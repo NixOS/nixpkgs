@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "primus-lib-20151204";
+  name = "primus-lib-2015-04-28";
 
   src = fetchFromGitHub {
     owner = "amonakov";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Low-overhead client-side GPU offloading";
-    homepage = https://github.com/amonakov/primus;
+    homepage = "https://github.com/amonakov/primus";
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ abbradar ];

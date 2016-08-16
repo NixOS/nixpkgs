@@ -30,7 +30,7 @@ import ./make-test.nix ({ pkgs, ... }:
     $machine->sleep(2);
 
     # Why do I need to do this??
-    $machine->succeed("su alice -c ecryptfs-umount-private");
+    $machine->succeed("su alice -c ecryptfs-umount-private || true");
     $machine->sleep(1);
     $machine->fail("mount | grep ecryptfs"); # check that encrypted home is not mounted
 
@@ -53,7 +53,7 @@ import ./make-test.nix ({ pkgs, ... }:
     $machine->sleep(2);
 
     # Why do I need to do this??
-    $machine->succeed("su alice -c ecryptfs-umount-private");
+    $machine->succeed("su alice -c ecryptfs-umount-private || true");
     $machine->sleep(1);
 
     # Check that the filesystem is not accessible

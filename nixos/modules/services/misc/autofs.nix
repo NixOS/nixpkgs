@@ -75,9 +75,10 @@ in
     boot.kernelModules = [ "autofs4" ];
 
     systemd.services.autofs =
-      { description = "Filesystem automounter";
+      { description = "Automounts filesystems on demand";
+        after = [ "network.target" "ypbind.service" "sssd.service" "network-online.target" ];
+        wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
 
         preStart = ''
           # There should be only one autofs service managed by systemd, so this should be safe.
@@ -85,7 +86,9 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = "${pkgs.autofs5}/sbin/automount ${if cfg.debug then "-d" else ""} -f -t ${builtins.toString cfg.timeout} ${autoMaster} ${if cfg.debug then "-l7" else ""}";
+          Type = "forking";
+          PIDFile = "/run/autofs.pid";
+          ExecStart = "${pkgs.autofs5}/bin/automount ${optionalString cfg.debug "-d"} -p /run/autofs.pid -t ${builtins.toString cfg.timeout} ${autoMaster}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };

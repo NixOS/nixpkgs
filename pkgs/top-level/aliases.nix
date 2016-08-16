@@ -79,11 +79,6 @@ doNotDisplayTwice rec {
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
   QmidiNet = qmidinet;  # added 2016-05-22
   quake3game = ioquake3; # added 2016-01-14
-  quassel_kf5 = kde5.quassel; # added 2015-09-30
-  quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
-  quasselClient_kf5 = kde5.quasselClient; # added 2015-09-30
-  quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
-  quasselDaemon_qt5 = kde5.quasselDaemon; # added 2015-09-30
   qwt6 = qt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rekonqWrapper = rekonq; # added 2015-01
@@ -111,4 +106,5 @@ doNotDisplayTwice rec {
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
+  m3d-linux = m33-linux; # added 2016-08-13
 }

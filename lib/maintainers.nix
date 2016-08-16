@@ -240,7 +240,7 @@
   mathnerd314 = "Mathnerd314 <mathnerd314.gph+hs@gmail.com>";
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
   maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
-  mbakke = "Marius Bakke <ymse@tuta.io>";
+  mbakke = "Marius Bakke <mbakke@fastmail.com>";
   matthewbauer = "Matthew Bauer <mjbauer95@gmail.com>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
   mboes = "Mathieu Boespflug <mboes@tweag.net>";
@@ -248,6 +248,7 @@
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
+  michalrus = "Michal Rus <m@michalrus.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
   mimadrid = "Miguel Madrid <mimadrid@ucm.es>";
   mingchuan = "Ming Chuan <ming@culpring.com>";

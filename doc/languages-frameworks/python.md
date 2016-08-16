@@ -566,7 +566,7 @@ running `nix-shell` with the following `shell.nix`
     with import <nixpkgs> {};
 
     (python3.buildEnv.override {
-      extraLibs = with python3Packages; [ numpy requests ];
+      extraLibs = with python3Packages; [ numpy requests2 ];
     }).env
 
 will drop you into a shell where Python will have the
@@ -605,7 +605,7 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 
     with import <nixpkgs> {};
 
-    (python33.withPackages (ps: [ps.numpy ps.requests])).env
+    (python33.withPackages (ps: [ps.numpy ps.requests2])).env
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
