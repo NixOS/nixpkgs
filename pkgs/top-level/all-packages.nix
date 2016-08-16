@@ -10958,6 +10958,8 @@ in
     flex = flex_2_5_35;
   };
 
+  hd-idle = callPackage ../os-specific/linux/hd-idle { };
+
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
   hibernate = callPackage ../os-specific/linux/hibernate { };
