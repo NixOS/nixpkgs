@@ -4,7 +4,7 @@
 , locale ? "C" }:
 
 let
-  inherit (pythonPackages) python pygobject dbus pyGtkGlade pycairo;
+  inherit (pythonPackages) python pygobject dbus-python pyGtkGlade pycairo;
 in stdenv.mkDerivation rec {
   name = "wicd-${version}";
   version = "1.7.2.4";
@@ -38,15 +38,15 @@ in stdenv.mkDerivation rec {
     substituteInPlace in/scripts=wicd.in --subst-var-by TEMPLATE-DEFAULT $out/share/other/dhclient.conf.template.default
 
     sed -i "2iexport PATH=${python}/bin:${wpa_supplicant}/sbin:${dhcpcd}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${nettools}/bin:${iputils}/bin:${openresolv}/sbin:${iproute}/sbin\$\{PATH:+:\}\$PATH" in/scripts=wicd.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pygobject}):$(toPythonPath ${dbus})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pygobject}):$(toPythonPath ${dbus-python})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-client.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${dbus})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-client.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-client.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-gtk.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${dbus}):$(toPythonPath ${pythonPackages.notify})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-gtk.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python}):$(toPythonPath ${pythonPackages.notify})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-gtk.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-cli.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pycairo}):$(toPythonPath ${dbus})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-cli.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-cli.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-curses.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pycairo}):$(toPythonPath ${dbus}):$(toPythonPath ${pythonPackages.urwid}):$(toPythonPath ${pythonPackages.curses})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-curses.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python}):$(toPythonPath ${pythonPackages.urwid}):$(toPythonPath ${pythonPackages.curses})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-curses.in
     rm po/ast.po
   '';
 

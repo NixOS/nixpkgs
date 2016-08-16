@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, python, pkgconfig, qtbase, qtsvg, qtwebkit, sip, pythonDBus
+{ stdenv, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit
 , lndir, makeWrapper, qmakeHook }:
 
 let
   version = "5.5.1";
+  inherit (pythonPackages) python dbus-python;
+  sip = pythonPackages.sip_4_16;
 in stdenv.mkDerivation {
   name = "${python.libPrefix}-PyQt-${version}";
 
@@ -30,7 +32,7 @@ in stdenv.mkDerivation {
     runHook preConfigure
 
     mkdir -p $out
-    lndir ${pythonDBus} $out
+    lndir ${dbus-python} $out
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
 

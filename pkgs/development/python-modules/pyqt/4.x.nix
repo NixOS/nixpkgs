@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, python, pythonPackages, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
+{ stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, makeWrapper }:
 
-let version = "4.11.3";
-in
-stdenv.mkDerivation {
+let
+  version = "4.11.3";
+  inherit (pythonPackages) python dbus-python;
+in stdenv.mkDerivation {
   name = "${python.libPrefix}-PyQt-x11-gpl-${version}";
 
   src = fetchurl {
@@ -12,7 +13,7 @@ stdenv.mkDerivation {
 
   configurePhase = ''
     mkdir -p $out
-    lndir ${pythonDBus} $out
+    lndir ${dbus-python} $out
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
 

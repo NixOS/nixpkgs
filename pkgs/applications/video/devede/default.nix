@@ -1,7 +1,7 @@
-{ pkgs, stdenv, fetchurl, pythonPackages, buildPythonApplication, pygtk, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor }:
+{ pkgs, stdenv, fetchurl, pythonPackages, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor }:
 
 let
-  inherit (pythonPackages) dbus;
+  inherit (pythonPackages) dbus-python buildPythonApplication pygtk;
 
 in buildPythonApplication rec {
   name = "devede-3.23.0";
@@ -14,7 +14,7 @@ in buildPythonApplication rec {
 
   buildInputs = [ ffmpeg ];
 
-  propagatedBuildInputs = [ pygtk dbus ffmpeg mplayer dvdauthor vcdimager cdrkit ];
+  propagatedBuildInputs = [ pygtk dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit ];
 
   postPatch = ''
     substituteInPlace devede --replace "/usr/share/devede" "$out/share/devede"

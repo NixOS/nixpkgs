@@ -1,8 +1,9 @@
-{stdenv, fetchurl, makeWrapper, useSetUID, dbus, libxml2, pam, pkgconfig, pmount, python, pythonDBus}:
+{stdenv, fetchurl, makeWrapper, useSetUID, dbus, libxml2, pam, pkgconfig, pmount, pythonPackages}:
 
 let
   pmountBin = useSetUID pmount "/bin/pmount";
   pumountBin = useSetUID pmount "/bin/pumount";
+  inherit (pythonPackages) python dbus-python;
 in
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     for prog in $out/bin/pamusb-conf $out/bin/pamusb-agent; do
       substituteInPlace $prog --replace '/usr/bin/env python' '/bin/python'
       wrapProgram $prog \
-        --prefix PYTHONPATH : "$(toPythonPath ${pythonDBus})"
+        --prefix PYTHONPATH : "$(toPythonPath ${dbus-python})"
     done
   '';
 
