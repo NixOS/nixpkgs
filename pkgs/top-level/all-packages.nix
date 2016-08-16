@@ -17522,9 +17522,10 @@ in
     pythonPackages = python3Packages;
   };
 
+  # Wine defaults to a mixed 64 / 32 build on x86_64 and to pure 32 on x86
   wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
-    wineBuild = config.wine.build or "wine32";
+    wineBuild = config.wine.build or (if system == "x86_64-linux" then "wineWow" else "wine32");
   };
   wine = lowPrio (self.wineMinimal.override {
     pngSupport = true;
