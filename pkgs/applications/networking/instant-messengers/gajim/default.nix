@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, intltool, pkgconfig, libX11, gtk
-, ldns, pythonDBus, pythonPackages
+, ldns, pythonPackages
 
 , enableJingle ? true, farstream ? null, gst_plugins_bad ? null
 ,                      libnice ? null
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     pythonPackages.sqlite3 pythonPackages.pyasn1
     pythonPackages.pyxdg
     pythonPackages.nbxmpp
-    pythonPackages.pyopenssl pythonDBus
+    pythonPackages.pyopenssl pythonPackages.dbus-python
   ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
     ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils

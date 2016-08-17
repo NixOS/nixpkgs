@@ -24,7 +24,7 @@ fi
 # Parse the command line for the -I flag
 extraBuildFlags=()
 chrootCommand=(/run/current-system/sw/bin/bash)
-bootLoader=1
+buildUsersGroup="nixbld"
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -43,6 +43,7 @@ while [ "$#" -gt 0 ]; do
             ;;
         --closure)
             closure="$1"; shift 1
+            buildUsersGroup=""
             ;;
         --no-channel-copy)
             noChannelCopy=1
@@ -51,7 +52,7 @@ while [ "$#" -gt 0 ]; do
             noRootPasswd=1
             ;;
         --no-bootloader)
-            bootLoader=0
+            noBootLoader=1
             ;;
         --show-trace)
             extraBuildFlags+=("$i")
@@ -101,8 +102,8 @@ mount -t tmpfs -o "mode=0755" none $mountPoint/run
 mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
 rm -rf $mountPoint/var/run
 ln -s /run $mountPoint/var/run
-rm -f $mountPoint/etc/{resolv.conf,hosts}
-cp -Lf /etc/resolv.conf /etc/hosts $mountPoint/etc/
+for f in /etc/resolv.conf /etc/hosts; do rm -f $mountPoint/$f; [ -f "$f" ] && cp -Lf $f $mountPoint/etc/; done
+for f in /etc/passwd /etc/group;      do touch $mountPoint/$f; [ -f "$f" ] && mount --rbind -o ro $f $mountPoint/$f; done
 
 cp -Lf "@cacert@" "$mountPoint/tmp/ca-cert.crt"
 export SSL_CERT_FILE=/tmp/ca-cert.crt
@@ -142,7 +143,7 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/log/nix/drvs
 
 mkdir -m 1775 -p $mountPoint/nix/store
-chown root:nixbld $mountPoint/nix/store
+chown @root_uid@:@nixbld_gid@ $mountPoint/nix/store
 
 
 # There is no daemon in the chroot.
@@ -155,18 +156,13 @@ export LC_ALL=
 export LC_TIME=
 
 
-# Create a temporary Nix config file that causes the nixbld users to
-# be used.
-echo "build-users-group = nixbld" > $mountPoint/tmp/nix.conf # FIXME: remove in Nix 1.8
-binary_caches=$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')
-if test -n "$binary_caches"; then
-    echo "binary-caches = $binary_caches" >> $mountPoint/tmp/nix.conf
-fi
-export NIX_CONF_DIR=/tmp
+# Builds will use users that are members of this group
+extraBuildFlags+=(--option "build-users-group" "$buildUsersGroup")
 
-touch $mountPoint/etc/passwd $mountPoint/etc/group
-mount --bind -o ro /etc/passwd $mountPoint/etc/passwd
-mount --bind -o ro /etc/group $mountPoint/etc/group
+
+# Inherit binary caches from the host
+binary_caches="$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')"
+extraBuildFlags+=(--option "binary-caches" "$binary_caches")
 
 
 # Copy Nix to the Nix store on the target device, unless it's already there.
@@ -247,7 +243,7 @@ ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defex
 
 
 # Get rid of the /etc bind mounts.
-umount $mountPoint/etc/passwd $mountPoint/etc/group
+for f in /etc/passwd /etc/group; do [ -f "$f" ] && umount $mountPoint/$f; done
 
 
 # Grub needs an mtab.
@@ -263,16 +259,17 @@ touch $mountPoint/etc/NIXOS
 # a menu default pointing at the kernel/initrd/etc of the new
 # configuration.
 echo "finalising the installation..."
-NIXOS_INSTALL_GRUB="$bootLoader" chroot $mountPoint \
-    /nix/var/nix/profiles/system/bin/switch-to-configuration boot
-
+if [ -z "$noBootLoader" ]; then
+  NIXOS_INSTALL_GRUB=1 chroot $mountPoint \
+      /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+fi
 
 # Run the activation script.
 chroot $mountPoint /nix/var/nix/profiles/system/activate
 
 
 # Ask the user to set a root password.
-if [ -z "$noRootPasswd" ] && [ "$(chroot $mountPoint /run/current-system/sw/bin/sh -l -c "nix-instantiate --eval '<nixpkgs/nixos>' -A config.users.mutableUsers")" = true ] && [ -t 0 ] ; then
+if [ -z "$noRootPasswd" ] && [ -x $mountPoint/var/setuid-wrappers/passwd ] && [ -t 0 ]; then
     echo "setting root password..."
     chroot $mountPoint /var/setuid-wrappers/passwd
 fi

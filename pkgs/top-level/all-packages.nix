@@ -843,14 +843,7 @@ in
 
   mpdcron = callPackage ../tools/audio/mpdcron { };
 
-  mpdris2 = callPackage ../tools/audio/mpdris2 {
-    python = pythonFull;
-    wrapPython = pythonPackages.wrapPython;
-    mpd = pythonPackages.mpd;
-    pygtk = pythonPackages.pygtk;
-    dbus = pythonPackages.dbus;
-    pynotify = pythonPackages.notify;
-  };
+  mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
@@ -3188,8 +3181,6 @@ in
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pyatspi = python3Packages.pyatspi;
-
   pycangjie = pythonPackages.pycangjie;
 
   pydb = callPackage ../development/tools/pydb { };
@@ -3197,8 +3188,6 @@ in
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
-
-  pythonDBus = self.dbus_python;
 
   pythonIRClib = pythonPackages.pythonIRClib;
 
@@ -3524,9 +3513,7 @@ in
 
   sonarr = callPackage ../servers/sonarr { };
 
-  sonata = callPackage ../applications/audio/sonata {
-    inherit (python3Packages) buildPythonApplication python isPy3k dbus pygobject3 mpd2;
-  };
+  sonata = callPackage ../applications/audio/sonata { };
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
@@ -3755,6 +3742,8 @@ in
   tracefilegen = callPackage ../development/tools/analysis/garcosim/tracefilegen { };
 
   tracefilesim = callPackage ../development/tools/analysis/garcosim/tracefilesim { };
+
+  translate-shell = callPackage ../applications/misc/translate-shell { };
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
@@ -7070,7 +7059,6 @@ in
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
-  dbus_python     = self.pythonPackages.dbus;
 
   dbus-sharp-1_0 = callPackage ../development/libraries/dbus-sharp/dbus-sharp-1.0.nix { };
   dbus-sharp-2_0 = callPackage ../development/libraries/dbus-sharp { };
@@ -8743,7 +8731,9 @@ in
     withGUI = false;
   };
 
-  mlt-qt4 = callPackage ../development/libraries/mlt {
+  mlt = callPackage ../development/libraries/mlt {};
+
+  mlt-qt4 = callPackage ../development/libraries/mlt/qt-4.nix {
     ffmpeg = ffmpeg_2;
     qt = qt4;
   };
@@ -10273,6 +10263,9 @@ in
 
   mailman = callPackage ../servers/mail/mailman { };
 
+  mattermost = callPackage ../servers/mattermost { };
+  matterircd = callPackage ../servers/mattermost/matterircd.nix { };
+
   mediatomb = callPackage ../servers/mediatomb {
     spidermonkey = spidermonkey_185;
   };
@@ -10410,6 +10403,8 @@ in
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
   influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
+
+  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; }; 
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
@@ -10728,10 +10723,6 @@ in
 
   blktrace = callPackage ../os-specific/linux/blktrace { };
 
-  bluez4 = lowPrio (callPackage ../os-specific/linux/bluez {
-    pygobject = pygobject3;
-  });
-
   bluez5 = callPackage ../os-specific/linux/bluez/bluez5.nix { };
 
   # Needed for LibreOffice
@@ -10881,7 +10872,7 @@ in
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
   ffadoFull = callPackage ../os-specific/linux/ffado {
-    inherit (pythonPackages) python pyqt4;
+    inherit (pythonPackages) python pyqt4 dbus-python;
   };
   libffado = self.ffadoFull.override { prefix = "lib"; };
 
@@ -10916,6 +10907,8 @@ in
   gradm = callPackage ../os-specific/linux/gradm {
     flex = flex_2_5_35;
   };
+
+  hd-idle = callPackage ../os-specific/linux/hd-idle { };
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
@@ -11085,7 +11078,6 @@ in
   linux_4_1 = callPackage ../os-specific/linux/kernel/linux-4.1.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.hiddev_CVE_2016_5829
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -12369,6 +12361,10 @@ in
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
 
+  bitwig-studio =  callPackage ../applications/audio/bitwig-studio {
+    inherit (gnome2) zenity;
+  };
+
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
@@ -13383,7 +13379,6 @@ in
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
   hamster-time-tracker = callPackage ../applications/misc/hamster-time-tracker {
-    inherit (pythonPackages) pyxdg pygtk dbus sqlite3;
     inherit (gnome) gnome_python;
   };
 
@@ -13816,7 +13811,6 @@ in
   mendeley = callPackage ../applications/office/mendeley { };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    inherit (pythonPackages) curses docutils hg-git dulwich;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
     inherit (darwin) cf-private;
     guiSupport = false; # use mercurialFull to get hgk GUI
@@ -13938,6 +13932,8 @@ in
   ncmpc = callPackage ../applications/audio/ncmpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
+
+  ympd = callPackage ../applications/audio/ympd { };
 
   nload = callPackage ../applications/networking/nload { };
 
@@ -14420,12 +14416,9 @@ in
 
   quirc = callPackage ../tools/graphics/quirc {};
 
-  quodlibet = callPackage ../applications/audio/quodlibet {
-    inherit (pythonPackages) mutagen;
-  };
+  quodlibet = callPackage ../applications/audio/quodlibet { };
 
   quodlibet-with-gst-plugins = callPackage ../applications/audio/quodlibet {
-    inherit (pythonPackages) mutagen;
     withGstPlugins = true;
     gst_plugins_bad = null;
   };
