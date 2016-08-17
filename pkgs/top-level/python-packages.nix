@@ -268,7 +268,7 @@ in modules // {
     pythonPackages = self;
   };
 
-  pyqt5 = pkgs.qt55.callPackage ../development/python-modules/pyqt/5.x.nix {
+  pyqt5 = pkgs.qt5.callPackage ../development/python-modules/pyqt/5.x.nix {
     pythonPackages = self;
   };
 
