@@ -13963,6 +13963,8 @@ in
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  ympd = callPackage ../applications/audio/ympd { };
+
   nload = callPackage ../applications/networking/nload { };
 
   normalize = callPackage ../applications/audio/normalize { };
