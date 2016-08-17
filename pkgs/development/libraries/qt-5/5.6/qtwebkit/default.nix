@@ -1,6 +1,6 @@
-{ qtSubmodule, stdenv, qtdeclarative, qtlocation, qtmultimedia, qtsensors
+{ qtSubmodule, stdenv, qtdeclarative, qtlocation, qtsensors
 , fontconfig, gdk_pixbuf, gtk, libwebp, libxml2, libxslt
-, sqlite, libudev
+, sqlite, libudev, glib, gst_all_1
 , bison2, flex, gdb, gperf, perl, pkgconfig, python, ruby
 , substituteAll
 , flashplayerFix ? false
@@ -10,8 +10,8 @@ with stdenv.lib;
 
 qtSubmodule {
   name = "qtwebkit";
-  qtInputs = [ qtdeclarative qtlocation qtmultimedia qtsensors ];
-  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite ];
+  qtInputs = [ qtdeclarative qtlocation qtsensors ];
+  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ];
   nativeBuildInputs = [
     bison2 flex gdb gperf perl pkgconfig python ruby
   ];
