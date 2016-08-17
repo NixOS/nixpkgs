@@ -3,35 +3,25 @@ Description: do not build unrar extension as we strip unrar from the tarball
 Forwarded: not-needed
 Last-Update: 2013-04-04
 
-Index: calibre/setup/extensions.py
+Index: calibre/setup/extensions.json
 ===================================================================
---- calibre.orig/setup/extensions.py	2014-02-02 10:42:14.510954007 +0100
-+++ calibre/setup/extensions.py	2014-02-02 10:42:14.502954007 +0100
-@@ -209,24 +209,6 @@
-                 sip_files=['calibre/ebooks/pdf/render/qt_hack.sip']
-                 ),
- 
--    Extension('unrar',
--              ['unrar/%s.cpp'%(x.partition('.')[0]) for x in '''
--               rar.o strlist.o strfn.o pathfn.o savepos.o smallfn.o global.o file.o
--               filefn.o filcreat.o archive.o arcread.o unicode.o system.o
--               isnt.o crypt.o crc.o rawread.o encname.o resource.o match.o
--               timefn.o rdwrfn.o consio.o options.o ulinks.o errhnd.o rarvm.o
--               secpassword.o rijndael.o getbits.o sha1.o extinfo.o extract.o
--               volume.o list.o find.o unpack.o cmddata.o filestr.o scantree.o
--               '''.split()] + ['calibre/utils/unrar.cpp'],
--              inc_dirs=['unrar'],
--              cflags=[('/' if iswindows else '-') + x for x in (
--                  'DSILENT', 'DRARDLL', 'DUNRAR')] + (
--                  [] if iswindows else ['-D_FILE_OFFSET_BITS=64',
--                                        '-D_LARGEFILE_SOURCE']),
--              optimize_level=2,
--              libraries=['User32', 'Advapi32', 'kernel32', 'Shell32'] if iswindows else []
--              ),
--
-     ]
- 
- 
+--- calibre.orig/setup/extensions.json
++++ calibre/setup/extensions.json
+@@ -211,14 +211,5 @@
+         "sources": "calibre/devices/mtp/unix/devices.c calibre/devices/mtp/unix/libmtp.c",
+         "headers": "calibre/devices/mtp/unix/devices.h calibre/devices/mtp/unix/upstream/music-players.h calibre/devices/mtp/unix/upstream/device-flags.h",
+         "libraries": "mtp"
+-    },
+-    {
+-        "name": "unrar",
+-        "sources": "unrar/rar.cpp unrar/strlist.cpp unrar/strfn.cpp unrar/pathfn.cpp unrar/savepos.cpp unrar/smallfn.cpp unrar/global.cpp unrar/file.cpp unrar/filefn.cpp unrar/filcreat.cpp unrar/archive.cpp unrar/arcread.cpp unrar/unicode.cpp unrar/system.cpp unrar/isnt.cpp unrar/crypt.cpp unrar/crc.cpp unrar/rawread.cpp unrar/encname.cpp unrar/resource.cpp unrar/match.cpp unrar/timefn.cpp unrar/rdwrfn.cpp unrar/consio.cpp unrar/options.cpp unrar/ulinks.cpp unrar/errhnd.cpp unrar/rarvm.cpp unrar/secpassword.cpp unrar/rijndael.cpp unrar/getbits.cpp unrar/sha1.cpp unrar/extinfo.cpp unrar/extract.cpp unrar/volume.cpp unrar/list.cpp unrar/find.cpp unrar/unpack.cpp unrar/cmddata.cpp unrar/filestr.cpp unrar/scantree.cpp calibre/utils/unrar.cpp",
+-        "inc_dirs": "unrar",
+-        "defines": "SILENT RARDLL UNRAR _FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE",
+-        "windows_defines": "SILENT RARDLL UNRAR",
+-        "optimize_level": 2,
+-        "windows_libraries": "User32 Advapi32 kernel32 Shell32"
+     }
+ ]
 Index: calibre/src/calibre/ebooks/metadata/archive.py
 ===================================================================
 --- calibre.orig/src/calibre/ebooks/metadata/archive.py	2014-02-02 10:42:14.510954007 +0100
