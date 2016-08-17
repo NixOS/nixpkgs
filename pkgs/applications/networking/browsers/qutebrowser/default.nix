@@ -1,7 +1,8 @@
 { stdenv, fetchurl, buildPythonApplication, makeQtWrapper, wrapGAppsHook
 , qtmultimedia, pyqt5, jinja2, pygments, pyyaml, pypeg2, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
-, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav }:
+, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
+, qtwebkit-plugins }:
 
 let version = "0.8.2"; in
 
@@ -18,7 +19,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   buildInputs = [
-    qtmultimedia
+    qtmultimedia qtwebkit-plugins
     gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
     glib_networking
   ];
