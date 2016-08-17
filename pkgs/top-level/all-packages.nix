@@ -9215,6 +9215,8 @@ in
       ffmpeg = ffmpeg_2;
     });
 
+    qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
+
   } // kdeFrameworks;
 
   qtEnv = qt5.env;
