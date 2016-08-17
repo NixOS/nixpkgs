@@ -17,6 +17,8 @@ buildPythonPath() {
     declare -A pythonPathsSeen=()
     program_PYTHONPATH=
     program_PATH=
+    pythonPathsSeen["@python@"]=1
+    addToSearchPath program_PATH @python@/bin
     for path in $pythonPath; do
         _addToPythonPath $path
     done

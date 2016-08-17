@@ -42,6 +42,7 @@ in modules // {
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
       substitutions.executable = python.interpreter;
+      substitutions.python = python;
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.
         # NOTE: Order DOES matter here, so single character quotes need to be
