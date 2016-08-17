@@ -18,7 +18,10 @@ let
 
   bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
-  buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/buildpythonpackage.nix {
+  mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
+  });
+  buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
+    inherit mkPythonDerivation;
     inherit bootstrapped-pip;
   });
 
@@ -34,7 +37,7 @@ let
 
 in modules // {
 
-  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
 
   # helpers
 

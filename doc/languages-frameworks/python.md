@@ -481,7 +481,7 @@ and the aliases
 #### `buildPythonPackage` function
 
 The `buildPythonPackage` function is implemented in
-`pkgs/development/interpreters/python/buildpythonpackage.nix`
+`pkgs/development/interpreters/python/build-python-package.nix`
 
 and can be used as:
 
