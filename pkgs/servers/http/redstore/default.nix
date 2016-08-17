@@ -10,10 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gmp pkgconfig redland zlib librdf_raptor2 librdf_rasqal ];
-     
+
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${librdf_raptor2}/include/raptor2"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${librdf_rasqal}/include/rasqal"
+    # Define _XOPEN_SOURCE to enable, e.g., getaddrinfo.
+    configureFlagsArray+=(
+      "CFLAGS=-D_XOPEN_SOURCE=600 -I${librdf_raptor2}/include/raptor2 -I${librdf_rasqal}/include/rasqal"
+    )
   '';
 
   meta = {
