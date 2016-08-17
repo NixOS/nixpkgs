@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     longDescription = "This package also includes `lllc', the LLL compiler.";
     homepage = https://github.com/ethereum/solidity;
     license = stdenv.lib.licenses.gpl3;
+    maintainers = [ stdenv.lib.maintainers.dbrock ];
     inherit version;
   };
 }
