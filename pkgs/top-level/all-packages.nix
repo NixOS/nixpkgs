@@ -12328,6 +12328,7 @@ in
 
   go-ethereum = self.altcoins.go-ethereum;
   parity = self.altcoins.parity;
+  ethabi = self.altcoins.ethabi;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
