@@ -2,6 +2,14 @@
 { fetchurl, mirror }:
 
 {
+  qtwebkit = {
+    version = "5.7.0";
+    src = fetchurl {
+      url = "${mirror}/community_releases/5.7/5.7.0/qtwebkit-opensource-src-5.7.0.tar.xz";
+      sha256 = "1prlpl3zslzpr1iv7m3irvxjxn3v8nlxh21v9k2kaq4fpwy2b8y7";
+      name = "qtwebkit-opensource-src-5.7.0.tar.xz";
+    };
+  };
   qt3d = {
     version = "5.7.0";
     src = fetchurl {
@@ -146,20 +154,20 @@
       name = "qtpurchasing-opensource-src-5.7.0.tar.xz";
     };
   };
-  qtquickcontrols = {
-    version = "5.7.0";
-    src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.7/5.7.0/submodules/qtquickcontrols-opensource-src-5.7.0.tar.xz";
-      sha256 = "0cpcrmz9n5b4bgmshmk093lirl9xwqb23inchnai1zqg21vrmqfq";
-      name = "qtquickcontrols-opensource-src-5.7.0.tar.xz";
-    };
-  };
   qtquickcontrols2 = {
     version = "5.7.0";
     src = fetchurl {
       url = "${mirror}/official_releases/qt/5.7/5.7.0/submodules/qtquickcontrols2-opensource-src-5.7.0.tar.xz";
       sha256 = "0i8h933vhvx1bmniqdx0idg6vk82w9byd3dq0bb2phwjg5vv1xb3";
       name = "qtquickcontrols2-opensource-src-5.7.0.tar.xz";
+    };
+  };
+  qtquickcontrols = {
+    version = "5.7.0";
+    src = fetchurl {
+      url = "${mirror}/official_releases/qt/5.7/5.7.0/submodules/qtquickcontrols-opensource-src-5.7.0.tar.xz";
+      sha256 = "0cpcrmz9n5b4bgmshmk093lirl9xwqb23inchnai1zqg21vrmqfq";
+      name = "qtquickcontrols-opensource-src-5.7.0.tar.xz";
     };
   };
   qtscript = {
