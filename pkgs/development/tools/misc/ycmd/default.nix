@@ -10,12 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1g0hivv3wla7z5dgnkcn3ny38p089pjfj36nx6k29zmprgmjinyr";
   };
 
-  buildInputs = [ python cmake llvmPackages.clang boost makeWrapper ];
+  buildInputs = [ python cmake boost makeWrapper ];
 
   propagatedBuildInputs = with pythonPackages; [ waitress frozendict bottle ];
 
   buildPhase = ''
-    python build.py --clang-completer --system-libclang --system-boost
+    export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
+    python build.py --clang-completer --system-boost
   '';
 
   configurePhase = ":";
