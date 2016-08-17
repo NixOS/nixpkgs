@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip/PyQt5':"  \
       setup/build_environment.py
   '';
 
