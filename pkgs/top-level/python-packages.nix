@@ -8534,20 +8534,7 @@ in modules // {
     installPhase = ''
       mkdir -p $out/${python.sitePackages}
       cp -r scfbuild $out/${python.sitePackages}
-      # Workaround for #16133
-      mkdir -p $out/bin
-
-      cat >$out/bin/scfbuild <<EOF
-      #!/usr/bin/env python2
-
-      import sys
-      from scfbuild.main import main
-
-      if __name__ == '__main__':
-        sys.exit(main())
-      EOF
-
-      chmod +x $out/bin/scfbuild
+      cp -r bin $out
     '';
 
     meta = with stdenv.lib; {
