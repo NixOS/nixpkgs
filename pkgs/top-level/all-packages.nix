@@ -14714,6 +14714,8 @@ in
     themes = [];  # extra themes, etc.
   };
 
+  skrooge2 = qt5.callPackage ../applications/office/skrooge/2.nix {};
+
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
