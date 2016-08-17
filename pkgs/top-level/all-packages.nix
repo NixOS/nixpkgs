@@ -667,7 +667,7 @@ in
   calamares = qt5.callPackage ../tools/misc/calamares rec {
     python = python3;
     boost = pkgs.boost.override { python=python3; };
-    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
+    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost=boost; };
   };
 
   capstone = callPackage ../development/libraries/capstone { };
