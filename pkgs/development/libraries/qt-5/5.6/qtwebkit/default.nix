@@ -31,4 +31,5 @@ qtSubmodule {
         };
     in optionals flashplayerFix [ dlopen-webkit-nsplugin dlopen-webkit-gtk ]
     ++ [ dlopen-webkit-udev ];
+  meta.maintainers = with stdenv.lib.maintainers; [ abbradar ];
 }
