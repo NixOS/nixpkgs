@@ -248,6 +248,7 @@
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
+  michalrus = "Michal Rus <m@michalrus.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
   mimadrid = "Miguel Madrid <mimadrid@ucm.es>";
   mingchuan = "Ming Chuan <ming@culpring.com>";

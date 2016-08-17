@@ -111,11 +111,20 @@ in rec {
       ];
     }).config.system.build;
   in
-    pkgs.symlinkJoin {name="netboot"; paths=[
-      build.netbootRamdisk
-      build.kernel
-      build.netbootIpxeScript
-    ];};
+    pkgs.symlinkJoin {
+      name="netboot";
+      paths=[
+        build.netbootRamdisk
+        build.kernel
+        build.netbootIpxeScript
+      ];
+      postBuild = ''
+        mkdir -p $out/nix-support
+        echo "file bzImage $out/bzImage" >> $out/nix-support/hydra-build-products
+        echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
+        echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
+      '';
+    };
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;

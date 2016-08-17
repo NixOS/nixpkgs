@@ -191,7 +191,7 @@ in modules // {
     };
   };
 
-  dbus = callPackage ../development/python-modules/dbus {
+  dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
 
@@ -265,14 +265,11 @@ in modules // {
   };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
-    pythonDBus = self.dbus;
     pythonPackages = self;
   };
 
   pyqt5 = pkgs.qt55.callPackage ../development/python-modules/pyqt/5.x.nix {
-    sip = self.sip_4_16;
-    pythonDBus = self.dbus;
-    python = self.python;
+    pythonPackages = self;
   };
 
   pyside = callPackage ../development/python-modules/pyside { };
@@ -14658,7 +14655,7 @@ in modules // {
       sha256 = "0yjxwisxpxy3vpnqk9nw5k3db3xx6wyf6sk1px9m94s30glcq2cc";
     };
 
-    propagatedBuildInputs = with self; [ appdirs pyyaml requests2 dbus emoji sleekxmpp mock ];
+    propagatedBuildInputs = with self; [ appdirs pyyaml requests2 dbus-python emoji sleekxmpp mock ];
 
     meta = {
       description = "A utility for sending notifications, on demand and when commands finish";
@@ -17887,12 +17884,16 @@ in modules // {
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
-    version = "4.3.0";
+    version = "3.4.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/psutil/${name}.tar.gz";
-      sha256 = "1w4r09fvn6kd80m5mx4ws1wz100brkaq6hzzpwrns8cgjzjpl6c6";
+      sha256 = "b17fa01aa766daa388362d0eda5c215d77e03a8d37676b68971f37bf3913b725";
     };
+
+    # Certain tests fail due to being in a chroot.
+    # See also the older issue: https://code.google.com/p/psutil/issues/detail?id=434
+    doCheck = false;
 
     buildInputs = with self; [ mock ] ++ optionals stdenv.isDarwin [ pkgs.darwin.IOKit ];
 
@@ -22522,7 +22523,7 @@ in modules // {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 pkgs.pythonDBus pygobject ];
+    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 dbus-python pygobject ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
@@ -26786,7 +26787,7 @@ in modules // {
     };
 
     preConfigure = ''
-      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
+      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
     '';
     preBuild = "${python}/bin/${python.executable} setup.py build_ext";
     installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
@@ -26856,7 +26857,7 @@ in modules // {
     # no tests available
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pygobject3 dbus ];
+    propagatedBuildInputs = with self; [ pygobject3 dbus-python ];
 
     meta = {
       homepage = https://github.com/ricardomv/snapper-gui;

@@ -1,17 +1,19 @@
-{stdenv, fetchurl, cmake, pkgconfig
+{ stdenv, fetchurl, cmake, pkgconfig
 , libXrender, renderproto, gtk, libwnck, pango, cairo
 , GConf, libXdamage, damageproto, libxml2, libxslt, glibmm
 , metacity
 , libstartup_notification, libpthreadstubs, libxcb, intltool
 , ORBit2, libXau, libICE, libSM
 , dbus, dbus_glib, librsvg, mesa
-, libXdmcp, libnotify, python
-, hicolor_icon_theme, libjpeg_turbo, libsigcxx, protobuf, pygtk, pythonDBus
+, libXdmcp, libnotify, pythonPackages
+, hicolor_icon_theme, libjpeg_turbo, libsigcxx, protobuf
 , xdg_utils
 , gettext, boost, pyrex
 , makeWrapper
 }:
 let
+  inherit (pythonPackages) python dbus-python pygtk;
+
   s = # Generated upstream information
   rec {
     baseName="compiz";
@@ -29,7 +31,7 @@ let
     ORBit2 libXau libICE libSM
     dbus dbus_glib librsvg mesa
     libXdmcp libnotify python
-    hicolor_icon_theme libjpeg_turbo libsigcxx protobuf pygtk pythonDBus
+    hicolor_icon_theme libjpeg_turbo libsigcxx protobuf pygtk dbus-python
     xdg_utils
     gettext boost pyrex
     makeWrapper 

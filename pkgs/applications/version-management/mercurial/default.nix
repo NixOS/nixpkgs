@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, python, makeWrapper, docutils, unzip, hg-git, dulwich
-, guiSupport ? false, tk ? null, curses
+{ stdenv, fetchurl, pythonPackages, makeWrapper, docutils, unzip
+, guiSupport ? false, tk ? null
 , ApplicationServices, cf-private }:
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
   version = "3.8.2";
   name = "mercurial-${version}";
+  inherit (pythonPackages) curses docutils hg-git dulwich python;
 in
 
 stdenv.mkDerivation {
