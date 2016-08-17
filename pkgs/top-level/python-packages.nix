@@ -307,8 +307,6 @@ in modules // {
 
   sip = callPackage ../development/python-modules/sip { };
 
-  sip_4_16 = callPackage ../development/python-modules/sip/4.16.nix { };
-
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
