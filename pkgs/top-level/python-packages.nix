@@ -53,7 +53,7 @@ in modules // {
           isSingle = elem quote [ "\"" "'\"'\"'" ];
           endQuote = if isSingle then "[^\\\\]${quote}" else quote;
         in ''
-          /^ *[a-z]?${quote}/ {
+          /^[a-z]?${quote}/ {
             /${quote}${quote}|${quote}.*${endQuote}/{n;br}
             :${label}; n; /^${quote}/{n;br}; /${endQuote}/{n;br}; b${label}
           }
@@ -73,11 +73,11 @@ in modules // {
 
       in ''
         1 {
-          /^#!/!b; :r
-          /\\$/{N;br}
-          /__future__|^ *(#.*)?$/{n;br}
+          :r
+          /\\$|,$/{N;br}
+          /__future__|^ |^ *(#.*)?$/{n;br}
           ${concatImapStrings mkStringSkipper quoteVariants}
-          /^ *[^# ]/i ${replaceStrings ["\n"] [";"] preamble}
+          /^[^# ]/i ${replaceStrings ["\n"] [";"] preamble}
         }
       '';
     }
