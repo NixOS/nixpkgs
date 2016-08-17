@@ -13200,7 +13200,7 @@ let
      stdenv = stdenv_32bit;
   };
 
-  shotcut = qt5.callPackage ../applications/video/shotcut { };
+  shotcut = qt55.callPackage ../applications/video/shotcut { };
 
   smplayer = qt5.callPackage ../applications/video/smplayer { };
 

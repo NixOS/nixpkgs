@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, SDL, frei0r, gettext, makeWrapper, mlt, pkgconfig, qtbase }:
+{ stdenv, fetchurl, SDL, frei0r, gettext, makeWrapper, mlt, pkgconfig, qtbase,
+qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qmakeHook }:
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "14.09";
+  version = "16.08";
 
   src = fetchurl {
     url = "https://github.com/mltframework/shotcut/archive/v${version}.tar.gz";
-    sha256 = "1504ds3ppqmpg84nb2gb74qndqysjwn3xw7n8xv19kd1pppnr10f";
+    sha256 = "10f32mfj3f8mjp0yi0jb7wc5d3inycn5c1pvqdagjhyyv3rvx9zy";
   };
 
-  buildInputs = [ SDL frei0r gettext makeWrapper mlt pkgconfig qtbase ];
-
-  configurePhase = "qmake PREFIX=$out";
+  buildInputs = [ SDL frei0r gettext makeWrapper mlt pkgconfig qtbase
+    qtmultimedia qtwebkit qtx11extras qtwebsockets qmakeHook ];
 
   postInstall = ''
     mkdir -p $out/share/shotcut
