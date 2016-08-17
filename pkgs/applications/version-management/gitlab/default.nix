@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
       SKIP_STORAGE_VALIDATION=true \
       rake assets:precompile RAILS_ENV=production
     mv config/gitlab.yml config/gitlab.yml.example
+    rm config/secrets.yml
     mv config config.dist
   '';
 
