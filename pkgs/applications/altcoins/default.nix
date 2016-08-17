@@ -27,6 +27,8 @@ rec {
   namecoin  = callPackage ./namecoin.nix  { inherit namecoind; };
   namecoind = callPackage ./namecoind.nix { };
 
+  ethabi = callPackage ./ethabi.nix { };
+
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };
 
