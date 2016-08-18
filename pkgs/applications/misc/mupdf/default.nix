@@ -18,17 +18,32 @@ stdenv.mkDerivation rec {
       url = "http://git.ghostscript.com/?p=mupdf.git;a=commitdiff_plain;h=39b0f07dd960f34e7e6bf230ffc3d87c41ef0f2e;hp=fa1936405b6a84e5c9bb440912c23d532772f958";
       sha256 = "1g9fkd1f5rx1z043vr9dj4934qf7i4nkvbwjc61my9azjrrc3jv7";
     })
+    # Compatibility with new openjpeg
+    (fetchpatch {
+      name = "mupdf-1.5-openjpeg-2.1.0.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/mupdf-1.5-openjpeg-2.1.0.patch?h=packages/mupdf&id=ca5e3ef6c7788ccfb6011d785078bc47762f19e5";
+      sha256 = "0f18793q9fd22h3lclm8wahvc8az4v08an6lzy8mczrkl8mcgm3k";
+    })
   ];
 
   NIX_CFLAGS_COMPILE= [ "-fPIC" ];
+  makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib freetype libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama ];
+  buildInputs = [ zlib libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama freetype libjpeg jbig2dec openjpeg ];
+  outputs = [ "out" "bin" "doc" ];
 
-  installPhase = ''
-    make install prefix=$out
-    gcc -shared -o $out/lib/libmupdf.so.${version} -Wl,--whole-archive $out/lib/libmupdf.a -Wl,--no-whole-archive
+  preConfigure = ''
+    # Don't remove mujs because upstream version is incompatible
+    rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,jpeg,openjpeg,zlib}
+  '';
 
-    ln -s $out/lib/libmupdf.so.${version} $out/lib/libmupdf.so
+  postInstall = ''
+    for i in $out/lib/*.a; do
+      so="''${i%.a}.so"
+      gcc -shared -o $so.${version} -Wl,--whole-archive $i -Wl,--no-whole-archive
+      ln -s $so.${version} $so
+      rm $i
+    done
 
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/mupdf.pc" <<EOF
@@ -38,23 +53,24 @@ stdenv.mkDerivation rec {
 
     Name: mupdf
     Description: Library for rendering PDF documents
-    Requires: freetype2 libopenjp2 libcrypto
     Version: ${version}
-    Libs: -L$out/lib -lmupdf
+    Libs: -L$out/lib -lmupdf -lmupdfthird
     Cflags: -I$out/include
     EOF
 
-    mkdir -p $out/share/applications
-    cat > $out/share/applications/mupdf.desktop <<EOF
+    moveToOutput "bin" "$bin"
+    mkdir -p $bin/share/applications
+    cat > $bin/share/applications/mupdf.desktop <<EOF
     [Desktop Entry]
     Type=Application
     Version=1.0
     Name=mupdf
     Comment=PDF viewer
-    Exec=$out/bin/mupdf-x11 %f
+    Exec=$bin/bin/mupdf-x11 %f
     Terminal=false
     EOF
   '';
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
