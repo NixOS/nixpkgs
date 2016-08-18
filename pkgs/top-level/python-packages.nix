@@ -1167,6 +1167,33 @@ in modules // {
     };
   });
 
+  asciinema = buildPythonPackage rec {
+    name = "asciinema-${version}";
+    version = "1.3.0";
+
+    disabled = pythonOlder "3.3";
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ requests2 ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "asciinema";
+      repo = "asciinema";
+      rev = "v${version}";
+      sha256 = "1hx7xipyy9w72iwlawldlif9qk3f7b8jx8c1wcx114pqbjz5d347";
+    };
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    meta = {
+      description = "Terminal session recorder and the best companion of asciinema.org";
+      homepage = https://asciinema.org/;
+      license = with licenses; [ gpl3 ];
+    };
+  };
+
   astroid = buildPythonPackage rec {
     name = "astroid-1.4.4";
 
