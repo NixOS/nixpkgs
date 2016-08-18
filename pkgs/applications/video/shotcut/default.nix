@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, SDL, frei0r, gettext, makeWrapper, mlt, pkgconfig, qtbase,
-qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qmakeHook }:
+{ stdenv, fetchurl, SDL, frei0r, gettext, mlt, jack1, pkgconfig, qtbase,
+qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquick1, qtquickcontrols,
+qtgraphicaleffects,
+qmakeHook, makeQtWrapper }:
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
@@ -10,13 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "10f32mfj3f8mjp0yi0jb7wc5d3inycn5c1pvqdagjhyyv3rvx9zy";
   };
 
-  buildInputs = [ SDL frei0r gettext makeWrapper mlt pkgconfig qtbase
-    qtmultimedia qtwebkit qtx11extras qtwebsockets qmakeHook ];
+  buildInputs = [ SDL frei0r gettext mlt pkgconfig qtbase qtmultimedia qtwebkit
+    qtx11extras qtwebsockets qtquick1 qtquickcontrols qtgraphicaleffects qmakeHook makeQtWrapper ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/shotcut
     cp -r src/qml $out/share/shotcut/
-    wrapProgram $out/bin/shotcut --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1
+    wrapQtProgram $out/bin/shotcut --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 --prefix LD_LIBRARY_PATH : ${jack1}/lib:${SDL.out}/lib
   '';
 
   meta = with stdenv.lib; {
