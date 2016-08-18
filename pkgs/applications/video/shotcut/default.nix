@@ -1,7 +1,6 @@
 { stdenv, fetchurl, SDL, frei0r, gettext, mlt, jack1, pkgconfig, qtbase,
 qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquick1, qtquickcontrols,
-qtgraphicaleffects,
-qmakeHook, makeQtWrapper }:
+qtgraphicaleffects, makeQtWrapper }:
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
@@ -13,7 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ SDL frei0r gettext mlt pkgconfig qtbase qtmultimedia qtwebkit
-    qtx11extras qtwebsockets qtquick1 qtquickcontrols qtgraphicaleffects qmakeHook makeQtWrapper ];
+    qtx11extras qtwebsockets qtquick1 qtquickcontrols qtgraphicaleffects makeQtWrapper ];
+
+  configurePhase = ''
+    qmake PREFIX=$out $qmakeFlags
+  '';
 
   enableParallelBuilding = true;
 
