@@ -1,6 +1,7 @@
-{ stdenv, fetch-bower, git }: name: version: target: outputHash: stdenv.mkDerivation {
+{ stdenv, fetch-bower, git, cacert }: name: version: target: outputHash: stdenv.mkDerivation {
   name = "${name}-${version}";
   buildCommand = ''
+    export GIT_SSL_CAINFO=${cacert}/etc/ssl/certs/ca-bundle.crt
     out=$PWD/out fetch-bower "${name}" "${version}" "${target}"
     cp -R out $out
   '';
