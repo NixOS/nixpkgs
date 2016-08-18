@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
 
   postPatch = optionalString enablePython ''
     sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
+
+    # Workaround for a change in Python import stuff in SWIG 3.0.8.
+    # This has been fixed in SELinux upstream (commit a9604c30) but
+    # it's not released.
+    substituteInPlace src/Makefile --replace \
+      site-packages/selinux/_selinux.so \
+      site-packages/_selinux.so
   '';
 
   preBuild = ''
