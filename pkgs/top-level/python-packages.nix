@@ -4630,6 +4630,27 @@ in modules // {
     };
   };
 
+  pytest-mock = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pytest-mock";
+    version = "1.2";
+
+    propagatedBuildInputs = with self; [ mock pytest ];
+
+    meta = {
+      description = "Thin-wrapper around the mock package for easier use with py.test.";
+      homepage    = "https://github.com/pytest-dev/pytest-mock";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.zip";
+      sha256 = "03zxar5drzm7ksqyrwypjaza3cri6wqvpr6iam92djvg6znp32gp";
+    };
+  };
+
   pytestpep8 = buildPythonPackage rec {
     name = "pytest-pep8";
     src = pkgs.fetchurl {
