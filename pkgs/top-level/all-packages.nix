@@ -9554,6 +9554,8 @@ in
 
   tntnet = callPackage ../development/libraries/tntnet { };
 
+  tntdb = callPackage ../development/libraries/tntdb { };
+
   kyotocabinet = callPackage ../development/libraries/kyotocabinet { };
 
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
