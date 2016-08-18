@@ -254,12 +254,11 @@ in
               echo -n .
               trial=$(($trial + 1))
               if [[ $trial -eq 60 ]]; then
-                echo
-                echo "$msg"
                 break
               fi
             done
             echo
+            if [[ -n "$msg" ]]; then echo "$msg"; fi
         '') rootPools));
       };
 
