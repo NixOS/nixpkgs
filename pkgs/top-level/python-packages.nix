@@ -17819,11 +17819,11 @@ in modules // {
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
-    version = "3.4.2";
+    version = "4.3.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/psutil/${name}.tar.gz";
-      sha256 = "b17fa01aa766daa388362d0eda5c215d77e03a8d37676b68971f37bf3913b725";
+      sha256 = "1w4r09fvn6kd80m5mx4ws1wz100brkaq6hzzpwrns8cgjzjpl6c6";
     };
 
     # Certain tests fail due to being in a chroot.
