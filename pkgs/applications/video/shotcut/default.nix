@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL, frei0r, gettext, mlt, jack1, pkgconfig, qtbase,
-qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquick1, qtquickcontrols,
+qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquickcontrols,
 qtgraphicaleffects,
 qmakeHook, makeQtWrapper }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ SDL frei0r gettext mlt pkgconfig qtbase qtmultimedia qtwebkit
-    qtx11extras qtwebsockets qtquick1 qtquickcontrols qtgraphicaleffects qmakeHook makeQtWrapper ];
+    qtx11extras qtwebsockets qtquickcontrols qtgraphicaleffects qmakeHook makeQtWrapper ];
 
   enableParallelBuilding = true;
 
