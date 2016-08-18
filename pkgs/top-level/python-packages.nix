@@ -24664,8 +24664,12 @@ in modules // {
       sha256 = "1vpf98k4jp4yhbv2jbyq8dj5fdasrd26rkq34pacs5n7mkxxlr6c";
     };
 
+    LC_ALL = "en_US.UTF-8";
+
     propagatedBuildInputs = with self; [ itsdangerous ];
-    nativeBuildInputs = with self; [ pytest requests ];
+    buildInputs = with self; [ pytest requests2 pkgs.glibcLocales ];
+
+
 
     meta = {
       homepage = http://werkzeug.pocoo.org/;
