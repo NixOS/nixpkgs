@@ -1,9 +1,10 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
-, minimal ? false
+, withData ? false, poppler_data
 , qt4Support ? false, qt4 ? null
 , qt5Support ? false, qtbase ? null
-, utils ? false, suffix ? "glib"
+, utils ? false
+, minimal ? false, suffix ? "glib"
 }:
 
 let # beware: updates often break cups_filters build
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  patches = [ ./datadir_env.patch ];
+  buildInputs = [ libiconv ] ++ libintlOrEmpty ++ lib.optional withData poppler_data;
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     ++ optional qt4Support qt4
     ++ optional qt5Support qtbase;
 
-  nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
+  nativeBuildInputs = [ pkgconfig ];
 
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
