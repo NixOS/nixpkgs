@@ -4944,6 +4944,8 @@ in modules // {
       sha256 = "0fwydaahgflz9w753v1cmkfzrlfq1vb8zp4i20m2d3lvkm4crv93";
     };
 
+    buildInputs = with self; [ pytest ];
+
     meta = with stdenv.lib; {
       description = "Scripting library for tmux";
       homepage = https://libtmux.readthedocs.io/;
