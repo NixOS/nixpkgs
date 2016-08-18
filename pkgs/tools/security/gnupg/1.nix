@@ -1,11 +1,11 @@
 { stdenv, fetchurl, readline, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "gnupg-1.4.20";
+  name = "gnupg-1.4.21";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1k7d6zi0zznqsmcjic0yrgfhqklqz3qgd3yac7wxsa7s6088p604";
+    sha256 = "0xi2mshq8f6zbarb5f61c9w2qzwrdbjm4q8fqsrwlzc51h8a6ivb";
   };
 
   buildInputs = [ readline bzip2 ];
