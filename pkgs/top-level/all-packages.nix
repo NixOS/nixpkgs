@@ -4016,6 +4016,8 @@ in
 
   ugarit-manifest-maker = callPackage ../tools/backup/ugarit-manifest-maker { };
 
+  unar = callPackage ../tools/archivers/unar { stdenv = clangStdenv; };
+
   unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
