@@ -4747,6 +4747,30 @@ in modules // {
     };
   };
 
+  pytest-server-fixtures = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pytest-server-fixtures";
+    version = "1.1.0";
+
+    propagatedBuildInputs = with self; [ setuptools-git pytest-shutil pytest-fixture-config psutil requests2 ];
+
+    meta = {
+      description = "Extensible server fixures for py.test";
+      homepage    = "https://github.com/manahl/pytest-plugins";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+
+    doCheck = false;
+    # RuntimeError: Unable to find a free server number to start Xvfb
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "1gs9qimcn8q6xi9d6i5624l0dziwvn6nj2rda07fg15g1cq66s8l";
+    };
+  };
+
   pytestcov = buildPythonPackage (rec {
     name = "pytest-cov-2.2.0";
 
