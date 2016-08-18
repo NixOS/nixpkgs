@@ -7,8 +7,8 @@
 }:
 
 let # beware: updates often break cups_filters build
-  version = "0.43.0"; # even major numbers are stable
-  sha256 = "0mi4zf0pz3x3fx3ir7szz1n57nywgbpd4mp2r7mvf47f4rmf4867";
+  version = "0.46.0"; # even major numbers are stable
+  sha256 = "11z4d5vrrd0m7w9bfydwabksk273z7z0xf2nwvzf5pk17p8kazcn";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
-
-  # Any package depending on Qt >= 5.7 must build using the C++11 standard.
-  CXXFLAGS = lib.optional qt5Support "-std=c++11";
 
   configureFlags = with lib;
     [
