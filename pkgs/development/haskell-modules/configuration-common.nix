@@ -939,13 +939,6 @@ self: super: {
     '';
   });
 
-  # libmpd has an upper-bound on time which doesn't seem to be a real build req
-  libmpd = dontCheck (overrideCabal super.libmpd (drv: {
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
-    '';
-  }));
-
   # https://github.com/commercialhaskell/stack/issues/2263
   stack = appendPatch super.stack (pkgs.fetchpatch {
     url = "https://github.com/commercialhaskell/stack/commit/7f7f1a5f67f4ecdd1f3009495f1ff101dd38047e.patch";
