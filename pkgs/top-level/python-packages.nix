@@ -19997,6 +19997,12 @@ in modules // {
 
     propagatedBuildInputs = with self; [ urllib3 dns];
 
+    postPatch = ''
+      sed -i '19s/dns/"dnspython"/' setup.py
+    '';
+
+    # Some issues with etcd not in path even though most tests passed
+    doCheck = false;
 
     meta = {
       description = "A python client for Etcd";
