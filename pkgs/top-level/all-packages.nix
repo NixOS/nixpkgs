@@ -11898,6 +11898,8 @@ in
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
+  bookerly = callPackage ../data/fonts/bookerly { };
+
   cacert = callPackage ../data/misc/cacert { };
 
   caladea = callPackage ../data/fonts/caladea {};
