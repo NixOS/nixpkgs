@@ -27,6 +27,7 @@ rec {
       # C standard library stuff
       cp -d ${darwin.Libsystem}/lib/*.o $out/lib/
       cp -d ${darwin.Libsystem}/lib/*.dylib $out/lib/
+      cp -d ${darwin.Libsystem}/lib/system/*.dylib $out/lib/
 
       # Resolv is actually a link to another package, so let's copy it properly
       rm $out/lib/libresolv.9.dylib
@@ -90,7 +91,7 @@ rec {
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
 
       # Copy binutils.
-      for i in as ld ar ranlib nm strip otool install_name_tool dsymutil lipo; do
+      for i in as ld ar ranlib nm strip otool install_name_tool dsymutil; do
         cp ${darwin.cctools}/bin/$i $out/bin
       done
 

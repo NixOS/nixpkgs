@@ -62,6 +62,7 @@ services.gitlab = {
     address = "localhost";
     port = 25;
   };
+  secrets.db_key_base = "ei3eeP1ohsh0uu3ad4YeeMeeheengah3AiZee2ohl4Ooj5mie4Ohl0vishoghaes";
   extraConfig = {
     gitlab = {
       email_from = "gitlab-no-reply@example.com";
@@ -73,6 +74,12 @@ services.gitlab = {
 };
 </programlisting>
 </para>
+
+<para>If you're setting up a new Gitlab instance, generate a new
+<literal>db_key_base</literal> secret to encrypt sensible data in the
+database. If you're restoring an existing Gitlab instance, you must
+specify the <literal>db_key_base</literal> secret from
+<literal>config/secrets.yml</literal> in your Gitlab state folder.</para>
 
 <para>Refer to <xref linkend="ch-options" /> for all available configuration
 options for the <literal>services.gitlab</literal> module.</para>

@@ -191,7 +191,7 @@ in modules // {
     };
   };
 
-  dbus = callPackage ../development/python-modules/dbus {
+  dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
 
@@ -265,14 +265,11 @@ in modules // {
   };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
-    pythonDBus = self.dbus;
     pythonPackages = self;
   };
 
-  pyqt5 = pkgs.qt55.callPackage ../development/python-modules/pyqt/5.x.nix {
-    sip = self.sip_4_16;
-    pythonDBus = self.dbus;
-    python = self.python;
+  pyqt5 = pkgs.qt5.callPackage ../development/python-modules/pyqt/5.x.nix {
+    pythonPackages = self;
   };
 
   pyside = callPackage ../development/python-modules/pyside { };
@@ -309,8 +306,6 @@ in modules // {
   rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
 
   sip = callPackage ../development/python-modules/sip { };
-
-  sip_4_16 = callPackage ../development/python-modules/sip/4.16.nix { };
 
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
@@ -4948,6 +4943,8 @@ in modules // {
       url = "mirror://pypi/l/libtmux/${name}.tar.gz";
       sha256 = "0fwydaahgflz9w753v1cmkfzrlfq1vb8zp4i20m2d3lvkm4crv93";
     };
+
+    buildInputs = with self; [ pytest ];
 
     meta = with stdenv.lib; {
       description = "Scripting library for tmux";
@@ -14612,7 +14609,7 @@ in modules // {
       sha256 = "0yjxwisxpxy3vpnqk9nw5k3db3xx6wyf6sk1px9m94s30glcq2cc";
     };
 
-    propagatedBuildInputs = with self; [ appdirs pyyaml requests2 dbus emoji sleekxmpp mock ];
+    propagatedBuildInputs = with self; [ appdirs pyyaml requests2 dbus-python emoji sleekxmpp mock ];
 
     meta = {
       description = "A utility for sending notifications, on demand and when commands finish";
@@ -17494,11 +17491,11 @@ in modules // {
   };
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-3.2.0";
+    name = "Pillow-3.3.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/Pillow/${name}.tar.gz";
-      sha256 = "0jkqjnqj3bz3cwrvbw6q1zy6dn0c328r6v20k7m0lj0c45bs1c34";
+      sha256 = "1lfc197rj4b4inib9b0q0g3rsi204gywfrnk38yk8kssi2f7q7h3";
     };
 
     # Check is disabled because of assertion errors, see
@@ -17828,6 +17825,10 @@ in modules // {
       url = "mirror://pypi/p/psutil/${name}.tar.gz";
       sha256 = "1w4r09fvn6kd80m5mx4ws1wz100brkaq6hzzpwrns8cgjzjpl6c6";
     };
+
+    # Certain tests fail due to being in a chroot.
+    # See also the older issue: https://code.google.com/p/psutil/issues/detail?id=434
+    doCheck = false;
 
     buildInputs = with self; [ mock ] ++ optionals stdenv.isDarwin [ pkgs.darwin.IOKit ];
 
@@ -19685,11 +19686,11 @@ in modules // {
 
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
-    version = "0.15.1";
+    version = "16.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
-      sha256 = "0wnnq15rhj7fhdcd8ycwiw6r6g3w9f9lcy6cigg8226vsrq618ph";
+      sha256 = "0zfijaxlq4vgi6jz0d4i5xq9ygqnyps6br7lmigjhqnh8gp10g9n";
     };
 
     # 12 tests failing, 26 error out
@@ -19996,6 +19997,12 @@ in modules // {
 
     propagatedBuildInputs = with self; [ urllib3 dns];
 
+    postPatch = ''
+      sed -i '19s/dns/"dnspython"/' setup.py
+    '';
+
+    # Some issues with etcd not in path even though most tests passed
+    doCheck = false;
 
     meta = {
       description = "A python client for Etcd";
@@ -22457,7 +22464,7 @@ in modules // {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 pkgs.pythonDBus pygobject ];
+    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 dbus-python pygobject ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
@@ -24665,8 +24672,12 @@ in modules // {
       sha256 = "1vpf98k4jp4yhbv2jbyq8dj5fdasrd26rkq34pacs5n7mkxxlr6c";
     };
 
+    LC_ALL = "en_US.UTF-8";
+
     propagatedBuildInputs = with self; [ itsdangerous ];
-    nativeBuildInputs = with self; [ pytest requests ];
+    buildInputs = with self; [ pytest requests2 pkgs.glibcLocales ];
+
+
 
     meta = {
       homepage = http://werkzeug.pocoo.org/;
@@ -26557,7 +26568,8 @@ in modules // {
 
     postPatch = ''
       substituteInPlace requirements.txt \
-        --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28'
+        --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28' \
+        --replace 'pyopenssl==0.15.1' 'pyopenssl==16.0.0'
     '';
 
     propagatedBuildInputs = with self; [
@@ -26724,7 +26736,7 @@ in modules // {
     };
 
     preConfigure = ''
-      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
+      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
     '';
     preBuild = "${python}/bin/${python.executable} setup.py build_ext";
     installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
@@ -26794,7 +26806,7 @@ in modules // {
     # no tests available
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pygobject3 dbus ];
+    propagatedBuildInputs = with self; [ pygobject3 dbus-python ];
 
     meta = {
       homepage = https://github.com/ricardomv/snapper-gui;
@@ -27096,15 +27108,15 @@ in modules // {
 
   service-identity = buildPythonPackage rec {
     name = "service-identity-${version}";
-    version = "14.0.0";
+    version = "16.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/service_identity/service_identity-${version}.tar.gz";
-      sha256 = "0njg9bklkkp4rl2b9vsfh9aasxy3w2dmjkv9cq34jn65lwcs619i";
+      sha256 = "0dih7i7d36nbllcxgfkvbnaj1wlzhwfnpr4b97dz74czylif4c06";
     };
 
     propagatedBuildInputs = with self; [
-      characteristic pyasn1 pyasn1-modules pyopenssl idna
+      characteristic pyasn1 pyasn1-modules pyopenssl idna attrs
     ];
 
     buildInputs = with self; [

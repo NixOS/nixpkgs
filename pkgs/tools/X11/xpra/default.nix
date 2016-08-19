@@ -30,7 +30,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow pygtk pygobject rencode pycrypto cryptography pycups lz4 dbus
+    pillow pygtk pygobject rencode pycrypto cryptography pycups lz4 dbus-python
   ];
 
   preBuild = ''

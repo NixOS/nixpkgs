@@ -1,0 +1,14 @@
+diff -c ProjectCenter-0.6.2/GNUmakefile.preamble ProjectCenter-0.6.2.patched/GNUmakefile.preamble
+--- ProjectCenter-0.6.2/GNUmakefile.preamble	2010-08-08 03:56:04.000000000 +0600
++++ artyom/ProjectCenter-0.6.2.patched/GNUmakefile.preamble	2014-12-01 20:08:31.000000000 +0600
+@@ -39,7 +39,7 @@
+ ADDITIONAL_INCLUDE_DIRS += -I./ -I./Headers
+ 
+ # Additional LDFLAGS to pass to the linker
+-ADDITIONAL_LDFLAGS += 
++ADDITIONAL_LDFLAGS += -lgnustep-base -lgnustep-gui
+ 
+ # Additional library directories the linker should search
+ ADDITIONAL_LIB_DIRS += -L./Framework/ProjectCenter.framework/$(GNUSTEP_TARGET_LDIR)
+
+Diff finished.  Mon Dec  1 20:08:50 2014

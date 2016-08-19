@@ -6,7 +6,7 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "5.1.1";
+  majorVersion = "5.3.1";
   version = "${majorVersion}";
   libPrefix = "pypy${majorVersion}";
 
@@ -17,8 +17,8 @@ let
     inherit majorVersion version;
 
     src = fetchurl {
-      url = "https://bitbucket.org/pypy/pypy/get/release-${version}.tar.bz2";
-      sha256 = "1dmckvffanmh0b50pq34shnw05r55gjxn43kgvnkz5kkvvsbxdg1";
+      url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
+      sha256 = "19cq2ngkh5q5jxwhw81rd6p0qna73z85jfik88w0856k5aj86yha";
     };
 
    # http://bugs.python.org/issue27369

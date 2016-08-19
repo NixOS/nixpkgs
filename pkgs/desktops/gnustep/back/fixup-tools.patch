@@ -1,0 +1,14 @@
+diff -c gnustep-back-0.24.0/Tools/GNUmakefile.preamble gnustep-back-0.24.0.patched/Tools/GNUmakefile.preamble
+--- gnustep-back-0.24.0/Tools/GNUmakefile.preamble	2013-07-04 22:44:28.000000000 +0600
++++ gnustep-back-0.24.0.patched/Tools/GNUmakefile.preamble	2014-12-01 16:40:37.000000000 +0600
+@@ -52,6 +52,9 @@
+ # Additional libraries when linking applications
+ #ADDITIONAL_GUI_LIBS +=
+ 
++# Additional libraries when linking tools
++gpbs_TOOL_LIBS += -lgnustep-gui -lgnustep-base $(SYSTEM_LIBS)
++
+ #
+ # Flags dealing with installing and uninstalling
+ #
+

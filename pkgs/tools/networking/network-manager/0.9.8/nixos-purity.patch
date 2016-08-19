@@ -47,7 +47,7 @@ index 1dc94ee..e60f3c8 100644
  
  	for (iter = modules; *iter; iter++) {
 -		char *argv[3] = { "/sbin/modprobe", *iter, NULL };
-+		char *argv[3] = { "@kmod@/bin/modprobe", *iter, NULL };
++		char *argv[3] = { "/var/run/current-system/sw/bin/modprobe", *iter, NULL };
  		char *envp[1] = { NULL };
  		GError *error = NULL;
  
@@ -71,7 +71,7 @@ index 59698c3..7dba0f7 100644
  	/* Make sure /dev/ppp exists (bgo #533064) */
  	if (stat ("/dev/ppp", &st) || !S_ISCHR (st.st_mode))
 -		ignored = system ("/sbin/modprobe ppp_generic");
-+		ignored = system ("@kmod@/bin/modprobe ppp_generic");
++		ignored = system ("/var/run/current-system/sw/bin/modprobe ppp_generic");
  
  	connection = nm_act_request_get_connection (req);
  	g_assert (connection);

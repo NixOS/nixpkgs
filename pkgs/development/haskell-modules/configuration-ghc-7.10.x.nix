@@ -136,7 +136,6 @@ self: super: {
 
   timezone-series = doJailbreak super.timezone-series;
   timezone-olson = doJailbreak super.timezone-olson;
-  libmpd = dontCheck super.libmpd;
   xmonad-extras = overrideCabal super.xmonad-extras (drv: {
     postPatch = ''
       sed -i -e "s,<\*,<¤,g" XMonad/Actions/Volume.hs

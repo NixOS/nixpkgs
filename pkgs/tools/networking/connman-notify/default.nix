@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pythonPackages.python
-    pythonPackages.dbus
+    pythonPackages.dbus-python
     pythonPackages.pygobject
     pythonPackages.pygtk
     pythonPackages.notify

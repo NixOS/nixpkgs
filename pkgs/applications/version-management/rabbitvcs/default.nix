@@ -11,7 +11,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "0964pdylrx4n9c9l8ncwv4q1p63y4hadb5v4pgvm0m2fah2jlkly";
   };
 
-  pythonPath = with python2Packages; [ configobj dbus pygobject pygtk simplejson pysvn dulwich tkinter gvfs xdg_utils ];
+  pythonPath = with python2Packages; [ configobj dbus-python pygobject pygtk simplejson pysvn dulwich tkinter gvfs xdg_utils ];
 
   prePatch = ''
       sed -ie 's|if sys\.argv\[1\] == "install":|if False:|' ./setup.py
