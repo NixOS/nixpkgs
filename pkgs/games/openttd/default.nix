@@ -1,5 +1,7 @@
 { stdenv, fetchurl, fetchzip, pkgconfig, SDL, libpng, zlib, xz, freetype, fontconfig
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
+, withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
+, writeScriptBin, makeWrapper
 }:
 
 let
@@ -18,6 +20,12 @@ let
     sha256 = "0qnmfzz0v8vxrrvxnm7szphrlrlvhkwn3y92b4iy0b4b6yam0yd4";
   };
 
+  playmidi = writeScriptBin "playmidi" ''
+    #!/bin/sh
+    trap "${procps}/bin/pkill fluidsynth" EXIT
+    ${fluidsynth}/bin/fluidsynth -a ${audioDriver} -i ${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 $*
+  '';
+
 in
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
@@ -28,8 +36,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ak32fj5xkk2fvmm3g8i7wzmk4bh2ijsp8fzvvw5wj6365p9j24v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL libpng xz zlib freetype fontconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  buildInputs = [ SDL libpng xz zlib freetype fontconfig ]
+    ++ stdenv.lib.optional withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";
 
@@ -58,6 +67,11 @@ stdenv.mkDerivation rec {
       cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/baseset/openmsx
     ''}
 
+    ${stdenv.lib.optionalString withFluidSynth ''
+      wrapProgram $out/bin/openttd \
+        --add-flags -m \
+        --add-flags extmidi:cmd=${playmidi}/bin/playmidi
+    ''}
   '';
 
   meta = {
