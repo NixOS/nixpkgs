@@ -13083,6 +13083,8 @@ in
 
   gsimplecal = callPackage ../applications/misc/gsimplecal { };
 
+  gthumb = callPackage ../applications/graphics/gthumb { };
+
   gtimelog = pythonPackages.gtimelog;
 
   inherit (gnome3) gucharmap;
