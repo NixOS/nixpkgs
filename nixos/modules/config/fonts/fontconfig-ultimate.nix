@@ -79,16 +79,16 @@ let fcBool = x: if x then "<bool>true</bool>" else "<bool>false</bool>";
 
       # fontconfig ultimate substitutions
       ${optionalString (cfg.substitutions != "none") ''
-      ln -s ${pkgs.fontconfig-ultimate.confd}/etc/fonts/presets/${cfg.substitutions}/*.conf \
+      ln -s ${pkgs.fontconfig-ultimate}/etc/fonts/presets/${cfg.substitutions}/*.conf \
             $support_folder
-      ln -s ${pkgs.fontconfig-ultimate.confd}/etc/fonts/presets/${cfg.substitutions}/*.conf \
+      ln -s ${pkgs.fontconfig-ultimate}/etc/fonts/presets/${cfg.substitutions}/*.conf \
             $latest_folder
       ''}
 
       # fontconfig ultimate various configuration files
-      ln -s ${pkgs.fontconfig-ultimate.confd}/etc/fonts/conf.d/*.conf \
+      ln -s ${pkgs.fontconfig-ultimate}/etc/fonts/conf.d/*.conf \
             $support_folder
-      ln -s ${pkgs.fontconfig-ultimate.confd}/etc/fonts/conf.d/*.conf \
+      ln -s ${pkgs.fontconfig-ultimate}/etc/fonts/conf.d/*.conf \
             $latest_folder
     '';
 
@@ -153,9 +153,7 @@ in
           };
 
           substitutions = mkOption {
-            type = types.str // {
-              check = flip elem ["none" "free" "combi" "ms"];
-            };
+            type = types.nullOr (types.enum ["free" "combi" "ms"]);
             default = "free";
             description = ''
               Font substitutions to replace common Type 1 fonts with nicer
@@ -166,35 +164,12 @@ in
             '';
           };
 
-          rendering = mkOption {
-            type = types.attrs;
-            default = pkgs.fontconfig-ultimate.rendering.ultimate;
+          preset = mkOption {
+            type = types.enum ["ultimate1" "ultimate2" "ultimate3" "ultimate4" "ultimate5" "osx" "windowsxp"];
+            default = "ultimate3";
             description = ''
-              FreeType rendering settings presets. The default is
-              <literal>pkgs.fontconfig-ultimate.rendering.ultimate</literal>.
-              The other available styles are:
-              <literal>ultimate-lighter</literal>,
-              <literal>ultimate-darker</literal>,
-              <literal>ultimate-lightest</literal>,
-              <literal>ultimate-darkest</literal>,
-              <literal>default</literal> (the original Infinality default),
-              <literal>osx</literal>,
-              <literal>ipad</literal>,
-              <literal>ubuntu</literal>,
-              <literal>linux</literal>,
-              <literal>winxplight</literal>,
-              <literal>win7light</literal>,
-              <literal>winxp</literal>,
-              <literal>win7</literal>,
-              <literal>vanilla</literal>,
-              <literal>classic</literal>,
-              <literal>nudge</literal>,
-              <literal>push</literal>,
-              <literal>shove</literal>,
-              <literal>sharpened</literal>,
-              <literal>infinality</literal>. Any of the presets may be
-              customized by editing the attributes. To disable, set this option
-              to the empty attribute set <literal>{}</literal>.
+              FreeType rendering settings preset. Any of the presets may be
+              customized by setting environment variables.
             '';
           };
         };
@@ -206,7 +181,7 @@ in
   config = mkIf (config.fonts.fontconfig.enable && cfg.enable) {
 
     fonts.fontconfig.confPackages = [ confPkg ];
-    environment.variables = cfg.rendering;
+    environment.variables."INFINALITY_FT" = cfg.preset;
 
   };
 
