@@ -1191,6 +1191,7 @@ self: super: {
   "anatomy" = dontDistribute super."anatomy";
   "android" = dontDistribute super."android";
   "android-lint-summary" = dontDistribute super."android-lint-summary";
+  "angle" = dontDistribute super."angle";
   "animalcase" = dontDistribute super."animalcase";
   "annah" = dontDistribute super."annah";
   "annihilator" = dontDistribute super."annihilator";
@@ -3079,6 +3080,7 @@ self: super: {
   "gang-of-threads" = dontDistribute super."gang-of-threads";
   "garepinoh" = dontDistribute super."garepinoh";
   "garsia-wachs" = dontDistribute super."garsia-wachs";
+  "gasp" = dontDistribute super."gasp";
   "gbu" = dontDistribute super."gbu";
   "gc" = dontDistribute super."gc";
   "gc-monitoring-wai" = dontDistribute super."gc-monitoring-wai";
@@ -4241,6 +4243,7 @@ self: super: {
   "hsc3-sf-hsndfile" = dontDistribute super."hsc3-sf-hsndfile";
   "hsc3-unsafe" = dontDistribute super."hsc3-unsafe";
   "hsc3-utils" = dontDistribute super."hsc3-utils";
+  "hscaffold" = dontDistribute super."hscaffold";
   "hscamwire" = dontDistribute super."hscamwire";
   "hscassandra" = dontDistribute super."hscassandra";
   "hscd" = dontDistribute super."hscd";
@@ -4798,6 +4801,7 @@ self: super: {
   "keycode" = doDistribute super."keycode_0_2";
   "keyed" = dontDistribute super."keyed";
   "keyring" = dontDistribute super."keyring";
+  "keysafe" = dontDistribute super."keysafe";
   "keystore" = dontDistribute super."keystore";
   "keyvaluehash" = dontDistribute super."keyvaluehash";
   "keyword-args" = dontDistribute super."keyword-args";
@@ -5087,6 +5091,7 @@ self: super: {
   "llvm-data-interop" = dontDistribute super."llvm-data-interop";
   "llvm-extra" = dontDistribute super."llvm-extra";
   "llvm-ffi" = dontDistribute super."llvm-ffi";
+  "llvm-ffi-tools" = dontDistribute super."llvm-ffi-tools";
   "llvm-general" = dontDistribute super."llvm-general";
   "llvm-general-pure" = dontDistribute super."llvm-general-pure";
   "llvm-general-quote" = dontDistribute super."llvm-general-quote";
@@ -5748,6 +5753,7 @@ self: super: {
   "old-version" = dontDistribute super."old-version";
   "olwrapper" = dontDistribute super."olwrapper";
   "omaketex" = dontDistribute super."omaketex";
+  "ombra" = dontDistribute super."ombra";
   "omega" = dontDistribute super."omega";
   "omnicodec" = dontDistribute super."omnicodec";
   "on-a-horse" = dontDistribute super."on-a-horse";
@@ -6310,6 +6316,7 @@ self: super: {
   "qtah-examples" = dontDistribute super."qtah-examples";
   "qtah-generator" = dontDistribute super."qtah-generator";
   "qtah-qt5" = dontDistribute super."qtah-qt5";
+  "quack" = dontDistribute super."quack";
   "quadratic-irrational" = dontDistribute super."quadratic-irrational";
   "quantfin" = dontDistribute super."quantfin";
   "quantities" = dontDistribute super."quantities";
