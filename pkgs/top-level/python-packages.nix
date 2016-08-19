@@ -42,6 +42,7 @@ in modules // {
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
       substitutions.executable = python.interpreter;
+      substitutions.python = python;
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.
         # NOTE: Order DOES matter here, so single character quotes need to be
@@ -53,19 +54,31 @@ in modules // {
           isSingle = elem quote [ "\"" "'\"'\"'" ];
           endQuote = if isSingle then "[^\\\\]${quote}" else quote;
         in ''
-          /^ *[a-z]?${quote}/ {
+          /^[a-z]?${quote}/ {
             /${quote}${quote}|${quote}.*${endQuote}/{n;br}
             :${label}; n; /^${quote}/{n;br}; /${endQuote}/{n;br}; b${label}
           }
         '';
 
+        # This preamble does two things:
+        # * Sets argv[0] to the original application's name; otherwise it would be .foo-wrapped.
+        #   Python doesn't support `exec -a`.
+        # * Adds all required libraries to sys.path via `site.addsitedir`. It also handles *.pth files.
+        preamble = ''
+          import sys
+          import site
+          import functools
+          sys.argv[0] = '"'$(basename "$f")'"'
+          functools.reduce(lambda k, p: site.addsitedir(p, k), ['"$([ -n "$program_PYTHONPATH" ] && (echo "'$program_PYTHONPATH'" | sed "s|:|','|g") || true)"'], site._init_pathinfo())
+        '';
+
       in ''
         1 {
-          /^#!/!b; :r
-          /\\$/{N;br}
-          /__future__|^ *(#.*)?$/{n;br}
+          :r
+          /\\$|,$/{N;br}
+          /__future__|^ |^ *(#.*)?$/{n;br}
           ${concatImapStrings mkStringSkipper quoteVariants}
-          /^ *[^# ]/i import sys; sys.argv[0] = '"'$(basename "$f")'"'
+          /^[^# ]/i ${replaceStrings ["\n"] [";"] preamble}
         }
       '';
     }
@@ -8521,20 +8534,7 @@ in modules // {
     installPhase = ''
       mkdir -p $out/${python.sitePackages}
       cp -r scfbuild $out/${python.sitePackages}
-      # Workaround for #16133
-      mkdir -p $out/bin
-
-      cat >$out/bin/scfbuild <<EOF
-      #!/usr/bin/env python2
-
-      import sys
-      from scfbuild.main import main
-
-      if __name__ == '__main__':
-        sys.exit(main())
-      EOF
-
-      chmod +x $out/bin/scfbuild
+      cp -r bin $out
     '';
 
     meta = with stdenv.lib; {
