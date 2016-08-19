@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     export SAGE_ATLAS_ARCH=fast
     mkdir -p $out/sageHome
     export HOME=$out/sageHome
+    export CPPFLAGS="-P"
   '';
 
   preBuild = "patchShebangs build";
@@ -30,7 +31,6 @@ stdenv.mkDerivation rec {
   installPhase = ''DESTDIR=$out make install'';
 
   meta = {
-    broken = true;
     homepage = "http://www.sagemath.org";
     description = "A free open source mathematics software system";
     license = stdenv.lib.licenses.gpl2Plus;
