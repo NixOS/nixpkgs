@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, libiconv, libintlOrEmpty
 , expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
@@ -18,6 +18,17 @@ stdenv.mkDerivation rec {
     url = "http://cairographics.org/releases/${name}.tar.xz";
     sha256 = "0lmjlzmghmr27y615px9hkm552x7ap6pmq9mfbzr6smp8y2b6g31";
   };
+
+  infinality = fetchFromGitHub {
+    owner = "archfan";
+    repo = "infinality_bundle";
+    rev = "5c0949a477bf43d2ac4e57b4fc39bcc3331002ee";
+    sha256 = "17389aqm6rlxl4b5mv1fx4b22x2v2n60hfhixfxqxpd8ialsdi6l";
+  };
+
+  prePatch = ''
+    patches="$patches $(echo $infinality/*_cairo-iu/*.patch)"
+  '';
 
   outputs = [ "dev" "out" "docdev" ];
   outputBin = "dev"; # very small
