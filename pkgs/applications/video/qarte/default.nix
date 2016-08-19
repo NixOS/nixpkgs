@@ -1,8 +1,7 @@
 { stdenv, fetchbzr, pythonPackages, rtmpdump, makeWrapper }:
 
 let
-  inherit (pythonPackages) python pyqt4;
-  sip = pythonPackages.sip_4_16;
+  inherit (pythonPackages) python pyqt4 sip;
 in stdenv.mkDerivation {
   name = "qarte-2.4.0";
   src = fetchbzr {

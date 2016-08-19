@@ -1162,7 +1162,7 @@ in
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
-  checkbashism = callPackage ../development/tools/misc/checkbashisms { };
+  checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   clamav = callPackage ../tools/security/clamav { };
 
@@ -3756,6 +3756,8 @@ in
 
   tracefilesim = callPackage ../development/tools/analysis/garcosim/tracefilesim { };
 
+  translate-shell = callPackage ../applications/misc/translate-shell { };
+
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
   trickle = callPackage ../tools/networking/trickle {};
@@ -4018,6 +4020,8 @@ in
   ugarit = callPackage ../tools/backup/ugarit { };
 
   ugarit-manifest-maker = callPackage ../tools/backup/ugarit-manifest-maker { };
+
+  unar = callPackage ../tools/archivers/unar { stdenv = clangStdenv; };
 
   unarj = callPackage ../tools/archivers/unarj { };
 
@@ -5393,6 +5397,8 @@ in
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
+    topkg = callPackage ../development/ocaml-modules/topkg { };
+
     tsdl = callPackage ../development/ocaml-modules/tsdl { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
@@ -5528,6 +5534,8 @@ in
   smlnj = if stdenv.isDarwin
             then callPackage ../development/compilers/smlnj { }
             else callPackage_i686 ../development/compilers/smlnj { };
+
+  solc = callPackage ../development/compilers/solc { };
 
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper { };
 
@@ -6412,6 +6420,8 @@ in
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = self.gnumake42;
 
+  gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
+  
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
@@ -7049,6 +7059,8 @@ in
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
   cutee = callPackage ../development/libraries/cutee { };
+
+  cxxtools = callPackage ../development/libraries/cxxtools { };
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
@@ -8747,7 +8759,9 @@ in
     withGUI = false;
   };
 
-  mlt-qt4 = callPackage ../development/libraries/mlt {
+  mlt = callPackage ../development/libraries/mlt {};
+
+  mlt-qt4 = callPackage ../development/libraries/mlt/qt-4.nix {
     ffmpeg = ffmpeg_2;
     qt = qt4;
   };
@@ -9195,6 +9209,8 @@ in
       ffmpeg = ffmpeg_2;
     });
 
+    qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
+
   } // kdeFrameworks;
 
   qtEnv = qt5.env;
@@ -9523,6 +9539,10 @@ in
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
   tnt = callPackage ../development/libraries/tnt { };
+
+  tntnet = callPackage ../development/libraries/tntnet { };
+
+  tntdb = callPackage ../development/libraries/tntdb { };
 
   kyotocabinet = callPackage ../development/libraries/kyotocabinet { };
 
@@ -10427,6 +10447,8 @@ in
 
   influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
 
+  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; }; 
+
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
@@ -10829,12 +10851,6 @@ in
     libobjc = apple-source-releases.objc4;
 
     stubs = callPackages ../os-specific/darwin/stubs {};
-  };
-
-  gnustep-make = callPackage ../development/tools/build-managers/gnustep/make {};
-  gnustep-xcode = callPackage ../development/tools/build-managers/gnustep/xcode {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-    inherit (darwin) libobjc;
   };
 
   devicemapper = self.lvm2;
@@ -12388,6 +12404,10 @@ in
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
 
+  bitwig-studio =  callPackage ../applications/audio/bitwig-studio {
+    inherit (gnome2) zenity;
+  };
+
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
@@ -12428,7 +12448,7 @@ in
   calcurse = callPackage ../applications/misc/calcurse { };
 
   calibre = qt55.callPackage ../applications/misc/calibre {
-    inherit (pythonPackages) pyqt5 sip_4_16;
+    inherit (pythonPackages) pyqt5 sip;
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
@@ -13060,6 +13080,8 @@ in
 
   gsimplecal = callPackage ../applications/misc/gsimplecal { };
 
+  gthumb = callPackage ../applications/graphics/gthumb { };
+
   gtimelog = pythonPackages.gtimelog;
 
   inherit (gnome3) gucharmap;
@@ -13633,7 +13655,9 @@ in
     ffmpeg = ffmpeg_2;
   };
 
-  kiwix = callPackage ../applications/misc/kiwix { };
+  kiwix = callPackage ../applications/misc/kiwix {
+    stdenv = overrideCC stdenv gcc49;
+  };
 
   koji = callPackage ../tools/package-management/koji { };
 
@@ -14695,6 +14719,8 @@ in
   sddm = qt5.callPackage ../applications/display-managers/sddm {
     themes = [];  # extra themes, etc.
   };
+
+  skrooge2 = qt5.callPackage ../applications/office/skrooge/2.nix {};
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;

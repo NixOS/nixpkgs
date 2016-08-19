@@ -43,13 +43,11 @@ extra-packages:
   - containers < 0.5                    # required to build alex with GHC 6.12.3
   - control-monad-free < 0.6            # newer versions don't compile with anything but GHC 7.8.x
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
-  - descriptive < 0.1                   # required for structured-haskell-mode-1.0.8
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock < 2.17                      # required on GHC 7.10.x
   - haddock-api == 2.15.*               # required on GHC 7.8.x
   - haddock-api == 2.16.*               # required on GHC 7.10.x
-  - haskell-src-exts < 1.16             # required for structured-haskell-mode-1.0.8
   - mtl < 2.2                           # newer versions require transformers > 0.4.x, which we cannot provide in GHC 7.8.x
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
   - parallel == 3.2.0.3                 # newer versions don't work with GHC 6.12.3
@@ -4264,7 +4262,6 @@ dont-distribute-packages:
   structs:                                      [ i686-linux, x86_64-linux ]
   structural-induction:                         [ i686-linux, x86_64-linux ]
   structural-traversal:                         [ i686-linux, x86_64-linux ]
-  structured-haskell-mode:                      [ i686-linux, x86_64-linux ]
   structured-mongoDB:                           [ i686-linux, x86_64-linux ]
   structures:                                   [ i686-linux, x86_64-linux ]
   stunts:                                       [ i686-linux, x86_64-darwin, x86_64-linux ]

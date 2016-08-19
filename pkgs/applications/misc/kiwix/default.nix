@@ -1,9 +1,7 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, zip, python
-, zlib, xapian, which , icu, libmicrohttpd , lzma, zimlib
-, ctpp2, aria2, wget , bc, libuuid , glibc, libX11
-, libXext, libXt, libXrender , glib, dbus, dbus_glib, gtk
-, gdk_pixbuf, pango, cairo , freetype, fontconfig, alsaLib
-, atk
+{ stdenv, callPackage, overrideCC, fetchurl, makeWrapper, pkgconfig
+, zip, python, zlib, which, icu, libmicrohttpd, lzma, ctpp2, aria2, wget, bc
+, libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus_glib
+, gtk, gdk_pixbuf, pango, cairo , freetype, fontconfig, alsaLib, atk
 }:
 
 let
@@ -30,6 +28,9 @@ let
     url = http://download.kiwix.org/dev/pugixml-1.2.tar.gz;
     sha256 = "0sqk0vdwjq44jxbbkj1cy8qykrmafs1sickzldb2w2nshsnjshhg";
   };
+
+  xapian = callPackage ../../../development/libraries/xapian { inherit stdenv; };
+  zimlib = callPackage ../../../development/libraries/zimlib { inherit stdenv; };
 
 in
 with stdenv.lib;
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
 
     rm $out/bin/kiwix
     makeWrapper $out/lib/kiwix/kiwix-launcher $out/bin/kiwix \
-      --suffix LD_LIBRARY_PATH : `cat ${stdenv.cc}/nix-support/orig-cc`/lib:${makeLibraryPath [libX11 libXext libXt libXrender glib dbus dbus_glib gtk gdk_pixbuf pango cairo freetype fontconfig alsaLib atk]} \
+      --suffix LD_LIBRARY_PATH : ${makeLibraryPath [stdenv.cc.cc libX11 libXext libXt libXrender glib dbus dbus_glib gtk gdk_pixbuf pango cairo freetype fontconfig alsaLib atk]} \
       --suffix PATH : ${aria2}/bin
   '';
 
@@ -106,6 +107,5 @@ stdenv.mkDerivation rec {
     homepage = http://kiwix.org;
     license = licenses.gpl3;
     maintainers = with maintainers; [ robbinch ];
-    broken = true;
   };
 }
