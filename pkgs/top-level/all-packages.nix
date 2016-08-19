@@ -5395,6 +5395,8 @@ in
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
+    topkg = callPackage ../development/ocaml-modules/topkg { };
+
     tsdl = callPackage ../development/ocaml-modules/tsdl { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
