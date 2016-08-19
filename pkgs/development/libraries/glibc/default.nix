@@ -70,7 +70,7 @@ in
       fi
 
       # Get rid of more unnecessary stuff.
-      rm -rf $out/var $out/sbin/sln
+      rm -rf $out/var $out/bin/sln
 
       # For some reason these aren't stripped otherwise and retain reference
       # to bootstrap-tools; on cross-arm this stripping would break objects.
