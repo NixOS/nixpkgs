@@ -52,9 +52,12 @@ stdenv.mkDerivation rec {
       cp ${opensfx}/*.{obs,cat} $out/share/games/openttd/data
     ''}
 
+    mkdir $out/share/games/openttd/baseset/openmsx
+
     ${stdenv.lib.optionalString withOpenMSX ''
-      cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/data
+      cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/baseset/openmsx
     ''}
+
   '';
 
   meta = {
