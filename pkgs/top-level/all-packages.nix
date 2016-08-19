@@ -7766,6 +7766,8 @@ in
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
+  imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
+
   ijs = callPackage ../development/libraries/ijs { };
 
   incrtcl = callPackage ../development/libraries/incrtcl { };
