@@ -63,11 +63,17 @@ let
       mkdir -p $out/share $out/bin
       cp pixie-src/pixie-vm $out/share/pixie-vm
       cp -R pixie-src/pixie $out/share/pixie
-      makeWrapper $out/share/pixie-vm $out/bin/pxi \
+      makeWrapper $out/share/pixie-vm $out/bin/pixie-vm \
         --prefix LD_LIBRARY_PATH : ${library-path} \
         --prefix C_INCLUDE_PATH : ${include-path} \
         --prefix LIBRARY_PATH : ${library-path} \
         --prefix PATH : ${bin-path}
+      cat > $out/bin/pxi <<EOF
+      #!$shell
+      >&2 echo "[\$\$] WARNING: 'pxi' is a deprecated alias for 'pixie-vm', please update your scripts."
+      exec $out/bin/pixie-vm "\$@"
+      EOF
+      chmod +x $out/bin/pxi
     '';
     meta = {
       description = "A clojure-like lisp, built with the pypy vm toolkit";
