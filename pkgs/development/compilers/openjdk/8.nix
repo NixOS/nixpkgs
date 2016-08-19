@@ -2,7 +2,7 @@
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
 , setJavaClassPath
 , minimal ? false
-, enableInfinality ? false # font rendering patch
+, enableInfinality ? true # font rendering patch
 }:
 
 let

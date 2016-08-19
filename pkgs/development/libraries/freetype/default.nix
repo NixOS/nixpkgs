@@ -1,14 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, which, zlib, bzip2, libpng, gnumake
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, which, zlib, bzip2, libpng, gnumake
 , glib /* passthru only */
 
   # FreeType supports sub-pixel rendering.  This is patented by
   # Microsoft, so it is disabled by default.  This option allows it to
   # be enabled.  See http://www.freetype.org/patents.html.
 , useEncumberedCode ? true
+, useInfinality ? true
 }:
+
+assert useInfinality -> useEncumberedCode;
 
 let
   version = "2.6.5";
+
+  infinality = fetchFromGitHub {
+    owner = "archfan";
+    repo = "infinality_bundle";
+    rev = "5c0949a477bf43d2ac4e57b4fc39bcc3331002ee";
+    sha256 = "17389aqm6rlxl4b5mv1fx4b22x2v2n60hfhixfxqxpd8ialsdi6l";
+  };
+
 in
 with { inherit (stdenv.lib) optional optionals optionalString; };
 stdenv.mkDerivation rec {
@@ -26,7 +37,7 @@ stdenv.mkDerivation rec {
       url = "http://pkgs.fedoraproject.org/cgit/rpms/freetype.git/plain/freetype-2.2.1-enable-valid.patch?id=9a81147af83b1166a5f301e379f85927cc610990";
       sha256 = "0zkgqhws2s0j8ywksclf391iijhidb1a406zszd7xbdjn28kmj2l";
     })
-  ] ++ optionals (useEncumberedCode) [
+  ] ++ optionals (!useInfinality && useEncumberedCode) [
     # Patch to enable subpixel rendering.
     # See https://www.freetype.org/freetype2/docs/reference/ft2-lcd_filtering.html.
     (fetchurl {
@@ -36,6 +47,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  prePatch = optionalString useInfinality ''
+    patches="$patches $(ls ${infinality}/*_freetype2-iu/*-infinality-*.patch)"
+  '';
+
   outputs = [ "dev" "out" ];
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
@@ -44,7 +59,7 @@ stdenv.mkDerivation rec {
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
 
-  configureFlags = "--disable-static --bindir=$(dev)/bin";
+  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
 
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = optionalString stdenv.isArm "-std=gnu99";
