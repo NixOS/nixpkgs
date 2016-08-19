@@ -1,5 +1,12 @@
-{ fetchurl, stdenv, acl, openssl, libxml2, attr, zlib, bzip2, e2fsprogs, xz, lzo
-, sharutils }:
+{
+  fetchurl, stdenv,
+  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
+
+  # Optional
+  xarSupport ? false,
+}:
+
+assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   name = "libarchive-${version}";
@@ -10,11 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "1lngng84k1kkljl74q0cdqc3s82vn2kimfm02dgm4d6m7x71mvkj";
   };
 
-  buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz lzo ] ++
-    stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
+  buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
+    ++ stdenv.lib.optional xarSupport libxml2;
 
   # Without this, pkgconfig-based dependencies are unhappy
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isLinux [ attr acl ];
+
+  configureFlags = stdenv.lib.optional (!xarSupport) "--without-xml2";
 
   preBuild = if stdenv.isCygwin then ''
     echo "#include <windows.h>" >> config.h
