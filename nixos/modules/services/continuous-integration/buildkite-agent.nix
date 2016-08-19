@@ -77,15 +77,11 @@ in
         preStart = ''
             ${pkgs.coreutils}/bin/mkdir -m 0700 -p /var/lib/buildkite-agent/.ssh
 
-            if ! [ -f /var/lib/buildkite-agent/.ssh/id_rsa ]; then
-              echo "${cfg.openssh.privateKey}" > /var/lib/buildkite-agent/.ssh/id_rsa
-              ${pkgs.coreutils}/bin/chmod 600 /var/lib/buildkite-agent/.ssh/id_rsa
-            fi
+            echo "${cfg.openssh.privateKey}" > /var/lib/buildkite-agent/.ssh/id_rsa
+            ${pkgs.coreutils}/bin/chmod 600 /var/lib/buildkite-agent/.ssh/id_rsa
 
-            if ! [ -f /var/lib/buildkite-agent/.ssh/id_rsa.pub ]; then
-              echo "${cfg.openssh.publicKey}" > /var/lib/buildkite-agent/.ssh/id_rsa.pub
-              ${pkgs.coreutils}/bin/chmod 600 /var/lib/buildkite-agent/.ssh/id_rsa.pub
-            fi
+            echo "${cfg.openssh.publicKey}" > /var/lib/buildkite-agent/.ssh/id_rsa.pub
+            ${pkgs.coreutils}/bin/chmod 600 /var/lib/buildkite-agent/.ssh/id_rsa.pub
           '';
 
         serviceConfig =
