@@ -28,6 +28,7 @@ doNotDisplayTwice rec {
   btrfsProgs = btrfs-progs; # added 2016-01-03
   buildbotSlave = buildbot-slave;  # added 2014-12-09
   bundler_HEAD = bundler; # added 2015-11-15
+  checkbashism = checkbashisms; # added 2016-08-16
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
