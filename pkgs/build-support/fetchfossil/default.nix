@@ -1,6 +1,6 @@
 {stdenv, fossil}:
 
-{name ? null, url, rev ? null, md5 ? null, sha256 ? null}:
+{name ? null, url, rev, md5 ? null, sha256 ? null}:
 
 stdenv.mkDerivation {
   name = "fossil-archive" + (if name != null then "-${name}" else "");

@@ -1,5 +1,5 @@
 source $stdenv/setup
-header "Cloning Fossil $url into $out"
+header "Cloning Fossil $url [$rev] into $out"
 
 # Fossil, bless its adorable little heart, wants to write global configuration
 # to $HOME/.fossil. AFAICT, there is no way to disable this functionality.
@@ -13,7 +13,7 @@ mkdir fossil-clone
 WORKDIR=$(pwd)
 mkdir $out
 pushd $out
-fossil open "$WORKDIR/fossil-clone.fossil"
+fossil open "$WORKDIR/fossil-clone.fossil" "$rev"
 popd
 
 # Just nuke the checkout file.
