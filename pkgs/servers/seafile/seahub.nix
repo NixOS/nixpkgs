@@ -1,12 +1,12 @@
 {stdenv, fetchurl, python, pythonPackages, makeWrapper, seafile}:
 
 stdenv.mkDerivation rec {
-  version = "5.1.2";
+  version = "5.1.4";
   name = "seafile-seahub-${version}";
 
   src = fetchurl {
     url = "https://github.com/haiwen/seahub/archive/v${version}-server.tar.gz";
-    sha256 = "1k3y803p8fpnxqv6a90akcfb3b1brgli85p4pkvl87299k8gid83";
+    sha256 = "1cd6425abi8h8xdsjch7mkdpkfi3k5pyl2p1qrnkq4ivfqs7hay6";
   };
 
   dontBuild = true;
