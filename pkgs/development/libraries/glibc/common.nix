@@ -55,9 +55,6 @@ stdenv.mkDerivation ({
       ./cve-2016-1234.patch
       ./cve-2016-3706.patch
       ./fix_warnings.patch
-
-      # Fixes segfault when calling pty.fork() in python
-      ./forkpty.patch
     ];
 
   postPatch =
