@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ht-${version}";
   version = "2.1.0";
   src = fetchurl {
-    url = "mirror://sourceforge/projects/hte/files/ht-source/ht-${version}.tar.bz2";
+    url = "http://sourceforge.net/projects/hte/files/ht-source/ht-${version}.tar.bz2";
     sha256 = "0w2xnw3z9ws9qrdpb80q55h6ynhh3aziixcfn45x91bzrbifix9i";
   };
   buildInputs = [

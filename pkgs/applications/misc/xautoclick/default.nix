@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.31";
   name = "xautoclick-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/project/xautoclick/xautoclick/xautoclick-0.31/xautoclick-0.31.tar.gz";
+    url = "http://downloads.sourceforge.net/project/xautoclick/xautoclick/xautoclick-0.31/xautoclick-0.31.tar.gz";
     sha256 = "0h522f12a7v2b89411xm51iwixmjp2mp90rnizjgiakx9ajnmqnm";
   };
   buildInputs = [ xorg.libX11 xorg.libXtst xorg.xinput xorg.libXi xorg.libXext pkgconfig ]
