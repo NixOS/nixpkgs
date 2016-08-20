@@ -15,21 +15,17 @@ assert x11Support -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.1.14";
+  version = "2.1.15";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0hmsiscpdpdqd8kcjpzkz2gzcc3cnrvswk9p1jzi4sivd7lxwl4l";
+    sha256 = "1pgz02gd84ab94w4xdg67p9z8kvkyr9d523bvcxxd2hviwh1m362";
   };
 
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba libiconv npth gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2
   ];
-
-  # gpgsm-linking is fixed by commit (c49c43d7) in the gnupg master branch;
-  # fix-gpgsm-linking.patch should be dropped after gnupg 2.1.15 is released
-  patches = [ ./fix-gpgsm-linking.patch ];
 
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
