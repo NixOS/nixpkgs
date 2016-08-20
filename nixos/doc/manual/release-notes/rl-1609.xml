@@ -58,6 +58,14 @@ following incompatible changes:</para>
     official documentation</link>.</para>
   </listitem>
 
+  <listitem>
+    <para><literal>fonts.fontconfig.ultimate.rendering</literal> was removed
+    because our presets were obsolete for some time. New presets are hardcoded
+    into freetype; one selects a preset via <literal>fonts.fontconfig.ultimate.preset</literal>.
+    You can customize those presets via ordinary environment variables, using
+    <literal>environment.variables</literal>.</para>
+  </listitem>
+
 </itemizedlist>
 
 
