@@ -9568,6 +9568,8 @@ in
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
+  torch = callPackage ../development/libraries/torch {};
+
   tremor = callPackage ../development/libraries/tremor { };
 
   udns = callPackage ../development/libraries/udns { };
