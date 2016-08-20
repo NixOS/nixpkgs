@@ -5793,10 +5793,14 @@ in modules // {
 
   ds4drv = buildPythonPackage rec {
     name = "ds4drv-${version}";
-    version = "0.5.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/ds4drv/${name}.tar.gz";
-      sha256 = "0dq2z1z09zxa6rn3v94vwqaaz29jwiydkss8hbjglixf20krmw3b";
+    version = "0.5.1";
+
+    # PyPi only carries py3 wheel
+    src = pkgs.fetchFromGitHub {
+      owner = "chrippa";
+      repo = "ds4drv";
+      rev = "v${version}";
+      sha256 = "0vinpla0apizzykcyfis79mrm1i6fhns83nkzw85svypdhkx2g8v";
     };
 
     propagatedBuildInputs = with self; [ evdev pyudev ];
@@ -5940,18 +5944,17 @@ in modules // {
   };
 
   evdev = buildPythonPackage rec {
-    version = "0.4.7";
+    version = "0.6.1";
     name = "evdev-${version}";
-    disabled = isPy34;  # see http://bugs.python.org/issue21121
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/e/evdev/${name}.tar.gz";
-      sha256 = "1mz8cfncpxc1wbk2nj7apl0ssqc0vfndysxchq3wabd9vzx5p71k";
+      sha256 = "0fwaffw1ga7vqa28zy8kc1pycn9xddzw2knd6hd1kkp5c4acgcv7";
     };
 
     buildInputs = with self; [ pkgs.linuxHeaders ];
 
-    patchPhase = "sed -e 's#/usr/include/linux/input.h#${pkgs.linuxHeaders}/include/linux/input.h#' -i setup.py";
+    setupPyBuildFlags = ["--evdev-headers ${pkgs.linuxHeaders}/include/linux/input.h:${pkgs.linuxHeaders}/include/linux/input-event-codes.h"];
 
     doCheck = false;
 
@@ -19421,20 +19424,22 @@ in modules // {
 
   pyudev = buildPythonPackage rec {
     name = "pyudev-${version}";
-    version = "0.16.1";
+    version = "0.20.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyudev/${name}.tar.gz";
-      sha256 = "765d1c14bd9bd031f64e2612225621984cb2bbb8cbc0c03538bcc4c735ff1c95";
+      sha256 = "0al4cpg0m8n7cd06w94x3cx8mxaqg08bfv4r6a3pkgqxc74mpn0l";
     };
 
     postPatch = ''
-      sed -i -e '/udev_library_name/,/^ *libudev/ {
-        s|CDLL([^,]*|CDLL("${pkgs.libudev.out}/lib/libudev.so.1"|p; d
-      }' pyudev/_libudev.py
+      substituteInPlace src/pyudev/_ctypeslib/libudev.py --replace \
+        "find_library('udev')" "'${pkgs.systemd}/lib/libudev.so'"
     '';
 
-    propagatedBuildInputs = with self; [ pkgs.udev ];
+    propagatedBuildInputs = with self; [ pkgs.udev six ];
+    buildInputs = with self; [ mock pyside pytest hypothesis docutils]; # required for tests
+
+    doCheck = false; # requires gccxml and a better udev hack
 
     meta = {
       homepage = "http://pyudev.readthedocs.org/";

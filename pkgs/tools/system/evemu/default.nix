@@ -6,8 +6,7 @@ stdenv.mkDerivation rec {
   name = "evemu-${version}";
   version = "2.4.0";
 
-  # We could have downloaded a release tarball from cgit, but it changes hash
-  # each time it is downloaded :/
+  # freedesktop no longer provides tarballs
   src = fetchgit {
     url = git://git.freedesktop.org/git/evemu;
     rev = "refs/tags/v${version}";
