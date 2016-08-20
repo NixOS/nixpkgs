@@ -26255,6 +26255,8 @@ in modules // {
     # Likely current pyusb will work but we need to patch the hard requirement then.
     broken = true;
 
+    patchPhase = "substituteInPlace setup.py --replace pyusb==1.0.0b1 pyusb==1.0.0";
+
     propagatedBuildInputs = with self; [ pyusb ];
 
     meta = {
