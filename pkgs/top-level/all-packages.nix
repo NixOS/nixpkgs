@@ -9987,6 +9987,8 @@ in
 
   go2nix = callPackage ../development/tools/go2nix { };
 
+  leaps = callPackage ../development/tools/leaps { };
+
   ### DEVELOPMENT / LISP MODULES
 
   asdf = callPackage ../development/lisp-modules/asdf {
