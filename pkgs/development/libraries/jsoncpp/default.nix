@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_STATIC_LIBS=OFF"
-  ];
+  cmakeFlags = {
+    BUILD_SHARED_LIBS = true;
+    BUILD_STATIC_LIBS = false;
+  };
 
   meta = with stdenv.lib; {
     inherit version;

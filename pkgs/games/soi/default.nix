@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost lua luabind libGLU_combined SDL ];
 
-  cmakeFlags = [
-    "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
-  ];
+  cmakeFlags = {
+    EIGEN_INCLUDE_DIR = "${eigen2}/include/eigen2";
+  };
 
   meta = with stdenv.lib; {
     description = "A physics-based puzzle game";

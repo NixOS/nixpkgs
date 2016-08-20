@@ -162,14 +162,21 @@ rec {
         lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
           (lib.concatLists propagatedDependencies));
 
-      derivationArg =
-        (removeAttrs attrs
-          ["meta" "passthru" "pos"
-           "doCheck" "doInstallCheck"
-           "checkInputs" "installCheckInputs"
-           "__impureHostDeps" "__propagatedImpureHostDeps"
-           "sandboxProfile" "propagatedSandboxProfile"])
-        // {
+      derivationArg = let
+        baseDerivationArg = (removeAttrs attrs [
+          "meta"
+          "passthru"
+          "pos"
+          "doCheck"
+          "doInstallCheck"
+          "checkInputs"
+          "installCheckInputs"
+          "__impureHostDeps"
+          "__propagatedImpureHostDeps"
+          "sandboxProfile"
+          "setupHookFunc"
+          "propagatedSandboxProfile"
+        ]) // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
           name = assert validity.handled; name + lib.optionalString
@@ -236,6 +243,11 @@ rec {
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         };
+      # TODO: use dependencies/propagatedDependencies instead of just nativeBuildInputs?
+      in lib.foldl'
+        (drvArg: dep: if dep == null then drvArg else dep.setupHookFunc drvArg)
+        baseDerivationArg
+        nativeBuildInputs;
 
       validity = import ./check-meta.nix {
         inherit lib config meta;
@@ -283,6 +295,7 @@ rec {
         validity.handled
         ({
            overrideAttrs = f: mkDerivation (attrs // (f attrs));
+           setupHookFunc = attrs.setupHookFunc or lib.id;
            inherit meta passthru;
          } //
          # Pass through extra attributes that are not inputs, but

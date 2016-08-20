@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "190yg6kkw953h8wajlqr2hvs2fz65y6z0blmywlg1nff724allaq";
   };
 
-  cmakeFlags = [
-    "-DMSGPACK_INCLUDE_DIRS=${libmsgpack}/include"
-    "-DMSGPACK_LIBRARIES=${libmsgpack}/lib/libmsgpackc.so"
-  ];
+  cmakeFlags = {
+    MSGPACK_INCLUDE_DIRS = "${libmsgpack}/include";
+    MSGPACK_LIBRARIES = "${libmsgpack}/lib/libmsgpackc.so";
+  };
 
   buildInputs = with pythonPackages; [
     neovim qtbase libmsgpack

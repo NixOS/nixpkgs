@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = [
-    "-DENABLE_FFMPEG='true'"
-    #"-DENABLE_LINK='true'" currently broken :/
-    "-DSYSCONFDIR=etc"
-  ];
+  cmakeFlags = {
+    ENABLE_FFMPEG = true;
+    #ENABLE_LINK = true; currently broken :/
+    SYSCONFDIR = "etc";
+  };
 
   meta = {
     description = "A merge of the original Visual Boy Advance forks";

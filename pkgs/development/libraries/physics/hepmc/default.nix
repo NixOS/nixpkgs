@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   patches = [ ./in_source.patch ];
   buildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-Dmomentum:STRING=GEV"
-    "-Dlength:STRING=MM"
-  ];
+  cmakeFlags = {
+    length = "MM";
+    momentum = "GEV";
+  };
 
   enableParallelBuilding = true;
 

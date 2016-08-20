@@ -227,6 +227,19 @@ rec {
   */
   escapeNixString = s: escape ["$"] (builtins.toJSON s);
 
+  /* Takes an array of strings and preps them for eval into a bash array.
+     Each value has double quotes escape, then is wrapped in double quotes;
+     the values are concatenated and wrapped in parentheses.
+
+     Example:
+       escapeBashArray ["one" "two three" "four\"five"]
+       => "(\"one\"\n\"two three\"\n\"four\\\"five\")"
+  */
+  escapeBashArray = xs: let
+    dquote = ''"'';
+    escapeVal = x: dquote + (escape [ dquote ] x) + dquote;
+  in "(" + (concatMapStringsSep "\n" escapeVal xs) + ")";
+
   /* Obsolete - use replaceStrings instead. */
   replaceChars = builtins.replaceStrings or (
     del: new: s:
@@ -446,6 +459,10 @@ rec {
        => "--without-shared"
   */
   withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
+
+  tabJoin = xs: let
+    escapeTab = escape [ "\t" ];
+  in builtins.concatStringsSep "\t" (builtins.map escapeTab xs);
 
   /* Create a fixed width string with additional prefix to match
      required width.

@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     sed -i 's/virtual void endImage() = 0;/virtual void endImage() {}/' src/nvtt/nvtt.h
   '';
 
-  cmakeFlags = [
-    "-DNVTT_SHARED=TRUE"
-  ];
+  cmakeFlags = {
+    NVTT_SHARED = true;
+  };
 
   postInstall = ''
     moveToOutput include "$dev"

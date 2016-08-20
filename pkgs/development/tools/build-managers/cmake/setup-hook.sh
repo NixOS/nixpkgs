@@ -13,6 +13,11 @@ fixCmakeFiles() {
 }
 
 cmakeConfigurePhase() {
+
+    # Convert cmakeFlags into an array first
+    # so it can safely be modified by preConfigure
+    eval declare -a cmakeFlags="${cmakeFlags:-()}"
+
     runHook preConfigure
 
     if [ -z "$dontFixCmake" ]; then
@@ -26,7 +31,7 @@ cmakeConfigurePhase() {
     fi
 
     if [ -z "$dontAddPrefix" ]; then
-        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix $cmakeFlags"
+        cmakeFlags=("-DCMAKE_INSTALL_PREFIX=$prefix" "${cmakeFlags[@]}")
     fi
 
     # We should set the proper `CMAKE_SYSTEM_NAME`.
@@ -35,25 +40,28 @@ cmakeConfigurePhase() {
     # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
     # strip. Otherwise they are taken to be relative to the source root of the
     # package being built.
-    cmakeFlags="-DCMAKE_CXX_COMPILER=$CXX $cmakeFlags"
-    cmakeFlags="-DCMAKE_C_COMPILER=$CC $cmakeFlags"
-    cmakeFlags="-DCMAKE_AR=$(command -v $AR) $cmakeFlags"
-    cmakeFlags="-DCMAKE_RANLIB=$(command -v $RANLIB) $cmakeFlags"
-    cmakeFlags="-DCMAKE_STRIP=$(command -v $STRIP) $cmakeFlags"
+    cmakeFlags=(
+        "-DCMAKE_CXX_COMPILER=$CXX"
+        "-DCMAKE_C_COMPILER=$CC"
+        "-DCMAKE_AR=$(command -v $AR)"
+        "-DCMAKE_RANLIB=$(command -v $RANLIB)"
+        "-DCMAKE_STRIP=$(command -v $STRIP)"
+        "${cmakeFlags[@]}"
+    )
 
     # on macOS we want to prefer Unix-style headers to Frameworks
     # because we usually do not package the framework
-    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=last $cmakeFlags"
+    cmakeFlags=("-DCMAKE_FIND_FRAMEWORK=last" "${cmakeFlags[@]}")
 
     # we never want to use the global macOS SDK
-    cmakeFlags="-DCMAKE_OSX_SYSROOT= $cmakeFlags"
+    cmakeFlags=("-DCMAKE_OSX_SYSROOT=" "${cmakeFlags[@]}")
 
     # disable OSX deployment target
     # we don't want our binaries to have a "minimum" OSX version
-    cmakeFlags="-DCMAKE_OSX_DEPLOYMENT_TARGET= $cmakeFlags"
+    cmakeFlags=("-DCMAKE_OSX_DEPLOYMENT_TARGET=" "${cmakeFlags[@]}")
 
     # correctly detect our clang compiler
-    cmakeFlags="-DCMAKE_POLICY_DEFAULT_CMP0025=NEW $cmakeFlags"
+    cmakeFlags=("-DCMAKE_POLICY_DEFAULT_CMP0025=NEW" "${cmakeFlags[@]}")
 
     # This installs shared libraries with a fully-specified install
     # name. By default, cmake installs shared libraries with just the
@@ -62,21 +70,29 @@ cmakeConfigurePhase() {
     # libraries are in a system path or in the same directory as the
     # executable. This flag makes the shared library accessible from its
     # nix/store directory.
-    cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=${!outputLib}/lib $cmakeFlags"
-    cmakeFlags="-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib $cmakeFlags"
-    cmakeFlags="-DCMAKE_INSTALL_INCLUDEDIR=${!outputDev}/include $cmakeFlags"
+    cmakeFlags=(
+        "-DCMAKE_INSTALL_NAME_DIR=${!outputLib}/lib"
+        "-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib"
+        "-DCMAKE_INSTALL_INCLUDEDIR=${!outputDev}/include"
+        "${cmakeFlags[@]}"
+    )
 
     # Avoid cmake resetting the rpath of binaries, on make install
     # And build always Release, to ensure optimisation flags
-    cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
-
+    cmakeFlags=(
+        "-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release}"
+        "-DCMAKE_SKIP_BUILD_RPATH=ON"
+        "${cmakeFlags[@]}"
+    )
     if [ "$buildPhase" = ninjaBuildPhase ]; then
-        cmakeFlags="-GNinja $cmakeFlags"
+        cmakeFlags=(
+            "-GNinja"
+            "${cmakeFlags[@]}"
+        )
     fi
 
-    echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
-
-    cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
+    echo "cmake invocation: cmake ${cmakeDir:-.} ${cmakeFlags[@]}"
+    cmake "${cmakeDir:-.}" "${cmakeFlags[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1

@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     glew libpulseaudio udev
   ];
 
-  cmakeFlags = [
-    "-DWITH_SYSTEM_FFMPEG=1"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-  ];
+  cmakeFlags = {
+    GTK2_GDKCONFIG_INCLUDE_DIR = "${gtk2.out}/lib/gtk-2.0/include";
+    GTK2_GLIBCONFIG_INCLUDE_DIR = "${glib.out}/lib/glib-2.0/include";
+    WITH_SYSTEM_FFMPEG = true;
+  };
 
   postInstall = ''
     mkdir -p $out/bin

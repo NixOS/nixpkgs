@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 SDL2_image curl libogg libvorbis libGLU_combined openal boost glew ];
 
-  cmakeFlags = [ "-DENABLE_BOOST_STATIC_LIBS=OFF" ];
+  cmakeFlags = { ENABLE_BOOST_STATIC_LIBS = false; };
 
   postInstall = ''
     mkdir $out/bin

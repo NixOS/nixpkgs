@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     patchShebangs src/git_sha1.sh
   '';
 
-  cmakeFlags = [ "-DCLANG_LIBRARY_DIR=${clang-unwrapped}/lib" ];
+  cmakeFlags = { CLANG_LIBRARY_DIR = "${clang-unwrapped}/lib"; };
 
   buildInputs = [
     llvm

@@ -17,15 +17,15 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    cmake libpfm zlib python2Packages.python python2Packages.pexpect which procps gdb capnproto
+    libpfm zlib python2Packages.python python2Packages.pexpect which procps gdb capnproto
   ];
-  cmakeFlags = [
-    "-DCMAKE_C_FLAGS_RELEASE:STRING="
-    "-DCMAKE_CXX_FLAGS_RELEASE:STRING="
-    "-Ddisable32bit=ON"
-  ];
+  cmakeFlags = {
+    CMAKE_C_FLAGS_RELEASE = "";
+    CMAKE_CXX_FLAGS_RELEASE = "";
+    disable32bit = true;
+  };
 
   # we turn on additional warnings due to hardening
   NIX_CFLAGS_COMPILE = "-Wno-error";

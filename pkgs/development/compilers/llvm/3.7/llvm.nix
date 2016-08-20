@@ -70,20 +70,20 @@ in stdenv.mkDerivation rec {
     ../fix-llvm-config.patch
   ];
 
-  cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=ON"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
-  ] ++ stdenv.lib.optional enableSharedLibraries
-    "-DBUILD_SHARED_LIBS=ON"
-    ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-    ++ stdenv.lib.optionals ( isDarwin) [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DCAN_TARGET_i386=false"
-  ];
+  cmakeFlags = with stdenv.lib; {
+    CMAKE_BUILD_TYPE = "${if debugVersion then "Debug" else "Release"}";
+    LLVM_INSTALL_UTILS = true; # Needed by rustc
+    LLVM_BUILD_TESTS = true;
+    LLVM_ENABLE_FFI = true;
+    LLVM_ENABLE_RTTI = true;
+  } // (optionalAttrs (enableSharedLibraries) {
+    BUILD_SHARED_LIBS = true;
+  }) // (optionalAttrs (!stdenv.isDarwin) {
+    LLVM_BINUTILS_INCDIR = "${libbfd.dev}/include";
+  }) // (optionalAttrs (stdenv.isDarwin) {
+    LLVM_ENABLE_LIBCXX = true;
+    CAN_TARGET_i386 = false;
+  });
 
   NIX_LDFLAGS = "-lpthread"; # no idea what's the problem
 

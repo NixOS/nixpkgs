@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libminc libjpeg zlib ];
   propagatedBuildInputs = [ perl TextFormat ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
+  cmakeFlags = { LIBMINC_DIR = "${libminc}/lib/"; };
 
   checkPhase = "ctest --output-on-failure";  # still some weird test failures though
 

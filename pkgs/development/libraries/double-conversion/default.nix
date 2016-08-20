@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = { BUILD_SHARED_LIBS = true; };
 
   # Case sensitivity issue
   preConfigure = lib.optionalString stdenv.isDarwin ''

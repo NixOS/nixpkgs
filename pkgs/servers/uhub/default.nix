@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = ''
-    -DSYSTEMD_SUPPORT=ON
-    ${if tlsSupport then "-DSSL_SUPPORT=ON" else "-DSSL_SUPPORT=OFF"}
-  '';
+  cmakeFlags = {
+    SSL_SUPPORT = tlSupport;
+    SYSTEMD_SUPPORT = true;
+  };
 
   meta = with stdenv.lib; {
     description = "High performance peer-to-peer hub for the ADC network";

@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     cp -a "${resources}/iconsets" "$sourceRoot"
   '';
 
-  cmakeFlags = [
-    "-DENABLE_PLUGINS=ON"
-  ];
+  cmakeFlags = {
+    ENABLE_PLUGINS = true;
+  };
 
   nativeBuildInputs = [ cmake ];
 

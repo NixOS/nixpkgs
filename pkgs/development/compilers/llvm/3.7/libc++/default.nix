@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package
-    cmakeFlagsArray=($cmakeFlagsArray -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$NIX_BUILD_TOP/libcxxabi-${version}.src/include")
+    cmakeFlags+=(
+        "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=$NIX_BUILD_TOP/libcxxabi-${version}.src/include"
+    )
   '';
 
   patches = [

@@ -10,7 +10,6 @@
 }:
 
 let
-  mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
   inherit (stdenv) is64bit;
 in
 
@@ -32,18 +31,18 @@ stdenv.mkDerivation rec {
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake
   '';
 
-  cmakeFlags = [
-    (mkFlag debugSupport "CHECKED_BUILD")
-    "-DSTATIC_LINK_CRT=OFF"
-    (mkFlag (highbitdepthSupport && is64bit) "HIGH_BIT_DEPTH")
-    (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-    (mkFlag ppaSupport "ENABLE_PPA")
-    (mkFlag vtuneSupport "ENABLE_VTUNE")
-    (mkFlag custatsSupport "DETAILED_CU_STATS")
-    "-DENABLE_SHARED=ON"
-    (mkFlag cliSupport "ENABLE_CLI")
-    (mkFlag unittestsSupport "ENABLE_TESTS")
-  ];
+  cmakeFlags = {
+    CHECKED_BUILD = debugSupport;
+    STATIC_LINK_CRT = false;
+    HIGH_BIT_DEPTH = highbitdepthSupport && is64bit;
+    WARNINGS_AS_ERRORS = werrorSupport;
+    ENABLE_PPA = ppaSupport;
+    ENABLE_VTUNE = vtuneSupport;
+    DETAILED_CU_STATS = custatsSupport;
+    ENABLE_SHARED = true;
+    ENABLE_CLI = cliSupport;
+    ENABLE_TESTS = unittestsSupport;
+  };
 
   preConfigure = ''
     cd source

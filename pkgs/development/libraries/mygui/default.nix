@@ -20,7 +20,11 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libX11 unzip cmake ois freetype libuuid boost (if withOgre then ogre else libGLU_combined) ];
 
   # Tools are disabled due to compilation failures.
-  cmakeFlags = [ "-DMYGUI_BUILD_TOOLS=OFF" "-DMYGUI_BUILD_DEMOS=OFF" "-DMYGUI_RENDERSYSTEM=${renderSystem}" ];
+  cmakeFlags = {
+    MYGUI_BUILD_DEMOS = false;
+    MYGUI_BUILD_TOOLS = false;
+    MYGUI_RENDERSYSTEM = renderSystem;
+  };
 
   meta = with stdenv.lib; {
     homepage = http://mygui.info/;

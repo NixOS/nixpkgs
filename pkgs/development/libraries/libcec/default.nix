@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake udev libcec_platform ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=1" ];
+  cmakeFlags = { BUILD_SHARED_LIBS = true; };
 
   # Fix dlopen path
   patchPhase = ''

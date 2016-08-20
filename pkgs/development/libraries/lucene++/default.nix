@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
            CMakeLists.txt
   '';
 
-  cmakeFlags = [ "-DGTEST_INCLUDE_DIR=${gtest}/include" ];
+  cmakeFlags = { GTEST_INCLUDE_DIR = "${gtest}/include"; };
   buildInputs = [ cmake boost gtest ];
 
   enableParallelBuilding = true;

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
 
-  cmakeFlags = [ "-DSAMPLE_MAP=n" ];
+  cmakeFlags = { SAMPLE_MAP = false; };
 
   meta = {
     homepage = http://www.navit-project.org/;

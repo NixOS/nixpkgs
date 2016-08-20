@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1cjxgh41r8k6j029yxs8msp3z6lcnpm16g5pvckk35kc7zhfpykn";
   };
 
-  cmakeFlags = [ "-DGKLIB_PATH=../GKlib" ];
+  cmakeFlags = { GKLIB_PATH = "../GKlib"; };
   buildInputs = [ unzip cmake ];
 
   meta = {

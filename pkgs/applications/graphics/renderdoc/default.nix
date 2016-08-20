@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
     patchShebangs swig/autogen.sh
   '';
 
-  cmakeFlags = [
-    "-DBUILD_VERSION_HASH=${src.rev}"
-    "-DBUILD_VERSION_DIST_NAME=NixOS"
-    "-DBUILD_VERSION_DIST_VER=${version}"
-    "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
-    "-DBUILD_VERSION_STABLE=ON"
+  cmakeFlags = {
+    BUILD_VERSION_HASH = src.rev;
+    BUILD_VERSION_DIST_NAME = "NixOS";
+    BUILD_VERSION_DIST_VER = version;
+    BUILD_VERSION_DIST_CONTACT = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc";
+    BUILD_VERSION_DIST_STABLE = true;
     # TODO: add once pyside2 is in nixpkgs
-    #"-DPYSIDE2_PACKAGE_DIR=${python36Packages.pyside2}"
-  ];
+    # PYSIDE2_PACKAGE_DIR = python36Packages.pyside2;
+  };
 
   # Future work: define these in the above array via placeholders
   preConfigure = ''

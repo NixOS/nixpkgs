@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
     SDL2 openal fluidsynth bzip2 zlib libjpeg game-music-emu libsndfile mpg123
   ];
 
-  cmakeFlags = [
-    "-DFORCE_INTERNAL_GME=OFF"
-    "-DGME_INCLUDE_DIR=${game-music-emu}/include"
-    "-DGME_LIBRARIES=${game-music-emu}/lib/libgme.so"
-  ];
+  cmakeFlags = {
+    FORCE_INTERNAL_GME = false;
+    GME_INCLUDE_DIR = "${game-music-emu}/include";
+    GME_LIBRARIES = "${game-music-emu}/lib/libgme.so";
+  };
 
   sourceRoot = ".";
 

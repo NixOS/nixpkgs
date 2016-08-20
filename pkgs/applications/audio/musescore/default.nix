@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "00inrw9g8g34g74bhg5gp0rr5nydhjraiyn7vpl7kaqi5yzmhawd";
   };
 
-  cmakeFlags = [
-  ] ++ lib.optional (lib.versionAtLeast freetype.version "2.5.2") "-DUSE_SYSTEM_FREETYPE=ON";
+  cmakeFlags = {
+    USE_SYSTEM_FREETYPE = lib.versionAtLeast freetype.version "2.5.2";
+  };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

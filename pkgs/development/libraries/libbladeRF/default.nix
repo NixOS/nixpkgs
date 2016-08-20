@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
   '';
 
-  cmakeFlags = [
-    "-DBUILD_DOCUMENTATION=ON"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-DUDEV_RULES_PATH=etc/udev/rules.d"
-    "-DINSTALL_UDEV_RULES=ON"
-  ];
+  cmakeFlags = {
+    BUILD_DOCUMENTATION = true;
+  } // (stdenv.lib.optionalAttrs stdenv.isLinux {
+    INSTALL_UDEV_RULES = true;
+    UDEV_RULES_PATH = "etc/udev/rules.d";
+  });
 
   hardeningDisable = [ "fortify" ];
 

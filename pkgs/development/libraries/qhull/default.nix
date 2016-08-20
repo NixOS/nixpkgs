@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = "-DMAN_INSTALL_DIR=share/man/man1 -DDOC_INSTALL_DIR=share/doc/qhull";
+  cmakeFlags = {
+    DOC_INSTALL_DIR = "share/doc/qhull";
+    MAN_INSTALL_DIR = "share/man/man1";
+  };
 
   hardeningDisable = [ "format" ];
 

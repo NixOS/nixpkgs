@@ -29,8 +29,8 @@ stdenv.mkDerivation {
     substituteInPlace data/org.gnome.finalterm.gschema.xml \
       --replace "/bin/bash" "${bashInteractive}/bin/bash"
 
-    cmakeFlagsArray=(
-      -DMINIMAL_FLAGS=ON
+    cmakeFlags+=(
+      "-DMINIMAL_FLAGS=ON"
     )
   '';
 

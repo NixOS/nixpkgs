@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
                   libvorbis fribidi dbus libpng pcre openssl icu ]
                 ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation];
 
-  cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
+  cmakeFlags = {
+    ENABLE_TOOLS = enableTools;
+  };
 
   enableParallelBuilding = true;
 

@@ -8,16 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "09d1gmqx3wbdfgwf7r91r12m2vknviv0i8wxwh2q9w1vrpizrczy";
   };
 
-  cmakeFlags = [
-    "-DBUILD_TESTING=OFF"
-    "-DBUILD_EXAMPLES=OFF"
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DModule_ITKMINC=ON"
-    "-DModule_ITKIOMINC=ON"
-    "-DModule_ITKIOTransformMINC=ON"
-    "-DModule_ITKVtkGlue=ON"
-    "-DModule_ITKReview=ON"
-  ];
+  cmakeFlags = {
+    BUILD_EXAMPLES = false;
+    BUILD_SHARED_LIBS = true;
+    BUILD_TESTING = false;
+    Module_ITKIOMINC = true;
+    Module_ITKIOTransformMINC = true;
+    Module_ITKMINC = true;
+    Module_ITKReview = true;
+    Module_ITKVtkGlue = true;
+  };
 
   enableParallelBuilding = true;
 

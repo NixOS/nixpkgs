@@ -71,29 +71,24 @@ in stdenv.mkDerivation rec {
     ln -sv $PWD/lib $out
   '';
 
-  cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=ON"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
+  cmakeFlags = with stdenv.lib; {
+    CMAKE_BUILD_TYPE = "${if debugVersion then "Debug" else "Release"}";
+    LLVM_INSTALL_UTILS = true;  # Needed by rustc
+    LLVM_BUILD_TESTS = true;
+    LLVM_ENABLE_FFI = true;
+    LLVM_ENABLE_RTTI = true;
 
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
-  ] ++ stdenv.lib.optional enableSharedLibraries [
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ] ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-    ++ stdenv.lib.optionals ( isDarwin) [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DCAN_TARGET_i386=false"
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    # Not yet supported
-    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
-    "-DCOMPILER_RT_BUILD_XRAY=OFF"
-
-  ];
+    LLVM_HOST_TRIPLE = stdenv.hostPlatform.config;
+    LLVM_DEFAULT_TARGET_TRIPLE = stdenv.targetPlatform.config;
+    TARGET_TRIPLE = stdenv.targetPlatform.config;
+  } // optionalAttrs enableSharedLibraries {
+    LLVM_LINK_LLVM_DYLIB = true;
+  } // optionalAttrs (!stdenv.isDarwin) {
+    LLVM_BINUTILS_INCDIR = "${libbfd.dev}/include";
+  } // optionalAttrs (stdenv.isDarwin) {
+    LLVM_ENABLE_LIBCXX = true;
+    CAN_TARGET_i386 = false;
+  };
 
   postBuild = ''
     rm -fR $out

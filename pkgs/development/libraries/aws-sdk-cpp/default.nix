@@ -36,11 +36,14 @@ in stdenv.mkDerivation rec {
                          (builtins.elem "*" apis)))
          (with darwin.apple_sdk.frameworks; [ CoreAudio AudioToolbox ]);
 
-  cmakeFlags =
-    lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DENABLE_TESTING=OFF"
-    ++ lib.optional (apis != ["*"])
-      "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
+  cmakeFlags = {
+    # TODO(aneeshusa): upstream seems to use this as a string variable instead of a boolean?
+    CUSTOM_MEMORY_MANAGEMENT = if customMemoryManagement then "1" else "0";
+  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    ENABLE_TESTING = false;
+  } // lib.optionalAttrs (apis != [ "*" ]) {
+      BUILD_ONLY = lib.concatStringsSep ";" apis;
+  };
 
   enableParallelBuilding = true;
 

@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
                                      --replace /usr \$\{INSTALL_PREFIX\}
   '';
 
-  cmakeFlags = [
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-  ];
+  cmakeFlags = {
+    GTK2_GLIBCONFIG_INCLUDE_DIR = "${glib.out}/lib/glib-2.0/include";
+    GTK2_GDKCONFIG_INCLUDE_DIR = "${gtk2.out}/lib/gtk-2.0/include";
+  };
 
   meta = with stdenv.lib; {
     description = "Comprehensive suite for man in the middle attacks";

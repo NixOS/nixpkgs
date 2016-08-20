@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     colord colord-gtk libwebp libsecret gnome3.adwaita-icon-theme
     osm-gps-map ocl-icd
   ];
-    
-  cmakeFlags = [
-    "-DBUILD_USERMANUAL=False"
-  ];
+
+  cmakeFlags = {
+    BUILD_USERMANUAL = false;
+  };
 
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the

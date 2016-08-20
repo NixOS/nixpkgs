@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];
 
-  cmakeFlags = [ "-DENABLE_EXAMPLES=false" "-DENABLE_TEST=false" ];
+  cmakeFlags = {
+    ENABLE_EXAMPLES = false;
+    ENABLE_TEST = false;
+  };
 
   enableParallelBuilding = true;
 

@@ -11,9 +11,9 @@ stdenv.mkDerivation {
     sha256 = "0fkd5rawqni1cq51fmr76iw7ll4fmbahfwv4rglnsabbkylf73pr";
   };
 
-  cmakeFlags = [
-    "-DDYND_BUILD_BENCHMARKS=OFF"
-  ];
+  cmakeFlags = {
+    DYND_BUILD_BENCHMARKS = false;
+  };
 
   # added to fix build with gcc7
   NIX_CFLAGS_COMPILE = [

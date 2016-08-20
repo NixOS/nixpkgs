@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" ];
 
-  cmakeFlags = ''
-    -DSC_WII=OFF
-    -DSC_EL=${if useSCEL then "ON" else "OFF"}
-  '';
+  cmakeFlags = {
+    SC_EL = useSCEL;
+    SC_WII = false;
+  };
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 

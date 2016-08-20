@@ -22,18 +22,19 @@ let
     buildInputs = [ libxml2 llvm ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-    cmakeFlags = [
-      "-DCMAKE_CXX_FLAGS=-std=c++11"
-    ] ++ stdenv.lib.optionals enableManpages [
-      "-DCLANG_INCLUDE_DOCS=ON"
-      "-DLLVM_ENABLE_SPHINX=ON"
-      "-DSPHINX_OUTPUT_MAN=ON"
-      "-DSPHINX_OUTPUT_HTML=OFF"
-      "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ]
+    cmakeFlags = {
+      CMAKE_CXX_FLAGS = "-std=c++11";
+    } // (stdenv.lib.optionalAttrs enableManpages {
+      CLANG_INCLUDE_DOCS = true;
+      LLVM_ENABLE_SPHINX = true;
+      SPHINX_OUTPUT_MAN = true;
+      SPHINX_OUTPUT_HTML = false;
+      SPHINX_WARNINGS_AS_ERRORS = false;
+    })
     # Maybe with compiler-rt this won't be needed?
-    ++ stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}"
-    ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include";
+    // (stdenv.lib.optionalAttrs stdenv.isLinux { GCC_INSTALL_PREFIX = "${gcc}"; })
+    // (stdenv.lib.optionalAttrs (stdenv.cc.libc != null) { C_INCLUDE_DIRS = "${stdenv.cc.libc}/include"; })
+    ;
 
     patches = [ ./purity.patch ];
 

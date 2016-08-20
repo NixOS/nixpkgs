@@ -40,13 +40,15 @@ let
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
       enableParallelBuilding = true;
-      cmakeFlags = with stdenv.lib; [
-        "-DENABLE_MAN=ON"
-        "-DENABLE_DOC=ON"
-      ]
-        ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
-        ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
-        ;
+      cmakeFlags = {
+        ENABLE_MAN = true;
+        ENABLE_DOC = true;
+      } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+        ICONV_LIBRARY = "${libiconv}/lib/libiconv.dylib";
+        CMAKE_FIND_FRAMEWORK = "LAST";
+      } // stdenv.lib.foldr (
+        plugin: acc: acc // { ${plugin.cmakeFlag} = plugin.enabled; }
+      ) {} plugins;
 
       buildInputs = with stdenv.lib; [
           ncurses openssl aspell gnutls zlib curl pkgconfig

@@ -7,12 +7,10 @@
 , minimal ? false, suffix ? "glib"
 }:
 
-let # beware: updates often break cups-filters build
-  version = "0.67.0";
-  mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
-in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
+  # beware: updates often break cups-filters build
+  version = "0.67.0";
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
@@ -36,14 +34,14 @@ stdenv.mkDerivation rec {
   # Not sure when and how to pass it.  It seems an upstream bug anyway.
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
-  cmakeFlags = [
-    (mkFlag true "XPDF_HEADERS")
-    (mkFlag (!minimal) "GLIB")
-    (mkFlag (!minimal) "CPP")
-    (mkFlag (!minimal) "LIBCURL")
-    (mkFlag utils "UTILS")
-    (mkFlag qt5Support "QT5")
-  ];
+  cmakeFlags = {
+    XPDF_HEADERS = true;
+    GLIB = !minimal;
+    CPP = !minimal;
+    LIBCURL = !minimal;
+    UTILS = utils;
+    QT5 = qt5Support;
+  };
 
   meta = with lib; {
     homepage = https://poppler.freedesktop.org/;

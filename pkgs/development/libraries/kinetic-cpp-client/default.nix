@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   # The headers and library include from these and there is no provided pc file
   propagatedBuildInputs = [ protobuf openssl ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=true"
-  ];
+  cmakeFlags = {
+    BUILD_SHARED_LIBS = true;
+  };
 
   preCheck = ''
     # The checks cannot find libkinetic_client.so otherwise

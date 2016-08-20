@@ -30,13 +30,13 @@ stdenv.mkDerivation {
     export LDFLAGS="-ldl"
   '';
 
-  cmakeFlags = [
-    "-DLLDB_PATH_TO_LLVM_BUILD=${llvm}"
-    "-DLLDB_PATH_TO_CLANG_BUILD=${clang-unwrapped}"
-    "-DPYTHON_VERSION_MAJOR=2"
-    "-DPYTHON_VERSION_MINOR=7"
-    "-DLLDB_DISABLE_LIBEDIT=1" # https://llvm.org/bugs/show_bug.cgi?id=28898
-  ];
+  cmakeFlags = {
+    LLDB_DISABLE_LIBEDIT = 1; # https://llvm.org/bugs/show_bug.cgi?id=28898
+    LLDB_PATH_TO_CLANG_BUILD = "${clang-unwrapped}";
+    LLDB_PATH_TO_LLVM_BUILD = "${llvm}";
+    PYTHON_VERSION_MAJOR = 2;
+    PYTHON_VERSION_MINOR = 7;
+  };
 
   enableParallelBuilding = true;
 

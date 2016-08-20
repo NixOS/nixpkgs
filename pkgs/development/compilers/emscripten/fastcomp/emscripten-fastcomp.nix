@@ -26,17 +26,17 @@ stdenv.mkDerivation rec {
     cp -Lr ${srcFL} tools/clang
     chmod +w -R tools/clang
   '';
-  cmakeFlags = [
-    "-DLLVM_TARGETS_TO_BUILD='X86;JSBackend'"
-    "-DLLVM_INCLUDE_EXAMPLES=OFF"
-    "-DLLVM_INCLUDE_TESTS=ON"
-    #"-DLLVM_CONFIG=${llvm}/bin/llvm-config"
-    "-DLLVM_BUILD_TESTS=ON"
-    "-DCLANG_INCLUDE_TESTS=ON"
-  ] ++ (stdenv.lib.optional stdenv.isLinux
+  cmakeFlags = {
+    LLVM_TARGETS_TO_BUILD = "X86;JSBackend";
+    LLVM_INCLUDE_EXAMPLES = false;
+    LLVM_INCLUDE_TESTS = true;
+    # LLVM_CONFIG = "${llvm}/bin/llvm-config";
+    LLVM_BUILD_TESTS = true;
+    CLANG_INCLUDE_TESTS = true;
+  } ++ (stdenv.lib.optionalAttrs stdenv.isLinux {
     # necessary for clang to find crtend.o
-    "-DGCC_INSTALL_PREFIX=${gcc}"
-  );
+    GCC_INSTALL_PREFIX = "${gcc}";
+  });
   enableParallelBuilding = true;
 
   passthru = {

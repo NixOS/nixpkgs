@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
                   libXrandr libXrender xcbutilimage
                 ] ++ stdenv.lib.optional stdenv.isLinux udev
                   ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
-  cmakeFlags = [ "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
-                 "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
-                 "-DSFML_BUILD_FRAMEWORKS=no"
-                 "-DSFML_USE_SYSTEM_DEPS=yes" ];
+
+  cmakeFlags = {
+    SFML_INSTALL_PKGCONFIG_FILES = true;
+    SFML_MISC_INSTALL_PREFIX = "share/SFML";
+    SFML_BUILD_FRAMEWORKS = false;
+    SFML_USE_SYSTEM_DEPS = true;
+  }
+
   meta = with stdenv.lib; {
     homepage = http://www.sfml-dev.org/;
     description = "Simple and fast multimedia library";

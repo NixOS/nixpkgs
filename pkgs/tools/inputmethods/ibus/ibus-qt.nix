@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ibus cmake qt4 icu doxygen
   ];
 
-  cmakeFlags = [ "-DQT_PLUGINS_DIR=lib/qt4/plugins" ];
+  cmakeFlags = { QT_PLUGINS_DIR = "lib/qt4/plugins"; };
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/ibus/ibus-qt/;

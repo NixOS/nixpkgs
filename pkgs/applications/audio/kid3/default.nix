@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
     id3lib taglib mp4v2 flac libogg libvorbis zlib readline
     qtbase qttools qtmultimedia qtquickcontrols makeWrapper ];
 
-  cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
+  cmakeFlags = {
+    WITH_APPS = "Qt;CLI";
+  };
+
   NIX_LDFLAGS = "-lm -lpthread";
 
   preConfigure = ''

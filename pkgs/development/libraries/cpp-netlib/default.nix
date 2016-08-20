@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   # This can be removed when updating to 0.13, see https://github.com/cpp-netlib/cpp-netlib/issues/629
   propagatedBuildInputs = [ asio ];
 
-  cmakeFlags = [
-    "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = {
+    CPP-NETLIB_BUILD_SHARED_LIBS = true;
+  };
 
   enableParallelBuilding = true;
 

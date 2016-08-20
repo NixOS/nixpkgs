@@ -37,9 +37,9 @@ stdenv.mkDerivation {
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
-  cmakeFlags = [
-    "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
-  ];
+  cmakeFlags = {
+    LLDB_CODESIGN_IDENTITY = ""; # codesigning makes nondeterministic
+  };
 
   # Add missing include to fix error when using std::bind
   prePatch = ''

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   # for tracking usage.
   consumerKey = "23e747012c68601f27ab69c6de129ed70552d55b6";
   consumerSecret = "4701cb00c1bd357bbcae7c3d713dd216";
-  
+
   src = fetchFromGitHub {
     owner = "olav-st";
     repo = "screencloud";
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
   # to add the argument for us.
   dontAddPrefix = true;
 
-  cmakeFlags = [
-    "-DQXT_QXTCORE_INCLUDE_DIR=${qxt}/include/QxtCore"
-    "-DQXT_QXTCORE_LIB_RELEASE=${qxt}/lib/libQxtCore.so"
-    "-DQXT_QXTGUI_INCLUDE_DIR=${qxt}/include/QxtGui"
-    "-DQXT_QXTGUI_LIB_RELEASE=${qxt}/lib/libQxtGui.so"
-    "-DCONSUMER_KEY_SCREENCLOUD=${consumerKey}"
-    "-DCONSUMER_SECRET_SCREENCLOUD=${consumerSecret}"
-  ];
+  cmakeFlags = {
+    QXT_QXTCORE_INCLUDE_DIR = "${qxt}/include/QxtCore";
+    QXT_QXTCORE_LIB_RELEASE = "${qxt}/lib/libQxtCore.so";
+    QXT_QXTGUI_INCLUDE_DIR = "${qxt}/include/QxtGui";
+    QXT_QXTGUI_LIB_RELEASE = "${qxt}/lib/libQxtGui.so";
+    CONSUMER_KEY_SCREENCLOUD = "${consumerKey}";
+    CONSUMER_SECRET_SCREENCLOUD = "${consumerSecret}";
+  };
 
   setSourceRoot = ''
     sourceRoot=$(echo */screencloud)
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # This needs to be set in preConfigure instead of cmakeFlags in order to
     # access the $prefix environment variable.
-    export cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix/opt $cmakeFlags"
+    cmakeFlags+=("-DCMAKE_INSTALL_PREFIX=$prefix/opt")
   '';
 
   # There are a number of issues with screencloud's installation. We need to add

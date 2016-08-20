@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake pcre zlib python openssl ];
 
-  cmakeFlags = [
-    "--no-warn-unused-cli"
-  ];
+  cmakeFlags = {
+    extraFlags = [ "--no-warn-unused-cli" ];
+  };
 
   meta = with stdenv.lib; {
     homepage = http://cppcms.com;

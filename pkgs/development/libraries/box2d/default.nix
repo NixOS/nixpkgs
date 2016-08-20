@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
     unzip cmake libGLU_combined freeglut libX11 xproto inputproto libXi
   ];
 
-  cmakeFlags = [ "-DBOX2D_INSTALL=ON" "-DBOX2D_BUILD_SHARED=ON" ];
+  cmakeFlags = {
+    BOX2D_BUILD_SHARED = true;
+    BOX2D_INSTALL = true;
+  };
 
   prePatch = ''
     substituteInPlace Box2D/Common/b2Settings.h \

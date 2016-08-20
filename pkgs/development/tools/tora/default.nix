@@ -30,18 +30,18 @@ in mkDerivation rec {
       extlibs/libermodel/dotgraph.cpp
   '';
 
-  cmakeFlags = [
-    "-DWANT_INTERNAL_LOKI=0"
-    "-DWANT_INTERNAL_QSCINTILLA=0"
+  cmakeFlags = {
+    ENABLE_DB2 = false;
+    ENABLE_ORACLE = false;
+    ENABLE_TERADATA = false;
     # cmake/modules/FindQScintilla.cmake looks in qtbase and for the wrong library name
-    "-DQSCINTILLA_INCLUDE_DIR=${qscintillaLib}/include"
-    "-DQSCINTILLA_LIBRARY=${qscintillaLib}/lib/libqscintilla2.so"
-    "-DENABLE_DB2=0"
-    "-DENABLE_ORACLE=0"
-    "-DENABLE_TERADATA=0"
-    "-DQT5_BUILD=1"
-    "-Wno-dev"
-  ];
+    QSCINTILLA_INCLUDE_DIR = "${qscintillaLib}/include";
+    QSCINTILLA_LIBRARY = "${qscintillaLib}/lib/libqscintilla2.so";
+    QT5_BUILD = true;
+    WANT_INTERNAL_LOKI = false;
+    WANT_INTERNAL_QSCINTILLA = false;
+    extraFlags = [ "-Wno-dev" ];
+  };
 
   # these libraries are only searched for at runtime so we need to force-link them
   NIX_LDFLAGS = [

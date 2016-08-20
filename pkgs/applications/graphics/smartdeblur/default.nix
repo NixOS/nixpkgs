@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake qt4 fftw ];
 
-  cmakeFlags = "-DUSE_SYSTEM_FFTW=ON";
+  cmakeFlags = { USE_SYSTEM_FFTW = true; };
 
   meta = {
     homepage = https://github.com/Y-Vladimir/SmartDeblur;

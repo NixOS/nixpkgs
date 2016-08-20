@@ -24,14 +24,14 @@ in stdenv.mkDerivation {
 
   src = sources.src;
 
-  cmakeFlags = [
-    "-DENABLE_FREETYPE=1"
-    "-DENABLE_GETTEXT=1"
-    "-DENABLE_SYSTEM_JSONCPP=1"
-    "-DGETTEXT_INCLUDE_DIR=${gettext}/include/gettext"
-    "-DCURL_INCLUDE_DIR=${curl.dev}/include/curl"
-    "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
-  ];
+  cmakeFlags = {
+    CURL_INCLUDE_DIR = "${curl.dev}/include/curl";
+    ENABLE_FREETYPE = true;
+    ENABLE_GETTEXT = true;
+    ENABLE_SYSTEM_JSONCPP = true;
+    GETTEXT_INCLUDE_DIR = "${gettext}/include/gettext";
+    IRRLICHT_INCLUDE_DIR = "${irrlicht}/include/irrlicht";
+  };
 
   NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
 

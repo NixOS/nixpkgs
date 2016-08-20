@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   # tests are fetching an external git repository
-  cmakeFlags = [ "-DNO_TESTS:BOOL=ON" ];
+  cmakeFlags = { NO_TESTS = true; };
 
   meta = with stdenv.lib; {
     description = "A wrapper for dmenu that recognize .desktop files";

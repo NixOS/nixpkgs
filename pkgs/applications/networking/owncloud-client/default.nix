@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qtbase qtwebkit qtkeychain sqlite ];
 
-  cmakeFlags = [
-    "-UCMAKE_INSTALL_LIBDIR"
-  ];
+  cmakeFlags = {
+    CMAKE_INSTALL_LIBDIR = null;
+  };
 
   enableParallelBuilding = true;
 

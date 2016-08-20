@@ -16,10 +16,13 @@ stdenv.mkDerivation {
      sha256 = "1zwvlx5dz9nwjazhnrhzb0w8ilpa84r0hrxrmmy69pgr1p1yif5a";
   };
 
-  cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
-    ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
-           ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
-    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
+  cmakeFlags = {
+    OGRE_BUILD_RENDERSYSTEM_GL = true;
+    OGRE_BUILD_SAMPLES = withSamples;
+  } // (builtins.listToAttrs (builtins.map
+      (x: { name = "OGRE_BUILD_PLUGIN_${x}"; value = true; })
+      ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
+  ));
 
   enableParallelBuilding = true;
 

@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    cmakeFlags="
-      -DWL_INSTALL_BASEDIR=$out
-      -DWL_INSTALL_DATADIR=$out/share/widelands
-      -DWL_INSTALL_BINARY=$out/bin
-    "
+    cmakeFlags+=(
+        "-DWL_INSTALL_BASEDIR=$out"
+        "-DWL_INSTALL_DATADIR=$out/share/widelands"
+        "-DWL_INSTALL_BINARY=$out/bin"
+    )
   '';
 
   nativeBuildInputs = [ cmake python gettext ];

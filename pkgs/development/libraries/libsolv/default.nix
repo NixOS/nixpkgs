@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1knr48dilg8kscbmpjvd7m2krvgcdq0f9vpbqcgmxxa969mzrcy7";
   };
 
-  cmakeFlags = [
-    "-DENABLE_COMPLEX_DEPS=true"
-    "-DENABLE_RPMMD=true"
-    "-DENABLE_RPMDB=true"
-    "-DENABLE_PUBKEY=true"
-    "-DENABLE_RPMDB_BYRPMHEADER=true"
-  ];
+  cmakeFlags = {
+    ENABLE_COMPLEX_DEPS = true;
+    ENABLE_RPMMD = true;
+    ENABLE_RPMDB = true;
+    ENABLE_PUBKEY = true;
+    ENABLE_RPMDB_BYRPMHEADER = true;
+  };
 
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ zlib expat rpm db ];

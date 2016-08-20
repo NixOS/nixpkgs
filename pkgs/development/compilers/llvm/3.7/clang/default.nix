@@ -15,12 +15,14 @@ let
 
     buildInputs = [ cmake libxml2 llvm ];
 
-    cmakeFlags = [
-      "-DCMAKE_CXX_FLAGS=-std=c++11"
-    ] ++
-    # Maybe with compiler-rt this won't be needed?
-    (stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}") ++
-    (stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include");
+    cmakeFlags = {
+      CMAKE_CXX_FLAGS = "-std=c++11";
+    } // (stdenv.lib.optionalAttrs stdenv.isLinux {
+      # Maybe with compiler-rt this won't be needed?
+      GCC_INSTALL_PREFIX = "${gcc}";
+    }) // (stdenv.lib.optionalAttrs (stdenv.cc.libc != null) {
+      C_INCLUDE_DIRS = "${stdenv.cc.libc}/include";
+    });
 
     patches = [ ./purity.patch ];
 

@@ -2,10 +2,6 @@
 , parallel ? true
 }:
 
-let
-  mkFlag = optset: flag: if optset then "-D${flag}=ON" else "-D${flag}=OFF";
-in
-
 stdenv.mkDerivation rec {
   name = "stxxl-${version}";
   version = "1.4.1";
@@ -17,11 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_STATIC_LIBS=OFF"
-    (mkFlag parallel "USE_GNU_PARALLEL")
-  ];
+  cmakeFlags = {
+    BUILD_SHARED_LIBS = true;
+    BUILD_STATIC_LIBS = false;
+    USE_GNU_PARALLEL = parallel;
+  };
 
   passthru = {
     inherit parallel;

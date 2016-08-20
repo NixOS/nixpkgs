@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1fcc6ylfiw1npdhx7mrsj7h0dx7cym7i9664kpr76zqazb52ikm9";
   })];
 
-  cmakeFlags = [ "-DLLVM_OCAML_OUT_OF_TREE=TRUE" ];
+  cmakeFlags = { LLVM_OCAML_OUT_OF_TREE = true; };
 
   buildFlags = "ocaml_all";
 

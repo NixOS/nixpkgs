@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = with llvmPackages; [ clang-unwrapped llvm ];
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
+  cmakeFlags = { IWYU_LLVM_ROOT_PATH = "${llvmPackages.clang-unwrapped}"; };
 
   enableParallelBuilding = true;
 

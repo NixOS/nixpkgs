@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = []
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-                           "-DMSGPACK_BUILD_EXAMPLES=OFF"
-    ++ stdenv.lib.optional (hostPlatform.libc == "msvcrt")
-                           "-DCMAKE_SYSTEM_NAME=Windows"
-    ;
+  cmakeFlags = {}
+    // stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    MSGPACK_BUILD_EXAMPLES = false;
+  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
+    CMAKE_SYSTEM_NAME = "Windows";
+  };
 
   meta = with stdenv.lib; {
     description = "MessagePack implementation for C and C++";

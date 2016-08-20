@@ -11,7 +11,10 @@ stdenv.mkDerivation {
   postUnpack = ''
     unpackFile ${libcxx.src}
     unpackFile ${llvm.src}
-    export cmakeFlags="-DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
+    export cmakeFlags=(
+      "-DLLVM_PATH=$PWD/$(ls -d llvm-*)"
+      "-DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
+    )
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''

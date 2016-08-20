@@ -17,11 +17,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib netcdf nifticlib hdf5 ];
 
-  cmakeFlags = [ "-DBUILD_TESTING=${if doCheck then "TRUE" else "FALSE"}"
-                 "-DLIBMINC_MINC1_SUPPORT=TRUE"
-                 "-DLIBMINC_BUILD_SHARED_LIBS=TRUE"
-                 "-DLIBMINC_USE_SYSTEM_NIFTI=TRUE" ];
-
+  cmakeFlags = {
+    BUILD_TESTING = doCheck;
+    LIBMINC_MINC1_SUPPORT = true;
+    LIBMINC_BUILD_SHARED_LIBS = true;
+    LIBMINC_USE_SYSTEM_NIFTI = true;
+  };
 
   checkPhase = ''
     export LD_LIBRARY_PATH="$(pwd)"  # see #22060

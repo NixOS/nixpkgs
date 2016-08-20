@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     sha256 = "1r6qp9l2lp5jpc6ciklbg1swvvzcpc37rg9py46hk0wxy6klnm0b"; # v0.8.0
   };
 
-  cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ]
-    ++ stdenv.lib.optional stdenv.isDarwin [
+  cmakeFlags = {
+    QT_TRANSLATIONS_DIR = "share/qt/translations";
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
        # correctly detect the compiler
        # for details see cmake --help-policy CMP0025
-       "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
-       ]
-   ;
+       CMAKE_POLICY_DEFAULT_CMP0025 = "NEW";
+  };
 
   nativeBuildInputs = [ cmake ];
 

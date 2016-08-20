@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
   # disable installation of the python scripting interface
-  cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
+  cmakeFlags = { BUILD_HSI = false; };
 
   enableParallelBuilding = true;
 

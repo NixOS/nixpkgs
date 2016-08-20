@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export cmakeFlags="-DPREFIX=$out -DCFGDIR=/etc/icewm"
+    cmakeFlags+=("-DPREFIX=$out" "-DCFGDIR=/etc/icewm")
   '';
 
   patches = [ ./fix-strlcat_strlcpy.patch ] ++

@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
     rtaudio
   ];
 
-  cmakeFlags = [
-    "-GNinja"
-    "-DISCORE_CONFIGURATION=static-release"
-    "-DISCORE_ENABLE_LTO=OFF"
-    "-DISCORE_BUILD_FOR_PACKAGE_MANAGER=True"
-  ];
+  cmakeFlags = {
+    generator = "Ninja";
+    ISCORE_CONFIGURATION = "static-release";
+    ISCORE_ENABLE_LTO = false;
+    ISCORE_BUILD_FOR_PACKAGE_MANAGER = true;
+  };
 
   preConfigure = ''
     export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"

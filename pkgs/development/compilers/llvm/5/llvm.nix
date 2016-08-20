@@ -71,32 +71,30 @@ in stdenv.mkDerivation (rec {
     ln -sv $PWD/lib $out
   '';
 
-  cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=ON"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
+ cmakeFlags = with stdenv; {
+    CMAKE_BUILD_TYPE = if debugVersion then "Debug" else "Release";
+    LLVM_INSTALL_UTILS = true;  # Needed by rustc
+    LLVM_BUILD_TESTS = true;
+    LLVM_ENABLE_FFI = true;
+    LLVM_ENABLE_RTTI = true;
 
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
-  ]
-  ++ stdenv.lib.optional enableSharedLibraries
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ stdenv.lib.optionals enableManpages [
-    "-DLLVM_BUILD_DOCS=ON"
-    "-DLLVM_ENABLE_SPHINX=ON"
-    "-DSPHINX_OUTPUT_MAN=ON"
-    "-DSPHINX_OUTPUT_HTML=OFF"
-    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ]
-  ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ stdenv.lib.optionals (isDarwin) [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DCAN_TARGET_i386=false"
-  ];
+    LLVM_HOST_TRIPLE = stdenv.hostPlatform.config;
+    LLVM_DEFAULT_TARGET_TRIPLE = stdenv.hostPlatform.config;
+    TARGET_TRIPLE = stdenv.hostPlatform.config;
+  } // (stdenv.lib.optionalAttrs enableSharedLibraries {
+    LLVM_LINK_LLVM_DYLIB = true;
+  }) // (stdenv.lib.optionalAttrs enableManpages {
+    LLVM_BUILD_DOCS = true;
+    LLVM_ENABLE_SPHINX = true;
+    SPHINX_OUTPUT_MAN = true;
+    SPHINX_OUTPUT_HTML = false;
+    SPHINX_WARNINGS_AS_ERRORS = false;
+  }) // (stdenv.lib.optionalAttrs (!isDarwin) {
+    LLVM_BINUTILS_INCDIR = "${libbfd.dev}/include";
+  }) // (stdenv.lib.optionalAttrs (isDarwin) {
+    LLVM_ENABLE_LIBCXX = true;
+    CAN_TARGET_i386 = false;
+  });
 
   postBuild = ''
     rm -fR $out

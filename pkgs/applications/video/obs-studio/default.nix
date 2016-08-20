@@ -66,7 +66,9 @@ in stdenv.mkDerivation rec {
   # obs attempts to dlopen libobs-opengl, it fails unless we make sure
   # DL_OPENGL is an explicit path. Not sure if there's a better way
   # to handle this.
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\"" ];
+  cmakeFlags = {
+    CMAKE_CXX_FLAGS = "-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\"";
+  };
 
   postInstall = ''
       wrapProgram $out/bin/obs \

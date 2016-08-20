@@ -11,7 +11,9 @@ stdenv.mkDerivation {
     mv clang-tools-extra-* $sourceRoot/tools/extra
     # !!! Hopefully won't be needed for 3.5
     unpackFile ${llvm.src}
-    export cmakeFlags="$cmakeFlags -DCLANG_PATH_TO_LLVM_SOURCE="`ls -d $PWD/llvm-*`
+    cmakeFlags+=(
+        "-DCLANG_PATH_TO_LLVM_SOURCE="$(ls -d $PWD/llvm-*)
+    )
     (cd llvm-* && patch -Np1 -i ${./llvm-separate-build.patch})
   '';
 
@@ -19,12 +21,14 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake libedit libxml2 zlib ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
-    "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}"
-  ] ++
-  (stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include") ++
-  (stdenv.lib.optional (stdenv.cc.cc != null) "-DGCC_INSTALL_PREFIX=${stdenv.cc.cc}");
+  cmakeFlags = with stdenv.lib; {
+    CMAKE_CXX_FLAGS = "-std=c++11";
+    CLANG_PATH_TO_LLVM_BUILD = "${llvm}";
+  } // optionalAttrs (stdenv.cc.libc != null) {
+    C_INCLUDE_DIRS = "${stdenv.cc.libc}/include";
+  } // optionalAttrs (stdenv.cc.cc != null) {
+    GCC_INSTALL_PREFIX = "${stdenv.cc.cc}";
+  };
 
   # Clang expects to find LLVMgold in its own prefix
   # Clang expects to find sanitizer libraries in its own prefix

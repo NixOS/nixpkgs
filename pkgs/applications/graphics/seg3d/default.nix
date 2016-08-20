@@ -12,22 +12,22 @@ stdenv.mkDerivation {
 
   patches = [ ./cstdio.patch ];
 
-  cmakeFlags = [
-    "-DM_LIBRARY=${stdenv.glibc.out}/lib/libm.so"
-    "-DDL_LIBRARY=${stdenv.glibc.out}/lib/libdl.so"
-    "-DBUILD_UTILS=1"
-    "-DBUILD_SEG3D=1"
-    "-DBUILD_DATAFLOW=0"
-    "-DBUILD_SHARED_LIBS=0"
-    "-DWITH_X11=1"
-    "-DBUILD_BIOMESH3D=1"
-    "-DWITH_TETGEN=1"
-    "-DBUILD_TYPE=Release"
-    "-DBUILD_TESTING=0"
-    "-DWITH_WXWIDGETS=ON"
-    "-DITK_DIR=${itk}/lib/InsightToolkit"
-    "-DGDCM_LIBRARY=${itk}/lib/libitkgdcm.a"
-  ];
+  cmakeFlags = {
+    M_LIBRARY = "${stdenv.glibc.out}/lib/libm.so";
+    DL_LIBRARY = "${stdenv.glibc.out}/lib/libdl.so";
+    BUILD_UTILS = true;
+    BUILD_SEG3D = true;
+    BUILD_DATAFLOW = false;
+    BUILD_SHARED_LIBS = false;
+    WITH_X11 = true;
+    BUILD_BIOMESH3D = true;
+    WITH_TETGEN = true;
+    BUILD_TYPE = "Release";
+    BUILD_TESTING = false;
+    WITH_WXWIDGETS = true;
+    ITK_DIR = "${itk}/lib/InsightToolkit";
+    GDCM_LIBRARY = "${itk}/lib/libitkgdcm.a";
+  };
 
 
   makeFlags = "VERBOSE=1";

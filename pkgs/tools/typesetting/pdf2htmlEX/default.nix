@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./add-glib-cmake.patch ];
 
-  cmakeFlags = [ "-DENABLE_SVG=ON" ];
+  cmakeFlags = { ENABLE_SVG = true; };
 
   enableParallelBuilding = true;
 

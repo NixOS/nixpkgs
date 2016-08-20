@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
       --replace buffio.h tidybuffio.h
   '';
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = {
+    BUILD_SHARED_LIBS = true;
+  };
 
   installPhase = ''
     mkdir $out

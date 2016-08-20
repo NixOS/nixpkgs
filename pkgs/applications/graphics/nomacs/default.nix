@@ -47,11 +47,13 @@ stdenv.mkDerivation rec {
                  quazip
                  gsettings-desktop-schemas];
 
-  cmakeFlags = ["-DENABLE_OPENCV=ON"
-                "-DENABLE_RAW=ON"
-                "-DENABLE_TIFF=ON"
-                "-DENABLE_QUAZIP=ON"
-                "-DUSE_SYSTEM_QUAZIP=ON"];
+  cmakeFlags = {
+    ENABLE_OPENCV = true;
+    ENABLE_QUAZIP = true;
+    ENABLE_RAW = true;
+    ENABLE_TIFF = true;
+    USE_SYSTEM_QUAZIP = true;
+  };
 
   meta = with stdenv.lib; {
     homepage = https://nomacs.org;

@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "0j84h36wkjfjbsd7ybyji7rcc9wpjdbl0f1xdcc1g7h0nz34pc0g";
   };
 
-  cmakeFlags = [
-    "-DLUCENEPP_INCLUDE_DIR=${lucenepp}/include"
-    "-DLUCENEPP_LIBRARY_DIR=${lucenepp}/lib"
-  ];
+  cmakeFlags = {
+    LUCENEPP_INCLUDE_DIR = "${lucenepp}/include";
+    LUCENEPP_LIBRARY_DIR = "${lucenepp}/lib";
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

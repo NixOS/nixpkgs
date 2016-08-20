@@ -8,15 +8,17 @@ stdenv.mkDerivation {
   preUnpack = ''
     # !!! Hopefully won't be needed for 3.5
     unpackFile ${llvm.src}
-    export cmakeFlags="$cmakeFlags -DLLD_PATH_TO_LLVM_SOURCE="`ls -d $PWD/llvm-*`
+    cmakeFlags+=(
+        "-DLLD_PATH_TO_LLVM_SOURCE="$(ls -d $PWD/llvm-*)
+    )
   '';
 
   buildInputs = [ cmake ncurses zlib python2 ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
-    "-DLLD_PATH_TO_LLVM_BUILD=${llvm}"
-  ];
+  cmakeFlags = {
+    CMAKE_CXX_FLAGS = "-std=c++11";
+    LLD_PATH_TO_LLVM_BUILD = "${llvm}";
+  };
 
   enableParallelBuilding = true;
 

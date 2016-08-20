@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ qtbase gsl getdata netcdf muparser matio ];
 
-  cmakeFlags = "-Dkst_qt5=1 -Dkst_release=1";
+  cmakeFlags = {
+    kst_qt5 = true;
+    kst_release = true;
+  };
 
   postInstall = ''
     mkdir -p $out

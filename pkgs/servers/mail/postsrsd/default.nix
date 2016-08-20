@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "09yzb0fvnbfy534maqlqk79c41p1yz8r9f73n7bahm5lwd0livk9";
   };
 
-  cmakeFlags = [ "-DGENERATE_SRS_SECRET=OFF" "-DINIT_FLAVOR=systemd" ];
+  cmakeFlags = {
+    GENERATE_SRS_SECRET = false;
+    INIT_FLAVOR = "systemd";
+  };
 
   preConfigure = ''
     sed -i "s,\"/etc\",\"$out/etc\",g" CMakeLists.txt

@@ -13,11 +13,11 @@ let
       inherit sha256;
     };
 
-    cmakeFlags = [
-      "-DBUILD_NTOX=ON"
-      "-DDHT_BOOTSTRAP=ON"
-      "-DBOOTSTRAP_DAEMON=ON"
-    ];
+    cmakeFlags = {
+      BOOTSTRAP_DAEMON = true;
+      BUILD_NTOX = true;
+      DHT_BOOTSTRAP = true;
+    };
 
     buildInputs = [
       libsodium libmsgpack ncurses libconfig

@@ -13,11 +13,6 @@
 , darwin
 }:
 
-let
-  opencvFlag = name: enabled: "-DWITH_${name}=${if enabled then "ON" else "OFF"}";
-
-in
-
 stdenv.mkDerivation rec {
   name = "opencv-${version}";
   version = "2.4.13";
@@ -63,14 +58,14 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
-  cmakeFlags = [
-    (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "JASPER" enableJPEG2K)
-    (opencvFlag "JPEG" enableJPEG)
-    (opencvFlag "PNG" enablePNG)
-    (opencvFlag "OPENEXR" enableEXR)
-    (opencvFlag "GSTREAMER" enableGStreamer)
-  ];
+  cmakeFlags = {
+    WITH_JASPER = enableJPEG2K;
+    WITH_JPEG = enableJPEG;
+    WIHT_OPENEXR = enableEXR;
+    WITH_PNG = enablePNG;
+    WITH_TIFF = enableTIFF;
+    WITH_GSTREAMER = enableGStreamer;
+  };
 
   enableParallelBuilding = true;
 

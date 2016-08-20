@@ -18,10 +18,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  cmakeFlags = [
-    "-DUSE_BUNDLED_DEPS=OFF"
-    "-DSYSDIG_VERSION=${version}"
-  ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
+  cmakeFlags = {
+    USE_BUNDLED_DEPS = false;
+    SYSDIG_VERSION = "${version}";
+  } // optionalAttrs (kernel == null) {
+    BUILD_DRIVER = false;
+  };
 
   # needed since luajit-2.1.0-beta3
   NIX_CFLAGS_COMPILE = [

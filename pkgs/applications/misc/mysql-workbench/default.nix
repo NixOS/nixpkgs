@@ -56,17 +56,17 @@ in stdenv.mkDerivation rec {
     "-I${glibmm}/lib/giomm-2.4/include"
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
-    "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
-    "-DCTemplate_INCLUDE_DIR=${libctemplate}/include"
-    "-DCAIRO_INCLUDE_DIRS=${cairo.dev}/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk}/lib/gtk-2.0/include"
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${gtk.dev}/include"
-    "-DGTK2_GTKMMCONFIG_INCLUDE_DIR=${gtkmm}/lib/gtkmm-2.4/include"
-    "-DGTK2_GDKMMCONFIG_INCLUDE_DIR=${gtkmm}/lib/gdkmm-2.4/include"
-    "-DGTK2_GLIBMMCONFIG_INCLUDE_DIR=${glibmm}/lib/glibmm-2.4/include"
-  ];
+  cmakeFlags = {
+    CMAKE_CXX_FLAGS = "-std=c++11";
+    MySQL_CONFIG_PATH = "${mysql}/bin/mysql_config";
+    CTemplate_INCLUDE_DIR = "${libctemplate}/include";
+    CAIRO_INCLUDE_DIRS = "${cairo.dev}/include";
+    GTK2_GDKCONFIG_INCLUDE_DIR = "${gtk}/lib/gtk-2.0/include";
+    GTK2_GLIBCONFIG_INCLUDE_DIR = "${gtk.dev}/include";
+    GTK2_GTKMMCONFIG_INCLUDE_DIR = "${gtkmm}/lib/gtkmm-2.4/include";
+    GTK2_GDKMMCONFIG_INCLUDE_DIR = "${gtkmm}/lib/gdkmm-2.4/include";
+    GTK2_GLIBMMCONFIG_INCLUDE_DIR = "${glibmm}/lib/glibmm-2.4/include";
+  };
 
   postInstall = ''
     patchShebangs $out/share/mysql-workbench/extras/build_freetds.sh

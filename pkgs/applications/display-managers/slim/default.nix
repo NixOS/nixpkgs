@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "substituteInPlace CMakeLists.txt --replace /lib $out/lib";
 
-  cmakeFlags = [ "-DUSE_PAM=1" ];
+  cmakeFlags = { USE_PAM = true; };
 
   NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype -std=c++11";
 

@@ -113,33 +113,26 @@ in stdenv.mkDerivation rec {
     ln -sv $PWD/lib $out
   '';
 
-  cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=ON"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
-    "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
+  cmakeFlags = with stdenv; {
+    CMAKE_BUILD_TYPE = "${if debugVersion then "Debug" else "Release"}";
+    LLVM_INSTALL_UTILS = true;  # Needed by rustc
+    LLVM_BUILD_TESTS = true;
+    LLVM_ENABLE_FFI = true;
+    LLVM_ENABLE_RTTI = true;
+    COMPILER_RT_INCLUDE_TESTS = false; # FIXME: requires clang source code
+    LLVM_LINK_LLVM_DYLIB = enableSharedLibraries;
+    LLVM_ENABLE_LIBCXX = isDarwin;
+    CAN_TARGET_i386 = !isDarwin;
 
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
-  ] ++ stdenv.lib.optional enableSharedLibraries [
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ] ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-    ++ stdenv.lib.optionals (isDarwin) [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DCAN_TARGET_i386=false"
-  ] ++ stdenv.lib.optionals (buildPlatform != hostPlatform) [
-    "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen"
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    # Not yet supported
-    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
-    "-DCOMPILER_RT_BUILD_XRAY=OFF"
-
-  ];
+    LLVM_HOST_TRIPLE = stdenv.hostPlatform.config;
+    LLVM_DEFAULT_TARGET_TRIPLE = stdenv.targetPlatform.config;
+    TARGET_TRIPLE = stdenv.targetPlatform.config;
+  } // lib.optionalAttrs (!isDarwin) {
+    LLVM_BINUTILS_INCDIR = "${libbfd.dev}/include";
+  } // lib.optionalAttrs (buildPlatform != hostPlatform) {
+    CMAKE_CROSSCOMPILING = true;
+    LLVM_TABLEGEN = "${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen";
+  };
 
   postBuild = ''
     rm -fR $out

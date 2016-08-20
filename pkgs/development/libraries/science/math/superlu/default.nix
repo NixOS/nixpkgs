@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ openblasCompat ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=true"
-    "-DUSE_XSDK_DEFAULTS=true"
-  ];
+  cmakeFlags = {
+    BUILD_SHARED_LIBS = true;
+    USE_XSDK_DEFAULTS = true;
+  };
 
   patches = [
     ./find-openblas-library.patch

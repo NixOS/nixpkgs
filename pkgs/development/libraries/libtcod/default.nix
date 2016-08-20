@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     echo 'INSTALL(DIRECTORY include DESTINATION .)' >> CMakeLists.txt
   '';
 
-  cmakeFlags="-DLIBTCOD_SAMPLES=OFF";
+  cmakeFlags = { LIBTCOD_SAMPLES = false; };
 
   buildInputs = [ cmake SDL libGLU_combined upx zlib ];
 

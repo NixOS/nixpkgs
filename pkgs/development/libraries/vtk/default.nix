@@ -38,12 +38,16 @@ stdenv.mkDerivation rec {
   # built and requiring one of the shared objects.
   # At least, we use -fPIC for other packages to be able to use this in shared
   # objects.
-  cmakeFlags = [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" ]
-    ++ optional (qtLib != null) [ "-DVTK_USE_QT:BOOL=ON" ]
-    ++ optional stdenv.isDarwin [ "-DBUILD_TESTING:BOOL=OFF"
-                                  "-DCMAKE_OSX_SYSROOT="
-                                  "-DCMAKE_OSX_DEPLOYMENT_TARGET="
-                                  "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ];
+  cmakeFlags = {
+    CMAKE_C_FLAGS = "-fPIC";
+    CMAKE_CXX_FLAGS = "-fPIC";
+    VTK_USE_QT = qtLib != null;
+  } // (optionalAttrs stdenv.isDarwin {
+    BUILD_TESTING = false;
+    CMAKE_OSX_SYSROOT = "";
+    CMAKE_OSX_DEPLOYMENT_TARGET = "";
+    OPENGL_INCLUDE_DIR = "${OpenGL}/Library/Frameworks";
+  });
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-7.0|' ./Parallel/Core/CMakeLists.txt

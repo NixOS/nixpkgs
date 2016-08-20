@@ -15,7 +15,7 @@ stdenv.mkDerivation (rec {
     sha256 = "0zrrmfkfhd2xb4879z5khjb6xsdklrm01f1lscrs2ks68v25fk78";
   };
 
-  cmakeFlags = [ "-DTHREADSAFE=ON" ];
+  cmakeFlags = { THREADSAFE = true; };
 
   nativeBuildInputs = [ cmake python pkgconfig ];
 

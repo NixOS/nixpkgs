@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg
   ];
 
-  cmakeFlags = [
-    "-DOPENSPADES_INSTALL_BINARY=bin"
-  ];
+  cmakeFlags = {
+    OPENSPADES_INSTALL_BINARY = "bin";
+  };
 
   devPak = fetchurl {
     url = "https://github.com/yvt/openspades-paks/releases/download/r${devPakVersion}/OpenSpadesDevPackage-r${devPakVersion}.zip";

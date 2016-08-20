@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     optipng imagemagick
   ];
 
-  cmakeFlags = [
-    "-DDATA_DIR_PREFIXES=$out/share"
-    "-DImageMagick_convert_EXECUTABLE=${imagemagick.out}/bin/convert"
-    "-DImageMagick_mogrify_EXECUTABLE=${imagemagick.out}/bin/mogrify"
-  ];
+  cmakeFlags = {
+    DATA_DIR_PREFIXES = "$out/share";
+    ImageMagick_convert_EXECUTABLE = "${imagemagick.out}/bin/convert";
+    ImageMagick_mogrify_EXECUTABLE = "${imagemagick.out}/bin/mogrify";
+  };
 
   enableParallelBuilding = true;
 

@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0bims0y0nyviv2f2nxfj37s3258cjbfp9xd97najz0yylnk3qdfw";
   };
 
-  cmakeFlags = [
-    "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
-    "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG"
-    "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG"
-  ];
+  cmakeFlags = {
+    CMAKE_C_FLAGS_RELEASE = "-DNDEBUG";
+    CMAKE_CXX_FLAGS_RELEASE = "-DNDEBUG";
+    IRRLICHT_INCLUDE_DIR = "${irrlicht}/include/irrlicht";
+  };
 
   buildInputs = [
     cmake irrlicht libpng bzip2 libjpeg sqlite

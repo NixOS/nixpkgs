@@ -42,13 +42,12 @@ stdenv.mkDerivation rec {
   # QGIS_MACAPP_BUNDLE=0 stops the installer copying the Qt binaries into the
   # installation which causes havoc
   # Building RelWithDebInfo allows QGIS_DEBUG to print debugging information
-  cmakeFlags = stdenv.lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}"
-               ++ stdenv.lib.optional stdenv.isDarwin
-                    (["-DCMAKE_FIND_FRAMEWORK=never"]
-                      ++ ["-DQGIS_MACAPP_BUNDLE=0"]);
-#                     ++ ["-DCMAKE_BUILD_TYPE=RelWithDebInfo"];
-
-
+  cmakeFlags = (stdenv.lib.optionalAttrs withGrass {
+    GRASS_PREFIX7 = "${grass}/${grass.name}";
+  }) // (stdenv.lib.optionalAttrs stdenv.isDarwin {
+    CMAKE_FIND_FRAMEWORK = "never"
+    DQGIS_MACAPP_BUNDLE = false;
+  });
 
   postInstall =
     (stdenv.lib.optionalString stdenv.isLinux ''

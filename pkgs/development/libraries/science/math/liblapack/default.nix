@@ -26,19 +26,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ gfortran cmake ];
   nativeBuildInputs = [ python2 ];
 
-  cmakeFlags = [
-    "-DUSE_OPTIMIZED_BLAS=ON"
-    "-DCMAKE_Fortran_FLAGS=-fPIC"
-  ]
-  ++ (optionals (atlas != null) [
-    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlasMaybeShared}/lib/libf77blas${usedLibExtension}"
-    "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
-  ])
-  ++ (optional shared "-DBUILD_SHARED_LIBS=ON")
-  # If we're on darwin, CMake will automatically detect impure paths. This switch
-  # prevents that.
-  ++ (optional stdenv.isDarwin "-DCMAKE_OSX_SYSROOT:PATH=''")
-  ;
+  cmakeFlags = {
+    BUILD_SHARED_LIBS = shared;
+    CMAKE_Fortran_FLAGS = "-fPIC";
+    USE_OPTIMIZED_BLAS = true;
+  } // (optionalAttrs (atlas != null) {
+    BLAS_ATLAS_atlas_LIBRARY = "${atlasMaybeShared}/lib/libatlas${usedLibExtension}";
+    BLAS_ATLAS_f77blas_LIBRARY = "${atlasMaybeShared}/lib/libf77blas${usedLibExtension}";
+  }) // (optionalAttrs stdenv.isDarwin {
+    # If we're on darwin, CMake will automatically detect impure paths. This switch
+    # prevents that.
+    CMAKE_OSX_SYSROOT = "";
+  });
 
   doCheck = ! shared;
 

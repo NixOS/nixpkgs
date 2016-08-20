@@ -9,10 +9,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake isl python2 gmp ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
-    "-DLLVM_INSTALL_ROOT=${llvm}"
-  ];
+  cmakeFlags = {
+    CMAKE_CXX_FLAGS = "-std=c++11";
+    LLVM_INSTALL_ROOT = "${llvm}";
+  };
 
   enableParallelBuilding = true;
 

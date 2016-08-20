@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [ qt4 ];
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = "-DWITH_DOC=OFF";
+  cmakeFlags = { WITH_DOC = false; };
 
   meta = with stdenv.lib; {
     description = "Provides a Qt implementation of the DBusMenu spec";

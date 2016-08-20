@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost zlib ];
 
-  cmakeFlags = [ "-DBUILD_CONTRIBS=ON" "-DBUILD_CONTRIBS_LIB=ON" ];
+  cmakeFlags = {
+    BUILD_CONTRIBS = true;
+    BUILD_CONTRIBS_LIB = true;
+  };
 
   patches = # From debian
     [ ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch

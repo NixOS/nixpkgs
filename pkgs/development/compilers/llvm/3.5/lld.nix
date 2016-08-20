@@ -8,7 +8,9 @@ stdenv.mkDerivation {
   preUnpack = ''
     # !!! Hopefully won't be needed for 3.5
     unpackFile ${llvm.src}
-    export cmakeFlags="$cmakeFlags -DLLD_PATH_TO_LLVM_SOURCE="`ls -d $PWD/llvm-*`
+    cmakeFlags+=(
+        "-DLLD_PATH_TO_LLVM_SOURCE="$(ls -d $PWD/llvm-*)
+    )
   '';
 
   buildInputs = [ cmake ncurses zlib python ];

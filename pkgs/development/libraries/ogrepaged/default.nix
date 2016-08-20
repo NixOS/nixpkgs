@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ois ogre libX11 boost ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  cmakeFlags = [ "-DPAGEDGEOMETRY_BUILD_SAMPLES=OFF" ];
+  cmakeFlags = { PAGEDGEOMETRY_BUILD_SAMPLES = false; };
 
   enableParallelBuilding = true;
 

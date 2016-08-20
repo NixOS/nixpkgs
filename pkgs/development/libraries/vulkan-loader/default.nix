@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
-  cmakeFlags = [
-    "-DFALLBACK_DATA_DIRS=${libGL_driver.driverLink}/share:/usr/local/share:/usr/share"
-    "-DVULKAN_HEADERS_INSTALL_DIR=${vulkan-headers}"
-  ];
+  cmakeFlags = {
+    FALLBACK_DATA_DIRS = "${libGL_driver.driverLink}/share:/usr/local/share:/usr/share";
+    VULKAN_HEADERS_INSTALL_DIR = vulkan-headers;
+  };
 
   outputs = [ "out" "dev" ];
 

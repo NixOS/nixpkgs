@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -e 's@/XInput2.h@/XI2.h@g' -i CMakeLists.txt "src/"*.c
   '';
 
-  cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
+  cmakeFlags = { CMAKE_SKIP_RPATH = true; };
 
   meta = with stdenv.lib; {
     description = "A game programming library";

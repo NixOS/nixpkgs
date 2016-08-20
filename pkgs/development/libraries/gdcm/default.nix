@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     cd ../build
   '';
 
-  cmakeFlags = ''
-    -DGDCM_BUILD_APPLICATIONS=ON
-    -DGDCM_BUILD_SHARED_LIBS=ON
-    -DGDCM_USE_VTK=ON
-  '';
+  cmakeFlags = {
+    GDCM_BUILD_APPLICATIONS = true;
+    GDCM_BUILD_SHARED_LIBS = true;
+    GDCM_USE_VTK = true;
+  };
 
   enableParallelBuilding = true;
   buildInputs = [ cmake vtk ];

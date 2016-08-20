@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake qtbase qttools file solid ];
 
-  cmakeFlags = "-DQT5BUILD=true";
+  cmakeFlags = { QT5BUILD = true; };
 
   meta = {
     homepage = http://dfilemanager.sourceforge.net/;

@@ -41,15 +41,15 @@ in stdenv.mkDerivation {
                   libsecret spice-protocol spice-gtk epoxy at-spi2-core
                   openssl hicolor-icon-theme adwaita-icon-theme json-glib ];
 
-  cmakeFlags = [
-    "-DWITH_VTE=OFF"
-    "-DWITH_TELEPATHY=OFF"
-    "-DWITH_AVAHI=OFF"
-    "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
-    "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
-    "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.so"
-    "-DWINPR_INCLUDE_DIR=${freerdp}/include/winpr2"
-  ];
+  cmakeFlags = {
+    FREERDP_CLIENT_LIBRARY = "${freerdp}/lib/libfreerdp-client2.so";
+    FREERDP_LIBRARY = "${freerdp}/lib/libfreerdp2.so";
+    FREERDP_WINPR_LIBRARY = "${freerdp}/lib/libwinpr2.so";
+    WINPR_INCLUDE_DIR = "${freerdp}/include/winpr2";
+    WITH_AVAHI = false;
+    WITH_TELEPATHY = false;
+    WITH_VTE = false;
+  };
 
   preFixup = ''
     gappsWrapperArgs+=(

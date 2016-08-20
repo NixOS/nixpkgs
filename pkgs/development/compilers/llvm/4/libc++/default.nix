@@ -34,11 +34,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  cmakeFlags = [
-    "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
-    "-DLIBCXX_LIBCPPABI_VERSION=2"
-    "-DLIBCXX_CXX_ABI=libcxxabi"
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1";
+  cmakeFlags = {
+    LIBCXX_LIBCXXABI_LIB_PATH = "${libcxxabi}/lib";
+    LIBCXX_LIBCPPABI_VERSION = "2";
+    LIBCXX_CXX_ABI = "libcxxabi";
+  } // (stdenv.lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    LIBCXX_HAS_MUSL_LIBC = "1";
+  });
 
   enableParallelBuilding = true;
 

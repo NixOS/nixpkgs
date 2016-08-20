@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man"];
 
-  cmakeFlags = ''
-    -DWITH_MATLAB=false 
-  '';
+  cmakeFlags = { WITH_MATLAB = false; };
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [

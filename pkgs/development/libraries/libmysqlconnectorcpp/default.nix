@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake boost mysql ];
 
-  cmakeFlags = [ "-DMYSQL_LIB_DIR=${mysql}/lib" ];
+  cmakeFlags = { MYSQL_LIB_DIR = "${mysql}/lib"; };
 
   meta = {
     homepage = https://dev.mysql.com/downloads/connector/cpp/;

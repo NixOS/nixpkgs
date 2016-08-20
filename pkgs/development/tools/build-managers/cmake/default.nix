@@ -70,6 +70,32 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
+  setupHookFunc = let
+
+    flattenFlag = name: value: let
+      serializedValue =
+        if builtins.isString value then value
+        else if builtins.isInt value then (builtins.toString value)
+        else if builtins.isBool value then (if value then "ON" else "OFF")
+        else throw "Bad value ${value} for cmakeFlags attr ${name}";
+
+      # Strings and paths are more complicated to discern,
+      # so just skip those
+      flagType = if builtins.isBool value then ":BOOL" else "";
+    # Unset if the value is null, otherwise set the value
+    in if (value == null) then "-U${name}" else"-D${name}${flagType}=${serializedValue}";
+
+    mkCmakeFlags = cmakeFlags: let
+      flagsList = (stdenv.lib.mapAttrsToList flattenFlag (
+          builtins.removeAttrs cmakeFlags [ "generator" "extraArgs" ]
+      )) ++ stdenv.lib.optional (cmakeFlags ? generator) "-G${cmakeFlags.generator}"
+      ++ stdenv.lib.optionals (cmakeFlags ? extraArgs) cmakeFlags.extraArgs
+      ;
+    in stdenv.lib.strings.escapeBashArray flagsList;
+
+  in oldAttrs: oldAttrs // stdenv.lib.optionalAttrs (oldAttrs ? cmakeFlags) {
+    cmakeFlags = mkCmakeFlags oldAttrs.cmakeFlags;
+  };
 
   buildInputs =
     [ setupHook pkgconfig ]

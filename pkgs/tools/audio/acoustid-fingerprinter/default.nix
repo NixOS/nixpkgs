@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake qt4 taglib chromaprint ffmpeg ];
 
-  cmakeFlags = [ "-DTAGLIB_MIN_VERSION=${(builtins.parseDrvName taglib.name).version}" ];
+  cmakeFlags = { TAGLIB_MIN_VERSION = (builtins.parseDrvName taglib.name).version; };
 
   patches = [ (fetchpatch {
     url = "https://bitbucket.org/acoustid/acoustid-fingerprinter/commits/632e87969c3a5562a5d4842b03613267ba6236b2/raw";

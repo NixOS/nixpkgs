@@ -46,10 +46,10 @@ let
 
     lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
 
-    cmakeFlags = [
-      "-DLUA_PRG=${luaPackages.lua}/bin/lua"
-      "-DGPERF_PRG=${gperf}/bin/gperf"
-    ];
+    cmakeFlags = {
+      LUA_PRG = "${luaPackages.lua}/bin/lua";
+      GPERF_PRG = "${gperf}/bin/gperf";
+    };
 
     # triggers on buffer overflow bug while running tests
     hardeningDisable = [ "fortify" ];

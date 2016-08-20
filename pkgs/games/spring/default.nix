@@ -25,9 +25,11 @@ stdenv.mkDerivation rec {
     rm rts/build/cmake/FindGLEW.cmake
   '';
 
-  cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
-                "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
-                "-DPREFER_STATIC_LIBS:BOOL=OFF"];
+  cmakeFlags = {
+    CMAKE_BUILD_WITH_INSTALL_RPATH = true;
+    CMAKE_INSTALL_RPATH_USE_LINK_PATH = true;
+    PREFER_STATIC_LIBS = false;
+  };
 
   buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL2
     xorg.libX11 xorg.libXcursor libGLU_combined glew asciidoc libxslt docbook_xsl curl makeWrapper

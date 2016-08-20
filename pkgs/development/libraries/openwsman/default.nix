@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    cmakeFlags="$cmakeFlags -DPACKAGE_ARCHITECTURE=$(uname -m)";
+    cmakeFlags+=("-DPACKAGE_ARCHITECTURE=$(uname -m)")
   '';
 
   configureFlags = "--disable-more-warnings";

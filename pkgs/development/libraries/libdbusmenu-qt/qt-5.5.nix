@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ qtbase ];
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = "-DWITH_DOC=OFF";
+  cmakeFlags = { WITH_DOC = false; };
 
   meta = with stdenv.lib; {
     homepage = https://launchpad.net/libdbusmenu-qt;

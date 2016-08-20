@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|DESTINATION.*PURPLE_PLUGIN_DIR}|DESTINATION lib/purple-2|' CMakeLists.txt
   '';
 
-  cmakeFlags = "-DCMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT=1";
+  cmakeFlags = { CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT = true; };
 
   meta = {
     homepage = https://bitbucket.org/olegoandreev/purple-vk-plugin;

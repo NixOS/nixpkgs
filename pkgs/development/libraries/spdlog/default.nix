@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  # cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLES=ON" ];
+  # cmakeFlags = { SPDLOG_BUILD_EXAMPLES = true; };
 
   outputs = [ "out" "doc" ];
 

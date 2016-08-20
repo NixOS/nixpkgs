@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost ffmpeg ];
 
-  cmakeFlags = [ "-DBUILD_EXAMPLES=ON" ];
+  cmakeFlags = { BUILD_EXAMPLES = true; };
 
   meta = with stdenv.lib; {
     homepage = https://acoustid.org/chromaprint;

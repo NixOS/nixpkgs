@@ -12,9 +12,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake doxygen ];
 
-  cmakeFlags = [
-    "-DUri_BUILD_TESTS=OFF" "-DUri_BUILD_DOCS=ON" "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = {
+    BUILD_SHARED_LIBS = true;
+    Uri_BUILD_DOCS = true;
+    Uri_BUILD_TESTS = false;
+  };
 
   postBuild = "make doc";
 

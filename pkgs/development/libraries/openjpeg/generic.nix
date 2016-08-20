@@ -20,7 +20,6 @@ assert (openjpegJarSupport || jpipLibSupport) -> jdk != null;
 
 let
   inherit (stdenv.lib) optional optionals;
-  mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
 in
 
 stdenv.mkDerivation rec {
@@ -37,21 +36,20 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_NAME_DIR=\${CMAKE_INSTALL_PREFIX}/lib"
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_CODEC=ON"
-    (mkFlag mj2Support "BUILD_MJ2")
-    (mkFlag jpwlLibSupport "BUILD_JPWL")
-    (mkFlag jpipLibSupport "BUILD_JPIP")
-    (mkFlag jpipServerSupport "BUILD_JPIP_SERVER")
-    #(mkFlag opjViewerSupport "BUILD_VIEWER")
-    "-DBUILD_VIEWER=OFF"
-    (mkFlag openjpegJarSupport "BUILD_JAVA")
-    (mkFlag jp3dSupport "BUILD_JP3D")
-    (mkFlag thirdPartySupport "BUILD_THIRDPARTY")
-    (mkFlag testsSupport "BUILD_TESTING")
-  ];
+  cmakeFlags = {
+    CMAKE_INSTALL_NAME_DIR = "$CMAKE_INSTALL_PREFIX/lib";
+    BUILD_SHARED_LIBS = true;
+    BUILD_CODEC = true;
+    BUILD_MJ2 = mj2Support;
+    BUILD_JPWL = jpwlLibSupport;
+    BUILD_JPIP = jpipLibSupport;
+    BUILD_JPIP_SERVER = jpipServerSupport;
+    BUILD_VIEWER = false;
+    BUILD_JAVA = openjpegJarSupport;
+    BUILD_JP3D = jp3dSupport;
+    BUILD_THIRDPARTY = thirdPartySupport;
+    BUILD_TESTING = testsSupport;
+  };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

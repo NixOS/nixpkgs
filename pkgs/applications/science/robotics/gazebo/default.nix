@@ -32,12 +32,13 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true; # gazebo needs this so bad
-  cmakeFlags = [
-  "-DCMAKE_INSTALL_LIBDIR:PATH=lib"
-  "-DCMAKE_INSTALL_INCLUDEDIR=include" ]
-    ++ optional withQuickBuild [ "-DENABLE_TESTS_COMPILATION=False" ]
-    ++ optional withLowMemorySupport [ "-DUSE_LOW_MEMORY_TESTS=True" ]
-    ++ optional withHeadless [ "-DENABLE_SCREEN_TESTS=False" ];
+  cmakeFlags = {
+    CMAKE_INSTALL_LIBDIR = "lib";
+    CMAKE_INSTALL_INCLUDEDIR = "include";
+    ENABLE_TESTS_COMPILATION = !withQuickBuild;
+    USE_LOW_MEMORY_TESTS = withLowMemorySupport;
+    ENABLE_SCREEN_TESTS = !withHeadless;
+  };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

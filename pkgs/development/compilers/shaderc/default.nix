@@ -43,7 +43,9 @@ in stdenv.mkDerivation rec {
   buildInputs = [ cmake python ];
   enableParallelBuilding = true;
 
-  cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
+  cmakeFlags = {
+    SHADERC_SKIP_TESTS = true;
+  };
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

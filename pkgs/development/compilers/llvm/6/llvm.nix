@@ -67,37 +67,33 @@ in stdenv.mkDerivation (rec {
     ln -sv $PWD/lib $out
   '';
 
-  cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=ON"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
+  cmakeFlags = {
+    CMAKE_BUILD_TYPE = "${if debugVersion then "Debug" else "Release"}";
+    LLVM_INSTALL_UTILS = true;  # Needed by rustc
+    LLVM_BUILD_TESTS = true;
+    LLVM_ENABLE_FFI = true;
+    LLVM_ENABLE_RTTI = true;
+    LLVM_LINK_LLVM_DYLIB = enableSharedLibraries;
 
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    LLVM_HOST_TRIPLE = "${stdenv.hostPlatform.config}";
+    LLVM_DEFAULT_TARGET_TRIPLE = "${stdenv.hostPlatform.config}";
+    TARGET_TRIPLE = "${stdenv.hostPlatform.config}";
 
-    "-DLLVM_ENABLE_DUMP=ON"
-  ]
-  ++ stdenv.lib.optional enableSharedLibraries
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ stdenv.lib.optionals enableManpages [
-    "-DLLVM_BUILD_DOCS=ON"
-    "-DLLVM_ENABLE_SPHINX=ON"
-    "-DSPHINX_OUTPUT_MAN=ON"
-    "-DSPHINX_OUTPUT_HTML=OFF"
-    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ]
-  ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ stdenv.lib.optionals (isDarwin) [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DCAN_TARGET_i386=false"
-  ]
-  ++ stdenv.lib.optional enableWasm
-   "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
-  ;
+    LLVM_ENABLE_DUMP = true;
+  } // (stdenv.lib.optionalAttrs enableManpages {
+    LLVM_BUILD_DOCS = true;
+    LLVM_ENABLE_SPHINX = true;
+    SPHINX_OUTPUT_MAN = true;
+    SPHINX_OUTPUT_HTML = false;
+    SPHINX_WARNINGS_AS_ERRORS = false;
+  }) // (stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
+    LLVM_BINUTILS_INCDIR = "${libbfd.dev}/include";
+  }) // (stdenv.lib.optionalAttrs (stdenv.isDarwin) {
+    LLVM_ENABLE_LIBCXX = true;
+    CAN_TARGET_i386 = false;
+  }) // (stdenv.lib.optionalAttrs enableWasm {
+    LLVM_EXPERIMENTAL_TARGETS_TO_BUILD = "WebAssembly";
+  });
 
   postBuild = ''
     rm -fR $out
