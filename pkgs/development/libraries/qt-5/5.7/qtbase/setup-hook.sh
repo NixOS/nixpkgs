@@ -61,11 +61,6 @@ _qtMultioutDevs() {
 
 preFixupHooks+=(_qtMultioutDevs)
 
-if [[ -z "$NIX_QT_PIC" ]]; then
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE${NIX_CFLAGS_COMPILE:+ }-fPIC"
-    export NIX_QT_PIC=1
-fi
-
 _qtSetCMakePrefix() {
     export CMAKE_PREFIX_PATH="$NIX_QT5_TMP${CMAKE_PREFIX_PATH:+:}${CMAKE_PREFIX_PATH}"
 }
