@@ -227,6 +227,7 @@ let
           outputs = outputs';
         } else { })))) (
       {
+        overrideAttrs = f: mkDerivation (attrs // (f attrs));
         # The meta attribute is passed in the resulting attribute set,
         # but it's not part of the actual derivation, i.e., it's not
         # passed to the builder and is not a dependency.  But since we
