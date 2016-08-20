@@ -4,8 +4,8 @@
 
 let
   major = "0.32";
-  minor = "0";
-  sha256 = "0vpvq403vdd25irvgk7zibz3nw4x4i17m0dgnns8j1q4vr7am8h7";
+  minor = "1";
+  sha256 = "1ab1l44abf9fj1wznzq5956431ia136rl5049cggnk5393jlf3fx";
 in
 stdenv.mkDerivation rec {
   name = "vala-${major}.${minor}";
@@ -27,4 +27,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib libiconv ]
     ++ libintlOrEmpty;
+
 }

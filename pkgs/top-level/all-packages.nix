@@ -7084,6 +7084,8 @@ in
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
+  cxx-prettyprint = callPackage ../development/libraries/cxx-prettyprint { };
+
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
     kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
   };
@@ -9717,6 +9719,8 @@ in
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
+  wt = callPackage ../development/libraries/wt { };
+
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
@@ -9982,6 +9986,8 @@ in
   buildGoPackage = buildGo16Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
+
+  leaps = callPackage ../development/tools/leaps { };
 
   ### DEVELOPMENT / LISP MODULES
 

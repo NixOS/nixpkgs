@@ -36,10 +36,7 @@ in customEmacsPackages.emacsWithPackages (epkgs: [ epkgs.evil epkgs.magit ])
 
 with lib; let inherit (self) emacs; in
 
-{
-  packagesFun ? [], # packages explicitly requested by the user
-  extraStart ? ""
-}:
+packagesFun: # packages explicitly requested by the user
 
 let
   explicitRequires =
@@ -56,7 +53,7 @@ stdenv.mkDerivation {
   # Store all paths we want to add to emacs here, so that we only need to add
   # one path to the load lists
   deps = runCommand "emacs-packages-deps"
-   { inherit explicitRequires lndir emacs extraStart; }
+   { inherit explicitRequires lndir emacs; }
    ''
      mkdir -p $out/bin
      mkdir -p $out/share/emacs/site-lisp
@@ -99,7 +96,6 @@ stdenv.mkDerivation {
 (load-file "$emacs/share/emacs/site-lisp/site-start.el")
 (add-to-list 'load-path "$out/share/emacs/site-lisp")
 (add-to-list 'exec-path "$out/bin")
-$extraStart
 EOF
 
      # Byte-compiling improves start-up time only slightly, but costs nothing.

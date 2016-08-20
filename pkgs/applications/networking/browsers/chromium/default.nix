@@ -1,4 +1,4 @@
-{ newScope, stdenv, makeWrapper, makeDesktopItem, writeScript
+{ newScope, stdenv, makeWrapper, makeDesktopItem, ed
 
 # package customization
 , channel ? "stable"
@@ -66,38 +66,36 @@ let
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${chromium.browser.version}";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ed ];
 
   outputs = ["out" "sandbox"];
 
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
-    launchScript = writeScript "chromium" ''
-      #! ${stdenv.shell}
-
-      if [ -x "/var/setuid-wrappers/${sandboxExecutableName}" ]
-      then
-        export CHROME_DEVEL_SANDBOX="/var/setuid-wrappers/${sandboxExecutableName}"
-      else
-        export CHROME_DEVEL_SANDBOX="@sandbox@/bin/${sandboxExecutableName}"
-      fi
-
-      # libredirect causes chromium to deadlock on startup
-      export LD_PRELOAD="$(echo -n "$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\.so$ | tr '\n' ':')"
-
-      exec @out@/bin/.chromium-wrapped "''${extraFlagsArray[@]}" "$@"
-    '';
   in with stdenv.lib; ''
     mkdir -p "$out/bin" "$out/share/applications"
 
     ln -s "${chromium.browser}/share" "$out/share"
-    eval makeWrapper "${browserBinary}" "$out/bin/.chromium-wrapped" \
+    eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
-    cp -v "${launchScript}" "$out/bin/chromium"
-    substituteInPlace $out/bin/chromium --subst-var out --subst-var sandbox
-    chmod 755 "$out/bin/chromium"
+    ed -v -s "$out/bin/chromium" << EOF
+    2i
+
+    if [ -x "/var/setuid-wrappers/${sandboxExecutableName}" ]
+    then
+      export CHROME_DEVEL_SANDBOX="/var/setuid-wrappers/${sandboxExecutableName}"
+    else
+      export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
+    fi
+
+    # libredirect causes chromium to deadlock on startup
+    export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
+
+    .
+    w
+    EOF
 
     ln -sv "${chromium.browser.sandbox}" "$sandbox"
 
