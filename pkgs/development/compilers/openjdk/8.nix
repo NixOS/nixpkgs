@@ -101,6 +101,10 @@ let
       "--enable-unlimited-crypto"
       "--disable-debug-symbols"
       "--disable-freetype-bundling"
+
+      # glibc 2.24 deprecated readdir_r so we need this
+      # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
+      "--with-extra-cflags=\"-Wno-error=deprecated-declarations\""
     ] ++ (if minimal then [
       "--disable-headful"
       "--with-zlib=bundled"
