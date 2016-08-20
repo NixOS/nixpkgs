@@ -161,12 +161,12 @@ in {
         User = "seafile";
         Group = "seafile";
         RuntimeDirectory = "seafile";
-        ExecStart = "${pkgs.seafile-server}/bin/seaf-server -F ${centralConfigDir} -c ${ccnetDir} -d ${seafileDataDir} -l ${logDir}/seafile.log -P ${runDir}/seafile.pid";
+        ExecStart = "${pkgs.seafile}/bin/seaf-server -F ${centralConfigDir} -c ${ccnetDir} -d ${seafileDataDir} -l ${logDir}/seafile.log -P ${runDir}/seafile.pid";
         PIDFile = "${runDir}/seafile.pid";
       };
       preStart = ''
         if [ ! -d "${seafileDataDir}" ]; then
-          ${pkgs.seafile-server}/bin/seaf-server-init -F ${centralConfigDir} \
+          ${pkgs.seafile}/bin/seaf-server-init -F ${centralConfigDir} \
             --seafile-dir ${seafileDataDir} --port ${toString cfg.seafilePort} --fileserver-port ${toString cfg.fileserverPort}
         fi
       '';
@@ -188,7 +188,7 @@ in {
         Group = "seafile";
         RuntimeDirectory = "seafile";
         WorkingDirectory = pkgs.seafile-seahub;
-        ExecStart = "${pkgs.seafile-seahub}/manage.py runfcgi host=127.0.0.1 port=8000 pidfile=${runDir}/seahub.pid outlog=${logDir}/seahub_access.log errlog=${logDir}/seahub_error.log";
+        ExecStart = "${pkgs.seafile-seahub}/manage.py runfcgi host=0.0.0.0 port=8000 pidfile=${runDir}/seahub.pid outlog=${logDir}/seahub_access.log errlog=${logDir}/seahub_error.log";
         PIDFile = "${runDir}/seahub.pid";
       };
       preStart = ''
