@@ -302,6 +302,7 @@ let
         xf86inputsynaptics = linux;
         xf86videoati = linux;
         xf86videocirrus = linux;
+        xf86videoamdgpu = linux;
         xf86videointel = linux;
         xf86videonv = linux;
         xf86videovesa = linux;
