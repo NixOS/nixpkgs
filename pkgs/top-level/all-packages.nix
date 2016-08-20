@@ -12288,6 +12288,8 @@ in
 
   antiword = callPackage ../applications/office/antiword {};
 
+  ao = callPackage ../applications/graphics/ao {};
+
   ardour = self.ardour4;
 
   ardour3 =  callPackage ../applications/audio/ardour/ardour3.nix {
