@@ -3324,10 +3324,13 @@ let self = _self // overrides; _self = with self; {
     name = "DateTime-Format-SQLite-0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFAERBER/${name}.tar.gz";
-      sha256 = "1d4ln8x5bjpqmgnbbi2h16knfz674dsgvk6x7m60v6ykw454w7yc";
+      sha256 = "cc1f4e0ae1d39b0d4c3dddccfd7423c77c67a70950c4b5ecabf8ca553ab294b4";
     };
-
     propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
+    meta = {
+      description = "Parse and format SQLite dates and times";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   DateTimeFormatW3CDTF = buildPerlPackage {
