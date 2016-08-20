@@ -66,8 +66,9 @@ stdenv.mkDerivation rec {
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
-    "-I${cairo.dev}/include/cairo";
+  NIX_CFLAGS_COMPILE =
+    [ "-ffreestanding" ] # needed due to glibc 2.24 upgrade (see https://sourceware.org/glibc/wiki/Release/2.24#Known_Issues)
+    ++ stdenv.lib.optional (stdenv.isDarwin && withX) "-I${cairo.dev}/include/cairo";
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
