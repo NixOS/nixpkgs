@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jwrww1vn7yqxmb84n6y4p58z34gga0ic4rs2msvpzc2x1hxrn31";
   };
 
+  outputs = [ "dev" "out" "bin" "man" ];
+
   buildInputs = [ openldap ]
             ++ stdenv.lib.optional enablePython python;
 
