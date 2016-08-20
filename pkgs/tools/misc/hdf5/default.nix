@@ -17,14 +17,12 @@ assert !cpp || mpi == null;
 with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
-  version = "1.10.0";
+  version = "1.10.0-patch1";
   name = "hdf5-${version}";
   src = fetchurl {
     url = "http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
-    sha256 = "0a1xfj73ipykiq01n9y1d6f0k2wa972fx8xxndm0c5vkgkf71zri";
+    sha256 = "1fnzdw0ay5mm9v2vjxfhpjkwrkf9ccfah62lhlcfpp2kv16jcwpp";
   };
-
-  patches = [ ./hl-H5LDpublic.patch ];
 
   passthru = {
     mpiSupport = (mpi != null);
