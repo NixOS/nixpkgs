@@ -7857,6 +7857,30 @@ in modules // {
     };
   };
 
+   pybluez = buildPythonPackage rec {
+    version = "unstable-20160819";
+    pname = "pybluez";
+    name = "${pname}-${version}";
+
+    propagatedBuildInputs = with self; [ pkgs.bluez ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "karulis";
+      repo = "${pname}";
+      rev = "a0b226a61b166e170d48539778525b31e47a4731";
+      sha256 = "104dm5ngfhqisv1aszdlr3szcav2g3bhsgzmg4qfs09b3i5zj047";
+    };
+
+    # the tests do not pass
+    doCheck = false;
+
+    meta = {
+      description = "Bluetooth Python extension module";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ leenaars ];
+    };
+  };
+
   pycares = buildPythonPackage rec {
     name = "pycares-${version}";
     version = "1.0.0";
