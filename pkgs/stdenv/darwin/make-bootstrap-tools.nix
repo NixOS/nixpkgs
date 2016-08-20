@@ -1,8 +1,10 @@
-{ system ? builtins.currentSystem }:
+{ pkgspath ? ../../.., test-pkgspath ? pkgspath }:
 
-with import ../../.. { inherit system; };
+with import pkgspath { system = builtins.currentSystem; };
 
-rec {
+let
+  llvmPackages = llvmPackages_38;
+in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
@@ -79,11 +81,11 @@ rec {
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
-      cp -d ${libcxx}/lib/libc++*.dylib $out/lib
-      cp -d ${libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${libcxx}/include/c++     $out/include
+      cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
 
       cp -d ${icu.out}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
@@ -295,8 +297,8 @@ rec {
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   test-pkgs = let
-    stdenv = import ./. { inherit system bootstrapFiles; };
-  in import ../../.. {
+    stdenv = import "${test-pkgspath}/pkgs/stdenv/darwin" { inherit system bootstrapFiles; };
+  in import test-pkgspath {
     inherit system;
     bootStdenv = stdenv.stdenvDarwin;
   };
