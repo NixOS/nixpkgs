@@ -26185,6 +26185,8 @@ in modules // {
       sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
     '';
 
+    propagatedBuildInputs = [ pkgs.libusb ];
+
     # No tests included
     doCheck = false;
 
