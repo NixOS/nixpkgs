@@ -2935,7 +2935,7 @@ in
     owncloud82
     owncloud90;
 
-  owncloudclient = callPackage ../applications/networking/owncloud-client { };
+  owncloud-client = callPackage ../applications/networking/owncloud-client { };
 
   p2pvc = callPackage ../applications/video/p2pvc {};
 
