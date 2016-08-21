@@ -839,6 +839,9 @@ self: super: {
   # https://github.com/guillaume-nargeot/hpc-coveralls/issues/52
   hpc-coveralls = disableSharedExecutables super.hpc-coveralls;
 
+  # Can't find libHSidris-*.so during build.
+  idris = disableSharedExecutables super.idris;
+
   # https://github.com/fpco/stackage/issues/838
   cryptonite = dontCheck super.cryptonite;
 
