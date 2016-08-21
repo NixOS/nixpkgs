@@ -726,6 +726,8 @@ in
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
+  crane-gps-watch = callPackage ../applications/misc/crane-gps-watch { };
+
   contacts = callPackage ../tools/misc/contacts { };
 
   coturn = callPackage ../servers/coturn { };
