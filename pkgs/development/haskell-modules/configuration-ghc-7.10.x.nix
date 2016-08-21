@@ -210,7 +210,7 @@ self: super: {
   semigroups_0_18_1 = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
-  Glob_0_7_9 = addBuildDepends super.Glob_0_7_9 (with self; [semigroups]);
+  Glob_0_7_10 = addBuildDepends super.Glob_0_7_10 (with self; [semigroups]);
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
   # cereal must have `fail` in pre-ghc-8.0.x versions
   # also tests require bytestring>=0.10.8.1
