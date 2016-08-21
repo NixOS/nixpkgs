@@ -9568,6 +9568,8 @@ in
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
+  torch = callPackage ../development/libraries/torch {};
+
   tremor = callPackage ../development/libraries/tremor { };
 
   udns = callPackage ../development/libraries/udns { };
@@ -12285,6 +12287,8 @@ in
   antimony = qt5.callPackage ../applications/graphics/antimony {};
 
   antiword = callPackage ../applications/office/antiword {};
+
+  ao = callPackage ../applications/graphics/ao {};
 
   ardour = self.ardour4;
 
