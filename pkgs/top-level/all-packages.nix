@@ -17525,6 +17525,8 @@ in
     inherit (gnome2) zenity;
   };
 
+  with-shell = callPackage ../applications/misc/with-shell { };
+
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
