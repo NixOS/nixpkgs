@@ -14,7 +14,8 @@ top-level attribute to `top-level/all-packages.nix`.
 
 */
 
-{ pkgs
+{ pkgs,
+  darwin, fixDarwinDylibNames
 
 # options
 , developerBuild ? false
@@ -27,7 +28,7 @@ with stdenv.lib;
 
 let
 
-  mirror = "http://download.qt.io";
+  mirror = "https://download.qt.io";
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
 
   qtSubmodule = args:
@@ -40,7 +41,11 @@ let
       name = "${name}-${version}";
       inherit src;
 
+      buildInputs = with stdenv; (args.buildInputs or [])
+        ++ lib.optional isDarwin [ fixDarwinDylibNames ];
+
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
+
       nativeBuildInputs =
         (args.nativeBuildInputs or [])
         ++ [ pkgs.perl self.qmakeHook ];
@@ -64,11 +69,12 @@ let
 
       qtbase = callPackage ./qtbase {
         inherit (srcs.qtbase) src version;
-        mesa = pkgs.mesa_noglu;
-        harfbuzz = pkgs.harfbuzz-icu;
+        mesa = if stdenv.isLinux then pkgs.mesa_noglu else null;
+        harfbuzz = if stdenv.isLinux then pkgs.harfbuzz-icu else pkgs.harfbuzz;
         cups = if stdenv.isLinux then pkgs.cups else null;
-        # GNOME dependencies are not used unless gtkStyle == true
-        bison = pkgs.bison2; # error: too few arguments to function 'int yylex(...
+        inherit (darwin.apple_sdk.frameworks)
+          CoreGraphics CoreServices CoreText Cocoa OpenGL AppKit Security
+          SystemConfiguration CFNetwork DiskArbitration IOKit;
         inherit developerBuild decryptSslTraffic;
       };
 
@@ -78,12 +84,20 @@ let
       qtgraphicaleffects = callPackage ./qtgraphicaleffects.nix {};
       qtimageformats = callPackage ./qtimageformats.nix {};
       qtlocation = callPackage ./qtlocation.nix {};
+      qtmacextras = callPackage ./qtmacextras.nix {};
       qtmultimedia = callPackage ./qtmultimedia.nix {
-        inherit (pkgs.gst_all_1) gstreamer gst-plugins-base;
+        inherit (pkgs.gst_all_1)
+          gstreamer gst-plugins-base;
+        inherit (darwin.apple_sdk.frameworks)
+          OpenAL AVFoundation CoreMedia QuartzCore AppKit Quartz
+          AudioUnit AudioToolbox;
       };
       qtquickcontrols = callPackage ./qtquickcontrols.nix {};
+      qtquickcontrols2 = callPackage ./qtquickcontrols2.nix {};
       qtscript = callPackage ./qtscript {};
+      qtscxml = callPackage ./qtscxml.nix {};
       qtsensors = callPackage ./qtsensors.nix {};
+      qtserialbus = callPackage ./qtserialbus.nix {};
       qtserialport = callPackage ./qtserialport {};
       qtsvg = callPackage ./qtsvg.nix {};
       qttools = callPackage ./qttools {};
@@ -96,12 +110,14 @@ let
       qtxmlpatterns = callPackage ./qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-${qtbase.version}" [
+      full = with stdenv; env "qt-${qtbase.version}" ([
         qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
-        qtx11extras qtxmlpatterns
-      ];
+        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
+        qtscript qtsensors qtscxml qtserialbus qtserialport qtsvg qttools qttranslations
+        qtwebsockets qtxmlpatterns
+      ]
+      ++ lib.optional isDarwin [ qtmacextras ]
+      ++ lib.optional isLinux [ qtx11extras ]);
 
       makeQtWrapper =
         makeSetupHook

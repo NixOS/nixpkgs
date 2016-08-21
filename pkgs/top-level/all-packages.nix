@@ -9160,7 +9160,11 @@ in
     in recurseIntoAttrs (imported.override (super: qt5LibsFun));
 
   qt57 =
-    let imported = import ../development/libraries/qt-5/5.7 { inherit pkgs; };
+    let imported = import ../development/libraries/qt-5/5.7 {
+        inherit pkgs;
+        inherit darwin;
+        inherit fixDarwinDylibNames;
+    };
     in recurseIntoAttrs (imported.override (super: qt5LibsFun));
 
   qt5 = self.qt56;

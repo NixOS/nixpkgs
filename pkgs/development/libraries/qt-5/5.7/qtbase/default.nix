@@ -9,13 +9,16 @@
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, sqlite, udev,
   xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xlibs,
-  zlib,
+  zlib, libmng, libwebp, jasper, double_conversion,
+
+  # OS X
+  Cocoa, CoreServices, CoreGraphics, CoreText, OpenGL, AppKit, Security,
+  SystemConfiguration, CFNetwork, DiskArbitration, IOKit,
 
   # optional dependencies
-  cups ? null, mysql ? null, postgresql ? null,
+  cups ? null, mysql ? null, postgresql ? null, mesa ? null,
 
   # options
-  mesaSupported, mesa,
   buildExamples ? false,
   buildTests ? false,
   developerBuild ? false,
@@ -36,12 +39,13 @@ stdenv.mkDerivation {
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
     ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
-    ++ lib.optional mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
+    ++ lib.optional (mesa != null) [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
 
   postPatch =
     ''
-      substituteInPlace configure --replace /bin/pwd pwd
-      substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+      sed -i "s|/bin/sh|/bin/bash|g" configure
+      sed -i 's|/bin/pwd|pwd|g' configure
+      sed -i "s|/bin/ls|${coreutils}/bin/ls|g" src/corelib/global/global.pri
       sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
 
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "src/corelib/Qt5Config.cmake.in"
@@ -49,35 +53,25 @@ stdenv.mkDerivation {
       sed -i 's/NO_DEFAULT_PATH//' "src/gui/Qt5GuiConfigExtras.cmake.in"
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
 
-      substituteInPlace src/network/kernel/qdnslookup_unix.cpp \
-        --replace "@glibc@" "${stdenv.cc.libc.out}"
-      substituteInPlace src/network/kernel/qhostinfo_unix.cpp \
-        --replace "@glibc@" "${stdenv.cc.libc.out}"
+      sed -i "s|@glibc@|${stdenv.cc.libc.out}|g" src/network/kernel/qdnslookup_unix.cpp
+      sed -i "s|@glibc@|${stdenv.cc.libc.out}|g" src/network/kernel/qhostinfo_unix.cpp
 
-      substituteInPlace src/plugins/platforms/xcb/qxcbcursor.cpp \
-        --replace "@libXcursor@" "${libXcursor.out}"
+      sed -i "s|@libXcursor@|${libXcursor.out}|g" src/plugins/platforms/xcb/qxcbcursor.cpp
 
-      substituteInPlace src/network/ssl/qsslsocket_openssl_symbols.cpp \
-        --replace "@openssl@" "${openssl.out}"
+      sed -i "s|@openssl@|${openssl.out}|g" src/network/ssl/qsslsocket_openssl_symbols.cpp
 
-      substituteInPlace src/dbus/qdbus_symbols.cpp \
-        --replace "@dbus_libs@" "${dbus.lib}"
+      sed -i "s|@dbus_libs@|${dbus.lib}|g" src/dbus/qdbus_symbols.cpp
 
-      substituteInPlace \
-        src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-        --replace "@libX11@" "${libX11.out}"
+      sed -i "s|@libX11@|${libX11.out}|g" src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
     ''
-    + lib.optionalString mesaSupported ''
-      substituteInPlace \
-        src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
-        --replace "@mesa_lib@" "${mesa.out}"
-      substituteInPlace mkspecs/common/linux.conf \
-        --replace "@mesa_lib@" "${mesa.out}" \
-        --replace "@mesa_inc@" "${mesa.dev or mesa}"
+    + lib.optionalString (mesa != null) ''
+      sed -i "s|@mesa_lib@|${mesa.out}|g" src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
+      sed -i "s|@mesa_lib@|${mesa.out}|g" mkspecs/common/linux.conf
+      sed -i "s|@mesa_inc@|${mesa.dev or mesa}|g" mkspecs/common/linux.conf
     '';
 
-
   setOutputFlags = false;
+
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
@@ -92,41 +86,36 @@ stdenv.mkDerivation {
   prefixKey = "-prefix ";
 
   # -no-eglfs, -no-directfb, -no-linuxfb and -no-kms because of the current minimalist mesa
-  # TODO Remove obsolete and useless flags once the build will be totally mastered
-  configureFlags = ''
-    -verbose
-    -confirm-license
-    -opensource
 
+  /* Build with no ICU support on Darwin because of this:
+  https://wiki.qt.io/Locale_Support_in_Qt_5 */
+
+  # Configure flags in same order as used by `./configure --help`.
+
+  configureFlags = with stdenv; ''
     -release
-    -shared
     ${lib.optionalString developerBuild "-developer-build"}
+    -no-optimized-tools
+    -opensource
+    -confirm-license
+    -c++std c++11
+    -shared
     -largefile
     -accessibility
-    -rpath
-    -optimized-qmake
-    -strip
-    -no-reduce-relocations
-    -system-proxies
-    -pkg-config
 
-    -gui
-    -widgets
-    -opengl desktop
+    -no-sql-db2
+    -no-sql-ibase
+    ${lib.optionalString (null != mysql) "-plugin-sql-mysql"}
+    ${lib.optionalString (null == mysql) "-no-sql-mysql"}
+    -no-sql-oci
+    -no-sql-odbc
+    -no-sql-sqlite2
+    ${lib.optionalString (null != postgresql) "-plugin-sql-psql"}
+    ${lib.optionalString (null == postgresql) "-no-sql-psql"}
+    -no-sql-tds
+
+    -system-sqlite
     -qml-debug
-    -nis
-    -iconv
-    -icu
-    -pch
-    -glib
-    -xcb
-    -qpa xcb
-    -${lib.optionalString (cups == null) "no-"}cups
-
-    -no-eglfs
-    -no-directfb
-    -no-linuxfb
-    -no-kms
 
     ${lib.optionalString (!system-x86_64) "-no-sse2"}
     -no-sse3
@@ -135,30 +124,87 @@ stdenv.mkDerivation {
     -no-sse4.2
     -no-avx
     -no-avx2
+    -no-avx512
     -no-mips_dsp
     -no-mips_dspr2
 
+    -pkg-config
+
     -system-zlib
+    -no-mtdev
     -system-libpng
     -system-libjpeg
+    -system-doubleconversion
+    ${lib.optionalString isLinux "-system-freetype"}
+    ${lib.optionalString isDarwin "-no-freetype"}
     -system-harfbuzz
-    -system-xcb
-    -system-xkbcommon
+    ${lib.optionalString isLinux "-openssl-linked"}
+    ${lib.optionalString isDarwin "-no-openssl"}
+    -no-libproxy
     -system-pcre
-    -openssl-linked
-    -dbus-linked
-    -libinput
-    -gtk
-
-    -system-sqlite
-    -${if mysql != null then "plugin" else "no"}-sql-mysql
-    -${if postgresql != null then "plugin" else "no"}-sql-psql
+    -system-xcb
+    ${lib.optionalString isDarwin "-no-xkbcommon-x11"}
+    ${lib.optionalString isDarwin "-no-xkbcommon-evdev"}
+    -${lib.optionalString isDarwin "no-"}glib
+    ${lib.optionalString isDarwin "-no-pulseaudio"}
+    ${lib.optionalString isDarwin "-no-alsa"}
+    -${lib.optionalString isDarwin "no-"}gtk
 
     -make libs
     -make tools
     -${lib.optionalString (buildExamples == false) "no"}make examples
     -${lib.optionalString (buildTests == false) "no"}make tests
-    -v
+
+    -gui
+    -widgets
+    -${lib.optionalString isDarwin "no-"}rpath
+    -verbose
+    -nis
+    -${lib.optionalString (cups == null) "no-"}cups
+    -iconv
+    ${lib.optionalString isDarwin "-no-evdev"}
+    -no-tslib
+    -${lib.optionalString isDarwin "no-"}icu
+    -${lib.optionalString isDarwin "no-"}fontconfig
+    -strip
+    -pch
+    -no-ltcg
+    -dbus-linked
+    -no-reduce-relocations
+    ${lib.optionalString isDarwin "-no-use-gold-linker"}
+    -${lib.optionalString isDarwin "no-"}xcb
+    -no-eglfs
+    -no-kms
+    -no-gbm
+    -no-directfb
+    -no-linuxfb
+    -no-mirclient
+    -no-openvg
+    ${lib.optionalString isLinux "-qpa xcb"}
+    ${lib.optionalString isDarwin "-qpa cocoa"}
+    -opengl desktop
+    -${lib.optionalString isDarwin "no-"}libinput
+    -system-proxies
+
+    ${lib.optionalString isDarwin "-no-framework"}
+    ${lib.optionalString isDarwin "-securetransport"}
+    ${lib.optionalString isDarwin "-sdk macosx10.11"}
+
+    ${lib.optionalString isDarwin "-no-libudev"}
+'' +
+# TODO Figure out why autodetection fails on Darwin for the following libraries.
+lib.optionalString isDarwin ''
+    -I${zlib.out}/include/ -L${zlib.out}/lib
+    -I${libpng.dev}/include/ -L${libpng.out}/lib
+    -I${libjpeg.dev}/include/ -L${libjpeg.out}/lib
+    -I${double_conversion.out}/include/ -L${double_conversion.out}/lib
+    -I${harfbuzz.dev}/include/ -I${harfbuzz.out}/include/
+    -L${harfbuzz.out}/lib
+    -I${pcre16.dev}/include/ -L${pcre16.out}/lib
+    -I${libtiff.dev}/include/ -L${libtiff.out}/lib
+    -I${libmng.dev}/include/ -L${libmng.out}/lib
+    -I${libwebp.out}/include/ -L${libwebp.out}/lib
+    -I${jasper.dev}/include/ -L${jasper.out}/lib
   '';
 
   # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
@@ -166,23 +212,33 @@ stdenv.mkDerivation {
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  propagatedBuildInputs = [
-    dbus glib libxml2 libxslt openssl pcre16 sqlite udev zlib
+  propagatedBuildInputs = with stdenv; [
+    dbus libxml2 libxslt pcre16 sqlite zlib double_conversion
 
     # Image formats
-    libjpeg libpng libtiff
+    libjpeg libpng libtiff libmng libwebp jasper
 
     # Text rendering
-    fontconfig freetype harfbuzz icu
+    harfbuzz
+  ]
+  ++ lib.optional isLinux [
+    glib openssl udev
+
+    # Text rendering
+    fontconfig freetype icu
 
     # X11 libs
     libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
     xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
   ]
-  ++ lib.optional mesaSupported mesa;
+  ++ lib.optional isDarwin [
+    Cocoa CoreServices CoreGraphics CoreText OpenGL AppKit
+    Security SystemConfiguration CFNetwork DiskArbitration IOKit
+  ]
+  ++ lib.optional (mesa != null) mesa;
 
-  buildInputs =
-    [ gtk3 libinput ]
+  buildInputs = with stdenv;
+    lib.optional isLinux [ gtk3 libinput ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
@@ -241,7 +297,8 @@ stdenv.mkDerivation {
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ bbenoist qknight ttuegel ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
+    hydraPlatforms = platforms.linux;
   };
 
 }
