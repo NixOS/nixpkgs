@@ -3455,9 +3455,7 @@ in
 
   sharutils = callPackage ../tools/archivers/sharutils { };
 
-  shotwell = callPackage ../applications/graphics/shotwell {
-    vala = vala_0_28;
-  };
+  shotwell = callPackage ../applications/graphics/shotwell { };
 
   shout = callPackage ../applications/networking/irc/shout { };
 
@@ -4043,7 +4041,6 @@ in
 
   valum = callPackage ../development/web/valum {
     inherit (gnome3) libgee;
-    vala = vala_0_28;
   };
 
   varnish = callPackage ../servers/varnish { };
@@ -5593,7 +5590,7 @@ in
 
   urweb = callPackage ../development/compilers/urweb { };
 
-  vala = callPackage ../development/compilers/vala/default.nix { };
+  vala_0_23 = callPackage ../development/compilers/vala/0.23.nix { };
 
   vala_0_26 = callPackage ../development/compilers/vala/0.26.nix { };
 
@@ -13041,9 +13038,7 @@ in
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
-  font-manager = callPackage ../applications/misc/font-manager {
-    vala = vala_0_32;
-  };
+  font-manager = callPackage ../applications/misc/font-manager { };
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
@@ -14288,7 +14283,6 @@ in
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
-    vala = vala_0_26;
     inherit (gnome3) libgee;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
@@ -15034,9 +15028,7 @@ in
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
-  vanubi = callPackage ../applications/editors/vanubi {
-    vala = vala_0_26;
-  };
+  vanubi = callPackage ../applications/editors/vanubi { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
