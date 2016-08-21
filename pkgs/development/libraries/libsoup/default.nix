@@ -1,18 +1,18 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
 , gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
-, valaSupport ? true, vala_0_23
+, valaSupport ? true, vala_0_32
 , libintlOrEmpty
 , intltool, python }:
 let
-  majorVersion = "2.54";
-  version = "${majorVersion}.1";
+  majorVersion = "2.55";
+  version = "${majorVersion}.90";
 in
 stdenv.mkDerivation {
   name = "libsoup-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "0cyn5pq4xl1gb8413h2p4d5wrn558dc054zhwmk4swrl40ijrd27";
+    sha256 = "14xp0vfjdgd7y1r2xclfvd4mgcwbwnflw8ycm2ii5a8y4dgsmabb";
   };
 
   prePatch = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "out" ];
 
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ]
-    ++ stdenv.lib.optionals valaSupport [ vala_0_23 ];
+    ++ stdenv.lib.optionals valaSupport [ vala_0_32 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];
@@ -33,8 +33,7 @@ stdenv.mkDerivation {
 
   # glib_networking is a runtime dependency, not a compile-time dependency
   configureFlags = "--disable-tls-check"
-    + stdenv.lib.optionalString (!valaSupport) " --enable-vala=no"
-    + stdenv.lib.optionalString (valaSupport) " --enable-vala=yes"
+    + " --enable-vala=${if valaSupport then "yes" else "no"}"
     + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
