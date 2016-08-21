@@ -203,6 +203,7 @@ self: super: {
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
   # GHC versions prior to 8.x require additional build inputs.
+  aeson_0_11_2_0 = disableCabalFlag (addBuildDepend super.aeson_0_11_2_0 self.semigroups) "old-locale";
   aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
   case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
   bytes = addBuildDepend super.bytes self.doctest;
