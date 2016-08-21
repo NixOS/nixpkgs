@@ -63,7 +63,7 @@ in {
       type = types.string;
       default = "127.0.0.1";
       description = ''
-        The tcp port used by ccnet.
+        The tcp address used by ccnet.
       '';
     };
 
