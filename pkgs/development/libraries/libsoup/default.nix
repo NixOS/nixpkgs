@@ -1,6 +1,6 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
 , gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
-, valaSupport ? true, vala_0_23
+, valaSupport ? true, vala_0_32
 , libintlOrEmpty
 , intltool, python }:
 let
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "out" ];
 
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ]
-    ++ stdenv.lib.optionals valaSupport [ vala_0_23 ];
+    ++ stdenv.lib.optionals valaSupport [ vala_0_32 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];
@@ -33,8 +33,7 @@ stdenv.mkDerivation {
 
   # glib_networking is a runtime dependency, not a compile-time dependency
   configureFlags = "--disable-tls-check"
-    + stdenv.lib.optionalString (!valaSupport) " --enable-vala=no"
-    + stdenv.lib.optionalString (valaSupport) " --enable-vala=yes"
+    + " --enable-vala=${if valaSupport then "yes" else "no"}"
     + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
