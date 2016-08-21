@@ -1,6 +1,6 @@
 {stdenv, fossil}:
 
-{name ? null, url, rev, md5 ? null, sha256 ? null}:
+{name ? null, url, rev, sha256}:
 
 stdenv.mkDerivation {
   name = "fossil-archive" + (if name != null then "-${name}" else "");
@@ -11,9 +11,9 @@ stdenv.mkDerivation {
   # https://www.fossil-scm.org/index.html/doc/trunk/www/env-opts.md
   impureEnvVars = [ "http_proxy" ];
 
-  outputHashAlgo = if md5 != null then "md5" else "sha256";
+  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = if md5 != null then md5 else sha256;
+  outputHash = sha256;
 
   inherit url rev;
   preferLocalBuild = true;
