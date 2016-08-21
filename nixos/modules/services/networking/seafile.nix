@@ -188,7 +188,7 @@ in {
         Group = "seafile";
         RuntimeDirectory = "seafile";
         WorkingDirectory = pkgs.seafile-seahub;
-        ExecStart = "${pkgs.seafile-seahub}/manage.py runfcgi host=0.0.0.0 port=8000 pidfile=${runDir}/seahub.pid outlog=${logDir}/seahub_access.log errlog=${logDir}/seahub_error.log";
+        ExecStart = "${pkgs.seafile-seahub}/manage.py runfcgi host=127.0.0.1 port=8000 pidfile=${runDir}/seahub.pid outlog=${logDir}/seahub_access.log errlog=${logDir}/seahub_error.log";
         PIDFile = "${runDir}/seahub.pid";
       };
       preStart = ''
