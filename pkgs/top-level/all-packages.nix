@@ -730,6 +730,8 @@ in
 
   coturn = callPackage ../servers/coturn { };
 
+  crunch = callPackage ../tools/security/crunch { };
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   datamash = callPackage ../tools/misc/datamash { };
