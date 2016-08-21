@@ -162,6 +162,8 @@ in
 
   fetchdarcs = callPackage ../build-support/fetchdarcs { };
 
+  fetchfossil = callPackage ../build-support/fetchfossil { };
+
   fetchgit = callPackage ../build-support/fetchgit {
     git = gitMinimal;
   };
