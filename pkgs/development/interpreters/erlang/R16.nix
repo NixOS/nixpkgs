@@ -1,16 +1,6 @@
-{ stdenv, fetchurl, perl, gnum4, ncurses, openssl
-, gnused, gawk, makeWrapper
-, odbcSupport ? false, unixODBC ? null
-, wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null
-, enableDebugInfo ? false }:
+{ mkDerivation, fetchurl }:
 
-assert wxSupport -> mesa != null && wxGTK != null && xorg != null;
-assert odbcSupport -> unixODBC != null;
-
-with stdenv.lib;
-
-stdenv.mkDerivation rec {
-  name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}";
+mkDerivation rec {
   version = "16B03-1";
 
   src = fetchurl {
@@ -18,21 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1rvyfh22g1fir1i4xn7v2md868wcmhajwhfsq97v7kn5kd2m7khp";
   };
 
-  debugInfo = enableDebugInfo;
-
-  buildInputs =
-    [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ optional wxSupport [ mesa wxGTK xorg.libX11 ]
-      ++ optional odbcSupport [ unixODBC ];
-
-  patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
+  patchPhase = ''
+    sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure
+  '';
 
   preConfigure = ''
     export HOME=$PWD/../
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
-
-  configureFlags= "--with-ssl=${openssl.dev} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
 
   postInstall = let
     manpages = fetchurl {
@@ -48,29 +31,4 @@ stdenv.mkDerivation rec {
       ln -s "$i" "$out/share/man/''${prefix##*/}/''${i##*/}erl"
     done
   '';
-
-  # Some erlang bin/ scripts run sed and awk
-  postFixup = ''
-    wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"
-    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${gnused}/bin/:${gawk}/bin"
-  '';
-
-  setupHook = ./setup-hook.sh;
-
-  meta = {
-    homepage = "http://www.erlang.org/";
-    description = "Programming language used for massively scalable soft real-time systems";
-
-    longDescription = ''
-      Erlang is a programming language used to build massively scalable
-      soft real-time systems with requirements on high availability.
-      Some of its uses are in telecoms, banking, e-commerce, computer
-      telephony and instant messaging. Erlang's runtime system has
-      built-in support for concurrency, distribution and fault
-      tolerance.
-    '';
-
-    platforms = platforms.unix;
-    maintainers = [ maintainers.the-kenny ];
-  };
 }

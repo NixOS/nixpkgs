@@ -5672,71 +5672,83 @@ in
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
-  erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
-  erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-  };
-  erlangR17_odbc = callPackage ../development/interpreters/erlang/R17.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    odbcSupport = true;
-  };
-  erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    javacSupport = true;
-  };
-  erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    javacSupport = true; odbcSupport = true;
-  };
-  erlangR18 = callPackage ../development/interpreters/erlang/R18.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-  };
-  erlangR18_odbc = callPackage ../development/interpreters/erlang/R18.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    odbcSupport = true;
-  };
-  erlangR18_javac = callPackage ../development/interpreters/erlang/R18.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    javacSupport = true;
-  };
-  erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    javacSupport = true; odbcSupport = true;
-  };
-  erlangR19 = callPackage ../development/interpreters/erlang/R19.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-  };
-  erlangR19_odbc = callPackage ../development/interpreters/erlang/R19.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    odbcSupport = true;
-  };
-  erlangR19_javac = callPackage ../development/interpreters/erlang/R19.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      javacSupport = true;
-  };
-  erlangR19_odbc_javac = callPackage ../development/interpreters/erlang/R19.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    javacSupport = true; odbcSupport = true;
-  };
-  erlang = self.erlangR18;
-  erlang_odbc = self.erlangR18_odbc;
-  erlang_javac = self.erlangR18_javac;
-  erlang_odbc_javac = self.erlangR18_odbc_javac;
+  beam = callPackage ./beam-packages.nix { };
 
-  rebar = callPackage ../development/tools/build-managers/rebar { };
-  rebar3-open = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = false; };
-  rebar3 = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = true; };
+  beamPackages = beam.packages.erlangR18;
+  erlang = beamPackages.erlang;
+  rebar = beamPackages.rebar;
+  rebar3 = beamPackages.rebar3;
+
+  elixir = beam.packages.elixir131.elixir;
+
   hexRegistrySnapshot = callPackage ../development/beam-modules/hex-registry-snapshot.nix { };
   fetchHex = callPackage ../development/beam-modules/fetch-hex.nix { };
 
-  beamPackages = callPackage ../development/beam-modules { };
-  hex2nix = beamPackages.callPackage ../development/tools/erlang/hex2nix { };
-  cuter = callPackage ../development/tools/erlang/cuter { };
+  # erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
+  # erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
+  # erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  # };
+  # erlangR17_odbc = callPackage ../development/interpreters/erlang/R17.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #   odbcSupport = true;
+  # };
+  # erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #   javacSupport = true;
+  # };
+  # erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #   javacSupport = true; odbcSupport = true;
+  # };
+  # erlangR18 = callPackage ../development/interpreters/erlang/R18.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  # };
+  # erlangR18_odbc = callPackage ../development/interpreters/erlang/R18.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #   odbcSupport = true;
+  # };
+  # erlangR18_javac = callPackage ../development/interpreters/erlang/R18.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #   javacSupport = true;
+  # };
+  # erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #   javacSupport = true; odbcSupport = true;
+  # };
+  # erlangR19 = callPackage ../development/interpreters/erlang/R19.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  # };
+  # erlangR19_odbc = callPackage ../development/interpreters/erlang/R19.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #   odbcSupport = true;
+  # };
+  # erlangR19_javac = callPackage ../development/interpreters/erlang/R19.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #     javacSupport = true;
+  # };
+  # erlangR19_odbc_javac = callPackage ../development/interpreters/erlang/R19.nix {
+  #   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #   javacSupport = true; odbcSupport = true;
+  # };
+  # erlang = self.erlangR18;
+  # erlang_odbc = self.erlangR18_odbc;
+  # erlang_javac = self.erlangR18_javac;
+  # erlang_odbc_javac = self.erlangR18_odbc_javac;
 
-  relxExe = callPackage ../development/tools/erlang/relx-exe {};
+  # rebar = callPackage ../development/tools/build-managers/rebar { };
+  # rebar3-open = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = false; };
+  # rebar3 = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = true; };
+  # hexRegistrySnapshot = callPackage ../development/beam-modules/hex-registry-snapshot.nix { };
+  # fetchHex = callPackage ../development/beam-modules/fetch-hex.nix { };
 
-  elixir = callPackage ../development/interpreters/elixir { debugInfo = true; };
+  # beamPackages = callPackage ../development/beam-modules { };
+  # hex2nix = beamPackages.callPackage ../development/tools/erlang/hex2nix { };
+  # cuter = callPackage ../development/tools/erlang/cuter { };
+
+  # relxExe = callPackage ../development/tools/erlang/relx-exe {};
+
+  # elixir = callPackage ../development/interpreters/elixir { debugInfo = true; };
 
   lfe = callPackage ../development/interpreters/lfe { };
 
