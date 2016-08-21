@@ -65,6 +65,8 @@ self: super: {
 
   hoauth2 = overrideCabal super.hoauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.wai self.warp ]; });
 
+  yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
+
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
@@ -203,6 +205,7 @@ self: super: {
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
   # GHC versions prior to 8.x require additional build inputs.
+  aeson_0_11_2_0 = disableCabalFlag (addBuildDepend super.aeson_0_11_2_0 self.semigroups) "old-locale";
   aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
   case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
   bytes = addBuildDepend super.bytes self.doctest;
@@ -210,7 +213,7 @@ self: super: {
   semigroups_0_18_1 = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
-  Glob_0_7_9 = addBuildDepends super.Glob_0_7_9 (with self; [semigroups]);
+  Glob_0_7_10 = addBuildDepends super.Glob_0_7_10 (with self; [semigroups]);
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
   # cereal must have `fail` in pre-ghc-8.0.x versions
   # also tests require bytestring>=0.10.8.1

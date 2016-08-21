@@ -7064,6 +7064,8 @@ in
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
+  cxx-prettyprint = callPackage ../development/libraries/cxx-prettyprint { };
+
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
     kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
   };
@@ -9550,6 +9552,8 @@ in
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
+  torch = callPackage ../development/libraries/torch {};
+
   tremor = callPackage ../development/libraries/tremor { };
 
   udns = callPackage ../development/libraries/udns { };
@@ -9698,6 +9702,8 @@ in
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
+
+  wt = callPackage ../development/libraries/wt { };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
@@ -9964,6 +9970,8 @@ in
   buildGoPackage = buildGo16Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
+
+  leaps = callPackage ../development/tools/leaps { };
 
   ### DEVELOPMENT / LISP MODULES
 
@@ -12272,6 +12280,8 @@ in
   antimony = qt5.callPackage ../applications/graphics/antimony {};
 
   antiword = callPackage ../applications/office/antiword {};
+
+  ao = callPackage ../applications/graphics/ao {};
 
   ardour = self.ardour4;
 
