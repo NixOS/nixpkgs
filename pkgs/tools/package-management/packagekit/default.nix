@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, lib
 , intltool, glib, pkgconfig, polkit, python, sqlite, systemd
-, gobjectIntrospection, vala, gtk_doc, autoreconfHook, autoconf-archive
+, gobjectIntrospection, vala_0_23, gtk_doc, autoreconfHook, autoconf-archive
 , nix, boost
 , enableCommandNotFound ? false
 , enableBashCompletion ? false, bashCompletion ? null }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "150mpar7bhlvwfpwsr6zrjn3yggvklzr6nlhk0shaxnrfkfxvvb6";
   };
 
-  buildInputs = [ glib polkit systemd python gobjectIntrospection vala ]
+  buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_23 ]
                   ++ lib.optional enableBashCompletion bashCompletion;
   propagatedBuildInputs = [ sqlite nix boost ];
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk_doc ];
