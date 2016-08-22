@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-libplotter"; # required for pstoedit
 
-  doCheck = true;
+  # disable tests on i686 like ubuntu
+  # https://lists.gnu.org/archive/html/bug-plotutils/2016-04/msg00002.html
+  doCheck = if stdenv.isi686 then false else true;
 
   meta = {
     description = "Powerful C/C++ library for exporting 2D vector graphics";
