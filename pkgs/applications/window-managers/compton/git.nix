@@ -4,13 +4,13 @@
   libXrandr, libXrender, xwininfo }:
 
 stdenv.mkDerivation {
-  name = "compton-git-2015-09-21";
+  name = "compton-git-2016-08-10";
 
   src = fetchFromGitHub {
     owner  = "chjj";
     repo   = "compton";
-    rev    = "2343e4bbd298b35ea5c190c52abd2b0cb9f79a18";
-    sha256 = "1pb0ic47sfd796crwk47cya2ahbxsm6ygi6sh4fwd734kwz37h4z";
+    rev    = "f1cd308cde0f1e1f21ec2ac8f16a3c873fa22d3a";
+    sha256 = "1ky438d1rsg4ylkcp60m82r0jck8rks3gfa869rc63k37p2nfn8p";
   };
 
   nativeBuildInputs = [
