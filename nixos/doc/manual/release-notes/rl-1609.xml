@@ -90,6 +90,13 @@ following incompatible changes:</para>
     Use <literal>security.audit.enable = true;</literal> to explicitly enable it.</para>
   </listitem>
 
+  <listitem>
+    <para>PHP now scans for extra configuration .ini files in /etc/php.d
+    instead of /etc. This prevents accidentally loading non-PHP .ini files
+    that may be in /etc.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
