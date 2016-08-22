@@ -22,4 +22,10 @@ buildGoPackage rec {
       fi
     done
   '';
+
+  meta = with stdenv.lib; {
+    description = "Tool for building, changing, and versioning infrastructure";
+    homepage = "https://www.terraform.io/";
+    license = licenses.mpl20;
+  };
 }
