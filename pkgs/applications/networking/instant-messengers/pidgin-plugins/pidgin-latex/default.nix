@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    wrapArgs = "--prefix PATH ':' ${texLive}/bin:${imagemagick.out}/bin";
+    wrapArgs = "--prefix PATH ':' ${stdenv.lib.makeBinPath [ texLive imagemagick ]}";
   };
 
   meta = with stdenv.lib; {

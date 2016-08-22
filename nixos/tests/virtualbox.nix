@@ -9,7 +9,7 @@ let
 
     miniInit = ''
       #!${pkgs.stdenv.shell} -xe
-      export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+      export PATH="${stdenv.lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
       mkdir -p /var/run/dbus
       cat > /etc/passwd <<EOF

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/sbin/gparted \
       --prefix PATH : "${procps}/bin"
     wrapProgram $out/sbin/gpartedbin \
-      --prefix PATH : "${gpart}/bin:${hdparm}/bin:${utillinux}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ gpart hdparm utillinux ]}"
   '';
 
   meta = with stdenv.lib; {

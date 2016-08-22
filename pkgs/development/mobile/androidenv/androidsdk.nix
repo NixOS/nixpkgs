@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
         for i in emulator emulator64-arm emulator64-mips emulator64-x86 emulator64-crash-service
         do
             wrapProgram `pwd`/$i \
-              --prefix PATH : ${file}/bin:${glxinfo}/bin \
+              --prefix PATH : ${stdenv.lib.makeBinPath [ file glxinfo ]} \
               --suffix LD_LIBRARY_PATH : `pwd`/lib64:`pwd`/lib64/qt/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext mesa alsaLib zlib libpulseaudio ]} \
               --suffix QT_XKB_CONFIG_ROOT : ${xkeyboardconfig}/share/X11/xkb
         done

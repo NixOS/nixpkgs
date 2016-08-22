@@ -18,6 +18,6 @@ chmod -v 755 $out_bin
 patchShebangs $out
 
 wrapProgram $out_bin \
-    --prefix PATH ":" "${rlwrap}/bin:${coreutils}/bin:${findutils}/bin" \
+    --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils findutils ]}" \
     --set LEIN_GPG ${gnupg1compat}/bin/gpg \
     --set JAVA_CMD ${jdk}/bin/java

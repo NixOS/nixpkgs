@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH ":" "${libbonoboui}/lib/libglade/2.0"  \
         --prefix PERL5LIB ":" "$PERL5LIB"                               \
         --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
-        --prefix PATH ":" "$out/bin:${perl}/bin:${gconf}/bin"
+        --prefix PATH ":" "$out/bin:${stdenv.lib.makeBinPath [ perl gconf ]}"
     done
 
     rm $out/share/icons/hicolor/icon-theme.cache
