@@ -55,7 +55,7 @@ in {
     security.audit = {
       enable = mkOption {
         type        = types.enum [ false true "lock" ];
-        default     = true; # The kernel seems to enable it by default with no rules anyway
+        default     = false;
         description = ''
           Whether to enable the Linux audit system. The special `lock' value can be used to
           enable auditing and prevent disabling it until a restart. Be careful about locking
