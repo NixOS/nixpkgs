@@ -13,9 +13,8 @@ stdenv.mkDerivation rec {
   patches = [ ./remove-runtime-dep-on-openssl-headers.patch ];
 
   preConfigure = ''
-    for i in "doc/texi2pod.pl" "util/rmold.pl"; do
-      sed -i "$i" -e 's|/usr/bin.*perl|${perl}/bin/perl|g'
-    done
+    patchShebangs doc
+
   '' + stdenv.lib.optionalString doCheck ''
     # Work around lack of DNS resolution in chroots.
     for i in "tests/"*.pm "tests/"*.px
@@ -26,9 +25,9 @@ stdenv.mkDerivation rec {
     export LIBS="-liconv -lintl"
   '';
 
-  nativeBuildInputs = [ gettext pkgconfig ];
+  nativeBuildInputs = [ gettext pkgconfig perl ];
   buildInputs = [ libidn libiconv libpsl ]
-    ++ stdenv.lib.optionals doCheck [ perl perlPackages.IOSocketSSL LWP python3 ]
+    ++ stdenv.lib.optionals doCheck [ perlPackages.IOSocketSSL LWP python3 ]
     ++ stdenv.lib.optional (openssl != null) openssl
     ++ stdenv.lib.optional stdenv.isDarwin perl;
 

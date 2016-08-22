@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gobjectIntrospection, libsoup
-, libxslt, check, vala ? null
+, libxslt, check, vala_0_23 ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig intltool gobjectIntrospection libsoup libxslt check vala
+    pkgconfig intltool gobjectIntrospection libsoup libxslt check vala_0_23
   ];
 
   meta = with stdenv.lib; {

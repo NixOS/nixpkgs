@@ -1,6 +1,6 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
 , gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
-, valaSupport ? true, vala
+, valaSupport ? true, vala_0_23
 , libintlOrEmpty
 , intltool, python }:
 let
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "out" ];
 
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ]
-    ++ stdenv.lib.optionals valaSupport [ vala ];
+    ++ stdenv.lib.optionals valaSupport [ vala_0_23 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];

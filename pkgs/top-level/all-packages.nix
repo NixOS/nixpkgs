@@ -162,6 +162,8 @@ in
 
   fetchdarcs = callPackage ../build-support/fetchdarcs { };
 
+  fetchfossil = callPackage ../build-support/fetchfossil { };
+
   fetchgit = callPackage ../build-support/fetchgit {
     git = gitMinimal;
   };
@@ -729,6 +731,8 @@ in
   contacts = callPackage ../tools/misc/contacts { };
 
   coturn = callPackage ../servers/coturn { };
+
+  crunch = callPackage ../tools/security/crunch { };
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
@@ -2931,7 +2935,7 @@ in
     owncloud82
     owncloud90;
 
-  owncloudclient = callPackage ../applications/networking/owncloud-client { };
+  owncloud-client = callPackage ../applications/networking/owncloud-client { };
 
   p2pvc = callPackage ../applications/video/p2pvc {};
 
@@ -3453,9 +3457,7 @@ in
 
   sharutils = callPackage ../tools/archivers/sharutils { };
 
-  shotwell = callPackage ../applications/graphics/shotwell {
-    vala = vala_0_28;
-  };
+  shotwell = callPackage ../applications/graphics/shotwell { };
 
   shout = callPackage ../applications/networking/irc/shout { };
 
@@ -4041,7 +4043,6 @@ in
 
   valum = callPackage ../development/web/valum {
     inherit (gnome3) libgee;
-    vala = vala_0_28;
   };
 
   varnish = callPackage ../servers/varnish { };
@@ -5591,7 +5592,7 @@ in
 
   urweb = callPackage ../development/compilers/urweb { };
 
-  vala = callPackage ../development/compilers/vala/default.nix { };
+  vala_0_23 = callPackage ../development/compilers/vala/0.23.nix { };
 
   vala_0_26 = callPackage ../development/compilers/vala/0.26.nix { };
 
@@ -13039,9 +13040,7 @@ in
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
-  font-manager = callPackage ../applications/misc/font-manager {
-    vala = vala_0_32;
-  };
+  font-manager = callPackage ../applications/misc/font-manager { };
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
@@ -14284,7 +14283,6 @@ in
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
-    vala = vala_0_26;
     inherit (gnome3) libgee;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
@@ -15030,9 +15028,7 @@ in
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
-  vanubi = callPackage ../applications/editors/vanubi {
-    vala = vala_0_26;
-  };
+  vanubi = callPackage ../applications/editors/vanubi { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
@@ -17520,6 +17516,8 @@ in
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
   };
+
+  with-shell = callPackage ../applications/misc/with-shell { };
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
