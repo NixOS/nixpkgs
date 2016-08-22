@@ -3,21 +3,16 @@
 
 let
   deps = import ./deps.nix { inherit fetchurl; };
-  version = "1.3.0";
+  version = "1.4.0";
   src = fetchurl {
     url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "0mk9v4s51jdrrcs78v3cm131pz3fdhjkd4cmmfn1kkcfcpqzw6j8";
-    
+    sha256 = "0w5f10p4d4ppwg2plbbrmqwmi1ycgpaidyajza11c9svka014zrb";
   };
 in stdenv.mkDerivation rec {
   name = "pypi2nix-${version}";
   srcs = with deps; [
     src
-    pip
     click
-    setuptools
-    zcbuildout
-    zcrecipeegg
     requests
   ];  # six attrs effect ];
   buildInputs = [ python zip makeWrapper ];
@@ -26,11 +21,7 @@ in stdenv.mkDerivation rec {
   postUnpack = ''
     mkdir -p $out/pkgs
 
-    mv pip-*/pip                        $out/pkgs/pip
     mv click-*/click                    $out/pkgs/click
-    mv setuptools-*/setuptools          $out/pkgs/setuptools
-    mv zc.buildout-*/src/zc             $out/pkgs/zc
-    mv zc.recipe.egg-*/src/zc/recipe    $out/pkgs/zc/recipe
     # mv six-*/six.py                    $out/pkgs/
     # mv attrs-*/src/attr                $out/pkgs/attrs
     # mv effect-*/effect                 $out/pkgs/effect
@@ -48,9 +39,9 @@ in stdenv.mkDerivation rec {
   commonPhase = ''
     mkdir -p $out/bin
 
-    echo "#!${python}/bin/python3"       >  $out/bin/pypi2nix
-    echo "import pypi2nix.cli"          >> $out/bin/pypi2nix
-    echo "pypi2nix.cli.main()"          >> $out/bin/pypi2nix
+    echo "#!${python.interpreter}" >  $out/bin/pypi2nix
+    echo "import pypi2nix.cli" >> $out/bin/pypi2nix
+    echo "pypi2nix.cli.main()" >> $out/bin/pypi2nix
 
     chmod +x $out/bin/pypi2nix
 
@@ -81,6 +72,5 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/garbas/pypi2nix;
     description = "A tool that generates nix expressions for your python packages, so you don't have to.";
     maintainers = with stdenv.lib.maintainers; [ garbas ];
-    platforms = with stdenv.lib.platforms; unix;
   };
 }

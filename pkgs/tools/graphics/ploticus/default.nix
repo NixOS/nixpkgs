@@ -11,6 +11,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib libX11 libpng ];
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./ploticus-install.patch ];
 
   meta = with stdenv.lib; {

@@ -8,6 +8,7 @@ import ./make-test.nix ({ pkgs, ... }: {
         kdev = config.boot.kernelPackages.kernel.dev;
         kver = config.boot.kernelPackages.kernel.modDirVersion;
         ksrc = "${kdev}/lib/modules/${kver}/build";
+        hardeningDisable = [ "pic" ];
       } ''
         echo "obj-m += $name.o" > Makefile
         echo "$source" > "$name.c"

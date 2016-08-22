@@ -399,7 +399,7 @@ in {
         environment = carbonEnvironment;
         path = [ carbonEnv ];
         serviceConfig = {
-          ExecStart = "${carbonEnv}/bin/twistd ${carbonOpts name}";
+          ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
@@ -421,7 +421,7 @@ in {
         after = [ "network-interfaces.target" ];
         environment = carbonEnvironment;
         serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts name}";
+          ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PIDFile="/run/${name}/${name}.pid";
@@ -437,7 +437,7 @@ in {
         after = [ "network-interfaces.target" ];
         environment = carbonEnvironment;
         serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts name}";
+          ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PIDFile="/run/${name}/${name}.pid";
@@ -470,7 +470,7 @@ in {
               penvPack = "${penv}/${pkgs.python.sitePackages}";
               # opt/graphite/webapp contains graphite/settings.py
               # explicitly adding pycairo in path because it cannot be imported via buildEnv
-            in "${penvPack}/opt/graphite/webapp:${penvPack}:${pkgs.pycairo}/${pkgs.python.sitePackages}";
+            in "${penvPack}/opt/graphite/webapp:${penvPack}:${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}";
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_CONF_DIR = configDir;
           GRAPHITE_STORAGE_DIR = dataDir;

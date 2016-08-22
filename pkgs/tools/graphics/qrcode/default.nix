@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     inherit (s) rev url sha256;
   };
 
-  hardeningDisable = [ "fortify" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/qrcode}

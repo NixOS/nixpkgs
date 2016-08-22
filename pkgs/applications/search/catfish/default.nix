@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, which, intltool, findutils, xdg_utils, pycairo,
+{ stdenv, fetchurl, file, which, intltool, findutils, xdg_utils,
   gnome3, pythonPackages, wrapGAppsHook }:
 
 pythonPackages.buildPythonApplication rec {

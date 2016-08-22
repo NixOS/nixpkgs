@@ -33,15 +33,18 @@ while read line; do
     *_MD5SUM\ :=*)
       read tbline;
       line=${line##* };
+      line=${line##*:=};
       if [ "${tbline#*VERSION_MICRO}" != "$tbline" ]; then
          verline=${tbline##* };
          read tbline;
          tbline=${tbline##* };
+         tbline=${tbline##*:=};
          md5=$line
          name=$tbline;
          name="${name/\$([A-Z]*_VERSION_MICRO)/$verline}"
       else
          tbline=${tbline##* };
+         tbline=${tbline##*:=};
          md5=$line
          name=$tbline;
       fi
@@ -50,6 +53,7 @@ while read line; do
       ;;
     *_TARBALL\ :=*)
       line=${line##* };
+      line=${line##*:=};
       line="${line#,}"
       md5=${line:0:32};
       name=${line:33};

@@ -274,6 +274,7 @@
       gocd-agent = 251;
       gocd-server = 252;
       terraria = 253;
+      mattermost = 254;
 
       prometheus = 999;
 
@@ -520,6 +521,7 @@
       gocd-agent = 251;
       gocd-server = 252;
       terraria = 253;
+      mattermost = 254;
 
       prometheus = 999;
 

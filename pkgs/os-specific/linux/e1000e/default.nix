@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "07hg6xxqgqshnys1qs9wbl9qr7d4ixdkd1y1fj27cg6bn8s2n797";
   };
 
+  hardeningDisable = [ "pic" ];
+
   configurePhase = ''
     cd src
     kernel_version=${kernel.modDirVersion}

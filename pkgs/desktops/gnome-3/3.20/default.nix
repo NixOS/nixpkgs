@@ -321,6 +321,8 @@ let
 
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
+  nemiver = callPackage ./devtools/nemiver { };
+
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };

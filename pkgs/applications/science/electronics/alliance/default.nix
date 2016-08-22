@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "046c9qwl1vbww0ljm4xyxf5jpz9nq62b2q0wdz9xjimgh4c207w1";
   };
 
+
   nativeBuildInputs = [ libtool automake autoconf flex ];
   buildInputs = [ xproto motif xproto libX11 libXt libXpm bison ];
 

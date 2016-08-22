@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
-, librsvg, pango, gtk, bzip2, json_glib, intltool, autoreconfHook }:
+, librsvg, pango, gtk, bzip2, json_glib, intltool, autoreconfHook, libraw }:
 
 stdenv.mkDerivation rec {
   name = "gegl-0.3.6";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     babl libpng cairo libjpeg librsvg pango gtk bzip2 which json_glib intltool
+    libraw
   ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

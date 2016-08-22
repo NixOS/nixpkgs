@@ -1,0 +1,10 @@
+--- a/src/confmgr/nmv-gconf-mgr.cc	2014-07-08 10:24:06.000000000 +0200
++++ b/src/confmgr/nmv-gconf-mgr.cc	2016-08-04 23:50:08.143060464 +0200
+@@ -32,6 +32,7 @@
+ NEMIVER_BEGIN_NAMESPACE (nemiver)
+ 
+ using nemiver::common::GCharSafePtr;
++using nemiver::common::GErrorSafePtr;
+ 
+ class GConfMgr : public IConfMgr {
+     GConfMgr (const GConfMgr &);

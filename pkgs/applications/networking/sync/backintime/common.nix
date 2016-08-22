@@ -1,6 +1,8 @@
-{stdenv, fetchFromGitHub, makeWrapper, gettext, python3, python3Packages, rsync, cron, openssh, sshfsFuse, encfs }:
+{stdenv, fetchFromGitHub, makeWrapper, gettext, python3Packages, rsync, cron, openssh, sshfsFuse, encfs }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python3Packages) python dbus-python keyring;
+in stdenv.mkDerivation rec {
   version = "1.1.12";
 
   name = "backintime-common-${version}";
@@ -12,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n3x48wa8aa7i8fff85h3b5h3xpabk51ld0ymy3pkqh0krfgs59a";
   };
 
-  buildInputs = [ makeWrapper gettext python3 python3Packages.dbus python3Packages.keyring openssh cron rsync sshfsFuse encfs ];
+  buildInputs = [ makeWrapper gettext python dbus-python keyring openssh cron rsync sshfsFuse encfs ];
 
   installFlags = [ "DEST=$(out)" ];
 

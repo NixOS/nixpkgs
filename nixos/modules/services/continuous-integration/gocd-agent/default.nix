@@ -36,7 +36,7 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.jre config.programs.ssh.package pkgs.nix ];
+        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD agent process.
@@ -57,18 +57,10 @@ in {
       };
 
       goServer = mkOption {
-        default = "127.0.0.1";
+        default = "https://127.0.0.1:8154/go";
         type = types.str;
         description = ''
-          Address of GoCD Server to attach the Go.CD Agent to.
-        '';
-      };
-
-      goServerPort = mkOption {
-        default = 8153;
-        type = types.int;
-        description = ''
-          Port that Go.CD Server is Listening on.
+          URL of the GoCD Server to attach the Go.CD Agent to.
         '';
       };
 
@@ -80,26 +72,26 @@ in {
         '';
       };
 
-      heapSize = mkOption {
+      initialJavaHeapSize = mkOption {
         default = "128m";
         type = types.str;
         description = ''
-          Specifies the java heap memory size for the Go.CD agent java process.
+          Specifies the initial java heap memory size for the Go.CD agent java process.
         '';
       };
 
-      maxMemory = mkOption {
+      maxJavaHeapMemory = mkOption {
         default = "256m";
         type = types.str;
         description = ''
-          Specifies the java maximum memory size for the Go.CD agent java process.
+          Specifies the java maximum heap memory size for the Go.CD agent java process.
         '';
       };
 
       startupOptions = mkOption {
         default = [
-          "-Xms${cfg.heapSize}"
-          "-Xmx${cfg.maxMemory}"
+          "-Xms${cfg.initialJavaHeapSize}"
+          "-Xmx${cfg.maxJavaHeapMemory}"
           "-Djava.io.tmpdir=/tmp"
           "-Dcruise.console.publish.interval=10"
           "-Djava.security.egd=file:/dev/./urandom"
@@ -112,8 +104,8 @@ in {
 
       extraOptions = mkOption {
         default = [ ];
-        example = [ 
-          "-X debug" 
+        example = [
+          "-X debug"
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5006"
           "-verbose:gc"
           "-Xloggc:go-agent-gc.log"
@@ -170,7 +162,7 @@ in {
               config.environment.sessionVariables;
         in
           selectedSessionVars //
-            { 
+            {
               NIX_REMOTE = "daemon";
               AGENT_WORK_DIR = cfg.workDir;
               AGENT_STARTUP_ARGS = ''${concatStringsSep " "  cfg.startupOptions}'';
@@ -199,13 +191,14 @@ in {
         ${pkgs.jre}/bin/java ${concatStringsSep " " cfg.startupOptions} \
                         ${concatStringsSep " " cfg.extraOptions} \
                               -jar ${pkgs.gocd-agent}/go-agent/agent-bootstrapper.jar \
-                              ${cfg.goServer} \
-                              ${toString cfg.goServerPort}
+                              -serverUrl ${cfg.goServer}
       '';
 
       serviceConfig = {
         User = cfg.user;
         WorkingDirectory = cfg.workDir;
+        RestartSec = 30;
+        Restart = "on-failure";
       };
     };
   };

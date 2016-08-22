@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, buildPythonApplication, pythonPackages
-, python, cython, pkgconfig
-, xorg, gtk, glib, pango, cairo, gdk_pixbuf, atk, pycairo
+{ stdenv, fetchurl, pythonPackages, pkgconfig
+, xorg, gtk, glib, pango, cairo, gdk_pixbuf, atk
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama }:
 
-buildPythonApplication rec {
+let
+  inherit (pythonPackages) python cython buildPythonApplication;
+in buildPythonApplication rec {
   name = "xpra-0.17.4";
   namePrefix = "";
   src = fetchurl {
@@ -29,7 +30,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow pygtk pygobject rencode pycrypto cryptography pycups lz4 dbus
+    pillow pygtk pygobject rencode pycrypto cryptography pycups lz4 dbus-python
   ];
 
   preBuild = ''

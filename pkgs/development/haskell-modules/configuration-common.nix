@@ -30,6 +30,9 @@ self: super: {
     hardeningDisable = [ "format" ];
   });
 
+  # This test keeps being aborted because it runs too quietly for too long
+  Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
 
@@ -959,33 +962,12 @@ self: super: {
     '';
   });
 
-  # libmpd has an upper-bound on time which doesn't seem to be a real build req
-  libmpd = dontCheck (overrideCabal super.libmpd (drv: {
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
-    '';
-  }));
-
   # https://github.com/commercialhaskell/stack/issues/2263
   stack = appendPatch super.stack (pkgs.fetchpatch {
     url = "https://github.com/commercialhaskell/stack/commit/7f7f1a5f67f4ecdd1f3009495f1ff101dd38047e.patch";
     sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
   });
 
-  # https://github.com/GaloisInc/HaNS/pull/12
-  hans = overrideCabal super.hans (drv: {
-    src = pkgs.fetchFromGitHub {
-      owner = "GaloisInc";
-      repo = "HaNS";
-      rev = "53e4af3ee46fc06b31754cec620209a81bbef456";
-      sha256 = "079205fqglzhh931h4n7qlrih18117m3w82ih19b8ygr55ps4ldj";
-    };
-    doHaddock = false;
-    patches = [(pkgs.fetchpatch {
-          url = "https://patch-diff.githubusercontent.com/raw/GaloisInc/HaNS/pull/12.patch";
-          sha256 = "0xa5b7i9wx32ji0zzlh1a1pws677iffby3bg39kv3c9srdb4by1g";
-      })];
-  });
 
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
@@ -995,5 +977,22 @@ self: super: {
   # RPATH also needs to be propagated when using static linking. GHC automatically handles this for
   # us when we patch the cabal file (Link options will be recored in the ghc package registry).
   GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
+
+  # https://github.com/gwern/mueval/issues/14
+  mueval = overrideCabal super.mueval (drv: {
+    revision = null;
+    editedCabalFile = null;
+    patches = [(pkgs.fetchpatch {
+      url = "https://github.com/gwern/mueval/commit/866f895e0b671bcaa232b46ed93dd7d47a4b32b2.patch";
+      sha256 = "16pb9nfr52hwidxv0f7j4yg8yd86959kzbcw9lmnzpvgdy5qyvkg";
+    })];
+  });
+
+  # remove if a version > 0.1.0.1 ever gets released
+  stunclient = overrideCabal super.stunclient (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
+    '';
+  });
 
 }

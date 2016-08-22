@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, pygobject3, wrapGAppsHook
+{ stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
 , gst_all_1, glib_networking, gobjectIntrospection
 }:
 
@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado requests2 dbus
+    gst-python pygobject3 pykka tornado requests2 dbus-python
   ];
 
   # There are no tests

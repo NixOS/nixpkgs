@@ -10,8 +10,8 @@ assert wantPS -> (ps != null);
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "3.4";
-  minorVersion = "3";
+  majorVersion = "3.6";
+  minorVersion = "0";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "1yl0z422gr7zfc638chifv343vx0ig5gasvrh7nzf7b15488qgxp";
+    sha256 = "0w3n2i02jpbgai4dxsigm1c1i1qb5v70wyxckzwrxvs0ri0fs1gx";
   };
 
   patches =
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
         --subst-var-by glibc_bin ${getBin glibc} \
         --subst-var-by glibc_dev ${getDev glibc} \
         --subst-var-by glibc_lib ${getLib glibc}
+      substituteInPlace Modules/FindCxxTest.cmake \
+        --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
     '';
   configureFlags =
     [ "--docdir=share/doc/${name}"

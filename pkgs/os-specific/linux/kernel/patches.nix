@@ -93,9 +93,9 @@ rec {
   grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.6.5";
-      grrev  = "201607312210";
-      sha256 = "17dnp6w092kvqxqxbdgjpl4mrsn2wkb7z8q5d8ck7dfanpmqap0w";
+    { kver   = "4.7.1";
+      grrev  = "201608161813";
+      sha256 = "0ppay8gv7ml7kajbin7gclhrpkmc6pggxcbzzngm7qwdjjk5pppj";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -136,10 +136,6 @@ rec {
     { name = "mfd_fix_dependency";
       patch = ./chromiumos-patches/mfd-fix-dependency.patch;
     };
-  qat_common_Makefile =
-    { name = "qat_common_Makefile";
-      patch = ./qat_common_Makefile.patch;
-    };
 
   hiddev_CVE_2016_5829 =
     { name = "hiddev_CVE_2016_5829";
@@ -147,10 +143,5 @@ rec {
         url = "https://sources.debian.net/data/main/l/linux/4.6.3-1/debian/patches/bugfix/all/HID-hiddev-validate-num_values-for-HIDIOCGUSAGES-HID.patch";
         sha256 = "14rm1qr87p7a5prz8g5fwbpxzdp3ighj095x8rvhm8csm20wspyy";
       };
-    };
-
-  ecryptfs_fix_mmap_bug =
-    { name = "ecryptfs_fix_mmap_bug";
-      patch = ./ecryptfs-fix-mmap-bug.patch;
     };
 }

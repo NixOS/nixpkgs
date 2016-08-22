@@ -1,10 +1,8 @@
-{ stdenv, fetchurl, python, pythonPackages, pycrypto, attr }:
+{ stdenv, fetchurl, pythonPackages, attr }:
 
 pythonPackages.buildPythonApplication rec {
   name = "obnam-${version}";
   version = "1.19.1";
-
-  namePrefix = "";
 
   src = fetchurl rec {
     url = "http://code.liw.fi/debian/pool/main/o/obnam/obnam_${version}.orig.tar.xz";
@@ -12,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   buildInputs = [ pythonPackages.sphinx attr ];
-  propagatedBuildInputs = [ pycrypto pythonPackages.paramiko pythonPackages.tracing pythonPackages.ttystatus pythonPackages.cliapp pythonPackages.larch pythonPackages.pyyaml pythonPackages.fuse ];
+  propagatedBuildInputs = with pythonPackages; [ pycrypto paramiko tracing ttystatus cliapp larch pyyaml fuse ];
 
   doCheck = false;
 

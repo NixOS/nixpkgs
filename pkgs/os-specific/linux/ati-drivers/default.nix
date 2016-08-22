@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux+x86_64";
   };
 
+  hardeningDisable = [ "pic" "format" ];
+
   patchPhaseSamples = "patch -p2 < ${./patches/patch-samples.patch}";
   patches = [
     ./patches/15.12-xstate-fp.patch

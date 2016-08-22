@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all";
+  # -Wno-sign-compare is needed because the current flex 2.5 generates code
+  # that throws warnings
+  NIX_CFLAGS_COMPILE = "-fstack-protector-all -Wno-sign-compare";
 
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")

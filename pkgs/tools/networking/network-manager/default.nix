@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
       --replace /bin/sh ${stdenv.shell} \
       --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
       --replace /bin/sed ${gnused}/bin/sed
+    substituteInPlace data/NetworkManager.service.in \
+      --replace /bin/kill ${coreutils}/bin/kill
     # to enable link-local connections
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';

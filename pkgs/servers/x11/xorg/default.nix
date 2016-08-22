@@ -9,7 +9,9 @@ let
   mkDerivation = name: attrs:
     let newAttrs = (overrides."${name}" or (x: x)) attrs;
         stdenv = newAttrs.stdenv or args.stdenv;
-    in stdenv.mkDerivation (removeAttrs newAttrs [ "stdenv" ]);
+      in stdenv.mkDerivation ((removeAttrs newAttrs [ "stdenv" ]) // {
+        hardeningDisable = [ "bindnow" "relro" ];
+      });
 
   overrides = import ./overrides.nix {inherit args xorg;};
 
@@ -1811,11 +1813,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videointel = (mkDerivation "xf86videointel" {
-    name = "xf86-video-intel-2016-07-29";
+    name = "xf86-video-intel-2016-08-11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/49daf5df124b5ae6c7508e934768c292f4143040.tar.gz;
-      sha256 = "0mkyxwm9ka5y6b8x1c70jx68c8ibv750yw556zyki43qzypdfp5x";
+      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/c26a148541e321f90870bd937a6ff1967f9873ed.tar.gz;
+      sha256 = "0kz1wjnram0121mg2q6wg7ax5kxqg4gk4gxwd6jypn68r71cxpkl";
     };
     buildInputs = [pkgconfig dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ];
     meta.platforms = stdenv.lib.platforms.unix;

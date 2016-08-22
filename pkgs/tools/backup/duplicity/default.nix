@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, python, librsync, ncftp, gnupg, boto, makeWrapper
-, lockfile, setuptools, paramiko, pycrypto, ecdsa
+{ stdenv, fetchurl, pythonPackages, librsync, ncftp, gnupg, makeWrapper
 }:
 
 let
   version = "0.7.07.1";
-in
-stdenv.mkDerivation {
+  inherit (pythonPackages) boto ecdsa lockfile paramiko pycrypto python setuptools;
+in stdenv.mkDerivation {
   name = "duplicity-${version}";
 
   src = fetchurl {

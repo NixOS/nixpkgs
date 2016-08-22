@@ -535,7 +535,6 @@ in
   xf86videointel = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
     nativeBuildInputs = [args.autoreconfHook xorg.utilmacros];
-    hardeningDisable = [ "bindnow" ];
   };
 
   xwd = attrs: attrs // {

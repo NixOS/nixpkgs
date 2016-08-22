@@ -14,7 +14,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-music-ogg-shared" + stdenv.lib.optionalString enableNativeMidi " --enable-music-native-midi-gpl";
 
-  postInstall = "ln -s $out/include/SDL/SDL_mixer.h $out/include/";
+  postInstall = ''
+    ln -s $out/include/SDL/SDL_mixer.h $out/include/
+
+    for f in $out/include/SDL/SDL_mixer.h
+    do
+      for i in SDL_types.h SDL_rwops.h SDL_audio.h SDL_endian.h SDL_version.h begin_code.h close_code.h
+      do
+        substituteInPlace $f --replace "#include \"$i\"" "#include <SDL/$i>"
+      done
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";

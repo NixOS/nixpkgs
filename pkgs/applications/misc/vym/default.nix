@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1x4qp6wpszscbbs4czkfvskm7qjglvxm813nqv281bpy4y1hhvgs";
   };
 
-  buildInputs = [ pkgconfig qt4 qmake4Hook ];
-
   hardeningDisable = [ "format" ];
+
+  buildInputs = [ pkgconfig qt4 qmake4Hook ];
 
   meta = with stdenv.lib; {
     description = "A mind-mapping software";

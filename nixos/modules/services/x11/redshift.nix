@@ -108,7 +108,12 @@ in {
         RestartSec = 3;
         Restart = "always";
       };
-      environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
+      environment = {
+        DISPLAY = ":${toString (
+          let display = config.services.xserver.display;
+          in if display != null then display else 0
+        )}";
+      };
     };
   };
 

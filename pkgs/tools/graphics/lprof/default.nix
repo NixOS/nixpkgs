@@ -7,6 +7,8 @@ stdenv.mkDerivation {
   name = "lprof-1.11.4.1";
   buildInputs = [ scons qt3 lcms1 libtiff vigra ];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     export QTDIR=${qt3}
     export qt_directory=${qt3}

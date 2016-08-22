@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, openblasCompat, superlu, hdf5 }:
+{ stdenv, fetchurl, cmake, openblasCompat, superlu, hdf5-cpp }:
 
 stdenv.mkDerivation rec {
   version = "7.200.2";
@@ -9,12 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1yvx75caks477jqwx5gspi6946jialddk00wdvg6dnh5wdi2xasm";
   };
 
-  buildInputs = [ cmake openblasCompat superlu hdf5 ];
+  buildInputs = [ cmake openblasCompat superlu hdf5-cpp ];
 
   cmakeFlags = [ "-DDETECT_HDF5=ON" ];
 
-  patches = [ ./use-unix-config-on-OS-X.patch
-              ./use-OpenBLAS-as-LAPACK.patch ];
+  patches = [ ./use-unix-config-on-OS-X.patch ];
 
   meta = with stdenv.lib; {
     description = "C++ linear algebra library";
