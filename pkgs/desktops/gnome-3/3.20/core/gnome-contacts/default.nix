@@ -3,7 +3,7 @@
 , libchamplain, clutter_gtk, geocode_glib
 , bash, makeWrapper, itstool, folks, libnotify, libxml2
 , gnome3, librsvg, gdk_pixbuf, file, telepathy_glib, nspr, nss
-, libsoup, vala, dbus_glib, automake115x, autoconf }:
+, libsoup, vala_0_32, dbus_glib, automake115x, autoconf }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
                   libxml2 libsoup gnome3.gnome_online_accounts nspr nss
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
                   libchamplain clutter_gtk geocode_glib
-                  vala automake115x autoconf db ];
+                  vala_0_32 automake115x autoconf db ];
 
   preFixup = ''
     for f in "$out/bin/gnome-contacts" "$out/libexec/gnome-contacts-search-provider"; do

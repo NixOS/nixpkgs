@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, m4, glibc, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
+{ fetchurl, stdenv, m4, glibc, gtk3, libexif, libgphoto2, libsoup, libxml2, vala_0_28, sqlite
 , webkitgtk, pkgconfig, gnome3, gst_all_1, which, udev, libgudev, libraw, glib, json_glib
 , gettext, desktop_file_utils, lcms2, gdk_pixbuf, librsvg, wrapGAppsHook
 , gnome_doc_utils, hicolor_icon_theme, itstool }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildInputs = [ m4 glibc gtk3 libexif libgphoto2 libsoup libxml2 vala sqlite webkitgtk
+  buildInputs = [ m4 glibc gtk3 libexif libgphoto2 libsoup libxml2 vala_0_28 sqlite webkitgtk
                   pkgconfig gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
                   which udev libgudev gnome3.gexiv2 hicolor_icon_theme
                   libraw json_glib gettext desktop_file_utils glib lcms2 gdk_pixbuf librsvg

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, automake, autoconf, libtool,
   pkgconfig, file, intltool, libxml2, json_glib , sqlite, itstool,
-  vala, gnome3, wrapGAppsHook
+  vala_0_32, gnome3, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     automake autoconf libtool
     file
     intltool
-    vala
+    vala_0_32
     gnome3.yelp_tools
     wrapGAppsHook
   ];

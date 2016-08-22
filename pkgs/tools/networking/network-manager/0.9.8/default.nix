@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, pkgconfig, dbus_glib
 , udev, libnl, libuuid, gnutls, dhcp
-, libgcrypt, perl, libgudev }:
+, libgcrypt, perl, libgudev, avahi, ppp, kmod }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace src/nm-device.c \
+      --replace @avahi@ ${avahi} \
+      --replace @kmod@ ${kmod}
+    substituteInPlace src/ppp-manager/nm-ppp-manager.c \
+      --replace @ppp@ ${ppp} \
+      --replace @kmod@ ${kmod}
   '';
 
   # Right now we hardcode quite a few paths at build time. Probably we should

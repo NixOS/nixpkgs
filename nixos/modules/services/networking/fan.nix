@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.networking.fan;
-  modprobe = "${config.system.sbin.modprobe}/sbin/modprobe";
+  modprobe = "${pkgs.kmod}/bin/modprobe";
 
 in
 

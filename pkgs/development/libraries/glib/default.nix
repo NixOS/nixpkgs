@@ -40,7 +40,7 @@ let
   '';
 
   ver_maj = "2.48";
-  ver_min = "1";
+  ver_min = "2";
 in
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "74411bff489cb2a3527bac743a51018841a56a4d896cc1e0d0d54f8166a14612";
+    sha256 = "f25e751589cb1a58826eac24fbd4186cda4518af772806b666a3f91f66e6d3f4";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;

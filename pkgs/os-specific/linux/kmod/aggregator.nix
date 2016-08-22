@@ -21,7 +21,7 @@ buildEnv {
       # kernel version number, otherwise depmod will use `uname -r'.
       if test -w $out/lib/modules/$kernelVersion; then
           rm -f $out/lib/modules/$kernelVersion/modules.*
-          ${kmod}/sbin/depmod -b $out -a $kernelVersion
+          ${kmod}/bin/depmod -b $out -a $kernelVersion
       fi
     '';
 }
