@@ -3201,11 +3201,11 @@ in modules // {
   };
 
   cassandra-driver = buildPythonPackage rec {
-    name = "cassandra-driver-2.6.0c2";
+    name = "cassandra-driver-3.6.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cassandra-driver/${name}.tar.gz";
-      sha256 = "00cc2rkvkxaxn7sf2qzy29s6h394fla73rbdh9krxbswp5nvp27r";
+      sha256 = "1aqmy3psn12lxgp659d0zsxkirxzy5lnbnzxf9xjq1a93s3qm704";
     };
 
     propagatedBuildInputs = with self; [
