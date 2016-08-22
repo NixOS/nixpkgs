@@ -66,6 +66,11 @@ following incompatible changes:</para>
     <literal>environment.variables</literal>.</para>
   </listitem>
 
+  <listitem>
+    <para>The <literal>audit</literal> service is no longer enabled by default.
+    Use <literal>security.audit.enable = true;</literal> to explicitly enable it.
+  </listitem>
+
 </itemizedlist>
 
 
