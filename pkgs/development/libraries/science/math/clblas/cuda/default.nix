@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sed -i -re 's/(set\(\s*Boost_USE_STATIC_LIBS\s+).*/\1OFF\ \)/g' src/CMakeLists.txt
   '';
 
-  configurePhase = ''    
+  configurePhase = ''
     findInputs ${boost} boost_dirs propagated-native-build-inputs
 
     export BOOST_INCLUDEDIR=$(echo $boost_dirs | sed -e s/\ /\\n/g - | grep '\-dev')/include
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     mkdir -p Build
     pushd Build
 
-    export LD_LIBRARY_PATH="${blas}/lib:${nvidia_x11}/lib"
+    export LD_LIBRARY_PATH="${stdenv.lib.makeLibraryPath [ blas nvidia_x11 ]}"
 
     cmake ../src -DCMAKE_INSTALL_PREFIX=$out \
                  -DCMAKE_BUILD_TYPE=Release \
