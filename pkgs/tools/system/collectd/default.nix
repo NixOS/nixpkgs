@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (libsigrok != null) "--with-libsigrok" ++
     stdenv.lib.optional (python != null) "--with-python=${python}/bin/python";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp -Wno-error=deprecated-declarations";
 
   meta = with stdenv.lib; {
     description = "Daemon which collects system performance statistics periodically";
