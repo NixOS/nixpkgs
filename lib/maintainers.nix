@@ -249,6 +249,7 @@
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
+  mic92 = "Jörg Thalheim <joerg@higgsboson.tk>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
   michalrus = "Michal Rus <m@michalrus.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
