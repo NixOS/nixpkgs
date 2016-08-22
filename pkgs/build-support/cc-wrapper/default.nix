@@ -238,6 +238,7 @@ stdenv.mkDerivation {
       rm $out/nix-support/setup-hook.tmp
 
       substituteAll ${./add-flags} $out/nix-support/add-flags.sh
+      cp -p ${./add-hardening} $out/nix-support/add-hardening.sh
       cp -p ${./utils.sh} $out/nix-support/utils.sh
     ''
     + extraBuildCommands;

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "bindir=\${out}/bin" ];
 
+  hardeningDisable = [ "format" ];
+
   postConfigure = ''
     substituteInPlace config.h \
       --replace '#define PACKAGE ""' '#define PACKAGE "stardust"'

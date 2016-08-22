@@ -9,6 +9,8 @@ stdenv.mkDerivation {
 
   unpackCmd = "(mkdir cron && cd cron && sh $curSrc)";
 
+  hardeningEnable = [ "pie" ];
+
   preBuild = ''
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
     makeFlags="DESTROOT=$out"

@@ -23,6 +23,8 @@ buildPythonPackage rec {
     sha256 = "0qfzx3sqx4mwxv99sfybhsij4b5pc03ricl73h4vhkzazgjjjhfm";
   };
 
+  hardeningDisable = [ "format" ];
+
   propagatedBuildInputs = [ pkgconfig wxGTK (wxGTK.gtk) libX11 ]  ++ lib.optional openglSupport pyopengl;
   preConfigure = "cd wxPython";
 

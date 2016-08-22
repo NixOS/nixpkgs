@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "09rdg7fm423x6sbbw3lvnvmk4nyc33az8ar93xgq0n9qii49z3bv";
   };
 
+  hardeningDisable = [ "pic" ];
+
   makeFlags = [
     "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
     "SHELL=/bin/sh"

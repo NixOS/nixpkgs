@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-pangoxsl --disable-gp";
 
+  hardeningDisable = [ "format" ];
+
   preBuild = ''
     substituteInPlace tools/insert-file-as-string.pl --replace "/usr/bin/perl" "${perl}/bin/perl"
     substituteInPlace Makefile --replace "docs" ""

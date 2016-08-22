@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ pkgconfig gtk freeglut SDL mesa libXi libXmu ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "A fast-paced puzzle game inspired by the classic Super NES title Tetris Attack!";
     homepage = http://www.nongnu.org/crack-attack/;

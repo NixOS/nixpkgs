@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "Smalltalk programming language and environment";
     longDescription = ''

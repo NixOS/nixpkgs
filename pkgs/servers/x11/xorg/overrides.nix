@@ -561,4 +561,8 @@ in
     configureFlags = "--with-cpp=${args.mcpp}/bin/mcpp";
   };
 
+  sessreg = attrs: attrs // {
+    preBuild = "sed -i 's|gcc -E|gcc -E -P|' man/Makefile";
+  };
+
 }

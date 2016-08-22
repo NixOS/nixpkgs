@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses readline ];
 
+  hardeningDisable = [ "fortify" ];
+
   NIX_CFLAGS_COMPILE = "-std=gnu90";
 
   preConfigure = ''

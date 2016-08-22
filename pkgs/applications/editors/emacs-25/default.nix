@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
+  hardeningDisable = [ "format" ];
+
   configureFlags =
     (if stdenv.isDarwin
       then [ "--with-ns" "--disable-ns-self-contained" ]

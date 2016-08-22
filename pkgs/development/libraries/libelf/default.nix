@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
+
   # For cross-compiling, native glibc is needed for the "gencat" program.
   crossAttrs = {
     nativeBuildInputs = [ gettext glibc ];

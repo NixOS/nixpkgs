@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
 
   preInstall = "mkdir -p $out/{bin,lib,man/man1,man/man3,include/gsm}";
 
-  NIX_CFLAGS_COMPILE = optional (!staticSupport) "-fPIC";
-
   parallelBuild = false;
 
   meta = with stdenv.lib; {

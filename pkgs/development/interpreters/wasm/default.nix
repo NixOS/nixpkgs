@@ -17,6 +17,9 @@ let
     buildInputs = [ cmake clang python ];
 
     buildPhase = "make clang-debug-no-tests";
+
+    hardeningDisable = [ "format" ];
+
     installPhase = ''
       mkdir -p $out/bin
       cp out/clang/Debug/no-tests/sexpr-wasm $out/bin

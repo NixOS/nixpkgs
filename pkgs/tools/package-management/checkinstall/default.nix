@@ -44,6 +44,8 @@ stdenv.mkDerivation {
 
   buildInputs = [gettext];
 
+  hardeningDisable = [ "fortify" ];
+
   preBuild = ''
     makeFlagsArray=(PREFIX=$out)
 

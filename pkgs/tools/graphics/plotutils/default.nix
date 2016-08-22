@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-libplotter"; # required for pstoedit
 
+  hardeningDisable = [ "format" ];
+
   doCheck = true;
 
   meta = {

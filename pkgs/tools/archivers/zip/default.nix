@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
 
+  hardeningDisable = [ "format" ];
+
   makefile = "unix/Makefile";
   buildFlags = if stdenv.isCygwin then "cygwin" else "generic";
   installFlags = "prefix=$(out) INSTALL=cp";

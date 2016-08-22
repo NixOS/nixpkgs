@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0m7gvlgs1mhyw3c8s2dg05j7r7hz8kjpb0sk245m61ir9dmwlf8i";
   };
 
-  CFLAGS = "-fPIE -fPIC -pie -fstack-protector-all -D_FORTIFY_SOURCE=2 -O2 -Wl,-z,relro,-z,now";
-
   buildInputs = [ libsodium ];
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];

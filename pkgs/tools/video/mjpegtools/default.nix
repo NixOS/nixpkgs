@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "01y4xpfdvd4zgv6fmcjny9mr1gbfd4y2i4adp657ydw6fqyi8kw6";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ libdv libjpeg libpng pkgconfig ]
               ++ lib.optional (!withMinimal) [ gtk libX11 SDL SDL_gfx ];
 

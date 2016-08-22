@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s1qq3k5mpcs9i7ng0l9fvr1f75abpbzfi1jaf3zpzbs1dz50dlx";
   };
 
-  buildInputs = [libevent];
+  buildInputs = [ libevent ];
 
   preConfigure = ''
     sed -i 's|libevent.a|libevent.so|' configure
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   LDFLAGS = "-levent";
 
   configureFlags = "--with-libevent";
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Lightweight userspace bandwidth shaper";

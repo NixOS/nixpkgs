@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     owner = "yuejia";
   };
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     sed -i 's#/usr/bin/##g' Makefile
     sed -i "s#-lclang#-L$(clang --print-search-dirs |

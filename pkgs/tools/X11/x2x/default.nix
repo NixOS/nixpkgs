@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ imake libX11 libXtst libXext ];
 
+  hardeningDisable = [ "format" ];
+
   configurePhase = ''
     xmkmf
     makeFlags="BINDIR=$out/bin x2x"

@@ -19,6 +19,7 @@ let version = "3.2.1";
       #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+
     buildInputs = [
       sasl boost gperftools pcre-cpp snappy
       zlib libyamlcpp sasl openssl libpcap
@@ -91,6 +92,8 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  hardeningEnable = [ "pie" ];
 
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";

@@ -17,6 +17,9 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  hardeningDisable = [ "format" ];
+
   buildPhase = ''
     find . -name Makefile | xargs sed -i -e "s@/bin/rm@$(type -P rm)@g"
     find . -name Makefile | xargs sed -i -e "s@/bin/mv@$(type -P mv)@g"
@@ -32,11 +35,13 @@ stdenv.mkDerivation {
     make -C source/formed realclean
     make -C source/formed formed
   '';
+
   installPhase = ''
     mkdir -p "$out"/{bin,share/otter}
     cp bin/* source/formed/formed "$out/bin/"
     cp -r examples examples-mace2 documents README* Legal Changelog Contents index.html "$out/share/otter/"
   '';
+
   meta = {
     inherit (s) version;
     description = "A reliable first-order theorem prover";

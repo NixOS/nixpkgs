@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
+  hardeningDisable = [ "format" "stackprotector" ];
+
   makeFlags = commonMakeFlags ++ [
     "KLIBCARCH=${stdenv.platform.kernelArch}"
     "KLIBCKERNELSRC=${linuxHeaders}"

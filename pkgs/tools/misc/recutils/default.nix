@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ curl emacs ] ++ (stdenv.lib.optionals doCheck [ check bc ]);
 
   meta = {

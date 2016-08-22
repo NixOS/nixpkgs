@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
+
   meta = {
     homepage = "http://www.gnu.org/software/bison/";
     description = "Yacc-compatible parser generator";

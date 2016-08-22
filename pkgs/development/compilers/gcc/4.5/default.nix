@@ -134,6 +134,8 @@ stdenv.mkDerivation ({
     inherit langC langCC langFortran langJava langAda;
   };
 
+  hardeningDisable = [ "format" ] ++ optional (name != "gnat") "all";
+
   patches =
     [ ]
     ++ optional (cross != null) ../libstdc++-target.patch
@@ -207,7 +209,7 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [ texinfo which gettext ]
     ++ optional (perl != null) perl;
-    
+
   buildInputs = [ gmp mpfr libmpc libelf ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)

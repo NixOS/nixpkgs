@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake libpng ilmbase libtiff zlib libjpeg mesa libX11 ];
 
+  hardeningDisable = [ "format" ];
+
   patchPhase = ''
     # Fix build due to missing dependnecies.
     echo 'target_link_libraries(bc7 nvmath)' >> src/nvtt/bc7/CMakeLists.txt

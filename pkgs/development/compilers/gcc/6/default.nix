@@ -226,6 +226,8 @@ stdenv.mkDerivation ({
 
   libc_dev = stdenv.cc.libc_dev;
 
+  hardeningDisable = [ "format" ];
+
   postPatch =
     if (stdenv.isGNU
         || (libcCross != null                  # e.g., building `gcc.crossDrv'

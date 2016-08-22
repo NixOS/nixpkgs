@@ -7,7 +7,7 @@
 stdenv.mkDerivation rec {
   name = "kipi-plugins-1.9.0";
 
-  src = fetchurl { 
+  src = fetchurl {
     url = "mirror://sourceforge/kipi/${name}.tar.bz2";
     sha256 = "0k4k9v1rj7129n0s0i5pvv4rabx0prxqs6sca642fj95cxc6c96m";
   };
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.kipi-plugins.org;
     inherit (kdelibs.meta) platforms;
     maintainers = with stdenv.lib.maintainers; [ viric urkud ];
-    broken = true; # it should be build from digikam sources, perhaps together
+    broken = true; # it should be built from digikam sources, perhaps together
   };
 }

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
 
+  hardeningDisable = [ "stackprotector" ];
+
   preConfigure = ''
     configureFlagsArray=(
       --datadir=$out/share/maude

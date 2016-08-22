@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libaal];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     substituteInPlace configure --replace " -static" ""
   '';

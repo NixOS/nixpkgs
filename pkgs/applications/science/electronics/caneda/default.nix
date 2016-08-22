@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "dfbcac97f5a1b41ad9a63392394f37fb294cbf78c576673c9bc4a5370957b2c8";
   };
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ cmake qt4 libxml2 libxslt ];
 

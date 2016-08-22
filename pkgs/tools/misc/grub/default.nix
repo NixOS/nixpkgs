@@ -36,6 +36,8 @@ stdenv.mkDerivation {
   # autoreconfHook required for the splashimage patch.
   buildInputs = [ autoreconfHook texinfo ];
 
+  hardeningDisable = [ "stackprotector" ];
+
   prePatch = ''
     unpackFile $gentooPatches
     rm patch/400_all_grub-0.97-reiser4-20050808-gentoo.patch

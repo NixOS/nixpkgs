@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     })
   ];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     cat > config.params << EOF
     bsd_games_cfg_man6dir=$out/share/man/man6

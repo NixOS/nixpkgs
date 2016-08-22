@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-paragui" "--disable-paraguitest" ];
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # I'm too lazy to catch all gcc47-related problems
+  hardeningDisable = [ "format" ];
 
   buildInputs = [
     SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat

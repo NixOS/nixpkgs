@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "067f4li48qfhz2barj70zpf2d2mlii12npx07jx9xjkkgz84z4c9";
   };
 
+  hardeningDisable = [ "relro" "bindnow" ];
+
   makeFlags = [
     "PREFIX=$(out)"
   ];
