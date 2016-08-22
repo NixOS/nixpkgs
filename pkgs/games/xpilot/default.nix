@@ -1,7 +1,7 @@
-{stdenv, fetchurl, libX11, SDL, mesa, expat, SDL_ttf, SDL_image}:
+{stdenv, fetchurl, libX11, libSM, SDL, mesa, expat, SDL_ttf, SDL_image, zlib}:
 let
   buildInputs = [
-    libX11 SDL SDL_ttf SDL_image mesa expat
+    libX11 libSM SDL SDL_ttf SDL_image mesa expat zlib
   ];
 in
 stdenv.mkDerivation rec {
