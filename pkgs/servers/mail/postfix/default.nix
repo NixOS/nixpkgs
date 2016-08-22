@@ -75,9 +75,9 @@ in stdenv.mkDerivation rec {
     cp -rv installdir/etc $out
     sed -e '/^PATH=/d' -i $out/libexec/postfix/post-install
     wrapProgram $out/libexec/postfix/post-install \
-      --prefix PATH ":" ${coreutils}/bin:${findutils}/bin:${gnugrep}/bin
+      --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep ]}
     wrapProgram $out/libexec/postfix/postfix-script \
-      --prefix PATH ":" ${coreutils}/bin:${findutils}/bin:${gnugrep}/bin:${gawk}/bin:${gnused}/bin
+      --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
 
   meta = {

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
-    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd}/bin:$PATH
+    PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd ]}:$PATH
     substituteInPlace configure \
       --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
   '' + ''
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       --replace "$out/bin" "${gettext}/bin"
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${iptables}/sbin:${iproute}/sbin:${pmutils}/bin:${numad}/bin:${numactl}/bin
+      --prefix PATH : ${stdenv.lib.makeBinPath [ iptables iproute pmutils numad numactl ]}
   '';
 
   enableParallelBuilding = true;
