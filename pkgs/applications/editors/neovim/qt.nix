@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   name = "neovim-qt-${version}";
 
   src = fetchFromGitHub {
-    repo = "neovim-qt";
     owner = "equalsraf";
+    repo = "neovim-qt";
     rev = "v${version}";
     sha256 = "0mqs2f7l05q2ayj77czr5fnpr7fa00qrmjdjxglbwxdxswcsz88n";
   };
