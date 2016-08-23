@@ -241,6 +241,14 @@ in modules // {
     mpi = pkgs.openmpi;
   };
 
+  neuron = pkgs.neuron.override {
+	inherit python; 
+  };
+
+  neuron-mpi = pkgs.neuron-mpi.override {
+	inherit python;
+  };
+
   nixpart = callPackage ../tools/filesystems/nixpart { };
 
   # This is used for NixOps to make sure we won't break it with the next major
