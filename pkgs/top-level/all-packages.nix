@@ -15839,6 +15839,7 @@ in
 
   openlierox = callPackage ../games/openlierox { };
 
+  openclonk54 = callPackage ../games/openclonk/5.4.nix { boost155 = boost155.override { enableStatic = true; }; };
   openclonk = callPackage ../games/openclonk { };
 
   openmw = callPackage ../games/openmw { };
