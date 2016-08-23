@@ -46,11 +46,11 @@ if [[ ! $hardeningDisable == "all" ]]; then
           ;;
         relro)
           if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling relro >&2; fi
-          hardeningLDFlags+=('-z relro')
+          hardeningLDFlags+=('-z' 'relro')
           ;;
         bindnow)
           if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling bindnow >&2; fi
-          hardeningLDFlags+=('-z now')
+          hardeningLDFlags+=('-z' 'now')
           ;;
         *)
           echo "Hardening flag unknown: $flag" >&2
