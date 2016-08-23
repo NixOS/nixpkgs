@@ -4780,10 +4780,14 @@ in
   openjdk = if stdenv.isDarwin then self.openjdk7 else self.openjdk8;
 
   jdk7 = self.openjdk7 // { outputs = [ "out" ]; };
-  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}" (self.openjdk7.jre // { outputs = [ "jre" ]; });
+  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      (self.openjdk7.jre // { outputs = [ "jre" ]; }));
 
   jdk8 = self.openjdk8 // { outputs = [ "out" ]; };
-  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}" (self.openjdk8.jre // { outputs = [ "jre" ]; });
+  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      (self.openjdk8.jre // { outputs = [ "jre" ]; }));
 
   jdk = if stdenv.isDarwin then self.jdk7 else self.jdk8;
   jre = if stdenv.isDarwin then self.jre7 else self.jre8;
@@ -6419,8 +6423,9 @@ in
   gotty = callPackage ../servers/gotty { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
-  gradle = self.gradleGen.gradleLatest;
-  gradle25 = self.gradleGen.gradle25;
+  gradle = self.gradleGen.gradle_latest;
+  gradle_2_14 = self.gradleGen.gradle_2_14;
+  gradle_2_5 = self.gradleGen.gradle_2_5;
 
   gperf = callPackage ../development/tools/misc/gperf { };
 
@@ -8861,7 +8866,8 @@ in
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
-  openal = openalSoft;
+  openal = self.openalSoft;
+
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
   };
@@ -9290,9 +9296,7 @@ in
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
-    pulseaudioSupport = if (config ? pulseaudio)
-                        then config.pulseaudio
-                        else stdenv.isLinux;
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa;
   };
 
@@ -9316,7 +9320,8 @@ in
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
-    pulseaudioSupport = config.pulseaudio or false; # better go through ALSA
+    udevSupport = stdenv.isLinux;
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
 
@@ -10767,7 +10772,7 @@ in
 
   checksec = callPackage ../os-specific/linux/checksec { };
 
-  cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
+  cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_1; # conky can use 5.2, but toluapp can not
@@ -15097,6 +15102,10 @@ in
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2;
     libva = libva-full; # also wants libva-x11
+  };
+
+  vlc_npapi = callPackage ../applications/video/vlc/plugin.nix {
+    gtk = gtk2;
   };
 
   vlc_qt5 = qt5.vlc;

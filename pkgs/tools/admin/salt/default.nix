@@ -34,7 +34,7 @@ pythonPackages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
-      --subst-var-by "libcrypto" "${openssl}/lib/libcrypto.so"
+      --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
   '';
 
   # The tests fail due to socket path length limits at the very least;

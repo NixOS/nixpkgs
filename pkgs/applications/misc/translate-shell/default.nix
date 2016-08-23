@@ -76,13 +76,13 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/test/TestCommons.awk --replace "\"gawk\"" "\"${gawk}/bin/gawk\""
     substituteInPlace $out/share/test/TestCommons.awk --replace "Commons.awk" "$out/share/include/Commons.awk"
 
-    substituteInPlace $out/share/include/Main.awk --replace "\"tput\"" "\"${ncurses}/bin/tput\""
+    substituteInPlace $out/share/include/Main.awk --replace "\"tput\"" "\"${ncurses.out}/bin/tput\""
     substituteInPlace $out/share/include/Help.awk --replace "\"groff\"" "\"${groff}/bin/groff\""
     substituteInPlace $out/share/include/Utils.awk --replace "\"fribidi\"" "\"${fribidi}/bin/fribidi\""
     substituteInPlace $out/share/include/Utils.awk --replace "\"fribidi " "\"${fribidi}/bin/fribidi "
     substituteInPlace $out/share/include/Utils.awk --replace "\"rlwrap\"" "\"${rlwrap}/bin/rlwrap\""
     substituteInPlace $out/share/include/Utils.awk --replace "\"emacs\"" "\"${emacs}/bin/emacs\""
-    substituteInPlace $out/share/include/Utils.awk --replace "\"curl\"" "\"${curl}/bin/curl\""
+    substituteInPlace $out/share/include/Utils.awk --replace "\"curl\"" "\"${curl.bin}/bin/curl\""
 
     substituteInPlace $out/share/build.awk --replace "\"pandoc " "\"${pandoc}/bin/pandoc "
 

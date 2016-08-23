@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/jitsi
     substituteInPlace $out/bin/jitsi \
         --subst-var-by JAVA ${jdk}/bin/java \
-        --subst-var-by EXTRALIBS ${gtk2}/lib
+        --subst-var-by EXTRALIBS ${gtk2.out}/lib
     patchShebangs $out
 
     libPath="$libPath:${jdk.jre.home}/lib/${jdk.architecture}"

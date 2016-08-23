@@ -41,9 +41,6 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
-    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
-
     install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
     install -Dm644 qutebrowser.desktop \
         "$out/share/applications/qutebrowser.desktop"
@@ -54,6 +51,14 @@ buildPythonApplication rec {
     install -Dm644 icons/qutebrowser.svg \
         "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
+    mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
+    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
+
+    sed -i 's/\.qutebrowser-wrapped/qutebrowser/g' $out/bin/..qutebrowser-wrapped-wrapped
   '';
 
   meta = {

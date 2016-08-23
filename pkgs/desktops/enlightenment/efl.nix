@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   patches = [ ./efl-elua.patch ];
 
   preConfigure = ''
-    export PKG_CONFIG_PATH="${gst_all_1.gst-plugins-base}/lib/pkgconfig/gstreamer-video-0.10.pc:$PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH="${gst_all_1.gst-plugins-base.dev}/lib/pkgconfig/gstreamer-video-0.10.pc:$PKG_CONFIG_PATH"
     export LD_LIBRARY_PATH="$(pwd)/src/lib/eina/.libs:$LD_LIBRARY_PATH"
   '';
 
