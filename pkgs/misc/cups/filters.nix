@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
       # Ensure that bannertopdf can find the PDF templates in
       # $out. (By default, it assumes that cups and cups-filters are
       # installed in the same prefix.)
-      substituteInPlace config.h --replace ${cups}/share/cups/data $out/share/cups/data
+      substituteInPlace config.h --replace ${cups.out}/share/cups/data $out/share/cups/data
 
       # Ensure that gstoraster can find gs in $PATH.
       substituteInPlace filter/gstoraster.c --replace execve execvpe

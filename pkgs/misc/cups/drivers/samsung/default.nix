@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
     my_patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath ${cups}/lib:$(cat $NIX_CC/nix-support/orig-cc)/lib:${stdenv.glibc}/lib \
+      --set-rpath ${cups.out}/lib:$(cat $NIX_CC/nix-support/orig-cc)/lib:${stdenv.glibc}/lib \
       - ${arch}/{pstosecps,rastertospl,smfpnetdiscovery}
 
     mkdir -p $out/etc/sane.d/dll.d/
