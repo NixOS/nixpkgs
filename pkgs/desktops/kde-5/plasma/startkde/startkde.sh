@@ -119,9 +119,12 @@ if test $returncode -ne 0; then
 fi
 [ -r $configDir/startupconfig ] && . $configDir/startupconfig
 
-if test "$kdeglobals_kscreen_scalefactor" -ne 1; then
-    export QT_DEVICE_PIXEL_RATIO=$kdeglobals_kscreen_scalefactor
+if [ "$kdeglobals_kscreen_screenscalefactors" ]; then
+    export QT_SCREEN_SCALE_FACTORS="$kdeglobals_kscreen_screenscalefactors"
 fi
+#Manually disable auto scaling because we are scaling above
+#otherwise apps that manually opt in for high DPI get auto scaled by the developer AND manually scaled by us
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
 XCURSOR_PATH=~/.icons
 IFS=":" read -r -a xdgDirs <<< "$XDG_DATA_DIRS"
@@ -158,6 +161,12 @@ unset THEME
 # so don't move this up.
 #
 xsetroot -cursor_name left_ptr
+
+if test "$kcmfonts_general_forcefontdpi" -ne 0; then
+    xrdb -quiet -merge -nocpp <<EOF
+Xft.dpi: $kcmfonts_general_forcefontdpi
+EOF
+fi
 
 dl=$DESKTOP_LOCKED
 unset DESKTOP_LOCKED # Don't want it in the environment
@@ -240,7 +249,7 @@ KDE_SESSION_VERSION=5
 export KDE_SESSION_VERSION
 xprop -root -f KDE_SESSION_VERSION 32c -set KDE_SESSION_VERSION 5
 
-KDE_SESSION_UID=`id -ru`
+KDE_SESSION_UID=$(id -ru)
 export KDE_SESSION_UID
 
 XDG_CURRENT_DESKTOP=KDE
@@ -277,11 +286,6 @@ if test $? -ne 0; then
 fi
 
 qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
-
-# (NixOS) Run kbuildsycoca5 before starting the user session because things
-# may be missing or moved if they have run nixos-rebuild and it may not be
-# possible for them to start Konsole to run it manually!
-kbuildsycoca5
 
 # finally, give the session control to the session manager
 # see kdebase/ksmserver for the description of the rest of the startup sequence
