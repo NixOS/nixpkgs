@@ -88,6 +88,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   libxml2 = all;
   libxslt = all;
   lout = linux;
+  lsh = linux;
   lsof = linux;
   ltrace = linux;
   lvm2 = linux;
