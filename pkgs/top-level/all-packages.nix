@@ -15143,6 +15143,10 @@ in
     libva = libva-full; # also wants libva-x11
   };
 
+  vlc_npapi = callPackage ../applications/video/vlc/plugin.nix {
+    gtk = gtk2;
+  };
+
   vlc_qt5 = qt5.vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
