@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
       gnome3.gnome_settings_daemon xorg.xtrans gnome3.defaultIconTheme
       gsettings_desktop_schemas upower intltool gconf makeWrapper systemd ];
 
+  # FIXME: glib binaries shouldn't be in .dev!
   preFixup = ''
     wrapProgram "$out/bin/gnome-session" \
-      --prefix PATH : "${glib}/bin" \
+      --prefix PATH : "${glib.dev}/bin" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
