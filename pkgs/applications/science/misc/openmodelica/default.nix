@@ -26,6 +26,8 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -L${gfortran.cc.lib}/lib"
+
     autoconf
     ./configure CC=${clang}/bin/clang CXX=${clang}/bin/clang++ --prefix=$out
   '';

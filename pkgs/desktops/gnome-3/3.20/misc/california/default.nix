@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala, makeWrapper
+{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_32, makeWrapper
 , gnome3, glib, libsoup, libgdata, sqlite, itstool, xdg_utils }:
 
 let
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  buildInputs = [ makeWrapper intltool pkgconfig vala glib gtk3 gnome3.libgee
+  buildInputs = [ makeWrapper intltool pkgconfig vala_0_32 glib gtk3 gnome3.libgee
     libsoup libgdata gnome3.gnome_online_accounts gnome3.evolution_data_server
     sqlite itstool xdg_utils gnome3.gsettings_desktop_schemas ];
 

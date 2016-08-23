@@ -42,6 +42,7 @@ in modules // {
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
       substitutions.executable = python.interpreter;
+      substitutions.python = python;
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.
         # NOTE: Order DOES matter here, so single character quotes need to be
@@ -53,19 +54,31 @@ in modules // {
           isSingle = elem quote [ "\"" "'\"'\"'" ];
           endQuote = if isSingle then "[^\\\\]${quote}" else quote;
         in ''
-          /^ *[a-z]?${quote}/ {
+          /^[a-z]?${quote}/ {
             /${quote}${quote}|${quote}.*${endQuote}/{n;br}
             :${label}; n; /^${quote}/{n;br}; /${endQuote}/{n;br}; b${label}
           }
         '';
 
+        # This preamble does two things:
+        # * Sets argv[0] to the original application's name; otherwise it would be .foo-wrapped.
+        #   Python doesn't support `exec -a`.
+        # * Adds all required libraries to sys.path via `site.addsitedir`. It also handles *.pth files.
+        preamble = ''
+          import sys
+          import site
+          import functools
+          sys.argv[0] = '"'$(basename "$f")'"'
+          functools.reduce(lambda k, p: site.addsitedir(p, k), ['"$([ -n "$program_PYTHONPATH" ] && (echo "'$program_PYTHONPATH'" | sed "s|:|','|g") || true)"'], site._init_pathinfo())
+        '';
+
       in ''
         1 {
-          /^#!/!b; :r
-          /\\$/{N;br}
-          /__future__|^ *(#.*)?$/{n;br}
+          :r
+          /\\$|,$/{N;br}
+          /__future__|^ |^ *(#.*)?$/{n;br}
           ${concatImapStrings mkStringSkipper quoteVariants}
-          /^ *[^# ]/i import sys; sys.argv[0] = '"'$(basename "$f")'"'
+          /^[^# ]/i ${replaceStrings ["\n"] [";"] preamble}
         }
       '';
     }
@@ -1166,33 +1179,6 @@ in modules // {
       '';
     };
   });
-
-  asciinema = buildPythonPackage rec {
-    name = "asciinema-${version}";
-    version = "1.3.0";
-
-    disabled = pythonOlder "3.3";
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ requests2 ];
-
-    src = pkgs.fetchFromGitHub {
-      owner = "asciinema";
-      repo = "asciinema";
-      rev = "v${version}";
-      sha256 = "1hx7xipyy9w72iwlawldlif9qk3f7b8jx8c1wcx114pqbjz5d347";
-    };
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    meta = {
-      description = "Terminal session recorder and the best companion of asciinema.org";
-      homepage = https://asciinema.org/;
-      license = with licenses; [ gpl3 ];
-    };
-  };
 
   astroid = buildPythonPackage rec {
     name = "astroid-1.4.4";
@@ -3335,7 +3321,7 @@ in modules // {
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url = "http://downloads.sourceforge.net/project/cgkit/cgkit/cgkit-${version}/cgkit-${version}-py2k.tar.gz";
+      url = "mirror://sourceforge/project/cgkit/cgkit/cgkit-${version}/cgkit-${version}-py2k.tar.gz";
       sha256 = "0vvllc42mdyma3c7yqhahs4bfxymm2kvmc4va7dxqr5x0rzh6rd6";
     };
 
@@ -8548,20 +8534,7 @@ in modules // {
     installPhase = ''
       mkdir -p $out/${python.sitePackages}
       cp -r scfbuild $out/${python.sitePackages}
-      # Workaround for #16133
-      mkdir -p $out/bin
-
-      cat >$out/bin/scfbuild <<EOF
-      #!/usr/bin/env python2
-
-      import sys
-      from scfbuild.main import main
-
-      if __name__ == '__main__':
-        sys.exit(main())
-      EOF
-
-      chmod +x $out/bin/scfbuild
+      cp -r bin $out
     '';
 
     meta = with stdenv.lib; {
@@ -22864,7 +22837,7 @@ in modules // {
 
     checkPhase = ''
       cd tests
-      export MAGICK_HOME="${pkgs.imagemagick}"
+      export MAGICK_HOME="${pkgs.imagemagick.dev}"
       export PYTHONPATH=$PYTHONPATH:../
       py.test
       cd ..
@@ -26559,13 +26532,13 @@ in modules // {
   };
 
   libvirt = let
-    version = "2.0.0";
+    version = "2.1.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0h0x5lpsx97bvw20pzfcsdmmivximddq4qmn8fk0n55dqv0wn5kq";
+      sha256 = "1jxsxnhy303l3wpxzkyip39yq65zwc0pxni6ww0jgnv0pshpz23l";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];

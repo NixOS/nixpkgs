@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
-      --prefix PATH ':' "${btrfs-progs}/bin:${bash}/bin/"
+      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash ]}"
   '';
 
   meta = with stdenv.lib; {

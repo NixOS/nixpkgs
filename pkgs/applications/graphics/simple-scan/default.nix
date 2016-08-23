@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool
-, libusb1, libxml2, pkgconfig, sane-backends, vala, wrapGAppsHook   
+, libusb1, libxml2, pkgconfig, sane-backends, vala_0_23, wrapGAppsHook
 , gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cairo colord glib gusb gtk3 libusb1 libxml2 sane-backends
-    vala ];
+    vala_0_23 ];
   nativeBuildInputs = [ intltool itstool pkgconfig wrapGAppsHook ];
 
   configureFlags = [ "--disable-packagekit" ];

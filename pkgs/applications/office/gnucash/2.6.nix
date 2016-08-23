@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
         --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${name}" \
         --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"  \
-        --prefix PATH ":" "$out/bin:${perl}/bin:${gconf}/bin"
+        --prefix PATH ":" "$out/bin:${stdenv.lib.makeBinPath [ perl gconf ]}"
     done
 
     rm $out/share/icons/hicolor/icon-theme.cache

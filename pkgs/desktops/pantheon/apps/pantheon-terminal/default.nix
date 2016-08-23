@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, cmake, vala, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper }:
+{ stdenv, fetchurl, perl, cmake, vala_0_23, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper }:
 
 stdenv.mkDerivation rec {
   majorVersion = "0.3";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with gnome3; [
-    perl cmake vala pkgconfig glib gtk3 granite libnotify gettext makeWrapper
+    perl cmake vala_0_23 pkgconfig glib gtk3 granite libnotify gettext makeWrapper
     vte_290 libgee gsettings_desktop_schemas defaultIconTheme
   ];
   meta = {

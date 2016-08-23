@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.3.8";
 
   src = fetchurl {
-    url = "https://downloads.sourceforge.net/project/mlterm/01release/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/mlterm/01release/${name}/${name}.tar.gz";
     sha256 = "088pgxynzxxii7wdmjp2fdkxydirx4k05588zkhlzalkb5l8ji1i";
   };
 

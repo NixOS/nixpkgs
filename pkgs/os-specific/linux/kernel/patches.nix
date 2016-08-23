@@ -93,9 +93,9 @@ rec {
   grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.7.1";
-      grrev  = "201608161813";
-      sha256 = "0ppay8gv7ml7kajbin7gclhrpkmc6pggxcbzzngm7qwdjjk5pppj";
+    { kver   = "4.7.2";
+      grrev  = "201608211829";
+      sha256 = "1a7pvmb57w7j9s4ww8xvzzijlpnr2i7nhm7jhgfz4n5w3jvxcny3";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,

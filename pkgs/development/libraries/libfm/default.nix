@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, gtk, intltool, menu-cache, pango, pkgconfig, vala
+{ stdenv, fetchurl, glib, gtk, intltool, menu-cache, pango, pkgconfig, vala_0_23
 , extraOnly ? false }:
 let
     inherit (stdenv.lib) optional;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bsh4p7h2glhxf1cc1lvbxyb4qy0y1zsnl9izf7vrldkikrgc13q";
   };
 
-  buildInputs = [ glib gtk intltool pango pkgconfig vala ]
+  buildInputs = [ glib gtk intltool pango pkgconfig vala_0_23 ]
                 ++ optional (!extraOnly) menu-cache;
 
   configureFlags = optional extraOnly "--with-extra-only";

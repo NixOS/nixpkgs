@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/gnome-keyring" \
-      --prefix XDG_DATA_DIRS : "${glib}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${glib.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     wrapProgram "$out/bin/gnome-keyring-daemon" \
-      --prefix XDG_DATA_DIRS : "${glib}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${glib.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

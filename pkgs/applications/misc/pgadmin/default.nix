@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-libxml2=${libxml2}"
-    "--with-libxslt=${libxslt}"
+    "--with-libxslt=${libxslt.dev}"
   ];
 
   meta = with stdenv.lib; { 

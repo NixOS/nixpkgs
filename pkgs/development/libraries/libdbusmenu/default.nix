@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lib, file
 , pkgconfig, intltool
 , glib, dbus_glib, json_glib
-, gobjectIntrospection, vala, gnome_doc_utils
+, gobjectIntrospection, vala_0_23, gnome_doc_utils
 , gtkVersion ? null, gtk2 ? null, gtk3 ? null }:
 
 with lib;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib dbus_glib json_glib
-    gobjectIntrospection vala gnome_doc_utils
+    gobjectIntrospection vala_0_23 gnome_doc_utils
   ] ++ optional (gtkVersion != null) (if gtkVersion == "2" then gtk2 else gtk3);
 
   postPatch = ''

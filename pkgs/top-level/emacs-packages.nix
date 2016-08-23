@@ -63,7 +63,7 @@ let
     inherit fetchurl lib stdenv texinfo;
   };
 
-  emacsWrapper = import ../build-support/emacs/wrapper.nix {
+  emacsWithPackages = import ../build-support/emacs/wrapper.nix {
     inherit lib lndir makeWrapper stdenv runCommand;
   };
 
@@ -71,9 +71,7 @@ let
 
   inherit emacs melpaBuild trivialBuild;
 
-  emacsWrapper = emacsWrapper self;
-
-  emacsWithPackages = packagesFun: emacsWrapper { inherit packagesFun; };
+  emacsWithPackages = emacsWithPackages self;
 
   ## START HERE
 

@@ -26,6 +26,15 @@ stdenv.mkDerivation rec {
     ${optionalString enableTiny "--enable-tiny"}
   '';
 
+  patchFlags = [ "-p0" ];
+
+  patches = optional stdenv.isDarwin
+    (fetchurl {
+      name = "darwin.patch";
+      url = "https://trac.macports.org/browser/trunk/dports/editors/nano/files/patch-src-winio.c.diff?rev=151356&format=txt";
+      sha256 = "184q33irz9px2svwr2qx70zvfby5zlwlhv4k607yzsy90fq2jpdd";
+    });
+
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/text.c --replace "__time_t" "time_t"
   '';

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig
-, gnome3, ncurses, gobjectIntrospection, vala, libxml2, gnutls
+, gnome3, ncurses, gobjectIntrospection, vala_0_32, libxml2, gnutls
 
 , selectTextPatch ? false
 , fetchFromGitHub, autoconf, automake, libtool, gtk_doc, gperf
@@ -9,7 +9,7 @@ let baseAttrs = rec {
   inherit (import ./src.nix fetchurl) name src;
 
   buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib
-                  gnome3.gtk3 ncurses vala libxml2 ];
+                  gnome3.gtk3 ncurses vala_0_32 libxml2 ];
 
   propagatedBuildInputs = [ gnutls ];
 

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     sed -ie 's#/usr/share/zoneinfo/#${tzdata}/share/zoneinfo/#g' \
       $out/lib/factor/extra/tzinfo/tzinfo.factor
 
-    sed -ie 's#/usr/share/terminfo#${ncurses}/share/terminfo#g' \
+    sed -ie 's#/usr/share/terminfo#${ncurses.out}/share/terminfo#g' \
       $out/lib/factor/extra/terminfo/terminfo.factor
 
     cp ./factor $out/bin
