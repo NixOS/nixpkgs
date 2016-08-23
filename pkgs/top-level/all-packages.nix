@@ -3686,6 +3686,8 @@ with pkgs;
 
   rng_tools = callPackage ../tools/security/rng-tools { };
 
+  rnv = callPackage ../tools/text/xml/rnv { };
+
   rq = callPackage ../development/tools/rq {
     v8 = v8_static;
   };
