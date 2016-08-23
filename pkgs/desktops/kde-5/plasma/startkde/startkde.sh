@@ -210,7 +210,7 @@ done
 echo 'startkde: Starting up...'  1>&2
 
 # Make sure that D-Bus is running
-if $qdbus >/dev/null 2>/dev/null; then
+if qdbus >/dev/null 2>/dev/null; then
     : # ok
 else
     echo 'startkde: Could not start D-Bus. Can you call qdbus?'  1>&2
