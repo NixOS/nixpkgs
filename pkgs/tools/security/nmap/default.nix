@@ -2,16 +2,15 @@
 , graphicalSupport ? false
 , libX11 ? null
 , gtk ? null
-, python ? null
-, pygtk ? null
+, pythonPackages
 , makeWrapper ? null
-, pygobject ? null
-, pycairo ? null
-, pysqlite ? null
 }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
+
+let
+  inherit (pythonPackages) python pygtk pygobject pycairo pysqlite;
+in stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
   version = "7.12";
 

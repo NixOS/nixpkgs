@@ -23,12 +23,12 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "16.04";
+  version = "16.08";
   name = "ejabberd-${version}";
 
   src = fetchurl {
     url = "http://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
-    sha256 = "1hrcswk03x5x6f6xy8sac4ihhi6jcmsfp6449k3570j39vklz5ix";
+    sha256 = "0dqikg0xgph8xjvaxc9r6cyq7k7c8l5jiqr3kyhricziyak9hmdl";
   };
 
   nativeBuildInputs = [ fakegit ];
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
 
     inherit src;
 
-    configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite}" ];
+    configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
     buildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
 
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "08s1j0xa65xkrqw810wzgssngs67sz722jsvj7p02v4ra8jcl31f";
+    outputHash = "040l336570lwxsvlli7kqaa18pz92jbf9105mx394ib62z72vvlp";
   };
 
   configureFlags =
@@ -95,6 +95,7 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     cp -r $deps deps
     chmod -R +w deps
+    patchShebangs deps
   '';
 
   postInstall = ''

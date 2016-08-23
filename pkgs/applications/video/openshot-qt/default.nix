@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     echo "exec ${python3Packages.python.interpreter} $(toPythonPath $out)/launch.py" >>$out/bin/openshot-qt
     chmod +x $out/bin/openshot-qt
     wrapProgram $out/bin/openshot-qt \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${libopenshot}):$(toPythonPath ${python3Packages.pyqt5}):$(toPythonPath ${python3Packages.sip_4_16}):$(toPythonPath ${python3Packages.httplib2}):$PYTHONPATH"
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${libopenshot}):$(toPythonPath ${python3Packages.pyqt5}):$(toPythonPath ${python3Packages.sip}):$(toPythonPath ${python3Packages.httplib2}):$PYTHONPATH"
   '';
 
   doCheck = false;

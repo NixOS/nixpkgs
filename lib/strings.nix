@@ -248,7 +248,7 @@ rec {
   /* Converts an ASCII string to upper-case.
 
      Example:
-       toLower "home"
+       toUpper "home"
        => "HOME"
   */
   toUpper = replaceChars lowerChars upperChars;
@@ -372,7 +372,12 @@ rec {
        getVersion pkgs.youtube-dl
        => "2016.01.01"
   */
-  getVersion = x: (builtins.parseDrvName (x.name or x)).version;
+  getVersion = x:
+   let
+     parse = drv: (builtins.parseDrvName drv).version;
+   in if isString x
+      then parse x
+      else x.version or (parse x.name);
 
   /* Extract name with version from URL. Ask for separator which is
      supposed to start extension.

@@ -8,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.5.0";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "http://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "0cjrh4wpdhkvmahfkg8f2a2qzilcq12i78q5arwr7dnmx1j8hapj";
+    sha256 = "0x0jxn1hnif92m7dyqrqh015gpsf79dviarb7dfl0zya2drlk1m8";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
       # Ensure that bannertopdf can find the PDF templates in
       # $out. (By default, it assumes that cups and cups-filters are
       # installed in the same prefix.)
-      substituteInPlace config.h --replace ${cups}/share/cups/data $out/share/cups/data
+      substituteInPlace config.h --replace ${cups.out}/share/cups/data $out/share/cups/data
 
       # Ensure that gstoraster can find gs in $PATH.
       substituteInPlace filter/gstoraster.c --replace execve execvpe

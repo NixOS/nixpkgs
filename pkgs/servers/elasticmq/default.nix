@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       cp bin/run.sh $out/bin/elasticmq
       substituteInPlace $out/bin/elasticmq --replace '-DBASEDIR=$BASEDIR' '-DBASEDIR=''${ELASTICMQ_DATA_PREFIX:-.}'
 
-      wrapProgram $out/bin/elasticmq --prefix PATH : "${which}/bin:${jre}/bin"
+      wrapProgram $out/bin/elasticmq --prefix PATH : "${stdenv.lib.makeBinPath [ which jre ]}"
     '';
 
   meta = {

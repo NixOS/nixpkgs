@@ -21,10 +21,10 @@ in stdenv.mkDerivation rec {
                 ++ lib.optional withPulseAudio libpulseaudio;
 
   postPatch = lib.optionalString withPulseAudio ''
-    sed -i 's,CDLL(",CDLL("${libpulseaudio}/lib/,g' blueman/main/PulseAudioUtils.py
+    sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py
   '';
 
-  pythonPath = with pythonPackages; [ dbus pygobject3 ];
+  pythonPath = with pythonPackages; [ dbus-python pygobject3 ];
 
   propagatedUserEnvPkgs = [ obex_data_server dconf ];
 
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/blueman-project;
+    homepage = "https://github.com/blueman-project/blueman";
     description = "GTK+-based Bluetooth Manager";
     license = licenses.gpl3;
     platforms = platforms.linux;

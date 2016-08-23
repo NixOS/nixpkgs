@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "emojione-${version}";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "eosrei";
     repo = "emojione-color-font";
     rev = "v${version}";
-    sha256 = "001c2bph4jcdg9arfmyxrscf1i09gvg44kqy28chjmhxzq99hpcg";
+    sha256 = "0hgs661g1j91lkafhrfx5ix7ymarh5bzcx34r2id6jl7dc3j41l3";
   };
 
   preBuild = ''

@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, buildPythonApplication, pythonPackages
-, python, cython, pkgconfig
-, xorg, gtk, glib, pango, cairo, gdk_pixbuf, atk, pycairo
+{ stdenv, fetchurl, pythonPackages, pkgconfig
+, xorg, gtk, glib, pango, cairo, gdk_pixbuf, atk
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama }:
 
-buildPythonApplication rec {
+let
+  inherit (pythonPackages) python cython buildPythonApplication;
+in buildPythonApplication rec {
   name = "xpra-0.17.4";
   namePrefix = "";
   src = fetchurl {
@@ -29,7 +30,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow pygtk pygobject rencode pycrypto cryptography pycups lz4 dbus
+    pillow pygtk pygobject rencode pycrypto cryptography pycups lz4 dbus-python
   ];
 
   preBuild = ''
@@ -50,7 +51,7 @@ buildPythonApplication rec {
       --set XPRA_LOG_DIR "\$HOME/.xpra" \
       --set XPRA_INSTALL_PREFIX "$out" \
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib \
-      --prefix PATH : ${getopt}/bin:${xorgserver.out}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux ]}
   '';
 
   preCheck = "exit 0";
@@ -59,7 +60,7 @@ buildPythonApplication rec {
   #postFixup = ''
   #  sed -i '2iexport XKB_BINDIR="${xkbcomp}/bin"' $out/bin/xpra
   #  sed -i '3iexport FONTCONFIG_FILE="${fontsConf}"' $out/bin/xpra
-  #  sed -i '4iexport PATH=${getopt}/bin:${xorgserver.out}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin\${PATH:+:}\$PATH' $out/bin/xpra
+  #  sed -i '4iexport PATH=${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux ]}\${PATH:+:}\$PATH' $out/bin/xpra
   #'';
 
 

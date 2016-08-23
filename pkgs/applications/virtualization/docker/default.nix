@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
-      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${utillinux}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ iproute iptables e2fsprogs xz utillinux ]}"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service

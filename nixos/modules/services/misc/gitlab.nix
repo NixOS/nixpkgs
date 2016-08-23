@@ -41,6 +41,11 @@ let
       namespace: resque:gitlab
   '';
 
+  secretsYml = ''
+    production:
+      db_key_base: ${cfg.secrets.db_key_base}
+  '';
+
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
     production = flip recursiveUpdate cfg.extraConfig {
@@ -116,7 +121,7 @@ let
       makeWrapper ${cfg.packages.gitlab.env}/bin/bundle $out/bin/gitlab-bundle \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
-          --set PATH '${pkgs.nodejs}/bin:${pkgs.gzip}/bin:${config.services.postgresql.package}/bin:$PATH' \
+          --set PATH '${stdenv.lib.makeBinPath [ pkgs.nodejs pkgs.gzip config.services.postgresql.package ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
       makeWrapper $out/bin/gitlab-bundle $out/bin/gitlab-rake \
@@ -313,6 +318,19 @@ in {
         };
       };
 
+      secrets.db_key_base = mkOption {
+        type = types.str;
+        example = "";
+        description = ''
+          The db_key_base secrets is used to encrypt variables in the DB. If
+          you change or lose this key you will be unable to access variables
+          stored in database.
+
+          Make sure the secret is at least 30 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
@@ -380,6 +398,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "300";
+        Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart="${cfg.packages.gitlab.env}/bin/bundle exec \"sidekiq -q post_receive -q mailers -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
       };
@@ -404,6 +423,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "300";
+        Restart = "on-failure";
         ExecStart =
           "${cfg.packages.gitlab-workhorse}/bin/gitlab-workhorse "
           + "-listenUmask 0 "
@@ -465,6 +485,7 @@ in {
         # JSON is a subset of YAML
         ln -fs ${pkgs.writeText "gitlab.yml" (builtins.toJSON gitlabConfig)} ${cfg.statePath}/config/gitlab.yml
         ln -fs ${pkgs.writeText "database.yml" databaseYml} ${cfg.statePath}/config/database.yml
+        ln -fs ${pkgs.writeText "secrets.yml" secretsYml} ${cfg.statePath}/config/secrets.yml
         ln -fs ${pkgs.writeText "unicorn.rb" unicornConfig} ${cfg.statePath}/config/unicorn.rb
 
         chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}/

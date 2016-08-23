@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     "--builtin-libraries=replace"
   ];
 
+  postInstall = ''		
+    ar qf $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o		
+  '';
+
   meta = with stdenv.lib; {
     description = "Hierarchical pool based memory allocator with destructors";
     homepage = http://tdb.samba.org/;

@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, python, librsync, ncftp, gnupg, boto, makeWrapper
-, lockfile, setuptools, paramiko, pycrypto, ecdsa
+{ stdenv, fetchurl, pythonPackages, librsync, ncftp, gnupg, makeWrapper
 }:
 
 let
   version = "0.7.07.1";
-in
-stdenv.mkDerivation {
+  inherit (pythonPackages) boto ecdsa lockfile paramiko pycrypto python setuptools;
+in stdenv.mkDerivation {
   name = "duplicity-${version}";
 
   src = fetchurl {
@@ -17,7 +16,7 @@ stdenv.mkDerivation {
     python setup.py install --prefix=$out
     wrapProgram $out/bin/duplicity \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
-      --prefix PATH : "${gnupg}/bin:${ncftp}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp ]}"
     wrapProgram $out/bin/rdiffdir \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})"
   '';

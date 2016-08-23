@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper pkgconfig efl python2Packages.python python2Packages.wrapPython dbus ];
-  pythonPath = [ python2Packages.pythonefl python2Packages.dbus elementary ];
+  pythonPath = [ python2Packages.pythonefl python2Packages.dbus-python elementary ];
   postInstall = ''
     wrapPythonPrograms
   '';

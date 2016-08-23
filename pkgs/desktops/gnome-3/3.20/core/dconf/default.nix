@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, vala, libxslt, pkgconfig, glib, dbus_glib, gnome3
+{ stdenv, fetchurl, vala_0_32, libxslt, pkgconfig, glib, dbus_glib, gnome3
 , libxml2, intltool, docbook_xsl_ns, docbook_xsl, makeWrapper }:
 
 let
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "4373e0ced1f4d7d68d518038796c073696280e22957babb29feb0267c630fec2";
   };
 
-  buildInputs = [ vala libxslt pkgconfig glib dbus_glib gnome3.gtk libxml2
+  buildInputs = [ vala_0_32 libxslt pkgconfig glib dbus_glib gnome3.gtk libxml2
                   intltool docbook_xsl docbook_xsl_ns makeWrapper ];
 
   meta = with stdenv.lib; {

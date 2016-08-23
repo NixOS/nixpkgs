@@ -1,6 +1,8 @@
-{ stdenv, fetchbzr, python, pyqt4, sip, rtmpdump, makeWrapper }:
+{ stdenv, fetchbzr, pythonPackages, rtmpdump, makeWrapper }:
 
-stdenv.mkDerivation {
+let
+  inherit (pythonPackages) python pyqt4 sip;
+in stdenv.mkDerivation {
   name = "qarte-2.4.0";
   src = fetchbzr {
     url = http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/trunk;

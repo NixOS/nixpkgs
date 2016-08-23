@@ -9,23 +9,34 @@ curl="curl \
  --max-redirs 20 \
  --retry 3 \
  --cacert $cacert/etc/ssl/certs/ca-bundle.crt \
+ -b cookies \
+ -c cookies \
  $curlOpts \
  $NIX_CURL_FLAGS"
 
 # We don't want the password to be on any program's argv, as it may be
 # visible in /proc. Writing it to file with echo should be safe, since
 # it's a shell builtin.
-echo "password=$password" > password
+echo -n "$password" > password
 # Might as well hide the username as well.
-echo "username-or-email=$username" > username
+echo -n "$username" > username
+
+# Get a CSRF token.
+csrf=$($curl $loginUrl | xidel - -e '//input[@id="csrf_token"]/@value')
 
 # Log in. We don't especially care about the result, but let's check if login failed.
-$curl -c cookies -d @username -d @password $loginUrl -D headers > /dev/null
+$curl --data-urlencode csrf_token="$csrf" \
+      --data-urlencode username_or_email@username \
+      --data-urlencode password@password \
+      -d action=Login \
+      $loginUrl -D headers > /dev/null
 
-if grep -q 'Location: /' headers; then
+if grep -q 'Location: https://' headers; then
     # Now download. We need --insecure for this, but the sha256 should cover us.
-    $curl -b cookies --insecure --location $url > $out
+    $curl --insecure --location $url > $out
+    set +x
 else
+    set +x
     echo 'Login failed'
     echo 'Please set username and password with config.nix,'
     echo 'or /etc/nix/nixpkgs-config.nix if on NixOS.'

@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
     for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
         wrapProgram "$prog" \
             --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
-            --prefix PATH : "${curl}/bin"
+            --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
     done
   '';
 

@@ -3,16 +3,23 @@
 
 set -x
 
+MAJOR_VERSION="5.5"
+VERSION="${MAJOR_VERSION}.1"
 # The trailing slash at the end is necessary!
-RELEASE_URL="http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/"
+RELEASE_URLS=(
+    "http://download.qt.io/official_releases/qt/$MAJOR_VERSION/$VERSION/submodules/"
+    "http://download.qt.io/community_releases/$MAJOR_VERSION/$VERSION/"
+)
 EXTRA_WGET_ARGS='-A *.tar.xz'
 
 mkdir tmp; cd tmp
 
-wget -nH -r -c --no-parent $RELEASE_URL $EXTRA_WGET_ARGS
+for url in "${RELEASE_URLS[@]}"; do
+    wget -nH -r -c --no-parent $url $EXTRA_WGET_ARGS
+done
 
 cat >../srcs.nix <<EOF
-# DO NOT EDIT! This file is generated automatically by manifest.sh
+# DO NOT EDIT! This file is generated automatically by fetchsrcs.sh
 { fetchurl, mirror }:
 
 {
@@ -20,7 +27,7 @@ EOF
 
 workdir=$(pwd)
 
-find . | while read src; do
+find . | sort | while read src; do
     if [[ -f "${src}" ]]; then
         url="${src:2}"
         # Sanitize file name

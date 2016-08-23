@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   patchPhase = ''
     ${myPatchElf "opt/brother/scanner/brscan4/brsaneconfig4"}
 
-    RPATH=${libusb}/lib
+    RPATH=${libusb.out}/lib
     for a in usr/lib64/sane/*.so*; do
       if ! test -L $a; then
         patchelf --set-rpath $RPATH $a

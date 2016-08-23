@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   preCheck = ''
-    export LIBRARY_PATH="$out/lib:${openssl.out}/lib:${pcre2}/lib"
+    export LIBRARY_PATH="$out/lib:${stdenv.lib.makeLibraryPath [ openssl pcre2 ]}"
   '';
 
   installPhase = ''

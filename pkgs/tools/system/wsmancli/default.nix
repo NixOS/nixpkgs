@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ./bootstrap
 
     configureFlagsArray=(
-      LIBS="-L${openssl}/lib -lssl -lcrypto"
+      LIBS="-L${openssl.out}/lib -lssl -lcrypto"
     )
   '';
 

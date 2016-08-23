@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
     xorg.libX11 udev utillinux systemd ];
 
-  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus dbus libjpeg xorg.libXcomposite
+  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus-python dbus libjpeg xorg.libXcomposite
     xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
     bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   patches = [ ./efl-elua.patch ];
 
   preConfigure = ''
-    export PKG_CONFIG_PATH="${gst_all_1.gst-plugins-base}/lib/pkgconfig/gstreamer-video-0.10.pc:$PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH="${gst_all_1.gst-plugins-base.dev}/lib/pkgconfig/gstreamer-video-0.10.pc:$PKG_CONFIG_PATH"
     export LD_LIBRARY_PATH="$(pwd)/src/lib/eina/.libs:$LD_LIBRARY_PATH"
   '';
 

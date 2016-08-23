@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, intltool, glib, pkgconfig, polkit, python, sqlite, systemd
-, gobjectIntrospection, vala, gtk_doc, autoreconfHook, autoconf-archive
+{ stdenv, fetchFromGitHub, lib
+, intltool, glib, pkgconfig, polkit, python, sqlite, systemd
+, gobjectIntrospection, vala_0_23, gtk_doc, autoreconfHook, autoconf-archive
 , nix, boost
 , enableCommandNotFound ? false
 , enableBashCompletion ? false, bashCompletion ? null }:
 
-with stdenv.lib;
-
 stdenv.mkDerivation rec {
-  name = "packagekit-2016-06-03";
+  name = "packagekit-${version}";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit";
-    rev = "99fd83bbb26badf43c6a17a9f0c6dc054c7484c8";
-    sha256 = "0y42vl6r1wh57sbjfkn4khjs78q54wshf4p0v4nly9s7hydxpi6a";
+    rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "150mpar7bhlvwfpwsr6zrjn3yggvklzr6nlhk0shaxnrfkfxvvb6";
   };
 
-  buildInputs = [ glib polkit systemd python gobjectIntrospection vala ]
-                  ++ optional enableBashCompletion bashCompletion;
+  buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_23 ]
+                  ++ lib.optional enableBashCompletion bashCompletion;
   propagatedBuildInputs = [ sqlite nix boost ];
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk_doc ];
 
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     "--with-dbus-sys=$(out)/etc/dbus-1/system.d"
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system/"
   ]
-  ++ optional (!enableBashCompletion) "--disable-bash-completion"
-  ++ optional (!enableCommandNotFound) "--disable-command-not-found";
+  ++ lib.optional (!enableBashCompletion) "--disable-bash-completion"
+  ++ lib.optional (!enableCommandNotFound) "--disable-command-not-found";
 
   enableParallelBuilding = true;
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "System to facilitate installing and updating packages";
     longDescription = ''
       PackageKit is a system designed to make installing and updating software

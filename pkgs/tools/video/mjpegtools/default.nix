@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdv libjpeg libpng pkgconfig ]
               ++ lib.optional (!withMinimal) [ gtk libX11 SDL SDL_gfx ];
 
+  NIX_CFLAGS_COMPILE = lib.optional (!withMinimal) "-I${SDL}/include/SDL";
+
   postPatch = ''
     sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure
   '';
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A suite of programs for processing MPEG or MJPEG video";
-    homepage = http://mjpeg.sourceforge.net/;
+    homepage = "http://mjpeg.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

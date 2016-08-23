@@ -7,7 +7,7 @@ ruby = File.join(ENV["ruby"], "bin", RbConfig::CONFIG['ruby_install_name'])
 out = ENV["out"]
 bin_path = File.join(ENV["out"], "bin")
 gem_home = ENV["GEM_HOME"]
-gem_path = ENV["GEM_PATH"].split(":")
+gem_path = ENV["GEM_PATH"].split(File::PATH_SEPARATOR)
 install_path = Dir.glob("#{gem_home}/gems/*").first
 gemspec_path = ARGV[0]
 
@@ -64,11 +64,16 @@ spec.executables.each do |exe|
 # this file is here to facilitate running it.
 #
 
-Gem.use_paths "#{gem_home}", #{gem_path.to_s}
-
 require 'rubygems'
 
-load Gem.bin_path(#{spec.name.inspect}, #{exe.inspect})
+Gem.paths = {
+  'GEM_PATH' => (
+    ENV['GEM_PATH'].to_s.split(File::PATH_SEPARATOR) +
+    #{([gem_home] + gem_path).to_s}
+  ).join(File::PATH_SEPARATOR)
+}
+
+load Gem.activate_bin_path(#{spec.name.inspect}, #{exe.inspect}, #{spec.version.to_s.inspect})
     EOF
   end
 

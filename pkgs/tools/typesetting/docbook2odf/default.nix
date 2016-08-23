@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sed -i "s|/usr/share/docbook2odf|$out/share/docbook2odf|" "$out/bin/docbook2odf"
 
     wrapProgram "$out/bin/docbook2odf" \
-      --prefix PATH : "${zip}/bin:${libxslt}/bin" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ zip libxslt ]}" \
       --prefix PERL5PATH : "${stdenv.lib.makePerlPath [PerlMagick]}"
   '';
 
