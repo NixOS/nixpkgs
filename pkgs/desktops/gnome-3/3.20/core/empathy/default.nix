@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
                   file libtool librsvg ];
 
   NIX_CFLAGS_COMPILE = [ "-I${dbus_glib.dev}/include/dbus-1.0"
-                         "-I${dbus_libs}/include/dbus-1.0"
-                         "-I${dbus_libs}/lib/dbus-1.0/include" ];
+                         "-I${dbus_libs.dev}/include/dbus-1.0"
+                         "-I${dbus_libs.dev}/lib/dbus-1.0/include" ];
 
   preFixup = ''
     for f in $out/bin/* $out/libexec/*; do
