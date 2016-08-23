@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
-, librsvg, pango, gtk, bzip2, intltool, libtool, automake, autoconf, json_glib }:
+, librsvg, pango, gtk, bzip2, intltool, libtool, automake, autoconf, json_glib , libraw }:
 
 stdenv.mkDerivation rec {
   name = "gegl-0.3.6";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-docs";
 
   buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk bzip2 intltool
-                  autoconf automake libtool which json_glib ];
+                  autoconf automake libtool which json_glib libraw ];
 
   nativeBuildInputs = [ pkgconfig ];
 

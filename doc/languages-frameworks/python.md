@@ -566,7 +566,7 @@ running `nix-shell` with the following `shell.nix`
     with import <nixpkgs> {};
 
     (python3.buildEnv.override {
-      extraLibs = with python3Packages; [ numpy requests ];
+      extraLibs = with python3Packages; [ numpy requests2 ];
     }).env
 
 will drop you into a shell where Python will have the
@@ -605,7 +605,7 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 
     with import <nixpkgs> {};
 
-    (python33.withPackages (ps: [ps.numpy ps.requests])).env
+    (python33.withPackages (ps: [ps.numpy ps.requests2])).env
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
@@ -748,6 +748,23 @@ in newpkgs.python35.withPackages (ps: [ps.blaze])
 ```
 The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
 
+### `python setup.py bdist_wheel` cannot create .whl
+
+Executing `python setup.py bdist_wheel` fails with
+```
+ValueError: ZIP does not support timestamps before 1980
+```
+This is because files are included that depend on items in the Nix store which have a timestamp of, that is, it corresponds to January the 1st, 1970 at 00:00:00. And as the error informs you, ZIP does not support that.
+Fortunately `bdist_wheel` takes into account `SOURCE_DATE_EPOCH`. On Nix this value is set to 1. By setting it to a value correspond to 1980 or later it is possible to build wheels.
+
+Use 1980 as timestamp:
+```
+SOURCE_DATE_EPOCH=315532800 python3 setup.py bdist_wheel
+```
+or the current time:
+```
+SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel
+```
 
 ### `install_data` / `data_files` problems
 

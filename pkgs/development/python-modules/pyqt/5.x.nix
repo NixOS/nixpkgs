@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, python, pkgconfig, qtbase, qtsvg, qtwebkit, sip, pythonDBus
+{ stdenv, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit, dbus_libs
 , lndir, makeWrapper, qmakeHook }:
 
 let
-  version = "5.5.1";
+  version = "5.6";
+  inherit (pythonPackages) python dbus-python sip;
 in stdenv.mkDerivation {
   name = "${python.libPrefix}-PyQt-${version}";
 
@@ -15,22 +16,22 @@ in stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt-gpl-${version}.tar.gz";
-    sha256 = "11l3pm0wkwkxzw4n3022iid3yyia5ap4l0ny1m5ngkzzzfafyw0a";
+    url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
+    sha256 = "1qgh42zsr9jppl9k7fcdbhxcd1wrb7wyaj9lng9nxfa19in1lj1f";
   };
 
   buildInputs = [
-    python pkgconfig makeWrapper lndir
-    qtbase qtsvg qtwebkit qmakeHook
+    pkgconfig makeWrapper lndir
+    qtbase qtsvg qtwebkit dbus_libs qmakeHook
   ];
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ sip python ];
 
   configurePhase = ''
     runHook preConfigure
 
     mkdir -p $out
-    lndir ${pythonDBus} $out
+    lndir ${dbus-python} $out
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
 
@@ -40,12 +41,13 @@ in stdenv.mkDerivation {
 
     ${python.executable} configure.py  -w \
       --confirm-license \
-      --dbus=$out/include/dbus-1.0 \
+      --dbus=${dbus_libs.dev}/include/dbus-1.0 \
       --qmake=$QMAKE \
       --no-qml-plugin \
       --bindir=$out/bin \
-      --destdir=$out/lib/${python.libPrefix}/site-packages \
-      --sipdir=$out/share/sip \
+      --destdir=$out/${python.sitePackages} \
+      --stubsdir=$out/${python.sitePackages}/PyQt5 \
+      --sipdir=$out/share/sip/PyQt5 \
       --designer-plugindir=$out/plugins/designer
 
     runHook postConfigure

@@ -1,9 +1,9 @@
-{ stdenv, buildPythonApplication, fetchurl, gettext, gtk3, pythonPackages
+{ stdenv, fetchurl, gettext, gtk3, pythonPackages
 , gdk_pixbuf, libnotify, gst_all_1
 , libgnome_keyring3 ? null, networkmanager ? null
 }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "mailnag-${version}";
   version = "1.1.0";
 
@@ -13,7 +13,7 @@ buildPythonApplication rec {
   };
 
   buildInputs = [
-    gettext gtk3 pythonPackages.pygobject3 pythonPackages.dbus
+    gettext gtk3 pythonPackages.pygobject3 pythonPackages.dbus-python
     pythonPackages.pyxdg gdk_pixbuf libnotify gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad libgnome_keyring3 networkmanager

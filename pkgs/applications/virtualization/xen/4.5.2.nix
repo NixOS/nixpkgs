@@ -15,16 +15,16 @@ let
     firmwareGits =
       [ # tag 1.7.5
         { git = { name = "seabios";
-                  url = git://xenbits.xen.org/seabios.git;
+                  url = https://xenbits.xen.org/git-http/seabios.git;
                   rev = "e51488c5f8800a52ac5c8da7a31b85cca5cc95d2";
-                  sha256 = "b96a0b9f31cab0f3993d007dcbe5f1bd69ad02b0a23eb2dc8a3ed1aafe7985cb";
+                  sha256 = "0jk54ybhmw97pzyhpm6jr2x99f702kbn0ipxv5qxcbynflgdazyb";
                 };
           patches = [ ./0000-qemu-seabios-enable-ATA_DMA.patch ];
         }
         { git = { name = "ovmf";
-                  url = git://xenbits.xen.org/ovmf.git;
+                  url = https://xenbits.xen.org/git-http/ovmf.git;
                   rev = "cb9a7ebabcd6b8a49dc0854b2f9592d732b5afbd";
-                  sha256 = "1ncb8dpqzaj3s8am44jvclhby40hwczljz0a1gd282h9yr4k4sk2";
+                  sha256 = "07zmdj90zjrzip74fvd4ss8n8njk6cim85s58mc6snxmqqv7gmcq";
                 };
         }
       ];
@@ -32,20 +32,20 @@ let
     toolsGits =
       [ # tag qemu-xen-4.5.2
         { git = { name = "qemu-xen";
-                  url = git://xenbits.xen.org/qemu-upstream-4.5-testing.git;
+                  url = https://xenbits.xen.org/git-http/qemu-xen.git;
                   rev = "e5a1bb22cfb307db909dbd3404c48e5bbeb9e66d";
-                  sha256 = "1qflb3j8qcvipavybqhi0ql7m2bx51lhzgmf7pdbls8minpvdzg2";
+                  sha256 = "00h6hc1y19y9wafxk01hvwm2j8lysz26wi2dnv8md76zxavg4maa";
                 };
         }
         # tag xen-4.5.2
         { git = { name = "qemu-xen-traditional";
-                  url = git://xenbits.xen.org/qemu-xen-4.5-testing.git;
+                  url = https://xenbits.xen.org/git-http/qemu-xen-traditional.git;
                   rev = "dfe880e8d5fdc863ce6bbcdcaebaf918f8689cc0";
-                  sha256 = "14fxdsnkq729z5glkifdpz26idmn7fl38w1v97xj8cf6ifvk76cz";
+                  sha256 = "07jwpxgk9ls5hma6vv1frnx1aczlvpddlgiyii9qmmlxxwjs21yj";
                 };
         }
         { git = { name = "xen-libhvm";
-                  url = "https://github.com/ts468/xen-libhvm";
+                  url = https://github.com/ts468/xen-libhvm;
                   rev = "442dcc4f6f4e374a51e4613532468bd6b48bdf63";
                   sha256 = "9ba97c39a00a54c154785716aa06691d312c99be498ebbc00dc3769968178ba8";
                 };

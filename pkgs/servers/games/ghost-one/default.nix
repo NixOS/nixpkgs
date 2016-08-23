@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sm2ca3lcdr4vjg7v94d8zhqz8cdp44rg8yinzzwkgsr0hj74fv2";
   };
 
-  buildInputs = [ unzip gmp zlib bzip2 boost mysql.lib ];
+  buildInputs = [ unzip gmp zlib bzip2 boost mysql.client ];
 
   patchPhase = ''
-    substituteInPlace ghost/Makefile --replace "/usr/local/lib/mysql" "${mysql.lib}/lib/mysql"
+    substituteInPlace ghost/Makefile --replace "/usr/local/lib/mysql" \
+      "${stdenv.lib.getLib mysql.client}/lib/mysql"
   '';
 
   buildPhase = ''
@@ -49,5 +50,6 @@ stdenv.mkDerivation rec {
     description = "A Warcraft III: Reign of Chaos and Warcraft III: The Frozen Throne game hosting bot";
     license = licenses.asl20;
     maintainers = [ maintainers.phreedom ];
+    broken = true; # can't even get downloaded
   };
 }

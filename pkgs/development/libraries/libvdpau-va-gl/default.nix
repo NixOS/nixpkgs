@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "libvdpau-va-gl-${version}";
-  version = "0.3.6";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "i-rinat";
     repo = "libvdpau-va-gl";
     rev = "v${version}";
-    sha256 = "06lcg6zfj6mn17svz7s0y6ijdah55l9rnp9r440lcbixivjbgyn5";
+    sha256 = "1y511jxs0df1fqzjcvb6zln7nbmchv1g6z3lw0z9nsf64ziycj8k";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

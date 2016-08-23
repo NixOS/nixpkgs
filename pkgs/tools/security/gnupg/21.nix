@@ -27,13 +27,15 @@ stdenv.mkDerivation rec {
     readline libusb gnutls adns openldap zlib bzip2
   ];
 
+  # gpgsm-linking is fixed by commit (c49c43d7) in the gnupg master branch;
+  # fix-gpgsm-linking.patch should be dropped after gnupg 2.1.15 is released
+  patches = [ ./fix-gpgsm-linking.patch ];
+
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
   configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
-
-  postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;

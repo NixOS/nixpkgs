@@ -1,35 +1,37 @@
-{stdenv, fetchurl, cmake, pkgconfig
+{ stdenv, fetchurl, cmake, pkgconfig
 , libXrender, renderproto, gtk, libwnck, pango, cairo
 , GConf, libXdamage, damageproto, libxml2, libxslt, glibmm
 , metacity
 , libstartup_notification, libpthreadstubs, libxcb, intltool
-, ORBit2, libXau
+, ORBit2, libXau, libICE, libSM
 , dbus, dbus_glib, librsvg, mesa
-, libXdmcp, libnotify, python
-, hicolor_icon_theme, libjpeg_turbo, libsigcxx, protobuf, pygtk, pythonDBus
+, libXdmcp, libnotify, pythonPackages
+, hicolor_icon_theme, libjpeg_turbo, libsigcxx, protobuf
 , xdg_utils
 , gettext, boost, pyrex
 , makeWrapper
 }:
 let
+  inherit (pythonPackages) python dbus-python pygtk;
+
   s = # Generated upstream information
   rec {
     baseName="compiz";
-    version="0.9.12.2";
+    version="0.9.13.0";
     name="${baseName}-${version}";
-    hash="107cv8jm7nl0lbkj2y7878lmv1pd6blra68fg10cgb7xdngaq5w9";
-    url="https://launchpad.net/compiz/0.9.12/0.9.12.2/+download/compiz-0.9.12.2.tar.bz2";
-    sha256="107cv8jm7nl0lbkj2y7878lmv1pd6blra68fg10cgb7xdngaq5w9";
+    hash="00m73im5kdpbfjg9ryzxnab5qvx5j51gxwr3wzimkrcbax6vb3ph";
+    url="https://launchpad.net/compiz/0.9.13/0.9.13.0/+download/compiz-0.9.13.0.tar.bz2";
+    sha256="00m73im5kdpbfjg9ryzxnab5qvx5j51gxwr3wzimkrcbax6vb3ph";
   };
   buildInputs = [cmake pkgconfig
     libXrender renderproto gtk libwnck pango cairo
     GConf libXdamage damageproto libxml2 libxslt glibmm libstartup_notification
     metacity
     libpthreadstubs libxcb intltool
-    ORBit2 libXau
+    ORBit2 libXau libICE libSM
     dbus dbus_glib librsvg mesa
     libXdmcp libnotify python
-    hicolor_icon_theme libjpeg_turbo libsigcxx protobuf pygtk pythonDBus
+    hicolor_icon_theme libjpeg_turbo libsigcxx protobuf pygtk dbus-python
     xdg_utils
     gettext boost pyrex
     makeWrapper 

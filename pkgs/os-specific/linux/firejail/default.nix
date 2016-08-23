@@ -3,11 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="firejail";
-    version="0.9.40";
+    version="0.9.42-rc1";
     name="${baseName}-${version}";
-    hash="1vr0z694wibjkcpmyg7lz68r53z857c8hsb02cqxi4lfkkcmzgh2";
-    url="mirror://sourceforge/project/firejail/firejail/firejail-0.9.40-rc1.tar.bz2";
-    sha256="1vr0z694wibjkcpmyg7lz68r53z857c8hsb02cqxi4lfkkcmzgh2";
+    url="mirror://sourceforge/project/firejail/firejail/firejail-0.9.42~rc1.tar.bz2";
+    sha256="11br6xp86bxs1ic2x683hbvg1hk8v2wp8cw6blj0zz3cdl0pcjqf";
   };
   buildInputs = [
     which
@@ -18,6 +17,7 @@ stdenv.mkDerivation {
   inherit buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
+    name = "${s.name}.tar.bz2";
   };
 
   preConfigure = ''

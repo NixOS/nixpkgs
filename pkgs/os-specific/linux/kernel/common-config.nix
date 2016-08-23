@@ -321,6 +321,7 @@ with stdenv.lib;
   DVB_DYNAMIC_MINORS? y # we use udev
   EFI_STUB y # EFI bootloader in the bzImage itself
   FHANDLE y # used by systemd
+  SECCOMP y # used by systemd >= 231
   FRONTSWAP y
   FUSION y # Fusion MPT device support
   IDE n # deprecated IDE support

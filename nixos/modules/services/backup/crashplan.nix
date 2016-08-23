@@ -28,7 +28,7 @@ with lib;
       description = "CrashPlan Backup Engine";
 
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after    = [ "network.target" "local-fs.target" ];
 
       preStart = ''
         ensureDir() {

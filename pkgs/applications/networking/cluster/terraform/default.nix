@@ -15,10 +15,10 @@ buildGoPackage rec {
   };
 
   postInstall = ''
-    # prefix all the plugins with "terraform-"
+    # remove all plugins, they are part of the main binary now
     for i in $bin/bin/*; do
       if [[ $(basename $i) != terraform ]]; then
-        mv -v $i $bin/bin/terraform-$(basename $i);
+        rm "$i"
       fi
     done
   '';

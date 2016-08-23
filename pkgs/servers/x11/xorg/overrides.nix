@@ -323,6 +323,10 @@ in
     ];
   };
 
+  xf86videoamdgpu = attrs: attrs // {
+    configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
+  };
+
   xf86videoati = attrs: attrs // {
     NIX_CFLAGS_COMPILE = "-I${xorg.xorgserver}/include/xorg";
   };

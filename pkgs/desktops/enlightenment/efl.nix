@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
     xorg.libX11 udev utillinux systemd ];
 
-  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus dbus libjpeg xorg.libXcomposite
+  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus-python dbus libjpeg xorg.libXcomposite
     xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
     bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
