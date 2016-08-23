@@ -131,16 +131,9 @@ let
   # The initrd only has to mount / or any FS marked as necessary for
   # booting (such as the FS containing /nix/store, or an FS needed for
   # mounting /, like / on a loopback).
-  #
-  # We need to guarantee that / is the first filesystem in the list so
-  # that if and when lustrateRoot is invoked, nothing else is mounted
-  fileSystems = let
-    filterNeeded = filter
-      (fs: fs.mountPoint != "/" && (fs.neededForBoot || elem fs.mountPoint [ "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ]));
-    filterRoot = filter
-      (fs: fs.mountPoint == "/");
-    allFileSystems = attrValues config.fileSystems;
-  in (filterRoot allFileSystems) ++ (filterNeeded allFileSystems);
+  fileSystems = filter
+    (fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
+    (attrValues config.fileSystems);
 
 
   udevRules = pkgs.stdenv.mkDerivation {
