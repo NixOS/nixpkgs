@@ -430,6 +430,7 @@
   ./services/networking/wakeonlan.nix
   ./services/networking/websockify.nix
   ./services/networking/wicd.nix
+  ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
   ./services/networking/xl2tpd.nix
