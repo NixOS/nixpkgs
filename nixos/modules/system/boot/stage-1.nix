@@ -26,9 +26,7 @@ let
   # The initrd only has to mount `/` or any FS marked as necessary for
   # booting (such as the FS containing `/nix/store`, or an FS needed for
   # mounting `/`, like `/` on a loopback).
-  fileSystems = filter
-    (fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
-    config.system.build.fileSystems;
+  fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck

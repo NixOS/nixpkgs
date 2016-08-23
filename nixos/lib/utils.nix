@@ -2,6 +2,10 @@ pkgs: with pkgs.lib;
 
 rec {
 
+  # Check whenever fileSystem is needed for boot
+  fsNeededForBoot = fs: fs.neededForBoot
+                     || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
+
   # Check whenever `b` depends on `a` as a fileSystem
   # FIXME: it's incorrect to simply use hasPrefix here: "/dev/a" is not a parent of "/dev/ab"
   fsBefore = a: b: ((any (x: elem x [ "bind" "move" ]) b.options) && (a.mountPoint == b.device))
