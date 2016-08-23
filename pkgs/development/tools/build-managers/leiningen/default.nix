@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, coreutils, findutils, jdk, rlwrap, gnupg1compat }:
+, coreutils, jdk, rlwrap, gnupg1compat }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
@@ -17,15 +17,32 @@ stdenv.mkDerivation rec {
     sha256 = "1533msarx6gb3xc2sp2nmspllnqy7anpnv9a0ifl0psxm3xph06p";
   };
 
-  patches = [ ./lein-fix-jar-path.patch ];
+  JARNAME = "${name}-standalone.jar";
 
-  inherit rlwrap gnupg1compat findutils coreutils jdk;
-
-  builder = ./builder.sh;
+  unpackPhase = "true";
 
   buildInputs = [ makeWrapper ];
-
   propagatedBuildInputs = [ jdk ];
+
+  installPhase = ''
+    mkdir -p $out/bin $out/share/java
+
+    cp -v $src $out/bin/lein
+    cp -v $jarsrc $out/share/java/$JARNAME
+  '';
+
+  fixupPhase = ''
+    chmod +x $out/bin/lein
+    patchShebangs $out/bin/lein
+
+    substituteInPlace $out/bin/lein \
+      --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/java/$JARNAME"
+
+    wrapProgram $out/bin/lein \
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils ]}" \
+      --set LEIN_GPG ${gnupg1compat}/bin/gpg \
+      --set JAVA_CMD ${jdk}/bin/java
+  '';
 
   meta = {
     homepage = http://leiningen.org/;
