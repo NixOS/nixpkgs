@@ -4,8 +4,12 @@ hardeningCFlags=()
 hardeningLDFlags=()
 hardeningDisable=${hardeningDisable:-""}
 
-if [[ "$($LD -z 2>&1)" =~ "unknown option" ]]; then
-  hardeningDisable+=" bindnow relro"
+if [[ -z "@ld_supports_bindnow@" ]]; then
+  hardeningDisable+=" bindnow"
+fi
+
+if [[ -z "@ld_supports_relro@" ]]; then
+  hardeningDisable+=" relro"
 fi
 
 if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: Value of '$hardeningDisable': $hardeningDisable >&2; fi
