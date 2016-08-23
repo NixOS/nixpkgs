@@ -2402,6 +2402,8 @@ in
 
   libtermkey = callPackage ../development/libraries/libtermkey { };
 
+  libtelnet = callPackage ../development/libraries/libtelnet { };
+
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libshout = callPackage ../development/libraries/libshout { };
