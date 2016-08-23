@@ -30,8 +30,8 @@ let
                             --with-g4install-dir=${geant4} \
                             --with-python-incdir=${python}/include/python${python.majorVersion} \
                             --with-python-libdir=${python}/lib \
-                            --with-boost-incdir=${boost}/include \
-                            --with-boost-libdir=${boost}/lib
+                            --with-boost-incdir=${boost.dev}/include \
+                            --with-boost-libdir=${boost.out}/lib
       '';
 
       enableParallelBuilding = true;
