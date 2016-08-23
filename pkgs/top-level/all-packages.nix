@@ -15543,6 +15543,8 @@ in
 
   openlierox = callPackage ../games/openlierox { };
 
+  openclonk = callPackage ../games/openclonk { };
+
   openmw = callPackage ../games/openmw { };
 
   openra = callPackage ../games/openra { lua = lua5_1; };
