@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   # Needs to be propagated for the .pc file to work
   propagatedBuildInputs = [ zeromq ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   meta = with stdenv.lib; {
     homepage = "http://czmq.zeromq.org/";
     description = "High-level C Binding for ZeroMQ";

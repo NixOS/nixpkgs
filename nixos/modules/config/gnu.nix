@@ -9,7 +9,8 @@ with lib;
       default = false;
       description =
         '' When enabled, GNU software is chosen by default whenever a there is
-           a choice between GNU and non-GNU software.
+           a choice between GNU and non-GNU software (e.g., GNU lsh
+           vs. OpenSSH).
         '';
     };
   };
@@ -31,6 +32,12 @@ with lib;
     # GNU GRUB, where available.
     boot.loader.grub.enable = !pkgs.stdenv.isArm;
     boot.loader.grub.version = 2;
+
+    # GNU lsh.
+    services.openssh.enable = false;
+    services.lshd.enable = true;
+    programs.ssh.startAgent = false;
+    services.xserver.startGnuPGAgent = true;
 
     # TODO: GNU dico.
     # TODO: GNU Inetutils' inetd.
