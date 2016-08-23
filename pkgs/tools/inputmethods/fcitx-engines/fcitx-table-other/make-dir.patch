@@ -1,0 +1,16 @@
+diff --git a/tables/CMakeLists.txt b/tables/CMakeLists.txt
+index 1f501ba..68d8c51 100644
+--- a/tables/CMakeLists.txt
++++ b/tables/CMakeLists.txt
+@@ -50,8 +50,11 @@ set(CONF_FILE)
+ foreach(table ${TABLE_NAMES})
+   fcitx_translate_add_apply_source("${table}.conf.in"
+     "${CMAKE_CURRENT_BINARY_DIR}/${table}.conf")
++  get_filename_component(out_dir
++    "${CMAKE_CURRENT_BINARY_DIR}/${table}.mb" PATH)
+   add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${table}.mb"
+     DEPENDS "${table}.txt" "${TXT2MB}"
++    COMMAND "${CMAKE_COMMAND}" -E make_directory "${out_dir}"
+     COMMAND "${TXT2MB}" ARGS "${CMAKE_CURRENT_SOURCE_DIR}/${table}.txt"
+     "${CMAKE_CURRENT_BINARY_DIR}/${table}.mb")
+   set(MB_FILE ${MB_FILE} "${CMAKE_CURRENT_BINARY_DIR}/${table}.mb")
