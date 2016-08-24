@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, libibmad }:
 
-stdenv.mkDerivation {
-  name = "mstflint-3.7.0-1.18";
+stdenv.mkDerivation rec {
+  name = "mstflint-4.4.0-1.12.gd1edd58";
 
   src = fetchurl {
-    url = "https://www.openfabrics.org/downloads/mstflint/mstflint-3.7.0-1.18.gcdb9f80.tar.gz";
-    sha256 = "10x4l3i58ynnni18i8qq1gfbqd2028r4jd3frshiwrl9yrj7sxn2";
+    url = "https://www.openfabrics.org/downloads/mstflint/${name}.tar.gz";
+    sha256 = "0kg33i5s5zdc7kigww62r0b824zfw06r757fl6jwrq7lj91j0380";
   };
 
   buildInputs = [ zlib libibmad ];
