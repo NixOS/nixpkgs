@@ -1,5 +1,5 @@
 { CoreServices, Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk,
-fetchurl, gnustep-make, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl,
+fetchurl, gnustep, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl,
 libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp,
 libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin,
 libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_cssm, libsecurity_filedb,
@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-no_dtrace_dof";
 
-  makeFlags = "-f ${./GNUmakefile} MAKEFILE_NAME=${./GNUmakefile}";
+  makeFlags = [
+    "-f ${./GNUmakefile}"
+    "MAKEFILE_NAME=${./GNUmakefile}"
+    "GNUSTEP_MAKEFILES=${gnustep.make}/share/GNUstep/Makefiles"
+  ];
 
   installFlags = [
     "security_INSTALL_DIR=\$(out)/bin"
@@ -50,7 +54,7 @@ stdenv.mkDerivation rec {
   __propagatedImpureHostDeps = [ "/System/Library/Keychains" ];
 
   buildInputs = [
-    gnustep-make
+    gnustep.make
     libsecurity_asn1
     libsecurity_utilities
     libsecurity_cdsa_utilities

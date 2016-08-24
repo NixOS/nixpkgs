@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng ];
 
   # disable failing test on i686
+  # https://lists.gnu.org/archive/html/bug-plotutils/2016-04/msg00002.html
   prePatch = stdenv.lib.optionalString stdenv.isi686 ''
     substituteInPlace test/Makefile.in --replace 'spline.test' ' '
   '';

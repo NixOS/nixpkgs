@@ -36,8 +36,6 @@ kdeApp {
     "-DKDE_DEFAULT_HOME=.kde"
   ];
 
-  setupHook = ./setup-hook.sh;
-
   meta = {
     platforms = lib.platforms.linux;
     homepage = "http://www.kde.org";

@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
       patchShebangs $i
     done
     patchShebangs util/gen-mi-enum
+    rm -rf contrib
   '';
 
   makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"

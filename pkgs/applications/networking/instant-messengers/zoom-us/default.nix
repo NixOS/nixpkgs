@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
     version = "2.0.52458.0531";
     src = fetchurl {
-      url = "https://zoom.us/client/latest/zoom_${version}_x86_64.tar.xz";
+      url = "https://zoom.us/client/${version}/zoom_${version}_x86_64.tar.xz";
       sha256 = "16d64pn9j27v3fnh4c9i32vpkr10q1yr26w14964n0af1mv5jf7a";
     };
 

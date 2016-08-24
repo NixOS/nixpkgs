@@ -423,6 +423,10 @@ in
 
   apitrace = qt55.callPackage ../applications/graphics/apitrace {};
 
+  argus = callPackage ../tools/networking/argus {};
+
+  argus-clients = callPackage ../tools/networking/argus-clients {};
+
   argtable = callPackage ../tools/misc/argtable {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
@@ -2203,9 +2207,7 @@ in
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
-  keybase = callPackage ../applications/misc/keybase { };
-
-  keybase-go = callPackage ../tools/security/keybase { };
+  keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/kbfs { };
 
@@ -3998,6 +4000,8 @@ in
   uhub = callPackage ../servers/uhub { };
 
   unclutter = callPackage ../tools/misc/unclutter { };
+
+  unclutter-xfixes = callPackage ../tools/misc/unclutter-xfixes { };
 
   unbound = callPackage ../tools/networking/unbound { };
 
@@ -7070,7 +7074,11 @@ in
 
   ctpl = callPackage ../development/libraries/ctpl { };
 
+  cppdb = callPackage ../development/libraries/cppdb { };
+
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
+
+  cppcms = callPackage ../development/libraries/cppcms { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
@@ -10439,6 +10447,7 @@ in
   };
 
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
+  pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
   pshs = callPackage ../servers/http/pshs { };
 
@@ -13335,6 +13344,8 @@ in
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   linssid = qt5.callPackage ../applications/networking/linssid { };
+
+  manuskript = callPackage ../applications/editors/manuskript { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
