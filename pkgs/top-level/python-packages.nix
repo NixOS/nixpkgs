@@ -10850,6 +10850,12 @@ in modules // {
     };
   };
 
+  gdal = (pkgs.gdal.overrideDerivation (oldattrs: {
+    name = "${python.libPrefix}-" + oldattrs.name;
+  })).override {
+    pythonPackages = self;
+  };
+
   gdrivefs = buildPythonPackage rec {
     version = "0.14.3";
     name = "gdrivefs-${version}";
