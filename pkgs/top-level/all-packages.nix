@@ -2206,9 +2206,7 @@ in
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
-  keybase = callPackage ../applications/misc/keybase { };
-
-  keybase-go = callPackage ../tools/security/keybase { };
+  keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/kbfs { };
 
