@@ -1,13 +1,30 @@
-{ stdenv, fetchurl, buildPythonApplication, makeQtWrapper, wrapGAppsHook
+{ stdenv, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
 , qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
 , qtwebkit-plugins }:
 
-let version = "0.8.2"; in
+let
+  pdfjs = stdenv.mkDerivation rec {
+    name = "pdfjs-${version}";
+    version = "1.4.20";
 
-buildPythonApplication rec {
+    src = fetchurl {
+      url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
+      sha256 = "1ca1fzyc5qnan6gavcd8bnfqriqqvgdsf4m8ka4nayf50k64xxj9";
+    };
+
+    nativeBuildInputs = [ unzip ];
+
+    buildCommand = ''
+      mkdir $out
+      unzip -d $out $src
+    '';
+  };
+
+in buildPythonApplication rec {
   name = "qutebrowser-${version}";
+  version = "0.8.2";
   namePrefix = "";
 
   src = fetchurl {
@@ -34,6 +51,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     sed -i "s,/usr/share/qutebrowser,$out/share/qutebrowser,g" qutebrowser/utils/standarddir.py
+    sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
   '';
 
   postBuild = ''
