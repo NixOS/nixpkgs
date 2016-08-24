@@ -133,7 +133,7 @@ in
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,
 
-          ${pkgs.openssl}/etc/**                     r,
+          ${pkgs.openssl.out}/etc/**                     r,
           ${pkgs.transmission}/share/transmission/** r,
 
           owner ${settingsDir}/** rw,

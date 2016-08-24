@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i Makefile -e 's,LIBTCODDIR=.*,LIBTCODDIR=${libtcod},g' \
-                    -e 's,sdl-config,${SDL}/bin/sdl-config,g'
+                    -e 's,sdl-config,${SDL.dev}/bin/sdl-config,g'
     sed -i src/platform/tcod-platform.c -e "s,fonts/font,$out/share/brogue/fonts/font,g"
     make clean
     rm -rf src/libtcod*

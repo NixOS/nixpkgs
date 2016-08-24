@@ -18,7 +18,7 @@ buildPerlPackage {
   installPhase = '' 
     mkdir -p $out/bin $out/share/man/man1
     cp get_iplayer $out/bin
-    wrapProgram $out/bin/get_iplayer --suffix PATH : ${ffmpeg.bin}/bin:${flvstreamer}/bin:${vlc}/bin:${rtmpdump}/bin --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/get_iplayer --suffix PATH : ${stdenv.lib.makeBinPath [ ffmpeg flvstreamer vlc rtmpdump ]} --prefix PERL5LIB : $PERL5LIB
     cp get_iplayer.1 $out/share/man/man1
   '';
   

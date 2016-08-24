@@ -15,4 +15,4 @@ cp -u @seednodes@ $FREENET_HOME/seednodes.fref
 chmod u+rw $FREENET_HOME/seednodes.fref
 
 cd $FREENET_HOME
-@jre@/bin/java -cp @freenet@/share/freenet/bcprov-jdk15on-152.jar:@freenet@/share/freenet/freenet-ext.jar:@freenet@/share/freenet/freenet.jar -Xmx1024M freenet.node.NodeStarter
+@jre@/bin/java -cp @freenet@/share/freenet/bcprov-@bcprov_version@.jar:@freenet@/share/freenet/freenet-ext.jar:@freenet@/share/freenet/freenet.jar -Xmx1024M freenet.node.NodeStarter

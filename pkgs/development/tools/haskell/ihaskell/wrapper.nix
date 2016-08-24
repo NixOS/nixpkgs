@@ -9,7 +9,7 @@ let
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
     #! ${stdenv.shell}
     export GHC_PACKAGE_PATH="$(echo ${ihaskellEnv}/lib/*/package.conf.d| tr ' ' ':'):$GHC_PACKAGE_PATH"
-    export PATH="${ihaskell}/bin:${ihaskellEnv}/bin:${ipython}/bin"
+    export PATH="${stdenv.lib.makeBinPath [ ihaskell ihaskellEnv ipython ]}"
     ${ihaskell}/bin/ihaskell install -l $(${ihaskellEnv}/bin/ghc --print-libdir) && ${ipython}/bin/ipython notebook --kernel=haskell
   '';
   profile = "${ihaskell.pname}-${ihaskell.version}/profile/profile.tar";

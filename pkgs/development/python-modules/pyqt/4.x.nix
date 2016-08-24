@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, makeWrapper }:
+{ stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
 
 let
   version = "4.11.3";
-  inherit (pythonPackages) python dbus-python;
+  inherit (pythonPackages) python dbus-python sip;
 in stdenv.mkDerivation {
   name = "${python.libPrefix}-PyQt-x11-gpl-${version}";
 
@@ -22,16 +22,16 @@ in stdenv.mkDerivation {
 
     configureFlagsArray=( \
       --confirm-license --bindir $out/bin \
-      --destdir $out/lib/${python.libPrefix}/site-packages \
-      --plugin-destdir $out/lib/qt4/plugins --sipdir $out/share/sip \
-      --dbus=$out/include/dbus-1.0 --verbose)
+      --destdir $out/${python.sitePackages} \
+      --plugin-destdir $out/lib/qt4/plugins --sipdir $out/share/sip/PyQt4 \
+      --dbus=${dbus_libs.dev}/include/dbus-1.0 --verbose)
 
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
-  buildInputs = [ pkgconfig makeWrapper qt4 lndir ];
+  buildInputs = [ pkgconfig makeWrapper qt4 lndir dbus_libs ];
 
-  propagatedBuildInputs = [ pythonPackages.sip_4_16 python ];
+  propagatedBuildInputs = [ sip python ];
 
   postInstall = ''
     for i in $out/bin/*; do

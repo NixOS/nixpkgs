@@ -260,7 +260,7 @@ touch $mountPoint/etc/NIXOS
 # configuration.
 echo "finalising the installation..."
 if [ -z "$noBootLoader" ]; then
-  NIXOS_INSTALL_GRUB=1 chroot $mountPoint \
+  NIXOS_INSTALL_BOOTLOADER=1 chroot $mountPoint \
       /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 fi
 

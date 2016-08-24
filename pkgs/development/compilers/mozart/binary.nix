@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
   name = "mozart-binary-${version}";
 
   src = fetchurl {
-    url = "http://sourceforge.net/projects/mozart-oz/files/v${version}-alpha.0/mozart2-${version}-alpha.0+build.4105.5c06ced-x86_64-linux.tar.gz";
+    url = "mirror://sourceforge/project/mozart-oz/v${version}-alpha.0/mozart2-${version}-alpha.0+build.4105.5c06ced-x86_64-linux.tar.gz";
     sha256 = "0rsfrjimjxqbwprpzzlmydl3z3aiwg5qkb052jixdxjyad7gyh5z";
   };
 

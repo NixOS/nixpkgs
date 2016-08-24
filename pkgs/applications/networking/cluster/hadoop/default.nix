@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     mv * $out
 
     for n in $out/{bin,sbin}"/"*; do
-      wrapProgram $n --prefix PATH : "${which}/bin:${jre}/bin:${bash}/bin" --set JAVA_HOME "${jre}" --set HADOOP_PREFIX "$out"
+      wrapProgram $n --prefix PATH : "${stdenv.lib.makeBinPath [ which jre bash ]}" --set JAVA_HOME "${jre}" --set HADOOP_PREFIX "$out"
     done
   '';
 

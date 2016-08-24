@@ -489,6 +489,54 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   };
   # };
 
+  GitVersionTree = buildDotnetPackage rec {
+    baseName = "GitVersionTree";
+    version = "2013-10-01";
+
+    src = fetchFromGitHub {
+      owner = "crc8";
+      repo = "GitVersionTree";
+      rev = "58dc39c43cffea44f721ee4425835e56518f7da2";
+      sha256 = "0mna5pkpqkdr5jgn8paz004h1pa24ncsvmi2c8s4gp94nfw34x05";
+    };
+
+    buildInputs = with pkgs; [ ed ];
+
+    postPatch = ''
+      ed -v -p: -s GitVersionTree/Program.cs << EOF
+      /Main()
+      c
+      static void Main(string[] args)
+      .
+      /EnableVisualStyles
+      i
+      Reg.Write("GitPath", "${pkgs.gitMinimal}/bin/git");
+      Reg.Write("GraphvizPath", "${pkgs.graphviz}/bin/dot");
+      if (args.Length > 0) {
+        Reg.Write("GitRepositoryPath", args[0]);
+      }
+      .
+      w
+      EOF
+
+      substituteInPlace GitVersionTree/Forms/MainForm.cs \
+        --replace 'Directory.GetParent(Application.ExecutablePath)' 'Environment.CurrentDirectory' \
+        --replace '\\' '/' \
+        --replace '@"\"' '"/"'
+    '';
+
+    outputFiles = [ "GitVersionTree/bin/Release/*" ];
+    exeFiles = [ "GitVersionTree.exe" ];
+
+    meta = with stdenv.lib; {
+      description = "A tool to help visualize git revisions and branches";
+      homepage = https://github.com/crc8/GitVersionTree;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ obadz ];
+      platforms = platforms.all;
+    };
+  };
+
   MathNetNumerics = buildDotnetPackage rec {
     baseName = "MathNet.Numerics";
     version = "3.7.0";

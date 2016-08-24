@@ -1,7 +1,7 @@
-{stdenv, fetchurl, ocaml, findlib, opam, xmlm}:
+{ stdenv, fetchurl, ocaml, findlib, opam, xmlm, topkg }:
 let
   pname = "uucd";
-  version = "2.0.0";
+  version = "4.0.0";
   webpage = "http://erratique.ch/software/${pname}";
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
@@ -11,16 +11,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "12lbrrdjwdxfa99pbg344dfkj51lr5d2ispcj7d7lwsqyxy6h57i";
+    sha256 = "11cjfwa4wjhsyvzq4wl9z44xi28n49drz8nbfpx754vyfzwj3yc6";
   };
 
-  buildInputs = [ ocaml findlib opam xmlm ];
+  buildInputs = [ ocaml findlib opam topkg ];
 
   createFindlibDestdir = true;
 
   unpackCmd = "tar xjf $src";
 
-  buildPhase = "ocaml ./pkg/build.ml native=true native-dynlink=true";
+  inherit (topkg) buildPhase;
 
   installPhase = ''
     opam-installer --script --prefix=$out ${pname}.install > install.sh

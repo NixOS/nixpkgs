@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, vala, pkgconfig, glib, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, autoconf, vala_0_32, pkgconfig, glib, gobjectIntrospection, gnome3 }:
 let
   ver_maj = "0.6";
   ver_min = "8";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix_introspection_paths.patch ];
 
-  buildInputs = [ autoconf vala pkgconfig glib gobjectIntrospection ];
+  buildInputs = [ autoconf vala_0_32 pkgconfig glib gobjectIntrospection ];
 
   meta = with stdenv.lib; {
     description = "Utility library providing GObject-based interfaces and classes for commonly used data structures";

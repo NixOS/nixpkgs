@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ apacheHttpd autoconf autoreconfHook automake curl glib lasso libtool libxml2 libxslt openssl pkgconfig xmlsec ];
 
-  configureFlags = ["--with-apxs2=${apacheHttpd}/bin/apxs" "--exec-prefix=$out"];
+  configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
 
   installPhase = ''
     mkdir -p $out/bin

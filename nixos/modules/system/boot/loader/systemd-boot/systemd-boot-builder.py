@@ -7,6 +7,7 @@ import subprocess
 import glob
 import tempfile
 import errno
+import warnings
 
 def copy_if_not_exists(source, dest):
     if not os.path.exists(dest):
@@ -92,8 +93,11 @@ parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot 
 parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
 args = parser.parse_args()
 
-# We deserve our own env var!
 if os.getenv("NIXOS_INSTALL_GRUB") == "1":
+    warnings.warn("NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER", DeprecationWarning)
+    os.environ["NIXOS_INSTALL_BOOTLOADER"] = "1"
+
+if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
     if "@canTouchEfiVariables@" == "1":
         subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "install"])
     else:

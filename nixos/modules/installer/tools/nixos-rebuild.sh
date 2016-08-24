@@ -33,7 +33,11 @@ while [ "$#" -gt 0 ]; do
         action="$i"
         ;;
       --install-grub)
-        export NIXOS_INSTALL_GRUB=1
+        echo "$0: --install-grub deprecated, use --install-bootloader instead" >&2
+        export NIXOS_INSTALL_BOOTLOADER=1
+        ;;
+      --install-bootloader)
+        export NIXOS_INSTALL_BOOTLOADER=1
         ;;
       --no-build-nix)
         buildNix=

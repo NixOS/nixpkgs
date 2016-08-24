@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pyqt5, sip_4_16, poppler_utils, pkgconfig, libpng
+{ stdenv, fetchurl, python, pyqt5, sip, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmakeHook, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, pythonPackages, xz, libusb1, libmtp
 , xdg_utils, makeDesktopItem
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip/PyQt5':"  \
       setup/build_environment.py
   '';
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];
 
   buildInputs =
-    [ python pyqt5 sip_4_16 poppler_utils libpng imagemagick libjpeg
+    [ python pyqt5 sip poppler_utils libpng imagemagick libjpeg
       fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo}/include/podofo
     export PODOFO_LIB_DIR=${podofo}/lib
-    export SIP_BIN=${sip_4_16}/bin/sip
+    export SIP_BIN=${sip}/bin/sip
     python setup.py install --prefix=$out
 
     PYFILES="$out/bin/* $out/lib/calibre/calibre/web/feeds/*.py

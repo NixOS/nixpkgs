@@ -1,12 +1,30 @@
-{ stdenv, fetchurl, buildPythonApplication, makeQtWrapper, wrapGAppsHook
-, qtmultimedia, pyqt5, jinja2, pygments, pyyaml, pypeg2, glib_networking
+{ stdenv, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
+, qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
-, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav }:
+, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
+, qtwebkit-plugins }:
 
-let version = "0.8.2"; in
+let
+  pdfjs = stdenv.mkDerivation rec {
+    name = "pdfjs-${version}";
+    version = "1.4.20";
 
-buildPythonApplication rec {
+    src = fetchurl {
+      url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
+      sha256 = "1ca1fzyc5qnan6gavcd8bnfqriqqvgdsf4m8ka4nayf50k64xxj9";
+    };
+
+    nativeBuildInputs = [ unzip ];
+
+    buildCommand = ''
+      mkdir $out
+      unzip -d $out $src
+    '';
+  };
+
+in buildPythonApplication rec {
   name = "qutebrowser-${version}";
+  version = "0.8.2";
   namePrefix = "";
 
   src = fetchurl {
@@ -18,7 +36,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   buildInputs = [
-    qtmultimedia
+    qtbase qtwebkit-plugins
     gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
     glib_networking
   ];
@@ -33,6 +51,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     sed -i "s,/usr/share/qutebrowser,$out/share/qutebrowser,g" qutebrowser/utils/standarddir.py
+    sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
   '';
 
   postBuild = ''
@@ -40,9 +59,6 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
-    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
-
     install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
     install -Dm644 qutebrowser.desktop \
         "$out/share/applications/qutebrowser.desktop"
@@ -53,6 +69,14 @@ buildPythonApplication rec {
     install -Dm644 icons/qutebrowser.svg \
         "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
+    mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
+    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
+
+    sed -i 's/\.qutebrowser-wrapped/qutebrowser/g' $out/bin/..qutebrowser-wrapped-wrapped
   '';
 
   meta = {

@@ -20,9 +20,9 @@ in
     services.xserver.windowManager.session = singleton
       { name = "metacity";
         start = ''
-          env LD_LIBRARY_PATH=${xorg.libX11.out}/lib:${xorg.libXext.out}/lib:/usr/lib/
+          env LD_LIBRARY_PATH=${lib.makeLibraryPath [ xorg.libX11 xorg.libXext ]}:/usr/lib/
           # !!! Hack: load the schemas for Metacity.
-          GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \
+          GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf.out}/bin/gconftool-2 \
             --makefile-install-rule ${gnome.metacity}/etc/gconf/schemas/*.schemas # */
           ${gnome.metacity}/bin/metacity &
           waitPID=$!

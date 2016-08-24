@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, makeWrapper
-, pkgconfig, cmake, libxml2, vala, intltool, libmx, gnome3, gtk3, gtk_doc
+, pkgconfig, cmake, libxml2, vala_0_23, intltool, libmx, gnome3, gtk3, gtk_doc
 , keybinder3, clutter_gtk, libnotify
 , libxkbcommon, xorg, udev
 , bashInteractive
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    pkgconfig cmake vala intltool gtk3 gnome3.gnome_common gnome3.libgee
+    pkgconfig cmake vala_0_23 intltool gtk3 gnome3.gnome_common gnome3.libgee
     gtk_doc clutter_gtk libmx keybinder3 libxml2 libnotify makeWrapper
     xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence
     libxkbcommon
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/finalterm" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share:${gnome3.gtk.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with lib; {

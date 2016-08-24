@@ -22,6 +22,7 @@ dontLink=0
 getVersion=0
 nonFlagArgs=0
 [[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
+cppInclude=1
 
 params=("$@")
 n=0
@@ -46,6 +47,10 @@ while [ $n -lt ${#params[*]} ]; do
         isCpp=1
     elif [ "$p" = -nostdlib ]; then
         isCpp=-1
+    elif [ "$p" = -nostdinc ]; then
+        cppInclude=0
+    elif [ "$p" = -nostdinc++ ]; then
+        cppInclude=0
     elif [ "${p:0:1}" != - ]; then
         nonFlagArgs=1
     elif [ "$p" = -m32 ]; then
@@ -105,7 +110,9 @@ if [ "$NIX_ENFORCE_NO_NATIVE" = 1 ]; then
 fi
 
 if [[ "$isCpp" = 1 ]]; then
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+    if [[ "$cppInclude" = 1 ]]; then
+        NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+    fi
     NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK $NIX_CXXSTDLIB_LINK"
 fi
 

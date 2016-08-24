@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     cp $out/share/stumpwm/modules/util/stumpish/stumpish $out/bin/
     chmod +x $out/bin/stumpish
     wrapProgram $out/bin/stumpish \
-      --prefix PATH ":" "${rlwrap}/bin:${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:${xprop}/bin"
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap gnused gnugrep coreutils xprop ]}"
 
     # Paths in the compressed image $out/bin/stumpwm are not
     # recognized by Nix. Add explicit reference here.

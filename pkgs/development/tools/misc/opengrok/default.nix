@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     cp -a * $out/
     substituteInPlace $out/bin/OpenGrok --replace /bin/uname ${coreutils}/bin/uname
     wrapProgram $out/bin/OpenGrok \
-      --prefix PATH : "${ctags}/bin:${git}/bin" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ ctags git ]}" \
       --set JAVA_HOME "${jre}" \
       --set OPENGROK_TOMCAT_BASE "/var/tomcat"
   '';
