@@ -8936,16 +8936,6 @@ in modules // {
 
   django = self.django_1_10;
 
-  django_gis = self.django.override rec {
-    patches = [
-      (pkgs.substituteAll {
-        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
-        geos = pkgs.geos;
-        gdal = pkgs.gdal;
-      })
-    ];
-  };
-
   django_1_10 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.10";
@@ -8955,6 +8945,14 @@ in modules // {
       url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
       sha256 = "01bh5yra6zyxcpqacahbwfbn0y4ivw07j2jsw3crvmjzivb6if26";
     };
+
+    patches = [
+      (pkgs.substituteAll {
+        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
+        geos = pkgs.geos;
+        gdal = self.gdal;
+      })
+    ];
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
     postFixup = ''
