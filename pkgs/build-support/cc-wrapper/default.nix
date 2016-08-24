@@ -237,9 +237,14 @@ stdenv.mkDerivation {
       cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
       rm $out/nix-support/setup-hook.tmp
 
-      # some linkers on some platforms don't support -z
-      export ld_supports_bindnow=$([[ "$($ldPath/ld -z now 2>&1 || true)" =~ "un(known|recognized) option" ]])
-      export ld_supports_relro=$([[ "$($ldPath/ld -z relro 2>&1 || true)" =~ "un(known|recognized) option" ]])
+      # some linkers on some platforms don't support specific -z flags
+      hardening_unsupported_flags=""
+      if [[ "$($ldPath/ld -z now 2>&1 || true)" =~ "unknown option" ]]; then
+        hardening_unsupported_flags+=" bindnow"
+      fi
+      if [[ "$($ldPath/ld -z relro 2>&1 || true)" =~ "unknown option" ]]; then
+        hardening_unsupported_flags+=" relro"
+      fi
 
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh

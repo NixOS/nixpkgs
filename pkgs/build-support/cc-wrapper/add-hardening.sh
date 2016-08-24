@@ -4,17 +4,11 @@ hardeningCFlags=()
 hardeningLDFlags=()
 hardeningDisable=${hardeningDisable:-""}
 
-if [[ -z "@ld_supports_bindnow@" ]]; then
-  hardeningDisable+=" bindnow"
-fi
-
-if [[ -z "@ld_supports_relro@" ]]; then
-  hardeningDisable+=" relro"
-fi
+hardeningDisable+=" @hardening_unsupported_flags@"
 
 if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: Value of '$hardeningDisable': $hardeningDisable >&2; fi
 
-if [[ ! $hardeningDisable == "all" ]]; then
+if [[ ! $hardeningDisable =~ "all" ]]; then
   if [[ -n "$NIX_DEBUG" ]]; then echo 'HARDENING: Is active (not completely disabled with "all" flag)' >&2; fi
   for flag in "${hardeningFlags[@]}"
   do
