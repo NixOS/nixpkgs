@@ -7092,6 +7092,8 @@ in
 
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
+  cppcms = callPackage ../development/libraries/cppcms { };
+
   cppunit = callPackage ../development/libraries/cppunit { };
 
   cpputest = callPackage ../development/libraries/cpputest { };
