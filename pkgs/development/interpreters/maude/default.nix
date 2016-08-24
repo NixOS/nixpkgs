@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
 
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "stackprotector" ] ++
+    stdenv.lib.optionals stdenv.isi686 [ "pic" "fortify" ];
 
   preConfigure = ''
     configureFlagsArray=(
