@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs }:
+{ stdenv, fetchurl, fetchzip, pkgs }:
 
 let
   # This attrset can in theory be computed automatically, but for that to work nicely we need
@@ -6,9 +6,13 @@ let
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
   versions = {
-    "osx-10.11.2" = {
-      dtrace = "168";
-      xnu    = "3248.20.55";
+    "osx-10.11.6" = {
+      dtrace        = "168";
+      xnu           = "3248.60.10";
+      libpthread    = "138.10.4";
+    };
+    "osx-10.11.5" = {
+      Libc          = "1082.50.1"; # 10.11.6 still unreleased :/
     };
     "osx-10.10.5" = {
       adv_cmds      = "158";
@@ -185,13 +189,18 @@ let
     CoreOSMakefiles = applePackage "CoreOSMakefiles"   "osx-10.5"        "0kxp53spbn7109l7cvhi88pmfsi81lwmbws819b6wr3hm16v84f4" {};
     Csu             = applePackage "Csu"               "osx-10.10.5"     "0yh5mslyx28xzpv8qww14infkylvc1ssi57imhi471fs91sisagj" {};
     dtrace          = applePackage "dtrace"            "osx-10.10.5"     "0pp5x8dgvzmg9vvg32hpy2brm17dpmbwrcr4prsmdmfvd4767wcf" {};
-    dtracen         = applePackage "dtrace"            "osx-10.11.2"     "04mi0jy8gy0w59rk9i9dqznysv6fzz1v5mq779s41cp308yi0h1c" {};
+    dtracen         = applePackage "dtrace"            "osx-10.11.6"     "04mi0jy8gy0w59rk9i9dqznysv6fzz1v5mq779s41cp308yi0h1c" {};
     dyld            = applePackage "dyld"              "osx-10.10.5"     "167f74ln8pmfimwn6kwh199ylvy3fw72fd15da94mf34ii0zar6k" {};
     eap8021x        = applePackage "eap8021x"          "osx-10.10.5"     "1f37dpbcgrd1b14nrv2lpqrkap74myjbparz9masx92df6kcn7l2" {};
     IOKit           = applePackage "IOKit"             "osx-10.10.5"     "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x0m" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "0w30hvwqq8j5n90s3qyp0fccxflvrmmjnicjri4i1vd2g196jdgj" {};
     libauto         = applePackage "libauto"           "osx-10.9.5"      "17z27yq5d7zfkwr49r7f0vn9pxvj95884sd2k6lq6rfaz9gxqhy3" {};
-    Libc            = applePackage "Libc"              "osx-10.9.5"      "1jz5bx9l4q484vn28c6n9b28psja3rpxiqbj6zwrwvlndzmq1yz5" {};
+    Libc            = applePackage "Libc"              "osx-10.11.5"     "1qv7r0dgz06jy9i5agbqzxgdibb0m8ylki6g5n5pary88lzrawfd" {
+      Libc_10-9 = fetchzip {
+        url    = "http://www.opensource.apple.com/tarballs/Libc/Libc-997.90.3.tar.gz";
+        sha256 = "1xchgxkxg5288r2b9yfrqji2gsgdap92k4wx2dbjwslixws12pq7";
+      };
+    };
     Libc_old        = applePackage "Libc/825_40_1.nix" "osx-10.8.5"      "0xsx1im52gwlmcrv4lnhhhn9dyk5ci6g27k6yvibn9vj8fzjxwcf" {};
     libclosure      = applePackage "libclosure"        "osx-10.10.5"     "1zqy1zvra46cmqv6vsf1mcsz3a76r9bky145phfwh4ab6y15vjpq" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.9.5"      "1lc5033cmkwxy3r26gh9plimxshxfcbgw6i0j7mgjlnpk86iy5bk" {};
@@ -199,7 +208,7 @@ let
     Libinfo         = applePackage "Libinfo"           "osx-10.10.5"     "19n72s652rrqnc9hzlh4xq3h7xsfyjyklmcgyzyj0v0z68ww3z6h" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "02sd82ig2jvvyyfschmb4gpz6psnizri8sh6i982v341x6y4ysl7" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.9.5"      "164rx4za5z74s0mk9x0m1815r1m9kfal8dz3bfaw7figyjd6nqad" {};
-    libpthread      = applePackage "libpthread"        "osx-10.10.5"     "1p2y6xvsfqyakivr6d48fgrd163b5m9r045cxyfwrf8w0r33nfn3" {};
+    libpthread      = applePackage "libpthread"        "osx-10.11.6"     "1kbw738cmr9pa7pz1igmajs307clfq7gv2vm1sqdzhcnnjxbl28w" {};
     libresolv       = applePackage "libresolv"         "osx-10.10.5"     "0nvssf4qaqgs1dxwayzdy66757k99969f6c7n68n58n2yh6f5f6a" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.9.5"      "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim1gw43x4lvz4qydpp5kg2rh" {};
     libutil         = applePackage "libutil"           "osx-10.10.5"     "12gsvmj342n5d81kqwba68bmz3zf2757442g1sz2y5xmcapa3g5f" {};
@@ -209,7 +218,7 @@ let
     ppp             = applePackage "ppp"               "osx-10.10.5"     "01v7i0xds185glv8psvlffylfcfhbx1wgsfg74kx5rh3lyrigwrb" {};
     removefile      = applePackage "removefile"        "osx-10.10.5"     "1f2jw5irq6fz2jv5pag1w2ivfp8659v74f0h8kh0yx0rqw4asm33" {};
     Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
-    xnu             = applePackage "xnu"               "osx-10.9.5"      "1ssw5fzvgix20bw6y13c39ib0zs7ykpig3irlwbaccpjpci5jl0s" {};
+    xnu             = applePackage "xnu"               "osx-10.11.6"     "0yhziq4dqqcbjpf6vyqn8xhwva2zb525gndkx8cp8alzwp76jnr9" {};
 
     # Pending work... we can't change the above packages in place because the bootstrap depends on them, so we detach the expressions
     # here so we can work on them.
