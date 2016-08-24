@@ -7088,6 +7088,8 @@ in
 
   ctpl = callPackage ../development/libraries/ctpl { };
 
+  cppdb = callPackage ../development/libraries/cppdb { };
+
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
