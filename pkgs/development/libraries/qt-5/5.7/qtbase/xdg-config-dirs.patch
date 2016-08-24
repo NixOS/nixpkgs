@@ -1,12 +1,12 @@
-Index: qtbase-opensource-src-5.7.0/src/corelib/io/qsettings.cpp
-===================================================================
---- qtbase-opensource-src-5.7.0.orig/src/corelib/io/qsettings.cpp
-+++ qtbase-opensource-src-5.7.0/src/corelib/io/qsettings.cpp
-@@ -1161,6 +1161,23 @@ QConfFileSettingsPrivate::QConfFileSetti
+diff --git a/src/corelib/io/qsettings.cpp b/src/corelib/io/qsettings.cpp
+index 6e788d2..fabb95f 100644
+--- a/src/corelib/io/qsettings.cpp
++++ b/src/corelib/io/qsettings.cpp
+@@ -1161,6 +1161,23 @@ QConfFileSettingsPrivate::QConfFileSettingsPrivate(QSettings::Format format,
          confFiles[F_System | F_Application].reset(QConfFile::fromName(systemPath + appFile, false));
      confFiles[F_System | F_Organization].reset(QConfFile::fromName(systemPath + orgFile, false));
  
-+#if !defined(Q_OS_WIN)
++#if defined(Q_OS_LINUX)
 +    // Add directories specified in $XDG_CONFIG_DIRS
 +    const QString pathEnv = QString::fromLocal8Bit(getenv("XDG_CONFIG_DIRS"));
 +    if (!pathEnv.isEmpty()) {
@@ -26,16 +26,19 @@ Index: qtbase-opensource-src-5.7.0/src/corelib/io/qsettings.cpp
      for (i = 0; i < NumConfFiles; ++i) {
          if (confFiles[i]) {
              spec = i;
-Index: qtbase-opensource-src-5.7.0/src/corelib/io/qsettings_p.h
-===================================================================
---- qtbase-opensource-src-5.7.0.orig/src/corelib/io/qsettings_p.h
-+++ qtbase-opensource-src-5.7.0/src/corelib/io/qsettings_p.h
-@@ -246,7 +246,7 @@ public:
+diff --git a/src/corelib/io/qsettings_p.h b/src/corelib/io/qsettings_p.h
+index 9d7b667..b6e6433 100644
+--- a/src/corelib/io/qsettings_p.h
++++ b/src/corelib/io/qsettings_p.h
+@@ -246,7 +246,11 @@ public:
          F_Organization = 0x1,
          F_User = 0x0,
          F_System = 0x2,
--        NumConfFiles = 4
++#if defined(Q_OS_LINUX)
 +        NumConfFiles = 40 // HACK: increase NumConfFiles from 4 to 40 in order to accommodate more paths in $XDG_CONFIG_DIRS -- ellis
++#else
+         NumConfFiles = 4
++#endif
      };
  
      QSettings::Format format;
