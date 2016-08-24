@@ -13,15 +13,19 @@ stdenv.mkDerivation rec {
     sha256 = "1arkyizn5wbgvbh53aziv3s6lmd3wm9lqzkhxb3hijlp1y124hjg";
   };
 
-  buildInputs = [libpng];
+  buildInputs = [ libpng ];
+
+  # disable failing test on i686
+  # https://lists.gnu.org/archive/html/bug-plotutils/2016-04/msg00002.html
+  prePatch = stdenv.lib.optionalString stdenv.isi686 ''
+    substituteInPlace test/Makefile.in --replace 'spline.test' ' '
+  '';
 
   patches = map fetchurl (import ./debian-patches.nix);
 
   configureFlags = "--enable-libplotter"; # required for pstoedit
 
-  # disable tests on i686 like ubuntu
-  # https://lists.gnu.org/archive/html/bug-plotutils/2016-04/msg00002.html
-  doCheck = if stdenv.isi686 then false else true;
+  doCheck = true;
 
   meta = {
     description = "Powerful C/C++ library for exporting 2D vector graphics";
@@ -45,9 +49,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/plotutils/;
 
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [
-      stdenv.lib.maintainers.marcweber
-    ];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }
