@@ -422,6 +422,10 @@ in
 
   apitrace = qt55.callPackage ../applications/graphics/apitrace {};
 
+  argus = callPackage ../tools/networking/argus {};
+
+  argus-clients = callPackage ../tools/networking/argus-clients {};
+
   argtable = callPackage ../tools/misc/argtable {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
