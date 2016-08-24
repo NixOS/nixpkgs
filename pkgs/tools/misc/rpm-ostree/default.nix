@@ -20,8 +20,6 @@ in stdenv.mkDerivation rec {
     sha256 = "19jvnmy9zinx0j5nvy3h5abfv9d988kvyza09gljx16gll8qkbbf";
   };
 
-  NIX_CFLAGS_LINK = "-L${elfutils}/lib";
-
   buildInputs = [
     which autoconf automake pkgconfig libtool libcap ostree rpm glib libgsystem
     json_glib libarchive libhif librepo gtk_doc libxslt docbook_xsl docbook_xml_dtd_42
