@@ -30,10 +30,12 @@ stdenv.mkDerivation rec {
       patchShebangs $i
     done
     patchShebangs util/gen-mi-enum
+    substituteInPlace Makefile \
+      --subst-var-by sqliteDev ${sqlite.dev}
   '';
 
   makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
-                "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}" ]
+                "SAVEDIR=~/.crawl" ]
            ++ stdenv.lib.optionals tileMode [ "TILES=y" "dejavu_fonts=${dejavu_fonts}" ];
 
   postInstall = if tileMode then "mv $out/bin/crawl $out/bin/crawl-tiles" else "";
