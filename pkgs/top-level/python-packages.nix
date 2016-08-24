@@ -9366,11 +9366,11 @@ in modules // {
 
   django_raster = buildPythonPackage rec {
     name = "django-raster-${version}";
-    version = "0.2";
+    version = "0.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-raster/${name}.tar.gz";
-      sha256 = "1zdcxzj43qrv7cl6q9nb2dkfnsyn74dzf2igpnd6nbbfdnkif9bm";
+      sha256 = "0vn11y07wag7yvjzrk7m99xs3cqyaaaklwcsik9zbvw0kwp2khni";
     };
 
     propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2
