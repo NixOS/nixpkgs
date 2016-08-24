@@ -16702,6 +16702,11 @@ in
   suitesparse = suitesparse_4_4;
 
   superlu = callPackage ../development/libraries/science/math/superlu {};
+  
+  petsc = callPackage ../development/libraries/science/math/petsc {
+    mpi = pkgs.openmpi;
+	openblas = openblasCompat;
+  };
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 

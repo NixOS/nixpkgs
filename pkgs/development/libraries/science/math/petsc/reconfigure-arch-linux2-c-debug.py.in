@@ -1,0 +1,39 @@
+#!@python_interpreter@
+
+configure_options = [
+  '--known-level1-dcache-size=32768',
+  '--known-level1-dcache-linesize=32',
+  '--known-level1-dcache-assoc=0',
+  '--known-sizeof-char=1',
+  '--known-sizeof-void-p=8',
+  '--known-sizeof-short=2',
+  '--known-sizeof-int=4',
+  '--known-sizeof-long=8',
+  '--known-sizeof-long-long=8',
+  '--known-sizeof-float=4',
+  '--known-sizeof-double=8',
+  '--known-sizeof-size_t=8',
+  '--known-bits-per-byte=8',
+  '--known-memcmp-ok=1',
+  '--known-sizeof-MPI_Comm=4',
+  '--known-sizeof-MPI_Fint=4',
+  '--known-mpi-long-double=1',
+  '--known-mpi-int64_t=1',
+  '--known-mpi-c-double-complex=1',
+  '--known-sdot-returns-double=0',
+  '--known-snrm2-returns-double=0',
+  '--known-has-attribute-aligned=1',
+  '--prefix=@out@',
+  '--with-fc=0',
+  '--with-mpi-dir=@mpi_path@',
+  '--with-batch',
+  '--known-mpi-shared-libraries=0',
+  '--with-blas-lib=@blas_path@/lib/lib@blasLibName@.a',
+  '--with-lapack-lib=@liblapack_path@/lib/lib@liblapackLibName@.a',
+]
+if __name__ == '__main__':
+  import os
+  import sys
+  sys.path.insert(0, os.path.abspath('config'))
+  import configure
+  configure.petsc_configure(configure_options)
