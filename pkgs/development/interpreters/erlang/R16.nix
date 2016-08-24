@@ -2,7 +2,8 @@
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
 , wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null
-, enableDebugInfo ? false }:
+, enableDebugInfo ? false
+, Carbon ? null, Cocoa ? null }:
 
 assert wxSupport -> mesa != null && wxGTK != null && xorg != null;
 assert odbcSupport -> unixODBC != null;
@@ -23,7 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
     ] ++ optional wxSupport [ mesa wxGTK xorg.libX11 ]
-      ++ optional odbcSupport [ unixODBC ];
+      ++ optional odbcSupport [ unixODBC ]
+      ++ optional stdenv.isDarwin [ Carbon Cocoa ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
@@ -52,7 +54,7 @@ stdenv.mkDerivation rec {
   # Some erlang bin/ scripts run sed and awk
   postFixup = ''
     wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"
-    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${gnused}/bin/:${gawk}/bin"
+    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnused gawk ]}"
   '';
 
   setupHook = ./setup-hook.sh;

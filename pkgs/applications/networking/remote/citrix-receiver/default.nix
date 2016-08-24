@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper "$ICAInstDir/wfica -icaroot $ICAInstDir" "$out/bin/wfica" \
       --set ICAROOT "$ICAInstDir" \
-      --set GTK_PATH "${gtk}/lib/gtk-2.0:${gnome3.gnome_themes_standard}/lib/gtk-2.0" \
+      --set GTK_PATH "${gtk.out}/lib/gtk-2.0:${gnome3.gnome_themes_standard}/lib/gtk-2.0" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
       --set LD_LIBRARY_PATH "$libPath" \

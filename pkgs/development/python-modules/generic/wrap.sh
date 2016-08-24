@@ -8,7 +8,6 @@ wrapPythonPrograms() {
 # of dependencies.
 buildPythonPath() {
     local pythonPath="$1"
-    local python="@executable@"
     local path
 
     # Create an empty table of python paths (see doc on _addToPythonPath
@@ -51,9 +50,9 @@ wrapPythonProgramsIn() {
     for f in $(find "$dir" -type f -perm -0100); do
         # Rewrite "#! .../env python" to "#! /nix/store/.../python".
         # Strip suffix, like "3" or "2.7m" -- we don't have any choice on which
-        # Python to use besides one in $python anyway.
+        # Python to use besides one with this hook anyway.
         if head -n1 "$f" | grep -q '#!.*/env.*\(python\|pypy\)'; then
-            sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)[^ ]*^#! $python^"
+            sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)[^ ]*^#! @executable@^"
         fi
 
         # catch /python and /.python-wrapped

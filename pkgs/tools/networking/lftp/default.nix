@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnutls readline zlib libidn ];
 
   configureFlags = [
-    "--with-readline=${readline}"
+    "--with-readline=${readline.dev}"
   ];
 
   meta = with stdenv.lib; {

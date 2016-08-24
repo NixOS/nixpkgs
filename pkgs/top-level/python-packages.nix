@@ -22902,7 +22902,7 @@ in modules // {
 
     checkPhase = ''
       cd tests
-      export MAGICK_HOME="${pkgs.imagemagick}"
+      export MAGICK_HOME="${pkgs.imagemagick.dev}"
       export PYTHONPATH=$PYTHONPATH:../
       py.test
       cd ..

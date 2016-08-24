@@ -409,6 +409,7 @@
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
+  ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/strongswan.nix
   ./services/networking/supplicant.nix

@@ -1608,6 +1608,7 @@ in
   fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
   fontforge-gtk = callPackage ../tools/misc/fontforge {
     withGTK = true;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
   fontmatrix = callPackage ../applications/graphics/fontmatrix {};
@@ -1620,6 +1621,7 @@ in
 
   fox = callPackage ../development/libraries/fox/default.nix {
     libpng = libpng12;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
   fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
@@ -2465,6 +2467,10 @@ in
 
   lsb-release = callPackage ../os-specific/linux/lsb-release { };
 
+  # lsh installs `bin/nettle-lfib-stream' and so does Nettle.  Give the
+  # former a lower priority than Nettle.
+  lsh = lowPrio (callPackage ../tools/networking/lsh { });
+
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../os-specific/linux/lxc { };
@@ -3023,7 +3029,9 @@ in
 
   pciutils = callPackage ../tools/system/pciutils { };
 
-  pcsclite = callPackage ../tools/security/pcsclite { };
+  pcsclite = callPackage ../tools/security/pcsclite {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pcsctools = callPackage ../tools/security/pcsctools {
     inherit (perlPackages) pcscperl Glib Gtk2 Pango;
@@ -3498,7 +3506,9 @@ in
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
-  smartmontools = callPackage ../tools/system/smartmontools { };
+  smartmontools = callPackage ../tools/system/smartmontools {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   smbldaptools = callPackage ../tools/networking/smbldaptools {
     inherit (perlPackages) NetLDAP CryptSmbHash DigestSHA1;
@@ -4742,7 +4752,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = self.go_1_6;
+  go_1_7 = callPackage ../development/compilers/go/1.7.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
+  go = self.go_1_7;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -4793,10 +4807,14 @@ in
   openjdk = if stdenv.isDarwin then self.openjdk7 else self.openjdk8;
 
   jdk7 = self.openjdk7 // { outputs = [ "out" ]; };
-  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}" (self.openjdk7.jre // { outputs = [ "jre" ]; });
+  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      (self.openjdk7.jre // { outputs = [ "jre" ]; }));
 
   jdk8 = self.openjdk8 // { outputs = [ "out" ]; };
-  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}" (self.openjdk8.jre // { outputs = [ "jre" ]; });
+  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      (self.openjdk8.jre // { outputs = [ "jre" ]; }));
 
   jdk = if stdenv.isDarwin then self.jdk7 else self.jdk8;
   jre = if stdenv.isDarwin then self.jre7 else self.jre8;
@@ -5653,7 +5671,9 @@ in
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
+  erlangR16 = callPackage ../development/interpreters/erlang/R16.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
   erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -5939,7 +5959,9 @@ in
 
   racket = callPackage ../development/interpreters/racket { };
 
-  rakudo = callPackage ../development/interpreters/rakudo { };
+  rakudo = callPackage ../development/interpreters/rakudo {
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
 
   rascal = callPackage ../development/interpreters/rascal { };
 
@@ -6432,8 +6454,9 @@ in
   gotty = callPackage ../servers/gotty { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
-  gradle = self.gradleGen.gradleLatest;
-  gradle25 = self.gradleGen.gradle25;
+  gradle = self.gradleGen.gradle_latest;
+  gradle_2_14 = self.gradleGen.gradle_2_14;
+  gradle_2_5 = self.gradleGen.gradle_2_5;
 
   gperf = callPackage ../development/tools/misc/gperf { };
 
@@ -7292,7 +7315,9 @@ in
 
   gephi = callPackage ../applications/science/misc/gephi { };
 
-  gegl = callPackage ../development/libraries/gegl { };
+  gegl = callPackage ../development/libraries/gegl {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix { };
 
@@ -7345,7 +7370,9 @@ in
   gle = callPackage ../development/libraries/gle { };
 
   glew = callPackage ../development/libraries/glew { };
-  glew110 = callPackage ../development/libraries/glew/1.10.nix { };
+  glew110 = callPackage ../development/libraries/glew/1.10.nix {
+    inherit (darwin.apple_sdk.frameworks) AGL;
+  };
 
   glfw = self.glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
@@ -8092,7 +8119,9 @@ in
 
   libffi = callPackage ../development/libraries/libffi { };
 
-  libfreefare = callPackage ../development/libraries/libfreefare { };
+  libfreefare = callPackage ../development/libraries/libfreefare {
+    inherit (darwin) libobjc;
+  };
 
   libftdi = callPackage ../development/libraries/libftdi { };
 
@@ -8476,7 +8505,9 @@ in
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
 
-  libstatgrab = callPackage ../development/libraries/libstatgrab { };
+  libstatgrab = callPackage ../development/libraries/libstatgrab {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   libsvm = callPackage ../development/libraries/libsvm { };
 
@@ -8881,7 +8912,8 @@ in
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
-  openal = openalSoft;
+  openal = self.openalSoft;
+
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
   };
@@ -9310,9 +9342,7 @@ in
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
-    pulseaudioSupport = if (config ? pulseaudio)
-                        then config.pulseaudio
-                        else stdenv.isLinux;
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa;
   };
 
@@ -9336,7 +9366,8 @@ in
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
-    pulseaudioSupport = config.pulseaudio or false; # better go through ALSA
+    udevSupport = stdenv.isLinux;
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
 
@@ -10798,7 +10829,7 @@ in
 
   checksec = callPackage ../os-specific/linux/checksec { };
 
-  cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
+  cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_1; # conky can use 5.2, but toluapp can not
@@ -10840,6 +10871,8 @@ in
     };
 
     opencflite = callPackage ../os-specific/darwin/opencflite {};
+
+    swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation {};
 
     xcode = callPackage ../os-specific/darwin/xcode {};
 
@@ -12484,7 +12517,9 @@ in
 
   cbc = callPackage ../applications/science/math/cbc { };
 
-  cddiscid = callPackage ../applications/audio/cd-discid { };
+  cddiscid = callPackage ../applications/audio/cd-discid {
+    inherit (darwin) IOKit;
+  };
 
   cdparanoia = self.cdparanoiaIII;
 
@@ -13316,7 +13351,9 @@ in
 
   svox = callPackage ../applications/audio/svox { };
 
-  gkrellm = callPackage ../applications/misc/gkrellm { };
+  gkrellm = callPackage ../applications/misc/gkrellm {
+    inherit (darwin) IOKit;
+  };
 
   gmu = callPackage ../applications/audio/gmu { };
 
@@ -15131,6 +15168,10 @@ in
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2;
     libva = libva-full; # also wants libva-x11
+  };
+
+  vlc_npapi = callPackage ../applications/video/vlc/plugin.nix {
+    gtk = gtk2;
   };
 
   vlc_qt5 = qt5.vlc;

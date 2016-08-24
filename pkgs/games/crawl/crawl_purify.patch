@@ -7,7 +7,7 @@ index b7e2fbf..5ff23db 100644
  
  ifndef CROSSHOST
 -	SQLITE_INCLUDE_DIR := /usr/include
-+	SQLITE_INCLUDE_DIR := ${sqlite}/include
++	SQLITE_INCLUDE_DIR := ${sqlite.dev}/include
  else
  	# This is totally wrong, works only with some old-style setups, and
  	# on some architectures of Debian/new FHS multiarch -- excluding, for

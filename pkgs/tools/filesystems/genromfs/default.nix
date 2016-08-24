@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "prefix = /usr" "prefix = $out"
+    substituteInPlace Makefile \
+      --replace "prefix = /usr" "prefix = $out" \
+      --replace "gcc" "cc"
   '';
 
   meta = with stdenv.lib; {
