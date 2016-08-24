@@ -30,8 +30,6 @@ stdenv.mkDerivation {
     moveToOutput share "$dev" # just aclocal
   '';
 
-  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
-
   enableParallelBuilding = true;
 
   meta = {
