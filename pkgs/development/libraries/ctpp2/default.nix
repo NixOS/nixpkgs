@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gcc48 }:
+{ stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   name = "ctpp2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z22zfw9lb86z4hcan9hlvji49c9b7vznh7gjm95gnvsh43zsgx8";
   };
 
-  buildInputs = [ cmake gcc48 ];
+  buildInputs = [ cmake ];
 
   patchPhase = ''
     # include <unistd.h> to fix undefined getcwd
