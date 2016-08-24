@@ -11,13 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua pkgconfig autoreconfHook ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
-  propagatedBuildInputs = [ popt nss db bzip2 libarchive ];
+  propagatedBuildInputs = [ popt elfutils nss db bzip2 libarchive ];
 
-  # Note: we don't add elfutils to buildInputs, since it provides a
-  # bad `ld' and other stuff.
-  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${elfutils}/include";
-
-  NIX_CFLAGS_LINK = "-L${elfutils}/lib";
+  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
   postPatch = ''
     # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here

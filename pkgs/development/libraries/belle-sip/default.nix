@@ -9,14 +9,16 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "belle-sip-1.4.1";
+  name = "belle-sip-1.4.2";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/belle-sip/${name}.tar.gz";
-    sha256 = "0q1d3fqsrxi3kxcjcibr376js25h6in8c1hm7c53wz252jx6f42b";
+    sha256 = "0c48jh3kjz58swvx1m63ijx5x0c0hf37d803d99flk2l10kbfb42";
   };
 
   nativeBuildInputs = [ jre ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # belle-sip.pc doesn't have a library path for antlr3c or polarssl
   propagatedBuildInputs = [ libantlr3c polarssl ];
