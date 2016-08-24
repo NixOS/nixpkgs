@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
-, lua, lua5_sockets, libuchardet, rubberband
+, lua, lua5_sockets, libuchardet, libiconv ? null, darwin
 
 , x11Support ? true,
     mesa       ? null,
@@ -13,18 +13,19 @@
     wayland      ? null,
     libxkbcommon ? null
 
+, rubberbandSupport  ? !stdenv.isDarwin, rubberband ? null
 , xineramaSupport    ? true,  libXinerama   ? null
 , xvSupport          ? true,  libXv         ? null
 , sdl2Support        ? true,  SDL2          ? null
-, alsaSupport        ? true,  alsaLib       ? null
+, alsaSupport        ? !stdenv.isDarwin,  alsaLib       ? null
 , screenSaverSupport ? true,  libXScrnSaver ? null
 , vdpauSupport       ? true,  libvdpau      ? null
-, dvdreadSupport     ? true,  libdvdread    ? null
-, dvdnavSupport      ? true,  libdvdnav     ? null
+, dvdreadSupport     ? !stdenv.isDarwin,  libdvdread    ? null
+, dvdnavSupport      ? dvdreadSupport,  libdvdnav     ? null
 , bluraySupport      ? true,  libbluray     ? null
 , speexSupport       ? true,  speex         ? null
 , theoraSupport      ? true,  libtheora     ? null
-, pulseSupport       ? true,  libpulseaudio ? null
+, pulseSupport       ? !stdenv.isDarwin,  libpulseaudio ? null
 , bs2bSupport        ? true,  libbs2b       ? null
 , cacaSupport        ? true,  libcaca       ? null
 , libpngSupport      ? true,  libpng        ? null
@@ -39,11 +40,12 @@
 
 with stdenv.lib;
 
-let 
+let
   available = x: x != null;
 in
 assert x11Support         -> all available [mesa libX11 libXext libXxf86vm];
 assert waylandSupport     -> all available [wayland libxkbcommon];
+assert rubberbandSupport  -> available rubberband;
 assert xineramaSupport    -> x11Support && available libXinerama;
 assert xvSupport          -> x11Support && available libXv;
 assert sdl2Support        -> available SDL2;
@@ -109,7 +111,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg freetype libass libpthreadstubs
-    lua lua5_sockets libuchardet rubberband
+    lua lua5_sockets libuchardet
   ] ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv
     ++ optional theoraSupport      libtheora
@@ -118,6 +120,10 @@ in stdenv.mkDerivation rec {
     ++ optional bluraySupport      libbluray
     ++ optional jackaudioSupport   libjack2
     ++ optional pulseSupport       libpulseaudio
+    ++ optional stdenv.isDarwin    libiconv
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+       Cocoa CoreAudio ])
+    ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport       libvdpau
     ++ optional speexSupport       speex
@@ -158,7 +164,7 @@ in stdenv.mkDerivation rec {
     homepage = http://mpv.io;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fuuzetsu ];
-    platforms = platforms.linux;
+    platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''
       mpv is a free and open-source general-purpose video player,
