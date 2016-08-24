@@ -1603,6 +1603,7 @@ in
   fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
   fontforge-gtk = callPackage ../tools/misc/fontforge {
     withGTK = true;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
   fontmatrix = callPackage ../applications/graphics/fontmatrix {};
@@ -1615,6 +1616,7 @@ in
 
   fox = callPackage ../development/libraries/fox/default.nix {
     libpng = libpng12;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
   fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
@@ -3018,7 +3020,9 @@ in
 
   pciutils = callPackage ../tools/system/pciutils { };
 
-  pcsclite = callPackage ../tools/security/pcsclite { };
+  pcsclite = callPackage ../tools/security/pcsclite {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pcsctools = callPackage ../tools/security/pcsctools {
     inherit (perlPackages) pcscperl Glib Gtk2 Pango;
@@ -3493,7 +3497,9 @@ in
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
-  smartmontools = callPackage ../tools/system/smartmontools { };
+  smartmontools = callPackage ../tools/system/smartmontools {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   smbldaptools = callPackage ../tools/networking/smbldaptools {
     inherit (perlPackages) NetLDAP CryptSmbHash DigestSHA1;
@@ -4733,7 +4739,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = self.go_1_6;
+  go_1_7 = callPackage ../development/compilers/go/1.7.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
+  go = self.go_1_7;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -5648,7 +5658,9 @@ in
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
+  erlangR16 = callPackage ../development/interpreters/erlang/R16.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
   erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -5934,7 +5946,9 @@ in
 
   racket = callPackage ../development/interpreters/racket { };
 
-  rakudo = callPackage ../development/interpreters/rakudo { };
+  rakudo = callPackage ../development/interpreters/rakudo {
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
 
   rascal = callPackage ../development/interpreters/rascal { };
 
@@ -7285,7 +7299,9 @@ in
 
   gephi = callPackage ../applications/science/misc/gephi { };
 
-  gegl = callPackage ../development/libraries/gegl { };
+  gegl = callPackage ../development/libraries/gegl {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix { };
 
@@ -7338,7 +7354,9 @@ in
   gle = callPackage ../development/libraries/gle { };
 
   glew = callPackage ../development/libraries/glew { };
-  glew110 = callPackage ../development/libraries/glew/1.10.nix { };
+  glew110 = callPackage ../development/libraries/glew/1.10.nix {
+    inherit (darwin.apple_sdk.frameworks) AGL;
+  };
 
   glfw = self.glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
@@ -8085,7 +8103,9 @@ in
 
   libffi = callPackage ../development/libraries/libffi { };
 
-  libfreefare = callPackage ../development/libraries/libfreefare { };
+  libfreefare = callPackage ../development/libraries/libfreefare {
+    inherit (darwin) libobjc;
+  };
 
   libftdi = callPackage ../development/libraries/libftdi { };
 
@@ -8469,7 +8489,9 @@ in
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
 
-  libstatgrab = callPackage ../development/libraries/libstatgrab { };
+  libstatgrab = callPackage ../development/libraries/libstatgrab {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   libsvm = callPackage ../development/libraries/libsvm { };
 
@@ -8845,7 +8867,9 @@ in
 
   non = callPackage ../applications/audio/non { };
 
-  nspr = callPackage ../development/libraries/nspr { };
+  nspr = callPackage ../development/libraries/nspr {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
@@ -12460,7 +12484,9 @@ in
 
   cbc = callPackage ../applications/science/math/cbc { };
 
-  cddiscid = callPackage ../applications/audio/cd-discid { };
+  cddiscid = callPackage ../applications/audio/cd-discid {
+    inherit (darwin) IOKit;
+  };
 
   cdparanoia = self.cdparanoiaIII;
 
@@ -13293,7 +13319,9 @@ in
 
   svox = callPackage ../applications/audio/svox { };
 
-  gkrellm = callPackage ../applications/misc/gkrellm { };
+  gkrellm = callPackage ../applications/misc/gkrellm {
+    inherit (darwin) IOKit;
+  };
 
   gmu = callPackage ../applications/audio/gmu { };
 

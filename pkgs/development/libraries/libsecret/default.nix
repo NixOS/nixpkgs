@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cychxc3ff8fp857iikw0n2s13s2mhw2dn1mr632f7w3sn6vvrww";
   };
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl ];
   buildInputs = [ libgcrypt gobjectIntrospection vala_0_32 ];

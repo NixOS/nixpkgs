@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nha21rbdhl10vdpaq8d5v5fszvggl1xar555pvrnvm2y443ffpp";
   };
 
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+
   buildInputs = [ gtk2 which pkgconfig intltool file ];
 
   doCheck = true;

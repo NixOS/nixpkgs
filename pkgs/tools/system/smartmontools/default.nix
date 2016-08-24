@@ -1,4 +1,5 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl
+, IOKit ? null }:
 
 let
   version = "6.4";
@@ -17,6 +18,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
     sha256 = "11bsxcghh7adzdklcslamlynydxb708vfz892d5w7agdq405ddza";
   };
+
+  buildInputs = [] ++ stdenv.lib.optional stdenv.isDarwin IOKit;
 
   patchPhase = ''
     cp ${driverdb} drivedb.h

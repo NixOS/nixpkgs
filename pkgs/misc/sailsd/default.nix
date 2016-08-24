@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
     chmod 755 -R $sourceRoot/libsailing
   '';
 
+  patchPhase = ''
+    substituteInPlace Makefile \
+      --replace gcc cc
+  '';
+
   meta = with stdenv.lib; {
     description = "Simulator daemon for autonomous sailing boats";
     homepage = https://github.com/sails-simulator/sailsd;

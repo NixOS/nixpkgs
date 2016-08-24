@@ -9,6 +9,8 @@ stdenv.mkDerivation {
 
   buildInputs = [xlibsWrapper];
 
+  buildFlags = [ "CC=cc" ];
+
   installPhase = ''
     mkdir -pv "$out/bin"
     mkdir -pv "$out/share/man/man1"
