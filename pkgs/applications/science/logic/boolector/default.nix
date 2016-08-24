@@ -23,10 +23,8 @@ let
   license = with stdenv.lib.licenses; if useV16 then unfreeRedistributable else gpl3;
 in
 stdenv.mkDerivation (boolectorPkg // {
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib stdenv.glibc.static zlib.static ];
   enableParallelBuilding = false;
-
-  buildPhase = "./build.sh";
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/include
