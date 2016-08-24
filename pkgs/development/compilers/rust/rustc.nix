@@ -2,7 +2,6 @@
 , llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git, cmake, curl
 
 , isRelease ? false
-, needsCmake ? false
 , shortVersion
 , forceBundledLLVM ? false
 , srcSha, srcRev
@@ -81,7 +80,7 @@ stdenv.mkDerivation {
 
     # Fix the configure script to not require curl as we won't use it
     sed -i configure \
-      -e '/probe_need CFG_CURLORWGET/d'
+      -e '/probe_need CFG_CURL curl/d'
 
     # Fix the use of jemalloc prefixes which our jemalloc doesn't have
     # TODO: reenable if we can figure out how to get our jemalloc to work
@@ -92,7 +91,7 @@ stdenv.mkDerivation {
     rm -vr src/test/run-make/linker-output-non-utf8/
 
     # Useful debugging parameter
-    #export VERBOSE=1
+    # export VERBOSE=1
   '';
 
   preConfigure = ''
@@ -101,14 +100,12 @@ stdenv.mkDerivation {
     configureFlagsArray+=("--infodir=$out/share/info")
   '';
 
-  # New -beta and -unstable unfortunately need cmake for compiling
-  # llvm-rt but don't use it for the normal build. This disables cmake
-  # in Nix.
-  dontUseCmakeConfigure = needsCmake;
+  # rustc unfortunately need cmake for compiling llvm-rt but doesn't
+  # use it for the normal build. This disables cmake in Nix.
+  dontUseCmakeConfigure = true;
 
   # ps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git ]
-    ++ stdenv.lib.optional needsCmake [ cmake curl ];
+  nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git cmake ];
 
   buildInputs = [ ncurses ] ++ targetToolchains
     ++ optional (!forceBundledLLVM) llvmShared;

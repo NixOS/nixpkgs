@@ -3,17 +3,13 @@
 
 rec {
   rustc = callPackage ./rustc.nix {
-    shortVersion = "master-1.12.0";
+    shortVersion = "master-1.13.0";
     forceBundledLLVM = false;
-    needsCmake = true;
     configureFlags = [ "--release-channel=nightly" ];
-    srcRev = "d9a911d236cbecb47775276ba51a5f9111bdbc9c";
-    srcSha = "07wybqvnw99fljmcy33vb9iwirmp10cwy47n008p396s7pb852hv";
+    srcRev = "308824acecf902f2b6a9c1538bde0324804ba68e";
+    srcSha = "17zv1a27a7w6n3a22brriqx5m6i4s3nsj7mlnpliwghlbz8q7384";
     patches = [
       ./patches/disable-lockfile-check.patch
-      # Drop this patch after
-      # https://github.com/rust-lang/rust/pull/35140 gets merged
-      ./patches/tcp-stress-test-run-a-smaller-number-of-threads.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
     inherit targets;
     inherit targetPatches;
