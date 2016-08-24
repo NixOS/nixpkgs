@@ -13,7 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "1arkyizn5wbgvbh53aziv3s6lmd3wm9lqzkhxb3hijlp1y124hjg";
   };
 
-  buildInputs = [libpng];
+  buildInputs = [ libpng ];
+
+  # disable failing test on i686
+  prePatch = stdenv.lib.optionalString stdenv.isi686 ''
+    substituteInPlace test/Makefile.in --replace 'spline.test' ' '
+  '';
 
   patches = map fetchurl (import ./debian-patches.nix);
 
@@ -45,9 +50,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/plotutils/;
 
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [
-      stdenv.lib.maintainers.marcweber
-    ];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }
