@@ -7094,6 +7094,8 @@ in
 
   ctpl = callPackage ../development/libraries/ctpl { };
 
+  cppdb = callPackage ../development/libraries/cppdb { };
+
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
   cppcms = callPackage ../development/libraries/cppcms { };
