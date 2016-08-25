@@ -10,7 +10,7 @@ let
     rev = "refs/tags/v${version}";
   };
   buildInputs = [
-    stdenv.cc.libc.static
+    (stdenv.lib.getOutput "static" stdenv.cc.libc)
   ];
 in
 stdenv.mkDerivation {
