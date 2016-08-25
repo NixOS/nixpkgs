@@ -1869,6 +1869,8 @@ in
     ghostscript = null;
   };
 
+  groonga = callPackage ../servers/search/groonga { };
+
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
