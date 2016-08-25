@@ -12102,6 +12102,8 @@ in
 
   orbitron = callPackage ../data/fonts/orbitron { };
 
+  oxygenfonts = callPackage ../data/fonts/oxygenfonts { };
+
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   pecita = callPackage ../data/fonts/pecita {};
