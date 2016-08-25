@@ -9068,12 +9068,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.12";
+    version = "1.8.14";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "04vi1rmin161drssqhi9n54j6mz8l6vs46pc7zbn50vzacysg3xn";
+      sha256 = "0ka6slangri68qaf91gl10l9m14f6waj4ncz543rbcpvj25w90jj";
     };
 
     # too complicated to setup
