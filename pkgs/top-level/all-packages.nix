@@ -2228,6 +2228,8 @@ in
 
   kst = qt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
+  kytea = callPackage ../tools/text/kytea { };
+
   leocad = callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
