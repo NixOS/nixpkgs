@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     phonon automoc4 chromaprint id3lib taglib mp4v2 flac libogg libvorbis
     qt zlib readline makeWrapper ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DWITH_APPS=Qt;CLI" ];
+  cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
   NIX_LDFLAGS = "-lm -lpthread";
 
   preConfigure = ''

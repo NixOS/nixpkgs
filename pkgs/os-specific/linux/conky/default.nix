@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     ++ optional  weatherXoapSupport libxml2
     ;
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
+  cmakeFlags = []
     ++ optional docsSupport         "-DMAINTAINER_MODE=ON"
     ++ optional curlSupport         "-DBUILD_CURL=ON"
     ++ optional (!ibmSupport)       "-DBUILD_IBM=OFF"
