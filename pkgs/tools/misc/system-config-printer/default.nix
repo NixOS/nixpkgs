@@ -59,6 +59,10 @@ in stdenv.mkDerivation rec {
 
       # The below line will be unneeded when the next upstream release arrives.
       sed -i -e "s|/usr/bin|$out/bin|" "$out/share/dbus-1/services/org.fedoraproject.Config.Printing.service"
+
+      # Manually expand literal "$(out)", which have failed to expand
+      sed -e "s|ExecStart=\$(out)|ExecStart=$out|" \
+          -i "$out/etc/systemd/system/configure-printer@.service"
     '';
 
   meta = {

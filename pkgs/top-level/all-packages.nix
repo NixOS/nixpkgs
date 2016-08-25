@@ -1876,6 +1876,8 @@ in
     ghostscript = null;
   };
 
+  groonga = callPackage ../servers/search/groonga { };
+
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
@@ -2228,6 +2230,8 @@ in
   kronometer = qt5.callPackage ../tools/misc/kronometer { };
 
   kst = qt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
+
+  kytea = callPackage ../tools/text/kytea { };
 
   leocad = callPackage ../applications/graphics/leocad { };
 
@@ -5849,10 +5853,6 @@ in
 
   phpPackages = php56Packages;
 
-  php55Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php55;
-  });
-
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
   });
@@ -5862,7 +5862,6 @@ in
   });
 
   inherit (callPackages ../development/interpreters/php { })
-    php55
     php56
     php70;
 
@@ -14448,7 +14447,7 @@ in
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
-  qmmp = callPackage ../applications/audio/qmmp { };
+  qmmp = qt5.callPackage ../applications/audio/qmmp { };
 
   qnotero = callPackage ../applications/office/qnotero { };
 
@@ -17012,7 +17011,7 @@ in
     libusb = libusb1;
   };
 
-  cups_filters = callPackage ../misc/cups/filters.nix { };
+  cups-filters = callPackage ../misc/cups/filters.nix { };
 
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
