@@ -1,9 +1,18 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils findutils gnused nix wget
 
+SRCS=
+if [ -d "$1" ]; then
+    SRCS="$(pwd)/$1/srcs.nix"
+    . "$1/fetch.sh"
+else
+    SRCS="$(pwd)/$(dirname $1)/srcs.nix"
+    . "$1"
+fi
+
 tmp=$(mktemp -d)
 pushd $tmp >/dev/null
-wget -nH -r -c --no-parent "$@" >/dev/null
+wget -nH -r -c --no-parent "${WGET_ARGS[@]}" >/dev/null
 
 csv=$(mktemp)
 find . -type f | while read src; do
@@ -15,8 +24,8 @@ find . -type f | while read src; do
     echo "$name,$version,$src,$filename" >>$csv
 done
 
-cat <<EOF
-# DO NOT EDIT! This file is generated automatically by fetchsrcs.sh
+cat >"$SRCS" <<EOF
+# DO NOT EDIT! This file is generated automatically by fetch-kde-qt.sh
 { fetchurl, mirror }:
 
 {
@@ -29,7 +38,7 @@ gawk -F , "{ print \$1 }" $csv | sort | uniq | while read name; do
     filename=$(gawk -F , "/^$name,$latestVersion,/ { print \$4 }" $csv)
     url="${src:2}"
     sha256=$(nix-hash --type sha256 --base32 --flat "$src")
-    cat <<EOF
+    cat >>"$SRCS" <<EOF
   $name = {
     version = "$latestVersion";
     src = fetchurl {
@@ -41,7 +50,7 @@ gawk -F , "{ print \$1 }" $csv | sort | uniq | while read name; do
 EOF
 done
 
-echo "}"
+echo "}" >>"$SRCS"
 
 popd >/dev/null
 rm -fr $tmp >/dev/null
