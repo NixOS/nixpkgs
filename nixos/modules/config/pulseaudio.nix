@@ -34,7 +34,7 @@ let
         ${addModuleIf cfg.zeroconf.publish.enable "module-zeroconf-publish"}
         ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
         ${addModuleIf cfg.tcp.enable (concatStringsSep " "
-           ([ "load-module module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
+           ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
         ${cfg.extraConfig}
       '';
     };
