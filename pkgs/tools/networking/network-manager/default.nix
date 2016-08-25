@@ -7,12 +7,12 @@
 stdenv.mkDerivation rec {
   name    = "network-manager-${version}";
   pname   = "NetworkManager";
-  major   = "1.2";
+  major   = "1.4";
   version = "${major}.2";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
-    sha256 = "41d8082e027f58bb5fa4181f93742606ab99c659794a18e2823eff22df0eecd9";
+    sha256 = "a864e347ddf6da8dabd40e0185b8c10a655d4a94b45cbaa2b3bb4b5e8360d204";
   };
 
   preConfigure = ''
