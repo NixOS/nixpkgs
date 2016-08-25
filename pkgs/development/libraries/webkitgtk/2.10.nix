@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   # XXX: WebKit2 missing include path for gst-plugins-base.
   # Filled: https://bugs.webkit.org/show_bug.cgi?id=148894
-  NIX_CFLAGS_COMPILE = "-I${gst-plugins-base}/include/gstreamer-1.0";
+  NIX_CFLAGS_COMPILE = "-I${gst-plugins-base.dev}/include/gstreamer-1.0";
 
   nativeBuildInputs = [
     cmake perl python ruby bison gperf sqlite
