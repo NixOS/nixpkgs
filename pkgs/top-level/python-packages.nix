@@ -7526,7 +7526,7 @@ in modules // {
     };
   };
 
-  nxt_python = buildPythonPackage rec {
+  nxt-python = buildPythonPackage rec {
     version = "unstable-20160819";
     pname = "nxt-python";
     name = "${pname}-${version}";
