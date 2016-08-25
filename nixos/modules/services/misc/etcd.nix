@@ -28,13 +28,13 @@ in {
 
     listenClientUrls = mkOption {
       description = "Etcd list of URLs to listen on for client traffic.";
-      default = ["http://localhost:2379"];
+      default = ["http://127.0.0.1:2379"];
       type = types.listOf types.str;
     };
 
     listenPeerUrls = mkOption {
       description = "Etcd list of URLs to listen on for peer traffic.";
-      default = ["http://localhost:2380"];
+      default = ["http://127.0.0.1:2380"];
       type = types.listOf types.str;
     };
 
