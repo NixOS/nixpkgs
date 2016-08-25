@@ -7130,6 +7130,29 @@ in modules // {
     };
   };
 
+  lightblue = buildPythonPackage rec {
+    pname = "lightblue";
+    version = "0.4";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://sourceforge/${pname}/${name}.tar.gz";
+      sha256 = "016h1mlhpqxjj25lcvl4fqc19k8ifmsv6df7rhr12fyfcrp5i14d";
+    };
+
+    buildInputs = [ pkgs.bluez pkgs.openobex ];
+
+
+    meta = {
+      homepage = http://lightblue.sourceforge.net;
+      description = "Cross-platform Bluetooth API for Python";
+      maintainers = with maintainers; [ leenaars ];
+      license = licenses.gpl3;
+      platform = platforms.all;
+    };
+  };
+
+
   lightning = buildPythonPackage rec {
     version = "1.2.1";
     name = "lightning-python-${version}";
@@ -7503,6 +7526,33 @@ in modules // {
     };
   };
 
+  nxt_python = buildPythonPackage rec {
+    version = "unstable-20160819";
+    pname = "nxt-python";
+    name = "${pname}-${version}";
+
+    propagatedBuildInputs = with self; [ pyusb pybluez pyfantom pkgs.git ];
+    disabled = isPy3k;
+
+    src = pkgs.fetchgit {
+      url = "http://github.com/Eelviny/nxt-python";
+      rev = "479e20b7491b28567035f4cee294c4a2af629297";
+      sha256 = "0mcsajhgm2wy4iy2lhmyi3xibgmbixbchanzmlhsxk6qyjccn9r9";
+      branchName= "pyusb";
+    };
+
+    # Tests fail on Mac dependency
+    doCheck = false;
+
+    meta = {
+      description = "Python driver/interface for Lego Mindstorms NXT robot";
+      homepage = https://github.com/Eelviny/nxt-python;
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ leenaars ];
+    };
+  };
+
   odfpy = buildPythonPackage rec {
     version = "0.9.6";
     name = "odfpy-${version}";
@@ -7804,6 +7854,30 @@ in modules // {
       maintainers = with maintainers; [ auntie ];
       license = licenses.gpl2;
       platform = platforms.all;
+    };
+  };
+
+   pybluez = buildPythonPackage rec {
+    version = "unstable-20160819";
+    pname = "pybluez";
+    name = "${pname}-${version}";
+
+    propagatedBuildInputs = with self; [ pkgs.bluez ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "karulis";
+      repo = "${pname}";
+      rev = "a0b226a61b166e170d48539778525b31e47a4731";
+      sha256 = "104dm5ngfhqisv1aszdlr3szcav2g3bhsgzmg4qfs09b3i5zj047";
+    };
+
+    # the tests do not pass
+    doCheck = false;
+
+    meta = {
+      description = "Bluetooth Python extension module";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ leenaars ];
     };
   };
 
@@ -18615,6 +18689,25 @@ in modules // {
     };
   };
 
+  pyfantom = buildPythonPackage rec {
+     name = "pyfantom-${version}";
+     version = "unstable-2013-12-18";
+
+     src = pkgs.fetchgit {
+       url = "http://git.ni.fr.eu.org/pyfantom.git";
+       sha256 = "1m53n8bxslq5zmvcf7i1xzsgq5bdsf1z529br5ypmj5bg0s86j4q";
+     };
+
+     # No tests included
+     doCheck = false;
+
+     meta = {
+       homepage = http://pyfantom.ni.fr.eu.org/;
+       description = "Wrapper for the LEGO Mindstorms Fantom Driver";
+       license = licenses.gpl2;
+     };
+   };
+
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
@@ -26135,6 +26228,8 @@ in modules // {
       sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
     '';
 
+    propagatedBuildInputs = [ pkgs.libusb ];
+
     # No tests included
     doCheck = false;
 
@@ -26159,6 +26254,8 @@ in modules // {
     # Requires pyusb 1.0.0b1.
     # Likely current pyusb will work but we need to patch the hard requirement then.
     broken = true;
+
+    patchPhase = "substituteInPlace setup.py --replace pyusb==1.0.0b1 pyusb==1.0.0";
 
     propagatedBuildInputs = with self; [ pyusb ];
 
