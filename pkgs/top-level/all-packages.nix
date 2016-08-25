@@ -9246,6 +9246,8 @@ in
 
   qwt = callPackage ../development/libraries/qwt {};
 
+  qwtPlot3D = callPackage ../development/libraries/qwtPlot3D { };
+
   qxt = callPackage ../development/libraries/qxt {};
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
