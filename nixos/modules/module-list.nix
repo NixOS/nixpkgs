@@ -256,7 +256,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/packagekit.nix
   ./services/misc/parsoid.nix
-  ./services/misc/phd.nix
+  ./services/misc/phabricator.nix
   ./services/misc/plex.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
