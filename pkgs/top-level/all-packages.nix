@@ -4735,9 +4735,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go_1_7 = callPackage ../development/compilers/go/1.7.nix {
+  go_1_7 = callPackage ../development/compilers/go/1.7.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    stdenv = stdenvAdapters.overrideCC pkgs.stdenv pkgs.clang_38;
+  });
 
   go = self.go_1_7;
 
