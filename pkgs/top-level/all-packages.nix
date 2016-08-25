@@ -7904,6 +7904,9 @@ in
 
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
 
+  libagar = callPackage ../development/libraries/libagar { };
+  libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
+
   libao = callPackage ../development/libraries/libao {
     usePulseAudio = config.pulseaudio or true;
     inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit;
