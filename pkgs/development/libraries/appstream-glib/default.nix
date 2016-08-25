@@ -5,13 +5,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.5.12";
+  name = "appstream-glib-0.5.15";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "00b0441f409vzgy0znn42k093w7hwv3495qvsakxnhvk1h1ws23s";
+    sha256 = "0wjc44hl6ni8jznfcrfb7dmhdbmkv3p32r436is67959p12q5krq";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool ];
