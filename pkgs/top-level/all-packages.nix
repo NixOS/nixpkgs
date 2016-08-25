@@ -14447,7 +14447,7 @@ in
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
-  qmmp = callPackage ../applications/audio/qmmp { };
+  qmmp = qt5.callPackage ../applications/audio/qmmp { };
 
   qnotero = callPackage ../applications/office/qnotero { };
 
