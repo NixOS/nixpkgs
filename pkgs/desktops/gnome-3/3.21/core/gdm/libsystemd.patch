@@ -1,0 +1,21 @@
+https://github.com/GNOME/gdm/commit/eee5bf72c9bb1c1d62eb0e7102088ae3b9a188cd
+--- a/configure.ac	2016-05-27 11:10:44.589740789 +0200
++++ b/configure.ac	2016-05-27 11:11:00.146427723 +0200
+@@ -888,7 +888,7 @@
+ dnl ---------------------------------------------------------------------------
+ 
+ PKG_CHECK_MODULES(SYSTEMD,
+-                  [libsystemd-login >= 186 libsystemd-daemon],
++                  [libsystemd],
+                   [have_systemd=yes], [have_systemd=no])
+ 
+ if test "x$with_systemd" = "xauto" ; then
+@@ -912,7 +912,7 @@
+ AC_SUBST(SYSTEMD_LIBS)
+ 
+ PKG_CHECK_MODULES(JOURNALD,
+-                  [libsystemd-journal],
++                  [libsystemd],
+                   [have_journald=yes], [have_journald=no])
+ 
+ if test "x$enable_systemd_journal" = "xauto" ; then

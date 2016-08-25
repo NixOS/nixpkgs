@@ -16195,6 +16195,7 @@ in
   };
 
   gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
+  gnome3_21 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.21 { });
 
   gnome3 = self.gnome3_20;
 
