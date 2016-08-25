@@ -2832,6 +2832,8 @@ in
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
 
+  networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan.nix { };
+
   networkmanagerapplet = newScope gnome2 ../tools/networking/network-manager-applet { };
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
