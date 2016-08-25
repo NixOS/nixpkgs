@@ -16894,6 +16894,8 @@ in
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
 
+  scidavis = callPackage ../applications/science/math/scidavis {};
+
   scotch = callPackage ../applications/science/math/scotch { };
 
   msieve = callPackage ../applications/science/math/msieve { };
