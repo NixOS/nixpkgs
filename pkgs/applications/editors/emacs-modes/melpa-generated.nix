@@ -30747,7 +30747,7 @@
         pname = "htmlize";
         version = "20130207.1202";
         src = fetchgit {
-          url = "http://fly.srk.fer.hr/~hniksic/emacs/htmlize.git";
+          url = "https://github.com/abo-abo/htmlize/";
           rev = "aa6e2f6dba6fdfa200c7c55efe29ff63380eac8f";
           sha256 = "1vkqxgirc82vc44g7xhhr041arf93yirjin3h144kjyfkgkplnkp";
         };
