@@ -18,7 +18,6 @@ let
 
     patches =
       args.patches
-      ++ [ ./use-etc-ssl-certs.patch ]
       ++ optional (versionOlder version "1.1.0") ./use-etc-ssl-certs.patch
       ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
       ++ optional
