@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     for f in "$out"/bin/gnumeric-*; do
       wrapProgram $f \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
+        ${stdenv.lib.optionalString (!stdenv.isDarwin) "--prefix GIO_EXTRA_MODULES : '${gnome3.dconf}/lib/gio/modules'"}
     done
   '';
 
