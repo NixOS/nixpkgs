@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig poppler zathura_core girara ];
 
-  makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
+  makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
   meta = with lib; {
     homepage = http://pwmt.org/projects/zathura/;

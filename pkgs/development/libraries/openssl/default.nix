@@ -19,6 +19,7 @@ let
     patches =
       args.patches
       ++ [ ./use-etc-ssl-certs.patch ]
+      ++ optional (versionOlder version "1.1.0") ./use-etc-ssl-certs.patch
       ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
       ++ optional
            (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
@@ -121,6 +122,11 @@ in {
       # https://git.openssl.org/?p=openssl.git;a=commit;h=a004e72b95835136d3f1ea90517f706c24c03da7
       ./1.0.2-CVE-2016-2177.diff
     ];
+  };
+
+  openssl_1_1_0 = common {
+    version = "1.1.0";
+    sha256 = "10lcpmnxap9nw8ymdglys93cgkwd1lf1rz4fhq5whwhlmkwrzipm";
   };
 
 }

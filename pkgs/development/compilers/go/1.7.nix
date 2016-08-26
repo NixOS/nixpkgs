@@ -100,6 +100,9 @@ stdenv.mkDerivation rec {
 
     sed -i '/TestDisasmExtld/areturn' src/cmd/objdump/objdump_test.go
 
+    sed -i 's/unrecognized/unknown/' src/cmd/link/internal/ld/lib.go
+    sed -i 's/unrecognized/unknown/' src/cmd/go/build.go
+
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
 
     sed -i '1 a\exit 0' misc/cgo/errors/test.bash
