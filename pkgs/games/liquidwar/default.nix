@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     libXrender libcaca cunit
   ];
 
+  NIX_CFLAGS_COMPILE="-Wno-error=deprecated-declarations";
+
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${SDL.dev}/include/SDL" ];
 
