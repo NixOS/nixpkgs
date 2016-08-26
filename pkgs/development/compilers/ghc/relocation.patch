@@ -1,3 +1,11 @@
+Adding support for the R_X86_64_REX_GOTPCRELX relocation type. 
+This relocation is treated by the linker the same as the R_X86_64_GOTPCRELX type
+G + GOT + A - P to generate relative offsets to the GOT.
+The REX prefix has no influence in this stage.
+
+This caused breakage when enabling relro/bindnow hardening e.g. in ghcPaclages.vector
+
+Source: https://phabricator.haskell.org/D2303#67070
 diff --git a/rts/Linker.c b/rts/Linker.c
 --- a/rts/Linker.c
 +++ b/rts/Linker.c
