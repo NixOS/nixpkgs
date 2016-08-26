@@ -29,6 +29,21 @@ let
 in
 
 {
+  bundler = attrs:
+    let
+      templates = "${attrs.ruby.gemPath}/gems/${attrs.gemName}-${attrs.version}/lib/bundler/templates/";
+    in {
+      # patching shebangs would fail on the templates/Executable file, so we
+      # temporarily remove the executable flag.
+      preFixup  = "chmod -x $out/${templates}/Executable";
+      postFixup = ''
+        chmod +x $out/${templates}/Executable
+
+        # Allows to load another bundler version
+        sed -i -e "s/activate_bin_path/bin_path/g" $out/bin/bundle
+      '';
+    };
+
   capybara-webkit = attrs: {
     buildInputs = [ qt48 ];
   };
@@ -177,14 +192,5 @@ in
     '';
   };
 
-  # patching shebangs would fail on the templates/Executable file, so we
-  # temporarily remove the executable flag.
-  bundler = attrs:
-    let
-      templates = "${attrs.ruby.gemPath}/gems/${attrs.gemName}-${attrs.version}/lib/bundler/templates/";
-    in {
-      preFixup  = "chmod -x $out/${templates}/Executable";
-      postFixup = "chmod +x $out/${templates}/Executable";
-    };
 }
 
