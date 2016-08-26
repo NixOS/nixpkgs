@@ -975,4 +975,7 @@ self: super: {
     '';
   });
 
+  # https://bitbucket.org/ssaasen/spy/pull-requests/3/fsnotify-dropped-system-filepath
+  spy = appendPatch super.spy ./patches/spy.patch;
+
 }
