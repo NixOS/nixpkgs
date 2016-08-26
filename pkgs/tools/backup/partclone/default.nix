@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ e2fsprogs libuuid stdenv.glibc stdenv.glibc.static ];
+  buildInputs = [
+    e2fsprogs libuuid stdenv.cc.libc
+    (stdenv.lib.getOutput "static" stdenv.cc.libc)
+  ];
 
   enableParallelBuilding = true;
 

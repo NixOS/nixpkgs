@@ -1,0 +1,27 @@
+Adding support for the R_X86_64_REX_GOTPCRELX relocation type. 
+This relocation is treated by the linker the same as the R_X86_64_GOTPCRELX type
+G + GOT + A - P to generate relative offsets to the GOT.
+The REX prefix has no influence in this stage.
+
+This caused breakage when enabling relro/bindnow hardening e.g. in ghcPaclages.vector
+
+Source: https://phabricator.haskell.org/D2303#67070
+diff --git a/rts/Linker.c b/rts/Linker.c
+--- a/rts/Linker.c
++++ b/rts/Linker.c
+@@ -5681,7 +5681,13 @@
+           *(Elf64_Sword *)P = (Elf64_Sword)value;
+ #endif
+           break;
+-
++/* These two relocations were introduced in glibc 2.23 and binutils 2.26.
++    But in order to use them the system which compiles the bindist for GHC needs
++    to have glibc >= 2.23. So only use them if they're defined. */
++#if defined(R_X86_64_REX_GOTPCRELX) && defined(R_X86_64_GOTPCRELX)
++      case R_X86_64_REX_GOTPCRELX:
++      case R_X86_64_GOTPCRELX:
++#endif
+       case R_X86_64_GOTPCREL:
+       {
+           StgInt64 gotAddress = (StgInt64) &makeSymbolExtra(oc, ELF_R_SYM(info), S)->addr;
+

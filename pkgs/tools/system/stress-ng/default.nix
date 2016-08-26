@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "stress-ng-${version}";
-  version = "0.06.11";
+  version = "0.06.14";
 
   src = fetchurl {
-    sha256 = "0481aji9hdq8qbslrrc87r2p2pn8jxf913ac8wm5kxj02yqf7ccv";
+    sha256 = "06kycxfwkdrm2vs9xk8cb6c1mki29ymrrqwwxxqx4icnwvq135hv";
     url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.gz";
   };
 
@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/usr" ""
   '';
 
-  enableParallelBuilding = true;
+  # Won't build on i686 because the binary will be linked again in the
+  # install phase without checking the dependencies. This will prevent
+  # triggering the rebuild. Why this only happens on i686 remains a
+  # mystery, though. :-(
+  enableParallelBuilding = (!stdenv.isi686);
 
   installFlags = [ "DESTDIR=$(out)" ];
 

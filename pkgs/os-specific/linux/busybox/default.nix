@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("CC=gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
   '';
 
-  buildInputs = lib.optionals (enableStatic && !useMusl) [ glibc glibc.static ];
+  buildInputs = lib.optionals (enableStatic && !useMusl) [ stdenv.cc.libc stdenv.cc.libc.static ];
 
   crossAttrs = {
     extraCrossConfig = ''

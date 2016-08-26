@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1669m8k9q72rpd2mzs0bh2q6lcwqiwd1ax3vrard1dgn64yq4hxx";
   };
 
-  patches = [ ./fix-7.6.3-clang.patch ];
+  patches = [ ./fix-7.6.3-clang.patch ./relocation.patch ];
 
   buildInputs = [ ghc perl gmp ncurses ];
 
