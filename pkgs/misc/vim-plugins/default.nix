@@ -816,11 +816,11 @@ rec {
   };
 
   vimtex = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vimtex-2016-07-26";
+    name = "vimtex-2016-08-19";
     src = fetchgit {
       url = "git://github.com/lervag/vimtex";
-      rev = "35fae13d17a08a7688a385644879f073a0fc8809";
-      sha256 = "0czj44ivvhh26w69w6grv26sq4b2rbcphsgs5hjga8wdnw63yxmd";
+      rev = "5bc5b14ae213deeafd2b6d8702ac11cefd4c0e8b";
+      sha256 = "0gqjxwjln82ar8dnv0dpmkhmycznxk2r0g06sddaq12y4r6bw5s9";
     };
     dependencies = [];
 
