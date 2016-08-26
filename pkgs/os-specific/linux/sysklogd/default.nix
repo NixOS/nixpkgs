@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   patches = [ ./systemd.patch ];
 
+  NIX_CFLAGS_COMPILE = "-DSYSV";
+
   installFlags = "BINDIR=$(out)/sbin MANDIR=$(out)/share/man INSTALL=install";
 
   preConfigure =
