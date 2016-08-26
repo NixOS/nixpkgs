@@ -80,7 +80,7 @@ services.gitlab = {
 </para>
 
 <para>If you're setting up a new Gitlab instance, generate new secrets. You
-for instance use <literal>tr -dc A-Za-z0-9 < /dev/urandom | head -c 128</literal>
+for instance use <literal>tr -dc A-Za-z0-9 &lt; /dev/urandom | head -c 128</literal>
 to generate a new secret. Gitlab encrypts sensitive data stored in the database.
 If you're restoring an existing Gitlab instance, you must specify the secrets
 secret from <literal>config/secrets.yml</literal> located in your Gitlab state
