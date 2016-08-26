@@ -10009,7 +10009,11 @@ in
     go = go_1_6;
   };
 
-  buildGoPackage = buildGo16Package;
+  buildGo17Package = callPackage ../development/go-modules/generic {
+    go = go_1_7;
+  };
+
+  buildGoPackage = buildGo17Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
