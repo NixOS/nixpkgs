@@ -21,5 +21,6 @@ buildGoPackage rec {
     license = "MIT";
     maintainers = with stdenv.lib.maintainers; [ qknight ];
     meta.platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }
