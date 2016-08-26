@@ -32,7 +32,7 @@ in {
       configFile = pkgs.writeText "configuration.nix"
         ''
           {
-            imports = [ <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix> ];
+            imports = [ <nixpkgs/nixos/modules/installer/virtualbox-demo.nix> ];
           }
         '';
 
