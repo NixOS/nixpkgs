@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a9b78d9d66c9c21de6c0932e36bb87406a4856f1611bf83bd44539bdc6ed0ed";
   };
 
-  patches = [ ./fix-7.0.4-clang.patch ];
+  patches = [ ./fix-7.0.4-clang.patch ./relocation.patch ];
 
   buildInputs = [ ghc perl gmp ncurses ];
 
