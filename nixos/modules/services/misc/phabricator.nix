@@ -131,7 +131,7 @@ in {
         after = [ "network.target" "mysql.service" "phpfpm.service" ];
         wantedBy = [ "multi-user.target" ];
         path = with pkgs; [
-          php git
+          php git openssh
         ];
         script = ''
           ${pkgs.phabricator}/phabricator/bin/phd start
