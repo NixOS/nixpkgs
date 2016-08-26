@@ -17102,7 +17102,7 @@ in
 
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
 
-  foomatic_filters = callPackage ../misc/drivers/foomatic-filters {};
+  foomatic-filters = callPackage ../misc/drivers/foomatic-filters {};
 
   freestyle = callPackage ../misc/freestyle { };
 
