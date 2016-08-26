@@ -24,7 +24,7 @@ let
       let
       in stdenv.mkDerivation (args // {
 
-        outputs = args.outputs or [ "dev" "out" ];
+        outputs = args.outputs or [ "out" "dev" ];
 
         propagatedUserEnvPkgs =
           builtins.map lib.getBin (args.propagatedBuildInputs or []);
