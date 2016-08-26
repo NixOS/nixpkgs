@@ -36,9 +36,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
 	sed -i 's,which ,command -v ,' "$out/etc/vmware-tools/scripts/vmware/network"
 	wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
-		--prefix PATH ':' "${iproute}/bin" \
-		--prefix PATH ':' "${dbus}/bin" \
-		--prefix PATH ':' "${systemd}/bin"
+		--prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd ]}"
   '';
 
   meta = with stdenv.lib; {

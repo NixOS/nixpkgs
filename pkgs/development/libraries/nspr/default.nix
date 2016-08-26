@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, CoreServices }:
+{ stdenv, fetchurl
+, CoreServices ? null }:
 
 let version = "4.12"; in
 

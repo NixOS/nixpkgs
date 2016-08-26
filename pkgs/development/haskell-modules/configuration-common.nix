@@ -44,7 +44,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1b4yw305h7ca28x8s2jnkcc9cwn3rygnjyarib33dk4z066lsg7s";
+      sha256 = "1frdld9kgnfd4ll8yx086lwmbqxa5k56y567qw2zy9kz1iiz2fpi";
       rev = drv.version;
     };
   })).override {
@@ -859,6 +859,9 @@ self: super: {
 
   # https://github.com/guillaume-nargeot/hpc-coveralls/issues/52
   hpc-coveralls = disableSharedExecutables super.hpc-coveralls;
+
+  # Can't find libHSidris-*.so during build.
+  idris = disableSharedExecutables super.idris;
 
   # https://github.com/fpco/stackage/issues/838
   cryptonite = dontCheck super.cryptonite;

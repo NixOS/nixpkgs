@@ -30,11 +30,13 @@ doNotDisplayTwice rec {
   bundler_HEAD = bundler; # added 2015-11-15
   checkbashism = checkbashisms; # added 2016-08-16
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
+  cifs_utils = cifs-utils; # added 2016-08
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
   conkerorWrapper = conkeror; # added 2015-01
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
+  cups_filters = cups-filters; # added 2016-08
   cv = progress; # added 2015-09-06
   debian_devscripts = debian-devscripts; # added 2016-03-23
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
@@ -56,6 +58,7 @@ doNotDisplayTwice rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
+  keybase-go = keybase;  # added 2016-08-24
   letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libcap_manpages = libcap.doc; # added 2016-04-29
@@ -75,6 +78,7 @@ doNotDisplayTwice rec {
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   ncat = nmap;  # added 2016-01-26
   nfsUtils = nfs-utils;  # added 2014-12-06
+  owncloudclient = owncloud-client;  # added 2016-08
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = qt5.poppler;  # added 2015-12-19

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -p djvu2pdf $out/bin
-    wrapProgram $out/bin/djvu2pdf --prefix PATH : ${ghostscript}/bin:${djvulibre.bin}/bin:${which}/bin
+    wrapProgram $out/bin/djvu2pdf --prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript djvulibre which ]}
 
     mkdir -p $out/man/man1
     cp -p djvu2pdf.1.gz $out/man/man1

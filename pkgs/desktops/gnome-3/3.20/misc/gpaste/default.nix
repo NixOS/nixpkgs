@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, autoreconfHook, pkgconfig, vala, glib
+{ stdenv, fetchurl, intltool, autoreconfHook, pkgconfig, vala_0_32, glib
 , pango, gtk3, gnome3, dbus, clutter, appstream-glib, makeWrapper, systemd, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "08h1igdgapz7px12r7mrfcxmz68g9ijg73w69j75spg0yc6f4xax";
   };
 
-  buildInputs = [ intltool autoreconfHook pkgconfig vala glib
+  buildInputs = [ intltool autoreconfHook pkgconfig vala_0_32 glib
                   gtk3 gnome3.gnome_control_center dbus
                   clutter pango appstream-glib makeWrapper systemd gobjectIntrospection ];
 

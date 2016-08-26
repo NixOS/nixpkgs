@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/hwengine --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH:${mesa}/lib/:${freeglut}/lib:${physfs}/lib
+    wrapProgram $out/bin/hwengine --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH:${stdenv.lib.makeLibraryPath [ mesa freeglut physfs ]}
   '';
 
   meta = with stdenv.lib; {

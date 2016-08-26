@@ -42,6 +42,7 @@ in modules // {
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
       substitutions.executable = python.interpreter;
+      substitutions.python = python;
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.
         # NOTE: Order DOES matter here, so single character quotes need to be
@@ -53,19 +54,31 @@ in modules // {
           isSingle = elem quote [ "\"" "'\"'\"'" ];
           endQuote = if isSingle then "[^\\\\]${quote}" else quote;
         in ''
-          /^ *[a-z]?${quote}/ {
+          /^[a-z]?${quote}/ {
             /${quote}${quote}|${quote}.*${endQuote}/{n;br}
             :${label}; n; /^${quote}/{n;br}; /${endQuote}/{n;br}; b${label}
           }
         '';
 
+        # This preamble does two things:
+        # * Sets argv[0] to the original application's name; otherwise it would be .foo-wrapped.
+        #   Python doesn't support `exec -a`.
+        # * Adds all required libraries to sys.path via `site.addsitedir`. It also handles *.pth files.
+        preamble = ''
+          import sys
+          import site
+          import functools
+          sys.argv[0] = '"'$(basename "$f")'"'
+          functools.reduce(lambda k, p: site.addsitedir(p, k), ['"$([ -n "$program_PYTHONPATH" ] && (echo "'$program_PYTHONPATH'" | sed "s|:|','|g") || true)"'], site._init_pathinfo())
+        '';
+
       in ''
         1 {
-          /^#!/!b; :r
-          /\\$/{N;br}
-          /__future__|^ *(#.*)?$/{n;br}
+          :r
+          /\\$|,$/{N;br}
+          /__future__|^ |^ *(#.*)?$/{n;br}
           ${concatImapStrings mkStringSkipper quoteVariants}
-          /^ *[^# ]/i import sys; sys.argv[0] = '"'$(basename "$f")'"'
+          /^[^# ]/i ${replaceStrings ["\n"] [";"] preamble}
         }
       '';
     }
@@ -7119,6 +7132,29 @@ in modules // {
     };
   };
 
+  lightblue = buildPythonPackage rec {
+    pname = "lightblue";
+    version = "0.4";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://sourceforge/${pname}/${name}.tar.gz";
+      sha256 = "016h1mlhpqxjj25lcvl4fqc19k8ifmsv6df7rhr12fyfcrp5i14d";
+    };
+
+    buildInputs = [ pkgs.bluez pkgs.openobex ];
+
+
+    meta = {
+      homepage = http://lightblue.sourceforge.net;
+      description = "Cross-platform Bluetooth API for Python";
+      maintainers = with maintainers; [ leenaars ];
+      license = licenses.gpl3;
+      platform = platforms.all;
+    };
+  };
+
+
   lightning = buildPythonPackage rec {
     version = "1.2.1";
     name = "lightning-python-${version}";
@@ -7492,6 +7528,33 @@ in modules // {
     };
   };
 
+  nxt-python = buildPythonPackage rec {
+    version = "unstable-20160819";
+    pname = "nxt-python";
+    name = "${pname}-${version}";
+
+    propagatedBuildInputs = with self; [ pyusb pybluez pyfantom pkgs.git ];
+    disabled = isPy3k;
+
+    src = pkgs.fetchgit {
+      url = "http://github.com/Eelviny/nxt-python";
+      rev = "479e20b7491b28567035f4cee294c4a2af629297";
+      sha256 = "0mcsajhgm2wy4iy2lhmyi3xibgmbixbchanzmlhsxk6qyjccn9r9";
+      branchName= "pyusb";
+    };
+
+    # Tests fail on Mac dependency
+    doCheck = false;
+
+    meta = {
+      description = "Python driver/interface for Lego Mindstorms NXT robot";
+      homepage = https://github.com/Eelviny/nxt-python;
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ leenaars ];
+    };
+  };
+
   odfpy = buildPythonPackage rec {
     version = "0.9.6";
     name = "odfpy-${version}";
@@ -7793,6 +7856,30 @@ in modules // {
       maintainers = with maintainers; [ auntie ];
       license = licenses.gpl2;
       platform = platforms.all;
+    };
+  };
+
+   pybluez = buildPythonPackage rec {
+    version = "unstable-20160819";
+    pname = "pybluez";
+    name = "${pname}-${version}";
+
+    propagatedBuildInputs = with self; [ pkgs.bluez ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "karulis";
+      repo = "${pname}";
+      rev = "a0b226a61b166e170d48539778525b31e47a4731";
+      sha256 = "104dm5ngfhqisv1aszdlr3szcav2g3bhsgzmg4qfs09b3i5zj047";
+    };
+
+    # the tests do not pass
+    doCheck = false;
+
+    meta = {
+      description = "Bluetooth Python extension module";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ leenaars ];
     };
   };
 
@@ -8523,20 +8610,7 @@ in modules // {
     installPhase = ''
       mkdir -p $out/${python.sitePackages}
       cp -r scfbuild $out/${python.sitePackages}
-      # Workaround for #16133
-      mkdir -p $out/bin
-
-      cat >$out/bin/scfbuild <<EOF
-      #!/usr/bin/env python2
-
-      import sys
-      from scfbuild.main import main
-
-      if __name__ == '__main__':
-        sys.exit(main())
-      EOF
-
-      chmod +x $out/bin/scfbuild
+      cp -r bin $out
     '';
 
     meta = with stdenv.lib; {
@@ -8938,16 +9012,6 @@ in modules // {
 
   django = self.django_1_10;
 
-  django_gis = self.django.override rec {
-    patches = [
-      (pkgs.substituteAll {
-        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
-        geos = pkgs.geos;
-        gdal = pkgs.gdal;
-      })
-    ];
-  };
-
   django_1_10 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.10";
@@ -8957,6 +9021,14 @@ in modules // {
       url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
       sha256 = "01bh5yra6zyxcpqacahbwfbn0y4ivw07j2jsw3crvmjzivb6if26";
     };
+
+    patches = [
+      (pkgs.substituteAll {
+        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
+        geos = pkgs.geos;
+        gdal = self.gdal;
+      })
+    ];
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
     postFixup = ''
@@ -8974,12 +9046,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.5";
+    version = "1.9.9";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "19kaw9flk9jjz1n7q378waybxnkrrhkq240lby4zaaas62nnfip5";
+      sha256 = "136ypwacj4av6xqmbfp6lhlr0171ws2knv74h0r59ssaaffznh73";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -8998,12 +9070,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.12";
+    version = "1.8.14";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "04vi1rmin161drssqhi9n54j6mz8l6vs46pc7zbn50vzacysg3xn";
+      sha256 = "0ka6slangri68qaf91gl10l9m14f6waj4ncz543rbcpvj25w90jj";
     };
 
     # too complicated to setup
@@ -9370,11 +9442,11 @@ in modules // {
 
   django_raster = buildPythonPackage rec {
     name = "django-raster-${version}";
-    version = "0.2";
+    version = "0.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-raster/${name}.tar.gz";
-      sha256 = "1zdcxzj43qrv7cl6q9nb2dkfnsyn74dzf2igpnd6nbbfdnkif9bm";
+      sha256 = "0vn11y07wag7yvjzrk7m99xs3cqyaaaklwcsik9zbvw0kwp2khni";
     };
 
     propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2
@@ -10776,6 +10848,12 @@ in modules // {
       description = "A Python script for summarizing gcov data";
       license = "BSD";
     };
+  };
+
+  gdal = (pkgs.gdal.overrideDerivation (oldattrs: {
+    name = "${python.libPrefix}-" + oldattrs.name;
+  })).override {
+    pythonPackages = self;
   };
 
   gdrivefs = buildPythonPackage rec {
@@ -18680,6 +18758,25 @@ in modules // {
     };
   };
 
+  pyfantom = buildPythonPackage rec {
+     name = "pyfantom-${version}";
+     version = "unstable-2013-12-18";
+
+     src = pkgs.fetchgit {
+       url = "http://git.ni.fr.eu.org/pyfantom.git";
+       sha256 = "1m53n8bxslq5zmvcf7i1xzsgq5bdsf1z529br5ypmj5bg0s86j4q";
+     };
+
+     # No tests included
+     doCheck = false;
+
+     meta = {
+       homepage = http://pyfantom.ni.fr.eu.org/;
+       description = "Wrapper for the LEGO Mindstorms Fantom Driver";
+       license = licenses.gpl2;
+     };
+   };
+
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
@@ -19152,11 +19249,11 @@ in modules // {
 
   pyparsing = buildPythonPackage rec {
     name = "pyparsing-${version}";
-    version = "2.1.4";
+    version = "2.1.8";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyparsing/${name}.tar.gz";
-      sha256 = "0z3rn5cl22kglrvlkfbdjgrp7s443k6k4hcr5awlj3dmg7m4s8x9";
+      sha256 = "0sy5fxhsvhf0fwk9h6nqlhn1lsjpdmg41jziw5z814rlkydqd903";
     };
 
     # Not everything necessary to run the tests is included in the distribution
@@ -22902,7 +22999,7 @@ in modules // {
 
     checkPhase = ''
       cd tests
-      export MAGICK_HOME="${pkgs.imagemagick}"
+      export MAGICK_HOME="${pkgs.imagemagick.dev}"
       export PYTHONPATH=$PYTHONPATH:../
       py.test
       cd ..
@@ -26197,6 +26294,8 @@ in modules // {
       sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
     '';
 
+    propagatedBuildInputs = [ pkgs.libusb ];
+
     # No tests included
     doCheck = false;
 
@@ -26221,6 +26320,8 @@ in modules // {
     # Requires pyusb 1.0.0b1.
     # Likely current pyusb will work but we need to patch the hard requirement then.
     broken = true;
+
+    patchPhase = "substituteInPlace setup.py --replace pyusb==1.0.0b1 pyusb==1.0.0";
 
     propagatedBuildInputs = with self; [ pyusb ];
 

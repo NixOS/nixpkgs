@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
     "-DWT_CPP_11_MODE=-std=c++11"
     "-DGM_PREFIX=${graphicsmagick}"
-    "-DMYSQL_PREFIX=${libmysql}"
+    "-DMYSQL_PREFIX=${libmysql.dev}"
     "--no-warn-unused-cli"
   ];
 

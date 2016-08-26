@@ -37,9 +37,10 @@
   ./hardware/network/rtl8192c.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
+  ./hardware/video/amdgpu.nix
+  ./hardware/video/ati.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/nvidia.nix
-  ./hardware/video/ati.nix
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx.nix
@@ -255,7 +256,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/packagekit.nix
   ./services/misc/parsoid.nix
-  ./services/misc/phd.nix
+  ./services/misc/phabricator.nix
   ./services/misc/plex.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
@@ -408,6 +409,7 @@
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
+  ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/strongswan.nix
   ./services/networking/supplicant.nix

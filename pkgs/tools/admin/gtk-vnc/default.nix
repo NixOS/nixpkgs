@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gobjectIntrospection
 , python, gtk, pygtk, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
 , libffi, cyrus_sasl, intltool, perl, perlPackages, libpulseaudio
-, kbproto, libX11, libXext, xextproto, pygobject, libgcrypt, gtk3, vala
+, kbproto, libX11, libXext, xextproto, pygobject, libgcrypt, gtk3, vala_0_23
 , pygobject3, libogg, enableGTK3 ? false, libgpgerror }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     python gnutls cairo libtool pkgconfig glib libffi libgcrypt
     intltool cyrus_sasl libpulseaudio perl perlPackages.TextCSV
     gobjectIntrospection libogg libgpgerror
-  ] ++ (if enableGTK3 then [ gtk3 vala pygobject3 ] else [ gtk pygtk pygobject ]);
+  ] ++ (if enableGTK3 then [ gtk3 vala_0_23 pygobject3 ] else [ gtk pygtk pygobject ]);
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
   configureFlags = [

@@ -1,6 +1,7 @@
 {stdenv, fetchurl, ncurses, tcl, openssl, pam, pkgconfig, gettext, kerberos
 , openldap
 }:
+# NOTE: Please check if any changes here are applicable to ../alpine/ as well
 let
   baseName = "re-alpine";
   version = "2.03";
@@ -23,8 +24,8 @@ stdenv.mkDerivation {
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
     "--with-tcl-lib=${tcl.libPrefix}"
-  ];
-
+    "--with-passfile=.pine-passfile"
+    ];
   preConfigure = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
   '';

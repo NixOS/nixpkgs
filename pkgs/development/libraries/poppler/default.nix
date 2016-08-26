@@ -1,14 +1,15 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
-, minimal ? false
+, withData ? false, poppler_data
 , qt4Support ? false, qt4 ? null
 , qt5Support ? false, qtbase ? null
-, utils ? false, suffix ? "glib"
+, utils ? false
+, minimal ? false, suffix ? "glib"
 }:
 
-let # beware: updates often break cups_filters build
-  version = "0.43.0"; # even major numbers are stable
-  sha256 = "0mi4zf0pz3x3fx3ir7szz1n57nywgbpd4mp2r7mvf47f4rmf4867";
+let # beware: updates often break cups-filters build
+  version = "0.46.0"; # even major numbers are stable
+  sha256 = "11z4d5vrrd0m7w9bfydwabksk273z7z0xf2nwvzf5pk17p8kazcn";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
@@ -20,21 +21,18 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  patches = [ ./datadir_env.patch ];
+  buildInputs = [ libiconv ] ++ libintlOrEmpty ++ lib.optional withData poppler_data;
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
-    [ zlib freetype fontconfig libjpeg ]
-    ++ optionals (!minimal) [ cairo lcms curl openjpeg ]
+    [ zlib freetype fontconfig libjpeg openjpeg ]
+    ++ optionals (!minimal) [ cairo lcms curl ]
     ++ optional qt4Support qt4
     ++ optional qt5Support qtbase;
 
-  nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
+  nativeBuildInputs = [ pkgconfig ];
 
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
-
-  # Any package depending on Qt >= 5.7 must build using the C++11 standard.
-  CXXFLAGS = lib.optional qt5Support "-std=c++11";
 
   configureFlags = with lib;
     [
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
     ]
     ++ optionals minimal [
       "--disable-poppler-glib" "--disable-poppler-cpp"
-      "--disable-libopenjpeg" "--disable-libcurl"
+      "--disable-libcurl"
     ]
     ++ optional (!utils) "--disable-utils" ;
 

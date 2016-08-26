@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    ${glib}/bin/glib-compile-schemas --targetdir=${uuid}/schemas ${uuid}/schemas
+    ${glib.dev}/bin/glib-compile-schemas --targetdir=${uuid}/schemas ${uuid}/schemas
   '';
 
   installPhase = ''

@@ -2,7 +2,9 @@
 
 with import ../../.. { inherit system; };
 
-rec {
+let
+  llvmPackages = llvmPackages_38;
+in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
@@ -27,7 +29,6 @@ rec {
       # C standard library stuff
       cp -d ${darwin.Libsystem}/lib/*.o $out/lib/
       cp -d ${darwin.Libsystem}/lib/*.dylib $out/lib/
-      cp -d ${darwin.Libsystem}/lib/system/*.dylib $out/lib/
 
       # Resolv is actually a link to another package, so let's copy it properly
       rm $out/lib/libresolv.9.dylib
@@ -79,11 +80,11 @@ rec {
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
-      cp -d ${libcxx}/lib/libc++*.dylib $out/lib
-      cp -d ${libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${libcxx}/include/c++     $out/include
+      cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
 
       cp -d ${icu.out}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
@@ -91,7 +92,7 @@ rec {
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
 
       # Copy binutils.
-      for i in as ld ar ranlib nm strip otool install_name_tool dsymutil; do
+      for i in as ld ar ranlib nm strip otool install_name_tool dsymutil lipo; do
         cp ${darwin.cctools}/bin/$i $out/bin
       done
 

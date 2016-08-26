@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   phases = [ "buildPhase" "installPhase" ];
 
   buildPhase = ''
-    gcc -O2 -o RunningX $(pkg-config --cflags --libs x11) $src
+    cc -O2 -o RunningX $(pkg-config --cflags --libs x11) $src
   '';
 
   installPhase = ''

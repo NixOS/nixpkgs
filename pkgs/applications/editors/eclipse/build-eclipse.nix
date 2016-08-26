@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
-    [ -f $libCairo ] && patchelf --set-rpath ${freetype}/lib:${fontconfig}/lib:${libX11}/lib:${libXrender}/lib:${zlib}/lib $libCairo
+    [ -f $libCairo ] && patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo
 
     # Create wrapper script.  Pass -configuration to store
     # settings in ~/.eclipse/org.eclipse.platform_<version> rather
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk.out}/lib:${libXtst}/lib${stdenv.lib.optionalString (webkitgtk2 != null) ":${webkitgtk2}/lib"} \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath ([ glib gtk libXtst ] ++ stdenv.lib.optional (webkitgtk2 != null) webkitgtk2)} \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
 
     # Create desktop item.

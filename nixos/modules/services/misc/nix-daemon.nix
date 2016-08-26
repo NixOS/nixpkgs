@@ -248,7 +248,7 @@ in
         description = ''
           List of binary cache URLs that non-root users can use (in
           addition to those specified using
-          <option>nix.binaryCaches</option> by passing
+          <option>nix.binaryCaches</option>) by passing
           <literal>--option binary-caches</literal> to Nix commands.
         '';
       };

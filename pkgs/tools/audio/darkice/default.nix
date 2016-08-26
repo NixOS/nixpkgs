@@ -20,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "darkice-${version}";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/darkice/${version}/darkice-${version}.tar.gz";
-    sha256 = "0m5jzmja7a9x15zl1634bhxrg3rccph9rkar0rmz6wlw5nzakyxk";
+    sha256 = "1rlxds7ssq7nk2in4s46xws7xy9ylxsqgcz85hxjgh17lsm0y39c";
   };
 
   configureFlags = [
@@ -39,6 +39,10 @@ in stdenv.mkDerivation rec {
 #    "--with-aacplus-prefix=${aacplus}" ### missing: aacplus
 #    "--with-twolame-prefix=${twolame}" ### missing: twolame
   ];
+
+  patches = [ ./fix-undeclared-memmove.patch ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://darkice.org/;
