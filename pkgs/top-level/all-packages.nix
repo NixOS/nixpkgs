@@ -15540,13 +15540,9 @@ in
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
-  zathuraCollection = recurseIntoAttrs
-    (callPackage ../applications/misc/zathura {
-        callPackage = newScope pkgs.zathuraCollection;
-        useMupdf = config.zathura.useMupdf or true;
-      });
-
-  zathura = zathuraCollection.zathuraWrapper;
+  zathura = callPackage ../applications/misc/zathura {
+    useMupdf = config.zathura.useMupdf or true;
+  };
 
   zed = callPackage ../applications/editors/zed { };
 
