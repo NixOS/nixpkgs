@@ -4924,6 +4924,10 @@ in
     inherit (stdenvAdapters) overrideCC;
   };
 
+  llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 {
+    inherit (stdenvAdapters) overrideCC;
+  };
+
   manticore = callPackage ../development/compilers/manticore { };
 
   mentorToolchains = recurseIntoAttrs (
