@@ -5,16 +5,20 @@ with lib;
 let
   cfg = config.services.neo4j;
 
-  serverConfig = pkgs.writeText "neo4j-server.properties" ''
-    org.neo4j.server.database.location=${cfg.dataDir}/data/graph.db
-    org.neo4j.server.webserver.address=${cfg.listenAddress}
-    org.neo4j.server.webserver.port=${toString cfg.port}
+  serverConfig = pkgs.writeText "neo4j.conf" ''
+    dbms.directories.certificates=${cfg.dataDir}/certificates
+    dbms.directories.logs=${cfg.dataDir}/logs
+    dbms.directories.data=${cfg.dataDir}/data
+    dbms.directories.metrics=${cfg.dataDir}/metrics
+    dbms.directories.plugins=${cfg.dataDir}/plugins
+    dbms.connector.http.type=HTTP
+    dbms.connector.http.enabled=true
+    dbms.connector.http.address=${cfg.listenAddress}:${toString cfg.port}
     ${optionalString cfg.enableHttps ''
-      org.neo4j.server.webserver.https.enabled=true
-      org.neo4j.server.webserver.https.port=${toString cfg.httpsPort}
-      org.neo4j.server.webserver.https.cert.location=${cfg.cert}
-      org.neo4j.server.webserver.https.key.location=${cfg.key}
-      org.neo4j.server.webserver.https.keystore.location=${cfg.dataDir}/data/keystore
+      dbms.connector.https.type=HTTP
+      dbms.connector.https.enabled=true
+      dbms.connector.https.encryption=TLS
+      dbms.connector.https.address=${cfg.listenAddress}:${toString cfg.httpsPort}
     ''}
     org.neo4j.server.webadmin.rrdb.location=${cfg.dataDir}/data/rrd
     org.neo4j.server.webadmin.data.uri=/db/data/
@@ -24,27 +28,12 @@ let
     ${cfg.extraServerConfig}
   '';
 
-  loggingConfig = pkgs.writeText "logging.properties" cfg.loggingConfig;
-
-  wrapperConfig = pkgs.writeText "neo4j-wrapper.conf" ''
-    wrapper.java.additional=-Dorg.neo4j.server.properties=${serverConfig}
-    wrapper.java.additional=-Djava.util.logging.config.file=${loggingConfig}
-    wrapper.java.additional=-XX:+UseConcMarkSweepGC
-    wrapper.java.additional=-XX:+CMSClassUnloadingEnabled
-    wrapper.pidfile=${cfg.dataDir}/neo4j-server.pid
-    wrapper.name=neo4j
-  '';
-
 in {
 
   ###### interface
 
   options.services.neo4j = {
-    enable = mkOption {
-      description = "Whether to enable neo4j.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "neo4j";
 
     package = mkOption {
       description = "Neo4j package to use.";
@@ -77,36 +66,10 @@ in {
       type = types.int;
     };
 
-    cert = mkOption {
-      description = "Neo4j https certificate.";
-      default = "${cfg.dataDir}/conf/ssl/neo4j.cert";
-      type = types.path;
-    };
-
-    key = mkOption {
-      description = "Neo4j https certificate key.";
-      default = "${cfg.dataDir}/conf/ssl/neo4j.key";
-      type = types.path;
-    };
-
     dataDir = mkOption {
       description = "Neo4j data directory.";
       default = "/var/lib/neo4j";
       type = types.path;
-    };
-
-    loggingConfig = mkOption {
-      description = "Neo4j logging configuration.";
-      default = ''
-        handlers=java.util.logging.ConsoleHandler
-        .level=INFO
-        org.neo4j.server.level=INFO
-
-        java.util.logging.ConsoleHandler.level=INFO
-        java.util.logging.ConsoleHandler.formatter=org.neo4j.server.logging.SimpleConsoleFormatter
-        java.util.logging.ConsoleHandler.filter=org.neo4j.server.logging.NeoLogFilter
-      '';
-      type = types.lines;
     };
 
     extraServerConfig = mkOption {
@@ -124,15 +87,19 @@ in {
       description = "Neo4j Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      environment = { NEO4J_INSTANCE = cfg.dataDir; };
+      environment = {
+        NEO4J_INSTANCE = cfg.dataDir;
+        NEO4J_CONF = "${cfg.dataDir}/conf";
+      };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/neo4j console";
         User = "neo4j";
         PermissionsStartOnly = true;
       };
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}/{data/graph.db,conf}
-        ln -fs ${wrapperConfig} ${cfg.dataDir}/conf/neo4j-wrapper.conf
+        mkdir -p /run/neo4j
+        mkdir -m 0700 -p ${cfg.dataDir}/{data,conf,certificates,logs}
+        ln -fs ${serverConfig} ${cfg.dataDir}/conf/neo4j.conf
         if [ "$(id -u)" = 0 ]; then chown -R neo4j ${cfg.dataDir}; fi
       '';
     };
