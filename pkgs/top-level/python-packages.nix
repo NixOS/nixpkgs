@@ -29459,4 +29459,47 @@ in modules // {
       sha256 = "14kb9gxw39zhvrijhp066b4bm6bgv35iw56c394y4dyczpha0dij";
     };
   };
+
+  sqlalchemy_bb8 = buildPythonPackage rec {
+    name = "sqlalchemy-${version}";
+    version = "0.7.8";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
+      sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
+    };
+
+    doCheck = false;
+    # ERROR: test.engine.test_execute.EchoTest.test_echo_flag_independence
+
+    propagatedBuildInputs = with self; [ pysqlite ];
+
+    meta = {
+      description = "SQL Alchemy for buildbot8.";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
+    };
+  };
+
+  sqlalchemy_migrate_bb8 = buildPythonPackage rec {
+    name = "sqlalchemy-migrate-${version}";
+    version = "0.7.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/0b/af/d3d59014c3629ac8087082a7772fc29af67c30eebf43c62b3cf240d71504/sqlalchemy-migrate-0.7.2.tar.gz";
+      sha256 = "0cw3q83q3bmq0izrq10y46svsfvwqnj6bcqivgz47w96xrlcfmbz";
+    };
+
+    doCheck = false;
+    # ERROR: Failure: IOError (You must specify the databases to use for testing!
+
+    propagatedBuildInputs = with self; [ tempita decorator nose unittest2 scripttest sqlalchemy_bb8 ];
+
+    meta = {
+      description = "sqlalchemy-migrate for buildbot8.";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
+    };
+  };
+
 }

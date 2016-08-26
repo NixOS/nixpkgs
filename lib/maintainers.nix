@@ -273,6 +273,7 @@
   mudri = "James Wood <lamudri@gmail.com>";
   muflax = "Stefan Dorn <mail@muflax.com>";
   myrl = "Myrl Hex <myrl.0xf@gmail.com>";
+  nand0p = "Fernando Jose Pando <nando@hex7.com>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
   Nate-Devv = "Nathan Moore <natedevv@gmail.com>";
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
