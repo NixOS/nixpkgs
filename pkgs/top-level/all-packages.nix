@@ -15810,6 +15810,9 @@ in
     guile = guile_1_8;
   };
 
+  liquidwar5 = callPackage ../games/liquidwar/5.nix {
+  };
+
   macopix = callPackage ../games/macopix {
     gtk = gtk2;
   };
