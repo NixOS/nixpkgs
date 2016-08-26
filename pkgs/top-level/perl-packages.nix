@@ -3028,10 +3028,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataValidateDomain = buildPerlPackage rec {
-    name = "Data-Validate-Domain-0.12";
+    name = "Data-Validate-Domain-0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "6bd39c71d232fa341ad1324158bf1edf5df9add2bcac87996aa4b584445cdec5";
+      sha256 = "4470f253b8d2720a4dd3fa3ae550995417c2269f3be7ff030e01afa04a3a9421";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ NetDomainTLD ];
