@@ -3281,6 +3281,8 @@ in
 
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
 
+  rc = callPackage ../shells/rc { };
+
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
   redir = callPackage ../tools/networking/redir { };
