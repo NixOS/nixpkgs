@@ -8,6 +8,18 @@ in {
   options = {
     services.phabricator = {
       enable = mkEnableOption "phabricator";
+
+      serverName = mkOption {
+        type = types.str;
+        example = "phabricator.example.com";
+        description = "Server name for phabricator without URI scheme.";
+      };
+
+      forceSSL = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enables TLS on the nginx vhost and redirects to it.";
+      };
     };
   };
 
@@ -21,27 +33,26 @@ in {
     # Use postfix to send out mails.
     # services.postfix.enable = mkDefault true;
 
-    # users.extraUsers = [
-    #   { name = cfg.user;
-    #     group = cfg.group;
-    #     home = "${cfg.statePath}/home";
-    #     shell = "${pkgs.bash}/bin/bash";
-    #     uid = config.ids.uids.gitlab;
-    #   }
-    # ];
+    users.extraUsers = {
+      phabricator = {
+        group = "phabricator";
+        uid = config.ids.uids.phabricator;
+      };
+    };
 
-    # users.extraGroups = [
-    #   { name = cfg.group;
-    #     gid = config.ids.gids.gitlab;
-    #   }
-    # ];
+    users.extraGroups = {
+      phabricator = {
+        gid = config.ids.gids.phabricator;
+      };
+    };
 
     services = {
       nginx = {
         enable = true;
         virtualHosts = {
-          "phabricator.localhost" = {
+          ${cfg.serverName} = {
             root = "${pkgs.phabricator}/phabricator/webroot";
+            forceSSL = cfg.forceSSL;
             locations = {
               "/" = {
                 index = "index.php";
@@ -62,10 +73,10 @@ in {
           };
         };
       };
-      phpfpm.pools.www = {
+      phpfpm.pools.phabricator = {
         listen = "localhost:9000";
         extraConfig = ''
-          user = nobody
+          user = phabricator
           pm = dynamic
           pm.max_children = 75
           pm.start_servers = 10
@@ -80,11 +91,13 @@ in {
         enable = true;
         package = pkgs.mysql;
       };
-      postfix.enable = true;
+      postfix.enable = mkDefault true;
     };
 
     systemd.services = {
-      phabricator = {
+      phabricator = let 
+        baseURI = "http${optionalString cfg.forceSSL "s"}://${cfg.serverName}";
+      in {
         after = [ "network.target" "mysql.service" "phpfpm.service" ];
         wantedBy = [ "multi-user.target" ];
         path = with pkgs; [
@@ -97,10 +110,10 @@ in {
           if [[ ! -d /var/lib/phabricator/conf ]]; then
             mkdir -p /var/lib/phabricator/conf
             cp -r ${pkgs.phabricator}/phabricator/conf.dist/* /var/lib/phabricator/conf
-            chown -R nobody /var/lib/phabricator
+            chown -R phabricator /var/lib/phabricator
           fi
           ${pkgs.phabricator}/phabricator/bin/storage upgrade --force  # otherwise needs nginx disabled
-          ${pkgs.phabricator}/phabricator/bin/config set phabricator.base-uri 'http://phabricator.localhost/'
+          ${pkgs.phabricator}/phabricator/bin/config set phabricator.base-uri '${baseURI}'
           ${pkgs.phabricator}/phabricator/bin/config set environment.append-paths \
             '[ "${pkgs.which}/bin", "${pkgs.diffutils}/bin", "${pkgs.pythonPackages.pygments}/bin",
                "${pkgs.git}/bin" ]'
@@ -128,6 +141,7 @@ in {
           Type = "oneshot";
           ExecStop = ''${pkgs.phabricator}/phabricator/bin/phd stop'';
           RemainAfterExit = "yes";
+          User = "phabricator";
         };
       };
     };

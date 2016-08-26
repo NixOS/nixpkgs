@@ -275,6 +275,7 @@
       gocd-server = 252;
       terraria = 253;
       mattermost = 254;
+      phabricator = 255;
 
       prometheus = 999;
 
@@ -522,6 +523,7 @@
       gocd-server = 252;
       terraria = 253;
       mattermost = 254;
+      phabricator = 255;
 
       prometheus = 999;
 
