@@ -181,6 +181,9 @@ with stdenv.lib;
   VGA_SWITCHEROO y # Hybrid graphics support
   DRM_GMA600 y
   DRM_GMA3600 y
+  ${optionalString (versionAtLeast version "4.5") ''
+    DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
+  ''}
 
   # Sound.
   SND_DYNAMIC_MINORS y
