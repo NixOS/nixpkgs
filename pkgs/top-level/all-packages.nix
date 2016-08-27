@@ -2701,6 +2701,8 @@ in
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
 
+  neural-style = callPackage ../tools/graphics/neural-style {};
+
   nco = callPackage ../development/libraries/nco { };
 
   nc6 = callPackage ../tools/networking/nc6 { };
