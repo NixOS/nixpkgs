@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
       sha256 = "042lc5yyyl3zszll2l930apysd0lip26w0d0f0gjkl7sbhshgk8v";
     })
   ];
+  NIX_CFLAGS_COMPILE = "-DSYSV";
   makeFlags="BINDIR=\${out}/bin MANPATH=\${out}/man";
   preBuild = "xmkmf";
   installTargets = "install install.man";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, foomatic_filters, bc, unzip, ghostscript, systemd, vim }:
+{ stdenv, fetchurl, foomatic-filters, bc, unzip, ghostscript, systemd, vim }:
 
 stdenv.mkDerivation rec {
   name = "foo2zjs-20110210";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vss8gdbbgxr694xw48rys2qflbnb4sp4gdb1v6z4m9ab97hs5yk";
   };
 
-  buildInputs = [ foomatic_filters bc unzip ghostscript systemd vim ];
+  buildInputs = [ foomatic-filters bc unzip ghostscript systemd vim ];
 
   patches = [ ./no-hardcode-fw.diff ];
 

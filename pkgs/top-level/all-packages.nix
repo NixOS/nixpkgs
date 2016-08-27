@@ -1556,6 +1556,8 @@ in
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  ferm = callPackage ../tools/networking/ferm { };
+
   fgallery = callPackage ../tools/graphics/fgallery {
     inherit (perlPackages) ImageExifTool JSON;
   };
@@ -2699,6 +2701,8 @@ in
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
 
+  neural-style = callPackage ../tools/graphics/neural-style {};
+
   nco = callPackage ../development/libraries/nco { };
 
   nc6 = callPackage ../tools/networking/nc6 { };
@@ -3278,6 +3282,8 @@ in
   ratools = callPackage ../tools/networking/ratools { };
 
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
+
+  rc = callPackage ../shells/rc { };
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
@@ -4736,9 +4742,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go_1_7 = callPackage ../development/compilers/go/1.7.nix {
+  go_1_7 = callPackage ../development/compilers/go/1.7.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    stdenv = stdenvAdapters.overrideCC pkgs.stdenv pkgs.clang_38;
+  });
 
   go = self.go_1_7;
 
@@ -8716,6 +8724,8 @@ in
 
   live555 = callPackage ../development/libraries/live555 { };
 
+  loadcaffe = callPackage ../development/libraries/loadcaffe {};
+
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
@@ -9002,7 +9012,8 @@ in
       };
     })
     openssl_1_0_1
-    openssl_1_0_2;
+    openssl_1_0_2
+    openssl_1_1_0;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -9587,7 +9598,9 @@ in
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
-  torch = callPackage ../development/libraries/torch {};
+  torch = callPackage ../development/libraries/torch {
+    openblas = openblasCompat;
+  };
 
   tremor = callPackage ../development/libraries/tremor { };
 
@@ -10004,7 +10017,11 @@ in
     go = go_1_6;
   };
 
-  buildGoPackage = buildGo16Package;
+  buildGo17Package = callPackage ../development/go-modules/generic {
+    go = go_1_7;
+  };
+
+  buildGoPackage = buildGo17Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -11165,6 +11182,7 @@ in
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.cpu-cgroup-v2."4.4"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11176,6 +11194,7 @@ in
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.cpu-cgroup-v2."4.6"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11187,6 +11206,9 @@ in
   linux_4_7 = callPackage ../os-specific/linux/kernel/linux-4.7.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        kernelPatches.cpu-cgroup-v2."4.7"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -15538,13 +15560,9 @@ in
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
-  zathuraCollection = recurseIntoAttrs
-    (callPackage ../applications/misc/zathura {
-        callPackage = newScope pkgs.zathuraCollection;
-        useMupdf = config.zathura.useMupdf or true;
-      });
-
-  zathura = zathuraCollection.zathuraWrapper;
+  zathura = callPackage ../applications/misc/zathura {
+    useMupdf = config.zathura.useMupdf or true;
+  };
 
   zed = callPackage ../applications/editors/zed { };
 
@@ -15802,6 +15820,9 @@ in
 
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_1_8;
+  };
+
+  liquidwar5 = callPackage ../games/liquidwar/5.nix {
   };
 
   macopix = callPackage ../games/macopix {
@@ -17104,7 +17125,7 @@ in
 
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
 
-  foomatic_filters = callPackage ../misc/drivers/foomatic-filters {};
+  foomatic-filters = callPackage ../misc/drivers/foomatic-filters {};
 
   freestyle = callPackage ../misc/freestyle { };
 

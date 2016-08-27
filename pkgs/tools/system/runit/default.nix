@@ -9,33 +9,37 @@ stdenv.mkDerivation rec {
     sha256 = "065s8w62r6chjjs6m9hapcagy33m75nlnxb69vg0f4ngn061dl3g";
   };
 
-  patches = [ ./Makefile.patch ];
+  outputs = [ "out" "man" ];
+
+  sourceRoot = "admin/${name}";
+
+  doCheck = true;
 
   postPatch = ''
-    cd ${name}
     sed -i 's,-static,,g' src/Makefile
   '';
 
-  buildPhase = ''
-    make -C 'src'
-  '';
+  preBuild = ''
+    cd src
 
-  checkPhase = ''
-    make -C 'src' check
+    # Both of these are originally hard-coded to gcc
+    echo cc > conf-cc
+    echo cc > conf-ld
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    for f in $(cat package/commands); do
-      mv src/$f $out/bin/
-    done
+    cp -t $out/bin $(< ../package/commands)
+
+    mkdir -p $man/share/man
+    cp -r ../man $man/share/man/man8
   '';
 
   meta = with stdenv.lib; {
     description = "UNIX init scheme with service supervision";
     license = licenses.bsd3;
     homepage = "http://smarden.org/runit";
-    maintainers = with maintainers; [ rickynils ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ rickynils joachifm ];
+    platforms = platforms.unix;
   };
 }

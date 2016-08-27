@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jaw51382pqyb6d1kgfg8ir0wd3p5qr2bmg8svcmjhlyp3h73qhj";
   };
 
-  patches = [ ./avoid-gcc5-wrong-optimisation.patch ];
+  patches = [ ./avoid-gcc5-wrong-optimisation.patch ./tcsh.glibc-2.24.patch ];
   
   buildInputs = [ ncurses ];
 

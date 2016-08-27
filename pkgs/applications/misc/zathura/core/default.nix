@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils, file, makeWrapper, zathura_icon, sqlite, glib
-, synctexSupport ? true, texlive ? null
-}:
+{ stdenv, lib, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils
+, file, makeWrapper, sqlite, glib
+, synctexSupport ? true, texlive ? null }:
 
 assert synctexSupport -> texlive != null;
 
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     url = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
     sha256 = "0fyb5hak0knqvg90rmdavwcmilhnrwgg1s5ykx9wd3skbpi8nsh8";
   };
+
+  icon = ./icon.xpm;
 
   buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite glib
   ] ++ lib.optional synctexSupport texlive.bin.core;
@@ -27,23 +29,20 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/zathura" \
-      --prefix PATH ":" "${file}/bin" \
+      --prefix PATH ":" "${lib.makeBinPath [ file ]}" \
       --prefix XDG_CONFIG_DIRS ":" "$out/etc"
 
+    install -Dm644 $icon $out/share/pixmaps/pwmt.xpm
     mkdir -pv $out/etc
-    echo "set window-icon ${zathura_icon}" > $out/etc/zathurarc
+    echo "set window-icon $out/share/pixmaps/pwmt.xpm" > $out/etc/zathurarc
+    echo "Icon=pwmt" >> $out/share/applications/zathura.desktop
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pwmt.org/projects/zathura/;
     description = "A core component for zathura PDF viewer";
-    license = stdenv.lib.licenses.zlib;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
-
-    # Set lower priority in order to provide user with a wrapper script called
-    # 'zathura' instead of real zathura executable. The wrapper will build
-    # plugin path argument before executing the original.
-    priority = 1;
+    license = licenses.zlib;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ garbas ];
   };
 }

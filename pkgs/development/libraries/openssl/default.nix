@@ -17,7 +17,7 @@ let
     };
 
     patches =
-      [ ./use-etc-ssl-certs.patch ]
+      optional (versionOlder version "1.1.0") ./use-etc-ssl-certs.patch
       ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
       ++ optional
            (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
@@ -112,6 +112,11 @@ in {
   openssl_1_0_2 = common {
     version = "1.0.2h";
     sha256 = "1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919";
+  };
+
+  openssl_1_1_0 = common {
+    version = "1.1.0";
+    sha256 = "10lcpmnxap9nw8ymdglys93cgkwd1lf1rz4fhq5whwhlmkwrzipm";
   };
 
 }
