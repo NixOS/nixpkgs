@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   patchPhase = ''
-    substituteInPlace Makefile \
-      --replace "command -p mv" "mv"
     substituteInPlace Makefile.in \
       --replace "command -p mv" "mv"
     substituteInPlace autocrap/Makefile.am \
