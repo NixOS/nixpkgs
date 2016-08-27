@@ -18,7 +18,6 @@ let
 
   poolName = "tt-rss";
   phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
-  virtualHostName = "tt-rss";
 
   tt-rss-config = pkgs.writeText "config.php" ''
     <?php
@@ -119,17 +118,13 @@ let
         '';
       };
 
-      # TODO: Re-enable after https://github.com/NixOS/nixpkgs/pull/15862 is merged
-
-      # virtualHost = mkOption {
-      #   type = types.str;
-      #   default = "${virtualHostName}";
-      #   description = ''
-      #     Name of existing nginx virtual host that is used to run web-application.
-      #     If not specified a host will be created automatically with
-      #     default values.
-      #   '';
-      # };
+      virtualHost = mkOption {
+        type = types.nullOr types.str;
+        default = "tt-rss";
+        description = ''
+          Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
+        '';
+      };
 
       database = {
         type = mkOption {
@@ -456,7 +451,7 @@ let
 
   config = mkIf cfg.enable {
 
-    services.phpfpm.poolConfigs = if cfg.pool == "${poolName}" then {
+    services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
       "${poolName}" = ''
         listen = "${phpfpmSocketName}";
         listen.owner = nginx
@@ -471,36 +466,26 @@ let
         pm.max_requests = 500
         catch_workers_output = 1
       '';
-    } else {};
+    };
 
-    # TODO: Re-enable after https://github.com/NixOS/nixpkgs/pull/15862 is merged
+    services.nginx.virtualHosts = mkIf (cfg.virtualHost != null) {
+      "${cfg.virtualHost}" = {
+        root = "${cfg.root}";
 
-    # services.nginx.virtualHosts = if cfg.virtualHost == "${virtualHostName}" then {
-    #   "${virtualHostName}" = {
-    #     root = "${root}";
-    #     extraConfig = ''
-    #       access_log  /var/log/nginx-${virtualHostName}-access.log;
-    #       error_log   /var/log/nginx-${virtualHostName}-error.log;
-    #     '';
+        locations."/" = {
+          index = "index.php";
+        };
 
-    #     locations."/" = {
-    #       extraConfig = ''
-    #         index index.php;
-    #       '';
-    #     };
-
-    #     locations."~ \.php$" = {
-    #       extraConfig = ''
-    #         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    #         fastcgi_pass unix:${phpfpmSocketName};
-    #         fastcgi_index index.php;
-    #         fastcgi_param SCRIPT_FILENAME ${root}/$fastcgi_script_name;
-
-    #         include ${pkgs.nginx}/conf/fastcgi_params;
-    #       '';
-    #     };
-    #   };
-    # } else {};
+        locations."~ \.php$" = {
+          extraConfig = ''
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            fastcgi_pass unix:${phpfpmSocketName};
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME ${cfg.root}/$fastcgi_script_name;
+          '';
+        };
+      };
+    };
 
 
     systemd.services.tt-rss = let
