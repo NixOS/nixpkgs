@@ -366,7 +366,7 @@ let
 
       singleUserMode = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
 
         description = ''
           Operate in single user mode, disables all functionality related to
