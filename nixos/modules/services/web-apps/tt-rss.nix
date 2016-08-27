@@ -91,6 +91,15 @@ let
 
       enable = mkEnableOption "tt-rss";
 
+      root = mkOption {
+        type = types.path;
+        default = "/var/lib/tt-rss";
+        example = "/var/lib/tt-rss";
+        description = ''
+          Root of the application.
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "nginx";
@@ -445,9 +454,7 @@ let
 
   ###### implementation
 
-  config = let
-    root = "/var/lib/tt-rss";
-  in mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
     services.phpfpm.poolConfigs = if cfg.pool == "${poolName}" then {
       "${poolName}" = ''
@@ -524,12 +531,12 @@ let
                else "";
 
         in ''
-          rm -rf "${root}/*"
-          mkdir -m 755 -p "${root}"
-          cp -r "${pkgs.tt-rss}/"* "${root}"
-          ln -sf "${tt-rss-config}" "${root}/config.php"
-          chown -R "${cfg.user}" "${root}"
-          chmod -R 755 "${root}"
+          rm -rf "${cfg.root}/*"
+          mkdir -m 755 -p "${cfg.root}"
+          cp -r "${pkgs.tt-rss}/"* "${cfg.root}"
+          ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
+          chown -R "${cfg.user}" "${cfg.root}"
+          chmod -R 755 "${cfg.root}"
         '' + (optionalString (cfg.database.type == "pgsql") ''
 
           exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
@@ -554,7 +561,7 @@ let
 
         serviceConfig = {
           User = "${cfg.user}";
-          ExecStart = "${pkgs.php}/bin/php /var/lib/tt-rss/update.php --daemon";
+          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon";
           StandardOutput = "syslog";
           StandardError = "syslog";
           PermissionsStartOnly = true;
