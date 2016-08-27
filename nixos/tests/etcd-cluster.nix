@@ -1,14 +1,52 @@
 # This test runs simple etcd cluster
 
 import ./make-test.nix ({ pkgs, ... } : let
-  certs = pkgs.runCommand "certs" {
-    buildInputs = [pkgs.openssl];
-  } ''
-    mkdir -p $out
-    openssl genrsa -out $out/ca-key.pem 2048
-    openssl req -x509 -new -nodes -key $out/ca-key.pem -days 10000 -out $out/ca.pem -subj "/CN=etcd-ca"
 
-    cat << EOF > openssl.cnf
+  runWithOpenSSL = file: cmd: pkgs.runCommand file {
+    buildInputs = [ pkgs.openssl ];
+  } cmd;
+
+  ca_key = runWithOpenSSL "ca-key.pem" "openssl genrsa -out $out 2048";
+  ca_pem = runWithOpenSSL "ca.pem" ''
+    openssl req \
+      -x509 -new -nodes -key ${ca_key} \
+      -days 10000 -out $out -subj "/CN=etcd-ca"
+  '';
+  etcd_key = runWithOpenSSL "etcd-key.pem" "openssl genrsa -out $out 2048";
+  etcd_csr = runWithOpenSSL "etcd.csr" ''
+    openssl req \
+       -new -key ${etcd_key} \
+       -out $out -subj "/CN=etcd" \
+       -config ${openssl_cnf}
+  '';
+  etcd_cert = runWithOpenSSL "etcd.pem" ''
+    openssl x509 \
+      -req -in ${etcd_csr} \
+      -CA ${ca_pem} -CAkey ${ca_key} \
+      -CAcreateserial -out $out \
+      -days 365 -extensions v3_req \
+      -extfile ${openssl_cnf}
+  '';
+
+  etcd_client_key = runWithOpenSSL "etcd-client-key.pem"
+    "openssl genrsa -out $out 2048";
+
+  etcd_client_csr = runWithOpenSSL "etcd-client-key.pem" ''
+    openssl req \
+      -new -key ${etcd_client_key} \
+      -out $out -subj "/CN=etcd-client" \
+      -config ${client_openssl_cnf}
+  '';
+
+  etcd_client_cert = runWithOpenSSL "etcd-client.crt" ''
+    openssl x509 \
+      -req -in ${etcd_client_csr} \
+      -CA ${ca_pem} -CAkey ${ca_key} -CAcreateserial \
+      -out $out -days 365 -extensions v3_req \
+      -extfile ${client_openssl_cnf}
+  '';
+
+  openssl_cnf = pkgs.writeText "openssl.cnf" ''
     ions = v3_req
     distinguished_name = req_distinguished_name
     [req_distinguished_name]
@@ -22,13 +60,9 @@ import ./make-test.nix ({ pkgs, ... } : let
     DNS.2 = node2
     DNS.3 = node3
     IP.1 = 127.0.0.1
-    EOF
+  '';
 
-    openssl genrsa -out $out/etcd-key.pem 2048
-    openssl req -new -key $out/etcd-key.pem -out etcd.csr -subj "/CN=etcd" -config openssl.cnf
-    openssl x509 -req -in etcd.csr -CA $out/ca.pem -CAkey $out/ca-key.pem -CAcreateserial -out $out/etcd.pem -days 365 -extensions v3_req -extfile openssl.cnf
-
-    cat << EOF > client-openssl.cnf
+  client_openssl_cnf = pkgs.writeText "client-openssl.cnf" ''
     ions = v3_req
     distinguished_name = req_distinguished_name
     [req_distinguished_name]
@@ -36,20 +70,15 @@ import ./make-test.nix ({ pkgs, ... } : let
     basicConstraints = CA:FALSE
     keyUsage = digitalSignature, keyEncipherment
     extendedKeyUsage = clientAuth
-    EOF
-
-    openssl genrsa -out $out/etcd-client-key.pem 2048
-    openssl req -new -key $out/etcd-client-key.pem -out etcd-client.csr -subj "/CN=etcd-client" -config client-openssl.cnf
-    openssl x509 -req -in etcd-client.csr -CA $out/ca.pem -CAkey $out/ca-key.pem -CAcreateserial -out $out/etcd-client.pem -days 365 -extensions v3_req -extfile client-openssl.cnf
   '';
 
   nodeConfig = {
     services = {
       etcd = {
         enable = true;
-        keyFile = "${certs}/etcd-key.pem";
-        certFile = "${certs}/etcd.pem";
-        trustedCaFile = "${certs}/ca.pem";
+        keyFile = etcd_key;
+        certFile = etcd_cert;
+        trustedCaFile = ca_pem;
         peerClientCertAuth = true;
         listenClientUrls = ["https://127.0.0.1:2379"];
         listenPeerUrls = ["https://0.0.0.0:2380"];
@@ -57,9 +86,9 @@ import ./make-test.nix ({ pkgs, ... } : let
     };
 
     environment.variables = {
-      ETCDCTL_CERT_FILE = "${certs}/etcd-client.pem";
-      ETCDCTL_KEY_FILE = "${certs}/etcd-client-key.pem";
-      ETCDCTL_CA_FILE = "${certs}/ca.pem";
+      ETCDCTL_CERT_FILE = "${etcd_client_cert}";
+      ETCDCTL_KEY_FILE = "${etcd_client_key}";
+      ETCDCTL_CA_FILE = "${ca_pem}";
       ETCDCTL_PEERS = "https://127.0.0.1:2379";
     };
 
