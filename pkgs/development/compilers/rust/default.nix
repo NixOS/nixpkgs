@@ -7,15 +7,17 @@ in
 
 rec {
   rustc = callPackage ./rustc.nix {
-    shortVersion = "1.10.0";
+    shortVersion = "1.11.0";
     isRelease = true;
     forceBundledLLVM = false;
     configureFlags = [ "--release-channel=stable" ];
-    srcRev = "cfcb716cf0961a7e3a4eceac828d94805cf8140b";
-    srcSha = "15i81ybh32xymmkyz3bkb5bdgi9hx8nb0sh00ac6qba6w8ljpii9";
+    srcRev = "9b21dcd6a89f38e8ceccb2ede8c9027cb409f6e3";
+    srcSha = "12djpxhwqvq3262ai9vd096bvriynci2mrwn0dfjrd0w6s0i8viy";
+
     patches = [
       ./patches/disable-lockfile-check.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
+
     inherit targets;
     inherit targetPatches;
     inherit targetToolchains;
@@ -27,10 +29,10 @@ rec {
     # `http.cainfo` option from .cargo/config which isn't released
     # yet.
 
-    version = "master-2016-07-25";
-    srcRev = "f09ef68cc47956ccc5f99212bdcdd15298c400a0";
-    srcSha = "1r6q9jd0fl6mzhwkvrrcv358q2784hg51dfpy28xgh4n61m7c155";
-    depsSha256 = "1p1ygabg9k9b0azm0mrx8asjzdi35c5zw53iysba198lli6bhdl4";
+    version = "0.12.0";
+    srcRev = "6b98d1f8abf5b33c1ca2771d3f5f3bafc3407b93";
+    srcSha = "0pq6l3yzmh2il6320f6501hvp9iikdxzl34i5b52v93ncpim36bk";
+    depsSha256 = "1jrwzm9fd15kf2d5zb17q901hx32h711ivcwdpxpmzwq08sjlcvl";
 
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo

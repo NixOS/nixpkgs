@@ -3,12 +3,11 @@
 
 rec {
   rustc = callPackage ./rustc.nix {
-    shortVersion = "beta-1.11.0";
+    shortVersion = "beta-2016-08-17";
     forceBundledLLVM = false;
-    needsCmake = true;
     configureFlags = [ "--release-channel=beta" ];
-    srcRev = "9333c420da0da6291740c313d5af3d620b55b8bc";
-    srcSha = "05z6i4s5jjw3c5ypap6kzxk81bg4dib47h51znvsvcvr0svsnkgs";
+    srcRev = "822166b842e4d0b32fafc8b077fb927ec281253d";
+    srcSha = "1zkv7hyjvcj7kvbngf309skgllk6rd7727a6hkvhd3hg8jlz0d00";
     patches = [
       ./patches/disable-lockfile-check.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;

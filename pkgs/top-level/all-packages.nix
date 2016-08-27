@@ -422,6 +422,10 @@ in
 
   apitrace = qt55.callPackage ../applications/graphics/apitrace {};
 
+  argus = callPackage ../tools/networking/argus {};
+
+  argus-clients = callPackage ../tools/networking/argus-clients {};
+
   argtable = callPackage ../tools/misc/argtable {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
@@ -1548,6 +1552,8 @@ in
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  ferm = callPackage ../tools/networking/ferm { };
+
   fgallery = callPackage ../tools/graphics/fgallery {
     inherit (perlPackages) ImageExifTool JSON;
   };
@@ -1866,6 +1872,8 @@ in
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
   };
+
+  groonga = callPackage ../servers/search/groonga { };
 
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
@@ -2198,9 +2206,7 @@ in
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
-  keybase = callPackage ../applications/misc/keybase { };
-
-  keybase-go = callPackage ../tools/security/keybase { };
+  keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/kbfs { };
 
@@ -2221,6 +2227,8 @@ in
   kronometer = qt5.callPackage ../tools/misc/kronometer { };
 
   kst = qt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
+
+  kytea = callPackage ../tools/text/kytea { };
 
   leocad = callPackage ../applications/graphics/leocad { };
 
@@ -2688,6 +2696,8 @@ in
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
+
+  neural-style = callPackage ../tools/graphics/neural-style {};
 
   nco = callPackage ../development/libraries/nco { };
 
@@ -3268,6 +3278,8 @@ in
   ratools = callPackage ../tools/networking/ratools { };
 
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
+
+  rc = callPackage ../shells/rc { };
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
@@ -3986,6 +3998,8 @@ in
 
   unclutter = callPackage ../tools/misc/unclutter { };
 
+  unclutter-xfixes = callPackage ../tools/misc/unclutter-xfixes { };
+
   unbound = callPackage ../tools/networking/unbound { };
 
   units = callPackage ../tools/misc/units { };
@@ -4486,24 +4500,6 @@ in
     libcCross = if crossSystem != null then libcCross else null;
   }));
 
-  gcc46 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.6 {
-    inherit noSysDirs;
-
-    ppl = null;
-    cloog = null;
-
-    # bootstrapping a profiled compiler does not work in the sheevaplug:
-    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = false;
-
-    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
-    # and host != build), `cross' must be null but the cross-libc must still
-    # be passed.
-    cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
-    texinfo = texinfo413;
-  }));
-
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
@@ -4739,9 +4735,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go_1_7 = callPackage ../development/compilers/go/1.7.nix {
+  go_1_7 = callPackage ../development/compilers/go/1.7.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    stdenv = stdenvAdapters.overrideCC pkgs.stdenv pkgs.clang_38;
+  });
 
   go = self.go_1_7;
 
@@ -5850,10 +5848,6 @@ in
 
   phpPackages = php56Packages;
 
-  php55Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php55;
-  });
-
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
   });
@@ -5863,7 +5857,6 @@ in
   });
 
   inherit (callPackages ../development/interpreters/php { })
-    php55
     php56
     php70;
 
@@ -7054,7 +7047,11 @@ in
 
   ctpl = callPackage ../development/libraries/ctpl { };
 
+  cppdb = callPackage ../development/libraries/cppdb { };
+
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
+
+  cppcms = callPackage ../development/libraries/cppcms { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
@@ -8693,6 +8690,8 @@ in
 
   live555 = callPackage ../development/libraries/live555 { };
 
+  loadcaffe = callPackage ../development/libraries/loadcaffe {};
+
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
@@ -8979,7 +8978,8 @@ in
       };
     })
     openssl_1_0_1
-    openssl_1_0_2;
+    openssl_1_0_2
+    openssl_1_1_0;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -9564,7 +9564,9 @@ in
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
-  torch = callPackage ../development/libraries/torch {};
+  torch = callPackage ../development/libraries/torch {
+    openblas = openblasCompat;
+  };
 
   tremor = callPackage ../development/libraries/tremor { };
 
@@ -9979,7 +9981,11 @@ in
     go = go_1_6;
   };
 
-  buildGoPackage = buildGo16Package;
+  buildGo17Package = callPackage ../development/go-modules/generic {
+    go = go_1_7;
+  };
+
+  buildGoPackage = buildGo17Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -10414,6 +10420,7 @@ in
   rspamd = callPackage ../servers/mail/rspamd { };
 
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
+  pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
   pshs = callPackage ../servers/http/pshs { };
 
@@ -11141,6 +11148,7 @@ in
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.cpu-cgroup-v2."4.4"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11152,6 +11160,7 @@ in
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.cpu-cgroup-v2."4.6"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11163,6 +11172,9 @@ in
   linux_4_7 = callPackage ../os-specific/linux/kernel/linux-4.7.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        kernelPatches.cpu-cgroup-v2."4.7"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -13306,6 +13318,8 @@ in
 
   linssid = qt5.callPackage ../applications/networking/linssid { };
 
+  manuskript = callPackage ../applications/editors/manuskript { };
+
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   praat = callPackage ../applications/audio/praat { };
@@ -14423,7 +14437,7 @@ in
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
-  qmmp = callPackage ../applications/audio/qmmp { };
+  qmmp = qt5.callPackage ../applications/audio/qmmp { };
 
   qnotero = callPackage ../applications/office/qnotero { };
 
@@ -15510,13 +15524,9 @@ in
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
-  zathuraCollection = recurseIntoAttrs
-    (callPackage ../applications/misc/zathura {
-        callPackage = newScope pkgs.zathuraCollection;
-        useMupdf = config.zathura.useMupdf or true;
-      });
-
-  zathura = zathuraCollection.zathuraWrapper;
+  zathura = callPackage ../applications/misc/zathura {
+    useMupdf = config.zathura.useMupdf or true;
+  };
 
   zed = callPackage ../applications/editors/zed { };
 
@@ -15774,6 +15784,9 @@ in
 
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_1_8;
+  };
+
+  liquidwar5 = callPackage ../games/liquidwar/5.nix {
   };
 
   macopix = callPackage ../games/macopix {
@@ -16983,7 +16996,7 @@ in
     libusb = libusb1;
   };
 
-  cups_filters = callPackage ../misc/cups/filters.nix { };
+  cups-filters = callPackage ../misc/cups/filters.nix { };
 
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
@@ -17071,7 +17084,7 @@ in
 
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
 
-  foomatic_filters = callPackage ../misc/drivers/foomatic-filters {};
+  foomatic-filters = callPackage ../misc/drivers/foomatic-filters {};
 
   freestyle = callPackage ../misc/freestyle { };
 

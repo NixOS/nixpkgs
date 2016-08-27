@@ -253,7 +253,7 @@ in
     networking.extraHosts = "${cjdnsHosts}";
 
     assertions = [
-      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile == "" );
+      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != "" );
         message = "Neither cjdns.ETHInterface.bind nor cjdns.UDPInterface.bind defined.";
       }
       { assertion = config.networking.enableIPv6;

@@ -299,20 +299,13 @@ let
     });
 
 in {
-
-  php55 = generic {
-    version = "5.5.38";
-    sha256 = "0f1y76whg6yx9a18mh97f8yq8lb64ri1f0zfr9la9374nbmq2g27";
-  };
-
   php56 = generic {
-    version = "5.6.24";
-    sha256 = "1iiqmjgxr10ci69f33fzyhplp06km6ybgqmxr1g142pdqdz628xz";
+    version = "5.6.25";
+    sha256 = "1pldn4z7pzcjm8li9xryrniz5cz542cbv4nlrr13wzzdmhr61kjq";
   };
 
   php70 = generic {
-    version = "7.0.9";
-    sha256 = "0yrv5ijw6bgc0ahplczwhl5nm6l5mnd1i2n5023z7wkmb25rdrif";
+    version = "7.0.10";
+    sha256 = "1ppn17n5klhs1b2mcbbxxiqq4xvdbmv8p866q0qnk61nlzjvnmc0";
   };
-
 }

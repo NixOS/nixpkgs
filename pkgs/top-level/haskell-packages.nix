@@ -47,7 +47,7 @@ rec {
       inherit (bootPkgs) hscolour;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
-      bootPkgs = packages.ghc784;
+      bootPkgs = packages.ghc7103;
       inherit (bootPkgs) alex happy;
     };
     ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix rec {

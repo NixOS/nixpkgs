@@ -2,6 +2,7 @@
 , openldap
 }:
 
+# NOTE: Please check if any changes here are applicable to ../realpine/ as well
 let
   version = "2.00";
   baseName = "alpine";

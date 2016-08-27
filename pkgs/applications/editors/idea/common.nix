@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip
 , coreutils, gnugrep, which, git, python, unzip }:
 
-{ name, product, version, build, src, wmClass, jdk, meta } @ attrs:
+{ name, product, version, src, wmClass, jdk, meta } @ attrs:
 
 with stdenv.lib;
 
@@ -11,7 +11,7 @@ let loName = toLower product;
 in
 
 with stdenv; lib.makeOverridable mkDerivation rec {
-  inherit name build src meta;
+  inherit name src meta;
   desktopItem = makeDesktopItem {
     name = execName;
     exec = execName;

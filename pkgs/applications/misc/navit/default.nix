@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  # 'cvs' is only for the autogen
-  buildInputs = [ pkgconfig gtk SDL fontconfig freetype imlib2 SDL_image mesa
-    libXmu freeglut python gettext quesoglc gd postgresql cmake qt4 SDL_ttf fribidi ];
+  buildInputs = [ gtk SDL fontconfig freetype imlib2 SDL_image mesa
+    libXmu freeglut python gettext quesoglc gd postgresql qt4 SDL_ttf fribidi ];
+
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
 
   cmakeFlags = [ "-DSAMPLE_MAP=n" ];
 

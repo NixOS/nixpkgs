@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
-, goffice, gnome3, makeWrapper, gtk3
+, goffice, gnome3, makeWrapper, gtk3, bison
 , python, pygobject3
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.26";
+  name = "gnumeric-1.12.32";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "48250718133e998f7b2e73f71be970542e46c9096afb936dbcb152cf5394ee14";
+    sha256 = "a07bc83e2adaeb94bfa2c737c9a19d90381a19cb203dd7c4d5f7d6cfdbee6de8";
   };
 
   configureFlags = "--disable-component";
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    pkgconfig intltool perl perlXMLParser
+    pkgconfig intltool perl perlXMLParser bison
     goffice gtk3 makeWrapper gnome3.defaultIconTheme
     python pygobject3
   ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     for f in "$out"/bin/gnumeric-*; do
       wrapProgram $f \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
+        ${stdenv.lib.optionalString (!stdenv.isDarwin) "--prefix GIO_EXTRA_MODULES : '${gnome3.dconf}/lib/gio/modules'"}
     done
   '';
 
