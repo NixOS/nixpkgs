@@ -3984,6 +3984,8 @@ in
 
   unclutter = callPackage ../tools/misc/unclutter { };
 
+  unclutter-xfixes = callPackage ../tools/misc/unclutter-xfixes { };
+
   unbound = callPackage ../tools/networking/unbound { };
 
   units = callPackage ../tools/misc/units { };
@@ -6445,7 +6447,7 @@ in
   gnumake = self.gnumake42;
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
-  
+
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
@@ -10472,7 +10474,7 @@ in
 
   influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
 
-  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; }; 
+  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
@@ -12342,6 +12344,7 @@ in
 
   go-ethereum = self.altcoins.go-ethereum;
   parity = self.altcoins.parity;
+  ethabi = self.altcoins.ethabi;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;

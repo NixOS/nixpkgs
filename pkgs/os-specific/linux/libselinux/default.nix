@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libsepol, pcre
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libsepol, pcre
 , enablePython ? true, swig ? null, python ? null
 }:
 
@@ -21,6 +21,17 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all -std=gnu89";
 
+  patches = [
+    # Fix Python package issue arising from recent SWIG changes.
+    (fetchpatch {
+      url = "https://github.com/SELinuxProject/selinux/commit/a9604c30a5e2f71007d31aa6ba41cf7b95d94822.patch";
+      sha256 = "030qaq1f78yvnr5wzwaxsn0jak89y7nmh93yxdssb4418si7chv4";
+      addPrefixes = true;
+    })
+  ];
+
+  patchFlags = ["-p2"];
+  
   postPatch = optionalString enablePython ''
     sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
   '';

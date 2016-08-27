@@ -28,6 +28,7 @@ rec {
   namecoind = callPackage ./namecoind.nix { };
 
   parity = callPackage ./parity.nix { };
+  ethabi = callPackage ./ethabi.nix { };
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };
