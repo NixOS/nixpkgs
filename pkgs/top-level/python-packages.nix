@@ -13957,7 +13957,6 @@ in modules // {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license = licenses.gpl2;
-      broken = true;
     };
 
     src = pkgs.fetchurl {
@@ -13965,8 +13964,14 @@ in modules // {
       sha256 = "1jja37nhiypdx1z6cazp8ffsf0z3yqmpdbprpdzf668lcb422rl0";
     };
 
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ wxPython pyserial hidapi xlib appdirs pkgs.wmctrl mock ];
+    # This is a fix for https://github.com/pypa/pip/issues/3624 causing regression https://github.com/pypa/pip/issues/3781
+    postPatch = ''
+     substituteInPlace setup.py --replace " in sys_platform" " == sys_platform"
+    '';
+
+    buildInputs = with self; [ pytest mock ];
+    propagatedBuildInputs = with self; [ six setuptools pyserial appdirs hidapi
+                                         wxPython xlib pkgs.wmctrl ];
   };
 
   pygal = buildPythonPackage rec {
