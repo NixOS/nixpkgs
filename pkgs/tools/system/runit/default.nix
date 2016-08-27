@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd src
+
+    # Both of these are originally hard-coded to gcc
+    echo cc > conf-cc
+    echo cc > conf-ld
   '';
 
   installPhase = ''
@@ -36,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "http://smarden.org/runit";
     maintainers = with maintainers; [ rickynils joachifm ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
