@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
-  NIX_CFLAGS_COMPILE = "-I${elfutils}/include -Wno-error=cpp -Wno-error=bool-compare";
+  NIX_CFLAGS_COMPILE = "-I${elfutils}/include -Wno-error=cpp -Wno-error=bool-compare -Wno-error=deprecated-declarations";
   NIX_CFLAGS_LINK = "-L${elfutils}/lib";
 
   installFlags = "install install-man ASCIIDOC8=1";
