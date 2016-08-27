@@ -20,10 +20,9 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
-    inherit (config.boot) devShmSize runSize;
     inherit (config.nix) readOnlyStore;
     inherit (config.networking) useHostResolvConf;
-    ttyGid = config.ids.gids.tty;
+    inherit (config.system.build) earlyMountScript;
     path =
       [ pkgs.coreutils
         pkgs.utillinux
