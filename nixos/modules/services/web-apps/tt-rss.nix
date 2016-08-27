@@ -34,10 +34,10 @@ let
       define('MYSQL_CHARSET', 'UTF8');
 
       define('DB_TYPE', '${cfg.database.type}');
-      define('DB_HOST', '${cfg.database.host}');
+      define('DB_HOST', '${optionalString (cfg.database.host != null) cfg.database.host}');
       define('DB_USER', '${cfg.database.user}');
       define('DB_NAME', '${cfg.database.name}');
-      define('DB_PASS', '${escape ["'" "\\"] cfg.database.password}');
+      define('DB_PASS', '${optionalString (cfg.database.password != null) (escape ["'" "\\"] cfg.database.password)}');
       define('DB_PORT', '${toString dbPort}');
 
       define('AUTH_AUTO_CREATE', ${boolToString cfg.auth.autoCreate});
@@ -141,10 +141,10 @@ let
         };
 
         host = mkOption {
-          type = types.str;
-          default = "localhost";
+          type = types.nullOr types.str;
+          default = null;
           description = ''
-            Host of the database.
+            Host of the database. Leave null to use Unix domain socket.
           '';
         };
 
@@ -510,25 +510,23 @@ let
         description = "Tiny Tiny RSS feeds update daemon";
 
         preStart = let
-          callSql = if cfg.database.type == "pgsql" then (e: ''
-                 ${optionalString (cfg.database.password != null)
-                   "PGPASSWORD=${cfg.database.password}"} ${pkgs.postgresql95}/bin/psql \
-                     -U ${cfg.database.user}                                            \
-                     -h ${cfg.database.host}                                            \
-                     --port ${toString dbPort}                                          \
-                     -c '${e}'                                                          \
-                     ${cfg.database.name}'')
+          callSql = e:
+              if cfg.database.type == "pgsql" then ''
+                  ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
+                  ${pkgs.postgresql95}/bin/psql \
+                    -U ${cfg.database.user} \
+                    ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \
+                    -c '${e}' \
+                    ${cfg.database.name}''
 
-               else if cfg.database.type == "mysql" then (e: ''
-                 echo '${e}' | ${pkgs.mysql}/bin/mysql                  \
-                   ${optionalString (cfg.database.password != null)
-                     "-p${cfg.database.password}"}                      \
-                   -u ${cfg.database.user}                              \
-                   -h ${cfg.database.host}                              \
-                   -P ${toString dbPort}                                \
-                   ${cfg.database.name}'')
+              else if cfg.database.type == "mysql" then ''
+                  echo '${e}' | ${pkgs.mysql}/bin/mysql \
+                    -u ${cfg.database.user} \
+                    ${optionalString (cfg.database.password != null) "-p${cfg.database.password}"} \
+                    ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} -P ${toString dbPort}"} \
+                    ${cfg.database.name}''
 
-               else "";
+              else "";
 
         in ''
           rm -rf "${cfg.root}/*"
@@ -537,8 +535,9 @@ let
           ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
           chown -R "${cfg.user}" "${cfg.root}"
           chmod -R 755 "${cfg.root}"
-        '' + (optionalString (cfg.database.type == "pgsql") ''
+        ''
 
+        + (optionalString (cfg.database.type == "pgsql") ''
           exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
           | tail -n+3 | head -n-2 | sed -e 's/[ \n\t]*//')
 
@@ -547,8 +546,9 @@ let
           else
             echo 'The database contains some data. Leaving it as it is.'
           fi;
-        '') + (optionalString (cfg.database.type == "mysql") ''
+        '')
 
+        + (optionalString (cfg.database.type == "mysql") ''
           exists=$(${callSql "select count(*) > 0 from information_schema.tables where table_schema = schema()"} \
           | tail -n+2 | sed -e 's/[ \n\t]*//')
 
