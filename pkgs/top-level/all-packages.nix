@@ -16100,6 +16100,8 @@ in
 
   vapoursynth = callPackage ../development/libraries/vapoursynth { };
 
+  vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
+
   vassal = callPackage ../games/vassal { };
 
   vdrift = callPackage ../games/vdrift { };
