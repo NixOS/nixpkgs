@@ -43,7 +43,9 @@ let
 
   secretsYml = ''
     production:
-      db_key_base: ${cfg.secrets.db_key_base}
+      secret_key_base: ${cfg.secrets.secret}
+      otp_key_base: ${cfg.secrets.otp}
+      db_key_base: ${cfg.secrets.db}
   '';
 
   gitlabConfig = {
@@ -121,7 +123,7 @@ let
       makeWrapper ${cfg.packages.gitlab.env}/bin/bundle $out/bin/gitlab-bundle \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
-          --set PATH '${stdenv.lib.makeBinPath [ pkgs.nodejs pkgs.gzip config.services.postgresql.package ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip config.services.postgresql.package ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
       makeWrapper $out/bin/gitlab-bundle $out/bin/gitlab-rake \
@@ -318,13 +320,36 @@ in {
         };
       };
 
-      secrets.db_key_base = mkOption {
+      secrets.secret = mkOption {
         type = types.str;
-        example = "";
         description = ''
-          The db_key_base secrets is used to encrypt variables in the DB. If
+          The secret is used to encrypt variables in the DB. If
           you change or lose this key you will be unable to access variables
           stored in database.
+
+          Make sure the secret is at least 30 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+        '';
+      };
+
+      secrets.db = mkOption {
+        type = types.str;
+        description = ''
+          The secret is used to encrypt variables in the DB. If
+          you change or lose this key you will be unable to access variables
+          stored in database.
+
+          Make sure the secret is at least 30 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+        '';
+      };
+
+      secrets.otp = mkOption {
+        type = types.str;
+        description = ''
+          The secret is used to encrypt secrets for OTP tokens. If
+          you change or lose this key, users which have 2FA enabled for login
+          won't be able to login anymore.
 
           Make sure the secret is at least 30 characters and all random,
           no regular words or you'll be exposed to dictionary attacks.
@@ -458,8 +483,7 @@ in {
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config ${cfg.statePath}/shell
 
-        # TODO: What exactly is gitlab-shell doing with the secret?
-        tr -dc _A-Z-a-z-0-9 < /dev/urandom | head -c 20 > ${cfg.statePath}/config/gitlab_shell_secret
+        tr -dc A-Za-z0-9 < /dev/urandom | head -c 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # The uploads directory is hardcoded somewhere deep in rails. It is
         # symlinked in the gitlab package to /run/gitlab/uploads to make it

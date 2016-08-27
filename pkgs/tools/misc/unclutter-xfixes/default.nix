@@ -5,9 +5,9 @@
 let version = "1.2"; in
 
 stdenv.mkDerivation {
-  name = "unclutter-xfixes";
+  name = "unclutter-xfixes-${version}";
   version = version;
-  
+
   src = fetchFromGitHub {
     owner = "Airblader";
     repo = "unclutter-xfixes";
@@ -21,6 +21,10 @@ stdenv.mkDerivation {
     asciidoc libxslt docbook_xsl
   ];
 
+  postPatch = ''
+    substituteInPlace Makefile --replace "CC = gcc" "CC = cc"
+  '';
+
   preBuild = ''
     # The Makefile calls git only to discover the package version,
     # but that doesn't work right in the build environment,
@@ -30,9 +34,9 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    export DESTDIR=$out PREFIX=/bin MANDIR=/man/man1
+    export DESTDIR=$out MANDIR=/man/man1
   '';
-  
+
   postInstall = ''
     mv $out/usr/bin $out/bin
     mv $out/usr/share/man $out/man

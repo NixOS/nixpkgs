@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, mesa_glu, x11, libXmu, libXi }:
+{ stdenv, fetchurl, mesa_glu, x11, libXmu, libXi
+, AGL ? null }:
 
 with stdenv.lib;
 
@@ -12,6 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ x11 libXmu libXi ];
   propagatedNativeBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
+  buildInputs = [] ++ optionals stdenv.isDarwin [ AGL ];
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux

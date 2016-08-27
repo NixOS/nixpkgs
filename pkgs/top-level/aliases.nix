@@ -36,6 +36,7 @@ doNotDisplayTwice rec {
   conkerorWrapper = conkeror; # added 2015-01
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
+  cups_filters = cups-filters; # added 2016-08
   cv = progress; # added 2015-09-06
   debian_devscripts = debian-devscripts; # added 2016-03-23
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
@@ -45,6 +46,7 @@ doNotDisplayTwice rec {
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
+  foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11
   fuse_zip = fuse-zip; # added 2016-04-27
   gettextWithExpat = gettext; # 2016-02-19
@@ -57,6 +59,7 @@ doNotDisplayTwice rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
+  keybase-go = keybase;  # added 2016-08-24
   letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libcap_manpages = libcap.doc; # added 2016-04-29

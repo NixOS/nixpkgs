@@ -4,18 +4,18 @@ with python27Packages;
 
 stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "113.0.0";
+  version = "122.0.0";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "0v90am3zb77c1d4qbm8pn3mn4xc9xbcw48clca2v5mr5g48aq221";
+        sha256 = "0nx348yx1avbb34bpj316fb7jzyzkylscyx8kv183rg4s1q2f798";
       }
     else
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "1fjc80i1szzppib5pplw3vxh83vzkimlfcpg82vakyhvbjndnqyr";
+        sha256 = "0jhw8yv2kv0fs64rzvddx3szzpn74nqnd3rbd9wx2vi6nmffkrwv";
       };
 
   buildInputs = [python27 makeWrapper];

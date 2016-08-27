@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  buildFlags = [ "CC=cc" ];
+
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
     cp sl $out/bin

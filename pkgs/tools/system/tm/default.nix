@@ -6,7 +6,9 @@ stdenv.mkDerivation {
 
   installPhase=''make install "PREFIX=$out"'';
 
-  patchPhase = ''sed -i 's@/usr/bin/install@install@g' Makefile'';
+  patchPhase = ''
+    sed -i 's@/usr/bin/install@install@g ; s/gcc/cc/g' Makefile
+  '';
 
   crossAttrs = {
     makeFlags = "CC=${stdenv.cross.config}-gcc";

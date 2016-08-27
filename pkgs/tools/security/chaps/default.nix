@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     sha256 = "0chk6pnn365d5kcz6vfqx1d0383ksk97icc0lzg0vvb0kvyj0ff1";
   };
 
+  # readdir_r(3) is deprecated in glibc >= 2.24
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   patches = [ ./fix_absolute_path.patch  ./fix_environment_variables.patch  ./fix_scons.patch  ./insert_prefetches.patch ];
 
   postPatch = ''

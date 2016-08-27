@@ -422,6 +422,10 @@ in
 
   apitrace = qt55.callPackage ../applications/graphics/apitrace {};
 
+  argus = callPackage ../tools/networking/argus {};
+
+  argus-clients = callPackage ../tools/networking/argus-clients {};
+
   argtable = callPackage ../tools/misc/argtable {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
@@ -1552,6 +1556,8 @@ in
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  ferm = callPackage ../tools/networking/ferm { };
+
   fgallery = callPackage ../tools/graphics/fgallery {
     inherit (perlPackages) ImageExifTool JSON;
   };
@@ -1607,6 +1613,7 @@ in
   fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
   fontforge-gtk = callPackage ../tools/misc/fontforge {
     withGTK = true;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
   fontmatrix = callPackage ../applications/graphics/fontmatrix {};
@@ -1619,6 +1626,7 @@ in
 
   fox = callPackage ../development/libraries/fox/default.nix {
     libpng = libpng12;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
   fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
@@ -1868,6 +1876,8 @@ in
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
   };
+
+  groonga = callPackage ../servers/search/groonga { };
 
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
@@ -2200,9 +2210,7 @@ in
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
-  keybase = callPackage ../applications/misc/keybase { };
-
-  keybase-go = callPackage ../tools/security/keybase { };
+  keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/kbfs { };
 
@@ -2223,6 +2231,8 @@ in
   kronometer = qt5.callPackage ../tools/misc/kronometer { };
 
   kst = qt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
+
+  kytea = callPackage ../tools/text/kytea { };
 
   leocad = callPackage ../applications/graphics/leocad { };
 
@@ -3022,7 +3032,9 @@ in
 
   pciutils = callPackage ../tools/system/pciutils { };
 
-  pcsclite = callPackage ../tools/security/pcsclite { };
+  pcsclite = callPackage ../tools/security/pcsclite {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pcsctools = callPackage ../tools/security/pcsctools {
     inherit (perlPackages) pcscperl Glib Gtk2 Pango;
@@ -3269,6 +3281,8 @@ in
 
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
 
+  rc = callPackage ../shells/rc { };
+
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
   redir = callPackage ../tools/networking/redir { };
@@ -3497,7 +3511,9 @@ in
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
-  smartmontools = callPackage ../tools/system/smartmontools { };
+  smartmontools = callPackage ../tools/system/smartmontools {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   smbldaptools = callPackage ../tools/networking/smbldaptools {
     inherit (perlPackages) NetLDAP CryptSmbHash DigestSHA1;
@@ -4489,24 +4505,6 @@ in
     libcCross = if crossSystem != null then libcCross else null;
   }));
 
-  gcc46 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.6 {
-    inherit noSysDirs;
-
-    ppl = null;
-    cloog = null;
-
-    # bootstrapping a profiled compiler does not work in the sheevaplug:
-    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = false;
-
-    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
-    # and host != build), `cross' must be null but the cross-libc must still
-    # be passed.
-    cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
-    texinfo = texinfo413;
-  }));
-
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
@@ -4742,7 +4740,13 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = self.go_1_6;
+  go_1_7 = callPackage ../development/compilers/go/1.7.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    stdenv = stdenvAdapters.overrideCC pkgs.stdenv pkgs.clang_38;
+  });
+
+  go = self.go_1_7;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -5678,7 +5682,9 @@ in
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
+  erlangR16 = callPackage ../development/interpreters/erlang/R16.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
   erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -5868,10 +5874,6 @@ in
 
   phpPackages = php56Packages;
 
-  php55Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php55;
-  });
-
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
   });
@@ -5881,7 +5883,6 @@ in
   });
 
   inherit (callPackages ../development/interpreters/php { })
-    php55
     php56
     php70;
 
@@ -5964,7 +5965,9 @@ in
 
   racket = callPackage ../development/interpreters/racket { };
 
-  rakudo = callPackage ../development/interpreters/rakudo { };
+  rakudo = callPackage ../development/interpreters/rakudo {
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
 
   rascal = callPackage ../development/interpreters/rascal { };
 
@@ -7076,7 +7079,11 @@ in
 
   ctpl = callPackage ../development/libraries/ctpl { };
 
+  cppdb = callPackage ../development/libraries/cppdb { };
+
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
+
+  cppcms = callPackage ../development/libraries/cppcms { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
@@ -7319,7 +7326,9 @@ in
 
   gephi = callPackage ../applications/science/misc/gephi { };
 
-  gegl = callPackage ../development/libraries/gegl { };
+  gegl = callPackage ../development/libraries/gegl {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix { };
 
@@ -7372,7 +7381,9 @@ in
   gle = callPackage ../development/libraries/gle { };
 
   glew = callPackage ../development/libraries/glew { };
-  glew110 = callPackage ../development/libraries/glew/1.10.nix { };
+  glew110 = callPackage ../development/libraries/glew/1.10.nix {
+    inherit (darwin.apple_sdk.frameworks) AGL;
+  };
 
   glfw = self.glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
@@ -8119,7 +8130,9 @@ in
 
   libffi = callPackage ../development/libraries/libffi { };
 
-  libfreefare = callPackage ../development/libraries/libfreefare { };
+  libfreefare = callPackage ../development/libraries/libfreefare {
+    inherit (darwin) libobjc;
+  };
 
   libftdi = callPackage ../development/libraries/libftdi { };
 
@@ -8503,7 +8516,9 @@ in
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
 
-  libstatgrab = callPackage ../development/libraries/libstatgrab { };
+  libstatgrab = callPackage ../development/libraries/libstatgrab {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   libsvm = callPackage ../development/libraries/libsvm { };
 
@@ -8879,7 +8894,9 @@ in
 
   non = callPackage ../applications/audio/non { };
 
-  nspr = callPackage ../development/libraries/nspr { };
+  nspr = callPackage ../development/libraries/nspr {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
@@ -8991,7 +9008,8 @@ in
       };
     })
     openssl_1_0_1
-    openssl_1_0_2;
+    openssl_1_0_2
+    openssl_1_1_0;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -9993,7 +10011,11 @@ in
     go = go_1_6;
   };
 
-  buildGoPackage = buildGo16Package;
+  buildGo17Package = callPackage ../development/go-modules/generic {
+    go = go_1_7;
+  };
+
+  buildGoPackage = buildGo17Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -10428,6 +10450,7 @@ in
   rspamd = callPackage ../servers/mail/rspamd { };
 
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
+  pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
   pshs = callPackage ../servers/http/pshs { };
 
@@ -11153,6 +11176,7 @@ in
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.cpu-cgroup-v2."4.4"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11164,6 +11188,7 @@ in
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.cpu-cgroup-v2."4.6"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11175,6 +11200,9 @@ in
   linux_4_7 = callPackage ../os-specific/linux/kernel/linux-4.7.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        kernelPatches.cpu-cgroup-v2."4.7"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -12500,7 +12528,9 @@ in
 
   cbc = callPackage ../applications/science/math/cbc { };
 
-  cddiscid = callPackage ../applications/audio/cd-discid { };
+  cddiscid = callPackage ../applications/audio/cd-discid {
+    inherit (darwin) IOKit;
+  };
 
   cdparanoia = self.cdparanoiaIII;
 
@@ -13320,6 +13350,8 @@ in
 
   linssid = qt5.callPackage ../applications/networking/linssid { };
 
+  manuskript = callPackage ../applications/editors/manuskript { };
+
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   praat = callPackage ../applications/audio/praat { };
@@ -13333,7 +13365,9 @@ in
 
   svox = callPackage ../applications/audio/svox { };
 
-  gkrellm = callPackage ../applications/misc/gkrellm { };
+  gkrellm = callPackage ../applications/misc/gkrellm {
+    inherit (darwin) IOKit;
+  };
 
   gmu = callPackage ../applications/audio/gmu { };
 
@@ -14435,7 +14469,7 @@ in
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
-  qmmp = callPackage ../applications/audio/qmmp { };
+  qmmp = qt5.callPackage ../applications/audio/qmmp { };
 
   qnotero = callPackage ../applications/office/qnotero { };
 
@@ -15522,13 +15556,9 @@ in
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
-  zathuraCollection = recurseIntoAttrs
-    (callPackage ../applications/misc/zathura {
-        callPackage = newScope pkgs.zathuraCollection;
-        useMupdf = config.zathura.useMupdf or true;
-      });
-
-  zathura = zathuraCollection.zathuraWrapper;
+  zathura = callPackage ../applications/misc/zathura {
+    useMupdf = config.zathura.useMupdf or true;
+  };
 
   zed = callPackage ../applications/editors/zed { };
 
@@ -15786,6 +15816,9 @@ in
 
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_1_8;
+  };
+
+  liquidwar5 = callPackage ../games/liquidwar/5.nix {
   };
 
   macopix = callPackage ../games/macopix {
@@ -17000,7 +17033,7 @@ in
     libusb = libusb1;
   };
 
-  cups_filters = callPackage ../misc/cups/filters.nix { };
+  cups-filters = callPackage ../misc/cups/filters.nix { };
 
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
@@ -17088,7 +17121,7 @@ in
 
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
 
-  foomatic_filters = callPackage ../misc/drivers/foomatic-filters {};
+  foomatic-filters = callPackage ../misc/drivers/foomatic-filters {};
 
   freestyle = callPackage ../misc/freestyle { };
 

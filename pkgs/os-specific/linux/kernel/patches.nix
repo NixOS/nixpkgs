@@ -144,4 +144,6 @@ rec {
         sha256 = "14rm1qr87p7a5prz8g5fwbpxzdp3ighj095x8rvhm8csm20wspyy";
       };
     };
+
+  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 }
