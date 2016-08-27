@@ -17679,6 +17679,8 @@ in
 
   maphosts = callPackage ../tools/networking/maphosts {};
 
+  zimg = callPackage ../development/libraries/zimg { };
+
   zuki-themes = callPackage ../misc/themes/zuki { };
 
   zoom-us = qt55.callPackage ../applications/networking/instant-messengers/zoom-us {};
