@@ -29,13 +29,6 @@ in {
       partitioned = true;
       diskSize = cfg.baseImageSize;
 
-      configFile = pkgs.writeText "configuration.nix"
-        ''
-          {
-            imports = [ <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix> ];
-          }
-        '';
-
       postVM =
         ''
           echo "creating VirtualBox disk image..."
