@@ -105,7 +105,7 @@ let
         default = "nginx";
         example = "nginx";
         description = ''
-          User account under which both the service and the web-application run.
+          User account under which both the update daemon and the web-application run.
         '';
       };
 
@@ -462,7 +462,7 @@ let
         listen.owner = nginx
         listen.group = nginx
         listen.mode = 0600
-        user = nginx
+        user = ${cfg.user}
         pm = dynamic
         pm.max_children = 75
         pm.start_servers = 10
