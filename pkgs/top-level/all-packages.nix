@@ -16098,6 +16098,8 @@ in
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 
+  vapoursynth = callPackage ../development/libraries/vapoursynth { };
+
   vassal = callPackage ../games/vassal { };
 
   vdrift = callPackage ../games/vdrift { };
