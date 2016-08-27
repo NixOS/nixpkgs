@@ -11330,6 +11330,11 @@ in
       enableHardening = true;
     });
 
+    virtualboxHeadless = lowPrio (virtualbox.override {
+      enableHardening = true;
+      headless = true;
+    });
+
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
     wireguard = callPackage ../os-specific/linux/wireguard { };
