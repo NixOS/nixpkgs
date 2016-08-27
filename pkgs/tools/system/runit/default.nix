@@ -1,4 +1,6 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl
+, static ? false
+}:
 
 stdenv.mkDerivation rec {
   name = "runit-${version}";
@@ -15,7 +17,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postPatch = ''
+  buildInputs = stdenv.lib.optionals static [ stdenv.cc.libc stdenv.cc.libc.static ];
+
+  postPatch = stdenv.lib.optionalString (!static) ''
     sed -i 's,-static,,g' src/Makefile
   '';
 
