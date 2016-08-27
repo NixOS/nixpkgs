@@ -8722,6 +8722,8 @@ in
 
   live555 = callPackage ../development/libraries/live555 { };
 
+  loadcaffe = callPackage ../development/libraries/loadcaffe {};
+
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
