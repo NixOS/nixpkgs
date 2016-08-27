@@ -9594,7 +9594,9 @@ in
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
-  torch = callPackage ../development/libraries/torch {};
+  torch = callPackage ../development/libraries/torch {
+    openblas = openblasCompat;
+  };
 
   tremor = callPackage ../development/libraries/tremor { };
 
