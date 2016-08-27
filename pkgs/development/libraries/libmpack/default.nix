@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "libmpack-${version}";
   version = "1.0.3-rev${rev}";
-  rev = "071d944c9ff7b7fbd2c3c19d1fd1a231363ddeea";
+  rev = "80bd55ea677e70b041f65a4b99438c1f059cce4b";
   src = fetchFromGitHub {
     owner = "tarruda";
     repo = "libmpack";
     inherit rev;
-    sha256 = "1h3pbmykm69gfyi0wz647gz5836a6f3jc4azzll7i3mkpc11gcrd";
+    sha256 = "1whnbgxd5580h59kvc2xgx6ymw7nk9kz6r4ajgsfv6c6h2xbwbl3";
   };
   LIBTOOL = "libtool";
   buildInputs = [ libtool ];
