@@ -964,6 +964,8 @@ in
 
   bogofilter = callPackage ../tools/misc/bogofilter { };
 
+  bsdbuild = callPackage ../development/tools/misc/bsdbuild { };
+
   bsdiff = callPackage ../tools/compression/bsdiff { };
 
   btar = callPackage ../tools/backup/btar {
