@@ -280,46 +280,6 @@ let
         scikitlearn = unix;
       };
 
-      xorg = {
-        fontadobe100dpi = linux ++ darwin;
-        fontadobe75dpi = linux ++ darwin;
-        fontbh100dpi = linux ++ darwin;
-        fontbhlucidatypewriter100dpi = linux ++ darwin;
-        fontbhlucidatypewriter75dpi = linux ++ darwin;
-        fontbhttf = linux ++ darwin;
-        fontcursormisc = linux ++ darwin;
-        fontmiscmisc = linux ++ darwin;
-        iceauth = linux ++ darwin;
-        libX11 = linux ++ darwin;
-        lndir = all ++ darwin;
-        setxkbmap = linux ++ darwin;
-        xauth = linux ++ darwin;
-        xbitmaps = linux ++ darwin;
-        xev = linux ++ darwin;
-        xf86inputevdev = linux;
-        xf86inputkeyboard = linux;
-        xf86inputmouse = linux;
-        xf86inputsynaptics = linux;
-        xf86videoati = linux;
-        xf86videocirrus = linux;
-        xf86videointel = linux;
-        xf86videonv = linux;
-        xf86videovesa = linux;
-        xf86videovmware = linux;
-        xfs = linux ++ darwin;
-        xinput = linux ++ darwin;
-        xkbcomp = linux ++ darwin;
-        xlsclients = linux ++ darwin;
-        xmessage = linux ++ darwin;
-        xorgserver = linux ++ darwin;
-        xprop = linux ++ darwin;
-        xrandr = linux ++ darwin;
-        xrdb = linux ++ darwin;
-        xset = linux ++ darwin;
-        xsetroot = linux ++ darwin;
-        xwininfo = linux ++ darwin;
-      };
-
       xfce = {
         gtk_xfce_engine = linux;
         mousepad = linux;
