@@ -1,12 +1,17 @@
-{ stdenv, fetchurl, fetchpatch
-, gnu-efi
-, dosfstools, efibootmgr
-}:
+{ stdenv, fetchurl, fetchpatch, gnu-efi }:
 
-assert (stdenv.system == "x86_64-linux" ||stdenv.system == "i686-linux");
+let
+  archids = {
+    "x86_64-linux" = { hostarch = "x86_64"; efiPlatform = "x64"; };
+    "i686-linux" = rec { hostarch = "ia32"; efiPlatform = hostarch; };
+  };
+
+  inherit
+    (archids.${stdenv.system} or (throw "unsupported system: ${stdenv.system}"))
+    hostarch efiPlatform;
+in
 
 stdenv.mkDerivation rec {
-
   name = "refind-${meta.version}";
   srcName = "refind-src-${meta.version}";
 
@@ -27,29 +32,27 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" ];
 
-  HOSTARCH =
-    if stdenv.system == "x86_64-linux" then "x64"
-    else if stdenv.system == "i686-linux" then "ia32"
-    else "null";
-
   postPatch = ''
     sed -e 's|-DEFI_FUNCTION_WRAPPER|-DEFI_FUNCTION_WRAPPER -maccumulate-outgoing-args|g' -i Make.common
     sed -e 's|-DEFIX64|-DEFIX64 -maccumulate-outgoing-args|g' -i Make.common
     sed -e 's|-m64|-maccumulate-outgoing-args -m64|g' -i filesystems/Make.gnuefi
   '';
 
-  buildPhase =
-    let ldScript =
-      if stdenv.system == "x86_64-linux" then "elf_x86_64_efi.lds"
-      else if stdenv.system == "i686-linux" then "elf_ia32_efi.lds" else "null";
-    in ''
-      make prefix= EFIINC=${gnu-efi}/include/efi EFILIB=${gnu-efi}/lib GNUEFILIB=${gnu-efi}/lib EFICRT0=${gnu-efi}/lib LDSCRIPT=${gnu-efi}/lib/${ldScript} gnuefi fs_gnuefi
-    '';
+  makeFlags =
+    [ "prefix="
+      "EFIINC=${gnu-efi}/include/efi"
+      "EFILIB=${gnu-efi}/lib"
+      "GNUEFILIB=${gnu-efi}/lib"
+      "EFICRT0=${gnu-efi}/lib"
+      "HOSTARCH=${hostarch}"
+    ];
+
+  buildFlags = [ "gnuefi" "fs_gnuefi" ];
 
   installPhase = ''
     install -d $out/bin/
-    install -d $out/share/refind/drivers_${HOSTARCH}/
-    install -d $out/share/refind/tools_${HOSTARCH}/
+    install -d $out/share/refind/drivers_${efiPlatform}/
+    install -d $out/share/refind/tools_${efiPlatform}/
     install -d $out/share/refind/docs/html/
     install -d $out/share/refind/docs/Styles/
     install -d $out/share/refind/fonts/
@@ -58,13 +61,13 @@ stdenv.mkDerivation rec {
     install -d $out/share/refind/keys/
 
     # refind uefi app
-    install -D -m0644 refind/refind_${HOSTARCH}.efi $out/share/refind/refind_${HOSTARCH}.efi
+    install -D -m0644 refind/refind_${efiPlatform}.efi $out/share/refind/refind_${efiPlatform}.efi
 
     # uefi drivers
-    install -D -m0644 drivers_${HOSTARCH}/*.efi $out/share/refind/drivers_${HOSTARCH}/
+    install -D -m0644 drivers_${efiPlatform}/*.efi $out/share/refind/drivers_${efiPlatform}/
 
     # uefi apps
-    install -D -m0644 gptsync/gptsync_${HOSTARCH}.efi $out/share/refind/tools_${HOSTARCH}/gptsync_${HOSTARCH}.efi
+    install -D -m0644 gptsync/gptsync_${efiPlatform}.efi $out/share/refind/tools_${efiPlatform}/gptsync_${efiPlatform}.efi
 
     # helper scripts
     install -D -m0755 refind-install $out/bin/refind-install
