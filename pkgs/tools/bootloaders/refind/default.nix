@@ -12,11 +12,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "refind-${meta.version}";
-  srcName = "refind-src-${meta.version}";
+  name = "refind-${version}";
+  version = "0.10.3";
+  srcName = "refind-src-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${meta.version}/${srcName}.tar.gz";
+    url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
     sha256 = "1r2qp29mz08lx36i7x52i2598773bxvfhwryd954ssq2baifjav5";
   };
 
@@ -119,7 +120,6 @@ EOF
   '';
 
   meta = with stdenv.lib; {
-    version = "0.10.3";
     description = "A graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
