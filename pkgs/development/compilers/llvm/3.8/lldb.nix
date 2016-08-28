@@ -33,7 +33,6 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLDB_PATH_TO_LLVM_BUILD=${llvm}"
     "-DLLVM_MAIN_INCLUDE_DIR=${llvm}/include"
     "-DLLDB_PATH_TO_CLANG_BUILD=${clang-unwrapped}"

@@ -10,7 +10,6 @@ stdenv.mkDerivation {
   buildInputs = [ cmake isl python gmp ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DLLVM_INSTALL_ROOT=${llvm}"
   ];

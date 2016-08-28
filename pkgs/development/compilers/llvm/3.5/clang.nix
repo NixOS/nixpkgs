@@ -15,7 +15,6 @@ in stdenv.mkDerivation {
   buildInputs = [ cmake libedit libxml2 llvm ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
   ] ++
   # Maybe with compiler-rt this won't be needed?

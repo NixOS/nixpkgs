@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = with stdenv.lib; concatStringsSep " " (flatten [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DGUI=${toString withGUI}"
     "-DETHASHCL=${toString withOpenCL}"
     "-DPROFILING=${toString withProfiling}"

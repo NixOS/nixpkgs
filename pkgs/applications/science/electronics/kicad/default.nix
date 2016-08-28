@@ -21,11 +21,10 @@ stdenv.mkDerivation rec {
       sha256 = "0vrzykgxx423iwgz6186bi8724kmbi5wfl92gfwb3r6mqammgwpg";
     })
   ];
-  
+
   sourceRoot = "kicad-${version}";
 
   cmakeFlags = ''
-    -DCMAKE_BUILD_TYPE=Release
     -DKICAD_SKIP_BOOST=ON
     -DKICAD_BUILD_VERSION=${version}
     -DKICAD_REPO_NAME=stable
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     pushd $(pwd)
-  '';  
+  '';
 
   postInstall = ''
     popd
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
     make $MAKE_FLAGS
     make install
     popd
-   
+
     pushd kicad-footprints-*
     mkdir -p $out/share/kicad/modules
     cp -R *.pretty $out/share/kicad/modules/

@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
-    "-DCMAKE_BUILD_TYPE=RELEASE"
   ];
 
   enableParallelBuilding = true;

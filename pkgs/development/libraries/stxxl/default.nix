@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
     (mkFlag parallel "USE_GNU_PARALLEL")
   ];
 
