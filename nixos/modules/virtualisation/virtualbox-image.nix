@@ -57,6 +57,8 @@ in {
           fn="$out/nixos-${config.system.nixosLabel}-${pkgs.stdenv.system}.ova"
           VBoxManage export "$vmName" --output "$fn"
 
+          rm -v $diskImage
+
           mkdir -p $out/nix-support
           echo "file ova $fn" >> $out/nix-support/hydra-build-products
         '';
