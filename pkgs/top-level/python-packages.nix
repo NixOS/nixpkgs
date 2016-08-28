@@ -18151,14 +18151,14 @@ in modules // {
 
 
   vobject = buildPythonPackage rec {
-    version = "0.9.2";
+    version = "0.9.3";
     name = "vobject-${version}";
 
     src = pkgs.fetchFromGitHub {
       owner = "eventable";
       repo = "vobject";
-      sha256 = "0zj0wplj8pry98x3g551wdhh12ric7rl6rsd6li23lzdxik82s3g";
-      rev = "7f042fdc62c9e9dc29d5f81313b9747cde205670";
+      sha256 = "00vbii5awwqwfh5hfklj1q79w7d85gjigvf2imgyb71g03sb8cjv";
+      rev = version;
     };
 
     disabled = isPyPy;
