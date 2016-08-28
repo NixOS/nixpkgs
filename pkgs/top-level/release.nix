@@ -279,23 +279,6 @@ let
         pandas = unix;
         scikitlearn = unix;
       };
-
-      xfce = {
-        gtk_xfce_engine = linux;
-        mousepad = linux;
-        ristretto = linux;
-        terminal = linux;
-        thunar = linux;
-        xfce4_power_manager = linux;
-        xfce4icontheme = linux;
-        xfce4mixer = linux;
-        xfce4panel = linux;
-        xfce4session = linux;
-        xfce4settings = linux;
-        xfdesktop = linux;
-        xfwm4 = linux;
-      };
-
     } ));
 
 in jobs
