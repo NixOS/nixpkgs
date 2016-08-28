@@ -503,19 +503,25 @@ rec {
   /* Return a module that causes a warning to be shown if the
      specified option is defined. For example,
 
-       mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ]
+       mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "<replacement instructions>"
 
      causes a warning if the user defines boot.loader.grub.bootDevice.
+
+     replacementInstructions is a string that provides instructions on
+     how to achieve the same functionality without the removed option,
+     or alternatively a reasoning why the functionality is not needed.
+     replacementInstructions SHOULD be provided!
   */
-  mkRemovedOptionModule = optionName:
+  mkRemovedOptionModule = optionName: replacementInstructions:
     { options, ... }:
     { options = setAttrByPath optionName (mkOption {
         visible = false;
       });
       config.warnings =
         let opt = getAttrFromPath optionName options; in
-        optional opt.isDefined
-          "The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.";
+        optional opt.isDefined ''
+            The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
+            ${replacementInstructions}'';
     };
 
   /* Return a module that causes a warning to be shown if the

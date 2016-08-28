@@ -29,7 +29,7 @@ with lib;
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
 
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
-    (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ])
+    (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
 
     # Old Grub-related options.
     (mkRenamedOptionModule [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ])
@@ -112,7 +112,7 @@ with lib;
     (mkRenamedOptionModule [ "services" "iodined" "domain" ] [ "services" "iodine" "server" "domain" ])
     (mkRenamedOptionModule [ "services" "iodined" "ip" ] [ "services" "iodine" "server" "ip" ])
     (mkRenamedOptionModule [ "services" "iodined" "extraConfig" ] [ "services" "iodine" "server" "extraConfig" ])
-    (mkRemovedOptionModule [ "services" "iodined" "client" ])
+    (mkRemovedOptionModule [ "services" "iodined" "client" ] "")
 
     # Grsecurity
     (mkRemovedOptionModule [ "security" "grsecurity" "kernelPatch" ])
@@ -141,18 +141,18 @@ with lib;
     (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "rendering" ] [ "fonts" "fontconfig" "ultimate" "preset" ])
 
     # Options that are obsolete and have no replacement.
-    (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ])
-    (mkRemovedOptionModule [ "programs" "bash" "enable" ])
-    (mkRemovedOptionModule [ "services" "samba" "defaultShare" ])
-    (mkRemovedOptionModule [ "services" "syslog-ng" "serviceName" ])
-    (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ])
-    (mkRemovedOptionModule [ "ec2" "metadata" ])
-    (mkRemovedOptionModule [ "services" "openvpn" "enable" ])
-    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ])
-    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ])
-    (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ])
-    (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ])
-    (mkRemovedOptionModule [ "services" "dovecot2" "package" ])
-
+    (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
+    (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
+    (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
+    (mkRemovedOptionModule [ "services" "syslog-ng" "serviceName" ] "")
+    (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ] "")
+    (mkRemovedOptionModule [ "ec2" "metadata" ] "")
+    (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
+    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ] "")
+    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ] "")
+    (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
+      "See the 16.03 release notes for more information.")
+    (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
+    (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
   ];
 }
