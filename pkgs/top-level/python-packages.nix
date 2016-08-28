@@ -24049,22 +24049,27 @@ in modules // {
   };
 
   twisted = buildPythonPackage rec {
-    disabled = isPy3k;
 
     name = "Twisted-${version}";
-    version = "16.2.0";
+    version = "16.4.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "0ydxrp9myw1mvsz3qfzx5579y5llmqa82pxvqchgp5syczffi450";
+      sha256 = "cd8820901900542d21fb1dee2cd4d4d334fff130e3fc30b777f81dd7d7f2836e";
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];
 
-    # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
+    # Generate Twisted's plug-in cache.  Twisted users must do it as well.  See
     # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
     # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
     # details.
     postInstall = "$out/bin/twistd --help > /dev/null";
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover -s twisted/test
+    '';
+    # Tests require network
+    doCheck = false;
 
     meta = {
       homepage = http://twistedmatrix.com/;
