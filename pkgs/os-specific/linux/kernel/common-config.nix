@@ -168,13 +168,13 @@ with stdenv.lib;
   FRAMEBUFFER_CONSOLE? y
   FRAMEBUFFER_CONSOLE_ROTATION? y
   ${optionalString (stdenv.system == "i686-linux") ''
-    FB_GEODE y
+    FB_GEODE? y
   ''}
 
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
   ${optionalString (versionOlder version "4.3" && !(features.chromiumos or false)) ''
-    DRM_I915_KMS y
+    DRM_I915_KMS? y
   ''}
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE? y
