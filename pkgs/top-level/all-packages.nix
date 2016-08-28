@@ -14473,6 +14473,7 @@ in
 
   qscreenshot = callPackage ../applications/graphics/qscreenshot {
     qt = qt4;
+    inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
   qsynth = callPackage ../applications/audio/qsynth { };
