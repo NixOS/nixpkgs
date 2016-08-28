@@ -1,8 +1,8 @@
 { stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
 , libpng, libX11, gettext, bash, gawk, boost, libnotify, gtk, doxygen, spring
 , makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
-stdenv.mkDerivation rec {
 
+stdenv.mkDerivation rec {
   name = "springlobby-${version}";
   version = "0.255";
 
@@ -15,12 +15,6 @@ stdenv.mkDerivation rec {
     cmake wxGTK30 openal pkgconfig curl gettext libtorrentRasterbar pcre jsoncpp
     boost libpng libX11 libnotify gtk doxygen makeWrapper glib minizip alure
   ];
-
-  prePatch = ''
-    substituteInPlace tools/regen_config_header.sh --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace tools/test-susynclib.awk --replace "#!/usr/bin/awk" "#!${gawk}/bin/awk"
-    substituteInPlace CMakeLists.txt --replace "boost_system-mt" "boost_system"
-  '';
 
   patches = [ ./revert_58b423e.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
 

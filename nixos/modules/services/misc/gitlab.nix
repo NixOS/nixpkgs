@@ -556,4 +556,7 @@ in {
     };
 
   };
+
+  meta.doc = ./gitlab.xml;
+
 }

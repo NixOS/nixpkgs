@@ -390,7 +390,7 @@ substitute() {
     local output="$2"
 
     if [ ! -f "$input" ]; then
-      echo "substitute: File \"$input\" does not exist"
+      echo "substitute(): file '$input' does not exist"
       return 1
     fi
 

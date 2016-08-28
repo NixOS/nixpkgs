@@ -101,9 +101,6 @@ stdenv.mkDerivation {
         --replace /usr/sbin/vgs ${lvm2}/sbin/vgs \
         --replace /usr/sbin/lvs ${lvm2}/sbin/lvs
 
-      substituteInPlace tools/hotplug/Linux/network-bridge \
-        --replace /usr/bin/logger ${utillinux}/bin/logger
-
       substituteInPlace tools/xenmon/xenmon.py \
         --replace /usr/bin/pkill ${procps}/bin/pkill
 

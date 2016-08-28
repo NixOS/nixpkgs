@@ -19,6 +19,8 @@ in stdenv.mkDerivation rec {
 
   qmakeFlags = [ "pokerth.pro" ];
 
+  NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
+
   postPatch = ''
     for f in connectivity.pro load.pro pokerth_game.pro pokerth_server.pro
     do
@@ -26,6 +28,8 @@ in stdenv.mkDerivation rec {
         --replace 'LIB_DIRS =' 'LIB_DIRS = ${boost.out}/lib'
     done
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     install -D -m755 bin/pokerth_server $server/bin/pokerth_server

@@ -12,7 +12,7 @@ let
     (fs: (fs.neededForBoot
           || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
           && fs.fsType == "zfs")
-    (attrValues config.fileSystems) != [];
+    config.system.build.fileSystems != [];
 
   # Ascertain whether NixOS container support is required
   containerSupportRequired =

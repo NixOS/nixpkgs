@@ -12,11 +12,11 @@ let
 
 in buildPythonPackage rec {
   name = "h5py-${version}";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "mirror://pypi/h/h5py/${name}.tar.gz";
-    sha256 = "9833df8a679e108b561670b245bcf9f3a827b10ccb3a5fa1341523852cfac2f6";
+    sha256 = "0df46dg7i7xfking9lp221bfm8dbl974yvlrbi1w7r6m61ac7bxj";
   };
 
   configure_flags = "--hdf5=${hdf5}" + optionalString mpiSupport " --mpi";
