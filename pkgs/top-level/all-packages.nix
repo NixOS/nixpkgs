@@ -13688,6 +13688,14 @@ in
 
   kdeconnect = qt5.callPackage ../applications/misc/kdeconnect { };
 
+  kdevelop-pg-qt = kde5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
+
+  kdevelop = kde5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
+    llvmPackages = llvmPackages_38;
+  };
+
+  kdevplatform = kde5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix {};
+
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
   };
