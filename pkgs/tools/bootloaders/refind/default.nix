@@ -105,6 +105,11 @@ stdenv.mkDerivation rec {
     # Post-install fixes
     sed -e "s|^ThisDir=.*|ThisDir=$out/share/refind/|g" -i $out/bin/refind-install
     sed -e "s|^RefindDir=.*|RefindDir=$out/share/refind/|g" -i $out/bin/refind-install
+
+    # Patch uses of `which`
+    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
+    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
+    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
   '';
 
   meta = with stdenv.lib; {
