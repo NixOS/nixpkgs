@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, automake, autoconf, libtool, pkgconfig, pythonPackages
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, pythonPackages
 , libevdev, linuxHeaders
 }:
 
@@ -14,18 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "07iha13xrpf4z59rzl9cm2h1zkc5xhyipbd3ajd3c1d4hhpn9w9s";
   };
 
-  buildInputs = [
-    automake autoconf libtool pkgconfig pythonPackages.python
-    pythonPackages.evdev libevdev
-  ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
-  preConfigure = ''
-    ./autogen.sh --prefix=$out
-  '';
-
-  postPatch = ''
-    substituteInPlace src/make-event-names.py --replace "/usr/include/linux/input.h" "${linuxHeaders}/include/linux/input.h"
-  '';
+  buildInputs = [ pythonPackages.python pythonPackages.evdev libevdev ];
 
   meta = with stdenv.lib; {
     description = "Records and replays device descriptions and events to emulate input devices through the kernel's input system";
