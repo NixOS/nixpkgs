@@ -1,7 +1,7 @@
-From 4c7572abafeac9b2dcd884c444c5a5bae5b302c3 Mon Sep 17 00:00:00 2001
+From 33dd8bad4b6a018d1bbe66b6e6de972c58cfc9f1 Mon Sep 17 00:00:00 2001
 From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
 Date: Sat, 31 May 2014 13:14:20 -0700
-Subject: [PATCH 6/6] fb: Revert fb changes that broke XQuartz
+Subject: [PATCH 5005/5005] fb: Revert fb changes that broke XQuartz
 
     http://bugs.freedesktop.org/show_bug.cgi?id=26124
 
@@ -20,10 +20,10 @@ This reverts commit 3c2c59eed3c68c0e5a93c38cf01eedad015e3157.
  4 files changed, 2 insertions(+), 162 deletions(-)
 
 diff --git a/fb/fb.h b/fb/fb.h
-index 59eaac3..046b948 100644
+index 256a1ee..8e87498 100644
 --- a/fb/fb.h
 +++ b/fb/fb.h
-@@ -1116,9 +1116,6 @@ extern _X_EXPORT void
+@@ -1111,9 +1111,6 @@ extern _X_EXPORT void
  extern _X_EXPORT Bool
   fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats);
  
@@ -34,7 +34,7 @@ index 59eaac3..046b948 100644
   * fbpixmap.c
   */
 diff --git a/fb/fbpict.c b/fb/fbpict.c
-index 6ee63e9..9c4cc42 100644
+index be8274b..66dd633 100644
 --- a/fb/fbpict.c
 +++ b/fb/fbpict.c
 @@ -65,152 +65,6 @@ fbComposite(CARD8 op,
@@ -95,7 +95,7 @@ index 6ee63e9..9c4cc42 100644
 -    pixman_glyph_cache_freeze (glyphCache);
 -
 -    if (n_glyphs > N_STACK_GLYPHS) {
--	if (!(pglyphs = malloc (n_glyphs * sizeof (pixman_glyph_t))))
+-	if (!(pglyphs = xallocarray(n_glyphs, sizeof(pixman_glyph_t))))
 -	    goto out;
 -    }
 -
@@ -190,7 +190,7 @@ index 6ee63e9..9c4cc42 100644
  static pixman_image_t *
  create_solid_fill_image(PicturePtr pict)
  {
-@@ -461,8 +315,7 @@ fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
+@@ -470,8 +324,7 @@ fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
          return FALSE;
      ps = GetPictureScreen(pScreen);
      ps->Composite = fbComposite;
@@ -239,5 +239,4 @@ index 71bcc5d..55330fc 100644
          free(depths[d].vids);
      free(depths);
 -- 
-2.3.2 (Apple Git-55)
-
+2.8.1
