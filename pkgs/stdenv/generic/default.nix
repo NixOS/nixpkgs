@@ -274,7 +274,10 @@ let
 
     // rec {
 
-      meta.description = "The default build environment for Unix packages in Nixpkgs";
+      meta = {
+        description = "The default build environment for Unix packages in Nixpkgs";
+        platforms = lib.platforms.all;
+      };
 
       # Utility flags to test the type of platform.
       isDarwin = system == "x86_64-darwin";

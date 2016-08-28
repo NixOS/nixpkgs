@@ -8783,6 +8783,9 @@ in
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
     paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
+    meta = {
+      platforms = lib.platforms.unix;
+    };
   });
 
   meterbridge = callPackage ../applications/audio/meterbridge { };
