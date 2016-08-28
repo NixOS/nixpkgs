@@ -17,7 +17,7 @@ let
     Caveat: even if the package is reached by a different means,
     the path above will be shown and not e.g. `${config.services.foo.package}`. */
   manual = import ../../../doc/manual {
-    inherit pkgs;
+    inherit pkgs config;
     version = config.system.nixosRelease;
     revision = "release-${config.system.nixosRelease}";
     options =

@@ -1,4 +1,4 @@
-{ pkgs, options, version, revision, extraSources ? [] }:
+{ pkgs, options, config, version, revision, extraSources ? [] }:
 
 with pkgs;
 
@@ -51,6 +51,14 @@ let
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];
 
+  modulesDoc = builtins.toFile "modules.xml" ''
+    <section xmlns:xi="http://www.w3.org/2001/XInclude" id="modules">
+    ${(lib.concatMapStrings (path: ''
+      <xi:include href="${path}" />
+    '') (lib.catAttrs "value" config.meta.doc))}
+    </section>
+  '';
+
   copySources =
     ''
       cp -prd $sources/* . # */
@@ -61,6 +69,7 @@ let
       cp ${../../modules/security/acme.xml} configuration/acme.xml
       cp ${../../modules/i18n/input-method/default.xml} configuration/input-methods.xml
       cp ${../../modules/services/editors/emacs.xml} configuration/emacs.xml
+      ln -s ${modulesDoc} configuration/modules.xml
       ln -s ${optionsDocBook} options-db.xml
       echo "${version}" > version
     '';
