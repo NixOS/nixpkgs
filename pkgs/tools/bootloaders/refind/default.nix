@@ -1,5 +1,7 @@
 { stdenv, fetchurl, fetchpatch
-, gnu-efi, efibootmgr, dosfstools, imagemagick }:
+, gnu-efi
+, dosfstools, efibootmgr
+}:
 
 assert (stdenv.system == "x86_64-linux" ||stdenv.system == "i686-linux");
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ gnu-efi efibootmgr dosfstools imagemagick ];
+  buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
 
