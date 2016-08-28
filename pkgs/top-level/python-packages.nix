@@ -24902,17 +24902,20 @@ in modules // {
   };
 
   xlib = buildPythonPackage (rec {
-    name = "xlib-0.15rc1";
+    name = "xlib-${version}";
+    version = "0.17";
 
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/python-xlib/python-${name}.tar.bz2";
-      sha256 = "0mvzz605pxzj7lfp2w6z4qglmr4rjza9xrb7sl8yn12cklzfky0m";
+    src = pkgs.fetchFromGitHub {
+      owner = "python-xlib";
+      repo = "python-xlib";
+      rev = "${version}";
+      sha256 = "1iiz2nq2hq9x6laavngvfngnmxbgnwh54wdbq6ncx4va7v98liyi";
     };
 
     # Tests require `pyutil' so disable them to avoid circular references.
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 ];
+    propagatedBuildInputs = with self; [ six setuptools_scm pkgs.xorg.libX11 ];
 
     meta = {
       description = "Fully functional X client library for Python programs";
