@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     install -D -m0644 gptsync/gptsync_${efiPlatform}.efi $out/share/refind/tools_${efiPlatform}/gptsync_${efiPlatform}.efi
 
     # helper scripts
-    install -D -m0755 refind-install $out/bin/refind-install
+    install -D -m0755 refind-install $out/share/refind/refind-install
     install -D -m0755 mkrlconf $out/bin/refind-mkrlconf
     install -D -m0755 mvrefind $out/bin/refind-mvrefind
     install -D -m0755 fonts/mkfont.sh $out/bin/refind-mkfont
@@ -99,15 +99,21 @@ stdenv.mkDerivation rec {
     # keys
     install -D -m0644 keys/* $out/share/refind/keys/
 
-    # fix sharp-bang paths
-    patchShebangs $out/bin/refind-*
+    # The refind-install script assumes that all resource files are
+    # installed under the same directory as the script itself. To avoid
+    # having to patch around this assumption, generate a wrapper that
+    # cds into $out/share/refind and executes the real script from
+    # there.
+    cat >$out/bin/refind-install <<EOF
+#! ${stdenv.shell}
+cd $out/share/refind && exec -a $out/bin/refind-install ./refind-install \$*
+EOF
+    chmod +x $out/bin/refind-install
 
-    # Post-install fixes
-    sed -e "s|^ThisDir=.*|ThisDir=$out/share/refind/|g" -i $out/bin/refind-install
-    sed -e "s|^RefindDir=.*|RefindDir=$out/share/refind/|g" -i $out/bin/refind-install
-
-    # Patch uses of `which`
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
+    # Patch uses of `which`.  We could patch in calls to efibootmgr,
+    # openssl, convert, and openssl, but that would greatly enlarge
+    # refind's closure (from ca 28MB to over 400MB).
+    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/share/refind/refind-install
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
   '';
