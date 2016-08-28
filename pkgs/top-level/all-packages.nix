@@ -2385,6 +2385,8 @@ in
 
   npm2nix = nodePackages.npm2nix;
 
+  kindlegen = callPackage ../tools/typesetting/kindlegen { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns { };
@@ -6433,7 +6435,7 @@ in
   gnumake = self.gnumake42;
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
-  
+
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
@@ -10485,7 +10487,7 @@ in
 
   influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
 
-  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; }; 
+  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
