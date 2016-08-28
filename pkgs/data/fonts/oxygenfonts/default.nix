@@ -1,32 +1,26 @@
 { stdenv, fetchFromGitHub }:
 
-let
-  pname = "oxygenfonts";
-  version = "20160825";
-in
+stdenv.mkDerivation rec {
+  name = "oxygenfonts-20160825";
 
-  stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
+  src = fetchFromGitHub {
+    owner = "vernnobile";
+    repo = "oxygenFont";
+    rev = "62db0ebe3488c936406685485071a54e3d18473b";
+    sha256 = "134kx3d0g3zdkw8kl8p6j37fzw3bl163jv2dx4dk1451f3ramcnh";
+  };
 
-    src = fetchFromGitHub {
-      owner = "vernnobile";
-      repo = "oxygenFont";
-      rev = "62db0ebe3488c936406685485071a54e3d18473b";
-      sha256 = "134kx3d0g3zdkw8kl8p6j37fzw3bl163jv2dx4dk1451f3ramcnh";
-    };
+  phases = [ "unpackPhase" "installPhase" ];
 
-    phases = [ "unpackPhase" "installPhase" ];
+  installPhase = ''
+    mkdir -p $out/share/fonts/truetype/
+    cp OxygenSans-version-0.4/*/*.ttf $out/share/fonts/truetype/
+    cp Oxygen-Monospace/*.ttf $out/share/fonts/truetype/
+  '';
 
-    installPhase = ''
-      mkdir -p $out/share/fonts/truetype/${pname}
-      cp OxygenSans-version-0.4/*/*.ttf $out/share/fonts/truetype/${pname}
-      cp Oxygen-Monospace/*.ttf $out/share/fonts/truetype/${pname}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Desktop/gui font for integrated use with the KDE desktop";
-      longDescription =
-      ''
+  meta = with stdenv.lib; {
+    description = "Desktop/gui font for integrated use with the KDE desktop";
+    longDescription = ''
       Oxygen Font is a font family originally aimed as a desktop/gui
       font for integrated use with the KDE desktop.
 
@@ -49,9 +43,9 @@ in
       traffic accident three months after its last release, causing him severe brain
       injury. He finally passed away, sans oxygen, on August 25th 2016.
       See: http://sansoxygen.com/
-      '';
+    '';
 
-      license = licenses.ofl;
-      platforms = platforms.all;
-    };
+    license = licenses.ofl;
+    platforms = platforms.all;
+  };
 }
