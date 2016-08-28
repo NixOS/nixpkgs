@@ -11,8 +11,9 @@
 
 { nixpkgs ? { outPath = (import ../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
-, # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+# The platforms for which we build Nixpkgs.
+, supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+# Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
 }:
 
@@ -84,18 +85,15 @@ let
         };
 
     } // (mapTestOn ((packagePlatforms pkgs) // rec {
-
-      #emacs24PackagesNg = packagePlatforms pkgs.emacs24PackagesNg;
-
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
+      # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
+
+      #emacs24PackagesNg = packagePlatforms pkgs.emacs24PackagesNg;
       #rPackages = packagePlatforms pkgs.rPackages;
-
       ocamlPackages = { };
-
       perlPackages = { };
-
       pythonPackages = {
         pandas = unix;
         scikitlearn = unix;
