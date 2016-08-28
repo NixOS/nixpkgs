@@ -6140,11 +6140,11 @@ in modules // {
 
   fake_factory = buildPythonPackage rec {
     name = "fake-factory-${version}";
-    version = "0.5.7";
+    version = "0.6.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fake-factory/${name}.tar.gz";
-      sha256 = "1chmarnrdzn4r017n8qlic0m0bbnhw04s3hkwribjvm3mqpb6pa0";
+      sha256 = "09sgk0kylsshs64a1xsz3qr187sbnqrbf4z8k3dgsy32lsgyffv2";
     };
 
     propagatedBuildInputs = with self; [ six dateutil ipaddress mock ];
