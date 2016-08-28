@@ -11440,50 +11440,6 @@ in
     '';
   };
 
-  # grsecurity: legacy
-
-  grsecurity_base_linux_3_14 = throw "grsecurity stable is no longer supported";
-  grsecurity_base_linux_4_4  = throw "grsecurity stable is no longer supported";
-
-  linuxPackages_grsec_desktop_3_14    = throw "linuxPackages_grsec_desktop has been removed";
-  linuxPackages_grsec_desktop_4_4    = throw "linuxPackages_grsec_desktop has been removed";
-  linuxPackages_grsec_desktop_4_5    = throw "linuxPackages_grsec_desktop has been removed";
-  linuxPackages_grsec_desktop_latest    = throw "linuxPackages_grsec_desktop has been removed";
-
-  linuxPackages_grsec_server_3_14     = throw "linuxPackages_grsec_server has been removed";
-  linuxPackages_grsec_server_4_4     = throw "linuxPackages_grsec_server has been removed";
-  linuxPackages_grsec_server_4_5     = throw "linuxPackages_grsec_server has been removed";
-  linuxPackages_grsec_server_latest     = throw "linuxPackages_grsec_server has been removed";
-
-  linuxPackages_grsec_server_xen_3_14 = throw "linuxPackages_grsec_server_xen has been removed";
-  linuxPackages_grsec_server_xen_4_4 = throw "linuxPackages_grsec_server_xen has been removed";
-  linuxPackages_grsec_server_xen_4_5 = throw "linuxPackages_grsec_server_xen has been removed";
-  linuxPackages_grsec_server_xen_latest = throw "linuxPackages_grsec_server_xen has been removed";
-
-  linux_grsec_desktop_3_14    = throw "grsecurity stable is no longer supported";
-  linux_grsec_desktop_4_4    = throw "grsecurity stable is no longer supported";
-  linux_grsec_desktop_4_5    = throw "linux_grsec_desktop has been removed";
-  linux_grsec_desktop_latest    = throw "linux_grsec_desktop has been removed";
-
-  linux_grsec_server_3_14     = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_4_4     = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_4_5     = throw "linux_grsec_server has been removed";
-  linux_grsec_server_latest     = throw "linux_grsec_server_latest has been removed";
-
-  linux_grsec_server_xen_3_14 = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_xen_4_4 = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_xen_4_5 = throw "linux_grsec_server_xen has been removed";
-  linux_grsec_server_xen_latest = throw "linux_grsec_server_xen has been removed";
-
-  linux_grsec_stable_desktop    = self.linux_grsec_desktop_3_14;
-  linux_grsec_stable_server     = self.linux_grsec_server_3_14;
-  linux_grsec_stable_server_xen = self.linux_grsec_server_xen_3_14;
-
-  linux_grsec_testing_desktop    = self.linux_grsec_desktop_latest;
-  linux_grsec_testing_server     = self.linux_grsec_server_latest;
-  linux_grsec_testing_server_xen = self.linux_grsec_server_xen_latest;
-
-
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_14 = recurseIntoAttrs (self.linuxPackagesFor self.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
   linuxPackages_chromiumos_3_18 = recurseIntoAttrs (self.linuxPackagesFor self.linux_chromiumos_3_18 linuxPackages_chromiumos_3_18);
