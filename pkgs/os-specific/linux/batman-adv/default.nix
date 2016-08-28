@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ viric fpletz ];
     platforms = with stdenv.lib.platforms; linux;
+    broken = (kernel.features.grsecurity or false);
   };
 }
