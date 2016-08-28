@@ -94,20 +94,20 @@ with stdenv.lib;
   PM_TRACE_RTC n
 
   # Enable various subsystems.
-  ACCESSIBILITY y # Accessibility support
-  AUXDISPLAY y # Auxiliary Display support
-  DONGLE y # Serial dongle support
-  HIPPI y
+  ACCESSIBILITY? y # Accessibility support
+  AUXDISPLAY? y # Auxiliary Display support
+  DONGLE? y # Serial dongle support
+  HIPPI? y
   MTD_COMPLEX_MAPPINGS y # needed for many devices
   SCSI_LOWLEVEL y # enable lots of SCSI devices
   SCSI_LOWLEVEL_PCMCIA y
   SCSI_SAS_ATA y  # added to enable detection of hard drive
   SPI y # needed for many devices
   SPI_MASTER y
-  WAN y
+  WAN? y
 
   # Networking options.
-  IP_PNP n
+  IP_PNP? n
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
   ''}
@@ -153,72 +153,72 @@ with stdenv.lib;
   BCMA_HOST_PCI? y
 
   # Enable various FB devices.
-  FB y
-  FB_EFI y
-  FB_NVIDIA_I2C y # Enable DDC Support
-  FB_RIVA_I2C y
-  FB_ATY_CT y # Mach64 CT/VT/GT/LT (incl. 3D RAGE) support
-  FB_ATY_GX y # Mach64 GX support
-  FB_SAVAGE_I2C y
-  FB_SAVAGE_ACCEL y
-  FB_SIS_300 y
-  FB_SIS_315 y
-  FB_3DFX_ACCEL y
-  FB_VESA y
-  FRAMEBUFFER_CONSOLE y
-  FRAMEBUFFER_CONSOLE_ROTATION y
+  FB? y
+  FB_EFI? y
+  FB_NVIDIA_I2C? y # Enable DDC Support
+  FB_RIVA_I2C? y
+  FB_ATY_CT? y # Mach64 CT/VT/GT/LT (incl. 3D RAGE) support
+  FB_ATY_GX? y # Mach64 GX support
+  FB_SAVAGE_I2C? y
+  FB_SAVAGE_ACCEL? y
+  FB_SIS_300? y
+  FB_SIS_315? y
+  FB_3DFX_ACCEL? y
+  FB_VESA? y
+  FRAMEBUFFER_CONSOLE? y
+  FRAMEBUFFER_CONSOLE_ROTATION? y
   ${optionalString (stdenv.system == "i686-linux") ''
-    FB_GEODE y
+    FB_GEODE? y
   ''}
 
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
   ${optionalString (versionOlder version "4.3" && !(features.chromiumos or false)) ''
-    DRM_I915_KMS y
+    DRM_I915_KMS? y
   ''}
   # Allow specifying custom EDID on the kernel command line
-  DRM_LOAD_EDID_FIRMWARE y
-  VGA_SWITCHEROO y # Hybrid graphics support
-  DRM_GMA600 y
-  DRM_GMA3600 y
+  DRM_LOAD_EDID_FIRMWARE? y
+  VGA_SWITCHEROO? y # Hybrid graphics support
+  DRM_GMA600? y
+  DRM_GMA3600? y
   ${optionalString (versionAtLeast version "4.5") ''
-    DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
+    DRM_AMD_POWERPLAY? y # necessary for amdgpu polaris support
   ''}
 
   # Sound.
-  SND_DYNAMIC_MINORS y
-  SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
-  SND_HDA_INPUT_BEEP y # Support digital beep via input layer
-  SND_USB_CAIAQ_INPUT y
-  PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  SND_DYNAMIC_MINORS? y
+  SND_AC97_POWER_SAVE? y # AC97 Power-Saving Mode
+  SND_HDA_INPUT_BEEP? y # Support digital beep via input layer
+  SND_USB_CAIAQ_INPUT? y
+  PSS_MIXER? y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
 
   # USB serial devices.
-  USB_SERIAL_GENERIC y # USB Generic Serial Driver
-  USB_SERIAL_KEYSPAN_MPR y # include firmware for various USB serial devices
-  USB_SERIAL_KEYSPAN_USA28 y
-  USB_SERIAL_KEYSPAN_USA28X y
-  USB_SERIAL_KEYSPAN_USA28XA y
-  USB_SERIAL_KEYSPAN_USA28XB y
-  USB_SERIAL_KEYSPAN_USA19 y
-  USB_SERIAL_KEYSPAN_USA18X y
-  USB_SERIAL_KEYSPAN_USA19W y
-  USB_SERIAL_KEYSPAN_USA19QW y
-  USB_SERIAL_KEYSPAN_USA19QI y
-  USB_SERIAL_KEYSPAN_USA49W y
-  USB_SERIAL_KEYSPAN_USA49WLC y
+  USB_SERIAL_GENERIC? y # USB Generic Serial Driver
+  USB_SERIAL_KEYSPAN_MPR? y # include firmware for various USB serial devices
+  USB_SERIAL_KEYSPAN_USA28? y
+  USB_SERIAL_KEYSPAN_USA28X? y
+  USB_SERIAL_KEYSPAN_USA28XA? y
+  USB_SERIAL_KEYSPAN_USA28XB? y
+  USB_SERIAL_KEYSPAN_USA19? y
+  USB_SERIAL_KEYSPAN_USA18X? y
+  USB_SERIAL_KEYSPAN_USA19W? y
+  USB_SERIAL_KEYSPAN_USA19QW? y
+  USB_SERIAL_KEYSPAN_USA19QI? y
+  USB_SERIAL_KEYSPAN_USA49W? y
+  USB_SERIAL_KEYSPAN_USA49WLC? y
 
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
-  FANOTIFY y
-  EXT2_FS_XATTR y
-  EXT2_FS_POSIX_ACL y
+  FANOTIFY? y
+  EXT2_FS_XATTR? y
+  EXT2_FS_POSIX_ACL? y
   EXT2_FS_SECURITY y
   ${optionalString (versionOlder version "4.0") ''
-    EXT2_FS_XIP y # Ext2 execute in place support
+    EXT2_FS_XIP? y # Ext2 execute in place support
   ''}
-  EXT3_FS_POSIX_ACL y
+  EXT3_FS_POSIX_ACL? y
   EXT3_FS_SECURITY y
-  EXT4_FS_POSIX_ACL y
+  EXT4_FS_POSIX_ACL? y
   EXT4_FS_SECURITY y
   REISERFS_FS_XATTR? y
   REISERFS_FS_POSIX_ACL? y
@@ -234,24 +234,24 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.0" && versionOlder version "4.6") ''
     NFSD_PNFS y
   ''}
-  NFSD_V2_ACL y
-  NFSD_V3 y
-  NFSD_V3_ACL y
+  NFSD_V2_ACL? y
+  NFSD_V3 y?
+  NFSD_V3_ACL? y
   NFSD_V4 y
   ${optionalString (versionAtLeast version "3.11") ''
     NFSD_V4_SECURITY_LABEL y
   ''}
-  NFS_FSCACHE y
-  NFS_SWAP y
-  NFS_V3_ACL y
+  NFS_FSCACHE? y
+  NFS_SWAP? y
+  NFS_V3_ACL? y
   ${optionalString (versionAtLeast version "3.11") ''
-    NFS_V4_1 y  # NFSv4.1 client support
-    NFS_V4_2 y
+    NFS_V4_1? y  # NFSv4.1 client support
+    NFS_V4_2? y
     NFS_V4_SECURITY_LABEL y
   ''}
-  CIFS_XATTR y
-  CIFS_POSIX y
-  CIFS_FSCACHE y
+  CIFS_XATTR? y
+  CIFS_POSIX? y
+  CIFS_FSCACHE? y
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
   ''}
@@ -259,15 +259,15 @@ with stdenv.lib;
     CEPH_FS_POSIX_ACL y
   ''}
   ${optionalString (versionAtLeast version "3.13") ''
-    SQUASHFS_FILE_DIRECT y
-    SQUASHFS_DECOMP_MULTI_PERCPU y
+    SQUASHFS_FILE_DIRECT? y
+    SQUASHFS_DECOMP_MULTI_PERCPU? y
   ''}
-  SQUASHFS_XATTR y
-  SQUASHFS_ZLIB y
-  SQUASHFS_LZO y
-  SQUASHFS_XZ y
+  SQUASHFS_XATTR? y
+  SQUASHFS_ZLIB? y
+  SQUASHFS_LZO? y
+  SQUASHFS_XZ? y
   ${optionalString (versionAtLeast version "3.19") ''
-    SQUASHFS_LZ4 y
+    SQUASHFS_LZ4? y
   ''}
 
   # Runtime security tests
@@ -276,8 +276,8 @@ with stdenv.lib;
   # Security related features.
   RANDOMIZE_BASE? y
   STRICT_DEVMEM y # Filter access to /dev/mem
-  SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
-  DEVKMEM n # Disable /dev/kmem
+  SECURITY_SELINUX_BOOTPARAM_VALUE? 0 # Disable SELinux by default
+  DEVKMEM? n # Disable /dev/kmem
   ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
   '' else ''
@@ -293,8 +293,8 @@ with stdenv.lib;
 
   # Microcode loading support
   MICROCODE y
-  MICROCODE_INTEL y
-  MICROCODE_AMD y
+  MICROCODE_INTEL? y
+  MICROCODE_AMD? y
   ${optionalString (versionAtLeast version "3.11" && versionOlder version "4.4") ''
     MICROCODE_EARLY y
     MICROCODE_INTEL_EARLY y
@@ -302,8 +302,8 @@ with stdenv.lib;
   ''}
 
   # Misc. options.
-  8139TOO_8129 y
-  8139TOO_PIO n # PIO is slower
+  8139TOO_8129? y
+  8139TOO_PIO? n # PIO is slower
   AIC79XX_DEBUG_ENABLE n
   AIC7XXX_DEBUG_ENABLE n
   AIC94XX_DEBUG n
@@ -322,52 +322,52 @@ with stdenv.lib;
   CLEANCACHE? y
   CRASH_DUMP? n
   DVB_DYNAMIC_MINORS? y # we use udev
-  EFI_STUB y # EFI bootloader in the bzImage itself
+  EFI_STUB? y # EFI bootloader in the bzImage itself
   FHANDLE y # used by systemd
   SECCOMP y # used by systemd >= 231
-  FRONTSWAP y
-  FUSION y # Fusion MPT device support
+  FRONTSWAP? y
+  FUSION? y # Fusion MPT device support
   IDE n # deprecated IDE support
   ${optionalString (versionAtLeast version "4.3") ''
     IDLE_PAGE_TRACKING y
   ''}
-  IRDA_ULTRA y # Ultra (connectionless) protocol
+  IRDA_ULTRA? y # Ultra (connectionless) protocol
   JOYSTICK_IFORCE_232? y # I-Force Serial joysticks and wheels
   JOYSTICK_IFORCE_USB? y # I-Force USB joysticks and wheels
   JOYSTICK_XPAD_FF? y # X-Box gamepad rumble support
   JOYSTICK_XPAD_LEDS? y # LED Support for Xbox360 controller 'BigX' LED
   KEXEC_FILE? y
   KEXEC_JUMP? y
-  LDM_PARTITION y # Windows Logical Disk Manager (Dynamic Disk) support
-  LOGIRUMBLEPAD2_FF y # Logitech Rumblepad 2 force feedback
-  LOGO n # not needed
-  MEDIA_ATTACH y
-  MEGARAID_NEWGEN y
+  LDM_PARTITION? y # Windows Logical Disk Manager (Dynamic Disk) support
+  LOGIRUMBLEPAD2_FF? y # Logitech Rumblepad 2 force feedback
+  LOGO? n # not needed
+  MEDIA_ATTACH? y
+  MEGARAID_NEWGEN? y
   ${optionalString (versionAtLeast version "3.15") ''
-    MLX4_EN_VXLAN y
+    MLX4_EN_VXLAN? y
   ''}
-  MODVERSIONS y
-  MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
-  MTRR_SANITIZER y
-  NET_FC y # Fibre Channel driver support
+  MODVERSIONS? y
+  MOUSE_PS2_ELANTECH? y # Elantech PS/2 protocol extension
+  MTRR_SANITIZER? y
+  NET_FC? y # Fibre Channel driver support
   ${optionalString (versionAtLeast version "3.11") ''
     PINCTRL_BAYTRAIL y # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
   ''}
   MMC_BLOCK_MINORS 32 # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
-  PPP_MULTILINK y # PPP multilink support
+  PPP_MULTILINK? y # PPP multilink support
   PPP_FILTER y
-  REGULATOR y # Voltage and Current Regulator Support
+  REGULATOR? y # Voltage and Current Regulator Support
   RC_DEVICES? y # Enable IR devices
-  RT2800USB_RT55XX y
-  SCHED_AUTOGROUP y
-  SCSI_LOGGING y # SCSI logging facility
-  SERIAL_8250 y # 8250/16550 and compatible serial support
-  SLIP_COMPRESSED y # CSLIP compressed headers
-  SLIP_SMART y
-  HWMON y
-  THERMAL_HWMON y # Hardware monitoring support
+  RT2800USB_RT55XX? y
+  SCHED_AUTOGROUP? y
+  SCSI_LOGGING? y # SCSI logging facility
+  SERIAL_8250? y # 8250/16550 and compatible serial support
+  SLIP_COMPRESSED? y # CSLIP compressed headers
+  SLIP_SMART? y
+  HWMON? y
+  THERMAL_HWMON? y # Hardware monitoring support
   ${optionalString (versionAtLeast version "3.15") ''
-    UEVENT_HELPER n
+    UEVENT_HELPER? n
   ''}
   ${optionalString (versionOlder version "3.15") ''
     USB_DEBUG? n
@@ -378,7 +378,7 @@ with stdenv.lib;
     USERFAULTFD y
   ''}
   X86_CHECK_BIOS_CORRUPTION y
-  X86_MCE y
+  X86_MCE? y
 
   # PCI-Expresscard hotplug support
   ${optionalString (versionAtLeast version "3.12") "HOTPLUG_PCI_PCIE y"}
@@ -387,51 +387,51 @@ with stdenv.lib;
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
   RT_GROUP_SCHED? y
   CGROUP_DEVICE? y
-  MEMCG y
-  MEMCG_SWAP y
+  MEMCG? y
+  MEMCG_SWAP? y
   ${optionalString (versionOlder version "4.7") "DEVPTS_MULTIPLE_INSTANCES y"}
   BLK_DEV_THROTTLING y
-  CFQ_GROUP_IOSCHED y
+  CFQ_GROUP_IOSCHED? y
   ${optionalString (versionAtLeast version "4.3") ''
     CGROUP_PIDS y
   ''}
 
   # Enable staging drivers.  These are somewhat experimental, but
   # they generally don't hurt.
-  STAGING y
+  STAGING? y
 
   # PROC_EVENTS requires that the netlink connector is not built
   # as a module.  This is required by libcgroup's cgrulesengd.
-  CONNECTOR y
-  PROC_EVENTS y
+  CONNECTOR? y
+  PROC_EVENTS? y
 
   # Tracing.
-  FTRACE y
-  KPROBES y
-  FUNCTION_TRACER y
-  FTRACE_SYSCALLS y
-  SCHED_TRACER y
-  STACK_TRACER y
-  UPROBE_EVENT y
+  FTRACE? y
+  KPROBES? y
+  FUNCTION_TRACER? y
+  FTRACE_SYSCALLS? y
+  SCHED_TRACER? y
+  STACK_TRACER? y
+  UPROBE_EVENT? y
   ${optionalString (versionAtLeast version "4.4") ''
-    BPF_SYSCALL y
-    BPF_EVENTS y
+    BPF_SYSCALL? y
+    BPF_EVENTS? y
   ''}
-  FUNCTION_PROFILER y
-  RING_BUFFER_BENCHMARK n
+  FUNCTION_PROFILER? y
+  RING_BUFFER_BENCHMARK? n
 
   # Devtmpfs support.
-  DEVTMPFS y
+  DEVTMPFS? y
 
   # Easier debugging of NFS issues.
-  SUNRPC_DEBUG y
+  SUNRPC_DEBUG? y
 
   # Virtualisation.
   PARAVIRT? y
-  HYPERVISOR_GUEST y
+  HYPERVISOR_GUEST? y
   PARAVIRT_SPINLOCKS? y
-  KVM_APIC_ARCHITECTURE y
-  KVM_ASYNC_PF y
+  KVM_APIC_ARCHITECTURE? y
+  KVM_ASYNC_PF? y
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_COMPAT? y
   ''}
@@ -439,10 +439,10 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y
   ''}
-  KVM_GUEST y
-  KVM_MMIO y
+  KVM_GUEST? y
+  KVM_MMIO? y
   ${optionalString (versionAtLeast version "3.13") ''
-    KVM_VFIO y
+    KVM_VFIO? y
   ''}
   XEN? y
   XEN_DOM0? y
@@ -471,17 +471,17 @@ with stdenv.lib;
     HIGHMEM64G? y # We need 64 GB (PAE) support for Xen guest support.
   ''}
   ${optionalString (stdenv.is64bit) ''
-    VFIO_PCI_VGA y
+    VFIO_PCI_VGA? y
   ''}
-  VIRT_DRIVERS y
+  VIRT_DRIVERS? y
 
   # Media support.
-  MEDIA_DIGITAL_TV_SUPPORT y
-  MEDIA_CAMERA_SUPPORT y
-  MEDIA_RC_SUPPORT y
-  MEDIA_USB_SUPPORT y
+  MEDIA_DIGITAL_TV_SUPPORT? y
+  MEDIA_CAMERA_SUPPORT? y
+  MEDIA_RC_SUPPORT? y
+  MEDIA_USB_SUPPORT? y
   ${optionalString (!(features.chromiumos or false)) ''
-    MEDIA_PCI_SUPPORT y
+    MEDIA_PCI_SUPPORT? y
   ''}
 
   # Our initrd init uses shebang scripts, so can't be modular.
@@ -500,8 +500,8 @@ with stdenv.lib;
   TRANSPARENT_HUGEPAGE_MADVISE? y
 
   # zram support (e.g for in-memory compressed swap).
-  ZSMALLOC y
-  ZRAM m
+  ZSMALLOC? y
+  ZRAM? m
   ZSWAP? y
 
   # Enable PCIe and USB for the brcmfmac driver
