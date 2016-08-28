@@ -277,7 +277,7 @@ with stdenv.lib;
   RANDOMIZE_BASE? y
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE? 0 # Disable SELinux by default
-  DEVKMEM?n # Disable /dev/kmem
+  DEVKMEM? n # Disable /dev/kmem
   ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
   '' else ''
