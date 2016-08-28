@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
       url = "https://gist.githubusercontent.com/miekg/9430422/raw/f00965cd63c497d320f028a9972d1185b0dae039/14-add-lockaftersleep-patch";
       sha256 = "042lc5yyyl3zszll2l930apysd0lip26w0d0f0gjkl7sbhshgk8v";
     })
+    ./processwait.patch
   ];
   makeFlags="BINDIR=\${out}/bin MANPATH=\${out}/man";
   preBuild = "xmkmf";
