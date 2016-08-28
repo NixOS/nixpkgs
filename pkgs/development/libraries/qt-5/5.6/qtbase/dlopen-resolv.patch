@@ -1,26 +1,26 @@
-Index: qtbase-opensource-src-5.6.0/src/network/kernel/qdnslookup_unix.cpp
+Index: qtbase-opensource-src-5.6.1/src/network/kernel/qdnslookup_unix.cpp
 ===================================================================
---- qtbase-opensource-src-5.6.0.orig/src/network/kernel/qdnslookup_unix.cpp
-+++ qtbase-opensource-src-5.6.0/src/network/kernel/qdnslookup_unix.cpp
-@@ -79,7 +79,7 @@ static void resolveLibrary()
+--- qtbase-opensource-src-5.6.1.orig/src/network/kernel/qdnslookup_unix.cpp
++++ qtbase-opensource-src-5.6.1/src/network/kernel/qdnslookup_unix.cpp
+@@ -78,7 +78,7 @@ static bool resolveLibraryInternal()
      if (!lib.load())
  #endif
      {
 -        lib.setFileName(QLatin1String("resolv"));
 +        lib.setFileName(QLatin1String("@glibc@/lib/resolv"));
          if (!lib.load())
-             return;
+             return false;
      }
-Index: qtbase-opensource-src-5.6.0/src/network/kernel/qhostinfo_unix.cpp
+Index: qtbase-opensource-src-5.6.1/src/network/kernel/qhostinfo_unix.cpp
 ===================================================================
---- qtbase-opensource-src-5.6.0.orig/src/network/kernel/qhostinfo_unix.cpp
-+++ qtbase-opensource-src-5.6.0/src/network/kernel/qhostinfo_unix.cpp
-@@ -95,7 +95,7 @@ static void resolveLibrary()
+--- qtbase-opensource-src-5.6.1.orig/src/network/kernel/qhostinfo_unix.cpp
++++ qtbase-opensource-src-5.6.1/src/network/kernel/qhostinfo_unix.cpp
+@@ -94,7 +94,7 @@ static bool resolveLibraryInternal()
      if (!lib.load())
  #endif
      {
 -        lib.setFileName(QLatin1String("resolv"));
 +        lib.setFileName(QLatin1String("@glibc@/lib/libresolv"));
          if (!lib.load())
-             return;
+             return false;
      }
