@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cmake, boost, ffmpeg }:
+{ stdenv, fetchurl, cmake, boost, ffmpeg, zlib
+, Accelerate ? null, CoreGraphics ? null }:
 
 stdenv.mkDerivation rec {
   name = "chromaprint-${version}";
@@ -11,7 +12,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost ffmpeg ];
+  buildInputs = [ boost ffmpeg zlib ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics ];
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" ];
 

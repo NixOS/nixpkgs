@@ -7005,7 +7005,9 @@ in
 
   chmlib = callPackage ../development/libraries/chmlib { };
 
-  chromaprint = callPackage ../development/libraries/chromaprint { };
+  chromaprint = callPackage ../development/libraries/chromaprint {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics;
+  };
 
   cilaterm = callPackage ../development/libraries/cil-aterm {
     stdenv = overrideInStdenv stdenv [gnumake380];
