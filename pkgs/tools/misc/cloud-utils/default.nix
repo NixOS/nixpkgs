@@ -11,7 +11,6 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp bin/growpart $out/bin/growpart
     sed -i 's|awk|gawk|' $out/bin/growpart
-    sed -i 's|sed|gnused|' $out/bin/growpart
   '';
   dontInstall = true;
   dontPatchShebangs = true;
