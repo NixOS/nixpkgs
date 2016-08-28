@@ -253,4 +253,6 @@ in
 
   };
 
+  meta.doc = ./postgresql.xml;
+
 }
