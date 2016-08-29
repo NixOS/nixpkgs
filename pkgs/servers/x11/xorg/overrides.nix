@@ -28,6 +28,10 @@ in
     buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
   };
 
+  fontbhttf = attrs: attrs // {
+    meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
+  };
+
   fontcursormisc = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
   };
