@@ -6145,6 +6145,8 @@ in
 
   bazel = callPackage ../development/tools/build-managers/bazel { jdk = openjdk8; };
 
+  bear = callPackage ../development/tools/build-managers/bear { };
+
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
   binutils = if stdenv.isDarwin then self.darwin.binutils else self.binutils-raw;
