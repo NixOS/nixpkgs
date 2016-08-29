@@ -7563,6 +7563,24 @@ in modules // {
     };
   };
 
+  npyscreen = buildPythonPackage rec {
+    version = "4.10.5";
+    pname = "npyscreen";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/npyscreen/${name}.tar.gz";
+      sha256 = "0vhjwn0dan3zmffvh80dxb4x67jysvvf1imp6pk4dsfslpwy0bk2";
+    };
+
+    meta = {
+      description = "Writing user interfaces without all that ugly mucking about
+      in hyperspace";
+      homepage = http://www.npcole.com/npyscreen/;
+      license = licenses.bsd;
+    };
+  };
+
   odfpy = buildPythonPackage rec {
     version = "0.9.6";
     name = "odfpy-${version}";
