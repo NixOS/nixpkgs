@@ -45,7 +45,7 @@ with stdenv.lib;
   # Bump the maximum number of CPUs to support systems like EC2 x1.*
   # instances and Xeon Phi.
   ${optionalString (stdenv.system == "x86_64-linux") ''
-    NR_CPUS 384
+    NR_CPUS? 384
   ''}
 
   # Unix domain sockets.
