@@ -7085,6 +7085,8 @@ in
 
   cppdb = callPackage ../development/libraries/cppdb { };
 
+  cpp-hocon = callPackage ../development/libraries/cpp-hocon { };
+
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
   cppcms = callPackage ../development/libraries/cppcms { };
