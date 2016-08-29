@@ -28,31 +28,15 @@ let
 in
 
 {
+  meta = {
+    maintainers = with maintainers; [ joachifm ];
+    doc = ./dnscrypt-proxy.xml;
+  };
+
   options = {
     services.dnscrypt-proxy = {
-      enable = mkEnableOption "dnscrypt-proxy" // { description = ''
-        Whether to enable the DNSCrypt client proxy. The proxy relays
-        DNS queries to a DNSCrypt enabled upstream resolver. The traffic
-        between the client and the upstream resolver is encrypted and
-        authenticated, mitigating the risk of MITM attacks and third-party
-        snooping (assuming the upstream is trustworthy).
+      enable = mkEnableOption "DNSCrypt client proxy";
 
-        Enabling this option does not alter the system nameserver; to relay
-        local queries, prepend <literal>127.0.0.1</literal> to
-        <option>networking.nameservers</option>.
-
-        The recommended configuration is to run DNSCrypt proxy as a forwarder
-        for a caching DNS client, as in
-        <programlisting>
-        {
-          services.dnscrypt-proxy.enable = true;
-          services.dnscrypt-proxy.localPort = 43;
-          services.dnsmasq.enable = true;
-          services.dnsmasq.servers = [ "127.0.0.1#43" ];
-          services.dnsmasq.resolveLocalQueries = true; # this is the default
-        }
-        </programlisting>
-      ''; };
       localAddress = mkOption {
         default = "127.0.0.1";
         type = types.str;
