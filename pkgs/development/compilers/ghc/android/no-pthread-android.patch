@@ -1,0 +1,12 @@
+diff -rupN a/compiler/main/DriverPipeline.hs b/compiler/main/DriverPipeline.hs
+--- a/compiler/main/DriverPipeline.hs	2015-07-21 13:52:50.000000000 +0000
++++ b/compiler/main/DriverPipeline.hs	2015-09-19 20:55:14.159366348 +0000
+@@ -1938,7 +1938,7 @@ linkBinary' staticLink dflags o_files de
+             let os = platformOS (targetPlatform dflags)
+             in if os == OSOsf3 then ["-lpthread", "-lexc"]
+                else if os `elem` [OSMinGW32, OSFreeBSD, OSOpenBSD,
+-                                  OSNetBSD, OSHaiku, OSQNXNTO, OSiOS, OSDarwin]
++                                  OSNetBSD, OSHaiku, OSQNXNTO, OSiOS, OSDarwin, OSAndroid]
+                then []
+                else ["-lpthread"]
+          | otherwise               = []
