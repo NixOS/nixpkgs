@@ -21,33 +21,40 @@ curl="curl            \
  $NIX_CURL_FLAGS"
 
 finish() {
-    find "$out" -type f -exec chmod 644 {} \;
-    for exes in $execs; do
-        chmod +x "$out/$exes"
-    done
     runHook postFetch
     set +o noglob
     exit 0
 }
 
+ipfs_add() {
+    if curl --retry 0 --head --silent "localhost:5001" > /dev/null; then
+        echo "[0m[01;36m=IPFS=[0m add $ipfs"
+        tar --owner=root --group=root -cWf "source.tar" $(echo *)
+        res=$(curl -# -F "file=@source.tar" "localhost:5001/api/v0/tar/add" | sed 's/.*"Hash":"\(.*\)".*/\1/')
+        if [ $ipfs != $res ]; then
+            echo "\`ipfs tar add' results in $res when $ipfs is expected"
+            exit 1
+        fi
+        rm "source.tar"
+    fi
+}
+
 echo
-echo -n "[0m[01;36m=IPFS=[0m get"
 
-if test -d "/ipfs/$ipfs"; then
-    echo " /ipfs/$ipfs"
-    (timeout 5 cp -r "/ipfs/$ipfs" "$out" && finish)
-    echo "Timed out"
-fi
+mkdir download
+cd download
 
-if $curl --retry 0 --head --silent "localhost:$port/ipfs/$ipfs" > /dev/null; then
+if curl --retry 0 --head --silent "localhost:5001" > /dev/null; then
     curlexit=18;
-    echo " localhost:$port/ipfs/$ipfs"
+    echo "[0m[01;36m=IPFS=[0m get $ipfs"
     # if we get error code 18, resume partial download
     while [ $curlexit -eq 18 ]; do
         # keep this inside an if statement, since on failure it doesn't abort the script
-        if $curl -C - --fail "http://localhost:$port/api/v0/get?arg=$ipfs&archive=true" --output "$ipfs.tar"; then
+        if $curl -C - "http://localhost:5001/api/v0/tar/cat?arg=$ipfs" --output "$ipfs.tar"; then
             unpackFile "$ipfs.tar"
-            mv "$ipfs" "$out"
+            rm "$ipfs.tar"
+            set +o noglob
+            mv $(echo *) "$out"
             finish
         else
             curlexit=$?;
@@ -57,15 +64,15 @@ fi
 
 if test -n "$url"; then
     curlexit=18;
-    echo " $url"
-    mkdir download
-    cd download
+    echo "Downloading $url"
     while [ $curlexit -eq 18 ]; do
         # keep this inside an if statement, since on failure it doesn't abort the script
         if $curl "$url" -O; then
+            set +o noglob
             tmpfile=$(echo *)
             unpackFile $tmpfile
             rm $tmpfile
+            ipfs_add
             mv $(echo *) "$out"
             finish
         else
@@ -73,19 +80,6 @@ if test -n "$url"; then
         fi
     done
 fi
-
-curlexit=18;
-echo " https://ipfs.io/ipfs/$ipfs"
-while [ $curlexit -eq 18 ]; do
-    # keep this inside an if statement, since on failure it doesn't abort the script
-    if $curl "https://ipfs.io/api/v0/get?arg=$ipfs&archive=true&compress=true" --output "$ipfs.tar.gz"; then
-        unpackFile "$ipfs.tar.gz"
-        mv "$ipfs" "$out"
-        finish
-    else
-        curlexit=$?;
-    fi
-done
 
 echo "[01;31merror:[0m cannot download $ipfs from ipfs or the given url"
 echo

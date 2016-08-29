@@ -5,9 +5,8 @@ stdenv.mkDerivation rec {
 
   src = fetchipfs {
     url    = "https://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz";
-    ipfs   = "QmeWBgpeMSNV9Mvp85N7jyFxbhUpgySANJsef5XQYyykjd";
-    sha256 = "0lbgr8d2vhblhczc16llcrvid6v7s678733zac6jbm6gy2di1mjb";
-    execs  = [ "configure" ];
+    ipfs   = "QmWyj65ak3wd8kG2EvPCXKd6Tij15m4SwJz6g2yG2rQ7w8";
+    sha256 = "1im1gglfm4k10bh4mdaqzmx3lm3kivnsmxrvl6vyvmfqqzljq75l";
   };
 
   doCheck = false;

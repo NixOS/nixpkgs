@@ -14,7 +14,6 @@
 , meta           ? {}
 , port           ? "8080"
 , postFetch      ? ""
-, execs          ? []
 }:
 
 assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
@@ -27,7 +26,7 @@ let
 in
 
 if (!hasHash) then throw "Specify sha for fetchipfs fixed-output derivation" else stdenv.mkDerivation {
-  name = "ipfs_"+ipfs;
+  name = ipfs;
   builder = ./builder.sh;
   buildInputs = [ curl ];
 
@@ -42,7 +41,6 @@ if (!hasHash) then throw "Specify sha for fetchipfs fixed-output derivation" els
   inherit curlOpts
           postFetch
           ipfs
-          execs
           url
           port;
 
