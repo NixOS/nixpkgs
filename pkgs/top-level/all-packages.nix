@@ -15851,6 +15851,8 @@ in
 
   privateer = callPackage ../games/privateer { };
 
+  qweechat = callPackage ../applications/networking/irc/qweechat { };
+
   qqwing = callPackage ../games/qqwing { };
 
   quake3wrapper = callPackage ../games/quake3/wrapper { };
