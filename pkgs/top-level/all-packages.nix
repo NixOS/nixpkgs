@@ -8413,6 +8413,8 @@ in
 
   libopus = callPackage ../development/libraries/libopus { };
 
+  liborc = callPackage ../development/libraries/liborc { };
+
   libosinfo = callPackage ../development/libraries/libosinfo {
     inherit (gnome3) libsoup;
   };
