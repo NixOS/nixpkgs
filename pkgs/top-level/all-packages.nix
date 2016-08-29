@@ -13836,7 +13836,6 @@ in
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   handbrake = callPackage ../applications/video/handbrake {
-    webkitgtk = webkitgtk24x;
     ffmpeg = ffmpeg_2;
   };
 
