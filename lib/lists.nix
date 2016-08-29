@@ -139,12 +139,12 @@ rec {
 
   # Partition the elements of a list in two lists, `right' and
   # `wrong', depending on the evaluation of a predicate.
-  partition = pred:
+  partition = builtins.partition or (pred:
     fold (h: t:
       if pred h
       then { right = [h] ++ t.right; wrong = t.wrong; }
       else { right = t.right; wrong = [h] ++ t.wrong; }
-    ) { right = []; wrong = []; };
+    ) { right = []; wrong = []; });
 
 
   zipListsWith =
