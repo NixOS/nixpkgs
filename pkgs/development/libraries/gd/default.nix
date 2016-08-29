@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib fontconfig freetype ];
   propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
 

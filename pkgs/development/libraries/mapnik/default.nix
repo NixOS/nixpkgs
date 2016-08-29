@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fda6syrfb81930sf7rgw1qmpnik8k1ngrjkh43ywd3s37nbqh1n";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ python scons ];
 

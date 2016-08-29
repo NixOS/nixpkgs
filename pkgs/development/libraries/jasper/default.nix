@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-shared";
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
 
   enableParallelBuilding = true;
 

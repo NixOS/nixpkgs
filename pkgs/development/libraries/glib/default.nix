@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "docdev" ];
   outputBin = "dev";
 
   setupHook = ./setup-hook.sh;

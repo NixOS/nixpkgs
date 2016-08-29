@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cchmi08jpjypgmm9i7xzh5qfg2q5k61kry9ns8mhw3z44a440ym";
   };
 
-  outputs = [ "dev" "out" ]; # to deal with propagatedBuildInputs
+  outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
 
   configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
 

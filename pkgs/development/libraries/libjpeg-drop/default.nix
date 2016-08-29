@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   configureFlags = []
     ++ optional static [ "--enable-static" "--disable-shared" ];
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
 
   meta = {
     homepage = http://jpegclub.org/jpegtran/;

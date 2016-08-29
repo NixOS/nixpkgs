@@ -32,7 +32,7 @@ self =  stdenv.mkDerivation {
         --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
     '';
 
-    outputs = [ "dev" "out" "lib" "doc" ];
+    outputs = [ "out" "dev" "lib" "doc" ];
 
     nativeBuildInputs = [ pkgconfig ];
     propagatedBuildInputs = [ expat ];

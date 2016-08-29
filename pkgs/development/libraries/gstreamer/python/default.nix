@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./different-path-with-pygobject.patch ];
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig python ];
 

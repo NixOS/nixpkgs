@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p1mn2hsmj5cp40fnc8g1yfvk72p8pjxi866gjdkgjsqrr7xdvih";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   nativeBuildInputs = [ libtool ];
   buildInputs = [ libmad libid3tag ];
 

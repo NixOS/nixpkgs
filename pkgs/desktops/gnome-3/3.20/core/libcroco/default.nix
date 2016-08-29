@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mm0wldbi40am5qn0nv7psisbg01k42rwzjxl3gv11l5jj554aqk";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";

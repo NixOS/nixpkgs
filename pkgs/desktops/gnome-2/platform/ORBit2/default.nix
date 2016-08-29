@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libIDL ] ++ libintlOrEmpty;
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   preBuild = ''
     sed 's/-DG_DISABLE_DEPRECATED//' -i linc2/src/Makefile

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama freetype libjpeg jbig2dec openjpeg ];
-  outputs = [ "out" "bin" "doc" ];
+  outputs = [ "bin" "out" "doc" ];
 
   preConfigure = ''
     # Don't remove mujs because upstream version is incompatible

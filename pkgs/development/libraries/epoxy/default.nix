@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dfkd4xbp7v5gwsf6qwaraz54yzizf3lj5ymyc0msjn0adq3j5yl";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python ];
   buildInputs = [ mesa libX11 ];

@@ -73,7 +73,7 @@ in
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
     configureFlags = "--enable-xkb --enable-xinput";
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
   };
 
   xcbproto = attrs : attrs // {
@@ -81,7 +81,7 @@ in
   };
 
   libX11 = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "out" "dev" "man" ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
@@ -101,15 +101,15 @@ in
   };
 
   libXau = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
   };
 
   libXdmcp = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
   };
 
   libXfont = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
     propagatedBuildInputs = [ args.freetype ]; # propagate link reqs. like bzip2
     # prevents "misaligned_stack_error_entering_dyld_stub_binder"
     configureFlags = lib.optionals isDarwin [
@@ -118,7 +118,7 @@ in
   };
 
   libXxf86vm = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
@@ -131,7 +131,7 @@ in
     '';
     propagatedBuildInputs = [ xorg.libSM ];
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
-    outputs = [ "dev" "out" "docdev" ];
+    outputs = [ "out" "dev" "docdev" ];
   };
 
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
@@ -145,29 +145,29 @@ in
   };
 
   libICE = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
   };
 
   libXcomposite = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
     propagatedBuildInputs = [ xorg.libXfixes ];
   };
 
   libXaw = attrs: attrs // {
-    outputs = [ "dev" "out" "docdev" ];
+    outputs = [ "out" "dev" "docdev" ];
     propagatedBuildInputs = [ xorg.libXmu ];
   };
 
   libXcursor = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
   };
 
   libXdamage = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
   };
 
   libXft = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     # the include files need ft2build.h, and Requires.private isn't enough for us
@@ -177,59 +177,59 @@ in
   };
 
   libXext = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
     propagatedBuildInputs = [ xorg.xproto xorg.libXau ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXfixes = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
   };
 
   libXi = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
   };
 
   libXinerama = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
   };
 
   libXmu = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
     buildFlags = ''BITMAP_DEFINES=-DBITMAPDIR=\"/no-such-path\"'';
   };
 
   libXrandr = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     propagatedBuildInputs = [xorg.libXrender];
   };
 
   libSM = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
     propagatedBuildInputs = [ xorg.libICE ];
   };
 
   libXrender = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXres = attrs: attrs // {
-    outputs = [ "dev" "out" "docdev" ];
+    outputs = [ "out" "dev" "docdev" ];
   };
 
   libXv = attrs: attrs // {
-    outputs = [ "dev" "out" "docdev" ];
+    outputs = [ "out" "dev" "docdev" ];
   };
 
   libXvMC = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "out" "dev" "doc" ];
     buildInputs = attrs.buildInputs ++ [xorg.renderproto];
   };
 
   libXpm = attrs: attrs // {
-    outputs = [ "dev" "out" "bin" ]; # tiny man in $bin
+    outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
 
@@ -237,11 +237,11 @@ in
     // { buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ]; };
 
   libxkbfile = attrs: attrs // {
-    outputs = [ "dev" "out" ]; # mainly to avoid propagation
+    outputs = [ "out" "dev" ]; # mainly to avoid propagation
   };
 
   libxshmfence = attrs: attrs // {
-    outputs = [ "dev" "out" ]; # mainly to avoid propagation
+    outputs = [ "out" "dev" ]; # mainly to avoid propagation
   };
 
   libpciaccess = attrs: attrs // {
@@ -265,32 +265,32 @@ in
   };
 
   xcbutil = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
   };
 
   xcbutilcursor = attrs: attrs // {
-    outputs = [ "dev" "out" ];
+    outputs = [ "out" "dev" ];
     meta = attrs.meta // { maintainers = [ stdenv.lib.maintainers.lovek323 ]; };
   };
 
   xcbutilimage = attrs: attrs // {
-    outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
+    outputs = [ "out" "dev" ]; # mainly to get rid of propagating others
   };
 
   xcbutilkeysyms = attrs: attrs // {
-    outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
+    outputs = [ "out" "dev" ]; # mainly to get rid of propagating others
   };
 
   xcbutilrenderutil = attrs: attrs // {
-    outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
+    outputs = [ "out" "dev" ]; # mainly to get rid of propagating others
   };
 
   xcbutilwm = attrs: attrs // {
-    outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
+    outputs = [ "out" "dev" ]; # mainly to get rid of propagating others
   };
 
   xf86inputevdev = attrs: attrs // {
-    outputs = [ "dev" "out" ]; # to get rid of xorgserver.dev; man is tiny
+    outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
     buildInputs = attrs.buildInputs ++ [ args.mtdev args.libevdev ];
@@ -310,7 +310,7 @@ in
   };
 
   xf86inputsynaptics = attrs: attrs // {
-    outputs = [ "dev" "out" ]; # *.pc pulls xorgserver.dev
+    outputs = [ "out" "dev" ]; # *.pc pulls xorgserver.dev
     buildInputs = attrs.buildInputs ++ [args.mtdev args.libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   };
@@ -420,7 +420,7 @@ in
     in
       if (!isDarwin)
       then {
-        outputs = [ "dev" "out" ];
+        outputs = [ "out" "dev" ];
         buildInputs = [ makeWrapper ] ++ commonBuildInputs;
         propagatedBuildInputs = [ libpciaccess args.epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev

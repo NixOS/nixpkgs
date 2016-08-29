@@ -85,7 +85,7 @@ let
 
     enableParallelBuilding = true;
 
-    outputs = [ "dev" "out" "bin" ];
+    outputs = [ "bin" "dev" "out" ];
     setOutputFlags = false;
 
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.

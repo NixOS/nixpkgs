@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''mkdir -vp $sourceRoot/m4'';
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ openssl ]
     ++ optionals stdenv.isLinux [ libcap libpcap libnfnetlink libnetfilter_conntrack libnetfilter_queue ];

@@ -9,7 +9,7 @@ stdenv.mkDerivation (rec {
 
   inherit src;
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   buildInputs = [ gnum4 ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "09lh8x6qj0cd950whgaqqi3c4pqbl6z7aw9ddm73i14bw056185v";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   configureFlags = [

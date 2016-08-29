@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # We don't currently build the Python, Perl, PHP, etc. bindings.
   # Perl is needed for the test suite, though.
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   nativeBuildInputs = [ autoreconfHook flex bison perl ];
   buildInputs = [ freetype zlib libpng giflib ];
 

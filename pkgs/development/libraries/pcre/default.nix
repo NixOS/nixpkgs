@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     ./CVE-2016-1283.patch
   ];
 
-  outputs = [ "dev" "out" "bin" "doc" "man" ];
+  outputs = [ "bin" "dev" "out" "doc" "man" ];
 
   configureFlags = [
     "--enable-jit"

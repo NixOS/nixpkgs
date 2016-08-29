@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kwbx92ps0r7s2mqy7lxbxanslxdzj7dp7r7gmdkzv1j8yqf3kwf";
   };
 
-  outputs = [ "dev" "out" "doc" ]; # it's dev-doc only
+  outputs = [ "out" "dev" "doc" ]; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
   configureFlags =

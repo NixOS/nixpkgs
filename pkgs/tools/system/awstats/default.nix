@@ -14,7 +14,7 @@ perlPackages.buildPerlPackage rec {
       --replace /usr/share/awstats/ "$out/wwwroot/cgi-bin/"
   '';
 
-  outputs = [ "out" "bin" "doc" ]; # bin just links the user-run executable
+  outputs = [ "bin" "out" "doc" ]; # bin just links the user-run executable
   propagatedBuildOutputs = [ ]; # otherwise out propagates bin -> cycle
 
   buildInputs = with perlPackages; [ ]; # plugins will need some

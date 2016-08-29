@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
   postPatch = "patchShebangs event_rpcgen.py";
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   nativeBuildInputs = [ autoreconfHook ];

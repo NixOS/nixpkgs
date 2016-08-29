@@ -13,7 +13,7 @@ let self = stdenv.mkDerivation rec {
   #outputs TODO: split $cxx due to libstdc++ dependency; maybe port to gmp5;
   # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
   # - see #5855 for related discussion
-  outputs = [ "dev" "out" "info" ];
+  outputs = [ "out" "dev" "info" ];
   passthru.static = self.out;
 
   nativeBuildInputs = [ m4 ];

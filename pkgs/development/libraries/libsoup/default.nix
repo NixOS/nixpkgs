@@ -22,7 +22,7 @@ stdenv.mkDerivation {
      substituteInPlace libsoup/Makefile.in --replace "\$(DESTDIR)\$(vapidir)" "\$(DESTDIR)\$(girdir)/../vala/vapi"
   '';
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ]
     ++ stdenv.lib.optionals valaSupport [ vala_0_23 ];
