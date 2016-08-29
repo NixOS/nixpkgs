@@ -824,10 +824,10 @@ self: super: {
   # https://github.com/ivanperez-keera/hcwiid/pull/4
   hcwiid = overrideCabal super.hcwiid (drv: {
     configureFlags = (drv.configureFlags or []) ++ [
-      "--extra-lib-dirs=${pkgs.bluez}/lib"
+      "--extra-lib-dirs=${pkgs.bluez.out}/lib"
       "--extra-lib-dirs=${pkgs.cwiid}/lib"
       "--extra-include-dirs=${pkgs.cwiid}/include"
-      "--extra-include-dirs=${pkgs.bluez}/include"
+      "--extra-include-dirs=${pkgs.bluez.dev}/include"
     ];
     prePatch = '' sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal" '';
   });
