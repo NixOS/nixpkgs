@@ -4725,7 +4725,7 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
-  go_1_4 = callPackage ../development/compilers/go/1.4.nix {
+  go_bootstrap = callPackage ../development/compilers/go/1.4.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -9969,10 +9969,6 @@ in
   buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO MODULES
-
-  buildGo14Package = callPackage ../development/go-modules/generic {
-    go = go_1_4;
-  };
 
   buildGo16Package = callPackage ../development/go-modules/generic {
     go = go_1_6;

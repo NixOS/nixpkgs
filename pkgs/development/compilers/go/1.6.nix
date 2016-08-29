@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, go_1_4, runCommand
+{ stdenv, lib, fetchurl, tzdata, iana_etc, go_bootstrap, runCommand
 , perl, which, pkgconfig, patch, fetchpatch
 , pcre
 , Security, Foundation, bash }:
@@ -6,7 +6,7 @@
 let
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
-    cp -rf ${go_1_4}/* $out/
+    cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  disallowedReferences = [ go_1_4 ];
+  disallowedReferences = [ go_bootstrap ];
 
   meta = with stdenv.lib; {
     branch = "1.6";
