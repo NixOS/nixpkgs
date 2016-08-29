@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ automake autoconf libtool which ];
 
+  NIX_CFLAGS_LINK = [ "-pthread" ];
+
   patches = [ ./bootstrap.patch ];
 
   meta = with stdenv.lib; {
