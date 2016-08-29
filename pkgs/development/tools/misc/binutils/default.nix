@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ./pt-pax-flags.patch
   ];
 
-  outputs = (optional (cross == null) "dev") ++ [ "out" "info" ];
+  outputs = [ "out" "info" ] ++ (optional (cross == null) "dev");
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];
