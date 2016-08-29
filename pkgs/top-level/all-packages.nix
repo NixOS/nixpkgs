@@ -2376,6 +2376,8 @@ in
 
   npm2nix = nodePackages.npm2nix;
 
+  kindlegen = callPackage ../tools/typesetting/kindlegen { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns { };
@@ -6420,7 +6422,7 @@ in
   gnumake = self.gnumake42;
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
-  
+
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
@@ -7046,6 +7048,8 @@ in
   ctpl = callPackage ../development/libraries/ctpl { };
 
   cppdb = callPackage ../development/libraries/cppdb { };
+
+  cpp-hocon = callPackage ../development/libraries/cpp-hocon { };
 
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
@@ -8392,6 +8396,8 @@ in
   liboop = callPackage ../development/libraries/liboop { };
 
   libopus = callPackage ../development/libraries/libopus { };
+
+  liborc = callPackage ../development/libraries/liborc { };
 
   libosinfo = callPackage ../development/libraries/libosinfo {
     inherit (gnome3) libsoup;
@@ -10460,7 +10466,7 @@ in
 
   influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
 
-  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; }; 
+  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
@@ -11389,50 +11395,6 @@ in
       GRKERNSEC_CONFIG_VIRT_XEN y
     '';
   };
-
-  # grsecurity: legacy
-
-  grsecurity_base_linux_3_14 = throw "grsecurity stable is no longer supported";
-  grsecurity_base_linux_4_4  = throw "grsecurity stable is no longer supported";
-
-  linuxPackages_grsec_desktop_3_14    = throw "linuxPackages_grsec_desktop has been removed";
-  linuxPackages_grsec_desktop_4_4    = throw "linuxPackages_grsec_desktop has been removed";
-  linuxPackages_grsec_desktop_4_5    = throw "linuxPackages_grsec_desktop has been removed";
-  linuxPackages_grsec_desktop_latest    = throw "linuxPackages_grsec_desktop has been removed";
-
-  linuxPackages_grsec_server_3_14     = throw "linuxPackages_grsec_server has been removed";
-  linuxPackages_grsec_server_4_4     = throw "linuxPackages_grsec_server has been removed";
-  linuxPackages_grsec_server_4_5     = throw "linuxPackages_grsec_server has been removed";
-  linuxPackages_grsec_server_latest     = throw "linuxPackages_grsec_server has been removed";
-
-  linuxPackages_grsec_server_xen_3_14 = throw "linuxPackages_grsec_server_xen has been removed";
-  linuxPackages_grsec_server_xen_4_4 = throw "linuxPackages_grsec_server_xen has been removed";
-  linuxPackages_grsec_server_xen_4_5 = throw "linuxPackages_grsec_server_xen has been removed";
-  linuxPackages_grsec_server_xen_latest = throw "linuxPackages_grsec_server_xen has been removed";
-
-  linux_grsec_desktop_3_14    = throw "grsecurity stable is no longer supported";
-  linux_grsec_desktop_4_4    = throw "grsecurity stable is no longer supported";
-  linux_grsec_desktop_4_5    = throw "linux_grsec_desktop has been removed";
-  linux_grsec_desktop_latest    = throw "linux_grsec_desktop has been removed";
-
-  linux_grsec_server_3_14     = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_4_4     = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_4_5     = throw "linux_grsec_server has been removed";
-  linux_grsec_server_latest     = throw "linux_grsec_server_latest has been removed";
-
-  linux_grsec_server_xen_3_14 = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_xen_4_4 = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_xen_4_5 = throw "linux_grsec_server_xen has been removed";
-  linux_grsec_server_xen_latest = throw "linux_grsec_server_xen has been removed";
-
-  linux_grsec_stable_desktop    = self.linux_grsec_desktop_3_14;
-  linux_grsec_stable_server     = self.linux_grsec_server_3_14;
-  linux_grsec_stable_server_xen = self.linux_grsec_server_xen_3_14;
-
-  linux_grsec_testing_desktop    = self.linux_grsec_desktop_latest;
-  linux_grsec_testing_server     = self.linux_grsec_server_latest;
-  linux_grsec_testing_server_xen = self.linux_grsec_server_xen_latest;
-
 
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_14 = recurseIntoAttrs (self.linuxPackagesFor self.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
@@ -13846,7 +13808,6 @@ in
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   handbrake = callPackage ../applications/video/handbrake {
-    webkitgtk = webkitgtk24x;
     ffmpeg = ffmpeg_2;
   };
 

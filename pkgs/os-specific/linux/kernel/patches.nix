@@ -31,6 +31,8 @@ let
       url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch";
       inherit sha256;
     };
+
+    features.grsecurity = true;
   };
 in
 
