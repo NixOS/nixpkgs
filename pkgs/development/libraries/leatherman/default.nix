@@ -2,20 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "leatherman-${version}";
-  version = "0.7.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    sha256 = "103qzhjhgw7jh0xcaxag735wfm6q35xprq5wmdimfhhmmrmjr51g";
+    sha256 = "18nidasykbwdd9qzwc8pnzhczy6acr3rsxwvv2v3j5gq3nbsk2mc";
     rev = version;
     repo = "leatherman";
     owner = "puppetlabs";
   };
 
   buildInputs = [ boost cmake curl ];
-
-  # curl upgrade to 7.50.0 (#17152) broke the curl mock tests, disabling for now
-  # upstream bug raised https://tickets.puppetlabs.com/browse/LTH-108
-  cmakeFlags = [ "-DLEATHERMAN_MOCK_CURL=OFF" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/puppetlabs/leatherman/;  
