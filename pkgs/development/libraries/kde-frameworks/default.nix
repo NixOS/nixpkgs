@@ -70,7 +70,7 @@ let
     ecm =
       let drv = { cmake, ecmNoHooks, pkgconfig, qtbase, qttools }:
             makeSetupHook
-            { deps = [ cmake ecmNoHooks pkgconfig qtbase qttools ]; }
+            { deps = lib.chooseDevOutputs [ cmake ecmNoHooks pkgconfig qtbase qttools ]; }
             ./setup-hook.sh;
       in callPackage drv {};
     ecmNoHooks = callPackage ./extra-cmake-modules {
