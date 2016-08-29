@@ -29463,4 +29463,27 @@ in modules // {
       sha256 = "14kb9gxw39zhvrijhp066b4bm6bgv35iw56c394y4dyczpha0dij";
     };
   };
+
+  autobahn = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "autobahn";
+    version = "0.16.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/${pname}/${name}.tar.gz";
+      sha256 = "1158ml8h3g0vlsgw2jmy579glbg7dn0mjij8xibdl509b8qv9p51";
+    };
+    buildInputs = with self; [ unittest2 mock pytest txaio trollius ];
+    propagatedBuildInputs = with self; [ six twisted ];
+    checkPhase = ''
+      py.test $out
+    '';
+
+    meta = {
+      description = "WebSocket and WAMP in Python for Twisted and asyncio.";
+      homepage    = "http://crossbar.io/autobahn";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
 }
