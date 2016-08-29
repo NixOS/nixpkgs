@@ -22706,6 +22706,31 @@ in modules // {
     };
   });
 
+  sphinxcontrib-blockdiag = buildPythonPackage (rec {
+    name = "${pname}-${version}";
+    pname = "sphinxcontrib-blockdiag";
+    version = "1.5.5";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "1w7q2hhpzk159wd35hlbwkh80hnglqa475blcd9vjwpkv1kgkpvw";
+    };
+
+    buildInputs = with self; [ mock sphinx-testing ];
+    propagatedBuildInputs = with self; [ sphinx blockdiag ];
+
+    # Seems to look for files in the wrong dir
+    doCheck = false;
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover -s tests
+    '';
+
+    meta = {
+      description = "Sphinx blockdiag extension";
+      homepage = "https://github.com/blockdiag/sphinxcontrib-blockdiag";
+      maintainers = [ nand0p ];
+      license = "BSD";
+    };
+  });
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
     name = "sphinxcontrib-httpdomain-1.3.0";
