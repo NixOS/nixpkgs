@@ -107,6 +107,7 @@ with stdenv.lib;
   WAN y
 
   # Networking options.
+  NET y
   IP_PNP n
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
@@ -210,6 +211,7 @@ with stdenv.lib;
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
   FANOTIFY y
+  TMPFS y
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
@@ -313,6 +315,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.4") ''
     B43_PCMCIA? y
   ''}
+  BLK_DEV_INITRD y
   BLK_DEV_INTEGRITY y
   BSD_PROCESS_ACCT_V3 y
   BT_HCIUART_BCSP? y
@@ -323,8 +326,10 @@ with stdenv.lib;
   CRASH_DUMP? n
   DVB_DYNAMIC_MINORS? y # we use udev
   EFI_STUB y # EFI bootloader in the bzImage itself
+  CGROUPS y # used by systemd
   FHANDLE y # used by systemd
   SECCOMP y # used by systemd >= 231
+  POSIX_MQUEUE y
   FRONTSWAP y
   FUSION y # Fusion MPT device support
   IDE n # deprecated IDE support

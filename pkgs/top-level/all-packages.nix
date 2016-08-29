@@ -4738,12 +4738,8 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
-  go_1_4 = callPackage ../development/compilers/go/1.4.nix {
+  go_bootstrap = callPackage ../development/compilers/go/1.4.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  go_1_5 = callPackage ../development/compilers/go/1.5.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
   go_1_6 = callPackage ../development/compilers/go/1.6.nix {
@@ -8767,6 +8763,9 @@ in
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
     paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
+    meta = {
+      platforms = lib.platforms.unix;
+    };
   });
 
   meterbridge = callPackage ../applications/audio/meterbridge { };
@@ -9988,14 +9987,6 @@ in
   buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO MODULES
-
-  buildGo14Package = callPackage ../development/go-modules/generic {
-    go = go_1_4;
-  };
-
-  buildGo15Package = callPackage ../development/go-modules/generic {
-    go = go_1_5;
-  };
 
   buildGo16Package = callPackage ../development/go-modules/generic {
     go = go_1_6;
@@ -12125,6 +12116,8 @@ in
 
   orbitron = callPackage ../data/fonts/orbitron { };
 
+  oxygenfonts = callPackage ../data/fonts/oxygenfonts { };
+
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   pecita = callPackage ../data/fonts/pecita {};
@@ -12735,7 +12728,6 @@ in
 
   docker = callPackage ../applications/virtualization/docker {
     btrfs-progs = btrfs-progs_4_4_1;
-    go = go_1_4;
   };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -13048,6 +13040,7 @@ in
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
+  keepassx2-http = callPackage ../applications/misc/keepassx/2.0-http.nix { };
 
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;

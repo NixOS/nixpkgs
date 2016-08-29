@@ -4227,15 +4227,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestPodLinkCheck = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-Pod-LinkCheck-1.001";
+  DistZillaPluginTestPodLinkCheck = buildPerlPackage rec {
+    name = "Dist-Zilla-Plugin-Test-Pod-LinkCheck-1.002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RW/RWSTAUNER/Dist-Zilla-Plugin-Test-Pod-LinkCheck-1.001.tar.gz;
-      sha256 = "d75682175dff1f79928794ba30ea29389a4666f781a50cba281c25cfd3c95bbd";
+      url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/${name}.tar.gz";
+      sha256 = "26f3b257d5037aeec8335910cfdaf76fc8612f38f5d3134f46cd433e116947b0";
     };
+#    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ DistZilla Moose TestPodLinkCheck ];
     meta = {
-      homepage = http://github.com/rwstauner/Dist-Zilla-Plugin-Test-Pod-LinkCheck;
+      homepage = https://github.com/rwstauner/Dist-Zilla-Plugin-Test-Pod-LinkCheck;
       description = "Add release tests for POD links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -5148,10 +5149,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileMimeInfo = buildPerlPackage rec {
-    name = "File-MimeInfo-0.23";
+    name = "File-MimeInfo-0.27";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "006i9idnxv9hsz1gykc5bqs05ma5wz9dsjrpmah9293bgdy1ccxj";
+      sha256 = "0d3jcs2fgrrfwl3rxk8xg0varjah2llm66jk6rk2gznpzqkgi72p";
     };
     doCheck = false; # Failed test 'desktop file is the right one'
     propagatedBuildInputs = [ FileBaseDir FileDesktopEntry ];
@@ -6613,10 +6614,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-2.033";
+    name = "IO-Socket-SSL-2.037";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SULLR/${name}.tar.gz";
-      sha256 = "01qggwmc97kpzx49fp4fxysrjyq8mpnx54nrb087ridj0ch3cf46";
+      sha256 = "6747226937d652a30a2c9c21d171412737f41f27ea7d82cd74845b3052909469";
     };
     propagatedBuildInputs = [ NetSSLeay URI ];
     # Fix path to default certificate store.
@@ -12708,13 +12709,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [PodCoverage];
   };
 
-  TestPodLinkCheck = buildPerlPackage {
-    name = "Test-Pod-LinkCheck-0.007";
+  TestPodLinkCheck = buildPerlPackage rec {
+    name = "Test-Pod-LinkCheck-0.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AP/APOCAL/Test-Pod-LinkCheck-0.007.tar.gz;
-      sha256 = "de2992e756fca96824411bb3ab2b94b05567cb3f2c5e3ffd8162ffdfd1f77c88";
+      url = "mirror://cpan/authors/id/A/AP/APOCAL/${name}.tar.gz";
+      sha256 = "2bfe771173c38b69eeb089504e3f76511b8e45e6a9e6dac3e616e400ea67bcf0";
     };
-    buildInputs = [ TestTester ];
+    buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CaptureTiny Moose TestPod podlinkcheck ];
     meta = {
       homepage = http://search.cpan.org/dist/Test-Pod-LinkCheck/;

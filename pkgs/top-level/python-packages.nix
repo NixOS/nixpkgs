@@ -6142,11 +6142,11 @@ in modules // {
 
   fake_factory = buildPythonPackage rec {
     name = "fake-factory-${version}";
-    version = "0.5.7";
+    version = "0.6.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fake-factory/${name}.tar.gz";
-      sha256 = "1chmarnrdzn4r017n8qlic0m0bbnhw04s3hkwribjvm3mqpb6pa0";
+      sha256 = "09sgk0kylsshs64a1xsz3qr187sbnqrbf4z8k3dgsy32lsgyffv2";
     };
 
     propagatedBuildInputs = with self; [ six dateutil ipaddress mock ];
@@ -6634,37 +6634,6 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [ gdata ];
-  };
-
-  googleplaydownloader = buildPythonPackage rec {
-    version = "1.8";
-    name = "googleplaydownloader-${version}";
-
-    src = pkgs.fetchurl {
-       url = "https://codingteam.net/project/googleplaydownloader/download/file/googleplaydownloader_${version}.orig.tar.gz";
-       sha256 = "1hxl4wdbiyq8ay6vnf3m7789jg0kc63kycjj01x1wm4gcm4qvbkx";
-     };
-
-    disabled = ! isPy27;
-
-    propagatedBuildInputs = with self; [ configparser pyasn1 ndg-httpsclient requests protobuf wxPython];
-
-    preBuild = ''
-      substituteInPlace googleplaydownloader/__init__.py --replace \
-        'open(os.path.join(HERE, "googleplaydownloader"' \
-        'open(os.path.join(HERE'
-    '';
-
-    postInstall = ''
-      cp -R googleplaydownloader/ext_libs $out/${python.sitePackages}/
-    '';
-
-    meta = {
-      homepage = https://codingteam.net/project/googleplaydownloader;
-      description = "Graphical software to download APKs from the Google Play store";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ DamienCassou ];
-    };
   };
 
   gplaycli = buildPythonPackage rec {

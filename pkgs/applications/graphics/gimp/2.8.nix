@@ -28,7 +28,12 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ pygtk ];
 
-  postInstall = ''wrapPythonPrograms'';
+  postFixup = ''
+    wrapPythonProgramsIn $out/lib/gimp/2.0/plug-ins/
+    wrapProgram $out/bin/gimp \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+  '';
 
   passthru = { inherit gtk; }; # probably its a good idea to use the same gtk in plugins ?
 

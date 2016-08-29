@@ -183,6 +183,6 @@ stdenv.mkDerivation ({
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ lib.maintainers.eelco ];
-    #platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux;
   } // meta;
 })
