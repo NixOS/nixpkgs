@@ -541,6 +541,17 @@ in
     nativeBuildInputs = [args.autoreconfHook xorg.utilmacros];
   };
 
+  xf86videoxgi = attrs: attrs // {
+    patches = [
+      # fixes invalid open mode
+      # https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/commit/?id=bd94c475035739b42294477cff108e0c5f15ef67
+      (args.fetchpatch {
+        url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/patch/?id=bd94c475035739b42294477cff108e0c5f15ef67";
+        sha256 = "0myfry07655adhrpypa9rqigd6rfx57pqagcwibxw7ab3wjay9f6";
+      })
+    ];
+  };
+
   xwd = attrs: attrs // {
     buildInputs = with xorg; attrs.buildInputs ++ [libXt libxkbfile];
   };
