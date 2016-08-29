@@ -328,7 +328,7 @@ in
   };
 
   xf86videoati = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.xorgserver}/include/xorg";
+    NIX_CFLAGS_COMPILE = "-I${xorg.xorgserver.dev or xorg.xorgserver}/include/xorg";
   };
 
   xf86videonv = attrs: attrs // {
