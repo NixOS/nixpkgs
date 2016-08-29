@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--with-libtool"
-    "--with-libxml2=${libxml2}"
+    "--with-libxml2=${libxml2.dev}"
     "--with-openssl=${openssl.dev}"
     "--without-atf"
     "--without-dlopen"
