@@ -49,7 +49,7 @@ let
 
     postPatch = ''
       rm -f rebar rebar3
-    '';
+    '' + postPatch;
 
     configurePhase = if configurePhase == null
     then ''
