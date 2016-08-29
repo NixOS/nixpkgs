@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  hardeningDisable = [ "format" ];
+
   configureFlags = [
     "--enable-gtk2"
     (if compat24 then "--enable-compat24" else "--disable-compat24")
