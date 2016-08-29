@@ -1803,6 +1803,31 @@ in modules // {
     };
   };
 
+  beancount-import = buildPythonPackage (rec {
+    name = "beancount-import-adf0070a303c96a7bf1385cce01c93d8a042fcf9";
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/jbms/beancount-import";
+      rev = "adf0070a303c96a7bf1385cce01c93d8a042fcf9";
+      sha256 = "1yilsbaxxmsvrpjjykk90ncg9c9k8qziffr6dbdrsjr1bfcj0mhf";
+    };
+
+    buildInputs = with self; [
+      nltk
+      numpy
+      scikitlearn
+      npyscreen
+
+      pkgs.beancount
+
+    ];
+
+    meta = {
+      homepage = https://github.com/jbms/beancount-import;
+      license = "gpl2";
+    };
+  });
+
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
     disabled = isPy3k;
