@@ -7602,7 +7602,7 @@ in modules // {
       description = "Writing user interfaces without all that ugly mucking about
       in hyperspace";
       homepage = http://www.npcole.com/npyscreen/;
-      license = licenses.bsd;
+      license = licenses.bsd2; # not sure here
     };
   };
 
