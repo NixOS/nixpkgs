@@ -4771,6 +4771,31 @@ in modules // {
     };
   };
 
+  pytest-shutil = buildPythonPackage rec {
+    name = "pytest-shutil-${version}";
+    version = "1.1.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-shutil/${name}.tar.gz";
+      sha256 = "bb3c4fc2dddaf70b38bd9bb7a710d07728fa14f88fbc89c2a07979b383ade5d4";
+    };
+    buildInputs = with self; [ cmdline ];
+    propagatedBuildInputs = with self; [ pytest pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
+    meta = {
+      description = "A goodie-bag of unix shell and environment tools for py.test";
+      homepage = https://github.com/manahl/pytest-plugins;
+      maintainers = with maintainers; [ ryansydnor ];
+      platforms   = platforms.all;
+      license = licenses.mit;
+    };
+
+
+    checkPhase = ''
+      py.test
+    '';
+    # Bunch of pickle errors
+    doCheck = false;
+  };
+
   pytestcov = buildPythonPackage (rec {
     name = "pytest-cov-2.2.0";
 
