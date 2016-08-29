@@ -62,6 +62,7 @@ in
           of other machines (typically on the local network).
         '';
       };
+
       localPort = mkOption {
         default = 53;
         type = types.int;
@@ -72,6 +73,7 @@ in
           to a different value; otherwise leave the default.
         '';
       };
+
       resolverName = mkOption {
         default = "dnscrypt.eu-nl";
         type = types.nullOr types.str;
@@ -82,6 +84,7 @@ in
           extensions, and claims to not keep logs.
         '';
       };
+
       resolverList = mkOption {
         description = ''
           The list of upstream DNSCrypt resolvers. By default, we use the most
@@ -94,6 +97,7 @@ in
         };
         defaultText = "pkgs.fetchurl { url = ...; sha256 = ...; }";
       };
+
       customResolver = mkOption {
         default = null;
         description = ''
@@ -103,26 +107,30 @@ in
         type = types.nullOr (types.submodule ({ ... }: { options = {
           address = mkOption {
             type = types.str;
-            description = "Resolver IP address";
+            description = "IP address";
             example = "208.67.220.220";
           };
+
           port = mkOption {
             type = types.int;
-            description = "Resolver port";
+            description = "Port";
             default = 443;
           };
+
           name = mkOption {
             type = types.str;
-            description = "Provider fully qualified domain name";
+            description = "Fully qualified domain name";
             example = "2.dnscrypt-cert.opendns.com";
           };
+
           key = mkOption {
             type = types.str;
-            description = "Provider public key";
+            description = "Public key";
             example = "B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79";
           };
         }; }));
       };
+
       tcpOnly = mkOption {
         default = false;
         type = types.bool;
@@ -131,6 +139,7 @@ in
           TCP instead of UDP (on port 443). Use only if the UDP port is blocked.
         '';
       };
+
       ephemeralKeys = mkOption {
         default = false;
         type = types.bool;
