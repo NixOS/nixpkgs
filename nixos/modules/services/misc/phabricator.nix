@@ -20,6 +20,12 @@ in {
         default = true;
         description = "Enables TLS on the nginx vhost and redirects to it.";
       };
+
+      baseURI = mkOption {
+        type = types.str;
+        example = "https://phabricator.example.com";
+        description = "Base URI for phabricator.";
+      };
     };
   };
 
