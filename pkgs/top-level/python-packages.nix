@@ -7459,6 +7459,16 @@ in modules // {
     };
   };
 
+  nltk = buildPythonPackage (rec {
+    version = "3.2.1";
+    name = "nltk-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nltk/${name}.tar.gz";
+      sha256 = "0skxbhnymwlspjkzga0f7x1hg3y50fwpfghs8g8k7fh6f4nknlym";
+    };
+  });
+
   logster = buildPythonPackage {
     name = "logster-7475c53822";
     src = pkgs.fetchgit {
