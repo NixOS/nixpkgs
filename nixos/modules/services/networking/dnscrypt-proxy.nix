@@ -221,7 +221,6 @@ in
         ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
 
         User = "dnscrypt-proxy";
-        Group = "dnscrypt-proxy";
 
         PrivateTmp = true;
         PrivateDevices = true;
