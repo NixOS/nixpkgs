@@ -105,7 +105,7 @@ with stdenv.lib;
   WAN? y
 
   # Networking options.
-  NET? y
+  NET y
   IP_PNP? n
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
@@ -209,7 +209,7 @@ with stdenv.lib;
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
   FANOTIFY? y
-  TMPFS? y
+  TMPFS y
   EXT2_FS_XATTR? y
   EXT2_FS_POSIX_ACL? y
   EXT2_FS_SECURITY y
