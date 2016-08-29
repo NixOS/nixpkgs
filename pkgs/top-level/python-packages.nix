@@ -22800,6 +22800,24 @@ in modules // {
     };
   });
 
+  sphinxcontrib-spelling = buildPythonPackage (rec {
+    name = "${pname}-${version}";
+    pname = "sphinxcontrib-spelling";
+    version = "2.2.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "1f0fymrk4kvhqs0vj9gay4lhacxkfrlrpj4gvg0p4wjdczplxd3z";
+    };
+    propagatedBuildInputs = with self; [ sphinx pyenchant];
+    # No tests included
+    doCheck = false;
+    meta = {
+      description = "Sphinx spelling extension";
+      homepage = "http://bitbucket.org/dhellmann/sphinxcontrib-spelling";
+      maintainers = [ nand0p ];
+      license = "BSD";
+    };
+  });
 
   sphinx_pypi_upload = buildPythonPackage (rec {
     name = "Sphinx-PyPI-upload-0.2.1";
