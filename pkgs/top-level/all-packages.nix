@@ -8749,6 +8749,9 @@ in
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
     paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
+    meta = {
+      platforms = lib.platforms.unix;
+    };
   });
 
   meterbridge = callPackage ../applications/audio/meterbridge { };
@@ -12094,6 +12097,8 @@ in
 
   orbitron = callPackage ../data/fonts/orbitron { };
 
+  oxygenfonts = callPackage ../data/fonts/oxygenfonts { };
+
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   pecita = callPackage ../data/fonts/pecita {};
@@ -13016,6 +13021,7 @@ in
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
+  keepassx2-http = callPackage ../applications/misc/keepassx/2.0-http.nix { };
 
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;

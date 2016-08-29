@@ -47,6 +47,6 @@ stdenv.mkDerivation {
       z77z
       vrthra
     ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
