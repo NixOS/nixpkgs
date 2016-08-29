@@ -29934,4 +29934,20 @@ in modules // {
     };
   };
 
+  pmw = buildPythonPackage rec {
+    name = "Pmw-${version}";
+    version = "2.0.1";
+
+    meta = {
+      description = "Pmw toolkit for building widgets.";
+      homepage    = "http://sourceforge.net/projects/pmw";
+      license     = licenses.bsd2;
+      maintainers = with maintainers; [ mog ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pmw/${name}.tar.gz";
+      sha256 = "080iml3868nxniyn56kcwnbghm10j7fw74a5nj0s19sm4zsji78b";
+    };
+  };
 }
