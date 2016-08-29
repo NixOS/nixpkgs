@@ -66,6 +66,8 @@ stdenv.mkDerivation {
   patches = optional tolerateCpuTimingInaccuracy ./disable-timing-accuracy-check.patch
     ++ optional stdenv.isDarwin ./tmpdir.patch;
 
+  hardeningDisable = [ "format" ];
+
   # Configure outside of the source directory.
   preConfigure = ''
     mkdir build
@@ -73,14 +75,9 @@ stdenv.mkDerivation {
     configureScript=../configure
   '';
 
-  # * -fPIC is passed even in non-shared builds so that the ATLAS code can be
-  #   used to inside of shared libraries, like Octave does.
-  #
   # * -t 0 disables use of multi-threading. It's not quite clear what the
   #   consequences of that setting are and whether it's necessary or not.
   configureFlags = [
-    "-Fa alg"
-    "-fPIC"
     "-t ${threads}"
     cpuConfig
   ] ++ optional shared "--shared"

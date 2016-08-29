@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
 
   src = srcs.vsl;
 
+  hardeningDisable = [ "pic" ];
+
   prePatch = ''
     cd root/usr/src/iomemory-vsl-*
   '';

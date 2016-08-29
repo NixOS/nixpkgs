@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "pic" ];
+
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"

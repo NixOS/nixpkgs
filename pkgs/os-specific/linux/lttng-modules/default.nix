@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0a9xwq0kgpx1y800l232h524f19g3py6cnxff10j9p01q6lzhrxh";
   };
 
+  hardeningDisable = [ "pic" ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     export INSTALL_MOD_PATH="$out"

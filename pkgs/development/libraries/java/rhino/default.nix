@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   patches = [ ./gcj-type-mismatch.patch ];
 
+  hardeningDisable = [ "fortify" "format" ];
+
   preConfigure =
     ''
       find -name \*.jar -or -name \*.class -exec rm -v {} \;

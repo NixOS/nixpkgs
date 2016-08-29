@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     find . -exec sed -e 's@/bin/uname@${coreutils}&@g' -i '{}' ';'
   '';
 
+  hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
+
   postInstall = ''
     rm -rf "$out/LIB"
     cp -r Singular/LIB "$out"

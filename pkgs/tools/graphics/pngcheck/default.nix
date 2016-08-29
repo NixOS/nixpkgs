@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pzkj1bb4kdybk6vbfq9s0wzdm5szmrgixkas3xmbpv4mhws1w3p";
   };
 
-  # configurePhase = ''
-  #   sed -i s,/usr,$out, Makefile
-  # '';
+  hardeningDisable = [ "format" ];
 
   makefile = "Makefile.unx";
   makeFlags = "ZPATH=${zlib.static}/lib";

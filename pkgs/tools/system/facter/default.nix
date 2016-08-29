@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
   # since we cant expand $out in cmakeFlags
   preConfigure = "cmakeFlags+=\" -DRUBY_LIB_INSTALL=$out/lib/ruby\"";
 
-  libyamlcpp_ = libyamlcpp.override { makePIC = true; };
-
-  buildInputs = [ boost cmake cpp-hocon curl leatherman libyamlcpp_ openssl ruby utillinux ];
+  buildInputs = [ boost cmake cpp-hocon curl leatherman libyamlcpp openssl ruby utillinux ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/puppetlabs/facter;

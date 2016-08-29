@@ -11,7 +11,7 @@
   # icu version missmatch may cause such error when selecting from a table:
   # "Collation unicode for character set utf8 is not installed"
 
-  # icu 3.0 can still be build easily by nix (by dropping the #elif case and
+  # icu 3.0 can still be built easily by nix (by dropping the #elif case and
   # make | make)
   icu ? null
 
@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/firebird/Firebird-${version}.tar.bz2";
     sha256 = "0887a813wffp44hnc2gmwbc4ylpqw3fh3hz3bf6q3648344a9fdv";
   };
+
+  hardeningDisable = [ "format" ];
 
   # configurePhase = ''
   #   sed -i 's@cp /usr/share/automake-.*@@' autogen.sh

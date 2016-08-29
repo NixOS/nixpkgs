@@ -15,12 +15,14 @@ let s = # Generated upstream information
   };
   buildInputs = [zlib jam pkgconfig gettext libxml2 libxslt xproto libX11 mesa 
     SDL SDL_mixer SDL_image SDL_ttf SDL_gfx physfs];
-in 
+in
 stdenv.mkDerivation rec {
   inherit (s) name version;
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  hardeningDisable = [ "format" ];
 
   inherit buildInputs;
 

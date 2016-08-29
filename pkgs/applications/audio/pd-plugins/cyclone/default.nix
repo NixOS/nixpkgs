@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ puredata ];
 
+  hardeningDisable = [ "format" ];
+
   patchPhase = ''
     for file in `grep -r -l g_canvas.h`
       do

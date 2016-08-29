@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ omake ocaml flex bison ];
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = "omake all";
 
   checkPhase = "omake check";

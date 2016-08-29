@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./drop-hardcoded-prefix.patch ];
 
+  hardeningDisable = [ "format" ];
+
   enableParallelBuilding = true;
 
   meta = {

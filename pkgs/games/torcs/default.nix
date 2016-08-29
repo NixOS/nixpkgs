@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   installTargets = "install datainstall";
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "Car racing game";
     homepage = http://torcs.sourceforge.net/;

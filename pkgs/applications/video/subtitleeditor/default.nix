@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./subtitleeditor-0.52.1-build-fix.patch ];
 
   preConfigure = ''

@@ -675,7 +675,7 @@ in
   calamares = qt5.callPackage ../tools/misc/calamares rec {
     python = python3;
     boost = pkgs.boost.override { python=python3; };
-    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
+    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost=boost; };
   };
 
   capstone = callPackage ../development/libraries/capstone { };
@@ -949,10 +949,6 @@ in
       ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
       ClassAccessor TextRoman DataUniqid LinguaTranslit UnicodeNormalize;
-  };
-
-  bibtextools = callPackage ../tools/typesetting/bibtex-tools {
-    inherit (strategoPackages016) strategoxt sdf;
   };
 
   blueman = callPackage ../tools/bluetooth/blueman {
@@ -4372,10 +4368,7 @@ in
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
 
-  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
-    clang = clang_34;
-    llvmPackages = llvmPackages_34;
-  };
+  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
   clangUnwrapped = llvm: pkg: callPackage pkg { inherit llvm; };
 
@@ -4734,12 +4727,8 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
-  go_1_4 = callPackage ../development/compilers/go/1.4.nix {
+  go_bootstrap = callPackage ../development/compilers/go/1.4.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  go_1_5 = callPackage ../development/compilers/go/1.5.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
   go_1_6 = callPackage ../development/compilers/go/1.6.nix {
@@ -5491,11 +5480,6 @@ in
 
   ponyc = callPackage ../development/compilers/ponyc { };
 
-  qcmm = callPackage ../development/compilers/qcmm {
-    lua   = lua4;
-    ocaml = ocaml_3_08_0;
-  };
-
   rgbds = callPackage ../development/compilers/rgbds { };
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
@@ -5563,20 +5547,6 @@ in
 
   stalin = callPackage ../development/compilers/stalin { };
 
-  strategoPackages = recurseIntoAttrs strategoPackages018;
-
-  strategoPackages016 = callPackage ../development/compilers/strategoxt/0.16.nix {
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
-  strategoPackages017 = callPackage ../development/compilers/strategoxt/0.17.nix {
-    readline = readline5;
-  };
-
-  strategoPackages018 = callPackage ../development/compilers/strategoxt/0.18.nix {
-    readline = readline5;
-  };
-
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
@@ -5617,8 +5587,6 @@ in
   vala_0_32 = callPackage ../development/compilers/vala/0.32.nix { };
 
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
-
-  webdsl = callPackage ../development/compilers/webdsl { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
@@ -6152,8 +6120,6 @@ in
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
   automake = self.automake115x;
-
-  automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
@@ -6901,10 +6867,6 @@ in
   aspell = callPackage ../development/libraries/aspell { };
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
-
-  aterm = self.aterm25;
-
-  aterm25 = callPackage ../development/libraries/aterm/2.5.nix { };
 
   attica = callPackage ../development/libraries/attica { };
 
@@ -9659,8 +9621,6 @@ in
 
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
-    # The build succeeds using gcc5 but it fails to build pkgs.consul-ui
-    stdenv = overrideCC stdenv gcc48;
   };
 
   v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
@@ -10015,14 +9975,6 @@ in
   buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO MODULES
-
-  buildGo14Package = callPackage ../development/go-modules/generic {
-    go = go_1_4;
-  };
-
-  buildGo15Package = callPackage ../development/go-modules/generic {
-    go = go_1_5;
-  };
 
   buildGo16Package = callPackage ../development/go-modules/generic {
     go = go_1_6;
@@ -10895,6 +10847,8 @@ in
 
     opencflite = callPackage ../os-specific/darwin/opencflite {};
 
+    swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation {};
+
     xcode = callPackage ../os-specific/darwin/xcode {};
 
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
@@ -11338,8 +11292,6 @@ in
     phc-intel = callPackage ../os-specific/linux/phc-intel { };
 
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
-
-    psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
     seturgent = callPackage ../os-specific/linux/seturgent { };
 
@@ -12707,7 +12659,6 @@ in
 
   docker = callPackage ../applications/virtualization/docker {
     btrfs-progs = btrfs-progs_4_4_1;
-    go = go_1_4;
   };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -16042,15 +15993,10 @@ in
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = !stdenv.isi686; };
     libpng = libpng12;
   };
 
-  torcs = callPackage ../games/torcs {
-    # Torcs wants to make shared libraries linked with plib libraries (it provides static).
-    # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = !stdenv.isi686; };
-  };
+  torcs = callPackage ../games/torcs { };
 
   trigger = callPackage ../games/trigger { };
 

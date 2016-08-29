@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libpcap perl];
 
+  hardeningDisable = [ "fortify" ];
+
   installPhase = ''
     mkdir -pv $out/bin
     cp dhcpdump $out/bin

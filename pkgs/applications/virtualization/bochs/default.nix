@@ -145,7 +145,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE="-I${gtk.dev}/include/gtk-2.0/ -I${libtool}/include/";
   NIX_LDFLAGS="-L${libtool.lib}/lib";
-	
+
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "An open-source IA-32 (x86) PC emulator";
     longDescription = ''

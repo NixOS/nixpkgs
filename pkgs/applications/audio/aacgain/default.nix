@@ -2,12 +2,15 @@
 
 stdenv.mkDerivation {
   name = "aacgain-1.9.0";
+
   src = fetchFromGitHub {
     owner = "mulx";
     repo = "aacgain";
     rev = "7c29dccd878ade1301710959aeebe87a8f0828f5";
     sha256 = "07hl432vsscqg01b6wr99qmsj4gbx0i02x4k565432y6zpfmaxm0";
   };
+
+  hardeningDisable = [ "format" ];
 
   configurePhase = ''
     cd mp4v2
@@ -28,7 +31,7 @@ stdenv.mkDerivation {
     make LDFLAGS=-static
 
     cd ..
-    make   
+    make
   '';
 
   installPhase = ''

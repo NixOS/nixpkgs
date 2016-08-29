@@ -12,6 +12,8 @@ stdenv.mkDerivation {
          else if stdenv.system == "x86_64-linux" then "linux64"
          else throw "Unsupported system";
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = ''
     cd emu
     make -f Makefile.picat.$ARCH

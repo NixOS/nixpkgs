@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     sha256 = "183l4v6aw52r3ydwl8bxg1lh3cwfakb35rpy6mjg23dqmqsynmcn";
   };
 
+  patches = [ ./relocation.patch ];
+
   postUnpack = ''
     pushd ghc-${builtins.substring 0 7 rev}
     echo ${version} >VERSION

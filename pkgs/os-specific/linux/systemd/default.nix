@@ -80,6 +80,8 @@ stdenv.mkDerivation rec {
       "--with-rc-local-script-path-stop=/etc/halt.local"
     ] ++ (if enableKDbus then [ "--enable-kdbus" ] else [ "--disable-kdbus" ]);
 
+  hardeningDisable = [ "stackprotector" ];
+
   preConfigure =
     ''
       ./autogen.sh

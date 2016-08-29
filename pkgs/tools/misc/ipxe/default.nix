@@ -18,6 +18,9 @@ stdenv.mkDerivation {
 
   preConfigure = "cd src";
 
+  # not possible due to assembler code
+  hardeningDisable = [ "pic" "stackprotector" ];
+
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags =

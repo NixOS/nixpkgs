@@ -34,6 +34,9 @@ stdenv.mkDerivation {
 
   buildInputs = [perl];
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
+
   extraIncludeDirs =
     if cross != null then
         (if cross.arch == "powerpc" then ["ppc"] else [])

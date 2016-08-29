@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  hardeningDisable = [ "pic" ];
+
   preConfigure = ''
     ln -s "${kernel.dev}/lib/modules/"*/build $TMP/linux
 

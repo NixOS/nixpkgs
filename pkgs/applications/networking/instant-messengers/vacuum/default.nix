@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
   '';
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "An XMPP client fully composed of plugins";
     maintainers = [ maintainers.raskin ];

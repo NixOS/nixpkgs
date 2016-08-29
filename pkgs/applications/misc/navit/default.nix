@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xx62l5srfhh9cfi7n3pxj8hpcgr1rpa0hzfmbrqadzv09z36723";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ gtk SDL fontconfig freetype imlib2 SDL_image mesa
     libXmu freeglut python gettext quesoglc gd postgresql qt4 SDL_ttf fribidi ];
 

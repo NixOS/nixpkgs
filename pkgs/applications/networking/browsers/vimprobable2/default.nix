@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];
 
-  installPhase = ''
-    make PREFIX=/ DESTDIR=$out install
-  '';
+  hardeningDisable = [ "format" ];
+
+  installFlags = "PREFIX=/ DESTDIR=$(out)";
 
   preFixup = ''
     wrapProgram "$out/bin/vimprobable2" \
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       GTK bindings). The goal of Vimprobable is to build a completely
       keyboard-driven, efficient and pleasurable browsing-experience. Its
       featureset might be considered "minimalistic", but not as minimalistic as
-      being completely featureless. 
+      being completely featureless.
     '';
     homepage = "http://sourceforge.net/apps/trac/vimprobable";
     license = stdenv.lib.licenses.mit;

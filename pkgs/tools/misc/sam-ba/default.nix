@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools";
     # License in <source>/doc/readme.txt
     license = "BSD-like (partly binary-only)";  # according to Buildroot
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];  # patchelf fails on i686-linux
     maintainers = [ maintainers.bjornfor ];
   };
 }

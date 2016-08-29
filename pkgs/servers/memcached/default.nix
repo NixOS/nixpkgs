@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [cyrus_sasl libevent];
 
+  hardeningEnable = [ "pie" ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-Wno-error";
+
   meta = with stdenv.lib; {
     description = "A distributed memory object caching system";
     repositories.git = https://github.com/memcached/memcached.git;

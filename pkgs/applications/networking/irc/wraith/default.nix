@@ -10,6 +10,7 @@ mkDerivation rec {
     url = "mirror://sourceforge/wraithbotpack/wraith-v${version}.tar.gz";
     sha256 = "0h6liac5y7im0jfm2sj18mibvib7d1l727fjs82irsjj1v9kif3j";
   };
+  hardeningDisable = [ "format" ];
   buildInputs = [ openssl ];
   patches = [ ./configure.patch ./dlopen.patch ];
   postPatch = ''

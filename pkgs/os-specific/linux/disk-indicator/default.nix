@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
+  hardeningDisable = [ "fortify" ];
+
   installPhase = ''
     mkdir -p "$out/bin"
     cp ./disk_indicator "$out/bin/"

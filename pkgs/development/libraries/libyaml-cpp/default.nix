@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, makePIC ? false }:
+{ stdenv, fetchFromGitHub, cmake, boost }:
 
 stdenv.mkDerivation rec {
   name = "libyaml-cpp-${version}";
@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake boost ];
-
-  cmakeFlags = stdenv.lib.optionals makePIC [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

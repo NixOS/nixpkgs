@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     rev = "c6e3d7195060774bf95afc6df9c9588922076d3e";
   };
 
+  hardeningDisable = [ "format" ];
+
   patchPhase = ''
     for f in cmake/FindArgtable.cmake \
              src/stubgenerator/stubgenerator.cpp \

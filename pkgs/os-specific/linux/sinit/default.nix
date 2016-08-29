@@ -3,13 +3,14 @@ let
   s = # Generated upstream information
   rec {
     baseName="sinit";
-    version="0.9.2";
+    version="1.0";
     name="${baseName}-${version}";
     url="http://git.suckless.org/sinit/";
-    sha256="0nncyzwnszwlqcvx1jf42rn1n2dd5vcxkndqb1b546pgpifniivp";
+    sha256="0cf8yylgrrj1wxm5v6jdlbnxpx97m38yxrc9nmv1l8hldjqsj9pc";
     rev = "refs/tags/v${version}";
   };
   buildInputs = [
+    (stdenv.lib.getOutput "static" stdenv.cc.libc)
   ];
 in
 stdenv.mkDerivation {

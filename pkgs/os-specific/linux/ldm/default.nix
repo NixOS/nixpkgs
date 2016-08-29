@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sed '16i#include <sys/stat.h>' -i ldm.c
   '';
 
-  buildPhase = "make ldm";
+  buildFlags = "ldm";
 
   installPhase = ''
     mkdir -p $out/bin

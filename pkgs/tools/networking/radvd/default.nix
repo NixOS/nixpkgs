@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libdaemon bison flex check ];
 
+  hardeningEnable = [ "pie" ];
+
   meta = with stdenv.lib; {
     homepage = http://www.litech.org/radvd/;
     description = "IPv6 Router Advertisement Daemon";

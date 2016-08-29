@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     "LOCALEDIR=$(out)/share/locale"
   ];
 
+  hardeningEnable = [ "pie" ];
+
   postBuild = optionalString stdenv.isLinux ''
     make -C contrib/lease-tools
   '';

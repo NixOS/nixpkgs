@@ -42,13 +42,17 @@ stdenv.mkDerivation rec {
     substituteInPlace etc/init.d/generate_initd_scripts.sh \
       --replace "/bin/bash" "${stdenv.shell}"
 
+    substituteInPlace cpp/thirdparty/gtest-1.7.0/configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+
+    substituteInPlace cpp/thirdparty/protobuf-2.5.0/configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+
+    substituteInPlace cpp/thirdparty/protobuf-2.5.0/gtest/configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+
     # do not put cmake into buildInputs
     export PATH="$PATH:${cmake}/bin"
-  '';
-
-  preBuild = ''
-    substituteInPlace configure \
-    --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
   doCheck = false;

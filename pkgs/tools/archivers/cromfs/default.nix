@@ -10,9 +10,6 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs configure";
 
-  # Removing the static linking, as it doesn't compile in x86_64.
-  makeFlags = "cromfs-driver util/mkcromfs util/unmkcromfs util/cvcromfs";
-
   installPhase = ''
     install -d $out/bin
     install cromfs-driver $out/bin

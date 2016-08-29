@@ -18,6 +18,8 @@ composableDerivation.composableDerivation {} (fixed: rec {
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ (stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ]);
 
+  hardeningDisable = [ "format" ];
+
   # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
   # Unset CC and CXX as they confuse libtool.
   preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";

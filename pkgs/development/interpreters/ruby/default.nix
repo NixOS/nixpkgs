@@ -22,6 +22,7 @@ let
       then version
       else versionNoPatch;
     tag = "v" + stdenv.lib.replaceChars ["." "p" "-"] ["_" "_" ""] fullVersionName;
+    isRuby20 = majorVersion == "2" && minorVersion == "0";
     isRuby21 = majorVersion == "2" && minorVersion == "1";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
@@ -80,6 +81,8 @@ let
           ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
 
         enableParallelBuilding = true;
+
+        hardeningDisable = lib.optional isRuby20 [ "format" ];
 
         patches =
           [ ./gem_hook.patch ] ++

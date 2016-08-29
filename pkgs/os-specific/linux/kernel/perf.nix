@@ -25,17 +25,14 @@ stdenv.mkDerivation {
   # binutils is required for libbfd.
   nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
       flex bison libiberty ];
-  buildInputs = [ python perl newt slang pkgconfig libunwind binutils zlib ] ++
+  buildInputs = [ elfutils python perl newt slang pkgconfig libunwind binutils zlib ] ++
     stdenv.lib.optional withGtk gtk;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
-  NIX_CFLAGS_COMPILE = "-I${elfutils}/include -Wno-error=cpp -Wno-error=bool-compare -Wno-error=deprecated-declarations";
-  NIX_CFLAGS_LINK = "-L${elfutils}/lib";
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp -Wno-error=bool-compare -Wno-error=deprecated-declarations";
 
   installFlags = "install install-man ASCIIDOC8=1";
-
-  inherit elfutils;
 
   crossAttrs = {
     /* I don't want cross-python or cross-perl -

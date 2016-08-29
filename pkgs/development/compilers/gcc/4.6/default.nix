@@ -193,6 +193,8 @@ stdenv.mkDerivation ({
 
   inherit patches enableMultilib;
 
+  hardeningDisable = [ "format" ];
+
   libc_dev = stdenv.cc.libc_dev;
 
   postPatch =

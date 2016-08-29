@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ gcj unzip ];
 
+  hardeningDisable = [ "fortify" "format" ];
+
   preBuild = ''
     cd pdftk
     sed -e 's@/usr/bin/@@g' -i Makefile.*

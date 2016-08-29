@@ -7,18 +7,16 @@ stdenv.mkDerivation rec {
     sha256 = "18wkbfzp07yckg05b5gjy67rw06z9lxp0hzg0zwj7rz8i12jxi9j";
   };
 
-   buildInputs = [
-     allegro
-   ];
+  buildInputs = [ allegro ];
 
-   configureFlags = 
-     (stdenv.lib.optional stdenv.isx86_64 "--disable-asm")
-     ;
+  configureFlags = stdenv.lib.optional stdenv.isx86_64 "--disable-asm";
 
-   meta = with stdenv.lib; {
-     description = ''The classic version of a quick tactics game LiquidWar'';
-     maintainers = [ maintainers.raskin ];
-     license = licenses.gpl2Plus;
-     platforms = platforms.linux;
-   };
+  hardeningDisable = [ "format" ];
+
+  meta = with stdenv.lib; {
+    description = ''The classic version of a quick tactics game LiquidWar'';
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+  };
 }

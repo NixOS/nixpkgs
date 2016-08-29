@@ -48,6 +48,8 @@ stdenv.mkDerivation {
 
   pythonPath = [ pythonPackages.curses ];
 
+  hardeningDisable = [ "stackprotector" "fortify" "pic" ];
+
   patches = stdenv.lib.optionals ((xenserverPatched == false) && (builtins.hasAttr "xenPatches" xenConfig)) xenConfig.xenPatches;
 
   postPatch = ''
@@ -98,9 +100,6 @@ stdenv.mkDerivation {
       substituteInPlace tools/blktap2/lvm/lvm-util.c \
         --replace /usr/sbin/vgs ${lvm2}/sbin/vgs \
         --replace /usr/sbin/lvs ${lvm2}/sbin/lvs
-
-      substituteInPlace tools/hotplug/Linux/network-bridge \
-        --replace /usr/bin/logger ${utillinux}/bin/logger
 
       substituteInPlace tools/xenmon/xenmon.py \
         --replace /usr/bin/pkill ${procps}/bin/pkill

@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     homepage = http://www.gphoto.org/proj/libgphoto2/;
     description = "A library for accessing digital cameras";
