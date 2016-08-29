@@ -30,6 +30,7 @@ stdenv.mkDerivation {
      -e "s/not config.CheckHeader('tiff.h')/False/" \
      -e "s/not config.CheckCXXHeader('vigra\/impex.hxx')/False/" \
      \
+     -e "s/^\(      'LDFLAGS'.*\)/\1\n,'hardeningDisable' : os.environ['hardeningDisable']/" \
      -e "s/^\(      'LDFLAGS'.*\)/\1\n,'NIX_CFLAGS_COMPILE' : os.environ['NIX_CFLAGS_COMPILE']/" \
      -e "s/^\(      'LDFLAGS'.*\)/\1\n,'NIX_LDFLAGS' : os.environ['NIX_LDFLAGS']/"
 
