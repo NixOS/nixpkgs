@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     cd ${name}
     
-    sed -ie '1 s_$_ -include ${glibc}/include/errno.h_' src/conf-cc
+    sed -ie '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
     
     substituteInPlace src/Makefile \
       --replace '/bin/sh' '${bash}/bin/bash -oxtrace'
     
     sed -ie "s_^PATH=.*_PATH=$src/${name}/compile:''${PATH}_" src/rts.tests
     
-    cat ${glibc}/include/errno.h
+    cat ${glibc.dev}/include/errno.h
   '';
   
   buildPhase = ''

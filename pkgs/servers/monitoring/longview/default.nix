@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     mv Linode $out
     ln -s ../Linode/Longview.pl $out/bin/longview
     for h in syscall.h sys/syscall.h asm/unistd.h asm/unistd_32.h asm/unistd_64.h bits/wordsize.h bits/syscall.h; do
-        ${perl}/bin/h2ph -d $out ${glibc}/include/$h
+        ${perl}/bin/h2ph -d $out ${glibc.dev}/include/$h
         mkdir -p $out/usr/include/$(dirname $h)
-        mv $out${glibc}/include/''${h%.h}.ph $out/usr/include/$(dirname $h)
+        mv $out${glibc.dev}/include/''${h%.h}.ph $out/usr/include/$(dirname $h)
     done
     wrapProgram $out/Linode/Longview.pl --prefix PATH : ${perl}/bin:$out/bin \
      --suffix PERL5LIB : $out/Linode --suffix PERL5LIB : $PERL5LIB \
