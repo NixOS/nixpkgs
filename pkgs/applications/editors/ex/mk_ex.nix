@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     sed -i 's/^PREFIX.*//' Makefile.in
+
+    # for ex-3.7
+    sed -i 's,PRESERVEDIR=/var/preserve,PRESERVEDIR=/tmp/ex-3.7-preserve,' Makefile.in
+
     sh ./configure
   '';
 
