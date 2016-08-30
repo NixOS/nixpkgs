@@ -13395,7 +13395,7 @@ in
 
   google-chrome-dev = self.google-chrome.override { channel = "dev"; };
 
-  googleearth = callPackage_i686 ../applications/misc/googleearth { };
+  googleearth = callPackage ../applications/misc/googleearth { };
 
   google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
     libpng = libpng12;
