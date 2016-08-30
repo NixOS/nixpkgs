@@ -108,12 +108,12 @@ let
 
         mysql = {
           configureFlags = ["--with-mysql"];
-          buildInputs = [ mysql.lib ];
+          buildInputs = [ mysql.lib.dev ];
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${mysql.lib}/bin/mysql_config"];
-          buildInputs = [ mysql.lib ];
+          configureFlags = ["--with-mysqli=${mysql.lib.dev}/bin/mysql_config"];
+          buildInputs = [ mysql.lib.dev ];
         };
 
         mysqli_embedded = {
@@ -123,8 +123,8 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${mysql.lib}"];
-          buildInputs = [ mysql.lib ];
+          configureFlags = ["--with-pdo-mysql=${mysql.lib.dev}"];
+          buildInputs = [ mysql.lib.dev ];
         };
 
         bcmath = {

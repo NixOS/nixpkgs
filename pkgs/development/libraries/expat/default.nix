@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zq4lnwjlw8s9mmachwfvfjf2x3lk24jm41746ykhdcvs7r0zrfr";
   };
 
-  outputs = [ "dev" "out" ]; # TODO: fix referrers
+  outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
 
   configureFlags = stdenv.lib.optional stdenv.isFreeBSD "--with-pic";

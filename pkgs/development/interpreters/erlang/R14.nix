@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags = "--with-ssl=${openssl}";
+  configureFlags = "--with-ssl=${openssl.dev}";
 
   hardeningDisable = [ "format" ];
 

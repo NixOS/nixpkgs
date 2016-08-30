@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''patchShebangs .'';
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
 
   configureFlags = [

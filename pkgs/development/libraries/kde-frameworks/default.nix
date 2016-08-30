@@ -24,7 +24,7 @@ let
       let
       in stdenv.mkDerivation (args // {
 
-        outputs = args.outputs or [ "dev" "out" ];
+        outputs = args.outputs or [ "out" "dev" ];
 
         propagatedUserEnvPkgs =
           builtins.map lib.getBin (args.propagatedBuildInputs or []);
@@ -70,7 +70,7 @@ let
     ecm =
       let drv = { cmake, ecmNoHooks, pkgconfig, qtbase, qttools }:
             makeSetupHook
-            { deps = [ cmake ecmNoHooks pkgconfig qtbase qttools ]; }
+            { deps = lib.chooseDevOutputs [ cmake ecmNoHooks pkgconfig qtbase qttools ]; }
             ./setup-hook.sh;
       in callPackage drv {};
     ecmNoHooks = callPackage ./extra-cmake-modules {

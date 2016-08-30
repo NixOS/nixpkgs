@@ -280,7 +280,7 @@ let
       onigVariable = "ONIG_DIR=${oniguruma}";
       gnuVariable = "GNU_INCDIR=${gnulib}/lib";
       treVariable = "TRE_DIR=${tre}";
-      posixVariable = "POSIX_DIR=${glibc}";
+      posixVariable = "POSIX_DIR=${glibc.dev}";
     in ''
       sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' \
           -i Makefile

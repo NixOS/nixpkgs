@@ -27,7 +27,7 @@ let
     };
 
   # Can't do separate $lib and $bin, as libs reference bins
-  outputs = [ "dev" "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
 
     buildInputs = [ zlib apr aprutil sqlite ]
       ++ stdenv.lib.optional httpSupport serf

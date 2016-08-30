@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./caps-fix.patch ];
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig intltool autoreconfHook ];
 

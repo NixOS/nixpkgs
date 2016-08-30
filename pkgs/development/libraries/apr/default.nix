@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   preConfigure =

@@ -10,10 +10,10 @@ let self = stdenv.mkDerivation rec {
     sha256 = "1mpzprdzkgfpdc1v2lf4dxlxps4x8bvmzvd8n1ri6gw9y9jrh458";
   };
 
-  #outputs TODO: split $cxx due to libstdc++ dependency; maybe port to gmp5;
+  #outputs TODO: split $cxx due to libstdc++ dependency
   # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
   # - see #5855 for related discussion
-  outputs = [ "dev" "out" "info" ];
+  outputs = [ "out" "dev" "info" ];
   passthru.static = self.out;
 
   nativeBuildInputs = [ m4 ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1v2x2s04jry4gpabws92i0wq2ghd47yr5n9nhgnkd7c38xv1wdk4";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ pkgconfig gtk python gettext ];
 

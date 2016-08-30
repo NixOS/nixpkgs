@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xsqwxhfqzr79av89mg766kxpb2i41bd0vwspk01xjdzrnn5l9zs";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
   outputMan = "dev"; # tiny pages
 

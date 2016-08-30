@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./unused-variable.patch ];
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook ]; # won't configure without it, no idea why
 

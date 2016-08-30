@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: separate "out" and "bin"
-  outputs = [ "dev" "out" "man" "docdev" ];
+  outputs = [ "out" "dev" "man" "docdev" ];
 
   buildInputs = [ openssl cyrus_sasl db groff ];
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rfzbgsh8ira5p76kdghygl5i3fvmmx4wbw5rp7f8ajc4vxp18g0";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib zlib libgpgerror ];

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [
-    "-I${libxml2}/include/libxml2"
+    "-I${libxml2.dev}/include/libxml2"
   ];
 
   postInstall = ''

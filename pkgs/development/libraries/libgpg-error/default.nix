@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure";
 
-  outputs = [ "dev" "out" "info" ];
+  outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # deps want just the lib, most likely
 
   # If architecture-dependent MO files aren't available, they're generated

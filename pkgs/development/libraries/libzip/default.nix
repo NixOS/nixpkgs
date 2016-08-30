@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "08b26qbfxq6z5xf36y1d8insm5valv83dhj933iag6man04prb2r";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = [ zlib ];

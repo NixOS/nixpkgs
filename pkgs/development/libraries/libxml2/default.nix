@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i7a0nhxwkxx6dkm8917qn0bsfn1av6ghg2f4dxanxi4bn4b1jjn";
   };
 
-  outputs = [ "dev" "out" "bin" "doc" ]
+  outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional supportPython "py";
   propagatedBuildOutputs = "out bin" + lib.optionalString supportPython " py";
 

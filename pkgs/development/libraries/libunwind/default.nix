@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/LIBLZMA/s:-lzma:-llzma:' configure
   '';
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ xz ];
 

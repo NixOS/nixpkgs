@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0d15cec3b6d55c60eac205b1f3ba81a1ed4eadd9d0f8e7c508bc7065d0c4ca50";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "docdev" ];
   outputBin = "dev";
 
   enableParallelBuilding = true;

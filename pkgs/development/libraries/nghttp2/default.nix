@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace "malloc_stats_print" "je_malloc_stats_print"
   '' else null;
 
-  outputs = [ "dev" "out" "lib" ];
+  outputs = [ "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libev zlib ];

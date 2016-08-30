@@ -156,7 +156,7 @@ let
           baseRuby = baseruby;
           libPath = "lib/${rubyEngine}/${versionNoPatch}";
           gemPath = "lib/${rubyEngine}/gems/${versionNoPatch}";
-          dev = import ./dev.nix {
+          devEnv = import ./dev.nix {
             inherit buildEnv bundler bundix;
             ruby = self;
           };

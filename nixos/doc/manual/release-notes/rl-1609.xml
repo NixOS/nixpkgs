@@ -35,6 +35,17 @@ following incompatible changes:</para>
 <itemizedlist>
 
   <listitem>
+    <para>A large number of packages have been converted to use the multiple outputs feature
+      of Nix to greatly reduce the amount of required disk space. This may require changes
+      to any custom packages to make them build again; see the relevant chapter in the
+      Nixpkgs manual for more information. (Additional caveat to packagers: some packaging conventions
+      related to multiple-output packages
+      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/14766">were changed</link>
+      late (August 2016) in the release cycle and differ from the initial introduction of multiple outputs.)
+    </para>
+  </listitem>
+
+  <listitem>
     <para>Shell aliases for systemd sub-commands
     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/15598">were dropped</link>:
     <command>start</command>, <command>stop</command>,

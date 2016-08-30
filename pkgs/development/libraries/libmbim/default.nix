@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0abv0h9c3kbw4bq1b9270sg189jcjj3x3wa91bj836ynwg9m34wl";
   };
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   preConfigure = ''
     patchShebangs .

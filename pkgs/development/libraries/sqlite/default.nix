@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "19j73j44akqgc6m82wm98yvnmm3mfzmfqr8mp3n7n080d53q4wdw";
   };
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   buildInputs = lib.optionals interactive [ readline ncurses ];
 

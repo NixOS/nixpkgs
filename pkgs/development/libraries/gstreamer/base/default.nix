@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "9d7109c8fb0a5dec8edb17b0053c59a46aba7ddf48dc48ea822ebbbd4339d38d";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     pkgconfig python gobjectIntrospection

@@ -87,7 +87,7 @@ common = rec { # attributes common to both builds
 client = stdenv.mkDerivation (common // {
   name = "mariadb-client-${common.version}";
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   propagatedBuildInputs = [ openssl zlib ]; # required from mariadb.pc
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's/u_int\([0-9]*\)_t/uint\1_t/g' include/pcm.h
   '';
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   crossAttrs = {
     patchPhase = ''

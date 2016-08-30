@@ -24,7 +24,7 @@ let
            (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
            ./darwin-arch.patch;
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
   setOutputFlags = false;
 
     nativeBuildInputs = [ perl ];

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     sha256 = "d7995317530c8773ec088f94d9320909d41da61996b801ebacce9a56af493f97";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig python ];
 
