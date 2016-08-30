@@ -7075,6 +7075,8 @@ in
 
   cxx-prettyprint = callPackage ../development/libraries/cxx-prettyprint { };
 
+  cxxtest = callPackage ../development/libraries/cxxtest { };
+
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
     kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
   };
