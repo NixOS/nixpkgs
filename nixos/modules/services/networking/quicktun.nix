@@ -16,8 +16,6 @@ with lib;
       description = "QuickTun tunnels";
       type = types.attrsOf (types.submodule {
         options = {
-          #enable = mkEnable "QuickTun";
-
           tunMode = mkOption {
             type = types.int;
             default = 0;
