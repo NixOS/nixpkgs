@@ -7309,6 +7309,9 @@ in modules // {
       ipywidgets
     ];
 
+    # Meta-package, no tests
+    doCheck = false;
+
     meta = {
       description = "Installs all the Jupyter components in one go";
       homepage = "http://jupyter.org/";
