@@ -4440,12 +4440,11 @@ in modules // {
 
   bcrypt = buildPythonPackage rec {
     name = "bcrypt-${version}";
-    version = "2.0.0";
+    version = "3.1.0";
 
     src = pkgs.fetchurl {
-      url = "https://api.github.com/repos/pyca/bcrypt/tarball/${version}";
-      name = "bcrypt-${version}.tar.gz";
-      sha256 = "14i1yp4qkjklx82jl61cjjcw367lc0pkvnix3gaz451ijdcmz3x8";
+      url = "mirror://pypi/b/bcrypt/${name}.tar.gz";
+      sha256 = "e54820d8b9eff357d1003f5b8d4b949a632b76b89610d8a933783fd476033ebe";
     };
     buildInputs = with self; [ pycparser mock pytest py ];
     propagatedBuildInputs = with self; optional (!isPyPy) cffi;
