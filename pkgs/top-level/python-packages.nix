@@ -4052,11 +4052,11 @@ in modules // {
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
     name = "cryptography-${version}";
-    version = "1.4";
+    version = "1.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography/${name}.tar.gz";
-      sha256 = "0a6i4914ychryj7kqqmf970incynj5lzx57n3cbv5i4hxm09a55v";
+      sha256 = "52f47ec9a57676043f88e3ca133638790b6b71e56e8890d9d7f3ae4fcd75fa24";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
