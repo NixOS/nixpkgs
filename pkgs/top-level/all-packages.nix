@@ -1500,6 +1500,8 @@ in
 
   evtest = callPackage ../applications/misc/evtest { };
 
+  ex_1_1 = callPackage ../applications/editors/ex/1_1.nix { };
+
   exa = callPackage ../tools/misc/exa { };
 
   exempi = callPackage ../development/libraries/exempi { };
