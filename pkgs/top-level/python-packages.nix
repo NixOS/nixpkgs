@@ -12196,20 +12196,21 @@ in modules // {
   };
 
   isort = buildPythonPackage rec {
-    name = "isort-4.2.2";
-
+    name = "${pname}-${version}";
+    pname = "isort";
+    version = "4.2.5";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/i/isort/${name}.tar.gz";
-      sha256 = "0xqxnkli3j69mj1m0i1r9n68bfkdxfcgxi602lqgy491m21q1rpj";
+      url = "mirror://pypi/i/${pname}/${name}.tar.gz";
+      sha256 = "0p7a6xaq7zxxq5vr5gizshnsbk2afm70apg97xwfdxiwyi201cjn";
     };
-
     buildInputs = with self; [ mock pytest ];
-
+    # No tests distributed
+    doCheck = false;
     meta = {
       description = "A Python utility / library to sort Python imports";
       homepage = https://github.com/timothycrosley/isort;
       license = licenses.mit;
-      maintainers = with maintainers; [ couchemar ];
+      maintainers = with maintainers; [ couchemar nand0p ];
     };
   };
 
