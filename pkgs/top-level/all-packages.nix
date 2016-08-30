@@ -1502,6 +1502,8 @@ in
 
   ex_1_1 = callPackage ../applications/editors/ex/1_1.nix { };
 
+  ex_2_2 = callPackage ../applications/editors/ex/2_2.nix { };
+
   exa = callPackage ../tools/misc/exa { };
 
   exempi = callPackage ../development/libraries/exempi { };
