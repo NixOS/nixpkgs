@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ 
     stdenv pkgconfig
-  ] ++ stdenv.lib.optional enableX11 [xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi];
+  ] ++ stdenv.lib.optionals enableX11 [xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi];
 
   configureFlags = stdenv.lib.optional enableX11 "--with-x11";
 
