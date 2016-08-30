@@ -22,7 +22,7 @@ runCommand "${nameVersion.name}-multi-${nameVersion.version}"
     chmod +x "$bin/bin/ldd"
 
     mkdir "$dev"
-    cp -rs '${glibc32}'/include "$dev/"
+    cp -rs '${glibc32.dev}'/include "$dev/"
     chmod +w -R "$dev"
-    cp -rsf '${glibc64}'/include "$dev/"
+    cp -rsf '${glibc64.dev}'/include "$dev/"
   ''
