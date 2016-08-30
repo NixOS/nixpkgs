@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     ''PREFIX=$(out)''
   ]
   ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
+  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.lib.getDev stdenv.cc.libc}"
   ;
   meta = {
     homepage = "http://www.creytiv.com/re.html";
