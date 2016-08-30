@@ -25,12 +25,9 @@ stdenv.mkDerivation {
     cp "$(ls -d llvm-*.src)/lib/Support/regex_impl.h" "$srcDir/tools/lib/Support/"
   '';
 
-  buildInputs = [ cmake python which swig ncurses zlib libedit ];
+  buildInputs = [ cmake python which swig ncurses zlib libedit llvm ];
 
-  preConfigure = ''
-    export CXXFLAGS="-pthread"
-    export LDFLAGS="-ldl"
-  '';
+  hardeningDisable = [ "format" ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
