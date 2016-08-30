@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , overrideDerivation
 
 # required for gcc plugins
@@ -24,7 +25,7 @@ overrideDerivation (kernel.override {
   inherit extraConfig;
   ignoreConfigErrors = true;
 }) (attrs: {
-  nativeBuildInputs = [ gmp libmpc mpfr ] ++ (attrs.nativeBuildInputs or []);
+  nativeBuildInputs = (lib.chooseDevOutputs [ gmp libmpc mpfr ]) ++ (attrs.nativeBuildInputs or []);
   preConfigure = ''
     echo ${localver} >localversion-grsec
     ${attrs.preConfigure or ""}
