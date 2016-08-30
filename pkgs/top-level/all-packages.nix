@@ -2421,6 +2421,8 @@ in
 
   libtermkey = callPackage ../development/libraries/libtermkey { };
 
+  libtelnet = callPackage ../development/libraries/libtelnet { };
+
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libshout = callPackage ../development/libraries/libshout { };
@@ -5499,10 +5501,10 @@ in
 
   rust = rustStable;
   rustStable = callPackage ../development/compilers/rust {};
-  rustBeta = lowPrio (callPackage ../development/compilers/rust/beta.nix {});
-  rustUnstable = lowPrio (callPackage ../development/compilers/rust/head.nix {
+  rustBeta = callPackage ../development/compilers/rust/beta.nix {};
+  rustUnstable = callPackage ../development/compilers/rust/head.nix {
     rustPlatform = recurseIntoAttrs (makeRustPlatform rustBeta);
-  });
+  };
 
   cargo = rust.cargo;
   rustc = rust.rustc;
@@ -11216,12 +11218,14 @@ in
   };
 
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.modinst_arg_list_too_long
+    ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
+      kernelPatches.mips_fpureg_emu
+      kernelPatches.mips_fpu_sigill
+      kernelPatches.mips_ext3_n32
+    ];
   };
 
   linux_chromiumos_3_14 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.14.nix {
@@ -13112,6 +13116,8 @@ in
   puddletag = callPackage ../applications/audio/puddletag { };
 
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
+
+  wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
     withQt = false;
@@ -15887,6 +15893,8 @@ in
 
   privateer = callPackage ../games/privateer { };
 
+  qweechat = callPackage ../applications/networking/irc/qweechat { };
+
   qqwing = callPackage ../games/qqwing { };
 
   quake3wrapper = callPackage ../games/quake3/wrapper { };
@@ -17435,6 +17443,8 @@ in
   urbit = callPackage ../misc/urbit { };
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
+
+  valauncher = callPackage ../applications/misc/valauncher { };
 
   vault = callPackage ../tools/security/vault { };
 

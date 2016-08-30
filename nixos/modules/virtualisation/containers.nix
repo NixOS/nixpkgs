@@ -340,6 +340,20 @@ in
                 A specification of the desired configuration of this
                 container, as a NixOS module.
               '';
+              type = lib.mkOptionType {
+                name = "Toplevel NixOS config";
+                merge = loc: defs: (import ../../lib/eval-config.nix {
+                  inherit system;
+                  modules =
+                    let extraConfig =
+                      { boot.isContainer = true;
+                        networking.hostName = mkDefault name;
+                        networking.useDHCP = false;
+                      };
+                    in [ extraConfig ] ++ (map (x: x.value) defs);
+                  prefix = [ "containers" name ];
+                }).config;
+              };
             };
 
             path = mkOption {

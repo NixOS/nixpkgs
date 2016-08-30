@@ -1,0 +1,76 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-dnscrypt-proxy">
+
+  <title>DNSCrypt client proxy</title>
+
+  <para>
+    The DNSCrypt client proxy relays DNS queries to a DNSCrypt enabled
+    upstream resolver. The traffic between the client and the upstream
+    resolver is encrypted and authenticated, mitigating the risk of MITM
+    attacks, DNS poisoning attacks, and third-party snooping (assuming the
+    upstream is trustworthy).
+  </para>
+
+  <sect1><title>Basic configuration</title>
+
+  <para>
+    To enable the client proxy, set
+    <programlisting>
+      services.dnscrypt-proxy.enable = true;
+    </programlisting>
+  </para>
+
+  <para>
+    Enabling the client proxy does not alter the system nameserver; to
+    relay local queries, prepend <literal>127.0.0.1</literal> to
+    <option>networking.nameservers</option>.
+  </para>
+
+  </sect1>
+
+  <sect1><title>As a forwarder for a caching DNS client</title>
+
+  <para>
+    By default, DNSCrypt proxy acts as a transparent proxy for the
+    system stub resolver. Because the client does not cache lookups, this
+    setup can significantly slow down e.g., web browsing. The recommended
+    configuration is to run DNSCrypt proxy as a forwarder for a caching DNS
+    client. To achieve this, change the default proxy listening port to
+    a non-standard value and point the caching client to it:
+    <programlisting>
+      services.dnscrypt-proxy.localPort = 43;
+    </programlisting>
+  </para>
+
+  <sect2><title>dnsmasq</title>
+  <para>
+    <programlisting>
+      {
+      services.dnsmasq.enable = true;
+      services.dnsmasq.servers = [ "127.0.0.1#43" ];
+      }
+    </programlisting>
+  </para>
+  </sect2>
+
+  <sect2><title>unbound</title>
+  <para>
+    <programlisting>
+      {
+      networking.nameservers = [ "127.0.0.1" ];
+      services.unbound.enable = true;
+      services.unbound.forwardAddresses = [ "127.0.0.1@43" ];
+      services.unbound.extraConfig = ''
+        do-not-query-localhost: no
+      '';
+      }
+    </programlisting>
+  </para>
+  </sect2>
+
+  </sect1>
+
+</chapter>

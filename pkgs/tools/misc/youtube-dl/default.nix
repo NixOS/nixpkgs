@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, buildPythonApplication, makeWrapper, ffmpeg, zip
-, pandoc ? null
+{ stdenv, fetchurl, buildPythonApplication, makeWrapper, zip, ffmpeg, pandoc
+, atomicparsley
+# Pandoc is required to build the package's man page. Release tarballs contain a
+# formatted man page already, though, it will still be installed. We keep the
+# manpage argument in place in case someone wants to use this derivation to
+# build a Git version of the tool that doesn't have the formatted man page
+# included.
+, generateManPage ? false
+, ffmpegSupport ? true
 }:
 
-# Pandoc is required to build the package's man page. Release tarballs
-# contain a formatted man page already, though, so it's fine to pass
-# "pandoc = null" to this derivation; the man page will still be
-# installed. We keep the pandoc argument and build input in place in
-# case someone wants to use this derivation to build a Git version of
-# the tool that doesn't have the formatted man page included.
+with stdenv.lib;
 
 buildPythonApplication rec {
 
@@ -19,16 +21,20 @@ buildPythonApplication rec {
     sha256 = "017x2hqc2bacypjmn9ac9f91y9y6afydl0z7dich5l627494hvfg";
   };
 
-  buildInputs = [ makeWrapper zip pandoc ];
+  buildInputs = [ makeWrapper zip ] ++ optional generateManPage pandoc;
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
-  postInstall = stdenv.lib.optionalString (ffmpeg != null)
-    ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg.bin}/bin"'';
+  # atomicparsley for embedding thumbnails
+  postInstall = let
+    packagesthatwillbeusedbelow = [ atomicparsley ] ++ optional ffmpegSupport ffmpeg;
+  in ''
+    wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesthatwillbeusedbelow}"
+  '';
 
   # Requires network
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://rg3.github.io/youtube-dl/;
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";

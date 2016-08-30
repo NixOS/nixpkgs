@@ -218,12 +218,12 @@ rec {
        partition (x: x > 2) [ 5 1 2 3 4 ]
        => { right = [ 5 3 4 ]; wrong = [ 1 2 ]; }
   */
-  partition = pred:
+  partition = builtins.partition or (pred:
     fold (h: t:
       if pred h
       then { right = [h] ++ t.right; wrong = t.wrong; }
       else { right = t.right; wrong = [h] ++ t.wrong; }
-    ) { right = []; wrong = []; };
+    ) { right = []; wrong = []; });
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined

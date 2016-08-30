@@ -2,9 +2,7 @@
 
 with import ../../.. { inherit system; };
 
-let
-  llvmPackages = llvmPackages_38;
-in rec {
+rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
@@ -80,11 +78,11 @@ in rec {
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
-      cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
-      cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${libcxxabi}/lib/libc++abi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
+      cp -rd ${libcxx}/include/c++     $out/include
 
       cp -d ${icu.out}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib

@@ -346,7 +346,7 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
-  ${optionalString (versionAtLeast version "3.15") ''
+  ${optionalString (versionAtLeast version "3.15" && versionOlder version "4.8") ''
     MLX4_EN_VXLAN y
   ''}
   MODVERSIONS y
@@ -433,7 +433,9 @@ with stdenv.lib;
   PARAVIRT? y
   HYPERVISOR_GUEST y
   PARAVIRT_SPINLOCKS? y
-  KVM_APIC_ARCHITECTURE y
+  ${optionalString (versionOlder version "4.8") ''
+    KVM_APIC_ARCHITECTURE y
+  ''}
   KVM_ASYNC_PF y
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_COMPAT? y

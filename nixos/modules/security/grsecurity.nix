@@ -20,6 +20,11 @@ let
 in
 
 {
+  meta = {
+    maintainers = with maintainers; [ joachifm ];
+    doc = ./grsecurity.xml;
+  };
+
   options.security.grsecurity = {
 
     enable = mkEnableOption "grsecurity/PaX";
