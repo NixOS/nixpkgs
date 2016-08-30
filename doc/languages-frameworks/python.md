@@ -715,8 +715,8 @@ Python attribute sets are created for each interpreter version. We will therefor
 In the following example we change the name of the package `pandas` to `foo`.
 ```
 newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
+  python35Packages = (super.python35Packages.override { self = python35Packages;})
+    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
   };
 });
 ```
@@ -727,8 +727,8 @@ with import <nixpkgs> {};
 (let
 
 newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
+  python35Packages = (super.python35Packages.override { self = python35Packages;})
+    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
   };
 });
 in newpkgs.python35.withPackages (ps: [ps.blaze])
@@ -743,13 +743,27 @@ with import <nixpkgs> {};
 
 newpkgs = pkgs.overridePackages(self: super: rec {
   python35Packages = super.python35Packages.override {
-    self = python35Packages // { scipy = python35Packages.scipy_0_16;};
+    self = python35Packages // { scipy = python35Packages.scipy_0_17;};
   };
 });
 in newpkgs.python35.withPackages (ps: [ps.blaze])
 ).env
 ```
 The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
+
+A similar example but now using `django`
+```
+with import <nixpkgs> {};
+
+(let
+
+newpkgs = pkgs.overridePackages(self: super: rec {
+  python27Packages = (super.python27Packages.override {self = python27Packages;})
+    // { django = super.python27Packages.django_1_9; };
+});
+in newpkgs.python27.withPackages (ps: [ps.django_guardian ])
+).env
+```
 
 ### `python setup.py bdist_wheel` cannot create .whl
 
