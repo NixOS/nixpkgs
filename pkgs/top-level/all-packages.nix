@@ -1510,6 +1510,8 @@ in
 
   ex_3_7 = callPackage ../applications/editors/ex/3_7.nix { };
 
+  ex_3_7_4_4 = callPackage ../applications/editors/ex/3_7_4_4.nix { };
+
   exa = callPackage ../tools/misc/exa { };
 
   exempi = callPackage ../development/libraries/exempi { };
