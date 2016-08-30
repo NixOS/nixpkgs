@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
-  dontPatchELF = 1; # !!!
-
-  # Fixup broken libtool
+  # 1. Fixup broken libtool
+  # 2. Libraries left in the build location confuse `patchelf --shrink-rpath`
+  #    Delete these to let patchelf discover the right path instead.
   preFixup = ''
     sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
         -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
         -i $out/lib/libldap.la -i $out/lib/libldap_r.la
+    rm -r libraries/*/.libs
   '';
 
   meta = with stdenv.lib; {
