@@ -5013,11 +5013,11 @@ in modules // {
 
   dask = buildPythonPackage rec {
     name = "dask-${version}";
-    version = "0.9.0";
+    version = "0.11.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dask/${name}.tar.gz";
-      sha256 = "1jm6riz6fbbd554i0dg0w1xfcmx3f9ryp4jrlavsy4zambilm6b3";
+      sha256 = "ef32490c0b156584a71576dccec4dfe550a0cd81a9c131a4ee2e43c241b601c3";
     };
 
     buildInputs = with self; [ pytest ];
