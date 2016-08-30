@@ -4059,7 +4059,7 @@ in modules // {
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
                     self.iso8601 self.pyasn1 self.pytest self.py self.hypothesis1 ]
                ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
-    propagatedBuildInputs = with self; [ six idna ipaddress pyasn1 cffi pyasn1-modules modules.sqlite3 ]
+    propagatedBuildInputs = with self; [ six idna ipaddress pyasn1 cffi pyasn1-modules modules.sqlite3 pytz ]
      ++ optional (pythonOlder "3.4") self.enum34;
 
     # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
