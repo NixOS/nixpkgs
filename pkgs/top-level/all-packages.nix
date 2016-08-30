@@ -13084,6 +13084,8 @@ in
 
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
+  wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
+
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
     withQt = false;
     withGtk = false;
