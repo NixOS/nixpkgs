@@ -2,7 +2,9 @@
 , gnugrep, txt2man, makeWrapper, which
 }:
 
-stdenv.mkDerivation {
+let
+  pythonEnv = python.withPackages (ps: [ps.cryptography] );
+in stdenv.mkDerivation {
   name = "duply-1.9.2";
 
   src = fetchurl {
@@ -11,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ txt2man makeWrapper ];
-
+  propagatedBuildInputs = [ pythonEnv ];
   phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
@@ -20,7 +22,7 @@ stdenv.mkDerivation {
     sed -i 's|/usr/bin/env bash|${bash}/bin/bash|' duply
     mv duply "$out/bin"
     wrapProgram "$out/bin/duply" --set PATH \
-        "${coreutils}/bin:${python}/bin:${duplicity}/bin:${gawk}/bin:${gnupg1}/bin:${bash}/bin:${gnugrep}/bin:${txt2man}/bin:${which}/bin"
+        "${coreutils}/bin:${pythonEnv}/bin:${duplicity}/bin:${gawk}/bin:${gnupg1}/bin:${bash}/bin:${gnugrep}/bin:${txt2man}/bin:${which}/bin"
     "$out/bin/duply" txt2man | gzip -c > "$out/share/man/man1/duply.1.gz"
   '';
 
