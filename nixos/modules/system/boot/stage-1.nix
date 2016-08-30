@@ -190,7 +190,9 @@ let
 
     inherit udevRules extraUtils modulesClosure;
 
-    inherit (config.boot) resumeDevice devSize runSize;
+    inherit (config.boot) resumeDevice;
+
+    inherit (config.system.build) earlyMountScript;
 
     inherit (config.boot.initrd) checkJournalingFS
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;

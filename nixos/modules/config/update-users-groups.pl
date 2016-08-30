@@ -52,8 +52,8 @@ foreach my $g (@{$spec->{groups}}) {
     $gidsUsed{$g->{gid}} = 1 if defined $g->{gid};
 }
 
-foreach my $u (@{$spec->{groups}}) {
-    $uidsUsed{$u->{u}} = 1 if defined $u->{uid};
+foreach my $u (@{$spec->{users}}) {
+    $uidsUsed{$u->{uid}} = 1 if defined $u->{uid};
 }
 
 # Read the current /etc/group.

@@ -154,9 +154,15 @@ in
 
     system.activationScripts.tmpfs =
       ''
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devSize}" none /dev
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devShmSize}" none /dev/shm
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.runSize}" none /run
+        specialMount() {
+          local device="$1"
+          local mountPoint="$2"
+          local options="$3"
+          local fsType="$4"
+
+          ${pkgs.utillinux}/bin/mount -t "$fsType" -o "remount,$options" "$device" "$mountPoint"
+        }
+        source ${config.system.build.earlyMountScript}
       '';
 
   };

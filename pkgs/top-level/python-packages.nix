@@ -4002,25 +4002,22 @@ in modules // {
 
   cytoolz = buildPythonPackage rec {
     name = "cytoolz-${version}";
-    version = "0.7.4";
+    version = "0.8.0";
 
     src = pkgs.fetchurl{
       url = "mirror://pypi/c/cytoolz/cytoolz-${version}.tar.gz";
-      sha256 = "9c2e3dda8232b6cd5b84b8c8df6c8155c2adeb8734eb7ec38e189affc0f2eba5";
+      sha256 = "2239890c8fe2da3eba82947c6a68cfa406e5a5045911c9ab3de8113462372629";
     };
 
     # Extension types
     disabled = isPyPy;
 
     buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ toolz ];
 
     checkPhase = ''
       nosetests -v $out/${python.sitePackages}
     '';
-
-    # Several tests fail with Python 3.5
-    # https://github.com/pytoolz/cytoolz/issues/73
-    doCheck = !isPy35;
 
     meta = {
       homepage = "http://github.com/pytoolz/cytoolz/";
@@ -4062,7 +4059,7 @@ in modules // {
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
                     self.iso8601 self.pyasn1 self.pytest self.py self.hypothesis1 ]
                ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
-    propagatedBuildInputs = with self; [ six idna ipaddress pyasn1 cffi pyasn1-modules modules.sqlite3 ]
+    propagatedBuildInputs = with self; [ six idna ipaddress pyasn1 cffi pyasn1-modules modules.sqlite3 pytz ]
      ++ optional (pythonOlder "3.4") self.enum34;
 
     # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
@@ -4440,12 +4437,11 @@ in modules // {
 
   bcrypt = buildPythonPackage rec {
     name = "bcrypt-${version}";
-    version = "2.0.0";
+    version = "3.1.0";
 
     src = pkgs.fetchurl {
-      url = "https://api.github.com/repos/pyca/bcrypt/tarball/${version}";
-      name = "bcrypt-${version}.tar.gz";
-      sha256 = "14i1yp4qkjklx82jl61cjjcw367lc0pkvnix3gaz451ijdcmz3x8";
+      url = "mirror://pypi/b/bcrypt/${name}.tar.gz";
+      sha256 = "e54820d8b9eff357d1003f5b8d4b949a632b76b89610d8a933783fd476033ebe";
     };
     buildInputs = with self; [ pycparser mock pytest py ];
     propagatedBuildInputs = with self; optional (!isPyPy) cffi;
@@ -5014,11 +5010,11 @@ in modules // {
 
   dask = buildPythonPackage rec {
     name = "dask-${version}";
-    version = "0.9.0";
+    version = "0.11.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dask/${name}.tar.gz";
-      sha256 = "1jm6riz6fbbd554i0dg0w1xfcmx3f9ryp4jrlavsy4zambilm6b3";
+      sha256 = "ef32490c0b156584a71576dccec4dfe550a0cd81a9c131a4ee2e43c241b601c3";
     };
 
     buildInputs = with self; [ pytest ];
@@ -7311,6 +7307,9 @@ in modules // {
       ipykernel
       ipywidgets
     ];
+
+    # Meta-package, no tests
+    doCheck = false;
 
     meta = {
       description = "Installs all the Jupyter components in one go";
@@ -12297,12 +12296,12 @@ in modules // {
   };
 
   jupyter_client = buildPythonPackage rec {
-    version = "4.2.2";
+    version = "4.3.0";
     name = "jupyter_client-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_client/${name}.tar.gz";
-      sha256 = "052a02p38byp3n95k8cwidid05gc5cx44qinzsdzs605zw757z1z";
+      sha256 = "70b2e88403835a1d54b83858783d9e5e5771fa4bb6f6904e0b5bb8cfde4b99dd";
     };
 
     buildInputs = with self; [ nose ];
@@ -12324,12 +12323,12 @@ in modules // {
   };
 
   jupyter_core = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.1.1";
     name = "jupyter_core-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_core/${name}.tar.gz";
-      sha256 = "04xxqa2m8yjpzxb2szbym6ngycyrmhymyy2vp2s6vi9kkikz0shl";
+      sha256 = "ae0e69435258126466c86cd989e465a9c334c50107ef4f257decc8693650bf4c";
     };
 
     buildInputs = with self; [ pytest mock ];
@@ -12791,18 +12790,18 @@ in modules // {
     };
   };
 
-  llvmlite = buildPythonPackage rec {
+  llvmlite = let
+    llvm = pkgs.llvm_38;
+  in buildPythonPackage rec {
     name = "llvmlite-${version}";
-    version = "0.12.1";
+    version = "0.13.0";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/llvmlite/${name}.tar.gz";
-      sha256 = "3ce71beebd4cbc7a49abe4eadfc99725477fd43caeb7405650ebb746c7a1d0df";
+      sha256 = "f852be3391acb2e77ef484c5d0ff90e7cf2821dcf9575e358a1f08c274c582eb";
     };
-
-    llvm = pkgs.llvm_37;
 
     propagatedBuildInputs = with self; [ llvm ] ++ optional (pythonOlder "3.4") enum34;
 
@@ -17747,11 +17746,11 @@ in modules // {
   };
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-3.3.0";
+    name = "Pillow-3.3.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/Pillow/${name}.tar.gz";
-      sha256 = "1lfc197rj4b4inib9b0q0g3rsi204gywfrnk38yk8kssi2f7q7h3";
+      sha256 = "3491ca65d9fdba4db094ab3f8e17170425e7dd670e507921a665a1975d1b3df1";
     };
 
     # Check is disabled because of assertion errors, see
@@ -20624,11 +20623,11 @@ in modules // {
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.11.0";
+    version = "2.11.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "11d3vrbiqrz30qbplv80y72y9i47hihs35p5n04fl4ggjcz0bzxj";
+      sha256 = "5acf980358283faba0b897c73959cecf8b841205bb4b2ad3ef545f46eae1a133";
     };
 
     nativeBuildInputs = [ self.pytest ];
@@ -22215,11 +22214,11 @@ in modules // {
 
   sounddevice = buildPythonPackage rec {
     name = "sounddevice-${version}";
-    version = "0.3.1";
+    version = "0.3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sounddevice/${name}.tar.gz";
-      sha256 = "8e5a6816b369c7aea77e06092b2fee99c8b6efbeef4851f53ea3cb208a7607f5";
+      sha256 = "f6c4120357c1458b23bd0d466c66808efdefad397bf97b1162600d079d4665ae";
     };
 
     propagatedBuildInputs = with self; [ cffi numpy pkgs.portaudio ];
@@ -23873,12 +23872,12 @@ in modules // {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.2.1";
+    version = "4.2.2";
     name = "traitlets-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/traitlets/${name}.tar.gz";
-      sha256 = "1h0aryjiqz2f3ykcjb34k5wz6bmzyp5cll7r4k08yfvji4ya7svn";
+      sha256 = "7d7e3070484b2fe490fa55e0acf7023afc5ed9ddabec57405f25c355158e152a";
     };
 
     buildInputs = with self; [ nose mock ];
@@ -24006,11 +24005,11 @@ in modules // {
 
   toolz = buildPythonPackage rec{
     name = "toolz-${version}";
-    version = "0.7.4";
+    version = "0.8.0";
 
     src = pkgs.fetchurl{
       url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+      sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
     };
 
     buildInputs = with self; [ nose ];
@@ -24043,11 +24042,11 @@ in modules // {
 
   tqdm = buildPythonPackage rec {
     name = "tqdm-${version}";
-    version = "3.7.1";
+    version = "3.8.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tqdm/${name}.tar.gz";
-      sha256 = "f12d792685f779e8754e623aff1a25a93b98a90457e3a2b7eb89b4401c2c239e";
+      sha256 = "bab05f8bb6efd2702ab6c532e5e6a758a66c0d2f443e09784b73e4066e6b3a37";
     };
 
     buildInputs = with self; [ nose coverage pkgs.glibcLocales flake8 ];
@@ -25232,11 +25231,11 @@ in modules // {
 
   xarray = buildPythonPackage rec {
     name = "xarray-${version}";
-    version = "0.7.2";
+    version = "0.8.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xarray/${name}.tar.gz";
-      sha256 = "0gnhznv18iz478r8wg6a686dqgs1v4i3yra8y91x3vsfl23mgv34";
+      sha256 = "4da06e38baea65c51347ba0770db416ebf003dbad5637215d2b25b191f2be1fb";
     };
 
     buildInputs = with self; [ pytest ];
