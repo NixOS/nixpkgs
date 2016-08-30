@@ -17452,6 +17452,8 @@ in
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
+  valauncher = callPackage ../applications/misc/valauncher { };
+
   vault = callPackage ../tools/security/vault { };
 
   vbam = callPackage ../misc/emulators/vbam {
