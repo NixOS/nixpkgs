@@ -75,6 +75,13 @@ let
     ${coreutils}/bin/rm -f $tmp $tmp.ns
   '';
 
+  createWifi = name: opt: opt.handle-assertions "the network config '${name}'" {
+    # TODO(akavel): find out how to make sure that user's custom/changed files won't be overridden by those below?
+    target = "NetworkManager/system-connections/__${opt.id or name}";
+    mode = "0400";
+    source = opt.configfile;
+  };
+
   dispatcherTypesSubdirMap = {
     "basic" = "";
     "pre-up" = "pre-up.d/";
@@ -159,7 +166,7 @@ in {
             };
 
             type = mkOption {
-              type = types.enum (attrNames dispatcherTypesSubdirMap); 
+              type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
               description = ''
                 Dispatcher hook type. Only basic hooks are currently available.
@@ -170,6 +177,14 @@ in {
         default = [];
         description = ''
           A list of scripts which will be executed in response to  network  events.
+        '';
+      };
+
+      networks = mkOption {
+        type = types.attrsOf (types.submodule { imports = [ ./networkmanager-connections ]; _module.args = { inherit pkgs; }; });
+        default = {};
+        description = ''
+          set of network configurations
         '';
       };
     };
@@ -213,6 +228,7 @@ in {
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
+      ++ mapAttrsToList createWifi cfg.networks
       ++ lib.imap (i: s: {
         text = s.source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";

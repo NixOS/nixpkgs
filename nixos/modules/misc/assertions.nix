@@ -29,6 +29,24 @@ with lib;
       '';
     };
 
+    handle-assertions = mkOption {
+      internal = true;
+      type = types.unspecified;
+      description = ''
+        This is a function you can call to display all warnings to the user and
+        fail if any assertions fail.
+      '';
+    };
   };
   # impl of assertions is in <nixpkgs/nixos/modules/system/activation/top-level.nix>
+  config = {
+    handle-assertions =
+      let failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+          showWarnings = inCategory: res: fold (w: x: builtins.trace "[1;31mwarning${inCategory}: ${w}[0m" x) res config.warnings;
+      in category: res: let inCategory = if category != "" then " in ${category}" else ""; in showWarnings inCategory (
+              if failed == [] then
+                res
+              else
+                throw "\nFailed assertions${inCategory}:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
+  };
 }
