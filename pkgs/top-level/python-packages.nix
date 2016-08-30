@@ -23946,11 +23946,11 @@ in modules // {
 
   toolz = buildPythonPackage rec{
     name = "toolz-${version}";
-    version = "0.7.4";
+    version = "0.8.0";
 
     src = pkgs.fetchurl{
       url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+      sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
     };
 
     buildInputs = with self; [ nose ];
