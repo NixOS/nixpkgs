@@ -115,7 +115,7 @@ in
         chown unbound ${stateDir} ${rootTrustAnchorFile}
         ''}
         touch ${stateDir}/dev/random
-        ${pkgs.utillinux}/bin/mount --bind -n /dev/random ${stateDir}/dev/random
+        ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
       '';
 
       serviceConfig = {
