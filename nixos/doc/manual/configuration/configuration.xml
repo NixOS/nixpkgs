@@ -24,7 +24,6 @@ effect after you run <command>nixos-rebuild</command>.</para>
 <xi:include href="networking.xml" />
 <xi:include href="linux-kernel.xml" />
 
-<xi:include href="emacs.xml" />
 <xi:include href="modules.xml" xpointer="xpointer(//section[@id='modules']/*)" />
 
 <!-- Apache; libvirtd virtualisation -->
