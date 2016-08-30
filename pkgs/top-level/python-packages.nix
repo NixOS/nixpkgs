@@ -22978,8 +22978,8 @@ in modules // {
     meta = {
       description = "Sphinx spelling extension";
       homepage = "http://bitbucket.org/dhellmann/sphinxcontrib-spelling";
-      maintainers = [ nand0p ];
-      license = "BSD";
+      maintainers = with maintainers; [ nand0p ];
+      license = licenses.bsd2;
     };
   });
 
