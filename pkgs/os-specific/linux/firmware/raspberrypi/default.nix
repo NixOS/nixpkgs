@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "06g691px0abndp5zvz2ba1g675rcqb64n055h5ahgnlck5cdpawg";
   };
 
+  dontStrip = true;    # Stripping breaks some of the binaries
+
   installPhase = ''
     mkdir -p $out/share/raspberrypi/boot
     cp -R boot/* $out/share/raspberrypi/boot
