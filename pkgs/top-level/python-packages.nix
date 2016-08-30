@@ -23983,11 +23983,11 @@ in modules // {
 
   tqdm = buildPythonPackage rec {
     name = "tqdm-${version}";
-    version = "3.7.1";
+    version = "3.8.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tqdm/${name}.tar.gz";
-      sha256 = "f12d792685f779e8754e623aff1a25a93b98a90457e3a2b7eb89b4401c2c239e";
+      sha256 = "bab05f8bb6efd2702ab6c532e5e6a758a66c0d2f443e09784b73e4066e6b3a37";
     };
 
     buildInputs = with self; [ nose coverage pkgs.glibcLocales flake8 ];
