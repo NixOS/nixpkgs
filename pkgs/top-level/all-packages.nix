@@ -11185,12 +11185,14 @@ in
   };
 
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.modinst_arg_list_too_long
+    ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
+      kernelPatches.mips_fpureg_emu
+      kernelPatches.mips_fpu_sigill
+      kernelPatches.mips_ext3_n32
+    ];
   };
 
   linux_chromiumos_3_14 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.14.nix {
