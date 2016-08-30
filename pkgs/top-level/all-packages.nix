@@ -12106,6 +12106,8 @@ in
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
+  roboto = callPackage ../data/fonts/roboto { };
+
   hasklig = callPackage ../data/fonts/hasklig {};
 
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
