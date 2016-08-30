@@ -22915,8 +22915,8 @@ in modules // {
     meta = {
       description = "Sphinx blockdiag extension";
       homepage = "https://github.com/blockdiag/sphinxcontrib-blockdiag";
-      maintainers = [ nand0p ];
-      license = "BSD";
+      maintainers = with maintainers; [ nand0p ];
+      license = licenses.bsd2;
     };
   });
 
