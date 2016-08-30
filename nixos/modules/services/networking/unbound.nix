@@ -12,9 +12,17 @@ let
 
   interfaces = concatMapStrings (x: "  interface: ${x}\n") cfg.interfaces;
 
-  forward = optionalString (length cfg.forwardAddresses != 0)
-    "forward-zone:\n  name: .\n" +
-    concatMapStrings (x: "  forward-addr: ${x}\n") cfg.forwardAddresses;
+  isLocalAddress = x: substring 0 9 x == "127.0.0.1";
+
+  forward =
+    optionalString (any isLocalAddress cfg.forwardAddresses) ''
+      do-not-query-localhost: no
+    '' +
+    optionalString (cfg.forwardAddresses != []) ''
+      forward-zone:
+        name: .
+    '' +
+    concatMapStringsSep "\n" (x: "    forward-addr: ${x}") cfg.forwardAddresses;
 
   rootTrustAnchorFile = "${stateDir}/root.key";
 
