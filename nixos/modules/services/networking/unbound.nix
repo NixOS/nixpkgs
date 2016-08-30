@@ -43,11 +43,7 @@ in
   options = {
     services.unbound = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Whether to enable the Unbound domain name server.";
-      };
+      enable = mkEnableOption "Unbound domain name server";
 
       allowedAccess = mkOption {
         default = ["127.0.0.0/24"];
