@@ -5838,9 +5838,9 @@ in
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
 
-  php = php56;
+  php = php70;
 
-  phpPackages = php56Packages;
+  phpPackages = php70Packages;
 
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
