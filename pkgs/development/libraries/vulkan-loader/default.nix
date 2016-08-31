@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchFromGitHub, cmake, pkgconfig, git, python3,
-  python3Packages, glslang, spirv-tools, x11, libxcb}:
+  python3Packages, glslang, spirv-tools, x11, libxcb, wayland }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake pkgconfig git python3 python3Packages.lxml
-                  glslang spirv-tools x11 libxcb
+                  glslang spirv-tools x11 libxcb wayland
                 ];
+
+  cmakeFlags = [
+    "-DBUILD_WSI_WAYLAND_SUPPORT=ON" # XLIB/XCB supported by default
+  ];
 
   installPhase = ''
     mkdir -p $out/lib
