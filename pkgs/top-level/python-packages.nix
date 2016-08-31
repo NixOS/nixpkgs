@@ -6336,7 +6336,7 @@ in modules // {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
-  fedora_cert = stdenv.mkDerivation (rec {
+  fedora_cert = mkPythonDerivation rec {
     name = "fedora-cert-0.5.9.2";
     meta.maintainers = with maintainers; [ mornfall ];
 
@@ -6345,12 +6345,10 @@ in modules // {
       sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
     };
 
-    propagatedBuildInputs = with self; [ python python_fedora wrapPython ];
+    propagatedBuildInputs = with self; [ python_fedora modules.sqlite3 pyopenssl ];
     postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
     doCheck = false;
-
-    postFixup = "wrapPythonPrograms";
-  });
+  };
 
   fedpkg = buildPythonPackage (rec {
     name = "fedpkg-1.14";
