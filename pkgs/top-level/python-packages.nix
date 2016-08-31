@@ -18,7 +18,7 @@ let
 
   bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
-  buildPythonPackage = makeOverridable (callPackage ../development/python-modules/generic {
+  buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/buildpythonpackage.nix {
     inherit bootstrapped-pip;
   });
 
@@ -82,7 +82,7 @@ in modules // {
         }
       '';
     }
-   ../development/python-modules/generic/wrap.sh;
+   ../development/interpreters/python/wrap.sh;
 
   # specials
 
