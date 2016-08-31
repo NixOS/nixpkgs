@@ -26976,24 +26976,28 @@ in modules // {
 
   searx = buildPythonPackage rec {
     name = "searx-${version}";
-    version = "0.9.0";
+    version = "0.9.0+git20160816";
 
     src = pkgs.fetchFromGitHub {
       owner = "asciimoo";
       repo = "searx";
-      rev = "v${version}";
-      sha256 = "030qkrsj4as9anr8xfpk5n41qzg7w4yyjasb4cqislvyl1l1dvvs";
+      rev = "b72aec0a9b2b548d7f6a8ddecedd58f5392b8372";
+      sha256 = "00j10w1mpw12ad3v5wd9wk5fvw5d7yahrjxj39qb35z2x2a80pn1";
     };
 
     postPatch = ''
       substituteInPlace requirements.txt \
-        --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28' \
-        --replace 'pyopenssl==0.15.1' 'pyopenssl==16.0.0'
+        --replace 'pyopenssl==0.15.1' 'pyopenssl==16.0.0' \
+        --replace 'requests==2.10.0' 'requests==2.11.0' \
+        --replace 'python-dateutil==2.5.3' 'python-dateutil==2.4.2' \
+        --replace 'flask==0.11.1' 'flask==0.10.1' \
+        --replace 'ndg-httpsclient==0.4.1' 'ndg-httpsclient==0.4.0' \
+        --replace 'lxml==3.6.0' 'lxml==3.5.0'
     '';
 
     propagatedBuildInputs = with self; [
       pyyaml lxml_3_5 grequests flaskbabel flask requests2
-      gevent speaklater Babel pytz dateutil pygments_2_0
+      gevent speaklater Babel pytz dateutil pygments
       pyasn1 pyasn1-modules ndg-httpsclient certifi
     ];
 
