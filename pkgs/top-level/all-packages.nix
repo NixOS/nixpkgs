@@ -1510,6 +1510,11 @@ in
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
+  fast-neural-doodle = callPackage ../tools/graphics/fast-neural-doodle {
+    inherit (python27Packages) numpy scipy h5py scikitlearn python
+      pillow;
+  };
+
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
   fcitx = callPackage ../tools/inputmethods/fcitx {
