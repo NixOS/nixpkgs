@@ -21412,6 +21412,7 @@ in modules // {
       description = "Python interface to R";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ joelmo ];
+      broken = true;
     };
   };
 

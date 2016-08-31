@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "oxygenfonts-20160825";
+  name = "oxygenfonts-20160824";
 
   src = fetchFromGitHub {
     owner = "vernnobile";
