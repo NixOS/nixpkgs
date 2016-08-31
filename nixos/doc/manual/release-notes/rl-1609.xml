@@ -79,7 +79,7 @@ following incompatible changes:</para>
 
   <listitem>
     <para>The <literal>audit</literal> service is no longer enabled by default.
-    Use <literal>security.audit.enable = true;</literal> to explicitly enable it.
+    Use <literal>security.audit.enable = true;</literal> to explicitly enable it.</para>
   </listitem>
 
 </itemizedlist>
