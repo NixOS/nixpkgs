@@ -2,13 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "glslang-${version}";
-  version = "2016-07-27";
+  version = "2016-07-16";
 
+  # `vulkan-loader` requires a specific version of `glslang` as specified in
+  # `<vulkan-loader-repo>/glslang_revision`.
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "8c8505c60454549181d78301933f3f108e2f55e6";
-    sha256 = "1219sq86pz6k8nzg9sqm34b0rdv6kkjirg54y6b2r5ak568r4kwx";
+    rev = "e4821e43c86d97bcf65fb07c1f70471b7102978d";
+    sha256 = "0vnfl8r5ssil1sffgk9sf7c7n5l3775pfizxgb1bcyvm84vw0pr3";
   };
 
   patches = [ ./install-headers.patch ];
