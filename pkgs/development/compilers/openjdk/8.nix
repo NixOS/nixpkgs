@@ -127,8 +127,8 @@ let
 
       # Mirror some stuff in top-level.
       mkdir $out/include $out/share/man
-      ln -s $out/lib/openjdk/include/* $out/include
-      ln -s $out/lib/openjdk/man/* $out/share/man
+      ln -s $out/lib/openjdk/include/* $out/include/
+      ln -s $out/lib/openjdk/man/* $out/share/man/
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
