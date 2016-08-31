@@ -9573,6 +9573,8 @@ in
     openblas = openblasCompat;
   };
 
+  torch-hdf5 = callPackage ../development/libraries/torch-hdf5 {};
+
   tremor = callPackage ../development/libraries/tremor { };
 
   udns = callPackage ../development/libraries/udns { };
