@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, fetchFromGitHub, cmake, git, python3, libxcb
-, python3Packages, glslang, pkgconfig, x11 }:
+{ stdenv, fetchgit, fetchFromGitHub, cmake, pkgconfig, git, python3,
+  python3Packages, glslang, spirv-tools, x11, libxcb}:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1y42rlffmr80rd4m0xfv2mfwd9qvd680i18vr0xs109narb6fm4f";
   };
 
-  buildInputs = [ cmake git python3 libxcb python3Packages.lxml glslang
-                  pkgconfig x11
+  buildInputs = [ cmake pkgconfig git python3 python3Packages.lxml
+                  glslang spirv-tools x11 libxcb
                 ];
 
   installPhase = ''
