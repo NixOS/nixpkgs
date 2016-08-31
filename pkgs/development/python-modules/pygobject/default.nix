@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python, pkgconfig, glib }:
+{ stdenv, fetchurl, python, mkPythonDerivation, pkgconfig, glib }:
 
-stdenv.mkDerivation rec {
+mkPythonDerivation rec {
   name = "pygobject-2.28.6";
   
   src = fetchurl {
@@ -18,9 +18,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-introspection";
 
-  buildInputs = [ python pkgconfig glib ];
-
-  passthru.pythonPath = [];
+  buildInputs = [ pkgconfig glib ];
 
   # in a "normal" setup, pygobject and pygtk are installed into the
   # same site-packages: we need a pth file for both. pygtk.py would be

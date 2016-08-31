@@ -13,7 +13,12 @@
 # by default prefix `name` e.g. "python3.3-${name}"
 , namePrefix ? python.libPrefix + "-"
 
+# Dependencies for building the package
 , buildInputs ? []
+
+# Dependencies needed for running the checkPhase.
+# These are added to buildInputs when doCheck = true.
+, checkInputs ? []
 
 # propagate build dependencies so in case we have A -> B -> C,
 # C can import package A propagated by B
@@ -52,7 +57,8 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
 
   buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
-    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
+    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
+    ++ lib.optionals attrs.doCheck checkInputs;
 
   # propagate python/setuptools to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];

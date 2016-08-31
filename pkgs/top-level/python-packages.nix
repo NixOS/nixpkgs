@@ -20192,7 +20192,7 @@ in modules // {
   });
 
 
-  pysvn = pkgs.stdenv.mkDerivation rec {
+  pysvn = mkPythonDerivation rec {
     name = "pysvn-1.8.0";
 
     src = pkgs.fetchurl {
@@ -20200,7 +20200,7 @@ in modules // {
       sha256 = "0srjr2qgxfs69p65d9vvdib2lc142x10w8afbbdrqs7dhi46yn9r";
     };
 
-    buildInputs = with self; [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
+    buildInputs = with self; [ pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
       ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
 
     # There seems to be no way to pass that path to configure.
@@ -20346,7 +20346,7 @@ in modules // {
   });
 
 
-  pywebkitgtk = stdenv.mkDerivation rec {
+  pywebkitgtk = mkPythonDerivation rec {
     name = "pywebkitgtk-${version}";
     version = "1.1.8";
 
@@ -20677,14 +20677,14 @@ in modules // {
 
   qscintilla = if isPy3k || isPyPy
     then throw "qscintilla-${pkgs.qscintilla.version} not supported for interpreter ${python.executable}"
-    else pkgs.stdenv.mkDerivation rec {
+    else mkPythonDerivation rec {
       # TODO: Qt5 support
       name = "qscintilla-${version}";
       version = pkgs.qscintilla.version;
 
       src = pkgs.qscintilla.src;
 
-      buildInputs = with self; [ pkgs.xorg.lndir pyqt4.qt pyqt4 python ];
+      buildInputs = with self; [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
 
       preConfigure = ''
         mkdir -p $out
