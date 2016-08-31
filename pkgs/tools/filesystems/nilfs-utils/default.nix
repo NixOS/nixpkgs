@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
     sed -e 's@/sbin/@'"$out"'/sbin/@' -i ./lib/cleaner*.c
   '';
 
+  # FIXME: Remove after https://github.com/NixOS/patchelf/pull/98 is in
+  dontPatchELF = true;
+
   meta = {
     description = "NILFS utilities";
     maintainers = with stdenv.lib.maintainers;
@@ -33,6 +36,5 @@ stdenv.mkDerivation rec {
       linux;
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
     updateWalker = true;
-    inherit version;
   };
 }
