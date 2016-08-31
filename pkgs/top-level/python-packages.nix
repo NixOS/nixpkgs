@@ -29824,4 +29824,32 @@ in modules // {
       sha256 = "1lqa8dy1sr1bxi00ri79lmbxvzxi84ki8p46zynyrgcqhwicxq2n";
     };
   };
+
+  whoosh = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "Whoosh";
+    version = "2.7.4";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/25/2b/6beed2107b148edc1321da0d489afc4617b9ed317ef7b72d4993cad9b684/${name}.tar.gz";
+      sha256 = "10qsqdjpbc85fykc1vgcs8xwbgn4l2l52c8d83xf1q59pwyn79bw";
+    };
+    buildInputs = with self; [ pytest ];
+
+    # Wrong encoding
+    postPatch = ''
+      rm tests/test_reading.py
+    '';
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Fast, pure-Python full text indexing, search, and spell checking library.";
+      homepage    = "http://bitbucket.org/mchaput/whoosh";
+      license     = licenses.bsd2;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
 }
