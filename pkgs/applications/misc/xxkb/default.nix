@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     imake
     libX11 libXt libXext libXpm
-  ] ++ stdenv.lib.optional svgSupport [ librsvg glib gdk_pixbuf pkgconfig ];
+  ] ++ stdenv.lib.optionals svgSupport [ librsvg glib gdk_pixbuf pkgconfig ];
 
   outputs = [ "out" "man" ];
 
