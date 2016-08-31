@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
-    echo 'QMAKE_LRELEASE = ${qttools}/bin/lrelease' >> src/gcconfig.pri
+    echo 'QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
   '';
   #postConfigure =
