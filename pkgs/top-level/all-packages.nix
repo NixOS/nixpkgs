@@ -12143,6 +12143,8 @@ in
 
   roboto = callPackage ../data/fonts/roboto { };
 
+  roboto-mono = callPackage ../data/fonts/roboto-mono { };
+
   hasklig = callPackage ../data/fonts/hasklig {};
 
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
