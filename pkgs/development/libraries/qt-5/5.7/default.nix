@@ -111,7 +111,7 @@ let
 
       qmakeHook =
         makeSetupHook
-        { deps = [ self.qtbase ]; }
+        { deps = [ self.qtbase.dev ]; }
         ./qmake-hook.sh;
 
     };
