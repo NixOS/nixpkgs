@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
 
     export pythonpath="$PYTHONPATH"
 
-    substituteAll "${./get-hdf5-mask.sh}" "$out/bin/get-hdf5-mask"
+    substituteAll "${./get-mask-hdf5.sh}" "$out/bin/get-mask-hdf5"
     substituteAll "${./fast-neural-doodle.sh}" "$out/bin/fast-neural-doodle"
 
     chmod a+x "$out/bin"/*
 
-    "$out/bin/get-hdf5-mask" --n_colors=4 --style_image data/Renoir/style.png --style_mask data/Renoir/style_mask.png --target_mask data/Renoir/target_mask.png --out_hdf5 masks.hdf5
+    "$out/bin/get-mask-hdf5" --n_colors=4 --style_image data/Renoir/style.png --style_mask data/Renoir/style_mask.png --target_mask data/Renoir/target_mask.png --out_hdf5 masks.hdf5
 
     "$out/bin/fast-neural-doodle" -gpu -1 -masks_hdf5 masks.hdf5 -num_iterations 1
   '';
