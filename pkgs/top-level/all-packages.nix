@@ -13774,6 +13774,7 @@ in
     boost = boost155;
   };
   ledger = self.ledger3;
+  ledger-web = callPackage ../applications/office/ledger-web { };
 
   lighthouse = callPackage ../applications/misc/lighthouse { };
 
