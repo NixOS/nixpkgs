@@ -5,25 +5,14 @@ let
   name = "zed-${version}";
   version = "1.1.0";
 
-  # When upgrading node.nix / node packages:
+  # When upgrading node packages:
   #   fetch package.json from Zed's repository
-  #   run `npm2nix package.json node.nix`
+  #   run `node2nix -i package.json -c zed.nix -e ../../../development/node-packages/node-env.nix`
   #   and replace node.nix with new one
-  nodePackages = import ../../../../pkgs/top-level/node-packages.nix {
+  node_env = (import ./zed.nix {
     inherit pkgs;
-    inherit (pkgs) stdenv nodejs fetchurl fetchgit;
-    neededNatives = [ pkgs.python ] ++ pkgs.lib.optional pkgs.stdenv.isLinux pkgs.utillinux;
-    self = nodePackages;
-    generated = ./node.nix;
-  };
-
-  node_env = buildEnv {
-    name = "node_env";
-    paths = [ nodePackages."body-parser" nodePackages.express
-      nodePackages.request nodePackages.tar nodePackages.ws ];
-    pathsToLink = [ "/lib" ];
-    ignoreCollisions = true;
-  };
+    inherit (stdenv) system;
+  }).package;
 
   zed = stdenv.mkDerivation rec {
     inherit name version;
