@@ -15,7 +15,7 @@ let ccache = stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace 'objs) $(extra_libs)' 'objs)'
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
@@ -63,7 +63,7 @@ let ccache = stdenv.mkDerivation rec {
     downloadPage = https://ccache.samba.org/download.html;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nckx ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 };
 in ccache
