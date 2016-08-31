@@ -4552,12 +4552,10 @@ in modules // {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
     };
-    buildInputs = with self; [ pyramid_mako nose django jinja2 tornado pyramid Mako ];
+    buildInputs = with self; [ pyramid_mako nose django_1_9 jinja2 tornado pyramid Mako ];
     propagatedBuildInputs = with self; [ six ];
     patchPhase = '' sed -i 's/1.4.99/1.99/' setup.py '';
     checkPhase = '' nosetests pyjade '';
-    doCheck = false;
-    # ImportError: from django.template.loader import BaseLoader cannot import name 'BaseLoader'
     meta = {
       description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
       homepage    = "http://github.com/syrusakbary/pyjade";
