@@ -102,11 +102,11 @@ in
                 source=/nix/var/nix/profiles/default/bin/${program}
             fi
 
-            cp ${setuidWrapper}/bin/setuid-wrapper ${wrapperDir}/${program}
-            echo -n "$source" > ${wrapperDir}/${program}.real
-            chmod 0000 ${wrapperDir}/${program} # to prevent races
-            chown ${owner}.${group} ${wrapperDir}/${program}
-            chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${wrapperDir}/${program}
+            cp ${setuidWrapper}/bin/setuid-wrapper $wrapperDir/${program}
+            echo -n "$source" > $wrapperDir/${program}.real
+            chmod 0000 $wrapperDir/${program} # to prevent races
+            chown ${owner}.${group} $wrapperDir/${program}
+            chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" $wrapperDir/${program}
           '';
 
       in stringAfter [ "users" ]
@@ -115,9 +115,23 @@ in
           # programs to be wrapped.
           SETUID_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          rm -f ${wrapperDir}/* # */
+          mkdir -p /run/setuid-wrapper-dirs
+          wrapperDir=$(mktemp --directory --tmpdir=/run/setuid-wrapper-dirs setuid-wrappers.XXXXXXXXXX)
 
           ${concatMapStrings makeSetuidWrapper setuidPrograms}
+
+          if [ -d ${wrapperDir} ]; then
+            mv --no-target-directory ${wrapperDir} ${wrapperDir}-old
+            ln --symbolic $wrapperDir ${wrapperDir}
+            rm --force --recursive ${wrapperDir}-old
+          elif [ -L ${wrapperDir} ]; then
+            ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
+            old=$(readlink ${wrapperDir})
+            mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
+            rm --force --recursive $old
+          else
+            ln --symbolic $wrapperDir ${wrapperDir}
+          fi
         '';
 
   };
