@@ -20,7 +20,7 @@ let
 
   specialFSTypes = [ "proc" "sysfs" "tmpfs" "devtmpfs" "devpts" ];
 
-  fileSystemOpts = { name, config, ... }: {
+  coreFileSystemOpts = { name, config, ... }: {
 
     options = {
 
@@ -35,13 +35,6 @@ let
         example = "/dev/sda";
         type = types.nullOr types.str;
         description = "Location of the device.";
-      };
-
-      label = mkOption {
-        default = null;
-        example = "root-partition";
-        type = types.nullOr types.str;
-        description = "Label of the device (if any).";
       };
 
       fsType = mkOption {
@@ -61,6 +54,26 @@ let
         type = types.either types.commas (types.listOf types.str);
         apply = x: if isList x then x else lib.strings.splitString "," (builtins.trace "warning: passing a comma-separated string for filesystem options is deprecated; use a list of strings instead. This will become a hard error in 16.09." x);
       });
+
+    };
+
+    config = {
+      mountPoint = mkDefault name;
+      device = mkIf (elem config.fsType specialFSTypes) (mkDefault config.fsType);
+    };
+
+  };
+
+  fileSystemOpts = { config, ... }: {
+
+    options = {
+
+      label = mkOption {
+        default = null;
+        example = "root-partition";
+        type = types.nullOr types.str;
+        description = "Label of the device (if any).";
+      };
 
       autoFormat = mkOption {
         default = false;
@@ -99,22 +112,9 @@ let
         description = "Disable running fsck on this filesystem.";
       };
 
-      early = mkOption {
-        default = false;
-        type = types.bool;
-        internal = true;
-        description = ''
-	  Mount this filesystem very early during boot. At the moment of
-	  mounting no disks are exposed, so this option is primarily for
-          special file systems.
-        '';
-      };
-
     };
 
     config = {
-      mountPoint = mkDefault name;
-      device = mkIf (elem config.fsType specialFSTypes) (mkDefault config.fsType);
       options = mkIf config.autoResize [ "x-nixos.autoresize" ];
 
       # -F needed to allow bare block device without partitions
@@ -151,7 +151,7 @@ in
           "/bigdisk".label = "bigdisk";
         }
       '';
-      type = types.loaOf (types.submodule fileSystemOpts);
+      type = types.loaOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = "/"</literal>).  Each
@@ -183,6 +183,15 @@ in
       description = "Names of supported filesystem types.";
     };
 
+    boot.specialFileSystems = mkOption {
+      default = {};
+      type = types.loaOf (types.submodule coreFileSystemOpts);
+      internal = true;
+      description = ''
+        Special filesystems that are mounted very early during boot.
+      '';
+    };
+
   };
 
 
@@ -196,14 +205,11 @@ in
       { assertion = ! (fileSystems' ? "cycle");
         message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
       }
-      { assertion = all (x: !x.early || (x.label == null && !x.autoFormat && !x.autoResize)) fileSystems;
-        message = "Early filesystems don't support mounting by label, auto formatting and resizing";
-      }
     ];
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
-    system.build.earlyMountScript = makeSpecialMounts (filter (fs: fs.early) fileSystems);
+    system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues config.boot.specialFileSystems)).result;
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
@@ -234,7 +240,7 @@ in
             + " " + (if skipCheck fs then "0" else
                      if fs.mountPoint == "/" then "1" else "2")
             + "\n"
-        ) (filter (fs: !fs.early) fileSystems)}
+        ) fileSystems}
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
@@ -282,7 +288,7 @@ in
       in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
 
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
-    fileSystems = mapAttrs (n: fs: fs // { early = true; }) {
+    boot.specialFileSystems = {
       "/proc" = { fsType = "proc"; options = [ "nosuid" "noexec" "nodev" ]; };
       "/sys" = { fsType = "sysfs"; options = [ "nosuid" "noexec" "nodev" ]; };
       "/run" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
