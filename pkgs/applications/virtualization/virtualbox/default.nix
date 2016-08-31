@@ -108,7 +108,7 @@ in stdenv.mkDerivation {
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
   configurePhase = ''
-    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${stdenv.cc.libc}/include,,g')
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
 
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
