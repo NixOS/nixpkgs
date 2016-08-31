@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, runCommand, gcc, zlib }:
+{ stdenv, fetchurl, fetchpatch, runCommand, zlib }:
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";
@@ -17,41 +17,44 @@ let ccache = stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  passthru = {
+  passthru = let
+      cc = stdenv.cc.cc;
+      ccname = if stdenv.cc.cc.isClang or false then "clang" else "gcc";
+      cxxname = if stdenv.cc.cc.isClang or false then "clang++" else "g++";
+    in {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
     links = extraConfig: stdenv.mkDerivation rec {
       name = "ccache-links";
       passthru = {
-        inherit gcc;
-        isGNU = true;
+        inherit (cc) isGNU isClang;
       };
-      inherit (gcc.cc) lib;
+      inherit (cc) lib;
       buildCommand = ''
         mkdir -p $out/bin
-        if [ -x "${gcc.cc}/bin/gcc" ]; then
-          cat > $out/bin/gcc << EOF
+        if [ -x "${cc}/bin/${ccname}" ]; then
+          cat > $out/bin/${ccname} << EOF
           #!/bin/sh
           ${extraConfig}
-          exec ${ccache}/bin/ccache ${gcc.cc}/bin/gcc "\$@"
+          exec ${ccache}/bin/ccache ${cc}/bin/${ccname} "\$@"
         EOF
-          chmod +x $out/bin/gcc
+          chmod +x $out/bin/${ccname}
         fi
-        if [ -x "${gcc.cc}/bin/g++" ]; then
-          cat > $out/bin/g++ << EOF
+        if [ -x "${cc}/bin/${cxxname}" ]; then
+          cat > $out/bin/${cxxname} << EOF
           #!/bin/sh
           ${extraConfig}
-          exec ${ccache}/bin/ccache ${gcc.cc}/bin/g++ "\$@"
+          exec ${ccache}/bin/ccache ${cc}/bin/${cxxname} "\$@"
         EOF
-          chmod +x $out/bin/g++
+          chmod +x $out/bin/${cxxname}
         fi
-        for executable in $(ls ${gcc.cc}/bin); do
+        for executable in $(ls ${cc}/bin); do
           if [ ! -x "$out/bin/$executable" ]; then
-            ln -s ${gcc.cc}/bin/$executable $out/bin/$executable
+            ln -s ${cc}/bin/$executable $out/bin/$executable
           fi
         done
-        for file in $(ls ${gcc.cc} | grep -vw bin); do
-          ln -s ${gcc.cc}/$file $out/$file
+        for file in $(ls ${cc} | grep -vw bin); do
+          ln -s ${cc}/$file $out/$file
         done
       '';
     };
