@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders ? stdenv.cc.libc.linuxHeaders, libseccomp
@@ -19,6 +19,14 @@ stdenv.mkDerivation rec {
     rev = "124564dd451349ec12673a7d4836b4a7a2f8fb4e";
     sha256 = "021b7filp1dlhic1iv54b821w7mj5595njvzns939pmn636ry4m5";
   };
+
+  patches = [
+    # Fixes tty issues, see #18158. Remove when upgrading to systemd 232.
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/bd64d82c1c0e3fe2a5f9b3dd9132d62834f50b2d.patch";
+      sha256 = "1gc9fxdlnfmjhbi77xfwcb5mkhryjsdi0rmbh2lq2qq737iyqqwm";
+    })
+  ];
 
   /* gave up for now!
   outputs = [ "out" "libudev" "doc" ]; # maybe: "dev"
