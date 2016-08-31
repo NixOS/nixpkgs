@@ -190,7 +190,7 @@ go.stdenv.mkDerivation (
   enableParallelBuilding = enableParallelBuilding;
 
   # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-  outputs = args.outputs or [ "out" "bin" ];
+  outputs = args.outputs or [ "bin" "out" ];
 
   meta = {
     # Add default meta information
