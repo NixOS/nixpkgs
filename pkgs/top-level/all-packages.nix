@@ -17666,4 +17666,5 @@ in
 
   wo-istes-jetzt = callPackage ../tools/misc/wo-istes-jetzt { };
 
+  privacyidea = callPackage ../servers/privacyidea { };
 }

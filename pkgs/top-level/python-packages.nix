@@ -19308,6 +19308,21 @@ in modules // {
     };
   };
 
+  pyjwt_1_3 = buildPythonPackage rec {
+    version = "1.3.0";
+    name = "pyjwt-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://github.com/progrium/pyjwt/archive/${version}.tar.gz";
+      sha256 = "13189pxn588zgg07nr0bi2qs36i4wvf2k05hww2lxi9f6pbz32hb";
+    };
+
+    buildInputs = with self; [ pytestrunner pytestcov pytest coverage ];
+    propagatedBuildInputs = with self; [ pycrypto ecdsa ];
+
+    meta = self.pyjwt.meta;
+  };
+
   pykickstart = buildPythonPackage rec {
     name = "pykickstart-${version}";
     version = "1.99.39";
@@ -19337,6 +19352,26 @@ in modules // {
     };
   };
 
+  sqlsoup = buildPythonPackage rec {
+    name = "sqlsoup-0.9.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sqlsoup/${name}.tar.gz";
+      sha256 = "1mj00fhxj75ac3i8xk9jmm7hvcjz9p4x2r3yndcwsgb659rvgbrg";
+    };
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ sqlalchemy ];
+  };
+
+  pyrad = buildPythonPackage rec {
+    name = "pyrad-2.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyrad/${name}.tar.gz";
+      sha256 = "16c9f4k3ar18zkp9bzf3aw0qi2mvnrb6761r7hwb9kla6apw3nkb";
+    };
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ six ];
+  };
 
   pyodbc = buildPythonPackage rec {
     name = "pyodbc-3.0.7";
@@ -23967,16 +24002,12 @@ in modules // {
 
   qrcode = buildPythonPackage rec {
     name = "qrcode-${version}";
-    version = "5.1";
+    version = "5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/q/qrcode/${name}.tar.gz";
-      sha256 = "0skzrvhjnnacrz52jml4i050vdx5lfcd3np172srxjaghdgfxg9k";
+      sha256 = "0kljfrfq0c2rmxf8am57333ia41kd0snbm2rnqbdy816hgpcq5a1";
     };
-
-    # Errors in several tests:
-    # TypeError: must be str, not bytes
-    disabled = isPy3k;
 
     propagatedBuildInputs = with self; [ six pillow ];
 
