@@ -22903,32 +22903,36 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.6";
-
-    # 1.4 is broken
-    # https://github.com/sphinx-doc/sphinx/issues/2394
-
+    name = "${pname}-${version}";
+    pname = "Sphinx";
+    version = "1.3.6";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Sphinx/${name}.tar.gz";
+      url = "mirror://pypi/S/${pname}/${name}.tar.gz";
       sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
     };
-
     LC_ALL = "en_US.UTF-8";
-    checkPhase = ''
-      PYTHON=${python.executable} make test
-    '';
-
-    buildInputs = with self; [ mock pkgs.glibcLocales ];
+    buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales ];
+    patchPhase = '' sed -i '$ d' tests/test_setup_command.py '';
+    checkPhase = '' PYTHON=${python.executable} make test '';
     propagatedBuildInputs = with self; [
-      docutils jinja2 pygments sphinx_rtd_theme
-      alabaster Babel snowballstemmer six nose
+      docutils
+      jinja2
+      pygments
+      sphinx_rtd_theme
+      alabaster
+      Babel
+      snowballstemmer
+      six
+      sqlalchemy
+      whoosh
+      imagesize
     ];
-
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
       license = licenses.bsd3;
-      platforms = platforms.unix;
+      maintainers = with maintainers; [ nand0p ];
+      platforms = platforms.all;
     };
   });
 
