@@ -1,26 +1,35 @@
-{stdenv, fetchgit, which, libX11, libXt, fontconfig
+{ stdenv, fetchgit, which, libX11, libXt, fontconfig, freetype
 , xproto ? null
 , xextproto ? null
 , libXext ? null
   # For building web manuals
-, perl ? null }:
+, perl ? null
+, samChordingSupport ? true #from 9front
+}:
 
 stdenv.mkDerivation rec {
-  name = "plan9port-2015-06-29";
+  name = "plan9port-2015-11-10";
 
   src = fetchgit {
     # Latest, same as on github, google code is old
     url = "https://plan9port.googlesource.com/plan9";
-    rev = "71de840";
-    sha256 = "002ma7h7z3wii520dhijikwdc679hpwn0jv5a0c8g299drvzq2wx";
+    rev = "0d2dfbc";
+    sha256 = "1h16wvps4rfkjim2ihkmniw8wzl7yill5910larci1c70x6zcicf";
   };
 
-  patches = [ ./fontsrv.patch ];
-  postPatch =
-    ''
-      substituteInPlace src/cmd/acme/acme.c \
-          --replace /lib/font/bit $out/plan9/font
-    '';
+  patches = [
+    ./fontsrv.patch
+  ] ++ stdenv.lib.optionals samChordingSupport [ ./sam_chord_9front.patch ];
+
+  postPatch = ''
+    #hardcoded path
+    substituteInPlace src/cmd/acme/acme.c \
+      --replace /lib/font/bit $out/plan9/font
+    #deprecated flags
+    find . -type f \
+      -exec sed -i -e 's/_SVID_SOURCE/_DEFAULT_SOURCE/g' {} \; \
+      -exec sed -i -e 's/_BSD_SOURCE/_DEFAULT_SOURCE/g' {} \;
+  '';
 
   builder = ./builder.sh;
 
@@ -35,6 +44,7 @@ stdenv.mkDerivation rec {
                     libXt
                     xextproto
                     libXext
+                    freetype #fontsrv wants ft2build.h. provides system fonts for acme and sam.
                   ];
 
   enableParallelBuilding = true;
@@ -49,4 +59,5 @@ stdenv.mkDerivation rec {
 
   libXt_dev = libXt.dev;
   fontconfig_dev = fontconfig.dev;
+  freetype_dev = freetype.dev;
 }
