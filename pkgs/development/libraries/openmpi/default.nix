@@ -42,6 +42,10 @@ in stdenv.mkDerivation rec {
     patchShebangs ompi/mpi/fortran/base/gen-mpi-sizeof.pl
   '';
 
+  postInstall = ''
+		rm -f $out/lib/*.la
+   '';
+
   meta = {
     homepage = http://www.open-mpi.org/;
     description = "Open source MPI-2 implementation";
