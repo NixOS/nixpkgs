@@ -26988,7 +26988,7 @@ in modules // {
     postPatch = ''
       substituteInPlace requirements.txt \
         --replace 'pyopenssl==0.15.1' 'pyopenssl==16.0.0' \
-        --replace 'requests==2.10.0' 'requests==2.11.0' \
+        --replace 'requests==2.10.0' 'requests==2.11.1' \
         --replace 'python-dateutil==2.5.3' 'python-dateutil==2.4.2' \
         --replace 'flask==0.11.1' 'flask==0.10.1' \
         --replace 'ndg-httpsclient==0.4.1' 'ndg-httpsclient==0.4.0' \
