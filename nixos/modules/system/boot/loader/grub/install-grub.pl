@@ -176,7 +176,7 @@ sub GrubFs {
                 $search = $types{$fsIdentifier} . ' ';
 
                 # Based on the type pull in the identifier from the system
-                my ($status, @devInfo) = runCommand("blkid -o export @{[$fs->device]}");
+                my ($status, @devInfo) = runCommand("@utillinux@/bin/blkid -o export @{[$fs->device]}");
                 if ($status != 0) {
                     die "Failed to get blkid info for @{[$fs->mount]} on @{[$fs->device]}";
                 }
@@ -189,7 +189,7 @@ sub GrubFs {
 
             # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
             if ($fs->type eq 'btrfs') {
-                my ($status, @id_info) = runCommand("btrfs subvol show @{[$fs->mount]}");
+                my ($status, @id_info) = runCommand("@btrfsprogs@/bin/btrfs subvol show @{[$fs->mount]}");
                 if ($status != 0) {
                     die "Failed to retrieve subvolume info for @{[$fs->mount]}\n";
                 }
@@ -197,7 +197,7 @@ sub GrubFs {
                 if ($#ids > 0) {
                     die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
                 } elsif ($#ids == 0) {
-                    my ($status, @path_info) = runCommand("btrfs subvol list @{[$fs->mount]}");
+                    my ($status, @path_info) = runCommand("@btrfsprogs@/bin/btrfs subvol list @{[$fs->mount]}");
                     if ($status != 0) {
                         die "Failed to find @{[$fs->mount]} subvolume id from btrfs\n";
                     }
