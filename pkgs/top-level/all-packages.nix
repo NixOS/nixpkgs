@@ -12102,6 +12102,8 @@ in
 
   roboto-mono = callPackage ../data/fonts/roboto-mono { };
 
+  roboto-slab = callPackage ../data/fonts/roboto-slab { };
+
   hasklig = callPackage ../data/fonts/hasklig {};
 
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
