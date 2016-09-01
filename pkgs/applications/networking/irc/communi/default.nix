@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcommuni qt5.qtbase ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   configurePhase = ''
     export QMAKEFEATURES=${libcommuni}/features

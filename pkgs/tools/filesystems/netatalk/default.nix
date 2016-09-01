@@ -19,7 +19,7 @@ stdenv.mkDerivation rec{
     "--localstatedir=/var/lib"
   ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   meta = {
     description = "Apple Filing Protocol Server";

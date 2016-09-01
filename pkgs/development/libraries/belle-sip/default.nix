@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "--with-polarssl=${polarssl}"
   ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.linphone.org/index.php/eng;

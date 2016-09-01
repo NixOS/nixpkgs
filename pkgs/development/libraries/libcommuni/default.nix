@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt5.qtbase ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   configurePhase = ''
     sed -i -e 's|/bin/pwd|pwd|g' configure

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake ];
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   meta = {
     description = "advanced disassembly library";
