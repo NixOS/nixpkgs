@@ -1,12 +1,15 @@
 [
   "alloy"
+, "azure-cli"
 , "bower"
 , "bower2nix"
 , "browserify"
 , "castnow"
 , "coffee-script"
 , "cordova"
+, "dnschain"
 , "docker-registry-server"
+, "eslint"
 , "fetch-bower"
 , "forever"
 , "git-run"
@@ -51,4 +54,5 @@
 , "ungit"
 , "webdrvr"
 , "webpack"
+, "wring"
 ]
