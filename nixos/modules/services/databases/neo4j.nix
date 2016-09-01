@@ -11,6 +11,8 @@ let
     dbms.directories.data=${cfg.dataDir}/data
     dbms.directories.metrics=${cfg.dataDir}/metrics
     dbms.directories.plugins=${cfg.dataDir}/plugins
+    dbms.allow_format_migration=true
+    dbms.security.auth_enabled=false
     dbms.connector.http.type=HTTP
     dbms.connector.http.enabled=true
     dbms.connector.http.address=${cfg.listenAddress}:${toString cfg.port}
