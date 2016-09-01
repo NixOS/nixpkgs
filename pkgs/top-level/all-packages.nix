@@ -16455,8 +16455,8 @@ in
 
   igv = callPackage ../applications/science/biology/igv { };
 
-  neuron = callPackage ../applications/science/biology/neuron { 
-	python = null;	
+  neuron = callPackage ../applications/science/biology/neuron {
+    python = null;
   };
 
   neuron-mpi = appendToName "mpi" (neuron.override {

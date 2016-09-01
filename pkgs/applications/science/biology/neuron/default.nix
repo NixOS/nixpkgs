@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     export prefix="''${prefix} --exec-prefix=''${out}" 
   '';
 
-  configureFlags = with stdenv.lib; 
-				   [ "--without-x" "--with-readline=${readline}" ]
+  configureFlags = with stdenv.lib;
+                    [ "--without-x" "--with-readline=${readline}" ]
                     ++  optionals (python != null)  [ "--with-nrnpython=${python.interpreter}" ]
                     ++ (if mpi != null then ["--with-mpi" "--with-paranrn"] 
                         else ["--without-mpi"]);

@@ -242,11 +242,11 @@ in modules // {
   };
 
   neuron = pkgs.neuron.override {
-	inherit python; 
+    inherit python;
   };
 
   neuron-mpi = pkgs.neuron-mpi.override {
-	inherit python;
+    inherit python;
   };
 
   nixpart = callPackage ../tools/filesystems/nixpart { };
