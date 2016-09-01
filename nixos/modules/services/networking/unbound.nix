@@ -122,6 +122,10 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf";
         ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
+
+        ProtectSystem = true;
+        ProtectHome = true;
+        PrivateDevices = true;
       };
     };
 
