@@ -1206,6 +1206,10 @@ in modules // {
     pympler coverage ]
      ++ optionals (stdenv.isDarwin) [ pkgs.clang ];
 
+    checkPhase = ''
+      py.test
+    '';
+
     meta = {
       description = "Python attributes without boilerplate";
       homepage = https://github.com/hynek/attrs;
