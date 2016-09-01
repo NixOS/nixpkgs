@@ -174,6 +174,7 @@ let
 
       ln -s $out/lib/openjdk/bin $out/bin
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
+      ln -s $jre/lib/openjdk/jre $out/jre
     '';
 
     # FIXME: this is unnecessary once the multiple-outputs branch is merged.
