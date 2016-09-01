@@ -23098,40 +23098,6 @@ in modules // {
     rope = if isPy3k then null else self.rope;
   };
 
-  sqlalchemy7 = buildPythonPackage rec {
-    name = "SQLAlchemy-0.7.10";
-    disabled = isPy34 || isPy35;
-    doCheck = !isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
-    };
-
-    patches = [
-      # see https://groups.google.com/forum/#!searchin/sqlalchemy/module$20logging$20handlers/sqlalchemy/ukuGhmQ2p6g/2_dOpBEYdDYJ
-      # waiting for 0.7.11 release
-      ../development/python-modules/sqlalchemy-0.7.10-test-failures.patch
-    ];
-
-    preConfigure = optionalString isPy3k ''
-      python3 sa2to3.py --no-diffs -w lib test examples
-    '';
-
-    buildInputs = with self; [ nose mock ]
-      ++ stdenv.lib.optional doCheck pysqlite;
-    propagatedBuildInputs = with self; [ modules.sqlite3 ];
-
-    checkPhase = ''
-      ${python.executable} sqla_nose.py
-    '';
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
-    };
-  };
-
   sqlalchemy8 = buildPythonPackage rec {
     name = "SQLAlchemy-0.8.7";
     disabled = isPy34 || isPy35;
