@@ -51,4 +51,8 @@ in
     (mkIf wmCfg.i3.enable (i3config "i3" pkgs.i3 wmCfg.i3))
     (mkIf wmCfg.i3-gaps.enable (i3config "i3-gaps" pkgs.i3-gaps wmCfg.i3-gaps))
   ];
+
+  meta.tests = {
+    i3wm = ./tests/i3wm.nix;
+  };
 }

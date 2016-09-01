@@ -1,11 +1,14 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "i3wm";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig ];
   };
 
   machine = { lib, pkgs, ... }: {
-    imports = [ ./common/x11.nix ./common/user-account.nix ];
+    imports = [
+      <nixpkgs/nixos/tests/common/x11.nix>
+      <nixpkgs/nixos/tests/common/user-account.nix>
+    ];
     services.xserver.displayManager.auto.user = "alice";
     services.xserver.windowManager.default = lib.mkForce "i3";
     services.xserver.windowManager.i3.enable = true;
@@ -30,4 +33,4 @@ import ./make-test.nix ({ pkgs, ...} : {
     $machine->sleep(1);
     $machine->screenshot("terminal");
   '';
-})
+}
