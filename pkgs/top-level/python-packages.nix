@@ -2409,7 +2409,7 @@ in modules // {
       sha256 = "1j4f51dxic39mdwf6alj7gd769wy6mhk916v031wjali51xkh3xb";
     };
 
-    buildInputs = with self; [ hypothesis1 sqlite3 ];
+    buildInputs = with self; [ hypothesis sqlite3 ];
 
     propagatedBuildInputs = with self; [ chardet ];
 
@@ -4032,7 +4032,7 @@ in modules // {
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest_29 self.py self.hypothesis1 self.pytz ]
+                    self.iso8601 self.pyasn1 self.pytest_29 self.py self.hypothesis self.pytz ]
                ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
     propagatedBuildInputs = with self; [ six idna ipaddress pyasn1 cffi pyasn1-modules modules.sqlite3 pytz ]
      ++ optional (pythonOlder "3.4") self.enum34;
@@ -7588,7 +7588,7 @@ in modules // {
 
     buildInputs = with self;
       [
-        hypothesis1
+        hypothesis
         pytestcache
         pytestcov
         pytestflakes
@@ -11664,25 +11664,6 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [ requests2 ];
-  };
-
-  hypothesis1 = buildPythonPackage rec {
-    name = "hypothesis-1.14.0";
-
-    buildInputs = with self; [fake_factory django numpy pytz flake8 pytest ];
-
-    doCheck = false;  # no tests in source
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hypothesis/${name}.tar.gz";
-      sha256 = "12dxrvn108q2j20brrk6zcb8w00kn3af1c07c0fv572nf2ngyaxy";
-    };
-
-    meta = {
-      description = "A Python library for property based testing";
-      homepage = https://github.com/DRMacIver/hypothesis;
-      license = licenses.mpl20;
-    };
   };
 
   hypothesis = buildPythonPackage rec {
@@ -19545,7 +19526,7 @@ in modules // {
       sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
     };
 
-    buildInputs = with self; [ six pytest hypothesis1 ] ++ optional (!isPy3k) modules.sqlite3;
+    buildInputs = with self; [ six pytest hypothesis ] ++ optional (!isPy3k) modules.sqlite3;
 
     checkPhase = ''
       py.test
