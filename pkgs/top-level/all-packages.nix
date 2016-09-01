@@ -6507,6 +6507,8 @@ in
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
+  kube-aws = callPackage ../development/tools/kube-aws { };
+
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   leiningen = callPackage ../development/tools/build-managers/leiningen { };
