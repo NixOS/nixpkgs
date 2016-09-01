@@ -28,7 +28,7 @@ let
     };
 
     # TODO: Add a "dev" output containing the header files.
-    outputs = [ "out" "man" "docdev" ];
+    outputs = [ "out" "man" "devdoc" ];
     setOutputFlags = false;
 
     patches =

@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   # keep developer docs separately (man2 and man3)
-  outputs = [ "out" "docdev" ];
+  outputs = [ "out" "devdoc" ];
   makeFlags = [ "MANDIR=$(out)/share/man" ];
   postFixup = ''
-    moveToOutput share/man/man2 "$docdev"
+    moveToOutput share/man/man2 "$devdoc"
   '';
 
   meta = with stdenv.lib; {
