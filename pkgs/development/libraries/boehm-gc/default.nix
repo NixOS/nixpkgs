@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
   patches = if stdenv.isCygwin then [ ./cygwin.patch ] else null;
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   configureFlags =
     [ "--enable-cplusplus" ]

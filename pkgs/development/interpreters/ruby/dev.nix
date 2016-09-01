@@ -8,7 +8,6 @@ let
     ruby = ruby;
   };
   bundix_ = bundix.override {
-    ruby = ruby;
     bundler = bundler_;
   };
 in

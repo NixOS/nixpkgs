@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtdeclarative ];
   nativeBuildInputs = [ qmakeHook which ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   dontUseQmakeConfigure = true;
   configureFlags = "-config release";

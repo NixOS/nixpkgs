@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "08qd9s3wfhv0ajswsylnfwr5h0d7j9d4rgip855nrh400nxp940p";
   };
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "bin" "dev" "out" "doc" ];
 
   nativeBuildInputs = [ gettext ];
   buildInputs = [ attr ];

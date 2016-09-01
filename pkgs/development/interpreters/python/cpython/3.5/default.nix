@@ -2,7 +2,6 @@
 , bzip2
 , db
 , gdbm
-, less
 , libX11, xproto
 , lzma
 , ncurses
@@ -43,11 +42,6 @@ let
     libX11
     xproto
   ] ++ optionals stdenv.isDarwin [ CF configd ];
-
-  propagatedBuildInputs = [
-    less
-  ];
-
 in
 stdenv.mkDerivation {
   name = "python3-${fullVersion}";
@@ -55,7 +49,6 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   inherit buildInputs;
-  inherit propagatedBuildInputs;
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";

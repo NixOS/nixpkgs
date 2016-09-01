@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin CoreServices;
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   preConfigure = ''

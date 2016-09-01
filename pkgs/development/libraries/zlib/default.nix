@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  outputs = [ "dev" "out" "static" ];
+  outputs = [ "out" "dev" "static" ];
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 

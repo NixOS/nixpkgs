@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zzp6hc7r7m3gl6zjbmzn92zkih4664cckaf49l1g5hapa8721fb";
   };
 
-  outputs = [ "dev" "out" ]; # get rid of propagating systemd closure
+  outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
 
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs =

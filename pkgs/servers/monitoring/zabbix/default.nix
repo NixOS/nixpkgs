@@ -14,7 +14,7 @@ let
       substituteInPlace ./configure \
         --replace " -static" "" \
         ${stdenv.lib.optionalString (stdenv.cc.libc != null) ''
-          --replace /usr/include/iconv.h ${stdenv.cc.libc}/include/iconv.h
+          --replace /usr/include/iconv.h ${stdenv.lib.getDev stdenv.cc.libc}/include/iconv.h
         ''}
     '';
 

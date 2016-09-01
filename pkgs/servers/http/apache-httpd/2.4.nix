@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   # FIXME: -dev depends on -doc
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
   buildInputs = [perl] ++

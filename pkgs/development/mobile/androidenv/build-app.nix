@@ -19,7 +19,7 @@ in
 stdenv.mkDerivation ({
   name = stdenv.lib.replaceChars [" "] [""] name;
 
-  ANDROID_HOME = "${androidsdkComposition}/libexec/android-sdk-${platformName}";
+  ANDROID_HOME = "${androidsdkComposition}/libexec";
 
   buildInputs = [ jdk ant ] ++
     stdenv.lib.optional useNDK [ androidndk gnumake gawk file which ];

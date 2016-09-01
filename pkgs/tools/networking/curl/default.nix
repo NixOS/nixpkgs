@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mjidq4q0hikhis2d35kzkhx6xfcgl875mk5ph5d98fa9kswa4iw";
   };
 
-  outputs = [ "dev" "out" "bin" "man" "docdev" ];
+  outputs = [ "bin" "dev" "out" "man" "docdev" ];
 
   nativeBuildInputs = [ pkgconfig perl ];
 

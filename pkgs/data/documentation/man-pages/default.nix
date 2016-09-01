@@ -9,12 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vimj3va16plxmv46rw6nzw4m9l11hb7r1d217y1bjpd5q8nw8qz";
   };
 
-  # keep developer docs separately (man2 and man3)
-  outputs = [ "out" "docdev" ];
   makeFlags = [ "MANDIR=$(out)/share/man" ];
-  postFixup = ''
-    moveToOutput share/man/man2 "$docdev"
-  '';
 
   meta = with stdenv.lib; {
     description = "Linux development manual pages";

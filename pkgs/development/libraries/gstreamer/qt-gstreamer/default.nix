@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base glib qt4 ];
   propagatedBuildInputs = [ boost ];

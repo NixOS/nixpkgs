@@ -481,7 +481,7 @@ and the aliases
 #### `buildPythonPackage` function
 
 The `buildPythonPackage` function is implemented in
-`pkgs/development/python-modules/generic/default.nix`
+`pkgs/development/interpreters/python/build-python-package.nix`
 
 and can be used as:
 
@@ -536,6 +536,7 @@ All parameters from `mkDerivation` function are still supported.
 * `installFlags`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"].
 * `format`: Format of the source. Options are `setup` for when the source has a `setup.py` and `setuptools` is used to build a wheel, and `wheel` in case the source is already a binary wheel. The default value is `setup`.
 * `catchConflicts` If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
+* `checkInputs` Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
 
 #### `buildPythonApplication` function
 

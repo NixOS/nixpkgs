@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    makeFlags="ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0
+    makeFlags="ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr.dev} USE_PYTHON=0
       INSTALLDIR=$out dist_dir="
   '';
 

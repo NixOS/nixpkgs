@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cs5im0ib0cmr1lhr5765yliqjfyxvk4kwy8h1l8bn3mj6bzk0ib";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "docdev" ];
 
   #TODO: gladeui
   # By default, libxfcegui4 tries to install into libglade's prefix.

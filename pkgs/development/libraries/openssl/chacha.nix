@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1030rs4bdaysxbq0mmck1dn6g5adspzkwsrnhvv16b4ig0r4ncgj";
   };
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
   setOutputFlags = false;
 
   nativeBuildInputs = [ perl zlib ];

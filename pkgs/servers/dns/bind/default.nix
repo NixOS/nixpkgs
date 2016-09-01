@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "08s48h5p916ixjiwgar4w6skc20crmg7yj1y7g89c083zvw8lnxk";
   };
 
-  outputs = [ "dev" "bin" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "man" ];
 
   patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--with-libtool"
-    "--with-libxml2=${libxml2}"
+    "--with-libxml2=${libxml2.dev}"
     "--with-openssl=${openssl.dev}"
     "--without-atf"
     "--without-dlopen"

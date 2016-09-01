@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -i '/AC_CONFIG_MACRO_DIR/i PKG_PROG_PKG_CONFIG' configure.ac
   '';
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ fftw speexdsp ];

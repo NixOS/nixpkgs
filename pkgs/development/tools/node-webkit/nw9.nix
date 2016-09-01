@@ -13,6 +13,8 @@ let
       xorg.libXext xorg.libXfixes nss nspr gconf expat dbus stdenv.cc.cc
       xorg.libXtst xorg.libXi
     ];
+    
+    extraOutputsToInstall = [ "lib" "out" ];
   };
 
 in stdenv.mkDerivation rec {

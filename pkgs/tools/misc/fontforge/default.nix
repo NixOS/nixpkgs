@@ -29,9 +29,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     git autoconf automake gnum4 libtool perl pkgconfig gettext uthash
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
-    pango
   ]
-    ++ lib.optionals withGTK [ gtk2 ]
+    ++ lib.optionals withGTK [ gtk2 pango ]
     ++ lib.optionals (withGTK && stdenv.isDarwin) [ Carbon Cocoa ];
 
   configureFlags =

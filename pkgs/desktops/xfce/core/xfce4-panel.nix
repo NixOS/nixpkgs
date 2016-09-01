@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patches = [ ./xfce4-panel-datadir.patch ];
   patchFlags = "-p1";
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "docdev" ];
 
   nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
 

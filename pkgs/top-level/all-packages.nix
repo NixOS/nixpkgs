@@ -1515,6 +1515,11 @@ in
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
+  fast-neural-doodle = callPackage ../tools/graphics/fast-neural-doodle {
+    inherit (python27Packages) numpy scipy h5py scikitlearn python
+      pillow;
+  };
+
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
   fcitx = callPackage ../tools/inputmethods/fcitx {
@@ -2359,13 +2364,21 @@ in
   else
     nodejs-4_x;
 
-  nodePackages_6_x = callPackage ./node-packages.nix { self = nodePackages_6_x; nodejs = nodejs-6_x; };
+  nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
+    nodejs = pkgs.nodejs-6_x;
+  };
 
-  nodePackages_5_x = callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; };
+  nodePackages_5_x = callPackage ../development/node-packages/default-v5.nix {
+    nodejs = pkgs.nodejs-5_x;
+  };
 
-  nodePackages_4_x = callPackage ./node-packages.nix { self = nodePackages_4_x; nodejs = nodejs-4_x; };
+  nodePackages_4_x = callPackage ../development/node-packages/default-v4.nix {
+    nodejs = pkgs.nodejs-4_x;
+  };
 
-  nodePackages_0_10 = callPackage ./node-packages.nix { self = nodePackages_0_10; nodejs = nodejs-0_10; };
+  nodePackages_0_10 = callPackage ../development/node-packages/default-v0_10.nix {
+    nodejs = pkgs.nodejs-0_10;
+  };
 
   nodePackages = if stdenv.system == "armv5tel-linux" then
     nodePackages_0_10
@@ -3120,7 +3133,7 @@ in
   platformioPackages = callPackage ../development/arduino/platformio { };
   platformio = platformioPackages.platformio-chrootenv.override {};
 
-  platinum-searcher = (callPackage ../tools/text/platinum-searcher { }).bin // { outputs = [ "bin" ]; };
+  platinum-searcher = callPackage ../tools/text/platinum-searcher { };
 
   plex = callPackage ../servers/plex { enablePlexPass = config.plex.enablePlexPass or false; };
 
@@ -3224,7 +3237,7 @@ in
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
-  remarshal = (callPackage ../development/tools/remarshal { }).bin // { outputs = [ "bin" ]; };
+  remarshal = callPackage ../development/tools/remarshal { };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio { };
 
@@ -6180,13 +6193,18 @@ in
     wxGTK = wxGTK30;
   };
 
-  buildbot = callPackage ../development/tools/build-managers/buildbot {
-    inherit (pythonPackages) twisted jinja2 sqlalchemy_migrate_0_7;
-    dateutil = pythonPackages.dateutil_1_5;
-  };
-
   buildbot-slave = callPackage ../development/tools/build-managers/buildbot-slave {
     inherit (pythonPackages) twisted;
+  };
+
+  buildbot = callPackage ../development/tools/build-managers/buildbot/9.nix { };
+  buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
+  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
+  buildbot-ui = self.buildbot.override {
+    plugins = with self.buildbot-plugins; [ www ];
+  };
+  buildbot-full = self.buildbot.override {
+    plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
   };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
@@ -6505,6 +6523,8 @@ in
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
+  kube-aws = callPackage ../development/tools/kube-aws { };
+
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   leiningen = callPackage ../development/tools/build-managers/leiningen { };
@@ -6544,7 +6564,7 @@ in
     licenseAccepted = (config.neoload.accept_license or false);
     fontsConf = makeFontsConf {
       fontDirectories = [
-        xorg.fontbhttf
+        dejavu_fonts.minimal
       ];
     };
   };
@@ -7220,8 +7240,9 @@ in
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
     inherit (darwin) CF;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices AVFoundation
-                                          MediaToolbox VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) 
+      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox 
+      VideoDecodeAcceleration;
   };
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer {
@@ -9591,6 +9612,8 @@ in
     openblas = openblasCompat;
   };
 
+  torch-hdf5 = callPackage ../development/libraries/torch-hdf5 {};
+
   tremor = callPackage ../development/libraries/tremor { };
 
   udns = callPackage ../development/libraries/udns { };
@@ -10234,7 +10257,7 @@ in
   bird = callPackage ../servers/bird { };
   bird6 = bird.override { enableIPv6 = true; };
 
-  bosun = (callPackage ../servers/monitoring/bosun { }).bin // { outputs = [ "bin" ]; };
+  bosun = callPackage ../servers/monitoring/bosun { };
   scollector = bosun;
 
   charybdis = callPackage ../servers/irc/charybdis {};
@@ -10263,7 +10286,7 @@ in
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
-  dnschain = callPackage ../servers/dnschain { };
+  #dnschain = callPackage ../servers/dnschain { };
 
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
@@ -10319,13 +10342,13 @@ in
 
   gofish = callPackage ../servers/gopher/gofish { };
 
-  grafana = (callPackage ../servers/monitoring/grafana { }).bin // { outputs = ["bin"]; };
+  grafana = callPackage ../servers/monitoring/grafana { };
 
   groovebasin = callPackage ../applications/audio/groovebasin { nodejs = nodejs-0_10; };
 
   haka = callPackage ../tools/security/haka { };
 
-  heapster = (callPackage ../servers/monitoring/heapster { }).bin // { outputs = ["bin"]; };
+  heapster = callPackage ../servers/monitoring/heapster { };
 
   hbase = callPackage ../servers/hbase {};
 
@@ -10487,9 +10510,9 @@ in
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
-  influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
+  influxdb = callPackage ../servers/nosql/influxdb/v0.nix { };
 
-  influxdb10 = (callPackage ../servers/nosql/influxdb/v1.nix { }).bin // { outputs = [ "bin" ]; };
+  influxdb10 = callPackage ../servers/nosql/influxdb/v1.nix { };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
@@ -10606,7 +10629,7 @@ in
     boost = boost159;
   };
 
-  ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
+  #ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
 
   s6 = callPackage ../tools/system/s6 { };
 
@@ -13758,7 +13781,7 @@ in
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
-        freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
+        freefont_ttf xorg.fontmiscmisc
       ];
     };
     clucene_core = clucene_core_2;
@@ -13777,7 +13800,7 @@ in
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
-        freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
+        freefont_ttf xorg.fontmiscmisc
       ];
     };
     mdds = mdds_0_12_1;
@@ -16471,7 +16494,9 @@ in
 
   igv = callPackage ../applications/science/biology/igv { };
 
-  neuron = callPackage ../applications/science/biology/neuron { };
+  neuron = callPackage ../applications/science/biology/neuron {
+    python = null;
+  };
 
   neuron-mpi = appendToName "mpi" (neuron.override {
     mpi = pkgs.openmpi;
@@ -17356,9 +17381,7 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  terraform =
-    (callPackage ../applications/networking/cluster/terraform {}).bin //
-      { outputs = [ "bin" ]; };
+  terraform = callPackage ../applications/networking/cluster/terraform {};
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
