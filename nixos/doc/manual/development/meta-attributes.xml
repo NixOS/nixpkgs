@@ -14,8 +14,8 @@
 
 <para><literal>meta</literal> is a top level attribute like
   <literal>options</literal> and <literal>config</literal>. Available
-  meta-attributes are <literal>maintainers</literal> and
-  <literal>doc</literal>.</para>
+  meta-attributes are <literal>maintainers</literal>,
+  <literal>doc</literal> and <literal>tests</literal>.</para>
 
 <para>Each of the meta-attributes must be defined at most once per module
   file.</para>
@@ -35,6 +35,10 @@
     maintainers = with lib.maintainers; [ ericsagnes ]; <co
       xml:id='modules-meta-1' />
     doc = ./default.xml; <co xml:id='modules-meta-2' />
+    tests = { <co xml:id='modules-meta-3' />
+      containers-ipv4 = ./tests/containers-ipv4.nix;
+      containers-ipv6 = ./tests/containers-ipv6.nix;
+    };
   };
 }
 </programlisting>
@@ -55,6 +59,19 @@
     building the NixOS manual:
   </para>
   <programlisting>$ nix-build nixos/release.nix -A manual</programlisting>
+ </callout>
+
+ <callout arearefs='modules-meta-3'>
+  <para>
+    <varname>tests</varname> is a set of which keys are test names and values
+    point to a test file. All the tests declared via this attribute are
+    automatically included in
+    <filename xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/release.nix">release.nix</filename>'s
+    <literal>tests.module</literal> set.
+    It is important to check that newly added and modified test are not
+    breaking by running them:
+  </para>
+  <programlisting>$ nix-build nixos/release.nix -A tests.module.TEST_NAME</programlisting>
  </callout>
 
 </calloutlist>

@@ -22,9 +22,9 @@ let
             [{ inherit (def) file; value = def'; }]) def.value) defs));
   };
 
-  docFile = types.path // {
+  file = types.path // {
     # Returns tuples of
-    #   { file = "module location"; value = <path/to/doc.xml>; }
+    #   { file = "module location"; value = <path/to/file.ext>; }
     merge = loc: defs: defs;
   };
 in
@@ -45,12 +45,22 @@ in
       };
 
       doc = mkOption {
-        type = docFile;
+        type = file;
         internal = true;
         example = "./meta.xml";
         description = ''
           Documentation prologe for the set of options of each module.  This
           option should be defined at most once per module.
+        '';
+      };
+
+      tests = mkOption {
+        type = with types; attrsOf file;
+        internal = true;
+        example = literalExample "./test.nix";
+        description = ''
+          Tests for the module. Tests get added to the tests attribute of release.nix with the test name prepended by "module-".
+          This option should be defined at most once per module.
         '';
       };
 
