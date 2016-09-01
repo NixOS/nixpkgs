@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     sqlite readline asciidoc SDL SDL_gfx
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
+
   configureFlags = [
     "--with-ext=oo"
     "--with-ext=tree"
@@ -24,12 +26,6 @@ stdenv.mkDerivation {
     "--enable-utf8"
     "--ipv6"
   ];
-
-  preConfigurePhase = ''
-    export CFLAGS=$(sdl-config --cflags)
-    export LDFLAGS=$(sdl-config --libs)
-  '';
-
 
   meta = {
     description = "An open source small-footprint implementation of the Tcl programming language";
