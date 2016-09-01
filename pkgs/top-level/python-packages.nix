@@ -3096,6 +3096,7 @@ in modules // {
       })
 
       ../development/python-modules/cairocffi/dlopen-paths.patch
+      ../development/python-modules/cairocffi/fix_test_scaled_font.patch
     ];
 
     postPatch = ''
