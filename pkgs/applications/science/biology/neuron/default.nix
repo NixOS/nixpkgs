@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ## standardise python neuron install dir if any
     if [[ -d $out/lib/python ]]; then
         mkdir -p ''${out}/${python.sitePackages}
-        mv ''${out}/lib/python  ''${out}/${python.sitePackages}
+        mv ''${out}/lib/python/*  ''${out}/${python.sitePackages}/
     fi
   ''];
   
