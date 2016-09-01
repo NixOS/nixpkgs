@@ -30,4 +30,10 @@ nodePackages // {
       }} $TMPDIR/webdrvr/chromedriver_linux64.zip
     '';
   });
+  
+  wring = nodePackages.phantomjs.override (oldAttrs: {
+    buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
+  });
+  
+  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0";
 }
