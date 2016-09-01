@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa, glew
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu, mesa_noglu, glew
 , cudaSupport ? false, cudatoolkit
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     ];
 
   buildInputs =
-    [ cmake pkgconfig mesa
+    [ cmake pkgconfig mesa_glu mesa_noglu
       # FIXME: these are not actually needed, but the configure script wants them.
       glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor xorg.libXinerama
     ]

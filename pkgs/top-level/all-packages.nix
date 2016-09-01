@@ -8767,8 +8767,11 @@ in
     };
     in mo.drivers
   );
+
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
+    # FIXME: this causes mesa to have a runtime dependency on
+    # mesa_noglu.dev.
     paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
     meta = {
       platforms = lib.platforms.unix;
