@@ -80,7 +80,11 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.str;
-        description = "Extra lines of unbound config.";
+        description = ''
+          Extra unbound config. See
+          <citerefentry><refentrytitle>unbound.conf</refentrytitle><manvolnum>8
+          </manvolnum></citerefentry>.
+        '';
       };
 
     };
