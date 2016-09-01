@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kmiv1mcrxniigdcs65w23897mczsx0hasxc6p13hjk58zzfvj1h";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   configureFlags = [
     (mkFlag documentationSupport "documentation")

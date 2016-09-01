@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   });
 
   prePatch = with stdenv.lib; let
-    libs = concatStringsSep "," (map (lib: "\"${lib}/include\"") buildInputs);
+    libs = concatStringsSep "," (map (lib: "\"${lib.dev}/include\"") buildInputs);
   in ''
     sed -i -e '/^search_includes/,/^}/c \
       search_includes = function(_) { return $array(${libs}) }

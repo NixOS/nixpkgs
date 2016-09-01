@@ -79,7 +79,7 @@ stdenv.mkDerivation {
        export MACOSX_DEPLOYMENT_TARGET=10.6
      ''}
 
-    substituteInPlace ./Lib/plat-generic/regen --replace "/usr/include" ${glibc}/include
+    substituteInPlace ./Lib/plat-generic/regen --replace "/usr/include" ${glibc.dev}/include
 
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"

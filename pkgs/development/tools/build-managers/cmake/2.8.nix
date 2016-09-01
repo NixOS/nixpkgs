@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = optional wantPS ps;
 
   CMAKE_PREFIX_PATH = concatStringsSep ":"
-    (concatMap (p: [ p p.out ]) buildInputs);
+    (concatMap (p: [ (p.dev or p) (p.out or p) ]) buildInputs);
 
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"

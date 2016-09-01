@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "109w86kfqrgz83g9ivggplmgc77rz8kx8646izvm2jb57h4rbh71";
   };
 
-  outputs = [ "dev" "out" "bin" ]; # small man pages in $bin
+  outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   buildInputs =
     [ pkgconfig glib expat pam intltool spidermonkey gobjectIntrospection ]

@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libusb-compat-0.1.5";
 
-  outputs = [ "dev" "out" ]; # get rid of propagating systemd closure
+  outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
   outputBin = "dev";
 
   nativeBuildInputs = [ pkgconfig ];

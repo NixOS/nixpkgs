@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   inherit src patches;
 
-  outputs = [ "dev" "out" "bin" "man" "docdev" ];
+  outputs = [ "bin" "dev" "out" "man" "docdev" ];
   outputInfo = "docdev";
 
   postPatch = lib.optionalString (lib.versionAtLeast version "3.4") ''

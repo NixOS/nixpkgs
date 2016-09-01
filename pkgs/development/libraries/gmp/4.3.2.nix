@@ -1,12 +1,18 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   name = "gmp-4.3.2";
 
   src = fetchurl {
     url = "mirror://gnu/gmp/${name}.tar.bz2";
     sha256 = "0x8prpqi9amfcmi7r4zrza609ai9529pjaq0h4aw51i867064qck";
   };
+
+  #outputs TODO: split $cxx due to libstdc++ dependency
+  # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
+  # - see #5855 for related discussion
+  outputs = [ "out" "dev" "info" ];
+  passthru.static = self.out;
 
   nativeBuildInputs = [ m4 ];
 
@@ -60,4 +66,5 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
-}
+};
+  in self

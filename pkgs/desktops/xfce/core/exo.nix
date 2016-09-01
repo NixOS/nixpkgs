@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "docdev" ];
     # lib/xfce4/exo-1/exo-compose-mail-1 is a perl script :-/
 
   nativeBuildInputs = [ pkgconfig intltool ];

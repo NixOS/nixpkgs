@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   sourceRoot = "qt-everywhere-opensource-src-${version}";
 
-  outputs = [ "dev" "out" "gtk" ];
+  outputs = [ "out" "dev" "gtk" ];
 
   postUnpack = ''
     mv qtbase-opensource-src-${version} ./qt-everywhere-opensource-src-${version}/qtbase

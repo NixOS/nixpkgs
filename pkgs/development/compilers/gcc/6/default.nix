@@ -165,8 +165,8 @@ let version = "6.2.0";
           " --disable-libatomic " +  # libatomic requires libc
           " --disable-decimal-float" # libdecnumber requires libc
           else
-          (if crossDarwin then " --with-sysroot=${libcCross.out}/share/sysroot"
-           else                " --with-headers=${libcCross.dev}/include") +
+          (if crossDarwin then " --with-sysroot=${getLib libcCross}/share/sysroot"
+           else                " --with-headers=${getDev libcCross}/include") +
           # Ensure that -print-prog-name is able to find the correct programs.
           (stdenv.lib.optionalString (crossMingw || crossDarwin) (
             " --with-as=${binutilsCross}/bin/${cross.config}-as" +
@@ -247,7 +247,7 @@ stdenv.mkDerivation ({
           ++ stdenv.lib.optional (libpthread != null) libpthread;
         extraCPPSpec =
           concatStrings (intersperse " "
-                          (map (x: "-I${x}/include") extraCPPDeps));
+                          (map (x: "-I${x.dev or x}/include") extraCPPDeps));
         extraLibSpec =
           if libpthreadCross != null
           then "-L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}"
@@ -411,6 +411,7 @@ stdenv.mkDerivation ({
       ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.crossDrv}" else ""}
       --with-gmp=${gmp.crossDrv}
       --with-mpfr=${mpfr.crossDrv}
+      --with-mpc=${libmpc.crossDrv}
       --disable-libstdcxx-pch
       --without-included-gettext
       --with-system-zlib
@@ -456,7 +457,7 @@ stdenv.mkDerivation ({
   # Likewise, the LTO code doesn't find zlib.
 
   CPATH = concatStrings
-            (intersperse ":" (map (x: x + "/include")
+            (intersperse ":" (map (x: "${x.dev or x}/include")
                                   (optionals (zlib != null) [ zlib ]
                                    ++ optionals langJava [ boehmgc ]
                                    ++ optionals javaAwtGtk xlibs
@@ -479,7 +480,7 @@ stdenv.mkDerivation ({
 
   EXTRA_TARGET_CFLAGS =
     if cross != null && libcCross != null then [
-        "-idirafter ${libcCross.dev}/include"
+        "-idirafter ${getDev libcCross}/include"
       ]
       ++ optionals (! crossStageStatic) [
         "-B${libcCross.out}/lib"

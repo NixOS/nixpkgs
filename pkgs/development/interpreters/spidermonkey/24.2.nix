@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n1phk8r3l8icqrrap4czplnylawa0ddc2cc4cgdz46x3lrkybz6";
   };
 
-  outputs = [ "dev" "out" "lib" ];
+  outputs = [ "out" "dev" "lib" ];
 
   propagatedBuildInputs = [ nspr ];
 

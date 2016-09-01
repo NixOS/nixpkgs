@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ libiconv ] ++ libintlOrEmpty ++ lib.optional withData poppler_data;
 

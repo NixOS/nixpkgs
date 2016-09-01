@@ -3,7 +3,7 @@
 with stdenv.lib;
 let
   makeFlags = ''
-    INCDIR=${glibc}/include \
+    INCDIR=${glibc.dev}/include \
     BINDIR=$out/bin LIBDIR=$out/lib CALC_INCDIR=$out/include/calc CALC_SHAREDIR=$out/share/calc MANDIR=$out/share/man/man1 \
     USE_READLINE=-DUSE_READLINE READLINE_LIB=-lreadline READLINE_EXTRAS='-lhistory -lncurses' \
     TERMCONTROL=-DUSE_TERMIOS \

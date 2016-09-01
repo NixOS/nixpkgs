@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt ]
                 ++ optional (!withMbedTLS) openssl
                 ++ optional withMbedTLS mbedtls
-                ++ optional enableSystemSharedLib [libev libsodium udns];
+                ++ optionals enableSystemSharedLib [libev libsodium udns];
 
   configureFlags = optional withMbedTLS
                      [ "--with-crypto-library=mbedtls"

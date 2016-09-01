@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, pkgconfig, gtk
+{ stdenv, lib, fetchurl, unzip, jdk, pkgconfig, gtk
 , libXtst, libXi, mesa, webkit, libsoup, xorg
 , pango, gdk_pixbuf, glib
 }:
@@ -37,10 +37,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ unzip jdk pkgconfig gtk libXtst libXi mesa webkit libsoup ];
 
-  NIX_LFLAGS = [ "-lX11" "-I${xorg.libX11}/lib"
-    "-lpango-1.0" "-I${pango}/lib"
-    "-lgdk_pixbuf-2.0" "-I${gdk_pixbuf}/lib"
-    "-lglib-2.0" "-I${glib}/lib"];
+  NIX_LFLAGS = (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk_pixbuf glib ]) ++
+    [ "-lX11" "-lpango-1.0" "-lgdk_pixbuf-2.0" "-lglib-2.0" ];
 
   buildPhase = ''
     unzip src.zip -d src

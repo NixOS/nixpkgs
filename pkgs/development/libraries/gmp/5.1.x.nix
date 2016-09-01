@@ -2,7 +2,7 @@
 
 with { inherit (stdenv.lib) optional optionalString; };
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   name = "gmp-5.1.3";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0q5i39pxrasgn9qdxzpfbwhh11ph80p57x6hf48m74261d97j83m";
   };
 
-  outputs = [ "out" "info" ];
+  #outputs TODO: split $cxx due to libstdc++ dependency
+  # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
+  # - see #5855 for related discussion
+  outputs = [ "out" "dev" "info" ];
+  passthru.static = self.out;
 
   nativeBuildInputs = [ m4 ];
 
@@ -76,4 +80,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.peti ];
   };
-}
+};
+  in self

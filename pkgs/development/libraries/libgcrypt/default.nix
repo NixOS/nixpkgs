@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wbh6fq5zi9wg2xcfvfpwh7dv52jihivx1vm4h91c2kx0w8n3b6x";
   };
 
-  outputs = [ "dev" "out" "info" ];
+  outputs = [ "out" "dev" "info" ];
   outputBin = "dev";
 
   buildInputs =

@@ -22,7 +22,7 @@ with lib;
   config = {
 
     fonts.fonts =
-      [ pkgs.xorg.fontbhttf
+      [
         pkgs.xorg.fontbhlucidatypewriter100dpi
         pkgs.xorg.fontbhlucidatypewriter75dpi
         pkgs.dejavu_fonts

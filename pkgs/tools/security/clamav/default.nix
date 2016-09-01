@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "--with-zlib=${zlib.dev}"
     "--with-libbz2-prefix=${bzip2.dev}"
     "--with-iconv-dir=${libiconv}"
-    "--with-xml=${libxml2}"
+    "--with-xml=${libxml2.dev}"
     "--with-openssl=${openssl.dev}"
     "--with-libncurses-prefix=${ncurses.dev}"
     "--with-libcurl=${curl.dev}"
