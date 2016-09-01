@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , bzip2
-, db
 , gdbm
 , libX11, xproto
 , lzma
@@ -33,7 +32,6 @@ let
     lzma
     gdbm
     sqlite
-    db
     readline
     ncurses
     openssl
@@ -109,7 +107,7 @@ stdenv.mkDerivation {
   passthru = rec {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
-    dbSupport = db != null;
+    dbSupport = false;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
