@@ -37,6 +37,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  postInstall = "rm $out/lib/*.a";
+
   meta = {
     description = "An Open-Source subdivision surface library";
     homepage = http://graphics.pixar.com/opensubdiv;
