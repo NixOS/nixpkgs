@@ -1,0 +1,26 @@
+{
+  "name": "zed",
+  "version": "1.0.0",
+  "main": "app://./editor.html?url=&title=Zed&cli=1",
+  "node-main": "background.nw.js",
+  "window": {
+    "title": "Zed",
+    "toolbar": false,
+    "width": 1024,
+    "height": 768,
+    "show": true,
+    "frame": true,
+    "icon": "Icon.png"
+  },
+  "dependencies": {
+    "body-parser": "^1.6.3",
+    "express": "^4.8.3",
+    "request": "~2.34.0",
+    "tar": "~0.1.19",
+    "ws": "~0.4.32"
+  },
+  "chromium-args": "--disable-web-security -–allow-file-access-from-files",
+  "webkit": {
+    "page-cache": false
+  }
+}
