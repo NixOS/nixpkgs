@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ viric ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

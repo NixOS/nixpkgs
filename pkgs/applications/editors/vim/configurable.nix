@@ -199,7 +199,7 @@ composableDerivation {
     homepage    = http://www.vim.org;
     license = licenses.vim;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 })
 
