@@ -96,12 +96,9 @@ in
 
     environment.systemPackages = [ pkgs.unbound ];
 
-    users.extraUsers = singleton {
-      name = "unbound";
-      uid = config.ids.uids.unbound;
+    users.users.unbound = {
       description = "unbound daemon user";
-      home = stateDir;
-      createHome = true;
+      isSystemUser = true;
     };
 
     systemd.services.unbound = {
