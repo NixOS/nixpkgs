@@ -11681,6 +11681,10 @@ in modules // {
   hypothesis = buildPythonPackage rec {
     # http://hypothesis.readthedocs.org/en/latest/packaging.html
 
+    # Hypothesis has optional dependencies on the following libraries
+    # pytz fake_factory django numpy pytest
+    # If you need these, you can just add them to your environment.
+
     name = "hypothesis-${version}";
     version = "3.1.0";
 
@@ -11693,7 +11697,7 @@ in modules // {
     };
 
     buildInputs = with self; [ flake8 pytest flaky ];
-    propagatedBuildInputs = with self; ([ pytz fake_factory django numpy ] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
+    propagatedBuildInputs = with self; ([] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
 
     # https://github.com/DRMacIver/hypothesis/issues/300
     checkPhase = ''
