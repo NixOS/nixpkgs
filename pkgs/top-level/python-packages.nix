@@ -4544,6 +4544,27 @@ in modules // {
     };
   };
 
+  pyjade = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pyjade";
+    version = "4.0.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
+    };
+    buildInputs = with self; [ pyramid_mako nose django_1_9 jinja2 tornado pyramid Mako ];
+    propagatedBuildInputs = with self; [ six ];
+    patchPhase = '' sed -i 's/1.4.99/1.99/' setup.py '';
+    checkPhase = '' nosetests pyjade '';
+    meta = {
+      description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
+      homepage    = "http://github.com/syrusakbary/pyjade";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
   pytest = self.pytest_29;
 
   pytest_27 = buildPythonPackage rec {
@@ -4857,6 +4878,26 @@ in modules // {
       license = licenses.mit;
     };
   });
+
+  pytest-virtualenv = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pytest-virtualenv";
+    version = "1.1.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "093f5fa479ee6201e48db367c307531dc8b800609b0c3ddca9c01e0fd466a669";
+    };
+    buildInputs = with self; [ pytestcov mock cmdline ];
+    propagatedBuildInputs = with self; [ pytest-fixture-config pytest-shutil pytest ];
+    checkPhase = '' py.test tests/unit '';
+    meta = {
+      description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
+      homepage = https://github.com/manahl/pytest-plugins;
+      license = licenses.mit;
+      maintainers = with maintainers; [ ryansydnor ];
+      platforms   = platforms.all;
+    };
+  };
 
   pytest_xdist = buildPythonPackage rec {
     name = "pytest-xdist-1.8";
@@ -6202,20 +6243,29 @@ in modules // {
     };
   };
 
-
   execnet = buildPythonPackage rec {
-    name = "execnet-1.1";
-
+    name = "${pname}-${version}";
+    pname = "execnet";
+    version = "1.4.1";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/e/execnet/${name}.zip";
-      sha256 = "fa1d8bd6b6d2282ff4df474b8ac687e1775bff4fc6462b219a5f89d5e9e6908c";
+      url = "mirror://pypi/e/${pname}/${name}.tar.gz";
+      sha256 = "1rpk1vyclhg911p3hql0m0nrpq7q7mysxnaaw6vs29cpa6kx8vgn";
     };
-
-    doCheck = !isPy3k;  # failures..
-
+    buildInputs = with self; [ pytest setuptools_scm ];
+    propagatedBuildInputs = with self; [ apipkg ];
+    # remove vbox tests
+    patchPhase = ''
+      rm -v testing/test_termination.py
+      rm -v testing/test_channel.py
+      rm -v testing/test_xspec.py
+      rm -v testing/test_gateway.py
+    '';
+    checkPhase = '' py.test testing '';
     meta = {
       description = "Rapid multi-Python deployment";
       license = licenses.gpl2;
+      homepage = "http://codespeak.net/execnet";
+      maintainers = with maintainers; [ nand0p ];
     };
   };
 
@@ -12154,20 +12204,20 @@ in modules // {
   };
 
   isort = buildPythonPackage rec {
-    name = "isort-4.2.2";
-
+    name = "${pname}-${version}";
+    pname = "isort";
+    version = "4.2.5";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/i/isort/${name}.tar.gz";
-      sha256 = "0xqxnkli3j69mj1m0i1r9n68bfkdxfcgxi602lqgy491m21q1rpj";
+      url = "mirror://pypi/i/${pname}/${name}.tar.gz";
+      sha256 = "0p7a6xaq7zxxq5vr5gizshnsbk2afm70apg97xwfdxiwyi201cjn";
     };
-
     buildInputs = with self; [ mock pytest ];
-
+    checkPhase = '' ${python.interpreter} -m unittest discover '';
     meta = {
       description = "A Python utility / library to sort Python imports";
       homepage = https://github.com/timothycrosley/isort;
       license = licenses.mit;
-      maintainers = with maintainers; [ couchemar ];
+      maintainers = with maintainers; [ couchemar nand0p ];
     };
   };
 
@@ -21810,23 +21860,23 @@ in modules // {
     };
   };
 
-
-  setuptoolsTrial = buildPythonPackage {
-    name = "setuptools-trial-0.5.12";
-
+  setuptoolsTrial = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "setuptools_trial";
+    version = "0.6.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/s/setuptools_trial/setuptools_trial-0.5.12.tar.gz";
-      sha256 = "9cc4ca5fd432944eb95e193f28b5a602e8b07201fea4d7077c0976a40f073432";
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "14220f8f761c48ba1e2526f087195077cf54fad7098b382ce220422f0ff59b12";
     };
-
-    propagatedBuildInputs = with self; [ twisted ];
-
+    buildInputs = with self; [ pytest virtualenv pytestrunner pytest-virtualenv ];
+    propagatedBuildInputs = with self; [ twisted pathlib2 ];
+    patchPhase = '' sed -i '12,$d' tests/test_main.py '';
     meta = {
-      description = "Setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
-
-      homepage = http://allmydata.org/trac/setuptools_trial;
-
-      license = "unspecified"; # !
+      description = "Setuptools plugin that makes unit tests execute with trial instead of pyunit.";
+      homepage = "https://github.com/rutsky/setuptools-trial";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ ryansydnor nand0p ];
+      platforms   = platforms.all;
     };
   };
 
@@ -22830,32 +22880,36 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.6";
-
-    # 1.4 is broken
-    # https://github.com/sphinx-doc/sphinx/issues/2394
-
+    name = "${pname}-${version}";
+    pname = "Sphinx";
+    version = "1.3.6";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Sphinx/${name}.tar.gz";
+      url = "mirror://pypi/S/${pname}/${name}.tar.gz";
       sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
     };
-
     LC_ALL = "en_US.UTF-8";
-    checkPhase = ''
-      PYTHON=${python.executable} make test
-    '';
-
-    buildInputs = with self; [ mock pkgs.glibcLocales ];
+    buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales ];
+    patchPhase = '' sed -i '$ d' tests/test_setup_command.py '';
+    checkPhase = '' PYTHON=${python.executable} make test '';
     propagatedBuildInputs = with self; [
-      docutils jinja2 pygments sphinx_rtd_theme
-      alabaster Babel snowballstemmer six nose
+      docutils
+      jinja2
+      pygments
+      sphinx_rtd_theme
+      alabaster
+      Babel
+      snowballstemmer
+      six
+      sqlalchemy
+      whoosh
+      imagesize
     ];
-
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
       license = licenses.bsd3;
-      platforms = platforms.unix;
+      maintainers = with maintainers; [ nand0p ];
+      platforms = platforms.all;
     };
   });
 
@@ -26535,6 +26589,49 @@ in modules // {
     };
   };
 
+  txgithub = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "txgithub";
+    version = "15.0.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/${pname}/${name}.tar.gz";
+      sha256 = "16gbizy8vkxasxylwzj4p66yw8979nvzxdj6csidgmng7gi2k8nx";
+    };
+    propagatedBuildInputs = with self; [ pyopenssl twisted service-identity ];
+    # fix python3 issues
+    patchPhase = ''
+      sed -i 's/except usage.UsageError, errortext/except usage.UsageError as errortext/' txgithub/scripts/create_token.py
+      sed -i 's/except usage.UsageError, errortext/except usage.UsageError as errortext/' txgithub/scripts/gist.py
+      sed -i 's/print response\[\x27html_url\x27\]/print(response\[\x27html_url\x27\])/' txgithub/scripts/gist.py
+      sed -i '41d' txgithub/scripts/gist.py
+      sed -i '41d' txgithub/scripts/gist.py
+    '';
+    meta = {
+      description = "GitHub API client implemented using Twisted.";
+      homepage    = "https://github.com/tomprince/txgithub";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
+  txrequests = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "txrequests";
+    version = "0.9.2";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/${pname}/${name}.tar.gz";
+      sha256 = "0kkxxd17ar5gyjkz9yrrdr15a64qw6ym60ndi0zbwx2s634yfafw";
+    };
+    propagatedBuildInputs = with self; [ twisted requests2 cryptography ];
+    meta = {
+      description = "Asynchronous Python HTTP for Humans.";
+      homepage    = "https://github.com/tardyp/txrequests";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
 
   txamqp = buildPythonPackage rec {
     name = "txamqp-${version}";
@@ -29803,4 +29900,22 @@ in modules // {
       sha256 = "1lqa8dy1sr1bxi00ri79lmbxvzxi84ki8p46zynyrgcqhwicxq2n";
     };
   };
+
+  whoosh = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "Whoosh";
+    version = "2.7.4";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/25/2b/6beed2107b148edc1321da0d489afc4617b9ed317ef7b72d4993cad9b684/${name}.tar.gz";
+      sha256 = "10qsqdjpbc85fykc1vgcs8xwbgn4l2l52c8d83xf1q59pwyn79bw";
+    };
+    meta = {
+      description = "Fast, pure-Python full text indexing, search, and spell checking library.";
+      homepage    = "http://bitbucket.org/mchaput/whoosh";
+      license     = licenses.bsd2;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
 }
