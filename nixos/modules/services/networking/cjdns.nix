@@ -263,4 +263,8 @@ in
 
   };
 
+  meta.tests = {
+    cjdns = ./tests/cjdns.nix;
+  };
+
 }

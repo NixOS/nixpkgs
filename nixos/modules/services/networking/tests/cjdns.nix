@@ -22,7 +22,7 @@ let
 
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "cjdns";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ehmry ];
@@ -122,4 +122,4 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       $bob->succeed("curl --fail -g http://[$aliceIp6]");
     '';
-})
+}
