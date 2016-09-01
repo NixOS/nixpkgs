@@ -99,7 +99,7 @@ stdenv.mkDerivation {
     # Get rid of retained dependencies on -dev packages, and remove
     # some $TMPDIR references to improve binary reproducibility.
     for i in $out/lib//python${majorVersion}/_sysconfigdata.py $out/lib/python${majorVersion}/config-${majorVersion}m/Makefile; do
-      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
     done
 
     # FIXME: should regenerate this.
