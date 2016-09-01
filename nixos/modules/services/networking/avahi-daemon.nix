@@ -204,4 +204,8 @@ in
 
   };
 
+  meta.tests = {
+    avahi = ./tests/avahi.nix;
+  };
+
 }

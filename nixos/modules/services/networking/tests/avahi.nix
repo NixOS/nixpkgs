@@ -1,5 +1,5 @@
 # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
-import ./make-test.nix ({ pkgs, ... } : {
+{ pkgs, ... } : {
   name = "avahi";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow ];
@@ -57,4 +57,4 @@ import ./make-test.nix ({ pkgs, ... } : {
        $two->succeed("getent hosts one.local >&2");
        $two->succeed("getent hosts two.local >&2");
     '';
-})
+}

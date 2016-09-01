@@ -253,7 +253,6 @@ in rec {
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
   # ‘nix-build tests/login.nix -A result’.
-  tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.blivet = callTest tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
@@ -332,6 +331,7 @@ in rec {
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
   tests.xfce = callTest tests/xfce.nix {};
+  tests.module = moduleTests {};
 
 
   /* Build a bunch of typical closures so that Hydra can keep track of
