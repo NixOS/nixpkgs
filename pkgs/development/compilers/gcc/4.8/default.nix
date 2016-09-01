@@ -198,7 +198,7 @@ let version = "4.8.5";
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
 
-    bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips && !stdenv.isDarwin;
+    bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
 
 in
 
