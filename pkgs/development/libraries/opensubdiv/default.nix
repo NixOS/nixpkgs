@@ -12,6 +12,8 @@ stdenv.mkDerivation {
     sha256 = "14ylpzk4121gi3fl02dwmqjp5sbaqpkm4gd0lh6jijccdih0xsc0";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches =
     [ # Fix for building with cudatoolkit 7.
       (fetchurl {
