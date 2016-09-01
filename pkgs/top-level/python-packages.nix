@@ -23157,6 +23157,7 @@ in modules // {
     meta = {
       homepage = http://www.sqlalchemy.org/;
       description = "A Python SQL toolkit and Object Relational Mapper";
+      broken = true;
     };
   };
 
