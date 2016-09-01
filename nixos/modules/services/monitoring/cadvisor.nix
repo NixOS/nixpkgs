@@ -96,4 +96,8 @@ in {
 
     virtualisation.docker.enable = mkDefault true;
   };
+
+  meta.tests = {
+    cadvisor = ./tests/cadvisor.nix;
+  };
 }

@@ -257,7 +257,6 @@ in rec {
   tests.blivet = callTest tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
-  tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
@@ -331,7 +330,9 @@ in rec {
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
   tests.xfce = callTest tests/xfce.nix {};
-  tests.module = moduleTests {};
+  tests.module = moduleTests {
+    cadvisor = { systems = [ "x86_64-linux" ]; };
+  };
 
 
   /* Build a bunch of typical closures so that Hydra can keep track of
