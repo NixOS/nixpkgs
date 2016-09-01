@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcommuni qtbase ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   preConfigure = ''
     export QMAKEFEATURES=${libcommuni}/features
