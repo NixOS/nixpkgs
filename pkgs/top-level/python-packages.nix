@@ -17114,6 +17114,10 @@ in modules // {
       sha256 = "17zajiw4mjbkkv6ahp3xf025qglkj0805m9s41c45zryzj6p2h39";
     };
 
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
     meta = {
       description = "Object-oriented filesystem paths";
       homepage = "https://pathlib.readthedocs.org/";
