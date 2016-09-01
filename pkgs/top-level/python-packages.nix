@@ -23253,7 +23253,6 @@ in modules // {
   };
 
   sqlalchemy_migrate = self.sqlalchemy_migrate_func self.sqlalchemy;
-  sqlalchemy_migrate_0_7 = self.sqlalchemy_migrate_func self.sqlalchemy7;
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
