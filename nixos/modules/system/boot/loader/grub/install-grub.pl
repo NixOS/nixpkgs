@@ -140,7 +140,10 @@ my $driveid = 1;
 sub GrubFs {
     my ($dir) = @_;
     my $fs = GetFs($dir);
-    my $path = "/" . substr($dir, length($fs->mount));
+    my $path = substr($dir, length($fs->mount));
+    if (substr($path, 0, 1) ne "/") {
+      $path = "/$path";
+    }
     my $search = "";
 
     if ($grubVersion > 1) {
