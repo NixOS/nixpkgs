@@ -5,7 +5,7 @@ let
   localIp = "fc00::1";
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "containers-ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco chaoflow kampfschlaefer ];
@@ -13,7 +13,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine =
     { config, pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    { imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix> ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
 
@@ -58,4 +58,4 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->fail("nixos-container destroy webserver");
     '';
 
-})
+}

@@ -1,6 +1,6 @@
 # Test for NixOS' container support.
 
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "containers-bridge";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ kampfschlaefer ];
@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine =
     { config, pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    { imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix> ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
       virtualisation.vlans = [];
@@ -100,4 +100,4 @@ import ./make-test.nix ({ pkgs, ...} : {
       # Destroying a declarative container should fail.
       $machine->fail("nixos-container destroy webserver");
     '';
-})
+}

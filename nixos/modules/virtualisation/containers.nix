@@ -655,4 +655,12 @@ in
 
     environment.systemPackages = [ pkgs.nixos-container ];
   });
+
+  meta.tests = {
+    containers-ipv4       = ./tests/containers-ipv4.nix;
+    containers-ipv6       = ./tests/containers-ipv6.nix;
+    containers-bridge     = ./tests/containers-bridge.nix;
+    containers-imperative = ./tests/containers-imperative.nix;
+    containers-extra_veth = ./tests/containers-extra_veth.nix;
+  };
 }
