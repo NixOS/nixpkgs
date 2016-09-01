@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   # TODO: separate "out" and "bin"
   outputs = [ "dev" "out" "man" "docdev" ];
 
+  enableParallelBuilding = true;
+
   buildInputs = [ openssl cyrus_sasl db groff ];
 
   configureFlags =
@@ -20,13 +22,18 @@ stdenv.mkDerivation rec {
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
-  dontPatchELF = 1; # !!!
+  # Workaround for the issue described in https://github.com/NixOS/patchelf/pull/98.
+  preConfigure = ''
+    export NIX_LDFLAGS_BEFORE+=" -rpath $out/lib"
+  '';
 
   # Fixup broken libtool
   preFixup = ''
     sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
         -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
         -i $out/lib/libldap.la -i $out/lib/libldap_r.la
+
+    rm -rf $out/var
   '';
 
   meta = with stdenv.lib; {
