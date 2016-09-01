@@ -23715,7 +23715,10 @@ in modules // {
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
-    doCheck = ''
+
+    doCheck = true;
+
+    checkPhase = ''
       patchShebangs run_tests.sh
       ./run_tests.sh
     '';
