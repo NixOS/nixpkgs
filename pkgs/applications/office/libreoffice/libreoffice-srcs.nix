@@ -95,9 +95,9 @@
   brief = true;
 }
 {
-  name = "expat-2.1.0.tar.gz";
-  md5 = "dd7dab7a5fea97d2a6a43f511449b7cd";
-  brief = false;
+  name = "expat-2.1.1.tar.bz2";
+  md5 = "7380a64a8e3a9d66a9887b01d0d7ea81";
+  brief = true;
 }
 {
   name = "Firebird-2.5.4.26856-0.tar.bz2";
@@ -331,8 +331,8 @@
   brief = false;
 }
 {
-  name = "libxml2-2.9.3.tar.gz";
-  md5 = "daece17e045f1c107610e137ab50c179";
+  name = "libxml2-2.9.4.tar.gz";
+  md5 = "ae249165c173b1ff386ee8ad676815f5";
   brief = false;
 }
 {
@@ -401,8 +401,8 @@
   brief = false;
 }
 {
-  name = "openssl-1.0.2g.tar.gz";
-  md5 = "f3c710c045cdee5fd114feb69feba7aa";
+  name = "openssl-1.0.2h.tar.gz";
+  md5 = "9392e65072ce4b614c1392eefc1f23d0";
   brief = true;
 }
 {
