@@ -202,4 +202,8 @@ in {
       };
     };
   };
+
+  meta.tests = {
+    gocd-agent = ./test.nix;
+  };
 }

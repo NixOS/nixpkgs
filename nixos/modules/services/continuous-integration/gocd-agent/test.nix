@@ -9,7 +9,7 @@ let
   header = "Accept: application/vnd.go.cd.v2+json";
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "gocd-agent";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ grahamc swarren83 ];
@@ -37,4 +37,4 @@ import ./make-test.nix ({ pkgs, ...} : {
     $gocd_agent->waitUntilSucceeds("curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].uuid");
     $gocd_agent->succeed("curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].agent_state | grep -q Idle");
   '';
-})
+}
