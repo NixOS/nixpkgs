@@ -50,7 +50,6 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   inherit buildInputs;
-  inherit propagatedBuildInputs;
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
