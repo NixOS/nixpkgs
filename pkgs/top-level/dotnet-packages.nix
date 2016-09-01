@@ -252,6 +252,51 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
+  Dafny = buildDotnetPackage rec {
+    baseName = "Dafny";
+    version = "1.9.8";
+
+    src = fetchurl {
+      url = "https://github.com/Microsoft/dafny/archive/v${version}.tar.gz";
+      sha256 = "0n4pk4cv7d2zsn4xmyjlxvpfl9avq79r06c7kzmrng24p3k4qj6s";
+    };
+
+    preBuild = ''
+      ln -s ${pkgs.z3} Binaries/z3
+    '';
+
+    buildInputs = [ Boogie ];
+
+    xBuildFiles = [ "Source/Dafny.sln" ];
+    xBuildFlags = [ ];
+
+    outputFiles = [ "Binaries/*" ];
+
+    # Do not wrap the z3 executable, only dafny-related ones.
+    exeFiles = [ "Dafny*.exe" ];
+
+    # Dafny needs mono in its path.
+    makeWrapperArgs = "--set PATH ${mono}/bin";
+
+    # Boogie as an input is not enough. Boogie libraries need to be at the same
+    # place as Dafny ones. Same for "*.dll.mdb". No idea why or how to fix.
+    postFixup = ''
+      for lib in ${Boogie}/lib/dotnet/${Boogie.baseName}/*.dll{,.mdb}; do
+        ln -s $lib $out/lib/dotnet/${baseName}/
+      done
+      # We generate our own executable scripts
+      rm -f $out/lib/dotnet/${baseName}/dafny{,-server}
+    '';
+
+    meta = {
+      description = "A programming language with built-in specification constructs";
+      homepage = "http://research.microsoft.com/dafny";
+      maintainers = with maintainers; [ layus ];
+      license = licenses.MIT;
+      platforms = with platforms; (linux ++ darwin);
+    };
+  };
+
   Deedle = buildDotnetPackage rec {
     baseName = "Deedle";
     version = "1.2.0";
