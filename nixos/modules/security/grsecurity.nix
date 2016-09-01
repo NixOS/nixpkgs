@@ -23,6 +23,9 @@ in
   meta = {
     maintainers = with maintainers; [ joachifm ];
     doc = ./grsecurity.xml;
+    tests = {
+      grsecurity = ./tests/grsecurity.nix;
+    };
   };
 
   options.security.grsecurity = {

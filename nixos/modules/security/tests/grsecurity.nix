@@ -1,6 +1,6 @@
 # Basic test to make sure grsecurity works
 
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "grsecurity";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ copumpkin joachifm ];
@@ -43,4 +43,4 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->succeed("[ -c /dev/grsec ]");
     };
   '';
-})
+}

@@ -269,7 +269,6 @@ in rec {
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
   #tests.gitlab = callTest tests/gitlab.nix {};
-  tests.grsecurity = callTest tests/grsecurity.nix {};
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer = callSubTests tests/installer.nix {};
