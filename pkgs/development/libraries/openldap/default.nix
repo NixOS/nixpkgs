@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   #    Delete these to let patchelf discover the right path instead.
   #    FIXME: that one can be removed when https://github.com/NixOS/patchelf/pull/98
   #    is in Nixpkgs patchelf.
->>>>>>> upstream/master
   preFixup = ''
     sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
         -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
