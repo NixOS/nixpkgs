@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qr286q8mwbr4cxz0y0rf045zc071qh3cb804by6w1ydlqciih8a";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ cmake boost ];
 
