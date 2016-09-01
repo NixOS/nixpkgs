@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   inherit src patches;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "dev" ];
 
   setOutputFlags = false;
 
