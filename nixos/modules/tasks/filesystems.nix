@@ -48,12 +48,8 @@ let
         default = [ "defaults" ];
         example = [ "data=journal" ];
         description = "Options used to mount the file system.";
-      } // (if versionAtLeast lib.nixpkgsVersion "16.09" then {
         type = types.listOf types.str;
-      } else {
-        type = types.either types.commas (types.listOf types.str);
-        apply = x: if isList x then x else lib.strings.splitString "," (builtins.trace "warning: passing a comma-separated string for filesystem options is deprecated; use a list of strings instead. This will become a hard error in 16.09." x);
-      });
+      };
 
     };
 
