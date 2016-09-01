@@ -3,31 +3,21 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, unzip, wrapPython, lib, bootstrapped-pip
-, ensureNewerSourcesHook }:
+{ lib
+, python
+, mkPythonDerivation
+, bootstrapped-pip
+}:
 
-{ name
-
-# by default prefix `name` e.g. "python3.3-${name}"
-, namePrefix ? python.libPrefix + "-"
-
-, buildInputs ? []
+{ buildInputs ? []
 
 # propagate build dependencies so in case we have A -> B -> C,
-# C can import package A propagated by B 
-, propagatedBuildInputs ? []
+# C can import package A propagated by B
+#, propagatedBuildInputs ? []
 
 # passed to "python setup.py build_ext"
 # https://github.com/pypa/pip/issues/881
 , setupPyBuildFlags ? []
-
-# DEPRECATED: use propagatedBuildInputs
-, pythonPath ? []
-
-# used to disable derivation, useful for specific python versions
-, disabled ? false
-
-, meta ? {}
 
 # Execute before shell hook
 , preShellHook ? ""
@@ -35,25 +25,15 @@
 # Execute after shell hook
 , postShellHook ? ""
 
-# Additional arguments to pass to the makeWrapper function, which wraps
-# generated binaries.
-, makeWrapperArgs ? []
-
 # Additional flags to pass to "pip install".
 , installFlags ? []
-
-# Raise an error if two packages are installed with the same name
-, catchConflicts ? true
 
 , format ? "setup"
 
 , ... } @ attrs:
 
 
-# Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled
-then throw "${name} not supported for interpreter ${python.executable}"
-else
+
 
 let
   # use setuptools shim (so that setuptools is imported before distutils)
@@ -73,14 +53,10 @@ let
         installCheckPhase = attrs.checkPhase or ":";
 
         # Wheels don't have any checks to run
-        doInstallCheck = attrs.doCheck or false;
+        doCheck = attrs.doCheck or false;
       }
     else if format == "setup" then
       {
-        # propagate python/setuptools to active setup-hook in nix-shell
-        propagatedBuildInputs =
-          propagatedBuildInputs ++ [ python setuptools ];
-
         # we copy nix_run_setup.py over so it's executed relative to the root of the source
         # many project make that assumption
         buildPhase = attrs.buildPhase or ''
@@ -100,21 +76,17 @@ let
         # are typically distributed with tests.
         # With Python it's a common idiom to run the tests
         # after the software has been installed.
-
-        # For backwards compatibility, let's use an alias
-        doInstallCheck = attrs.doCheck or true;
+        doCheck = attrs.doCheck or true;
       }
     else
       throw "Unsupported format ${format}";
-in
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] // {
-  name = namePrefix + name;
 
-  buildInputs = [ wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
-    ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
-    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
+in mkPythonDerivation ( attrs // {
 
-  pythonPath = pythonPath;
+  # To build and install a wheel we need pip
+  buildInputs = buildInputs ++ [ bootstrapped-pip ];
+
+#inherit propagatedBuildInputs;
 
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
@@ -125,9 +97,6 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
 
     runHook postConfigure
   '';
-
-  # Python packages don't have a checkPhase, only an installCheckPhase
-  doCheck = false;
 
   installPhase = attrs.installPhase or ''
     runHook preInstall
@@ -142,14 +111,6 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     runHook postInstall
   '';
 
-  postFixup = attrs.postFixup or ''
-    wrapPythonPrograms
-  '' + lib.optionalString catchConflicts ''
-    # check if we have two packages with the same name in closure and fail
-    # this shouldn't happen, something went wrong with dependencies specs
-    ${python.interpreter} ${./catch_conflicts.py}
-  '';
-
   shellHook = attrs.shellHook or ''
     ${preShellHook}
     if test -e setup.py; then
@@ -162,13 +123,4 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     ${postShellHook}
   '';
 
-  meta = with lib.maintainers; {
-    # default to python's platforms
-    platforms = python.meta.platforms;
-  } // meta // {
-    # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ chaoflow domenkozar ];
-    # a marker for release utilities to discover python packages
-    isBuildPythonPackage = python.meta.platforms;
-  };
 } // formatspecific)

@@ -18,7 +18,10 @@ let
 
   bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
-  buildPythonPackage = makeOverridable (callPackage ../development/python-modules/generic {
+  mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
+  });
+  buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
+    inherit mkPythonDerivation;
     inherit bootstrapped-pip;
   });
 
@@ -34,55 +37,11 @@ let
 
 in modules // {
 
-  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
 
   # helpers
 
-  wrapPython = pkgs.makeSetupHook
-    { deps = pkgs.makeWrapper;
-      substitutions.libPrefix = python.libPrefix;
-      substitutions.executable = python.interpreter;
-      substitutions.python = python;
-      substitutions.magicalSedExpression = let
-        # Looks weird? Of course, it's between single quoted shell strings.
-        # NOTE: Order DOES matter here, so single character quotes need to be
-        #       at the last position.
-        quoteVariants = [ "'\"'''\"'" "\"\"\"" "\"" "'\"'\"'" ]; # hey Vim: ''
-
-        mkStringSkipper = labelNum: quote: let
-          label = "q${toString labelNum}";
-          isSingle = elem quote [ "\"" "'\"'\"'" ];
-          endQuote = if isSingle then "[^\\\\]${quote}" else quote;
-        in ''
-          /^[a-z]?${quote}/ {
-            /${quote}${quote}|${quote}.*${endQuote}/{n;br}
-            :${label}; n; /^${quote}/{n;br}; /${endQuote}/{n;br}; b${label}
-          }
-        '';
-
-        # This preamble does two things:
-        # * Sets argv[0] to the original application's name; otherwise it would be .foo-wrapped.
-        #   Python doesn't support `exec -a`.
-        # * Adds all required libraries to sys.path via `site.addsitedir`. It also handles *.pth files.
-        preamble = ''
-          import sys
-          import site
-          import functools
-          sys.argv[0] = '"'$(basename "$f")'"'
-          functools.reduce(lambda k, p: site.addsitedir(p, k), ['"$([ -n "$program_PYTHONPATH" ] && (echo "'$program_PYTHONPATH'" | sed "s|:|','|g") || true)"'], site._init_pathinfo())
-        '';
-
-      in ''
-        1 {
-          :r
-          /\\$|,$/{N;br}
-          /__future__|^ |^ *(#.*)?$/{n;br}
-          ${concatImapStrings mkStringSkipper quoteVariants}
-          /^[^# ]/i ${replaceStrings ["\n"] [";"] preamble}
-        }
-      '';
-    }
-   ../development/python-modules/generic/wrap.sh;
+  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
 
   # specials
 
@@ -6377,7 +6336,7 @@ in modules // {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
-  fedora_cert = stdenv.mkDerivation (rec {
+  fedora_cert = mkPythonDerivation rec {
     name = "fedora-cert-0.5.9.2";
     meta.maintainers = with maintainers; [ mornfall ];
 
@@ -6386,12 +6345,10 @@ in modules // {
       sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
     };
 
-    propagatedBuildInputs = with self; [ python python_fedora wrapPython ];
+    propagatedBuildInputs = with self; [ python_fedora modules.sqlite3 pyopenssl ];
     postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
     doCheck = false;
-
-    postFixup = "wrapPythonPrograms";
-  });
+  };
 
   fedpkg = buildPythonPackage (rec {
     name = "fedpkg-1.14";
@@ -20235,7 +20192,7 @@ in modules // {
   });
 
 
-  pysvn = pkgs.stdenv.mkDerivation rec {
+  pysvn = mkPythonDerivation rec {
     name = "pysvn-1.8.0";
 
     src = pkgs.fetchurl {
@@ -20243,7 +20200,7 @@ in modules // {
       sha256 = "0srjr2qgxfs69p65d9vvdib2lc142x10w8afbbdrqs7dhi46yn9r";
     };
 
-    buildInputs = with self; [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
+    buildInputs = with self; [ pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
       ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
 
     # There seems to be no way to pass that path to configure.
@@ -20389,7 +20346,7 @@ in modules // {
   });
 
 
-  pywebkitgtk = stdenv.mkDerivation rec {
+  pywebkitgtk = mkPythonDerivation rec {
     name = "pywebkitgtk-${version}";
     version = "1.1.8";
 
@@ -20720,14 +20677,14 @@ in modules // {
 
   qscintilla = if isPy3k || isPyPy
     then throw "qscintilla-${pkgs.qscintilla.version} not supported for interpreter ${python.executable}"
-    else pkgs.stdenv.mkDerivation rec {
+    else mkPythonDerivation rec {
       # TODO: Qt5 support
       name = "qscintilla-${version}";
       version = pkgs.qscintilla.version;
 
       src = pkgs.qscintilla.src;
 
-      buildInputs = with self; [ pkgs.xorg.lndir pyqt4.qt pyqt4 python ];
+      buildInputs = with self; [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
 
       preConfigure = ''
         mkdir -p $out
