@@ -7579,26 +7579,29 @@ in modules // {
   };
 
   natsort = buildPythonPackage rec {
-    name = "natsort-4.0.0";
+    name = "natsort-5.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/natsort/${name}.tar.gz";
-      sha256 = "a0d4239bd609eae5cd5163db6f9794378ce0e3f43ae16c10c35472d866ae20cd";
+      sha256 = "4ad6b4d1153451e345967989bd3ca30abf33f615b116eeadfcc51a456e6974a9";
     };
 
     buildInputs = with self;
       [
         hypothesis1
+        pytestcache
         pytestcov
         pytestflakes
         pytestpep8
-        covCore
+        mock
+        pathlib
       ];
 
     meta = {
       description = "Natural sorting for python";
       homepage = https://github.com/SethMMorton/natsort;
       license = licenses.mit;
+      broken = true;
     };
   };
 
