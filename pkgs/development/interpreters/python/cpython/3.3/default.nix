@@ -2,7 +2,6 @@
 , bzip2
 , db
 , gdbm
-, less
 , libX11, xproto
 , lzma
 , ncurses
@@ -27,10 +26,6 @@ let
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 lzma gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
-  ];
-
-  propagatedBuildInputs = [
-    less
   ];
 
 in
