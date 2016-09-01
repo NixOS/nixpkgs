@@ -12272,6 +12272,9 @@ in modules // {
 
     propagatedBuildInputs = with self; [ markupsafe ];
 
+    # No tests included
+    doCheck = false;
+
     meta = {
       homepage = http://jinja.pocoo.org/;
       description = "Stand-alone template engine";
