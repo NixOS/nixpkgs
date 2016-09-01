@@ -17,6 +17,12 @@ let
     '';
   };
 
+  setuid-swap = pkgs.runCommand "setuid-swap" {} ''
+    mkdir -p $out/bin
+    gcc -Wall -O2 ${./setuid-swap.c} -o $out/bin/setuid-swap
+    fixupPhase
+  '';
+
 in
 
 {
@@ -102,11 +108,11 @@ in
                 source=/nix/var/nix/profiles/default/bin/${program}
             fi
 
-            cp ${setuidWrapper}/bin/setuid-wrapper ${wrapperDir}/${program}
-            echo -n "$source" > ${wrapperDir}/${program}.real
-            chmod 0000 ${wrapperDir}/${program} # to prevent races
-            chown ${owner}.${group} ${wrapperDir}/${program}
-            chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${wrapperDir}/${program}
+            cp ${setuidWrapper}/bin/setuid-wrapper ${wrapperDir}-new/${program}
+            echo -n "$source" > ${wrapperDir}-new/${program}.real
+            chmod 0000 ${wrapperDir}-new/${program} # to prevent races
+            chown ${owner}.${group} ${wrapperDir}-new/${program}
+            chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${wrapperDir}-new/${program}
           '';
 
       in stringAfter [ "users" ]
@@ -115,9 +121,11 @@ in
           # programs to be wrapped.
           SETUID_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          rm -f ${wrapperDir}/* # */
-
+          mkdir -p ${wrapperDir}-new
           ${concatMapStrings makeSetuidWrapper setuidPrograms}
+
+          ${setuid-swap}/bin/setuid-swap ${wrapperDir}-new ${wrapperDir} ${wrapperDir}-tmp
+          rm -fR ${wrapperDir}-new
         '';
 
   };
