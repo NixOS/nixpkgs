@@ -2,7 +2,7 @@
 #   1. GoCD server starts
 #   2. GoCD server responds
 
-import ./make-test.nix ({ pkgs, ...} :
+{ pkgs, ...} :
 
 {
   name = "gocd-server";
@@ -25,4 +25,4 @@ nodes = {
     $gocd_server->waitForOpenPort("8153");
     $gocd_server->waitUntilSucceeds("curl -s -f localhost:8153/go");
   '';
-})
+}
