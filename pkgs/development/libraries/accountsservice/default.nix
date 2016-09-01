@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, makeWrapper
+{ stdenv, fetchurl, pkgconfig, glib, intltool, makeWrapper, shadow
 , libtool, gobjectIntrospection, polkit, systemd, coreutils }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
                      "--localstatedir=/var" ];
   prePatch = ''
-    substituteInPlace src/daemon.c --replace '"/usr/sbin/' '"/run/current-system/sw/sbin/'
-    substituteInPlace src/user.c --replace '"/usr/sbin/' '"/run/current-system/sw/sbin/' --replace '"/usr/bin/' '"/run/current-system/sw/bin' --replace '"/bin/cat"' '"/run/current-system/sw/bin/cat"'
+    substituteInPlace src/daemon.c --replace '"/usr/sbin/useradd"' '"${shadow}/bin/useradd"' \
+                                   --replace '"/usr/sbin/userdel"' '"${shadow}/bin/userdel"'
+    substituteInPlace src/user.c   --replace '"/usr/sbin/usermod"' '"${shadow}/bin/usermod"' \
+                                   --replace '"/usr/bin/chage"' '"${shadow}/bin/chage"' \
+                                   --replace '"/usr/bin/passwd"' '"${shadow}/bin/passwd"' \
+                                   --replace '"/bin/cat"' '"${coreutils}/bin/cat"'
   '';
 
   patches = [
