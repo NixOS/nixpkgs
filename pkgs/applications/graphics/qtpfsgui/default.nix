@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   preConfigure = ''
-    export CPATH="${ilmbase}/include/OpenEXR:$CPATH"
+    export CPATH="${ilmbase.dev}/include/OpenEXR:$CPATH"
   '';
 
   qmakeFlags = [

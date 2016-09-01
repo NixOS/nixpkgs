@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nzvfxd3ybxx61rj6vxcaaxfrsxrl9af3h8jj7pr3rncisnl9gkl";
   })];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   buildInputs =
     [

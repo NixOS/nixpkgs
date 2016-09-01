@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1izddjwbh1grs8080vmaix72z469qy29wrvkphgmqmcm0sv1by7c";
   };
 
+  outputs = [ "out" "dev" ];
+
   preConfigure = ''
     ./bootstrap
   '';
