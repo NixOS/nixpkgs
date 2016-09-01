@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Note: using $out instead of $man to prevent a runtime dependency on $man.
     configureFlagsArray+=(--mandir=$out/share/man --enable-man-symlinks)
+
+    # Don't install tzdata because NixOS already has a more up-to-date copy.
+    configureFlagsArray+=(--with-tzdata=no)
+
     cd unix
   '';
 
