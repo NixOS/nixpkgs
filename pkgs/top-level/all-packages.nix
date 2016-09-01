@@ -8772,7 +8772,7 @@ in
     name = "mesa-${mesa_noglu.version}";
     # FIXME: this causes mesa to have a runtime dependency on
     # mesa_noglu.dev.
-    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
+    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu mesa_glu.dev ];
     meta = {
       platforms = lib.platforms.unix;
     };
