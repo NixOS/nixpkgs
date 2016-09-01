@@ -74,7 +74,6 @@
       rtkit = 45;
       dovecot2 = 46;
       dovenull2 = 47;
-      unbound = 48;
       prayer = 49;
       mpd = 50;
       clamav = 51;
@@ -331,7 +330,6 @@
       #rtkit = 45; # unused
       dovecot2 = 46;
       #dovenull = 47; # unused
-      #unbound = 48; # unused
       prayer = 49;
       mpd = 50;
       clamav = 51;
