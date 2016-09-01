@@ -41,6 +41,8 @@
 
 , passthru ? {}
 
+, doCheck ? false
+
 , ... } @ attrs:
 
 
@@ -58,14 +60,14 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
-    ++ lib.optionals attrs.doCheck checkInputs;
+    ++ lib.optionals doCheck checkInputs;
 
   # propagate python/setuptools to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
-  doInstallCheck = attrs.doCheck or false;
+  doInstallCheck = doCheck;
 
   postFixup = attrs.postFixup or ''
     wrapPythonPrograms
