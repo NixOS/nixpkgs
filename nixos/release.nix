@@ -89,6 +89,45 @@ let
       });
   }).config));
 
+  # Function to directly call a test file
+  # the test file should be a function returning a single test or a set of tests
+  callTest' = file: { systems ? supportedSystems, ... } @ args: 
+    let
+      # raw test function
+      testFn = import file;
+      # pkgs needed to dummy evaluate the test, not used in the final test
+      pkgs = import ../. { system = "x86_64-linux"; };
+      # basic arguments
+      testArgs = rec { inherit pkgs; inherit (pkgs) lib; } // args;
+      # test applied with basic arguments
+      dummyTest = testFn testArgs;
+      # check if the test is a derivation like in runInMachine
+      drvTest = isDerivation dummyTest;
+      # to check if it is a single test or multiple tests
+      singleTest = dummyTest ? "testScript";
+      # generate the tests with makeTest function
+      mkTest = { system ? builtins.currentSystem, ... } @ args:
+        let testLib = import ./lib/testing.nix { inherit system; };
+            # pkgs coming from testing.nix for the system tested
+            pkgsSet = { inherit testLib pkgs; };
+            test = testFn (args // pkgsSet);
+        in if drvTest then test
+              else if singleTest
+                   then testLib.makeTest test
+                   else mapAttrs (k: v: testLib.makeTest v) test;
+      # generate test jobs for systens
+      testForSys = f: genAttrs systems (system: hydraJob ( f( mkTest({ inherit system; } // testArgs)) ) );
+      in 
+        if (drvTest || singleTest)
+           then testForSys id
+           else mapAttrs (k: _: testForSys (getAttr k)) dummyTest;
+
+  # Gather tests declared in modules meta.tests
+  # args is a set of { "testName" = { extra args }; } to override test arguments, typically systems
+  moduleTests = args:
+    let tests = (import lib/eval-config.nix { modules = []; }).config.meta.tests;
+        args' = k: attrByPath [k] {} args;
+    in mapAttrs (k: v: callTest' (head v).value (args' k)) tests;
 
 in rec {
 
