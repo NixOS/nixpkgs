@@ -1,6 +1,6 @@
 # This test runs simple etcd node
 
-import ./make-test.nix ({ pkgs, ... } : {
+{ pkgs, ... } : {
   name = "etcd";
 
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -24,4 +24,4 @@ import ./make-test.nix ({ pkgs, ... } : {
       $node->succeed("etcdctl get /foo/bar | grep 'Hello world'");
     }
   '';
-})
+}

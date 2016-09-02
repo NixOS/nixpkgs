@@ -195,4 +195,8 @@ in {
       home = cfg.dataDir;
     };
   };
+
+  meta.tests = {
+    etcd = ./tests/etcd.nix;
+  };
 }

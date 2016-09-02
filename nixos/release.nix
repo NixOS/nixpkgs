@@ -260,7 +260,6 @@ in rec {
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
-  tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
   tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
   tests.ferm = callTest tests/ferm.nix {};
@@ -302,6 +301,7 @@ in rec {
     cadvisor = { systems = [ "x86_64-linux" ]; };
     kubernetes = { systems = [ "x86_64-linux" ]; };
     docker = { systems = [ "x86_64-linux" ]; };
+    etcd = { systems = [ "x86_64-linux" ]; };
   };
 
   /* Build a bunch of typical closures so that Hydra can keep track of
