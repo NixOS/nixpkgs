@@ -55,6 +55,8 @@ stdenv.mkDerivation {
     (cd $out/include && ln -s wx-*/* .)
   ";
 
+  patches = [ ./darwin.patch ];
+
   passthru = {inherit gtk compat30 compat28 unicode;};
 
   checkPhase = ''

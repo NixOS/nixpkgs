@@ -1,0 +1,56 @@
+Remove unavailable "NSOperatingSystemVersion" from wxWidgets. This should be compatible with v3.1.0.
+
+"NSOperatingSystemVersion" was apparently removed by Apple in 10.10.
+
+--- a/src/osx/cocoa/utils_base.mm
++++ b/src/osx/cocoa/utils_base.mm
+@@ -30,19 +30,6 @@
+ // our OS version is the same in non GUI and GUI cases
+ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
+ {
+-#ifdef wxHAS_NSPROCESSINFO
+-    if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)])
+-    {
+-        NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
+-
+-        if ( majorVsn != NULL )
+-            *majorVsn = osVer.majorVersion;
+-
+-        if ( minorVsn != NULL )
+-            *minorVsn = osVer.minorVersion;
+-    }
+-    else
+-#endif
+     {
+         // On OS X versions prior to 10.10 NSProcessInfo does not provide the OS version
+         // Deprecated Gestalt calls are required instead
+@@ -69,18 +56,6 @@ wxGCC_WARNING_RESTORE()
+ 
+ bool wxCheckOsVersion(int majorVsn, int minorVsn)
+ {
+-#ifdef wxHAS_NSPROCESSINFO
+-    if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)])
+-    {
+-        NSOperatingSystemVersion osVer;
+-        osVer.majorVersion = majorVsn;
+-        osVer.minorVersion = minorVsn;
+-        osVer.patchVersion = 0;
+-
+-        return [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:osVer] != NO;
+-    }
+-    else
+-#endif
+     {
+         int majorCur, minorCur;
+         wxGetOsVersion(&majorCur, &minorCur);
+@@ -133,10 +108,6 @@ wxString wxGetOsDescription()
+     if (!osName.empty())
+         osDesc += " " + osName;
+ 
+-    NSString* osVersionString = [NSProcessInfo processInfo].operatingSystemVersionString;
+-    if (osVersionString)
+-        osDesc += " " + wxCFStringRef::AsString((CFStringRef)osVersionString);
+-
+     return osDesc;
+ }
+ 
