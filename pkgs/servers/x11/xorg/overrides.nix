@@ -327,6 +327,19 @@ in
     ];
   };
 
+  # Obsolete drivers that don't compile anymore.
+  xf86videoark        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videogeode      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videoglide      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videoglint      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videoi128       = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videonewport    = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videoopenchrome = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videotga        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videov4l        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videovoodoo     = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+  xf86videowsfb       = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
+
   xf86videoamdgpu = attrs: attrs // {
     configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
   };
