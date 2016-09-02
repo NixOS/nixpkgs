@@ -271,7 +271,6 @@ in rec {
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.installer = callSubTests tests/installer.nix {};
-  tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};

@@ -190,4 +190,8 @@ in
     };
   };
 
+  meta.tests = {
+    influxdb = ./tests/influxdb.nix;
+  };
+
 }
