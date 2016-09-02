@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+{ pkgs, ...} :
 
 let
   replicateUser = "replicate";
@@ -63,4 +63,4 @@ in
     $slave2->sleep(100); # Hopefully this is long enough!!
     $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
   '';
-})
+}

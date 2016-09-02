@@ -294,4 +294,8 @@ in
 
   };
 
+  meta.tests = {
+    mysql = ./tests/mysql.nix;
+    mysqlReplication = ./tests/mysql-replication.nix;
+  };
 }
