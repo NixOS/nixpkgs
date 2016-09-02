@@ -198,7 +198,7 @@ in
      [
        { program = "login_duo";
          source  = "${pkgs.duo-unix.out}/bin/login_duo";
-         user    = "root";
+         owner   = "root";
          group   = "root";
          setuid  = true;
        }

@@ -30,7 +30,7 @@ buildGoPackage rec {
       -e 's|/bin/chown|${coreutils}/bin/chown|' \
       -e 's|/bin/date|${coreutils}/bin/date|' \
       -e 's|/sbin/poweroff|${systemd}/sbin/poweroff|' \
-      -e 's|/usr/bin/sudo|/var/setuid-wrappers/sudo|' \
+      -e 's|/usr/bin/sudo|/var/permissions-wrappers/sudo|' \
       -e 's|/sbin/cryptsetup|${cryptsetup}/bin/cryptsetup|'
   '';
 }

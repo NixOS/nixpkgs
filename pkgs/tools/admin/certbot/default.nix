@@ -29,7 +29,7 @@ pythonPackages.buildPythonApplication rec {
   buildInputs = [ dialog ] ++ (with pythonPackages; [ nose mock gnureadline ]);
 
   patchPhase = ''
-    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/var/setuid-wrappers/sendmail"
+    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/var/permissions-wrappers/sendmail"
     substituteInPlace certbot/le_util.py --replace "sw_vers" "/usr/bin/sw_vers"
   '';
 

@@ -444,33 +444,34 @@ in
 
     security.permissionsWrappers.setuid =
       [
-        (optionals config.security.pam.enableEcryptfs
-          { program = "mount.ecryptfs_private"
-            source  = "${pkgs.ecryptfs.out}/bin/mount.ecryptfs_private";
-            user    = "root";
-            group   = "root";
-            setuid  = true;
-          })
+        { program = "unix_chkpwd";
+          source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+          owner = "root";
+          group = "root";
+          setuid = true;
+        }
+
+
           
-        (optionals config.security.pam.enableEcryptfs
-          { program = "umount.ecryptfs_private";
-            source  = "${pkgs.ecryptfs.out}/bin/umount.ecryptfs_private";
-            user    = "root";
-            group   = "root";
-            setuid  = true;
-          })
-      ]
+      ] ++ (optional config.security.pam.enableEcryptfs 
+        { program = "umount.ecryptfs_private";
+          source  = "${pkgs.ecryptfs.out}/bin/umount.ecryptfs_private";
+          owner   = "root";
+          group   = "root";
+          setuid  = true;
+        }
+      ) ++ (optional config.security.pam.enableEcryptfs
+        { program = "mount.ecryptfs_private";
+          source  = "${pkgs.ecryptfs.out}/bin/mount.ecryptfs_private";
+          owner   = "root";
+          group   = "root";
+          setuid  = true;
+        }
+      );
         
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
-
-    security.setuidOwners = [ {
-      program = "unix_chkpwd";
-      source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
-      owner = "root";
-      setuid = true;
-    } ];
 
     security.pam.services =
       { other.text =

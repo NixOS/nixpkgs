@@ -262,7 +262,7 @@ chroot $mountPoint /nix/var/nix/profiles/system/activate
 # Ask the user to set a root password.
 if [ -z "$noRootPasswd" ] && [ -x $mountPoint/var/setuid-wrappers/passwd ] && [ -t 0 ]; then
     echo "setting root password..."
-    chroot $mountPoint /var/setuid-wrappers/passwd
+    chroot $mountPoint /var/permissions-wrappers/passwd
 fi
 
 

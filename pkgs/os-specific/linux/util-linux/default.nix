@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     --enable-last
     --enable-mesg
     --disable-use-tty-group
-    --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/bin:/sbin
+    --enable-fs-paths-default=/var/permissions-wrappers:/var/run/current-system/sw/bin:/sbin
     ${if ncurses == null then "--without-ncurses" else ""}
     ${if systemd == null then "" else ''
       --with-systemd

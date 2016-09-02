@@ -30,7 +30,7 @@ let
       mkdir -p $out
 
       sed '${./dbus-system-local.conf.in}' \
-        -e 's,@servicehelper@,${config.security.wrapperDir}/dbus-daemon-launch-helper,g' \
+        -e 's,@servicehelper@,${config.security.permissionsWrapperDir}/dbus-daemon-launch-helper,g' \
         -e 's,@extra@,${systemExtraxml},' \
         > "$out/system-local.conf"
 
@@ -102,9 +102,9 @@ in
 
     systemd.packages = [ pkgs.dbus.daemon ];
 
-    security.setuidOwners = singleton
+    security.permissionsWrappers.setuid = singleton
       { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus_daemon.out}/libexec/dbus-daemon-launch-helper";
+        source = "${pkgs.dbus_daemon}/libexec/dbus-daemon-launch-helper";
         owner = "root";
         group = "messagebus";
         setuid = true;

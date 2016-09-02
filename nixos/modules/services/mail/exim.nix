@@ -70,7 +70,7 @@ in
       etc."exim.conf".text = ''
         exim_user = ${cfg.user}
         exim_group = ${cfg.group}
-        exim_path = /var/setuid-wrappers/exim
+        exim_path = /var/permissions-wrappers/exim
         spool_directory = ${cfg.spoolDir}
         ${cfg.config}
       '';
@@ -93,11 +93,11 @@ in
     [
       { program = "exim";
         source  = "${pkgs.exim.out}/bin/exim";
-        user    = "root";
+        owner   = "root";
         group   = "root";
         setuid  = true;
       }
-    ]
+    ];
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";

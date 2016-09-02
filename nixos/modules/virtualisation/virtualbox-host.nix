@@ -63,7 +63,7 @@ in
     boot.extraModulePackages = [ virtualbox ];
     environment.systemPackages = [ virtualbox ];
 
-    security.setuidOwners = let
+    security.permissionsWrappers.setuid = let
       mkSuid = program: {
         inherit program;
         source = "${virtualbox}/libexec/virtualbox/${program}";

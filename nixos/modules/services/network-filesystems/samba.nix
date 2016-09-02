@@ -30,7 +30,7 @@ let
     ''
       [ global ]
       security = ${cfg.securityType}
-      passwd program = /var/setuid-wrappers/passwd %u
+      passwd program = /var/permissions-wrappers/passwd %u
       pam password change = ${smbToString cfg.syncPasswordsByPam}
       invalid users = ${smbToString cfg.invalidUsers}
 

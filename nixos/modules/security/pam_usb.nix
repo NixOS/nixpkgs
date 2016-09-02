@@ -37,20 +37,19 @@ in
       [
         { program = "pmount";
           source  = "${pkgs.pmount.out}/bin/pmount";
-          user    = "root";
+          owner   = "root";
           group   = "root";
           setuid  = true;
         }
 
         { program = "pumount";
           source  = "${pkgs.pmount.out}/bin/pumount";
-          user    = "root";
+          owner   = "root";
           group   = "root";
           setuid  = true;
         }
       ];
 
-setuidPrograms = [ "pmount" "pumount" ];
     environment.systemPackages = [ pkgs.pmount ];
 
   };

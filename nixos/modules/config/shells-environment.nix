@@ -169,7 +169,7 @@ in
          ${cfg.extraInit}
 
          # The setuid wrappers override other bin directories.
-         export PATH="${config.security.wrapperDir}:$PATH"
+         export PATH="${config.security.permissionsWrapperDir}:$PATH"
 
          # ~/bin if it exists overrides other bin directories.
          export PATH="$HOME/bin:$PATH"

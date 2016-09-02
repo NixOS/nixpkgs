@@ -87,20 +87,18 @@ in
       [
         { program = "pkexec";
           source  = "${pkgs.polkit.out}/bin/pkexec";
-          user    = "root";
+          owner   = "root";
           group   = "root";
           setuid  = true;
         }
-      ];
 
-    security.setuidOwners = [
-      { program = "polkit-agent-helper-1";
-        owner = "root";
-        group = "root";
-        setuid = true;
-        source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
-      }
-    ];
+        { program = "polkit-agent-helper-1";
+          owner = "root";
+          group = "root";
+          setuid = true;
+          source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
+        }
+      ];
 
     system.activationScripts.polkit =
       ''

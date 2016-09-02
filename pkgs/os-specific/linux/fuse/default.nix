@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       # Ensure that FUSE calls the setuid wrapper, not
       # $out/bin/fusermount. It falls back to calling fusermount in
       # $PATH, so it should also work on non-NixOS systems.
-      export NIX_CFLAGS_COMPILE="-DFUSERMOUNT_DIR=\"/var/setuid-wrappers\""
+      export NIX_CFLAGS_COMPILE="-DFUSERMOUNT_DIR=\"/var/permissions-wrappers\""
 
       sed -e 's@/bin/@${utillinux}/bin/@g' -i lib/mount_util.c
     '';

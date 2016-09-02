@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, sendmailPath ? "/var/setuid-wrappers/sendmail" }:
+{ stdenv, fetchurl, flex, bison, sendmailPath ? "/var/permissions-wrappers/sendmail" }:
 
 stdenv.mkDerivation rec {
   name = "petidomo-4.3";

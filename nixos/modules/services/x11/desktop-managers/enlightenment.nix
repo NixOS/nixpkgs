@@ -66,7 +66,7 @@ in
     [
       { program = "e_freqset";
         source  = "${e.enlightenment.out}/bin/e_freqset";
-        user    = "root";
+        owner   = "root";
         group   = "root";
         setuid  = true;        
       }

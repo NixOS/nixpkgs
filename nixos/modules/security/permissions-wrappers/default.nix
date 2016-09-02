@@ -3,10 +3,17 @@ let
 
   inherit (config.security) permissionsWrapperDir;
 
+  isNotNull = v: if v != null then true else false;
+
   cfg = config.security.permissionsWrappers;
 
-  setcapWrappers = import ./setcap-wrapper-drv.nix { };
-  setuidWrappers = import ./setuid-wrapper-drv.nix { };
+  setcapWrappers = import ./setcap-wrapper-drv.nix {
+    inherit config lib pkgs;
+  };
+
+  setuidWrappers = import ./setuid-wrapper-drv.nix {
+    inherit config lib pkgs;
+  };
 
   ###### Activation script for the setcap wrappers
   configureSetcapWrapper =
@@ -16,8 +23,7 @@ let
     , owner  ? "nobody"
     , group  ? "nogroup"
     , setcap ? false
-    }:
-    ''
+    }: ''
       cp ${setcapWrappers}/bin/${program}.wrapper ${permissionsWrapperDir}/${program}
 
       # Prevent races
@@ -43,22 +49,22 @@ let
     '';
 
   ###### Activation script for the setuid wrappers
-  makeSetuidWrapper =
+  configureSetuidWrapper =
     { program
     , source ? null
     , owner  ? "nobody"
+    # Legacy code I can't find :(
+    , user   ? null
     , group  ? "nogroup"
     , setuid ? false
     , setgid ? false
     , permissions ? "u+rx,g+x,o+x"
-    }:
-
-    ''
+    }: ''
       cp ${setuidWrappers}/bin/${program}.wrapper ${permissionsWrapperDir}/${program}
 
       # Prevent races
       chmod 0000 ${permissionsWrapperDir}/${program}
-      chown ${owner}.${group} ${permissionsWrapperDir}/${program}
+      chown ${if user != null then user else owner}.${group} ${permissionsWrapperDir}/${program}
 
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${permissionsWrapperDir}/${program}
     '';
@@ -68,12 +74,12 @@ in
   ###### interface
 
   options = {
-    security.permissionsWrappers.setcap = mkOption {
-      type    = types.listOf types.attrs;
+    security.permissionsWrappers.setcap = lib.mkOption {
+      type    = lib.types.listOf lib.types.attrs;
       default = [];
       example =
         [ { program = "ping";
-            source  = "${pkgs.iputils.out}/bin/ping"
+            source  = "${pkgs.iputils.out}/bin/ping";
             owner   = "nobody";
             group   = "nogroup";
             setcap  = true;
@@ -106,12 +112,12 @@ in
       '';
     };
 
-    security.permissionsWrappers.setuid = mkOption {
-      type = types.listOf types.attrs;
+    security.permissionsWrappers.setuid = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
       default = [];
       example =
         [ { program = "sendmail";
-            source = "${pkgs.sendmail.bin}/bin/sendmail";
+            source = "/nix/store/.../bin/sendmail";
             owner = "nobody";
             group = "postdrop";
             setuid = false;
@@ -126,8 +132,8 @@ in
       '';
     };
 
-    security.permissionsWrapperDir = mkOption {
-      type        = types.path;
+    security.permissionsWrapperDir = lib.mkOption {
+      type        = lib.types.path;
       default     = "/var/permissions-wrappers";
       internal    = true;
       description = ''
@@ -152,7 +158,7 @@ in
 
     ###### setcap activation script
     system.activationScripts.setcap =
-      stringAfter [ "users" ]
+      lib.stringAfter [ "users" ]
         ''
           # Look in the system path and in the default profile for
           # programs to be wrapped.
@@ -168,12 +174,12 @@ in
           # Concatenate the generated shell slices to configure
           # wrappers for each program needing specialized capabilities.
 
-          ${concatMapStrings configureSetcapWrapper cfg.setcap}
+          ${lib.concatMapStrings configureSetcapWrapper (builtins.filter isNotNull cfg.setcap)}
         '';
 
     ###### setuid activation script
     system.activationScripts.setuid =
-      stringAfter [ "users" ]
+      lib.stringAfter [ "users" ]
         ''
           # Look in the system path and in the default profile for
           # programs to be wrapped.
@@ -189,7 +195,7 @@ in
           # Concatenate the generated shell slices to configure
           # wrappers for each program needing specialized capabilities.
 
-          ${concatMapStrings configureSetuidWrapper cfg.setuid}
+          ${lib.concatMapStrings configureSetuidWrapper (builtins.filter isNotNull cfg.setuid)}
         '';
 
   };

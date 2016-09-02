@@ -1,5 +1,5 @@
 { fetchurl, stdenv, glib, xorg, cairo, gtk, pango, makeWrapper, openssl, bzip2,
-  pkexecPath ? "/var/setuid-wrappers/pkexec", libredirect,
+  pkexecPath ? "/var/permissions-wrappers/pkexec", libredirect,
   gksuSupport ? false, gksu}:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";

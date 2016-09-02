@@ -1,5 +1,5 @@
 { stdenv, fetchurl, coreutils, pam, groff
-, sendmailPath ? "/var/setuid-wrappers/sendmail"
+, sendmailPath ? "/var/permissions-wrappers/sendmail"
 , withInsults ? false
 }:
 

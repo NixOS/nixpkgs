@@ -1,5 +1,5 @@
 {stdenv, fetchurl,
-sendmailPath ? "/var/setuid-wrappers/sendmail" }:
+sendmailPath ? "/var/permissions-wrappers/sendmail" }:
 
 stdenv.mkDerivation rec {
 

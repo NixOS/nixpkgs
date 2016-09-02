@@ -119,7 +119,7 @@ in
           '';
       };
 
-    security.setuidOwners = singleton
+    security.permissionsWrappers.setuid = singleton
       { program = "kcheckpass";
         source = "${kde_workspace}/lib/kde4/libexec/kcheckpass";
         owner = "root";

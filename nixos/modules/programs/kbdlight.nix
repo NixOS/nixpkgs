@@ -15,7 +15,7 @@ in
     security.permissionsWrappers.setuid =
     [ { program = "kbdlight";
         source  = "${pkgs.kbdlight.out}/bin/kbdlight";
-        user    = "root";
+        owner   = "root";
         group   = "root";
         setuid  = true;        
     }];

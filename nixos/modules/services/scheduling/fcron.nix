@@ -96,7 +96,7 @@ in
             fcronallow  =       /etc/fcron.allow
             fcrondeny   =       /etc/fcron.deny
             shell       =       /bin/sh
-            sendmail    =       /var/setuid-wrappers/sendmail
+            sendmail    =       /var/permissions-wrappers/sendmail
             editor      =       /run/current-system/sw/bin/vi
           '';
           target = "fcron.conf";
@@ -110,7 +110,7 @@ in
     [
       { program = "fcrontab";
         source  = "${pkgs.fcron.out}/bin/fcrontab";
-        user    = "root";
+        owner   = "root";
         group   = "root";
         setuid  = true;        
       }

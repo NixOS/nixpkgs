@@ -102,18 +102,18 @@ in
         chgpasswd = { rootOK = true; };
       };
 
-    security.setuidPrograms = 
+    security.permissionsWrappers.setuid = 
     [
       { program = "su";
         source  = "${pkgs.shadow.su}/bin/su";
-        user    = "root";
+        owner   = "root";
         group   = "root";
         setuid  = true;        
       }
 
       { program = "chfn";
         source  = "${pkgs.shadow.out}/bin/chfn";
-        user    = "root";
+        owner   = "root";
         group   = "root";
         setuid  = true;
       }

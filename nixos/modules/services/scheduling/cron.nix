@@ -20,7 +20,7 @@ let
   cronNixosPkg = pkgs.cron.override {
     # The mail.nix nixos module, if there is any local mail system enabled,
     # should have sendmail in this path.
-    sendmailPath = "/var/setuid-wrappers/sendmail";
+    sendmailPath = "/var/permissions-wrappers/sendmail";
   };
 
   allFiles =
@@ -61,7 +61,7 @@ in
           A list of Cron jobs to be appended to the system-wide
           crontab.  See the manual page for crontab for the expected
           format. If you want to get the results mailed you must setuid
-          sendmail. See <option>security.setuidOwners</option>
+          sendmail. See <option>security.permissionsWrappers.setuid</option>
 
           If neither /var/cron/cron.deny nor /var/cron/cron.allow exist only root
           will is allowed to have its own crontab file. The /var/cron/cron.deny file
@@ -99,7 +99,7 @@ in
       [
         { program = "crontab";
           source  = "${pkgs.cronNixosPkg.out}/bin/crontab";
-          user    = "root";
+          owner   = "root";
           group   = "root";
           setuid  = true;        
         }

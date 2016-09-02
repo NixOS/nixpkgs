@@ -13,7 +13,7 @@ let
              source=/nix/var/nix/profiles/default/bin/${program}
          fi
 
-         gcc -Wall -O2 -DWRAPPER_SETUID=1 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${cfg.permissionsWrapperDir}\" \
+         gcc -Wall -O2 -DWRAPPER_SETUID=1 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.permissionsWrapperDir}\" \
              -lcap-ng -lcap ${./permissions-wrapper.c} -o $out/bin/${program}.wrapper
        '';
 in
@@ -31,6 +31,6 @@ pkgs.stdenv.mkDerivation {
 
     # Concat together all of our shell splices to compile
     # binary wrapper programs for all configured setcap programs.
-    ${concatMapStrings mkSetuidWrapper cfg.setuid}
+    ${lib.concatMapStrings mkSetuidWrapper cfg.setuid}
   '';
-};
+}

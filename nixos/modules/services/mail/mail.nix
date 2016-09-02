@@ -26,7 +26,7 @@ with lib;
 
   config = mkIf (config.services.mail.sendmailSetuidWrapper != null) {
 
-    security.setuidOwners = [ config.services.mail.sendmailSetuidWrapper ];
+    security.permissionsWrappers.setuid = [ config.services.mail.sendmailSetuidWrapper ];
 
   };
 

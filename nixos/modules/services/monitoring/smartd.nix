@@ -124,7 +124,7 @@ in
           };
 
           mailer = mkOption {
-            default = "/var/setuid-wrappers/sendmail";
+            default = "/var/permissions-wrappers/sendmail";
             type = types.path;
             description = ''
               Sendmail-compatible binary to be used to send the messages.

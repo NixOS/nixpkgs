@@ -42,8 +42,10 @@ in
 
   config = mkIf cfg.enable {
 
-    security.setuidOwners = map (program: {
+    security.permissionsWrappers.setuid = map (program: {
       inherit program;
+
+      source = "${pkgs.atd}/bin/${program}";
       owner = "atd";
       group = "atd";
       setuid = true;

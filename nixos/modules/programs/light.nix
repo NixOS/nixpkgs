@@ -25,7 +25,7 @@ in
     security.permissionsWrappers.setuid =
     [ { program = "light";
         source  = "${pkgs.light.out}/bin/light";
-        user    = "root";
+        owner   = "root";
         group   = "root";
         setuid  = true;        
     }];

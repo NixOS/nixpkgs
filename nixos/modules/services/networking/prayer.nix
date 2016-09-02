@@ -18,7 +18,7 @@ let
     var_prefix = "${stateDir}"
     prayer_user = "${prayerUser}"
     prayer_group = "${prayerGroup}"
-    sendmail_path = "/var/setuid-wrappers/sendmail"
+    sendmail_path = "/var/permissions-wrappers/sendmail"
 
     use_http_port ${cfg.port}
 
