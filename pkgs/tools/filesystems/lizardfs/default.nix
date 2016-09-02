@@ -7,6 +7,8 @@
 , asciidoc
 , libxml2
 , libxslt
+, docbook_xml_dtd_412
+, docbook_xsl
 , boost
 , pkgconfig
 , judy
@@ -25,7 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "18p2pj9crjqgxxxzdfcs3j3fqhinmwi7qxcf71jsw17syqwyygh8";
   };
 
-  buildInputs = [ cmake fuse asciidoc libxml2.bin libxslt.bin zlib boost pkgconfig judy pam makeWrapper ];
+  buildInputs = 
+    [ cmake fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
+      zlib boost pkgconfig judy pam makeWrapper
+    ];
 
   patches = [ ./412.patch ];
 
