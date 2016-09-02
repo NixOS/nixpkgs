@@ -77,12 +77,31 @@ in
 
     };
 
+    systemd.user.dbus = {
+
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Start the session D-Bus instance on-demand via a systemd user
+          service. This is upstream's recommended way to start D-Bus.
+        '';
+      };
+
+    };
+
   };
 
 
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    warnings =
+      lib.optional
+        (config.systemd.user.dbus.enable
+         && config.services.xserver.startDbusSession)
+        "systemd.user.dbus.enable should not be set at the same time as services.xserver.startDbusSession";
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus_tools ];
 
@@ -122,7 +141,7 @@ in
 
     systemd.services.dbus.restartTriggers = [ configDir ];
 
-    systemd.user = {
+    systemd.user = mkIf config.systemd.user.dbus.enable {
       services.dbus = {
         description = "D-Bus User Message Bus";
         requires = [ "dbus.socket" ];
