@@ -60,4 +60,8 @@ in {
 
     users.extraUsers.peerflix.uid = config.ids.uids.peerflix;
   };
+
+  meta.tests = {
+    peerflix = ./tests/peerflix.nix;
+  };
 }
