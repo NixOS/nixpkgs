@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
   snakeOilPrivateKey = pkgs.writeText "privkey.snakeoil" ''
@@ -68,4 +68,4 @@ in {
                        " server true");
     };
   '';
-})
+}

@@ -373,4 +373,8 @@ in
 
   };
 
+  meta.tests = {
+    openssh = ./tests/openssh.nix;
+  };
+
 }
