@@ -273,6 +273,7 @@
   mudri = "James Wood <lamudri@gmail.com>";
   muflax = "Stefan Dorn <mail@muflax.com>";
   myrl = "Myrl Hex <myrl.0xf@gmail.com>";
+  nand0p = "Fernando Jose Pando <nando@hex7.com>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
   Nate-Devv = "Nathan Moore <natedevv@gmail.com>";
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
@@ -352,6 +353,7 @@
   rvlander = "Gaëtan André <rvlander@gaetanandre.eu>";
   ryanartecona = "Ryan Artecona <ryanartecona@gmail.com>";
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
+  ryansydnor = "Ryan Sydnor <ryan.t.sydnor@gmail.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   ryneeverett = "Ryne Everett <ryneeverett@gmail.com>";
   s1lvester = "Markus Silvester <s1lvester@bockhacker.me>";

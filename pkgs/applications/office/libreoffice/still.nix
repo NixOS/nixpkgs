@@ -69,6 +69,16 @@ in stdenv.mkDerivation rec {
     sha256 = "1qg0dj0zwh5ifhmvv4k771nmyqddz4ifn75s9mr1p0nyix8zks8x";
   };
 
+  # we only have this problem on i686 ATM
+  patches = if stdenv.is64bit then null else [
+    (fetchurl {
+      name = "disable-flaky-tests.diff";
+      url = "https://anonscm.debian.org/git/pkg-openoffice/libreoffice.git/plain"
+        + "/patches/disable-flaky-tests.diff?h=libreoffice_5.1.5_rc2-1";
+      sha256 = "1v1aiqdi64iijjraj6v4ljzclrd9lqan54hmy2h6m20x3ab005wb";
+    })
+  ];
+
   # Openoffice will open libcups dynamically, so we link it directly
   # to make its dlopen work.
   # It also seems not to mention libdl explicitly in some places.

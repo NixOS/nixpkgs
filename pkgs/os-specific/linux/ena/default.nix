@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
+  # linux 3.12
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   configurePhase =
     ''
       cd kernel/linux/ena

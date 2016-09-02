@@ -715,8 +715,8 @@ Python attribute sets are created for each interpreter version. We will therefor
 In the following example we change the name of the package `pandas` to `foo`.
 ```
 newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
+  python35Packages = (super.python35Packages.override { self = python35Packages;})
+    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
   };
 });
 ```
@@ -727,8 +727,8 @@ with import <nixpkgs> {};
 (let
 
 newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
+  python35Packages = (super.python35Packages.override { self = python35Packages;})
+    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
   };
 });
 in newpkgs.python35.withPackages (ps: [ps.blaze])
@@ -743,7 +743,7 @@ with import <nixpkgs> {};
 
 newpkgs = pkgs.overridePackages(self: super: rec {
   python35Packages = super.python35Packages.override {
-    self = python35Packages // { scipy = python35Packages.scipy_0_16;};
+    self = python35Packages // { scipy = python35Packages.scipy_0_17;};
   };
 });
 in newpkgs.python35.withPackages (ps: [ps.blaze])
@@ -751,23 +751,41 @@ in newpkgs.python35.withPackages (ps: [ps.blaze])
 ```
 The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
 
+A similar example but now using `django`
+```
+with import <nixpkgs> {};
+
+(let
+
+newpkgs = pkgs.overridePackages(self: super: rec {
+  python27Packages = (super.python27Packages.override {self = python27Packages;})
+    // { django = super.python27Packages.django_1_9; };
+});
+in newpkgs.python27.withPackages (ps: [ps.django_guardian ])
+).env
+```
+
 ### `python setup.py bdist_wheel` cannot create .whl
 
-Executing `python setup.py bdist_wheel` fails with
+Executing `python setup.py bdist_wheel` in a `nix-shell `fails with
 ```
 ValueError: ZIP does not support timestamps before 1980
 ```
 This is because files are included that depend on items in the Nix store which have a timestamp of, that is, it corresponds to January the 1st, 1970 at 00:00:00. And as the error informs you, ZIP does not support that.
-Fortunately `bdist_wheel` takes into account `SOURCE_DATE_EPOCH`. On Nix this value is set to 1. By setting it to a value correspond to 1980 or later it is possible to build wheels.
+The command `bdist_wheel` takes into account `SOURCE_DATE_EPOCH`, and `nix-shell` sets this to 1. By setting it to a value corresponding to 1980 or later, or by unsetting it, it is possible to build wheels.
 
 Use 1980 as timestamp:
 ```
-SOURCE_DATE_EPOCH=315532800 python3 setup.py bdist_wheel
+nix-shell --run "SOURCE_DATE_EPOCH=315532800 python3 setup.py bdist_wheel"
 ```
 or the current time:
 ```
-SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel
+nix-shell --run "SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel"
 ```
+or unset:
+"""
+nix-shell --run "unset SOURCE_DATE_EPOCH; python3 setup.py bdist_wheel"
+"""
 
 ### `install_data` / `data_files` problems
 

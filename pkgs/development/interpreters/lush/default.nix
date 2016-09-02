@@ -1,5 +1,5 @@
 {stdenv, fetchurl, libX11, xproto, indent, readline, gsl, freeglut, mesa, SDL
-, blas, binutils, intltool, gettext, zlib}:
+, blas, binutils, intltool, gettext, zlib, libSM}:
 
 stdenv.mkDerivation rec {
   baseName = "lush";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 xproto indent readline gsl freeglut mesa SDL blas binutils
+    libX11 libSM xproto indent readline gsl freeglut mesa SDL blas binutils
     intltool gettext zlib
   ];
 

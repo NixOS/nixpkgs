@@ -18,10 +18,6 @@ rec {
   };
 
   cargo = callPackage ./cargo.nix rec {
-    # TODO: We're temporarily tracking master here as Darwin needs the
-    # `http.cainfo` option from .cargo/config which isn't released
-    # yet.
-
     version = "beta-2016-07-25";
     srcRev = "f09ef68cc47956ccc5f99212bdcdd15298c400a0";
     srcSha = "1r6q9jd0fl6mzhwkvrrcv358q2784hg51dfpy28xgh4n61m7c155";

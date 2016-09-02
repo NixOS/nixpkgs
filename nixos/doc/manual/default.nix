@@ -63,12 +63,6 @@ let
     ''
       cp -prd $sources/* . # */
       chmod -R u+w .
-      cp ${../../modules/services/databases/postgresql.xml} configuration/postgresql.xml
-      cp ${../../modules/services/misc/gitlab.xml} configuration/gitlab.xml
-      cp ${../../modules/services/misc/taskserver/doc.xml} configuration/taskserver.xml
-      cp ${../../modules/security/acme.xml} configuration/acme.xml
-      cp ${../../modules/i18n/input-method/default.xml} configuration/input-methods.xml
-      cp ${../../modules/services/editors/emacs.xml} configuration/emacs.xml
       ln -s ${modulesDoc} configuration/modules.xml
       ln -s ${optionsDocBook} options-db.xml
       echo "${version}" > version
