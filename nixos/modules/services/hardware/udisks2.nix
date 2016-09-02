@@ -51,4 +51,8 @@ with lib;
     };
   };
 
+  meta.tests = {
+    udisks2 = ./tests/udisks2.nix;
+  };
+
 }
