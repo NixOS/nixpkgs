@@ -483,6 +483,8 @@ in
     pkgs_i686 = pkgsi686Linux;
   };
 
+  adb-sync = callPackage ../development/mobile/adb-sync { };
+
   apg = callPackage ../tools/security/apg { };
 
   autorevision = callPackage ../tools/misc/autorevision { };
