@@ -171,4 +171,8 @@ in {
       };
     };
   };
+
+  meta.tests = {
+    jenkins = ./test.nix;
+  };
 }
