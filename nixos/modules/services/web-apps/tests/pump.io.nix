@@ -1,6 +1,6 @@
 # This test runs pump.io with mongodb, listing on port 443.
 
-import ./make-test.nix ({ pkgs, ...} : let
+{ pkgs, ...} : let
   snakeOilKey = ''
     -----BEGIN PRIVATE KEY-----
     MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCqVemio78R41Tz
@@ -91,4 +91,4 @@ in {
     $one->waitForUnit("pump.io.service");
     $one->waitUntilSucceeds("curl -k https://localhost");
   '';
-})
+}

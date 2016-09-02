@@ -361,4 +361,8 @@ in
         createHome = true;
       };
   };
+
+  meta.tests = {
+    pumpio = ./tests/pump.io.nix;
+  };
 }
