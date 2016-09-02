@@ -536,5 +536,10 @@ in {
     })
   ];
 
-  meta.doc = ./doc.xml;
+  meta = {
+    doc = ./doc.xml;
+    tests = {
+      taskserver = ./test.nix;
+    };
+  };
 }
