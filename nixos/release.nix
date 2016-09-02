@@ -299,7 +299,6 @@ in rec {
   tests.samba = callTest tests/samba.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
-  tests.xfce = callTest tests/xfce.nix {};
   tests.module = moduleTests {
     cadvisor = { systems = [ "x86_64-linux" ]; };
     kubernetes = { systems = [ "x86_64-linux" ]; };

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "xfce";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow shlevy ];
@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine =
     { config, pkgs, ... }:
 
-    { imports = [ ./common/user-account.nix ];
+    { imports = [ <nixpkgs/nixos/tests/common/user-account.nix> ];
 
       services.xserver.enable = true;
 
@@ -39,4 +39,4 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->mustFail("su - bob -c 'DISPLAY=:0.0 xmessage Foo'");
       $machine->mustFail("su - bob -c 'DISPLAY=:0 xmessage Foo'");
     '';
-})
+}
