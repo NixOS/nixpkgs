@@ -48,6 +48,7 @@
 , "sloc"
 , "smartdc"
 , "stylus"
+, "svgo"
 , "titanium"
 , "typescript"
 , "uglify-js"
