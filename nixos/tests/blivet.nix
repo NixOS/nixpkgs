@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: with pkgs.pythonPackages; rec {
+{ pkgs, ... }: with pkgs.pythonPackages; rec {
   name = "blivet";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig ];
@@ -84,4 +84,4 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.pythonPackages; rec {
     $machine->succeed("${blivetTest}");
     $machine->execute("rm -rf /tmp/xchg/bigtmp");
   '';
-})
+}

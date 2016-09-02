@@ -1,6 +1,5 @@
-{ system ? builtins.currentSystem }:
+{ pkgs, system ? builtins.currentSystem, ... }:
 
-with import ../lib/testing.nix { inherit system; };
 with import ../lib/qemu-flags.nix;
 with pkgs.lib;
 
@@ -46,7 +45,7 @@ let
           ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
         '';
       };
-    in makeTest {
+    in {
       name = "ec2-" + name;
       nodes = {};
       testScript =

@@ -1,6 +1,5 @@
-{ system ? builtins.currentSystem, debug ? false }:
+{ pkgs, system ? builtins.currentSystem, debug ? false, ... }:
 
-with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
 
 let
@@ -323,7 +322,7 @@ let
     headless.services.xserver.enable = false;
   };
 
-  mkVBoxTest = name: testScript: makeTest {
+  mkVBoxTest = name: testScript: {
     name = "virtualbox-${name}";
 
     machine = { lib, config, ... }: {

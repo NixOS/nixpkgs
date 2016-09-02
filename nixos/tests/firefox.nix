@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+{ pkgs, ... }: {
   name = "firefox";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow shlevy ];
@@ -20,4 +20,4 @@ import ./make-test.nix ({ pkgs, ... }: {
       $machine->screenshot("screen");
     '';
 
-})
+}

@@ -1,16 +1,16 @@
-{ system ? builtins.currentSystem
-, pkgs ? import ../.. { inherit system; }
+{ pkgs
+, system ? builtins.currentSystem
 , channelMap ? {
     stable = pkgs.chromium;
     beta   = pkgs.chromiumBeta;
     dev    = pkgs.chromiumDev;
   }
+, ...
 }:
 
-with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
 
-mapAttrs (channel: chromiumPkg: makeTest rec {
+mapAttrs (channel: chromiumPkg: rec {
   name = "chromium-${channel}";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig ];

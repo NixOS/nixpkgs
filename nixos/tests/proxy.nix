@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : 
+{ pkgs, ...} : 
 
 let
 
@@ -93,4 +93,4 @@ in
       $backend2->unblock;
       $client->succeed("curl --fail http://proxy/");
     '';
-})
+}

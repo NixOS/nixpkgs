@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
+{ pkgs, latestKernel ? false, ... }:
 
 {
   name = "login";
@@ -68,4 +68,4 @@ import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
       };
     '';
 
-})
+}

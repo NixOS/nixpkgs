@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+{ pkgs, ...} :
 
 let
 
@@ -92,4 +92,4 @@ rec {
       $server->stopJob("quake3-server");
     '';
 
-})
+}

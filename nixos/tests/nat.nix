@@ -3,7 +3,7 @@
 # client on the inside network, a server on the outside network, and a
 # router connected to both that performs Network Address Translation
 # for the client.
-import ./make-test.nix ({ pkgs, withFirewall, ... }:
+{ pkgs, withFirewall, ... }:
   let
     unit = if withFirewall then "firewall" else "nat";
   in
@@ -83,4 +83,4 @@ import ./make-test.nix ({ pkgs, withFirewall, ... }:
         $client->succeed("curl --fail http://server/ >&2");
         $client->succeed("ping -c 1 server >&2");
       '';
-  })
+  }

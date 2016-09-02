@@ -1,6 +1,6 @@
 # Test printing via CUPS.
 
-import ./make-test.nix ({pkgs, ... }: {
+{pkgs, ... }: {
   name = "printing";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ domenkozar eelco chaoflow jgeerds ];
@@ -96,4 +96,4 @@ import ./make-test.nix ({pkgs, ... }: {
           };
       }
     '';
-})
+}

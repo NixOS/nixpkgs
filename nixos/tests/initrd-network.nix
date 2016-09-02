@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "initrd-network";
 
   meta.maintainers = [ pkgs.stdenv.lib.maintainers.eelco ];
@@ -19,4 +19,4 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->waitForUnit("multi-user.target");
       $machine->succeed("ip link >&2");
     '';
-})
+}

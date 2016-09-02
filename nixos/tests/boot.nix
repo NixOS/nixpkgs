@@ -1,6 +1,5 @@
-{ system ? builtins.currentSystem }:
+{ pkgs, system ? builtins.currentSystem, ... }:
 
-with import ../lib/testing.nix { inherit system; };
 with import ../lib/qemu-flags.nix;
 with pkgs.lib;
 
@@ -16,7 +15,7 @@ let
     }).config.system.build.isoImage;
 
   makeBootTest = name: machineConfig:
-    makeTest {
+    {
       inherit iso;
       name = "boot-" + name;
       nodes = { };
@@ -77,7 +76,7 @@ in {
         ];
       };
     in
-      makeTest {
+      {
         name = "boot-netboot";
         nodes = { };
         testScript =

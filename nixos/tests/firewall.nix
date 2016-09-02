@@ -1,6 +1,6 @@
 # Test the firewall module.
 
-import ./make-test.nix ( { pkgs, ... } : {
+{ pkgs, ... } : {
   name = "firewall";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow ];
@@ -62,4 +62,4 @@ import ./make-test.nix ( { pkgs, ... } : {
     $walled->succeed("${newSystem}/bin/switch-to-configuration test 2>&1" .
                      " | grep -qF firewall.service");
   '';
-})
+}

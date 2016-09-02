@@ -1,6 +1,5 @@
-{ system ? builtins.currentSystem }:
+{ pkgs, system ? builtins.currentSystem, ... }:
 
-with import ../lib/testing.nix { inherit system; };
 with import ../lib/qemu-flags.nix;
 with pkgs.lib;
 
@@ -163,7 +162,7 @@ let
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid"
     , enableOCR ? false, meta ? {}
     }:
-    makeTest {
+    {
       inherit enableOCR;
       name = "installer-" + name;
       meta = with pkgs.stdenv.lib.maintainers; {

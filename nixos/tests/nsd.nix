@@ -5,7 +5,7 @@ let
     # for a host utility with IPv6 support
     environment.systemPackages = [ pkgs.bind ];
   };
-in import ./make-test.nix ({ pkgs, ...} : {
+in { pkgs, ...} : {
   name = "nsd";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig ];
@@ -83,4 +83,4 @@ in import ./make-test.nix ({ pkgs, ...} : {
       };
     }
   '';
-})
+}

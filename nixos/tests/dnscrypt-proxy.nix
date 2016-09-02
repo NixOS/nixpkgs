@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+{ pkgs, ... }: {
   name = "dnscrypt-proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ joachifm ];
@@ -30,4 +30,4 @@ import ./make-test.nix ({ pkgs, ... }: {
     $client->execute("${pkgs.iputils}/bin/ping -c1 example.com");
     $client->succeed("systemctl is-active dnscrypt-proxy");
   '';
-})
+}

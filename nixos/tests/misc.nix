@@ -1,6 +1,6 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "misc";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow ];
@@ -127,4 +127,4 @@ import ./make-test.nix ({ pkgs, ...} : {
           $machine->succeed("[ `su - alice -c 'pgrep -c -u root'` != 0 ]");
       };
     '';
-})
+}

@@ -1,6 +1,6 @@
 # Test whether hibernation from partition works.
 
-import ./make-test.nix (pkgs: {
+{ pkgs, ... }: {
   name = "hibernate";
 
   nodes = {
@@ -39,4 +39,4 @@ import ./make-test.nix (pkgs: {
       $probe->waitUntilSucceeds("echo test | nc -c machine 4444");
     '';
 
-})
+}

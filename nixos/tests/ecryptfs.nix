@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 {
   name = "ecryptfs";
 
@@ -78,4 +78,4 @@ import ./make-test.nix ({ pkgs, ... }:
 
     $machine->sendChars("logout\n");
   '';
-})
+}

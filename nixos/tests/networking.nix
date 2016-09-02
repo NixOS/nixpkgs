@@ -1,6 +1,5 @@
-{ system ? builtins.currentSystem, networkd }:
+{ pkgs, system ? builtins.currentSystem, networkd, ... }:
 
-with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
 
 let
@@ -385,7 +384,7 @@ let
     };
   };
 
-in mapAttrs (const (attrs: makeTest (attrs // {
+in mapAttrs (const (attrs: (attrs // {
   name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ wkennington ];

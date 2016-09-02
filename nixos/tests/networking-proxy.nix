@@ -10,7 +10,7 @@ let default-config = {
 
         virtualisation.memorySize = 128;
       };
-in import ./make-test.nix ({ pkgs, ...} : {
+in { pkgs, ...} : {
   name = "networking-proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [  ];
@@ -108,4 +108,4 @@ in import ./make-test.nix ({ pkgs, ...} : {
       $machine4->mustSucceed("su - alice -c 'env | grep -i ftp_proxy | grep 000'");
       $machine4->mustSucceed("su - alice -c 'env | grep -i no_proxy | grep 131415'");
     '';
-})
+}

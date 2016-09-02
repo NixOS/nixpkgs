@@ -6,7 +6,7 @@
 # which only works if the first client successfully uses the UPnP-IGD
 # protocol to poke a hole in the NAT.
 
-import ./make-test.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
 
@@ -113,4 +113,4 @@ in
       $client2->succeed("cmp /tmp/test.tar.bz2 ${file}");
     '';
 
-})
+}

@@ -1,6 +1,6 @@
 # This test start mongodb, runs a query using mongo shell
 
-import ./make-test.nix ({ pkgs, ...} : let
+{ pkgs, ...} : let
   testQuery = pkgs.writeScript "nixtest.js" ''
     db.greetings.insert({ "greeting": "hello" });
     print(db.greetings.findOne().greeting);
@@ -31,4 +31,4 @@ in {
     $one->waitForUnit("mongodb.service");
     $one->succeed("mongo nixtest ${testQuery}") =~ /hello/ or die;
   '';
-})
+}

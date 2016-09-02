@@ -1,6 +1,4 @@
-{ system ? builtins.currentSystem }:
-
-with import ../lib/testing.nix { inherit system; };
+{ pkgs, system ? builtins.currentSystem, ... }:
 
 let
   testReader = pkgs.writeScript "test-input-reader" ''
@@ -43,7 +41,7 @@ let
     readerInput = flatten (mapAttrsToList mkReaderInput tests);
     perlStr = val: "'${escape ["'" "\\"] val}'";
     perlReaderInput = concatMapStringsSep ", " perlStr readerInput;
-  in makeTest {
+  in {
     name = "keymap-${layout}";
 
     machine.i18n.consoleKeyMap = mkOverride 900 layout;
