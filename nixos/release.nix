@@ -279,7 +279,6 @@ in rec {
   #tests.lightdm = callTest tests/lightdm.nix {};
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
-  tests.mathics = callTest tests/mathics.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mongodb = callTest tests/mongodb.nix {};
   tests.mumble = callTest tests/mumble.nix {};

@@ -51,4 +51,8 @@ in {
       };
     };
   };
+
+  meta.tests = {
+    mathics = ./tests/mathics.nix;
+  };
 }

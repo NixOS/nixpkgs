@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+{ pkgs, ... }: {
   name = "mathics";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ benley ];
@@ -17,4 +17,4 @@ import ./make-test.nix ({ pkgs, ... }: {
     $machine->waitForOpenPort(8888);
     $machine->succeed("curl http://localhost:8888/");
   '';
-})
+}
