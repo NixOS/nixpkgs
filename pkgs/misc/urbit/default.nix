@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     ncurses perl zlib python
   ];
 
+  # uses 'readdir_r' deprecated by glibc 2.24
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   configurePhase = ''
     :
   '';

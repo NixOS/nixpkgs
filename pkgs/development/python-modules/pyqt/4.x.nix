@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
+{ lib, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
 
 let
   version = "4.11.3";
-  inherit (pythonPackages) python dbus-python sip;
-in stdenv.mkDerivation {
-  name = "${python.libPrefix}-PyQt-x11-gpl-${version}";
+  inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
+in mkPythonDerivation {
+  name = "PyQt-x11-gpl-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt4/PyQt-${version}/PyQt-x11-gpl-${version}.tar.gz";
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ pkgconfig makeWrapper qt4 lndir dbus_libs ];
 
-  propagatedBuildInputs = [ sip python ];
+  propagatedBuildInputs = [ sip ];
 
   postInstall = ''
     for i in $out/bin/*; do
@@ -42,7 +42,6 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    pythonPath = [];
     qt = qt4;
   };
 
@@ -50,7 +49,7 @@ in stdenv.mkDerivation {
     description = "Python bindings for Qt";
     license = "GPL";
     homepage = http://www.riverbankcomputing.co.uk;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.mesaPlatforms;
   };
 }

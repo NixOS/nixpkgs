@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "SQL/RDF database used by, e.g., KDE-nepomuk";
     homepage = http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/;
     #configure: The current version [...] can only be built on 64bit platforms
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.urkud ];
   };
 }

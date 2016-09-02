@@ -981,16 +981,6 @@ self: super: {
   # us when we patch the cabal file (Link options will be recored in the ghc package registry).
   GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
 
-  # https://github.com/gwern/mueval/issues/14
-  mueval = overrideCabal super.mueval (drv: {
-    revision = null;
-    editedCabalFile = null;
-    patches = [(pkgs.fetchpatch {
-      url = "https://github.com/gwern/mueval/commit/866f895e0b671bcaa232b46ed93dd7d47a4b32b2.patch";
-      sha256 = "16pb9nfr52hwidxv0f7j4yg8yd86959kzbcw9lmnzpvgdy5qyvkg";
-    })];
-  });
-
   # remove if a version > 0.1.0.1 ever gets released
   stunclient = overrideCabal super.stunclient (drv: {
     postPatch = (drv.postPatch or "") + ''

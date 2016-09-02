@@ -20,7 +20,7 @@ in
 
           postVM =
             ''
-              PATH=$PATH:${stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+              PATH=$PATH:${lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
               pushd $out
               ${pkgs.qemu_kvm}/bin/qemu-img convert -c -O qcow2 $diskImageBase nixos.qcow2
               rm $diskImageBase

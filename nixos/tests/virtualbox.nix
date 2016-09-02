@@ -314,6 +314,9 @@ let
 
     test2.vmFlags = hostonlyVMFlags;
     test2.vmScript = dhcpScript;
+
+    headless.virtualisation.virtualbox.headless = true;
+    headless.services.xserver.enable = false;
   };
 
   mkVBoxTest = name: testScript: makeTest {
@@ -400,6 +403,14 @@ in mapAttrs mkVBoxTest {
     });
 
     shutdownVM_simple;
+  '';
+
+  headless = ''
+    createVM_headless;
+    $machine->succeed(ru("VBoxHeadless --startvm headless & disown %1"));
+    waitForStartup_headless;
+    waitForVMBoot_headless;
+    shutdownVM_headless;
   '';
 
   host-usb-permissions = ''

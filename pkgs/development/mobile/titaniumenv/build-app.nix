@@ -1,4 +1,4 @@
-{stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which, xcodeBaseDir}:
+{stdenv, androidsdk, titaniumsdk, titanium, alloy, xcodewrapper, jdk, python, nodejs, which, xcodeBaseDir}:
 { name, src, target, androidPlatformVersions ? [ "23" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
 , iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "9.2"
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
   
-  buildInputs = [ titanium jdk python which ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  buildInputs = [ nodejs titanium alloy jdk python which ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
   
   buildPhase = ''
     export HOME=$TMPDIR
@@ -78,10 +78,9 @@ stdenv.mkDerivation {
             javac -version
           ''}
           
-          titanium config --config-file $TMPDIR/config.json --no-colors android.sdk ${androidsdkComposition}/libexec/android-sdk-*
-          titanium config --config-file $TMPDIR/config.json --no-colors android.buildTools.selectedVersion 23.0.1
+          titanium config --config-file $TMPDIR/config.json --no-colors android.sdk ${androidsdkComposition}/libexec
           
-          export PATH=$(echo ${androidsdkComposition}/libexec/android-sdk-*/tools):$(echo ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*):$PATH
+          export PATH=$(echo ${androidsdkComposition}/libexec/tools):$(echo ${androidsdkComposition}/libexec/build-tools/android-*):$PATH
           
           ${if release then
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --store-password ${androidKeyStorePassword} --output-dir $out''

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, python, pysideGeneratorrunner, pysideShiboken, qt4 }:
+{ lib, fetchurl, cmake, python, mkPythonDerivation, pysideGeneratorrunner, pysideShiboken, qt4 }:
 
-stdenv.mkDerivation rec {
+mkPythonDerivation rec {
   name = "${python.libPrefix}-pyside-${version}";
   version = "1.2.4";
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     homepage = "http://www.pyside.org";
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.chaoflow ];
+    platforms = lib.platforms.all;
   };
 }

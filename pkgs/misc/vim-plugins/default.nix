@@ -1169,11 +1169,11 @@ rec {
   };
 
   youcompleteme = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "youcompleteme-2016-07-23";
+    name = "youcompleteme-2016-09-01";
     src = fetchgit {
       url = "git://github.com/valloric/youcompleteme";
-      rev = "9968a43f7ec058298667c2c56ca86cfbbf1dac51";
-      sha256 = "17fxlflzggzx0mzsbmgvhp7dmkrx760w2pkais2vkafk3xdr1yr7";
+      rev = "e332cdb2a0c8599dead1d362b87bb9fb79c9a955";
+      sha256 = "0lqmdbv2z3rhm6a9c62rhfl3i30mvpg2f7k0cjan7jvrln9588k9";
     };
     dependencies = [];
     buildInputs = [

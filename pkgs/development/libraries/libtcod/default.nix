@@ -1,4 +1,4 @@
-{ stdenv, fetchFromBitbucket, cmake, SDL, mesa, upx }:
+{ stdenv, fetchFromBitbucket, cmake, SDL, mesa, upx, zlib }:
 
 stdenv.mkDerivation rec {
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags="-DLIBTCOD_SAMPLES=OFF";
 
-  buildInputs = [ cmake SDL mesa upx ];
+  buildInputs = [ cmake SDL mesa upx zlib ];
 
   meta = {
     description = "API for roguelike games";

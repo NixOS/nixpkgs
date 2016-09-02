@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cr0z81a41bg193dx9crcq1mns7mmzz7qys4lrbm18cmdbwkk88x";
   };
 
+  outputs = [ "bin" "out" "dev" "doc" ];
+
   buildInputs = [
     boost cmake ilmbase libjpeg libpng libtiff opencolorio openexr
     unzip
@@ -21,8 +23,13 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    makeFlags="ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0
+    makeFlags="ILMBASE_HOME=${ilmbase.dev} OPENEXR_HOME=${openexr.dev} USE_PYTHON=0
       INSTALLDIR=$out dist_dir="
+  '';
+
+  postInstall = ''
+    mkdir -p $bin
+    mv $out/bin $bin/
   '';
 
   enableParallelBuilding = true;

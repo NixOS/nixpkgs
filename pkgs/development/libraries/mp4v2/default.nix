@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://code.google.com/p/mp4v2;
     maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

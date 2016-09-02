@@ -557,8 +557,8 @@ script) if it exists.</para>
 
   <varlistentry>
     <term><varname>configureFlags</varname></term>
-    <listitem><para>Additional arguments passed to the configure
-    script.</para></listitem>
+    <listitem><para>A list of strings passed as additional arguments to the
+    configure script.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -658,7 +658,7 @@ nothing.</para>
 
   <varlistentry>
     <term><varname>makeFlags</varname></term>
-    <listitem><para>Additional flags passed to
+    <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  These flags are also used by the default
     install and check phase.  For setting make flags specific to the
     build phase, use <varname>buildFlags</varname> (see
@@ -685,7 +685,7 @@ makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
 
   <varlistentry>
     <term><varname>buildFlags</varname> / <varname>buildFlagsArray</varname></term>
-    <listitem><para>Additional flags passed to
+    <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  Like <varname>makeFlags</varname> and
     <varname>makeFlagsArray</varname>, but only used by the build
     phase.</para></listitem>
@@ -753,7 +753,7 @@ doCheck = true;</programlisting>
 
   <varlistentry>
     <term><varname>checkFlags</varname> / <varname>checkFlagsArray</varname></term>
-    <listitem><para>Additional flags passed to
+    <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  Like <varname>makeFlags</varname> and
     <varname>makeFlagsArray</varname>, but only used by the check
     phase.</para></listitem>
@@ -808,7 +808,7 @@ installTargets = "install-bin install-doc";</programlisting>
 
   <varlistentry>
     <term><varname>installFlags</varname> / <varname>installFlagsArray</varname></term>
-    <listitem><para>Additional flags passed to
+    <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  Like <varname>makeFlags</varname> and
     <varname>makeFlagsArray</varname>, but only used by the install
     phase.</para></listitem>

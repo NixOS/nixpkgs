@@ -20,6 +20,6 @@ with lib;
   config = mkIf config.security.hideProcessInformation {
     users.groups.proc.gid = config.ids.gids.proc;
 
-    fileSystems."/proc".options = [ "hidepid=2" "gid=${toString config.ids.gids.proc}" ];
+    boot.specialFileSystems."/proc".options = [ "hidepid=2" "gid=${toString config.ids.gids.proc}" ];
   };
 }

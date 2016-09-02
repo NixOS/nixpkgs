@@ -35,6 +35,14 @@ with lib;
     services.dbus.packages = [ pkgs.accountsservice ];
 
     systemd.packages = [ pkgs.accountsservice ];
+
+    systemd.services.accounts-daemon= {
+
+      wantedBy = [ "graphical.target" ];
+
+    } // (mkIf (!config.users.mutableUsers) {
+      environment.NIXOS_USERS_PURE = "true";
+    });
   };
 
 }

@@ -62,7 +62,7 @@ in
       homepage = http://www.zabbix.com/;
       license = licenses.gpl2;
       maintainers = [ maintainers.eelco ];
-      platforms = platforms.linux ++ platforms.darwin;
+      platforms = platforms.linux;
     };
   };
 

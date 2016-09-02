@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     description = "Console version of StarDict program";
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 
   src = fetchurl {

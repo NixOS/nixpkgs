@@ -425,13 +425,20 @@ in
         { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
       ];
 
-      system.build.installBootLoader = pkgs.writeScript "install-grub.sh" (''
+      system.build.installBootLoader =
+        let
+          install-grub-pl = pkgs.substituteAll {
+            src = ./install-grub.pl;
+            inherit (pkgs) utillinux;
+            btrfsprogs = pkgs.btrfs-progs;
+          };
+        in pkgs.writeScript "install-grub.sh" (''
         #!${pkgs.stdenv.shell}
         set -e
         export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig args} $@
+        ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
       ''));
 
       system.build.grub = grub;

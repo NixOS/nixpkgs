@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       a real live maintainer, or some actual wide use.
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 
   src = fetchurl {

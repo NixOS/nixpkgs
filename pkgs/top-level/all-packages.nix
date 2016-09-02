@@ -88,10 +88,6 @@ in
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
-  builderDefs = lib.composedArgsAndFun (callPackage ../build-support/builder-defs/builder-defs.nix) {};
-
-  builderDefsPackage = builderDefs.builderDefsPackage builderDefs;
-
   stringsWithDeps = lib.stringsWithDeps;
 
 
@@ -103,10 +99,6 @@ in
 
 
   ### BUILD SUPPORT
-
-  attrSetToDir = arg: callPackage ../build-support/upstream-updater/attrset-to-dir.nix {
-    theAttrSet = arg;
-  };
 
   autoreconfHook = makeSetupHook
     { substitutions = { inherit autoconf automake gettext libtool; }; }
@@ -178,7 +170,17 @@ in
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
-  packer = callPackage ../development/tools/packer { };
+  packer = callPackage ../development/tools/packer {
+    # Go 1.7 changed the linker flag format
+    buildGoPackage = buildGo16Package;
+    gotools = self.gotools.override {
+      buildGoPackage = buildGo16Package;
+      go = self.go_1_6;
+    };
+    gox = self.gox.override {
+      buildGoPackage = buildGo16Package;
+    };
+  };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
@@ -457,7 +459,7 @@ in
 
   aws_shell = pythonPackages.aws_shell;
 
-  azure-cli = callPackage ../tools/virtualization/azure-cli { };
+  azure-cli = nodePackages.azure-cli;
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
@@ -480,6 +482,8 @@ in
   androidenv = callPackage ../development/mobile/androidenv {
     pkgs_i686 = pkgsi686Linux;
   };
+
+  adb-sync = callPackage ../development/mobile/adb-sync { };
 
   apg = callPackage ../tools/security/apg { };
 
@@ -1518,6 +1522,11 @@ in
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
+  fast-neural-doodle = callPackage ../tools/graphics/fast-neural-doodle {
+    inherit (python27Packages) numpy scipy h5py scikitlearn python
+      pillow;
+  };
+
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
   fcitx = callPackage ../tools/inputmethods/fcitx {
@@ -2358,13 +2367,21 @@ in
   else
     nodejs-4_x;
 
-  nodePackages_6_x = callPackage ./node-packages.nix { self = nodePackages_6_x; nodejs = nodejs-6_x; };
+  nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
+    nodejs = pkgs.nodejs-6_x;
+  };
 
-  nodePackages_5_x = callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; };
+  nodePackages_5_x = callPackage ../development/node-packages/default-v5.nix {
+    nodejs = pkgs.nodejs-5_x;
+  };
 
-  nodePackages_4_x = callPackage ./node-packages.nix { self = nodePackages_4_x; nodejs = nodejs-4_x; };
+  nodePackages_4_x = callPackage ../development/node-packages/default-v4.nix {
+    nodejs = pkgs.nodejs-4_x;
+  };
 
-  nodePackages_0_10 = callPackage ./node-packages.nix { self = nodePackages_0_10; nodejs = nodejs-0_10; };
+  nodePackages_0_10 = callPackage ../development/node-packages/default-v0_10.nix {
+    nodejs = pkgs.nodejs-0_10;
+  };
 
   nodePackages = if stdenv.system == "armv5tel-linux" then
     nodePackages_0_10
@@ -4110,7 +4127,7 @@ in
 
   wml = callPackage ../development/web/wml { };
 
-  wring = callPackage ../tools/text/wring { };
+  wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
 
@@ -4938,7 +4955,10 @@ in
 
   microscheme = callPackage ../development/compilers/microscheme { };
 
-  mitscheme = callPackage ../development/compilers/mit-scheme { };
+  mitscheme = callPackage ../development/compilers/mit-scheme {
+   texLive = texlive.combine { inherit (texlive) scheme-small; };
+   texinfo = texinfo5;
+  };
 
   mkcl = callPackage ../development/compilers/mkcl {};
 
@@ -5843,16 +5863,13 @@ in
     qt = qt4;
   }));
 
-  # mercurial (hg) bleeding edge version
-  octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
-
   ocropus = callPackage ../applications/misc/ocropus { };
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
 
-  php = php56;
+  php = php70;
 
-  phpPackages = php56Packages;
+  phpPackages = php70Packages;
 
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
@@ -6179,13 +6196,18 @@ in
     wxGTK = wxGTK30;
   };
 
-  buildbot = callPackage ../development/tools/build-managers/buildbot {
-    inherit (pythonPackages) twisted jinja2 sqlalchemy_migrate_0_7;
-    dateutil = pythonPackages.dateutil_1_5;
-  };
-
   buildbot-slave = callPackage ../development/tools/build-managers/buildbot-slave {
     inherit (pythonPackages) twisted;
+  };
+
+  buildbot = callPackage ../development/tools/build-managers/buildbot/9.nix { };
+  buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
+  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
+  buildbot-ui = self.buildbot.override {
+    plugins = with self.buildbot-plugins; [ www ];
+  };
+  buildbot-full = self.buildbot.override {
+    plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
   };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
@@ -6503,6 +6525,8 @@ in
   kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends { };
 
   kcov = callPackage ../development/tools/analysis/kcov { };
+
+  kube-aws = callPackage ../development/tools/kube-aws { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
 
@@ -7216,8 +7240,9 @@ in
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
     inherit (darwin) CF;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices AVFoundation
-                                          MediaToolbox VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) 
+      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox 
+      VideoDecodeAcceleration;
   };
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer {
@@ -8758,9 +8783,12 @@ in
     };
     in mo.drivers
   );
+
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
-    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
+    # FIXME: this causes mesa to have a runtime dependency on
+    # mesa_noglu.dev.
+    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu mesa_glu.dev ];
     meta = {
       platforms = lib.platforms.unix;
     };
@@ -9585,6 +9613,8 @@ in
     openblas = openblasCompat;
   };
 
+  torch-hdf5 = callPackage ../development/libraries/torch-hdf5 {};
+
   tremor = callPackage ../development/libraries/tremor { };
 
   udns = callPackage ../development/libraries/udns { };
@@ -10252,7 +10282,7 @@ in
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
-  dnschain = callPackage ../servers/dnschain { };
+  #dnschain = callPackage ../servers/dnschain { };
 
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
@@ -10593,7 +10623,7 @@ in
     boost = boost159;
   };
 
-  ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
+  #ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
 
   s6 = callPackage ../tools/system/s6 { };
 
@@ -11329,6 +11359,11 @@ in
 
     virtualboxHardened = lowPrio (virtualbox.override {
       enableHardening = true;
+    });
+
+    virtualboxHeadless = lowPrio (virtualbox.override {
+      enableHardening = true;
+      headless = true;
     });
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
@@ -12111,6 +12146,10 @@ in
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
   roboto = callPackage ../data/fonts/roboto { };
+
+  roboto-mono = callPackage ../data/fonts/roboto-mono { };
+
+  roboto-slab = callPackage ../data/fonts/roboto-slab { };
 
   hasklig = callPackage ../data/fonts/hasklig {};
 
@@ -16041,7 +16080,7 @@ in
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  ut2004demo = callPackage ../games/ut2004demo { };
+  ut2004demo = callPackage_i686 ../games/ut2004demo { };
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 
@@ -16447,7 +16486,9 @@ in
 
   igv = callPackage ../applications/science/biology/igv { };
 
-  neuron = callPackage ../applications/science/biology/neuron { };
+  neuron = callPackage ../applications/science/biology/neuron {
+    python = null;
+  };
 
   neuron-mpi = appendToName "mpi" (neuron.override {
     mpi = pkgs.openmpi;
@@ -17345,50 +17386,6 @@ in
   # All the new TeX Live is inside. See description in default.nix.
   texlive = recurseIntoAttrs
     (callPackage ../tools/typesetting/tex/texlive-new { });
-
-  texLive = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive) {
-    ghostscript = ghostscriptX;
-    harfbuzz = harfbuzz.override {
-      withIcu = true; withGraphite2 = true;
-    };
-  };
-
-  texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
-    paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
-              texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht texinfo
-              texLiveModerntimeline texLiveContext ];
-  });
-
-  /* Look in configurations/misc/raskin.nix for usage example (around revisions
-  where TeXLive was added)
-
-  (texLiveAggregationFun {
-    paths = [texLive texLiveExtra texLiveCMSuper
-      texLiveBeamer
-    ];
-  })
-
-  You need to use texLiveAggregationFun to regenerate, say, ls-R (TeX-related file list)
-  Just installing a few packages doesn't work.
-  */
-  texLiveAggregationFun = params:
-    builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/aggregate.nix) params;
-
-  texLiveContext = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/context.nix) {};
-
-  texLiveExtra = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/extra.nix) {};
-
-  texLiveCMSuper = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/cm-super.nix) {};
-
-  texLiveLatexXColor = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/xcolor.nix) {};
-
-  texLivePGF = pgf3;
-
-  texLiveBeamer = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/beamer.nix) {};
-
-  texLiveModerncv = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/moderncv.nix) {};
-
-  texLiveModerntimeline = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/moderntimeline.nix) {};
 
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
 

@@ -32,6 +32,8 @@ let
     substituteInPlace ./common/Make.rules --replace "/usr/share/man" "share/man"
   '';
 
+  # FIXME: convert these to a single multiple-outputs package?
+
   libapparmor = stdenv.mkDerivation {
     name = "libapparmor-${apparmor-version}";
     src = apparmor-sources;
@@ -61,6 +63,13 @@ let
     postPatch = "cd ./libraries/libapparmor";
     configureFlags = "--with-python --with-perl";
 
+    outputs = [ "out" "python" ];
+
+    postInstall = ''
+      mkdir -p $python/lib
+      mv $out/lib/python* $python/lib/
+    '';
+
     meta = apparmor-meta "library";
   };
 
@@ -75,6 +84,7 @@ let
       pythonPackages.python
       pythonPackages.readline
       libapparmor
+      libapparmor.python
     ];
 
     prePatch = prePatchCommon;

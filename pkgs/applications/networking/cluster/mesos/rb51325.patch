@@ -1,0 +1,156 @@
+diff -Naur a/3rdparty/libprocess/3rdparty/stout/include/Makefile.am b/3rdparty/libprocess/3rdparty/stout/include/Makefile.am
+--- a/3rdparty/libprocess/3rdparty/stout/include/Makefile.am	2016-09-02 15:20:04.834457344 +0200
++++ b/3rdparty/libprocess/3rdparty/stout/include/Makefile.am	2016-09-02 15:21:00.190983981 +0200
+@@ -62,7 +62,6 @@
+   stout/os/chroot.hpp			\
+   stout/os/close.hpp			\
+   stout/os/constants.hpp		\
+-  stout/os/direntsize.hpp		\
+   stout/os/environment.hpp		\
+   stout/os/exists.hpp			\
+   stout/os/fcntl.hpp			\
+@@ -101,7 +100,6 @@
+   stout/os/posix/bootid.hpp		\
+   stout/os/posix/chown.hpp		\
+   stout/os/posix/chroot.hpp		\
+-  stout/os/posix/direntsize.hpp		\
+   stout/os/posix/exists.hpp		\
+   stout/os/posix/fcntl.hpp		\
+   stout/os/posix/fork.hpp		\
+@@ -118,7 +116,6 @@
+   stout/os/raw/environment.hpp		\
+   stout/os/windows/bootid.hpp		\
+   stout/os/windows/chroot.hpp		\
+-  stout/os/windows/direntsize.hpp	\
+   stout/os/windows/exists.hpp		\
+   stout/os/windows/fcntl.hpp		\
+   stout/os/windows/fork.hpp		\
+diff --git a/3rdparty/libprocess/3rdparty/stout/include/stout/os/direntsize.hpp b/3rdparty/libprocess/3rdparty/stout/include/stout/os/direntsize.hpp
+deleted file mode 100644
+index 819f99a89862491e99873bdedc603317b91266b0..0000000000000000000000000000000000000000
+--- a/3rdparty/libprocess/3rdparty/stout/include/stout/os/direntsize.hpp
++++ /dev/null
+@@ -1,26 +0,0 @@
+-// Licensed under the Apache License, Version 2.0 (the "License");
+-// you may not use this file except in compliance with the License.
+-// You may obtain a copy of the License at
+-//
+-//  http://www.apache.org/licenses/LICENSE-2.0
+-//
+-// Unless required by applicable law or agreed to in writing, software
+-// distributed under the License is distributed on an "AS IS" BASIS,
+-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-// See the License for the specific language governing permissions and
+-// limitations under the License.
+-
+-#ifndef __STOUT_OS_DIRENTSIZE_HPP__
+-#define __STOUT_OS_DIRENTSIZE_HPP__
+-
+-
+-// For readability, we minimize the number of #ifdef blocks in the code by
+-// splitting platform specifc system calls into separate directories.
+-#ifdef __WINDOWS__
+-#include <stout/os/windows/direntsize.hpp>
+-#else
+-#include <stout/os/posix/direntsize.hpp>
+-#endif // __WINDOWS__
+-
+-
+-#endif // __STOUT_OS_DIRENTSIZE_HPP__
+diff --git a/3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/direntsize.hpp b/3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/direntsize.hpp
+deleted file mode 100644
+index 9d8f72eb607a288e77f92b39b91542ff5eb2fa21..0000000000000000000000000000000000000000
+--- a/3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/direntsize.hpp
++++ /dev/null
+@@ -1,42 +0,0 @@
+-// Licensed under the Apache License, Version 2.0 (the "License");
+-// you may not use this file except in compliance with the License.
+-// You may obtain a copy of the License at
+-//
+-//  http://www.apache.org/licenses/LICENSE-2.0
+-//
+-// Unless required by applicable law or agreed to in writing, software
+-// distributed under the License is distributed on an "AS IS" BASIS,
+-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-// See the License for the specific language governing permissions and
+-// limitations under the License.
+-
+-#ifndef __STOUT_OS_POSIX_DIRENTSIZE_HPP__
+-#define __STOUT_OS_POSIX_DIRENTSIZE_HPP__
+-
+-#include <dirent.h>
+-#include <unistd.h>
+-
+-
+-namespace os {
+-
+-inline size_t dirent_size(DIR* dir)
+-{
+-  // Calculate the size for a "directory entry".
+-  long name_max = fpathconf(dirfd(dir), _PC_NAME_MAX);
+-
+-  // If we don't get a valid size, check NAME_MAX, but fall back on
+-  // 255 in the worst case ... Danger, Will Robinson!
+-  if (name_max == -1) {
+-    name_max = (NAME_MAX > 255) ? NAME_MAX : 255;
+-  }
+-
+-  size_t name_end = (size_t) offsetof(dirent, d_name) + name_max + 1;
+-
+-  size_t size = (name_end > sizeof(dirent) ? name_end : sizeof(dirent));
+-
+-  return size;
+-}
+-
+-} // namespace os {
+-
+-#endif // __STOUT_OS_POSIX_DIRENTSIZE_HPP__
+diff --git a/3rdparty/libprocess/3rdparty/stout/include/stout/os/windows/direntsize.hpp b/3rdparty/libprocess/3rdparty/stout/include/stout/os/windows/direntsize.hpp
+deleted file mode 100644
+index 7c8c7a06f478b3a80341a874494cff21f71fc397..0000000000000000000000000000000000000000
+--- a/3rdparty/libprocess/3rdparty/stout/include/stout/os/windows/direntsize.hpp
++++ /dev/null
+@@ -1,43 +0,0 @@
+-// Licensed under the Apache License, Version 2.0 (the "License");
+-// you may not use this file except in compliance with the License.
+-// You may obtain a copy of the License at
+-//
+-//  http://www.apache.org/licenses/LICENSE-2.0
+-//
+-// Unless required by applicable law or agreed to in writing, software
+-// distributed under the License is distributed on an "AS IS" BASIS,
+-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-// See the License for the specific language governing permissions and
+-// limitations under the License.
+-
+-#ifndef __STOUT_OS_WINDOWS_DIRENTSIZE_HPP__
+-#define __STOUT_OS_WINDOWS_DIRENTSIZE_HPP__
+-
+-#include <stout/internal/windows/dirent.hpp>
+-
+-#include <stout/windows.hpp>
+-
+-
+-namespace os {
+-
+-inline size_t dirent_size(DIR* dir)
+-{
+-  // NOTE: Size calculation logic here is much simpler than on POSIX because
+-  // our implementation of `dirent` is constant-sized. In particular, on POSIX,
+-  // we usually have to calculate the maximum name size for a path before we
+-  // can alloc a correctly-size `dirent`, but on Windows, `dirent.d_name` is
+-  // always `MAX_PATH` bytes in size.
+-  //
+-  // This follows closely from the Windows standard API data structures for
+-  // manipulating and querying directories. For example, the structures
+-  // `WIN32_FIND_DATA`[1] (which in many ways is the Windows equivalent of
+-  // `dirent`) has a field `cFileName` (which is much like `d_name`) that is
+-  // also `MAX_PATH` in size.
+-  //
+-  // [1] https://msdn.microsoft.com/en-us/library/windows/desktop/aa365740(v=vs.85).aspx
+-  return sizeof(dirent);
+-}
+-
+-} // namespace os {
+-
+-#endif // __STOUT_OS_WINDOWS_DIRENTSIZE_HPP__

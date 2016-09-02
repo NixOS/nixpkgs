@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     description = "An implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ bjg lovek323 wkennington ];
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }

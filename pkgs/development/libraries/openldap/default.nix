@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   # TODO: separate "out" and "bin"
   outputs = [ "out" "dev" "man" "devdoc" ];
 
+  enableParallelBuilding = true;
+
   buildInputs = [ openssl cyrus_sasl db groff ];
 
   configureFlags =
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
     sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
         -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
         -i $out/lib/libldap.la -i $out/lib/libldap_r.la
+
+    rm -rf $out/var
     rm -r libraries/*/.libs
   '';
 

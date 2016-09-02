@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
         and a documentation generator (ocamldoc).
       '';
 
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; linux;
   };
 
 }

@@ -3,12 +3,12 @@
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2016-08-06";
+  name = "xfstests-2016-08-26";
 
   src = fetchgit {
-    url = "git://oss.sgi.com/xfs/cmds/xfstests.git";
-    rev = "b7d908a0e8eb3bc069275dedfe981f9ea3aeeec2";
-    sha256 = "0dnhqqxmxr3mq2xjnxki92vjmi3y7g9xz3lfa1s1c8ayfcm3qq85";
+    url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
+    rev = "21eb9d303cff056753a3104602ff674d468af52e";
+    sha256 = "175nfdjfakxij7cmajjv2ycsiv4hkmx7b94nsylqrg51drx3jkji";
   };
 
   buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
     chmod a+rx "$dir"
     cd "$dir"
-    for f in check common ltp src tests; do
+    for f in $(cd @out@/lib/xfstests; echo *); do
       ln -s @out@/lib/xfstests/$f $f
     done
 

@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   preConfigure = ''
-    export CPATH="${ilmbase}/include/OpenEXR:$CPATH"
+    export CPATH="${ilmbase.dev}/include/OpenEXR:$CPATH"
   '';
 
   qmakeFlags = [
     "EXIV2PATH=${exiv2.dev}/include/exiv2"
-    "OPENEXRDIR=${openexr}/include/OpenEXR"
+    "OPENEXRDIR=${openexr.dev}/include/OpenEXR"
     "FFTW3DIR=${fftwSinglePrec.dev}/include"
     "LIBTIFFDIR=${libtiff.dev}/include"
   ];

@@ -20,6 +20,6 @@ in stdenv.mkDerivation {
     description = "A simple yet effective way to benchmark disk IO in Linux systems";
     homepage    = http://www.iomelt.com;
     maintainers = with maintainers; [ cstrahan ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    platforms   = platforms.linux;
   };
 }

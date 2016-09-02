@@ -15,6 +15,8 @@ let
       xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr libcap
       libnotify
     ];
+    
+    extraOutputsToInstall = [ "lib" "out" ];
   };
 
 in stdenv.mkDerivation rec {

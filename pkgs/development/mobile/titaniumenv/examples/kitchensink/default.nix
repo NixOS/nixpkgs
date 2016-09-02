@@ -9,7 +9,7 @@ let
   src = fetchgit {
     url = https://github.com/appcelerator/KitchenSink.git;
     rev = "6e9f509069fafdebfa78e15b2d14f20a27a485cc";
-    sha256 = "0370dc0ca78b96a7e0befbff9cb1c248695e1aff66aceea98043bbb16c5121e6";
+    sha256 = "049cf0d9y0ivhsi35slx621z0wry4lqf76hw0ksb315i2713v347";
   };
   
   # Rename the bundle id to something else

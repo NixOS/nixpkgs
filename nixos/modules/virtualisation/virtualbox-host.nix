@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.virtualisation.virtualbox.host;
   virtualbox = config.boot.kernelPackages.virtualbox.override {
-    inherit (cfg) enableHardening;
+    inherit (cfg) enableHardening headless;
   };
 
 in
@@ -45,6 +45,15 @@ in
           Disabling this can put your system's security at risk, as local users
           in the vboxusers group can tamper with the VirtualBox device files.
         </para></important>
+      '';
+    };
+
+    headless = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Use VirtualBox installation without GUI and Qt dependency. Useful to enable on servers
+        and when virtual machines are controlled only via SSH.
       '';
     };
   };
