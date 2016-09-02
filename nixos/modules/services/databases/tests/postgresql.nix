@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "postgresql";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ zagy ];
@@ -23,4 +23,4 @@ import ./make-test.nix ({ pkgs, ...} : {
     $master->sleep(10); # Hopefully this is long enough!!
     $master->succeed("echo 'select 1' | sudo -u postgres psql");
   '';
-})
+}
