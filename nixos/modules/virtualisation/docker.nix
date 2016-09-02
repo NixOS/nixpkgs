@@ -134,4 +134,8 @@ in
     })
   ]);
 
+  meta.tests = {
+    docker = ./tests/docker.nix;
+  };
+
 }
