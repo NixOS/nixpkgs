@@ -257,5 +257,8 @@ in
       script = ''${pkgs.thttpd}/bin/thttpd -u ${cfg.user} -c "**.fcgi" -d ${smokepingHome} -p ${builtins.toString cfg.port} -D'';
     };
   };
-}
 
+  meta.tests = {
+    smokeping = ./tests/smokeping.nix;
+  };
+}

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "smokeping";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ cransom ];
@@ -28,4 +28,4 @@ import ./make-test.nix ({ pkgs, ...} : {
     $sm->succeed("curl -s -f localhost:8081/smokeping.fcgi?target=Local");
     $sm->succeed("ls /var/lib/smokeping/cache/Local/LocalMachine_mini.png");
   '';
-})
+}
