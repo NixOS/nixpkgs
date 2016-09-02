@@ -53,8 +53,6 @@ let
     { program
     , source ? null
     , owner  ? "nobody"
-    # Legacy code I can't find :(
-    , user   ? null
     , group  ? "nogroup"
     , setuid ? false
     , setgid ? false
@@ -64,7 +62,7 @@ let
 
       # Prevent races
       chmod 0000 ${permissionsWrapperDir}/${program}
-      chown ${if user != null then user else owner}.${group} ${permissionsWrapperDir}/${program}
+      chown ${owner}.${group} ${permissionsWrapperDir}/${program}
 
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${permissionsWrapperDir}/${program}
     '';

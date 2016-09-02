@@ -119,7 +119,7 @@ in
       }
     ] ++
     (lib.optionals config.users.mutableUsers
-     map (x: x // { user = "root";
+     map (x: x // { owner   = "root";
                     group   = "root";
                     setuid  = true;
                   })
