@@ -24,6 +24,11 @@ in stdenv.mkDerivation rec {
   patches = [
     # https://reviews.apache.org/r/36610/
     ./rb36610.patch
+
+    # https://issues.apache.org/jira/browse/MESOS-6013
+    ./rb51324.patch
+    ./rb51325.patch
+
     ./maven_repo.patch
   ];
 
