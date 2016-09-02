@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: separate "out" and "bin"
-  outputs = [ "out" "dev" "man" "docdev" ];
+  outputs = [ "out" "dev" "man" "devdoc" ];
 
   enableParallelBuilding = true;
 
