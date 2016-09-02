@@ -526,22 +526,22 @@ let
         sha1 = "22e516e7519dd12583e174cca4eeb3b20c993d02";
       };
     };
-    "azure-arm-datalake-analytics-0.4.2" = {
+    "azure-arm-datalake-analytics-0.4.3" = {
       name = "azure-arm-datalake-analytics";
       packageName = "azure-arm-datalake-analytics";
-      version = "0.4.2";
+      version = "0.4.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/azure-arm-datalake-analytics/-/azure-arm-datalake-analytics-0.4.2.tgz";
-        sha1 = "6e0c6eccb51f17a48d4d208fd603272f67496f54";
+        url = "https://registry.npmjs.org/azure-arm-datalake-analytics/-/azure-arm-datalake-analytics-0.4.3.tgz";
+        sha1 = "10c81e59d3064289a42ab37fea805a334333ed91";
       };
     };
-    "azure-arm-datalake-store-0.4.1" = {
+    "azure-arm-datalake-store-0.4.2" = {
       name = "azure-arm-datalake-store";
       packageName = "azure-arm-datalake-store";
-      version = "0.4.1";
+      version = "0.4.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/azure-arm-datalake-store/-/azure-arm-datalake-store-0.4.1.tgz";
-        sha1 = "757b7a66fe4d70ae7f21ee91ef9ec3cd96fb3c28";
+        url = "https://registry.npmjs.org/azure-arm-datalake-store/-/azure-arm-datalake-store-0.4.2.tgz";
+        sha1 = "479f4a28986c9737b8fef14090c0c7ccc33cb123";
       };
     };
     "azure-arm-devtestlabs-0.1.0" = {
@@ -5134,13 +5134,13 @@ let
         sha1 = "dd3ae8dba3e58df5c9ed3457c055177849d82854";
       };
     };
-    "random-access-file-1.3.0" = {
+    "random-access-file-1.3.1" = {
       name = "random-access-file";
       packageName = "random-access-file";
-      version = "1.3.0";
+      version = "1.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/random-access-file/-/random-access-file-1.3.0.tgz";
-        sha1 = "f3490a47aa152b1b97790d247de82751571347b7";
+        url = "https://registry.npmjs.org/random-access-file/-/random-access-file-1.3.1.tgz";
+        sha1 = "5302a65a7ff2b83c50e18d79bf4cd619b520ac8d";
       };
     };
     "run-parallel-1.1.6" = {
@@ -9350,13 +9350,13 @@ let
         sha1 = "afab96262910a7f33c19a5775825c69f34e350ca";
       };
     };
-    "bluebird-3.4.5" = {
+    "bluebird-3.4.6" = {
       name = "bluebird";
       packageName = "bluebird";
-      version = "3.4.5";
+      version = "3.4.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/bluebird/-/bluebird-3.4.5.tgz";
-        sha1 = "dfea23c733b7b8e924af97662f9c7bbefefe5ff9";
+        url = "https://registry.npmjs.org/bluebird/-/bluebird-3.4.6.tgz";
+        sha1 = "01da8d821d87813d158967e743d5fe6c62cf8c0f";
       };
     };
     "slice-ansi-0.0.4" = {
@@ -9872,13 +9872,13 @@ let
         sha1 = "207bab91638499c07b2adf240a41a87210034575";
       };
     };
-    "binary-extensions-1.5.0" = {
+    "binary-extensions-1.6.0" = {
       name = "binary-extensions";
       packageName = "binary-extensions";
-      version = "1.5.0";
+      version = "1.6.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/binary-extensions/-/binary-extensions-1.5.0.tgz";
-        sha1 = "e6e2057f2cdfb17ad406349c86b71ef8069a25f5";
+        url = "https://registry.npmjs.org/binary-extensions/-/binary-extensions-1.6.0.tgz";
+        sha1 = "aa2184cbc434d29862c66a69bf81cc0a3383ee79";
       };
     };
     "set-immediate-shim-1.0.1" = {
@@ -16570,6 +16570,42 @@ let
         sha1 = "321f6cf73782a6ff751111390fc05e2c657d8c9b";
       };
     };
+    "coa-1.0.1" = {
+      name = "coa";
+      packageName = "coa";
+      version = "1.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/coa/-/coa-1.0.1.tgz";
+        sha1 = "7f959346cfc8719e3f7233cd6852854a7c67d8a3";
+      };
+    };
+    "whet.extend-0.9.9" = {
+      name = "whet.extend";
+      packageName = "whet.extend";
+      version = "0.9.9";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/whet.extend/-/whet.extend-0.9.9.tgz";
+        sha1 = "f877d5bf648c97e5aa542fadc16d6a259b9c11a1";
+      };
+    };
+    "csso-2.2.1" = {
+      name = "csso";
+      packageName = "csso";
+      version = "2.2.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/csso/-/csso-2.2.1.tgz";
+        sha1 = "51fbb5347e50e81e6ed51668a48490ae6fe2afe2";
+      };
+    };
+    "clap-1.1.1" = {
+      name = "clap";
+      packageName = "clap";
+      version = "1.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/clap/-/clap-1.1.1.tgz";
+        sha1 = "a8a93e0bfb7581ac199c4f001a5525a724ce696d";
+      };
+    };
     "fields-0.1.24" = {
       name = "fields";
       packageName = "fields";
@@ -17914,8 +17950,8 @@ in
         ];
       })
       sources."azure-arm-rediscache-0.2.1"
-      sources."azure-arm-datalake-analytics-0.4.2"
-      sources."azure-arm-datalake-store-0.4.1"
+      sources."azure-arm-datalake-analytics-0.4.3"
+      sources."azure-arm-datalake-store-0.4.2"
       sources."azure-arm-devtestlabs-0.1.0"
       sources."azure-graph-1.0.1"
       sources."azure-gallery-2.0.0-pre.18"
@@ -19476,10 +19512,9 @@ in
                       sources."minimist-0.0.8"
                     ];
                   })
-                  (sources."random-access-file-1.3.0" // {
+                  (sources."random-access-file-1.3.1" // {
                     dependencies = [
                       sources."inherits-2.0.1"
-                      sources."thunky-0.1.0"
                     ];
                   })
                   sources."randombytes-2.0.3"
@@ -22298,7 +22333,7 @@ in
       sources."strip-json-comments-1.0.4"
       (sources."table-3.7.8" // {
         dependencies = [
-          sources."bluebird-3.4.5"
+          sources."bluebird-3.4.6"
           sources."slice-ansi-0.0.4"
           (sources."string-width-1.0.2" // {
             dependencies = [
@@ -22526,7 +22561,7 @@ in
               sources."inherits-2.0.1"
               (sources."is-binary-path-1.0.1" // {
                 dependencies = [
-                  sources."binary-extensions-1.5.0"
+                  sources."binary-extensions-1.6.0"
                 ];
               })
               (sources."is-glob-2.0.1" // {
@@ -24125,7 +24160,7 @@ in
       sha1 = "6dca89ec25f4753f120f834c89398098040fd63e";
     };
     dependencies = [
-      sources."bluebird-3.4.5"
+      sources."bluebird-3.4.6"
       (sources."body-parser-1.15.2" // {
         dependencies = [
           sources."bytes-2.4.0"
@@ -24247,7 +24282,7 @@ in
           sources."inherits-2.0.1"
           (sources."is-binary-path-1.0.1" // {
             dependencies = [
-              sources."binary-extensions-1.5.0"
+              sources."binary-extensions-1.6.0"
             ];
           })
           (sources."is-glob-2.0.1" // {
@@ -27419,7 +27454,7 @@ in
           sources."inherits-2.0.1"
           (sources."is-binary-path-1.0.1" // {
             dependencies = [
-              sources."binary-extensions-1.5.0"
+              sources."binary-extensions-1.6.0"
             ];
           })
           (sources."is-glob-2.0.1" // {
@@ -28820,7 +28855,7 @@ in
           (sources."serialport-2.1.2" // {
             dependencies = [
               sources."bindings-1.2.1"
-              sources."bluebird-3.4.5"
+              sources."bluebird-3.4.6"
               (sources."debug-2.2.0" // {
                 dependencies = [
                   sources."ms-0.7.1"
@@ -30188,7 +30223,7 @@ in
       sha1 = "8e457f49e8b73ea0c4a00ab76cd79e598bd57992";
     };
     dependencies = [
-      sources."bluebird-3.4.5"
+      sources."bluebird-3.4.6"
       (sources."chalk-1.1.3" // {
         dependencies = [
           sources."ansi-styles-2.2.1"
@@ -31215,10 +31250,9 @@ in
                   sources."minimist-0.0.8"
                 ];
               })
-              (sources."random-access-file-1.3.0" // {
+              (sources."random-access-file-1.3.1" // {
                 dependencies = [
                   sources."inherits-2.0.1"
-                  sources."thunky-0.1.0"
                 ];
               })
               sources."randombytes-2.0.3"
@@ -33314,6 +33348,72 @@ in
     meta = {
       description = "Robust, expressive, and feature-rich CSS superset";
       homepage = https://github.com/stylus/stylus;
+      license = "MIT";
+    };
+    production = true;
+  };
+  svgo = nodeEnv.buildNodePackage {
+    name = "svgo";
+    packageName = "svgo";
+    version = "0.7.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/svgo/-/svgo-0.7.0.tgz";
+      sha1 = "51a95c5f7aaa98824f92857ac14c2cdbe81537aa";
+    };
+    dependencies = [
+      sources."sax-1.2.1"
+      (sources."coa-1.0.1" // {
+        dependencies = [
+          sources."q-1.4.1"
+        ];
+      })
+      (sources."js-yaml-3.6.1" // {
+        dependencies = [
+          (sources."argparse-1.0.7" // {
+            dependencies = [
+              sources."sprintf-js-1.0.3"
+            ];
+          })
+          sources."esprima-2.7.3"
+        ];
+      })
+      sources."colors-1.1.2"
+      sources."whet.extend-0.9.9"
+      (sources."mkdirp-0.5.1" // {
+        dependencies = [
+          sources."minimist-0.0.8"
+        ];
+      })
+      (sources."csso-2.2.1" // {
+        dependencies = [
+          (sources."clap-1.1.1" // {
+            dependencies = [
+              (sources."chalk-1.1.3" // {
+                dependencies = [
+                  sources."ansi-styles-2.2.1"
+                  sources."escape-string-regexp-1.0.5"
+                  (sources."has-ansi-2.0.0" // {
+                    dependencies = [
+                      sources."ansi-regex-2.0.0"
+                    ];
+                  })
+                  (sources."strip-ansi-3.0.1" // {
+                    dependencies = [
+                      sources."ansi-regex-2.0.0"
+                    ];
+                  })
+                  sources."supports-color-2.0.0"
+                ];
+              })
+            ];
+          })
+          sources."source-map-0.5.6"
+        ];
+      })
+    ];
+    meta = {
+      description = "Nodejs-based tool for optimizing SVG vector graphics files";
+      homepage = https://github.com/svg/svgo;
       license = "MIT";
     };
     production = true;
@@ -35670,7 +35770,7 @@ in
               sources."inherits-2.0.1"
               (sources."is-binary-path-1.0.1" // {
                 dependencies = [
-                  sources."binary-extensions-1.5.0"
+                  sources."binary-extensions-1.6.0"
                 ];
               })
               (sources."is-glob-2.0.1" // {
