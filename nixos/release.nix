@@ -275,7 +275,6 @@ in rec {
   tests.kde5 = callTest tests/kde5.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
-  tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   #tests.lightdm = callTest tests/lightdm.nix {};
   tests.login = callTest tests/login.nix {};
@@ -317,6 +316,7 @@ in rec {
   tests.xfce = callTest tests/xfce.nix {};
   tests.module = moduleTests {
     cadvisor = { systems = [ "x86_64-linux" ]; };
+    kubernetes = { systems = [ "x86_64-linux" ]; };
   };
 
 

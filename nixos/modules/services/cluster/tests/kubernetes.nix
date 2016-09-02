@@ -1,6 +1,6 @@
 # This test runs two node kubernetes cluster and checks if simple redis pod works
 
-import ./make-test.nix ({ pkgs, ...} : rec {
+{ pkgs, ...} : rec {
   name = "kubernetes";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ offline ];
@@ -179,4 +179,4 @@ import ./make-test.nix ({ pkgs, ...} : rec {
     }
 
   '';
-})
+}

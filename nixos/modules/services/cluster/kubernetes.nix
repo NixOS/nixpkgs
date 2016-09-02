@@ -632,4 +632,8 @@ in {
     })
 
   ];
+
+  meta.tests = {
+    kubernetes = ./tests/kubernetes.nix;
+  };
 }
