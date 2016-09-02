@@ -201,4 +201,8 @@ in
     '';
 
   })];
+
+  meta.tests = {
+    munin = ./tests/munin.nix;
+  };
 }
