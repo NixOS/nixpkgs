@@ -365,4 +365,8 @@ in
 
   };
 
+  meta.tests = {
+    tomcat = ./tests/tomcat.nix;
+  };
+
 }
