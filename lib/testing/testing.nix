@@ -1,6 +1,6 @@
 { system, minimal ? false, config ? {} }:
 
-with import ./build-vms.nix { inherit system minimal config; };
+with import ../../nixos/lib/build-vms.nix { inherit system minimal config; };
 with pkgs;
 
 rec {

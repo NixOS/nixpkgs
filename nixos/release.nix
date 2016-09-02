@@ -3,7 +3,9 @@
 , supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
-with import ../lib;
+with {
+  inherit (import ../lib/testing { inherit supportedSystems; }) callTest;
+} // (import ../lib);
 
 let
 
@@ -17,24 +19,7 @@ let
     inherit system;
   } // args);
 
-  callTest = fn: args: forAllSystems (system: hydraJob (importTest fn args system));
-
-  callSubTests = fn: args: let
-    discover = attrs: let
-      subTests = filterAttrs (const (hasAttr "test")) attrs;
-    in mapAttrs (const (t: hydraJob t.test)) subTests;
-
-    discoverForSystem = system: mapAttrs (_: test: {
-      ${system} = test;
-    }) (discover (importTest fn args system));
-
-  # If the test is only for a particular system, use only the specified
-  # system instead of generating attributes for all available systems.
-  in if args ? system then discover (import fn args)
-     else foldAttrs mergeAttrs {} (map discoverForSystem supportedSystems);
-
   pkgs = import nixpkgs { system = "x86_64-linux"; };
-
 
   versionModule =
     { system.nixosVersionSuffix = versionSuffix;
@@ -89,45 +74,12 @@ let
       });
   }).config));
 
-  # Function to directly call a test file
-  # the test file should be a function returning a single test or a set of tests
-  callTest' = file: { systems ? supportedSystems, ... } @ args: 
-    let
-      # raw test function
-      testFn = import file;
-      # pkgs needed to dummy evaluate the test, not used in the final test
-      pkgs = import ../. { system = "x86_64-linux"; };
-      # basic arguments
-      testArgs = rec { inherit pkgs; inherit (pkgs) lib; } // args;
-      # test applied with basic arguments
-      dummyTest = testFn testArgs;
-      # check if the test is a derivation like in runInMachine
-      drvTest = isDerivation dummyTest;
-      # to check if it is a single test or multiple tests
-      singleTest = dummyTest ? "testScript";
-      # generate the tests with makeTest function
-      mkTest = { system ? builtins.currentSystem, ... } @ args:
-        let testLib = import ./lib/testing.nix { inherit system; };
-            # pkgs coming from testing.nix for the system tested
-            pkgsSet = { inherit testLib pkgs; };
-            test = testFn (args // pkgsSet);
-        in if drvTest then test
-              else if singleTest
-                   then testLib.makeTest test
-                   else mapAttrs (k: v: testLib.makeTest v) test;
-      # generate test jobs for systens
-      testForSys = f: genAttrs systems (system: hydraJob ( f( mkTest({ inherit system; } // testArgs)) ) );
-      in 
-        if (drvTest || singleTest)
-           then testForSys id
-           else mapAttrs (k: _: testForSys (getAttr k)) dummyTest;
-
   # Gather tests declared in modules meta.tests
   # args is a set of { "testName" = { extra args }; } to override test arguments, typically systems
   moduleTests = args:
     let tests = (import lib/eval-config.nix { modules = []; }).config.meta.tests;
         args' = k: attrByPath [k] {} args;
-    in mapAttrs (k: v: callTest' (head v).value (args' k)) tests;
+    in mapAttrs (k: v: callTest (head v).value (args' k)) tests;
 
 in rec {
 
@@ -253,45 +205,45 @@ in rec {
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
   # ‘nix-build tests/login.nix -A result’.
-  tests.bittorrent = callTest' tests/bittorrent.nix {};
-  tests.blivet = callTest' tests/blivet.nix {};
-  tests.boot = callTest' tests/boot.nix {};
-  tests.boot-stage1 = callTest' tests/boot-stage1.nix {};
-  tests.chromium = (callTest' tests/chromium.nix { systems = [ "x86_64-linux" ]; }).stable;
-  tests.dnscrypt-proxy = callTest' tests/dnscrypt-proxy.nix { systems = [ "x86_64-linux" ]; };
-  tests.ecryptfs = callTest' tests/ecryptfs.nix {};
-  tests.ec2-nixops = (callTest' tests/ec2.nix { systems = [ "x86_64-linux" ]; }).boot-ec2-nixops;
-  tests.ec2-config = (callTest' tests/ec2.nix { systems = [ "x86_64-linux" ]; }).boot-ec2-config;
-  tests.firefox = callTest' tests/firefox.nix {};
-  tests.firewall = callTest' tests/firewall.nix {};
+  tests.bittorrent = callTest tests/bittorrent.nix {};
+  tests.blivet = callTest tests/blivet.nix {};
+  tests.boot = callTest tests/boot.nix {};
+  tests.boot-stage1 = callTest tests/boot-stage1.nix {};
+  tests.chromium = (callTest tests/chromium.nix { systems = [ "x86_64-linux" ]; }).stable;
+  tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { systems = [ "x86_64-linux" ]; };
+  tests.ecryptfs = callTest tests/ecryptfs.nix {};
+  tests.ec2-nixops = (callTest tests/ec2.nix { systems = [ "x86_64-linux" ]; }).boot-ec2-nixops;
+  tests.ec2-config = (callTest tests/ec2.nix { systems = [ "x86_64-linux" ]; }).boot-ec2-config;
+  tests.firefox = callTest tests/firefox.nix {};
+  tests.firewall = callTest tests/firewall.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
-  tests.hibernate = callTest' tests/hibernate.nix {};
-  tests.installer = callTest' tests/installer.nix {};
-  tests.ipv6 = callTest' tests/ipv6.nix {};
-  tests.keymap = callTest' tests/keymap.nix {};
-  tests.initrdNetwork = callTest' tests/initrd-network.nix {};
-  tests.latestKernel.login = callTest' tests/login.nix { latestKernel = true; };
+  tests.hibernate = callTest tests/hibernate.nix {};
+  tests.installer = callTest tests/installer.nix {};
+  tests.ipv6 = callTest tests/ipv6.nix {};
+  tests.keymap = callTest tests/keymap.nix {};
+  tests.initrdNetwork = callTest tests/initrd-network.nix {};
+  tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   #tests.lightdm = callTest tests/lightdm.nix {};
-  tests.login = callTest' tests/login.nix {};
+  tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
-  tests.misc = callTest' tests/misc.nix {};
-  tests.mongodb = callTest' tests/mongodb.nix {};
-  tests.mumble = callTest' tests/mumble.nix {};
-  tests.nat.firewall = callTest' tests/nat.nix { withFirewall = true; };
-  tests.nat.standalone = callTest' tests/nat.nix { withFirewall = false; };
-  tests.networking.networkd = callTest' tests/networking.nix { networkd = true; };
-  tests.networking.scripted = callTest' tests/networking.nix { networkd = false; };
+  tests.misc = callTest tests/misc.nix {};
+  tests.mongodb = callTest tests/mongodb.nix {};
+  tests.mumble = callTest tests/mumble.nix {};
+  tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
+  tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.networking.networkd = callTest tests/networking.nix { networkd = true; };
+  tests.networking.scripted = callTest tests/networking.nix { networkd = false; };
   # TODO: put in networking.nix after the test becomes more complete
-  tests.networkingProxy = callTest' tests/networking-proxy.nix {};
-  tests.nfs3 = callTest' tests/nfs.nix { version = 3; };
-  tests.nfs4 = callTest' tests/nfs.nix { version = 4; };
-  tests.nsd = callTest' tests/nsd.nix {};
-  tests.printing = callTest' tests/printing.nix {};
-  tests.proxy = callTest' tests/proxy.nix {};
-  tests.quake3 = callTest' tests/quake3.nix {};
-  tests.runInMachine = callTest' tests/run-in-machine.nix {};
-  tests.samba = callTest' tests/samba.nix {};
-  tests.simple = callTest' tests/simple.nix {};
+  tests.networkingProxy = callTest tests/networking-proxy.nix {};
+  tests.nfs3 = callTest tests/nfs.nix { version = 3; };
+  tests.nfs4 = callTest tests/nfs.nix { version = 4; };
+  tests.nsd = callTest tests/nsd.nix {};
+  tests.printing = callTest tests/printing.nix {};
+  tests.proxy = callTest tests/proxy.nix {};
+  tests.quake3 = callTest tests/quake3.nix {};
+  tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.samba = callTest tests/samba.nix {};
+  tests.simple = callTest tests/simple.nix {};
   tests.module = moduleTests {
     cadvisor = { systems = [ "x86_64-linux" ]; };
     kubernetes = { systems = [ "x86_64-linux" ]; };

@@ -4,6 +4,6 @@
 
 let nodes = import networkExpr; in
 
-with import ../../../../lib/testing.nix { inherit system; };
+with import ../../../../../lib/testing/testing.nix { inherit system; };
 
 (makeTest { inherit nodes; testScript = ""; }).driver
