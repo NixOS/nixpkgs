@@ -272,7 +272,6 @@ in rec {
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
-  tests.kde5 = callTest tests/kde5.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };

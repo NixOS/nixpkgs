@@ -225,4 +225,8 @@ in
 
   };
 
+  meta.tests = {
+    kde5 = ./tests/kde5.nix;
+  };
+
 }
