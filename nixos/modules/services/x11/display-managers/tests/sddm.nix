@@ -1,11 +1,11 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "sddm";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ttuegel ];
   };
 
   machine = { lib, ... }: {
-    imports = [ ./common/user-account.nix ];
+    imports = [ <nixpkgs/nixos/tests/common/user-account.nix> ];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm = {
       enable = true;
@@ -27,4 +27,4 @@ import ./make-test.nix ({ pkgs, ...} : {
     $machine->succeed("xauth merge ~alice/.Xauthority");
     $machine->waitForWindow("^IceWM ");
   '';
-})
+}

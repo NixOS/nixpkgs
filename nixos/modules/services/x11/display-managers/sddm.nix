@@ -255,4 +255,8 @@ in
     users.extraGroups.sddm.gid = config.ids.gids.sddm;
 
   };
+
+  meta.tests = {
+    sddm = ./tests/sddm.nix;
+  };
 }
