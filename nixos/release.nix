@@ -287,7 +287,6 @@ in rec {
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nsd = callTest tests/nsd.nix {};
-  #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.quagga = callTest tests/quagga.nix {};
@@ -302,6 +301,7 @@ in rec {
     docker = { systems = [ "x86_64-linux" ]; };
     etcd = { systems = [ "x86_64-linux" ]; };
     fleet = { systems = [ "x86_64-linux" ]; };
+    panamax = { systems = [ "x86_64-linux" ]; };
   };
 
   /* Build a bunch of typical closures so that Hydra can keep track of

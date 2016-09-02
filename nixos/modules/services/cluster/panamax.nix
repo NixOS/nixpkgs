@@ -153,4 +153,8 @@ in {
     environment.systemPackages = [ panamax_api panamax_ui ];
     users.extraGroups.panamax.gid = config.ids.gids.panamax;
   };
+
+  meta.tests = {
+    panamax = ./tests/panamax.nix;
+  };
 }

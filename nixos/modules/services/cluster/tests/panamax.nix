@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "panamax";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ offline ];
@@ -18,4 +18,4 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->succeed("curl --fail http://localhost:8888/ > /dev/null");
       $machine->shutdown;
     '';
-})
+}
