@@ -3544,7 +3544,19 @@ let self = _self // overrides; _self = with self; {
 
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit stdenv fetchurl buildPerlPackage DBI;
-    inherit (pkgs) sqlite;
+    # inherit (pkgs) sqlite;
+
+    # Workaround to address DBIxClass test failure.
+    # https://rt.cpan.org/Public/Bug/Display.html?id=117271#txn-1662798
+    # https://github.com/NixOS/nixpkgs/pull/18083#issuecomment-243408430
+    sqlite = pkgs.sqlite.overrideDerivation (_: {
+      name = "sqlite-3.13.0";
+
+      src = fetchurl {
+        url = "http://sqlite.org/2016/sqlite-autoconf-3130000.tar.gz";
+        sha256 = "0sq88jbwsk48i41f7m7rkw9xvijq011nsbs7pl49s31inck70yg2";
+      };
+    });
   };
 
   DBDmysql = import ../development/perl-modules/DBD-mysql {
@@ -3578,6 +3590,7 @@ let self = _self // overrides; _self = with self; {
 
   DBIxClass = buildPerlPackage rec {
     name = "DBIx-Class-0.082840";
+    # UPGRADE Note: Please remove workaround in DBDSQLite above
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
       sha256 = "4049afd175e315ebcab945b19030aec40bcec46cc5611b0286a5a267ca7181ef";
