@@ -147,4 +147,8 @@ in {
     environment.systemPackages = [ pkgs.fleet ];
     users.extraGroups.fleet.gid = config.ids.gids.fleet;
   };
+
+  meta.tests = {
+    fleet = ./tests/fleet.nix;
+  };
 }

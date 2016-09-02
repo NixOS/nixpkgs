@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : rec {
+{ pkgs, ...} : rec {
   name = "simple";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ offline ];
@@ -73,4 +73,4 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       $node1->succeed("fleetctl stop hello.service");
       $node1->succeed("fleetctl destroy hello.service");
     '';
-})
+}

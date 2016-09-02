@@ -265,7 +265,6 @@ in rec {
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.installer = callSubTests tests/installer.nix {};
@@ -302,6 +301,7 @@ in rec {
     kubernetes = { systems = [ "x86_64-linux" ]; };
     docker = { systems = [ "x86_64-linux" ]; };
     etcd = { systems = [ "x86_64-linux" ]; };
+    fleet = { systems = [ "x86_64-linux" ]; };
   };
 
   /* Build a bunch of typical closures so that Hydra can keep track of
