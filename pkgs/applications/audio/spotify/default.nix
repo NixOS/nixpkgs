@@ -5,7 +5,8 @@
 assert stdenv.system == "x86_64-linux";
 
 let
-  version = "1.0.36.120.g536a862f-20";
+  # Please update the stable branch!
+  version = "1.0.37.152.gc83ea995-42";
 
   deps = [
     alsaLib
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
   src =
     fetchurl {
       url = "http://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
-      sha256 = "03r4hz4x4f3zmp6dsv1n72y5q01d7mfqvaaxqvd587a5561gahf0";
+      sha256 = "00hd5q3cn9dzgphkpswd5y06k9phiqhhmb3frwdkcnb1d4pnp9cx";
     };
 
   buildInputs = [ dpkg makeWrapper ];
