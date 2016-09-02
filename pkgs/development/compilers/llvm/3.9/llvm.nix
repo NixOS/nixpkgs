@@ -18,7 +18,7 @@
 }:
 
 let
-  src = fetch "llvm" "10iz9qjxgd05qfzi1zppabn1gb2w1f4ryrydi2mk0z4v18wxhbmm";
+  src = fetch "llvm" "0j49lkd5d7nnpdqzaybs2472bvcxyx0i4r3iccwf3kj2v9wk3iv6";
 in stdenv.mkDerivation rec {
   name = "llvm-${version}";
 

@@ -15,7 +15,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "1rhilgdlbbwkmd37jr29015m1jrq0vdplrmzydxg31yzbavmfl6y";
+  src = fetch "lldb" "1113s6crh94hzk9h9lqrvng0lsy174ml2rq0r962ngqy843hwa31";
 
   postUnpack = ''
     # Hack around broken standalone build as of 3.8
