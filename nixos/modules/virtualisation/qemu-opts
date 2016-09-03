@@ -1,4 +1,0 @@
-          -device virtio-serial \
-          -chardev socket,id=charconsole0,path=/tmp/nixos-socket,server,nowait \
-          #-device virtconsole,chardev=charconsole0,id=console0 \
-          -device virtserialport,chardev=chardev=charconsole0,id=serial0

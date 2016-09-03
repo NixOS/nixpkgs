@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , overrideDerivation
 
 # required for gcc plugins
@@ -20,12 +21,11 @@ assert (kernel.version == grsecPatch.kver);
 
 overrideDerivation (kernel.override {
   inherit modDirVersion;
-  kernelPatches = [ { inherit (grsecPatch) name patch; } ] ++ kernelPatches ++ (kernel.kernelPatches or []);
-  features = (kernel.features or {}) // { grsecurity = true; };
+  kernelPatches = [ grsecPatch ] ++ kernelPatches ++ (kernel.kernelPatches or []);
   inherit extraConfig;
   ignoreConfigErrors = true;
 }) (attrs: {
-  nativeBuildInputs = [ gmp libmpc mpfr ] ++ (attrs.nativeBuildInputs or []);
+  nativeBuildInputs = (lib.chooseDevOutputs [ gmp libmpc mpfr ]) ++ (attrs.nativeBuildInputs or []);
   preConfigure = ''
     echo ${localver} >localversion-grsec
     ${attrs.preConfigure or ""}

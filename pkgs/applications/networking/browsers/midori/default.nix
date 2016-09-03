@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, intltool, vala, wrapGAppsHook
+{ stdenv, fetchurl, cmake, pkgconfig, intltool, vala_0_23, wrapGAppsHook
 , gtk3, webkitgtk, librsvg, libnotify, sqlite
 , glib_networking, gsettings_desktop_schemas, libsoup, pcre, gnome3
 , libxcb, libpthreadstubs, libXdmcp, libxkbcommon, epoxy, at_spi2_core
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    vala
+    vala_0_23
     gtk3 webkitgtk librsvg libnotify sqlite gsettings_desktop_schemas pcre gnome3.gcr
     libxcb libpthreadstubs libXdmcp libxkbcommon epoxy at_spi2_core
     (libsoup.override {gnomeSupport = true; valaSupport = true;})

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "--with-pcre=${pcre.dev}"
     "--with-apr=${apr.dev}"
     "--with-apu=${aprutil.dev}/bin/apu-1-config"
-    "--with-libxml=${libxml2}"
+    "--with-libxml=${libxml2.dev}"
   ];
 
   outputs = ["out" "nginx"];

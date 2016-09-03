@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake ];
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputDoc = "dev";
 
   meta = with stdenv.lib; {

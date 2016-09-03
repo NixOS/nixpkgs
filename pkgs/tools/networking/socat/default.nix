@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./enable-ecdhe.patch ./libressl-fixes.patch ];
 
+  hardeningEnable = [ "pie" ];
+
   meta = {
     description = "A utility for bidirectional data transfer between two independent data channels";
     homepage = http://www.dest-unreach.org/socat/;

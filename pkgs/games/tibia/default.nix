@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     cp -r * $out/res
 
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 \
-             --set-rpath ${stdenv.cc.cc.lib}/lib:${libX11}/lib:${mesa}/lib \
+             --set-rpath ${stdenv.lib.makeLibraryPath [ stdenv.cc.cc libX11 mesa ]} \
              "$out/res/Tibia"
 
     # We've patchelf'd the files. The main ‘Tibia’ binary is a bit

@@ -1,23 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, efl, elementary, xcbutilkeysyms, libXrandr, libXdmcp, libxcb,
-libffi, pam, alsaLib, luajit, bzip2, libuuid, libpthreadstubs, gdbm, libcap, mesa_glu
-, xkeyboard_config }:
+{ stdenv, fetchurl, pkgconfig, efl, xcbutilkeysyms, libXrandr, libXdmcp,
+libxcb, libffi, pam, alsaLib, luajit, bzip2, libpthreadstubs, gdbm, libcap,
+mesa_glu , xkeyboard_config }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "119sxrgrz163c01yx0q9n2jpmmbv0a58akmz0c2z4xy37f1m02rx";
+    sha256 = "0fi5dxrprnvhnn2y51gnfpsjj44snriqi20k20a73vhaqxfn8xx8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ efl elementary libXdmcp libxcb
-    xcbutilkeysyms libXrandr libffi pam alsaLib luajit bzip2 libuuid
+  buildInputs = [ efl libXdmcp libxcb
+    xcbutilkeysyms libXrandr libffi pam alsaLib luajit bzip2
     libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${efl}/include/eo-1" "-I${efl}/include/emile-1" "-I${libuuid}/include/uuid" ];
+  NIX_CFLAGS_COMPILE = [
+    "-I${efl}/include/ecore-imf-1"
+    "-I${efl}/include/emile-1"
+    "-I${efl}/include/eo-1"
+    "-I${efl}/include/ethumb-1"
+    "-I${efl}/include/ethumb-client-1"
+  ];
 
   preConfigure = ''
     export USER_SESSION_DIR=$prefix/lib/systemd/user

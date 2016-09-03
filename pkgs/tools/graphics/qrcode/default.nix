@@ -1,4 +1,4 @@
-{stdenv, fetchgit}:
+{ stdenv, fetchgit }:
 let
   s =
   rec {
@@ -16,14 +16,19 @@ in
 stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs;
+
   src = fetchgit {
     inherit (s) rev url sha256;
   };
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/qrcode}
     cp qrcode "$out/bin"
     cp DOCUMENTATION LICENCE "$out/share/doc/qrcode"
   '';
+
   meta = {
     inherit (s) version;
     description = ''A small QR-code tool'';

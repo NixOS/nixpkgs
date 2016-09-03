@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, perl, perlXMLParser, gtk, libXft
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, gtk, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
 , gsl, python, numpy, pyxml, lxml, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, unzip
+, libvisio, libcdr, libexif, unzip, automake114x, autoconf
 , boxMakerPlugin ? false # boxmaker plugin
 }:
 
@@ -12,6 +12,11 @@ boxmaker = fetchurl {
   # http://www.inkscapeforum.com/viewtopic.php?f=11&t=10403
   url = "http://www.keppel.demon.co.uk/111000/files/BoxMaker0.91.zip";
   sha256 = "5c5697f43dc3a95468f61f479cb50b7e2b93379a1729abf19e4040ac9f43a1a8";
+};
+
+stdcxx-patch = fetchpatch {
+  url = http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/diff/14542?context=3;
+  sha256 = "15h831lsh61ichgdygkdkbdm1dlb9mhprldq27hkx2472lcnyx6y";
 };
 
 in
@@ -28,6 +33,7 @@ stdenv.mkDerivation rec {
   patches = [ ./deprecated-scopedptr.patch ];
 
   postPatch = ''
+    patch -i ${stdcxx-patch} -p 0
     patchShebangs share/extensions
   ''
   # Clang gets misdetected, so hardcode the right answer
@@ -46,7 +52,7 @@ stdenv.mkDerivation rec {
     pkgconfig perl perlXMLParser gtk libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm glibmm libsigcxx lcms boost gettext
     makeWrapper intltool gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif
+    libvisio libcdr libexif automake114x autoconf
   ] ++ stdenv.lib.optional boxMakerPlugin unzip;
 
   enableParallelBuilding = true;

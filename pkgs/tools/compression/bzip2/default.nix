@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
   '';
 
-  outputs = [ "dev" "bin" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "man" ];
 
   configureFlags =
     stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "-I${xproto}/include/X11"
     "-I${libX11.dev}/include/X11"
     "-I${libXcursor.dev}/include/X11"
-    "-I${SDL}/include/SDL"
+    "-I${SDL.dev}/include/SDL"
     "-I${SDL2}/include/SDL2"
   ];
 

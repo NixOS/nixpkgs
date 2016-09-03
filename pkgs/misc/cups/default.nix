@@ -5,21 +5,21 @@
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
-let version = "2.1.3"; in
 
 with stdenv.lib;
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "cups-${version}";
+  version = "2.1.4";
 
   passthru = { inherit version; };
 
   src = fetchurl {
-    url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "1lyl3z01xhg9xb9c8m42398c6h9kw8qr6jwiv8bjdsjab11hv9rn";
+    url = "https://github.com/apple/cups/releases/download/release-${version}/cups-${version}-source.tar.gz";
+    sha256 = "13bjxw256wd1nff22vj2z25mdhllj2h6d9xypsg55b40661zs52b";
   };
 
   # FIXME: the cups libraries contains some $out/share strings so can't be split.
-  outputs = [ "dev" "out" "man" ]; # TODO: above
+  outputs = [ "out" "dev" "man" ]; # TODO: above
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]

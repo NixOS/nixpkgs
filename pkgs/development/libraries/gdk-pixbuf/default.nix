@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yc8indbl3hf18z6x6kjg59xp9sngm1d8vmz4c7bs6g27qw5npnm";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   setupHook = ./setup-hook.sh;

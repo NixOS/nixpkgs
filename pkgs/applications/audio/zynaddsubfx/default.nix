@@ -14,6 +14,8 @@ stdenv.mkDerivation  rec {
   buildInputs = [ alsaLib libjack2 fftw fltk13 libjpeg minixml zlib liblo ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "High quality software synthesizer";
     homepage = http://zynaddsubfx.sourceforge.net;

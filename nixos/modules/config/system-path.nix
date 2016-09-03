@@ -76,7 +76,7 @@ in
       extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "doc" "info" "docdev" ];
+        example = [ "doc" "info" "devdoc" ];
         description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
       };
 

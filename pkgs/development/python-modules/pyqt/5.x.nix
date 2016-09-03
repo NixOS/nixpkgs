@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit, dbus_libs
+{ lib, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit, dbus_libs
 , lndir, makeWrapper, qmakeHook }:
 
 let
   version = "5.6";
-  inherit (pythonPackages) python dbus-python sip;
-in stdenv.mkDerivation {
-  name = "${python.libPrefix}-PyQt-${version}";
+  inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
+in mkPythonDerivation {
+  name = "PyQt-${version}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for Qt5";
     homepage    = http://www.riverbankcomputing.co.uk;
     license     = licenses.gpl3;
@@ -25,13 +25,14 @@ in stdenv.mkDerivation {
     qtbase qtsvg qtwebkit dbus_libs qmakeHook
   ];
 
-  propagatedBuildInputs = [ sip python ];
+  propagatedBuildInputs = [ sip ];
 
   configurePhase = ''
     runHook preConfigure
 
     mkdir -p $out
     lndir ${dbus-python} $out
+    rm -rf "$out/nix-support"
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
 
@@ -60,6 +61,4 @@ in stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
-
-  passthru.pythonPath = [];
 }

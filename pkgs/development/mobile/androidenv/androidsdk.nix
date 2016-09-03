@@ -1,7 +1,7 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
 , platformTools, buildTools, support, supportRepository, platforms, sysimages, addons
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
-, freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils, libpulseaudio
+, freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils, libpulseaudio, dbus
 , zlib, glxinfo, xkeyboardconfig
 }:
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false, useGooglePlayServices ? false }:
@@ -71,11 +71,11 @@ stdenv.mkDerivation rec {
     
       wrapProgram `pwd`/uiautomatorviewer \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk libXtst ]}
     
       wrapProgram `pwd`/hierarchyviewer \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk libXtst ]}
       
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
 
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
         for i in emulator emulator64-arm emulator64-mips emulator64-x86 emulator64-crash-service
         do
             wrapProgram `pwd`/$i \
-              --prefix PATH : ${file}/bin:${glxinfo}/bin \
-              --suffix LD_LIBRARY_PATH : `pwd`/lib64:`pwd`/lib64/qt/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext mesa alsaLib zlib libpulseaudio ]} \
+              --prefix PATH : ${stdenv.lib.makeBinPath [ file glxinfo ]} \
+              --suffix LD_LIBRARY_PATH : `pwd`/lib64:`pwd`/lib64/qt/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext mesa alsaLib zlib libpulseaudio dbus.lib ]} \
               --suffix QT_XKB_CONFIG_ROOT : ${xkeyboardconfig}/share/X11/xkb
         done
       ''}

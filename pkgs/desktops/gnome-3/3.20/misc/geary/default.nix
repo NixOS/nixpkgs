@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala
+{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_32
 , makeWrapper, gdk_pixbuf, cmake, desktop_file_utils
 , libnotify, libcanberra, libsecret, gmime
 , libpthreadstubs, sqlite
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   buildInputs = [ intltool pkgconfig gtk3 makeWrapper cmake desktop_file_utils gnome_doc_utils
-                  vala webkitgtk libnotify libcanberra gnome3.libgee libsecret gmime sqlite
+                  vala_0_32 webkitgtk libnotify libcanberra gnome3.libgee libsecret gmime sqlite
                   libpthreadstubs gnome3.gsettings_desktop_schemas gnome3.gcr
                   gdk_pixbuf librsvg gnome3.defaultIconTheme ];
 

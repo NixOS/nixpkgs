@@ -58,7 +58,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "6.1.0";
+let version = "6.2.0";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
@@ -165,8 +165,8 @@ let version = "6.1.0";
           " --disable-libatomic " +  # libatomic requires libc
           " --disable-decimal-float" # libdecnumber requires libc
           else
-          (if crossDarwin then " --with-sysroot=${libcCross.out}/share/sysroot"
-           else                " --with-headers=${libcCross.dev}/include") +
+          (if crossDarwin then " --with-sysroot=${getLib libcCross}/share/sysroot"
+           else                " --with-headers=${getDev libcCross}/include") +
           # Ensure that -print-prog-name is able to find the correct programs.
           (stdenv.lib.optionalString (crossMingw || crossDarwin) (
             " --with-as=${binutilsCross}/bin/${cross.config}-as" +
@@ -215,7 +215,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "0ld3y4rgimyqgx1nwvzqyl5gr4wzc0ch4akkvsqp3fgbmdfcii09";
+    sha256 = "1idpf43988v1a6i8lw9ak1r7igcfg1bm5kn011iydlr2qygmhi4r";
   };
 
   inherit patches;
@@ -225,6 +225,8 @@ stdenv.mkDerivation ({
   NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
+
+  hardeningDisable = [ "format" ];
 
   postPatch =
     if (stdenv.isGNU
@@ -245,7 +247,7 @@ stdenv.mkDerivation ({
           ++ stdenv.lib.optional (libpthread != null) libpthread;
         extraCPPSpec =
           concatStrings (intersperse " "
-                          (map (x: "-I${x}/include") extraCPPDeps));
+                          (map (x: "-I${x.dev or x}/include") extraCPPDeps));
         extraLibSpec =
           if libpthreadCross != null
           then "-L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}"
@@ -333,8 +335,8 @@ stdenv.mkDerivation ({
       else ""}
     ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
     ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
-    --with-gmp=${gmp}
-    --with-mpfr=${mpfr}
+    --with-gmp=${gmp.dev}
+    --with-mpfr=${mpfr.dev}
     --with-mpc=${libmpc}
     ${if libelf != null then "--with-libelf=${libelf}" else ""}
     --disable-libstdcxx-pch
@@ -409,6 +411,7 @@ stdenv.mkDerivation ({
       ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.crossDrv}" else ""}
       --with-gmp=${gmp.crossDrv}
       --with-mpfr=${mpfr.crossDrv}
+      --with-mpc=${libmpc.crossDrv}
       --disable-libstdcxx-pch
       --without-included-gettext
       --with-system-zlib
@@ -454,7 +457,7 @@ stdenv.mkDerivation ({
   # Likewise, the LTO code doesn't find zlib.
 
   CPATH = concatStrings
-            (intersperse ":" (map (x: x + "/include")
+            (intersperse ":" (map (x: "${x.dev or x}/include")
                                   (optionals (zlib != null) [ zlib ]
                                    ++ optionals langJava [ boehmgc ]
                                    ++ optionals javaAwtGtk xlibs
@@ -477,7 +480,7 @@ stdenv.mkDerivation ({
 
   EXTRA_TARGET_CFLAGS =
     if cross != null && libcCross != null then [
-        "-idirafter ${libcCross.dev}/include"
+        "-idirafter ${getDev libcCross}/include"
       ]
       ++ optionals (! crossStageStatic) [
         "-B${libcCross.out}/lib"

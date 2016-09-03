@@ -2,8 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";
-  version = "git-2016-04-29";
-  rev = "233543d343bf86fa31c35ee21242fa2da3a965ab";
+  version = "2.3";
 
   buildInputs = [ cmake llvmPackages.llvm openssl llvmPackages.clang emacs ];
 
@@ -13,10 +12,10 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchgit {
-    inherit rev;
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "10j1s7kvnd5823p1kgx3hyca9jz9j27y6xk0q208p095wf8hk105";
+    sha256 = "05kzch88x2wiimygfli6vsr9i5hzgkybsya8qx4zvb6daip4b7yf";
   };
 
   meta = {

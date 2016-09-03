@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   buildInputs = [pkgconfig gtk libpng];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "A fast image viewer";
     homepage = http://gqview.sourceforge.net;

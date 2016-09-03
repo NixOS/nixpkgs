@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   configureFlags = "-v";
 
   meta = with stdenv.lib; {
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = [ maintainers.urkud ];
     license = stdenv.lib.licenses.lgpl3;
     description = "An opensource database of photographic lenses and their characteristics";

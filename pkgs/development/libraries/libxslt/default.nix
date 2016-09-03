@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "bin" "dev" "out" "doc" ];
 
   buildInputs = [ libxml2 ];
 

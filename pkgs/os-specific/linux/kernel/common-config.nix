@@ -35,9 +35,7 @@ with stdenv.lib;
   DEBUG_DEVRES n
   DEBUG_NX_TEST n
   DEBUG_STACK_USAGE n
-  ${optionalString (!(features.grsecurity or false)) ''
-    DEBUG_STACKOVERFLOW n
-  ''}
+  DEBUG_STACKOVERFLOW n
   RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
@@ -107,6 +105,7 @@ with stdenv.lib;
   WAN y
 
   # Networking options.
+  NET y
   IP_PNP n
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
@@ -181,6 +180,9 @@ with stdenv.lib;
   VGA_SWITCHEROO y # Hybrid graphics support
   DRM_GMA600 y
   DRM_GMA3600 y
+  ${optionalString (versionAtLeast version "4.5") ''
+    DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
+  ''}
 
   # Sound.
   SND_DYNAMIC_MINORS y
@@ -207,6 +209,7 @@ with stdenv.lib;
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
   FANOTIFY y
+  TMPFS y
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
@@ -310,6 +313,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.4") ''
     B43_PCMCIA? y
   ''}
+  BLK_DEV_INITRD y
   BLK_DEV_INTEGRITY y
   BSD_PROCESS_ACCT_V3 y
   BT_HCIUART_BCSP? y
@@ -320,8 +324,10 @@ with stdenv.lib;
   CRASH_DUMP? n
   DVB_DYNAMIC_MINORS? y # we use udev
   EFI_STUB y # EFI bootloader in the bzImage itself
+  CGROUPS y # used by systemd
   FHANDLE y # used by systemd
   SECCOMP y # used by systemd >= 231
+  POSIX_MQUEUE y
   FRONTSWAP y
   FUSION y # Fusion MPT device support
   IDE n # deprecated IDE support
@@ -340,7 +346,7 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
-  ${optionalString (versionAtLeast version "3.15") ''
+  ${optionalString (versionAtLeast version "3.15" && versionOlder version "4.8") ''
     MLX4_EN_VXLAN y
   ''}
   MODVERSIONS y
@@ -427,7 +433,9 @@ with stdenv.lib;
   PARAVIRT? y
   HYPERVISOR_GUEST y
   PARAVIRT_SPINLOCKS? y
-  KVM_APIC_ARCHITECTURE y
+  ${optionalString (versionOlder version "4.8") ''
+    KVM_APIC_ARCHITECTURE y
+  ''}
   KVM_ASYNC_PF y
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_COMPAT? y

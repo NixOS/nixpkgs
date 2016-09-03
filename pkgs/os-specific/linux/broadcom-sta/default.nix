@@ -19,6 +19,8 @@ stdenv.mkDerivation {
     sha256 = hashes.${stdenv.system};
   };
 
+  hardeningDisable = [ "pic" ];
+
   patches = [
     ./i686-build-failure.patch
     ./license.patch

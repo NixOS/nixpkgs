@@ -37,9 +37,10 @@
   ./hardware/network/rtl8192c.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
+  ./hardware/video/amdgpu.nix
+  ./hardware/video/ati.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/nvidia.nix
-  ./hardware/video/ati.nix
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx.nix
@@ -334,6 +335,7 @@
   ./services/networking/docker-registry-server.nix
   ./services/networking/ejabberd.nix
   ./services/networking/fan.nix
+  ./services/networking/ferm.nix
   ./services/networking/firefox/sync-server.nix
   ./services/networking/firewall.nix
   ./services/networking/flashpolicyd.nix
@@ -386,6 +388,7 @@
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
+  ./services/networking/quagga.nix
   ./services/networking/quassel.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix

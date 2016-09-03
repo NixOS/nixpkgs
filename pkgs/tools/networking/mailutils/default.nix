@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0szbqa12zqzldqyw97lxqax3ja2adis83i7brdfsxmrfw68iaf65";
   };
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./path-to-cat.patch ./no-gets.patch ./scm_c_string.patch ];
 
   configureFlags = [

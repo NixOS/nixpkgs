@@ -341,7 +341,7 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether GRUB should be build against libzfs.
+          Whether GRUB should be built against libzfs.
           ZFS support is only available for GRUB v2.
           This option is ignored for GRUB v1.
         '';
@@ -351,7 +351,7 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether GRUB should be build with EFI support.
+          Whether GRUB should be built with EFI support.
           EFI support is only available for GRUB v2.
           This option is ignored for GRUB v1.
         '';
@@ -425,13 +425,20 @@ in
         { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
       ];
 
-      system.build.installBootLoader = pkgs.writeScript "install-grub.sh" (''
+      system.build.installBootLoader =
+        let
+          install-grub-pl = pkgs.substituteAll {
+            src = ./install-grub.pl;
+            inherit (pkgs) utillinux;
+            btrfsprogs = pkgs.btrfs-progs;
+          };
+        in pkgs.writeScript "install-grub.sh" (''
         #!${pkgs.stdenv.shell}
         set -e
         export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig args} $@
+        ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
       ''));
 
       system.build.grub = grub;
@@ -500,7 +507,7 @@ in
 
 
   imports =
-    [ (mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ])
+    [ (mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "")
       (mkRenamedOptionModule [ "boot" "copyKernels" ] [ "boot" "loader" "grub" "copyKernels" ])
       (mkRenamedOptionModule [ "boot" "extraGrubEntries" ] [ "boot" "loader" "grub" "extraEntries" ])
       (mkRenamedOptionModule [ "boot" "extraGrubEntriesBeforeNixos" ] [ "boot" "loader" "grub" "extraEntriesBeforeNixOS" ])

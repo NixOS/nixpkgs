@@ -25,7 +25,7 @@ stdenv.mkDerivation rec
     make install
 
     wrapProgram $out/bin/seafile-applet \
-      --suffix PATH : ${ccnet}/bin:${seafile-shared}/bin
+      --suffix PATH : ${stdenv.lib.makeBinPath [ ccnet seafile-shared ]}
     '';
 
   meta =

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig, vala, gtk3, libgee
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig, vala_0_26, gtk3, libgee
 , poppler, libpthreadstubs, gstreamer, gst-plugins-base, librsvg }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ gstreamer gst-plugins-base vala gtk3 libgee poppler
+  buildInputs = [ gstreamer gst-plugins-base vala_0_26 gtk3 libgee poppler
                   libpthreadstubs makeWrapper librsvg ];
 
   postInstall = ''

@@ -62,4 +62,9 @@ in
     environment.systemPackages = [ cfg.package gtk2_cache gtk3_cache ];
   };
 
+  meta = {
+    maintainers = with lib.maintainers; [ ericsagnes ];
+    doc = ./default.xml;
+  };
+
 }

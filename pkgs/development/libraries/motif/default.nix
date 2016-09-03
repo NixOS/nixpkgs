@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libXp libXau ];
 
+  hardeningDisable = [ "format" ];
+
   makeFlags = [ "CFLAGS=-fno-strict-aliasing" ];
 
   prePatch = ''rm lib/Xm/Xm.h'';

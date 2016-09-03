@@ -8,7 +8,7 @@ let
 
   devices = map (nr: "zram${toString nr}") (range 0 (cfg.numDevices - 1));
 
-  modprobe = "${config.system.sbin.modprobe}/sbin/modprobe";
+  modprobe = "${pkgs.kmod}/bin/modprobe";
 
 in
 

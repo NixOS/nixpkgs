@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "owncloud-client" + "-" + version;
 
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
-    sha256 = "1wis62jk4y4mbr25y39y6af57pi6vp2mbryazmvn6zgnygf69m3h";
+    sha256 = "00bx9wrgvbdhi9vx30qfgkdz0k8nxlj313pac34cchx5xpij3jgq";
   };
 
   buildInputs =

@@ -1,0 +1,33 @@
+From 6ad29ae97263060c9ec95856e0d8ab18409108c0 Mon Sep 17 00:00:00 2001
+From: Franz Pletz <fpletz@fnordicwalking.de>
+Date: Sat, 3 Sep 2016 05:45:36 +0200
+Subject: [PATCH] Set correct program name for sleep
+
+---
+ src/password-store.sh | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/password-store.sh b/src/password-store.sh
+index 63be840..ca47df3 100755
+--- a/src/password-store.sh
++++ b/src/password-store.sh
+@@ -133,11 +133,14 @@ clip() {
+ 	# variable. Specifically, it cannot store nulls nor (non-trivally) store
+ 	# trailing new lines.
+ 	local sleep_argv0="password store sleep on display $DISPLAY"
+-	pkill -f "^$sleep_argv0" 2>/dev/null && sleep 0.5
++	pkill -P $(pgrep -f "^$sleep_argv0") 2>/dev/null && sleep 0.5
+ 	local before="$(xclip -o -selection "$X_SELECTION" 2>/dev/null | base64)"
+ 	echo -n "$1" | xclip -selection "$X_SELECTION" || die "Error: Could not copy data to the clipboard"
+ 	(
+-		( exec -a "$sleep_argv0" sleep "$CLIP_TIME" )
++		# Execute sleep as a child process of bash because it may be
++		# a symlink to a single binary version of coreutils or busybox
++		# which depends on argv0 correctly set to "sleep"
++		( exec -a "$sleep_argv0" bash <(echo sleep "$CLIP_TIME") )
+ 		local now="$(xclip -o -selection "$X_SELECTION" | base64)"
+ 		[[ $now != $(echo -n "$1" | base64) ]] && before="$now"
+ 
+-- 
+2.9.3
+

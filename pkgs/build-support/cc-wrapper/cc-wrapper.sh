@@ -22,6 +22,7 @@ dontLink=0
 getVersion=0
 nonFlagArgs=0
 [[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
+cppInclude=1
 
 params=("$@")
 n=0
@@ -46,6 +47,10 @@ while [ $n -lt ${#params[*]} ]; do
         isCpp=1
     elif [ "$p" = -nostdlib ]; then
         isCpp=-1
+    elif [ "$p" = -nostdinc ]; then
+        cppInclude=0
+    elif [ "$p" = -nostdinc++ ]; then
+        cppInclude=0
     elif [ "${p:0:1}" != - ]; then
         nonFlagArgs=1
     elif [ "$p" = -m32 ]; then
@@ -64,7 +69,6 @@ done
 if [ "$nonFlagArgs" = 0 ]; then
     dontLink=1
 fi
-
 
 # Optionally filter out paths not refering to the store.
 if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
@@ -106,20 +110,24 @@ if [ "$NIX_ENFORCE_NO_NATIVE" = 1 ]; then
 fi
 
 if [[ "$isCpp" = 1 ]]; then
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+    if [[ "$cppInclude" = 1 ]]; then
+        NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+    fi
     NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK $NIX_CXXSTDLIB_LINK"
 fi
 
-# Add the flags for the C compiler proper.
-extraAfter=($NIX_CFLAGS_COMPILE)
-extraBefore=()
+LD=@ldPath@/ld
+source @out@/nix-support/add-hardening.sh
 
+# Add the flags for the C compiler proper.
+extraAfter=($NIX_CFLAGS_COMPILE ${hardeningCFlags[@]})
+extraBefore=()
 
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($NIX_CFLAGS_LINK)
+    extraAfter+=($NIX_CFLAGS_LINK ${hardeningLDFlags[@]})
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_LDFLAGS again).

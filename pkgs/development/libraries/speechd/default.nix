@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
              ++ lib.optional withPico svox;
   nativeBuildInputs = [ pkgconfig python3Packages.wrapPython ];
 
+  hardeningDisable = [ "format" ];
+
   pythonPath = with python3Packages; [ pyxdg ];
 
   postPatch = lib.optionalString withPico ''

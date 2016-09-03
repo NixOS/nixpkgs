@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = optional wantPS ps;
 
   CMAKE_PREFIX_PATH = concatStringsSep ":"
-    (concatMap (p: [ p p.out ]) buildInputs);
+    (concatMap (p: [ (p.dev or p) (p.out or p) ]) buildInputs);
 
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
-    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.all;
+    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ urkud mornfall ];
   };
 }

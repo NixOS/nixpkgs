@@ -22,8 +22,8 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
     sed -i 's|/usr/include/libaio.h|${libaio}/include/libaio.h|' usr/Makefile
-    sed -i 's|/usr/include/sys/|${stdenv.glibc}/include/sys/|' usr/Makefile
-    sed -i 's|/usr/include/linux/|${stdenv.glibc}/include/linux/|' usr/Makefile
+    sed -i 's|/usr/include/sys/|${stdenv.glibc.dev}/include/sys/|' usr/Makefile
+    sed -i 's|/usr/include/linux/|${stdenv.glibc.dev}/include/linux/|' usr/Makefile
   '';
 
   postInstall = ''

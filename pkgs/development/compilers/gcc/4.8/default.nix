@@ -217,6 +217,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
+  hardeningDisable = [ "format" ];
+
   outputs = [ "out" "lib" "doc" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;

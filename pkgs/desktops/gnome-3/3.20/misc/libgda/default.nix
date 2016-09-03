@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ pkgconfig intltool itstool libxml2 gtk3 openssl ];
 
   meta = with stdenv.lib; {

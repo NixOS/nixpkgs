@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "libudev-${systemd.version}";
 
   unpackPhase = ":";
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   installPhase = ''
     mkdir -p "$out/lib" "$dev/lib/pkgconfig" "$dev/include"
     cp -P "${systemd}"/lib/libudev.* "$out/lib/"

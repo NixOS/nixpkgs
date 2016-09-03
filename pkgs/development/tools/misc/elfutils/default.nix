@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./glibc-2.21.patch ];
 
+  hardeningDisable = [ "format" ];
+
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
   nativeBuildInputs = [ m4 bison flex gettext bzip2 ];

@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpaper gperf file ];
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
-    description = "An Anyithing to PostScript converter and pretty-printer";
+    description = "An Anything to PostScript converter and pretty-printer";
     longDescription = ''
       GNU a2ps converts files into PostScript for printing or viewing. It uses a nice default format,
       usually two pages on each physical page, borders surrounding pages, headers with useful information

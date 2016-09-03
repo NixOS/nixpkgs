@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, audiofile, libcap
-, openglSupport ? false, mesa ? null
-, alsaSupport ? true, alsaLib ? null
-, x11Support ? true, xlibsWrapper ? null, libXrandr ? null
-, pulseaudioSupport ? true, libpulseaudio ? null
+, openglSupport ? false, mesa_noglu, mesa_glu
+, alsaSupport ? true, alsaLib
+, x11Support ? true, libXext, libICE, libXrandr
+, pulseaudioSupport ? true, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
@@ -10,34 +10,29 @@
 # PulseAudio.
 assert (stdenv.isLinux && !(stdenv ? cross)) -> alsaSupport || pulseaudioSupport;
 
-assert openglSupport -> (mesa != null && x11Support);
-assert x11Support -> (xlibsWrapper != null && libXrandr != null);
-assert alsaSupport -> alsaLib != null;
-assert pulseaudioSupport -> libpulseaudio != null;
-
 let
   inherit (stdenv.lib) optional optionals;
 in
 stdenv.mkDerivation rec {
-  version = "1.2.15";
   name    = "SDL-${version}";
+  version = "1.2.15";
 
   src = fetchurl {
     url    = "http://www.libsdl.org/release/${name}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
   nativeBuildInputs = [ pkgconfig ];
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedBuildInputs =
-    optionals x11Support [ xlibsWrapper libXrandr ] ++
+    optionals x11Support [ libXext libICE libXrandr ] ++
     optional alsaSupport alsaLib ++
     optional stdenv.isLinux libcap ++
-    optional openglSupport mesa ++
+    optionals openglSupport [ mesa_noglu mesa_glu ] ++
     optional pulseaudioSupport libpulseaudio ++
     optional stdenv.isDarwin Cocoa;
 
@@ -57,9 +52,9 @@ stdenv.mkDerivation rec {
     "--enable-rpath"
     "--disable-pulseaudio-shared"
     "--disable-osmesa-shared"
-  ] ++ stdenv.lib.optionals (stdenv ? cross) ([
+  ] ++ optionals (stdenv ? cross) ([
     "--without-x"
-  ] ++ stdenv.lib.optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib");
+  ] ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib");
 
   patches = [
     # Fix window resizing issues, e.g. for xmonad
@@ -95,15 +90,18 @@ stdenv.mkDerivation rec {
       url = "http://hg.libsdl.org/SDL/raw-rev/bbfb41c13a87";
       sha256 = "1336g7waaf1c8yhkz11xbs500h8bmvabh4h437ax8l1xdwcppfxv";
     })
+    ./find-headers.patch
   ];
 
   postFixup = ''moveToOutput share/aclocal "$dev" '';
+
+  setupHook = ./setup-hook.sh;
 
   passthru = { inherit openglSupport; };
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";
-    homepage    = http://www.libsdl.org/;
+    homepage    = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
     license     = licenses.lgpl21;

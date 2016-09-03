@@ -221,6 +221,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
+  hardeningDisable = [ "format" ];
+
   outputs = if langJava || langGo then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;

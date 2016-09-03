@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-all-plugins";
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "Visualization program for exploring high-dimensional data";
     homepage = http://www.ggobi.org/;

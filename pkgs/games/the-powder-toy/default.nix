@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, pkgconfig, SDL, lua, fftwFloat }:
+{ stdenv, fetchFromGitHub, scons, pkgconfig, SDL, lua, fftwFloat, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   name = "the-powder-toy-${version}";
@@ -13,9 +13,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-env.patch ];
 
+  postPatch = ''
+    sed -i 's,lua5.1,lua,g' SConscript
+  '';
+
   nativeBuildInputs = [ scons pkgconfig ];
 
-  buildInputs = [ SDL lua fftwFloat ];
+  buildInputs = [ SDL lua fftwFloat zlib bzip2 ];
 
   buildPhase = "scons DESTDIR=$out/bin --tool='' -j$NIX_BUILD_CORES";
 

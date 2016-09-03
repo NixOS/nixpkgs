@@ -8,10 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0v14ff9s37vkh45diaddndcrj0hmn67arh8xh8k79q9c1vgc1cm7";
   };
 
-  outputs = [ "dev" "out" "bin" "man" ];
+  outputs = [ "bin" "dev" "out" "man" ];
 
   buildInputs = [ ncurses readline ];
   configureFlags = [ "--with-ui" "--with-readline" ];
+
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = http://hunspell.sourceforge.net;

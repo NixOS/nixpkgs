@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://kldp.net/baekmuk/release/865-${name}.tar.gz";
-    sha256 = "08ab7dffb55d5887cc942ce370f5e33b756a55fbb4eaf0b90f244070e8d51882";
+    sha256 = "10hqspl70h141ywz1smlzdanlx9vwgsp1qrcjk68fn2xnpzpvaq8";
   };
 
   dontBuild = true;

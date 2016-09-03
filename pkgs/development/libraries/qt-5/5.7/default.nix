@@ -47,7 +47,7 @@ let
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
-      outputs = args.outputs or [ "dev" "out" ];
+      outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
       setupHook = ./setup-hook.sh;
@@ -88,6 +88,7 @@ let
       qtsvg = callPackage ./qtsvg.nix {};
       qttools = callPackage ./qttools {};
       qttranslations = callPackage ./qttranslations.nix {};
+      qtwayland = callPackage ./qtwayland.nix {};
       qtwebchannel = callPackage ./qtwebchannel.nix {};
       qtwebengine = callPackage ./qtwebengine.nix {};
       qtwebkit = callPackage ./qtwebkit {};
@@ -99,8 +100,8 @@ let
       full = env "qt-${qtbase.version}" [
         qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
-        qtx11extras qtxmlpatterns
+        qtsensors qtserialport qtsvg qttools qttranslations qtwayland
+        qtwebsockets qtx11extras qtxmlpatterns
       ];
 
       makeQtWrapper =
@@ -110,7 +111,7 @@ let
 
       qmakeHook =
         makeSetupHook
-        { deps = [ self.qtbase ]; }
+        { deps = [ self.qtbase.dev ]; }
         ./qmake-hook.sh;
 
     };

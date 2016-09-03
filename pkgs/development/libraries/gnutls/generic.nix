@@ -17,8 +17,8 @@ stdenv.mkDerivation {
 
   inherit src patches;
 
-  outputs = [ "dev" "out" "bin" "man" "docdev" ];
-  outputInfo = "docdev";
+  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputInfo = "devdoc";
 
   postPatch = lib.optionalString (lib.versionAtLeast version "3.4") ''
     sed '2iecho "name constraints tests skipped due to datefudge problems"\nexit 0' \

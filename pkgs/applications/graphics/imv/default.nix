@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, SDL2, SDL2_ttf, freeimage }:
+{ stdenv, fetchgit, SDL2, SDL2_ttf, freeimage, fontconfig }:
 
 stdenv.mkDerivation rec {
   name = "imv-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fhc944g7b61jrkd4wn1piq6dkpabsbxpm80pifx9dqmj16sf0pf";
   };
 
-  buildInputs = [ SDL2 SDL2_ttf freeimage ];
+  buildInputs = [ SDL2 SDL2_ttf freeimage fontconfig ];
 
   configurePhase = "substituteInPlace Makefile --replace /usr $out";
 

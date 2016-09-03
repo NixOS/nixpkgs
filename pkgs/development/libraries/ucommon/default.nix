@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig ];
 
+  # disable flaky networking test
+  postPatch = ''
+    substituteInPlace test/stream.cpp \
+      --replace 'ifndef UCOMMON_SYSRUNTIME' 'if 0'
+  '';
+
   # ucommon.pc has link time depdendencies on -lssl, -lcrypto, -lz, -lgnutls
   propagatedBuildInputs = [ openssl zlib gnutls ];
 
@@ -30,6 +36,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ viric ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

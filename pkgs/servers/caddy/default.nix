@@ -1,18 +1,18 @@
-{ stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "caddy-${version}";
-  version = "v0.9.0";
-  rev = "f28af637327a4f12ae745284c519cfdeca5502ef";
+  version = "v0.9.1";
 
   goPackagePath = "github.com/mholt/caddy";
 
   subPackages = [ "caddy" ];
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/mholt/caddy.git";
-    sha256 = "1s7z0xbcw516i37pyj1wgxd9diqrifdghf97vs31ilbqs6z0nyls";
+  src = fetchFromGitHub {
+    owner = "mholt";
+    repo = "caddy";
+    rev = version;
+    sha256 = "0slh4nf5pd42mgj1j9hzywqpc3p6d211dm6pdlhb6lyn8f6nprgp";
   };
 
   buildFlagsArray = ''

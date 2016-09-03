@@ -8,7 +8,7 @@ let
   opensslCrossSystem = stdenv.cross.openssl.system or
     (throw "openssl needs its platform name cross building");
 
-  common = { version, sha256 }: stdenv.mkDerivation rec {
+  common = args@{ version, sha256, patches ? [] }: stdenv.mkDerivation rec {
     name = "openssl-${version}";
 
     src = fetchurl {
@@ -17,13 +17,14 @@ let
     };
 
     patches =
-      [ ./use-etc-ssl-certs.patch ]
+      (args.patches or [])
+      ++ optional (versionOlder version "1.1.0") ./use-etc-ssl-certs.patch
       ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
       ++ optional
            (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
            ./darwin-arch.patch;
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
   setOutputFlags = false;
 
     nativeBuildInputs = [ perl ];
@@ -107,11 +108,24 @@ in {
   openssl_1_0_1 = common {
     version = "1.0.1t";
     sha256 = "4a6ee491a2fdb22e519c76fdc2a628bb3cec12762cd456861d207996c8a07088";
+    patches = [
+      # https://git.openssl.org/?p=openssl.git;a=commit;h=6f35f6deb5ca7daebe289f86477e061ce3ee5f46
+      ./1.0.1-CVE-2016-2177.diff
+    ];
   };
 
   openssl_1_0_2 = common {
     version = "1.0.2h";
     sha256 = "1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919";
+    patches = [
+      # https://git.openssl.org/?p=openssl.git;a=commit;h=a004e72b95835136d3f1ea90517f706c24c03da7
+      ./1.0.2-CVE-2016-2177.diff
+    ];
+  };
+
+  openssl_1_1_0 = common {
+    version = "1.1.0";
+    sha256 = "10lcpmnxap9nw8ymdglys93cgkwd1lf1rz4fhq5whwhlmkwrzipm";
   };
 
 }

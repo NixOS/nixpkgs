@@ -173,15 +173,19 @@ Index: qtbase-opensource-src-5.7.0/mkspecs/features/data/cmake/Qt5BasicConfig.cm
      endif()
  !!ENDIF // CMAKE_RELEASE_TYPE
  !!ENDIF // CMAKE_FIND_OTHER_LIBRARY_BUILD
-@@ -329,7 +259,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME
+@@ -328,11 +258,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME
+     macro(_populate_$${CMAKE_MODULE_NAME}_plugin_properties Plugin Configuration PLUGIN_LOCATION)
          set_property(TARGET Qt5::${Plugin} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${Configuration})
  
- !!IF isEmpty(CMAKE_PLUGIN_DIR_IS_ABSOLUTE)
+-!!IF isEmpty(CMAKE_PLUGIN_DIR_IS_ABSOLUTE)
 -        set(imported_location \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_PLUGIN_DIR}${PLUGIN_LOCATION}\")
-+        set(imported_location \"@NIX_OUT@/$${CMAKE_PLUGIN_DIR}${PLUGIN_LOCATION}\")
- !!ELSE
-         set(imported_location \"$${CMAKE_PLUGIN_DIR}${PLUGIN_LOCATION}\")
- !!ENDIF
+-!!ELSE
+-        set(imported_location \"$${CMAKE_PLUGIN_DIR}${PLUGIN_LOCATION}\")
+-!!ENDIF
++        set(imported_location \"${PLUGIN_LOCATION}\")
+         _qt5_$${CMAKE_MODULE_NAME}_check_file_exists(${imported_location})
+         set_target_properties(Qt5::${Plugin} PROPERTIES
+             \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 Index: qtbase-opensource-src-5.7.0/src/gui/Qt5GuiConfigExtras.cmake.in
 ===================================================================
 --- qtbase-opensource-src-5.7.0.orig/src/gui/Qt5GuiConfigExtras.cmake.in
@@ -319,3 +323,63 @@ Index: qtbase-opensource-src-5.7.0/src/dbus/Qt5DBusConfigExtras.cmake.in
  !!ELSE
      set(imported_location \"$${CMAKE_BIN_DIR}qdbusxml2cpp$$CMAKE_BIN_SUFFIX\")
  !!ENDIF
+Index: qtbase-opensource-src-5.7.0/mkspecs/features/create_cmake.prf
+===================================================================
+--- qtbase-opensource-src-5.7.0.orig/mkspecs/features/create_cmake.prf
++++ qtbase-opensource-src-5.7.0/mkspecs/features/create_cmake.prf
+@@ -136,28 +136,28 @@ contains(CONFIG, plugin) {
+ 
+     win32 {
+         isEmpty(CMAKE_STATIC_TYPE) {
+-            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}.dll
+-            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d.dll
++            CMAKE_PLUGIN_LOCATION_RELEASE = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/$${TARGET}.dll
++            CMAKE_PLUGIN_LOCATION_DEBUG = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/$${TARGET}d.dll
+         } else:mingw {
+-            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${TARGET}.a
+-            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${TARGET}d.a
++            CMAKE_PLUGIN_LOCATION_RELEASE = $${CMAKE_PLUGIN_DIR}/$$PLUGIN_TYPE/lib$${TARGET}.a
++            CMAKE_PLUGIN_LOCATION_DEBUG = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/lib$${TARGET}d.a
+         } else {                         # MSVC static
+-            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}.lib
+-            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d.lib
++            CMAKE_PLUGIN_LOCATION_RELEASE = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/$${TARGET}.lib
++            CMAKE_PLUGIN_LOCATION_DEBUG = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/$${TARGET}d.lib
+         }
+     } else {
+         mac {
+             isEmpty(CMAKE_STATIC_TYPE): CMAKE_PlUGIN_EXT = .dylib
+             else: CMAKE_PlUGIN_EXT = .a
+ 
+-            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
+-            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
++            CMAKE_PLUGIN_LOCATION_RELEASE = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
++            CMAKE_PLUGIN_LOCATION_DEBUG = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
+         } else {
+             isEmpty(CMAKE_STATIC_TYPE): CMAKE_PlUGIN_EXT = .so
+             else: CMAKE_PlUGIN_EXT = .a
+ 
+-            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
+-            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
++            CMAKE_PLUGIN_LOCATION_RELEASE = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
++            CMAKE_PLUGIN_LOCATION_DEBUG = $${CMAKE_PLUGIN_DIR}$$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
+         }
+     }
+     cmake_target_file.input = $$PWD/data/cmake/Qt5PluginTarget.cmake.in
+Index: qtbase-opensource-src-5.7.0/mkspecs/features/data/cmake/Qt5PluginTarget.cmake.in
+===================================================================
+--- qtbase-opensource-src-5.7.0.orig/mkspecs/features/data/cmake/Qt5PluginTarget.cmake.in
++++ qtbase-opensource-src-5.7.0/mkspecs/features/data/cmake/Qt5PluginTarget.cmake.in
+@@ -2,10 +2,10 @@
+ add_library(Qt5::$$CMAKE_PLUGIN_NAME MODULE IMPORTED)
+ 
+ !!IF !isEmpty(CMAKE_RELEASE_TYPE)
+-_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME RELEASE \"$${CMAKE_PLUGIN_LOCATION_RELEASE}\")
++_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME RELEASE \"@NIX_OUT@/$${CMAKE_PLUGIN_LOCATION_RELEASE}\")
+ !!ENDIF
+ !!IF !isEmpty(CMAKE_DEBUG_TYPE)
+-_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME DEBUG \"$${CMAKE_PLUGIN_LOCATION_DEBUG}\")
++_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME DEBUG \"@NIX_OUT@/$${CMAKE_PLUGIN_LOCATION_DEBUG}\")
+ !!ENDIF
+ 
+ list(APPEND Qt5$${CMAKE_MODULE_NAME}_PLUGINS Qt5::$$CMAKE_PLUGIN_NAME)

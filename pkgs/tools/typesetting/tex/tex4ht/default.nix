@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tetex unzip ];
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = ''
     cd src
     for f in tex4ht t4ht htcmd ; do

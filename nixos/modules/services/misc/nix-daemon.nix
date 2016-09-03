@@ -248,7 +248,7 @@ in
         description = ''
           List of binary cache URLs that non-root users can use (in
           addition to those specified using
-          <option>nix.binaryCaches</option> by passing
+          <option>nix.binaryCaches</option>) by passing
           <literal>--option binary-caches</literal> to Nix commands.
         '';
       };
@@ -311,7 +311,7 @@ in
       nixPath = mkOption {
         type = types.listOf types.str;
         default =
-          [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
+          [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
           ];

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1yd6l1l1c62xjr1xnij2x49kr416anbgfs4y06r86kp9hkmz2g7i";
   };
 
+  hardeningDisable = [ "format" ];
+
   postPatch = ''
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",

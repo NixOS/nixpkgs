@@ -11,6 +11,8 @@ stdenv.mkDerivation {
   buildInputs = [ allegro openal mesa zlib hawknl freeglut libX11
     libXxf86vm libXcursor libXpm ];
 
+  hardeningDisable = [ "format" ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp fakenes $out/bin

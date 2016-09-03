@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "prefix=$(out)";
 
+  hardeningDisable = stdenv.lib.optional (stdenv.isi686) "stackprotector";
+
   meta = {
     description = "Library for asynchronous I/O in Linux";
     homepage = http://lse.sourceforge.net/io/aio.html;

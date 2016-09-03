@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
 
     wrapProgram $out/bin/microscheme \
-      --prefix PATH : "${avrdude}/bin:${avrgcclibc}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ avrdude avrgcclibc ]}"
   '';
 
   meta = with stdenv.lib; {

@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [ "--disable-spamassassin" "--disable-pst-import" "--disable-autoar"
                      "--disable-libcryptui" ];
 
-  NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss -I${glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 

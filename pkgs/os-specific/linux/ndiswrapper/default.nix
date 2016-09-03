@@ -3,6 +3,8 @@
 stdenv.mkDerivation {
   name = "ndiswrapper-1.59-${kernel.version}";
 
+  hardeningDisable = [ "pic" ];
+
   patches = [ ./no-sbin.patch ];
 
   # need at least .config and include 

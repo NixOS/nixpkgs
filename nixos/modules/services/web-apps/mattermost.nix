@@ -37,7 +37,7 @@ in
         type = types.str;
         example = "https://chat.example.com";
         description = ''
-          URL this Mattermost instance is reachable under, without trailing slash."
+          URL this Mattermost instance is reachable under, without trailing slash.
         '';
       };
 

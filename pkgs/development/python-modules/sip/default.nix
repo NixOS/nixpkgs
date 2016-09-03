@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python, isPyPy }:
+{ lib, fetchurl, mkPythonDerivation, python, isPyPy }:
 
-if isPyPy then throw "sip not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
+if isPyPy then throw "sip not supported for interpreter ${python.executable}" else mkPythonDerivation rec {
   name = "sip-4.18.1";
 
   src = fetchurl {
@@ -14,11 +14,7 @@ if isPyPy then throw "sip not supported for interpreter ${python.executable}" el
       -b $out/bin -e $out/include
   '';
 
-  buildInputs = [ python ];
-
-  passthru.pythonPath = [];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Creates C++ bindings for Python modules";
     homepage    = "http://www.riverbankcomputing.co.uk/";
     license     = licenses.gpl2Plus;

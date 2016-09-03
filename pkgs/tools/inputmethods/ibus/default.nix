@@ -34,9 +34,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python3 pygobject3
     intltool isocodes pkgconfig
-    gtk2 gtk3 dconf glib
+    gtk2 gtk3 dconf
     dbus libnotify gobjectIntrospection wayland
   ];
+
+  propagatedBuildInputs = [ glib ];
 
   nativeBuildInputs = [ makeWrapper ];
 

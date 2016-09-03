@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--disable-ip6";
-
   patches = stdenv.lib.singleton ./libressl-fixes.patch ;
 
   meta = with stdenv.lib; {

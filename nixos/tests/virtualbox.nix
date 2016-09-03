@@ -4,12 +4,12 @@ with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
 
 let
-  testVMConfig = vmName: attrs: { config, pkgs, ... }: let
+  testVMConfig = vmName: attrs: { config, pkgs, lib, ... }: let
     guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
     miniInit = ''
       #!${pkgs.stdenv.shell} -xe
-      export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
       mkdir -p /var/run/dbus
       cat > /etc/passwd <<EOF
@@ -314,6 +314,9 @@ let
 
     test2.vmFlags = hostonlyVMFlags;
     test2.vmScript = dhcpScript;
+
+    headless.virtualisation.virtualbox.headless = true;
+    headless.services.xserver.enable = false;
   };
 
   mkVBoxTest = name: testScript: makeTest {
@@ -400,6 +403,14 @@ in mapAttrs mkVBoxTest {
     });
 
     shutdownVM_simple;
+  '';
+
+  headless = ''
+    createVM_headless;
+    $machine->succeed(ru("VBoxHeadless --startvm headless & disown %1"));
+    waitForStartup_headless;
+    waitForVMBoot_headless;
+    shutdownVM_headless;
   '';
 
   host-usb-permissions = ''

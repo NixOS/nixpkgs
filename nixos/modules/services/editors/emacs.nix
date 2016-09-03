@@ -83,4 +83,6 @@ in {
       EDITOR = mkOverride 900 "${editorScript}/bin/emacseditor";
     } else {};
   };
+
+  meta.doc = ./emacs.xml;
 }

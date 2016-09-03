@@ -7,9 +7,10 @@
 , extraPatches ? [ ]
 , license ? stdenv.lib.licenses.sleepycat
 , branch ? null
+, drvArgs ? {}
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "db-${version}";
 
   src = fetchurl {
@@ -42,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     branch = branch;
   };
-}
+} // drvArgs)

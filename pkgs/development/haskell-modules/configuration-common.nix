@@ -23,7 +23,12 @@ self: super: {
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
-  c2hs = if pkgs.stdenv.isDarwin then dontCheck super.c2hs else super.c2hs;
+  c2hs = dontCheck super.c2hs;
+
+  # fix errors caused by hardening flags
+  epanet-haskell = super.epanet-haskell.overrideDerivation (drv: {
+    hardeningDisable = [ "format" ];
+  });
 
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
@@ -39,7 +44,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1b4yw305h7ca28x8s2jnkcc9cwn3rygnjyarib33dk4z066lsg7s";
+      sha256 = "1frdld9kgnfd4ll8yx086lwmbqxa5k56y567qw2zy9kz1iiz2fpi";
       rev = drv.version;
     };
   })).override {
@@ -203,10 +208,24 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib;
-  glib = addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib;
-  gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
-  gtk = addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk;
+  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend (
+    addBuildTool super.gio self.gtk2hs-buildtools
+  ) pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend (
+    addBuildTool super.glib self.gtk2hs-buildtools
+  ) pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  gtk3 = pkgs.lib.overrideDerivation (super.gtk3.override { inherit (pkgs) gtk3; }) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend (
+    addBuildTool super.gtk self.gtk2hs-buildtools
+  ) pkgs.gtk) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
@@ -385,7 +404,9 @@ self: super: {
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
-  lvmrun = dontCheck super.lvmrun;
+  lvmrun = pkgs.lib.overrideDerivation (dontCheck super.lvmrun) (drv: {
+    hardeningDisable = [ "format" ];
+  });
   memcache = dontCheck super.memcache;
   milena = dontCheck super.milena;
   nats-queue = dontCheck super.nats-queue;
@@ -803,10 +824,10 @@ self: super: {
   # https://github.com/ivanperez-keera/hcwiid/pull/4
   hcwiid = overrideCabal super.hcwiid (drv: {
     configureFlags = (drv.configureFlags or []) ++ [
-      "--extra-lib-dirs=${pkgs.bluez}/lib"
+      "--extra-lib-dirs=${pkgs.bluez.out}/lib"
       "--extra-lib-dirs=${pkgs.cwiid}/lib"
       "--extra-include-dirs=${pkgs.cwiid}/include"
-      "--extra-include-dirs=${pkgs.bluez}/include"
+      "--extra-include-dirs=${pkgs.bluez.dev}/include"
     ];
     prePatch = '' sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal" '';
   });
@@ -838,6 +859,9 @@ self: super: {
 
   # https://github.com/guillaume-nargeot/hpc-coveralls/issues/52
   hpc-coveralls = disableSharedExecutables super.hpc-coveralls;
+
+  # Can't find libHSidris-*.so during build.
+  idris = disableSharedExecutables super.idris;
 
   # https://github.com/fpco/stackage/issues/838
   cryptonite = dontCheck super.cryptonite;
@@ -930,7 +954,9 @@ self: super: {
 
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
-  pango = addBuildTool super.pango self.gtk2hs-buildtools;
+  pango = (addBuildTool super.pango self.gtk2hs-buildtools).overrideDerivation (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
 
   # Fix tests which would otherwise fail with "Couldn't launch intero process."
   intero = overrideCabal super.intero (drv: {
@@ -955,21 +981,14 @@ self: super: {
   # us when we patch the cabal file (Link options will be recored in the ghc package registry).
   GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
 
-  # https://github.com/gwern/mueval/issues/14
-  mueval = overrideCabal super.mueval (drv: {
-    revision = null;
-    editedCabalFile = null;
-    patches = [(pkgs.fetchpatch {
-      url = "https://github.com/gwern/mueval/commit/866f895e0b671bcaa232b46ed93dd7d47a4b32b2.patch";
-      sha256 = "16pb9nfr52hwidxv0f7j4yg8yd86959kzbcw9lmnzpvgdy5qyvkg";
-    })];
-  });
-
   # remove if a version > 0.1.0.1 ever gets released
   stunclient = overrideCabal super.stunclient (drv: {
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
     '';
   });
+
+  # https://bitbucket.org/ssaasen/spy/pull-requests/3/fsnotify-dropped-system-filepath
+  spy = appendPatch super.spy ./patches/spy.patch;
 
 }

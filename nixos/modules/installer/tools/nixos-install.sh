@@ -92,14 +92,13 @@ fi
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run $mountPoint/home
 mkdir -m 01777 -p $mountPoint/tmp
 mkdir -m 0755 -p $mountPoint/tmp/root
-mkdir -m 0755 -p $mountPoint/var/setuid-wrappers
+mkdir -m 0755 -p $mountPoint/var
 mkdir -m 0700 -p $mountPoint/root
 mount --rbind /dev $mountPoint/dev
 mount --rbind /proc $mountPoint/proc
 mount --rbind /sys $mountPoint/sys
 mount --rbind / $mountPoint/tmp/root
 mount -t tmpfs -o "mode=0755" none $mountPoint/run
-mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
 rm -rf $mountPoint/var/run
 ln -s /run $mountPoint/var/run
 for f in /etc/resolv.conf /etc/hosts; do rm -f $mountPoint/$f; [ -f "$f" ] && cp -Lf $f $mountPoint/etc/; done
@@ -136,7 +135,6 @@ fi
 mkdir -m 0755 -p \
     $mountPoint/nix/var/nix/gcroots \
     $mountPoint/nix/var/nix/temproots \
-    $mountPoint/nix/var/nix/manifests \
     $mountPoint/nix/var/nix/userpool \
     $mountPoint/nix/var/nix/profiles \
     $mountPoint/nix/var/nix/db \
@@ -199,14 +197,6 @@ export NIX_OTHER_STORES=/tmp/root/nix:$NIX_OTHER_STORES
 
 p=@nix@/libexec/nix/substituters
 export NIX_SUBSTITUTERS=$p/copy-from-other-stores.pl:$p/download-from-binary-cache.pl
-
-
-# Make manifests available in the chroot.
-rm -f $mountPoint/nix/var/nix/manifests/*
-for i in /nix/var/nix/manifests/*.nixmanifest; do
-    chroot $mountPoint @nix@/bin/nix-store -r "$(readlink -f "$i")" > /dev/null
-    cp -pd "$i" $mountPoint/nix/var/nix/manifests/
-done
 
 
 if [ -z "$closure" ]; then

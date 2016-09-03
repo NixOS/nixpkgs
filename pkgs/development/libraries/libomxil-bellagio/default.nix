@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = http://sourceforge.net/projects/omxil/;
     description = "An opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
     license = licenses.lgpl21;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
 }

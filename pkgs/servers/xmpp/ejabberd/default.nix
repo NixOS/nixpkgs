@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
 
     inherit src;
 
-    configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite}" ];
+    configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
     buildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
 

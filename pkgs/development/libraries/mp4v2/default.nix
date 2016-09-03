@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
   # `faac' expects `mp4.h'.
   postInstall = "ln -s mp4v2/mp4v2.h $out/include/mp4.h";
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     homepage = http://code.google.com/p/mp4v2;
     maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

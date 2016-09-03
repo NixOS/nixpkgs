@@ -7,11 +7,19 @@ let
 in
 {
   options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
-  
+  options.services.zerotierone.package = mkOption {
+    default = pkgs.zerotierone;
+    defaultText = "pkgs.zerotierone";
+    type = types.package;
+    description = ''
+      ZeroTier One package to use.
+    '';
+  };
+
   config = mkIf cfg.enable {
     systemd.services.zerotierone = {
       description = "ZeroTierOne";
-      path = [ pkgs.zerotierone ];
+      path = [ cfg.package ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart =
@@ -21,7 +29,7 @@ in
         chown -R root:root /var/lib/zerotier-one
         '';
       serviceConfig = {
-        ExecStart = "${pkgs.zerotierone}/bin/zerotier-one";
+        ExecStart = "${cfg.package}/bin/zerotier-one";
         Restart = "always";
         KillMode = "process";
       };
@@ -30,6 +38,6 @@ in
     # ZeroTier does not issue DHCP leases, but some strangers might...
     networking.dhcpcd.denyInterfaces = [ "zt0" ];
 
-    environment.systemPackages = [ pkgs.zerotierone ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

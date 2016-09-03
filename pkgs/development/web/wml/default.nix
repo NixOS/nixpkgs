@@ -21,12 +21,14 @@ perlPackages.buildPerlPackage rec {
     sed -i 's/ doc / /g' wml_backend/p2_mp4h/Makefile.in
     sed -i '/p2_mp4h\/doc/d' Makefile.in
   '';
-  
+
   buildInputs = with perlPackages; 
     [ perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize ];
 
   patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
-  
+
+  hardeningDisable = [ "format" ];
+
   postPatch = ''
     substituteInPlace wml_frontend/wml.src \
       --replace "File::PathConvert::realpath" "Cwd::realpath" \

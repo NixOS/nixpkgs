@@ -75,7 +75,6 @@ in
       serviceConfig = {
         ExecStart = "${bumblebee}/bin/bumblebeed --use-syslog -g ${cfg.group} --driver ${cfg.driver}";
       };
-      environment.MODULE_DIR="/run/current-system/kernel-modules/lib/modules/";
     };
   };
 }

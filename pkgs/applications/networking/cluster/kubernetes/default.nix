@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/kube-proxy" --prefix PATH : "${iptables}/bin"
-    wrapProgram "$out/bin/kubelet" --prefix PATH : "${utillinux}/bin:${procps-ng}/bin"
+    wrapProgram "$out/bin/kubelet" --prefix PATH : "${stdenv.lib.makeBinPath [ utillinux procps-ng ]}"
     chmod +x "$out/libexec/kubernetes/safe_format_and_mount"
-    wrapProgram "$out/libexec/kubernetes/safe_format_and_mount" --prefix PATH : "${e2fsprogs}/bin:${utillinux}/bin"
+    wrapProgram "$out/libexec/kubernetes/safe_format_and_mount" --prefix PATH : "${stdenv.lib.makeBinPath [ e2fsprogs utillinux ]}"
     substituteInPlace "$out"/libexec/kubernetes/cluster/update-storage-objects.sh \
       --replace KUBE_OUTPUT_HOSTBIN KUBE_BIN
   '';

@@ -309,7 +309,7 @@ in rec {
     };
 
     startAt = mkOption {
-      type = types.str;
+      type = with types; either str (listOf str);
       default = "";
       example = "Sun 14:00:00";
       description = ''

@@ -11,12 +11,12 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
-  version = "100";
+  version = "101";
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
     urls = [ "http://download.byuu.org/${sourceName}.7z" ];
-    sha256 = "1pp20dxv6y2brb144v8kxfkkn0rcd755rivgrbvzzgn3v9dgjprp";
+    sha256 = "04vr3fp0b3cwq7q8d9v60qmv08zpcsb5gqn1whl4fvwcxcl22by8";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
@@ -41,8 +41,12 @@ stdenv.mkDerivation rec {
     install -m 755 icarus/out/icarus $out/bin/
     install -m 755 higan/out/higan $out/bin/
     install -m 644 higan/data/higan.desktop $out/share/applications/
-    install -m 644 higan/data/higan.png $out/share/pixmaps/
-    cp --recursive --no-dereference --preserve='links' --no-preserve='ownership' higan/data/cheats.bml higan/profile/* $out/share/higan/
+    install -m 644 higan/data/higan.png $out/share/pixmaps/higan-icon.png
+    install -m 644 higan/resource/logo/higan.png $out/share/pixmaps/higan-logo.png
+    cp --recursive --no-dereference --preserve='links' --no-preserve='ownership' \
+      higan/data/cheats.bml  $out/share/higan/
+    cp --recursive --no-dereference --preserve='links' --no-preserve='ownership' \
+      higan/systems/* $out/share/higan/
   '';
 
   fixupPhase = ''

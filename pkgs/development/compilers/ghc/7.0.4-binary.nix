@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${ncurses5.out}/lib:${gmp.out}/lib" {} \;
+          --set-rpath "${stdenv.lib.makeLibraryPath [ ncurses5 gmp ]}" {} \;
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       for prog in ld ar gcc strip ranlib; do

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux ++ platforms.darwin;
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [
     autoconf

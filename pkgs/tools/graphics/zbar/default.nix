@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     [ imagemagickBig pkgconfig python pygtk perl libX11
       libv4l qt4 lzma gtk2 autoreconfHook ];
 
+  hardeningDisable = [ "fortify" ];
+
   meta = with stdenv.lib; {
     description = "Bar code reader";
     longDescription = ''

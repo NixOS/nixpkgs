@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "17l5czpvv5ilmg17frg0w4qwf89jzh2aglm9fgx0l0aakn6j7al1";
   };
 
+  hardeningDisable = [ "fortify" ];
+
   patches =
     [ ./0001-vimdot-lookup-vim-in-PATH.patch
-    
+
       # NOTE: Once this patch is removed, flex can probably be removed from
       # buildInputs.
       ./cve-2014-9157.patch

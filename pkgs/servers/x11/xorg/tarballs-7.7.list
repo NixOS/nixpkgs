@@ -127,6 +127,7 @@ mirror://xorg/individual/driver/xf86-input-mouse-1.9.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-synaptics-1.8.3.tar.bz2
 mirror://xorg/individual/driver/xf86-input-vmmouse-13.1.0.tar.bz2
 mirror://xorg/individual/driver/xf86-input-void-1.4.1.tar.bz2
+mirror://xorg/individual/driver/xf86-video-amdgpu-1.1.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ati-7.7.0.tar.bz2

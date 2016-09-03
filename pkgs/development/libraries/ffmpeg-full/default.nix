@@ -141,7 +141,8 @@
 /*
  *  Darwin frameworks
  */
-, Cocoa, CoreServices, AVFoundation, MediaToolbox, VideoDecodeAcceleration, CF
+, Cocoa, CoreAudio, CoreServices, AVFoundation, MediaToolbox
+, VideoDecodeAcceleration, CF
 }:
 
 /* Maintainer notes:
@@ -236,14 +237,17 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.0.2";
+  version = "3.1.3";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "08sjp4dxgcinmv9ly7nm24swmn2cnbbhvph44ihlplf4n33kr542";
+    sha256 = "08l8290gipm632dhrqndnphdpkc5ncqc1j3hxdx46r1a3q3mqmzq";
   };
 
-  patchPhase = ''patchShebangs .'';
+  patchPhase = ''patchShebangs .
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/#ifndef __MAC_10_11/#if 1/' ./libavcodec/audiotoolboxdec.c
+  '';
 
   configureFlags = [
     /*
@@ -412,8 +416,8 @@ stdenv.mkDerivation rec {
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optionals nvenc [ nvidia-video-sdk ]
-    ++ optionals stdenv.isDarwin [ Cocoa CoreServices AVFoundation MediaToolbox
-                                   VideoDecodeAcceleration ];
+    ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation 
+                                   MediaToolbox VideoDecodeAcceleration ];
 
   # Build qt-faststart executable
   buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';

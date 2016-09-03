@@ -1,8 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, audiofile
-, openglSupport ? false, mesa ? null
-, alsaSupport ? true, alsaLib ? null
-, x11Support ? true, xlibsWrapper ? null, libXrandr ? null
-, pulseaudioSupport ? true, libpulseaudio ? null
+{ stdenv, lib, fetchurl, pkgconfig, audiofile
+, openglSupport ? false, mesa_noglu
+, alsaSupport ? true, alsaLib
+, x11Support ? true, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
+, dbusSupport ? false, dbus
+, udevSupport ? false, udev
+, ibusSupport ? false, ibus
+, pulseaudioSupport ? true, libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
 }:
 
@@ -10,35 +13,39 @@
 # PulseAudio.
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 
-assert openglSupport -> (stdenv.isDarwin || mesa != null && x11Support);
-assert x11Support -> (xlibsWrapper != null && libXrandr != null);
-assert alsaSupport -> alsaLib != null;
-assert pulseaudioSupport -> libpulseaudio != null;
+assert openglSupport -> (stdenv.isDarwin || mesa_noglu != null && x11Support);
 
 let
-  configureFlagsFun = attrs: ''
-        --disable-oss --disable-x11-shared
-        --disable-pulseaudio-shared --disable-alsa-shared
-        ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib.out}/lib" else ""}
-        ${if (!x11Support) then "--without-x" else ""}
-      '';
+  configureFlagsFun = attrs: [
+      "--disable-oss" "--disable-x11-shared"
+      "--disable-pulseaudio-shared" "--disable-alsa-shared"
+    ] ++ lib.optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib"
+      ++ lib.optional (!x11Support) "--without-x";
 in
 stdenv.mkDerivation rec {
-  name = "SDL2-2.0.3";
+  name = "SDL2-${version}";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "0369ngvb46x6c26h8zva4x22ywgy6mvn0wx87xqwxg40pxm9m9m5";
+    sha256 = "0jqp46mxxbh9lhpx1ih6sp93k752j2smhpc0ad0q4cb3px0famfs";
   };
 
-  # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
-  propagatedBuildInputs = stdenv.lib.optionals x11Support [ xlibsWrapper libXrandr ] ++
-    stdenv.lib.optional pulseaudioSupport libpulseaudio;
+  patches = [ ./find-headers.patch ];
 
-  buildInputs = [ pkgconfig audiofile ] ++
-    stdenv.lib.optional openglSupport mesa ++
-    stdenv.lib.optional alsaSupport alsaLib ++
-    stdenv.lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+  nativeBuildInputs = [ pkgconfig ];
+
+  # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
+  propagatedBuildInputs = lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ] ++
+    lib.optional pulseaudioSupport libpulseaudio;
+
+  buildInputs = [ audiofile ] ++
+    lib.optional openglSupport mesa_noglu ++
+    lib.optional alsaSupport alsaLib ++
+    lib.optional dbusSupport dbus ++
+    lib.optional udevSupport udev ++
+    lib.optional ibusSupport ibus ++
+    lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
   dontDisableStatic = true;
@@ -49,20 +56,22 @@ stdenv.mkDerivation rec {
   configureFlags = configureFlagsFun { inherit alsaLib; };
 
   crossAttrs = {
-      configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
+    configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
   };
 
   postInstall = ''
     rm $out/lib/*.a
   '';
 
-  passthru = {inherit openglSupport;};
+  setupHook = ./setup-hook.sh;
 
-  meta = {
+  passthru = { inherit openglSupport; };
+
+  meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";
-    homepage = http://www.libsdl.org/;
-    license = stdenv.lib.licenses.zlib;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.page ];
+    homepage = "http://www.libsdl.org/";
+    license = licenses.zlib;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ page ];
   };
 }

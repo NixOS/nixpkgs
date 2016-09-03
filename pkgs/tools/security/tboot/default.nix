@@ -12,12 +12,15 @@ stdenv.mkDerivation rec {
 
   patches = [ ./tboot-add-well-known-secret-option-to-lcp_writepol.patch ];
 
+  hardeningDisable = [ "pic" "stackprotector" ];
+
   configurePhase = ''
     for a in lcptools utils tb_polgen; do
       substituteInPlace $a/Makefile --replace /usr/sbin /sbin
     done
     substituteInPlace docs/Makefile --replace /usr/share /share
   '';
+
   installFlags = "DESTDIR=$(out)";
 
   meta = with stdenv.lib; {

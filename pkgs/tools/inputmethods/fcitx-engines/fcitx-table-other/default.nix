@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, gettext }:
+{ stdenv, fetchurl, fetchpatch, cmake, fcitx, gettext }:
 
 stdenv.mkDerivation rec {
   name = "fcitx-table-other-${version}";
@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake fcitx gettext ];
+
+  patches = [
+    (fetchpatch { url = https://sources.debian.net/data/main/f/fcitx-table-other/0.2.3-3/debian/patches/0001-table-other-fix-build.patch;
+                  sha256 = "06n1df9szfgfjm5al8r1mvp4cib5h0cm601kwngl6k1vqyyjzg1j";
+                })
+  ];
 
   preInstall = ''
    substituteInPlace tables/cmake_install.cmake \

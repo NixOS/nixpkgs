@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
                   gdk_pixbuf gnome3.defaultIconTheme librsvg which gnome_common
                   gcr avahi gnome3.gsettings_desktop_schemas gnome3.dconf ];
 
-  NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss -I${glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 

@@ -16,6 +16,7 @@ let
       libc = "glibc";
       platform = pkgsNoParams.platforms.sheevaplug;
       openssl.system = "linux-generic32";
+      inherit (platform) gcc;
     };
   };
 

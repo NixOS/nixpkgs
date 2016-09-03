@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       # gstreamer gst_plugins_base
     ];
 
-  outputs = [ "dev" "out" "test" ];
+  outputs = [ "out" "dev" "test" ];
 
   patches = [ ./bluez-5.37-obexd_without_systemd-1.patch ];
 

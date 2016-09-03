@@ -5,6 +5,8 @@ stdenv.mkDerivation rec {
   name = "drgeo-${version}";
   version = "1.1.0";
 
+  hardeningDisable = [ "format" ];
+
   src = fetchurl {
     url = "mirror://sourceforge/ofset/${name}.tar.gz";
     sha256 = "05i2czgzhpzi80xxghinvkyqx4ym0gm9f38fz53idjhigiivp4wc";

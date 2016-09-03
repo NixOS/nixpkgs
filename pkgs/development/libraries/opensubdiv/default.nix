@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa, glew
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu, mesa_noglu, glew
 , cudaSupport ? false, cudatoolkit
 }:
 
@@ -12,6 +12,8 @@ stdenv.mkDerivation {
     sha256 = "14ylpzk4121gi3fl02dwmqjp5sbaqpkm4gd0lh6jijccdih0xsc0";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches =
     [ # Fix for building with cudatoolkit 7.
       (fetchurl {
@@ -21,7 +23,7 @@ stdenv.mkDerivation {
     ];
 
   buildInputs =
-    [ cmake pkgconfig mesa
+    [ cmake pkgconfig mesa_glu mesa_noglu
       # FIXME: these are not actually needed, but the configure script wants them.
       glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor xorg.libXinerama
     ]
@@ -36,6 +38,8 @@ stdenv.mkDerivation {
     ];
 
   enableParallelBuilding = true;
+
+  postInstall = "rm $out/lib/*.a";
 
   meta = {
     description = "An Open-Source subdivision surface library";

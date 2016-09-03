@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "16z74q422jmprhyvy7c9x909li8cqzmvzyr8cgbm52xcsp6pqs1z";
   };
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   meta = with stdenv.lib; {
     homepage = http://xiph.org/ogg/;

@@ -32,6 +32,8 @@ stdenv.mkDerivation {
 
   kernel = if libsOnly then null else kernel.dev;
 
+  hardeningDisable = [ "pic" "format" ];
+
   dontStrip = true;
 
   glPath = stdenv.lib.makeLibraryPath [xorg.libXext xorg.libX11 xorg.libXrandr];

@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net ];
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./logfile.patch ];
 
   meta = {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "17892sclz3yg45wbyqqrzzpq3l0icbnfl28f101b3062g8cy97dh";
   };
 
-  outputs = [ "dev" "out" "info" ];
+  outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
   propagatedBuildInputs = [ libgpgerror glib libassuan pth ];

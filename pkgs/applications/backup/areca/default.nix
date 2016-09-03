@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace bin/areca_run.sh --replace "/usr/lib/java/swt.jar" "${swt}/jars/swt.jar"
 
     sed -i "s#^PROGRAM_DIR.*#PROGRAM_DIR=$out#g" bin/areca_run.sh
-    sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=${swt}/lib:$out/lib:${acl}/lib#g" bin/areca_run.sh
+    sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=$out/lib:${stdenv.lib.makeLibraryPath [ swt acl ]}#g" bin/areca_run.sh
 
     # https://sourceforge.net/p/areca/bugs/563/
     substituteInPlace bin/areca_run.sh --replace '[ "$JAVA_IMPL" = "java" ]' \
