@@ -12351,6 +12351,7 @@ in
   bitcoin-xt = self.altcoins.bitcoin-xt;
 
   go-ethereum = self.altcoins.go-ethereum;
+  ethabi = self.altcoins.ethabi;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
