@@ -122,15 +122,16 @@ let
 
       cp -av build/*/images/j2sdk-image/* $out/lib/openjdk
 
-      # Move some stuff to top-level.
-      mv $out/lib/openjdk/include $out/include
-      mv $out/lib/openjdk/man $out/share/man
+      # Remove some broken manpages.
+      rm -rf $out/lib/openjdk/man/ja*
+
+      # Mirror some stuff in top-level.
+      mkdir $out/include $out/share/man
+      ln -s $out/lib/openjdk/include/* $out/include/
+      ln -s $out/lib/openjdk/man/* $out/share/man/
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
-
-      # Remove some broken manpages.
-      rm -rf $out/share/man/ja*
 
       # Remove crap from the installation.
       rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
@@ -174,6 +175,7 @@ let
 
       ln -s $out/lib/openjdk/bin $out/bin
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
+      ln -s $jre/lib/openjdk/jre $out/jre
     '';
 
     # FIXME: this is unnecessary once the multiple-outputs branch is merged.

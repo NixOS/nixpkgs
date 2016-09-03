@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform graphical controller for the Tor software, built using the Qt framework";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.phreedom ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

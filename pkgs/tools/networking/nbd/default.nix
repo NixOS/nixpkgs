@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Map arbitrary files as block devices over the network";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.peti ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

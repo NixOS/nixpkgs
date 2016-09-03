@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , bzip2
-, db
 , gdbm
 , libX11, xproto
 , lzma
@@ -33,7 +32,6 @@ let
     lzma
     gdbm
     sqlite
-    db
     readline
     ncurses
     openssl
@@ -95,10 +93,21 @@ stdenv.mkDerivation {
     paxmark E $out/bin/python${majorVersion}
   '';
 
+  postFixup = ''
+    # Get rid of retained dependencies on -dev packages, and remove
+    # some $TMPDIR references to improve binary reproducibility.
+    for i in $out/lib//python${majorVersion}/_sysconfigdata.py $out/lib/python${majorVersion}/config-${majorVersion}m/Makefile; do
+      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+    done
+
+    # FIXME: should regenerate this.
+    rm $out/lib/python${majorVersion}/__pycache__/_sysconfigdata.cpython*
+  '';
+
   passthru = rec {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
-    dbSupport = db != null;
+    dbSupport = false;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);

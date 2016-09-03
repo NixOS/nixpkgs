@@ -170,7 +170,17 @@ in
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
-  packer = callPackage ../development/tools/packer { };
+  packer = callPackage ../development/tools/packer {
+    # Go 1.7 changed the linker flag format
+    buildGoPackage = buildGo16Package;
+    gotools = self.gotools.override {
+      buildGoPackage = buildGo16Package;
+      go = self.go_1_6;
+    };
+    gox = self.gox.override {
+      buildGoPackage = buildGo16Package;
+    };
+  };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
@@ -450,7 +460,7 @@ in
 
   aws_shell = pythonPackages.aws_shell;
 
-  azure-cli = callPackage ../tools/virtualization/azure-cli { };
+  azure-cli = nodePackages.azure-cli;
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
@@ -473,6 +483,8 @@ in
   androidenv = callPackage ../development/mobile/androidenv {
     pkgs_i686 = pkgsi686Linux;
   };
+
+  adb-sync = callPackage ../development/mobile/adb-sync { };
 
   apg = callPackage ../tools/security/apg { };
 
@@ -4128,7 +4140,7 @@ in
 
   wml = callPackage ../development/web/wml { };
 
-  wring = callPackage ../tools/text/wring { };
+  wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
 
@@ -5864,9 +5876,9 @@ in
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
 
-  php = php56;
+  php = php70;
 
-  phpPackages = php56Packages;
+  phpPackages = php70Packages;
 
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
@@ -8785,9 +8797,12 @@ in
     };
     in mo.drivers
   );
+
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
-    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
+    # FIXME: this causes mesa to have a runtime dependency on
+    # mesa_noglu.dev.
+    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu mesa_glu.dev ];
     meta = {
       platforms = lib.platforms.unix;
     };
@@ -11373,6 +11388,11 @@ in
       enableHardening = true;
     });
 
+    virtualboxHeadless = lowPrio (virtualbox.override {
+      enableHardening = true;
+      headless = true;
+    });
+
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
     wireguard = callPackage ../os-specific/linux/wireguard { };
@@ -12153,6 +12173,10 @@ in
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
   roboto = callPackage ../data/fonts/roboto { };
+
+  roboto-mono = callPackage ../data/fonts/roboto-mono { };
+
+  roboto-slab = callPackage ../data/fonts/roboto-slab { };
 
   hasklig = callPackage ../data/fonts/hasklig {};
 
@@ -16088,7 +16112,7 @@ in
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  ut2004demo = callPackage ../games/ut2004demo { };
+  ut2004demo = callPackage_i686 ../games/ut2004demo { };
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 

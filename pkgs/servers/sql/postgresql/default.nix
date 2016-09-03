@@ -33,6 +33,7 @@ let
       [ (if lib.versionAtLeast version "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
         ./less-is-more.patch
         ./hardcode-pgxs-path.patch
+        ./specify_pkglibdir_at_runtime.patch
       ];
 
     installTargets = [ "install-world" ];

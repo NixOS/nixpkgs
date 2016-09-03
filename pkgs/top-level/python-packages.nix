@@ -1206,6 +1206,10 @@ in modules // {
     pympler coverage ]
      ++ optionals (stdenv.isDarwin) [ pkgs.clang ];
 
+    checkPhase = ''
+      py.test
+    '';
+
     meta = {
       description = "Python attributes without boilerplate";
       homepage = https://github.com/hynek/attrs;
@@ -2405,7 +2409,7 @@ in modules // {
       sha256 = "1j4f51dxic39mdwf6alj7gd769wy6mhk916v031wjali51xkh3xb";
     };
 
-    buildInputs = with self; [ hypothesis1 sqlite3 ];
+    buildInputs = with self; [ hypothesis sqlite3 ];
 
     propagatedBuildInputs = with self; [ chardet ];
 
@@ -4028,7 +4032,7 @@ in modules // {
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest self.py self.hypothesis1 ]
+                    self.iso8601 self.pyasn1 self.pytest_29 self.py self.hypothesis self.pytz ]
                ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
     propagatedBuildInputs = with self; [ six idna ipaddress pyasn1 cffi pyasn1-modules modules.sqlite3 pytz ]
      ++ optional (pythonOlder "3.4") self.enum34;
@@ -7577,26 +7581,29 @@ in modules // {
   };
 
   natsort = buildPythonPackage rec {
-    name = "natsort-4.0.0";
+    name = "natsort-5.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/natsort/${name}.tar.gz";
-      sha256 = "a0d4239bd609eae5cd5163db6f9794378ce0e3f43ae16c10c35472d866ae20cd";
+      sha256 = "4ad6b4d1153451e345967989bd3ca30abf33f615b116eeadfcc51a456e6974a9";
     };
 
     buildInputs = with self;
       [
-        hypothesis1
+        hypothesis
+        pytestcache
         pytestcov
         pytestflakes
         pytestpep8
-        covCore
+        mock
+        pathlib
       ];
 
     meta = {
       description = "Natural sorting for python";
       homepage = https://github.com/SethMMorton/natsort;
       license = licenses.mit;
+      broken = true;
     };
   };
 
@@ -9171,12 +9178,12 @@ in modules // {
 
   django_1_10 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.10";
+    version = "1.10.1";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-      sha256 = "01bh5yra6zyxcpqacahbwfbn0y4ivw07j2jsw3crvmjzivb6if26";
+      sha256 = "1wr438yykg0m5s9xini36hc826di55jm6by8syplczxnbjrcbrnn";
     };
 
     patches = [
@@ -11661,27 +11668,12 @@ in modules // {
     propagatedBuildInputs = with self; [ requests2 ];
   };
 
-  hypothesis1 = buildPythonPackage rec {
-    name = "hypothesis-1.14.0";
-
-    buildInputs = with self; [fake_factory django numpy pytz flake8 pytest ];
-
-    doCheck = false;  # no tests in source
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hypothesis/${name}.tar.gz";
-      sha256 = "12dxrvn108q2j20brrk6zcb8w00kn3af1c07c0fv572nf2ngyaxy";
-    };
-
-    meta = {
-      description = "A Python library for property based testing";
-      homepage = https://github.com/DRMacIver/hypothesis;
-      license = licenses.mpl20;
-    };
-  };
-
   hypothesis = buildPythonPackage rec {
     # http://hypothesis.readthedocs.org/en/latest/packaging.html
+
+    # Hypothesis has optional dependencies on the following libraries
+    # pytz fake_factory django numpy pytest
+    # If you need these, you can just add them to your environment.
 
     name = "hypothesis-${version}";
     version = "3.1.0";
@@ -11695,7 +11687,7 @@ in modules // {
     };
 
     buildInputs = with self; [ flake8 pytest flaky ];
-    propagatedBuildInputs = with self; ([ pytz fake_factory django numpy ] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
+    propagatedBuildInputs = with self; ([] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
 
     # https://github.com/DRMacIver/hypothesis/issues/300
     checkPhase = ''
@@ -12281,6 +12273,9 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [ markupsafe ];
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       homepage = http://jinja.pocoo.org/;
@@ -17152,6 +17147,10 @@ in modules // {
       sha256 = "17zajiw4mjbkkv6ahp3xf025qglkj0805m9s41c45zryzj6p2h39";
     };
 
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
     meta = {
       description = "Object-oriented filesystem paths";
       homepage = "https://pathlib.readthedocs.org/";
@@ -19630,7 +19629,7 @@ in modules // {
       sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
     };
 
-    buildInputs = with self; [ six pytest hypothesis1 ] ++ optional (!isPy3k) modules.sqlite3;
+    buildInputs = with self; [ six pytest hypothesis ] ++ optional (!isPy3k) modules.sqlite3;
 
     checkPhase = ''
       py.test
@@ -21197,6 +21196,13 @@ in modules // {
       url = "mirror://pypi/i/isodate/${name}.tar.gz";
       sha256 = "42105c41d037246dc1987e36d96f3752ffd5c0c24834dd12e4fdbe1e79544e31";
     };
+
+    # Judging from SyntaxError
+    doCheck = !(isPy3k);
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover -s src/isodate/tests
+    '';
 
     meta = {
       description = "ISO 8601 date/time parser";
@@ -22960,32 +22966,36 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.6";
-
-    # 1.4 is broken
-    # https://github.com/sphinx-doc/sphinx/issues/2394
-
+    name = "${pname}-${version}";
+    pname = "Sphinx";
+    version = "1.3.6";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Sphinx/${name}.tar.gz";
+      url = "mirror://pypi/S/${pname}/${name}.tar.gz";
       sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
     };
-
     LC_ALL = "en_US.UTF-8";
-    checkPhase = ''
-      PYTHON=${python.executable} make test
-    '';
-
-    buildInputs = with self; [ mock pkgs.glibcLocales ];
+    buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales ];
+    patchPhase = '' sed -i '$ d' tests/test_setup_command.py '';
+    checkPhase = '' PYTHON=${python.executable} make test '';
     propagatedBuildInputs = with self; [
-      docutils jinja2 pygments sphinx_rtd_theme
-      alabaster Babel snowballstemmer six nose
+      docutils
+      jinja2
+      pygments
+      sphinx_rtd_theme
+      alabaster
+      Babel
+      snowballstemmer
+      six
+      sqlalchemy
+      whoosh
+      imagesize
     ];
-
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
       license = licenses.bsd3;
-      platforms = platforms.unix;
+      maintainers = with maintainers; [ nand0p ];
+      platforms = platforms.all;
     };
   });
 
@@ -23808,7 +23818,13 @@ in modules // {
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
-    doCheck = false;
+
+    doCheck = true;
+
+    checkPhase = ''
+      patchShebangs run_tests.sh
+      ./run_tests.sh
+    '';
 
     meta = {
       homepage = https://github.com/openstack/python-novaclient/;

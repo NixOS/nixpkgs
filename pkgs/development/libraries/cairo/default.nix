@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     patches="$patches $(echo $infinality/*_cairo-iu/*.patch)"
   '';
 
-  outputs = [ "out" "dev" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # very small
 
   nativeBuildInputs = [

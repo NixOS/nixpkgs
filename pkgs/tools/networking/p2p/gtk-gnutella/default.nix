@@ -16,6 +16,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ bison binutils gettext pkgconfig ];
   buildInputs = [ glib gnutls gtk libxml2 zlib ];
 
+  hardeningDisable = [ "bindnow" "fortify" "pic" "relro" ];
+
   configureScript = "./build.sh --configure-only";
 
   meta = with stdenv.lib; {

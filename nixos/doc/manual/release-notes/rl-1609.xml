@@ -58,6 +58,14 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
+    <para>/var/setuid-wrappers/
+      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18124">is now a symlink so
+      it can be atomically updated</link>
+      and it's not mounted as tmpfs anymore since setuid binaries are located on /run/ as tmpfs.
+    </para>
+  </listitem>
+
+  <listitem>
     <para>Gitlab's maintainence script gitlab-runner was removed and split up into the more clearer
       gitlab-run and gitlab-rake scripts because gitlab-runner is a component of Gitlab CI.</para>
   </listitem>

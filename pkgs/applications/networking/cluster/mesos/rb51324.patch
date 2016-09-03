@@ -1,0 +1,72 @@
+diff --git a/3rdparty/libprocess/3rdparty/stout/include/stout/os/ls.hpp b/3rdparty/libprocess/3rdparty/stout/include/stout/os/ls.hpp
+index f8da9ef74a885cc39424b3e50cebca905d88ca44..25e2bec6415f2382291cf8da5c0a8c44cf882d27 100644
+--- a/3rdparty/libprocess/3rdparty/stout/include/stout/os/ls.hpp
++++ b/3rdparty/libprocess/3rdparty/stout/include/stout/os/ls.hpp
+@@ -18,6 +18,8 @@
+ #else
+ #include <dirent.h>
+ #endif // __WINDOWS__
++
++#include <errno.h>
+ #include <stdlib.h>
+ 
+ #include <list>
+@@ -26,8 +28,6 @@
+ #include <stout/error.hpp>
+ #include <stout/try.hpp>
+ 
+-#include <stout/os/direntsize.hpp>
+-
+ 
+ namespace os {
+ 
+@@ -36,36 +36,32 @@ inline Try<std::list<std::string>> ls(const std::string& directory)
+   DIR* dir = opendir(directory.c_str());
+ 
+   if (dir == NULL) {
+-    // Preserve `opendir` error.
+     return ErrnoError("Failed to opendir '" + directory + "'");
+   }
+ 
+-  dirent* temp = (dirent*) malloc(os::dirent_size(dir));
+-
+-  if (temp == NULL) {
+-    // Preserve `malloc` error.
+-    ErrnoError error("Failed to allocate directory entries");
+-    closedir(dir);
+-    return error;
+-  }
+-
+   std::list<std::string> result;
+   struct dirent* entry;
+-  int error;
+ 
+-  while ((error = readdir_r(dir, temp, &entry)) == 0 && entry != NULL) {
++  // Zero `errno` before starting to call `readdir`. This is necessary
++  // to allow us to determine when `readdir` returns an error.
++  errno = 0;
++
++  while ((entry = readdir(dir)) != NULL) {
+     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+       continue;
+     }
+     result.push_back(entry->d_name);
+   }
+ 
+-  free(temp);
+-  closedir(dir);
++  if (errno != 0) {
++    // Preserve `readdir` error.
++    Error error = ErrnoError("Failed to read directory");
++    closedir(dir);
++    return error;
++  }
+ 
+-  if (error != 0) {
+-    // Preserve `readdir_r` error.
+-    return ErrnoError("Failed to read directories");
++  if (closedir(dir) == -1) {
++    return ErrnoError("Failed to close directory");
+   }
+ 
+   return result;

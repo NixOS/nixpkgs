@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.sbcl.org;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     inherit version;
   };
 }

@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
       homepage = http://yacas.sourceforge.net/;
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with stdenv.lib.maintainers; [viric];
-      platforms = with stdenv.lib.platforms; all;
+      platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -31,7 +31,7 @@ nodePackages // {
     '';
   });
   
-  wring = nodePackages.phantomjs.override (oldAttrs: {
+  wring = nodePackages.wring.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
   });
   

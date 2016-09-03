@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     cd source
   '';
 
+  postInstall = ''
+    rm $out/lib/*.a
+  '';
+
   nativeBuildInputs = [ cmake yasm ];
 
   meta = with stdenv.lib; {
