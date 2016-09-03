@@ -4508,8 +4508,9 @@ in modules // {
       sha256 = "7959b4a74abdc27b312fed1c21e6caf9309ce0b29ea86b591fd2e99ecdf27f73";
     };
 
-    # 3.5 is not supported but has been working fine
-    doCheck = !isPy35;
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover -s tests
+    '';
 
     meta = {
       description = "C parser in Python";
