@@ -348,7 +348,18 @@ in
                     let extraConfig =
                       { boot.isContainer = true;
                         networking.hostName = mkDefault name;
-                        networking.useDHCP = false;
+                        networking.useDHCP = mkDefault false;
+                        systemd.services.dhcpcd.preStart = ''
+                          # Fixes DHCP because dhcpcd fails if this sysctl is not writable
+                          echo 0 > /tmp/container_promote_secondaries
+                          ${pkgs.utillinux}/bin/mount -o bind /tmp/container_promote_secondaries /proc/sys/net/ipv4/conf/eth0/promote_secondaries
+
+                          # Remove nameservers provided by the host
+                          resolvconf -d host || true
+                        '';
+                        systemd.services.dhcpcd.postStop = ''
+                          ${pkgs.utillinux}/bin/umount /proc/sys/net/ipv4/conf/eth0/promote_secondaries
+                        '';
                       };
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
@@ -425,28 +436,7 @@ in
 
           config = mkMerge
             [ (mkIf options.config.isDefined {
-                path = (import ../../lib/eval-config.nix {
-                  inherit system;
-                  modules =
-                    let extraConfig =
-                      { boot.isContainer = true;
-                        networking.hostName = mkDefault name;
-                        networking.useDHCP = mkDefault false;
-                        systemd.services.dhcpcd.preStart = ''
-                          # Fixes DHCP because dhcpcd fails if this sysctl is not writable
-                          echo 0 > /tmp/container_promote_secondaries
-                          ${pkgs.utillinux}/bin/mount -o bind /tmp/container_promote_secondaries /proc/sys/net/ipv4/conf/eth0/promote_secondaries
-
-                          # Remove nameservers provided by the host
-                          resolvconf -d host || true
-                        '';
-                        systemd.services.dhcpcd.postStop = ''
-                          ${pkgs.utillinux}/bin/umount /proc/sys/net/ipv4/conf/eth0/promote_secondaries
-                        '';
-                      };
-                    in [ extraConfig config.config ];
-                  prefix = [ "containers" name ];
-                }).config.system.build.toplevel;
+                path = config.config.system.build.toplevel;
               })
             ];
         }));
