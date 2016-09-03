@@ -6,6 +6,10 @@ let
 
   cfg = config.security.pki;
 
+  cacertPackage = pkgs.cacert.override {
+    blacklist = cfg.caCertificateBlacklist;
+  };
+
   caCertificates = pkgs.runCommand "ca-certificates.crt"
     { files =
         cfg.certificateFiles ++
@@ -74,11 +78,7 @@ in
 
   config = {
 
-    nixpkgs.packageOverrides.cacert = pkgs.cacert.override {
-      blacklist = cfg.caCertificateBlacklist;
-    };
-
-    security.pki.certificateFiles = [ "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ];
+    security.pki.certificateFiles = [ "${cacertPackage}/etc/ssl/certs/ca-bundle.crt" ];
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caCertificates;
