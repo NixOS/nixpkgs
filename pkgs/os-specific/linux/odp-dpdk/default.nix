@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, openssl, libpcap, dpdk, bash }:
+{ stdenv, fetchgit, autoreconfHook, openssl, libpcap, dpdk }:
 
 stdenv.mkDerivation rec {
   name = "odp-dpdk-${version}";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kf090bizr0p0cxn525qpmypb5j86imvxrfpmwbl7vqqfh74j5ax";
   };
 
-  nativeBuildInputs = [ autoreconfHook bash ];
-  buildInputs = [ stdenv openssl dpdk libpcap ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl dpdk libpcap ];
 
   RTE_SDK = "${dpdk}";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
