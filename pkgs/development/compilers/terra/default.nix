@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "A low-level counterpart to Lua";
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jb55 ];
     license = licenses.mit;
   };
