@@ -16882,6 +16882,8 @@ in
     nix-prefetch-zip
     nix-prefetch-scripts;
 
+  nix-run-test = callPackage ../tools/package-management/nix-run-test { };
+
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { };
