@@ -20140,14 +20140,16 @@ in modules // {
     };
   };
 
-  pysqlite = buildPythonPackage (rec {
-    name = "pysqlite-2.6.3";
-    disabled = isPy3k;
+  pysqlite = buildPythonPackage rec {
+    name = "pysqlite-2.8.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysqlite/${name}.tar.gz";
-      sha256 = "13djzgnbi71znjjyaw4nybg6smilgszcid646j5qav7mdchkb77y";
+      sha256 = "17d3335863e8cf8392eea71add33dab3f96d060666fe68ab7382469d307f4490";
     };
+
+    # Need to use the builtin sqlite3 on Python 3
+    disabled = isPy3k;
 
     # Since the `.egg' file is zipped, the `NEEDED' of the `.so' files
     # it contains is not taken into account.  Thus, we must explicitly make
@@ -20160,14 +20162,9 @@ in modules // {
               --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"
     '';
 
-    # error: invalid command 'test'
-    doCheck = false;
-
     meta = {
       homepage = http://pysqlite.org/;
-
       description = "Python bindings for the SQLite embedded relational database engine";
-
       longDescription = ''
         pysqlite is a DB-API 2.0-compliant database interface for SQLite.
 
@@ -20187,12 +20184,10 @@ in modules // {
         possible to create user-defined SQL functions and aggregates
         in Python.
       '';
-
       license = licenses.bsd3;
-
       maintainers = [ ];
     };
-  });
+  };
 
 
   pysvn = mkPythonDerivation rec {
