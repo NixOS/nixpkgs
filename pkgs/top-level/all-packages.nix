@@ -14259,6 +14259,8 @@ in
     inherit (pkgs.kde4) kdelibs;
   };
 
+  osmctools = callPackage ../applications/misc/osmctools { };
+
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
   opusfile = callPackage ../applications/audio/opusfile { };
