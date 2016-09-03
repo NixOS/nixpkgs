@@ -32,7 +32,7 @@ rec {
 
   */
 
-  callTest = file: { systems ? supportedSystems, ... } @ args: 
+  callTest = file: { systems ? supportedSystems, interactive ? false, ... } @ args:
     let
       # raw test function
       testFn = import file;
@@ -56,11 +56,20 @@ rec {
               else if singleTest
                    then testLib.makeTest test
                    else mapAttrs (k: v: testLib.makeTest v) test;
-      # generate test jobs for systens
-      testForSys = f: genAttrs systems (system: hydraJob ( f( mkTest({ inherit system; } // testArgs)) ) );
-      in 
-        if (drvTest || singleTest)
-           then testForSys id
-           else mapAttrs (k: _: testForSys (getAttr k)) dummyTest;
+      # function to prepare the test
+      prepTestFn = if interactive
+                   then (getAttr "driver")
+                   else hydraJob;
+      # check unsupported cases
+      runCheck = f: if (drvTest && interactive)
+                 then builtins.abort "Derivation tests cannot be run interactively"
+                 else f;
+      # generate test jobs for systems
+      testForSys = f: genAttrs systems (system: prepTestFn( f( mkTest({ inherit system; } // testArgs)) ) );
+      # fully prepared test
+      test = if (drvTest || singleTest)
+                then testForSys id
+                else mapAttrs (k: _: testForSys (getAttr k)) dummyTest;
+      in runCheck test;
 
 }
