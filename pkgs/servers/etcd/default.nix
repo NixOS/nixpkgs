@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   name = "etcd-${version}";
-  version = "3.0.6";
+  version = "3.0.6"; # After updating check that nixos tests pass
   rev = "v${version}";
 
   goPackagePath = "github.com/coreos/etcd";
