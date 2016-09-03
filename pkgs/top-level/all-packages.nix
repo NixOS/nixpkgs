@@ -1020,6 +1020,8 @@ in
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
+  mdf2iso = callPackage ../tools/cd-dvd/mdf2iso { };
+
   libceph = self.ceph.lib;
   ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
   ceph-dev = self.ceph;
