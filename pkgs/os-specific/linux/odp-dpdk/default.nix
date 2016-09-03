@@ -1,17 +1,17 @@
-{ stdenv, fetchgit, autoreconfHook, openssl, libpcap, dpdk, bash }:
+{ stdenv, fetchgit, autoreconfHook, openssl, libpcap, dpdk }:
 
 stdenv.mkDerivation rec {
   name = "odp-dpdk-${version}";
-  version = "1.10.1.0";
+  version = "2016-08-16";
 
   src = fetchgit {
     url = "https://git.linaro.org/lng/odp-dpdk.git";
-    rev = "0ed1ced007d98980f90604675083bf30c354e867";
-    sha256 = "1kf090bizr0p0cxn525qpmypb5j86imvxrfpmwbl7vqqfh74j5ax";
+    rev = "7068593f600e2b5a23ee1780d5c722c54e966df1";
+    sha256 = "0pz0zkxqaac193x21wmj3x88gfza6bvhmv5yf8fzkpm9zxnl2sy4";
   };
 
-  nativeBuildInputs = [ autoreconfHook bash ];
-  buildInputs = [ stdenv openssl dpdk libpcap ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl dpdk libpcap ];
 
   RTE_SDK = "${dpdk}";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
