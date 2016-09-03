@@ -9,7 +9,7 @@
 particularly useful when developing or debugging a test:
 
 <screen>
-$ nix-build nixos/tests/login.nix -A driver
+$ nix-run-test --interactive nixos/tests/login.nix
 $ ./result/bin/nixos-test-driver
 starting VDE switch for network 1
 &gt;
@@ -31,7 +31,7 @@ test (e.g. to debug the test script).</para>
 <para>To just start and experiment with the VMs, run:
 
 <screen>
-$ nix-build nixos/tests/login.nix -A driver
+$ nix-run-test --interactive nixos/tests/login.nix
 $ ./result/bin/nixos-run-vms
 </screen>
 

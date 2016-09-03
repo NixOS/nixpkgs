@@ -6,20 +6,21 @@
 
 <title>Running Tests</title>
 
-<para>You can run tests using <command>nix-build</command>. For
-example, to run the test <filename
+<para>You can run tests using <command>nix-run-test</command>.
+<command>nix-run-test</command> is available in nixpkgs.
+For example, to run the test <filename
 xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix">login.nix</filename>,
 you just do:
 
 <screen>
-$ nix-build '&lt;nixpkgs/nixos/tests/login.nix>'
+$ nix-run-test '&lt;nixpkgs/nixos/tests/login.nix>'
 </screen>
 
 or, if you don’t want to rely on <envar>NIX_PATH</envar>:
 
 <screen>
 $ cd /my/nixpkgs/nixos/tests
-$ nix-build login.nix
+$ nix-run-test login.nix
 …
 running the VM test script
 machine: QEMU running (pid 8841)
