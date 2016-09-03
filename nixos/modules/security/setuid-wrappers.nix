@@ -117,6 +117,7 @@ in
 
           mkdir -p /run/setuid-wrapper-dirs
           wrapperDir=$(mktemp --directory --tmpdir=/run/setuid-wrapper-dirs setuid-wrappers.XXXXXXXXXX)
+          chmod a+rx $wrapperDir
 
           ${concatMapStrings makeSetuidWrapper setuidPrograms}
 
