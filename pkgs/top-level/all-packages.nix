@@ -12269,6 +12269,8 @@ in
 
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
+  airwave = callPackage ../applications/audio/airwave/default.nix { };
+
   alchemy = callPackage ../applications/graphics/alchemy { };
 
   alock = callPackage ../misc/screensavers/alock { };
