@@ -23052,7 +23052,7 @@ in modules // {
       url = "mirror://pypi/s/${pname}/${name}.tar.gz";
       sha256 = "1zsnhc573rvaww9qqyzs4f5h4hhvxklvppv14450vi5dk8rij81z";
     };
-    buildInputs = with self; [ sphinx-testing pytest];
+    buildInputs = with self; [ sphinx-testing pytest pbr];
     propagatedBuildInputs = with self; [ sphinx blockdiag ];
     checkPhase = ''
       py.test -k "not test_build_epub"
