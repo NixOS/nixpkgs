@@ -26588,6 +26588,8 @@ in modules // {
     };
     propagatedBuildInputs = with self; [ twisted requests2 cryptography ];
 
+    # Require network access
+    doCheck = false;
     checkPhase = ''
       ${python.interpreter} -m unittest discover
     '';
