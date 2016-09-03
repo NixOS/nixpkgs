@@ -19259,6 +19259,9 @@ in modules // {
       sha256 = "1x3i9wmzw33fpkis203alygfnrkcmq9w1aydcm887jh6frfqm6cw";
     };
 
+    # No tests distributed
+    doCheck = false;
+
     meta = {
       homepage = https://github.com/seb-m/pyinotify/wiki;
       description = "Monitor filesystems events on Linux platforms with inotify";
