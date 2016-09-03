@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   # therefore requires the followin flag until this package gets updated
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
+  doCheck = false;
+
   enableParallelBuilding = true;
 
   preBuild =
