@@ -7091,6 +7091,8 @@ in
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
+  curlcpp = callPackage ../development/libraries/curlcpp { };
+
   cutee = callPackage ../development/libraries/cutee { };
 
   cxxtools = callPackage ../development/libraries/cxxtools { };
