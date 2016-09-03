@@ -51,7 +51,7 @@ in rec {
         nixos.tests.chromium
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
-        nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
+        nixos.tests.module.gnome3.x86_64-linux # FIXME: i686-linux
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
@@ -71,9 +71,9 @@ in rec {
         (all nixos.tests.hibernate)
         (all nixos.tests.ecryptfs)
         (all nixos.tests.ipv6)
-        (all nixos.tests.i3wm)
-        (all nixos.tests.kde4)
-        (all nixos.tests.kde5)
+        (all nixos.tests.module.i3wm)
+        (all nixos.tests.module.kde4)
+        (all nixos.tests.module.kde5)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
@@ -90,13 +90,13 @@ in rec {
         (all nixos.tests.networking.scripted.vlan)
         (all nixos.tests.nfs3)
         (all nixos.tests.nfs4)
-        (all nixos.tests.openssh)
+        (all nixos.tests.module.openssh)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
-        (all nixos.tests.sddm)
+        (all nixos.tests.module.sddm)
         (all nixos.tests.simple)
-        (all nixos.tests.udisks2)
-        (all nixos.tests.xfce)
+        (all nixos.tests.module.udisks2)
+        (all nixos.tests.module.xfce)
 
         nixpkgs.tarball
         (all nixpkgs.emacs)
