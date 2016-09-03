@@ -23033,7 +23033,7 @@ in modules // {
       url = "mirror://pypi/s/${pname}/${name}.tar.gz";
       sha256 = "1f0fymrk4kvhqs0vj9gay4lhacxkfrlrpj4gvg0p4wjdczplxd3z";
     };
-    propagatedBuildInputs = with self; [ sphinx pyenchant];
+    propagatedBuildInputs = with self; [ sphinx pyenchant pbr ];
     # No tests included
     doCheck = false;
     meta = {
