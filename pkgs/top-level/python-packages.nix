@@ -23146,23 +23146,23 @@ in modules // {
 
   sqlalchemy_1_0 = buildPythonPackage rec {
     name = "SQLAlchemy-${version}";
-    version = "1.0.14";
+    version = "1.0.15";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "1cq52yyplvi1wrvrzn779l9sfsjb158a18xaqbn7z779q4wilkfs";
+      sha256 = "586f5ccf068211795a89ed22d196c5cc3006b6be00261bcac6f584c0b8e0845a";
     };
 
-    buildInputs = with self; [ nose mock ]
-      ++ stdenv.lib.optional doCheck pysqlite;
+    buildInputs = with self; [ pytest mock pytest_xdist ]
+      ++ stdenv.lib.optional (!isPy3k) pysqlite;
     propagatedBuildInputs = with self; [ modules.sqlite3 ];
 
     # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
     # acceptable reason to make all dependents unavailable on Python 3 as well
-    doCheck = !(isPyPy || isPy3k);
+    #doCheck = !(isPyPy || isPy3k);
 
     checkPhase = ''
-      ${python.executable} sqla_nose.py
+      py.test
     '';
 
     meta = {
