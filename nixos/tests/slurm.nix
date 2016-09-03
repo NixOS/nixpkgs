@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 let mungekey = "mungeverryweakkeybuteasytointegratoinatest";
     slurmconfig = {
       client.enable = true;
@@ -77,4 +77,4 @@ in {
     $control->succeed("srun -N 3 hostname | sort | uniq | wc -l | xargs test 3 -eq");
   };
   '';
-})
+}

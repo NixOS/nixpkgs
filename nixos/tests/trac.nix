@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+{ pkgs, ... }: {
   name = "trac";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow ];
@@ -71,4 +71,4 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       $client->screenshot("screen");
     '';
-})
+}

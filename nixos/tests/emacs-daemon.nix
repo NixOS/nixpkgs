@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "emacs-daemon";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ DamienCassou ];
@@ -42,4 +42,4 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       $machine->screenshot("emacsclient");
     '';
-})
+}

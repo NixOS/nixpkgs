@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 with pkgs.lib;
 
@@ -244,4 +244,4 @@ in {
       ensureMountPoint("/mnt/boot");
     };
   '';
-})
+}

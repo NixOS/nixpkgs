@@ -1,6 +1,6 @@
 # Simple example to showcase distributed tests using NixOS VMs.
 
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "mpich";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow ];
@@ -38,4 +38,4 @@ import ./make-test.nix ({ pkgs, ...} : {
 
        $master->succeed("mpiexec -n 2 ./example >&2");
     '';
-})
+}

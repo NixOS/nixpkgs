@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...}:
+{ pkgs, ...}:
 let
   user = "cassandra";
   nodeCfg = nodes: selfIP: cassandraOpts:
@@ -65,4 +65,4 @@ in
       $cass0->waitUntilSucceeds("nodetool status | grep UN | grep 192.168.1.3");
     };
   '';
-})
+}

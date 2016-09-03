@@ -1,11 +1,11 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "lightdm";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig ];
   };
 
   machine = { lib, ... }: {
-    imports = [ ./common/user-account.nix ];
+    imports = [ <nixpkgs/nixos/tests/common/user-account.nix> ];
     services.xserver.enable = true;
     services.xserver.displayManager.lightdm.enable = true;
     services.xserver.windowManager.default = "icewm";
@@ -26,4 +26,4 @@ import ./make-test.nix ({ pkgs, ...} : {
     $machine->succeed("xauth merge ~alice/.Xauthority");
     $machine->waitForWindow("^IceWM ");
   '';
-})
+}

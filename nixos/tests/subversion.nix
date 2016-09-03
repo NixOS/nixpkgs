@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : 
+{ pkgs, ... }:
 
 let
 
@@ -118,4 +118,4 @@ in
       $webserver->stopJob("httpd");
     '';
 
-})
+}

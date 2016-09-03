@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "simple";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ offline ];
@@ -29,4 +29,4 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->waitForUnit("mesos-master.service");
       $machine->waitForUnit("mesos-slave.service");
     '';
-})
+}
