@@ -5438,6 +5438,7 @@ tl: { # no indentation
   deps."menukeys" = tl."menukeys";
   deps."method" = tl."method";
   deps."metre" = tl."metre";
+  deps."mfirstuc" = tl."mfirstuc";
   deps."mftinc" = tl."mftinc";
   deps."midpage" = tl."midpage";
   deps."minibox" = tl."minibox";
@@ -14865,6 +14866,14 @@ tl: { # no indentation
   md5.doc = "4aa0350edb2a6d1ab18246284ecd6ebe";
   hasRunfiles = true;
   version = "2.5a";
+};
+"mfirstuc" = {
+  stripPrefix = 0;
+  md5.run = "73871f101c1139846cd2993910333dd1";
+  md5.doc = "aaa0350edb2a6d1ab18246284ecd6ebe";
+  md5.source = "2780f59815ed74b79006057724eb8d9e";
+  hasRunfiles = true;
+  version = "2.02";
 };
 "mflogo" = {
   stripPrefix = 0;
