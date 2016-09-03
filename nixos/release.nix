@@ -74,12 +74,17 @@ let
       });
   }).config));
 
+  # list of blacklisted module tests that shouldn't end in `tests.module`
+  # example: blacklistedModuleTests = [ "panamax" ];
+  blacklistedModuleTests = [ ];
+
   # Gather tests declared in modules meta.tests
   # args is a set of { "testName" = { extra args }; } to override test arguments, typically systems
   moduleTests = args:
     let tests = (import lib/eval-config.nix { modules = []; }).config.meta.tests;
+        filteredTests = filterAttrs (k: _: !(elem k blacklistedModuleTests)) tests;
         args' = k: attrByPath [k] {} args;
-    in mapAttrs (k: v: callTest (head v).value (args' k)) tests;
+    in mapAttrs (k: v: callTest (head v).value (args' k)) filteredTests;
 
 in rec {
 
