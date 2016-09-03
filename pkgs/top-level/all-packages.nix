@@ -9800,7 +9800,9 @@ in
     php = php56;
   };
 
-  xapian-omega = callPackage ../tools/misc/xapian-omega {};
+  xapian-omega = callPackage ../tools/misc/xapian-omega {
+    libmagic = file;
+  };
 
   xavs = callPackage ../development/libraries/xavs { };
 
