@@ -16199,7 +16199,9 @@ in
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  ut2004demo = callPackage_i686 ../games/ut2004demo { };
+  ut2004Packages = callPackage ../games/ut2004 { };
+
+  ut2004demo = self.ut2004Packages.ut2004 [ self.ut2004Packages.ut2004-demo ];
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 
