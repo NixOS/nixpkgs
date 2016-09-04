@@ -220,6 +220,37 @@ let
     };
   };
 
+  v8 = assert isPhp7; buildPecl rec {
+    version = "0.1.0";
+    name = "v8-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/pinepain/php-v8/archive/v${version}.tar.gz";
+      sha256 = "18smnxd34b486f5n8j0wk9z7r5x1w84v89mgf76z0bn7gxdxl0xj";
+    };
+
+    buildInputs = [ pkgs.v8 ];
+    configureFlags = [ "--with-v8=${pkgs.v8}" ];
+
+    patches = [
+      (builtins.toFile "link-libv8_libbase.patch" ''
+        Index: php-v8/config.m4
+        ===================================================================
+        --- php-v8.orig/config.m4
+        +++ php-v8/config.m4
+        @@ -69,7 +69,7 @@ if test "$PHP_V8" != "no"; then
+               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
+               ;;
+             * )
+        -      static_link_extra="libv8_libplatform.a"
+        +      static_link_extra="libv8_libplatform.a libv8_libbase.a"
+               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
+               ;;
+           esac
+	''
+      )];
+  };
+
   v8js = assert isPhp7; buildPecl rec {
     version = "1.3.2";
     name = "v8js-${version}";
