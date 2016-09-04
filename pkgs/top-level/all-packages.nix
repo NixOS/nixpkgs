@@ -12963,6 +12963,8 @@ in
 
   espeak = callPackage ../applications/audio/espeak { };
 
+  espeak-ng = callPackage ../applications/audio/espeak-ng { };
+
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
   esniper = callPackage ../applications/networking/esniper { };
