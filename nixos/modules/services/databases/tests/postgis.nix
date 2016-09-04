@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "postgis";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lsix ];
@@ -27,4 +27,4 @@ import ./make-test.nix ({ pkgs, ...} : {
     $master->sleep(10); # Hopefully this is long enough!!
     $master->succeed("sudo -u postgres psql -c 'CREATE EXTENSION postgis;'");
   '';
-})
+}
