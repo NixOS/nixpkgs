@@ -21,7 +21,8 @@ let
   # map: name -> fixed-output hash
   # sha1 in base32 was chosen as a compromise between security and length
   # warning: the following generator command takes lots of resources
-  # nix-build ../../../../.. -Q -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes.nix
+  # nix-build ../../../../.. -Q -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes-new.nix
+  # mv ./fixedHashes{-new,}.nix
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
@@ -82,10 +83,7 @@ let
           sha512 = attrs.sha512.${tlType};
           inherit pname tlType version;
         };
-        in mkPkgs {
-          inherit (pkg) pname tlType version;
-          pkgList = [ pkg ];
-        };
+        in mkPkg pkg;
     in {
       # TL pkg contains lists of packages: runtime files, docs, sources, binaries
       pkgs =
@@ -101,50 +99,49 @@ let
         ++ combinePkgs (attrs.deps or {});
     };
 
-  # the basename used by upstream (without ".tar.xz" suffix)
-  mkUrlName = { pname, tlType, ... }:
-    pname + lib.optionalString (tlType != "run") ".${tlType}";
+  # create a derivation that contains an unpacked upstream TL package
+  mkPkg = { pname, tlType, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
+    let
+      # the basename used by upstream (without ".tar.xz" suffix)
+      urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
+      tlName = urlName + "-${version}";
+      fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
-  # command to unpack a single TL package
-  unpackPkg =
-    { # url ? null, urlPrefix ? null
-      sha512, pname, tlType, postUnpack ? "", stripPrefix ? 1, ...
-    }@args: let
-      url = args.url or "${urlPrefix}/${mkUrlName args}.tar.xz";
+      url = args.url or "${urlPrefix}/${urlName}.tar.xz";
       urlPrefix = args.urlPrefix or
+        http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016;
       # XXX XXX XXX FIXME: mirror the snapshot XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
       #  ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
-      #  http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive;
-        http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016;
-      # beware: standard mirrors http://mirror.ctan.org/ don't have releases
-      #mirror = "http://ftp.math.utah.edu"; # ftp://tug.ctan.org no longer works, although same IP
-    in
-      rec {
-        src = fetchurl { inherit url sha512; };
-        unpackCmd =  ''
-          tar -xf '${src}' \
-            '--strip-components=${toString stripPrefix}' \
-            -C "$out" --anchored --exclude=tlpkg --keep-old-files
-        '' + postUnpack;
-      };
+      #mirror = "http://ftp.math.utah.edu";
+      src = fetchurl { inherit url sha512; };
 
-  # create a derivation that contains unpacked upstream TL packages
-  mkPkgs = { pname, tlType, version, pkgList }@args:
-      /* TODOs:
-          - "historic" isn't mirrored; posted a question at #287
-          - maybe cache (some) collections? (they don't overlap)
-      */
-    let
-      tlName = "${mkUrlName args}-${version}";
-      fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
-      pkgs = map unpackPkg (fastUnique (a: b: a.sha512 < b.sha512) pkgList);
-    in runCommand "texlive-${tlName}"
+      passthru = {
+        inherit pname tlType version;
+      } // lib.optionalAttrs (sha512 != "") { inherit src; };
+      unpackCmd = file: ''
+        tar -xf ${file} \
+          '--strip-components=${toString stripPrefix}' \
+          -C "$out" --anchored --exclude=tlpkg --keep-old-files
+      '' + postUnpack;
+
+    in if sha512 == "" then
+      # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
+      fetchurl {
+        inherit url;
+        sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
+          else fixedHash;
+        name = tlName;
+        recursiveHash = true;
+        downloadToTemp = true;
+        postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
+        # TODO: perhaps override preferHashedMirrors and allowSubstitutes
+      }
+        // passthru
+
+    else runCommand "texlive-${tlName}"
       ( { # lots of derivations, not meant to be cached
           preferLocalBuild = true; allowSubstitutes = false;
-          passthru = {
-            inherit pname tlType version;
-            srcs = map (pkg: pkg.src) pkgs;
-          };
+          inherit passthru;
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
           outputHashAlgo = "sha1";
@@ -153,7 +150,7 @@ let
       )
       ( ''
           mkdir "$out"
-        '' + lib.concatMapStrings (pkg: pkg.unpackCmd) pkgs
+        '' + unpackCmd "'${src}'"
       );
 
   # combine a set of TL packages into a single TL meta-package
