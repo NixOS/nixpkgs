@@ -9806,9 +9806,10 @@ in
 
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
     php = php56;
+    sphinx = pythonPackages.sphinx;
   };
 
-  xapian-omega = callPackage ../tools/misc/xapian-omega {
+  xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
     libmagic = file;
   };
 
