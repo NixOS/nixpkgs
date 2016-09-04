@@ -214,6 +214,18 @@ in
     wmClass = "jetbrains-rubymine";
   };
 
+  ruby-mine8 = buildRubyMine rec {
+    name = "ruby-mine-${version}";
+    version = "8.0.4";
+    description = "The Most Intelligent Ruby and Rails IDE";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
+      sha256 = "0hipxib7377232w1jbf8h98bmh0djkllsrq3lq0w3fdxqglma43a";
+    };
+    wmClass = "jetbrains-rubymine";
+  };
+
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
     version = "2016.2.2";
