@@ -292,7 +292,6 @@ in rec {
   tests.runInMachine = callTest' tests/run-in-machine.nix {};
   tests.samba = callTest' tests/samba.nix {};
   tests.simple = callTest' tests/simple.nix {};
-  tests.virtualbox = callTest' tests/virtualbox.nix { systems = [ "x86_64-linux" ]; };
   tests.module = moduleTests {
     cadvisor = { systems = [ "x86_64-linux" ]; };
     kubernetes = { systems = [ "x86_64-linux" ]; };
@@ -300,6 +299,7 @@ in rec {
     etcd = { systems = [ "x86_64-linux" ]; };
     fleet = { systems = [ "x86_64-linux" ]; };
     panamax = { systems = [ "x86_64-linux" ]; };
+    virtualbox = { systems = [ "x86_64-linux" ]; };
   };
 
   /* Build a bunch of typical closures so that Hydra can keep track of

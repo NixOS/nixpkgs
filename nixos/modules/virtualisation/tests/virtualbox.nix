@@ -84,10 +84,10 @@ let
   in optionalString debug "$machine->execute(ru '${logcmd} & disown');";
 
   testVM = vmName: vmScript: let
-    cfg = (import ../lib/eval-config.nix {
+    cfg = (import <nixpkgs/nixos/lib/eval-config.nix> {
       system = "i686-linux";
       modules = [
-        ../modules/profiles/minimal.nix
+        <nixpkgs/nixos/modules/profiles/minimal.nix>
         (testVMConfig vmName vmScript)
       ];
     }).config;
@@ -329,7 +329,7 @@ let
       imports = let
         mkVMConf = name: val: val.machine // { key = "${name}-config"; };
         vmConfigs = mapAttrsToList mkVMConf vboxVMs;
-      in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
+      in [ <nixpkgs/nixos/tests/common/user-account.nix> <nixpkgs/nixos/tests/common/x11.nix> ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
       virtualisation.virtualbox.host.enable = true;
       services.xserver.displayManager.auto.user = "alice";

@@ -129,4 +129,8 @@ in
     # means we have internet access.
     networking.networkmanager.unmanaged = ["vboxnet0"];
   })]);
+
+  meta.tests = {
+    virtualbox = ./tests/virtualbox.nix;
+  };
 }
