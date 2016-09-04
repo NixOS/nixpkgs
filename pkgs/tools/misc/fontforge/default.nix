@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]
-    ++ lib.optional withGTK "--enable-gtk2-use";
+    ++ lib.optional withGTK "--enable-gtk2-use"
+    ++ lib.optional (!withGTK) "--without-x";
 
   preConfigure = ''
     cp -r "${gnulib}" ./gnulib
