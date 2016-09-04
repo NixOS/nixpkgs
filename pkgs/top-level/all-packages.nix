@@ -12961,9 +12961,10 @@ in
     pythonPackages = python3Packages;
   };
 
-  espeak = callPackage ../applications/audio/espeak { };
+  espeak-classic = callPackage ../applications/audio/espeak { };
 
   espeak-ng = callPackage ../applications/audio/espeak-ng { };
+  espeak = self.espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
