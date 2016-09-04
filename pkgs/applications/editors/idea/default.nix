@@ -130,6 +130,18 @@ in
     wmClass = "jetbrains-clion";
   };
 
+  clion1 = buildClion rec {
+    name = "clion-${version}";
+    version = "1.2.5";
+    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
+      sha256 = "0ll1rcnnbd1if6x5rp3qw35lvp5zdzmvyg9n1lha89i34xiw36jp";
+    };
+    wmClass = "jetbrains-clion";
+  };
+
   idea14-community = buildIdea rec {
     name = "idea-community-${version}";
     version = "14.1.7";
