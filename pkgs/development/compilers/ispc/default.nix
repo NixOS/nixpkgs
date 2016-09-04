@@ -1,10 +1,10 @@
-{stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages}:
+{stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages, clangWrapSelf}:
 
-# TODO: patch LLVM so Knights Landing works better (patch included in ispc github)
+# TODO: patch LLVM so Skylake-EX works better (patch included in ispc github) - needed for LLVM 3.9?
 
 stdenv.mkDerivation rec {
-  version = "20151128";
-  rev = "d3020580ff18836de2d4cae18901980b551d9d01";
+  version = "1.9.1";
+  rev = "v${version}";
 
   name = "ispc-${version}";
 
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     owner = "ispc";
     repo = "ispc";
     inherit rev;
-    sha256 = "15qi22qvmlx3jrhrf3rwl0y77v66prpan6qb66a55dw3pw2d4jvn";
+    sha256 = "1wwsyvn44hd5iyi5779l5378x096307slpyl29wrsmfp66796693";
   };
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   doCheck = true;
 
@@ -26,11 +26,8 @@ stdenv.mkDerivation rec {
     bison
     flex
     llvm
-    clang
+    llvmPackages.clang-unwrapped # we need to link against libclang, so we need the unwrapped
   ];
-
-  # https://github.com/ispc/ispc/pull/1190
-  patches = [ ./gcc5.patch ];
 
   postPatch = "sed -i -e 's/\\/bin\\///g' -e 's/-lcurses/-lncurses/g' Makefile";
 
@@ -41,10 +38,12 @@ stdenv.mkDerivation rec {
 
   checkPhase = ''
     export ISPC_HOME=$PWD
-    python run_tests.py
+    PATH=${llvmPackages.clang}/bin:$PATH python run_tests.py --non-interactive
   '';
 
   makeFlags = [
+    "CXX=${llvmPackages.clang}/bin/clang++"
+    "CLANG=${llvmPackages.clang}/bin/clang"
     "CLANG_INCLUDE=${llvmPackages.clang-unwrapped}/include"
     ];
 
