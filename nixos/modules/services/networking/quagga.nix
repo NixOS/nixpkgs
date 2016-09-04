@@ -182,6 +182,11 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ tavyc ];
+  meta = {
+    maintainers = with lib.maintainers; [ tavyc ];
+    tests = {
+      quagga = ./tests/quagga.nix;
+    };
+  };
 
 }

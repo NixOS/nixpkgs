@@ -5,7 +5,7 @@
 #
 # All interfaces are in OSPF Area 0.
 
-import ./make-test.nix ({ pkgs, ... }:
+{ pkgs, ... }:
   let
 
     ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ip4).address;
@@ -94,4 +94,4 @@ import ./make-test.nix ({ pkgs, ... }:
           $server->waitForUnit("httpd");
           $client->succeed("curl --fail http://server/ >&2");
         '';
-    })
+    }
