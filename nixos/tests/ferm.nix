@@ -54,6 +54,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $client->waitForUnit("network.target");
       $server->waitForUnit("ferm.service");
       $server->waitForUnit("nginx.service");
+      $server->waitUntilSucceeds("ss -ntl | grep -q 80");
 
       subtest "port 80 is allowed", sub {
           $client->succeed("curl --fail -g http://192.168.1.1:80/status");
