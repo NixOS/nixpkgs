@@ -151,4 +151,8 @@ in
       };
     };
   };
+
+  meta.tests = {
+    logstash = ./tests/logstash.nix;
+  };
 }
