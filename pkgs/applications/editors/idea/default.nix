@@ -250,15 +250,14 @@ in
     wmClass = "jetbrains-phpstorm";
   };
 
-
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "10.0.5";
+    version = "2016.2.2";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "0a5s6f99wyql5pgjl94pf4ljdbviik3b8dbr1s6b7c6jn1gk62ic";
+      sha256 = "0n2fvhjasklshyfcbwwn6wahzld8x65bid08245awdqv33p87bq6";
     };
     wmClass = "jetbrains-webstorm";
   };
