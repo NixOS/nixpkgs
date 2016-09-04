@@ -6,11 +6,11 @@
 pythonPackages.buildPythonApplication rec {
   name = "gpodder-${version}";
 
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchurl {
     url = "http://gpodder.org/src/${name}.tar.gz";
-    sha256 = "1ik954idi0ldnw0wrv7mm71smyb6x66332jxcaf1dxsl12ccm44l";
+    sha256 = "036p9vnkr3if0k548xhhjmcwdaimy3yd24s3xd8vzlp0wdzkzrhn";
   };
 
   postPatch = with stdenv.lib; ''

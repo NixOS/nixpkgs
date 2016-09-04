@@ -3708,6 +3708,8 @@ in
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
 
+  tcpkali = callPackage ../applications/networking/tcpkali { };
+
   teamviewer = callPackage ../applications/networking/remote/teamviewer {
     stdenv = stdenv_32bit;
   };
@@ -4951,6 +4953,10 @@ in
   };
 
   llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 {
+    inherit (stdenvAdapters) overrideCC;
+  };
+
+  llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 {
     inherit (stdenvAdapters) overrideCC;
   };
 
@@ -7772,7 +7778,7 @@ in
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_37;
+    llvmPackages = llvmPackages_39;
   };
 
   itk = callPackage ../development/libraries/itk { };
@@ -11962,6 +11968,7 @@ in
     inherit (perlPackages) FontTTF;
   });
 
+  # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
   dejavu_fontsEnv = buildEnv {
     name = "${dejavu_fonts.name}";
     paths = [ dejavu_fonts.out ];
@@ -14557,7 +14564,7 @@ in
   };
 
   qutebrowser = qt5.callPackage ../applications/networking/browsers/qutebrowser {
-    inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2;
+    inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2 cssutils;
     inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
   };
 
@@ -15048,6 +15055,8 @@ in
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
   transcode = callPackage ../applications/audio/transcode { };
+
+  transcribe = callPackage ../applications/audio/transcribe { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission_gtk = transmission.override { enableGTK3 = true; };
@@ -15610,7 +15619,7 @@ in
   };
 
   zotero = callPackage ../applications/office/zotero {
-    firefox = firefox-unwrapped;
+    firefox = firefox-esr-unwrapped;
   };
 
   zscroll = callPackage ../applications/misc/zscroll {};

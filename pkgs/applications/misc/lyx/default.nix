@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
 
   # python is run during runtime to do various tasks
   postFixup = ''
-    sed '1s:/usr/bin/python:${python}/bin/python:'
-
     wrapProgram "$out/bin/lyx" \
       --prefix PATH : '${python}/bin'
   '';

@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, python, alsaLib, libX11, mesa_glu, SDL, lua5, zlib, bam, freetype }:
+{ fetchurl, stdenv, makeWrapper, python, alsaLib
+, libX11, mesa_glu, SDL, lua5, zlib, bam, freetype
+}:
 
 stdenv.mkDerivation rec {
   name = "teeworlds-0.6.3";
@@ -11,7 +13,9 @@ stdenv.mkDerivation rec {
   # we always want to use system libs instead of these
   postPatch = "rm -r other/{freetype,sdl}/{include,lib32,lib64}";
 
-  buildInputs = [ python alsaLib libX11 mesa_glu SDL lua5 zlib bam freetype ];
+  buildInputs = [
+    python makeWrapper alsaLib libX11 mesa_glu SDL lua5 zlib bam freetype
+  ];
 
   buildPhase = ''
     bam -a -v release
