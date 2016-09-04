@@ -446,4 +446,8 @@ in {
       };
     };
   };
+
+  meta.tests = {
+    cassandra = ./tests/cassandra.nix;
+  };
 }
