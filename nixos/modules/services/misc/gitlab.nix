@@ -565,6 +565,11 @@ in {
 
   };
 
-  meta.doc = ./gitlab.xml;
+  meta = {
+    doc = ./gitlab.xml;
+    tests = {
+      gitlab = ./tests/gitlab.nix;
+    };
+  };
 
 }
