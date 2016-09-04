@@ -21325,6 +21325,25 @@ in modules // {
     };
   };
 
+  rootpy = buildPythonPackage rec {
+    version = "0.8.3";
+    name = "rootpy-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/d5/40/feddb2c9d1cadfe05d1d9aea1a71be093dc700879c9f6af40a10b1330f34/rootpy-0.8.3.tar.gz";
+      sha256 = "14q9bhs2a53598571x8yikj68x2iyl6090wbvdrpbwr238799b0z";
+    };
+
+    disabled = isPy3k;
+
+    propagatedBuildInputs = with self; [ pkgs.root readline numpy matplotlib ];
+
+    meta = {
+      homepage = "http://www.rootpy.org";
+      license = licenses.gpl3;
+      description = "Pythonic interface to the ROOT framework";
+    };
+  };
 
   rope = buildPythonPackage rec {
     version = "0.10.2";
