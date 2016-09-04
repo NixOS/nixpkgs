@@ -60,4 +60,8 @@ in {
       };
     };
   };
+
+  meta.tests = {
+    ferm = ./tests/ferm.nix;
+  };
 }

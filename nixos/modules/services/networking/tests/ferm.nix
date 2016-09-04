@@ -1,5 +1,4 @@
-
-import ./make-test.nix ({ pkgs, ...} : {
+{ pkgs, ...} : {
   name = "ferm";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mic92 ];
@@ -69,4 +68,4 @@ import ./make-test.nix ({ pkgs, ...} : {
           $client->fail("curl --fail -g http://[fd00::1]:8080/status");
       };
     '';
-})
+}
