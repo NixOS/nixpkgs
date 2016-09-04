@@ -154,4 +154,8 @@ in
       };
     };
   };
+
+  meta.tests = {
+    haka = ./tests/haka.nix;
+  };
 }
