@@ -146,4 +146,8 @@ in
 
   };
 
+  meta.tests = {
+    riak = ./tests/riak.nix;
+  };
+
 }
