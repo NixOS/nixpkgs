@@ -7,11 +7,11 @@
 let
   inherit (pythonPackages) python cython buildPythonApplication;
 in buildPythonApplication rec {
-  name = "xpra-0.17.4";
+  name = "xpra-0.17.5";
   namePrefix = "";
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "0v9xiy1d1izjnpy4d4l5zwfhb6z7x35nn8nzzn7a5mnsim5qb9wj";
+    sha256 = "01k5iax42820pblfadig8rqfa1wlcgpakmjp142gx3fg59fnav3i";
   };
 
   buildInputs = [
