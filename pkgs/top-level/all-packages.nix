@@ -9803,7 +9803,7 @@ in
     sphinx = pythonPackages.sphinx;
   };
 
-  xapian-omega = callPackage ../tools/misc/xapian-omega {
+  xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
     libmagic = file;
   };
 
