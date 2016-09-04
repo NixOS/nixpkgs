@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "xapian-omega-${version}";
-  version = "1.4.0";
+  version = (builtins.parseDrvName xapian.name).version;
 
   src = fetchurl {
     url = "http://oligarchy.co.uk/xapian/${version}/xapian-omega-${version}.tar.xz";
