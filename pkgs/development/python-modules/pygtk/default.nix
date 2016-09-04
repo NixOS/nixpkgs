@@ -44,7 +44,7 @@ buildPythonPackage rec {
   postInstall = ''
     rm $out/bin/pygtk-codegen-2.0
     ln -s ${pygobject}/bin/pygobject-codegen-2.0  $out/bin/pygtk-codegen-2.0
-    ln -s ${pygobject}/lib/${python.libPrefix}/site-packages/${pygobject.name}.pth \
+    ln -s ${pygobject}/lib/${python.libPrefix}/site-packages/pygobject-${pygobject.version}.pth \
                   $out/lib/${python.libPrefix}/site-packages/${name}.pth
   '';
 }
