@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
-  version = "2.2.3";
+  version = "2.2.5";
 
   src = fetchgit {
     url = https://github.com/github/hub.git;
     rev = "refs/tags/v${version}";
-    sha256 = "1vswkx4lm6x4s04453qkmv970gjn79ma39fmdg8mnzy7lh2swws6";
+    sha256 = "13pab3r2ngac2kljy9jb4lz3g3d6smkwydlx23ydjvyjbg2zb75r";
   };
 
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/bin"
-    cp hub "$out/bin/"
+    cp bin/hub "$out/bin/"
 
     mkdir -p "$out/share/man/man1"
     cp "man/hub.1" "$out/share/man/man1/"

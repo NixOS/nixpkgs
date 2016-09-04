@@ -14,6 +14,7 @@ in mkPythonDerivation {
   configurePhase = ''
     mkdir -p $out
     lndir ${dbus-python} $out
+    rm -rf "$out/nix-support"
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
 

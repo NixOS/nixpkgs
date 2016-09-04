@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ ./program-name.patch ] ++
-    stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+    [ ./program-name.patch
+      ./set-correct-program-name-for-sleep.patch
+    ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
   buildInputs = [ makeWrapper ];
 

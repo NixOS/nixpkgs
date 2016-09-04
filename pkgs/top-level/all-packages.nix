@@ -7107,6 +7107,8 @@ in
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
+  curlcpp = callPackage ../development/libraries/curlcpp { };
+
   cutee = callPackage ../development/libraries/cutee { };
 
   cxxtools = callPackage ../development/libraries/cxxtools { };
@@ -9818,7 +9820,9 @@ in
     php = php56;
   };
 
-  xapian-omega = callPackage ../tools/misc/xapian-omega {};
+  xapian-omega = callPackage ../tools/misc/xapian-omega {
+    libmagic = file;
+  };
 
   xavs = callPackage ../development/libraries/xavs { };
 
@@ -11954,8 +11958,13 @@ in
 
   crimson = callPackage ../data/fonts/crimson {};
 
-  dejavu_fonts = callPackage ../data/fonts/dejavu-fonts {
+  dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
+  });
+
+  dejavu_fontsEnv = buildEnv {
+    name = "${dejavu_fonts.name}";
+    paths = [ dejavu_fonts.out ];
   };
 
   dina-font = callPackage ../data/fonts/dina { };
@@ -12298,6 +12307,8 @@ in
 
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
+  airwave = callPackage ../applications/audio/airwave/default.nix { };
+
   alchemy = callPackage ../applications/graphics/alchemy { };
 
   alock = callPackage ../misc/screensavers/alock { };
@@ -12378,6 +12389,7 @@ in
   bitcoin-xt = self.altcoins.bitcoin-xt;
 
   go-ethereum = self.altcoins.go-ethereum;
+  ethabi = self.altcoins.ethabi;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -13851,6 +13863,7 @@ in
     boost = boost155;
   };
   ledger = self.ledger3;
+  ledger-web = callPackage ../applications/office/ledger-web { };
 
   lighthouse = callPackage ../applications/misc/lighthouse { };
 
@@ -14290,6 +14303,8 @@ in
   opera = callPackage ../applications/networking/browsers/opera {
     inherit (pkgs.kde4) kdelibs;
   };
+
+  osmctools = callPackage ../applications/misc/osmctools { };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
