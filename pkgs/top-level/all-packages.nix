@@ -10675,6 +10675,10 @@ in
       HTTPDate MailDKIM LWP IOSocketSSL;
   };
 
+  deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
+  deadpixi-sam = deadpixi-sam-unstable;
+  sam = deadpixi-sam;
+
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
   samba4 = callPackage ../servers/samba/4.x.nix {
