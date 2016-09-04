@@ -273,4 +273,16 @@ in
     };
     wmClass = "jetbrains-webstorm";
   };
+
+  webstorm11 = buildWebStorm rec {
+    name = "webstorm-${version}";
+    version = "11.0.4";
+    description = "Professional IDE for Web and JavaScript development";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
+      sha256 = "17agyqdyz6naxyx6p0y240ar93gja0ypw01nm2qmfzvh7ch03r24";
+    };
+    wmClass = "jetbrains-webstorm";
+  };
 }
