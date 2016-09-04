@@ -207,6 +207,16 @@ let
     };
   };
 
+  v8js = assert isPhp7; buildPecl rec {
+    version = "1.3.2";
+    name = "v8js-${version}";
+
+    sha256 = "1x7gxi70zgj3vaxs89nfbnwlqcxrps1inlyfzz66pbzdbfwvc8z8";
+
+    buildInputs = [ pkgs.v8 ];
+    configureFlags = [ "--with-v8js=${pkgs.v8}" ];
+  };
+
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
     version = "1.2.0";
