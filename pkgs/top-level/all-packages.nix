@@ -17051,6 +17051,10 @@ with pkgs;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
   };
 
+  tde = recurseIntoAttrs (callPackage ../desktops/tde/R14 {
+    callPackage = pkgs.newScope pkgs.tde;
+  });
+
   redshift = callPackage ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg;
   };
