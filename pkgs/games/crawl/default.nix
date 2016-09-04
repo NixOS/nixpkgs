@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype
+, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush
 , tileMode ? false
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl ];
+  nativeBuildInputs = [ pkgconfig which perl pngcrush ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
