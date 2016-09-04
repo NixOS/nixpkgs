@@ -9418,6 +9418,8 @@ in
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
+  sonic = callPackage ../development/libraries/sonic { };
+
   soprano = callPackage ../development/libraries/soprano { };
 
   soqt = callPackage ../development/libraries/soqt { };
