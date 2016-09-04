@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, buildPythonApplication, pythonPackages, mygpoclient, intltool
+{ stdenv, fetchurl, pythonPackages, mygpoclient, intltool
 , ipodSupport ? true, libgpod
 , gnome3
 }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "gpodder-${version}";
-  namePrefix = "";
 
   version = "3.9.0";
 
@@ -31,7 +30,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    feedparser dbus mygpoclient sqlite3 pygtk eyeD3
+    feedparser dbus-python mygpoclient sqlite3 pygtk eyeD3
   ] ++ stdenv.lib.optional ipodSupport libgpod;
 
   checkPhase = ''

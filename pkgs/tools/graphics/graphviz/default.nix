@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "17l5czpvv5ilmg17frg0w4qwf89jzh2aglm9fgx0l0aakn6j7al1";
   };
 
+  hardeningDisable = [ "fortify" ];
+
   patches =
     [ ./0001-vimdot-lookup-vim-in-PATH.patch
-    
+
       # NOTE: Once this patch is removed, flex can probably be removed from
       # buildInputs.
       ./cve-2014-9157.patch
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
       interfaces for other technical domains.
     '';
 
-    hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with stdenv.lib.maintainers; [ bjornfor raskin ];
     downloadPage = "http://www.graphviz.org/pub/graphviz/ARCHIVE/";
     inherit version;

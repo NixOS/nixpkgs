@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "Extract urls from text";
     homepage = https://github.com/mvdan/xurls;
     maintainers = [ maintainers.koral ];
+    platforms = platforms.unix;
   };
 }

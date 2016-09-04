@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
       trees or files; and vifn, to invoke vi given a function name rather
       than a file name.
     '';
+    platforms = stdenv.lib.platforms.linux;
   };
 }

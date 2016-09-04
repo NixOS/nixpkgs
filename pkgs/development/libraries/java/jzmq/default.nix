@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.zeromq.org";
     description = "Java bindings for ZeroMQ";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

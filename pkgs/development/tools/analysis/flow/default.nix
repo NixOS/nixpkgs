@@ -3,13 +3,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.22.1";
+  version = "0.30.0";
   name = "flow-${version}";
+
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "11d04g8rvjv2q79pmrjjx8lmmm1ix8kih7wc0adln0ap5123ph46";
+    sha256 = "1s6l3570r53qjyqs8ghqqgb51rb0skijwjgm6av43xi7b7knkd35";
   };
 
   installPhase = ''

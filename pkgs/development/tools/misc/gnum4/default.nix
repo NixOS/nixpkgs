@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
   # Upstream is aware of it; it may be in the next release.
   patches = [ ./s_isdir.patch ];
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
+
   meta = {
     homepage = http://www.gnu.org/software/m4/;
     description = "GNU M4, a macro processor";
@@ -37,6 +40,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 
 }

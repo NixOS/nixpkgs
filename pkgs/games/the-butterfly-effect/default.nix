@@ -10,10 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1ag2cp346f9bz9qy6za6q54id44d2ypvkyhvnjha14qzzapwaysj";
   };
 
+  postPatch = "sed '1i#include <vector>' -i src/model/World.h";
+
   buildInputs = [
     qt5.qtbase qt5.qtsvg qt5.qttranslations box2d which cmake
     gettext
   ];
+  enableParallelBuilding = true;
 
   installPhase = ''
     make DESTDIR=.. install

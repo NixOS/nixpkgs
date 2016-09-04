@@ -1,14 +1,14 @@
-with import ./.. { };
-with lib;
 let
-  sources = sourceFilesBySuffices ./. [".xml"];
+  pkgs = import ./.. { };
+  lib = pkgs.lib;
+  sources = lib.sourceFilesBySuffices ./. [".xml"];
   sources-langs = ./languages-frameworks;
 in
-stdenv.mkDerivation {
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
 
-  buildInputs = [ pandoc libxml2 libxslt ];
+  buildInputs = with pkgs; [ pandoc libxml2 libxslt zip ];
 
   xsltFlags = ''
     --param section.autolabel 1
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       extraHeader = ''xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" '';
     in ''
       {
-        pandoc '${inputFile}' -w docbook ${optionalString useChapters "--chapters"} \
+        pandoc '${inputFile}' -w docbook ${lib.optionalString useChapters "--chapters"} \
           --smart \
           | sed -e 's|<ulink url=|<link xlink:href=|' \
               -e 's|</ulink>|</link>|' \
@@ -57,33 +57,43 @@ stdenv.mkDerivation {
       outputFile = "./languages-frameworks/haskell.xml";
     }
   + toDocbook {
-      inputFile = ./../pkgs/development/idris-modules/README.md;
+      inputFile = ../pkgs/development/idris-modules/README.md;
       outputFile = "languages-frameworks/idris.xml";
     }
   + toDocbook {
-      inputFile = ./../pkgs/development/r-modules/README.md;
+      inputFile = ../pkgs/development/r-modules/README.md;
       outputFile = "languages-frameworks/r.xml";
     }
   + ''
-    echo ${nixpkgsVersion} > .version
+    echo ${lib.nixpkgsVersion} > .version
 
     # validate against relaxng schema
     xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
-    ${jing}/bin/jing ${docbook5}/xml/rng/docbook/docbook.rng manual-full.xml
+    ${pkgs.jing}/bin/jing ${pkgs.docbook5}/xml/rng/docbook/docbook.rng manual-full.xml
 
     dst=$out/share/doc/nixpkgs
     mkdir -p $dst
     xsltproc $xsltFlags --nonet --xinclude \
       --output $dst/manual.html \
-      ${docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
+      ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
       ./manual.xml
 
     cp ${./style.css} $dst/style.css
 
     mkdir -p $dst/images/callouts
-    cp "${docbook5_xsl}/xml/xsl/docbook/images/callouts/"*.gif $dst/images/callouts/
+    cp "${pkgs.docbook5_xsl}/xml/xsl/docbook/images/callouts/"*.gif $dst/images/callouts/
 
     mkdir -p $out/nix-support
     echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
+
+    xsltproc $xsltFlags --nonet --xinclude \
+      --output $dst/epub/ \
+      ${pkgs.docbook5_xsl}/xml/xsl/docbook/epub/docbook.xsl \
+      ./manual.xml
+
+    cp -r $dst/images $dst/epub/OEBPS
+    echo "application/epub+zip" > mimetype
+    zip -0Xq  "$dst/Nixpkgs Contributors Guide - NixOS community.epub" mimetype
+    zip -Xr9D "$dst/Nixpkgs Contributors Guide - NixOS community.epub" $dst/epub/*
   '';
 }

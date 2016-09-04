@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     description = "A C++/Qt wrapper around the Echo Nest API";
     homepage = "http://projects.kde.org/projects/playground/libs/libechonest";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

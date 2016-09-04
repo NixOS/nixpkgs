@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt
-, gobjectIntrospection, valaSupport ? true, vala }:
+, gobjectIntrospection, valaSupport ? true, vala_0_23 }:
 
 stdenv.mkDerivation rec {
   name = "telepathy-glib-0.24.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [dbus_glib glib python gobjectIntrospection];
 
-  buildInputs = [pkgconfig libxslt] ++ stdenv.lib.optional valaSupport vala;
+  buildInputs = [pkgconfig libxslt] ++ stdenv.lib.optional valaSupport vala_0_23;
 
   preConfigure = ''
     substituteInPlace telepathy-glib/telepathy-glib.pc.in --replace Requires.private Requires
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://telepathy.freedesktop.org;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

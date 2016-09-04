@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     description = "A general platform for complex network analysis and visualization";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [stdenv.lib.maintainers.mimadrid];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

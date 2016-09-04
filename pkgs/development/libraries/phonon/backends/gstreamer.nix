@@ -1,13 +1,14 @@
 { stdenv, lib, fetchurl, cmake, gst_all_1, phonon, pkgconfig
-, extra-cmake-modules ? null, qtbase ? null, qtx11extras ? null, qt4 ? null
-, debug ? false }:
+, extra-cmake-modules, qtbase ? null, qtx11extras ? null, qt4 ? null
+, withQt5 ? false
+, debug ? false
+}:
 
 with lib;
 
 let
   v = "4.9.0";
   pname = "phonon-backend-gstreamer";
-  withQt5 = extra-cmake-modules != null;
 in
 
 assert withQt5 -> qtbase != null;
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [
     # This flag should be picked up through pkgconfig, but it isn't.
-    "-I${gst_all_1.gstreamer}/lib/gstreamer-1.0/include"
+    "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;

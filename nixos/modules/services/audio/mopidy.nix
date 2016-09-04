@@ -47,6 +47,7 @@ in {
       };
 
       configuration = mkOption {
+        default = "";
         type = types.lines;
         description = ''
           The configuration that Mopidy should use.

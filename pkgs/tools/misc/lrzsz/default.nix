@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wcgfa9fsigf1gri74gq0pa7pyajk12m4z69x7ci9c6x9fqkd2y2";
   };
 
+  hardeningDisable = [ "format" ];
+
   configureFlags = [ "--program-transform-name=s/^l//" ];
 
   meta = with stdenv.lib; {

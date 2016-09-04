@@ -1,15 +1,8 @@
-diff --git a/config/policy.xml b/config/policy.xml
-index ca3b022..b058c05 100644
 --- a/config/policy.xml
 +++ b/config/policy.xml
-@@ -58,4 +58,10 @@
-   <!-- <policy domain="resource" name="time" value="3600"/> -->
-   <!-- <policy domain="system" name="precision" value="6"/> -->
-   <policy domain="cache" name="shared-secret" value="passphrase"/>
-+
-+  <policy domain="coder" rights="none" pattern="EPHEMERAL" />
-+  <policy domain="coder" rights="none" pattern="URL" />
-+  <policy domain="coder" rights="none" pattern="HTTPS" />
-+  <policy domain="coder" rights="none" pattern="MVG" />
-+  <policy domain="coder" rights="none" pattern="MSL" />
- </policymap>
+67a68,72
+>   <policy domain="coder" rights="none" pattern="EPHEMERAL" />
+>   <policy domain="coder" rights="none" pattern="URL" />
+>   <policy domain="coder" rights="none" pattern="HTTPS" />
+>   <policy domain="coder" rights="none" pattern="MVG" />
+>   <policy domain="coder" rights="none" pattern="MSL" />

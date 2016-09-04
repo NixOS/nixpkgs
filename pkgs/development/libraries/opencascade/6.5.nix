@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   # https://bugs.freedesktop.org/show_bug.cgi?id=83631
     + " -DGLX_GLXEXT_LEGACY";
 
+  hardeningDisable = [ "format" ];
+
   configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" "--with-qt=${qt4}" "--with-ftgl=${ftgl}" "--with-freetype=${freetype.dev}" ];
 
   postInstall = ''

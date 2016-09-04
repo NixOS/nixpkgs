@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     homepage = "http://www.glassechidna.com.au/products/heimdall/";
     description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

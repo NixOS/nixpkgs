@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://audacious-media-player.org/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; unix;
   };
 }

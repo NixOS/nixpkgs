@@ -12,5 +12,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.jedrea.com/chmlib;
     license = "LGPL";
     description = "A library for dealing with Microsoft ITSS/CHM format files";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

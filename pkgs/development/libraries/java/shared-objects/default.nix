@@ -7,4 +7,8 @@ stdenv.mkDerivation {
     md5 = "c1f2c58bd1a07be32da8a6b89354a11f";
   };
   buildInputs = [stdenv jdk];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

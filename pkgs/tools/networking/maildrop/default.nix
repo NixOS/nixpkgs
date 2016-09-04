@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.courier-mta.org/maildrop/;
     description = "Mail filter/mail delivery agent that is used by the Courier Mail Server";
     license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

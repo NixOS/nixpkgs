@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ indent ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "Library reading dwg files";
     homepage = http://libdwg.sourceforge.net/en/;

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gtkflags.patch ];
 
-  makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
+  makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
   meta = with lib; {
     homepage = http://pwmt.org/projects/zathura/;

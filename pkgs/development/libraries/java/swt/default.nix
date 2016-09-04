@@ -23,6 +23,8 @@ in stdenv.mkDerivation rec {
   fullVersion = "${version}-201202080800";
   name = "swt-${version}";
 
+  hardeningDisable = [ "format" ];
+
   # Alas, the Eclipse Project apparently doesn't produce source-only
   # releases of SWT.  So we just grab a binary release and extract
   # "src.zip" from that.
@@ -67,5 +69,6 @@ in stdenv.mkDerivation rec {
     description = "An widget toolkit for Java to access the user-interface facilities of the operating systems on which it is implemented";
     license = licenses.epl10;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

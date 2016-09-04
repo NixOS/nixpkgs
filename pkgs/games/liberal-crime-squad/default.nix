@@ -1,14 +1,14 @@
 { fetchFromGitHub, stdenv, ncurses, autoreconfHook, SDL2, SDL2_mixer }:
 
 stdenv.mkDerivation rec {
-  version = "2016-05-08";
+  version = "2016-07-06";
   name = "liberal-crime-squad-${version}";
 
   src = fetchFromGitHub {
     owner = "Kamal-Sadek";
     repo = "Liberal-Crime-Squad";
-    rev = "127d712";
-    sha256 = "1n16rmi2gm2mcnpp0ms1whj0nzcbfw52dnd90l52w4d1g4kqf1ck";
+    rev = "2ace84e";
+    sha256 = "0mcldn8ivlfyjfx22ygzcbbw3bzl0j6vi3g6jyj8jmcrni61mgmb";
   };
 
   buildInputs = [ ncurses autoreconfHook SDL2 SDL2_mixer ];

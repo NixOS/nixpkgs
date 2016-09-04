@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tig-2.1.1";
+  name = "tig-2.2";
 
   src = fetchurl {
     url = "http://jonas.nitro.dk/tig/releases/${name}.tar.gz";
-    sha256 = "0bw5wivswwh7vx897q8xc2cqgkqhdzk8gh6fnav2kf34sngigiah";
+    sha256 = "0k3m894vfkgkj7xbr0j6ph91351dl6id5f0hk2ksjp5lmg9i6llg";
   };
 
   buildInputs = [ ncurses asciidoc xmlto docbook_xsl readline git makeWrapper ]

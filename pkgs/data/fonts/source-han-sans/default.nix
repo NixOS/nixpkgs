@@ -26,6 +26,7 @@ let
       description = "${language} subset of an open source Pan-CJK typeface";
       homepage = https://github.com/adobe-fonts/source-han-sans;
       license = stdenv.lib.licenses.asl20;
+      platforms = stdenv.lib.platforms.unix;
     };
   };
 in

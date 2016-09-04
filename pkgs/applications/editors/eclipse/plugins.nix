@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.16.0.201603042325";
+    version = "6.19.1.201607051943";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.16.0/net.sf.eclipsecs-updatesite_${version}.zip";
-      sha256 = "0bm1linyw82bryblyabcx89zqw1ingh8mx62bwp3qj05yc9ksnly";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.19.1/net.sf.eclipsecs-updatesite_${version}.zip";
+      sha256 = "03aah57g0cgxym95p1wcj2h69xy3r9c0vv7js3gpmw1hx8w9sjsf";
     };
 
     meta = with stdenv.lib; {
@@ -341,12 +341,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.5.1";
+    version = "4.6";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/org.eclipse.jdt-4.5.1.zip";
-      sha256 = "0nxi552vvpjalnsqhc0zi6fgaj9p22amxsiczpv7za4kr7m47x73";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/org.eclipse.jdt-4.6.zip";
+      sha256 = "0raz8d09fnnx19l012l5frca97qavfivvygn3mvsllcyskhqc5hg";
     };
 
     meta = with stdenv.lib; {

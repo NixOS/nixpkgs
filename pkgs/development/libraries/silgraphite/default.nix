@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An advanced font engine";
     maintainers = [ stdenv.lib.maintainers.raskin ];
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

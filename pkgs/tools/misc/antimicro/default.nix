@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Ryochan7/antimicro";
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl3;
+    platforms = with platforms; linux;
   };
 }

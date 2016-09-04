@@ -58,5 +58,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.twister.net.co/";
     description = "Peer-to-peer microblogging";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

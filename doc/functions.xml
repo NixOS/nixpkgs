@@ -89,27 +89,27 @@ in ...</programlisting>
   <title>&lt;pkg&gt;.overrideDerivation</title>
 
   <warning>
-    <para>Do not use this function in Nixpkgs. Because it breaks
-    package abstraction and doesn’t provide error checking for
-    function arguments, it is only intended for ad-hoc customisation
-    (such as in <filename>~/.nixpkgs/config.nix</filename>).
-   </para>
-
-   <para>
-    Additionally, <varname>overrideDerivation</varname> forces an evaluation
-    of the Derivation which can be quite a performance penalty if there are many
-    overrides used.
+    <para>Do not use this function in Nixpkgs as it evaluates a Derivation
+    before modifying it, which breaks package abstraction and removes
+    error-checking of function arguments. In addition, this
+    evaluation-per-function application incurs a performance penalty,
+    which can become a problem if many overrides are used.
+    It is only intended for ad-hoc customisation, such as in
+    <filename>~/.nixpkgs/config.nix</filename>.
    </para>
   </warning>
 
   <para>
-    The function <varname>overrideDerivation</varname> is usually available for all the
-    derivations in the nixpkgs expression (<varname>pkgs</varname>).
+    The function <varname>overrideDerivation</varname> creates a new derivation
+    based on an existing one by overriding the original's attributes with
+    the attribute set produced by the specified function.
+    This function is available on all
+    derivations defined using the <varname>makeOverridable</varname> function.
+    Most standard derivation-producing functions, such as
+    <varname>stdenv.mkDerivation</varname>, are defined using this
+    function, which means most packages in the nixpkgs expression,
+    <varname>pkgs</varname>, have this function.
   </para> 
-  <para>
-    It is used to create a new derivation by overriding the attributes of
-    the original derivation according to the given function.
-  </para>
 
   <para>
     Example usage:
@@ -125,15 +125,29 @@ in ...</programlisting>
   </para>
 
   <para>
-    In the above example, the name, src and patches of the derivation
-    will be overridden, while all other attributes will be retained from the
-    original derivation.
+    In the above example, the <varname>name</varname>, <varname>src</varname>,
+    and <varname>patches</varname> of the derivation will be overridden, while
+    all other attributes will be retained from the original derivation.
   </para>
 
   <para>
     The argument <varname>oldAttrs</varname> is used to refer to the attribute set of
     the original derivation.
   </para>
+
+  <note>
+    <para>
+      A package's attributes are evaluated *before* being modified by
+      the <varname>overrideDerivation</varname> function.
+      For example, the <varname>name</varname> attribute reference
+      in <varname>url = "mirror://gnu/hello/${name}.tar.gz";</varname>
+      is filled-in *before* the <varname>overrideDerivation</varname> function
+      modifies the attribute set. This means that overriding the
+      <varname>name</varname> attribute, in this example, *will not* change the
+      value of the <varname>url</varname> attribute. Instead, we need to override
+      both the <varname>name</varname> *and* <varname>url</varname> attributes.
+    </para>
+  </note>
 
 </section>
 

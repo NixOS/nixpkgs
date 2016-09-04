@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       message = goBuyItNow;
       name = "${name}-bin";
       sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
-    } else throw "unsupported platform ${stdenv.s:ystem} only i686-linux supported for now.";
+    } else throw "unsupported platform ${stdenv.system} only i686-linux supported for now.";
 
   phases = "installPhase";
   ld_preload = ./isatty.c;

@@ -1,9 +1,10 @@
-{ kde, kdelibs, python, pyqt4, kdepimlibs, shared_desktop_ontologies,
+{ kde, kdelibs, pythonPackages, kdepimlibs, shared_desktop_ontologies,
   polkit_qt4, boost, lndir, pkgconfig }:
 
-let pydir = "lib/python${python.majorVersion}"; in
-
-kde {
+let
+  inherit (pythonPackages) python pyqt4;
+  pydir = "lib/python${python.majorVersion}";
+in kde {
 
   patches = [ ./pykde4-gcc-5.patch ];
 

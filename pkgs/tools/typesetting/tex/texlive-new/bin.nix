@@ -3,7 +3,7 @@
 , zlib, bzip2, ncurses, libpng, flex, bison, libX11, libICE, xproto
 , freetype, t1lib, gd, libXaw, icu, ghostscript, ed, libXt, libXpm, libXmu, libXext
 , xextproto, perl, libSM, ruby, expat, curl, libjpeg, python, fontconfig, pkgconfig
-, poppler, libpaper, graphite2, lesstif, zziplib, harfbuzz, texinfo, potrace, gmp, mpfr
+, poppler, libpaper, graphite2, zziplib, harfbuzz, texinfo, potrace, gmp, mpfr
 , xpdf, cairo, pixman, xorg, clisp
 , makeWrapper
 }:
@@ -65,6 +65,14 @@ core = stdenv.mkDerivation rec {
     perl
   ];
 
+  hardeningDisable = [ "format" ];
+
+  postPatch = ''
+    for i in texk/kpathsea/mktex*; do
+      sed -i '/^mydir=/d' "$i"
+    done
+  '';
+
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
       libs/{mpfr,pixman,poppler,potrace,xpdf,zlib,zziplib}
@@ -122,6 +130,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
   inherit (common) src;
+
+  hardeningDisable = [ "format" ];
 
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 ];
 

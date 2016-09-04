@@ -75,7 +75,7 @@ in
 
       bindUnixSockets =  mkOption {
         type = types.listOf types.str;
-        default = ["/run/rmilter.sock"];
+        default = ["/run/rmilter/rmilter.sock"];
         description = ''
           Unix domain sockets to listen for MTA requests.
         '';
@@ -114,7 +114,7 @@ in
 
         servers = mkOption {
           type = types.listOf types.str;
-          default = ["r:/run/rspamd.sock"];
+          default = ["r:/run/rspamd/rspamd.sock"];
           description = ''
             Spamd socket definitions.
             Is server name is prefixed with r: it is rspamd server.
@@ -197,7 +197,7 @@ milter_default_action = accept
 
       serviceConfig = {
         ExecStart = "${pkgs.rmilter}/bin/rmilter ${optionalString cfg.debug "-d"} -n -c ${rmilterConfigFile}";
-        ExecReload = "/bin/kill -USR1 $MAINPID";
+        ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = true;
@@ -212,10 +212,10 @@ milter_default_action = accept
       description = "Rmilter service socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-          ListenStream = cfg.bindUnixSockets ++ cfg.bindInetSockets;
-          SocketUser = cfg.user;
-          SocketGroup = cfg.group;
-          SocketMode = "0660";
+        ListenStream = cfg.bindUnixSockets ++ cfg.bindInetSockets;
+        SocketUser = cfg.user;
+        SocketGroup = cfg.group;
+        SocketMode = "0666";
       };
     };
 

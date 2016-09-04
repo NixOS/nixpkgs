@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://despotify.se";
     license = stdenv.lib.licenses.bsd2;
+    platforms = stdenv.lib.platforms.linux;
   };
 
 }

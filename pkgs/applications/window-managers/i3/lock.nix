@@ -2,11 +2,11 @@
   pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
-  name = "i3lock-2.7";
+  name = "i3lock-2.8";
 
   src = fetchurl {
     url = "http://i3wm.org/i3lock/${name}.tar.bz2";
-    sha256 = "1qlgafbyqjpqdfs50f2y0xphn2jdigafkqqsmpikk97cs0z1i0k8";
+    sha256 = "028fc0f74df10826514d5a4ed38f6895935d1f5d47ca9fcffc64b076aaf6e2f4";
   };
 
   buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutilimage pam libX11

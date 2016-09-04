@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/jiixyj/libebur128;
     license = licenses.mit;
     maintainers = [ maintainers.andrewrk ];
+    platforms = platforms.unix;
   };
 }

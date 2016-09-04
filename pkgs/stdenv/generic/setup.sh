@@ -389,6 +389,11 @@ substitute() {
     local input="$1"
     local output="$2"
 
+    if [ ! -f "$input" ]; then
+      echo "substitute(): file '$input' does not exist"
+      return 1
+    fi
+
     local -a params=("$@")
 
     local n p pattern replacement varName content
@@ -827,6 +832,10 @@ showPhaseHeader() {
 
 
 genericBuild() {
+    if [ -f "$buildCommandPath" ]; then
+        . "$buildCommandPath"
+        return
+    fi
     if [ -n "$buildCommand" ]; then
         eval "$buildCommand"
         return

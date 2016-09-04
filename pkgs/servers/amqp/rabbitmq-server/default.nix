@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      echo 'PATH=${erlang}/bin:${PATH:+:}$PATH' >> $out/sbin/rabbitmq-env
+      echo 'PATH=${erlang}/bin:''${PATH:+:}$PATH' >> $out/sbin/rabbitmq-env
     ''; # */
 
   meta = {

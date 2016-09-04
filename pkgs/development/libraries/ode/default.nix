@@ -11,5 +11,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Dynamics Engine";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

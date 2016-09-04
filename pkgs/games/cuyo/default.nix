@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_mixer }:
+{ stdenv, fetchurl, SDL, SDL_mixer, zlib }:
 
 stdenv.mkDerivation rec {
   name = "cuyo-${version}";
@@ -9,12 +9,13 @@ stdenv.mkDerivation rec {
      sha256 = "17yqv924x7yvwix7yz9jdhgyar8lzdhqvmpvv0any8rdkajhj23c";
      };
 
- buildInputs = [ SDL SDL_mixer];
+  buildInputs = [ SDL SDL_mixer zlib ];
      
   meta = {
      homepage = http://karimmi.de/cuyo;
      description = "Stacking blocks game, with different rules for each level";
      license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
   
 }

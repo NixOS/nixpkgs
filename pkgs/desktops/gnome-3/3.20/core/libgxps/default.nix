@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, cairo, libarchive, freetype, libjpeg, libtiff
-, openssl, bzip2, acl, attr
+, openssl, bzip2, acl, attr, libxml2
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gi0b0x0354jyqc48vspk2hg2q1403cf2p9ibj847nzhkdrh9l9r";
   };
 
-  buildInputs = [ pkgconfig glib cairo freetype libjpeg libtiff acl openssl bzip2 attr];
+  buildInputs = [ pkgconfig glib cairo freetype libjpeg libtiff acl openssl bzip2 attr libxml2 ];
   propagatedBuildInputs = [ libarchive ];
 
   configureFlags = "--without-liblcms2";

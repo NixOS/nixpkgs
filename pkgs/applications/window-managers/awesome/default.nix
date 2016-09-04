@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       --prefix LUA_PATH ";" '"${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua"' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
-      --prefix PATH : "${compton}/bin:${unclutter}/bin:${procps}/bin:${iproute}/sbin:${coreutils}/bin:${curl.bin}/bin:${alsaUtils}/bin:${findutils}/bin:${xterm}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ compton unclutter procps iproute coreutils curl alsaUtils findutils xterm ]}"
 
     wrapProgram $out/bin/awesome-client \
       --prefix PATH : "${which}/bin"

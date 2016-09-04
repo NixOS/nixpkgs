@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "16768gyi85mkizfn874q2q9xf32knw08z27si3k5bk99492dxwzw";
   };
 
+  postPatch = ''
+    sed '1i#include <cmath>' -i src/Transformer/SpectrumCircleTransformer.cpp
+  '';
+
   buildInputs = [ fftw ncurses libpulseaudio ];
 
   buildFlags = [ "ENABLE_PULSE=1" ];

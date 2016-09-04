@@ -1,4 +1,4 @@
-{ newScope, stdenv, makeWrapper, makeDesktopItem
+{ newScope, stdenv, makeWrapper, makeDesktopItem, ed
 
 # package customization
 , channel ? "stable"
@@ -61,30 +61,57 @@ let
 
   suffix = if channel != "stable" then "-" + channel else "";
 
+  sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
+
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${chromium.browser.version}";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ed ];
+
+  outputs = ["out" "sandbox"];
 
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
   in with stdenv.lib; ''
-    mkdir -p "$out/bin" "$out/share/applications"
+    mkdir -p "$out/bin"
 
-    ln -s "${chromium.browser}/share" "$out/share"
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
+    ed -v -s "$out/bin/chromium" << EOF
+    2i
+
+    if [ -x "/var/setuid-wrappers/${sandboxExecutableName}" ]
+    then
+      export CHROME_DEVEL_SANDBOX="/var/setuid-wrappers/${sandboxExecutableName}"
+    else
+      export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
+    fi
+
+    # libredirect causes chromium to deadlock on startup
+    export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
+
+    .
+    w
+    EOF
+
+    ln -sv "${chromium.browser.sandbox}" "$sandbox"
+
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
-    ln -s "${chromium.browser}/share/icons" "$out/share/icons"
+
+    mkdir -p "$out/share/applications"
+    for f in '${chromium.browser}'/share/*; do
+      ln -s -t "$out/share/" "$f"
+    done
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
   inherit (chromium.browser) meta packageName;
 
   passthru = {
-    inherit (chromium) upstream-info;
+    inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;
+    inherit sandboxExecutableName;
   };
 }

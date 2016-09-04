@@ -1,6 +1,7 @@
 { stdenv, composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
 , freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
 , cfg ? {}
+, darwin, libtiff, freetype
 }:
 
 let inherit (composableDerivation) edf; in
@@ -21,7 +22,10 @@ composableDerivation.composableDerivation {} {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ xlibsWrapper inputproto libXi freeglut ];
+  propagatedBuildInputs = [ inputproto ]
+    ++ (if stdenv.isDarwin
+        then (with darwin.apple_sdk.frameworks; [Cocoa AGL GLUT freetype libtiff])
+        else [ xlibsWrapper libXi freeglut ]);
 
   enableParallelBuilding = true;
 
@@ -55,9 +59,8 @@ composableDerivation.composableDerivation {} {
   meta = {
     description = "A C++ cross-platform lightweight GUI library";
     homepage = http://www.fltk.org;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.gpl2;
   };
 
 }
-

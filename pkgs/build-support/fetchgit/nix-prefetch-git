@@ -20,6 +20,7 @@ http_proxy=${http_proxy:-}
 fullRev=
 humanReadableRev=
 commitDate=
+commitDateStrict8601=
 
 if test -n "$deepClone"; then
     deepClone=true
@@ -287,9 +288,12 @@ _clone_user_rev() {
             fi;;
     esac
 
-    fullRev="$(cd "$dir" && (git rev-parse "$rev" 2> /dev/null || git rev-parse "refs/heads/$branchName") | tail -n1)"
-    humanReadableRev="$(cd "$dir" && (git describe "$fullRev" 2> /dev/null || git describe --tags "$fullRev" 2> /dev/null || echo -- none --))"
-    commitDate="$(cd "$dir" && git show --no-patch --pretty=%ci "$fullRev")"
+    pushd "$dir" >/dev/null
+    fullRev=$( (git rev-parse "$rev" 2>/dev/null || git rev-parse "refs/heads/$branchName") | tail -n1)
+    humanReadableRev=$(git describe "$fullRev" 2> /dev/null || git describe --tags "$fullRev" 2> /dev/null || echo -- none --)
+    commitDate=$(git show --no-patch --pretty=%ci "$fullRev")
+    commitDateStrict8601=$(git show --no-patch --pretty=%cI "$fullRev")
+    popd >/dev/null
 
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
@@ -337,6 +341,7 @@ print_results() {
         echo "{"
         echo "  \"url\": \"$url\","
         echo "  \"rev\": \"$fullRev\","
+        echo "  \"date\": \"$commitDateStrict8601\","
         echo -n "  \"$hashType\": \"$hash\""
         if test -n "$fetchSubmodules"; then
             echo ","

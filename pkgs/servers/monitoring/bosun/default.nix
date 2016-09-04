@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "bosun";
-  rev = "0.5.0-rc4";
+  rev = "0.5.0";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "bosun-monitor";
     repo = "bosun";
-    sha256 = "0cybhy5nshg3z2h5i6r8p9d0qihcnz8s8wh5cqf17ix17k31qans";
+    sha256 = "1qj97wiqj6awivvac1n00k0x8wdv4ambzdj4502nmmnr5rdbqq88";
   };
 
   subPackages = [ "cmd/bosun" "cmd/scollector" ];

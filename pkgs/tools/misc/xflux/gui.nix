@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # remove messing with shipped binary
   patches = [ ./setup.patch ];
 
-  # not sure if these need to be propogated or not?
+  # not sure if these need to be propagated or not?
   propagatedBuildInputs = [
     pexpect
     pyGtkGlade

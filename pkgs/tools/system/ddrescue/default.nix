@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b71hb42lh33y9843nd1mxlwkk9qh9ajvnz6ivzd1jq9lav4x7ph";
   };
 
-  buildInputs = [ lzip ];
+  nativeBuildInputs = [ lzip ];
 
   doCheck = true;
 

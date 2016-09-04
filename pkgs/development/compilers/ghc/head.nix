@@ -6,18 +6,18 @@ let
   inherit (bootPkgs) ghc;
 
 in stdenv.mkDerivation rec {
-  version = "7.11.20151216";
+  version = "8.1.20160826";
   name = "ghc-${version}";
-  rev = "28638dfe79e915f33d75a1b22c5adce9e2b62b97";
+  rev = "0050aff22ba04baca732bf5124002417ab667f8a";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "0rjzkzn0hz1vdnjikcbwfs5ggs8r3y4gqxfdn4jzfp45gx94wiwv";
+    sha256 = "1iirb11fr8914pb6i988cfji56gs698ll819bgb0hpcdkrmffwqc";
   };
 
   patches = [
-    ./ghc-7.x-dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
+    ./ghc-8.x-dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
   ];
 
   postUnpack = ''
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-gcc=${stdenv.cc}/bin/cc"
+    "--with-cc=${stdenv.cc}/bin/cc"
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${binutils}/bin:${coreutils}/bin"' $i
+      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
     done
   '';
 

@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     homepage = https://cmus.github.io/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.oxij ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -31,5 +31,6 @@ stdenv.mkDerivation {
 
     # Permissive BSD-style license.
     license = "permissive";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

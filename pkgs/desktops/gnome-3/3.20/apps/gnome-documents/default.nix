@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preFixup = ''
-    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib}/bin/gapplication"
+    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.dev}/bin/gapplication"
 
     gappsWrapperArgs+=(--run 'if [ -z "$XDG_CACHE_DIR" ]; then XDG_CACHE_DIR=$HOME/.cache; fi; if [ -w "$XDG_CACHE_DIR/.." ]; then mkdir -p "$XDG_CACHE_DIR/gnome-documents"; fi')
   '';

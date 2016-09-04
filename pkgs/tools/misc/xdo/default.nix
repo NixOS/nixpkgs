@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, libxcb, xcbutilwm }:
+{ stdenv, fetchFromGitHub, libxcb, xcbutilwm }:
 
 stdenv.mkDerivation rec {
-   name = "xdo-0.5";
+   name = "xdo-${version}";
+   version = "0.5.3";
 
-   src = fetchurl {
-     url = "https://github.com/baskerville/xdo/archive/0.5.tar.gz";
-     sha256 = "0sjnjs12i0gp1dg1m5jid4a3bg9am4qkf0qafyp6yn176yzcz1i6";
+   src = fetchFromGitHub {
+     owner = "baskerville";
+     repo = "xdo";
+     rev = version;
+     sha256 = "0gfrziil6xw6pkr8k8rn56ihy0333v6dlsw3dckib9hm7ikj0k2f";
    };
 
    prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
@@ -14,9 +17,9 @@ stdenv.mkDerivation rec {
 
    meta = {
      description = "Small X utility to perform elementary actions on windows";
-     homepage = https://github.com/baskerville/xdo;
+     inherit (src.meta) homepage;
      maintainers = [ stdenv.lib.maintainers.meisternu ];
-     license = "Custom";
+     license = stdenv.lib.licenses.bsd2;
      platforms = stdenv.lib.platforms.linux;
    };
 }

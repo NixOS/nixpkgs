@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Library that hides the complexity of using the SIP protocol";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

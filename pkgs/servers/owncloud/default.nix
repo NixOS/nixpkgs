@@ -25,6 +25,7 @@ let
       homepage = https://owncloud.org;
       maintainers = with stdenv.lib.maintainers; [ matejc ];
       license = stdenv.lib.licenses.agpl3Plus;
+      platforms = with stdenv.lib.platforms; unix;
     };
 
   });

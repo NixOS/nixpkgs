@@ -22,11 +22,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ bzip2 patchelf ];
- 
+
   dontPatchELF = true;
-  
+
   phases = "unpackPhase patchPhase installPhase";
-  
+
   installPhase = ''
     mkdir -pv $out
     cp -r ./* $out
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     for f in $(find $out); do
       if [ -f "$f" ] && patchelf "$f" 2> /dev/null; then
         patchelf --set-interpreter ${getLib glibc}/lib/ld-linux.so.2 \
-                 --set-rpath $out/lib:${getLib gcc}/lib:${ncurses.out}/lib \
+                 --set-rpath ${stdenv.lib.makeLibraryPath [ "$out" gcc ncurses ]} \
                  "$f" || true
       fi
     done
@@ -42,8 +42,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors (Cortex-M0/M0+/M3/M4, Cortex-R4/R5/R7)";
-    homepage = "https://launchpad.net/gcc-arm-embedded";
-    license = licenses.gpl3;
+    homepage = https://launchpad.net/gcc-arm-embedded;
+    license = with licenses; [ bsd2 gpl2 gpl3 lgpl21 lgpl3 mit ];
+    maintainers = [ maintainers.rasendubi ];
     platforms = platforms.linux;
   };
 }

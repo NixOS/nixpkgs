@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, cairo, xlibsWrapper, fontconfig, freetype, libsigcxx }:
+{ fetchurl, stdenv, pkgconfig, darwin, cairo, xlibsWrapper, fontconfig, freetype, libsigcxx }:
 let
   ver_maj = "1.12";
   ver_min = "0";
@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ cairo libsigcxx ];
-  buildInputs = [ fontconfig freetype ];
+  buildInputs = [ fontconfig freetype ]
+  ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ApplicationServices
+  ]);
 
   doCheck = true;
 
@@ -35,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = http://cairographics.org/;
 
     license = with licenses; [ lgpl2Plus mpl10 ];
+    platforms = platforms.unix;
   };
 }

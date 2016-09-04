@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fvm6rdalqcxckbddch8ycdw6n2ckldblv117n09chi2l7bm0q5k";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "Lightweight library to simplify and generalize unit tests for C";

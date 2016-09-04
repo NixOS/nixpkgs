@@ -1,12 +1,15 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
-, minimal ? false, qt4Support ? false, qt4 ? null, qt5Support ? false, qtbase ? null
-, utils ? false, suffix ? "glib"
+, withData ? false, poppler_data
+, qt4Support ? false, qt4 ? null
+, qt5Support ? false, qtbase ? null
+, utils ? false
+, minimal ? false, suffix ? "glib"
 }:
 
-let # beware: updates often break cups_filters build
-  version = "0.43.0"; # even major numbers are stable
-  sha256 = "0mi4zf0pz3x3fx3ir7szz1n57nywgbpd4mp2r7mvf47f4rmf4867";
+let # beware: updates often break cups-filters build
+  version = "0.47.0"; # even major numbers are stable
+  sha256 = "0hnjkcqqk87dw3hlda4gh4l7brkslniax9a79g772jn3iwiffwmq";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
@@ -18,16 +21,16 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  patches = [ ./datadir_env.patch ];
+  buildInputs = [ libiconv ] ++ libintlOrEmpty ++ lib.optional withData poppler_data;
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
-    [ zlib freetype fontconfig libjpeg ]
-    ++ optionals (!minimal) [ cairo lcms curl openjpeg ]
+    [ zlib freetype fontconfig libjpeg openjpeg ]
+    ++ optionals (!minimal) [ cairo lcms curl ]
     ++ optional qt4Support qt4
     ++ optional qt5Support qtbase;
 
-  nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
+  nativeBuildInputs = [ pkgconfig ];
 
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
@@ -40,7 +43,7 @@ stdenv.mkDerivation rec {
     ]
     ++ optionals minimal [
       "--disable-poppler-glib" "--disable-poppler-cpp"
-      "--disable-libopenjpeg" "--disable-libcurl"
+      "--disable-libcurl"
     ]
     ++ optional (!utils) "--disable-utils" ;
 

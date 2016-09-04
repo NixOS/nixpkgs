@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/src";
 
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.isi686 "pic";
+
   makefileExtra = ./Makefile.extra;
   makefile = "Makefile.ref";
-  
+
   patchPhase =
     ''
       cat ${makefileExtra} >> ${makefile}
@@ -27,4 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = "-f ${makefile} JS_DIST=\${out} BUILD_OPT=1 JS_READLINE=1 JS_THREADSAFE=1";
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

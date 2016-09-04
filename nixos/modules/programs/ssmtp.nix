@@ -100,6 +100,12 @@ in
           Password used for SMTP auth. (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)
         '';
       };
+      
+      setSendmail = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to set the system sendmail to ssmtp's.";
+      };
 
     };
 
@@ -122,6 +128,13 @@ in
       '';
 
     environment.systemPackages = [pkgs.ssmtp];
+    
+    services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail {
+      program = "sendmail";
+      source = "${pkgs.ssmtp}/bin/sendmail";
+      setuid = false;
+      setgid = false;
+    };
 
   };
 

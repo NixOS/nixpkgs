@@ -107,7 +107,7 @@ let
         };
 
         mysql = {
-          configureFlags = ["--with-mysql=${mysql.lib}"];
+          configureFlags = ["--with-mysql"];
           buildInputs = [ mysql.lib ];
         };
 
@@ -257,6 +257,8 @@ let
         calendarSupport = config.php.calendar or true;
       };
 
+      hardeningDisable = [ "bindnow" ];
+
       configurePhase = ''
         # Don't record the configure flags since this causes unnecessary
         # runtime dependencies.
@@ -283,8 +285,9 @@ let
       meta = with stdenv.lib; {
         description = "An HTML-embedded scripting language";
         homepage = http://www.php.net/;
-        license = stdenv.lib.licenses.php301;
+        license = licenses.php301;
         maintainers = with maintainers; [ globin ];
+        platforms = platforms.all;
       };
 
       patches = if !php7 then [ ./fix-paths.patch ] else [ ./fix-paths-php7.patch ];
@@ -296,20 +299,13 @@ let
     });
 
 in {
-
-  php55 = generic {
-    version = "5.5.36";
-    sha256 = "1fvipg3p8m61kym2ir589vi1l6zm0r95rd97z5s6sq6ylgxfv114";
-  };
-
   php56 = generic {
-    version = "5.6.22";
-    sha256 = "1il8kwg3pak06i4fz09br7vjsxvwfgxcd95zyaf6kyjjrj08mnlh";
+    version = "5.6.25";
+    sha256 = "1pldn4z7pzcjm8li9xryrniz5cz542cbv4nlrr13wzzdmhr61kjq";
   };
 
   php70 = generic {
-    version = "7.0.7";
-    sha256 = "06ixiaqqndvancqy5xmnzpscd77z2ixv3yrsdq0r8avqqhjjjks7";
+    version = "7.0.10";
+    sha256 = "1ppn17n5klhs1b2mcbbxxiqq4xvdbmv8p866q0qnk61nlzjvnmc0";
   };
-
 }

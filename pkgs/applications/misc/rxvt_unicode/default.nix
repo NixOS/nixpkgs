@@ -53,5 +53,6 @@ stdenv.mkDerivation (rec {
     description = "A clone of the well-known terminal emulator rxvt";
     homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
     maintainers = [ stdenv.lib.maintainers.mornfall ];
+    platforms = stdenv.lib.platforms.unix;
   };
 })

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, go_1_4, runCommand
+{ stdenv, lib, fetchurl, tzdata, iana_etc, go_bootstrap, runCommand
 , perl, which, pkgconfig, patch, fetchpatch
 , pcre
 , Security, Foundation, bash }:
@@ -6,7 +6,7 @@
 let
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
-    cp -rf ${go_1_4}/* $out/
+    cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
@@ -15,11 +15,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "17sfhg3xfnakk666wlsbhxp4vbn19hlywf5cn1zfcd4zqkcyx30h";
+    sha256 = "1plakydixx0xrp0z3n8ahnwg66psn31791dh56yl4ry41phq0axm";
   };
 
   # perl is used for testing go vet
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [
     Security Foundation
   ];
+
+  hardeningDisable = [ "all" ];
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
@@ -141,7 +143,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  disallowedReferences = [ go_1_4 ];
+  disallowedReferences = [ go_bootstrap ];
 
   meta = with stdenv.lib; {
     branch = "1.6";

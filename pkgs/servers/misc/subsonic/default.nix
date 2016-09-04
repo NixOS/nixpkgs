@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     description = "Personal media streamer";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ telotortium ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 
   phases = ["unpackPhase" "installPhase"];

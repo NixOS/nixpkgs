@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image} :
+{stdenv, fetchurl, SDL, SDL_image, mesa} :
 
 stdenv.mkDerivation {
   name = "kobodeluxe-0.5.1";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0f7b910a399d985437564af8c5d81d6dcf22b96b26b01488d72baa6a6fdb5c2c";
   };
 
-  buildInputs = [ SDL SDL_image];
+  buildInputs = [ SDL SDL_image mesa ];
 
   prePatch = ''
     sed -e 's/char \*tok/const char \*tok/' -i graphics/window.cpp
@@ -19,5 +19,6 @@ stdenv.mkDerivation {
     homepage = http://olofson.net/kobodl/;
     description = "Enhanced version of Akira Higuchi's game XKobo  for Un*x systems with X11";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

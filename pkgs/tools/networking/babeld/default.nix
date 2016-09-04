@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "Loop-avoiding distance-vector routing protocol";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu fpletz ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

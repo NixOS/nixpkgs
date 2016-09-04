@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.kraxel.org/blog/linux/fbida/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

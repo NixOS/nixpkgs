@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "OpenGL utility library";
     homepage = http://cgit.freedesktop.org/mesa/glu/;
     license = stdenv.lib.licenses.sgi-b-20;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

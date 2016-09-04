@@ -37,5 +37,6 @@ mkDerivation {
   description = "A dependency manager for Haskell";
   homepage = "https://github.com/sol/tinc#readme";
   license = stdenv.lib.licenses.mit;
+  hydraPlatforms = stdenv.lib.platforms.none;
   maintainers = [ stdenv.lib.maintainers.robbinch ];
 }

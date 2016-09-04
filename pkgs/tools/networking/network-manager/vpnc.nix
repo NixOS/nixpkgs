@@ -2,13 +2,13 @@
 , withGnome ? true, gnome3, procps, kmod }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
-  pname = "NetworkManager-vpnc";
+  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  pname   = "NetworkManager-vpnc";
   version = networkmanager.version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/1.0/${pname}-${version}.tar.xz";
-    sha256 = "0hycplnc78688sgpzdh3ifra6chascrh751mckqkp1j553bri0jk";
+    url    = "mirror://gnome/sources/${pname}/${networkmanager.major}/${pname}-${version}.tar.xz";
+    sha256 = "e900f6500026f8c3ee4feb92e1d0a0c0abbee9ba507dad915b47a8ab7df9e1f3";
   };
 
   buildInputs = [ vpnc networkmanager libsecret ]
@@ -24,19 +24,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
      substituteInPlace "configure" \
-       --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
+       --replace "/sbin/sysctl" "${procps}/bin/sysctl"
      substituteInPlace "src/nm-vpnc-service.c" \
-       --replace "/sbin/vpnc" "${vpnc}/sbin/vpnc" \
-       --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
-  '';
-
-  postConfigure = ''
-     substituteInPlace "./auth-dialog/Makefile" \
-       --replace "-Wstrict-prototypes" "" \
-       --replace "-Werror" ""
-     substituteInPlace "properties/Makefile" \
-       --replace "-Wstrict-prototypes" "" \
-       --replace "-Werror" ""
+       --replace "/sbin/vpnc" "${vpnc}/bin/vpnc" \
+       --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
   '';
 
   meta = {

@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
       license = stdenv.lib.licenses.gpl3;
       homepage = "https://github.com/aggelgian/cuter";
       maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
+      platforms = with stdenv.lib.platforms; unix;
     };
 }

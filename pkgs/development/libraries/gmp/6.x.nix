@@ -3,11 +3,11 @@
 with { inherit (stdenv.lib) optional optionalString; };
 
 let self = stdenv.mkDerivation rec {
-  name = "gmp-6.1.0";
+  name = "gmp-6.1.1";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "1s3kddydvngqrpc6i1vbz39raya2jdcl042wi0ksbszgjjllk129";
+    sha256 = "1mpzprdzkgfpdc1v2lf4dxlxps4x8bvmzvd8n1ri6gw9y9jrh458";
   };
 
   #outputs TODO: split $cxx due to libstdc++ dependency; maybe port to gmp5;
@@ -73,7 +73,7 @@ let self = stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.peti ];
+    maintainers = [ maintainers.peti maintainers.vrthra ];
   };
 };
   in self

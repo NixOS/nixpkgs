@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   patches = [ ./configure.patch ];
   patchFlags = "-p0";
 
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+  buildFlags = [ "CC=cc" ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp mg $out/bin

@@ -46,4 +46,8 @@ stdenv.mkDerivation {
   passthru = {
     inherit gtk;
   };
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

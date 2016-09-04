@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = http://supertux.github.io/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

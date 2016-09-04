@@ -8,11 +8,19 @@ stdenv.mkDerivation rec {
     sha256 = "1wjf79ipqwb5phfjjwf15rwgigakylnfqaj4crs5qnds6ba6i1ld";
   };
 
+  patches = [(fetchurl {
+    url = "https://anonscm.debian.org/cgit/pkg-phototools/libgphoto2.git/plain"
+      + "/debian/patches/libjpeg_turbo_1.5.0_fix.patch?id=8ce79a2a02d";
+    sha256 = "114iyhk6idxz2jhnzpf1glqm6d0x0y8cqfpqxz9i96q9j7x3wwin";
+  })];
+
   nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [ libtool libjpeg libusb1 ];
 
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://www.gphoto.org/proj/libgphoto2/;

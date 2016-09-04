@@ -1,5 +1,5 @@
-{ stdenv, fetchzip, buildPythonApplication, docbook2x, libxslt, gnome_doc_utils
-, intltool, dbus_glib, pygobject, pygtk, pyxdg, gnome_python, dbus, sqlite3
+{ stdenv, fetchzip, pythonPackages, docbook2x, libxslt, gnome_doc_utils
+, intltool, dbus_glib, gnome_python, dbus
 , hicolor_icon_theme
 }:
 
@@ -8,9 +8,8 @@
 #
 #   WARNING:root:Could not import wnck - workspace tracking will be disabled
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "hamster-time-tracker-1.04";
-  namePrefix = "";
 
   src = fetchzip {
     name = "${name}-src";
@@ -22,7 +21,7 @@ buildPythonApplication rec {
     docbook2x libxslt gnome_doc_utils intltool dbus_glib hicolor_icon_theme
   ];
 
-  propagatedBuildInputs = [ pygobject pygtk pyxdg gnome_python dbus sqlite3 ];
+  propagatedBuildInputs = with pythonPackages; [ pygobject pygtk pyxdg gnome_python dbus-python sqlite3 ];
 
   configurePhase = ''
     python waf configure --prefix="$out"

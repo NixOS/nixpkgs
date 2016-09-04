@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
       sha256 = "042lc5yyyl3zszll2l930apysd0lip26w0d0f0gjkl7sbhshgk8v";
     })
   ];
+  NIX_CFLAGS_COMPILE = "-DSYSV";
   makeFlags="BINDIR=\${out}/bin MANPATH=\${out}/man";
   preBuild = "xmkmf";
   installTargets = "install install.man";
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
     description = "A program that launches a given program when your X session has been idle for a given time.";
     homepage = http://www.ibiblio.org/pub/linux/X11/screensavers;
     maintainers = with maintainers; [ garbas ];
+    platforms = platforms.unix;
     license = licenses.gpl2;
   };
 }

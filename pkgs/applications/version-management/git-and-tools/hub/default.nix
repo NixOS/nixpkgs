@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = https://hub.github.com/;
     maintainers = with maintainers; [ the-kenny ];
+    platforms = with platforms; unix;
   };
 }

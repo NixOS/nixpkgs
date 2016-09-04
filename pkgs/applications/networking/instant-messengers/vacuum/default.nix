@@ -16,11 +16,18 @@ stdenv.mkDerivation rec {
     qt4 openssl xproto libX11 libXScrnSaver scrnsaverproto xz zlib
   ];
 
+  # hack: needed to fix build issues in
+  # http://hydra.nixos.org/build/38322959/nixlog/1
+  # should be an upstream issue but it's easy to fix
+  NIX_LDFLAGS = "-lz";
+
   nativeBuildInputs = [ qmake4Hook ];
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
   '';
+
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "An XMPP client fully composed of plugins";

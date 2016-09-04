@@ -2,7 +2,7 @@
 , gnugrep, gzip, openssh
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs
+, svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "2.9.0";
+  version = "2.9.3";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -19,8 +19,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "02dl8yvvl7m4zy39s0xmqr958ah7krvkv94lmx4vz3wl95wsj7zl";
+    sha256 = "0qzs681a64k3shh5p0rg41l1z16fbk5sj0xga45k34hp1hsp654z";
   };
+
+  hardeningDisable = [ "format" ];
 
   patches = [
     ./docbook2texi.patch
@@ -102,6 +104,11 @@ stdenv.mkDerivation {
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi
+      # Give access to CGI.pm and friends (was removed from perl core in 5.22)
+      for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
+          sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
+              "$out/share/gitweb/gitweb.cgi"
+      done
 
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing

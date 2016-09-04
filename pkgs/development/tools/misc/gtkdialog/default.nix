@@ -14,5 +14,6 @@ stdenv.mkDerivation {
     homepage = http://gtkdialog.googlecode.com/;
     description = "Small utility for fast and easy GUI building from many scripted and compiled languages";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

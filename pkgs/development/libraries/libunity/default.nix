@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, vala, python, intltool, pkgconfig
+{ stdenv, fetchurl, vala_0_23, python, intltool, pkgconfig
 , glib, libgee_0_6, gtk3, dee, libdbusmenu-glib
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib libgee_0_6 gtk3 ];
   propagatedBuildInputs = [ dee libdbusmenu-glib ];
-  nativeBuildInputs = [ vala python intltool pkgconfig ];
+  nativeBuildInputs = [ vala_0_23 python intltool pkgconfig ];
 
   enableParallelBuilding = true;
 

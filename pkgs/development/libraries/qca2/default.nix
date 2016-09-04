@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = "LGPL";
     homepage = http://delta.affinix.com/qca;
     maintainers = [ maintainers.sander maintainers.urkud ];
+    platforms = platforms.linux;
   };
 }

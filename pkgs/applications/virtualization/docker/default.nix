@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="a34a1d59"
+    export DOCKER_GITCOMMIT="20f81dde"
     ./hack/make.sh dynbinary
   '';
 
@@ -47,13 +47,14 @@ stdenv.mkDerivation rec {
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
-      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${utillinux}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ iproute iptables e2fsprogs xz utillinux ]}"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
 
     # completion
     install -Dm644 ./contrib/completion/bash/docker $out/share/bash-completion/completions/docker
+    install -Dm644 ./contrib/completion/fish/docker.fish $out/share/fish/vendor_completions.d/docker.fish
     install -Dm644 ./contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
   '';
 

@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0n5rhwl83yv8qm0zrbaxnyrf8x1i3b6si927518mwfxs96jrdkdh";
   };
 
+  patches = [ ./relocation.patch ];
+
   buildInputs = [ ghc perl gmp ncurses ];
 
   enableParallelBuilding = true;

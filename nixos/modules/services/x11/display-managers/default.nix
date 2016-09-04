@@ -34,7 +34,7 @@ let
 
       ${optionalString cfg.displayManager.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
-          _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$1"
+          _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$@"
         fi
       ''}
 
@@ -134,8 +134,9 @@ let
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 
+      # FIXME: gdbus should not be in glib.dev!
       ${optionalString (cfg.startDbusSession && cfg.updateDbusEnvironment) ''
-        ${pkgs.glib}/bin/gdbus call --session \
+        ${pkgs.glib.dev}/bin/gdbus call --session \
           --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
           --method org.freedesktop.DBus.UpdateActivationEnvironment \
           "{$(env | ${pkgs.gnused}/bin/sed "s/'/\\\\'/g; s/\([^=]*\)=\(.*\)/'\1':'\2'/" \
@@ -305,7 +306,8 @@ in
   };
 
   imports = [
-   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ])
+   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
+     "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
   ];
 
 }

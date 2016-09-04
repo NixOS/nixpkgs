@@ -156,12 +156,12 @@ rec {
        hasSuffix "foo" "barfoo"
        => true
   */
-  hasSuffix = suff: str:
+  hasSuffix = suffix: content:
     let
-      lenStr = stringLength str;
-      lenSuff = stringLength suff;
-    in lenStr >= lenSuff &&
-       substring (lenStr - lenSuff) lenStr str == suff;
+      lenContent = stringLength content;
+      lenSuffix = stringLength suffix;
+    in lenContent >= lenSuffix &&
+       substring (lenContent - lenSuffix) lenContent content == suffix;
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
@@ -203,20 +203,19 @@ rec {
   */
   escape = list: replaceChars list (map (c: "\\${c}") list);
 
-  /* Escape all characters that have special meaning in the Bourne shell.
+  /* Quote string to be used safely within the Bourne shell.
 
      Example:
-       escapeShellArg "so([<>])me"
-       => "so\\(\\[\\<\\>\\]\\)me"
+       escapeShellArg "esc'ape\nme"
+       => "'esc'\\''ape\nme'"
   */
-  escapeShellArg = arg:
-    lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]") (toString arg);
+  escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
 
-  /* Escape all arguments to be passed to the Bourne shell.
+  /* Quote all arguments to be safely passed to the Bourne shell.
 
      Example:
-       escapeShellArgs ["one" "two three"]
-       => "one two\\ three"
+       escapeShellArgs ["one" "two three" "four'five"]
+       => "'one' 'two three' 'four'\\''five'"
   */
   escapeShellArgs = concatMapStringsSep " " escapeShellArg;
 
@@ -249,7 +248,7 @@ rec {
   /* Converts an ASCII string to upper-case.
 
      Example:
-       toLower "home"
+       toUpper "home"
        => "HOME"
   */
   toUpper = replaceChars lowerChars upperChars;
@@ -373,7 +372,12 @@ rec {
        getVersion pkgs.youtube-dl
        => "2016.01.01"
   */
-  getVersion = x: (builtins.parseDrvName (x.name or x)).version;
+  getVersion = x:
+   let
+     parse = drv: (builtins.parseDrvName drv).version;
+   in if isString x
+      then parse x
+      else x.version or (parse x.name);
 
   /* Extract name with version from URL. Ask for separator which is
      supposed to start extension.
@@ -480,4 +484,14 @@ rec {
       absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
     in
       absolutePaths;
+
+  /* Read the contents of a file removing the trailing \n
+
+     Example:
+       $ echo "1.0" > ./version
+
+       fileContents ./version
+       => "1.0"
+  */
+  fileContents = file: removeSuffix "\n" (builtins.readFile file);
 }

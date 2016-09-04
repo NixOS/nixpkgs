@@ -52,6 +52,8 @@ in
   config = mkIf config.services.shairport-sync.enable {
 
     services.avahi.enable = true;
+    services.avahi.publish.enable = true;
+    services.avahi.publish.userServices = true;
 
     users.extraUsers = singleton
       { name = cfg.user;

@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
     export BOOST_INCLUDEDIR=${boost.dev}/include
     export BOOST_LIBRARYDIR=${boost.out}/lib
-    export OPENSSL_ROOT_DIR=${openssl.dev}
+    export CMAKE_INCLUDE_PATH=${openssl.dev}/include
+    export CMAKE_LIBRARY_PATH=${openssl.out}/lib
 
     substituteInPlace cpp/cmake/FindValgrind.cmake \
       --replace "/usr/local" "${valgrind}"
@@ -41,13 +42,17 @@ stdenv.mkDerivation rec {
     substituteInPlace etc/init.d/generate_initd_scripts.sh \
       --replace "/bin/bash" "${stdenv.shell}"
 
+    substituteInPlace cpp/thirdparty/gtest-1.7.0/configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+
+    substituteInPlace cpp/thirdparty/protobuf-2.5.0/configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+
+    substituteInPlace cpp/thirdparty/protobuf-2.5.0/gtest/configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+
     # do not put cmake into buildInputs
     export PATH="$PATH:${cmake}/bin"
-  '';
-
-  preBuild = ''
-    substituteInPlace configure \
-    --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
   doCheck = false;

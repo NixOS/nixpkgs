@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, intltool, pkgconfig, libX11, gtk
-, ldns, pythonDBus, pythonPackages
+, ldns, pythonPackages
 
 , enableJingle ? true, farstream ? null, gst_plugins_bad ? null
 ,                      libnice ? null
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e '0,/^[^#]/ {
       /^[^#]/i export \\\
-        PYTHONPATH="'"$PYTHONPATH\''${PYTHONPATH:+:}\$PYTHONPATH"'" \\\
         GST_PLUGIN_PATH="'"\$GST_PLUGIN_PATH''${GST_PLUGIN_PATH:+:}${""
         }$GST_PLUGIN_PATH"'"
     }' scripts/gajim.in
@@ -53,21 +52,38 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    python intltool pkgconfig libX11
+    python libX11
+  ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ];
+
+  nativeBuildInputs = [
+    pythonPackages.wrapPython intltool pkgconfig
+  ];
+
+  propagatedBuildInputs = [
     pythonPackages.pygobject pythonPackages.pyGtkGlade
     pythonPackages.sqlite3 pythonPackages.pyasn1
     pythonPackages.pyxdg
     pythonPackages.nbxmpp
-    pythonPackages.pyopenssl pythonDBus
-  ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
-    ++ optional enableE2E pythonPackages.pycrypto
+    pythonPackages.pyopenssl pythonPackages.dbus-python
+  ] ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
     ++ optional enableNotifications pythonPackages.notify
     ++ extraPythonPackages pythonPackages;
 
-  postInstall = ''
+  postFixup = ''
     install -m 644 -t "$out/share/gajim/icons/hicolor" \
                       "icons/hicolor/index.theme"
+
+    buildPythonPath "$out"
+
+    for i in $out/bin/*; do
+      name="$(basename "$i")"
+      if [ "$name" = "gajim-history-manager" ]; then
+        name="history_manager"
+      fi
+
+      patchPythonScript "$out/share/gajim/src/$name.py"
+    done
   '';
 
   enableParallelBuilding = true;
@@ -79,5 +95,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin maintainers.aszlig ];
     downloadPage = "http://gajim.org/downloads.php";
     updateWalker = true;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

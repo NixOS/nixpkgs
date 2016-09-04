@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     homepage = http://repo.or.cz/w/fast-export.git;
     license = licenses.gpl2;
     maintainers = [ maintainers.koral ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -6,4 +6,8 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   inherit mysql_jdbc;
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

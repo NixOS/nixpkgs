@@ -10,12 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1g0hivv3wla7z5dgnkcn3ny38p089pjfj36nx6k29zmprgmjinyr";
   };
 
-  buildInputs = [ python cmake llvmPackages.clang boost makeWrapper ];
+  buildInputs = [ python cmake boost makeWrapper ];
 
   propagatedBuildInputs = with pythonPackages; [ waitress frozendict bottle ];
 
   buildPhase = ''
-    python build.py --clang-completer --system-libclang --system-boost
+    export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
+    python build.py --clang-completer --system-boost
   '';
 
   configurePhase = ":";
@@ -28,10 +29,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A code-completion and comprehension server";
-    homepage = "https://github.com/Valloric/ycmd";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    homepage = https://github.com/Valloric/ycmd;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ rasendubi ];
+    platforms = platforms.all;
   };
 }

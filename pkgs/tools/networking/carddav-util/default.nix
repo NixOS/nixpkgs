@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://github.com/ljanyst/carddav-util;
     description = "A CardDAV import/export utility";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

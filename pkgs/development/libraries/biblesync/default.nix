@@ -28,5 +28,6 @@ stdenv.mkDerivation rec{
     '';
     license = licenses.publicDomain;
     maintainers = [ maintainers.AndersonTorres ]; 
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://hal.freedesktop.org/releases/;
     description = "D-Bus bindings for GObject";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

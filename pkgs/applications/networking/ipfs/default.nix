@@ -1,6 +1,6 @@
-{ stdenv, buildGo15Package, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGo15Package rec {
+buildGoPackage rec {
   name = "ipfs-${version}";
   version = "i20160112--${stdenv.lib.strings.substring 0 7 rev}";
   rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
@@ -17,5 +17,6 @@ buildGo15Package rec {
   meta = with stdenv.lib; {
     description = "A global, versioned, peer-to-peer filesystem";
     license = licenses.mit;
+    broken = true;
   };
 }

@@ -1,54 +1,43 @@
-<!--
-* Copyright (C) 2012 The Android Open Source Project
-*
-* Licensed under the Apache License, version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
--->
+<?xml version="1.0" ?>
 <sdk:sdk-sys-img xmlns:sdk="http://schemas.android.com/sdk/android/sys-img/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!--Generated on 2016-07-15 21:31:22.867420 with ADRT.-->
+	<sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
-
-    <sdk:license id="android-sdk-license" type="text">To get started with the Android SDK, you must agree to the following terms and conditions.
-
-This is the Android SDK License Agreement (the &quot;License Agreement&quot;).
+This is the Android Software Development Kit License Agreement
 
 1. Introduction
 
-1.1 The Android SDK (referred to in the License Agreement as the &quot;SDK&quot; and specifically including the Android system files, packaged APIs, and SDK library files and tools , if and when they are made available) is licensed to you subject to the terms of the License Agreement. The License Agreement forms a legally binding contract between you and Google in relation to your use of the SDK.
+1.1 The Android Software Development Kit (referred to in the License Agreement as the &quot;SDK&quot; and specifically including the Android system files, packaged APIs, and Google APIs add-ons) is licensed to you subject to the terms of the License Agreement. The License Agreement forms a legally binding contract between you and Google in relation to your use of the SDK.
 
 1.2 &quot;Android&quot; means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
 
-1.3 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+1.3 A &quot;compatible implementation&quot; means any Android device that (i) complies with the Android Compatibility Definition document, which can be found at the Android compatibility website (http://source.android.com/compatibility) and which may be updated from time to time; and (ii) successfully passes the Android Compatibility Test Suite (CTS).
+
+1.4 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
 
 2. Accepting the License Agreement
 
 2.1 In order to use the SDK, you must first agree to the License Agreement. You may not use the SDK if you do not accept the License Agreement.
 
-2.2 By clicking to accept and/or using the SDK, you hereby agree to the terms of the License Agreement.
+2.2 By clicking to accept, you hereby agree to the terms of the License Agreement.
 
-2.3 You may not use the SDK and may not accept the License Agreement if you are a person barred from receiving the SDK under the laws of the United States or other countries including the country in which you are resident or from which you use the SDK.
+2.3 You may not use the SDK and may not accept the License Agreement if you are a person barred from receiving the SDK under the laws of the United States or other countries, including the country in which you are resident or from which you use the SDK.
 
-2.4 If you will use the SDK internally within your company or organization you agree to be bound by the License Agreement on behalf of your employer or other entity, and you represent and warrant that you have full legal authority to bind your employer or such entity to the License Agreement. If you do not have the requisite authority, you may not accept the License Agreement or use the SDK on behalf of your employer or other entity.
+2.4 If you are agreeing to be bound by the License Agreement on behalf of your employer or other entity, you represent and warrant that you have full legal authority to bind your employer or such entity to the License Agreement. If you do not have the requisite authority, you may not accept the License Agreement or use the SDK on behalf of your employer or other entity.
+
 
 3. SDK License from Google
 
-3.1 Subject to the terms of the License Agreement, Google grants you a royalty-free, non-assignable, non-exclusive, non-sublicensable, limited, revocable license to use the SDK, personally or internally within your company or organization, solely to develop and distribute applications to run on the Android platform.
+3.1 Subject to the terms of the License Agreement, Google grants you a limited, worldwide, royalty-free, non-assignable, non-exclusive, and non-sublicensable license to use the SDK solely to develop applications for compatible implementations of Android.
 
-3.2 You agree that Google or third parties own all legal right, title and interest in and to the SDK, including any Intellectual Property Rights that subsist in the SDK. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+3.2 You may not use this SDK to develop applications for other platforms (including non-compatible implementations of Android) or to develop another SDK. You are of course free to develop applications for other platforms, including non-compatible implementations of Android, provided that this SDK is not used for that purpose.
 
-3.3 You may not use the SDK for any purpose not expressly permitted by the License Agreement. Except to the extent required by applicable third party licenses, you may not: (a) copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the SDK or any part of the SDK; or (b) load any part of the SDK onto a mobile handset or any other hardware device except a personal computer, combine any part of the SDK with other software, or distribute any software or device incorporating a part of the SDK.
+3.3 You agree that Google or third parties own all legal right, title and interest in and to the SDK, including any Intellectual Property Rights that subsist in the SDK. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
 
-3.4 You agree that you will not take any actions that may cause or result in the fragmentation of Android, including but not limited to distributing, participating in the creation of, or promoting in any way a software development kit derived from the SDK.
+3.4 You may not use the SDK for any purpose not expressly permitted by the License Agreement.  Except to the extent required by applicable third party licenses, you may not: (a) copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the SDK or any part of the SDK; or (b) load any part of the SDK onto a mobile handset or any other hardware device except a personal computer, combine any part of the SDK with other software, or distribute any software or device incorporating a part of the SDK.
 
-3.5 Use, reproduction and distribution of components of the SDK licensed under an open source software license are governed solely by the terms of that open source software license and not the License Agreement. You agree to remain a licensee in good standing in regard to such open source software licenses under all the rights granted and to refrain from any actions that may terminate, suspend, or breach such rights.
+3.5 Use, reproduction and distribution of components of the SDK licensed under an open source software license are governed solely by the terms of that open source software license and not the License Agreement.
 
 3.6 You agree that the form and nature of the SDK that Google provides may change without prior notice to you and that future versions of the SDK may be incompatible with applications developed on previous versions of the SDK. You agree that Google may stop (permanently or temporarily) providing the SDK (or any features within the SDK) to you or to users generally at Google's sole discretion, without prior notice to you.
 
@@ -56,15 +45,16 @@ This is the Android SDK License Agreement (the &quot;License Agreement&quot;).
 
 3.8 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the SDK.
 
+
 4. Use of the SDK by You
 
-4.1 Google agrees that nothing in the License Agreement gives Google any right, title or interest from you (or your licensors) under the License Agreement in or to any software applications that you develop using the SDK, including any intellectual property rights that subsist in those applications.
+4.1 Google agrees that it obtains no right, title or interest from you (or your licensors) under the License Agreement in or to any software applications that you develop using the SDK, including any intellectual property rights that subsist in those applications.
 
-4.2 You agree to use the SDK and write applications only for purposes that are permitted by (a) the License Agreement, and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+4.2 You agree to use the SDK and write applications only for purposes that are permitted by (a) the License Agreement and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
 
-4.3 You agree that if you use the SDK to develop applications, you will protect the privacy and legal rights of users. If users provide you with user names, passwords, or other login information or personal information, you must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If users provide you with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, each user has given you permission to do so.
+4.3 You agree that if you use the SDK to develop applications for general public users, you will protect the privacy and legal rights of those users. If the users provide you with user names, passwords, or other login information or personal information, you must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If the user provides your application with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, the user has given you permission to do so.
 
-4.4 You agree that you will not engage in any activity with the SDK, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of Google or any third party.
+4.4 You agree that you will not engage in any activity with the SDK, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of any third party including, but not limited to, Google or any mobile communications carrier.
 
 4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through Android and/or applications for Android, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
 
@@ -78,7 +68,8 @@ This is the Android SDK License Agreement (the &quot;License Agreement&quot;).
 
 6.1 In order to continually innovate and improve the SDK, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the SDK are being used and how they are being used. Before any of this information is collected, the SDK will notify you and seek your consent. If you withhold consent, the information will not be collected.
 
-6.2 The data collected is examined in the aggregate to improve the SDK and is maintained in accordance with Google's Privacy Policy located at http://www.google.com/policies/privacy/.
+6.2 The data collected is examined in the aggregate to improve the SDK and is maintained in accordance with Google's Privacy Policy.
+
 
 7. Third Party Applications
 
@@ -86,15 +77,17 @@ This is the Android SDK License Agreement (the &quot;License Agreement&quot;).
 
 7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
 
-7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party.
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party. In that case, the License Agreement does not affect your legal relationship with these third parties.
 
-8. Using Google APIs
 
-8.1 Google APIs
+8. Using Android APIs
+
+8.1 Google Data APIs
 
 8.1.1 If you use any API to retrieve data from Google, you acknowledge that the data may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.
 
 8.1.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so.
+
 
 9. Terminating the License Agreement
 
@@ -102,31 +95,38 @@ This is the Android SDK License Agreement (the &quot;License Agreement&quot;).
 
 9.2 If you want to terminate the License Agreement, you may do so by ceasing your use of the SDK and any relevant developer credentials.
 
-9.3 Google may at any time, terminate the License Agreement, with or without cause, upon notice to you.
+9.3 Google may at any time, terminate the License Agreement with you if:
+(A) you have breached any provision of the License Agreement; or
+(B) Google is required to do so by law; or
+(C) the partner with whom Google offered certain parts of SDK (such as APIs) to you has terminated its relationship with Google or ceased to offer certain parts of the SDK to you; or
+(D) Google decides to no longer provide the SDK or certain parts of the SDK to users in the country in which you are resident or from which you use the service, or the provision of the SDK or certain SDK services to you by Google is, in Google's sole discretion, no longer commercially viable.
 
-9.4 The License Agreement will automatically terminate without notice or other action when Google ceases to provide the SDK or certain parts of the SDK to users in the country in which you are resident or from which you use the service.
+9.4 When the License Agreement comes to an end, all of the legal rights, obligations and liabilities that you and Google have benefited from, been subject to (or which have accrued over time whilst the License Agreement has been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 14.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
 
-9.5 When the License Agreement is terminated, the license granted to you in the License Agreement will terminate, you will immediately cease all use of the SDK, and the provisions of paragraphs 10, 11, 12 and 14 shall survive indefinitely.
 
-10. DISCLAIMERS
+10. DISCLAIMER OF WARRANTIES
 
 10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE SDK IS AT YOUR SOLE RISK AND THAT THE SDK IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
 
-10.2 YOUR USE OF THE SDK AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE SDK IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE. WITHOUT LIMITING THE FOREGOING, YOU UNDERSTAND THAT THE SDK MAY CONTAIN ERRORS, DEFECTS AND SECURITY VULNERABILITIES THAT CAN RESULT IN SIGNIFICANT DAMAGE, INCLUDING THE COMPLETE, IRRECOVERABLE LOSS OF USE OF YOUR COMPUTER SYSTEM OR OTHER DEVICE.
+10.2 YOUR USE OF THE SDK AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE SDK IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
 
 10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
 
 11. LIMITATION OF LIABILITY
 
 11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
 
+
 12. Indemnification
 
-12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys’ fees) arising out of or accruing from (a) your use of the SDK, (b) any application you develop on the SDK that infringes any Intellectual Property Rights of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you of the License Agreement.
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys fees) arising out of or accruing from (a) your use of the SDK, (b) any application you develop on the SDK that infringes any copyright, trademark, trade secret, trade dress, patent or other intellectual property right of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you with the License Agreement.
+
 
 13. Changes to the License Agreement
 
 13.1 Google may make changes to the License Agreement as it distributes new versions of the SDK. When these changes are made, Google will make a new version of the License Agreement available on the website where the SDK is made available.
+
 
 14. General Legal Terms
 
@@ -140,14 +140,13 @@ This is the Android SDK License Agreement (the &quot;License Agreement&quot;).
 
 14.5 EXPORT RESTRICTIONS. THE SDK IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE SDK. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
 
-14.6 The License Agreement may not be assigned or transferred by you without the prior written approval of Google, and any attempted assignment without such approval will be void. You shall not delegate your responsibilities or obligations under the License Agreement without the prior written approval of Google.
+14.6 The rights granted in the License Agreement may not be assigned or transferred by either you or Google without the prior written approval of the other party. Neither you nor Google shall be permitted to delegate their responsibilities or obligations under the License Agreement without the prior written approval of the other party.
 
 14.7 The License Agreement, and your relationship with Google under the License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from the License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
 
-June 2014.
-    </sdk:license>
 
-    <sdk:license id="android-sdk-preview-license" type="text">To get started with the Android SDK Preview, you must agree to the following terms and conditions.
+November 20, 2015</sdk:license>
+	<sdk:license id="android-sdk-preview-license" type="text">To get started with the Android SDK Preview, you must agree to the following terms and conditions.
 As described below, please note that this is a preview version of the Android SDK, subject to change, that you use at your own risk.  The Android SDK Preview is not a stable release, and may contain errors and defects that can result in serious damage to your computer systems, devices and data.
 
 This is the Android SDK Preview License Agreement (the &quot;License Agreement&quot;).
@@ -280,18 +279,14 @@ This is the Android SDK Preview License Agreement (the &quot;License Agreement&q
 
 14.7 The License Agreement, and your relationship with Google under the License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from the License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
 
-June 2014.
-    </sdk:license>
-
-    <sdk:license id="intel-android-sysimage-license" type="text">
-<![CDATA[
-Intel Corporation Internal Evaluation License Agreement for x86 Android* System Images for Android Software Development Kit (SDK)
-This Internal Evaluation License Agreement (this "Agreement") is entered into by and between Intel and you (as an individual developer or a legal entity -- identified below as Recipient). Intel shall provide the Evaluation Software to Recipient as described in accordance with the Internal Evaluation License Terms and Conditions.
+June 2014.</sdk:license>
+	<sdk:license id="intel-android-sysimage-license" type="text">Intel Corporation Internal Evaluation License Agreement for x86 Android* System Images for Android Software Development Kit (SDK)
+This Internal Evaluation License Agreement (this &quot;Agreement&quot;) is entered into by and between Intel and you (as an individual developer or a legal entity -- identified below as Recipient). Intel shall provide the Evaluation Software to Recipient as described in accordance with the Internal Evaluation License Terms and Conditions.
 
 Definitions.
 These terms shall have the following meanings:
 
-"Intel" or "INTEL"
+&quot;Intel&quot; or &quot;INTEL&quot;
 Intel Corporation
 With an Address of:
 2200 Mission College Blvd.
@@ -300,27 +295,27 @@ Office of the General Counsel
 Mail Stop: RNB-4-51
 Attn: Software and Services Group Legal
 
-"Evaluation Software"
+&quot;Evaluation Software&quot;
 The x86 Android* emulator system images for Android  Software Development Kit (SDK), as provided by Intel.
 
 INTERNAL EVALUATION LICENSE TERMS AND CONDITIONS
 
 1. DEFINITIONS.
 
-1.1 Additional Defined Terms. "Agreement", "Evaluation Software",  "Intel", "Non-disclosure Agreement", "Recipient", and "Effective Date" shall have the meanings ascribed to them on the signature page(s) of this Agreement.
+1.1 Additional Defined Terms. &quot;Agreement&quot;, &quot;Evaluation Software&quot;,  &quot;Intel&quot;, &quot;Non-disclosure Agreement&quot;, &quot;Recipient&quot;, and &quot;Effective Date&quot; shall have the meanings ascribed to them on the signature page(s) of this Agreement.
 
 1.2 Evaluation Materials means, collectively, the Evaluation Software (in source and/or object code form) and documentation (including, without limitation, any design documents, specifications and other related materials) related to the Evaluation Software.
 
-1.3 "Open Source Software" means any software that requires as a condition of use, modification and/or distribution of such software that such software or other software incorporated into, derived from or distributed with such software (a) be disclosed or distributed in source code form; or (b) be licensed by the user to third parties for the purpose of making and/or distributing derivative works; or (c) be redistributable at no charge. Open Source Software includes, without limitation, software licensed or distributed under any of the following licenses or distribution models, or licenses or distribution models substantially similar to any of the following: (a) GNUs General Public License (GPL) or Lesser/Library GPL (LGPL), (b) the Artistic License (e.g., PERL), (c) the Mozilla Public License, (d) the Netscape Public License, (e) the Sun Community Source License (SCSL), (f) the Sun Industry Source License (SISL), (g) the Apache Software license and (h) the Common Public License (CPL).
+1.3 &quot;Open Source Software&quot; means any software that requires as a condition of use, modification and/or distribution of such software that such software or other software incorporated into, derived from or distributed with such software (a) be disclosed or distributed in source code form; or (b) be licensed by the user to third parties for the purpose of making and/or distributing derivative works; or (c) be redistributable at no charge. Open Source Software includes, without limitation, software licensed or distributed under any of the following licenses or distribution models, or licenses or distribution models substantially similar to any of the following: (a) GNUs General Public License (GPL) or Lesser/Library GPL (LGPL), (b) the Artistic License (e.g., PERL), (c) the Mozilla Public License, (d) the Netscape Public License, (e) the Sun Community Source License (SCSL), (f) the Sun Industry Source License (SISL), (g) the Apache Software license and (h) the Common Public License (CPL).
 
-1.4 "Pre-Release Materials" means "alpha" or "beta" designated pre-release features, which may not be fully functional, which Intel may substantially modify in producing any production version of the Evaluation Materials and/or is still under development by Intel and/or Intels suppliers.
+1.4 &quot;Pre-Release Materials&quot; means &quot;alpha&quot; or &quot;beta&quot; designated pre-release features, which may not be fully functional, which Intel may substantially modify in producing any production version of the Evaluation Materials and/or is still under development by Intel and/or Intels suppliers.
 
 2. PURPOSE. Intel desires to provide the Evaluation Materials to Recipient solely for Recipient's internal evaluation of the Evaluation Software and other Intel products, to evaluate the desirability of cooperating with Intel in developing products based on the Evaluation Software and/or to advise Intel as to possible modifications to the Evaluation Software. Recipient may not disclose, distribute or make commercial use of the Evaluation Materials or any modifications to the Evaluation Materials.
 THE EVALUATION MATERIALS ARE PROVIDED FOR EVALUATION PURPOSES ONLY AND MAY NOT BE DISTRIBUTED BY RECIPIENT OR INCORPORATED INTO RECIPIENTS PRODUCTS OR SOFTWARE. PLEASE CONTACT AN INTEL SALES REPRESENTATIVE TO LEARN ABOUT THE AVAILABILITY AND COST OF A COMMERICAL VERSION OF THE EVALUATION SOFTWARE.
 
 3. TITLE. Title to the Evaluation Materials remains with Intel or its suppliers. Recipient shall not mortgage, pledge or encumber the Evaluation Materials in any way. Recipient shall return all Evaluation Materials, keeping no copies, upon termination or expiration of this Agreement.
 
-4. LICENSE. Intel grants Recipient a royalty-free, personal, nontransferable, nonexclusive license under its copyrights to use the Evaluation Software only for the purposes described in paragraph 2 above. Unless otherwise communicated in writing by Intel to Recipient, to the extent the Evaluation Software is provided in more than one delivery or release (each, a "Release") the license grant in this Section 4 and the Evaluation Period shall apply to each Release. Recipient may not make modifications to the Evaluation Software. Recipient shall not disassemble, reverse-engineer, or decompile any software not provided to Recipient in source code form.
+4. LICENSE. Intel grants Recipient a royalty-free, personal, nontransferable, nonexclusive license under its copyrights to use the Evaluation Software only for the purposes described in paragraph 2 above. Unless otherwise communicated in writing by Intel to Recipient, to the extent the Evaluation Software is provided in more than one delivery or release (each, a &quot;Release&quot;) the license grant in this Section 4 and the Evaluation Period shall apply to each Release. Recipient may not make modifications to the Evaluation Software. Recipient shall not disassemble, reverse-engineer, or decompile any software not provided to Recipient in source code form.
 EXCEPT AS PROVIDED HEREIN, NO OTHER LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR OTHERWISE, TO ANY OTHER INTELLECTUAL PROPERTY RIGHTS IS GRANTED TO THE RECIPIENT.
 
 5. NO OBLIGATION. Recipient shall have no duty to purchase or license any product from Intel. Intel and its suppliers shall have no obligation to provide support for, or develop a non-evaluation version of, the Evaluation Software or to license any version of it.
@@ -341,22 +336,18 @@ EXCEPT AS PROVIDED HEREIN, NO OTHER LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR 
 
 10.3 Assignment. Recipient may not delegate, assign or transfer this Agreement, the license granted or any of Recipients rights or duties hereunder, expressly, by implication, by operation of law, by way of merger (regardless of whether Recipient is the surviving entity) or acquisition, or otherwise and any attempt to do so, without Intels express prior written consent, shall be null and void. Intel may assign this Agreement, and its rights and obligations hereunder, in its sole discretion.
 
-10.4 Entire Agreement. This Agreement constitutes the entire agreement between Recipient and Intel and supersedes in their entirety any and all oral or written agreements previously existing between Recipient and Intel with respect to the subject matter hereof. This Agreement supersedes any and all "click-to-accept" or shrink-wrapped licenses, in hard-copy or electronic form, embedded in or included with the Evaluation Materials. This Agreement may only be amended or supplemented by a writing that refers explicitly to this Agreement and that is signed by duly authorized representatives of Recipient and Intel. Without limiting the foregoing, terms and conditions on any purchase orders or similar materials submitted by Recipient to Intel, and any terms contained in Intels standard acknowledgment form that are in conflict with these terms, shall be of no force or effect.
+10.4 Entire Agreement. This Agreement constitutes the entire agreement between Recipient and Intel and supersedes in their entirety any and all oral or written agreements previously existing between Recipient and Intel with respect to the subject matter hereof. This Agreement supersedes any and all &quot;click-to-accept&quot; or shrink-wrapped licenses, in hard-copy or electronic form, embedded in or included with the Evaluation Materials. This Agreement may only be amended or supplemented by a writing that refers explicitly to this Agreement and that is signed by duly authorized representatives of Recipient and Intel. Without limiting the foregoing, terms and conditions on any purchase orders or similar materials submitted by Recipient to Intel, and any terms contained in Intels standard acknowledgment form that are in conflict with these terms, shall be of no force or effect.
 
 10.5 Severability. In the event that any provision of this Agreement shall be unenforceable or invalid under any applicable law or be so held by applicable court decision, such unenforceability or invalidity shall not render this Agreement unenforceable or invalid as a whole, and, in such event, such provision shall be changed and interpreted so as to best accomplish the objectives of such unenforceable or invalid provision within the limits of applicable law or applicable court decisions.
 
-10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other approval from the U.S. Department of Commerce or any other agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is "deemed" to take place when information is released to a foreign national wherever located.
+10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other approval from the U.S. Department of Commerce or any other agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is &quot;deemed&quot; to take place when information is released to a foreign national wherever located.
 
 10.7 Special Terms for Pre-Release Materials. If so indicated in the description of the Evaluation Software, the Evaluation Software may contain Pre-Release Materials. Recipient hereby understands, acknowledges and agrees that: (i) Pre-Release Materials may not be fully tested and may contain bugs or errors; (ii) Pre-Release materials are not suitable for commercial release in their current state; (iii) regulatory approvals for Pre-Release Materials (such as UL or FCC) have not been obtained, and Pre-Release Materials may therefore not be certified for use in certain countries or environments and (iv) Intel can provide no assurance that it will ever produce or make generally available a production version of the Pre-Release Materials . Intel is not under any obligation to develop and/or release or offer for sale or license a final product based upon the Pre-Release Materials and may unilaterally elect to abandon the Pre-Release Materials or any such development platform at any time and without any obligation or liability whatsoever to Recipient or any other person.
 
 10.8 Open Source Software. In the event Open Source software is included with Evaluation Software, such Open Source software is licensed pursuant to the applicable Open Source software license agreement identified in the Open Source software comments in the applicable source code file(s) and/or file header provided with Evaluation Software. Additional detail may be provided (where applicable) in the accompanying on-line documentation. With respect to the Open Source software, nothing in this Agreement limits any rights under, or grants rights that supersede, the terms of any applicable Open Source software license agreement.
-ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED POSSIBLY WITH FAULTS
-]]>
-    </sdk:license>
-    <sdk:license id="mips-android-sysimage-license" type="text">
-<![CDATA[
-MIPS Technologies, Inc. (“MIPS”) Internal Evaluation License Agreement for MIPS Android™ System Images for Android Software Development Kit (SDK):
-This Internal Evaluation License Agreement (this "Agreement") is entered into by and between MIPS and you (as an individual developer or a legal entity -- identified below as “Recipient”). MIPS shall make the Evaluation Software available to Recipient as described in accordance with the terms and conditions set forth below.
+ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED POSSIBLY WITH FAULTS</sdk:license>
+	<sdk:license id="mips-android-sysimage-license" type="text">MIPS Technologies, Inc. (“MIPS”) Internal Evaluation License Agreement for MIPS Android™ System Images for Android Software Development Kit (SDK):
+This Internal Evaluation License Agreement (this &quot;Agreement&quot;) is entered into by and between MIPS and you (as an individual developer or a legal entity -- identified below as “Recipient”). MIPS shall make the Evaluation Software available to Recipient as described in accordance with the terms and conditions set forth below.
 
 By clicking on the “Accept” button, downloading, installing, or otherwise using the Evaluation Materials (defined below), you agree to be bound by the terms of this Agreement effective as of the date you click “Accept” (the “Effective Date”), and if doing so on behalf of an entity, you represent that you are authorized to bind the entity to the terms and conditions of this Agreement. If you do not agree to be bound by the terms and conditions of this Agreement, do not download, install, or use the Evaluation Materials.
 
@@ -366,7 +357,7 @@ By clicking on the “Accept” button, downloading, installing, or otherwise us
 
 1.2 “Evaluation Software” shall mean MIPS Android™ emulator system images for Android Software Development Kit (SDK), as made available to Recipient.
 
-1.3 “Evaluation Materials" means, collectively, the Evaluation Software (in source and/or object code form) and documentation (including, without limitation, any design documents, specifications, reference manuals, and other related materials) related to the Evaluation Software as made available to Recipient.
+1.3 “Evaluation Materials&quot; means, collectively, the Evaluation Software (in source and/or object code form) and documentation (including, without limitation, any design documents, specifications, reference manuals, and other related materials) related to the Evaluation Software as made available to Recipient.
 
 1.4 “Open Source Software” means any software that requires (as a condition of use, modification and/or distribution of such software) that such software or other software incorporated into, derived from or distributed with such software (a) be disclosed or distributed in source code form; or (b) be licensed by the user to third parties for the purpose of making and/or distributing derivative works; or (c) be redistributable at no charge. Open Source Software includes, without limitation, software licensed or distributed under any of the following licenses or distribution models, or licenses or distribution models substantially similar to any of the following: (a) GNU’s General Public License (GPL) or Lesser/Library GPL (LGPL), (b) the Artistic License (e.g., PERL), (c) the Mozilla Public License, (d) the Netscape Public License, (e) the Sun Community Source License (SCSL), (f) the Sun Industry Source License (SISL), (g) the Apache Software license and (h) the Common Public License (CPL).
 
@@ -405,428 +396,471 @@ EXCEPT AS PROVIDED HEREIN, NO OTHER LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR 
 
 10.5 Severability. In the event that any provision of this Agreement is finally adjudicated to be unenforceable or invalid under any applicable law, such unenforceability or invalidity shall not render this Agreement unenforceable or invalid as a whole, and, in such event, such unenforceable or invalid provision shall be interpreted so as to best accomplish the objectives of such provision within the limits of applicable law or applicable court decisions.
 
-10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other necessary approval from the U.S. Department of Commerce or any other governing agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all applicable laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is "deemed" to take place when information is released to a foreign national wherever located.
+10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other necessary approval from the U.S. Department of Commerce or any other governing agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all applicable laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is &quot;deemed&quot; to take place when information is released to a foreign national wherever located.
 
 10.7 Special Terms for Pre-Release Materials. If so indicated in the description of the Evaluation Software, the Evaluation Software may contain Pre-Release Materials. Recipient hereby understands, acknowledges and agrees that: (i) Pre-Release Materials may not be fully tested and may contain bugs or errors; (ii) Pre-Release materials are not suitable for commercial release in their current state; (iii) regulatory approvals for Pre-Release Materials (such as UL or FCC) have not been obtained, and Pre-Release Materials may therefore not be certified for use in certain countries or environments or may not be suitable for certain applications and (iv) MIPS can provide no assurance that it will ever produce or make generally available a production version of the Pre-Release Materials . MIPS is not under any obligation to develop and/or release or offer for sale or license a final product based upon the Pre-Release Materials and may unilaterally elect to abandon the Pre-Release Materials or any such development platform at any time and without any obligation or liability whatsoever to Recipient or any other person.
 
 ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED “AS IS” AND “AS AVAILABLE”, POSSIBLY WITH FAULTS, AND WITHOUT REPRESENTATION OR WARRANTY OF ANY KIND.
 
 10.8 Open Source Software. In the event Open Source software is included with Evaluation Software, such Open Source software is licensed pursuant to the applicable Open Source software license agreement identified in the Open Source software comments in the applicable source code file(s) and/or file header as indicated in the Evaluation Software. Additional detail may be available (where applicable) in the accompanying on-line documentation. With respect to the Open Source software, nothing in this Agreement limits any rights under, or grants rights that supersede, the terms of any applicable Open Source software license agreement.
-    ]]>
-    </sdk:license>
-
-    <!-- ARM SYSTEM IMAGES ........................ -->
-
-    <sdk:system-image>
-        <!-- Generated at Wed Dec  7 13:47:01 2011 from git_ics-mr0 @ 229537 -->
-        <sdk:revision>2</sdk:revision>
-        <sdk:description>Android SDK Platform 4.0</sdk:description>
-        <sdk:api-level>14</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:obsolete/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>99621822</sdk:size>
-                <sdk:checksum type="sha1">d8991b0c06b18d7d6ed4169d67460ee1add6661b</sdk:checksum>
-                <sdk:url>sysimg_armv7a-14_r02.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Tue Mar 10 10:46:44 2015 from git_ics-mr1 @ 1741834 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 4.0.3</sdk:description>
-        <sdk:api-level>15</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>96240395</sdk:size>
-                <sdk:checksum type="sha1">0a47f586e172b1cf3db2ada857a70c2bdec24ef8</sdk:checksum>
-                <sdk:url>sysimg_armv7a-15_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Tue Mar 10 10:30:46 2015 from git_jb-dev @ 1741836 -->
-        <sdk:revision>4</sdk:revision>
-        <sdk:description>Android SDK Platform 4.1.2</sdk:description>
-        <sdk:api-level>16</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>112608076</sdk:size>
-                <sdk:checksum type="sha1">39c093ea755098f0ee79f607be7df9e54ba4943f</sdk:checksum>
-                <sdk:url>sysimg_armv7a-16_r04.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  9 18:24:53 2015 from git_jb-mr1.1-dev @ 1742939 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 4.2.2</sdk:description>
-        <sdk:api-level>17</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>118663847</sdk:size>
-                <sdk:checksum type="sha1">97cfad22b51c8475e228b207dd36dbef1c18fa38</sdk:checksum>
-                <sdk:url>sysimg_armv7a-17_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  9 17:40:24 2015 from git_jb-mr2-dev @ 1743067 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 4.3.1</sdk:description>
-        <sdk:api-level>18</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>125503391</sdk:size>
-                <sdk:checksum type="sha1">2d7d51f4d2742744766511e5d6b491bd49161c51</sdk:checksum>
-                <sdk:url>sysimg_armv7a-18_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  9 16:57:24 2015 from git_klp-dev @ 1743154 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 4.4.4</sdk:description>
-        <sdk:api-level>19</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>159399028</sdk:size>
-                <sdk:checksum type="sha1">5daf7718e3ab03d9bd8792b492dd305f386ef12f</sdk:checksum>
-                <sdk:url>sysimg_armv7a-19_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Fri Mar  6 08:10:49 2015 from git_lmp-sdk-release @ 1772600 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 5.0.2</sdk:description>
-        <sdk:api-level>21</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>186521381</sdk:size>
-                <sdk:checksum type="sha1">0b2e21421d29f48211b5289ca4addfa7f4c7ae5a</sdk:checksum>
-                <sdk:url>sysimg_arm-21_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  2 11:01:02 2015 from git_lmp-mr1-sdk-release @ 1737576 -->
-        <sdk:revision>1</sdk:revision>
-        <sdk:description>Android SDK Platform 5.1</sdk:description>
-        <sdk:api-level>22</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>193687339</sdk:size>
-                <sdk:checksum type="sha1">2aa6a887ee75dcf3ac34627853d561997792fcb8</sdk:checksum>
-                <sdk:url>sysimg_arm-22_r01.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
-
-    <!-- X86 SYSTEM IMAGES ........................ -->
-
-    <sdk:system-image>
-        <sdk:description>Android SDK Platform 2.3.7</sdk:description>
-        <sdk:revision>3</sdk:revision>
-        <sdk:api-level>10</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:uses-license ref="intel-android-sysimage-license"/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>66997702</sdk:size>
-                <sdk:checksum type="sha1">6b8539eaca9685d2d3289bf8e6d21d366d791326</sdk:checksum>
-                <sdk:url>sysimg_x86-10_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <sdk:description>Android SDK Platform 4.0.4</sdk:description>
-        <sdk:revision>2</sdk:revision>
-        <sdk:api-level>15</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:uses-license ref="intel-android-sysimage-license"/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>109019058</sdk:size>
-                <sdk:checksum type="sha1">56b8d4b3d0f6a8876bc78d654da186f3b7b7c44f</sdk:checksum>
-                <sdk:url>sysimg_x86-15_r02.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <sdk:description>Android SDK Platform 4.1.1</sdk:description>
-        <sdk:revision>2</sdk:revision>
-        <sdk:api-level>16</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:uses-license ref="intel-android-sysimage-license"/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>135252264</sdk:size>
-                <sdk:checksum type="sha1">36c2a2e394bcb3290583ce09815eae7711d0b2c2</sdk:checksum>
-                <sdk:url>sysimg_x86-16_r02.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  9 18:25:14 2015 from git_jb-mr1.1-dev @ 1742939 -->
-        <sdk:revision>2</sdk:revision>
-        <sdk:description>Android SDK Platform 4.2.2</sdk:description>
-        <sdk:api-level>17</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>136075512</sdk:size>
-                <sdk:checksum type="sha1">bd8c7c5411431af7e051cbe961be430fc31e773d</sdk:checksum>
-                <sdk:url>sysimg_x86-17_r02.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  9 17:40:48 2015 from git_jb-mr2-dev @ 1743067 -->
-        <sdk:revision>2</sdk:revision>
-        <sdk:description>Android SDK Platform 4.3.1</sdk:description>
-        <sdk:api-level>18</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>143899902</sdk:size>
-                <sdk:checksum type="sha1">ab3de121a44fca43ac3aa83f7d68cc47fc643ee8</sdk:checksum>
-                <sdk:url>sysimg_x86-18_r02.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  9 16:57:47 2015 from git_klp-dev @ 1743154 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 4.4.4</sdk:description>
-        <sdk:api-level>19</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>180245668</sdk:size>
-                <sdk:checksum type="sha1">3782f3ebac5e54b3de454570add401989515ffca</sdk:checksum>
-                <sdk:url>sysimg_x86-19_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Fri Mar  6 08:10:07 2015 from git_lmp-sdk-release @ 1772600 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 5.0.2</sdk:description>
-        <sdk:api-level>21</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>201601288</sdk:size>
-                <sdk:checksum type="sha1">a0b510c66769e84fa5e40515531be2d266a4247f</sdk:checksum>
-                <sdk:url>sysimg_x86-21_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Fri Mar  6 08:10:31 2015 from git_lmp-sdk-release @ 1772600 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 5.0.2</sdk:description>
-        <sdk:api-level>21</sdk:api-level>
-        <sdk:abi>x86_64</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>285253158</sdk:size>
-                <sdk:checksum type="sha1">2f205b728695d84488156f4846beb83a353ea64b</sdk:checksum>
-                <sdk:url>sysimg_x86_64-21_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  2 11:00:17 2015 from git_lmp-mr1-sdk-release @ 1737576 -->
-        <sdk:revision>1</sdk:revision>
-        <sdk:description>Android SDK Platform 5.1</sdk:description>
-        <sdk:api-level>22</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>207436768</sdk:size>
-                <sdk:checksum type="sha1">6c7bb51e41a16099bb1f2a3cc81fdb5aa053fc15</sdk:checksum>
-                <sdk:url>sysimg_x86-22_r01.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  2 11:00:41 2015 from git_lmp-mr1-sdk-release @ 1737576 -->
-        <sdk:revision>1</sdk:revision>
-        <sdk:description>Android SDK Platform 5.1</sdk:description>
-        <sdk:api-level>22</sdk:api-level>
-        <sdk:abi>x86_64</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>292511941</sdk:size>
-                <sdk:checksum type="sha1">05752813603f9fa03a58dcf7f8f5e779be722aae</sdk:checksum>
-                <sdk:url>sysimg_x86_64-22_r01.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
-
-    <!-- MIPS SYSTEM IMAGES ........................ -->
-
-    <sdk:system-image>
-        <sdk:revision>1</sdk:revision>
-        <sdk:description>Android 4.0.4</sdk:description>
-        <sdk:api-level>15</sdk:api-level>
-        <sdk:abi>mips</sdk:abi>
-        <sdk:uses-license ref="mips-android-sysimage-license"/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>117503178</sdk:size>
-                <sdk:checksum type="sha1">a753bb4a6783124dad726c500ce9aec9d2c1b2d9</sdk:checksum>
-                <sdk:url>sysimg_mips-15_r01.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <sdk:revision>4</sdk:revision>
-        <!-- mipsia repo tag qa-dev-mips-jb-20130123,
-             github.com/MIPS branch dev-mips-jb, tag mips-jb-4.1.2_r1m1
-             repo init -u git://github.com/MIPS/manifests.git
-                 -b dev-mips-jb -m mips-jb-4.1.2_r1m1.xml           -->
-        <sdk:description>Android 4.1.2</sdk:description>
-        <sdk:api-level>16</sdk:api-level>
-        <sdk:abi>mips</sdk:abi>
-        <sdk:uses-license ref="mips-android-sysimage-license"/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>122482530</sdk:size>
-                <sdk:checksum type="sha1">67943c54fb3943943ffeb05fdd39c0b753681f6e</sdk:checksum>
-                <sdk:url>sysimg_mips-16_r04.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <sdk:revision>1</sdk:revision>
-        <!-- mipsia repo tag qa-dev-mips-jb-mr1-20121219,
-             github.com/MIPS tag mips-jb-4.2.1_r1 -->
-        <sdk:description>Android 4.2.1</sdk:description>
-        <sdk:api-level>17</sdk:api-level>
-        <sdk:abi>mips</sdk:abi>
-        <sdk:uses-license ref="mips-android-sysimage-license"/>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>131781761</sdk:size>
-                <sdk:checksum type="sha1">f0c6e153bd584c29e51b5c9723cfbf30f996a05d</sdk:checksum>
-                <sdk:url>sysimg_mips-17_r01.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:tag-id>default</sdk:tag-id>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Fri Aug 14 15:40:56 2015 from git_mnc-release @ 2166767 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 6.0</sdk:description>
-        <sdk:api-level>23</sdk:api-level>
-        <sdk:abi>x86</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>240896796</sdk:size>
-                <sdk:checksum type="sha1">3cb2e8efb575c35a558b091eac7e1bc5843f5f12</sdk:checksum>
-                <sdk:url>sysimg_x86-23_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Fri Aug 14 15:41:23 2015 from git_mnc-release @ 2166767 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 6.0</sdk:description>
-        <sdk:api-level>23</sdk:api-level>
-        <sdk:abi>x86_64</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>337897181</sdk:size>
-                <sdk:checksum type="sha1">226510856431bc4a73690540a8d7cbad974bedd3</sdk:checksum>
-                <sdk:url>sysimg_x86_64-23_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
-
-    <sdk:system-image>
-        <!-- Generated at Fri Aug 14 15:41:43 2015 from git_mnc-release @ 2166767 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 6.0</sdk:description>
-        <sdk:api-level>23</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>226879660</sdk:size>
-                <sdk:checksum type="sha1">7bb8768ec4333500192fd9627d4234f505fa98dc</sdk:checksum>
-                <sdk:url>sysimg_arm-23_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
+</sdk:license>
+	<sdk:system-image>
+		<!--Generated from bid:229537, branch:git_ics-mr0-->
+		<sdk:api-level>14</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>2</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:05 2016.-->
+				<sdk:size>99621822</sdk:size>
+				<sdk:checksum type="sha1">d8991b0c06b18d7d6ed4169d67460ee1add6661b</sdk:checksum>
+				<sdk:url>sysimg_armv7a-14_r02.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1741834, branch:git_ics-mr1-->
+		<sdk:api-level>15</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>3</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:24:59 2016.-->
+				<sdk:size>96240395</sdk:size>
+				<sdk:checksum type="sha1">0a47f586e172b1cf3db2ada857a70c2bdec24ef8</sdk:checksum>
+				<sdk:url>sysimg_armv7a-15_r03.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1741836, branch:git_jb-dev-->
+		<sdk:api-level>16</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>4</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:24:59 2016.-->
+				<sdk:size>112608076</sdk:size>
+				<sdk:checksum type="sha1">39c093ea755098f0ee79f607be7df9e54ba4943f</sdk:checksum>
+				<sdk:url>sysimg_armv7a-16_r04.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1742939, branch:git_jb-mr1.1-dev-->
+		<sdk:api-level>17</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>3</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:00 2016.-->
+				<sdk:size>118663847</sdk:size>
+				<sdk:checksum type="sha1">97cfad22b51c8475e228b207dd36dbef1c18fa38</sdk:checksum>
+				<sdk:url>sysimg_armv7a-17_r03.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1743067, branch:git_jb-mr2-dev-->
+		<sdk:api-level>18</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>3</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:01 2016.-->
+				<sdk:size>125503391</sdk:size>
+				<sdk:checksum type="sha1">2d7d51f4d2742744766511e5d6b491bd49161c51</sdk:checksum>
+				<sdk:url>sysimg_armv7a-18_r03.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1743154, branch:git_klp-dev-->
+		<sdk:api-level>19</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>3</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:02 2016.-->
+				<sdk:size>159399028</sdk:size>
+				<sdk:checksum type="sha1">5daf7718e3ab03d9bd8792b492dd305f386ef12f</sdk:checksum>
+				<sdk:url>sysimg_armv7a-19_r03.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1772600, branch:git_lmp-sdk-release-->
+		<sdk:api-level>21</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>3</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:03 2016.-->
+				<sdk:size>186521381</sdk:size>
+				<sdk:checksum type="sha1">0b2e21421d29f48211b5289ca4addfa7f4c7ae5a</sdk:checksum>
+				<sdk:url>sysimg_arm-21_r03.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1737576, branch:git_lmp-mr1-sdk-release-->
+		<sdk:api-level>22</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>1</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:24:58 2016.-->
+				<sdk:size>193687339</sdk:size>
+				<sdk:checksum type="sha1">2aa6a887ee75dcf3ac34627853d561997792fcb8</sdk:checksum>
+				<sdk:url>sysimg_arm-22_r01.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2166767, branch:git_mnc-release-->
+		<sdk:api-level>23</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>3</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:04 2016.-->
+				<sdk:size>226879660</sdk:size>
+				<sdk:checksum type="sha1">7bb8768ec4333500192fd9627d4234f505fa98dc</sdk:checksum>
+				<sdk:url>sysimg_arm-23_r03.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:3065232, branch:git_nyc-emu-release-->
+		<sdk:api-level>24</sdk:api-level>
+		<sdk:description>ARM EABI v7a System Image</sdk:description>
+		<sdk:revision>5</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Fri Jul 15 10:08:55 2016.-->
+				<sdk:size>497498007</sdk:size>
+				<sdk:checksum type="sha1">2eb8fb86f7312614a2a0b033d669d67206a618ff</sdk:checksum>
+				<sdk:url>sysimg_armeabi-v7a-24_r05.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-preview-license"/>
+		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1741834, branch:git_ics-mr1-->
+		<sdk:api-level>15</sdk:api-level>
+		<sdk:description>MIPS System Image</sdk:description>
+		<sdk:revision>1</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:24:59 2016.-->
+				<sdk:size>117503178</sdk:size>
+				<sdk:checksum type="sha1">a753bb4a6783124dad726c500ce9aec9d2c1b2d9</sdk:checksum>
+				<sdk:url>sysimg_mips-15_r01.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="mips-android-sysimage-license"/>
+		<sdk:abi>mips</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1741836, branch:git_jb-dev-->
+		<sdk:api-level>16</sdk:api-level>
+		<sdk:description>MIPS System Image</sdk:description>
+		<sdk:revision>1</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:00 2016.-->
+				<sdk:size>122482530</sdk:size>
+				<sdk:checksum type="sha1">67943c54fb3943943ffeb05fdd39c0b753681f6e</sdk:checksum>
+				<sdk:url>sysimg_mips-16_r04.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="mips-android-sysimage-license"/>
+		<sdk:abi>mips</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1742939, branch:git_jb-mr1.1-dev-->
+		<sdk:api-level>17</sdk:api-level>
+		<sdk:description>MIPS System Image</sdk:description>
+		<sdk:revision>1</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:00 2016.-->
+				<sdk:size>131781761</sdk:size>
+				<sdk:checksum type="sha1">f0c6e153bd584c29e51b5c9723cfbf30f996a05d</sdk:checksum>
+				<sdk:url>sysimg_mips-17_r01.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="mips-android-sysimage-license"/>
+		<sdk:abi>mips</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1, branch:-->
+		<sdk:api-level>10</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>3</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:24:58 2016.-->
+				<sdk:size>66997702</sdk:size>
+				<sdk:checksum type="sha1">6b8539eaca9685d2d3289bf8e6d21d366d791326</sdk:checksum>
+				<sdk:url>sysimg_x86-10_r03.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2, branch:-->
+		<sdk:api-level>15</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>2</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:04 2016.-->
+				<sdk:size>109019058</sdk:size>
+				<sdk:checksum type="sha1">56b8d4b3d0f6a8876bc78d654da186f3b7b7c44f</sdk:checksum>
+				<sdk:url>sysimg_x86-15_r02.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:3, branch:unknown-->
+		<sdk:api-level>16</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>2</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:12 2016.-->
+				<sdk:size>135252264</sdk:size>
+				<sdk:checksum type="sha1">36c2a2e394bcb3290583ce09815eae7711d0b2c2</sdk:checksum>
+				<sdk:url>sysimg_x86-16_r02.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1742939, branch:git_jb-mr1.1-dev-->
+		<sdk:api-level>17</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>2</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:01 2016.-->
+				<sdk:size>136075512</sdk:size>
+				<sdk:checksum type="sha1">bd8c7c5411431af7e051cbe961be430fc31e773d</sdk:checksum>
+				<sdk:url>sysimg_x86-17_r02.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:1743067, branch:git_jb-mr2-dev-->
+		<sdk:api-level>18</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>2</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Mar 29 18:25:02 2016.-->
+				<sdk:size>143899902</sdk:size>
+				<sdk:checksum type="sha1">ab3de121a44fca43ac3aa83f7d68cc47fc643ee8</sdk:checksum>
+				<sdk:url>sysimg_x86-18_r02.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2872501, branch:git_klp-emu-release-->
+		<sdk:api-level>19</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>5</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Mon May 16 16:26:22 2016.-->
+				<sdk:size>183946064</sdk:size>
+				<sdk:checksum type="sha1">c9298a8eafceed3b8fa11071ba63a3d18e17fd8e</sdk:checksum>
+				<sdk:url>sysimg_x86-19_r05.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2781484, branch:git_lmp-emu-release-->
+		<sdk:api-level>21</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>4</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Thu Apr 21 08:05:21 2016.-->
+				<sdk:size>206323409</sdk:size>
+				<sdk:checksum type="sha1">3b78ad294aa1cdefa4be663d4af6c80d920ec49e</sdk:checksum>
+				<sdk:url>sysimg_x86-21_r04.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2780077, branch:git_lmp-mr1-emu-release-->
+		<sdk:api-level>22</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>5</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Wed Apr 20 08:41:31 2016.-->
+				<sdk:size>212301282</sdk:size>
+				<sdk:checksum type="sha1">909e0ad91ed43381597e82f65ec93d41f049dd53</sdk:checksum>
+				<sdk:url>sysimg_x86-22_r05.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2780065, branch:git_mnc-emu-release-->
+		<sdk:api-level>23</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>9</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Wed Apr 20 08:41:52 2016.-->
+				<sdk:size>252059065</sdk:size>
+				<sdk:checksum type="sha1">0ce9229974818179833899dce93f228a895ec6a2</sdk:checksum>
+				<sdk:url>sysimg_x86-23_r09.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:3065232, branch:git_nyc-emu-release-->
+		<sdk:api-level>24</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>5</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Fri Jul 15 10:09:24 2016.-->
+				<sdk:size>535224957</sdk:size>
+				<sdk:checksum type="sha1">ce6441c4cadaecd28b364c59b36c31ef0904dae0</sdk:checksum>
+				<sdk:url>sysimg_x86-24_r05.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-preview-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2781484, branch:git_lmp-emu-release-->
+		<sdk:api-level>21</sdk:api-level>
+		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
+		<sdk:revision>4</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Thu Apr 21 08:05:44 2016.-->
+				<sdk:size>290590059</sdk:size>
+				<sdk:checksum type="sha1">eb14ba9c14615d5e5a21c854be29aa903d9bb63d</sdk:checksum>
+				<sdk:url>sysimg_x86_64-21_r04.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86_64</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2780077, branch:git_lmp_mr1-emu-release-->
+		<sdk:api-level>22</sdk:api-level>
+		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
+		<sdk:revision>5</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Wed Apr 20 08:44:05 2016.-->
+				<sdk:size>297851141</sdk:size>
+				<sdk:checksum type="sha1">8a04ff4fb30f70414e6ec7b3b06285f316e93d08</sdk:checksum>
+				<sdk:url>sysimg_x86_64-22_r05.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86_64</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:2780065, branch:git_mnc-emu-release-->
+		<sdk:api-level>23</sdk:api-level>
+		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
+		<sdk:revision>9</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Wed Apr 20 08:44:42 2016.-->
+				<sdk:size>349443901</sdk:size>
+				<sdk:checksum type="sha1">571f5078a3d337a9144e2af13bd23ca46845a979</sdk:checksum>
+				<sdk:url>sysimg_x86_64-23_r09.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86_64</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:3065232, branch:git_nyc-emu-release-->
+		<sdk:api-level>24</sdk:api-level>
+		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
+		<sdk:revision>5</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Fri Jul 15 10:10:10 2016.-->
+				<sdk:size>727226879</sdk:size>
+				<sdk:checksum type="sha1">e1869b32b1dcb2f4d4d18c912166b3e2bee8a841</sdk:checksum>
+				<sdk:url>sysimg_x86_64-24_r05.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-preview-license"/>
+		<sdk:abi>x86_64</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
 </sdk:sdk-sys-img>

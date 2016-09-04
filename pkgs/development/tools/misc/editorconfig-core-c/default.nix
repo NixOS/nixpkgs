@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd2 bsd3 ];
     version = "0.12.1";
     maintainers = [ maintainers.dochang ];
+    platforms = platforms.unix;
   };
 
 }

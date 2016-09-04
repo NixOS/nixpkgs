@@ -24,4 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # since glib-2.46
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

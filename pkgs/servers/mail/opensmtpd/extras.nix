@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libevent
-    libasr python2 lua5 perl mariadb postgresql sqlite hiredis ];
+    libasr python2 lua5 perl mariadb.client postgresql sqlite hiredis ];
 
   configureFlags = [
     "--sysconfdir=/etc"

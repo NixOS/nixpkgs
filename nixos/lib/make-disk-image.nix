@@ -12,6 +12,9 @@
   # directly.
   partitioned ? true
 
+  # Whether to invoke switch-to-configuration boot during image creation
+, installBootLoader ? true
+
 , # The root file system type.
   fsType ? "ext4"
 
@@ -64,40 +67,24 @@ pkgs.vmTools.runInLinuxVM (
       mkdir /mnt
       mount $rootDisk /mnt
 
-      # The initrd expects these directories to exist.
-      mkdir /mnt/dev /mnt/proc /mnt/sys
-
-      mount -o bind /proc /mnt/proc
-      mount -o bind /dev /mnt/dev
-      mount -o bind /sys /mnt/sys
-
-      # Copy all paths in the closure to the filesystem.
-      storePaths=$(perl ${pkgs.pathsFromGraph} /tmp/xchg/closure)
-
-      mkdir -p /mnt/nix/store
-      echo "copying everything (will take a while)..."
-      set -f
-      cp -prd $storePaths /mnt/nix/store/
-
       # Register the paths in the Nix database.
       printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-          chroot /mnt ${config.nix.package.out}/bin/nix-store --load-db --option build-users-group ""
+          ${config.nix.package.out}/bin/nix-store --load-db --option build-users-group ""
 
       # Add missing size/hash fields to the database. FIXME:
       # exportReferencesGraph should provide these directly.
-      chroot /mnt ${config.nix.package.out}/bin/nix-store --verify --check-contents
+      ${config.nix.package.out}/bin/nix-store --verify --check-contents --option build-users-group ""
 
-      # Create the system profile to allow nixos-rebuild to work.
-      chroot /mnt ${config.nix.package.out}/bin/nix-env --option build-users-group "" \
-          -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
+      # In case the bootloader tries to write to /dev/sda…
+      ln -s vda /dev/xvda
+      ln -s vda /dev/sda
 
-      # `nixos-rebuild' requires an /etc/NIXOS.
-      mkdir -p /mnt/etc
-      touch /mnt/etc/NIXOS
-
-      # `switch-to-configuration' requires a /bin/sh
-      mkdir -p /mnt/bin
-      ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
+      # Install the closure onto the image
+      USER=root ${config.system.build.nixos-install}/bin/nixos-install \
+        --closure ${config.system.build.toplevel} \
+        --no-channel-copy \
+        --no-root-passwd \
+        ${optionalString (!installBootLoader) "--no-bootloader"}
 
       # Install a configuration.nix.
       mkdir -p /mnt/etc/nixos
@@ -105,12 +92,9 @@ pkgs.vmTools.runInLinuxVM (
         cp ${configFile} /mnt/etc/nixos/configuration.nix
       ''}
 
-      # Generate the GRUB menu.
-      ln -s vda /dev/xvda
-      ln -s vda /dev/sda
-      chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
+      # Remove /etc/machine-id so that each machine cloning this image will get its own id
+      rm -f /mnt/etc/machine-id
 
-      umount /mnt/proc /mnt/dev /mnt/sys
       umount /mnt
 
       # Do a fsck to make sure resize2fs works.

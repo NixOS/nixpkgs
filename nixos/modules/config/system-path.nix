@@ -34,7 +34,6 @@ let
       config.programs.ssh.package
       pkgs.perl
       pkgs.procps
-      pkgs.rsync
       pkgs.strace
       pkgs.su
       pkgs.time

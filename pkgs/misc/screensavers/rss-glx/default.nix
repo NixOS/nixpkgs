@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
       original collection, plus a few others.
     '';
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

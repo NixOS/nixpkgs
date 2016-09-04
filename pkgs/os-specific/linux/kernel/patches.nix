@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs }:
+{ stdenv, fetchurl, fetchpatch, pkgs }:
 
 let
 
@@ -31,6 +31,8 @@ let
       url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch";
       inherit sha256;
     };
+
+    features.grsecurity = true;
   };
 in
 
@@ -72,6 +74,11 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
+  modinst_arg_list_too_long =
+    { name = "modinst-arglist-too-long";
+      patch = ./modinst-arg-list-too-long.patch;
+    };
+
   ubuntu_fan_4_4 =
     { name = "ubuntu-fan";
       patch = ./ubuntu-fan-4.4.patch;
@@ -93,9 +100,9 @@ rec {
   grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.5.7";
-      grrev  = "201606142010";
-      sha256 = "00lg4zlxxcl9a27vxl4c4cv6adsdvl00kkbl6s97523vsvsvy1q0";
+    { kver   = "4.7.2";
+      grrev  = "201608211829";
+      sha256 = "1a7pvmb57w7j9s4ww8xvzzijlpnr2i7nhm7jhgfz4n5w3jvxcny3";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -136,8 +143,14 @@ rec {
     { name = "mfd_fix_dependency";
       patch = ./chromiumos-patches/mfd-fix-dependency.patch;
     };
-  qat_common_Makefile =
-    { name = "qat_common_Makefile";
-      patch = ./qat_common_Makefile.patch;
+
+  hiddev_CVE_2016_5829 =
+    { name = "hiddev_CVE_2016_5829";
+      patch = fetchpatch {
+        url = "https://sources.debian.net/data/main/l/linux/4.6.3-1/debian/patches/bugfix/all/HID-hiddev-validate-num_values-for-HIDIOCGUSAGES-HID.patch";
+        sha256 = "14rm1qr87p7a5prz8g5fwbpxzdp3ighj095x8rvhm8csm20wspyy";
+      };
     };
+
+  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 }

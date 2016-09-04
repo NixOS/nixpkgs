@@ -16,5 +16,6 @@ stdenv.mkDerivation {
     description = "A Nix-based distributed service deployment tool";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

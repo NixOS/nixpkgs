@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     homepage = http://dar.linux.free.fr/;
     description = "Disk ARchiver, allows backing up files into indexed archives";

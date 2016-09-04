@@ -1,12 +1,19 @@
 { stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
 , pkgconfig, runCommand, which, libtool
 , callPackage
+, darwin ? null
 }@args:
 
-import ./nodejs.nix (args // rec {
-  version = "6.2.2";
-  src = fetchurl {
-    url = "https://nodejs.org/download/release/v${version}/node-v${version}.tar.xz";
-    sha256 = "2dfeeddba750b52a528b38a1c31e35c1fb40b19cf28fbf430c3c8c7a6517005a";
-  };
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+
+in import ./nodejs.nix (args // rec {
+  version = "6.4.0";
+  sha256 = "1b3xpp38fd2y8zdkpvkyyvsddh5y4vly81hxkf9hi6wap0nqidj9";
+  extraBuildInputs = stdenv.lib.optionals stdenv.isDarwin
+    [ CoreServices ApplicationServices ];
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i -e "s|tr1/type_traits|type_traits|g" \
+      -e "s|std::tr1|std|" src/util.h
+  '';
 })

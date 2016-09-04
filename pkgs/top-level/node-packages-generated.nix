@@ -42094,6 +42094,27 @@
     os = [ ];
     cpu = [ ];
   };
+  by-spec."rollup"."*" =
+    self.by-version."rollup"."0.31.2";
+  by-version."rollup"."0.31.2" = self.buildNodePackage {
+    name = "rollup-0.31.2";
+    version = "0.31.2";
+    bin = true;
+    src = fetchurl {
+      url = "https://registry.npmjs.org/rollup/-/rollup-0.31.2.tgz";
+      name = "rollup-0.31.2.tgz";
+      sha1 = "b479fe0a5faf7c310b8cc963da4dd0eb0a6174d0";
+    };
+    deps = {
+      "source-map-support-0.4.0" = self.by-version."source-map-support"."0.4.0";
+    };
+    optionalDependencies = {
+    };
+    peerDependencies = [];
+    os = [ ];
+    cpu = [ ];
+  };
+  "rollup" = self.by-version."rollup"."0.31.2";
   by-spec."root"."^2.0.0" =
     self.by-version."root"."2.0.0";
   by-version."root"."2.0.0" = self.buildNodePackage {
@@ -45396,6 +45417,24 @@
     os = [ ];
     cpu = [ ];
   };
+  by-version."source-map-support"."0.4.0" = self.buildNodePackage {
+    name = "source-map-support-0.4.0";
+    version = "0.4.0";
+    bin = false;
+    src = fetchurl {
+      url = "https://registry.npmjs.org/source-map-support/-/source-map-support-0.4.0.tgz";
+      name = "source-map-support-0.4.0.tgz";
+      sha1 = "cb92292bc05455ce48691de545ac2690bb1cc976";
+    };
+    deps = {
+      "source-map-0.1.32" = self.by-version."source-map"."0.1.32";
+    };
+    optionalDependencies = {
+    };
+    peerDependencies = [];
+    os = [ ];
+    cpu = [ ];
+  };
   by-spec."sparkles"."^1.0.0" =
     self.by-version."sparkles"."1.0.0";
   by-version."sparkles"."1.0.0" = self.buildNodePackage {
@@ -47984,6 +48023,8 @@
   };
   "timezone" = self.by-version."timezone"."1.0.4";
   by-spec."tinycolor"."0.x" =
+    self.by-version."tinycolor"."0.0.1";
+  by-spec."tinycolor"."0.0.x" =
     self.by-version."tinycolor"."0.0.1";
   by-version."tinycolor"."0.0.1" = self.buildNodePackage {
     name = "tinycolor-0.0.1";
@@ -52237,6 +52278,8 @@
   };
   by-spec."ws"."0.8.1" =
     self.by-version."ws"."0.8.1";
+  by-spec."ws"."0.8.x" =
+    self.by-version."ws"."0.8.1";
   by-version."ws"."0.8.1" = self.buildNodePackage {
     name = "ws-0.8.1";
     version = "0.8.1";
@@ -52302,6 +52345,29 @@
   };
   by-spec."ws"."^1.0.1" =
     self.by-version."ws"."1.1.0";
+  by-spec."wscat"."*" =
+    self.by-version."wscat"."1.0.1";
+  by-version."wscat"."1.0.1" = self.buildNodePackage {
+    name = "wscat-1.0.1";
+    version = "1.0.1";
+    bin = true;
+    src = fetchurl {
+      url = "https://registry.npmjs.org/wscat/-/wscat-1.0.1.tgz";
+      name = "wscat-1.0.1.tgz";
+      sha1 = "542b47c1c27334c64ececef9c2db02faf6212964";
+    };
+    deps = {
+      "commander-2.8.1" = self.by-version."commander"."2.8.1";
+      "tinycolor-0.0.1" = self.by-version."tinycolor"."0.0.1";
+      "ws-0.8.1" = self.by-version."ws"."0.8.1";
+    };
+    optionalDependencies = {
+    };
+    peerDependencies = [];
+    os = [ ];
+    cpu = [ ];
+  };
+  "wscat" = self.by-version."wscat"."1.0.1";
   by-spec."wu"."*" =
     self.by-version."wu"."2.1.0";
   by-version."wu"."2.1.0" = self.buildNodePackage {

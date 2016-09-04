@@ -4,7 +4,7 @@ buildGoPackage rec {
   name = "nginx_exporter-${version}";
   version = "20160524-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "2cf16441591f6b6e58a8c0439dcaf344057aea2b";
-  
+
   goPackagePath = "github.com/discordianfish/nginx_exporter";
 
   src = fetchgit {

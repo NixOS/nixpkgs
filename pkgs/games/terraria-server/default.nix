@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r Linux $out/
+    chmod +x "$out/Linux/TerrariaServer.bin.x86_64"
     ln -s "$out/Linux/TerrariaServer.bin.x86_64" $out/bin/TerrariaServer
     # Fix "/lib64/ld-linux-x86-64.so.2" like references in ELF executables.
     find "$out" | while read filepath; do

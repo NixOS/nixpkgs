@@ -29,7 +29,7 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${qemu_kvm}/bin:${vde2}/bin:${netpbm}/bin:${coreutils}/bin" \
+          --prefix PATH : "${lib.makeBinPath [ qemu_kvm vde2 netpbm coreutils ]}" \
           --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
       '';
   };
@@ -113,14 +113,14 @@ rec {
             --add-flags "$vms" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
-            --set testScript '"$testScript"' \
-            --set VLANS '"${toString vlans}"'
+            --set testScript '$testScript' \
+            --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
             --add-flags "$vms" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
-            --set tests '"startAll; joinAll;"' \
-            --set VLANS '"${toString vlans}"' \
+            --set tests 'startAll; joinAll;' \
+            --set VLANS '${toString vlans}' \
             ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
         ''; # "
 

@@ -1,17 +1,17 @@
 { stdenv, fetchurl, fetchgit, ftgl, freefont_ttf, libjack2, mesa_glu, pkgconfig
-, libltc, libsndfile, libsamplerate
+, libltc, libsndfile, libsamplerate, xz
 , lv2, mesa, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "2015-07-02";
+  version = "20160619";
   name = "x42-plugins-${version}";
 
   src = fetchurl {
-    url = "http://gareus.org/misc/x42-plugins/x42-plugins-20150702.tar.xz";
-    sha256 = "1mq0grabzbl9xsd53v2qajhr8nngk0d4lx9n0n3nwy95y2gmy6sm";
+    url = "http://gareus.org/misc/x42-plugins/${name}.tar.xz";
+    sha256 = "1ald0c5xbfkdq6g5xwyy8wmbi636m3k3gqrq16kbh46g0kld1as9";
   };
 
-  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 mesa gtk2 cairo pango fftwFloat pkgconfig  zita-convolver];
+  buildInputs = [ xz mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 mesa gtk2 cairo pango fftwFloat pkgconfig  zita-convolver];
 
   makeFlags = [ "PREFIX=$(out)" "FONTFILE=${freefont_ttf}/share/fonts/truetype/FreeSansBold.ttf" "LIBZITACONVOLVER=${zita-convolver}/include/zita-convolver.h" ];
 

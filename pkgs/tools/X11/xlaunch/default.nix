@@ -59,5 +59,6 @@ EOF
   meta = {
     description = ''Wrapper to parse NixOS-specific X environment and launch a custom X session'';
     maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -10,4 +10,8 @@ stdenv.mkDerivation {
     md5 = "e50f7d38caf4285965c7a247e026fa7c";
   };
   catalog = ./docbook-ebnf.cat;
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

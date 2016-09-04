@@ -88,6 +88,8 @@ i18n.inputMethod = {
       methods among Traditional Chinese Unix users.</para></listitem>
   <listitem><para>Hangul (<literal>fcitx-engines.hangul</literal>): Korean input 
       method.</para></listitem>
+  <listitem><para>Unikey (<literal>fcitx-engines.unikey</literal>): Vietnamese input 
+      method.</para></listitem>
   <listitem><para>m17n (<literal>fcitx-engines.m17n</literal>): m17n is an input 
       method that uses input methods and corresponding icons in the m17n 
       database.</para></listitem>

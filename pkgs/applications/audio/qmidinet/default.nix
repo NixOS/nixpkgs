@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a1pj4w74wj1gcfv4a0vzcglmr5sw0xp0y56w8rk3ig4k11xi8sa";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ qt4 alsaLib libjack2 ];
 
   meta = with stdenv.lib; {

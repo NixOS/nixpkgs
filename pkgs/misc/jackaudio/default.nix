@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python, makeWrapper
-, bash, libsamplerate, libsndfile, readline
+{ stdenv, fetchFromGitHub, pkgconfig, pythonPackages, makeWrapper
+, bash, libsamplerate, libsndfile, readline, gcc
 
 # Optional Dependencies
-, dbus ? null, pythonDBus ? null, libffado ? null, alsaLib ? null
+, dbus ? null, libffado ? null, alsaLib ? null
 , libopus ? null
 
 # Extra options
@@ -11,12 +11,13 @@
 
 with stdenv.lib;
 let
+  inherit (pythonPackages) python dbus-python;
   shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
 
   libOnly = prefix == "lib";
 
   optDbus = shouldUsePkg dbus;
-  optPythonDBus = if libOnly then null else shouldUsePkg pythonDBus;
+  optPythonDBus = if libOnly then null else shouldUsePkg dbus-python;
   optLibffado = if libOnly then null else shouldUsePkg libffado;
   optAlsaLib = if libOnly then null else shouldUsePkg alsaLib;
   optLibopus = shouldUsePkg libopus;
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
-  buildInputs = [
+  buildInputs = [ gcc
     python
 
     libsamplerate libsndfile readline

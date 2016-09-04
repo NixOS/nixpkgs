@@ -20,8 +20,7 @@ assert (kernel.version == grsecPatch.kver);
 
 overrideDerivation (kernel.override {
   inherit modDirVersion;
-  kernelPatches = [ { inherit (grsecPatch) name patch; } ] ++ kernelPatches ++ (kernel.kernelPatches or []);
-  features = (kernel.features or {}) // { grsecurity = true; };
+  kernelPatches = [ grsecPatch ] ++ kernelPatches ++ (kernel.kernelPatches or []);
   inherit extraConfig;
   ignoreConfigErrors = true;
 }) (attrs: {

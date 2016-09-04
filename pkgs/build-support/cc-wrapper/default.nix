@@ -96,6 +96,7 @@ stdenv.mkDerivation {
       echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
+      echo "${libc_dev}" > $out/nix-support/orig-libc-dev
     ''
 
     + (if nativeTools then ''
@@ -236,7 +237,17 @@ stdenv.mkDerivation {
       cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
       rm $out/nix-support/setup-hook.tmp
 
-      substituteAll ${./add-flags} $out/nix-support/add-flags.sh
+      # some linkers on some platforms don't support specific -z flags
+      hardening_unsupported_flags=""
+      if [[ "$($ldPath/ld -z now 2>&1 || true)" =~ "unknown option" ]]; then
+        hardening_unsupported_flags+=" bindnow"
+      fi
+      if [[ "$($ldPath/ld -z relro 2>&1 || true)" =~ "unknown option" ]]; then
+        hardening_unsupported_flags+=" relro"
+      fi
+
+      substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
+      substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       cp -p ${./utils.sh} $out/nix-support/utils.sh
     ''
     + extraBuildCommands;

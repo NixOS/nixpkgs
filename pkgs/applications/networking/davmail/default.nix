@@ -1,10 +1,10 @@
 { fetchurl, stdenv, jre, glib, libXtst, gtk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "davmail-4.7.1";
+  name = "davmail-4.7.2";
   src = fetchurl {
     url = "mirror://sourceforge/davmail/4.7.1/davmail-linux-x86_64-4.7.1-2416.tgz";
-    sha256 = "c3bf1a3a94f35586a3a8d2d28cdaf8c9514a8cf904a51fd74961e93909c9d2a4";
+    sha256 = "196jr44kksb197biz984z664llf9z3d8rlnjm2iqcmgkjhx1mgy3";
   };
 
   buildInputs = [ makeWrapper ];
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
   mkdir -p $out/bin
   cp ./* $out/bin/ -R
-  wrapProgram $out/bin/davmail.sh --prefix PATH : ${jre}/bin --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+  wrapProgram $out/bin/davmail.sh --prefix PATH : ${jre}/bin --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk libXtst ]}
    '';
 }

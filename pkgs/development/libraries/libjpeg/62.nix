@@ -26,4 +26,8 @@ stdenv.mkDerivation {
       md5 = "092a12aeb0c386dd7dae059109d950ba";
     })
   ];
+
+  meta = {
+        platforms = stdenv.lib.platforms.unix;
+  };
 }

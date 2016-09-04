@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.12.2";
+  version = "0.13.3";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,13 +11,13 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "02qqcnijv8z3736iczbx082yizpqk02g5k746k7sdgfkgyxydppk";
+    sha256 = "0mfrlb91akzrj0qpjpaa9bkp6m9z95z56glamry73qy21vbnj58m";
   };
 
   buildInputs = [ ncurses ];
 
   goDeps = ./deps.json;
-  
+
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
@@ -28,4 +28,11 @@ buildGoPackage rec {
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
   '';
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/junegunn/fzf;
+    description = "A command-line fuzzy finder written in Go";
+    license = licenses.mit;
+    platforms = platforms.unix;
+  };
 }

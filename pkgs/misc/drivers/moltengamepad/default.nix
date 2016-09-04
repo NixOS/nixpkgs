@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "05cpxfzxgm86kxx0a9f76bshjwpz9w1g8bn30ib1i5a3fv7bmirl";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ libudev ];
 
   buildPhase = ''
@@ -31,6 +33,7 @@ stdenv.mkDerivation rec {
     description = "Flexible Linux input device translator, geared for gamepads";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];
+    platforms = platforms.linux;
   };
 
 }

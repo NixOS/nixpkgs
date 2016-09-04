@@ -18,4 +18,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

@@ -1,24 +1,17 @@
-{ stdenv, fetchurl, ninja, python3 }:
-
-stdenv.mkDerivation rec {
-  name = "meson-0.26.0";
+{ lib, python3Packages, fetchurl }:
+python3Packages.buildPythonPackage rec {
+  name = "meson-0.32.0";
 
   src = fetchurl {
-    url = "https://github.com/jpakkane/meson/archive/0.26.0.tar.gz";
-    sha256 = "1hmfn1bkxnwsnlhw6x9ryfcm4zwsf2w7h51cll1xrxg1rq08fvck";
+    url = "mirror://pypi/m/meson/${name}.tar.gz";
+    sha256 = "1i5m4q53sr55aw8kx761kh0rsfwkpq0gfa0c0k3jf66y4aml6n54";
   };
 
-  buildInputs = [ ninja python3 ];
-
-  installPhase = ''
-    python3 ./install_meson.py --prefix=$out --destdir="$pkgdir/"
-  '';
-
-  meta = {
-    homepage = "http://mesonbuild.com";
+  meta = with lib; {
+    homepage = http://mesonbuild.com;
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.mbe ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mbe rasendubi ];
+    platforms = platforms.all;
   };
 }

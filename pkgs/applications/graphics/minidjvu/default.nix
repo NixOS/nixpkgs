@@ -22,5 +22,6 @@ stdenv.mkDerivation {
     description = "Black-and-white djvu page encoder and decoder that use interpage information";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

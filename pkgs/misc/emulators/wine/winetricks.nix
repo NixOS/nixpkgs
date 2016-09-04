@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21;
     homepage = http://code.google.com/p/winetricks/;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

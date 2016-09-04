@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    dscription = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";
+    description = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";
     homepage = http://www.haka-security.org/;
     license = stdenv.lib.licenses.mpl20;
     maintaineres = [ stdenv.lib.maintainers.tvestelind ];

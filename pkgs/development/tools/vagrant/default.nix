@@ -4,7 +4,7 @@
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 let
-  version = "1.8.1";
+  version = "1.8.4";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -15,17 +15,18 @@ let
 in
 stdenv.mkDerivation rec {
   name = "vagrant-${version}";
+  inherit version;
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_x86_64.deb";
-        sha256 = "0gb999ql4kfxd9473cx3xn6a11094dm4iyrx1dzd9v2sygh1l3pd";
+        sha256 = "fd38d8e00e494a617201facb42fc2cac627e5021db15e91c2a041eac6a2d8208";
       }
     else
       fetchurl {
         url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_i686.deb";
-        sha256 = "1nzg6i9i270xgaih381q096lb23rwxkif4ba9j62y3zjmj6az4xf";
+        sha256 = "555351717cacaa8660821df8988cc40a39923b06b698fca6bb90621008aab06f";
       };
 
   meta = with stdenv.lib; {
@@ -39,10 +40,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb -x ${src} .
+    ${dpkg}/bin/dpkg-deb -x "$src" .
   '';
 
-  buildPhase = false;
+  buildPhase = "";
 
   installPhase = ''
     sed -i "s|/opt|$out/opt|" usr/bin/vagrant
@@ -55,6 +56,8 @@ stdenv.mkDerivation rec {
     ln -s ${curl.dev}/bin/curl-config opt/vagrant/embedded/bin
 
     # libarchive: bsdtar, bsdcpio
+    rm opt/vagrant/embedded/lib/libarchive*
+    ln -s ${libarchive}/lib/libarchive.so opt/vagrant/embedded/lib/libarchive.so
     rm opt/vagrant/embedded/bin/{bsdtar,bsdcpio}
     ln -s ${libarchive}/bin/bsdtar opt/vagrant/embedded/bin
     ln -s ${libarchive}/bin/bsdcpio opt/vagrant/embedded/bin
@@ -74,6 +77,10 @@ stdenv.mkDerivation rec {
     ln -s ${ruby}/bin/ri opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ruby opt/vagrant/embedded/bin
 
+    # ruby libs
+    rm -rf opt/vagrant/embedded/lib
+    ln -s ${ruby}/lib opt/vagrant/embedded/lib
+
     # libiconv: iconv
     rm opt/vagrant/embedded/bin/iconv
     ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
@@ -92,17 +99,17 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r opt "$out"
     cp -r usr/bin "$out"
-    wrapProgram $out/bin/vagrant --prefix LD_LIBRARY_PATH : $out/opt/vagrant/embedded/lib
+    wrapProgram "$out/bin/vagrant" --prefix LD_LIBRARY_PATH : "$out/opt/vagrant/embedded/lib"
   '';
 
   preFixup = ''
     # 'hide' the template file from shebang-patching
-    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.10.6/lib/bundler/templates/Executable
-    chmod -x $out/opt/vagrant/embedded/gems/gems/vagrant-${version}/plugins/provisioners/salt/bootstrap-salt.sh
+    chmod -x "$out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable"
+    chmod -x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
   '';
 
   postFixup = ''
-    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.10.6/lib/bundler/templates/Executable
-    chmod +x $out/opt/vagrant/embedded/gems/gems/vagrant-${version}/plugins/provisioners/salt/bootstrap-salt.sh
+    chmod +x "$out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable"
+    chmod +x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
   '';
 }

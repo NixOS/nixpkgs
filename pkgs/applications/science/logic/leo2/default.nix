@@ -1,64 +1,37 @@
-x@{builderDefsPackage
-  , ocaml, eprover, zlib
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["eprover"];
+{ stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="leo2";
-    version = "1.6.2";
-    name="${baseName}_v${version}";
+stdenv.mkDerivation rec {
+  name = "leo2-${version}";
+  version = "1.6.2";
+
+  src = fetchurl {
     url = "http://page.mi.fu-berlin.de/cbenzmueller/leo/leo2_v${version}.tgz";
-    hash="d46a94f5991623386eb9061cfb0d748e258359a8c690fded173d35303e0e9e3a";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
     sha256 = "1wjpmizb181iygnd18lx7p77fwaci2clgzs5ix5j51cc8f3pazmv";
   };
 
-  name = "${sourceInfo.baseName}-${sourceInfo.version}";
-  inherit buildInputs;
+  buildInputs = [ makeWrapper eprover ocaml perl zlib ];
 
-  phaseNames = ["makeInstallationDir" "doUnpack" "doMake" "doFinalize"];
+  sourceRoot = "leo2/src";
 
-  makeInstallationDir = a.fullDepEntry (''
-    mkdir -p "$out/share/leo2/build-dir"
-    cd "$out/share/leo2/build-dir"
-  '') ["minInit" "defEnsureDir"];
+  preConfigure = "patchShebangs configure";
 
-  goSrcDir = "cd src/";
+  buildFlags = [ "opt" ];
 
-  doFinalize = a.fullDepEntry (''
-    mkdir -p "$out/bin"
-    echo -e "#! /bin/sh\\n$PWD/../bin/leo --atprc $out/etc/leoatprc \"\$@\"\\n" > "$out/bin/leo"
-    chmod a+x "$out/bin/leo"
+  preInstall = "mkdir -p $out/bin";
+
+  postInstall = ''
     mkdir -p "$out/etc"
     echo -e "e = ${eprover}/bin/eprover\\nepclextract = ${eprover}/bin/epclextract" > "$out/etc/leoatprc"
-  '') ["minInit" "doMake" "defEnsureDir"];
 
-  makeFlags = [
-    "SHELL=${a.stdenv.shell}"
-  ];
+    wrapProgram $out/bin/leo \
+      --add-flags "--atprc $out/etc/leoatprc"
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A high-performance typed higher order prover";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.bsd3;
-    inherit (sourceInfo) version;
-    homepage = "http://page.mi.fu-berlin.de/cbenzmueller/leo/";
-    downloadPage = "http://page.mi.fu-berlin.de/cbenzmueller/leo/download.html";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+    homepage = http://www.leoprover.org/;
   };
-}) x
-
+}

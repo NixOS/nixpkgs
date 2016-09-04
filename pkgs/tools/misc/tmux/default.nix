@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   name = "tmux-${version}";
   version = "2.2";
 
-  outputs = [ "out" "bin" "man" ];
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "tmux";

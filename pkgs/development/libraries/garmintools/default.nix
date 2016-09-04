@@ -10,5 +10,6 @@ stdenv.mkDerivation {
     homepage = https://code.google.com/p/garmintools;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.ocharles ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

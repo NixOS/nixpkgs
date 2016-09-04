@@ -18,5 +18,6 @@ stdenv.mkDerivation {
     homepage = http://www.ijg.org/;
     description = "A library that implements the JPEG image file format";
     license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

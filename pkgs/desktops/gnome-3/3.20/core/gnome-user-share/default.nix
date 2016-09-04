@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   preConfigure = ''
     sed -e 's,^LoadModule dnssd_module.\+,LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so,' -i data/dav_user_2.2.conf 
   '';
 
-  configureFlags = [ "--with-httpd=${apacheHttpd_2_2}/bin/httpd"
-                     "--with-modules-path=${apacheHttpd_2_2}/modules"
+  configureFlags = [ "--with-httpd=${apacheHttpd_2_2.out}/bin/httpd"
+                     "--with-modules-path=${apacheHttpd_2_2.dev}/modules"
                      "--disable-bluetooth"
                      "--with-nautilusdir=$(out)/lib/nautilus/extensions-3.0" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/gsettings-schemas/$name
     mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name
-    ${glib}/bin/glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas
+    ${glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas
   '';
 
   preFixup = ''

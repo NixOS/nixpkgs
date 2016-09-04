@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
 
+  hardeningDisable = [ "stackprotector" ] ++
+    stdenv.lib.optionals stdenv.isi686 [ "pic" "fortify" ];
+
   preConfigure = ''
     configureFlagsArray=(
       --datadir=$out/share/maude
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
       rewriting logic computation.
     '';
 
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

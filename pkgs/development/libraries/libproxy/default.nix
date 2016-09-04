@@ -13,4 +13,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib ]
     # now some optional deps, but many more are possible
     ++ [ glib ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

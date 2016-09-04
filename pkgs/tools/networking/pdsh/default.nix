@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       while timeouts occur on some connections.
     '';
 
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

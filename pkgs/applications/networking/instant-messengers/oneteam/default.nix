@@ -1,88 +1,64 @@
-x@{builderDefsPackage
-  , fetchgit, perl, xulrunner, cmake, perlPackages, zip, unzip, pkgconfig
-  , libpulseaudio, glib, gtk, pixman, nspr, nss, libXScrnSaver, scrnsaverproto
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["fetchgit" "perlPackages"];
+{ stdenv, fetchFromGitHub
+, perl, xulrunner, cmake, perlPackages, zip, unzip, pkgconfig
+, libpulseaudio, glib, gtk, pixman, nspr, nss, libXScrnSaver
+, scrnsaverproto
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames)) ++ [
-      a.perlPackages.SubName a.gtk a.glib
-    ];
-  sourceInfo = rec {
-    baseName="oneteam";
-    version="git-head";
-    name="${baseName}-${version}";
-    url="git://git.process-one.net/oneteam/oneteam.git";
-    rev="066cd861ea4436bbe363f032c58a746a1cac7498";
-    hash="972310d6ef20db7dc749d7d935aa50889afe2004db2a07409830e09ef639f30a";
-    method="fetchgit";
-  };
-in
-rec {
-  srcDrv = a.fetchgit {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-    rev = sourceInfo.rev;
+stdenv.mkDerivation rec {
+  name = "oneteam-unstable-2013-02-21";
+
+  src = fetchFromGitHub {
+    repo = "oneteam";
+    owner = "processone";
+    rev = "c51bc545c3a32db4ea8b96e43b84fcfc6b8d3d2a";
+    sha256 = "19104fwdaf0nnsr5w755fg8wwww5sh96wmn939gxa5ah155nf2w3";
   };
 
-  src=srcDrv + "/";
+  nativeBuildInputs = [ pkgconfig cmake zip unzip ];
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs =
+    [ perl xulrunner libpulseaudio glib gtk pixman nspr
+      nss libXScrnSaver scrnsaverproto
+    ] ++ [ perlPackages.SubName gtk glib ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["goComponents" "setVars" "fixComponents" "doCmake" 
-    "doMakeInstall" "goBack" "buildApp" "doDeploy"];
-
-  fixComponents = a.fullDepEntry ''
+  postPatch = ''
     sed -e '1i#include <netinet/in.h>' -i src/rtp/otRTPDecoder.cpp src/rtp/otRTPEncoder.cpp
-  '' ["minInit" "doUnpack"];
-
-  setVars=a.noDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr.dev}/include/nspr"
   '';
 
-  cmakeBuildDir="cmake-build";
-  cmakeFlags=["-D XPCOM_GECKO_SDK=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"];
+  cmakeBuildDir = "cmake-build";
+  cmakeFlags = ["-D XPCOM_GECKO_SDK=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"];
 
-  goComponents=a.fullDepEntry "cd src/components" ["doUnpack"];
-  goBack=a.noDepEntry "cd ../../..";
-
-  buildApp=a.fullDepEntry ''
+  buildPhase = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr.dev}/include/nspr"
+    cd src/components
     perl build.pl XULAPP 1
-  '' ["addInputs"];
+    cd ../../
+  '';
 
-  doDeploy = a.fullDepEntry ''
+  installPhase = ''
     TARGET_DIR="$out/share/oneteam/app"
     BUILD_DIR="$PWD"
     mkdir -p "$TARGET_DIR"
     cd "$TARGET_DIR"
     unzip "$BUILD_DIR/oneteam.xulapp"
     mkdir -p "$out/bin"
-    echo "#! ${a.stdenv.shell}" > "$out/bin/oneteam"
+    echo "#! ${stdenv.shell}" > "$out/bin/oneteam"
     echo "\"${xulrunner}/bin/xulrunner\" \"$TARGET_DIR/application.ini\"" > "$out/bin/oneteam"
     chmod a+x "$out/bin/oneteam"
     mkdir -p "$out/share/doc"
     cp -r "$BUILD_DIR/docs" "$out/share/doc/oneteam"
-  '' ["defEnsureDir"];
+  '';
 
   meta = {
     description = "An XMPP client";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    license = a.lib.licenses.gpl2;
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
+    license = stdenv.lib.licenses.gpl2;
     homepage="http://oneteam.im";
   };
+
   passthru = {
     updateInfo = {
-      downloadPage = "git://git.process-one.net/oneteam/oneteam.git";
+      downloadPage = "git://github.com/processone/oneteam";
     };
   };
-}) x
-
+}

@@ -18,4 +18,8 @@ stdenv.mkDerivation {
   preInstall = "echo -e 'install:\n	mkdir \${out}/bin;\n	cp xmacrorec xmacrorec2 xmacroplay \${out}/bin;' >>Makefile; ";
 
   buildInputs = [ libX11 libXtst xextproto libXi inputproto ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

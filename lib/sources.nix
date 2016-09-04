@@ -20,7 +20,9 @@ rec {
       lib.hasSuffix "~" baseName ||
       # Filter out generates files.
       lib.hasSuffix ".o" baseName ||
-      lib.hasSuffix ".so" baseName
+      lib.hasSuffix ".so" baseName ||
+      # Filter out nix-build result symlinks
+      (type == "symlink" && lib.hasPrefix "result" baseName)
     );
     in src: builtins.filterSource filter src;
 
@@ -44,21 +46,22 @@ rec {
             packedRefsName = toString path + "/packed-refs";
         in if lib.pathExists fileName
            then
-             let fileContent = readFile fileName;
+             let fileContent = lib.fileContents fileName;
                  # Sometimes git stores the commitId directly in the file but
                  # sometimes it stores something like: «ref: refs/heads/branch-name»
-                 matchRef    = match "^ref: (.*)\n$" fileContent;
+                 matchRef    = match "^ref: (.*)$" fileContent;
              in if   isNull matchRef
-                then lib.removeSuffix "\n" fileContent
+                then fileContent
                 else readCommitFromFile path (lib.head matchRef)
            # Sometimes, the file isn't there at all and has been packed away in the
            # packed-refs file, so we have to grep through it:
            else if lib.pathExists packedRefsName
            then
-             let packedRefs  = lib.splitString "\n" (readFile packedRefsName);
-                 matchRule   = match ("^(.*) " + file + "$");
-                 matchedRefs = lib.flatten (lib.filter (m: ! (isNull m)) (map matchRule packedRefs));
-             in lib.head matchedRefs
+             let fileContent = readFile packedRefsName;
+                 matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
+             in if   isNull matchRef
+                then throw ("Could not find " + file + " in " + packedRefsName)
+                else lib.head matchRef
            else throw ("Not a .git directory: " + path);
     in lib.flip readCommitFromFile "HEAD";
 }

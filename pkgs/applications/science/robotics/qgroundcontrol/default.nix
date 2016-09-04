@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, git,  espeak, SDL, udev, doxygen, cmake, overrideCC#, gcc48
+{ stdenv, fetchgit, git,  espeak, SDL, udev, doxygen, cmake
   , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
   , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmakeHook
   , makeQtWrapper, lndir
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
  ] ++ qtInputs;
 
   patches = [ ./0001-fix-gcc-cmath-namespace-issues.patch ];
+  postPatch = ''
+    sed '1i#include <cmath>' -i src/Vehicle/Vehicle.cc \
+      -i src/comm/{QGCFlightGearLink,QGCJSBSimLink}.cc \
+      -i src/{uas/UAS,ui/QGCDataPlot2D}.cc
+  '';
 
   preConfigure = ''
     mkdir build

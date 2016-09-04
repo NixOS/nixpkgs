@@ -1,5 +1,5 @@
 { supportedSystems
-, packageSet ? (import ./../..)
+, packageSet ? (import ../..)
 , allowTexliveBuilds ? false
 , scrubJobs ? true
 }:

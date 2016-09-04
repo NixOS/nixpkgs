@@ -121,7 +121,13 @@ let
         default = pkgs.nologin;
         defaultText = "pkgs.nologin";
         example = literalExample "pkgs.bashInteractive";
-        description = "The path to the user's shell.";
+        description = ''
+          The path to the user's shell. Can use shell derivations,
+          like <literal>pkgs.bashInteractive</literal>. Don’t
+          forget to enable your shell in
+          <literal>programs</literal> if necessary,
+          like <code>programs.zsh.enable = true;</code>.
+        '';
       };
 
       subUidRanges = mkOption {

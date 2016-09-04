@@ -19,10 +19,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi mesa_noglu ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
-  configureFlags = lib.optionals (!minimal) [
-    "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri"
-    "--enable-glx"
-  ];
+  configureFlags =
+    [ "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri" ] ++
+    lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
 

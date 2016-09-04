@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       or device.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ nckx ];
+    platforms = platforms.linux;
   };
 }

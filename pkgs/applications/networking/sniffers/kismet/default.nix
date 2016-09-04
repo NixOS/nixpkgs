@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "Wireless network sniffer";
     homepage = http://www.kismetwireless.net/;
     license = "GPL";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = http://xapian.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

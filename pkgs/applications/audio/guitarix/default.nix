@@ -1,7 +1,8 @@
 { stdenv, fetchurl, gettext, intltool, pkgconfig, python
-, avahi, bluez, boost, eigen, fftw, glib, glibmm, gtk, gtkmm, libjack2
+, avahi, bluez, boost, eigen, fftw, glib, glib_networking
+, glibmm, gsettings_desktop_schemas, gtk, gtkmm, libjack2
 , ladspaH, librdf, libsndfile, lilv, lv2, serd, sord, sratom
-, webkitgtk2, zita-convolver, zita-resampler
+, webkitgtk2, wrapGAppsHook, zita-convolver, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -11,19 +12,20 @@ in
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
-  version = "0.34.0";
+  version = "0.35.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.bz2";
-    sha256 = "0pamaq8iybsaglq6y1m1rlmz4wgbs2r6m24bj7x4fwg4grjvzjl8";
+    url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
+    sha256 = "066qva1zk63qw60s0vbi9g9jh22ljw67p91pk82kv11gw24h3vg6";
   };
 
-  nativeBuildInputs = [ gettext intltool pkgconfig python ];
+  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python ];
 
   buildInputs = [
-    avahi bluez boost eigen fftw glib glibmm gtk gtkmm libjack2
-    ladspaH librdf libsndfile lilv lv2 serd sord sratom
-    webkitgtk2 zita-convolver zita-resampler
+    avahi bluez boost eigen fftw glib glibmm glib_networking.out
+    gsettings_desktop_schemas gtk gtkmm libjack2 ladspaH librdf
+    libsndfile lilv lv2 serd sord sratom webkitgtk2 zita-convolver
+    zita-resampler
   ];
 
   configureFlags = [
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''python waf install'';
 
-  meta = with stdenv.lib; { 
+  meta = with stdenv.lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with

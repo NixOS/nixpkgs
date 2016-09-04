@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libebml-1.3.3";
+  name = "libebml-1.3.4";
 
   src = fetchurl {
     url = "http://dl.matroska.org/downloads/libebml/${name}.tar.bz2";
-    sha256 = "16alhwd1yz5bv3765xfn5azwk37805lg1f61195gjq8rlkd49yrm";
+    sha256 = "11zka6z9ncywyjr1gfm5cnii33ln7y3w6s86kiacchip2g7kw3f5";
   };
 
   meta = with stdenv.lib; {

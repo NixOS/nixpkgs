@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gmic-${version}";
-  version = "1.6.5.0";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "http://gmic.eu/files/source/gmic_${version}.tar.gz";
-    sha256 = "1vb6zm5zpqfnzxjvb9yfvczaqacm55rf010ib0yk9f28b17qrjgb";
+    sha256 = "1k4swqi1adq479b6zdpvy5kdpkvjkfihkj9iwgw9mgi0xdqikjry";
   };
 
   buildInputs = [ fftw zlib libjpeg libtiff libpng ];
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = http://gmic.eu/;
     license = licenses.cecill20;
     maintainers = [ maintainers.rycee ];
+    platforms = platforms.linux;
   };
 }

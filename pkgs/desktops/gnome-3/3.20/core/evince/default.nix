@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     (if supportXPS then "--enable-xps" else "--disable-xps")
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   preConfigure = with stdenv.lib;
     optionalString doCheck ''

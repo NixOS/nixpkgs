@@ -35,5 +35,6 @@ stdenv.mkDerivation {
       require the Gimp to even be installed.
     '';
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

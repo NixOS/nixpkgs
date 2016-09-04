@@ -52,8 +52,8 @@ foreach my $g (@{$spec->{groups}}) {
     $gidsUsed{$g->{gid}} = 1 if defined $g->{gid};
 }
 
-foreach my $u (@{$spec->{groups}}) {
-    $uidsUsed{$u->{u}} = 1 if defined $u->{uid};
+foreach my $u (@{$spec->{users}}) {
+    $uidsUsed{$u->{uid}} = 1 if defined $u->{uid};
 }
 
 # Read the current /etc/group.
@@ -103,7 +103,7 @@ foreach my $g (@{$spec->{groups}}) {
     if (defined $existing) {
         $g->{gid} = $existing->{gid} if !defined $g->{gid};
         if ($g->{gid} != $existing->{gid}) {
-            warn "warning: not applying GID change of group ‘$name’\n";
+            warn "warning: not applying GID change of group ‘$name’ ($existing->{gid} -> $g->{gid})\n";
             $g->{gid} = $existing->{gid};
         }
         $g->{password} = $existing->{password}; # do we want this?
@@ -163,7 +163,7 @@ foreach my $u (@{$spec->{users}}) {
     if (defined $existing) {
         $u->{uid} = $existing->{uid} if !defined $u->{uid};
         if ($u->{uid} != $existing->{uid}) {
-            warn "warning: not applying UID change of user ‘$name’\n";
+            warn "warning: not applying UID change of user ‘$name’ ($existing->{uid} -> $u->{uid})\n";
             $u->{uid} = $existing->{uid};
         }
     } else {

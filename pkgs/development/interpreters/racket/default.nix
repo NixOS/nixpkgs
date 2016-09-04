@@ -32,11 +32,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.5";
+  version = "6.6";
 
   src = fetchurl {
     url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "0gvh7i5k87mg1gpqk8gaq50ja9ksbhnvdqn7qqh0n17byidd6999";
+    sha256 = "1kzdi1n6h6hmz8zd9k8r5a5yp2ryi4w3c2fjm1k6cqicn18cwaxz";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://racket-lang.org/;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ kkallio henrytill ];
+    maintainers = with maintainers; [ kkallio henrytill vrthra ];
     platforms = platforms.unix;
   };
 }

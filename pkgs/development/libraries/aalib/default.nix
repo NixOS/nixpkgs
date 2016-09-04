@@ -35,5 +35,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "ASCII art graphics library";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

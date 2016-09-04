@@ -501,14 +501,18 @@ sub getEfiTarget {
 my @deviceTargets = getDeviceTargets();
 my $efiTarget = getEfiTarget();
 my $prevGrubState = readGrubState();
-my @prevDeviceTargets = split/:/, $prevGrubState->devices;
+my @prevDeviceTargets = split/,/, $prevGrubState->devices;
 
 my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
 my $nameDiffer = get("fullName") ne $prevGrubState->name;
 my $versionDiffer = get("fullVersion") ne $prevGrubState->version;
 my $efiDiffer = $efiTarget ne $prevGrubState->efi;
 my $efiMountPointDiffer = $efiSysMountPoint ne $prevGrubState->efiMountPoint;
-my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
+if (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1") {
+    warn "NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER";
+    $ENV{'NIXOS_INSTALL_BOOTLOADER'} = "1";
+}
+my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_BOOTLOADER'} // "") eq "1");
 
 # install a symlink so that grub can detect the boot drive
 my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space";
@@ -549,7 +553,7 @@ if ($requireNewInstall != 0) {
     print FILE get("fullName"), "\n" or die;
     print FILE get("fullVersion"), "\n" or die;
     print FILE $efiTarget, "\n" or die;
-    print FILE join( ":", @deviceTargets ), "\n" or die;
+    print FILE join( ",", @deviceTargets ), "\n" or die;
     print FILE $efiSysMountPoint, "\n" or die;
     close FILE or die;
 }

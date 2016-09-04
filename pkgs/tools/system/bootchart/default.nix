@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.bootchart.org/;
     description = "Performance analysis and visualization of the GNU/Linux boot process";
     license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 
 }

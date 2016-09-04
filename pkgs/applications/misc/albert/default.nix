@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.8.8";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner  = "manuelschneid3r";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "1mqxy5xbvgzykg2vvr2d1p9kr2viga1pqxslkg9y1x05kdhr2zal";
+    sha256 = "1x8fpc6rnjifh405p385avdaww4v8ld6qwczqwmkzgbcn15gman7";
   };
 
   nativeBuildInputs = [ cmake makeQtWrapper ];
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Desktop agnostic launcher";
     license     = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.ericsagnes ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

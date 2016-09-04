@@ -4,7 +4,7 @@
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
 , libXcomposite, libXext, libXrandr, libXtst, libSM, libICE, libxcb
-, mono, libgnomeui, gnome_vfs, gnome-sharp, gtk-sharp
+, mono, libgnomeui, gnome_vfs, gnome-sharp, gtk-sharp, chromium
 }:
 
 let
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper fakeroot file getopt ];
 
-  outputs = [ "out" "monodevelop" "sandbox" ];
+  outputs = [ "out" "monodevelop" ];
 
   unpackPhase = ''
     echo -e 'q\ny' | fakeroot sh $src
@@ -91,12 +91,10 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -Dm755 Editor/chrome-sandbox $sandbox/bin/unity-chrome-sandbox
-
     unitydir="$out/opt/Unity/Editor"
     mkdir -p $unitydir
     mv Editor/* $unitydir
-    ln -sf /var/setuid-wrappers/unity-chrome-sandbox $unitydir/chrome-sandbox
+    ln -sf /var/setuid-wrappers/${chromium.sandboxExecutableName} $unitydir/chrome-sandbox
 
     mkdir -p $out/share/applications
     sed "/^Exec=/c\Exec=$out/bin/unity-editor" \

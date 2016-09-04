@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, automake, autoconf, pkgconfig, libtool, vala, python, libsearpc, libzdb, libuuid, libevent, sqlite, openssl}:
+{stdenv, fetchurl, which, automake, autoconf, pkgconfig, libtool, vala_0_23, python, libsearpc, libzdb, libuuid, libevent, sqlite, openssl}:
 
 stdenv.mkDerivation rec
 {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec
     sha256 = "1e1c670a85619b174328a15925a050c7a8b323fecd13434992332f5c15e05de1";
   };
 
-  buildInputs = [ which automake autoconf pkgconfig libtool vala  python ];
+  buildInputs = [ which automake autoconf pkgconfig libtool vala_0_23 python ];
   propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite openssl ];
 
   preConfigure = ''

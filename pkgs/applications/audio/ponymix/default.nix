@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "ponymix-${version}";
-  version = "4";
+  version = "5";
   src = fetchurl {
     url = "http://code.falconindy.com/archive/ponymix/${name}.tar.xz";
-    sha256 = "008pk3sqc8955k2f502z1syzv43a4q0yk5ws69lgpqfsy1mzki2d";
+    sha256 = "0qn2kms9h9b7da2xzkdgzrykhhdywr4psxnz03j8rg7wa9nwfw0x";
   };
 
   buildInputs = [ libpulseaudio libnotify ];

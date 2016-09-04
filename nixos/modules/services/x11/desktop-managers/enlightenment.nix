@@ -29,7 +29,7 @@ in
   config = mkIf (xcfg.enable && cfg.enable) {
 
     environment.systemPackages = [
-      e.efl e.evas e.emotion e.elementary e.enlightenment
+      e.efl e.enlightenment
       e.terminology e.econnman
       pkgs.xorg.xauth # used by kdesu
       pkgs.gtk # To get GTK+'s themes.

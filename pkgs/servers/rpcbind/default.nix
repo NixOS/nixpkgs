@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     description = "ONC RPC portmapper";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    homepage = http://sourceforge.net/projects/rpcbind/;
+    homepage = "http://sourceforge.net/projects/rpcbind/";
     maintainers = with maintainers; [ abbradar ];
     longDescription = ''
       Universal addresses to RPC program number mapper.

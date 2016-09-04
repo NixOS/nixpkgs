@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "etcd-${version}";
-  version = "2.3.0";
+  version = "2.3.7";
   rev = "v${version}";
   
   goPackagePath = "github.com/coreos/etcd";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "coreos";
     repo = "etcd";
-    sha256 = "1cchlhsdbbqal145cvdiq7rzqqi131iq7z0r2hmzwx414k04wyn7";
+    sha256 = "07rdnhcpnvnkxj5pqacxz669rzn5vw2i1zmf6dd4nv7wpfscdw9f";
   };
 
   goDeps = ./deps.json;

@@ -17,8 +17,10 @@ buildRustPackage rec {
   buildInputs = [ makeWrapper ];
 
   preCheck = ''
-    export RUST_SRC;_PATH="${rustPlatform.rust.rustc.src}/src"
+    export RUST_SRC_PATH="${rustPlatform.rust.rustc.src}/src"
   '';
+
+  doCheck = true;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -31,5 +33,6 @@ buildRustPackage rec {
     homepage = https://github.com/phildawes/racer;
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [ jagajaga globin ];
+    platforms = platforms.all;
   };
 }

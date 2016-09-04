@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://librdf.org/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

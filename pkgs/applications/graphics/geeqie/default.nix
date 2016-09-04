@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "geeqie-${version}";
-  version = "1.2.3";
+  version = "1.3";
 
   src = fetchurl {
     url = "http://geeqie.org/${name}.tar.xz";
-    sha256 = "2629bf33a9070fad4804b1ef051c3bf8a8fdad3bba4e6188dc20588185003248";
+    sha256 = "0gzc82sy66pbsmq7lnmq4y37zqad1zfwfls3ik3dmfm8s5nmcvsb";
   };
 
   preConfigure = "./autogen.sh";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     # Allow geeqie to find exiv2 and exiftran, necessary to
     # losslessly rotate JPEG images.
     sed -i $out/lib/geeqie/geeqie-rotate \
-        -e '1 a export PATH=${exiv2}/bin:${fbida}/bin:$PATH'
+        -e '1 a export PATH=${stdenv.lib.makeBinPath [ exiv2 fbida ]}:$PATH'
   '';
 
   meta = with stdenv.lib; {

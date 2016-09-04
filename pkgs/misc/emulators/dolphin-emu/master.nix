@@ -1,4 +1,4 @@
-{ stdenv, gcc5, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
+{ stdenv, gcc, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
 , gettext, git, libpthreadstubs, libXrandr, libXext, readline
 , openal, libXdmcp, portaudio, fetchgit, libusb, libevdev
 , libpulseaudio ? null }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ gcc5 pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
+  buildInputs = [ gcc pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   libevdev git libXdmcp portaudio libusb libpulseaudio ];
 

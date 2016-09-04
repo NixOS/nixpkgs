@@ -21,4 +21,8 @@ stdenv.mkDerivation rec {
     cp -a {bin,docs,etc,lib,sbin,share} $out
     find $out -name '*.in' -exec rm '{}' \;
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

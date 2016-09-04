@@ -192,7 +192,7 @@ let lispPackages = rec {
     version = "git-20150514";
     description = "Common Lisp SQL Interface library";
     deps = [uffi];
-    buildInputs = [pkgs.mysql.lib pkgs.zlib];
+    buildInputs = [pkgs.mysql.client pkgs.zlib];
     # Source type: git
     src = pkgs.fetchgit {
       url =
@@ -204,8 +204,8 @@ let lispPackages = rec {
     };
     overrides = x:{
       preConfigure = ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql.lib}/include/mysql"
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql.lib}/lib/mysql"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${stdenv.lib.getDev pkgs.mysql.client}/include/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${stdenv.lib.getLib pkgs.mysql.client}/lib/mysql"
       '';
     };
   };

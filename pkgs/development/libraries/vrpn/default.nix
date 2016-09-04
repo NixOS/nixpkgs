@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.boost;
                         # see # <http://www.cs.unc.edu/Research/vrpn/obtaining_vrpn.html>
 
+    platforms = stdenv.lib.platforms.linux;
   };
 }

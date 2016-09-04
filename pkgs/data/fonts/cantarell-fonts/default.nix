@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   major = "0.0";
-  minor = "24";
+  minor = "25";
   name = "cantarell-fonts-${major}.${minor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/cantarell-fonts/${major}/${name}.tar.xz";
-    sha256 = "0r4jnc2x9yncf40lixjb1pqgpq8rzbi2fz33pshlqzjgx2d69bcw";
+    sha256 = "0zvkd8cm1cg2919v1js9qmzwa02sjl7qajj3gcvgqvai1fm2i8hl";
   };
 
   meta = {

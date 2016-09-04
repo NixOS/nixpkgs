@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, gettext, pkgconfig, glib, gtk, libX11, libSM, libICE }:
+{ fetchurl, stdenv, gettext, pkgconfig, glib, gtk, libX11, libSM, libICE
+, IOKit ? null }:
 
 stdenv.mkDerivation rec {
   name = "gkrellm-2.3.5";
@@ -7,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "12rc6zaa7kb60b9744lbrlfkxxfniprm6x0mispv63h4kh75navh";
   };
 
-  buildInputs = [gettext pkgconfig glib gtk libX11 libSM libICE];
+  buildInputs = [gettext pkgconfig glib gtk libX11 libSM libICE]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+
+  hardeningDisable = [ "format" ];
 
   # Makefiles are patched to fix references to `/usr/X11R6' and to add
   # `-lX11' to make sure libX11's store path is in the RPATH.

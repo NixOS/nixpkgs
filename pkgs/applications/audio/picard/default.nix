@@ -1,10 +1,10 @@
-{ stdenv, buildPythonApplication, fetchurl, gettext
+{ stdenv, pythonPackages, fetchurl, gettext
 , pkgconfig, libofa, ffmpeg, chromaprint
-, pyqt4, mutagen, python-libdiscid
 }:
 
-let version = "1.3.2"; in
-buildPythonApplication {
+let
+  version = "1.3.2";
+in pythonPackages.buildPythonApplication {
   name = "picard-${version}";
   namePrefix = "";
 
@@ -20,10 +20,10 @@ buildPythonApplication {
     gettext
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with pythonPackages; [
     pyqt4
     mutagen
-    python-libdiscid
+    discid
   ];
 
   installPhase = ''

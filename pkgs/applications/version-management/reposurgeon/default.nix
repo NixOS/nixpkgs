@@ -1,11 +1,13 @@
-{stdenv, fetchurl, makeWrapper, python27, python27Packages, git,
- docbook_xml_dtd_412, docbook_xml_xslt, asciidoc, xmlto,
- cython ? null,
- bazaar ? null, cvs ? null, darcs ? null, fossil ? null,
- mercurial ? null, monotone ? null, rcs ? null, src ? null,
- subversion ? null, cvs_fast_export ? null }:
+{ stdenv, fetchurl, makeWrapper, python27Packages, git
+, docbook_xml_dtd_412, docbook_xml_xslt, asciidoc, xmlto
+, bazaar ? null, cvs ? null, darcs ? null, fossil ? null
+, mercurial ? null, monotone ? null, rcs ? null, src ? null
+, subversion ? null, cvs_fast_export ? null }:
+
 with stdenv; with lib;
-mkDerivation rec {
+let
+  inherit (python27Packages) python cython;
+in mkDerivation rec {
   name = "reposurgeon-${meta.version}";
   meta = {
     description = "A tool for editing version-control repository history";
@@ -33,8 +35,8 @@ mkDerivation rec {
     makeFlagsArray=(
       XML_CATALOG_FILES="${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml ${docbook_xml_xslt}/xml/xsl/docbook/catalog.xml"
       prefix="$out"
-      pyinclude="-I${python27}/include/python2.7"
-      pylib="-L${python27}/lib -lpython2.7"
+      pyinclude="-I${python}/include/python2.7"
+      pylib="-L${python}/lib -lpython2.7"
     )
   '';
 
@@ -51,7 +53,7 @@ mkDerivation rec {
         [ out git bazaar cvs darcs fossil mercurial
           monotone rcs src subversion cvs_fast_export ]
       );
-      pythonpath = makeSearchPathOutput "lib" python27.sitePackages (
+      pythonpath = makeSearchPathOutput "lib" python.sitePackages (
         filter (x: x != null)
         [ python27Packages.readline or null python27Packages.hglib or null ]
       );

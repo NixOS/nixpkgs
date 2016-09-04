@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "2.6";
+  version = "2.7.1";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "05sdxgg2w7ykw6xbcq6dl2kzxdz4qzhjajiawpy6490wqiji7wm1";
+    sha256 = "1vhbs1fmr9x2imqyd6yfvkbz763jhjfm9wk4nizf9rn1cvxrjqa4";
   };
 
   buildInputs = [ coq ] ++ (with ocamlPackages; [ ocaml findlib menhir ]);

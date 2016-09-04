@@ -11,4 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1nfj89b0dv1c2fyqi1pg54fyzs3462cbp7jv7lskqsxvqy4mh9x1";
   };
   
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

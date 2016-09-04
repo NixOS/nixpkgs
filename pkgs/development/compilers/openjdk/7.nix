@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype
-, which, bootjdk, nettools, xorg, file
+, which, bootjdk, nettools, xorg, file, cups
 , fontconfig, cpio, cacert, perl, setJavaClassPath
 , minimal ? false
 }:
@@ -23,11 +23,6 @@ let
 
   # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
   paxflags = if stdenv.isi686 then "msp" else "m";
-
-  cupsSrc = fetchurl {
-    url = http://ftp.easysw.com/pub/cups/1.5.4/cups-1.5.4-source.tar.bz2;
-    md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
-  };
 
   baseurl = "http://hg.openjdk.java.net/jdk7u/jdk7u";
   repover = "jdk7u${update}-b${build}";
@@ -74,6 +69,8 @@ let
         fontconfig perl file bootjdk
       ];
 
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
     NIX_LDFLAGS = if minimal then null else "-lfontconfig -lXcursor -lXinerama";
 
     postUnpack = ''
@@ -89,7 +86,7 @@ let
       sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
         {jdk,corba}/make/common/shared/Defs-utils.gmk
 
-      tar xf ${cupsSrc}
+      tar xf ${cups.src}
       cupsDir=$(echo $(pwd)/cups-*)
       makeFlagsArray+=(CUPS_HEADERS_PATH=$cupsDir)
     '';

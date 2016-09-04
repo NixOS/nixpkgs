@@ -10,6 +10,7 @@ rec {
 
   # SourceForge.
   sourceforge = [
+    http://downloads.sourceforge.net/
     http://prdownloads.sourceforge.net/
     http://heanet.dl.sourceforge.net/sourceforge/
     http://surfnet.dl.sourceforge.net/sourceforge/
@@ -86,16 +87,44 @@ rec {
   ];
 
   savannah = [
-    ftp://mirror.csclub.uwaterloo.ca/nongnu/
-    ftp://mirror.publicns.net/pub/nongnu/
-    ftp://savannah.c3sl.ufpr.br/
-    http://download.savannah.gnu.org/releases/
-    http://ftp.cc.uoc.gr/mirrors/nongnu.org/
-    http://ftp.twaren.net/Unix/NonGNU/
-    http://mirror.csclub.uwaterloo.ca/nongnu/
-    http://nongnu.askapache.com/
+    # Mirrors from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
+    http://mirror.easyname.at/nongnu/
+    http://mirror2.klaus-uwe.me/nongnu/
     http://savannah.c3sl.ufpr.br/
-    http://www.centervenus.com/mirrors/nongnu/
+    http://mirror.csclub.uwaterloo.ca/nongnu/
+    http://mirror.cedia.org.ec/nongnu/
+    http://ftp.igh.cnrs.fr/pub/nongnu/
+    http://mirror6.layerjet.com/nongnu
+    http://mirror.netcologne.de/savannah/
+    http://ftp.cc.uoc.gr/mirrors/nongnu.org/
+    http://nongnu.uib.no/
+    http://mirrors.fe.up.pt/pub/nongnu/
+    http://mirror.lihnidos.org/GNU/savannah/
+    http://savannah.mirror.si/
+    http://ftp.acc.umu.se/mirror/gnu.org/savannah/
+    http://ftp.twaren.net/Unix/NonGNU/
+    http://ftp.yzu.edu.tw/pub/nongnu/
+    http://mirror.rackdc.com/savannah/
+    http://savannah-nongnu-org.ip-connect.vn.ua/
+    http://www.mirrorservice.org/sites/download.savannah.gnu.org/releases/
+    http://savannah.spinellicreations.com/
+    http://gnu.mirrors.pair.com/savannah/savannah/
+    ftp://mirror.easyname.at/nongnu/
+    ftp://mirror2.klaus-uwe.me/nongnu/
+    ftp://savannah.c3sl.ufpr.br/savannah-nongnu/
+    ftp://mirror.csclub.uwaterloo.ca/nongnu/
+    ftp://mirror.cedia.org.ec/nongnu
+    ftp://ftp.igh.cnrs.fr/pub/nongnu/
+    ftp://mirror6.layerjet.com/nongnu/
+    ftp://mirror.netcologne.de/savannah/
+    ftp://nongnu.uib.no/pub/nongnu/
+    ftp://mirrors.fe.up.pt/pub/nongnu/
+    ftp://savannah.mirror.si/savannah/
+    ftp://ftp.twaren.net/Unix/NonGNU/
+    ftp://ftp.yzu.edu.tw/pub/nongnu/
+    ftp://savannah-nongnu-org.ip-connect.vn.ua/mirror/savannah.nongnu.org/
+    ftp://ftp.mirrorservice.org/sites/download.savannah.gnu.org/releases/
+    ftp://spinellicreations.com/gnu_dot_org_savannah_mirror/
   ];
 
   samba = [
@@ -289,34 +318,49 @@ rec {
 
   # Sage mirrors (http://www.sagemath.org/mirrors.html)
   sagemath = [
-    http://boxen.math.washington.edu/home/sagemath/sage-mirror/src/
-    http://echidna.maths.usyd.edu.au/sage/src/
-    http://ftp.iitm.ac.in/sage/src/
+    # Africa
+    http://sagemath.polytechnic.edu.na/src/
+    ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/src/
+    http://sagemath.mirror.ac.za/src/
+    https://ftp.leg.uct.ac.za/pub/packages/sage/src/
+    http://mirror.ufs.ac.za/sagemath/src/
+
+    # America, North
+    http://mirrors-usa.go-parts.com/sage/sagemath/src/
+    http://mirrors.mit.edu/sage/src/
+    http://www.cecm.sfu.ca/sage/src/
+    http://files.sagemath.org/src/
+    http://mirror.clibre.uqam.ca/sage/src/
+    https://mirrors.xmission.com/sage/src/
+
+    # America, South
+    http://sagemath.c3sl.ufpr.br/src/
+    http://linorg.usp.br/sage/
+
+    # Asia
+    http://sage.asis.io/src/
+    http://mirror.hust.edu.cn/sagemath/src/
+    https://ftp.iitm.ac.in/sage/src/
     http://ftp.kaist.ac.kr/sage/src/
     http://ftp.riken.jp/sagemath/src/
+    https://mirrors.tuna.tsinghua.edu.cn/sagemath/src/
+    https://mirrors.ustc.edu.cn/sagemath/src/
     http://ftp.tsukuba.wide.ad.jp/software/sage/src/
-    http://jambu.spms.ntu.edu.sg/sage/src/
-    http://linorg.usp.br/sage/src/
-    http://mirror.aarnet.edu.au/pub/sage/src/
-    http://mirror.clibre.uqam.ca/sage/src/
-    http://mirror.hust.edu.cn/sagemath/src/
-    http://mirror.switch.ch/mirror/sagemath/src/
-    http://mirror.yandex.ru/mirrors/sage.math.washington.edu/src/
-    http://mirrors.fe.up.pt/pub/sage/src/
-    http://mirrors.hustunique.com/sagemath/src/
-    http://mirrors.ustc.edu.cn/sagemath/src/
-    http://mirrors.xmission.com/sage/src/
-    http://sage.asis.io/src/
+    http://ftp.yz.yamagata-u.ac.jp/pub/math/sage/src/
+    https://mirror.yandex.ru/mirrors/sage.math.washington.edu/src/
+
+    # Australia
+    http://echidna.maths.usyd.edu.au/sage/src/
+
+    # Europe
     http://sage.mirror.garr.it/mirrors/sage/src/
-    http://sage.yasar.edu.tr/src/
-    http://sagemath.c3sl.ufpr.br/src/
-    http://sagemath.polytechnic.edu.na/src/
     http://sunsite.rediris.es/mirror/sagemath/src/
+    http://mirror.switch.ch/mirror/sagemath/src/
+    http://mirrors.fe.up.pt/pub/sage/src/
     http://www-ftp.lip6.fr/pub/math/sagemath/src/
-    http://www.mirrorservice.org/sites/www.sagemath.org/src/
+    http://ftp.ntua.gr/pub/sagemath/src/
 
     # Old versions
-    http://www.cecm.sfu.ca/sage/src/
     http://sagemath.org/src-old/
   ];
 

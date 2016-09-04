@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "08zd1yc3w00yv4mvvz5sq1gf91f6p2s9ljcd72m33xgnkglj60v4";
   };
 
+  hardeningDisable = [ "format" ];
+
   patches = [
     ./numad-linker-flags.patch
   ];

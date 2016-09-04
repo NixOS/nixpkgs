@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vyvmgim03q8pcmfa1i0njr4w1lpjq5g3b47f67v9b5c5jcjycwn";
   };
 
+  postPatch = "sed '1i#include <cmath>' -i Sources/Client/{,Client}Player.cpp";
+
   nativeBuildInputs = 
     with stdenv.lib;
     [ cmake curl glew makeWrapper mesa SDL2 SDL2_image unzip wget zlib ]

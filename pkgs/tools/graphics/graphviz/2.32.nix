@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     ]
     ++ stdenv.lib.optional (xorg == null) "--without-x";
 
+  hardeningDisable = [ "fortify" ];
+
   preBuild = ''
     sed -e 's@am__append_5 *=.*@am_append_5 =@' -i lib/gvc/Makefile
   '';
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
       interfaces for other technical domains.
     '';
 
-    hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with stdenv.lib.maintainers; [ bjornfor raskin ];
     inherit version;
     branch = "2.32";

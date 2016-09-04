@@ -26,6 +26,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ gmp mpfr libmpc zlib ];
 
+  hardeningDisable = [ "format" ];
+
   # Make sure we don't strip the libraries in lib/gcc/avr.
   stripDebugList= [ "bin" "avr/bin" "libexec" ];
 

@@ -8,13 +8,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "rmilter-${version}";
-  version = "1.8.4";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "rmilter";
     rev = version;
-    sha256 = "0d2hv39sbzsv3bkbx433vpdqgcjv71v2kkaz4k065xppi35wa2js";
+    sha256 = "1bfql9v243iw3v87kjgwcx4xxw7g5nv1rsi9gk8p7xg5mzrhi3bn";
   };
 
   nativeBuildInputs = [ bison cmake flex ];
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
       postfix or sendmail
     '';
     maintainers = with maintainers; [ avnik fpletz ];
+    platforms = with platforms; linux;
   };
 }

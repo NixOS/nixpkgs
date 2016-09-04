@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, texinfo, alsaLib, libpulseaudio }:
+{ stdenv, fetchurl, texinfo, alsaLib, libpulseaudio, CoreAudio }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (stdenv.lib) optional optionals optionalString;
+
+in stdenv.mkDerivation rec {
   name = "libmikmod-3.3.7";
   src = fetchurl {
     url = "mirror://sourceforge/mikmod/${name}.tar.gz";
@@ -8,11 +11,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ texinfo ]
-    ++ stdenv.lib.optional stdenv.isLinux [ alsaLib libpulseaudio ];
+    ++ optionals stdenv.isLinux [ alsaLib libpulseaudio ]
+    ++ optional stdenv.isDarwin CoreAudio;
   propagatedBuildInputs =
-    stdenv.lib.optional stdenv.isLinux libpulseaudio;
+    optional stdenv.isLinux libpulseaudio;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lasound";
+  NIX_LDFLAGS = optionalString stdenv.isLinux "-lasound";
 
   meta = with stdenv.lib; {
     description = "A library for playing tracker music module files";

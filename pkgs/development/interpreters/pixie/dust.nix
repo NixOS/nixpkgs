@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pixie ];
   patches = [ ./make-paths-configurable.patch ];
   configurePhase = ''
-    pixiePath="${pixie}/bin/pxi" \
+    pixiePath="${pixie}/bin/pixie-vm" \
     basePath="$out/share/dust" \
       substituteAll dust.in dust
     chmod +x dust
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "Provides tooling around pixie, e.g. a nicer repl, running tests and fetching dependencies";
     homepage = src.meta.homepage;
     license = stdenv.lib.licenses.lgpl3;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -28,7 +28,6 @@ _qtPropagate() {
     for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
         if [ -d "$1/$dir" ]; then
             propagateOnce propagatedBuildInputs "$1"
-            propagateOnce propagatedUserEnvPkgs "$1"
             break
         fi
     done
@@ -43,9 +42,6 @@ _qtPropagateNative() {
     for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
         if [ -d "$1/$dir" ]; then
             propagateOnce propagatedNativeBuildInputs "$1"
-            if [ -z "$crossConfig" ]; then
-                propagateOnce propagatedUserEnvPkgs "$1"
-            fi
             break
         fi
     done
@@ -64,11 +60,6 @@ _qtMultioutDevs() {
 }
 
 preFixupHooks+=(_qtMultioutDevs)
-
-if [[ -z "$NIX_QT_PIC" ]]; then
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE${NIX_CFLAGS_COMPILE:+ }-fPIC"
-    export NIX_QT_PIC=1
-fi
 
 _qtSetCMakePrefix() {
     export CMAKE_PREFIX_PATH="$NIX_QT5_TMP${CMAKE_PREFIX_PATH:+:}${CMAKE_PREFIX_PATH}"

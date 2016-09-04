@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, libxml2, upower
 , pkgconfig, gtk3, glib
-, bash, makeWrapper, itstool, vala, sqlite, libxslt
+, bash, makeWrapper, itstool, vala_0_32, sqlite, libxslt
 , gnome3, librsvg, gdk_pixbuf, file, libnotify
 , evolution_data_server, gst_all_1, poppler
 , icu, taglib, libjpeg, libtiff, giflib, libcue
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0 -I${poppler}/include/poppler";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0 -I${poppler.dev}/include/poppler";
 
   enableParallelBuilding = true;
 
-  buildInputs = [ vala pkgconfig gtk3 glib intltool itstool libxml2
+  buildInputs = [ vala_0_32 pkgconfig gtk3 glib intltool itstool libxml2
                   bzip2 gnome3.totem-pl-parser libxslt
                   gnome3.gsettings_desktop_schemas makeWrapper file
                   gdk_pixbuf gnome3.defaultIconTheme librsvg sqlite

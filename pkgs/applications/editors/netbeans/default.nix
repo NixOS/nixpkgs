@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${jdk}/bin:${which}/bin \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ jdk which ]} \
       --prefix JAVA_HOME : ${jdk.home} \
       --add-flags "--jdkhome ${jdk.home}"
       
@@ -46,5 +46,6 @@ stdenv.mkDerivation {
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ libtiff ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
     homepage = http://www.remotesensing.org/geotiff/geotiff.html;

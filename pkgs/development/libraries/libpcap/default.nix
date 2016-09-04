@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.tcpdump.org;
     description = "Packet Capture Library";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, sqlite, gnome3, vala
+{ stdenv, fetchurl, pkgconfig, glib, sqlite, gnome3, vala_0_23
 , intltool, libtool, python, dbus_libs, telepathy_glib
 , gtk3, json_glib, librdf_raptor2, pythonPackages, dbus_glib }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];
 
   buildInputs = [ pkgconfig glib sqlite gnome3.gnome_common intltool
-                  libtool python dbus_libs telepathy_glib vala dbus_glib
+                  libtool python dbus_libs telepathy_glib vala_0_23 dbus_glib
                   gtk3 json_glib librdf_raptor2 pythonPackages.rdflib ];
 
   prePatch = "patchShebangs .";

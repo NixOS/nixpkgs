@@ -29,5 +29,6 @@ stdenv.mkDerivation {
         easy to work with, and notably used by FVWM.
       '';
 
+    platforms = stdenv.lib.platforms.linux;
   };
 }

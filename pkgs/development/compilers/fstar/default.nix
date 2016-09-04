@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
         -C src/ocaml-output
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   preCheck = "ulimit -s unlimited";
 
@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
     license = licenses.asl20;
-    platforms = with platforms; linux;
+    platforms = with platforms; darwin ++ linux;
   };
 }

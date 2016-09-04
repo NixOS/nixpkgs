@@ -2,15 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "gettext-${version}";
-  version = "0.19.7";
+  version = "0.19.8";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "0gy2b2aydj8r0sapadnjw8cmb8j2rynj28d5qs1mfa800njd51jk";
+    sha256 = "13ylc6n3hsk919c7xl0yyibc3pfddzb53avdykn4hmk8g6yzd91x";
   };
   patches = [ ./absolute-paths.diff ];
 
   outputs = [ "out" "doc" ];
+
+  # FIXME stackprotector needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "format" "stackprotector" ];
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
   '';
 
-  buildInputs = [ xz xz.bin libiconv ];
+  nativeBuildInputs = [ xz xz.bin ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv; # HACK, see #10874 (and 14664)
 
   enableParallelBuilding = true;
 
@@ -78,7 +81,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/gettext/;
 
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [ zimbatm vrthra ];
     platforms = lib.platforms.all;
   };
 }

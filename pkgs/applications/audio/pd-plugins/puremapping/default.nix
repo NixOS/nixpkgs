@@ -1,12 +1,13 @@
 { stdenv, fetchurl, unzip, puredata }:
 
 stdenv.mkDerivation rec {
-  name = "puremapping-1.01";
+  name = "puremapping-${version}";
+  version = "20160130";
 
   src = fetchurl {
-    url = "http://www.chnry.net/ch/IMG/zip/puremapping-libdir-generic.zip";
+    url = "http://www.chnry.net/data/puremapping-${version}-generic.zip";
     name = "puremapping";
-    sha256 = "1ygzxsfj3rnzjkpmgi4wch810q8s5vm1gdam6a938hbbvamafgvc";
+    sha256 = "1h7qgqd8srrxw2y1rkdw5js4k6f5vc8x6nlm2mq9mq9vjck7n1j7";
   };
 
   buildInputs = [ unzip puredata ];

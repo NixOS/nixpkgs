@@ -19,5 +19,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Block layer IO tracing mechanism";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

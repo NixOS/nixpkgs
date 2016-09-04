@@ -62,7 +62,9 @@ let
       idx=2
       extraDisks=""
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
-        ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
+        if ! test -e "empty$idx.qcow2"; then
+            ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
+        fi
         extraDisks="$extraDisks -drive index=$idx,file=$(pwd)/empty$idx.qcow2,if=${cfg.qemu.diskInterface},werror=report"
         idx=$((idx + 1))
       '')}
@@ -133,13 +135,13 @@ let
         }
         ''
           # Create a /boot EFI partition with 40M
-          ${pkgs.gptfdisk}/sbin/sgdisk -G /dev/vda
-          ${pkgs.gptfdisk}/sbin/sgdisk -a 1 -n 1:34:2047 -c 1:"BIOS Boot Partition" -t 1:ef02 /dev/vda
-          ${pkgs.gptfdisk}/sbin/sgdisk -a 512 -N 2 -c 2:"EFI System" -t 2:ef00 /dev/vda
-          ${pkgs.gptfdisk}/sbin/sgdisk -A 1:set:1 /dev/vda
-          ${pkgs.gptfdisk}/sbin/sgdisk -A 2:set:2 /dev/vda
-          ${pkgs.gptfdisk}/sbin/sgdisk -h 2 /dev/vda
-          ${pkgs.gptfdisk}/sbin/sgdisk -C /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -G /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -a 1 -n 1:34:2047 -c 1:"BIOS Boot Partition" -t 1:ef02 /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -a 512 -N 2 -c 2:"EFI System" -t 2:ef00 /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -A 1:set:1 /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -A 2:set:2 /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -h 2 /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -C /dev/vda
           ${pkgs.utillinux}/bin/sfdisk /dev/vda -A 2
           . /sys/class/block/vda2/uevent
           mknod /dev/vda2 b $MAJOR $MINOR
@@ -149,11 +151,11 @@ let
           ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
 
           # Mount /boot; load necessary modules first.
-          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko.xz || true
-          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_iso8859-1.ko.xz || true
-          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/fat.ko.xz || true
-          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko.xz || true
-          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_iso8859-1.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/fat.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko.xz || true
           mkdir /boot
           mount /dev/vda2 /boot
 
@@ -368,7 +370,7 @@ in
     boot.initrd.extraUtilsCommands =
       ''
         # We need mke2fs in the initrd.
-        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/mke2fs
+        copy_bin_and_libs ${pkgs.e2fsprogs}/bin/mke2fs
       '';
 
     boot.initrd.postDeviceCommands =

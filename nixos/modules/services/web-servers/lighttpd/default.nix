@@ -224,12 +224,6 @@ in
       description = "Lighttpd Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        ${if cfg.cgit.enable then ''
-          mkdir -p /var/cache/cgit
-          chown lighttpd:lighttpd /var/cache/cgit
-        '' else ""}
-      '';
       serviceConfig.ExecStart = "${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}";
       # SIGINT => graceful shutdown
       serviceConfig.KillSignal = "SIGINT";

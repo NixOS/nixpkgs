@@ -291,8 +291,8 @@ pyfftw = buildPythonPackage rec {
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
 
-  LDFLAGS="-L${pkgs.fftw}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
-  CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
+  LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
+  CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
   '';
 
   meta = {
@@ -503,9 +503,12 @@ and can be used as:
 
 The `buildPythonPackage` mainly does four things:
 
-* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to build a wheel binary zipfile.
+* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to
+  build a wheel binary zipfile.
 * In the `installPhase`, it installs the wheel file using `pip install *.whl`.
-* In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to wrap all programs in the `$out/bin/*` directory to include `$PYTHONPATH` and `$PATH` environment variables.
+* In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
+  wrap all programs in the `$out/bin/*` directory to include `$PATH`
+  environment variable and add dependent libraries to script's `sys.path`.
 * In the `installCheck` phase, `${python.interpreter} setup.py test` is ran.
 
 As in Perl, dependencies on other Python packages can be specified in the
@@ -566,7 +569,7 @@ running `nix-shell` with the following `shell.nix`
     with import <nixpkgs> {};
 
     (python3.buildEnv.override {
-      extraLibs = with python3Packages; [ numpy requests ];
+      extraLibs = with python3Packages; [ numpy requests2 ];
     }).env
 
 will drop you into a shell where Python will have the
@@ -605,7 +608,7 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 
     with import <nixpkgs> {};
 
-    (python33.withPackages (ps: [ps.numpy ps.requests])).env
+    (python33.withPackages (ps: [ps.numpy ps.requests2])).env
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
@@ -629,7 +632,7 @@ Given a `default.nix`:
     src = ./.; }
 
 Running `nix-shell` with no arguments should give you
-the environment in which the package would be build with
+the environment in which the package would be built with
 `nix-build`.
 
 Shortcut to setup environments with C headers/libraries and python packages:
@@ -649,6 +652,56 @@ community to help save time. No tool is preferred at the moment.
 
 ## FAQ
 
+### How can I install a working Python environment?
+
+As explained in the user's guide installing individual Python packages
+imperatively with `nix-env -i` or declaratively in `environment.systemPackages`
+is not supported. However, it is possible to install a Python environment with packages (`python.buildEnv`).
+
+In the following examples we create an environment with Python 3.5, `numpy` and `ipython`.
+As you might imagine there is one limitation here, and that's you can install
+only one environment at a time. You will notice the complaints about collisions
+when you try to install a second environment.
+
+#### Environment defined in separate `.nix` file
+
+Create a file, e.g. `build.nix`, with the following expression
+```nix
+with import <nixpkgs> {};
+with python35Packages;
+
+python.withPackages (ps: with ps; [ numpy ipython ])
+```
+and install it in your profile with
+```
+nix-env -if build.nix
+```
+Now you can use the Python interpreter, as well as the extra packages that you added to the environment.
+
+#### Environment defined in `~/.nixpkgs/config.nix`
+
+If you prefer to, you could also add the environment as a package override to the Nixpkgs set.
+```
+  packageOverrides = pkgs: with pkgs; with python35Packages; {
+    myEnv = python.withPackages (ps: with ps; [ numpy ipython ]);
+  };
+```
+and install it in your profile with
+```
+nix-env -iA nixos.blogEnv
+```
+Note that I'm using the attribute path here.
+
+#### Environment defined in `/etc/nixos/configuration.nix`
+
+For the sake of completeness, here's another example how to install the environment system-wide.
+
+```nix
+environment.systemPackages = with pkgs; [
+  (python35Packages.python.withPackages (ps: callPackage ../packages/common-python-packages.nix { pythonPackages = ps; }))
+];
+```
+
 ### How to solve circular dependencies?
 
 Consider the packages `A` and `B` that depend on each other. When packaging `B`,
@@ -662,8 +715,8 @@ Python attribute sets are created for each interpreter version. We will therefor
 In the following example we change the name of the package `pandas` to `foo`.
 ```
 newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
+  python35Packages = (super.python35Packages.override { self = python35Packages;})
+    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
   };
 });
 ```
@@ -674,8 +727,8 @@ with import <nixpkgs> {};
 (let
 
 newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
+  python35Packages = (super.python35Packages.override { self = python35Packages;})
+    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
   };
 });
 in newpkgs.python35.withPackages (ps: [ps.blaze])
@@ -690,7 +743,7 @@ with import <nixpkgs> {};
 
 newpkgs = pkgs.overridePackages(self: super: rec {
   python35Packages = super.python35Packages.override {
-    self = python35Packages // { scipy = python35Packages.scipy_0_16;};
+    self = python35Packages // { scipy = python35Packages.scipy_0_17;};
   };
 });
 in newpkgs.python35.withPackages (ps: [ps.blaze])
@@ -698,6 +751,41 @@ in newpkgs.python35.withPackages (ps: [ps.blaze])
 ```
 The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
 
+A similar example but now using `django`
+```
+with import <nixpkgs> {};
+
+(let
+
+newpkgs = pkgs.overridePackages(self: super: rec {
+  python27Packages = (super.python27Packages.override {self = python27Packages;})
+    // { django = super.python27Packages.django_1_9; };
+});
+in newpkgs.python27.withPackages (ps: [ps.django_guardian ])
+).env
+```
+
+### `python setup.py bdist_wheel` cannot create .whl
+
+Executing `python setup.py bdist_wheel` in a `nix-shell `fails with
+```
+ValueError: ZIP does not support timestamps before 1980
+```
+This is because files are included that depend on items in the Nix store which have a timestamp of, that is, it corresponds to January the 1st, 1970 at 00:00:00. And as the error informs you, ZIP does not support that.
+The command `bdist_wheel` takes into account `SOURCE_DATE_EPOCH`, and `nix-shell` sets this to 1. By setting it to a value corresponding to 1980 or later, or by unsetting it, it is possible to build wheels.
+
+Use 1980 as timestamp:
+```
+nix-shell --run "SOURCE_DATE_EPOCH=315532800 python3 setup.py bdist_wheel"
+```
+or the current time:
+```
+nix-shell --run "SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel"
+```
+or unset:
+"""
+nix-shell --run "unset SOURCE_DATE_EPOCH; python3 setup.py bdist_wheel"
+"""
 
 ### `install_data` / `data_files` problems
 

@@ -1,26 +1,34 @@
-{ stdenv, fetchurl, dpdk, libpcap, utillinux }:
+{ stdenv, fetchurl, dpdk, libpcap, utillinux
+, pkgconfig
+, gtk, withGtk ? false
+}:
 
 stdenv.mkDerivation rec {
   name = "pktgen-${version}";
-  version = "3.0.00";
+  version = "3.0.04";
 
   src = fetchurl {
     url = "http://dpdk.org/browse/apps/pktgen-dpdk/snapshot/pktgen-${version}.tar.gz";
-    sha256 = "703f8bd615aa4ae3a3085055483f9889dda09d082abb58afd33c1ba7c766ea65";
+    sha256 = "0vrmbpl8zaal5zjwyzlx0y3d6jydfxdmf0psdj7ic37h5yh2iv2q";
   };
 
-  buildInputs = [ dpdk libpcap ];
+  nativeBuildInputs = stdenv.lib.optionals withGtk [ pkgconfig ];
+
+  buildInputs =
+    [ dpdk libpcap ]
+    ++ stdenv.lib.optionals withGtk [gtk];
 
   RTE_SDK = "${dpdk}";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
+  GUI = stdenv.lib.optionalString withGtk "true";
 
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
 
-  patchPhase = ''
-    sed -i -e s:/usr/local:$out:g lib/lua/src/luaconf.h
-    sed -i -e s:/usr/bin/lscpu:${utillinux}/bin/lscpu:g lib/common/wr_lscpu.h
+  postPatch = ''
+    substituteInPlace lib/lua/src/luaconf.h --replace /usr/local $out
+    substituteInPlace lib/common/wr_lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu
   '';
 
   installPhase = ''

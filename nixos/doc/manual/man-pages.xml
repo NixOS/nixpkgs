@@ -27,5 +27,6 @@
   <xi:include href="man-nixos-install.xml" />
   <xi:include href="man-nixos-option.xml" />
   <xi:include href="man-nixos-rebuild.xml" />
+  <xi:include href="man-nixos-version.xml" />
 
 </reference>

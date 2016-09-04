@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
   propagatedBuildInputs = [ gdk_pixbuf gnome3.defaultIconTheme librsvg ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/gnome-system-log" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

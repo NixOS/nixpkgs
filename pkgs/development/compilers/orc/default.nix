@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "orc-0.4.24";
+  name = "orc-0.4.25";
 
   src = fetchurl {
     url = "http://gstreamer.freedesktop.org/src/orc/${name}.tar.xz";
-    sha256 = "16ykgdrgxr6pfpy931p979cs68klvwmk3ii1k0a00wr4nn9x931k";
+    sha256 = "1lak3hyvvb0w9avzmf0a8vayb7vqhj4m709q1czlhvgjb15dbcf1";
   };
 
   outputs = [ "dev" "out" ];

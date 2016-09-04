@@ -2,6 +2,15 @@ pkgs: with pkgs.lib;
 
 rec {
 
+  # Check whenever fileSystem is needed for boot
+  fsNeededForBoot = fs: fs.neededForBoot
+                     || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
+
+  # Check whenever `b` depends on `a` as a fileSystem
+  # FIXME: it's incorrect to simply use hasPrefix here: "/dev/a" is not a parent of "/dev/ab"
+  fsBefore = a: b: ((any (x: elem x [ "bind" "move" ]) b.options) && (a.mountPoint == b.device))
+                || (hasPrefix a.mountPoint b.mountPoint);
+
   # Escape a path according to the systemd rules, e.g. /dev/xyzzy
   # becomes dev-xyzzy.  FIXME: slow.
   escapeSystemdPath = s:
@@ -12,6 +21,8 @@ rec {
   toShellPath = shell:
     if types.shellPackage.check shell then
       "/run/current-system/sw${shell.shellPath}"
+    else if types.package.check shell then
+      throw "${shell} is not a shell package"
     else
       shell;
 }

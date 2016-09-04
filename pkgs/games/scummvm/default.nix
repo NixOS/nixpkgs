@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib }:
+{ stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib, mesa }:
 
 stdenv.mkDerivation rec {
   name = "scummvm-1.8.0";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/scummvm/${name}.tar.bz2";
     sha256 = "0f3zgvz886lk9ps0v333aq74vx6grlx68hg14gfaxcvj55g73v01";
   };
   
-  buildInputs = [ SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ];
+  buildInputs = [ SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib mesa ];
+
+  hardeningDisable = [ "format" ];
 
   crossAttrs = {
     preConfigure = ''
@@ -25,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     homepage = http://www.scummvm.org/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 

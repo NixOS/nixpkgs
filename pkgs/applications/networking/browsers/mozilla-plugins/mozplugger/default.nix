@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Mozilla plugin for launching external program for handling in-page objects";
     homepage = http://mozplugger.mozdev.org/;
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -39,5 +39,6 @@ in stdenv.mkDerivation rec {
     description = "A tool to serve ZIM files using HTTP";
     homepage = http://git.wikimedia.org/log/openzim;
     maintainers = with stdenv.lib.maintainers; [ robbinch ];
+    platforms = [ "x86_64-linux" ];
   };
 }

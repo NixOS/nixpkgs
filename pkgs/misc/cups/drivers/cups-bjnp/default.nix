@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
       Canon printer. The design is based on reverse engineering of the protocol.
     '';
     homepage = http://cups-bjnp.sourceforge.net;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

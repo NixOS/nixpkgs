@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://lynx.isc.org/;
     description = "A text-mode web browser";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

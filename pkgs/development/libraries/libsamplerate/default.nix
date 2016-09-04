@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, libsndfile }:
+{ stdenv, fetchurl, pkgconfig, libsndfile, ApplicationServices, Carbon, CoreServices }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (stdenv.lib) optionals optionalString;
+
+in stdenv.mkDerivation rec {
   name = "libsamplerate-0.1.8";
 
   src = fetchurl {
@@ -9,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libsndfile ];
+  buildInputs = [ libsndfile ]
+    ++ optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
   # maybe interesting configure flags:
   #--disable-fftw          disable usage of FFTW
@@ -17,14 +21,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "bin" "out" ];
 
-  postConfigure = stdenv.lib.optionalString stdenv.isDarwin
-    ''
-      # need headers from the Carbon.framework in /System/Library/Frameworks to
-      # compile this on darwin -- not sure how to handle
-      NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
+  postConfigure = optionalString stdenv.isDarwin ''
+    # need headers from the Carbon.framework in /System/Library/Frameworks to
+    # compile this on darwin -- not sure how to handle
+    NIX_CFLAGS_COMPILE+=" -I${Carbon}/Library/Frameworks/Carbon.framework/Headers"
 
-      substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
-    '';
+    substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
+  '';
 
   meta = with stdenv.lib; {
     description = "Sample Rate Converter for audio";

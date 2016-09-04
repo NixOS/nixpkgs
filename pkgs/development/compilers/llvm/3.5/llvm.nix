@@ -53,6 +53,8 @@ in stdenv.mkDerivation rec {
     "-DCAN_TARGET_i386=false"
   ];
 
+  patches = [ ./fix-15974.patch ];
+
   postBuild = ''
     rm -fR $out
 
@@ -75,3 +77,4 @@ in stdenv.mkDerivation rec {
     platforms   = stdenv.lib.platforms.all;
   };
 }
+

@@ -3,6 +3,7 @@
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
+, qtbase, qtdeclarative, qtwebkit
 }:
 
 # this package contains the daemon version of dropbox
@@ -20,18 +21,19 @@
 # them with our own.
 
 let
-  # NOTE: When updating, please also update in current stable, as older versions stop working
-  version = "4.4.29";
+  # NOTE: When updating, please also update in current stable,
+  # as older versions stop working
+  version = "8.4.21";
   sha256 =
     {
-      "x86_64-linux" = "1ff01vqi9jiwhkqm81rh321bsz4brl11xal2xzm9gll7s2m8lz06";
-      "i686-linux" = "0lwvvyxy5xyxh0b2g8a9bdy0y2hgpbak4n6q6b30167fvpj1ad1i";
+      "x86_64-linux" = "1nihmr99mzyjhhdlg39j6g0m6hqgdz80lgrjdw1nnh38vq4fgbnq";
+      "i686-linux"   = "09jfdc8isjcpvgnvfykawlvdq65ng0dg6b54m4vdswk58ggndvlq";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
     {
       "x86_64-linux" = "x86_64";
-      "i686-linux" = "x86";
+      "i686-linux"   = "x86";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   # relative location where the dropbox libraries are stored
@@ -42,6 +44,8 @@ let
       dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
       libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
       ncurses zlib
+
+      qtbase qtdeclarative qtwebkit
     ];
 
   desktopItem = makeDesktopItem {
@@ -70,12 +74,25 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p "$out/${appdir}"
-    cp -r "dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
+    cp -r --no-preserve=mode "dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
 
     rm "$out/${appdir}/libdrm.so.2"
     rm "$out/${appdir}/libffi.so.6"
     rm "$out/${appdir}/libGL.so.1"
     rm "$out/${appdir}/libX11-xcb.so.1"
+
+    rm "$out/${appdir}/libQt5Core.so.5"
+    rm "$out/${appdir}/libQt5DBus.so.5"
+    rm "$out/${appdir}/libQt5Gui.so.5"
+    rm "$out/${appdir}/libQt5Network.so.5"
+    rm "$out/${appdir}/libQt5OpenGL.so.5"
+    rm "$out/${appdir}/libQt5PrintSupport.so.5"
+    rm "$out/${appdir}/libQt5Qml.so.5"
+    rm "$out/${appdir}/libQt5Quick.so.5"
+    rm "$out/${appdir}/libQt5Sql.so.5"
+    rm "$out/${appdir}/libQt5WebKit.so.5"
+    rm "$out/${appdir}/libQt5WebKitWidgets.so.5"
+    rm "$out/${appdir}/libQt5XcbQpa.so.5"
 
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
@@ -87,6 +104,8 @@ in stdenv.mkDerivation {
     RPATH="${ldpath}:$out/${appdir}"
     makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "$RPATH"
+
+    chmod 755 $out/${appdir}/dropbox
   '';
 
   fixupPhase = ''

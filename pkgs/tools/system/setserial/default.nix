@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Serial port configuration utility";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

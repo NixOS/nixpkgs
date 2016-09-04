@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     #homepage = http://www.tangogps.org/; # no longer valid, I couldn't find any other
 
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -11,7 +11,7 @@ diff -ru -x '*~' mesa-11.1.4-orig/src/gallium/targets/dri/Makefile.am mesa-11.1.
  install-data-hook:
  	for i in $(TARGET_DRIVERS); do                                  \
 -		ln -f $(DESTDIR)$(dridir)/gallium_dri.so                \
-+		ln -sf $(DESTDIR)$(dridir)/gallium_dri.so               \
++		ln -srf $(DESTDIR)$(dridir)/gallium_dri.so               \
  		      $(DESTDIR)$(dridir)/$${i}_dri.so;                 \
  	done;                                                           \
 -	$(RM) $(DESTDIR)$(dridir)/gallium_dri.*
@@ -36,7 +36,7 @@ diff -ru -x '*~' mesa-11.1.4-orig/src/gallium/targets/vdpau/Makefile.am mesa-11.
  		k=libvdpau_$${i}.$(LIB_EXT);				\
  		l=$${k}.$(VDPAU_MAJOR).$(VDPAU_MINOR).0;		\
 -		ln -f $${dest_dir}/$${j}.$(VDPAU_MAJOR).$(VDPAU_MINOR).0 \
-+		ln -sf $${dest_dir}/$${j}.$(VDPAU_MAJOR).$(VDPAU_MINOR).0 \
++		ln -srf $${dest_dir}/$${j}.$(VDPAU_MAJOR).$(VDPAU_MINOR).0 \
  		      $${dest_dir}/$${l};				\
  		ln -sf $${l}						\
  		       $${dest_dir}/$${k}.$(VDPAU_MAJOR).$(VDPAU_MINOR); \
@@ -62,7 +62,7 @@ diff -ru -x '*~' mesa-11.1.4-orig/src/mesa/drivers/dri/Makefile.am mesa-11.1.4/s
  install-data-hook:
  	for i in $(MEGADRIVERS); do \
 -		ln -f $(DESTDIR)$(dridir)/mesa_dri_drivers.so \
-+		ln -sf $(DESTDIR)$(dridir)/mesa_dri_drivers.so \
++		ln -srf $(DESTDIR)$(dridir)/mesa_dri_drivers.so \
  		      $(DESTDIR)$(dridir)/$$i; \
  	done;
 -	$(RM) $(DESTDIR)$(dridir)/mesa_dri_drivers.*

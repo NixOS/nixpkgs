@@ -2,7 +2,7 @@
 , kernel ? pkgs.linux
 , img ? "bzImage"
 , rootModules ?
-    [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
+    [ "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
 }:
 
 with pkgs;
@@ -218,6 +218,7 @@ rec {
     ${qemuProg} \
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
+      -device virtio-rng-pci \
       -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
       -drive file=$diskImage,if=virtio,cache=unsafe,werror=report \
@@ -319,6 +320,7 @@ rec {
     origArgs = args;
     origBuilder = builder;
     QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
+    passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
 
@@ -585,7 +587,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${dpkg}/bin:${dpkg}/bin:${glibc.bin}/bin:${lzma.bin}/bin
+        PATH=$PATH:${stdenv.lib.makeBinPath [ dpkg dpkg glibc lzma ]}
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
@@ -1117,6 +1119,32 @@ rec {
         sha256 = "0fa09bb5f82e4a04890b91255f4b34360e38ede964fe8328f7377e36f06bad27";
       };
       urlPrefix = mirror://fedora/linux/releases/23/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora24i386 = {
+      name = "fedora-24-i386";
+      fullName = "Fedora 24 (i386)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/24/Everything/i386/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "6928e251628da7a74b79180739a43784e534eaa744ba4bcb18c847dff541f344";
+      };
+      urlPrefix = mirror://fedora/linux/releases/24/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora24x86_64 = {
+      name = "fedora-24-x86_64";
+      fullName = "Fedora 24 (x86_64)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/24/Everything/x86_64/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "8dcc989396ed27fadd252ba9b655019934bc3d9915f186f1f2f27e71eba7b42f";
+      };
+      urlPrefix = mirror://fedora/linux/releases/24/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
       unifiedSystemDir = true;

@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
       networkmanager modemmanager makeWrapper gnome3.gnome-bluetooth grilo ];
 
   preBuild = ''
-    substituteInPlace tz.h --replace "/usr/share/zoneinfo/zone.tab" "${tzdata}/share/zoneinfo/zone.tab"
     substituteInPlace panels/datetime/tz.h --replace "/usr/share/zoneinfo/zone.tab" "${tzdata}/share/zoneinfo/zone.tab"
 
     # hack to make test-endianess happy

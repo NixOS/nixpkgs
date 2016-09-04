@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.nial.com;
     license = stdenv.lib.licenses.artistic1;
     maintainers = [ stdenv.lib.maintainers.vrthra ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

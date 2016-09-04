@@ -6,7 +6,7 @@
 
 let
   optional = stdenv.lib.optional;
-  version = "3.17";
+  version = "3.18";
   name = "libreswan-${version}";
   binPath = stdenv.lib.makeBinPath [
     bash iproute iptables procps coreutils gnused gawk nss.tools which python
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.libreswan.org/${name}.tar.gz";
-    sha256 = "00qd1n6f5w4xr06yanfpnbnn7y7rq2m878ifa3hh13bdgzsqdhi8";
+    sha256 = "0zginnakxw7m79zrdvfdvliaiyg78zgqfqkks9z5d1rjj5w13xig";
   };
 
   nativeBuildInputs = [ makeWrapper ];

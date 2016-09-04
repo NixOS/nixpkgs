@@ -1,0 +1,14 @@
+diff --git a/src/gnome-ddcc-applet/Makefile.am b/src/gnome-ddcc-applet/Makefile.am
+index d85ff56..b13e74c 100644
+--- a/src/gnome-ddcc-applet/Makefile.am
++++ b/src/gnome-ddcc-applet/Makefile.am
+@@ -6,7 +6,8 @@ DDCC_LDADD = ../lib/libddccontrol.la
+ 
+ EXTRA_DIST = GNOME_ddcc-applet.server.in.in GNOME_ddcc-applet.xml
+ 
+-pkglib_PROGRAMS = ddcc-applet
++programfilesdir = $(pkglibdir)
++programfiles_PROGRAMS = ddcc-applet
+ ddcc_applet_SOURCES = ddcc-applet.c ddcc-applet.h
+ 
+ ddcc_applet_LDADD = $(GNOME_LDFLAGS) $(DDCC_LDADD)

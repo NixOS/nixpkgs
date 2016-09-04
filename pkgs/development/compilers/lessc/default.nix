@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "LESS to CSS compiler";
     homepage = http://lesscss.org/;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
 }

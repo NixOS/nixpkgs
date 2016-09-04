@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://gitlab.com/groups/uhttpmock/;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ DamienCassou ];
+    platforms = with platforms; linux;
   };
 }

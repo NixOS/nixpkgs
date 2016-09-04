@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://jnettop.kubs.info/;
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

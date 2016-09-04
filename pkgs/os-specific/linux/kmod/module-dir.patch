@@ -1,7 +1,46 @@
-diff -ru -x '*~' kmod-17-orig/libkmod/libkmod.c kmod-17/libkmod/libkmod.c
---- kmod-17-orig/libkmod/libkmod.c	2014-04-01 12:40:37.161940089 +0200
-+++ kmod-17/libkmod/libkmod.c	2014-04-17 13:47:15.871441987 +0200
-@@ -201,7 +201,7 @@
+diff --git a/Makefile.am b/Makefile.am
+index d4eeb7e..5c9f603 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -19,6 +19,7 @@ AM_CPPFLAGS = \
+ 	-include $(top_builddir)/config.h \
+ 	-I$(top_srcdir) \
+ 	-DSYSCONFDIR=\""$(sysconfdir)"\" \
++	-DMODULESDIRS=\""$(shell echo $(modulesdirs) | $(SED) 's|:|\\",\\"|g')"\" \
+ 	${zlib_CFLAGS}
+ 
+ AM_CFLAGS = $(OUR_CFLAGS)
+diff --git a/configure.ac b/configure.ac
+index 23510c8..66490cf 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -202,6 +202,12 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl-flat])
+ ], [
+ AM_CONDITIONAL([ENABLE_GTK_DOC], false)])
+ 
++AC_ARG_WITH([modulesdirs],
++	AS_HELP_STRING([--with-modulesdirs=DIRS], [Kernel modules directories, separated by :]),
++	[],
++	[with_modulesdirs=/lib/modules])
++AC_SUBST([modulesdirs], [$with_modulesdirs])
++
+ 
+ #####################################################################
+ # Default CFLAGS and LDFLAGS
+diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
+index 69fe431..d37da32 100644
+--- a/libkmod/libkmod.c
++++ b/libkmod/libkmod.c
+@@ -206,12 +206,15 @@ static int log_priority(const char *priority)
+ 	return 0;
+ }
+ 
+-static const char *dirname_default_prefix = "/lib/modules";
++static const char *dirname_default_prefixes[] = {
++	MODULESDIRS,
++	NULL
++};
+ 
  static char *get_kernel_release(const char *dirname)
  {
  	struct utsname u;
@@ -10,51 +49,109 @@ diff -ru -x '*~' kmod-17-orig/libkmod/libkmod.c kmod-17/libkmod/libkmod.c
  
  	if (dirname != NULL)
  		return path_make_absolute_cwd(dirname);
-@@ -209,7 +209,10 @@
+@@ -219,8 +222,42 @@ static char *get_kernel_release(const char *dirname)
  	if (uname(&u) < 0)
  		return NULL;
  
 -	if (asprintf(&p, "%s/%s", dirname_default_prefix, u.release) < 0)
-+	if ((dirname_prefix = getenv("MODULE_DIR")) == NULL)
-+		dirname_prefix = dirname_default_prefix;
+-		return NULL;
++	if ((dirname_prefix = getenv("MODULE_DIR")) != NULL) {
++		if(asprintf(&p, "%s/%s", dirname_prefix, u.release) < 0)
++			return NULL;
++	} else {
++		size_t i;
++		char buf[PATH_MAX];
 +
-+	if (asprintf(&p, "%s/%s", dirname_prefix, u.release) < 0)
- 		return NULL;
++		for (i = 0; dirname_default_prefixes[i] != NULL; i++) {
++			int plen;
++			struct stat dirstat;
++
++			plen = snprintf(buf, sizeof(buf), "%s/%s", dirname_default_prefixes[i], u.release);
++			if (plen < 0)
++				return NULL;
++			else if (plen >= PATH_MAX)
++				continue;
++
++			if (dirname_default_prefixes[i + 1] != NULL) {
++				if (stat(buf, &dirstat) < 0) {
++					if (errno == ENOENT)
++						continue;
++					else
++						return NULL;
++				}
++
++				if (!S_ISDIR(dirstat.st_mode))
++					continue;
++			}
++
++			p = malloc(plen + 1);
++			if (p == NULL)
++				return NULL;
++			memcpy(p, buf, plen + 1);
++			break;
++		}
++	}
  
  	return p;
-diff -ru -x '*~' kmod-17-orig/tools/static-nodes.c kmod-17/tools/static-nodes.c
---- kmod-17-orig/tools/static-nodes.c	2013-12-17 22:05:42.159047316 +0100
-+++ kmod-17/tools/static-nodes.c	2014-04-17 13:51:17.945974320 +0200
-@@ -159,6 +159,7 @@
+ }
+diff --git a/tools/static-nodes.c b/tools/static-nodes.c
+index 8d2356d..2ed306d 100644
+--- a/tools/static-nodes.c
++++ b/tools/static-nodes.c
+@@ -29,10 +29,11 @@
+ #include <unistd.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+-#include <sys/utsname.h>
+ 
+ #include <shared/util.h>
+ 
++#include <libkmod/libkmod.h>
++
+ #include "kmod.h"
+ 
+ struct static_nodes_format {
+@@ -154,8 +155,8 @@ static void help(void)
+ 
+ static int do_static_nodes(int argc, char *argv[])
+ {
+-	struct utsname kernel;
+ 	char modules[PATH_MAX], buf[4096];
++	struct kmod_ctx *ctx;
+ 	const char *output = "/dev/stdout";
  	FILE *in = NULL, *out = NULL;
  	const struct static_nodes_format *format = &static_nodes_format_human;
- 	int r, ret = EXIT_SUCCESS;
-+	char *dirname_prefix;
- 
- 	for (;;) {
- 		int c, idx = 0, valid;
-@@ -211,16 +212,19 @@
- 		goto finish;
+@@ -206,22 +207,25 @@ static int do_static_nodes(int argc, char *argv[])
+ 		}
  	}
  
+-	if (uname(&kernel) < 0) {
+-		fputs("Error: uname failed!\n", stderr);
++	ctx = kmod_new(NULL, NULL);
++	if (ctx == NULL) {
++		fprintf(stderr, "Error: failed to create kmod context\n");
+ 		ret = EXIT_FAILURE;
+ 		goto finish;
+ 	}
+-
 -	snprintf(modules, sizeof(modules), "/lib/modules/%s/modules.devname", kernel.release);
-+	if ((dirname_prefix = getenv("MODULE_DIR")) == NULL)
-+		dirname_prefix = "/lib/modules";
-+
-+	snprintf(modules, sizeof(modules), "%s/%s/modules.devname", dirname_prefix, kernel.release);
++	if (snprintf(modules, sizeof(modules), "%s/modules.devname", kmod_get_dirname(ctx)) < 0) {
++		fprintf(stderr, "Error: path to modules.devname is too long\n");
++		ret = EXIT_FAILURE;
++		goto finish;
++	}
++	kmod_unref(ctx);
  	in = fopen(modules, "re");
  	if (in == NULL) {
  		if (errno == ENOENT) {
 -			fprintf(stderr, "Warning: /lib/modules/%s/modules.devname not found - ignoring\n",
 -				kernel.release);
-+			fprintf(stderr, "Warning: %s/%s/modules.devname not found - ignoring\n",
-+				dirname_prefix, kernel.release);
++			fprintf(stderr, "Warning: %s not found - ignoring\n", modules);
  			ret = EXIT_SUCCESS;
  		} else {
 -			fprintf(stderr, "Error: could not open /lib/modules/%s/modules.devname - %m\n",
 -				kernel.release);
-+			fprintf(stderr, "Error: could not open %s/%s/modules.devname - %m\n",
-+				dirname_prefix, kernel.release);
++			fprintf(stderr, "Error: could not open %s - %m\n", modules);
  			ret = EXIT_FAILURE;
  		}
  		goto finish;

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cairo gdk_pixbuf libconfig pango pkgconfig xcbutilwm ];
 
+  hardeningDisable = [ "format" ];
+
   postPatch = ''
     substituteInPlace ./Makefile --replace "\$(shell git describe)" "${version}"
   '';

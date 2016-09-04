@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     homepage = http://hawksoft.com/hawknl/;
     description = "Free, open source, game oriented network API";
     license = stdenv.lib.licenses.lgpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -13,11 +13,13 @@ with stdenv.lib;
 assert x11Support -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.1.12";
+  name = "gnupg-${version}";
+
+  version = "2.1.15";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "01n5py45x0r97l4dzmd803jpbpbcxr1591k3k4s8m9804jfr4d5c";
+    sha256 = "1pgz02gd84ab94w4xdg67p9z8kvkyr9d523bvcxxd2hviwh1m362";
   };
 
   buildInputs = [
@@ -31,13 +33,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
 
-  postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
-
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;
     description = "A complete and free implementation of the OpenPGP standard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wkennington peti fpletz ];
+    maintainers = with maintainers; [ wkennington peti fpletz vrthra ];
     platforms = platforms.all;
   };
 }

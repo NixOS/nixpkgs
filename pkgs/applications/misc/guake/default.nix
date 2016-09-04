@@ -11,12 +11,14 @@ gconftool-2 --recursive-unset /apps/guake
 */
 { stdenv, fetchurl, lib
 , pkgconfig, libtool, intltool, makeWrapper
-, dbus, gtk2, gconf, python2, python2Packages, libutempter, vte, keybinder, gnome2, gnome3 }:
+, dbus, gtk2, gconf, python2Packages, libutempter, vte, keybinder, gnome2, gnome3 }:
 
 with lib;
 
-let inputs = [ dbus gtk2 gconf python2 libutempter vte keybinder gnome3.gnome_common ];
-    pyPath = makeSearchPathOutput "lib" python2.sitePackages (attrVals [ "dbus" "notify" "pyGtkGlade" "pyxdg" ] python2Packages ++ [ gnome2.gnome_python ]);
+let
+  inherit (python2Packages) python;
+  inputs = [ dbus gtk2 gconf python libutempter vte keybinder gnome3.gnome_common ];
+  pyPath = makeSearchPathOutput "lib" python.sitePackages (attrVals [ "dbus-python" "notify" "pyGtkGlade" "pyxdg" ] python2Packages ++ [ gnome2.gnome_python ]);
  in stdenv.mkDerivation rec {
   name = "guake-${version}";
   version = "0.8.3";
@@ -29,6 +31,8 @@ let inputs = [ dbus gtk2 gconf python2 libutempter vte keybinder gnome3.gnome_co
   nativeBuildInputs = [ pkgconfig libtool intltool makeWrapper ];
 
   buildInputs = inputs ++ (with python2Packages; [ pyGtkGlade pyxdg ]);
+
+  propagatedUserEnvPkgs = [ gconf.out ];
 
   patchPhase = ''
     patchShebangs .
@@ -58,11 +62,11 @@ let inputs = [ dbus gtk2 gconf python2 libutempter vte keybinder gnome3.gnome_co
   postFixup = ''
     for bin in $out/bin/{guake,guake-prefs}; do
       substituteInPlace $bin \
-        --replace '/usr/bin/env python2' ${python2}/bin/python2
+        --replace '/usr/bin/env python2' ${python.interpreter}
       wrapProgram $bin \
         --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_LIBRARY_PATH : ${makeLibraryPath inputs} \
-        --prefix PYTHONPATH : "$out/${python2.sitePackages}:${pyPath}:$PYTHONPATH"
+        --prefix PYTHONPATH : "$out/${python.sitePackages}:${pyPath}:$PYTHONPATH"
     done
   '';
 

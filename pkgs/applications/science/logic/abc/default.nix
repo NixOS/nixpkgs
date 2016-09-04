@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "abc-verifier-${version}";
-  version = "20150614";
+  version = "20160818";
 
   src = fetchhg {
     url    = "https://bitbucket.org/alanmi/abc";
-    rev    = "38661894bc1287cad9bd35978bd252dbfe3e6c56";
-    sha256 = "04v0hkvj501r10pj3yrqrk2463d1d7lhl8dzfjwkmlbmlmpjlvvv";
+    rev    = "a2e5bc66a68a72ccd267949e5c9973dd18f8932a";
+    sha256 = "09yvhj53af91nc54gmy7cbp7yljfcyj68a87494r5xvdfnsj11gy";
   };
 
   buildInputs = [ readline ];

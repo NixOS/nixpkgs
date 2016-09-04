@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Various fonts from the DOSEmu project";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

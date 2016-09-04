@@ -36,6 +36,8 @@ with lib;
   config = mkMerge [
     (mkIf config.systemd.coredump.enable {
 
+      systemd.additionalUpstreamSystemUnits = [ "systemd-coredump.socket" "systemd-coredump@.service" ];
+
       environment.etc."systemd/coredump.conf".text =
         ''
           [Coredump]
@@ -45,7 +47,7 @@ with lib;
       # Have the kernel pass core dumps to systemd's coredump helper binary.
       # From systemd's 50-coredump.conf file. See:
       # <https://github.com/systemd/systemd/blob/v218/sysctl.d/50-coredump.conf.in>
-      boot.kernel.sysctl."kernel.core_pattern" = "|${pkgs.systemd}/lib/systemd/systemd-coredump %p %u %g %s %t %e";
+      boot.kernel.sysctl."kernel.core_pattern" = "|${pkgs.systemd}/lib/systemd/systemd-coredump %P %u %g %s %t %c %e";
     })
 
     (mkIf (!config.systemd.coredump.enable) {

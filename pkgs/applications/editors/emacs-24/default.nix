@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
+    # emacs runs then dumps itself. In the process, it keeps a copy of the
+    # PATH env var, holding all the build inputs in it's closure.
+    # Prevent that by running the self-dumping emacs with an empty PATH.
+    sed -i 's|^RUN_TEMACS = |&PATH= |' src/Makefile.in
   '';
 
   buildInputs =
@@ -66,8 +70,9 @@ stdenv.mkDerivation rec {
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
-    "-I${cairo.dev}/include/cairo";
+  NIX_CFLAGS_COMPILE =
+    [ "-ffreestanding" ] # needed due to glibc 2.24 upgrade (see https://sourceware.org/glibc/wiki/Release/2.24#Known_Issues)
+    ++ stdenv.lib.optional (stdenv.isDarwin && withX) "-I${cairo.dev}/include/cairo";
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/

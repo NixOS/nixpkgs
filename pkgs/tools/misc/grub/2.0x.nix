@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
+  hardeningDisable = [ "all" ];
+
   preConfigure =
     '' for i in "tests/util/"*.in
        do

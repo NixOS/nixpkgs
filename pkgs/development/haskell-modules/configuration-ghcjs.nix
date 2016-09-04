@@ -8,12 +8,14 @@ in
 with import ./lib.nix { inherit pkgs; };
 
 self: super:
-  # The stage 2 packages. Regenerate with ./ghcjs/gen-stage2.rb
-  let stage2 =
-    (import ./ghcjs/stage2.nix {
-       inherit (self) callPackage;
-       inherit (self.ghc) ghcjsBoot;
-    }); in stage2 // {
+
+  let # The stage 1 packages
+      stage1 = pkgs.lib.genAttrs super.ghc.stage1Packages (pkg: null);
+      # The stage 2 packages. Regenerate with ../compilers/ghcjs/gen-stage2.rb
+      stage2 = super.ghc.mkStage2 {
+        inherit (self) callPackage;
+      };
+  in stage1 // stage2 // {
 
   old-time = overrideCabal stage2.old-time (drv: {
     postPatch = ''
@@ -31,30 +33,6 @@ self: super:
 
   inherit (self.ghc.bootPkgs)
     jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
-
-  # This is the list of the Stage 1 packages that are built into a booted ghcjs installation
-  # It can be generated with the command:
-  # nix-shell -p haskell.packages.ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1 = null;/'"
-  array = null;
-  base = null;
-  binary = null;
-  rts = null;
-  bytestring = null;
-  containers = null;
-  deepseq = null;
-  directory = null;
-  filepath = null;
-  ghc-prim = null;
-  ghcjs-prim = null;
-  integer-gmp = null;
-  old-locale = null;
-  pretty = null;
-  primitive = null;
-  process = null;
-  template-haskell = null;
-  time = null;
-  transformers = null;
-  unix = null;
 
   # Don't set integer-simple to null!
   # GHCJS uses integer-gmp, so any package expression that depends on

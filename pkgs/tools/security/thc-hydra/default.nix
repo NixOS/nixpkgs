@@ -1,29 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libidn, ncurses, pcre, libssh, postgresql92 }:
+{ stdenv, lib, fetchurl, zlib, openssl, ncurses, libidn, pcre, libssh, libmysql, postgresql
+, withGUI ? false, makeWrapper, pkgconfig, gtk2 }:
 
-with stdenv.lib;
+let
+  makeDirs = output: subDir: pkgs: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) pkgs);
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "thc-hydra-${version}";
-  version = "7.5";
+  version = "8.2";
 
   src = fetchurl {
     url = "http://www.thc.org/releases/hydra-${version}.tar.gz";
-    sha256 = "1dhavbn2mcm6c2c1qw29ipbpmczax3vhhlxzwn49c8cq471yg4vj";
+    sha256 = "1i2a5glmrxdjr80gfppx6wgakflcpj3ksgng212fjzhxr9m4k24y";
   };
 
   preConfigure = ''
-   substituteInPlace configure --replace "\$LIBDIRS" "${openssl.out}/lib ${pcre.out}/lib ${libssh.out}/lib ${postgresql92.lib}/lib"
-   substituteInPlace configure --replace "\$INCDIRS" "${openssl.dev}/include ${pcre.dev}/include ${libssh.dev}/include ${postgresql92}/include"
+    substituteInPlace configure \
+      --replace "\$LIBDIRS" "${makeDirs "lib" "lib" buildInputs}" \
+      --replace "\$INCDIRS" "${makeDirs "dev" "include" buildInputs}" \
+      --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
+      --replace "libcurses.so" "libncurses.so" \
+      --replace "-lcurses" "-lncurses"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libidn ncurses pcre libssh ];
+  nativeBuildInputs = lib.optionals withGUI [ pkgconfig makeWrapper ];
+  buildInputs = [ zlib openssl ncurses libidn pcre libssh libmysql postgresql ]
+                ++ lib.optional withGUI gtk2;
 
-  meta = {
+  postInstall = lib.optionalString withGUI ''
+    wrapProgram $out/bin/xhydra \
+      --add-flags --hydra-path --add-flags "$out/bin/hydra"
+  '';
+
+  meta = with stdenv.lib; {
     description = "A very fast network logon cracker which support many different services";
     license = licenses.agpl3;
     homepage = https://www.thc.org/thc-hydra/;
     maintainers = with maintainers; [offline];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

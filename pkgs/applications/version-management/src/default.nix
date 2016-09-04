@@ -1,20 +1,20 @@
 { stdenv, fetchurl, python, rcs, git }:
 
 stdenv.mkDerivation rec {
-  name = "src-0.19";
+  name = "src-1.11";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/src/${name}.tar.gz";
-    sha256 = "0p56g09ndbmnxxjz2rn7fq3yjx572ywj0xdim9rz5cqnx0pmr71x";
+    sha256 = "07kj0ri0s0vn8s54yvkyzaag332spxs0379r718b80y31c4mgbyl";
   };
 
   buildInputs = [ python rcs git ];
 
-  preConfigure = "patchShebangs .";
+  preConfigure = ''
+    patchShebangs .
+  '';
 
   makeFlags = [ "prefix=$(out)" ];
-
-  doCheck = true;
 
   meta = {
     description = "Simple single-file revision control";

@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, vala
+{ stdenv, intltool, fetchurl, vala_0_32
 , pkgconfig, gtk3, glib
 , makeWrapper, itstool, gnupg, libsoup
 , gnome3, librsvg, gdk_pixbuf, gpgme
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.gcr
                   gnome3.gsettings_desktop_schemas makeWrapper gnupg
                   gdk_pixbuf gnome3.defaultIconTheme librsvg gpgme
-                  libsecret avahi libsoup p11_kit vala gnome3.gcr
+                  libsecret avahi libsoup p11_kit vala_0_32 gnome3.gcr
                   openssh ];
 
   preFixup = ''

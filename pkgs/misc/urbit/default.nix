@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://urbit.org;
     license = licenses.mit;
     maintainers = with maintainers; [ mudri ];
+    platforms = with platforms; linux;
   };
 }

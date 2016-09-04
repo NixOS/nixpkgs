@@ -47,7 +47,6 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-application=browser"
-      "--disable-javaxpcom"
       "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
@@ -64,11 +63,9 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       #"--enable-system-cairo"
       "--enable-startup-notification"
       "--enable-content-sandbox"            # available since 26.0, but not much info available
-      "--disable-content-sandbox-reporter"  # keeping disabled for now
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
-      "--disable-installer"
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
@@ -99,7 +96,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   postInstall =
     ''
       # For grsecurity kernels
-      paxmark m $out/lib/${pname}-${version}/{firefox,firefox-bin,plugin-container}
+      paxmark m $out/lib/firefox-[0-9]*/{firefox,firefox-bin,plugin-container}
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
@@ -135,14 +132,14 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "47.0";
-    sha512 = "35275e5595e7f01a232e5ea6d7899857d0a1d7eab640fe614ef66c865abedae3e08bc6c0cde13165d53140ccf6f721bbcd583d091032e119d44884287393c223";
+    version = "48.0.2";
+    sha512 = "d5addb0cd01e2aeb0fd9387800e82e385f3986716887840322d261d772a442f6fdb1d910cd53f2373f0fb82ed0b2a45356ac83f3ef230e14a2b9db8999ad8a4e";
   };
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.1.1esr";
-    sha512 = "ee6bccdf01450c5b371e31c35f5bb084ad49f796fcc9cf3a346646972044ad85ce198cc34b697c32e2d3ad1e25955ef5b91b68790704ecaa4de9d3a412914fc7";
+    version = "45.3.0esr";
+    sha512 = "ee618aec579625122c3e511a7ac83ac4db9718f5695b6fe6250717602178bae9bb7e5ebe8764f4d33ecf44d3db13abfed0d24c1ec71e64a1087fb6d5a579b0c0";
   };
 
 }

@@ -1,0 +1,42 @@
+From ebe7b90100a3d960f53fdc9409d2d89eaa61bf11 Mon Sep 17 00:00:00 2001
+From: Thomas Perl <m@thp.io>
+Date: Tue, 28 Jun 2016 18:15:51 +0200
+Subject: [PATCH] Check current directory and use os.path.relpath (Fixes #73)
+
+---
+ setup.py | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 947a7c8..45405cd 100644
+--- a/setup.py
++++ b/setup.py
+@@ -7,10 +7,15 @@
+ 
+ import os
+ import re
++import sys
+ 
+ PACKAGE_NAME = 'urlwatch'
+ DEPENDENCIES = ['minidb', 'PyYAML', 'requests']
+-HERE = os.path.dirname(__file__)
++HERE = os.path.abspath(os.path.dirname(__file__))
++
++if os.path.normpath(os.getcwd()) != os.path.normpath(HERE):
++    print('You must run {} inside {} (cwd={})'.format(os.path.basename(__file__), HERE, os.getcwd()))
++    sys.exit(1)
+ 
+ # Assumptions:
+ #  1. Package name equals main script file name (and only one script)
+@@ -29,9 +34,9 @@
+ 
+ m['scripts'] = [os.path.join(HERE, PACKAGE_NAME)]
+ m['package_dir'] = {'': os.path.join(HERE, 'lib')}
+-m['packages'] = ['.'.join(dirname[len(HERE)+1:].split(os.sep)[1:])
++m['packages'] = ['.'.join(os.path.relpath(dirname, HERE).split(os.sep)[1:])
+                  for dirname, _, files in os.walk(os.path.join(HERE, 'lib')) if '__init__.py' in files]
+-m['data_files'] = [(dirname[len(HERE)+1:], [os.path.join(dirname[len(HERE)+1:], fn) for fn in files])
++m['data_files'] = [(os.path.relpath(dirname, HERE), [os.path.join(os.path.relpath(dirname, HERE), fn) for fn in files])
+                    for dirname, _, files in os.walk(os.path.join(HERE, 'share')) if files]
+ m['install_requires'] = DEPENDENCIES
+ 

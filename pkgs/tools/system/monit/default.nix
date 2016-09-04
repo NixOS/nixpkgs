@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "Monitoring system";
     license = stdenv.lib.licenses.agpl3;
     maintainers = with stdenv.lib.maintainers; [ raskin wmertens ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

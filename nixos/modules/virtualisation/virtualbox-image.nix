@@ -8,6 +8,8 @@ let
 
 in {
 
+  imports = [ ./grow-partition.nix ];
+
   options = {
     virtualbox = {
       baseImageSize = mkOption {
@@ -29,22 +31,15 @@ in {
       partitioned = true;
       diskSize = cfg.baseImageSize;
 
-      configFile = pkgs.writeText "configuration.nix"
-        ''
-          {
-            imports = [ <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix> ];
-          }
-        '';
-
       postVM =
         ''
-          echo "creating VirtualBox disk image..."
-          ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vdi $diskImage disk.vdi
-          rm $diskImage
-
-          echo "creating VirtualBox VM..."
           export HOME=$PWD
           export PATH=${pkgs.linuxPackages.virtualbox}/bin:$PATH
+
+          echo "creating VirtualBox pass-through disk wrapper (no copying invovled)..."
+          VBoxManage internalcommands createrawvmdk -filename disk.vmdk -rawdisk $diskImage
+
+          echo "creating VirtualBox VM..."
           vmName="NixOS ${config.system.nixosLabel} (${pkgs.stdenv.system})"
           VBoxManage createvm --name "$vmName" --register \
             --ostype ${if pkgs.stdenv.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
@@ -57,19 +52,24 @@ in {
             --usb on --mouse usbtablet
           VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
           VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
-            --medium disk.vdi
+            --medium disk.vmdk
 
           echo "exporting VirtualBox VM..."
           mkdir -p $out
           fn="$out/nixos-${config.system.nixosLabel}-${pkgs.stdenv.system}.ova"
           VBoxManage export "$vmName" --output "$fn"
 
+          rm -v $diskImage
+
           mkdir -p $out/nix-support
           echo "file ova $fn" >> $out/nix-support/hydra-build-products
         '';
     };
 
-    fileSystems."/".device = "/dev/disk/by-label/nixos";
+    fileSystems."/" = {
+      device = "/dev/disk/by-label/nixos";
+      autoResize = true;
+    };
 
     boot.loader.grub.device = "/dev/sda";
 

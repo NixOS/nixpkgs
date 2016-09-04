@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, coreutils, scrot, imagemagick, gawk
-, i3lock-color
+, i3lock-color, getopt, fontconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sed -i -e "s|i3lock -n |${i3lock-color}/bin/i3lock-color -n |" lock
     sed -i -e 's|ICON="$SCRIPTPATH/lockdark.png"|ICON="'$out'/share/i3lock-fancy/lockdark.png"|' lock
     sed -i -e 's|ICON="$SCRIPTPATH/lock.png"|ICON="'$out'/share/i3lock-fancy/lock.png"|' lock
+    sed -i -e "s|getopt |${getopt}/bin/getopt |" lock
+    sed -i -e "s|fc-match |${fontconfig.bin}/bin/fc-match |" lock
   '';
   installPhase = ''
     mkdir -p $out/bin $out/share/i3lock-fancy

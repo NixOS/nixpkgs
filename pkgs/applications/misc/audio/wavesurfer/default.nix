@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     ln -s $out/{nix-support,bin}/wavesurfer.tcl
     wrapProgram "$out/nix-support/wavesurfer.tcl"  \
                  --set TCLLIBPATH "${snack}/lib" \
-                 --prefix PATH : "${tcl}/bin:${tk}/bin"
+                 --prefix PATH : "${stdenv.lib.makeBinPath [ tcl tk ]}"
   '';
 
   meta = { 

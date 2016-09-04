@@ -11,16 +11,17 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
-  version = "098";
+  version = "101";
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
     urls = [ "http://download.byuu.org/${sourceName}.7z" ];
-    sha256 = "0qphvjfv17dbmzgb4pny2q6ln0lsgzyhalq6qyqxc3qwm4fzdjv1";
+    sha256 = "04vr3fp0b3cwq7q8d9v60qmv08zpcsb5gqn1whl4fvwcxcl22by8";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
   patches = [ ./0001-change-flags.diff ];
+  postPatch = "sed '1i#include <cmath>' -i higan/fc/ppu/ppu.cpp";
 
   buildInputs =
   [ p7zip pkgconfig libX11 libXv udev mesa SDL libao openal libpulseaudio gtk gtksourceview ];
@@ -40,8 +41,12 @@ stdenv.mkDerivation rec {
     install -m 755 icarus/out/icarus $out/bin/
     install -m 755 higan/out/higan $out/bin/
     install -m 644 higan/data/higan.desktop $out/share/applications/
-    install -m 644 higan/data/higan.png $out/share/pixmaps/
-    cp --recursive --no-dereference --preserve='links' --no-preserve='ownership' higan/data/cheats.bml higan/profile/* $out/share/higan/
+    install -m 644 higan/data/higan.png $out/share/pixmaps/higan-icon.png
+    install -m 644 higan/resource/logo/higan.png $out/share/pixmaps/higan-logo.png
+    cp --recursive --no-dereference --preserve='links' --no-preserve='ownership' \
+      higan/data/cheats.bml  $out/share/higan/
+    cp --recursive --no-dereference --preserve='links' --no-preserve='ownership' \
+      higan/systems/* $out/share/higan/
   '';
 
   fixupPhase = ''

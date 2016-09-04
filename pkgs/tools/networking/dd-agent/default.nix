@@ -36,11 +36,19 @@ stdenv.mkDerivation rec {
     ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
     ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
 
+    cat > $out/bin/dd-jmxfetch <<EOF
+    #!/usr/bin/env bash
+    exec ${python}/bin/python $out/agent/jmxfetch.py $@
+    EOF
+    chmod a+x $out/bin/dd-jmxfetch
+
     wrapProgram $out/bin/dd-forwarder \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/bin/dd-agent \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/bin/dogstatsd \
+      --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/bin/dd-jmxfetch \
       --prefix PYTHONPATH : $PYTHONPATH
 
     patchShebangs $out

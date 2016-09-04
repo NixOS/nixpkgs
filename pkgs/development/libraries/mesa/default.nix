@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, libudev, llvmPackages, libffi, libomxil-bellagio
-, libvdpau, libelf, libva
-, grsecEnabled
+{ stdenv, fetchurl, fetchpatch
+, pkgconfig, intltool, autoreconfHook, substituteAll
+, file, expat, libdrm, xorg, wayland, libudev
+, llvmPackages, libffi, libomxil-bellagio, libva
+, libelf, libvdpau, python
+, grsecEnabled ? false
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 }:
 
-if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
-  throw "unsupported platform for Mesa"
-else
 
 /** Packaging design:
   - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
@@ -20,11 +19,15 @@ else
   - libOSMesa is in $osmesa (~4 MB)
 */
 
-with { inherit (stdenv.lib) optional optionalString; };
+with stdenv.lib;
+
+if ! lists.elem stdenv.system platforms.mesaPlatforms then
+  throw "unsupported platform for Mesa"
+else
 
 let
-  version = "11.2.2";
-  # this is the default search path for DRI drivers
+  version = "12.0.1";
+  branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
 
@@ -34,20 +37,20 @@ stdenv.mkDerivation {
   src =  fetchurl {
     urls = [
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
-      (with stdenv.lib; ''ftp://ftp.freedesktop.org/pub/mesa/older-versions/''
-        + head (splitString "." version) + ''.x/${version}/mesa-${version}.tar.xz'')
+      "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "40e148812388ec7c6d7b6657d5a16e2e8dabba8b97ddfceea5197947647bdfb4";
+    sha256 = "12b3i59xdn2in2hchrkgh4fwij8zhznibx976l3pdj3qkyvlzcms";
   };
 
   prePatch = "patchShebangs .";
 
+  # TODO:
+  #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
+  #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-   # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
-   #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
@@ -61,60 +64,58 @@ stdenv.mkDerivation {
 
   outputs = [ "dev" "out" "drivers" "osmesa" ];
 
+  # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
+    "--with-egl-platforms=x11,wayland,drm"
+    (optionalString (stdenv.system != "armv7l-linux")
+      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast")
+    (optionalString (stdenv.system != "armv7l-linux")
+      "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast")
 
+    (enableFeature enableTextureFloats "texture-float")
+    (enableFeature grsecEnabled "glx-rts")
+    (enableFeature stdenv.isLinux "dri3")
+    (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
+    "--enable-dri"
+    "--enable-driglx-direct"
     "--enable-gles1"
     "--enable-gles2"
-    "--enable-dri"
-  ] ++ optional stdenv.isLinux "--enable-dri3"
-    ++ [
     "--enable-glx"
+    "--enable-glx-tls"
     "--enable-gallium-osmesa" # used by wine
+    "--enable-gallium-llvm"
     "--enable-egl"
     "--enable-xa" # used in vmware driver
     "--enable-gbm"
-  ] ++ optional stdenv.isLinux "--enable-nine" # Direct3D in Wine
-    ++ [
     "--enable-xvmc"
     "--enable-vdpau"
-    #"--enable-omx"
-    #"--enable-va"
-
-    # TODO: Figure out how to enable opencl without having a runtime dependency on clang
-    "--disable-opencl"
-
-    (if "armv7l-linux" == stdenv.system
-      then null
-      else "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast")
     "--enable-shared-glapi"
     "--enable-sysfs"
-    "--enable-driglx-direct" # seems enabled anyway
-    "--enable-glx-tls"
-    (if "armv7l-linux" == stdenv.system
-      then "--with-dri-drivers="
-      else "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast")
-    "--with-egl-platforms=x11,wayland,drm"
-
-    "--enable-gallium-llvm"
     "--enable-llvm-shared-libs"
-  ] ++ optional enableTextureFloats "--enable-texture-float"
-    ++ optional grsecEnabled "--enable-glx-rts"; # slight performance degradation, enable only for grsec
+    "--enable-omx"
+    "--enable-va"
+    "--disable-opencl"
+  ];
 
   nativeBuildInputs = [ pkgconfig file ];
 
-  propagatedBuildInputs = with xorg; [ libXdamage libXxf86vm ]
+  propagatedBuildInputs = with xorg;
+    [ libXdamage libXxf86vm ]
     ++ optional stdenv.isLinux libdrm;
 
   buildInputs = with xorg; [
     autoreconfHook intltool expat llvmPackages.llvm
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
-    libffi wayland libvdpau libelf libXvMC /* libomxil-bellagio libva */
+    libffi wayland libvdpau libelf libXvMC
+    libomxil-bellagio libva libpthreadstubs
+    (python.withPackages (ps: [ ps.Mako ]))
   ] ++ optional stdenv.isLinux libudev;
+
 
   enableParallelBuilding = true;
   doCheck = false;
@@ -124,44 +125,42 @@ stdenv.mkDerivation {
     "localstatedir=\${TMPDIR}"
   ];
 
-  # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
-  #   also move libOSMesa to $osmesa, as it's relatively big
-  # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
-  postInstall = with stdenv.lib; ''
-    mv -t "$drivers/lib/" \
-      $out/lib/libXvMC* \
-      $out/lib/d3d \
-      $out/lib/vdpau \
-      $out/lib/libxatracker*
+  # TODO: probably not all .la files are completely fixed, but it shouldn't matter;
+  postInstall = ''
+    # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
+    mv -t "$drivers/lib/"    \
+      $out/lib/libXvMC*      \
+      $out/lib/d3d           \
+      $out/lib/vdpau         \
+      $out/lib/bellagio      \
+      $out/lib/libxatracker* \
 
+    mv $out/lib/dri/* $drivers/lib/dri
+
+    # move libOSMesa to $osmesa, as it's relatively big
     mkdir -p {$osmesa,$drivers}/lib/
-    mv -t $osmesa/lib/ \
-      $out/lib/libOSMesa*
+    mv -t $osmesa/lib/ $out/lib/libOSMesa*
 
-  '' + /* now fix references in .la files */ ''
-    sed "/^libdir=/s,$out,$osmesa," -i \
-      $osmesa/lib/libOSMesa*.la
+    # now fix references in .la files
+    sed "/^libdir=/s,$out,$osmesa," -i $osmesa/lib/libOSMesa*.la
 
-  '' + /* set the default search path for DRI drivers; used e.g. by X server */ ''
+    # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
-  '' + /* move vdpau drivers to $drivers/lib, so they are found */ ''
-    mv "$drivers"/lib/vdpau/* "$drivers"/lib/ && rmdir "$drivers"/lib/vdpau
   '';
-  #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM */
 
-  postFixup =
+  # TODO:
+  #  @vcunat isn't sure if drirc will be found when in $out/etc/;
+  #  check $out doesn't depend on llvm: builder failures are ignored
+  #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
+  postFixup = ''
     # add RPATH so the drivers can find the moved libgallium and libdricore9
     # moved here to avoid problems with stripping patchelfed files
-  ''
     for lib in $drivers/lib/*.so* $drivers/lib/*/*.so*; do
       if [[ ! -L "$lib" ]]; then
         patchelf --set-rpath "$(patchelf --print-rpath $lib):$drivers/lib" "$lib"
       fi
     done
   '';
-  # ToDo + /* check $out doesn't depend on llvm */ ''
-  # builder failures are ignored for some reason
-  #   grep -qv '${llvmPackages.llvm}' -R "$out"
 
   passthru = { inherit libdrm version driverLink; };
 

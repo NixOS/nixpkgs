@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     license = licenses.cddl;
     homepage = http://www.brendangregg.com/flamegraphs.html;
     description = "Visualization for profiled code";
+    platforms = platforms.unix;
   };
 }

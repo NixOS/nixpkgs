@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, autoconf, automake, libtool, coreutils, gawk
+{ fetchFromGitHub, stdenv, autoreconfHook, coreutils, gawk
 , configFile ? "all"
 
 # Kernel dependencies
@@ -28,14 +28,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./const.patch ./install_prefix.patch ];
 
-  buildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  hardeningDisable = [ "pic" ];
 
   preConfigure = ''
-    ./autogen.sh
-
     substituteInPlace ./module/spl/spl-generic.c --replace /usr/bin/hostid hostid
-    substituteInPlace ./module/spl/spl-module.c  --replace /bin/mknod mknod
-
     substituteInPlace ./module/spl/spl-generic.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:${gawk}:/bin"
     substituteInPlace ./module/splat/splat-vnode.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:/bin"
     substituteInPlace ./module/splat/splat-linux.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:/bin"

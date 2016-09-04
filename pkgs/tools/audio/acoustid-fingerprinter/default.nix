@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "Audio fingerprinting tool using chromaprint";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ ehmry ];
+    platforms = with platforms; linux;
   };
 }

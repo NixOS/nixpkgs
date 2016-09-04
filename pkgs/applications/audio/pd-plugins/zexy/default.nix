@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     for i in ${puredata}/include/pd/*; do
       ln -s $i .
     done
-    patchShebangs
     ./bootstrap.sh
     ./configure --enable-lpt=no --prefix=$out
   '';

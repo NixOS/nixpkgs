@@ -17,5 +17,6 @@ stdenv.mkDerivation {
     homepage = http://alumnit.ca/~apenwarr/netselect/;
     description = "An ultrafast intelligent parallelizing binary-search implementation of \"ping\"";
     license = "BSD";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

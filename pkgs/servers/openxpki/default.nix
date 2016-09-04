@@ -76,5 +76,6 @@ buildPerlPackage {
     description = "Enterprise-grade PKI/Trustcenter software";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -269,6 +269,12 @@
       mosquitto = 246;
       toxvpn = 247;
       squeezelite = 248;
+      turnserver = 249;
+      smokeping = 250;
+      gocd-agent = 251;
+      gocd-server = 252;
+      terraria = 253;
+      mattermost = 254;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -369,7 +375,7 @@
       quassel = 89;
       amule = 90;
       minidlna = 91;
-      #elasticsearch = 92; # unused
+      elasticsearch = 92;
       #tcpcryptd = 93; # unused
       connman = 94;
       firebird = 95;
@@ -508,6 +514,12 @@
       mosquitto = 246;
       #toxvpn = 247; # unused
       #squeezelite = 248; #unused
+      turnserver = 249;
+      smokeping = 250;
+      gocd-agent = 251;
+      gocd-server = 252;
+      terraria = 253;
+      mattermost = 254;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

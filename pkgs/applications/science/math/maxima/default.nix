@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, sbcl, texinfo, perl, makeWrapper, rlwrap ? null, tk ? null, gnuplot ? null }:
+{ stdenv, fetchurl, sbcl, texinfo, perl, python, makeWrapper, rlwrap ? null, tk ? null, gnuplot ? null }:
 
 let
   name    = "maxima";
-  version = "5.36.1";
+  version = "5.38.1";
 
   searchPath =
     stdenv.lib.makeBinPath
@@ -13,10 +13,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "0x1rk659sn3cq0n5c90848ilzr1gb1wf0072fl6jhkdq00qgh2s0";
+    sha256 = "1p6646rvq43hk09msyp0dk50cqpkh07mf4x0bc2fqisqmcv6b1hf";
   };
 
-  buildInputs = [sbcl texinfo perl makeWrapper];
+  buildInputs = [sbcl texinfo perl python makeWrapper];
 
   postInstall = ''
     # Make sure that maxima can find its runtime dependencies.

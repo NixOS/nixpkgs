@@ -7,7 +7,11 @@
 <title>Imperative Container Management</title>
 
 <para>We’ll cover imperative container management using
-<command>nixos-container</command> first. You create a container with
+<command>nixos-container</command> first.
+Be aware that container management is currently only possible
+as <literal>root</literal>.</para>
+
+<para>You create a container with
 identifier <literal>foo</literal> as follows:
 
 <screen>

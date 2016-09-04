@@ -3,7 +3,7 @@
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
 , net_snmp, openssl, polkit
 , bash, coreutils, utillinux
-, qtSupport ? true, qt4, pyqt4
+, qtSupport ? true, qt4
 , withPlugin ? false
 }:
 

@@ -69,5 +69,6 @@ composableDerivation.composableDerivation {} rec {
     homepage = xapian.meta.homepage;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

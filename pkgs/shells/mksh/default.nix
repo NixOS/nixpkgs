@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ groff ];
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = ''
     mkdir build-dir/
     cp mksh.1 dot.mkshrc build-dir/

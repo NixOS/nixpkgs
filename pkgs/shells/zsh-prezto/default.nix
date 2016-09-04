@@ -41,5 +41,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/sorin-ionescu/prezto";
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
+    platforms = with platforms; unix;
   };
 }

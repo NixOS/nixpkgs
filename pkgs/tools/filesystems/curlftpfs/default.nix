@@ -7,4 +7,8 @@ stdenv.mkDerivation {
     sha256 = "0n397hmv21jsr1j7zx3m21i7ryscdhkdsyqpvvns12q7qwwlgd2f";
   };
   buildInputs = [fuse curl pkgconfig glib zlib];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     homepage = http://ipw2200.sourceforge.net/firmware.php;
     license = stdenv.lib.licenses.unfreeRedistributableFirmware;
     maintainers = with maintainers; [ lukasepple ];
+    platforms = with platforms; linux;
   };
 }

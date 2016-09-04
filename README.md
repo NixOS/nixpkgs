@@ -1,6 +1,7 @@
 [<img src="http://nixos.org/logo/nixos-hires.png" width="500px" alt="logo" />](https://nixos.org/nixos)
 
 [![Build Status](https://travis-ci.org/NixOS/nixpkgs.svg?branch=master)](https://travis-ci.org/NixOS/nixpkgs)
+[![Code Triagers Badge](https://www.codetriage.com/nixos/nixpkgs/badges/users.svg)](https://www.codetriage.com/nixos/nixpkgs)
 [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
 [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
 
@@ -31,7 +32,7 @@ For pull-requests, please rebase onto nixpkgs `master`.
 * [Documentation (Nix Expression Language chapter)](https://nixos.org/nix/manual/#ch-expression-language)
 * [Manual (How to write packages for Nix)](https://nixos.org/nixpkgs/manual/)
 * [Manual (NixOS)](https://nixos.org/nixos/manual/)
-* [Nix Wiki](https://nixos.org/wiki/)
+* [Nix Wiki](https://nixos.org/wiki/) (deprecated, see milestone ["Move the Wiki!"](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Move+the+wiki%21%22))
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
 * [Continuous package builds for 16.03 release](https://hydra.nixos.org/jobset/nixos/release-16.03)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)

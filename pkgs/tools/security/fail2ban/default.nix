@@ -17,11 +17,6 @@ pythonPackages.buildPythonApplication {
     ++ (stdenv.lib.optional stdenv.isLinux pythonPackages.systemd);
 
   preConfigure = ''
-    for i in fail2ban-client fail2ban-regex fail2ban-server; do
-      substituteInPlace $i \
-        --replace /usr/share/fail2ban $out/share/fail2ban
-    done
-
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail \

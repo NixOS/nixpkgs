@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="libatomic_ops";
-    version="7.4.2";
+    version="7.4.4";
     name="${baseName}-${version}";
-    hash="1pdm0h1y7bgkczr8byg20r6bq15m5072cqm5pny4f9crc9gn3yh4";
-    url="http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-7.4.2.tar.gz";
-    sha256="1pdm0h1y7bgkczr8byg20r6bq15m5072cqm5pny4f9crc9gn3yh4";
+    hash="13vg5fqwil17zpf4hj4h8rh3blzmym693lkdjgvwpgni1mh0l8dz";
+    url="http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-7.4.4.tar.gz";
+    sha256="13vg5fqwil17zpf4hj4h8rh3blzmym693lkdjgvwpgni1mh0l8dz";
   };
   
   buildInputs = stdenv.lib.optionals stdenv.isCygwin [ autoconf automake libtool ];

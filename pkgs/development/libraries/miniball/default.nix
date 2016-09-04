@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.inf.ethz.ch/personal/gaertner/miniball.html;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.erikryb ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

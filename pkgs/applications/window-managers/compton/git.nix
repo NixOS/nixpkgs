@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, asciidoc, dbus, docbook_xml_dtd_45,
   docbook_xml_xslt, libconfig, libdrm, libxml2, libxslt, mesa, pcre,
   pkgconfig, libXcomposite, libXdamage, libXext, libXfixes, libXinerama,
-  libXrandr, libXrender }:
+  libXrandr, libXrender, xwininfo }:
 
 stdenv.mkDerivation {
-  name = "compton-git-2015-09-21";
+  name = "compton-git-2016-08-10";
 
   src = fetchFromGitHub {
     owner  = "chjj";
     repo   = "compton";
-    rev    = "2343e4bbd298b35ea5c190c52abd2b0cb9f79a18";
-    sha256 = "1pb0ic47sfd796crwk47cya2ahbxsm6ygi6sh4fwd734kwz37h4z";
+    rev    = "f1cd308cde0f1e1f21ec2ac8f16a3c873fa22d3a";
+    sha256 = "1ky438d1rsg4ylkcp60m82r0jck8rks3gfa869rc63k37p2nfn8p";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,8 @@ stdenv.mkDerivation {
     pcre
   ];
 
+  propagatedBuildInputs = [ xwininfo ];
+
   installFlags = "PREFIX=$(out)";
 
   meta = with stdenv.lib; {
@@ -47,7 +49,7 @@ stdenv.mkDerivation {
     longDescription = ''
       A fork of XCompMgr, which is a sample compositing manager for X
       servers supporting the XFIXES, DAMAGE, RENDER, and COMPOSITE
-      extensions.  It enables basic eye-candy effects. This fork adds
+      extensions. It enables basic eye-candy effects. This fork adds
       additional features, such as additional effects, and a fork at a
       well-defined and proper place.
     '';

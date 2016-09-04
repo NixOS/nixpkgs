@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     homepage = http://upx.sourceforge.net/;
     description = "The Ultimate Packer for eXecutables";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

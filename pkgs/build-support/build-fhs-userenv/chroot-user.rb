@@ -20,6 +20,7 @@ envvars = [ 'TERM',
             'XDG_RUNTIME_DIR',
             'LANG',
             'SSL_CERT_FILE',
+            'DBUS_SESSION_BUS_ADDRESS',
           ]
 
 require 'tmpdir'

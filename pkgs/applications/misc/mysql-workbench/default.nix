@@ -3,10 +3,13 @@
 , libctemplate, libglade
 , libiodbc
 , libgnome, libsigcxx, libuuid, libxml2, libzip, lua, mesa, mysql
-, pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite, sudo
+, pango, pcre, pkgconfig, sqlite, sudo
+, pythonPackages
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) pexpect pycrypto python paramiko;
+in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
   version = "5.2.47";
   name = "${pname}-${version}";

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DMAN_INSTALL_DIR=share/man/man1 -DDOC_INSTALL_DIR=share/doc/qhull";
 
+  hardeningDisable = [ "format" ];
+
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/namespace std { struct bidirectional_iterator_tag; struct random_access_iterator_tag; }/#include <iterator>/' ./src/libqhullcpp/QhullIterator.h
     sed -i 's/namespace std { struct bidirectional_iterator_tag; struct random_access_iterator_tag; }/#include <iterator>/' ./src/libqhullcpp/QhullLinkedList.h
@@ -21,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.qhull.org/;
     description = "Computes the convex hull, Delaunay triangulation, Voronoi diagram and more";
     license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

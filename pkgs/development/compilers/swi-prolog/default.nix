@@ -17,6 +17,8 @@ stdenv.mkDerivation {
   buildInputs = [ gmp readline openssl libjpeg unixODBC libXinerama
     libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig ];
 
+  hardeningDisable = [ "format" ];
+
   configureFlags = "--with-world --enable-gmp --enable-shared";
 
   buildFlags = "world";
@@ -26,7 +28,7 @@ stdenv.mkDerivation {
     description = "A Prolog compiler and interpreter";
     license = "LGPL";
 
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

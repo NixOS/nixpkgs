@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.stringtemplate.org/";
     description = "Text Templating Library";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook intltool evolution_data_server

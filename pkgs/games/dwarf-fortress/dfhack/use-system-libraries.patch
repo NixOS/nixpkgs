@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 46fd565..254c3c0 100644
+index 956edfc..fb0e6bc 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -160,8 +160,6 @@ ELSEIF(MSVC)
@@ -11,7 +11,7 @@ index 46fd565..254c3c0 100644
  ADD_DEFINITIONS(-DLUA_BUILD_AS_DLL)
  
  if(APPLE)
-@@ -182,11 +180,8 @@ else()
+@@ -182,10 +180,8 @@ else()
      set(ZLIB_ROOT /usr/lib/i386-linux-gnu)
  endif()
  find_package(ZLIB REQUIRED)
@@ -19,27 +19,31 @@ index 46fd565..254c3c0 100644
  include_directories(depends/lua/include)
  include_directories(depends/md5)
 -include_directories(depends/jsoncpp)
--include_directories(depends/tinyxml)
- include_directories(depends/tthread)
- include_directories(${ZLIB_INCLUDE_DIRS})
- include_directories(depends/clsocket/src)
+ 
+ # Support linking against external tinyxml
+ # If we find an external tinyxml, set the DFHACK_TINYXML variable to "tinyxml"
 diff --git a/depends/CMakeLists.txt b/depends/CMakeLists.txt
-index bf0345b..2a1a852 100644
+index d8442b1..b47dc2a 100644
 --- a/depends/CMakeLists.txt
 +++ b/depends/CMakeLists.txt
-@@ -1,10 +1,7 @@
+@@ -1,7 +1,6 @@
  #list depends here.
  add_subdirectory(lua)
  add_subdirectory(md5)
 -add_subdirectory(protobuf)
--add_subdirectory(tinyxml)
+ 
+ # Don't build tinyxml if it's being externally linked against.
+ if(NOT TinyXML_FOUND)
+@@ -9,7 +8,6 @@ if(NOT TinyXML_FOUND)
+ endif()
+ 
  add_subdirectory(tthread)
 -add_subdirectory(jsoncpp)
  # build clsocket static and only as a dependency. Setting those options here overrides its own default settings.
  OPTION(CLSOCKET_SHARED "Build clsocket lib as shared." OFF)
  OPTION(CLSOCKET_DEP_ONLY "Build for use inside other CMake projects as dependency." ON)
 diff --git a/library/CMakeLists.txt b/library/CMakeLists.txt
-index 54300ec..128bfd1 100644
+index d3e3480..5d4b572 100644
 --- a/library/CMakeLists.txt
 +++ b/library/CMakeLists.txt
 @@ -223,10 +223,10 @@ LIST(APPEND PROJECT_SOURCES ${PROJECT_PROTO_SRCS})
@@ -55,24 +59,8 @@ index 54300ec..128bfd1 100644
  )
  
  # Merge headers into sources
-@@ -269,12 +269,12 @@ IF(UNIX)
- ENDIF()
- 
- IF(APPLE)
--  SET(PROJECT_LIBS dl dfhack-md5 dfhack-tinyxml dfhack-tinythread)
-+  SET(PROJECT_LIBS dl dfhack-md5 tinyxml dfhack-tinythread)
- ELSEIF(UNIX)
--  SET(PROJECT_LIBS rt dl dfhack-md5 dfhack-tinyxml dfhack-tinythread)
-+  SET(PROJECT_LIBS rt dl dfhack-md5 tinyxml dfhack-tinythread)
- ELSE(WIN32)
-   #FIXME: do we really need psapi?
--  SET(PROJECT_LIBS psapi dfhack-md5 dfhack-tinyxml dfhack-tinythread)
-+  SET(PROJECT_LIBS psapi dfhack-md5 tinyxml dfhack-tinythread)
- ENDIF()
- 
- ADD_LIBRARY(dfhack-version STATIC DFHackVersion.cpp)
 diff --git a/plugins/CMakeLists.txt b/plugins/CMakeLists.txt
-index dd1c634..7bd8c17 100644
+index c24b940..afeb888 100644
 --- a/plugins/CMakeLists.txt
 +++ b/plugins/CMakeLists.txt
 @@ -47,11 +47,11 @@ STRING(REPLACE ".proto" ".pb.h" PROJECT_PROTO_HDRS "${PROJECT_PROTOS}")

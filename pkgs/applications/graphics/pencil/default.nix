@@ -32,5 +32,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2; # Commercial license is also available
     maintainers = with maintainers; [ bjornfor prikhi ];
     platforms = platforms.linux;
+    # See https://github.com/prikhi/pencil/issues/840
+    # ("Error: Platform version '47.0' is not compatible with minVersion >= 36.0 maxVersion <= 46.*")
+    broken = true;
   };
 }

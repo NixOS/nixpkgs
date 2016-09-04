@@ -2,11 +2,11 @@ wrapQtProgram() {
     local prog="$1"
     shift
     wrapProgram "$prog" \
-        --prefix QT_PLUGIN_PATH : "$QT_PLUGIN_PATH" \
-        --prefix QML_IMPORT_PATH : "$QML_IMPORT_PATH" \
-        --prefix QML2_IMPORT_PATH : "$QML2_IMPORT_PATH" \
-        --prefix XDG_CONFIG_DIRS : "$NIX_WRAP_XDG_CONFIG_DIRS" \
-        --prefix XDG_DATA_DIRS : "$NIX_WRAP_XDG_DATA_DIRS" \
+        --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
+        --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
+        --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
+        --prefix XDG_DATA_DIRS : "$RUNTIME_XDG_DATA_DIRS" \
+        --prefix XDG_CONFIG_DIRS : "$RUNTIME_XDG_CONFIG_DIRS" \
         "$@"
 }
 
@@ -16,11 +16,11 @@ makeQtWrapper() {
     shift
     shift
     makeWrapper "$old" "$new" \
-        --prefix QT_PLUGIN_PATH : "$QT_PLUGIN_PATH" \
-        --prefix QML_IMPORT_PATH : "$QML_IMPORT_PATH" \
-        --prefix QML2_IMPORT_PATH : "$QML2_IMPORT_PATH" \
-        --prefix XDG_CONFIG_DIRS : "$NIX_WRAP_XDG_CONFIG_DIRS" \
-        --prefix XDG_DATA_DIRS : "$NIX_WRAP_XDG_DATA_DIRS" \
+        --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
+        --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
+        --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
+        --prefix XDG_DATA_DIRS : "$RUNTIME_XDG_DATA_DIRS" \
+        --prefix XDG_CONFIG_DIRS : "$RUNTIME_XDG_CONFIG_DIRS" \
         "$@"
 }
 
@@ -29,10 +29,8 @@ _makeQtWrapperSetup() {
     export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}${!outputLib}/lib/qt5/plugins"
     export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}${!outputLib}/lib/qt5/imports"
     export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}${!outputLib}/lib/qt5/qml"
-    export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS${XDG_CONFIG_DIRS:+:}${!outputLib}/etc/xdg"
-    export XDG_DATA_DIRS="$XDG_DATA_DIRS${XDG_DATA_DIRS:+:}${!outputLib}/share"
-    export NIX_WRAP_XDG_CONFIG_DIRS="$NIX_WRAP_XDG_CONFIG_DIRS${NIX_WRAP_XDG_CONFIG_DIRS:+:}${!outputLib}/etc/xdg"
-    export NIX_WRAP_XDG_DATA_DIRS="$NIX_WRAP_XDG_DATA_DIRS${NIX_WRAP_XDG_DATA_DIRS:+:}${!outputLib}/share"
+    export RUNTIME_XDG_DATA_DIRS="$XDG_DATA_DIRS${XDG_DATA_DIRS:+:}${!outputBin}/share"
+    export RUNTIME_XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS${XDG_CONFIG_DIRS:+:}${!outputBin}/etc/xdg"
 }
 
 prePhases+=(_makeQtWrapperSetup)

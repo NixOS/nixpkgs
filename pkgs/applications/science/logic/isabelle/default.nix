@@ -62,5 +62,6 @@ stdenv.mkDerivation {
     homepage = http://isabelle.in.tum.de/;
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.jwiegley ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

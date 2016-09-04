@@ -557,8 +557,8 @@ script) if it exists.</para>
 
   <varlistentry>
     <term><varname>configureFlags</varname></term>
-    <listitem><para>Additional arguments passed to the configure
-    script.</para></listitem>
+    <listitem><para>A list of strings passed as additional arguments to the
+    configure script.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -658,7 +658,7 @@ nothing.</para>
 
   <varlistentry>
     <term><varname>makeFlags</varname></term>
-    <listitem><para>Additional flags passed to
+    <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  These flags are also used by the default
     install and check phase.  For setting make flags specific to the
     build phase, use <varname>buildFlags</varname> (see
@@ -685,7 +685,7 @@ makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
 
   <varlistentry>
     <term><varname>buildFlags</varname> / <varname>buildFlagsArray</varname></term>
-    <listitem><para>Additional flags passed to
+    <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  Like <varname>makeFlags</varname> and
     <varname>makeFlagsArray</varname>, but only used by the build
     phase.</para></listitem>
@@ -753,7 +753,7 @@ doCheck = true;</programlisting>
 
   <varlistentry>
     <term><varname>checkFlags</varname> / <varname>checkFlagsArray</varname></term>
-    <listitem><para>Additional flags passed to
+    <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  Like <varname>makeFlags</varname> and
     <varname>makeFlagsArray</varname>, but only used by the check
     phase.</para></listitem>
@@ -808,7 +808,7 @@ installTargets = "install-bin install-doc";</programlisting>
 
   <varlistentry>
     <term><varname>installFlags</varname> / <varname>installFlagsArray</varname></term>
-    <listitem><para>Additional flags passed to
+    <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  Like <varname>makeFlags</varname> and
     <varname>makeFlagsArray</varname>, but only used by the install
     phase.</para></listitem>
@@ -1196,10 +1196,24 @@ echo @foo@
     <term><function>stripHash</function>
     <replaceable>path</replaceable></term>
     <listitem><para>Strips the directory and hash part of a store
-    path, and prints (on standard output) only the name part.  For
-    instance, <literal>stripHash
-    /nix/store/68afga4khv0w...-coreutils-6.12</literal> print
-    <literal>coreutils-6.12</literal>.</para></listitem>
+    path, storing the name part in the environment variable
+    <literal>strippedName</literal>. For example:
+    
+<programlisting>
+stripHash "/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
+# prints coreutils-8.24
+echo $strippedName
+</programlisting>
+
+    If you wish to store the result in another variable, then the
+    following idiom may be useful:
+    
+<programlisting>
+name="/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
+someVar=$(stripHash $name; echo $strippedName)
+</programlisting>
+
+    </para></listitem>
   </varlistentry>
 
   
@@ -1305,6 +1319,25 @@ echo @foo@
     <envar>GST_PLUGIN_SYSTEM_PATH</envar> environment variable.</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term>paxctl</term>
+    <listitem><para>Defines the <varname>paxmark</varname> helper for
+    setting per-executable PaX flags on Linux (where it is available by
+    default; on all other platforms, <varname>paxmark</varname> is a no-op).
+    For example, to disable secure memory protections on the executable
+    <replaceable>foo</replaceable>:
+    <programlisting>
+      postFixup = ''
+        paxmark m $out/bin/<replaceable>foo</replaceable>
+      '';
+    </programlisting>
+    The <literal>m</literal> flag is the most common flag and is typically
+    required for applications that employ JIT compilation or otherwise need to
+    execute code generated at run-time.  Disabling PaX protections should be
+    considered a last resort: if possible, problematic features should be
+    disabled or patched to work with PaX.</para></listitem>
+  </varlistentry>
+
 </variablelist>
 
 </para>
@@ -1327,6 +1360,209 @@ in the default system locations.</para>
 
 </section>
 
+<section xml:id="sec-hardening-in-nixpkgs"><title>Hardening in Nixpkgs</title>
+
+<para>There are flags available to harden packages at compile or link-time.
+These can be toggled using the <varname>stdenv.mkDerivation</varname> parameters
+<varname>hardeningDisable</varname> and <varname>hardeningEnable</varname>.
+</para>
+
+<para>The following flags are enabled by default and might require disabling
+if the program to package is incompatible.
+</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>format</varname></term>
+    <listitem><para>Adds the <option>-Wformat -Wformat-security
+    -Werror=format-security</option> compiler options. At present,
+    this warns about calls to <varname>printf</varname> and
+    <varname>scanf</varname> functions where the format string is
+    not a string literal and there are no format arguments, as in
+    <literal>printf(foo);</literal>. This may be a security hole
+    if the format string came from untrusted input and contains
+    <literal>%n</literal>.</para>
+
+    <para>This needs to be turned off or fixed for errors similar to:</para>
+
+    <programlisting>
+/tmp/nix-build-zynaddsubfx-2.5.2.drv-0/zynaddsubfx-2.5.2/src/UI/guimain.cpp:571:28: error: format not a string literal and no format arguments [-Werror=format-security]
+         printf(help_message);
+                            ^
+cc1plus: some warnings being treated as errors
+    </programlisting></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stackprotector</varname></term>
+    <listitem>
+    <para>Adds the <option>-fstack-protector-strong
+    --param ssp-buffer-size=4</option>
+    compiler options. This adds safety checks against stack overwrites
+    rendering many potential code injection attacks into aborting situations.
+    In the best case this turns code injection vulnerabilities into denial
+    of service or into non-issues (depending on the application).</para>
+
+    <para>This needs to be turned off or fixed for errors similar to:</para>
+
+    <programlisting>
+bin/blib.a(bios_console.o): In function `bios_handle_cup':
+/tmp/nix-build-ipxe-20141124-5cbdc41.drv-0/ipxe-5cbdc41/src/arch/i386/firmware/pcbios/bios_console.c:86: undefined reference to `__stack_chk_fail'
+    </programlisting></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>fortify</varname></term>
+    <listitem>
+    <para>Adds the <option>-O2 -D_FORTIFY_SOURCE=2</option> compiler
+    options. During code generation the compiler knows a great deal of
+    information about buffer sizes (where possible), and attempts to replace
+    insecure unlimited length buffer function calls with length-limited ones.
+    This is especially useful for old, crufty code. Additionally, format
+    strings in writable memory that contain '%n' are blocked. If an application
+    depends on such a format string, it will need to be worked around.
+    </para>
+
+    <para>Addtionally, some warnings are enabled which might trigger build
+    failures if compiler warnings are treated as errors in the package build.
+    In this case, set <option>NIX_CFLAGS_COMPILE</option> to
+    <option>-Wno-error=warning-type</option>.</para>
+
+    <para>This needs to be turned off or fixed for errors similar to:</para>
+
+    <programlisting>
+malloc.c:404:15: error: return type is an incomplete type
+malloc.c:410:19: error: storage size of 'ms' isn't known
+    </programlisting>
+    <programlisting>
+strdup.h:22:1: error: expected identifier or '(' before '__extension__'
+    </programlisting>
+    <programlisting>
+strsep.c:65:23: error: register name not specified for 'delim'
+    </programlisting>
+    <programlisting>
+installwatch.c:3751:5: error: conflicting types for '__open_2'
+    </programlisting>
+    <programlisting>
+fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
+    </programlisting>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>pic</varname></term>
+    <listitem>
+    <para>Adds the <option>-fPIC</option> compiler options. This options adds
+    support for position independant code in shared libraries and thus making
+    ASLR possible.</para>
+    <para>Most notably, the Linux kernel, kernel modules and other code
+    not running in an operating system environment like boot loaders won't
+    build with PIC enabled. The compiler will is most cases complain that
+    PIC is not supported for a specific build.
+    </para>
+
+    <para>This needs to be turned off or fixed for assembler errors similar to:</para>
+
+    <programlisting>
+ccbLfRgg.s: Assembler messages:
+ccbLfRgg.s:33: Error: missing or invalid displacement expression `private_key_len@GOTOFF'
+    </programlisting>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>strictoverflow</varname></term>
+    <listitem>
+    <para>Signed integer overflow is undefined behaviour according to the C
+    standard. If it happens, it is an error in the program as it should check
+    for overflow before it can happen, not afterwards. GCC provides built-in
+    functions to perform arithmetic with overflow checking, which are correct
+    and faster than any custom implementation. As a workaround, the option
+    <option>-fno-strict-overflow</option> makes gcc behave as if signed
+    integer overflows were defined.
+    </para>
+
+    <para>This flag should not trigger any build or runtime errors.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>relro</varname></term>
+    <listitem>
+    <para>Adds the <option>-z relro</option> linker option. During program
+    load, several ELF memory sections need to be written to by the linker,
+    but can be turned read-only before turning over control to the program.
+    This prevents some GOT (and .dtors) overwrite attacks, but at least the
+    part of the GOT used by the dynamic linker (.got.plt) is still vulnerable.
+    </para>
+
+    <para>This flag can break dynamic shared object loading. For instance, the
+    module systems of Xorg and OpenCV are incompatible with this flag. In almost
+    all cases the <varname>bindnow</varname> flag must also be disabled and
+    incompatible programs typically fail with similar errors at runtime.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>bindnow</varname></term>
+    <listitem>
+    <para>Adds the <option>-z bindnow</option> linker option. During program
+    load, all dynamic symbols are resolved, allowing for the complete GOT to
+    be marked read-only (due to <varname>relro</varname>). This prevents GOT
+    overwrite attacks. For very large applications, this can incur some
+    performance loss during initial load while symbols are resolved, but this
+    shouldn't be an issue for daemons.
+    </para>
+
+    <para>This flag can break dynamic shared object loading. For instance, the
+    module systems of Xorg and PHP are incompatible with this flag. Programs
+    incompatible with this flag often fail at runtime due to missing symbols,
+    like:</para>
+
+    <programlisting>
+intel_drv.so: undefined symbol: vgaHWFreeHWRec
+    </programlisting>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+<para>The following flags are disabled by default and should be enabled
+for packages that take untrusted input, like network services.
+</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>pie</varname></term>
+    <listitem>
+    <para>Adds the <option>-fPIE</option> compiler and <option>-pie</option>
+    linker options. Position Independent Executables are needed to take
+    advantage of Address Space Layout Randomization, supported by modern
+    kernel versions. While ASLR can already be enforced for data areas in
+    the stack and heap (brk and mmap), the code areas must be compiled as
+    position-independent. Shared libraries already do this with the
+    <varname>pic</varname> flag, so they gain ASLR automatically, but binary
+    .text regions need to be build with <varname>pie</varname> to gain ASLR.
+    When this happens, ROP attacks are much harder since there are no static
+    locations to bounce off of during a memory corruption attack.
+    </para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+<para>For more in-depth information on these hardening flags and hardening in
+general, refer to the
+<link xlink:href="https://wiki.debian.org/Hardening">Debian Wiki</link>,
+<link xlink:href="https://wiki.ubuntu.com/Security/Features">Ubuntu Wiki</link>,
+<link xlink:href="https://wiki.gentoo.org/wiki/Project:Hardened">Gentoo Wiki</link>,
+and the <link xlink:href="https://wiki.archlinux.org/index.php/DeveloperWiki:Security">
+Arch Wiki</link>.
+</para>
+
+</section>
 
 </chapter>
 

@@ -14,29 +14,22 @@
 <literal>/run/gitlab/gitlab-workhorse.socket</literal>. You need to configure a
 webserver to proxy HTTP requests to the socket.</para>
 
-<para>For instance, this could be used for Nginx:
+<para>For instance, the following configuration could be used to use nginx as
+    frontend proxy:
 
 <programlisting>
-services.nginx.httpConfig = ''
-  server {
-    server_name git.example.com;
-    listen 443 ssl spdy;
-    listen [::]:443 ssl spdy;
-
-    ssl_certificate /var/lib/acme/git.example.com/fullchain.pem;
-    ssl_certificate_key /var/lib/acme/git.example.com/key.pem;
-
-    location / {
-      proxy_http_version 1.1;
-      proxy_set_header    Host                $http_host;
-      proxy_set_header    X-Real-IP           $remote_addr;
-      proxy_set_header    X-Forwarded-Ssl     on;
-      proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
-      proxy_set_header    X-Forwarded-Proto   $scheme;
-
-      proxy_pass http://unix:/run/gitlab/gitlab-workhorse.socket;
-    }
-  }
+    services.nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+      virtualHosts."git.example.com" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+      };
+    };
 '';
 </programlisting>
 </para>
@@ -49,10 +42,10 @@ services.nginx.httpConfig = ''
 both services. In the case of PostgreSQL, a database and a role will be created.
 </para>
 
-<para>The default state dir is /var/gitlab/state. This is where all data like
-the repositories and uploads will be stored.</para>
+<para>The default state dir is <literal>/var/gitlab/state</literal>. This is where
+all data like the repositories and uploads will be stored.</para>
 
-<para>A basic configuration could look like this:
+<para>A basic configuration with some custom settings could look like this:
 
 <programlisting>
 services.gitlab = {
@@ -64,14 +57,34 @@ services.gitlab = {
   port = 443;
   user = "git";
   group = "git";
+  smtp = {
+    enable = true;
+    address = "localhost";
+    port = 25;
+  };
+  secrets = {
+    db = "uPgq1gtwwHiatiuE0YHqbGa5lEIXH7fMsvuTNgdzJi8P0Dg12gibTzBQbq5LT7PNzcc3BP9P1snHVnduqtGF43PgrQtU7XL93ts6gqe9CBNhjtaqUwutQUDkygP5NrV6";
+    secret = "devzJ0Tz0POiDBlrpWmcsjjrLaltyiAdS8TtgT9YNBOoUcDsfppiY3IXZjMVtKgXrFImIennFGOpPN8IkP8ATXpRgDD5rxVnKuTTwYQaci2NtaV1XxOQGjdIE50VGsR3";
+    otp = "e1GATJVuS2sUh7jxiPzZPre4qtzGGaS22FR50Xs1TerRVdgI3CBVUi5XYtQ38W4xFeS4mDqi5cQjExE838iViSzCdcG19XSL6qNsfokQP9JugwiftmhmCadtsnHErBMI";
+  };
   extraConfig = {
     gitlab = {
+      email_from = "gitlab-no-reply@example.com";
+      email_display_name = "Example GitLab";
+      email_reply_to = "gitlab-no-reply@example.com";
       default_projects_features = { builds = false; };
     };
   };
 };
 </programlisting>
 </para>
+
+<para>If you're setting up a new Gitlab instance, generate new secrets. You
+for instance use <literal>tr -dc A-Za-z0-9 &lt; /dev/urandom | head -c 128</literal>
+to generate a new secret. Gitlab encrypts sensitive data stored in the database.
+If you're restoring an existing Gitlab instance, you must specify the secrets
+secret from <literal>config/secrets.yml</literal> located in your Gitlab state
+folder.</para>
 
 <para>Refer to <xref linkend="ch-options" /> for all available configuration
 options for the <literal>services.gitlab</literal> module.</para>
@@ -80,21 +93,21 @@ options for the <literal>services.gitlab</literal> module.</para>
 
 <section><title>Maintenance</title>
 
-<para>You can run all Gitlab related commands like rake tasks with
-<literal>gitlab-runner</literal> which will be available on the system
-when gitlab is enabled. You will have to run the commands as the user that
-you configured to run gitlab.</para>
+<para>You can run Gitlab's rake tasks with <literal>gitlab-rake</literal>
+which will be available on the system when gitlab is enabled. You will
+have to run the command as the user that you configured to run gitlab
+with.</para>
 
-<para>For instance, to backup a Gitlab instance:
+<para>For example, to backup a Gitlab instance:
 
 <programlisting>
-$ sudo -u git -H gitlab-runner exec rake gitlab:backup:create
+$ sudo -u git -H gitlab-rake gitlab:backup:create
 </programlisting>
 
 A list of all availabe rake tasks can be obtained by running:
 
 <programlisting>
-$ sudo -u git -H gitlab-runner exec rake -T
+$ sudo -u git -H gitlab-rake -T
 </programlisting>
 </para>
 

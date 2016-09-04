@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xorg, wayland, epoxy, json_glib, libxkbcommon, gmp
+, xorg, epoxy, json_glib, libxkbcommon, gmp
+, waylandSupport ? stdenv.isLinux, wayland, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 , darwin
@@ -12,7 +13,7 @@ with stdenv.lib;
 
 let
   ver_maj = "3.20";
-  ver_min = "5";
+  ver_min = "9";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "9790b0267384904ad8a08e7f16e5f9ff1c4037de57788d48d1eaf528355b1564";
+    sha256 = "05xcwvy68p7f4hdhi4bgdm3aycvqqr4pr5kkkr8ba91l5yx0k9l3";
   };
 
   outputs = [ "dev" "out" ];
@@ -34,13 +35,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with xorg; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
-    ++ optionals stdenv.isLinux [ wayland ]
+    ++ optionals waylandSupport [ wayland wayland-protocols ]
     ++ optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa ])
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
   #TODO: colord?
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
@@ -53,9 +54,13 @@ stdenv.mkDerivation rec {
     "--disable-glibtest"
     "--with-gdktarget=quartz"
     "--enable-quartz-backend"
+  ] ++ optional stdenv.isLinux [
+    "--enable-x11-backend"
+  ] ++ optional waylandSupport [
+    "--enable-wayland-backend"
   ];
 
-  postInstall = ''
+  postInstall = optionalString (!stdenv.isDarwin) ''
     substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
       --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
   '';

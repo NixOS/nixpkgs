@@ -18,7 +18,9 @@ in
     ./i3.nix
     ./jwm.nix
     ./metacity.nix
+    ./mwm.nix
     ./openbox.nix
+    ./pekwm.nix
     ./notion.nix
     ./ratpoison.nix
     ./sawfish.nix

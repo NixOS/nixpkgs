@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0czccp4fcpf2ykp16xcrzdfmnircz1ynhls334q374xknd5747d2";
   };
 
-  NIX_CFLAGS_COMPILE = "-fpic";
-
   # From Handbrake
   patches = [
     ./A00-a52-state-t-public.patch
@@ -21,5 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ATSC A/52 stream decoder";
     homepage = http://liba52.sourceforge.net/;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

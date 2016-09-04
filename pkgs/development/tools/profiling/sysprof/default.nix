@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
       do not need to be recompiled.  In fact they don't even have to
       be restarted.
     '';
+    platforms = stdenv.lib.platforms.linux;
   };
 }

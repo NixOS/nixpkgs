@@ -40,7 +40,7 @@ let
       EOF
     '' + lib.concatStrings cmds;
 
-  hsPkgs = haskell.packages.ghc7103.override {
+  hsPkgs = haskell.packages.ghc801.override {
     overrides = self: super:
       let hlib = haskell.lib;
           elmRelease = import ./packages/release.nix { inherit (self) callPackage; };

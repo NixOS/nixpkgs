@@ -13,10 +13,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ mpd_clientlib dbus_glib audacious gtk gsl libaudclient ];
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "Generates playlists such that each song sounds good following the previous song";
     homepage = http://gjay.sourceforge.net/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

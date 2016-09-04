@@ -157,6 +157,7 @@ in
         serviceConfig = {
           Type = "simple";
           PIDFile = "/run/tinc.${network}.pid";
+          Restart = "on-failure";
         };
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts

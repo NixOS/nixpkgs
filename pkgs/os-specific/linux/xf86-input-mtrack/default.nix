@@ -39,5 +39,6 @@ stdenv.mkDerivation {
     description = "An Xorg driver for multitouch trackpads";
 
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,6 +1,5 @@
-{ fetchurl, stdenv, mesa, freeglut, SDL
-, libXi, libSM, libXmu, libXext, libX11,
-enablePIC ? false }:
+{ fetchurl, fetchpatch, stdenv, mesa, freeglut, SDL
+, libXi, libSM, libXmu, libXext, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "plib-1.8.5";
@@ -11,9 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "0cha71mflpa10vh2l7ipyqk67dq2y0k5xbafwdks03fwdyzj4ns8";
   };
 
-  patches = [ ./CVE-2012-4552.patch ];
-
-  NIX_CFLAGS_COMPILE = if enablePIC then "-fPIC" else "";
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.net/data/main/p/plib/1.8.5-7/debian/patches/04_CVE-2011-4620.diff";
+      sha256 = "1b7y0vqqdzd48q68ldlzw0zzqy9mg4c10a754r4hi3ldjmcplf0j";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.net/data/main/p/plib/1.8.5-7/debian/patches/05_CVE-2012-4552.diff";
+      sha256 = "0b6cwdwii5b5vy78sbw5cw1s96l4jyzr4dk69v63pa0wwi2b5dki";
+    })
+  ];
 
   propagatedBuildInputs = [
     mesa freeglut SDL
@@ -39,5 +45,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
 
     homepage = http://plib.sourceforge.net/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -27,5 +27,6 @@ buildInputs = [ gtk perl perlXMLParser pkgconfig ];
     homepage = http://gcolor2.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ notthemessiah ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

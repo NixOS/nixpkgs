@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   # fatal error: gio/gunixfdlist.h: No such file or directory
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   buildInputs = with gnome3;
     [ intltool pkgconfig ibus gtk glib gsettings_desktop_schemas networkmanager
@@ -16,10 +16,11 @@ stdenv.mkDerivation rec {
       polkit geocode_glib geoclue2 librsvg xf86_input_wacom udev libgudev libwacom libxslt
       libtool docbook_xsl docbook_xsl_ns makeWrapper gnome_themes_standard ];
 
+  # FIXME: glib binaries shouldn't be in .dev!
   preFixup = ''
     wrapProgram "$out/libexec/gnome-settings-daemon-localeexec" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix PATH : "${glib}/bin" \
+      --prefix PATH : "${glib.dev}/bin" \
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 

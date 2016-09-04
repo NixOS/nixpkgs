@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk_doc
-, libgcrypt, gobjectIntrospection }:
+, libgcrypt, gobjectIntrospection, vala_0_32 }:
 let
   version = "0.18.5";
 in
@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1cychxc3ff8fp857iikw0n2s13s2mhw2dn1mr632f7w3sn6vvrww";
   };
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl ];
-  buildInputs = [ libgcrypt gobjectIntrospection ];
+  buildInputs = [ libgcrypt gobjectIntrospection vala_0_32 ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 
   meta = {

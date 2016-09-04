@@ -1,0 +1,52 @@
+diff --git a/rtgui/adjuster.cc b/rtgui/adjuster.cc
+index f73dd8a..a7a069c 100644
+--- a/rtgui/adjuster.cc
++++ b/rtgui/adjuster.cc
+@@ -17,7 +17,7 @@
+  *  along with RawTherapee.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ #include "adjuster.h"
+-#include <sigc++/class_slot.h>
++#include <sigc++/slot.h>
+ #include <cmath>
+ #include "multilangmgr.h"
+ #include "../rtengine/rtengine.h"
+diff --git a/rtgui/preferences.cc b/rtgui/preferences.cc
+index 134c0d7..8ce1808 100644
+--- a/rtgui/preferences.cc
++++ b/rtgui/preferences.cc
+@@ -16,7 +16,7 @@
+  *  You should have received a copy of the GNU General Public License
+  *  along with RawTherapee.  If not, see <http://www.gnu.org/licenses/>.
+  */
+-#include <sigc++/class_slot.h>
++#include <sigc++/slot.h>
+ #include "preferences.h"
+ #include "multilangmgr.h"
+ #include "splash.h"
+diff --git a/rtgui/thresholdadjuster.cc b/rtgui/thresholdadjuster.cc
+index 6b41329..19cde25 100644
+--- a/rtgui/thresholdadjuster.cc
++++ b/rtgui/thresholdadjuster.cc
+@@ -17,7 +17,7 @@
+  *  along with RawTherapee.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ #include "thresholdadjuster.h"
+-#include <sigc++/class_slot.h>
++#include <sigc++/slot.h>
+ #include <cmath>
+ #include "multilangmgr.h"
+ #include "../rtengine/rtengine.h"
+diff --git a/rtgui/tonecurve.cc b/rtgui/tonecurve.cc
+index 2e439e1..5f14200 100644
+--- a/rtgui/tonecurve.cc
++++ b/rtgui/tonecurve.cc
+@@ -18,7 +18,7 @@
+  */
+ #include "tonecurve.h"
+ #include "adjuster.h"
+-#include <sigc++/class_slot.h>
++#include <sigc++/slot.h>
+ #include <iomanip>
+ #include "ppversion.h"
+ #include "edit.h"

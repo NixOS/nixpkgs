@@ -10,14 +10,18 @@ stdenv.mkDerivation rec {
     sha256 = "0f6y18k7db2ci6xn664zcwm1g1k04sdv7gg1yd5jk41bndjb7z8h";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  buildInputs = [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
-  patchPhase = '' # kinda icky
+  postPatch = '' # kinda icky
     sed -e '/("@INSTALL@")/d' \
         -e s,@INSTALL@,$out/share/photivo, \
         -i Sources/ptSettings.cpp
+    sed '1i#include <math.h>' -i Sources/filters/ptFilter_StdCurve.cpp
   '';
+
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
       platforms = platforms.linux;

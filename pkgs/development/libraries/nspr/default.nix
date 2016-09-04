@@ -1,4 +1,5 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl
+, CoreServices ? null }:
 
 let version = "4.12"; in
 
@@ -26,6 +27,8 @@ stdenv.mkDerivation {
     find $out -name "*.a" -delete
     moveToOutput share "$dev" # just aclocal
   '';
+
+  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 

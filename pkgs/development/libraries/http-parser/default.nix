@@ -42,5 +42,6 @@ in stdenv.mkDerivation {
     homepage = https://github.com/joyent/http-parser;
 
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux; # Broken on pure-darwin, wants xcode
   };
 }

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig }:
+{ stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig
+, enableDecLocator ? true
+}:
 
 stdenv.mkDerivation rec {
   name = "xterm-325";
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
     "--enable-luit"
     "--enable-mini-luit"
     "--with-tty-group=tty"
-  ];
+  ] ++ stdenv.lib.optional enableDecLocator "--enable-dec-locator";
 
   # Work around broken "plink.sh".
   NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";

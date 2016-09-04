@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, pyqt4, cython, libvncserver, zlib, twisted
+{ stdenv, fetchurl, pythonPackages, libvncserver, zlib
 , gnutls, libvpx, makeDesktopItem }:
 
 pythonPackages.buildPythonApplication rec {
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages;[ pyqt4 cjson sipsimple twisted
     ];
 
-  buildInputs = [ cython zlib libvncserver libvpx ];
+  buildInputs = [ pythonPackages.cython zlib libvncserver libvpx ];
 
   desktopItem = makeDesktopItem {
     name = "Blink";

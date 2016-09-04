@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ SDL gtk mesa ];
 
   nativeBuildInputs = [ autoconf automake libtool m4 pkgconfig makeWrapper ];
@@ -38,5 +40,6 @@ stdenv.mkDerivation rec {
     homepage = http://icculus.org/smpeg/;
     description = "MPEG decoding library";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

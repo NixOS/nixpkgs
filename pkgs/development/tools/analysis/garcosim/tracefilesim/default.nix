@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "156m92k38ap4bzidbr8dzl065rni8lrib71ih88myk9z5y1x5nxm";
   };
 
+  hardeningDisable = [ "fortify" ];
+
   installPhase = ''
     mkdir --parents "$out/bin"
     cp ./traceFileSim "$out/bin"

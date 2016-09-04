@@ -13,4 +13,8 @@ stdenv.mkDerivation {
     --x-libraries=${libX11}/lib";
 
   buildInputs = [libjpeg libXext libX11 xextproto libtiff libungif libpng];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

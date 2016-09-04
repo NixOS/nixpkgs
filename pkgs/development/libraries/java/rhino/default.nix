@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   patches = [ ./gcj-type-mismatch.patch ];
 
+  hardeningDisable = [ "fortify" "format" ];
+
   preConfigure =
     ''
       find -name \*.jar -or -name \*.class -exec rm -v {} \;
@@ -53,5 +55,6 @@ stdenv.mkDerivation {
     homepage = http://www.mozilla.org/rhino/;
 
     license = with licenses; [ mpl11 /* or */ gpl2Plus ];
+    platforms = platforms.linux;
   };
 }

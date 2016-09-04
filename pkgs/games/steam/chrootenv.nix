@@ -8,19 +8,26 @@
 }:
 
 let
-  commonTargetPkgs = pkgs: with pkgs; [
-    steamPackages.steam-fonts
-    # Errors in output without those
-    pciutils
-    python2
-    # Games' dependencies
-    xlibs.xrandr
-    which
-    # Needed by gdialog, including in the steam-runtime
-    perl
-    # Open URLs
-    xdg_utils
-  ];
+  commonTargetPkgs = pkgs: with pkgs;
+    let primus2 =
+      if newStdcpp then primus else primus.override {
+        stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
+        stdenv_i686 = overrideInStdenv pkgsi686Linux.stdenv [ useOldCXXAbi ];
+      };
+    in [
+      steamPackages.steam-fonts
+      # Errors in output without those
+      pciutils
+      python2
+      # Games' dependencies
+      xlibs.xrandr
+      which
+      # Needed by gdialog, including in the steam-runtime
+      perl
+      # Open URLs
+      xdg_utils
+    ] ++ lib.optional withJava jdk
+      ++ lib.optional withPrimus primus2;
 
 in buildFHSUserEnv rec {
   name = "steam";
@@ -29,12 +36,7 @@ in buildFHSUserEnv rec {
     steamPackages.steam
     # License agreement
     gnome3.zenity
-  ] ++ commonTargetPkgs pkgs
-    ++ lib.optional withJava jdk
-    ++ lib.optional withPrimus (primus.override {
-         stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
-         stdenv_i686 = overrideInStdenv pkgsi686Linux.stdenv [ useOldCXXAbi ];
-       });
+  ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
     # These are required by steam with proper errors

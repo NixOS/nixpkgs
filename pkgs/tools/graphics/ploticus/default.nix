@@ -11,6 +11,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib libX11 libpng ];
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./ploticus-install.patch ];
 
   meta = with stdenv.lib; {
@@ -24,5 +26,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     homepage = http://ploticus.sourceforge.net/;
+    platforms = with platforms; linux;
   };
 }

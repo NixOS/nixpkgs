@@ -26,6 +26,7 @@ in
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_rpi;
+  boot.consoleLogLevel = 7;
 
   # FIXME: this probably should be in installation-device.nix
   users.extraUsers.root.initialHashedPassword = "";

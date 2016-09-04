@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
 
   name = "spring-${version}";
-  version = "101.0";
+  version = "103.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/springrts/spring_${version}_src.tar.lzma";
-    sha256 = "0nr65zhw92k36zgwqgi31vcp129vk7r3v7xzd6l9w7mp1ljvypgi";
+    sha256 = "1fmnwk8ig36429pkp1rafzg4hyzp7i6mwy27p7fdxrdj1q4blx9l";
   };
 
   # The cmake included module correcly finds nix's glew, however
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib::${systemd}/lib"
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
   '';
 
   meta = with stdenv.lib; {

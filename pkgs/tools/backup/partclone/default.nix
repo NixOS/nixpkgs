@@ -1,21 +1,25 @@
-{stdenv, fetchFromGitHub
-, pkgconfig, libuuid
-, e2fsprogs, automake, autoconf
+{ stdenv, fetchFromGitHub, autoreconfHook
+, pkgconfig, libuuid, e2fsprogs
 }:
-stdenv.mkDerivation {
-  name = "partclone-stable";
-  enableParallelBuilding = true;
+
+stdenv.mkDerivation rec {
+  name = "partclone-${version}";
+  version = "0.2.89";
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
-    rev = "stable";
-    sha256 = "0q3brjmnldpr89nhbiajxg3gncz0nagc34n7q2723lpz7bn28w3z";
+    rev = version;
+    sha256 = "0gw47pchqshhm00yf34qgxh6bh2jfryv0sm7ghwn77bv5gzwr481";
   };
 
-  buildInputs = [e2fsprogs pkgconfig libuuid automake autoconf];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [
+    e2fsprogs libuuid stdenv.cc.libc
+    (stdenv.lib.getOutput "static" stdenv.cc.libc)
+  ];
 
-  installPhase = ''make INSTPREFIX=$out install'';
+  enableParallelBuilding = true;
 
   meta = {
     description = "Utilities to save and restore used blocks on a partition";

@@ -1,0 +1,345 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-grsecurity">
+
+  <title>Grsecurity/PaX</title>
+
+  <para>
+    Grsecurity/PaX is a set of patches against the Linux kernel that make it
+    harder to exploit bugs.  The patchset includes protections such as
+    enforcement of non-executable memory, address space layout randomization,
+    and chroot jail hardening.  These and other
+    <link xlink:href="https://grsecurity.net/features.php">features</link>
+    render entire classes of exploits inert without additional efforts on the
+    part of the adversary.
+  </para>
+
+  <para>
+    The NixOS grsecurity/PaX module is designed with casual users in mind and is
+    intended to be compatible with normal desktop usage, without unnecessarily
+    compromising security.  The following sections describe the configuration
+    and administration of a grsecurity/PaX enabled NixOS system.  For
+    more comprehensive coverage, please refer to the
+    <link xlink:href="https://en.wikibooks.org/wiki/Grsecurity">grsecurity wikibook</link>
+    and the
+    <link xlink:href="https://wiki.archlinux.org/index.php/Grsecurity">Arch
+    Linux wiki page on grsecurity</link>.
+
+    <note><para>grsecurity/PaX is only available for the latest linux -stable
+    kernel; patches against older kernels are available from upstream only for
+    a fee.</para></note>
+    <note><para>We standardise on a desktop oriented configuration primarily due
+    to lack of resources.  The grsecurity/PaX configuration state space is huge
+    and each configuration requires quite a bit of testing to ensure that the
+    resulting packages work as advertised.  Defining additional package sets
+    would likely result in a large number of functionally broken packages, to
+    nobody's benefit.</para></note>.
+  </para>
+
+  <sect1 xml:id="sec-grsec-enable"><title>Enabling grsecurity/PaX</title>
+
+  <para>
+    To make use of grsecurity/PaX on NixOS, add the following to your
+    <filename>configuration.nix</filename>:
+    <programlisting>
+      security.grsecurity.enable = true;
+    </programlisting>
+    followed by
+    <programlisting>
+      # nixos-rebuild boot
+      # reboot
+    </programlisting>
+    For most users, further configuration should be unnecessary.  All users
+    are encouraged to look over <xref linkend="sec-grsec-security" /> before
+    using the system, however.  If you experience problems, please refer to
+    <xref linkend="sec-grsec-issues" />.
+  </para>
+
+  <para>
+    Once booted into the new system, you can optionally use
+    <command>paxtest</command> to exercise various PaX features:
+    <screen><![CDATA[
+    # nix-shell -p paxtest --command 'paxtest blackhat'
+    Executable anonymous mapping             : Killed
+    Executable bss                           : Killed
+    # ... remaining output truncated for brevity
+    ]]></screen>
+  </para>
+
+  </sect1>
+
+  <sect1 xml:id="sec-grsec-declarative-tuning"><title>Declarative tuning</title>
+
+  <para>
+    The default configuration mode is strictly declarative.  Some features
+    simply cannot be changed at all after boot, while others are locked once the
+    system is up and running.  Moreover, changes to the configuration enter
+    into effect only upon booting into the new system.
+  </para>
+
+  <para>
+    The NixOS module exposes a limited number of options for tuning the behavior
+    of grsecurity/PaX.  These are options thought to be of particular interest
+    to most users.  For experts, further tuning is possible via
+    <option>boot.kernelParams</option> (see
+    <xref linkend="sec-grsec-kernel-params" />) and
+    <option>boot.kernel.sysctl."kernel.grsecurity.*"</option> (the wikibook
+    contains an <link xlink:href="https://en.wikibooks.org/wiki/Grsecurity/Appendix/Sysctl_Options">
+    exhaustive listing of grsecurity sysctl tunables</link>).
+  </para>
+
+  </sect1>
+
+  <sect1 xml:id="sec-grsec-manual-tuning"><title>Manual tuning</title>
+
+  <para>
+    To permit manual tuning of grsecurity runtime parameters, set:
+    <programlisting>
+      security.grsecurity.lockTunables = false;
+    </programlisting>
+    Once booted into this system, grsecurity features that have a corresponding
+    sysctl tunable can be changed without rebooting, either by switching into
+    a new system profile or via the <command>sysctl</command> utility.
+  </para>
+
+  <para>
+    To lock all grsecurity tunables until the next boot, do:
+    <screen>
+      # systemctl start grsec-lock
+    </screen>
+  </para>
+
+  </sect1>
+
+  <sect1 xml:id="sec-grsec-security"><title>Security considerations</title>
+
+  <para>
+    The NixOS kernel is built using upstream's recommended settings for a
+    desktop deployment that generally favours security over performance.  This
+    section details deviations from upstream's recommendations that may
+    compromise operational security.
+
+    <warning><para>There may be additional problems not covered here!</para>
+    </warning>.
+  </para>
+
+  <itemizedlist>
+
+    <listitem><para>
+      The following hardening features are disabled in the NixOS kernel:
+      <itemizedlist>
+        <listitem><para>Kernel symbol hiding: rendered useless by redistributing
+        kernel objects.</para></listitem>
+
+        <listitem><para>Randomization of kernel structures: rendered useless by
+        redistributing kernel objects.</para></listitem>
+
+        <listitem><para>TCP simultaneous OPEN connection is permitted: breaking
+        strict TCP conformance is inappropriate for a general purpose kernel.
+        The trade-off is that an attacker may be able to deny outgoing
+        connections if they are able to guess the source port allocated by your
+        OS for that connection <emphasis>and</emphasis> also manage to initiate
+        a TCP simultaneous OPEN on that port before the connection is actually
+        established.</para></listitem>
+
+        <listitem><para><filename class="directory">/sys</filename> hardening:
+        breaks systemd.</para></listitem>
+
+        <listitem><para>Trusted path execution: a desirable feature, but
+        requires some more work to operate smoothly on NixOS.</para></listitem>
+      </itemizedlist>
+    </para></listitem>
+
+    <listitem><para>
+      The NixOS module conditionally weakens <command>chroot</command>
+      restrictions to accommodate NixOS lightweight containers and sandboxed Nix
+      builds.  This is problematic if the deployment also runs a privileged
+      network facing process that <emphasis>relies</emphasis> on
+      <command>chroot</command> for isolation.
+    </para></listitem>
+
+    <listitem><para>
+      The NixOS kernel is patched to allow usermode helpers from anywhere in the
+      Nix store.  A usermode helper is an executable called by the kernel in
+      certain circumstances, e.g., <command>modprobe</command>.  Vanilla
+      grsecurity only allows usermode helpers from paths typically owned by the
+      super user.  The NixOS kernel allows an attacker to inject malicious code
+      into the Nix store which could then be executed by the kernel as a
+      usermode helper.
+    </para></listitem>
+
+    <listitem><para>
+      The following features are disabled because they overlap with
+      vanilla kernel mechanisms:
+
+      <itemizedlist>
+        <listitem><para><filename class="directory">/proc</filename> hardening:
+        use <option>security.hideProcessInformation</option> instead.  This
+        trades weaker protection for greater compatibility.
+        </para></listitem>
+
+        <listitem><para><command>dmesg</command> restrictions:
+        use <option>boot.kernel.sysctl."kernel.dmesg_restrict"</option> instead
+        </para></listitem>
+      </itemizedlist>
+    </para></listitem>
+
+  </itemizedlist>
+
+  </sect1>
+
+  <sect1 xml:id="sec-grsec-custom-kernel"><title>Using a custom grsecurity/PaX kernel</title>
+
+  <para>
+    The NixOS kernel is likely to be either too permissive or too restrictive
+    for many deployment scenarios.  In addition to producing a kernel more
+    suitable for a particular deployment, a custom kernel may improve security
+    by depriving an attacker the ability to study the kernel object code, adding
+    yet more guesswork to successfully carry out certain exploits.
+  </para>
+
+  <para>
+    To use a custom kernel with upstream's recommended settings for server
+    deployments:
+    <programlisting>
+      boot.kernelPackages =
+        let
+          kernel = pkgs.linux_grsec_nixos.override {
+            extraConfig = ''
+              GRKERNSEC y
+              PAX y
+              GRKERNSEC_CONFIG_AUTO y
+              GRKERNSEC_CONFIG_SERVER y
+              GRKERNSEC_CONFIG_SECURITY y
+            '';
+          };
+          self = pkgs.linuxPackagesFor kernel self;
+        in self;
+    </programlisting>
+    The wikibook provides an exhaustive listing of
+    <link xlink:href="https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options">kernel configuration options</link>.
+  </para>
+
+  <para>
+    The NixOS module makes several assumptions about the kernel and so may be
+    incompatible with your customised kernel.  Most of these assumptions are
+    encoded as assertions &#x2014; mismatches should ideally result in a build
+    failure.  Currently, the only way to work around incompatibilities is to
+    eschew the NixOS module and do all configuration yourself.
+  </para>
+
+  </sect1>
+
+  <sect1 xml:id="sec-grsec-pax-flags"><title>Per-executable PaX flags</title>
+
+  <para>
+    Manual tuning of per-file PaX flags for executables in the Nix store is
+    impossible on a properly configured system.  If a package in Nixpkgs fails
+    due to PaX, that is a bug in the package recipe and should be reported to
+    the maintainer (including relevant <command>dmesg</command> output).
+  </para>
+
+  <para>
+    For executables installed outside of the Nix store, PaX flags can be set
+    using the <command>paxctl</command> utility:
+    <programlisting>
+      paxctl -czem <replaceable>foo</replaceable>
+    </programlisting>
+
+    <warning>
+      <para><command>paxctl</command> overwrites files in-place.</para>
+    </warning>
+
+    Equivalently, on file systems that support extended attributes:
+    <programlisting>
+      setfattr -n user.pax.flags -v em <replaceable>foo</replaceable>
+    </programlisting>
+
+    <!-- TODO: PaX flags via RBAC policy -->
+  </para>
+
+  </sect1>
+
+  <sect1 xml:id="sec-grsec-issues"><title>Issues and work-arounds</title>
+
+  <itemizedlist>
+    <listitem><para>User namespaces require <literal>CAP_SYS_ADMIN</literal>:
+    consequently, unprivileged namespaces are unsupported. Applications that
+    rely on namespaces for sandboxing must use a privileged helper. For chromium
+    there is <option>security.chromiumSuidSandbox.enable</option>.</para></listitem>
+
+    <listitem><para>Access to EFI runtime services is disabled by default:
+    this plugs a potential code injection attack vector; use
+    <option>security.grsecurity.disableEfiRuntimeServices</option> to override
+    this behavior.</para></listitem>
+
+    <listitem><para>Virtualization: KVM is the preferred virtualization
+    solution. Xen, Virtualbox, and VMWare are
+    <emphasis>unsupported</emphasis> and most likely require a custom kernel.
+    </para></listitem>
+
+    <listitem><para>
+      Attaching <command>gdb</command> to a running process is disallowed by
+      default: unprivileged users can only ptrace processes that are children of
+      the ptracing process.  To relax this restriction, set
+      <programlisting>
+        boot.kernel.sysctl."kernel.grsecurity.harden_ptrace" = 0;
+      </programlisting>
+    </para></listitem>
+
+    <listitem><para>
+      Overflows in boot critical code (e.g., the root filesystem module) can
+      render the system unbootable.  Work around by setting
+      <programlisting>
+        boot.kernel.kernelParams = [ "pax_size_overflow_report_only" ];
+      </programlisting>
+    </para></listitem>
+
+    <listitem><para>
+      The <citerefentry><refentrytitle>modify_ldt
+      </refentrytitle><manvolnum>2</manvolnum></citerefentry> syscall is disabled
+      by default.  This restriction can interfere with programs designed to run
+      legacy 16-bit or segmented 32-bit code.  To support applications that rely
+      on this syscall, set
+      <programlisting>
+        boot.kernel.sysctl."kernel.modify_ldt" = 1;
+      </programlisting>
+    </para></listitem>
+
+  </itemizedlist>
+
+  </sect1>
+
+  <sect1 xml:id="sec-grsec-kernel-params"><title>Grsecurity/PaX kernel parameters</title>
+
+  <para>
+    The NixOS kernel supports the following kernel command line parameters:
+    <itemizedlist>
+      <listitem><para>
+        <literal>pax_nouderef</literal>: disable UDEREF (separate kernel and
+        user address spaces).
+      </para></listitem>
+
+      <listitem><para>
+        <literal>pax_weakuderef</literal>: enable a faster but
+        weaker variant of UDEREF on 64-bit processors with PCID support
+        (check <code>grep pcid /proc/cpuinfo</code>).
+      </para></listitem>
+
+      <listitem><para>
+        <literal>pax_sanitize_slab={off|fast|full}</literal>: control kernel
+        slab object sanitization
+      </para></listitem>
+
+      <listitem><para>
+        <literal>pax_size_overflow_report_only</literal>: log size overflow
+        violations but leave the violating task running
+      </para></listitem>
+    </itemizedlist>
+  </para>
+
+  </sect1>
+
+</chapter>

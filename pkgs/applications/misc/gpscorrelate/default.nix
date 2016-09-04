@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://freefoote.dview.net/linux_gpscorr.html;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

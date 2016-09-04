@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python, buildPythonApplication, pythonPackages, pkgconfig
-, pyrex096, ffmpeg, boost, glib, pygobject, gtk2, webkitgtk2, libsoup, pygtk
-, taglib, sqlite, pycurl, mutagen, pycairo, pythonDBus, pywebkitgtk
+{ stdenv, fetchurl, pkgconfig
+, pythonPackages, pyrex096, ffmpeg, boost, glib, gtk2, webkitgtk2, libsoup
+, taglib, sqlite
 , libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
 , gst_python, gst_plugins_base, gst_plugins_good, gst_ffmpeg
 , enableBonjour ? false, avahi ? null
@@ -10,10 +10,11 @@ assert enableBonjour -> avahi != null;
 
 with stdenv.lib;
 
-buildPythonApplication rec {
-  name = "miro-${version}";
-  namePrefix = "";
+let
+  inherit (pythonPackages) python buildPythonApplication;
   version = "6.0";
+in buildPythonApplication rec {
+  name = "miro-${version}";
 
   src = fetchurl {
     url = "http://ftp.osuosl.org/pub/pculture.org/miro/src/${name}.tar.gz";
@@ -56,7 +57,7 @@ buildPythonApplication rec {
 
   preInstall = ''
     # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
-    ${python}/bin/${python.executable} setup.py install_data --root=$out
+    ${python.interpreter} setup.py install_data --root=$out
     sed -i '/data_files=data_files/d' setup.py
   '';
 
@@ -68,14 +69,14 @@ buildPythonApplication rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
   '';
 
-  buildInputs = [
-    pkgconfig pyrex096 ffmpeg boost glib pygobject gtk2 webkitgtk2 libsoup
-    pygtk taglib gsettings_desktop_schemas sqlite
+  buildInputs = with pythonPackages; [ pygtk pygobject ] ++ [
+    pkgconfig pyrex096 ffmpeg boost glib gtk2 webkitgtk2 libsoup
+    taglib gsettings_desktop_schemas sqlite
   ];
 
-  propagatedBuildInputs = [
-    pygobject pygtk pycurl python.modules.sqlite3 mutagen pycairo pythonDBus
-    pywebkitgtk libtorrentRasterbar
+  propagatedBuildInputs = with pythonPackages; [
+    pygobject pygtk pycurl sqlite3 mutagen pycairo dbus-python
+    pywebkitgtk] ++ [ libtorrentRasterbar
     gst_python gst_plugins_base gst_plugins_good gst_ffmpeg
   ] ++ optional enableBonjour avahi;
 

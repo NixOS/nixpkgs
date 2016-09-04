@@ -2,12 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "fira-code-${version}";
-  version = "1.102";
+  version = "1.200";
 
   src = fetchurl {
     url = "https://github.com/tonsky/FiraCode/releases/download/${version}/FiraCode_${version}.zip";
-    sha256 = "0vcrzf7dmcy3n2ic05ihadmfgzmmmp0vz8grnqaxfi3y1jpw8ggy";
+    sha256 = "1zja7fsfh3xx2qv9wv46997d02l5nm483b5s39jpmxfracj8qam7";
   };
+
+  sourceRoot = "otf";
 
   buildInputs = [ unzip ];
   phases = [ "unpackPhase" "installPhase" ];

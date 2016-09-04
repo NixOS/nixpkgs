@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, docutils, makeWrapper, perl, pkgconfig, python, which
-, ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, lua, lua5_sockets
+{ stdenv, fetchurl, fetchFromGitHub, docutils, makeWrapper, perl, pkgconfig
+, python, which, ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs
+, lua, lua5_sockets
 , libuchardet, rubberband
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null, libXxf86vm ? null
 , xineramaSupport ? true, libXinerama ? null
@@ -54,19 +55,21 @@ let
   # for purity reasons this behavior should be avoided.
   wafVersion = "1.8.12";
   waf = fetchurl {
-    urls = [ "http://ftp.waf.io/pub/release/waf-${wafVersion}"
-             "http://waf.io/waf-${wafVersion}" ];
+    urls = [ "http://waf.io/waf-${wafVersion}"
+             "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
     sha256 = "12y9c352zwliw0zk9jm2lhynsjcf5jy0k1qch1c1av8hnbm2pgq1";
   };
 in
 
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.17.0";
+  version = "0.19.0";
 
-  src = fetchurl {
-    url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "0vms3viwqcwl1mrgmf2yy4c69fvv7xpbkyrl693l6zpwynqd4b30";
+  src = fetchFromGitHub {
+    owner = "mpv-player";
+    repo = "mpv";
+    rev = "v${version}";
+    sha256 = "14rbglrcplhkf16ik4fbcv7k27lz6h4glfayr12ylh98srmsscqa";
   };
 
   patchPhase = ''

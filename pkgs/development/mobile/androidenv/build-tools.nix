@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
         cd ${version}
         
         # Patch the interpreter
-        for i in aapt aidl bcc_compat dexdump llvm-rs-cc
+        for i in aidl bcc_compat dexdump llvm-rs-cc
         do
             patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
         done
@@ -33,35 +33,35 @@ stdenv.mkDerivation rec {
         # These binaries need to find libstdc++ and libgcc_s
         for i in aidl lib/libLLVM.so
         do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib $i
         done
         
         # These binaries need to find libstdc++, libgcc_s and libraries in the current folder
         for i in lib/libbcc.so lib/libbcinfo.so lib/libclang.so aidl
         do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:`pwd`/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib:`pwd`/lib $i
         done
         
         # Create link to make libtinfo.so.5 work
-        ln -s ${ncurses_32bit}/lib/libncurses.so.5 `pwd`/lib/libtinfo.so.5
+        ln -s ${ncurses_32bit.out}/lib/libncurses.so.5 `pwd`/lib/libtinfo.so.5
         
         # These binaries need to find libstdc++, libgcc_s, ncurses, and libraries in the current folder
         for i in bcc_compat llvm-rs-cc
         do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${ncurses_32bit}/lib:`pwd`/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib:${ncurses_32bit.out}/lib:`pwd`/lib $i
         done
 
         # These binaries also need zlib in addition to libstdc++
-        for i in arm-linux-androideabi-ld i686-linux-android-ld mipsel-linux-android-ld split-select zipalign
+        for i in arm-linux-androideabi-ld i686-linux-android-ld mipsel-linux-android-ld split-select aapt zipalign
         do
             patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit}/lib:`pwd`/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib:${zlib_32bit.out}/lib:`pwd`/lib $i
         done
         
         # These binaries need to find libstdc++, libgcc_s, and zlib
         for i in aapt dexdump
         do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit}/lib:`pwd`/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib:${zlib_32bit.out}/lib:`pwd`/lib $i
         done
       ''}
       

@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     description = "Indexer and CGI search front-end built on Xapian library";
     homepage = http://xapian.org/;
     license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

@@ -12,5 +12,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.libee.org/";
     description = "An Event Expression Library inspired by CEE";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

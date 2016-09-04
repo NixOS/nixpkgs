@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "source-code-pro-${version}";
-  version = "2.010";
+  version = "2.030";
 
   src = fetchFromGitHub {
     owner = "adobe-fonts";
     repo = "source-code-pro";
-    rev = "2.010R-ro/1.030R-it";
-    name = "2.010R-ro-1.030R-it";
-    sha256 = "0f40g23lfcajpd5m9r1z7v8x011dsfs6ba7fihjal6yzaf5hb6mh";
+    rev = "2.030R-ro/1.050R-it";
+    name = "2.030R-ro-1.050R-it";
+    sha256 = "0hc5kflr8xzqgdm0c3gbgb1paygznxmnivkylid69ipc7wnicx1n";
   };
 
   phases = "unpackPhase installPhase";

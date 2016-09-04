@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ autoreconfHook pkgconfig systemd glib dbus libnl pythonPackages.python pythonPackages.wrapPython ];
-  pythonPath = [ pythonPackages.pygobject pythonPackages.dbus pythonPackages.pygtk ];
+  pythonPath = [ pythonPackages.pygobject pythonPackages.dbus-python pythonPackages.pygtk ];
 
   configureFlags = [ "--disable-debug" "--enable-tools" "--enable-ese" "--with-systemdsystemunitdir=$out/lib/systemd/system" ];
 

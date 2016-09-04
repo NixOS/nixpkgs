@@ -2,21 +2,13 @@
 , sharutils }:
 
 stdenv.mkDerivation rec {
-  name = "libarchive-3.1.2";
+  name = "libarchive-${version}";
+  version = "3.2.1";
 
   src = fetchurl {
-    urls = [
-      "http://pkgs.fedoraproject.org/repo/pkgs/libarchive/libarchive-3.1.2.tar.gz/efad5a503f66329bb9d2f4308b5de98a/${name}.tar.gz"
-      "${meta.homepage}/downloads/${name}.tar.gz"
-    ];
-    sha256 = "0pixqnrcf35dnqgv0lp7qlcw7k13620qkhgxr288v7p4iz6ym1zb";
+    url = "${meta.homepage}/downloads/${name}.tar.gz";
+    sha256 = "1lngng84k1kkljl74q0cdqc3s82vn2kimfm02dgm4d6m7x71mvkj";
   };
-
-  patches = [
-    ./CVE-2013-0211.patch # https://github.com/libarchive/libarchive/commit/22531545
-    ./CVE-2015-1197.patch # https://github.com/NixOS/nixpkgs/issues/6799
-      # ^ it's CVE-2015-2304 specific to libarchive
-  ];
 
   buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz lzo ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];

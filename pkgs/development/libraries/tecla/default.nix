@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Command-line editing library";
     license = "as-is";
 
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

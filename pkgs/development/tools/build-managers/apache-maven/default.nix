@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "Build automation tool (used primarily for Java projects)";
     homepage = http://maven.apache.org/;
     license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

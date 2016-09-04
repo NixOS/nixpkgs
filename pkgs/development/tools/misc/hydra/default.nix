@@ -3,7 +3,7 @@
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
 , guile, perl, postgresql92, aws-sdk-cpp, nukeReferences, git, boehmgc
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
-, rpm, dpkg, cdrkit }:
+, rpm, dpkg, cdrkit, fetchpatch }:
 
 with stdenv;
 
@@ -70,6 +70,12 @@ in releaseTools.nixBuild rec {
     sha256 = "0ngipzm2i2vz5ygfd70hh82d027snpl85r8ncn1rxlkak0g8fxsl";
   };
 
+  patches = [(fetchpatch {
+    name = "cmath.diff";
+    url = https://github.com/vcunat/hydra/commit/3c6fca1ba299.diff; # https://github.com/NixOS/hydra/pull/337
+    sha256 = "02m9q304ay45s7xfkm2y7lppakrkx3hrq39mm6348isnbqmbarc0";
+  })];
+
   buildInputs =
     [ makeWrapper autoconf automake libtool unzip nukeReferences pkgconfig sqlite libpqxx
       gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
@@ -112,7 +118,7 @@ in releaseTools.nixBuild rec {
 
   preCheck = ''
     patchShebangs .
-    export LOGNAME=${LOGNAME:-foo}
+    export LOGNAME=''${LOGNAME:-foo}
   '';
 
   postInstall = ''

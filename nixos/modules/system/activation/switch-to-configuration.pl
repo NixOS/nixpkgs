@@ -261,7 +261,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
 
 sub pathToUnitName {
     my ($path) = @_;
-    open my $cmd, "-|", "systemd-escape", "--suffix=mount", "-p", $path
+    open my $cmd, "-|", "@systemd@/bin/systemd-escape", "--suffix=mount", "-p", $path
         or die "Unable to escape $path!\n";
     my $escaped = join "", <$cmd>;
     chomp $escaped;

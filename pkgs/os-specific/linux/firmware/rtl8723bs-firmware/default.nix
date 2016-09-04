@@ -17,5 +17,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/hadess/rtl8723bs;
     license = licenses.unfreeRedistributableFirmware;
     maintainers = with maintainers; [ elitak ];
+    platforms = with platforms; linux;
   };
 }

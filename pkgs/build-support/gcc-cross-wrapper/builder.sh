@@ -7,7 +7,7 @@ mkdir $out/nix-support
 # Force gcc to use ld-wrapper.sh when calling ld.
 cflagsCompile="-B$out/bin/"
 
-if test -z "$nativeLibc"; then
+if test -z "$nativeLibc" -a -n "$libc"; then
     cflagsCompile="$cflagsCompile -B$gccLibs/lib -B$libc/lib/ -isystem $libc/include"
     ldflags="$ldflags -L$libc/lib"
     # Get the proper dynamic linker for glibc and uclibc. 
@@ -111,6 +111,7 @@ chmod +x "$out/bin/$crossConfig-ld"
 # Glibc.
 test -n "$gcc" && echo $gcc > $out/nix-support/orig-cc
 test -n "$libc" && echo $libc > $out/nix-support/orig-libc
+test -n "$libc_dev" && echo $libc_dev > $out/nix-support/orig-libc-dev
 
 doSubstitute "$addFlags" "$out/nix-support/add-flags"
 

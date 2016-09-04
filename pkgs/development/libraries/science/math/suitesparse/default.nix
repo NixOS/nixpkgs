@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     "LAPACK="
   ];
 
-  NIX_CFLAGS = "-fPIC" + stdenv.lib.optionalString stdenv.isDarwin " -DNTIMER";
+  NIX_CFLAGS = stdenv.lib.optionalString stdenv.isDarwin " -DNTIMER";
 
   postInstall = ''
     # Build and install shared library
@@ -78,5 +78,6 @@ stdenv.mkDerivation {
     description = "A suite of sparse matrix algorithms";
     license = with licenses; [ bsd2 gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ttuegel ];
+    platforms = with platforms; unix;
   };
 }

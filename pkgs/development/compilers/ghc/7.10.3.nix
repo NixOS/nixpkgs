@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     docFixes
+    ./relocation.patch
     ./ghc-7.x-dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
   ];
 
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${binutils}/bin:${coreutils}/bin"' $i
+      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
     done
   '';
 
