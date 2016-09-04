@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gtk3, perl, vte }:
+{ stdenv, fetchurl, cmake, pkgconfig, gtk3, perl, vte, pcre, glib }:
 
 stdenv.mkDerivation rec {
   name = "sakura-${version}";
-  version = "3.2.0";
+  version = "3.3.4";
 
   src = fetchurl {
     url = "http://launchpad.net/sakura/trunk/${version}/+download/${name}.tar.bz2";
-    sha256 = "1pfvc35kckrzik5wx8ywhkhclr52rfp2syg46ix2nsdm72q6dl90";
+    sha256 = "1fnkrkzf2ysav1ljgi4y4w8kvbwiwgmg1462xhizlla8jqa749r7";
   };
 
   nativeBuildInputs = [ cmake perl pkgconfig ];
 
-  buildInputs = [ gtk3 vte ];
+  buildInputs = [ gtk3 vte pcre glib ];
 
   meta = with stdenv.lib; {
     description = "A terminal emulator based on GTK and VTE";
