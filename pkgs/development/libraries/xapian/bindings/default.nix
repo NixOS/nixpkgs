@@ -23,6 +23,17 @@ composableDerivation.composableDerivation {} rec {
            name = "python";
            enable = {
             buildInputs = [ python sphinx ];
+
+            # Our `sphinx-build` binary is a shell wrapper around
+            # `sphinx-build` python code. Makefile tries to execute it
+            # using python2 and fails. Fixing that here.
+            patchPhase = ''
+              for a in python/Makefile* ; do
+                substituteInPlace $a \
+                  --replace '$(PYTHON2) $(SPHINX_BUILD)' '$(SPHINX_BUILD)'
+              done
+            '';
+
             # export same env vars as in pythonNew
             preConfigure = ''
               export PYTHON_LIB=$out/lib/${python.libPrefix}/site-packages
