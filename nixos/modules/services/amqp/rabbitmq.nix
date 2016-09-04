@@ -135,4 +135,8 @@ in {
 
   };
 
+  meta.tests = {
+    rabbitmq = ./tests/rabbitmq.nix;
+  };
+
 }
