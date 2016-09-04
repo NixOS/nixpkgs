@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig autoconf ];
 
-  patchPhase = if stdenv.isDarwin then ''
+  postPatch = if stdenv.isDarwin then ''
     substituteInPlace configure.in --replace "-framework System" -lSystem
     substituteInPlace build/aclocal/bakefile.m4 --replace /Developer/Tools/SetFile ${setfile}/bin/SetFile
   '' else "";
@@ -50,10 +50,6 @@ stdenv.mkDerivation {
     ++ optional stdenv.isDarwin "--with-cocoa";
 
   SEARCH_LIB = optionalString withMesa "${mesa}/lib";
-
-  postInstall = "
-    (cd $out/include && ln -s wx-*/* .)
-  ";
 
   patches = [ ./darwin.patch ];
 
