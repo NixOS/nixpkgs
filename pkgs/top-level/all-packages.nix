@@ -3697,6 +3697,8 @@ in
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
 
+  tcpkali = callPackage ../applications/networking/tcpkali { };
+
   teamviewer = callPackage ../applications/networking/remote/teamviewer {
     stdenv = stdenv_32bit;
   };
