@@ -101,5 +101,9 @@ in {
     };
   };
 
+  meta.tests = {
+    mesos = ./tests/mesos.nix;
+  };
+
 }
 
