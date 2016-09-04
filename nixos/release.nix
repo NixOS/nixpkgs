@@ -75,8 +75,19 @@ let
   }).config));
 
   # list of blacklisted module tests that shouldn't end in `tests.module`
-  # example: blacklistedModuleTests = [ "panamax" ];
-  blacklistedModuleTests = [ ];
+  blacklistedModuleTests = [
+    "postgis"
+    "emacs-daemon"
+    "gitlab"
+    "haka"
+    "lightdm"
+    "logstash"
+    "mesos"
+    "panamax"
+    "rabbitmq"
+    "riak"
+    "slurm"
+  ];
 
   # Gather tests declared in modules meta.tests
   # args is a set of { "testName" = { extra args }; } to override test arguments, typically systems
