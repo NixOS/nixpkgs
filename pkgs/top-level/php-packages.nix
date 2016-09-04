@@ -81,6 +81,19 @@ let
     buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
   };
 
+  # No support for PHP 7 yet (and probably never will be)
+  spidermonkey = assert !isPhp7; buildPecl rec {
+    name = "spidermonkey-1.0.0";
+
+    sha256 = "1ywrsp90w6rlgq3v2vmvp2zvvykkgqqasab7h9bf3vgvgv3qasbg";
+
+    configureFlags = [
+      "--with-spidermonkey=${pkgs.spidermonkey_185}"
+    ];
+
+    buildInputs = [ pkgs.spidermonkey_185 ];
+  };
+
   xdebug = if isPhp7 then xdebug24 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
