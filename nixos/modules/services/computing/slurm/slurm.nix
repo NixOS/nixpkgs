@@ -168,4 +168,8 @@ in
 
   };
 
+  meta.tests = {
+    slurm = ./test.nix;
+  };
+
 }
