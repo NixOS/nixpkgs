@@ -9,7 +9,7 @@
   machine =
     { config, pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
+    { imports = [ <nixpkgs/nixos/tests/common/x11.nix> ];
       services.emacs = {
         enable = true;
         defaultEditor = true;

@@ -88,5 +88,10 @@ in {
       } else {});
   };
 
-  meta.doc = ./emacs.xml;
+  meta = {
+    doc = ./emacs.xml;
+    tests = {
+      emacs-daemon = ./tests/emacs-daemon.nix;
+    };
+  };
 }
