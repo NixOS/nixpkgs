@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    ${python.interpreter}setup.py build
+    ${python.interpreter} setup.py build
   '';
 
   installPhase = ''
