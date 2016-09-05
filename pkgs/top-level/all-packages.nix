@@ -285,7 +285,7 @@ in
       inherit kernel rootModules allowMissing;
     };
 
-  nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) runCommand; };
+  nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
