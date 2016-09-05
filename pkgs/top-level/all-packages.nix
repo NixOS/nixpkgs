@@ -10525,6 +10525,8 @@ in
 
   influxdb10 = callPackage ../servers/nosql/influxdb/v1.nix { };
 
+  telegraf = (callPackage ../tools/system/telegraf/default.nix { }).bin // { outputs = [ "bin" ]; };
+
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
