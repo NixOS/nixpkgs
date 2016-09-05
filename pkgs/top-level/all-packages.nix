@@ -6935,6 +6935,10 @@ in
 
   babl = callPackage ../development/libraries/babl { };
 
+  bctoolbox = callPackage ../development/libraries/bctoolbox {
+    mbedtls = mbedtls_1_3;
+  };
+
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
   beignet = callPackage ../development/libraries/beignet {
