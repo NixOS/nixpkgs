@@ -8766,6 +8766,7 @@ in
   matio = callPackage ../development/libraries/matio { };
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
+  mbedtls_1_3 = callPackage ../development/libraries/mbedtls/1.3.nix { };
 
   mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
   mdds_0_12_1 = callPackage ../development/libraries/mdds/0.12.1.nix { };
