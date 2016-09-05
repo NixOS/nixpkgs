@@ -5714,14 +5714,14 @@ in modules // {
 
   docker = buildPythonPackage rec {
     name = "docker-py-${version}";
-    version = "1.7.2";
+    version = "1.9.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-py/${name}.tar.gz";
-      sha256 = "0k6hm3vmqh1d3wr9rryyif5n4rzvcffdlb1k4jvzp7g4996d3ccm";
+      sha256 = "0zkdgz6akzfdda29y4bwa444r0sr2py5pwvvh6bnsy25lwabkikd";
     };
 
-    propagatedBuildInputs = with self; [ six requests2 websocket_client ];
+    propagatedBuildInputs = with self; [ six requests2 websocket_client ipaddress backports_ssl_match_hostname ];
 
     # Version conflict
     doCheck = false;
