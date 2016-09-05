@@ -7139,7 +7139,7 @@ in
   dbus-sharp-glib-1_0 = callPackage ../development/libraries/dbus-sharp-glib/dbus-sharp-glib-1.0.nix { };
   dbus-sharp-glib-2_0 = callPackage ../development/libraries/dbus-sharp-glib { };
 
-  # Should we deprecate these? Currently there are many references.
+  # FIXME: deprecate these.
   dbus_tools = self.dbus.out;
   dbus_libs = self.dbus;
   dbus_daemon = self.dbus.daemon;
