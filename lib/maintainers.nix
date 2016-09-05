@@ -40,6 +40,7 @@
   arobyn = "Alexei Robyn <shados@shados.net>";
   artuuge = "Artur E. Ruuge <artuuge@gmail.com>";
   ashalkhakov = "Artyom Shalkhakov <artyom.shalkhakov@gmail.com>";
+  aske = "Kirill Boltaev <aske@fmap.me>";
   asppsa = "Alastair Pharo <asppsa@gmail.com>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
