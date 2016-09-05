@@ -260,6 +260,11 @@ with stdenv.lib;
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
+  CIFS_STATS y
+  CIFS_WEAK_PW_HASH y
+  CIFS_UPCALL y
+  CIFS_ACL y
+  CIFS_DFS_UPCALL y
   CIFS_SMB2 y
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
