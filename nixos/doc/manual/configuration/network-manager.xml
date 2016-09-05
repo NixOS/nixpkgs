@@ -16,12 +16,22 @@ networking.networkmanager.enable = true;
 some desktop managers (e.g., GNOME) enable NetworkManager
 automatically for you.</para>
 
-<para>All users that should have permission to change network settings
-must belong to the <code>networkmanager</code> group.</para>
+<para>All users that should have permission to change network settings must
+belong to the <code>networkmanager</code> group:
+
+<programlisting>
+users.extraUsers.youruser.extraGroups = [ "networkmanager" ];
+</programlisting>
+</para>
+
+<para>NetworkManager is controlled using either <command>nmcli</command> or
+<command>nmtui</command> (curses-based terminal user interface). See their
+manual pages for details on their usage. Some desktop environments (GNOME, KDE)
+have their own configuration tools for NetworkManager.</para>
 
 <note><para><code>networking.networkmanager</code> and
-<code>networking.wireless</code> can not be enabled at the same time:
-you can still connect to the wireless networks using
+<code>networking.wireless</code> (WPA Supplicant) cannot be enabled at the same
+time: you can still connect to the wireless networks using
 NetworkManager.</para></note>
 
 </section>
