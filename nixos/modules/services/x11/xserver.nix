@@ -228,7 +228,7 @@ in
 
       startDbusSession = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to start a new DBus session when you log in with dbus-launch.
         '';
