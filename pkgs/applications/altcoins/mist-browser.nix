@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchurl, unzip, buildEnv, makeWrapper, makeDesktopItem, geth }:
+{ pkgs, stdenv, fetchurl, unzip, buildEnv, makeWrapper, makeDesktopItem, go-ethereum }:
 
 let
   mistEnv = buildEnv {
@@ -6,7 +6,7 @@ let
       paths = with pkgs; [
         stdenv.cc.cc glib dbus gtk atk pango freetype
         fontconfig gdk_pixbuf cairo cups expat alsaLib
-        nspr gnome.GConf nss libnotify libcap geth systemd
+        nspr gnome.GConf nss libnotify libcap go-ethereum systemd
         xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage
         xorg.libXtst xorg.libXcomposite xorg.libXi xorg.libXfixes
         xorg.libXrandr xorg.libXcursor
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   icon = fetchurl {
     url = "https://raw.githubusercontent.com/ethereum/mist/master/icons/wallet/icon.png";
-    sha256 = "127yznh6f35wxcgbrkk5kim6py284z34rm0mb08qk0ff0akjk77z";
+    sha256 = "0flyrzy43vxn1gp5qpaiyvhsac588sqgnlpqd13gdr2pay3l5xaz";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -38,16 +38,16 @@ stdenv.mkDerivation rec {
     unzip "$src"
     mv "$PWD/${_name}" "$out"
     rm "$out/resources/node/geth/geth"
-    ln -s "${geth}/bin/geth" "$out/resources/node/geth/geth"
+    ln -s "${go-ethereum}/bin/geth" "$out/resources/node/geth/geth"
 
-    chmod +x "$out/Ethereum-Wallet"
+    chmod +x "$out/Mist"
     chmod +x "$out/libnode.so"
 
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      "$out/Ethereum-Wallet"
+      "$out/Mist"
 
     mkdir "$out/bin"
-    ln -s "$out/Ethereum-Wallet" "$out/bin/mist"
+    ln -s "$out/Mist" "$out/bin/mist"
 
     wrapProgram $out/bin/mist \
       --prefix "LD_LIBRARY_PATH" : "${mistEnv}/lib:${mistEnv}/lib64"
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "Ethereum wallet";
+    description = "Ethereum browser and wallet";
     homepage = "https://ethereum.org/";
-    maintainers = with maintainers; [ dvc ];
+    maintainers = with maintainers; [ dvc ryepdx ];
     license = licenses.gpl3;
     platforms = platforms.linux;
   };
