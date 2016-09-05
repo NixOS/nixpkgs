@@ -67,8 +67,9 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
-  ./programs/freetds.nix
   ./programs/fish.nix
+  ./programs/freetds.nix
+  ./programs/info.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/man.nix
