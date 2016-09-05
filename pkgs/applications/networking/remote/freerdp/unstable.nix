@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, zlib, libX11, libXcursor
-, libXdamage, libXext, glib, alsaLib, ffmpeg, libxkbfile, libXinerama, libXv
-, substituteAll
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, zlib
+, libX11, libXcursor, libXdamage, libXext, libXrender, libxkbfile, libXinerama, libXv
+, glib, alsaLib, ffmpeg, substituteAll, wayland
 , libpulseaudio ? null, cups ? null, pcsclite ? null
 , buildServer ? true, optimize ? true
 }:
 
 stdenv.mkDerivation rec {
-  name = "freerdp-1.2.0-beta1";
+  name = "freerdp-1.2.0-20160107";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    rev = "1.2.0-beta1+android7";
-    sha256 = "08nn18jydblrif1qs92pakzd3ww7inr0i378ssn1bjp09lm1bkk0";
+    rev = "c3ce0c3b09bf10f388011e01bb4091e351af39e9";
+    sha256 = "0m8yqs4acj8jga1zxifba8zwmasgff5l0fmgb0iwzczp8wwj36rw";
   };
 
   patches = [
@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
       });
 
   buildInputs = [
-    cmake pkgconfig openssl zlib libX11 libXcursor libXdamage libXext glib
+    cmake pkgconfig openssl zlib libX11 libXcursor libXdamage libXext libXrender glib
     alsaLib ffmpeg libxkbfile libXinerama libXv cups libpulseaudio pcsclite
+    wayland
   ];
 
   doCheck = false;
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DWITH_CUNIT=OFF"
+    "-DWITH_WAYLAND=ON"
   ] ++ stdenv.lib.optional (libpulseaudio != null) "-DWITH_PULSE=ON"
     ++ stdenv.lib.optional (cups != null) "-DWITH_CUPS=ON"
     ++ stdenv.lib.optional (pcsclite != null) "-DWITH_PCSC=ON"
@@ -47,8 +49,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.freerdp.com/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington peterhoeg ];
     platforms = platforms.unix;
   };
 }
-
