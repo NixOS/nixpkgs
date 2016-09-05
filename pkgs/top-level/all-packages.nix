@@ -847,6 +847,8 @@ in
 
   interlock = callPackage ../servers/interlock {};
 
+  kapacitor = callPackage ../servers/monitoring/kapacitor { };
+
   long-shebang = callPackage ../misc/long-shebang {};
 
   mathics = pythonPackages.mathics;
