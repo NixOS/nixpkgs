@@ -9055,6 +9055,10 @@ in
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
+  pcaudiolib = callPackage ../development/libraries/pcaudiolib {
+    pulseaudioSupport = config.pulseaudio or true;
+  };
+
   pcg_c = callPackage ../development/libraries/pcg-c { };
 
   pcl = callPackage ../development/libraries/pcl {
@@ -9453,6 +9457,8 @@ in
   socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
+
+  sonic = callPackage ../development/libraries/sonic { };
 
   soprano = callPackage ../development/libraries/soprano { };
 
@@ -13023,7 +13029,10 @@ in
     pythonPackages = python3Packages;
   };
 
-  espeak = callPackage ../applications/audio/espeak { };
+  espeak-classic = callPackage ../applications/audio/espeak { };
+
+  espeak-ng = callPackage ../applications/audio/espeak-ng { };
+  espeak = self.espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
