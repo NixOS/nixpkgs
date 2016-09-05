@@ -92,6 +92,7 @@ fi
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run $mountPoint/home
 mkdir -m 01777 -p $mountPoint/tmp
 mkdir -m 0755 -p $mountPoint/tmp/root
+mkdir -m 0755 -p $mountPoint/var
 mkdir -m 0700 -p $mountPoint/root
 mount --rbind /dev $mountPoint/dev
 mount --rbind /proc $mountPoint/proc
@@ -168,7 +169,7 @@ if ! NIX_DB_DIR=$mountPoint/nix/var/nix/db nix-store --check-validity @nix@ 2> /
     for i in $(@perl@/bin/perl @pathsFromGraph@ @nixClosure@); do
         echo "  $i"
         chattr -R -i $mountPoint/$i 2> /dev/null || true # clear immutable bit
-        @rsync@/bin/rsync -a $i $mountPoint/nix/store/
+        rsync -a $i $mountPoint/nix/store/
     done
 
     # Register the paths in the Nix closure as valid.  This is necessary

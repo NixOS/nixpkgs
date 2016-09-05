@@ -81,6 +81,19 @@ let
     buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
   };
 
+  # No support for PHP 7 yet (and probably never will be)
+  spidermonkey = assert !isPhp7; buildPecl rec {
+    name = "spidermonkey-1.0.0";
+
+    sha256 = "1ywrsp90w6rlgq3v2vmvp2zvvykkgqqasab7h9bf3vgvgv3qasbg";
+
+    configureFlags = [
+      "--with-spidermonkey=${pkgs.spidermonkey_185}"
+    ];
+
+    buildInputs = [ pkgs.spidermonkey_185 ];
+  };
+
   xdebug = if isPhp7 then xdebug24 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
@@ -205,6 +218,47 @@ let
       rev = "4a37e47d0256581ce2f7a3b15b5bb932add09f36";
       sha256 = "1qm2ifa0zf95l1g967iiabmja17srpwz73lfci7z13ffdw1ayhfd";
     };
+  };
+
+  v8 = assert isPhp7; buildPecl rec {
+    version = "0.1.0";
+    name = "v8-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/pinepain/php-v8/archive/v${version}.tar.gz";
+      sha256 = "18smnxd34b486f5n8j0wk9z7r5x1w84v89mgf76z0bn7gxdxl0xj";
+    };
+
+    buildInputs = [ pkgs.v8 ];
+    configureFlags = [ "--with-v8=${pkgs.v8}" ];
+
+    patches = [
+      (builtins.toFile "link-libv8_libbase.patch" ''
+        Index: php-v8/config.m4
+        ===================================================================
+        --- php-v8.orig/config.m4
+        +++ php-v8/config.m4
+        @@ -69,7 +69,7 @@ if test "$PHP_V8" != "no"; then
+               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
+               ;;
+             * )
+        -      static_link_extra="libv8_libplatform.a"
+        +      static_link_extra="libv8_libplatform.a libv8_libbase.a"
+               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
+               ;;
+           esac
+	''
+      )];
+  };
+
+  v8js = assert isPhp7; buildPecl rec {
+    version = "1.3.2";
+    name = "v8js-${version}";
+
+    sha256 = "1x7gxi70zgj3vaxs89nfbnwlqcxrps1inlyfzz66pbzdbfwvc8z8";
+
+    buildInputs = [ pkgs.v8 ];
+    configureFlags = [ "--with-v8js=${pkgs.v8}" ];
   };
 
   composer = pkgs.stdenv.mkDerivation rec {

@@ -123,8 +123,9 @@ rec {
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
-    mkdir -p /fs/dev /fs/dev/shm
+    mkdir -p /fs/dev/shm /fs/dev/pts
     mount -t tmpfs -o "mode=1777" none /fs/dev/shm
+    mount -t devpts none /fs/dev/pts
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
@@ -261,9 +262,12 @@ rec {
       exit 1
     fi
 
-    eval "$postVM"
+    exitCode="$(cat xchg/in-vm-exit)"
+    if [ "$exitCode" != "0" ]; then
+      exit "$exitCode"
+    fi
 
-    exit $(cat xchg/in-vm-exit)
+    eval "$postVM"
   '';
 
 

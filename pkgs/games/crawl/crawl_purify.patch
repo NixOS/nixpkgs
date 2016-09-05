@@ -1,8 +1,7 @@
-diff --git a/crawl-ref/source/Makefile b/crawl-ref/source/Makefile
-index b7e2fbf..5ff23db 100644
---- a/crawl-ref/source/Makefile
-+++ b/crawl-ref/source/Makefile
-@@ -273,7 +273,7 @@ endif
+diff -ru3 crawl-ref-0.18.1-src-old/crawl-ref/source/Makefile crawl-ref-0.18.1-src/crawl-ref/source/Makefile
+--- crawl-ref-0.18.1-src-old/crawl-ref/source/Makefile	1970-01-01 03:00:01.000000000 +0300
++++ crawl-ref-0.18.1-src/crawl-ref/source/Makefile	2016-09-04 17:25:54.310929928 +0300
+@@ -285,7 +285,7 @@
  LIBZ := contrib/install/$(ARCH)/lib/libz.a
  
  ifndef CROSSHOST
@@ -11,21 +10,27 @@ index b7e2fbf..5ff23db 100644
  else
  	# This is totally wrong, works only with some old-style setups, and
  	# on some architectures of Debian/new FHS multiarch -- excluding, for
-@@ -943,7 +943,7 @@ else
+@@ -957,9 +957,9 @@
    SYS_PROPORTIONAL_FONT = $(shell { name=$(OUR_PROPORTIONAL_FONT);\
      {\
        fc-list | sed 's/: .*//' | grep -Fi "/$$name";\
 -      for dir in /usr/share/fonts /usr/local/share/fonts /usr/*/lib/X11/fonts;\
 +      for dir in ${dejavu_fonts}/share/fonts;\
        do [ -d $$dir ] && echo $$dir; done;\
-     } | xargs -I% find % -type f -iname $$name -print | head -n1; } 2>/dev/null)
+-    } | xargs -I% find % -type f -iname $$name -print | head -n1; } 2>/dev/null)
++    } | xargs -I% find -L % -type f -iname $$name -print | head -n1; } 2>/dev/null)
    ifneq (,$(SYS_PROPORTIONAL_FONT))
-@@ -968,7 +968,7 @@ else
+     ifeq (,$(COPY_FONTS))
+       DEFINES += -DPROPORTIONAL_FONT=\"$(SYS_PROPORTIONAL_FONT)\"
+@@ -982,9 +982,9 @@
    SYS_MONOSPACED_FONT = $(shell { name=$(OUR_MONOSPACED_FONT);\
      {\
        fc-list | sed 's/: .*//' | grep -Fi "/$$name";\
 -      for dir in /usr/share/fonts /usr/local/share/fonts /usr/*/lib/X11/fonts;\
 +      for dir in ${dejavu_fonts}/share/fonts;\
        do [ -d $$dir ] && echo $$dir; done;\
-     } | xargs -I% find % -type f -iname $$name -print | head -n1; } 2>/dev/null)
+-    } | xargs -I% find % -type f -iname $$name -print | head -n1; } 2>/dev/null)
++    } | xargs -I% find -L % -type f -iname $$name -print | head -n1; } 2>/dev/null)
    ifneq (,$(SYS_MONOSPACED_FONT))
+     ifeq (,$(COPY_FONTS))
+       DEFINES += -DMONOSPACED_FONT=\"$(SYS_MONOSPACED_FONT)\"

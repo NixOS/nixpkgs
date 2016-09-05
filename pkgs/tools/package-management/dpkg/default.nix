@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "--disable-dselect"
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
+    (stdenv.lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
+    (stdenv.lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
   ];
 
   preConfigure = ''
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "The Debian package manager";
     homepage = http://wiki.debian.org/Teams/Dpkg;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ mornfall nckx ];
   };
 }

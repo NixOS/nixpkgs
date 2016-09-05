@@ -3176,11 +3176,11 @@ in modules // {
   };
 
   cassandra-driver = buildPythonPackage rec {
-    name = "cassandra-driver-2.6.0c2";
+    name = "cassandra-driver-3.6.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cassandra-driver/${name}.tar.gz";
-      sha256 = "00cc2rkvkxaxn7sf2qzy29s6h394fla73rbdh9krxbswp5nvp27r";
+      sha256 = "1aqmy3psn12lxgp659d0zsxkirxzy5lnbnzxf9xjq1a93s3qm704";
     };
 
     propagatedBuildInputs = with self; [
@@ -4508,8 +4508,9 @@ in modules // {
       sha256 = "7959b4a74abdc27b312fed1c21e6caf9309ce0b29ea86b591fd2e99ecdf27f73";
     };
 
-    # 3.5 is not supported but has been working fine
-    doCheck = !isPy35;
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover -s tests
+    '';
 
     meta = {
       description = "C parser in Python";
@@ -5242,7 +5243,8 @@ in modules // {
       sha256 = "a11c41b0cf8218e7cdc19ab7a1bdf5c141d161cd2350daee819473cc63cd0685";
     };
 
-    disabled = !isPy3k;
+    # Tests require some python3-isms but code works without.
+    doCheck = isPy3k;
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ];
@@ -7893,17 +7895,17 @@ in modules // {
 
   pirate-get = buildPythonPackage rec {
     name = "pirate-get-${version}";
-    version = "0.2.8";
+    version = "0.2.9";
 
     disabled = !isPy3k;
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pirate-get/${name}.tar.gz";
-      sha256 = "033dwv0w9fx3dwrna3fzvmynsfhb2qjhx6f2i9sfv82ijvkm8ynz";
+      sha256 = "1djmfghnwsn3z525h6d98r0lllayvzsg71z0gskk25zr24kjs24a";
     };
 
-    propagatedBuildInputs = with self; [ colorama veryprettytable pyquery ];
+    propagatedBuildInputs = with self; [ colorama veryprettytable beautifulsoup4 ];
 
     meta = {
       description = "A command line interface for The Pirate Bay";
@@ -13391,17 +13393,18 @@ in modules // {
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "1.3.3";
+    version = "1.3.5";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/r/rainbowstream/${name}.tar.gz";
-      sha256 = "08598slbn8sm2hjs0q1041fv7m56k2ky4q66rsihacjw0mg7blai";
+      sha256 = "0a8bs9g81ns47d4vaj5pfgw9zwbcp0nivlm5rps4dlb6qwvzni1w";
     };
 
     doCheck = false;
 
     patches = [
       ../development/python-modules/rainbowstream/image.patch
+      ../development/python-modules/rainbowstream/setup.patch
     ];
 
     postPatch = ''
@@ -13425,6 +13428,7 @@ in modules // {
     buildInputs = with self; [
       pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales
       pillow twitter pyfiglet requests2 arrow dateutil modules.readline pysocks
+      pocket
     ];
 
     meta = {
@@ -13432,6 +13436,27 @@ in modules // {
       homepage    = "http://www.rainbowstream.org/";
       license     = licenses.mit;
       maintainers = with maintainers; [ thoughtpolice ];
+    };
+  };
+
+  pocket = buildPythonPackage rec {
+    name = "pocket-${version}";
+    version = "0.3.6";
+
+    src = pkgs.fetchurl {
+      url    = "mirror://pypi/p/pocket/${name}.tar.gz";
+      sha256 = "1fc9vc5nyzf1kzmnrs18dmns7nn8wjfrg7br1w4c5sgs35mg2ywh";
+    };
+
+    buildInputs = with self; [
+      requests2
+    ];
+
+    meta = {
+      description = "Wrapper for the pocket API";
+      homepage    = "https://github.com/tapanpandita/pocket";
+      license     = licenses.bsd3;
+      maintainers = with maintainers; [ ericsagnes ];
     };
   };
 
@@ -14349,12 +14374,12 @@ in modules // {
   };
 
   netifaces = buildPythonPackage rec {
-    version = "0.10.4";
+    version = "0.10.5";
     name = "netifaces-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/netifaces/${name}.tar.gz";
-      sha256 = "1plw237a4zib4z8s62g0mrs8gm3kjfrp5sxh6bbk9nl3rdls2mln";
+      sha256 = "12v2bm77dgaqjm9vmb8in0zpip2hn98mf5sycfvgq5iivm9avn2r";
     };
 
     meta = {
@@ -17750,9 +17775,11 @@ in modules // {
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = ${libinclude pkgs.freetype}|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = ${libinclude pkgs.libjpeg}|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude pkgs.zlib}|g ;
-              s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude' pkgs.libwebp}|g ;
+              s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude pkgs.lcms2}|g ;
               s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude pkgs.libtiff}|g ;
               s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' pkgs.tcl}|g ;'
+      export LDFLAGS="-L${pkgs.libwebp}/lib"
+      export CFLAGS="-I${pkgs.libwebp}/include"
     ''
     # Remove impurities
     + stdenv.lib.optionalString stdenv.isDarwin ''
@@ -19258,6 +19285,9 @@ in modules // {
       sha256 = "1x3i9wmzw33fpkis203alygfnrkcmq9w1aydcm887jh6frfqm6cw";
     };
 
+    # No tests distributed
+    doCheck = false;
+
     meta = {
       homepage = https://github.com/seb-m/pyinotify/wiki;
       description = "Monitor filesystems events on Linux platforms with inotify";
@@ -20136,14 +20166,16 @@ in modules // {
     };
   };
 
-  pysqlite = buildPythonPackage (rec {
-    name = "pysqlite-2.6.3";
-    disabled = isPy3k;
+  pysqlite = buildPythonPackage rec {
+    name = "pysqlite-2.8.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysqlite/${name}.tar.gz";
-      sha256 = "13djzgnbi71znjjyaw4nybg6smilgszcid646j5qav7mdchkb77y";
+      sha256 = "17d3335863e8cf8392eea71add33dab3f96d060666fe68ab7382469d307f4490";
     };
+
+    # Need to use the builtin sqlite3 on Python 3
+    disabled = isPy3k;
 
     # Since the `.egg' file is zipped, the `NEEDED' of the `.so' files
     # it contains is not taken into account.  Thus, we must explicitly make
@@ -20156,14 +20188,9 @@ in modules // {
               --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"
     '';
 
-    # error: invalid command 'test'
-    doCheck = false;
-
     meta = {
       homepage = http://pysqlite.org/;
-
       description = "Python bindings for the SQLite embedded relational database engine";
-
       longDescription = ''
         pysqlite is a DB-API 2.0-compliant database interface for SQLite.
 
@@ -20183,12 +20210,10 @@ in modules // {
         possible to create user-defined SQL functions and aggregates
         in Python.
       '';
-
       license = licenses.bsd3;
-
       maintainers = [ ];
     };
-  });
+  };
 
 
   pysvn = mkPythonDerivation rec {
@@ -21789,14 +21814,20 @@ in modules // {
 
   setuptools_scm = buildPythonPackage rec {
     name = "setuptools_scm-${version}";
-    version = "1.10.1";
+    version = "1.11.1";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/s/setuptools_scm/${name}.tar.bz2";
-      sha256 = "1cdea91bbe1ec4d52b3e9c451ab32ae6e1f3aa3fd91e90580490a9eb75bea286";
+      url = "mirror://pypi/s/setuptools_scm/${name}.tar.gz";
+      sha256 = "8c45f738a23410c5276b0ed9294af607f491e4260589f1eb90df8312e23819bf";
     };
 
-    buildInputs = with self; [ pip ];
+    buildInputs = with self; [ pip pytest ];
+    # Seems to fail due to chroot
+    doCheck = false;
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = with stdenv.lib; {
       homepage = https://bitbucket.org/pypa/setuptools_scm/;
@@ -23034,7 +23065,7 @@ in modules // {
       url = "mirror://pypi/s/${pname}/${name}.tar.gz";
       sha256 = "1f0fymrk4kvhqs0vj9gay4lhacxkfrlrpj4gvg0p4wjdczplxd3z";
     };
-    propagatedBuildInputs = with self; [ sphinx pyenchant];
+    propagatedBuildInputs = with self; [ sphinx pyenchant pbr ];
     # No tests included
     doCheck = false;
     meta = {
@@ -23053,7 +23084,7 @@ in modules // {
       url = "mirror://pypi/s/${pname}/${name}.tar.gz";
       sha256 = "1zsnhc573rvaww9qqyzs4f5h4hhvxklvppv14450vi5dk8rij81z";
     };
-    buildInputs = with self; [ sphinx-testing pytest];
+    buildInputs = with self; [ sphinx-testing pytest pbr];
     propagatedBuildInputs = with self; [ sphinx blockdiag ];
     checkPhase = ''
       py.test -k "not test_build_epub"
@@ -23141,23 +23172,23 @@ in modules // {
 
   sqlalchemy_1_0 = buildPythonPackage rec {
     name = "SQLAlchemy-${version}";
-    version = "1.0.14";
+    version = "1.0.15";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "1cq52yyplvi1wrvrzn779l9sfsjb158a18xaqbn7z779q4wilkfs";
+      sha256 = "586f5ccf068211795a89ed22d196c5cc3006b6be00261bcac6f584c0b8e0845a";
     };
 
-    buildInputs = with self; [ nose mock ]
-      ++ stdenv.lib.optional doCheck pysqlite;
+    buildInputs = with self; [ pytest mock pytest_xdist ]
+      ++ stdenv.lib.optional (!isPy3k) pysqlite;
     propagatedBuildInputs = with self; [ modules.sqlite3 ];
 
     # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
     # acceptable reason to make all dependents unavailable on Python 3 as well
-    doCheck = !(isPyPy || isPy3k);
+    #doCheck = !(isPyPy || isPy3k);
 
     checkPhase = ''
-      ${python.executable} sqla_nose.py
+      py.test
     '';
 
     meta = {
@@ -26583,6 +26614,8 @@ in modules // {
     };
     propagatedBuildInputs = with self; [ twisted requests2 cryptography ];
 
+    # Require network access
+    doCheck = false;
     checkPhase = ''
       ${python.interpreter} -m unittest discover
     '';
@@ -27526,6 +27559,10 @@ in modules // {
     buildInputs = with self; [
       pytest
     ];
+
+    checkPhase = ''
+      py.test
+    '';
   };
 
   signedjson = buildPythonPackage rec {

@@ -285,6 +285,8 @@ in
       inherit kernel rootModules allowMissing;
     };
 
+  nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) runCommand; };
+
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
   srcOnly = args: callPackage ../build-support/src-only args;
@@ -1019,6 +1021,8 @@ in
   cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
+
+  mdf2iso = callPackage ../tools/cd-dvd/mdf2iso { };
 
   libceph = self.ceph.lib;
   ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
@@ -3696,6 +3700,8 @@ in
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
+
+  tcpkali = callPackage ../applications/networking/tcpkali { };
 
   teamviewer = callPackage ../applications/networking/remote/teamviewer {
     stdenv = stdenv_32bit;
@@ -7095,6 +7101,8 @@ in
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
+  curlcpp = callPackage ../development/libraries/curlcpp { };
+
   cutee = callPackage ../development/libraries/cutee { };
 
   cxxtools = callPackage ../development/libraries/cxxtools { };
@@ -7133,7 +7141,7 @@ in
   dbus-sharp-glib-1_0 = callPackage ../development/libraries/dbus-sharp-glib/dbus-sharp-glib-1.0.nix { };
   dbus-sharp-glib-2_0 = callPackage ../development/libraries/dbus-sharp-glib { };
 
-  # Should we deprecate these? Currently there are many references.
+  # FIXME: deprecate these.
   dbus_tools = self.dbus.out;
   dbus_libs = self.dbus;
   dbus_daemon = self.dbus.daemon;
@@ -7630,13 +7638,13 @@ in
   gtk-sharp-2_0 = callPackage ../development/libraries/gtk-sharp/2.0.nix {
     inherit (gnome) libglade libgtkhtml gtkhtml
               libgnomecanvas libgnomeui libgnomeprint
-              libgnomeprintui GConf gnomepanel;
+              libgnomeprintui GConf;
   };
 
   gtk-sharp-3_0 = callPackage ../development/libraries/gtk-sharp/3.0.nix {
     inherit (gnome) libglade libgtkhtml gtkhtml
               libgnomecanvas libgnomeui libgnomeprint
-              libgnomeprintui GConf gnomepanel;
+              libgnomeprintui GConf;
   };
 
   gtk-sharp = self.gtk-sharp-2_0;
@@ -7758,7 +7766,7 @@ in
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_37;
+    llvmPackages = llvmPackages_39;
   };
 
   itk = callPackage ../development/libraries/itk { };
@@ -9049,6 +9057,10 @@ in
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
+  pcaudiolib = callPackage ../development/libraries/pcaudiolib {
+    pulseaudioSupport = config.pulseaudio or true;
+  };
+
   pcg_c = callPackage ../development/libraries/pcg-c { };
 
   pcl = callPackage ../development/libraries/pcl {
@@ -9448,6 +9460,8 @@ in
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
+  sonic = callPackage ../development/libraries/sonic { };
+
   soprano = callPackage ../development/libraries/soprano { };
 
   soqt = callPackage ../development/libraries/soqt { };
@@ -9802,9 +9816,12 @@ in
 
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
     php = php56;
+    sphinx = pythonPackages.sphinx;
   };
 
-  xapian-omega = callPackage ../tools/misc/xapian-omega {};
+  xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
+    libmagic = file;
+  };
 
   xavs = callPackage ../development/libraries/xavs { };
 
@@ -11399,7 +11416,10 @@ in
   linuxPackages_4_6 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_6 linuxPackages_4_6);
   linuxPackages_4_7 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_7 linuxPackages_4_7);
   # Don't forget to update linuxPackages_latest!
-  linuxPackages_testing = recurseIntoAttrs (self.linuxPackagesFor self.linux_testing linuxPackages_testing);
+
+  # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
+  linuxPackages_testing = self.linuxPackagesFor self.linux_testing linuxPackages_testing;
+
   linuxPackages_custom = {version, src, configfile}:
                            let linuxPackages_self = (self.linuxPackagesFor (self.linuxManualConfig {inherit version src configfile;
                                                                                                     allowImportFromDerivation=true;})
@@ -11791,6 +11811,7 @@ in
   utillinuxCurses = utillinux;
 
   utillinuxMinimal = appendToName "minimal" (utillinux.override {
+    minimal = true;
     ncurses = null;
     perl = null;
     systemd = null;
@@ -11927,8 +11948,14 @@ in
 
   crimson = callPackage ../data/fonts/crimson {};
 
-  dejavu_fonts = callPackage ../data/fonts/dejavu-fonts {
+  dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
+  });
+
+  # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
+  dejavu_fontsEnv = buildEnv {
+    name = "${dejavu_fonts.name}";
+    paths = [ dejavu_fonts.out ];
   };
 
   dina-font = callPackage ../data/fonts/dina { };
@@ -12271,6 +12298,8 @@ in
 
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
+  airwave = callPackage ../applications/audio/airwave/default.nix { };
+
   alchemy = callPackage ../applications/graphics/alchemy { };
 
   alock = callPackage ../misc/screensavers/alock { };
@@ -12351,6 +12380,7 @@ in
   bitcoin-xt = self.altcoins.bitcoin-xt;
 
   go-ethereum = self.altcoins.go-ethereum;
+  ethabi = self.altcoins.ethabi;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -13002,7 +13032,10 @@ in
     pythonPackages = python3Packages;
   };
 
-  espeak = callPackage ../applications/audio/espeak { };
+  espeak-classic = callPackage ../applications/audio/espeak { };
+
+  espeak-ng = callPackage ../applications/audio/espeak-ng { };
+  espeak = self.espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
@@ -13825,6 +13858,7 @@ in
     boost = boost155;
   };
   ledger = self.ledger3;
+  ledger-web = callPackage ../applications/office/ledger-web { };
 
   lighthouse = callPackage ../applications/misc/lighthouse { };
 
@@ -14263,6 +14297,8 @@ in
     inherit (pkgs.kde4) kdelibs;
   };
 
+  osmctools = callPackage ../applications/misc/osmctools { };
+
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
   opusfile = callPackage ../applications/audio/opusfile { };
@@ -14514,7 +14550,7 @@ in
   };
 
   qutebrowser = qt5.callPackage ../applications/networking/browsers/qutebrowser {
-    inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2;
+    inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2 cssutils;
     inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
   };
 
@@ -15005,6 +15041,8 @@ in
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
   transcode = callPackage ../applications/audio/transcode { };
+
+  transcribe = callPackage ../applications/audio/transcribe { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission_gtk = transmission.override { enableGTK3 = true; };
@@ -15567,7 +15605,7 @@ in
   };
 
   zotero = callPackage ../applications/office/zotero {
-    firefox = firefox-unwrapped;
+    firefox = firefox-esr-unwrapped;
   };
 
   zscroll = callPackage ../applications/misc/zscroll {};

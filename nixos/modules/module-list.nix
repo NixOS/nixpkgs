@@ -66,8 +66,9 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
-  ./programs/freetds.nix
   ./programs/fish.nix
+  ./programs/freetds.nix
+  ./programs/info.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/man.nix
@@ -388,6 +389,7 @@
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
+  ./services/networking/quagga.nix
   ./services/networking/quassel.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix

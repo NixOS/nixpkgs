@@ -22,5 +22,5 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--disable-scrollkeeper" "--disable-introspection"/*not useful AFAIK*/ ];
 
-  NIX_CFLAGS_COMPILE="-I${GConf}/include/gconf/2";
+  NIX_CFLAGS_COMPILE="-I${GConf.dev}/include/gconf/2";
 }
