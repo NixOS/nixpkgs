@@ -7,7 +7,7 @@
 , dbus_libs, gtk, gdk_pixbuf, gcc
 
 # Will crash without.
-, libudev
+, systemd
 
 # Loaded at runtime.
 , libexif
@@ -45,7 +45,7 @@ let
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite
     alsaLib libXdamage libXtst libXrandr expat cups
     dbus_libs gtk gdk_pixbuf gcc
-    libudev
+    systemd
     libexif
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd

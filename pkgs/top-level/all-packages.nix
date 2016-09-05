@@ -11783,8 +11783,8 @@ in
 
   # This hacky alias covers most use cases without mass-replace (build inputs)
   # and causes an *evaluation* error if "${udev}" is attempted.
-  udev = [ libudev.dev libudev.out ];
-  libudev = callPackage ../os-specific/linux/systemd/libudev.nix { };
+  udev = [ systemd.dev systemd.out ];
+  libudev = udev;
 
   eudev = callPackage ../os-specific/linux/eudev {};
 

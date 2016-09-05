@@ -8,7 +8,7 @@
 , libusb1, pciutils, nss
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, libudev, kerberos
+, nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk, dbus_glib
@@ -113,7 +113,7 @@ let
     buildInputs = defaultDependencies ++ [
       which
       python perl pkgconfig
-      nspr nss libudev
+      nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
       glib gtk dbus_glib
@@ -147,7 +147,7 @@ let
         -e "/python_arch/s/: *'[^']*'/: '""'/" \
         build/common.gypi chrome/chrome_tests.gypi
 
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${libudev.out}/lib/\1!' \
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
