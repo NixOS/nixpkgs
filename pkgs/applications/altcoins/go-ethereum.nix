@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "go-ethereum-${version}";
-  version = "1.4.7";
+  version = "1.4.11";
   rev = "refs/tags/v${version}";
   goPackagePath = "github.com/ethereum/go-ethereum";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     inherit rev;
     url = "https://${goPackagePath}";
-    sha256 = "19q518kxkvrr44cvsph4wv3lr6ivqsckz1f22r62932s3sq6gyd8";
+    sha256 = "0lflsx4sx9inb9z2x9qgp98pj623wp9h3c2bjah86zqy42qwwda1";
   };
 
   buildPhase = ''
