@@ -1712,6 +1712,21 @@ in modules // {
     };
   };
 
+  backports_ssl_match_hostname = self.buildPythonPackage rec {
+    name = "backports.ssl_match_hostname-${version}";
+    version = "3.5.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/backports.ssl_match_hostname/${name}.tar.gz";
+      sha256 = "1wndipik52cyqy0677zdgp90i435pmvwd89cz98lm7ri0y3xjajh";
+    };
+
+    meta = {
+      description = "The Secure Sockets layer is only actually *secure*";
+      homepage = http://bitbucket.org/brandon/backports.ssl_match_hostname;
+    };
+  };
+
   backports_lzma = self.buildPythonPackage rec {
     name = "backports.lzma-0.0.3";
     disabled = isPy3k;
@@ -12128,11 +12143,11 @@ in modules // {
   };
 
   ipaddress = if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
-    name = "ipaddress-1.0.15";
+    name = "ipaddress-1.0.16";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipaddress/${name}.tar.gz";
-      sha256 = "0dk6ky7akh5j4y3qbpnbi0qby64nyprbkrjm2s32pcfdr77qav5g";
+      sha256 = "1c3imabdrw8nfksgjjflzg7h4ynjckqacb188rf541m74arq4cas";
     };
 
     checkPhase = ''
@@ -26402,7 +26417,7 @@ in modules // {
       sha256 = "cb3ab95617ed2098d24723e3ad04ed06c4fde661400b96daa1859af965bfe040";
     };
 
-    propagatedBuildInputs = with self; [ six backports_ssl_match_hostname_3_4_0_2 unittest2 argparse ];
+    propagatedBuildInputs = with self; [ six backports_ssl_match_hostname unittest2 argparse ];
 
     meta = {
       homepage = https://github.com/liris/websocket-client;
