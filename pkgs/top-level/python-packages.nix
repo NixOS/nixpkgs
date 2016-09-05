@@ -10251,13 +10251,13 @@ in modules // {
   };
 
   docker_compose = buildPythonPackage rec {
-    version = "1.6.2";
+    version = "1.8.0";
     name = "docker-compose-${version}";
     namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-compose/${name}.tar.gz";
-      sha256 = "10i4032d99hm5nj1p74pcad9i3gz1h5x3096byklncgssfyjqki6";
+      sha256 = "1ad28x3marfmyrbibbkzy46bpbgc29k20ik661l8r49nr0m6px35";
     };
 
     # lots of networking and other fails
