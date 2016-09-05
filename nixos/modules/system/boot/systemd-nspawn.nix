@@ -106,29 +106,18 @@ in {
       description = "Definition of systemd-nspawn configurations.";
     };
 
-    systemd.nspawn.units = mkOption {
-      description = "Definition of systemd-nspawn units.";
-      default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
-        { options = concreteUnitOptions;
-          config = {
-            unit = mkDefault (makeUnit name config);
-          };
-        };
-    };
-
   };
 
-  config = mkIf config.systemd.nspawn.enable {
-    systemd.nspawn.units = mapAttrs' (n: v: nameValuePair "${n}.nspawn" (instanceToUnit n v)) cfg.instances;
+  config =
+    let
+      units = mapAttrs' (n: v: nameValuePair "${n}.nspawn" (instanceToUnit n v)) cfg.instances;
+    in mkIf config.systemd.nspawn.enale {
 
-    environment.etc."systemd/nspawn".source =
-      generateUnits "nspawn" cfg.units [] [];
+      environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];
 
-    systemd.services."systemd-nspawn@" = {
-      wantedBy = [ "machine.target" ];
-    };
+      systemd.services."systemd-nspawn@" = {
+        wantedBy = [ "machine.target" ];
+      };
   };
 
 }
