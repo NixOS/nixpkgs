@@ -5,11 +5,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "linphone-3.8.5";
+  name = "linphone-${version}";
+  major = "3.9";
+  version = "${major}.1";
 
   src = fetchurl {
-    url = "mirror://savannah/linphone/3.8.x/sources/${name}.tar.gz";
-    sha256 = "10brlbwkk61nhd5v2sim1vfv11xm138l1cqqh3imhs2sigmzzlax";
+    url = "mirror://savannah/linphone/${major}.x/sources/${name}.tar.gz";
+    sha256 = "1b14gwq36d0sbn1125if9zydll9kliigk19zchbqiy9n2gjymrl4";
   };
 
   buildInputs = [
