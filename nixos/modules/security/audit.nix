@@ -14,6 +14,7 @@ let
 
   disableScript = pkgs.writeScript "audit-disable" ''
     #!${pkgs.stdenv.shell} -eu
+    grep audit=0 /proc/cmdline && exit 0
     # Explicitly disable everything, as otherwise journald might start it.
     auditctl -D
     auditctl -e 0 -a task,never
