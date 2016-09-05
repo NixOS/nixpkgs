@@ -9,7 +9,8 @@
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL
 , vncSupport ? true, libjpeg, libpng
-, spiceSupport ? !stdenv.isDarwin, spice, spice_protocol, usbredir
+, spiceSupport ? !stdenv.isDarwin, spice, spice_protocol
+, usbredirSupport ? spiceSupport, usbredir
 , x86Only ? false
 , nixosTestRunner ? false
 }:
@@ -44,7 +45,8 @@ stdenv.mkDerivation rec {
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]
     ++ optionals vncSupport [ libjpeg libpng ]
-    ++ optionals spiceSupport [ spice_protocol spice usbredir ]
+    ++ optionals spiceSupport [ spice_protocol spice ]
+    ++ optionals usbredirSupport [ usbredir ]
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ];
 
   enableParallelBuilding = true;
@@ -95,6 +97,7 @@ stdenv.mkDerivation rec {
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
+    ++ optional usbredirSupport "--enable-usb-redir"
     ++ optional x86Only "--target-list=i386-softmmu,x86_64-softmmu"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isLinux "--enable-linux-aio";
