@@ -31,6 +31,7 @@ with stdenv.lib;
 
   # Debugging.
   DEBUG_KERNEL y
+  DYNAMIC_DEBUG y
   TIMER_STATS y
   BACKTRACE_SELF_TEST n
   CPU_NOTIFIER_ERROR_INJECT? n
