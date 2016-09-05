@@ -4573,6 +4573,7 @@ in
     libcCross = if crossSystem != null then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
+    cloog = if !stdenv.isDarwin then cloog else null;
   }));
 
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
