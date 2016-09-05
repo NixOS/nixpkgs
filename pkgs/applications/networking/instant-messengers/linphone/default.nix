@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
-, zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, polarssl, libsoup, udev
+, zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, libsoup, udev
 , ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip
 , mediastreamer-openh264, makeWrapper
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     readline openldap cyrus_sasl libupnp zlib libxml2 gtk2 libnotify speex ffmpeg libX11
-    polarssl libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
+    libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
   ];
 
   nativeBuildInputs = [ intltool pkgconfig makeWrapper ];
@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-ldap"
     "--with-ffmpeg=${ffmpeg.dev}"
-    "--with-polarssl=${polarssl}"
-    "--enable-lime"
     "--enable-external-ortp"
     "--enable-external-mediastreamer"
   ];
