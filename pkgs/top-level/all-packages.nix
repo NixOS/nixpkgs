@@ -11809,6 +11809,7 @@ in
   utillinuxCurses = utillinux;
 
   utillinuxMinimal = appendToName "minimal" (utillinux.override {
+    minimal = true;
     ncurses = null;
     perl = null;
     systemd = null;

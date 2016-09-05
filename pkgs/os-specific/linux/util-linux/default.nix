@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, zlib, ncurses ? null, perl ? null, pam, systemd }:
+{ lib, stdenv, fetchurl, pkgconfig, zlib, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
 
 stdenv.mkDerivation rec {
   name = "util-linux-${version}";
-  version = stdenv.lib.concatStringsSep "." ([ majorVersion ]
-    ++ stdenv.lib.optional (patchVersion != "") patchVersion);
+  version = lib.concatStringsSep "." ([ majorVersion ]
+    ++ lib.optional (patchVersion != "") patchVersion);
   majorVersion = "2.28";
   patchVersion = "1";
 
@@ -56,17 +56,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs =
     [ zlib pam ]
-    ++ stdenv.lib.optional (ncurses != null) ncurses
-    ++ stdenv.lib.optional (systemd != null) [ systemd pkgconfig ]
-    ++ stdenv.lib.optional (perl != null) perl;
+    ++ lib.optional (ncurses != null) ncurses
+    ++ lib.optional (systemd != null) [ systemd pkgconfig ]
+    ++ lib.optional (perl != null) perl;
 
   postInstall = ''
     rm "$bin/bin/su" # su should be supplied by the su package (shadow)
+  '' + lib.optionalString minimal ''
+    rm -rf $out/share/{locale,doc,bash-completion}
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://www.kernel.org/pub/linux/utils/util-linux/;
     description = "A set of system utilities for Linux";
     license = licenses.gpl2; # also contains parts under more permissive licenses
