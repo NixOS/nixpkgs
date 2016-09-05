@@ -45,5 +45,6 @@ in stdenv.mkDerivation rec {
     maintainers = gnome3.maintainers;
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 }
