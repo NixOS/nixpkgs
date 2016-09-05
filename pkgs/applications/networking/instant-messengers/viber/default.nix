@@ -1,6 +1,6 @@
 {fetchurl, stdenv, dpkg, makeWrapper,
  alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1, harfbuzz, libcap,
- libpulseaudio, mesa, nspr, nss, libudev, wayland, xorg, zlib, ...
+ libpulseaudio, mesa, nspr, nss, systemd, wayland, xorg, zlib, ...
 }:
 
 assert stdenv.system == "x86_64-linux";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       nspr
       nss
       stdenv.cc.cc
-      libudev
+      systemd
       wayland
       zlib
 

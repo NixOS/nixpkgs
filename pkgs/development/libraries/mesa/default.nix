@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, libudev
+, file, expat, libdrm, xorg, wayland, systemd
 , llvmPackages, libffi, libomxil-bellagio, libva
 , libelf, libvdpau, python
 , grsecEnabled ? false
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        libudev = libudev.out;
+        libudev = systemd.lib;
       });
 
   postPatch = ''
@@ -114,7 +114,7 @@ stdenv.mkDerivation {
     libffi wayland libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs
     (python.withPackages (ps: [ ps.Mako ]))
-  ] ++ optional stdenv.isLinux libudev;
+  ] ++ optional stdenv.isLinux systemd;
 
 
   enableParallelBuilding = true;
