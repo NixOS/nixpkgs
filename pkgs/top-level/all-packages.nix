@@ -1262,6 +1262,7 @@ in
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
 
   cunit = callPackage ../tools/misc/cunit { };
+  bcunit = callPackage ../tools/misc/bcunit { };
 
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };
 
