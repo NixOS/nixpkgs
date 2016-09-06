@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "0q03gg0sh2mljlbmhamnxz28d13znh9dzca84p554s7pwg6z4wca";
+  outputHash = "13l78kdn5px2n5jkbdmligmmgij7dlfkvahgy6wmg3515496cj7k";
 
   meta = with stdenv.lib; {
     homepage = https://www.google.com/fontsl;
