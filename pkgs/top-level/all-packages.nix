@@ -14642,6 +14642,8 @@ in
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
+  squishyball = callPackage ../applications/audio/squishyball { };
+
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
