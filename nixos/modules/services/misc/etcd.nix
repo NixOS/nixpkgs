@@ -28,13 +28,13 @@ in {
 
     listenClientUrls = mkOption {
       description = "Etcd list of URLs to listen on for client traffic.";
-      default = ["http://localhost:4001"];
+      default = ["http://127.0.0.1:2379"];
       type = types.listOf types.str;
     };
 
     listenPeerUrls = mkOption {
       description = "Etcd list of URLs to listen on for peer traffic.";
-      default = ["http://localhost:7001"];
+      default = ["http://127.0.0.1:2380"];
       type = types.listOf types.str;
     };
 
@@ -46,7 +46,7 @@ in {
 
     initialCluster = mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
-      default = ["${cfg.name}=http://localhost:7001"];
+      default = ["${cfg.name}=http://127.0.0.1:2380"];
       type = types.listOf types.str;
     };
 
@@ -66,6 +66,54 @@ in {
       description = "Etcd discovery url";
       default = "";
       type = types.str;
+    };
+
+    clientCertAuth = mkOption {
+      description = "Whether to use certs for client authentication";
+      default = false;
+      type = types.bool;
+    };
+
+    trustedCaFile = mkOption {
+      description = "Certificate authority file to use for clients";
+      default = null;
+      type = types.nullOr types.path;
+    };
+
+    certFile = mkOption {
+      description = "Cert file to use for clients";
+      default = null;
+      type = types.nullOr types.path;
+    };
+
+    keyFile = mkOption {
+      description = "Key file to use for clients";
+      default = null;
+      type = types.nullOr types.path;
+    };
+
+    peerCertFile = mkOption {
+      description = "Cert file to use for peer to peer communication";
+      default = cfg.certFile;
+      type = types.nullOr types.path;
+    };
+
+    peerKeyFile = mkOption {
+      description = "Key file to use for peer to peer communication";
+      default = cfg.keyFile;
+      type = types.nullOr types.path;
+    };
+
+    peerTrustedCaFile = mkOption {
+      description = "Certificate authority file to use for peer to peer communication";
+      default = cfg.trustedCaFile;
+      type = types.nullOr types.path;
+    };
+
+    peerClientCertAuth = mkOption {
+      description = "Whether to check all incoming peer requests from the cluster for valid client certificates signed by the supplied CA";
+      default = false;
+      type = types.bool;
     };
 
     extraConf = mkOption {
@@ -99,7 +147,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
 
-      environment = {
+      environment = (filterAttrs (n: v: v != null) {
         ETCD_NAME = cfg.name;
         ETCD_DISCOVERY = cfg.discovery;
         ETCD_DATA_DIR = cfg.dataDir;
@@ -107,7 +155,14 @@ in {
         ETCD_LISTEN_CLIENT_URLS = concatStringsSep "," cfg.listenClientUrls;
         ETCD_LISTEN_PEER_URLS = concatStringsSep "," cfg.listenPeerUrls;
         ETCD_INITIAL_ADVERTISE_PEER_URLS = concatStringsSep "," cfg.initialAdvertisePeerUrls;
-      } // (optionalAttrs (cfg.discovery == ""){
+        ETCD_PEER_TRUSTED_CA_FILE = cfg.peerTrustedCaFile;
+        ETCD_PEER_CERT_FILE = cfg.peerCertFile;
+        ETCD_PEER_KEY_FILE = cfg.peerKeyFile;
+        ETCD_CLIENT_CERT_AUTH = toString cfg.peerClientCertAuth;
+        ETCD_TRUSTED_CA_FILE = cfg.trustedCaFile;
+        ETCD_CERT_FILE = cfg.certFile;
+        ETCD_KEY_FILE = cfg.keyFile;
+      }) // (optionalAttrs (cfg.discovery == ""){
         ETCD_INITIAL_CLUSTER = concatStringsSep "," cfg.initialCluster;
         ETCD_INITIAL_CLUSTER_STATE = cfg.initialClusterState;
         ETCD_INITIAL_CLUSTER_TOKEN = cfg.initialClusterToken;

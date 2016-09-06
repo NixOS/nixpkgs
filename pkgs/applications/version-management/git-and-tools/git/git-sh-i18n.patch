@@ -1,11 +1,9 @@
-diff --git a/git-sh-i18n.sh b/git-sh-i18n.sh
-index e6c3116..4e34a2c 100644
 --- a/git-sh-i18n.sh
 +++ b/git-sh-i18n.sh
-@@ -15,69 +15,11 @@ else
+@@ -15,87 +15,11 @@
  fi
  export TEXTDOMAINDIR
- 
+
 -# First decide what scheme to use...
 -GIT_INTERNAL_GETTEXT_SH_SCHEME=fallthrough
 -if test -n "@@USE_GETTEXT_SCHEME@@"
@@ -44,6 +42,13 @@ index e6c3116..4e34a2c 100644
 -			git sh-i18n--envsubst "$1"
 -		)
 -	}
+-
+-	eval_ngettext () {
+-		ngettext "$1" "$2" "$3" | (
+-			export PATH $(git sh-i18n--envsubst --variables "$2");
+-			git sh-i18n--envsubst "$2"
+-		)
+-	}
 -	;;
 -poison)
 -	# Emit garbage so that tests that incorrectly rely on translatable
@@ -55,24 +60,35 @@ index e6c3116..4e34a2c 100644
 -	eval_gettext () {
 -		printf "%s" "# GETTEXT POISON #"
 -	}
+-
+-	eval_ngettext () {
+-		printf "%s" "# GETTEXT POISON #"
+-	}
 -	;;
 -*)
 -	gettext () {
 -		printf "%s" "$1"
 -	}
-+# GNU gettext
-+export GIT_INTERNAL_GETTEXT_SH_SCHEME=gnu
-+export PATH=@gettext@/bin:$PATH
- 
+-
 -	eval_gettext () {
 -		printf "%s" "$1" | (
 -			export PATH $(git sh-i18n--envsubst --variables "$1");
 -			git sh-i18n--envsubst "$1"
 -		)
 -	}
++# GNU gettext
++export GIT_INTERNAL_GETTEXT_SH_SCHEME=gnu
++export PATH=@gettext@/bin:$PATH
+
+-	eval_ngettext () {
+-		(test "$3" = 1 && printf "%s" "$1" || printf "%s" "$2") | (
+-			export PATH $(git sh-i18n--envsubst --variables "$2");
+-			git sh-i18n--envsubst "$2"
+-		)
+-	}
 -	;;
 -esac
 +. @gettext@/bin/gettext.sh
- 
+
  # Git-specific wrapper functions
  gettextln () {

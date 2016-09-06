@@ -3,7 +3,7 @@
 
   src = fetchurl {
     url = "http://downloads.dell.com/printer/Dell-5130cdn-Color-Laser-${version}.noarch.rpm";
-    md5 = "7fb7122e67e40b99deb9665d88df62d1";
+    sha256 = "0pj32sj6jcdnpa5v75af0hnvx4z0ky0m1k2522cfdx4cb1r2lna9";
   };
 in runCommand "Dell-5130cdn-Color-Laser-1.3-1" {} ''
   mkdir -p usr/share/cups/model

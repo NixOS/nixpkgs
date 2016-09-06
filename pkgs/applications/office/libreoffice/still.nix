@@ -271,5 +271,6 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 }

@@ -5243,7 +5243,8 @@ in modules // {
       sha256 = "a11c41b0cf8218e7cdc19ab7a1bdf5c141d161cd2350daee819473cc63cd0685";
     };
 
-    disabled = !isPy3k;
+    # Tests require some python3-isms but code works without.
+    doCheck = isPy3k;
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ];
@@ -7896,17 +7897,17 @@ in modules // {
 
   pirate-get = buildPythonPackage rec {
     name = "pirate-get-${version}";
-    version = "0.2.8";
+    version = "0.2.9";
 
     disabled = !isPy3k;
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pirate-get/${name}.tar.gz";
-      sha256 = "033dwv0w9fx3dwrna3fzvmynsfhb2qjhx6f2i9sfv82ijvkm8ynz";
+      sha256 = "1djmfghnwsn3z525h6d98r0lllayvzsg71z0gskk25zr24kjs24a";
     };
 
-    propagatedBuildInputs = with self; [ colorama veryprettytable pyquery ];
+    propagatedBuildInputs = with self; [ colorama veryprettytable beautifulsoup4 ];
 
     meta = {
       description = "A command line interface for The Pirate Bay";
@@ -17839,9 +17840,11 @@ in modules // {
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = ${libinclude pkgs.freetype}|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = ${libinclude pkgs.libjpeg}|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude pkgs.zlib}|g ;
-              s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude' pkgs.libwebp}|g ;
+              s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude pkgs.lcms2}|g ;
               s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude pkgs.libtiff}|g ;
               s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' pkgs.tcl}|g ;'
+      export LDFLAGS="-L${pkgs.libwebp}/lib"
+      export CFLAGS="-I${pkgs.libwebp}/include"
     ''
     # Remove impurities
     + stdenv.lib.optionalString stdenv.isDarwin ''
@@ -27062,13 +27065,13 @@ in modules // {
   };
 
   libvirt = let
-    version = "2.1.0";
+    version = "2.2.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "1jxsxnhy303l3wpxzkyip39yq65zwc0pxni6ww0jgnv0pshpz23l";
+      sha256 = "0xpamw9gjmahvrbfkxjlplgdbhjr35vpp3a942bmw9qqy2rjwsxs";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];

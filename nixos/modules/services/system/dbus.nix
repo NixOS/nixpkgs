@@ -84,7 +84,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus_tools ];
+    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
     environment.etc = singleton
       { source = configDir;
@@ -104,7 +104,7 @@ in
 
     security.setuidOwners = singleton
       { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus_daemon.out}/libexec/dbus-daemon-launch-helper";
+        source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
         owner = "root";
         group = "messagebus";
         setuid = true;

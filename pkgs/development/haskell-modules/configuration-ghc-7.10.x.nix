@@ -219,6 +219,7 @@ self: super: {
   # also tests require bytestring>=0.10.8.1
   cereal = dontCheck (addBuildDepend super.cereal self.fail);
   cereal_0_5_2_0 = dontCheck (addBuildDepend super.cereal_0_5_2_0 self.fail);
+  lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
 
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };

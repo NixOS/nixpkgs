@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack, qt48
+, libmsgpack, qt48, libsodium
 }:
 
 let
@@ -127,6 +127,14 @@ in
 
   puma = attrs: {
     buildInputs = [ openssl ];
+  };
+
+  rbnacl = spec: {
+    postInstall = ''
+    sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
+    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium.${if stdenv.isDarwin then "dylib" else "so"}'
+    "
+    '';
   };
 
   rmagick = attrs: {
