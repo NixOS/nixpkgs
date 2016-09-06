@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://alioth.debian.org/frs/download.php/file/1140/${name}.tar.gz";
-    md5 = "c63bf7b0bb5f530cf3c08715db721cd3";
+    sha256 = "1ad4zr7rcxpda8yzvfkq1rfjgx9nl6lan5a628wvpdbh3fn9v0z7";
   };
 
   preConfigure = ''
