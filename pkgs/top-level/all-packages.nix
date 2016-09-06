@@ -13881,7 +13881,7 @@ in
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
-    ffmpeg = ffmpeg_2;
+    polarssl = mbedtls_1_3;
   };
 
   linuxsampler = callPackage ../applications/audio/linuxsampler {

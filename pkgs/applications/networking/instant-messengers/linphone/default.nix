@@ -1,32 +1,36 @@
 { stdenv, fetchurl, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
 , zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, libsoup, udev
 , ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip
-, mediastreamer-openh264, makeWrapper
+, mediastreamer-openh264, bctoolbox, makeWrapper, fetchFromGitHub, cmake
+, libmatroska, bcunit, doxygen, gdk_pixbuf, glib, cairo, pango, polarssl
 }:
 
 stdenv.mkDerivation rec {
-  name = "linphone-${version}";
-  major = "3.9";
-  version = "${major}.1";
+  baseName = "linphone";
+  version = "3.10.2";
+  name = "${baseName}-${version}";
 
-  src = fetchurl {
-    url = "mirror://savannah/linphone/${major}.x/sources/${name}.tar.gz";
-    sha256 = "1b14gwq36d0sbn1125if9zydll9kliigk19zchbqiy9n2gjymrl4";
+  src = fetchFromGitHub {
+    owner = "BelledonneCommunications";
+    repo = "${baseName}";
+    rev = "${version}";
+    sha256 = "053gad4amdbq5za8f2n9j5q59nkky0w098zbsa3dvpcqvv7ar16p";
   };
 
   buildInputs = [
     readline openldap cyrus_sasl libupnp zlib libxml2 gtk2 libnotify speex ffmpeg libX11
-    libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
+    polarssl libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
+    bctoolbox libmatroska bcunit gdk_pixbuf glib cairo pango
   ];
 
-  nativeBuildInputs = [ intltool pkgconfig makeWrapper ];
+  nativeBuildInputs = [ intltool pkgconfig makeWrapper cmake doxygen ];
 
-  configureFlags = [
-    "--enable-ldap"
-    "--with-ffmpeg=${ffmpeg.dev}"
-    "--enable-external-ortp"
-    "--enable-external-mediastreamer"
-  ];
+  NIX_CFLAGS_COMPILE = " -Wno-error -I${glib.dev}/include/glib-2.0
+    -I${glib.out}/lib/glib-2.0/include -I${gtk2.dev}/include/gtk-2.0/
+    -I${cairo.dev}/include/cairo -I${pango.dev}/include/pango-1.0
+    -I${gtk2}/lib/gtk-2.0/include
+    -DLIBLINPHONE_GIT_VERSION=\"v${version}\"
+    ";
 
   postInstall = ''
     for i in $(cd $out/bin && ls); do
