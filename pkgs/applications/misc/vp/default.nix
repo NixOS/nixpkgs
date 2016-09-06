@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, SDL, SDL_image }:
+{ stdenv, fetchFromGitHub, autoreconfHook, SDL, SDL_image }:
 
 stdenv.mkDerivation rec {
   name = "vp-${version}";
@@ -11,11 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "08q6xrxsyj6vj0sz59nix9isqz84gw3x9hym63lz6v8fpacvykdq";
   };
 
-  buildInputs = [ SDL autoconf automake SDL_image ];
+  configureFlags = [ "CFLAGS=-I${SDL_image}/include/SDL" ];
 
-  preConfigure = ''
-    autoreconf -i
-  '';
+  buildInputs = [ SDL autoreconfHook SDL_image ];
 
   meta = with stdenv.lib; {
     homepage = http://brlcad.org/~erik/;
