@@ -1,27 +1,27 @@
-{ stdenv, fetchurl, python, pygtk, notify, keybinder, vte, gettext, intltool
-, makeWrapper
+{ stdenv, fetchurl, buildPythonApplication, python2Packages, pango, notify, keybinder, vte, gettext, intltool, file
 }:
 
-stdenv.mkDerivation rec {
+buildPythonApplication rec {
   name = "terminator-${version}";
   version = "0.98";
-  
+
   src = fetchurl {
     url = "https://launchpad.net/terminator/trunk/${version}/+download/${name}.tar.gz";
     sha256 = "1h965z06dsfk38byyhnsrscd9r91qm92ggwgjrh7xminzsgqqv8a";
   };
-  
-  buildInputs = [
-    python pygtk notify keybinder vte gettext intltool makeWrapper
+
+  nativeBuildInputs = [ file ];
+
+  pythonPath = with python2Packages; [
+    pygtk pygobject vte keybinder notify gettext pango
   ];
 
-  installPhase = ''
-    python setup.py --without-icon-cache install --prefix="$out"
+  postPatch = ''
+    patchShebangs .
+  '';
 
-    for file in "$out"/bin/*; do
-        wrapProgram "$file" \
-            --prefix PYTHONPATH : "$(toPythonPath $out):$PYTHONPATH"
-    done
+  checkPhase = ''
+    ./run_tests
   '';
 
   meta = with stdenv.lib; {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://gnometerminator.blogspot.no/p/introduction.html;
     license = licenses.gpl2;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor globin ];
     platforms = platforms.linux;
   };
 }
