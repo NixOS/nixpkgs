@@ -114,17 +114,18 @@ let
         port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
         listenString = toString port + optionalString ssl " ssl http2"
           + optionalString vhost.default " default";
-        acmeLocation = optionalString vhost.enableACME ''
+        acmeLocation = optionalString vhost.enableACME (''
           location /.well-known/acme-challenge {
-            try_files $uri @acme-fallback;
+            ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             root ${vhost.acmeRoot};
             auth_basic off;
           }
+        '' + (optionalString (vhost.acmeFallbackHost != null) ''
           location @acme-fallback {
             auth_basic off;
             proxy_pass http://${vhost.acmeFallbackHost};
           }
-        '';
+        ''));
       in ''
         ${optionalString vhost.forceSSL ''
           server {
