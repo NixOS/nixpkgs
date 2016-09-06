@@ -1,14 +1,16 @@
 {stdenv, fetchurl, jdk}:
 
+let version = "5.5.36"; in
+
 stdenv.mkDerivation {
 
-  name = "jakarta-tomcat-5.0.27";
+  name = "jakarta-tomcat-${version}";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = https://archive.apache.org/dist/tomcat/tomcat-5/archive/v5.0.27/bin/jakarta-tomcat-5.0.27.tar.gz;
-    sha256 = "0y3xfzb3wch359c6w0a2npxbj3vasrmr5jlvws8m08qn8d5wjgw7";
+    url = "https://archive.apache.org/dist/tomcat/tomcat-5/v${version}/bin/apache-tomcat-${version}.tar.gz";
+    sha256 = "01mzvh53wrs1p2ym765jwd00gl6kn8f9k3nhdrnhdqr8dhimfb2p";
   };
 
   inherit jdk;
