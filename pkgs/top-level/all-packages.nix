@@ -5582,6 +5582,8 @@ in
 
   solc = callPackage ../development/compilers/solc { };
 
+  souffle = callPackage ../development/compilers/souffle { };
+
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper { };
 
   squeak = callPackage ../development/compilers/squeak { };
