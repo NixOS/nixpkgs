@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # See https://github.com/souffle-lang/souffle/issues/176
+  hardeningDisable = [ "fortify" ];
+
   meta = with stdenv.lib; {
     description = "A translator of declarative Datalog programs into the C++ language";
     homepage    = "http://souffle-lang.github.io/";
