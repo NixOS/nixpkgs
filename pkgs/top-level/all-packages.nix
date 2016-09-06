@@ -13550,6 +13550,8 @@ in
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
+  hyperterm = callPackage ../applications/misc/hyperterm { inherit (gnome) GConf; };
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
