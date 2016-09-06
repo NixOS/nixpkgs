@@ -10,7 +10,7 @@ import ./make-test.nix ({ pkgs, withFirewall, ... }:
   {
     name = "nat${if withFirewall then "WithFirewall" else "Standalone"}";
   meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ eelco chaoflow rob wkennington ];
+      maintainers = [ eelco chaoflow rbvermaa wkennington ];
     };
 
     nodes =

@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "An interactive process viewer for Linux";
     homepage = "http://htop.sourceforge.net";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ rob simons relrod ];
+    maintainers = with stdenv.lib.maintainers; [ rbvermaa simons relrod ];
   };
 }

@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     description = "A program which generates ASCII pictures of a cow with a message";
     homepage = http://www.nog.net/~tony/warez/cowsay.shtml;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.rob ];
+    maintainers = [ stdenv.lib.maintainers.rbvermaa ];
   };
 }
