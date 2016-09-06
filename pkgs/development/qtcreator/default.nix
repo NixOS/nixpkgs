@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmakeHook makeQtWrapper makeWrapper ];
 
-  doCheck = false;
+  doCheck = true;
 
   enableParallelBuilding = true;
 
