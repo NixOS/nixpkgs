@@ -1625,7 +1625,9 @@ in
 
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
-  fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
+  fontforge = lowPrio (callPackage ../tools/misc/fontforge {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  });
   fontforge-gtk = callPackage ../tools/misc/fontforge {
     withGTK = true;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
