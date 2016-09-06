@@ -10546,8 +10546,6 @@ in
 
   influxdb10 = callPackage ../servers/nosql/influxdb/v1.nix { };
 
-  hyperdex = callPackage ../servers/nosql/hyperdex { };
-
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
