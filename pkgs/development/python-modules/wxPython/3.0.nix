@@ -1,17 +1,17 @@
-{ fetchurl
+{ stdenv, fetchurl
 , lib
 , pythonPackages
 , openglSupport ? true
-, libX11
-, wxGTK
+, wxWidgets
 , pkgconfig
+, setfile ? null , AGL ? null
 }:
 
-assert wxGTK.unicode;
+assert wxWidgets.unicode;
 
 with pythonPackages;
 
-buildPythonPackage rec {
+stdenv.mkDerivation rec {
   name = "wxPython-${version}";
   version = "3.0.2.0";
 
@@ -25,17 +25,19 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "format" ];
 
-  propagatedBuildInputs = [ pkgconfig wxGTK (wxGTK.gtk) libX11 ]  ++ lib.optional openglSupport pyopengl;
-  preConfigure = "cd wxPython";
+  buildInputs = [ pkgconfig wxWidgets ]
+    ++ lib.optional openglSupport pyopengl
+    ++ lib.optionals stdenv.isDarwin [ AGL ];
 
-  NIX_LDFLAGS = "-lX11 -lgdk-x11-2.0";
+  configureFlags = [
+    "--disable-precomp-headers"
+    "--with-macosx-version-min=10.7"
+  ];
 
-  buildPhase = "";
-
-  installPhase = ''
-    ${python.interpreter} setup.py install WXPORT=gtk2 NO_HEADERS=1 BUILD_GLCANVAS=${if openglSupport then "1" else "0"} UNICODE=1 --prefix=$out
-    wrapPythonPrograms
+  patchPhase = ''
+    substituteInPlace configure --replace "-framework System" -lSystem
+    substituteInPlace configure --replace /Developer/Tools/SetFile ${setfile}/bin/SetFile
   '';
 
-  passthru = { inherit wxGTK openglSupport; };
+  passthru = { inherit wxWidgets openglSupport; };
 }
