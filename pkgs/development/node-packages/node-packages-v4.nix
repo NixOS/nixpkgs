@@ -22041,6 +22041,163 @@ in
     };
     production = true;
   };
+  elasticdump = nodeEnv.buildNodePackage {
+    name = "elasticdump";
+    packageName = "elasticdump";
+    version = "2.4.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/elasticdump/-/elasticdump-2.4.2.tgz";
+      sha1 = "757c98aea05ee8714f0de2a33224c4136414633e";
+    };
+    dependencies = [
+      (sources."JSONStream-1.1.4" // {
+        dependencies = [
+          sources."jsonparse-1.2.0"
+          sources."through-2.3.8"
+        ];
+      })
+      (sources."async-2.0.1" // {
+        dependencies = [
+          sources."lodash-4.15.0"
+        ];
+      })
+      sources."aws4-1.4.1"
+      (sources."optimist-0.6.1" // {
+        dependencies = [
+          sources."wordwrap-0.0.3"
+          sources."minimist-0.0.10"
+        ];
+      })
+      (sources."request-2.74.0" // {
+        dependencies = [
+          sources."aws-sign2-0.6.0"
+          (sources."bl-1.1.2" // {
+            dependencies = [
+              (sources."readable-stream-2.0.6" // {
+                dependencies = [
+                  sources."core-util-is-1.0.2"
+                  sources."inherits-2.0.1"
+                  sources."isarray-1.0.0"
+                  sources."process-nextick-args-1.0.7"
+                  sources."string_decoder-0.10.31"
+                  sources."util-deprecate-1.0.2"
+                ];
+              })
+            ];
+          })
+          sources."caseless-0.11.0"
+          (sources."combined-stream-1.0.5" // {
+            dependencies = [
+              sources."delayed-stream-1.0.0"
+            ];
+          })
+          sources."extend-3.0.0"
+          sources."forever-agent-0.6.1"
+          sources."form-data-1.0.1"
+          (sources."har-validator-2.0.6" // {
+            dependencies = [
+              (sources."chalk-1.1.3" // {
+                dependencies = [
+                  sources."ansi-styles-2.2.1"
+                  sources."escape-string-regexp-1.0.5"
+                  (sources."has-ansi-2.0.0" // {
+                    dependencies = [
+                      sources."ansi-regex-2.0.0"
+                    ];
+                  })
+                  (sources."strip-ansi-3.0.1" // {
+                    dependencies = [
+                      sources."ansi-regex-2.0.0"
+                    ];
+                  })
+                  sources."supports-color-2.0.0"
+                ];
+              })
+              (sources."commander-2.9.0" // {
+                dependencies = [
+                  sources."graceful-readlink-1.0.1"
+                ];
+              })
+              (sources."is-my-json-valid-2.13.1" // {
+                dependencies = [
+                  sources."generate-function-2.0.0"
+                  (sources."generate-object-property-1.2.0" // {
+                    dependencies = [
+                      sources."is-property-1.0.2"
+                    ];
+                  })
+                  sources."jsonpointer-2.0.0"
+                  sources."xtend-4.0.1"
+                ];
+              })
+              (sources."pinkie-promise-2.0.1" // {
+                dependencies = [
+                  sources."pinkie-2.0.4"
+                ];
+              })
+            ];
+          })
+          (sources."hawk-3.1.3" // {
+            dependencies = [
+              sources."hoek-2.16.3"
+              sources."boom-2.10.1"
+              sources."cryptiles-2.0.5"
+              sources."sntp-1.0.9"
+            ];
+          })
+          (sources."http-signature-1.1.1" // {
+            dependencies = [
+              sources."assert-plus-0.2.0"
+              (sources."jsprim-1.3.0" // {
+                dependencies = [
+                  sources."extsprintf-1.0.2"
+                  sources."json-schema-0.2.2"
+                  sources."verror-1.3.6"
+                ];
+              })
+              (sources."sshpk-1.10.0" // {
+                dependencies = [
+                  sources."asn1-0.2.3"
+                  sources."assert-plus-1.0.0"
+                  sources."dashdash-1.14.0"
+                  sources."getpass-0.1.6"
+                  sources."jsbn-0.1.0"
+                  sources."tweetnacl-0.13.3"
+                  sources."jodid25519-1.0.2"
+                  sources."ecc-jsbn-0.1.1"
+                  (sources."bcrypt-pbkdf-1.0.0" // {
+                    dependencies = [
+                      sources."tweetnacl-0.14.3"
+                    ];
+                  })
+                ];
+              })
+            ];
+          })
+          sources."is-typedarray-1.0.0"
+          sources."isstream-0.1.2"
+          sources."json-stringify-safe-5.0.1"
+          (sources."mime-types-2.1.11" // {
+            dependencies = [
+              sources."mime-db-1.23.0"
+            ];
+          })
+          sources."node-uuid-1.4.7"
+          sources."oauth-sign-0.8.2"
+          sources."qs-6.2.1"
+          sources."stringstream-0.0.5"
+          sources."tough-cookie-2.3.1"
+          sources."tunnel-agent-0.4.3"
+        ];
+      })
+    ];
+    meta = {
+      description = "import and export tools for elasticsearch";
+      homepage = "https://github.com/taskrabbit/elasticsearch-dump#readme";
+      license = "Apache-2.0";
+    };
+    production = true;
+  };
   eslint = nodeEnv.buildNodePackage {
     name = "eslint";
     packageName = "eslint";
