@@ -105,6 +105,16 @@ let
         '';
       };
 
+      setEnvironment = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the service should set the environment variables
+          listed in <option>environment.sessionVariables</option>
+          using <literal>pam_env.so</literal>.
+        '';
+      };
+
       setLoginUid = mkOption {
         type = types.bool;
         description = ''
@@ -284,7 +294,9 @@ let
               "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
 
           # Session management.
-          session required pam_env.so envfile=${config.system.build.pamEnvironment}
+          ${optionalString cfg.setEnvironment ''
+            session required pam_env.so envfile=${config.system.build.pamEnvironment}
+          ''}
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
               "session ${
@@ -477,6 +489,13 @@ in
         vlock = {};
         xlock = {};
         xscreensaver = {};
+
+        runuser = { rootOK = true; unixAuth = false; setEnvironment = false; };
+
+        /* FIXME: should runuser -l start a systemd session? Currently
+           it complains "Cannot create session: Already running in a
+           session". */
+        runuser-l = { rootOK = true; unixAuth = false; };
       };
 
   };
