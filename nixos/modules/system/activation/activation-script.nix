@@ -12,11 +12,14 @@ let
     '';
   });
 
-  path = map getBin
-    [ pkgs.coreutils pkgs.gnugrep pkgs.findutils
-      pkgs.glibc # needed for getent
-      pkgs.shadow
-      pkgs.nettools # needed for hostname
+  path = with pkgs; map getBin
+    [ coreutils
+      gnugrep
+      findutils
+      glibc # needed for getent
+      shadow
+      nettools # needed for hostname
+      e2fsprogs # needed for chattr
     ];
 
 in
@@ -137,8 +140,13 @@ in
 
         mkdir -m 1777 -p /var/tmp
 
+        # Make sure it's really empty
+        chattr -i /var/empty
+        rm -rf /var/empty
+
         # Empty, read-only home directory of many system accounts.
         mkdir -m 0555 -p /var/empty
+        chattr +i /var/empty
       '';
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
