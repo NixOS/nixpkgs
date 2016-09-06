@@ -10,7 +10,7 @@ buildPythonApplication rec {
     sha256 = "1h965z06dsfk38byyhnsrscd9r91qm92ggwgjrh7xminzsgqqv8a";
   };
 
-  nativeBuildInputs = [ file ];
+  nativeBuildInputs = [ file intltool ];
 
   pythonPath = with python2Packages; [
     pygtk pygobject vte keybinder notify gettext pango
