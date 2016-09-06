@@ -7,7 +7,7 @@ let honcho = buildPythonApplication rec {
 
   src = fetchzip {
     url = "https://github.com/nickstenning/honcho/archive/v${version}.tar.gz";
-    md5 = "f5e6a7f6c1d0c167d410d7f601b4407e";
+    sha256 = "1ishyzvq19hdln2nn3bjlk0kwfqsbddpypp28n88jp3px6832w02";
   };
 
   buildInputs = with pythonPackages; [ nose mock jinja2 ];
