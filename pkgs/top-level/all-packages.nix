@@ -6130,6 +6130,7 @@ in
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
   antlr3 = callPackage ../development/tools/parsing/antlr { };
+  antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix { };
 
   ant = self.apacheAnt;
 
