@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, bundlerEnv, ruby
+{ stdenv, lib, fetchFromGitHub, bundlerEnv, ruby
 , withPostgresql ? true, postgresql
 , withSqlite ? false, sqlite
 }:
@@ -8,7 +8,7 @@ let
   cmd = "ledger_web";
 
   env = bundlerEnv {
-    name = _name;
+    name = "${_name}-env";
     inherit ruby;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   name = "${_name}-${version}";
   version = "1.5.2";
 
-  buildInputs = [ env ruby makeWrapper ]
+  buildInputs = [ env ruby ]
     ++ lib.optional withPostgresql postgresql
     ++ lib.optional withSqlite sqlite;
 
@@ -39,14 +39,10 @@ in stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
-    mkdir -p $out
+    mkdir -p $out/bin
 
-    cp --no-preserve=mode -r bin lib $out
+    cp --no-preserve=mode -r lib $out
 
-    chmod 0755 $out/bin/${cmd}
-
-    wrapProgram $out/bin/${cmd} \
-      --set BUNDLE_BIN ${env.bundler}/bin/bundle \
-      --set GEM_PATH   ${env}/${env.ruby.gemPath}
+    ln -s ${env}/bin/${cmd} $out/bin/${cmd}
   '';
 }
