@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "iperf-3.3";
@@ -9,6 +9,23 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl ];
+
+  preConfigure = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE"
+  '';
+
+  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "http://git.alpinelinux.org/cgit/aports/plain/main/iperf3/build-fixes.patch";
+      name = "fix-musl-build.patch";
+      sha256 = "0zvfjnqdldh6rc6qggyb310swdnl9qk0m3z1kklnqzgjsh8dskvl";
+    })
+    (fetchpatch {
+      url = "http://git.alpinelinux.org/cgit/aports/plain/main/iperf3/remove-pg-flags.patch";
+      name = "remove-pg-flags.patch";
+      sha256 = "0lnczhass24kgq59drgdipnhjnw4l1cy6gqza7f2ah1qr4q104rm";
+    })
+];
 
   postInstall = ''
     ln -s iperf3 $out/bin/iperf
