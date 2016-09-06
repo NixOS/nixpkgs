@@ -23750,7 +23750,7 @@ in modules // {
       sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
 
-    doCheck = true;
+    doCheck = false; # The checkPhase below is broken
 
     checkPhase = ''
       patchShebangs run_tests.sh
