@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = with stdenv.lib; []
-    ++ optional stdenv.isDarwin "-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"
+    ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
     ++ optional (!guileSupport) "-DENABLE_GUILE=OFF"
     ++ optional (!luaSupport)   "-DENABLE_LUA=OFF"
     ++ optional (!perlSupport)  "-DENABLE_PERL=OFF"
