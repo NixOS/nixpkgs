@@ -6567,6 +6567,8 @@ in
 
   minify = callPackage ../development/web/minify { };
 
+  minizinc = callPackage ../development/tools/minizinc { };
+
   mk = callPackage ../development/tools/build-managers/mk { };
 
   msitools = callPackage ../development/tools/misc/msitools { };
