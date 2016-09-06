@@ -10725,8 +10725,6 @@ in
 
   slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
 
-  tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
-
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
 
   tomcat7 = callPackage ../servers/http/tomcat/7.0.nix { };
