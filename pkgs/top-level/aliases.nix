@@ -109,6 +109,11 @@ doNotDisplayTwice rec {
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  wxmac = wxWidgets30; # 2016-06-11
+  wxGTK = wxWidgets28; # 2016-06-11
+  wxGTK28 = wxWidgets28; # 2016-06-11
+  wxGTK29 = wxWidgets28; # 2016-06-11
+  wxGTK30 = wxWidgets30; # 2016-06-11
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09

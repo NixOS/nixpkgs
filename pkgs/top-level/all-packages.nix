@@ -9803,28 +9803,19 @@ in
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
-  wxGTK = wxGTK28;
-
-  wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
+  wxWidgets = callPackage ../development/libraries/wxWidgets/default.nix {
     inherit (gnome) GConf;
-    withMesa = lib.elem system lib.platforms.mesaPlatforms;
-  };
-
-  wxGTK29 = callPackage ../development/libraries/wxGTK-2.9/default.nix {
-    inherit (gnome) GConf;
-    inherit (darwin.stubs) setfile;
-    withMesa = lib.elem system lib.platforms.mesaPlatforms;
-  };
-
-  wxGTK30 = callPackage ../development/libraries/wxGTK-3.0/default.nix {
-    inherit (gnome) GConf;
-    inherit (darwin.stubs) setfile;
-    withMesa = lib.elem system lib.platforms.mesaPlatforms;
-  };
-
-  wxmac = callPackage ../development/libraries/wxmac {
-    inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel QuickTime;
     inherit (darwin.stubs) setfile rez derez;
+    inherit (darwin.apple_sdk.frameworks) Cocoa QuickTime Kernel QTKit;
+    withMesa = !stdenv.isDarwin && lib.elem system lib.platforms.mesaPlatforms;
+  };
+
+  wxWidgets30 = wxWidgets.override {
+    compat30 = true;
+  };
+
+  wxWidgets28 = wxWidgets.override {
+    compat28 = true;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
