@@ -166,7 +166,8 @@ in
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
-                  after = [ "network.target" ];
+                  after = [ "network.target" "network-online.target" ];
+                  wants = [ "network-online.target" ];
                   serviceConfig = {
                     Type = "oneshot";
                     SuccessExitStatus = [ "0" "1" ];
