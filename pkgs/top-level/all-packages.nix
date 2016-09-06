@@ -5861,7 +5861,7 @@ in
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     qt = qt4;
-    platforms = ["x86_64-linux" "x86_64-darwin"];
+    overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
   }));
 
   ocropus = callPackage ../applications/misc/ocropus { };
