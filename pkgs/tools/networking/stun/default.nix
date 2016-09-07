@@ -1,36 +1,42 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "stun-0.96.dfsg-5";
+stdenv.mkDerivation rec {
+  name    = "${pname}-${version}";
+  pname   = "stun";
+  version = "0.97";
 
   src = fetchurl {
-    url = mirror://debian/pool/main/s/stun/stun_0.96.dfsg.orig.tar.gz;
-    sha256 = "09bnb3p6h8fhsskdp4wrl9hhml1va0xb28fkwgyzs32q2333pgz4";
+    url    = "mirror://sourceforge/${pname}/stund-${version}.tgz";
+    sha256 = "1mxirnnqfqdwb9x8hfjjsscp6lx3468ph6ddx32l94ir46fbzqc3";
   };
 
-  # make it compile on x86_64-linux:
-  postUnpack = ''
-    sed -i 's@|| defined(__i386__)@|| defined(__x86_64__) || defined(__i386__)@' stund/stun.cxx
+  srcManpages = fetchurl {
+    url    = "mirror://ubuntu/pool/universe/s/stun/stun_0.97~dfsg-2.debian.tar.xz";
+    name   = "stun-debian.tar.xz";
+    sha256 = "1pr6zrdhia0aafsvywl1hrhlgl00vahp63bw1z2mzvdxri7q88f0";
+  };
+
+  outputs = [ "out" "server" ];
+
+  preBuild = ''
+    tar Jxvf ${srcManpages} debian/manpages
+    gzip -9 debian/manpages/stun.1
+    gzip -9 debian/manpages/stund.8
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,man/man8,man/man1}
-    cp client $out/bin/stun
-    cp server $out/bin/stund
-    cp debian/manpages/stund.8 $out/man/man8
-    cp debian/manpages/stun.1 $out/man/man1
+    mkdir -p $out/bin $server/bin $out/man/man1 $server/man/man8
+    cp -v client $out/bin/stun
+    cp -v server $server/bin/stund
+    cp -v debian/manpages/stun.1.gz  $out/man/man1
+    cp -v debian/manpages/stund.8.gz $server/man/man8
   '';
 
-  patches = fetchurl {
-    url = mirror://debian/pool/main/s/stun/stun_0.96.dfsg-5.diff.gz;
-    sha256 = "0a6iig58zykdab89b99v1w4fn3gf2d8wz9c01vx2zvlg22gyji0l";
-  };
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Stun server and test client";
-    homepage = http://sourceforge.net/projects/stun/;
-    license = stdenv.lib.licenses.vsl10;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage    = http://sourceforge.net/projects/stun/;
+    license     = licenses.vsl10;
+    maintainers = with maintainers; [ marcweber obadz ];
+    platforms   = platforms.linux;
   };
 }
