@@ -39,8 +39,8 @@ with lib;
     };
 
     acmeFallbackHost = mkOption {
-      type = types.str;
-      default = "0.0.0.0";
+      type = types.nullOr types.str;
+      default = null;
       description = ''
         Host which to proxy requests to if acme challenge is not found. Useful
         if you want multiple hosts to be able to verify the same domain name.

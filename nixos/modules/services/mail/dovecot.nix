@@ -271,6 +271,9 @@ in
       { assertion = cfg.showPAMFailure -> cfg.enablePAM;
         message = "dovecot is configured with showPAMFailure while enablePAM is disabled";
       }
+      { assertion = (cfg.sieveScripts != {}) -> ((cfg.mailUser != null) && (cfg.mailGroup != null));
+        message = "dovecot requires mailUser and mailGroup to be set when sieveScripts is set";
+      }
     ];
 
   };

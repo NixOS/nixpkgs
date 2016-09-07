@@ -3544,19 +3544,7 @@ let self = _self // overrides; _self = with self; {
 
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit stdenv fetchurl buildPerlPackage DBI;
-    # inherit (pkgs) sqlite;
-
-    # Workaround to address DBIxClass test failure.
-    # https://rt.cpan.org/Public/Bug/Display.html?id=117271#txn-1662798
-    # https://github.com/NixOS/nixpkgs/pull/18083#issuecomment-243408430
-    sqlite = pkgs.sqlite.overrideDerivation (_: {
-      name = "sqlite-3.13.0";
-
-      src = fetchurl {
-        url = "http://sqlite.org/2016/sqlite-autoconf-3130000.tar.gz";
-        sha256 = "0sq88jbwsk48i41f7m7rkw9xvijq011nsbs7pl49s31inck70yg2";
-      };
-    });
+    inherit (pkgs) sqlite;
   };
 
   DBDmysql = import ../development/perl-modules/DBD-mysql {
@@ -9226,7 +9214,7 @@ let self = _self // overrides; _self = with self; {
     name = "Mozilla-Ldap-${version}";
     version = "1.5.3";
     USE_OPENLDAP = 1;
-    LDAPSDKDIR = pkgs.openldap;
+    LDAPSDKDIR = pkgs.openldap.dev;
     LDAPSDKLIBDIR = "${pkgs.openldap.out}/lib";
     src = fetchurl {
       url = "https://ftp.mozilla.org/pub/directory/perldap/releases/${version}/src/perl-mozldap-${version}.tar.gz";

@@ -2,7 +2,7 @@
 , libsndfile, libX11, graphicsmagick, pcre, pkgconfig, mesa, fltk
 , fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
-, suitesparse ? null, gnuplot ? null, jdk ? null, python ? null
+, suitesparse ? null, gnuplot ? null, jdk ? null, python ? null, overridePlatforms ? null
 }:
 
 let
@@ -70,6 +70,8 @@ stdenv.mkDerivation rec {
     homepage = http://octave.org/;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric raskin];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = if overridePlatforms == null then
+      (with stdenv.lib.platforms; linux ++ darwin)
+    else overridePlatforms;
   };
 }

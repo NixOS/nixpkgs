@@ -54,6 +54,7 @@ let
         pkgsi686Linux.stdenv.cc.cc.lib
         # aapt wants libz.so.1
         zlib
+        pkgsi686Linux.zlib
         # Support multiple monitors
         libXrandr
       ]}"

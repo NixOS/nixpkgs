@@ -85,7 +85,7 @@ in
 
       forwardX11 = mkOption {
         type = types.bool;
-        default = cfgc.setXAuthLocation;
+        default = false;
         description = ''
           Whether to allow X11 connections to be forwarded.
         '';
@@ -226,6 +226,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    programs.ssh.setXAuthLocation = mkForce cfg.forwardX11;
 
     users.extraUsers.sshd =
       { isSystemUser = true;

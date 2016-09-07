@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpipeline db groff ];
+  troff="${groff}/bin/groff";
 
   configureFlags = [
     "--disable-setuid"

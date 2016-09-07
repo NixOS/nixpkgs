@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
 
   checkPhase = "ctest";
-  doCheck = true;
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/BIC-MNI/minc-tools;
