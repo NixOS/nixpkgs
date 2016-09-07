@@ -19,7 +19,6 @@ let
       glibc # needed for getent
       shadow
       nettools # needed for hostname
-      e2fsprogs # needed for chattr
     ];
 
 in
@@ -140,13 +139,13 @@ in
 
         mkdir -m 1777 -p /var/tmp
 
+        # Empty, immutable home directory of many system accounts.
+        mkdir -p /var/empty
         # Make sure it's really empty
-        chattr -i /var/empty
-        rm -rf /var/empty
-
-        # Empty, read-only home directory of many system accounts.
-        mkdir -m 0555 -p /var/empty
-        chattr +i /var/empty
+        ${pkgs.e2fsprogs}/bin/chattr -i /var/empty
+        find /var/empty -mindepth 1 -delete
+        chmod 0555 /var/empty
+        ${pkgs.e2fsprogs}/bin/chattr +i /var/empty
       '';
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
