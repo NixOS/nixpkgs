@@ -212,6 +212,7 @@ self: super: {
   hslogger = addBuildDepend super.hslogger self.HUnit;
   semigroups_0_18_1 = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
+  texmath = addBuildDepend super.texmath self.network-uri;
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
   Glob_0_7_10 = addBuildDepends super.Glob_0_7_10 (with self; [semigroups]);
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
