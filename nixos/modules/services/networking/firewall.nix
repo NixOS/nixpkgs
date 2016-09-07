@@ -490,7 +490,7 @@ in
 
     systemd.services.firewall = {
       description = "Firewall";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" "sysinit.target" ];
       wants = [ "network-pre.target" ];
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
