@@ -475,6 +475,8 @@ in
 
   awscli = pythonPackages.awscli; # Should be moved out of python-packages.nix
 
+  awslogs = callPackage ../tools/admin/awslogs { };
+
   aws_shell = python2Packages.aws_shell; # Should be moved out of python-packages.nix
 
   azure-cli = nodePackages.azure-cli;
