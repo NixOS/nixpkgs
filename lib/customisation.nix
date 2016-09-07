@@ -183,4 +183,37 @@ rec {
         };
     in self;
 
+  /* Use this if you want to override the native derivation of a
+     package without affecting the cross derivation.
+
+     It converts a set like
+
+       let nativeDrv = origNativeDrv
+           crossDrv = origCrossDrv
+       in nativeDrv // {inherit crossDrv nativeDrv; }
+
+     to a set where the nativeDrv has been replaced with a new
+     derivation but the crossDrv is the same as before.
+
+     Note: if the old derivation does not have a crossDrv, the
+     set returned by this function will have a crossDrv attribute that
+     should not be evaluated because it will result in an error.
+     If that is a problem, this function can be changed to ommit
+     the crossDrv attribute in that situation. */
+  overrideNativeDrv = newNativeDrv: old:
+    let
+      nativeDrv = newNativeDrv;
+      crossDrv = old.crossDrv;
+    in nativeDrv // { inherit crossDrv nativeDrv; };
+
+  /* Given a list of attribute names (strings), a set of new packages,
+     and a set of old packages, produces a set that maps the specified
+     attributes to derivations that have the native derivation from the
+     new set but the cross derivation (crossDrv) from the old set. */
+  overrideNativeDrvs = attrs: newPkgs: oldPkgs:
+    let f = (attr: {
+      name = attr;
+      value = overrideNativeDrv newPkgs.${attr} oldPkgs.${attr};
+    });
+    in builtins.listToAttrs (map f attrs);
 }

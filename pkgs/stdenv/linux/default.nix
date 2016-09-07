@@ -284,22 +284,13 @@ rec {
       shellPackage = stage4.pkgs.bash;
     };
 
-    /* outputs TODO
-    allowedRequisites = with stage4.pkgs;
-      [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
-        paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
-      ];
-      */
+    overrides = lib.overrideNativeDrvs [
+      "attr" "acl" "bash" "binutils" "bzip2" "coreutils" "diffutils"
+      "findutils" "gawk" "gcc" "glibc" "gnugrep" "gnumake" "gnused"
+      "gnutar" "gnupatch" "gzip" "patchelf" "paxctl" "pcre" "xz"
+      "zlib"
+    ] stage4.pkgs;
 
-    overrides = pkgs: {
-      gcc = cc;
-
-      inherit (stage4.pkgs)
-        gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl zlib pcre;
-    };
   };
 
 }
