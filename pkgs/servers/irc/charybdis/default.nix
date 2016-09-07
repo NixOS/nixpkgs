@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bison, flex, openssl }:
+{ stdenv, fetchFromGitHub, bison, flex, openssl }:
 
 stdenv.mkDerivation rec {
   name = "charybdis-3.5.3";
