@@ -2620,6 +2620,8 @@ in
 
   mimetic = callPackage ../development/libraries/mimetic { };
 
+  minio-client = callPackage ../tools/networking/minio-client { };
+
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
   miniupnpc = callPackage ../tools/networking/miniupnpc { };
