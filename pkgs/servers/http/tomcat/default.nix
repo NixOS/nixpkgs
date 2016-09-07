@@ -37,14 +37,26 @@ in {
 
   tomcat7 = common {
     versionMajor = "7";
-    versionMinor = "0.68";
-    sha256 = "1q5qgci5ia25zqa1k1n2xzarsgk1317ya89mfgg0fmi65x1046ic";
+    versionMinor = "0.70";
+    sha256 = "0x4chqb7kkmadmhf2hlank856hw2vpgjl14fak74ybimlcb3dwqk";
   };
 
   tomcat8 = common {
     versionMajor = "8";
-    versionMinor = "0.32";
-    sha256 = "1f59x5z8qf4rzy49m8d5ifi4h1ghkz5r33l3i67sib414h7jc8vy";
+    versionMinor = "0.37";
+    sha256 = "0f9d4yxjzwdrayj5l3jyiclnmpb5lffvmsnp54qpf6m3gm7cj5i6";
   };
 
+  tomcat85 = common {
+    versionMajor = "8";
+    versionMinor = "5.5";
+    sha256 = "0idfxjrw5q45f531gyjnv6xjkbj9nhy2v1w4z7558z96230a0fqj";
+  };
+  
+  tomcatUnstable = common {
+    versionMajor = "9";
+    versionMinor = "0.0.M10";
+    sha256 = "0p3pqwz9zjvr9w73divsyaa53mbazf0icxfs06wvgxsvkbgj5gq9";
+  };
+  
 }

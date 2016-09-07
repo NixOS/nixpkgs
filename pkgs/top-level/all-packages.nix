@@ -10751,7 +10751,9 @@ in
   inherit (callPackages ../servers/http/tomcat { })
     tomcat6
     tomcat7
-    tomcat8;
+    tomcat8
+    tomcat85
+    tomcatUnstable;
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
