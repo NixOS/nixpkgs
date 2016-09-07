@@ -75,7 +75,8 @@ in
       };
 
       browseDomains = mkOption {
-        default = [ "0pointer.de" "zeroconf.org" ];
+        default = [ ];
+        example = [ "0pointer.de" "zeroconf.org" ];
         description = ''
           List of non-local DNS domains to be browsed.
         '';
