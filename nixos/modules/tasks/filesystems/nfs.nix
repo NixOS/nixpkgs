@@ -38,15 +38,17 @@ in
         default = null;
         example = 4000;
         description = ''
-          Use fixed port for rpc.statd, useful if NFS server is behind firewall.
+          Use a fixed port for <command>rpc.statd</command>. This is
+          useful if the NFS server is behind a firewall.
         '';
       };
       lockdPort = mkOption {
         default = null;
         example = 4001;
         description = ''
-          Use fixed port for NFS lock manager kernel module (lockd/nlockmgr),
-          useful if NFS server is behind firewall.
+          Use a fixed port for the NFS lock manager kernel module
+          (<literal>lockd/nlockmgr</literal>).  This is useful if the
+          NFS server is behind a firewall.
         '';
       };
     };
