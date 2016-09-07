@@ -25,7 +25,7 @@ in mkPythonDerivation {
       --confirm-license --bindir $out/bin \
       --destdir $out/${python.sitePackages} \
       --plugin-destdir $out/lib/qt4/plugins --sipdir $out/share/sip/PyQt4 \
-      --dbus=${dbus_libs.dev}/include/dbus-1.0 --verbose)
+      --dbus=${dbus-python}/include/dbus-1.0 --verbose)
 
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';

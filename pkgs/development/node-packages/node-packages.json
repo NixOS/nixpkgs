@@ -9,6 +9,7 @@
 , "cordova"
 , "dnschain"
 , "docker-registry-server"
+, "elasticdump"
 , "eslint"
 , "fetch-bower"
 , "forever"

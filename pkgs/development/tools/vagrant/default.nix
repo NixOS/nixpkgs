@@ -33,11 +33,13 @@ in stdenv.mkDerivation rec {
     "-p1"
     "-d ./opt/vagrant/embedded/gems/gems/vagrant-${version}"
   ];
-  patches = (fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/mitchellh/vagrant/pull/7611.diff";
-    name = "fix_incorrect_ssh_keys_permissions.patch";
-    sha256 = "0lqa9xpg79ggp9fc8gzb5lv675ydj2p8l55bx4hs1hf8zz2c1hjf";
-  });
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/mitchellh/vagrant/pull/7611.diff";
+      name = "fix_incorrect_ssh_keys_permissions.patch";
+      sha256 = "0lqa9xpg79ggp9fc8gzb5lv675ydj2p8l55bx4hs1hf8zz2c1hjf";
+    })
+  ];
 
   meta = with stdenv.lib; {
     description = "A tool for building complete development environments";

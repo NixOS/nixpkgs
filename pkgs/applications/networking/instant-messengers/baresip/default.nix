@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
-  NIX_CFLAGS_COMPILE='' -I${librem}/include/rem -I${gsm}/include/gsm '';
+  NIX_CFLAGS_COMPILE='' -I${librem}/include/rem -I${gsm}/include/gsm
+    -DHAVE_INTTYPES_H -D__GLIBC__ 
+    -D__need_timeval -D__need_timespec -D__need_time_t '';
   meta = {
     homepage = "http://www.creytiv.com/baresip.html";
     platforms = with stdenv.lib.platforms; linux;
