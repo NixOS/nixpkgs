@@ -220,7 +220,7 @@ let
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps ++ optional v.rstp "mstpd.service";
             partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
-            after = [ "network-pre.target" "mstpd.service" ] ++ deps
+            after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
             before = [ "network-setup.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
