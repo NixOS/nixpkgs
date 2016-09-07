@@ -24,6 +24,15 @@ let
 
     options = {
 
+      enabled = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Specifies if NixOS should mount this special file system or not.
+          This option can be used to turn off mounting of specific file systems.
+        '';
+      };
+
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = types.str;
@@ -205,7 +214,7 @@ in
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
-    system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues config.boot.specialFileSystems)).result;
+    system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (filter (fs: fs.enabled) (attrValues config.boot.specialFileSystems))).result;
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
@@ -290,11 +299,10 @@ in
       "/dev" = { fsType = "devtmpfs"; options = [ "nosuid" "strictatime" "mode=755" "size=${config.boot.devSize}" ]; };
       "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
       "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "gid=${toString config.ids.gids.tty}" ]; };
-    } // optionalAttrs (!config.boot.isContainer) {
       # systemd-nspawn populates /sys by itself, and remounting it causes all
       # kinds of weird issues (most noticeably, waiting for host disk device
       # nodes).
-      "/sys" = { fsType = "sysfs"; options = [ "nosuid" "noexec" "nodev" ]; };
+      "/sys" = { enabled = !config.boot.isContainer; fsType = "sysfs"; options = [ "nosuid" "noexec" "nodev" ]; };
     };
 
   };
