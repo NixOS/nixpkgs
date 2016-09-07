@@ -27121,13 +27121,15 @@ in modules // {
     };
   };
 
-  udiskie = buildPythonPackage rec {
-    version = "1.4.8";
+  udiskie = buildPythonApplication rec {
+    version = "1.5.1";
     name = "udiskie-${version}";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/coldfix/udiskie/archive/${version}.tar.gz";
-      sha256 = "0fj1kh6pmwyyy54ybc5fa625lhrxzhzmfx1nwz2lym5cpm4b21fl";
+    src = pkgs.fetchFromGitHub {
+      owner = "coldfix";
+      repo = "udiskie";
+      rev = version;
+      sha256 = "01x5fvllb262x6r3547l23z7p6hr7ddz034bkhmj2cqmf83sxwxd";
     };
 
     preConfigure = ''
@@ -27140,7 +27142,10 @@ in modules // {
       pkgs.wrapGAppsHook
     ];
 
-    propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
+    propagatedBuildInputs = with self; [
+      pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3
+      pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt
+    ];
 
     postBuild = "make -C doc";
 
