@@ -231,12 +231,20 @@ rec {
      correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls = loc: opts:
     foldl' (res: opt:
-      if opt.options ? default && res ? default ||
-         opt.options ? example && res ? example ||
-         opt.options ? description && res ? description ||
-         opt.options ? apply && res ? apply ||
-         # Accept to merge options which have identical types.
-         opt.options ? type && res ? type && opt.options.type.name != res.type.name
+      let t  = res.type;
+          t' = opt.options.type;
+          mergedType = t.typeMerge t'.functor;
+          typesMergeable = mergedType != null;
+          typeSet = if (bothHave "type") && typesMergeable
+                       then { type = mergedType; }
+                       else {};
+          bothHave = k: opt.options ? ${k} && res ? ${k};
+      in
+      if bothHave "default" ||
+         bothHave "example" ||
+         bothHave "description" ||
+         bothHave "apply" ||
+         (bothHave "type" && (! typesMergeable))
       then
         throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${showFiles res.declarations}."
       else
@@ -258,7 +266,7 @@ rec {
         in opt.options // res //
           { declarations = res.declarations ++ [opt.file];
             options = submodules;
-          }
+          } // typeSet
     ) { inherit loc; declarations = []; options = []; } opts;
 
   /* Merge all the definitions of an option to produce the final
@@ -422,12 +430,14 @@ rec {
       options = opt.options or
         (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
       f = tp:
+        let optionSetIn = type: (tp.name == type) && (tp.functor.wrapped.name == "optionSet");
+        in
         if tp.name == "option set" || tp.name == "submodule" then
           throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
-        else if tp.name == "attribute set of option sets" then types.attrsOf (types.submodule options)
-        else if tp.name == "list or attribute set of option sets" then types.loaOf (types.submodule options)
-        else if tp.name == "list of option sets" then types.listOf (types.submodule options)
-        else if tp.name == "null or option set" then types.nullOr (types.submodule options)
+        else if optionSetIn "attrsOf" then types.attrsOf (types.submodule options)
+        else if optionSetIn "loaOf"   then types.loaOf   (types.submodule options)
+        else if optionSetIn "listOf"  then types.listOf  (types.submodule options)
+        else if optionSetIn "nullOr"  then types.nullOr  (types.submodule options)
         else tp;
     in
       if opt.type.getSubModules or null == null
