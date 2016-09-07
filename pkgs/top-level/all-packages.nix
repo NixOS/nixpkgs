@@ -6050,6 +6050,11 @@ in
 
   wasm = callPackage ../development/interpreters/wasm { };
 
+  xulrunner = callPackage ../development/interpreters/xulrunner {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
 
   ### DEVELOPMENT / MISC
 
