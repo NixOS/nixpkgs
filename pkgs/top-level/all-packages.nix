@@ -6004,16 +6004,16 @@ in
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_1_9_3
     ruby_2_0_0
-    ruby_2_1_7
-    ruby_2_2_3
+    ruby_2_1_10
+    ruby_2_2_5
     ruby_2_3_1;
 
   # Ruby aliases
   ruby = ruby_2_3;
   ruby_1_9 = ruby_1_9_3;
   ruby_2_0 = ruby_2_0_0;
-  ruby_2_1 = ruby_2_1_7;
-  ruby_2_2 = ruby_2_2_3;
+  ruby_2_1 = ruby_2_1_10;
+  ruby_2_2 = ruby_2_2_5;
   ruby_2_3 = ruby_2_3_1;
 
   scsh = callPackage ../development/interpreters/scsh { };
