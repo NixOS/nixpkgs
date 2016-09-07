@@ -43,7 +43,7 @@ in
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
     });
 
-    systemd.services.dhcpcd.enable = mkDefault false;
+    networking.dhcpcd.enable = mkDefault false;
 
     systemd.services.network-local-commands = {
       after = [ "systemd-networkd.service" ];
