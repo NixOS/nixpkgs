@@ -57,8 +57,8 @@ let
   platform = if platform_ != null then platform_
     else config.platform or platformAuto;
 
-  topLevelArguments = {
-    inherit system bootStdenv noSysDirs config crossSystem platform lib;
+  topLevelArgs = {
+    inherit system bootStdenv noSysDirs config crossSystem platform;
   };
 
   # Allow packages to be overridden globally via the `packageOverrides'
@@ -85,9 +85,13 @@ let
           inherit lib; inherit (self) stdenv; inherit (self.xorg) lndir;
         });
 
-      stdenvDefault = self: super: (import ./stdenv.nix topLevelArguments) {} pkgs;
+      stdenvArgs = topLevelArgs // {
+        inherit lib;
+        allPackages = args: import ./. (topLevelArgs // args);
+      };
+      stdenvDefault = self: super: import ./stdenv.nix stdenvArgs;
 
-      allPackagesArgs = topLevelArguments // { inherit pkgsWithOverrides; };
+      allPackagesArgs = topLevelArgs // { inherit lib pkgsWithOverrides; };
       allPackages = self: super:
         let res = import ./all-packages.nix allPackagesArgs res self;
         in res;
