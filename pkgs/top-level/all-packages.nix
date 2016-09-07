@@ -4480,18 +4480,19 @@ in
 
   gccApple = throw "gccApple is no longer supported";
 
-  gccCrossStageStatic = let
-    libcCross1 =
-      if stdenv.cross.libc == "msvcrt" then windows.mingw_w64_headers
-      else if stdenv.cross.libc == "libSystem" then darwin.xcode
-      else null;
-    in wrapGCCCross {
-      gcc = forceNativeDrv (gcc.cc.override {
+  gccCrossStageStatic =
+    wrapGCCCross {
+      gcc = forceNativeDrv (callPackage ../development/compilers/gcc/5 {
         cross = crossSystem;
         crossStageStatic = true;
-        langCC = false;
+        noSysDirs = true;
+        profiledCompiler = gcc.cc.profiledCompiler;
+        isl = isl_0_14;
         libcCross = libcCross1;
         enableShared = false;
+        langCC = false;
+        langObjC = false;
+        langObjCpp = false;
       });
       libc = libcCross1;
       binutils = binutilsCross;
@@ -4507,13 +4508,20 @@ in
   };
 
   gccCrossStageFinal = wrapGCCCross {
-    gcc = forceNativeDrv (gcc.cc.override {
+    gcc = forceNativeDrv (callPackage ../development/compilers/gcc/5 {
       cross = crossSystem;
       crossStageStatic = false;
+      noSysDirs = true;
+      profiledCompiler = gcc.cc.profiledCompiler;
+      isl = isl_0_14;
+      libcCross = libcCross;
 
       # XXX: We have troubles cross-compiling libstdc++ on MinGW (see
       # <http://hydra.nixos.org/build/4268232>), so don't even try.
       langCC = crossSystem.config != "i686-pc-mingw32";
+
+      langObjC = false;
+      langObjCpp = false;
     });
     libc = libcCross;
     binutils = binutilsCross;
@@ -7432,13 +7440,20 @@ in
     withGd = true;
   };
 
-  glibcCross = forceNativeDrv (glibc.override {
+  glibcCross = forceNativeDrv (callPackage ../development/libraries/glibc {
+    installLocales = false;
     gccCross = gccCrossStageStatic;
     linuxHeaders = linuxHeadersCross;
   });
 
+  libcCross1 =
+    if crossSystem.libc == "msvcrt" then windows.mingw_w64_headers
+    else if crossSystem.libc == "libSystem" then darwin.xcode
+    else null;
+
   # We can choose:
-  libcCrossChooser = name: if name == "glibc" then glibcCross
+  libcCrossChooser = name:
+    if name == "glibc" then glibcCross
     else if name == "uclibc" then uclibcCross
     else if name == "msvcrt" then windows.mingw_w64
     else if name == "libSystem" then darwin.xcode
@@ -8306,13 +8321,16 @@ in
   # glibc provides libiconv so systems with glibc don't need to build libiconv
   # separately, but we also provide libiconvReal, which will always be a
   # standalone libiconv, just in case you want it
-  libiconv = if crossSystem != null then
-    (if crossSystem.libc == "glibc" then libcCross
-      else if crossSystem.libc == "libSystem" then darwin.libiconv
-      else libiconvReal)
-    else if stdenv.isGlibc then stdenv.cc.libc
-    else if stdenv.isDarwin then darwin.libiconv
-    else libiconvReal;
+  libiconv =
+    let
+      nativeDrv = if stdenv.isGlibc then stdenv.cc.libc
+        else if stdenv.isDarwin then darwin.libiconv
+        else libiconvReal;
+      crossDrv =
+        if crossSystem.libc == "glibc" then libcCross
+        else if crossSystem.libc == "libSystem" then darwin.libiconv
+        else libiconvReal.crossDrv;
+    in nativeDrv // { inherit crossDrv nativeDrv; };
 
   libiconvReal = callPackage ../development/libraries/libiconv {
     fetchurl = fetchurlBoot;
