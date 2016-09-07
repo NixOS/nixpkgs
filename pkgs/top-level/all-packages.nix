@@ -4774,12 +4774,10 @@ in
 
   icedtea7_web = callPackage ../development/compilers/icedtea-web {
     jdk = jdk7;
-    xulrunner = firefox-unwrapped;
   };
 
   icedtea8_web = callPackage ../development/compilers/icedtea-web {
     jdk = jdk8;
-    xulrunner = firefox-unwrapped;
   };
 
   icedtea_web = self.icedtea8_web;
@@ -14244,9 +14242,7 @@ in
 
   omxplayer = callPackage ../applications/video/omxplayer { };
 
-  oneteam = callPackage ../applications/networking/instant-messengers/oneteam {
-    xulrunner = firefox-unwrapped;
-  };
+  oneteam = callPackage ../applications/networking/instant-messengers/oneteam { };
 
   openbox = callPackage ../applications/window-managers/openbox { };
 
@@ -14303,7 +14299,6 @@ in
   pekwm = callPackage ../applications/window-managers/pekwm { };
 
   pencil = callPackage ../applications/graphics/pencil {
-    xulrunner = firefox-unwrapped;
   };
 
   perseus = callPackage ../applications/science/math/perseus {};
@@ -17629,4 +17624,6 @@ in
   zuki-themes = callPackage ../misc/themes/zuki { };
 
   zoom-us = qt55.callPackage ../applications/networking/instant-messengers/zoom-us {};
+
+  xulrunner = firefox-unwrapped;
 }
