@@ -17,17 +17,18 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules -DBCC_KERNEL_HAS_SOURCE_DIR=1";
-    
+
   postInstall = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/doc
+    mv $out/share/bcc/tools/doc/*.txt $out/share/doc
     for f in $out/share/bcc/tools\/*; do
-      ln -s $f $out/bin/$(basename $f) 
+      ln -s $f $out/bin/$(basename $f)
       wrapProgram $f \
         --prefix LD_LIBRARY_PATH : $out/lib \
         --prefix PYTHONPATH : $out/lib/python2.7/site-packages \
         --prefix PYTHONPATH : :${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages
     done
-  '';  
+  '';
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
