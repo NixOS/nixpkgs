@@ -63,10 +63,6 @@ self: super: {
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
 
-  hoauth2 = overrideCabal super.hoauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.wai self.warp ]; });
-
-  yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
-
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
@@ -205,22 +201,24 @@ self: super: {
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
   # GHC versions prior to 8.x require additional build inputs.
-  aeson_0_11_2_0 = disableCabalFlag (addBuildDepend super.aeson_0_11_2_0 self.semigroups) "old-locale";
-  aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
-  case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
-  bytes = addBuildDepend super.bytes self.doctest;
-  hslogger = addBuildDepend super.hslogger self.HUnit;
-  semigroups_0_18_1 = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
-  semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
-  texmath = addBuildDepend super.texmath self.network-uri;
-  intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
-  Glob_0_7_10 = addBuildDepends super.Glob_0_7_10 (with self; [semigroups]);
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
+  Glob_0_7_10 = addBuildDepends super.Glob_0_7_10 (with self; [semigroups]);
+  aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
+  aeson_0_11_2_0 = disableCabalFlag (addBuildDepend super.aeson_0_11_2_0 self.semigroups) "old-locale";
+  bytes = addBuildDepend super.bytes self.doctest;
+  case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  hoauth2 = overrideCabal super.hoauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.wai self.warp ]; });
+  hslogger = addBuildDepend super.hslogger self.HUnit;
+  intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
+  lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
+  semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
+  semigroups_0_18_1 = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
+  texmath = addBuildDepend super.texmath self.network-uri;
+  yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
   # cereal must have `fail` in pre-ghc-8.0.x versions
   # also tests require bytestring>=0.10.8.1
   cereal = dontCheck (addBuildDepend super.cereal self.fail);
   cereal_0_5_2_0 = dontCheck (addBuildDepend super.cereal_0_5_2_0 self.fail);
-  lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
 
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
