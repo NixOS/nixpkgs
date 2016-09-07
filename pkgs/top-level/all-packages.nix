@@ -9288,6 +9288,10 @@ in
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
+    qtkeychain = callPackage ../development/libraries/qtkeychain {
+      withQt5 = true;
+    };
+
     quazip = callPackage ../development/libraries/quazip {
       qt = qtbase;
     };

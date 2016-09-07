@@ -1,7 +1,12 @@
-{ stdenv, fetchFromGitHub, cmake, qt4 }:
+{ stdenv, fetchFromGitHub, cmake, qt4 ? null
+, withQt5 ? false, qtbase ? null, qttools ? null
+}:
+
+assert withQt5 -> qtbase != null;
+assert withQt5 -> qttools != null;
 
 stdenv.mkDerivation rec {
-  name = "qtkeychain-${version}";
+  name = "qtkeychain-${if withQt5 then "qt5" else "qt4"}-${version}";
   version = "0.7.0";
 
   src = fetchFromGitHub {
@@ -13,7 +18,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
-  buildInputs = [ cmake qt4 ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = if withQt5 then [ qtbase qttools ] else [ qt4 ];
 
   meta = {
     description = "Platform-independent Qt API for storing passwords securely";
