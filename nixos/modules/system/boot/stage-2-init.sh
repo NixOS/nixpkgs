@@ -36,7 +36,7 @@ fi
 
 # Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
 # stage 1, we need to do that here.
-if [ ! -e /proc/1 ] || [ -n "$container" ]; then
+if [ ! -e /proc/1 ]; then
     specialMount() {
         local device="$1"
         local mountPoint="$2"
