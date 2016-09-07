@@ -1,12 +1,13 @@
 { stdenv, fetchgit, bison, flex, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "charybdis-3.5.0-rc1";
+  name = "charybdis-3.5.3";
 
-  src = fetchgit {
-    url = "https://github.com/atheme/charybdis.git";
-    rev = "43a9b61c427cd0f3fa2c192890b8a48d9ea6fb7f";
-    sha256 = "ae2c8a72e6a29c901f9b51759b542ee12c4ec918050a2d9d65e5635077a0fcef";
+  src = fetchFromGitHub {
+    owner = "charybdis-ircd";
+    repo = "charybdis";
+    rev = name;
+    sha256 = "1s8p26lrc5vm08gi6hc5gqidgyj7v5bzm4d2g81v4xk387f85lnc";
   };
 
   patches = [
