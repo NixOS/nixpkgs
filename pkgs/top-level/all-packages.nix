@@ -4991,6 +4991,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation;
   });
 
+  mono46 = lowPrio (callPackage ../development/compilers/mono/4.6.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  });
+
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
   mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
