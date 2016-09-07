@@ -1542,6 +1542,27 @@ in {
     };
   };
 
+  awslogs = buildPythonPackage rec {
+    name = "awslogs-${version}";
+    version = "0.5";
+    src = pkgs.fetchurl {
+      url = "https://github.com/jorgebastida/awslogs/archive/0.5.tar.gz";
+      sha256 = "1hhvxsr8ishz645wv3r6px1652qqlaxrpxhcgf82q29h6w3ydsmk";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [
+      boto3 termcolor dateutil docutils
+    ];
+
+    meta = {
+      homepage = https://github.com/jorgebastida/awslogs;
+      description = "AWS CloudWatch logs for Humans";
+      license = licenses.bsd3;
+    };
+  };
+
   aws_shell = buildPythonPackage rec {
     name = "aws-shell-${version}";
     version = "0.1.1";
