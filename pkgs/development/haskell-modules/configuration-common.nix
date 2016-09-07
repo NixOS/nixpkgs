@@ -994,4 +994,9 @@ self: super: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
   });
 
+  # https://github.com/MarcWeber/hasktags/issues/32
+  hasktags = overrideCabal super.hasktags (drv: {
+    postInstall = "rm $out/bin/test";
+  });
+
 }
