@@ -11,10 +11,13 @@ let
       inherit sha256;
     };
     
+    outputs = [ "out" "webapps" ];
     installPhase =
       ''
         mkdir $out
         mv * $out
+        mkdir -p $webapps/webapps
+        mv $out/webapps $webapps/
       '';
     
     meta = {

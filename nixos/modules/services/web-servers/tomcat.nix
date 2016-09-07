@@ -74,8 +74,8 @@ in
 
       webapps = mkOption {
         type = types.listOf types.package;
-        default = [ tomcat ];
-        defaultText = "[ tomcat ]";
+        default = [ tomcat.webapps ];
+        defaultText = "[ tomcat.webapps ]";
         description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
       };
 
