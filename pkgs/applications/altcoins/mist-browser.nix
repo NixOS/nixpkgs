@@ -1,17 +1,17 @@
-{ pkgs, stdenv, fetchurl, unzip, buildEnv, makeWrapper, makeDesktopItem, go-ethereum }:
+{ pkgs, stdenv, alsaLib, atk, cairo, cups, dbus, expat, fetchurl, fontconfig,
+freetype, gdk_pixbuf, gnome, glib, gtk, go-ethereum, libcap, libnotify, libudev,
+nspr, nss, unzip, buildEnv, makeDesktopItem, makeWrapper,
+pango, patchelf, systemd, xorg}:
 
 let
-  mistEnv = buildEnv {
-      name = "env-mist";
-      paths = with pkgs; [
+  deps = [
         stdenv.cc.cc glib dbus gtk atk pango freetype
         fontconfig gdk_pixbuf cairo cups expat alsaLib
-        nspr gnome.GConf nss libnotify libcap go-ethereum systemd
+        nspr gnome.GConf nss libnotify libcap pango go-ethereum systemd
         xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage
         xorg.libXtst xorg.libXcomposite xorg.libXi xorg.libXfixes
-        xorg.libXrandr xorg.libXcursor
+        xorg.libXrandr xorg.libXcursor xorg.libXScrnSaver
       ];
-    };
 in
 stdenv.mkDerivation rec {
   name = "mist-browser-${version}";
@@ -32,7 +32,10 @@ stdenv.mkDerivation rec {
   };
 
   phases = [ "unpackPhase" "installPhase" ];
-  buildInputs = [ mistEnv unzip makeWrapper ];
+  buildInputs = [ patchelf unzip makeWrapper ];
+
+  #binPath = makeBinPath deps;
+  libpath = stdenv.lib.makeLibraryPath deps;
 
   installPhase = ''
     unzip "$src"
@@ -50,8 +53,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/Mist" "$out/bin/mist"
 
     wrapProgram $out/bin/mist \
-      --prefix "LD_LIBRARY_PATH" : "${mistEnv}/lib:${mistEnv}/lib64"
-
+      --prefix "LD_LIBRARY_PATH" : $libpath
     mkdir -p "$out/share/applications"
     cp -r "${desktopItem}/share/applications" "$out/share/"
   '';
