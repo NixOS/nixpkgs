@@ -35,10 +35,6 @@ self:
     });
 
     overrides = {
-      ac-php = super.ac-php.override {
-        inherit (self.melpaPackages) company popup;
-      };
-
       # upstream issue: mismatched filename
       ack-menu = markBroken super.ack-menu;
 
@@ -94,6 +90,9 @@ self:
 
       # upstream issue: missing file header
       initsplit = markBroken super.initsplit;
+
+      # upstream issue: missing dependency
+      jade = null;
 
       # upstream issue: missing file header
       jsfmt = markBroken super.jsfmt;
