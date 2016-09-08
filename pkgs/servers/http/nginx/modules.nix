@@ -15,8 +15,8 @@
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-rtmp-module";
-      rev = "v1.1.7";
-      sha256 = "0i0fa1znkj7cipy5nlkw4k40klhp9jzk28wxy2vrvd2jvh91x3ma";
+      rev = "v1.1.9";
+      sha256 = "19vqw1ba01m2wlncpycw9vj5n8741pv36hd3dy9jjdxwlzdjzyi5";
     };
   };
 
