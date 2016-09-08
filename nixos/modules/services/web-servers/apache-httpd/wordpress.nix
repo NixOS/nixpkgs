@@ -244,7 +244,6 @@ in
     chown ${serverInfo.serverConfig.user} ${config.wordpressUploads}
 
     # we should use systemd dependencies here
-    #waitForUnit("network-interfaces.target");
     if [ ! -d ${serverInfo.fullConfig.services.mysql.dataDir}/${config.dbName} ]; then
       echo "Need to create the database '${config.dbName}' and grant permissions to user named '${config.dbUser}'."
       # Wait until MySQL is up

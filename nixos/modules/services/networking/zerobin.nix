@@ -93,8 +93,8 @@ in
         serviceConfig.User = cfg.user;
         serviceConfig.Group = cfg.group;
         preStart = ''
-        mkdir -p ${cfg.dataDir}
-        chown ${cfg.user} ${cfg.dataDir}
+          mkdir -p ${cfg.dataDir}
+          chown ${cfg.user} ${cfg.dataDir}
         '';
       };
     };

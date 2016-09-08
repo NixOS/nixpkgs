@@ -208,7 +208,7 @@ in
     # networking.firewall.allowedUDPPorts = ...
 
     systemd.services.cjdns = {
-      description = "encrypted networking for everybody";
+      description = "cjdns: routing engine designed for security, scalability, speed and ease of use";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
