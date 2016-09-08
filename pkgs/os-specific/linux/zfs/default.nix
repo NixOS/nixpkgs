@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences
+, coreutils, attr
 , configFile ? "all"
 
 # Userspace dependencies
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoreconfHook nukeReferences ]
     ++ optionals buildKernel [ spl ]
-    ++ optionals buildUser [ zlib libuuid python ];
+    ++ optionals buildUser [ zlib libuuid python attr ];
 
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
