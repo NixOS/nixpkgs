@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
 , alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
-, mesa_noglu, xcbutilkeysyms, xdg_utils }:
+, mesa_noglu, xcbutilkeysyms, xdg_utils, libtool }:
 
 let
 
@@ -31,6 +31,7 @@ let
     dbus
     alsaLib
     zlib
+    libtool
     libxml2
     libxslt
     expat
