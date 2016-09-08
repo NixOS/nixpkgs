@@ -3732,6 +3732,8 @@ in
 
   telnet = callPackage ../tools/networking/telnet { };
 
+  telegraf = callPackage ../servers/monitoring/telegraf { };
+
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texlive.combined.scheme-small;
     extraFonts = true;
