@@ -275,6 +275,7 @@
       terraria = 253;
       mattermost = 254;
       prometheus = 255;
+      telegraf = 256;
 
       phabricator = 999;
 
@@ -522,6 +523,7 @@
       terraria = 253;
       mattermost = 254;
       prometheus = 255;
+      #telegraf = 256; # unused
 
       phabricator = 999;
 
