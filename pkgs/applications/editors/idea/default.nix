@@ -120,12 +120,12 @@ in
 {
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2016.2.1";
+    version = "2016.2.2";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "01a8qylfw8bsyywlxgysghjd7d2rlp9x3myd6nqhn7c1803pcks4";
+      sha256 = "06aq3lfccki9203gjvibzj3gn9d82pc6s5z0m3fnf049zxk58ndi";
     };
     wmClass = "jetbrains-clion";
   };
