@@ -14333,6 +14333,8 @@ in
 
   osmo = callPackage ../applications/office/osmo { };
 
+  pamix = callPackage ../applications/audio/pamix { };
+
   pamixer = callPackage ../applications/audio/pamixer { };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
