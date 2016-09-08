@@ -121,10 +121,10 @@
 
   statsd = {
     src = fetchFromGitHub {
-      owner = "zebrafishlabs";
+      owner = "apcera";
       repo = "nginx-statsd";
-      rev = "b756a12abf110b9e36399ab7ede346d4bb86d691";
-      sha256 = "1psrb5v071idlplvbnaq904nlhqw1zrbw4aawfs278zcdmq67zn8";
+      rev = "2147d61dc31dd4865604be92349e6192a905d21a";
+      sha256 = "19s3kwjgf51jkwknh7cfi82p6kifl8rl146wxc3ijds12776ilsv";
     };
   };
 
