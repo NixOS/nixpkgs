@@ -90,6 +90,12 @@ following incompatible changes:</para>
     Use <literal>security.audit.enable = true;</literal> to explicitly enable it.</para>
   </listitem>
 
+  <listitem>
+    <para>Process information hiding is now enabled by default.
+    Use <literal>security.hideProcessInformation.enable = false;</literal>
+    to explicitly disable it.</para>
+  </listitem>
+
 </itemizedlist>
 
 

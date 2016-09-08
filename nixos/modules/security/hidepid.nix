@@ -3,7 +3,9 @@ with lib;
 
 {
   options = {
-    security.hideProcessInformation = mkEnableOption "" // {
+    security.hideProcessInformation = mkOption {
+      default = true;
+      example = false;
       description = ''
         Restrict access to process information to the owning user.  Enabling
         this option implies, among other things, that command-line arguments
@@ -16,6 +18,7 @@ with lib;
         to its supplementary groups via
         <option>systemd.services.&lt;name?&gt;.serviceConfig.SupplementaryGroups</option>.
       '';
+      type = types.bool;
     };
   };
 
