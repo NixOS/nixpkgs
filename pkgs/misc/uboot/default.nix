@@ -12,12 +12,14 @@ let
     name = "uboot-${defconfig}-${version}";
     version = "2016.05";
 
-    nativeBuildInputs = [ bc dtc ];
-
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
       sha256 = "0wdivib8kbm17qr6r7n7wyzg5vnwpagvwk5m0z80rbssc5sj5l47";
     };
+
+    nativeBuildInputs = [ bc dtc ];
+
+    hardeningDisable = [ "all" ];
 
     configurePhase = ''
       make ${defconfig}

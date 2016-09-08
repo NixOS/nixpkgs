@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     description = ''A torch implementation of the paper A Neural Algorithm of Artistic Style'';
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    # Eats a lot of RAM
+    platforms = ["x86_64-linux"];
   };
 }

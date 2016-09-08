@@ -31,11 +31,12 @@ stdenv.mkDerivation rec {
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
   ]
     ++ lib.optionals withGTK [ gtk2 pango ]
-    ++ lib.optionals (withGTK && stdenv.isDarwin) [ Carbon Cocoa ];
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   configureFlags =
     lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]
-    ++ lib.optional withGTK "--enable-gtk2-use";
+    ++ lib.optional withGTK "--enable-gtk2-use"
+    ++ lib.optional (!withGTK) "--without-x";
 
   preConfigure = ''
     cp -r "${gnulib}" ./gnulib

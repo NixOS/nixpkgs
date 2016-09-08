@@ -2,6 +2,6 @@
 
 callPackage ./generic.nix (rec {
   inherit Foundation libobjc;
-  version = "4.4.1.0";
-  sha256 = "0jibyvyv2jy8dq5ij0j00iq3v74r0y90dcjc3dkspcfbnn37cphn";
+  version = "4.4.2.11";
+  sha256 = "0cxnypw1j7s253wr5hy05k42ghgg2s9qibp10kndwnp5bv12q34h";
 })
