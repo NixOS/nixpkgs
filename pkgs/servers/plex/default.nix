@@ -1,14 +1,9 @@
 { stdenv, fetchurl, rpmextract, glibc
 , dataDir ? "/var/lib/plex" # Plex's data directory must be baked into the package due to symlinks.
-, enablePlexPass ? false
 }:
 
 let
-  plexpkg = if enablePlexPass then {
-    version = "1.0.1.2396";
-    vsnHash = "c094d0d";
-    sha256 = "0bhbpaj88989zn1q590mkcqshcpir87yiac9x1dl0afzpxj09lcz";
-  } else {
+  plexpkg = {
     version = "1.0.0.2261";
     vsnHash = "a17e99e";
     sha256 = "14li33ni6aaa1qwvc02a066k52s1qwhpv55prvlmq3m5jm3iv0lr";
