@@ -278,18 +278,44 @@ push @imports, "<nixpkgs/nixos/modules/installer/scan/not-detected.nix>"
 # For a device name like /dev/sda1, find a more stable path like
 # /dev/disk/by-uuid/X or /dev/disk/by-label/Y.
 sub findStableDevPath {
-    my ($dev) = @_;
+    my ($dev, $searchPaths) = @_;
+    $searchPaths = [ glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*") ] unless defined $searchPaths;
     return $dev if substr($dev, 0, 1) ne "/";
     return $dev unless -e $dev;
 
     my $st = stat($dev) or return $dev;
 
-    foreach my $dev2 (glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+    foreach my $dev2 (@$searchPaths) {
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
     }
 
     return $dev;
+}
+
+
+# Given something like /dev/dm-0 spit out the dmName and underlying /dev/sdXY slave
+sub findDevUnderlyingDM {
+    my $device = shift;
+
+    if (-e $device) {
+        my $deviceName = basename(abs_path($device));
+        if (-e "/sys/class/block/$deviceName"
+            && read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet') =~ /^CRYPT-LUKS/)
+        {
+            my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
+            if (scalar @slaves == 1) {
+                my $slave = "/dev/" . basename($slaves[0]);
+                if (-e $slave) {
+                    my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
+                    chomp $dmName;
+                    return [ $dmName, $slave ]
+                }
+            }
+        }
+    }
+
+    return undef;
 }
 
 
@@ -301,8 +327,13 @@ my @swapDevices;
 foreach my $swap (@swaps) {
     $swap =~ /^(\S+)\s/;
     next unless -e $1;
-    my $dev = findStableDevPath $1;
-    push @swapDevices, "{ device = \"$dev\"; }";
+    my $device = $1;
+    if (my $dmInfo = findDevUnderlyingDM($device)) {
+      $device = $dmInfo->[1];
+    }
+    # UUIDs and label aren't usable when the underlying device is randomly re-encrypted. Use partUUID instead.
+    my $dev = findStableDevPath($device, [ glob("/dev/disk/by-partuuid/*"), glob("/dev/disk/by-id/*") ]);
+    push @swapDevices, "{ device = \"$dev\"; randomEncryption = true; };";
 }
 
 
@@ -422,21 +453,10 @@ EOF
 
     # If this filesystem is on a LUKS device, then add a
     # boot.initrd.luks.devices entry.
-    if (-e $device) {
-        my $deviceName = basename(abs_path($device));
-        if (-e "/sys/class/block/$deviceName"
-            && read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet') =~ /^CRYPT-LUKS/)
-        {
-            my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
-            if (scalar @slaves == 1) {
-                my $slave = "/dev/" . basename($slaves[0]);
-                if (-e $slave) {
-                    my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
-                    chomp $dmName;
-                    $fileSystems .= "  boot.initrd.luks.devices.\"$dmName\".device = \"${\(findStableDevPath $slave)}\";\n\n";
-                }
-            }
-        }
+    if (my $dmInfo = findDevUnderlyingDM($device))
+    {
+       my ($dmName, $slave) = @$dmInfo;
+       $fileSystems .= "  boot.initrd.luks.devices.\"$dmName\".device = \"${\(findStableDevPath $slave)}\";\n\n";
     }
 }
 
