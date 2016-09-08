@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Convert flat ASCII text to man page format";
     homepage = http://mvertes.free.fr/;
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ bjornfor ];
   };
 }
