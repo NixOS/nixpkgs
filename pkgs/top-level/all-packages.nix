@@ -16151,6 +16151,10 @@ in
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 
+  vapoursynth = callPackage ../development/libraries/vapoursynth { };
+
+  vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
+
   vassal = callPackage ../games/vassal { };
 
   vdrift = callPackage ../games/vdrift { };
@@ -17689,6 +17693,8 @@ in
   sequelpro = callPackage ../applications/misc/sequelpro {};
 
   maphosts = callPackage ../tools/networking/maphosts {};
+
+  zimg = callPackage ../development/libraries/zimg { };
 
   zuki-themes = callPackage ../misc/themes/zuki { };
 
