@@ -97,9 +97,7 @@ in {
 
   options = {
 
-    systemd.nspawn.enable = mkEnableOption "systemd-nspawn instance configuration";
-
-    systemd.nspawn.instances = mkOption {
+    systemd.nspawn = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ instanceOptions ];
@@ -111,7 +109,7 @@ in {
   config =
     let
       units = mapAttrs' (n: v: nameValuePair "${n}.nspawn" (instanceToUnit n v)) cfg.instances;
-    in mkIf config.systemd.nspawn.enale {
+    in mkIf (cfg != {}) {
 
       environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];
 
