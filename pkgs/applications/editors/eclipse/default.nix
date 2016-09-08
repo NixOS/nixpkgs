@@ -438,6 +438,12 @@ rec {
         ln -s ${eclipse}/share $out/
       '';
 
+  eclipse-rustdt = with plugins; eclipseWithPlugins {
+    eclipse = eclipse-cpp-46;
+    jvmArgs = [ "-Xmx2048m" ];
+    plugins = [ rustdt ];
+  };
+
   plugins = callPackage ./plugins.nix { };
 
 }
