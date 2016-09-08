@@ -127,4 +127,13 @@
       sha256 = "1psrb5v071idlplvbnaq904nlhqw1zrbw4aawfs278zcdmq67zn8";
     };
   };
+
+  upstream-check = {
+    src = fetchFromGitHub {
+      owner = "yaoweibin";
+      repo = "nginx_upstream_check_module";
+      rev = "10782eaff51872a8f44e65eed89bbe286004bcb1";
+      sha256 = "0h98a8kiw2qkqfavysm1v16kf4cs4h39j583wapif4p0qx3bbm89";
+    };
+  };
 }
