@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
+  CXXFLAGS = lib.optional qt5Support "-std=c++11";
+
   configureFlags = with lib;
     [
       "--enable-xpdf-headers"
