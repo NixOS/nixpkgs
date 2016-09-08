@@ -358,6 +358,31 @@ rec {
     };
   };
 
+  rustdt = buildEclipseUpdateSite rec {
+    name = "rustdt-${version}";
+    version = "0.6.2";
+    owner = "RustDT";
+    repo = "rustdt.github.io";
+    rev = "5cbe753008c40555c493092a6f4ae1ffbff0b3ce";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
+      sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
+      extraPostFetch =
+        ''
+          mv "$out/${repo}-${rev}/releases/local-repo"/* "$out/"
+        '';
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/RustDT;
+      description = "Rust development tooling";
+      license = licenses.epl10;
+      platforms = platforms.all;
+    };
+  };
+
   scala = buildEclipseUpdateSite rec {
     name = "scala-${version}";
     version = "4.4.1.201605041056";
