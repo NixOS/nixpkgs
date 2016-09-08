@@ -11806,9 +11806,7 @@ in
     cross = assert crossSystem != null; crossSystem;
   });
 
-  # This hacky alias covers most use cases without mass-replace (build inputs)
-  # and causes an *evaluation* error if "${udev}" is attempted.
-  udev = [ systemd.dev systemd.out ];
+  udev = systemd;
   libudev = udev;
 
   eudev = callPackage ../os-specific/linux/eudev {};
