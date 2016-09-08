@@ -831,6 +831,8 @@ in
 
   fzy = callPackage ../tools/misc/fzy { };
 
+  gdrivefs = python27Packages.gdrivefs;
+
   gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };

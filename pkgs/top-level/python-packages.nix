@@ -11021,15 +11021,14 @@ in modules // {
   };
 
   gdrivefs = buildPythonPackage rec {
-    version = "0.14.3";
+    version = "0.14.8";
     name = "gdrivefs-${version}";
+    namePrefix = "";
     disabled = !isPy27;
 
-    src = pkgs.fetchFromGitHub {
-      sha256 = "1ljkh1871lwzn5lhhgbmbf2hfnbnajr3ddz3q5n1kid25qb3l086";
-      rev = version;
-      repo = "GDriveFS";
-      owner = "dsoprea";
+    src = pkgs.fetchurl {
+      url = "https://github.com/dsoprea/GDriveFS/archive/${version}.tar.gz";
+      sha256 = "1dch10ajkp567pwvssvz1v5c0hxfyd8wf9qd7j1gfybh7f7hyzvw";
     };
 
     buildInputs = with self; [ gipc greenlet httplib2 six ];
