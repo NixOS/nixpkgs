@@ -206,14 +206,15 @@ rec {
       crossDrv = old.crossDrv;
     in nativeDrv // { inherit crossDrv nativeDrv; };
 
-  /* Given a list of attribute names (strings), a set of new packages,
-     and a set of old packages, produces a set that maps the specified
-     attributes to derivations that have the native derivation from the
-     new set but the cross derivation (crossDrv) from the old set. */
-  overrideNativeDrvs = attrs: newPkgs: oldPkgs:
+  /* Given a set of new packages and a set of old packages, produces a
+     set with the same attribute names as the set of new packages,
+     where each attribute value is a derivation that has the native
+     derivation from the new set but the cross derivation (crossDrv)
+     from the old set. */
+  overrideNativeDrvs = newPkgs: oldPkgs:
     let f = (attr: {
       name = attr;
       value = overrideNativeDrv newPkgs.${attr} oldPkgs.${attr};
     });
-    in builtins.listToAttrs (map f attrs);
+    in builtins.listToAttrs (map f (builtins.attrNames newPkgs));
 }

@@ -292,13 +292,12 @@ rec {
       ];
       */
 
-    overrides = lib.overrideNativeDrvs [
-      "attr" "acl" "bash" "binutils" "bzip2" "coreutils" "diffutils"
-      "findutils" "gawk" "gcc" "glibc" "gnugrep" "gnumake" "gnused"
-      "gnutar" "gnupatch" "gzip" "patchelf" "paxctl" "pcre" "xz"
-      "zlib"
-    ] stage4.pkgs;
-
+    overrides = lib.overrideNativeDrvs {
+      inherit (stage4.pkgs)
+        gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+        gcc glibc gnumake gnused gnutar gnugrep gnupatch patchelf
+        attr acl paxctl zlib pcre;
+    };
   };
 
 }
