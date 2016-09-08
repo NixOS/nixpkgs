@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
 let
 
@@ -21,9 +21,11 @@ let
       '';
     
     meta = {
-      homepage = http://tomcat.apache.org/;
+      homepage = https://tomcat.apache.org/;
       description = "An implementation of the Java Servlet and JavaServer Pages technologies";
-      platforms = with stdenv.lib.platforms; all;
+      platforms = with lib.platforms; all;
+      maintainers = with lib.maintainers; [ danbst ];
+      license = [ lib.licenses.asl20 ];
     };
   });
 

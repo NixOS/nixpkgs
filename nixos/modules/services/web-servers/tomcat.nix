@@ -10,6 +10,10 @@ in
 
 {
 
+  meta = {
+    maintainers = with maintainers; [ danbst ];
+  };
+
   ###### interface
 
   options = {
