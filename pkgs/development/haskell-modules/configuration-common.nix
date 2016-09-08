@@ -39,14 +39,20 @@ self: super: {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
-  # This package needs a little help compiling properly on Darwin.
-  git-annex = (overrideCabal super.git-annex (drv: {
+  # The Hackage tarball is purposefully broken. Mr. Hess wants people to build
+  # his package from the Git repo because that is, like, better!
+  git-annex = ((overrideCabal super.git-annex (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
       sha256 = "1frdld9kgnfd4ll8yx086lwmbqxa5k56y567qw2zy9kz1iiz2fpi";
       rev = drv.version;
     };
+  })).overrideScope (self: super: {
+    # https://github.com/prowdsponsor/esqueleto/issues/137
+    persistent = self.persistent_2_2_4_1;
+    persistent-template = self.persistent-template_2_1_8_1;
+    persistent-sqlite = self.persistent-sqlite_2_2_1;
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;

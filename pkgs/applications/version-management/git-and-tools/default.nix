@@ -40,7 +40,7 @@ rec {
     svnSupport = true;
   }));
 
-  git-annex = pkgs.haskell.packages.lts.git-annex;
+  git-annex = pkgs.haskellPackages.git-annex;
   gitAnnex = git-annex;
 
   git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
