@@ -4426,7 +4426,7 @@ in
     coq = coq_8_5;
   });
 
-  cryptol = self.haskell.packages.lts.cryptol;
+  cryptol = haskellPackages.cryptol;
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
