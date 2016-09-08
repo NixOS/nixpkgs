@@ -165,7 +165,7 @@ EOF
       if [ -n "$contents" ]; then
         echo Adding contents
         for c in $contents; do
-          cp -drf $c/* layer/
+          cp -drf $c/*/ layer/
           chmod -R ug+w layer/
         done
       fi
@@ -193,7 +193,7 @@ EOF
       preMount = lib.optionalString (contents != null) ''
         echo Adding contents
         for c in ${builtins.toString contents}; do
-          cp -drf $c/* layer/
+          cp -drf $c/*/ layer/
           chmod -R ug+w layer/
         done
       '';
