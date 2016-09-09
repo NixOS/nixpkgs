@@ -4677,13 +4677,6 @@ in
 
   gccgo = gccgo49;
 
-  gccgo48 = wrapCC (gcc48.cc.override {
-    name = "gccgo";
-    langCC = true; #required for go.
-    langC = true;
-    langGo = true;
-  });
-
   gccgo49 = wrapCC (gcc49.cc.override {
     name = "gccgo49";
     langCC = true; #required for go.
