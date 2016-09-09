@@ -23555,7 +23555,7 @@ in modules // {
 
     patchPhase = ''
       substituteInPlace setup.py \
-          --replace "/usr/include" "${pkgs.systemd}/include"
+          --replace "/usr/include" "${pkgs.systemd.dev}/include"
       echo '#include <time.h>' >> systemd/pyutil.h
     '';
 
