@@ -252,7 +252,7 @@ let
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
-    curl = [ pkgs.curl ];
+    curl = [ pkgs.curl.dev ];
     devEMF = [ pkgs.xorg.libXft ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
