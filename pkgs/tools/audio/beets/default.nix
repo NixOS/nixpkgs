@@ -15,7 +15,8 @@
 , enableWeb            ? true
 
 # External plugins
-, enableAlternatives ? false
+, enableAlternatives   ? false
+, enableCopyArtifacts  ? false
 
 , bashInteractive, bashCompletion
 }:
@@ -103,6 +104,9 @@ in buildPythonApplication rec {
     ++ optional enableThumbnails   pythonPackages.pyxdg
     ++ optional enableWeb          pythonPackages.flask
     ++ optional enableAlternatives (import ./alternatives-plugin.nix {
+      inherit stdenv buildPythonApplication pythonPackages fetchFromGitHub;
+    })
+    ++ optional enableCopyArtifacts (import ./copyartifacts-plugin.nix {
       inherit stdenv buildPythonApplication pythonPackages fetchFromGitHub;
     });
 
