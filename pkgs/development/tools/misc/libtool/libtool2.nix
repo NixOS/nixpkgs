@@ -21,9 +21,15 @@ stdenv.mkDerivation rec {
   # leads to the failure of a number of tests.
   doCheck = false;
 
-  # Don't run the native `strip' when cross-compiling.  This breaks at least
-  # with `.a' files for MinGW.
-  dontStrip = stdenv ? cross;
+  # This is just here because it was here in previous commits and we
+  # want to avoid a mass-rebuild of everything that depends on libtool.
+  dontStrip = false;
+
+  crossAttrs = {
+    # Don't run the native `strip' when cross-compiling.  This breaks at least
+    # with `.a' files for MinGW.
+    dontStrip = true;
+  };
 
   meta = {
     description = "GNU Libtool, a generic library support script";
