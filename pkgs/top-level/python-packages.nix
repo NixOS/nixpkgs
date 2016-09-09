@@ -5096,6 +5096,9 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest ];
+    patchPhase = ''
+      sed -i 's/==2.9.1//' requirements/test.txt
+    '';
 
     meta = with stdenv.lib; {
       description = "Scripting library for tmux";
