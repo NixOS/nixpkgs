@@ -181,7 +181,7 @@ rec {
           eval $i2=/tmp/xchg/$_basename
           ${coreutils}/bin/ls -la $xchg
         done
-        unset i i2 _basename
+        unset i i2 _basename xchg
 
         export > $xchg/saved-env
         export tests='${testScript}'
