@@ -279,7 +279,7 @@ let
     mwaved = [ pkgs.fftw ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
-    openssl = [ pkgs.openssl ];
+    openssl = [ pkgs.openssl.dev8 ];
     outbreaker = [ pkgs.gsl_1 ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
