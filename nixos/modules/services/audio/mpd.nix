@@ -122,12 +122,12 @@ in {
       after = [ "network.target" "sound.target" ];
       description = "Music Player Daemon";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.mpd ];
+
       preStart = "mkdir -p ${cfg.dataDir} && chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}";
-      script = "exec mpd --no-daemon ${mpdConf}";
       serviceConfig = {
         User = "${cfg.user}";
         PermissionsStartOnly = true;
+        ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
       };
     };
 
