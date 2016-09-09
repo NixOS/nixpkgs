@@ -20716,6 +20716,7 @@ in modules // {
       preConfigure = ''
         mkdir -p $out
         lndir ${self.pyqt4} $out
+        rm -rf "$out/nix-support"
         cd Python
         ${python.executable} ./configure-old.py \
             --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
