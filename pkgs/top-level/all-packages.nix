@@ -6546,6 +6546,8 @@ in
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
+  go-md2man = callPackage ../development/tools/misc/md2man {};
+
   minify = callPackage ../development/web/minify { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
