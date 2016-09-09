@@ -362,7 +362,7 @@ let
     WhopGenome = [ pkgs.zlib ];
     XBRL = [ pkgs.zlib pkgs.libxml2 ];
     xml2 = [ pkgs.libxml2 ];
-    XML = [ pkgs.libtool pkgs.libxml2 pkgs.xmlsec pkgs.libxslt ];
+    XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
     affyPLM = [ pkgs.zlib ];
     bamsignals = [ pkgs.zlib ];
     BitSeq = [ pkgs.zlib ];
