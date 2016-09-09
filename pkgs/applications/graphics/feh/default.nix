@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ xlibsWrapper imlib2 libjpeg libpng libXinerama curl libexif ]
+  nativeBuildInputs = [ makeWrapper ]
     ++ stdenv.lib.optional doCheck [ perlPackages.TestCommand perlPackages.TestHarness ];
+
+  buildInputs = [ xlibsWrapper imlib2 libjpeg libpng libXinerama curl libexif ];
 
   preBuild = ''
     makeFlags="PREFIX=$out exif=1"
