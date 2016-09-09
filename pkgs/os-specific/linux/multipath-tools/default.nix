@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lvm2, libaio, gzip, readline, udev }:
+{ stdenv, fetchurl, lvm2, libaio, gzip, readline, systemd }:
 
 stdenv.mkDerivation rec {
   name = "multipath-tools-0.5.0";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ gzip ];
-  buildInputs = [ udev lvm2 libaio readline ];
+  buildInputs = [ systemd lvm2 libaio readline ];
 
   makeFlags = [
     "LIB=lib"

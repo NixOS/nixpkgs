@@ -19713,11 +19713,11 @@ in modules // {
 
     postPatch = ''
       sed -i -e '/udev_library_name/,/^ *libudev/ {
-        s|CDLL([^,]*|CDLL("${pkgs.libudev.out}/lib/libudev.so.1"|p; d
+        s|CDLL([^,]*|CDLL("${pkgs.systemd.lib}/lib/libudev.so.1"|p; d
       }' pyudev/_libudev.py
     '';
 
-    propagatedBuildInputs = with self; [ pkgs.udev ];
+    propagatedBuildInputs = with self; [ pkgs.systemd ];
 
     meta = {
       homepage = "http://pyudev.readthedocs.org/";
@@ -23555,7 +23555,7 @@ in modules // {
 
     patchPhase = ''
       substituteInPlace setup.py \
-          --replace "/usr/include" "${pkgs.systemd}/include"
+          --replace "/usr/include" "${pkgs.systemd.dev}/include"
       echo '#include <time.h>' >> systemd/pyutil.h
     '';
 

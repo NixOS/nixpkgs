@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   # due to lots of ${utillinux}/bin occurences and headers being rather small
   outputDev = "bin";
 
-
   #FIXME: make it also work on non-nixos?
   postPatch = ''
     # Substituting store paths would create a circular dependency on systemd
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ zlib pam ]
     ++ lib.optional (ncurses != null) ncurses
-    ++ lib.optional (systemd != null) [ systemd pkgconfig ]
+    ++ lib.optional (systemd != null) systemd
     ++ lib.optional (perl != null) perl;
 
   postInstall = ''
