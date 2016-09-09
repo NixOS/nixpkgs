@@ -1,5 +1,5 @@
-{ stdenv, makeWrapper, fetchurl, xlibsWrapper, imlib2, libjpeg, libpng
-, libXinerama, curl, libexif, perlPackages }:
+{ stdenv, fetchurl, makeWrapper, xorg, imlib2, libjpeg, libpng
+, curl, libexif, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "feh-2.17.1";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs = [ makeWrapper xorg.libXt ]
     ++ stdenv.lib.optional doCheck [ perlPackages.TestCommand perlPackages.TestHarness ];
 
-  buildInputs = [ xlibsWrapper imlib2 libjpeg libpng libXinerama curl libexif ];
+  buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   preBuild = ''
     makeFlags="PREFIX=$out exif=1"
