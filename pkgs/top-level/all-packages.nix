@@ -5028,6 +5028,8 @@ in
 
   ocaml_4_02 = callPackage ../development/compilers/ocaml/4.02.nix { };
 
+  ocaml_4_03 = callPackage ../development/compilers/ocaml/4.03.nix { };
+
   orc = callPackage ../development/compilers/orc { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
@@ -7270,8 +7272,8 @@ in
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
     inherit (darwin) CF;
-    inherit (darwin.apple_sdk.frameworks) 
-      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox 
+    inherit (darwin.apple_sdk.frameworks)
+      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
   };
 
