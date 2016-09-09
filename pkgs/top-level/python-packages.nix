@@ -28207,12 +28207,12 @@ in modules // {
   };
 
   pypeg2 = buildPythonPackage rec {
-    version = "2.15.1";
+    version = "2.15.2";
     name = "pypeg2-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyPEG2/pyPEG2-${version}.tar.gz";
-      sha256 = "f4814a5f9c84bbb0794bef8d2a5871f4aed25366791c55e2162681873ad8bd21";
+      sha256 = "0v8ziaam2r637v94ra4dbjw6jzxz99gs5x4i585kgag1v204yb9b";
     };
 
     meta = {
