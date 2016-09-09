@@ -12125,6 +12125,8 @@ in
 
   mro-unicode = callPackage ../data/fonts/mro-unicode { };
 
+  mustache-spec = callPackage ../data/documentation/mustache-spec { };
+
   nafees = callPackage ../data/fonts/nafees { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
