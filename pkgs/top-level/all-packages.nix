@@ -9358,6 +9358,8 @@ in
 
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
+  readline63enhancedModstrs = callPackage ../development/libraries/readline/6.3-enhanced-modstrs.nix { };
+
   readosm = callPackage ../development/libraries/readosm { };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
