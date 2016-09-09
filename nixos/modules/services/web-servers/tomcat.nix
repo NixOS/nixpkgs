@@ -27,9 +27,9 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.tomcat7;
-        defaultText = "pkgs.tomcat7";
-        example = lib.literalExample "pkgs.tomcat8";
+        default = pkgs.tomcat85;
+        defaultText = "pkgs.tomcat85";
+        example = lib.literalExample "pkgs.tomcatUnstable";
         description = ''
           Which tomcat package to use.
         '';
