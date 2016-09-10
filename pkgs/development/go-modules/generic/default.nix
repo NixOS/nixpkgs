@@ -56,7 +56,7 @@ let
     };
 
   importGodeps = { depsFile }:
-    map dep2src (lib.importJSON depsFile);
+    map dep2src (import depsFile);
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;

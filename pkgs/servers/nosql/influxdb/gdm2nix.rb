@@ -30,4 +30,5 @@ deps = File.read("Godeps").lines.map do |line|
   }
 end
 
+#TODO: move to deps.nix in NIXON format
 File.write("deps.json", JSON.pretty_generate(deps))

@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "0gvnbr61d5si06ik2j075jg00r9b94ryfgg06nqxkf10dp8lgi09";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "Share your terminal as a web application";
