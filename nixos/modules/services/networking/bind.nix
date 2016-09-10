@@ -146,7 +146,7 @@ in
 
     systemd.services.bind = {
       description = "BIND name server job";
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
