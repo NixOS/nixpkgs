@@ -209,8 +209,8 @@ in
 
     systemd.services.cjdns = {
       description = "encrypted networking for everybody";
-      wantedBy = [ "network.target" ];
-      after = [ "networkSetup.service" "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       preStart = if cfg.confFile != "" then "" else ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
