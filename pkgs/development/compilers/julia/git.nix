@@ -174,5 +174,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    broken = stdenv.isi686;
   };
 }
