@@ -967,7 +967,6 @@ self: super: {
     sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
   });
 
-
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
   # depend on freeglut, which provides GHC to necessary information to generate a correct RPATH.
@@ -977,7 +976,8 @@ self: super: {
   # us when we patch the cabal file (Link options will be recored in the ghc package registry).
   GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
 
-  # remove if a version > 0.1.0.1 ever gets released
+  # https://github.com/Philonous/hs-stun/pull/1
+  # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
