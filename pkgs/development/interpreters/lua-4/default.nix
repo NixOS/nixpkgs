@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://www.lua.org/ftp/lua-4.0.1.tar.gz;
-    md5 = "a31d963dbdf727f9b34eee1e0d29132c";
+    sha256 = "0ajd906hasii365xdihv9mdmi3cixq758blx0289x4znkha6wx6z";
   };
 
   configurePhase = "sed -i -e 's/CFLAGS= -O2/CFLAGS = -O3 -fPIC/' config";
