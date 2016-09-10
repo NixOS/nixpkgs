@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/b/breathe/${name}.tar.gz";
-    md5 = "e35f6ce54485663857129370047f6057";
+    sha256 = "0m3w8yx24nm01xxx6aj08cklnifwlzzmczc5b0ni40l63lhvm3lp";
   };
 
   propagatedBuildInputs = [ docutils six sphinx ];
