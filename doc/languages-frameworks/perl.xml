@@ -157,16 +157,16 @@ expression on standard output.  For example:
 
 <screen>
 $ nix-generate-from-cpan XML::Simple
-  XMLSimple = buildPerlPackage {
-    name = "XML-Simple-2.20";
+  XMLSimple = buildPerlPackage rec {
+    name = "XML-Simple-2.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.20.tar.gz;
-      sha256 = "5cff13d0802792da1eb45895ce1be461903d98ec97c9c953bc8406af7294434a";
+      url = "mirror://cpan/authors/id/G/GR/GRANTM/${name}.tar.gz";
+      sha256 = "b9450ef22ea9644ae5d6ada086dc4300fa105be050a2030ebd4efd28c198eb49";
     };
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAX XMLSAXExpat ];
     meta = {
-      description = "Easily read/write XML (esp config files)";
-      license = "perl";
+      description = "An API for simple XML files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 </screen>

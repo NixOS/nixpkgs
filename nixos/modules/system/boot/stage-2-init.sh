@@ -29,7 +29,7 @@ setPath "@path@"
 # Normally, stage 1 mounts the root filesystem read/writable.
 # However, in some environments, stage 2 is executed directly, and the
 # root is read-only.  So make it writable here.
-if [ "$container" != systemd-nspawn ]; then
+if [ -z "$container" ]; then
     mount -n -o remount,rw none /
 fi
 

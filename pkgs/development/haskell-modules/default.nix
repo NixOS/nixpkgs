@@ -85,7 +85,10 @@ let
         ghcWithHoogle = selectFrom:
           let
             packages = selectFrom self;
-            hoogle = callPackage ./hoogle.nix { inherit packages; };
+            hoogle = callPackage ./hoogle.nix {
+              inherit packages;
+              hoogle = self.hoogle_4_2_43;
+            };
           in withPackages (packages ++ [ hoogle ]);
 
         ghc = ghc // {

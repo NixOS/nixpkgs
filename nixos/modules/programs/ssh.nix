@@ -56,7 +56,6 @@ in
 
       setXAuthLocation = mkOption {
         type = types.bool;
-        default = config.services.xserver.enable;
         description = ''
           Whether to set the path to <command>xauth</command> for X11-forwarded connections.
           This causes a dependency on X11 packages.
@@ -164,6 +163,9 @@ in
   };
 
   config = {
+
+    programs.ssh.setXAuthLocation =
+      mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11);
 
     assertions =
       [ { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;

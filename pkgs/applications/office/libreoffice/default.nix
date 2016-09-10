@@ -268,5 +268,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
     hydraPlatforms = [];
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 }

@@ -64,10 +64,6 @@ stdenv.mkDerivation rec {
   installFlags = "-C src/ocaml-output";
 
   postInstall = ''
-    # Workaround for FStarLang/FStar#456
-    mv $out/lib/fstar/* $out/lib/
-    rmdir $out/lib/fstar
-
     wrapProgram $out/bin/fstar.exe --prefix PATH ":" "${z3}/bin"
   '';
 

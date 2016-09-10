@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     url = "http://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
     sha256 = "0g0x4m8rb2ybpxwrszb4w37rb10v9fbszm7l2skjakf4dx0gw5i7";
   };
+  postPatch = "patchShebangs libs/libvpx/build/make/rtcd.pl";
 
   buildInputs = [
     ncurses curl pkgconfig gnutls readline openssl perl libjpeg

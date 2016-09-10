@@ -1,4 +1,4 @@
-{ qtSubmodule, qtbase, substituteAll, libudev }:
+{ qtSubmodule, qtbase, substituteAll, systemd }:
 
 qtSubmodule {
   name = "qtserialport";
@@ -6,7 +6,7 @@ qtSubmodule {
   patches = [
     (substituteAll {
       src = ./0001-dlopen-serialport-udev.patch;
-      libudev = libudev.out;
+      libudev = systemd.lib;
     })
   ];
 }

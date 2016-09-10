@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.draios.com/dependencies/libb64-1.2.src.zip";
-    md5 = "a609809408327117e2c643bed91b76c5";
+    sha256 = "1lxzi6v10qsl2r6633dx0zwqyvy0j19nmwclfd0d7qybqmhqsg9l";
   };
 
   buildInputs = [ unzip ];

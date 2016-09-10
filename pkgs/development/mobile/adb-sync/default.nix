@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "1y016bjky5sn58v91jyqfz7vw8qfqnfhb9s9jd32k8y29hy5vy4d";
   };
 
-  preferLocalBuild = true;
-
   buildInputs = [ python androidsdk makeWrapper ];
 
   phases = "installPhase";
@@ -27,7 +25,8 @@ stdenv.mkDerivation rec {
     description = "A tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
     homepage = "https://github.com/google/adb-sync";
     license = licenses.asl20;
-    platforms = platforms.all;
+    platforms = platforms.unix;
+    hydraPlatforms = [];
     maintainers = with maintainers; [ scolobb ];
   };
 }

@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
         "--enable-dap"
         "--enable-shared"
     ]
-    ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" ]);
+    ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
 
     meta = {
         platforms = stdenv.lib.platforms.unix;

@@ -2,6 +2,8 @@
 
 # module requires Linux >= 4.1 https://www.wireguard.io/install/#kernel-requirements
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.1";
+# module is incompatible with the PaX constification plugin
+assert kernel != null -> !(kernel.features.grsecurity or false);
 
 let
   name = "wireguard-unstable-${version}";

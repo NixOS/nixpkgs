@@ -6,8 +6,8 @@
 with stdenv.lib;
 
 let
-  baseVersion = "3.6";
-  revision = "1";
+  baseVersion = "4.1";
+  revision = "0";
   version = "${baseVersion}.${revision}";
 in
 
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
-    sha256 = "1qjxy5l76dij3wqakd66prn1i0k1gd3gi4cv38bivk9j0gw12dp5";
+    sha256 = "00xlzw01ngza54ssmwz2ryahjlrbniy2q3p174xri1pxvcih4b21";
   };
 
-  buildInputs = [ makeWrapper qtbase qtscript qtquickcontrols qtdeclarative ];
+  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper ];
+  nativeBuildInputs = [ qmakeHook makeQtWrapper makeWrapper ];
 
-  doCheck = false;
+  doCheck = true;
 
   enableParallelBuilding = true;
 

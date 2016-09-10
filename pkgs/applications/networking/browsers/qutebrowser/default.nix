@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
-, qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, glib_networking
+, qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, cssutils, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
 , qtwebkit-plugins }:
@@ -46,7 +46,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    pyyaml pyqt5 jinja2 pygments pypeg2
+    pyyaml pyqt5 jinja2 pygments pypeg2 cssutils
   ];
 
   postPatch = ''

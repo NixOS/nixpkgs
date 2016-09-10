@@ -9,6 +9,8 @@ stdenv.mkDerivation  rec {
     sha256 = "1qpyb7355s21sgy6gibkybxpzx4ikha57a8w644lca6qy9mhcwi3";
   };
 
+  patches = [ ./mutex_no_nameclash.patch ];
+
   buildInputs = [ alsaLib gtkmm libjack2 ];
   nativeBuildInputs = [ pkgconfig ];
 

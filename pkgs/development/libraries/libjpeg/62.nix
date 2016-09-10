@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = http://www.ijg.org/files/jpegsrc.v6b.tar.gz;
-    md5 = "dbd5f3b47ed13132f04c685d608a7547";
+    sha256 = "0pg34z6rbkk5kvdz6wirf7g4mdqn5z8x97iaw17m15lr3qjfrhvm";
   };
   
   inherit libtool;

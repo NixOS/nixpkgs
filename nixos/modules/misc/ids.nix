@@ -181,7 +181,6 @@
       systemd-timesync = 154;
       liquidsoap = 155;
       etcd = 156;
-      docker-registry = 157;
       hbase = 158;
       opentsdb = 159;
       scollector = 160;
@@ -436,7 +435,6 @@
       systemd-timesync = 154;
       liquidsoap = 155;
       #etcd = 156; # unused
-      #docker-registry = 157; # unused
       hbase = 158;
       opentsdb = 159;
       scollector = 160;

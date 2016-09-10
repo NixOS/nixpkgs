@@ -383,7 +383,7 @@ You can select a particular GHC version to compile with by setting the
 Stack choose what GHC version it wants based on the snapshot specified
 in `stack.yaml` (only works with Stack >= 1.1.3):
 
-    {nixpkgs ? import <nixpkgs> { }, ghc ? nixpkgs.ghc}
+    {nixpkgs ? import <nixpkgs> { }, ghc ? nixpkgs.ghc}:
 
     with nixpkgs;
 

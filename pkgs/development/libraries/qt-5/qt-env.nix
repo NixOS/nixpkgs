@@ -1,6 +1,6 @@
-{ runCommand, lndir, qtbase }: name: paths:
+{ lib, runCommand, lndir, qtbase }: name: paths:
 
-runCommand name { inherit paths qtbase; } ''
+runCommand name { qtbase = qtbase.dev; paths = lib.chooseDevOutputs paths;  } ''
 
 mkdir -p "$out/bin" "$out/mkspecs" "$out/include" "$out/lib" "$out/share"
 

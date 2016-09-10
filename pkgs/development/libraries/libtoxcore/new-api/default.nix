@@ -2,13 +2,13 @@
 , libvpx, check, libconfig, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "tox-core-dev-20160319";
+  name = "tox-core-dev-20160727";
 
   src = fetchFromGitHub {
     owner  = "irungentoo";
     repo   = "toxcore";
-    rev    = "532629d486e3361c7d8d95b38293cc7d61dc4ee5";
-    sha256 = "0x8mjrjiafgia9vy7w4zhfzicr2fljx8xgm2ppi4kva2r2z1wm2f";
+    rev    = "755f084e8720b349026c85afbad58954cb7ff1d4";
+    sha256 = "0ap1gvlyihnfivv235dbrgsxsiiz70bhlmlr5gn1027w3h5kqz8w";
   };
 
   NIX_LDFLAGS = "-lgcc_s";
@@ -29,8 +29,10 @@ stdenv.mkDerivation rec {
     "--enable-daemon"
   ];
 
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    autoreconfHook libsodium ncurses check libconfig pkgconfig
+    autoreconfHook libsodium ncurses check libconfig
   ] ++ stdenv.lib.optionals (!stdenv.isArm) [
     libopus
   ];
