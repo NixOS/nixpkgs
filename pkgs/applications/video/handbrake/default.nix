@@ -14,7 +14,7 @@
 { stdenv, config, fetchurl,
   python, pkgconfig, yasm,
   autoconf, automake, libtool, m4,
-  libass, libsamplerate, fribidi, libxml2, bzip2,
+  fake-wget, libass, libsamplerate, fribidi, libxml2, bzip2,
   libogg, libtheora, libvorbis, libdvdcss, a52dec, fdk_aac,
   lame, ffmpeg, libdvdread, libdvdnav, libbluray,
   mp4v2, mpeg2dec, x264, x265, libmkv,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python pkgconfig yasm autoconf automake libtool m4 ];
   buildInputs = [
-    fribidi fontconfig freetype hicolor_icon_theme
+    fake-wget fribidi fontconfig freetype hicolor_icon_theme
     libass libsamplerate libxml2 bzip2
     libogg libtheora libvorbis libdvdcss a52dec libmkv fdk_aac
     lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
@@ -51,14 +51,6 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    # Fake wget to prevent downloads
-    mkdir wget
-    echo "#!/bin/sh" > wget/wget
-    echo "echo ===== Not fetching \$*" >> wget/wget
-    echo "exit 1" >> wget/wget
-    chmod +x wget/wget
-    export PATH=$PATH:$PWD/wget
-
     # Force using nixpkgs dependencies
     sed -i '/MODULES += contrib/d' make/include/main.defs
     sed -i '/PKG_CONFIG_PATH=/d' gtk/module.rules

@@ -4134,6 +4134,8 @@ in
     libpsl = null;
   };
 
+  fake-wget = callPackage ../tools/networking/fake-wget {};
+
   which = callPackage ../tools/system/which { };
 
   wicd = callPackage ../tools/networking/wicd { };
