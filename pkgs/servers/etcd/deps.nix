@@ -1,0 +1,20 @@
+[
+{
+  goPackagePath = "github.com/olekukonko/tablewriter";
+  fetch = {
+    type = "git";
+    url = "https://github.com/olekukonko/tablewriter";
+    rev = "cca8bbc0798408af109aaaa239cbd2634846b340";
+    sha256 = "0f9ph3z7lh6p6gihbl1461j9yq5qiaqxr9mzdkp512n18v89ml48";
+  };
+}
+{
+  goPackagePath = "github.com/mattn/go-runewidth";
+  fetch =  {
+    type = "git";
+    url = "https://github.com/mattn/go-runewidth";
+    rev = "d6bea18f789704b5f83375793155289da36a3c7f";
+    sha256 = "1hnigpn7rjbwd1ircxkyx9hvi0xmxr32b2jdy2jzw6b3jmcnz1fs";
+  };
+}
+]

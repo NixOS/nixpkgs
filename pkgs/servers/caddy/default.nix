@@ -20,5 +20,5 @@ buildGoPackage rec {
       -X github.com/mholt/caddy/caddy/caddymain.gitTag=${version}
   '';
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 }

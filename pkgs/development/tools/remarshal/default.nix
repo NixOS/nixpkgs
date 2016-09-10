@@ -12,7 +12,7 @@ buildGoPackage rec {
     sha256 = "0lhsqca3lq3xvdwsmrngv4p6b7k2lkbfnxnk5qj6jdd5y7f4b496";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   meta = with lib; {
     description = "Convert between TOML, YAML and JSON";

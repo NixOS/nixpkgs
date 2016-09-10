@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "go2nix-${version}";
-  version = "0.1.0";
+  version = "1.1.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/kamilchm/go2nix";
@@ -12,10 +12,10 @@ buildGoPackage rec {
     inherit rev;
     owner = "kamilchm";
     repo = "go2nix";
-    sha256 = "10nz7gva3n6wk01wphrjjb31sy33kf9ji03zr849x21a669fnmjf";
+    sha256 = "0asbbcyf1hh8khakych0y09rjarjiywr8pyy1v8ghpr1vvg43a09";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   buildInputs = [ go-bindata goimports makeWrapper ];
   preBuild = ''go generate ./...'';
