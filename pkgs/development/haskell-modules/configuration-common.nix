@@ -948,14 +948,6 @@ self: super: {
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc {};
 
-  # https://github.com/NixOS/nixpkgs/issues/14967
-  yi = markBroken super.yi;
-  yi-fuzzy-open = markBroken super.yi-fuzzy-open;
-  yi-monokai = markBroken super.yi-monokai;
-  yi-snippet = markBroken super.yi-snippet;
-  yi-solarized = markBroken super.yi-solarized;
-  yi-spolsky = markBroken super.yi-spolsky;
-
   # gtk2hs-buildtools must have Cabal 1.24
   gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_0_0; };
 
