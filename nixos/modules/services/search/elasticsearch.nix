@@ -129,7 +129,7 @@ in {
     systemd.services.elasticsearch = {
       description = "Elasticsearch Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       path = [ pkgs.inetutils ];
       environment = {
         ES_HOME = cfg.dataDir;
