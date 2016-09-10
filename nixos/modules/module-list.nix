@@ -230,7 +230,6 @@
   ./services/misc/dictd.nix
   ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
-  ./services/misc/docker-registry.nix
   ./services/misc/emby.nix
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
@@ -334,7 +333,6 @@
   ./services/networking/dnschain.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
-  ./services/networking/docker-registry-server.nix
   ./services/networking/ejabberd.nix
   ./services/networking/fan.nix
   ./services/networking/ferm.nix

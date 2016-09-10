@@ -251,6 +251,7 @@ in rec {
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};
+  tests.kde5 = callTest tests/kde5.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
@@ -284,7 +285,6 @@ in rec {
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.sddm = callTest tests/sddm.nix {};
-  tests.sddm-kde5 = callTest tests/sddm-kde5.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};

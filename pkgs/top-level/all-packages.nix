@@ -831,6 +831,8 @@ in
 
   fzy = callPackage ../tools/misc/fzy { };
 
+  gdrivefs = python27Packages.gdrivefs;
+
   gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
@@ -4441,7 +4443,7 @@ in
     coq = coq_8_5;
   });
 
-  cryptol = self.haskell.packages.lts.cryptol;
+  cryptol = haskellPackages.cryptol;
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
@@ -4674,13 +4676,6 @@ in
   };
 
   gccgo = gccgo49;
-
-  gccgo48 = wrapCC (gcc48.cc.override {
-    name = "gccgo";
-    langCC = true; #required for go.
-    langC = true;
-    langGo = true;
-  });
 
   gccgo49 = wrapCC (gcc49.cc.override {
     name = "gccgo49";
@@ -8803,7 +8798,7 @@ in
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
-    llvmPackages = llvmPackages_38; # various problems with 3.7; see #11367, #11467
+    llvmPackages = llvmPackages_39;
   });
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
@@ -10746,11 +10741,12 @@ in
 
   slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
 
-  tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
-
-  tomcat7 = callPackage ../servers/http/tomcat/7.0.nix { };
-
-  tomcat8 = callPackage ../servers/http/tomcat/8.0.nix { };
+  inherit (callPackages ../servers/http/tomcat { })
+    tomcat6
+    tomcat7
+    tomcat8
+    tomcat85
+    tomcatUnstable;
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
@@ -11804,10 +11800,8 @@ in
     cross = assert crossSystem != null; crossSystem;
   });
 
-  # This hacky alias covers most use cases without mass-replace (build inputs)
-  # and causes an *evaluation* error if "${udev}" is attempted.
-  udev = [ libudev.dev libudev.out ];
-  libudev = callPackage ../os-specific/linux/systemd/libudev.nix { };
+  udev = systemd;
+  libudev = udev;
 
   eudev = callPackage ../os-specific/linux/eudev {};
 
@@ -12124,6 +12118,8 @@ in
   mplus-outline-fonts = callPackage ../data/fonts/mplus-outline-fonts { };
 
   mro-unicode = callPackage ../data/fonts/mro-unicode { };
+
+  mustache-spec = callPackage ../data/documentation/mustache-spec { };
 
   nafees = callPackage ../data/fonts/nafees { };
 
@@ -12700,7 +12696,7 @@ in
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskell.lib.overrideCabal self.haskell.packages.lts.darcs (drv: {
+  darcs = haskell.lib.overrideCabal haskellPackages.darcs (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
     enableSharedExecutables = false;
     enableSharedLibraries = false;

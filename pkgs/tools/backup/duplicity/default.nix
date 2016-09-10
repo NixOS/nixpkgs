@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, librsync, ncftp, gnupg, makeWrapper
+{ stdenv, fetchurl, pythonPackages, librsync, ncftp, gnupg, rsync, makeWrapper
 }:
 
 let
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     python setup.py install --prefix=$out
     wrapProgram $out/bin/duplicity \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp ]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
     wrapProgram $out/bin/rdiffdir \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})"
   '';

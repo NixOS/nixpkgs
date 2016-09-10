@@ -3096,6 +3096,7 @@ in modules // {
       })
 
       ../development/python-modules/cairocffi/dlopen-paths.patch
+      ../development/python-modules/cairocffi/fix_test_scaled_font.patch
     ];
 
     postPatch = ''
@@ -5096,6 +5097,9 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest ];
+    patchPhase = ''
+      sed -i 's/==2.9.1//' requirements/test.txt
+    '';
 
     meta = with stdenv.lib; {
       description = "Scripting library for tmux";
@@ -11021,15 +11025,14 @@ in modules // {
   };
 
   gdrivefs = buildPythonPackage rec {
-    version = "0.14.3";
+    version = "0.14.8";
     name = "gdrivefs-${version}";
+    namePrefix = "";
     disabled = !isPy27;
 
-    src = pkgs.fetchFromGitHub {
-      sha256 = "1ljkh1871lwzn5lhhgbmbf2hfnbnajr3ddz3q5n1kid25qb3l086";
-      rev = version;
-      repo = "GDriveFS";
-      owner = "dsoprea";
+    src = pkgs.fetchurl {
+      url = "https://github.com/dsoprea/GDriveFS/archive/${version}.tar.gz";
+      sha256 = "1dch10ajkp567pwvssvz1v5c0hxfyd8wf9qd7j1gfybh7f7hyzvw";
     };
 
     buildInputs = with self; [ gipc greenlet httplib2 six ];
@@ -19714,11 +19717,11 @@ in modules // {
 
     postPatch = ''
       sed -i -e '/udev_library_name/,/^ *libudev/ {
-        s|CDLL([^,]*|CDLL("${pkgs.libudev.out}/lib/libudev.so.1"|p; d
+        s|CDLL([^,]*|CDLL("${pkgs.systemd.lib}/lib/libudev.so.1"|p; d
       }' pyudev/_libudev.py
     '';
 
-    propagatedBuildInputs = with self; [ pkgs.udev ];
+    propagatedBuildInputs = with self; [ pkgs.systemd ];
 
     meta = {
       homepage = "http://pyudev.readthedocs.org/";
@@ -20713,6 +20716,7 @@ in modules // {
       preConfigure = ''
         mkdir -p $out
         lndir ${self.pyqt4} $out
+        rm -rf "$out/nix-support"
         cd Python
         ${python.executable} ./configure-old.py \
             --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
@@ -23556,7 +23560,7 @@ in modules // {
 
     patchPhase = ''
       substituteInPlace setup.py \
-          --replace "/usr/include" "${pkgs.systemd}/include"
+          --replace "/usr/include" "${pkgs.systemd.dev}/include"
       echo '#include <time.h>' >> systemd/pyutil.h
     '';
 
@@ -28208,12 +28212,12 @@ in modules // {
   };
 
   pypeg2 = buildPythonPackage rec {
-    version = "2.15.1";
+    version = "2.15.2";
     name = "pypeg2-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyPEG2/pyPEG2-${version}.tar.gz";
-      sha256 = "f4814a5f9c84bbb0794bef8d2a5871f4aed25366791c55e2162681873ad8bd21";
+      sha256 = "0v8ziaam2r637v94ra4dbjw6jzxz99gs5x4i585kgag1v204yb9b";
     };
 
     meta = {

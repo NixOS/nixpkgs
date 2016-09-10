@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpthreadstubs libpciaccess ]
-    ++ stdenv.lib.optional stdenv.isLinux udev;
+  buildInputs = [ libpthreadstubs libpciaccess ];
+    # libdrm as of 2.4.70 does not actually do anything with udev.
+    #++ stdenv.lib.optional stdenv.isLinux udev;
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
 

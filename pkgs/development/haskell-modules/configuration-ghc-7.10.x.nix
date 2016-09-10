@@ -182,7 +182,6 @@ self: super: {
   # lens-family-th >= 0.5.0.0 is GHC 8.0 only
   lens-family-th = self.lens-family-th_0_4_1_0;
 
-
   # The tests in vty-ui do not build, but vty-ui itself builds.
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
