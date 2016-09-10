@@ -104,7 +104,7 @@ in buildEnv {
 
       patchCnfLua "./texmfcnf.lua"
 
-      rm updmap.cfg
+      #rm updmap.cfg
     )
   '' +
     # updmap.cfg seems like not needing changes
@@ -182,7 +182,8 @@ in buildEnv {
     texlinks.sh "$out/bin" && wrapBin
     perl `type -P fmtutil.pl` --sys --refresh | grep '^fmtutil' # too verbose
     #texlinks.sh "$out/bin" && wrapBin # do we need to regenerate format links?
-    perl `type -P updmap.pl` --sys --syncwithtrees --force
+    echo "y" | perl `type -P updmap.pl` --sys --syncwithtrees --force
+    perl `type -P updmap.pl` --sys --force
     perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
