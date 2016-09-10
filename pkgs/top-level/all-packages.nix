@@ -16784,6 +16784,8 @@ in
   libjack2 = jack2Full.override { prefix = "lib"; };
   libjack2-git = callPackage ../misc/jackaudio/git.nix { };
 
+  libjaylink = callPackage ../development/tools/misc/libjaylink { };
+
   keynav = callPackage ../tools/X11/keynav { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
