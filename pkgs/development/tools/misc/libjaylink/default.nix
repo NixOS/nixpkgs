@@ -10,11 +10,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ autoreconfHook pkgconfig libusb ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Shared library written in C to access SEGGER J-Link and compatible devices";
     homepage = http://git.zapb.de/libjaylink.git;
-    license = stdenv.lib.licenses.gpl2plus;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ elitak ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ elitak ];
   };
 }

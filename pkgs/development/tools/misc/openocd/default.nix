@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, libftdi, libusb1, pkgconfig, hidapi }:
-
-stdenv.mkDerivation rec {
-  name = "openocd-${version}";
+{ stdenv, fetchurl, libftdi, libusb1, pkgconfig, hidapi, jimtcl, libjaylink }:
+let
   version = "0.9.0";
+in
+stdenv.mkDerivation {
+  name = "openocd-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/openocd/openocd-${version}.tar.bz2";
     sha256 = "0hzlnm19c4b35vsxs6ik94xbigv3ykdgr8gzrdir6sqmkan44w43";
   };
 
-  buildInputs = [ libftdi libusb1 pkgconfig hidapi ];
+  buildInputs = [ libftdi libusb1 pkgconfig hidapi jimtcl libjaylink ];
 
   configureFlags = [
+    "--disable-internal-jimtcl"
+    "--disable-internal-libjaylink"
     "--enable-jtag_vpi"
     "--enable-usb_blaster_libftdi"
     "--enable-amtjtagaccel"
@@ -23,6 +26,11 @@ stdenv.mkDerivation rec {
     "--enable-sysfsgpio"
     "--enable-remote-bitbang"
   ];
+
+  # FIXME HACK since inputs from jimctl arent being propagated properly?!
+  preConfigure = ''
+    export LIBS="-lreadline -lSDL -lSDL_gfx -lsqlite3"
+  '';
 
   postInstall = ''
     mkdir -p "$out/etc/udev/rules.d"
