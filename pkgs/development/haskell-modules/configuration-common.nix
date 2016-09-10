@@ -948,9 +948,6 @@ self: super: {
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc {};
 
-  # gtk2hs-buildtools must have Cabal 1.24
-  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_0_0; };
-
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = (addBuildTool super.pango self.gtk2hs-buildtools).overrideDerivation (drv: {
