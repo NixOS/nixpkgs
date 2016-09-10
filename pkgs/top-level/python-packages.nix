@@ -1683,6 +1683,21 @@ in modules // {
     };
   };
 
+  backports_ssl_match_hostname = self.buildPythonPackage rec {
+    name = "backports.ssl_match_hostname-${version}";
+    version = "3.5.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/backports.ssl_match_hostname/${name}.tar.gz";
+      sha256 = "1wndipik52cyqy0677zdgp90i435pmvwd89cz98lm7ri0y3xjajh";
+    };
+
+    meta = {
+      description = "The Secure Sockets layer is only actually *secure*";
+      homepage = http://bitbucket.org/brandon/backports.ssl_match_hostname;
+    };
+  };
+
   backports_lzma = self.buildPythonPackage rec {
     name = "backports.lzma-0.0.3";
     disabled = isPy3k;
@@ -5676,14 +5691,14 @@ in modules // {
 
   docker = buildPythonPackage rec {
     name = "docker-py-${version}";
-    version = "1.7.2";
+    version = "1.9.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-py/${name}.tar.gz";
-      sha256 = "0k6hm3vmqh1d3wr9rryyif5n4rzvcffdlb1k4jvzp7g4996d3ccm";
+      sha256 = "0zkdgz6akzfdda29y4bwa444r0sr2py5pwvvh6bnsy25lwabkikd";
     };
 
-    propagatedBuildInputs = with self; [ six requests2 websocket_client ];
+    propagatedBuildInputs = with self; [ six requests2 websocket_client ipaddress backports_ssl_match_hostname ];
 
     # Version conflict
     doCheck = false;
@@ -10214,13 +10229,13 @@ in modules // {
   };
 
   docker_compose = buildPythonPackage rec {
-    version = "1.6.2";
+    version = "1.8.0";
     name = "docker-compose-${version}";
     namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-compose/${name}.tar.gz";
-      sha256 = "10i4032d99hm5nj1p74pcad9i3gz1h5x3096byklncgssfyjqki6";
+      sha256 = "1ad28x3marfmyrbibbkzy46bpbgc29k20ik661l8r49nr0m6px35";
     };
 
     # lots of networking and other fails
@@ -12090,11 +12105,11 @@ in modules // {
   };
 
   ipaddress = if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
-    name = "ipaddress-1.0.15";
+    name = "ipaddress-1.0.16";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipaddress/${name}.tar.gz";
-      sha256 = "0dk6ky7akh5j4y3qbpnbi0qby64nyprbkrjm2s32pcfdr77qav5g";
+      sha256 = "1c3imabdrw8nfksgjjflzg7h4ynjckqacb188rf541m74arq4cas";
     };
 
     checkPhase = ''
@@ -26381,7 +26396,7 @@ in modules // {
       sha256 = "cb3ab95617ed2098d24723e3ad04ed06c4fde661400b96daa1859af965bfe040";
     };
 
-    propagatedBuildInputs = with self; [ six backports_ssl_match_hostname_3_4_0_2 unittest2 argparse ];
+    propagatedBuildInputs = with self; [ six backports_ssl_match_hostname unittest2 argparse ];
 
     meta = {
       homepage = https://github.com/liris/websocket-client;
