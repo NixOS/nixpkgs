@@ -4443,7 +4443,15 @@ in
     coq = coq_8_5;
   });
 
-  cryptol = haskellPackages.cryptol;
+  # Users installing via `nix-env` will likely be using the REPL,
+  # which has a hard dependency on Z3, so make sure it is available.
+  cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
+    buildInputs = (oldAttrs.buildInputs or []) ++ [ makeWrapper ];
+    installPhase = (oldAttrs.installPhase or "") + ''
+      wrapProgram $out/bin/cryptol \
+        --prefix 'PATH' ':' "${lib.getBin z3}/bin"
+    '';
+  });
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
