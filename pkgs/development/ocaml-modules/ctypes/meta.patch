@@ -1,0 +1,13 @@
+diff -uNr ocaml-ctypes-ocaml-ctypes-0.2.2/META ocaml-ctypes-ocaml-ctypes-0.2.2-new/META
+--- ocaml-ctypes-ocaml-ctypes-0.2.2/META	2013-11-20 13:49:04.000000000 +0100
++++ ocaml-ctypes-ocaml-ctypes-0.2.2-new/META	2014-12-31 11:12:15.787412242 +0100
+@@ -6,6 +6,9 @@
+ archive(native) = "ctypes.cmxa"
+ archive(native, plugin) = "ctypes.cmxs"
+ exists_if = "ctypes.cma"
++linkopts = "-cclib -lffi -ccopt -L@LIBFFI@"
++linkopts(plugin) = "-dllib -lffi -dllpath @LIBFFI@"
++
+ 
+ package "top" (
+   version = "0.2.2"
