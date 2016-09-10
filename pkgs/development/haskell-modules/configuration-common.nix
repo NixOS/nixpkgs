@@ -867,9 +867,6 @@ self: super: {
   # https://github.com/guillaume-nargeot/hpc-coveralls/issues/52
   hpc-coveralls = disableSharedExecutables super.hpc-coveralls;
 
-  # Can't find libHSidris-*.so during build.
-  idris = disableSharedExecutables super.idris;
-
   # https://github.com/fpco/stackage/issues/838
   cryptonite = dontCheck super.cryptonite;
 
@@ -986,5 +983,15 @@ self: super: {
 
   # https://bitbucket.org/ssaasen/spy/pull-requests/3/fsnotify-dropped-system-filepath
   spy = appendPatch super.spy ./patches/spy.patch;
+
+  idris = overrideCabal super.idris (drv: {
+    # "idris" binary cannot find Idris library otherwise while building. After
+    # installing it's completely fine though. This seems like a bug in Idris
+    # that's related to builds with shared libraries enabled. It would be great
+    # if someone who knows a thing or two about Idris could look into this.
+    preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+    # https://github.com/idris-lang/Idris-dev/issues/2499
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+  });
 
 }
