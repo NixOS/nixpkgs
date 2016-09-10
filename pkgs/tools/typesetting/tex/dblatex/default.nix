@@ -4,7 +4,7 @@
 , tex ? texlive.combine { # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar
       fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
-      multirow overpic pdfpages rotating stmaryrd subfigure titlesec wasysym
+      multirow overpic pdfpages graphics stmaryrd subfigure titlesec wasysym
       # pkgs below don't seem requested by dblatex, but our manual fails without them
       ec zapfding symbol eepic times rsfs cs tex4ht courier helvetic ly1;
   }
