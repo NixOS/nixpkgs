@@ -9966,10 +9966,6 @@ in
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
-  atermjava = callPackage ../development/libraries/java/aterm {
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
   commonsBcel = callPackage ../development/libraries/java/commons/bcel { };
 
   commonsBsf = callPackage ../development/libraries/java/commons/bsf { };
