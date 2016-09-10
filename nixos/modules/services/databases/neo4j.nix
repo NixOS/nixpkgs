@@ -123,7 +123,7 @@ in {
     systemd.services.neo4j = {
       description = "Neo4j Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       environment = { NEO4J_INSTANCE = cfg.dataDir; };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/neo4j console";
