@@ -12770,9 +12770,7 @@ in
 
   dmtx-utils = callPackage ../tools/graphics/dmtx-utils { };
 
-  docker = callPackage ../applications/virtualization/docker {
-    btrfs-progs = btrfs-progs_4_4_1;
-  };
+  docker = callPackage ../applications/virtualization/docker { };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
