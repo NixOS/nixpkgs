@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
-, libXrandr
+{ stdenv, buildEnv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
+, libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
+, libXrandr, libXinerama
 , which, alsaLib, curl, libvpx, gawk, nettools, dbus
 , xorriso, makeself, perl, pkgconfig, nukeReferences
 , javaBindings ? false, jdk ? null
@@ -20,7 +20,7 @@ let
   # revision/hash as well. See
   # http://download.virtualbox.org/virtualbox/${version}/SHA256SUMS
   # for hashes.
-  version = "5.0.26";
+  version = "5.1.4";
 
   forEachModule = action: ''
     for mod in \
@@ -41,12 +41,12 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "108824";
+  extpackRevision = "110228";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
-    sha256 = "2f2302c7ba3d00a1258fe8e7767a6eb08dccdc3c31f6e3eeb74063c2c268b104";
+    sha256 = "9462ff1b567c37ad9a33c0c7ca1925776615ec89b5a72563f29a8cc8514cf316";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) available at:
@@ -60,23 +60,28 @@ let
     '';
   };
 
+  vbox-qt5-env = buildEnv {
+    name = "vbox-qt5-env-${version}";
+    paths = [ qt5.qtbase.dev qt5.qtbase.out qt5.qtx11extras.dev qt5.qtx11extras.out qt5.qttools.dev ];
+  };
+
 in stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "78dec1369d2c8feefea3c682d95e76c0e99414c56626388035cf4061d4dad62e";
+    sha256 = "b9a14a7771059c55c44b97f8d4eef9bea84544f3e215e0caa563bc35e2f16aaf";
   };
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
-      pkgconfig which libXmu nukeReferences ]
+      pkgconfig which libXmu nukeReferences libpng ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python
     ++ optional pulseSupport libpulseaudio
-    ++ optionals (headless) [ libXrandr libpng ]
-    ++ optionals (!headless) [ qt4 SDL ];
+    ++ optionals (headless) [ libXrandr ]
+    ++ optionals (!headless) [ vbox-qt5-env libXinerama SDL ];
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
@@ -103,11 +108,12 @@ in stdenv.mkDerivation {
     set +x
   '';
 
-  patches = optional enableHardening ./hardened.patch;
+  patches = optional enableHardening ./hardened.patch
+    ++ [ ./libressl.patch ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
-      src/apps/adpctl/VBoxNetAdpCtl.cpp
+      src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
@@ -135,7 +141,7 @@ in stdenv.mkDerivation {
 
     ./configure \
       ${optionalString headless "--build-headless"} \
-      ${optionalString (!headless) "--with-qt4-dir=${qt4}"} \
+      ${optionalString (!headless) "--with-qt-dir=${vbox-qt5-env}"} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
