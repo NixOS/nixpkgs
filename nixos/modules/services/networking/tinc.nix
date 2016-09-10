@@ -149,8 +149,8 @@ in
       ("tinc.${network}")
       ({
         description = "Tinc Daemon - ${network}";
-        wantedBy = [ "network.target" ];
-        after = [ "network-interfaces.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
         path = [ data.package ];
         restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
           ++ mapAttrsToList (host: _ : config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
