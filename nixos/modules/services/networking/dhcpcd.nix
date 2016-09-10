@@ -61,7 +61,6 @@ let
       ${cfg.extraConfig}
     '';
 
-  # Hook for emitting ip-up/ip-down events.
   exitHook = pkgs.writeText "dhcpcd.exit-hook"
     ''
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
@@ -73,13 +72,7 @@ let
           # applies to openntpd.
           ${config.systemd.package}/bin/systemctl try-restart ntpd.service
           ${config.systemd.package}/bin/systemctl try-restart openntpd.service
-
-          ${config.systemd.package}/bin/systemctl start ip-up.target
       fi
-
-      #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
-      #    ${config.systemd.package}/bin/systemctl start ip-down.target
-      #fi
 
       ${cfg.runHook}
     '';

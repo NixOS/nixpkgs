@@ -116,8 +116,8 @@ in
 
       wantedBy = [ "multi-user.target" "sshd.service" ];
       before = [ "sshd.service" ];
-      wants = [ "ip-up.target" ];
-      after = [ "ip-up.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       path = [ pkgs.wget pkgs.iproute ];
 

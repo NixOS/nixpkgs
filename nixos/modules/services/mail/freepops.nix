@@ -74,7 +74,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.freepopsd = {
       description = "Freepopsd (webmail over POP3)";
-      wantedBy = [ "ip-up.target" ];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       script = ''
         ${pkgs.freepops}/bin/freepopsd \
           -p ${toString cfg.port} \

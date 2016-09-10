@@ -55,7 +55,6 @@ let
   ipUpScript = writeScript "01nixos-ip-up" ''
     #!/bin/sh
     if test "$2" = "up"; then
-      ${config.systemd.package}/bin/systemctl start ip-up.target
       ${config.systemd.package}/bin/systemctl start network-online.target
     fi
   '';

@@ -677,8 +677,7 @@ in
     };
 
     systemd.services.systemd-networkd-wait-online = {
-      before = [ "ip-up.target" ];
-      wantedBy = [ "network-online.target" "ip-up.target" ];
+      wantedBy = [ "network-online.target" ];
     };
 
     systemd.services."systemd-network-wait-online@" = {
