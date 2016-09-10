@@ -80,7 +80,7 @@ in {
     systemd.services.mesos-master = {
       description = "Mesos Master";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.mesos}/bin/mesos-master \
