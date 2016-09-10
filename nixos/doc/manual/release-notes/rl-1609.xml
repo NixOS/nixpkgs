@@ -99,6 +99,13 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
+  <listitem>
+    <para><literal>goPackages</literal> was replaced with separated Go applications
+    in appropriate <literal>nixpkgs</literal> categories. Each Go package uses its own
+    dependency set defined in nix. There's also a new <literal>go2nix</literal>
+    tool introduced to generate Go package definition from its Go source automatically.</para>
+  </listitem>
+
 </itemizedlist>
 
 

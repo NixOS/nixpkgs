@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "059az73j717gd960g4jigrxnvqrjh9jw1c324xpwaafa0bf10llm";
   };
 
-  goDeps = ./mesos-exporter_deps.json;
+  goDeps = ./mesos-exporter_deps.nix;
 
   meta = with stdenv.lib; {
     description = "Export Mesos metrics to Prometheus";

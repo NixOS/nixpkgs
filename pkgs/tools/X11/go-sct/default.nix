@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "1iqdagrq0j7sqxgsj31skgk73k2rbpbvj41v087af9103wf8h9z7";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   buildInputs = [ xorg.libX11 xorg.libXrandr ];
 

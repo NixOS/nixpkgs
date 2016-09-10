@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   buildInputs = [ ncurses ];
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim

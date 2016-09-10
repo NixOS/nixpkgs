@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1bj0s4s3gbcnlp2z2yx7jf3jx14cdg2v4pr0yciai0g6jwwg63hd";
   };
 
-  goDeps = ./pushgateway_deps.json;
+  goDeps = ./pushgateway_deps.nix;
 
   buildInputs = [ go-bindata ];
 
