@@ -1,17 +1,17 @@
 diff --git a/src/VBox/Runtime/common/crypto/digest-builtin.cpp b/src/VBox/Runtime/common/crypto/digest-builtin.cpp
-index 997523c..26d5c1b 100644
+index 66b4304..1aaceff 100644
 --- a/src/VBox/Runtime/common/crypto/digest-builtin.cpp
 +++ b/src/VBox/Runtime/common/crypto/digest-builtin.cpp
-@@ -552,7 +552,7 @@ static PCRTCRDIGESTDESC const g_apDigestOps[] =
+@@ -561,7 +561,7 @@ static PCRTCRDIGESTDESC const g_apDigestOps[] =
   * OpenSSL EVP.
   */
-     
+ 
 -# if OPENSSL_VERSION_NUMBER >= 0x10100000
 +# if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
  /** @impl_interface_method{RTCRDIGESTDESC::pfnNew} */
  static DECLCALLBACK(void*) rtCrDigestOsslEvp_New(void)
  {
-@@ -588,7 +588,7 @@ static DECLCALLBACK(int) rtCrDigestOsslEvp_Init(void *pvState, void *pvOpaque, b
+@@ -597,7 +597,7 @@ static DECLCALLBACK(int) rtCrDigestOsslEvp_Init(void *pvState, void *pvOpaque, b
      if (fReInit)
      {
          pEvpType = EVP_MD_CTX_md(pThis);
@@ -20,7 +20,7 @@ index 997523c..26d5c1b 100644
          EVP_MD_CTX_reset(pThis);
  # else
          EVP_MD_CTX_cleanup(pThis);
-@@ -607,7 +607,7 @@ static DECLCALLBACK(int) rtCrDigestOsslEvp_Init(void *pvState, void *pvOpaque, b
+@@ -616,7 +616,7 @@ static DECLCALLBACK(int) rtCrDigestOsslEvp_Init(void *pvState, void *pvOpaque, b
  static DECLCALLBACK(void) rtCrDigestOsslEvp_Delete(void *pvState)
  {
      EVP_MD_CTX *pThis = (EVP_MD_CTX *)pvState;
@@ -29,7 +29,7 @@ index 997523c..26d5c1b 100644
      EVP_MD_CTX_reset(pThis);
  # else
      EVP_MD_CTX_cleanup(pThis);
-@@ -652,13 +652,13 @@ static RTCRDIGESTDESC const g_rtCrDigestOpenSslDesc =
+@@ -661,13 +661,13 @@ static RTCRDIGESTDESC const g_rtCrDigestOpenSslDesc =
      NULL,
      RTDIGESTTYPE_UNKNOWN,
      EVP_MAX_MD_SIZE,

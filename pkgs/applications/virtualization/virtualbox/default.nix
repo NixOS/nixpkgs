@@ -20,7 +20,7 @@ let
   # revision/hash as well. See
   # http://download.virtualbox.org/virtualbox/${version}/SHA256SUMS
   # for hashes.
-  version = "5.1.2";
+  version = "5.1.4";
 
   forEachModule = action: ''
     for mod in \
@@ -41,12 +41,12 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "108956";
+  extpackRevision = "110228";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
-    sha256 = "394d933be4022b2b15225670fe6e2a4486f34e5a565a719e0de5984089ccd975";
+    sha256 = "9462ff1b567c37ad9a33c0c7ca1925776615ec89b5a72563f29a8cc8514cf316";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) available at:
@@ -70,7 +70,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "03c92e3000d4b905d5b18a6abed757998125a37e5efa7864e62eae2baeabe010";
+    sha256 = "b9a14a7771059c55c44b97f8d4eef9bea84544f3e215e0caa563bc35e2f16aaf";
   };
 
   buildInputs =
@@ -113,7 +113,7 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
-      src/apps/adpctl/VBoxNetAdpCtl.cpp
+      src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
