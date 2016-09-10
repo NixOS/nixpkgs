@@ -141,7 +141,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.xinetd = {
       description = "xinetd server";
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.xinetd ];
       script = "xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
