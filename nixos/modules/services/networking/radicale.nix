@@ -50,7 +50,7 @@ in
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${pkgs.pythonPackages.radicale}/bin/radicale -C ${confFile} -f";
       serviceConfig.User = "radicale";
