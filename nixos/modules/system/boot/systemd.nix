@@ -727,8 +727,6 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
-    systemd.targets.network-online.after = [ "ip-up.target" ];
-
     systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services

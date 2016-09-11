@@ -147,10 +147,9 @@ in
     systemd.services.dhcpcd =
       { description = "DHCP Client";
 
-        wantedBy = [ "network.target" ];
-        # Work-around to deal with problems where the kernel would remove &
-        # re-create Wifi interfaces early during boot.
-        after = [ "network-interfaces.target" ];
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network.target" ];
+        before = [ "network.target" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
