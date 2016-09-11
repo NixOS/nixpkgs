@@ -6,7 +6,7 @@ let
 
   fetch = fetch_v version;
   fetch_v = ver: name: sha256: fetchurl {
-    url = "http://llvm.org/releases/3.9.0/${name}-${ver}.src.tar.xz";
+    url = "http://llvm.org/releases/${version}/${name}-${ver}.src.tar.xz";
     inherit sha256;
   };
 
