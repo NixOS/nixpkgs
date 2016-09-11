@@ -1,5 +1,5 @@
 {
-  fetchurl, stdenv,
+  fetchurl, stdenv, pkgconfig,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
 
   # Optional but increases closure only negligibly.
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lngng84k1kkljl74q0cdqc3s82vn2kimfm02dgm4d6m7x71mvkj";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
     ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
     ++ stdenv.lib.optional xarSupport libxml2;
