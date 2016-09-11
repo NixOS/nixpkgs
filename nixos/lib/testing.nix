@@ -181,9 +181,11 @@ rec {
           eval $i2=/tmp/xchg/$_basename
           ${coreutils}/bin/ls -la $xchg
         done
-        unset i i2 _basename xchg
 
-        export > $xchg/saved-env
+        unset i i2 _basename
+        export | ${gnugrep}/bin/grep -v '^xchg=' > $xchg/saved-env
+        unset xchg
+
         export tests='${testScript}'
         ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
