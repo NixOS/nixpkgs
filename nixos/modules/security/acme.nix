@@ -129,11 +129,10 @@ in
 
       certs = mkOption {
         default = { };
-        type = types.loaOf types.optionSet;
+        type = with types; loaOf (submodule certOpts);
         description = ''
           Attribute set of certificates to get signed and renewed.
         '';
-        options = [ certOpts ];
         example = {
           "example.com" = {
             webroot = "/var/www/challenges/";
