@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     sha256 = "0fbh0afzw1gm4r2w68b8l0vhnia1qyzdl407vyxfw4v4fkm1v16c";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ python pkgconfig popt atk gtk libX11 libICE libXtst libXi
                   intltool libbonobo ORBit2 GConf dbus_glib ];
 }
