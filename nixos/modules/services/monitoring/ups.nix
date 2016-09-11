@@ -169,8 +169,7 @@ in
           monitoring directly.  These are usually attached to serial ports,
           but USB devices are also supported.
         '';
-        type = types.attrsOf types.optionSet;
-        options = [ upsOptions ];
+        type = with types; attrsOf (submodule upsOptions);
       };
 
     };
