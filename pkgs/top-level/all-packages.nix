@@ -12091,6 +12091,8 @@ in
 
   libre-caslon = callPackage ../data/fonts/libre-caslon { };
 
+  libre-franklin = callPackage ../data/fonts/libre-franklin { };
+
   lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
 
   lmodern = callPackage ../data/fonts/lmodern { };
