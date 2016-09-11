@@ -12034,6 +12034,8 @@ in
     inherit (pythonPackages) scfbuild;
   };
 
+  encode-sans = callPackage ../data/fonts/encode-sans { };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
