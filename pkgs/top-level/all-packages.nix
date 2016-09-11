@@ -12085,6 +12085,8 @@ in
 
   libertine = callPackage ../data/fonts/libertine { };
 
+  libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
+
   lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
 
   lmodern = callPackage ../data/fonts/lmodern { };
