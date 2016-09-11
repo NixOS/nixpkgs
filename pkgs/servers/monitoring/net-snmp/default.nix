@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    for f in $out/lib/*.la $out/bin/net-snmp-config $out/bin/net-snmp-create-v3-user; do
+    for f in "$out/lib/"*.la $out/bin/net-snmp-config $out/bin/net-snmp-create-v3-user; do
       sed 's|-L${openssl.dev}|-L${openssl.out}|g' -i $f
     done
   '';

@@ -62,7 +62,8 @@ with lib;
       };
 
     systemd.services.virtuoso = {
-      wantedBy = [ "ip-up.target" ];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       preStart = ''
         mkdir -p ${stateDir}

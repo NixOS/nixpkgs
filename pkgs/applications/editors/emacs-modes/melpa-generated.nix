@@ -20035,12 +20035,12 @@
     f = callPackage ({ dash, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "f";
-        version = "20160815.1253";
+        version = "20160909.829";
         src = fetchFromGitHub {
           owner = "rejeep";
           repo = "f.el";
-          rev = "4f8d3112f03e99506bab3c910fa3a29f0b8eb86b";
-          sha256 = "0gf4vh7h4sjmp74kfiwxngjpx44m88mksridfil7piapbg23z9xm";
+          rev = "e055e3dd404c8a7cc7849a0e6fd8aade714c5355";
+          sha256 = "1n9v2ackd86xbl0msnrvrfxp1qacydz9n0zjxm328jxlvj4h35rx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/22ddcf536af597b688d8edb70b3636ed6c265bf5/recipes/f";
@@ -33331,6 +33331,27 @@
         packageRequires = [ sws-mode ];
         meta = {
           homepage = "https://melpa.org/#/inform7-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    inherit-local = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "inherit-local";
+        version = "20160909.755";
+        src = fetchFromGitHub {
+          owner = "shlevy";
+          repo = "inherit-local";
+          rev = "e687c702adb27ce5f69fb28a47fe21a86cf84063";
+          sha256 = "11z3b1xwg6r769w3scd29lqg62fx8mp81g8dbx4klmj3clvyn69i";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/50751b5f9843fde00505edd281e404ec1d875713/recipes/inherit-local";
+          sha256 = "0j785xb72nk04x6jb9x5pdwp3dkalqmy208mvj4ss4fm559qfp3i";
+          name = "inherit-local";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/inherit-local";
           license = lib.licenses.free;
         };
       }) {};

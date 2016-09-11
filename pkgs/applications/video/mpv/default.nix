@@ -29,9 +29,9 @@
 , cacaSupport        ? true,  libcaca       ? null
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
+, vaapiSupport       ? true,  libva         ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , jackaudioSupport   ? false, libjack2      ? null
-, vaapiSupport       ? false, libva         ? null
 
 # scripts you want to be loaded by default
 , scripts ? []
@@ -75,13 +75,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "14rbglrcplhkf16ik4fbcv7k27lz6h4glfayr12ylh98srmsscqa";
+    sha256 = "0zp852b505lr2gllqylg2xrc8sgw9b1xjn1c7px36hzddny15c16";
   };
 
   patchPhase = ''
