@@ -23,6 +23,7 @@ rec {
 
   sameLibiconv = pkgs.libiconv == pkgsWithCross.libiconv;
   sameLibtool = pkgs.libtool == pkgsWithCross.libtool;
+  sameLibxml2 = pkgs.libxml2 == pkgsWithCross.libxml2;
   sameGcc6 = pkgs.gcc6 == pkgsWithCross.gcc6;
   sameGcc5 = pkgs.gcc5 == pkgsWithCross.gcc5;
   sameGcc49 = pkgs.gcc49 == pkgsWithCross.gcc49;
@@ -32,5 +33,5 @@ rec {
   # TODO: Test that *all* GCCs are the same:
   # sameGcc = sameGcc6 && sameGcc5 && sameGcc49 && sameGcc48 && sameGcc45;
 
-  testsPass = sameLibiconv && sameGcc5 && sameLibtool;
+  testsPass = sameLibiconv && sameLibtool && sameLibxml2 && sameGcc5;
 }

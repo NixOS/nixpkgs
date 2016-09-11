@@ -1,7 +1,12 @@
 { stdenv, lib, fetchurl, zlib, xz, python, findXMLCatalogs, libiconv, fetchpatch
-, supportPython ? (! stdenv ? cross) }:
+, supportPython ? null }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivationWithCrossArg(cross:
+  let
+    supportPythonReally = if supportPython == null
+                          then cross == null
+                          else supportPython;
+  in rec {
   name = "libxml2-${version}";
   version = "2.9.4";
 
@@ -18,10 +23,10 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "doc" ]
-    ++ lib.optional supportPython "py";
-  propagatedBuildOutputs = "out bin" + lib.optionalString supportPython " py";
+    ++ lib.optional supportPythonReally "py";
+  propagatedBuildOutputs = "out bin" + lib.optionalString supportPythonReally " py";
 
-  buildInputs = lib.optional supportPython python
+  buildInputs = lib.optional supportPythonReally python
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
@@ -29,25 +34,25 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ];
 
-  configureFlags = lib.optional supportPython "--with-python=${python}"
+  configureFlags = lib.optional supportPythonReally "--with-python=${python}"
     ++ [ "--exec_prefix=$dev" ];
 
   enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
 
-  crossAttrs = lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  crossAttrs = lib.optionalAttrs (cross.libc == "msvcrt") {
     # creating the DLL is broken ATM
     dontDisableStatic = true;
     configureFlags = configureFlags ++ [ "--disable-shared" ];
 
     # libiconv is a header dependency - propagating is enough
     propagatedBuildInputs =  [ findXMLCatalogs libiconv ];
-  };
+  } // { supportPythonReally = false; };
 
-  preInstall = lib.optionalString supportPython
+  preInstall = lib.optionalString supportPythonReally
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
-  installFlags = lib.optionalString supportPython
+  installFlags = lib.optionalString supportPythonReally
     ''pythondir="$(py)/lib/${python.libPrefix}/site-packages"'';
 
   postFixup = ''
@@ -56,7 +61,7 @@ stdenv.mkDerivation rec {
     moveToOutput share/man/man1 "$bin"
   '';
 
-  passthru = { inherit version; pythonSupport = supportPython; };
+  passthru = { inherit version; pythonSupport = supportPythonReally; };
 
   meta = {
     homepage = http://xmlsoft.org/;
@@ -65,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.eelco ];
   };
-}
+})

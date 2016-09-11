@@ -256,6 +256,9 @@ let
       # derivation (e.g., in assertions).
       passthru);
 
+  # This gets overridden in makeStdvenvCross to do something more useful.
+  mkDerivationWithCrossArg = attrFunc: mkDerivation (attrFunc null);
+
   # The stdenv that we are producing.
   result =
     derivation (
@@ -334,6 +337,8 @@ let
       needsPax = isLinux;
 
       inherit mkDerivation;
+
+      inherit mkDerivationWithCrossArg;
 
       # For convenience, bring in the library functions in lib/ so
       # packages don't have to do that themselves.
