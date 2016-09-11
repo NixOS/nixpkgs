@@ -12019,6 +12019,8 @@ in
 
   cabin = callPackage ../data/fonts/cabin { };
 
+  dosis = callPackage ../data/fonts/dosis { };
+
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
