@@ -386,8 +386,7 @@ in
 
     security.pam.services = mkOption {
       default = [];
-      type = types.loaOf types.optionSet;
-      options = [ pamOpts ];
+      type = with types; loaOf (submodule pamOpts);
       description =
         ''
           This option defines the PAM services.  A service typically
