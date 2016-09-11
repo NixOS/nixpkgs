@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, python, gstreamer
-, gst_plugins_base, pygobject
+, gst_plugins_base, pygobject2
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patches = [ ./disable-testFake.patch ];
 
   buildInputs =
-    [ pkgconfig gst_plugins_base pygobject ]
+    [ pkgconfig gst_plugins_base pygobject2 ]
     ;
 
   propagatedBuildInputs = [ gstreamer python ];

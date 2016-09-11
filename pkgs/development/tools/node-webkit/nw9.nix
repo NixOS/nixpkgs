@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
-, xorg, alsaLib, dbus, glib, gtk, atk, pango, freetype, fontconfig
+, xorg, alsaLib, dbus, glib, gtk2, atk, pango, freetype, fontconfig
 , gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, systemd }:
 let
   bits = if stdenv.system == "x86_64-linux" then "x64"
@@ -8,7 +8,7 @@ let
   nwEnv = buildEnv {
     name = "node-webkit-env";
     paths = [
-      xorg.libX11 xorg.libXrender glib gtk atk pango cairo gdk_pixbuf
+      xorg.libX11 xorg.libXrender glib gtk2 atk pango cairo gdk_pixbuf
       freetype fontconfig xorg.libXcomposite alsaLib xorg.libXdamage
       xorg.libXext xorg.libXfixes nss nspr gconf expat dbus stdenv.cc.cc
       xorg.libXtst xorg.libXi

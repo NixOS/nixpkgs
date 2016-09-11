@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, glib, glib_networking, gtk, libsoup, libX11, perl,
+{ stdenv, fetchurl, makeWrapper, glib, glib_networking, gtk2, libsoup, libX11, perl,
   pkgconfig, webkit, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "13jdximksh9r3cgd2f8vms0pbsn3x0gxvyqdqiw16xp5fmdx5kzr";
   };
 
-  buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];
+  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];
 
   hardeningDisable = [ "format" ];
 

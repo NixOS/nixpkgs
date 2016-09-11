@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, glib, xorg, cairo, gtk, pango, makeWrapper, openssl, bzip2,
+{ fetchurl, stdenv, glib, xorg, cairo, gtk2, pango, makeWrapper, openssl, bzip2,
   pkexecPath ? "/var/setuid-wrappers/pkexec", libredirect,
   gksuSupport ? false, gksu}:
 
@@ -7,7 +7,7 @@ assert gksuSupport -> gksu != null;
 
 let
   build = "3114";
-  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk cairo pango];
+  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo pango];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
     ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
 in let

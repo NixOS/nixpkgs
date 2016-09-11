@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, alsaLib, aubio, boost, cairomm, curl, doxygen, dbus, fftw
-, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtk, gtkmm, libjack2
+, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtkmm2, libjack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
 , libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper, pango
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
-      glibmm graphviz gtk gtkmm libjack2 libgnomecanvas libgnomecanvasmm liblo
+      glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv-svn lv2
       makeWrapper pango perl pkgconfig python rubberband serd sord-svn sratom suil taglib vampSDK

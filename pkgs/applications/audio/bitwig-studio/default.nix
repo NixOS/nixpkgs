@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk_pixbuf
-, glib, gtk, harfbuzz, jdk, lib, libX11, libXau, libXcursor, libXdmcp
+, glib, gtk2, harfbuzz, jdk, lib, libX11, libXau, libXcursor, libXdmcp
 , libXext, libXfixes, libXrender, libbsd, libjack2, libpng, libxcb
 , libxkbcommon, libxkbfile, makeWrapper, pixman, xcbutil, xcbutilwm
 , xdg_utils, zenity, zlib }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   libPath = lib.makeLibraryPath [
-    alsaLib bzip2.out cairo freetype gdk_pixbuf glib gtk harfbuzz
+    alsaLib bzip2.out cairo freetype gdk_pixbuf glib gtk2 harfbuzz
     libX11 libXau libXcursor libXdmcp libXext libXfixes libXrender
     libbsd libjack2 libpng libxcb libxkbfile pixman xcbutil xcbutilwm
     zlib

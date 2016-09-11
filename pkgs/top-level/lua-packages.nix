@@ -7,7 +7,7 @@
 
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
 , fetchFromGitHub, libmpack
 }:
 

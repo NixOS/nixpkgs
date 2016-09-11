@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
-, libcanberra, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio
+, libcanberra_gtk2, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio
 , gdk_pixbuf, librsvg, libxkbfile, libnotify, libgudev
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, python, libkrb5, networkmanagerapplet, networkmanager
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   buildInputs = with gnome3;
-    [ pkgconfig intltool ibus gtk glib upower libcanberra gsettings_desktop_schemas
+    [ pkgconfig intltool ibus gtk glib upower libcanberra_gtk2 gsettings_desktop_schemas
       libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
       gnome_online_accounts libsoup colord libpulseaudio fontconfig colord-gtk libpwquality
       accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify libxkbfile

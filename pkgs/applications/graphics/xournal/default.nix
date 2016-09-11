@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, ghostscript, atk, gtk, glib, fontconfig, freetype
+, ghostscript, atk, gtk2, glib, fontconfig, freetype
 , libgnomecanvas, libgnomeprint, libgnomeprintui
 , pango, libX11, xproto, zlib, poppler
 , autoconf, automake, libtool, pkgconfig}:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ghostscript atk gtk glib fontconfig freetype
+    ghostscript atk gtk2 glib fontconfig freetype
     libgnomecanvas libgnomeprint libgnomeprintui
     pango libX11 xproto zlib poppler
   ];

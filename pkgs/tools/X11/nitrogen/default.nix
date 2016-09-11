@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk2, gtkmm }:
+{ stdenv, fetchurl, pkgconfig, glib, gtkmm2 }:
 
 let version = "1.5.2";
 in
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "60a2437ce6a6c0ba44505fc8066c1973140d4bb48e1e5649f525c7b0b8bf9fd2";
   };
 
-  buildInputs = [ glib gtk2 gtkmm pkgconfig ];
+  buildInputs = [ glib gtkmm2 pkgconfig ];
 
   NIX_LDFLAGS = "-lX11";
 

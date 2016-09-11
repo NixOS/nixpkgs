@@ -2,7 +2,7 @@
 , glib, dbus, udev, libgudev, udisks2, libgcrypt
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, samba, libmtp
-, gnomeSupport ? false, gnome,libgnome_keyring, gconf, makeWrapper }:
+, gnomeSupport ? false, gnome, libgnome_keyring, makeWrapper }:
 
 let
   ver_maj = "1.22";

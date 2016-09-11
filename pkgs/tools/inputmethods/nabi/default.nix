@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, libhangul }:
+{ stdenv, fetchurl, pkgconfig, gtk2, libhangul }:
 
 stdenv.mkDerivation {
   name = "nabi-1.0.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0craa24pw7b70sh253arv9bg9sy4q3mhsjwfss3bnv5nf0xwnncw";
   };
 
-  buildInputs = [ gtk libhangul pkgconfig ];
+  buildInputs = [ gtk2 libhangul pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "The Easy Hangul XIM";

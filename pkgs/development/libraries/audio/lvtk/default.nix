@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, gtkmm, lv2, pkgconfig, python }:
+{ stdenv, fetchurl, boost, gtkmm2, lv2, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   name = "lvtk-${version}";
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig python ];
-  buildInputs = [ boost gtkmm lv2 ];
+  buildInputs = [ boost gtkmm2 lv2 ];
+
+  enableParallelBuilding = true;
 
   # Fix including the boost libraries during linking
   postPatch = ''

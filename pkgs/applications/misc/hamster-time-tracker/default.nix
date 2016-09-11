@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
     docbook2x libxslt gnome_doc_utils intltool dbus_glib hicolor_icon_theme
   ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygobject pygtk pyxdg gnome_python dbus-python sqlite3 ];
+  propagatedBuildInputs = with pythonPackages; [ pygobject2 pygtk pyxdg gnome_python dbus-python sqlite3 ];
 
   configurePhase = ''
     python waf configure --prefix="$out"

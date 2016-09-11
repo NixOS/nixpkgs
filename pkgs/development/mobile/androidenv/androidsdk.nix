@@ -1,7 +1,7 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
 , platformTools, buildTools, support, supportRepository, platforms, sysimages, addons
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
-, freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils, libpulseaudio, dbus
+, freetype, fontconfig, glib, gtk2, atk, file, jdk, coreutils, libpulseaudio, dbus
 , zlib, glxinfo, xkeyboardconfig
 }:
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false, useGooglePlayServices ? false }:
@@ -67,15 +67,15 @@ stdenv.mkDerivation rec {
       
       wrapProgram `pwd`/android \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ glib gtk libXtst ]}
+        --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ glib gtk2 libXtst ]}
     
       wrapProgram `pwd`/uiautomatorviewer \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk libXtst ]}
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
     
       wrapProgram `pwd`/hierarchyviewer \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk libXtst ]}
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
       
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk atk stdenv.cc.cc libXtst ]}
+          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk2 atk stdenv.cc.cc libXtst ]}
 
         cd ../..
       ''
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk atk stdenv.cc.cc libXtst ]}
+          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk2 atk stdenv.cc.cc libXtst ]}
 
         cd ../..
       ''

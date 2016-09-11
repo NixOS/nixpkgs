@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, glib, gnome
+, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, glib, gnome2
 , libnotify, nspr, nss, systemd, xorg }:
 
 let
@@ -16,10 +16,10 @@ let
     fontconfig
     freetype
     glib
-    gnome.GConf
-    gnome.gdk_pixbuf
-    gnome.gtk
-    gnome.pango
+    gnome2.GConf
+    gnome2.gdk_pixbuf
+    gnome2.gtk
+    gnome2.pango
     libnotify
     nspr
     nss

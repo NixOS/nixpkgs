@@ -1,7 +1,7 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
 args@{pkgs, source ? "default", fetchurl, fetchFromGitHub, stdenv, ncurses, pkgconfig, gettext
-, composableDerivation, lib, config, glib, gtk, python, perl, tcl, ruby
+, composableDerivation, lib, config, glib, gtk2, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 
@@ -79,7 +79,7 @@ composableDerivation {
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
     nativeBuildInputs
-      = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
+      = [ ncurses pkgconfig gtk2 libX11 libXext libSM libXpm libXt libXaw libXau
           libXmu glib libICE ];
 
     # most interpreters aren't tested yet.. (see python for example how to do it)

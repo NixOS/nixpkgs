@@ -3,7 +3,7 @@
 , Xaw3d, withXaw3d ? false
 #, withPVMlib ? false
 , tcl, tk, withTk ? false
-, gtk, withGtk ? false # working ?
+, gtk2, withGtk ? false # working ?
 #, withF2c ? false
 , ocaml, withOCaml ? false
 #, withJava ? false
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [gfortran ncurses]
-  ++ lib.optionals withGtk [gtk]
+  ++ lib.optionals withGtk [gtk2]
   ++ lib.optionals withOCaml [ocaml]
   ++ lib.optional withX xlibsWrapper
   ;

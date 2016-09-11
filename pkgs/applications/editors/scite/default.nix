@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk }:
+{ stdenv, fetchurl, pkgconfig, gtk2 }:
 
 let
   version = "3.3.7";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     sha256 = "0x7i6yxq50frsjkrp3lc5zy0d1ssq2n91igjn0dmqajpg7kls2dd";
   };
 
-  buildInputs = [ pkgconfig gtk ];
+  buildInputs = [ pkgconfig gtk2 ];
   sourceRoot = "scintilla/gtk";
 
   buildPhase = ''

@@ -46,7 +46,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ])
-  ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.gnome.glib ]
+  ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.opencl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]

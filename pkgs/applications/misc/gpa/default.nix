@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk, gpgme, libgpgerror, libassuan }:
+{ stdenv, fetchurl, intltool, pkgconfig, gtk2, gpgme, libgpgerror, libassuan }:
 
 stdenv.mkDerivation rec {
   name = "gpa-0.9.9";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0d235hcqai7m3qb7m9kvr2r4qg4714f87j9fdplwrlz1p4wdfa38";
   };
 
-  buildInputs = [ intltool pkgconfig gtk gpgme libgpgerror libassuan ];
+  buildInputs = [ intltool pkgconfig gtk2 gpgme libgpgerror libassuan ];
 
   meta = with stdenv.lib; {
     description = "Graphical user interface for the GnuPG";

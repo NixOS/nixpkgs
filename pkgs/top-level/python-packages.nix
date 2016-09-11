@@ -232,8 +232,7 @@ in modules // {
 
   pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
 
-  pygobject = callPackage ../development/python-modules/pygobject { };
-
+  pygobject2 = callPackage ../development/python-modules/pygobject { };
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
 
   pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
@@ -241,7 +240,7 @@ in modules // {
   pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
 
   pyGtkGlade = self.pygtk.override {
-    libglade = pkgs.gnome.libglade;
+    libglade = pkgs.gnome2.libglade;
   };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
@@ -14821,7 +14820,7 @@ in modules // {
         configure
     '';
 
-    buildInputs = with self; [ python pkgs.pkgconfig pkgs.libnotify pygobject pygtk pkgs.glib pkgs.gtk pkgs.dbus_glib ];
+    buildInputs = with self; [ python pkgs.pkgconfig pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
@@ -22802,7 +22801,7 @@ in modules // {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 dbus-python pygobject ];
+    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 dbus-python pygobject2 ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
