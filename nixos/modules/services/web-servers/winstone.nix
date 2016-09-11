@@ -113,8 +113,7 @@ in {
   options = {
     services.winstone = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ winstoneOpts ];
+      type = with types; attrsOf (submodule winstoneOpts);
       description = ''
         Defines independent Winstone services, each serving one WAR-file.
       '';
