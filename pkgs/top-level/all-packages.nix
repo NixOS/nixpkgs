@@ -2565,6 +2565,8 @@ in
 
   man-db = callPackage ../tools/misc/man-db { };
 
+  mandoc = callPackage ../tools/misc/mandoc { };
+
   mawk = callPackage ../tools/text/mawk { };
 
   mbox = callPackage ../tools/security/mbox { };
