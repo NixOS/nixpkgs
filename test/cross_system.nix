@@ -21,6 +21,8 @@ rec {
     };
   };
 
+  sameBoehmgc = pkgs.boehmgc == pkgsWithCross.boehmgc;
+  sameLibffi = pkgs.libffi == pkgsWithCross.libffi;
   sameLibiconv = pkgs.libiconv == pkgsWithCross.libiconv;
   sameLibtool = pkgs.libtool == pkgsWithCross.libtool;
   sameLibxml2 = pkgs.libxml2 == pkgsWithCross.libxml2;
@@ -29,9 +31,11 @@ rec {
   sameGcc49 = pkgs.gcc49 == pkgsWithCross.gcc49;
   sameGcc48 = pkgs.gcc48 == pkgsWithCross.gcc48;
   sameGcc45 = pkgs.gcc45 == pkgsWithCross.gcc45;
+  sameGuile = pkgs.guile == pkgsWithCross.guile;
 
   # TODO: Test that *all* GCCs are the same:
   # sameGcc = sameGcc6 && sameGcc5 && sameGcc49 && sameGcc48 && sameGcc45;
 
-  testsPass = sameLibiconv && sameLibtool && sameLibxml2 && sameGcc5;
+  testsPass = sameBoehmgc && sameLibffi && sameLibiconv && sameLibtool
+    && sameLibxml2 && sameGcc5 && sameGuile;
 }

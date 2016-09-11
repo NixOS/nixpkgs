@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
      in
        import ./readline-6.3-patches.nix patch);
 
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv ? cross;
+  # This is just here because it was present in previous commits and
+  # we want to avoid a meaningless mass rebuild.
+  dontStrip = false;
+
+  crossAttrs.dontStrip = true; # Don't run the native `strip' when cross-compiling.
+
   bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
 
   meta = with stdenv.lib; {
