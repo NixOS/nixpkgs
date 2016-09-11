@@ -12087,6 +12087,8 @@ in
 
   libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
 
+  libre-bodoni = callPackage ../data/fonts/libre-bodoni { };
+
   lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
 
   lmodern = callPackage ../data/fonts/lmodern { };
