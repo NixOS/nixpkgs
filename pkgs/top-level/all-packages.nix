@@ -12001,6 +12001,8 @@ in
 
   docbook5_xsl = self.docbook_xsl_ns;
 
+  cabin = callPackage ../data/fonts/cabin { };
+
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
