@@ -122,23 +122,23 @@ in
     };
 
     networking.nat.forwardPorts = mkOption {
-      type = types.listOf types.optionSet;
+      type = with types; listOf (submodule {
+        options = {
+          sourcePort = mkOption {
+            type = types.int;
+            example = 8080;
+            description = "Source port of the external interface";
+          };
+
+          destination = mkOption {
+            type = types.str;
+            example = "10.0.0.1:80";
+            description = "Forward tcp connection to destination ip:port";
+          };
+        };
+      });
       default = [];
       example = [ { sourcePort = 8080; destination = "10.0.0.1:80"; } ];
-      options = {
-        sourcePort = mkOption {
-          type = types.int;
-          example = 8080;
-          description = "Source port of the external interface";
-        };
-
-        destination = mkOption {
-          type = types.str;
-          example = "10.0.0.1:80";
-          description = "Forward tcp connection to destination ip:port";
-        };
-      };
-
       description =
         ''
           List of forwarded ports from the external interface to
