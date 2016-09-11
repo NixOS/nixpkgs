@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs, nodePackages
+, jailbreak-cabal, hscolour, cpphs, nodePackages, makeWrapper
 }:
 
 { pname
@@ -33,6 +33,7 @@
 , doHaddock ? !stdenv.isDarwin || stdenv.lib.versionAtLeast ghc.version "7.8"
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? []
+, runtimeDepends ? [], testtimeDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
 , testTarget ? ""
 , broken ? false
@@ -149,6 +150,7 @@ stdenv.mkDerivation ({
   preConfigurePhases = ["compileBuildDriverPhase"];
   preInstallPhases = ["haddockPhase"];
 
+  buildInputs = [ makeWrapper ];
   inherit src;
 
   nativeBuildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
@@ -277,6 +279,19 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
+  # Wrap binaries so they have access to runtime deps, but only if we
+  # have a non-empty runtimeDepends so they aren't wrapped unecessarily.
+  postFixup = if builtins.length runtimeDepends > 0 then ''
+    for exe in "$out/bin/"* ; do
+      wrapProgram "$exe" --prefix PATH ":" \
+      ${stdenv.lib.makeBinPath runtimeDepends}
+    done
+  '' else (if postFixup == "" then null else postFixup);
+
+  preCheck = if builtins.length testtimeDepends > 0 then ''
+    export PATH=${stdenv.lib.makeBinPath testtimeDepends}:$PATH
+  '' else (if preCheck == "" then null else preCheck);
+
   passthru = passthru // {
 
     inherit pname version;
@@ -321,13 +336,11 @@ stdenv.mkDerivation ({
 // optionalAttrs (postBuild != "")      { inherit postBuild; }
 // optionalAttrs (doCheck)              { inherit doCheck; }
 // optionalAttrs (checkPhase != "")     { inherit checkPhase; }
-// optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
 // optionalAttrs (preInstall != "")     { inherit preInstall; }
 // optionalAttrs (installPhase != "")   { inherit installPhase; }
 // optionalAttrs (postInstall != "")    { inherit postInstall; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
-// optionalAttrs (postFixup != "")      { inherit postFixup; }
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
 // optionalAttrs (stdenv.isLinux)       { LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
