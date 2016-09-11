@@ -12105,6 +12105,8 @@ in
 
   libre-bodoni = callPackage ../data/fonts/libre-bodoni { };
 
+  libre-caslon = callPackage ../data/fonts/libre-caslon { };
+
   lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
 
   lmodern = callPackage ../data/fonts/lmodern { };
