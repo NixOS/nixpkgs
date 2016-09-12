@@ -3856,7 +3856,6 @@ in modules // {
     };
   });
 
-
   contextlib2 = buildPythonPackage rec {
     name = "contextlib2-${version}";
     version = "0.5.3";
@@ -14342,6 +14341,13 @@ in modules // {
     version = "1.3.1";
 
     propagatedBuildInputs = with self ; [ dns pyasn1 ];
+
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://patch-diff.githubusercontent.com/raw/fritzy/SleekXMPP/pull/418.patch";
+        sha256 = "1apz901jzd2gq60pncy2510qsgrl0dd49cnkgp25nimi6blnp14f";
+      })
+    ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sleekxmpp/${name}.tar.gz";
