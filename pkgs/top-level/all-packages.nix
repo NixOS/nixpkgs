@@ -1907,6 +1907,8 @@ in
 
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
+    psutils = null;
+    netpbm = null;
   };
 
   groonga = callPackage ../servers/search/groonga { };
