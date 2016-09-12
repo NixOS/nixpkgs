@@ -26,13 +26,7 @@ let
 
 in {
   options.services.collectd = with types; {
-    enable = mkOption {
-      default = false;
-      description = ''
-        Whether to enable collectd agent.
-      '';
-      type = bool;
-    };
+    enable = mkEnableOption "collectd agent";
 
     package = mkOption {
       default = pkgs.collectd;
