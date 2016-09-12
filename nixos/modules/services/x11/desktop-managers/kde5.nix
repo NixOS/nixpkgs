@@ -16,11 +16,7 @@ in
   options = {
 
     services.xserver.desktopManager.kde5 = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Plasma 5 (KDE 5) desktop environment.";
-      };
+      enable = mkEnableOption "the Plasma 5 (KDE 5) desktop environment";
 
     };
 
