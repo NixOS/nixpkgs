@@ -8,11 +8,7 @@ let
 in {
   options = {
     services.cadvisor = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Whether to enable cadvisor service.";
-      };
+      enable = mkEnableOption "cadvisor service";
 
       listenAddress = mkOption {
         default = "127.0.0.1";
