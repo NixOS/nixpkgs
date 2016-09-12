@@ -47,11 +47,7 @@ in
 
     services.acpid = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the ACPI daemon.";
-      };
+      enable = mkEnableOption "the ACPI daemon";
 
       handlers = mkOption {
         type = types.attrsOf (types.submodule {
