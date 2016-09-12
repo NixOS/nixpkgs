@@ -9,11 +9,7 @@ in
 {
   options = {
     services.xserver.desktopManager.kodi = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = "Enable the kodi multimedia center.";
-      };
+      enable = mkEnableOption "the kodi multimedia center";
     };
   };
 
