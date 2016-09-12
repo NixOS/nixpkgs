@@ -181,7 +181,6 @@
       systemd-timesync = 154;
       liquidsoap = 155;
       etcd = 156;
-      docker-registry = 157;
       hbase = 158;
       opentsdb = 159;
       scollector = 160;
@@ -275,9 +274,9 @@
       gocd-server = 252;
       terraria = 253;
       mattermost = 254;
-      phabricator = 255;
+      prometheus = 255;
 
-      prometheus = 999;
+      phabricator = 999;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -439,7 +438,6 @@
       systemd-timesync = 154;
       liquidsoap = 155;
       #etcd = 156; # unused
-      #docker-registry = 157; # unused
       hbase = 158;
       opentsdb = 159;
       scollector = 160;
@@ -523,9 +521,9 @@
       gocd-server = 252;
       terraria = 253;
       mattermost = 254;
-      phabricator = 255;
+      prometheus = 255;
 
-      prometheus = 999;
+      phabricator = 999;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

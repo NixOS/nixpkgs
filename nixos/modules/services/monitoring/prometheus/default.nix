@@ -56,6 +56,15 @@ let
           How frequently to evaluate rules by default.
         '';
       };
+
+      labels = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        description = ''
+          The labels to add to any timeseries that this Prometheus instance
+          scrapes.
+        '';
+      };
     };
   };
 
@@ -144,11 +153,11 @@ let
         '';
       };
       static_configs = mkOption {
-        type = types.listOf promTypes.target_group;
+        type = types.listOf promTypes.static_config;
         default = [];
         apply = x: map _filter x;
         description = ''
-          List of labeled static configurations for this job.
+          List of labeled target groups for this job.
         '';
       };
       relabel_configs = mkOption {
@@ -162,7 +171,7 @@ let
     };
   };
 
-  promTypes.target_group = types.submodule {
+  promTypes.static_config = types.submodule {
     options = {
       targets = mkOption {
         type = types.listOf types.str;
@@ -242,7 +251,7 @@ let
 
   promTypes.file_sd_config = types.submodule {
     options = {
-      names = mkOption {
+      files = mkOption {
         type = types.listOf types.str;
         description = ''
           Patterns for files from which target groups are extracted. Refer
@@ -396,7 +405,7 @@ in {
       after    = [ "network.target" ];
       script = ''
         #!/bin/sh
-        exec ${pkgs.prometheus.bin}/bin/prometheus \
+        exec ${pkgs.prometheus}/bin/prometheus \
           ${concatStringsSep " \\\n  " cmdlineArgs}
       '';
       serviceConfig = {

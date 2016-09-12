@@ -52,14 +52,6 @@ let
     });
   '';
 
-  ipUpScript = writeScript "01nixos-ip-up" ''
-    #!/bin/sh
-    if test "$2" = "up"; then
-      ${config.systemd.package}/bin/systemctl start ip-up.target
-      ${config.systemd.package}/bin/systemctl start network-online.target
-    fi
-  '';
-
   ns = xs: writeText "nameservers" (
     concatStrings (map (s: "nameserver ${s}\n") xs)
   );
@@ -188,9 +180,6 @@ in {
     boot.kernelModules = [ "ppp_mppe" ]; # Needed for most (all?) PPTP VPN connections.
 
     environment.etc = with cfg.basePackages; [
-      { source = ipUpScript;
-        target = "NetworkManager/dispatcher.d/01nixos-ip-up";
-      }
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
       }

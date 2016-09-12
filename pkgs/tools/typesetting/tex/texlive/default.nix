@@ -21,7 +21,8 @@ let
   # map: name -> fixed-output hash
   # sha1 in base32 was chosen as a compromise between security and length
   # warning: the following generator command takes lots of resources
-  # nix-build -Q -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes.nix
+  # nix-build ../../../../.. -Q -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes-new.nix
+  # mv ./fixedHashes{-new,}.nix
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
@@ -32,27 +33,22 @@ let
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    /* curl ftp://tug.ctan.org/pub/tex/historic/systems/texlive/2015/tlnet-final/tlpkg/texlive.tlpdb.xz \
+    /* # beware: the URL below changes contents continuously
+      curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix */
-    orig = import ./pkgs.nix tl;
+    orig = import ./pkgs.nix tl; # XXX XXX XXX FIXME: the file is probably too big now XXX XXX XXX XXX XXX XXX
     clean = orig // {
       # overrides of texlive.tlpdb
-
-      tetex = orig.tetex // { # 2015.08.27 as we need version with mktexlsr.pl
-        # TODO: official hashed mirror
-        urlPrefix = "http://lipa.ms.mff.cuni.cz/~cunav5am/nix";
-        md5.run = "4b4c0208124dfc9c8244c24421946d36";
-        md5.doc = "983f5e5b5f4e407760b4ec176cf6a58f";
-        version = "3.0"; # it's the same
-        postUnpack = "cd $out && patch -p2 < ${./texlinks.patch} || true";
-        # TODO: postUnpack per tlType instead of these hacks
-      };
 
       dvidvi = orig.dvidvi // {
         hasRunfiles = false; # only contains docs that's in bin.core.doc already
       };
       texlive-msg-translations = orig.texlive-msg-translations // {
         hasRunfiles = false; # only *.po for tlmgr
+      };
+
+      xdvi = orig.xdvi // { # it seems to need it to transform fonts
+        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
       };
 
       # remove dependency-heavy packages from the basic collections
@@ -62,9 +58,15 @@ let
       latex = orig.latex // {
         deps = removeAttrs orig.latex.deps [ "luatex" ];
       };
-
-      xdvi = orig.xdvi // { # it seems to need it to transform fonts
-        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
+      # add them elsewhere so that collections cover all packages
+      collection-luatex = orig.collection-luatex // {
+        deps = orig.collection-luatex.deps // { inherit (tl) luatex; };
+      };
+      collection-metapost = orig.collection-metapost // {
+        deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
+      };
+      collection-genericextra = orig.collection-genericextra // {
+        deps = orig.collection-genericextra.deps // { inherit (tl) xdvi; };
       };
     }; # overrides
 
@@ -78,13 +80,10 @@ let
       version = attrs.version or bin.texliveYear;
       mkPkgV = tlType: let
         pkg = attrs // {
-          md5 = attrs.md5.${tlType};
+          sha512 = attrs.sha512.${tlType};
           inherit pname tlType version;
         };
-        in mkPkgs {
-          inherit (pkg) pname tlType version;
-          pkgList = [ pkg ];
-        };
+        in mkPkg pkg;
     in {
       # TL pkg contains lists of packages: runtime files, docs, sources, binaries
       pkgs =
@@ -93,54 +92,56 @@ let
             # the fake derivations are used for filtering of hyphenation patterns
           else { inherit pname version; tlType = "run"; }
         )]
-        ++ lib.optional (attrs.md5 ? "doc") (mkPkgV "doc")
-        ++ lib.optional (attrs.md5 ? "source") (mkPkgV "source")
+        ++ lib.optional (attrs.sha512 ? "doc") (mkPkgV "doc")
+        ++ lib.optional (attrs.sha512 ? "source") (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
         ++ combinePkgs (attrs.deps or {});
     };
 
-  # the basename used by upstream (without ".tar.xz" suffix)
-  mkUrlName = { pname, tlType, ... }:
-    pname + lib.optionalString (tlType != "run") ".${tlType}";
-
-  # command to unpack a single TL package
-  unpackPkg =
-    { # url ? null, urlPrefix ? null
-      md5, pname, tlType, postUnpack ? "", stripPrefix ? 1, ...
-    }@args: let
-      url = args.url or "${urlPrefix}/${mkUrlName args}.tar.xz";
-      urlPrefix = args.urlPrefix or
-        ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
-      # beware: standard mirrors http://mirror.ctan.org/ don't have releases
-      mirror = "http://ftp.math.utah.edu"; # ftp://tug.ctan.org no longer works, although same IP
-    in
-      rec {
-        src = fetchurl { inherit url md5; };
-        unpackCmd =  ''
-          tar -xf '${src}' \
-            '--strip-components=${toString stripPrefix}' \
-            -C "$out" --anchored --exclude=tlpkg --keep-old-files
-        '' + postUnpack;
-      };
-
-  # create a derivation that contains unpacked upstream TL packages
-  mkPkgs = { pname, tlType, version, pkgList }@args:
-      /* TODOs:
-          - "historic" isn't mirrored; posted a question at #287
-          - maybe cache (some) collections? (they don't overlap)
-      */
+  # create a derivation that contains an unpacked upstream TL package
+  mkPkg = { pname, tlType, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
     let
-      tlName = "${mkUrlName args}-${version}";
+      # the basename used by upstream (without ".tar.xz" suffix)
+      urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
+      tlName = urlName + "-${version}";
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
-      pkgs = map unpackPkg (fastUnique (a: b: a.md5 < b.md5) pkgList);
-    in runCommand "texlive-${tlName}"
+
+      url = args.url or "${urlPrefix}/${urlName}.tar.xz";
+      urlPrefix = args.urlPrefix or
+        http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016;
+      # XXX XXX XXX FIXME: mirror the snapshot XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
+      #  ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
+      #mirror = "http://ftp.math.utah.edu";
+      src = fetchurl { inherit url sha512; };
+
+      passthru = {
+        inherit pname tlType version;
+      } // lib.optionalAttrs (sha512 != "") { inherit src; };
+      unpackCmd = file: ''
+        tar -xf ${file} \
+          '--strip-components=${toString stripPrefix}' \
+          -C "$out" --anchored --exclude=tlpkg --keep-old-files
+      '' + postUnpack;
+
+    in if sha512 == "" then
+      # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
+      fetchurl {
+        inherit url;
+        sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
+          else fixedHash;
+        name = tlName;
+        recursiveHash = true;
+        downloadToTemp = true;
+        postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
+        # TODO: perhaps override preferHashedMirrors and allowSubstitutes
+      }
+        // passthru
+
+    else runCommand "texlive-${tlName}"
       ( { # lots of derivations, not meant to be cached
           preferLocalBuild = true; allowSubstitutes = false;
-          passthru = {
-            inherit pname tlType version;
-            srcs = map (pkg: pkg.src) pkgs;
-          };
+          inherit passthru;
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
           outputHashAlgo = "sha1";
@@ -149,7 +150,7 @@ let
       )
       ( ''
           mkdir "$out"
-        '' + lib.concatMapStrings (pkg: pkg.unpackCmd) pkgs
+        '' + unpackCmd "'${src}'"
       );
 
   # combine a set of TL packages into a single TL meta-package

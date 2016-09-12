@@ -127,7 +127,7 @@ assert gtk != null -> (filter (x: x == null) xlibs) == [];
 stdenv.mkDerivation ({
   name = "${name}-${version}" + crossNameAddon;
 
-  builder = ./builder.sh;
+  builder = ../builder.sh;
 
   src = (import ./sources.nix) {
     inherit fetchurl optional version;
@@ -135,6 +135,13 @@ stdenv.mkDerivation ({
   };
 
   hardeningDisable = [ "format" ] ++ optional (name != "gnat") "all";
+
+  outputs = if (stdenv.is64bit && langAda) then [ "out" "doc" ]
+    else [ "out" "lib" "doc" ];
+  setOutputFlags = false;
+  NIX_NO_SELF_RPATH = true;
+
+  libc_dev = stdenv.cc.libc_dev;
 
   patches =
     [ ]

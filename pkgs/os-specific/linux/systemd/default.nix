@@ -28,13 +28,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  /* gave up for now!
-  outputs = [ "out" "libudev" "doc" ]; # maybe: "dev"
-  # note: there are many references to ${systemd}/...
-  outputDev = "out";
-  propagatedBuildOutputs = "libudev";
-  */
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "lib" "man" "dev" ];
 
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
@@ -119,16 +113,6 @@ stdenv.mkDerivation rec {
       #export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
 
-  /*
-  makeFlags = [
-    "udevlibexecdir=$(libudev)/lib/udev"
-    # udev rules refer to $out, and anything but libs should probably go to $out
-    "udevrulesdir=$(out)/lib/udev/rules.d"
-    "udevhwdbdir=$(out)/lib/udev/hwdb.d"
-  ];
-  */
-
-
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
   NIX_CFLAGS_COMPILE =
@@ -180,26 +164,18 @@ stdenv.mkDerivation rec {
 
       rm -rf $out/etc/rpm
 
-      rm $out/lib/*.la
+      rm $lib/lib/*.la
 
       # "kernel-install" shouldn't be used on NixOS.
       find $out -name "*kernel-install*" -exec rm {} \;
-    ''; # */
-  /*
-      # Move lib(g)udev to a separate output. TODO: maybe split them up
-      #   to avoid libudev pulling glib
-      mkdir -p "$libudev/lib"
-      mv "$out"/lib/lib{,g}udev* "$libudev/lib/"
 
-      for i in "$libudev"/lib/*.la; do
-        substituteInPlace $i --replace "$out" "$libudev"
-      done
-      for i in "$out"/lib/pkgconfig/{libudev,gudev-1.0}.pc; do
-        substituteInPlace $i --replace "libdir=$out" "libdir=$libudev"
-      done
-  */
+      # Keep only libudev and libsystemd in the lib output.
+      mkdir -p $out/lib
+      mv $lib/lib/security $lib/lib/libnss* $out/lib/
+    ''; # */
 
   enableParallelBuilding = true;
+
   /*
   # some libs fail to link to liblzma and/or libffi
   postFixup = let extraLibs = stdenv.lib.makeLibraryPath [ xz.out libffi.out zlib.out ];

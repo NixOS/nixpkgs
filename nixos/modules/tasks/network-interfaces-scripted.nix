@@ -138,7 +138,6 @@ in
                     # (Flushing this interface may have removed it.)
                     ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
                   fi
-                  ${config.systemd.package}/bin/systemctl start ip-up.target
                 '';
             preStop = flip concatMapStrings (ips) (ip:
                 let

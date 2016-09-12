@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   glpkWithExtras = lib.overrideDerivation glpk (attrs: {
     propagatedNativeBuildInputs = [ gmp libtool libmysql libiodbc ];
 
+    CPPFLAGS = "-I${gmp.dev}/include";
+
     preConfigure = ''
       substituteInPlace configure \
         --replace /usr/include/mysql ${lib.getDev libmysql}/include/mysql

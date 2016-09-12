@@ -115,6 +115,7 @@
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
   ./services/audio/squeezelite.nix
+  ./services/audio/ympd.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/crashplan.nix
@@ -230,7 +231,6 @@
   ./services/misc/dictd.nix
   ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
-  ./services/misc/docker-registry.nix
   ./services/misc/emby.nix
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
@@ -290,7 +290,6 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
-  ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -337,7 +336,6 @@
   ./services/networking/dnschain.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
-  ./services/networking/docker-registry-server.nix
   ./services/networking/ejabberd.nix
   ./services/networking/fan.nix
   ./services/networking/ferm.nix

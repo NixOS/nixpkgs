@@ -16,10 +16,7 @@ stdenv.mkDerivation rec {
     ./rtcwake-search-PATH-for-shutdown.patch
   ];
 
-  outputs = [ "bin" "out" "man" ]; # TODO: $bin is kept the first for now
-  # due to lots of ${utillinux}/bin occurences and headers being rather small
-  outputDev = "bin";
-
+  outputs = [ "bin" "dev" "out" "man" ];
 
   #FIXME: make it also work on non-nixos?
   postPatch = ''
@@ -57,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ zlib pam ]
     ++ lib.optional (ncurses != null) ncurses
-    ++ lib.optional (systemd != null) [ systemd pkgconfig ]
+    ++ lib.optional (systemd != null) systemd
     ++ lib.optional (perl != null) perl;
 
   postInstall = ''

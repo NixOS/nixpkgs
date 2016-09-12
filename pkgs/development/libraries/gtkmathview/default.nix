@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     description = "C++ rendering engine for MathML documents";
     license = stdenv.lib.licenses.lgpl3Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
+    broken = true;
   };
 }

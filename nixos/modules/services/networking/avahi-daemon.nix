@@ -7,10 +7,6 @@ let
 
   cfg = config.services.avahi;
 
-  # We must escape interfaces due to the systemd interpretation
-  subsystemDevice = interface:
-    "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device";
-
   avahiDaemonConf = with cfg; pkgs.writeText "avahi-daemon.conf" ''
     [server]
     ${# Users can set `networking.hostName' to the empty string, when getting
@@ -180,14 +176,8 @@ in
     environment.systemPackages = [ pkgs.avahi ];
 
     systemd.services.avahi-daemon =
-      let
-        deps = optionals (cfg.interfaces!=null) (map subsystemDevice cfg.interfaces);
-      in
       { description = "Avahi daemon";
-        wantedBy = [ "ip-up.target" ];
-        bindsTo = deps;
-        after = deps;
-        before = [ "ip-up.target" ];
+        wantedBy = [ "multi-user.target" ];
         # Receive restart event after resume
         partOf = [ "post-resume.target" ];
 

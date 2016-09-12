@@ -1,6 +1,6 @@
 { fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
-, libgcrypt, libudev, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -28,7 +28,7 @@ let
     nss
     pango
     stdenv.cc.cc
-    libudev
+    systemd
     xorg.libX11
     xorg.libXcomposite
     xorg.libXcursor
