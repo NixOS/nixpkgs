@@ -11328,6 +11328,8 @@ in
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
+    displaylink = callPackage ../os-specific/linux/displaylink { };
+
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
     pktgen = callPackage ../os-specific/linux/pktgen { };

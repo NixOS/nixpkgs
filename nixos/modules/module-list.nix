@@ -40,6 +40,7 @@
   ./hardware/video/amdgpu.nix
   ./hardware/video/ati.nix
   ./hardware/video/bumblebee.nix
+  ./hardware/video/displaylink.nix
   ./hardware/video/nvidia.nix
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/input-method/default.nix
