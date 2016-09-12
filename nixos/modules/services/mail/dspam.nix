@@ -35,11 +35,7 @@ in {
 
     services.dspam = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the dspam spam filter.";
-      };
+      enable = mkEnableOption "the dspam spam filter";
 
       user = mkOption {
         type = types.str;
