@@ -424,11 +424,7 @@ in
 
     services.httpd = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the Apache HTTP Server.";
-      };
+      enable = mkEnableOption "the Apache HTTP Server";
 
       package = mkOption {
         type = types.package;
