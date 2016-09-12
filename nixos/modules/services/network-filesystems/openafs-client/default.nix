@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkOption mkIf;
+  inherit (lib) mkEnableOption mkOption mkIf;
 
   cfg = config.services.openafsClient;
 
@@ -26,10 +26,7 @@ in
 
     services.openafsClient = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the OpenAFS client.";
-      };
+      enable = mkEnableOption "the OpenAFS client";
 
       cellName = mkOption {
         default = "grand.central.org";
