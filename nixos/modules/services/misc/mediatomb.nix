@@ -155,13 +155,7 @@ in {
 
     services.mediatomb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the mediatomb DLNA server.
-        '';
-      };
+      enable = mkEnableOption "the mediatomb DLNA server";
 
       serverName = mkOption {
         type = types.string;
