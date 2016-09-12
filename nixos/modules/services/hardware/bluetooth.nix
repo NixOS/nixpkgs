@@ -45,11 +45,7 @@ in
 
   options = {
 
-    hardware.bluetooth.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Whether to enable support for Bluetooth.";
-    };
+    hardware.bluetooth.enable = mkEnableOption "support for Bluetooth";
 
   };
 
