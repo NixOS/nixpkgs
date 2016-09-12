@@ -36,11 +36,7 @@ in
 
     services.fcron = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the <command>fcron</command> daemon.";
-      };
+      enable = mkEnableOption "the <command>fcron</command> daemon";
 
       allow = mkOption {
         type = types.listOf types.str;
