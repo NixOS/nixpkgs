@@ -8950,6 +8950,8 @@ in
 
   non = callPackage ../applications/audio/non { };
 
+  ntl = callPackage ../development/libraries/ntl { };
+
   nspr = callPackage ../development/libraries/nspr {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
