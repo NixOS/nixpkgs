@@ -10,12 +10,7 @@ in {
 
     services.fprot = {
       updater = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Whether to enable automatic F-Prot virus definitions database updates.
-          '';
-        };
+        enable = mkEnableOption "automatic F-Prot virus definitions database updates";
 
         productData = mkOption {
           description = ''
