@@ -10,11 +10,7 @@ in {
   ###### interface
 
   options.services.chronos = {
-    enable = mkOption {
-      description = "Whether to enable graphite web frontend.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "graphite web frontend";
 
     httpPort = mkOption {
       description = "Chronos listening port";
