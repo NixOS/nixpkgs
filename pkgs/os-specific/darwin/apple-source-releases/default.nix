@@ -10,6 +10,7 @@ let
       dtrace        = "168";
       xnu           = "3248.60.10";
       libpthread    = "138.10.4";
+      libiconv      = "44";
     };
     "osx-10.11.5" = {
       Libc          = "1082.50.1"; # 10.11.6 still unreleased :/
@@ -204,7 +205,7 @@ let
     Libc_old        = applePackage "Libc/825_40_1.nix" "osx-10.8.5"      "0xsx1im52gwlmcrv4lnhhhn9dyk5ci6g27k6yvibn9vj8fzjxwcf" {};
     libclosure      = applePackage "libclosure"        "osx-10.10.5"     "1zqy1zvra46cmqv6vsf1mcsz3a76r9bky145phfwh4ab6y15vjpq" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.9.5"      "1lc5033cmkwxy3r26gh9plimxshxfcbgw6i0j7mgjlnpk86iy5bk" {};
-    libiconv        = applePackage "libiconv"          "osx-10.9.5"      "0sni1gx6i2h7r4r4hhwbxdir45cp039m4wi74izh4l0pfw7gywad" {};
+    libiconv        = applePackage "libiconv"          "osx-10.11.6"     "11h6lfajydri4widis62q8scyz7z8l6msqyx40ly4ahsdlbl0981" {};
     Libinfo         = applePackage "Libinfo"           "osx-10.10.5"     "19n72s652rrqnc9hzlh4xq3h7xsfyjyklmcgyzyj0v0z68ww3z6h" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "02sd82ig2jvvyyfschmb4gpz6psnizri8sh6i982v341x6y4ysl7" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.9.5"      "164rx4za5z74s0mk9x0m1815r1m9kfal8dz3bfaw7figyjd6nqad" {};
@@ -219,17 +220,6 @@ let
     removefile      = applePackage "removefile"        "osx-10.10.5"     "1f2jw5irq6fz2jv5pag1w2ivfp8659v74f0h8kh0yx0rqw4asm33" {};
     Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
     xnu             = applePackage "xnu"               "osx-10.11.6"     "0yhziq4dqqcbjpf6vyqn8xhwva2zb525gndkx8cp8alzwp76jnr9" {};
-
-    # Pending work... we can't change the above packages in place because the bootstrap depends on them, so we detach the expressions
-    # here so we can work on them.
-    CF_new          = applePackage "CF/new.nix"          "osx-10.10.5"     "1sadmxi9fsvsmdyxvg2133sdzvkzwil50vyyidxsyk1iyfzqsvln" {};
-    Libc_new        = applePackage "Libc/new.nix"        "osx-10.10.5"     "1jz5bx9l4q484vn08c6n9b28psja3rpxiqbj6zwrwvlndzmq1yz5" {};
-    libdispatch_new = applePackage "libdispatch/new.nix" "osx-10.10.5"     "1lc5033cmkwxy0r26gh9plimxshxfcbgw6i0j7mgjlnpk86iy5bk" {};
-    libiconv_new    = applePackage "libiconv/new.nix"    "osx-10.10.5"     "0sni1gx6i2h7r404hhwbxdir45cp039m4wi74izh4l0pfw7gywad" {};
-    Libnotify_new   = applePackage "Libnotify/new.nix"   "osx-10.10.5"     "0sni1gx6i2h7r404hhwbxdir45cp039m4wi70izh4l0pfw7gywad" {};
-    Libsystem_new   = applePackage "Libsystem/new.nix"   "osx-10.10.5"     "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim10w43x4lvz4qydpp5kg2rh" {};
-    objc4_new       = applePackage "objc4/new.nix"       "osx-10.10.5"     "0r0797ckmgv19if4i14dzyjh7i5klkm9jpacjif9v3rpycyyx1n3" {};
-    xnu_new         = applePackage "xnu/new.nix"         "osx-10.11.2"     "1ax280jblz7laqam8fcwrffrrz26am10p1va9mlg9mklvbqarhqh" {};
 
     libsecurity_apple_csp      = libsecPackage "libsecurity_apple_csp"      "osx-10.7.5" "1ngyn1ik27n4x981px3kfd1z1n8zx7r5w812b6qfjpy5nw4h746w" {};
     libsecurity_apple_cspdl    = libsecPackage "libsecurity_apple_cspdl"    "osx-10.7.5" "1svqa5fhw7p7njzf8bzg7zgc5776aqjhdbnlhpwmr5hmz5i0x8r7" {};

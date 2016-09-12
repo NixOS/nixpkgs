@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, self, callPackage, python27Packages
+{ stdenv, fetchurl, fetchpatch, self, callPackage, python27Packages
 , bzip2, openssl, gettext
 
 , includeModules ? false
@@ -44,6 +44,14 @@ let
       ./deterministic-build.patch
 
       ./properly-detect-curses.patch
+
+      # FIXME: get rid of this after the next release, when the commit referenced here makes
+      # it in. We need it until then because it breaks compilation of programs that use
+      # locale with clang 3.8 and higher.
+      (fetchpatch {
+        url    = "https://hg.python.org/cpython/raw-rev/e0ec3471cb09";
+        sha256 = "1jdgb70jw942r4kmr01qll7mk1di8jx0qiabmp20jhnmha246ivq";
+      })
     ] ++ optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
