@@ -2536,10 +2536,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptJWT = buildPerlPackage rec {
-    name = "Crypt-JWT-0.017";
+    name = "Crypt-JWT-0.018";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "811857ca0be3155ebb2f5ce006772f7463165678f6aa2c959f3009aa54d2f4f7";
+      sha256 = "90e78f7f0ced17e5c2080ad8c7008ce3badd05186e2ff20cf9c7232ed863cdaf";
     };
     propagatedBuildInputs = [ CryptX JSONMaybeXS ];
     meta = {
@@ -3578,6 +3578,7 @@ let self = _self // overrides; _self = with self; {
 
   DBIxClass = buildPerlPackage rec {
     name = "DBIx-Class-0.082840";
+    # UPGRADE Note: Please remove workaround in DBDSQLite above
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
       sha256 = "4049afd175e315ebcab945b19030aec40bcec46cc5611b0286a5a267ca7181ef";
@@ -3958,6 +3959,18 @@ let self = _self // overrides; _self = with self; {
       description = "Perl extension for getting MD5 sums for files and urls";
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  DigestPerlMD5 = buildPerlPackage rec {
+    name = "Digest-Perl-MD5-1.9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DE/DELTA/${name}.tar.gz";
+      sha256 = "7100cba1710f45fb0e907d8b1a7bd8caef35c64acd31d7f225aff5affeecd9b1";
+    };
+    meta = {
+      description = "Perl Implementation of Rivest's MD5 algorithm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -7363,13 +7376,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogAny = buildPerlPackage rec {
-    name = "Log-Any-1.040";
+    name = "Log-Any-1.042";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "9759211bfc28055e4617894cf96c3b419e0c3c6afb4bdbfe2382f247193b3864";
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/${name}.tar.gz";
+      sha256 = "b2cadb25a147bd49afdab1092a4a37268f307fcb6524a679623647a22501de84";
     };
     meta = {
-      homepage = https://github.com/dagolden/Log-Any;
+      homepage = https://github.com/preaction/Log-Any;
       description = "Bringing loggers and listeners together";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
@@ -9201,7 +9214,7 @@ let self = _self // overrides; _self = with self; {
     name = "Mozilla-Ldap-${version}";
     version = "1.5.3";
     USE_OPENLDAP = 1;
-    LDAPSDKDIR = pkgs.openldap;
+    LDAPSDKDIR = pkgs.openldap.dev;
     LDAPSDKLIBDIR = "${pkgs.openldap.out}/lib";
     src = fetchurl {
       url = "https://ftp.mozilla.org/pub/directory/perldap/releases/${version}/src/perl-mozldap-${version}.tar.gz";
@@ -9700,11 +9713,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  OLEStorageLight = buildPerlPackage rec {
+  # For backwards compatibility. Please use OLEStorage_Lite instead.
+  OLEStorageLight = OLEStorage_Lite;
+
+  OLEStorage_Lite = buildPerlPackage rec {
     name = "OLE-Storage_Lite-0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/${name}.tar.gz";
       sha256 = "179cxwqxb0f9dpx8954nvwjmggxxi5ndnang41yav1dx6mf0abp7";
+    };
+    meta = {
+      description = "Read and write OLE storage files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -11172,13 +11192,30 @@ let self = _self // overrides; _self = with self; {
   };
 
   SpreadsheetParseExcel = buildPerlPackage rec {
-    name = "Spreadsheet-ParseExcel-0.2603";
+    name = "Spreadsheet-ParseExcel-0.65";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KW/KWITKNR/${name}.tar.gz";
-      sha256 = "0q5qq982528cdpqdj2wszrnf5g2rfphx0b413lczx7nvkkyy9xqz";
+      url = "mirror://cpan/authors/id/D/DO/DOUGW/${name}.tar.gz";
+      sha256 = "6ec4cb429bd58d81640fe12116f435c46f51ff1040c68f09cc8b7681c1675bec";
     };
+    propagatedBuildInputs = [ CryptRC4 DigestPerlMD5 IOstringy OLEStorage_Lite ];
+    meta = {
+      homepage = http://github.com/runrig/spreadsheet-parseexcel/;
+      description = "Read information from an Excel file";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
-    propagatedBuildInputs = [ IOStringy OLEStorageLight ];
+  SpreadsheetWriteExcel = buildPerlPackage rec {
+    name = "Spreadsheet-WriteExcel-2.40";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/${name}.tar.gz";
+      sha256 = "e356aad6866cf135731268ee0e979a197443c15a04878e9cf3e80d022ad6c07e";
+    };
+    propagatedBuildInputs = [ OLEStorage_Lite ParseRecDescent ];
+    meta = {
+      description = "Write to a cross platform Excel binary file";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   SQLAbstract = buildPerlPackage rec {

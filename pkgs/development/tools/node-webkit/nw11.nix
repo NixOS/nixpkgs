@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 , xorg, alsaLib, dbus, glib, gtk, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, libudev, libcap
+, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, systemd, libcap
 , libnotify}:
 let
   bits = if stdenv.system == "x86_64-linux" then "x64"
@@ -15,6 +15,8 @@ let
       xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr libcap
       libnotify
     ];
+    
+    extraOutputsToInstall = [ "lib" "out" ];
   };
 
 in stdenv.mkDerivation rec {
@@ -35,7 +37,7 @@ in stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/node-webkit/nw
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/node-webkit/nwsnapshot
 
-    ln -s ${libudev.out}/lib/libudev.so $out/share/node-webkit/libudev.so.0
+    ln -s ${systemd.lib}/lib/libudev.so $out/share/node-webkit/libudev.so.0
 
     patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:$out/share/node-webkit" $out/share/node-webkit/nw
     patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:$out/share/node-webkit" $out/share/node-webkit/nwsnapshot

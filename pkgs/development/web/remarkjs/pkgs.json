@@ -1,0 +1,12 @@
+[
+  "marked"
+, "browserify"
+, "uglify-js"
+, "less"
+, "mocha"
+, "mocha-phantomjs"
+, "should"
+, "sinon"
+, "jshint"
+, "shelljs"
+]

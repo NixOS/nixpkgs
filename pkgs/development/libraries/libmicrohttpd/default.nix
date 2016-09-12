@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mzbqr6sqisppz88mh73bbh5sw57g8l87qvhcjdx5pmbd183idni";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" "info" ];
   buildInputs = [ libgcrypt curl gnutls pkgconfig ];
 
   preCheck = ''

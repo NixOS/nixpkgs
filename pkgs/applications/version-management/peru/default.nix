@@ -1,24 +1,21 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchurl, python3Packages }:
 
 let 
-  version = "0.2.3"; 
-in
-
-python3Packages.buildPythonApplication rec {
-  
-  # Do not prefix name with python specific version identifier.
-  namePrefix = "";
+  pythonPackages = python3Packages;
+in pythonPackages.buildPythonApplication rec {
 
   name = "peru-${version}";
+  version = "1.0.1";
 
-  src = fetchFromGitHub {
-    owner = "buildinspace";
-    repo = "peru";
-    rev = "${version}";
-    sha256 = "04bnaly50qmzkj0shdag94n8vr3ggarlqdny5zdb8nh31fqgln8b";
+  src = fetchurl {
+    url = "mirror://pypi/p/peru/${name}.tar.gz";
+    sha256 = "d51771d4aa7e16119e46c39efd71b0a1a898607bf3fb7735fc688a64fc59cbf1";
   };
 
-  pythonPath = with python3Packages; [ pyyaml docopt ];
+  propagatedBuildInputs = with pythonPackages; [ pyyaml docopt ];
+
+  # No tests in archive
+  doCheck = false;
 
   meta = {
     homepage = https://github.com/buildinspace/peru;

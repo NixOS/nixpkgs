@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, libudev
+, file, expat, libdrm, xorg, wayland, systemd
 , llvmPackages, libffi, libomxil-bellagio, libva
 , libelf, libvdpau, python
 , grsecEnabled ? false
@@ -26,7 +26,7 @@ if ! lists.elem stdenv.system platforms.mesaPlatforms then
 else
 
 let
-  version = "12.0.1";
+  version = "12.0.2";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "12b3i59xdn2in2hchrkgh4fwij8zhznibx976l3pdj3qkyvlzcms";
+    sha256 = "d957a5cc371dcd7ff2aa0d87492f263aece46f79352f4520039b58b1f32552cb";
   };
 
   prePatch = "patchShebangs .";
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        libudev = libudev.out;
+        libudev = systemd.lib;
       });
 
   postPatch = ''
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
       --replace _EGL_DRIVER_SEARCH_DIR '"${driverLink}"'
   '';
 
-  outputs = [ "dev" "out" "drivers" "osmesa" ];
+  outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   configureFlags = [
@@ -114,7 +114,7 @@ stdenv.mkDerivation {
     libffi wayland libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs
     (python.withPackages (ps: [ ps.Mako ]))
-  ] ++ optional stdenv.isLinux libudev;
+  ] ++ optional stdenv.isLinux systemd;
 
 
   enableParallelBuilding = true;

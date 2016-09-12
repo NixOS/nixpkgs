@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON"
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
 
   enableParallelBuilding = true;
 

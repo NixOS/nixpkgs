@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
+, libXrandr
 , which, alsaLib, curl, libvpx, gawk, nettools, dbus
 , xorriso, makeself, perl, pkgconfig, nukeReferences
 , javaBindings ? false, jdk ? null
@@ -7,6 +8,7 @@
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
+, headless ? false
 }:
 
 with stdenv.lib;
@@ -67,12 +69,14 @@ in stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
+    [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
       pkgconfig which libXmu nukeReferences ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python
-    ++ optional pulseSupport libpulseaudio;
+    ++ optional pulseSupport libpulseaudio
+    ++ optionals (headless) [ libXrandr libpng ]
+    ++ optionals (!headless) [ qt4 SDL ];
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
@@ -108,7 +112,7 @@ in stdenv.mkDerivation {
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
   configurePhase = ''
-    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${stdenv.cc.libc}/include,,g')
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
 
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
@@ -129,7 +133,9 @@ in stdenv.mkDerivation {
     ''}
     LOCAL_CONFIG
 
-    ./configure --with-qt4-dir=${qt4} \
+    ./configure \
+      ${optionalString headless "--build-headless"} \
+      ${optionalString (!headless) "--with-qt4-dir=${qt4}"} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
@@ -180,16 +186,18 @@ in stdenv.mkDerivation {
       EXTHELPER
     ''}
 
-    # Create and fix desktop item
-    mkdir -p $out/share/applications
-    sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
-    ln -sfv $libexec/virtualbox.desktop $out/share/applications
-    # Icons
-    mkdir -p $out/share/icons/hicolor
-    for size in `ls -1 $libexec/icons`; do
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
-    done
+    ${optionalString (!headless) ''
+      # Create and fix desktop item
+      mkdir -p $out/share/applications
+      sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
+      ln -sfv $libexec/virtualbox.desktop $out/share/applications
+      # Icons
+      mkdir -p $out/share/icons/hicolor
+      for size in `ls -1 $libexec/icons`; do
+        mkdir -p $out/share/icons/hicolor/$size/apps
+        ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
+      done
+    ''}
 
     # Get rid of a reference to linux.dev.
     nuke-refs $out/lib/modules/*/misc/*.ko

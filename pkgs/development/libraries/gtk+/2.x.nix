@@ -8,14 +8,14 @@ assert xineramaSupport -> xorg.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.30";
+  name = "gtk+-2.24.31";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "0d15cec3b6d55c60eac205b1f3ba81a1ed4eadd9d0f8e7c508bc7065d0c4ca50";
+    sha256 = "68c1922732c7efc08df4656a5366dcc3afdc8791513400dac276009b40954658";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   enableParallelBuilding = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     else "--with-xinput=yes";
 
   postInstall = ''
-    moveToOutput share/gtk-2.0/demo "$docdev"
+    moveToOutput share/gtk-2.0/demo "$devdoc"
   '';
 
   passthru = {

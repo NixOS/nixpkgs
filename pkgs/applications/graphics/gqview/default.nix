@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = mirror://sourceforge/gqview/gqview-2.1.5.tar.gz;
-    md5 = "4644187d9b14b1dc11ac3bb146f262ea";
+    sha256 = "0ilm5s7ps9kg4f5hzgjhg0xhn6zg0v9i7jnd67zrx9h7wsaa9zhj";
   };
 
   buildInputs = [pkgconfig gtk libpng];

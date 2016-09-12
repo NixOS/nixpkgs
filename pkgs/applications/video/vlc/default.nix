@@ -76,5 +76,9 @@ stdenv.mkDerivation rec {
     homepage = http://www.videolan.org/vlc/;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
+    broken =
+      if withQt5
+      then builtins.compareVersions qtbase.version "5.7.0" >= 0
+      else false;
   };
 }

@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
       Library) is a development library geared towards developers who wish to
       add MusicBrainz lookup capabilities to their applications.'';
     maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

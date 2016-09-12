@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ libiconv ] ++ libintlOrEmpty ++ lib.optional withData poppler_data;
 
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+
+  CXXFLAGS = lib.optional qt5Support "-std=c++11";
 
   configureFlags = with lib;
     [

@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   configureFlags = with stdenv.lib; [
     "--disable-geolocation"
     "--disable-jit"
+    # needed for parallel building
+    "--enable-dependency-tracking"
     (optionalString enableIntrospection "--enable-introspection")
   ] ++ optional withGtk2 [
     "--with-gtk=2.0"
@@ -86,7 +88,6 @@ stdenv.mkDerivation rec {
     (if withGtk2 then gtk2 else gtk3)
   ];
 
-  # Still fails with transient errors in version 2.4.9.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
 }

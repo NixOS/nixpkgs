@@ -1,6 +1,6 @@
 { qtSubmodule, stdenv, qtdeclarative, qtlocation, qtsensors
 , fontconfig, gdk_pixbuf, gtk, libwebp, libxml2, libxslt
-, sqlite, libudev, glib, gst_all_1
+, sqlite, systemd, glib, gst_all_1
 , bison2, flex, gdb, gperf, perl, pkgconfig, python, ruby
 , substituteAll
 , flashplayerFix ? false
@@ -27,7 +27,7 @@ qtSubmodule {
         };
         dlopen-webkit-udev = substituteAll {
           src = ./0003-dlopen-webkit-udev.patch;
-          libudev = libudev.out;
+          libudev = systemd.lib;
         };
     in optionals flashplayerFix [ dlopen-webkit-nsplugin dlopen-webkit-gtk ]
     ++ [ dlopen-webkit-udev ];

@@ -261,9 +261,9 @@ fi
 prebuiltNix() {
     machine="$1"
     if [ "$machine" = x86_64 ]; then
-        echo /nix/store/xryr9g56h8yjddp89d6dw12anyb4ch7c-nix-1.10
+        echo @nix_x86_64_linux@
     elif [[ "$machine" =~ i.86 ]]; then
-        echo /nix/store/2w92k5wlpspf0q2k9mnf2z42prx3bwmv-nix-1.10
+        echo @nix_i686_linux@
     else
         echo "$0: unsupported platform"
         exit 1

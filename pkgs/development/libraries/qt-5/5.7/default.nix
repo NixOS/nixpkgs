@@ -47,7 +47,7 @@ let
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
-      outputs = args.outputs or [ "dev" "out" ];
+      outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
       setupHook = ./setup-hook.sh;
@@ -111,7 +111,7 @@ let
 
       qmakeHook =
         makeSetupHook
-        { deps = [ self.qtbase ]; }
+        { deps = [ self.qtbase.dev ]; }
         ./qmake-hook.sh;
 
     };

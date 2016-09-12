@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sc768q2cixwanlwrz95mp389iaadl4s95486caavxx4g7znvn8m";
   };
 
-  outputs = [ "dev" "bin" "out" ];
+  outputs = [ "bin" "dev" "out" ];
 
   propagatedBuildInputs = [ libusb1 ];
   buildInputs = [ pkgconfig ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       in the form of a library suitable primarily for POSIX compliant operating
       systems. We implement MTP Basic, the stuff proposed for standardization.
       '';
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }

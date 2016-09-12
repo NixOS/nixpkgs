@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   name = "packer-${version}";
   version = "0.10.1";
 
-  src = import ./deps.nix {
+  src = (import ./deps.nix {
     inherit stdenv lib gox gotools buildGoPackage fetchgit fetchhg fetchbzr fetchsvn;
-  };
+  }).out;
 
   buildInputs = [ src.go gox gotools ];
 

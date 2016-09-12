@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       for first-order and equational logic. Prover9 is a successor of
       the Otter Prover. This is the LADR command-line version.
     '';
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [];
   };
 }

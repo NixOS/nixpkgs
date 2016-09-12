@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wvip28gm2w061hn84zp2q4dv947ihylrppahn4cjspzff935zfh";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   buildInputs = [
     pkgconfig intltool dbus_glib gdk_pixbuf curl freetype

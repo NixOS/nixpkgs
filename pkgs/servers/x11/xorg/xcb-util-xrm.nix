@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig m4 libxcb xcbutil ]
-    ++ stdenv.lib.optional doCheck [ libX11 ];
+    ++ stdenv.lib.optional doCheck libX11;
   doCheck = true;
 
   meta = with stdenv.lib; {

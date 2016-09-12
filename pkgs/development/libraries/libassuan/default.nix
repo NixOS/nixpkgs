@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w9bmasln4z8mn16s1is55a06w3nv8jbyal496z5jvr5vcxkm112";
   };
 
-  outputs = [ "dev" "out" "info" ];
+  outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # libassuan-config
 
   buildInputs = [ libgpgerror pth ];

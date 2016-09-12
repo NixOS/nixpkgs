@@ -43,14 +43,10 @@ in
   options = {
     services.unbound = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Whether to enable the Unbound domain name server.";
-      };
+      enable = mkEnableOption "Unbound domain name server";
 
       allowedAccess = mkOption {
-        default = ["127.0.0.0/24"];
+        default = [ "127.0.0.0/24" ];
         type = types.listOf types.str;
         description = "What networks are allowed to use unbound as a resolver.";
       };
@@ -97,7 +93,7 @@ in
     };
 
     systemd.services.unbound = {
-      description="Unbound recursive Domain Name Server";
+      description = "Unbound recursive Domain Name Server";
       after = [ "network.target" ];
       before = [ "nss-lookup.target" ];
       wants = [" nss-lookup.target" ];

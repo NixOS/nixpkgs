@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h1nhg5cmmzlbipak526nk4bm6d0yb217mll75f3rpg7kz1cqiv1";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   configureFlags = [
     "--enable-libv4l"

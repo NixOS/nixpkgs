@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qjiqc5pknaal57453nxcbz3mn1r4hkyywam41wfcglq3v2qlg39";
   };
 
-  outputs = [ "dev" "lib" "doc" "out" ]
+  outputs = [ "out" "dev" "lib" "doc" ]
     ++ stdenv.lib.optional (pam != null) "pam";
 
   nativeBuildInputs = [ perl ];

@@ -12,7 +12,7 @@ let
     installPhase = ''
       mkdir -p $out/bin
       cp ${./setuid-wrapper.c} setuid-wrapper.c
-      gcc -Wall -O2 -DWRAPPER_DIR=\"${wrapperDir}\" \
+      gcc -Wall -O2 -DWRAPPER_DIR=\"/run/setuid-wrapper-dirs\" \
           setuid-wrapper.c -o $out/bin/setuid-wrapper
     '';
   };
@@ -102,11 +102,11 @@ in
                 source=/nix/var/nix/profiles/default/bin/${program}
             fi
 
-            cp ${setuidWrapper}/bin/setuid-wrapper ${wrapperDir}/${program}
-            echo -n "$source" > ${wrapperDir}/${program}.real
-            chmod 0000 ${wrapperDir}/${program} # to prevent races
-            chown ${owner}.${group} ${wrapperDir}/${program}
-            chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${wrapperDir}/${program}
+            cp ${setuidWrapper}/bin/setuid-wrapper $wrapperDir/${program}
+            echo -n "$source" > $wrapperDir/${program}.real
+            chmod 0000 $wrapperDir/${program} # to prevent races
+            chown ${owner}.${group} $wrapperDir/${program}
+            chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" $wrapperDir/${program}
           '';
 
       in stringAfter [ "users" ]
@@ -115,9 +115,30 @@ in
           # programs to be wrapped.
           SETUID_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          rm -f ${wrapperDir}/* # */
+          mkdir -p /run/setuid-wrapper-dirs
+          wrapperDir=$(mktemp --directory --tmpdir=/run/setuid-wrapper-dirs setuid-wrappers.XXXXXXXXXX)
+          chmod a+rx $wrapperDir
 
           ${concatMapStrings makeSetuidWrapper setuidPrograms}
+
+          if [ -L ${wrapperDir} ]; then
+            # Atomically replace the symlink
+            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+            old=$(readlink ${wrapperDir})
+            ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
+            mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
+            rm --force --recursive $old
+          elif [ -d ${wrapperDir} ]; then
+            # Compatibility with old state, just remove the folder and symlink
+            rm -f ${wrapperDir}/*
+            # if it happens to be a tmpfs
+            ${pkgs.utillinux}/bin/umount ${wrapperDir} || true
+            rm -d ${wrapperDir}
+            ln -d --symbolic $wrapperDir ${wrapperDir}
+          else
+            # For initial setup
+            ln --symbolic $wrapperDir ${wrapperDir}
+          fi
         '';
 
   };

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       code, LGPL or LGPL-compatible for the supporting library).
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "8d7549118a3b7a009ece6bb38a05b66709c551d32d2adfd89eded4d1d7a23944";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig python ];
 

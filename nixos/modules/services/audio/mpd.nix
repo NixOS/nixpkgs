@@ -33,6 +33,7 @@ in {
     services.mpd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable MPD, the music player daemon.
@@ -40,6 +41,7 @@ in {
       };
 
       musicDirectory = mkOption {
+        type = types.path;
         default = "${cfg.dataDir}/music";
         description = ''
           The directory where mpd reads music from.
@@ -47,6 +49,7 @@ in {
       };
 
       extraConfig = mkOption {
+        type = types.str;
         default = "";
         description = ''
           Extra directives added to to the end of MPD's configuration file,
@@ -56,6 +59,7 @@ in {
       };
 
       dataDir = mkOption {
+        type = types.path;
         default = "/var/lib/mpd";
         description = ''
           The directory where MPD stores its state, tag cache,
@@ -64,11 +68,13 @@ in {
       };
 
       user = mkOption {
+        type = types.str;
         default = "mpd";
         description = "User account under which MPD runs.";
       };
 
       group = mkOption {
+        type = types.str;
         default = "mpd";
         description = "Group account under which MPD runs.";
       };
@@ -76,6 +82,7 @@ in {
       network = {
 
         listenAddress = mkOption {
+          type = types.str;
           default = "any";
           description = ''
             This setting sets the address for the daemon to listen on. Careful attention
@@ -85,6 +92,7 @@ in {
         };
 
         port = mkOption {
+          type = types.int;
           default = 6600;
           description = ''
             This setting is the TCP port that is desired for the daemon to get assigned
@@ -114,12 +122,12 @@ in {
       after = [ "network.target" "sound.target" ];
       description = "Music Player Daemon";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.mpd ];
+
       preStart = "mkdir -p ${cfg.dataDir} && chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}";
-      script = "exec mpd --no-daemon ${mpdConf}";
       serviceConfig = {
         User = "${cfg.user}";
         PermissionsStartOnly = true;
+        ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
       };
     };
 

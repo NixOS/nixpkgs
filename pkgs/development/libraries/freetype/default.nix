@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     patches="$patches $(ls ${infinality}/*_freetype2-iu/*-infinality-*.patch)"
   '';
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
   # dependence on harfbuzz is looser than the reverse dependence

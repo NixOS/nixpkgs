@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out"/{bin,lib/lua/neural-style/models,share/doc/neural-style,share/neural-style}
     for file in $models; do
-      cp "$file" "$out/lib/lua/neural-style/models/$(basename "$file" | sed -e 's/[^-]*-//')"
+      ln -s "$file" "$out/lib/lua/neural-style/models/$(basename "$file" | sed -e 's/[^-]*-//')"
     done;
     cp README* INSTALL* LICEN?E* "$out"/share/doc/neural-style/
     cp neural_style.lua "$out"/lib/lua/neural-style
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     description = ''A torch implementation of the paper A Neural Algorithm of Artistic Style'';
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    # Eats a lot of RAM
+    platforms = ["x86_64-linux"];
   };
 }

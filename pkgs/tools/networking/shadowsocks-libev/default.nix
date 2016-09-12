@@ -15,8 +15,8 @@
 
 let
 
-  version = "2.4.8";
-  sha256 = "af3fc3be50fb24dfd1aed8ce34d2d13448735f6181269f54f4860438a1838472";
+  version = "2.5.0";
+  sha256 = "6841e0efa1c01caef5a827f463ee304dc9e48fb4751cc9256316df5ab4490ae0";
 
 in
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt ]
                 ++ optional (!withMbedTLS) openssl
                 ++ optional withMbedTLS mbedtls
-                ++ optional enableSystemSharedLib [libev libsodium udns];
+                ++ optionals enableSystemSharedLib [libev libsodium udns];
 
   configureFlags = optional withMbedTLS
                      [ "--with-crypto-library=mbedtls"

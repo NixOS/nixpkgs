@@ -19,12 +19,12 @@ rec {
       if stdenv.system == "x86_64-linux" then
         fetchurl {
           url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops/R-3.5.2-201002111343/eclipse-SDK-3.5.2-linux-gtk-x86_64.tar.gz;
-          md5 = "54e2ce0660b2b1b0eb4267acf70ea66d";
+          sha256 = "1ndvanxw62b5ywi6ww0dyimabfmjdsw9q3xpy95zd8d5ygj2qsgq";
         }
       else
         fetchurl {
           url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops/R-3.5.2-201002111343/eclipse-SDK-3.5.2-linux-gtk.tar.gz;
-          md5 = "bde55a2354dc224cf5f26e5320e72dac";
+          sha256 = "0y5n0cyr9lgjmmzkfmav7j5w66rc1jq3300hcw3vrfjiv1k6ng3w";
         };
   };
   eclipse_sdk_35 = eclipse-sdk-35; # backward compatibility, added 2016-01-30
@@ -198,6 +198,23 @@ rec {
       else throw "Unsupported system: ${stdenv.system}";
   };
   eclipse_cpp_45 = eclipse-cpp-45; # backward compatibility, added 2016-01-30
+
+  eclipse-cpp-46 = buildEclipse {
+    name = "eclipse-cpp-4.6.0";
+    description = "Eclipse IDE for C/C++ Developers, Neon release";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/R/eclipse-cpp-neon-R-linux-gtk-x86_64.tar.gz;
+          sha256 = "09fqsgvbjfdqvn7z03crkii34z4bsb34y272q68ib8741bxk0i6m";
+        }
+      else if stdenv.system == "i686-linux" then
+        fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/R/eclipse-cpp-neon-R-linux-gtk.tar.gz;
+          sha256 = "0a12qmqq22v7sbmwn1hjv1zcrkmp64bf0ajmdjljhs9ac79mxn5h";
+        }
+      else throw "Unsupported system: ${stdenv.system}";
+  };
 
   eclipse-sdk-421 = buildEclipse {
     name = "eclipse-sdk-4.2.1";

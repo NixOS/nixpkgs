@@ -6,7 +6,7 @@ let
   glibc64 = glibc;
 in
 runCommand "${nameVersion.name}-multi-${nameVersion.version}"
-  { outputs = [ "dev" "out" "bin" ]; } # TODO: no static version here (yet)
+  { outputs = [ "bin" "dev" "out"]; } # TODO: no static version here (yet)
   ''
     mkdir -p "$out/lib"
     ln -s '${glibc64.out}'/lib/* "$out/lib"
@@ -22,7 +22,7 @@ runCommand "${nameVersion.name}-multi-${nameVersion.version}"
     chmod +x "$bin/bin/ldd"
 
     mkdir "$dev"
-    cp -rs '${glibc32}'/include "$dev/"
+    cp -rs '${glibc32.dev}'/include "$dev/"
     chmod +w -R "$dev"
-    cp -rsf '${glibc64}'/include "$dev/"
+    cp -rsf '${glibc64.dev}'/include "$dev/"
   ''

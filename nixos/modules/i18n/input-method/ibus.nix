@@ -30,10 +30,9 @@ in
         example = literalExample "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
-            engines =
-              lib.concatStringsSep ", "
-              (map (name: "<literal>${name}</literal>")
-               (lib.attrNames pkgs.ibus-engines));
+            enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
+            engines = concatStringsSep ", "
+              (map (name: "<literal>${name}</literal>") (attrNames enginesDrv));
           in
             "Enabled IBus engines. Available engines are: ${engines}.";
       };

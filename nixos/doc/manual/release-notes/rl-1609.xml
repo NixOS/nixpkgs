@@ -35,6 +35,17 @@ following incompatible changes:</para>
 <itemizedlist>
 
   <listitem>
+    <para>A large number of packages have been converted to use the multiple outputs feature
+      of Nix to greatly reduce the amount of required disk space. This may require changes
+      to any custom packages to make them build again; see the relevant chapter in the
+      Nixpkgs manual for more information. (Additional caveat to packagers: some packaging conventions
+      related to multiple-output packages
+      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/14766">were changed</link>
+      late (August 2016) in the release cycle and differ from the initial introduction of multiple outputs.)
+    </para>
+  </listitem>
+
+  <listitem>
     <para>Shell aliases for systemd sub-commands
     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/15598">were dropped</link>:
     <command>start</command>, <command>stop</command>,
@@ -44,6 +55,14 @@ following incompatible changes:</para>
   <listitem>
     <para>Redis now binds to 127.0.0.1 only instead of listening to all network interfaces. This is the default
     behavior of Redis 3.2</para>
+  </listitem>
+
+  <listitem>
+    <para>/var/setuid-wrappers/
+      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18124">is now a symlink so
+      it can be atomically updated</link>
+      and it's not mounted as tmpfs anymore since setuid binaries are located on /run/ as tmpfs.
+    </para>
   </listitem>
 
   <listitem>
@@ -64,6 +83,11 @@ following incompatible changes:</para>
     into freetype; one selects a preset via <literal>fonts.fontconfig.ultimate.preset</literal>.
     You can customize those presets via ordinary environment variables, using
     <literal>environment.variables</literal>.</para>
+  </listitem>
+
+  <listitem>
+    <para>The <literal>audit</literal> service is no longer enabled by default.
+    Use <literal>security.audit.enable = true;</literal> to explicitly enable it.</para>
   </listitem>
 
 </itemizedlist>

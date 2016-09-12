@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c2i9ih331304bh31c5gh94fx0qa49rsn70pvczvdfhi8pmcms6g";
   };
 
-  outputs = [ "dev" "out" "bin" "static" ];
+  outputs = [ "bin" "dev" "out" "static" ];
 
   postPatch = ''
     substituteInPlace Makefile --replace \
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "A low-level counterpart to Lua";
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jb55 ];
     license = licenses.mit;
   };

@@ -10,7 +10,6 @@
 , libgnomeui ? null
 , libgnomeprint ? null
 , libgnomeprintui ? null
-, gnomepanel ? null
 , libxml2
 , monoDLLFixer
 }:
@@ -36,7 +35,6 @@ stdenv.mkDerivation {
   buildInputs = [
     pkgconfig mono glib pango gtk GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
-    gnomepanel
   ];
 
   dontStrip = true;

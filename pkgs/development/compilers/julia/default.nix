@@ -48,12 +48,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.4.5";
+  version = "0.4.6";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "09gc6yf3v4in0qwhrbgjrjgvblp941di0mli4zax22mvf4dzc7s4";
+    sha256 = "17wsppmsf782icyzri34zha61wfx4brfq4h68qg17w6zimd2plg5";
   };
 
   prePatch = ''
@@ -161,5 +161,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    broken = stdenv.isi686;
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       }
     ;
 
-  outputs = [ "dev" "lib" "bin" "out" ]; # $out contains all the config
+  outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
   buildInputs = [ pkgconfig expat ];

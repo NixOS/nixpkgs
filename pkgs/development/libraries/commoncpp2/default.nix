@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/commoncpp/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = with stdenv.lib.platforms; allBut freebsd;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

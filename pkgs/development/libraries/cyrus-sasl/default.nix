@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hvvbcsg21nlncbgs0cgn3iwlnb3vannzwsp6rwvnn9ba4v53g4g";
   };
 
-  outputs = [ "dev" "bin" "out" "man" "docdev" ];
+  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   buildInputs =
     [ openssl db gettext kerberos ]

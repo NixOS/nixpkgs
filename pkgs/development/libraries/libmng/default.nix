@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l5wa3b9rr4zl49zbbjpapqyccqjwzkzw1ph3p4pk9p5h73h9317";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
-  outputMan= "docdev";
+  outputs = [ "out" "dev" "devdoc" ];
+  outputMan= "devdoc";
 
   propagatedBuildInputs = [ zlib libpng libjpeg lcms2 ];
 

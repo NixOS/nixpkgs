@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lvaglcjsvnyglgj3cb3pjc22nq8fml1vlx5dmmmw66ywx526925";
   };
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   propagatedBuildInputs = [ libtiff libjpeg zlib ];
 

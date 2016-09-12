@@ -59,22 +59,24 @@ echo
 echo "[1;32m<<< NixOS Stage 1 >>>[0m"
 echo
 
-
-# Mount special file systems.
+# Make several required directories.
 mkdir -p /etc/udev
 touch /etc/fstab # to shut up mount
-touch /etc/mtab # to shut up mke2fs
+ln -s /proc/mounts /etc/mtab # to shut up mke2fs
 touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
-mkdir -p /proc
-mount -t proc proc /proc
-mkdir -p /sys
-mount -t sysfs sysfs /sys
-mount -t devtmpfs -o "size=@devSize@" devtmpfs /dev
-mkdir -p /run
-mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
-mkdir /dev/pts
-mount -t devpts devpts /dev/pts
+
+# Mount special file systems.
+specialMount() {
+  local device="$1"
+  local mountPoint="$2"
+  local options="$3"
+  local fsType="$4"
+
+  mkdir -m 0755 -p "$mountPoint"
+  mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
+}
+source @earlyMountScript@
 
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp

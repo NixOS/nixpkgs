@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xknlg2h287dx34v2n5r33bpcl4biqf0cv7nak657rjki7s0k4bk";
   };
 
+  outputs = [ "out" "minimal" ];
+
   buildFlags = "full-ttf";
 
   preBuild = "patchShebangs scripts";
@@ -22,6 +24,10 @@ stdenv.mkDerivation rec {
     for i in $(find build -name '*.ttf'); do
         cp $i $out/share/fonts/truetype;
     done;
+  '' + ''
+    local fname=share/fonts/truetype/DejaVuSans.ttf
+    moveToOutput "$fname" "$minimal"
+    ln -s "$minimal/$fname" "$out/$fname"
   '';
 
   meta = {
@@ -41,6 +47,6 @@ stdenv.mkDerivation rec {
     # See http://dejavu-fonts.org/wiki/License for details
     license = stdenv.lib.licenses.free;
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Utilities for encoding and decoding binary files in MIME";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

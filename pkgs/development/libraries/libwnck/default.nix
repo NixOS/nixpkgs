@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "17isfjvrzgj5znld2a7zsk9vd39q9wnsysnw5jr8iz410z935xw3";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   buildInputs = [ pkgconfig gtk intltool xorg.libX11 xorg.libXres ];

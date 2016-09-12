@@ -60,7 +60,6 @@ let
     sudo launchctl load -w /Library/LaunchDaemons/$daemonName
   '';
   fontDirs = [
-    xorg.fontbhttf
     xorg.fontbhlucidatypewriter100dpi
     xorg.fontbhlucidatypewriter75dpi
     ttf_bitstream_vera

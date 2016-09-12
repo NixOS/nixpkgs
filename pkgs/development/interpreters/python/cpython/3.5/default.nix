@@ -1,8 +1,6 @@
 { stdenv, fetchurl
 , bzip2
-, db
 , gdbm
-, less
 , libX11, xproto
 , lzma
 , ncurses
@@ -34,7 +32,6 @@ let
     lzma
     gdbm
     sqlite
-    db
     readline
     ncurses
     openssl
@@ -43,11 +40,6 @@ let
     libX11
     xproto
   ] ++ optionals stdenv.isDarwin [ CF configd ];
-
-  propagatedBuildInputs = [
-    less
-  ];
-
 in
 stdenv.mkDerivation {
   name = "python3-${fullVersion}";
@@ -55,7 +47,6 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   inherit buildInputs;
-  inherit propagatedBuildInputs;
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
@@ -66,6 +57,7 @@ stdenv.mkDerivation {
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
+    substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
 
   preConfigure = ''
@@ -102,10 +94,21 @@ stdenv.mkDerivation {
     paxmark E $out/bin/python${majorVersion}
   '';
 
+  postFixup = ''
+    # Get rid of retained dependencies on -dev packages, and remove
+    # some $TMPDIR references to improve binary reproducibility.
+    for i in $out/lib//python${majorVersion}/_sysconfigdata.py $out/lib/python${majorVersion}/config-${majorVersion}m/Makefile; do
+      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+    done
+
+    # FIXME: should regenerate this.
+    rm $out/lib/python${majorVersion}/__pycache__/_sysconfigdata.cpython*
+  '';
+
   passthru = rec {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
-    dbSupport = db != null;
+    dbSupport = false;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);

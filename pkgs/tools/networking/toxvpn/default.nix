@@ -4,23 +4,23 @@ with lib;
 
 let
   libtoxcoreLocked = stdenv.lib.overrideDerivation libtoxcore (oldAttrs: {
-    name = "libtoxcore-20160319";
+    name = "libtoxcore-2016-09-07";
     src = fetchFromGitHub {
-      owner  = "irungentoo";
+      owner  = "TokTok";
       repo   = "toxcore";
-      rev = "532629d486e3361c7d8d95b38293cc7d61dc4ee5";
-      sha256 = "0x8mjrjiafgia9vy7w4zhfzicr2fljx8xgm2ppi4kva2r2z1wm2f";
+      rev    = "3521898b0cbf398d882496f6382f6c4ea1c23bc1";
+      sha256 = "1jvf0v9cqwd4ssj1iarhgsr05qg48v7yvmbnn3k01jy0lqci8iaq";
     };
   });
 
 in stdenv.mkDerivation {
-  name = "toxvpn-20160606";
+  name = "toxvpn-2016-09-09";
 
   src = fetchFromGitHub {
     owner  = "cleverca22";
     repo   = "toxvpn";
-    rev    = "50a0a439a6b11579bab7cc0744a18a9addc5eb5c";
-    sha256 = "12dkvsqs4fljwa1367jzqaynf6i8c98y9fs2lm2mqp3wkw0r3rg9";
+    rev    = "6e188f26fff8bddc1014ee3cc7a7423f9f344a09";
+    sha256 = "1bshc6pzk7z7q7g17cwx9gmlcyzn4szqvdiy0ihbk2xmx9k31c6p";
   };
 
   buildInputs = [ cmake libtoxcoreLocked jsoncpp libsodium libcap ] ++ optional (systemd != null) systemd;

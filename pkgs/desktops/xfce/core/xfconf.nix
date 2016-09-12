@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mmi0g30aln3x98y5p507g17pipq0dj0bwypshan8cq5hkmfl44r";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   #TODO: no perl bingings yet (ExtUtils::Depends, ExtUtils::PkgConfig, Glib)
   buildInputs = [ pkgconfig intltool glib libxfce4util ];

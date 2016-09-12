@@ -18,7 +18,9 @@ let
 
   prioOption = prio: optionalString (prio != null) " pri=${toString prio}";
 
-  fileSystemOpts = { name, config, ... }: {
+  specialFSTypes = [ "proc" "sysfs" "tmpfs" "devtmpfs" "devpts" ];
+
+  coreFileSystemOpts = { name, config, ... }: {
 
     options = {
 
@@ -35,13 +37,6 @@ let
         description = "Location of the device.";
       };
 
-      label = mkOption {
-        default = null;
-        example = "root-partition";
-        type = types.nullOr types.str;
-        description = "Label of the device (if any).";
-      };
-
       fsType = mkOption {
         default = "auto";
         example = "ext3";
@@ -53,12 +48,28 @@ let
         default = [ "defaults" ];
         example = [ "data=journal" ];
         description = "Options used to mount the file system.";
-      } // (if versionAtLeast lib.nixpkgsVersion "16.09" then {
         type = types.listOf types.str;
-      } else {
-        type = types.either types.commas (types.listOf types.str);
-        apply = x: if isList x then x else lib.strings.splitString "," (builtins.trace "warning: passing a comma-separated string for filesystem options is deprecated; use a list of strings instead. This will become a hard error in 16.09." x);
-      });
+      };
+
+    };
+
+    config = {
+      mountPoint = mkDefault name;
+      device = mkIf (elem config.fsType specialFSTypes) (mkDefault config.fsType);
+    };
+
+  };
+
+  fileSystemOpts = { config, ... }: {
+
+    options = {
+
+      label = mkOption {
+        default = null;
+        example = "root-partition";
+        type = types.nullOr types.str;
+        description = "Label of the device (if any).";
+      };
 
       autoFormat = mkOption {
         default = false;
@@ -100,8 +111,6 @@ let
     };
 
     config = {
-      mountPoint = mkDefault name;
-      device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
       options = mkIf config.autoResize [ "x-nixos.autoresize" ];
 
       # -F needed to allow bare block device without partitions
@@ -109,6 +118,13 @@ let
     };
 
   };
+
+  # Makes sequence of `specialMount device mountPoint options fsType` commands.
+  # `systemMount` should be defined in the sourcing script.
+  makeSpecialMounts = mounts:
+    pkgs.writeText "mounts.sh" (concatMapStringsSep "\n" (mount: ''
+      specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
+    '') mounts);
 
 in
 
@@ -131,8 +147,7 @@ in
           "/bigdisk".label = "bigdisk";
         }
       '';
-      type = types.loaOf types.optionSet;
-      options = [ fileSystemOpts ];
+      type = types.loaOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = "/"</literal>).  Each
@@ -164,6 +179,15 @@ in
       description = "Names of supported filesystem types.";
     };
 
+    boot.specialFileSystems = mkOption {
+      default = {};
+      type = types.loaOf (types.submodule coreFileSystemOpts);
+      internal = true;
+      description = ''
+        Special filesystems that are mounted very early during boot.
+      '';
+    };
+
   };
 
 
@@ -181,6 +205,7 @@ in
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
+    system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues config.boot.specialFileSystems)).result;
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
@@ -257,6 +282,20 @@ in
           };
 
       in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
+
+    # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
+    boot.specialFileSystems = {
+      "/proc" = { fsType = "proc"; options = [ "nosuid" "noexec" "nodev" ]; };
+      "/run" = { fsType = "tmpfs"; options = [ "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
+      "/dev" = { fsType = "devtmpfs"; options = [ "nosuid" "strictatime" "mode=755" "size=${config.boot.devSize}" ]; };
+      "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
+      "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "gid=${toString config.ids.gids.tty}" ]; };
+    } // optionalAttrs (!config.boot.isContainer) {
+      # systemd-nspawn populates /sys by itself, and remounting it causes all
+      # kinds of weird issues (most noticeably, waiting for host disk device
+      # nodes).
+      "/sys" = { fsType = "sysfs"; options = [ "nosuid" "noexec" "nodev" ]; };
+    };
 
   };
 

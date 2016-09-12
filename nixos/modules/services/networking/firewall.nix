@@ -490,7 +490,8 @@ in
 
     systemd.services.firewall = {
       description = "Firewall";
-      wantedBy = [ "network-pre.target" ];
+      wantedBy = [ "sysinit.target" ];
+      wants = [ "network-pre.target" ];
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
@@ -500,6 +501,7 @@ in
       # containers don't have CAP_SYS_MODULE. So the host system had
       # better have all necessary modules already loaded.
       unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+      unitConfig.DefaultDependencies = false;
 
       reloadIfChanged = true;
 

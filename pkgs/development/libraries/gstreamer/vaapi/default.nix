@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "14jal2g5mf8r59w8420ixl3kg50vcmy56446ncwd0xrizd6yms5b";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = with stdenv.lib; [ pkgconfig bzip2 ];
 

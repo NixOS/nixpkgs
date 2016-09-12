@@ -470,6 +470,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "The Unlicense";
   };
 
+  upl = {
+    fullName = "Universal Permissive License";
+    url = "https://oss.oracle.com/licenses/upl/";
+  };
+
   vim = spdx {
     spdxId = "Vim";
     fullName = "Vim License";

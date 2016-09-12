@@ -18,20 +18,27 @@ write_entry(){
   eval "echo -n \"\$additions_${name%%[-_.]*}\""
   eval "test -n \"\$additions_${name%%[-_.]*}\" && echo"
   echo '}'
+  saved_line=
 }
 
+saved_line=
 cat "$(dirname "$0")/libreoffice-srcs-additions.sh" "$@" |
 while read line; do
   case "$line" in
     EVAL\ *)
       echo "${line#* }" >&2;
       eval "${line#* }";
+      saved_line=
       ;;
     \#*)
       echo Skipping comment: "$line" >&2;
       ;;
     *_MD5SUM\ :=*)
-      read tbline;
+      if test -n "$saved_line"; then
+        tbline="$saved_line"
+      else
+        read tbline;
+      fi;
       line=${line##* };
       line=${line##*:=};
       if [ "${tbline#*VERSION_MICRO}" != "$tbline" ]; then
@@ -59,7 +66,11 @@ while read line; do
       name=${line:33};
       name="${name%)}"
       brief=false;
-      write_entry;
+      if test -n "$name"; then
+        write_entry;
+      else
+        saved_line="$line";
+      fi
       ;;
     *)
       echo Skipping: "$line" >&2;

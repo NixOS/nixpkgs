@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pvw2mrm03p51p03179rb6fk9p42iykkwj1jcdv7jr265xymy8nw";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig gnum4 ];
   propagatedBuildInputs = [ glib libsigcxx ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "130kz0ghsrggdn70kygrmsy3n533hwd948q69vyvqz44yw9n3f06";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp ];
 

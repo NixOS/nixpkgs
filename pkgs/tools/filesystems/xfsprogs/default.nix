@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libuuid ];
   buildInputs = [ gettext readline ];
 
-  outputs = [ "dev" "out" "bin" ]; # TODO: review xfs
+  outputs = [ "bin" "dev" "out" ]; # TODO: review xfs
 
   preConfigure = ''
     NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"

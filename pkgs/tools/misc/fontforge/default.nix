@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     git autoconf automake gnum4 libtool perl pkgconfig gettext uthash
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
-    pango
   ]
-    ++ lib.optionals withGTK [ gtk2 ]
-    ++ lib.optionals (withGTK && stdenv.isDarwin) [ Carbon Cocoa ];
+    ++ lib.optionals withGTK [ gtk2 pango ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   configureFlags =
     lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]
-    ++ lib.optional withGTK "--enable-gtk2-use";
+    ++ lib.optional withGTK "--enable-gtk2-use"
+    ++ lib.optional (!withGTK) "--without-x";
 
   preConfigure = ''
     cp -r "${gnulib}" ./gnulib

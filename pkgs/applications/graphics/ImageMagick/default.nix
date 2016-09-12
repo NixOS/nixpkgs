@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./imagetragick.patch ] ++ cfg.patches;
 
-  outputs = [ "dev" "out" "doc" ]; # bin/ isn't really big
+  outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
 
   enableParallelBuilding = true;

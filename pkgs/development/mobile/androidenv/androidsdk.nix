@@ -1,7 +1,7 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
 , platformTools, buildTools, support, supportRepository, platforms, sysimages, addons
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
-, freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils, libpulseaudio
+, freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils, libpulseaudio, dbus
 , zlib, glxinfo, xkeyboardconfig
 }:
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false, useGooglePlayServices ? false }:
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
         do
             wrapProgram `pwd`/$i \
               --prefix PATH : ${stdenv.lib.makeBinPath [ file glxinfo ]} \
-              --suffix LD_LIBRARY_PATH : `pwd`/lib64:`pwd`/lib64/qt/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext mesa alsaLib zlib libpulseaudio ]} \
+              --suffix LD_LIBRARY_PATH : `pwd`/lib64:`pwd`/lib64/qt/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext mesa alsaLib zlib libpulseaudio dbus.lib ]} \
               --suffix QT_XKB_CONFIG_ROOT : ${xkeyboardconfig}/share/X11/xkb
         done
       ''}
