@@ -10,11 +10,7 @@ in {
   options.services.mesos = {
 
     master = {
-      enable = mkOption {
-        description = "Whether to enable the Mesos Master.";
-        default = false;
-        type = types.bool;
-      };
+      enable = mkEnableOption "the Mesos Master";
 
       port = mkOption {
         description = "Mesos Master port";
