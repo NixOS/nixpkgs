@@ -16203,6 +16203,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    inherit-local = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "inherit-local";
+        version = "1.1";
+        src = fetchFromGitHub {
+          owner = "shlevy";
+          repo = "inherit-local";
+          rev = "e687c702adb27ce5f69fb28a47fe21a86cf84063";
+          sha256 = "11z3b1xwg6r769w3scd29lqg62fx8mp81g8dbx4klmj3clvyn69i";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/inherit-local";
+          sha256 = "1v3q3s6qq64k1f4ck6rfgsy1arnf9cxg2kw6d1ahfrwr4ixsqm87";
+          name = "inherit-local";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/inherit-local";
+          license = lib.licenses.free;
+        };
+      }) {};
     init-loader = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "init-loader";
@@ -20410,6 +20431,27 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://melpa.org/#/ninja-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    nix-buffer = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "nix-buffer";
+        version = "1.2.2";
+        src = fetchFromGitHub {
+          owner = "shlevy";
+          repo = "nix-buffer";
+          rev = "eb28bf99c3562cfda07f312ca49e0b594f0ff81b";
+          sha256 = "148iyy8ma1n5a3biyal5rafxpp0zzn81nyy06jlzrkzjy44iyzwi";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/nix-buffer";
+          sha256 = "1fjkf88345v9l2v2mk8a057mw0p0rckf6rjf00y5464dyhh58vcd";
+          name = "nix-buffer";
+        };
+        packageRequires = [ emacs f ];
+        meta = {
+          homepage = "https://melpa.org/#/nix-buffer";
           license = lib.licenses.free;
         };
       }) {};

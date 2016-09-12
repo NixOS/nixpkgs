@@ -33345,8 +33345,8 @@
           sha256 = "11z3b1xwg6r769w3scd29lqg62fx8mp81g8dbx4klmj3clvyn69i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/50751b5f9843fde00505edd281e404ec1d875713/recipes/inherit-local";
-          sha256 = "0j785xb72nk04x6jb9x5pdwp3dkalqmy208mvj4ss4fm559qfp3i";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/inherit-local";
+          sha256 = "1v3q3s6qq64k1f4ck6rfgsy1arnf9cxg2kw6d1ahfrwr4ixsqm87";
           name = "inherit-local";
         };
         packageRequires = [ emacs ];
@@ -42882,8 +42882,8 @@
           sha256 = "1y5x49mqippngp7ya6y7p8z81anrc644n84wpd7y62yqv8qhz0fp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/4de2a8cbf1180ec7ca1648f497538b8dbf7a3945/recipes/nix-buffer";
-          sha256 = "1svx1wg05fajxzjz95dfg072i6nfydr0ir4q1zhdxg1igkffqsml";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/nix-buffer";
+          sha256 = "1fjkf88345v9l2v2mk8a057mw0p0rckf6rjf00y5464dyhh58vcd";
           name = "nix-buffer";
         };
         packageRequires = [ emacs f ];
