@@ -13,11 +13,7 @@ in {
   options = {
 
     services.canto-daemon = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the canto RSS daemon.";
-      };
+      enable = mkEnableOption "the canto RSS daemon";
     };
 
   };
