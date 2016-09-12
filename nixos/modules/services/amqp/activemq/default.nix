@@ -24,13 +24,7 @@ in {
 
   options = {
     services.activemq = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the Apache ActiveMQ message broker service.
-        '';
-      };
+      enable = mkEnableOption "the Apache ActiveMQ message broker service";
       configurationDir = mkOption {
         default = "${activemq}/conf";
         description = ''
