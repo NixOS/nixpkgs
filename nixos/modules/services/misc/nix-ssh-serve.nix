@@ -7,11 +7,7 @@ with lib;
 
     nix.sshServe = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable serving the Nix store as a binary cache via SSH.";
-      };
+      enable = mkEnableOption "serving the Nix store as a binary cache via SSH";
 
       keys = mkOption {
         type = types.listOf types.str;
