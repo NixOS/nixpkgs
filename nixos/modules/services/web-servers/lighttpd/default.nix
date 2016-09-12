@@ -119,13 +119,7 @@ in
 
     services.lighttpd = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Enable the lighttpd web server.
-        '';
-      };
+      enable = mkEnableOption "the lighttpd web server";
 
       port = mkOption {
         default = 80;
