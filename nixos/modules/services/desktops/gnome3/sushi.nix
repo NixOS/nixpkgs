@@ -15,13 +15,7 @@ in
 
     services.gnome3.sushi = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable Sushi, a quick previewer for nautilus.
-        '';
-      };
+      enable = mkEnableOption "Sushi, a quick previewer for nautilus";
 
     };
 
