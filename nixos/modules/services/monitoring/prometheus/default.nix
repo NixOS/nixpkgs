@@ -322,13 +322,7 @@ in {
   options = {
     services.prometheus = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the Prometheus monitoring daemon.
-        '';
-      };
+      enable = mkEnableOption "the Prometheus monitoring daemon";
 
       listenAddress = mkOption {
         type = types.str;
