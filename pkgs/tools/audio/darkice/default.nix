@@ -1,24 +1,9 @@
-{ stdenv, buildEnv, fetchurl
+{ stdenv, buildEnv, fetchurl, pkgconfig
 , libjack2, alsaLib, libpulseaudio
 , faac, lame, libogg, libopus, libvorbis, libsamplerate
 }:
 
-let
-  oggEnv = buildEnv {
-    name = "env-darkice-ogg";
-    paths = [
-      libopus.dev libopus libvorbis.dev libvorbis libogg.dev libogg
-    ];
-  };
-
-  darkiceEnv = buildEnv {
-    name = "env-darkice";
-    paths = [
-      lame.out lame.lib libpulseaudio libpulseaudio.dev alsaLib alsaLib.dev libsamplerate.out libsamplerate.dev
-    ];
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "darkice-${version}";
   version = "1.3";
 
@@ -27,17 +12,16 @@ in stdenv.mkDerivation rec {
     sha256 = "1rlxds7ssq7nk2in4s46xws7xy9ylxsqgcz85hxjgh17lsm0y39c";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    libopus libvorbis libogg libpulseaudio alsaLib libsamplerate libjack2 lame
+  ];
+
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   configureFlags = [
-    "--with-alsa-prefix=${darkiceEnv}"
     "--with-faac-prefix=${faac}"
-    "--with-jack-prefix=${libjack2}"
-    "--with-lame-prefix=${darkiceEnv}"
-    "--with-opus-prefix=${oggEnv}"
-    "--with-pulseaudio-prefix=${darkiceEnv}"
-    "--with-samplerate-prefix=${darkiceEnv}"
-    "--with-vorbis-prefix=${oggEnv}"
-#    "--with-aacplus-prefix=${aacplus}" ### missing: aacplus
-#    "--with-twolame-prefix=${twolame}" ### missing: twolame
+    "--with-lame-prefix=${lame.lib}"
   ];
 
   patches = [ ./fix-undeclared-memmove.patch ];
