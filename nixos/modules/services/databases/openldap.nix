@@ -19,14 +19,7 @@ in
 
     services.openldap = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "
-          Whether to enable the ldap server.
-        ";
-        example = true;
-      };
+      enable = mkEnableOption "the ldap server";
 
       user = mkOption {
         type = types.string;
