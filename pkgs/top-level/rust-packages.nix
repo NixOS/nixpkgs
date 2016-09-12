@@ -4,12 +4,13 @@
 # version that we define here. If you're having problems downloading / finding
 # a Rust library, try updating this to a newer commit.
 
-{ runCommand, fetchFromGitHub, git }:
+with import <nixpkgs> {};
+# { runCommand, fetchFromGitHub, git }:
 
 let
-  version = "2016-08-23";
-  rev = "e98ce679ed90bb5b8a64ad9f5bd82f87fd6b641f";
-  sha256 = "0dpl071ic3ddknsy98dxm99mznlblhmgjqi9ha6rlbldbjp3gf8j";
+  version = "2016-09-12";
+  rev = "e9afe5107ab79bb9cfe9b54760b51d61a4511a16";
+  sha256 = "0jhp3dbf5b5j83bj7ql2incz9lwmqf6agxp1ib93nl6v5af0pk7d";
 
   src = fetchFromGitHub {
       inherit rev;
