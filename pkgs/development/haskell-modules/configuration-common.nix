@@ -764,8 +764,12 @@ self: super: {
     '';
   });
 
-  # Byte-compile elisp code for Emacs.
+  # Fine-tune the build.
   structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
+    # Statically linked Haskell libraries make the tool start-up much faster,
+    # which is important for use in Emacs.
+    enableSharedExecutables = false;
+    # Byte-compile elisp code for Emacs.
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
