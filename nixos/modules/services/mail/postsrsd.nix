@@ -14,11 +14,7 @@ in {
 
     services.postsrsd = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the postsrsd SRS server for Postfix.";
-      };
+      enable = mkEnableOption "the postsrsd SRS server for Postfix";
 
       domain = mkOption {
         type = types.str;
