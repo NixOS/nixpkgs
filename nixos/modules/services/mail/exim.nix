@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf mkOption singleton types;
+  inherit (lib) mkEnableOption mkIf mkOption singleton types;
   inherit (pkgs) coreutils exim;
   cfg = config.services.exim;
 in
@@ -14,11 +14,7 @@ in
 
     services.exim = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the Exim mail transfer agent.";
-      };
+      enable = mkEnableOption "the Exim mail transfer agent";
 
       config = mkOption {
         type = types.string;
