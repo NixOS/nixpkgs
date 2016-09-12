@@ -536,6 +536,10 @@ in
   };
   aria = self.aria2;
 
+  aspcud = callPackage ../tools/misc/aspcud {
+    boost = boost155;
+  };
+
   at = callPackage ../tools/system/at { };
 
   atftp = callPackage ../tools/networking/atftp { };
@@ -710,6 +714,8 @@ in
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
+  clasp = callPackage ../tools/misc/clasp { };
+
   cli53 = callPackage ../tools/admin/cli53 { };
 
   cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
@@ -842,6 +848,8 @@ in
   glide = callPackage ../development/tools/glide { };
 
   gmic = callPackage ../tools/graphics/gmic { };
+
+  gringo = callPackage ../tools/misc/gringo { };
 
   gti = callPackage ../tools/misc/gti { };
 
