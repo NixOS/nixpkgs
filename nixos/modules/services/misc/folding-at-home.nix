@@ -12,12 +12,7 @@ in {
 
     services.foldingAtHome = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable the Folding@Home to use idle CPU time.
-        '';
-      };
+      enable = mkEnableOption "the Folding@Home to use idle CPU time";
 
       nickname = mkOption {
         default = "Anonymous";
