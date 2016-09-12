@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   outputs = [ "out" "kmod" "examples" ];
 
+  hardeningDisable = [ "pic" ];
+
   configurePhase = ''
     make T=x86_64-native-linuxapp-gcc config
   '';

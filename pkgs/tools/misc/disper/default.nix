@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
       wrapProgram $out/bin/disper \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libXrandr.out}/lib:${xorg.libX11.out}/lib"
+        --prefix "LD_LIBRARY_PATH" : "${stdenv.lib.makeLibraryPath [ xorg.libXrandr xorg.libX11 ]}"
   '';
 
   src = fetchurl {

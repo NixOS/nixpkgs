@@ -2,12 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "communi-${version}";
-  version = "2016-01-03";
+  version = "2016-08-19";
 
   src = fetchgit {
     url = "https://github.com/communi/communi-desktop.git";
-    rev = "ad1b9a30ed6c51940c0d2714b126a32b5d68c876";
-    sha256 = "0jx963pfvzk4dbk8mrmzfrhzybk5y6ib9yzaj662wliayrzj7vpg";
+    rev = "d516b01b1382a805de65f21f3475e0a8e64a97b5";
+    sha256 = "1pn7mr7ch1ck5qv9zdn3ril40c9kk6l04475564rpzf11jly76an";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ makeQtWrapper qmakeHook ];
@@ -32,6 +33,10 @@ stdenv.mkDerivation rec {
     wrapQtProgram "$out/bin/communi"
     substituteInPlace "$out/share/applications/communi.desktop" \
       --replace "/usr/bin" "$out/bin"
+  '';
+
+  postFixup = ''
+    patchelf --set-rpath "$out/lib:$(patchelf --print-rpath $out/bin/.communi-wrapped)" $out/bin/.communi-wrapped
   '';
 
   meta = with stdenv.lib; {

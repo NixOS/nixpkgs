@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  hardeningDisable = [ "pic" ];
+
   # also maybe python2 to generate xorg.conf
   nativeBuildInputs = [ p7zip ] ++ lib.optionals (!libsOnly) [ makeWrapper ];
 

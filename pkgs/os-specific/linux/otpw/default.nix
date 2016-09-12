@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam ];
 
+  hardeningDisable = [ "stackprotector" ];
+
   meta = {
     homepage = http://www.cl.cam.ac.uk/~mgk25/otpw.html;
     description = "A one-time password login package";

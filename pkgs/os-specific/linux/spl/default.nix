@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  hardeningDisable = [ "pic" ];
+
   preConfigure = ''
     substituteInPlace ./module/spl/spl-generic.c --replace /usr/bin/hostid hostid
     substituteInPlace ./module/spl/spl-generic.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:${gawk}:/bin"

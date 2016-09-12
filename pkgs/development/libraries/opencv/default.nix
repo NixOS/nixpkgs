@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "bindnow" "relro" ];
+
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
   meta = {

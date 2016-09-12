@@ -4,7 +4,6 @@
 assert stdenv.lib.versionAtLeast kernel.version "3.19";
 
 stdenv.mkDerivation rec {
-
   name = "facetimehd-${version}-${kernel.version}";
   version = "git-20160503";
 
@@ -29,6 +28,8 @@ stdenv.mkDerivation rec {
     export INSTALL_MOD_PATH="$out"
   '';
 
+  hardeningDisable = [ "pic" ];
+
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -40,5 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ womfoo grahamc ];
     platforms = platforms.linux;
   };
-
 }

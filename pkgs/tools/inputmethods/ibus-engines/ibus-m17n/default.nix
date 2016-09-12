@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, automake, autoconf, libtool, pkgconfig
+, autoreconfHook, pkgconfig
 , ibus, m17n_lib, m17n_db, gettext, python3, pygobject3
 }:
 
@@ -19,11 +19,7 @@ stdenv.mkDerivation rec {
     python3 pygobject3
   ];
 
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-
-  preConfigure = ''
-    autoreconf --verbose --force --install
-  '';
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   meta = with stdenv.lib; {
     isIbusEngine = true;

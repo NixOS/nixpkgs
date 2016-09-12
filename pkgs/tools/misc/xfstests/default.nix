@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];
 
+  hardeningDisable = [ "format" ];
+
   patchPhase = ''
     # Patch the destination directory
     sed -i include/builddefs.in -e "s|^PKG_LIB_DIR\s*=.*|PKG_LIB_DIR=$out/lib/xfstests|"

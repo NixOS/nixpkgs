@@ -1,6 +1,6 @@
 { stdenv, fetchsvn, pkgconfig, autoreconfHook, gnutls33, freetype
 , SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, libjack2, libvorbis
-, libsndfile, libogg
+, libSM, libsndfile, libogg
 }:
 
 stdenv.mkDerivation {
@@ -14,10 +14,12 @@ stdenv.mkDerivation {
 
   buildInputs = [
     pkgconfig autoreconfHook gnutls33 freetype SDL SDL_gfx SDL_ttf
-    liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg
+    liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg libSM
   ];
 
   patches = [ ./am_path_sdl.patch ./xml.patch ];
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "A live looping instrument with JACK and MIDI support";

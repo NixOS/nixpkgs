@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "tetex-3.0";
-  
+
   src = fetchurl {
     url = ftp://cam.ctan.org/tex-archive/systems/unix/teTeX/current/distrib/tetex-src-3.0.tar.gz;
     md5 = "944a4641e79e61043fdaf8f38ecbb4b3";
@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ flex bison zlib libpng ncurses ed ];
+
+  hardeningDisable = [ "format" ];
 
   # fixes "error: conflicting types for 'calloc'", etc.
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''

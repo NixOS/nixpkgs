@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    gcc tie.c -o tie
+    cc tie.c -o tie
   '';
 
   installPhase = ''

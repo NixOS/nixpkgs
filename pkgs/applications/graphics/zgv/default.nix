@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image pkgconfig libjpeg libpng libtiff ];
 
+  hardeningDisable = [ "format" ];
+
   makeFlags = [
     "BACKEND=SDL"
   ];

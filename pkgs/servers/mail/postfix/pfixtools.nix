@@ -38,6 +38,8 @@ stdenv.mkDerivation {
                       --replace /bin/bash ${bash}/bin/bash;
   '';
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+
   makeFlags = "DESTDIR=$(out) prefix=";
 
   meta = {

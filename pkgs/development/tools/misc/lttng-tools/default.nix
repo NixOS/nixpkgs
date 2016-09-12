@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ popt libuuid liburcu lttng-ust libxml2 ];
 
   prePatch = ''
-    sed -e "s|/sbin/modprobe|${kmod}/sbin/modprobe|g" \
+    sed -e "s|/sbin/modprobe|${kmod}/bin/modprobe|g" \
         -i src/bin/lttng-sessiond/modprobe.c
   '';
 

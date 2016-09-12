@@ -1,0 +1,26 @@
+diff --git a/src/Spy/Watcher.hs b/src/Spy/Watcher.hs
+     index 8512613..4df67d4 100644
+--- a/src/Spy/Watcher.hs
++++ b/src/Spy/Watcher.hs
+@@ -50,7 +50,7 @@ plainFormat = Plain
+ spy :: Spy -> IO b -> IO ()
+ spy config after = withManager $ \wm ->
+     runIndefinitely
+-      (watchTree wm (decodeString $ dir config)
++      (watchTree wm (dir config)
+                   (not . skipEvent config . eventPath)
+                   (handleEvent config)) 
+       (const after)
+@@ -106,9 +106,9 @@ eventTime (Modified _ t) = t
+ eventTime (Removed _ t) = t
+ 
+ eventPath :: Event -> FilePath
+-eventPath (Added fp _) = encodeString fp
+-eventPath (Modified fp _) = encodeString fp
+-eventPath (Removed fp _) = encodeString fp
++eventPath (Added fp _) = fp
++eventPath (Modified fp _) = fp
++eventPath (Removed fp _) = fp
+ 
+ eventType :: Event -> FilePath
+ eventType (Added _ _) = "Added"

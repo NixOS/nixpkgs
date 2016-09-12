@@ -19,7 +19,7 @@ in
       description = ''
         Configure the governor used to regulate the frequence of the
         available CPUs. By default, the kernel configures the
-        on-demand governor.
+        performance governor.
       '';
     };
 
@@ -38,7 +38,7 @@ in
       description = "CPU Frequency Governor Setup";
       after = [ "systemd-modules-load.service" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ cpupower config.system.sbin.modprobe ];
+      path = [ cpupower pkgs.kmod ];
       unitConfig.ConditionVirtualization = false;
       serviceConfig = {
         Type = "oneshot";

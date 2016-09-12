@@ -36,6 +36,8 @@ let
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
+    hardeningDisable = stdenv.lib.optional stdenv.isi686 "pic";
+
     C_INCLUDE_PATH = stdenv.lib.makeSearchPathOutput "dev" "include" buildInputs;
     LIBRARY_PATH = stdenv.lib.makeLibraryPath buildInputs;
     LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath (stdenv.lib.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);

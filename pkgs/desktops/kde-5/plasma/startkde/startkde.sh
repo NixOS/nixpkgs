@@ -119,9 +119,12 @@ if test $returncode -ne 0; then
 fi
 [ -r $configDir/startupconfig ] && . $configDir/startupconfig
 
-if test "$kdeglobals_kscreen_scalefactor" -ne 1; then
-    export QT_DEVICE_PIXEL_RATIO=$kdeglobals_kscreen_scalefactor
+if [ "$kdeglobals_kscreen_screenscalefactors" ]; then
+    export QT_SCREEN_SCALE_FACTORS="$kdeglobals_kscreen_screenscalefactors"
 fi
+#Manually disable auto scaling because we are scaling above
+#otherwise apps that manually opt in for high DPI get auto scaled by the developer AND manually scaled by us
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
 XCURSOR_PATH=~/.icons
 IFS=":" read -r -a xdgDirs <<< "$XDG_DATA_DIRS"
@@ -159,6 +162,12 @@ unset THEME
 #
 xsetroot -cursor_name left_ptr
 
+if test "$kcmfonts_general_forcefontdpi" -ne 0; then
+    xrdb -quiet -merge -nocpp <<EOF
+Xft.dpi: $kcmfonts_general_forcefontdpi
+EOF
+fi
+
 dl=$DESKTOP_LOCKED
 unset DESKTOP_LOCKED # Don't want it in the environment
 
@@ -176,32 +185,10 @@ if test -z "$dl"; then
   esac
 fi
 
-# Source scripts found in <config locations>/plasma-workspace/env/*.sh
-# (where <config locations> correspond to the system and user's configuration
-# directories, as identified by Qt's qtpaths,  e.g.  $HOME/.config
-# and /etc/xdg/ on Linux)
-#
-# This is where you can define environment variables that will be available to
-# all KDE programs, so this is where you can run agents using e.g. eval `ssh-agent`
-# or eval `gpg-agent --daemon`.
-# Note: if you do that, you should also put "ssh-agent -k" as a shutdown script
-#
-# (see end of this file).
-# For anything else (that doesn't set env vars, or that needs a window manager),
-# better use the Autostart folder.
-
-IFS=":" read -r -a scriptpath <<< $(qtpaths --paths GenericConfigLocation)
-# Add /env/ to the directory to locate the scripts to be sourced
-for prefix in "${scriptpath[@]}"; do
-  for file in "$prefix"/plasma-workspace/env/*.sh; do
-    test -r "$file" && . "$file" || true
-  done
-done
-
 echo 'startkde: Starting up...'  1>&2
 
 # Make sure that D-Bus is running
-if $qdbus >/dev/null 2>/dev/null; then
+if qdbus >/dev/null 2>/dev/null; then
     : # ok
 else
     echo 'startkde: Could not start D-Bus. Can you call qdbus?'  1>&2
@@ -240,11 +227,33 @@ KDE_SESSION_VERSION=5
 export KDE_SESSION_VERSION
 xprop -root -f KDE_SESSION_VERSION 32c -set KDE_SESSION_VERSION 5
 
-KDE_SESSION_UID=`id -ru`
+KDE_SESSION_UID=$(id -ru)
 export KDE_SESSION_UID
 
 XDG_CURRENT_DESKTOP=KDE
 export XDG_CURRENT_DESKTOP
+
+# Source scripts found in <config locations>/plasma-workspace/env/*.sh
+# (where <config locations> correspond to the system and user's configuration
+# directories, as identified by Qt's qtpaths,  e.g.  $HOME/.config
+# and /etc/xdg/ on Linux)
+#
+# This is where you can define environment variables that will be available to
+# all KDE programs, so this is where you can run agents using e.g. eval `ssh-agent`
+# or eval `gpg-agent --daemon`.
+# Note: if you do that, you should also put "ssh-agent -k" as a shutdown script
+#
+# (see end of this file).
+# For anything else (that doesn't set env vars, or that needs a window manager),
+# better use the Autostart folder.
+
+IFS=":" read -r -a scriptpath <<< $(qtpaths --paths GenericConfigLocation)
+# Add /env/ to the directory to locate the scripts to be sourced
+for prefix in "${scriptpath[@]}"; do
+  for file in "$prefix"/plasma-workspace/env/*.sh; do
+    test -r "$file" && . "$file" || true
+  done
+done
 
 # At this point all the environment is ready, let's send it to kwalletd if running
 if test -n "$PAM_KWALLET_LOGIN" ; then
@@ -277,11 +286,6 @@ if test $? -ne 0; then
 fi
 
 qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
-
-# (NixOS) Run kbuildsycoca5 before starting the user session because things
-# may be missing or moved if they have run nixos-rebuild and it may not be
-# possible for them to start Konsole to run it manually!
-kbuildsycoca5
 
 # finally, give the session control to the session manager
 # see kdebase/ksmserver for the description of the rest of the startup sequence

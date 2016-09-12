@@ -5,7 +5,16 @@ with utils;
 
 let
 
-  fileSystems = attrValues config.fileSystems;
+  fileSystems' = toposort fsBefore (attrValues config.fileSystems);
+
+  fileSystems = if fileSystems' ? "result"
+                then # use topologically sorted fileSystems everywhere
+                     fileSystems'.result
+                else # the assertion below will catch this,
+                     # but we fall back to the original order
+                     # anyway so that other modules could check
+                     # their assertions too
+                     (attrValues config.fileSystems);
 
   prioOption = prio: optionalString (prio != null) " pri=${toString prio}";
 
@@ -162,6 +171,17 @@ in
 
   config = {
 
+    assertions = let
+      ls = sep: concatMapStringsSep sep (x: x.mountPoint);
+    in [
+      { assertion = ! (fileSystems' ? "cycle");
+        message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
+      }
+    ];
+
+    # Export for use in other modules
+    system.build.fileSystems = fileSystems;
+
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
     # Add the mount helpers to the system path so that `mount' can find them.
@@ -175,9 +195,12 @@ in
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
       in ''
         # This is a generated file.  Do not edit!
+        #
+        # To make changes, edit the fileSystems and swapDevices NixOS options
+        # in your /etc/nixos/configuration.nix file.
 
         # Filesystems.
-        ${flip concatMapStrings fileSystems (fs:
+        ${concatMapStrings (fs:
             (if fs.device != null then fs.device
              else if fs.label != null then "/dev/disk/by-label/${fs.label}"
              else throw "No device specified for mount point ‘${fs.mountPoint}’.")
@@ -188,7 +211,7 @@ in
             + " " + (if skipCheck fs then "0" else
                      if fs.mountPoint == "/" then "1" else "2")
             + "\n"
-        )}
+        ) fileSystems}
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
@@ -208,14 +231,15 @@ in
 
         formatDevice = fs:
           let
-            mountPoint' = escapeSystemdPath fs.mountPoint;
-            device' = escapeSystemdPath fs.device;
+            mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
+            device'  = escapeSystemdPath fs.device;
+            device'' = "${device}.device";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
-            wantedBy = [ "${mountPoint'}.mount" ];
-            before = [ "${mountPoint'}.mount" "systemd-fsck@${device'}.service" ];
-            requires = [ "${device'}.device" ];
-            after = [ "${device'}.device" ];
+            wantedBy = [ mountPoint' ];
+            before = [ mountPoint' "systemd-fsck@${device'}.service" ];
+            requires = [ device'' ];
+            after = [ device'' ];
             path = [ pkgs.utillinux ] ++ config.system.fsPackages;
             script =
               ''

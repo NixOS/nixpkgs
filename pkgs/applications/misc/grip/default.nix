@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk glib pkgconfig libgnome libgnomeui vte curl cdparanoia
     libid3tag ncurses libtool ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "GTK+-based audio CD player/ripper";
     homepage = "http://nostatic.org/grip";

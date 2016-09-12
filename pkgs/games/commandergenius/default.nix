@@ -1,44 +1,28 @@
 { lib, stdenv, fetchFromGitHub, SDL2, SDL2_image, pkgconfig
-, libvorbis, libogg, mesa, boost, curl, zlib, cmake }:
+, libvorbis, mesa_noglu, boost, cmake }:
 
 
 stdenv.mkDerivation rec {
   name = "commandergenius-${version}";
-  version = "194beta";
+  version = "1822release";
 
   src = fetchFromGitHub {
     owner = "gerstrong";
     repo = "Commander-Genius";
     rev = "v${version}";
-    sha256 = "0qxqzlmadxklrhxilbqj7y94fmbv0byj6vgpl59lb77lgs4y4x47";
+    sha256 = "07vxg8p1dnnkajzs5nifxpwn4mdd1hxsw05jl25gvaimpl9p2qc8";
   };
 
-  buildInputs = [ SDL2 SDL2_image pkgconfig libvorbis libogg mesa boost curl zlib cmake ];
+  buildInputs = [ SDL2 SDL2_image mesa_noglu boost libvorbis ];
 
-  patchPhase = ''
-    cat >> lib/GsKit/CMakeLists.txt <<EOF
-    execute_process(COMMAND sdl2-config --cflags
-      OUTPUT_VARIABLE CFLAGS)
-    string(REGEX REPLACE "^-I" "" CFLAGS2 \''${CFLAGS})
-    string(REGEX REPLACE " .*" "" SDLINC \''${CFLAGS2})
-    INCLUDE_DIRECTORIES(\''${SDLINC})
-    EOF
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  postPatch = ''
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(sdl2-config --cflags)"
+    sed -i 's,APPDIR games,APPDIR bin,' src/install.cmake
   '';
 
-  configurePhase = ''
-    cmake -DUSE_SDL2=yes -DBUILD_TARGET=LINUX -DCMAKE_INSTALL_PREFIX:PATH=$out -DCPACK_PACKAGE_INSTALL_DIRECTORY=$out
-    sed -i 's_/usr/share_$out_g' cmake_install.cmake
-    sed -i 's_/usr/share_$out_g' src/cmake_install.cmake
-  '';
-
-  installTargets = [ ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp src/CGeniusExe $out/bin
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Modern Interpreter for the Commander Keen Games";
     longdescription = ''
       Commander Genius is an open-source clone of
@@ -48,8 +32,8 @@ stdenv.mkDerivation rec {
       are required to do so
     '';
     homepage = "https://github.com/gerstrong/Commander-Genius";
-    maintainers = with stdenv.lib.maintainers; [ hce ]; 
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with maintainers; [ hce ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

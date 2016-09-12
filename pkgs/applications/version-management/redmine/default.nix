@@ -11,6 +11,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0x0zwxyj4dwbk7l64s3lgny10mjf0ba8jwrbafsm4d72sncmacv0";
   };
 
+  hardeningDisable = [ "format" ];
+
   # taken from redmine (2.5.1-2~bpo70+3) in debian wheezy-backports
   # needed to separate run-time and build-time directories
   patches = [
@@ -18,6 +20,7 @@ in stdenv.mkDerivation rec {
     ./2004_FHS_plugins_assets.patch
     ./2003_externalize_session_config.patch
   ];
+
   postPatch = ''
     substituteInPlace lib/redmine/plugin.rb --replace "File.join(Rails.root, 'plugins')" "ENV['RAILS_PLUGINS']"
     substituteInPlace lib/redmine/plugin.rb --replace "File.join(Rails.root, 'plugins', id.to_s, 'db', 'migrate')" "File.join(ENV['RAILS_PLUGINS'], id.to_s, 'db', 'migrate')"

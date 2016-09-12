@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   patches = [
         # Patches from the gentoo ebuild
 

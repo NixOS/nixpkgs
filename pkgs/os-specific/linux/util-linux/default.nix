@@ -2,11 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "util-linux-${version}";
-  version = "2.28";
+  version = stdenv.lib.concatStringsSep "." ([ majorVersion ]
+    ++ stdenv.lib.optional (patchVersion != "") patchVersion);
+  majorVersion = "2.28";
+  patchVersion = "1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${version}/${name}.tar.xz";
-    sha256 = "1fql204qn3098j34yd358l85ffp7a4kqjf7jf1qk2b4al7i4fn1r";
+    url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
+    sha256 = "03xnaw3c7pavxvvh1vnimcr44hlhhf25whawiyv8dxsflfj4xkiy";
   };
 
   patches = [

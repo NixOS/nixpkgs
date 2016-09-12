@@ -5,13 +5,13 @@
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-${version}";
 
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     rev = "v${version}";
-    sha256 = "06f1y87dqc7p6kq5npmg3ki8x4iacyjzd7nq7188x20y2zglrjbm";
+    sha256 = "15i17rj2bh2kda6d6rwcjhs2m3nfsrcyq3lj9vbgmacg0cdb22pp";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];

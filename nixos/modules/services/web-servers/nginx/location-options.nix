@@ -14,8 +14,25 @@ with lib;
       default = null;
       example = "http://www.example.org/";
       description = ''
-        Adds proxy_pass directive and sets default proxy headers Host, X-Real-Ip
-        and X-Forwarded-For.
+        Adds proxy_pass directive.
+      '';
+    };
+
+    index = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "index.php index.html";
+      description = ''
+        Adds index directive.
+      '';
+    };
+
+    tryFiles = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "$uri =404";
+      description = ''
+        Adds try_files directive.
       '';
     };
 

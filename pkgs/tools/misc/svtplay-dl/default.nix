@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace lib/svtplay_dl/fetcher/rtmp.py \
       --replace '"rtmpdump"' '"${rtmpdump}/bin/rtmpdump"'
 
-    substituteInPlace run-tests.sh \
+    substituteInPlace scripts/run-tests.sh \
       --replace 'PYTHONPATH=lib' 'PYTHONPATH=lib:$PYTHONPATH'
   '';
 
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = "sh run-tests.sh -2";
+  checkPhase = "sh scripts/run-tests.sh -2";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/spaam/svtplay-dl;

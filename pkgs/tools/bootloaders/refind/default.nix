@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, unzip, gnu-efi, efibootmgr, dosfstools, imagemagick }:
+{ stdenv, fetchurl, fetchpatch
+, gnu-efi, efibootmgr, dosfstools, imagemagick }:
 
 assert (stdenv.system == "x86_64-linux" ||stdenv.system == "i686-linux");
 
@@ -9,18 +9,28 @@ stdenv.mkDerivation rec {
   srcName = "refind-src-${meta.version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${meta.version}/${srcName}.zip";
-    sha256 = "0ai150rzx20sfl92j6y1p6qnyy0wbmazrlp2fg19acs98qyxl8lh";
+    url = "mirror://sourceforge/project/refind/${meta.version}/${srcName}.tar.gz";
+    sha256 = "1r2qp29mz08lx36i7x52i2598773bxvfhwryd954ssq2baifjav5";
   };
 
-  buildInputs = [ unzip gnu-efi efibootmgr dosfstools imagemagick ];
+  patches = [
+    (fetchpatch {
+      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=831258;filename=002-efiprot.patch;msg=10";
+      sha256 = "17h03h5mgkpamcj9jcq8h6x2admpknysrbdwccg7yxirlc52fc2s";
+      name = "002-efiprot.patch";
+    })
+  ];
+
+  buildInputs = [ gnu-efi efibootmgr dosfstools imagemagick ];
+
+  hardeningDisable = [ "stackprotector" ];
 
   HOSTARCH =
     if stdenv.system == "x86_64-linux" then "x64"
     else if stdenv.system == "i686-linux" then "ia32"
     else "null";
 
-  patchPhase = ''
+  postPatch = ''
     sed -e 's|-DEFI_FUNCTION_WRAPPER|-DEFI_FUNCTION_WRAPPER -maccumulate-outgoing-args|g' -i Make.common
     sed -e 's|-DEFIX64|-DEFIX64 -maccumulate-outgoing-args|g' -i Make.common
     sed -e 's|-m64|-maccumulate-outgoing-args -m64|g' -i filesystems/Make.gnuefi
@@ -55,9 +65,9 @@ stdenv.mkDerivation rec {
     install -D -m0644 gptsync/gptsync_${HOSTARCH}.efi $out/share/refind/tools_${HOSTARCH}/gptsync_${HOSTARCH}.efi
 
     # helper scripts
-    install -D -m0755 install.sh $out/bin/refind-install
-    install -D -m0755 mkrlconf.sh $out/bin/refind-mkrlconf
-    install -D -m0755 mvrefind.sh $out/bin/refind-mvrefind
+    install -D -m0755 refind-install $out/bin/refind-install
+    install -D -m0755 mkrlconf $out/bin/refind-mkrlconf
+    install -D -m0755 mvrefind $out/bin/refind-mvrefind
     install -D -m0755 fonts/mkfont.sh $out/bin/refind-mkfont
 
     # sample config files
@@ -76,7 +86,7 @@ stdenv.mkDerivation rec {
     rm -f $out/share/refind/fonts/mkfont.sh
 
     # icons
-    install -D -m0644 icons/* $out/share/refind/icons/
+    install -D -m0644 icons/*.png $out/share/refind/icons/
 
     # images
     install -D -m0644 images/*.{png,bmp} $out/share/refind/images/
@@ -90,11 +100,10 @@ stdenv.mkDerivation rec {
     # Post-install fixes
     sed -e "s|^ThisDir=.*|ThisDir=$out/share/refind/|g" -i $out/bin/refind-install
     sed -e "s|^RefindDir=.*|RefindDir=$out/share/refind/|g" -i $out/bin/refind-install
-    sed -e "s|^ThisScript=.*|ThisScript=$out/bin/refind-install|g" -i $out/bin/refind-install
   '';
 
   meta = with stdenv.lib; {
-    version = "0.9.2";
+    version = "0.10.3";
     description = "A graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based

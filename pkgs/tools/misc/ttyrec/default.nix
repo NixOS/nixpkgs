@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang-fixes.patch ];
 
-  makeFlags = []
+  makeFlags = [ "CFLAGS=-DSVR4" ]
     ++ stdenv.lib.optional stdenv.cc.isClang "CC=clang";
 
   installPhase = ''

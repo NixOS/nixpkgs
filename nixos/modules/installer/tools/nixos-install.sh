@@ -136,7 +136,6 @@ fi
 mkdir -m 0755 -p \
     $mountPoint/nix/var/nix/gcroots \
     $mountPoint/nix/var/nix/temproots \
-    $mountPoint/nix/var/nix/manifests \
     $mountPoint/nix/var/nix/userpool \
     $mountPoint/nix/var/nix/profiles \
     $mountPoint/nix/var/nix/db \
@@ -199,14 +198,6 @@ export NIX_OTHER_STORES=/tmp/root/nix:$NIX_OTHER_STORES
 
 p=@nix@/libexec/nix/substituters
 export NIX_SUBSTITUTERS=$p/copy-from-other-stores.pl:$p/download-from-binary-cache.pl
-
-
-# Make manifests available in the chroot.
-rm -f $mountPoint/nix/var/nix/manifests/*
-for i in /nix/var/nix/manifests/*.nixmanifest; do
-    chroot $mountPoint @nix@/bin/nix-store -r "$(readlink -f "$i")" > /dev/null
-    cp -pd "$i" $mountPoint/nix/var/nix/manifests/
-done
 
 
 if [ -z "$closure" ]; then

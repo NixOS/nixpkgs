@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ]);
 
   configurePhase = ''
-    export BOOST_INCLUDEDIR=${boost}/include
+    export BOOST_INCLUDEDIR=${boost.dev}/include
     export BOOST_LIBRARYDIR=${boost.out}/lib
 
     mkdir -p Build/Install

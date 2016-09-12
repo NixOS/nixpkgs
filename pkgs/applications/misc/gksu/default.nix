@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     libgksu
   ];
 
+  hardeningDisable = [ "format" ];
+
   patches = [
     # https://savannah.nongnu.org/bugs/index.php?36127
     ./gksu-2.0.2-glib-2.31.patch

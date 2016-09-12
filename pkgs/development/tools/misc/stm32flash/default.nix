@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "04k631g9lzvp9xr4sw51xpq1g542np61s1l8fpwx9rbsc8m5l0i6";
   };
 
+  buildFlags = [ "CC=cc" ];
+
   installPhase = ''
     # Manually copy, make install copies to /usr/local/bin
     mkdir -pv $out/bin/

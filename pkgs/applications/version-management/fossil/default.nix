@@ -1,24 +1,29 @@
-{stdenv, libiconv, fetchurl, zlib, openssl, tcl, readline, sqlite, withJson ? true}:
+{stdenv, libiconv, fetchurl, zlib, openssl, tcl, readline, sqlite, ed, which
+, tcllib, withJson ? true}:
 
 stdenv.mkDerivation rec {
-  name = "fossil-1.33";
+  name = "fossil-1.35";
 
   src = fetchurl {
     urls = 
       [
-        https://www.fossil-scm.org/download/fossil-src-1.33.tar.gz
+        https://www.fossil-scm.org/download/fossil-src-1.35.tar.gz
       ];
     name = "${name}.tar.gz";
-    sha256 = "0gkzd9nj3xyznh9x8whv0phdnj11l5c8164rc3l0jvs5i61c95b2";
+    sha256 = "07ds6rhq69bhydpm9a01mgdhxf88p9b6y5hdnhn8gjc7ba92zyf1";
   };
 
-  buildInputs = [ zlib openssl readline sqlite ]
+  buildInputs = [ zlib openssl readline sqlite which ed ]
              ++ stdenv.lib.optional stdenv.isDarwin libiconv;
   nativeBuildInputs = [ tcl ];
 
   doCheck = true;
 
   checkTarget = "test";
+
+  preCheck = ''
+    export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
+  '';
   configureFlags = if withJson then  "--json" else  "";
 
   preBuild=''

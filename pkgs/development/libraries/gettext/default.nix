@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
+  # FIXME stackprotector needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "format" "stackprotector" ];
+
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
   configureFlags = [ "--disable-csharp" "--with-xz" ]

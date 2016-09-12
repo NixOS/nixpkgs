@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline ];
   configureFlags = [ "--with-ui" "--with-readline" ];
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     homepage = http://hunspell.sourceforge.net;
     description = "Spell checker";

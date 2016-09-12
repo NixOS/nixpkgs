@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     python setup.py install --prefix=$out
     wrapProgram $out/bin/duplicity \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
-      --prefix PATH : "${gnupg}/bin:${ncftp}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp ]}"
     wrapProgram $out/bin/rdiffdir \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})"
   '';

@@ -87,16 +87,44 @@ rec {
   ];
 
   savannah = [
-    ftp://mirror.csclub.uwaterloo.ca/nongnu/
-    ftp://mirror.publicns.net/pub/nongnu/
-    ftp://savannah.c3sl.ufpr.br/
-    http://download.savannah.gnu.org/releases/
-    http://ftp.cc.uoc.gr/mirrors/nongnu.org/
-    http://ftp.twaren.net/Unix/NonGNU/
-    http://mirror.csclub.uwaterloo.ca/nongnu/
-    http://nongnu.askapache.com/
+    # Mirrors from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
+    http://mirror.easyname.at/nongnu/
+    http://mirror2.klaus-uwe.me/nongnu/
     http://savannah.c3sl.ufpr.br/
-    http://www.centervenus.com/mirrors/nongnu/
+    http://mirror.csclub.uwaterloo.ca/nongnu/
+    http://mirror.cedia.org.ec/nongnu/
+    http://ftp.igh.cnrs.fr/pub/nongnu/
+    http://mirror6.layerjet.com/nongnu
+    http://mirror.netcologne.de/savannah/
+    http://ftp.cc.uoc.gr/mirrors/nongnu.org/
+    http://nongnu.uib.no/
+    http://mirrors.fe.up.pt/pub/nongnu/
+    http://mirror.lihnidos.org/GNU/savannah/
+    http://savannah.mirror.si/
+    http://ftp.acc.umu.se/mirror/gnu.org/savannah/
+    http://ftp.twaren.net/Unix/NonGNU/
+    http://ftp.yzu.edu.tw/pub/nongnu/
+    http://mirror.rackdc.com/savannah/
+    http://savannah-nongnu-org.ip-connect.vn.ua/
+    http://www.mirrorservice.org/sites/download.savannah.gnu.org/releases/
+    http://savannah.spinellicreations.com/
+    http://gnu.mirrors.pair.com/savannah/savannah/
+    ftp://mirror.easyname.at/nongnu/
+    ftp://mirror2.klaus-uwe.me/nongnu/
+    ftp://savannah.c3sl.ufpr.br/savannah-nongnu/
+    ftp://mirror.csclub.uwaterloo.ca/nongnu/
+    ftp://mirror.cedia.org.ec/nongnu
+    ftp://ftp.igh.cnrs.fr/pub/nongnu/
+    ftp://mirror6.layerjet.com/nongnu/
+    ftp://mirror.netcologne.de/savannah/
+    ftp://nongnu.uib.no/pub/nongnu/
+    ftp://mirrors.fe.up.pt/pub/nongnu/
+    ftp://savannah.mirror.si/savannah/
+    ftp://ftp.twaren.net/Unix/NonGNU/
+    ftp://ftp.yzu.edu.tw/pub/nongnu/
+    ftp://savannah-nongnu-org.ip-connect.vn.ua/mirror/savannah.nongnu.org/
+    ftp://ftp.mirrorservice.org/sites/download.savannah.gnu.org/releases/
+    ftp://spinellicreations.com/gnu_dot_org_savannah_mirror/
   ];
 
   samba = [

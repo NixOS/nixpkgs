@@ -1,0 +1,76 @@
+From 75549414927212d4d1666730133805b33447de79 Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins.hb@gmail.com>
+Date: Tue, 3 Nov 2015 10:16:01 -0800
+Subject: [PATCH] muxavformat: add support for mp4 fallback audio signalling
+
+---
+diff --git a/libhb/muxavformat.c b/libhb/muxavformat.c
+index 0d70597..373c2ab 100644
+--- a/libhb/muxavformat.c
++++ b/libhb/muxavformat.c
+@@ -121,7 +121,7 @@ static int avformatInit( hb_mux_object_t * m )
+     hb_mux_data_t * track;
+     int meta_mux;
+     int max_tracks;
+-    int ii, ret;
++    int ii, jj, ret;
+ 
+     int clock_min, clock_max, clock;
+     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
+@@ -589,6 +589,56 @@ static int avformatInit( hb_mux_object_t * m )
+         }
+     }
+ 
++    // Check for audio track associations
++    for (ii = 0; ii < hb_list_count(job->list_audio); ii++)
++    {
++        audio = hb_list_item(job->list_audio, ii);
++        switch (audio->config.out.codec & HB_ACODEC_MASK)
++        {
++            case HB_ACODEC_FFAAC:
++            case HB_ACODEC_CA_AAC:
++            case HB_ACODEC_CA_HAAC:
++            case HB_ACODEC_FDK_AAC:
++            case HB_ACODEC_FDK_HAAC:
++                break;
++
++            default:
++            {
++                // Mark associated fallback audio tracks for any non-aac track
++                for(jj = 0; jj < hb_list_count( job->list_audio ); jj++ )
++                {
++                    hb_audio_t    * fallback;
++                    int             codec;
++
++                    if (ii == jj) continue;
++
++                    fallback = hb_list_item( job->list_audio, jj );
++                    codec = fallback->config.out.codec & HB_ACODEC_MASK;
++                    if (fallback->config.in.track == audio->config.in.track &&
++                        (codec == HB_ACODEC_FFAAC ||
++                         codec == HB_ACODEC_CA_AAC ||
++                         codec == HB_ACODEC_CA_HAAC ||
++                         codec == HB_ACODEC_FDK_AAC ||
++                         codec == HB_ACODEC_FDK_HAAC))
++                    {
++                        hb_mux_data_t * fallback_track;
++                        int           * sd;
++
++                        track = audio->priv.mux_data;
++                        fallback_track = fallback->priv.mux_data;
++                        sd = (int*)av_stream_new_side_data(track->st,
++                                                     AV_PKT_DATA_FALLBACK_TRACK,
++                                                     sizeof(int));
++                        if (sd != NULL)
++                        {
++                            *sd = fallback_track->st->index;
++                        }
++                    }
++                }
++            } break;
++        }
++    }
++
+     char * subidx_fmt =
+         "size: %dx%d\n"
+         "org: %d, %d\n"

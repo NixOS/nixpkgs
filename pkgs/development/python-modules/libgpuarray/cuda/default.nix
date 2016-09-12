@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "$p:${cudatoolkit}/lib:${clblas}/lib:${nvidia_x11}/lib" $1
+      patchelf --set-rpath "$p:${stdenv.lib.makeLibraryPath [ cudatoolkit clblas nvidia_x11 ]}" $1
     }
 
     fixRunPath Install/lib/libgpuarray.so

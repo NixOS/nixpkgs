@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk pkgconfig intltool ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     homepage = http://pio.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;

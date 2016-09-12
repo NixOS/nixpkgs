@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig intltool glib exo pcre libxfce4util libxfce4ui xfce4panel xfconf gtk ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "A command-line plugin";

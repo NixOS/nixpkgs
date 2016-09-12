@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   # https://bugs.freedesktop.org/show_bug.cgi?id=83631
   NIX_CFLAGS_COMPILE = "-DGLX_GLXEXT_LEGACY";
 
+  hardeningDisable = [ "format" ];
+
   postInstall = ''
     mv $out/inc $out/include
     mkdir -p $out/share/doc/${name}

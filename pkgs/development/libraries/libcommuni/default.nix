@@ -1,17 +1,18 @@
-{ fetchgit, qtbase, qmakeHook, which, stdenv
+{ stdenv, fetchFromGitHub, qtbase, qtdeclarative, qmakeHook, which
 }:
 
 stdenv.mkDerivation rec {
   name = "libcommuni-${version}";
-  version = "2016-03-23";
+  version = "2016-08-17";
 
-  src = fetchgit {
-    url = "https://github.com/communi/libcommuni.git";
-    rev = "6a5110b25e2838e7dc2c62d16b9fd06d12beee7e";
-    sha256 = "184ah5xqg5pgy8h6fyyz2k0vak1fmhrcidwz828yl4lsvz1vjqh1";
+  src = fetchFromGitHub {
+    owner = "communi";
+    repo = "libcommuni";
+    rev = "dedba6faf57c31c8c70fd563ba12d75a9caee8a3";
+    sha256 = "0wvs53z34vfs5xlln4a6sbd4981svag89xm0f4k20mb1i052b20i";
   };
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ qtbase qtdeclarative ];
   nativeBuildInputs = [ qmakeHook which ];
 
   enableParallelBuild = true;

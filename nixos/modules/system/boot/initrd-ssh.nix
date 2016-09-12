@@ -93,6 +93,10 @@ in
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.dropbear}/bin/dropbear
       cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
+
+      ${optionalString (cfg.hostRSAKey != null) "install -D ${cfg.hostRSAKey} $out/etc/dropbear/dropbear_rsa_host_key"}
+      ${optionalString (cfg.hostDSSKey != null) "install -D ${cfg.hostDSSKey} $out/etc/dropbear/dropbear_dss_host_key"}
+      ${optionalString (cfg.hostECDSAKey != null) "install -D ${cfg.hostECDSAKey} $out/etc/dropbear/dropbear_ecdsa_host_key"}
     '';
 
     boot.initrd.extraUtilsCommandsTest = ''
@@ -108,9 +112,9 @@ in
       touch /var/log/lastlog
 
       mkdir -p /etc/dropbear
-      ${optionalString (cfg.hostRSAKey != null) "ln -s ${cfg.hostRSAKey} /etc/dropbear/dropbear_rsa_host_key"}
-      ${optionalString (cfg.hostDSSKey != null) "ln -s ${cfg.hostDSSKey} /etc/dropbear/dropbear_dss_host_key"}
-      ${optionalString (cfg.hostECDSAKey != null) "ln -s ${cfg.hostECDSAKey} /etc/dropbear/dropbear_ecdsa_host_key"}
+      ${optionalString (cfg.hostRSAKey != null) "ln -s $extraUtils/etc/dropbear/dropbear_rsa_host_key /etc/dropbear/dropbear_rsa_host_key"}
+      ${optionalString (cfg.hostDSSKey != null) "ln -s $extraUtils/etc/dropbear/dropbear_dss_host_key /etc/dropbear/dropbear_dss_host_key"}
+      ${optionalString (cfg.hostECDSAKey != null) "ln -s $extraUtils/etc/dropbear/dropbear_ecdsa_host_key /etc/dropbear/dropbear_ecdsa_host_key"}
 
       mkdir -p /root/.ssh
       ${concatStrings (map (key: ''

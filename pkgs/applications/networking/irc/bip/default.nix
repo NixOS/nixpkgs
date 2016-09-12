@@ -30,10 +30,7 @@ in stdenv.mkDerivation {
     }
   ];
 
-  postPatch = ''
-  '';
-
-  configureFlags = [ "--disable-pie" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   buildInputs = [ bison flex autoconf automake openssl ];
 

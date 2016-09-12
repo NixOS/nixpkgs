@@ -31,6 +31,8 @@ let
       url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch";
       inherit sha256;
     };
+
+    features.grsecurity = true;
   };
 in
 
@@ -72,6 +74,11 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
+  modinst_arg_list_too_long =
+    { name = "modinst-arglist-too-long";
+      patch = ./modinst-arg-list-too-long.patch;
+    };
+
   ubuntu_fan_4_4 =
     { name = "ubuntu-fan";
       patch = ./ubuntu-fan-4.4.patch;
@@ -93,9 +100,9 @@ rec {
   grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.7.1";
-      grrev  = "201608161813";
-      sha256 = "0ppay8gv7ml7kajbin7gclhrpkmc6pggxcbzzngm7qwdjjk5pppj";
+    { kver   = "4.7.2";
+      grrev  = "201608211829";
+      sha256 = "1a7pvmb57w7j9s4ww8xvzzijlpnr2i7nhm7jhgfz4n5w3jvxcny3";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -144,4 +151,6 @@ rec {
         sha256 = "14rm1qr87p7a5prz8g5fwbpxzdp3ighj095x8rvhm8csm20wspyy";
       };
     };
+
+  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 }

@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sz2n7jbmg3g97bs613xxjpzqbsl5rvpg6v7g3x3ycyd35r8vsfp";
   };
 
-  # It built code to be put in a shared object without -fPIC
-  NIX_CFLAGS_COMPILE = "-fPIC";
+  hardeningDisable = [ "format" ];
 
   prePatch = ''
     sed -i s,/usr/bin/perl,${perl}/bin/perl, doc/eperl

@@ -17,13 +17,13 @@ let
   # fetch hashes by running `print-hashes.sh 1.9.0`
   bootstrapHash =
     if stdenv.system == "i686-linux"
-    then "dd4d9bf1b9393867eb18d00431e8fb733894984f2c7b5154bc1b64d045077b45"
+    then "be93dd2b80a97f2877679950d56990628c6547b953294f16bf6d69c18a39edc0"
     else if stdenv.system == "x86_64-linux"
-    then "288ff13efa2577e81c77fc2cb6e2b49b1ed0ceab51b4fa12f7efb87039ac49b7"
+    then "f189303d52b37c8bb694b9d9739ae73ffa926cbdeffde1d5d6a5c6e811940293"
     else if stdenv.system == "i686-darwin"
-    then "4d4d4b256d6bd6ae2527cf61007b2553de200f0a1910b7ad41e4f51d2b21e536"
+    then "40d4782a58dd5bef22dbbaa7a363f3b42f844628db07205f6435ac934f350061"
     else if stdenv.system == "x86_64-darwin"
-    then "d59b5509e69c1cace20a57072e3b3ecefdbfd8c7e95657b0ff2ac10aa1dfebe6"
+    then "4bb71249f4afd7cee07f63d681f9fcb1b525ee3dfd49722adab7a40024e45af7"
     else throw "missing boostrap hash for platform ${stdenv.system}";
 
   needsPatchelf = stdenv.isLinux;
@@ -33,7 +33,7 @@ let
      sha256 = bootstrapHash;
   };
 
-  version = "1.9.0";
+  version = "1.10.0";
 in
 
 rec {

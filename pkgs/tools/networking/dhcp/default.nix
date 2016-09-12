@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl makeWrapper openldap bind ];
 
   configureFlags = [
-    "--with-libbind=${bind}"
+    "--with-libbind=${bind.dev}"
     "--enable-failover"
     "--enable-execute"
     "--enable-tracing"

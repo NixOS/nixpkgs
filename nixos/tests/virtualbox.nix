@@ -4,12 +4,12 @@ with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
 
 let
-  testVMConfig = vmName: attrs: { config, pkgs, ... }: let
+  testVMConfig = vmName: attrs: { config, pkgs, lib, ... }: let
     guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
     miniInit = ''
       #!${pkgs.stdenv.shell} -xe
-      export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
       mkdir -p /var/run/dbus
       cat > /etc/passwd <<EOF

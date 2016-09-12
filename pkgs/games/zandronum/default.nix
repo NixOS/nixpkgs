@@ -35,6 +35,8 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/zandronum
