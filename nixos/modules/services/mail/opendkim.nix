@@ -23,11 +23,7 @@ in {
 
     services.opendkim = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the OpenDKIM sender authentication system.";
-      };
+      enable = mkEnableOption "the OpenDKIM sender authentication system";
 
       socket = mkOption {
         type = types.str;
