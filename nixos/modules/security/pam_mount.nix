@@ -12,13 +12,7 @@ in
   options = {
 
     security.pam.mount = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable PAM mount system to mount fileystems on user login.
-        '';
-      };
+      enable = mkEnableOption "PAM mount system to mount fileystems on user login";
 
       extraVolumes = mkOption {
         type = types.listOf types.str;
