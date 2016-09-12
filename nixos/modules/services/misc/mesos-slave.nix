@@ -18,11 +18,7 @@ in {
 
   options.services.mesos = {
     slave = {
-      enable = mkOption {
-        description = "Whether to enable the Mesos Slave.";
-        default = false;
-        type = types.bool;
-      };
+      enable = mkEnableOption "the Mesos Slave";
 
       ip = mkOption {
         description = "IP address to listen on.";
