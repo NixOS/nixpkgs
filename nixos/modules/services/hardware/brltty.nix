@@ -9,11 +9,7 @@ in {
 
   options = {
 
-    services.brltty.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Whether to enable the BRLTTY daemon.";
-    };
+    services.brltty.enable = mkEnableOption "the BRLTTY daemon";
 
   };
 
