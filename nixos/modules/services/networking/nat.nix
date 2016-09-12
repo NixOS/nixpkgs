@@ -66,14 +66,7 @@ in
 
   options = {
 
-    networking.nat.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description =
-        ''
-          Whether to enable Network Address Translation (NAT).
-        '';
-    };
+    networking.nat.enable = mkEnableOption "Network Address Translation (NAT)";
 
     networking.nat.internalInterfaces = mkOption {
       type = types.listOf types.str;
