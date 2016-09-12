@@ -13,11 +13,7 @@ in
   options = {
 
     services.xserver.desktopManager.xfce = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Xfce desktop environment.";
-      };
+      enable = mkEnableOption "the Xfce desktop environment";
 
       thunarPlugins = mkOption {
         default = [];
