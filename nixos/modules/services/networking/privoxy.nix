@@ -30,13 +30,7 @@ in
 
     services.privoxy = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the Privoxy non-caching filtering proxy.
-        '';
-      };
+      enable = mkEnableOption "the Privoxy non-caching filtering proxy";
 
       listenAddress = mkOption {
         type = types.str;
