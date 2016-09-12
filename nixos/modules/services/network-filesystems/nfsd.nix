@@ -19,12 +19,7 @@ in
     services.nfs = {
 
       server = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Whether to enable the kernel's NFS server.
-          '';
-        };
+        enable = mkEnableOption "the kernel's NFS server";
 
         exports = mkOption {
           default = "";
