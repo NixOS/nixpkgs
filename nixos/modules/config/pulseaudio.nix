@@ -83,13 +83,7 @@ in {
   options = {
 
     hardware.pulseaudio = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the PulseAudio sound server.
-        '';
-      };
+      enable = mkEnableOption "the PulseAudio sound server";
 
       systemWide = mkOption {
         type = types.bool;
