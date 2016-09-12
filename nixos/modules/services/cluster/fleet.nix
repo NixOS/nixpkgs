@@ -9,13 +9,7 @@ in {
 
   ##### Interface
   options.services.fleet = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable fleet service.
-      '';
-    };
+    enable = mkEnableOption "fleet service";
 
     listen = mkOption {
       type = types.listOf types.str;
