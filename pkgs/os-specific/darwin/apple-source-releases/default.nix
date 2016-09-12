@@ -13,37 +13,33 @@ let
       libiconv      = "44";
       Libnotify     = "150.40.1";
       objc4         = "680";
+      eap8021x      = "222.40.1";
+      dyld          = "360.22";
+      architecture  = "268";
+      CommonCrypto  = "60075.50.1";
+      copyfile      = "127";
+      Csu           = "85";
+      ppp           = "809.50.2";
+      libclosure    = "65";
+      Libinfo       = "477.50.4";
+      removefile    = "41";
+      libresolv     = "60";
+
+      # Their release page is a bit of a mess here, so I'm going to lie a bit and say this version
+      # is the right one, even though it isn't. The version I have here doesn't appear to be linked
+      # to any OS releases, but Apple also doesn't mention mDNSResponder from 10.11 to 10.11.6, and
+      # neither of those versions are publicly available.
+      mDNSResponder = "625.41.2";
+
+      libutil       = "43";
+      libunwind     = "35.3";
     };
     "osx-10.11.5" = {
       Libc          = "1082.50.1"; # 10.11.6 still unreleased :/
     };
     "osx-10.10.5" = {
       adv_cmds      = "158";
-      architecture  = "266";
-      CF            = "1153.18";
-      CommonCrypto  = "60061.30.1";
-      copyfile      = "118.1.2";
-      Csu           = "85";
-      dyld          = "353.2.3";
-      eap8021x      = "198.30.1";
-      libauto       = "186";
-      Libc          = "1044.40.1";
-      libclosure    = "65";
-      libdispatch   = "442.1.4";
-      libiconv      = "42";
-      Libinfo       = "459.40.1";
-      Libnotify     = "133.1.1";
-      libpthread    = "105.40.1";
-      libresolv     = "57";
-      Libsystem     = "1213";
-      libunwind     = "35.3";
-      libutil       = "38";
-      mDNSResponder = "576.30.4";
-      objc4         = "647";
-      ppp           = "786.40.2";
-      removefile    = "35";
       Security      = "57031.40.6";
-      xnu           = "2782.40.9";
 
       IOAudioFamily                        = "203.3";
       IOFireWireFamily                     = "458";
@@ -65,15 +61,11 @@ let
       CF                 = "855.17";
       launchd            = "842.92.1";
       libauto            = "185.5";
-      Libc               = "997.90.3";
+      Libc               = "997.90.3"; # We use this, but not from here
       libdispatch        = "339.92.1";
-      libiconv           = "41";
-      Libnotify          = "121.20.1";
       Libsystem          = "1197.1.1";
-      objc4              = "551.1";
       Security           = "55471.14.18";
       security_dotmac_tp = "55107.1";
-      xnu                = "2422.115.4";
 
       IOStorageFamily = "172";
     };
@@ -181,21 +173,20 @@ let
 
   packages = {
     inherit (adv_cmds) ps locale;
-    architecture    = applePackage "architecture"      "osx-10.10.5"     "0fc9s1f4mnzaixrmkkq9y8276g8i5grryh2dggi4h347i33kd097" {};
+    architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
     bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-7.0"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
     CF              = applePackage "CF"                "osx-10.9.5"      "1sadmxi9fsvsmdyxvg2133sdzvkzwil5fvyyidxsyk1iyfzqsvln" {};
-    CommonCrypto    = applePackage "CommonCrypto"      "osx-10.10.5"     "0rm1r552i3mhyik2y3309dw90ap6vlhk583237jxfmdkip4c6mdr" {};
+    CommonCrypto    = applePackage "CommonCrypto"      "osx-10.11.6"     "0vllfpb8f4f97wj2vpdd7w5k9ibnsbr6ff1zslpp6q323h01n25y" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {};
-    copyfile        = applePackage "copyfile"          "osx-10.10.5"     "1s90wv9jsi6ismdnc1my3rxaa83k3s5ialrs5xlrmyb7s0pgvz7j" {};
+    copyfile        = applePackage "copyfile"          "osx-10.11.6"     "1rkf3iaxmjz5ycgrmf0g971kh90jb2z1zqxg5vlqz001s4y457gs" {};
     CoreOSMakefiles = applePackage "CoreOSMakefiles"   "osx-10.5"        "0kxp53spbn7109l7cvhi88pmfsi81lwmbws819b6wr3hm16v84f4" {};
-    Csu             = applePackage "Csu"               "osx-10.10.5"     "0yh5mslyx28xzpv8qww14infkylvc1ssi57imhi471fs91sisagj" {};
-    dtrace          = applePackage "dtrace"            "osx-10.10.5"     "0pp5x8dgvzmg9vvg32hpy2brm17dpmbwrcr4prsmdmfvd4767wcf" {};
-    dtracen         = applePackage "dtrace"            "osx-10.11.6"     "04mi0jy8gy0w59rk9i9dqznysv6fzz1v5mq779s41cp308yi0h1c" {};
-    dyld            = applePackage "dyld"              "osx-10.10.5"     "167f74ln8pmfimwn6kwh199ylvy3fw72fd15da94mf34ii0zar6k" {};
-    eap8021x        = applePackage "eap8021x"          "osx-10.10.5"     "1f37dpbcgrd1b14nrv2lpqrkap74myjbparz9masx92df6kcn7l2" {};
-    IOKit           = applePackage "IOKit"             "osx-10.10.5"     "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x0m" { inherit IOKitSrcs; };
+    Csu             = applePackage "Csu"               "osx-10.11.6"     "0yh5mslyx28xzpv8qww14infkylvc1ssi57imhi471fs91sisagj" {};
+    dtrace          = applePackage "dtrace"            "osx-10.11.6"     "0pp5x8dgvzmg9vvg32hpy2brm17dpmbwrcr4prsmdmfvd4767wc0" {};
+    dyld            = applePackage "dyld"              "osx-10.11.6"     "0qkjmjazm2zpgvwqizhandybr9cm3gz9pckx8rmf0py03faafc08" {};
+    eap8021x        = applePackage "eap8021x"          "osx-10.11.6"     "15bbgjhi8l7hbib41gqcldzbf3hf6105jbwc745hp1gmrscw4zch" {};
+    IOKit           = applePackage "IOKit"             "osx-10.11.6"     "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x00" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "0w30hvwqq8j5n90s3qyp0fccxflvrmmjnicjri4i1vd2g196jdgj" {};
     libauto         = applePackage "libauto"           "osx-10.9.5"      "17z27yq5d7zfkwr49r7f0vn9pxvj95884sd2k6lq6rfaz9gxqhy3" {};
     Libc            = applePackage "Libc"              "osx-10.11.5"     "1qv7r0dgz06jy9i5agbqzxgdibb0m8ylki6g5n5pary88lzrawfd" {
@@ -205,21 +196,21 @@ let
       };
     };
     Libc_old        = applePackage "Libc/825_40_1.nix" "osx-10.8.5"      "0xsx1im52gwlmcrv4lnhhhn9dyk5ci6g27k6yvibn9vj8fzjxwcf" {};
-    libclosure      = applePackage "libclosure"        "osx-10.10.5"     "1zqy1zvra46cmqv6vsf1mcsz3a76r9bky145phfwh4ab6y15vjpq" {};
+    libclosure      = applePackage "libclosure"        "osx-10.11.6"     "1zqy1zvra46cmqv6vsf1mcsz3a76r9bky145phfwh4ab6y15vjpq" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.9.5"      "1lc5033cmkwxy3r26gh9plimxshxfcbgw6i0j7mgjlnpk86iy5bk" {};
     libiconv        = applePackage "libiconv"          "osx-10.11.6"     "11h6lfajydri4widis62q8scyz7z8l6msqyx40ly4ahsdlbl0981" {};
-    Libinfo         = applePackage "Libinfo"           "osx-10.10.5"     "19n72s652rrqnc9hzlh4xq3h7xsfyjyklmcgyzyj0v0z68ww3z6h" {};
+    Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "0qjgkd4y8sjvwjzv5wwyzkb61pg8wwg95bkp721dgzv119dqhr8x" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "02sd82ig2jvvyyfschmb4gpz6psnizri8sh6i982v341x6y4ysl7" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.11.6"     "14rhhfzb75r9jf3kyj8fzd01n09n7km1fsdj3dzl3lkkp1sir78m" {};
     libpthread      = applePackage "libpthread"        "osx-10.11.6"     "1kbw738cmr9pa7pz1igmajs307clfq7gv2vm1sqdzhcnnjxbl28w" {};
-    libresolv       = applePackage "libresolv"         "osx-10.10.5"     "0nvssf4qaqgs1dxwayzdy66757k99969f6c7n68n58n2yh6f5f6a" {};
+    libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.9.5"      "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim1gw43x4lvz4qydpp5kg2rh" {};
-    libutil         = applePackage "libutil"           "osx-10.10.5"     "12gsvmj342n5d81kqwba68bmz3zf2757442g1sz2y5xmcapa3g5f" {};
-    libunwind       = applePackage "libunwind"         "osx-10.10.5"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
-    mDNSResponder   = applePackage "mDNSResponder"     "osx-10.10.5"     "1h4jin7ya1ih7v0hksi7gfmbv767pv8wsyyv1qfy2xw36x8wnds7" {};
+    libutil         = applePackage "libutil"           "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
+    libunwind       = applePackage "libunwind"         "osx-10.11.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk10" {};
+    mDNSResponder   = applePackage "mDNSResponder"     "osx-10.11.6"     "069incq28a78yh1bnr17h9cd5if5mwqpq8ahnkyxxx25fkaxgzcf" {};
     objc4           = applePackage "objc4"             "osx-10.11.6"     "00b7vbgxni8frrqyi69b4njjihlwydzjd9zj9x4z5dbx8jabkvrj" {};
-    ppp             = applePackage "ppp"               "osx-10.10.5"     "01v7i0xds185glv8psvlffylfcfhbx1wgsfg74kx5rh3lyrigwrb" {};
-    removefile      = applePackage "removefile"        "osx-10.10.5"     "1f2jw5irq6fz2jv5pag1w2ivfp8659v74f0h8kh0yx0rqw4asm33" {};
+    ppp             = applePackage "ppp"               "osx-10.11.6"     "1dql6r1v0vbcs04958nn2i6p31yfsxyy51jca63bm5mf0gxalk3f" {};
+    removefile      = applePackage "removefile"        "osx-10.11.6"     "1b6r74ry3k01kypvlaclf33fha15pcm0kzx9zrymlg66wg0s0i3r" {};
     Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
     xnu             = applePackage "xnu"               "osx-10.11.6"     "0yhziq4dqqcbjpf6vyqn8xhwva2zb525gndkx8cp8alzwp76jnr9" {};
 
