@@ -16,11 +16,7 @@ in
 
     services.xfs = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the X Font Server.";
-      };
+      enable = mkEnableOption "the X Font Server";
 
     };
 
