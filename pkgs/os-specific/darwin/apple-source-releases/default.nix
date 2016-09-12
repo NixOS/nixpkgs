@@ -11,6 +11,8 @@ let
       xnu           = "3248.60.10";
       libpthread    = "138.10.4";
       libiconv      = "44";
+      Libnotify     = "150.40.1";
+      objc4         = "680";
     };
     "osx-10.11.5" = {
       Libc          = "1082.50.1"; # 10.11.6 still unreleased :/
@@ -208,14 +210,14 @@ let
     libiconv        = applePackage "libiconv"          "osx-10.11.6"     "11h6lfajydri4widis62q8scyz7z8l6msqyx40ly4ahsdlbl0981" {};
     Libinfo         = applePackage "Libinfo"           "osx-10.10.5"     "19n72s652rrqnc9hzlh4xq3h7xsfyjyklmcgyzyj0v0z68ww3z6h" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "02sd82ig2jvvyyfschmb4gpz6psnizri8sh6i982v341x6y4ysl7" {};
-    Libnotify       = applePackage "Libnotify"         "osx-10.9.5"      "164rx4za5z74s0mk9x0m1815r1m9kfal8dz3bfaw7figyjd6nqad" {};
+    Libnotify       = applePackage "Libnotify"         "osx-10.11.6"     "14rhhfzb75r9jf3kyj8fzd01n09n7km1fsdj3dzl3lkkp1sir78m" {};
     libpthread      = applePackage "libpthread"        "osx-10.11.6"     "1kbw738cmr9pa7pz1igmajs307clfq7gv2vm1sqdzhcnnjxbl28w" {};
     libresolv       = applePackage "libresolv"         "osx-10.10.5"     "0nvssf4qaqgs1dxwayzdy66757k99969f6c7n68n58n2yh6f5f6a" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.9.5"      "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim1gw43x4lvz4qydpp5kg2rh" {};
     libutil         = applePackage "libutil"           "osx-10.10.5"     "12gsvmj342n5d81kqwba68bmz3zf2757442g1sz2y5xmcapa3g5f" {};
     libunwind       = applePackage "libunwind"         "osx-10.10.5"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.10.5"     "1h4jin7ya1ih7v0hksi7gfmbv767pv8wsyyv1qfy2xw36x8wnds7" {};
-    objc4           = applePackage "objc4"             "osx-10.9.5"      "1jrdb6yyb5jwwj27c1r0nr2y2ihqjln8ynj61mpkvp144c1cm5bg" {};
+    objc4           = applePackage "objc4"             "osx-10.11.6"     "00b7vbgxni8frrqyi69b4njjihlwydzjd9zj9x4z5dbx8jabkvrj" {};
     ppp             = applePackage "ppp"               "osx-10.10.5"     "01v7i0xds185glv8psvlffylfcfhbx1wgsfg74kx5rh3lyrigwrb" {};
     removefile      = applePackage "removefile"        "osx-10.10.5"     "1f2jw5irq6fz2jv5pag1w2ivfp8659v74f0h8kh0yx0rqw4asm33" {};
     Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
