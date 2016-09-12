@@ -20,7 +20,7 @@ with lib;
         <!-- FIXME: ugly, see #10721 -->
         <programlisting>
         nixpkgs.config.packageOverrides = pkgs: {
-          hello = overrideDerivation pkgs.hello (attrs: {
+          hello = pkgs.stdenv.lib.overrideDerivation pkgs.hello (attrs: {
             outputs = attrs.outputs or ["out"] ++ ["debug"];
             buildInputs = attrs.buildInputs ++ [&lt;nixpkgs/pkgs/build-support/setup-hooks/separate-debug-info.sh>];
           });
