@@ -40,11 +40,7 @@ in {
   ###### interface
 
   options.services.neo4j = {
-    enable = mkOption {
-      description = "Whether to enable neo4j.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "neo4j";
 
     package = mkOption {
       description = "Neo4j package to use.";
