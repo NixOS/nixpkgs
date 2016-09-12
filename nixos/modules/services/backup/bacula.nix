@@ -165,13 +165,7 @@ let
 in {
   options = {
     services.bacula-fd = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the Bacula File Daemon.
-        '';
-      };
+      enable = mkEnableOption "the Bacula File Daemon";
  
       name = mkOption {
         default = "${config.networking.hostName}-fd";
@@ -225,13 +219,7 @@ in {
     };
 
     services.bacula-sd = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable Bacula Storage Daemon.
-        '';
-      };
+      enable = mkEnableOption "Bacula Storage Daemon";
  
       name = mkOption {
         default = "${config.networking.hostName}-sd";
@@ -290,13 +278,7 @@ in {
     };
 
     services.bacula-dir = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable Bacula Director Daemon.
-        '';
-      };
+      enable = mkEnableOption "Bacula Director Daemon";
 
       name = mkOption {
         default = "${config.networking.hostName}-dir";
