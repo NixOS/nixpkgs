@@ -12,13 +12,7 @@ in {
 
   ##### Interface
   options.services.panamax = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable Panamax service.
-      '';
-    };
+    enable = mkEnableOption "Panamax service";
 
     UIPort = mkOption {
       type = types.int;
