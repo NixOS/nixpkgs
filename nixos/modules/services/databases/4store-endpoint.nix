@@ -13,10 +13,7 @@ with lib;
 
     services.fourStoreEndpoint = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable 4Store SPARQL endpoint.";
-      };
+      enable = mkEnableOption "4Store SPARQL endpoint";
 
       database = mkOption {
         default = config.services.fourStore.database;
