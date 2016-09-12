@@ -15,10 +15,7 @@ in
 
     krb5 = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable Kerberos V.";
-      };
+      enable = mkEnableOption "Kerberos V";
 
       defaultRealm = mkOption {
         default = "ATENA.MIT.EDU";
