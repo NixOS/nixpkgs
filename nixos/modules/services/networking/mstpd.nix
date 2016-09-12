@@ -6,13 +6,7 @@ with lib;
 {
   options.services.mstpd = {
     
-    enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Whether to enable the multiple spanning tree protocol daemon.
-      '';
-    };
+    enable = mkEnableOption "the multiple spanning tree protocol daemon";
 
   };
 
