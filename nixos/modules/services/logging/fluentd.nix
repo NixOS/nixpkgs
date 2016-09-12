@@ -10,11 +10,7 @@ in {
   options = {
 
     services.fluentd = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable fluentd.";
-      };
+      enable = mkEnableOption "fluentd";
 
       config = mkOption {
         type = types.lines;
