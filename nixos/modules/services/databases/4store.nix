@@ -14,10 +14,7 @@ with lib;
 
     services.fourStore = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable 4Store RDF database server.";
-      };
+      enable = mkEnableOption "4Store RDF database server";
 
       database = mkOption {
         default = "";
