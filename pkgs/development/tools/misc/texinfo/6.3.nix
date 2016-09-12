@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "texinfo-6.1";
+  name = "texinfo-6.3";
 
   src = fetchurl {
     url = "mirror://gnu/texinfo/${name}.tar.xz";
-    sha256 = "1ll3d0l8izygdxqz96wfr2631kxahifwdknpgsx2090vw963js5c";
+    sha256 = "0fpr9kdjjl6nj2pc50k2zr7134hvqz8bi8pfqa7131a9lpzz6v14";
   };
 
   buildInputs = [ perl xz ]
