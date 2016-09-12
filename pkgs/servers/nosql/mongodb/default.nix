@@ -63,8 +63,6 @@ in stdenv.mkDerivation rec {
       # We remove the build flags from buildInfo data.
       ./forget-build-dependencies.patch
 
-      ./asio-sslv3.patch  # remove when using system asio
-
       (fetchpatch {
         url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
         name = "boost160.patch";
