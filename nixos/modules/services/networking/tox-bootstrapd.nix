@@ -19,14 +19,7 @@ in
 {
   options =
     { services.toxBootstrapd =
-        { enable = mkOption {
-            type = types.bool;
-            default = false;
-            description =
-              ''
-                Whether to enable the Tox DHT bootstrap daemon.
-              '';
-          };
+        { enable = mkEnableOption "the Tox DHT bootstrap daemon";
 
           port = mkOption {
             type = types.int;
