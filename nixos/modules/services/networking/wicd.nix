@@ -26,7 +26,9 @@ with lib;
     environment.systemPackages = [pkgs.wicd];
 
     systemd.services.wicd = {
-      after = [ "network-interfaces.target" ];
+      after = [ "network-pre.target" ];
+      before = [ "network.target" ];
+      wants = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${pkgs.wicd}/sbin/wicd -f";
     };
