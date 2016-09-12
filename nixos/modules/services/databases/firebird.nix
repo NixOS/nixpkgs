@@ -40,12 +40,7 @@ in
 
     services.firebird = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable the Firebird super server.
-        '';
-      };
+      enable = mkEnableOption "the Firebird super server";
 
       package = mkOption {
         default = pkgs.firebirdSuper;
