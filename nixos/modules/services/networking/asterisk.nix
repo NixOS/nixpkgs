@@ -81,13 +81,7 @@ in
 {
   options = {
     services.asterisk = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the Asterisk PBX server.
-        '';
-      };
+      enable = mkEnableOption "the Asterisk PBX server";
 
       extraConfig = mkOption {
         default = "";
