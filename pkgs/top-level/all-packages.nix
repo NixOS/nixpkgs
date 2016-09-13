@@ -945,6 +945,8 @@ in
 
   asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
+  asunder = callPackage ../applications/audio/asunder { };
+
   autossh = callPackage ../tools/networking/autossh { };
 
   asynk = callPackage ../tools/networking/asynk { };
