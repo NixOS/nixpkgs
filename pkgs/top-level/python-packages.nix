@@ -28236,6 +28236,9 @@ in modules // {
       sha256 = "0v8ziaam2r637v94ra4dbjw6jzxz99gs5x4i585kgag1v204yb9b";
     };
 
+    #https://bitbucket.org/fdik/pypeg/issues/36/test-failures-on-py35
+    doCheck = !isPy3k;
+
     meta = {
       description = "PEG parser interpreter in Python";
       homepage = http://fdik.org/pyPEG;
