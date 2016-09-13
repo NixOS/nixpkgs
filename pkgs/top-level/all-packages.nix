@@ -5529,6 +5529,8 @@ in
     ppx_assert = callPackage ../development/ocaml-modules/janestreet/ppx-assert.nix {};
 
     ppx_inline_test = callPackage ../development/ocaml-modules/janestreet/ppx-inline-test.nix {};
+
+    ppx_bench = callPackage ../development/ocaml-modules/janestreet/ppx-bench.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
