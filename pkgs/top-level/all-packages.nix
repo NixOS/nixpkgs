@@ -5504,6 +5504,11 @@ in
 
     # Jane Street
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
+
+    buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
+
+    ppx_core = callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
+
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
