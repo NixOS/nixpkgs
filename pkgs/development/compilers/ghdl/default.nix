@@ -10,7 +10,7 @@ let
   version = "0.33";
 in
 stdenv.mkDerivation rec {
-  name = "ghdl-${version}";
+  name = "ghdl-${flavour}-${version}";
 
   src = fetchFromGitHub {
     owner = "tgingold";
