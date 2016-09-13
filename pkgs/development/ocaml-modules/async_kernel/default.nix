@@ -1,5 +1,5 @@
 {stdenv, buildOcaml, fetchurl, core_kernel,
- bin_prot, fieldslib, pa_ounit, pa_test,
+ bin_prot, fieldslib_p4, pa_ounit, pa_test,
  sexplib, herelib}:
 
 buildOcaml rec {
@@ -14,7 +14,7 @@ buildOcaml rec {
   };
 
   buildInputs = [ pa_test pa_ounit ];
-  propagatedBuildInputs = [ core_kernel bin_prot fieldslib herelib sexplib ];
+  propagatedBuildInputs = [ core_kernel bin_prot fieldslib_p4 herelib sexplib ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/async_kernel;

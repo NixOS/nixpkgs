@@ -5202,7 +5202,7 @@ in
 
     faillib = callPackage ../development/ocaml-modules/faillib { };
 
-    fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
+    fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
 
@@ -5558,7 +5558,11 @@ in
 
     ppx_jane = callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
 
+
+    # Core sublibs
     typerep = callPackage ../development/ocaml-modules/janestreet/typerep.nix {};
+
+    fieldslib = callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
