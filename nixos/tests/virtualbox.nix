@@ -144,6 +144,7 @@ let
       "--uart1 0x3F8 4"
       "--uartmode1 client /run/virtualbox-log-${name}.sock"
       "--memory 768"
+      "--audio none"
     ] ++ (attrs.vmFlags or []));
 
     controllerFlags = mkFlags [
