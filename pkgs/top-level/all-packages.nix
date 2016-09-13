@@ -4563,6 +4563,7 @@ in
     libcCross = if crossSystem != null then libcCross else null;
 
     isl = isl_0_14;
+    texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
   }));
 
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
