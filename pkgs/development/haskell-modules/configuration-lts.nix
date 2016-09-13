@@ -987,6 +987,7 @@ self: super: {
   "Wheb" = dontDistribute super."Wheb";
   "WikimediaParser" = dontDistribute super."WikimediaParser";
   "Win32" = doDistribute super."Win32_2_3_1_0";
+  "Win32-console" = dontDistribute super."Win32-console";
   "Win32-dhcp-server" = dontDistribute super."Win32-dhcp-server";
   "Win32-errors" = dontDistribute super."Win32-errors";
   "Win32-junction-point" = dontDistribute super."Win32-junction-point";
@@ -1310,6 +1311,7 @@ self: super: {
   "astview" = dontDistribute super."astview";
   "astview-utils" = dontDistribute super."astview-utils";
   "async-ajax" = dontDistribute super."async-ajax";
+  "async-dejafu" = doDistribute super."async-dejafu_0_1_2_2";
   "async-extras" = dontDistribute super."async-extras";
   "async-manager" = dontDistribute super."async-manager";
   "async-pool" = dontDistribute super."async-pool";
@@ -1425,6 +1427,7 @@ self: super: {
   "basex-client" = dontDistribute super."basex-client";
   "bash" = dontDistribute super."bash";
   "basic-lens" = dontDistribute super."basic-lens";
+  "basic-prelude" = doDistribute super."basic-prelude_0_5_2";
   "basic-sop" = dontDistribute super."basic-sop";
   "baskell" = dontDistribute super."baskell";
   "battlenet" = dontDistribute super."battlenet";
@@ -1621,6 +1624,7 @@ self: super: {
   "bond-haskell" = dontDistribute super."bond-haskell";
   "bond-haskell-compiler" = dontDistribute super."bond-haskell-compiler";
   "bookkeeper" = dontDistribute super."bookkeeper";
+  "bookkeeper-permissions" = dontDistribute super."bookkeeper-permissions";
   "boolean-list" = dontDistribute super."boolean-list";
   "boolean-normal-forms" = dontDistribute super."boolean-normal-forms";
   "boolexpr" = dontDistribute super."boolexpr";
@@ -2448,6 +2452,7 @@ self: super: {
   "definitive-reactive" = dontDistribute super."definitive-reactive";
   "definitive-sound" = dontDistribute super."definitive-sound";
   "deiko-config" = dontDistribute super."deiko-config";
+  "dejafu" = doDistribute super."dejafu_0_3_2_1";
   "deka" = dontDistribute super."deka";
   "deka-tests" = dontDistribute super."deka-tests";
   "delaunay" = dontDistribute super."delaunay";
@@ -3007,6 +3012,7 @@ self: super: {
   "fluidsynth" = dontDistribute super."fluidsynth";
   "fmark" = dontDistribute super."fmark";
   "foldl-incremental" = dontDistribute super."foldl-incremental";
+  "foldl-statistics" = dontDistribute super."foldl-statistics";
   "foldl-transduce" = dontDistribute super."foldl-transduce";
   "foldl-transduce-attoparsec" = dontDistribute super."foldl-transduce-attoparsec";
   "folds" = dontDistribute super."folds";
@@ -4428,6 +4434,7 @@ self: super: {
   "hsyslog" = doDistribute super."hsyslog_2_0";
   "hsyslog-udp" = dontDistribute super."hsyslog-udp";
   "hszephyr" = dontDistribute super."hszephyr";
+  "htaglib" = doDistribute super."htaglib_1_0_3";
   "htags" = dontDistribute super."htags";
   "htar" = dontDistribute super."htar";
   "htestu" = dontDistribute super."htestu";
@@ -4494,6 +4501,7 @@ self: super: {
   "hulk" = dontDistribute super."hulk";
   "hums" = dontDistribute super."hums";
   "hunch" = dontDistribute super."hunch";
+  "hunit-dejafu" = doDistribute super."hunit-dejafu_0_3_0_1";
   "hunit-gui" = dontDistribute super."hunit-gui";
   "hunit-parsec" = dontDistribute super."hunit-parsec";
   "hunit-rematch" = dontDistribute super."hunit-rematch";
@@ -5291,6 +5299,7 @@ self: super: {
   "mahoro" = dontDistribute super."mahoro";
   "maid" = dontDistribute super."maid";
   "mailbox-count" = dontDistribute super."mailbox-count";
+  "mailchimp" = dontDistribute super."mailchimp";
   "mailchimp-subscribe" = dontDistribute super."mailchimp-subscribe";
   "mailgun" = dontDistribute super."mailgun";
   "majordomo" = dontDistribute super."majordomo";
@@ -7582,6 +7591,7 @@ self: super: {
   "task-distribution" = dontDistribute super."task-distribution";
   "taskpool" = dontDistribute super."taskpool";
   "tasty" = doDistribute super."tasty_0_11_0_3";
+  "tasty-dejafu" = doDistribute super."tasty-dejafu_0_3_0_1";
   "tasty-golden" = doDistribute super."tasty-golden_2_3_1";
   "tasty-groundhog-converters" = dontDistribute super."tasty-groundhog-converters";
   "tasty-hunit-adapter" = dontDistribute super."tasty-hunit-adapter";
@@ -8150,6 +8160,7 @@ self: super: {
   "vector-random" = dontDistribute super."vector-random";
   "vector-read-instances" = dontDistribute super."vector-read-instances";
   "vector-sized" = dontDistribute super."vector-sized";
+  "vector-space" = doDistribute super."vector-space_0_10_3";
   "vector-space-map" = dontDistribute super."vector-space-map";
   "vector-space-opengl" = dontDistribute super."vector-space-opengl";
   "vector-space-points" = dontDistribute super."vector-space-points";
@@ -8339,6 +8350,8 @@ self: super: {
   "wordsetdiff" = dontDistribute super."wordsetdiff";
   "workdays" = dontDistribute super."workdays";
   "workflow-osx" = dontDistribute super."workflow-osx";
+  "workflow-types" = dontDistribute super."workflow-types";
+  "workflow-windows" = dontDistribute super."workflow-windows";
   "wp-archivebot" = dontDistribute super."wp-archivebot";
   "wraparound" = dontDistribute super."wraparound";
   "wraxml" = dontDistribute super."wraxml";
