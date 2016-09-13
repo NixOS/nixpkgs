@@ -1,9 +1,9 @@
 {stdenv, fetchurl, gettext, ncurses
 , gtkGUI ? false
 , pkgconfig ? null
-, gtk ? null}:
+, gtk2 ? null}:
 
-assert gtkGUI -> pkgconfig != null && gtk != null;
+assert gtkGUI -> pkgconfig != null && gtk2 != null;
 
 stdenv.mkDerivation rec {
   name = "aumix-2.9.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gettext ncurses ]
-    ++ (if gtkGUI then [pkgconfig gtk] else []);
+    ++ (if gtkGUI then [pkgconfig gtk2] else []);
 
   meta = {
     description = "Audio mixer for X and the console";

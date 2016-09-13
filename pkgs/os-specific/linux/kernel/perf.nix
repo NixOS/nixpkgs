@@ -1,11 +1,11 @@
 { lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
 , libiberty
-, zlib, withGtk ? false, gtk ? null }:
+, zlib, withGtk ? false, gtk2 ? null }:
 
 with lib;
 
-assert withGtk -> gtk != null;
+assert withGtk -> gtk2 != null;
 assert versionAtLeast kernel.version "3.12";
 
 stdenv.mkDerivation {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
       flex bison libiberty ];
   buildInputs = [ elfutils python perl newt slang pkgconfig libunwind binutils zlib ] ++
-    stdenv.lib.optional withGtk gtk;
+    stdenv.lib.optional withGtk gtk2;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.

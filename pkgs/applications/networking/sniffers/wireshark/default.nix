@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
 , gnutls, libgcrypt, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
 , zlib
-, withGtk ? false, gtk ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
+, withGtk ? false, gtk2 ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
 , withQt ? false, qt4 ? null
 }:
 
-assert withGtk -> !withQt && gtk != null;
+assert withGtk -> !withQt && gtk2 != null;
 assert withQt -> !withGtk && qt4 != null;
 
 with stdenv.lib;
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     bison flex perl pkgconfig libpcap lua5 openssl libgcrypt gnutls
     geoip libnl c-ares python libcap glib zlib
   ] ++ optional withQt qt4
-    ++ (optionals withGtk [gtk pango cairo gdk_pixbuf]);
+    ++ (optionals withGtk [gtk2 pango cairo gdk_pixbuf]);
 
   patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
