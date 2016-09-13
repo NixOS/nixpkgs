@@ -71,7 +71,7 @@ let
   gnumake = pkgs.gnumake.crossDrv;
   patch = pkgs.patch.crossDrv;
   patchelf = pkgs.patchelf.crossDrv;
-  gcc = pkgs.gcc.cc.crossDrv;
+  gcc = pkgs.gcc.crossDrv.cc;
   gmpxx = pkgs.gmpxx.crossDrv;
   mpfr = pkgs.mpfr.crossDrv;
   zlib = pkgs.zlib.crossDrv;
