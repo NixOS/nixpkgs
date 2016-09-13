@@ -389,13 +389,13 @@ in
     systemd.units = mkOption {
       description = "Definition of systemd units.";
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
+      type = with types; attrsOf (submodule (
+        { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        };
+        }));
     };
 
     systemd.packages = mkOption {
@@ -406,43 +406,37 @@ in
 
     systemd.targets = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ targetOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig] );
       description = "Definition of systemd target units.";
     };
 
     systemd.services = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ serviceOptions unitConfig serviceConfig ];
+      type = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ]);
       description = "Definition of systemd service units.";
     };
 
     systemd.sockets = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ socketOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = socketOptions; } unitConfig ]);
       description = "Definition of systemd socket units.";
     };
 
     systemd.timers = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ timerOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ]);
       description = "Definition of systemd timer units.";
     };
 
     systemd.paths = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ pathOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = pathOptions; } unitConfig ]);
       description = "Definition of systemd path units.";
     };
 
     systemd.mounts = mkOption {
       default = [];
-      type = types.listOf types.optionSet;
-      options = [ mountOptions unitConfig mountConfig ];
+      type = with types; listOf (submodule [ { options = mountOptions; } unitConfig mountConfig ]);
       description = ''
         Definition of systemd mount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
@@ -452,8 +446,7 @@ in
 
     systemd.automounts = mkOption {
       default = [];
-      type = types.listOf types.optionSet;
-      options = [ automountOptions unitConfig automountConfig ];
+      type = with types; listOf (submodule [ { options = automountOptions; } unitConfig automountConfig ]);
       description = ''
         Definition of systemd automount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
@@ -590,33 +583,30 @@ in
     systemd.user.units = mkOption {
       description = "Definition of systemd per-user units.";
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
+      type = with types; attrsOf (submodule (
+        { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        };
+        }));
     };
 
     systemd.user.services = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ serviceOptions unitConfig serviceConfig ];
+      type = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ] );
       description = "Definition of systemd per-user service units.";
     };
 
     systemd.user.timers = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ timerOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ] );
       description = "Definition of systemd per-user timer units.";
     };
 
     systemd.user.sockets = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ socketOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = socketOptions; } unitConfig ] );
       description = "Definition of systemd per-user socket units.";
     };
 
