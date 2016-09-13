@@ -5457,6 +5457,11 @@ in
       then callPackage ../development/ocaml-modules/ppx_blob {}
       else null;
 
+    ppx_deriving =
+      if lib.versionAtLeast ocaml_version "4.02"
+      then callPackage ../development/ocaml-modules/ppx_deriving {}
+      else null;
+
     ppx_tools =
       if lib.versionAtLeast ocaml_version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
