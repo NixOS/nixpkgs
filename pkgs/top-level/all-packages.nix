@@ -5502,6 +5502,8 @@ in
       oasis = ocaml_oasis;
     };
 
+    # Jane Street
+    js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
