@@ -231,7 +231,7 @@ let
         type = types.bool;
         description = ''
           Whether this interface is virtual and should be created by tunctl.
-          This is mainly useful for creating bridges between a host a virtual
+          This is mainly useful for creating bridges between a host and a virtual
           network such as VPN or a virtual machine.
         '';
       };
