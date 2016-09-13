@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, systemd, boost
+{ stdenv, fetchurl, pkgconfig, glib, systemd, boost, darwin
 , alsaSupport ? true, alsaLib
 , flacSupport ? true, flac
 , vorbisSupport ? true, libvorbis
@@ -42,6 +42,7 @@ in stdenv.mkDerivation rec {
   patches = stdenv.lib.optionals stdenv.isDarwin ./darwin-enable-cxx-exceptions.patch;
 
   buildInputs = [ pkgconfig glib boost ]
+    ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
     ++ opt flacSupport flac
