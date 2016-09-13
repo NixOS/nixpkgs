@@ -4,8 +4,13 @@ with lib;
 
 let
   cfg = config.virtualisation.virtualbox.host;
-  virtualbox = config.boot.kernelPackages.virtualbox.override {
+
+  virtualbox = pkgs.virtualbox.override {
     inherit (cfg) enableHardening headless;
+  };
+
+  kernelModules = config.boot.kernelPackages.virtualbox.override {
+    inherit virtualbox;
   };
 
 in
@@ -60,7 +65,7 @@ in
 
   config = mkIf cfg.enable (mkMerge [{
     boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];
-    boot.extraModulePackages = [ virtualbox ];
+    boot.extraModulePackages = [ kernelModules ];
     environment.systemPackages = [ virtualbox ];
 
     security.setuidOwners = let
