@@ -5553,6 +5553,8 @@ in
     ppx_typerep_conv = callPackage ../development/ocaml-modules/janestreet/ppx-typerep-conv.nix {};
 
     ppx_variants_conv = callPackage ../development/ocaml-modules/janestreet/ppx-variants-conv.nix {};
+
+    ppx_expect = callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
