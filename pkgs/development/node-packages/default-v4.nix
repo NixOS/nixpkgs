@@ -35,5 +35,7 @@ nodePackages // {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
   });
   
-  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0";
+  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
+    postInstall = "npm run-script prepublish";
+  };
 }
