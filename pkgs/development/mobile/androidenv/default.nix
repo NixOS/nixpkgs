@@ -6,10 +6,11 @@ rec {
   };
   
   buildTools = import ./build-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
+    inherit (pkgs) stdenv fetchurl unzip zlib file;
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
-    ncurses_32bit = pkgs_i686.ncurses;
+    ncurses_32bit = pkgs_i686.ncurses5;
+    ncurses = pkgs.ncurses5;
   };
   
   support = import ./support.nix {
