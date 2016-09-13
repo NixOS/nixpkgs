@@ -206,7 +206,7 @@ let
     libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.9.5"      "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim1gw43x4lvz4qydpp5kg2rh" {};
     libutil         = applePackage "libutil"           "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
-    libunwind       = applePackage "libunwind"         "osx-10.11.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk10" {};
+    libunwind       = applePackage "libunwind"         "osx-10.11.6"     "16nhx2pahh9d62mvszc88q226q5lwjankij276fxwrm8wb50zzlx" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.11.6"     "069incq28a78yh1bnr17h9cd5if5mwqpq8ahnkyxxx25fkaxgzcf" {};
     objc4           = applePackage "objc4"             "osx-10.11.6"     "00b7vbgxni8frrqyi69b4njjihlwydzjd9zj9x4z5dbx8jabkvrj" {};
     ppp             = applePackage "ppp"               "osx-10.11.6"     "1dql6r1v0vbcs04958nn2i6p31yfsxyy51jca63bm5mf0gxalk3f" {};
