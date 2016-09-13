@@ -12487,7 +12487,7 @@ in
   };
 
   banshee = callPackage ../applications/audio/banshee {
-    gconf = pkgs.gnome.GConf;
+    gconf = pkgs.gnome2.GConf;
     libgpod = pkgs.libgpod.override { monoSupport = true; };
   };
 
