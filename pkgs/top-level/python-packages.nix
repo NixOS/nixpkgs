@@ -13048,14 +13048,14 @@ in modules // {
 
 
   Mako = buildPythonPackage rec {
-    name = "Mako-1.0.2";
+    name = "Mako-1.0.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/Mako/${name}.tar.gz";
-      sha256 = "17k7jy3byi4hj6ksszib6gxbf6n7snnnirnbrdldn848abjc4l15";
+      sha256 = "0nchpw6akfcsg8w6irjlx0gyzadc123hv4g47sijgnqd9nz9vngy";
     };
 
-    buildInputs = with self; [ markupsafe nose mock ];
+    buildInputs = with self; [ markupsafe nose mock pytest ];
     propagatedBuildInputs = with self; [ markupsafe ];
 
     doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
