@@ -5547,6 +5547,8 @@ in
     ppx_pipebang = callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
 
     ppx_sexp_message = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-message.nix {};
+
+    ppx_sexp_value = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-value.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
