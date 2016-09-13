@@ -3,6 +3,6 @@
   builder = ./builder.sh;
   src = fetchurl {
     url = http://tarballs.nixos.org/cua-mode-2.10.el;
-    md5 = "5bf5e43f5f38c8383868c7c6c5baca09";
+    sha256 = "01877xjbq0v9wrpcbnhvppdn9wxliwkkjg3dr6k795mjgslwhr1b";
   };
 }
