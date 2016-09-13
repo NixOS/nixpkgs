@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpcap, pkgconfig, openssl
 , graphicalSupport ? false
 , libX11 ? null
-, gtk ? null
+, gtk2 ? null
 , pythonPackages
 , makeWrapper ? null
 }:
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap pkgconfig openssl makeWrapper python ]
     ++ optionals graphicalSupport [
-      libX11 gtk pygtk pysqlite pygobject2 pycairo
+      libX11 gtk2 pygtk pysqlite pygobject2 pycairo
     ];
 
   meta = {

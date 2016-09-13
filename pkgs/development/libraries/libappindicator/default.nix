@@ -6,7 +6,7 @@
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
 , python, pygobject2, pygtk, gobjectIntrospection, vala_0_23
-, monoSupport ? false, mono ? null, gtk-sharp ? null
+, monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
 with lib;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     glib dbus_glib
     python pygobject2 pygtk gobjectIntrospection vala_0_23
   ] ++ (if gtkVersion == "2"
-    then [ gtk2 libindicator-gtk2 libdbusmenu-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp ]
+    then [ gtk2 libindicator-gtk2 libdbusmenu-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ gtk3 libindicator-gtk3 libdbusmenu-gtk3 ]);
 
   postPatch = ''
