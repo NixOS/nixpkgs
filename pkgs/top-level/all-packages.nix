@@ -15674,6 +15674,8 @@ in
     pygtk = pyGtkGlade;
   };
 
+  zoom_us = callPackage ../applications/networking/zoom_us {};
+
   zotero = callPackage ../applications/office/zotero {
     firefox = firefox-esr-unwrapped;
   };
