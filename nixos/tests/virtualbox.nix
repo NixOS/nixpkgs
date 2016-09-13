@@ -273,9 +273,12 @@ let
 
       sub shutdownVM_${name} {
         $machine->succeed(ru "touch ${sharePath}/shutdown");
-        $machine->waitUntilSucceeds(
-          "test ! -e ${sharePath}/shutdown ".
-          "  -a ! -e ${sharePath}/boot-done"
+        $machine->execute(
+          'set -e; i=0; '.
+          'while test -e ${sharePath}/shutdown '.
+          '        -o -e ${sharePath}/boot-done; do '.
+          'sleep 1; i=$(($i + 1)); [ $i -le 3600 ]; '.
+          'done'
         );
         waitForShutdown_${name};
       }
