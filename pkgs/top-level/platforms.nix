@@ -396,9 +396,8 @@ rec {
 
   novena = armv7l-hf-multiplatform // {
     name = "novena";
-    kernelHeadersBaseConfig = "imx_v6_v7_defconfig";
     kernelBaseConfig = "novena_defconfig"; # Requires Novena kernel.
-    #uboot = "novena";
+    uboot = "novena";
     # Only for uboot = uboot :
     #ubootConfig = "novena_config";
   };
