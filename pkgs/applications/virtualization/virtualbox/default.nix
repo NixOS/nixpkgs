@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
+{ stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
 , libXrandr, libXinerama
 , which, alsaLib, curl, libvpx, gawk, nettools, dbus
@@ -35,11 +35,6 @@ let
     '';
   };
 
-  vbox-qt5-env = buildEnv {
-    name = "vbox-qt5-env-${version}";
-    paths = [ qt5.qtbase.dev qt5.qtbase.out qt5.qtx11extras.dev qt5.qtx11extras.out qt5.qttools.dev ];
-  };
-
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
@@ -58,7 +53,7 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr ]
-    ++ optionals (!headless) [ vbox-qt5-env libXinerama SDL ];
+    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
@@ -66,7 +61,9 @@ in stdenv.mkDerivation {
     set -x
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
-        -i configure
+        ${optionalString (!headless) ''
+        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qt5.qtbase}/bin"@' \
+        ''} -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
     sed -i -e '
@@ -83,7 +80,7 @@ in stdenv.mkDerivation {
   '';
 
   patches = optional enableHardening ./hardened.patch
-    ++ [ ./libressl.patch ];
+    ++ [ ./libressl.patch ./qtx11extras.patch ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
@@ -111,11 +108,15 @@ in stdenv.mkDerivation {
     ${optionalString javaBindings ''
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
+    ${optionalString (!headless) ''
+    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qt5.qtx11extras}/lib
+    PATH_QT5_X11_EXTRAS_INC        := ${getDev qt5.qtx11extras}/include
+    TOOL_QT5_LRC                   := ${getDev qt5.qttools}/bin/lrelease
+    ''}
     LOCAL_CONFIG
 
     ./configure \
       ${optionalString headless "--build-headless"} \
-      ${optionalString (!headless) "--with-qt-dir=${vbox-qt5-env}"} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
