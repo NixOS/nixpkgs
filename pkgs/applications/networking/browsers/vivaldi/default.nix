@@ -4,7 +4,7 @@
 , freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
 , libuuid, xz
 , gstreamer, gst_plugins_base, libxml2
-, glib, gtk, pango, gdk_pixbuf, cairo, atk, gnome3
+, glib, gtk2, pango, gdk_pixbuf, cairo, atk, gnome3
 , nss, nspr
 , patchelf
 }:
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
       libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-      atk alsaLib dbus_libs cups gtk gdk_pixbuf libexif ffmpeg systemd
+      atk alsaLib dbus_libs cups gtk2 gdk_pixbuf libexif ffmpeg systemd
       freetype fontconfig libXrender libuuid expat glib nss nspr
       gstreamer libxml2 gst_plugins_base pango cairo gnome3.gconf
       patchelf

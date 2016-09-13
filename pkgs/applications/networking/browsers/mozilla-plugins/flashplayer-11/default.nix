@@ -14,7 +14,7 @@
 , libXcursor
 , libXt
 , libvdpau
-, gtk
+, gtk2
 , glib
 , pango
 , cairo
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath
     [ zlib alsaLib curl nspr fontconfig freetype expat libX11
-      libXext libXrender libXcursor libXt gtk glib pango atk cairo gdk_pixbuf
+      libXext libXrender libXcursor libXt gtk2 glib pango atk cairo gdk_pixbuf
       libvdpau nss
     ];
 

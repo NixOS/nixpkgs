@@ -4,7 +4,7 @@
 , udev
 , mesa, SDL
 , libao, openal, libpulseaudio
-, gtk, gtksourceview
+, gtk2, gtksourceview
 }:
 
 with stdenv.lib;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   postPatch = "sed '1i#include <cmath>' -i higan/fc/ppu/ppu.cpp";
 
   buildInputs =
-  [ p7zip pkgconfig libX11 libXv udev mesa SDL libao openal libpulseaudio gtk gtksourceview ];
+  [ p7zip pkgconfig libX11 libXv udev mesa SDL libao openal libpulseaudio gtk2 gtksourceview ];
 
   unpackPhase = ''
     7z x $src

@@ -1,9 +1,9 @@
-{stdenv, fetchurl, pkgconfig, gtk, libpng}:
+{stdenv, fetchurl, pkgconfig, gtk2, libpng}:
 
-assert pkgconfig != null && gtk != null && libpng != null;
+assert pkgconfig != null && gtk2 != null && libpng != null;
 # Note that we cannot just copy gtk's png attribute, since gtk might
 # not be linked against png.
-# !!! assert libpng == gtk.libpng;
+# !!! assert libpng == gtk2.libpng;
 
 stdenv.mkDerivation {
   name = "gqview-2.1.5";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0ilm5s7ps9kg4f5hzgjhg0xhn6zg0v9i7jnd67zrx9h7wsaa9zhj";
   };
 
-  buildInputs = [pkgconfig gtk libpng];
+  buildInputs = [pkgconfig gtk2 libpng];
 
   hardeningDisable = [ "format" ];
 

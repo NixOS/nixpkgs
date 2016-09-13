@@ -1,7 +1,7 @@
 { stdenv, fetchurl
 , pkgconfig
 , intltool
-, gnome
+, gnome2
 , libxslt
 , python
 }:
@@ -20,15 +20,17 @@ in stdenv.mkDerivation {
     sha256 = "15h6ps58giy5r1g66sg1l4xzhjssl362mfny2x09khdqsvk2j38k";
   };
 
-  buildInputs = [
+  buildInputs = with gnome2; [
     pkgconfig
     intltool
-    gnome.GConf
-    gnome.gtk
-    gnome.libgnomecanvas
-    gnome.libgnomeui
-    gnome.libglade
-    gnome.scrollkeeper
+
+    GConf
+    gtk
+    libgnomecanvas
+    libgnomeui
+    libglade
+    scrollkeeper
+
     libxslt
     python
   ];

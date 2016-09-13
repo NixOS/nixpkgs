@@ -1,16 +1,16 @@
 { stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
-, glib, gtk, libXtst, jdk
+, glib, libXtst, jdk
 , webkitgtk2 ? null  # for internal web browser
 , buildEnv, writeText, runCommand
 , callPackage
-} @ args:
+}:
 
 assert stdenv ? glibc;
 
 rec {
 
-  buildEclipse = import ./build-eclipse.nix args;
+  buildEclipse = callPackage ./build-eclipse.nix { };
 
   eclipse-sdk-35 = buildEclipse {
     name = "eclipse-sdk-3.5.2";

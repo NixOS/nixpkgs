@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gtk, freetype, fontconfig, lcms,
+{ stdenv, fetchurl, cmake, pkgconfig, gtk2, freetype, fontconfig, lcms,
   flex, libtiff, libjpeg, libpng, libexif, zlib, perl, libX11,
   perlXMLParser, python, pygtk, gettext, intltool, babl, gegl,
   glib, makedepend, xf86vidmodeproto, xineramaproto, libXmu, openexr,
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b5g4bkq62yiz1cnb2vfij0a8fw5w5z202v5dm4dh89k7cj0yq4w";
   };
 
-  buildInputs = [ libpng gtk freetype fontconfig lcms flex libtiff libjpeg
+  buildInputs = [ libpng gtk2 freetype fontconfig lcms flex libtiff libjpeg
     libexif zlib perl libX11 perlXMLParser python pygtk gettext intltool babl
     gegl glib makedepend xf86vidmodeproto xineramaproto libXmu openexr mesa
     libXext libXpm libXau libXxf86vm pixman libpthreadstubs fltk

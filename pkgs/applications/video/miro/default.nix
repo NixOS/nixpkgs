@@ -69,13 +69,13 @@ in buildPythonApplication rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
   '';
 
-  buildInputs = with pythonPackages; [ pygtk pygobject ] ++ [
+  buildInputs = with pythonPackages; [ pygtk pygobject2 ] ++ [
     pkgconfig pyrex096 ffmpeg boost glib gtk2 webkitgtk2 libsoup
     taglib gsettings_desktop_schemas sqlite
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pygobject pygtk pycurl sqlite3 mutagen pycairo dbus-python
+    pygobject2 pygtk pycurl sqlite3 mutagen pycairo dbus-python
     pywebkitgtk] ++ [ libtorrentRasterbar
     gst_python gst_plugins_base gst_plugins_good gst_ffmpeg
   ] ++ optional enableBonjour avahi;

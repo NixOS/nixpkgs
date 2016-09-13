@@ -4,7 +4,7 @@
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
 , libXcomposite, libXext, libXrandr, libXtst, libSM, libICE, libxcb
-, mono, libgnomeui, gnome_vfs, gnome-sharp, gtk-sharp, chromium
+, mono, libgnomeui, gnome_vfs, gnome-sharp, gtk-sharp-2_0, chromium
 }:
 
 let
@@ -19,10 +19,10 @@ let
   binPath = lib.makeBinPath [ nodejs gnutar ];
   developBinPath = lib.makeBinPath [ mono ];
   developLibPath = lib.makeLibraryPath [
-    glib libgnomeui gnome_vfs gnome-sharp gtk-sharp gtk-sharp.gtk
+    glib libgnomeui gnome_vfs gnome-sharp gtk-sharp-2_0 gtk-sharp-2_0.gtk
   ];
   developDotnetPath = lib.concatStringsSep ":" [
-    gnome-sharp gtk-sharp
+    gnome-sharp gtk-sharp-2_0
   ];
 
   ver = "5.3.5";

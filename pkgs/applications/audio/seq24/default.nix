@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtkmm, libjack2, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, gtkmm2, libjack2, pkgconfig }:
 
 stdenv.mkDerivation  rec {
   name = "seq24-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation  rec {
 
   patches = [ ./mutex_no_nameclash.patch ];
 
-  buildInputs = [ alsaLib gtkmm libjack2 ];
+  buildInputs = [ alsaLib gtkmm2 libjack2 ];
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {

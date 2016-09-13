@@ -8,7 +8,7 @@
 , freetype
 , gdk_pixbuf
 , glib
-, gtk
+, gtk2
 , libjpeg_turbo
 , mesa_glu
 , mesa_noglu
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     freetype
     gdk_pixbuf
     glib
-    gtk
+    gtk2
     libjpeg_turbo
     mesa_glu
     mesa_noglu

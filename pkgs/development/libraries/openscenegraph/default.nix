@@ -2,7 +2,7 @@
 , libpng, coin3d, jasper, gdal_1_11, xproto, libX11, libXmu
 , freeglut, mesa, doxygen, ffmpeg, xineLib, unzip, zlib, openal
 , libxml2, curl, a52dec, faad2, gdk_pixbuf, pkgconfig, kbproto, SDL
-, qt4, poppler, librsvg, gtk
+, qt4, poppler, librsvg, gtk2
 , withApps ? true }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cmake giflib libjpeg libtiff lib3ds freetype libpng coin3d jasper
     gdal_1_11 xproto libX11 libXmu freeglut mesa doxygen ffmpeg
     xineLib unzip zlib openal libxml2 curl a52dec faad2 gdk_pixbuf
-    pkgconfig kbproto SDL qt4 poppler librsvg gtk
+    pkgconfig kbproto SDL qt4 poppler librsvg gtk2
   ];
 
   enableParallelBuilding = true;

@@ -25,7 +25,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra
+, libcanberra_gtk2
 , libgnome
 , libgnomeui
 , defaultIconTheme
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra
+      libcanberra_gtk2
       libgnome
       libgnomeui
       mesa

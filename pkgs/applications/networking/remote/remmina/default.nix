@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, makeWrapper
-, glib, gtk, gettext, libxkbfile, libgnome_keyring, libX11
+, glib, gtk2, gettext, libxkbfile, libgnome_keyring, libX11
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem }:
 
 let
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ cmake pkgconfig makeWrapper
-                  glib gtk gettext libxkbfile libgnome_keyring libX11
+                  glib gtk2 gettext libxkbfile libgnome_keyring libX11
                   freerdp libssh libgcrypt gnutls ];
 
   cmakeFlags = "-DWITH_VTE=OFF -DWITH_TELEPATHY=OFF -DWITH_AVAHI=OFF";

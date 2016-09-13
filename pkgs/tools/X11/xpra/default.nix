@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pythonPackages, pkgconfig
-, xorg, gtk, glib, pango, cairo, gdk_pixbuf, atk
+, xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama }:
@@ -22,7 +22,7 @@ in buildPythonApplication rec {
     xorg.xproto xorg.fixesproto xorg.libXtst xorg.libXfixes xorg.libXcomposite xorg.libXdamage
     xorg.libXrandr xorg.libxkbfile
 
-    pango cairo gdk_pixbuf atk gtk glib
+    pango cairo gdk_pixbuf atk gtk2 glib
 
     ffmpeg libvpx x264 libwebp
 
@@ -30,7 +30,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow pygtk pygobject rencode pycrypto cryptography pycups lz4 dbus-python
+    pillow pygtk pygobject2 rencode pycrypto cryptography pycups lz4 dbus-python
   ];
 
   preBuild = ''

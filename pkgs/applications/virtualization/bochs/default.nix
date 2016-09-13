@@ -1,6 +1,6 @@
 { stdenv, fetchurl, config
 , pkgconfig, libtool
-, gtk, mesa, readline, libX11, libXpm
+, gtk2, mesa, readline, libX11, libXpm
 , docbook_xml_dtd_45, docbook_xsl
 , sdlSupport ? true, SDL2 ? null
 , termSupport ? true , ncurses ? null
@@ -12,7 +12,7 @@
 
 assert sdlSupport -> (SDL2 != null);
 assert termSupport -> (ncurses != null);
-assert wxSupport -> (gtk != null && wxGTK != null);
+assert wxSupport -> (gtk2 != null && wxGTK != null);
 assert wgetSupport -> (wget != null);
 assert curlSupport -> (curl != null);
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   busMouse = config.bochs.busMouse or false;
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig libtool gtk mesa readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
+  [ pkgconfig libtool gtk2 mesa readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
   ++ optionals sdlSupport [ SDL2 ]
   ++ optionals wxSupport [ wxGTK ]
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional busMouse "--enable-busmouse"
     ;
 
-  NIX_CFLAGS_COMPILE="-I${gtk.dev}/include/gtk-2.0/ -I${libtool}/include/";
+  NIX_CFLAGS_COMPILE="-I${gtk2.dev}/include/gtk-2.0/ -I${libtool}/include/";
   NIX_LDFLAGS="-L${libtool.lib}/lib";
 
   hardeningDisable = [ "format" ];

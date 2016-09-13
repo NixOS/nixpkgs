@@ -1,5 +1,5 @@
 { stdenv, fetchurl, rpm, cpio, mesa, xorg, cairo
-, libpng, gtk, glib, gdk_pixbuf, fontconfig, freetype, curl
+, libpng, gtk2, glib, gdk_pixbuf, fontconfig, freetype, curl
 , dbus_glib, alsaLib, libpulseaudio, systemd, pango
 }:
 
@@ -16,7 +16,7 @@ let
       xorg.libXrender
       cairo
       libpng
-      gtk
+      gtk2
       glib
       fontconfig
       freetype
@@ -26,7 +26,7 @@ let
   rpathProgram = makeLibraryPath
     [ gdk_pixbuf
       glib
-      gtk
+      gtk2
       xorg.libX11
       xorg.libXcomposite
       xorg.libXfixes

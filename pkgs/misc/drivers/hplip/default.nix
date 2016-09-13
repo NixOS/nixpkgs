@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   pythonPath = with pythonPackages; [
     dbus
     pillow
-    pygobject
+    pygobject2
     recursivePthLoader
     reportlab
     usbutils

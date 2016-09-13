@@ -229,7 +229,7 @@ self: super: {
   });
   gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend (
     addBuildTool super.gtk self.gtk2hs-buildtools
-  ) pkgs.gtk) (drv: {
+  ) pkgs.gtk2) (drv: {
     hardeningDisable = [ "fortify" ];
   });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
