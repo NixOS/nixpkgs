@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.atlassian.com/software/confluence/downloads/binary/${name}.tar.gz";
-    sha256 = "1f7v2fb4408zj84vh8m9axlv841k312djpk3d24gsgabsmx552mb";
+    sha256 = "07v31lr2jyh90ynjv6f61jh8wkry6lx02nm3yra02920k4y0w22a";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
@@ -24,4 +24,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp -rva . $out
   '';
+
+  meta = with stdenv.lib; {
+    license = licenses.unfree;
+  };
 }
