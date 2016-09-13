@@ -15218,7 +15218,7 @@ in
     stdenv = stdenv_32bit;
     inherit (gnome) libIDL;
     enableExtensionPack = config.virtualbox.enableExtensionPack or false;
-    pulseSupport = config.pulseaudio or false;
+    pulseSupport = config.pulseaudio or true;
   };
 
   virtualboxHardened = lowPrio (virtualbox.override {
