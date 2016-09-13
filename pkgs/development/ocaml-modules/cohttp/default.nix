@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, cmdliner, re, uri, fieldslib, sexplib, conduit,
+{stdenv, buildOcaml, fetchurl, cmdliner, re, uri, fieldslib_p4, sexplib, conduit,
  stringext, base64, magic-mime, ounit, alcotest, lwt ? null,
  async ? null, async_ssl ? null}:
 
@@ -14,7 +14,7 @@ buildOcaml rec {
   };
 
   buildInputs = [ alcotest ];
-  propagatedBuildInputs = [ cmdliner re uri fieldslib sexplib sexplib
+  propagatedBuildInputs = [ cmdliner re uri fieldslib_p4 sexplib sexplib
                             conduit stringext base64 magic-mime ounit async
                             async_ssl lwt ];
 

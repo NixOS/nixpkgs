@@ -1,5 +1,5 @@
 {stdenv, buildOcaml, fetchurl, bin_prot, comparelib, core, custom_printf,
- fieldslib, pa_bench, pa_ounit, pipebang, pa_test, textutils, re2, sexplib}:
+ fieldslib_p4, pa_bench, pa_ounit, pipebang, pa_test, textutils, re2, sexplib}:
 
 buildOcaml rec {
   name = "core_extended";
@@ -14,7 +14,7 @@ buildOcaml rec {
 
   hasSharedObjects = true;
   buildInputs = [ pa_bench pa_test pa_ounit ];
-  propagatedBuildInputs = [bin_prot comparelib core custom_printf fieldslib
+  propagatedBuildInputs = [bin_prot comparelib core custom_printf fieldslib_p4
                            pipebang textutils re2 sexplib ];
 
   meta = with stdenv.lib; {

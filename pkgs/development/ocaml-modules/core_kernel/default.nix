@@ -1,6 +1,6 @@
 {stdenv, buildOcaml, fetchurl, type_conv,
  bin_prot, comparelib, custom_printf, enumerate,
- fieldslib, herelib, pa_bench, pa_test, pa_ounit,
+ fieldslib_p4, herelib, pa_bench, pa_test, pa_ounit,
  pipebang, sexplib, typerep_p4, variantslib}:
 
 buildOcaml rec {
@@ -18,7 +18,7 @@ buildOcaml rec {
 
   buildInputs = [ pa_test pa_ounit ];
   propagatedBuildInputs = [ type_conv pa_bench bin_prot comparelib custom_printf
-                            enumerate fieldslib herelib pipebang sexplib
+                            enumerate fieldslib_p4 herelib pipebang sexplib
                             typerep_p4 variantslib ];
 
   meta = with stdenv.lib; {
