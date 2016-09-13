@@ -5540,6 +5540,8 @@ in
     ppx_type_conv = callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
 
     ppx_compare = callPackage ../development/ocaml-modules/janestreet/ppx-compare.nix {};
+
+    ppx_here = callPackage ../development/ocaml-modules/janestreet/ppx-here.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
