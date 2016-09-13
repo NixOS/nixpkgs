@@ -20504,11 +20504,11 @@ in modules // {
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.11";
+    name = "PyYAML-3.12";
 
     src = pkgs.fetchurl {
       url = "http://pyyaml.org/download/pyyaml/${name}.zip";
-      sha256 = "19bb3ac350ef878dda84a62d37c7d5c17a137386dde9c2ce7249c7a21d7f6ac9";
+      sha256 = "19s1lxi0idq4a0bpvld866pv5b16lqxypyswmsdi5ys4210jxj2s";
     };
 
     buildInputs = with self; [ pkgs.pyrex ];
