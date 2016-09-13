@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnat, zlib, llvm_35, ncurses, clang, flavour ? "mcode" }:
+{ stdenv, fetchFromGitHub, gnat, zlib, llvm_35, ncurses, clang, flavour ? "mcode" }:
 
 # mcode only works on x86, while the llvm flavour works on both x86 and x86_64.
 
@@ -13,9 +13,11 @@ in
 stdenv.mkDerivation rec {
   name = "ghdl-${flavour}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/tgingold/ghdl/archive/v${version}.tar.gz";
-    sha256 = "09yvgqyglbakd74v2dgr470clzm744i232nixyffcds55vkij5da";
+  src = fetchFromGitHub {
+    owner = "tgingold";
+    repo = "ghdl";
+    rev = "v${version}";
+    sha256 = "0g72rk2yzr0lrpncq2c1qcv71w3mi2hjq84r1yzgjr6d0qm87r2a";
   };
 
   buildInputs = [ gnat zlib ] ++ optionals (flavour == "llvm") [ clang ncurses ];
