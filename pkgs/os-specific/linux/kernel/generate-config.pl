@@ -124,7 +124,10 @@ my %config;
 open CONFIG, "<.config" or die;
 while (<CONFIG>) {
     chomp;
-    if (/^CONFIG_([A-Za-z0-9_]+)=(.*)$/) {
+    if (/^CONFIG_([A-Za-z0-9_]+)="(.*)"$/) {
+        # String options have double quotes, e.g. 'CONFIG_NLS_DEFAULT="utf8"' and allow escaping.
+        ($config{$1} = $2) =~ s/\\([\\"])/$1/g;
+    } elsif (/^CONFIG_([A-Za-z0-9_]+)=(.*)$/) {
         $config{$1} = $2;
     } elsif (/^# CONFIG_([A-Za-z0-9_]+) is not set$/) {
         $config{$1} = "n";
