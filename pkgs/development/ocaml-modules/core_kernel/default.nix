@@ -1,7 +1,7 @@
 {stdenv, buildOcaml, fetchurl, type_conv,
  bin_prot, comparelib, custom_printf, enumerate,
  fieldslib, herelib, pa_bench, pa_test, pa_ounit,
- pipebang, sexplib, typerep, variantslib}:
+ pipebang, sexplib, typerep_p4, variantslib}:
 
 buildOcaml rec {
   name = "core_kernel";
@@ -19,7 +19,7 @@ buildOcaml rec {
   buildInputs = [ pa_test pa_ounit ];
   propagatedBuildInputs = [ type_conv pa_bench bin_prot comparelib custom_printf
                             enumerate fieldslib herelib pipebang sexplib
-                            typerep variantslib ];
+                            typerep_p4 variantslib ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/core_kernel;

@@ -5489,7 +5489,7 @@ in
 
     twt = callPackage ../development/ocaml-modules/twt { };
 
-    typerep = callPackage ../development/ocaml-modules/typerep { };
+    typerep_p4 = callPackage ../development/ocaml-modules/typerep { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
 
@@ -5574,6 +5574,8 @@ in
     ppx_variants_conv = callPackage ../development/ocaml-modules/janestreet/ppx-variants-conv.nix {};
 
     ppx_expect = callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
+
+    typerep = callPackage ../development/ocaml-modules/janestreet/typerep.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
