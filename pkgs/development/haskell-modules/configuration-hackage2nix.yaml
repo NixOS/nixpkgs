@@ -116,6 +116,7 @@ dont-distribute-packages:
   hfsevents:                                    [ i686-linux, x86_64-linux ]
   hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   reactivity:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
+  Win32-console:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   Win32-dhcp-server:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   Win32-errors:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   Win32-extras:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
