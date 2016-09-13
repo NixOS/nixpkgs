@@ -140,6 +140,9 @@ with lib;
     # fontconfig-ultimate
     (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "rendering" ] [ "fonts" "fontconfig" "ultimate" "preset" ])
 
+    # murmur
+    (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
     (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
