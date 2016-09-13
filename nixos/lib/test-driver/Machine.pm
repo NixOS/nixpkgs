@@ -566,14 +566,25 @@ sub getWindowNames {
 }
 
 
+sub hasWindow {
+    my ($self, $regexp) = @_;
+    my @names = $self->getWindowNames;
+    foreach my $n (@names) {
+        if ($n =~ /$regexp/) {
+            $self->log("match '$n' on '$regexp'");
+            return 1;
+        } else {
+            $self->log("no match '$n' on '$regexp'");
+        }
+    }
+}
+
+
 sub waitForWindow {
     my ($self, $regexp) = @_;
     $self->nest("waiting for a window to appear", sub {
         retry sub {
-            my @names = $self->getWindowNames;
-            foreach my $n (@names) {
-                return 1 if $n =~ /$regexp/;
-            }
+            return $self->hasWindow($regexp)
         }
     });
 }

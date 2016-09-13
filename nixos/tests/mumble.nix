@@ -33,34 +33,69 @@ in
     $client1->execute("mumble mumble://client1\@server/test &");
     $client2->execute("mumble mumble://client2\@server/test &");
 
-    # cancel client audio configuration
-    $client1->waitForWindow(qr/Audio Tuning Wizard/);
-    $client2->waitForWindow(qr/Audio Tuning Wizard/);
-    $server->sleep(5); # wait because mumble is slow to register event handlers
-    $client1->sendKeys("esc");
-    $client2->sendKeys("esc");
+    sub retry {
+        my ($coderef) = @_;
+        my $n;
+        for ($n = 0; $n < 900; $n++) {
+            return if &$coderef;
+            sleep 1;
+        }
+        die "action timed out after $n seconds";
+    }
 
-    # cancel client cert configuration
-    $client1->waitForWindow(qr/Certificate Management/);
-    $client2->waitForWindow(qr/Certificate Management/);
-    $server->sleep(5); # wait because mumble is slow to register event handlers
-    $client1->sendKeys("esc");
-    $client2->sendKeys("esc");
+    my @clients = ($client1, $client2);
+    foreach my $cl (@clients) {
+        # cancel client audio configuration
+        my $audiore = qr/Audio Tuning Wizard/;
+        $cl->waitForWindow($audiore);
+        $cl->sleep(5);
+        $cl->nest("Cancel Audio Tuning Wizard", sub {
+          my $c = 0;
+          retry(sub {
+            return 1 if !$cl->hasWindow($audiore);
+            if ($c % 2 > 0) {
+              $cl->sendKeys("alt-tab");
+              $cl->sleep(5);
+            }
+            $cl->sendKeys("esc");
+            $c++;
+          });
+        });
 
-    # accept server certificate
-    $client1->waitForWindow(qr/^Mumble$/);
-    $client2->waitForWindow(qr/^Mumble$/);
-    $server->sleep(5); # wait because mumble is slow to register event handlers
-    $client1->sendChars("y");
-    $client2->sendChars("y");
-    $server->sleep(5); # wait because mumble is slow to register event handlers
+        # cancel client cert configuration
+        my $certre = qr/Certificate Management/;
+        $cl->waitForWindow($certre);
+        $cl->sleep(5);
+        $cl->nest("Cancel Certificate Management", sub {
+          my $c = 0;
+          retry(sub {
+            return 1 if !$cl->hasWindow($certre);
+            if ($c % 2 > 0) {
+              $cl->sendKeys("alt-tab");
+              $cl->sleep(5);
+            }
+            $cl->sendKeys("esc");
+            $c++;
+          });
+        });
 
-    # sometimes the wrong of the 2 windows is focused, we switch focus and try pressing "y" again
-    $client1->sendKeys("alt-tab");
-    $client2->sendKeys("alt-tab");
-    $server->sleep(5); # wait because mumble is slow to register event handlers
-    $client1->sendChars("y");
-    $client2->sendChars("y");
+        # accept server certificate
+        my $acceptre = qr/^Mumble$/;
+        $cl->waitForWindow($acceptre);
+        $cl->sleep(5);
+        $cl->nest("Accept Server Certificate", sub {
+          my $c = 0;
+          retry(sub {
+            return 1 if !$cl->hasWindow($acceptre);
+            if ($c % 2 > 0) {
+              $cl->sendKeys("alt-tab");
+              $cl->sleep(5);
+            }
+            $cl->sendChars("y");
+            $c++;
+          });
+        });
+    }
 
     # Find clients in logs
     $server->waitUntilSucceeds("grep -q 'client1' /var/log/murmur/murmurd.log");
