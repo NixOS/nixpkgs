@@ -15,7 +15,7 @@ let
     logfile=/var/log/murmur/murmurd.log
     pidfile=${cfg.pidfile}
 
-    welcome="${cfg.welcome}"
+    welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
 
     ${if cfg.hostName == "" then "" else "host="+cfg.hostName}
@@ -84,7 +84,7 @@ in
         description = "Path to PID file for Murmur daemon.";
       };
 
-      welcome = mkOption {
+      welcometext = mkOption {
         type = types.str;
         default = "";
         description = "Welcome message for connected clients.";
