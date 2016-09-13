@@ -4,7 +4,7 @@
 , makeWrapper }:
 
 let
-  inherit (pythonPackages) dbus-python pygtk2 python;
+  inherit (pythonPackages) dbus-python pygtk python;
 in stdenv.mkDerivation rec {
 
   name = "batti-${version}";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig gettext python gtk2 pygtk2 dbus-python gdk_pixbuf upower makeWrapper ];
+  [ pkgconfig gettext python gtk2 pygtk dbus-python gdk_pixbuf upower makeWrapper ];
 
   configurePhase = "true";
 
