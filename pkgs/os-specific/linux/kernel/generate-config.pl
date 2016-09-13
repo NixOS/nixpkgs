@@ -91,17 +91,17 @@ sub runConfig {
                 print STDERR "CHOICE: $1, ANSWER: $answer\n" if $debug;
                 print OUT "$answer\n" if $1 =~ /-/;
             }
-        
+
             # Some questions lack the option name ("bla bla [Y/n/m/...] ").
             elsif ($line =~ /(.*) \[(.*)\] ###$/) {
                 print OUT "\n";
             }
-            
+
             else {
                 warn "don't know how to answer this question: $line\n";
                 print OUT "\n";
             }
-        
+
             $line = "";
             %choices = ();
         }
@@ -136,6 +136,6 @@ foreach my $name (sort (keys %answers)) {
     my $f = $requiredAnswers{$name} && $ENV{'ignoreConfigErrors'} ne "1"
         ? sub { die "error: " . $_[0]; } : sub { warn "warning: " . $_[0]; };
     &$f("unused option: $name\n") unless defined $config{$name};
-    &$f("option not set correctly: $name\n")
+    &$f("option not set correctly: $name (wanted '$answers{$name}', got '$config{$name}')\n")
         if $config{$name} && $config{$name} ne $answers{$name};
 }
