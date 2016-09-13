@@ -6294,6 +6294,8 @@ in
 
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
+  cheat = callPackage ../applications/misc/cheat { };
+
   chefdk = callPackage ../development/tools/chefdk {
     ruby = ruby_2_0;
   };
