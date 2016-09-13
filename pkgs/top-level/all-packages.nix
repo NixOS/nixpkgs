@@ -6546,6 +6546,8 @@ in
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
+  go-md2man = callPackage ../development/tools/misc/md2man {};
+
   minify = callPackage ../development/web/minify { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
@@ -12587,6 +12589,8 @@ in
   conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
   conkeror = self.wrapFirefox conkeror-unwrapped { };
 
+  containerd = callPackage ../applications/virtualization/containerd { };
+
   cpp_ethereum = callPackage ../applications/misc/webthree-umbrella {
     withOpenCL = true;
 
@@ -12689,9 +12693,7 @@ in
 
   dmtx-utils = callPackage ../tools/graphics/dmtx-utils { };
 
-  docker = callPackage ../applications/virtualization/docker {
-    btrfs-progs = btrfs-progs_4_4_1;
-  };
+  docker = callPackage ../applications/virtualization/docker { };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
@@ -14567,6 +14569,8 @@ in
   rtv = callPackage ../applications/misc/rtv { };
 
   rubyripper = callPackage ../applications/audio/rubyripper {};
+
+  runc = callPackage ../applications/virtualization/runc {};
 
   rxvt = callPackage ../applications/misc/rxvt { };
 
