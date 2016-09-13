@@ -5543,6 +5543,8 @@ in
     ppx_fields_conv = callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
 
     ppx_let = callPackage ../development/ocaml-modules/janestreet/ppx-let.nix {};
+
+    ppx_pipebang = callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
