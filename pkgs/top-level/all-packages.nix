@@ -5517,6 +5517,8 @@ in
     ppx_optcomp = callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
 
     ppx_driver = callPackage ../development/ocaml-modules/janestreet/ppx-driver.nix {};
+
+    ppx_type_conv = callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
