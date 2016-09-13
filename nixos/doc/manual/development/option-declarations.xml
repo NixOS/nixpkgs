@@ -31,9 +31,9 @@ options = {
   <varlistentry>
     <term><varname>type</varname></term>
     <listitem>
-      <para>The type of the option (see below).  It may be omitted,
-      but that’s not advisable since it may lead to errors that are
-      hard to diagnose.</para>
+      <para>The type of the option (see <xref linkend='sec-option-types' />).
+      It may be omitted, but that’s not advisable since it may lead to errors
+      that are hard to diagnose.</para>
     </listitem>
   </varlistentry>
 
@@ -64,87 +64,5 @@ options = {
 </variablelist>
 
 </para>
-
-<para>Here is a non-exhaustive list of option types:
-
-<variablelist>
-
-  <varlistentry>
-    <term><varname>types.bool</varname></term>
-    <listitem>
-      <para>A Boolean.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>types.int</varname></term>
-    <listitem>
-      <para>An integer.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>types.str</varname></term>
-    <listitem>
-      <para>A string.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>types.lines</varname></term>
-    <listitem>
-      <para>A string.  If there are multiple definitions, they are
-      concatenated, with newline characters in between.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>types.path</varname></term>
-    <listitem>
-      <para>A path, defined as anything that, when coerced to a
-      string, starts with a slash.  This includes derivations.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>types.package</varname></term>
-    <listitem>
-      <para>A derivation (such as <literal>pkgs.hello</literal>) or a
-      store path (such as
-      <filename>/nix/store/1ifi1cfbfs5iajmvwgrbmrnrw3a147h9-hello-2.10</filename>).</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>types.listOf</varname> <replaceable>t</replaceable></term>
-    <listitem>
-      <para>A list of elements of type <replaceable>t</replaceable>
-      (e.g., <literal>types.listOf types.str</literal> is a list of
-      strings).  Multiple definitions are concatenated together.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>types.attrsOf</varname> <replaceable>t</replaceable></term>
-    <listitem>
-      <para>A set of elements of type <replaceable>t</replaceable>
-      (e.g., <literal>types.attrsOf types.int</literal> is a set of
-      name/value pairs, the values being integers).</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>types.nullOr</varname> <replaceable>t</replaceable></term>
-    <listitem>
-      <para>Either the value <literal>null</literal> or something of
-      type <replaceable>t</replaceable>.</para>
-    </listitem>
-  </varlistentry>
-
-</variablelist>
-
-You can also create new types using the function
-<varname>mkOptionType</varname>.  See
-<filename>lib/types.nix</filename> in Nixpkgs for details.</para>
 
 </section>
