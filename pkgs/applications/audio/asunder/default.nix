@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, gtk, libcddb, intltool, pkgconfig, cdparanoia
+{ stdenv, fetchurl, makeWrapper, gtk2, libcddb, intltool, pkgconfig, cdparanoia
 , mp3Support ? false, lame
 , oggSupport ? true, vorbis-tools
 , flacSupport ? true, flac
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nq9kd4rd4k2kibf57gdbm0zw2gxa234vvvdhxkm8g5bhx5h3iyq";
   };
 
-  buildInputs = [ gtk libcddb intltool pkgconfig makeWrapper ];
+  buildInputs = [ gtk2 libcddb intltool pkgconfig makeWrapper ];
 
   runtimeDeps =
     optional mp3Support lame ++
