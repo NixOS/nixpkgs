@@ -123,7 +123,6 @@ self: super: {
     prePatch = "sed -i 's|4\.8|4.9|' diagrams-core.cabal";
   });
 
-  timezone-series = doJailbreak super.timezone-series;
   timezone-olson = doJailbreak super.timezone-olson;
   xmonad-extras = overrideCabal super.xmonad-extras (drv: {
     postPatch = ''
