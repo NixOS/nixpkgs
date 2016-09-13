@@ -5539,6 +5539,8 @@ in
     ppx_enumerate = callPackage ../development/ocaml-modules/janestreet/ppx-enumerate.nix {};
 
     ppx_fail = callPackage ../development/ocaml-modules/janestreet/ppx-fail.nix {};
+
+    ppx_fields_conv = callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
