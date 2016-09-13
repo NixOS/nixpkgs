@@ -5509,6 +5509,8 @@ in
 
     ppx_core = callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
 
+    ppx_optcomp = callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
+
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
