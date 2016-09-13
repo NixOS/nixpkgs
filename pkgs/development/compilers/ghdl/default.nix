@@ -6,7 +6,8 @@
 assert flavour == "llvm" || flavour == "mcode";
 
 let
-  optional = stdenv.lib.optional;
+  inherit (stdenv.lib) optional;
+  inherit (stdenv.lib) optionals;
   version = "0.33";
 in
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g72rk2yzr0lrpncq2c1qcv71w3mi2hjq84r1yzgjr6d0qm87r2a";
   };
 
-  buildInputs = [ gnat zlib ] ++ optional (flavour == "llvm") [ clang ncurses ];
+  buildInputs = [ gnat zlib ] ++ optionals (flavour == "llvm") [ clang ncurses ];
 
   configureFlags = optional (flavour == "llvm") "--with-llvm=${llvm_35}";
 
