@@ -5556,6 +5556,8 @@ in
 
     ppx_expect = callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
 
+    ppx_jane = callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
+
     typerep = callPackage ../development/ocaml-modules/janestreet/typerep.nix {};
   };
 
