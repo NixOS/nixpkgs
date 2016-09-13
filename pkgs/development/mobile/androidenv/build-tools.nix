@@ -1,16 +1,16 @@
-{stdenv, stdenv_32bit, fetchurl, unzip, zlib_32bit, ncurses_32bit}:
+{stdenv, stdenv_32bit, fetchurl, unzip, zlib_32bit, ncurses_32bit, file, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "23.0.1";
+  version = "24.0.2";
   name = "android-build-tools-r${version}";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "https://dl.google.com/android/repository/build-tools_r${version}-linux.zip";
-      sha1 = "b6ba7c399d5fa487d95289d8832e4ad943aed556";
+      sha256 = "15bxk03m1r1i74idydgqsrz1k7qczi8f9sj4kl8vvbw9l6w2jklj";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "https://dl.google.com/android/repository/build-tools_r${version}-macosx.zip";
-      sha1 = "d96ec1522721e9a179ae2c591c99f75d31d39718";
+      sha256 = "0h71bv8rdkssn7a17vj3r7jl5jwsxbwpg3sig0k9a7yfwyfc71s8";
     }
     else throw "System ${stdenv.system} not supported!";
 
@@ -23,50 +23,34 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
       ''
         cd ${version}
-        
-        # Patch the interpreter
-        for i in aidl bcc_compat dexdump llvm-rs-cc
-        do
-            patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
-        done
-        
-        # These binaries need to find libstdc++ and libgcc_s
-        for i in aidl lib/libLLVM.so
-        do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib $i
-        done
-        
-        # These binaries need to find libstdc++, libgcc_s and libraries in the current folder
-        for i in lib/libbcc.so lib/libbcinfo.so lib/libclang.so aidl
-        do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib:`pwd`/lib $i
-        done
-        
-        # Create link to make libtinfo.so.5 work
-        ln -s ${ncurses_32bit.out}/lib/libncurses.so.5 `pwd`/lib/libtinfo.so.5
-        
-        # These binaries need to find libstdc++, libgcc_s, ncurses, and libraries in the current folder
-        for i in bcc_compat llvm-rs-cc
-        do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib:${ncurses_32bit.out}/lib:`pwd`/lib $i
-        done
 
-        # These binaries also need zlib in addition to libstdc++
-        for i in arm-linux-androideabi-ld i686-linux-android-ld mipsel-linux-android-ld split-select aapt zipalign
+        ln -s ${ncurses.out}/lib/libncurses.so.5 `pwd`/lib64/libtinfo.so.5
+
+        find . -type f -print0 | while IFS= read -r -d "" file
         do
-            patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib:${zlib_32bit.out}/lib:`pwd`/lib $i
-        done
-        
-        # These binaries need to find libstdc++, libgcc_s, and zlib
-        for i in aapt dexdump
-        do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib:${zlib_32bit.out}/lib:`pwd`/lib $i
+          type=$(file "$file")
+          ## Patch 64-bit binaries
+          if grep -q "ELF 64-bit" <<< "$type"
+          then
+            if grep -q "interpreter" <<< "$type"
+            then
+              patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 "$file"
+            fi
+            patchelf --set-rpath `pwd`/lib64:${stdenv.cc.cc.lib.out}/lib:${zlib.out}/lib:${ncurses.out}/lib "$file"
+          ## Patch 32-bit binaries
+          elif grep -q "ELF 32-bit" <<< "$type"
+          then
+            if grep -q "interpreter" <<< "$type"
+            then
+              patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 "$file"
+            fi
+            patchelf --set-rpath ${stdenv_32bit.cc.cc.lib.out}/lib:${zlib_32bit.out}/lib:${ncurses_32bit.out}/lib "$file"
+          fi
         done
       ''}
       
       patchShebangs .
   '';
   
-  buildInputs = [ unzip ];
+  buildInputs = [ unzip file ];
 }
