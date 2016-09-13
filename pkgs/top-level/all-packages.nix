@@ -5527,6 +5527,8 @@ in
     ppx_sexp_conv = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-conv.nix {};
 
     ppx_assert = callPackage ../development/ocaml-modules/janestreet/ppx-assert.nix {};
+
+    ppx_inline_test = callPackage ../development/ocaml-modules/janestreet/ppx-inline-test.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
