@@ -195,6 +195,10 @@ rec {
      to a set where the nativeDrv has been replaced with a new
      derivation but the crossDrv is the same as before.
 
+     It also provides an appropriate "override" function in the new
+     set that behaves like the override function usually does,
+     overriding both the native and cross derivation.
+
      Note: if the old derivation does not have a crossDrv, the
      set returned by this function will have a crossDrv attribute that
      should not be evaluated because it will result in an error.
@@ -204,7 +208,9 @@ rec {
     let
       nativeDrv = newNativeDrv;
       crossDrv = old.crossDrv;
-    in nativeDrv // { inherit crossDrv nativeDrv; };
+      override = newArgs: overrideNativeDrv
+        (newNativeDrv.override newArgs) (old.override newArgs);
+    in nativeDrv // { inherit crossDrv nativeDrv override; };
 
   /* Given a set of new packages and a set of old packages, produces a
      set with the same attribute names as the set of new packages,
