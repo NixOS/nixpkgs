@@ -5533,6 +5533,8 @@ in
     ppx_bench = callPackage ../development/ocaml-modules/janestreet/ppx-bench.nix {};
 
     ppx_bin_prot = callPackage ../development/ocaml-modules/janestreet/ppx-bin-prot.nix {};
+
+    ppx_custom_printf = callPackage ../development/ocaml-modules/janestreet/ppx-custom-printf.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
