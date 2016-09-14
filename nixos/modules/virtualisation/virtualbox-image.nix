@@ -34,7 +34,7 @@ in {
       postVM =
         ''
           export HOME=$PWD
-          export PATH=${pkgs.linuxPackages.virtualbox}/bin:$PATH
+          export PATH=${pkgs.virtualbox}/bin:$PATH
 
           echo "creating VirtualBox pass-through disk wrapper (no copying invovled)..."
           VBoxManage internalcommands createrawvmdk -filename disk.vmdk -rawdisk $diskImage

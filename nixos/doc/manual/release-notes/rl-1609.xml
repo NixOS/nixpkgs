@@ -90,6 +90,15 @@ following incompatible changes:</para>
     Use <literal>security.audit.enable = true;</literal> to explicitly enable it.</para>
   </listitem>
 
+  <listitem>
+    <para>
+      <literal>pkgs.linuxPackages.virtualbox</literal> now contains only the
+      kernel modules instead of the VirtualBox user space binaries.
+      If you want to reference the user space binaries, you have to use the new
+      <literal>pkgs.virtualbox</literal> instead.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
