@@ -26,9 +26,7 @@ self: super: {
   c2hs = dontCheck super.c2hs;
 
   # fix errors caused by hardening flags
-  epanet-haskell = super.epanet-haskell.overrideDerivation (drv: {
-    hardeningDisable = [ "format" ];
-  });
+  epanet-haskell = disableHardening super.epanet-haskell ["format"];
 
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
@@ -214,24 +212,10 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend (
-    addBuildTool super.gio self.gtk2hs-buildtools
-  ) pkgs.glib) (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
-  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend (
-    addBuildTool super.glib self.gtk2hs-buildtools
-  ) pkgs.glib) (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
-  gtk3 = pkgs.lib.overrideDerivation (super.gtk3.override { inherit (pkgs) gtk3; }) (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
-  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend (
-    addBuildTool super.gtk self.gtk2hs-buildtools
-  ) pkgs.gtk2) (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
+  gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib) ["fortify"];
+  glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib) ["fortify"];
+  gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
+  gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
@@ -411,9 +395,7 @@ self: super: {
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
-  lvmrun = pkgs.lib.overrideDerivation (dontCheck super.lvmrun) (drv: {
-    hardeningDisable = [ "format" ];
-  });
+  lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
   memcache = dontCheck super.memcache;
   milena = dontCheck super.milena;
   nats-queue = dontCheck super.nats-queue;
@@ -951,9 +933,7 @@ self: super: {
 
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
-  pango = (addBuildTool super.pango self.gtk2hs-buildtools).overrideDerivation (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
+  pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
 
   # Fix tests which would otherwise fail with "Couldn't launch intero process."
   intero = overrideCabal super.intero (drv: {
