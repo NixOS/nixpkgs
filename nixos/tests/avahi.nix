@@ -28,6 +28,8 @@ import ./make-test.nix ({ pkgs, ... } : {
        # mDNS.
        $one->waitForUnit("network.target");
        $two->waitForUnit("network.target");
+       $one->waitForUnit("avahi-daemon.service");
+       $two->waitForUnit("avahi-daemon.service");
 
        $one->succeed("avahi-resolve-host-name one.local | tee out >&2");
        $one->succeed("test \"`cut -f1 < out`\" = one.local");
