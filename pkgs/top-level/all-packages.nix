@@ -4755,6 +4755,8 @@ in
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
   });
 
+  halide = callPackage ../development/compilers/halide { };
+
   haxe = callPackage ../development/compilers/haxe {
     inherit (ocamlPackages) camlp4;
   };
