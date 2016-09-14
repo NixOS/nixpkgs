@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv, pa_ounit, sexplib, herelib}:
+{stdenv, buildOcaml, fetchurl, type_conv, pa_ounit, sexplib_p4, herelib}:
 
 buildOcaml rec {
   name = "pa_test";
@@ -12,7 +12,7 @@ buildOcaml rec {
   };
 
   buildInputs = [ pa_ounit ];
-  propagatedBuildInputs = [ type_conv sexplib herelib ];
+  propagatedBuildInputs = [ type_conv sexplib_p4 herelib ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/pa_test;

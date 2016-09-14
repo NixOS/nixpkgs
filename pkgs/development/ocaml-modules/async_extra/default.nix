@@ -1,6 +1,6 @@
 {stdenv, buildOcaml, fetchurl, async_kernel, async_unix,
  bin_prot, core, custom_printf, fieldslib_p4, herelib, pa_ounit,
- pipebang, pa_test, sexplib}:
+ pipebang, pa_test, sexplib_p4}:
 
 buildOcaml rec {
   name = "async_extra";
@@ -15,7 +15,7 @@ buildOcaml rec {
 
   buildInputs = [ pa_test pa_ounit ];
   propagatedBuildInputs = [ async_kernel async_unix core bin_prot custom_printf
-                            fieldslib_p4 herelib pipebang sexplib ];
+                            fieldslib_p4 herelib pipebang sexplib_p4 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/async_extra;
