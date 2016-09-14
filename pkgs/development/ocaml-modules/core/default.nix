@@ -1,5 +1,5 @@
 {stdenv, buildOcaml, fetchurl, type_conv,
- core_kernel, bin_prot, comparelib, custom_printf, enumerate,
+ core_kernel, bin_prot_p4, comparelib, custom_printf, enumerate,
  fieldslib_p4, herelib, pa_bench, pa_test, pa_ounit,
  pipebang, sexplib_p4, typerep_p4, variantslib_p4}:
 
@@ -17,7 +17,7 @@ buildOcaml rec {
   hasSharedObjects = true;
 
   buildInputs = [ pa_bench pa_test pa_ounit ];
-  propagatedBuildInputs = [ type_conv core_kernel bin_prot comparelib
+  propagatedBuildInputs = [ type_conv core_kernel bin_prot_p4 comparelib
                             custom_printf enumerate fieldslib_p4 herelib
                             pipebang sexplib_p4 typerep_p4 variantslib_p4 ];
 

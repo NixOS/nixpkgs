@@ -5146,7 +5146,7 @@ in
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
-    bin_prot = callPackage ../development/ocaml-modules/bin_prot { };
+    bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
@@ -5567,6 +5567,8 @@ in
     sexplib = callPackage ../development/ocaml-modules/janestreet/sexplib.nix {};
 
     variantslib = callPackage ../development/ocaml-modules/janestreet/variantslib.nix {};
+
+    bin_prot = callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
