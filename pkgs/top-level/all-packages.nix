@@ -11400,23 +11400,13 @@ in
 
     vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
 
-    virtualbox = callPackage ../applications/virtualization/virtualbox {
-      stdenv = stdenv_32bit;
-      inherit (gnome2) libIDL;
-      enableExtensionPack = config.virtualbox.enableExtensionPack or false;
-      pulseSupport = config.pulseaudio or false;
+    virtualbox = callPackage ../os-specific/linux/virtualbox {
+      virtualbox = pkgs.virtualboxHardened;
     };
 
-    virtualboxHardened = lowPrio (virtualbox.override {
-      enableHardening = true;
-    });
-
-    virtualboxHeadless = lowPrio (virtualbox.override {
-      enableHardening = true;
-      headless = true;
-    });
-
-    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
+    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions {
+      virtualbox = pkgs.virtualboxHardened;
+    };
 
     wireguard = callPackage ../os-specific/linux/wireguard { };
 
@@ -15231,6 +15221,22 @@ in
   };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
+
+  virtualbox = callPackage ../applications/virtualization/virtualbox {
+    stdenv = stdenv_32bit;
+    inherit (gnome2) libIDL;
+    enableExtensionPack = config.virtualbox.enableExtensionPack or false;
+    pulseSupport = config.pulseaudio or true;
+  };
+
+  virtualboxHardened = lowPrio (virtualbox.override {
+    enableHardening = true;
+  });
+
+  virtualboxHeadless = lowPrio (virtualbox.override {
+    enableHardening = true;
+    headless = true;
+  });
 
   virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
     fltk = fltk13;
