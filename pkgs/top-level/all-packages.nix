@@ -5303,7 +5303,7 @@ in
 
     core_extended = callPackage ../development/ocaml-modules/core_extended { };
 
-    core_kernel = callPackage ../development/ocaml-modules/core_kernel { };
+    core_kernel_p4 = callPackage ../development/ocaml-modules/core_kernel { };
 
     core = callPackage ../development/ocaml-modules/core { };
 
@@ -5569,6 +5569,8 @@ in
     variantslib = callPackage ../development/ocaml-modules/janestreet/variantslib.nix {};
 
     bin_prot = callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {};
+
+    core_kernel = callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
