@@ -5444,9 +5444,7 @@ in
       oasis = ocaml_oasis;
     };
 
-    qtest = callPackage ../development/ocaml-modules/qtest {
-      oasis = ocaml_oasis;
-    };
+    qtest = callPackage ../development/ocaml-modules/qtest { };
 
     re = callPackage ../development/ocaml-modules/re { };
 
