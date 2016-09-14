@@ -7,7 +7,7 @@ buildOcamlJane rec {
   propagatedBuildInputs = [ ppx_core ppx_tools ppx_type_conv sexplib];
 
   meta = with stdenv.lib; {
-    description = "A ppx rewriter that defines an extension node whose value is its source position";
+    description = "PPX syntax extension that generates code for converting OCaml types to and from s-expressions, as defined in the sexplib library";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };
