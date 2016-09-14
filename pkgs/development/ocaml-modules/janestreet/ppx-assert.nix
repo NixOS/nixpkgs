@@ -9,7 +9,7 @@ buildOcamlJane rec {
       ppx_type_conv sexplib ];
 
   meta = with stdenv.lib; {
-    description = "Assert-like extension nodes that raise useful errors on failure.";
+    description = "Assert-like extension nodes that raise useful errors on failure";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };

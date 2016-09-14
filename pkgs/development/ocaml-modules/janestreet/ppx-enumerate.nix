@@ -7,7 +7,7 @@ buildOcamlJane rec {
   propagatedBuildInputs = [ ppx_core ppx_tools ppx_type_conv ];
 
   meta = with stdenv.lib; {
-    description = "Generate a list containing all values of a finite type.";
+    description = "Generate a list containing all values of a finite type";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };

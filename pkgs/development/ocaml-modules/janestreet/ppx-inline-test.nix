@@ -7,7 +7,7 @@ buildOcamlJane rec {
   propagatedBuildInputs = [ ppx_core ppx_driver ppx_tools ];
 
   meta = with stdenv.lib; {
-    description = "Syntax extension for writing in-line tests in ocaml code.";
+    description = "Syntax extension for writing in-line tests in ocaml code";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };

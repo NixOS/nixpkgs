@@ -8,7 +8,7 @@ buildOcamlJane rec {
     [ ppx_core ppx_deriving ppx_driver ppx_tools ];
 
   meta = with stdenv.lib; {
-    description = "The type_conv library factors out functionality needed by different preprocessors that generate code from type specifications.";
+    description = "The type_conv library factors out functionality needed by different preprocessors that generate code from type specifications";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };

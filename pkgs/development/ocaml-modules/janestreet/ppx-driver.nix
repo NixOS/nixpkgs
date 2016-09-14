@@ -8,7 +8,7 @@ buildOcamlJane rec {
     [ ppx_core ppx_optcomp ];
 
   meta = with stdenv.lib; {
-    description = "A driver is an executable created from a set of OCaml AST transformers linked together with a command line frontend.";
+    description = "A driver is an executable created from a set of OCaml AST transformers linked together with a command line frontend";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };

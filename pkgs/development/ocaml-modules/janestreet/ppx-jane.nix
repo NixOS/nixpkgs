@@ -15,7 +15,7 @@ buildOcamlJane rec {
       ppx_sexp_message ppx_sexp_value ppx_typerep_conv ppx_variants_conv ];
 
   meta = with stdenv.lib; {
-    description = "ppx_jane is a ppx_driver including all standard ppx rewriters.";
+    description = "A ppx_driver including all standard ppx rewriters";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };

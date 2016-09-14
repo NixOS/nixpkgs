@@ -8,7 +8,7 @@ buildOcamlJane rec {
     [ppx_core ppx_driver ppx_tools ppx_type_conv ];
 
   meta = with stdenv.lib; {
-    description = "Generation of fast comparison functions from type expressions and definitions.";
+    description = "Generation of fast comparison functions from type expressions and definitions";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };

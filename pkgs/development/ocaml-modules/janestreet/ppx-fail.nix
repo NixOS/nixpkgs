@@ -7,7 +7,7 @@ buildOcamlJane rec {
   propagatedBuildInputs = [ ppx_core ppx_driver ppx_here ppx_tools ];
 
   meta = with stdenv.lib; {
-    description = "Syntax extension that makes failwith include a position.";
+    description = "Syntax extension that makes failwith include a position";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };
