@@ -5487,7 +5487,7 @@ in
     uuseg = callPackage ../development/ocaml-modules/uuseg { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
 
-    variantslib = callPackage ../development/ocaml-modules/variantslib { };
+    variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
@@ -5565,6 +5565,8 @@ in
     fieldslib = callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {};
 
     sexplib = callPackage ../development/ocaml-modules/janestreet/sexplib.nix {};
+
+    variantslib = callPackage ../development/ocaml-modules/janestreet/variantslib.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
