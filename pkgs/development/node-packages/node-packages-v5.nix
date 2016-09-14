@@ -3757,13 +3757,13 @@ let
         sha1 = "b5835739270cfe26acf632099fded2a07f209e5e";
       };
     };
-    "pbkdf2-3.0.5" = {
+    "pbkdf2-3.0.6" = {
       name = "pbkdf2";
       packageName = "pbkdf2";
-      version = "3.0.5";
+      version = "3.0.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/pbkdf2/-/pbkdf2-3.0.5.tgz";
-        sha1 = "10d907817f11d1191c11499bd067f04330a0aec3";
+        url = "https://registry.npmjs.org/pbkdf2/-/pbkdf2-3.0.6.tgz";
+        sha1 = "943d289ccd92b3dec55cc77dd696d44d6087e8bd";
       };
     };
     "public-encrypt-4.0.0" = {
@@ -9800,13 +9800,13 @@ let
         sha1 = "62b110e289a471418e3ec36a617d472e301dfc89";
       };
     };
-    "for-in-0.1.5" = {
+    "for-in-0.1.6" = {
       name = "for-in";
       packageName = "for-in";
-      version = "0.1.5";
+      version = "0.1.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/for-in/-/for-in-0.1.5.tgz";
-        sha1 = "007374e2b6d5c67420a1479bdb75a04872b738c4";
+        url = "https://registry.npmjs.org/for-in/-/for-in-0.1.6.tgz";
+        sha1 = "c9f96e89bfad18a545af5ec3ed352a1d9e5b4dc8";
       };
     };
     "glob-base-0.3.0" = {
@@ -11331,13 +11331,13 @@ let
         sha1 = "488b1d1d2451cb3d3a6b192cfc030f44c5855fea";
       };
     };
-    "http-proxy-1.14.0" = {
+    "http-proxy-1.15.1" = {
       name = "http-proxy";
       packageName = "http-proxy";
-      version = "1.14.0";
+      version = "1.15.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/http-proxy/-/http-proxy-1.14.0.tgz";
-        sha1 = "be32ab34dd5229e87840f4c27cb335ee195b2a83";
+        url = "https://registry.npmjs.org/http-proxy/-/http-proxy-1.15.1.tgz";
+        sha1 = "91a6088172e79bc0e821d5eb04ce702f32446393";
       };
     };
     "isbinaryfile-3.0.1" = {
@@ -12933,13 +12933,13 @@ let
         sha1 = "104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6";
       };
     };
-    "es6-promise-3.3.0" = {
+    "es6-promise-3.3.1" = {
       name = "es6-promise";
       packageName = "es6-promise";
-      version = "3.3.0";
+      version = "3.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/es6-promise/-/es6-promise-3.3.0.tgz";
-        sha1 = "c0859acb27b6804895a6067c981d410e68d2b116";
+        url = "https://registry.npmjs.org/es6-promise/-/es6-promise-3.3.1.tgz";
+        sha1 = "a08cdde84ccdbf34d027a1451bc91d4bcd28a613";
       };
     };
     "ignore-by-default-1.0.1" = {
@@ -16255,13 +16255,13 @@ let
         sha1 = "fe85b2ec75a59037f2adfec100fd6c601761152e";
       };
     };
-    "uc.micro-1.0.2" = {
+    "uc.micro-1.0.3" = {
       name = "uc.micro";
       packageName = "uc.micro";
-      version = "1.0.2";
+      version = "1.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/uc.micro/-/uc.micro-1.0.2.tgz";
-        sha1 = "466f26316a0bb707def6682f91f50139b8b8d538";
+        url = "https://registry.npmjs.org/uc.micro/-/uc.micro-1.0.3.tgz";
+        sha1 = "7ed50d5e0f9a9fb0a573379259f2a77458d50192";
       };
     };
     "htmlparser2-3.9.1" = {
@@ -17497,13 +17497,13 @@ let
         sha1 = "fecd7a18e7ce5ca6abfb953e1f86213a49f1625b";
       };
     };
-    "loader-utils-0.2.15" = {
+    "loader-utils-0.2.16" = {
       name = "loader-utils";
       packageName = "loader-utils";
-      version = "0.2.15";
+      version = "0.2.16";
       src = fetchurl {
-        url = "https://registry.npmjs.org/loader-utils/-/loader-utils-0.2.15.tgz";
-        sha1 = "c7df3342a9d4e2103dddc97d4060daccc246d6ac";
+        url = "https://registry.npmjs.org/loader-utils/-/loader-utils-0.2.16.tgz";
+        sha1 = "f08632066ed8282835dff88dfb52704765adee6d";
       };
     };
     "memory-fs-0.3.0" = {
@@ -18346,7 +18346,7 @@ in
       sources."create-hash-1.1.2"
       sources."create-hmac-1.1.4"
       sources."diffie-hellman-5.0.2"
-      sources."pbkdf2-3.0.5"
+      sources."pbkdf2-3.0.6"
       sources."public-encrypt-4.0.0"
       sources."randombytes-2.0.3"
       sources."browserify-aes-1.0.6"
@@ -19014,7 +19014,7 @@ in
       sources."create-hash-1.1.2"
       sources."create-hmac-1.1.4"
       sources."diffie-hellman-5.0.2"
-      sources."pbkdf2-3.0.5"
+      sources."pbkdf2-3.0.6"
       sources."public-encrypt-4.0.0"
       sources."randombytes-2.0.3"
       sources."browserify-aes-1.0.6"
@@ -20077,7 +20077,7 @@ in
       sources."is-buffer-1.1.4"
       sources."for-own-0.1.4"
       sources."is-extendable-0.1.1"
-      sources."for-in-0.1.5"
+      sources."for-in-0.1.6"
       sources."glob-base-0.3.0"
       sources."is-dotfile-1.0.2"
       sources."is-equal-shallow-0.1.3"
@@ -20589,7 +20589,7 @@ in
       sources."is-buffer-1.1.4"
       sources."for-own-0.1.4"
       sources."is-extendable-0.1.1"
-      sources."for-in-0.1.5"
+      sources."for-in-0.1.6"
       sources."glob-base-0.3.0"
       sources."is-dotfile-1.0.2"
       sources."glob-parent-2.0.0"
@@ -20940,7 +20940,7 @@ in
       })
       sources."glob-7.0.6"
       sources."graceful-fs-4.1.6"
-      sources."http-proxy-1.14.0"
+      sources."http-proxy-1.15.1"
       sources."isbinaryfile-3.0.1"
       sources."lodash-3.10.1"
       (sources."log4js-0.6.38" // {
@@ -21015,7 +21015,7 @@ in
       sources."is-buffer-1.1.4"
       sources."for-own-0.1.4"
       sources."is-extendable-0.1.1"
-      sources."for-in-0.1.5"
+      sources."for-in-0.1.6"
       sources."glob-base-0.3.0"
       sources."is-dotfile-1.0.2"
       sources."is-equal-shallow-0.1.3"
@@ -21491,7 +21491,7 @@ in
       sources."is-buffer-1.1.4"
       sources."for-own-0.1.4"
       sources."is-extendable-0.1.1"
-      sources."for-in-0.1.5"
+      sources."for-in-0.1.6"
       (sources."glob-base-0.3.0" // {
         dependencies = [
           sources."glob-parent-2.0.0"
@@ -22384,7 +22384,7 @@ in
     dependencies = [
       sources."chokidar-1.6.0"
       sources."debug-2.2.0"
-      sources."es6-promise-3.3.0"
+      sources."es6-promise-3.3.1"
       sources."ignore-by-default-1.0.1"
       sources."lodash.defaults-3.1.2"
       sources."minimatch-3.0.3"
@@ -22433,7 +22433,7 @@ in
       sources."is-buffer-1.1.4"
       sources."for-own-0.1.4"
       sources."is-extendable-0.1.1"
-      sources."for-in-0.1.5"
+      sources."for-in-0.1.6"
       sources."glob-base-0.3.0"
       sources."is-dotfile-1.0.2"
       sources."is-equal-shallow-0.1.3"
@@ -25112,7 +25112,7 @@ in
       sources."entities-1.1.1"
       sources."linkify-it-1.2.4"
       sources."mdurl-1.0.1"
-      sources."uc.micro-1.0.2"
+      sources."uc.micro-1.0.3"
       (sources."htmlparser2-3.9.1" // {
         dependencies = [
           sources."readable-stream-2.1.5"
@@ -26364,7 +26364,7 @@ in
       })
       sources."acorn-3.3.0"
       sources."interpret-0.6.6"
-      sources."loader-utils-0.2.15"
+      sources."loader-utils-0.2.16"
       sources."memory-fs-0.3.0"
       sources."mkdirp-0.5.1"
       (sources."node-libs-browser-0.6.0" // {
@@ -26505,7 +26505,7 @@ in
       sources."is-posix-bracket-0.1.1"
       sources."for-own-0.1.4"
       sources."is-extendable-0.1.1"
-      sources."for-in-0.1.5"
+      sources."for-in-0.1.6"
       sources."glob-base-0.3.0"
       sources."is-dotfile-1.0.2"
       sources."is-equal-shallow-0.1.3"
