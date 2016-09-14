@@ -3757,13 +3757,13 @@ let
         sha1 = "b5835739270cfe26acf632099fded2a07f209e5e";
       };
     };
-    "pbkdf2-3.0.5" = {
+    "pbkdf2-3.0.6" = {
       name = "pbkdf2";
       packageName = "pbkdf2";
-      version = "3.0.5";
+      version = "3.0.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/pbkdf2/-/pbkdf2-3.0.5.tgz";
-        sha1 = "10d907817f11d1191c11499bd067f04330a0aec3";
+        url = "https://registry.npmjs.org/pbkdf2/-/pbkdf2-3.0.6.tgz";
+        sha1 = "943d289ccd92b3dec55cc77dd696d44d6087e8bd";
       };
     };
     "public-encrypt-4.0.0" = {
@@ -18346,7 +18346,7 @@ in
       sources."create-hash-1.1.2"
       sources."create-hmac-1.1.4"
       sources."diffie-hellman-5.0.2"
-      sources."pbkdf2-3.0.5"
+      sources."pbkdf2-3.0.6"
       sources."public-encrypt-4.0.0"
       sources."randombytes-2.0.3"
       sources."browserify-aes-1.0.6"
@@ -19014,7 +19014,7 @@ in
       sources."create-hash-1.1.2"
       sources."create-hmac-1.1.4"
       sources."diffie-hellman-5.0.2"
-      sources."pbkdf2-3.0.5"
+      sources."pbkdf2-3.0.6"
       sources."public-encrypt-4.0.0"
       sources."randombytes-2.0.3"
       sources."browserify-aes-1.0.6"
