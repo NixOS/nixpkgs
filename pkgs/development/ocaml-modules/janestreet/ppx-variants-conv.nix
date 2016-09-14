@@ -7,7 +7,7 @@ buildOcamlJane rec {
   propagatedBuildInputs = [ ppx_core ppx_tools ppx_type_conv sexplib];
 
   meta = with stdenv.lib; {
-    description = "Generation of accessor and iteration functions for ocaml variant types.";
+    description = "Generation of accessor and iteration functions for ocaml variant types";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };
