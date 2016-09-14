@@ -4407,6 +4407,7 @@ in
 
   clang = llvmPackages.clang;
 
+  clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
   clang_36 = llvmPackages_36.clang;
@@ -4933,6 +4934,7 @@ in
 
   llvm = llvmPackages.llvm;
 
+  llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
   llvm_36 = llvmPackages_36.llvm;
