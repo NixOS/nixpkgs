@@ -238,11 +238,24 @@ rec {
     lts-6_4 = packages.ghc7103;
     lts-6_5 = packages.ghc7103;
     lts-6_6 = packages.ghc7103;
-    lts-6_7 = packages.ghc7103.override {
+    lts-6_7 = packages.ghc7103;
+    lts-6_8 = packages.ghc7103;
+    lts-6_9 = packages.ghc7103;
+    lts-6_10 = packages.ghc7103;
+    lts-6_11 = packages.ghc7103;
+    lts-6_12 = packages.ghc7103;
+    lts-6_13 = packages.ghc7103;
+    lts-6_14 = packages.ghc7103;
+    lts-6_15 = packages.ghc7103;
+    lts-6_16 = packages.ghc7103;
+    lts-6_17 = packages.ghc7103;
+    lts-6 = packages.lts-6_17;
+
+    lts-7_0 = packages.ghc801.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts.nix { };
     };
-    lts-6 = packages.lts-6_7;
+    lts-7 = packages.lts-7_0;
 
-    lts = packages.lts-6;
+    lts = packages.lts-7;
   };
 }
