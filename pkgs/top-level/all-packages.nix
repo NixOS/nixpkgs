@@ -5387,7 +5387,7 @@ in
       camlp5 = camlp5_transitional;
     };
 
-    textutils = callPackage ../development/ocaml-modules/textutils { };
+    textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
 
     type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
     type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
@@ -5575,6 +5575,8 @@ in
     core = callPackage ../development/ocaml-modules/janestreet/core.nix {};
 
     re2 = callPackage ../development/ocaml-modules/janestreet/re2.nix {};
+
+    textutils = callPackage ../development/ocaml-modules/janestreet/textutils.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
