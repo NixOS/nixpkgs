@@ -4737,7 +4737,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc801.override {
+  haskellPackages = haskell.packages.lts-7.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
 
