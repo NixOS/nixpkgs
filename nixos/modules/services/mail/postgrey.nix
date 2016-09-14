@@ -7,21 +7,25 @@ with lib; let
 in {
 
   options = {
-    services.postgrey = {
+    services.postgrey = with types; {
       enable = mkOption {
+        type = bool;
         default = false;
         description = "Whether to run the Postgrey daemon";
       };
       inetAddr = mkOption {
+        type = nullOr string;
         default = null;
         example = "127.0.0.1";
         description = "The inet address to bind to. If none given, bind to /var/run/postgrey.sock";
       };
       inetPort = mkOption {
+        type = int;
         default = 10030;
         description = "The tcp port to bind to";
       };
       greylistText = mkOption {
+        type = string;
         default = "Greylisted for %%s seconds";
         description = "Response status text for greylisted messages";
       };
