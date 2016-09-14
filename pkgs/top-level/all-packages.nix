@@ -5301,7 +5301,7 @@ in
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
-    core_extended = callPackage ../development/ocaml-modules/core_extended { };
+    core_extended_p4 = callPackage ../development/ocaml-modules/core_extended { };
 
     core_kernel_p4 = callPackage ../development/ocaml-modules/core_kernel { };
 
@@ -5577,6 +5577,8 @@ in
     re2 = callPackage ../development/ocaml-modules/janestreet/re2.nix {};
 
     textutils = callPackage ../development/ocaml-modules/janestreet/textutils.nix {};
+
+    core_extended = callPackage ../development/ocaml-modules/janestreet/core-extended.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
@@ -5704,9 +5706,12 @@ in
   tinycc = callPackage ../development/compilers/tinycc { };
 
   trv = callPackage ../development/tools/misc/trv {
-   inherit (ocamlPackages_4_02) findlib camlp4 core async async_unix
-     async_extra sexplib async_shell core_extended async_find cohttp uri;
+   inherit (ocamlPackages_4_02) findlib camlp4 async async_unix
+     async_extra async_shell async_find cohttp uri;
     ocaml = ocaml_4_02;
+    core_extended = ocamlPackages_4_02.core_extended_p4;
+    sexplib = ocamlPackages_4_02.sexplib_p4;
+    core = ocamlPackages_4_02.core_p4;
   };
 
   bupc = callPackage ../development/compilers/bupc { };
