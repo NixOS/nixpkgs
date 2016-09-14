@@ -2,6 +2,7 @@
   "alloy"
 , "azure-cli"
 , "babel-cli"
+, "babel-eslint"
 , "bower"
 , "bower2nix"
 , "browserify"

@@ -3901,6 +3901,24 @@ let
         sha1 = "9978ce317388c649ad8793028c3477ef044a8b51";
       };
     };
+    "lodash.assign-4.2.0" = {
+      name = "lodash.assign";
+      packageName = "lodash.assign";
+      version = "4.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lodash.assign/-/lodash.assign-4.2.0.tgz";
+        sha1 = "0d99f3ccd7a6d261d19bdaeb9245005d285808e7";
+      };
+    };
+    "lodash.pickby-4.6.0" = {
+      name = "lodash.pickby";
+      packageName = "lodash.pickby";
+      version = "4.6.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lodash.pickby/-/lodash.pickby-4.6.0.tgz";
+        sha1 = "7dea21d8c18d7703a27c704c15d3b84a67e33aff";
+      };
+    };
     "argparse-1.0.4" = {
       name = "argparse";
       packageName = "argparse";
@@ -17695,15 +17713,6 @@ let
         sha1 = "32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a";
       };
     };
-    "lodash.assign-4.2.0" = {
-      name = "lodash.assign";
-      packageName = "lodash.assign";
-      version = "4.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.assign/-/lodash.assign-4.2.0.tgz";
-        sha1 = "0d99f3ccd7a6d261d19bdaeb9245005d285808e7";
-      };
-    };
     "pkg-conf-1.1.3" = {
       name = "pkg-conf";
       packageName = "pkg-conf";
@@ -18699,6 +18708,54 @@ in
     meta = {
       description = "Babel command line.";
       homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-eslint = nodeEnv.buildNodePackage {
+    name = "babel-eslint";
+    packageName = "babel-eslint";
+    version = "6.1.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-eslint/-/babel-eslint-6.1.2.tgz";
+      sha1 = "5293419fe3672d66598d327da9694567ba6a5f2f";
+    };
+    dependencies = [
+      sources."babel-traverse-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babylon-6.9.2"
+      sources."lodash.assign-4.2.0"
+      sources."lodash.pickby-4.6.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babel-runtime-6.11.6"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."lodash-4.15.0"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Custom parser for ESLint";
+      homepage = https://github.com/babel/babel-eslint;
       license = "MIT";
     };
     production = true;
