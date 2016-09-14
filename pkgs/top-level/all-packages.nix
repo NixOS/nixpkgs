@@ -5060,7 +5060,7 @@ in
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
-    async_extra = callPackage ../development/ocaml-modules/async_extra { };
+    async_extra_p4 = callPackage ../development/ocaml-modules/async_extra { };
 
     async_find = callPackage ../development/ocaml-modules/async_find { };
 
@@ -5610,18 +5610,22 @@ in
       then callPackage ../development/ocaml-modules/janestreet/core-extended.nix {}
       else core_extended_p4;
 
-     async_kernel =
+    async_kernel =
       if lib.versionOlder "4.02" ocaml_version
       then callPackage ../development/ocaml-modules/janestreet/async-kernel.nix {}
       else async_kernel_p4;
 
     async_rpc_kernel = callPackage ../development/ocaml-modules/janestreet/async-rpc-kernel.nix {};
 
-     async_unix =
+    async_unix =
       if lib.versionOlder "4.02" ocaml_version
       then callPackage ../development/ocaml-modules/janestreet/async-unix.nix {}
       else async_unix_p4;
 
+    async_extra =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/async-extra.nix {}
+      else async_extra_p4;
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
