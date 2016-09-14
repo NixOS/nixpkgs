@@ -5615,6 +5615,8 @@ in
       then callPackage ../development/ocaml-modules/janestreet/async-kernel.nix {}
       else async_kernel_p4;
 
+    async_rpc_kernel = callPackage ../development/ocaml-modules/janestreet/async-rpc-kernel.nix {};
+
      async_unix =
       if lib.versionOlder "4.02" ocaml_version
       then callPackage ../development/ocaml-modules/janestreet/async-unix.nix {}
