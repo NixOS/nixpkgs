@@ -2,11 +2,11 @@
  ocamlmod, ocamlify, ounit, expect}:
 
 stdenv.mkDerivation {
-  name = "ocaml-oasis-0.4.7";
+  name = "ocaml-oasis-0.4.6";
 
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/1635/oasis-0.4.6.tar.gz;
-    sha256 = "13crvqiy0hhlnm4qfyxq2jjvs11ldxf15c4g9q91k1x3wj04pg2l";
+    url = http://forge.ocamlcore.org/frs/download.php/1604/oasis-0.4.6.tar.gz;
+    sha256 = "1yxv3ckkf87nz0cyll0yy1kd295j5pv3jqwkfrr1y65wkz5vw90k";
   };
 
   createFindlibDestdir = true;
