@@ -24,7 +24,12 @@ buildOcaml (args // {
 
   installPhase = ''
     opam-installer -i --prefix $prefix --libdir `ocamlfind printconf destdir` --stubsdir `ocamlfind printconf destdir`/${name} ${name}.install
-    if [ -d $out/lib/${name} ]; then if [ "$(ls -A $out/lib/${name})" ]; then mv $out/lib/${name}/* `ocamlfind printconf destdir`/${name}; fi; rmdir $out/lib/${name}; fi
+    if [ -d $out/lib/${name} ]
+      then if [ "$(ls -A $out/lib/${name})" ]
+        then mv $out/lib/${name}/* `ocamlfind printconf destdir`/${name}
+      fi
+      rmdir $out/lib/${name}
+    fi
   '';
 
 })
