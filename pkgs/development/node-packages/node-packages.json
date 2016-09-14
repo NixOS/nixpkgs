@@ -3,6 +3,7 @@
 , "azure-cli"
 , "babel-cli"
 , "babel-eslint"
+, "babel-polyfill"
 , "bower"
 , "bower2nix"
 , "browserify"

@@ -19675,6 +19675,27 @@ in
     };
     production = true;
   };
+  babel-polyfill = nodeEnv.buildNodePackage {
+    name = "babel-polyfill";
+    packageName = "babel-polyfill";
+    version = "6.13.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-polyfill/-/babel-polyfill-6.13.0.tgz";
+      sha1 = "5978215c25d49a697eb78afc54e63c9d3a73d5ec";
+    };
+    dependencies = [
+      sources."core-js-2.4.1"
+      sources."babel-runtime-6.11.6"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Provides polyfills necessary for a full ES2015+ environment";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
   bower = nodeEnv.buildNodePackage {
     name = "bower";
     packageName = "bower";
