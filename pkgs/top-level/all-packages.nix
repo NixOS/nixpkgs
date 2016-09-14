@@ -2076,6 +2076,10 @@ in
 
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
+  huginn = callPackage ../applications/misc/huginn {
+    ruby = ruby_2_3;
+  };
+
   hwinfo = callPackage ../tools/system/hwinfo { };
 
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };

@@ -239,6 +239,7 @@
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
+  ./services/misc/huginn.nix
   ./services/misc/ihaskell.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix

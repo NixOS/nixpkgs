@@ -1,0 +1,102 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-huginn">
+
+<title>Huginn</title>
+
+<para>Huginn is a platform for agents.</para>
+
+<section><title>Prerequisites</title>
+
+<para>Huginn by default listens for connecions on localhost at port 3000. however,
+if enableUnicorn = true it will listen on a socket
+<literal>/${hugin.statePath/tmp/sockets/huginn.socket</literal>. You need to configure a
+webserver to proxy HTTP requests to the socket.</para>
+
+<para>For instance, the following configuration could be used to use nginx as
+    frontend proxy:
+
+<programlisting>
+services.httpd = {
+  enable = true;
+  enableSSL = false;
+  adminAddr = "mog@localhost";
+  virtualHosts =
+  [{
+    hostName = "localhost";
+    serverAliases = ["localhost"];
+      extraConfig = ''
+        DocumentRoot ${pkgs.huginn}/share/huginn/public
+        &lt;Directory  ${pkgs.huginn}/share/huginn/public&gt;
+           Require all granted
+           AllowOverride all
+           Options -MultiViews
+        &lt;/Directory&gt;
+      # prevent a forward proxy!
+      ProxyRequests off
+      # User-Agent / browser identification is used from the original client
+      ProxyVia Off
+      ProxyPreserveHost On
+      &lt;Proxy *&gt;
+        Order deny,allow
+        Allow from all
+      &lt;/Proxy&gt;
+      ProxyPass /assets !
+      ProxyPass / unix:${config.services.huginn.huginnSocket}|http://localhost/
+      ProxyPassReverse / unix:${config.services.huginn.huginnSocket}|http://localhost/
+        '';
+        }
+  ];
+};
+</programlisting>
+</para>
+
+</section>
+
+<section><title>Configuring</title>
+
+<para>Huginn depends on both PostgreSQL. It will automatically enable it and create a role and database for postgreSQL.
+</para>
+
+<para>The default state dir is <literal>/var/huginn</literal>. This is where
+all data like the repositories and uploads will be stored.</para>
+
+<para>A basic configuration with some custom settings could look like this:
+
+<programlisting>
+services.huginn = {
+  enable = true;
+};
+</programlisting>
+</para>
+
+<para>Refer to <xref linkend="ch-options" /> for all available configuration
+options for the <literal>services.huginn</literal> module.</para>
+
+</section>
+
+<section><title>Maintenance</title>
+
+<para>You can run Huginn's rake tasks with <literal>huginn-rake</literal>
+which will be available on the system when huginn is enabled. You will
+have to run the command as the user that you configured to run huginn
+with.</para>
+
+<para>For example, to get timezone choices:
+
+<programlisting>
+$ sudo -u huginn -H huginn-rake time:zones:all
+</programlisting>
+
+A list of all availabe rake tasks can be obtained by running:
+
+<programlisting>
+$ sudo -u huginn -H huginn-rake -T
+</programlisting>
+</para>
+
+</section>
+
+</chapter>
