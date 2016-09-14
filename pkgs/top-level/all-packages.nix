@@ -5072,7 +5072,7 @@ in
 
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
 
-    async =
+    async_p4 =
       if lib.versionOlder "4.02" ocaml_version
       then callPackage ../development/ocaml-modules/async { }
       else null;
@@ -5626,6 +5626,11 @@ in
       if lib.versionOlder "4.02" ocaml_version
       then callPackage ../development/ocaml-modules/janestreet/async-extra.nix {}
       else async_extra_p4;
+
+    async =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/async.nix {}
+      else async_p4;
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
@@ -5753,9 +5758,11 @@ in
   tinycc = callPackage ../development/compilers/tinycc { };
 
   trv = callPackage ../development/tools/misc/trv {
-   inherit (ocamlPackages_4_02) findlib camlp4 async
-     async_extra async_shell async_find cohttp uri;
+   inherit (ocamlPackages_4_02) findlib camlp4
+     async_shell async_find cohttp uri;
     ocaml = ocaml_4_02;
+    async = ocamlPackages_4_02.async_p4;
+    async_extra = ocamlPackages_4_02.async_extra_p4;
     async_unix = ocamlPackages_4_02.async_unix_p4;
     core_extended = ocamlPackages_4_02.core_extended_p4;
     sexplib = ocamlPackages_4_02.sexplib_p4;

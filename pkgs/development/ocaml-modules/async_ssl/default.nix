@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, async, comparelib, core_p4, ctypes, openssl,
+{stdenv, buildOcaml, fetchurl, async_p4, comparelib, core_p4, ctypes, openssl,
  fieldslib_p4, herelib, pa_bench, pa_ounit, pipebang, pa_test, sexplib_p4}:
 
 buildOcaml rec {
@@ -13,7 +13,7 @@ buildOcaml rec {
   };
 
   buildInputs = [ pa_bench pa_test ];
-  propagatedBuildInputs = [ ctypes async comparelib core_p4 fieldslib_p4 pa_ounit
+  propagatedBuildInputs = [ ctypes async_p4 comparelib core_p4 fieldslib_p4 pa_ounit
                             herelib pipebang sexplib_p4 openssl ];
 
   meta = with stdenv.lib; {
