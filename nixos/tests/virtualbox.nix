@@ -390,6 +390,7 @@ in mapAttrs mkVBoxTest {
     $machine->sendKeys("ctrl-q");
     $machine->sleep(5);
     $machine->screenshot("gui_manager_stopped");
+    destroyVM_simple;
   '';
 
   simple-cli = ''
@@ -407,6 +408,7 @@ in mapAttrs mkVBoxTest {
     });
 
     shutdownVM_simple;
+    destroyVM_simple;
   '';
 
   headless = ''
@@ -415,6 +417,7 @@ in mapAttrs mkVBoxTest {
     waitForStartup_headless;
     waitForVMBoot_headless;
     shutdownVM_headless;
+    destroyVM_headless;
   '';
 
   host-usb-permissions = ''
