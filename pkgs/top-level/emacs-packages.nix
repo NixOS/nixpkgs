@@ -1566,6 +1566,8 @@ let
     };
   };
 
+  tramp = callPackage ../applications/editors/emacs-modes/tramp { };
+
   tracking = melpaBuild rec {
     pname   = "tracking";
     version = circe.version;
