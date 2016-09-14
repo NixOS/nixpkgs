@@ -74,6 +74,15 @@ stdenv.mkDerivation rec {
     [ "-ffreestanding" ] # needed due to glibc 2.24 upgrade (see https://sourceware.org/glibc/wiki/Release/2.24#Known_Issues)
     ++ stdenv.lib.optional (stdenv.isDarwin && withX) "-I${cairo.dev}/include/cairo";
 
+  # Occasionally, the Emacs "unexec" method of producing an executable
+  # on OS X will fail if there is not enough room for data segments.
+  # See:
+  #   http://web.mit.edu/Emacs/source/emacs-23.1/src/unexmacosx.c
+  #   https://lists.gnu.org/archive/html/emacs-devel/2013-05/msg00453.html
+  # Increasing the headerpad size fixes this issue.
+  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
+    "-headerpad_max_install_names";
+
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
