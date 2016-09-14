@@ -1,6 +1,7 @@
 [
   "alloy"
 , "azure-cli"
+, "babel-cli"
 , "bower"
 , "bower2nix"
 , "browserify"
