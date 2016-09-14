@@ -23,10 +23,17 @@ buildGoPackage rec {
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
   '';
 
-  postInstall= ''
+  postInstall = ''
     cp $src/bin/fzf-tmux $bin/bin
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
+  '';
+
+  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+    # fixes cycle between $out and $bin
+    # otool -l shows that the binary includes an LC_RPATH to $out/lib
+    # it seems safe to remove that since but the directory does not exist.
+    install_name_tool -delete_rpath $out/lib $bin/bin/fzf
   '';
 
   meta = with stdenv.lib; {
