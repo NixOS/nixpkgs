@@ -5357,6 +5357,7 @@ in
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
 
     ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
+    ocaml_oasis_46 = callPackage ../development/tools/ocaml/oasis/0.4.6.nix { };
 
     ocaml_optcomp = callPackage ../development/ocaml-modules/optcomp { };
 
