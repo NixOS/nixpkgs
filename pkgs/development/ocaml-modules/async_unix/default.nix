@@ -1,5 +1,5 @@
 {stdenv, buildOcaml, fetchurl, async_kernel,
- bin_prot_p4, comparelib, core, fieldslib_p4, herelib, pa_ounit,
+ bin_prot_p4, comparelib, core_p4, fieldslib_p4, herelib, pa_ounit,
  pipebang, pa_test, sexplib_p4}:
 
 buildOcaml rec {
@@ -15,7 +15,7 @@ buildOcaml rec {
 
   hasSharedObjects = true;
   buildInputs = [ pa_ounit ];
-  propagatedBuildInputs = [ async_kernel core bin_prot_p4 comparelib
+  propagatedBuildInputs = [ async_kernel core_p4 bin_prot_p4 comparelib
                             fieldslib_p4 herelib pipebang pa_test sexplib_p4 ];
 
    meta = with stdenv.lib; {

@@ -5320,7 +5320,7 @@ in
 
     core_kernel_p4 = callPackage ../development/ocaml-modules/core_kernel { };
 
-    core = callPackage ../development/ocaml-modules/core { };
+    core_p4 = callPackage ../development/ocaml-modules/core { };
 
     ocamlbuild =
     if lib.versionOlder "4.03" ocaml_version then
@@ -5590,6 +5590,8 @@ in
     bin_prot = callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {};
 
     core_kernel = callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {};
+
+    core = callPackage ../development/ocaml-modules/janestreet/core.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
