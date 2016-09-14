@@ -5369,7 +5369,7 @@ in
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
-    re2 = callPackage ../development/ocaml-modules/re2 { };
+    re2_p4 = callPackage ../development/ocaml-modules/re2 { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
@@ -5573,6 +5573,8 @@ in
     core_kernel = callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {};
 
     core = callPackage ../development/ocaml-modules/janestreet/core.nix {};
+
+    re2 = callPackage ../development/ocaml-modules/janestreet/re2.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
