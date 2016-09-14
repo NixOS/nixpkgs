@@ -13486,9 +13486,9 @@ in
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
-  google-chrome-beta = google-chrome.override { channel = "beta"; };
+  google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
-  google-chrome-dev = google-chrome.override { channel = "dev"; };
+  google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
