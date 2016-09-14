@@ -15871,8 +15871,6 @@ in
 
   gnugo = callPackage ../games/gnugo { };
 
-  gsb = callPackage ../games/gsb { };
-
   gtypist = callPackage ../games/gtypist { };
 
   gzdoom = callPackage ../games/gzdoom { };
