@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ gsettings_desktop_schemas gnome_keyring gnome-menus glib gcr json_glib accountsservice
-      libcroco intltool libsecret pkgconfig libsoup polkit libcanberra gdk_pixbuf librsvg
+      libcroco intltool libsecret pkgconfig libsoup polkit libcanberra_gtk2 gdk_pixbuf librsvg
       clutter networkmanager libstartup_notification telepathy_glib docbook_xsl docbook_xsl_ns
       libXtst p11_kit networkmanagerapplet gjs mutter libpulseaudio caribou evolution_data_server
       libical libtool nss gtk gstreamer makeWrapper gdm

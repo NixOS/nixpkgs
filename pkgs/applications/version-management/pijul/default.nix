@@ -31,7 +31,7 @@ buildRustPackage rec {
     homepage = https://pijul.org/;
     description = "Fast DVCS based on a categorical theory of patches";
     license = licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.x86_64;  # i686 builds fail due to lmdb
     maintainers = with maintainers; [ puffnfresh ];
   };
 }

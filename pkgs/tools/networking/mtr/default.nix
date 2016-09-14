@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ncurses, autoconf
-, withGtk ? false, gtk ? null}:
+, withGtk ? false, gtk2 ? null}:
 
-assert withGtk -> gtk != null;
+assert withGtk -> gtk2 != null;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = optionalString (!withGtk) "--without-gtk";
 
-  buildInputs = [ autoconf ncurses ] ++ optional withGtk gtk;
+  buildInputs = [ autoconf ncurses ] ++ optional withGtk gtk2;
 
   meta = {
     homepage = http://www.bitwizard.nl/mtr/;

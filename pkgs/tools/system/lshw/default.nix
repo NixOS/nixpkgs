@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, withGUI? false, gtk? null, pkgconfig? null, sqlite? null  # compile GUI
+, withGUI ? false, gtk2 ? null, pkgconfig? null, sqlite ? null  # compile GUI
  }:
 stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1728b96gyjmrp31knzips9azn6wkfdp5k5dnbil7h7hgz99w177b";
   };
 
-  buildInputs = [] ++ stdenv.lib.optional withGUI [ gtk pkgconfig sqlite ];
+  buildInputs = [] ++ stdenv.lib.optional withGUI [ gtk2 pkgconfig sqlite ];
 
   postBuild = if withGUI then "make gui" else "";
 

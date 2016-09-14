@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, bzip2, pkgconfig, curl, lzma, gettext
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? false, gtk
+, gtkClient ? false, gtk2
 , server ? true, readline }:
 
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib bzip2 curl lzma gettext ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
-    ++ optionals gtkClient [ gtk ]
+    ++ optionals gtkClient [ gtk2 ]
     ++ optional server readline;
 
   configureFlags = []

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, libX11, libjpeg, libpng, libtiff, pkgconfig,
-librsvg, glib, gtk, libXext, libXxf86vm, poppler, xineLib }:
+librsvg, glib, gtk2, libXext, libXxf86vm, poppler, xineLib }:
 
 stdenv.mkDerivation rec {
   name = "eaglemode-0.86.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl libX11 libjpeg libpng libtiff pkgconfig
-    librsvg glib gtk libXxf86vm libXext poppler xineLib ];
+    librsvg glib gtk2 libXxf86vm libXext poppler xineLib ];
 
   # The program tries to dlopen both Xxf86vm and Xext, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.

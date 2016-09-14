@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk, GConf, alsaLib }:
+{ stdenv, fetchurl, intltool, pkgconfig, gtk2, GConf, alsaLib }:
 
 stdenv.mkDerivation rec {
   name = "gmtk-1.0.9b";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "07y5hd94qhvlk9a9vhrpznqaml013j3rq52r3qxmrj74gg4yf4zc";
   };
 
-  buildInputs = [ intltool pkgconfig gtk GConf alsaLib ];
+  buildInputs = [ intltool pkgconfig gtk2 GConf alsaLib ];
 
   meta = {
     platforms = stdenv.lib.platforms.linux;

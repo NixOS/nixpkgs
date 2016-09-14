@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst_plugins_base, GConf, libX11, cairo
 , withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l1w4i113csv3bd5r8ybyj0qpxdq83lj6jrc5p7cc10mkwyiagqz";
   };
 
-  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst_plugins_base GConf libX11 cairo ]
+  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst_plugins_base GConf libX11 cairo ]
     ++ optional withMesa mesa;
 
   nativeBuildInputs = [ pkgconfig ];
@@ -56,7 +56,10 @@ stdenv.mkDerivation rec {
     (cd $out/include && ln -s wx-*/* .)
   ";
 
-  passthru = {inherit gtk compat24 compat26 unicode;};
+  passthru = {
+    inherit compat24 compat26 unicode;
+    gtk = gtk2;
+  };
 
   enableParallelBuilding = true;
   

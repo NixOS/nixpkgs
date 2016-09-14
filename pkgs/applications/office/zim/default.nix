@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPythonApplication, pythonPackages, pygtk, pygobject, python }:
+{ stdenv, lib, fetchurl, buildPythonApplication, pythonPackages, pygtk, pygobject2, python }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "15pdq4fxag85qjsrdmmssiq85qsk5vnbp8mrqnpvx8lm8crz6hjl";
   };
 
-  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk pythonPackages.pyxdg pygobject ];
+  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk pythonPackages.pyxdg pygobject2 ];
 
   preBuild = ''
     export HOME=$TMP

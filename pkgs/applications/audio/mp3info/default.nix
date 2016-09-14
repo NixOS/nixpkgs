@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses, pkgconfig, gtk }:
+{ fetchurl, stdenv, ncurses, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "mp3info-0.8.5a";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "042f1czcs9n2sbqvg4rsvfwlqib2gk976mfa2kxlfjghx5laqf04";
   };
 
-  buildInputs = [ ncurses pkgconfig gtk ];
+  buildInputs = [ ncurses pkgconfig gtk2 ];
 
   hardeningDisable = [ "format" ];
 

@@ -1,16 +1,16 @@
 { stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
-, glib, gtk, libXtst, jdk
+, glib, libXtst, jdk
 , webkitgtk2 ? null  # for internal web browser
 , buildEnv, writeText, runCommand
 , callPackage
-} @ args:
+}:
 
 assert stdenv ? glibc;
 
 rec {
 
-  buildEclipse = import ./build-eclipse.nix args;
+  buildEclipse = callPackage ./build-eclipse.nix { };
 
   eclipse-sdk-35 = buildEclipse {
     name = "eclipse-sdk-3.5.2";
@@ -198,6 +198,23 @@ rec {
       else throw "Unsupported system: ${stdenv.system}";
   };
   eclipse_cpp_45 = eclipse-cpp-45; # backward compatibility, added 2016-01-30
+
+  eclipse-cpp-46 = buildEclipse {
+    name = "eclipse-cpp-4.6.0";
+    description = "Eclipse IDE for C/C++ Developers, Neon release";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/R/eclipse-cpp-neon-R-linux-gtk-x86_64.tar.gz;
+          sha256 = "09fqsgvbjfdqvn7z03crkii34z4bsb34y272q68ib8741bxk0i6m";
+        }
+      else if stdenv.system == "i686-linux" then
+        fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/R/eclipse-cpp-neon-R-linux-gtk.tar.gz;
+          sha256 = "0a12qmqq22v7sbmwn1hjv1zcrkmp64bf0ajmdjljhs9ac79mxn5h";
+        }
+      else throw "Unsupported system: ${stdenv.system}";
+  };
 
   eclipse-sdk-421 = buildEclipse {
     name = "eclipse-sdk-4.2.1";

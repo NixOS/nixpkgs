@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeDesktopItem
-, libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk
+, libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk2
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
 }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
+    stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
   ];
 in

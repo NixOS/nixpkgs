@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libogg libopus ];
+  buildInputs = [ openssl libogg ];
+  propagatedBuildInputs = [ libopus ];
+  patches = [ ./include-multistream.patch ];
 
   meta = {
     description = "High-level API for decoding and seeking in .opus files";

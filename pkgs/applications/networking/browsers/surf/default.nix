@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, gtk, webkit, pkgconfig, glib, glib_networking, libsoup, gsettings_desktop_schemas, patches ? null}:
+{stdenv, fetchurl, makeWrapper, gtk2, webkit, pkgconfig, glib, glib_networking, libsoup, gsettings_desktop_schemas, patches ? null}:
 
 stdenv.mkDerivation rec {
   name = "surf-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jj93izd8fizxfa6ln9w1h9bwki81sz5dhskh5x1rl34zd38aq4m";
   };
 
-  buildInputs = [ gtk makeWrapper webkit gsettings_desktop_schemas pkgconfig glib libsoup ];
+  buildInputs = [ gtk2 makeWrapper webkit gsettings_desktop_schemas pkgconfig glib libsoup ];
 
   # Allow users set their own list of patches
   inherit patches;

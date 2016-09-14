@@ -571,6 +571,16 @@ in
       '';
     };
 
+    systemd.user.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultCPUAccounting=yes";
+      description = ''
+        Extra config options for systemd user instances. See man systemd-user.conf for
+        available options.
+      '';
+    };
+
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -665,6 +675,11 @@ in
         ${config.systemd.extraConfig}
       '';
 
+      "systemd/user.conf".text = ''
+        [Manager]
+        ${config.systemd.user.extraConfig}
+      '';
+
       "systemd/journald.conf".text = ''
         [Journal]
         RateLimitInterval=${config.services.journald.rateLimitInterval}
@@ -726,8 +741,6 @@ in
       { description = "Security Keys";
         unitConfig.X-StopOnReconfiguration = true;
       };
-
-    systemd.targets.network-online.after = [ "ip-up.target" ];
 
     systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets

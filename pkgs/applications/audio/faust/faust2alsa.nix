@@ -6,7 +6,7 @@
 , freetype
 , gdk_pixbuf
 , glib
-, gtk
+, gtk2
 , pango
 }:
 
@@ -22,7 +22,7 @@ faust.wrapWithBuildEnv {
     freetype
     gdk_pixbuf
     glib
-    gtk
+    gtk2
     pango
   ];
 

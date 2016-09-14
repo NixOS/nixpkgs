@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpipeline db groff ];
   troff="${groff}/bin/groff";
 
+  postPatch = ''
+    substituteInPlace src/man_db.conf.in \
+      --replace "/usr/local/share" "/run/current-system/sw/share" \
+      --replace "/usr/share" "/run/current-system/sw/share"
+  '';
+
   configureFlags = [
     "--disable-setuid"
     "--localstatedir=/var"

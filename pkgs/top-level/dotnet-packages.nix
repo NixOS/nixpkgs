@@ -580,7 +580,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
     };
 
-    buildInputs = [ pkgs.gtk-sharp ];
+    buildInputs = [ pkgs.gtk-sharp-2_0 ];
 
     meta = {
       description = "A generic framework for creating extensible applications";

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gtk, gettext, bzip2, zlib
+{ fetchurl, stdenv, pkgconfig, gtk2, gettext, bzip2, zlib
 , libjpeg, libtiff, cfitsio, exiv2, lcms2, gtkimageview, lensfun }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig gtk gtkimageview gettext bzip2 zlib
+    [ pkgconfig gtk2 gtkimageview gettext bzip2 zlib
       libjpeg libtiff cfitsio exiv2 lcms2 lensfun
     ];
 

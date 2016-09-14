@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "smlnj-bootstrap-${version}";
 
-  version = "110.76";
+  version = "110.80";
 
   src = fetchurl {
     url = "http://smlnj.cs.uchicago.edu/dist/working/${version}/smlnj-x86-${version}.pkg";
-    sha256 = "0n3kdlqffqw97piya7i4lddrhjml2dp1q9hfq2jrd2hbzln8vdjf";
+    sha256 = "1709xpgmxa6v73h77y7vn9wf5vlfdk75p61w28nzgfdsdc8f8l65";
   };
 
   buildInputs = [ cpio rsync makeWrapper ];

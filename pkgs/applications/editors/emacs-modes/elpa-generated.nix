@@ -175,10 +175,10 @@
       }) {};
     auctex = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auctex";
-        version = "11.89.4";
+        version = "11.89.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-11.89.4.tar";
-          sha256 = "06dxj9wflwgzy88vk47pdk6xln4f63cab7s73ynwp2bdqjs99f5b";
+          url = "https://elpa.gnu.org/packages/auctex-11.89.5.tar";
+          sha256 = "0scab76ks9wnv1wp9lrm6h9hag7p70zn950srp2p02vrzz2z5p53";
         };
         packageRequires = [];
         meta = {
@@ -618,10 +618,10 @@
       }) {};
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "el-search";
-        version = "0.2.2";
+        version = "0.2.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-0.2.2.tar";
-          sha256 = "07b4jk143vi3sydg03mg12gy1rs21q0qvs7p303irwz4pv8bfwqj";
+          url = "https://elpa.gnu.org/packages/el-search-0.2.3.tar";
+          sha256 = "0icxfq6hd8pfg4r5q70ylm84wgv1jiijpv0d56x7kjdh7wrdalrb";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1336,10 +1336,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20160829";
+        version = "20160905";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20160829.tar";
-          sha256 = "1p0bxbzjzxmhsg1m4a3mlsphh7gcv6b97mfgkl22lfy0ia0g1fzv";
+          url = "https://elpa.gnu.org/packages/org-20160905.tar";
+          sha256 = "118xq8bsiwa6nfxm14ww5dmyf5r0cv69lf748cj39bcvg1qm94vn";
         };
         packageRequires = [];
         meta = {

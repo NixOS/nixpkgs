@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, mono
 , glib
 , pango
-, gtk
+, gtk2
 , GConf ? null
 , libglade ? null
 , libgtkhtml ? null
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    pkgconfig mono glib pango gtk GConf libglade libgnomecanvas
+    pkgconfig mono glib pango gtk2 GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
   ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   inherit monoDLLFixer;
 
   passthru = {
-    inherit gtk;
+    gtk = gtk2;
   };
 
   meta = {

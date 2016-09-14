@@ -203,6 +203,12 @@ in
         # Misc. stuff.
         "pcips2" "atkbd"
 
+        # Temporary fix for https://github.com/NixOS/nixpkgs/issues/18451
+        # Remove as soon as upstream gets fixed - marking it:
+        # TODO
+        # FIXME
+        "i8042"
+
         # To wait for SCSI devices to appear.
         "scsi_wait_scan"
 

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk, libgnomeui, libofx
+{ fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk2, libgnomeui, libofx
 , libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
 , intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper, libglade
 , libgsf, libart_lgpl, perlPackages, aqbanking, gwenhywfar
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig libxml2 gconf glib gtk libgnomeui libgtkhtml gtkhtml
+    pkgconfig libxml2 gconf glib gtk2 libgnomeui libgtkhtml gtkhtml
     libgnomeprint goffice enchant gettext intltool perl guile slibGuile
     swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
     perlPackages.DateManip perlPackages.FinanceQuote aqbanking gwenhywfar

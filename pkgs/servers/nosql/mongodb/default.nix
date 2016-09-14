@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-let version = "3.2.1";
+let version = "3.2.9";
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "059gskly8maj2c9iy46gccx7a9ya522pl5aaxl5vss5bllxilhsh";
+    sha256 = "06q6j2bjy31pjwqws53wdpmn2x8w2hafzsnv1s3wx15pc9vq3y15";
   };
 
   nativeBuildInputs = [ scons ];

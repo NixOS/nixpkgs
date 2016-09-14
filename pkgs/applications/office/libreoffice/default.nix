@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip
 , CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, gtk, libmspack, getopt, file, cairo, which
+, bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
@@ -23,8 +23,8 @@ let
   langsSpaces = lib.concatStringsSep " " langs;
   major = "5";
   minor = "2";
-  patch = "0";
-  tweak = "4";
+  patch = "1";
+  tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
@@ -50,14 +50,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0a3dnqm9k1skp7jvg354fdn84y0ylvnjzpd4v2r2mbz8vc4p3ld5";
+      sha256 = "1ahdz1ynbab001441lqqlfphysr867rjcndq93z66mr5v3r1spvm";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "1gyakwbbsd3aykf0gsanyg6p4g4qixj1rh6qxspln70afl3kxm90";
+      sha256 = "0mln1mqy3c7k4c449w5knjnc4dv0ckl0i7q47p2pldxjjf5n2887";
     };
 
   };
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1v3bbk2afq61gs3l4qvc1r6y0ylr21jzbm3wcnyq9c3bbyw43pj7";
+    sha256 = "14g2xwpid4vsgmc69rs7hz1wx96dfkq0cbm32vjgljsm7a19qfc1";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -242,7 +242,7 @@ in stdenv.mkDerivation rec {
   buildInputs = with xorg;
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gtk3 gtk
+      freetype GConf getopt gnome_vfs gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst

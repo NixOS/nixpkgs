@@ -1,5 +1,5 @@
 { stdenv, fetchurl,
-  cmake, dbus_glib, glib, gtk, gdk_pixbuf, pkgconfig, xorg }:
+  cmake, dbus_glib, glib, gtk2, gdk_pixbuf, pkgconfig, xorg }:
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "09mz4szsz3yswbj0nbw6qzlc5bc4id0f9r6ifm60b5nc8x1l72d2";
   };
 
-  buildInputs = [ cmake dbus_glib glib gtk gdk_pixbuf
+  buildInputs = [ cmake dbus_glib glib gtk2 gdk_pixbuf
    pkgconfig xorg.libXau xorg.libXdmcp xorg.libpthreadstubs
    xorg.libxcb xorg.pixman ];
 

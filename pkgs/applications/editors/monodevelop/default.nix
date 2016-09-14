@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, fetchNuGet
 , autoconf, automake, pkgconfig, shared_mime_info, intltool
-, glib, mono, gtk-sharp, gnome, gnome-sharp, unzip
+, glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
 , dotnetPackages
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf automake pkgconfig shared_mime_info intltool
-    mono gtk-sharp gnome-sharp unzip
+    mono gtk-sharp-2_0 gnome-sharp unzip
     pkgconfig
     dotnetPackages.NUnit
     dotnetPackages.NUnitRunners
@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
     for prog in monodevelop mdtool; do
     patch -p 0 $out/bin/$prog <<EOF
     2a3,5
-    > export MONO_GAC_PREFIX=${gnome-sharp}:${gtk-sharp}:\$MONO_GAC_PREFIX
+    > export MONO_GAC_PREFIX=${gnome-sharp}:${gtk-sharp-2_0}:\$MONO_GAC_PREFIX
     > export PATH=${mono}/bin:\$PATH
-    > export LD_LIBRARY_PATH=${stdenv.lib.makeLibraryPath [ glib gnome.libgnomeui gnome.gnome_vfs gnome-sharp gtk-sharp gtk-sharp.gtk ]}:\$LD_LIBRARY_PATH
+    > export LD_LIBRARY_PATH=${stdenv.lib.makeLibraryPath [ glib gnome2.libgnomeui gnome2.gnome_vfs gnome-sharp gtk-sharp-2_0 gtk-sharp-2_0.gtk ]}:\$LD_LIBRARY_PATH
     > 
     EOF
     done

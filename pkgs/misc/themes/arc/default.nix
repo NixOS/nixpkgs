@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gnome3, gtk, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gnome3, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   version = "2016-06-06";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  configureFlags = "--with-gnome=${gnome3.version}";
+  configureFlags = "--with-gnome=${gnome3.version} ";
 
   meta = with stdenv.lib; {
     description = "A flat theme with transparent elements for GTK 3, GTK 2 and Gnome-Shell";

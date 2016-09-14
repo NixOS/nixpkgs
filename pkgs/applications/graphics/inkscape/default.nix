@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, gtk, libXft
-, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, libXft
+, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
 , gsl, python, numpy, pyxml, lxml, poppler, imagemagick, libwpg, librevenge
 , libvisio, libcdr, libexif, unzip, automake114x, autoconf
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pkgconfig perl perlXMLParser gtk libXft libpng zlib popt boehmgc
-    libxml2 libxslt glib gtkmm glibmm libsigcxx lcms boost gettext
+    pkgconfig perl perlXMLParser libXft libpng zlib popt boehmgc
+    libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     makeWrapper intltool gsl poppler imagemagick libwpg librevenge
     libvisio libcdr libexif automake114x autoconf
   ] ++ stdenv.lib.optional boxMakerPlugin unzip;

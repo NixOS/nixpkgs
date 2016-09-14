@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, wmctrl, pythonPackages, byzanz
-, xdpyinfo, makeWrapper, gtk, xorg, gnome3 }:
+, xdpyinfo, makeWrapper, gtk2, xorg, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "mkcast-2015-03-13";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "15wp3n3z8gw7kjdxs4ahda17n844awhxsqbql5ipsdhqfxah2d8p";
   };
 
-  buildInputs = with pythonPackages; [ makeWrapper pygtk gtk xlib ];
+  buildInputs = with pythonPackages; [ makeWrapper pygtk gtk2 xlib ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

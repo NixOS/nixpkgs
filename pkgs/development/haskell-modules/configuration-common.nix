@@ -39,14 +39,20 @@ self: super: {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
-  # This package needs a little help compiling properly on Darwin.
-  git-annex = (overrideCabal super.git-annex (drv: {
+  # The Hackage tarball is purposefully broken. Mr. Hess wants people to build
+  # his package from the Git repo because that is, like, better!
+  git-annex = ((overrideCabal super.git-annex (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1frdld9kgnfd4ll8yx086lwmbqxa5k56y567qw2zy9kz1iiz2fpi";
+      sha256 = "0an1rafbv48m04g7crfj2qrk64d98yrjn2z4hfv2pybwmqdmx78z";
       rev = drv.version;
     };
+  })).overrideScope (self: super: {
+    # https://github.com/prowdsponsor/esqueleto/issues/137
+    persistent = self.persistent_2_2_4_1;
+    persistent-template = self.persistent-template_2_1_8_1;
+    persistent-sqlite = self.persistent-sqlite_2_2_1;
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
@@ -223,7 +229,7 @@ self: super: {
   });
   gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend (
     addBuildTool super.gtk self.gtk2hs-buildtools
-  ) pkgs.gtk) (drv: {
+  ) pkgs.gtk2) (drv: {
     hardeningDisable = [ "fortify" ];
   });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
@@ -304,6 +310,7 @@ self: super: {
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
+  servant-router = dontCheck super.servant-router;
   serversession-backend-redis = dontCheck super.serversession-backend-redis;
   slack-api = dontCheck super.slack-api;                # https://github.com/mpickering/slack-api/issues/5
   socket = dontCheck super.socket;
@@ -757,8 +764,12 @@ self: super: {
     '';
   });
 
-  # Byte-compile elisp code for Emacs.
+  # Fine-tune the build.
   structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
+    # Statically linked Haskell libraries make the tool start-up much faster,
+    # which is important for use in Emacs.
+    enableSharedExecutables = false;
+    # Byte-compile elisp code for Emacs.
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
@@ -860,9 +871,6 @@ self: super: {
   # https://github.com/guillaume-nargeot/hpc-coveralls/issues/52
   hpc-coveralls = disableSharedExecutables super.hpc-coveralls;
 
-  # Can't find libHSidris-*.so during build.
-  idris = disableSharedExecutables super.idris;
-
   # https://github.com/fpco/stackage/issues/838
   cryptonite = dontCheck super.cryptonite;
 
@@ -897,8 +905,8 @@ self: super: {
 
   # Haste stuff
   haste-Cabal         = markBroken (self.callPackage ../tools/haskell/haste/haste-Cabal.nix {});
-  haste-cabal-install = self.callPackage ../tools/haskell/haste/haste-cabal-install.nix { Cabal = self.haste-Cabal; };
-  haste-compiler      = self.callPackage ../tools/haskell/haste/haste-compiler.nix { inherit overrideCabal; super-haste-compiler = super.haste-compiler; };
+  haste-cabal-install = markBroken (self.callPackage ../tools/haskell/haste/haste-cabal-install.nix { Cabal = self.haste-Cabal; });
+  haste-compiler      = markBroken (self.callPackage ../tools/haskell/haste/haste-compiler.nix { inherit overrideCabal; super-haste-compiler = super.haste-compiler; });
 
   # Ensure the necessary frameworks are propagatedBuildInputs on darwin
   OpenGLRaw = overrideCabal super.OpenGLRaw (drv: {
@@ -941,17 +949,6 @@ self: super: {
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc {};
 
-  # https://github.com/NixOS/nixpkgs/issues/14967
-  yi = markBroken super.yi;
-  yi-fuzzy-open = markBroken super.yi-fuzzy-open;
-  yi-monokai = markBroken super.yi-monokai;
-  yi-snippet = markBroken super.yi-snippet;
-  yi-solarized = markBroken super.yi-solarized;
-  yi-spolsky = markBroken super.yi-spolsky;
-
-  # gtk2hs-buildtools must have Cabal 1.24
-  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_0_0; };
-
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = (addBuildTool super.pango self.gtk2hs-buildtools).overrideDerivation (drv: {
@@ -971,7 +968,6 @@ self: super: {
     sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
   });
 
-
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
   # depend on freeglut, which provides GHC to necessary information to generate a correct RPATH.
@@ -981,7 +977,8 @@ self: super: {
   # us when we patch the cabal file (Link options will be recored in the ghc package registry).
   GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
 
-  # remove if a version > 0.1.0.1 ever gets released
+  # https://github.com/Philonous/hs-stun/pull/1
+  # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
@@ -990,5 +987,20 @@ self: super: {
 
   # https://bitbucket.org/ssaasen/spy/pull-requests/3/fsnotify-dropped-system-filepath
   spy = appendPatch super.spy ./patches/spy.patch;
+
+  idris = overrideCabal super.idris (drv: {
+    # "idris" binary cannot find Idris library otherwise while building. After
+    # installing it's completely fine though. This seems like a bug in Idris
+    # that's related to builds with shared libraries enabled. It would be great
+    # if someone who knows a thing or two about Idris could look into this.
+    preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+    # https://github.com/idris-lang/Idris-dev/issues/2499
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+  });
+
+  # https://github.com/MarcWeber/hasktags/issues/32
+  hasktags = overrideCabal super.hasktags (drv: {
+    postInstall = "rm $out/bin/test";
+  });
 
 }

@@ -1,5 +1,5 @@
 { fetchurl, fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, mesa, boost,
-  pkgconfig, libuuid, openal, ogre, ois, curl, gtk, pixman, mygui, unzip,
+  pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, pixman, mygui, unzip,
   angelscript, ogrepaged, mysocketw, libxcb
   }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ wxGTK30 freeimage cmake zziplib mesa boost pkgconfig
-    libuuid openal ogre ois curl gtk mygui unzip angelscript
+    libuuid openal ogre ois curl gtk2 mygui unzip angelscript
     ogrepaged mysocketw libxcb ];
 
   meta = {

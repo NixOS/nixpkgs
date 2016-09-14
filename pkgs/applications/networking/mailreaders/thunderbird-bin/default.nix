@@ -15,7 +15,7 @@
 , glibc
 , gst_plugins_base
 , gstreamer
-, gtk
+, gtk2
 , kerberos
 , libX11
 , libXScrnSaver
@@ -26,7 +26,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra
+, libcanberra_gtk2
 , libgnome
 , libgnomeui
 , mesa
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
       glibc
       gst_plugins_base
       gstreamer
-      gtk
+      gtk2
       kerberos
       libX11
       libXScrnSaver
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra
+      libcanberra_gtk2
       libgnome
       libgnomeui
       mesa

@@ -69,6 +69,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.pythonPackages; rec {
     sed -i \
       -e '1i import tempfile' \
       -e 's|_STORE_FILE_PATH = .*|_STORE_FILE_PATH = tempfile.gettempdir()|' \
+      -e 's|DEFAULT_STORE_SIZE = .*|DEFAULT_STORE_SIZE = 409600|' \
       tests/loopbackedtestcase.py
 
     PYTHONPATH=".:$(< "${pkgs.stdenv.mkDerivation {

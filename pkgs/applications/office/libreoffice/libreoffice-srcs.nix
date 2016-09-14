@@ -290,8 +290,8 @@
   brief = true;
 }
 {
-  name = "language-subtag-registry-2016-02-10.tar.bz2";
-  md5 = "d1e7c55a0383f7d720d3ead0b6117284";
+  name = "language-subtag-registry-2016-07-19.tar.bz2";
+  md5 = "8a037dc60b16bf8c5fe871b33390a4a2";
   brief = true;
 }
 {
@@ -436,13 +436,13 @@
   brief = false;
 }
 {
-  name = "libpng-1.6.19.tar.gz";
-  md5 = "3121bdc77c365a87e054b9f859f421fe";
+  name = "libpng-1.6.24.tar.gz";
+  md5 = "65213080dd30a9b16193d9b83adc1ee9";
   brief = true;
 }
 {
-  name = "poppler-0.26.4.tar.gz";
-  md5 = "35c0660065d023365e9854c13e289d12";
+  name = "poppler-0.46.0.tar.bz2";
+  md5 = "38c758d84437378ec4f5aae9f875301d";
   brief = true;
 }
 {
