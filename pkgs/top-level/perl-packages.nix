@@ -13329,6 +13329,7 @@ let self = _self // overrides; _self = with self; {
       ''
         substituteInPlace Makefile.PL --replace '"cpp"' '"gcc -E"'
       '';
+    NIX_CFLAGS_COMPILE = "-DCURL_STRICTER";
     doCheck = false; # performs network access
   };
 
