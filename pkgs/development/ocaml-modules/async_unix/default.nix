@@ -1,6 +1,6 @@
 {stdenv, buildOcaml, fetchurl, async_kernel,
  bin_prot, comparelib, core, fieldslib_p4, herelib, pa_ounit,
- pipebang, pa_test, sexplib}:
+ pipebang, pa_test, sexplib_p4}:
 
 buildOcaml rec {
   name = "async_unix";
@@ -16,7 +16,7 @@ buildOcaml rec {
   hasSharedObjects = true;
   buildInputs = [ pa_ounit ];
   propagatedBuildInputs = [ async_kernel core bin_prot comparelib
-                            fieldslib_p4 herelib pipebang pa_test sexplib ];
+                            fieldslib_p4 herelib pipebang pa_test sexplib_p4 ];
 
    meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/async_unix;

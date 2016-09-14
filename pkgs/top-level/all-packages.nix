@@ -5405,7 +5405,7 @@ in
     sexplib_111_25_00 = callPackage ../development/ocaml-modules/sexplib/111.25.00.nix { };
     sexplib_112_24_01 = callPackage ../development/ocaml-modules/sexplib/112.24.01.nix { };
 
-    sexplib =
+    sexplib_p4 =
       if lib.versionOlder "4.02" ocaml_version
       then sexplib_112_24_01
       else if lib.versionOlder "4.00" ocaml_version
@@ -5563,6 +5563,8 @@ in
     typerep = callPackage ../development/ocaml-modules/janestreet/typerep.nix {};
 
     fieldslib = callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {};
+
+    sexplib = callPackage ../development/ocaml-modules/janestreet/sexplib.nix {};
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
