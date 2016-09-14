@@ -5560,25 +5560,55 @@ in
 
 
     # Core sublibs
-    typerep = callPackage ../development/ocaml-modules/janestreet/typerep.nix {};
+    typerep =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/typerep.nix {}
+      else typerep_p4;
 
-    fieldslib = callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {};
+    fieldslib =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {}
+      else fieldslib_p4;
 
-    sexplib = callPackage ../development/ocaml-modules/janestreet/sexplib.nix {};
+    sexplib =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
+      else sexplib_p4;
 
-    variantslib = callPackage ../development/ocaml-modules/janestreet/variantslib.nix {};
+    variantslib =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/variantslib.nix {}
+      else variantslib_p4;
 
-    bin_prot = callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {};
+    bin_prot =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {}
+      else bin_prot_p4;
 
-    core_kernel = callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {};
+    core_kernel =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {}
+      else core_kernel_p4;
 
-    core = callPackage ../development/ocaml-modules/janestreet/core.nix {};
+    core =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/core.nix {}
+      else core_p4;
 
-    re2 = callPackage ../development/ocaml-modules/janestreet/re2.nix {};
+    re2 =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/re2.nix {}
+      else re2_p4;
 
-    textutils = callPackage ../development/ocaml-modules/janestreet/textutils.nix {};
+    textutils =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/textutils.nix {}
+      else textutils_p4;
 
-    core_extended = callPackage ../development/ocaml-modules/janestreet/core-extended.nix {};
+    core_extended =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/janestreet/core-extended.nix {}
+      else core_extended_p4;
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
