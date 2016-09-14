@@ -251,9 +251,7 @@ rec {
     lts-6_17 = packages.ghc7103;
     lts-6 = packages.lts-6_17;
 
-    lts-7_0 = packages.ghc801.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts.nix { };
-    };
+    lts-7_0 = packages.ghc801;
     lts-7 = packages.lts-7_0;
 
     lts = packages.lts-7;
