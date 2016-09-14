@@ -3919,6 +3919,663 @@ let
         sha1 = "7dea21d8c18d7703a27c704c15d3b84a67e33aff";
       };
     };
+    "babel-plugin-syntax-async-functions-6.13.0" = {
+      name = "babel-plugin-syntax-async-functions";
+      packageName = "babel-plugin-syntax-async-functions";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-6.13.0.tgz";
+        sha1 = "cad9cad1191b5ad634bf30ae0872391e0647be95";
+      };
+    };
+    "babel-helper-remap-async-to-generator-6.11.2" = {
+      name = "babel-helper-remap-async-to-generator";
+      packageName = "babel-helper-remap-async-to-generator";
+      version = "6.11.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-remap-async-to-generator/-/babel-helper-remap-async-to-generator-6.11.2.tgz";
+        sha1 = "fe482d566355d36f946d7db162fd4eb56258a6ff";
+      };
+    };
+    "babel-helper-function-name-6.8.0" = {
+      name = "babel-helper-function-name";
+      packageName = "babel-helper-function-name";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-function-name/-/babel-helper-function-name-6.8.0.tgz";
+        sha1 = "a0336ba14526a075cdf502fc52d3fe84b12f7a34";
+      };
+    };
+    "babel-helper-get-function-arity-6.8.0" = {
+      name = "babel-helper-get-function-arity";
+      packageName = "babel-helper-get-function-arity";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-get-function-arity/-/babel-helper-get-function-arity-6.8.0.tgz";
+        sha1 = "88276c24bd251cdf6f61b6f89f745f486ced92af";
+      };
+    };
+    "babel-plugin-syntax-class-constructor-call-6.13.0" = {
+      name = "babel-plugin-syntax-class-constructor-call";
+      packageName = "babel-plugin-syntax-class-constructor-call";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-class-constructor-call/-/babel-plugin-syntax-class-constructor-call-6.13.0.tgz";
+        sha1 = "96fb2e9f177dca22824065de4392f2fe3486b765";
+      };
+    };
+    "babel-plugin-syntax-class-properties-6.13.0" = {
+      name = "babel-plugin-syntax-class-properties";
+      packageName = "babel-plugin-syntax-class-properties";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-class-properties/-/babel-plugin-syntax-class-properties-6.13.0.tgz";
+        sha1 = "d7eb23b79a317f8543962c505b827c7d6cac27de";
+      };
+    };
+    "babel-helper-define-map-6.9.0" = {
+      name = "babel-helper-define-map";
+      packageName = "babel-helper-define-map";
+      version = "6.9.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-define-map/-/babel-helper-define-map-6.9.0.tgz";
+        sha1 = "6629f9b2a7e58e18e8379a57d1e6fbb2969902fb";
+      };
+    };
+    "babel-plugin-syntax-decorators-6.13.0" = {
+      name = "babel-plugin-syntax-decorators";
+      packageName = "babel-plugin-syntax-decorators";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-decorators/-/babel-plugin-syntax-decorators-6.13.0.tgz";
+        sha1 = "312563b4dbde3cc806cee3e416cceeaddd11ac0b";
+      };
+    };
+    "babel-helper-explode-class-6.8.0" = {
+      name = "babel-helper-explode-class";
+      packageName = "babel-helper-explode-class";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-explode-class/-/babel-helper-explode-class-6.8.0.tgz";
+        sha1 = "196a228cc69ea57308695e4ebd1a36cf3f8eca3d";
+      };
+    };
+    "babel-helper-bindify-decorators-6.8.0" = {
+      name = "babel-helper-bindify-decorators";
+      packageName = "babel-helper-bindify-decorators";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-bindify-decorators/-/babel-helper-bindify-decorators-6.8.0.tgz";
+        sha1 = "b34805a30b1433cc0042f7054f88a7133c144909";
+      };
+    };
+    "babel-plugin-syntax-do-expressions-6.13.0" = {
+      name = "babel-plugin-syntax-do-expressions";
+      packageName = "babel-plugin-syntax-do-expressions";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-do-expressions/-/babel-plugin-syntax-do-expressions-6.13.0.tgz";
+        sha1 = "5747756139aa26d390d09410b03744ba07e4796d";
+      };
+    };
+    "babel-helper-optimise-call-expression-6.8.0" = {
+      name = "babel-helper-optimise-call-expression";
+      packageName = "babel-helper-optimise-call-expression";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-optimise-call-expression/-/babel-helper-optimise-call-expression-6.8.0.tgz";
+        sha1 = "4175628e9c89fc36174904f27070f29d38567f06";
+      };
+    };
+    "babel-helper-replace-supers-6.14.0" = {
+      name = "babel-helper-replace-supers";
+      packageName = "babel-helper-replace-supers";
+      version = "6.14.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-replace-supers/-/babel-helper-replace-supers-6.14.0.tgz";
+        sha1 = "038e13824d6de0e412fbd6708fd3611a7683d869";
+      };
+    };
+    "babel-plugin-transform-es2015-modules-commonjs-6.14.0" = {
+      name = "babel-plugin-transform-es2015-modules-commonjs";
+      packageName = "babel-plugin-transform-es2015-modules-commonjs";
+      version = "6.14.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-6.14.0.tgz";
+        sha1 = "db731640c67ea6ebaecf90eb9cdabddb584aeb36";
+      };
+    };
+    "babel-plugin-transform-strict-mode-6.11.3" = {
+      name = "babel-plugin-transform-strict-mode";
+      packageName = "babel-plugin-transform-strict-mode";
+      version = "6.11.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-strict-mode/-/babel-plugin-transform-strict-mode-6.11.3.tgz";
+        sha1 = "183741325126bc7ec9cf4c0fc257d3e7ca5afd40";
+      };
+    };
+    "babel-helper-hoist-variables-6.8.0" = {
+      name = "babel-helper-hoist-variables";
+      packageName = "babel-helper-hoist-variables";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-hoist-variables/-/babel-helper-hoist-variables-6.8.0.tgz";
+        sha1 = "8b0766dc026ea9ea423bc2b34e665a4da7373aaf";
+      };
+    };
+    "babel-plugin-transform-es2015-modules-amd-6.8.0" = {
+      name = "babel-plugin-transform-es2015-modules-amd";
+      packageName = "babel-plugin-transform-es2015-modules-amd";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-amd/-/babel-plugin-transform-es2015-modules-amd-6.8.0.tgz";
+        sha1 = "25d954aa0bf04031fc46d2a8e6230bb1abbde4a3";
+      };
+    };
+    "babel-helper-call-delegate-6.8.0" = {
+      name = "babel-helper-call-delegate";
+      packageName = "babel-helper-call-delegate";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-call-delegate/-/babel-helper-call-delegate-6.8.0.tgz";
+        sha1 = "9d283e7486779b6b0481864a11b371ea5c01fa64";
+      };
+    };
+    "babel-helper-regex-6.9.0" = {
+      name = "babel-helper-regex";
+      packageName = "babel-helper-regex";
+      version = "6.9.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-regex/-/babel-helper-regex-6.9.0.tgz";
+        sha1 = "c74265fde180ff9a16735fee05e63cadb9e0b057";
+      };
+    };
+    "regexpu-core-2.0.0" = {
+      name = "regexpu-core";
+      packageName = "regexpu-core";
+      version = "2.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/regexpu-core/-/regexpu-core-2.0.0.tgz";
+        sha1 = "49d038837b8dcf8bfa5b9a42139938e6ea2ae240";
+      };
+    };
+    "regenerate-1.3.1" = {
+      name = "regenerate";
+      packageName = "regenerate";
+      version = "1.3.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/regenerate/-/regenerate-1.3.1.tgz";
+        sha1 = "0300203a5d2fdcf89116dce84275d011f5903f33";
+      };
+    };
+    "regjsgen-0.2.0" = {
+      name = "regjsgen";
+      packageName = "regjsgen";
+      version = "0.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/regjsgen/-/regjsgen-0.2.0.tgz";
+        sha1 = "6c016adeac554f75823fe37ac05b92d5a4edb1f7";
+      };
+    };
+    "regjsparser-0.1.5" = {
+      name = "regjsparser";
+      packageName = "regjsparser";
+      version = "0.1.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/regjsparser/-/regjsparser-0.1.5.tgz";
+        sha1 = "7ee8f84dc6fa792d3fd0ae228d24bd949ead205c";
+      };
+    };
+    "jsesc-0.5.0" = {
+      name = "jsesc";
+      packageName = "jsesc";
+      version = "0.5.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/jsesc/-/jsesc-0.5.0.tgz";
+        sha1 = "e7dee66e35d6fc16f710fe91d5cf69f70f08911d";
+      };
+    };
+    "babel-plugin-syntax-exponentiation-operator-6.13.0" = {
+      name = "babel-plugin-syntax-exponentiation-operator";
+      packageName = "babel-plugin-syntax-exponentiation-operator";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-exponentiation-operator/-/babel-plugin-syntax-exponentiation-operator-6.13.0.tgz";
+        sha1 = "9ee7e8337290da95288201a6a57f4170317830de";
+      };
+    };
+    "babel-helper-builder-binary-assignment-operator-visitor-6.15.0" = {
+      name = "babel-helper-builder-binary-assignment-operator-visitor";
+      packageName = "babel-helper-builder-binary-assignment-operator-visitor";
+      version = "6.15.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-builder-binary-assignment-operator-visitor/-/babel-helper-builder-binary-assignment-operator-visitor-6.15.0.tgz";
+        sha1 = "39e9ee143f797b642262e4646c681c32089ef1ab";
+      };
+    };
+    "babel-helper-explode-assignable-expression-6.8.0" = {
+      name = "babel-helper-explode-assignable-expression";
+      packageName = "babel-helper-explode-assignable-expression";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-explode-assignable-expression/-/babel-helper-explode-assignable-expression-6.8.0.tgz";
+        sha1 = "9b3525e05b761c3b88919d730a28bad1967e6556";
+      };
+    };
+    "babel-plugin-syntax-export-extensions-6.13.0" = {
+      name = "babel-plugin-syntax-export-extensions";
+      packageName = "babel-plugin-syntax-export-extensions";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-export-extensions/-/babel-plugin-syntax-export-extensions-6.13.0.tgz";
+        sha1 = "70a1484f0f9089a4e84ad44bac353c95b9b12721";
+      };
+    };
+    "babel-plugin-syntax-flow-6.13.0" = {
+      name = "babel-plugin-syntax-flow";
+      packageName = "babel-plugin-syntax-flow";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-flow/-/babel-plugin-syntax-flow-6.13.0.tgz";
+        sha1 = "9af0cd396087bf7677053e1afa52f206c0416f17";
+      };
+    };
+    "babel-plugin-syntax-function-bind-6.13.0" = {
+      name = "babel-plugin-syntax-function-bind";
+      packageName = "babel-plugin-syntax-function-bind";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-function-bind/-/babel-plugin-syntax-function-bind-6.13.0.tgz";
+        sha1 = "48c495f177bdf31a981e732f55adc0bdd2601f46";
+      };
+    };
+    "babel-plugin-syntax-object-rest-spread-6.13.0" = {
+      name = "babel-plugin-syntax-object-rest-spread";
+      packageName = "babel-plugin-syntax-object-rest-spread";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-object-rest-spread/-/babel-plugin-syntax-object-rest-spread-6.13.0.tgz";
+        sha1 = "fd6536f2bce13836ffa3a5458c4903a597bb3bf5";
+      };
+    };
+    "babel-helper-builder-react-jsx-6.9.0" = {
+      name = "babel-helper-builder-react-jsx";
+      packageName = "babel-helper-builder-react-jsx";
+      version = "6.9.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-helper-builder-react-jsx/-/babel-helper-builder-react-jsx-6.9.0.tgz";
+        sha1 = "a633978d669c4c9dcad716cc577ee3e0bb8ae723";
+      };
+    };
+    "babel-plugin-syntax-jsx-6.13.0" = {
+      name = "babel-plugin-syntax-jsx";
+      packageName = "babel-plugin-syntax-jsx";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.13.0.tgz";
+        sha1 = "e741ff3992c578310be45c571bcd90a2f9c5586e";
+      };
+    };
+    "babel-plugin-transform-es2015-block-scoping-6.15.0" = {
+      name = "babel-plugin-transform-es2015-block-scoping";
+      packageName = "babel-plugin-transform-es2015-block-scoping";
+      version = "6.15.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-block-scoping/-/babel-plugin-transform-es2015-block-scoping-6.15.0.tgz";
+        sha1 = "5b443ca142be8d1db6a8c2ae42f51958b66b70f6";
+      };
+    };
+    "babel-plugin-transform-es2015-for-of-6.8.0" = {
+      name = "babel-plugin-transform-es2015-for-of";
+      packageName = "babel-plugin-transform-es2015-for-of";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-for-of/-/babel-plugin-transform-es2015-for-of-6.8.0.tgz";
+        sha1 = "82eda139ba4270dda135c3ec1b1f2813fa62f23c";
+      };
+    };
+    "babel-plugin-check-es2015-constants-6.8.0" = {
+      name = "babel-plugin-check-es2015-constants";
+      packageName = "babel-plugin-check-es2015-constants";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-check-es2015-constants/-/babel-plugin-check-es2015-constants-6.8.0.tgz";
+        sha1 = "dbf024c32ed37bfda8dee1e76da02386a8d26fe7";
+      };
+    };
+    "babel-plugin-transform-es2015-arrow-functions-6.8.0" = {
+      name = "babel-plugin-transform-es2015-arrow-functions";
+      packageName = "babel-plugin-transform-es2015-arrow-functions";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-arrow-functions/-/babel-plugin-transform-es2015-arrow-functions-6.8.0.tgz";
+        sha1 = "5b63afc3181bdc9a8c4d481b5a4f3f7d7fef3d9d";
+      };
+    };
+    "babel-plugin-transform-es2015-block-scoped-functions-6.8.0" = {
+      name = "babel-plugin-transform-es2015-block-scoped-functions";
+      packageName = "babel-plugin-transform-es2015-block-scoped-functions";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-block-scoped-functions/-/babel-plugin-transform-es2015-block-scoped-functions-6.8.0.tgz";
+        sha1 = "ed95d629c4b5a71ae29682b998f70d9833eb366d";
+      };
+    };
+    "babel-plugin-transform-es2015-classes-6.14.0" = {
+      name = "babel-plugin-transform-es2015-classes";
+      packageName = "babel-plugin-transform-es2015-classes";
+      version = "6.14.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-classes/-/babel-plugin-transform-es2015-classes-6.14.0.tgz";
+        sha1 = "87d5149ee91fb475922409f9af5b2ba5d1e39287";
+      };
+    };
+    "babel-plugin-transform-es2015-computed-properties-6.8.0" = {
+      name = "babel-plugin-transform-es2015-computed-properties";
+      packageName = "babel-plugin-transform-es2015-computed-properties";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-computed-properties/-/babel-plugin-transform-es2015-computed-properties-6.8.0.tgz";
+        sha1 = "f51010fd61b3bd7b6b60a5fdfd307bb7a5279870";
+      };
+    };
+    "babel-plugin-transform-es2015-destructuring-6.9.0" = {
+      name = "babel-plugin-transform-es2015-destructuring";
+      packageName = "babel-plugin-transform-es2015-destructuring";
+      version = "6.9.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-destructuring/-/babel-plugin-transform-es2015-destructuring-6.9.0.tgz";
+        sha1 = "f55747f62534866a51b4c4fdb255e6d85e8604d6";
+      };
+    };
+    "babel-plugin-transform-es2015-duplicate-keys-6.8.0" = {
+      name = "babel-plugin-transform-es2015-duplicate-keys";
+      packageName = "babel-plugin-transform-es2015-duplicate-keys";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-duplicate-keys/-/babel-plugin-transform-es2015-duplicate-keys-6.8.0.tgz";
+        sha1 = "fd8f7f7171fc108cc1c70c3164b9f15a81c25f7d";
+      };
+    };
+    "babel-plugin-transform-es2015-function-name-6.9.0" = {
+      name = "babel-plugin-transform-es2015-function-name";
+      packageName = "babel-plugin-transform-es2015-function-name";
+      version = "6.9.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-function-name/-/babel-plugin-transform-es2015-function-name-6.9.0.tgz";
+        sha1 = "8c135b17dbd064e5bba56ec511baaee2fca82719";
+      };
+    };
+    "babel-plugin-transform-es2015-literals-6.8.0" = {
+      name = "babel-plugin-transform-es2015-literals";
+      packageName = "babel-plugin-transform-es2015-literals";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-literals/-/babel-plugin-transform-es2015-literals-6.8.0.tgz";
+        sha1 = "50aa2e5c7958fc2ab25d74ec117e0cc98f046468";
+      };
+    };
+    "babel-plugin-transform-es2015-modules-systemjs-6.14.0" = {
+      name = "babel-plugin-transform-es2015-modules-systemjs";
+      packageName = "babel-plugin-transform-es2015-modules-systemjs";
+      version = "6.14.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-systemjs/-/babel-plugin-transform-es2015-modules-systemjs-6.14.0.tgz";
+        sha1 = "c519b5c73e32388e679c9b1edf41b2fc23dc3303";
+      };
+    };
+    "babel-plugin-transform-es2015-modules-umd-6.12.0" = {
+      name = "babel-plugin-transform-es2015-modules-umd";
+      packageName = "babel-plugin-transform-es2015-modules-umd";
+      version = "6.12.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-umd/-/babel-plugin-transform-es2015-modules-umd-6.12.0.tgz";
+        sha1 = "5d73559eb49266775ed281c40be88a421bd371a3";
+      };
+    };
+    "babel-plugin-transform-es2015-object-super-6.8.0" = {
+      name = "babel-plugin-transform-es2015-object-super";
+      packageName = "babel-plugin-transform-es2015-object-super";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-object-super/-/babel-plugin-transform-es2015-object-super-6.8.0.tgz";
+        sha1 = "1b858740a5a4400887c23dcff6f4d56eea4a24c5";
+      };
+    };
+    "babel-plugin-transform-es2015-parameters-6.11.4" = {
+      name = "babel-plugin-transform-es2015-parameters";
+      packageName = "babel-plugin-transform-es2015-parameters";
+      version = "6.11.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-parameters/-/babel-plugin-transform-es2015-parameters-6.11.4.tgz";
+        sha1 = "2d41e88c3e4319797e305f87027ef43f4dc739c4";
+      };
+    };
+    "babel-plugin-transform-es2015-shorthand-properties-6.8.0" = {
+      name = "babel-plugin-transform-es2015-shorthand-properties";
+      packageName = "babel-plugin-transform-es2015-shorthand-properties";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-shorthand-properties/-/babel-plugin-transform-es2015-shorthand-properties-6.8.0.tgz";
+        sha1 = "f0a4c5fd471630acf333c2d99c3d677bf0952149";
+      };
+    };
+    "babel-plugin-transform-es2015-spread-6.8.0" = {
+      name = "babel-plugin-transform-es2015-spread";
+      packageName = "babel-plugin-transform-es2015-spread";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-spread/-/babel-plugin-transform-es2015-spread-6.8.0.tgz";
+        sha1 = "0217f737e3b821fa5a669f187c6ed59205f05e9c";
+      };
+    };
+    "babel-plugin-transform-es2015-sticky-regex-6.8.0" = {
+      name = "babel-plugin-transform-es2015-sticky-regex";
+      packageName = "babel-plugin-transform-es2015-sticky-regex";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-sticky-regex/-/babel-plugin-transform-es2015-sticky-regex-6.8.0.tgz";
+        sha1 = "e73d300a440a35d5c64f5c2a344dc236e3df47be";
+      };
+    };
+    "babel-plugin-transform-es2015-template-literals-6.8.0" = {
+      name = "babel-plugin-transform-es2015-template-literals";
+      packageName = "babel-plugin-transform-es2015-template-literals";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-template-literals/-/babel-plugin-transform-es2015-template-literals-6.8.0.tgz";
+        sha1 = "86eb876d0a2c635da4ec048b4f7de9dfc897e66b";
+      };
+    };
+    "babel-plugin-transform-es2015-typeof-symbol-6.8.0" = {
+      name = "babel-plugin-transform-es2015-typeof-symbol";
+      packageName = "babel-plugin-transform-es2015-typeof-symbol";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-typeof-symbol/-/babel-plugin-transform-es2015-typeof-symbol-6.8.0.tgz";
+        sha1 = "84c29eb1219372480955a020fef7a65c44f30533";
+      };
+    };
+    "babel-plugin-transform-es2015-unicode-regex-6.11.0" = {
+      name = "babel-plugin-transform-es2015-unicode-regex";
+      packageName = "babel-plugin-transform-es2015-unicode-regex";
+      version = "6.11.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-es2015-unicode-regex/-/babel-plugin-transform-es2015-unicode-regex-6.11.0.tgz";
+        sha1 = "6298ceabaad88d50a3f4f392d8de997260f6ef2c";
+      };
+    };
+    "babel-plugin-transform-regenerator-6.14.0" = {
+      name = "babel-plugin-transform-regenerator";
+      packageName = "babel-plugin-transform-regenerator";
+      version = "6.14.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-6.14.0.tgz";
+        sha1 = "119119b20c8b4283f6c77f0170d404c3c654bec8";
+      };
+    };
+    "babel-plugin-transform-exponentiation-operator-6.8.0" = {
+      name = "babel-plugin-transform-exponentiation-operator";
+      packageName = "babel-plugin-transform-exponentiation-operator";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-exponentiation-operator/-/babel-plugin-transform-exponentiation-operator-6.8.0.tgz";
+        sha1 = "db25742e9339eade676ca9acec46f955599a68a4";
+      };
+    };
+    "babel-plugin-syntax-trailing-function-commas-6.13.0" = {
+      name = "babel-plugin-syntax-trailing-function-commas";
+      packageName = "babel-plugin-syntax-trailing-function-commas";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-syntax-trailing-function-commas/-/babel-plugin-syntax-trailing-function-commas-6.13.0.tgz";
+        sha1 = "2b84b7d53dd744f94ff1fad7669406274b23f541";
+      };
+    };
+    "babel-plugin-transform-async-to-generator-6.8.0" = {
+      name = "babel-plugin-transform-async-to-generator";
+      packageName = "babel-plugin-transform-async-to-generator";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-async-to-generator/-/babel-plugin-transform-async-to-generator-6.8.0.tgz";
+        sha1 = "fbb154f2912e00b9f0972131d7e03ebbe45684c2";
+      };
+    };
+    "babel-plugin-transform-flow-strip-types-6.14.0" = {
+      name = "babel-plugin-transform-flow-strip-types";
+      packageName = "babel-plugin-transform-flow-strip-types";
+      version = "6.14.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-flow-strip-types/-/babel-plugin-transform-flow-strip-types-6.14.0.tgz";
+        sha1 = "35ceb03f8770934044bab1a76f7e4ee0aa9220f9";
+      };
+    };
+    "babel-plugin-transform-react-display-name-6.8.0" = {
+      name = "babel-plugin-transform-react-display-name";
+      packageName = "babel-plugin-transform-react-display-name";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-react-display-name/-/babel-plugin-transform-react-display-name-6.8.0.tgz";
+        sha1 = "f7a084977383d728bdbdc2835bba0159577f660e";
+      };
+    };
+    "babel-plugin-transform-react-jsx-6.8.0" = {
+      name = "babel-plugin-transform-react-jsx";
+      packageName = "babel-plugin-transform-react-jsx";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-react-jsx/-/babel-plugin-transform-react-jsx-6.8.0.tgz";
+        sha1 = "94759942f70af18c617189aa7f3593f1644a71ab";
+      };
+    };
+    "babel-plugin-transform-react-jsx-source-6.9.0" = {
+      name = "babel-plugin-transform-react-jsx-source";
+      packageName = "babel-plugin-transform-react-jsx-source";
+      version = "6.9.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-react-jsx-source/-/babel-plugin-transform-react-jsx-source-6.9.0.tgz";
+        sha1 = "af684a05c2067a86e0957d4f343295ccf5dccf00";
+      };
+    };
+    "babel-plugin-transform-react-jsx-self-6.11.0" = {
+      name = "babel-plugin-transform-react-jsx-self";
+      packageName = "babel-plugin-transform-react-jsx-self";
+      version = "6.11.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-react-jsx-self/-/babel-plugin-transform-react-jsx-self-6.11.0.tgz";
+        sha1 = "605c9450c1429f97a930f7e1dfe3f0d9d0dbd0f4";
+      };
+    };
+    "babel-plugin-transform-do-expressions-6.8.0" = {
+      name = "babel-plugin-transform-do-expressions";
+      packageName = "babel-plugin-transform-do-expressions";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-do-expressions/-/babel-plugin-transform-do-expressions-6.8.0.tgz";
+        sha1 = "fda692af339835cc255bb7544efb8f7c1306c273";
+      };
+    };
+    "babel-plugin-transform-function-bind-6.8.0" = {
+      name = "babel-plugin-transform-function-bind";
+      packageName = "babel-plugin-transform-function-bind";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-function-bind/-/babel-plugin-transform-function-bind-6.8.0.tgz";
+        sha1 = "e7f334ce69f50d28fe850a822eaaab9fa4f4d821";
+      };
+    };
+    "babel-preset-stage-1-6.13.0" = {
+      name = "babel-preset-stage-1";
+      packageName = "babel-preset-stage-1";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-preset-stage-1/-/babel-preset-stage-1-6.13.0.tgz";
+        sha1 = "51bf411fa6c4d629fb6ca5e1baf272af648850cc";
+      };
+    };
+    "babel-plugin-transform-class-constructor-call-6.8.0" = {
+      name = "babel-plugin-transform-class-constructor-call";
+      packageName = "babel-plugin-transform-class-constructor-call";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-class-constructor-call/-/babel-plugin-transform-class-constructor-call-6.8.0.tgz";
+        sha1 = "6e740bc80f16d295fa598d92518666020a906192";
+      };
+    };
+    "babel-plugin-transform-export-extensions-6.8.0" = {
+      name = "babel-plugin-transform-export-extensions";
+      packageName = "babel-plugin-transform-export-extensions";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-export-extensions/-/babel-plugin-transform-export-extensions-6.8.0.tgz";
+        sha1 = "fa80ff655b636549431bfd38f6b817bd82e47f5b";
+      };
+    };
+    "babel-preset-stage-2-6.13.0" = {
+      name = "babel-preset-stage-2";
+      packageName = "babel-preset-stage-2";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-preset-stage-2/-/babel-preset-stage-2-6.13.0.tgz";
+        sha1 = "7a3d9e24209a8621dac4b0c2a163a5477ff410e3";
+      };
+    };
+    "babel-plugin-transform-class-properties-6.11.5" = {
+      name = "babel-plugin-transform-class-properties";
+      packageName = "babel-plugin-transform-class-properties";
+      version = "6.11.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-class-properties/-/babel-plugin-transform-class-properties-6.11.5.tgz";
+        sha1 = "429c7a4e7d8ac500448eb14ec502604bc568c91c";
+      };
+    };
+    "babel-plugin-transform-decorators-6.13.0" = {
+      name = "babel-plugin-transform-decorators";
+      packageName = "babel-plugin-transform-decorators";
+      version = "6.13.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-decorators/-/babel-plugin-transform-decorators-6.13.0.tgz";
+        sha1 = "82d65c1470ae83e2d13eebecb0a1c2476d62da9d";
+      };
+    };
+    "babel-plugin-transform-object-rest-spread-6.8.0" = {
+      name = "babel-plugin-transform-object-rest-spread";
+      packageName = "babel-plugin-transform-object-rest-spread";
+      version = "6.8.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-plugin-transform-object-rest-spread/-/babel-plugin-transform-object-rest-spread-6.8.0.tgz";
+        sha1 = "03d1308e257a9d8e1a815ae1fd3db21bdebf08d9";
+      };
+    };
+    "babel-preset-stage-3-6.11.0" = {
+      name = "babel-preset-stage-3";
+      packageName = "babel-preset-stage-3";
+      version = "6.11.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/babel-preset-stage-3/-/babel-preset-stage-3-6.11.0.tgz";
+        sha1 = "1315059fde5b65f6e4cec4f2b591627470213065";
+      };
+    };
     "argparse-1.0.4" = {
       name = "argparse";
       packageName = "argparse";
@@ -18760,6 +19417,1907 @@ in
     };
     production = true;
   };
+  babel-plugin-check-es2015-constants = nodeEnv.buildNodePackage {
+    name = "babel-plugin-check-es2015-constants";
+    packageName = "babel-plugin-check-es2015-constants";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-check-es2015-constants/-/babel-plugin-check-es2015-constants-6.8.0.tgz";
+      sha1 = "dbf024c32ed37bfda8dee1e76da02386a8d26fe7";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 constants to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-async-functions = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-async-functions";
+    packageName = "babel-plugin-transform-async-functions";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-async-functions/-/babel-plugin-transform-async-functions-6.8.0.tgz";
+      sha1 = "dcd0b18b1062559fa8b7d3823efe419bb4685e31";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile async functions to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-async-to-generator = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-async-to-generator";
+    packageName = "babel-plugin-transform-async-to-generator";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-async-to-generator/-/babel-plugin-transform-async-to-generator-6.8.0.tgz";
+      sha1 = "fbb154f2912e00b9f0972131d7e03ebbe45684c2";
+    };
+    dependencies = [
+      sources."babel-helper-remap-async-to-generator-6.11.2"
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-template-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babylon-6.9.2"
+      sources."lodash-4.15.0"
+      sources."esutils-2.0.2"
+      sources."to-fast-properties-1.0.2"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn async functions into ES2015 generators";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-async-to-module-method = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-async-to-module-method";
+    packageName = "babel-plugin-transform-async-to-module-method";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-async-to-module-method/-/babel-plugin-transform-async-to-module-method-6.8.0.tgz";
+      sha1 = "e515913e3a466628eb6e8cdb132f5ed95e88ddf6";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-helper-remap-async-to-generator-6.11.2"
+      sources."babel-types-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-template-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babylon-6.9.2"
+      sources."lodash-4.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn async functions into a module method";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-class-constructor-call = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-class-constructor-call";
+    packageName = "babel-plugin-transform-class-constructor-call";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-class-constructor-call/-/babel-plugin-transform-class-constructor-call-6.8.0.tgz";
+      sha1 = "6e740bc80f16d295fa598d92518666020a906192";
+    };
+    dependencies = [
+      sources."babel-template-6.15.0"
+      sources."babel-plugin-syntax-class-constructor-call-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."babylon-6.9.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."lodash-4.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "## Installation";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-class-properties = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-class-properties";
+    packageName = "babel-plugin-transform-class-properties";
+    version = "6.11.5";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-class-properties/-/babel-plugin-transform-class-properties-6.11.5.tgz";
+      sha1 = "429c7a4e7d8ac500448eb14ec502604bc568c91c";
+    };
+    dependencies = [
+      sources."babel-helper-function-name-6.8.0"
+      sources."babel-plugin-syntax-class-properties-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-types-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-template-6.15.0"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "## Installation";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-decorators = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-decorators";
+    packageName = "babel-plugin-transform-decorators";
+    version = "6.13.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-decorators/-/babel-plugin-transform-decorators-6.13.0.tgz";
+      sha1 = "82d65c1470ae83e2d13eebecb0a1c2476d62da9d";
+    };
+    dependencies = [
+      sources."babel-types-6.15.0"
+      sources."babel-helper-define-map-6.9.0"
+      sources."babel-plugin-syntax-decorators-6.13.0"
+      sources."babel-helper-explode-class-6.8.0"
+      sources."babel-template-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."babel-helper-bindify-decorators-6.8.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile class and object decorators to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-do-expressions = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-do-expressions";
+    packageName = "babel-plugin-transform-do-expressions";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-do-expressions/-/babel-plugin-transform-do-expressions-6.8.0.tgz";
+      sha1 = "fda692af339835cc255bb7544efb8f7c1306c273";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-do-expressions-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile do expressions to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-arrow-functions = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-arrow-functions";
+    packageName = "babel-plugin-transform-es2015-arrow-functions";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-arrow-functions/-/babel-plugin-transform-es2015-arrow-functions-6.8.0.tgz";
+      sha1 = "5b63afc3181bdc9a8c4d481b5a4f3f7d7fef3d9d";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 arrow functions to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-block-scoped-functions = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-block-scoped-functions";
+    packageName = "babel-plugin-transform-es2015-block-scoped-functions";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-block-scoped-functions/-/babel-plugin-transform-es2015-block-scoped-functions-6.8.0.tgz";
+      sha1 = "ed95d629c4b5a71ae29682b998f70d9833eb366d";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel plugin to ensure function declarations at the block level are block scoped";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-block-scoping = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-block-scoping";
+    packageName = "babel-plugin-transform-es2015-block-scoping";
+    version = "6.15.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-block-scoping/-/babel-plugin-transform-es2015-block-scoping-6.15.0.tgz";
+      sha1 = "5b443ca142be8d1db6a8c2ae42f51958b66b70f6";
+    };
+    dependencies = [
+      sources."babel-traverse-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-template-6.15.0"
+      sources."lodash-4.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 block scoping (const and let) to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-classes = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-classes";
+    packageName = "babel-plugin-transform-es2015-classes";
+    version = "6.14.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-classes/-/babel-plugin-transform-es2015-classes-6.14.0.tgz";
+      sha1 = "87d5149ee91fb475922409f9af5b2ba5d1e39287";
+    };
+    dependencies = [
+      sources."babel-helper-optimise-call-expression-6.8.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babel-helper-replace-supers-6.14.0"
+      sources."babel-template-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-define-map-6.9.0"
+      sources."babel-messages-6.8.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-types-6.15.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babylon-6.9.2"
+      sources."lodash-4.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."to-fast-properties-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 classes to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-computed-properties = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-computed-properties";
+    packageName = "babel-plugin-transform-es2015-computed-properties";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-computed-properties/-/babel-plugin-transform-es2015-computed-properties-6.8.0.tgz";
+      sha1 = "f51010fd61b3bd7b6b60a5fdfd307bb7a5279870";
+    };
+    dependencies = [
+      sources."babel-helper-define-map-6.9.0"
+      sources."babel-template-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."lodash-4.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."esutils-2.0.2"
+      sources."to-fast-properties-1.0.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 computed properties to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-destructuring = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-destructuring";
+    packageName = "babel-plugin-transform-es2015-destructuring";
+    version = "6.9.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-destructuring/-/babel-plugin-transform-es2015-destructuring-6.9.0.tgz";
+      sha1 = "f55747f62534866a51b4c4fdb255e6d85e8604d6";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 destructuring to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-duplicate-keys = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-duplicate-keys";
+    packageName = "babel-plugin-transform-es2015-duplicate-keys";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-duplicate-keys/-/babel-plugin-transform-es2015-duplicate-keys-6.8.0.tgz";
+      sha1 = "fd8f7f7171fc108cc1c70c3164b9f15a81c25f7d";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."babel-types-6.15.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile objects with duplicate keys to valid strict ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-for-of = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-for-of";
+    packageName = "babel-plugin-transform-es2015-for-of";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-for-of/-/babel-plugin-transform-es2015-for-of-6.8.0.tgz";
+      sha1 = "82eda139ba4270dda135c3ec1b1f2813fa62f23c";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 for...of to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-function-name = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-function-name";
+    packageName = "babel-plugin-transform-es2015-function-name";
+    version = "6.9.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-function-name/-/babel-plugin-transform-es2015-function-name-6.9.0.tgz";
+      sha1 = "8c135b17dbd064e5bba56ec511baaee2fca82719";
+    };
+    dependencies = [
+      sources."babel-helper-function-name-6.8.0"
+      sources."babel-types-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-template-6.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."lodash-4.15.0"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Apply ES2015 function.name semantics to all functions";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-instanceof = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-instanceof";
+    packageName = "babel-plugin-transform-es2015-instanceof";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-instanceof/-/babel-plugin-transform-es2015-instanceof-6.8.0.tgz";
+      sha1 = "a46260d962274b7b9944f2fb5117974281f08eb9";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "## Installation";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-literals = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-literals";
+    packageName = "babel-plugin-transform-es2015-literals";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-literals/-/babel-plugin-transform-es2015-literals-6.8.0.tgz";
+      sha1 = "50aa2e5c7958fc2ab25d74ec117e0cc98f046468";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 unicode string and number literals to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-modules-amd = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-modules-amd";
+    packageName = "babel-plugin-transform-es2015-modules-amd";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-amd/-/babel-plugin-transform-es2015-modules-amd-6.8.0.tgz";
+      sha1 = "25d954aa0bf04031fc46d2a8e6230bb1abbde4a3";
+    };
+    dependencies = [
+      sources."babel-plugin-transform-es2015-modules-commonjs-6.14.0"
+      sources."babel-template-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-types-6.15.0"
+      sources."babel-plugin-transform-strict-mode-6.11.3"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+      sources."babylon-6.9.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "## Installation";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-modules-commonjs = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-modules-commonjs";
+    packageName = "babel-plugin-transform-es2015-modules-commonjs";
+    version = "6.14.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-6.14.0.tgz";
+      sha1 = "db731640c67ea6ebaecf90eb9cdabddb584aeb36";
+    };
+    dependencies = [
+      sources."babel-types-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-template-6.15.0"
+      sources."babel-plugin-transform-strict-mode-6.11.3"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babylon-6.9.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "## Installation";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-modules-systemjs = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-modules-systemjs";
+    packageName = "babel-plugin-transform-es2015-modules-systemjs";
+    version = "6.14.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-systemjs/-/babel-plugin-transform-es2015-modules-systemjs-6.14.0.tgz";
+      sha1 = "c519b5c73e32388e679c9b1edf41b2fc23dc3303";
+    };
+    dependencies = [
+      sources."babel-template-6.15.0"
+      sources."babel-helper-hoist-variables-6.8.0"
+      sources."babel-runtime-6.11.6"
+      sources."babylon-6.9.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."lodash-4.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "## Installation";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-modules-umd = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-modules-umd";
+    packageName = "babel-plugin-transform-es2015-modules-umd";
+    version = "6.12.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-umd/-/babel-plugin-transform-es2015-modules-umd-6.12.0.tgz";
+      sha1 = "5d73559eb49266775ed281c40be88a421bd371a3";
+    };
+    dependencies = [
+      sources."babel-plugin-transform-es2015-modules-amd-6.8.0"
+      sources."babel-template-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-plugin-transform-es2015-modules-commonjs-6.14.0"
+      sources."babel-types-6.15.0"
+      sources."babel-plugin-transform-strict-mode-6.11.3"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+      sources."babylon-6.9.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "## Installation";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-object-super = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-object-super";
+    packageName = "babel-plugin-transform-es2015-object-super";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-object-super/-/babel-plugin-transform-es2015-object-super-6.8.0.tgz";
+      sha1 = "1b858740a5a4400887c23dcff6f4d56eea4a24c5";
+    };
+    dependencies = [
+      sources."babel-helper-replace-supers-6.14.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-helper-optimise-call-expression-6.8.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-messages-6.8.0"
+      sources."babel-template-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."lodash-4.15.0"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 object super to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-parameters = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-parameters";
+    packageName = "babel-plugin-transform-es2015-parameters";
+    version = "6.11.4";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-parameters/-/babel-plugin-transform-es2015-parameters-6.11.4.tgz";
+      sha1 = "2d41e88c3e4319797e305f87027ef43f4dc739c4";
+    };
+    dependencies = [
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-call-delegate-6.8.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-template-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."lodash-4.15.0"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."babel-helper-hoist-variables-6.8.0"
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 default and rest parameters to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-shorthand-properties = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-shorthand-properties";
+    packageName = "babel-plugin-transform-es2015-shorthand-properties";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-shorthand-properties/-/babel-plugin-transform-es2015-shorthand-properties-6.8.0.tgz";
+      sha1 = "f0a4c5fd471630acf333c2d99c3d677bf0952149";
+    };
+    dependencies = [
+      sources."babel-types-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 shorthand properties to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-spread = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-spread";
+    packageName = "babel-plugin-transform-es2015-spread";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-spread/-/babel-plugin-transform-es2015-spread-6.8.0.tgz";
+      sha1 = "0217f737e3b821fa5a669f187c6ed59205f05e9c";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 spread to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-sticky-regex = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-sticky-regex";
+    packageName = "babel-plugin-transform-es2015-sticky-regex";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-sticky-regex/-/babel-plugin-transform-es2015-sticky-regex-6.8.0.tgz";
+      sha1 = "e73d300a440a35d5c64f5c2a344dc236e3df47be";
+    };
+    dependencies = [
+      sources."babel-helper-regex-6.9.0"
+      sources."babel-types-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."lodash-4.15.0"
+      sources."esutils-2.0.2"
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 sticky regex to an ES5 RegExp constructor";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-template-literals = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-template-literals";
+    packageName = "babel-plugin-transform-es2015-template-literals";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-template-literals/-/babel-plugin-transform-es2015-template-literals-6.8.0.tgz";
+      sha1 = "86eb876d0a2c635da4ec048b4f7de9dfc897e66b";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 template literals to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-typeof-symbol = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-typeof-symbol";
+    packageName = "babel-plugin-transform-es2015-typeof-symbol";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-typeof-symbol/-/babel-plugin-transform-es2015-typeof-symbol-6.8.0.tgz";
+      sha1 = "84c29eb1219372480955a020fef7a65c44f30533";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "## Installation";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es2015-unicode-regex = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es2015-unicode-regex";
+    packageName = "babel-plugin-transform-es2015-unicode-regex";
+    version = "6.11.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es2015-unicode-regex/-/babel-plugin-transform-es2015-unicode-regex-6.11.0.tgz";
+      sha1 = "6298ceabaad88d50a3f4f392d8de997260f6ef2c";
+    };
+    dependencies = [
+      sources."babel-helper-regex-6.9.0"
+      sources."babel-runtime-6.11.6"
+      sources."regexpu-core-2.0.0"
+      sources."lodash-4.15.0"
+      sources."babel-types-6.15.0"
+      sources."esutils-2.0.2"
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."regenerate-1.3.1"
+      sources."regjsgen-0.2.0"
+      sources."regjsparser-0.1.5"
+      sources."jsesc-0.5.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES2015 Unicode regex to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es3-member-expression-literals = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es3-member-expression-literals";
+    packageName = "babel-plugin-transform-es3-member-expression-literals";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es3-member-expression-literals/-/babel-plugin-transform-es3-member-expression-literals-6.8.0.tgz";
+      sha1 = "180796863e2eddc4b48561d0c228369b05b722e2";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Ensure that reserved words are quoted in property accesses";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es3-property-literals = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es3-property-literals";
+    packageName = "babel-plugin-transform-es3-property-literals";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es3-property-literals/-/babel-plugin-transform-es3-property-literals-6.8.0.tgz";
+      sha1 = "8e7cc50cfe060b7c487ae33c501a4f659133bade";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Ensure that reserved words are quoted in object property keys";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-es5-property-mutators = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-es5-property-mutators";
+    packageName = "babel-plugin-transform-es5-property-mutators";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-es5-property-mutators/-/babel-plugin-transform-es5-property-mutators-6.8.0.tgz";
+      sha1 = "b2288f96dc5ea2f8c466a6f60c566d3f77c42b84";
+    };
+    dependencies = [
+      sources."babel-helper-define-map-6.9.0"
+      sources."babel-runtime-6.11.6"
+      sources."lodash-4.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."esutils-2.0.2"
+      sources."to-fast-properties-1.0.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-template-6.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile ES5 property mutator shorthand syntax to Object.defineProperty";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-eval = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-eval";
+    packageName = "babel-plugin-transform-eval";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-eval/-/babel-plugin-transform-eval-6.8.0.tgz";
+      sha1 = "09cd6ce68fb2dcc56cef8f2bd06645def9e23757";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile eval calls with string literals";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-exponentiation-operator = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-exponentiation-operator";
+    packageName = "babel-plugin-transform-exponentiation-operator";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-exponentiation-operator/-/babel-plugin-transform-exponentiation-operator-6.8.0.tgz";
+      sha1 = "db25742e9339eade676ca9acec46f955599a68a4";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-exponentiation-operator-6.13.0"
+      sources."babel-helper-builder-binary-assignment-operator-visitor-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-helper-explode-assignable-expression-6.8.0"
+      sources."babel-types-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."lodash-4.15.0"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile exponentiation operator to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-export-extensions = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-export-extensions";
+    packageName = "babel-plugin-transform-export-extensions";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-export-extensions/-/babel-plugin-transform-export-extensions-6.8.0.tgz";
+      sha1 = "fa80ff655b636549431bfd38f6b817bd82e47f5b";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-export-extensions-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile export extensions to ES2015";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-flow-comments = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-flow-comments";
+    packageName = "babel-plugin-transform-flow-comments";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-flow-comments/-/babel-plugin-transform-flow-comments-6.8.0.tgz";
+      sha1 = "e7c772628f2f6d7d4f1340965ca6d9c9da50319c";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."babel-plugin-syntax-flow-6.13.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn flow type annotations into comments";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-flow-strip-types = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-flow-strip-types";
+    packageName = "babel-plugin-transform-flow-strip-types";
+    version = "6.14.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-flow-strip-types/-/babel-plugin-transform-flow-strip-types-6.14.0.tgz";
+      sha1 = "35ceb03f8770934044bab1a76f7e4ee0aa9220f9";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."babel-plugin-syntax-flow-6.13.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Strip flow type annotations from your output code.";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-function-bind = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-function-bind";
+    packageName = "babel-plugin-transform-function-bind";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-function-bind/-/babel-plugin-transform-function-bind-6.8.0.tgz";
+      sha1 = "e7f334ce69f50d28fe850a822eaaab9fa4f4d821";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-function-bind-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile function bind operator to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-inline-environment-variables = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-inline-environment-variables";
+    packageName = "babel-plugin-transform-inline-environment-variables";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-inline-environment-variables/-/babel-plugin-transform-inline-environment-variables-6.8.0.tgz";
+      sha1 = "fc91dd08127dc6c2abdfd1721b11e9602a69ba10";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Inline environment variables";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-jscript = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-jscript";
+    packageName = "babel-plugin-transform-jscript";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-jscript/-/babel-plugin-transform-jscript-6.8.0.tgz";
+      sha1 = "8a16f2051ba4f8eebd7cef0cff8838d46f50cd3b";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel plugin to fix buggy JScript named function expressions";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-member-expression-literals = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-member-expression-literals";
+    packageName = "babel-plugin-transform-member-expression-literals";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-member-expression-literals/-/babel-plugin-transform-member-expression-literals-6.8.0.tgz";
+      sha1 = "718755a70492a895d8f41810afa9998bc09f57b9";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn valid member expression property literals into plain identifiers";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-merge-sibling-variables = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-merge-sibling-variables";
+    packageName = "babel-plugin-transform-merge-sibling-variables";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-merge-sibling-variables/-/babel-plugin-transform-merge-sibling-variables-6.8.0.tgz";
+      sha1 = "724074e4ef78b601fcf9a34165c972a1b6117e99";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Merge sibling variables into one.";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-minify-booleans = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-minify-booleans";
+    packageName = "babel-plugin-transform-minify-booleans";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-minify-booleans/-/babel-plugin-transform-minify-booleans-6.8.0.tgz";
+      sha1 = "b1a48864a727847696b84eae36fa4d085a54b42b";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn boolean literals into !0 for true and !1 for false.";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-node-env-inline = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-node-env-inline";
+    packageName = "babel-plugin-transform-node-env-inline";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-node-env-inline/-/babel-plugin-transform-node-env-inline-6.8.0.tgz";
+      sha1 = "80d2f9e6dd6f86a943b1378655df5d2cdc11b533";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Inline the `NODE_ENV` environment variable and if it's a part of a binary expression (eg. `process.env.NODE_ENV === \"development\"`) then statically evaluate and replace it.";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-object-assign = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-object-assign";
+    packageName = "babel-plugin-transform-object-assign";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-object-assign/-/babel-plugin-transform-object-assign-6.8.0.tgz";
+      sha1 = "76e17f2dc0f36f14f548b9afd7aaef58d29ebb75";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Replace Object.assign with an inline helper";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-object-rest-spread = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-object-rest-spread";
+    packageName = "babel-plugin-transform-object-rest-spread";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-object-rest-spread/-/babel-plugin-transform-object-rest-spread-6.8.0.tgz";
+      sha1 = "03d1308e257a9d8e1a815ae1fd3db21bdebf08d9";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-object-rest-spread-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Compile object rest and spread to ES5";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-object-set-prototype-of-to-assign = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-object-set-prototype-of-to-assign";
+    packageName = "babel-plugin-transform-object-set-prototype-of-to-assign";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-object-set-prototype-of-to-assign/-/babel-plugin-transform-object-set-prototype-of-to-assign-6.8.0.tgz";
+      sha1 = "72bfc09ce2e56910757716f2761d96d14cc574e1";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn Object.setPrototypeOf to assignments";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-property-literals = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-property-literals";
+    packageName = "babel-plugin-transform-property-literals";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-property-literals/-/babel-plugin-transform-property-literals-6.8.0.tgz";
+      sha1 = "a65b2e6e1274d25df0f3a4c5e85bc8f1cdd9e019";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn valid property key literals to plain identifiers";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-proto-to-assign = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-proto-to-assign";
+    packageName = "babel-plugin-transform-proto-to-assign";
+    version = "6.9.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-proto-to-assign/-/babel-plugin-transform-proto-to-assign-6.9.0.tgz";
+      sha1 = "56aa9fd4d0bf13921ce1c4e08140b2604f4a8db9";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."lodash-4.15.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel plugin for turning __proto__ into a shallow property clone";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-react-constant-elements = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-react-constant-elements";
+    packageName = "babel-plugin-transform-react-constant-elements";
+    version = "6.9.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-react-constant-elements/-/babel-plugin-transform-react-constant-elements-6.9.1.tgz";
+      sha1 = "125b86d96cb322e2139b607fd749ad5fbb17f005";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Treat React JSX elements as value types and hoist them to the highest scope";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-react-display-name = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-react-display-name";
+    packageName = "babel-plugin-transform-react-display-name";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-react-display-name/-/babel-plugin-transform-react-display-name-6.8.0.tgz";
+      sha1 = "f7a084977383d728bdbdc2835bba0159577f660e";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Add displayName to React.createClass calls";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-react-inline-elements = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-react-inline-elements";
+    packageName = "babel-plugin-transform-react-inline-elements";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-react-inline-elements/-/babel-plugin-transform-react-inline-elements-6.8.0.tgz";
+      sha1 = "fc2d8fec1f2f87e5c4961ac367610039f325bbe6";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn JSX elements into exploded React objects";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-react-jsx = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-react-jsx";
+    packageName = "babel-plugin-transform-react-jsx";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-react-jsx/-/babel-plugin-transform-react-jsx-6.8.0.tgz";
+      sha1 = "94759942f70af18c617189aa7f3593f1644a71ab";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."babel-helper-builder-react-jsx-6.9.0"
+      sources."babel-plugin-syntax-jsx-6.13.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babel-types-6.15.0"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn JSX into React function calls";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-react-jsx-compat = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-react-jsx-compat";
+    packageName = "babel-plugin-transform-react-jsx-compat";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-react-jsx-compat/-/babel-plugin-transform-react-jsx-compat-6.8.0.tgz";
+      sha1 = "9c54e1c91aa0d2965a9e0a738d2fd1c894c2de53";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."babel-helper-builder-react-jsx-6.9.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babel-types-6.15.0"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Turn JSX into React Pre-0.12 function calls";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-react-jsx-self = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-react-jsx-self";
+    packageName = "babel-plugin-transform-react-jsx-self";
+    version = "6.11.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-react-jsx-self/-/babel-plugin-transform-react-jsx-self-6.11.0.tgz";
+      sha1 = "605c9450c1429f97a930f7e1dfe3f0d9d0dbd0f4";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."babel-plugin-syntax-jsx-6.13.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Add a __self prop to all JSX Elements";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-react-jsx-source = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-react-jsx-source";
+    packageName = "babel-plugin-transform-react-jsx-source";
+    version = "6.9.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-react-jsx-source/-/babel-plugin-transform-react-jsx-source-6.9.0.tgz";
+      sha1 = "af684a05c2067a86e0957d4f343295ccf5dccf00";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."babel-plugin-syntax-jsx-6.13.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Add a __source prop to all JSX Elements";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-regenerator = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-regenerator";
+    packageName = "babel-plugin-transform-regenerator";
+    version = "6.14.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-6.14.0.tgz";
+      sha1 = "119119b20c8b4283f6c77f0170d404c3c654bec8";
+    };
+    dependencies = [
+      sources."babel-plugin-transform-es2015-block-scoping-6.15.0"
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-plugin-transform-es2015-for-of-6.8.0"
+      sources."babel-core-6.14.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-traverse-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babylon-6.9.2"
+      sources."private-0.1.6"
+      sources."babel-template-6.15.0"
+      sources."lodash-4.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-generator-6.14.0"
+      sources."babel-helpers-6.8.0"
+      sources."babel-messages-6.8.0"
+      sources."babel-register-6.14.0"
+      sources."convert-source-map-1.3.0"
+      sources."debug-2.2.0"
+      sources."json5-0.4.0"
+      sources."minimatch-3.0.3"
+      sources."path-exists-1.0.0"
+      sources."path-is-absolute-1.0.0"
+      sources."shebang-regex-1.0.0"
+      sources."slash-1.0.0"
+      sources."source-map-0.5.6"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."detect-indent-3.0.1"
+      sources."get-stdin-4.0.1"
+      sources."minimist-1.2.0"
+      sources."repeating-1.1.3"
+      sources."is-finite-1.0.1"
+      sources."number-is-nan-1.0.0"
+      sources."core-js-2.4.1"
+      sources."home-or-tmp-1.0.0"
+      (sources."mkdirp-0.5.1" // {
+        dependencies = [
+          sources."minimist-0.0.8"
+        ];
+      })
+      (sources."source-map-support-0.2.10" // {
+        dependencies = [
+          sources."source-map-0.1.32"
+        ];
+      })
+      sources."os-tmpdir-1.0.1"
+      sources."user-home-1.1.1"
+      sources."amdefine-1.0.0"
+      sources."ms-0.7.1"
+      sources."brace-expansion-1.1.6"
+      sources."balanced-match-0.4.2"
+      sources."concat-map-0.0.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Explode async and generator functions into a state machine.";
+      homepage = https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator;
+      license = "BSD";
+    };
+    production = true;
+  };
+  babel-plugin-transform-remove-console = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-remove-console";
+    packageName = "babel-plugin-transform-remove-console";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-remove-console/-/babel-plugin-transform-remove-console-6.8.0.tgz";
+      sha1 = "c4162f01ee169491776e64093f4dad8d61125a90";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Remove console.* calls";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-remove-debugger = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-remove-debugger";
+    packageName = "babel-plugin-transform-remove-debugger";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-remove-debugger/-/babel-plugin-transform-remove-debugger-6.8.0.tgz";
+      sha1 = "d3ece7d8400473f7a706177ba22fd3026ad7e020";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Remove debugger statements";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-runtime = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-runtime";
+    packageName = "babel-plugin-transform-runtime";
+    version = "6.15.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-runtime/-/babel-plugin-transform-runtime-6.15.0.tgz";
+      sha1 = "3d75b4d949ad81af157570273846fb59aeb0d57c";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-simplify-comparison-operators = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-simplify-comparison-operators";
+    packageName = "babel-plugin-transform-simplify-comparison-operators";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-simplify-comparison-operators/-/babel-plugin-transform-simplify-comparison-operators-6.8.0.tgz";
+      sha1 = "0183d65bfdc54c80d922a3a9b3008e25fa9d32a7";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Convert === and !== to == and != if their types are inferred to be the same.";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-strict-mode = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-strict-mode";
+    packageName = "babel-plugin-transform-strict-mode";
+    version = "6.11.3";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-strict-mode/-/babel-plugin-transform-strict-mode-6.11.3.tgz";
+      sha1 = "183741325126bc7ec9cf4c0fc257d3e7ca5afd40";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."babel-types-6.15.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "TODO";
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-plugin-transform-undefined-to-void = nodeEnv.buildNodePackage {
+    name = "babel-plugin-transform-undefined-to-void";
+    packageName = "babel-plugin-transform-undefined-to-void";
+    version = "6.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-plugin-transform-undefined-to-void/-/babel-plugin-transform-undefined-to-void-6.8.0.tgz";
+      sha1 = "bc5b6b4908d3b1262170e67cb3963903ddce167e";
+    };
+    dependencies = [
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Replace references to `undefined` with `void 0`";
+      license = "MIT";
+    };
+    production = true;
+  };
   babel-polyfill = nodeEnv.buildNodePackage {
     name = "babel-polyfill";
     packageName = "babel-polyfill";
@@ -18776,6 +21334,537 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Provides polyfills necessary for a full ES2015+ environment";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-preset-es2015 = nodeEnv.buildNodePackage {
+    name = "babel-preset-es2015";
+    packageName = "babel-preset-es2015";
+    version = "6.14.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.14.0.tgz";
+      sha1 = "cd2437a96f02a4d19bb87e87980bf0b0288d13eb";
+    };
+    dependencies = [
+      sources."babel-plugin-check-es2015-constants-6.8.0"
+      sources."babel-plugin-transform-es2015-arrow-functions-6.8.0"
+      sources."babel-plugin-transform-es2015-block-scoped-functions-6.8.0"
+      sources."babel-plugin-transform-es2015-block-scoping-6.15.0"
+      sources."babel-plugin-transform-es2015-classes-6.14.0"
+      sources."babel-plugin-transform-es2015-computed-properties-6.8.0"
+      sources."babel-plugin-transform-es2015-destructuring-6.9.0"
+      sources."babel-plugin-transform-es2015-duplicate-keys-6.8.0"
+      sources."babel-plugin-transform-es2015-for-of-6.8.0"
+      sources."babel-plugin-transform-es2015-function-name-6.9.0"
+      sources."babel-plugin-transform-es2015-literals-6.8.0"
+      sources."babel-plugin-transform-es2015-modules-amd-6.8.0"
+      sources."babel-plugin-transform-es2015-modules-commonjs-6.14.0"
+      sources."babel-plugin-transform-es2015-modules-systemjs-6.14.0"
+      sources."babel-plugin-transform-es2015-modules-umd-6.12.0"
+      sources."babel-plugin-transform-es2015-object-super-6.8.0"
+      sources."babel-plugin-transform-es2015-parameters-6.11.4"
+      sources."babel-plugin-transform-es2015-shorthand-properties-6.8.0"
+      sources."babel-plugin-transform-es2015-spread-6.8.0"
+      sources."babel-plugin-transform-es2015-sticky-regex-6.8.0"
+      sources."babel-plugin-transform-es2015-template-literals-6.8.0"
+      sources."babel-plugin-transform-es2015-typeof-symbol-6.8.0"
+      sources."babel-plugin-transform-es2015-unicode-regex-6.11.0"
+      sources."babel-plugin-transform-regenerator-6.14.0"
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babel-traverse-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-template-6.15.0"
+      sources."lodash-4.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."babel-helper-optimise-call-expression-6.8.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babel-helper-replace-supers-6.14.0"
+      sources."babel-helper-define-map-6.9.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-plugin-transform-strict-mode-6.11.3"
+      sources."babel-helper-hoist-variables-6.8.0"
+      sources."babel-helper-call-delegate-6.8.0"
+      sources."babel-helper-regex-6.9.0"
+      sources."regexpu-core-2.0.0"
+      sources."regenerate-1.3.1"
+      sources."regjsgen-0.2.0"
+      sources."regjsparser-0.1.5"
+      sources."jsesc-0.5.0"
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-core-6.14.0"
+      sources."private-0.1.6"
+      sources."babel-generator-6.14.0"
+      sources."babel-helpers-6.8.0"
+      sources."babel-register-6.14.0"
+      sources."convert-source-map-1.3.0"
+      sources."json5-0.4.0"
+      sources."minimatch-3.0.3"
+      sources."path-exists-1.0.0"
+      sources."path-is-absolute-1.0.0"
+      sources."shebang-regex-1.0.0"
+      sources."slash-1.0.0"
+      sources."source-map-0.5.6"
+      sources."detect-indent-3.0.1"
+      sources."get-stdin-4.0.1"
+      sources."minimist-1.2.0"
+      sources."repeating-1.1.3"
+      sources."is-finite-1.0.1"
+      sources."number-is-nan-1.0.0"
+      sources."home-or-tmp-1.0.0"
+      (sources."mkdirp-0.5.1" // {
+        dependencies = [
+          sources."minimist-0.0.8"
+        ];
+      })
+      (sources."source-map-support-0.2.10" // {
+        dependencies = [
+          sources."source-map-0.1.32"
+        ];
+      })
+      sources."os-tmpdir-1.0.1"
+      sources."user-home-1.1.1"
+      sources."amdefine-1.0.0"
+      sources."brace-expansion-1.1.6"
+      sources."balanced-match-0.4.2"
+      sources."concat-map-0.0.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel preset for all es2015 plugins.";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-preset-es2016 = nodeEnv.buildNodePackage {
+    name = "babel-preset-es2016";
+    packageName = "babel-preset-es2016";
+    version = "6.11.3";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-preset-es2016/-/babel-preset-es2016-6.11.3.tgz";
+      sha1 = "f42220bf5fa4c6fc57b23ebee137307e749505a2";
+    };
+    dependencies = [
+      sources."babel-plugin-transform-exponentiation-operator-6.8.0"
+      sources."babel-plugin-syntax-exponentiation-operator-6.13.0"
+      sources."babel-helper-builder-binary-assignment-operator-visitor-6.15.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-helper-explode-assignable-expression-6.8.0"
+      sources."babel-types-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."lodash-4.15.0"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel preset for all es2016 plugins.";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-preset-es2017 = nodeEnv.buildNodePackage {
+    name = "babel-preset-es2017";
+    packageName = "babel-preset-es2017";
+    version = "6.14.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-preset-es2017/-/babel-preset-es2017-6.14.0.tgz";
+      sha1 = "44b2eed54708e110893dd3d6e84652ea14ec9ff1";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-trailing-function-commas-6.13.0"
+      sources."babel-plugin-transform-async-to-generator-6.8.0"
+      sources."babel-helper-remap-async-to-generator-6.11.2"
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-template-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babylon-6.9.2"
+      sources."lodash-4.15.0"
+      sources."esutils-2.0.2"
+      sources."to-fast-properties-1.0.2"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel preset for all es2017 plugins.";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-preset-react = nodeEnv.buildNodePackage {
+    name = "babel-preset-react";
+    packageName = "babel-preset-react";
+    version = "6.11.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-preset-react/-/babel-preset-react-6.11.1.tgz";
+      sha1 = "98ac2bd3c1b76f3062ae082580eade154a19b590";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-flow-6.13.0"
+      sources."babel-plugin-syntax-jsx-6.13.0"
+      sources."babel-plugin-transform-flow-strip-types-6.14.0"
+      sources."babel-plugin-transform-react-display-name-6.8.0"
+      sources."babel-plugin-transform-react-jsx-6.8.0"
+      sources."babel-plugin-transform-react-jsx-source-6.9.0"
+      sources."babel-plugin-transform-react-jsx-self-6.11.0"
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babel-helper-builder-react-jsx-6.9.0"
+      sources."babel-types-6.15.0"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel preset for all React plugins.";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-preset-stage-0 = nodeEnv.buildNodePackage {
+    name = "babel-preset-stage-0";
+    packageName = "babel-preset-stage-0";
+    version = "6.5.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-preset-stage-0/-/babel-preset-stage-0-6.5.0.tgz";
+      sha1 = "8b8479b2077482b8f3dc8f8f5f0c9c79788cde22";
+    };
+    dependencies = [
+      sources."babel-plugin-transform-do-expressions-6.8.0"
+      sources."babel-plugin-transform-function-bind-6.8.0"
+      sources."babel-preset-stage-1-6.13.0"
+      sources."babel-plugin-syntax-do-expressions-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babel-plugin-syntax-function-bind-6.13.0"
+      sources."babel-plugin-transform-class-constructor-call-6.8.0"
+      sources."babel-plugin-transform-export-extensions-6.8.0"
+      sources."babel-preset-stage-2-6.13.0"
+      sources."babel-template-6.15.0"
+      sources."babel-plugin-syntax-class-constructor-call-6.13.0"
+      sources."babylon-6.9.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."lodash-4.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."babel-plugin-syntax-export-extensions-6.13.0"
+      sources."babel-plugin-transform-class-properties-6.11.5"
+      sources."babel-plugin-transform-decorators-6.13.0"
+      sources."babel-plugin-transform-object-rest-spread-6.8.0"
+      sources."babel-preset-stage-3-6.11.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babel-plugin-syntax-class-properties-6.13.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-helper-define-map-6.9.0"
+      sources."babel-plugin-syntax-decorators-6.13.0"
+      sources."babel-helper-explode-class-6.8.0"
+      sources."babel-helper-bindify-decorators-6.8.0"
+      sources."babel-plugin-syntax-object-rest-spread-6.13.0"
+      sources."babel-plugin-syntax-trailing-function-commas-6.13.0"
+      sources."babel-plugin-transform-async-to-generator-6.8.0"
+      sources."babel-plugin-transform-exponentiation-operator-6.8.0"
+      sources."babel-helper-remap-async-to-generator-6.11.2"
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-plugin-syntax-exponentiation-operator-6.13.0"
+      sources."babel-helper-builder-binary-assignment-operator-visitor-6.15.0"
+      sources."babel-helper-explode-assignable-expression-6.8.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel preset for stage 0 plugins";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-preset-stage-1 = nodeEnv.buildNodePackage {
+    name = "babel-preset-stage-1";
+    packageName = "babel-preset-stage-1";
+    version = "6.13.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-preset-stage-1/-/babel-preset-stage-1-6.13.0.tgz";
+      sha1 = "51bf411fa6c4d629fb6ca5e1baf272af648850cc";
+    };
+    dependencies = [
+      sources."babel-plugin-transform-class-constructor-call-6.8.0"
+      sources."babel-plugin-transform-export-extensions-6.8.0"
+      sources."babel-preset-stage-2-6.13.0"
+      sources."babel-template-6.15.0"
+      sources."babel-plugin-syntax-class-constructor-call-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."babylon-6.9.2"
+      sources."babel-traverse-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."lodash-4.15.0"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."esutils-2.0.2"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."to-fast-properties-1.0.2"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babel-plugin-syntax-export-extensions-6.13.0"
+      sources."babel-plugin-transform-class-properties-6.11.5"
+      sources."babel-plugin-transform-decorators-6.13.0"
+      sources."babel-plugin-transform-object-rest-spread-6.8.0"
+      sources."babel-preset-stage-3-6.11.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babel-plugin-syntax-class-properties-6.13.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-helper-define-map-6.9.0"
+      sources."babel-plugin-syntax-decorators-6.13.0"
+      sources."babel-helper-explode-class-6.8.0"
+      sources."babel-helper-bindify-decorators-6.8.0"
+      sources."babel-plugin-syntax-object-rest-spread-6.13.0"
+      sources."babel-plugin-syntax-trailing-function-commas-6.13.0"
+      sources."babel-plugin-transform-async-to-generator-6.8.0"
+      sources."babel-plugin-transform-exponentiation-operator-6.8.0"
+      sources."babel-helper-remap-async-to-generator-6.11.2"
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-plugin-syntax-exponentiation-operator-6.13.0"
+      sources."babel-helper-builder-binary-assignment-operator-visitor-6.15.0"
+      sources."babel-helper-explode-assignable-expression-6.8.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel preset for stage 1 plugins";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-preset-stage-2 = nodeEnv.buildNodePackage {
+    name = "babel-preset-stage-2";
+    packageName = "babel-preset-stage-2";
+    version = "6.13.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-preset-stage-2/-/babel-preset-stage-2-6.13.0.tgz";
+      sha1 = "7a3d9e24209a8621dac4b0c2a163a5477ff410e3";
+    };
+    dependencies = [
+      sources."babel-plugin-transform-class-properties-6.11.5"
+      sources."babel-plugin-transform-decorators-6.13.0"
+      sources."babel-plugin-transform-object-rest-spread-6.8.0"
+      sources."babel-preset-stage-3-6.11.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babel-plugin-syntax-class-properties-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-types-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."babel-template-6.15.0"
+      sources."esutils-2.0.2"
+      sources."lodash-4.15.0"
+      sources."to-fast-properties-1.0.2"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."babylon-6.9.2"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babel-helper-define-map-6.9.0"
+      sources."babel-plugin-syntax-decorators-6.13.0"
+      sources."babel-helper-explode-class-6.8.0"
+      sources."babel-helper-bindify-decorators-6.8.0"
+      sources."babel-plugin-syntax-object-rest-spread-6.13.0"
+      sources."babel-plugin-syntax-trailing-function-commas-6.13.0"
+      sources."babel-plugin-transform-async-to-generator-6.8.0"
+      sources."babel-plugin-transform-exponentiation-operator-6.8.0"
+      sources."babel-helper-remap-async-to-generator-6.11.2"
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-plugin-syntax-exponentiation-operator-6.13.0"
+      sources."babel-helper-builder-binary-assignment-operator-visitor-6.15.0"
+      sources."babel-helper-explode-assignable-expression-6.8.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel preset for stage 2 plugins";
+      homepage = https://babeljs.io/;
+      license = "MIT";
+    };
+    production = true;
+  };
+  babel-preset-stage-3 = nodeEnv.buildNodePackage {
+    name = "babel-preset-stage-3";
+    packageName = "babel-preset-stage-3";
+    version = "6.11.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/babel-preset-stage-3/-/babel-preset-stage-3-6.11.0.tgz";
+      sha1 = "1315059fde5b65f6e4cec4f2b591627470213065";
+    };
+    dependencies = [
+      sources."babel-plugin-syntax-trailing-function-commas-6.13.0"
+      sources."babel-plugin-transform-async-to-generator-6.8.0"
+      sources."babel-plugin-transform-exponentiation-operator-6.8.0"
+      sources."babel-helper-remap-async-to-generator-6.11.2"
+      sources."babel-plugin-syntax-async-functions-6.13.0"
+      sources."babel-runtime-6.11.6"
+      sources."babel-template-6.15.0"
+      sources."babel-types-6.15.0"
+      sources."babel-traverse-6.15.0"
+      sources."babel-helper-function-name-6.8.0"
+      sources."babylon-6.9.2"
+      sources."lodash-4.15.0"
+      sources."esutils-2.0.2"
+      sources."to-fast-properties-1.0.2"
+      sources."babel-code-frame-6.11.0"
+      sources."babel-messages-6.8.0"
+      sources."debug-2.2.0"
+      sources."globals-8.18.0"
+      sources."invariant-2.2.1"
+      sources."chalk-1.1.3"
+      sources."js-tokens-2.0.0"
+      sources."ansi-styles-2.2.1"
+      sources."escape-string-regexp-1.0.5"
+      sources."has-ansi-2.0.0"
+      sources."strip-ansi-3.0.1"
+      sources."supports-color-2.0.0"
+      sources."ansi-regex-2.0.0"
+      sources."ms-0.7.1"
+      (sources."loose-envify-1.2.0" // {
+        dependencies = [
+          sources."js-tokens-1.0.3"
+        ];
+      })
+      sources."babel-helper-get-function-arity-6.8.0"
+      sources."core-js-2.4.1"
+      sources."regenerator-runtime-0.9.5"
+      sources."babel-plugin-syntax-exponentiation-operator-6.13.0"
+      sources."babel-helper-builder-binary-assignment-operator-visitor-6.15.0"
+      sources."babel-helper-explode-assignable-expression-6.8.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Babel preset for stage 3 plugins";
       homepage = https://babeljs.io/;
       license = "MIT";
     };
