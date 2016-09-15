@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdk:sdk-sys-img xmlns:sdk="http://schemas.android.com/sdk/android/sys-img/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<!--Generated on 2016-07-15 21:31:22.867420 with ADRT.-->
+	<!--Generated on 2016-09-12 21:35:04.795787 with ADRT.-->
 	<sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
 This is the Android Software Development Kit License Agreement
@@ -558,20 +558,37 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3065232, branch:git_nyc-emu-release-->
+		<!--Generated from bid:3245079, branch:git_nyc-emu-release-->
 		<sdk:api-level>24</sdk:api-level>
 		<sdk:description>ARM EABI v7a System Image</sdk:description>
-		<sdk:revision>5</sdk:revision>
+		<sdk:revision>7</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Jul 15 10:08:55 2016.-->
-				<sdk:size>497498007</sdk:size>
-				<sdk:checksum type="sha1">2eb8fb86f7312614a2a0b033d669d67206a618ff</sdk:checksum>
-				<sdk:url>sysimg_armeabi-v7a-24_r05.zip</sdk:url>
+				<!--Built on: Tue Sep  6 08:28:18 2016.-->
+				<sdk:size>283677512</sdk:size>
+				<sdk:checksum type="sha1">3454546b4eed2d6c3dd06d47757d6da9f4176033</sdk:checksum>
+				<sdk:url>armeabi-v7a-24_r07.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-preview-license"/>
+		<sdk:uses-license ref="android-sdk-license"/>
 		<sdk:abi>armeabi-v7a</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:3245079, branch:git_nyc-emu-release-->
+		<sdk:api-level>24</sdk:api-level>
+		<sdk:description>ARM 64 v8a System Image</sdk:description>
+		<sdk:revision>7</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Sep  6 08:28:58 2016.-->
+				<sdk:size>384556503</sdk:size>
+				<sdk:checksum type="sha1">e8ab2e49e4efe4b064232b33b5eeaded61437d7f</sdk:checksum>
+				<sdk:url>arm64-v8a-24_r07.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>arm64-v8a</sdk:abi>
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
@@ -779,19 +796,19 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3065232, branch:git_nyc-emu-release-->
+		<!--Generated from bid:3245079, branch:git_nyc-emu-release-->
 		<sdk:api-level>24</sdk:api-level>
 		<sdk:description>Intel x86 Atom System Image</sdk:description>
-		<sdk:revision>5</sdk:revision>
+		<sdk:revision>7</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Jul 15 10:09:24 2016.-->
-				<sdk:size>535224957</sdk:size>
-				<sdk:checksum type="sha1">ce6441c4cadaecd28b364c59b36c31ef0904dae0</sdk:checksum>
-				<sdk:url>sysimg_x86-24_r05.zip</sdk:url>
+				<!--Built on: Tue Sep  6 08:29:27 2016.-->
+				<sdk:size>302213276</sdk:size>
+				<sdk:checksum type="sha1">566fdee283a907854bfa3c174265bc31f396eabd</sdk:checksum>
+				<sdk:url>x86-24_r07.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-preview-license"/>
+		<sdk:uses-license ref="android-sdk-license"/>
 		<sdk:abi>x86</sdk:abi>
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
@@ -847,19 +864,19 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3065232, branch:git_nyc-emu-release-->
+		<!--Generated from bid:3245079, branch:git_nyc-emu-release-->
 		<sdk:api-level>24</sdk:api-level>
 		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
-		<sdk:revision>5</sdk:revision>
+		<sdk:revision>7</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Jul 15 10:10:10 2016.-->
-				<sdk:size>727226879</sdk:size>
-				<sdk:checksum type="sha1">e1869b32b1dcb2f4d4d18c912166b3e2bee8a841</sdk:checksum>
-				<sdk:url>sysimg_x86_64-24_r05.zip</sdk:url>
+				<!--Built on: Tue Sep  6 08:29:51 2016.-->
+				<sdk:size>407148033</sdk:size>
+				<sdk:checksum type="sha1">a379932395ced0a8f572b39c396d86e08827a9ba</sdk:checksum>
+				<sdk:url>x86_64-24_r07.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-preview-license"/>
+		<sdk:uses-license ref="android-sdk-license"/>
 		<sdk:abi>x86_64</sdk:abi>
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>

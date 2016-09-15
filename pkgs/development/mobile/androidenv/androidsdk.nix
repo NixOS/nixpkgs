@@ -10,16 +10,16 @@ with { inherit (stdenv.lib) makeLibraryPath; };
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "25.1.7";
+  version = "25.2.2";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/repository/tools_r${version}-linux.zip";
-      sha1 = "p03br08zfq0j7aar5638z8fdh5n9x1in";
+      sha256 = "0q53yq8fjc10kr4fz3rap5vsil3297w5nn4kw1z0ms7yz1d1im8h";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/repository/tools_r${version}-macosx.zip";
-      sha1 = "7fzlfms37cfk25kk4f9zriy63djmbi8g";
+      sha256 = "1wq7xm0rhy0h6qylv7fq9mhf8hqihrr1nzf7d322rc3g0jfrdrcl";
     }
     else throw "platform not ${stdenv.system} supported!";
 
