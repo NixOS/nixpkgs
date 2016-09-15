@@ -588,6 +588,24 @@ in modules // {
     };
   };
 
+  asgiref = buildPythonPackage rec {
+    name = "asgiref-${version}";
+    version = "0.14.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/asgiref/${name}.tar.gz";
+      sha256 = "1ww4z14pd7g2mwz5nyvxm4rif0rsm9h8i0lwk78v58b2j45r43lc";
+    };
+
+    propagatedBuildInputs = with self ; [ six ];
+
+    meta = {
+      description = "Reference ASGI adapters and channel layers";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/asgiref;
+    };
+  };
+
   python-editor = buildPythonPackage rec {
     name = "python-editor-${version}";
     version = "0.4";
