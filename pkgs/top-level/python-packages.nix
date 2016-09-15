@@ -2140,6 +2140,27 @@ in modules // {
     };
   };
 
+  channels = buildPythonPackage rec {
+    name = "channels-${version}";
+    version = "0.17.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/channels/${name}.tar.gz";
+      sha256 = "1a7fzm25sm3qqgxf7j3hml2lkipvf0yapdg4rkk7x3m11zm0xgv9";
+    };
+
+    # Files are missing in the distribution
+    doCheck = false;
+
+    propagatedBuildInputs = with self ; [ asgiref django daphne ];
+
+    meta = {
+      description = "Brings event-driven capabilities to Django with a channel system";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/channels;
+    };
+  };
+
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
 
