@@ -5414,6 +5414,24 @@ in modules // {
     };
   });
 
+  daphne = buildPythonPackage rec {
+    name = "daphne-${version}";
+    version = "0.15.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/daphne/${name}.tar.gz";
+      sha256 = "095xdh10v8sqwyas02q72ij3ivd5qjg5ki5cvha0fpzd361izdnp";
+    };
+
+    propagatedBuildInputs = with self; [ asgiref autobahn ];
+
+    meta = {
+      description = "Django ASGI (HTTP/WebSocket) server";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/daphne;
+    };
+  };
+
   dateparser = buildPythonPackage rec {
     name = "dateparser-${version}";
     version = "0.3.2-pre-2016-01-21"; # Fix assert year 2016 == 2015
