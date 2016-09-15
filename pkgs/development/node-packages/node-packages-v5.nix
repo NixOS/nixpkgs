@@ -7807,6 +7807,15 @@ let
         sha1 = "5fa55e02be7ca934edfc12665632e849b72e5209";
       };
     };
+    "parserlib-1.0.0" = {
+      name = "parserlib";
+      packageName = "parserlib";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/parserlib/-/parserlib-1.0.0.tgz";
+        sha1 = "88340e7e8d95bac9e09236742eef53bec1e4b30f";
+      };
+    };
     "bluebird-2.9.9" = {
       name = "bluebird";
       packageName = "bluebird";
@@ -18146,10 +18155,10 @@ in
   bower2nix = nodeEnv.buildNodePackage {
     name = "bower2nix";
     packageName = "bower2nix";
-    version = "3.1.0";
+    version = "3.1.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/bower2nix/-/bower2nix-3.1.0.tgz";
-      sha1 = "f18a46335854ff9c5b4fe78f88309d7bf0631a1b";
+      url = "https://registry.npmjs.org/bower2nix/-/bower2nix-3.1.1.tgz";
+      sha1 = "77cc8f966a3595686f5d6fae30ad9bd2cc20bfe3";
     };
     dependencies = [
       sources."argparse-1.0.4"
@@ -19454,6 +19463,26 @@ in
     meta = {
       description = "Cordova command line interface tool";
       license = "Apache-2.0";
+    };
+    production = true;
+  };
+  csslint = nodeEnv.buildNodePackage {
+    name = "csslint";
+    packageName = "csslint";
+    version = "1.0.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/csslint/-/csslint-1.0.2.tgz";
+      sha1 = "d01ab277845686c3c4a0d6166b3817ee114bd73d";
+    };
+    dependencies = [
+      sources."clone-1.0.2"
+      sources."parserlib-1.0.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "CSSLint";
+      homepage = http://csslint.net/;
+      license = "MIT";
     };
     production = true;
   };
