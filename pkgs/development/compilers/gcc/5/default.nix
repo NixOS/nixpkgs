@@ -145,7 +145,7 @@ let version = "5.4.0";
         withFloat +
         withMode +
         (if crossMingw && crossStageStatic then
-          " --with-headers=${libcCross}/include" +
+          " --with-sysroot=${libcCross}/include" +
           " --with-gcc" +
           " --with-gnu-as" +
           " --with-gnu-ld" +
@@ -167,7 +167,8 @@ let version = "5.4.0";
           " --disable-decimal-float" # libdecnumber requires libc
           else
           (if crossDarwin then " --with-sysroot=${getLib libcCross}/share/sysroot"
-           else                " --with-headers=${getDev libcCross}/include") +
+           else                " --with-sysroot=${getDev libcCross}" +
+                               " --with-native-system-header-dir=/include") +
           # Ensure that -print-prog-name is able to find the correct programs.
           (stdenv.lib.optionalString (crossMingw || crossDarwin) (
             " --with-as=${binutilsCross}/bin/${cross.config}-as" +
