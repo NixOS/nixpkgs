@@ -29868,8 +29868,8 @@ in modules // {
       url = "mirror://pypi/a/${pname}/${name}.tar.gz";
       sha256 = "1158ml8h3g0vlsgw2jmy579glbg7dn0mjij8xibdl509b8qv9p51";
     };
-    buildInputs = with self; [ unittest2 mock pytest txaio trollius ];
-    propagatedBuildInputs = with self; [ six twisted ];
+    buildInputs = with self; [ unittest2 mock pytest trollius ];
+    propagatedBuildInputs = with self; [ six twisted txaio ];
     checkPhase = ''
       py.test $out
     '';
