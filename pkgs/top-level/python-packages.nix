@@ -19679,11 +19679,11 @@ in modules // {
 
   pysocks = buildPythonPackage rec {
     name = "pysocks-${version}";
-    version = "1.5.0";
+    version = "1.5.7";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/P/PySocks/PySocks-${version}.tar.gz";
-      sha256 = "10wq5311qrnk8rvzsh6gwzxi7h51pgvzw3d7s1mb39fsvf0vyjdk";
+      sha256 = "124bydbcspzhkb6ynckvgqra1b79rh5mrq98kbyyd202n6a7c775";
     };
 
     doCheck = false;
@@ -27037,15 +27037,16 @@ in modules // {
 
   searx = buildPythonPackage rec {
     name = "searx-${version}";
-    version = "0.9.0";
+    version = "0.10.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "asciimoo";
       repo = "searx";
       rev = "v${version}";
-      sha256 = "030qkrsj4as9anr8xfpk5n41qzg7w4yyjasb4cqislvyl1l1dvvs";
+      sha256 = "0j9pnifcrm4kzziip43w2fgadsg1sqlcm7dfxhnshdx03nby2dy2";
     };
 
+    patches = [ ../development/python-modules/searx.patch ];
     postPatch = ''
       substituteInPlace requirements.txt \
         --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28' \
@@ -27055,14 +27056,14 @@ in modules // {
     propagatedBuildInputs = with self; [
       pyyaml lxml_3_5 grequests flaskbabel flask requests2
       gevent speaklater Babel pytz dateutil pygments_2_0
-      pyasn1 pyasn1-modules ndg-httpsclient certifi
+      pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
     ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
       description = "A privacy-respecting, hackable metasearch engine";
       license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ matejc fpletz ];
+      maintainers = with maintainers; [ matejc fpletz profpatsch ];
     };
   };
 
