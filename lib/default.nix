@@ -31,6 +31,7 @@ let
 
   # domain-specific
   sandbox = import ./sandbox.nix;
+  fetchers = import ./fetchers.nix;
 
 in
   { inherit trivial
@@ -39,7 +40,7 @@ in
             modules options types
             licenses platforms systems
             debug misc
-            sandbox;
+            sandbox fetchers;
   }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
