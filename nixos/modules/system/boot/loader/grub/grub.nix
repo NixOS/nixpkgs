@@ -465,7 +465,7 @@ in
             + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
         }
         {
-          assertion = all (c: c < 2) (mapAttrsToList (_: c: c) bootDeviceCounters);
+          assertion = cfg.efiSupport || all (c: c < 2) (mapAttrsToList (_: c: c) bootDeviceCounters);
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {
