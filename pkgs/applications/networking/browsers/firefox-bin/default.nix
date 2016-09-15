@@ -2,6 +2,7 @@
 , alsaLib
 , atk
 , cairo
+, curl
 , cups
 , dbus_glib
 , dbus_libs
@@ -75,6 +76,7 @@ stdenv.mkDerivation {
       alsaLib
       atk
       cairo
+      curl
       cups
       dbus_glib
       dbus_libs
