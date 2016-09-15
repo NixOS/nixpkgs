@@ -35,6 +35,7 @@
 , gnused ? null
 , binutils ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
+, darwin ? null
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -363,7 +364,9 @@ stdenv.mkDerivation ({
       )
     }
     ${if cross == null
-      then " --with-native-system-header-dir=${getDev stdenv.libc}/include"
+      then if stdenv.isDarwin
+        then " --with-native-system-header-dir=${darwin.usr-include}"
+        else " --with-native-system-header-dir=${getDev stdenv.libc}/include"
       else ""}
     ${if langAda then " --enable-libada" else ""}
     ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}

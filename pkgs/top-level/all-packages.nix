@@ -10958,6 +10958,8 @@ in
     libobjc = apple-source-releases.objc4;
 
     stubs = callPackages ../os-specific/darwin/stubs {};
+
+    usr-include = callPackage ../os-specific/darwin/macheaders.nix {};
   };
 
   devicemapper = lvm2;
