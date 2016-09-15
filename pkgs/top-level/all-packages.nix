@@ -9900,6 +9900,8 @@ in
 
   czmq = callPackage ../development/libraries/czmq { };
 
+  czmqpp = callPackage ../development/libraries/czmqpp { };
+
   zimlib = callPackage ../development/libraries/zimlib { };
 
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
