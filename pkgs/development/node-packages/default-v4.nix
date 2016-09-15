@@ -38,4 +38,13 @@ nodePackages // {
   npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
     postInstall = "npm run-script prepublish";
   };
+
+  bower2nix = nodePackages.bower2nix.override (oldAttrs: {
+    buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+    postInstall = ''
+      for prog in bower2nix fetch-bower; do
+        wrapProgram "$out/bin/$prog" --prefix PATH : "${pkgs.git}/bin"
+      done
+    '';
+  });
 }
