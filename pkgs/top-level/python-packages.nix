@@ -19785,11 +19785,11 @@ in modules // {
 
   pysocks = buildPythonPackage rec {
     name = "pysocks-${version}";
-    version = "1.5.0";
+    version = "1.5.7";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/P/PySocks/PySocks-${version}.tar.gz";
-      sha256 = "10wq5311qrnk8rvzsh6gwzxi7h51pgvzw3d7s1mb39fsvf0vyjdk";
+      sha256 = "124bydbcspzhkb6ynckvgqra1b79rh5mrq98kbyyd202n6a7c775";
     };
 
     doCheck = false;
@@ -27139,7 +27139,7 @@ in modules // {
 
   searx = buildPythonPackage rec {
     name = "searx-${version}";
-    version = "0.9.0+git20160816";
+    version = "0.10.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "asciimoo";
@@ -27148,6 +27148,7 @@ in modules // {
       sha256 = "00j10w1mpw12ad3v5wd9wk5fvw5d7yahrjxj39qb35z2x2a80pn1";
     };
 
+    patches = [ ../development/python-modules/searx.patch ];
     postPatch = ''
       substituteInPlace requirements.txt \
         --replace 'pyopenssl==0.15.1' 'pyopenssl==16.0.0' \
@@ -27168,7 +27169,7 @@ in modules // {
       homepage = https://github.com/asciimoo/searx;
       description = "A privacy-respecting, hackable metasearch engine";
       license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ matejc fpletz ];
+      maintainers = with maintainers; [ matejc fpletz profpatsch ];
     };
   };
 
