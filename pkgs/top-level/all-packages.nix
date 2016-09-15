@@ -15130,6 +15130,8 @@ in
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
+  systemtap = callPackage ../development/tools/profiling/systemtap { };
+
   tabbed = callPackage ../applications/window-managers/tabbed {
     # if you prefer a custom config, write the config.h in tabbed.config.h
     # and enable
