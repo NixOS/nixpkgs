@@ -26,7 +26,6 @@ doNotDisplayTwice rec {
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
-  buildbotSlave = buildbot-slave;  # added 2014-12-09
   bundler_HEAD = bundler; # added 2015-11-15
   checkbashism = checkbashisms; # added 2016-08-16
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15

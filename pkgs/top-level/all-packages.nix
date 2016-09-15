@@ -6227,11 +6227,7 @@ in
     wxGTK = wxGTK30;
   };
 
-  buildbot-slave = callPackage ../development/tools/build-managers/buildbot-slave {
-    inherit (pythonPackages) twisted;
-  };
-
-  buildbot = callPackage ../development/tools/build-managers/buildbot/9.nix { };
+  buildbot = callPackage ../development/tools/build-managers/buildbot { };
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
   buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
   buildbot-ui = self.buildbot.override {
