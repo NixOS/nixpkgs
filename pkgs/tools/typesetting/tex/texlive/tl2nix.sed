@@ -12,10 +12,10 @@ s/^name (.*)/name "\1"/
 /^name /s/^name (.*)/\1 = {/p
 /^$/,1i};
 
-# extract md5 for runfiles
-s/^containermd5 (.*)/  md5.run = "\1";/p
-s/^doccontainermd5 (.*)/  md5.doc = "\1";/p
-s/^srccontainermd5 (.*)/  md5.source = "\1";/p
+# extract hashes of *.tar.xz
+s/^containerchecksum (.*)/  sha512.run = "\1";/p
+s/^doccontainerchecksum (.*)/  sha512.doc = "\1";/p
+s/^srccontainerchecksum (.*)/  sha512.source = "\1";/p
 /^runfiles /i\  hasRunfiles = true;
 
 # number of path components to strip, defaulting to 1 ("texmf-dist/")

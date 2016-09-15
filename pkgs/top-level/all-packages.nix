@@ -8765,7 +8765,7 @@ in
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
-    llvmPackages = llvmPackages_38; # various problems with 3.7; see #11367, #11467
+    llvmPackages = llvmPackages_39;
   });
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
@@ -17385,9 +17385,9 @@ in
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
-  # All the new TeX Live is inside. See description in default.nix.
+  # TeX Live; see http://nixos.org/nixpkgs/manual/#sec-language-texlive
   texlive = recurseIntoAttrs
-    (callPackage ../tools/typesetting/tex/texlive-new { });
+    (callPackage ../tools/typesetting/tex/texlive { });
 
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
 

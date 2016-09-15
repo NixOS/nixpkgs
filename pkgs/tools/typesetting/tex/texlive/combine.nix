@@ -28,7 +28,7 @@ let
       ++ lib.optional (lib.any pkgNeedsPython splitBin.wrong) ruby;
   };
 
-  mkUniquePkgs = pkgs: fastUnique (a: b: a < b)
+  mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
     # here we deal with those dummy packages needed for hyphenation filtering
     (map (p: if lib.isDerivation p then builtins.toPath p else "") pkgs);
 
@@ -58,6 +58,17 @@ in buildEnv {
       '')
       pkgList.bin
     +
+
+    # Patch texlinks.sh back to 2015 version;
+    # otherwise some bin/ links break, e.g. xe(la)tex.
+  ''
+    (
+      cd "$out/share/texmf/scripts/texlive"
+      local target="$(readlink texlinks.sh)"
+      rm texlinks.sh && cp "$target" texlinks.sh
+      patch --verbose -R texlinks.sh < '${./texlinks.diff}'
+    )
+  '' +
   ''
     export PATH="$out/bin:$out/share/texmf/scripts/texlive:${perl}/bin:$PATH"
     export TEXMFCNF="$out/share/texmf/web2c"
