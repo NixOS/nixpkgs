@@ -8,11 +8,11 @@
 # plugin derivations in the Nix store and nowhere else.
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.33";
+  version = "2.34";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "0n4rkx2awyq1gbqiby1lkf2zw82brji96s4fkjsahmci528a882i";
+    sha256 = "e3f184e4deddd1aa5ee2b52e2373c772d3f3975e5eddb2fd729eb27b437011aa";
   };
 
   sourceRoot = ".";
@@ -20,7 +20,7 @@ with builtins; buildDotnetPackage rec {
   buildInputs = [ unzip makeWrapper icoutils ];
 
   pluginLoadPathsPatch =
-    let outputLc = toString (add 8 (length plugins));
+    let outputLc = toString (add 7 (length plugins));
         patchTemplate = readFile ./keepass-plugins.patch;
         loadTemplate  = readFile ./keepass-plugins-load.patch;
         loads =
