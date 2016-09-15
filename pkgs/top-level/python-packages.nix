@@ -17910,6 +17910,21 @@ in modules // {
     };
   };
 
+  posix_ipc = buildPythonPackage rec {
+    name = "posix_ipc-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/posix_ipc/${name}.tar.gz";
+      sha256 = "1jzg66708pi5n9w07fbz6rlxx30cjds9hp2yawjjfryafh1hg4ww";
+    };
+
+    meta = {
+      description = "POSIX IPC primitives (semaphores, shared memory and message queues)";
+      license = licenses.bsd3;
+      homepage = http://semanchuk.com/philip/posix_ipc/;
+    };
+  };
 
   powerline = buildPythonPackage rec {
     rev  = "2.1.4";
