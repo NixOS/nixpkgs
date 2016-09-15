@@ -16,7 +16,7 @@ buildGoPackage rec {
   };
 
   # Generated with the `gdm2nix.rb` script and the `Godeps` file from the influxdb repo root.
-  goDeps = ./. + builtins.toPath "/deps-${version}.json";
+  goDeps = ./. + builtins.toPath "/deps-${version}.nix";
 
   meta = with lib; {
     description = "The plugin-driven server agent for collecting & reporting metrics.";
