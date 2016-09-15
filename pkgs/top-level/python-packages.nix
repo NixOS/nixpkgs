@@ -606,6 +606,24 @@ in modules // {
     };
   };
 
+  asgi_ipc = buildPythonPackage rec {
+    name = "asgi_ipc-${version}";
+    version = "1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/asgi_ipc/${name}.tar.gz";
+      sha256 = "16q5x2cvx3rpnikmqv8l4clkfib8baqy7diy18rsmzj6hqqli3xy";
+    };
+
+    propagatedBuildInputs = with self ; [ asgiref msgpack posix_ipc ];
+
+    meta = {
+      description = "Posix IPC-backed ASGI channel layer implementation";
+      license = licenses.bsd3;
+      homepage = http://github.com/django/asgi_ipc/;
+    };
+  };
+
   python-editor = buildPythonPackage rec {
     name = "python-editor-${version}";
     version = "0.4";
