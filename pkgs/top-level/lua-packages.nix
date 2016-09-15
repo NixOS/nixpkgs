@@ -7,7 +7,7 @@
 
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
 , fetchFromGitHub, libmpack, openldap, mysql, postgresql
 }:
 
@@ -243,6 +243,11 @@ let
     patchPhase = ''
       sed -e "s,^LUAPREFIX_linux.*,LUAPREFIX_linux=$out," \
           -i src/makefile
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      export PLAT=macosx
+      export LUAPREFIX_macosx=$out
+      substituteInPlace src/Makefile --replace gcc cc \
+        --replace 10.3 10.5
     '';
 
     meta = {

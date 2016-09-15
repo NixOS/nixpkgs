@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
-, glib, gnome, gtk, libnotify, libX11, libXcomposite, libXcursor, libXdamage
+, glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, pango
 , systemd, libXScrnSaver }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
     libPath = stdenv.lib.makeLibraryPath [
         stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
-        gdk_pixbuf glib gnome.GConf gtk libnotify libX11 libXcomposite
+        gdk_pixbuf glib gnome2.GConf gtk2 libnotify libX11 libXcomposite
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
         libXtst nspr nss pango systemd libXScrnSaver
      ];

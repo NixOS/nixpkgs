@@ -1,5 +1,5 @@
 { clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, fetchsvn, gyp, which, ninja, 
-  python, pkgconfig, protobuf, gtk, zinnia, qt4, libxcb, tegaki-zinnia-japanese,
+  python, pkgconfig, protobuf, gtk2, zinnia, qt4, libxcb, tegaki-zinnia-japanese,
   fcitx, gettext }:
 let
   japanese_usage_dictionary = fetchsvn {
@@ -23,7 +23,7 @@ in clangStdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gyp which ninja python pkgconfig ];
-  buildInputs = [ protobuf gtk zinnia qt4 libxcb fcitx gettext ];
+  buildInputs = [ protobuf gtk2 zinnia qt4 libxcb fcitx gettext ];
 
   postUnpack = ''
     rmdir $sourceRoot/src/third_party/japanese_usage_dictionary/

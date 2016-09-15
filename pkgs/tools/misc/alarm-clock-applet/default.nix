@@ -2,7 +2,7 @@
 , glib
 , gtk2
 , gst_all_1
-, gnome
+, gnome2
 , libnotify
 , libxml2
 , libunique
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     gtk2
     gst_all_1.gstreamer
     gst_plugins
-    gnome.GConf
-    gnome.gnome_icon_theme
+    gnome2.GConf
+    gnome2.gnome_icon_theme
     libnotify
     libxml2
     libunique
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  propagatedUserEnvPkgs = [ gnome.GConf.out ];
+  propagatedUserEnvPkgs = [ gnome2.GConf.out ];
 
   enableParallelBuilding = true;
 

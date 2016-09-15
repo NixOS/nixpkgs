@@ -270,6 +270,13 @@ with stdenv.lib;
     SQUASHFS_LZ4 y
   ''}
 
+  # Native Language Support modules, needed by some filesystems
+  NLS y
+  NLS_DEFAULT utf8
+  NLS_UTF8 m
+  NLS_CODEPAGE_437 m # VFAT default for the codepage= mount option
+  NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
+
   # Runtime security tests
   DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, libX11, gtk }:
+{ stdenv, fetchurl, intltool, pkgconfig, libX11, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "lxappearance-0.6.2";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ intltool pkgconfig ];
-  buildInputs = [ libX11 gtk ];
+
+  buildInputs = [ libX11 gtk2 ];
 
   meta = {
     description = "A lightweight program for configuring the theme and fonts of gtk applications";

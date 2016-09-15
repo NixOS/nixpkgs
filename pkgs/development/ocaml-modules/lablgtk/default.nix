@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk, libgnomecanvas, libglade, gtksourceview, camlp4}:
+{stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview, camlp4}:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1bybn3jafxf4cx25zvn8h2xj9agn1xjbn7j3ywxxqx6az7rfnnwp";
   };
 
-  buildInputs = [ocaml findlib pkgconfig gtk libgnomecanvas libglade gtksourceview camlp4];
+  buildInputs = [ocaml findlib pkgconfig gtk2 libgnomecanvas libglade gtksourceview camlp4];
 
   configureFlags = "--with-libdir=$(out)/lib/ocaml/${ocaml_version}/site-lib";
   buildFlags = "world";

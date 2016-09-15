@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, spice_protocol, intltool, celt_0_5_1
+{ stdenv, fetchurl, pkgconfig, gtk2, spice_protocol, intltool, celt_0_5_1
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python, pygtk, autoreconfHook, usbredir, libsoup
 , gtk3, enableGTK3 ? false }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     spice_protocol celt_0_5_1 openssl libpulseaudio pixman gobjectIntrospection
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir
-  ] ++ (if enableGTK3 then [ gtk3 ] else [ gtk ]);
+  ] ++ (if enableGTK3 then [ gtk3 ] else [ gtk2 ]);
 
   nativeBuildInputs = [ pkgconfig intltool libsoup autoreconfHook ];
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, unzip, ftgl, glew, asciidoc
 , cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm, glibmm, gtkglext, pangox_compat, libXmu }:
+, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.5";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
      cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
      boost boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff
      gettext intltool perl unzip ftgl glew asciidoc
-     gtkmm glibmm gtkglext pangox_compat libXmu
+     gtkmm2 glibmm gtkglext pangox_compat libXmu
     ];
 
   #doCheck = false;

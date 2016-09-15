@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk, pkgconfig, texinfo }:
+{ stdenv, fetchurl, gtk2, pkgconfig, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "xzgv-${version}";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/xzgv/xzgv-${version}.tar.gz";
     sha256 = "1rh432wnvzs434knzbda0fslhfx0gngryrrnqkfm6gwd2g5mxcph";
   };
-  buildInputs = [ gtk pkgconfig texinfo ];
+  buildInputs = [ gtk2 pkgconfig texinfo ];
   patches = [ ./fix-linker-paths.patch ];
   postPatch = ''
     substituteInPlace config.mk \

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, dpdk, libpcap, utillinux
 , pkgconfig
-, gtk, withGtk ? false
+, gtk2, withGtk ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ dpdk libpcap ]
-    ++ stdenv.lib.optionals withGtk [gtk];
+    ++ stdenv.lib.optionals withGtk [gtk2];
 
   RTE_SDK = "${dpdk}";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";

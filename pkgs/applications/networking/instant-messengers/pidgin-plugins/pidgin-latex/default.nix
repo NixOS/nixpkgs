@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pidgin, texLive, imagemagick, glib, gtk }:
+{ stdenv, fetchurl, pkgconfig, pidgin, texLive, imagemagick, glib, gtk2 }:
 
 let version = "1.5.0";
 in
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [pkgconfig];
-  buildInputs = [gtk glib pidgin];
+  buildInputs = [gtk2 glib pidgin];
   makeFlags = "PREFIX=$(out)";
 
   postPatch = ''

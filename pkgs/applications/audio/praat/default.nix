@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtk, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, gtk2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "praat-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp praat $out/bin
   '';
 
-  buildInputs = [ alsaLib gtk pkgconfig ];
+  buildInputs = [ alsaLib gtk2 pkgconfig ];
 
   meta = {
     description = "Doing phonetics by computer";

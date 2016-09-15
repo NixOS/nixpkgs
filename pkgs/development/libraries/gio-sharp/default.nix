@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, which, pkgconfig, mono, gtk-sharp }:
+{ stdenv, fetchFromGitHub, autoconf, automake, which, pkgconfig, mono, gtk-sharp-2_0 }:
 
 stdenv.mkDerivation rec {
   name = "gio-sharp-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoconf automake which ];
-  buildInputs = [ mono gtk-sharp ];
+  buildInputs = [ mono gtk-sharp-2_0 ];
 
   dontStrip = true;
 

@@ -98,9 +98,6 @@ self:
       # upstream issue: missing file header
       initsplit = markBroken super.initsplit;
 
-      # upstream issue: missing dependency
-      jade = null;
-
       # upstream issue: missing file header
       jsfmt = markBroken super.jsfmt;
 

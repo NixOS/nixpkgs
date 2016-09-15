@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
-, nettle, libgcrypt, python, pygobject, gobjectIntrospection, libcap_ng, numactl
+, nettle, libgcrypt, python, pygobject2, gobjectIntrospection, libcap_ng, numactl
 , withXen ? false, xen ? null
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject gobjectIntrospection libcap_ng numactl
+    python pygobject2 gobjectIntrospection libcap_ng numactl
   ] ++ stdenv.lib.optional withXen [
     xen
   ];

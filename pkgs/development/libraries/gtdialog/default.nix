@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cdk, unzip, gtk, glib, ncurses, pkgconfig}:
+{stdenv, fetchurl, cdk, unzip, gtk2, glib, ncurses, pkgconfig}:
 let
   s = # Generated upstream information
   rec {
@@ -10,7 +10,7 @@ let
     sha256="0nvcldyhj8abr8jny9pbyfjwg8qfp9f2h508vjmrvr5c5fqdbbm0";
   };
   buildInputs = [
-    cdk unzip gtk glib ncurses pkgconfig
+    cdk unzip gtk2 glib ncurses pkgconfig
   ];
 in
 stdenv.mkDerivation {

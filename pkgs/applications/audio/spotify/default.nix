@@ -1,6 +1,6 @@
 { fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
+, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, GConf
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome2 }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -22,7 +22,7 @@ let
     GConf
     gdk_pixbuf
     glib
-    gtk
+    gtk2
     libgcrypt
     libpng
     nss
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
       librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome.zenity}/bin"
+        --prefix PATH : "${gnome2.zenity}/bin"
 
       # Desktop file
       mkdir -p "$out/share/applications/"

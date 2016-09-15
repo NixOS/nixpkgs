@@ -1,38 +1,40 @@
-{ stdenv, lib, writeText, bash, fetchurl, php }:
+{ stdenv, lib, writeText, writeScript, fetchurl, php }:
 
 let
+  version = "0.24.1";
+  name = "wp-cli-${version}";
+
   phpIni = writeText "wp-cli-php.ini" ''
     [Phar]
     phar.readonly = Off
   '';
 
-in stdenv.mkDerivation rec {
-  version = "0.23.1";
-  name = "wp-cli-${version}";
+  wpBin = writeScript "wp" ''
+    #! ${stdenv.shell} -e
+    exec ${php}/bin/php \
+      -c ${phpIni} \
+      -f ${src} "$@"
+  '';
 
   src = fetchurl {
     url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "1sjai8gjsx6j82lsxq9m827bczp4ajnldk6ibj4krcisn9pjva5f";
+    sha256 = "027nclp8qbfr624ja6aixzcwnvb55d7dskk9l1i042bc86hmphfd";
   };
 
-  propagatedBuildInputs = [ php ];
+in stdenv.mkDerivation rec {
+
+  inherit name;
 
   buildCommand = ''
     mkdir -p $out/bin
-
-    cat >$out/bin/wp <<EOF
-    #! ${bash}/bin/bash -e
-    exec ${php}/bin/php -c ${phpIni} -f ${src} "\$@"
-    EOF
-
-    chmod +x $out/bin/wp
+    ln -s ${wpBin} $out/bin/wp
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A command line interface for WordPress";
-    maintainers = [ stdenv.lib.maintainers.peterhoeg ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.all;
     homepage = https://wp-cli.org;
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
   };
 }

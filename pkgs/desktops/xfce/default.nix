@@ -5,9 +5,10 @@ let
 callPackage = newScope (deps // xfce_self);
 
 deps = { # xfce-global dependency overrides should be here
-  inherit (pkgs.gnome) libglade libwnck vte gtksourceview;
+  inherit (pkgs.gnome2) libglade libwnck vte gtksourceview;
   inherit (pkgs.gnome3) dconf;
   inherit (pkgs.perlPackages) URI;
+  gtk = pkgs.gtk2;
 };
 
 xfce_self = rec { # the lines are very long but it seems better than the even-odd line approach

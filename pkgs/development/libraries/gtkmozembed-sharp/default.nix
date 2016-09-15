@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, mono, gtksharp, gtk, monoDLLFixer}:
+{stdenv, fetchurl, pkgconfig, mono, gtksharp, gtk2, monoDLLFixer}:
 
 stdenv.mkDerivation {
   name = "gtkmozembed-sharp-0.7-pre41601";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    pkgconfig mono gtksharp gtk
+    pkgconfig mono gtksharp gtk2
   ];
 
   inherit monoDLLFixer;

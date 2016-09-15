@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, clutter, gtk }:
+{ fetchurl, stdenv, pkgconfig, clutter, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "clutter-gtk-0.10.8";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0508x1jfnlq0zhgscysvfa7i7ljkzm23d2myikvdjwc8ar8zjrvq";
   };
 
-  propagatedBuildInputs = [ clutter gtk ];
+  propagatedBuildInputs = [ clutter gtk2 ];
   nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK

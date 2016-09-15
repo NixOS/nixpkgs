@@ -40,13 +40,25 @@ in
       };
     storageDriver =
       mkOption {
-        type = types.enum ["aufs" "btrfs" "devicemapper" "overlay" "zfs"];
-        default = "devicemapper";
+        type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs"]);
+        default = null;
         description =
           ''
-            This option determines which Docker storage driver to use.
+            This option determines which Docker storage driver to use. By default
+            it let's docker automatically choose preferred storage driver.
           '';
       };
+
+    logDriver =
+      mkOption {
+        type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs"];
+        default = "journald";
+        description =
+          ''
+            This option determines which Docker log driver to use.
+          '';
+      };
+
     extraOptions =
       mkOption {
         type = types.separatedString " ";
@@ -88,7 +100,12 @@ in
         after = [ "network.target" ] ++ (optional cfg.socketActivation "docker.socket") ;
         requires = optional cfg.socketActivation "docker.socket";
         serviceConfig = {
-          ExecStart = "${pkgs.docker}/bin/docker daemon --group=docker --storage-driver=${cfg.storageDriver} ${optionalString cfg.socketActivation "--host=fd://"} ${cfg.extraOptions}";
+          ExecStart = ''${pkgs.docker}/bin/dockerd \
+            --group=docker --log-driver=${cfg.logDriver} \
+            ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
+            ${optionalString cfg.socketActivation "--host=fd://"} \
+            ${cfg.extraOptions}
+          '';
           #  I'm not sure if that limits aren't too high, but it's what
           #  goes in config bundled with docker itself
           LimitNOFILE = 1048576;

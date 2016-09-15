@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, glib, pkgconfig, gtk }:
+{ stdenv, fetchurl, ncurses, glib, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "latencytop-0.5";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vq3j9zdab6njly2wp900b3d5244mnxfm88j2bkiinbvxbxp4zwy";
   };
 
-  buildInputs = [ ncurses glib pkgconfig gtk ];
+  buildInputs = [ ncurses glib pkgconfig gtk2 ];
 
   meta = {
     homepage = http://latencytop.org;

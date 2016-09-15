@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lib, pkgconfig, glib, gtk, python27, pythonPackages }:
+{stdenv, fetchurl, lib, pkgconfig, glib, gtk2, python27, pythonPackages }:
 
 stdenv.mkDerivation rec {
   version = "0.14.7";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1abn4amsyys6vwn7csxsxny94n24ycca3xhqxqcmdc4j0dzn3kmb";
   };
 
-  buildInputs = [ pkgconfig glib gtk python27 pythonPackages.wrapPython pythonPackages.pygtk ];
+  buildInputs = [ pkgconfig glib gtk2 python27 pythonPackages.wrapPython pythonPackages.pygtk ];
   pythonPath = with pythonPackages; [ pygtk pycairo ];
 
   installPhase = ''

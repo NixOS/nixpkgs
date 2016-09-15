@@ -85,7 +85,7 @@ in
         ${lib.optionalString cfg.enableInsults "Defaults insults"}
 
         # "root" is allowed to do anything.
-        root        ALL=(ALL) SETENV: ALL
+        root        ALL=(ALL:ALL) SETENV: ALL
 
         # Users in the "wheel" group can do anything.
         %wheel      ALL=(ALL:ALL) ${lib.optionalString (!cfg.wheelNeedsPassword) "NOPASSWD: ALL, "}SETENV: ALL

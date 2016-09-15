@@ -17,9 +17,10 @@ let
     sha256 = "682b4a6880d224ee0b7447241b684330b731018585f1ba519f46660c10d63950";
   };
 
+  # **please** update this patch when you update to a new openssh release.
   gssapiSrc = fetchpatch {
-    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?id=46961f5704f8e86cea3e99253faad55aef4d8f35";
-    sha256 = "01mf2vx1gavypbdx06mcbmcrkm2smff0h3jfmr61k6h6j3xk88y5";
+    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?id=477bb7636238c106f8cd7c868a8c0c5eabcfb3db";
+    sha256 = "1kcx2rw6z7y591vr60ww2m2civ0cx6f6awdpi66p1sric9b65si3";
   };
 
 in

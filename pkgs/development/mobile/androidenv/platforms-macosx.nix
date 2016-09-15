@@ -283,8 +283,8 @@ in
   platform_24 = buildPlatform {
     name = "android-platform-7.0";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/platform-24_r01.zip;
-      sha1 = "27516dab4848f55896e16f7089038c62bbbffea7";
+      url = https://dl.google.com/android/repository/platform-24_r02.zip;
+      sha1 = "8912da3d4bfe7a9f28f0e5ce92d3a8dc96342aee";
     };
     meta = {
       description = "Android SDK Platform 24";

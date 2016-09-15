@@ -6,7 +6,7 @@
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
 , buildWebkit ? stdenv.isLinux
 , flashplayerFix ? false, gdk_pixbuf
-, gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
+, gtkStyle ? false, libgnomeui, gtk2, GConf, gnome_vfs
 , developerBuild ? false
 , docs ? false
 , examples ? false
@@ -65,13 +65,13 @@ stdenv.mkDerivation rec {
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
         gconf = GConf.out;
-        gtk = gtk.out;
+        gtk = gtk2.out;
         libgnomeui = libgnomeui.out;
         gnome_vfs = gnome_vfs.out;
       })
     ++ stdenv.lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
-        gtk = gtk.out;
+        gtk = gtk2.out;
         gdk_pixbuf = gdk_pixbuf.out;
       })
     ++ [(fetchpatch {
@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
     ++ optionals (mysql != null) [ mysql.lib ]
-    ++ optionals gtkStyle [ gtk gdk_pixbuf ]
+    ++ optionals gtkStyle [ gtk2 gdk_pixbuf ]
     ++ optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];

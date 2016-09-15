@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, glib, xorg, cairo, gtk, makeDesktopItem }:
+{ fetchurl, stdenv, glib, xorg, cairo, gtk2, makeDesktopItem }:
 let
-  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk cairo];
+  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo];
 in
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 

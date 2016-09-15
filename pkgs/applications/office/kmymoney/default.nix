@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
 
   KDEDIRS = libalkimia;
 
-  patches = [ ./qgpgme.patch ];
+  patches = [
+    ./qgpgme.patch
+    ./seqaccessmgrtest.patch
+  ];
 
   meta = {
     homepage = http://kmymoney2.sourceforge.net/;

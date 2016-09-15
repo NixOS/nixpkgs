@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, which, pkgconfig, gtk } :
+{ stdenv, fetchurl, getopt, which, pkgconfig, gtk2 } :
 
 stdenv.mkDerivation (rec {
   name = "pqiv-0.12";
@@ -8,7 +8,7 @@ stdenv.mkDerivation (rec {
     sha256 = "646c69f2f4e7289913f6b8e8ae984befba9debf0d2b4cc8af9955504a1fccf1e";
   };
 
-  buildInputs = [ getopt which pkgconfig gtk ];
+  buildInputs = [ getopt which pkgconfig gtk2 ];
 
   preConfigure=''
     substituteInPlace configure --replace /bin/bash "$shell"

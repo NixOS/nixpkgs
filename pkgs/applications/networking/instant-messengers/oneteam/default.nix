@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , perl, xulrunner, cmake, perlPackages, zip, unzip, pkgconfig
-, libpulseaudio, glib, gtk, pixman, nspr, nss, libXScrnSaver
+, libpulseaudio, glib, gtk2, pixman, nspr, nss, libXScrnSaver
 , scrnsaverproto
 }:
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake zip unzip ];
 
   buildInputs =
-    [ perl xulrunner libpulseaudio glib gtk pixman nspr
+    [ perl xulrunner libpulseaudio glib gtk2 pixman nspr
       nss libXScrnSaver scrnsaverproto
-    ] ++ [ perlPackages.SubName gtk glib ];
+    ] ++ [ perlPackages.SubName gtk2 glib ];
 
   postPatch = ''
     sed -e '1i#include <netinet/in.h>' -i src/rtp/otRTPDecoder.cpp src/rtp/otRTPEncoder.cpp

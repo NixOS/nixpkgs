@@ -3,18 +3,25 @@
 , coreutils
 , fetchurl
 , findutils
+, file
 , git
+, glxinfo
 , gnugrep
 , gnutar
 , gzip
 , jdk
+, libpulseaudio
+, libX11
 , libXrandr
 , makeWrapper
+, pciutils
 , pkgsi686Linux
+, setxkbmap
 , stdenv
 , unzip
 , which
 , writeTextFile
+, xkeyboard_config
 , zlib
 }:
 
@@ -40,6 +47,12 @@ let
         jdk
         which
 
+        # For Android emulator
+        file
+        glxinfo
+        pciutils
+        setxkbmap
+
         # Used during setup wizard
         gnutar
         gzip
@@ -47,17 +60,22 @@ let
         # Runtime stuff
         git
 
-      ]}" --set LD_LIBRARY_PATH "${stdenv.lib.makeLibraryPath [
+      ]}" --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         # Gradle wants libstdc++.so.6
         stdenv.cc.cc.lib
         # mksdcard wants 32 bit libstdc++.so.6
         pkgsi686Linux.stdenv.cc.cc.lib
+
         # aapt wants libz.so.1
         zlib
         pkgsi686Linux.zlib
         # Support multiple monitors
         libXrandr
-      ]}"
+
+        # For Android emulator
+        libpulseaudio
+        libX11
+      ]}" --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb"
     '';
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
