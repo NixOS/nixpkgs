@@ -13,7 +13,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ file intltool ];
 
   pythonPath = with python2Packages; [
-    pygtk pygobject vte keybinder notify gettext pango
+    pygtk pygobject2 vte keybinder notify gettext pango
   ];
 
   postPatch = ''
