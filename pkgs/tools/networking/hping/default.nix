@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A command-line oriented TCP/IP packet assembler/analyzer";
     homepage = "http://www.hping.org/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
