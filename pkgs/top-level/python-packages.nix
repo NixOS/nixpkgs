@@ -28490,15 +28490,16 @@ in modules // {
 
   mps-youtube = buildPythonPackage rec {
     name = "mps-youtube-${version}";
-    version = "0.2.6";
+    version = "0.2.7.1";
 
     disabled = (!isPy3k);
+    doCheck = false;
 
     src = pkgs.fetchFromGitHub {
       owner = "mps-youtube";
       repo = "mps-youtube";
       rev = "v${version}";
-      sha256 = "1vbf60z2birbm7wc9irxy0jf5x3y32ncl8fw52v19xyx7fq10jrm";
+      sha256 = "16zn5gwb3568w95lr21b88zkqlay61p1541sa9c3x69zpi8v0pys";
     };
 
     propagatedBuildInputs = with self; [ pafy ];
