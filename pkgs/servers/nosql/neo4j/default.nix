@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, which, gnused, gawk, bashCompletion }:
+{ stdenv, fetchurl, makeWrapper, coreutils, jre, which, gnused, gawk, bashCompletion, gnugrep }:
 
 with stdenv.lib;
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/neo4j/bin/neo4j \
         --replace compgen ${bashCompletion}/share/bash-completion/completions/compgen
     makeWrapper "$out/share/neo4j/bin/neo4j" "$out/bin/neo4j" \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gnused gawk ]}"
+        --prefix PATH : "${stdenv.lib.makeBinPath [ coreutils jre which gnused gawk gnugrep ]}"
     makeWrapper "$out/share/neo4j/bin/neo4j-shell" "$out/bin/neo4j-shell" \
         --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gnused gawk ]}"
   '';
