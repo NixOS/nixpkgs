@@ -12790,6 +12790,8 @@ in
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
+  docker-machine = callPackage ../applications/networking/cluster/docker-machine { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
