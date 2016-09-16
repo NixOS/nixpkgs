@@ -365,22 +365,22 @@ in
           Whether to invoke <literal>grub-install</literal> with
           <literal>--removable</literal>.
 
-          Unless turn this on, GRUB will install itself somewhere (exactly
-          where depends on other config variables) in
-          <literal>boot.loader.efi.efiSysMountPoint</literal>. If you've set
+          Unless you turn this on, GRUB will install itself somewhere in
+          <literal>boot.loader.efi.efiSysMountPoint</literal> (exactly where
+          depends on other config variables). If you've set
           <literal>boot.loader.efi.canTouchEfiVariables</literal> *AND* you
           are currently booted in UEFI mode, then GRUB will use
-          <literal>efibootmgr</literal> to modify the boot order in the NVRAM's
-          EFI variables of your computer to include this location. If you are
-          *not* booted in UEFI mode at the time grub is being installed, the
+          <literal>efibootmgr</literal> to modify the boot order in the
+          EFI variables of your firmware to include this location. If you are
+          *not* booted in UEFI mode at the time GRUB is being installed, the
           NVRAM will not be modified, and your system will not find GRUB at
-          boot time. GRUB will still succeed (althgouh you'll see a warning
-          printed "<literal>efibootmgr: EFI variables are not supported on
-          this system.</literal>").
+          boot time. However, GRUB will still return success so you may miss
+          the warning that gets printed ("<literal>efibootmgr: EFI variables
+          are not supported on this system.</literal>").
 
-          If you do turn this feature on, then GRUB will install itself
-          in a specific special location within <literal>efiSysMountPoint</literal>
-          (namely <literal>EFI/boot/boot$arch.efi</literal>) which is the firmwares
+          If you turn this feature on, GRUB will install itself in a special
+          location within <literal>efiSysMountPoint</literal> (namely
+          <literal>EFI/boot/boot$arch.efi</literal>) which the firmwares
           are hardcoded to try first, regardless of NVRAM EFI variables.
 
           To summarize, turn this on if:
@@ -389,7 +389,7 @@ in
             but you are currently booted in legacy mode</listitem>
             <listitem>You want to make a drive that will boot regardless of
             the NVRAM state of the computer (like a USB "removable" drive)</listitem>
-            <listitem>You simply dislike the idea of depending on some NVRAM
+            <listitem>You simply dislike the idea of depending on NVRAM
             state to make your drive bootable</listitem>
           </itemizedlist>
         '';
