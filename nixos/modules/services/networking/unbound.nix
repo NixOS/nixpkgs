@@ -12,7 +12,7 @@ let
 
   interfaces = concatMapStrings (x: "  interface: ${x}\n") cfg.interfaces;
 
-  isLocalAddress = x: substring 0 9 x == "127.0.0.1";
+  isLocalAddress = x: substring 0 3 x == "::1" || substring 0 9 x == "127.0.0.1";
 
   forward =
     optionalString (any isLocalAddress cfg.forwardAddresses) ''
