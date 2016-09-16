@@ -79,19 +79,21 @@ in {
           };
         };
       };
-      phpfpm.pools.phabricator = {
-        listen = "localhost:9000";
-        extraConfig = ''
-          user = phabricator
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-          php_admin_value[post_max_size] = 32M
-
-        '';
+      phpfpm = {
+        phpPackage = pkgs.php56;
+        pools.phabricator = {
+          listen = "localhost:9000";
+          extraConfig = ''
+            user = phabricator
+            pm = dynamic
+            pm.max_children = 75
+            pm.start_servers = 10
+            pm.min_spare_servers = 5
+            pm.max_spare_servers = 20
+            pm.max_requests = 500
+            php_admin_value[post_max_size] = 32M
+          '';
+        };
       };
       mysql = {
         enable = true;
@@ -107,7 +109,7 @@ in {
         after = [ "network.target" "mysql.service" "phpfpm.service" ];
         wantedBy = [ "multi-user.target" ];
         path = with pkgs; [
-          php
+          php56
         ];
         script = ''
           mkdir -p /run/phabricator
@@ -137,7 +139,7 @@ in {
         after = [ "network.target" "mysql.service" "phpfpm.service" ];
         wantedBy = [ "multi-user.target" ];
         path = with pkgs; [
-          php git openssh
+          php56 git openssh
         ];
         script = ''
           ${pkgs.phabricator}/phabricator/bin/phd start
