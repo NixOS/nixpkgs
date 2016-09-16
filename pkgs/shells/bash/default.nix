@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null, binutils ? null, bison }:
+{ stdenv, fetchurl, readline70 ? null, interactive ? false, texinfo ? null
+, binutils ? null, bison
+}:
 
-assert interactive -> readline != null;
+assert interactive -> readline70 != null;
 assert stdenv.isDarwin -> binutils != null;
 
 let
-  version = "4.3";
+  version = "4.4";
   realName = "bash-${version}";
-  shortName = "bash43";
+  shortName = "bash44";
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
-  sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
+  sha256 = "1jyz6snd63xjn6skk7za6psgidsd53k05cr3lksqybi0q6936syq";
 
   inherit (stdenv.lib) optional optionalString;
 in
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
           inherit sha256;
         };
     in
-      import ./bash-4.3-patches.nix patch) 
+      import ./bash-4.4-patches.nix patch)
       ++ optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {
@@ -67,8 +69,9 @@ stdenv.mkDerivation rec {
   # Note: Bison is needed because the patches above modify parse.y.
   nativeBuildInputs = [bison]
     ++ optional (texinfo != null) texinfo
-    ++ optional interactive readline
     ++ optional stdenv.isDarwin binutils;
+
+  buildInputs = optional interactive readline70;
 
   # Bash randomly fails to build because of a recursive invocation to
   # build `version.h'.
