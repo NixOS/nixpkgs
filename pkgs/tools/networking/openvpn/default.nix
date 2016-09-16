@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig }:
+{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig
+, pkcs11Support ? false, pkcs11helper ? null,
+}:
+
+assert pkcs11Support -> (pkcs11helper != null);
 
 with stdenv.lib;
 
@@ -13,13 +17,14 @@ stdenv.mkDerivation rec {
   patches = optional stdenv.isLinux ./systemd-notify.patch;
 
   buildInputs = [ lzo openssl pkgconfig ]
-                  ++ optionals stdenv.isLinux [ pam systemd iproute ];
+                  ++ optionals stdenv.isLinux [ pam systemd iproute ]
+                  ++ optional pkcs11Support pkcs11helper;
 
-  configureFlags = optionalString stdenv.isLinux ''
-    --enable-systemd
-    --enable-iproute2
-    IPROUTE=${iproute}/sbin/ip
-  '';
+  configureFlags = optionals stdenv.isLinux [
+    "--enable-systemd"
+    "--enable-iproute2"
+    "IPROUTE=${iproute}/sbin/ip" ]
+    ++ optional pkcs11Support "--enable-pkcs11";
 
   postInstall = ''
     mkdir -p $out/share/doc/openvpn/examples
