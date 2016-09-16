@@ -69,7 +69,7 @@ in
     services.xserver.updateDbusEnvironment = true;
 
     environment.systemPackages =
-      [ pkgs.gtk # To get GTK+'s themes.
+      [ pkgs.gtk2 # To get GTK+'s themes.
         pkgs.hicolor_icon_theme
         pkgs.tango-icon-theme
         pkgs.shared_mime_info
