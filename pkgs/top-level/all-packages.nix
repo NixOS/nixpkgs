@@ -15603,7 +15603,9 @@ in
 
   xterm = callPackage ../applications/misc/xterm { };
 
-  mlterm = callPackage ../applications/misc/mlterm { };
+  mlterm = callPackage ../applications/misc/mlterm {
+    vte = gnome3.vte_290;
+  };
 
   finalterm = callPackage ../applications/misc/finalterm { };
 
