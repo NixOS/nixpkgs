@@ -100,6 +100,7 @@ in
         pkgs.xfce.tumbler       # found via dbus
       ]
       ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager
+      ++ optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ optionals (!cfg.noDesktop)
          [ pkgs.xfce.xfce4panel
            pkgs.xfce.xfdesktop
