@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
           inherit sha256;
         };
     in
-      import ./bash-4.3-patches.nix patch) 
+      import ./bash-4.4-patches.nix patch)
       ++ optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {
