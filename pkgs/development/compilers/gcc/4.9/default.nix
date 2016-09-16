@@ -368,7 +368,7 @@ stdenv.mkDerivation ({
     ${if cross == null
       then if stdenv.isDarwin
         then " --with-native-system-header-dir=${darwin.usr-include}"
-        else " --with-native-system-header-dir=${getDev stdenv.libc}/include"
+        else " --with-native-system-header-dir=${getDev stdenv.cc.libc}/include"
       else ""}
     ${if langAda then " --enable-libada" else ""}
     ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
