@@ -63,6 +63,16 @@ pythonPackages.buildPythonApplication (rec {
     sed -i.bak -e '69,84d' buildbot/test/unit/test_www_config.py
   '';
 
+  postFixup = ''
+    buildPythonPath "$out"
+    patchPythonScript "$out/bin/buildbot"
+    mv -v $out/bin/buildbot $out/bin/.wrapped-buildbot
+    echo "#!/bin/bash" > $out/bin/buildbot
+    echo "export PYTHONPATH=$out/lib/python2.7/site-packages:$PYTHONPATH" >> $out/bin/buildbot
+    echo "exec $out/bin/.wrapped-buildbot \"\$@\"" >> $out/bin/buildbot
+    chmod -c 755 $out/bin/buildbot
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://buildbot.net/;
     description = "Continuous integration system that automates the build/test cycle";
