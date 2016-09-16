@@ -11573,6 +11573,8 @@ in
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
+    systemtap = callPackage ../development/tools/profiling/systemtap { };
+
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
@@ -15129,8 +15131,6 @@ in
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
-
-  systemtap = callPackage ../development/tools/profiling/systemtap { };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
     # if you prefer a custom config, write the config.h in tabbed.config.h
