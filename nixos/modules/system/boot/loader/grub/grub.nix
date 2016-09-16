@@ -363,9 +363,9 @@ in
         type = types.bool;
         description = ''
           Whether to invoke <literal>grub-install</literal> with
-          <literal>--removable</literal>.
+          <literal>--removable</literal>.</para>
 
-          Unless you turn this on, GRUB will install itself somewhere in
+          <para>Unless you turn this on, GRUB will install itself somewhere in
           <literal>boot.loader.efi.efiSysMountPoint</literal> (exactly where
           depends on other config variables). If you've set
           <literal>boot.loader.efi.canTouchEfiVariables</literal> *AND* you
@@ -376,21 +376,21 @@ in
           NVRAM will not be modified, and your system will not find GRUB at
           boot time. However, GRUB will still return success so you may miss
           the warning that gets printed ("<literal>efibootmgr: EFI variables
-          are not supported on this system.</literal>").
+          are not supported on this system.</literal>").</para>
 
-          If you turn this feature on, GRUB will install itself in a special
-          location within <literal>efiSysMountPoint</literal> (namely
+          <para>If you turn this feature on, GRUB will install itself in a
+          special location within <literal>efiSysMountPoint</literal> (namely
           <literal>EFI/boot/boot$arch.efi</literal>) which the firmwares
-          are hardcoded to try first, regardless of NVRAM EFI variables.
+          are hardcoded to try first, regardless of NVRAM EFI variables.</para>
 
-          To summarize, turn this on if:
+          <para>To summarize, turn this on if:
           <itemizedlist>
-            <listitem>You are installing NixOS and want it to boot in UEFI mode,
-            but you are currently booted in legacy mode</listitem>
-            <listitem>You want to make a drive that will boot regardless of
-            the NVRAM state of the computer (like a USB "removable" drive)</listitem>
-            <listitem>You simply dislike the idea of depending on NVRAM
-            state to make your drive bootable</listitem>
+            <listitem><para>You are installing NixOS and want it to boot in UEFI mode,
+            but you are currently booted in legacy mode</para></listitem>
+            <listitem><para>You want to make a drive that will boot regardless of
+            the NVRAM state of the computer (like a USB "removable" drive)</para></listitem>
+            <listitem><para>You simply dislike the idea of depending on NVRAM
+            state to make your drive bootable</para></listitem>
           </itemizedlist>
         '';
       };
