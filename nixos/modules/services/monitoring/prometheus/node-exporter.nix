@@ -48,13 +48,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
-
     systemd.services.prometheus-node-exporter = {
       description = "Prometheus exporter for machine metrics";
       unitConfig.Documentation = "https://github.com/prometheus/node_exporter";
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
       script = ''
         exec ${pkgs.prometheus-node-exporter}/bin/node_exporter \
           ${optionalString (cfg.enabledCollectors != [])
