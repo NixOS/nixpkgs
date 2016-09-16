@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "xmpp-client-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/agl/xmpp-client";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "agl";
+    repo = "xmpp-client";
     inherit rev;
-    url = "https://github.com/agl/xmpp-client";
     sha256 = "0j9mfr208cachzm39i8b94v5qk9hws278vv2ms9ma4wn16wns81s";
   };
 
