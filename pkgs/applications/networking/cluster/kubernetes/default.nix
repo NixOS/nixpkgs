@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.2.4";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1a3y0f1l008ywkwwygg9vn2rb722c54i3pbgqks38gw1yyvgbiih";
+    sha256 = "0w0f9chmrvkqrrsd5cdf3cwgcybw4472rfmwv0xq2v74lgd89mmm";
   };
 
   buildInputs = [ makeWrapper which go iptables rsync ];
