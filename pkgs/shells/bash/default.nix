@@ -4,11 +4,11 @@ assert interactive -> readline != null;
 assert stdenv.isDarwin -> binutils != null;
 
 let
-  version = "4.3";
+  version = "4.4";
   realName = "bash-${version}";
-  shortName = "bash43";
+  shortName = "bash44";
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
-  sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
+  sha256 = "1jyz6snd63xjn6skk7za6psgidsd53k05cr3lksqybi0q6936syq";
 
   inherit (stdenv.lib) optional optionalString;
 in
