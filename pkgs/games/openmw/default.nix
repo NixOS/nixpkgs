@@ -2,11 +2,7 @@
 , giflib, libXt, pkgconfig }:
 
 let
-  openscenegraph_ = openscenegraph.override {
-    inherit ffmpeg giflib;
-    withApps = false;
-  };
-  openscenegraph__ = openscenegraph_.overrideDerivation (self: {
+  openscenegraph_ = openscenegraph.overrideDerivation (self: {
     src = fetchFromGitHub {
       owner = "OpenMW";
       repo = "osg";
@@ -27,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake boost ffmpeg qt4 bullet mygui openscenegraph__ SDL2 unshield openal pkgconfig libXt ];
+  buildInputs = [ cmake boost ffmpeg qt4 bullet mygui openscenegraph_ SDL2 unshield openal pkgconfig libXt ];
 
   meta = with stdenv.lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
