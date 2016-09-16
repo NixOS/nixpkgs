@@ -6,9 +6,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   buildInputs = [mercurial];
 
-  impureEnvVars = [
-    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
-  ];
+  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
 
   # Nix <= 0.7 compatibility.
   id = md5;
