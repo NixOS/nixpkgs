@@ -20,15 +20,13 @@ stdenv.mkDerivation rec {
 
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
     patchShebangs ./hack
-    hack/build-go.sh --use_go_build
 
-    (cd cluster/addons/dns/kube2sky && go build ./kube2sky.go)
+    hack/build-go.sh --use_go_build
   '';
 
   installPhase = ''
     mkdir -p "$out/bin" "$out"/libexec/kubernetes/cluster
     cp _output/local/go/bin/{kube*,hyperkube} "$out/bin/"
-    cp cluster/addons/dns/kube2sky/kube2sky "$out/bin/"
     cp cluster/saltbase/salt/helpers/safe_format_and_mount "$out/libexec/kubernetes"
     cp -R hack "$out/libexec/kubernetes"
     cp cluster/update-storage-objects.sh "$out/libexec/kubernetes/cluster"
