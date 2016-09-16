@@ -17,9 +17,6 @@ import ./make-test.nix ({ pkgs, ...} : {
   
     $one->waitForUnit("influxdb.service");
 
-    # Check if admin interface is avalible
-    $one->waitUntilSucceeds("curl -f 127.0.0.1:8083");
-
     # create database
     $one->succeed(q~
       curl -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE test"

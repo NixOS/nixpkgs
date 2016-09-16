@@ -66,16 +66,16 @@ let
       enabled = false;
     }];
 
-    collectd = {
+    collectd = [{
       enabled = false;
       typesdb = "${pkgs.collectd}/share/collectd/types.db";
       database = "collectd_db";
       port = 25826;
-    };
+    }];
 
-    opentsdb = {
+    opentsdb = [{
       enabled = false;
-    };
+    }];
 
     continuous_queries = {
       enabled = true;
@@ -170,6 +170,11 @@ in
       preStart = ''
         mkdir -m 0770 -p ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}; fi
+      '';
+      postStart = mkBefore ''
+        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://127.0.0.1${toString configOptions.http.bind-address}'/ping; do
+          sleep 1;
+        done
       '';
     };
 
