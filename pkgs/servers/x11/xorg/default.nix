@@ -1582,11 +1582,11 @@ let
   }) // {inherit ;};
 
   xf86inputevdev = (mkDerivation "xf86inputevdev" {
-    name = "xf86-input-evdev-2.10.2";
+    name = "xf86-input-evdev-2.10.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-evdev-2.10.2.tar.bz2;
-      sha256 = "07gybpiv33rymcq5l729agan7nzv5f97wdczja6p145b846n6fm7";
+      url = mirror://xorg/individual/driver/xf86-input-evdev-2.10.3.tar.bz2;
+      sha256 = "18ijnclnylrr7vkvflalkw4bqfily3scg6baczjjgycdpsj1p8js";
     };
     buildInputs = [pkgconfig inputproto udev xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
