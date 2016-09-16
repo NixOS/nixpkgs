@@ -15604,7 +15604,9 @@ in
   xterm = callPackage ../applications/misc/xterm { };
 
   mlterm = callPackage ../applications/misc/mlterm {
-    vte = gnome3.vte_290;
+    vte = gnome3.vte;
+    libssh2 = null;
+    openssl = null;
   };
 
   finalterm = callPackage ../applications/misc/finalterm { };
