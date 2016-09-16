@@ -13164,6 +13164,11 @@ in modules // {
       substituteInPlace setup.py --replace "sympy==0.7.6" "sympy"
     '';
 
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin $out
+      patchPythonScript $out/${python.sitePackages}/mathics/manage.py
+    '';
+
     propagatedBuildInputs = with self; [
       cython
       sympy
