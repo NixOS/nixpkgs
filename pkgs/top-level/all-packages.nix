@@ -9044,10 +9044,7 @@ in
   openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
   openjpeg = openjpeg_2_1;
 
-  openscenegraph = callPackage ../development/libraries/openscenegraph {
-    giflib = giflib_4_1;
-    ffmpeg = ffmpeg_0;
-  };
+  openscenegraph = callPackage ../development/libraries/openscenegraph { };
 
   openslp = callPackage ../development/libraries/openslp {};
 
