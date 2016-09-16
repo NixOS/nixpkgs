@@ -2420,7 +2420,7 @@ dont-distribute-packages:
   language-lua-qq:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   language-mixal:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   language-objc:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
-  language-puppet:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
+  language-puppet:                              [ i686-linux, x86_64-darwin ]
   language-python-colour:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   language-qux:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   language-sh:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
