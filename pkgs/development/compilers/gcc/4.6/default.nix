@@ -13,7 +13,7 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , ppl ? null, cloog ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
-, zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
+, zip ? null, unzip ? null, pkgconfig ? null, gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
@@ -82,7 +82,7 @@ let version = "4.6.4";
       xproto renderproto xextproto inputproto randrproto
     ];
 
-    javaAwtGtk = langJava && gtk != null;
+    javaAwtGtk = langJava && gtk2 != null;
 
     /* Platform flags */
     platformFlags = let
@@ -175,7 +175,7 @@ let version = "4.6.4";
 in
 
 # We need all these X libraries when building AWT with GTK+.
-assert gtk != null -> (filter (x: x == null) xlibs) == [];
+assert gtk2 != null -> (filter (x: x == null) xlibs) == [];
 
 stdenv.mkDerivation ({
   name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
@@ -266,7 +266,7 @@ stdenv.mkDerivation ({
     ++ (optional (cloog != null) cloog)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
-    ++ (optionals javaAwtGtk ([ gtk libart_lgpl ] ++ xlibs))
+    ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])

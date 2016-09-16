@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1b61w4pc5gl7m12mphricihzq7ifnzwn0yyw3ypv0d0fj26h5hc3";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "Execute SQL against structured text like CSV or TSV";

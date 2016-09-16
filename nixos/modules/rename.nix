@@ -15,7 +15,6 @@ with lib;
     (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "networking" "enableRalinkFirmware" ])
 
     (mkRenamedOptionModule [ "services" "cadvisor" "host" ] [ "services" "cadvisor" "listenAddress" ])
-    (mkRenamedOptionModule [ "services" "dockerRegistry" "host" ] [ "services" "dockerRegistry" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "elasticsearch" "host" ] [ "services" "elasticsearch" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "api" "host" ] [ "services" "graphite" "api" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "web" "host" ] [ "services" "graphite" "web" "listenAddress" ])
@@ -154,5 +153,7 @@ with lib;
       "See the 16.03 release notes for more information.")
     (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+    (mkRemovedOptionModule [ "services" "dockerRegistry" ]
+      "docker-registry has been deprecated upstream since a long time.")
   ];
 }

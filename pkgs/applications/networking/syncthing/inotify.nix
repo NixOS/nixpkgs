@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "194pbz9zzxaz0vri93czpbsxl85znlba2gy61mjgyr0dm2h4s6yw";
   };
 
-  goDeps = ./inotify-deps.json;
+  goDeps = ./inotify-deps.nix;
 
   meta = {
     homepage = https://github.com/syncthing/syncthing-inotify;

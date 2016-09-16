@@ -40,6 +40,7 @@
   ./hardware/video/amdgpu.nix
   ./hardware/video/ati.nix
   ./hardware/video/bumblebee.nix
+  ./hardware/video/displaylink.nix
   ./hardware/video/nvidia.nix
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/input-method/default.nix
@@ -287,6 +288,8 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/prometheus/default.nix
+  ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -295,6 +298,7 @@
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix
+  ./services/monitoring/telegraf.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/zabbix-agent.nix

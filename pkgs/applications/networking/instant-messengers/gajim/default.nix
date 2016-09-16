@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, python, intltool, pkgconfig, libX11, gtk
+{ stdenv, fetchurl, python, intltool, pkgconfig, libX11
 , ldns, pythonPackages
 
 , enableJingle ? true, farstream ? null, gst_plugins_bad ? null
 ,                      libnice ? null
 , enableE2E ? true
 , enableRST ? true
-, enableSpelling ? true, gtkspell ? null
+, enableSpelling ? true, gtkspell2 ? null
 , enableNotifications ? false
 , extraPythonPackages ? pkgs: []
 }:
@@ -14,7 +14,7 @@ assert enableJingle -> farstream != null && gst_plugins_bad != null
                     && libnice != null;
 assert enableE2E -> pythonPackages.pycrypto != null;
 assert enableRST -> pythonPackages.docutils != null;
-assert enableSpelling -> gtkspell != null;
+assert enableSpelling -> gtkspell2 != null;
 assert enableNotifications -> pythonPackages.notify != null;
 
 with stdenv.lib;
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       src/features_window.py
     sed -i -e "s|'drill'|'${ldns}/bin/drill'|" src/common/resolver.py
   '' + optionalString enableSpelling ''
-    sed -i -e 's|=.*find_lib.*|= "${gtkspell}/lib/libgtkspell.so"|'   \
+    sed -i -e 's|=.*find_lib.*|= "${gtkspell2}/lib/libgtkspell.so"|'   \
       src/gtkspell.py
   '';
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    pythonPackages.pygobject pythonPackages.pyGtkGlade
+    pythonPackages.pygobject2 pythonPackages.pyGtkGlade
     pythonPackages.sqlite3 pythonPackages.pyasn1
     pythonPackages.pyxdg
     pythonPackages.nbxmpp

@@ -50,7 +50,8 @@ stdenv.mkDerivation rec {
         -C src/ocaml-output
   '';
 
-  doCheck = !stdenv.isDarwin;
+  # https://github.com/FStarLang/FStar/issues/676
+  doCheck = false;
 
   preCheck = "ulimit -s unlimited";
 

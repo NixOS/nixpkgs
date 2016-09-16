@@ -9,7 +9,7 @@ assert withGstPlugins -> gst_plugins_base != null
 
 let
   version = "2.6.3";
-  inherit (pythonPackages) buildPythonApplication python mutagen pygtk pygobject dbus-python;
+  inherit (pythonPackages) buildPythonApplication python mutagen pygtk pygobject2 dbus-python;
 in buildPythonApplication {
   # call the package quodlibet and just quodlibet
   name = "quodlibet${stdenv.lib.optionalString withGstPlugins "-with-gst-plugins"}-${version}";
@@ -48,7 +48,7 @@ in buildPythonApplication {
   ];
 
   propagatedBuildInputs = [
-    mutagen pygtk pygobject dbus-python gst_python intltool
+    mutagen pygtk pygobject2 dbus-python gst_python intltool
   ];
 
   postInstall = stdenv.lib.optionalString withGstPlugins ''

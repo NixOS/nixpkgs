@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst_plugins_base, GConf, setfile
 , withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
+    [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst_plugins_base GConf ]
     ++ optional withMesa mesa
     ++ optional stdenv.isDarwin setfile;
@@ -52,7 +52,10 @@ stdenv.mkDerivation {
     (cd $out/include && ln -s wx-*/* .)
   ";
 
-  passthru = {inherit gtk compat24 compat26 unicode;};
+  passthru = {
+    inherit compat24 compat26 unicode;
+    gtk = gtk2;
+  };
 
   enableParallelBuilding = true;
   

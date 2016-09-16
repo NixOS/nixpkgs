@@ -232,8 +232,7 @@ in modules // {
 
   pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
 
-  pygobject = callPackage ../development/python-modules/pygobject { };
-
+  pygobject2 = callPackage ../development/python-modules/pygobject { };
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
 
   pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
@@ -241,7 +240,7 @@ in modules // {
   pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
 
   pyGtkGlade = self.pygtk.override {
-    libglade = pkgs.gnome.libglade;
+    libglade = pkgs.gnome2.libglade;
   };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
@@ -4668,6 +4667,31 @@ in modules // {
       license = licenses.mit;
       maintainers = with maintainers; [ ryansydnor ];
       platforms   = platforms.all;
+    };
+  };
+
+  pytest-rerunfailures = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pytest-rerunfailures";
+    version = "2.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "1zzxlswbny8dp3c1sbhpyms1xkknxb6qfji3y3azc7gc95324xsv";
+    };
+
+    propagatedBuildInputs = with self; [ pytest ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "pytest plugin to re-run tests to eliminate flaky failures.";
+      homepage = https://github.com/pytest-dev/pytest-rerunfailures;
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ jgeerds ];
+      platforms = platforms.all;
     };
   };
 
@@ -9137,7 +9161,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      pyGtkGlade pkgs.libtorrentRasterbar_1_09 twisted Mako chardet pyxdg self.pyopenssl modules.curses service-identity
+      pyGtkGlade pkgs.libtorrentRasterbar_1_0 twisted Mako chardet pyxdg self.pyopenssl modules.curses service-identity
     ];
 
     nativeBuildInputs = [ pkgs.intltool ];
@@ -13048,14 +13072,14 @@ in modules // {
 
 
   Mako = buildPythonPackage rec {
-    name = "Mako-1.0.2";
+    name = "Mako-1.0.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/Mako/${name}.tar.gz";
-      sha256 = "17k7jy3byi4hj6ksszib6gxbf6n7snnnirnbrdldn848abjc4l15";
+      sha256 = "0nchpw6akfcsg8w6irjlx0gyzadc123hv4g47sijgnqd9nz9vngy";
     };
 
-    buildInputs = with self; [ markupsafe nose mock ];
+    buildInputs = with self; [ markupsafe nose mock pytest ];
     propagatedBuildInputs = with self; [ markupsafe ];
 
     doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
@@ -13138,6 +13162,11 @@ in modules // {
 
     prePatch = ''
       substituteInPlace setup.py --replace "sympy==0.7.6" "sympy"
+    '';
+
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin $out
+      patchPythonScript $out/${python.sitePackages}/mathics/manage.py
     '';
 
     propagatedBuildInputs = with self; [
@@ -14821,7 +14850,7 @@ in modules // {
         configure
     '';
 
-    buildInputs = with self; [ python pkgs.pkgconfig pkgs.libnotify pygobject pygtk pkgs.glib pkgs.gtk pkgs.dbus_glib ];
+    buildInputs = with self; [ python pkgs.pkgconfig pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
@@ -19655,11 +19684,11 @@ in modules // {
 
   pysocks = buildPythonPackage rec {
     name = "pysocks-${version}";
-    version = "1.5.0";
+    version = "1.5.7";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/P/PySocks/PySocks-${version}.tar.gz";
-      sha256 = "10wq5311qrnk8rvzsh6gwzxi7h51pgvzw3d7s1mb39fsvf0vyjdk";
+      sha256 = "124bydbcspzhkb6ynckvgqra1b79rh5mrq98kbyyd202n6a7c775";
     };
 
     doCheck = false;
@@ -20504,11 +20533,11 @@ in modules // {
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.11";
+    name = "PyYAML-3.12";
 
     src = pkgs.fetchurl {
       url = "http://pyyaml.org/download/pyyaml/${name}.zip";
-      sha256 = "19bb3ac350ef878dda84a62d37c7d5c17a137386dde9c2ce7249c7a21d7f6ac9";
+      sha256 = "19s1lxi0idq4a0bpvld866pv5b16lqxypyswmsdi5ys4210jxj2s";
     };
 
     buildInputs = with self; [ pkgs.pyrex ];
@@ -22802,7 +22831,7 @@ in modules // {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 dbus-python pygobject ];
+    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 dbus-python pygobject2 ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
@@ -27013,15 +27042,16 @@ in modules // {
 
   searx = buildPythonPackage rec {
     name = "searx-${version}";
-    version = "0.9.0";
+    version = "0.10.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "asciimoo";
       repo = "searx";
       rev = "v${version}";
-      sha256 = "030qkrsj4as9anr8xfpk5n41qzg7w4yyjasb4cqislvyl1l1dvvs";
+      sha256 = "0j9pnifcrm4kzziip43w2fgadsg1sqlcm7dfxhnshdx03nby2dy2";
     };
 
+    patches = [ ../development/python-modules/searx.patch ];
     postPatch = ''
       substituteInPlace requirements.txt \
         --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28' \
@@ -27031,14 +27061,14 @@ in modules // {
     propagatedBuildInputs = with self; [
       pyyaml lxml_3_5 grequests flaskbabel flask requests2
       gevent speaklater Babel pytz dateutil pygments_2_0
-      pyasn1 pyasn1-modules ndg-httpsclient certifi
+      pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
     ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
       description = "A privacy-respecting, hackable metasearch engine";
       license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ matejc fpletz ];
+      maintainers = with maintainers; [ matejc fpletz profpatsch ];
     };
   };
 
@@ -27140,47 +27170,8 @@ in modules // {
     };
   };
 
-  udiskie = buildPythonPackage rec {
-    version = "1.4.8";
-    name = "udiskie-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/coldfix/udiskie/archive/${version}.tar.gz";
-      sha256 = "0fj1kh6pmwyyy54ybc5fa625lhrxzhzmfx1nwz2lym5cpm4b21fl";
-    };
-
-    preConfigure = ''
-      export XDG_RUNTIME_DIR=/tmp
-    '';
-
-    buildInputs = [
-      pkgs.asciidoc-full        # For building man page.
-    ];
-
-    propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
-
-    postBuild = "make -C doc";
-
-    postInstall = ''
-      mkdir -p $out/share/man/man8
-      cp -v doc/udiskie.8 $out/share/man/man8/
-    '';
-
-    preFixup = ''
-        wrapProgram "$out/bin/"* \
-          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
-    '';
-
-    # tests require dbusmock
-    doCheck = false;
-
-    meta = {
-      description = "Removable disk automounter for udisks";
-      license = licenses.mit;
-      homepage = https://github.com/coldfix/udiskie;
-      maintainers = with maintainers; [ AndersonTorres ];
-    };
-  };
+  # For backwards compatibility. Please use nixpkgs.udiskie instead.
+  udiskie = pkgs.udiskie.override { pythonPackages = self; };
 
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
@@ -28234,6 +28225,9 @@ in modules // {
       url = "mirror://pypi/p/pyPEG2/pyPEG2-${version}.tar.gz";
       sha256 = "0v8ziaam2r637v94ra4dbjw6jzxz99gs5x4i585kgag1v204yb9b";
     };
+
+    #https://bitbucket.org/fdik/pypeg/issues/36/test-failures-on-py35
+    doCheck = !isPy3k;
 
     meta = {
       description = "PEG parser interpreter in Python";

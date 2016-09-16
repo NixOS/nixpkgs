@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk, gtkspell, aspell
+{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk2, gtkspell2, aspell
 , gstreamer, gst_plugins_base, gst_plugins_good, startupnotification, gettext
 , perl, perlXMLParser, libxml2, nss, nspr, farsight2
 , libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
@@ -26,7 +26,7 @@ let unwrapped = stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    gtkspell aspell
+    gtkspell2 aspell
     gstreamer gst_plugins_base gst_plugins_good startupnotification
     libxml2 nss nspr farsight2
     libXScrnSaver ncurses python
@@ -38,7 +38,7 @@ let unwrapped = stdenv.mkDerivation rec {
   ++ (lib.optional (libgcrypt != null) libgcrypt);
 
   propagatedBuildInputs = [
-    pkgconfig gtk perl perlXMLParser gettext
+    pkgconfig gtk2 perl perlXMLParser gettext
   ];
 
   patches = [./pidgin-makefile.patch ./add-search-path.patch ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, boost, gtk, pkgconfig, python }:
+{ stdenv, fetchsvn, boost, gtk2, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   name = "raul-svn-${rev}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yvm3j57lch89dixx7zsip7pxsws0xxy1y6ck7a3l0534qc5kny4";
   };
 
-  buildInputs = [ boost gtk pkgconfig python ];
+  buildInputs = [ boost gtk2 pkgconfig python ];
 
   configurePhase = "python waf configure --prefix=$out";
 

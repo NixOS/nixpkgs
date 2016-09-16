@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, zlib, libX11, libXcursor
-, libXdamage, libXext, glib, alsaLib, ffmpeg, libxkbfile, libXinerama, libXv
+, libXdamage, libXext, libXrender, glib, alsaLib, ffmpeg, libxkbfile, libXinerama, libXv
 , substituteAll
 , libpulseaudio ? null, cups ? null, pcsclite ? null
 , buildServer ? true, optimize ? true
 }:
 
 stdenv.mkDerivation rec {
-  name = "freerdp-1.2.0-beta1";
+  name = "freerdp-2.0-dev";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    rev = "1.2.0-beta1+android7";
-    sha256 = "08nn18jydblrif1qs92pakzd3ww7inr0i378ssn1bjp09lm1bkk0";
+    rev = "1855e36179fb197e713d41c4ef93e19cf1f0be2f";
+    sha256 = "1lydkh6by0sjy6dl57bzg7c11ccyp24s80pwxw9h5kmxkbw6mx5q";
   };
 
   patches = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       });
 
   buildInputs = [
-    cmake pkgconfig openssl zlib libX11 libXcursor libXdamage libXext glib
+    cmake pkgconfig openssl zlib libX11 libXcursor libXdamage libXext libXrender glib
     alsaLib ffmpeg libxkbfile libXinerama libXv cups libpulseaudio pcsclite
   ];
 
@@ -51,4 +51,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, graphviz, gtk, gtkmm, pkgconfig, python }:
+{ stdenv, fetchsvn, graphviz, gtkmm2, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   name = "ganv-svn-${rev}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0klzng3jvc09lj4hxnzlb8z5s5qp8rj16b1x1j6hcbqdja54fccj";
   };
 
-  buildInputs = [ graphviz gtk gtkmm pkgconfig python ];
+  buildInputs = [ graphviz gtkmm2 pkgconfig python ];
 
   configurePhase = "python waf configure --prefix=$out";
 

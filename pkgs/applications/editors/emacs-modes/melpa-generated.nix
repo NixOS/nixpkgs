@@ -33345,8 +33345,8 @@
           sha256 = "11z3b1xwg6r769w3scd29lqg62fx8mp81g8dbx4klmj3clvyn69i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/50751b5f9843fde00505edd281e404ec1d875713/recipes/inherit-local";
-          sha256 = "0j785xb72nk04x6jb9x5pdwp3dkalqmy208mvj4ss4fm559qfp3i";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/inherit-local";
+          sha256 = "1v3q3s6qq64k1f4ck6rfgsy1arnf9cxg2kw6d1ahfrwr4ixsqm87";
           name = "inherit-local";
         };
         packageRequires = [ emacs ];
@@ -34414,22 +34414,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    jade = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, js2-mode, lib, map, melpaBuild, seq, websocket }:
+    jade = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, js2-mode, lib, melpaBuild, seq, websocket }:
     melpaBuild {
         pname = "jade";
-        version = "20160808.129";
+        version = "20160913.816";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
           repo = "jade";
-          rev = "e5204d18a9a9563af2ba5d5f985d6161a906d7d9";
-          sha256 = "0l0q4c98jil0scr4spc3z3rgy4xy4w85zrsas1z8w142arvpiw70";
+          rev = "5d9c5cc88a4601700adba558aab2818591fcf02c";
+          sha256 = "1jfwns1jk0ixpxcf2rk49mr008bnnzq8g591vyd31lb5n10kwyc2";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b989c1bd83f20225314b6e903c5e1df972551c19/recipes/jade";
           sha256 = "04w7pgn0dkppi6l15rkz8b1bcpw1dsgvvijy81a6i4nkigxxlv4y";
           name = "jade";
         };
-        packageRequires = [ company emacs js2-mode map seq websocket ];
+        packageRequires = [ company emacs js2-mode seq websocket ];
         meta = {
           homepage = "https://melpa.org/#/jade";
           license = lib.licenses.free;
@@ -42882,8 +42882,8 @@
           sha256 = "1y5x49mqippngp7ya6y7p8z81anrc644n84wpd7y62yqv8qhz0fp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/4de2a8cbf1180ec7ca1648f497538b8dbf7a3945/recipes/nix-buffer";
-          sha256 = "1svx1wg05fajxzjz95dfg072i6nfydr0ir4q1zhdxg1igkffqsml";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/nix-buffer";
+          sha256 = "1fjkf88345v9l2v2mk8a057mw0p0rckf6rjf00y5464dyhh58vcd";
           name = "nix-buffer";
         };
         packageRequires = [ emacs f ];

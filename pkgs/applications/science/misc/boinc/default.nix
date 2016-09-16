@@ -1,6 +1,6 @@
 { fetchFromGitHub, stdenv, autoconf, automake, pkgconfig, m4, curl,
 mesa, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK, xcbutil,
-sqlite, gtk, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
+sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 stdenv.mkDerivation rec {
   version = "7.4.42";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libtool automake autoconf m4 pkgconfig curl mesa libXmu libXi
-    freeglut libjpeg wxGTK sqlite gtk libXScrnSaver libnotify patchelf libX11 
+    freeglut libjpeg wxGTK sqlite gtk2 libXScrnSaver libnotify patchelf libX11
     libxcb xcbutil
   ];
 

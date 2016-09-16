@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, boost, ganv, glibmm, gtk, gtkmm, libjack2, lilv-svn
+{ stdenv, fetchsvn, boost, ganv, glibmm, gtkmm2, libjack2, lilv-svn
 , lv2, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord-svn, sratom
 , suil
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    boost ganv glibmm gtk gtkmm libjack2 lilv-svn lv2 makeWrapper pkgconfig
+    boost ganv glibmm gtkmm2 libjack2 lilv-svn lv2 makeWrapper pkgconfig
     python raul serd sord-svn sratom suil
   ];
 

@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   pythonPath = with pythonPackages;
-    [ dbus pygobject pygobject3 recursivePthLoader ];
+    [ dbus pygobject2 pygobject3 recursivePthLoader ];
 
   buildInputs =
     [ pkgconfig dbus glib alsaLib python pythonPackages.wrapPython

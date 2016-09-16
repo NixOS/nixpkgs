@@ -1,5 +1,5 @@
 { stdenv, pkgs, fetchurl, fetchFromGitHub, pkgconfig, libconfig, 
-  gtkmm, glibmm, libxml2, libsecret, curl, unrar, libzip, 
+  gtkmm2, glibmm, libxml2, libsecret, curl, unrar, libzip,
   librsvg, gst_all_1, autoreconfHook, makeWrapper }:
 stdenv.mkDerivation {
   name = "ahoviewer-1.4.6";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
   enableParallelBuilding = true; 
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
-  buildInputs = [ glibmm libconfig gtkmm glibmm libxml2 
+  buildInputs = [ glibmm libconfig gtkmm2 glibmm libxml2
                   libsecret curl unrar libzip librsvg 
                   gst_all_1.gstreamer
                   gst_all_1.gst-plugins-good 

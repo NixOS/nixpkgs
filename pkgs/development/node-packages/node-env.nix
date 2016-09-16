@@ -227,6 +227,9 @@ let
                 done
             done
         fi
+        
+        # Run post install hook, if provided
+        runHook postInstall
       '';
     });
 

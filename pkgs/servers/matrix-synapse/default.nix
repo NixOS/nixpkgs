@@ -12,13 +12,13 @@ let
 in
 buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "04wl6lznffxhvfq52cmbg2amkl03454wyaqc17i0zlc6b0p14dli";
+    sha256 = "0171pp7phizg5j78i1srkx2hj4fqi0qn66sn6x4gshv9grncjsgw";
   };
 
   patches = [ ./matrix-synapse.patch ];

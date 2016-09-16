@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mono, gtk-sharp, monoDLLFixer }:
+{ stdenv, fetchurl, pkgconfig, mono, gtk-sharp-2_0, monoDLLFixer }:
 
 stdenv.mkDerivation rec {
   name = "hyena-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig mono gtk-sharp
+    pkgconfig mono gtk-sharp-2_0
   ];
 
   postPatch = ''

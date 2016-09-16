@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gnome3, libgksu,
+{ stdenv, fetchurl, pkgconfig, gtk2, gnome3, libgksu,
   intltool, libstartup_notification, gtk_doc, wrapGAppsHook
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk gnome3.gconf libstartup_notification gnome3.libgnome_keyring
+    gtk2 gnome3.gconf libstartup_notification gnome3.libgnome_keyring
   ];
 
   propagatedBuildInputs = [

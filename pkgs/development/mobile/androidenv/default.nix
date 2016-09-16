@@ -6,10 +6,11 @@ rec {
   };
   
   buildTools = import ./build-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
+    inherit (pkgs) stdenv fetchurl unzip zlib file;
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
-    ncurses_32bit = pkgs_i686.ncurses;
+    ncurses_32bit = pkgs_i686.ncurses5;
+    ncurses = pkgs.ncurses5;
   };
   
   support = import ./support.nix {
@@ -40,7 +41,7 @@ rec {
 
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk atk mesa file alsaLib jdk coreutils libpulseaudio dbus;
+    inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk2 atk mesa file alsaLib jdk coreutils libpulseaudio dbus;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst xkeyboardconfig;
     
     inherit platformTools buildTools support supportRepository platforms sysimages addons;

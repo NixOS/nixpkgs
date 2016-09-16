@@ -69,7 +69,7 @@ in
     services.xserver.updateDbusEnvironment = true;
 
     environment.systemPackages =
-      [ pkgs.gtk.out # To get GTK+'s themes and gtk-update-icon-cache
+      [ pkgs.gtk2.out # To get GTK+'s themes and gtk-update-icon-cache
         pkgs.hicolor_icon_theme
         pkgs.tango-icon-theme
         pkgs.shared_mime_info
@@ -100,6 +100,7 @@ in
         pkgs.xfce.tumbler       # found via dbus
       ]
       ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager
+      ++ optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ optionals (!cfg.noDesktop)
          [ pkgs.xfce.xfce4panel
            pkgs.xfce.xfdesktop

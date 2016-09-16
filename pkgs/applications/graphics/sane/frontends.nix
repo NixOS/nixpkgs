@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sane-backends, libX11, gtk, pkgconfig, libusb ? null}:
+{ stdenv, fetchurl, sane-backends, libX11, gtk2, pkgconfig, libusb ? null}:
 
 stdenv.mkDerivation rec {
   name = "sane-frontends-1.0.14";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -e '/SANE_CAP_ALWAYS_SETTABLE/d' -i src/gtkglue.c
   '';
 
-  buildInputs = [sane-backends libX11 gtk pkgconfig] ++
+  buildInputs = [sane-backends libX11 gtk2 pkgconfig] ++
 	(if libusb != null then [libusb] else []);
 
   meta = {

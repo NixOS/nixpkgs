@@ -11,7 +11,17 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "05z5ssv9glsqmcy9fdq06bawy1274dnzqsqd3a4z4jd0w6j09smn";
   };
 
-  buildInputs = with pythonPackages; [ pytest ];
+  patchPhase = ''
+    # Dependencies required for testing shouldn't pinned to
+    # a specific version.
+    substituteInPlace requirements/test.txt \
+      --replace "==" ">="
+  '';
+
+  buildInputs = with pythonPackages; [
+    pytest
+    pytest-rerunfailures
+  ];
 
   propagatedBuildInputs = with pythonPackages; [
     click colorama kaptan libtmux

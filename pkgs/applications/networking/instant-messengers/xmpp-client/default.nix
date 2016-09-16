@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0a1r08zs723ikcskmn6ylkdi3frcd0i0lkx30i9q39ilf734v253";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "An XMPP client with OTR support";

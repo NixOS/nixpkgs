@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, sqlite, zlib, proj, geos }:
+{ stdenv, fetchurl, pkgconfig, libxml2, sqlite, zlib, proj, geos, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "libspatialite-4.2.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b9ipmp09y2ij7yajyjsh0zcwps8n5g88lzfzlkph33lail8l4wz";
   };
 
-  buildInputs = [ pkgconfig libxml2 sqlite zlib proj geos ];
+  buildInputs = [ pkgconfig libxml2 sqlite zlib proj geos libiconv ];
 
   configureFlags = "--disable-freexl";
 
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.gaia-gis.it/fossil/libspatialite;
     # They allow any of these
     license = with licenses; [ gpl2Plus lgpl21Plus mpl11 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

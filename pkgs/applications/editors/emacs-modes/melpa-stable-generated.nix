@@ -16203,6 +16203,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    inherit-local = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "inherit-local";
+        version = "1.1";
+        src = fetchFromGitHub {
+          owner = "shlevy";
+          repo = "inherit-local";
+          rev = "e687c702adb27ce5f69fb28a47fe21a86cf84063";
+          sha256 = "11z3b1xwg6r769w3scd29lqg62fx8mp81g8dbx4klmj3clvyn69i";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/inherit-local";
+          sha256 = "1v3q3s6qq64k1f4ck6rfgsy1arnf9cxg2kw6d1ahfrwr4ixsqm87";
+          name = "inherit-local";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/inherit-local";
+          license = lib.licenses.free;
+        };
+      }) {};
     init-loader = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "init-loader";
@@ -16662,22 +16683,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    jade = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, js2-mode, lib, map, melpaBuild, seq, websocket }:
+    jade = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, js2-mode, lib, melpaBuild, seq, websocket }:
     melpaBuild {
         pname = "jade";
-        version = "0.17";
+        version = "0.19";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
           repo = "jade";
-          rev = "11769bf8419202819a25047f57dd9aa0c98f5ebb";
-          sha256 = "09zfvcirz7hcp255yhsf7d04vrc078kk69qhwy1j31ar0rb4fy1b";
+          rev = "94f53bbd8aa8719b3d83ce038f68e74695b86ed4";
+          sha256 = "0c40pg9f9w90fb1gwpl4z5wxhi0ng8j2fr6kf60yhbwg65x92w2k";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b989c1bd83f20225314b6e903c5e1df972551c19/recipes/jade";
           sha256 = "04w7pgn0dkppi6l15rkz8b1bcpw1dsgvvijy81a6i4nkigxxlv4y";
           name = "jade";
         };
-        packageRequires = [ company emacs js2-mode map seq websocket ];
+        packageRequires = [ company emacs js2-mode seq websocket ];
         meta = {
           homepage = "https://melpa.org/#/jade";
           license = lib.licenses.free;
@@ -20410,6 +20431,27 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://melpa.org/#/ninja-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    nix-buffer = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "nix-buffer";
+        version = "1.2.2";
+        src = fetchFromGitHub {
+          owner = "shlevy";
+          repo = "nix-buffer";
+          rev = "eb28bf99c3562cfda07f312ca49e0b594f0ff81b";
+          sha256 = "148iyy8ma1n5a3biyal5rafxpp0zzn81nyy06jlzrkzjy44iyzwi";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/nix-buffer";
+          sha256 = "1fjkf88345v9l2v2mk8a057mw0p0rckf6rjf00y5464dyhh58vcd";
+          name = "nix-buffer";
+        };
+        packageRequires = [ emacs f ];
+        meta = {
+          homepage = "https://melpa.org/#/nix-buffer";
           license = lib.licenses.free;
         };
       }) {};

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "5.0.7";
