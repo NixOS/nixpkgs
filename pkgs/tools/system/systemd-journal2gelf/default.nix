@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "012fmnb44681dgz21n1dlb6vh923bpk5lkqir1q40kfz6pacq64n";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "Export entries from systemd's journal and send them to a graylog server using gelf";
