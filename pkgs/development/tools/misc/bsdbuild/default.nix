@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, libtool, pkgconfig, gettext, groff, ed }:
+{ stdenv, fetchurl, perl, libtool, pkgconfig, gettext, mandoc, ed }:
 
 stdenv.mkDerivation rec {
   name = "bsdbuild-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zrdjh7a6z4khhfw9zrp490afq306cpl5v8wqz2z55ys7k1n5ifl";
   };
 
-  buildInputs = [ perl groff ed ];
+  buildInputs = [ perl mandoc ed ];
   nativeBuildInputs = [ pkgconfig libtool gettext ];
 
   prePatch = ''
