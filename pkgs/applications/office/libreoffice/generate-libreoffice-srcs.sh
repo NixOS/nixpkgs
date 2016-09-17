@@ -2,10 +2,6 @@
 
 # Ideally we would move as much as possible into derivation dependencies
 
-# Take the list of files from the main package, ooo.lst.in
-
-# This script wants an argument: download list file
-
 cat <<EOF
 [
 EOF
@@ -22,7 +18,7 @@ write_entry(){
 }
 
 saved_line=
-cat "$(dirname "$0")/libreoffice-srcs-additions.sh" "$@" |
+cat "$(dirname "$0")/libreoffice-srcs-additions.sh" "$downloadList" |
 while read line; do
   case "$line" in
     EVAL\ *)
