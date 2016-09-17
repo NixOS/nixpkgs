@@ -17448,7 +17448,8 @@ in
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
-  mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
+  mfcj470dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj470dwcupswrapper { };
+  mfcj470dwlpr = callPackage_i686 ../misc/cups/drivers/mfcj470dwlpr { };
 
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung { };
   samsung-unified-linux-driver = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
