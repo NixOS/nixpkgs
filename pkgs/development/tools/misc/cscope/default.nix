@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, ncurses, pkgconfig, emacs}:
+{ fetchurl, stdenv, ncurses, pkgconfig
+, emacsSupport ? true, emacs
+}:
 
 stdenv.mkDerivation rec {
   name = "cscope-15.8a";
@@ -11,10 +13,9 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-ncurses=${ncurses.dev}";
 
   buildInputs = [ ncurses ];
-  nativeBuildInputs = [ pkgconfig emacs ];
+  nativeBuildInputs = [ pkgconfig ] + stdenv.lib.optional emacsSupport emacs;
 
-  postInstall = ''
-    # Install Emacs mode.
+  postInstall = stdenv.lib.optionalString emacsSupport ''
     cd "contrib/xcscope"
 
     sed -i "cscope-indexer" \
