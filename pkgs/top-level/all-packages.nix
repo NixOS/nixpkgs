@@ -849,6 +849,8 @@ in
 
   gmic = callPackage ../tools/graphics/gmic { };
 
+  goa = callPackage ../development/tools/goa { };
+
   gringo = callPackage ../tools/misc/gringo { };
 
   gti = callPackage ../tools/misc/gti { };
