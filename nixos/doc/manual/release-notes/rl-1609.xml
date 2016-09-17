@@ -129,6 +129,12 @@ following incompatible changes:</para>
   <literal>noexec</literal>, <literal>nodev</literal> and/or
   <literal>nosuid</literal> options.</para></listitem>
 
+  <listitem><para>The reverse path filter was interfering with DHCPv4 server
+  operation in the past. An exception for DHCPv4 and a new option to log
+  packets that were dropped due to the reverse path filter was added
+  (<literal>networking.firewall.logReversePathDrops</literal>) for easier
+  debugging.</para></listitem>
+
 </itemizedlist>
 
 
