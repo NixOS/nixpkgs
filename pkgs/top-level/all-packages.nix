@@ -734,6 +734,8 @@ in
 
   consul-template = callPackage ../tools/system/consul-template { };
 
+  corebird = callPackage ../applications/networking/corebird { };
+
   corosync = callPackage ../servers/corosync { };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
