@@ -189,14 +189,18 @@ let
       sha256 = "0j8jx8bjicvp9khs26xjya8c495wrpb7parxfnabdqa5nnsxjrwb";
     };
 
-    patchPhase = ''
-      sed -e "s,^LUAPREFIX_linux.*,LUAPREFIX_linux=$out," \
-          -i src/makefile
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
-      export PLAT=macosx
-      export LUAPREFIX_macosx=$out
-      substituteInPlace src/Makefile --replace gcc cc \
+    patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/makefile --replace gcc cc \
         --replace 10.3 10.5
+    '';
+
+    preBuild = ''
+      makeFlagsArray=(
+        LUAV=${lua.luaversion}
+        PLAT=${if stdenv.isDarwin then "macosx" else "linux"}
+        LUAPREFIX_linux=$out
+        LUAPREFIX_macosx=$out
+      );
     '';
 
     meta = {
