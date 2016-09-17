@@ -27,7 +27,7 @@ kdeApp {
   ];
 
   # cmake does not detect path to `ilmbase`
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
     "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/xml/dtd/docbook"

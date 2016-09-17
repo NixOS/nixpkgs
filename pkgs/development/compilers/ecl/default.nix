@@ -1,7 +1,8 @@
 {stdenv, fetchurl
 , libtool, autoconf, automake
 , gmp, mpfr, libffi, makeWrapper
-, noUnicode ? false, 
+, noUnicode ? false
+, gcc
 }:
 let
   s = # Generated upstream information
@@ -17,15 +18,17 @@ let
     libtool autoconf automake makeWrapper
   ];
   propagatedBuildInputs = [
-    libffi gmp mpfr
+    libffi gmp mpfr gcc
   ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs propagatedBuildInputs;
+
   src = fetchurl {
     inherit (s) url sha256;
   };
+
   configureFlags = [
     "--enable-threads"
     "--with-gmp-prefix=${gmp.dev}"
@@ -35,12 +38,17 @@ stdenv.mkDerivation {
     (stdenv.lib.optional (! noUnicode)
       "--enable-unicode")
     ;
+
+  hardeningDisable = [ "format" ];
+
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" \
+      --prefix PATH ':' "${gcc}/bin" \
       --prefix NIX_LDFLAGS ' ' "-L${gmp.lib or gmp.out or gmp}/lib" \
       --prefix NIX_LDFLAGS ' ' "-L${libffi.lib or libffi.out or libffi}/lib"
   '';
+
   meta = {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";

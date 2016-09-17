@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, gnome,
+{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips,
   fftw, orc, lcms, imagemagick, openexr, libtiff, libjpeg, libgsf, libexif,
   python27, libpng, matio ? null, cfitsio ? null, libwebp ? null
 }:

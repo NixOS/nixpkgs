@@ -18,7 +18,7 @@ let
       substituteInPlace ./configure \
         --replace " -static" "" \
         ${stdenv.lib.optionalString (stdenv.cc.libc != null) ''
-          --replace /usr/include/iconv.h ${stdenv.cc.libc}/include/iconv.h
+          --replace /usr/include/iconv.h ${stdenv.lib.getDev stdenv.cc.libc}/include/iconv.h
         ''}
     '';
 
@@ -84,7 +84,7 @@ in
       homepage = http://www.zabbix.com/;
       license = licenses.gpl2;
       maintainers = [ maintainers.eelco ];
-      platforms = platforms.linux ++ platforms.darwin;
+      platforms = platforms.linux;
     };
   };
 

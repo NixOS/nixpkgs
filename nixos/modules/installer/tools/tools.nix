@@ -32,11 +32,15 @@ let
       "cp refs $out";
   };
 
-  nixos-rebuild = makeProg {
-    name = "nixos-rebuild";
-    src = ./nixos-rebuild.sh;
-    nix = config.nix.package.out;
-  };
+  nixos-rebuild =
+    let fallback = import ./nix-fallback-paths.nix; in
+    makeProg {
+      name = "nixos-rebuild";
+      src = ./nixos-rebuild.sh;
+      nix = config.nix.package.out;
+      nix_x86_64_linux = fallback.x86_64-linux;
+      nix_i686_linux = fallback.i686-linux;
+    };
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";

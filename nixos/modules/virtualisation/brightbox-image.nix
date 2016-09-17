@@ -20,7 +20,7 @@ in
 
           postVM =
             ''
-              PATH=$PATH:${stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+              PATH=$PATH:${lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
               pushd $out
               ${pkgs.qemu_kvm}/bin/qemu-img convert -c -O qcow2 $diskImageBase nixos.qcow2
               rm $diskImageBase
@@ -116,8 +116,8 @@ in
 
       wantedBy = [ "multi-user.target" "sshd.service" ];
       before = [ "sshd.service" ];
-      wants = [ "ip-up.target" ];
-      after = [ "ip-up.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       path = [ pkgs.wget pkgs.iproute ];
 

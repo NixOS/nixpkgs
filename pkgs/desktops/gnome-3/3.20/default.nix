@@ -45,7 +45,7 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) glib gtk2 webkitgtk24x webkitgtk212x gtk3 gtkmm3 libcanberra;
+  inherit (pkgs) glib gtk2 webkitgtk24x webkitgtk212x gtk3 gtkmm3 libcanberra_gtk2;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };

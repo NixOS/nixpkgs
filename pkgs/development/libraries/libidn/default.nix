@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "068fjg2arlppjqqpzd714n1lf6gxkpac9v5yyvp1qwmv6nvam9s4";
   };
 
-  outputs = [ "dev" "out" "bin" "info" "docdev" ];
+  outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
   doCheck = ! stdenv.isDarwin;
+
+  hardeningDisable = [ "format" ];
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 

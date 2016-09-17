@@ -1,0 +1,27 @@
+From e069102365a9ff03822667f435e662f938e8d768 Mon Sep 17 00:00:00 2001
+From: Alexander Ried <ried@mytum.de>
+Date: Wed, 1 Jun 2016 12:49:48 +0200
+Subject: [PATCH] Add nixbld* to user blacklist
+
+---
+ src/user-classify.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/user-classify.c b/src/user-classify.c
+index 69e6809..0e152b6 100644
+--- a/src/user-classify.c
++++ b/src/user-classify.c
+@@ -75,6 +75,10 @@ user_classify_is_blacklisted (const char *username)
+                 return TRUE;
+         }
+ 
++        if (g_str_has_prefix (username, "nixbld")) {
++                return TRUE;
++        }
++
+         return FALSE;
+ }
+ 
+-- 
+2.7.4
+

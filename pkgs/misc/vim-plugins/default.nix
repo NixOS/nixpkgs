@@ -13,7 +13,8 @@ in
 
 # TL;DR
 # Add your plugin to ./vim-plugin-names
-# Generate via `vim-plugin-names-to-nix`
+# Regenerate via `nix-build -Q -A vimPlugins.pluginnames2nix; ./result/bin/vim-plugin-names-to-nix`
+# Copy the generated expression(s) into this file.
 # If plugin is complicated then make changes to ./vim2nix/additional-nix-code
 
 # This attrs contains two sections:
@@ -100,7 +101,7 @@ rec {
 
   fzfWrapper = buildVimPluginFrom2Nix {
     name = fzf.name;
-    src = "${fzf}/share/go/src/github.com/junegunn/fzf";
+    src = fzf.src;
     dependencies = [];
   };
 
@@ -885,6 +886,17 @@ rec {
 
   };
 
+  vim-indent-guides = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-indent-guides-2016-04-17";
+    src = fetchgit {
+      url = "git://github.com/nathanaelkane/vim-indent-guides";
+      rev = "018298ead9d3aa9cd3b4ae222f81022a33978b09";
+      sha256 = "0zyrs9r3vza2kqhqir6qpkygy6yljpn877bvycspv89ljzczmwrs";
+    };
+    dependencies = [];
+
+  };
+
   vim-stylish-haskell = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-stylish-haskell-2015-05-10";
     src = fetchgit {
@@ -1157,11 +1169,11 @@ rec {
   };
 
   youcompleteme = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "youcompleteme-2016-07-23";
+    name = "youcompleteme-2016-09-01";
     src = fetchgit {
       url = "git://github.com/valloric/youcompleteme";
-      rev = "9968a43f7ec058298667c2c56ca86cfbbf1dac51";
-      sha256 = "17fxlflzggzx0mzsbmgvhp7dmkrx760w2pkais2vkafk3xdr1yr7";
+      rev = "e332cdb2a0c8599dead1d362b87bb9fb79c9a955";
+      sha256 = "0lqmdbv2z3rhm6a9c62rhfl3i30mvpg2f7k0cjan7jvrln9588k9";
     };
     dependencies = [];
     buildInputs = [

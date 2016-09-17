@@ -2,11 +2,11 @@
 , flex, bison, libmnl, libnftnl, gmp, readline }:
 
 stdenv.mkDerivation rec {
-  name = "nftables-0.5";
+  name = "nftables-0.6";
 
   src = fetchurl {
     url = "http://netfilter.org/projects/nftables/files/${name}.tar.bz2";
-    sha256 = "1mhaw7ys7ma5786xyfccgar389jsj2zp7qmvghsgr96q6grxzdhz";
+    sha256 = "0bbcrn9nz75daic8bq7rspvcw3ck7l82vqcvkyyg4mhwbxjn5pny";
   };
 
   configureFlags = [

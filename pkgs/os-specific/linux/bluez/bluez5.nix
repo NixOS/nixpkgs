@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   pythonPath = with pythonPackages;
-    [ dbus pygobject pygobject3 recursivePthLoader ];
+    [ dbus pygobject2 pygobject3 recursivePthLoader ];
 
   buildInputs =
     [ pkgconfig dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       # gstreamer gst_plugins_base
     ];
 
-  outputs = [ "dev" "out" "test" ];
+  outputs = [ "out" "dev" "test" ];
 
   patches = [ ./bluez-5.37-obexd_without_systemd-1.patch ];
 

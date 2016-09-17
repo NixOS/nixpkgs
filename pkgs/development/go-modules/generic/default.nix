@@ -56,7 +56,7 @@ let
     };
 
   importGodeps = { depsFile }:
-    map dep2src (lib.importJSON depsFile);
+    map dep2src (import depsFile);
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
@@ -180,6 +180,16 @@ go.stdenv.mkDerivation (
     done < <(find $bin/bin -type f 2>/dev/null)
   '';
 
+  shellHook = ''
+    d=$(mktemp -d "--suffix=-$name")
+  '' + toString (map (dep: ''
+     mkdir -p "$d/src/$(dirname "${dep.goPackagePath}")"
+     ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
+  ''
+  ) goPath) + ''
+    export GOPATH="$d:$GOPATH"
+  '';
+
   disallowedReferences = lib.optional (!allowGoReference) go
     ++ lib.optional (!dontRenameImports) govers;
 
@@ -190,7 +200,7 @@ go.stdenv.mkDerivation (
   enableParallelBuilding = enableParallelBuilding;
 
   # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-  outputs = args.outputs or [ "out" "bin" ];
+  outputs = args.outputs or [ "bin" "out" ];
 
   meta = {
     # Add default meta information

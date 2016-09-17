@@ -31,6 +31,8 @@ in stdenv.mkDerivation rec {
                     openjpeg freetype jbig2dec djvulibre openssl ];
   NIX_LDFLAGS = "-lX11 -lXext";
 
+  hardeningDisable = [ "format" ];
+
   k2_pa = ./k2pdfopt.patch;
   tess_pa = ./tesseract.patch;
 
@@ -96,7 +98,7 @@ in stdenv.mkDerivation rec {
             -ljbig2dec -ljpeg -lopenjp2 -lpng -lfreetype -lpthread -lmujs \
             -lPgm2asc -llept -ltesseract -lcrypto
 
-    mkdir -p $out/bin 
+    mkdir -p $out/bin
     cp k2pdfopt $out/bin
   '';
 

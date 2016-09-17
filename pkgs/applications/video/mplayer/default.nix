@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, freetype, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, yasm
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
-, alsaSupport ? true, alsaLib ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
 , screenSaverSupport ? true, libXScrnSaver ? null
 , vdpauSupport ? false, libvdpau ? null
-, cddaSupport ? true, cdparanoia ? null
-, dvdnavSupport ? true, libdvdnav ? null
+, cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
+, dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
 , bluraySupport ? true, libbluray ? null
 , amrSupport ? false, amrnb ? null, amrwb ? null
 , cacaSupport ? true, libcaca ? null
@@ -24,6 +24,7 @@
 , libpngSupport ? true, libpng ? null
 , libjpegSupport ? true, libjpeg ? null
 , useUnfreeCodecs ? false
+, darwin ? null
 }:
 
 assert fontconfigSupport -> (fontconfig != null);
@@ -102,6 +103,13 @@ stdenv.mkDerivation rec {
     sed -i /^_install_strip/d configure
   '';
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pigoz/mplayer-svn/commit/6c6a7c2afe11c15716cdf4371fb4bf211644b7e1.patch";
+      sha256 = "0abg5122kisgcc8ay3barlibrgn259igsfq3ak6na9g8j5cgviw9";
+    })
+  ];
+
   buildInputs = with stdenv.lib;
     [ pkgconfig freetype ]
     ++ optional aalibSupport aalib
@@ -127,6 +135,7 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
+    ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
     ;
 
   nativeBuildInputs = [ yasm ];
@@ -162,8 +171,8 @@ stdenv.mkDerivation rec {
       --disable-xanim
       --disable-ivtv
       --disable-xvid --disable-xvid-lavc
-      --enable-vidix
-      --enable-fbdev
+      ${optionalString stdenv.isLinux "--enable-vidix"}
+      ${optionalString stdenv.isLinux "--enable-fbdev"}
       --disable-ossaudio
     '';
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, firefox, perl, unzipNLS, xorg }:
+{ stdenv, fetchurl, lib, bash, firefox, perl, unzipNLS, xorg }:
 
 let
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     unzip "${xpi}" -d "$out/libexec/zotero"
 
     BUILDID=`date +%Y%m%d`
-    GECKO_VERSION="${firefox.passthru.version}"
+    GECKO_VERSION="${lib.removeSuffix "esr" firefox.passthru.version}"
     UPDATE_CHANNEL="default"
 
     # Copy branding
@@ -52,8 +52,8 @@ stdenv.mkDerivation {
 
     # Copy application.ini and modify
     cp assets/application.ini "$out/libexec/zotero/application.ini"
-    perl -pi -e "s/{{VERSION}}/$version/" "$out/libexec/zotero/application.ini"
-    perl -pi -e "s/{{BUILDID}}/$BUILDID/" "$out/libexec/zotero/application.ini"
+    perl -pi -e "s/\{\{VERSION}}/$version/" "$out/libexec/zotero/application.ini"
+    perl -pi -e "s/\{\{BUILDID}}/$BUILDID/" "$out/libexec/zotero/application.ini"
     perl -pi -e "s/^MaxVersion.*\$/MaxVersion=$GECKO_VERSION/" "$out/libexec/zotero/application.ini"
 
     # Copy prefs.js and modify

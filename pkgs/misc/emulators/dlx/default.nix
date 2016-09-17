@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   makeFlags = "LINK=gcc CFLAGS=-O2";
 
+  hardeningDisable = [ "format" ];
+
   installPhase = ''
     mkdir -p $out/include/dlx $out/share/dlx/{examples,doc} $out/bin
     mv -v masm mon dasm $out/bin/

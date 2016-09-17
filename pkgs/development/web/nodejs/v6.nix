@@ -8,8 +8,8 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
 in import ./nodejs.nix (args // rec {
-  version = "6.3.1";
-  sha256 = "06ran2ccfxkwyk6w4wikd7qws286952lbx93pqaygmbh9f0q9rbg";
+  version = "6.6.0";
+  sha256 = "0cqswab9idbz5kzj50fnalg1zrircmbn9qga0cr33lvjnv98a134";
   extraBuildInputs = stdenv.lib.optionals stdenv.isDarwin
     [ CoreServices ApplicationServices ];
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''

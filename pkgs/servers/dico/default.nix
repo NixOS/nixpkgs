@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "13by0zimx90v2j8v7n4k9y3xwmh4q9jdc2f4f8yjs3x7f5bzm2pk";
   };
 
+  hardeningDisable = [ "format" ];
+
   # XXX: Add support for GNU SASL.
   buildInputs =
     [ libtool gettext zlib readline gsasl guile python pcre libffi groff ];

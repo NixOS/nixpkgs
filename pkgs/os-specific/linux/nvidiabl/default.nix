@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1c7ar39wc8jpqh67sw03lwnyp0m9l6dad469ybqrgcywdiwxspwj";
   };
 
+  hardeningDisable = [ "pic" ];
+
   patches = [ ./linux4compat.patch ];
 
   preConfigure = ''

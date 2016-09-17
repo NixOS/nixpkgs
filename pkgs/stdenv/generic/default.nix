@@ -158,8 +158,12 @@ let
         outputs ++
         (if separateDebugInfo then assert result.isLinux; [ "debug" ] else []);
 
-      buildInputs' = buildInputs ++
+      buildInputs' = lib.chooseDevOutputs buildInputs ++
         (if separateDebugInfo then [ ../../build-support/setup-hooks/separate-debug-info.sh ] else []);
+
+      nativeBuildInputs' = lib.chooseDevOutputs nativeBuildInputs;
+      propagatedBuildInputs' = lib.chooseDevOutputs propagatedBuildInputs;
+      propagatedNativeBuildInputs' = lib.chooseDevOutputs propagatedNativeBuildInputs;
 
     in
 
@@ -176,13 +180,13 @@ let
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
           computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs' ++ nativeBuildInputs');
           computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (propagatedBuildInputs' ++ propagatedNativeBuildInputs');
           computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs' ++ nativeBuildInputs'));
           computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs' ++ propagatedNativeBuildInputs'));
         in
         {
           builder = attrs.realBuilder or shell;
@@ -194,17 +198,17 @@ let
 
           # Inputs built by the cross compiler.
           buildInputs = if crossConfig != null then buildInputs' else [];
-          propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs else [];
+          propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs' else [];
           # Inputs built by the usual native compiler.
-          nativeBuildInputs = nativeBuildInputs
+          nativeBuildInputs = nativeBuildInputs'
             ++ lib.optionals (crossConfig == null) buildInputs'
             ++ lib.optional
                 (result.isCygwin
                   || (crossConfig != null && lib.hasSuffix "mingw32" crossConfig))
                 ../../build-support/setup-hooks/win-dll-link.sh
             ;
-          propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
-            (if crossConfig == null then propagatedBuildInputs else []);
+          propagatedNativeBuildInputs = propagatedNativeBuildInputs' ++
+            (if crossConfig == null then propagatedBuildInputs' else []);
         } // ifDarwin {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
@@ -274,7 +278,10 @@ let
 
     // rec {
 
-      meta.description = "The default build environment for Unix packages in Nixpkgs";
+      meta = {
+        description = "The default build environment for Unix packages in Nixpkgs";
+        platforms = lib.platforms.all;
+      };
 
       # Utility flags to test the type of platform.
       isDarwin = system == "x86_64-darwin";

@@ -28,7 +28,7 @@ let
     };
 
     # TODO: Add a "dev" output containing the header files.
-    outputs = [ "out" "man" "docdev" ];
+    outputs = [ "out" "man" "devdoc" ];
     setOutputFlags = false;
 
     patches =
@@ -67,6 +67,9 @@ let
     dontAddPrefix = true;
 
     enableParallelBuilding = true;
+
+    # FIXME needs gcc 4.9 in bootstrap tools
+    hardeningDisable = [ "stackprotector" ];
 
     preConfigure =
       ''

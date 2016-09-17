@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, audiofile, libcap
-, openglSupport ? false, mesa_noglu
+, openglSupport ? false, mesa_noglu, mesa_glu
 , alsaSupport ? true, alsaLib
 , x11Support ? true, libXext, libICE, libXrandr
 , pulseaudioSupport ? true, libpulseaudio
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
   nativeBuildInputs = [ pkgconfig ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     optionals x11Support [ libXext libICE libXrandr ] ++
     optional alsaSupport alsaLib ++
     optional stdenv.isLinux libcap ++
-    optional openglSupport mesa_noglu ++
+    optionals openglSupport [ mesa_noglu mesa_glu ] ++
     optional pulseaudioSupport libpulseaudio ++
     optional stdenv.isDarwin Cocoa;
 

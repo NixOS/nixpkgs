@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
+    # emacs runs then dumps itself. In the process, it keeps a copy of the
+    # PATH env var, holding all the build inputs in it's closure.
+    # Prevent that by running the self-dumping emacs with an empty PATH.
+    sed -i 's|^RUN_TEMACS = |&PATH= |' src/Makefile.in
   '';
 
   buildInputs =

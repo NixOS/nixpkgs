@@ -234,9 +234,8 @@ in
         serviceConfig.Type = "oneshot";
 
         script = ''
-          if ! test -e ${cfg.dbpath}; then
-              install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
-          fi
+          install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
+          chown -R ${cfg.user} ${cfg.dbpath}
         '';
       };
 

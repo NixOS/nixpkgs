@@ -110,7 +110,7 @@ stdenv.mkDerivation ({
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
-  outputs = [ "dev" "out" "bin" "static" ];
+  outputs = [ "out" "bin" "dev" "static" ];
 
   buildInputs = lib.optionals (cross != null) [ gccCross ]
     ++ lib.optionals withGd [ gd libpng ];
@@ -181,6 +181,6 @@ stdenv.mkDerivation ({
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ lib.maintainers.eelco ];
-    #platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux;
   } // meta;
 })

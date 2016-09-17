@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
     (opencvFlag "TIFF" enableTIFF)
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  hardeningDisable = [ "bindnow" "relro" ];
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 

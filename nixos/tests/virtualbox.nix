@@ -144,6 +144,7 @@ let
       "--uart1 0x3F8 4"
       "--uartmode1 client /run/virtualbox-log-${name}.sock"
       "--memory 768"
+      "--audio none"
     ] ++ (attrs.vmFlags or []));
 
     controllerFlags = mkFlags [
@@ -273,9 +274,12 @@ let
 
       sub shutdownVM_${name} {
         $machine->succeed(ru "touch ${sharePath}/shutdown");
-        $machine->waitUntilSucceeds(
-          "test ! -e ${sharePath}/shutdown ".
-          "  -a ! -e ${sharePath}/boot-done"
+        $machine->execute(
+          'set -e; i=0; '.
+          'while test -e ${sharePath}/shutdown '.
+          '        -o -e ${sharePath}/boot-done; do '.
+          'sleep 1; i=$(($i + 1)); [ $i -le 3600 ]; '.
+          'done'
         );
         waitForShutdown_${name};
       }
@@ -314,6 +318,9 @@ let
 
     test2.vmFlags = hostonlyVMFlags;
     test2.vmScript = dhcpScript;
+
+    headless.virtualisation.virtualbox.headless = true;
+    headless.services.xserver.enable = false;
   };
 
   mkVBoxTest = name: testScript: makeTest {
@@ -383,6 +390,7 @@ in mapAttrs mkVBoxTest {
     $machine->sendKeys("ctrl-q");
     $machine->sleep(5);
     $machine->screenshot("gui_manager_stopped");
+    destroyVM_simple;
   '';
 
   simple-cli = ''
@@ -400,6 +408,16 @@ in mapAttrs mkVBoxTest {
     });
 
     shutdownVM_simple;
+    destroyVM_simple;
+  '';
+
+  headless = ''
+    createVM_headless;
+    $machine->succeed(ru("VBoxHeadless --startvm headless & disown %1"));
+    waitForStartup_headless;
+    waitForVMBoot_headless;
+    shutdownVM_headless;
+    destroyVM_headless;
   '';
 
   host-usb-permissions = ''

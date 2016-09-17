@@ -1,0 +1,24 @@
+diff --git a/setup.py b/setup.py
+index 07b5913..2b7b15e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -24,15 +24,16 @@ install_requires = [
+ ]
+ 
+ # Default user (considers non virtualenv method)
+-user = os.environ.get('SUDO_USER', os.environ['USER'])
++user = os.environ.get('SUDO_USER', os.environ.get('USER', None))
+ 
+ # Copy default config if not exists
+ default = os.path.expanduser("~") + os.sep + '.rainbow_config.json'
+ if not os.path.isfile(default):
+     cmd = 'cp rainbowstream/colorset/config ' + default
+     os.system(cmd)
+-    cmd = 'chown ' + quote(user) + ' ' + default
+-    os.system(cmd)
++    if user:
++        cmd = 'chown ' + quote(user) + ' ' + default
++        os.system(cmd)
+     cmd = 'chmod 777 ' + default
+     os.system(cmd)
+ 

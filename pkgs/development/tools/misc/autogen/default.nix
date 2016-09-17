@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01d4m8ckww12sy50vgyxlnz83z9dxqpyqp153cscncc9w6jq19d7";
   };
 
-  outputs = [ "dev" "bin" "lib" "out" "man" "info" ];
+  outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
   nativeBuildInputs = [ which pkgconfig perl ];
   buildInputs = [ guile libxml2 ];

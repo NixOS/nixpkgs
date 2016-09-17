@@ -19,14 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "0g3xz8jpz1pl2zzmssglrpa9nxiaa7rmcmvgpbrjz8k9cyynqsvl";
   };
 
+  hardeningDisable = [ "format" ];
+
   # -pthread gets passed to clang, causing warnings
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ zlib fontconfig freetype ];
   propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
 

@@ -12,10 +12,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "5dc6c570f3b90085e99a881c866a41d9a298a12552cbed7d81f43d1a5d27e096";
+    sha256 = (lib.importJSON ../upstream-info.json).guest;
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
+
+  hardeningDisable = [ "pic" ];
 
   buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 

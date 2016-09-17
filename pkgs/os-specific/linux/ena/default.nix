@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "03w6xgv3lfn28n38mj9cdi3px5zjyrbxnflpd3ggivkv6grf9fp7";
   };
 
+  hardeningDisable = [ "pic" ];
+
+  # linux 3.12
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   configurePhase =
     ''
       cd kernel/linux/ena
@@ -30,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/amzn/amzn-drivers;
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.linux;
   };
 }

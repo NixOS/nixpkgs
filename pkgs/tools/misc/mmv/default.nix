@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0399c027ea1e51fd607266c1e33573866d4db89f64a74be8b4a1d2d1ff1fdeef";
   };
 
+  hardeningDisable = [ "format" ];
+
   patches = [
     # Use Debian patched version, as upstream is no longer maintained and it
     # contains a _lot_ of fixes.

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pv4zrajm46za0f6lv162iqffih57a8ly4pc69f7y0gfyigb8p80";
   };
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = "unset CC";
 
   patches = stdenv.lib.optionals stdenv.isDarwin [
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin [
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [
     Carbon
     IOKit
   ];

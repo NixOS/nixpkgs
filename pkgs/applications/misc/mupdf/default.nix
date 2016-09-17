@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama freetype libjpeg jbig2dec openjpeg ];
-  outputs = [ "out" "bin" "doc" ];
+  outputs = [ "bin" "dev" "out" "doc" ];
 
   preConfigure = ''
     # Don't remove mujs because upstream version is incompatible
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     Description: Library for rendering PDF documents
     Version: ${version}
     Libs: -L$out/lib -lmupdf -lmupdfthird
-    Cflags: -I$out/include
+    Cflags: -I$dev/include
     EOF
 
     moveToOutput "bin" "$bin"

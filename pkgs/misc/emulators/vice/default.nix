@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, libpng, giflib, libjpeg, alsaLib, readline, mesa, libX11
-, pkgconfig, gtk, SDL, autoreconfHook, makeDesktopItem
+, pkgconfig, gtk2, SDL, autoreconfHook, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl libpng giflib libjpeg alsaLib readline mesa
-                  pkgconfig gtk SDL autoreconfHook ];
+                  pkgconfig gtk2 SDL autoreconfHook ];
   configureFlags = "--with-sdl --enable-fullscreen --enable-gnomeui";
 
   desktopItem = makeDesktopItem {

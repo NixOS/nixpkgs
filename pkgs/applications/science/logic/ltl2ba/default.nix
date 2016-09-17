@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "16z0gc7a9dkarwn0l6rvg5jdhw1q4qyn4501zlchy0zxqddz0sx6";
   };
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     substituteInPlace Makefile \
     --replace "CC=gcc" ""

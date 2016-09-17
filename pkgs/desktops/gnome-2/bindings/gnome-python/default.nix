@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  inherit (pythonPackages) python pygobject pygtk dbus-python;
+  inherit (pythonPackages) python pygobject2 pygtk dbus-python;
 in stdenv.mkDerivation rec {
   version = "2.28";
   name = "gnome-python-${version}.1";
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     cp bonobo/*.{py,defs} $out/share/pygtk/2.0/defs/
   '';
 
-  buildInputs = [ python pkgconfig pygobject pygtk glib gtk GConf libgnome dbus-python gnome_vfs ];
+  buildInputs = [ python pkgconfig pygobject2 pygtk glib gtk GConf libgnome dbus-python gnome_vfs ];
 
   doCheck = false;
 

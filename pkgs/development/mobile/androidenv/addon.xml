@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdk:sdk-addon xmlns:sdk="http://schemas.android.com/sdk/android/addon/7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<!--Generated on 2016-07-21 16:22:25.601902 with ADRT.-->
+	<!--Generated on 2016-09-13 10:48:39.682447 with ADRT.-->
 	<sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
 This is the Android Software Development Kit License Agreement
@@ -587,7 +587,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>3</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:39:39 2016.-->
+				<!--Built on: Mon Aug 15 05:06:49 2016.-->
 				<sdk:size>34908058</sdk:size>
 				<sdk:checksum type="sha1">1f92abf3a76be66ae8032257fc7620acbd2b2e3a</sdk:checksum>
 				<sdk:url>google_apis-3-r03.zip</sdk:url>
@@ -614,7 +614,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>2</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:39:43 2016.-->
+				<!--Built on: Mon Aug 15 05:06:49 2016.-->
 				<sdk:size>42435735</sdk:size>
 				<sdk:checksum type="sha1">9b6e86d8568558de4d606a7debc4f6049608dbd0</sdk:checksum>
 				<sdk:url>google_apis-4_r02.zip</sdk:url>
@@ -641,7 +641,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:39:47 2016.-->
+				<!--Built on: Mon Aug 15 05:06:51 2016.-->
 				<sdk:size>49123776</sdk:size>
 				<sdk:checksum type="sha1">46eaeb56b645ee7ffa24ede8fa17f3df70db0503</sdk:checksum>
 				<sdk:url>google_apis-5_r01.zip</sdk:url>
@@ -668,7 +668,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:39:52 2016.-->
+				<!--Built on: Mon Aug 15 05:06:51 2016.-->
 				<sdk:size>53382941</sdk:size>
 				<sdk:checksum type="sha1">5ff545d96e031e09580a6cf55713015c7d4936b2</sdk:checksum>
 				<sdk:url>google_apis-6_r01.zip</sdk:url>
@@ -695,7 +695,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:39:55 2016.-->
+				<!--Built on: Mon Aug 15 05:06:52 2016.-->
 				<sdk:size>53691339</sdk:size>
 				<sdk:checksum type="sha1">2e7f91e0fe34fef7f58aeced973c6ae52361b5ac</sdk:checksum>
 				<sdk:url>google_apis-7_r01.zip</sdk:url>
@@ -722,7 +722,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>2</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:39:59 2016.-->
+				<!--Built on: Mon Aug 15 05:06:52 2016.-->
 				<sdk:size>59505020</sdk:size>
 				<sdk:checksum type="sha1">3079958e7ec87222cac1e6b27bc471b27bf2c352</sdk:checksum>
 				<sdk:url>google_apis-8_r02.zip</sdk:url>
@@ -749,7 +749,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>2</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:04 2016.-->
+				<!--Built on: Mon Aug 15 05:06:50 2016.-->
 				<sdk:size>63401546</sdk:size>
 				<sdk:checksum type="sha1">78664645a1e9accea4430814f8694291a7f1ea5d</sdk:checksum>
 				<sdk:url>google_apis-9_r02.zip</sdk:url>
@@ -776,7 +776,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>2</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:09 2016.-->
+				<!--Built on: Mon Aug 15 05:06:52 2016.-->
 				<sdk:size>65781578</sdk:size>
 				<sdk:checksum type="sha1">cc0711857c881fa7534f90cf8cc09b8fe985484d</sdk:checksum>
 				<sdk:url>google_apis-10_r02.zip</sdk:url>
@@ -807,7 +807,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:13 2016.-->
+				<!--Built on: Mon Aug 15 05:06:54 2016.-->
 				<sdk:size>83477179</sdk:size>
 				<sdk:checksum type="sha1">5eab5e81addee9f3576d456d205208314b5146a5</sdk:checksum>
 				<sdk:url>google_apis-11_r01.zip</sdk:url>
@@ -834,7 +834,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:18 2016.-->
+				<!--Built on: Mon Aug 15 05:06:51 2016.-->
 				<sdk:size>86099835</sdk:size>
 				<sdk:checksum type="sha1">e9999f4fa978812174dfeceec0721c793a636e5d</sdk:checksum>
 				<sdk:url>google_apis-12_r01.zip</sdk:url>
@@ -865,7 +865,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:23 2016.-->
+				<!--Built on: Mon Aug 15 05:06:54 2016.-->
 				<sdk:size>88615525</sdk:size>
 				<sdk:checksum type="sha1">3b153edd211c27dc736c893c658418a4f9041417</sdk:checksum>
 				<sdk:url>google_apis-13_r01.zip</sdk:url>
@@ -896,7 +896,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>2</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:28 2016.-->
+				<!--Built on: Mon Aug 15 05:06:53 2016.-->
 				<sdk:size>106533714</sdk:size>
 				<sdk:checksum type="sha1">f8eb4d96ad0492b4c0db2d7e4f1a1a3836664d39</sdk:checksum>
 				<sdk:url>google_apis-14_r02.zip</sdk:url>
@@ -925,7 +925,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>3</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:33 2016.-->
+				<!--Built on: Mon Aug 15 05:06:54 2016.-->
 				<sdk:size>106624396</sdk:size>
 				<sdk:checksum type="sha1">d0d2bf26805eb271693570a1aaec33e7dc3f45e9</sdk:checksum>
 				<sdk:url>google_apis-15_r03.zip</sdk:url>
@@ -958,7 +958,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>4</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:40 2016.-->
+				<!--Built on: Mon Aug 15 05:06:54 2016.-->
 				<sdk:size>127341982</sdk:size>
 				<sdk:checksum type="sha1">ee6acf1b01020bfa8a8e24725dbc4478bee5e792</sdk:checksum>
 				<sdk:url>google_apis-16_r04.zip</sdk:url>
@@ -991,7 +991,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>4</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:46 2016.-->
+				<!--Built on: Mon Aug 15 05:06:55 2016.-->
 				<sdk:size>137231243</sdk:size>
 				<sdk:checksum type="sha1">a076be0677f38df8ca5536b44dfb411a0c808c4f</sdk:checksum>
 				<sdk:url>google_apis-17_r04.zip</sdk:url>
@@ -1024,7 +1024,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>4</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:40:53 2016.-->
+				<!--Built on: Mon Aug 15 05:06:54 2016.-->
 				<sdk:size>143195183</sdk:size>
 				<sdk:checksum type="sha1">6109603409debdd40854d4d4a92eaf8481462c8b</sdk:checksum>
 				<sdk:url>google_apis-18_r04.zip</sdk:url>
@@ -1057,7 +1057,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>20</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Thu May 19 11:35:33 2016.-->
+				<!--Built on: Mon Aug 15 04:16:31 2016.-->
 				<sdk:size>147081</sdk:size>
 				<sdk:checksum type="sha1">5b933abe830b2f25b4c0f171d45e9e0651e56311</sdk:checksum>
 				<sdk:url>google_apis-19_r20.zip</sdk:url>
@@ -1086,11 +1086,44 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		</sdk:libs>
 	</sdk:add-on>
 	<sdk:add-on>
+		<!--Generated from bid:3249234, branch:git_nyc-emu-release-->
+		<sdk:revision>1</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Thu Sep  8 15:11:39 2016.-->
+				<sdk:size>154865</sdk:size>
+				<sdk:checksum type="sha1">31361c2868f27343ee917fbd259c1463821b6145</sdk:checksum>
+				<sdk:url>google_apis-24_r1.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:vendor-id>google</sdk:vendor-id>
+		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
+		<sdk:name-id>google_apis</sdk:name-id>
+		<sdk:name-display>Google APIs</sdk:name-display>
+		<sdk:api-level>24</sdk:api-level>
+		<sdk:description>Android + Google APIs</sdk:description>
+		<sdk:libs>
+			<sdk:lib>
+				<sdk:name>com.google.android.maps</sdk:name>
+				<sdk:description>API for Google Maps</sdk:description>
+			</sdk:lib>
+			<sdk:lib>
+				<sdk:name>com.android.future.usb.accessory</sdk:name>
+				<sdk:description>API for USB Accessories</sdk:description>
+			</sdk:lib>
+			<sdk:lib>
+				<sdk:name>com.google.android.media.effects</sdk:name>
+				<sdk:description>Collection of video effects</sdk:description>
+			</sdk:lib>
+		</sdk:libs>
+	</sdk:add-on>
+	<sdk:add-on>
 		<!--Generated from bid:77907680, branch:perforce-->
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:41:02 2016.-->
+				<!--Built on: Mon Aug 15 05:06:45 2016.-->
 				<sdk:size>179499</sdk:size>
 				<sdk:checksum type="sha1">66a754efb24e9bb07cc51648426443c7586c9d4a</sdk:checksum>
 				<sdk:url>google_apis-21_r01.zip</sdk:url>
@@ -1123,7 +1156,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:41:05 2016.-->
+				<!--Built on: Mon Aug 15 05:06:45 2016.-->
 				<sdk:size>179259</sdk:size>
 				<sdk:checksum type="sha1">5def0f42160cba8acff51b9c0c7e8be313de84f5</sdk:checksum>
 				<sdk:url>google_apis-22_r01.zip</sdk:url>
@@ -1156,7 +1189,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:41:08 2016.-->
+				<!--Built on: Mon Aug 15 05:06:45 2016.-->
 				<sdk:size>179900</sdk:size>
 				<sdk:checksum type="sha1">04c5cc1a7c88967250ebba9561d81e24104167db</sdk:checksum>
 				<sdk:url>google_apis-23_r01.zip</sdk:url>
@@ -1190,7 +1223,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>2</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:41:13 2016.-->
+				<!--Built on: Mon Aug 15 05:06:54 2016.-->
 				<sdk:size>78266751</sdk:size>
 				<sdk:checksum type="sha1">92128a12e7e8b0fb5bac59153d7779b717e7b840</sdk:checksum>
 				<sdk:url>google_tv-12_r02.zip</sdk:url>
@@ -1212,7 +1245,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:41:18 2016.-->
+				<!--Built on: Mon Aug 15 05:06:54 2016.-->
 				<sdk:size>87721879</sdk:size>
 				<sdk:checksum type="sha1">b73f7c66011ac8180b44aa4e83b8d78c66ea9a09</sdk:checksum>
 				<sdk:url>google_tv-13_r01.zip</sdk:url>
@@ -1229,18 +1262,18 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:libs/>
 	</sdk:add-on>
 	<sdk:extra>
-		<!--Generated from bid:3078275, branch:git_nyc-dev-->
+		<!--Generated from bid:3256427, branch:git_nyc-support-release-->
 		<sdk:revision>
-			<sdk:major>35</sdk:major>
+			<sdk:major>37</sdk:major>
 			<sdk:minor>0</sdk:minor>
 			<sdk:micro>0</sdk:micro>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Thu Jul 21 12:00:22 2016.-->
-				<sdk:size>251973915</sdk:size>
-				<sdk:checksum type="sha1">7a201334775d78bf185ffcce686b1b168d152217</sdk:checksum>
-				<sdk:url>android_m2repository_r35.zip</sdk:url>
+				<!--Built on: Mon Sep 12 10:14:44 2016.-->
+				<sdk:size>281268000</sdk:size>
+				<sdk:checksum type="sha1">2f862a5d66d5526cd5b7655c3e9678f493e485f7</sdk:checksum>
+				<sdk:url>android_m2repository_r37.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -1275,88 +1308,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:old-paths>compatibility</sdk:old-paths>
 	</sdk:extra>
 	<sdk:extra>
-		<!--Generated from bid:108530044, branch:perforce-->
+		<!--Generated from bid:128809501, branch:perforce-->
 		<sdk:revision>
-			<sdk:major>1</sdk:major>
-			<sdk:minor>0</sdk:minor>
-			<sdk:micro>3</sdk:micro>
+			<sdk:major>32</sdk:major>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:38:48 2016.-->
-				<sdk:size>12968916</sdk:size>
-				<sdk:checksum type="sha1">7c9ef7544cf0aea030bcc29bd8e12c04fd53e653</sdk:checksum>
-				<sdk:url>gapid_r01_linux.zip</sdk:url>
-				<sdk:host-os>linux</sdk:host-os>
-			</sdk:archive>
-			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:38:46 2016.-->
-				<sdk:size>15824058</sdk:size>
-				<sdk:checksum type="sha1">597eb271349d890566274861eba2770a84ee4c69</sdk:checksum>
-				<sdk:url>gapid_r01_osx.zip</sdk:url>
-			</sdk:archive>
-			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:38:47 2016.-->
-				<sdk:size>13220091</sdk:size>
-				<sdk:checksum type="sha1">82c9b3eb1b281f27f58fe55025227148b3deb12e</sdk:checksum>
-				<sdk:url>gapid_r01_windows.zip</sdk:url>
-				<sdk:host-os>windows</sdk:host-os>
-			</sdk:archive>
-		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-license"/>
-		<sdk:vendor-id>android</sdk:vendor-id>
-		<sdk:vendor-display>Android</sdk:vendor-display>
-		<sdk:description>Tools that support GPU debugging and profiling within an IDE.</sdk:description>
-		<sdk:name-display>GPU Debugging tools</sdk:name-display>
-		<sdk:path>gapid</sdk:path>
-	</sdk:extra>
-	<sdk:extra>
-		<!--Generated from bid:2994895, branch:git_studio-master-dev-->
-		<sdk:revision>
-			<sdk:major>3</sdk:major>
-			<sdk:minor>1</sdk:minor>
-			<sdk:micro>0</sdk:micro>
-		</sdk:revision>
-		<sdk:archives>
-			<sdk:archive>
-				<!--Built on: Tue Jun 21 13:35:11 2016.-->
-				<sdk:size>31528127</sdk:size>
-				<sdk:checksum type="sha1">a33fe37c87b095171d647385445abe164ae03514</sdk:checksum>
-				<sdk:url>gapid_2994895_linux.zip</sdk:url>
-				<sdk:host-os>linux</sdk:host-os>
-			</sdk:archive>
-			<sdk:archive>
-				<!--Built on: Tue Jun 21 13:35:14 2016.-->
-				<sdk:size>31908588</sdk:size>
-				<sdk:checksum type="sha1">81dec931c8b0a5fe7c68accd8b3f8c731a9474f3</sdk:checksum>
-				<sdk:url>gapid_2994895_osx.zip</sdk:url>
-			</sdk:archive>
-			<sdk:archive>
-				<!--Built on: Tue Jun 21 13:35:13 2016.-->
-				<sdk:size>31656334</sdk:size>
-				<sdk:checksum type="sha1">ce00f4a7364d7fdd5d25d2429f04c4d50f56be1e</sdk:checksum>
-				<sdk:url>gapid_2994895_windows.zip</sdk:url>
-				<sdk:host-os>windows</sdk:host-os>
-			</sdk:archive>
-		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-license"/>
-		<sdk:vendor-id>android</sdk:vendor-id>
-		<sdk:vendor-display>Android</sdk:vendor-display>
-		<sdk:description>Tools that support GPU debugging and profiling within an IDE.</sdk:description>
-		<sdk:name-display>GPU Debugging tools</sdk:name-display>
-		<sdk:path>gapid_3</sdk:path>
-	</sdk:extra>
-	<sdk:extra>
-		<!--Generated from bid:127098392, branch:perforce-->
-		<sdk:revision>
-			<sdk:major>31</sdk:major>
-		</sdk:revision>
-		<sdk:archives>
-			<sdk:archive>
-				<!--Built on: Mon Jul 11 10:11:05 2016.-->
-				<sdk:size>106690833</sdk:size>
-				<sdk:checksum type="sha1">20054f56e8e24c5f1aadd8cdf232d5dd54565aee</sdk:checksum>
-				<sdk:url>google_m2repository_r31.zip</sdk:url>
+				<!--Built on: Fri Jul 29 09:01:13 2016.-->
+				<sdk:size>113922721</sdk:size>
+				<sdk:checksum type="sha1">ae24bde9c8f732f4d13b72e70802be8c97dcfddf</sdk:checksum>
+				<sdk:url>google_m2repository_r32.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -1431,16 +1392,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:path>google_play_services_froyo</sdk:path>
 	</sdk:extra>
 	<sdk:extra>
-		<!--Generated from bid:125682601, branch:perforce-->
+		<!--Generated from bid:128810771, branch:perforce-->
 		<sdk:revision>
-			<sdk:major>31</sdk:major>
+			<sdk:major>32</sdk:major>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Thu Jun 23 11:29:48 2016.-->
-				<sdk:size>11746505</sdk:size>
-				<sdk:checksum type="sha1">3f1b502d0f6361c036cb332b8c15249a1168e08b</sdk:checksum>
-				<sdk:url>google_play_services_9256000_r31.zip</sdk:url>
+				<!--Built on: Fri Jul 29 09:01:17 2016.-->
+				<sdk:size>11820632</sdk:size>
+				<sdk:checksum type="sha1">bf0e7c1848371c7e6dd7a01e237dbd916e5cb04f</sdk:checksum>
+				<sdk:url>google_play_services_945200_r32.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>

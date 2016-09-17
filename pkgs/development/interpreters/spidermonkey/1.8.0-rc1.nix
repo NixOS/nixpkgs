@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/src";
 
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.isi686 "pic";
+
   makefileExtra = ./Makefile.extra;
   makefile = "Makefile.ref";
-  
+
   patchPhase =
     ''
       cat ${makefileExtra} >> ${makefile}

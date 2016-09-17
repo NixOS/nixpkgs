@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-let version = "3.2.1";
+let version = "3.2.9";
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
@@ -19,6 +19,7 @@ let version = "3.2.1";
       #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+
     buildInputs = [
       sasl boost gperftools pcre-cpp snappy
       zlib libyamlcpp sasl openssl libpcap
@@ -43,7 +44,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "059gskly8maj2c9iy46gccx7a9ya522pl5aaxl5vss5bllxilhsh";
+    sha256 = "06q6j2bjy31pjwqws53wdpmn2x8w2hafzsnv1s3wx15pc9vq3y15";
   };
 
   nativeBuildInputs = [ scons ];
@@ -91,6 +92,8 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  hardeningEnable = [ "pie" ];
 
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";

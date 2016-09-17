@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.freetype.org/ttfautohint/;
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 
 }

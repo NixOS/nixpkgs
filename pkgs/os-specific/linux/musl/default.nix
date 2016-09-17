@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # required to avoid busybox segfaulting on startup when invoking
+  # nix-build "<nixpkgs/pkgs/stdenv/linux/make-bootstrap-tools.nix>"
+  hardeningDisable = [ "stackprotector" ];
+
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
   '';

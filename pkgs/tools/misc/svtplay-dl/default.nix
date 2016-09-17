@@ -5,13 +5,13 @@ let
   inherit (pythonPackages) python nose pycrypto requests2 mock;
 in stdenv.mkDerivation rec {
   name = "svtplay-dl-${version}";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "0wzh86zjly2r03qpjb5z0ddy79qkbw7k04qfawj22nf2w629r0dk";
+    sha256 = "0cnhv9a6vdrp2wmyl69fb1yklbx1x5pblsy4a5a36gwxmaill05k";
   };
 
   pythonPaths = [ pycrypto requests2 ];
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace lib/svtplay_dl/fetcher/rtmp.py \
       --replace '"rtmpdump"' '"${rtmpdump}/bin/rtmpdump"'
 
-    substituteInPlace run-tests.sh \
+    substituteInPlace scripts/run-tests.sh \
       --replace 'PYTHONPATH=lib' 'PYTHONPATH=lib:$PYTHONPATH'
   '';
 
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = "sh run-tests.sh -2";
+  checkPhase = "sh scripts/run-tests.sh -2";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/spaam/svtplay-dl;

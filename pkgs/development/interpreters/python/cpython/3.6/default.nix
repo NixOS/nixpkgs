@@ -3,7 +3,6 @@
 , bzip2
 , db
 , gdbm
-, less
 , libX11, xproto
 , lzma
 , ncurses
@@ -45,11 +44,6 @@ let
     libX11
     xproto
   ] ++ optionals stdenv.isDarwin [ CF configd ];
-
-  propagatedBuildInputs = [
-    less
-  ];
-
 in
 stdenv.mkDerivation {
   name = "python3-${fullVersion}";
@@ -57,7 +51,6 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   inherit buildInputs;
-  inherit propagatedBuildInputs;
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.0/Python-${fullVersion}.tar.xz";
@@ -68,6 +61,7 @@ stdenv.mkDerivation {
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
+    substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
 
   preConfigure = ''
@@ -79,7 +73,7 @@ stdenv.mkDerivation {
        export MACOSX_DEPLOYMENT_TARGET=10.6
      ''}
 
-    substituteInPlace ./Lib/plat-generic/regen --replace "/usr/include" ${glibc}/include
+    substituteInPlace ./Lib/plat-generic/regen --replace "/usr/include" ${glibc.dev}/include
 
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"

@@ -1,6 +1,6 @@
 { qtSubmodule, stdenv, qtdeclarative, qtlocation, qtsensors
-, fontconfig, gdk_pixbuf, gtk, libwebp, libxml2, libxslt
-, sqlite, libudev, glib, gst_all_1
+, fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
+, sqlite, systemd, glib, gst_all_1
 , bison2, flex, gdb, gperf, perl, pkgconfig, python, ruby
 , substituteAll
 , flashplayerFix ? false
@@ -18,16 +18,16 @@ qtSubmodule {
   patches =
     let dlopen-webkit-nsplugin = substituteAll {
           src = ./0001-dlopen-webkit-nsplugin.patch;
-          gtk = gtk.out;
+          gtk = gtk2.out;
           gdk_pixbuf = gdk_pixbuf.out;
         };
         dlopen-webkit-gtk = substituteAll {
           src = ./0002-dlopen-webkit-gtk.patch;
-          gtk = gtk.out;
+          gtk = gtk2.out;
         };
         dlopen-webkit-udev = substituteAll {
           src = ./0003-dlopen-webkit-udev.patch;
-          libudev = libudev.out;
+          libudev = systemd.lib;
         };
     in optionals flashplayerFix [ dlopen-webkit-nsplugin dlopen-webkit-gtk ]
     ++ [ dlopen-webkit-udev ];

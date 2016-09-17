@@ -1,20 +1,14 @@
 { stdenv, fetchurl, fetchpatch }:
 let
-  version = "0.1.6";
+  version = "0.1.7";
 in
 stdenv.mkDerivation {
   name = "libyaml-${version}";
 
   src = fetchurl {
     url = "http://pyyaml.org/download/libyaml/yaml-${version}.tar.gz";
-    sha256 = "0j9731s5zjb8mjx7wzf6vh7bsqi38ay564x6s9nri2nh9cdrg9kx";
+    sha256 = "0a87931cx5m14a1x8rbjix3nz7agrcgndf4h392vm62a4rby9240";
   };
-
-  patches = [(fetchpatch {
-    name = "CVE-2014-9130.diff";
-    url = "http://bitbucket.org/xi/libyaml/commits/2b915675/raw/";
-    sha256 = "1vrkga2wk060wccg61c2mj5prcyv181qikgdfi1z4hz8ygmpvl04";
-  })];
 
   meta = with stdenv.lib; {
     homepage = http://pyyaml.org/;

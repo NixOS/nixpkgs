@@ -10,10 +10,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./upstream.patch ];
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
+
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
 
   configureFlags =
     stdenv.lib.optional stdenv.isSunOS "--disable-thread-safe" ++

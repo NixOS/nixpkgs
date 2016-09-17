@@ -20,9 +20,11 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   nativeBuildInputs = [ perl texinfo ];
+
+  hardeningDisable = [ "fortify" ];
 
   postPatch = ''
     substituteInPlace "texi2pod.pl" \

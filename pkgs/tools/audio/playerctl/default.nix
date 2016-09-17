@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, which, gnome, glib,
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, which, gnome2, glib,
   pkgconfig, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    which autoconf automake libtool gnome.gtkdoc glib pkgconfig
+    which autoconf automake libtool gnome2.gtkdoc glib pkgconfig
     gobjectIntrospection
   ];
 

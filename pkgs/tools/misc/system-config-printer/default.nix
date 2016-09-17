@@ -1,6 +1,7 @@
 { stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto
 , makeWrapper, gtk3, docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop_file_utils, libusb1, cups, gdk_pixbuf, pango, atk, libnotify
+, cups-filters
 , pythonPackages
 , withGUI ? true
 }:
@@ -39,7 +40,9 @@ in stdenv.mkDerivation rec {
       giTypelibPath = stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gdk_pixbuf.out gtk3.out pango.out atk.out libnotify.out ];
     in
     ''
-      export makeWrapperArgs="--set prefix $out --set GI_TYPELIB_PATH ${giTypelibPath}"
+      export makeWrapperArgs="--set prefix $out \
+          --set GI_TYPELIB_PATH ${giTypelibPath} \
+          --set CUPS_DATADIR ${cups-filters}/share/cups"
       wrapPythonPrograms
       # The program imports itself, so we need to move shell wrappers to a proper place.
       fixupWrapper() {

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernel, xorg, zlib, gtk, atk, pango, glib, gdk_pixbuf}:
+{stdenv, fetchurl, kernel, xorg, zlib, gtk2, atk, pango, glib, gdk_pixbuf}:
 
 let
 
@@ -26,6 +26,8 @@ stdenv.mkDerivation {
 
   kernel = kernel.dev;
 
+  hardeningDisable = [ "pic" "format" ];
+
   inherit versionNumber;
 
   dontStrip = true;
@@ -34,7 +36,7 @@ stdenv.mkDerivation {
 
   cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.cc.cc];
 
-  programPath = stdenv.lib.makeLibraryPath [ gtk atk pango glib gdk_pixbuf xorg.libXv ];
+  programPath = stdenv.lib.makeLibraryPath [ gtk2 atk pango glib gdk_pixbuf xorg.libXv ];
 
   meta = {
     homepage = http://www.nvidia.com/object/unix.html;

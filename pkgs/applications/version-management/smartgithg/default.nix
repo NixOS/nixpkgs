@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, makeWrapper
 , jre
-, gtk, glib
+, gtk2, glib
 , libXtst
 , git, mercurial, subversion
 , which
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       which
     ];
     runtime_lib_paths = lib.makeLibraryPath [
-      gtk glib
+      gtk2 glib
       libXtst
     ];
   in ''

@@ -25,7 +25,10 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          Whether to configure zsh as an interactive shell.
+          Whether to configure zsh as an interactive shell. To enable zsh for
+          a particular user, use the <option>users.users.&lt;name?&gt;.shell</option>
+          option for that user. To enable zsh system-wide use the
+          <option>users.defaultUserShell</option> option.
         '';
         type = types.bool;
       };

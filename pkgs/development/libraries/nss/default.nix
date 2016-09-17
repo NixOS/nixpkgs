@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     INSTALL_TARGET
   '';
 
-  outputs = [ "dev" "out" "tools" ];
+  outputs = [ "out" "dev" "tools" ];
 
   preConfigure = "cd nss";
 

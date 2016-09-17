@@ -2,9 +2,9 @@
 
 let
   version = "4.11.3";
-  inherit (pythonPackages) python dbus-python sip;
-in stdenv.mkDerivation {
-  name = "${python.libPrefix}-PyQt-x11-gpl-${version}";
+  inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
+in mkPythonDerivation {
+  name = "PyQt-x11-gpl-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt4/PyQt-${version}/PyQt-x11-gpl-${version}.tar.gz";
@@ -14,24 +14,31 @@ in stdenv.mkDerivation {
   configurePhase = ''
     mkdir -p $out
     lndir ${dbus-python} $out
+    rm -rf "$out/nix-support"
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      export QMAKESPEC="unsupported/macx-clang-libc++" # OS X target after bootstrapping phase \
+    ''}
 
     substituteInPlace configure.py \
-      --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'"
+      --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'" \
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      --replace "qt_macx_spec = 'macx-g++'" "qt_macx_spec = 'unsupported/macx-clang-libc++'" # for bootstrapping phase \
+    ''}
 
     configureFlagsArray=( \
       --confirm-license --bindir $out/bin \
       --destdir $out/${python.sitePackages} \
       --plugin-destdir $out/lib/qt4/plugins --sipdir $out/share/sip/PyQt4 \
-      --dbus=${dbus_libs.dev}/include/dbus-1.0 --verbose)
+      --dbus=${dbus-python}/include/dbus-1.0 --verbose)
 
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
   buildInputs = [ pkgconfig makeWrapper qt4 lndir dbus_libs ];
 
-  propagatedBuildInputs = [ sip python ];
+  propagatedBuildInputs = [ sip ];
 
   postInstall = ''
     for i in $out/bin/*; do
@@ -42,7 +49,6 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    pythonPath = [];
     qt = qt4;
   };
 

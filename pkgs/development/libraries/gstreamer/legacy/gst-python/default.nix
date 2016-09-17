@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, python, gstreamer
-, gst_plugins_base, pygobject
+, gst_plugins_base, pygobject2
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "0y1i4n5m1diljqr9dsq12anwazrhbs70jziich47gkdwllcza9lg";
   };
 
+  hardeningDisable = [ "bindnow" ];
+
   # Need to disable the testFake test case due to bug in pygobject.
   # See https://bugzilla.gnome.org/show_bug.cgi?id=692479
   patches = [ ./disable-testFake.patch ];
 
   buildInputs =
-    [ pkgconfig gst_plugins_base pygobject ]
+    [ pkgconfig gst_plugins_base pygobject2 ]
     ;
 
   propagatedBuildInputs = [ gstreamer python ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ orc ];

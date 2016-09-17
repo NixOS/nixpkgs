@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-fatal-warnings";
 
-  NIX_CFLAGS_COMPILE = ["-I${nspr.dev}/include/nspr" "-I${nss}/include/nss"
+  NIX_CFLAGS_COMPILE = ["-I${nspr.dev}/include/nspr" "-I${nss.dev}/include/nss"
                         "-I${dbus_glib.dev}/include/dbus-1.0" "-I${dbus_libs.dev}/include/dbus-1.0"];
 
   enableParallelBuilding = true;

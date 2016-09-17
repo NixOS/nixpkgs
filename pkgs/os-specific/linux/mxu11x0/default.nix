@@ -28,6 +28,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "pic" ];
+
   meta = with stdenv.lib; {
     description = "MOXA UPort 11x0 USB to Serial Hub driver";
     homepage = "https://github.com/ellysh/mxu11x0";

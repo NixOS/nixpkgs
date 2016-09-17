@@ -68,6 +68,7 @@
 "github:mhinz/vim-startify"
 "github:mkasa/lushtags"
 "github:mpickering/hlint-refactor-vim"
+"github:nathanaelkane/vim-indent-guides"
 "github:nbouscal/vim-stylish-haskell"
 "github:neovimhaskell/haskell-vim"
 "github:osyo-manga/shabadou.vim"

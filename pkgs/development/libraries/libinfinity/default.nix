@@ -3,7 +3,7 @@
 , documentation ? false # build documentation
 , avahiSupport ? false # build support for Avahi in libinfinity
 , stdenv, fetchurl, pkgconfig, glib, libxml2, gnutls, gsasl
-, gtk ? null, gtkdoc ? null, avahi ? null, libdaemon ? null, libidn, gss }:
+, gtk2 ? null, gtkdoc ? null, avahi ? null, libdaemon ? null, libidn, gss }:
 
 let
   edf = flag: feature: (if flag then "--with-" else "--without-") + feature;
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig glib libxml2 gsasl libidn gss ]
-    ++ optional gtkWidgets gtk
+    ++ optional gtkWidgets gtk2
     ++ optional documentation gtkdoc
     ++ optional avahiSupport avahi
     ++ optional daemon libdaemon;

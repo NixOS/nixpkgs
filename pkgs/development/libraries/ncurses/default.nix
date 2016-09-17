@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang.patch ] ++ lib.optional (abiVersion == "5" && stdenv.cc.isGNU) ./gcc-5.patch;
 
-  outputs = [ "dev" "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
   configureFlags = [

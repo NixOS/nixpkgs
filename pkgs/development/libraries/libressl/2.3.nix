@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
 
   meta = with stdenv.lib; {
     description = "Free TLS/SSL implementation";

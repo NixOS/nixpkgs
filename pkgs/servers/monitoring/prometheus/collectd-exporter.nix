@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1p0kb7c8g0r0sp5a6xrx8vnwbw14hhwlqzk4n2xx2y8pvnbivajz";
   };
 
-  goDeps = ./collectd-exporter_deps.json;
+  goDeps = ./collectd-exporter_deps.nix;
 
   meta = with stdenv.lib; {
     description = "Relay server for exporting metrics from collectd to Prometheus";

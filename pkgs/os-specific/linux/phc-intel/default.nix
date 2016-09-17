@@ -8,18 +8,20 @@ assert !kernel.features ? grsecurity;
 
 let
   release = "0.4.0";
-  revbump = "rev19"; # don't forget to change forum download id...
+  revbump = "rev22"; # don't forget to change forum download id...
 in stdenv.mkDerivation rec {
   name = "linux-phc-intel-${version}-${kernel.version}";
   version = "${release}-${revbump}";
 
   src = fetchurl {
-    sha256 = "1apvjp2rpaf3acjvsxgk6xiwrx4n9p565gxvra05pvicwikfiqa8";
-    url = "http://www.linux-phc.org/forum/download/file.php?id=168";
+    sha256 = "f80285a8cd2ebb1753841e493af0c091d55c33823777b26a93d25ed7264a385d";
+    url = "http://www.linux-phc.org/forum/download/file.php?id=172";
     name = "phc-intel-pack-${revbump}.tar.bz2";
   };
 
   buildInputs = [ which ];
+
+  hardeningDisable = [ "pic" ];
 
   makeFlags = with kernel; [
     "DESTDIR=$(out)"

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  outputs = [ "dev" "out" "static" ];
+  outputs = [ "out" "dev" "static" ];
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
       export CC=$crossConfig-gcc
     fi
   '';
+
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
 
   configureFlags = stdenv.lib.optional (!static) "--shared";
 
@@ -47,8 +50,7 @@ stdenv.mkDerivation rec {
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc "
-                     + stdenv.lib.optionalString (stdenv.isFreeBSD) "-fPIC";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc";
 
   crossAttrs = {
     dontStrip = static;

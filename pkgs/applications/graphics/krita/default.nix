@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     openjpeg opencolorio vc poppler_qt5 curl ilmbase
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${ilmbase}/include/OpenEXR" ];
+  NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 
   enableParallelBuilding = true;
 

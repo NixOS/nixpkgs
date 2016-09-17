@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (stdenv.cross.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
-  outputs = [ "dev" "out" "doc" "bin" ];
+  outputs = [ "bin" "dev" "out" "doc" ];
 
   nativeBuildInputs = [ nasm ];
 

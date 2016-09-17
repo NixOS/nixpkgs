@@ -207,27 +207,35 @@ in
     };
   };
 
+  sysimg_arm64-v8a_24 = buildSystemImage {
+    name = "sysimg-arm64-v8a-24";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/sys-img/android/arm64-v8a-24_r07.zip;
+      sha1 = "e8ab2e49e4efe4b064232b33b5eeaded61437d7f";
+    };
+  };
+
   sysimg_armeabi-v7a_24 = buildSystemImage {
     name = "sysimg-armeabi-v7a-24";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android/sysimg_armeabi-v7a-24_r05.zip;
-      sha1 = "2eb8fb86f7312614a2a0b033d669d67206a618ff";
+      url = https://dl.google.com/android/repository/sys-img/android/armeabi-v7a-24_r07.zip;
+      sha1 = "3454546b4eed2d6c3dd06d47757d6da9f4176033";
     };
   };
 
   sysimg_x86_24 = buildSystemImage {
     name = "sysimg-x86-24";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android/sysimg_x86-24_r05.zip;
-      sha1 = "ce6441c4cadaecd28b364c59b36c31ef0904dae0";
+      url = https://dl.google.com/android/repository/sys-img/android/x86-24_r07.zip;
+      sha1 = "566fdee283a907854bfa3c174265bc31f396eabd";
     };
   };
 
   sysimg_x86_64_24 = buildSystemImage {
     name = "sysimg-x86_64-24";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android/sysimg_x86_64-24_r05.zip;
-      sha1 = "e1869b32b1dcb2f4d4d18c912166b3e2bee8a841";
+      url = https://dl.google.com/android/repository/sys-img/android/x86_64-24_r07.zip;
+      sha1 = "a379932395ced0a8f572b39c396d86e08827a9ba";
     };
   };
 }

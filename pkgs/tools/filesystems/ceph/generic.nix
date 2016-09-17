@@ -121,19 +121,19 @@ stdenv.mkDerivation {
     ];
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
     boost python libxml2 optYasm optLibatomic_ops optLibs3 malloc pythonPackages.flask zlib
-  ] ++ optional (versionAtLeast version "9.0.0") [
+  ] ++ optionals (versionAtLeast version "9.0.0") [
     pythonPackages.sphinx # Used for docs
-  ] ++ optional stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     linuxHeaders libuuid udev keyutils optLibaio optLibxfs optZfs
-  ] ++ optional hasServer [
+  ] ++ optionals hasServer [
     optSnappy optLeveldb
-  ] ++ optional hasRadosgw [
+  ] ++ optionals hasRadosgw [
     optFcgi optExpat optCurl optFuse optLibedit
-  ] ++ optional hasXio [
+  ] ++ optionals hasXio [
     optAccelio optLibibverbs optLibrdmacm
-  ] ++ optional hasRocksdb [
+  ] ++ optionals hasRocksdb [
     optRocksdb
-  ] ++ optional hasKinetic [
+  ] ++ optionals hasKinetic [
     optKinetic-cpp-client
   ];
 

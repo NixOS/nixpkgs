@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage    = http://ncmpcpp.rybczak.net/;
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 mornfall koral ];
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }

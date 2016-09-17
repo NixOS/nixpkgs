@@ -2,7 +2,6 @@
 , bzip2
 , db
 , gdbm
-, less
 , libX11, xproto
 , lzma
 , ncurses
@@ -29,10 +28,6 @@ let
     zlib bzip2 lzma gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
   ];
 
-  propagatedBuildInputs = [
-    less
-  ];
-
 in
 stdenv.mkDerivation {
   name = "python3-${version}";
@@ -40,7 +35,6 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   inherit buildInputs;
-  inherit propagatedBuildInputs;
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";

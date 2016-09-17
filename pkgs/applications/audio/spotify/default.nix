@@ -1,11 +1,12 @@
 { fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
-, libgcrypt, libudev, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
+, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, GConf
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome2 }:
 
 assert stdenv.system == "x86_64-linux";
 
 let
-  version = "1.0.36.120.g536a862f-20";
+  # Please update the stable branch!
+  version = "1.0.37.152.gc83ea995-42";
 
   deps = [
     alsaLib
@@ -21,13 +22,13 @@ let
     GConf
     gdk_pixbuf
     glib
-    gtk
+    gtk2
     libgcrypt
     libpng
     nss
     pango
     stdenv.cc.cc
-    libudev
+    systemd
     xorg.libX11
     xorg.libXcomposite
     xorg.libXcursor
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
   src =
     fetchurl {
       url = "http://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
-      sha256 = "03r4hz4x4f3zmp6dsv1n72y5q01d7mfqvaaxqvd587a5561gahf0";
+      sha256 = "00hd5q3cn9dzgphkpswd5y06k9phiqhhmb3frwdkcnb1d4pnp9cx";
     };
 
   buildInputs = [ dpkg makeWrapper ];
@@ -82,7 +83,7 @@ stdenv.mkDerivation {
       librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome.zenity}/bin"
+        --prefix PATH : "${gnome2.zenity}/bin"
 
       # Desktop file
       mkdir -p "$out/share/applications/"

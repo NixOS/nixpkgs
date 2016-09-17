@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
 
+  patches = [ ./relocation.patch ];
+
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];

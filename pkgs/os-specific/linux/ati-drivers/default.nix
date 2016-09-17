@@ -65,14 +65,19 @@ stdenv.mkDerivation rec {
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux+x86_64";
   };
 
+  hardeningDisable = [ "pic" "format" ];
+
   patchPhaseSamples = "patch -p2 < ${./patches/patch-samples.patch}";
   patches = [
     ./patches/15.12-xstate-fp.patch
     ./patches/15.9-kcl_str.patch
     ./patches/15.9-mtrr.patch
     ./patches/15.9-preempt.patch
-    ./patches/15.9-sep_printf.patch
-  ];
+    ./patches/15.9-sep_printf.patch ]
+  ++ optionals ( kernel != null &&
+                 (builtins.compareVersions kernel.version "4.6") >= 0 )
+               [ ./patches/kernel-4.6-get_user_pages.patch
+                 ./patches/kernel-4.6-page_cache_release-put_page.patch ];
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM

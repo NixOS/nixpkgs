@@ -454,6 +454,8 @@ rec {
   getLib = getOutput "lib";
   getDev = getOutput "dev";
 
+  /* Pick the outputs of packages to place in buildInputs */
+  chooseDevOutputs = drvs: builtins.map getDev drvs;
 
   /*** deprecated stuff ***/
 

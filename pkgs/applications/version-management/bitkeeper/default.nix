@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lk4vydpq5bi52m81h327gvzdzybf8kkak7yjwmpj6kg1jn9blaz";
   };
 
+  hardeningDisable = [ "fortify" ];
+
   enableParallelBuilding = true;
 
   buildInputs = [

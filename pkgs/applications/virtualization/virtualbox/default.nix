@@ -1,12 +1,14 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
+, libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
+, libXrandr, libXinerama
 , which, alsaLib, curl, libvpx, gawk, nettools, dbus
-, xorriso, makeself, perl, pkgconfig, nukeReferences
+, xorriso, makeself, perl, pkgconfig
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
+, headless ? false
 }:
 
 with stdenv.lib;
@@ -14,37 +16,12 @@ with stdenv.lib;
 let
   buildType = "release";
 
-  # When changing this, update ./guest-additions and the extpack
-  # revision/hash as well. See
-  # http://download.virtualbox.org/virtualbox/${version}/SHA256SUMS
-  # for hashes.
-  version = "5.1.2";
-
-  forEachModule = action: ''
-    for mod in \
-      out/linux.*/${buildType}/bin/src/vboxdrv \
-      out/linux.*/${buildType}/bin/src/vboxpci \
-      out/linux.*/${buildType}/bin/src/vboxnetadp \
-      out/linux.*/${buildType}/bin/src/vboxnetflt
-    do
-      if [ "x$(basename "$mod")" != xvboxdrv -a ! -e "$mod/Module.symvers" ]
-      then
-        cp -v out/linux.*/${buildType}/bin/src/vboxdrv/Module.symvers \
-          "$mod/Module.symvers"
-      fi
-      INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=misc \
-      make -j $NIX_BUILD_CORES -C "$MODULES_BUILD_DIR" DEPMOD=/do_not_use_depmod \
-        "M=\$(PWD)/$mod" BUILD_TYPE="${buildType}" ${action}
-    done
-  '';
+  inherit (importJSON ./upstream-info.json) version extpackRev extpack main;
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "108956";
   extensionPack = requireFile rec {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
-    # IMPORTANT: Hash must be base16 encoded because it's used as an input to
-    # VBoxExtPackHelperApp!
-    sha256 = "394d933be4022b2b15225670fe6e2a4486f34e5a565a719e0de5984089ccd975";
+    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRev}.vbox-extpack";
+    sha256 = extpack;
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) available at:
@@ -59,31 +36,36 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "virtualbox-${version}-${kernel.version}";
+  name = "virtualbox-${version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "03c92e3000d4b905d5b18a6abed757998125a37e5efa7864e62eae2baeabe010";
+    sha256 = main;
   };
 
+  outputs = [ "out" "modsrc" ];
+
   buildInputs =
-    [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
+    [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
-      pkgconfig which libXmu nukeReferences ]
+      pkgconfig which libXmu libpng ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python
-    ++ optional pulseSupport libpulseaudio;
+    ++ optional pulseSupport libpulseaudio
+    ++ optionals (headless) [ libXrandr ]
+    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
+
+  hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
   prePatch = ''
     set -x
-    MODULES_BUILD_DIR=`echo ${kernel.dev}/lib/modules/*/build`
-    sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \
-        -e 's@MKISOFS --version@MKISOFS -version@' \
+    sed -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
-        -i configure
+        ${optionalString (!headless) ''
+        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qt5.qtbase}/bin"@' \
+        ''} -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
-    find . -type f -iname '*makefile*' -exec sed -i -e 's/depmod -a/:/g' {} +
     sed -i -e '
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g
       s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g
@@ -98,22 +80,16 @@ in stdenv.mkDerivation {
   '';
 
   patches = optional enableHardening ./hardened.patch
-    ++ [
-      (fetchurl rec {
-        name = "fix-detect-gcc-5.4.patch";
-        url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=827193;filename=${name};msg=5";
-        sha256 = "0y6v5dc6fqj9iv27cl8q2g87v1kxg19129mpas4vjg7g0529v4g9";
-      })
-    ];
+    ++ [ ./libressl.patch ./qtx11extras.patch ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
-      src/apps/adpctl/VBoxNetAdpCtl.cpp
+      src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
   configurePhase = ''
-    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${stdenv.cc.libc}/include,,g')
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
 
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
@@ -132,9 +108,15 @@ in stdenv.mkDerivation {
     ${optionalString javaBindings ''
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
+    ${optionalString (!headless) ''
+    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qt5.qtx11extras}/lib
+    PATH_QT5_X11_EXTRAS_INC        := ${getDev qt5.qtx11extras}/include
+    TOOL_QT5_LRC                   := ${getDev qt5.qttools}/bin/lrelease
+    ''}
     LOCAL_CONFIG
 
-    ./configure --with-qt4-dir=${qt4} \
+    ./configure \
+      ${optionalString headless "--build-headless"} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
@@ -152,7 +134,6 @@ in stdenv.mkDerivation {
   buildPhase = ''
     source env.sh
     kmk -j $NIX_BUILD_CORES BUILD_TYPE="${buildType}"
-    ${forEachModule "modules"}
   '';
 
   installPhase = ''
@@ -163,9 +144,6 @@ in stdenv.mkDerivation {
     mkdir -p "$libexec"
     find out/linux.*/${buildType}/bin -mindepth 1 -maxdepth 1 \
       -name src -o -exec cp -avt "$libexec" {} +
-
-    # Install kernel modules
-    ${forEachModule "modules_install"}
 
     # Create wrapper script
     mkdir -p $out/bin
@@ -185,19 +163,20 @@ in stdenv.mkDerivation {
       EXTHELPER
     ''}
 
-    # Create and fix desktop item
-    mkdir -p $out/share/applications
-    sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
-    ln -sfv $libexec/virtualbox.desktop $out/share/applications
-    # Icons
-    mkdir -p $out/share/icons/hicolor
-    for size in `ls -1 $libexec/icons`; do
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
-    done
+    ${optionalString (!headless) ''
+      # Create and fix desktop item
+      mkdir -p $out/share/applications
+      sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
+      ln -sfv $libexec/virtualbox.desktop $out/share/applications
+      # Icons
+      mkdir -p $out/share/icons/hicolor
+      for size in `ls -1 $libexec/icons`; do
+        mkdir -p $out/share/icons/hicolor/$size/apps
+        ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
+      done
+    ''}
 
-    # Get rid of a reference to linux.dev.
-    nuke-refs $out/lib/modules/*/misc/*.ko
+    cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
   '';
 
   passthru = { inherit version; /* for guest additions */ };

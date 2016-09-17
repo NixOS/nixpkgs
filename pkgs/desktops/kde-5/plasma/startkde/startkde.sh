@@ -185,28 +185,6 @@ if test -z "$dl"; then
   esac
 fi
 
-# Source scripts found in <config locations>/plasma-workspace/env/*.sh
-# (where <config locations> correspond to the system and user's configuration
-# directories, as identified by Qt's qtpaths,  e.g.  $HOME/.config
-# and /etc/xdg/ on Linux)
-#
-# This is where you can define environment variables that will be available to
-# all KDE programs, so this is where you can run agents using e.g. eval `ssh-agent`
-# or eval `gpg-agent --daemon`.
-# Note: if you do that, you should also put "ssh-agent -k" as a shutdown script
-#
-# (see end of this file).
-# For anything else (that doesn't set env vars, or that needs a window manager),
-# better use the Autostart folder.
-
-IFS=":" read -r -a scriptpath <<< $(qtpaths --paths GenericConfigLocation)
-# Add /env/ to the directory to locate the scripts to be sourced
-for prefix in "${scriptpath[@]}"; do
-  for file in "$prefix"/plasma-workspace/env/*.sh; do
-    test -r "$file" && . "$file" || true
-  done
-done
-
 echo 'startkde: Starting up...'  1>&2
 
 # Make sure that D-Bus is running
@@ -254,6 +232,28 @@ export KDE_SESSION_UID
 
 XDG_CURRENT_DESKTOP=KDE
 export XDG_CURRENT_DESKTOP
+
+# Source scripts found in <config locations>/plasma-workspace/env/*.sh
+# (where <config locations> correspond to the system and user's configuration
+# directories, as identified by Qt's qtpaths,  e.g.  $HOME/.config
+# and /etc/xdg/ on Linux)
+#
+# This is where you can define environment variables that will be available to
+# all KDE programs, so this is where you can run agents using e.g. eval `ssh-agent`
+# or eval `gpg-agent --daemon`.
+# Note: if you do that, you should also put "ssh-agent -k" as a shutdown script
+#
+# (see end of this file).
+# For anything else (that doesn't set env vars, or that needs a window manager),
+# better use the Autostart folder.
+
+IFS=":" read -r -a scriptpath <<< $(qtpaths --paths GenericConfigLocation)
+# Add /env/ to the directory to locate the scripts to be sourced
+for prefix in "${scriptpath[@]}"; do
+  for file in "$prefix"/plasma-workspace/env/*.sh; do
+    test -r "$file" && . "$file" || true
+  done
+done
 
 # At this point all the environment is ready, let's send it to kwalletd if running
 if test -n "$PAM_KWALLET_LOGIN" ; then

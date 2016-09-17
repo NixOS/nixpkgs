@@ -8,8 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1m72lk90b5i3h9qnmss6aygrzyn8x2avy3hyaq2fb0jglkrkz6ar";
   };
 
-  outputs = [ "bin" "out" "man" ];
-  outputDev = "bin"; # just for *.pc
+  outputs = [ "bin" "dev" "out" "man" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libuuid ];

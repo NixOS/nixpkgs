@@ -1,15 +1,16 @@
-{ stdenv, fetchgit, cmake, polkit-qt, libyamlcpp, python, boost, parted
+{ stdenv, fetchurl, cmake, polkit-qt, libyamlcpp, python, boost, parted
 , extra-cmake-modules, kconfig, ki18n, kcoreaddons, solid, utillinux, libatasmart
 , ckbcomp, glibc, tzdata, xkeyboard_config, qtbase, qtsvg, qttools }:
 
 stdenv.mkDerivation rec {
-  name = "calamares-${version}";
-  version = "1.0";
+  name = "${pname}-${version}";
+  pname = "calamares";
+  version = "1.1.4.2";
 
-  src = fetchgit {
-    url = "https://github.com/calamares/calamares.git";
-    rev = "dabfb68a68cb012a90cd7b94a22e1ea08f7dd8ad";
-    sha256 = "12n161fmzybi20pxcjikqnckhzh175ni5da122p74bx7fzv7q41p";
+  # release including submodule
+  src = fetchurl {
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "1mh0nmzc3i1aqcj79q2s3vpccn0mirlfbj26sfyb0v6gcrvf707d";
   };
 
   buildInputs = [
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
           -i src/modules/locale/timezonewidget/localeconst.h \
           -i src/modules/locale/SetTimezoneJob.cpp
 
-      sed -e 's,/usr/share/i18n/locales,${glibc}/share/i18n/locales,' \
+      sed -e 's,/usr/share/i18n/locales,${glibc.out}/share/i18n/locales,' \
           -i src/modules/locale/timezonewidget/localeconst.h
 
       sed -e 's,/usr/share/X11/xkb/rules/base.lst,${xkeyboard_config}/share/X11/xkb/rules/base.lst,' \

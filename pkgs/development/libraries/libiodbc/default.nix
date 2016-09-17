@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, useGTK ? false }:
+{ stdenv, fetchurl, pkgconfig, gtk2, useGTK ? false }:
 
 stdenv.mkDerivation rec {
   name = "libiodbc-3.52.8";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "16hjb6fcval85gnkgkxfhw4c5h3pgf86awyh8p2bhnnvzc0ma5hq";
   };
 
-  buildInputs = stdenv.lib.optionals useGTK [ gtk pkgconfig ];
+  buildInputs = stdenv.lib.optionals useGTK [ gtk2 pkgconfig ];
 
   preBuild =
     ''

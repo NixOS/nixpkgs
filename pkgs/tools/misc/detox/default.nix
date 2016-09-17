@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [flex];
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     homepage = http://detox.sourceforge.net/;
     description = "Utility designed to clean up filenames";

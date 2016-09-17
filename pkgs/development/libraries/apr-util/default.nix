@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isFreeBSD ./include-static-dependencies.patch;
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   buildInputs = optional stdenv.isFreeBSD autoreconfHook;

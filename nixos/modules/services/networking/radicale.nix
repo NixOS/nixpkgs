@@ -52,8 +52,7 @@ in
       description = "A Simple Calendar and Contact Server";
       after = [ "network-interfaces.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${pkgs.pythonPackages.radicale}/bin/radicale -C ${confFile} -d";
-      serviceConfig.Type = "forking";
+      script = "${pkgs.pythonPackages.radicale}/bin/radicale -C ${confFile} -f";
       serviceConfig.User = "radicale";
       serviceConfig.Group = "radicale";
     };

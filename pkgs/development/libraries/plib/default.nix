@@ -1,6 +1,5 @@
 { fetchurl, fetchpatch, stdenv, mesa, freeglut, SDL
-, libXi, libSM, libXmu, libXext, libX11,
-enablePIC ? false }:
+, libXi, libSM, libXmu, libXext, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "plib-1.8.5";
@@ -21,8 +20,6 @@ stdenv.mkDerivation rec {
       sha256 = "0b6cwdwii5b5vy78sbw5cw1s96l4jyzr4dk69v63pa0wwi2b5dki";
     })
   ];
-
-  NIX_CFLAGS_COMPILE = if enablePIC then "-fPIC" else "";
 
   propagatedBuildInputs = [
     mesa freeglut SDL

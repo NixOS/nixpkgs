@@ -11,12 +11,14 @@ let
     if cfg.extraPlugins == [] then pg
     else pkgs.buildEnv {
       name = "postgresql-and-plugins-${(builtins.parseDrvName pg.name).version}";
-      paths = [ pg ] ++ cfg.extraPlugins;
+      paths = [ pg pg.lib ] ++ cfg.extraPlugins;
+      buildInputs = [ pkgs.makeWrapper ];
       postBuild =
         ''
           mkdir -p $out/bin
           rm $out/bin/{pg_config,postgres,pg_ctl}
           cp --target-directory=$out/bin ${pg}/bin/{postgres,pg_config,pg_ctl}
+          wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
         '';
     };
 
@@ -252,5 +254,7 @@ in
       };
 
   };
+
+  meta.doc = ./postgresql.xml;
 
 }

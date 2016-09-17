@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, expat, systemd, glib, dbus_glib, python
+{ stdenv, lib, fetchurl, pkgconfig, expat, systemd
 , libX11 ? null, libICE ? null, libSM ? null, x11Support ? (stdenv.isLinux || stdenv.isDarwin) }:
 
 assert x11Support -> libX11 != null
@@ -6,8 +6,8 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.10.8";
-  sha256 = "0560y3hxpgh346w6avcrcz79c8ansmn771y5xpcvvlr6m8mx5wxs";
+  version = "1.10.10";
+  sha256 = "0hwsfczhx2djmc9116vj5v230i7gpjihwh3vbljs1ldlk831v3wx";
 
 self =  stdenv.mkDerivation {
     name = "dbus-${version}";
@@ -32,7 +32,7 @@ self =  stdenv.mkDerivation {
         --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
     '';
 
-    outputs = [ "dev" "out" "lib" "doc" ];
+    outputs = [ "out" "dev" "lib" "doc" ];
 
     nativeBuildInputs = [ pkgconfig ];
     propagatedBuildInputs = [ expat ];

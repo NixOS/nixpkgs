@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
     "-DWITH_IPP=${if enableIpp then "ON" else "OFF"}"
@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableContrib [ "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules" ];
 
   enableParallelBuilding = true;
+
+  hardeningDisable = [ "bindnow" "relro" ];
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 

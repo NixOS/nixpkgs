@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpipeline db groff ];
+  troff="${groff}/bin/groff";
+
+  postPatch = ''
+    substituteInPlace src/man_db.conf.in \
+      --replace "/usr/local/share" "/run/current-system/sw/share" \
+      --replace "/usr/share" "/run/current-system/sw/share"
+  '';
 
   configureFlags = [
     "--disable-setuid"
@@ -36,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "http://man-db.nongnu.org";
     description = "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

@@ -5,16 +5,16 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "openssl-chacha-${version}";
-  version = "2016-01-27";
+  version = "2016-08-22";
 
   src = fetchFromGitHub {
     owner = "PeterMosmans";
     repo = "openssl";
-    rev = "4576ede5b08242bcd6749fc284c691ed177842b7";
-    sha256 = "1030rs4bdaysxbq0mmck1dn6g5adspzkwsrnhvv16b4ig0r4ncgj";
+    rev = "293717318e903b95f4d7e83a98a087282f37efc3";
+    sha256 = "134j3anjnj2q99xsd8d47bwvjp73qkdsimdd9riyjxa3hd8ysr00";
   };
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
   setOutputFlags = false;
 
   nativeBuildInputs = [ perl zlib ];

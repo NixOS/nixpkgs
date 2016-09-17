@@ -11,9 +11,11 @@ with lib;
 let cfg = config.ec2; in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-grow-partition.nix ./amazon-init.nix ];
+  imports = [ ../profiles/headless.nix ./ec2-data.nix ./grow-partition.nix ./amazon-init.nix ];
 
   config = {
+
+    virtualisation.growPartition = cfg.hvm;
 
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";

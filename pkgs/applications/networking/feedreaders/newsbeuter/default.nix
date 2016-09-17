@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     description = "An open-source RSS/Atom feed reader for text terminals";
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
     license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = stdenv.lib.platforms.linux;
   };
 }

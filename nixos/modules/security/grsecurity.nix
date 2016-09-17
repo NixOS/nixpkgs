@@ -12,7 +12,7 @@ let
     (fs: (fs.neededForBoot
           || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
           && fs.fsType == "zfs")
-    (attrValues config.fileSystems) != [];
+    config.system.build.fileSystems != [];
 
   # Ascertain whether NixOS container support is required
   containerSupportRequired =
@@ -20,6 +20,11 @@ let
 in
 
 {
+  meta = {
+    maintainers = with maintainers; [ joachifm ];
+    doc = ./grsecurity.xml;
+  };
+
   options.security.grsecurity = {
 
     enable = mkEnableOption "grsecurity/PaX";
@@ -66,6 +71,8 @@ in
         (isYES "GRKERNSEC_SYSCTL_DISTRO")
         (isNO "GRKERNSEC_NO_RBAC")
       ];
+
+    nixpkgs.config.grsecurity = true;
 
     # Install PaX related utillities into the system profile.
     environment.systemPackages = with pkgs; [ gradm paxctl pax-utils ];

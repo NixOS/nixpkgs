@@ -5,6 +5,7 @@ with lib;
 stdenv.mkDerivation rec {
   version = "0.30.0";
   name = "flow-${version}";
+
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "A static type checker for JavaScript";
     homepage = http://flowtype.org;
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ puffnfresh globin ];
   };
 }

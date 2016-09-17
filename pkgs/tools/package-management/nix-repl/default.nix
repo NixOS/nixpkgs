@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     $CXX -O3 -Wall -std=c++0x \
       -o $out/bin/nix-repl nix-repl.cc \
-      -I${nix}/include/nix \
+      -I${nix.dev}/include/nix \
       -lnixformat -lnixutil -lnixstore -lnixexpr -lnixmain -lreadline -lgc \
       -DNIX_VERSION=\"${(builtins.parseDrvName nix.name).version}\"
   '';

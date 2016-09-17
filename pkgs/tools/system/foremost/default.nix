@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   preInstall = ''
     mkdir -p $out/{bin,share/man/man8}
   '';

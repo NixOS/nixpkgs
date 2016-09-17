@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, gnugrep, kmod }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, gnugrep, kmod }:
 
 stdenv.mkDerivation rec {
   name = "mbpfan-${version}";
@@ -9,7 +9,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0issn5233h2nclrmh2jzyy5y0dyyd57f1ia7gvs3bys95glcm2s5";
   };
-  patches = [ ./fixes.patch ];
+  patches = [
+    ./fixes.patch
+    (fetchpatch { # buffer overflow fix https://github.com/dgraziotin/mbpfan/issues/72
+                  url = https://github.com/dgraziotin/mbpfan/commit/f2736c8ab93cafffc25b86bcc6c33e6cbd537243.patch;
+                  sha256 = "10sldc69c91qk3hq0f6r3gxay38l2iw93nl85qh94mwpb8hy92yj"; })
+  ];
   postPatch = ''
     substituteInPlace src/main.c \
       --replace '@GREP@' '${gnugrep}/bin/grep' \

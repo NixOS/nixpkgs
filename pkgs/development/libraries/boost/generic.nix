@@ -162,7 +162,7 @@ stdenv.mkDerivation {
 
   postFixup = fixup;
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   setOutputFlags = false;
 
   crossAttrs = rec {

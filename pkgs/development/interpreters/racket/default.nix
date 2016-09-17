@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
 , cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp, gtk, libffi, libjpeg, libpng
+, glib, gmp, gtk2, libffi, libjpeg, libpng
 , libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? true
@@ -17,7 +17,7 @@ let
     fontconfig
     glib
     gmp
-    gtk
+    gtk2
     libjpeg
     libpng
     mpfr

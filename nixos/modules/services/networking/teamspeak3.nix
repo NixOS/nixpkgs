@@ -95,47 +95,44 @@ in
 
   ###### implementation
 
-  config = mkMerge [
-    (mkIf cfg.enable {
-      users.users.teamspeak = {
-        description = "Teamspeak3 voice communication server daemon";
-        group = group;
-        uid = config.ids.uids.teamspeak;
-        home = cfg.dataDir;
-        createHome = true;
-      };
+  config = mkIf cfg.enable {
+    users.users.teamspeak = {
+      description = "Teamspeak3 voice communication server daemon";
+      group = group;
+      uid = config.ids.uids.teamspeak;
+      home = cfg.dataDir;
+      createHome = true;
+    };
 
-      users.groups.teamspeak = {
-        gid = config.ids.gids.teamspeak;
-      };
+    users.groups.teamspeak = {
+      gid = config.ids.gids.teamspeak;
+    };
 
-      systemd.services.teamspeak3-server = {
-        description = "Teamspeak3 voice communication server daemon";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.teamspeak3-server = {
+      description = "Teamspeak3 voice communication server daemon";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-        preStart = ''
-          mkdir -p ${cfg.logPath}
-          chown ${user}:${group} ${cfg.logPath}
+      preStart = ''
+        mkdir -p ${cfg.logPath}
+        chown ${user}:${group} ${cfg.logPath}
+      '';
+
+      serviceConfig = {
+        ExecStart = ''
+          ${ts3}/bin/ts3server \
+            dbsqlpath=${ts3}/lib/teamspeak/sql/ logpath=${cfg.logPath} \
+            voice_ip=${cfg.voiceIP} default_voice_port=${toString cfg.defaultVoicePort} \
+            filetransfer_ip=${cfg.fileTransferIP} filetransfer_port=${toString cfg.fileTransferPort} \
+            query_ip=${cfg.queryIP} query_port=${toString cfg.queryPort}
         '';
-
-        serviceConfig = {
-          ExecStart = ''
-            ${ts3}/bin/ts3server \
-              dbsqlpath=${ts3}/lib/teamspeak/sql/ logpath=${cfg.logPath} \
-              voice_ip=${cfg.voiceIP} default_voice_port=${toString cfg.defaultVoicePort} \
-              filetransfer_ip=${cfg.fileTransferIP} filetransfer_port=${toString cfg.fileTransferPort} \
-              query_ip=${cfg.queryIP} query_port=${toString cfg.queryPort}
-          '';
-          WorkingDirectory = cfg.dataDir;
-          User = user;
-          Group = group;
-          PermissionsStartOnly = true;
-        };
+        WorkingDirectory = cfg.dataDir;
+        User = user;
+        Group = group;
+        PermissionsStartOnly = true;
       };
-    })
-    {
-      meta.maintainers = with lib.maintainers; [ arobyn ];
-    }
-  ];
+    };
+  };
+
+  meta.maintainers = with lib.maintainers; [ arobyn ];
 }

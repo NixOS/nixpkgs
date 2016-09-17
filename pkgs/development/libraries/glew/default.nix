@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1iwb2a6wfhkzv6fa7zx2gz1lkwa0iwnd9ka1im5vdc44xm4dq9da";
   };
 
+  outputs = [ "bin" "out" "dev" "doc" ];
+
   nativeBuildInputs = [ xlibsWrapper libXmu libXi ];
   propagatedNativeBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
 
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "install.all" ];
 
   preInstall = ''
-    export GLEW_DEST="$out"
+    makeFlagsArray+=(GLEW_DEST=$out BINDIR=$bin/bin INCDIR=$dev/include/GL)
   '';
 
   postInstall = ''
@@ -32,6 +34,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/pkgconfig
     cp glew*.pc $out/lib/pkgconfig
     cp -r README.txt LICENSE.txt doc $out/share/doc/glew
+    rm $out/lib/*.a
   '';
 
   crossAttrs.makeFlags = [

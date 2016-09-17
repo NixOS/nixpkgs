@@ -14,6 +14,7 @@ let
   upstreamSystemUnits =
     [ # Targets.
       "basic.target"
+      "busnames.target"
       "sysinit.target"
       "sockets.target"
       "graphical.target"
@@ -140,6 +141,7 @@ let
       "user.slice"
       "machine.slice"
       "systemd-machined.service"
+      "systemd-nspawn@.service"
 
       # Temporary file creation / cleanup.
       "systemd-tmpfiles-clean.service"
@@ -569,6 +571,16 @@ in
       '';
     };
 
+    systemd.user.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultCPUAccounting=yes";
+      description = ''
+        Extra config options for systemd user instances. See man systemd-user.conf for
+        available options.
+      '';
+    };
+
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -663,6 +675,11 @@ in
         ${config.systemd.extraConfig}
       '';
 
+      "systemd/user.conf".text = ''
+        [Manager]
+        ${config.systemd.user.extraConfig}
+      '';
+
       "systemd/journald.conf".text = ''
         [Journal]
         RateLimitInterval=${config.services.journald.rateLimitInterval}
@@ -724,18 +741,6 @@ in
       { description = "Security Keys";
         unitConfig.X-StopOnReconfiguration = true;
       };
-
-    systemd.targets.network-online.after = [ "ip-up.target" ];
-
-    systemd.targets.network-pre = {
-      wantedBy = [ "network.target" ];
-      before = [ "network.target" ];
-    };
-
-    systemd.targets.remote-fs-pre = {
-      wantedBy = [ "remote-fs.target" ];
-      before = [ "remote-fs.target" ];
-    };
 
     systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets

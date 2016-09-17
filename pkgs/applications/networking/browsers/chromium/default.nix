@@ -5,7 +5,7 @@
 , enableSELinux ? false
 , enableNaCl ? false
 , enableHotwording ? false
-, gnomeSupport ? false
+, gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
@@ -22,7 +22,7 @@ let
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit enableSELinux enableNaCl enableHotwording gnomeSupport
+      inherit enableSELinux enableNaCl enableHotwording gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
               hiDPISupport;
     };
@@ -74,9 +74,8 @@ in stdenv.mkDerivation {
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
   in with stdenv.lib; ''
-    mkdir -p "$out/bin" "$out/share/applications"
+    mkdir -p "$out/bin"
 
-    ln -s "${chromium.browser}/share" "$out/share"
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
@@ -100,7 +99,11 @@ in stdenv.mkDerivation {
     ln -sv "${chromium.browser.sandbox}" "$sandbox"
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
-    ln -s "${chromium.browser}/share/icons" "$out/share/icons"
+
+    mkdir -p "$out/share/applications"
+    for f in '${chromium.browser}'/share/*; do
+      ln -s -t "$out/share/" "$f"
+    done
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 

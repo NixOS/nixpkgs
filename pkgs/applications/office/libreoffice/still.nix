@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip
 , CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, gtk, libmspack, getopt, file, cairo, which
+, bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
@@ -19,14 +19,14 @@
 }:
 
 let
+  primary-src = import ./still-primary-src.nix { inherit fetchurl; };
+in
+
+with { inherit (primary-src) major minor subdir version; };
+
+let
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
-  major = "5";
-  minor = "1";
-  patch = "5";
-  tweak = "2";
-  subdir = "${major}.${minor}.${patch}";
-  version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
   fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
     inherit name md5;
@@ -64,10 +64,17 @@ let
 in stdenv.mkDerivation rec {
   name = "libreoffice-${version}";
 
-  src = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1qg0dj0zwh5ifhmvv4k771nmyqddz4ifn75s9mr1p0nyix8zks8x";
-  };
+  inherit (primary-src) src;
+
+  # we only have this problem on i686 ATM
+  patches = if stdenv.is64bit then null else [
+    (fetchurl {
+      name = "disable-flaky-tests.diff";
+      url = "https://anonscm.debian.org/git/pkg-openoffice/libreoffice.git/plain"
+        + "/patches/disable-flaky-tests.diff?h=libreoffice_5.1.5_rc2-1";
+      sha256 = "1v1aiqdi64iijjraj6v4ljzclrd9lqan54hmy2h6m20x3ab005wb";
+    })
+  ];
 
   # Openoffice will open libcups dynamically, so we link it directly
   # to make its dlopen work.
@@ -236,7 +243,7 @@ in stdenv.mkDerivation rec {
   buildInputs = with xorg;
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gtk3 gtk
+      freetype GConf getopt gnome_vfs gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
@@ -261,5 +268,6 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 }

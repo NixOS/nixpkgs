@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sed -i 's|#include <malloc.h>|#include <malloc/malloc.h>|' ./man/texinfo2man.c
   '';
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     homepage = https://www.gnu.org/software/indent/;
     description = "A source code reformatter";

@@ -6,7 +6,7 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "5.3.1";
+  majorVersion = "5.4.1";
   version = "${majorVersion}";
   libPrefix = "pypy${majorVersion}";
 
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-      sha256 = "19cq2ngkh5q5jxwhw81rd6p0qna73z85jfik88w0856k5aj86yha";
+      sha256 = "1x8sa5x1nkrb8wrmicri94ji8kvyxihyryi8br5fk7gak0agcai0";
     };
 
    # http://bugs.python.org/issue27369
@@ -35,6 +35,8 @@ let
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
+
+    hardeningDisable = stdenv.lib.optional stdenv.isi686 "pic";
 
     C_INCLUDE_PATH = stdenv.lib.makeSearchPathOutput "dev" "include" buildInputs;
     LIBRARY_PATH = stdenv.lib.makeLibraryPath buildInputs;

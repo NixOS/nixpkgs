@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.13.3";
+  version = "0.13.5";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,12 +11,12 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0mfrlb91akzrj0qpjpaa9bkp6m9z95z56glamry73qy21vbnj58m";
+    sha256 = "1zfl53nv0b2wsmgbsf850yafqkx9pplpx339iiw4037msdjqhi19";
   };
 
   buildInputs = [ ncurses ];
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim

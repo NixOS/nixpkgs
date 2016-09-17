@@ -1,5 +1,5 @@
 { stdenv, fetchurl, kernel ? null, xorg, zlib, perl
-, gtk, atk, pango, glib, gdk_pixbuf, cairo, nukeReferences
+, gtk2, atk, pango, glib, gdk_pixbuf, cairo, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -42,6 +42,8 @@ stdenv.mkDerivation {
 
   kernel = if libsOnly then null else kernel.dev;
 
+  hardeningDisable = [ "pic" "format" ];
+
   dontStrip = true;
 
   glPath      = makeLibraryPath [xorg.libXext xorg.libX11 xorg.libXrandr];
@@ -50,7 +52,7 @@ stdenv.mkDerivation {
   allLibPath  = makeLibraryPath [xorg.libXext xorg.libX11 xorg.libXrandr zlib stdenv.cc.cc];
 
   gtkPath = optionalString (!libsOnly) (makeLibraryPath
-    [ gtk atk pango glib gdk_pixbuf cairo ] );
+    [ gtk2 atk pango glib gdk_pixbuf cairo ] );
   programPath = makeLibraryPath [ xorg.libXv ];
 
   patches = if (!libsOnly) && (versionAtLeast kernel.dev.version "4.7") then [ ./365.35-kernel-4.7.patch ] else [];

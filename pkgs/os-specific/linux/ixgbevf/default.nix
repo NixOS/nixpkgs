@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1i6ry3vd77190sxb47xhbz3v30gighwax6prav4ggs3q80a389c8";
   };
 
+  hardeningDisable = [ "pic" ];
+
   configurePhase = ''
     cd src
     makeFlagsArray+=(KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build INSTALL_MOD_PATH=$out MANDIR=/share/man)

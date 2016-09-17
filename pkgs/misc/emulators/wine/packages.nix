@@ -1,5 +1,4 @@
 { system, stdenv, stdenv_32bit, lib, pkgs, pkgsi686Linux, callPackage, callPackage_i686,
-  overrideCC, wrapCCMulti, gcc49,
   wineRelease ? "stable",
   supportFlags
 }:
@@ -17,9 +16,6 @@ in with src; {
   wine64 = callPackage ./base.nix {
     name = "wine64-${version}";
     inherit src version supportFlags;
-    # FIXME: drop this when GCC is updated to >5.3.
-    # Corresponding bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69140
-    stdenv = overrideCC stdenv gcc49;
     pkgArches = [ pkgs ];
     geckos = [ gecko64 ];
     monos =  [ mono ];
@@ -29,8 +25,7 @@ in with src; {
   wineWow = callPackage ./base.nix {
     name = "wine-wow-${version}";
     inherit src version supportFlags;
-    # FIXME: see above.
-    stdenv = overrideCC stdenv_32bit (wrapCCMulti gcc49);
+    stdenv = stdenv_32bit;
     pkgArches = [ pkgs pkgsi686Linux ];
     geckos = [ gecko32 gecko64 ];
     monos =  [ mono ];
