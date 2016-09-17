@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.openscenegraph.org/;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    hydraPlatforms = lib.optionals (!withQt5) meta.platforms;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };
 }
