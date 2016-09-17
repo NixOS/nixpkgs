@@ -17257,10 +17257,12 @@ in
 
   mnemonicode = callPackage ../misc/mnemonicode { };
 
-  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
-    lua = lua5_1;
-    libctemplate = libctemplate_2_2;
-  };
+  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench (let mysql = mysql57; in {
+    automake = automake113x;
+    gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
+    mysql = mysql;
+    pcre = pcre-cpp;
+  });
 
   redis-desktop-manager = qt55.callPackage ../applications/misc/redis-desktop-manager { };
 
