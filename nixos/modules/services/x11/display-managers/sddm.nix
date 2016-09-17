@@ -46,7 +46,7 @@ let
     HideUsers=${concatStringsSep "," dmcfg.hiddenUsers}
     HideShells=/run/current-system/sw/bin/nologin
 
-    [XDisplay]
+    [X11]
     MinimumVT=${toString xcfg.tty}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
@@ -100,7 +100,7 @@ in
 
       theme = mkOption {
         type = types.str;
-        default = "maui";
+        default = "";
         description = ''
           Greeter theme to use.
         '';
