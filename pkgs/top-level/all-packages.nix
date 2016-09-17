@@ -10964,7 +10964,7 @@ in
 
     stubs = callPackages ../os-specific/darwin/stubs {};
 
-    usr-include = callPackage ../os-specific/darwin/macheaders.nix {};
+    usr-include = callPackage ../os-specific/darwin/usr-include {};
   };
 
   devicemapper = lvm2;

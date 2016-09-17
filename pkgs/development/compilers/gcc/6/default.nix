@@ -461,7 +461,7 @@ stdenv.mkDerivation ({
   #
   # Likewise, the LTO code doesn't find zlib.
 
-  CPATH = makeSearchPath "dev" "include" ([]
+  CPATH = makeSearchPathOutput "dev" "include" ([]
     ++ optional (zlib != null) zlib
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
