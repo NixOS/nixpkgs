@@ -10512,6 +10512,12 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost159;
+  };
+
   mysql = mariadb;
   libmysql = mysql.client; # `libmysql` is a slight misnomer ATM
 
