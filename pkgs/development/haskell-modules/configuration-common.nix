@@ -981,9 +981,6 @@ self: super: {
     '';
   });
 
-  # https://bitbucket.org/ssaasen/spy/pull-requests/3/fsnotify-dropped-system-filepath
-  spy = appendPatch super.spy ./patches/spy.patch;
-
   idris = overrideCabal super.idris (drv: {
     # "idris" binary cannot find Idris library otherwise while building. After
     # installing it's completely fine though. This seems like a bug in Idris
