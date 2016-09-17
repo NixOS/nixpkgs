@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, stdenv, ncurses, additionalPatches ? [] }:
 
 stdenv.mkDerivation rec {
   name = "readline-6.3p08";
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
            inherit sha256;
          };
      in
-       import ./readline-6.3-patches.nix patch);
+       import ./readline-6.3-patches.nix patch)
+    ++ additionalPatches;
 
   # Don't run the native `strip' when cross-compiling.
   dontStrip = stdenv ? cross;
