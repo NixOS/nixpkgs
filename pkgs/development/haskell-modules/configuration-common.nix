@@ -991,4 +991,7 @@ self: super: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
   });
 
+  # https://github.com/pontarius/pontarius-xmpp/issues/105
+  pontarius-xmpp = dontCheck super.pontarius-xmpp;
+
 }
