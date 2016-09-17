@@ -1393,6 +1393,8 @@ in
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
   };
 
+  docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
+
   dog = callPackage ../tools/system/dog { };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
