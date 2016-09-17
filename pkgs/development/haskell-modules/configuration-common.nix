@@ -405,7 +405,7 @@ self: super: {
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
   memcache = dontCheck super.memcache;
-  MemoTrie = dontCheck super.MemoTrie;
+  MemoTrie = dontHaddock (dontCheck super.MemoTrie);
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
   nats-queue = dontCheck super.nats-queue;
