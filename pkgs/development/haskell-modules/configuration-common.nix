@@ -500,7 +500,7 @@ self: super: {
   duplo = dontCheck super.duplo;
 
   # Nix-specific workaround
-  xmonad = appendPatch super.xmonad ./patches/xmonad-nix.patch;
+  xmonad = appendPatch (dontCheck super.xmonad) ./patches/xmonad-nix.patch;
 
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
