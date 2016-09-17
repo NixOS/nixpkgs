@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses, pkgconfig
+{ fetchurl, stdenv, ncurses
 , emacsSupport ? true, emacs
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-ncurses=${ncurses.dev}";
 
   buildInputs = [ ncurses ];
-  nativeBuildInputs = [ pkgconfig ] + stdenv.lib.optional emacsSupport emacs;
+  nativeBuildInputs = stdenv.lib.optional emacsSupport emacs;
 
   postInstall = stdenv.lib.optionalString emacsSupport ''
     cd "contrib/xcscope"
