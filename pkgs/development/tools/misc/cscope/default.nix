@@ -8,13 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "07jdhxvp3dv7acvp0pwsdab1g2ncxjlcf838lj7vxgjs1p26lwzb";
   };
 
-  preConfigure = ''
-    sed -i "contrib/xcscope/cscope-indexer" \
-        -"es|^PATH=.*$|PATH=\"$out/bin:\$PATH\"|g"
-    sed -i "contrib/xcscope/xcscope.el" \
-        -"es|\"cscope-indexer\"|\"$out/libexec/cscope/cscope-indexer\"|g";
-  '';
-
   configureFlags = "--with-ncurses=${ncurses.dev}";
 
   buildInputs = [ ncurses ];
@@ -23,6 +16,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Install Emacs mode.
     cd "contrib/xcscope"
+
+    sed -i "cscope-indexer" \
+        -"es|^PATH=.*$|PATH=\"$out/bin:\$PATH\"|g"
+    sed -i "xcscope.el" \
+        -"es|\"cscope-indexer\"|\"$out/libexec/cscope/cscope-indexer\"|g";
 
     mkdir -p "$out/libexec/cscope"
     cp "cscope-indexer" "$out/libexec/cscope"
