@@ -121,6 +121,14 @@ following incompatible changes:</para>
   functionality.  See <xref linkend="sec-grsecurity" /> for documentation
   </para></listitem>
 
+  <listitem><para>Special filesystems, like <literal>/proc</literal>,
+  <literal>/run</literal> and others, now have the same mount options as
+  recommended by systemd. They are now unified across different places in NixOS.
+  Options are also updated on the system switch if possible. One benefit from
+  this is improved security -- most such filesystems are now mounted with
+  <literal>noexec</literal>, <literal>nodev</literal> and/or
+  <literal>nosuid</literal> options.</para></listitem>
+
 </itemizedlist>
 
 
