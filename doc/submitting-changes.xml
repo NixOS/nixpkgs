@@ -178,8 +178,17 @@ Additional information.
 </listitem>
 
 <listitem>
-<para>Rebase you branch against current <command>master</command>.</para>
+<para>Rebase you branch against current <command>master</command>.
+
+<itemizedlist>
+<listitem>
+<para>Use <command>git rebase --onto master 0998212 'fix/pkg-name-update'</command> to only rebase the changes in your branche.
+Where <command>0998212</command> is the commit of your current installation and <command>fix/pkg-name-update</command> is the branch you have been working on.</para>
 </listitem>
+</itemizedlist>
+</para>
+</listitem>
+
 </itemizedlist>
 </section>
 
