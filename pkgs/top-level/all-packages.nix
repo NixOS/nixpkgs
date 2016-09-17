@@ -841,8 +841,6 @@ in
 
   goa = callPackage ../development/tools/goa { };
 
-  gringo = callPackage ../tools/misc/gringo { };
-
   gti = callPackage ../tools/misc/gti { };
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
