@@ -1783,6 +1783,8 @@ in
     ruby = ruby_2_2;
   };
 
+  gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
+
   gitlab-shell = callPackage ../applications/version-management/gitlab-shell {
     ruby = ruby_2_2;
   };
