@@ -80,7 +80,9 @@ rec {
   neosnippet          = neosnippet-vim;
   nerdcommenter       = The_NERD_Commenter;
   nerdtree            = The_NERD_tree;
+  polyglot            = vim-polyglot;
   quickrun            = vim-quickrun;
+  repeat              = vim-repeat;
   signature           = vim-signature;
   stylish-haskell     = vim-stylish-haskell;
   stylishHaskell      = stylish-haskell; # backwards compat, added 2014-10-18
@@ -92,6 +94,7 @@ rec {
   tmux-navigator      = vim-tmux-navigator;
   tmuxNavigator       = tmux-navigator; # backwards compat, added 2014-10-18
   tslime              = tslime-vim;
+  unite               = unite-vim;
   vimproc             = vimproc-vim;
   vimshell            = vimshell-vim;
   watchdogs           = vim-watchdogs;
