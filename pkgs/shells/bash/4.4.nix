@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  outputs = [ "out" "doc" "info" ];
+  outputs = [ "out" "dev" "doc" "info" ];
 
   # the man pages are small and useful enough
   outputMan = if interactive then "out" else null;
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ln -s bash "$out/bin/sh"
+    moveToOutput lib/bash/Makefile.inc "$dev"
   '';
 
   postFixup = if interactive
