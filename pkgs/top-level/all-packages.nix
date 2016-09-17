@@ -10927,7 +10927,10 @@ in
       xctoolchain = xcode.toolchain;
     };
 
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix { inherit libobjc; }).native;
+    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {
+      inherit libobjc;
+      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
+    }).native;
 
     cf-private = callPackage ../os-specific/darwin/cf-private {
       inherit (apple-source-releases) CF;
