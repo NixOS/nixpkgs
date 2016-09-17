@@ -197,15 +197,18 @@ let
     preBuild = ''
       makeFlagsArray=(
         LUAV=${lua.luaversion}
-        PLAT=${if stdenv.isDarwin then "macosx" else "linux"}
-        LUAPREFIX_linux=$out
-        LUAPREFIX_macosx=$out
+        PLAT=${if stdenv.isDarwin then "macosx"
+               else if stdenv.isFreeBSD then "freebsd"
+               else if stdenv.isLinux then "linux"
+               else if stdenv.isSunOS then "solaris"
+               else throw "unsupported platform"}
+        prefix=$out
       );
     '';
 
     meta = {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = with platforms; [darwin linux freebsd illumos];
       maintainers = with maintainers; [ mornfall ];
     };
   };
