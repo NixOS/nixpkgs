@@ -1,12 +1,13 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
+, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
-, autoconf, automake
 , withX ? !stdenv.isDarwin
 , withGTK2 ? true, gtk2 ? null
 , withGTK3 ? false, gtk3 ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
+, srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
+, srcLocal ? false
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -33,14 +34,11 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.isDarwin ./at-fdcwd.patch;
 
-  postPatch = ''
-    substituteInPlace lisp/international/mule-cmds.el \
-      --replace "/usr/share/locale" "${gettext}/share/locale"
-  '';
+  nativeBuildInputs = [ pkgconfig ]
+    ++ lib.optionals srcRepo [ autoconf automake texinfo ];
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm gettext
-      autoconf automake ]
+    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
     ++ lib.optional stdenv.isLinux dbus
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
@@ -63,16 +61,17 @@ stdenv.mkDerivation rec {
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets";
 
-  preConfigure = ''
+  preConfigure = lib.optionalString srcRepo ''
     ./autogen.sh
+  '' + lib.optionalString srcLocal ''
+    find . -name '*.elc' -delete
+  '' + ''
+    substituteInPlace lisp/international/mule-cmds.el \
+      --replace /usr/share/locale ${gettext}/share/locale
 
-    for i in Makefile.in src/Makefile.in lib-src/Makefile.in leim/Makefile.in; do
+    for i in Makefile.in {src,lib-src,leim}/Makefile.in; do
         substituteInPlace $i --replace /bin/pwd pwd
     done
-  '';
-
-  preBuild = ''
-    find . -name '*.elc' -delete
   '';
 
   postInstall = ''
