@@ -26,8 +26,6 @@ in
 stdenv.mkDerivation rec {
   name = "emacs-25.1";
 
-  builder = ./builder.sh;
-
   src = fetchurl {
     url = "mirror://gnu//emacs/${name}.tar.xz";
     sha256 = "0cwgyiyymnx4xdg99dm2drfxcyhy2jmyf0rkr9fwj9mwwf77kwhr";
@@ -69,6 +67,14 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo.dev}/include/cairo";
+
+  preConfigure = ''
+    ./autogen.sh
+
+    for i in Makefile.in src/Makefile.in lib-src/Makefile.in leim/Makefile.in; do
+        substituteInPlace $i --replace /bin/pwd pwd
+    done
+  '';
 
   preBuild = ''
     find . -name '*.elc' -delete
