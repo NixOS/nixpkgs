@@ -124,11 +124,6 @@ rec {
     };
 
 
-  chromiumos_Kconfig_fix_entries_3_14 =
-    { name = "Kconfig_fix_entries_3_14";
-      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.14.patch;
-    };
-
   chromiumos_Kconfig_fix_entries_3_18 =
     { name = "Kconfig_fix_entries_3_18";
       patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.18.patch;
