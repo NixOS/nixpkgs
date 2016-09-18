@@ -13116,6 +13116,7 @@ in
   errbot = callPackage ../applications/networking/errbot {
     pythonPackages = python3Packages;
   };
+  errbot-plugin-xmppbridge = callPackage ../applications/networking/errbot/plugins/xmppbridge.nix { };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
