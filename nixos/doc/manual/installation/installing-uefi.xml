@@ -12,33 +12,50 @@ changes:
 
 <itemizedlist>
   <listitem>
-    <para>You should boot the live CD in UEFI mode (consult your
-    specific hardware's documentation for instructions). You may find
-    the <link
-    xlink:href="http://www.rodsbooks.com/refind">rEFInd
-    boot manager</link> useful.</para>
+    <para>You will need your drive's partition table to be stored using
+    the GPT, rather than MBR, format. (That is likely already the case
+    if your current operating system boots in UEFI mode). Use
+    <command>gdisk</command> rather than <command>fdisk</command> to
+    partition your disk.</para>
   </listitem>
   <listitem>
-    <para>Instead of <command>fdisk</command>, you should use
-    <command>gdisk</command> to partition your disks. You will need to
-    have a separate partition for <filename>/boot</filename> with
-    partition code EF00, and it should be formatted as a
-    <literal>vfat</literal> filesystem.</para>
+    <para>If you don't have one already, you will need to create a
+    separate partition (called the EFP) with partition code EF00 and the
+    GPT <literal>boot</literal> flag. It should be formatted as a
+    <literal>vfat</literal> filesystem and be about ~100-200MB. You set
+    configurations to have it mounted in
+    <literal>boot.loader.efi.efiSysMountPoint</literal>
+    (<literal>/boot</literal> by default).</para>
   </listitem>
   <listitem>
-    <para>You must set <option>boot.loader.systemd-boot.enable</option> to
+    <para>If you want your device to be bootable in BIOS (legacy) mode
+    as well, and if you don't have one already, you will need to create
+    a separate "BIOS boot" partition with partition code EF02. This
+    partition does not need to be formatted, or mounted, and can be as
+    small as 1MB.</para>
+  </listitem>
+  <listitem>
+    <para>During installation, after mounting your installation partition to
+    <code>/mnt</code>, you must manually mount the EFP partition to
+    <code>/mnt/boot</code> (or your selected mountpoint).</para>
+  </listitem>
+  <listitem>
+    <para>You must set <option>boot.loader.grub.efiSupport</option> to
     <literal>true</literal>. <command>nixos-generate-config</command>
-    should do this automatically for new configurations when booted in
-    UEFI mode.</para>
+    should do this automatically for new configurations when the
+    installation device is booted in UEFI mode.</para>
   </listitem>
   <listitem>
-    <para>After having mounted your installation partition to
-    <code>/mnt</code>, you must mount the <code>boot</code> partition
-    to <code>/mnt/boot</code>.</para>
+    <para>If you have not booted the installation device in UEFI mode,
+    you'll probably need to set
+    <literal>boot.loader.grub.efiInstallAsRemovable</literal> to
+    <literal>true</literal> and
+    <literal>boot.loader.efi.canTouchEfiVariables</literal> to
+    <literal>false</literal>.</para>
   </listitem>
   <listitem>
     <para>You may want to look at the options starting with
-    <option>boot.loader.efi</option> and <option>boot.loader.systemd-boot</option>
+    <option>boot.loader.efi</option> and <option>boot.loader.grub</option>
     as well.</para>
   </listitem>
 </itemizedlist>
