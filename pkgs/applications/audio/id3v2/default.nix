@@ -1,4 +1,4 @@
-{stdenv, fetchurl, id3lib, groff, zlib}:
+{stdenv, fetchurl, id3lib, zlib, mandoc}:
 
 stdenv.mkDerivation rec {
   name = "id3v2-${version}";
@@ -9,8 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1gr22w8gar7zh5pyyvdy7cy26i47l57jp1l1nd60xfwx339zl1c1";
   };
 
-  nativeBuildInputs = [ groff ];
-  buildInputs = [ id3lib zlib ];
+  buildInputs = [ id3lib zlib mandoc ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "nroff -man"  "${mandoc}/bin/mandoc -T man"
+  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "clean" "all" ];
