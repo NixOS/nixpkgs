@@ -11371,6 +11371,8 @@ in
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
+    rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
+
     openafsClient = callPackage ../servers/openafs-client { };
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
@@ -11694,6 +11696,8 @@ in
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
   rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
+
+  rtlwifi_new-firmware = callPackage ../os-specific/linux/firmware/rtlwifi_new-firmware { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
