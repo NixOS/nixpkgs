@@ -3,19 +3,19 @@
 let
 
 spirv_sources = {
-  # `vulkan-loader` requires a specific version of `spirv-tools` as specified
-  # in `<vulkan-loader-repo>/spirv-tools_revision`.
+  # `vulkan-loader` requires a specific version of `spirv-tools` and `spirv-headers` as specified in
+  # `<vulkan-loader-repo>/spirv-tools_revision`.
   tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "1a9385bbd0e6eae188c14302cf37c415ecc8b698";
-    sha256 = "12a2wyxhsnms966s12x9bkz2kh478qf9ygglzkxkd83j5fvmvzwm";
+    rev = "923a4596b44831a07060df45caacb522613730c9";
+    sha256 = "0hmgng2sv34amfsag3ya09prnv1w535djwlzfn8h2vh430vgawxa";
   };
   headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "3814effb879ab5a98a7b9288a4b4c7849d2bc8ac";
-    sha256 = "1wfszfsx318i0gavwk0w1klg4wiav8g4q4qpraqgm69arasfb9gh";
+    rev = "33d41376d378761ed3a4c791fc4b647761897f26";
+    sha256 = "1s103bpi3g6hhq453qa4jbabfkyxxpf9vn213j8k4vm26lsi8hs2";
   };
 };
 
@@ -27,8 +27,13 @@ stdenv.mkDerivation rec {
 
   src = spirv_sources.tools;
   patchPhase = ''ln -sv ${spirv_sources.headers} external/spirv-headers'';
+  enableParallelBuilding = true;
 
   buildInputs = [ cmake python ];
+
+  passthru = {
+    headers = spirv_sources.headers;
+  };
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
