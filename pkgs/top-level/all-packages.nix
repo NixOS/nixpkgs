@@ -14881,7 +14881,6 @@ in
   crack_attack = callPackage ../games/crack-attack { };
 
   crafty = callPackage ../games/crafty { };
-  craftyFull = appendToName "full" (self.crafty.override { fullVariant = true; });
 
   crawlTiles = self.crawl.override {
     tileMode = true;
