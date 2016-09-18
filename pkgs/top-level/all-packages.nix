@@ -3618,7 +3618,7 @@ in
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
-  sshfsFuse = callPackage ../tools/filesystems/sshfs-fuse { };
+  sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
 
   sshuttle = callPackage ../tools/security/sshuttle { };
 
