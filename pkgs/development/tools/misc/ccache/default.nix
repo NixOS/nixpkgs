@@ -19,15 +19,16 @@ let ccache = stdenv.mkDerivation rec {
 
   passthru = let
       cc = stdenv.cc.cc;
-      ccname = if stdenv.cc.cc.isClang or false then "clang" else "gcc";
-      cxxname = if stdenv.cc.cc.isClang or false then "clang++" else "g++";
+      ccname = if stdenv.cc.isClang then "clang" else "gcc";
+      cxxname = if stdenv.cc.isClang then "clang++" else "g++";
     in {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
     links = extraConfig: stdenv.mkDerivation rec {
       name = "ccache-links";
       passthru = {
-        inherit (cc) isGNU isClang;
+        inherit (stdenv.cc) isClang;
+        inherit (cc) isGNU;
       };
       inherit (cc) lib;
       buildCommand = ''

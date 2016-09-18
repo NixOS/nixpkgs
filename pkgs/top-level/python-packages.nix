@@ -1812,11 +1812,11 @@ in modules // {
   });
 
   beautifulsoup4 = buildPythonPackage (rec {
-    name = "beautifulsoup4-4.4.1";
+    name = "beautifulsoup4-4.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/beautifulsoup4/${name}.tar.gz";
-      sha256 = "1d36lc4pfkvl74fmzdib2nqnvknm0jddgf2n9yd7im150qyh3m47";
+      sha256 = "1qgmhw65ncsgccjhslgkkszif47q6gvxwqv4mim17agxd81p951w";
     };
 
     buildInputs = [ self.nose ];
@@ -10779,26 +10779,19 @@ in modules // {
   };
 
   falcon = buildPythonPackage (rec {
-    name = "falcon-0.3.0";
+    name = "falcon-1.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/falcon/${name}.tar.gz";
-      sha256 = "10ivzk88m8nn3bqbg6xgv6yfy2dgp6yzbcvr645y93pzlash4xpj";
+      sha256 = "ddce23a2dd0abba6d19775e9bf7ba64e184b15a0e7163e65f62af63354193f63";
     };
 
-    propagatedBuildInputs = with self; [ coverage ddt nose pyyaml requests2 six testtools python_mimeparse ];
+    buildInputs = with self; stdenv.lib.optionals doCheck [coverage ddt nose pyyaml requests2 testtools];
+    propagatedBuildInputs = with self; [ six python_mimeparse ];
 
     # The travis build fails since the migration from multiprocessing to threading for hosting the API under test.
     # OSError: [Errno 98] Address already in use
     doCheck = false;
-
-    # This patch is required if the tests are enabled
-    # See https://github.com/falconry/falcon/issues/572
-    #patches = singleton (pkgs.fetchurl {
-    #  name = "falcon-572.patch";
-    #  url = "https://github.com/desiderius/falcon/commit/088bd3f2204eb6368acb3a1bf6c6b54c415225c2.patch";
-    #  sha256 = "19102dlzc4890skmam2v20va2vk5xr56fi4nzibzfvl7vyq68060";
-    #});
 
     meta = {
       description = "An unladen web framework for building APIs and app backends";
@@ -10807,7 +10800,24 @@ in modules // {
       maintainers = with maintainers; [ desiderius ];
     };
   });
+  hug = buildPythonPackage rec {
+    name = "hug-2.1.2";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/hug/${name}.tar.gz";
+      sha256 = "93325e13706594933a9afb0d4f0b0748134494299038f07df41152baf6f89f4c";
+    };
 
+    propagatedBuildInputs = with self; [ falcon requests2 ];
+
+    # tests are not shipped in the tarball
+    doCheck = false;
+
+    meta = {
+      description = "A Python framework that makes developing APIs as simple as possible, but no simpler";
+      homepage = https://github.com/timothycrosley/hug;
+      license = licenses.mit;
+    };
+  };
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
     disabled = isPy3k;
@@ -17093,6 +17103,29 @@ in modules // {
     };
   };
 
+  parsel = buildPythonPackage rec {
+    name = "parsel-${version}";
+    version = "1.0.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/parsel/${name}.tar.gz";
+      sha256 = "9c12c370feda864c2f541cecce9bfb3a2a682c6c59c097a852e7b040dc6b8431";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ six w3lib lxml cssselect ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      homepage = "https://github.com/scrapy/parsel";
+      description = "Parsel is a library to extract data from HTML and XML using XPath and CSS selectors";
+      license = licenses.bsd3;
+    };
+  };
+
   partd = buildPythonPackage rec {
     name = "partd-${version}";
     version = "0.3.3";
@@ -18823,12 +18856,17 @@ in modules // {
 
   pydispatcher = buildPythonPackage (rec {
     version = "2.0.5";
-    disabled = isPy35;
     name = "pydispatcher-${version}";
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyDispatcher/PyDispatcher-${version}.tar.gz";
       sha256 = "1bswbmhlbqdxlgbxlb6xrlm4k253sg8nvpl1whgsys8p3fg0cw2m";
     };
+
+    buildInputs = with self; [ pytest ];
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       homepage = http://pydispatcher.sourceforge.net/;
@@ -21431,6 +21469,25 @@ in modules // {
     };
   };
 
+  rootpy = buildPythonPackage rec {
+    version = "0.8.3";
+    name = "rootpy-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/d5/40/feddb2c9d1cadfe05d1d9aea1a71be093dc700879c9f6af40a10b1330f34/rootpy-0.8.3.tar.gz";
+      sha256 = "14q9bhs2a53598571x8yikj68x2iyl6090wbvdrpbwr238799b0z";
+    };
+
+    disabled = isPy3k;
+
+    propagatedBuildInputs = with self; [ pkgs.root readline numpy matplotlib ];
+
+    meta = {
+      homepage = "http://www.rootpy.org";
+      license = licenses.gpl3;
+      description = "Pythonic interface to the ROOT framework";
+    };
+  };
 
   rope = buildPythonPackage rec {
     version = "0.10.2";
@@ -24484,10 +24541,10 @@ in modules // {
   twisted = buildPythonPackage rec {
 
     name = "Twisted-${version}";
-    version = "16.4.0";
+    version = "16.4.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "cd8820901900542d21fb1dee2cd4d4d334fff130e3fc30b777f81dd7d7f2836e";
+      sha256 = "1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816";
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];
@@ -29215,16 +29272,21 @@ in modules // {
 
   scrapy = buildPythonPackage rec {
     name = "Scrapy-${version}";
-    version = "1.0.5";
+    version = "1.1.2";
 
-    disabled = isPy3k;
+    buildInputs = with self; [ pytest botocore testfixtures pillow ];
+    propagatedBuildInputs = with self; [
+      six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
+    ];
 
-    buildInputs = with self ; [ pytest ];
-    propagatedBuildInputs = with self ; [ six twisted w3lib lxml cssselect queuelib pyopenssl service-identity ];
+    checkPhase = ''
+      env LC_ALL=en_US.UTF-8 py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py
+      # The ignored tests require mitmproxy, which depends on protobuf, but it's disabled on Python3
+    '';
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/Scrapy/${name}.tar.gz";
-      sha256 = "0a51c785a310d65f6e70285a2da56d48ef7d049bd7fd60a08eef05c52328ca96";
+      sha256 = "a0a8c7bccbd598d2731ec9f267b8efbd8fb99767f826f8f2924a5610707a03d4";
     };
 
     meta = {

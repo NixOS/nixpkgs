@@ -46,6 +46,7 @@ self: super: {
       sha256 = "0an1rafbv48m04g7crfj2qrk64d98yrjn2z4hfv2pybwmqdmx78z";
       rev = drv.version;
     };
+    doCheck = false;  # version 6.20160907 has a test suite failure; reported upstream
   })).overrideScope (self: super: {
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
@@ -286,7 +287,6 @@ self: super: {
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
-  hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
@@ -773,7 +773,7 @@ self: super: {
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
       pushd >/dev/null $lispdir
       for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
+        emacs -Q -L . -L ${pkgs.emacsPackages.haskellMode}/share/emacs/site-lisp \
           --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
           -f batch-byte-compile $i
       done
@@ -790,7 +790,7 @@ self: super: {
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
       pushd >/dev/null $lispdir
       for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
+        emacs -Q -L . -L ${pkgs.emacsPackages.haskellMode}/share/emacs/site-lisp \
           --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
           -f batch-byte-compile $i
       done
@@ -989,6 +989,8 @@ self: super: {
     preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
     # https://github.com/idris-lang/Idris-dev/issues/2499
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+    # test suite cannot find its own "idris" binary
+    doCheck = false;
   });
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
