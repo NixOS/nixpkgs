@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, zlib, imlib2, pkgconfig, libX11 }:
+{ stdenv, fetchurl, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libcaca-0.99.beta19";
@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
-  propagatedBuildInputs = [ ncurses zlib imlib2 pkgconfig libX11 ];
+  configureFlags = "--disable-x11 --disable-imlib2 --disable-doc";
+
+  propagatedBuildInputs = [ ncurses zlib ];
 
   postInstall = ''
     mkdir -p $dev/bin
