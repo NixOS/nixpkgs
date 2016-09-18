@@ -35,6 +35,11 @@
 , opencv
 , threadweaver
 
+# For panorama and focus stacking
+, enblend-enfuse
+, hugin
+, gnumake
+
 , oxygen
 }:
 
@@ -99,7 +104,9 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
 
-    wrapQtProgram $out/bin/digikam
+    wrapQtProgram $out/bin/digikam \
+      --prefix PATH : "${gnumake}/bin:${hugin}/bin:${enblend-enfuse}/bin"
+
     wrapQtProgram $out/bin/showfoto
   '';
 
