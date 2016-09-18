@@ -13703,7 +13703,7 @@ in
   inspectrum = callPackage ../applications/misc/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
-    lua = lua5;
+    lua = lua5_1;
   };
 
   ipe = qt5.callPackage ../applications/graphics/ipe {
