@@ -1,0 +1,33 @@
+--- a/src/core/window.c	2015-05-26 10:52:41.382834963 +0200
++++ b/src/core/window.c	2015-05-26 10:53:03.039948034 +0200
+@@ -3499,7 +3499,7 @@
+ 
+ static MetaMonitorInfo *
+ find_monitor_by_winsys_id (MetaWindow *window,
+-                           guint       winsys_id)
++                           gint       winsys_id)
+ {
+   int i;
+ 
+@@ -3618,7 +3618,7 @@
+    */
+ 
+   gboolean did_placement;
+-  guint old_output_winsys_id;
++  gint old_output_winsys_id;
+   MetaRectangle unconstrained_rect;
+   MetaRectangle constrained_rect;
+   MetaMoveResizeResultFlags result = 0;
+--- a/src/core/startup-notification.c	2016-06-06 12:13:27.100251933 +0200
++++ b/src/core/startup-notification.c	2016-06-06 12:13:42.554956773 +0200
+@@ -418,7 +418,7 @@
+   elapsed = ctod->now - timestamp;
+ 
+   meta_topic (META_DEBUG_STARTUP,
+-              "Sequence used %ld ms vs. %d max: %s\n",
++              "Sequence used %" G_GINT64_FORMAT " ms vs. %d max: %s\n",
+               elapsed, STARTUP_TIMEOUT,
+               meta_startup_notification_sequence_get_id (sequence));
+ 
+[?25l[J[J[J[34h[?25h[?1049h[?1h=[1;44r[34l[34h[?25h[23m[24m[0m[H[J[?25l[2;1H[1m[34m~                                                                                              [3;1H~                                                                                              [4;1H~                                                                                              [5;1H~                                                                                              [6;1H~                                                                                              [7;1H~                                                                                              [8;1H~                                                                                              [9;1H~                                                                                              [10;1H~                                                                                              [11;1H~                                                                                              [12;1H~                                                                                              [13;1H~                                                                                              [14;1H~                                                                                              [15;1H~                                                                                              [16;1H~                                                                                              [17;1H~                                                                                              [18;1H~                                                                                              [19;1H~                                                                                              [20;1H~                                                                                              [21;1H~                                                                                              [22;1H~                                                                                              [23;1H~                                                                                              [24;1H~                                                                                              [25;1H~                                                                                              [26;1H~                                                                                              [27;1H~                                                                                              [28;1H~                                                                                              [29;1H~                                                                                              [30;1H~                                                                                              [31;1H~                                                                                              [32;1H~                                                                                              [33;1H~                                                                                              [34;1H~                                                                                              [35;1H~                                                                                              [36;1H~                                                                                              [37;1H~                                                                                              [38;1H~                                                                                              [39;1H~                                                                                              [40;1H~                                                                                              [41;1H~                                                                                              [42;1H~                                                                                              [43;1H~                                                                                              [1;1H[34h[?25h[?25l[0m[44;1HType  :quit<Enter>  to exit Vim[1;1H[34h[?25h[?25l[34h[?25h[?25l[34h[?25h[?25l[34h[?25h[?25l[34h[?25h[?25l[34h[?25h[?25l[34h[?25h[44;1H
+[?1l>[?1049l
