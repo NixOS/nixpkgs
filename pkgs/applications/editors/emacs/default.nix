@@ -63,9 +63,6 @@ stdenv.mkDerivation rec {
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets";
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && withX)
-    "-I${cairo.dev}/include/cairo";
-
   preConfigure = ''
     ./autogen.sh
 
