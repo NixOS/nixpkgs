@@ -2445,6 +2445,8 @@ in
 
   libircclient = callPackage ../development/libraries/libircclient { };
 
+  libite = callPackage ../development/libraries/libite { };
+
   liboauth = callPackage ../development/libraries/liboauth { };
 
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
