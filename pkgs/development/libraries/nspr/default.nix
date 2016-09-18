@@ -11,8 +11,6 @@ stdenv.mkDerivation {
     sha256 = "1pk98bmc5xzbl62q5wf2d6mryf0v95z6rsmxz27nclwiaqg0mcg0";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin CoreServices;
-
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
@@ -29,6 +27,8 @@ stdenv.mkDerivation {
     find $out -name "*.a" -delete
     moveToOutput share "$dev" # just aclocal
   '';
+
+  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 
