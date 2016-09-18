@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "fanctl-${version}";
 
-  version = "0.9.0";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/ubuntu-fan_${version}.tar.xz";
-    sha256 = "03dv5zzb8fkl9kkbhznxm48d6j3fjms74fn0s1zip2gz53l1s14n";
+    sha256 = "0lj7371n06sg5mlbbfgvm0qhzgp464n6v55rgs7kmmx4d37gb5fl";
   };
 
   # The Ubuntu package creates a number of state/config directories upon
