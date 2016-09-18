@@ -1,7 +1,7 @@
 { stdenv, fetchurl
 , pkgconfig
 , ncurses, libX11
-, utillinux, file, which, groff
+, utillinux, file, which, mandoc
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses libX11 utillinux file which groff ];
+  buildInputs = [ ncurses libX11 utillinux file which mandoc ];
 
   meta = with stdenv.lib; {
     description = "A vi-like file manager";
