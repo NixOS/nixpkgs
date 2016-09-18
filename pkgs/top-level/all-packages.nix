@@ -11775,6 +11775,8 @@ in
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
+  shaderc = callPackage ../development/compilers/shaderc { };
+
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
