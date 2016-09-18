@@ -7943,7 +7943,9 @@ in
 
   libburn = callPackage ../development/libraries/libburn { };
 
-  libcaca = callPackage ../development/libraries/libcaca { };
+  libcaca = callPackage ../development/libraries/libcaca {
+    inherit (xlibs) libX11;
+  };
 
   libcanberra_gtk3 = callPackage ../development/libraries/libcanberra {
     gtk = pkgs.gtk3; 
