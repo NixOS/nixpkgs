@@ -15788,6 +15788,8 @@ in
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
+  digikam5 = kde5.callPackage ../applications/graphics/digikam/5.1.nix {};
+
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_9; };
