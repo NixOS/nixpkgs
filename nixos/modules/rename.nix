@@ -156,7 +156,5 @@ with lib;
       "See the 16.09 release notes for more information.")
     (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
-    (mkRemovedOptionModule [ "services" "dockerRegistry" ]
-      "docker-registry has been deprecated upstream since a long time.")
   ];
 }
