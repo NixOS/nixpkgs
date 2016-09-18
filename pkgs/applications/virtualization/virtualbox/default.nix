@@ -35,11 +35,6 @@ let
     '';
   };
 
-  vbox-qt5-env = buildEnv {
-    name = "vbox-qt5-env-${version}";
-    paths = [ qt5.qtbase.dev qt5.qtbase.out qt5.qtx11extras.dev qt5.qtx11extras.out qt5.qttools.dev ];
-  };
-
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
