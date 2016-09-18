@@ -113,6 +113,14 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "$out/bin/firefox" --version
     '';
 
+  postFixup =
+    # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
+    ''
+      patchelf --set-rpath "${lib.getLib libnotify
+        }/lib:$(patchelf --print-rpath "$out"/lib/firefox-*/libxul.so)" \
+          "$out"/lib/firefox-*/libxul.so
+    '';
+
   meta = {
     description = "A web browser" + lib.optionalString (pname == "firefox-esr") " (Extended Support Release)";
     homepage = http://www.mozilla.com/en-US/firefox/;
