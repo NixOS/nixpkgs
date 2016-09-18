@@ -4,9 +4,9 @@
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , autoconf, automake
 , withX ? !stdenv.isDarwin
+, withGTK2 ? true, gtk2 ? null
 , withGTK3 ? false, gtk3 ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
-, withGTK2 ? true, gtk2
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -19,8 +19,8 @@ assert withXwidgets -> withGTK3 && webkitgtk24x != null;
 
 let
   toolkit =
-    if withGTK3 then "gtk3"
-    else if withGTK2 then "gtk2"
+    if withGTK2 then "gtk2"
+    else if withGTK3 then "gtk3"
     else "lucid";
 in
 stdenv.mkDerivation rec {
@@ -31,9 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cwgyiyymnx4xdg99dm2drfxcyhy2jmyf0rkr9fwj9mwwf77kwhr";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    ./at-fdcwd.patch
-  ];
+  patches = lib.optional stdenv.isDarwin ./at-fdcwd.patch;
 
   postPatch = ''
     substituteInPlace lisp/international/mule-cmds.el \
