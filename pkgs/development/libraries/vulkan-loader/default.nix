@@ -3,20 +3,29 @@
 
 assert stdenv.system == "x86_64-linux";
 
-stdenv.mkDerivation rec {
-  name = "vulkan-loader-${version}";
-  version = "1.0.21.0";
-
+let
+  version = "1.0.26.0";
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-LoaderAndValidationLayers";
-    rev = "97e3b677d9681aa8d420c314edae96c4bf72246d";
-    sha256 = "1y42rlffmr80rd4m0xfv2mfwd9qvd680i18vr0xs109narb6fm4f";
+    rev = "sdk-${version}";
+    sha256 = "157m746hc76xrxd3qq0f44f5dy7pjbz8cx74ykqrlbc7rmpjpk58";
   };
+  getRev = name: builtins.substring 0 40 (builtins.readFile "${src}/${name}_revision");
+in
+
+assert getRev "spirv-tools" == spirv-tools.src.rev;
+assert getRev "spirv-headers" == spirv-tools.headers.rev;
+assert getRev "glslang" == glslang.src.rev;
+
+stdenv.mkDerivation rec {
+  name = "vulkan-loader-${version}";
+  inherit version src;
 
   buildInputs = [ cmake pkgconfig git python3 python3Packages.lxml
                   glslang spirv-tools x11 libxcb wayland
                 ];
+  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DBUILD_WSI_WAYLAND_SUPPORT=ON" # XLIB/XCB supported by default
