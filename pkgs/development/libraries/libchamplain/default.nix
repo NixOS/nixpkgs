@@ -1,13 +1,14 @@
 { fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, clutter, sqlite
 , clutter_gtk, libsoup /*, libmemphis */ }:
 
-let version = "0.12.13"; in
 stdenv.mkDerivation rec {
+  major = "0.12";
+  version = "${major}.14";
   name = "libchamplain-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libchamplain/0.12/libchamplain-${version}.tar.xz";
-    sha256 = "1arzd1hsgq14rbiwa1ih2g250x6ljna2s2kiqfrw155c612s9cxk";
+    url = "mirror://gnome/sources/libchamplain/${major}/${name}.tar.xz";
+    sha256 = "13snnka1jqc5qrgij8bm22xy02pncf3dn5ij3jh4rrpzq7g1sqpi";
   };
 
   buildInputs = [ pkgconfig ];
