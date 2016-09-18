@@ -3198,6 +3198,8 @@ in
 
   podiff = callPackage ../tools/text/podiff { };
 
+  pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
+
   poedit = callPackage ../tools/text/poedit { };
 
   polipo = callPackage ../servers/polipo { };
