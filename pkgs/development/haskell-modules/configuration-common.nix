@@ -989,6 +989,8 @@ self: super: {
     preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
     # https://github.com/idris-lang/Idris-dev/issues/2499
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+    # test suite cannot find its own "idris" binary
+    doCheck = false;
   });
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
