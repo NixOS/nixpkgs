@@ -24410,10 +24410,10 @@ in modules // {
   twisted = buildPythonPackage rec {
 
     name = "Twisted-${version}";
-    version = "16.4.0";
+    version = "16.4.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "cd8820901900542d21fb1dee2cd4d4d334fff130e3fc30b777f81dd7d7f2836e";
+      sha256 = "1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816";
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];
