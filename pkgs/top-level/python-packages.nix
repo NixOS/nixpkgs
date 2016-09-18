@@ -29137,16 +29137,21 @@ in modules // {
 
   scrapy = buildPythonPackage rec {
     name = "Scrapy-${version}";
-    version = "1.0.5";
+    version = "1.1.2";
 
-    disabled = isPy3k;
+    buildInputs = with self; [ pytest botocore testfixtures pillow ];
+    propagatedBuildInputs = with self; [
+      six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
+    ];
 
-    buildInputs = with self ; [ pytest ];
-    propagatedBuildInputs = with self ; [ six twisted w3lib lxml cssselect queuelib pyopenssl service-identity ];
+    checkPhase = ''
+      env LC_ALL=en_US.UTF-8 py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py
+      # The ignored tests require mitmproxy, which depends on protobuf, but it's disabled on Python3
+    '';
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/Scrapy/${name}.tar.gz";
-      sha256 = "0a51c785a310d65f6e70285a2da56d48ef7d049bd7fd60a08eef05c52328ca96";
+      sha256 = "a0a8c7bccbd598d2731ec9f267b8efbd8fb99767f826f8f2924a5610707a03d4";
     };
 
     meta = {
