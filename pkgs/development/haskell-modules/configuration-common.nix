@@ -773,7 +773,7 @@ self: super: {
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
       pushd >/dev/null $lispdir
       for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
+        emacs -Q -L . -L ${pkgs.emacsPackages.haskellMode}/share/emacs/site-lisp \
           --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
           -f batch-byte-compile $i
       done
@@ -790,7 +790,7 @@ self: super: {
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
       pushd >/dev/null $lispdir
       for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
+        emacs -Q -L . -L ${pkgs.emacsPackages.haskellMode}/share/emacs/site-lisp \
           --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
           -f batch-byte-compile $i
       done

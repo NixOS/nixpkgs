@@ -23,15 +23,14 @@ let
     else if withGTK2 then "gtk2"
     else "lucid";
 in
-
 stdenv.mkDerivation rec {
-  name = "emacs-25.1-rc2";
+  name = "emacs-25.1";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "ftp://alpha.gnu.org/gnu/emacs/pretest/${name}.tar.xz";
-    sha256 = "1hffvyvl50mrivdv6lp92sbxi3l2zhblj8npmpbzk47zpl1mzm2v";
+    url = "mirror://gnu//emacs/${name}.tar.xz";
+    sha256 = "0cwgyiyymnx4xdg99dm2drfxcyhy2jmyf0rkr9fwj9mwwf77kwhr";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -39,35 +38,36 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
+    substituteInPlace lisp/international/mule-cmds.el \
+      --replace "/usr/share/locale" "${gettext}/share/locale"
   '';
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm gettext
       autoconf automake ]
-    ++ stdenv.lib.optional stdenv.isLinux dbus
-    ++ stdenv.lib.optionals withX
+    ++ lib.optional stdenv.isLinux dbus
+    ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
-    ++ stdenv.lib.optional (withX && withGTK2) gtk2
-    ++ stdenv.lib.optional (withX && withGTK3) gtk3
-    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo
-    ++ stdenv.lib.optionals withXwidgets [webkitgtk24x wrapGAppsHook glib_networking];
+    ++ lib.optional (withX && withGTK2) gtk2
+    ++ lib.optional (withX && withGTK3) gtk3
+    ++ lib.optional (stdenv.isDarwin && withX) cairo
+    ++ lib.optionals withXwidgets [ webkitgtk24x wrapGAppsHook glib_networking ];
 
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
   hardeningDisable = [ "format" ];
 
-  configureFlags =
-    (if stdenv.isDarwin
+  configureFlags = [ "--with-modules" ] ++
+   (if stdenv.isDarwin
       then [ "--with-ns" "--disable-ns-self-contained" ]
     else if withX
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
-    ++ stdenv.lib.optional withXwidgets "--with-xwidgets";
+    ++ lib.optional withXwidgets "--with-xwidgets";
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo.dev}/include/cairo";
 
   preBuild = ''
@@ -77,13 +77,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
   '';
 
   meta = with stdenv.lib; {
-    description = "GNU Emacs 25 (pre), the extensible, customizable text editor";
+    description = "The extensible, customizable GNU text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];

@@ -12844,12 +12844,12 @@ in
 
   elvis = callPackage ../applications/editors/elvis { };
 
-  emacs = emacs24;
-  emacsPackages = emacs24Packages;
-  emacsPackagesNg = emacs24PackagesNg;
-  emacsMelpa = emacs24PackagesNg; # for backward compatibility
+  emacs = emacs25;
+  emacsPackages = emacs25Packages;
+  emacsPackagesNg = emacs25PackagesNg;
+  emacsMelpa = emacs25PackagesNg; # for backward compatibility
 
-  emacs24 = callPackage ../applications/editors/emacs-24 {
+  emacs25 = callPackage ../applications/editors/emacs {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
@@ -12861,30 +12861,18 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
   };
 
-  emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
+  emacs25-nox = lowPrio (appendToName "nox" (emacs25.override {
     withX = false;
     withGTK2 = false;
     withGTK3 = false;
   }));
 
-  emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.5.nix {
+  emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs/macport-24.5.nix {
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
   });
   emacs24Macport = self.emacs24Macport_24_5;
-
-  emacs25pre = lowPrio (callPackage ../applications/editors/emacs-25 {
-    # use override to enable additional features
-    libXaw = xorg.libXaw;
-    Xaw3d = null;
-    gconf = null;
-    alsaLib = null;
-    imagemagick = null;
-    acl = null;
-    gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
-  });
 
   emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
@@ -13039,7 +13027,7 @@ in
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
-  emacs24Packages = emacsPackagesGen emacs24 pkgs.emacs24Packages;
+  emacs25Packages = emacsPackagesGen emacs25 pkgs.emacs25Packages;
 
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
@@ -13064,9 +13052,9 @@ in
     };
   };
 
-  emacs24PackagesNg = emacsPackagesNgGen emacs24;
+  emacs25PackagesNg = emacsPackagesNgGen emacs25;
 
-  emacs24WithPackages = emacs24PackagesNg.emacsWithPackages;
+  emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
   # inherit (gnome3) empathy;
@@ -14286,7 +14274,7 @@ in
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     # No need to build Emacs - notmuch.el works just fine without
-    # byte-compilation. Use emacs24Packages.notmuch if you want to
+    # byte-compilation. Use emacsPackages.notmuch if you want to
     # byte-compiled files
     emacs = null;
     sphinx = pythonPackages.sphinx;
