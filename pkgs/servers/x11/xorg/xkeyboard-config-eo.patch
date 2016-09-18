@@ -17,26 +17,24 @@ index ec321f8..e9c3546 100644
          <_shortDescription>Irn</_shortDescription>
          <_description>Iran</_description>
 diff --git a/symbols/Makefile.am b/symbols/Makefile.am
-index 97c816d..d7e3a4e 100644
 --- a/symbols/Makefile.am
 +++ b/symbols/Makefile.am
 @@ -10,7 +10,7 @@ bt by braille \
- ca cd \
+ ca cd ch \
  ch cn cz \
- de dk \
+ de dk dz \
 -ee es et epo eu \
 +ee eo es et epo eu \
  fi fo fr \
  gb ge gh gn \
  gr hr hu \
 diff --git a/symbols/Makefile.in b/symbols/Makefile.in
-index b5be077..5cddcc7 100644
 --- a/symbols/Makefile.in
 +++ b/symbols/Makefile.in
 @@ -222,7 +222,7 @@ bt by braille \
- ca cd \
+ ca cd ch \
  ch cn cz \
- de dk \
+ de dk dz \
 -ee es et epo eu \
 +ee eo es et epo eu \
  fi fo fr \

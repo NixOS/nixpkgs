@@ -27149,8 +27149,8 @@ in modules // {
     src = pkgs.fetchFromGitHub {
       owner = "asciimoo";
       repo = "searx";
-      rev = "b72aec0a9b2b548d7f6a8ddecedd58f5392b8372";
-      sha256 = "00j10w1mpw12ad3v5wd9wk5fvw5d7yahrjxj39qb35z2x2a80pn1";
+      rev = "v${version}";
+      sha256 = "0j9pnifcrm4kzziip43w2fgadsg1sqlcm7dfxhnshdx03nby2dy2";
     };
 
     patches = [ ../development/python-modules/searx.patch ];
@@ -27166,8 +27166,8 @@ in modules // {
 
     propagatedBuildInputs = with self; [
       pyyaml lxml_3_5 grequests flaskbabel flask requests2
-      gevent speaklater Babel pytz dateutil pygments
-      pyasn1 pyasn1-modules ndg-httpsclient certifi
+      gevent speaklater Babel pytz dateutil pygments_2_0
+      pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
     ];
 
     meta = {

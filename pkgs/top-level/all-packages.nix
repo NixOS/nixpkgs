@@ -735,6 +735,8 @@ in
 
   consul-template = callPackage ../tools/system/consul-template { };
 
+  corebird = callPackage ../applications/networking/corebird { };
+
   corosync = callPackage ../servers/corosync { };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
@@ -849,6 +851,8 @@ in
   glide = callPackage ../development/tools/glide { };
 
   gmic = callPackage ../tools/graphics/gmic { };
+
+  goa = callPackage ../development/tools/goa { };
 
   gringo = callPackage ../tools/misc/gringo { };
 
@@ -2573,6 +2577,8 @@ in
   man-old = callPackage ../tools/misc/man { };
 
   man-db = callPackage ../tools/misc/man-db { };
+
+  mandoc = callPackage ../tools/misc/mandoc { };
 
   mawk = callPackage ../tools/text/mawk { };
 
@@ -4715,7 +4721,7 @@ in
     profiledCompiler = false;
   });
 
-  ghdl_mcode = callPackage ../development/compilers/ghdl { };
+  ghdl_mcode = callPackage_i686 ../development/compilers/ghdl { };
 
   gcl = callPackage ../development/compilers/gcl {
     gmp = gmp4;
@@ -5578,6 +5584,7 @@ in
       };
     });
 
+  rainicorn = callPackage ../development/tools/rust/rainicorn { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
@@ -6365,6 +6372,8 @@ in
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
+
+  libstdcxx5 = callPackage ../development/libraries/libstdc++5 { };
 
   libsigrok = callPackage ../development/tools/libsigrok { };
   # old version:
@@ -9057,10 +9066,7 @@ in
   openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
   openjpeg = openjpeg_2_1;
 
-  openscenegraph = callPackage ../development/libraries/openscenegraph {
-    giflib = giflib_4_1;
-    ffmpeg = ffmpeg_0;
-  };
+  openscenegraph = callPackage ../development/libraries/openscenegraph { };
 
   openslp = callPackage ../development/libraries/openslp {};
 
@@ -9965,6 +9971,8 @@ in
 
   czmq = callPackage ../development/libraries/czmq { };
 
+  czmqpp = callPackage ../development/libraries/czmqpp { };
+
   zimlib = callPackage ../development/libraries/zimlib { };
 
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
@@ -10712,6 +10720,10 @@ in
       HTTPDate MailDKIM LWP IOSocketSSL;
   };
 
+  deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
+  deadpixi-sam = deadpixi-sam-unstable;
+  sam = deadpixi-sam;
+
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
   samba4 = callPackage ../servers/samba/4.x.nix {
@@ -10955,7 +10967,10 @@ in
       xctoolchain = xcode.toolchain;
     };
 
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix { inherit libobjc; }).native;
+    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {
+      inherit libobjc;
+      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
+    }).native;
 
     cf-private = callPackage ../os-specific/darwin/cf-private {
       inherit (apple-source-releases) CF;
@@ -11238,15 +11253,6 @@ in
       ];
   };
 
-  linux_3_14 = callPackage ../os-specific/linux/kernel/linux-3.14.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_3_18 = callPackage ../os-specific/linux/kernel/linux-3.18.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11467,7 +11473,6 @@ in
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4 linuxPackages_4_4);
@@ -12822,6 +12827,8 @@ in
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
+  docker-machine = callPackage ../applications/networking/cluster/docker-machine { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
@@ -13523,9 +13530,9 @@ in
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
-  google-chrome-beta = google-chrome.override { channel = "beta"; };
+  google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
-  google-chrome-dev = google-chrome.override { channel = "dev"; };
+  google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
 
   googleearth = callPackage ../applications/misc/googleearth { };
 
@@ -15636,7 +15643,9 @@ in
 
   xterm = callPackage ../applications/misc/xterm { };
 
-  mlterm = callPackage ../applications/misc/mlterm { };
+  mlterm = callPackage ../applications/misc/mlterm {
+    vte = gnome3.vte_290;
+  };
 
   finalterm = callPackage ../applications/misc/finalterm { };
 
@@ -16227,7 +16236,9 @@ in
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  ut2004demo = callPackage_i686 ../games/ut2004demo { };
+  ut2004Packages = callPackage ../games/ut2004 { };
+
+  ut2004demo = self.ut2004Packages.ut2004 [ self.ut2004Packages.ut2004-demo ];
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 

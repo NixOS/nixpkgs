@@ -24,9 +24,6 @@ import ./make-test.nix ({ pkgs, ... } : {
 
       $influxdb->waitForUnit("influxdb.service");
 
-      # Wait until influxdb admin interface is available
-      $influxdb->waitUntilSucceeds("curl -f 127.0.0.1:8083");
-
       # create influxdb database
       $influxdb->succeed(q~
         curl -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE root"

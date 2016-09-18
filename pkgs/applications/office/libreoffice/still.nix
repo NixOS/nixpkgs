@@ -19,14 +19,14 @@
 }:
 
 let
+  primary-src = import ./still-primary-src.nix { inherit fetchurl; };
+in
+
+with { inherit (primary-src) major minor subdir version; };
+
+let
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
-  major = "5";
-  minor = "1";
-  patch = "5";
-  tweak = "2";
-  subdir = "${major}.${minor}.${patch}";
-  version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
   fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
     inherit name md5;
@@ -64,10 +64,7 @@ let
 in stdenv.mkDerivation rec {
   name = "libreoffice-${version}";
 
-  src = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1qg0dj0zwh5ifhmvv4k771nmyqddz4ifn75s9mr1p0nyix8zks8x";
-  };
+  inherit (primary-src) src;
 
   # we only have this problem on i686 ATM
   patches = if stdenv.is64bit then null else [

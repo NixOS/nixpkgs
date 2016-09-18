@@ -29,12 +29,12 @@ import ./generic.nix (args // rec {
     # ... but use none by default.
     # The default is safer if source policy routing is not setup.
     DEFAULT_DUMMY y
-    DEFAULT_MPTCP_PM "default"
+    DEFAULT_MPTCP_PM default
 
     # MPTCP scheduler selection.
     # Disabled as the only non-default is the useless round-robin.
     MPTCP_SCHED_ADVANCED n
-    DEFAULT_MPTCP_SCHED "default"
+    DEFAULT_MPTCP_SCHED default
 
     # Smarter TCP congestion controllers
     TCP_CONG_LIA m

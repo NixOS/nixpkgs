@@ -1,10 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pcre2-10.21";
+  name = "pcre2-${version}";
+  version = "10.22";
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "1q6lrj9b08l1q39vxipb0fi88x6ybvkr6439h8bjb9r8jd81fsn6";
+    sha256 = "05pl338962d7syd1rbkg96916mq7d3amz1n2fjnm0v5cyhcldd5j";
   };
 
   configureFlags = [
@@ -13,11 +14,17 @@ stdenv.mkDerivation rec {
     "--enable-jit"
   ];
 
-  meta = {
-	description = "Perl Compatible Regular Expressions";
+  outputs = [ "bin" "dev" "out" "doc" "man" "devdoc" ];
+
+  postFixup = ''
+    moveToOutput bin/pcre2-config "$dev"
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Perl Compatible Regular Expressions";
     homepage = "http://www.pcre.org/";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ttuegel ];
+    platforms = platforms.all;
   };
 }

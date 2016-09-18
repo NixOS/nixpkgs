@@ -19,14 +19,14 @@
 }:
 
 let
+  primary-src = import ./default-primary-src.nix { inherit fetchurl; };
+in
+
+with { inherit (primary-src) major minor subdir version; };
+
+let
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
-  major = "5";
-  minor = "2";
-  patch = "1";
-  tweak = "2";
-  subdir = "${major}.${minor}.${patch}";
-  version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
   fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
     inherit name md5;
@@ -64,10 +64,7 @@ let
 in stdenv.mkDerivation rec {
   name = "libreoffice-${version}";
 
-  src = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "14g2xwpid4vsgmc69rs7hz1wx96dfkq0cbm32vjgljsm7a19qfc1";
-  };
+  inherit (primary-src) src;
 
   # Openoffice will open libcups dynamically, so we link it directly
   # to make its dlopen work.
