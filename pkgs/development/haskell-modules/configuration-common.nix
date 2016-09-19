@@ -275,8 +275,8 @@ self: super: {
   HerbiePlugin = dontCheck super.HerbiePlugin;
 
   # These packages try to access the network.
-  amqp-conduit = dontCheck super.amqp-conduit;
   amqp = dontCheck super.amqp;
+  amqp-conduit = dontCheck super.amqp-conduit;
   bitcoin-api = dontCheck super.bitcoin-api;
   bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   bitx-bitcoin = dontCheck super.bitx-bitcoin;          # http://hydra.cryp.to/build/926187/log/raw
@@ -289,6 +289,7 @@ self: super: {
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   hoogle_5_0_4 = super.hoogle_5_0_4.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
+  mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
