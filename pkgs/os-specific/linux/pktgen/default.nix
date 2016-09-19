@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
   GUI = stdenv.lib.optionalString withGtk "true";
 
-  enableParallelBuilding = true;
-
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
 
   postPatch = ''
