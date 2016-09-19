@@ -4,6 +4,14 @@
 stdenv.mkDerivation rec {
   name = "libtunepimp-0.5.3";
 
+  outputs = [ "out" "lib" "dev" ];
+
+  setOutputFlags = false;
+
+  preConfigure = ''
+    configureFlagsArray=(--includedir=$dev/include --libdir=$lib/lib)
+  '';
+
   propagatedBuildInputs = [ zlib expat curl libmusicbrainz2 taglib libmpcdec
     libmad libogg libvorbis flac libofa libtool ];
 
