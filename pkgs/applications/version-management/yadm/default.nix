@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     a specific OS or host. Supplies a method of encrypting confidential data so it
     can safely be stored in your repository.
     '';
-    licence = stdenv.lib.licenses.gpl3;
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
   };
 }
