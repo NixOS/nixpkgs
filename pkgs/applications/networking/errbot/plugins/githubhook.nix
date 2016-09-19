@@ -11,10 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "0i5z9ilk17xcnmjlpxqfqg57wx8rriqrsp2qd1h9ikbyzhhldf09";
   };
 
+  patches = [
+    ./githubhook-fix-config.patch
+  ];
+
   dontBuild = true;
   installPhase = ''
-    mkdir -p $out/share/errbot/plugins/githubhook
-    cp -R githubhook.{plug,py} templates $out/share/errbot/plugins/githubhook
+    mkdir -p $out
+    cp -R githubhook.{plug,py} templates $out
   '';
 
   meta = with stdenv.lib; {
