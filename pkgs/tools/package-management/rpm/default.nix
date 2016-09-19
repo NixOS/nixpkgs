@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "18hk47hc755nslvb7xkq4jb095z7va0nlcyxdpxayc4lmb8mq3bp";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua pkgconfig autoreconfHook ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
@@ -30,6 +32,18 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
   '';
 
+  preFixup = ''
+    # Don't keep a reference to RPM headers or manpages
+    for f in $out/lib/rpm/platform/*/macros; do
+      substituteInPlace $f --replace "$dev" "/rpm-dev-path-was-here"
+      substituteInPlace $f --replace "$man" "/rpm-man-path-was-here"
+    done
+
+    # Avoid macros like '%__ld' pointing to absolute paths
+    for tool in ld nm objcopy objdump strip; do
+      sed -i $out/lib/rpm/macros -e "s/^%__$tool.*/%__$tool $tool/"
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.rpm.org/;
