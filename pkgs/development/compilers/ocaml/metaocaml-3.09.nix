@@ -27,7 +27,8 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = http://www.metaocaml.org/;
     license = with stdenv.lib.licenses; [ qpl lgpl2 ];
-    desctiption = "A compiled, type-safe, multi-stage programming language";
+    description = "A compiled, type-safe, multi-stage programming language";
+    broken = true;
   };
 
 })
