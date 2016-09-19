@@ -135,6 +135,13 @@ following incompatible changes:</para>
   (<literal>networking.firewall.logReversePathDrops</literal>) for easier
   debugging.</para></listitem>
 
+  <listitem><para>Containers configuration within
+  <literal>containers.&lt;name&gt;.config</literal> is now properly
+  typed and checked. In particular, partial configurations are merged
+  correctly.
+  (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/17365">#17365</link>)
+  </para></listitem>
+
 </itemizedlist>
 
 
