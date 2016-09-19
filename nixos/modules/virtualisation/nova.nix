@@ -160,6 +160,28 @@ in {
             the main Nova configurlmation file.
           '';
       };
+          
+      keystoneAdminUsername = mkOption {
+        type = types.str;
+        default = "admin";
+        description = ''
+        '';
+      };
+
+      keystoneAdminPassword = mkOption {
+        type = types.str;
+        default = "admin";
+        description = ''
+        '';
+      };
+
+      keystoneAdminTenant = mkOption {
+        type = types.str;
+        default = "admin";
+        description = ''
+        '';
+      };
+
     };
   };
 
@@ -207,7 +229,35 @@ in {
         # Initialise the database
         ${cfg.package}/bin/nova-manage --config-file=${novaConf} db sync
       '';
-      path = with pkgs; [ cfg.package mysql openssl config.programs.ssh.package "/var/setuid-wrappers/" ];
+      postStart = ''
+        # Wait until the keystone is available for use
+        count=0
+        while ! curl -s  http://localhost:35357/v2.0 > /dev/null 
+        do
+            if [ $count -eq 30 ]
+            then
+                echo "Tried 30 times, giving up..."
+                exit 1
+            fi
+
+            echo "Keystone not yet started. Waiting for 1 second..."
+            count=$((count++))
+            sleep 1
+        done
+
+        # If the service nova doesn't exist, we consider nova
+        # is not initialized
+        if ! keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get nova
+        then
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-create --type compute --name nova
+	    ID=$(keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get nova | awk '/ id / { print $4 }')
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} endpoint-create --region RegionOne --service $ID --internalurl 'http://localhost:8774/v2/%(tenant_id)s' --adminurl 'http://localhost:8774/v2/%(tenant_id)s' --publicurl 'http://localhost:8774/v2/%(tenant_id)s'
+
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-create --name nova --tenant service --pass asdasd
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-role-add --tenant service --user nova --role admin
+        fi
+        '';
+      path = with pkgs; [ cfg.package mysql openssl config.programs.ssh.package "/var/setuid-wrappers/" pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
       serviceConfig = {
         PermissionsStartOnly = true; # preStart must be run as root
         TimeoutStartSec = "900"; # 15min for initial db migrations

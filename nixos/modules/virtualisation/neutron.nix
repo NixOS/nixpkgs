@@ -166,6 +166,27 @@ in {
         and use a database such as MySQL.
       '';
     };
+    
+    keystoneAdminUsername = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
+
+    keystoneAdminPassword = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
+
+    keystoneAdminTenant = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
   };
 
 
@@ -192,7 +213,7 @@ in {
     systemd.services.neutron-server = {
       description = "OpenStack Neutron Daemon";
       after = [ "rabbitmq.service" "mysql.service" "network.target"];
-      path = [ package_set pkgs.mysql ];
+      path = [ package_set pkgs.mysql pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p /var/lock/neutron /var/lib/neutron
@@ -206,6 +227,34 @@ in {
         # Initialise the database
         ${package_set}/bin/neutron-db-manage --config-file ${neutronConf} --config-file ${ml2PluginConf} upgrade head
       '';
+      postStart = ''
+        # Wait until the keystone is available for use
+        count=0
+        while ! curl -s  http://localhost:35357/v2.0 > /dev/null 
+        do
+            if [ $count -eq 30 ]
+            then
+                echo "Tried 30 times, giving up..."
+                exit 1
+            fi
+
+            echo "Keystone not yet started. Waiting for 1 second..."
+            count=$((count++))
+            sleep 1
+        done
+
+        # If the service neutron doesn't exist, we consider neutron is
+        # not initialized
+        if ! keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get neutron
+        then
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-create --type network --name neutron
+	    ID=$(keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get neutron | awk '/ id / { print $4 }')
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} endpoint-create --region RegionOne --service $ID --internalurl http://localhost:9696 --adminurl http://localhost:9696 --publicurl http://localhost:9696
+
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-create --name neutron --tenant service --pass asdasd
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-role-add --tenant service --user neutron --role admin
+        fi
+        '';
       serviceConfig = {
         TimeoutStartSec = "600"; # 10min for initial db migrations
         ExecStart = "${package_set}/bin/neutron-server --config-file=${neutronConf} --config-file=${ml2PluginConf}";

@@ -62,8 +62,28 @@ in {
         and use a database such as MySQL.
       '';
     };
-  };
+    
+    keystoneAdminUsername = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
 
+    keystoneAdminPassword = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
+
+    keystoneAdminTenant = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
+  };
 
   config = mkIf cfg.enableSingleNode {
     # Note: when changing the default, make it conditional on
@@ -82,7 +102,7 @@ in {
     systemd.services.glance-registry = {
       description = "OpenStack Glance Registry Daemon";
       after = [ "mysql.service" "network.target"];
-      path = [ cfg.package pkgs.mysql ];
+      path = [ cfg.package pkgs.mysql pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -m 775 -p /var/lib/glance/{images,scrubber,image_cache}
@@ -96,6 +116,34 @@ in {
         # Initialise the database
         ${cfg.package}/bin/glance-manage --config-file=${glanceApiConf} --config-file=${glanceRegistryConf} db_sync
       '';
+      postStart = ''
+        # Wait until the keystone is available for use
+        count=0
+        while ! curl -s  http://localhost:35357/v2.0 > /dev/null 
+        do
+            if [ $count -eq 30 ]
+            then
+                echo "Tried 30 times, giving up..."
+                exit 1
+            fi
+
+            echo "Keystone not yet started. Waiting for 1 second..."
+            count=$((count++))
+            sleep 1
+        done
+
+        # If the service glance doesn't exist, we consider glance is
+        # not initialized
+        if ! keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get glance
+        then
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-create --type image --name glance
+	    ID=$(keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get glance | awk '/ id / { print $4 }')
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} endpoint-create --region RegionOne --service $ID --internalurl http://localhost:9292 --adminurl http://localhost:9292 --publicurl http://localhost:9292
+
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-create --name glance --tenant service --pass asdasd
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-role-add --tenant service --user glance --role admin
+        fi
+        '';
       serviceConfig = {
         PermissionsStartOnly = true; # preStart must be run as root
         TimeoutStartSec = "600"; # 10min for initial db migrations
