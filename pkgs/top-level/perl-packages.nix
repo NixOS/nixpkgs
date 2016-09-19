@@ -9643,7 +9643,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Interact with TELNET port or other TCP ports";
-      license = "unknown";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
