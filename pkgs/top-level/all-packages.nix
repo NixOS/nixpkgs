@@ -10776,14 +10776,14 @@ in
 
   slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
 
+  systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
+
   inherit (callPackages ../servers/http/tomcat { })
     tomcat6
     tomcat7
     tomcat8
     tomcat85
     tomcatUnstable;
-
-  systemd-journal2gelf = (callPackage ../servers/monitoring/systemd-journal2gelf { }).bin // { outputs = ["bin"]; };
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
