@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
     substituteInPlace lisp/international/mule-cmds.el \
       --replace /usr/share/locale ${gettext}/share/locale
 
-    for i in Makefile.in {src,lib-src,leim}/Makefile.in; do
-        substituteInPlace $i --replace /bin/pwd pwd
+    for makefile_in in $(find . -name Makefile.in -print); do
+        substituteInPlace $makefile_in --replace /bin/pwd pwd
     done
   '';
 
