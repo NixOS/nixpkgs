@@ -499,6 +499,8 @@ in
 
   elvish = callPackage ../shells/elvish { };
 
+  enpass = callPackage ../tools/security/enpass { };
+
   genymotion = callPackage ../development/mobile/genymotion { };
 
   grc = callPackage ../tools/misc/grc { };
