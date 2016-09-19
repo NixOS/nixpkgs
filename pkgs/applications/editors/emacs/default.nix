@@ -7,7 +7,6 @@
 , withGTK3 ? false, gtk3 ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
-, srcLocal ? false
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -63,8 +62,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = lib.optionalString srcRepo ''
     ./autogen.sh
-  '' + lib.optionalString srcLocal ''
-    find . -name '*.elc' -delete
   '' + ''
     substituteInPlace lisp/international/mule-cmds.el \
       --replace /usr/share/locale ${gettext}/share/locale
