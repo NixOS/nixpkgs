@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     description = "A build system designed for scalability and portability";
     homepage = "${webpage}";
     license = "GPL";
+    broken = true;
   };
 }
