@@ -98,6 +98,10 @@ stdenv.mkDerivation rec {
       mkdir -p $(dirname $preload)
       gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
       echo $preload > $plugins/extra-ld-preload
+
+      # Prevent a dependency on gcc.
+      strip -S $preload
+      patchELF $preload
     '';
 
   dontStrip = true;
