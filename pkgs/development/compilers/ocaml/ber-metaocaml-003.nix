@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
       A conservative extension of OCaml with the primitive type of code values,
       and three basic multi-stage expression forms: Brackets, Escape, and Run
     '';
+    broken = true;
   };
 }
