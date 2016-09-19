@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patch -p1 < patch-mac
-    sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
+    substituteInPlace lisp/international/mule-cmds.el \
+      --replace /usr/share/locale ${gettext}/share/locale
   '';
 
   configureFlags = [
