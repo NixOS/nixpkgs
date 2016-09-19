@@ -3579,7 +3579,6 @@ let self = _self // overrides; _self = with self; {
 
   DBIxClass = buildPerlPackage rec {
     name = "DBIx-Class-0.082840";
-    # UPGRADE Note: Please remove workaround in DBDSQLite above
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
       sha256 = "4049afd175e315ebcab945b19030aec40bcec46cc5611b0286a5a267ca7181ef";
