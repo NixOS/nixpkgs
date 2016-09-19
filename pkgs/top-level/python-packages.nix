@@ -11421,13 +11421,15 @@ in modules // {
 
   greenlet = buildPythonPackage rec {
     name = "greenlet-${version}";
-    version = "0.4.7";
+    version = "0.4.10";
     disabled = isPyPy;  # builtin for pypy
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/g/greenlet/${name}.zip";
-      sha256 = "1zlmsygjw69xlq56vz1z5ivzy9bwc7knjaykn2yy2hv4w2j4yb7k";
+      url = "mirror://pypi/g/greenlet/${name}.tar.gz";
+      sha256 = "c4417624aa88380cdf0fe110a8a6e0dbcc26f80887197fe5df0427dfa348ae62";
     };
+
+    propagatedBuildInputs = with self; [ six ];
 
     # see https://github.com/python-greenlet/greenlet/issues/85
     preCheck = ''
