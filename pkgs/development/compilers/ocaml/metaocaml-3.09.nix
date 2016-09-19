@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation (rec {
 
-  name = "metaocaml-3.09-alpha-30";
+  name = "metaocaml-${version}";
+  version = "3.09-alpha-30";
 
   src = fetchurl {
     url = "http://www.metaocaml.org/dist/old/MetaOCaml_309_alpha_030.tar.gz";

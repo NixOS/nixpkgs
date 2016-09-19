@@ -27,6 +27,7 @@ stdenv.mkDerivation (args // rec {
   x11inc = x11env + "/include";
 
   inherit name;
+  inherit version;
 
   src = fetchurl {
     url = real_url;
