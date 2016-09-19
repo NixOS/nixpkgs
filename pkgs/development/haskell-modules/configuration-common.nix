@@ -800,6 +800,7 @@ self: super: {
       mkdir -p $out/share/emacs
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
+    doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   });
 
   # https://github.com/yesodweb/Shelly.hs/issues/106

@@ -3844,7 +3844,6 @@ dont-distribute-packages:
   highWaterMark:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   himg:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   himpy:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
-  hindent:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   hinstaller:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   hinvaders:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   hinze-streams:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
