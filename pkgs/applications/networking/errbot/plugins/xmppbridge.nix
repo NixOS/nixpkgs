@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   installPhase = ''
-    mkdir -p $out/share/errbot/plugins/xmppbridge
-    cp xmppbridge.{plug,py} $out/share/errbot/plugins/xmppbridge
+    mkdir -p $out
+    cp xmppbridge.{plug,py} $out
   '';
 
   meta = with stdenv.lib; {
