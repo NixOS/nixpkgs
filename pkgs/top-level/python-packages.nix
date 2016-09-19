@@ -26154,7 +26154,7 @@ in modules // {
     name = "tornado-${version}";
     version = "4.4.1";
 
-    propagatedBuildInputs = with self; [ backports_abc backports_ssl_match_hostname_3_4_0_2 certifi singledispatch ];
+    propagatedBuildInputs = with self; [ backports_abc backports_ssl_match_hostname certifi singledispatch ];
 
     # We specify the name of the test files to prevent
     # https://github.com/NixOS/nixpkgs/issues/14634
