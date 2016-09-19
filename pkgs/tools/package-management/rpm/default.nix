@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
+  configureFlags = [
+    "--with-external-db"
+    "--with-lua"
+    "--enable-python"
+    "--localstatedir=/var"
+    "--sharedstatedir=/com"
+  ];
+
   postPatch = ''
     # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here
     substituteInPlace configure.ac --replace 'python''${PYTHON_VERSION}' ${python.executable}
@@ -22,7 +30,6 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
   '';
 
-  configureFlags = "--with-external-db --with-lua --enable-python --localstatedir=/var --sharedstatedir=/com";
 
   meta = with stdenv.lib; {
     homepage = http://www.rpm.org/;
