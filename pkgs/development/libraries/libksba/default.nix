@@ -8,7 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0kxdb02z41cwm1xbwfwj9nbc0dzjhwyq8c475mlhhmpcxcy8ihpn";
   };
 
+  outputs = [ "out" "dev" "doc" ];
+
   propagatedBuildInputs = [ libgpgerror ];
+
+  postInstall = ''
+    mkdir -p $dev/bin
+    mv $out/bin/*-config $dev/bin/
+    rmdir --ignore-fail-on-non-empty $out/bin
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://www.gnupg.org;
