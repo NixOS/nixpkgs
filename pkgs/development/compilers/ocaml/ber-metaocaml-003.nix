@@ -8,7 +8,8 @@ in
 
 stdenv.mkDerivation rec {
   
-  name = "ber-metaocaml-003";
+  name = "ber-metaocaml-${version}";
+  version = "003";
   
   src = fetchurl {
     url = "http://caml.inria.fr/pub/distrib/ocaml-3.11/ocaml-3.11.2.tar.bz2";
