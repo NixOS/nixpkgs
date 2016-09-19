@@ -17060,7 +17060,7 @@ in modules // {
       sha256 = "9c12c370feda864c2f541cecce9bfb3a2a682c6c59c097a852e7b040dc6b8431";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest pytestrunner ];
     propagatedBuildInputs = with self; [ six w3lib lxml cssselect ];
 
     checkPhase = ''
