@@ -140,7 +140,7 @@
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
-      monetdb = 115;
+      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       rippled = 116;
       murmur = 117;
       foundationdb = 118;
@@ -395,7 +395,7 @@
       #ngircd = 112; # unused
       btsync = 113;
       #minecraft = 114; # unused
-      monetdb = 115;
+      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       #ripped = 116; # unused
       #murmur = 117; # unused
       foundationdb = 118;
