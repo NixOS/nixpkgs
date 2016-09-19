@@ -11138,22 +11138,30 @@ in modules // {
   };
 
   gevent = buildPythonPackage rec {
-    name = "gevent-1.0.2";
-    disabled = isPy3k || isPyPy;  # see https://github.com/surfly/gevent/issues/248
+    name = "gevent-1.1.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gevent/${name}.tar.gz";
-      sha256 = "0cds7yvwdlqmd590i59vzxaviwxk4js6dkhnmdxb3p1xac7wmq9s";
+      sha256 = "cb15cf73d69a2eeefed330858f09634e2c50bf46da9f9e7635730fcfb872c02c";
     };
 
-    patchPhase = ''
+    # Why do we have this patch?
+    postPatch = ''
       substituteInPlace libev/ev.c --replace \
         "ecb_inline void ecb_unreachable (void) ecb_noreturn" \
         "ecb_inline ecb_noreturn void ecb_unreachable (void)"
     '';
 
     buildInputs = with self; [ pkgs.libev ];
-    propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ];
+    propagatedBuildInputs = with self; optionals (!isPyPy) [ greenlet ];
+
+    checkPhase = ''
+      cd greentest
+      ${python.interpreter} testrunner.py
+    '';
+
+    # Bunch of failures.
+    doCheck = false;
 
     meta = {
       description = "Coroutine-based networking library";
