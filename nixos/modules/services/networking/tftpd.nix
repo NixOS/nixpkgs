@@ -8,13 +8,7 @@ with lib;
 
   options = {
 
-    services.tftpd.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable tftpd, a Trivial File Transfer Protocol server.
-      '';
-    };
+    services.tftpd.enable = mkEnableOption "tftpd, a Trivial File Transfer Protocol server";
 
     services.tftpd.path = mkOption {
       type = types.path;

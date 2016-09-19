@@ -8,13 +8,7 @@ with lib;
   options = {
 
     security.pam.oath = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the OATH (one-time password) PAM module.
-        '';
-      };
+      enable = mkEnableOption "the OATH (one-time password) PAM module";
 
       digits = mkOption {
         type = types.enum [ 6 7 8 ];

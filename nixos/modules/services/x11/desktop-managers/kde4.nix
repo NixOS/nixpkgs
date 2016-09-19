@@ -50,11 +50,7 @@ in
   options = {
 
     services.xserver.desktopManager.kde4 = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the KDE 4 desktop environment.";
-      };
+      enable = mkEnableOption "the KDE 4 desktop environment";
 
       phononBackends = mkOption {
         type = types.listOf types.str;

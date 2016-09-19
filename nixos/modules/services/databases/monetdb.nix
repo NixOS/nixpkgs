@@ -12,11 +12,7 @@ with lib;
 
     services.monetdb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable MonetDB database server.";
-      };
+      enable = mkEnableOption "MonetDB database server";
 
       package = mkOption {
         type = types.path;

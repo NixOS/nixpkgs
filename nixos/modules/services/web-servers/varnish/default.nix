@@ -7,12 +7,7 @@ with lib;
 {
   options = {
     services.varnish = {
-      enable = mkOption {
-        default = false;
-        description = "
-          Enable the Varnish Server.
-        ";
-      };
+      enable = mkEnableOption "the Varnish Server";
 
       http_address = mkOption {
         default = "*:6081";

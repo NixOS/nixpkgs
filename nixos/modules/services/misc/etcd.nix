@@ -8,11 +8,7 @@ let
 in {
 
   options.services.etcd = {
-    enable = mkOption {
-      description = "Whether to enable etcd.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "etcd";
 
     name = mkOption {
       description = "Etcd unique node name.";

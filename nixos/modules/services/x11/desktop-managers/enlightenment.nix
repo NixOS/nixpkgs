@@ -18,11 +18,7 @@ in
 {
   options = {
 
-    services.xserver.desktopManager.enlightenment.enable = mkOption {
-      default = false;
-      example = true;
-      description = "Enable the Enlightenment desktop environment.";
-    };
+    services.xserver.desktopManager.enlightenment.enable = mkEnableOption "the Enlightenment desktop environment";
 
   };
 

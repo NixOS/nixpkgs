@@ -20,13 +20,7 @@ in
 
     services.seeks = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "
-          Whether to enable the Seeks server.
-        ";
-      };
+      enable = mkEnableOption "the Seeks server";
 
       confDir = mkOption {
         default = "";

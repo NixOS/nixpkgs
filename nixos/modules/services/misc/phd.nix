@@ -16,12 +16,7 @@ in
 
     services.phd = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Enable daemons for phabricator.
-        ";
-      };
+      enable = mkEnableOption "daemons for phabricator";
 
     };
 

@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 let
-  inherit (lib) mkOption mkIf;
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.environment.blcr;
   blcrPkg = config.boot.kernelPackages.blcr;
 in
@@ -10,11 +10,7 @@ in
   ###### interface
 
   options = {
-    environment.blcr.enable = mkOption {
-      default = false;
-      description =
-        "Whether to enable support for the BLCR checkpointing tool.";
-    };
+    environment.blcr.enable = mkEnableOption "support for the BLCR checkpointing tool";
   };
 
   ###### implementation

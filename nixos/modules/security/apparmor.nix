@@ -1,18 +1,14 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf mkOption types concatMapStrings;
+  inherit (lib) mkEnableOption mkIf mkOption types concatMapStrings;
   cfg = config.security.apparmor;
 in
 
 {
    options = {
      security.apparmor = {
-       enable = mkOption {
-         type = types.bool;
-         default = false;
-         description = "Enable the AppArmor Mandatory Access Control system.";
-       };
+       enable = mkEnableOption "the AppArmor Mandatory Access Control system";
        profiles = mkOption {
          type = types.listOf types.path;
          default = [];

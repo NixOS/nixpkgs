@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkOption mkIf singleton;
+  inherit (lib) mkEnableOption mkOption mkIf singleton;
 
   inherit (pkgs) heimdalFull;
 
@@ -17,12 +17,7 @@ in
 
     services.kerberos_server = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Enable the kerberos authentification server.
-        '';
-      };
+      enable = mkEnableOption "the kerberos authentification server";
 
     };
 

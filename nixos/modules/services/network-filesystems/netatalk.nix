@@ -43,10 +43,7 @@ in
   options = {
     services.netatalk = {
 
-      enable = mkOption {
-          default = false;
-          description = "Whether to enable the Netatalk AFP fileserver.";
-        };
+      enable = mkEnableOption "the Netatalk AFP fileserver";
 
       port = mkOption {
         default = 548;
@@ -64,10 +61,7 @@ in
       };
 
       homes = {
-        enable = mkOption {
-          default = false;
-          description = "Enable sharing of the UNIX server user home directories.";
-        };
+        enable = mkEnableOption "sharing of the UNIX server user home directories";
 
         path = mkOption {
           default = "";

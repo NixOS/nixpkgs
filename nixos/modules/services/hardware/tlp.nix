@@ -33,11 +33,7 @@ in
 
     services.tlp = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the TLP daemon.";
-      };
+      enable = mkEnableOption "the TLP daemon";
 
       extraConfig = mkOption {
         type = types.str;

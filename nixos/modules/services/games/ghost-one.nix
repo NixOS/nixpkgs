@@ -14,10 +14,7 @@ in
   options = {
     services.ghostOne = {
 
-      enable = mkOption {
-        default = false;
-        description = "Enable Ghost-One Warcraft3 game hosting server.";
-      };
+      enable = mkEnableOption "Ghost-One Warcraft3 game hosting server";
 
       language = mkOption {
         default = "English";

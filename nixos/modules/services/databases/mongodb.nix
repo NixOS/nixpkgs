@@ -32,12 +32,7 @@ in
 
     services.mongodb = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the MongoDB server.
-        ";
-      };
+      enable = mkEnableOption "the MongoDB server";
 
       package = mkOption {
         default = pkgs.mongodb;

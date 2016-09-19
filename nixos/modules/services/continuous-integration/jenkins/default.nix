@@ -5,13 +5,7 @@ let
 in {
   options = {
     services.jenkins = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the jenkins continuous integration server.
-        '';
-      };
+      enable = mkEnableOption "the jenkins continuous integration server";
 
       user = mkOption {
         default = "jenkins";

@@ -23,13 +23,7 @@ in {
   options = {
 
     services.riemann-dash = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the riemann-dash dashboard daemon.
-        '';
-      };
+      enable = mkEnableOption "the riemann-dash dashboard daemon";
       config = mkOption {
         type = types.lines;
         description = ''

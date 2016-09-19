@@ -21,13 +21,7 @@ let
 in {
 
   options.services.psd = with types; {
-    enable = mkOption {
-      type = bool;
-      default = false;
-      description = ''
-        Whether to enable the Profile Sync daemon.
-      '';
-    };
+    enable = mkEnableOption "the Profile Sync daemon";
 
     users = mkOption {
       type = listOf str;

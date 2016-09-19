@@ -8,11 +8,7 @@ in {
 
   options = {
     services.fcgiwrap = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI.";
-      };
+      enable = mkEnableOption "fcgiwrap, a server for running CGI applications over FastCGI";
 
       preforkProcesses = mkOption {
         type = types.int;

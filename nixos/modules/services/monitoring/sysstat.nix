@@ -5,13 +5,7 @@ let
 in {
   options = {
     services.sysstat = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable sar system activity collection.
-        '';
-      };
+      enable = mkEnableOption "sar system activity collection";
 
       collect-frequency = mkOption {
         default = "*:00/10";

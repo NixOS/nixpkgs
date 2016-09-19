@@ -112,10 +112,7 @@ in
 
     services.vsftpd = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the vsftpd FTP server.";
-      };
+      enable = mkEnableOption "the vsftpd FTP server";
 
       userlist = mkOption {
         default = [];

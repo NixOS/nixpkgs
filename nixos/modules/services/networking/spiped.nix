@@ -8,11 +8,7 @@ in
 {
   options = {
     services.spiped = {
-      enable = mkOption {
-        type        = types.bool;
-        default     = false;
-        description = "Enable the spiped service module.";
-      };
+      enable = mkEnableOption "the spiped service module";
 
       config = mkOption {
         type = types.attrsOf (types.submodule (

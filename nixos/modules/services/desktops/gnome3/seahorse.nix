@@ -15,13 +15,7 @@ in
 
     services.gnome3.seahorse = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable Seahorse search provider for the GNOME Shell activity search.
-        '';
-      };
+      enable = mkEnableOption "Seahorse search provider for the GNOME Shell activity search";
 
     };
 

@@ -9,13 +9,7 @@ with lib;
 
     hardware.trackpoint = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Enable sensitivity and speed configuration for trackpoints.
-        '';
-      };
+      enable = mkEnableOption "sensitivity and speed configuration for trackpoints";
 
       sensitivity = mkOption {
         default = 128;

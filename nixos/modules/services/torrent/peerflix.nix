@@ -17,11 +17,7 @@ in {
   ###### interface
 
   options.services.peerflix = {
-    enable = mkOption {
-      description = "Whether to enable peerflix service.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "peerflix service";
 
     stateDir = mkOption {
       description = "Peerflix state directory.";

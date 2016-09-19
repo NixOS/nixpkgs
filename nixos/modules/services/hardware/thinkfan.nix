@@ -52,12 +52,7 @@ in {
 
     services.thinkfan = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable thinkfan, fan controller for ibm/lenovo thinkpads.
-        '';
-      };
+      enable = mkEnableOption "thinkfan, fan controller for ibm/lenovo thinkpads";
 
       sensor = mkOption {
         default = "/proc/acpi/ibm/thermal";

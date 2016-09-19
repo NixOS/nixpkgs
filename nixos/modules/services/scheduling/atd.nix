@@ -16,13 +16,7 @@ in
 
   options = {
 
-    services.atd.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable the <command>at</command> daemon, a command scheduler.
-      '';
-    };
+    services.atd.enable = mkEnableOption "the <command>at</command> daemon, a command scheduler";
 
     services.atd.allowEveryone = mkOption {
       type = types.bool;

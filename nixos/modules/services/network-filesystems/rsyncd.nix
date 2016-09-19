@@ -30,10 +30,7 @@ in
   options = {
     services.rsyncd = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the rsync daemon.";
-      };
+      enable = mkEnableOption "the rsync daemon";
 
       motd = mkOption {
         type = types.string;

@@ -16,13 +16,7 @@ in
 
     services.tlsdated = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable tlsdated daemon.
-        '';
-      };
+      enable = mkEnableOption "tlsdated daemon";
 
       extraOptions = mkOption {
         type = types.string;

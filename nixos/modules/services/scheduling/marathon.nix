@@ -11,13 +11,7 @@ in {
   ###### interface
 
   options.services.marathon = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-	Whether to enable the marathon mesos framework.
-      '';
-    };
+    enable = mkEnableOption "the marathon mesos framework";
 
     master = mkOption {
       type = types.str;

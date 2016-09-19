@@ -20,12 +20,7 @@ in
 
     services.postgresqlBackup = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable PostgreSQL dumps.
-        '';
-      };
+      enable = mkEnableOption "PostgreSQL dumps";
 
       period = mkOption {
         default = "15 01 * * *";

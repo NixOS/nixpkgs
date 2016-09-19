@@ -8,13 +8,7 @@ in
 
   options = {
 
-    services.resolved.enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Whether to enable the systemd DNS resolver daemon.
-      '';
-    };
+    services.resolved.enable = mkEnableOption "the systemd DNS resolver daemon";
 
     services.resolved.fallbackDns = mkOption {
       default = [ ];

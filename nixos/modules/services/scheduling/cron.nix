@@ -37,11 +37,7 @@ in
 
     services.cron = {
 
-      enable = mkOption {
-        type = types.bool;
-        example = true;
-        description = "Whether to enable the Vixie cron daemon.";
-      };
+      enable = mkEnableOption "the Vixie cron daemon";
 
       mailto = mkOption {
         type = types.nullOr types.str;

@@ -42,12 +42,7 @@ in
 {
   options = {
     services.systemhealth = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Enable the system health monitor and its generation of graphs.
-        '';
-      };
+      enable = mkEnableOption "the system health monitor and its generation of graphs";
 
       urlPrefix = mkOption {
         default = "/health";

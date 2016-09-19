@@ -56,13 +56,7 @@ in {
 
   options = {
     services.redmine = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the redmine service.
-        '';
-      };
+      enable = mkEnableOption "the redmine service";
 
       stateDir = mkOption {
         type = types.str;

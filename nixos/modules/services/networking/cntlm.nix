@@ -15,12 +15,7 @@ in
 
     services.cntlm = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable the cntlm, which start a local proxy.
-        '';
-      };
+      enable = mkEnableOption "the cntlm, which start a local proxy";
 
       username = mkOption {
         description = ''

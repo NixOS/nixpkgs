@@ -20,13 +20,7 @@ in
   options = {
 
     services.cpuminer-cryptonight = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the cpuminer cryptonight miner.
-        '';
-      };
+      enable = mkEnableOption "the cpuminer cryptonight miner";
       url = mkOption {
         type = types.string;
         description = "URL of mining server";

@@ -36,12 +36,7 @@ in
 
     services.ircdHybrid = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Enable IRCD.
-        ";
-      };
+      enable = mkEnableOption "IRCD";
 
       serverName = mkOption {
         default = "hades.arpa";

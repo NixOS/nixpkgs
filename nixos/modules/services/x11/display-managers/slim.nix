@@ -47,13 +47,7 @@ in
 
     services.xserver.displayManager.slim = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = config.services.xserver.enable;
-        description = ''
-          Whether to enable SLiM as the display manager.
-        '';
-      };
+      enable = mkEnableOption "SLiM as the display manager";
 
       theme = mkOption {
         type = types.nullOr types.path;

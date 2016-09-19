@@ -25,11 +25,7 @@ in
   options = {
 
     services.fail2ban = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Whether to enable the fail2ban service.";
-      };
+      enable = mkEnableOption "the fail2ban service";
 
       daemonConfig = mkOption {
         default =

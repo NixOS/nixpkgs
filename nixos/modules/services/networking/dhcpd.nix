@@ -39,12 +39,7 @@ in
 
     services.dhcpd = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the DHCP server.
-        ";
-      };
+      enable = mkEnableOption "the DHCP server";
 
       extraConfig = mkOption {
         default = "";

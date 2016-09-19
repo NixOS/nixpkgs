@@ -19,12 +19,7 @@ in
 
     services.mysqlBackup = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable MySQL backups.
-        '';
-      };
+      enable = mkEnableOption "MySQL backups";
 
       period = mkOption {
         default = "15 01 * * *";

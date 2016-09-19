@@ -30,11 +30,7 @@ let
 in {
 
   options.services.apache-kafka = {
-    enable = mkOption {
-      description = "Whether to enable Apache Kafka.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "Apache Kafka";
 
     brokerId = mkOption {
       description = "Broker ID.";

@@ -29,13 +29,7 @@ in {
   options = {
 
     services.syslog-ng = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the syslog-ng daemon.
-        '';
-      };
+      enable = mkEnableOption "the syslog-ng daemon";
       package = mkOption {
         type = types.package;
         default = pkgs.syslogng;

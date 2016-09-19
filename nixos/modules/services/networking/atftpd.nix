@@ -16,13 +16,7 @@ in
 
     services.atftpd = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Whenever to enable the atftpd TFTP server.
-        '';
-      };
+      enable = mkEnableOption "the atftpd TFTP server";
 
       root = mkOption {
         default = "/var/empty";

@@ -78,13 +78,7 @@ in
 
     services.xserver.displayManager.kdm = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the KDE display manager.
-        '';
-      };
+      enable = mkEnableOption "the KDE display manager";
 
       enableXDMCP = mkOption {
         type = types.bool;

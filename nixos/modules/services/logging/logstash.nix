@@ -24,11 +24,7 @@ in
 
     services.logstash = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable logstash.";
-      };
+      enable = mkEnableOption "logstash";
 
       package = mkOption {
         type = types.package;

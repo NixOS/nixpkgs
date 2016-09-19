@@ -15,10 +15,7 @@ in
 
   ###### interface
 
-  options.virtualisation.virtualbox.guest.enable = mkOption {
-    default = false;
-    description = "Whether to enable the VirtualBox service and other guest additions.";
-  };
+  options.virtualisation.virtualbox.guest.enable = mkEnableOption "the VirtualBox service and other guest additions";
 
   ###### implementation
 
