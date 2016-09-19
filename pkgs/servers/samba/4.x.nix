@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v2grwivm6rasz1ganbybs0ikz1lydaniy65kxf1v8rl1qqngach";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   patches =
     [ ./4.x-no-persistent-install.patch
       ./4.x-fix-ctdb-deps.patch
