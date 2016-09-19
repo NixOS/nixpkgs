@@ -11016,7 +11016,7 @@ in modules // {
     };
   };
 
-  futures = buildPythonPackage rec {
+  futures = if !(isPy3k) then (buildPythonPackage rec {
     name = "futures-${version}";
     version = "3.0.5";
 
@@ -11041,7 +11041,7 @@ in modules // {
       license = licenses.bsd2;
       maintainers = with maintainers; [ garbas ];
     };
-  };
+  }) else null;
 
   futures_2_2 = self.futures.override rec {
     version = "2.2.0";
