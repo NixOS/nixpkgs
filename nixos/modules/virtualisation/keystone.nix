@@ -82,7 +82,7 @@ in {
     systemd.services.keystone-all = {
         description = "OpenStack Keystone Daemon";
         after = [ "mysql.service" "network.target"];
-        path = [ cfg.package pkgs.mysql ];
+        path = [ cfg.package pkgs.mysql pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
         wantedBy = [ "multi-user.target" ];
         preStart = ''
           mkdir -m 755 -p /var/lib/keystone
@@ -98,6 +98,38 @@ in {
           # Set up the keystone's PKI infrastructure
           ${cfg.package}/bin/keystone-manage --config-file=${keystoneConf} pki_setup --keystone-user keystone --keystone-group keystone
         '';
+	postStart = ''
+	    # Wait until the keystone is available for use
+            count=0
+            while ! curl -s  http://localhost:35357/v2.0 > /dev/null 
+            do
+                if [ $count -eq 30 ]
+                then
+                    echo "Tried 30 times, giving up..."
+                    exit 1
+                fi
+
+                echo "Keystone not yet started. Waiting for 1 second..."
+                count=$((count++))
+                sleep 1
+            done
+
+	    # If the tenant service doesn't exist, we consider
+	    # keystone is not initialized
+	    if ! keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken tenant-get service
+	    then
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken tenant-create --name service
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken tenant-create --name admin
+                # TODO: change password
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken user-create --name admin --tenant admin --pass admin
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken role-create --name admin
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken role-create --name Member
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken user-role-add --tenant admin --user admin --role admin
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken service-create --type identity --name keystone
+                ID=$(keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken service-get keystone | awk '/ id / { print $4 }')
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken endpoint-create --region RegionOne --service $ID --publicurl http://localhost:5000/v2.0 --adminurl http://localhost:35357/v2.0 --internalurl http://localhost:5000/v2.0
+            fi
+	'';
         serviceConfig = {
           PermissionsStartOnly = true; # preStart must be run as root
           TimeoutStartSec = "600"; # 10min for initial db migrations
