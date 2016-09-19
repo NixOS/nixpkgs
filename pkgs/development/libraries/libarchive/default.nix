@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lngng84k1kkljl74q0cdqc3s82vn2kimfm02dgm4d6m7x71mvkj";
   };
 
+  outputs = [ "out" "lib" "dev" ];
+
   buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz lzo ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
   '' else null;
 
   preFixup = ''
-    sed -i $out/lib/libarchive.la \
+    sed -i $lib/lib/libarchive.la \
       -e 's|-lcrypto|-L${openssl.out}/lib -lcrypto|' \
       -e 's|-llzo2|-L${lzo}/lib -llzo2|'
   '';
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       This library has code for detecting and reading many archive formats and
       compressions formats including (but not limited to) tar, shar, cpio, zip, and
-      compressed with gzip, bzip2, lzma, xz, .. 
+      compressed with gzip, bzip2, lzma, xz, ...
     '';
     homepage = http://libarchive.org;
     license = stdenv.lib.licenses.bsd3;
