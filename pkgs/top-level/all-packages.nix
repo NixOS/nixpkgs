@@ -10919,6 +10919,10 @@ in
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
+  cockroachdb = callPackage ../servers/sql/cockroachdb {
+    gcc = gcc6; # needs gcc 6.0 and above
+  };
+
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_1; # conky can use 5.2, but toluapp can not
   } // config.conky or {});
