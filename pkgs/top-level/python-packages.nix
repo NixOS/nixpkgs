@@ -25249,14 +25249,19 @@ in modules // {
   };
 
   willie = buildPythonPackage rec {
-    name = "willie-5.2.0";
+    name = "willie-${version}";
+    version = "5.5.1";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/w/willie/willie-5.2.0.tar.gz";
-      sha256 = "2da2e91b65c471b4c8e5e5e11471b25887635258d24aaf76b5354147b3ab577d";
+      url = "mirror://pypi/w/willie/${name}.tar.gz";
+      sha256 = "e03dd26ea694b877a2b3b7b4dcca8e79420e7f346abab34292bff43d992a8cc5";
     };
 
-    propagatedBuildInputs = with self; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname_3_4_0_2 ];
+    buildInputs = with self; [ pytest modules.sqlite3 ];
+    propagatedBuildInputs = with self; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname ];
+    checkPhase = ''
+      py.test test
+    '';
 
     meta = {
       description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
