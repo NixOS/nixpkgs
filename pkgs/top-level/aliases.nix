@@ -26,7 +26,6 @@ doNotDisplayTwice rec {
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
-  buildbotSlave = buildbot-slave;  # added 2014-12-09
   bundler_HEAD = bundler; # added 2015-11-15
   checkbashism = checkbashisms; # added 2016-08-16
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
@@ -100,6 +99,7 @@ doNotDisplayTwice rec {
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  sshfsFuse = sshfs-fuse; # added 2016-09
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03

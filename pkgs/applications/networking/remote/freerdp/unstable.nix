@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1lydkh6by0sjy6dl57bzg7c11ccyp24s80pwxw9h5kmxkbw6mx5q";
   };
 
+  prePatch = ''
+    substituteInPlace "libfreerdp/freerdp.pc.in" --replace "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
+  '';
+
   patches = [
   ] ++ stdenv.lib.optional (pcsclite != null)
       (substituteAll {
@@ -37,7 +41,6 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (pcsclite != null) "-DWITH_PCSC=ON"
     ++ stdenv.lib.optional buildServer "-DWITH_SERVER=ON"
     ++ stdenv.lib.optional optimize "-DWITH_SSE2=ON";
-
 
   meta = with stdenv.lib; {
     description = "A Remote Desktop Protocol Client";

@@ -604,9 +604,7 @@ in
 
   bitbucket-cli = pythonPackages.bitbucket-cli;
 
-  blink = callPackage ../applications/networking/instant-messengers/blink {
-    gnutls = gnutls33;
-  };
+  blink = callPackage ../applications/networking/instant-messengers/blink { };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
@@ -734,6 +732,8 @@ in
 
   consul-template = callPackage ../tools/system/consul-template { };
 
+  corebird = callPackage ../applications/networking/corebird { };
+
   corosync = callPackage ../servers/corosync { };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
@@ -847,7 +847,11 @@ in
 
   glide = callPackage ../development/tools/glide { };
 
+  glock = callPackage ../development/tools/glock { };
+
   gmic = callPackage ../tools/graphics/gmic { };
+
+  goa = callPackage ../development/tools/goa { };
 
   gringo = callPackage ../tools/misc/gringo { };
 
@@ -2443,6 +2447,8 @@ in
 
   libircclient = callPackage ../development/libraries/libircclient { };
 
+  libite = callPackage ../development/libraries/libite { };
+
   liboauth = callPackage ../development/libraries/liboauth { };
 
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
@@ -2564,6 +2570,8 @@ in
   man-old = callPackage ../tools/misc/man { };
 
   man-db = callPackage ../tools/misc/man-db { };
+
+  mandoc = callPackage ../tools/misc/mandoc { };
 
   mawk = callPackage ../tools/text/mawk { };
 
@@ -3612,7 +3620,7 @@ in
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
-  sshfsFuse = callPackage ../tools/filesystems/sshfs-fuse { };
+  sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
 
   sshuttle = callPackage ../tools/security/sshuttle { };
 
@@ -5567,6 +5575,7 @@ in
       };
     });
 
+  rainicorn = callPackage ../development/tools/rust/rainicorn { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
@@ -5809,7 +5818,7 @@ in
 
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
-  lxappearance = callPackage ../applications/misc/lxappearance {};
+  lxappearance = callPackage ../desktops/lxde/core/lxappearance {};
 
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
 
@@ -6229,11 +6238,7 @@ in
     wxGTK = wxGTK30;
   };
 
-  buildbot-slave = callPackage ../development/tools/build-managers/buildbot-slave {
-    inherit (pythonPackages) twisted;
-  };
-
-  buildbot = callPackage ../development/tools/build-managers/buildbot/9.nix { };
+  buildbot = callPackage ../development/tools/build-managers/buildbot { };
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
   buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
   buildbot-ui = self.buildbot.override {
@@ -6317,7 +6322,7 @@ in
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
+  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
     wantPS = stdenv.isDarwin;
     inherit (darwin) ps;
   };
@@ -6354,6 +6359,8 @@ in
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
+
+  libstdcxx5 = callPackage ../development/libraries/libstdc++5 { };
 
   libsigrok = callPackage ../development/tools/libsigrok { };
   # old version:
@@ -8281,6 +8288,10 @@ in
   libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
   libmsgpack_1_4 = callPackage ../development/libraries/libmsgpack/1.4.nix { };
 
+  libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
+    mysql = mysql57;
+  };
+
   libnatspec = callPackage ../development/libraries/libnatspec (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
@@ -9043,10 +9054,7 @@ in
   openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
   openjpeg = openjpeg_2_1;
 
-  openscenegraph = callPackage ../development/libraries/openscenegraph {
-    giflib = giflib_4_1;
-    ffmpeg = ffmpeg_0;
-  };
+  openscenegraph = callPackage ../development/libraries/openscenegraph { };
 
   openslp = callPackage ../development/libraries/openslp {};
 
@@ -9772,6 +9780,8 @@ in
 
   vrpn = callPackage ../development/libraries/vrpn { };
 
+  vsqlite = callPackage ../development/libraries/vsqlite { };
+
   vtk = callPackage ../development/libraries/vtk { };
 
   vtkWithQt4 = vtk.override { qtLib = qt4; };
@@ -9952,6 +9962,8 @@ in
   cppzmq = callPackage ../development/libraries/cppzmq {};
 
   czmq = callPackage ../development/libraries/czmq { };
+
+  czmqpp = callPackage ../development/libraries/czmqpp { };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
@@ -10548,8 +10560,6 @@ in
 
   rpcbind = callPackage ../servers/rpcbind { };
 
-  #monetdb = callPackage ../servers/sql/monetdb { };
-
   mariadb = callPackage ../servers/sql/mariadb {
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
@@ -10571,6 +10581,12 @@ in
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost159;
   };
 
   mysql = mariadb;
@@ -10692,6 +10708,10 @@ in
       HTTPDate MailDKIM LWP IOSocketSSL;
   };
 
+  deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
+  deadpixi-sam = deadpixi-sam-unstable;
+  sam = deadpixi-sam;
+
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
   samba4 = callPackage ../servers/samba/4.x.nix {
@@ -10761,6 +10781,8 @@ in
   slurm-llnl = callPackage ../servers/computing/slurm { gtk2 = null; };
 
   slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
+
+  systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   inherit (callPackages ../servers/http/tomcat { })
     tomcat6
@@ -10903,6 +10925,10 @@ in
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
+  cockroachdb = callPackage ../servers/sql/cockroachdb {
+    gcc = gcc6; # needs gcc 6.0 and above
+  };
+
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_1; # conky can use 5.2, but toluapp can not
   } // config.conky or {});
@@ -10931,7 +10957,10 @@ in
       xctoolchain = xcode.toolchain;
     };
 
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix { inherit libobjc; }).native;
+    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {
+      inherit libobjc;
+      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
+    }).native;
 
     cf-private = callPackage ../os-specific/darwin/cf-private {
       inherit (apple-source-releases) CF;
@@ -11214,15 +11243,6 @@ in
       ];
   };
 
-  linux_3_14 = callPackage ../os-specific/linux/kernel/linux-3.14.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_3_18 = callPackage ../os-specific/linux/kernel/linux-3.18.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11443,7 +11463,6 @@ in
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4 linuxPackages_4_4);
@@ -11665,6 +11684,8 @@ in
   pmtools = callPackage ../os-specific/linux/pmtools { };
 
   policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
+
+  powerdns = callPackage ../servers/dns/powerdns { };
 
   powertop = callPackage ../os-specific/linux/powertop { };
 
@@ -12678,7 +12699,7 @@ in
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
     libpng = libpng12;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
@@ -12798,6 +12819,8 @@ in
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
+  docker-machine = callPackage ../applications/networking/cluster/docker-machine { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
@@ -12845,12 +12868,12 @@ in
 
   elvis = callPackage ../applications/editors/elvis { };
 
-  emacs = emacs24;
-  emacsPackages = emacs24Packages;
-  emacsPackagesNg = emacs24PackagesNg;
-  emacsMelpa = emacs24PackagesNg; # for backward compatibility
+  emacs = emacs25;
+  emacsPackages = emacs25Packages;
+  emacsPackagesNg = emacs25PackagesNg;
+  emacsMelpa = emacs25PackagesNg; # for backward compatibility
 
-  emacs24 = callPackage ../applications/editors/emacs-24 {
+  emacs25 = callPackage ../applications/editors/emacs {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
@@ -12862,30 +12885,18 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
   };
 
-  emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
+  emacs25-nox = lowPrio (appendToName "nox" (emacs25.override {
     withX = false;
     withGTK2 = false;
     withGTK3 = false;
   }));
 
-  emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.5.nix {
+  emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs/macport-24.5.nix {
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
   });
   emacs24Macport = self.emacs24Macport_24_5;
-
-  emacs25pre = lowPrio (callPackage ../applications/editors/emacs-25 {
-    # use override to enable additional features
-    libXaw = xorg.libXaw;
-    Xaw3d = null;
-    gconf = null;
-    alsaLib = null;
-    imagemagick = null;
-    acl = null;
-    gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
-  });
 
   emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
@@ -13040,7 +13051,7 @@ in
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
-  emacs24Packages = emacsPackagesGen emacs24 pkgs.emacs24Packages;
+  emacs25Packages = emacsPackagesGen emacs25 pkgs.emacs25Packages;
 
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
@@ -13065,9 +13076,9 @@ in
     };
   };
 
-  emacs24PackagesNg = emacsPackagesNgGen emacs24;
+  emacs25PackagesNg = emacsPackagesNgGen emacs25;
 
-  emacs24WithPackages = emacs24PackagesNg.emacsWithPackages;
+  emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
   # inherit (gnome3) empathy;
@@ -13318,7 +13329,7 @@ in
 
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
     ffmpeg = ffmpeg_2;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   freicoin = callPackage ../applications/misc/freicoin {
@@ -13500,9 +13511,9 @@ in
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
-  google-chrome-beta = google-chrome.override { channel = "beta"; };
+  google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
-  google-chrome-dev = google-chrome.override { channel = "dev"; };
+  google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
@@ -14287,7 +14298,7 @@ in
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     # No need to build Emacs - notmuch.el works just fine without
-    # byte-compilation. Use emacs24Packages.notmuch if you want to
+    # byte-compilation. Use emacsPackages.notmuch if you want to
     # byte-compiled files
     emacs = null;
     sphinx = pythonPackages.sphinx;
@@ -14630,7 +14641,7 @@ in
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
-    cmake = cmake-2_8; # problems after 3.4 -> 3.6.0
+    cmake = cmake_2_8; # problems after 3.4 -> 3.6.0
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
@@ -15801,6 +15812,8 @@ in
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
+  digikam5 = kde5.callPackage ../applications/graphics/digikam/5.1.nix {};
+
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_9; };
@@ -16102,7 +16115,7 @@ in
 
   spring = callPackage ../games/spring {
     boost = boost155;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
@@ -16200,7 +16213,9 @@ in
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  ut2004demo = callPackage_i686 ../games/ut2004demo { };
+  ut2004Packages = callPackage ../games/ut2004 { };
+
+  ut2004demo = self.ut2004Packages.ut2004 [ self.ut2004Packages.ut2004-demo ];
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 
@@ -16270,7 +16285,7 @@ in
 
   zandronum = callPackage ../games/zandronum {
     fmod = fmod42416;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   zandronum-server = zandronum.override {
@@ -17088,7 +17103,7 @@ in
   stellarium = qt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   vite = callPackage ../applications/science/misc/vite { };
@@ -17376,10 +17391,12 @@ in
 
   mnemonicode = callPackage ../misc/mnemonicode { };
 
-  mysqlWorkbench = newScope gnome2 ../applications/misc/mysql-workbench {
-    lua = lua5_1;
-    libctemplate = libctemplate_2_2;
-  };
+  mysqlWorkbench = newScope gnome2 ../applications/misc/mysql-workbench (let mysql = mysql57; in {
+    automake = automake113x;
+    gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
+    mysql = mysql;
+    pcre = pcre-cpp;
+  });
 
   redis-desktop-manager = qt55.callPackage ../applications/misc/redis-desktop-manager { };
 

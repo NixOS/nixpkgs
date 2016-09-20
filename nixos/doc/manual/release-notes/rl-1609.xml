@@ -121,6 +121,27 @@ following incompatible changes:</para>
   functionality.  See <xref linkend="sec-grsecurity" /> for documentation
   </para></listitem>
 
+  <listitem><para>Special filesystems, like <literal>/proc</literal>,
+  <literal>/run</literal> and others, now have the same mount options as
+  recommended by systemd. They are now unified across different places in NixOS.
+  Options are also updated on the system switch if possible. One benefit from
+  this is improved security -- most such filesystems are now mounted with
+  <literal>noexec</literal>, <literal>nodev</literal> and/or
+  <literal>nosuid</literal> options.</para></listitem>
+
+  <listitem><para>The reverse path filter was interfering with DHCPv4 server
+  operation in the past. An exception for DHCPv4 and a new option to log
+  packets that were dropped due to the reverse path filter was added
+  (<literal>networking.firewall.logReversePathDrops</literal>) for easier
+  debugging.</para></listitem>
+
+  <listitem><para>Containers configuration within
+  <literal>containers.&lt;name&gt;.config</literal> is now properly
+  typed and checked. In particular, partial configurations are merged
+  correctly.
+  (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/17365">#17365</link>)
+  </para></listitem>
+
 </itemizedlist>
 
 

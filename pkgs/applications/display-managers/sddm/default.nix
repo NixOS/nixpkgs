@@ -1,11 +1,11 @@
 { stdenv, makeQtWrapper, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, libxcb, libpthreadstubs, lndir
+, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 , themes
 }:
 
 let
-  version = "0.13.0";
+  version = "0.14.0";
 
   unwrapped = stdenv.mkDerivation rec {
     name = "sddm-unwrapped-${version}";
@@ -14,19 +14,18 @@ let
       owner = "sddm";
       repo = "sddm";
       rev = "v${version}";
-      sha256 = "0c3q8lpb123m9k5x3i71mm8lmyzhknw77zxh89yfl8qmn6zd61i1";
+      sha256 = "0wwid23kw0725zpw67zchalg9mmharr7sn4yzhijq7wqpsczjfxj";
     };
 
     patches = [
       ./0001-ignore-config-mtime.patch
-      ./0002-fix-ConfigReader-QStringList-corruption.patch
-      (fetchpatch {
-        url = https://github.com/benjarobin/sddm/commit/7d05362e3c7c5945ad85b0176771bc1c5a370598.patch;
-        sha256 = "17f174lsb8vm7k1vx00yiqcipyyr6hgg4rm1rclps7saapfah5sj";
+      (fetchpatch { /* Fix display of user avatars. */
+        url = https://github.com/sddm/sddm/commit/ecb903e48822bd90650bdd64fe80754e3e9664cb.patch;
+        sha256 = "0zm88944pwdad8grmv0xwnxl23xml85ryc71x2xac233jxdyx6ms";
       })
     ];
 
-    nativeBuildInputs = [ cmake pkgconfig qttools ];
+    nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
 
     buildInputs = [
       libxcb libpthreadstubs libXdmcp libXau qtbase pam systemd
