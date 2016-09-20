@@ -6320,7 +6320,7 @@ in
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
+  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
     wantPS = stdenv.isDarwin;
     inherit (darwin) ps;
   };
@@ -12687,7 +12687,7 @@ in
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
     libpng = libpng12;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
@@ -13317,7 +13317,7 @@ in
 
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
     ffmpeg = ffmpeg_2;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   freicoin = callPackage ../applications/misc/freicoin {
@@ -14629,7 +14629,7 @@ in
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
-    cmake = cmake-2_8; # problems after 3.4 -> 3.6.0
+    cmake = cmake_2_8; # problems after 3.4 -> 3.6.0
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
@@ -16103,7 +16103,7 @@ in
 
   spring = callPackage ../games/spring {
     boost = boost155;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
@@ -16273,7 +16273,7 @@ in
 
   zandronum = callPackage ../games/zandronum {
     fmod = fmod42416;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   zandronum-server = zandronum.override {
@@ -17091,7 +17091,7 @@ in
   stellarium = qt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   vite = callPackage ../applications/science/misc/vite { };
