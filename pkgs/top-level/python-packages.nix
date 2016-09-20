@@ -4401,14 +4401,22 @@ in modules // {
 
 
   detox = self.buildPythonPackage rec {
-    name = "detox-0.9.3";
+    name = "detox-0.10.0";
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ tox py eventlet ];
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/d/detox/detox-0.9.3.tar.gz";
-      sha256 = "39d48b6758c43ba579f694507d54da96931195eb1b72ad79b46f50af9520b2f3";
+      url = "mirror://pypi/d/detox/${name}.tar.gz";
+      sha256 = "33b704c2a5657366850072fb2aa839df14dd2e692c0c1c2642c3ac30d5c0baec";
     };
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # eventlet timeout, and broken invokation 3.5
+    doCheck = false;
 
     meta = {
       description = "What is detox?";
