@@ -12287,6 +12287,8 @@ in
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
 
+  lato = callPackage ../data/fonts/lato {};
+
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
 
   liberation_ttf_from_source = callPackage ../data/fonts/redhat-liberation-fonts { };
