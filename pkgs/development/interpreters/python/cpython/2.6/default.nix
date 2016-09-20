@@ -94,6 +94,9 @@ let
 
         paxmark E $out/bin/python${majorVersion}
 
+        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
+        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
       '';
 
