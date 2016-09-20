@@ -6818,6 +6818,8 @@ in
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
 
+  patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
+
   peg = callPackage ../development/tools/parsing/peg { };
 
   phantomjs = callPackage ../development/tools/phantomjs { };
