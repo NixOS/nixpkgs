@@ -25,7 +25,7 @@ with stdenv.lib;
 let
   majorVersion = "3.6";
   minorVersion = "0";
-  minorVersionSuffix = "a3";
+  minorVersionSuffix = "b1";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "08c3598bwihibwca9lwxq923sjq9shvgv3wxv4vkga2n6hf63l1c";
+    sha256 = "0hjdlwkjanjagz4qggbfgal8ggmas26mx2jlgjx1z2mzi950jfx8";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -74,8 +74,6 @@ stdenv.mkDerivation {
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
      ''}
-
-    substituteInPlace ./Lib/plat-generic/regen --replace "/usr/include" ${glibc.dev}/include
 
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"
