@@ -19,6 +19,8 @@ buildOcaml rec {
   configurePhase = "./configure --prefix $prefix";
   installPhase = "opam-installer -i --prefix $prefix --libdir `ocamlfind printconf destdir` ${name}.install";
 
+  patches = [ ./js-build-tools-darwin.patch ];
+
   meta = with stdenv.lib; {
     description = "Jane Street Build Tools";
     maintainers = [ maintainers.maurer ];
