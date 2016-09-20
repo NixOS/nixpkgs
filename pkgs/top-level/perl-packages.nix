@@ -9672,10 +9672,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   NumberFormat = buildPerlPackage rec {
-    name = "Number-Format-1.73";
+    name = "Number-Format-1.75";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Number/${name}.tar.gz";
-      sha256 = "0v74hscnc807kf65x0am0rddk74nz7nfk3gf16yr5ar1xwibg8l4";
+      url = "mirror://cpan/authors/id/W/WR/WRW/${name}.tar.gz";
+      sha256 = "82d659cb16461764fd44d11a9ce9e6a4f5e8767dc1069eb03467c6e55de257f3";
+    };
+    meta = {
+      description = "Perl extension for formatting numbers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
