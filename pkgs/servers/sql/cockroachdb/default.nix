@@ -14,6 +14,11 @@ buildGoPackage rec {
     sha256 = "11camp588vsccxlc138l7x4qws2fj5wpx1177irzayqdng8dilx3";
   };
 
+  buildFlagsArray = ''
+    -ldflags=
+      -X github.com/cockroachdb/cockroach/build.tag=${version}
+  '';
+
   buildInputs = [ gcc ];
 
   goDeps = ./deps.nix;
