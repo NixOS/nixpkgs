@@ -11671,6 +11671,8 @@ in
 
   policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
 
+  powerdns = callPackage ../servers/dns/powerdns { };
+
   powertop = callPackage ../os-specific/linux/powertop { };
 
   prayer = callPackage ../servers/prayer { };
