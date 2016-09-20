@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, which, perl, autoreconfHook
+{ stdenv, fetchurl, ncurses, which, perl
 , gdbm ? null
 , openssl ? null
 , cyrus_sasl ? null
 , gpgme ? null
-, aclocal ? null
 , headerCache  ? true
 , sslSupport   ? true
 , saslSupport  ? true
 , gpgmeSupport ? true
 , imapSupport  ? true
-, withSidebar  ? false
-, withTrash    ? false
+, withSidebar  ? true
 }:
 
 assert headerCache  -> gdbm       != null;
@@ -22,11 +20,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mutt-${version}";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
-    sha256 = "13hxmji7v9m2agmvzrs7gzx8s3c9jiwrv7pbkr7z1kc6ckq2xl65";
+    sha256 = "0idkamdiwj9fgqaz1vzkfg78cnmkzp74skv0ibw2xjfq6ds9hghx";
   };
 
   buildInputs =
@@ -34,8 +32,7 @@ stdenv.mkDerivation rec {
     ++ optional headerCache  gdbm
     ++ optional sslSupport   openssl
     ++ optional saslSupport  cyrus_sasl
-    ++ optional gpgmeSupport gpgme
-    ++ optional withSidebar  autoreconfHook;
+    ++ optional gpgmeSupport gpgme;
 
   configureFlags = [
     (enableFeature headerCache  "hcache")
@@ -59,18 +56,6 @@ stdenv.mkDerivation rec {
     "--with-homespool=mailbox"
   ] ++ optional sslSupport  "--with-ssl"
     ++ optional saslSupport "--with-sasl";
-
-  patches =
-    optional withTrash (fetchpatch {
-      name = "trash.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/trash.patch?h=mutt-sidebar";
-      sha256 = "1hrib9jk28mqd02nzv0sx01jfdabzvnwcc5qjc3810zfglzc1nql";
-    }) ++
-    optional withSidebar (fetchpatch {
-      name = "sidebar.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/sidebar.patch?h=mutt-sidebar";
-      sha256 = "1l63wj7kw41jrh00mcxdw4p4vrbc9wld42s99liw8kz2aclymq5m";
-    });
 
   meta = {
     description = "A small but very powerful text-based mail client";
