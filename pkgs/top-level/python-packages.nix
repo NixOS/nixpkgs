@@ -26318,7 +26318,8 @@ in modules // {
   };
 
 
-  libarchive = buildPythonPackage rec {
+  libarchive = self.python-libarchive; # The latter is the name upstream uses
+  python-libarchive = buildPythonPackage rec {
     version = "3.1.2-1";
     name = "libarchive-${version}";
     disabled = isPy3k;
@@ -26328,7 +26329,8 @@ in modules // {
       sha256 = "0j4ibc4mvq64ljya9max8832jafi04jciff9ia9qy0xhhlwkcx8x";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.libarchive ];
+    propagatedBuildInputs = with self; [ pkgs.libarchive.lib ];
+    meta.broken = true;
   };
 
   libarchive-c = buildPythonPackage rec {
