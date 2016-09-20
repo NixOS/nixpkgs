@@ -847,6 +847,8 @@ in
 
   glide = callPackage ../development/tools/glide { };
 
+  glock = callPackage ../development/tools/glock { };
+
   gmic = callPackage ../tools/graphics/gmic { };
 
   goa = callPackage ../development/tools/goa { };
