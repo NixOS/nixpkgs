@@ -14,7 +14,7 @@ buildGoPackage rec {
     fetchSubmodules = false;  
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
   meta = {
     description = "A pair programming tool and library written in Golang";
     homepage = "https://github.com/jeffail/leaps/";

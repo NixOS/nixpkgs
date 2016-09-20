@@ -134,8 +134,8 @@ in
 
       wantedBy = [ "sshd.service" ];
       before = [ "sshd.service" ];
-      after = [ "network-online.target" "ip-up.target" ];
-      wants = [ "network-online.target" "ip-up.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
 
       script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'";
                    mktemp = "mktemp --tmpdir=/run"; in

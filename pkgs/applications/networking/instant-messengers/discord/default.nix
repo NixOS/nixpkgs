@@ -1,8 +1,8 @@
 { stdenv, fetchurl
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
-, glib, gnome, gtk, libnotify, libX11, libXcomposite, libXcursor, libXdamage
+, glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, pango
-, libudev, libXScrnSaver }:
+, systemd, libXScrnSaver }:
 
 let version = "0.0.8"; in
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation {
 
     libPath = stdenv.lib.makeLibraryPath [
         stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
-        gdk_pixbuf glib gnome.GConf gtk libnotify libX11 libXcomposite
+        gdk_pixbuf glib gnome2.GConf gtk2 libnotify libX11 libXcomposite
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-        libXtst nspr nss pango libudev.out libXScrnSaver
+        libXtst nspr nss pango systemd libXScrnSaver
      ];
 
     installPhase = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
         ln -s $out/DiscordCanary $out/bin/
 
         # Putting udev in the path won't work :(
-        ln -s ${libudev.out}/lib/libudev.so.1 $out
+        ln -s ${systemd.lib}/lib/libudev.so.1 $out
         '';
 
     meta = with stdenv.lib; {

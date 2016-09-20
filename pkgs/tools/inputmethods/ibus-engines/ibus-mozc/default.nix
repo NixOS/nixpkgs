@@ -1,4 +1,4 @@
-{ clangStdenv, fetchFromGitHub, fetchsvn, gyp, which, ninja, python, pkgconfig, protobuf, ibus, gtk, zinnia, qt4, libxcb, tegaki-zinnia-japanese }:
+{ clangStdenv, fetchFromGitHub, fetchsvn, gyp, which, ninja, python, pkgconfig, protobuf, ibus, gtk2, zinnia, qt4, libxcb, tegaki-zinnia-japanese }:
 
 let
   japanese_usage_dictionary = fetchsvn {
@@ -20,7 +20,7 @@ in clangStdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gyp which ninja python pkgconfig ];
-  buildInputs = [ protobuf ibus gtk zinnia qt4 libxcb ];
+  buildInputs = [ protobuf ibus gtk2 zinnia qt4 libxcb ];
 
   src = fetchFromGitHub {
     owner  = "google";

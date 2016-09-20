@@ -10,13 +10,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "9.4.0";
+  version = "9.4.2";
 
   src = fetchFromGitHub {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "0bmr0cnxp56flak6fjcn0ld5238h3ngrvy09yqp4790g8xwif35v";
+    sha256 = "1dyhlpik8d9z78dg47cha313r0dm9fcjg6hzkmzd2ng9yrq5pmdy";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf automake gettext ruby ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk, libsndfile, pkgconfig, python }:
+{ stdenv, fetchurl, gtk2, libsndfile, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   name = "lv2-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1saq0vwqy5zjdkgc5ahs8kcabxfmff2mmg68fiqrkv8hiw9m6jks";
   };
 
-  buildInputs = [ gtk libsndfile pkgconfig python ];
+  buildInputs = [ gtk2 libsndfile pkgconfig python ];
 
   configurePhase = "python waf configure --prefix=$out";
 

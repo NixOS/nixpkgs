@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, systemd, boost
+{ stdenv, fetchurl, pkgconfig, glib, systemd, boost, darwin
 , alsaSupport ? true, alsaLib
 , flacSupport ? true, flac
 , vorbisSupport ? true, libvorbis
@@ -30,18 +30,19 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.19";
-  minor = "15";
+  minor = "19";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${major}.${minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "12wvqb5r3q77x78wigmrsz3vv8rykcfnavffcvlqq0sbi4is5f8c";
+    sha256 = "07af1m2lgblyiq0gcs26zv8n22wrhrpmf49xsm338h1n87d6r1dw";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin ./darwin-enable-cxx-exceptions.patch;
 
   buildInputs = [ pkgconfig glib boost ]
+    ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
     ++ opt flacSupport flac

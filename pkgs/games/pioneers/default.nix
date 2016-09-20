@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk, pkgconfig, intltool } :
+{stdenv, fetchurl, gtk2, pkgconfig, intltool } :
 
 stdenv.mkDerivation rec {
   name = "pioneers-0.12.3";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yqypk5wmia8fqyrg9mn9xw6yfd0fpkxj1355csw1hgx8mh44y1d";
   };
 
-  buildInputs = [ gtk pkgconfig intltool ];
+  buildInputs = [ gtk2 pkgconfig intltool ];
 
   hardeningDisable = [ "format" ];
 

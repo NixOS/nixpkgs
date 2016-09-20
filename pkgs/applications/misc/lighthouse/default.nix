@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig
-, libX11, libxcb, cairo, gtk, pango, python27, python3
+, libX11, libxcb, cairo, gtk2, pango, python27, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
    };
 
   buildInputs = [
-    pkgconfig libX11 libxcb cairo gtk pango python27 python3
+    pkgconfig libX11 libxcb cairo gtk2 pango python27 python3
   ];
 
   makeFlags = [ "PREFIX=\${out}" ];

@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
-  version = "3.34";
+  version = "3.35";
   pname = "i3pystatus";
   disabled = !python3Packages.isPy3k;
 
   src = fetchurl {
     url = "mirror://pypi/i/${pname}/${name}.tar.gz";
-    sha256 = "1bpkkf9q4zqq7fh65zynbv26nq24rfznmw71jjvda7g8kjrwjdk5";
+    sha256 = "0g5m05rbqvq1qrspm6fyzky9xfhaz5pvc4hfzgdxrzijn8nfc860";
   };
 
   propagatedBuildInputs = with python3Packages; [ keyring colour netifaces praw psutil basiciw ] ++

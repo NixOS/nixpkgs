@@ -8,7 +8,7 @@ let
   fetchFilteredPatch = args: fetchurl (args // {
     downloadToTemp = true;
     postFetch = ''
-      ${patchutils}/bin/filterdiff --clean --strip-match=1 -x '"testsuite/"*' "$downloadedFile" > "$out"
+      ${patchutils}/bin/filterdiff --clean --strip-match=1 -x 'testsuite/*' "$downloadedFile" > "$out"
     '';
   });
 in

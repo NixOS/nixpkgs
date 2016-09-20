@@ -1,17 +1,22 @@
 { stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem }:
 
 let
-  version = "1.4.0";
-  rev = "6276dcb0ae497766056b4c09ea75be1d76a8b679";
+  version = "1.5.1";
+  rev = "07d663dc1bd848161edf4cd4ce30cce410d3d877";
 
-  sha256 = if stdenv.system == "i686-linux"    then "1k228kv1v2765qnz6zw41h79fddwx5pcy9v9jyhsrwyla83fx4ar"
-      else if stdenv.system == "x86_64-linux"  then "1v0am0xpgnlwb3k35v7wxlv22035444ii3v5gv6hf1xbnybsa7lm"
-      else if stdenv.system == "x86_64-darwin" then "0395wnq8wi9x382l51wf8wiaclx7bjf5p0j39gq8y6j2ww8y2z7n"
+  sha256 = if stdenv.system == "i686-linux"    then "1a2854snjdmfhzx6qwib4iw3qjhlmlf09dlsbbvh24zbrjphnd85"
+      else if stdenv.system == "x86_64-linux"  then "0gg2ad7sp02ffv7la61hh9h4vfw8qkfladbhwlh5y4axbbrx17r7"
+      else if stdenv.system == "x86_64-darwin" then "18q4ldnmm619vv8yx6rznpznpcc19zjczmcidr34552i5qfg5xsz"
       else throw "Unsupported system: ${stdenv.system}";
 
-  urlMod = if stdenv.system == "i686-linux" then "linux-ia32"
-      else if stdenv.system == "x86_64-linux" then "linux-x64"
-      else if stdenv.system == "x86_64-darwin" then "darwin"
+  urlBase = "https://az764295.vo.msecnd.net/stable/${rev}/";
+
+  urlStr = if stdenv.system == "i686-linux" then
+        urlBase + "code-stable-code_${version}-1473369468_i386.tar.gz"
+      else if stdenv.system == "x86_64-linux" then
+        urlBase + "code-stable-code_${version}-1473370243_amd64.tar.gz"
+      else if stdenv.system == "x86_64-darwin" then
+        urlBase + "VSCode-darwin-stable.zip"
       else throw "Unsupported system: ${stdenv.system}";
 in
   stdenv.mkDerivation rec {
@@ -19,7 +24,7 @@ in
     inherit version;
 
     src = fetchurl {
-      url = "https://az764295.vo.msecnd.net/stable/${rev}/VSCode-${urlMod}-stable.zip";
+      url = urlStr;
       inherit sha256;
     };
 
@@ -33,7 +38,9 @@ in
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
     };
 
-    buildInputs = [ unzip ];
+    buildInputs = if stdenv.system == "x86_64-darwin"
+      then [ unzip ]
+      else [ ];
 
     installPhase = ''
       mkdir -p $out/lib/vscode $out/bin

@@ -49,7 +49,7 @@ let
         overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
       };
 
-      mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome // scope;
+      mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
@@ -87,7 +87,7 @@ let
             packages = selectFrom self;
             hoogle = callPackage ./hoogle.nix {
               inherit packages;
-              hoogle = self.hoogle_4_2_43;
+              hoogle = self.hoogle_5_0_4;
             };
           in withPackages (packages ++ [ hoogle ]);
 

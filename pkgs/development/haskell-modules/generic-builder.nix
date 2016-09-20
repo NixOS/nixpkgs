@@ -47,6 +47,7 @@
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
+, hardeningDisable ? []
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -193,6 +194,9 @@ stdenv.mkDerivation ({
       fi
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
+        ${ stdenv.lib.optionalString stdenv.isDarwin
+            "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$p/lib"
+        }
       fi
     done
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
@@ -326,5 +330,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
+// optionalAttrs (hardeningDisable != []) { inherit hardeningDisable; }
 // optionalAttrs (stdenv.isLinux)       { LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, unzip, firefox-unwrapped, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "chatzilla-0.9.91";
+  name = "chatzilla-0.9.92";
 
   src = fetchurl {
     # Obtained from http://chatzilla.rdmsoft.com/xulrunner/.
     url = "http://chatzilla.rdmsoft.com/xulrunner/download/${name}.en-US.xulapp";
-    sha256 = "1bmjw2wvp8gh7fdl8czkxc55iari6dy672446hps20xixrh8hl8r";
+    sha256 = "09asg7ixjrin46xd19ri71g4jdrgb1gg0pk0lwk0dlb1qjxyf1xy";
   };
 
   buildInputs = [ unzip makeWrapper ];

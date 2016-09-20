@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, javac, jvm, antlr, pkgconfig, gtk, gconf, ecj }:
+{ fetchurl, stdenv, javac, jvm, antlr, pkgconfig, gtk2, gconf, ecj }:
 
 stdenv.mkDerivation rec {
   name = "classpath-0.99";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./missing-casts.patch ];
 
-  buildInputs = [ javac jvm antlr pkgconfig gtk gconf ecj ];
+  buildInputs = [ javac jvm antlr pkgconfig gtk2 gconf ecj ];
 
   configurePhase = ''
     # GCJ tries to compile all of Classpath during the `configure' run when

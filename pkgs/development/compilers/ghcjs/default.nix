@@ -19,6 +19,7 @@
 , haddock-api
 , ghcjs-prim
 , regex-posix
+, callPackage
 
 , bootPkgs, gmp
 , jailbreak-cabal
@@ -128,7 +129,7 @@ in mkDerivation (rec {
         --with-gmp-libraries ${gmp.out}/lib
   '';
   passthru = let
-    ghcjsNodePkgs = pkgs.nodePackages.override {
+    ghcjsNodePkgs = callPackage ../../../top-level/node-packages.nix {
       generated = ./node-packages-generated.nix;
       self = ghcjsNodePkgs;
     };

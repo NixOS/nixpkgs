@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, fetchurl, fetchzip, gtk, glib, pkgconfig, unzip, ncurses, zip }:
+{ stdenv, fetchhg, fetchurl, fetchzip, gtk2, glib, pkgconfig, unzip, ncurses, zip }:
 let
   # Textadept requires a whole bunch of external dependencies.
   # The build system expects to be able to download them with wget.
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   name = "textadept-${version}";
 
   buildInputs = [
-    gtk glib pkgconfig unzip ncurses zip
+    gtk2 glib pkgconfig unzip ncurses zip
   ];
 
   src = fetchhg {

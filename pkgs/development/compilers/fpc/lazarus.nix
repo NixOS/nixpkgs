@@ -1,7 +1,7 @@
 {
 stdenv, fetchurl
 , fpc
-, gtk, glib, pango, atk, gdk_pixbuf
+, gtk2, glib, pango, atk, gdk_pixbuf
 , libXi, inputproto, libX11, xproto, libXext, xextproto
 , makeWrapper
 }:
@@ -15,7 +15,7 @@ let
     name = "lazarus-${version}";
   };
   buildInputs = [
-    fpc gtk glib libXi inputproto
+    fpc gtk2 glib libXi inputproto
     libX11 xproto libXext xextproto pango atk
     stdenv.cc makeWrapper gdk_pixbuf
   ];

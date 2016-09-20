@@ -74,7 +74,6 @@
       rtkit = 45;
       dovecot2 = 46;
       dovenull2 = 47;
-      unbound = 48;
       prayer = 49;
       mpd = 50;
       clamav = 51;
@@ -141,7 +140,7 @@
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
-      monetdb = 115;
+      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       rippled = 116;
       murmur = 117;
       foundationdb = 118;
@@ -181,7 +180,6 @@
       systemd-timesync = 154;
       liquidsoap = 155;
       etcd = 156;
-      docker-registry = 157;
       hbase = 158;
       opentsdb = 159;
       scollector = 160;
@@ -275,6 +273,8 @@
       gocd-server = 252;
       terraria = 253;
       mattermost = 254;
+      prometheus = 255;
+      telegraf = 256;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -331,7 +331,6 @@
       #rtkit = 45; # unused
       dovecot2 = 46;
       #dovenull = 47; # unused
-      #unbound = 48; # unused
       prayer = 49;
       mpd = 50;
       clamav = 51;
@@ -396,7 +395,7 @@
       #ngircd = 112; # unused
       btsync = 113;
       #minecraft = 114; # unused
-      monetdb = 115;
+      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       #ripped = 116; # unused
       #murmur = 117; # unused
       foundationdb = 118;
@@ -436,7 +435,6 @@
       systemd-timesync = 154;
       liquidsoap = 155;
       #etcd = 156; # unused
-      #docker-registry = 157; # unused
       hbase = 158;
       opentsdb = 159;
       scollector = 160;
@@ -520,6 +518,8 @@
       gocd-server = 252;
       terraria = 253;
       mattermost = 254;
+      prometheus = 255;
+      #telegraf = 256; # unused
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

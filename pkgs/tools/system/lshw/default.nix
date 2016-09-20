@@ -1,27 +1,33 @@
-{ stdenv, fetchurl
-, withGUI? false, gtk? null, pkgconfig? null, sqlite? null  # compile GUI
- }:
-stdenv.mkDerivation rec {
+{ stdenv, lib, fetchurl, fetchpatch
+, withGUI ? false, gtk2, pkgconfig, sqlite # compile GUI
+}:
 
-  name = "lshw-${version}";
-  version = "02.17b";
+let numVersion = "02.18"; # :(
+in
+stdenv.mkDerivation rec {
+  name = "lshw-${numVersion}b";
+  version = "B.${numVersion}";
 
   src = fetchurl {
-    url = http://ezix.org/software/files/lshw-B.02.17.tar.gz;
-    sha256 = "1728b96gyjmrp31knzips9azn6wkfdp5k5dnbil7h7hgz99w177b";
+    url = "http://ezix.org/software/files/lshw-${version}.tar.gz";
+    sha256 = "0brwra4jld0d53d7jsgca415ljglmmx1l2iazpj4ndilr48yy8mf";
   };
 
-  buildInputs = [] ++ stdenv.lib.optional withGUI [ gtk pkgconfig sqlite ];
+  patches = [ (fetchpatch {
+    # fix crash in scan_dmi_sysfs() when run as non-root
+    url = "https://github.com/lyonel/lshw/commit/fbdc6ab15f7eea0ddcd63da355356ef156dd0d96.patch";
+    sha256 = "147wyr5m185f8swsmb4q1ahs9r1rycapbpa2548aqbv298bbish3";
+  })];
 
-  postBuild = if withGUI then "make gui" else "";
+  buildInputs = lib.optionals withGUI [ gtk2 pkgconfig sqlite ];
 
-  installPhase = ''
-    make DESTDIR="$out" install
-    ${if withGUI then "make DESTDIR=$out install-gui" else ""}
-    mv $out/usr/* $out
-    rmdir $out/usr
-    mv $out/sbin $out/bin
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  buildFlags = [ "all" ] ++ lib.optional withGUI "gui";
+
+  installTargets = [ "install" ] ++ lib.optional withGUI "install-gui";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://ezix.org/project/wiki/HardwareLiSter;

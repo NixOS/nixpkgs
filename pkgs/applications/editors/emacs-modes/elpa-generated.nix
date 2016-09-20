@@ -175,10 +175,10 @@
       }) {};
     auctex = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auctex";
-        version = "11.89.4";
+        version = "11.89.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-11.89.4.tar";
-          sha256 = "06dxj9wflwgzy88vk47pdk6xln4f63cab7s73ynwp2bdqjs99f5b";
+          url = "https://elpa.gnu.org/packages/auctex-11.89.5.tar";
+          sha256 = "0scab76ks9wnv1wp9lrm6h9hag7p70zn950srp2p02vrzz2z5p53";
         };
         packageRequires = [];
         meta = {
@@ -618,10 +618,10 @@
       }) {};
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "el-search";
-        version = "0.2.2";
+        version = "0.2.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-0.2.2.tar";
-          sha256 = "07b4jk143vi3sydg03mg12gy1rs21q0qvs7p303irwz4pv8bfwqj";
+          url = "https://elpa.gnu.org/packages/el-search-0.2.3.tar";
+          sha256 = "0icxfq6hd8pfg4r5q70ylm84wgv1jiijpv0d56x7kjdh7wrdalrb";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1336,10 +1336,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20160829";
+        version = "20160912";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20160829.tar";
-          sha256 = "1p0bxbzjzxmhsg1m4a3mlsphh7gcv6b97mfgkl22lfy0ia0g1fzv";
+          url = "https://elpa.gnu.org/packages/org-20160912.tar";
+          sha256 = "0g44hcyk9x0103mfkmkbrn4f36vlyrfxil1qd3fpwardcnaxr5w4";
         };
         packageRequires = [];
         meta = {
@@ -1529,10 +1529,10 @@
     rudel = callPackage ({ cl-generic, cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "rudel";
-        version = "0.3";
+        version = "0.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/rudel-0.3.tar";
-          sha256 = "041yac9a7hbz1fpmjlmc31ggcgg90fmw08z6bkzly2141yky8yh1";
+          url = "https://elpa.gnu.org/packages/rudel-0.3.1.tar";
+          sha256 = "0glqa68g509p0s2vcc0i8kzlddnc9brd9jqhnm5rzxz4i050cvnz";
         };
         packageRequires = [ cl-generic cl-lib emacs ];
         meta = {
@@ -1687,10 +1687,10 @@
       }) {};
     stream = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "stream";
-        version = "2.2.1";
+        version = "2.2.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/stream-2.2.1.el";
-          sha256 = "1d91ddak5whb7kln216vhcsl707h5kirc6aqbkw82skhpg4c3ap1";
+          url = "https://elpa.gnu.org/packages/stream-2.2.2.el";
+          sha256 = "00p24ipn8frlhhwzrz6za7dq4fkhs8i8cwp48yhsq9zpnj9y38xb";
         };
         packageRequires = [ emacs ];
         meta = {

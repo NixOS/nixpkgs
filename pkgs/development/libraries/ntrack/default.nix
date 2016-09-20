@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, qt4, pkgconfig, libnl, pygobject, python }:
+{ stdenv, fetchurl, glib, qt4, pkgconfig, libnl, python }:
 
 let
   version = "016";

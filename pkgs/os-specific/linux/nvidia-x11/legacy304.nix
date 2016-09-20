@@ -1,5 +1,5 @@
 { stdenv, fetchurl, kernel ? null, xorg, zlib, perl
-, gtk, atk, pango, glib, gdk_pixbuf
+, gtk2, atk, pango, glib, gdk_pixbuf
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.cc.cc];
 
   programPath = optionalString (!libsOnly) (stdenv.lib.makeLibraryPath
-    [ gtk atk pango glib gdk_pixbuf xorg.libXv ] );
+    [ gtk2 atk pango glib gdk_pixbuf xorg.libXv ] );
 
   buildInputs = [ perl ];
 

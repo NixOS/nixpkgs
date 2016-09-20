@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper
 , dpkg, patchelf
-, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, libudev }:
+, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd }:
 
 let
   inherit (stdenv) lib;
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
 
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
-    ln -s ${libudev.out}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -s ${systemd.lib}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     wrapProgram $out/bin/StarUML \
       --prefix LD_LIBRARY_PATH : $out/lib:${LD_LIBRARY_PATH}

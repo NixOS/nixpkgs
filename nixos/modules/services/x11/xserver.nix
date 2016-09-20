@@ -654,6 +654,8 @@ in
         ${xrandrMonitorSections}
       '';
 
+    fonts.enableDefaultFonts = mkDefault true;
+
   };
 
 }

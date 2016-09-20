@@ -1,23 +1,23 @@
-{ stdenv, pkgs, fetchFromGitHub, buildPythonPackage,
+{ stdenv, fetchFromGitHub, buildPythonPackage,
   pexpect,
   pyGtkGlade,
   pygobject,
   pyxdg,
   gnome_python,
+  libappindicator-gtk2,
+  xflux,
+  python
 }:
 buildPythonPackage rec {
-  version = "1.1.1";
   name = "xflux-gui-${version}";
+  version = "2016-08-08";
 
   src = fetchFromGitHub {
     repo = "xflux-gui";
     owner = "xflux-gui";
-    rev = "d897dfd";
-    sha256 = "1mx1r2hz3g3waafn4w8hql0gaasfizbzz60bk5llw007k4k8892r";
+    rev = "4125e70b6ad0aeda7de46b3a7083a26c392555dc";
+    sha256 = "1l56f59hnjyi7nn8wn3dfdx6lw2qjbrhdlcfz0qvwj6b0953f2s7";
   };
-
-  # remove messing with shipped binary
-  patches = [ ./setup.patch ];
 
   # not sure if these need to be propagated or not?
   propagatedBuildInputs = [
@@ -25,16 +25,21 @@ buildPythonPackage rec {
     pyGtkGlade
     pygobject
     pyxdg
-    pkgs.libappindicator-gtk2
+    libappindicator-gtk2
     gnome_python
   ];
 
   buildInputs = [
-    pkgs.xflux
+    xflux
   ];
 
   postPatch = ''
-     substituteInPlace src/fluxgui/xfluxcontroller.py --replace "pexpect.spawn(\"xflux\"" "pexpect.spawn(\"${pkgs.xflux}/bin/xflux\""
+     substituteInPlace src/fluxgui/xfluxcontroller.py --replace "pexpect.spawn(\"xflux\"" "pexpect.spawn(\"${xflux}/bin/xflux\""
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
+    patchPythonScript $out/${python.sitePackages}/fluxgui/fluxapp.py
   '';
 
   meta = {

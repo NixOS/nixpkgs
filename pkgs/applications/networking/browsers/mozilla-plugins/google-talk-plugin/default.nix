@@ -1,6 +1,6 @@
 { stdenv, fetchurl, rpm, cpio, mesa, xorg, cairo
-, libpng, gtk, glib, gdk_pixbuf, fontconfig, freetype, curl
-, dbus_glib, alsaLib, libpulseaudio, libudev, pango
+, libpng, gtk2, glib, gdk_pixbuf, fontconfig, freetype, curl
+, dbus_glib, alsaLib, libpulseaudio, systemd, pango
 }:
 
 with stdenv.lib;
@@ -16,7 +16,7 @@ let
       xorg.libXrender
       cairo
       libpng
-      gtk
+      gtk2
       glib
       fontconfig
       freetype
@@ -26,7 +26,7 @@ let
   rpathProgram = makeLibraryPath
     [ gdk_pixbuf
       glib
-      gtk
+      gtk2
       xorg.libX11
       xorg.libXcomposite
       xorg.libXfixes
@@ -37,7 +37,7 @@ let
       alsaLib
       libpulseaudio
       dbus_glib
-      libudev
+      systemd
       curl
       pango
       cairo
@@ -98,6 +98,10 @@ stdenv.mkDerivation rec {
       mkdir -p $(dirname $preload)
       gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
       echo $preload > $plugins/extra-ld-preload
+
+      # Prevent a dependency on gcc.
+      strip -S $preload
+      patchELF $preload
     '';
 
   dontStrip = true;

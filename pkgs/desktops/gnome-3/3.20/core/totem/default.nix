@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./x86.patch ];
 
-  propagatedBuildInputs = [ gobjectIntrospection python3Packages.pylint python3Packages.pygobject ];
+  propagatedBuildInputs = [ gobjectIntrospection python3Packages.pylint python3Packages.pygobject2 ];
 
   configureFlags = [ "--with-nautilusdir=$(out)/lib/nautilus/extensions-3.0" ];
 

@@ -81,7 +81,7 @@ in {
            '';
           };
           systemd.services.mongodb.unitConfig.Before = "pump.io.service";
-          systemd.services.mongodb.unitConfig.RequiredBy = "pump.io.service";
+          systemd.services."pump.io".unitConfig.Requires = "mongodb.service";
         };
     };
 

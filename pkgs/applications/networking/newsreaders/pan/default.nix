@@ -1,9 +1,9 @@
 { spellChecking ? true
-, stdenv, fetchurl, pkgconfig, gtk, gtkspell ? null
+, stdenv, fetchurl, pkgconfig, gtk2, gtkspell2 ? null
 , perl, pcre, gmime, gettext, intltool, dbus_glib, libnotify
 }:
 
-assert spellChecking -> gtkspell != null;
+assert spellChecking -> gtkspell2 != null;
 
 let version = "0.139"; in
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
     sha1 = "01ea0361a6d81489888e6abb075fd552999c3c60";
   };
 
-  buildInputs = [ pkgconfig gtk perl gmime gettext intltool dbus_glib libnotify ]
-    ++ stdenv.lib.optional spellChecking gtkspell;
+  buildInputs = [ pkgconfig gtk2 perl gmime gettext intltool dbus_glib libnotify ]
+    ++ stdenv.lib.optional spellChecking gtkspell2;
 
   enableParallelBuilding = true;
 

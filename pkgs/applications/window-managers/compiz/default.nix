@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig
-, libXrender, renderproto, gtk, libwnck, pango, cairo
+, libXrender, renderproto, gtk2, libwnck, pango, cairo
 , GConf, libXdamage, damageproto, libxml2, libxslt, glibmm
 , metacity
 , libstartup_notification, libpthreadstubs, libxcb, intltool
@@ -24,7 +24,7 @@ let
     sha256="00m73im5kdpbfjg9ryzxnab5qvx5j51gxwr3wzimkrcbax6vb3ph";
   };
   buildInputs = [cmake pkgconfig
-    libXrender renderproto gtk libwnck pango cairo
+    libXrender renderproto gtk2 libwnck pango cairo
     GConf libXdamage damageproto libxml2 libxslt glibmm libstartup_notification
     metacity
     libpthreadstubs libxcb intltool

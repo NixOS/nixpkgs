@@ -48,14 +48,18 @@ in
       { description = "Entropy Harvesting Daemon";
         unitConfig.Documentation = "man:haveged(8)";
         wantedBy = [ "multi-user.target" ];
-        
+
         path = [ pkgs.haveged ];
-        
-        serviceConfig = 
-          { Type = "forking";
-            ExecStart = "${pkgs.haveged}/sbin/haveged -w ${toString cfg.refill_threshold} -v 1";
-            PIDFile = "/run/haveged.pid";
-          };
+
+        serviceConfig = {
+          ExecStart = "${pkgs.haveged}/bin/haveged -F -w ${toString cfg.refill_threshold} -v 1";
+          SuccessExitStatus = 143;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateNetwork = true;
+          ProtectSystem = "full";
+          ProtectHome = true;
+        };
       };
 
   };

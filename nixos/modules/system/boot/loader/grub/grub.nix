@@ -55,7 +55,7 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
-        default fsIdentifier efiSupport gfxmodeEfi gfxmodeBios;
+        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
       path = (makeBinPath ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
         pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
@@ -357,6 +357,44 @@ in
         '';
       };
 
+      efiInstallAsRemovable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = ''
+          Whether to invoke <literal>grub-install</literal> with
+          <literal>--removable</literal>.</para>
+
+          <para>Unless you turn this on, GRUB will install itself somewhere in
+          <literal>boot.loader.efi.efiSysMountPoint</literal> (exactly where
+          depends on other config variables). If you've set
+          <literal>boot.loader.efi.canTouchEfiVariables</literal> *AND* you
+          are currently booted in UEFI mode, then GRUB will use
+          <literal>efibootmgr</literal> to modify the boot order in the
+          EFI variables of your firmware to include this location. If you are
+          *not* booted in UEFI mode at the time GRUB is being installed, the
+          NVRAM will not be modified, and your system will not find GRUB at
+          boot time. However, GRUB will still return success so you may miss
+          the warning that gets printed ("<literal>efibootmgr: EFI variables
+          are not supported on this system.</literal>").</para>
+
+          <para>If you turn this feature on, GRUB will install itself in a
+          special location within <literal>efiSysMountPoint</literal> (namely
+          <literal>EFI/boot/boot$arch.efi</literal>) which the firmwares
+          are hardcoded to try first, regardless of NVRAM EFI variables.</para>
+
+          <para>To summarize, turn this on if:
+          <itemizedlist>
+            <listitem><para>You are installing NixOS and want it to boot in UEFI mode,
+            but you are currently booted in legacy mode</para></listitem>
+            <listitem><para>You want to make a drive that will boot regardless of
+            the NVRAM state of the computer (like a USB "removable" drive)</para></listitem>
+            <listitem><para>You simply dislike the idea of depending on NVRAM
+            state to make your drive bootable</para></listitem>
+          </itemizedlist>
+        '';
+      };
+
       enableCryptodisk = mkOption {
         default = false;
         type = types.bool;
@@ -483,6 +521,14 @@ in
         {
           assertion = !cfg.trustedBoot.enable || cfg.trustedBoot.systemHasTPM == "YES_TPM_is_activated";
           message = "Trusted GRUB can break the system! Confirm that the system has an activated TPM by setting 'systemHasTPM'.";
+        }
+        {
+          assertion = cfg.efiInstallAsRemovable -> cfg.efiSupport;
+          message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn on boot.loader.grub.efiSupport";
+        }
+        {
+          assertion = cfg.efiInstallAsRemovable -> !config.boot.loader.efi.canTouchEfiVariables;
+          message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn off boot.loader.efi.canTouchEfiVariables";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, bison, pkgconfig
-, glib, gtk, libxml2, gettext, zlib, binutils, gnutls }:
+, glib, gtk2, libxml2, gettext, zlib, binutils, gnutls }:
 
 let
   name = "gtk-gnutella";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ bison binutils gettext pkgconfig ];
-  buildInputs = [ glib gnutls gtk libxml2 zlib ];
+  buildInputs = [ glib gnutls gtk2 libxml2 zlib ];
 
   hardeningDisable = [ "bindnow" "fortify" "pic" "relro" ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, glib, gtk, hicolor_icon_theme, json_c
+{ stdenv, fetchurl, gettext, glib, gtk2, hicolor_icon_theme, json_c
 , lcms2, libpng , makeWrapper, pkgconfig, pygtk, python, pythonPackages
 , scons, swig
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gettext glib gtk json_c lcms2 libpng makeWrapper pkgconfig pygtk
+    gettext glib gtk2 json_c lcms2 libpng makeWrapper pkgconfig pygtk
     python scons swig
   ];
 

@@ -1,28 +1,26 @@
 { stdenv, fetchurl, dpdk, libpcap, utillinux
 , pkgconfig
-, gtk, withGtk ? false
+, gtk2, withGtk ? false
 }:
 
 stdenv.mkDerivation rec {
   name = "pktgen-${version}";
-  version = "3.0.04";
+  version = "3.0.13";
 
   src = fetchurl {
     url = "http://dpdk.org/browse/apps/pktgen-dpdk/snapshot/pktgen-${version}.tar.gz";
-    sha256 = "0vrmbpl8zaal5zjwyzlx0y3d6jydfxdmf0psdj7ic37h5yh2iv2q";
+    sha256 = "64629b454ed8dc036d5e9bb30b3ae84a0bab0142b651c72da85ab1454e9ae0d6";
   };
 
   nativeBuildInputs = stdenv.lib.optionals withGtk [ pkgconfig ];
 
   buildInputs =
     [ dpdk libpcap ]
-    ++ stdenv.lib.optionals withGtk [gtk];
+    ++ stdenv.lib.optionals withGtk [gtk2];
 
   RTE_SDK = "${dpdk}";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
   GUI = stdenv.lib.optionalString withGtk "true";
-
-  enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
 

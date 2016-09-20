@@ -686,23 +686,6 @@ let
     };
   };
 
-  f = melpaBuild rec {
-    pname = "f";
-    version = "20151113";
-    src = fetchFromGitHub {
-      owner = "rejeep";
-      repo = "f.el";
-      rev = "e0259ee060ff9a3f12204adcc8630869080acd68";
-      sha256 = "0lzqfr5xgc3qvpbs6vf63yiw7pc2mybfvsrhczf9ghlmlawqa6k1";
-    };
-    fileSpecs = [ "f.el" ];
-    packageRequires = [ dash s ];
-    meta = {
-      description = "Emacs library for working with files and directories";
-      license = gpl3Plus;
-    };
-  };
-
   find-file-in-project = melpaBuild rec {
     pname = "find-file-in-project";
     version = "3.5";
@@ -1582,6 +1565,8 @@ let
       license = gpl3Plus;
     };
   };
+
+  tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
   tracking = melpaBuild rec {
     pname   = "tracking";

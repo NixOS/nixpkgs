@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk, gtk3, pango, perl, python, zip, libIDL
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, gtk3, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
@@ -30,7 +30,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2
+    [ pkgconfig gtk2 perl zip libIDL libjpeg zlib bzip2
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
@@ -113,6 +113,14 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "$out/bin/firefox" --version
     '';
 
+  postFixup =
+    # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
+    ''
+      patchelf --set-rpath "${lib.getLib libnotify
+        }/lib:$(patchelf --print-rpath "$out"/lib/firefox-*/libxul.so)" \
+          "$out"/lib/firefox-*/libxul.so
+    '';
+
   meta = {
     description = "A web browser" + lib.optionalString (pname == "firefox-esr") " (Extended Support Release)";
     homepage = http://www.mozilla.com/en-US/firefox/;
@@ -121,7 +129,8 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   };
 
   passthru = {
-    inherit gtk nspr version;
+    inherit nspr version;
+    gtk = gtk2;
     isFirefox3Like = true;
     browserName = "firefox";
     ffmpegSupport = lib.versionAtLeast version "46.0";

@@ -72,6 +72,8 @@ in
         (isNO "GRKERNSEC_NO_RBAC")
       ];
 
+    nixpkgs.config.grsecurity = true;
+
     # Install PaX related utillities into the system profile.
     environment.systemPackages = with pkgs; [ gradm paxctl pax-utils ];
 

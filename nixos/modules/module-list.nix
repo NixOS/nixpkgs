@@ -40,6 +40,7 @@
   ./hardware/video/amdgpu.nix
   ./hardware/video/ati.nix
   ./hardware/video/bumblebee.nix
+  ./hardware/video/displaylink.nix
   ./hardware/video/nvidia.nix
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/input-method/default.nix
@@ -66,8 +67,9 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
-  ./programs/freetds.nix
   ./programs/fish.nix
+  ./programs/freetds.nix
+  ./programs/info.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/man.nix
@@ -113,6 +115,7 @@
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
   ./services/audio/squeezelite.nix
+  ./services/audio/ympd.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/crashplan.nix
@@ -142,7 +145,6 @@
   ./services/databases/hbase.nix
   ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
-  ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
   ./services/databases/neo4j.nix
@@ -228,7 +230,6 @@
   ./services/misc/dictd.nix
   ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
-  ./services/misc/docker-registry.nix
   ./services/misc/emby.nix
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
@@ -286,6 +287,8 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/prometheus/default.nix
+  ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -294,6 +297,7 @@
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix
+  ./services/monitoring/telegraf.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/zabbix-agent.nix
@@ -332,7 +336,6 @@
   ./services/networking/dnschain.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
-  ./services/networking/docker-registry-server.nix
   ./services/networking/ejabberd.nix
   ./services/networking/fan.nix
   ./services/networking/ferm.nix
@@ -384,6 +387,7 @@
   ./services/networking/ostinato.nix
   ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
+  ./services/networking/powerdns.nix
   ./services/networking/pptpd.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk
+{ stdenv, fetchurl, pkgconfig, gtk2
 
 , openssl ? null
 , gpgme ? null
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig gtk ]
+    [ pkgconfig gtk2 ]
     ++ optional sslSupport openssl
     ++ optional gpgSupport gpgme;
 

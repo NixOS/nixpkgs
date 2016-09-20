@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, which, m4, gtk, pango, perl, python, zip, libIDL
+{ stdenv, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = # from firefox30Pkgs.xulrunner, without gstreamer and libvpx
-    [ pkgconfig which libpng gtk perl zip libIDL libjpeg zlib bzip2
+    [ pkgconfig which libpng gtk2 perl zip libIDL libjpeg zlib bzip2
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa

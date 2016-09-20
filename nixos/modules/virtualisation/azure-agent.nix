@@ -178,7 +178,8 @@ in
 
     systemd.services.waagent = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "ip-up.target" "sshd.service" ];
+      after = [ "network-online.target" "sshd.service" ];
+      wants = [ "network-online.target" ];
 
       path = [ pkgs.e2fsprogs ];
       description = "Windows Azure Agent Service";

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpcap, pkgconfig, openssl
 , graphicalSupport ? false
 , libX11 ? null
-, gtk ? null
+, gtk2 ? null
 , pythonPackages
 , makeWrapper ? null
 }:
@@ -9,7 +9,7 @@
 with stdenv.lib;
 
 let
-  inherit (pythonPackages) python pygtk pygobject pycairo pysqlite;
+  inherit (pythonPackages) python pygtk pygobject2 pycairo pysqlite;
 in stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
   version = "7.12";
@@ -26,12 +26,12 @@ in stdenv.mkDerivation rec {
   postInstall = ''
       wrapProgram $out/bin/ndiff --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH"
   '' + optionalString graphicalSupport ''
-      wrapProgram $out/bin/zenmap --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH" --prefix PYTHONPATH : $(toPythonPath ${pygtk})/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath ${pygobject})/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath ${pycairo})/gtk-2.0
+      wrapProgram $out/bin/zenmap --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH" --prefix PYTHONPATH : $(toPythonPath ${pygtk})/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath ${pygobject2})/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath ${pycairo})/gtk-2.0
   '';
 
   buildInputs = [ libpcap pkgconfig openssl makeWrapper python ]
     ++ optionals graphicalSupport [
-      libX11 gtk pygtk pysqlite pygobject pycairo
+      libX11 gtk2 pygtk pysqlite pygobject2 pycairo
     ];
 
   meta = {

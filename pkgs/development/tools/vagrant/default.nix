@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
+{ stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
 , libxml2, libxslt, makeWrapper }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 let
-  version = "1.8.4";
+  version = "1.8.5";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -12,22 +12,34 @@ let
     sha256 = "1rn03rqlf1iv6n87a78hkda2yqparhhaivfjpizblmxvlw2hk5r8";
   };
 
-in
-stdenv.mkDerivation rec {
+  sha256 = {
+    "x86_64-linux" = "1na5hxm3ilx268hk68dpgkks1jjh9q7p3ksjx8ssiijq6df47vih";
+    "i686-linux"   = "16psr5s0azpzavizh74085z7wygkfs4ribsfalvbd96phkrkp2wp";
+  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+
+  arch = builtins.replaceStrings ["-linux"] [""] stdenv.system;
+
+in stdenv.mkDerivation rec {
   name = "vagrant-${version}";
   inherit version;
 
-  src =
-    if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_x86_64.deb";
-        sha256 = "fd38d8e00e494a617201facb42fc2cac627e5021db15e91c2a041eac6a2d8208";
-      }
-    else
-      fetchurl {
-        url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_i686.deb";
-        sha256 = "555351717cacaa8660821df8988cc40a39923b06b698fca6bb90621008aab06f";
-      };
+  src = fetchurl {
+    url = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_${arch}.deb";
+    inherit sha256;
+  };
+
+  # Remove the patchFlags/patches when 1.8.6 is released
+  patchFlags = [
+    "-p1"
+    "-d ./opt/vagrant/embedded/gems/gems/vagrant-${version}"
+  ];
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/mitchellh/vagrant/pull/7611.diff";
+      name = "fix_incorrect_ssh_keys_permissions.patch";
+      sha256 = "0lqa9xpg79ggp9fc8gzb5lv675ydj2p8l55bx4hs1hf8zz2c1hjf";
+    })
+  ];
 
   meta = with stdenv.lib; {
     description = "A tool for building complete development environments";

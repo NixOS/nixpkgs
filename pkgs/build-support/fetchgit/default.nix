@@ -56,13 +56,9 @@ stdenv.mkDerivation {
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  impureEnvVars = [
-    # We borrow these environment variables from the caller to allow
-    # easy proxy configuration.  This is impure, but a fixed-output
-    # derivation like fetchurl is allowed to do so since its result is
-    # by definition pure.
-    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" "GIT_PROXY_COMMAND" "SOCKS_SERVER"
-    ];
+  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars ++ [
+    "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+  ];
 
   preferLocalBuild = true;
 }

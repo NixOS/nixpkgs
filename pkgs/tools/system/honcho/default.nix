@@ -1,13 +1,15 @@
-{ stdenv, fetchzip, pythonPackages, buildPythonApplication }:
+{ stdenv, fetchFromGitHub, pythonPackages, buildPythonApplication }:
 
 let honcho = buildPythonApplication rec {
   name = "honcho-${version}";
   version = "0.6.6";
   namePrefix = "";
 
-  src = fetchzip {
-    url = "https://github.com/nickstenning/honcho/archive/v${version}.tar.gz";
-    md5 = "f5e6a7f6c1d0c167d410d7f601b4407e";
+  src = fetchFromGitHub {
+    owner = "nickstenning";
+    repo = "honcho";
+    rev = "v${version}";
+    sha256 = "0lawwcyrrsd9z9jcr94qn1yabl9bzc529jkpc51jq720fhdlfcr0";
   };
 
   buildInputs = with pythonPackages; [ nose mock jinja2 ];

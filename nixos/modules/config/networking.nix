@@ -223,10 +223,10 @@ in
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
 
-    # The ‘ip-up’ target is started when we have IP connectivity.  So
-    # services that depend on IP connectivity (like ntpd) should be
-    # pulled in by this target.
-    systemd.targets.ip-up.description = "Services Requiring IP Connectivity";
+    # The ‘ip-up’ target is kept for backwards compatibility.
+    # New services should use systemd upstream targets:
+    # See https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
+    systemd.targets.ip-up.description = "Services Requiring IP Connectivity (deprecated)";
 
     # This is needed when /etc/resolv.conf is being overriden by networkd
     # and other configurations. If the file is destroyed by an environment
