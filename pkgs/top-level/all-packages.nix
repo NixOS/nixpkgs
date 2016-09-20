@@ -11779,6 +11779,8 @@ in
 
   numad = callPackage ../os-specific/linux/numad { };
 
+  nvme-cli = callPackage ../os-specific/linux/nvme-cli { };
+
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
     inherit (gnome2) gtk gtkmm;
   };
