@@ -481,13 +481,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  autobox = pkgs.perlPackages.Autobox;
-
-  Autobox = buildPerlPackage rec {
-    name = "autobox-2.83";
+  autobox = buildPerlPackage rec {
+    name = "autobox-2.84";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/${name}.tar.gz";
-      sha256 = "1i493ss5nr0hp3wncn0s31gyka4r09wx65b8g2f8av2nm4zs70rz";
+      sha256 = "98dd2754f226684a72ccba3a95956b7eaff2871568e4dd9746e6fb6daae0b96b";
     };
     propagatedBuildInputs = [ ScopeGuard ];
     meta = {
@@ -495,6 +493,8 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
+
+  Autobox = self.autobox;
 
   Autodia = buildPerlPackage rec {
     name = "Autodia-2.14";
