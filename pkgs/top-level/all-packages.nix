@@ -5365,6 +5365,8 @@ in
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
+    ocplib-json-typed = callPackage ../development/ocaml-modules/ocplib-json-typed { };
+
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
