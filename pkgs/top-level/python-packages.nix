@@ -29222,13 +29222,15 @@ in modules // {
     name = "Scrapy-${version}";
     version = "1.1.2";
 
-    buildInputs = with self; [ pytest botocore testfixtures pillow ];
+    buildInputs = with self; [ pkgs.glibcLocales mock pytest botocore testfixtures pillow ];
     propagatedBuildInputs = with self; [
       six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
     ];
 
+    LC_ALL="en_US.UTF-8";
+
     checkPhase = ''
-      env LC_ALL=en_US.UTF-8 py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py
+      py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py
       # The ignored tests require mitmproxy, which depends on protobuf, but it's disabled on Python3
     '';
 
