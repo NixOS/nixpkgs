@@ -68,7 +68,7 @@
       </para></listitem></varlistentry>
 
       <varlistentry><term><varname>
-        $outputDocdev</varname></term><listitem><para>
+        $outputDevdoc</varname></term><listitem><para>
         is for <emphasis>developer</emphasis> documentation.  Currently we count gtk-doc in there.  It goes to <varname>devdoc</varname> or is removed (!) by default.  This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
       </para></listitem></varlistentry>
 
