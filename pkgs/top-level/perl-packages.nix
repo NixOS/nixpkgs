@@ -9619,7 +9619,7 @@ let self = _self // overrides; _self = with self; {
     '';
     meta = {
       description = "Perl extension for using OpenSSL";
-      license = "SSLeay";
+      license = stdenv.lib.licenses.artistic2;
     };
   };
 
