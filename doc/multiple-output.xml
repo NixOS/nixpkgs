@@ -45,34 +45,48 @@
     <title>File type groups</title>
     <para>The support code currently recognizes some particular kinds of outputs and either instructs the build system of the package to put files into their desired outputs or it moves the files during the fixup phase.  Each group of file types has an <varname>outputFoo</varname> variable specifying the output name where they should go.  If that variable isn't defined by the derivation writer, it is guessed &ndash; a default output name is defined, falling back to other possibilities if the output isn't defined.</para>
     <variablelist>
+
       <varlistentry><term><varname>
          $outputDev</varname></term><listitem><para>
          is for development-only files. These include C(++) headers, pkg-config, cmake and aclocal files.  They go to <varname>dev</varname> or <varname>out</varname> by default.
-        </para></listitem></varlistentry>
+       </para></listitem>
+      </varlistentry>
+
       <varlistentry><term><varname>
         $outputBin</varname></term><listitem><para>
         is meant for user-facing binaries, typically residing in bin/.  They go to <varname>bin</varname> or <varname>out</varname> by default.
-        </para></listitem></varlistentry>
+      </para></listitem></varlistentry>
+
       <varlistentry><term><varname>
         $outputLib</varname></term><listitem><para>
         is meant for libraries, typically residing in <filename>lib/</filename> and <filename>libexec/</filename>.  They go to <varname>lib</varname> or <varname>out</varname> by default.
-        </para></listitem></varlistentry>
+      </para></listitem></varlistentry>
+
       <varlistentry><term><varname>
         $outputDoc</varname></term><listitem><para>
         is for user documentation, typically residing in <filename>share/doc/</filename>.  It goes to <varname>doc</varname> or <varname>out</varname> by default.
-        </para></listitem></varlistentry>
+      </para></listitem></varlistentry>
+
       <varlistentry><term><varname>
         $outputDocdev</varname></term><listitem><para>
-        is for <emphasis>developer</emphasis> documentation.  Currently we count gtk-doc and man3 pages in there.  It goes to <varname>devdoc</varname> or is removed (!) by default.  This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
-        </para></listitem></varlistentry>
+        is for <emphasis>developer</emphasis> documentation.  Currently we count gtk-doc in there.  It goes to <varname>devdoc</varname> or is removed (!) by default.  This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
+      </para></listitem></varlistentry>
+
       <varlistentry><term><varname>
         $outputMan</varname></term><listitem><para>
         is for man pages (except for section 3). They go to <varname>man</varname> or <varname>doc</varname> or <varname>$outputBin</varname> by default.
-        </para></listitem></varlistentry>
+      </para></listitem></varlistentry>
+
+      <varlistentry><term><varname>
+        $outputDevman</varname></term><listitem><para>
+        is for section 3 man pages. They go to <varname>devman</varname> or <varname>$outputMan</varname> by default.
+      </para></listitem></varlistentry>
+
       <varlistentry><term><varname>
         $outputInfo</varname></term><listitem><para>
         is for info pages. They go to <varname>info</varname> or <varname>doc</varname> or <varname>$outputMan</varname> by default.
-        </para></listitem></varlistentry>
+      </para></listitem></varlistentry>
+
     </variablelist>
   </section>
 
@@ -88,4 +102,3 @@
 </section><!--Writing a split derivation-->
 
 </chapter>
-
