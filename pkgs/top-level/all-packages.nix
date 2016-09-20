@@ -5814,7 +5814,7 @@ in
 
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
-  lxappearance = callPackage ../applications/misc/lxappearance {};
+  lxappearance = callPackage ../desktops/lxde/core/lxappearance {};
 
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
 
