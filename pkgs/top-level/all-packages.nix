@@ -5344,6 +5344,8 @@ in
 
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
+    frontc = callPackage ../development/ocaml-modules/frontc { };
+
     ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
