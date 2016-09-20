@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl}:
+{lib, buildOcaml, fetchurl}:
 
 buildOcaml rec {
   name = "FrontC";
@@ -9,7 +9,7 @@ buildOcaml rec {
     sha256 = "16dz153s92dgbw1rrfwbhscy73did87kfmjwyh3qpvs748h1sc4g";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://www.irit.fr/recherches/ARCHI/MARCH/rubrique.php3?id_rubrique=61;
     description = "C Parsing Library";
     license = licenses.lgpl21;
