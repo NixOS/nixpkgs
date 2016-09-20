@@ -5,9 +5,11 @@
 assert zlibSupport -> zlib != null;
 
 let
-
-  majorVersion = "5.4.1";
-  version = "${majorVersion}";
+  majorVersion = "5.4";
+  minorVersion = "1";
+  minorVersionSuffix = "";
+  pythonVersion = "2.7";
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "pypy${majorVersion}";
 
   pypy = stdenv.mkDerivation rec {

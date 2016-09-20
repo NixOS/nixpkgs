@@ -24,9 +24,11 @@ with stdenv.lib;
 
 let
   majorVersion = "3.6";
+  minorVersion = "0";
+  minorVersionSuffix = "a3";
   pythonVersion = majorVersion;
-  version = "${majorVersion}.0a3";
-  fullVersion = "${version}";
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
+  libPrefix = "python${majorVersion}";
 
   buildInputs = filter (p: p != null) [
     glibc
@@ -46,14 +48,14 @@ let
   ] ++ optionals stdenv.isDarwin [ CF configd ];
 in
 stdenv.mkDerivation {
-  name = "python3-${fullVersion}";
+  name = "python3-${version}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
   inherit buildInputs;
 
   src = fetchurl {
-    url = "https://www.python.org/ftp/python/${majorVersion}.0/Python-${fullVersion}.tar.xz";
+    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
     sha256 = "08c3598bwihibwca9lwxq923sjq9shvgv3wxv4vkga2n6hf63l1c";
   };
 
@@ -101,14 +103,14 @@ stdenv.mkDerivation {
   '';
 
   passthru = rec {
+    inherit libPrefix;
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
-    libPrefix = "python${majorVersion}";
-    executable = "python${majorVersion}m";
+    executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; };
     withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python36Packages; };
     isPy3 = true;

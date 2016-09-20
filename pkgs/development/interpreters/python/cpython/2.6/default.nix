@@ -8,10 +8,14 @@ with stdenv.lib;
 
 let
   majorVersion = "2.6";
-  version = "${majorVersion}.9";
+  minorVersion = "9";
+  minorVersionSuffix = "";
+  pythonVersion = majorVersion;
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
+  libPrefix = "python${majorVersion}";
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
     sha256 = "0hbfs2691b60c7arbysbzr0w9528d5pl8a4x7mq5psh6a2cvprya";
   };
 
@@ -94,12 +98,12 @@ let
       '';
 
     passthru = rec {
+      inherit libPrefix;
       inherit zlibSupport;
       isPy2 = true;
       isPy26 = true;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
       withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python26Packages; };
-      libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       interpreter = "${self}/bin/${executable}";

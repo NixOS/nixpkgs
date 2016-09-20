@@ -21,8 +21,11 @@ with stdenv.lib;
 
 let
   majorVersion = "3.3";
+  minorVersion = "6";
+  minorVersionSuffix = "";
   pythonVersion = majorVersion;
-  version = "${majorVersion}.6";
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
+  libPrefix = "python${majorVersion}";
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 lzma gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
@@ -37,7 +40,7 @@ stdenv.mkDerivation {
   inherit buildInputs;
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
     sha256 = "0gsxpgd5p4mwd01gw501vsyahncyw3h9836ypkr3y32kgazy89jj";
   };
 
@@ -74,14 +77,14 @@ stdenv.mkDerivation {
   '';
 
   passthru = rec {
+    inherit libPrefix;
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
-    libPrefix = "python${majorVersion}";
-    executable = "python3.3m";
+    executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; };
     withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python33Packages; };
     isPy3 = true;

@@ -23,9 +23,11 @@ with stdenv.lib;
 
 let
   majorVersion = "3.4";
+  minorVersion = "5";
+  minorVersionSuffix = "";
   pythonVersion = majorVersion;
-  version = "${majorVersion}.5";
-  fullVersion = "${version}";
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
+  libPrefix = "python${majorVersion}";
 
   buildInputs = filter (p: p != null) [
     zlib
@@ -45,14 +47,14 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "python3-${fullVersion}";
+  name = "python3-${version}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
   inherit buildInputs;
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
+    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
     sha256 = "12l9klp778wklxmckhghniy5hklss8r26995pyd00qbllk4b2r7f";
   };
 
@@ -98,14 +100,14 @@ stdenv.mkDerivation {
   '';
 
   passthru = rec {
+    inherit libPrefix;
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
-    libPrefix = "python${majorVersion}";
-    executable = "python3.4m";
+    executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; };
     withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python34Packages; };
     isPy3 = true;
