@@ -9584,6 +9584,8 @@ in
 
   stlport = callPackage ../development/libraries/stlport { };
 
+  streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
+
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
