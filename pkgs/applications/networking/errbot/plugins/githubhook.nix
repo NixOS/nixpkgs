@@ -5,15 +5,11 @@ stdenv.mkDerivation rec {
   version = "2016-09-06";
 
   src = fetchFromGitHub {
-    owner = "daenney";
+    owner = "mayflower";
     repo = "err-githubhook";
-    rev = "3368cfcc2aa21b5b5563cea1cb877702bada3872";
-    sha256 = "0i5z9ilk17xcnmjlpxqfqg57wx8rriqrsp2qd1h9ikbyzhhldf09";
+    rev = "cc62f7f55942d3023ec960689fd1aab7ed0dde3a";
+    sha256 = "0imwsa2aab7abx9vn0p8mzrsbgydhljkk7491d66lms6lyf7h7lj";
   };
-
-  patches = [
-    ./githubhook-fix-config.patch
-  ];
 
   dontBuild = true;
   installPhase = ''
