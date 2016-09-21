@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "errbot-plugin-githubhook-${version}";
-  version = "2016-09-06";
+  version = "2016-09-22";
 
   src = fetchFromGitHub {
     owner = "mayflower";
     repo = "err-githubhook";
-    rev = "cc62f7f55942d3023ec960689fd1aab7ed0dde3a";
-    sha256 = "0imwsa2aab7abx9vn0p8mzrsbgydhljkk7491d66lms6lyf7h7lj";
+    rev = "62002e3a5cda408f164146b281ad433707764aa4";
+    sha256 = "0as0dc3kbvav2xglzhp595qc2nfm4l2rkgh31kjvzxrj7inns4p9";
   };
 
   dontBuild = true;
