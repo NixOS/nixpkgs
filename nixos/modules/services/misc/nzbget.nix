@@ -9,7 +9,12 @@ in
 {
   options = {
     services.nzbget = {
-      enable = mkEnableOption "NZBGet";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable NZBGet.";
+      };
 
       package = mkOption {
         type = types.package;

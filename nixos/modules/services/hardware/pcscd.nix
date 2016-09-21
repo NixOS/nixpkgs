@@ -17,7 +17,12 @@ in {
   options = {
 
     services.pcscd = {
-      enable = mkEnableOption "PCSC-Lite daemon";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable PCSC-Lite daemon.";
+      };
 
       plugins = mkOption {
         type = types.listOf types.package;

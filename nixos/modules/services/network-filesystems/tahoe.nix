@@ -131,7 +131,12 @@ in
               The number of shares required to store a file.
             '';
           };
-          storage.enable = mkEnableOption "storage service";
+          storage.enable = mkOption {
+            type = types.bool;
+            default = false;
+            example = true;
+            description = "Whether to enable storage service.";
+          };
           storage.reservedSpace = mkOption {
             default = "1G";
             type = types.str;
@@ -139,7 +144,12 @@ in
               The amount of filesystem space to not use for storage.
             '';
           };
-          helper.enable = mkEnableOption "helper service";
+          helper.enable = mkOption {
+            type = types.bool;
+            default = false;
+            example = true;
+            description = "Whether to enable helper service.";
+          };
           package = mkOption {
             default = pkgs.tahoelafs;
             defaultText = "pkgs.tahoelafs";

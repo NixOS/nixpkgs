@@ -8,7 +8,12 @@ in
 {
   options = {
     services.cfdyndns = {
-      enable = mkEnableOption "Cloudflare Dynamic DNS Client";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable Cloudflare Dynamic DNS Client.";
+      };
 
       email = mkOption {
         type = types.str;

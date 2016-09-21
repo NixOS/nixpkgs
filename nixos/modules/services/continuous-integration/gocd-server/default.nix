@@ -7,7 +7,12 @@ let
 in {
   options = {
     services.gocd-server = {
-      enable = mkEnableOption "gocd-server";
+      enable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Whether to enable gocd-server.";
+      };
 
       user = mkOption {
         default = "gocd-server";

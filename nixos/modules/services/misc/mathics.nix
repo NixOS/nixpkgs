@@ -8,7 +8,12 @@ let
 in {
   options = {
     services.mathics = {
-      enable = mkEnableOption "Mathics notebook service";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable Mathics notebook service.";
+      };
 
       external = mkOption {
         type = types.bool;

@@ -17,7 +17,12 @@ in
   options = {
 
     services.torque.mom = {
-      enable = mkEnableOption "torque computing node";
+      enable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Whether to enable torque computing node.";
+      };
 
       serverNode = mkOption {
         type = types.str;

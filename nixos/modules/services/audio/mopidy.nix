@@ -21,7 +21,12 @@ in {
 
     services.mopidy = {
 
-      enable = mkEnableOption "Mopidy, a music player daemon";
+      enable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Whether to enable Mopidy, a music player daemon.";
+      };
 
       dataDir = mkOption {
         default = "/var/lib/mopidy";

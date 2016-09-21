@@ -18,7 +18,12 @@ in
 {
   options = {
     services.buildkite-agent = {
-      enable = mkEnableOption "buildkite-agent";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable buildkite-agent.";
+      };
 
       token = mkOption {
         type = types.str;

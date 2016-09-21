@@ -46,7 +46,12 @@ let
 
 in {
   options.services.grafana = {
-    enable = mkEnableOption "grafana";
+    enable = mkOption {
+      description = "Whether to enable grafana.";
+      default = false;
+      example = true;
+      type = types.bool;
+    };
 
     protocol = mkOption {
       description = "Which protocol to listen.";

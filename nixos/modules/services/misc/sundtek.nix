@@ -8,7 +8,12 @@ let
 in
 {
   options.services.sundtek = {
-    enable = mkEnableOption "Sundtek driver";
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Whether to enable Sundtek driver.";
+    };
   };
 
   config = mkIf cfg.enable {

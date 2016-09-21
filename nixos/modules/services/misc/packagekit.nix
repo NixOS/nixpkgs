@@ -30,12 +30,16 @@ in
   options = {
 
     services.packagekit = {
-      enable = mkEnableOption
-        ''
-          PackageKit provides a cross-platform D-Bus abstraction layer for
-          installing software. Software utilizing PackageKit can install
-          software regardless of the package manager.
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether to enable PackageKit, which provides a cross-platform D-Bus
+          abstraction layer for installing software. Software utilizing
+          PackageKit can install software regardless of the package manager.
         '';
+      };
     };
 
   };

@@ -14,7 +14,12 @@ let
 in {
 
   options.services.hoogle = {
-    enable = mkEnableOption "Haskell documentation server";
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Whether to enable Haskell documentation server.";
+    };
 
     port = mkOption {
       type = types.int;

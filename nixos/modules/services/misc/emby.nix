@@ -9,7 +9,12 @@ in
 {
   options = {
     services.emby = {
-      enable = mkEnableOption "Emby Media Server";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable Emby Media Server.";
+      };
 
       user = mkOption {
         type = types.str;

@@ -25,12 +25,22 @@ in
     services.slurm = {
 
       server = {
-        enable = mkEnableOption "slurm control daemon";
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          example = true;
+          description = "Whether to enable slurm control daemon.";
+        };
 
       };
       
       client = {
-        enable = mkEnableOption "slurm rlient daemon";
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          example = true;
+          description = "Whether to enable slurm rlient daemon.";
+        };
 
       };
 

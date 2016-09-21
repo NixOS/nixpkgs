@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
+  inherit (lib) mkOption mkIf mkMerge types;
 
   cfg = config.programs.tmux;
 
@@ -61,7 +61,14 @@ in {
   options = {
     programs.tmux = {
 
-      enable = mkEnableOption "<command>tmux</command> - a <command>screen</command> replacement.";
+      enable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = ''
+          Whether to enable <command>tmux</command> - a <command>screen</command> replacement.
+        '';
+      };
 
       aggressiveResize = mkOption {
         default = false;

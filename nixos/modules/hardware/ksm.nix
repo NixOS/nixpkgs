@@ -1,7 +1,12 @@
 { config, lib, ... }:
 
 {
-  options.hardware.enableKSM = lib.mkEnableOption "Kernel Same-Page Merging";
+  options.hardware.enableKSM = lib.mkOption {
+    default = false;
+    example = true;
+    type = lib.types.bool;
+    description = "Whether to enable Kernel Same-Page Merging.";
+  };
 
   config = lib.mkIf config.hardware.enableKSM {
     systemd.services.enable-ksm = {

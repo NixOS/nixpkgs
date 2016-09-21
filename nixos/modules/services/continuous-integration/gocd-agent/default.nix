@@ -7,7 +7,12 @@ let
 in {
   options = {
     services.gocd-agent = {
-      enable = mkEnableOption "gocd-agent";
+      enable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Whether to enable gocd-agent.";
+      };
 
       user = mkOption {
         default = "gocd-agent";

@@ -19,7 +19,12 @@ in
 {
   options = {
     services.rsnapshot = {
-      enable = mkEnableOption "rsnapshot backups";
+      enable = mkOption {
+        description = "Whether to enable rsnapshot backups.";
+        default = false;
+        example = true;
+        type = types.bool;
+      };
       enableManualRsnapshot = mkOption {
         description = "Whether to enable manual usage of the rsnapshot command with this module.";
         default = true;

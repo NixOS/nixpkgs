@@ -10,7 +10,12 @@ let
 in {
   options = {
     services.prometheus.nodeExporter = {
-      enable = mkEnableOption "prometheus node exporter";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable prometheus node exporter.";
+      };
 
       port = mkOption {
         type = types.int;

@@ -202,7 +202,12 @@ in
 
   options = {
     services.rippled = {
-      enable = mkEnableOption "rippled";
+      enable = mkOption {
+        description = "Whether to enable rippled.";
+        default = false;
+        example = true;
+        type = types.bool;
+      };
 
       package = mkOption {
 	description = "Which rippled package to use.";
@@ -374,7 +379,12 @@ in
       };
 
       statsd = {
-        enable = mkEnableOption "statsd monitoring for rippled";
+        enable = mkOption {
+          description = "Whether to enable statsd monitoring for rippled.";
+          default = false;
+          example = true;
+          type = types.bool;
+        };
 
         address = mkOption {
           description = "The UDP address and port of the listening StatsD server.";
