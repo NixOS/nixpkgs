@@ -16,7 +16,7 @@ stdenv.mkDerivation {
       /* program */ gpl3Plus
       /* data */ cc-by-sa-30
     ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ vbgl ];
   };
 }
