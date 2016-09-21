@@ -234,7 +234,7 @@
       calibre-server = 213;
       heapster = 214;
       bepasty = 215;
-      pumpio = 216;
+      #pumpio = 216; # unused
       nm-openvpn = 217;
       mathics = 218;
       ejabberd = 219;
@@ -486,7 +486,7 @@
       xtreemfs = 212;
       calibre-server = 213;
       bepasty = 215;
-      pumpio = 216;
+      #pumpio = 216; # unused
       nm-openvpn = 217;
       mathics = 218;
       ejabberd = 219;
