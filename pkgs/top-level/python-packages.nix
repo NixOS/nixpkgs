@@ -588,6 +588,63 @@ in modules // {
     };
   };
 
+  asgiref = buildPythonPackage rec {
+    name = "asgiref-${version}";
+    version = "0.14.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/asgiref/${name}.tar.gz";
+      sha256 = "1ww4z14pd7g2mwz5nyvxm4rif0rsm9h8i0lwk78v58b2j45r43lc";
+    };
+
+    propagatedBuildInputs = with self ; [ six ];
+
+    meta = {
+      description = "Reference ASGI adapters and channel layers";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/asgiref;
+    };
+  };
+
+  asgi_ipc = buildPythonPackage rec {
+    name = "asgi_ipc-${version}";
+    version = "1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/asgi_ipc/${name}.tar.gz";
+      sha256 = "16q5x2cvx3rpnikmqv8l4clkfib8baqy7diy18rsmzj6hqqli3xy";
+    };
+
+    propagatedBuildInputs = with self ; [ asgiref msgpack posix_ipc ];
+
+    meta = {
+      description = "Posix IPC-backed ASGI channel layer implementation";
+      license = licenses.bsd3;
+      homepage = http://github.com/django/asgi_ipc/;
+    };
+  };
+
+  asgi_redis = buildPythonPackage rec {
+    name = "asgi_redis-${version}";
+    version = "0.14.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/asgi_redis/${name}.tar.gz";
+      sha256 = "13ixh1nwgla7wm2xa42inwrd3g5lri89gd31xl62zhs8m6jmg122";
+    };
+
+    # Requires a redis server available
+    doCheck = false;
+
+    propagatedBuildInputs = with self ; [ asgiref asgi_ipc msgpack six redis cryptography ];
+
+    meta = {
+      description = "Redis-backed ASGI channel layer implementation";
+      license = licenses.bsd3;
+      homepage = http://github.com/django/asgi_redis/;
+    };
+  };
+
   python-editor = buildPythonPackage rec {
     name = "python-editor-${version}";
     version = "0.4";
@@ -2080,6 +2137,27 @@ in modules // {
       description = "Utility tools for control groups of Linux";
       maintainers = with maintainers; [ layus ];
       license = licenses.gpl2;
+    };
+  };
+
+  channels = buildPythonPackage rec {
+    name = "channels-${version}";
+    version = "0.17.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/channels/${name}.tar.gz";
+      sha256 = "1a7fzm25sm3qqgxf7j3hml2lkipvf0yapdg4rkk7x3m11zm0xgv9";
+    };
+
+    # Files are missing in the distribution
+    doCheck = false;
+
+    propagatedBuildInputs = with self ; [ asgiref django daphne ];
+
+    meta = {
+      description = "Brings event-driven capabilities to Django with a channel system";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/channels;
     };
   };
 
@@ -5372,6 +5450,24 @@ in modules // {
       license = licenses.psfl;
     };
   });
+
+  daphne = buildPythonPackage rec {
+    name = "daphne-${version}";
+    version = "0.15.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/daphne/${name}.tar.gz";
+      sha256 = "095xdh10v8sqwyas02q72ij3ivd5qjg5ki5cvha0fpzd361izdnp";
+    };
+
+    propagatedBuildInputs = with self; [ asgiref autobahn ];
+
+    meta = {
+      description = "Django ASGI (HTTP/WebSocket) server";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/daphne;
+    };
+  };
 
   dateparser = buildPythonPackage rec {
     name = "dateparser-${version}";
@@ -17973,6 +18069,21 @@ in modules // {
     };
   };
 
+  posix_ipc = buildPythonPackage rec {
+    name = "posix_ipc-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/posix_ipc/${name}.tar.gz";
+      sha256 = "1jzg66708pi5n9w07fbz6rlxx30cjds9hp2yawjjfryafh1hg4ww";
+    };
+
+    meta = {
+      description = "POSIX IPC primitives (semaphores, shared memory and message queues)";
+      license = licenses.bsd3;
+      homepage = http://semanchuk.com/philip/posix_ipc/;
+    };
+  };
 
   powerline = buildPythonPackage rec {
     rev  = "2.1.4";
@@ -30000,8 +30111,8 @@ in modules // {
       url = "mirror://pypi/a/${pname}/${name}.tar.gz";
       sha256 = "1158ml8h3g0vlsgw2jmy579glbg7dn0mjij8xibdl509b8qv9p51";
     };
-    buildInputs = with self; [ unittest2 mock pytest txaio trollius ];
-    propagatedBuildInputs = with self; [ six twisted ];
+    buildInputs = with self; [ unittest2 mock pytest trollius ];
+    propagatedBuildInputs = with self; [ six twisted txaio ];
     checkPhase = ''
       py.test $out
     '';
