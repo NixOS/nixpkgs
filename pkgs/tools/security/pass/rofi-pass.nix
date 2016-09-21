@@ -1,15 +1,14 @@
-{ stdenv, fetchgit
+{ stdenv, fetchurl
 , pass, rofi, coreutils, utillinux, xdotool, gnugrep, pwgen, findutils, gawk
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "rofi-pass-${version}";
-  version = "1.3.2";
+  version = "1.4.3";
 
-  src = fetchgit {
-    url = "https://github.com/carnager/rofi-pass";
-    rev = "refs/tags/${version}";
-    sha256 = "1xqp8s0yyjs2ca9mf8lbz8viwl9xzxf5kk1v68v9hqdgxj26wgls";
+  src = fetchurl {
+    url = "https://github.com/carnager/rofi-pass/archive/${version}.tar.gz";
+    sha256 = "02z1w7wnmg0ymajxanl7z7fxl1w6by4r9w56zd10yr2zzbw7zcm7";
   };
 
   buildInputs = [ makeWrapper ];
@@ -18,10 +17,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -a $src/rofi-pass $out/bin/rofi-pass
+    cp -a rofi-pass $out/bin/rofi-pass
 
     mkdir -p $out/share/doc/rofi-pass/
-    cp -a $src/config.example $out/share/doc/rofi-pass/config.example
+    cp -a config.example $out/share/doc/rofi-pass/config.example
   '';
 
   wrapperPath = with stdenv.lib; makeBinPath [
