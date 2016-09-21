@@ -102,6 +102,8 @@ rec {
           if opt ? example then { example = scrubOptionValue opt.example; }
           else if opt.type == lib.types.bool then
             { example = !docOptionDefault.default or false; }
+          else if opt ? type && isBool (docOptionDefault.default or null) && opt.type.check (!docOptionDefault.default) then
+            { example = !docOptionDefault.default or false; }
           else { };
 
         subOptions =
