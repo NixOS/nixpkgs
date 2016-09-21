@@ -7455,8 +7455,8 @@ in
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
     inherit (darwin) CF;
-    inherit (darwin.apple_sdk.frameworks) 
-      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox 
+    inherit (darwin.apple_sdk.frameworks)
+      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
   };
 
@@ -8118,7 +8118,7 @@ in
   };
 
   libcanberra_gtk3 = callPackage ../development/libraries/libcanberra {
-    gtk = pkgs.gtk3; 
+    gtk = pkgs.gtk3;
   };
   libcanberra_gtk2 = pkgs.libcanberra_gtk3.override { gtk = pkgs.gtk2; };
 
@@ -13074,6 +13074,13 @@ in
       ImageCaptureCore GSS ImageIO;
   });
   emacs24Macport = self.emacs24Macport_24_5;
+
+  emacs25Macport_25_1 = lowPrio (callPackage ../applications/editors/emacs/macport-25.1.nix {
+    inherit (darwin.apple_sdk.frameworks)
+      AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+      ImageCaptureCore GSS ImageIO;
+  });
+  emacs25Macport = self.emacs25Macport_25_1;
 
   emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
