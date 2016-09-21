@@ -1,22 +1,17 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage,
-  pexpect,
-  pyGtkGlade,
-  pygobject,
-  pyxdg,
-  gnome_python,
-  libappindicator-gtk2,
-  xflux,
-  python
+{ stdenv, fetchFromGitHub, buildPythonPackage
+, pexpect, pyGtkGlade, pygobject, pyxdg
+, gnome_python, python
+, libappindicator-gtk2, xflux, librsvg, wrapGAppsHook
 }:
 buildPythonPackage rec {
   name = "xflux-gui-${version}";
-  version = "2016-08-08";
+  version = "2016-09-21";
 
   src = fetchFromGitHub {
     repo = "xflux-gui";
     owner = "xflux-gui";
-    rev = "4125e70b6ad0aeda7de46b3a7083a26c392555dc";
-    sha256 = "1l56f59hnjyi7nn8wn3dfdx6lw2qjbrhdlcfz0qvwj6b0953f2s7";
+    rev = "0b56204477494b473a390e8b0db043437ec14f32";
+    sha256 = "15pr8f31jnhqjlpvasnj6cmm6hw5gljphh2pxzav3zd9bp4yl56r";
   };
 
   # not sure if these need to be propagated or not?
@@ -29,15 +24,17 @@ buildPythonPackage rec {
     gnome_python
   ];
 
-  buildInputs = [
-    xflux
-  ];
+  buildInputs = [ xflux librsvg ];
+
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   postPatch = ''
      substituteInPlace src/fluxgui/xfluxcontroller.py --replace "pexpect.spawn(\"xflux\"" "pexpect.spawn(\"${xflux}/bin/xflux\""
   '';
 
   postFixup = ''
+    wrapGAppsHook
+    makeWrapperArgs="''${gappsWrapperArgs[@]}"
     wrapPythonPrograms
     patchPythonScript $out/${python.sitePackages}/fluxgui/fluxapp.py
   '';
