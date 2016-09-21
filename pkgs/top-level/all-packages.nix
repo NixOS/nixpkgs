@@ -2478,6 +2478,8 @@ in
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
 
+  libnabo = callPackage ../development/libraries/libnabo { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   libmpack = callPackage ../development/libraries/libmpack { };
