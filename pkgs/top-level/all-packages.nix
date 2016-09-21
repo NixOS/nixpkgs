@@ -10935,6 +10935,8 @@ in
 
   conntrack_tools = callPackage ../os-specific/linux/conntrack-tools { };
 
+  coredns = callPackage ../servers/dns/coredns { };
+
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
   cryopid = callPackage ../os-specific/linux/cryopid { };
