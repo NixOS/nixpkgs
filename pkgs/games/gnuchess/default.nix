@@ -3,10 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="gnuchess";
-    version="6.2.2";
+    version="6.2.3";
     name="${baseName}-${version}";
     url="mirror://gnu/chess/${name}.tar.gz";
-    sha256="1a41ag03q66pwy3pjrmbxxjpzi9fcaiiaiywd7m9v25mxqac2xkp";
+    sha256="10hvnfhj9bkpz80x20jgxyqvgvrcgfdp8sfcbcrf1dgjn9v936bq";
   };
   buildInputs = [
     flex
