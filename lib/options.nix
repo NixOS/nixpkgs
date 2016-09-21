@@ -93,16 +93,22 @@ rec {
           visible = opt.visible or true;
           readOnly = opt.readOnly or false;
           type = opt.type.name or null;
-        }
-        // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
-        // (if opt ? default then { default = scrubOptionValue opt.default; } else {})
-        // (if opt ? defaultText then { default = opt.defaultText; } else {});
+        };
+        docOptionDefault =
+          if opt ? defaultText then { default = opt.defaultText; }
+          else if opt ? default then { default = scrubOptionValue opt.default; }
+          else { };
+        docOptionExample =
+          if opt ? example then { example = scrubOptionValue opt.example; }
+          else if opt.type == lib.types.bool then
+            { example = !docOptionDefault.default or false; }
+          else { };
 
         subOptions =
           let ss = opt.type.getSubOptions opt.loc;
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
       in
-        [ docOption ] ++ subOptions) (collect isOption options);
+        [ (docOption // docOptionDefault // docOptionExample) ] ++ subOptions) (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from
