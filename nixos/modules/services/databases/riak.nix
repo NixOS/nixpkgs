@@ -20,7 +20,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.riak2";
+        example = literalExample "pkgs.riak";
         description = ''
           Riak package to use.
         '';
