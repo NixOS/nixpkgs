@@ -1,28 +1,27 @@
-{ fetchurl, stdenv, ncurses, pkgconfig, emacs}:
+{ fetchurl, stdenv, ncurses
+, emacsSupport ? true, emacs
+}:
 
 stdenv.mkDerivation rec {
-  name = "cscope-15.8a";
+  name = "cscope-15.8b";
 
   src = fetchurl {
     url = "mirror://sourceforge/cscope/${name}.tar.gz";
-    sha256 = "07jdhxvp3dv7acvp0pwsdab1g2ncxjlcf838lj7vxgjs1p26lwzb";
+    sha256 = "1byk29rcpyygrnr03h5j3y8j0aqxldd9dr5ihi9q982sy28x12a8";
   };
-
-  preConfigure = ''
-    sed -i "contrib/xcscope/cscope-indexer" \
-        -"es|^PATH=.*$|PATH=\"$out/bin:\$PATH\"|g"
-    sed -i "contrib/xcscope/xcscope.el" \
-        -"es|\"cscope-indexer\"|\"$out/libexec/cscope/cscope-indexer\"|g";
-  '';
 
   configureFlags = "--with-ncurses=${ncurses.dev}";
 
   buildInputs = [ ncurses ];
-  nativeBuildInputs = [ pkgconfig emacs ];
+  nativeBuildInputs = stdenv.lib.optional emacsSupport emacs;
 
-  postInstall = ''
-    # Install Emacs mode.
+  postInstall = stdenv.lib.optionalString emacsSupport ''
     cd "contrib/xcscope"
+
+    sed -i "cscope-indexer" \
+        -"es|^PATH=.*$|PATH=\"$out/bin:\$PATH\"|g"
+    sed -i "xcscope.el" \
+        -"es|\"cscope-indexer\"|\"$out/libexec/cscope/cscope-indexer\"|g";
 
     mkdir -p "$out/libexec/cscope"
     cp "cscope-indexer" "$out/libexec/cscope"
