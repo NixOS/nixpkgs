@@ -2805,6 +2805,8 @@ in
 
   newsbeuter-dev = callPackage ../applications/networking/feedreaders/newsbeuter/dev.nix { };
 
+  nextcloud = callPackage ../servers/nextcloud { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   ngrok = callPackage ../tools/networking/ngrok { };
