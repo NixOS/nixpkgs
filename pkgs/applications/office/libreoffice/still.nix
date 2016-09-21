@@ -38,7 +38,7 @@ let
         url = "http://dev-www.libreoffice.org/extern/${md5}-${name}";
         sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
         name = "unowinreg.dll";
-      }) ] ++ (map fetchurl (import ./libreoffice-srcs-still.nix));
+      }) ] ++ (map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;})) (import ./libreoffice-srcs-still.nix));
 
     translations = fetchSrc {
       name = "translations";
@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
-  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
+  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.md5 or f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
