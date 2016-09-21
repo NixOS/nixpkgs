@@ -5,16 +5,12 @@ stdenv.mkDerivation rec {
   version = lib.concatStringsSep "." ([ majorVersion ]
     ++ lib.optional (patchVersion != "") patchVersion);
   majorVersion = "2.28";
-  patchVersion = "1";
+  patchVersion = "2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
-    sha256 = "03xnaw3c7pavxvvh1vnimcr44hlhhf25whawiyv8dxsflfj4xkiy";
+    sha256 = "1kgh16j3ywzf5gdz4vq6v3dyc5qsi377p11clj9xxgi0dwa3g7dq";
   };
-
-  patches = [
-    ./rtcwake-search-PATH-for-shutdown.patch
-  ];
 
   outputs = [ "bin" "dev" "out" "man" ];
 
@@ -24,6 +20,8 @@ stdenv.mkDerivation rec {
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "/run/current-system/sw/bin/login" \
       --replace "/sbin/shutdown" "/run/current-system/sw/bin/shutdown"
+    substituteInPlace sys-utils/rtcwake.c \
+      --replace "execv" "execvp"
   '';
 
   crossAttrs = {
@@ -41,6 +39,7 @@ stdenv.mkDerivation rec {
     --enable-mesg
     --disable-use-tty-group
     --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/bin:/sbin
+    --localstatedir=/var
     ${if ncurses == null then "--without-ncurses" else ""}
     ${if systemd == null then "" else ''
       --with-systemd
