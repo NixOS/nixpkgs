@@ -37,6 +37,8 @@ def main():
         print('    name = "{}";'.format(tarball))
         print('    url = "{}";'.format(url))
         print('    sha256 = "{}";'.format(sha256))
+        print('    md5 = "{}";'.format(md5))
+        print('    md5name = "{}-{}";'.format(md5,tarball))
         print('  }')
 
     print(']')
