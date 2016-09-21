@@ -9127,6 +9127,8 @@ in
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
+  pg_repack = callPackage ../servers/sql/postgresql/pg_repack {};
+
   phonon = callPackage ../development/libraries/phonon {};
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
