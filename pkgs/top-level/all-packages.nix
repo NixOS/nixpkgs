@@ -6208,7 +6208,7 @@ in
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel = callPackage ../development/tools/build-managers/bazel { jdk = openjdk8; };
+  bazel = callPackage ../development/tools/build-managers/bazel { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
 

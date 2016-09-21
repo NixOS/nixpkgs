@@ -1,19 +1,24 @@
-{ stdenv, fetchFromGitHub, jdk, zip, zlib, protobuf2_5, pkgconfig, libarchive, unzip, which, makeWrapper }:
-
+{ stdenv, fetchFromGitHub, jdk, zip, zlib, protobuf3_0, pkgconfig, libarchive, unzip, which, makeWrapper }:
 stdenv.mkDerivation rec {
-  name = "bazel-20150326.981b7bc1";
+  version = "0.3.1";
+  name = "bazel-${version}";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bazel";
-    rev = "981b7bc1";
-    sha256 = "0i9gxgqhfmix7hmkb15s7h9f8ssln08pixqm26pd1d20g0kfyxj7";
+    rev = version;
+    sha256 = "1cm8zjxf8y3ai6h9wndxvflfsijjqhg87fll9ar7ff0hbbbdf6l5";
   };
 
-  buildInputs = [ pkgconfig protobuf2_5 zlib zip jdk libarchive unzip which makeWrapper ];
+  buildInputs = [ pkgconfig protobuf3_0 zlib zip libarchive unzip which makeWrapper jdk ];
+
+  buildPhase = ''
+    export LD_LIBRARY_PATH="${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+
+    bash compile.sh
+  '';
 
   installPhase = ''
-    PROTOC=protoc bash compile.sh
     mkdir -p $out/bin $out/share
     cp -R output $out/share/bazel
     ln -s $out/share/bazel/bazel $out/bin/bazel
