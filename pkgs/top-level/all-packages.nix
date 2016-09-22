@@ -7229,7 +7229,7 @@ in
   gts = callPackage ../development/libraries/gts { };
 
   gvfs = callPackage ../development/libraries/gvfs {
-    gnome = self.gnome2;
+    gnome = self.gnome3;
   };
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
