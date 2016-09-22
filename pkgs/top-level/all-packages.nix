@@ -14651,6 +14651,12 @@ in
     cmake = cmake_2_8; # problems after 3.4 -> 3.6.0
   };
 
+  rawtherapee-git = lowPrio (callPackage ../applications/graphics/rawtherapee/dev.nix {
+    fftw = fftwSinglePrec;
+    cmake = cmake_2_8; # problems after 3.4 -> 3.6.0
+  });
+
+
   rcs = callPackage ../applications/version-management/rcs { };
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
