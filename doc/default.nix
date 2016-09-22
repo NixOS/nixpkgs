@@ -61,6 +61,10 @@ pkgs.stdenv.mkDerivation {
       outputFile = "languages-frameworks/idris.xml";
     }
   + toDocbook {
+      inputFile = ../pkgs/development/node-packages/README.md;
+      outputFile = "languages-frameworks/node.xml";
+    }
+  + toDocbook {
       inputFile = ../pkgs/development/r-modules/README.md;
       outputFile = "languages-frameworks/r.xml";
     }
