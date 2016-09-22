@@ -2,7 +2,7 @@
 , jasper, libintlOrEmpty, gobjectIntrospection, doCheck ? false }:
 
 let
-  ver_maj = "2.34";
+  ver_maj = "2.36";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
-    sha256 = "0yc8indbl3hf18z6x6kjg59xp9sngm1d8vmz4c7bs6g27qw5npnm";
+    sha256 = "85ab52ce9f2c26327141b3dcf21cca3da6a3f8de84b95fa1e727d8871a23245c";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
