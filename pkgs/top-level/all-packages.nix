@@ -9822,11 +9822,6 @@ in
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
-  webkitgtk210x = callPackage ../development/libraries/webkitgtk/2.10.nix {
-    harfbuzz = harfbuzz-icu;
-    gst-plugins-base = gst_all_1.gst-plugins-base;
-  };
-
   webkitgtk2 = webkitgtk24x.override {
     withGtk2 = true;
     enableIntrospection = false;
