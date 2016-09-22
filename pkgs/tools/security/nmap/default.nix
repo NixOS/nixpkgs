@@ -1,13 +1,12 @@
 { stdenv, fetchurl, libpcap, pkgconfig, openssl
 , graphicalSupport ? false
-, libX11 ? null
 , gtk2 ? null
+, libX11 ? null
 , withPython ? false # required for the `ndiff` binary
-, python2Packages ? null
-, makeWrapper ? null
+, python2 ? null
 }:
 
-assert withPython -> python2Packages != null;
+assert withPython -> python2 != null;
 
 with stdenv.lib;
 
@@ -16,6 +15,10 @@ let
   # Zenmap (the graphical program) also requires Python,
   # so automatically enable pythonSupport if graphicalSupport is requested.
   pythonSupport = withPython || graphicalSupport;
+
+  pythonEnv = python2.withPackages(ps: with ps; []
+    ++ optionals graphicalSupport [ pycairo pygobject2 pygtk pysqlite ]
+  );
 
 in stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
@@ -33,17 +36,10 @@ in stdenv.mkDerivation rec {
     ++ optional (!graphicalSupport) "--without-zenmap"
     ;
 
-  postInstall = optionalString pythonSupport ''
-      wrapProgram $out/bin/ndiff --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH"
-  '' + optionalString graphicalSupport ''
-      wrapProgram $out/bin/zenmap --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH" --prefix PYTHONPATH : $(toPythonPath $pygtk)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pygobject)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pycairo)/gtk-2.0
-  '';
-
-  buildInputs = with python2Packages; [ libpcap pkgconfig openssl ]
-    ++ optionals pythonSupport [ makeWrapper python ]
-    ++ optionals graphicalSupport [
-      libX11 gtk2 pygtk pysqlite pygobject2 pycairo
-    ];
+  buildInputs = [ libpcap pkgconfig openssl ]
+    ++ optional pythonSupport pythonEnv
+    ++ optionals graphicalSupport [ gtk2 libX11 ]
+    ;
 
   meta = {
     description = "A free and open source utility for network discovery and security auditing";
