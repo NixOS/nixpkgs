@@ -4125,11 +4125,11 @@ in modules // {
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
     name = "cryptography-${version}";
-    version = "1.5";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography/${name}.tar.gz";
-      sha256 = "52f47ec9a57676043f88e3ca133638790b6b71e56e8890d9d7f3ae4fcd75fa24";
+      sha256 = "1d8da8xbx51m4dqpy51crvcmjakmfcxpx14hh2izppifrh1fs35d";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
@@ -4146,11 +4146,11 @@ in modules // {
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
     name = "cryptography_vectors-${version}";
-    version = "1.5";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "ad19a2b98a475785c3b2ec8a8c9c974e0c48d00db0c23e79d776a2c489ad812d";
+      sha256 = "1z74mqwlvxlxz6b1xlflphqhgby1k77shl94zw5ncw3x3cqwbccl";
     };
   };
 
