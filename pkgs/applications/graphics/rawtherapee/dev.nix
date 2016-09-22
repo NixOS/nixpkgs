@@ -1,26 +1,28 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm2, libXau
 , libXdmcp, lcms2, libiptcdata, libcanberra_gtk2, fftw, expat, pcre, libsigcxx
-, mercurial  # Not really needed for anything, but it fails if it does not find 'hg'
 }:
 
 stdenv.mkDerivation rec {
-  name = "rawtherapee-4.2";
+  name = "rawtherapee-git-2016-09-21";
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
-    rev = "4.2";
-    sha256 = "1v4px239vlmk9l8wbzlvlyni4ns12icxmgfz21m86jkd10pj5dgr";
+    rev = "2d0e5e4feeac9801994d82c5931531f508deb2e9";
+    sha256 = "1d9bi3b6cslm0rhhqf0rx47nlnsnky284vqsxyq3mss6bd8880xh";
   };
 
   buildInputs = [ pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
-    lcms2 libiptcdata mercurial libcanberra_gtk2 fftw expat pcre libsigcxx ];
-
-  patchPhase = ''
-    patch -p1 < ${./sigc++_fix.patch}
-  '';
+    lcms2 libiptcdata libcanberra_gtk2 fftw expat pcre libsigcxx ];
 
   NIX_CFLAGS_COMPILE = "-std=gnu++11 -Wno-deprecated-declarations -Wno-unused-result";
+
+  # Copy generated ReleaseInfo.cmake so we don't need git. File was
+  # generated manually using `./tools/generateReleaseInfo` in the
+  # source folder. Make sure to regenerate it when updating.
+  preConfigure = ''
+    cp ${./ReleaseInfo.cmake} ./ReleaseInfo.cmake
+  '';
 
   enableParallelBuilding = true;
 
