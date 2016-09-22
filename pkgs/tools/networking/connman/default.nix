@@ -51,10 +51,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Provides a daemon for managing internet connections";
-    homepage = "https://connman.net/";
+    description = "A daemon for managing internet connections";
+    homepage = https://connman.net/;
     maintainers = [ maintainers.matejc ];
-    # tested only on linux, might work on others also
     platforms = platforms.linux;
     license = licenses.gpl2;
   };
