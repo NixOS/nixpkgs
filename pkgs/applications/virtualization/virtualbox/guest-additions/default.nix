@@ -139,6 +139,6 @@ stdenv.mkDerivation {
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
-    broken = with kernel.features; (grsecurity or false || chromiumos or false);
+    broken = kernel.features.grsecurity or false || kernel.features.chromiumos or false;
   };
 }
