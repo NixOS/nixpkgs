@@ -7,7 +7,7 @@
 , saslSupport ? false
 , stdenv, fetchurl, apr, aprutil, zlib, sqlite
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
-, sasl ? null, serf ? null
+, sasl ? null, serf ? null, openssl
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -29,7 +29,7 @@ let
   # Can't do separate $lib and $bin, as libs reference bins
   outputs = [ "out" "dev" "man" ];
 
-    buildInputs = [ zlib apr aprutil sqlite ]
+    buildInputs = [ zlib apr aprutil sqlite openssl ]
       ++ stdenv.lib.optional httpSupport serf
       ++ stdenv.lib.optional pythonBindings python
       ++ stdenv.lib.optional perlBindings perl
@@ -75,11 +75,13 @@ let
       mkdir -p $out/share/bash-completion/completions
       cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
 
-    for f in $out/lib/*.la; do
-      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
-      substituteInPlace $f --replace "${zlib.dev}/lib" "${zlib.out}/lib"
-      substituteInPlace $f --replace "${sqlite.dev}/lib" "${sqlite.out}/lib"
-    done
+      for f in $out/lib/*.la; do
+        substituteInPlace $f \
+          --replace "${expat.dev}/lib" "${expat.out}/lib" \
+          --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
+          --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
+          --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+      done
     '';
 
     inherit perlBindings pythonBindings;
