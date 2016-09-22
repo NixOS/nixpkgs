@@ -7,7 +7,7 @@ let
     preferLocalBuild = true; 
     allowSubstitutes = false;
     name = "gtk2-immodule.cache";
-    buildInputs = [ pkgs.gtk cfg.package ];
+    buildInputs = [ pkgs.gtk2 cfg.package ];
     buildCommand = ''
       mkdir -p $out/etc/gtk-2.0/
       GTK_PATH=${cfg.package}/lib/gtk-2.0/ gtk-query-immodules-2.0 > $out/etc/gtk-2.0/immodules.cache
