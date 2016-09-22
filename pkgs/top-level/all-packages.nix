@@ -9812,12 +9812,12 @@ in
     inherit (darwin) libobjc;
   };
 
-  webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
+  webkitgtk214x = callPackage ../development/libraries/webkitgtk/2.14.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
-  webkitgtk210x = callPackage ../development/libraries/webkitgtk/2.10.nix {
+  webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
