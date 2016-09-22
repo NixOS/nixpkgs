@@ -11695,10 +11695,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubIdentify = buildPerlPackage rec {
-    name = "Sub-Identify-0.04";
+    name = "Sub-Identify-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/${name}.tar.gz";
-      sha256 = "16g4dkmb4h5hh15jsq0kvsf3irrlrlqdv7qk6605wh5gjjwbcjxy";
+      sha256 = "83bb785a66113b4a966db0a4186fd1dd07987acdacb4502b1e1558f817dde825";
+    };
+    meta = {
+      description = "Retrieve names of code references";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
