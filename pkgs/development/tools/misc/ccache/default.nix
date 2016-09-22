@@ -18,44 +18,46 @@ let ccache = stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   passthru = let
-      cc = stdenv.cc.cc;
-      ccname = if stdenv.cc.isClang then "clang" else "gcc";
-      cxxname = if stdenv.cc.isClang then "clang++" else "g++";
+      unwrappedCC = stdenv.cc.cc;
     in {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
     links = extraConfig: stdenv.mkDerivation rec {
       name = "ccache-links";
       passthru = {
-        inherit (stdenv.cc) isClang;
-        inherit (cc) isGNU;
+        isClang = unwrappedCC.isClang or false;
+        isGNU = unwrappedCC.isGNU or false;
       };
-      inherit (cc) lib;
+      inherit (unwrappedCC) lib;
       buildCommand = ''
         mkdir -p $out/bin
-        if [ -x "${cc}/bin/${ccname}" ]; then
-          cat > $out/bin/${ccname} << EOF
-          #!/bin/sh
-          ${extraConfig}
-          exec ${ccache}/bin/ccache ${cc}/bin/${ccname} "\$@"
+
+        wrap() {
+          local cname="$1"
+          if [ -x "${unwrappedCC}/bin/$cname" ]; then
+            cat > $out/bin/$cname << EOF
+        #!/bin/sh
+        ${extraConfig}
+        exec ${ccache}/bin/ccache ${unwrappedCC}/bin/$cname "\$@"
         EOF
-          chmod +x $out/bin/${ccname}
-        fi
-        if [ -x "${cc}/bin/${cxxname}" ]; then
-          cat > $out/bin/${cxxname} << EOF
-          #!/bin/sh
-          ${extraConfig}
-          exec ${ccache}/bin/ccache ${cc}/bin/${cxxname} "\$@"
-        EOF
-          chmod +x $out/bin/${cxxname}
-        fi
-        for executable in $(ls ${cc}/bin); do
+            chmod +x $out/bin/$cname
+          fi
+        }
+
+        wrap cc
+        wrap c++
+        wrap gcc
+        wrap g++
+        wrap clang
+        wrap clang++
+
+        for executable in $(ls ${unwrappedCC}/bin); do
           if [ ! -x "$out/bin/$executable" ]; then
-            ln -s ${cc}/bin/$executable $out/bin/$executable
+            ln -s ${unwrappedCC}/bin/$executable $out/bin/$executable
           fi
         done
-        for file in $(ls ${cc} | grep -vw bin); do
-          ln -s ${cc}/$file $out/$file
+        for file in $(ls ${unwrappedCC} | grep -vw bin); do
+          ln -s ${unwrappedCC}/$file $out/$file
         done
       '';
     };
