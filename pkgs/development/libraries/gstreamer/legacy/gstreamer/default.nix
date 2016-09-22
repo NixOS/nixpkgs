@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1nkid1n2l3rrlmq5qrf5yy06grrkwjh3yxl5g0w58w0pih8allci";
   };
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = [ perl bison flex pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 ] ++ libintlOrEmpty;
 
