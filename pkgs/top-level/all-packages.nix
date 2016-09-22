@@ -1502,6 +1502,8 @@ in
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
+  enpass = callPackage ../applications/misc/enpass { };
+
   enscript = callPackage ../tools/text/enscript { };
 
   entr = callPackage ../tools/misc/entr { };
