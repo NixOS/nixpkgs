@@ -2480,6 +2480,8 @@ in
 
   libnabo = callPackage ../development/libraries/libnabo { };
 
+  libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   libmpack = callPackage ../development/libraries/libmpack { };
