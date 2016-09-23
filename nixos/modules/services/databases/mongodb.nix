@@ -131,4 +131,8 @@ in
 
   };
 
+  meta.tests = {
+    mongodb = ./tests/mongodb.nix;
+  };
+
 }
