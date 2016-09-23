@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
+, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
-, autoconf, automake
 , withX ? !stdenv.isDarwin
+, withGTK2 ? true, gtk2 ? null
 , withGTK3 ? false, gtk3 ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
-, withGTK2 ? true, gtk2
+, srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -19,71 +19,68 @@ assert withXwidgets -> withGTK3 && webkitgtk24x != null;
 
 let
   toolkit =
-    if withGTK3 then "gtk3"
-    else if withGTK2 then "gtk2"
+    if withGTK2 then "gtk2"
+    else if withGTK3 then "gtk3"
     else "lucid";
 in
-
 stdenv.mkDerivation rec {
-  name = "emacs-25.1-rc2";
-
-  builder = ./builder.sh;
+  name = "emacs-25.1";
 
   src = fetchurl {
-    url = "ftp://alpha.gnu.org/gnu/emacs/pretest/${name}.tar.xz";
-    sha256 = "1hffvyvl50mrivdv6lp92sbxi3l2zhblj8npmpbzk47zpl1mzm2v";
+    url = "mirror://gnu//emacs/${name}.tar.xz";
+    sha256 = "0cwgyiyymnx4xdg99dm2drfxcyhy2jmyf0rkr9fwj9mwwf77kwhr";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    ./at-fdcwd.patch
-  ];
+  patches = lib.optional stdenv.isDarwin ./at-fdcwd.patch;
 
-  postPatch = ''
-    sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
-  '';
+  nativeBuildInputs = [ pkgconfig ]
+    ++ lib.optionals srcRepo [ autoconf automake texinfo ];
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm gettext
-      autoconf automake ]
-    ++ stdenv.lib.optional stdenv.isLinux dbus
-    ++ stdenv.lib.optionals withX
+    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
+    ++ lib.optional stdenv.isLinux dbus
+    ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
-    ++ stdenv.lib.optional (withX && withGTK2) gtk2
-    ++ stdenv.lib.optional (withX && withGTK3) gtk3
-    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo
-    ++ stdenv.lib.optionals withXwidgets [webkitgtk24x wrapGAppsHook glib_networking];
+    ++ lib.optional (withX && withGTK2) gtk2
+    ++ lib.optional (withX && withGTK3) gtk3
+    ++ lib.optional (stdenv.isDarwin && withX) cairo
+    ++ lib.optionals withXwidgets [ webkitgtk24x wrapGAppsHook glib_networking ];
 
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
   hardeningDisable = [ "format" ];
 
-  configureFlags =
-    (if stdenv.isDarwin
+  configureFlags = [ "--with-modules" ] ++
+   (if stdenv.isDarwin
       then [ "--with-ns" "--disable-ns-self-contained" ]
     else if withX
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
-    ++ stdenv.lib.optional withXwidgets "--with-xwidgets";
+    ++ lib.optional withXwidgets "--with-xwidgets";
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
-    "-I${cairo.dev}/include/cairo";
+  preConfigure = lib.optionalString srcRepo ''
+    ./autogen.sh
+  '' + ''
+    substituteInPlace lisp/international/mule-cmds.el \
+      --replace /usr/share/locale ${gettext}/share/locale
 
-  preBuild = ''
-    find . -name '*.elc' -delete
+    for makefile_in in $(find . -name Makefile.in -print); do
+        substituteInPlace $makefile_in --replace /bin/pwd pwd
+    done
   '';
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
   '';
 
   meta = with stdenv.lib; {
-    description = "GNU Emacs 25 (pre), the extensible, customizable text editor";
+    description = "The extensible, customizable GNU text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];
