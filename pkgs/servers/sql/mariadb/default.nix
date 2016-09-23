@@ -16,11 +16,11 @@ mariadb = everything // {
 
 
 common = rec { # attributes common to both builds
-  version = "10.1.16";
+  version = "10.1.17";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "14s3wq1c25n62n75hkixl8n7cni4m73w055nsx4czm655k33bjv7";
+    sha256 = "1ddalhxxcn95qp5b50z213niylcd0s6bqphid0c7c624wg2mm92c";
   };
 
   prePatch = ''
