@@ -22,11 +22,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf automake gettext ruby ];
 
   buildInputs = [
-    expat
-    file xdg_utils boost libebml zlib
-    libmatroska libogg libvorbis flac
-    (optional withGUI qt5.qtbase)
-  ];
+    expat file xdg_utils boost libebml zlib libmatroska libogg
+    libvorbis flac
+  ] ++ optional withGUI qt5.qtbase;
 
   preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "./drake -j $NIX_BUILD_CORES";
