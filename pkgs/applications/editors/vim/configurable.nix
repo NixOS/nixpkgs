@@ -63,12 +63,6 @@ composableDerivation {
 
     patches = [ ./cflags-prune.diff ];
 
-    # if darwin support is enabled, we want to make sure we're not building with
-    # OS-installed python framework
-    patches = stdenv.lib.optionals
-      (stdenv.isDarwin && (config.vim.darwin or true))
-      [ ./python_framework.patch ];
-
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
