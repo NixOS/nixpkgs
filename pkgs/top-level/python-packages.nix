@@ -2037,13 +2037,14 @@ in modules // {
   };
 
   bedup = buildPythonPackage rec {
-    version = "0.10";
+    version = "0.10.1";
     name = "bedup-${version}";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/g2p/bedup.git";
-      rev = "598fd4b";
-      sha256 = "0cwnifv5mk5rgil0rcibqchz7y8nzpdpi3k2s9wbqcynjl7l49ln";
+    src = pkgs.fetchFromGitHub {
+      owner = "g2p";
+      repo = "bedup";
+      rev = "v${version}";
+      sha256 = "0sp8pmjkxcqq0alianfp41mwq7qj10rk1qy31pjjp9kiph1rn0x6";
     };
 
     buildInputs = with self; [ pkgs.btrfs-progs ];
@@ -2051,9 +2052,6 @@ in modules // {
       ++ optionals (!isPyPy) [ cffi ];
 
     disabled = pythonOlder "3.3";
-
-    # No proper test suite. Included tests cannot be run because of relative import
-    doCheck = false;
 
     meta = {
       description = "Deduplication for Btrfs";
