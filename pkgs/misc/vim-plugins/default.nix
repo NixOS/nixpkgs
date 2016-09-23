@@ -302,6 +302,23 @@ rec {
 
   };
 
+  ctrlp-cmatcher = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ctrlp-cmatcher-2016-09-22";
+    src = fetchgit {
+      url = "git://github.com/JazzCore/ctrlp-cmatcher";
+      rev = "6c36334f106b6fd981d23e724e9a618734cab43a";
+      sha256 = "1573kd6xf3n8sxlz2j4zadai4rnc7k3s9c54648yfzickwn57d8q";
+    };
+    dependencies = [];
+
+    buildInputs = [ python ];
+
+    buildPhase = ''
+      patchShebangs .
+      ./install.sh
+    '';
+  };
+
   ctrlp-z = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "ctrlp-z-2015-10-17";
     src = fetchgit {
