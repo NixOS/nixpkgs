@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, re, sexplib, stringext, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, re, sexplib_p4, stringext, ounit }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ ocaml findlib ounit ];
-  propagatedBuildInputs = [ re sexplib stringext ];
+  propagatedBuildInputs = [ re sexplib_p4 stringext ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
   buildPhase = ''
