@@ -2066,6 +2066,8 @@ in
 
   hping = callPackage ../tools/networking/hping { };
 
+  htpdate = callPackage ../tools/networking/htpdate { };
+
   http-prompt = callPackage ../tools/networking/http-prompt { };
 
   httpie = callPackage ../tools/networking/httpie { };
