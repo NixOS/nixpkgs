@@ -4,7 +4,7 @@
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "3.8.2";
+  version = "3.9.1";
   name = "mercurial-${version}";
   inherit (pythonPackages) curses docutils hg-git dulwich python;
 in
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/${name}.tar.gz";
-    sha256 = "1zdz42znd6i7c3nf31j0k6frcs68qyniyvcad8k2a1hlarlv2y6b";
+    sha256 = "0x6zjl8za6nnlbmyxng4pfrr2h77zi3wbg985262ghjyx33lypk2";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
