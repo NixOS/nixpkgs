@@ -21,10 +21,10 @@ rec {
       let arch = if stdenv.is64bit then "amd64" else "i386"; in ''
         mkdir patching
         pushd patching
-        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-0.10.jar
+        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-0.11.jar
         patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
-        jar cf native-platform-linux-${arch}-0.10.jar .
-        mv native-platform-linux-${arch}-0.10.jar $out/lib/gradle/lib/
+        jar cf native-platform-linux-${arch}-0.11.jar .
+        mv native-platform-linux-${arch}-0.11.jar $out/lib/gradle/lib/
         popd
 
         # The scanner doesn't pick up the runtime dependency in the jar.
@@ -52,11 +52,11 @@ rec {
   };
 
   gradle_latest = gradleGen rec {
-    name = "gradle-3.0";
+    name = "gradle-3.1";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "103z2nzlpc6x3mav0mqardd84rj1si718f6wpnpl8i273aa0dj9r";
+      sha256 = "1z0h60w0wvdg2rlxg5izcbhnrzdmr3mdgs7p09cm4lr28d139pn7";
     };
   };
 
