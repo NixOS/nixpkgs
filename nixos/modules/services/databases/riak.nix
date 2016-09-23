@@ -108,6 +108,7 @@ in
         pkgs.bash
       ];
 
+      environment.HOME = "${cfg.dataDir}";
       environment.RIAK_DATA_DIR = "${cfg.dataDir}";
       environment.RIAK_LOG_DIR = "${cfg.logDir}";
       environment.RIAK_ETC_DIR = "/etc/riak";
