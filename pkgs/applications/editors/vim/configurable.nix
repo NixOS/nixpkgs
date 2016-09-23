@@ -42,7 +42,7 @@ composableDerivation {
 } (fix: rec {
 
     name = "vim_configurable-${version}";
-    version = "7.4.826";
+    version = "8.0.0005";
 
     enableParallelBuilding = true; # test this
 
@@ -54,7 +54,7 @@ composableDerivation {
         owner = "vim";
         repo = "vim";
         rev = "v${version}";
-        sha256 = "04hp2gqbbj9h872bgj1g9xcaj5qlg9q45v6by2ch9n105dng9aj3";
+        sha256 = "0ys3l3dr43vjad1f096ch1sl3x2ajsqkd03rdn6n812m7j4wipx0";
       };
 
       "vim-nox" =
@@ -68,12 +68,6 @@ composableDerivation {
       };
 
     prePatch = "cd src";
-
-    # if darwin support is enabled, we want to make sure we're not building with
-    # OS-installed python framework
-    patches = stdenv.lib.optionals
-      (stdenv.isDarwin && (config.vim.darwin or true))
-      [ ./python_framework.patch ];
 
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
