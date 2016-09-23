@@ -7,11 +7,11 @@ assert pkcs11Support -> (pkcs11helper != null);
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "openvpn-2.3.11";
+  name = "openvpn-2.3.12";
 
   src = fetchurl {
     url = "http://swupdate.openvpn.net/community/releases/${name}.tar.gz";
-    sha256 = "0qv1flcz4q4mb7zpkxsnlmpvrv3s9gw7xvprjk7n2pnk9x1s85wi";
+    sha256 = "1zqwq19xg6yf90nv35yr8r0ljas5f42v4n9hjjmhlnzpan69plzm";
   };
 
   patches = optional stdenv.isLinux ./systemd-notify.patch;
