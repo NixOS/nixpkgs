@@ -35,6 +35,13 @@ following incompatible changes:</para>
       Now you need to use versioned attributes, like <literal>gnome3</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>A tmpfs is now mounted on <filename>/tmp</filename> by default during
+    boot. This can be disabled by setting <literal>boot.tmpOnTmpfs</literal>
+    to <literal>false</literal>, which is desirable on systems with little
+    memory. Additionally, you may want to clean the contents of
+    <filename>/tmp</filename> before upgrading.</para>
+  </listitem>
 </itemizedlist>
 
 

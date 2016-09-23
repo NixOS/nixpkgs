@@ -18,7 +18,7 @@ with lib;
 
     boot.tmpOnTmpfs = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
          Whether to mount a tmpfs on <filename>/tmp</filename> during boot.
       '';
