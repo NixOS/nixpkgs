@@ -4787,6 +4787,8 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
+  glslang = callPackage ../development/compilers/glslang { };
+
   go_bootstrap = callPackage ../development/compilers/go/1.4.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -6787,6 +6789,8 @@ in
   speedtest-cli = callPackage ../tools/networking/speedtest-cli { };
 
   spin = callPackage ../development/tools/analysis/spin { };
+
+  spirv-tools = callPackage ../development/tools/spirv-tools { };
 
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
@@ -9790,6 +9794,8 @@ in
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
+  vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
+
   vtk = callPackage ../development/libraries/vtk { };
 
   vtkWithQt4 = vtk.override { qtLib = qt4; };
@@ -12227,6 +12233,8 @@ in
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
+
+  shaderc = callPackage ../development/compilers/shaderc { };
 
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 
