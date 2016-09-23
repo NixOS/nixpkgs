@@ -3679,7 +3679,9 @@ in
 
   stun = callPackage ../tools/networking/stun { };
 
-  stunnel = callPackage ../tools/networking/stunnel { };
+  stunnel = callPackage ../tools/networking/stunnel {
+    openssl = openssl_1_1_0;
+  };
 
   strongswan = callPackage ../tools/networking/strongswan { };
 
