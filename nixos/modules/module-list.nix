@@ -250,6 +250,7 @@
   ./services/misc/mwlib.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
+  ./services/misc/nix-optimise.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/nzbget.nix
@@ -289,6 +290,7 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/node-exporter.nix
+  ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -353,6 +355,7 @@
   ./services/networking/haproxy.nix
   ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
+  ./services/networking/htpdate.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
@@ -474,6 +477,7 @@
   ./services/web-apps/mattermost.nix
   ./services/web-apps/pump.io.nix
   ./services/web-apps/tt-rss.nix
+  ./services/web-apps/selfoss.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix

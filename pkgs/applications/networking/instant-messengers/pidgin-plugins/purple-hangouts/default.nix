@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "purple-hangouts-hg-${version}";
-  version = "2016-07-17";
+  version = "2016-08-31";
 
   src = fetchhg {
     url = "https://bitbucket.org/EionRobb/purple-hangouts/";
-    rev = "2c60a5e";
-    sha256 = "1m8132ywg9982q3yiqgy1hzm61wkgi590425pp8yk1q03yipd6zb";
+    rev = "1c0286e48e92";
+    sha256 = "0iv1isa8brm89nvmwrvxjm5ymx4svqrz3gf5yciqzf6kpc82gnxr";
   };
 
   buildInputs = [ pidgin glib json_glib protobuf protobufc ];

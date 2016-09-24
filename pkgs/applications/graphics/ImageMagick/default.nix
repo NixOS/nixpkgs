@@ -11,11 +11,12 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.5-2";
-    sha256 = "09h3rpr1jnzd7ipy5d16r2gi0bwg4hk5khwzv4cyhv1xzs8pk7pj";
+    version = "6.9.5-10";
+    sha256 = "0cxjzqzca80vf6sfx4z9zq4wq2w0vy9ajp9kf88jb4na8mwsn198";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
+    # FIXME: This version has multiple security vulnerabilities
     // lib.optionalAttrs (stdenv.cross.libc or null == "msvcrt") {
         version = "6.9.2-0";
         sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";

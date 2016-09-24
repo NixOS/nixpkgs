@@ -588,6 +588,63 @@ in modules // {
     };
   };
 
+  asgiref = buildPythonPackage rec {
+    name = "asgiref-${version}";
+    version = "0.14.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/asgiref/${name}.tar.gz";
+      sha256 = "1ww4z14pd7g2mwz5nyvxm4rif0rsm9h8i0lwk78v58b2j45r43lc";
+    };
+
+    propagatedBuildInputs = with self ; [ six ];
+
+    meta = {
+      description = "Reference ASGI adapters and channel layers";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/asgiref;
+    };
+  };
+
+  asgi_ipc = buildPythonPackage rec {
+    name = "asgi_ipc-${version}";
+    version = "1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/asgi_ipc/${name}.tar.gz";
+      sha256 = "16q5x2cvx3rpnikmqv8l4clkfib8baqy7diy18rsmzj6hqqli3xy";
+    };
+
+    propagatedBuildInputs = with self ; [ asgiref msgpack posix_ipc ];
+
+    meta = {
+      description = "Posix IPC-backed ASGI channel layer implementation";
+      license = licenses.bsd3;
+      homepage = http://github.com/django/asgi_ipc/;
+    };
+  };
+
+  asgi_redis = buildPythonPackage rec {
+    name = "asgi_redis-${version}";
+    version = "0.14.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/asgi_redis/${name}.tar.gz";
+      sha256 = "13ixh1nwgla7wm2xa42inwrd3g5lri89gd31xl62zhs8m6jmg122";
+    };
+
+    # Requires a redis server available
+    doCheck = false;
+
+    propagatedBuildInputs = with self ; [ asgiref asgi_ipc msgpack six redis cryptography ];
+
+    meta = {
+      description = "Redis-backed ASGI channel layer implementation";
+      license = licenses.bsd3;
+      homepage = http://github.com/django/asgi_redis/;
+    };
+  };
+
   python-editor = buildPythonPackage rec {
     name = "python-editor-${version}";
     version = "0.4";
@@ -1980,13 +2037,14 @@ in modules // {
   };
 
   bedup = buildPythonPackage rec {
-    version = "0.10";
+    version = "0.10.1";
     name = "bedup-${version}";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/g2p/bedup.git";
-      rev = "598fd4b";
-      sha256 = "0cwnifv5mk5rgil0rcibqchz7y8nzpdpi3k2s9wbqcynjl7l49ln";
+    src = pkgs.fetchFromGitHub {
+      owner = "g2p";
+      repo = "bedup";
+      rev = "v${version}";
+      sha256 = "0sp8pmjkxcqq0alianfp41mwq7qj10rk1qy31pjjp9kiph1rn0x6";
     };
 
     buildInputs = with self; [ pkgs.btrfs-progs ];
@@ -1994,9 +2052,6 @@ in modules // {
       ++ optionals (!isPyPy) [ cffi ];
 
     disabled = pythonOlder "3.3";
-
-    # No proper test suite. Included tests cannot be run because of relative import
-    doCheck = false;
 
     meta = {
       description = "Deduplication for Btrfs";
@@ -2080,6 +2135,27 @@ in modules // {
       description = "Utility tools for control groups of Linux";
       maintainers = with maintainers; [ layus ];
       license = licenses.gpl2;
+    };
+  };
+
+  channels = buildPythonPackage rec {
+    name = "channels-${version}";
+    version = "0.17.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/channels/${name}.tar.gz";
+      sha256 = "1a7fzm25sm3qqgxf7j3hml2lkipvf0yapdg4rkk7x3m11zm0xgv9";
+    };
+
+    # Files are missing in the distribution
+    doCheck = false;
+
+    propagatedBuildInputs = with self ; [ asgiref django daphne ];
+
+    meta = {
+      description = "Brings event-driven capabilities to Django with a channel system";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/channels;
     };
   };
 
@@ -4047,11 +4123,11 @@ in modules // {
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
     name = "cryptography-${version}";
-    version = "1.5";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography/${name}.tar.gz";
-      sha256 = "52f47ec9a57676043f88e3ca133638790b6b71e56e8890d9d7f3ae4fcd75fa24";
+      sha256 = "1d8da8xbx51m4dqpy51crvcmjakmfcxpx14hh2izppifrh1fs35d";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
@@ -4068,11 +4144,11 @@ in modules // {
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
     name = "cryptography_vectors-${version}";
-    version = "1.5";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "ad19a2b98a475785c3b2ec8a8c9c974e0c48d00db0c23e79d776a2c489ad812d";
+      sha256 = "1z74mqwlvxlxz6b1xlflphqhgby1k77shl94zw5ncw3x3cqwbccl";
     };
   };
 
@@ -5372,6 +5448,24 @@ in modules // {
       license = licenses.psfl;
     };
   });
+
+  daphne = buildPythonPackage rec {
+    name = "daphne-${version}";
+    version = "0.15.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/daphne/${name}.tar.gz";
+      sha256 = "095xdh10v8sqwyas02q72ij3ivd5qjg5ki5cvha0fpzd361izdnp";
+    };
+
+    propagatedBuildInputs = with self; [ asgiref autobahn ];
+
+    meta = {
+      description = "Django ASGI (HTTP/WebSocket) server";
+      license = licenses.bsd3;
+      homepage = https://github.com/django/daphne;
+    };
+  };
 
   dateparser = buildPythonPackage rec {
     name = "dateparser-${version}";
@@ -12746,6 +12840,26 @@ in modules // {
     ];
   };
 
+  python-Levenshtein = buildPythonPackage rec {
+    name = "python-Levenshtein-${version}";
+    version = "0.12.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/python-Levenshtein/${name}.tar.gz";
+      sha256 = "1c9ybqcja31nghfcc8xxbbz9h60s9qi12b9hr4jyl69xbvg12fh3";
+    };
+
+    # No tests included in archive
+    doCheck = false;
+
+    meta = {
+      description = "Functions for fast computation of Levenshtein distance and string similarity";
+      homepage    = "https://github.com/ztane/python-Levenshtein";
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ aske ];
+    };
+  };
+
   libcloud = buildPythonPackage (rec {
     name = "libcloud-0.18.0";
 
@@ -17973,6 +18087,21 @@ in modules // {
     };
   };
 
+  posix_ipc = buildPythonPackage rec {
+    name = "posix_ipc-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/posix_ipc/${name}.tar.gz";
+      sha256 = "1jzg66708pi5n9w07fbz6rlxx30cjds9hp2yawjjfryafh1hg4ww";
+    };
+
+    meta = {
+      description = "POSIX IPC primitives (semaphores, shared memory and message queues)";
+      license = licenses.bsd3;
+      homepage = http://semanchuk.com/philip/posix_ipc/;
+    };
+  };
 
   powerline = buildPythonPackage rec {
     rev  = "2.1.4";
@@ -30000,8 +30129,8 @@ in modules // {
       url = "mirror://pypi/a/${pname}/${name}.tar.gz";
       sha256 = "1158ml8h3g0vlsgw2jmy579glbg7dn0mjij8xibdl509b8qv9p51";
     };
-    buildInputs = with self; [ unittest2 mock pytest txaio trollius ];
-    propagatedBuildInputs = with self; [ six twisted ];
+    buildInputs = with self; [ unittest2 mock pytest trollius ];
+    propagatedBuildInputs = with self; [ six twisted txaio ];
     checkPhase = ''
       py.test $out
     '';

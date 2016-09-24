@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
-  version = "2.2.5";
+  version = "2.2.8";
 
   src = fetchgit {
     url = https://github.com/github/hub.git;
     rev = "refs/tags/v${version}";
-    sha256 = "13pab3r2ngac2kljy9jb4lz3g3d6smkwydlx23ydjvyjbg2zb75r";
+    sha256 = "1fv4jb9vsbkscnb79gss2mwnd1yf9jhgzw1mhimhx25xizbx1fck";
   };
 
 
@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/zsh/site-functions"
     cp "etc/hub.zsh_completion" "$out/share/zsh/site-functions/_hub"
 
-# Broken: https://github.com/github/hub/issues/592
-#    mkdir -p "$out/etc/bash_completion.d"
-#    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
+    mkdir -p "$out/etc/bash_completion.d"
+    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
 
 # Should we also install provided git-hooks?
 # ?

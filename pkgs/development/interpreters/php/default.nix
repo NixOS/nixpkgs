@@ -300,8 +300,8 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.25";
-    sha256 = "1pldn4z7pzcjm8li9xryrniz5cz542cbv4nlrr13wzzdmhr61kjq";
+    version = "5.6.26";
+    sha256 = "0dk2ifn50iv8jvw2jyw2pr9xqnkksxfv9qbpay84na54hf0anynl";
   };
 
   php70 = generic {

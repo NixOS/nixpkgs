@@ -77,7 +77,7 @@ in {
            }; };
            mongodb.enable = true;
            mongodb.extraConfig = ''
-             nojournal = true
+             storage.journal.enabled: false
            '';
           };
           systemd.services.mongodb.unitConfig.Before = "pump.io.service";

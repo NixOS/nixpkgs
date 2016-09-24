@@ -533,6 +533,8 @@ in {
           fi
         fi
 
+        # enable required pg_trgm extension for gitlab
+        psql gitlab -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         # Always do the db migrations just to be sure the database is up-to-date
         ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
 

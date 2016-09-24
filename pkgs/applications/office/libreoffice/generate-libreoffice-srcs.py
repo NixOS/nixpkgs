@@ -8,26 +8,64 @@ of the input file, and writes the result to stdout.
 
 todo - Ideally we would move as much as possible into derivation dependencies.
 """
-import collections, itertools, json, re, sys, os
+import collections, itertools, json, re, subprocess, sys, os
 
 def main():
 
+    packages = list(get_packages())
+
+    for x in packages:
+        print(x, file=sys.stderr)
+
     print('[')
 
-    for x in get_packages():
+    for x in packages:
 
-        print('{')
+        md5 = x['md5']
+        tarball = x['tarball']
 
-        print('  name = "{}";'.format(x['tarball']))
-        print('  md5 = "{}";'.format(x['md5']))
-        print('  brief = {};'.format('true' if x['brief'] else 'false'))
+        url = construct_url(x)
+        print('url: {}'.format(url), file=sys.stderr)
 
-        if 'subdir' in x:
-            print('  subDir = "{}";'.format(x['subdir']))
+        path = download(url, tarball, md5)
+        print('path: {}'.format(path), file=sys.stderr)
 
-        print('}')
+        sha256 = get_sha256(path)
+        print('sha256: {}'.format(sha256), file=sys.stderr)
+
+        print('  {')
+        print('    name = "{}";'.format(tarball))
+        print('    url = "{}";'.format(url))
+        print('    sha256 = "{}";'.format(sha256))
+        print('    md5 = "{}";'.format(md5))
+        print('    md5name = "{}-{}";'.format(md5,tarball))
+        print('  }')
 
     print(']')
+
+
+def construct_url(x):
+    if x['brief']:
+        return 'http://dev-www.libreoffice.org/src/{}{}'.format(
+            x.get('subdir', ''), x['tarball'])
+    else:
+        return 'http://dev-www.libreoffice.org/src/{}{}-{}'.format(
+            x.get('subdir', ''), x['md5'], x['tarball'])
+
+
+def download(url, name, md5):
+    cmd = ['nix-prefetch-url', url, md5, '--print-path',
+           '--type', 'md5', '--name', name]
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, check=True,
+                          universal_newlines=True)
+    return proc.stdout.split('\n')[1].strip()
+
+
+def get_sha256(path):
+    cmd = ['sha256sum', path]
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, check=True,
+                          universal_newlines=True)
+    return proc.stdout.split(' ')[0].strip()
 
 
 def get_packages():

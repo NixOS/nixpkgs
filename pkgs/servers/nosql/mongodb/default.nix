@@ -80,6 +80,11 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2latlng.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2latlngrect.cc --replace drem remainder
+  '' + stdenv.lib.optionalString stdenv.isi686 ''
+
+    # don't fail by default on i686
+    substituteInPlace src/mongo/db/storage/storage_options.h \
+      --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
   buildPhase = ''

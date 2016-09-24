@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
     done
 
     substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
+  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+    sed -i "s_	patch -s -p0 <gdtoa.hide-public-fns.patch_	patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
   '';
 
   preBuild = ''
