@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   # fix crash; shouldn’t be a security risk because it’s an offline game
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "stackprotector" "fortify" ];
 
   meta = with stdenv.lib; {
     description = "A roguelike game";
