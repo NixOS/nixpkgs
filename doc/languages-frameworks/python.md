@@ -409,8 +409,8 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are available on
-Nix and are available as `python26`, `python27`, `python33`, `python34` and
+Versions 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are available on
+Nix and are available as `python27`, `python33`, `python34` and
 `python35`. The PyPy interpreter is also available as `pypy`. Currently, the
 aliases `python` and `python3` correspond to respectively `python27` and
 `python35`. The Nix expressions for the interpreters can be found in
@@ -419,7 +419,7 @@ aliases `python` and `python3` correspond to respectively `python27` and
 
 #### Missing modules standard library
 
-The interpreters `python26` and `python27` do not include modules that
+The interpreter `python27` does not include modules that
 require external dependencies. This is done in order to reduce the closure size.
 The following modules need to be added as `buildInput` explicitly:
 
@@ -432,7 +432,7 @@ The following modules need to be added as `buildInput` explicitly:
 * `python.modules.tkinter`
 * `python.modules.readline`
 
-For convenience `python27Full` and `python26Full` are provided with all
+For convenience `python27Full` is provided with all
 modules included.
 
 All packages depending on any Python interpreter get appended
@@ -466,7 +466,6 @@ Based on the packages defined in `pkgs/top-level/python-packages.nix` an
 attribute set is created for each available Python interpreter. The available
 sets are
 
-* `pkgs.python26Packages`
 * `pkgs.python27Packages`
 * `pkgs.python33Packages`
 * `pkgs.python34Packages`

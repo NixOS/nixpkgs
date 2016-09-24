@@ -5,7 +5,7 @@ with pkgs.lib;
 let
   pythonAtLeast = versionAtLeast python.pythonVersion;
   pythonOlder = versionOlder python.pythonVersion;
-  isPy26 = python.majorVersion == "2.6";
+  isPy26 = python.majorVersion == "2.6"; # Kept for compatibility. Do not use anymore.
   isPy27 = python.majorVersion == "2.7";
   isPy33 = python.majorVersion == "3.3";
   isPy34 = python.majorVersion == "3.4";
