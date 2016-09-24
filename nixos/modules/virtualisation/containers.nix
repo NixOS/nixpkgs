@@ -159,7 +159,7 @@ let
             fi
           ''
         else
-          ''${ipcmd} add ${cfg.attribute} dev $ifaceHost'';
+          ''${ipcmd} add ${cfg.${attribute}} dev $ifaceHost'';
       renderExtraVeth = name: cfg:
         if cfg.hostBridge != null then
           ''
