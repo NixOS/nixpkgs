@@ -9527,8 +9527,6 @@ in
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
-  rabbitmq-c_0_4 = callPackage ../development/libraries/rabbitmq-c/0.4.nix {};
-
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
 
   raul = callPackage ../development/libraries/audio/raul { };
