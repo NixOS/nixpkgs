@@ -35,6 +35,14 @@ following incompatible changes:</para>
       Now you need to use versioned attributes, like <literal>gnome3</literal>.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      The attribute name of the Radicale daemon has been changed from
+      <literal>pythonPackages.radicale</literal> to
+      <literal>radicale</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 
