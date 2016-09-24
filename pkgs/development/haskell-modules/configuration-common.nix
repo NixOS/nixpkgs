@@ -286,6 +286,7 @@ self: super: {
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
+  hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   hoogle_5_0_4 = super.hoogle_5_0_4.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
