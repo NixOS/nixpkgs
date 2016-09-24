@@ -2965,7 +2965,8 @@ in
     owncloud80
     owncloud81
     owncloud82
-    owncloud90;
+    owncloud90
+    owncloud91;
 
   owncloud-client = callPackage ../applications/networking/owncloud-client { };
 
