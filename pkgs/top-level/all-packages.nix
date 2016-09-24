@@ -17623,6 +17623,8 @@ in
 
   putty = callPackage ../applications/networking/remote/putty { };
 
+  redprl = callPackage ../applications/science/logic/redprl { };
+
   retroarchBare = callPackage ../misc/emulators/retroarch { };
 
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
