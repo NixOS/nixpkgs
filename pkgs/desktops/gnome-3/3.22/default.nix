@@ -262,9 +262,7 @@ let
 
   glade = callPackage ./apps/glade { };
 
-  gnome-boxes = callPackage ./apps/gnome-boxes {
-    spice_gtk = pkgs.spice_gtk.override { enableGTK3 = true; };
-  };
+  gnome-boxes = callPackage ./apps/gnome-boxes { };
 
   gnome-calendar = callPackage ./apps/gnome-calendar { };
 
