@@ -103,7 +103,7 @@ doNotDisplayTwice rec {
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
-  ucsFonts = ucs-fonts; # added 2016-07-15
+  ucsFonts = fonts.ucs-fonts; # added 2016-07-15
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
@@ -114,4 +114,33 @@ doNotDisplayTwice rec {
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
   m3d-linux = m33-linux; # added 2016-08-13
+
+  # added 2016-09-24
+  inherit (fonts) andagii anonymousPro arkpandora_ttf aurulent-sans
+    baekmuk-ttf bakoma_ttf cabin caladea cantarell_fonts carlito comfortaa
+    comic-neue comic-relief corefonts culmus clearlyU cm_unicode crimson
+    dejavu_fonts dejavu_fontsEnv dina-font dina-font-pcf dosis dosemu_fonts
+    eb-garamond emojione encode-sans fantasque-sans-mono fira fira-code
+    fira-mono font-awesome-ttf freefont_ttf font-droid gentium
+    gentium-book-basic gohufont google-fonts gyre-fonts hack-font hasklig
+    helvetica-neue-lt-std hanazono inconsolata inconsolata-lgc iosevka
+    ipafont ipaexfont junicode kawkab-mono-font kochi-substitute
+    kochi-substitute-naga10 lato league-of-moveable-type
+    liberation_ttf_from_source liberation_ttf_binary liberation_ttf
+    liberationsansnarrow liberationsansnarrow_binary libertine
+    libre-baskerville libre-bodoni libre-caslon libre-franklin lmmath lmodern
+    lobster-two lohit-fonts marathi-cursive meslo-lg mononoki montserrat
+    mph_2b_damase mplus-outline-fonts mro-unicode nafees nerdfonts
+    norwester-font noto-fonts noto-fonts-cjk noto-fonts-emoji oldstandard
+    oldsindhi open-dyslexic opensans-ttf orbitron oxygenfonts pecita
+    paratype-pt-mono paratype-pt-sans paratype-pt-serif poly powerline-fonts
+    profont proggyfonts sampradaya signwriting soundfont-fluid stix-otf
+    symbola aegyptus akkadian anatolian maya unidings musica analecta
+    quattrocento quattrocento-sans roboto roboto-mono roboto-slab
+    source-code-pro source-sans-pro source-serif-pro sourceHanSansPackages
+    source-han-sans-japanese source-han-sans-korean
+    source-han-sans-simplified-chinese source-han-sans-traditional-chinese
+    tai-ahom tewi-font theano tempora_lgc terminus_font tipa ttf_bitstream_vera
+    ubuntu_font_family ucs-fonts uni-vga unifont unifont_upper vistafonts
+    wqy_microhei wqy_zenhei xits-math;
 }

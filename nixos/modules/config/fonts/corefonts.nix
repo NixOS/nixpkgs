@@ -1,5 +1,5 @@
 # This module is deprecated, since you can just say ‘fonts.fonts = [
-# pkgs.corefonts ];’ instead.
+# pkgs.fonts.corefonts ];’ instead.
 
 { config, lib, pkgs, ... }:
 
@@ -29,7 +29,7 @@ with lib;
 
   config = mkIf config.fonts.enableCoreFonts {
 
-    fonts.fonts = [ pkgs.corefonts ];
+    fonts.fonts = [ pkgs.fonts.corefonts ];
 
   };
 

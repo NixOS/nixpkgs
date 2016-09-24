@@ -1854,8 +1854,6 @@ in
 
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
 
-  google-fonts = callPackage ../data/fonts/google-fonts { };
-
   gource = callPackage ../applications/version-management/gource { };
 
   gpart = callPackage ../tools/filesystems/gpart { };
@@ -2740,8 +2738,6 @@ in
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
-  nerdfonts = callPackage ../data/fonts/nerdfonts { };
-
   nestopia = callPackage ../misc/emulators/nestopia { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
@@ -3236,7 +3232,9 @@ in
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
 
-  projectm = callPackage ../applications/audio/projectm { };
+  projectm = callPackage ../applications/audio/projectm {
+    inherit (fonts) ttf_bitstream_vera;
+  };
 
   proot = callPackage ../tools/system/proot { };
 
@@ -4854,6 +4852,7 @@ in
       callPackage ../development/compilers/openjdk-darwin/8.nix { }
     else
       callPackage ../development/compilers/openjdk/8.nix {
+        inherit (fonts) liberation_ttf;
         bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
       };
 
@@ -6165,7 +6164,9 @@ in
 
   pyrex096 = callPackage ../development/interpreters/pyrex/0.9.6.nix { };
 
-  racket = callPackage ../development/interpreters/racket { };
+  racket = callPackage ../development/interpreters/racket {
+    inherit (fonts) freefont_ttf;
+  };
 
   rakudo = callPackage ../development/interpreters/rakudo {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
@@ -7497,7 +7498,9 @@ in
 
   fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
 
-  fontconfig = callPackage ../development/libraries/fontconfig { };
+  fontconfig = callPackage ../development/libraries/fontconfig {
+    inherit (fonts) dejavu_fonts;
+  };
 
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
@@ -7506,6 +7509,7 @@ in
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {
       inherit fontconfig fontDirectories;
+      inherit (fonts) dejavu_fonts;
     };
 
   makeFontsCache = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
@@ -9493,6 +9497,7 @@ in
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
     vlc = lowPrio (callPackage ../applications/video/vlc {
+      inherit (fonts) freefont_ttf;
       qt4 = null;
       withQt5 = true;
       ffmpeg = ffmpeg_2;
@@ -10983,7 +10988,9 @@ in
 
   xqilla = callPackage ../development/tools/xqilla { };
 
-  xquartz = callPackage ../servers/x11/xquartz { };
+  xquartz = callPackage ../servers/x11/xquartz {
+    inherit (fonts) ttf_bitstream_vera freefont_ttf liberation_ttf_binary;
+  };
   quartz-wm = callPackage ../servers/x11/quartz-wm {
     stdenv = clangStdenv;
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -12127,63 +12134,17 @@ in
 
   ### DATA
 
-  andagii = callPackage ../data/fonts/andagii { };
+  fonts = recurseIntoAttrs (callPackage ./fonts.nix {});
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
 
-  anonymousPro = callPackage ../data/fonts/anonymous-pro { };
-
   arc-icon-theme = callPackage ../data/icons/arc-icon-theme { };
-
-  arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
-
-  aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
-
-  baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
-
-  bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
   cacert = callPackage ../data/misc/cacert { };
 
-  caladea = callPackage ../data/fonts/caladea {};
-
-  cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
-
-  carlito = callPackage ../data/fonts/carlito {};
-
-  comfortaa = callPackage ../data/fonts/comfortaa {};
-
-  comic-neue = callPackage ../data/fonts/comic-neue { };
-
-  comic-relief = callPackage ../data/fonts/comic-relief {};
-
   coreclr = callPackage ../development/compilers/coreclr { };
-
-  corefonts = callPackage ../data/fonts/corefonts { };
-
-  culmus = callPackage ../data/fonts/culmus { };
-
-  clearlyU = callPackage ../data/fonts/clearlyU { };
-
-  cm_unicode = callPackage ../data/fonts/cm-unicode {};
-
-  crimson = callPackage ../data/fonts/crimson {};
-
-  dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
-    inherit (perlPackages) FontTTF;
-  });
-
-  # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
-  dejavu_fontsEnv = buildEnv {
-    name = "${dejavu_fonts.name}";
-    paths = [ dejavu_fonts.out ];
-  };
-
-  dina-font = callPackage ../data/fonts/dina { };
-
-  dina-font-pcf = callPackage ../data/fonts/dina-pcf { };
 
   docbook5 = callPackage ../data/sgml+xml/schemas/docbook-5.0 { };
 
@@ -12211,117 +12172,21 @@ in
 
   docbook5_xsl = docbook_xsl_ns;
 
-  cabin = callPackage ../data/fonts/cabin { };
-
-  dosis = callPackage ../data/fonts/dosis { };
-
-  dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
-
-  eb-garamond = callPackage ../data/fonts/eb-garamond { };
-
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
 
-  emojione = callPackage ../data/fonts/emojione {
-    inherit (nodePackages) svgo;
-    inherit (pythonPackages) scfbuild;
-  };
-
-  encode-sans = callPackage ../data/fonts/encode-sans { };
-
-  fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
-
-  fira = callPackage ../data/fonts/fira { };
-
-  fira-code = callPackage ../data/fonts/fira-code { };
-
-  fira-mono = callPackage ../data/fonts/fira-mono { };
-
-  font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
-
-  freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
-
-  font-droid = callPackage ../data/fonts/droid { };
-
   freepats = callPackage ../data/misc/freepats { };
 
-  gentium = callPackage ../data/fonts/gentium {};
-
-  gentium-book-basic = callPackage ../data/fonts/gentium-book-basic {};
-
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
-
-  gohufont = callPackage ../data/fonts/gohufont { };
 
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
 
   inherit (gnome3) gsettings_desktop_schemas;
 
-  gyre-fonts = callPackage ../data/fonts/gyre {};
-
-  hack-font = callPackage ../data/fonts/hack { };
-
-  helvetica-neue-lt-std = callPackage ../data/fonts/helvetica-neue-lt-std { };
-
   hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
-  hanazono = callPackage ../data/fonts/hanazono { };
-
-  inconsolata = callPackage ../data/fonts/inconsolata {};
-  inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
-
-  iosevka = callPackage ../data/fonts/iosevka { };
-
-  ipafont = callPackage ../data/fonts/ipafont {};
-  ipaexfont = callPackage ../data/fonts/ipaexfont {};
-
-  junicode = callPackage ../data/fonts/junicode { };
-
-  kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
-
-  kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
-
-  kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
-
-  lato = callPackage ../data/fonts/lato {};
-
-  league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
-
-  liberation_ttf_from_source = callPackage ../data/fonts/redhat-liberation-fonts { };
-  liberation_ttf_binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix { };
-  liberation_ttf = liberation_ttf_binary;
-
-  liberationsansnarrow = callPackage ../data/fonts/liberationsansnarrow { };
-  liberationsansnarrow_binary = callPackage ../data/fonts/liberationsansnarrow/binary.nix { };
-
-  libertine = callPackage ../data/fonts/libertine { };
-
-  libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
-
-  libre-bodoni = callPackage ../data/fonts/libre-bodoni { };
-
-  libre-caslon = callPackage ../data/fonts/libre-caslon { };
-
-  libre-franklin = callPackage ../data/fonts/libre-franklin { };
-
-  lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
-
-  lmodern = callPackage ../data/fonts/lmodern { };
-
-  lobster-two = callPackage ../data/fonts/lobster-two {};
-
-  # lohit-fonts.assamese lohit-fonts.bengali lohit-fonts.devanagari lohit-fonts.gujarati lohit-fonts.gurmukhi
-  # lohit-fonts.kannada lohit-fonts.malayalam lohit-fonts.marathi lohit-fonts.nepali lohit-fonts.odia
-  # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu
-  # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
-  lohit-fonts = recurseIntoAttrs ( callPackages ../data/fonts/lohit-fonts { } );
-
-  marathi-cursive = callPackage ../data/fonts/marathi-cursive { };
-
   man-pages = callPackage ../data/documentation/man-pages { };
-
-  meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
   miscfiles = callPackage ../data/misc/miscfiles { };
 
@@ -12329,83 +12194,27 @@ in
 
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
-  mononoki = callPackage ../data/fonts/mononoki { };
-
   moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
 
-  montserrat = callPackage ../data/fonts/montserrat { };
-
-  mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
-
-  mplus-outline-fonts = callPackage ../data/fonts/mplus-outline-fonts { };
-
-  mro-unicode = callPackage ../data/fonts/mro-unicode { };
-
   mustache-spec = callPackage ../data/documentation/mustache-spec { };
-
-  nafees = callPackage ../data/fonts/nafees { };
-
-  inherit (callPackages ../data/fonts/noto-fonts {})
-    noto-fonts noto-fonts-cjk noto-fonts-emoji;
 
   numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
 
   numix-icon-theme-circle = callPackage ../data/icons/numix-icon-theme-circle { };
 
-  oldstandard = callPackage ../data/fonts/oldstandard { };
-
-  oldsindhi = callPackage ../data/fonts/oldsindhi { };
-
-  open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
-
-  opensans-ttf = callPackage ../data/fonts/opensans-ttf { };
-
-  orbitron = callPackage ../data/fonts/orbitron { };
-
-  oxygenfonts = callPackage ../data/fonts/oxygenfonts { };
-
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
-  pecita = callPackage ../data/fonts/pecita {};
-
-  paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix {};
-  paratype-pt-sans = callPackage ../data/fonts/paratype-pt/sans.nix {};
-  paratype-pt-serif = callPackage ../data/fonts/paratype-pt/serif.nix {};
-
-  poly = callPackage ../data/fonts/poly { };
-
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
-
-  powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
-
-  profont = callPackage ../data/fonts/profont { };
-
-  proggyfonts = callPackage ../data/fonts/proggyfonts { };
-
-  sampradaya = callPackage ../data/fonts/sampradaya { };
 
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
 
-  signwriting = callPackage ../data/fonts/signwriting { };
-
-  soundfont-fluid = callPackage ../data/soundfonts/fluid { };
-
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
-
-  stix-otf = callPackage ../data/fonts/stix-otf { };
-
-  inherit (callPackages ../data/fonts/gdouros { })
-    symbola aegyptus akkadian anatolian maya unidings musica analecta;
 
   iana_etc = callPackage ../data/misc/iana-etc { };
 
   poppler_data = callPackage ../data/misc/poppler-data { };
-
-  quattrocento = callPackage ../data/fonts/quattrocento {};
-
-  quattrocento-sans = callPackage ../data/fonts/quattrocento-sans {};
 
   r3rs = callPackage ../data/documentation/rnrs/r3rs.nix { };
 
@@ -12413,29 +12222,7 @@ in
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
-  roboto = callPackage ../data/fonts/roboto { };
-
-  roboto-mono = callPackage ../data/fonts/roboto-mono { };
-
-  roboto-slab = callPackage ../data/fonts/roboto-slab { };
-
-  hasklig = callPackage ../data/fonts/hasklig {};
-
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
-
-  source-code-pro = callPackage ../data/fonts/source-code-pro {};
-
-  source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
-
-  source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
-
-  sourceHanSansPackages = callPackage ../data/fonts/source-han-sans { };
-  source-han-sans-japanese = sourceHanSansPackages.japanese;
-  source-han-sans-korean = sourceHanSansPackages.korean;
-  source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
-  source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
-
-  inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
     gtk = self.gtk2;
@@ -12443,41 +12230,13 @@ in
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) {};
 
-  theano = callPackage ../data/fonts/theano { };
-
-  tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
-
-  terminus_font = callPackage ../data/fonts/terminus-font { };
-
-  tipa = callPackage ../data/fonts/tipa { };
-
-  ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
-
   tzdata = callPackage ../data/misc/tzdata { };
-
-  ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
-
-  ucs-fonts = callPackage ../data/fonts/ucs-fonts { };
-
-  uni-vga = callPackage ../data/fonts/uni-vga { };
-
-  unifont = callPackage ../data/fonts/unifont { };
-
-  unifont_upper = callPackage ../data/fonts/unifont_upper { };
 
   vanilla-dmz = callPackage ../data/icons/vanilla-dmz { };
 
-  vistafonts = callPackage ../data/fonts/vista-fonts { };
-
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
-  wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
-
-  wqy_zenhei = callPackage ../data/fonts/wqy-zenhei { };
-
   xhtml1 = callPackage ../data/sgml+xml/schemas/xml-dtd/xhtml1 { };
-
-  xits-math = callPackage ../data/fonts/xits-math { };
 
   xkeyboard_config = xorg.xkeyboardconfig;
 
@@ -13627,6 +13386,7 @@ in
   gmu = callPackage ../applications/audio/gmu { };
 
   gnash = callPackage ../applications/video/gnash {
+    inherit (fonts) freefont_ttf;
     inherit (gnome2) gtkglext;
     xulrunner = firefox-unwrapped;
   };
@@ -13688,7 +13448,10 @@ in
 
   gollum = callPackage ../applications/misc/gollum { };
 
-  google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
+  google-chrome = callPackage ../applications/networking/browsers/google-chrome {
+    inherit (fonts) liberation_ttf;
+    gconf = gnome2.GConf;
+  };
 
   google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
@@ -14057,7 +13820,7 @@ in
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
-        freefont_ttf xorg.fontmiscmisc
+        fonts.freefont_ttf xorg.fontmiscmisc
       ];
     };
     clucene_core = clucene_core_2;
@@ -14076,7 +13839,7 @@ in
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
-        freefont_ttf xorg.fontmiscmisc
+        fonts.freefont_ttf xorg.fontmiscmisc
       ];
     };
     mdds = mdds_0_12_1;
@@ -14310,6 +14073,7 @@ in
   normalize = callPackage ../applications/audio/normalize { };
 
   mplayer = callPackage ../applications/video/mplayer ({
+    inherit (fonts) freefont_ttf;
     pulseSupport = config.pulseaudio or false;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
@@ -14321,6 +14085,7 @@ in
     };
 
   mpv = callPackage ../applications/video/mpv rec {
+    inherit (fonts) freefont_ttf;
     lua = lua5_1;
     lua5_sockets = lua5_1_sockets;
     youtube-dl = pythonPackages.youtube-dl;
@@ -14939,7 +14704,9 @@ in
 
   seq24 = callPackage ../applications/audio/seq24 { };
 
-  setbfree = callPackage ../applications/audio/setbfree { };
+  setbfree = callPackage ../applications/audio/setbfree {
+    inherit (fonts) ttf_bitstream_vera;
+  };
 
   sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
     gtk = gtk3;
@@ -15479,6 +15246,7 @@ in
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
   vlc = callPackage ../applications/video/vlc {
+    inherit (fonts) freefont_ttf;
     ffmpeg = ffmpeg_2;
     libva = libva-full; # also wants libva-x11
   };
@@ -15645,7 +15413,9 @@ in
 
   x2vnc = callPackage ../tools/X11/x2vnc { };
 
-  x42-plugins = callPackage ../applications/audio/x42-plugins { };
+  x42-plugins = callPackage ../applications/audio/x42-plugins {
+    inherit (fonts) freefont_ttf;
+  };
 
   xaos = callPackage ../applications/graphics/xaos {
     libpng = libpng12;
@@ -15914,7 +15684,9 @@ in
 
   armagetronad = callPackage ../games/armagetronad { };
 
-  arx-libertatis = callPackage ../games/arx-libertatis { };
+  arx-libertatis = callPackage ../games/arx-libertatis {
+    inherit (fonts) dejavu_fonts;
+  };
 
   asc = callPackage ../games/asc {
     lua = lua5_1;
@@ -15991,7 +15763,9 @@ in
     tileMode = true;
   };
 
-  crawl = callPackage ../games/crawl { };
+  crawl = callPackage ../games/crawl {
+    inherit (fonts) dejavu_fonts;
+  };
 
   crrcsim = callPackage ../games/crrcsim {};
 
@@ -16195,6 +15969,7 @@ in
   openspades-git = lowPrio (callPackage ../games/openspades/git.nix {});
 
   openttd = callPackage ../games/openttd {
+    inherit (fonts) soundfont-fluid;
     zlib = zlibStatic;
   };
 
@@ -17072,7 +16847,9 @@ in
   glucose = callPackage ../applications/science/logic/glucose { };
   glucose-syrup = callPackage ../applications/science/logic/glucose/syrup.nix { };
 
-  hol = callPackage ../applications/science/logic/hol { };
+  hol = callPackage ../applications/science/logic/hol {
+    inherit (fonts) liberation_ttf;
+  };
 
   hol_light = callPackage ../applications/science/logic/hol_light {
     camlp5 = ocamlPackages.camlp5_strict;
@@ -17548,8 +17325,6 @@ in
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
-  norwester-font = callPackage ../data/fonts/norwester  {};
-
   nut = callPackage ../applications/misc/nut { };
 
   solfege = callPackage ../misc/solfege {
@@ -17710,8 +17485,6 @@ in
   terraform = callPackage ../applications/networking/cluster/terraform {};
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
-
-  tewi-font = callPackage ../data/fonts/tewi  {};
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
 

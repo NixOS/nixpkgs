@@ -3164,7 +3164,7 @@ in modules // {
     # checkPhase require at least one 'normal' font and one 'monospace',
     # otherwise glyph tests fails
     FONTCONFIG_FILE = pkgs.makeFontsConf {
-      fontDirectories = [ pkgs.freefont_ttf ];
+      fontDirectories = [ pkgs.fonts.freefont_ttf ];
     };
 
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
