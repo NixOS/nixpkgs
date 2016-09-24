@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, glslang, spirv-tools, python }:
+{ stdenv, fetchFromGitHub, cmake, glslang, spirv-tools, python, libtool }:
 
 stdenv.mkDerivation rec {
   name = "shaderc-git-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ln -s ${spirv-tools.headers} third_party/spirv-tools/external/spirv-headers
   '';
 
-  buildInputs = [ cmake glslang python ];
+  buildInputs = [ cmake glslang python libtool ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" "-DSHADERC_GLSLANG_DIR=${glslang.src}" ];
