@@ -342,6 +342,7 @@
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
   redvers = "Redvers Davies <red@infect.me>";
   refnil = "Martin Lavoie <broemartino@gmail.com>";
+  regnat = "Théophane Hufschmitt <regnat@regnat.ovh>";
   relrod = "Ricky Elrod <ricky@elrod.me>";
   renzo = "Renzo Carbonara <renzocarbonara@gmail.com>";
   retrry = "Tadas Barzdžius <retrry@gmail.com>";
