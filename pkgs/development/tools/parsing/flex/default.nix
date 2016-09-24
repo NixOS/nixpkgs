@@ -1,11 +1,11 @@
 { stdenv, fetchurl, bison, m4 }:
 
 stdenv.mkDerivation rec {
-  name = "flex-2.6.0";
+  name = "flex-2.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/flex/${name}.tar.bz2";
-    sha256 = "1sdqx63yadindzafrq1w31ajblf9gl1c301g068s20s7bbpi3ri4";
+    url = "https://github.com/westes/flex/releases/download/v2.6.1/flex-2.6.1.tar.gz";
+    sha256 = "0fy14c35yz2m1n1m4f02by3501fn0cca37zn7jp8lpp4b3kgjhrw";
   };
 
   buildInputs = [ bison ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://flex.sourceforge.net/;
+    homepage = https://github.com/westes/flex;
     description = "A fast lexical analyser generator";
     platforms = stdenv.lib.platforms.unix;
   };
