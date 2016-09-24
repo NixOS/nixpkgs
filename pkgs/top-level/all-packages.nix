@@ -5954,9 +5954,6 @@ in
     self = python27;
     inherit (darwin) CF configd;
   };
-  python33 = callPackage ../development/interpreters/python/cpython/3.3 {
-    self = python33;
-  };
   python34 = hiPrio (callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
     self = python34;
@@ -10149,11 +10146,6 @@ in
     python = python27;
     self = python27Packages;
   }));
-
-  python33Packages = callPackage ./python-packages.nix {
-    python = python33;
-    self = python33Packages;
-  };
 
   python34Packages = callPackage ./python-packages.nix {
     python = python34;
