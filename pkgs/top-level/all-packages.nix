@@ -9960,6 +9960,10 @@ in
     graphviz = graphviz-nox;
   };
 
+  wayland_1_9 = callPackage ../development/libraries/wayland/1.9.nix {
+    graphviz = graphviz-nox;
+  };
+
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
   webkit = webkitgtk;
