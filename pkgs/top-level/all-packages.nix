@@ -5050,7 +5050,7 @@ in
     nodejs = nodejs-0_10;
   };
 
-  inherit (ocamlPackages) opam_1_0_0;
+  inherit (ocaml-ng.ocamlPackages_4_01_0) opam_1_0_0;
   inherit (ocaml-ng.ocamlPackages_4_01_0) opam_1_1;
   inherit (ocamlPackages) opam;
 
