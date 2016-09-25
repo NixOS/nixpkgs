@@ -6183,10 +6183,10 @@ in modules // {
   });
 
   editorconfig = buildPythonPackage rec {
-    name = "editorconfig";
+    name = "EditorConfig-0.12.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/89/b9/29a4d312d958d298cedf0019b60168dc680f79d7ca394664dd82cf4f66a3/EditorConfig-0.12.0.tar.gz";
+      url = "https://pypi.python.org/packages/89/b9/29a4d312d958d298cedf0019b60168dc680f79d7ca394664dd82cf4f66a3/${name}.tar.gz";
       sha256 = "1ah5hnrjw8r3pq586rh1w1ykqpb2dwzhhjc04d0n95fza1a3k9zd";
     };
 
