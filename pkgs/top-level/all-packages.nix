@@ -7255,10 +7255,8 @@ in
     cogl = cogl_1_22;
   };
 
-  clutter-gst = callPackage ../development/libraries/clutter-gst { };
-
-  clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix {
-    clutter = clutter_1_22;
+  clutter-gst = callPackage ../development/libraries/clutter-gst {
+    inherit (gnome3) cogl clutter;
   };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
