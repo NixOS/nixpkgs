@@ -13327,7 +13327,7 @@ in
   gksu = callPackage ../applications/misc/gksu { };
 
   gnuradio = callPackage ../applications/misc/gnuradio {
-    inherit (pythonPackages) lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython;
+    inherit (pythonPackages) lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
     fftw = fftwFloat;
   };
 
