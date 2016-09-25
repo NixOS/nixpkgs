@@ -3276,8 +3276,6 @@ in
 
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
 
-  pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
-
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pythonSexy = callPackage ../development/python-modules/libsexy { };
