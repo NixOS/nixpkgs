@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jcumming wizeman wkennington fpletz ];
-    broken = buildKernel && kernel.features.grsecurity;
+    broken = buildKernel && (kernel.features.grsecurity or false);
   };
 }
