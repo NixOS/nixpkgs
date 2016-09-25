@@ -13922,9 +13922,7 @@ in
 
   kdevplatform = kde5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix {};
 
-  keepnote = callPackage ../applications/office/keepnote {
-    pygtk = pyGtkGlade;
-  };
+  keepnote = callPackage ../applications/office/keepnote { };
 
   kermit = callPackage ../tools/misc/kermit { };
 
