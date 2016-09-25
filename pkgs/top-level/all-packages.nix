@@ -1904,6 +1904,7 @@ in
   graphviz_2_32 = callPackage ../tools/graphics/graphviz/2.32.nix { };
 
   grin = callPackage ../tools/text/grin { };
+  ripgrep = callPackage ../tools/text/ripgrep { };
 
   grive = callPackage ../tools/filesystems/grive {
     json_c = json-c-0-11; # won't configure with 0.12; others are vulnerable
@@ -3011,7 +3012,8 @@ in
     owncloud80
     owncloud81
     owncloud82
-    owncloud90;
+    owncloud90
+    owncloud91;
 
   owncloud-client = callPackage ../applications/networking/owncloud-client { };
 
@@ -5382,6 +5384,7 @@ in
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
 
     ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
+    ocaml_oasis_46 = callPackage ../development/tools/ocaml/oasis/0.4.6.nix { };
 
     ocaml_optcomp = callPackage ../development/ocaml-modules/optcomp { };
 
@@ -9986,6 +9989,10 @@ in
     graphviz = graphviz-nox;
   };
 
+  wayland_1_9 = callPackage ../development/libraries/wayland/1.9.nix {
+    graphviz = graphviz-nox;
+  };
+
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
   webkit = webkitgtk;
@@ -11430,7 +11437,7 @@ in
   };
 
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
-    kernelPatches = with kernelPatches; [ bridge_stp_helper link_lguest link_apm ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -11439,7 +11446,7 @@ in
   };
 
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
-    kernelPatches = with kernelPatches; [ bridge_stp_helper crc_regression link_lguest ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper crc_regression ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -11471,18 +11478,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.4"
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
-  linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.cpu-cgroup-v2."4.6"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11672,7 +11667,6 @@ in
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4 linuxPackages_4_4);
-  linuxPackages_4_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_6 linuxPackages_4_6);
   linuxPackages_4_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_7 linuxPackages_4_7);
   # Don't forget to update linuxPackages_latest!
 
@@ -13351,6 +13345,8 @@ in
   keepass = callPackage ../applications/misc/keepass { };
 
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
+
+  keepass-keepasshttp = callPackage ../applications/misc/keepass-plugins/keepasshttp { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
@@ -15855,7 +15851,9 @@ in
   xterm = callPackage ../applications/misc/xterm { };
 
   mlterm = callPackage ../applications/misc/mlterm {
-    vte = gnome3.vte_290;
+    vte = gnome3.vte;
+    libssh2 = null;
+    openssl = null;
   };
 
   finalterm = callPackage ../applications/misc/finalterm { };

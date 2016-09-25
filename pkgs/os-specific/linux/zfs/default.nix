@@ -110,6 +110,6 @@ stdenv.mkDerivation rec {
     homepage = http://zfsonlinux.org/;
     license = licenses.cddl;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming wizeman wkennington ];
+    maintainers = with maintainers; [ jcumming wizeman wkennington fpletz ];
   };
 }

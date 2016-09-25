@@ -240,19 +240,26 @@ let
       sha256 = "1chs7z7a3i3lck4x7rz60ziwbf793gw169hpjdfca8y4yf1hzsxk";
     };
 
-    patchPhase = ''
-      sed -e "s,^LUAPREFIX_linux.*,LUAPREFIX_linux=$out," \
-          -i src/makefile
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
-      export PLAT=macosx
-      export LUAPREFIX_macosx=$out
-      substituteInPlace src/Makefile --replace gcc cc \
+    patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/makefile --replace gcc cc \
         --replace 10.3 10.5
+    '';
+
+    preBuild = ''
+      makeFlagsArray=(
+        LUAV=${lua.luaversion}
+        PLAT=${if stdenv.isDarwin then "macosx"
+               else if stdenv.isFreeBSD then "freebsd"
+               else if stdenv.isLinux then "linux"
+               else if stdenv.isSunOS then "solaris"
+               else throw "unsupported platform"}
+        prefix=$out
+      );
     '';
 
     meta = {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = with platforms; [darwin linux freebsd illumos];
       maintainers = with maintainers; [ mornfall ];
     };
   };
