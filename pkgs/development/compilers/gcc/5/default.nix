@@ -61,6 +61,10 @@ with builtins;
 let version = "5.4.0";
     sha256 = "0fihlcy5hnksdxk0sn6bvgnyq8gfrgs8m794b1jxwd1dxinzg3b0";
 
+    # Rename the libcCross argument so we can redefine libcCross to
+    # null for the native compiler.
+    libcCrossArg = libcCross;
+
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
@@ -211,7 +215,11 @@ in
 # We need all these X libraries when building AWT with GTK+.
 assert x11Support -> (filter (x: x == null) ([ gtk libart_lgpl ] ++ xlibs)) == [];
 
-stdenv.mkDerivation ({
+stdenv.mkDerivationWithCrossArg ( hostCrossSystem:
+  let
+    targetCrossSystem = if cross != null then cross else hostCrossSystem;
+    libcCross = if targetCrossSystem != null then libcCrossArg else null;
+  in {
   name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
 
   builder = ../builder.sh;
@@ -234,7 +242,7 @@ stdenv.mkDerivation ({
 
   postPatch =
     if (stdenv.isGNU
-        || (cross != null && libcCross != null   # e.g., building `gcc.crossDrv'
+        || (libcCross != null                  # e.g., building `gcc.crossDrv'
             && libcCross ? crossConfig
             && libcCross.crossConfig == "i586-pc-gnu")
         || (crossGNU && libcCross != null))
@@ -243,7 +251,7 @@ stdenv.mkDerivation ({
       # in glibc, so add the right `-I' flags to the default spec string.
       assert libcCross != null -> libpthreadCross != null;
       let
-        libc = if cross != null && libcCross != null then libcCross else stdenv.glibc;
+        libc = if libcCross != null then libcCross else stdenv.glibc;
         gnu_h = "gcc/config/gnu.h";
         extraCPPDeps =
              libc.propagatedBuildInputs
@@ -273,7 +281,7 @@ stdenv.mkDerivation ({
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       let
-        libc = if cross != null && libcCross != null then libcCross else stdenv.cc.libc;
+        libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
         '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
@@ -286,7 +294,8 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs staticCompiler langJava;
+  inherit noSysDirs staticCompiler langJava crossStageStatic
+    libcCross crossMingw;
 
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
@@ -394,7 +403,6 @@ stdenv.mkDerivation ({
     xwithFpu = if xgccFpu != null then " --with-fpu=${xgccFpu}" else "";
     xwithFloat = if xgccFloat != null then " --with-float=${xgccFloat}" else "";
   in {
-    inherit crossStageStatic libcCross crossMingw;
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
     CC = "${stdenv.cross.config}-gcc";
@@ -471,7 +479,7 @@ stdenv.mkDerivation ({
 
                                    # On GNU/Hurd glibc refers to Mach & Hurd
                                    # headers.
-                                   ++ optionals (cross != null && libcCross != null && libcCross ? "propagatedBuildInputs" )
+                                   ++ optionals (libcCross != null && libcCross ? "propagatedBuildInputs" )
                                         libcCross.propagatedBuildInputs)));
 
   LIBRARY_PATH = concatStrings
@@ -549,10 +557,4 @@ stdenv.mkDerivation ({
 // optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-
-# This is only here because it was here in previous commits and we
-# want to avoid a meaningless mass rebuild.  These variables get
-# overridden via crossAttrs in an actual cross-build.
-// { crossMingw = false; inherit crossStageStatic; }
-
 )
