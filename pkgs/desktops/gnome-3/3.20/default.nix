@@ -45,16 +45,14 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) glib gtk2 webkitgtk24x webkitgtk212x gtk3 gtkmm3 libcanberra_gtk2;
+  inherit (pkgs) glib gtk2 webkitgtk24x webkitgtk212x gtk3 gtkmm3 libcanberra_gtk2
+    clutter-gst clutter_gtk;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_26;
-  clutter_gtk = pkgs.clutter_gtk_1_8.override { inherit clutter gtk3; };
-  clutter-gst_2 = pkgs.clutter-gst;
-  clutter-gst = pkgs.clutter-gst_3_0.override { inherit clutter cogl; };
   cogl = pkgs.cogl_1_22;
   gtk = gtk3;
   gtkmm = gtkmm3;
