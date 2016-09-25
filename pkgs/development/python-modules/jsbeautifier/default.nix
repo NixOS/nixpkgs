@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     homepage    = "http://jsbeautifier.org";
     description = "JavaScript unobfuscator and beautifier.";
     license     = stdenv.lib.licenses.mit;
-        maintainers = with stdenv.lib.maintainers; [ iElectric thoughtpolice cwoac ];
   };
 }
