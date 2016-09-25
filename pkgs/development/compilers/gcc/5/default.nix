@@ -145,7 +145,8 @@ let version = "5.4.0";
         withFloat +
         withMode +
         (if crossMingw && crossStageStatic then
-          " --with-sysroot=${libcCross}/include" +
+          " --with-sysroot=${libcCross}" +
+          " --with-native-system-header-dir=/include" +
           " --with-gcc" +
           " --with-gnu-as" +
           " --with-gnu-ld" +
@@ -552,6 +553,6 @@ stdenv.mkDerivation ({
 # This is only here because it was here in previous commits and we
 # want to avoid a meaningless mass rebuild.  These variables get
 # overridden via crossAttrs in an actual cross-build.
-// { crossMingw = false; crossStageStatic = true; }
+// { crossMingw = false; inherit crossStageStatic; }
 
 )
