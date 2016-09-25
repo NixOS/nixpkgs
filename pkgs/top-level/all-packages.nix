@@ -4230,6 +4230,8 @@ in
 
   xdummy = callPackage ../tools/misc/xdummy { };
 
+  xdxf2slob = callPackage ../tools/misc/xdxf2slob { };
+
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
 
   xflux = callPackage ../tools/misc/xflux { };
