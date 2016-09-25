@@ -7265,8 +7265,6 @@ in
 
   cogl = callPackage ../development/libraries/cogl { };
 
-  cogl_1_20 = callPackage ../development/libraries/cogl/1.20.nix { };
-
   cogl_1_22 = callPackage ../development/libraries/cogl/1.22.nix { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
