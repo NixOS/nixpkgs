@@ -196,8 +196,6 @@ in modules // {
     hdf5 = pkgs.hdf5-mpi;
   };
 
-  jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
-
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -1409,7 +1407,7 @@ in modules // {
       maintainers = with maintainers; [ abbradar ];
     };
   };
-
+  
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
     version = "1.10.51";
@@ -7319,6 +7317,39 @@ in modules // {
     };
   };
 
+  editorconfig = buildPythonPackage rec {
+    name = "editorconfig";
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/editorconfig/editorconfig-core-py.git";
+      rev = "582fbd04f9b31eb518afda56e2fc5378d24a07d6";
+      sha256 = "0gapdrnw6wc75vq867ki2vhsynqn82jb80knf1d704db99cgbnjb";
+    };
+
+    meta = {
+      homepage = "http://editorconfig.org";
+      description = "EditorConfig File Locator and Interpreter for Python";
+      license = stdenv.lib.licenses.psfl;
+    };
+  };
+  
+  jsbeautifier = buildPythonApplication rec {
+    name = "jsbeautifier-1.6.4";
+
+    buildInputs = with self; [ editorconfig pytest six ];
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/e4/76/dcc8f0d76253763fb6d7035be31cb7be5f185d2877faa96759be40ef5e55/${name}.tar.gz";
+      sha256 = "074n8f4ncz5pf0jkkf6i6by30qnaj5208sszaf9p86kgdigcdaf8";
+    };
+
+    meta = {
+      homepage    = "http://jsbeautifier.org";
+      description = "JavaScript unobfuscator and beautifier.";
+      license     = stdenv.lib.licenses.mit;
+    };
+  };
+  
   jsonpatch = buildPythonPackage rec {
     name = "jsonpatch-1.11";
 
