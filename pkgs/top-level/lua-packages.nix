@@ -206,7 +206,7 @@ let
       );
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       hydraPlatforms = with platforms; [darwin linux freebsd illumos];
       maintainers = with maintainers; [ mornfall ];
