@@ -1136,8 +1136,6 @@ in
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
-  ibus-libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
-
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
