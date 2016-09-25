@@ -49,6 +49,11 @@ stdenv.mkDerivation rec {
     varnish yajl jdk libtool python udev net_snmp hiredis libmnl
   ];
 
+  patches = [
+    # Replace deprecated readdir_r() with readdir() to avoid a fatal warning.
+    ./readdir-fix.patch
+  ];
+
   # for some reason libsigrok isn't auto-detected
   configureFlags =
     stdenv.lib.optional (libsigrok != null) "--with-libsigrok" ++
