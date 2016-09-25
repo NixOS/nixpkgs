@@ -19515,6 +19515,33 @@ in modules // {
     };
   };
 
+  PyICU = buildPythonPackage rec {
+    name = "PyICU-1.9.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/P/PyICU/${name}.tar.gz";
+      sha256 = "0hps2314w7ddiwhqgw249m3hgqnny7qn542vz26jxr5k5hhrcyhs";
+    };
+
+    buildInputs = [ pkgs.icu ];
+
+    patches = [
+      # Fixes a bug in the test suite.
+      (pkgs.fetchpatch {
+        url = "https://github.com/ovalhub/pyicu/commit/6ab20d48d85638acb3a811c8676f713bd26f0df9.patch";
+        sha256 = "0z4585r6bi0xxvrr93n450ka43vixx9zd063qna078vck0i3bkjg";
+      })
+    ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/PyICU/;
+      description = "Python extension wrapping the ICU C++ API";
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   pyinotify = buildPythonPackage rec {
     name = "pyinotify";
     version = "0.9.6";
