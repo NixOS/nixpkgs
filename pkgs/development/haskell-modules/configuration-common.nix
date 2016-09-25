@@ -766,25 +766,29 @@ self: super: {
   });
 
   # Fine-tune the build.
-  structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
+  structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
+    # Bump version to latest git-release to get support for Emacs 25.x.
+    version = "20160926-git";
+    src = pkgs.fetchFromGitHub {
+      owner = "chrisdone";
+      repo = "structured-haskell-mode";
+      sha256 = "1vrycvqp4n2pp6sq7z2v0zkqz6662nvacm7cla5hrrzl157cg0j5";
+      rev = "1ffb4db1e7049d4089fea430d4f20bce2eff263d";
+    };
+    jailbreak = false;
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
     # Byte-compile elisp code for Emacs.
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
-      pushd >/dev/null $lispdir
-      for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacsPackages.haskellMode}/share/emacs/site-lisp \
-          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
-          -f batch-byte-compile $i
-      done
-      popd >/dev/null
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-"*"/elisp" )
       mkdir -p $out/share/emacs
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
-  });
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_18_2;
+  };
 
   # Byte-compile elisp code for Emacs.
   hindent = overrideCabal super.hindent (drv: {
