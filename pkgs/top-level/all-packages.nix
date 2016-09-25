@@ -10362,8 +10362,6 @@ in
 
   pysideTools = pythonPackages.pysideTools;
 
-  pysideShiboken = pythonPackages.pysideShiboken;
-
   pyxml = pythonPackages.pyxml;
 
   rbtools = pythonPackages.rbtools;
