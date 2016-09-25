@@ -7243,14 +7243,6 @@ in
 
   clutter = callPackage ../development/libraries/clutter { };
 
-  clutter_1_22 = callPackage ../development/libraries/clutter/1.22.nix {
-    cogl = cogl_1_20;
-  };
-
-  clutter_1_24 = callPackage ../development/libraries/clutter/1.24.nix {
-    cogl = cogl_1_22;
-  };
-
   clutter_1_26 = callPackage ../development/libraries/clutter/1.26.nix {
     cogl = cogl_1_22;
   };
@@ -7259,12 +7251,8 @@ in
     inherit (gnome3) cogl clutter;
   };
 
-  clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
-  clutter_gtk_1_6 = callPackage ../development/libraries/clutter-gtk/1.6.nix {
-    clutter = clutter_1_22;
-  };
-  clutter_gtk_1_8 = callPackage ../development/libraries/clutter-gtk/1.8.nix {
-    clutter = clutter_1_26;
+  clutter_gtk = callPackage ../development/libraries/clutter-gtk {
+    inherit (gnome3) clutter;
   };
 
   cminpack = callPackage ../development/libraries/cminpack { };
