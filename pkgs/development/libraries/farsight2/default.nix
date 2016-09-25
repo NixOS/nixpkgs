@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gst_plugins_base
-, pygobject2, gst_python, gupnp_igd }:
+{ stdenv, fetchurl, libnice, pkgconfig, pythonPackages, gstreamer, gst_plugins_base
+, gst_python, gupnp_igd }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygobject2;
+in stdenv.mkDerivation rec {
   name = "farsight2-0.0.31";
   
   src = fetchurl {
