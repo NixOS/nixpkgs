@@ -9,6 +9,7 @@
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
+, patchelfUnstable # needed until 0.10 is released
 }:
 
 with stdenv.lib;
@@ -48,7 +49,7 @@ in stdenv.mkDerivation {
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
-      pkgconfig which libXmu libpng ]
+      pkgconfig which libXmu libpng patchelfUnstable ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python
     ++ optional pulseSupport libpulseaudio
@@ -180,9 +181,6 @@ in stdenv.mkDerivation {
   '';
 
   passthru = { inherit version; /* for guest additions */ };
-
-  # Workaround for https://github.com/NixOS/patchelf/issues/93 (can be removed once this issue is addressed)
-  dontPatchELF = true;
 
   meta = {
     description = "PC emulator";

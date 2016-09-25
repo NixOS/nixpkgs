@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "18fygk896gxbx47nh2rn5jp4skisgkl6pdfjqb7h0zn39hd6b6g5";
   };
 
+  outputs = [ "out" "lib" "dev" "doc" ];
+
   buildInputs = [ jasper ];
 
   propagatedBuildInputs = [ lcms2 ];

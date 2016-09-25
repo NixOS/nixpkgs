@@ -387,7 +387,7 @@ in
     };
 
     networking.localCommands = mkOption {
-      type = types.str;
+      type = types.lines;
       default = "";
       example = "text=anything; echo You can put $text here.";
       description = ''

@@ -332,28 +332,26 @@ stdenv.mkDerivation ({
   #
   # Likewise, the LTO code doesn't find zlib.
 
-  CPATH = concatStrings
-            (intersperse ":" (map (x: "${x.dev or x}/include")
-                                  (optionals (zlib != null) [ zlib ]
-                                   ++ optionals langJava [ boehmgc ]
-                                   ++ optionals javaAwtGtk xlibs
-                                   ++ optionals javaAwtGtk [ gmp mpfr ]
-                                   ++ optional (libpthread != null) libpthread
-                                   ++ optional (libpthreadCross != null) libpthreadCross
+  CPATH = makeSearchPathOutput "dev" "include" ([]
+    ++ optional (zlib != null) zlib
+    ++ optional langJava boehmgc
+    ++ optionals javaAwtGtk xlibs
+    ++ optionals javaAwtGtk [ gmp mpfr ]
+    ++ optional (libpthread != null) libpthread
+    ++ optional (libpthreadCross != null) libpthreadCross
 
-                                   # On GNU/Hurd glibc refers to Mach & Hurd
-                                   # headers.
-                                   ++ optionals (libcCross != null &&
-                                                 hasAttr "propagatedBuildInputs" libcCross)
-                                        libcCross.propagatedBuildInputs)));
+    # On GNU/Hurd glibc refers to Mach & Hurd
+    # headers.
+    ++ optionals (libcCross != null &&
+                  hasAttr "propagatedBuildInputs" libcCross)
+                 libcCross.propagatedBuildInputs);
 
-  LIBRARY_PATH = concatStrings
-                   (intersperse ":" (map (x: x + "/lib")
-                                         (optionals (zlib != null) [ zlib ]
-                                          ++ optionals langJava [ boehmgc ]
-                                          ++ optionals javaAwtGtk xlibs
-                                          ++ optionals javaAwtGtk [ gmp mpfr ]
-                                          ++ optional (libpthread != null) libpthread)));
+  LIBRARY_PATH = makeLibraryPath ([]
+    ++ optional (zlib != null) zlib
+    ++ optional langJava boehmgc
+    ++ optionals javaAwtGtk xlibs
+    ++ optionals javaAwtGtk [ gmp mpfr ]
+    ++ optional (libpthread != null) libpthread);
 
   EXTRA_TARGET_CFLAGS =
     if cross != null && libcCross != null then [

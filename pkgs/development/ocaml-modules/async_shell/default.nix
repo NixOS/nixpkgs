@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, async, core, core_extended}:
+{stdenv, buildOcaml, fetchurl, async_p4, core_p4, core_extended_p4}:
 
 buildOcaml rec {
   name = "async_shell";
@@ -11,7 +11,7 @@ buildOcaml rec {
     sha256 = "0b4497bea9124c5a665ee58fb0a73c5cbf2f757479df902e6870627196e6c105";
   };
 
-  propagatedBuildInputs = [ async core core_extended ];
+  propagatedBuildInputs = [ async_p4 core_p4 core_extended_p4 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/async_shell;

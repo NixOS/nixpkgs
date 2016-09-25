@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2, libarchive
+{ stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2
 , useNcurses ? false, ncurses, useQt4 ? false, qt4, wantPS ? false, ps ? null
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       sha256 = "136z63ff83hnwd247cq4m8m8164pklzyl5i2csf5h6wd8p01pdkj";
     })] ++
     # Don't search in non-Nix locations such as /usr, but do search in
-    # Nixpkgs' Glibc. 
+    # Nixpkgs' Glibc.
     optional (stdenv ? glibc) ./search-path.patch ++
     optional (stdenv ? cross) (fetchurl {
       name = "fix-darwin-cross-compile.patch";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
     });
 
-  buildInputs = [ curl expat zlib bzip2 libarchive ]
+  buildInputs = [ curl expat zlib bzip2 ]
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     (concatMap (p: [ (p.dev or p) (p.out or p) ]) buildInputs);
 
   configureFlags =
-    "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"
+    "--docdir=/share/doc/${name} --mandir=/share/man --system-libs --no-system-libarchive"
     + stdenv.lib.optionalString useQt4 " --qt-gui";
 
   setupHook = ./setup-hook.sh;

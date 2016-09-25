@@ -109,6 +109,7 @@ in {
         Restart  = "always";
         PrivateTmp = true;
         WorkingDirectory = "/tmp";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
   };

@@ -2,17 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "SaltTesting-${version}";
-  version = "2015.7.10";
+  version = "2016.9.7";
 
   disabled = pythonPackages.isPy3k;
 
-  propagatedBuildInputs = with pythonPackages; [
-    six
-  ];
-
   src = fetchurl {
     url = "mirror://pypi/S/SaltTesting/${name}.tar.gz";
-    sha256 = "0p0y8kb77pis18rcig1kf9dnns4bnfa3mr91q40lq4mw63l1b34h";
+    sha256 = "0vcw1b1176qm9nkic3sbxh6vnv9kpd9kgyqz5fpsp5jnb2hsf1qx";
   };
 
   meta = with stdenv.lib; {

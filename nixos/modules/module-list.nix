@@ -146,7 +146,6 @@
   ./services/databases/hbase.nix
   ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
-  ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
   ./services/databases/neo4j.nix
@@ -254,6 +253,7 @@
   ./services/misc/mwlib.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
+  ./services/misc/nix-optimise.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/nzbget.nix
@@ -358,6 +358,7 @@
   ./services/networking/haproxy.nix
   ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
+  ./services/networking/htpdate.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
@@ -392,6 +393,7 @@
   ./services/networking/ostinato.nix
   ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
+  ./services/networking/powerdns.nix
   ./services/networking/pptpd.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
@@ -485,6 +487,7 @@
   ./services/web-apps/privacyidea.nix
   ./services/web-apps/pump.io.nix
   ./services/web-apps/tt-rss.nix
+  ./services/web-apps/selfoss.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix

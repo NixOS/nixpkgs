@@ -403,16 +403,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.11.201604020423";
+    version = "6.9.12.201607091356";
 
     srcFeature = fetchurl {
       url = "http://beust.com/eclipse-old/eclipse_${version}/features/org.testng.eclipse_${version}.jar";
-      sha256 = "1cp7f6f0525wqwjj4pyrp0q0ii7zcd5gwd5acaq9jjb13xgw8vav";
+      sha256 = "06c6885d3ggg1i085zhfwayj06jn4v1jip9zz40921vpq0iand54";
     };
 
     srcPlugin = fetchurl {
       url = "http://beust.com/eclipse-old/eclipse_${version}/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "04m07cdfw0isp27ykx6dbrlcdw33rxww7vnavanygxxnlpyvyas3";
+      sha256 = "0bpyb9bnh8kglajmdzb7pr21i1sly73kwdjbygg75ad7z37l58br";
     };
 
     meta = with stdenv.lib; {

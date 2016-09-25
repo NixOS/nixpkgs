@@ -19,9 +19,11 @@ stdenv.mkDerivation {
     builder = ./download-list-builder.sh;
   };
 
+  buildInputs = [ python3 ];
+
   shellHook = ''
     function generate {
-      ./generate-libreoffice-srcs.sh | tee libreoffice-srcs-still.nix
+      python3 generate-libreoffice-srcs.py > libreoffice-srcs-still.nix
     }
   '';
 }
