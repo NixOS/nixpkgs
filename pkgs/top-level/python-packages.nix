@@ -6182,7 +6182,22 @@ in modules // {
     };
   });
 
+  editorconfig = buildPythonPackage rec {
+    name = "editorconfig";
 
+    src = pkgs.fetchgit {
+      url = "https://github.com/editorconfig/editorconfig-core-py.git";
+      rev = "582fbd04f9b31eb518afda56e2fc5378d24a07d6";
+      sha256 = "0gapdrnw6wc75vq867ki2vhsynqn82jb80knf1d704db99cgbnjb";
+    };
+
+    meta = {
+      homepage = "http://editorconfig.org";
+      description = "EditorConfig File Locator and Interpreter for Python";
+      license = stdenv.lib.licenses.psfl;
+    };
+  };
+  
   elasticsearchdsl = buildPythonPackage (rec {
     name = "elasticsearch-dsl-0.0.9";
 
@@ -7317,22 +7332,6 @@ in modules // {
     };
   };
 
-  editorconfig = buildPythonPackage rec {
-    name = "editorconfig";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/editorconfig/editorconfig-core-py.git";
-      rev = "582fbd04f9b31eb518afda56e2fc5378d24a07d6";
-      sha256 = "0gapdrnw6wc75vq867ki2vhsynqn82jb80knf1d704db99cgbnjb";
-    };
-
-    meta = {
-      homepage = "http://editorconfig.org";
-      description = "EditorConfig File Locator and Interpreter for Python";
-      license = stdenv.lib.licenses.psfl;
-    };
-  };
-  
   jsbeautifier = buildPythonApplication rec {
     name = "jsbeautifier-1.6.4";
 
