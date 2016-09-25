@@ -22338,6 +22338,31 @@ in modules // {
     };
   };
 
+  slob = buildPythonPackage rec {
+    name = "slob-unstable-2016-03-04";
+
+    disabled = !isPy3k;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "itkach";
+      repo = "slob";
+      rev = "31ad0e769360a5b10a4893f686587bb8e48c3895";
+      sha256 = "06yn510178awhjsvy88cpjz7rlmyviqd5g58gc8gf4ivyqdlqbsl";
+    };
+
+    propagatedBuildInputs = [ self.PyICU ];
+
+    checkPhase = "python3 -m unittest slob";
+
+    meta = {
+      homepage = https://github.com/itkach/slob/;
+      description = "Reference implementation of the slob (sorted list of blobs) format";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   slowaes = buildPythonPackage rec {
     name = "slowaes-${version}";
     version = "0.1a1";
