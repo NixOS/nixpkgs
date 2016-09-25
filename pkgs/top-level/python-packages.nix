@@ -9480,6 +9480,25 @@ in modules // {
     };
   };
 
+  django_accept_header = buildPythonPackage rec {
+    name = "django-accept-header-${version}";
+    version = "0.3.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-accept-header/${name}.tar.gz";
+      sha256 = "1a8jwxx2y0vylpwhfp3j1zhdzx3d8y0pgc3566xg81md6091ngrl";
+    };
+
+    buildInputs =  with self; [ pytest ];
+    propagatedBuildInputs = with self; [ django ];
+
+    meta = {
+      descriotion = "A Django middleware that inspects the HTTP Accept headers sent by browsers";
+      homepage = https://github.com/fladi/django-accept-header;
+      license = licenses.free; # ISC License (ISCL), MIT like
+    };
+  };
+
   django_appconf = buildPythonPackage rec {
     name = "django-appconf-${version}";
     version = "1.0.1";
