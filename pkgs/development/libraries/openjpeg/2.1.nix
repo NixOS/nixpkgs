@@ -1,7 +1,8 @@
 { callPackage, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "${branch}.0";
+  version = "2.1.1";
   branch = "2.1";
-  sha256 = "00zzm303zvv4ijzancrsb1cqbph3pgz0nky92k9qx3fq9y0vnchj";
+  revision = "v2.1.1";
+  sha256 = "1hrn10byrlw7hb7hwv2zvff89rxy3bsbn0im5ki4kdk63jw5p601";
 })
