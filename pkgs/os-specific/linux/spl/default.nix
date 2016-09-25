@@ -60,10 +60,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jcumming wizeman wkennington fpletz ];
-    broken = buildKernel
-      && (kernel.features.grsecurity or
-            # spl marked as broken until following patch is released
-            # https://github.com/zfsonlinux/spl/commit/fdbc1ba99d1f4d3958189079eee9b6c957e0264b
-            (versionAtLeast  kernel.version "4.7"));
+    broken = buildKernel && kernel.features.grsecurity;
   };
 }
