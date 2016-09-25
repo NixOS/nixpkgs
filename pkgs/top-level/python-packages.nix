@@ -196,6 +196,8 @@ in modules // {
     hdf5 = pkgs.hdf5-mpi;
   };
 
+  jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
