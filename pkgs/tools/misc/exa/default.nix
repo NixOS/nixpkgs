@@ -6,9 +6,7 @@ buildRustPackage rec {
   name = "exa-${version}";
   version = "2016-04-20";
 
-  # NOTE: There is an impurity caused by `exa` depending on
-  # https://github.com/rust-datetime/zoneinfo-compiled.git
-  depsSha256 = "0qsqkgc1wxigvskhaamgfp5pyc2kprsikhcfccysgs07w44nxkd0";
+  depsSha256 = "1s3l6pwlvq2siplhpx54z4dnsgici04cgrl53ml1a1d7aqx6nlly";
 
   src = fetchFromGitHub {
     owner = "ogham";
@@ -16,6 +14,17 @@ buildRustPackage rec {
     rev = "110a1c716bfc4a7f74f74b3c4f0a881c773fcd06";
     sha256 = "136yxi85m50vwmqinr1wnd0h29n5yjykqqqk9ibbcmmhx8sqhjzf";
   };
+
+  # This should be revisited, when upgrading exa!
+  # To avoid impurity and breakage when updating rustPlatform, set this dependency to a fixed revision.
+  # sandbox builds still break, because cargo tries to update git, however depsSha256 should be stable now.
+  cargoUpdateHook = ''
+    substituteInPlace Cargo.toml \
+      --replace 'git = "https://github.com/rust-datetime/zoneinfo-compiled.git"' \
+                'git = "https://github.com/rust-datetime/zoneinfo-compiled.git"
+rev="f56921ea5e9f7cf065b1480ff270a1757c1f742f"'
+  '';
+
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl zlib ];
