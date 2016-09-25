@@ -13483,7 +13483,6 @@ in
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost155;
     opencascade = opencascade_oce;
-    inherit (pythonPackages) matplotlib pycollada pivy;
   };
 
   freemind = callPackage ../applications/misc/freemind { };
