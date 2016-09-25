@@ -129,6 +129,9 @@ let
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv PATH="$PATH" \
+        ${if cfg.additionalCapabilities != null then
+          ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+        } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
 
@@ -302,6 +305,7 @@ let
   dummyConfig =
     {
       extraVeths = {};
+      additionalCapabilities = [];
       hostAddress = null;
       hostAddress6 = null;
       localAddress = null;
@@ -365,6 +369,17 @@ in
                 <option>config</option>, you can specify the path to
                 the evaluated NixOS system configuration, typically a
                 symlink to a system profile.
+              '';
+            };
+
+            additionalCapabilities = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
+              description = ''
+                Grant additional capabilities to the container.  See the
+                capabilities(7) and systemd-nspawn(1) man pages for more
+                information.
               '';
             };
 
