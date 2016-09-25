@@ -167,7 +167,12 @@ in
           local options="$3"
           local fsType="$4"
 
-          ${pkgs.utillinux}/bin/mount -t "$fsType" -o "remount,$options" "$device" "$mountPoint"
+          if ${pkgs.utillinux}/bin/mountpoint -q "$mountPoint"; then
+            local options="remount,$options"
+          else
+            mkdir -m 0755 -p "$mountPoint"
+          fi
+          ${pkgs.utillinux}/bin/mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }
         source ${config.system.build.earlyMountScript}
       '';
