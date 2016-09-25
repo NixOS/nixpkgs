@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "07rdnhcpnvnkxj5pqacxz669rzn5vw2i1zmf6dd4nv7wpfscdw9f";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   buildInputs = [ libpcap ];
 }

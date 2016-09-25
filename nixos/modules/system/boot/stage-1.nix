@@ -198,9 +198,10 @@ let
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: (sd ? label || hasPrefix "/dev/" sd.device) && !sd.randomEncryption 
-                    # Don't include zram devices
-                    && !(hasPrefix "/dev/zram" sd.device)) config.swapDevices);
+                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption
+                             # Don't include zram devices
+                             && !(hasPrefix "/dev/zram" sd.device)
+                            ) config.swapDevices);
 
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];

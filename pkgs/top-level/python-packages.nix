@@ -1981,13 +1981,14 @@ in modules // {
   };
 
   bedup = buildPythonPackage rec {
-    version = "0.10";
+    version = "0.10.1";
     name = "bedup-${version}";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/g2p/bedup.git";
-      rev = "598fd4b";
-      sha256 = "0cwnifv5mk5rgil0rcibqchz7y8nzpdpi3k2s9wbqcynjl7l49ln";
+    src = pkgs.fetchFromGitHub {
+      owner = "g2p";
+      repo = "bedup";
+      rev = "v${version}";
+      sha256 = "0sp8pmjkxcqq0alianfp41mwq7qj10rk1qy31pjjp9kiph1rn0x6";
     };
 
     buildInputs = with self; [ pkgs.btrfs-progs ];
@@ -1995,9 +1996,6 @@ in modules // {
       ++ optionals (!isPyPy) [ cffi ];
 
     disabled = pythonOlder "3.3";
-
-    # No proper test suite. Included tests cannot be run because of relative import
-    doCheck = false;
 
     meta = {
       description = "Deduplication for Btrfs";
@@ -4040,11 +4038,11 @@ in modules // {
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
     name = "cryptography-${version}";
-    version = "1.5";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography/${name}.tar.gz";
-      sha256 = "52f47ec9a57676043f88e3ca133638790b6b71e56e8890d9d7f3ae4fcd75fa24";
+      sha256 = "1d8da8xbx51m4dqpy51crvcmjakmfcxpx14hh2izppifrh1fs35d";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
@@ -4061,11 +4059,11 @@ in modules // {
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
     name = "cryptography_vectors-${version}";
-    version = "1.5";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "ad19a2b98a475785c3b2ec8a8c9c974e0c48d00db0c23e79d776a2c489ad812d";
+      sha256 = "1z74mqwlvxlxz6b1xlflphqhgby1k77shl94zw5ncw3x3cqwbccl";
     };
   };
 
@@ -13164,6 +13162,11 @@ in modules // {
 
     prePatch = ''
       substituteInPlace setup.py --replace "sympy==0.7.6" "sympy"
+    '';
+
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin $out
+      patchPythonScript $out/${python.sitePackages}/mathics/manage.py
     '';
 
     propagatedBuildInputs = with self; [

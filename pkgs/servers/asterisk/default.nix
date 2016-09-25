@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "13.6.0";
 
   src = fetchurl {
-    url = "http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-${version}.tar.gz";
+    url = "http://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
     sha256 = "0nh0fnqx84as92kk9d73s0386cndd17l06y1c72jl2bdjhyba0ca";
   };
 

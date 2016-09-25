@@ -837,7 +837,11 @@ in
 
   glide = callPackage ../development/tools/glide { };
 
+  glock = callPackage ../development/tools/glock { };
+
   gmic = callPackage ../tools/graphics/gmic { };
+
+  goa = callPackage ../development/tools/goa { };
 
   gti = callPackage ../tools/misc/gti { };
 
@@ -6544,6 +6548,8 @@ in
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
+  go-md2man = callPackage ../development/tools/misc/md2man {};
+
   minify = callPackage ../development/web/minify { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
@@ -8203,6 +8209,8 @@ in
 
   libltc = callPackage ../development/libraries/libltc { };
 
+  libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
+
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
   libmediainfo = callPackage ../development/libraries/libmediainfo { };
@@ -8216,6 +8224,10 @@ in
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
   libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
   libmsgpack_1_4 = callPackage ../development/libraries/libmsgpack/1.4.nix { };
+
+  libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
+    mysql = mysql57;
+  };
 
   libnatspec = callPackage ../development/libraries/libnatspec (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -9700,6 +9712,8 @@ in
 
   vrpn = callPackage ../development/libraries/vrpn { };
 
+  vsqlite = callPackage ../development/libraries/vsqlite { };
+
   vtk = callPackage ../development/libraries/vtk { };
 
   vtkWithQt4 = vtk.override { qtLib = qt4; };
@@ -9713,6 +9727,10 @@ in
   };
 
   wayland = callPackage ../development/libraries/wayland {
+    graphviz = graphviz-nox;
+  };
+
+  wayland_1_9 = callPackage ../development/libraries/wayland/1.9.nix {
     graphviz = graphviz-nox;
   };
 
@@ -10504,6 +10522,12 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost159;
+  };
+
   mysql = mariadb;
   libmysql = mysql.client; # `libmysql` is a slight misnomer ATM
 
@@ -10819,7 +10843,7 @@ in
 
   bluez = self.bluez5;
 
-  inherit (pythonPackages) bedup;
+  inherit (python3Packages) bedup;
 
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
@@ -10833,11 +10857,17 @@ in
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
+  cockroachdb = callPackage ../servers/sql/cockroachdb {
+    gcc = gcc6; # needs gcc 6.0 and above
+  };
+
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_1; # conky can use 5.2, but toluapp can not
   } // config.conky or {});
 
   conntrack_tools = callPackage ../os-specific/linux/conntrack-tools { };
+
+  coredns = callPackage ../servers/dns/coredns { };
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
@@ -10861,7 +10891,10 @@ in
       xctoolchain = xcode.toolchain;
     };
 
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix { inherit libobjc; }).native;
+    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {
+      inherit libobjc;
+      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
+    }).native;
 
     cf-private = callPackage ../os-specific/darwin/cf-private {
       inherit (apple-source-releases) CF;
@@ -11142,15 +11175,6 @@ in
       ];
   };
 
-  linux_3_14 = callPackage ../os-specific/linux/kernel/linux-3.14.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_3_18 = callPackage ../os-specific/linux/kernel/linux-3.18.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11371,7 +11395,6 @@ in
   linuxPackages_3_10 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = self.linuxPackagesFor self.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_14 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_18 linuxPackages_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_1 linuxPackages_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_4 linuxPackages_4_4);
@@ -12590,6 +12613,8 @@ in
   conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
   conkeror = self.wrapFirefox conkeror-unwrapped { };
 
+  containerd = callPackage ../applications/virtualization/containerd { };
+
   cpp_ethereum = callPackage ../applications/misc/webthree-umbrella {
     withOpenCL = true;
 
@@ -12692,9 +12717,7 @@ in
 
   dmtx-utils = callPackage ../tools/graphics/dmtx-utils { };
 
-  docker = callPackage ../applications/virtualization/docker {
-    btrfs-progs = btrfs-progs_4_4_1;
-  };
+  docker = callPackage ../applications/virtualization/docker { };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
@@ -12775,7 +12798,7 @@ in
   });
   emacs24Macport = self.emacs24Macport_24_5;
 
-  emacs25pre = lowPrio (callPackage ../applications/editors/emacs-25 {
+  emacs25 = lowPrio (callPackage ../applications/editors/emacs-25 {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
@@ -14570,6 +14593,8 @@ in
   rtv = callPackage ../applications/misc/rtv { };
 
   rubyripper = callPackage ../applications/audio/rubyripper {};
+
+  runc = callPackage ../applications/virtualization/runc {};
 
   rxvt = callPackage ../applications/misc/rxvt { };
 
@@ -17248,10 +17273,12 @@ in
 
   mnemonicode = callPackage ../misc/mnemonicode { };
 
-  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
-    lua = lua5_1;
-    libctemplate = libctemplate_2_2;
-  };
+  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench (let mysql = mysql57; in {
+    automake = automake113x;
+    gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
+    mysql = mysql;
+    pcre = pcre-cpp;
+  });
 
   redis-desktop-manager = qt55.callPackage ../applications/misc/redis-desktop-manager { };
 

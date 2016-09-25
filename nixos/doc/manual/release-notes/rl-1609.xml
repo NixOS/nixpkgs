@@ -99,6 +99,18 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
+  <listitem>
+    <para><literal>goPackages</literal> was replaced with separated Go applications
+    in appropriate <literal>nixpkgs</literal> categories. Each Go package uses its own
+    dependency set defined in nix. There's also a new <literal>go2nix</literal>
+    tool introduced to generate Go package definition from its Go source automatically.</para>
+  </listitem>
+
+  <listitem>
+    <para><literal>services.mongodb.extraConfig</literal> configuration format
+    was changed to YAML.</para>
+  </listitem>
+
 </itemizedlist>
 
 
@@ -113,6 +125,20 @@ following incompatible changes:</para>
   a reasonably secure system without having to sacrifice too much
   functionality.  See <xref linkend="sec-grsecurity" /> for documentation
   </para></listitem>
+
+  <listitem><para>Special filesystems, like <literal>/proc</literal>,
+  <literal>/run</literal> and others, now have the same mount options as
+  recommended by systemd. They are now unified across different places in NixOS.
+  Options are also updated on the system switch if possible. One benefit from
+  this is improved security -- most such filesystems are now mounted with
+  <literal>noexec</literal>, <literal>nodev</literal> and/or
+  <literal>nosuid</literal> options.</para></listitem>
+
+  <listitem><para>The reverse path filter was interfering with DHCPv4 server
+  operation in the past. An exception for DHCPv4 and a new option to log
+  packets that were dropped due to the reverse path filter was added
+  (<literal>networking.firewall.logReversePathDrops</literal>) for easier
+  debugging.</para></listitem>
 
 </itemizedlist>
 

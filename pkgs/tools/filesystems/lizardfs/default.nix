@@ -18,21 +18,19 @@
 
 stdenv.mkDerivation rec {
   name = "lizardfs-${version}";
-  version = "3.10.0";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "lizardfs";
     repo = "lizardfs";
-    rev = "v.${version}";
-    sha256 = "18p2pj9crjqgxxxzdfcs3j3fqhinmwi7qxcf71jsw17syqwyygh8";
+    rev = "v${version}";
+    sha256 = "0xw6skprxw0wcbqh4yx8f8a4q00x0sfz42llqgd047bcbga1k5zg";
   };
 
   buildInputs = 
     [ cmake fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
       zlib boost pkgconfig judy pam makeWrapper
     ];
-
-  patches = [ ./412.patch ];
 
   postInstall = ''
     wrapProgram $out/sbin/lizardfs-cgiserver \

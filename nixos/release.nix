@@ -260,6 +260,7 @@ in rec {
   #tests.logstash = callTest tests/logstash.nix {};
   tests.mathics = callTest tests/mathics.nix {};
   tests.misc = callTest tests/misc.nix {};
+  tests.mongodb = callTest tests/mongodb.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
   tests.mysql = callTest tests/mysql.nix {};

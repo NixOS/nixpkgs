@@ -6,7 +6,7 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "5.4.0";
+  majorVersion = "5.4.1";
   version = "${majorVersion}";
   libPrefix = "pypy${majorVersion}";
 
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-      sha256 = "1jm4ak6rbqhdhm8gjbd5hanabskbyzhzvjcl93fj0i017yirw88i";
+      sha256 = "1x8sa5x1nkrb8wrmicri94ji8kvyxihyryi8br5fk7gak0agcai0";
     };
 
    # http://bugs.python.org/issue27369
@@ -31,14 +31,6 @@ let
       in ''
       patch lib-python/2.7/test/test_pyexpat.py < '${expatch}'
     '';
-
-    # Increase recursion limit. This patch is not needed on pypy > 5.4.0
-    patches = [
-      (fetchurl {
-        url = "https://bitbucket.org/pypy/pypy/commits/a5db0f4359abb3f64b6d7ed83202e1cb0de37fb2/raw/";
-        sha256 = "07nvqjhj0kl67f3kjwhmybaqg6089ps3q8r0si1lgk3gyb56ygn0";
-      })
-    ];
 
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
