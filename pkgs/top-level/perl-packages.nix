@@ -9473,10 +9473,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetDomainTLD = buildPerlPackage rec {
-    name = "Net-Domain-TLD-1.74";
+    name = "Net-Domain-TLD-1.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXP/${name}.tar.gz";
-      sha256 = "bf936cc20834d5b9497e33dc41c2da6a58536b7a1e0df0b8f6ce7ed5111ca868";
+      sha256 = "4c37f811184d68ac4179d48c10ea31922dd5fca2c1bffcdcd95c5a2a3b4002ee";
     };
     meta = {
       description = "Work with TLD names";
