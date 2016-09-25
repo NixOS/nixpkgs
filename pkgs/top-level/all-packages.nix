@@ -13511,7 +13511,6 @@ in
     inherit (gnome2) libart_lgpl;
     webkit = null;
     lcms = lcms2;
-    wrapPython = pythonPackages.wrapPython;
   };
 
   gimp = gimp_2_8;
