@@ -7260,7 +7260,6 @@ in
   };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
-  clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
   clutter_gtk_1_6 = callPackage ../development/libraries/clutter-gtk/1.6.nix {
     clutter = clutter_1_22;
   };
