@@ -14572,7 +14572,6 @@ in
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
-    inherit (gnome3) libgee;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
