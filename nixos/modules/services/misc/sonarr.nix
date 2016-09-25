@@ -8,7 +8,12 @@ in
 {
   options = {
     services.sonarr = {
-      enable = mkEnableOption "Sonarr";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable Sonarr.";
+      };
     };
   };
 

@@ -29,7 +29,12 @@ in
 
     services.graylog = {
 
-      enable = mkEnableOption "Graylog";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable Graylog.";
+      };
 
       package = mkOption {
         type = types.package;

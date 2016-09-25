@@ -12,7 +12,12 @@ in {
 
     services.ympd = {
 
-      enable = mkEnableOption "ympd, the MPD Web GUI";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable ympd, the MPD Web GUI.";
+        example = true;
+      };
 
       webPort = mkOption {
         type = types.string;

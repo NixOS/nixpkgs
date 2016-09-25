@@ -16,7 +16,12 @@ in
 
     services.calibre-server = {
 
-      enable = mkEnableOption "calibre-server";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable calibre-server.";
+      };
 
       libraryDir = mkOption {
         description = ''

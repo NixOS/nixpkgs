@@ -67,9 +67,12 @@ in
 {
   options = {
 
-    hardware.sane.brscan4.enable = 
-      mkEnableOption "Brother's brscan4 scan backend" // {
+    hardware.sane.brscan4.enable = mkOption {
+      default = false;
+      example = true;
+      type = types.bool;
       description = ''
+        Whether to enable Brother's brscan4 scan backend.
         When enabled, will automatically register the "brscan4" sane
         backend and bring configuration files to their expected location. 
       '';

@@ -8,7 +8,12 @@ in
 {
   options = {
     services.znapzend = {
-      enable = mkEnableOption "ZnapZend daemon";
+      enable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Whether to enable ZnapZend daemon.";
+      };
     };
   };
 

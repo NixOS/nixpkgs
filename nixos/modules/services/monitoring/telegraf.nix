@@ -16,7 +16,12 @@ in {
   ###### interface
   options = {
     services.telegraf = {
-      enable = mkEnableOption "telegraf server";
+      enable = mkOption {
+        default = false;
+        example = true;
+        description = "Whether to enable telegraf server.";
+        type = types.bool;
+      };
 
       package = mkOption {
         default = pkgs.telegraf;

@@ -19,7 +19,12 @@ in
 {
   options = {
     services.factorio = {
-      enable = mkEnableOption name;
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable ${name}.";
+      };
       port = mkOption {
         type = types.int;
         default = 34197;

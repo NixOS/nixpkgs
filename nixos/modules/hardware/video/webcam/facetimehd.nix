@@ -12,7 +12,12 @@ in
 
 {
 
-  options.hardware.facetimehd.enable = mkEnableOption "facetimehd kernel module";
+  options.hardware.facetimehd.enable = mkOption {
+    default = false;
+    example = true;
+    type = types.bool;
+    description = "Whether to enable facetimehd kernel module.";
+  };
 
   config = mkIf cfg.enable {
 

@@ -12,7 +12,12 @@ in {
   ###### interface
 
   options = {
-    services.das_watchdog.enable = mkEnableOption "realtime watchdog";
+    services.das_watchdog.enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Whether to enable realtime watchdog.";
+    };
   };
 
   ###### implementation

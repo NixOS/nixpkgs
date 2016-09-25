@@ -29,7 +29,14 @@ in
 
     services.octoprint = {
 
-      enable = mkEnableOption "OctoPrint, web interface for 3D printers";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether to enable OctoPrint, web interface for 3D printers.
+        '';
+      };
 
       host = mkOption {
         type = types.str;

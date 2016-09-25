@@ -43,7 +43,12 @@ in
 
     services.rspamd = {
 
-      enable = mkEnableOption "Whether to run the rspamd daemon.";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable the rspamd daemon.";
+      };
 
       debug = mkOption {
         default = false;

@@ -14,7 +14,12 @@ in
 
   options = {
 
-    services.teamviewer.enable = mkEnableOption "TeamViewer daemon";
+    services.teamviewer.enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Whether to enable TeamViewer daemon.";
+    };
       
   };
 

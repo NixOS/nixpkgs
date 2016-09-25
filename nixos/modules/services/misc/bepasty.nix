@@ -13,7 +13,12 @@ let
 in
 {
   options.services.bepasty = {
-    enable = mkEnableOption "Bepasty servers";
+    enable = mkOption {
+      type = types.bool;
+      description = "Whether to enable Bepasty servers.";
+      default = false;
+      example = true;
+    };
 
     servers = mkOption {
       default = {};

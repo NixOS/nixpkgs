@@ -7,7 +7,12 @@ in
 {
   options = {
     services.spice-vdagentd = {
-      enable = mkEnableOption "Spice guest vdagent daemon";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable Spice guest vdagent daemon.";
+      };
     };
   };
 

@@ -15,7 +15,14 @@ in {
 
     services.squeezelite= {
 
-      enable = mkEnableOption "Squeezelite, a software Squeezebox emulator";
+      enable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = ''
+          Whether to enable Squeezelite, a software Squeezebox emulator.
+        '';
+      };
 
       dataDir = mkOption {
         default = "/var/lib/squeezelite";

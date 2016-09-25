@@ -370,7 +370,12 @@ in {
     };
 
     beacon = {
-      enable = mkEnableOption "graphite beacon";
+      enable = mkOption {
+        description = "Whether to enable graphite beacon.";
+        default = false;
+        example = true;
+        type = types.bool;
+      };
 
       config = mkOption {
         description = "Graphite beacon configuration.";

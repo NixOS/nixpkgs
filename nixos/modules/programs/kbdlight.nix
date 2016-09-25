@@ -7,7 +7,12 @@ let
 
 in
 {
-  options.programs.kbdlight.enable = mkEnableOption "kbdlight";
+  options.programs.kbdlight.enable = mkOption {
+    default = false;
+    example = true;
+    type = types.bool;
+    description = "Whether to enable kbdlight.";
+  };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kbdlight ];

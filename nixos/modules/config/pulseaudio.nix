@@ -163,18 +163,36 @@ in {
       };
 
       zeroconf = {
-        discovery.enable =
-          mkEnableOption "discovery of pulseaudio sinks in the local network";
-        publish.enable =
-          mkEnableOption "publishing the pulseaudio sink in the local network";
+        discovery.enable = mkOption {
+          default = false;
+          example = true;
+          type = types.bool;
+          description = "Whether to enable discovery of pulseaudio sinks in the local network.";
+        };
+        publish.enable = mkOption {
+          default = false;
+          example = true;
+          type = types.bool;
+          description = "Whether to enable publishing the pulseaudio sink in the local network.";
+        };
       };
 
       # TODO: enable by default?
       tcp = {
-        enable = mkEnableOption "tcp streaming support";
+        enable = mkOption {
+          default = false;
+          example = true;
+          type = types.bool;
+          description = "Whether to enable tcp streaming support.";
+        };
 
         anonymousClients = {
-          allowAll = mkEnableOption "all anonymous clients to stream to the server";
+          allowAll = mkOption {
+            default = false;
+            example = true;
+            type = types.bool;
+            description = "Whether to enable all anonymous clients to stream to the server.";
+          };
           allowedIpRanges = mkOption {
             type = types.listOf types.str;
             default = [];

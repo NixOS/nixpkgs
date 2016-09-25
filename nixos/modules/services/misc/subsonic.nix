@@ -5,7 +5,12 @@ with lib;
 let cfg = config.services.subsonic; in {
   options = {
     services.subsonic = {
-      enable = mkEnableOption "Subsonic daemon";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable Subsonic daemon.";
+      };
 
       home = mkOption {
         type = types.path;

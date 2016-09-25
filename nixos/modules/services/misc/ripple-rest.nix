@@ -23,9 +23,19 @@ let
 
 in {
   options.services.rippleRest = {
-    enable = mkEnableOption "ripple rest";
+    enable = mkOption {
+      description = "Whether to enable ripple rest.";
+      default = false;
+      example = true;
+      type = types.bool;
+    };
 
-    debug = mkEnableOption "debug for ripple-rest";
+    debug = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Whether to enable debug for ripple-rest.";
+    };
 
     host = mkOption {
       description = "Ripple rest host.";
@@ -40,7 +50,12 @@ in {
     };
 
     ssl = {
-      enable = mkEnableOption "ssl";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable ssl.";
+      };
 
       keyPath = mkOption {
         description = "Path to the ripple rest key file.";
