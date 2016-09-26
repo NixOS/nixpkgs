@@ -151,29 +151,6 @@ let
     };
   };
 
-  apel = melpaBuild rec {
-    pname = "apel";
-    version = "10.8";
-    src = fetchFromGitHub {
-      owner  = "wanderlust";
-      repo   = pname;
-      rev    = "8402e59eadb580f59969114557b331b4d9364f95";
-      sha256 = "0sdxnf4b8rqs1cbjxh23wvxmj7ll3zddv8yfdgif6zmgyy8xhc9m";
-    };
-    files = [
-      "alist.el" "apel-ver.el" "broken.el" "calist.el"
-      "emu.el" "filename.el" "install.el" "inv-23.el" "invisible.el"
-      "mcharset.el" "mcs-20.el" "mcs-e20.el" "mule-caesar.el"
-      "path-util.el" "pccl-20.el" "pccl.el" "pces-20.el" "pces-e20.el"
-      "pces.el" "pcustom.el" "poe.el" "poem-e20.el" "poem-e20_3.el"
-      "poem.el" "product.el" "pym.el" "richtext.el" "static.el"
-    ];
-    meta = {
-      description = "A Portable Emacs Library";
-      license = gpl3Plus; # probably
-    };
-  };
-
   autotetris = melpaBuild {
     pname = "autotetris-mode";
     version = "20141114.846";
