@@ -151,22 +151,6 @@ let
     };
   };
 
-  change-inner = melpaBuild rec {
-    pname   = "change-inner";
-    version = "20130208";
-    src = fetchFromGitHub {
-      owner  = "magnars";
-      repo   = "${pname}.el";
-      rev    = "6374b745ee1fd0302ad8596cdb7aca1bef33a730";
-      sha256 = "1fv8630bqbmfr56zai08f1q4dywksmghhm70084bz4vbs6rzdsbq";
-    };
-    packageRequires = [ expand-region ];
-    meta = {
-      description = "Change contents based on semantic units in Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   circe = melpaBuild rec {
     pname   = "circe";
     version = "2.1";
