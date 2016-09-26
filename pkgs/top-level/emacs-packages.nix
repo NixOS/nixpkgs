@@ -229,22 +229,6 @@ let
     };
   };
 
-  evil-visualstar = melpaBuild rec {
-    pname   = "evil-visualstar";
-    version = "20151017";
-    src = fetchFromGitHub {
-      owner  = "bling";
-      repo   = pname;
-      rev    = "bd9e1b50c03b37c57355d387f291c2ec8ce51eec";
-      sha256 = "17m4kdz1is4ipnyiv9n3vss49faswbbd6v57df9npzsbn5jyydd0";
-    };
-    packageRequires = [ evil ];
-    meta = {
-      description = "Start a * or # search from the visual selection";
-      license = gpl3Plus;
-    };
-  };
-
   evil = melpaBuild {
     pname   = "evil";
     version = "1.2.5";
