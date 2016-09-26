@@ -767,8 +767,8 @@ self: super: {
 
   # Fine-tune the build.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
-    # Bump version to latest git-release to get support for Emacs 25.x.
-    version = "20160926-git";
+    # Bump version to latest git-version to get support for Emacs 25.x.
+    version = "1.0.20-28-g1ffb4db";
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
       repo = "structured-haskell-mode";
