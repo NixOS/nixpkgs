@@ -104,22 +104,6 @@ let
     };
   };
 
-  ag = melpaBuild rec {
-    pname   = "ag";
-    version = "0.44";
-    src = fetchFromGitHub {
-      owner  = "Wilfred";
-      repo   = "${pname}.el";
-      rev    = version;
-      sha256 = "19y5w9m2flp4as54q8yfngrkri3kd7fdha9pf2xjgx6ryflqx61k";
-    };
-    packageRequires = [ dash s ];
-    meta = {
-      description = "Search using ag from inside Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   elisp-ffi = melpaBuild rec {
     pname = "elisp-ffi";
     version = "1.0.0";
