@@ -284,21 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  gntp = melpaBuild rec {
-    pname = "gntp";
-    version = "0.1";
-    src = fetchFromGitHub {
-      owner = "tekai";
-      repo  = "${pname}.el";
-      rev   = "v${version}";
-      sha256 = "1nvyjjjydrimpxy4cpg90si7sr8lmldbhlcm2mx8npklp9pn5y3a";
-    };
-    meta = {
-      description = "GNTP protocol implementation for Emacs";
-      license = gpl2Plus;
-    };
-  };
-
   gnus = melpaBuild rec {
     pname   = "gnus";
     version = "20140501";
