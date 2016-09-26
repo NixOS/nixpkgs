@@ -15,5 +15,9 @@
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
 
+###### Reviewing this pull-request
+
+See the nixpkgs manual for more details on how to [Review contributions](http://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download-by-type/doc/manual#chap-reviewing-contributions).
+
 ---
 
