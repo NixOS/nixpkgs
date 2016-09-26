@@ -284,22 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  # deprecated, part of haskell-mode now
-  hi2 = melpaBuild rec {
-    pname   = "hi2";
-    version = "1.0";
-    src = fetchFromGitHub {
-      owner  = "nilcons";
-      repo   = pname;
-      rev    = version;
-      sha256 = "1s08sgbh5v59lqskd0s1dscs6dy7z5mkqqkabs3gd35agbfvbmlf";
-    };
-    meta = {
-      description = "Minor haskell-indentation mode for haskell-mode, 2nd try";
-      license = gpl3Plus;
-    };
-  };
-
   highlight-indentation = melpaBuild rec {
     pname = "highlight-indentation";
     version = "0.7.0";
