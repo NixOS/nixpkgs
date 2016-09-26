@@ -311,21 +311,6 @@ let
     inherit lib;
   };
 
-  s = melpaBuild rec {
-    pname   = "s";
-    version = "20151023";
-    src = fetchFromGitHub {
-      owner  = "magnars";
-      repo   = "${pname}.el";
-      rev    = "372e94c1a28031686d75d6c52bfbe833a118a72a";
-      sha256 = "1zn8n3mv0iscs242dbkf5vmkkizfslq5haw9z0d0g3wknq18286h";
-    };
-    meta = {
-      description = "String manipulation library for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   semi = melpaBuild rec {
     pname = "semi";
     version = "1.14.7"; # 20150203
