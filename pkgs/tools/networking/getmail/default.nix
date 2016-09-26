@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication }:
+{ stdenv, fetchurl, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   version = "4.50.0";
   name = "getmail-${version}";
   namePrefix = "";
