@@ -339,18 +339,6 @@ let
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
-  tracking = melpaBuild rec {
-    pname   = "tracking";
-    version = circe.version;
-    src     = circe.src;
-    packageRequires = [ shorten ];
-    fileSpecs = [ "tracking.el" ];
-    meta = {
-      description = "Register buffers for user review library for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   tuareg = melpaBuild rec {
     pname = "tuareg";
     version = "2.0.9";
