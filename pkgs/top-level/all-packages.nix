@@ -4840,9 +4840,7 @@ in
 
   jrePlugin = self.jre8Plugin;
 
-  jre6Plugin = lowPrio (self.jdkdistro false true);
-
-  jre7Plugin = lowPrio (self.oraclejdk7distro false true);
+  jre7Plugin = lowPrio (pkgs.oraclejdk7distro false true);
 
   jre8Plugin = lowPrio (self.oraclejdk8distro false true);
 
@@ -4850,10 +4848,7 @@ in
     system == "i686-linux" ||
     system == "x86_64-linux";
 
-  jdkdistro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk6-linux.nix { });
+  jdkdistro = oraclejdk8distro;
 
   oraclejdk7distro = installjdk: pluginSupport:
     assert supportsJDK;
@@ -7236,8 +7231,8 @@ in
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
     inherit (darwin) CF;
-    inherit (darwin.apple_sdk.frameworks) 
-      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox 
+    inherit (darwin.apple_sdk.frameworks)
+      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
   };
 
