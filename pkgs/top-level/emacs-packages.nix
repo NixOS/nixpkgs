@@ -337,25 +337,6 @@ let
     };
   };
 
-  swiper = melpaBuild rec {
-    pname   = "swiper";
-    version = "0.7.0";
-    src = fetchFromGitHub {
-      owner  = "abo-abo";
-      repo   = pname;
-      rev    = version;
-      sha256 = "1kahl3h18vsjkbqvd84fb2w45s4srsiydn6jiv49vvg1yaxzxcbm";
-    };
-    fileSpecs = [ "swiper.el" "ivy.el" "colir.el" "counsel.el" ];
-    meta = {
-      description = "Overview as you search for a regex in Emacs";
-      license = gpl3Plus;
-    };
-  };
-  ivy = swiper;
-
-  #TODO: swiper-helm
-
   switch-window = melpaBuild rec {
     pname   = "switch-window";
     version = "20140919";
