@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version="1.5";
 
   src = fetchurl {
-    url="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-1.5.tar.gz";
+    url="https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
     sha256="0g29kyz4ykasdcrb0zmbrp2jqs9kv1wz9swx849i2d1ncknbzln4";
   };
 
@@ -35,5 +35,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = with lib.platforms; linux ++ darwin;
+    downloadPage = "http://stedolan.github.io/jq/download/";
+    updateWalker = true;
+    inherit version;
   };
 }
