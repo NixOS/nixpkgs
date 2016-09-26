@@ -213,21 +213,6 @@ let
     };
   };
 
-  engine-mode = melpaBuild rec {
-    pname = "engine-mode";
-    version = "1.0.0";
-    src = fetchFromGitHub {
-      owner  = "hrs";
-      repo   = "engine-mode";
-      rev    = "v${version}";
-      sha256 = "1dsa3r39ip20ddbw0m9vq8z3r4ahrxvb37adyqi4mbdgyr6fq6sw";
-    };
-    meta = {
-      description = "Minor mode for defining and querying search engines through Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   epl = melpaBuild rec {
     pname   = "epl";
     version = "20140823";
