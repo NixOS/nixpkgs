@@ -1,10 +1,10 @@
 { stdenv, fetchurl, libelf }:
 
 stdenv.mkDerivation rec {
-  name = "libdwarf-20121130";
-  
+  name = "libdwarf-20160613";
+
   src = fetchurl {
-    url = http://reality.sgiweb.org/davea/libdwarf-20121130.tar.gz;
+    url = "http://www.prevanders.net/${name}.tar.gz";
     sha256 = "1nfdfn5xf3n485pvpb853awyxxnvrg207i0wmrr7bhk8fcxdxbn0";
   };
 
