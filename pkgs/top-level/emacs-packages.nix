@@ -322,22 +322,6 @@ let
     };
   };
 
-  smart-mode-line = melpaBuild rec {
-    pname   = "smart-mode-line";
-    version = "2.6";
-    src = fetchFromGitHub {
-      owner  = "Bruce-Connor";
-      repo   = pname;
-      rev    = version;
-      sha256 = "17nav2jbvbd13xzgp29x396mc617n2dh6whjk4wnyvsyv7r0s9f6";
-    };
-    packageRequires = [ dash rich-minority ];
-    meta = {
-      description = "Sexy mode-line for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   smartparens = melpaBuild rec {
     pname   = "smartparens";
     version = "20151025";
