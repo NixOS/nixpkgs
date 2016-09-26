@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, python, buildPythonApplication, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "gitfs-0.2.5";
 
   src = fetchFromGitHub {
