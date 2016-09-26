@@ -151,22 +151,6 @@ let
     };
   };
 
-  autotetris = melpaBuild {
-    pname = "autotetris-mode";
-    version = "20141114.846";
-    src = fetchFromGitHub {
-      owner = "skeeto";
-      repo = "autotetris-mode";
-      rev = "7d348d33829bc89ddbd2b4d5cfe5073c3b0cbaaa";
-      sha256 = "14pjsb026mgjf6l3dggy255knr7c1vfmgb6kgafmkzvr96aglcdc";
-    };
-    files = [ "autotetris-mode.el" ];
-    meta = {
-      description = "For those who are too busy to play Emacs tetris";
-      license = unlicense;
-    };
-  };
-
   avy = melpaBuild rec {
     pname   = "avy";
     version = "0.3.0";
