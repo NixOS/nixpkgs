@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin nckx ];
     platforms = platforms.linux;
+    inherit version;
   };
 }
