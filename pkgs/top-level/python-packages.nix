@@ -18040,6 +18040,8 @@ in modules // {
     };
   };
 
+  pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
+
   pillow = buildPythonPackage rec {
     name = "Pillow-3.3.1";
 

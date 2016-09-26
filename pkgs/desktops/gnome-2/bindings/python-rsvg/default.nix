@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, gnome2, librsvg, pkgconfig, pygtk, python, gtk }:
+{ stdenv, fetchurl, gnome2, librsvg, pkgconfig, python27Packages, gtk }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python27Packages) python pygtk;
+in stdenv.mkDerivation rec {
   ver_maj = "2.32";
   ver_min = "0";
   version = "${ver_maj}.${ver_min}";

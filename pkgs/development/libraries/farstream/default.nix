@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gst-plugins-base
-, pygobject2, gst-python, gupnp_igd
+{ stdenv, fetchurl, libnice, pkgconfig, pythonPackages, gstreamer, gst-plugins-base
+, gst-python, gupnp_igd
 , gst-plugins-good, gst-plugins-bad, gst-libav
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygobject2;
+in stdenv.mkDerivation rec {
   name = "farstream-0.2.4";
   src = fetchurl {
     url = "http://www.freedesktop.org/software/farstream/releases/farstream/${name}.tar.gz";

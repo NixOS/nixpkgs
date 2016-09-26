@@ -6,9 +6,9 @@ Index: iproute2-4.3.0/include/linux/if_link.h
 --- iproute2-4.3.0.orig/include/linux/if_link.h
 +++ iproute2-4.3.0/include/linux/if_link.h
 @@ -392,6 +392,7 @@ enum {
- 	IFLA_VXLAN_GBP,
- 	IFLA_VXLAN_REMCSUM_NOPARTIAL,
  	IFLA_VXLAN_COLLECT_METADATA,
+ 	IFLA_VXLAN_LABEL,
+ 	IFLA_VXLAN_GPE,
 +	IFLA_VXLAN_FAN_MAP = 33,
  	__IFLA_VXLAN_MAX
  };
@@ -88,9 +88,9 @@ Index: iproute2-4.3.0/ip/iplink_vxlan.c
  			  struct nlmsghdr *n)
  {
 @@ -201,6 +243,10 @@ static int vxlan_parse_opt(struct link_u
- 			udp6zerocsumrx = 0;
- 		} else if (!matches(*argv, "gbp")) {
  			gbp = 1;
+ 		} else if (!matches(*argv, "gpe")) {
+ 			gpe = 1;
 +		} else if (!matches(*argv, "fan-map")) {
 +			NEXT_ARG();
 +			if (fan_parse_map(&argc, &argv, n))
@@ -117,9 +117,9 @@ Index: iproute2-4.3.0/ip/iplink_vxlan.c
 +		p = RTA_PAYLOAD(i);
 +		m = RTA_DATA(i);
 +		fprintf(f, "%s/%d:%s/%d ",
-+			rt_addr_n2a(AF_INET, p, &m->overlay, b1, INET_ADDRSTRLEN),
++			rt_addr_n2a_r(AF_INET, p, &m->overlay, b1, INET_ADDRSTRLEN),
 +			m->overlay_prefix,
-+			rt_addr_n2a(AF_INET, p, &m->underlay, b2, INET_ADDRSTRLEN),
++			rt_addr_n2a_r(AF_INET, p, &m->underlay, b2, INET_ADDRSTRLEN),
 +			m->underlay_prefix);
 +	}
 +}

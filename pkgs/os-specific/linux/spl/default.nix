@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = http://zfsonlinux.org/;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jcumming wizeman wkennington ];
+    maintainers = with maintainers; [ jcumming wizeman wkennington fpletz ];
     broken = buildKernel && (kernel.features.grsecurity or false);
   };
 }
