@@ -311,16 +311,6 @@ let
     inherit lib;
   };
 
-  request-deferred = melpaBuild rec {
-    pname = "request-deferred";
-    version = request.version;
-    src = request.src;
-    packageRequires = [ request deferred ];
-    files = [ "request-deferred.el" ];
-    meta = request.meta
-        // { description = "${request.meta.description} (deferred)"; };
-  };
-
   rich-minority = melpaBuild rec {
     pname   = "rich-minority";
     version = "0.1.1";
