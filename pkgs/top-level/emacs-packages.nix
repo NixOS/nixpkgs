@@ -249,22 +249,6 @@ let
     };
   };
 
-  flim = melpaBuild rec {
-    pname = "flim";
-    version = "1.14.9"; # 20141216
-    src = fetchFromGitHub {
-      owner  = "wanderlust";
-      repo   = pname;
-      rev    = "488a4d70fb4ae57bdd30dc75c2d75579894e28a2";
-      sha256 = "178fhpbyffksr4v3m8jmx4rx2vqyz23qhbyvic5afabxi6lahjfs";
-    };
-    packageRequires = [ apel ];
-    meta = {
-      description = "Email message encoding library for Emacs";
-      license = gpl3Plus; # probably
-    };
-  };
-
   ghc-mod = melpaBuild rec {
     pname = "ghc";
     version = external.ghc-mod.version;
