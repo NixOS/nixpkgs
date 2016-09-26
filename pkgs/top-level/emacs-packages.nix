@@ -339,27 +339,6 @@ let
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
-  wanderlust = melpaBuild rec {
-    pname = "wanderlust";
-    version = "2.15.9"; # 20150301
-    src = fetchFromGitHub {
-      owner  = pname;
-      repo   = pname;
-      rev    = "13fb4f6519490d4ac7138f3bcf76707654348071";
-      sha256 = "1l48xfcwkm205prspa1rns6lqfizik5gpdwmlfgyb5mabm9x53zn";
-    };
-    packageRequires = [ apel flim semi ];
-    fileSpecs = [
-      "doc/wl.texi" "doc/wl-ja.texi"
-      "elmo/*.el" "wl/*.el"
-      "etc/icons"
-    ];
-    meta = {
-      description = "E-Mail client for Emacs";
-      license = gpl3Plus; # probably
-    };
-  };
-
   web-mode = melpaBuild rec {
     pname   = "web-mode";
     version = "11.1.12";
