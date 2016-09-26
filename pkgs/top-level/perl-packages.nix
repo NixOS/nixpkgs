@@ -152,9 +152,6 @@ let self = _self // overrides; _self = with self; {
       sha256 = "2e3376d03bfa5f172f43d4c615ba496281c9ffe3093a828c539683e17e2fbbcb";
     };
     propagatedBuildInputs = [ AnyEvent CommonSense ];
-    meta = {
-      license = stdenv.lib.licenses.unknown;
-    };
   };
 
   AnyEventI3 = buildPerlPackage rec {
@@ -11417,9 +11414,6 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHI/${name}.tar.gz";
       sha256 = "2b8c1acd24fa9681ebba0ccb3c49f16289de1d579af8a0c898ea8f8d1baf5d36";
-    };
-    meta = {
-      license = stdenv.lib.licenses.unknown;
     };
   };
 
