@@ -8,7 +8,7 @@
 
 <para>The nixpkgs projects receives a fairly high number of contributions via github pull-requests. Reviewing and approving these is an important task and a way to contribute to the project.</para>
 
-<para>The high activity of nixpkgs change make any pull request that is open for long enough subject to conflicts that will require extra from the submitter or the merger. Reviewing pull requests in a timely manner and being responsive to the comments is the key to avoid these. Github provides sort filters that can be used to see the most recently and the least recently updated pull-requests.</para>
+<para>The high activity of nixpkgs change make any pull request that is open for long enough subject to conflicts that will require extra work from the submitter or the merger. Reviewing pull requests in a timely manner and being responsive to the comments is the key to avoid these. Github provides sort filters that can be used to see the <link xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc">most recently</link> and the <link xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc">least recently</link> updated pull-requests.</para>
 
 <para>When reviewing a pull request, please always be nice and polite. Controversial changes can lead to controversial opinions, but it is important to respect every community members and their work.</para>
 
@@ -16,7 +16,7 @@
 
 <para>Pull-requests reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.</para>
 
-<para>All the review template samples that are provided in this section are generic, and should be adapted by the reviewer to fit the pull-request content by adding or removing review points.</para>
+<para>All the review template samples provided in this section are generic and meant as examples. Their usage is optional and the reviewer is free to adapt them to his liking.</para>
 
 <section><title>Package updates</title>
 
@@ -26,7 +26,7 @@
 <para>Reviewing process:</para>
 
 <itemizedlist>
-  <listitem><para>Add labels to the pull-request.</para>
+  <listitem><para>Add labels to the pull-request. (Requires commit rights)</para>
     <itemizedlist>
       <listitem><para><literal>8.has: package (update)</literal> and any topic label that fit the updated package.</para></listitem>
     </itemizedlist>
@@ -35,22 +35,34 @@
   <listitem><para>Checking that the commit text is fitting the guidelines.</para></listitem>
   <listitem><para>Checking that the package maintainers are notified.</para>
     <itemizedlist>
-      <listitem><para>mention-bot usually notify github users based on the submitted changes, but it can happen that it miss some of the package maintainers.</para></listitem>
+      <listitem><para>mention-bot usually notify github users based on the submitted changes, but it can happen that it misses some of the package maintainers.</para></listitem>
+    </itemizedlist>
+  </listitem>
+  <listitem><para>Checking that the meta field contains correct information.</para>
+    <itemizedlist>
+      <listitem><para>License can change with version updates, so it should be checked to be fitting upstream license.</para></listitem>
+      <listitem><para>If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.</para></listitem>
     </itemizedlist>
   </listitem>
   <listitem><para>Checking that the code contains no typos.</para></listitem>
   <listitem><para>Building the package locally.</para>
     <itemizedlist>
-      <listitem><para>Pull-requests are often targetted to the master or staging branch so building the pull-request locally as it is submitted can trigger a large amount of source builds.</para>
+      <listitem><para>Pull-requests are often targeted to the master or staging branch so building the pull-request locally as it is submitted can trigger a large amount of source builds.</para>
         <para>It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review.</para>
 <screen>
 TODO: add commands for a local rebase and build
 </screen>
       </listitem>
+      <listitem>
+        <para>The <link xlink:href="https://github.com/madjar/nox">nox</link> tool can be used to review a pull-request content in a single command. It doesn't rebase on a channel branch so it might trigger many source builds. <varname>PRNUMBER</varname> should be replaced by the number at the end of the pull-request title.</para>
+<screen>
+$ nox-review -k pr PRNUMBER
+</screen>
+      </listitem>
     </itemizedlist>
   </listitem>
   <listitem><para>Running every binary.</para></listitem>
-  <listitem><para>Checking that the packages using the updated package are building fine.</para>
+  <listitem><para>Checking that the packages using the updated package are building fine in case the updated package is a library or is used as a build input by many other packages.</para>
 <screen>
 TODO: add commands
 </screen>
@@ -81,7 +93,7 @@ TODO: add commands
 <para>Reviewing process:</para>
 
 <itemizedlist>
-  <listitem><para>Add labels to the pull-request.</para>
+  <listitem><para>Add labels to the pull-request. (Requires commit rights)</para>
     <itemizedlist>
       <listitem><para><literal>8.has: package (new)</literal> and any topic label that fit the new package.</para></listitem>
     </itemizedlist>
@@ -92,7 +104,7 @@ TODO: add commands
     <itemizedlist>
       <listitem><para>License must be checked to be fitting upstream license.</para></listitem>
       <listitem><para>Platforms should be set or the package will not get binary substitutes.</para></listitem>
-      <listitem><para>If there is no maintainer, propose the submitter to become the maintainer.</para></listitem>
+      <listitem><para>A maintainer must be set, this can be the package submitter or a community member that accepts to take maintainership of the package.</para></listitem>
     </itemizedlist>
   </listitem>
   <listitem><para>Checking that the code contains no typos.</para></listitem>
@@ -138,7 +150,7 @@ TODO: add commands
 <para>Reviewing process</para>
 
 <itemizedlist>
-  <listitem><para>Add labels to the pull-request.</para>
+  <listitem><para>Add labels to the pull-request. (Requires commit rights)</para>
     <itemizedlist>
       <listitem><para><literal>8.has: module (update)</literal> and any topic label that fit the module.</para></listitem>
     </itemizedlist>
@@ -190,7 +202,7 @@ TODO: add commands
 <para>New modules submissions introduce a new module to NixOS.</para>
 
 <itemizedlist>
-  <listitem><para>Add labels to the pull-request.</para>
+  <listitem><para>Add labels to the pull-request. (Requires commit rights)</para>
     <itemizedlist>
       <listitem><para><literal>8.has: module (new)</literal> and any topic label that fit the module.</para></listitem>
     </itemizedlist>
@@ -252,6 +264,10 @@ The main reviewers for a topic can be hard to find as there is no list, but chec
 <para>It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.</para>
 
 <para>TODO: add the procedure to request merging rights.</para>
+
+<para>Please note that contributors with commit rights unactive for more than three months will have their commit rights revoked.</para>
+
+<para>In a case a contributor leaves definitively the Nix community, he should create an issue or notify the mailing list with references of packages and modules he maintains so the maintainership can be taken over by other contributors.</para>
 
 </section>
 </chapter>
