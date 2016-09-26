@@ -284,22 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  idris-mode = melpaBuild rec {
-    pname   = "idris-mode";
-    version = "0.9.19";
-    src = fetchFromGitHub {
-      owner  = "idris-hackers";
-      repo   = "idris-mode";
-      rev    = version;
-      sha256 = "0iwgbaq2797k1f7ql86i2pjfa67cha4s2v0mgmrd0qcgqkxsdq92";
-    };
-    packageRequires = [ prop-menu ];
-    meta = {
-      description = "Idris language support for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   lcs = melpaBuild rec {
     pname   = "lcs";
     version = circe.version;
