@@ -307,26 +307,6 @@ let
     };
   };
 
-  markdown-toc = melpaBuild rec {
-    pname = "markdown-toc";
-    version = "0.0.8";
-    src = fetchFromGitHub {
-      owner = "ardumont";
-      repo = pname;
-      rev = "06903e24457460a8964a978ace709c69afc36692";
-      sha256 = "07w0w9g81c6c404l3j7gb420wc2kjmah728w84mdymscdl5w3qyl";
-    };
-    packageRequires = [ markdown-mode dash s ];
-    files = [ "${pname}.el" ];
-    meta = {
-      description = "Generate a TOC in markdown file";
-      longDescription = ''
-        A simple mode to create TOC in a markdown file.
-      '';
-      license = gpl3Plus;
-    };
-  };
-
   moe-theme = melpaBuild rec {
     pname   = "moe-theme";
     version = "1.0";
