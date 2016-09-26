@@ -151,21 +151,6 @@ let
     };
   };
 
-  browse-kill-ring = melpaBuild rec {
-    pname   = "browse-kill-ring";
-    version = "20140104";
-    src = fetchFromGitHub {
-      owner  = pname;
-      repo   = pname;
-      rev    = "f81ca5f14479fa9e938f89bf8f6baa3c4bdfb755";
-      sha256 = "149g4qs5dqy6yzdj5smb39id5f72bz64qfv5bjf3ssvhwl2rfba8";
-    };
-    meta = {
-      description = "Interactively insert items from Emacs kill-ring";
-      license = gpl2Plus;
-    };
-  };
-
   button-lock = melpaBuild rec {
     pname   = "button-lock";
     version = "1.0.2";
