@@ -307,21 +307,6 @@ let
     };
   };
 
-  monokai-theme = melpaBuild rec {
-    pname   = "monokai-theme";
-    version = "1.0.0";
-    src = fetchFromGitHub {
-      owner  = "oneKelvinSmith";
-      repo   = "monokai-emacs";
-      rev    = "v${version}";
-      sha256 = "02w7k4s4698p4adjy4a36na28sb1s2zw4xsjs7p2hv9iiw9kmyvz";
-    };
-    meta = {
-      description = "An Emacs port of TextMate' Monokai theme inspired by Zenburn theme";
-      license = gpl3Plus;
-    };
-  };
-
   multiple-cursors = melpaBuild rec {
     pname = "multiple-cursors";
     version = "20150627";
