@@ -311,22 +311,6 @@ let
     inherit lib;
   };
 
-  semi = melpaBuild rec {
-    pname = "semi";
-    version = "1.14.7"; # 20150203
-    src = fetchFromGitHub {
-      owner  = "wanderlust";
-      repo   = pname;
-      rev    = "9976269556c5bcc021e4edf1b0e1accd39929528";
-      sha256 = "1g1xg57pz4msd3f998af5gq28qhmvi410faygzspra6y6ygaka68";
-    };
-    packageRequires = [ apel flim ];
-    meta = {
-      description = "MIME library for Emacs";
-      license = gpl3Plus; # probably
-    };
-  };
-
   shorten = melpaBuild rec {
     pname   = "shorten";
     version = circe.version;
