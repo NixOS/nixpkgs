@@ -229,21 +229,6 @@ let
     };
   };
 
-  evil = melpaBuild {
-    pname   = "evil";
-    version = "1.2.5";
-    src = fetchhg {
-      url = "https://bitbucket.org/lyro/evil";
-      rev = "72593d8e83a3";
-      sha256 = "1pv055qlc3vawzdik29d6zbbv8fa2ygwylm04wa46qr5sj53v0i8";
-    };
-    packageRequires = [ goto-chg undo-tree ];
-    meta = {
-      description = "Extensible vi layer for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   exec-path-from-shell = melpaBuild rec {
     pname   = "exec-path-from-shell";
     version = "20141022";
