@@ -229,21 +229,6 @@ let
     };
   };
 
-  expand-region = melpaBuild rec {
-    pname   = "expand-region";
-    version = "20150902";
-    src = fetchFromGitHub {
-      owner  = "magnars";
-      repo   = "${pname}.el";
-      rev    = "59f67115263676de5345581216640019975c4fda";
-      sha256 = "0qqqv0pp25xg1zh72i6fsb7l9vi14nd96rx0qdj1f3pdwfidqms1";
-    };
-    meta = {
-      description = "Increases the selected region by semantic units in Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   find-file-in-project = melpaBuild rec {
     pname = "find-file-in-project";
     version = "3.5";
