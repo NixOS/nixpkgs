@@ -311,14 +311,6 @@ let
     inherit lib;
   };
 
-  helm-projectile = melpaBuild rec {
-    pname   = "helm-projectile";
-    version = projectile.version;
-    src     = projectile.src;
-    fileSpecs = [ "helm-projectile.el" ];
-    packageRequires = [ helm projectile ];
-    meta = projectile.meta;
-  };
   persp-projectile = melpaBuild rec {
     pname   = "persp-projectile";
     version = projectile.version;
