@@ -7223,12 +7223,9 @@ in
 
   clucene_core = clucene_core_1;
 
-  clutter = callPackage ../development/libraries/clutter {
-    cogl = cogl_1_22;
-  };
+  clutter = callPackage ../development/libraries/clutter { };
 
   clutter-gst = callPackage ../development/libraries/clutter-gst {
-    inherit (gnome3) cogl;
   };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
@@ -7238,8 +7235,6 @@ in
   cmocka = callPackage ../development/libraries/cmocka { };
 
   cogl = callPackage ../development/libraries/cogl { };
-
-  cogl_1_22 = callPackage ../development/libraries/cogl/1.22.nix { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
 

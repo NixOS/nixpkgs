@@ -46,13 +46,12 @@ let
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x webkitgtk212x gtk3 gtkmm3 libcanberra_gtk2
-    clutter clutter-gst clutter_gtk;
+    clutter clutter-gst clutter_gtk cogl;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
-  cogl = pkgs.cogl_1_22;
   gtk = gtk3;
   gtkmm = gtkmm3;
   gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
