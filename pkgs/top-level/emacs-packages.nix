@@ -311,22 +311,6 @@ let
     inherit lib;
   };
 
-  rich-minority = melpaBuild rec {
-    pname   = "rich-minority";
-    version = "0.1.1";
-    src = fetchFromGitHub {
-      owner  = "Bruce-Connor";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0kvhy4mgs9llihwsb1a9n5a85xzjiyiyawxnz0axy2bvwcxnp20k";
-    };
-    packageRequires = [ dash ];
-    meta = {
-      description = "Hiding and/or highlighting the list of minor modes in the Emacs mode-line";
-      license = gpl3Plus;
-    };
-  };
-
   rust-mode = melpaBuild rec {
     pname = "rust-mode";
     version = "20151026";
