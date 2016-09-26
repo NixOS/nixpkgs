@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, buildPythonApplication, python27Packages, pkgs }:
+{ stdenv, fetchFromGitHub, python27Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
 
 let cairocffi-xcffib = python27Packages.cairocffi.override {
     pythonPath = [ python27Packages.xcffib ];
   };
 in
 
-buildPythonApplication rec {
+python27Packages.buildPythonApplication rec {
   name = "qtile-${version}";
   version = "0.10.4";
 
@@ -24,12 +24,12 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace libqtile/manager.py --subst-var-by out $out
-    substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${pkgs.glib.out}
-    substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pkgs.pango.out}
-    substituteInPlace libqtile/xcursors.py --subst-var-by xcb-cursor ${pkgs.xorg.xcbutilcursor.out}
+    substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${glib.out}
+    substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pango.out}
+    substituteInPlace libqtile/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
   '';
 
-  buildInputs = [ pkgs.pkgconfig pkgs.glib pkgs.xorg.libxcb pkgs.cairo pkgs.pango python27Packages.xcffib ];
+  buildInputs = [ pkgconfig glib libxcb cairo pango python27Packages.xcffib ];
 
   pythonPath = with python27Packages; [ xcffib cairocffi-xcffib trollius readline];
 

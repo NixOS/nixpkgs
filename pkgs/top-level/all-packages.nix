@@ -2906,9 +2906,7 @@ in
 
   obnam = callPackage ../tools/backup/obnam { };
 
-  odpdown = callPackage ../tools/typesetting/odpdown {
-    inherit (pythonPackages) lpod lxml mistune pillow pygments;
-  };
+  odpdown = callPackage ../tools/typesetting/odpdown { };
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
@@ -4230,10 +4228,6 @@ in
 
   xflux = callPackage ../tools/misc/xflux { };
   xflux-gui = callPackage ../tools/misc/xflux/gui.nix {
-    pexpect = pythonPackages.pexpect;
-    pyGtkGlade = pythonPackages.pyGtkGlade;
-    pygobject = pythonPackages.pygobject2;
-    pyxdg = pythonPackages.pyxdg;
     gnome_python = gnome2.gnome_python;
   };
 
@@ -7038,9 +7032,7 @@ in
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  winpdb = callPackage ../development/tools/winpdb {
-      inherit (pythonPackages) wxPython;
-  };
+  winpdb = callPackage ../development/tools/winpdb { };
 
   grabserial = callPackage ../development/tools/grabserial { };
 
@@ -14141,10 +14133,7 @@ in
 
   mimms = callPackage ../applications/audio/mimms {};
 
-  mirage = callPackage ../applications/graphics/mirage {
-    inherit (pythonPackages) pygtk;
-    inherit (pythonPackages) pillow;
-  };
+  mirage = callPackage ../applications/graphics/mirage { };
 
   mixxx = callPackage ../applications/audio/mixxx {
     inherit (vamp) vampSDK;
@@ -15316,7 +15305,9 @@ in
 
   qpdfview = callPackage ../applications/misc/qpdfview {};
 
-  qtile = callPackage ../applications/window-managers/qtile { };
+  qtile = callPackage ../applications/window-managers/qtile {
+    inherit (xorg) libxcb;
+  };
 
   qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
     features = "huge"; # one of  tiny, small, normal, big or huge

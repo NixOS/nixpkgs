@@ -1,6 +1,6 @@
-{ lib, pkgs, stdenv, buildPythonApplication, pythonPackages, fetchurl, fetchFromGitHub }:
+{ lib, pkgs, stdenv, pythonPackages, fetchurl, fetchFromGitHub }:
 let
-  matrix-angular-sdk = buildPythonApplication rec {
+  matrix-angular-sdk = pythonPackages.buildPythonApplication rec {
     name = "matrix-angular-sdk-${version}";
     version = "0.6.8";
 
@@ -9,8 +9,7 @@ let
       sha256 = "0gmx4y5kqqphnq3m7xk2vpzb0w2a4palicw7wfdr1q2schl9fhz2";
     };
   };
-in
-buildPythonApplication rec {
+in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
   version = "0.17.2";
 
