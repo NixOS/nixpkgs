@@ -1,8 +1,6 @@
 { stdenv, fetchgit, fetchFromGitHub, cmake, pkgconfig, git, python3,
   python3Packages, glslang, spirv-tools, x11, libxcb, wayland }:
 
-assert stdenv.system == "x86_64-linux";
-
 let
   version = "1.0.26.0";
   src = fetchFromGitHub {
