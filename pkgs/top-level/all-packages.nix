@@ -10330,40 +10330,6 @@ in
     self = pypyPackages;
   };
 
-  pycapnp = pythonPackages.pycapnp;
-
-  pyexiv2 = pythonPackages.pyexiv2;
-
-  inherit (self.pythonPackages)
-    pygtk
-    pygobject2 pygobject3;
-
-  pygtksourceview = pythonPackages.pygtksourceview;
-
-  pyGtkGlade = pythonPackages.pyGtkGlade;
-
-  rhpl = pythonPackages.rhpl;
-
-  pysideApiextractor = pythonPackages.pysideApiextractor;
-
-  pysideGeneratorrunner = pythonPackages.pysideGeneratorrunner;
-
-  pyside = pythonPackages.pyside;
-
-  pysideTools = pythonPackages.pysideTools;
-
-  pyxml = pythonPackages.pyxml;
-
-  rbtools = pythonPackages.rbtools;
-
-  rebol =  callPackage ../development/interpreters/rebol { };
-
-  slowaes = pythonPackages.slowaes;
-
-  yolk = callPackage ../development/python-modules/yolk {};
-
-  ZopeInterface = pythonPackages.zope_interface;
-
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
