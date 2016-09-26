@@ -6,6 +6,7 @@
 , withGTK2 ? true, gtk2 ? null
 , withGTK3 ? false, gtk3 ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
+, withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 }:
 
@@ -31,7 +32,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cwgyiyymnx4xdg99dm2drfxcyhy2jmyf0rkr9fwj9mwwf77kwhr";
   };
 
-  patches = lib.optional stdenv.isDarwin ./at-fdcwd.patch;
+  patches = lib.optional stdenv.isDarwin ./at-fdcwd.patch
+    ++ lib.optional withCsrc ./install-C-src.patch;
 
   nativeBuildInputs = [ pkgconfig ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ];
