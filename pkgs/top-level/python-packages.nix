@@ -19229,6 +19229,24 @@ in modules // {
     };
   };
 
+  pyftgl = buildPythonPackage rec {
+    name = "pyftgl-0.4b";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "umlaeute";
+      repo = "pyftgl";
+      rev = "0.4b";
+      sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
+    };
+
+    buildInputs = with self; [ pkgs.boost pkgs.freetype pkgs.ftgl pkgs.mesa ];
+
+    meta = {
+      description = "Python bindings for FTGL (FreeType for OpenGL)";
+      license = licenses.gpl2Plus;
+    };
+  };
+
   pygeoip = buildPythonPackage rec {
     name = "pygeoip-0.3.2";
 
