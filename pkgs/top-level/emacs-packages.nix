@@ -284,21 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  ibuffer-vc = melpaBuild rec {
-    pname   = "ibuffer-vc";
-    version = "0.10";
-    src = fetchFromGitHub {
-      owner  = "purcell";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0bqdi5w120256g74k0j4jj81x804x1gcg4dxa74w3mb6fl5xlvs8";
-    };
-    meta = {
-      description = "Version control aware Emacs ibuffer mode";
-      license = gpl3Plus;
-    };
-  };
-
   ido-ubiquitous = melpaBuild rec {
     pname   = "ido-ubiquitous";
     version = "2.17";
