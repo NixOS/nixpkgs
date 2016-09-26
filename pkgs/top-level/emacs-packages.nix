@@ -311,32 +311,6 @@ let
     inherit lib;
   };
 
-  request = melpaBuild rec {
-    pname = "request";
-    version = "0.2.0";
-
-    src = fetchFromGitHub {
-      owner = "tkf";
-      repo = "emacs-${pname}";
-      rev = "adf7de452f9914406bfb693541f1d280093c4efd";
-      sha256 = "0dja4g43zfjbxqvz2cgivgq5sfm6fz1563qgrp4yxknl7bdggb92";
-    };
-
-    files = [ "request.el" ];
-
-    meta = {
-      description = "Easy HTTP request for Emacs Lisp";
-      longDescription = ''
-        Request.el is a HTTP request library with multiple backends. It supports
-        url.el which is shipped with Emacs and curl command line program. User
-        can use curl when s/he has it, as curl is more reliable than url.el.
-        Library author can use request.el to avoid imposing external dependencies
-        such as curl to users while giving richer experience for users who have curl.
-      '';
-      license = gpl3Plus;
-    };
-  };
-
   request-deferred = melpaBuild rec {
     pname = "request-deferred";
     version = request.version;
