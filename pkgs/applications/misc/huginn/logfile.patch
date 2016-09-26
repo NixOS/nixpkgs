@@ -1,0 +1,25 @@
+From 3dc3b5b45d7392426c3d57b598a58b0f879bff07 Mon Sep 17 00:00:00 2001
+From: Matthew O'Gorman <mog@rldn.net>
+Date: Fri, 9 Sep 2016 19:12:23 -0400
+Subject: [PATCH] this is to get this off my back
+
+---
+ config/environments/production.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config/environments/production.rb b/config/environments/production.rb
+index cae4775..273782d 100644
+--- a/config/environments/production.rb
++++ b/config/environments/production.rb
+@@ -51,7 +51,7 @@ Huginn::Application.configure do
+ 
+   # Use a different logger for distributed setups
+   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+-
++  config.logger = ActiveSupport::Logger.new(ENV["HUGINN_LOG_PATH"])
+   # Use a different cache store in production
+   # config.cache_store = :mem_cache_store
+ 
+-- 
+2.9.3
+

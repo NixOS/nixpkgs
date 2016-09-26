@@ -1,0 +1,25 @@
+From 489ee401c29793b71ba579ed5a17a44917d917ad Mon Sep 17 00:00:00 2001
+From: Matthew O'Gorman <mog@rldn.net>
+Date: Fri, 9 Sep 2016 19:45:10 -0400
+Subject: [PATCH 2/2] thanks for the fish
+
+---
+ config/environments/production.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config/environments/production.rb b/config/environments/production.rb
+index 273782d..ccce557 100644
+--- a/config/environments/production.rb
++++ b/config/environments/production.rb
+@@ -54,7 +54,7 @@ Huginn::Application.configure do
+   config.logger = ActiveSupport::Logger.new(ENV["HUGINN_LOG_PATH"])
+   # Use a different cache store in production
+   # config.cache_store = :mem_cache_store
+-
++  config.cache_store = :file_store, ENV['HUGINN_STATE_PATH'] + '/tmp'
+   # Enable serving of images, stylesheets, and JavaScripts from an asset server
+   if ENV['ASSET_HOST'].present?
+     config.action_controller.asset_host = ENV['ASSET_HOST']
+-- 
+2.9.3
+
