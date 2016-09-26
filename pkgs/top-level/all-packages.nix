@@ -7223,19 +7223,15 @@ in
 
   clucene_core = clucene_core_1;
 
-  clutter = callPackage ../development/libraries/clutter { };
-
-  clutter_1_26 = callPackage ../development/libraries/clutter/1.26.nix {
+  clutter = callPackage ../development/libraries/clutter {
     cogl = cogl_1_22;
   };
 
   clutter-gst = callPackage ../development/libraries/clutter-gst {
-    inherit (gnome3) cogl clutter;
+    inherit (gnome3) cogl;
   };
 
-  clutter_gtk = callPackage ../development/libraries/clutter-gtk {
-    inherit (gnome3) clutter;
-  };
+  clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
