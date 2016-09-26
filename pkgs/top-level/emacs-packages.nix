@@ -75,22 +75,6 @@ let
 
   ## START HERE
 
-  ac-haskell-process = melpaBuild rec {
-    pname   = "ac-haskell-process";
-    version = "0.5";
-    src = fetchFromGitHub {
-      owner  = "purcell";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0dlrhc1dmzgrjvcnlqvm6clyv0r6zray6qqliqngy14880grghbm";
-    };
-    packageRequires = [ auto-complete haskell-mode ];
-    meta = {
-      description = "Haskell code completion for auto-complete Emacs framework";
-      license = gpl3Plus;
-    };
-  };
-
   tablist = melpaBuild rec {
     pname = "tablist";
     inherit (pdf-tools) src version;
