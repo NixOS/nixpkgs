@@ -284,24 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  git-gutter = melpaBuild rec {
-    pname = "git-gutter";
-    version = "20150930";
-    src = fetchFromGitHub {
-      owner  = "syohex";
-      repo   = "emacs-git-gutter";
-      rev    = "df7fb13481bea2b1476ca8a20bc958b17d1e06ae";
-      sha256 = "1xwdyjh13lp06yy9477013nj6idpsjr4ifg7hmyk5ai80axkgly7";
-    };
-    files = [ "git-gutter.el" ];
-    meta = {
-      description = "Show diff status of lines in a buffer relative to Git, mercurial, svn or bazaar repo's HEAD";
-      license = gpl3Plus;
-    };
-  };
-
-  #TODO git-gutter-fringe
-
   git-timemachine = melpaBuild rec {
     pname = "git-timemachine";
     version = "2.3";
