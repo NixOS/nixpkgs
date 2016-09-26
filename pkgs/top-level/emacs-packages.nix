@@ -311,15 +311,6 @@ let
     inherit lib;
   };
 
-  persp-projectile = melpaBuild rec {
-    pname   = "persp-projectile";
-    version = projectile.version;
-    src     = projectile.src;
-    fileSpecs = [ "persp-projectile.el" ];
-    packageRequires = [ perspective projectile ];
-    meta = projectile.meta;
-  };
-
   prop-menu = melpaBuild rec {
     pname   = "prop-menu";
     version = "0.1.2";
