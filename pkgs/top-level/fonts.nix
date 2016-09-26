@@ -5,21 +5,21 @@ rec {
 
   andagii = callPackage ../data/fonts/andagii { };
 
-  anonymousPro = callPackage ../data/fonts/anonymous-pro { };
+  anonymous-pro = callPackage ../data/fonts/anonymous-pro { };
 
-  arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
+  arkpandora-ttf = callPackage ../data/fonts/arkpandora { };
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
 
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
 
-  bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
+  bakoma-ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   cabin = callPackage ../data/fonts/cabin { };
 
   caladea = callPackage ../data/fonts/caladea {};
 
-  cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
+  cantarell = callPackage ../data/fonts/cantarell-fonts { };
 
   carlito = callPackage ../data/fonts/carlito {};
 
@@ -35,18 +35,18 @@ rec {
 
   clearlyU = callPackage ../data/fonts/clearlyU { };
 
-  cm_unicode = callPackage ../data/fonts/cm-unicode {};
+  cm-unicode = callPackage ../data/fonts/cm-unicode {};
 
   crimson = callPackage ../data/fonts/crimson {};
 
-  dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
+  dejavu = lowPrio (callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
   });
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
   dejavu_fontsEnv = buildEnv {
-    name = "${dejavu_fonts.name}";
-    paths = [ dejavu_fonts.out ];
+    name = "${dejavu.name}";
+    paths = [ dejavu.out ];
   };
 
   dina-font = callPackage ../data/fonts/dina { };
@@ -55,7 +55,7 @@ rec {
 
   dosis = callPackage ../data/fonts/dosis { };
 
-  dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
+  dosemu = callPackage ../data/fonts/dosemu-fonts { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
 
@@ -76,7 +76,7 @@ rec {
 
   font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
 
-  freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
+  freefont-ttf = callPackage ../data/fonts/freefont-ttf { };
 
   font-droid = callPackage ../data/fonts/droid { };
 
@@ -118,14 +118,14 @@ rec {
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
 
-  liberation_ttf_from_source = callPackage ../data/fonts/redhat-liberation-fonts { };
-  liberation_ttf_binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix {
-    inherit liberation_ttf_from_source;
+  liberation-ttf-from-source = callPackage ../data/fonts/redhat-liberation-fonts { };
+  liberation-ttf-binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix {
+    inherit liberation-ttf-from-source;
   };
-  liberation_ttf = liberation_ttf_binary;
+  liberation-ttf = liberation-ttf-binary;
 
   liberationsansnarrow = callPackage ../data/fonts/liberationsansnarrow { };
-  liberationsansnarrow_binary = callPackage ../data/fonts/liberationsansnarrow/binary.nix {
+  liberationsansnarrow-binary = callPackage ../data/fonts/liberationsansnarrow/binary.nix {
     inherit liberationsansnarrow;
   };
 
@@ -159,7 +159,7 @@ rec {
 
   montserrat = callPackage ../data/fonts/montserrat { };
 
-  mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
+  mph-2b-damase = callPackage ../data/fonts/mph-2b-damase { };
 
   mplus-outline-fonts = callPackage ../data/fonts/mplus-outline-fonts { };
 
@@ -169,10 +169,9 @@ rec {
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
-  norwester-font = callPackage ../data/fonts/norwester  {};
+  norwester = callPackage ../data/fonts/norwester  {};
 
-  inherit (callPackages ../data/fonts/noto-fonts {})
-    noto-fonts noto-fonts-cjk noto-fonts-emoji;
+  inherit (callPackages ../data/fonts/noto-fonts {}) noto noto-cjk noto-emoji;
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
@@ -239,29 +238,29 @@ rec {
 
   theano = callPackage ../data/fonts/theano { };
 
-  tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
+  tempora-lgc = callPackage ../data/fonts/tempora-lgc { };
 
-  terminus_font = callPackage ../data/fonts/terminus-font { };
+  terminus = callPackage ../data/fonts/terminus-font { };
 
   tipa = callPackage ../data/fonts/tipa { };
 
-  ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
+  ttf-bitstream-vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
-  ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
+  ubuntu = callPackage ../data/fonts/ubuntu-font-family { };
 
-  ucs-fonts = callPackage ../data/fonts/ucs-fonts { };
+  ucs = callPackage ../data/fonts/ucs-fonts { };
 
   uni-vga = callPackage ../data/fonts/uni-vga { };
 
   unifont = callPackage ../data/fonts/unifont { };
 
-  unifont_upper = callPackage ../data/fonts/unifont_upper { };
+  unifont-upper = callPackage ../data/fonts/unifont_upper { };
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
-  wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
+  wqy-microhei = callPackage ../data/fonts/wqy-microhei { };
 
-  wqy_zenhei = callPackage ../data/fonts/wqy-zenhei { };
+  wqy-zenhei = callPackage ../data/fonts/wqy-zenhei { };
 
   xits-math = callPackage ../data/fonts/xits-math { };
 

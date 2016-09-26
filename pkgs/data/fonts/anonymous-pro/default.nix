@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "anonymousPro-${version}";
+  name = "anonymous-pro-${version}";
   version = "1.002";
 
   src = fetchurl {

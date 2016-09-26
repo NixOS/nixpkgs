@@ -1,6 +1,6 @@
 { stdenv, lib, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, substituteAll, xterm, makeWrapper, ruby
 , openssl, quartz-wm, fontconfig, xkeyboard_config, xlsfonts, xfontsel
-, ttf_bitstream_vera, freefont_ttf, liberation_ttf_binary
+, ttf-bitstream-vera, freefont-ttf, liberation-ttf-binary
 , shell ? "${bashInteractive}/bin/bash"
 }:
 
@@ -62,9 +62,9 @@ let
   fontDirs = [
     xorg.fontbhlucidatypewriter100dpi
     xorg.fontbhlucidatypewriter75dpi
-    ttf_bitstream_vera
-    freefont_ttf
-    liberation_ttf_binary
+    ttf-bitstream-vera
+    freefont-ttf
+    liberation-ttf-binary
     xorg.fontbh100dpi
     xorg.fontmiscmisc
     xorg.fontcursormisc

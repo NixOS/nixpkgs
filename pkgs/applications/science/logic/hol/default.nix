@@ -1,4 +1,4 @@
-{stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf,
+{stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation-ttf,
  experimentalKernel ? true}:
 
 let
@@ -27,14 +27,14 @@ stdenv.mkDerivation {
     sha256 = "0x2wxksr305h1lrbklf6p42lp09rbhb4rsh74g0l70sgapyiac9b";
   };
 
-  buildInputs = [polymlEnableShared graphviz fontconfig liberation_ttf];
+  buildInputs = [polymlEnableShared graphviz fontconfig liberation-ttf];
 
   buildCommand = ''
 
     mkdir chroot-fontconfig
     cat ${fontconfig.out}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
     sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
-    echo "<dir>${liberation_ttf}</dir>" >> chroot-fontconfig/fonts.conf
+    echo "<dir>${liberation-ttf}</dir>" >> chroot-fontconfig/fonts.conf
     echo "</fontconfig>" >> chroot-fontconfig/fonts.conf
 
     export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf

@@ -69,7 +69,7 @@ in
         target = "X11/xkb";
       };
 
-    fonts.fonts = with pkgs.fonts; [ dejavu_fonts ubuntu_font_family ];
+    fonts.fonts = with pkgs.fonts; [ dejavu ubuntu ];
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;

@@ -1,6 +1,6 @@
 { stdenv, fetchgit, cmake, zlib, boost,
   openal, glm, freetype, mesa, glew, SDL2,
-  dejavu_fonts, inkscape, optipng, imagemagick }:
+  dejavu, inkscape, optipng, imagemagick }:
 
 stdenv.mkDerivation rec {
   name = "arx-libertatis-${version}";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ln -sf \
-      ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
+      ${dejavu}/share/fonts/truetype/DejaVuSansMono.ttf \
       $out/share/games/arx/misc/dejavusansmono.ttf
   '';
   

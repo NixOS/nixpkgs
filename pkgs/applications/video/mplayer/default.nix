@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, freetype, yasm
 , aalibSupport ? true, aalib ? null
-, fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
+, fontconfigSupport ? true, fontconfig ? null, freefont-ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
 , xineramaSupport ? true, libXinerama ? null
@@ -28,7 +28,7 @@
 }:
 
 assert fontconfigSupport -> (fontconfig != null);
-assert (!fontconfigSupport) -> (freefont_ttf != null);
+assert (!fontconfigSupport) -> (freefont-ttf != null);
 assert fribidiSupport -> (fribidi != null);
 assert x11Support -> (libX11 != null && libXext != null && mesa != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
   postInstall = stdenv.lib.optionalString (!fontconfigSupport)
     ''
       mkdir -p $out/share/mplayer
-      cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
+      cp ${freefont-ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
       if test -f $out/share/applications/mplayer.desktop ; then
         echo "NoDisplay=True" >> $out/share/applications/mplayer.desktop
       fi

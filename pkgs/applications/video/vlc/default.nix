@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xz, bzip2, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
-, pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
+, pkgconfig, dbus, fribidi, freefont-ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, udev, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace modules/text_renderer/freetype.c --replace \
       /usr/share/fonts/truetype/freefont/FreeSerifBold.ttf \
-      ${freefont_ttf}/share/fonts/truetype/FreeSerifBold.ttf
+      ${freefont-ttf}/share/fonts/truetype/FreeSerifBold.ttf
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, expat, libxslt, dejavu_fonts
+{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, expat, libxslt, dejavu
 , substituteAll }:
 
 /** Font configuration scheme
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
     "--disable-docs"
     # just <1MB; this is what you get when loading config fails for some reason
-    "--with-default-fonts=${dejavu_fonts.minimal}"
+    "--with-default-fonts=${dejavu.minimal}"
   ];
 
   # We should find a better way to access the arch reliably.
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd "$out/etc/fonts"
-    "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${dejavu_fonts.minimal}" \
+    "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${dejavu.minimal}" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \

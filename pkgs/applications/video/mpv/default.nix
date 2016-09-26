@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg
-, freefont_ttf, freetype, libass, libpthreadstubs
+, freefont-ttf, freetype, libass, libpthreadstubs
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
 
 , x11Support ? true,
@@ -149,7 +149,7 @@ in stdenv.mkDerivation rec {
 
     # Use a standard font
     mkdir -p $out/share/mpv
-    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
+    ln -s ${freefont-ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
     # Ensure youtube-dl is available in $PATH for MPV
     wrapProgram $out/bin/mpv \
       --add-flags "--script=${concatStringsSep "," scripts}" \

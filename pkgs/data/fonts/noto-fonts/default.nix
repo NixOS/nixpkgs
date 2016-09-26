@@ -2,7 +2,7 @@
 
 rec {
   # 18MB
-  noto-fonts = let version = "git-2016-03-29"; in stdenv.mkDerivation {
+  noto = let version = "git-2016-03-29"; in stdenv.mkDerivation {
     name = "noto-fonts-${version}";
 
     src = fetchFromGitHub {
@@ -49,7 +49,7 @@ rec {
     };
   };
   # 89MB
-  noto-fonts-cjk = let version = "1.004"; in stdenv.mkDerivation {
+  noto-cjk = let version = "1.004"; in stdenv.mkDerivation {
     name = "noto-fonts-cjk-${version}";
 
     src = fetchurl {
@@ -93,7 +93,7 @@ rec {
     };
   };
   # 12MB
-  noto-fonts-emoji = let version = "git-2016-03-17"; in stdenv.mkDerivation {
+  noto-emoji = let version = "git-2016-03-17"; in stdenv.mkDerivation {
     name = "noto-fonts-emoji-${version}";
 
     src = fetchFromGitHub {

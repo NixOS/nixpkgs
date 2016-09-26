@@ -12,7 +12,7 @@ with lib;
       fonts = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ pkgs.fonts.dejavu_fonts ]";
+        example = literalExample "[ pkgs.fonts.dejavu ]";
         description = "List of primary font paths.";
       };
 
@@ -35,9 +35,9 @@ with lib;
       [
         pkgs.xorg.fontbhlucidatypewriter100dpi
         pkgs.xorg.fontbhlucidatypewriter75dpi
-        pkgs.fonts.dejavu_fonts
-        pkgs.fonts.freefont_ttf
-        pkgs.fonts.liberation_ttf
+        pkgs.fonts.dejavu
+        pkgs.fonts.freefont-ttf
+        pkgs.fonts.liberation-ttf
         pkgs.xorg.fontbh100dpi
         pkgs.xorg.fontmiscmisc
         pkgs.xorg.fontcursormisc

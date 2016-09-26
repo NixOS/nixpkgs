@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, cmake
-, glew, ftgl, ttf_bitstream_vera
+, glew, ftgl, ttf-bitstream-vera
 , withQt ? true, qt4
 , withLibvisual ? false, libvisual, SDL
 , withJack ? false, libjack2
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig cmake ];
 
   cmakeFlags = ''
-    -DprojectM_FONT_MENU=${ttf_bitstream_vera}/share/fonts/truetype/VeraMono.ttf
-    -DprojectM_FONT_TITLE=${ttf_bitstream_vera}/share/fonts/truetype/Vera.ttf
+    -DprojectM_FONT_MENU=${ttf-bitstream-vera}/share/fonts/truetype/VeraMono.ttf
+    -DprojectM_FONT_TITLE=${ttf-bitstream-vera}/share/fonts/truetype/Vera.ttf
     -DINCLUDE-PROJECTM-TEST=OFF
     -DINCLUDE-PROJECTM-QT=${if withQt then "ON" else "OFF"}
     -DINCLUDE-PROJECTM-LIBVISUAL=${if withLibvisual then "ON" else "OFF"}

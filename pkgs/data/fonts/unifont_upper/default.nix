@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "unifont_upper-${version}";
+  name = "unifont-upper-${version}";
   version = "9.0.01";
 
   ttf = fetchurl {

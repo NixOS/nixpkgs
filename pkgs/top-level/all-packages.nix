@@ -3233,7 +3233,7 @@ in
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
 
   projectm = callPackage ../applications/audio/projectm {
-    inherit (fonts) ttf_bitstream_vera;
+    inherit (fonts) ttf-bitstream-vera;
   };
 
   proot = callPackage ../tools/system/proot { };
@@ -4852,7 +4852,7 @@ in
       callPackage ../development/compilers/openjdk-darwin/8.nix { }
     else
       callPackage ../development/compilers/openjdk/8.nix {
-        inherit (fonts) liberation_ttf;
+        inherit (fonts) liberation-ttf;
         bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
       };
 
@@ -6165,7 +6165,7 @@ in
   pyrex096 = callPackage ../development/interpreters/pyrex/0.9.6.nix { };
 
   racket = callPackage ../development/interpreters/racket {
-    inherit (fonts) freefont_ttf;
+    inherit (fonts) freefont-ttf;
   };
 
   rakudo = callPackage ../development/interpreters/rakudo {
@@ -6773,9 +6773,7 @@ in
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
     fontsConf = makeFontsConf {
-      fontDirectories = [
-        dejavu_fonts.minimal
-      ];
+      fontDirectories = [ fonts.dejavu.minimal ];
     };
   };
 
@@ -7499,7 +7497,7 @@ in
   fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
 
   fontconfig = callPackage ../development/libraries/fontconfig {
-    inherit (fonts) dejavu_fonts;
+    inherit (fonts) dejavu;
   };
 
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
@@ -7509,7 +7507,7 @@ in
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {
       inherit fontconfig fontDirectories;
-      inherit (fonts) dejavu_fonts;
+      inherit (fonts) dejavu;
     };
 
   makeFontsCache = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
@@ -9497,7 +9495,7 @@ in
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
     vlc = lowPrio (callPackage ../applications/video/vlc {
-      inherit (fonts) freefont_ttf;
+      inherit (fonts) freefont-ttf;
       qt4 = null;
       withQt5 = true;
       ffmpeg = ffmpeg_2;
@@ -10989,7 +10987,7 @@ in
   xqilla = callPackage ../development/tools/xqilla { };
 
   xquartz = callPackage ../servers/x11/xquartz {
-    inherit (fonts) ttf_bitstream_vera freefont_ttf liberation_ttf_binary;
+    inherit (fonts) ttf-bitstream-vera freefont-ttf liberation-ttf-binary;
   };
   quartz-wm = callPackage ../servers/x11/quartz-wm {
     stdenv = clangStdenv;
@@ -13386,7 +13384,7 @@ in
   gmu = callPackage ../applications/audio/gmu { };
 
   gnash = callPackage ../applications/video/gnash {
-    inherit (fonts) freefont_ttf;
+    inherit (fonts) freefont-ttf;
     inherit (gnome2) gtkglext;
     xulrunner = firefox-unwrapped;
   };
@@ -13449,7 +13447,7 @@ in
   gollum = callPackage ../applications/misc/gollum { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome {
-    inherit (fonts) liberation_ttf;
+    inherit (fonts) liberation-ttf;
     gconf = gnome2.GConf;
   };
 
@@ -13820,7 +13818,7 @@ in
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
-        fonts.freefont_ttf xorg.fontmiscmisc
+        fonts.freefont-ttf xorg.fontmiscmisc
       ];
     };
     clucene_core = clucene_core_2;
@@ -13839,7 +13837,7 @@ in
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
-        fonts.freefont_ttf xorg.fontmiscmisc
+        fonts.freefont-ttf xorg.fontmiscmisc
       ];
     };
     mdds = mdds_0_12_1;
@@ -14073,7 +14071,7 @@ in
   normalize = callPackage ../applications/audio/normalize { };
 
   mplayer = callPackage ../applications/video/mplayer ({
-    inherit (fonts) freefont_ttf;
+    inherit (fonts) freefont-ttf;
     pulseSupport = config.pulseaudio or false;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
@@ -14085,7 +14083,7 @@ in
     };
 
   mpv = callPackage ../applications/video/mpv rec {
-    inherit (fonts) freefont_ttf;
+    inherit (fonts) freefont-ttf;
     lua = lua5_1;
     lua5_sockets = lua5_1_sockets;
     youtube-dl = pythonPackages.youtube-dl;
@@ -14186,7 +14184,7 @@ in
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio {
-    fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
+    fontsConf = makeFontsConf { fontDirectories = [ freefont-ttf ]; };
     inherit (gnome3) defaultIconTheme;
   };
 
@@ -14705,7 +14703,7 @@ in
   seq24 = callPackage ../applications/audio/seq24 { };
 
   setbfree = callPackage ../applications/audio/setbfree {
-    inherit (fonts) ttf_bitstream_vera;
+    inherit (fonts) ttf-bitstream-vera;
   };
 
   sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
@@ -15246,7 +15244,7 @@ in
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
   vlc = callPackage ../applications/video/vlc {
-    inherit (fonts) freefont_ttf;
+    inherit (fonts) freefont-ttf;
     ffmpeg = ffmpeg_2;
     libva = libva-full; # also wants libva-x11
   };
@@ -15414,7 +15412,7 @@ in
   x2vnc = callPackage ../tools/X11/x2vnc { };
 
   x42-plugins = callPackage ../applications/audio/x42-plugins {
-    inherit (fonts) freefont_ttf;
+    inherit (fonts) freefont-ttf;
   };
 
   xaos = callPackage ../applications/graphics/xaos {
@@ -15685,7 +15683,7 @@ in
   armagetronad = callPackage ../games/armagetronad { };
 
   arx-libertatis = callPackage ../games/arx-libertatis {
-    inherit (fonts) dejavu_fonts;
+    inherit (fonts) dejavu;
   };
 
   asc = callPackage ../games/asc {
@@ -15764,7 +15762,7 @@ in
   };
 
   crawl = callPackage ../games/crawl {
-    inherit (fonts) dejavu_fonts;
+    inherit (fonts) dejavu;
   };
 
   crrcsim = callPackage ../games/crrcsim {};
@@ -16848,7 +16846,7 @@ in
   glucose-syrup = callPackage ../applications/science/logic/glucose/syrup.nix { };
 
   hol = callPackage ../applications/science/logic/hol {
-    inherit (fonts) liberation_ttf;
+    inherit (fonts) liberation-ttf;
   };
 
   hol_light = callPackage ../applications/science/logic/hol_light {
