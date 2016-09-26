@@ -151,21 +151,6 @@ let
     };
   };
 
-  company = melpaBuild rec {
-    pname   = "company";
-    version = "0.8.12";
-    src = fetchFromGitHub {
-      owner  = "company-mode";
-      repo   = "company-mode";
-      rev    = version;
-      sha256 = "08rrjfp2amgya1hswjz3vd5ja6lg2nfmm7454p0h1naz00hlmmw0";
-    };
-    meta = {
-      description = "Modular text completion framework for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   company-ghc = melpaBuild rec {
     pname   = "company-ghc";
     version = "0.1.10";
