@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, bash, buildPythonApplication }:
+{ stdenv, fetchurl, bash, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   version = "1.3";
   name = "apt-offline-${version}";
 
@@ -11,8 +11,6 @@ buildPythonApplication rec {
     url = "http://www.falsifian.org/a/cFi5/${name}.tar.gz";
     sha256 = "1sp7ai2abzhbg9y84700qziybphvpzl2nk3mz1d1asivzyjvxlxy";
   };
-
-  buildInputs = [ ];
 
   doCheck = false;
 
