@@ -1,16 +1,16 @@
-{stdenv, fetchurl, lua, curl, makeWrapper, which}:
+{stdenv, fetchurl, lua, curl, makeWrapper, which, unzip}:
 let
   s = # Generated upstream information
   rec {
     baseName="luarocks";
-    version="2.3.0";
+    version="2.4.0";
     name="${baseName}-${version}";
-    hash="15zdchj3wkjdbypj68kwqswxhkhrfnw72nlks6df4lk0nvp8zqv8";
-    url="http://luarocks.org/releases/luarocks-2.3.0-rc2.tar.gz";
-    sha256="15zdchj3wkjdbypj68kwqswxhkhrfnw72nlks6df4lk0nvp8zqv8";
+    hash="1hwpjj4nvy8m7hfmhf52vbhmlh7r3wfjjcc589yj8dnh528iqf24";
+    url="http://luarocks.org/releases/luarocks-2.4.0.tar.gz";
+    sha256="1hwpjj4nvy8m7hfmhf52vbhmlh7r3wfjjcc589yj8dnh528iqf24";
   };
   buildInputs = [
-    lua curl makeWrapper which
+    lua curl makeWrapper which unzip
   ];
 in
 stdenv.mkDerivation {
