@@ -149,8 +149,7 @@ let version = "5.4.0";
         withFloat +
         withMode +
         (if crossMingw && crossStageStatic then
-          " --with-sysroot=${libcCross}" +
-          " --with-native-system-header-dir=/include" +
+          " --with-headers=${libcCross}/include" +
           " --with-gcc" +
           " --with-gnu-as" +
           " --with-gnu-ld" +
