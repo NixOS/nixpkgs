@@ -151,22 +151,6 @@ let
     };
   };
 
-  bind-key = melpaBuild {
-    pname   = "bind-key";
-    version = "20150321";
-    src = fetchFromGitHub {
-      owner  = "jwiegley";
-      repo   = "use-package";
-      rev    = "77a77c8b03044f0279e00cadd6a6d1a7ae97b01";
-      sha256 = "14v6wzqn2jhjdbr7nwqilxy9l79m1f2rdrz2c6c6pcla5yjpd1k0";
-    };
-    files = [ "bind-key.el" ];
-    meta = {
-      description = "A simple way to manage personal keybindings";
-      license = gpl3Plus;
-    };
-  };
-
   browse-kill-ring = melpaBuild rec {
     pname   = "browse-kill-ring";
     version = "20140104";
