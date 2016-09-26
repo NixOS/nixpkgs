@@ -339,23 +339,6 @@ let
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
-  use-package = melpaBuild rec {
-    pname   = "use-package";
-    version = "20151112";
-    src = fetchFromGitHub {
-      owner  = "jwiegley";
-      repo   = pname;
-      rev    = "77a77c8b03044f0279e00cadd6a6d1a7ae97b01";
-      sha256 = "14v6wzqn2jhjdbr7nwqilxy9l79m1f2rdrz2c6c6pcla5yjpd1k0";
-    };
-    packageRequires = [ bind-key diminish ];
-    files = [ "use-package.el" ];
-    meta = {
-      description = "Isolate package configuration in your .emacs file";
-      license = gpl3Plus;
-    };
-  };
-
   volatile-highlights = melpaBuild rec {
     pname   = "volatile-highlights";
     version = "1.11";
