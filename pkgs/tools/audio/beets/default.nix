@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales
-, buildPythonApplication, pythonPackages, python, imagemagick
+, pythonPackages, imagemagick
 
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
@@ -72,10 +72,9 @@ let
   testShell = "${bashInteractive}/bin/bash --norc";
   completion = "${bashCompletion}/share/bash-completion/bash_completion";
 
-in buildPythonApplication rec {
+in pythonPackages.buildPythonApplication rec {
   name = "beets-${version}";
   version = "1.3.19";
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "sampsyo";
@@ -93,8 +92,8 @@ in buildPythonApplication rec {
     pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
-    python.modules.sqlite3
-    python.modules.readline
+    pythonPackages.python.modules.sqlite3
+    pythonPackages.python.modules.readline
   ] ++ optional enableAcoustid     pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate

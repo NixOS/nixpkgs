@@ -7407,6 +7407,9 @@ in modules // {
     };
   };
 
+  libsexy = callPackage ../development/python-modules/libsexy {
+    libsexy = pkgs.libsexy;
+  };
 
   libthumbor = buildPythonPackage rec {
     name = "libthumbor-${version}";

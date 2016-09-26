@@ -2915,9 +2915,7 @@ in
 
   obnam = callPackage ../tools/backup/obnam { };
 
-  odpdown = callPackage ../tools/typesetting/odpdown {
-    inherit (pythonPackages) lpod lxml mistune pillow pygments;
-  };
+  odpdown = callPackage ../tools/typesetting/odpdown { };
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
@@ -3283,7 +3281,7 @@ in
 
   pythonIRClib = pythonPackages.pythonIRClib;
 
-  pythonSexy = callPackage ../development/python-modules/libsexy { };
+  pythonSexy = pythonPackages.libsexy;
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
@@ -4245,10 +4243,6 @@ in
 
   xflux = callPackage ../tools/misc/xflux { };
   xflux-gui = callPackage ../tools/misc/xflux/gui.nix {
-    pexpect = pythonPackages.pexpect;
-    pyGtkGlade = pythonPackages.pyGtkGlade;
-    pygobject = pythonPackages.pygobject2;
-    pyxdg = pythonPackages.pyxdg;
     gnome_python = gnome2.gnome_python;
   };
 
@@ -4300,11 +4294,7 @@ in
 
   zbackup = callPackage ../tools/backup/zbackup {};
 
-  zbar = callPackage ../tools/graphics/zbar {
-    pygtk = lib.overrideDerivation pygtk (x: {
-      gtk = gtk2;
-    });
-  };
+  zbar = callPackage ../tools/graphics/zbar { };
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
@@ -7061,9 +7051,7 @@ in
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  winpdb = callPackage ../development/tools/winpdb {
-      inherit (pythonPackages) wxPython;
-  };
+  winpdb = callPackage ../development/tools/winpdb { };
 
   grabserial = callPackage ../development/tools/grabserial { };
 
@@ -10317,10 +10305,6 @@ in
 
   ### DEVELOPMENT / PYTHON MODULES
 
-  # python function with default python interpreter
-  buildPythonPackage = pythonPackages.buildPythonPackage;
-  buildPythonApplication = pythonPackages.buildPythonApplication;
-
   # `nix-env -i python-nose` installs for 2.7, the default python.
   # Therefore we do not recurse into attributes here, in contrast to
   # python27Packages. `nix-env -iA python26Packages.nose` works
@@ -10359,40 +10343,6 @@ in
     python = pypy;
     self = pypyPackages;
   };
-
-  pycapnp = pythonPackages.pycapnp;
-
-  pyexiv2 = pythonPackages.pyexiv2;
-
-  inherit (self.pythonPackages)
-    pygtk
-    pygobject2 pygobject3;
-
-  pygtksourceview = pythonPackages.pygtksourceview;
-
-  pyGtkGlade = pythonPackages.pyGtkGlade;
-
-  rhpl = pythonPackages.rhpl;
-
-  pysideApiextractor = pythonPackages.pysideApiextractor;
-
-  pysideGeneratorrunner = pythonPackages.pysideGeneratorrunner;
-
-  pyside = pythonPackages.pyside;
-
-  pysideTools = pythonPackages.pysideTools;
-
-  pyxml = pythonPackages.pyxml;
-
-  rbtools = pythonPackages.rbtools;
-
-  rebol =  callPackage ../development/interpreters/rebol { };
-
-  slowaes = pythonPackages.slowaes;
-
-  yolk = callPackage ../development/python-modules/yolk {};
-
-  ZopeInterface = pythonPackages.zope_interface;
 
   ### DEVELOPMENT / R MODULES
 
@@ -14222,10 +14172,7 @@ in
 
   mimms = callPackage ../applications/audio/mimms {};
 
-  mirage = callPackage ../applications/graphics/mirage {
-    inherit (pythonPackages) pygtk;
-    inherit (pythonPackages) pillow;
-  };
+  mirage = callPackage ../applications/graphics/mirage { };
 
   mixxx = callPackage ../applications/audio/mixxx {
     inherit (vamp) vampSDK;
@@ -15236,7 +15183,6 @@ in
 
   terminator = callPackage ../applications/misc/terminator {
     vte = gnome2.vte.override { pythonSupport = true; };
-    inherit (pythonPackages) notify;
   };
 
   termite = callPackage ../applications/misc/termite {
@@ -15400,7 +15346,9 @@ in
 
   qpdfview = callPackage ../applications/misc/qpdfview {};
 
-  qtile = callPackage ../applications/window-managers/qtile { };
+  qtile = callPackage ../applications/window-managers/qtile {
+    inherit (xorg) libxcb;
+  };
 
   qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
     features = "huge"; # one of  tiny, small, normal, big or huge
@@ -15892,9 +15840,7 @@ in
    SDL = SDL_sixel;
   };
 
-  zim = callPackage ../applications/office/zim {
-    pygtk = pyGtkGlade;
-  };
+  zim = callPackage ../applications/office/zim { };
 
   zotero = callPackage ../applications/office/zotero {
     firefox = firefox-esr-unwrapped;

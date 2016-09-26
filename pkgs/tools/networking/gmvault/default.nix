@@ -1,6 +1,6 @@
-{ pkgs, fetchurl, buildPythonApplication, pythonPackages }:
+{ pkgs, fetchurl, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   version = "1.8.1-beta";
   name = "gmvault-${version}";
 

@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, buildPythonApplication, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "iotop-0.6";
-  namePrefix = "";
 
   src = fetchurl {
     url = "http://guichaz.free.fr/iotop/files/${name}.tar.bz2";
     sha256 = "0nzprs6zqax0cwq8h7hnszdl3d2m4c2d4vjfxfxbnjfs9sia5pis";
   };
 
-  pythonPath = [ pythonPackages.curses ];
+  propagatedBuildInputs = [ pythonPackages.curses ];
 
   doCheck = false;
 
