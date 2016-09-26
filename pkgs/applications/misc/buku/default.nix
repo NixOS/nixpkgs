@@ -1,19 +1,21 @@
 { stdenv, pythonPackages, fetchFromGitHub,
-  encryptionSupport ? false
 }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.9";
+  version = "2.4";
   name = "buku-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
-    rev = "e99844876d0d871df80770b1bd76c161276116eb";
-    sha256 = "1qwkff61gdjd6w337a5ipfiybzqdwkxdyfa1l4zzm9dj7lsklgq2";
+    rev = "v${version}";
+    sha256 = "0rmvlpp1pzzgn1hf87ksigj9kp60gfwkvxymb4wiz7dqa57b1q0n";
   };
 
-  buildInputs = stdenv.lib.optional encryptionSupport pythonPackages.pycrypto;
+  buildInputs = [
+    pythonPackages.cryptography
+    pythonPackages.beautifulsoup4
+  ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
