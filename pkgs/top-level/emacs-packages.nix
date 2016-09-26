@@ -229,22 +229,6 @@ let
     };
   };
 
-  evil-leader = melpaBuild rec {
-    pname   = "evil-leader";
-    version = "0.4.3";
-    src = fetchFromGitHub {
-      owner  = "cofi";
-      repo   = pname;
-      rev    = version;
-      sha256 = "1k2zinchs0jjllp8zkpggckyy63dkyi5yig3p46vh4w45jdzysk5";
-    };
-    packageRequires = [ evil ];
-    meta = {
-      description = "<leader> key for evil";
-      license = gpl3Plus;
-    };
-  };
-
   evil-mc = melpaBuild rec {
     pname   = "evil-mc";
     version = "20150117";
