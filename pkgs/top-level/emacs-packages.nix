@@ -339,22 +339,6 @@ let
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
-  web-mode = melpaBuild rec {
-    pname   = "web-mode";
-    version = "11.1.12";
-    src = fetchFromGitHub {
-      owner  = "fxbois";
-      repo   = pname;
-      rev    = "67259f16bfaec5c006a53533b8feeba7771e1365";
-      sha256 = "16zcnwm7wnbl1xbsx7rr5rr697ax141akfx2lknwirx18vqmkijj";
-    };
-
-    meta = {
-      description = "Web template editing mode for Emacs";
-      license = gpl2;
-    };
-  };
-
   weechat = melpaBuild rec {
     pname   = "weechat.el";
     version = "0.2.2";
