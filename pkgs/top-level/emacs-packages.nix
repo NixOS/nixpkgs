@@ -339,22 +339,6 @@ let
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
-  tuareg = melpaBuild rec {
-    pname = "tuareg";
-    version = "2.0.9";
-    src = fetchFromGitHub {
-      owner  = "ocaml";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0jpcjy2a77mywba2vm61knj26pgylsmv5a21cdp80q40bac4i6bb";
-    };
-    packageRequires = [ caml ];
-    meta = {
-      description = "Extension of OCaml mode for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   use-package = melpaBuild rec {
     pname   = "use-package";
     version = "20151112";
