@@ -151,22 +151,6 @@ let
     };
   };
 
-  alert = melpaBuild rec {
-    pname = "alert";
-    version = "1.2";
-    src = fetchFromGitHub {
-      owner = "jwiegley";
-      repo  = pname;
-      rev   = "v${version}";
-      sha256 = "1vpc3q40m6dcrslki4bg725j4kv6c6xfxwjjl1ilg7la49fwwf26";
-    };
-    packageRequires = [ gntp log4e ];
-    meta = {
-      description = "A Growl-like alerts notifier for Emacs";
-      license = gpl2Plus;
-    };
-  };
-
   anzu = melpaBuild rec {
     pname = "anzu";
     version = "0.52";
