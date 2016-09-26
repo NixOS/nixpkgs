@@ -311,21 +311,6 @@ let
     inherit lib;
   };
 
-  prop-menu = melpaBuild rec {
-    pname   = "prop-menu";
-    version = "0.1.2";
-    src = fetchFromGitHub {
-      owner  = "david-christiansen";
-      repo   = "${pname}-el";
-      rev    = version;
-      sha256 = "18ap2liz5r5a8ja2zz9182fnfm47jnsbyblpq859zks356k37iwc";
-    };
-    meta = {
-      description = "Library for computing context menus based on text properties and overlays in Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   pyvenv = melpaBuild rec {
     pname = "pyvenv";
     version = "1.7";
