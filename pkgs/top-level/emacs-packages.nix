@@ -151,26 +151,6 @@ let
     };
   };
 
-  anzu = melpaBuild rec {
-    pname = "anzu";
-    version = "0.52";
-    src = fetchFromGitHub {
-      owner = "syohex";
-      repo  = "emacs-anzu";
-      rev = "f41db6225d8fb983324765aa42c94d3ee379a49f";
-      sha256 = "1mn20swasrl8kr557r1850vr1q0gcnwlxxafnc6lq5g01kjfcdxd";
-    };
-    meta = {
-      description = "Show number of matches in Emacs mode-line while searching";
-      longDescription = ''
-        anzu.el is an Emacs port of anzu.vim. anzu.el provides a minor
-        mode which displays current match and total matches information
-        in the mode-line in various search mode.
-      '';
-      license = gpl3Plus;
-    };
-  };
-
   apel = melpaBuild rec {
     pname = "apel";
     version = "10.8";
