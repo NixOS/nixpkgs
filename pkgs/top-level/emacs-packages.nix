@@ -213,22 +213,6 @@ let
     };
   };
 
-  evil-god-state = melpaBuild rec {
-    pname   = "evil-god-state";
-    version = "20140830";
-    src = fetchFromGitHub {
-      owner  = "gridaphobe";
-      repo   = pname;
-      rev    = "234a9b6f500ece89c3dfb5c1df5baef6963e4566";
-      sha256 = "16v6dpw1hibrkf9hga88gv5axvp1pajd67brnh5h4wpdy9qvwgyy";
-    };
-    packageRequires = [ evil god-mode ];
-    meta = {
-      description = "An evil-mode state for using Emacs god-mode";
-      license = gpl3Plus;
-    };
-  };
-
   evil-indent-textobject = melpaBuild rec {
     pname   = "evil-indent-textobject";
     version = "0.2";
