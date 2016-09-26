@@ -311,22 +311,6 @@ let
     inherit lib;
   };
 
-  projectile = melpaBuild rec {
-    pname   = "projectile";
-    version = "0.13.0";
-    src = fetchFromGitHub {
-      owner  = "bbatsov";
-      repo   = pname;
-      rev    = "v${version}";
-      sha256 = "1rl6n6v9f4m7m969frx8b51a4lzfix2bxx6rfcfbh6kzhc00qnxf";
-    };
-    fileSpecs = [ "projectile.el" ];
-    packageRequires = [ dash helm pkg-info ];
-    meta = {
-      description = "A project interaction library for Emacs";
-      license = gpl3Plus;
-    };
-  };
   helm-projectile = melpaBuild rec {
     pname   = "helm-projectile";
     version = projectile.version;
