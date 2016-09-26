@@ -151,23 +151,6 @@ let
     };
   };
 
-  caml = melpaBuild rec {
-    pname   = "caml";
-    version = "4.2.1"; # TODO: emacs doesn't seem to like 02 as a version component..
-    src = fetchFromGitHub {
-      owner  = "ocaml";
-      repo   = "ocaml";
-      rev    = "4.02.1";
-      sha256 = "05lms9qhcnwgi7k034kiiic58c9da22r32mpak0ahmvp5fylvjpb";
-    };
-    fileSpecs = [ "emacs/*.el" ];
-    configurePhase = "true";
-    meta = {
-      description = "OCaml code editing commands for Emacs";
-      license = gpl2Plus;
-    };
-  };
-
   change-inner = melpaBuild rec {
     pname   = "change-inner";
     version = "20130208";
