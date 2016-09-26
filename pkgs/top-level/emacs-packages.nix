@@ -339,21 +339,6 @@ let
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
-  volatile-highlights = melpaBuild rec {
-    pname   = "volatile-highlights";
-    version = "1.11";
-    src = fetchFromGitHub {
-      owner  = "k-talo";
-      repo   = "${pname}.el";
-      rev    = "fb2abc2d4d4051a9a6b7c8de2fe7564161f01f24";
-      sha256 = "1v0chqj5jir4685jd8ahw86g9zdmi6xd05wmzhyw20rbk924fcqf";
-    };
-    meta = {
-      description = "Brings visual feedback to some operations in Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   wanderlust = melpaBuild rec {
     pname = "wanderlust";
     version = "2.15.9"; # 20150301
