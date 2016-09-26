@@ -307,21 +307,6 @@ let
     };
   };
 
-  multiple-cursors = melpaBuild rec {
-    pname = "multiple-cursors";
-    version = "20150627";
-    src = fetchFromGitHub {
-      owner  = "magnars";
-      repo   = "multiple-cursors.el";
-      rev    = "9b53e892e6167f930763a3c5aedf8773110a8ae9";
-      sha256 = "0wcrdb137a9aq6dynlqbvypb6m2dj48m899xwy7ilnf2arrmipid";
-    };
-    meta = {
-      description = "Edit text in many places simultaneously in Emacs";
-      license = gpl3Plus; # TODO
-    };
-  };
-
   nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {
     inherit lib;
   };
