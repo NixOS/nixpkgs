@@ -295,21 +295,6 @@ let
     };
   };
 
-  log4e = melpaBuild rec {
-    pname = "log4e";
-    version = "0.3.0";
-    src = fetchFromGitHub {
-      owner = "aki2o";
-      repo  = pname;
-      rev   = "v${version}";
-      sha256 = "1l28n7a0v2zkknc70i1wn6qb5i21dkhfizzk8wcj28v44cgzk022";
-    };
-    meta = {
-      description = "Logging for elisp";
-      license = gpl2Plus;
-    };
-  };
-
   lui = melpaBuild rec {
     pname   = "lui";
     version = circe.version;
