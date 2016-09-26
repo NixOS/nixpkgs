@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, intltool, python, pygobject3
+{ stdenv, fetchurl, pkgconfig, intltool, pythonPackages
 , glib, gnome3, pango, libxml2, libxslt, sqlite, libsoup, glib_networking
 , webkitgtk, json_glib, gobjectIntrospection, gst_all_1
 , libnotify
 , makeWrapper
 }:
 
-let pname = "liferea";
-    version = "1.10.19";
-in
-stdenv.mkDerivation rec {
+let
+  pname = "liferea";
+  version = "1.10.19";
+  inherit (pythonPackages) python pygobject3;
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
