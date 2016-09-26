@@ -358,21 +358,6 @@ let
     };
   };
 
-  zenburn-theme = melpaBuild rec {
-    pname   = "zenburn-theme";
-    version = "2.2";
-    src = fetchFromGitHub {
-      owner  = "bbatsov";
-      repo   = "zenburn-emacs";
-      rev    = "v${version}";
-      sha256 = "1zspqpwgyv3969irg8p7zj3g4hww4bmnlvx33bvjyvvv5c4mg5wv";
-    };
-    meta = {
-      description = "An Emacs port of Vim's low contrast Zerburn theme";
-      license = gpl3Plus;
-    };
-  };
-
   };
 
 in
