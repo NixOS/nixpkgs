@@ -151,21 +151,6 @@ let
     };
   };
 
-  avy = melpaBuild rec {
-    pname   = "avy";
-    version = "0.3.0";
-    src = fetchFromGitHub {
-      owner  = "abo-abo";
-      repo   = pname;
-      rev    = version;
-      sha256 = "15xfgmsy4sqs3cmk7dwmj21g3r9dqb3fra7n7ly306bwgzh4vm8k";
-    };
-    meta = {
-      description = "Advanced cursor movement for Emacs that uses decision-trees for navigation";
-      license = gpl3Plus;
-    };
-  };
-
   bind-key = melpaBuild {
     pname   = "bind-key";
     version = "20150321";
