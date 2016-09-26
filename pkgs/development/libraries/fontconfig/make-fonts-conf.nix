@@ -1,10 +1,10 @@
-{ runCommand, libxslt, fontconfig, dejavu_fonts, fontDirectories }:
+{ runCommand, libxslt, fontconfig, dejavu, fontDirectories }:
 
 runCommand "fonts.conf"
   {
     buildInputs = [ libxslt fontconfig ];
     # Add a default font for non-nixos systems, <1MB and in nixos defaults.
-    fontDirectories = fontDirectories ++ [ dejavu_fonts.minimal ];
+    fontDirectories = fontDirectories ++ [ dejavu.minimal ];
   }
   ''
     xsltproc --stringparam fontDirectories "$fontDirectories" \

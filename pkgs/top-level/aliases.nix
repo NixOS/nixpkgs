@@ -103,7 +103,7 @@ doNotDisplayTwice rec {
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
-  ucsFonts = ucs-fonts; # added 2016-07-15
+  ucsFonts = fonts.ucs; # added 2016-07-15
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
@@ -114,4 +114,51 @@ doNotDisplayTwice rec {
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
   m3d-linux = m33-linux; # added 2016-08-13
+
+  # added 2016-09-26
+  anonymousPro = fonts.anonymous-pro;
+  arkpandora_ttf = fonts.arkpandora-ttf;
+  bakoma_ttf = fonts.bakoma-ttf;
+  cantarell_fonts = fonts.cantarell;
+  cm_unicode = fonts.cm-unicode;
+  dejavu_fonts = fonts.dejavu;
+  dosemu = fonts.dosemu_fonts;
+  freefont_ttf = fonts.freefont-ttf;
+  liberation_ttf_from_source = fonts.liberation-ttf-from-source;
+  liberation_ttf_binary = fonts.liberation-ttf-binary;
+  liberation_ttf = fonts.liberation-ttf;
+  liberationsansnarrow_binary = fonts.liberationsansnarrow-binary;
+  mph_2b_damase = fonts.mph-2b-damase;
+  norwester-font = fonts.norwester;
+  noto-fonts = fonts.noto;
+  noto-fonts-cjk = fonts.noto-cjk;
+  noto-fonts-emoji = fonts.noto-emoji;
+  tempora_lgc = fonts.tempora-lgc;
+  terminus_font = fonts.terminus;
+  ttf_bitstream_vera = fonts.ttf-bitstream-vera;
+  ubuntu_font_family = fonts.ubuntu;
+  ucs-fonts = fonts.ucs;
+  unifont_upper = fonts.unifont-upper;
+  wqy_microhei = fonts.wqy-microhei;
+  wqy_zenhei = fonts.wqy-zenhei;
+  inherit (fonts) andagii aurulent-sans baekmuk-ttf cabin caladea carlito
+    comfortaa comic-neue comic-relief corefonts culmus clearlyU crimson
+    dejavu_fontsEnv dina-font dina-font-pcf dosis eb-garamond emojione
+    encode-sans fantasque-sans-mono fira fira-code fira-mono font-awesome-ttf
+    font-droid gentium gentium-book-basic gohufont google-fonts gyre-fonts
+    hack-font hasklig helvetica-neue-lt-std hanazono inconsolata
+    inconsolata-lgc iosevka ipafont ipaexfont junicode kawkab-mono-font
+    kochi-substitute kochi-substitute-naga10 lato league-of-moveable-type
+    liberationsansnarrow libertine libre-baskerville libre-bodoni libre-caslon
+    libre-franklin lmmath lmodern lobster-two lohit-fonts marathi-cursive
+    meslo-lg mononoki montserrat mplus-outline-fonts mro-unicode nafees
+    nerdfonts oldstandard oldsindhi open-dyslexic opensans-ttf orbitron
+    oxygenfonts pecita paratype-pt-mono paratype-pt-sans paratype-pt-serif
+    poly powerline-fonts profont proggyfonts sampradaya signwriting
+    soundfont-fluid stix-otf symbola aegyptus akkadian anatolian maya unidings
+    musica analecta quattrocento quattrocento-sans roboto roboto-mono
+    roboto-slab source-code-pro source-sans-pro source-serif-pro
+    sourceHanSansPackages source-han-sans-japanese source-han-sans-korean
+    source-han-sans-simplified-chinese source-han-sans-traditional-chinese
+    tai-ahom tewi-font theano tipa uni-vga unifont vistafonts xits-math;
 }

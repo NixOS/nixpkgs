@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cpio, pkgconfig, file, which, unzip, zip, xorg, cups, freetype
-, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
+, alsaLib, bootjdk, cacert, perl, liberation-ttf, fontconfig, zlib
 , setJavaClassPath
 , minimal ? false
 , enableInfinality ? true # font rendering patch
@@ -68,7 +68,7 @@ let
       cpio file which unzip zip
       xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
       xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-      cups freetype alsaLib perl liberation_ttf fontconfig bootjdk zlib
+      cups freetype alsaLib perl liberation-ttf fontconfig bootjdk zlib
     ];
 
     prePatch = ''
@@ -140,7 +140,7 @@ let
       mv $out/lib/openjdk/jre $jre/lib/openjdk/
       mkdir $out/lib/openjdk/jre
       mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
-      lndir ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
+      lndir ${liberation-ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
       lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
       rm -rf $out/lib/openjdk/jre/bina

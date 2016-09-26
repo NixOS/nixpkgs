@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
-, cairo, coreutils, fontconfig, freefont_ttf
+, cairo, coreutils, fontconfig, freefont-ttf
 , glib, gmp, gtk2, libffi, libjpeg, libpng
 , libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -9,7 +9,7 @@
 let
 
   fontsConf = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
+    fontDirectories = [ freefont-ttf ];
   };
 
   libPath = stdenv.lib.makeLibraryPath [

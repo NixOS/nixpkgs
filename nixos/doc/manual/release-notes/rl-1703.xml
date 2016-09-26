@@ -34,6 +34,9 @@ following incompatible changes:</para>
       <literal>gtk</literal>, <literal>gtkmm</literal> and several others.
       Now you need to use versioned attributes, like <literal>gnome3</literal>.
     </para>
+    <para>
+      All font packages have been moved into <literal>nixpkgs.fonts</literal>.
+    </para>
   </listitem>
 
   <listitem>

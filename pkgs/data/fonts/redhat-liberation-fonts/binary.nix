@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, liberation_ttf_from_source }:
+{ stdenv, fetchurl, liberation-ttf-from-source }:
 
 stdenv.mkDerivation rec {
   version = "2.00.1";
@@ -16,5 +16,5 @@ stdenv.mkDerivation rec {
     cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${name}" || true
   '';
 
-  inherit (liberation_ttf_from_source) meta;
+  inherit (liberation-ttf-from-source) meta;
 }

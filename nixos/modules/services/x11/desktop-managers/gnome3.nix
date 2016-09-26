@@ -125,7 +125,7 @@ in {
     hardware.bluetooth.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
+    fonts.fonts = with pkgs.fonts; [ dejavu cantarell ];
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";

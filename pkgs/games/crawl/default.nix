@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush
+, dejavu, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush
 , tileMode ? false
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}" ]
-           ++ stdenv.lib.optionals tileMode [ "TILES=y" "dejavu_fonts=${dejavu_fonts}" ];
+           ++ stdenv.lib.optionals tileMode [ "TILES=y" "dejavu_fonts=${dejavu}" ];
 
   postInstall = if tileMode then "mv $out/bin/crawl $out/bin/crawl-tiles" else "";
 

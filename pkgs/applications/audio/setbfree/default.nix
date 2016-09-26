@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, freetype, ftgl, libjack2, libX11, lv2
-, mesa, pkgconfig, ttf_bitstream_vera
+, mesa, pkgconfig, ttf-bitstream-vera
 }:
 
 stdenv.mkDerivation  rec {
@@ -13,13 +13,13 @@ stdenv.mkDerivation  rec {
 
   patchPhase = ''
     sed 's#/usr/local#$(out)#g' -i common.mak
-    sed 's#/usr/share/fonts/truetype/ttf-bitstream-vera#${ttf_bitstream_vera}/share/fonts/truetype#g' \
+    sed 's#/usr/share/fonts/truetype/ttf-bitstream-vera#${ttf-bitstream-vera}/share/fonts/truetype#g' \
       -i b_synth/Makefile
   '';
 
   buildInputs = [
     alsaLib freetype ftgl libjack2 libX11 lv2 mesa pkgconfig
-    ttf_bitstream_vera
+    ttf-bitstream-vera
   ];
 
   meta = with stdenv.lib; {

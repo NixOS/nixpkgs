@@ -4,7 +4,7 @@
 , libogg, libxml2, libjpeg, mesa, libpng, libungif, libtool
 , boost, freetype, agg, dbus, curl, pkgconfig, gettext
 , glib, gtk2, gtkglext, pangox_compat, xlibsWrapper, ming, dejagnu, python, perl
-, freefont_ttf, haxe, swftools
+, freefont-ttf, haxe, swftools
 , lib, makeWrapper
 , xulrunner }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     # Provide a default font.
     sed -i "configure" \
-        -e 's|/usr/share/fonts/truetype/freefont/|${freefont_ttf}/share/fonts/truetype/|g'
+        -e 's|/usr/share/fonts/truetype/freefont/|${freefont-ttf}/share/fonts/truetype/|g'
   '';
 
   enableParallelBuilding = true;
