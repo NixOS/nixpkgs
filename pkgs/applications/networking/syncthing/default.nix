@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Open Source Continuous File Synchronization";
     license = stdenv.lib.licenses.mpl20;
     maintainers = with stdenv.lib.maintainers; [ pshendry joko peterhoeg ];
-    platforms = with stdenv.lib.platforms; linux ++ freebsd ++ openbsd ++ netbsd;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
