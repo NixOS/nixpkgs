@@ -322,21 +322,6 @@ let
     };
   };
 
-  smex = melpaBuild rec {
-    pname = "smex";
-    version = "20141210";
-    src = fetchFromGitHub {
-      owner  = "nonsequitur";
-      repo   = pname;
-      rev    = "aff8d4485139ac28f1c7e62912c0d0d480995831";
-      sha256 = "0017f1ji7rxad2n49dhn5g0pmw6lmw80cqk6dynszizj46xpbqfp";
-    };
-    meta = {
-      description = "M-x enhancement for Emacs build on top of Ido";
-      license = emacs.meta.license; # should be "same as Emacs"
-    };
-  };
-
   structured-haskell-mode = melpaBuild rec {
     pname = "shm";
     version = external.structured-haskell-mode.version;
