@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
   name = "dstat-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pythonPath = with pythonPackages; [ python-wifi ];
 
   patchPhase = ''
-    sed -i -e 's|/usr/bin/env python|${python}/bin/python|' \
+    sed -i -e 's|/usr/bin/env python|${pythonPackages.python.interpreter}|' \
            -e "s|/usr/share/dstat|$out/share/dstat|" dstat
   '';
 

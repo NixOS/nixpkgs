@@ -1,53 +1,12 @@
-{ pkgs, stdenv, python, self }:
+# This file contains all Python package overrides.
+
+{ stdenv, pkgs }:
 
 with pkgs.lib;
 
-let
-  pythonAtLeast = versionAtLeast python.pythonVersion;
-  pythonOlder = versionOlder python.pythonVersion;
-  isPy26 = python.majorVersion == "2.6";
-  isPy27 = python.majorVersion == "2.7";
-  isPy33 = python.majorVersion == "3.3";
-  isPy34 = python.majorVersion == "3.4";
-  isPy35 = python.majorVersion == "3.5";
-  isPy36 = python.majorVersion == "3.6";
-  isPyPy = python.executable == "pypy";
-  isPy3k = strings.substring 0 1 python.majorVersion == "3";
-
-  callPackage = pkgs.newScope self;
-
-  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
-
-  mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
-  });
-  buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
-    inherit mkPythonDerivation;
-    inherit bootstrapped-pip;
-  });
-
-  buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
-
-  modules = python.modules or {
-    readline = null;
-    sqlite3 = null;
-    curses = null;
-    curses_panel = null;
-    crypt = null;
-  };
-
-in modules // {
-
-  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
-
-  # helpers
-
-  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
-
-  # specials
+self: super: with super; {
 
   recursivePthLoader = callPackage ../development/python-modules/recursive-pth-loader { };
-
-  setuptools = callPackage ../development/python-modules/setuptools { };
 
   agate = buildPythonPackage rec {
     name = "agate-1.2.2";

@@ -6090,47 +6090,36 @@ in
   };
   purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
 
-  python = python2;
-  python2 = python27;
-  python3 = python35;
+  ## PYTHON
 
-  # pythonPackages further below, but assigned here because they need to be in sync
-  pythonPackages = python2Packages;
-  python2Packages = python27Packages;
-  python3Packages = python35Packages;
-
+  # Interpreters
   python26 = callPackage ../development/interpreters/python/cpython/2.6 {
-    db = db47;
     self = python26;
   };
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
-    self = python27;
     inherit (darwin) CF configd;
+    self = python27;
   };
   python33 = callPackage ../development/interpreters/python/cpython/3.3 {
     self = python33;
   };
-  python34 = hiPrio (callPackage ../development/interpreters/python/cpython/3.4 {
+  python34 = callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
     self = python34;
-  });
-  python35 = hiPrio (callPackage ../development/interpreters/python/cpython/3.5 {
+  };
+  python35 = callPackage ../development/interpreters/python/cpython/3.5 {
     inherit (darwin) CF configd;
     self = python35;
-  });
+  };
   python36 = callPackage ../development/interpreters/python/cpython/3.6 {
     inherit (darwin) CF configd;
     self = python36;
   };
-
-  pypy = pypy27;
-
   pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
     self = pypy27;
   };
 
-  pythonFull = python2Full;
-  python2Full = python27Full;
+  # Interpreters - full versions
   python26Full = python26.override {
     includeModules = true;
     self = python26Full;
@@ -6139,6 +6128,29 @@ in
     includeModules = true;
     self = python27Full;
   };
+
+  # Interpreters - aliases
+  python = python2;
+  python2 = python27;
+  python3 = python35;
+  pythonFull = python27Full;
+  pypy = pypy27;
+
+
+  ## Aliases package sets. Deprecated
+  python26Packages = python26.pkgs;
+  python27Packages = python27.pkgs;
+  python33Packages = python33.pkgs;
+  python34Packages = python34.pkgs;
+  python35Packages = python35.pkgs;
+  python36Packages = python36.pkgs;
+  pypy27Packages = pypy27.pkgs;
+
+  pythonPackages = python2Packages;
+  python2Packages = python27Packages;
+  python3Packages = python35Packages;
+  pypyPackages = pypy27Packages;
+  pythonFullPackages = pythonFull.pkgs;
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
@@ -10277,47 +10289,6 @@ in
     sqitchModule = perlPackages.AppSqitch;
   };
 
-  ### DEVELOPMENT / PYTHON MODULES
-
-  # `nix-env -i python-nose` installs for 2.7, the default python.
-  # Therefore we do not recurse into attributes here, in contrast to
-  # python27Packages. `nix-env -iA python26Packages.nose` works
-  # regardless.
-  python26Packages = callPackage ./python-packages.nix {
-    python = python26;
-    self = python26Packages;
-  };
-
-  python27Packages = lib.hiPrioSet (recurseIntoAttrs (callPackage ./python-packages.nix {
-    python = python27;
-    self = python27Packages;
-  }));
-
-  python33Packages = callPackage ./python-packages.nix {
-    python = python33;
-    self = python33Packages;
-  };
-
-  python34Packages = callPackage ./python-packages.nix {
-    python = python34;
-    self = python34Packages;
-  };
-
-  python35Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
-    python = python35;
-    self = python35Packages;
-  });
-
-  python36Packages = (callPackage ./python-packages.nix {
-    python = python36;
-    self = python36Packages;
-  });
-
-  pypyPackages = callPackage ./python-packages.nix {
-    python = pypy;
-    self = pypyPackages;
-  };
-
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
@@ -11113,7 +11084,7 @@ in
   dstat = callPackage ../os-specific/linux/dstat {
     # pythonFull includes the "curses" standard library module, for pretty
     # dstat color output
-    python = pythonFull;
+    pythonPackages = pythonFull.pkgs;
   };
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };

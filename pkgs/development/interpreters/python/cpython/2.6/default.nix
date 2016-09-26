@@ -1,6 +1,8 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
 , sqlite, tcl, tk, xlibsWrapper, openssl, readline, db, ncurses, gdbm, self, callPackage
-, python26Packages }:
+, pkgOverrides ? (self: super: {})
+, pkgs
+}:
 
 assert zlibSupport -> zlib != null;
 
@@ -97,13 +99,12 @@ let
       inherit zlibSupport;
       isPy2 = true;
       isPy26 = true;
-      buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python26Packages; };
       libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       interpreter = "${self}/bin/${executable}";
-    };
+    } // (import ../../interpreter.nix {inherit stdenv pkgs; overrides=pkgOverrides; python=self;});
+
 
     enableParallelBuilding = true;
 
