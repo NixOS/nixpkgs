@@ -307,21 +307,6 @@ let
     };
   };
 
-  moe-theme = melpaBuild rec {
-    pname   = "moe-theme";
-    version = "1.0";
-    src = fetchFromGitHub {
-      owner  = "kuanyui";
-      repo   = "${pname}.el";
-      rev    = "39384a7a9e6886f3a3d79efac4009fcd800a4a14";
-      sha256 = "0i7m15x9sij5wh0gwbijsis8a4jm8izywj7xprk21644ndskvfiz";
-    };
-    meta = {
-      description = "A set of Emacs themes optimized for terminals with 256 colors";
-      license = gpl3Plus;
-    };
-  };
-
   monokai-theme = melpaBuild rec {
     pname   = "monokai-theme";
     version = "1.0.0";
