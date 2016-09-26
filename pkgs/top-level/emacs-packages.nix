@@ -284,21 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  haskell-mode = melpaBuild rec {
-    pname   = "haskell-mode";
-    version = "13.16";
-    src = fetchFromGitHub {
-      owner  = "haskell";
-      repo   = pname;
-      rev    = "v${version}";
-      sha256 = "1gmpmfkr54sfzrif87zf92a1i13wx75bhp66h1rxhflg216m62yv";
-    };
-    meta = {
-      description = "Haskell language support for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   helm-bibtex = melpaBuild rec {
     pname = "helm-bibtex";
     version = "20151125";
