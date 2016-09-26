@@ -284,21 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  goto-chg = melpaBuild rec {
-    pname   = "goto-chg";
-    version = "1.6";
-    src = fetchhg {
-      url = "https://bitbucket.org/lyro/evil";
-      rev = "e5588e50c0e40a66c099868ea825755e348311fb";
-      sha256 = "0185vrzfdz6iwhmc22rjy0n7ppfppp2ddc8xl0vvbda79q6w3bp8";
-    };
-    files = [ "lib/goto-chg.el" ];
-    meta = {
-      description = "Goto last change in current buffer using Emacs undo information";
-      license = gpl3Plus;
-    };
-  };
-
   haskell-mode = melpaBuild rec {
     pname   = "haskell-mode";
     version = "13.16";
