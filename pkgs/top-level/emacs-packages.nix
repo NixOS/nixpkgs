@@ -151,21 +151,6 @@ let
     };
   };
 
-  button-lock = melpaBuild rec {
-    pname   = "button-lock";
-    version = "1.0.2";
-    src = fetchFromGitHub {
-      owner  = "rolandwalker";
-      repo   = pname;
-      rev    = "v${version}";
-      sha256 = "1kqcc1d56jz107bswlzvdng6ny6qwp93yck2i2j921msn62qvbb2";
-    };
-    meta = {
-      description = "Mouseable text in Emacs";
-      license  = bsd2;
-    };
-  };
-
   caml = melpaBuild rec {
     pname   = "caml";
     version = "4.2.1"; # TODO: emacs doesn't seem to like 02 as a version component..
