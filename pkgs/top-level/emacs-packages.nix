@@ -229,22 +229,6 @@ let
     };
   };
 
-  evil-mc = melpaBuild rec {
-    pname   = "evil-mc";
-    version = "20150117";
-    src = fetchFromGitHub {
-      owner  = "gabesoft";
-      repo   = "evil-mc";
-      rev    = "80471ba1173775e706c2043afd7d20ace652df7d";
-      sha256 = "1j23avcxj79plba99yfpmj9rfpdb527d7qfp4mx658y837vji1zm";
-    };
-    packageRequires = [ evil ];
-    meta = {
-      description = "Multiple cursors implementation for evil-mode";
-      license = gpl3Plus;
-    };
-  };
-
   evil-surround = melpaBuild rec {
     pname   = "evil-surround";
     version = "20140616";
