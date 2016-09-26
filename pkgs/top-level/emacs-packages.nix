@@ -284,21 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  hydra = melpaBuild rec {
-    pname   = "hydra";
-    version = "0.13.3";
-    src = fetchFromGitHub {
-      owner  = "abo-abo";
-      repo   = pname;
-      rev    = version;
-      sha256 = "08iw95lyizcyf6cjl37fm8wvay0vsk9758pk9gq9f2xiafcchl7f";
-    };
-    meta = {
-      description = "Tie related Emacs commands into a family of short bindings with a common prefix";
-      license = gpl3Plus;
-    };
-  };
-
   ibuffer-vc = melpaBuild rec {
     pname   = "ibuffer-vc";
     version = "0.10";
