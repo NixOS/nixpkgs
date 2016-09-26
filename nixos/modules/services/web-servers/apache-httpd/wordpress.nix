@@ -5,7 +5,8 @@ with lib;
 
 let
 
-  version = "4.3.1";
+  # Upgrading? We have a test! nix-build ./nixos/tests/wordpress.nix
+  version = "4.6.1";
   fullversion = "${version}";
 
   # Our bare-bones wp-config.php file using the above settings
@@ -74,7 +75,7 @@ let
       owner = "WordPress";
       repo = "WordPress";
       rev = "${fullversion}";
-      sha256 = "1rk10vcv4z9p04hfzc0wkbilrgx7m9ssyr6c3w6vw3vl1bcgqxza";
+      sha256 = "0n82xgjg1ry2p73hhgpslnkdzrma5n6hxxq76s7qskkzj0qjfvpn";
     };
     installPhase = ''
       mkdir -p $out
@@ -98,7 +99,7 @@ let
       # symlink additional plugin(s)
       ${concatMapStrings (plugin: "ln -s ${plugin} $out/wp-content/plugins/${plugin.name}\n") (config.plugins) }
 
-      # symlink additional translation(s) 
+      # symlink additional translation(s)
       mkdir -p $out/wp-content/languages
       ${concatMapStrings (language: "ln -s ${language}/*.mo ${language}/*.po $out/wp-content/languages/\n") (selectedLanguages) }
     '';
@@ -123,7 +124,7 @@ in
   options = {
     dbHost = mkOption {
       default = "localhost";
-      description = "The location of the database server.";  
+      description = "The location of the database server.";
       example = "localhost";
     };
     dbName = mkOption {
@@ -253,7 +254,7 @@ in
       done
       ${pkgs.mysql}/bin/mysql -e 'CREATE DATABASE ${config.dbName};'
       ${pkgs.mysql}/bin/mysql -e 'GRANT ALL ON ${config.dbName}.* TO ${config.dbUser}@localhost IDENTIFIED BY "${config.dbPassword}";'
-    else 
+    else
       echo "Good, no need to do anything database related."
     fi
   '';
