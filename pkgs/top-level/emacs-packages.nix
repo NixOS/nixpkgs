@@ -322,29 +322,6 @@ let
     };
   };
 
-  smartparens = melpaBuild rec {
-    pname   = "smartparens";
-    version = "20151025";
-    src = fetchFromGitHub {
-      owner  = "Fuco1";
-      repo   = pname;
-      rev    = "85583f9570be58f17ccd68388d9d4e58234d8ae9";
-      sha256 = "1pvzcrnzvksx1rzrr19256x1qhidr2acz6yipijlfx2zfjx2gxa7";
-    };
-    packageRequires = [ dash ];
-    meta = {
-      description = "Minor mode for Emacs that deals with parens pairs";
-      longDescription = ''
-        It started as a unification effort to combine functionality of
-        several existing packages in a single, compatible and
-        extensible way to deal with parentheses, delimiters, tags and
-        the like. Some of these packages include autopair, textmate,
-        wrap-region, electric-pair-mode, paredit and others.
-      '';
-      license = gpl3Plus;
-    };
-  };
-
   smex = melpaBuild rec {
     pname = "smex";
     version = "20141210";
