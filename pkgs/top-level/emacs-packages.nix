@@ -151,23 +151,6 @@ let
     };
   };
 
-  circe = melpaBuild rec {
-    pname   = "circe";
-    version = "2.1";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "0q3rv6lk37yybkbswmn4pgzca0nfhvf4h3ac395fr16k5ixybc5q";
-    };
-    packageRequires = [ lcs lui ];
-    fileSpecs = [ "circe*.el" "irc.el" "make-tls-process.el" ];
-    meta = {
-      description = "IRC client for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   company = melpaBuild rec {
     pname   = "company";
     version = "0.8.12";
