@@ -14538,7 +14538,6 @@ in
 
   terminator = callPackage ../applications/misc/terminator {
     vte = gnome2.vte.override { pythonSupport = true; };
-    inherit (pythonPackages) notify;
   };
 
   termite = callPackage ../applications/misc/termite {
