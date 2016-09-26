@@ -6,7 +6,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ipxe-${brand}-${date}-${builtins.substring 0 7 rev}";
+  name = "ipxe-${date}-${builtins.substring 0 7 rev}";
 
   buildInputs = [ perl cdrkit syslinux xz openssl ];
 
