@@ -284,22 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  gitconfig-mode = melpaBuild rec {
-    pname = "gitconfig-mode";
-    version = "1.0.0";
-    src = fetchFromGitHub {
-      owner  = "magit";
-      repo   = "git-modes";
-      rev    = version;
-      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
-    };
-    files = [ "gitconfig-mode.el" ];
-    meta = {
-      description = "Emacs major-mode for editing gitconfig files";
-      license = gpl3Plus;
-    };
-  };
-
   gitignore-mode = melpaBuild rec {
     pname = "gitignore-mode";
     version = "1.0.0";
