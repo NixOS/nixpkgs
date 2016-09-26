@@ -151,22 +151,6 @@ let
     };
   };
 
-  diminish = melpaBuild rec {
-    pname   = "diminish";
-    version = "0.45";
-    src = fetchFromGitHub {
-      owner  = "myrjola";
-      repo   = "${pname}.el";
-      rev    = "v${version}";
-      sha256 = "0qpgfgp8hrzz4vdifxq8h25n0a0jlzgf7aa1fpy6r0080v5rqbb6";
-    };
-    meta = {
-      description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
-      homepage = http://www.eskimo.com/~seldon/;
-      license = gpl3Plus;
-    };
-  };
-
   elpy = melpaBuild rec {
     pname   = "elpy";
     version = external.elpy.version;
