@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, buildPythonApplication, python2Packages, pango, notify, keybinder, vte, gettext, intltool, file
+{ stdenv, fetchurl, python2Packages, pango, keybinder, vte, gettext, intltool, file
 }:
 
-buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "terminator-${version}";
   version = "0.98";
 

@@ -15,9 +15,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject2 gobjectIntrospection libcap_ng numactl
-  ] ++ stdenv.lib.optional withXen [
-    xen
+    python pygobject2 gobjectIntrospection libcap_ng numactl xen
   ];
 
   meta = with stdenv.lib; {
