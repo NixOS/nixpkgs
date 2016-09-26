@@ -111,13 +111,13 @@ in {
   };
 
   openssl_1_0_2 = common {
-    version = "1.0.2i";
-    sha256 = "0vyy038676cv3m2523fi9ll9nkjxadqdnz18zdp5nm6925yli1wj";
+    version = "1.0.2j";
+    sha256 = "0cf4ar97ijfc7mg35zdgpad6x8ivkdx9qii6mz35khi1ps9g5bz7";
   };
 
   openssl_1_1_0 = common {
-    version = "1.1.0a";
-    sha256 = "0as40a1lipl9qfax7495jc1xfb049ygavkaxxk4y5kcn8birdrn2";
+    version = "1.1.0b";
+    sha256 = "1xznrqvb1dbngv2k2nb6da6fdw00c01sy2i36yjdxr4vpxrf0pd4";
   };
 
 }
