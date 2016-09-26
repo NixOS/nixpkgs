@@ -284,22 +284,6 @@ let
     inherit (external.rtags) meta;
   };
 
-  gitignore-mode = melpaBuild rec {
-    pname = "gitignore-mode";
-    version = "1.0.0";
-    src = fetchFromGitHub {
-      owner  = "magit";
-      repo   = "git-modes";
-      rev    = version;
-      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
-    };
-    files = [ "gitignore-mode.el" ];
-    meta = {
-      description = "Emacs major-mode for editing gitignore files";
-      license = gpl3Plus;
-    };
-  };
-
   gntp = melpaBuild rec {
     pname = "gntp";
     version = "0.1";
