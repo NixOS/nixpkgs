@@ -3274,7 +3274,7 @@ in
 
   pythonIRClib = pythonPackages.pythonIRClib;
 
-  pythonSexy = callPackage ../development/python-modules/libsexy { };
+  pythonSexy = pythonPackages.libsexy;
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
