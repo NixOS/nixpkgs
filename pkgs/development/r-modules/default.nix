@@ -266,6 +266,8 @@ let
     gmp = [ pkgs.gmp ];
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
+    h5 = [ pkgs.hdf5-cpp pkgs.which ];
+    h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp ];
@@ -308,6 +310,7 @@ let
     rgl = [ pkgs.mesa pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2 ];
+    rhdf5 = [ pkgs.zlib ];
     Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
     Rhtslib = [ pkgs.zlib ];
     RJaCGH = [ pkgs.zlib ];
@@ -367,12 +370,12 @@ let
     bamsignals = [ pkgs.zlib ];
     BitSeq = [ pkgs.zlib ];
     DiffBind = [ pkgs.zlib ];
-    ShortRead = [ pkgs.zlib ];
+    ShortRead = [ pkgs.zlib.dev ];
     oligo = [ pkgs.zlib ];
     gmapR = [ pkgs.zlib ];
     Rsubread = [ pkgs.zlib ];
-    XVector = [ pkgs.zlib ];
-    Rsamtools = [ pkgs.zlib ];
+    XVector = [ pkgs.zlib.dev ];
+    Rsamtools = [ pkgs.zlib.dev ];
     rtracklayer = [ pkgs.zlib ];
     affyio = [ pkgs.zlib ];
     VariantAnnotation = [ pkgs.zlib ];
@@ -390,7 +393,7 @@ let
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
     gmatrix = [ pkgs.cudatoolkit ];
-    RCurl = [ pkgs.curl ];
+    RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
     RGtk2 = [ pkgs.pkgconfig ];
@@ -1142,7 +1145,6 @@ let
     "proteoQC" # depends on broken package rTANDEM
     "PGA" # depends on broken package rTANDEM
     "MBESS" # depends on broken package OpenMx
-    "IONiseR" # depends on broken package rhdf5
     "DOQTL" # depends on broken package rhdf5
     "DmelSGI" # depends on broken package rhdf5
     "flowDiv" # depends on broken package ncdfFlow
@@ -1356,7 +1358,6 @@ let
     "gcmr" # depends on broken package nlopt
     "GDAtools" # depends on broken package nlopt
     "gdtools" # broken build
-    "GENE_E" # depends on broken package rhdf5
     "GENESIS" # broken build
     "genridge" # depends on broken package nlopt
     "geojsonio" # depends on broken package V8
@@ -1379,8 +1380,6 @@ let
     "GUIDE" # depends on broken package rpanel
     "GWAF" # depends on broken package nlopt
     "GWASTools" # broken build
-    "h5" # build is broken
-    "h5vc" # depends on broken package rhdf5
     "hbsae" # depends on broken package nlopt
     "heplots" # depends on broken package nlopt
     "HiDimMaxStable" # broken build
@@ -1407,7 +1406,6 @@ let
     "inSilicoMerging" # build is broken
     "INSPEcT" # depends on broken GenomicFeatures
     "interplot" # depends on broken arm
-    "IONiseR" # depends on broken rhdf5
     "IsingFit" # depends on broken package nlopt
     "ITEMAN" # depends on broken package car
     "iteRates" # broken build
@@ -1645,7 +1643,6 @@ let
     "REST" # depends on broken package nlopt
     "rgbif" # depends on broken package V8
     "Rgnuplot" # broken build
-    "rhdf5" # build is broken
     "rjade" # depends on broken package V8
     "rJPSGCS" # build is broken
     "rLindo" # build is broken
