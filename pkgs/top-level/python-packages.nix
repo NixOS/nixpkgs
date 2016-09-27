@@ -6861,6 +6861,25 @@ in modules // {
     };
   };
 
+  grip = buildPythonPackage rec {
+    version = "4.3.2";
+    name = "grip-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://files.pythonhosted.org/packages/8b/9d/698a7a3a8b57c28eacac27f269c9d0da228d20ee734edbe9451e3e0f7cde/${name}.zip";
+      sha256 = "0sr6srp4liqjs6hxcy9kp8g5dzbnyfmwcsy2cn6qszkpp9x25w70";
+    };
+
+    propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests2 ];
+
+    meta = with stdenv.lib; {
+      description = "Preview GitHub Markdown files like Readme locally before committing them";
+      homepage = https://github.com/joeyespo/grip;
+      license = licenses.mit;
+      maintainers = with maintainers; [ koral ];
+    };
+  };
+
   gst-python = callPackage ../development/libraries/gstreamer/python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
