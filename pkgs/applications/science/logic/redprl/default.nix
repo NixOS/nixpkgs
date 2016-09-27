@@ -8,6 +8,9 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
   buildInputs = [ mlton ];
+  patchPhase = ''
+    patchShebangs ./script/
+  '';
   builder = builtins.toFile "builder.sh" ''
     source $stdenv/setup
     mkdir -p $out/bin
