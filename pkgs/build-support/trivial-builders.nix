@@ -97,12 +97,16 @@ rec {
       done < graph
     '';
 
+
   # Quickly create a set of symlinks to derivations.
   # entries is a list of attribute sets like { name = "name" ; path = "/nix/store/..."; }
   linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
     (lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
-  # Require file
+
+  # Print an error message if the file with the specified name and
+  # hash doesn't exist in the Nix store. Do not use this function; it
+  # produces packages that cannot be built automatically.
   requireFile = { name ? null
                 , sha256 ? null
                 , sha1 ? null
@@ -115,8 +119,8 @@ rec {
     let msg =
       if message != null then message
       else ''
-        Unfortunately, we may not download file ${name_} automatically.
-        Please, go to ${url} to download it yourself, and add it to the Nix store
+        Unfortunately, we cannot download file ${name_} automatically.
+        Please go to ${url} to download it yourself, and add it to the Nix store
         using either
           nix-store --add-fixed ${hashAlgo} ${name_}
         or
@@ -143,6 +147,7 @@ rec {
       '';
     };
 
+
   # Search in the environment if the same program exists with a set uid or
   # set gid bit.  If it exists, run the first program found, otherwise run
   # the default binary.
@@ -168,11 +173,13 @@ rec {
         exec ${bin} "$@"
       '';
 
+
   # Copy a path to the Nix store.
   # Nix automatically copies files to the store before stringifying paths.
   # If you need the store path of a file, ${copyPathToStore <path>} can be
   # shortened to ${<path>}.
   copyPathToStore = builtins.filterSource (p: t: true);
+
 
   # Copy a list of paths to the Nix store.
   copyPathsToStore = builtins.map copyPathToStore;
