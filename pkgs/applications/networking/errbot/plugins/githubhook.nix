@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mayflower";
     repo = "err-githubhook";
-    rev = "62002e3a5cda408f164146b281ad433707764aa4";
-    sha256 = "0as0dc3kbvav2xglzhp595qc2nfm4l2rkgh31kjvzxrj7inns4p9";
+    rev = "ad0208a4bfdb29a3d2a9ab26751cc8441dc593b0";
+    sha256 = "0q2slk1llw4svl2lvfzq4yynz1sn3hc68lpkv4gb6zknqmkqxmrd";
   };
 
   dontBuild = true;
