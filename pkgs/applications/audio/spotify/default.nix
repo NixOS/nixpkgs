@@ -56,15 +56,22 @@ stdenv.mkDerivation {
 
   buildInputs = [ dpkg makeWrapper ];
 
-  unpackPhase = "true";
+  unpackPhase = ''
+    runHook preUnpack
+    dpkg-deb -x $src .
+    runHook postUnpack
+  '';
+
+  configurePhase = "runHook preConfigure; runHook postConfigure";
+  buildPhase = "runHook preBuild; runHook postBuild";
 
   installPhase =
     ''
+      runHook preInstall
+
       libdir=$out/lib/spotify
       mkdir -p $libdir
-      dpkg-deb -x $src $out
-      mv $out/usr/* $out/
-      rm -rf $out/usr
+      mv ./usr/* $out/
 
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
@@ -96,6 +103,8 @@ stdenv.mkDerivation {
         ln -s "$out/share/spotify/icons/spotify-linux-$i.png" \
           "$out/share/icons/hicolor/$ixi/apps/spotify-client.png"
       done
+
+      runHook postInstall
     '';
 
   dontStrip = true;
