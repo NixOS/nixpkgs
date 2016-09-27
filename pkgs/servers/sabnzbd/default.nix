@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     mkdir $out/bin
     echo "${pythonEnv}/bin/python $out/SABnzbd.py \$*" > $out/bin/sabnzbd
     chmod +x $out/bin/sabnzbd
-    wrapProgram $out/bin/sabnzbd --set PATH : ${path}
+    wrapProgram $out/bin/sabnzbd --set PATH ${path}
   '';
 
   meta = with stdenv.lib; {
