@@ -22882,8 +22882,6 @@ in modules // {
     };
   };
 
-  salttesting = callPackage ../tools/admin/salt/testing.nix {};
-
   sandboxlib = buildPythonPackage rec {
     name = "sandboxlib-${version}";
     version = "0.31";
