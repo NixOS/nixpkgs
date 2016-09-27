@@ -44,7 +44,7 @@ in {
 
           logLevel = mkOption {
             type = types.str;
-            default = "DEBUG";
+            default = "INFO";
             description = "Gitlab database hostname.";
           };
 
