@@ -96,15 +96,13 @@ with lib;
     '';
 
   in
-    pkgs.stdenv.mkDerivation {
-      inherit (pkg) name meta;
-
-      buildCommand = ''
+    pkgs.runCommand pkg.name
+      { inherit (pkg) meta; }
+      ''
         mkdir -p $out
         cp -prf ${pkg}/* $out/
         chmod a+w $out/share/apps/plasma-desktop/init
         cp -f ${plasmaInit} $out/share/apps/plasma-desktop/init/00-defaultLayout.js
       '';
-    };
 
 }
