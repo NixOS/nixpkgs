@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "LIBDIR=$(out)/lib"
     "SBINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man"
-    "BASH_COMPDIR=$(out)/share/bash-completion/completions/iproute2"
+    "BASH_COMPDIR=$(out)/share/bash-completion/completions"
     "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
   ];
 
