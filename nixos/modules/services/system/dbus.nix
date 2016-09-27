@@ -20,13 +20,11 @@ let
     "<includedir>${d}/etc/dbus-1/session.d</includedir>"
   ]));
 
-  configDir = pkgs.stdenv.mkDerivation {
-    name = "dbus-conf";
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    buildCommand = ''
+  configDir = pkgs.runCommand "dbus-conf"
+    { preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
       mkdir -p $out
 
       sed '${./dbus-system-local.conf.in}' \
@@ -38,7 +36,6 @@ let
         -e 's,@extra@,${sessionExtraxml},' \
         > "$out/session-local.conf"
     '';
-  };
 
 in
 

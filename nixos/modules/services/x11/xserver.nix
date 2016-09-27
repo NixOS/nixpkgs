@@ -71,15 +71,11 @@ let
     monitors = reverseList (foldl mkMonitor [] xrandrHeads);
   in concatMapStrings (getAttr "value") monitors;
 
-  configFile = pkgs.stdenv.mkDerivation {
-    name = "xserver.conf";
-
-    xfs = optionalString (cfg.useXFS != false)
-      ''FontPath "${toString cfg.useXFS}"'';
-
-    inherit (cfg) config;
-
-    buildCommand =
+  configFile = pkgs.runCommand "xserver.conf"
+    { xfs = optionalString (cfg.useXFS != false)
+        ''FontPath "${toString cfg.useXFS}"'';
+      inherit (cfg) config;
+    }
       ''
         echo 'Section "Files"' >> $out
         echo $xfs >> $out
@@ -102,7 +98,6 @@ let
 
         echo "$config" >> $out
       ''; # */
-  };
 
 in
 
