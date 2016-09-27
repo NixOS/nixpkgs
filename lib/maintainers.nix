@@ -97,6 +97,7 @@
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   couchemar = "Andrey Pavlov <couchemar@yandex.ru>";
   cransom = "Casey Ransom <cransom@hubns.net>";
+  cryptix = "Henry Bubert <cryptix@riseup.net>";
   CrystalGamma = "Jona Stubbe <nixos@crystalgamma.de>";
   cstrahan = "Charles Strahan <charles@cstrahan.com>";
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
