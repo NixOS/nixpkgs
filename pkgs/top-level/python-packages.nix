@@ -7642,17 +7642,19 @@ in modules // {
   };
 
   python-mapnik = buildPythonPackage {
-    name = "python-mapnik-fae6388";
+    name = "python-mapnik-git-2016-08-30";
 
-    src = pkgs.fetchgit {
-      url = https://github.com/mapnik/python-mapnik.git;
-      rev = "fae63881ed0945829e73f711d52740240b740936";
-      sha256 = "04k78l0xxb9cy8dbvmgldg8fgzz701gks14199h8zs2xvyi4gqd2";
+    src = pkgs.fetchFromGitHub {
+      owner = "mapnik";
+      repo = "python-mapnik";
+      rev = "541fd962d4fc99d50ec472af6ddccfdbf98cff37";
+      sha256 = "1d93qjnzggdpbhnmxlmk5jh0zd2jnpfl4n4aip5ypd39ilqibhf3";
     };
 
     disabled = isPyPy;
     doCheck = false; # doesn't find needed test data files
-    buildInputs = with pkgs; [ boost harfbuzz icu mapnik ];
+    buildInputs = with pkgs;
+      [ boost harfbuzz icu libjpeg libpng libtiff libwebp mapnik proj zlib ];
     propagatedBuildInputs = with self; [ pillow pycairo ];
 
     meta = with stdenv.lib; {
