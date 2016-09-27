@@ -1294,7 +1294,7 @@ let
     "DEGraph" # depends on broken package RCytoscape
     "destiny" # depends on broken package VIM
     "DiagTest3Grp" # depends on broken package nlopt
-    "diffHic" # depends on broken package rhdf5
+    "diffHic" # depends on broken package edgeR
     "difR" # depends on broken package nlopt
     "DirichletMultinomial" # Build Is Broken
     "DistatisR" # depends on broken package nlopt
@@ -1309,6 +1309,7 @@ let
     "easyanova" # depends on broken package nlopt
     "ecd" # depends on broken package polynom
     "edge" # depends on broken package nlopt
+    "edgeR" # broken url
     "eeptools" # depends on broken package nlopt
     "EffectLiteR" # depends on broken package nlopt
     "effects" # depends on broken package nlopt
