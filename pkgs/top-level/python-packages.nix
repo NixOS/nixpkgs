@@ -22882,8 +22882,6 @@ in modules // {
     };
   };
 
-  salt = callPackage ../tools/admin/salt {};
-
   salttesting = callPackage ../tools/admin/salt/testing.nix {};
 
   sandboxlib = buildPythonPackage rec {
