@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/bind9-config $dev
     moveToOutput bin/isc-config.sh $dev
 
-    for f in $out/lib/*.la; do
+    for f in "$out/lib/"*.la; do
       sed -i $f -e 's|-L${openssl.dev}|-L${openssl.out}|g'
     done
   '';
