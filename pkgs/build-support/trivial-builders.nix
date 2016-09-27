@@ -148,32 +148,6 @@ rec {
     };
 
 
-  # Search in the environment if the same program exists with a set uid or
-  # set gid bit.  If it exists, run the first program found, otherwise run
-  # the default binary.
-  useSetUID = drv: path:
-    let
-      name = baseNameOf path;
-      bin = "${drv}${path}";
-    in assert name != "";
-      writeScript "setUID-${name}" ''
-        #!${stdenv.shell}
-        inode=$(stat -Lc %i ${bin})
-        for file in $(type -ap ${name}); do
-          case $(stat -Lc %a $file) in
-            ([2-7][0-7][0-7][0-7])
-              if test -r "$file".real; then
-                orig=$(cat "$file".real)
-                if test $inode = $(stat -Lc %i "$orig"); then
-                  exec "$file" "$@"
-                fi
-              fi;;
-          esac
-        done
-        exec ${bin} "$@"
-      '';
-
-
   # Copy a path to the Nix store.
   # Nix automatically copies files to the store before stringifying paths.
   # If you need the store path of a file, ${copyPathToStore <path>} can be
