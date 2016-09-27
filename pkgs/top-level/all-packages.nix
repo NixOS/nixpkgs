@@ -74,6 +74,8 @@ in
     else
       stdenv);
 
+  stdenvNoCC = stdenv.override { cc = null; };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
