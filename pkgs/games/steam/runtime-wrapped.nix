@@ -22,6 +22,7 @@ let
     xlibs.libXcursor
     xlibs.libXrender
     xlibs.libXScrnSaver
+    xlibs.libXxf86vm
     xlibs.libXi
     xlibs.libSM
     xlibs.libICE
