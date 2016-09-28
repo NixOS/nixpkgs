@@ -2,22 +2,22 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
-  version = "4.2.2";
+  version = "4.3.3";
 
   src = fetchurl {
     url = "mirror://pypi/e/errbot/${name}.tar.gz";
-    sha256 = "1f1nw4m58dvmw0a37gbnihgdxxr3sz0l39653jigq9ysh3nznifv";
+    sha256 = "1z6xcm8jx22i56gpcrjym85a82swvaxh09zkryd5pdksi6k41rb4";
   };
 
   disabled = !pythonPackages.isPy3k;
 
-  patches = [
-    ./fix-dnspython.patch
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace dnspython3 dnspython
+  '';
 
-  buildInputs = with pythonPackages; [
-    pep8 mock pytest pytest_xdist
-  ];
+  # tests folder is not included in release
+  doCheck = false;
 
   propagatedBuildInputs = with pythonPackages; [
     webtest bottle threadpool rocket-errbot requests jinja2
@@ -29,7 +29,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Chatbot designed to be simple to extend with plugins written in Python";
     homepage = http://errbot.io/;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz globin ];
     license = licenses.gpl3;
     platforms = platforms.unix;
   };
