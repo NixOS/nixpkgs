@@ -3,7 +3,7 @@
 , gobjectIntrospection, vala_0_23, gtk_doc, autoreconfHook, autoconf-archive
 , nix, boost
 , enableCommandNotFound ? false
-, enableBashCompletion ? false, bashCompletion ? null }:
+, enableBashCompletion ? false, bash-completion ? null }:
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_23 ]
-                  ++ lib.optional enableBashCompletion bashCompletion;
+                  ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk_doc ];
 

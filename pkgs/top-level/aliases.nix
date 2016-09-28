@@ -24,6 +24,7 @@ doNotDisplayTwice rec {
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bar = lemonbar;  # added 2015-01-16
   bar-xft = lemonbar-xft;  # added 2015-01-16
+  bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
   bundler_HEAD = bundler; # added 2015-11-15
