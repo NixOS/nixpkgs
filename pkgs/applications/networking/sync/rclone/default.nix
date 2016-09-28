@@ -3,18 +3,18 @@
 
 buildGoPackage rec {
   name = "rclone-${version}";
-  version = "20160621-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "5a3b109e25a8ad942eebc15251a67629acd647f7";
+  version = "20160922-${stdenv.lib.strings.substring 0 7 rev}";
+  rev = "f2eeb4301cc04a68633eba7f51fa69a4fd9bb32c";
 
   goPackagePath = "github.com/ncw/rclone";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/ncw/rclone";
-    sha256 = "0np3k95zbhbaqnv251rz5j7nlpn8clbsnbiswmj55vxvsybk471x";
+    sha256 = "1saq98i5c5dqljp4qibbws5z305m6n5p4p61bjajw3r1kgxz1wmb";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   meta = {
     description = "Command line program to sync files and directories to and from major cloud storage";
