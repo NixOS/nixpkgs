@@ -16,7 +16,7 @@ let
     # programmable completion. If we do, enable all modules installed in
     # the system (and user profile).
     if shopt -q progcomp &>/dev/null; then
-      . "${pkgs.bashCompletion}/etc/profile.d/bash_completion.sh"
+      . "${pkgs.bash-completion}/etc/profile.d/bash_completion.sh"
       nullglobStatus=$(shopt -p nullglob)
       shopt -s nullglob
       for p in $NIX_PROFILES; do
