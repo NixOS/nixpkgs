@@ -24,7 +24,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
-  version = "8.10.3";
+  version = "8.11.2";
 
   buildInputs = [ env ruby bundler tzdata git nodejs procps ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "0fhnwrgrpccc2j9wgdmwwi9h1ym3ll97lhmddq0xfzivc302ri3w";
+    sha256 = "1id6jsf4mshxis07dqlkgdyqi1v415rp4lx9ix8sjfznchria58b";
   };
 
   patches = [
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
       SKIP_STORAGE_VALIDATION=true \
       rake assets:precompile RAILS_ENV=production
     mv config/gitlab.yml config/gitlab.yml.example
+    rm config/secrets.yml
     mv config config.dist
   '';
 

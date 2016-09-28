@@ -134,8 +134,9 @@ let
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 
+      # FIXME: gdbus should not be in glib.dev!
       ${optionalString (cfg.startDbusSession && cfg.updateDbusEnvironment) ''
-        ${pkgs.glib}/bin/gdbus call --session \
+        ${pkgs.glib.dev}/bin/gdbus call --session \
           --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
           --method org.freedesktop.DBus.UpdateActivationEnvironment \
           "{$(env | ${pkgs.gnused}/bin/sed "s/'/\\\\'/g; s/\([^=]*\)=\(.*\)/'\1':'\2'/" \

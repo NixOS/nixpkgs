@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl, python2 }:
+{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl, python2
+, IOKit ? null }:
 
 stdenv.mkDerivation rec {
   name = "pcsclite-${version}";
@@ -26,7 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig perl python2 ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus_libs ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus_libs ]
+             ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";

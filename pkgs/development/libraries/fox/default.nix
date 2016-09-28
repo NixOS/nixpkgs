@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor, libXrandr, libXft }:
+{ stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor, libXrandr, libXft
+, CoreServices ? null }:
 
 let
   version = "1.7.9";
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jb9368xsin3ppdf6979n5s7in3s9klbxqbwcp0z8misjixl7nzg";
   };
 
-  buildInputs = [ libpng xlibsWrapper libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft ];
+  buildInputs = [ libpng xlibsWrapper libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   doCheck = true;
 

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "fuseiso-20070708";
 
   src = fetchurl {
-    url = "http://sourceforge.net/projects/fuseiso/files/fuseiso/20070708/fuseiso-20070708.tar.bz2";
+    url = "mirror://sourceforge/project/fuseiso/fuseiso/20070708/fuseiso-20070708.tar.bz2";
     sha1 = "fe142556ad35dd7e5dc31a16183232a6e2da7692";  
   };
 

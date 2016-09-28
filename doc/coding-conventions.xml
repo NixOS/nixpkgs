@@ -659,4 +659,22 @@ src = fetchFromGitHub {
     </itemizedlist>
   </para>
 </section>
+
+<section xml:id="sec-patches"><title>Patches</title>
+  <para>Only patches that are unique to <literal>nixpkgs</literal> should be 
+    included in <literal>nixpkgs</literal> source.</para>
+  <para>Patches available online should be retrieved using 
+    <literal>fetchpatch</literal>.</para>
+  <para>
+<programlisting>
+patches = [
+  (fetchpatch {
+    name = "fix-check-for-using-shared-freetype-lib.patch";
+    url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
+    sha256 = "1f0k043rng7f0rfl9hhb89qzvvksqmkrikmm38p61yfx51l325xr";
+  })
+];
+</programlisting>
+  </para>
+</section>
 </chapter>

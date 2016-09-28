@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
-, wrapGAppsHook, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
+{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl
+, wrapGAppsHook, virtinst, gnome_python, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
 , avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3, system-libvirt
 }:
@@ -21,7 +21,7 @@ buildPythonApplication rec {
     [ eventlet greenlet gflags netaddr carrot routes
       PasteDeploy m2crypto ipy twisted
       distutils_extra simplejson readline glanceclient cheetah lockfile httplib2
-      urlgrabber virtinst pyGtkGlade pythonDBus gnome_python pygobject3
+      urlgrabber virtinst pyGtkGlade dbus-python gnome_python pygobject3
       libvirt libxml2Python ipaddr vte libosinfo gobjectIntrospection gtk3 mox
       gtkvnc libvirt-glib glib gsettings_desktop_schemas gnome3.defaultIconTheme
       wrapGAppsHook

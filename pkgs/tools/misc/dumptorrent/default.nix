@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
       sha256 = "073h03bmpfdy15qh37lvppayld2747i4acpyk0pm5nf2raiak0zm";
     };
 
+    patchPhase = ''
+      substituteInPlace Makefile \
+        --replace "gcc" "cc"
+    '';
+
     installPhase = ''
       mkdir -p $out/bin
       cp ./dumptorrent $out/bin

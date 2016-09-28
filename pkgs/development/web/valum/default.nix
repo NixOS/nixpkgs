@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python, glib, vala, ctpl
+{ stdenv, pkgconfig, fetchFromGitHub, python, glib, vala_0_28, ctpl
 , libgee, libsoup, fcgi }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lciwqk4k9sf1hl4drl207g0ydlxl906kx9lx5fqhfb8gwcfqh2g";
   };
 
-  buildInputs = [ python pkgconfig glib vala ctpl libgee libsoup fcgi ];
+  buildInputs = [ python pkgconfig glib vala_0_28 ctpl libgee libsoup fcgi ];
 
   configurePhase = ''python waf configure --prefix=$out'';
 

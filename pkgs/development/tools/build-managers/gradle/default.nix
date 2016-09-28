@@ -51,7 +51,16 @@ rec {
     };
   };
 
-  gradleLatest = gradleGen rec {
+  gradle_latest = gradleGen rec {
+    name = "gradle-3.0";
+
+    src = fetchurl {
+      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      sha256 = "103z2nzlpc6x3mav0mqardd84rj1si718f6wpnpl8i273aa0dj9r";
+    };
+  };
+
+  gradle_2_14 = gradleGen rec {
     name = "gradle-2.14.1";
 
     src = fetchurl {
@@ -60,7 +69,7 @@ rec {
     };
   };
 
-  gradle25 = gradleGen rec {
+  gradle_2_5 = gradleGen rec {
     name = "gradle-2.5";
 
     src = fetchurl {

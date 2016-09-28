@@ -247,8 +247,18 @@ in
               esac
             done
             ''] ++ (map (pool: ''
-            echo "importing root ZFS pool \"${pool}\"..."
-            zpool import -d ${cfgZfs.devNodes} -N $ZFS_FORCE "${pool}"
+            echo -n "importing root ZFS pool \"${pool}\"..."
+            trial=0
+            until msg="$(zpool import -d ${cfgZfs.devNodes} -N $ZFS_FORCE '${pool}' 2>&1)"; do
+              sleep 0.25
+              echo -n .
+              trial=$(($trial + 1))
+              if [[ $trial -eq 60 ]]; then
+                break
+              fi
+            done
+            echo
+            if [[ -n "$msg" ]]; then echo "$msg"; fi
         '') rootPools));
       };
 

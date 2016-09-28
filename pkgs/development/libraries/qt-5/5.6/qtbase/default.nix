@@ -107,7 +107,7 @@ stdenv.mkDerivation {
     -rpath
     -optimized-qmake
     -strip
-    -reduce-relocations
+    -no-reduce-relocations
     -system-proxies
     -pkg-config
 

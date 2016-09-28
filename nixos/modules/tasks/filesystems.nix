@@ -175,6 +175,9 @@ in
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
       in ''
         # This is a generated file.  Do not edit!
+        #
+        # To make changes, edit the fileSystems and swapDevices NixOS options
+        # in your /etc/nixos/configuration.nix file.
 
         # Filesystems.
         ${flip concatMapStrings fileSystems (fs:

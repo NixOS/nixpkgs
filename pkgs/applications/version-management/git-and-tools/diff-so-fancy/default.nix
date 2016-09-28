@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "diff-so-fancy-${version}";
-  version = "0.10.1";
+  version = "0.11.1";
 
   # perl is needed here so patchShebangs can do its job
   buildInputs = [perl makeWrapper];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "0wp5civn70jzil1gbygx6ccrxfrmc8xx90v7zgf36rqi2yhvv64m";
+    sha256 = "1dw32c5i9mry6zr2a6h1369fhp1qbqimx04qgdmdnmn1imyck1h3";
   };
 
   buildPhase = null;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     # itself, so we are copying executable to lib, and only symlink it
     # from bin/
     cp diff-so-fancy $out/lib/diff-so-fancy
-    cp -r lib $out/lib/diff-so-fancy
+    cp -r libexec $out/lib/diff-so-fancy
     ln -s $out/lib/diff-so-fancy/diff-so-fancy $out/bin
 
     # ncurses is needed for `tput`

@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python, dbus_glib, dbus_daemon
-, telepathy_farstream, telepathy_glib, pythonDBus, fetchpatch }:
+{ stdenv, fetchurl, cmake, qtbase, pkgconfig, pythonPackages, dbus_glib, dbus_daemon
+, telepathy_farstream, telepathy_glib, fetchpatch }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python dbus-python;
+in stdenv.mkDerivation rec {
   name = "telepathy-qt-0.9.6.1";
 
   src = fetchurl {
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     ];
 
   nativeBuildInputs = [ cmake pkgconfig python ];
-  propagatedBuildInputs = [ qtbase dbus_glib telepathy_farstream telepathy_glib pythonDBus ];
+  propagatedBuildInputs = [ qtbase dbus_glib telepathy_farstream telepathy_glib dbus-python ];
 
   buildInputs = stdenv.lib.optional doCheck dbus_daemon;
 

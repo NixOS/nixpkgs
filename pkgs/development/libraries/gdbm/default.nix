@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  configureFlags = [ "--enable-libgdbm-compat" ];
+
   meta = with stdenv.lib; {
     description = "GNU dbm key/value database library";
 

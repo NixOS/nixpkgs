@@ -1,10 +1,11 @@
 { stdenv, fetchurl
-, pkgconfig, gettext, python
-, gtk, pygtk, dbus_python
-, gdk_pixbuf, upower
+, pkgconfig, gettext, pythonPackages
+, gtk, gdk_pixbuf, upower
 , makeWrapper }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) dbus-python pygtk python;
+in stdenv.mkDerivation rec {
 
   name = "batti-${version}";
   version = "0.3.8";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig gettext python gtk pygtk dbus_python gdk_pixbuf upower makeWrapper ];
+  [ pkgconfig gettext python gtk pygtk dbus-python gdk_pixbuf upower makeWrapper ];
 
   configurePhase = "true";
 

@@ -1,7 +1,9 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
-, python, pythonDBus }:
+, pythonPackages}:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python dbus-python;
+in stdenv.mkDerivation rec {
   name = "a2jmidid-${version}";
   version = "8";
 
@@ -10,14 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "0pzm0qk5ilqhwz74pydg1jwrds27vm47185dakdrxidb5bv3b5ia";
   };
 
-  buildInputs = [ makeWrapper pkgconfig alsaLib dbus libjack2 python pythonDBus ];
+  buildInputs = [ makeWrapper pkgconfig alsaLib dbus libjack2 python dbus-python ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = "${python.interpreter} waf configure --prefix=$out";
 
-  buildPhase = "python waf";
+  buildPhase = "${python.interpreter} waf";
 
   installPhase = ''
-    python waf install
+    ${python.interpreter} waf install
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH
   '';
 

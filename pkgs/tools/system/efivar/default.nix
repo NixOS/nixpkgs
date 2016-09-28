@@ -1,23 +1,15 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, popt }:
+{ stdenv, fetchFromGitHub, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "0.23";
+  version = "27";
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
     repo = "efivar";
     rev = version;
-    sha256 = "1fdqi053v335pjwj1i3yi9f1kasdzg3agfcp36bxsbhqjp4imlid";
+    sha256 = "1vz3hzs9k7bjg2r5bsw1irnfq77lmq9819sg9a7w6w528bvzr4lx";
   };
-
-  patches = [
-    # fix problem with linux 4.4 headers https://github.com/rhinstaller/efivar/issues/37
-    (fetchurl {
-      url = https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/efivar/files/0.21-nvme_ioctl.h.patch;
-      sha256 = "1rjjpd4s1xdsnhq974j5wnwav8pfvd0jbvhk8a9wc2w029fvj7zp";
-    })
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ popt ];

@@ -1,6 +1,7 @@
 { stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto
 , makeWrapper, gtk3, docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop_file_utils, libusb1, cups, gdk_pixbuf, pango, atk, libnotify
+, cups-filters
 , pythonPackages
 , withGUI ? true
 }:
@@ -26,7 +27,7 @@ in stdenv.mkDerivation rec {
     ];
 
   pythonPath = with pythonPackages;
-    [ pycups pycurl dbus pygobject3 requests2 ];
+    [ pycups pycurl dbus-python pygobject3 requests2 ];
 
   configureFlags =
     [ "--with-udev-rules"
@@ -39,7 +40,9 @@ in stdenv.mkDerivation rec {
       giTypelibPath = stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gdk_pixbuf.out gtk3.out pango.out atk.out libnotify.out ];
     in
     ''
-      export makeWrapperArgs="--set prefix $out --set GI_TYPELIB_PATH ${giTypelibPath}"
+      export makeWrapperArgs="--set prefix $out \
+          --set GI_TYPELIB_PATH ${giTypelibPath} \
+          --set CUPS_DATADIR ${cups-filters}/share/cups"
       wrapPythonPrograms
       # The program imports itself, so we need to move shell wrappers to a proper place.
       fixupWrapper() {
@@ -59,6 +62,10 @@ in stdenv.mkDerivation rec {
 
       # The below line will be unneeded when the next upstream release arrives.
       sed -i -e "s|/usr/bin|$out/bin|" "$out/share/dbus-1/services/org.fedoraproject.Config.Printing.service"
+
+      # Manually expand literal "$(out)", which have failed to expand
+      sed -e "s|ExecStart=\$(out)|ExecStart=$out|" \
+          -i "$out/etc/systemd/system/configure-printer@.service"
     '';
 
   meta = {

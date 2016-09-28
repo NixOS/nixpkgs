@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     for a in "$out"/lib/*.so; do 
       patchelf --set-rpath "$out/lib:${boehmgc.out}/lib" "$a"
     done
-    sed -i -e "s|\-lgc|\-L${boehmgc}\/lib -lgc|" $out/lib/config.jam
+    sed -i -e "s|\-lgc|\-L${boehmgc.out}\/lib -lgc|" $out/lib/config.jam
     wrapProgram $out/bin/dylan-compiler --suffix PATH : ${gcc}/bin
   '';
 

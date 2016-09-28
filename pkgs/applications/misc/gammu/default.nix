@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.33.0";
 
   src = fetchurl {
-    url = "http://sourceforge.net/projects/gammu/files/gammu/${version}/gammu-${version}.tar.xz";
+    url = "mirror://sourceforge/project/gammu/gammu/${version}/gammu-${version}.tar.xz";
     sha256 = "18gplx1v9d70k1q86d5i4n4dfpx367g34pj3zscppx126vwhv112";
   };
 

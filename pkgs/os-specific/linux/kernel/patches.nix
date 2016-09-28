@@ -93,9 +93,9 @@ rec {
   grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.6.5";
-      grrev  = "201607312210";
-      sha256 = "17dnp6w092kvqxqxbdgjpl4mrsn2wkb7z8q5d8ck7dfanpmqap0w";
+    { kver   = "4.7.2";
+      grrev  = "201608211829";
+      sha256 = "1a7pvmb57w7j9s4ww8xvzzijlpnr2i7nhm7jhgfz4n5w3jvxcny3";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -136,10 +136,6 @@ rec {
     { name = "mfd_fix_dependency";
       patch = ./chromiumos-patches/mfd-fix-dependency.patch;
     };
-  qat_common_Makefile =
-    { name = "qat_common_Makefile";
-      patch = ./qat_common_Makefile.patch;
-    };
 
   hiddev_CVE_2016_5829 =
     { name = "hiddev_CVE_2016_5829";
@@ -148,4 +144,6 @@ rec {
         sha256 = "14rm1qr87p7a5prz8g5fwbpxzdp3ighj095x8rvhm8csm20wspyy";
       };
     };
+
+  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 }

@@ -10,16 +10,16 @@
 }:
 
 let
-  version = "1.2";
-  build = "490.39-1";
+  version = "1.3";
+  build = "551.30-1";
   fullVersion = "stable_${version}.${build}";
 
   info = if stdenv.is64bit then {
       arch = "amd64";
-      sha256 = "188fb91f1eb41e1dcaeda982567260adb6c004f4df00de55eed962e6ca7c621e";
+      sha256 = "89d0630c9df56cfb12a87f23430179f6d14a8c57fb029d1c8d28ab06c98b7640";
     } else {
       arch = "i386";
-      sha256 = "0c699a0d7ced5e77c41a85e81077a1b4561d64071ec89e0e875a1c55e78634eb";
+      sha256 = "0a7e07833f5359e38516222767da63edeca92177cbb6d4ef4946a6ef7c7b2946";
     };
 in stdenv.mkDerivation rec {
   product    = "vivaldi";

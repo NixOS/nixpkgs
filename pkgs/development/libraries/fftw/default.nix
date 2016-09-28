@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
     # all x86_64 have sse2
     # however, not all float sizes fit
     ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
-    ++ optional stdenv.cc.isGNU "--enable-openmp";
+    ++ optional stdenv.cc.isGNU "--enable-openmp"
+    # doc generation causes Fortran wrapper generation which hard-codes gcc
+    ++ optional (!stdenv.cc.isGNU) "--disable-doc";
 
   enableParallelBuilding = true;
 

@@ -181,6 +181,9 @@ with stdenv.lib;
   VGA_SWITCHEROO y # Hybrid graphics support
   DRM_GMA600 y
   DRM_GMA3600 y
+  ${optionalString (versionAtLeast version "4.5") ''
+    DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
+  ''}
 
   # Sound.
   SND_DYNAMIC_MINORS y
@@ -321,6 +324,7 @@ with stdenv.lib;
   DVB_DYNAMIC_MINORS? y # we use udev
   EFI_STUB y # EFI bootloader in the bzImage itself
   FHANDLE y # used by systemd
+  SECCOMP y # used by systemd >= 231
   FRONTSWAP y
   FUSION y # Fusion MPT device support
   IDE n # deprecated IDE support

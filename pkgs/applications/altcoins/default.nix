@@ -17,6 +17,7 @@ rec {
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
 
   go-ethereum = callPackage ./go-ethereum.nix { };
+  mist-browser = callPackage ./mist-browser.nix { };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
@@ -28,6 +29,7 @@ rec {
   namecoind = callPackage ./namecoind.nix { };
 
   parity = callPackage ./parity.nix { };
+  ethabi = callPackage ./ethabi.nix { };
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };

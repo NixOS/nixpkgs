@@ -19,6 +19,6 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

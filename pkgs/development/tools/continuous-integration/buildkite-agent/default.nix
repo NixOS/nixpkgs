@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/bootstrap.sh \
       --replace "#!/bin/bash" "#!$(type -P bash)"
     wrapProgram $out/bin/buildkite-agent \
-      --set PATH '"${openssh}/bin/:${git}/bin:${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:$PATH"'
+      --set PATH '"${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}:$PATH"'
   '';
 
   meta = {

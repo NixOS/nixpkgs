@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, lilypond, pyqt4, pygame }:
+{ stdenv, fetchurl, pythonPackages, lilypond}:
 
 pythonPackages.buildPythonApplication rec {
   name = "frescobaldi-${version}";

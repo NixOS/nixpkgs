@@ -17,6 +17,9 @@ rec {
   zcrecipeeggVersion = "2.0.3";
   zcrecipeeggHash = "69a8ce276029390a36008150444aa0b4";
 
+  buildoutrequirementsVersion = "0.2.2";
+  buildoutrequirementsHash = "0b4e53d871b167eaac0846942221af00";
+
   wheelVersion = "0.29.0";
   wheelHash = "555a67e4507cedee23a0deb9651e452f";
 
@@ -69,6 +72,11 @@ rec {
   zcrecipeegg = fetchurl {
     url = "https://pypi.python.org/packages/08/5e/ade683d229d77ed457017145672f1be4fd98be60f1a5344109a4e66a7d54/zc.recipe.egg-${zcrecipeeggVersion}.tar.gz";
     md5 = zcrecipeeggHash;
+  };
+
+  buildoutrequirements = fetchurl {
+    url = "https://github.com/garbas/buildout.requirements/archive/1e2977e2d254184399401746736d2b17c912b350.tar.gz";
+    md5 = buildoutrequirementsHash;
   };
 
   wheel = fetchurl {

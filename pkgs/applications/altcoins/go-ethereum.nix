@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "go-ethereum-${version}";
-  version = "1.4.7";
+  version = "1.4.13";
   rev = "refs/tags/v${version}";
   goPackagePath = "github.com/ethereum/go-ethereum";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     inherit rev;
     url = "https://${goPackagePath}";
-    sha256 = "19q518kxkvrr44cvsph4wv3lr6ivqsckz1f22r62932s3sq6gyd8";
+    sha256 = "1z627c0kbrddy9j670fhkhsj4k11risbfyfv4wbgr6lvwv5agqsq";
   };
 
   buildPhase = ''
@@ -26,9 +26,11 @@ stdenv.mkDerivation rec {
     cp -v build/bin/* $out/bin
   '';
 
-  meta = {
-    homepage = "https://ethereum.github.io/go-ethereum/";
+  meta = with stdenv.lib; {
     description = "Official golang implementation of the Ethereum protocol";
+    homepage = "https://ethereum.github.io/go-ethereum/";
+    maintainers = with maintainers; [ ryepdx ];
     license = with lib.licenses; [ lgpl3 gpl3 ];
+    platforms = platforms.linux;
   };
 }

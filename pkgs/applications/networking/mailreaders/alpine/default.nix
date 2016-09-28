@@ -1,6 +1,7 @@
 {stdenv, fetchurl, ncurses, tcl, openssl, pam, pkgconfig, gettext, kerberos
 , openldap
 }:
+# NOTE: Please check if any changes here are applicable to ../realpine/ as well
 let
   s = 
   rec {

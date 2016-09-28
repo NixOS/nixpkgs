@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, libmemcached, pcre
-, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
+, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
 , libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.12.1";
+  version = "3.14.5";
 
   # use git version since we need submodules
   src = fetchgit {

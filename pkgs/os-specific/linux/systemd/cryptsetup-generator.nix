@@ -18,10 +18,10 @@ stdenv.lib.overrideDerivation systemd (p: {
   # For some reason systemd-cryptsetup-generator is a wrapper-script
   # with the current release of systemd. We want the real one.
 
-  # TODO: Revert 3efadce when the wrapper-script is gone
+  # TODO: Remove `.libs` prefix when the wrapper-script is gone
   installPhase = ''
     mkdir -p $out/lib/systemd/
-    cp systemd-cryptsetup $out/lib/systemd/systemd-cryptsetup
+    cp .libs/systemd-cryptsetup $out/lib/systemd/systemd-cryptsetup
     cp .libs/*.so $out/lib/
 
     mkdir -p $out/lib/systemd/system-generators/

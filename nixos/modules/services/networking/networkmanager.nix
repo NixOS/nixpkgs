@@ -235,19 +235,13 @@ in {
 
     systemd.packages = cfg.packages;
 
-    # Create an initialisation service that both starts
-    # NetworkManager when network.target is reached,
-    # and sets up necessary directories for NM.
-    systemd.services."networkmanager-init" = {
-      description = "NetworkManager initialisation";
+    systemd.services."network-manager" = {
       wantedBy = [ "network.target" ];
-      wants = [ "network-manager.service" ];
-      before = [ "network-manager.service" ];
-      script = ''
+
+      preStart = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
         mkdir -m 755 -p ${stateDirs}
       '';
-      serviceConfig.Type = "oneshot";
     };
 
     # Turn off NixOS' network management

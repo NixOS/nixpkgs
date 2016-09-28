@@ -54,7 +54,7 @@ buildPythonApplication rec {
       --set XKB_BINDIR "${xkbcomp}/bin" \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib \
-      --prefix PATH : ${getopt}/bin:${xorgserver.out}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux ]}
   '';
 
   preCheck = "exit 0";
@@ -64,7 +64,7 @@ buildPythonApplication rec {
   #postFixup = ''
   #  sed -i '2iexport XKB_BINDIR="${xkbcomp}/bin"' $out/bin/xpra
   #  sed -i '3iexport FONTCONFIG_FILE="${fontsConf}"' $out/bin/xpra
-  #  sed -i '4iexport PATH=${getopt}/bin:${xorgserver.out}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin\${PATH:+:}\$PATH' $out/bin/xpra
+  #  sed -i '4iexport PATH=${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux ]}\${PATH:+:}\$PATH' $out/bin/xpra
   #'';
 
 

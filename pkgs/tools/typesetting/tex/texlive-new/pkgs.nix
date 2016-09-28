@@ -22857,7 +22857,7 @@ tl: { # no indentation
   version = "prot2.5";
 };
 "xdvi" = {
-  md5.run = "ada6dc1ceffd19a5fdd33d0536c8f82a";
+  md5.run = "0d66ffa281d713e3395ee0f5db93c9bd";
   md5.doc = "eda28e06fbd79ed2bb26aff4d4d2fd22";
   hasRunfiles = true;
   version = "22.87";

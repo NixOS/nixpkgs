@@ -165,6 +165,8 @@ let
   mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
     location ${location} {
       ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
+      ${optionalString (config.index != null) "index ${config.index};"}
+      ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${config.extraConfig}
     }

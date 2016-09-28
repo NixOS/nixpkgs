@@ -111,11 +111,20 @@ in rec {
       ];
     }).config.system.build;
   in
-    pkgs.symlinkJoin {name="netboot"; paths=[
-      build.netbootRamdisk
-      build.kernel
-      build.netbootIpxeScript
-    ];};
+    pkgs.symlinkJoin {
+      name="netboot";
+      paths=[
+        build.netbootRamdisk
+        build.kernel
+        build.netbootIpxeScript
+      ];
+      postBuild = ''
+        mkdir -p $out/nix-support
+        echo "file bzImage $out/bzImage" >> $out/nix-support/hydra-build-products
+        echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
+        echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
+      '';
+    };
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
@@ -211,7 +220,6 @@ in rec {
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
-  tests.cassandra = callTest tests/cassandra.nix {};
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};

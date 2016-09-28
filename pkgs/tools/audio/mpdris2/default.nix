@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, intltool
-, python, wrapPython, mpd, pygtk, dbus, pynotify
+, pythonPackages, pythonFull
 }:
 
 stdenv.mkDerivation rec {
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0zdmamj2ldhr6y3s464w8y2x3yizda784jnlrg3j3myfabssisvz";
   };
 
-  buildInputs = [ intltool autoreconfHook ];
-  propagatedBuildInputs = [ python wrapPython ];
-  pythonPath = [ mpd pygtk dbus pynotify ];
+  buildInputs = [ intltool autoreconfHook pythonPackages.wrapPython ];
+  propagatedBuildInputs = with pythonPackages; [ pythonFull  pygtk dbus-python ];
+  pythonPath = with pythonPackages; [ mpd pygtk dbus-python notify ];
   postInstall = "wrapPythonPrograms";
 
   meta = with stdenv.lib; {

@@ -2,7 +2,7 @@
 , systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused, coreutils, file, inetutils }:
+, ethtool, gnused, coreutils, file, inetutils, kmod }:
 
 stdenv.mkDerivation rec {
   name    = "network-manager-${version}";
@@ -19,13 +19,15 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
     substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
     substituteInPlace src/devices/nm-device.c --replace /usr/bin/ping ${inetutils}/bin/ping
-    substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe ${kmod}/bin/modprobe
     substituteInPlace data/84-nm-drivers.rules \
       --replace /bin/sh ${stdenv.shell}
     substituteInPlace data/85-nm-unmanaged.rules \
       --replace /bin/sh ${stdenv.shell} \
       --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
       --replace /bin/sed ${gnused}/bin/sed
+    substituteInPlace data/NetworkManager.service.in \
+      --replace /bin/kill ${coreutils}/bin/kill
     # to enable link-local connections
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';

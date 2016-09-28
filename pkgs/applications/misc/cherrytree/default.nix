@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pythonPackages, gettext, pygtksourceview, sqlite }:
+{ stdenv, fetchurl, pythonPackages, gettext, sqlite }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
   [ sqlite3 ];
 
   buildInputs = with pythonPackages;
-  [ python gettext wrapPython pygtk dbus pygtksourceview ];
+  [ python gettext wrapPython pygtk dbus-python pygtksourceview ];
 
   pythonPath = with pythonPackages;
-  [ pygtk dbus pygtksourceview ];
+  [ pygtk dbus-python pygtksourceview ];
 
   patches = [ ./subprocess.patch ];
 

@@ -109,6 +109,7 @@ in {
       after = [ "network.target" ];
       preStart = ''
         mkdir -p /var/spool/smtpd
+        chmod 711 /var/spool/smtpd
 
         mkdir -p /var/spool/smtpd/offline
         chown root.smtpq /var/spool/smtpd/offline
@@ -116,6 +117,7 @@ in {
 
         mkdir -p /var/spool/smtpd/purge
         chmod 700 /var/spool/smtpd/purge
+        chown smtpq /var/spool/smtpd/purge
       '';
       serviceConfig.ExecStart = "${opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";

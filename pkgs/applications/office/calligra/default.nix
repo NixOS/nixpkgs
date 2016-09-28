@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for i in $out/bin/*; do
       wrapProgram $i \
-        --prefix PATH ':' "${pstoedit}/bin" \
+        --prefix PATH ':' "${pstoedit.out}/bin" \
         --prefix XDG_DATA_DIRS ':' "${oxygen_icons}/share"
     done
   '';

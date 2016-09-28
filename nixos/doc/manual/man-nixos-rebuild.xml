@@ -29,7 +29,7 @@
     </group>
     <sbr />
     <arg><option>--upgrade</option></arg>
-    <arg><option>--install-grub</option></arg>
+    <arg><option>--install-bootloader</option></arg>
     <arg><option>--no-build-nix</option></arg>
     <arg><option>--fast</option></arg>
     <arg><option>--rollback</option></arg>
@@ -212,12 +212,11 @@ $ ./result/bin/run-*-vm
   </varlistentry>
 
   <varlistentry>
-    <term><option>--install-grub</option></term>
+    <term><option>--install-bootloader</option></term>
     <listitem>
-      <para>Causes the GRUB boot loader to be (re)installed on the
-      device specified by the
-      <varname>boot.loader.grub.device</varname> configuration
-      option.</para>
+      <para>Causes the boot loader to be (re)installed on the
+      device specified by the relevant configuration options.
+      </para>
     </listitem>
   </varlistentry>
 

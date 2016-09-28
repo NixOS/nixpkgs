@@ -12,18 +12,18 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gtkflags.patch ];
 
-  makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
+  makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pwmt.org/projects/zathura/;
     description = "A zathura DJVU plugin";
     longDescription = ''
-	  The zathura-djvu plugin adds DjVu support to zathura by using the
-	  djvulibre library.
+      The zathura-djvu plugin adds DjVu support to zathura by using the
+      djvulibre library.
     '';
-    license = stdenv.lib.licenses.zlib;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    license = licenses.zlib;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ garbas ];
   };
 }
 

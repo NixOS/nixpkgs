@@ -8,7 +8,7 @@ let
 
   inherit (config.services.avahi) nssmdns;
   inherit (config.services.samba) nsswins;
-  ldap = config.users.ldap.enable;
+  ldap = (config.users.ldap.enable && config.users.ldap.nsswitch);
 
 in
 

@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, unzip, gcc48 }:
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "perseus-4-beta";
   version = "4-beta";
-  buildInputs = [unzip gcc48];
+  buildInputs = [ unzip ];
 
   src = fetchurl {
     url = "http://www.sas.upenn.edu/~vnanda/source/perseus_4_beta.zip";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   buildPhase = ''
-    g++ Pers.cpp -O3 -o perseus
+    g++ Pers.cpp -O3 -fpermissive -o perseus
   '';
 
   installPhase = ''

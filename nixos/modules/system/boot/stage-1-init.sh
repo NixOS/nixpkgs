@@ -312,8 +312,50 @@ mountFS() {
         echo "retrying..."
         n=$((n + 1))
     done
+
+    [ "$mountPoint" == "/" ] &&
+        [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
+        lustrateRoot "/mnt-root"
 }
 
+lustrateRoot () {
+    local root="$1"
+
+    echo
+    echo -e "\e[1;33m<<< NixOS is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
+    echo
+
+    mkdir -m 0755 -p "$root/old-root.tmp"
+
+    echo
+    echo "Moving impurities out of the way:"
+    for d in "$root"/*
+    do
+        [ "$d" == "$root/nix"          ] && continue
+        [ "$d" == "$root/boot"         ] && continue # Don't render the system unbootable
+        [ "$d" == "$root/old-root.tmp" ] && continue
+
+        mv -v "$d" "$root/old-root.tmp"
+    done
+
+    # Use .tmp to make sure subsequent invokations don't clash
+    mv -v "$root/old-root.tmp" "$root/old-root"
+
+    mkdir -m 0755 -p "$root/etc"
+    touch "$root/etc/NIXOS"
+
+    exec 4< "$root/old-root/etc/NIXOS_LUSTRATE"
+
+    echo
+    echo "Restoring selected impurities:"
+    while read -u 4 keeper; do
+        dirname="$(dirname "$keeper")"
+        mkdir -m 0755 -p "$root/$dirname"
+        cp -av "$root/old-root/$keeper" "$root/$keeper"
+    done
+
+    exec 4>&-
+}
 
 # Function for waiting a device to appear.
 waitDevice() {

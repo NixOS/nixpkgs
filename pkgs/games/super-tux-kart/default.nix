@@ -1,6 +1,6 @@
 { fetchgit, fetchsvn, cmake, stdenv, plib, SDL, openal, freealut, mesa
 , libvorbis, libogg, gettext, libXxf86vm, curl, pkgconfig
-, fribidi, autoconf, automake, libtool, bluez, libjpeg }:
+, fribidi, autoconf, automake, libtool, bluez, libjpeg, libpng }:
 
 stdenv.mkDerivation rec {
   name = "supertuxkart-${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [
     plib SDL openal freealut mesa libvorbis libogg gettext
-    libXxf86vm curl pkgconfig fribidi autoconf automake libtool cmake bluez libjpeg
+    libXxf86vm curl pkgconfig fribidi autoconf automake libtool cmake bluez libjpeg libpng
   ];
 
   enableParallelBuilding = true;

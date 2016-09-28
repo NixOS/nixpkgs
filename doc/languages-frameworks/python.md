@@ -291,8 +291,8 @@ pyfftw = buildPythonPackage rec {
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
 
-  LDFLAGS="-L${pkgs.fftw}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
-  CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
+  LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
+  CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
   '';
 
   meta = {
@@ -503,9 +503,12 @@ and can be used as:
 
 The `buildPythonPackage` mainly does four things:
 
-* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to build a wheel binary zipfile.
+* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to
+  build a wheel binary zipfile.
 * In the `installPhase`, it installs the wheel file using `pip install *.whl`.
-* In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to wrap all programs in the `$out/bin/*` directory to include `$PYTHONPATH` and `$PATH` environment variables.
+* In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
+  wrap all programs in the `$out/bin/*` directory to include `$PATH`
+  environment variable and add dependent libraries to script's `sys.path`.
 * In the `installCheck` phase, `${python.interpreter} setup.py test` is ran.
 
 As in Perl, dependencies on other Python packages can be specified in the
@@ -566,7 +569,7 @@ running `nix-shell` with the following `shell.nix`
     with import <nixpkgs> {};
 
     (python3.buildEnv.override {
-      extraLibs = with python3Packages; [ numpy requests ];
+      extraLibs = with python3Packages; [ numpy requests2 ];
     }).env
 
 will drop you into a shell where Python will have the
@@ -605,7 +608,7 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 
     with import <nixpkgs> {};
 
-    (python33.withPackages (ps: [ps.numpy ps.requests])).env
+    (python33.withPackages (ps: [ps.numpy ps.requests2])).env
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
@@ -748,6 +751,23 @@ in newpkgs.python35.withPackages (ps: [ps.blaze])
 ```
 The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
 
+### `python setup.py bdist_wheel` cannot create .whl
+
+Executing `python setup.py bdist_wheel` fails with
+```
+ValueError: ZIP does not support timestamps before 1980
+```
+This is because files are included that depend on items in the Nix store which have a timestamp of, that is, it corresponds to January the 1st, 1970 at 00:00:00. And as the error informs you, ZIP does not support that.
+Fortunately `bdist_wheel` takes into account `SOURCE_DATE_EPOCH`. On Nix this value is set to 1. By setting it to a value correspond to 1980 or later it is possible to build wheels.
+
+Use 1980 as timestamp:
+```
+SOURCE_DATE_EPOCH=315532800 python3 setup.py bdist_wheel
+```
+or the current time:
+```
+SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel
+```
 
 ### `install_data` / `data_files` problems
 

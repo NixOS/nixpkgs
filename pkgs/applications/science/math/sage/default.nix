@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, perl, gfortran, texLive, ffmpeg, tk
+{ stdenv, fetchurl, m4, perl, gfortran, texlive, ffmpeg, tk
 , imagemagick, liblapack, python, openssl, libpng
 , which
 }:
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "102mrzzi215g1xn5zgcv501x9sghwg758jagx2jixvg1rj2jijj9";
   };
 
-  buildInputs = [ m4 perl gfortran texLive ffmpeg tk imagemagick liblapack
+  buildInputs = [ m4 perl gfortran texlive.combined.scheme-basic ffmpeg tk imagemagick liblapack
                   python openssl libpng which];
 
   patches = [ ./spkg-singular.patch ./spkg-python.patch ./spkg-git.patch ];
@@ -25,9 +25,12 @@ stdenv.mkDerivation rec {
     export HOME=$out/sageHome
   '';
 
+  preBuild = "patchShebangs build";
+
   installPhase = ''DESTDIR=$out make install'';
 
   meta = {
+    broken = true;
     homepage = "http://www.sagemath.org";
     description = "A free open source mathematics software system";
     license = stdenv.lib.licenses.gpl2Plus;

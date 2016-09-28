@@ -16,20 +16,20 @@ let
 
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "0.9.56";
+  version = "0.10.1";
   qtVersion = lib.replaceStrings ["."] ["_"] packagedQt;
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "000ngg6arfb6mif0hvin099f83q3sn7mw4vfvrikskczblw3a5lc";
+    sha256 = "08isxwif6zllglkpd9i7ypxm2s4bibzqris48607bafr88ylksdk";
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop.git";
-    rev = "f8907d1ccaf8345c06232238342921213270e3d8";
-    sha256 = "04jh0fsrh4iwg188d20z15qkxv05wa5lpd8h21yxx3jxqljpdkws";
+    rev = "9ce7be9efed501f988bb099956fa63729f2c25ea";
+    sha256 = "1wp6lqscpm2byizchm0bj48dg9bga02r9r69ns10zxk0gk0qvvdn";
   };
 
   buildInputs = [
@@ -50,22 +50,8 @@ in stdenv.mkDerivation rec {
     "CONFIG+=release"
     "DEFINES+=TDESKTOP_DISABLE_AUTOUPDATE"
     "DEFINES+=TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
-    "INCLUDEPATH+=${gtk2.dev}/include/gtk-2.0"
-    "INCLUDEPATH+=${glib.dev}/include/glib-2.0"
-    "INCLUDEPATH+=${glib.out}/lib/glib-2.0/include"
-    "INCLUDEPATH+=${cairo.dev}/include/cairo"
-    "INCLUDEPATH+=${pango.dev}/include/pango-1.0"
-    "INCLUDEPATH+=${gtk2.out}/lib/gtk-2.0/include"
-    "INCLUDEPATH+=${gdk_pixbuf.dev}/include/gdk-pixbuf-2.0"
-    "INCLUDEPATH+=${atk.dev}/include/atk-1.0"
-    "INCLUDEPATH+=${libappindicator-gtk2}/include/libappindicator-0.1"
-    "INCLUDEPATH+=${libunity}/include/unity"
-    "INCLUDEPATH+=${dee}/include/dee-1.0"
-    "INCLUDEPATH+=${libdbusmenu-glib}/include/libdbusmenu-glib-0.4"
     "INCLUDEPATH+=${breakpad}/include/breakpad"
     "QT_TDESKTOP_VERSION=${systemQt}"
-    "LIBS+=-lcrypto"
-    "LIBS+=-lssl"
   ];
 
   qtSrcs = [ qtbase.src qtimageformats.src ];
@@ -79,11 +65,10 @@ in stdenv.mkDerivation rec {
     sed -i 'Telegram/Telegram.pro' \
       -e 's,CUSTOM_API_ID,,g' \
       -e 's,/usr,/does-not-exist,g' \
-      -e '/LIBS += .*libxkbcommon.a/d' \
-      -e 's,LIBS += .*libz.a,LIBS += -lz,' \
-      -e 's,LIBS += .*libbreakpad_client.a,LIBS += ${breakpad}/lib/libbreakpad_client.a,' \
       -e 's, -flto,,g' \
-      -e 's, -static-libstdc++,,g'
+      -e 's,LIBS += .*libbreakpad_client.a,LIBS += ${breakpad}/lib/libbreakpad_client.a,' \
+      -e 's, -static-libstdc++,,g' \
+      -e '/LIBS += .*libxkbcommon.a/d'
 
     export qmakeFlags="$qmakeFlags QT_TDESKTOP_PATH=$PWD/../qt"
 
@@ -105,7 +90,7 @@ in stdenv.mkDerivation rec {
       export configureFlags="-prefix "$PWD/../qt" -release -opensource -confirm-license -system-zlib \
         -system-libpng -system-libjpeg -system-freetype -system-harfbuzz -system-pcre -system-xcb \
         -system-xkbcommon-x11 -no-opengl -static -nomake examples -nomake tests \
-        -openssl-linked -dbus-linked -system-sqlite -verbose \
+        -openssl-linked -dbus-linked -system-sqlite -verbose -no-gtkstyle \
         ${lib.optionalString (!system-x86_64) "-no-sse2"} -no-sse3 -no-ssse3 \
         -no-sse4.1 -no-sse4.2 -no-avx -no-avx2 -no-mips_dsp -no-mips_dspr2"
       export dontAddPrefix=1

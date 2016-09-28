@@ -75,7 +75,7 @@ stdenv.mkDerivation {
 
     for i in lib/VBoxOGL*.so
     do
-        patchelf --set-rpath $out/lib:${dbus.lib}/lib:${libXcomposite.out}/lib:${libXdamage.out}/lib:${libXext.out}/lib:${libXfixes.out}/lib $i
+        patchelf --set-rpath ${lib.makeLibraryPath [ "$out" dbus libXcomposite libXdamage libXext libXfixes ]} $i
     done
 
     # FIXME: Virtualbox 4.3.22 moved VBoxClient-all (required by Guest Additions

@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "xgboost-${version}";
-  version = "2016-05-14";
+  version = "0.60";
 
   # needs submodules
   src = fetchgit {
     url = "https://github.com/dmlc/xgboost";
-    rev = "9c26566eb09733423f821f139938ff4105c3775d";
-    sha256 = "1d7lnbwxwakclqqfjwyk9w3wd2clkihdr6ljs5z08ydiaspri093";
+    rev = "refs/tags/v${version}";
+    sha256 = "0536vfl59n9vlagl1cpdl06c9y19dscwhwdzvi27zk5nc5qb6rdq";
   };
-
-  postPatch = "sed '1i#include <cmath>' -i src/tree/param.h";
 
   enableParallelBuilding = true;
 

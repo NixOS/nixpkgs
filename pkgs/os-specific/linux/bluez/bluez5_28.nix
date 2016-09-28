@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib, python,
-  pythonPackages, pythonDBus, readline, libsndfile, udev, libical,
+{ stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
+  pythonPackages, readline, libsndfile, udev, libical,
   systemd, enableWiimote ? false }:
 
 assert stdenv.isLinux;
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python;
+in stdenv.mkDerivation rec {
   name = "bluez-5.28";
    
   src = fetchurl {
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   pythonPath = with pythonPackages;
-    [ pythonDBus pygobject pygobject3 recursivePthLoader ];
+    [ dbus pygobject pygobject3 recursivePthLoader ];
 
   buildInputs =
     [ pkgconfig dbus glib alsaLib python pythonPackages.wrapPython

@@ -9,11 +9,11 @@
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "1jwszhpjn09zkqji8w1x97rw0wqcl71ll2y6vp056fb1bvshms8h";
+    sha256 = "0sriasjc573c519yqw1hcfb3qqjcsm9hm8vayw0anwkl6di9ay8s";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
-    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd}/bin:$PATH
+    PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd ]}:$PATH
     substituteInPlace configure \
       --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
   '' + ''
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       --replace "$out/bin" "${gettext}/bin"
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${iptables}/sbin:${iproute}/sbin:${pmutils}/bin:${numad}/bin:${numactl}/bin
+      --prefix PATH : ${stdenv.lib.makeBinPath [ iptables iproute pmutils numad numactl ]}
   '';
 
   enableParallelBuilding = true;

@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   dontStrip = true;
 
   configurePhase = ''
-    sed -i -e 's+-I \$srcdir/mupdf/include -I \$srcdir/mupdf/thirdparty/freetype/include+-I ${freetype}/include+' build.sh
+    sed -i -e 's+-I \$srcdir/mupdf/include -I \$srcdir/mupdf/thirdparty/freetype/include+-I ${freetype.dev}/include+' build.sh
     sed -i -e 's+-lmupdf +-lfreetype -lz -lharfbuzz -ljbig2dec -lopenjp2 -ljpeg -lmupdf +' build.sh
     sed -i -e 's+-L\$srcdir/mupdf/build/native ++' build.sh
   '';

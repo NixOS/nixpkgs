@@ -30,9 +30,9 @@ in rec {
   };
 
   unstable = fetchurl rec {
-    version = "1.9.14";
+    version = "1.9.16";
     url = "mirror://sourceforge/wine/wine-${version}.tar.bz2";
-    sha256 = "0b65j8lc2axyc7lpa5rjr7vbjz4y78gkd7hhmvhra78pmwf9dgkz";
+    sha256 = "010gjib4nhrn9j9q12v5irda8df8xp17a6v6qqskkadd79kxc871";
     inherit (stable) mono;
     gecko32 = fetchurl rec {
       version = "2.44";
@@ -48,7 +48,7 @@ in rec {
 
   staging = fetchFromGitHub rec {
     inherit (unstable) version;
-    sha256 = "0582ylrvl7racpb0il3wmbivb2d7lh6n3mymh19yw94qzgifwqrw";
+    sha256 = "0rcy0i36jxv2akczd4sfrdmlsqxmj5v0wzvqb3xl8p2mldk9i8yl";
     owner = "wine-compholio";
     repo = "wine-staging";
     rev = "v${version}";

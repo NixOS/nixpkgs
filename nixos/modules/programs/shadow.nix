@@ -103,10 +103,9 @@ in
       };
 
     security.setuidPrograms = [ "su" "chfn" ]
+      ++ [ "newuidmap" "newgidmap" ] # new in shadow 4.2.x
       ++ lib.optionals config.users.mutableUsers
-      [ "passwd" "sg" "newgrp"
-        "newuidmap" "newgidmap" # new in shadow 4.2.x
-      ];
+      [ "passwd" "sg" "newgrp" ];
 
   };
 

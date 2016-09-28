@@ -1255,6 +1255,15 @@
       };
     }
     rec {
+      name = "libvulkan1_1.0.3~git20160215-0.1+steamos5+srt1_amd64";
+      md5 = "4d9ac7966de8160a13817291206b51a4";
+      url = "mirror://steamrt/pool/main/v/vulkan-loader/libvulkan1_1.0.3~git20160215-0.1+steamos5+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url md5;
+        name = "libvulkan1.deb";
+      };
+    }
+    rec {
       name = "libwind0-heimdal_1.6~git20120311.dfsg.1-2+srt4_amd64";
       md5 = "a1e5b4a8f8200feef82dab976f1b4e5d";
       url = "mirror://steamrt/pool/main/h/heimdal/libwind0-heimdal_1.6~git20120311.dfsg.1-2+srt4_amd64.deb";
@@ -2991,6 +3000,15 @@
       source = fetchurl {
         inherit url md5;
         name = "libvpx1.deb";
+      };
+    }
+    rec {
+      name = "libvulkan1_1.0.3~git20160215-0.1+steamos5+srt1_i386";
+      md5 = "de2c787fcc443fb989b1862367a2e0c7";
+      url = "mirror://steamrt/pool/main/v/vulkan-loader/libvulkan1_1.0.3~git20160215-0.1+steamos5+srt1_i386.deb";
+      source = fetchurl {
+        inherit url md5;
+        name = "libvulkan1.deb";
       };
     }
     rec {

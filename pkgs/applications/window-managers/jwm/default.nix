@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "jwm-${version}";
-  version = "1535";
+  version = "1548";
   
   src = fetchurl {
      url = "https://github.com/joewing/jwm/archive/s${version}.tar.gz";
-     sha256 = "1v593v1n9p9nvlhz1m9vc94wj21a6rbk7hcja30421h5mwa2b6gb";
+     sha256 = "1ih5y7567vwcbnkjwm3cc9iq4n9rzz818mkh6ryli9ld230hla5r";
   };
 
   nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];

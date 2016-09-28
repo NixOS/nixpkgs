@@ -1,4 +1,4 @@
-{ lib, pythonPackages, fetchurl }:
+{ lib, pythonPackages, fetchurl, git }:
 
 pythonPackages.buildPythonApplication rec {
   name = "nox-${version}";
@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "11f6css8rnh7qz55z7i81cnb5h9ys98fqxq3fps3hsh64zlydj52";
   };
 
-  buildInputs = [ pythonPackages.pbr ];
+  buildInputs = [ pythonPackages.pbr git ];
 
   propagatedBuildInputs = with pythonPackages; [
       dogpile_cache

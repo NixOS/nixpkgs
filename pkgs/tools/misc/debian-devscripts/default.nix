@@ -1,10 +1,13 @@
 {stdenv, fetchurl, perl, CryptSSLeay, LWP, unzip, xz, dpkg, TimeDate, DBFile
-, FileDesktopEntry, libxslt, docbook_xsl, python3, setuptools, makeWrapper
+, FileDesktopEntry, libxslt, docbook_xsl, makeWrapper
+, python3Packages
 , perlPackages, curl, gnupg, diffutils
 , sendmailPath ? "/var/setuid-wrappers/sendmail"
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python3Packages) python setuptools;
+in stdenv.mkDerivation rec {
   version = "2.16.6";
   name = "debian-devscripts-${version}";
 
@@ -14,13 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl CryptSSLeay LWP unzip xz dpkg TimeDate DBFile 
-    FileDesktopEntry libxslt python3 setuptools makeWrapper
+    FileDesktopEntry libxslt python setuptools makeWrapper
     perlPackages.ParseDebControl perlPackages.LWPProtocolHttps
     curl gnupg diffutils ];
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
-    tgtpy="$out/lib/${python3.libPrefix}/site-packages"
+    tgtpy="$out/lib/${python.libPrefix}/site-packages"
     mkdir -p "$tgtpy"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
     find po4a scripts -type f -exec sed -r \

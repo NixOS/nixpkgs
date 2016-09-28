@@ -508,7 +508,11 @@ my $nameDiffer = get("fullName") ne $prevGrubState->name;
 my $versionDiffer = get("fullVersion") ne $prevGrubState->version;
 my $efiDiffer = $efiTarget ne $prevGrubState->efi;
 my $efiMountPointDiffer = $efiSysMountPoint ne $prevGrubState->efiMountPoint;
-my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
+if (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1") {
+    warn "NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER";
+    $ENV{'NIXOS_INSTALL_BOOTLOADER'} = "1";
+}
+my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_BOOTLOADER'} // "") eq "1");
 
 # install a symlink so that grub can detect the boot drive
 my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space";
