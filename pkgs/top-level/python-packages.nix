@@ -7020,12 +7020,20 @@ in modules // {
     version = "4.3.2";
     name = "grip-${version}";
 
-    src = pkgs.fetchurl {
-      url = "https://files.pythonhosted.org/packages/8b/9d/698a7a3a8b57c28eacac27f269c9d0da228d20ee734edbe9451e3e0f7cde/${name}.zip";
-      sha256 = "0sr6srp4liqjs6hxcy9kp8g5dzbnyfmwcsy2cn6qszkpp9x25w70";
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyespo";
+      repo = "grip";
+      rev = "v${version}";
+      sha256 = "05a169sfaj280k7gibbc1rznjn43l5m6l1gpl6a5cmp5r8827khs";
     };
+    buildInputs = with self; [ pytest responses ];
 
     propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests2 ];
+
+    checkPhase = ''
+      export PATH="$PATH:$out/bin"
+      py.test -xm "not assumption"
+    '';
 
     meta = with stdenv.lib; {
       description = "Preview GitHub Markdown files like Readme locally before committing them";
