@@ -10774,121 +10774,123 @@ in
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
 
-  linuxPackagesFor = kernel: self: let callPackage = newScope self; in rec {
+  linuxPackagesFor = kernel: lib.makeExtensible (self: {
+    callPackage = newScope self;
+
     inherit kernel;
 
-    accelio = callPackage ../development/libraries/accelio { };
+    accelio = self.callPackage ../development/libraries/accelio { };
 
-    acpi_call = callPackage ../os-specific/linux/acpi-call {};
+    acpi_call = self.callPackage ../os-specific/linux/acpi-call {};
 
-    batman_adv = callPackage ../os-specific/linux/batman-adv {};
+    batman_adv = self.callPackage ../os-specific/linux/batman-adv {};
 
-    bcc = callPackage ../os-specific/linux/bcc { };
+    bcc = self.callPackage ../os-specific/linux/bcc { };
 
-    bbswitch = callPackage ../os-specific/linux/bbswitch {};
+    bbswitch = self.callPackage ../os-specific/linux/bbswitch {};
 
-    ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
+    ati_drivers_x11 = self.callPackage ../os-specific/linux/ati-drivers { };
 
-    blcr = callPackage ../os-specific/linux/blcr { };
+    blcr = self.callPackage ../os-specific/linux/blcr { };
 
-    cryptodev = callPackage ../os-specific/linux/cryptodev { };
+    cryptodev = self.callPackage ../os-specific/linux/cryptodev { };
 
-    cpupower = callPackage ../os-specific/linux/cpupower { };
+    cpupower = self.callPackage ../os-specific/linux/cpupower { };
 
-    displaylink = callPackage ../os-specific/linux/displaylink { };
+    displaylink = self.callPackage ../os-specific/linux/displaylink { };
 
-    dpdk = callPackage ../os-specific/linux/dpdk { };
+    dpdk = self.callPackage ../os-specific/linux/dpdk { };
 
-    pktgen = callPackage ../os-specific/linux/pktgen { };
+    pktgen = self.callPackage ../os-specific/linux/pktgen { };
 
-    odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
+    odp-dpdk = self.callPackage ../os-specific/linux/odp-dpdk { };
 
-    e1000e = callPackage ../os-specific/linux/e1000e {};
+    e1000e = self.callPackage ../os-specific/linux/e1000e {};
 
-    ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
+    ixgbevf = self.callPackage ../os-specific/linux/ixgbevf {};
 
-    ena = callPackage ../os-specific/linux/ena {};
+    ena = self.callPackage ../os-specific/linux/ena {};
 
-    v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
+    v4l2loopback = self.callPackage ../os-specific/linux/v4l2loopback { };
 
-    frandom = callPackage ../os-specific/linux/frandom { };
+    frandom = self.callPackage ../os-specific/linux/frandom { };
 
-    fusionio-vsl = callPackage ../os-specific/linux/fusionio/vsl.nix { };
+    fusionio-vsl = self.callPackage ../os-specific/linux/fusionio/vsl.nix { };
 
-    lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
+    lttng-modules = self.callPackage ../os-specific/linux/lttng-modules { };
 
-    broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
+    broadcom_sta = self.callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
-    nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
+    nvidiabl = self.callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
-    nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
-    nvidia_x11_legacy340 = callPackage ../os-specific/linux/nvidia-x11/legacy340.nix { };
-    nvidia_x11_beta      = nvidia_x11; # latest beta is lower version ATM
-                          # callPackage ../os-specific/linux/nvidia-x11/beta.nix { };
-    nvidia_x11           = callPackage ../os-specific/linux/nvidia-x11 { };
+    nvidia_x11_legacy173 = self.callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
+    nvidia_x11_legacy304 = self.callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
+    nvidia_x11_legacy340 = self.callPackage ../os-specific/linux/nvidia-x11/legacy340.nix { };
+    nvidia_x11_beta      = self.nvidia_x11; # latest beta is lower version ATM
+                          # self.callPackage ../os-specific/linux/nvidia-x11/beta.nix { };
+    nvidia_x11           = self.callPackage ../os-specific/linux/nvidia-x11 { };
 
-    rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
+    rtl8723bs = self.callPackage ../os-specific/linux/rtl8723bs { };
 
-    rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
+    rtl8812au = self.callPackage ../os-specific/linux/rtl8812au { };
 
-    rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
+    rtlwifi_new = self.callPackage ../os-specific/linux/rtlwifi_new { };
 
-    openafsClient = callPackage ../servers/openafs-client { };
+    openafsClient = self.callPackage ../servers/openafs-client { };
 
-    facetimehd = callPackage ../os-specific/linux/facetimehd { };
+    facetimehd = self.callPackage ../os-specific/linux/facetimehd { };
 
-    jool = callPackage ../os-specific/linux/jool { };
+    jool = self.callPackage ../os-specific/linux/jool { };
 
-    mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
+    mba6x_bl = self.callPackage ../os-specific/linux/mba6x_bl { };
 
-    mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
+    mxu11x0 = self.callPackage ../os-specific/linux/mxu11x0 { };
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
     */
-    ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
+    ndiswrapper = self.callPackage ../os-specific/linux/ndiswrapper { };
 
-    netatop = callPackage ../os-specific/linux/netatop { };
+    netatop = self.callPackage ../os-specific/linux/netatop { };
 
-    perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+    perf = self.callPackage ../os-specific/linux/kernel/perf.nix { };
 
-    phc-intel = callPackage ../os-specific/linux/phc-intel { };
+    phc-intel = self.callPackage ../os-specific/linux/phc-intel { };
 
-    prl-tools = callPackage ../os-specific/linux/prl-tools { };
+    prl-tools = self.callPackage ../os-specific/linux/prl-tools { };
 
-    seturgent = callPackage ../os-specific/linux/seturgent { };
+    seturgent = self.callPackage ../os-specific/linux/seturgent { };
 
-    spl = callPackage ../os-specific/linux/spl {
+    spl = self.callPackage ../os-specific/linux/spl {
       configFile = "kernel";
-      inherit kernel;
+      inherit (self) kernel;
     };
 
-    sysdig = callPackage ../os-specific/linux/sysdig {};
+    sysdig = self.callPackage ../os-specific/linux/sysdig {};
 
-    tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
+    tp_smapi = self.callPackage ../os-specific/linux/tp_smapi { };
 
-    v86d = callPackage ../os-specific/linux/v86d { };
+    v86d = self.callPackage ../os-specific/linux/v86d { };
 
-    vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
+    vhba = self.callPackage ../misc/emulators/cdemu/vhba.nix { };
 
-    virtualbox = callPackage ../os-specific/linux/virtualbox {
+    virtualbox = self.callPackage ../os-specific/linux/virtualbox {
       virtualbox = pkgs.virtualboxHardened;
     };
 
-    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions {
+    virtualboxGuestAdditions = self.callPackage ../applications/virtualization/virtualbox/guest-additions {
       virtualbox = pkgs.virtualboxHardened;
     };
 
-    wireguard = callPackage ../os-specific/linux/wireguard { };
+    wireguard = self.callPackage ../os-specific/linux/wireguard { };
 
-    x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
+    x86_energy_perf_policy = self.callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    zfs = callPackage ../os-specific/linux/zfs {
+    zfs = self.callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
-      inherit kernel spl;
+      inherit (self) kernel spl;
     };
-  };
+  });
 
   # The current default kernel / kernel modules.
   linuxPackages = linuxPackages_4_4;
@@ -10899,28 +10901,26 @@ in
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp linuxPackages_mptcp;
-  linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi linuxPackages_rpi;
-  linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
-  linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
-  linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
-  linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
-  linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4 linuxPackages_4_4);
-  linuxPackages_4_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_7 linuxPackages_4_7);
+  linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
+  linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
+  linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10);
+  linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice;
+  linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12);
+  linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18);
+  linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1);
+  linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
+  linuxPackages_4_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_7);
   # Don't forget to update linuxPackages_latest!
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
-  linuxPackages_testing = linuxPackagesFor pkgs.linux_testing linuxPackages_testing;
+  linuxPackages_testing = linuxPackagesFor pkgs.linux_testing;
 
   linuxPackages_custom = {version, src, configfile}:
-                           let linuxPackages_self = (linuxPackagesFor (pkgs.linuxManualConfig {inherit version src configfile;
-                                                                                               allowImportFromDerivation=true;})
-                                                     linuxPackages_self);
-                           in recurseIntoAttrs linuxPackages_self;
+                           recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {inherit version src configfile;
+                                                                                               allowImportFromDerivation=true;}));
 
   # Build a kernel for Xen dom0
-  linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
+  linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
   # Grsecurity packages
 
@@ -10940,8 +10940,7 @@ in
   };
 
   linuxPackages_grsec_nixos =
-    let self = linuxPackagesFor linux_grsec_nixos self;
-    in recurseIntoAttrs self;
+    recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
 
   # An unsupported grsec xen guest kernel
   linux_grsec_server_xen = linux_grsec_nixos.override {
@@ -10957,9 +10956,9 @@ in
   };
 
   # ChromiumOS kernels
-  linuxPackages_chromiumos_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
-  linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18 linuxPackages_chromiumos_3_18);
-  linuxPackages_chromiumos_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_latest linuxPackages_chromiumos_latest);
+  linuxPackages_chromiumos_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_14);
+  linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18);
+  linuxPackages_chromiumos_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_latest);
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
