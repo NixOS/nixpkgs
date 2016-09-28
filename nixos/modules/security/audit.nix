@@ -100,7 +100,7 @@ in {
   };
 
   config = {
-    systemd.services.audit = {
+    systemd.services.audit = mkIf cfg.enable {
       description = "Kernel Auditing";
       wantedBy = [ "basic.target" ];
 
