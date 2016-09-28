@@ -1,14 +1,14 @@
 { stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
-, coreutils, gnused, bind, openldap ? null
+, coreutils, gnused, openldap ? null
 }:
 
 stdenv.mkDerivation rec {
   name = "dhcp-${version}";
-  version = "4.3.3";
-  
+  version = "4.3.4";
+
   src = fetchurl {
     url = "http://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
-    sha256 = "1pjy4lylx7dww1fp2mk5ikya5vxaf97z70279j81n74vn12ljg2m";
+    sha256 = "0zk0imll6bfyp9p4ndn8h6s4ifijnw5bhixswifr5rnk7pp5l4gm";
   };
 
   patches =
@@ -23,21 +23,9 @@ stdenv.mkDerivation rec {
       ./set-hostname.patch
     ];
 
-  # Fixes "socket.c:591: error: invalid application of 'sizeof' to
-  # incomplete type 'struct in6_pktinfo'".  See
-  # http://www.mail-archive.com/blfs-book@linuxfromscratch.org/msg13013.html
-  #
-  # Also adds the ability to run dhcpd as a non-root user / group
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE -DPARANOIA";
-
-  # It would automatically add -Werror, which disables build in gcc 4.4
-  # due to an uninitialized variable.
-  CFLAGS = "-g -O2 -Wall";
-
-  buildInputs = [ perl makeWrapper openldap bind ];
+  buildInputs = [ perl makeWrapper openldap ];
 
   configureFlags = [
-    "--with-libbind=${bind.dev}"
     "--enable-failover"
     "--enable-execute"
     "--enable-tracing"
