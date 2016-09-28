@@ -13579,11 +13579,11 @@ in modules // {
   moinmoin = buildPythonPackage (rec {
     name = "moinmoin-${ver}";
     disabled = isPy3k;
-    ver = "1.9.7";
+    ver = "1.9.8";
 
     src = pkgs.fetchurl {
       url = "http://static.moinmo.in/files/moin-${ver}.tar.gz";
-      sha256 = "f4ba1b5c956bd96d2a61e27e68d297aa63d1afbc80d5740e139dcdf0affb4db5";
+      sha256 = "19hi16iy75lpx9ch799djc4hr4gai5rmvi542n29x6zhikysfjx7";
     };
 
     meta = {
