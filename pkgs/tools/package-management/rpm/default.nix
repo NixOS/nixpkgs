@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, libarchive, nspr, nss, popt, db, xz, python, lua, pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "rpm-4.12.0";
+  name = "rpm-4.13.0-rc1";
 
   src = fetchurl {
-    url = "http://rpm.org/releases/rpm-4.12.x/${name}.tar.bz2";
-    sha256 = "18hk47hc755nslvb7xkq4jb095z7va0nlcyxdpxayc4lmb8mq3bp";
+    url = "http://www.rpm.org/releases/testing/rpm-4.13.0-rc1.tar.bz2";
+    sha256 = "097mc0kkrf09c01hrgi71df7maahmvayfgsvspnxigvl3xysv8hp";
   };
 
   buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua pkgconfig autoreconfHook ];

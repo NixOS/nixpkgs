@@ -2965,7 +2965,8 @@ in
     owncloud80
     owncloud81
     owncloud82
-    owncloud90;
+    owncloud90
+    owncloud91;
 
   owncloud-client = callPackage ../applications/networking/owncloud-client { };
 
@@ -4839,9 +4840,7 @@ in
 
   jrePlugin = self.jre8Plugin;
 
-  jre6Plugin = lowPrio (self.jdkdistro false true);
-
-  jre7Plugin = lowPrio (self.oraclejdk7distro false true);
+  jre7Plugin = lowPrio (pkgs.oraclejdk7distro false true);
 
   jre8Plugin = lowPrio (self.oraclejdk8distro false true);
 
@@ -4849,10 +4848,7 @@ in
     system == "i686-linux" ||
     system == "x86_64-linux";
 
-  jdkdistro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk6-linux.nix { });
+  jdkdistro = oraclejdk8distro;
 
   oraclejdk7distro = installjdk: pluginSupport:
     assert supportsJDK;
@@ -7235,8 +7231,8 @@ in
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
     inherit (darwin) CF;
-    inherit (darwin.apple_sdk.frameworks) 
-      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox 
+    inherit (darwin.apple_sdk.frameworks)
+      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
   };
 
@@ -8781,6 +8777,7 @@ in
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
+      wayland = wayland_1_9; # work-around for #16779
     };
     in mo.drivers
   );
@@ -10717,11 +10714,12 @@ in
 
   slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
 
-  tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
-
-  tomcat7 = callPackage ../servers/http/tomcat/7.0.nix { };
-
-  tomcat8 = callPackage ../servers/http/tomcat/8.0.nix { };
+  inherit (callPackages ../servers/http/tomcat { })
+    tomcat6
+    tomcat7
+    tomcat8
+    tomcat85
+    tomcatUnstable;
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
@@ -11158,7 +11156,7 @@ in
   };
 
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
-    kernelPatches = with kernelPatches; [ bridge_stp_helper link_lguest link_apm ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper lguest_entry-linkage ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -11167,7 +11165,7 @@ in
   };
 
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
-    kernelPatches = with kernelPatches; [ bridge_stp_helper crc_regression link_lguest ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper crc_regression ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -11199,18 +11197,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.4"
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
-  linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.cpu-cgroup-v2."4.6"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11398,7 +11384,6 @@ in
   linuxPackages_3_18 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_18 linuxPackages_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_1 linuxPackages_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_4 linuxPackages_4_4);
-  linuxPackages_4_6 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_6 linuxPackages_4_6);
   linuxPackages_4_7 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_7 linuxPackages_4_7);
   # Don't forget to update linuxPackages_latest!
 
@@ -15128,7 +15113,7 @@ in
 
   virt-viewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
-    spice_gtk = spice_gtk.override { enableGTK3 = true; };
+    spice_gtk = spice_gtk;
   };
 
   virtmanager = callPackage ../applications/virtualization/virt-manager {
@@ -15136,7 +15121,7 @@ in
     vte = gnome3.vte;
     dconf = gnome3.dconf;
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
-    spice_gtk = spice_gtk.override { enableGTK3 = true; };
+    spice_gtk = spice_gtk;
     system-libvirt = libvirt;
   };
 

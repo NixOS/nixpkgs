@@ -273,7 +273,7 @@ let
 
   gnome-boxes = callPackage ./apps/gnome-boxes {
     gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
-    spice_gtk = pkgs.spice_gtk.override { enableGTK3 = true; };
+    spice_gtk = pkgs.spice_gtk;
   };
 
   gnome-calendar = callPackage ./apps/gnome-calendar { };
@@ -392,7 +392,7 @@ let
   gpaste = callPackage ./misc/gpaste { };
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
-  
+
   gtkhtml = callPackage ./misc/gtkhtml { };
 
   pomodoro = callPackage ./misc/pomodoro { };

@@ -99,9 +99,9 @@ in
 
       interactiveShellInit = ''
         # history defaults
-        export SAVEHIST=2000
-        export HISTSIZE=2000
-        export HISTFILE=$HOME/.zsh_history
+        SAVEHIST=2000
+        HISTSIZE=2000
+        HISTFILE=$HOME/.zsh_history
 
         setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
 

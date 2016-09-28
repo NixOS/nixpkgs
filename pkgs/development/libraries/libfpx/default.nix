@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libfpx-1.3.1-4";
+  name = "libfpx-1.3.1-7";
 
   src = fetchurl {
     url = "mirror://imagemagick/delegates/${name}.tar.xz";
-    sha256 = "0pbvxbp30zqjpc0q71qbl15cb47py74c4d6a8qv1mqa6j81pb233";
+    sha256 = "1s28mwb06w6dj0zl6ashpj8m1qiyadawzl7cvbw7dmj1w39ipghh";
   };
 
   # Darwin gets misdetected as Windows without this

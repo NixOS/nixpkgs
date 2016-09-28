@@ -505,9 +505,15 @@ with stdenv.lib;
   TRANSPARENT_HUGEPAGE_MADVISE? y
 
   # zram support (e.g for in-memory compressed swap).
-  ZSMALLOC y
   ZRAM m
   ZSWAP? y
+  ZBUD? y
+  ${optionalString (versionOlder version "3.18") ''
+    ZSMALLOC y
+  ''}
+  ${optionalString (versionAtLeast version "3.18") ''
+    ZSMALLOC m
+  ''}
 
   # Enable PCIe and USB for the brcmfmac driver
   BRCMFMAC_USB? y

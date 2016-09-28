@@ -34,6 +34,7 @@ let
       config.programs.ssh.package
       pkgs.perl
       pkgs.procps
+      pkgs.rsync # used by nixos-install anyway
       pkgs.strace
       pkgs.su
       pkgs.time
