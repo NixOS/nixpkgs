@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication, python, w3m, file }:
+{ stdenv, fetchurl, pythonPackages, w3m, file }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "ranger-1.7.2";
 
   meta = {
@@ -15,7 +15,7 @@ buildPythonApplication rec {
     sha256 = "0yaviybviwdvfg2a0pf2kk28g10k245499xmbpqlai7fv91f7xll";
   };
 
-  propagatedBuildInputs = [ python.modules.curses file ];
+  propagatedBuildInputs = [ pythonPackages.python.modules.curses file ];
 
   preConfigure = ''
     substituteInPlace ranger/ext/img_display.py \

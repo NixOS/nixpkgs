@@ -43,7 +43,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "0an1rafbv48m04g7crfj2qrk64d98yrjn2z4hfv2pybwmqdmx78z";
+      sha256 = "11xgnryvwh3a1dcd5bczrh6wwf23xa74p31cqvnhf2s6q8cb0aai";
       rev = drv.version;
     };
     doCheck = false;  # version 6.20160907 has a test suite failure; reported upstream
@@ -286,6 +286,7 @@ self: super: {
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
+  hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   hoogle_5_0_4 = super.hoogle_5_0_4.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
@@ -765,38 +766,46 @@ self: super: {
   });
 
   # Fine-tune the build.
-  structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
+  structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
+    # Bump version to latest git-version to get support for Emacs 25.x.
+    version = "1.0.20-28-g1ffb4db";
+    src = pkgs.fetchFromGitHub {
+      owner = "chrisdone";
+      repo = "structured-haskell-mode";
+      sha256 = "1vrycvqp4n2pp6sq7z2v0zkqz6662nvacm7cla5hrrzl157cg0j5";
+      rev = "1ffb4db1e7049d4089fea430d4f20bce2eff263d";
+    };
+    patches = [ (pkgs.fetchpatch {
+                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/140.patch";
+                  sha256 = "1zwyxfmkl04dy34mbifk24qj9g0sfpz0j8rm688qdah8lavp44df";
+                })
+                (pkgs.fetchpatch {
+                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/141.patch";
+                  sha256 = "1bqgzw8cvxs0yg3yipsayksf7djccslamksm0nkw0kfp22axzmng";
+                })
+              ];
+    jailbreak = false;
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
-    # Byte-compile elisp code for Emacs.
-    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    # Make elisp files available at a location where people expect it. We
+    # cannot easily byte-compile these files, unfortunately, because they
+    # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
-      pushd >/dev/null $lispdir
-      for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacsPackages.haskellMode}/share/emacs/site-lisp \
-          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
-          -f batch-byte-compile $i
-      done
-      popd >/dev/null
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-"*"/elisp" )
       mkdir -p $out/share/emacs
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
-  });
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_18_2;
+  };
 
-  # Byte-compile elisp code for Emacs.
+  # # Make elisp files available at a location where people expect it.
   hindent = overrideCabal super.hindent (drv: {
-    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    # We cannot easily byte-compile these files, unfortunately, because they
+    # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
-      pushd >/dev/null $lispdir
-      for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacsPackages.haskellMode}/share/emacs/site-lisp \
-          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
-          -f batch-byte-compile $i
-      done
-      popd >/dev/null
       mkdir -p $out/share/emacs
       ln -s $lispdir $out/share/emacs/site-lisp
     '';

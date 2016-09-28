@@ -290,6 +290,27 @@ in modules // {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  unifi = buildPythonPackage rec {
+    name = "unifi-1.2.5";
+
+    propagatedBuildInputs = with self; [ urllib3 ];
+
+    # upstream has no tests
+    doCheck = false;
+
+    meta = {
+      description = "An API towards the Ubiquity Networks UniFi controller";
+      homepage    = https://pypi.python.org/pypi/unifi/;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/unifi/${name}.tar.gz";
+      sha256 = "0prgx01hzs49prrazgxrinm7ivqzy57ch06qm2h7s1p957sazds8";
+    };
+  };
+
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   # packages defined here
@@ -7406,6 +7427,9 @@ in modules // {
     };
   };
 
+  libsexy = callPackage ../development/python-modules/libsexy {
+    libsexy = pkgs.libsexy;
+  };
 
   libthumbor = buildPythonPackage rec {
     name = "libthumbor-${version}";
@@ -7639,17 +7663,19 @@ in modules // {
   };
 
   python-mapnik = buildPythonPackage {
-    name = "python-mapnik-fae6388";
+    name = "python-mapnik-git-2016-08-30";
 
-    src = pkgs.fetchgit {
-      url = https://github.com/mapnik/python-mapnik.git;
-      rev = "fae63881ed0945829e73f711d52740240b740936";
-      sha256 = "04k78l0xxb9cy8dbvmgldg8fgzz701gks14199h8zs2xvyi4gqd2";
+    src = pkgs.fetchFromGitHub {
+      owner = "mapnik";
+      repo = "python-mapnik";
+      rev = "541fd962d4fc99d50ec472af6ddccfdbf98cff37";
+      sha256 = "1d93qjnzggdpbhnmxlmk5jh0zd2jnpfl4n4aip5ypd39ilqibhf3";
     };
 
     disabled = isPyPy;
     doCheck = false; # doesn't find needed test data files
-    buildInputs = with pkgs; [ boost harfbuzz icu mapnik ];
+    buildInputs = with pkgs;
+      [ boost harfbuzz icu libjpeg libpng libtiff libwebp mapnik proj zlib ];
     propagatedBuildInputs = with self; [ pillow pycairo ];
 
     meta = with stdenv.lib; {
@@ -8502,39 +8528,6 @@ in modules // {
       maintainers = with maintainers; [ artuuge ];
     };
 
-  };
-
-  radicale = buildPythonPackage rec {
-    name = "radicale-${version}";
-    namePrefix = "";
-    version = "1.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/R/Radicale/Radicale-${version}.tar.gz";
-      sha256 = "1c5lv8qca21mndkx350wxv34qypqh6gb4rhzms4anr642clq3jg2";
-    };
-
-    propagatedBuildInputs = with self; [
-      flup
-      ldap
-      sqlalchemy
-    ];
-
-    doCheck = true;
-
-    meta = {
-      homepage = http://www.radicale.org/;
-      description = "CalDAV CardDAV server";
-      longDescription = ''
-        The Radicale Project is a complete CalDAV (calendar) and CardDAV
-        (contact) server solution. Calendars and address books are available for
-        both local and remote access, possibly limited through authentication
-        policies. They can be viewed and edited by calendar and contact clients
-        on mobile phones or computers.
-      '';
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ edwtjo pSub ];
-    };
   };
 
   raven = buildPythonPackage rec {
@@ -13752,11 +13745,11 @@ in modules // {
   moinmoin = buildPythonPackage (rec {
     name = "moinmoin-${ver}";
     disabled = isPy3k;
-    ver = "1.9.7";
+    ver = "1.9.8";
 
     src = pkgs.fetchurl {
       url = "http://static.moinmo.in/files/moin-${ver}.tar.gz";
-      sha256 = "f4ba1b5c956bd96d2a61e27e68d297aa63d1afbc80d5740e139dcdf0affb4db5";
+      sha256 = "19hi16iy75lpx9ch799djc4hr4gai5rmvi542n29x6zhikysfjx7";
     };
 
     meta = {
@@ -14219,7 +14212,6 @@ in modules // {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license = licenses.gpl2;
-      broken = true;
     };
 
     src = pkgs.fetchurl {
@@ -14227,8 +14219,14 @@ in modules // {
       sha256 = "1jja37nhiypdx1z6cazp8ffsf0z3yqmpdbprpdzf668lcb422rl0";
     };
 
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ wxPython pyserial hidapi xlib appdirs pkgs.wmctrl mock ];
+    # This is a fix for https://github.com/pypa/pip/issues/3624 causing regression https://github.com/pypa/pip/issues/3781
+    postPatch = ''
+     substituteInPlace setup.py --replace " in sys_platform" " == sys_platform"
+    '';
+
+    buildInputs = with self; [ pytest mock ];
+    propagatedBuildInputs = with self; [ six setuptools pyserial appdirs hidapi
+                                         wxPython xlib pkgs.wmctrl ];
   };
 
   pygal = buildPythonPackage rec {
@@ -17969,6 +17967,8 @@ in modules // {
     };
   };
 
+  pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
+
   pillow = buildPythonPackage rec {
     name = "Pillow-3.3.1";
 
@@ -19221,6 +19221,24 @@ in modules // {
       description = "A simple program which checks Python source files for errors";
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  pyftgl = buildPythonPackage rec {
+    name = "pyftgl-0.4b";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "umlaeute";
+      repo = "pyftgl";
+      rev = "0.4b";
+      sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
+    };
+
+    buildInputs = with self; [ pkgs.boost pkgs.freetype pkgs.ftgl pkgs.mesa ];
+
+    meta = {
+      description = "Python bindings for FTGL (FreeType for OpenGL)";
+      license = licenses.gpl2Plus;
     };
   };
 
@@ -22884,10 +22902,6 @@ in modules // {
       license = licenses.mit;
     };
   };
-
-  salt = callPackage ../tools/admin/salt {};
-
-  salttesting = callPackage ../tools/admin/salt/testing.nix {};
 
   sandboxlib = buildPythonPackage rec {
     name = "sandboxlib-${version}";

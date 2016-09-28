@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, fetchurl, makeWrapper,
+{ stdenv, lib, fetchgit, fetchurl, makeWrapper,
   ocaml, unzip, ncurses, curl,
   aspcudSupport ? !stdenv.isDarwin, aspcud
 }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12.1";
+assert lib.versionAtLeast ocaml.version "3.12.1";
 
 let
   srcs = {

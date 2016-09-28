@@ -15,7 +15,7 @@
 
 with stdenv.lib;
 let
-  version = "2.6.1";
+  version = "2.7.0";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "1l88iqk0swqccrnjwczgl9arqsvy77bis862zxajy7z3dqdzshj9";
+    sha256 = "0lqyz01z90nvxpc3nx4djbci7hx62cwvs5zwd6phssds0sap6vij";
   };
 
   buildInputs =
@@ -47,22 +47,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-etc-install.patch
-    (fetchpatch {
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=fff39a7ad09da07ef490de05c92c91f22f8002f2";
-      name = "9pfs-forbid-illegal-path-names.patch";
-      sha256 = "081j85p6m7s1cfh3aq1i2av2fsiarlri9gs939s0wvc6pdyb4b70";
-    })
-    (fetchpatch {
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=805b5d98c649d26fc44d2d7755a97f18e62b438a";
-      name = "9pfs-forbid-.-and-..-in-file-names.patch";
-      sha256 = "0km6knll492dx745gx37bi6dhmz08cmjiyf479ajkykp0aljii24";
-    })
-    (fetchpatch {
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=56f101ecce0eafd09e2daf1c4eeb1377d6959261";
-      name = "9pfs-directory-traversal-CVE-2016-7116.patch";
-      sha256 = "06pr070qj19w5mjxr36bcqxmgpiczncigqsbwfc8ncjhm1h7dmry";
-    })
   ];
+  hardeningDisable = [ "stackprotector" ];
 
   configureFlags =
     [ "--smbd=smbd" # use `smbd' from $PATH

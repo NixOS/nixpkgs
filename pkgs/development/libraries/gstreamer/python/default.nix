@@ -1,9 +1,11 @@
-{ fetchurl, stdenv, pkgconfig, python
-, gst-plugins-base, pygobject3
+{ fetchurl, stdenv, pkgconfig, pythonPackages
+, gst-plugins-base
 , ncurses
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygobject3;
+in stdenv.mkDerivation rec {
   name = "gst-python-1.8.2";
 
   src = fetchurl {

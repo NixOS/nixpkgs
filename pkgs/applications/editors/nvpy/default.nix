@@ -1,6 +1,6 @@
-{ pkgs, fetchurl, tk, buildPythonApplication, pythonPackages }:
+{ pkgs, fetchurl, tk, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   version = "0.9.7";
   name = "nvpy-${version}";
 

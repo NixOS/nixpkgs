@@ -1,12 +1,15 @@
 {stdenv, fetchurl, ocaml, findlib, ocaml_data_notation, type_conv, camlp4,
  ocamlmod, ocamlify, ounit, expect}:
 
-stdenv.mkDerivation {
-  name = "ocaml-oasis-0.4.6";
+stdenv.mkDerivation rec {
+  version = "0.4.7";
+  name = "ocaml-oasis-${version}";
 
+  # You must manually update the url, not just the version. OCamlforge keys off
+  # the number after download.php, not the filename.
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/1604/oasis-0.4.6.tar.gz;
-    sha256 = "1yxv3ckkf87nz0cyll0yy1kd295j5pv3jqwkfrr1y65wkz5vw90k";
+    url = "http://forge.ocamlcore.org/frs/download.php/1635/oasis-${version}.tar.gz";
+    sha256 = "13crvqiy0hhlnm4qfyxq2jjvs11ldxf15c4g9q91k1x3wj04pg2l";
   };
 
   createFindlibDestdir = true;
