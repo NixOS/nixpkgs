@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libupnp-1.6.19";
+  name = "libupnp-1.6.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/pupnp/${name}.tar.bz2";
-    sha256 = "0amjv4lypvclmi4vim2qdyw5xa6v4x50zjgf682vahqjc0wjn55k";
+    sha256 = "0qrsdsb1qm85hc4jy04qph895613d148f0x1mmk6z99y3q43fdgf";
   };
 
   hardeningDisable = [ "fortify" ];

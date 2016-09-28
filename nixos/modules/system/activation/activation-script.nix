@@ -142,10 +142,10 @@ in
         # Empty, immutable home directory of many system accounts.
         mkdir -p /var/empty
         # Make sure it's really empty
-        ${pkgs.e2fsprogs}/bin/chattr -i /var/empty
+        ${pkgs.e2fsprogs}/bin/chattr -f -i /var/empty || true
         find /var/empty -mindepth 1 -delete
         chmod 0555 /var/empty
-        ${pkgs.e2fsprogs}/bin/chattr +i /var/empty
+        ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
       '';
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
@@ -159,7 +159,7 @@ in
         rmdir --ignore-fail-on-non-empty /usr/bin /usr
       '';
 
-    system.activationScripts.tmpfs =
+    system.activationScripts.specialfs =
       ''
         specialMount() {
           local device="$1"
@@ -167,7 +167,12 @@ in
           local options="$3"
           local fsType="$4"
 
-          ${pkgs.utillinux}/bin/mount -t "$fsType" -o "remount,$options" "$device" "$mountPoint"
+          if ${pkgs.utillinux}/bin/mountpoint -q "$mountPoint"; then
+            local options="remount,$options"
+          else
+            mkdir -m 0755 -p "$mountPoint"
+          fi
+          ${pkgs.utillinux}/bin/mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }
         source ${config.system.build.earlyMountScript}
       '';

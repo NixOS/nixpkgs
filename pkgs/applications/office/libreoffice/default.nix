@@ -28,25 +28,17 @@ let
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
 
-  fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
-    inherit name md5;
-    url = if brief then
-            "http://dev-www.libreoffice.org/src/${subDir}${name}"
-          else
-            "http://dev-www.libreoffice.org/src/${subDir}${md5}-${name}";
-  };
-
   fetchSrc = {name, sha256}: fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
     inherit sha256;
   };
 
   srcs = {
-    third_party = [ (fetchurl rec {
+    third_party = [ (let md5 = "185d60944ea767075d27247c3162b3bc"; in fetchurl rec {
         url = "http://dev-www.libreoffice.org/extern/${md5}-${name}";
-        md5 = "185d60944ea767075d27247c3162b3bc";
+        sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
         name = "unowinreg.dll";
-      }) ] ++ (map fetchThirdParty (import ./libreoffice-srcs.nix));
+      }) ] ++ (map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;})) (import ./libreoffice-srcs.nix));
 
     translations = fetchSrc {
       name = "translations";
@@ -84,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
-  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
+  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.md5 or f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/src/${srcs.translations.name}

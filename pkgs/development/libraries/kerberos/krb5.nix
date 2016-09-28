@@ -11,11 +11,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
-  version = "1.14.2";
+  version = "1.14.3";
 
   src = fetchurl {
     url = "${meta.homepage}dist/krb5/1.14/krb5-${version}.tar.gz";
-    sha256 = "09wbv969ak4fqlqr1ip5bi62fny1zlp1vwjarvj6a6cdfzkdgjkb";
+    sha256 = "1jgjiyh1sp72lkxvk437lz5hzcibvw99jc4ihzfz03fg43aj0ind";
   };
 
   configureFlags = optional stdenv.isFreeBSD ''WARN_CFLAGS=""'';

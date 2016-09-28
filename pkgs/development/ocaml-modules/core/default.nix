@@ -1,7 +1,7 @@
 {stdenv, buildOcaml, fetchurl, type_conv,
- core_kernel, bin_prot, comparelib, custom_printf, enumerate,
- fieldslib, herelib, pa_bench, pa_test, pa_ounit,
- pipebang, sexplib, typerep, variantslib}:
+ core_kernel_p4, bin_prot_p4, comparelib, custom_printf, enumerate,
+ fieldslib_p4, herelib, pa_bench, pa_test, pa_ounit,
+ pipebang, sexplib_p4, typerep_p4, variantslib_p4}:
 
 buildOcaml rec {
   name = "core";
@@ -17,9 +17,9 @@ buildOcaml rec {
   hasSharedObjects = true;
 
   buildInputs = [ pa_bench pa_test pa_ounit ];
-  propagatedBuildInputs = [ type_conv core_kernel bin_prot comparelib
-                            custom_printf enumerate fieldslib herelib
-                            pipebang sexplib typerep variantslib ];
+  propagatedBuildInputs = [ type_conv core_kernel_p4 bin_prot_p4 comparelib
+                            custom_printf enumerate fieldslib_p4 herelib
+                            pipebang sexplib_p4 typerep_p4 variantslib_p4 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/core;

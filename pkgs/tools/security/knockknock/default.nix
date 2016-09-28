@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, buildPythonApplication, hping }:
+{ stdenv, fetchFromGitHub, pythonPackages, hping }:
 
 pythonPackages.buildPythonApplication rec {
   rev  = "bf14bbff";

@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage, docutils, six, sphinx }:
+{ lib, fetchurl, buildPythonPackage, docutils, six, sphinx, isPy3k }:
 
 buildPythonPackage rec {
   name = "breathe-${version}";
@@ -10,6 +10,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ docutils six sphinx ];
+
+  disabled = isPy3k;
 
   meta = {
     homepage = https://github.com/michaeljones/breathe;

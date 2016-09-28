@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
     cp -r bin/fonts $out/share/brogue/
   '';
 
+  # fix crash; shouldn’t be a security risk because it’s an offline game
+  hardeningDisable = [ "stackprotector" "fortify" ];
+
   meta = with stdenv.lib; {
     description = "A roguelike game";
     homepage = https://sites.google.com/site/broguegame/;

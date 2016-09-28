@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, buildPythonApplication, pythonPackages, picocom
+{ stdenv, fetchurl, pythonPackages, picocom
 , avrdude, arduino-core, avrgcclibc }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "ino-0.3.6";
   namePrefix = "";
 

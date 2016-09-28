@@ -39,7 +39,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs24 = gtkSupported;
+  emacs25 = gtkSupported;
   enscript = all;
   file = all;
   findutils = all;

@@ -1,8 +1,6 @@
-{ stdenv, fetchurl, python, pygtk, notify, keybinder, vte, gettext, intltool
-, makeWrapper
-}:
+{ stdenv, fetchurl, pythonPackages, keybinder, vte, gettext, intltool }:
 
-stdenv.mkDerivation rec {
+pythonPackages.buildPythonApplication rec {
   name = "terminator-${version}";
   version = "0.98";
   
@@ -11,18 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1h965z06dsfk38byyhnsrscd9r91qm92ggwgjrh7xminzsgqqv8a";
   };
   
-  buildInputs = [
-    python pygtk notify keybinder vte gettext intltool makeWrapper
-  ];
+  propagatedBuildInputs = with pythonPackages; [ pygtk notify keybinder vte gettext intltool ];
 
-  installPhase = ''
-    python setup.py --without-icon-cache install --prefix="$out"
+  #setupPyBuildFlags = [ "--without-icon-cache" ];
 
-    for file in "$out"/bin/*; do
-        wrapProgram "$file" \
-            --prefix PYTHONPATH : "$(toPythonPath $out):$PYTHONPATH"
-    done
-  '';
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Terminal emulator with support for tiling and tabs";

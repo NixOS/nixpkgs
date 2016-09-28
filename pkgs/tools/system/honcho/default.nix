@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, buildPythonApplication }:
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
-let honcho = buildPythonApplication rec {
+let honcho = pythonPackages.buildPythonApplication rec {
   name = "honcho-${version}";
   version = "0.6.6";
   namePrefix = "";

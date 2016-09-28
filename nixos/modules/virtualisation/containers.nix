@@ -12,21 +12,21 @@ let
         ''
         echo "Bringing ${name} up"
         ip link set dev ${name} up
-        ${optionalString (cfg . "localAddress" or null != null) ''
+        ${optionalString (cfg.localAddress != null) ''
           echo "Setting ip for ${name}"
-          ip addr add ${cfg . "localAddress"} dev ${name}
+          ip addr add ${cfg.localAddress} dev ${name}
         ''}
-        ${optionalString (cfg . "localAddress6" or null != null) ''
+        ${optionalString (cfg.localAddress6 != null) ''
           echo "Setting ip6 for ${name}"
-          ip -6 addr add ${cfg . "localAddress6"} dev ${name}
+          ip -6 addr add ${cfg.localAddress6} dev ${name}
         ''}
-        ${optionalString (cfg . "hostAddress" or null != null) ''
+        ${optionalString (cfg.hostAddress != null) ''
           echo "Setting route to host for ${name}"
-          ip route add ${cfg . "hostAddress"} dev ${name}
+          ip route add ${cfg.hostAddress} dev ${name}
         ''}
-        ${optionalString (cfg . "hostAddress6" or null != null) ''
+        ${optionalString (cfg.hostAddress6 != null) ''
           echo "Setting route6 to host for ${name}"
-          ip -6 route add ${cfg . "hostAddress6"} dev ${name}
+          ip -6 route add ${cfg.hostAddress6} dev ${name}
         ''}
         ''
         );
@@ -56,9 +56,7 @@ let
             ip -6 route add default via $HOST_ADDRESS6
           fi
 
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg . "extraVeths" or {})}
-          ip a
-          ip r
+          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
 
         # Start the regular stage 1 script.
@@ -67,7 +65,8 @@ let
     );
 
   nspawnExtraVethArgs = (name: cfg: "--network-veth-extra=${name}");
-  startScript = (cfg:
+
+  startScript = cfg:
     ''
       mkdir -p -m 0755 "$root/etc" "$root/var/lib"
       mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/containers
@@ -92,11 +91,7 @@ let
         fi
       fi
 
-      ${if cfg . "extraVeths" or null != null then
-        ''extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg . "extraVeths" or {})}"''
-        else
-          ''# No extra veth pairs to create''
-      }
+      extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)}"
 
       for iface in $INTERFACES; do
         extraFlags+=" --network-interface=$iface"
@@ -135,10 +130,9 @@ let
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv PATH="$PATH" \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
-    ''
-    );
+    '';
 
-  preStartScript = (cfg:
+  preStartScript = cfg:
     ''
       # Clean up existing machined registration and interfaces.
       machinectl terminate "$INSTANCE" 2> /dev/null || true
@@ -151,45 +145,43 @@ let
       ${concatStringsSep "\n" (
         mapAttrsToList (name: cfg:
           ''ip link del dev ${name} 2> /dev/null || true ''
-        ) cfg . "extraVeths" or {}
+        ) cfg.extraVeths
       )}
-   ''
-    );
+   '';
+
   postStartScript = (cfg:
     let
-      ipcall = (cfg: ipcmd: variable: attribute:
-        if cfg . attribute or null == null then
+      ipcall = cfg: ipcmd: variable: attribute:
+        if cfg.${attribute} == null then
           ''
             if [ -n "${variable}" ]; then
               ${ipcmd} add ${variable} dev $ifaceHost
             fi
           ''
         else
-          ''${ipcmd} add ${cfg . attribute} dev $ifaceHost''
-        );
-      renderExtraVeth = (name: cfg:
-        if cfg . "hostBridge" or null != null then
+          ''${ipcmd} add ${cfg.${attribute}} dev $ifaceHost'';
+      renderExtraVeth = name: cfg:
+        if cfg.hostBridge != null then
           ''
             # Add ${name} to bridge ${cfg.hostBridge}
             ip link set dev ${name} master ${cfg.hostBridge} up
           ''
         else
           ''
-          # Set IPs and routes for ${name}
-          ${optionalString (cfg . "hostAddress" or null != null) ''
-            ip addr add ${cfg . "hostAddress"} dev ${name}
-          ''}
-          ${optionalString (cfg . "hostAddress6" or null != null) ''
-            ip -6 addr add ${cfg . "hostAddress6"} dev ${name}
-          ''}
-          ${optionalString (cfg . "localAddress" or null != null) ''
-            ip route add ${cfg . "localAddress"} dev ${name}
-          ''}
-          ${optionalString (cfg . "localAddress6" or null != null) ''
-            ip -6 route add ${cfg . "localAddress6"} dev ${name}
-          ''}
-          ''
-        );
+            # Set IPs and routes for ${name}
+            ${optionalString (cfg.hostAddress != null) ''
+              ip addr add ${cfg.hostAddress} dev ${name}
+            ''}
+            ${optionalString (cfg.hostAddress6 != null) ''
+              ip -6 addr add ${cfg.hostAddress6} dev ${name}
+            ''}
+            ${optionalString (cfg.localAddress != null) ''
+              ip route add ${cfg.localAddress} dev ${name}
+            ''}
+            ${optionalString (cfg.localAddress6 != null) ''
+              ip -6 route add ${cfg.localAddress6} dev ${name}
+            ''}
+          '';
     in
       ''
         if [ "$PRIVATE_NETWORK" = 1 ]; then
@@ -202,7 +194,7 @@ let
             ${ipcall cfg "ip route" "$LOCAL_ADDRESS" "localAddress"}
             ${ipcall cfg "ip -6 route" "$LOCAL_ADDRESS6" "localAddress6"}
           fi
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg . "extraVeths" or {})}
+          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
 
         # Get the leader PID so that we can signal it in
@@ -306,6 +298,15 @@ let
     };
 
   };
+
+  dummyConfig =
+    {
+      extraVeths = {};
+      hostAddress = null;
+      hostAddress6 = null;
+      localAddress = null;
+      localAddress6 = null;
+    };
 
 in
 
@@ -451,7 +452,7 @@ in
         containers.  Each container appears as a service
         <literal>container-<replaceable>name</replaceable></literal>
         on the host system, allowing it to be started and stopped via
-        <command>systemctl</command> .
+        <command>systemctl</command>.
       '';
     };
 
@@ -470,11 +471,11 @@ in
       environment.INSTANCE = "%i";
       environment.root = "/var/lib/containers/%i";
 
-      preStart = preStartScript {};
+      preStart = preStartScript dummyConfig;
 
-      script = startScript {};
+      script = startScript dummyConfig;
 
-      postStart = postStartScript {};
+      postStart = postStartScript dummyConfig;
 
       preStop =
         ''

@@ -38,16 +38,6 @@ in
 
 rec {
 
-  link_lguest =
-    { name = "gcc5-link-lguest";
-      patch = ./gcc5-link-lguest.patch;
-    };
-
-  link_apm =
-    { name = "gcc5-link-apm";
-      patch = ./gcc5-link-apm.patch;
-    };
-
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;
@@ -95,14 +85,10 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-  grsecurity_3_14 = throw "grsecurity stable is no longer supported";
-
-  grsecurity_4_4 = throw "grsecurity stable is no longer supported";
-
   grsecurity_testing = grsecPatch
-    { kver   = "4.7.4";
-      grrev  = "201609152234";
-      sha256 = "0314lb1dp5bnq3wibxc63a8z75q0b7w6zsgd6ccmhl9vwv7sm253";
+    { kver   = "4.7.5";
+      grrev  = "201609261522";
+      sha256 = "1306lw3byw6cyi0dqh0dcl67l0bi043zmp3582hjpkwj934bahf7";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,

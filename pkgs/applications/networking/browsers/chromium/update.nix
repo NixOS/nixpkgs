@@ -157,9 +157,7 @@ in rec {
           fi
         '';
 
-        impureEnvVars = [
-          "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
-        ];
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars;
       };
 
     in {

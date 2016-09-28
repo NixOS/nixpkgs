@@ -89,8 +89,16 @@ let
       cc
     ];
 
-  # Add a utility function to produce derivations that use this
-  # stdenv and its shell.
+  # `mkDerivation` wraps the builtin `derivation` function to
+  # produce derivations that use this stdenv and its shell.
+  #
+  # See also:
+  #
+  # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
+  #   Details on how to use this mkDerivation function
+  #
+  # * https://nixos.org/nix/manual/#ssec-derivation
+  #   Explanation about derivations in general
   mkDerivation =
     { buildInputs ? []
     , nativeBuildInputs ? []

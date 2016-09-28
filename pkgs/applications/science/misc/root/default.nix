@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";

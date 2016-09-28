@@ -6,6 +6,11 @@ require 'fileutils'
 require 'pathname'
 require 'tmpdir'
 
+if defined?(Encoding.default_internal)
+  Encoding.default_internal = Encoding::UTF_8
+  Encoding.default_external = Encoding::UTF_8
+end
+
 # Options:
 #
 #   name        - the gem name
