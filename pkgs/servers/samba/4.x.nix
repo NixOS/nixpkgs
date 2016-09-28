@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-      docbook_xml_dtd_45 */ readline talloc ntdb tdb tevent ldb popt iniparser
+      docbook_xml_dtd_45 */ readline talloc ntdb tdb /*tevent*/ ldb popt iniparser
       libbsd libarchive zlib acl fam libiconv gettext libunwind kerberos
     ]
     ++ optionals stdenv.isLinux [ libaio pam systemd ]
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
-      "--bundled-libraries=NONE"
+      "--bundled-libraries=tevent" # see #19013
       "--private-libraries=NONE"
       "--builtin-libraries=NONE"
     ]
