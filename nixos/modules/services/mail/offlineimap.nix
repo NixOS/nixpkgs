@@ -59,7 +59,7 @@ in {
       };
       path = cfg.path;
     };
-    environment.systemPackages = [ "${cfg.package}" ];
+    environment.systemPackages = [ cfg.package ];
     systemd.user.timers.offlineimap = {
       description = "offlineimap timer";
       timerConfig               = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
@@ -84,34 +84,19 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-1.1.1";
+  name = "mplayer-1.3.0";
 
   src = fetchurl {
-    # Old kind of URL:
-    # url = http://tarballs.nixos.org/mplayer-snapshot-20101227.tar.bz2;
-    # Snapshot I took on 20110423
-
-    #Transient
-    #url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
-    #sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
-
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.1.tar.xz";
-    sha256 = "ce8fc7c3179e6a57eb3a58cb7d1604388756b8a61764cc93e095e7aff3798c76";
+    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.3.0.tar.xz";
+    sha256 = "0hwqn04bdknb2ic88xd75smffxx63scvz0zvwvjb56nqj9n89l1s";
   };
 
   prePatch = ''
     sed -i /^_install_strip/d configure
   '';
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pigoz/mplayer-svn/commit/6c6a7c2afe11c15716cdf4371fb4bf211644b7e1.patch";
-      sha256 = "0abg5122kisgcc8ay3barlibrgn259igsfq3ak6na9g8j5cgviw9";
-    })
-  ];
-
   buildInputs = with stdenv.lib;
-    [ pkgconfig freetype ]
+    [ pkgconfig freetype ffmpeg ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi

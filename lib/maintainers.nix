@@ -49,6 +49,7 @@
   auntie = "Jonathan Glines <auntieNeo@gmail.com>";
   avnik = "Alexander V. Nikolaev <avn@avnik.info>";
   aycanirican = "Aycan iRiCAN <iricanaycan@gmail.com>";
+  bachp = "Pascal Bach <pascal.bach@nextrem.ch>";
   badi = "Badi' Abdul-Wahid <abdulwahidc@gmail.com>";
   balajisivaraman = "Balaji Sivaraman<sivaraman.balaji@gmail.com>";
   Baughn = "Svein Ove Aas <sveina@gmail.com>";
@@ -96,6 +97,7 @@
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   couchemar = "Andrey Pavlov <couchemar@yandex.ru>";
   cransom = "Casey Ransom <cransom@hubns.net>";
+  cryptix = "Henry Bubert <cryptix@riseup.net>";
   CrystalGamma = "Jona Stubbe <nixos@crystalgamma.de>";
   cstrahan = "Charles Strahan <charles@cstrahan.com>";
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
@@ -227,6 +229,7 @@
   linquize = "Linquize <linquize@yahoo.com.hk>";
   linus = "Linus Arver <linusarver@gmail.com>";
   lnl7 = "Daiderd Jordan <daiderd@gmail.com>";
+  loskutov = "Ignat Loskutov <ignat.loskutov@gmail.com>";
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   lowfatcomputing = "Andreas Wagner <andreas.wagner@lowfatcomputing.org>";
   lsix = "Lancelot SIX <lsix@lancelotsix.com>";
@@ -456,4 +459,5 @@
   zohl = "Al Zohali <zohl@fmap.me>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
   amiloradovsky = "Andrew Miloradovsky <miloradovsky@gmail.com>";
+  yochai = "Yochai <yochai@titat.info>";
 }

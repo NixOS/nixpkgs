@@ -33,7 +33,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.pythonPackages.radicale ];
+    environment.systemPackages = [ pkgs.radicale ];
 
     users.extraUsers = singleton
       { name = "radicale";
@@ -52,7 +52,7 @@ in
       description = "A Simple Calendar and Contact Server";
       after = [ "network-interfaces.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${pkgs.pythonPackages.radicale}/bin/radicale -C ${confFile} -f";
+      script = "${pkgs.radicale}/bin/radicale -C ${confFile} -f";
       serviceConfig.User = "radicale";
       serviceConfig.Group = "radicale";
     };

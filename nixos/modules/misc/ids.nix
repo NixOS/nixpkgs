@@ -274,6 +274,7 @@
       mattermost = 254;
       prometheus = 255;
       telegraf = 256;
+      gitlab-runner = 257;
 
       phabricator = 999;
 
@@ -520,6 +521,7 @@
       mattermost = 254;
       prometheus = 255;
       #telegraf = 256; # unused
+      gitlab-runner = 257;
 
       phabricator = 999;
 

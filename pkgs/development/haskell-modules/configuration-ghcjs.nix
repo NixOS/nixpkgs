@@ -122,4 +122,11 @@ self: super:
       ] drv.libraryHaskellDepends;
   });
 
+  http2 = addBuildDepends super.http2 [ self.aeson self.aeson-pretty self.hex self.unordered-containers self.vector self.word8 ];
+  # ghcjsBoot uses async 2.0.1.6, protolude wants 2.1.*
+  protolude = doJailbreak super.protolude;
+  semigroups = addBuildDepends super.semigroups [ self.hashable self.unordered-containers self.text self.tagged ];
+  # triggers an internal pattern match failure in haddock
+  # https://github.com/haskell/haddock/issues/553
+  wai = dontHaddock super.wai;
 }

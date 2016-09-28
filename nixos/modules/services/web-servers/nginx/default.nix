@@ -18,9 +18,13 @@ let
 
     ${cfg.config}
 
-    ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
-    events {}
+    ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
+    events {
+      ${cfg.eventsConfig}
+    }
+    ''}
 
+    ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
@@ -98,7 +102,6 @@ let
     }''}
 
     ${optionalString (cfg.httpConfig != "") ''
-    events {}
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
@@ -272,12 +275,20 @@ in
         ";
       };
 
+      eventsConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Configuration lines to be set inside the events block.
+        '';
+      };
+
       appendHttpConfig = mkOption {
         type = types.lines;
         default = "";
         description = "
           Configuration lines to be appended to the generated http block.
-          This is mutually exclusive with using config and httpConfig for 
+          This is mutually exclusive with using config and httpConfig for
           specifying the whole http block verbatim.
         ";
       };

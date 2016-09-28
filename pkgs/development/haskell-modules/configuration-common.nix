@@ -43,7 +43,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "0an1rafbv48m04g7crfj2qrk64d98yrjn2z4hfv2pybwmqdmx78z";
+      sha256 = "11xgnryvwh3a1dcd5bczrh6wwf23xa74p31cqvnhf2s6q8cb0aai";
       rev = drv.version;
     };
     doCheck = false;  # version 6.20160907 has a test suite failure; reported upstream

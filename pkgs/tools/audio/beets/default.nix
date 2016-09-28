@@ -107,10 +107,10 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableThumbnails   pythonPackages.pyxdg
     ++ optional enableWeb          pythonPackages.flask
     ++ optional enableAlternatives (import ./alternatives-plugin.nix {
-      inherit stdenv buildPythonApplication pythonPackages fetchFromGitHub;
+      inherit stdenv pythonPackages fetchFromGitHub;
     })
     ++ optional enableCopyArtifacts (import ./copyartifacts-plugin.nix {
-      inherit stdenv buildPythonApplication pythonPackages fetchFromGitHub;
+      inherit stdenv pythonPackages fetchFromGitHub;
     });
 
   buildInputs = with pythonPackages; [

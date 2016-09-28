@@ -988,6 +988,41 @@ set debug-file-directory ~/.nix-profile/lib/debug
 
 </section>
 
+<section xml:id="ssec-installCheck-phase"><title>The installCheck phase</title>
+
+<para>The installCheck phase checks whether the package was installed
+correctly by running its test suite against the installed directories.
+The default <function>installCheck</function> calls <command>make
+installcheck</command>.</para>
+
+<variablelist>
+  <title>Variables controlling the installCheck phase</title>
+
+  <varlistentry>
+    <term><varname>doInstallCheck</varname></term>
+    <listitem><para>If set to a non-empty string, the installCheck phase is
+    executed, otherwise it is skipped (default).  Thus you should set
+
+    <programlisting>doInstallCheck = true;</programlisting>
+
+    in the derivation to enable install checks.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preInstallCheck</varname></term>
+    <listitem><para>Hook executed at the start of the installCheck
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postInstallCheck</varname></term>
+    <listitem><para>Hook executed at the end of the installCheck
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>
 
 <section xml:id="ssec-distribution-phase"><title>The distribution
 phase</title>
