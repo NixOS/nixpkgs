@@ -13,6 +13,9 @@ let
 
     userData=/etc/ec2-metadata/user-data
 
+    # set nameserver to anything, it will be later overwritten to correct entry
+    echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+
     if [ -s "$userData" ]; then
 
       # If the user-data looks like it could be a nix expression,
