@@ -4,10 +4,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "farstream-0.2.4";
+  name = "farstream-0.2.8";
   src = fetchurl {
     url = "http://www.freedesktop.org/software/farstream/releases/farstream/${name}.tar.gz";
-    sha256 = "0c5vlyiwb799wpby4g9vffiy0nf09gy2cr84ksfy3jwzsxf5n38j";
+    sha256 = "0249ncd20x5mf884fd8bw75c3118b9fdml837v4fib349xmrqfrb";
   };
 
   buildInputs = [ libnice python pygobject gupnp_igd libnice ];
