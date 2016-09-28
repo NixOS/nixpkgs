@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses, makeWrapper
+{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses, makeWrapper, symlinkJoin
 , configFile ? null
 }:
 
@@ -37,13 +37,13 @@ let
       platforms = platforms.all;
     };
   };
-in if configFile == null then termite else stdenv.mkDerivation {
+in if configFile == null then termite else symlinkJoin {
   name = "termite-with-config-${version}";
+  paths = [ termite ];
   nativeBuildInputs = [ makeWrapper ];
-  buildCommand = ''
-    mkdir -p $out/etc/xdg/termite/ $out/bin
-    ln -s ${termite}/bin/termite $out/bin/termite
-    wrapProgram $out/bin/termite --add-flags "--config ${configFile}"
+  postBuild = ''
+    wrapProgram $out/bin/termite \
+      --add-flags "--config ${configFile}"
   '';
   passthru.terminfo = termite.terminfo;
 }
