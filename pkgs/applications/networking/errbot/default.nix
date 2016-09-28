@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, fetchpatch, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
@@ -10,6 +10,17 @@ pythonPackages.buildPythonApplication rec {
   };
 
   disabled = !pythonPackages.isPy3k;
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mayflower/errbot/commit/d6890c2e02e145b0344a5ea05fd5874218fa40ff.patch";
+      sha256 = "0qlninni6rgwk5fvcybpan3zppmchs34p4v9rzwnqqzhn4429mfh";
+    })
+    (fetchpatch {
+      url = "https://github.com/mayflower/errbot/commit/3705817fe2dfe957b35c5523bee8d85fa2d5f8f8.patch";
+      sha256 = "1whz72p5hjlwkriiql76vvc3lz1n171p9n0p4mk3mwgapgmwavd8";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
