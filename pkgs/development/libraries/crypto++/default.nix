@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     platforms = platforms.all;
     maintainers = [ ];
+    # Marked as broken due to needing an update for security issues.
+    # See: https://github.com/NixOS/nixpkgs/issues/18856
+    broken = true;
   };
 }
-
