@@ -4865,27 +4865,17 @@ in
 
   oraclejdk = pkgs.jdkdistro true false;
 
-  oraclejdk7 = pkgs.oraclejdk7distro true false;
-
-  oraclejdk7psu = pkgs.oraclejdk7psu_distro true false;
-
   oraclejdk8 = pkgs.oraclejdk8distro true false;
 
   oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
 
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
-  oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
-
-  oraclejre7psu = lowPrio (pkgs.oraclejdk7psu_distro false false);
-
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
   jrePlugin = jre8Plugin;
-
-  jre7Plugin = lowPrio (pkgs.oraclejdk7distro false true);
 
   jre8Plugin = lowPrio (pkgs.oraclejdk8distro false true);
 
@@ -4894,16 +4884,6 @@ in
     system == "x86_64-linux";
 
   jdkdistro = oraclejdk8distro;
-
-  oraclejdk7distro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk7-linux.nix { inherit installjdk; });
-
-  oraclejdk7psu_distro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk7psu-linux.nix { inherit installjdk; });
 
   oraclejdk8distro = installjdk: pluginSupport:
     assert supportsJDK;
