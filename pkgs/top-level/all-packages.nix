@@ -8303,6 +8303,8 @@ in
 
   menu-cache = callPackage ../development/libraries/menu-cache { };
 
+  mergerfs = callPackage ../tools/filesystems/mergerfs { };
+
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesaDarwinOr = alternative: if stdenv.isDarwin
