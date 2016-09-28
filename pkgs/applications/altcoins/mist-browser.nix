@@ -1,6 +1,6 @@
-{ pkgs, stdenv, alsaLib, atk, cairo, cups, dbus, expat, fetchurl, fontconfig,
-freetype, gdk_pixbuf, gnome, glib, gtk, go-ethereum, libcap, libnotify, libudev,
-nspr, nss, unzip, buildEnv, makeDesktopItem, makeWrapper,
+{ pkgs, stdenv, alsaLib, atk, cairo, cups, dbus, dpkg, expat, fetchurl,
+fontconfig, freetype, gdk_pixbuf, gnome, glib, gtk, go-ethereum, libcap,
+libnotify, libudev, nspr, nss, unzip, buildEnv, makeDesktopItem, makeWrapper,
 pango, patchelf, systemd, xorg}:
 
 let
@@ -12,18 +12,18 @@ let
         xorg.libXtst xorg.libXcomposite xorg.libXi xorg.libXfixes
         xorg.libXrandr xorg.libXcursor xorg.libXScrnSaver
       ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "mist-browser-${version}";
-  version = "0.8.2";
+  version = "0.8.3";
 
-  platform = "linux64";
+  is64Bit = (stdenv.system == "x86_64-linux");
+  platform = (if is64Bit then "linux64" else "linux32");
   _name = "Mist-${platform}-${_version}";
   _version = builtins.replaceStrings ["."] ["-"] version;
 
   src = fetchurl {
-    url = "https://github.com/ethereum/mist/releases/download/${version}/${_name}.zip";
-    sha256 = "3a222dd76a3b9b8f5f768cae7e57258fc07cff138e95c9c566687b8547275fea";
+    url = "https://github.com/ethereum/mist/releases/download/v${version}/${_name}.deb";
+    sha256 = "0kyszkjqhas74gazr80y853z2nycn6fh2mysn5pplpqkhmpz3yl8";
   };
 
   icon = fetchurl {
@@ -32,16 +32,19 @@ stdenv.mkDerivation rec {
   };
 
   phases = [ "unpackPhase" "installPhase" ];
-  buildInputs = [ patchelf unzip makeWrapper ];
+  buildInputs = [ dpkg makeWrapper patchelf ];
 
-  #binPath = makeBinPath deps;
   libpath = stdenv.lib.makeLibraryPath deps;
 
+  unpackPhase = "dpkg -x ${src} ./";
+
+  gethPath = if is64Bit then "nodes/geth/linux-x64/geth"
+             else "nodes/geth/geth";
+
   installPhase = ''
-    unzip "$src"
-    mv "$PWD/${_name}" "$out"
-    rm "$out/resources/node/geth/geth"
-    ln -s "${go-ethereum}/bin/geth" "$out/resources/node/geth/geth"
+    mv "$PWD/opt/Mist" "$out"
+    rm "$out/${gethPath}"
+    ln -s "${go-ethereum}/bin/geth" "$out/${gethPath}"
 
     chmod +x "$out/Mist"
     chmod +x "$out/libnode.so"
