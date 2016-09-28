@@ -8,13 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1klh81xbm9ppzgqk339097i39b7fnpmlj8lzn8bpczl3aww6x5xm";
   };
 
-  patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch
-    ++ stdenv.lib.optional (stdenv.cross.libc or null == "msvcrt")
-        (fetchpatch {
-          name = "mingw.patch";
-          url = "http://git.gnome.org/browse/libxslt/patch/?id=ab5810bf27cd63";
-          sha256 = "0kkqq3fv2k3q86al38vp6zwxazpvp5kslcjnmrq4ax5cm2zvsjk3";
-        });
+  patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
