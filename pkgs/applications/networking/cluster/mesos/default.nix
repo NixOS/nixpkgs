@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace src/Makefile.am --subst-var-by mavenRepo ${mavenRepo}
-    
+
     substituteInPlace 3rdparty/libprocess/include/process/subprocess.hpp \
       --replace '"sh"' '"${bash}/bin/bash"'
 
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/launcher/executor.cpp \
       --replace '"sh"' '"${bash}/bin/bash"'
-    
+
     substituteInPlace src/launcher/fetcher.cpp \
       --replace '"gzip' '"${gzip}/bin/gzip'    \
       --replace '"tar' '"${gnutar}/bin/tar'    \
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/python/cli/src/mesos/cli.py \
      --replace "['mesos-resolve'" "['$out/bin/mesos-resolve'"
-    
+
     substituteInPlace src/slave/containerizer/mesos/launch.cpp \
       --replace '"sh"' '"${bash}/bin/bash"'
 
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/linux/perf.cpp       \
       --replace '"perf ' '"${perf}/bin/perf '
-    
+
     substituteInPlace src/linux/systemd.cpp \
       --replace 'os::realpath("/sbin/init")' '"${systemd}/lib/systemd/systemd"'
 
@@ -180,5 +180,8 @@ in stdenv.mkDerivation rec {
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
     maintainers = with maintainers; [ cstrahan kevincox offline rushmorem ];
     platforms   = platforms.linux;
+    # Marked as broken due to needing an update for security issues.
+    # See: https://github.com/NixOS/nixpkgs/issues/18856
+    broken = true;
   };
 }
