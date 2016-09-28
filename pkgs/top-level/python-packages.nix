@@ -7016,6 +7016,25 @@ in modules // {
     };
   };
 
+  grip = buildPythonPackage rec {
+    version = "4.3.2";
+    name = "grip-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://files.pythonhosted.org/packages/8b/9d/698a7a3a8b57c28eacac27f269c9d0da228d20ee734edbe9451e3e0f7cde/${name}.zip";
+      sha256 = "0sr6srp4liqjs6hxcy9kp8g5dzbnyfmwcsy2cn6qszkpp9x25w70";
+    };
+
+    propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests2 ];
+
+    meta = with stdenv.lib; {
+      description = "Preview GitHub Markdown files like Readme locally before committing them";
+      homepage = https://github.com/joeyespo/grip;
+      license = licenses.mit;
+      maintainers = with maintainers; [ koral ];
+    };
+  };
+
   gst-python = callPackage ../development/libraries/gstreamer/python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
@@ -7976,6 +7995,24 @@ in modules // {
       homepage    = https://code.google.com/p/passlib/;
     };
   };
+
+  path-and-address = buildPythonPackage rec {
+    version = "2.0.1";
+    name = "path-and-address-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://files.pythonhosted.org/packages/2b/b5/749fab14d9e84257f3b0583eedb54e013422b6c240491a4ae48d9ea5e44f/${name}.zip";
+      sha256 = "1dviac24s0gm7ka2fwjjb25j9l2idc45zkgl662xx8mkhbcn6qz9";
+    };
+
+    meta = {
+      description = "Functions for server CLI applications used by humans";
+      homepage = https://github.com/joeyespo/path-and-address;
+      license = licenses.mit;
+      maintainers = with maintainers; [ koral];
+    };
+  };
+      
 
   pdfminer = buildPythonPackage rec {
     version = "20140328";
