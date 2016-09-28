@@ -254,6 +254,7 @@
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
   maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
   mbakke = "Marius Bakke <mbakke@fastmail.com>";
+  mbbx6spp = "Susan Potter <me@susanpotter.net>";
   matthewbauer = "Matthew Bauer <mjbauer95@gmail.com>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
   mboes = "Mathieu Boespflug <mboes@tweag.net>";
