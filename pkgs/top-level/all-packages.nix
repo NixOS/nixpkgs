@@ -9128,6 +9128,10 @@ in
     python = python2;
   };
 
+  tevent_0_9_29 = callPackage ../development/libraries/tevent/0.9.29.nix {
+    python = python2;
+  };
+
   tet = callPackage ../development/tools/misc/tet { };
 
   thrift = callPackage ../development/libraries/thrift {
@@ -10165,6 +10169,8 @@ in
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
+    # Samba 4 crashes with tevent 0.9.30
+    tevent =  tevent_0_9_29;
     # enableLDAP
   };
 
