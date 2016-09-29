@@ -107,4 +107,7 @@ with lib;
       '';
     };
 
+  # Disable large stuff that's not very useful on the installation CD.
+  services.xserver.desktopManager.kde4.enablePIM = false;
+
 }

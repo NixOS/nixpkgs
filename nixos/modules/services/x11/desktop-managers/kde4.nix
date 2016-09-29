@@ -70,6 +70,12 @@ in
         type = types.package;
         description = "Custom kde-workspace, used for NixOS rebranding.";
       };
+
+      enablePIM = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to enable PIM support. Note that enabling this pulls in Akonadi and MariaDB as dependencies.";
+      };
     };
   };
 
@@ -151,18 +157,20 @@ in
           xorg.xauth # used by kdesu
           pkgs.shared_desktop_ontologies # used by nepomuk
           pkgs.strigi # used by nepomuk
+        ]
+      ++ optionals cfg.enablePIM
+        [ pkgs.kde4.kdepim_runtime
           pkgs.kde4.akonadi
           pkgs.mysql # used by akonadi
-          pkgs.kde4.kdepim_runtime
         ]
-      ++ lib.optional config.hardware.pulseaudio.enable pkgs.kde4.kmix  # Perhaps this should always be enabled
-      ++ lib.optional config.hardware.bluetooth.enable pkgs.kde4.bluedevil
-      ++ lib.optional config.networking.networkmanager.enable pkgs.kde4.plasma-nm
+      ++ optional config.hardware.pulseaudio.enable pkgs.kde4.kmix  # Perhaps this should always be enabled
+      ++ optional config.hardware.bluetooth.enable pkgs.kde4.bluedevil
+      ++ optional config.networking.networkmanager.enable pkgs.kde4.plasma-nm
       ++ [ nepomukConfig ] ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
 
-    environment.profileRelativeEnvVars = mkIf (lib.elem "gstreamer" cfg.phononBackends) {
+    environment.profileRelativeEnvVars = mkIf (elem "gstreamer" cfg.phononBackends) {
       GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
     };
 
