@@ -15184,6 +15184,8 @@ in
       pythonPackages = python3Packages;
   };
 
+  bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
+
   beret = callPackage ../games/beret { };
 
   bitsnbots = callPackage ../games/bitsnbots {
