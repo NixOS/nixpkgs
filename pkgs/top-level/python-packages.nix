@@ -7020,12 +7020,20 @@ in modules // {
     version = "4.3.2";
     name = "grip-${version}";
 
-    src = pkgs.fetchurl {
-      url = "https://files.pythonhosted.org/packages/8b/9d/698a7a3a8b57c28eacac27f269c9d0da228d20ee734edbe9451e3e0f7cde/${name}.zip";
-      sha256 = "0sr6srp4liqjs6hxcy9kp8g5dzbnyfmwcsy2cn6qszkpp9x25w70";
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyespo";
+      repo = "grip";
+      rev = "v${version}";
+      sha256 = "05a169sfaj280k7gibbc1rznjn43l5m6l1gpl6a5cmp5r8827khs";
     };
+    buildInputs = with self; [ pytest responses ];
 
     propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests2 ];
+
+    checkPhase = ''
+      export PATH="$PATH:$out/bin"
+      py.test -xm "not assumption"
+    '';
 
     meta = with stdenv.lib; {
       description = "Preview GitHub Markdown files like Readme locally before committing them";
@@ -8000,9 +8008,15 @@ in modules // {
     version = "2.0.1";
     name = "path-and-address-${version}";
 
-    src = pkgs.fetchurl {
-      url = "https://files.pythonhosted.org/packages/2b/b5/749fab14d9e84257f3b0583eedb54e013422b6c240491a4ae48d9ea5e44f/${name}.zip";
-      sha256 = "1dviac24s0gm7ka2fwjjb25j9l2idc45zkgl662xx8mkhbcn6qz9";
+    buildInputs = with self; [ pytest ];
+
+    checkPhase = "py.test";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyespo";
+      repo = "path-and-address";
+      rev = "v${version}";
+      sha256 = "0b0afpsaim06mv3lhbpm8fmawcraggc11jhzr6h72kdj1cqjk5h6";
     };
 
     meta = {
@@ -8012,7 +8026,7 @@ in modules // {
       maintainers = with maintainers; [ koral];
     };
   };
-      
+
 
   pdfminer = buildPythonPackage rec {
     version = "20140328";
