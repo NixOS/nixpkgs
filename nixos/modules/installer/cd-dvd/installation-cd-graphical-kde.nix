@@ -105,4 +105,7 @@ with lib;
         cp -f ${plasmaInit} $out/share/apps/plasma-desktop/init/00-defaultLayout.js
       '';
 
+  # Disable large stuff that's not very useful on the installation CD.
+  services.xserver.desktopManager.kde4.enablePIM = false;
+
 }
