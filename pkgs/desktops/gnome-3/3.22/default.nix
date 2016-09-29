@@ -234,8 +234,6 @@ let
 
   vte_290 = callPackage ./core/vte/2.90.nix { };
 
-  vte-select-text = vte.override { selectTextPatch = true; };
-
   vino = callPackage ./core/vino { };
 
   yelp = callPackage ./core/yelp { };
