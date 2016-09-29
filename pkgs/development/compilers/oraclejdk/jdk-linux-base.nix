@@ -6,6 +6,7 @@
 , jceName
 , jceDownloadUrl
 , sha256JCE
+, broken ? false
 }:
 
 { swingSupport ? true
@@ -193,6 +194,7 @@ let result = stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ]; # some inherit jre.meta.platforms
+    broken = broken;
   };
 
 }; in result
