@@ -13,13 +13,15 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     # For building documentation:
-    sphinx
+    sphinx pytest setuptools_scm
   ];
   propagatedBuildInputs = [
     acl lz4 openssl
   ] ++ (with python3Packages; [
-    cython msgpack llfuse tox detox setuptools_scm
+    cython msgpack llfuse
   ]);
+
+  doCheck = false;
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
