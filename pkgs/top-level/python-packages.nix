@@ -9252,12 +9252,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.9";
+    version = "1.9.10";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "136ypwacj4av6xqmbfp6lhlr0171ws2knv74h0r59ssaaffznh73";
+      sha256 = "007w2pshbk1s6gfgp8717fwz01l8mcmd2lkxdgqqgd11bag7qfjv";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
