@@ -15662,6 +15662,25 @@ in modules // {
     };
   };
 
+  livereload = buildPythonPackage rec {
+    version = "2.4.1";
+    name = "livereload-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/lepture/python-livereload/archive/v${version}.tar.gz";
+      sha256 = "0m8b4f6wkrsh45ldqrq2l9ynv2dzlgb34bkwc7hzi0cihsfgwaca";
+    };
+
+    buildInputs = with self; [ tornado six ];
+
+    meta = {
+      homepage = https://github.com/lepture/python-livereload;
+      description = ''livereload server in python'';
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+  };
+
   livestreamer = buildPythonPackage rec {
     version = "1.12.2";
     name = "livestreamer-${version}";
