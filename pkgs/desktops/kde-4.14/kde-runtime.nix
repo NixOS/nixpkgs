@@ -1,5 +1,5 @@
 { kde, kdelibs, bzip2, libssh, exiv2, attica, qca2, shared_mime_info
-, libcanberra, virtuoso, samba, libjpeg, ntrack, pkgconfig, xz, libpulseaudio
+, libcanberra, samba, libjpeg, ntrack, pkgconfig, xz, libpulseaudio
 , networkmanager, kactivities, kdepimlibs, openexr, ilmbase, gpgme, glib
 }:
 
@@ -17,8 +17,6 @@ kde {
   nativeBuildInputs = [ shared_mime_info ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";
-
-  passthru.propagatedUserEnvPackages = [ virtuoso ];
 
   meta = {
     license = "LGPL";
