@@ -1,17 +1,20 @@
-{sbt,stdenv, fetchgit,jdk, makeWrapper}:
+{sbt,stdenv, fetchFromGitHub, jdk, makeWrapper}:
 
 with stdenv.lib;
  stdenv.mkDerivation {
-    name = "bge";
+    name = "bge-3.1";
 
     meta = {
-     description = "Bitcoin Graph Explorer is a blockchain analysis server";
-       homepage = "https://bitcoinprivacy.net";
-       maintainers =  with maintainers; [ jorgemartinezpizarro stefanwouldgo ];
-       license = licenses.asl20;
+      description = "A blockchain analysis server";
+      longDescription = "Bitcoin Graph Explorer is a live bitcoin blockchain analysis server including a REST API. It is written in Scala.";
+      homepage = "https://bitcoinprivacy.net";
+      maintainers =  with maintainers; [ jorgemartinezpizarro stefanwouldgo ];
+      license = licenses.asl20;
     };
 
-    buildPhase = let
+    buildInputs = [sbt makeWrapper];
+
+    buildPhase =  let
       sbtBootDir = "./.sbt/boot/";
       sbtIvyHome = "/var/tmp/`whoami`/.ivy";
       sbtOpts = "-XX:PermSize=190m -Dsbt.boot.directory=${sbtBootDir} -Dsbt.ivy.home=${sbtIvyHome}";
@@ -27,25 +30,25 @@ with stdenv.lib;
       '';
 
     installPhase = ''
-     mkdir -p $out
-     mkdir -p $out/bin/
-     cp  ./target/scala-2.11/bge-assembly-3.1.jar $out
-     cp bge $out/bin/
-     cp  ./api/target/scala-2.11/bgeapi-assembly-1.0.jar $out
-     cp api/bgeapi $out/bin/
-     wrapProgram $out/bin/bge --suffix LD_LIBRARY_PATH : ${stdenv.cc.cc.lib}/lib                 
+      mkdir -p $out
+      mkdir -p $out/bin/
+      cp  ./target/scala-2.11/bge-assembly-3.1.jar $out
+      cp bge $out/bin/
+      cp  ./api/target/scala-2.11/bgeapi-assembly-1.0.jar $out
+      cp api/bgeapi $out/bin/
+      wrapProgram $out/bin/bge --suffix LD_LIBRARY_PATH : ${stdenv.cc.cc.lib}/lib                 
     '';
 
-    src = fetchgit {
-    url = "git://github.com/bitcoinprivacy/Bitcoin-Graph-Explorer.git";
-    rev = "080bd1f";
-    md5 = "3928c2cea051f3a505e21c396c57d054";
-    } ;
+    src = fetchFromGitHub {
+      rev = "3.1";
+      owner = "bitcoinprivacy";
+      repo = "Bitcoin-Graph-Explorer";
+      sha256 = "062dfj4vc1r9q2dcppij2k16plv26xabvabn5qa9cq39289797vd";
+    };
+
     JAVA_HOME = "${jdk}";
+
     shellHook = ''
 
     export PS1="BGE > " '';
-#    LD_LIBRARY_PATH="${stdenv.cc.cc}/lib64";
-
-    buildInputs = [sbt makeWrapper];
 }
