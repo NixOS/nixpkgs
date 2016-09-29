@@ -9,7 +9,11 @@
 kdeApp {
   name = "kdelibs";
 
-  outputs = [ "out" ];
+  outputs = [ "out" "dev" ];
+
+  outputInclude = "out";
+
+  setOutputFlags = false;
 
   nativeBuildInputs = [
     automoc4 bison cmake flex libxslt perl pkgconfig shared_mime_info
