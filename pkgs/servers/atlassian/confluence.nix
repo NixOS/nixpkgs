@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     cp -rva . $out
+    patchShebangs $out/bin
   '';
 
   meta = with stdenv.lib; {
