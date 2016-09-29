@@ -4587,7 +4587,8 @@ in
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_14;
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
+    cloog = if !stdenv.isDarwin then cloog else null;
   }));
 
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
@@ -4602,9 +4603,9 @@ in
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_11;
+    isl = if !stdenv.isDarwin then isl_0_11 else null;
 
-    cloog = cloog_0_18_0;
+    cloog = if !stdenv.isDarwin then cloog_0_18_0 else null;
   }));
 
   gcc5 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5 {
@@ -4619,7 +4620,7 @@ in
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_14;
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
 
   gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
@@ -4634,7 +4635,7 @@ in
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_14;
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
 
   gfortran = if !stdenv.isDarwin then gfortran5
@@ -10435,6 +10436,8 @@ in
     libobjc = apple-source-releases.objc4;
 
     stubs = callPackages ../os-specific/darwin/stubs {};
+
+    usr-include = callPackage ../os-specific/darwin/macheaders.nix {};
   };
 
   devicemapper = lvm2;
