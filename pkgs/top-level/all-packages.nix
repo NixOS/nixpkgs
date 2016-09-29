@@ -505,6 +505,8 @@ in
    SDL = SDL_sixel;
   };
 
+  gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pass = callPackage ../tools/security/pass { };
