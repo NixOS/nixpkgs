@@ -5,6 +5,12 @@
 }:
 
 kde {
+  outputs = [ "out" "dev" ];
+
+  outputInclude = "out";
+
+  setOutputFlags = false;
+
   nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 
   cmakeFlags = [
