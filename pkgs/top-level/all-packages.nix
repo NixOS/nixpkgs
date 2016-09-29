@@ -815,6 +815,8 @@ in
 
   ent = callPackage ../tools/misc/ent { };
 
+  f3 = callPackage ../tools/filesystems/f3 { };
+
   facter = callPackage ../tools/system/facter {
     ruby = ruby_2_1;
   };
@@ -4175,6 +4177,8 @@ in
 
   wml = callPackage ../development/web/wml { };
 
+  wol = callPackage ../tools/networking/wol { };
+
   wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
@@ -4229,6 +4233,8 @@ in
   xdeltaUnstable = callPackage ../tools/compression/xdelta/unstable.nix { };
 
   xdummy = callPackage ../tools/misc/xdummy { };
+
+  xdxf2slob = callPackage ../tools/misc/xdxf2slob { };
 
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
 
@@ -4333,7 +4339,7 @@ in
     interactive = true;
   });
 
-  bashCompletion = callPackage ../shells/bash-completion { };
+  bash-completion = callPackage ../shells/bash-completion { };
 
   dash = callPackage ../shells/dash { };
 
@@ -8295,6 +8301,8 @@ in
 
   menu-cache = callPackage ../development/libraries/menu-cache { };
 
+  mergerfs = callPackage ../tools/filesystems/mergerfs { };
+
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesaDarwinOr = alternative: if stdenv.isDarwin
@@ -8314,6 +8322,7 @@ in
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
+      wayland = wayland_1_9; # work-around for #16779
     };
     in mo.drivers
   );
@@ -10678,7 +10687,7 @@ in
   };
 
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
-    kernelPatches = with kernelPatches; [ bridge_stp_helper ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper lguest_entry-linkage ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10866,6 +10875,8 @@ in
     };
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
+
+    systemtap = callPackage ../development/tools/profiling/systemtap { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 

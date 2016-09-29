@@ -94,14 +94,11 @@ let
     "--stringparam chunk.toc ${toc}"
   ];
 
-  olinkDB = stdenv.mkDerivation {
-    name = "manual-olinkdb";
-
-    inherit sources;
-
-    buildInputs = [ libxml2 libxslt ];
-
-    buildCommand = ''
+  olinkDB = runCommand "manual-olinkdb"
+    { inherit sources;
+      buildInputs = [ libxml2 libxslt ];
+    }
+    ''
       ${copySources}
 
       xsltproc \
@@ -133,15 +130,14 @@ let
       </targetset>
       EOF
     '';
-  };
 
 in rec {
 
   # The NixOS options in JSON format.
-  optionsJSON = stdenv.mkDerivation {
-    name = "options-json";
-
-    buildCommand = ''
+  optionsJSON = runCommand "options-json"
+    { meta.description = "List of NixOS options in JSON format";
+    }
+    ''
       # Export list of options in different format.
       dst=$out/share/doc/nixos
       mkdir -p $dst
@@ -154,18 +150,14 @@ in rec {
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
     ''; # */
 
-    meta.description = "List of NixOS options in JSON format";
-  };
-
   # Generate the NixOS manual.
-  manual = stdenv.mkDerivation {
-    name = "nixos-manual";
-
-    inherit sources;
-
-    buildInputs = [ libxml2 libxslt ];
-
-    buildCommand = ''
+  manual = runCommand "nixos-manual"
+    { inherit sources;
+      buildInputs = [ libxml2 libxslt ];
+      meta.description = "The NixOS manual in HTML format";
+      allowedReferences = ["out"];
+    }
+    ''
       ${copySources}
 
       # Check the validity of the manual sources.
@@ -192,20 +184,12 @@ in rec {
       echo "doc manual $dst" >> $out/nix-support/hydra-build-products
     ''; # */
 
-    meta.description = "The NixOS manual in HTML format";
 
-    allowedReferences = ["out"];
-  };
-
-
-  manualEpub = stdenv.mkDerivation {
-    name = "nixos-manual-epub";
-
-    inherit sources;
-
-    buildInputs = [ libxml2 libxslt zip ];
-
-    buildCommand = ''
+  manualEpub = runCommand "nixos-manual-epub"
+    { inherit sources;
+      buildInputs = [ libxml2 libxslt zip ];
+    }
+    ''
       ${copySources}
 
       # Check the validity of the manual sources.
@@ -234,17 +218,15 @@ in rec {
       mkdir -p $out/nix-support
       echo "doc-epub manual $manual" >> $out/nix-support/hydra-build-products
     '';
-  };
+
 
   # Generate the NixOS manpages.
-  manpages = stdenv.mkDerivation {
-    name = "nixos-manpages";
-
-    inherit sources;
-
-    buildInputs = [ libxml2 libxslt ];
-
-    buildCommand = ''
+  manpages = runCommand "nixos-manpages"
+    { inherit sources;
+      buildInputs = [ libxml2 libxslt ];
+      allowedReferences = ["out"];
+    }
+    ''
       ${copySources}
 
       # Check the validity of the man pages sources.
@@ -263,8 +245,5 @@ in rec {
         ${docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
         ./man-pages.xml
     '';
-
-    allowedReferences = ["out"];
-  };
 
 }

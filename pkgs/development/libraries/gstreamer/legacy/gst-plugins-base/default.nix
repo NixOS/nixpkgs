@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     patch -p1 < ${./gcc-4.9.patch}
   '';
 
+  outputs = [ "out" "dev" ];
+
   # TODO : v4l, libvisual
   buildInputs =
     [ pkgconfig glib cairo orc ]

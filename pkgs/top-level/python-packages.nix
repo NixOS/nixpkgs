@@ -7016,6 +7016,33 @@ in modules // {
     };
   };
 
+  grip = buildPythonPackage rec {
+    version = "4.3.2";
+    name = "grip-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyespo";
+      repo = "grip";
+      rev = "v${version}";
+      sha256 = "05a169sfaj280k7gibbc1rznjn43l5m6l1gpl6a5cmp5r8827khs";
+    };
+    buildInputs = with self; [ pytest responses ];
+
+    propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests2 ];
+
+    checkPhase = ''
+      export PATH="$PATH:$out/bin"
+      py.test -xm "not assumption"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Preview GitHub Markdown files like Readme locally before committing them";
+      homepage = https://github.com/joeyespo/grip;
+      license = licenses.mit;
+      maintainers = with maintainers; [ koral ];
+    };
+  };
+
   gst-python = callPackage ../development/libraries/gstreamer/python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
@@ -7976,6 +8003,30 @@ in modules // {
       homepage    = https://code.google.com/p/passlib/;
     };
   };
+
+  path-and-address = buildPythonPackage rec {
+    version = "2.0.1";
+    name = "path-and-address-${version}";
+
+    buildInputs = with self; [ pytest ];
+
+    checkPhase = "py.test";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyespo";
+      repo = "path-and-address";
+      rev = "v${version}";
+      sha256 = "0b0afpsaim06mv3lhbpm8fmawcraggc11jhzr6h72kdj1cqjk5h6";
+    };
+
+    meta = {
+      description = "Functions for server CLI applications used by humans";
+      homepage = https://github.com/joeyespo/path-and-address;
+      license = licenses.mit;
+      maintainers = with maintainers; [ koral];
+    };
+  };
+
 
   pdfminer = buildPythonPackage rec {
     version = "20140328";
@@ -19533,6 +19584,33 @@ in modules // {
     };
   };
 
+  PyICU = buildPythonPackage rec {
+    name = "PyICU-1.9.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/P/PyICU/${name}.tar.gz";
+      sha256 = "0hps2314w7ddiwhqgw249m3hgqnny7qn542vz26jxr5k5hhrcyhs";
+    };
+
+    buildInputs = [ pkgs.icu ];
+
+    patches = [
+      # Fixes a bug in the test suite.
+      (pkgs.fetchpatch {
+        url = "https://github.com/ovalhub/pyicu/commit/6ab20d48d85638acb3a811c8676f713bd26f0df9.patch";
+        sha256 = "0z4585r6bi0xxvrr93n450ka43vixx9zd063qna078vck0i3bkjg";
+      })
+    ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/PyICU/;
+      description = "Python extension wrapping the ICU C++ API";
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   pyinotify = buildPythonPackage rec {
     name = "pyinotify";
     version = "0.9.6";
@@ -22326,6 +22404,31 @@ in modules // {
       homepage = http://sigal.saimon.org/en/latest/index.html;
       license = licenses.mit;
       maintainers = with maintainers; [ domenkozar ];
+    };
+  };
+
+  slob = buildPythonPackage rec {
+    name = "slob-unstable-2016-03-04";
+
+    disabled = !isPy3k;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "itkach";
+      repo = "slob";
+      rev = "31ad0e769360a5b10a4893f686587bb8e48c3895";
+      sha256 = "06yn510178awhjsvy88cpjz7rlmyviqd5g58gc8gf4ivyqdlqbsl";
+    };
+
+    propagatedBuildInputs = [ self.PyICU ];
+
+    checkPhase = "python3 -m unittest slob";
+
+    meta = {
+      homepage = https://github.com/itkach/slob/;
+      description = "Reference implementation of the slob (sorted list of blobs) format";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
     };
   };
 
