@@ -35,9 +35,7 @@ let
     Restart = "on-failure";
   };
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -100,6 +98,17 @@ in
         '';
       };
 
+      openDefaultPorts = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open the default ports in the firewall:
+            - TCP 22000 for transfers
+            - UDP 21027 for discovery
+          You probably only want to disable this if you are running a single instance on this machine.
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.syncthing;
@@ -117,6 +126,14 @@ in
 
   config = mkIf cfg.enable {
 
+    networking.firewall = mkIf cfg.openDefaultPorts {
+      allowedTCPPorts = [ 22000 ];
+      allowedUDPPorts = [ 21027 ];
+    };
+
+    systemd.packages = [ pkgs.syncthing ]
+                       ++ lib.optional cfg.useInotify pkgs.syncthing-inotify;
+
     users = mkIf (cfg.user == defaultUser) {
       extraUsers."${defaultUser}" =
         { group = cfg.group;
@@ -132,15 +149,19 @@ in
 
     systemd.services = {
       syncthing = mkIf cfg.systemService (header // {
-          wants = mkIf cfg.useInotify [ "syncthing-inotify.service" ];
-          wantedBy = [ "multi-user.target" ];
-          serviceConfig = service // {
-            User = cfg.user;
-            Group = cfg.group;
-            PermissionsStartOnly = true;
-            ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
-          };
+        wants = mkIf cfg.useInotify [ "syncthing-inotify.service" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = service // {
+          User = cfg.user;
+          Group = cfg.group;
+          PermissionsStartOnly = true;
+          ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+        };
       });
+
+      syncthing-resume = {
+        wantedBy = [ "suspend.target" ];
+      };
 
       syncthing-inotify = mkIf (cfg.systemService && cfg.useInotify) (iNotifyHeader // {
         wantedBy = [ "multi-user.target" ];
@@ -150,20 +171,5 @@ in
         };
       });
     };
-
-    systemd.user.services = {
-      syncthing = header // {
-        serviceConfig = service // {
-          ExecStart = "${cfg.package}/bin/syncthing -no-browser";
-        };
-      };
-
-      syncthing-inotify = mkIf cfg.useInotify (iNotifyHeader // {
-        serviceConfig = iNotifyService // {
-          ExecStart = "${pkgs.syncthing-inotify.bin}/bin/syncthing-inotify -logflags=0";
-        };
-      });
-    };
-
   };
 }
