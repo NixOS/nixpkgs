@@ -1,4 +1,4 @@
-{ newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
+{ newScope, stdenv, isl, fetchurl, overrideCC, wrapCC, darwin }:
 let
   callPackage = newScope (self // { inherit stdenv isl version fetch; });
 
@@ -15,7 +15,7 @@ let
 
   self = {
     llvm = callPackage ./llvm.nix {
-      inherit compiler-rt_src stdenv;
+      inherit compiler-rt_src stdenv darwin;
     };
 
     clang-unwrapped = callPackage ./clang {

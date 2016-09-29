@@ -30,12 +30,20 @@ let
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
     '';
 
+    outputs = [ "out" "python" ];
+
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
       ln -sv ${llvm}/lib/LLVMgold.so $out/lib
       ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
       ln -sv $out/bin/clang $out/bin/cpp
+
+      mkdir -p $python/bin $python/share/clang/
+      mv $out/bin/{git-clang-format,scan-view,set-xcode-analyzer} $python/bin
+      mv $out/share/clang/*.py $python/share/clang
+
+      rm $out/bin/c-index-test
     '';
 
     enableParallelBuilding = true;

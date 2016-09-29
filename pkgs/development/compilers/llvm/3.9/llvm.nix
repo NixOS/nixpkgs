@@ -13,6 +13,7 @@
 , zlib
 , compiler-rt_src
 , libcxxabi
+, darwin
 , debugVersion ? false
 , enableSharedLibraries ? true
 }:
@@ -30,16 +31,28 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
+  outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
+
   buildInputs = [ perl groff cmake libxml2 python libffi ]
-    ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
+    ++ stdenv.lib.optionals stdenv.isDarwin
+         [ libcxxabi darwin.apple_sdk.libs.xpc darwin.cctools ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  postPatch = ""
   # hacky fix: New LLVM releases require a newer OS X SDK than
   # 10.9. This is a temporary measure until nixpkgs darwin support is
+  # updated. The second tweak forcibly removes i386 as a host
+  # architecture.
   # updated.
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  + stdenv.lib.optionalString stdenv.isDarwin ''
         sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
+        sed -i 's/set(X86 i386 i686)/set(X86 "")/' ./projects/compiler-rt/cmake/config-ix.cmake
+  ''
+  # Patch llvm-config to return correct library path based on --link-{shared,static}.
+  + stdenv.lib.optionalString (enableSharedLibraries) ''
+    substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
+    patch -p1 < ./llvm-outputs.patch
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -59,9 +72,10 @@ in stdenv.mkDerivation rec {
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ stdenv.lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
-    ++ stdenv.lib.optionals ( isDarwin) [
+    ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+    "-DCMAKE_LIBTOOL=${darwin.cctools}/bin/libtool"
   ];
 
   postBuild = ''
@@ -70,9 +84,17 @@ in stdenv.mkDerivation rec {
     paxmark m bin/{lli,llvm-rtdyld}
   '';
 
-  postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    install_name_tool -id $out/lib/libLLVM.dylib $out/lib/libLLVM.dylib
-    ln -s $out/lib/libLLVM.dylib $out/lib/libLLVM-${version}.dylib
+  postInstall = ""
+  + stdenv.lib.optionalString (enableSharedLibraries) ''
+    moveToOutput "lib/libLLVM-*" "$lib"
+    moveToOutput "lib/libLLVM.so" "$lib"
+    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
+  ''
+  + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+    moveToOutput "lib/libLLVM.dylib" "$lib"
+    install_name_tool -id "$lib/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
+    ln -s "$lib/lib/libLLVM.dylib" "$lib/lib/libLLVM-${version}.dylib"
   '';
 
   enableParallelBuilding = true;
