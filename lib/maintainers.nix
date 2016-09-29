@@ -199,6 +199,7 @@
   joamaki = "Jussi Maki <joamaki@gmail.com>";
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
+  jorgemartinezpizarro = "Jorge Martinez Pizarro <jorgemartinezpizarro@gmail.com>";
   joko = "Ioannis Koutras <ioannis.koutras@gmail.com>";
   jonafato = "Jon Banafato <jon@jonafato.com>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
@@ -397,6 +398,7 @@
   sprock = "Roger Mason <rmason@mun.ca>";
   spwhitt = "Spencer Whitt <sw@swhitt.me>";
   SShrike = "Severen Redwood <severen@shrike.me>";
+  stefanwouldgo = "Stefan Richter <richter@cs.rwth-aachen.de>";
   stephenmw = "Stephen Weinberg <stephen@q5comm.com>";
   steveej = "Stefan Junker <mail@stefanjunker.de>";
   swarren83 = "Shawn Warren <shawn.w.warren@gmail.com>";
