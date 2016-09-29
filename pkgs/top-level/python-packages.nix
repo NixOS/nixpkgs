@@ -20332,9 +20332,7 @@ in modules // {
       sha256 = "88f7ada2a71daf2c78a4f139b19d57551b4c8be01f53a1cb5c86c2f3bf01355f";
     };
 
-    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
-      sed -i 's/test_numeric_string_x509_name_entry/noop/' tests/hazmat/backends/test_openssl.py
-    '' + ''
+    preCheck = ''
       sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
     '';
 
@@ -20342,7 +20340,8 @@ in modules // {
       runHook preCheck
       export LANG="en_US.UTF-8";
       py.test;
-      runHook postCheck'';
+      runHook postCheck
+    '';
 
     buildInputs = [ pkgs.openssl self.pytest pkgs.glibcLocales ];
     propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
