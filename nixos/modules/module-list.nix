@@ -119,6 +119,7 @@
   ./services/audio/ympd.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
+  ./services/backup/borgbackup.nix
   ./services/backup/crashplan.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
