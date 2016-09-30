@@ -140,6 +140,12 @@ following incompatible changes:</para>
     was changed to YAML.</para>
   </listitem>
 
+  <listitem>
+    <para>
+      PHP has been upgraded to 7.0
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
