@@ -193,6 +193,10 @@ following incompatible changes:</para>
     </link>
   </para></listitem>
 
+  <listitem><para>
+    Gummi boot has been replaced using systemd-boot.
+  </para></listitem>
+
 </itemizedlist>
 
 
