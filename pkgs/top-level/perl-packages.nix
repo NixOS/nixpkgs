@@ -138,6 +138,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ AnyEvent ];
+    doCheck = false; # does an DNS lookup
     meta = {
       homepage = http://github.com/potyl/perl-AnyEvent-CacheDNS;
       description = "Simple DNS resolver with caching";
