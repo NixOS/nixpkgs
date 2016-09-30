@@ -82,6 +82,14 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
+    <para>
+      <literal>/var/empty</literal> is now immutable. Activation script runs <command>chattr +i</command>
+      to forbid any modifications inside the folder. See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18365">
+      the pull request</link> for what bugs this caused.
+    </para>
+  </listitem>
+
+  <listitem>
     <para>Gitlab's maintainance script
     <command>gitlab-runner</command> was removed and split up into the
     more clearer <command>gitlab-run</command> and
