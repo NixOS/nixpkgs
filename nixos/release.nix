@@ -284,6 +284,7 @@ in rec {
   tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.samba = callTest tests/samba.nix {};
   tests.sddm = callTest tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
