@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer
-, curl, gettext, libogg, libvorbis, mesa, openal, physfs, boost, glew
-, libiconv }:
+{ stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image , curl
+, libogg, libvorbis, mesa, openal, boost, glew
+}:
 
 stdenv.mkDerivation rec {
   name = "supertux-${version}";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = https://github.com/SuperTux/supertux/releases/download/v0.4.0/supertux-0.4.0.tar.bz2;
-    sha256 = "10ppmy6w77lxj8bdzjahc9bidgl4qgzr9rimn15rnqay84ydx3fi";
+    url = "https://github.com/SuperTux/supertux/releases/download/v${version}/SuperTux-v${version}-Source.tar.gz";
+    sha256 = "0fx7c7m6mfanqy7kln7yf6abb5l3r68picf32js2yls11jj0vbng";
   };
 
-  buildInputs = [ pkgconfig cmake SDL2 SDL2_image SDL2_mixer curl gettext
-                  libogg libvorbis mesa openal physfs boost glew libiconv ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  buildInputs = [ SDL2 SDL2_image curl libogg libvorbis mesa openal boost glew ];
+
+  cmakeFlags = [ "-DENABLE_BOOST_STATIC_LIBS=OFF" ];
 
   postInstall = ''
     mkdir $out/bin
