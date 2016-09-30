@@ -10567,7 +10567,7 @@ in modules // {
     };
 
     buildInputs = with self; [ nose mock pytestrunner pytest ];
-    propagatedBuildInputs = with self; [ pyflakes mccabe enum34 configparser pycodestyle ];
+    propagatedBuildInputs = with self; [ pyflakes mccabe_0_5 enum34 configparser pycodestyle ];
 
     patches = [
       ../development/python-modules/flake8/move-pytest-config-to-pytest-ini.patch
@@ -13498,6 +13498,23 @@ in modules // {
     };
   });
 
+  mccabe_0_5 = buildPythonPackage (rec {
+    name = "mccabe-0.5.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mccabe/${name}.tar.gz";
+      sha256 = "1zss8c5cn8wvxsbjzv70dxymybh3cjzrjl19vxfbnyvmidng0wrl";
+    };
+
+    buildInputs = with self; [ pytestrunner pytest ];
+
+    meta = {
+      description = "McCabe checker, plugin for flake8";
+      homepage = "https://github.com/flintwork/mccabe";
+      license = licenses.mit;
+      maintainers = with maintainers; [ ];
+    };
+  });
 
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.2.5";
