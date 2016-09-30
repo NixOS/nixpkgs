@@ -7017,6 +7017,33 @@ in modules // {
     };
   };
 
+  grip = buildPythonPackage rec {
+    version = "4.3.2";
+    name = "grip-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyespo";
+      repo = "grip";
+      rev = "v${version}";
+      sha256 = "05a169sfaj280k7gibbc1rznjn43l5m6l1gpl6a5cmp5r8827khs";
+    };
+    buildInputs = with self; [ pytest responses ];
+
+    propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests2 ];
+
+    checkPhase = ''
+      export PATH="$PATH:$out/bin"
+      py.test -xm "not assumption"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Preview GitHub Markdown files like Readme locally before committing them";
+      homepage = https://github.com/joeyespo/grip;
+      license = licenses.mit;
+      maintainers = with maintainers; [ koral ];
+    };
+  };
+
   gst-python = callPackage ../development/libraries/gstreamer/python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
@@ -7977,6 +8004,30 @@ in modules // {
       homepage    = https://code.google.com/p/passlib/;
     };
   };
+
+  path-and-address = buildPythonPackage rec {
+    version = "2.0.1";
+    name = "path-and-address-${version}";
+
+    buildInputs = with self; [ pytest ];
+
+    checkPhase = "py.test";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyespo";
+      repo = "path-and-address";
+      rev = "v${version}";
+      sha256 = "0b0afpsaim06mv3lhbpm8fmawcraggc11jhzr6h72kdj1cqjk5h6";
+    };
+
+    meta = {
+      description = "Functions for server CLI applications used by humans";
+      homepage = https://github.com/joeyespo/path-and-address;
+      license = licenses.mit;
+      maintainers = with maintainers; [ koral];
+    };
+  };
+
 
   pdfminer = buildPythonPackage rec {
     version = "20140328";
@@ -9357,12 +9408,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.9";
+    version = "1.9.10";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "136ypwacj4av6xqmbfp6lhlr0171ws2knv74h0r59ssaaffznh73";
+      sha256 = "007w2pshbk1s6gfgp8717fwz01l8mcmd2lkxdgqqgd11bag7qfjv";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -9381,12 +9432,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.14";
+    version = "1.8.15";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "0ka6slangri68qaf91gl10l9m14f6waj4ncz543rbcpvj25w90jj";
+      sha256 = "1kga849ixd6sz6svhv8dysyjr03wphqgl4wjw2yczmc5r4x58gl6";
     };
 
     # too complicated to setup
@@ -10439,17 +10490,45 @@ in modules // {
     };
   };
 
+  pycodestyle = buildPythonPackage rec {
+    name = "pycodestyle-${version}";
+    version = "2.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pycodestyle/${name}.tar.gz";
+      sha256 = "1rz2v8506mdjdyxcnv9ygiw6v0d4dqx8z5sjyjm0w2v32h5l5w1p";
+    };
+
+    meta = {
+      description = "Python style guide checker (formerly called pep8)";
+      homepage = https://pycodestyle.readthedocs.io;
+      license = licenses.mit;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  pep8 = self.pycodestyle;
+
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "2.5.4";
+    version = "3.0.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "0bs9cz4fr99r2rwig1b8jwaadl1nan7kgpdzqwj0bwbckwbmh7nc";
+      sha256 = "03cpdrjxh0fyi2qpdxbbrmxw7whiq3xr3p958gr6yzghk34i1hml";
     };
 
-    buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe ];
+    buildInputs = with self; [ nose mock pytestrunner pytest ];
+    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe enum34 configparser pycodestyle ];
+
+    patches = [
+      ../development/python-modules/flake8/move-pytest-config-to-pytest-ini.patch
+    ];
+
+    # Tests fail due to missing ini file.
+    preCheck = ''
+      touch tox.ini
+    '';
 
     meta = {
       description = "Code checking using pep8 and pyflakes";
@@ -13345,21 +13424,12 @@ in modules // {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.4.0";
+    name = "mccabe-0.5.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
+      sha256 = "1zss8c5cn8wvxsbjzv70dxymybh3cjzrjl19vxfbnyvmidng0wrl";
     };
-
-    # See https://github.com/flintwork/mccabe/issues/31
-    postPatch = ''
-      cp "${pkgs.fetchurl {
-        url = "https://raw.githubusercontent.com/flintwork/mccabe/"
-            + "e8aea16d28e92bd3c62601275762fc9c16808f6c/test_mccabe.py";
-        sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
-      }}" test_mccabe.py
-    '';
 
     buildInputs = with self; [ pytestrunner pytest ];
 
@@ -17552,23 +17622,6 @@ in modules // {
     };
   };
 
-  pep8 = buildPythonPackage rec {
-    name = "pep8-${version}";
-    version = "1.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pep8/${name}.tar.gz";
-      sha256 = "a113d5f5ad7a7abacef9df5ec3f2af23a20a28005921577b15dd584d099d5900";
-    };
-
-    meta = {
-      homepage = "http://pep8.readthedocs.org/";
-      description = "Python style guide checker";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
   pep257 = buildPythonPackage rec {
     name = "pep257-${version}";
     version = "0.3.2";
@@ -19604,6 +19657,33 @@ in modules // {
     };
   };
 
+  PyICU = buildPythonPackage rec {
+    name = "PyICU-1.9.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/P/PyICU/${name}.tar.gz";
+      sha256 = "0hps2314w7ddiwhqgw249m3hgqnny7qn542vz26jxr5k5hhrcyhs";
+    };
+
+    buildInputs = [ pkgs.icu ];
+
+    patches = [
+      # Fixes a bug in the test suite.
+      (pkgs.fetchpatch {
+        url = "https://github.com/ovalhub/pyicu/commit/6ab20d48d85638acb3a811c8676f713bd26f0df9.patch";
+        sha256 = "0z4585r6bi0xxvrr93n450ka43vixx9zd063qna078vck0i3bkjg";
+      })
+    ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/PyICU/;
+      description = "Python extension wrapping the ICU C++ API";
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   pyinotify = buildPythonPackage rec {
     name = "pyinotify";
     version = "0.9.6";
@@ -20353,16 +20433,25 @@ in modules // {
 
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
-    version = "16.0.0";
+    version = "16.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
-      sha256 = "0zfijaxlq4vgi6jz0d4i5xq9ygqnyps6br7lmigjhqnh8gp10g9n";
+      sha256 = "88f7ada2a71daf2c78a4f139b19d57551b4c8be01f53a1cb5c86c2f3bf01355f";
     };
 
-    # 12 tests failing, 26 error out
-    doCheck = false;
+    preCheck = ''
+      sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
+    '';
 
+    checkPhase = ''
+      runHook preCheck
+      export LANG="en_US.UTF-8";
+      py.test;
+      runHook postCheck
+    '';
+
+    buildInputs = [ pkgs.openssl self.pytest pkgs.glibcLocales ];
     propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
   };
 
@@ -22432,6 +22521,31 @@ in modules // {
       homepage = http://sigal.saimon.org/en/latest/index.html;
       license = licenses.mit;
       maintainers = with maintainers; [ domenkozar ];
+    };
+  };
+
+  slob = buildPythonPackage rec {
+    name = "slob-unstable-2016-03-04";
+
+    disabled = !isPy3k;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "itkach";
+      repo = "slob";
+      rev = "31ad0e769360a5b10a4893f686587bb8e48c3895";
+      sha256 = "06yn510178awhjsvy88cpjz7rlmyviqd5g58gc8gf4ivyqdlqbsl";
+    };
+
+    propagatedBuildInputs = [ self.PyICU ];
+
+    checkPhase = "python3 -m unittest slob";
+
+    meta = {
+      homepage = https://github.com/itkach/slob/;
+      description = "Reference implementation of the slob (sorted list of blobs) format";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
     };
   };
 

@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "MANDIR=$(out)/share/man" ];
+  outputDocdev = "out";
 
   meta = with stdenv.lib; {
     description = "Linux development manual pages";

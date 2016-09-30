@@ -1,11 +1,11 @@
 { fetchurl, stdenv, buildPythonPackage }:
 
 buildPythonPackage {
-  name = "zc.buildout-nix-2.5.0";
+  name = "zc.buildout-nix-2.5.3";
 
   src = fetchurl {
-    url = "mirror://pypi/z/zc.buildout/zc.buildout-2.5.0.tar.gz";
-    sha256 = "721bd2231a9f01f2d5c14f3adccb3385f85b093ee05b18d15d0ff2b9f1f1bd02";
+    url = "https://pypi.python.org/packages/e4/7b/63863f09bec5f5d7b9474209a6d4d3fc1e0bca02ecfb4c17f0cdd7b554b6/zc.buildout-2.5.3.tar.gz";
+    sha256 = "3e5f3afcc64416604c5efc554c2fa0901b60657e012a710c320e2eb510efcfb9";
   };
 
   patches = [ ./nix.patch ];

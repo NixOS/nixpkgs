@@ -57,5 +57,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.asterisk.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ auntie ];
+    # Marked as broken due to needing an update for security issues.
+    # See: https://github.com/NixOS/nixpkgs/issues/18856
+    broken = true;
   };
 }

@@ -19,7 +19,7 @@
 , enableAlternatives   ? false
 , enableCopyArtifacts  ? false
 
-, bashInteractive, bashCompletion
+, bashInteractive, bash-completion
 }:
 
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
@@ -70,7 +70,7 @@ let
   allEnabledPlugins = pluginsWithoutDeps ++ enabledOptionalPlugins;
 
   testShell = "${bashInteractive}/bin/bash --norc";
-  completion = "${bashCompletion}/share/bash-completion/bash_completion";
+  completion = "${bash-completion}/share/bash-completion/bash_completion";
 
 in pythonPackages.buildPythonApplication rec {
   name = "beets-${version}";

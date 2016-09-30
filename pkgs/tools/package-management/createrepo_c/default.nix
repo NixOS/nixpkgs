@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python, rpm, openssl, sqlite, file, xz, pcre, bashCompletion }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
 
 stdenv.mkDerivation rec {
   rev  = "0.10.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
                 "set (PYTHON_INSTALL_DIR "$out/${python.sitePackages}")"
   '';
 
-  buildInputs = [ cmake pkgconfig bzip2 expat glib curl libxml2 python rpm openssl sqlite file xz pcre bashCompletion ];
+  buildInputs = [ cmake pkgconfig bzip2 expat glib curl libxml2 python rpm openssl sqlite file xz pcre bash-completion ];
 
   meta = with stdenv.lib; {
     description = "C implementation of createrepo";

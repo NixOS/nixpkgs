@@ -506,6 +506,8 @@ in
    SDL = SDL_sixel;
   };
 
+  gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pass = callPackage ../tools/security/pass { };
@@ -813,6 +815,8 @@ in
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
+
+  f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
     ruby = ruby_2_1;
@@ -3265,6 +3269,8 @@ in
 
   progress = callPackage ../tools/misc/progress { };
 
+  ps3netsrv = callPackage ../servers/ps3netsrv { };
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
@@ -4188,6 +4194,8 @@ in
 
   wml = callPackage ../development/web/wml { };
 
+  wol = callPackage ../tools/networking/wol { };
+
   wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
@@ -4242,6 +4250,8 @@ in
   xdeltaUnstable = callPackage ../tools/compression/xdelta/unstable.nix { };
 
   xdummy = callPackage ../tools/misc/xdummy { };
+
+  xdxf2slob = callPackage ../tools/misc/xdxf2slob { };
 
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
 
@@ -4346,7 +4356,7 @@ in
     interactive = true;
   });
 
-  bashCompletion = callPackage ../shells/bash-completion { };
+  bash-completion = callPackage ../shells/bash-completion { };
 
   dash = callPackage ../shells/dash { };
 
@@ -4438,6 +4448,8 @@ in
   clang_36 = llvmPackages_36.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
+
+  clang-tools = callPackage ../development/tools/clang-tools { };
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
@@ -4876,27 +4888,17 @@ in
 
   oraclejdk = pkgs.jdkdistro true false;
 
-  oraclejdk7 = pkgs.oraclejdk7distro true false;
-
-  oraclejdk7psu = pkgs.oraclejdk7psu_distro true false;
-
   oraclejdk8 = pkgs.oraclejdk8distro true false;
 
   oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
 
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
-  oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
-
-  oraclejre7psu = lowPrio (pkgs.oraclejdk7psu_distro false false);
-
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
   jrePlugin = jre8Plugin;
-
-  jre7Plugin = lowPrio (pkgs.oraclejdk7distro false true);
 
   jre8Plugin = lowPrio (pkgs.oraclejdk8distro false true);
 
@@ -4905,16 +4907,6 @@ in
     system == "x86_64-linux";
 
   jdkdistro = oraclejdk8distro;
-
-  oraclejdk7distro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk7-linux.nix { inherit installjdk; });
-
-  oraclejdk7psu_distro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk7psu-linux.nix { inherit installjdk; });
 
   oraclejdk8distro = installjdk: pluginSupport:
     assert supportsJDK;
@@ -8313,6 +8305,8 @@ in
 
   menu-cache = callPackage ../development/libraries/menu-cache { };
 
+  mergerfs = callPackage ../tools/filesystems/mergerfs { };
+
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesaDarwinOr = alternative: if stdenv.isDarwin
@@ -8332,6 +8326,7 @@ in
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
+      wayland = wayland_1_9; # work-around for #16779
     };
     in mo.drivers
   );
@@ -10006,6 +10001,8 @@ in
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
+  postgrey = callPackage ../servers/mail/postgrey { };
+
   pshs = callPackage ../servers/http/pshs { };
 
   libpulseaudio = callPackage ../servers/pulseaudio { libOnly = true; };
@@ -10709,7 +10706,7 @@ in
   };
 
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
-    kernelPatches = with kernelPatches; [ bridge_stp_helper ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper lguest_entry-linkage ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10897,6 +10894,8 @@ in
     };
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
+
+    systemtap = callPackage ../development/tools/profiling/systemtap { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
@@ -12812,14 +12811,14 @@ in
   xfontsel = callPackage ../applications/misc/xfontsel { };
   inherit (xorg) xlsfonts;
 
-  freerdp = callPackage ../applications/networking/remote/freerdp {
+  freerdpStable = callPackage ../applications/networking/remote/freerdp {
     ffmpeg = ffmpeg_1;
   };
-
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
     ffmpeg = ffmpeg_2;
     cmake = cmake_2_8;
   };
+  freerdp = freerdpUnstable; # freerdpStable is marked broken, please switch back to it once fixed
 
   freicoin = callPackage ../applications/misc/freicoin {
     boost = boost155;
@@ -15632,7 +15631,7 @@ in
     };
   };
 
-  superTux = callPackage ../games/super-tux { };
+  superTux = callPackage ../games/supertux { };
 
   superTuxKart = callPackage ../games/super-tux-kart { };
 

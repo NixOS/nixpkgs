@@ -262,7 +262,6 @@ default-package-overrides:
   - cabal-rpm ==0.10.0
   - cabal-sort ==0.0.5.3
   - cabal-src ==0.3.0.1
-  - cabal2nix ==2.0.2
   - cache ==0.1.0.0
   - cacophony ==0.8.0
   - cairo ==0.13.3.0
@@ -1613,7 +1612,6 @@ default-package-overrides:
   - sqlite-simple ==0.4.9.0
   - srcloc ==0.5.1.0
   - stache ==0.1.7
-  - stack ==1.1.2
   - stack-run-auto ==0.1.1.4
   - stackage-curator ==0.14.1.1
   - stackage-types ==1.2.0

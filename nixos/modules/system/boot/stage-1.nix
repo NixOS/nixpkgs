@@ -134,10 +134,9 @@ let
     ''; # */
 
 
-  udevRules = pkgs.stdenv.mkDerivation {
-    name = "udev-rules";
-    allowedReferences = [ extraUtils ];
-    buildCommand = ''
+  udevRules = pkgs.runCommand "udev-rules"
+    { allowedReferences = [ extraUtils ]; }
+    ''
       mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
@@ -176,7 +175,6 @@ let
       substituteInPlace $out/60-persistent-storage.rules \
         --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
     ''; # */
-  };
 
 
   # The init script of boot stage 1 (loading kernel modules for
@@ -230,16 +228,12 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = pkgs.stdenv.mkDerivation {
-            name = "initrd-kmod-blacklist-ubuntu";
-            builder = pkgs.writeText "builder.sh" ''
-              source $stdenv/setup
+        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu"
+            { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
+            ''
               target=$out
-
               ${pkgs.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';
-            src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-          };
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
         { object = pkgs.kmod-debian-aliases;
