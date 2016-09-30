@@ -9968,6 +9968,8 @@ in
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
+  postgrey = callPackage ../servers/mail/postgrey { };
+
   pshs = callPackage ../servers/http/pshs { };
 
   libpulseaudio = callPackage ../servers/pulseaudio { libOnly = true; };
