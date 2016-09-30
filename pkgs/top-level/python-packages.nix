@@ -10517,7 +10517,7 @@ in modules // {
       sha256 = "03cpdrjxh0fyi2qpdxbbrmxw7whiq3xr3p958gr6yzghk34i1hml";
     };
 
-    buildInputs = with self; [ nose mock ];
+    buildInputs = with self; [ nose mock pytestrunner pytest ];
     propagatedBuildInputs = with self; [ pyflakes pep8 mccabe enum34 configparser pycodestyle ];
 
     patches = [
