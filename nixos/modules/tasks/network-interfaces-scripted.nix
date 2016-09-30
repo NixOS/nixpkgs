@@ -196,7 +196,7 @@ in
 
         createBridgeDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = if config.boot.isContainer then [] else map subsystemDevice v.interfaces;
+            deps = concatLists (map deviceDependency v.interfaces);
           in
           { description = "Bridge Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
@@ -237,7 +237,7 @@ in
 
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = if config.boot.isContainer then [] else map subsystemDevice v.interfaces;
+            deps = concatLists (map deviceDependency v.interfaces);
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
@@ -270,7 +270,7 @@ in
 
         createBondDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = if config.boot.isContainer then [] else map subsystemDevice v.interfaces;
+            deps = concatLists (map deviceDependency v.interfaces);
           in
           { description = "Bond Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
