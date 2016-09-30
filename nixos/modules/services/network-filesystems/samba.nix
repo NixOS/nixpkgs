@@ -56,6 +56,7 @@ let
       serviceConfig = {
         ExecStart = "${samba}/sbin/${appName} ${args}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        Type = "notify";
       };
 
       restartTriggers = [ configFile ];
@@ -167,12 +168,12 @@ in
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
           { public =
-             { path = "/srv/public";
-               "read only" = true;
-               browseable = "yes";
-               "guest ok" = "yes";
-                comment = "Public samba share.";
-             };
+            { path = "/srv/public";
+              "read only" = true;
+              browseable = "yes";
+              "guest ok" = "yes";
+              comment = "Public samba share.";
+            };
           };
       };
 
