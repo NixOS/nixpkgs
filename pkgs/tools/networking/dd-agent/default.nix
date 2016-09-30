@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
     pythonPackages.ntplib
     pythonPackages.simplejson
     pythonPackages.pyyaml
-    pythonPackages.requests
     pythonPackages.pymongo
     pythonPackages.docker
   ];
