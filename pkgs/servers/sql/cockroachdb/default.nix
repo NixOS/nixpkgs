@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "cockroach-${version}";
-  version = "beta-20160915";
+  version = "beta-20160929";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
   subPackages = [ "." ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "cockroachdb";
     repo = "cockroach";
     rev = version;
-    sha256 = "11camp588vsccxlc138l7x4qws2fj5wpx1177irzayqdng8dilx3";
+    sha256 = "1s0sh4avg78inq6m5pws1ddnb69qccff84r92g1d60h6jlb2s8y3";
   };
 
   buildFlagsArray = ''
