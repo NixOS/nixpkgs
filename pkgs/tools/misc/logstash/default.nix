@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper, jre  }:
 
 stdenv.mkDerivation rec {
   version = "2.3.4";
@@ -14,10 +14,20 @@ stdenv.mkDerivation rec {
   dontStrip         = true;
   dontPatchShebangs = true;
 
+  buildInputs = [
+    makeWrapper jre
+  ];
+  
   installPhase = ''
     mkdir -p $out
     cp -r {Gemfile*,vendor,lib,bin} $out
     mv $out/bin/plugin $out/bin/logstash-plugin
+	
+    wrapProgram $out/bin/logstash \
+       --set JAVA_HOME "${jre}"
+	   
+    wrapProgram $out/bin/rspec \
+       --set JAVA_HOME "${jre}"
   '';
 
   meta = with stdenv.lib; {
