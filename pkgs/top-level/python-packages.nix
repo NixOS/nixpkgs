@@ -10557,6 +10557,35 @@ in modules // {
     };
   };
 
+  flake8_3 = buildPythonPackage rec {
+    name = "flake8-${version}";
+    version = "3.0.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flake8/${name}.tar.gz";
+      sha256 = "03cpdrjxh0fyi2qpdxbbrmxw7whiq3xr3p958gr6yzghk34i1hml";
+    };
+
+    buildInputs = with self; [ nose mock pytestrunner pytest ];
+    propagatedBuildInputs = with self; [ pyflakes mccabe enum34 configparser pycodestyle ];
+
+    patches = [
+      ../development/python-modules/flake8/move-pytest-config-to-pytest-ini.patch
+    ];
+
+    # Tests fail due to missing ini file.
+    preCheck = ''
+      touch tox.ini
+    '';
+
+    meta = {
+      description = "Code checking using pep8 and pyflakes";
+      homepage = http://pypi.python.org/pypi/flake8;
+      license = licenses.mit;
+      maintainers = with maintainers; [ ];
+    };
+  };
+
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";
     version = "3.1.0";
