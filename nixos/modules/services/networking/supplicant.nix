@@ -34,7 +34,7 @@ let
       '';
     in
       { description = "Supplicant ${iface}${optionalString (iface=="WLAN"||iface=="LAN") " %I"}";
-        wantedBy = [ "network.target" ];
+        wantedBy = [ "network.target" ] ++ deps;
         bindsTo = deps;
         after = deps;
         before = [ "network.target" ];
