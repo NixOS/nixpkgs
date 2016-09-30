@@ -10489,6 +10489,23 @@ in modules // {
     };
   };
 
+  pycodestyle = buildPythonPackage rec {
+    name = "pycodestyle-${version}";
+    version = "2.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pycodestyle/${name}.tar.gz";
+      sha256 = "1rz2v8506mdjdyxcnv9ygiw6v0d4dqx8z5sjyjm0w2v32h5l5w1p";
+    };
+
+    meta = {
+      description = "Python style guide checker (formerly called pep8)";
+      homepage = https://pycodestyle.readthedocs.io;
+      license = licenses.mit;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
     version = "2.5.4";
