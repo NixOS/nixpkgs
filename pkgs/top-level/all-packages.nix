@@ -829,6 +829,8 @@ in
 
   fzy = callPackage ../tools/misc/fzy { };
 
+  gdrivefs = python27Packages.gdrivefs;
+
   gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
@@ -2607,6 +2609,8 @@ in
   mimeo = callPackage ../tools/misc/mimeo { };
 
   mimetic = callPackage ../development/libraries/mimetic { };
+
+  minio-client = callPackage ../tools/networking/minio-client { };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
@@ -6271,7 +6275,7 @@ in
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
+  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
     wantPS = stdenv.isDarwin;
     inherit (darwin) ps;
   };
@@ -6606,6 +6610,8 @@ in
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
+
+  patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
   peg = callPackage ../development/tools/parsing/peg { };
 
@@ -7124,7 +7130,7 @@ in
   dbus-sharp-glib-1_0 = callPackage ../development/libraries/dbus-sharp-glib/dbus-sharp-glib-1.0.nix { };
   dbus-sharp-glib-2_0 = callPackage ../development/libraries/dbus-sharp-glib { };
 
-  # Should we deprecate these? Currently there are many references.
+  # FIXME: deprecate these.
   dbus_tools = self.dbus.out;
   dbus_libs = self.dbus;
   dbus_daemon = self.dbus.daemon;
@@ -10381,6 +10387,8 @@ in
 
   mfi = callPackage ../servers/mfi { };
 
+  minio = callPackage ../servers/minio { };
+
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
   mod_fastcgi = pkgs.apacheHttpdPackages.mod_fastcgi;
@@ -12587,7 +12595,7 @@ in
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
     libpng = libpng12;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
@@ -13217,14 +13225,14 @@ in
   xfontsel = callPackage ../applications/misc/xfontsel { };
   inherit (xorg) xlsfonts;
 
-  freerdp = callPackage ../applications/networking/remote/freerdp {
+  freerdpStable = callPackage ../applications/networking/remote/freerdp {
     ffmpeg = ffmpeg_1;
   };
-
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
     ffmpeg = ffmpeg_2;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
+  freerdp = freerdpUnstable; # freerdpStable is marked broken, please switch back to it once fixed
 
   freicoin = callPackage ../applications/misc/freicoin {
     boost = boost155;
@@ -14530,7 +14538,7 @@ in
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
-    cmake = cmake-2_8; # problems after 3.4 -> 3.6.0
+    cmake = cmake_2_8; # problems after 3.4 -> 3.6.0
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
@@ -15992,7 +16000,7 @@ in
 
   spring = callPackage ../games/spring {
     boost = boost155;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
@@ -16156,7 +16164,7 @@ in
 
   zandronum = callPackage ../games/zandronum {
     fmod = fmod42416;
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   zandronum-server = zandronum.override {
@@ -16970,7 +16978,7 @@ in
   stellarium = qt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
-    cmake = cmake-2_8;
+    cmake = cmake_2_8;
   };
 
   vite = callPackage ../applications/science/misc/vite { };

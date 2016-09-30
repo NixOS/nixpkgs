@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, bc, perl, pam, libXext, libXScrnSaver, libX11
-, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, mesa, gtk
+, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, mesa_noglu, gtk
 , libxml2, libglade, intltool, xorg, makeWrapper, gle
 , forceInstallAllHacks ? false
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig bc perl libjpeg mesa gtk libxml2 libglade pam
+    [ pkgconfig bc perl libjpeg mesa_noglu gtk libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
       libXxf86misc intltool xorg.appres makeWrapper gle
     ];

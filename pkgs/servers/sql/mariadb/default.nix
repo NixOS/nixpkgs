@@ -14,7 +14,6 @@ mariadb = everything // {
   lib = client; # compat. with the old mariadb split
 };
 
-
 common = rec { # attributes common to both builds
   version = "10.1.17";
 
@@ -155,6 +154,9 @@ everything = stdenv.mkDerivation (common // {
   postInstall = common.postInstall + ''
     rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
+
+    # Don't install mysqlbug to prevent a dependency on gcc.
+    rm $out/bin/mysqlbug
   '';
 });
 

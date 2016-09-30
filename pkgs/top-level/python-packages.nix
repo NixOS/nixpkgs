@@ -9252,12 +9252,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.9";
+    version = "1.9.10";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "136ypwacj4av6xqmbfp6lhlr0171ws2knv74h0r59ssaaffznh73";
+      sha256 = "007w2pshbk1s6gfgp8717fwz01l8mcmd2lkxdgqqgd11bag7qfjv";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -9276,12 +9276,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.14";
+    version = "1.8.15";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "0ka6slangri68qaf91gl10l9m14f6waj4ncz543rbcpvj25w90jj";
+      sha256 = "1kga849ixd6sz6svhv8dysyjr03wphqgl4wjw2yczmc5r4x58gl6";
     };
 
     # too complicated to setup
@@ -11063,15 +11063,14 @@ in modules // {
   };
 
   gdrivefs = buildPythonPackage rec {
-    version = "0.14.3";
+    version = "0.14.8";
     name = "gdrivefs-${version}";
+    namePrefix = "";
     disabled = !isPy27;
 
-    src = pkgs.fetchFromGitHub {
-      sha256 = "1ljkh1871lwzn5lhhgbmbf2hfnbnajr3ddz3q5n1kid25qb3l086";
-      rev = version;
-      repo = "GDriveFS";
-      owner = "dsoprea";
+    src = pkgs.fetchurl {
+      url = "https://github.com/dsoprea/GDriveFS/archive/${version}.tar.gz";
+      sha256 = "1dch10ajkp567pwvssvz1v5c0hxfyd8wf9qd7j1gfybh7f7hyzvw";
     };
 
     buildInputs = with self; [ gipc greenlet httplib2 six ];
