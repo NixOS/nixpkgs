@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     python
     unzip
     makeWrapper
+    pythonPackages.requests2
     pythonPackages.psycopg2
     pythonPackages.psutil
     pythonPackages.ntplib
