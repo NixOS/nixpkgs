@@ -180,11 +180,18 @@ following incompatible changes:</para>
     <para><literal>services.xserver.startGnuPGAgent</literal>
       has been removed due to GnuPG 2.1.x bump. See <link
         xlink:href="https://github.com/NixOS/nixpkgs/commit/5391882ebd781149e213e8817fba6ac3c503740c">
-      how to achieve similar behavior. You might need to
+        how to achieve similar behavior</link>. You might need to
       <literal>pkill gpg-agent</literal> after the upgrade
       to prevent a stale agent being in the way.
     </para>
   </listitem>
+
+  <listitem><para>
+    <link xlink:href="https://github.com/NixOS/nixpkgs/commit/e561edc322d275c3687fec431935095cfc717147">
+    Declarative users could share the uid due to the bug in
+    the script handling conflict resolution.
+    </link>
+  </para></listitem>
 
 </itemizedlist>
 
