@@ -310,9 +310,9 @@ in
         generate a random 32-bit ID using the following commands:
 
         <literal>cksum /etc/machine-id | while read c rest; do printf "%x" $c; done</literal>
-        
+
         (this derives it from the machine-id that systemd generates) or
-        
+
         <literal>head -c4 /dev/urandom | od -A none -t x4</literal>
       '';
     };
@@ -972,12 +972,17 @@ in
         '';
       };
     } // (listToAttrs (flip map interfaces (i:
+      let
+        deviceDependency = if config.boot.isContainer
+          then []
+          else [ (subsystemDevice i.name) ];
+      in
       nameValuePair "network-link-${i.name}"
       { description = "Link configuration of ${i.name}";
         wantedBy = [ "network-interfaces.target" ];
         before = [ "network-interfaces.target" ];
-        bindsTo = [ (subsystemDevice i.name) ];
-        after = [ (subsystemDevice i.name) "network-pre.target" ];
+        bindsTo = deviceDependency;
+        after = [ "network-pre.target" ] ++ deviceDependency;
         path = [ pkgs.iproute ];
         serviceConfig = {
           Type = "oneshot";
