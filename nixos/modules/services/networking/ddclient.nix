@@ -99,7 +99,7 @@ in
         default = "web, web=checkip.dyndns.com/, web-skip='Current IP Address: '";
         type = str;
         description = ''
-          Method to determine the IP address to send to the dymanic DNS provider.
+          Method to determine the IP address to send to the dynamic DNS provider.
         '';
       };
     };
