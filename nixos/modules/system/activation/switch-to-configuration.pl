@@ -213,33 +213,30 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") ) {
                     $unitsToSkip{$unit} = 1;
                 } else {
-                    # If this unit is socket-activated, then stop the
-                    # socket unit(s) as well, and restart the
-                    # socket(s) instead of the service.
-                    my $socketActivated = 0;
-                    if ($unit =~ /\.service$/) {
-                        my @sockets = split / /, ($unitInfo->{Sockets} // "");
-                        if (scalar @sockets == 0) {
-                            @sockets = ("$baseName.socket");
-                        }
-                        foreach my $socket (@sockets) {
-                            if (defined $activePrev->{$socket}) {
-                                $unitsToStop{$unit} = 1;
-                                $unitsToStart{$unit} = 1;
-                                recordUnit($startListFile, $socket);
-                                $socketActivated = 1;
-                            }
-                        }
-                    }
-
                     if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
-
                         # This unit should be restarted instead of
                         # stopped and started.
                         $unitsToRestart{$unit} = 1;
                         recordUnit($restartListFile, $unit);
-
                     } else {
+                        # If this unit is socket-activated, then stop the
+                        # socket unit(s) as well, and restart the
+                        # socket(s) instead of the service.
+                        my $socketActivated = 0;
+                        if ($unit =~ /\.service$/) {
+                            my @sockets = split / /, ($unitInfo->{Sockets} // "");
+                            if (scalar @sockets == 0) {
+                                @sockets = ("$baseName.socket");
+                            }
+                            foreach my $socket (@sockets) {
+                                if (defined $activePrev->{$socket}) {
+                                    $unitsToStop{$socket} = 1;
+                                    $unitsToStart{$socket} = 1;
+                                    recordUnit($startListFile, $socket);
+                                    $socketActivated = 1;
+                                }
+                            }
+                        }
 
                         # If the unit is not socket-activated, record
                         # that this unit needs to be started below.
@@ -251,7 +248,6 @@ while (my ($unit, $state) = each %{$activePrev}) {
                         }
 
                         $unitsToStop{$unit} = 1;
-
                     }
                 }
             }
