@@ -1891,6 +1891,24 @@ in modules // {
     };
   };
 
+  beancount-pygments-lexer = buildPythonPackage (rec {
+    version = "0.1.2";
+    name = "beancount-pygments-lexer-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/beancount-pygments-lexer/${name}.tar.gz";
+      sha256 = "0qil39ckf6jhlgjwlxjrfphmx5zs9zhp0b92mrw99kbi06f1qcdq";
+    };
+
+    buildInputs = with self; [ pygments ];
+
+    meta = {
+      homepage = https://github.com/aumayr/beancount-pygments-lexer/;
+      license = licenses.mit;
+      description = "pygments-Lexer for beancount-files";
+    };
+  });
+
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
     disabled = isPy3k;
