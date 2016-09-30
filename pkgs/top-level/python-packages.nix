@@ -10489,17 +10489,45 @@ in modules // {
     };
   };
 
+  pycodestyle = buildPythonPackage rec {
+    name = "pycodestyle-${version}";
+    version = "2.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pycodestyle/${name}.tar.gz";
+      sha256 = "1rz2v8506mdjdyxcnv9ygiw6v0d4dqx8z5sjyjm0w2v32h5l5w1p";
+    };
+
+    meta = {
+      description = "Python style guide checker (formerly called pep8)";
+      homepage = https://pycodestyle.readthedocs.io;
+      license = licenses.mit;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  pep8 = self.pycodestyle;
+
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "2.5.4";
+    version = "3.0.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "0bs9cz4fr99r2rwig1b8jwaadl1nan7kgpdzqwj0bwbckwbmh7nc";
+      sha256 = "03cpdrjxh0fyi2qpdxbbrmxw7whiq3xr3p958gr6yzghk34i1hml";
     };
 
-    buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe ];
+    buildInputs = with self; [ nose mock pytestrunner pytest ];
+    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe enum34 configparser pycodestyle ];
+
+    patches = [
+      ../development/python-modules/flake8/move-pytest-config-to-pytest-ini.patch
+    ];
+
+    # Tests fail due to missing ini file.
+    preCheck = ''
+      touch tox.ini
+    '';
 
     meta = {
       description = "Code checking using pep8 and pyflakes";
@@ -13395,21 +13423,12 @@ in modules // {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.4.0";
+    name = "mccabe-0.5.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
+      sha256 = "1zss8c5cn8wvxsbjzv70dxymybh3cjzrjl19vxfbnyvmidng0wrl";
     };
-
-    # See https://github.com/flintwork/mccabe/issues/31
-    postPatch = ''
-      cp "${pkgs.fetchurl {
-        url = "https://raw.githubusercontent.com/flintwork/mccabe/"
-            + "e8aea16d28e92bd3c62601275762fc9c16808f6c/test_mccabe.py";
-        sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
-      }}" test_mccabe.py
-    '';
 
     buildInputs = with self; [ pytestrunner pytest ];
 
@@ -17548,23 +17567,6 @@ in modules // {
       homepage = "http://getpelican.com/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ offline prikhi garbas ];
-    };
-  };
-
-  pep8 = buildPythonPackage rec {
-    name = "pep8-${version}";
-    version = "1.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pep8/${name}.tar.gz";
-      sha256 = "a113d5f5ad7a7abacef9df5ec3f2af23a20a28005921577b15dd584d099d5900";
-    };
-
-    meta = {
-      homepage = "http://pep8.readthedocs.org/";
-      description = "Python style guide checker";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
     };
   };
 
