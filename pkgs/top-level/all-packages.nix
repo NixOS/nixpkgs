@@ -6188,6 +6188,8 @@ in
     withDocumentation = false; # 'true' is currently broken with qt>=5.5
   };
 
+  r10k = callPackage ../tools/system/r10k { };
+
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome2) vte;
     lua = lua5;
