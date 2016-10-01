@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
                   gobjectIntrospection libX11 gtk
                   libcanberra_gtk3 pam libtool plymouth ];
 
-  #enableParallelBuilding = true; # problems compiling
+  enableParallelBuilding = true;
 
   # Disable Access Control because our X does not support FamilyServerInterpreted yet
   patches = [ #./xserver_path.patch # gdm now uses wayland
