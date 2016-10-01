@@ -14680,7 +14680,6 @@ in
   };
 
   virt-viewer = callPackage ../applications/virtualization/virt-viewer {
-    gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk;
   };
 
@@ -14688,7 +14687,6 @@ in
     inherit (gnome2) gnome_python;
     vte = gnome3.vte;
     dconf = gnome3.dconf;
-    gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk;
     system-libvirt = libvirt;
   };

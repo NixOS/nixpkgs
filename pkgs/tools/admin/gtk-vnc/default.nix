@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gobjectIntrospection
-, gtk2, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
+, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
 , libffi, cyrus_sasl, intltool, perl, perlPackages, libpulseaudio
 , kbproto, libX11, libXext, xextproto, libgcrypt, gtk3, vala_0_23
-, libogg, enableGTK3 ? false, libgpgerror, pythonPackages }:
+, libogg, libgpgerror, pythonPackages }:
 
 let
-  inherit (pythonPackages) pygobject3 pygobject2 pygtk python;
+  inherit (pythonPackages) pygobject3 python;
 in stdenv.mkDerivation rec {
   name = "gtk-vnc-${version}";
   version = "0.5.3";
@@ -19,17 +19,14 @@ in stdenv.mkDerivation rec {
     python gnutls cairo libtool pkgconfig glib libffi libgcrypt
     intltool cyrus_sasl libpulseaudio perl perlPackages.TextCSV
     gobjectIntrospection libogg libgpgerror
-  ] ++ (if enableGTK3 then [ gtk3 vala_0_23 pygobject3 ] else [ gtk2 pygtk pygobject2 ]);
+    gtk3 vala_0_23 pygobject3 ];
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
   configureFlags = [
     "--with-python"
     "--with-examples"
-    (if enableGTK3 then "--with-gtk=3.0" else "--with-gtk=2.0")
+    "--with-gtk=3.0"
   ];
-
-  makeFlags = stdenv.lib.optionalString (!enableGTK3)
-    "CODEGENDIR=${pygobject2}/share/pygobject/2.0/codegen/ DEFSDIR=${pygtk}/share/pygtk/2.0/defs/";
 
   # Fix broken .la files
   preFixup = ''
