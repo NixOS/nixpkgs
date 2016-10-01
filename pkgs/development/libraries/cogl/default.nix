@@ -3,7 +3,7 @@
 , gstreamerSupport ? true, gst_all_1 }:
 
 let
-  ver_maj = "1.16";
+  ver_maj = "1.22";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -11,17 +11,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/cogl/${ver_maj}/${name}.tar.xz";
-    sha256 = "153014xygwyz9wmvgfwjxncqgc0qqvcy6b3jx1zdl3q5d9iw9hkm";
+    sha256 = "689dfb5d14fc1106e9d2ded0f7930dcf7265d0bc84fa846b4f03941633eeaa91";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [
     "--enable-introspection"
-    "--enable-gles1"
-    "--enable-gles2"
     "--enable-kms-egl-platform"
-  ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst";
+  ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst"
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
       glib gdk_pixbuf gobjectIntrospection
