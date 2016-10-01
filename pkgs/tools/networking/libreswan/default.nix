@@ -42,14 +42,15 @@ stdenv.mkDerivation {
     # Fix python script to use the correct python
     sed -i -e 's|#!/usr/bin/python|#!/usr/bin/env python|' -e 's/^\(\W*\)installstartcheck()/\1sscmd = "ss"\n\0/' programs/verify/verify.in
   '';
-  
+
   # Set appropriate paths for build
   preBuild = "export INC_USRLOCAL=\${out}";
 
-  makeFlags = [ 
+  makeFlags = [
     "INITSYSTEM=systemd"
     (if docs then "all" else "base")
   ];
+  CFLAGS = "-Wno-error=sign-compare";
 
   installTargets = [ (if docs then "install" else "install-base") ];
   # Hack to make install work
