@@ -108,7 +108,7 @@ in
     systemd.services.display-manager.wants = [ "systemd-machined.service" ];
     systemd.services.display-manager.after = [ "systemd-machined.service" ];
 
-    systemd.services.display-manager.path = [ gnome3.gnome_shell gnome3.caribou pkgs.xorg.xhost pkgs.dbus_tools ];
+    systemd.services.display-manager.path = [ gnome3.gnome_session ];
 
     services.dbus.packages = [ gdm ];
 
