@@ -12019,6 +12019,21 @@ in modules // {
     };
   };
 
+  uncompyle6 = buildPythonPackage rec {
+    name = "uncompyle6-${version}";
+    version = "2.8.3";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uncompyle6/${name}.tar.gz";
+      sha256 = "0hx5sji6qjvnq1p0zhvyk5hgracpv2w6iar1j59qwllxv115ffi1";
+    };
+    propagatedBuildInputs = with self; [ spark_parser xdis ];
+    meta = {
+      description = "Python cross-version byte-code deparser";
+      homepage = http://github.com/rocky/python-uncompyle6/;
+      license = licenses.mit;
+    };
+  };
+
   lsi = buildPythonPackage rec {
     name = "lsi-${version}";
     version = "0.2.2";
