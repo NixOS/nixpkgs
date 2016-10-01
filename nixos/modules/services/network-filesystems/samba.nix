@@ -223,4 +223,8 @@ in
       })
     ];
 
+  meta.tests = {
+    samba = ./tests/samba.nix;
+  };
+
 }

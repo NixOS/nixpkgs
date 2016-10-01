@@ -257,7 +257,6 @@ in rec {
   tests.proxy = callTest tests/proxy.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
-  tests.samba = callTest tests/samba.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.module = moduleTests {
     cadvisor = { systems = [ "x86_64-linux" ]; };

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 {
   name = "samba";
@@ -45,4 +45,4 @@ import ./make-test.nix ({ pkgs, ... }:
       $client->waitForUnit("network.target");
       $client->succeed("[[ \$(cat /public/foo) = bar ]]");
     '';
-})
+}
