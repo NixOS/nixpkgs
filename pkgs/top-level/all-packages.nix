@@ -2244,6 +2244,8 @@ in
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
 
+  kalibrate-hackrf = callPackage ../tools/misc/kalibrate-hackrf { };
+
   kakoune = callPackage ../applications/editors/kakoune { };
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
