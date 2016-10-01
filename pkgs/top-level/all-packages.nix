@@ -3989,6 +3989,8 @@ in
 
   watchman = callPackage ../development/tools/watchman { };
 
+  wavefunctioncollapse = callPackage ../tools/graphics/wavefunctioncollapse {};
+
   wbox = callPackage ../tools/networking/wbox {};
 
   welkin = callPackage ../tools/graphics/welkin {};
