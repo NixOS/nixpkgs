@@ -12004,6 +12004,21 @@ in modules // {
   };
 
 
+  xdis = buildPythonPackage rec {
+    name = "xdis-${version}";
+    version = "2.3.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/x/xdis/${name}.tar.gz";
+      sha256 = "1bi53n9fifjz2ja5inm546vzhjpgwx6n0qrhp106fss7bdm44a4v";
+    };
+    propagatedBuildInputs = with self; [ nose ];
+    meta = {
+      description = "Python cross-version byte-code disassembler and marshal routines";
+      homepage = https://github.com/rocky/python-xdis/;
+      license = licenses.mit;
+    };
+  };
+
   lsi = buildPythonPackage rec {
     name = "lsi-${version}";
     version = "0.2.2";
