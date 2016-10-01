@@ -7825,6 +7825,15 @@ let
         sha1 = "c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79";
       };
     };
+    "parserlib-1.0.0" = {
+      name = "parserlib";
+      packageName = "parserlib";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/parserlib/-/parserlib-1.0.0.tgz";
+        sha1 = "88340e7e8d95bac9e09236742eef53bec1e4b30f";
+      };
+    };
     "bluebird-2.9.9" = {
       name = "bluebird";
       packageName = "bluebird";
@@ -21496,6 +21505,26 @@ in
     meta = {
       description = "Cordova command line interface tool";
       license = "Apache-2.0";
+    };
+    production = true;
+  };
+  csslint = nodeEnv.buildNodePackage {
+    name = "csslint";
+    packageName = "csslint";
+    version = "1.0.3";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/csslint/-/csslint-1.0.3.tgz";
+      sha1 = "5dc024f13a1ff91c0dd08d01186ae1f6f9e92862";
+    };
+    dependencies = [
+      sources."clone-1.0.2"
+      sources."parserlib-1.0.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "CSSLint";
+      homepage = http://csslint.net/;
+      license = "MIT";
     };
     production = true;
   };
