@@ -319,22 +319,22 @@ let
         sha1 = "c8b2eeea6b8c1659fa7c1dd4fdaabe9533dc5e8b";
       };
     };
-    "os-homedir-1.0.1" = {
+    "os-homedir-1.0.2" = {
       name = "os-homedir";
       packageName = "os-homedir";
-      version = "1.0.1";
+      version = "1.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/os-homedir/-/os-homedir-1.0.1.tgz";
-        sha1 = "0d62bdf44b916fd3bbdcf2cab191948fb094f007";
+        url = "https://registry.npmjs.org/os-homedir/-/os-homedir-1.0.2.tgz";
+        sha1 = "ffbc4988336e0e833de0c168c7ef152121aa7fb3";
       };
     };
-    "os-tmpdir-1.0.1" = {
+    "os-tmpdir-1.0.2" = {
       name = "os-tmpdir";
       packageName = "os-tmpdir";
-      version = "1.0.1";
+      version = "1.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/os-tmpdir/-/os-tmpdir-1.0.1.tgz";
-        sha1 = "e9b423a1edaf479882562e92ed71d7743a071b6e";
+        url = "https://registry.npmjs.org/os-tmpdir/-/os-tmpdir-1.0.2.tgz";
+        sha1 = "bbe67406c79aa85c5cfec766fe5734555dfa1274";
       };
     };
     "isexe-1.1.2" = {
@@ -1300,22 +1300,22 @@ let
         sha1 = "3d4114218877537494f97f77f9785fab810fa4ac";
       };
     };
-    "is-finite-1.0.1" = {
+    "is-finite-1.0.2" = {
       name = "is-finite";
       packageName = "is-finite";
-      version = "1.0.1";
+      version = "1.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/is-finite/-/is-finite-1.0.1.tgz";
-        sha1 = "6438603eaebe2793948ff4a4262ec8db3d62597b";
+        url = "https://registry.npmjs.org/is-finite/-/is-finite-1.0.2.tgz";
+        sha1 = "cc6677695602be550ef11e8b4aa6305342b6d0aa";
       };
     };
-    "number-is-nan-1.0.0" = {
+    "number-is-nan-1.0.1" = {
       name = "number-is-nan";
       packageName = "number-is-nan";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/number-is-nan/-/number-is-nan-1.0.0.tgz";
-        sha1 = "c020f529c5282adfdd233d91d4b181c3d686dc4b";
+        url = "https://registry.npmjs.org/number-is-nan/-/number-is-nan-1.0.1.tgz";
+        sha1 = "097b602b53422a522c1afb8790318336941a011d";
       };
     };
     "buffer-equal-constant-time-1.0.1" = {
@@ -1750,13 +1750,13 @@ let
         sha1 = "583b1aa775961d4b113ac17d9c50baef9dd76bd1";
       };
     };
-    "path-is-absolute-1.0.0" = {
+    "path-is-absolute-1.0.1" = {
       name = "path-is-absolute";
       packageName = "path-is-absolute";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.0.tgz";
-        sha1 = "263dada66ab3f2fb10bf7f9d24dd8f3e570ef912";
+        url = "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz";
+        sha1 = "174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f";
       };
     };
     "wrappy-1.0.2" = {
@@ -2902,13 +2902,13 @@ let
         sha1 = "5a4c884992b63a7acd9badb7894c3ee9cfccad81";
       };
     };
-    "array-find-index-1.0.1" = {
+    "array-find-index-1.0.2" = {
       name = "array-find-index";
       packageName = "array-find-index";
-      version = "1.0.1";
+      version = "1.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/array-find-index/-/array-find-index-1.0.1.tgz";
-        sha1 = "0bc25ddac941ec8a496ae258fd4ac188003ef3af";
+        url = "https://registry.npmjs.org/array-find-index/-/array-find-index-1.0.2.tgz";
+        sha1 = "df010aa1287e164bbda6f9723b0a96a1ec4187a1";
       };
     };
     "hosted-git-info-2.1.5" = {
@@ -4720,13 +4720,13 @@ let
         sha1 = "106df57e0e509bafa6756e544d88205e52be33a6";
       };
     };
-    "simple-get-2.2.2" = {
+    "simple-get-2.2.3" = {
       name = "simple-get";
       packageName = "simple-get";
-      version = "2.2.2";
+      version = "2.2.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/simple-get/-/simple-get-2.2.2.tgz";
-        sha1 = "e4d0ff30af7dddf8ef9b5221c32658e7f1438515";
+        url = "https://registry.npmjs.org/simple-get/-/simple-get-2.2.3.tgz";
+        sha1 = "cc4b653891601977db17ff3bcbb01474997f9fdb";
       };
     };
     "thirty-two-1.0.2" = {
@@ -5089,13 +5089,13 @@ let
         sha1 = "fa9e319ffdeeeb35b27296ef0f3d374dac2f52a7";
       };
     };
-    "buffer-equals-1.0.3" = {
+    "buffer-equals-1.0.4" = {
       name = "buffer-equals";
       packageName = "buffer-equals";
-      version = "1.0.3";
+      version = "1.0.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/buffer-equals/-/buffer-equals-1.0.3.tgz";
-        sha1 = "9e9b8c160a5ceaf68f12ee5a8d2f4ba91c5453e0";
+        url = "https://registry.npmjs.org/buffer-equals/-/buffer-equals-1.0.4.tgz";
+        sha1 = "0353b54fd07fd9564170671ae6f66b9cf10d27f5";
       };
     };
     "k-bucket-0.6.0" = {
@@ -7753,13 +7753,13 @@ let
         sha1 = "a1f7838f8314c516f05ecefcbc4ccfe04b4ed789";
       };
     };
-    "code-point-at-1.0.0" = {
+    "code-point-at-1.0.1" = {
       name = "code-point-at";
       packageName = "code-point-at";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/code-point-at/-/code-point-at-1.0.0.tgz";
-        sha1 = "f69b192d3f7d91e382e4b71bddb77878619ab0c6";
+        url = "https://registry.npmjs.org/code-point-at/-/code-point-at-1.0.1.tgz";
+        sha1 = "1104cd34f9b5b45d3eba88f1babc1924e1ce35fb";
       };
     };
     "is-fullwidth-code-point-1.0.0" = {
@@ -8936,13 +8936,13 @@ let
         sha1 = "11a060568b67339444033d0125a61a20d564fb34";
       };
     };
-    "node-status-codes-2.0.0" = {
+    "node-status-codes-2.0.1" = {
       name = "node-status-codes";
       packageName = "node-status-codes";
-      version = "2.0.0";
+      version = "2.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/node-status-codes/-/node-status-codes-2.0.0.tgz";
-        sha1 = "f2d469d8927f088aff28a956d2b93e3e2d14fb8d";
+        url = "https://registry.npmjs.org/node-status-codes/-/node-status-codes-2.0.1.tgz";
+        sha1 = "298067659cb68a2b4670abbefde02a3819981f5b";
       };
     };
     "unzip-response-2.0.1" = {
@@ -11223,13 +11223,13 @@ let
         sha1 = "1fddad938aae1263ce138680be1b3f591c0ab41c";
       };
     };
-    "eventemitter3-2.0.1" = {
+    "eventemitter3-2.0.2" = {
       name = "eventemitter3";
       packageName = "eventemitter3";
-      version = "2.0.1";
+      version = "2.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/eventemitter3/-/eventemitter3-2.0.1.tgz";
-        sha1 = "59c8930b1d8f4da54ad752854948f44330e7f39c";
+        url = "https://registry.npmjs.org/eventemitter3/-/eventemitter3-2.0.2.tgz";
+        sha1 = "20ce4891909ce9f35b088c94fab40e2c96f473ac";
       };
     };
     "escodegen-1.8.1" = {
@@ -13365,13 +13365,13 @@ let
         sha1 = "4a64070f3fc5596fdc50e988813dd4ff003b3fd8";
       };
     };
-    "node-red-node-twitter-0.1.6" = {
+    "node-red-node-twitter-0.1.7" = {
       name = "node-red-node-twitter";
       packageName = "node-red-node-twitter";
-      version = "0.1.6";
+      version = "0.1.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/node-red-node-twitter/-/node-red-node-twitter-0.1.6.tgz";
-        sha1 = "ee1c65767db0325f316987bf155543864995e618";
+        url = "https://registry.npmjs.org/node-red-node-twitter/-/node-red-node-twitter-0.1.7.tgz";
+        sha1 = "8cef1e54df6217d83b49fd48684e6ca2ee1cf595";
       };
     };
     "node-red-node-rbe-0.1.5" = {
@@ -13894,15 +13894,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/twitter-ng/-/twitter-ng-0.6.2.tgz";
         sha1 = "13707115dd04c9bd1f2c646da976589be4d64bc4";
-      };
-    };
-    "request-2.67.0" = {
-      name = "request";
-      packageName = "request";
-      version = "2.67.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/request/-/request-2.67.0.tgz";
-        sha1 = "8af74780e2bf11ea0ae9aa965c11f11afd272742";
       };
     };
     "serialport-2.1.2" = {
@@ -15705,6 +15696,15 @@ let
         sha1 = "79d93d2d33363d6fdd2970b335d9141ad591d79b";
       };
     };
+    "request-2.67.0" = {
+      name = "request";
+      packageName = "request";
+      version = "2.67.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/request/-/request-2.67.0.tgz";
+        sha1 = "8af74780e2bf11ea0ae9aa965c11f11afd272742";
+      };
+    };
     "request-progress-2.0.1" = {
       name = "request-progress";
       packageName = "request-progress";
@@ -16208,6 +16208,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.0.tgz";
         sha1 = "ac3efac717b0e7bbdc778ce0bde7381ac6604393";
+      };
+    };
+    "path-is-absolute-1.0.0" = {
+      name = "path-is-absolute";
+      packageName = "path-is-absolute";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.0.tgz";
+        sha1 = "263dada66ab3f2fb10bf7f9d24dd8f3e570ef912";
       };
     };
     "path-to-regexp-0.1.6" = {
@@ -17860,8 +17869,8 @@ in
       sources."ini-1.3.4"
       sources."osenv-0.1.3"
       sources."which-1.2.11"
-      sources."os-homedir-1.0.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-homedir-1.0.2"
+      sources."os-tmpdir-1.0.2"
       sources."isexe-1.1.2"
       sources."xml2js-0.2.8"
       sources."sax-0.5.8"
@@ -18049,8 +18058,8 @@ in
       sources."map-obj-1.0.1"
       sources."get-stdin-4.0.1"
       sources."repeating-1.1.3"
-      sources."is-finite-1.0.1"
-      sources."number-is-nan-1.0.0"
+      sources."is-finite-1.0.2"
+      sources."number-is-nan-1.0.1"
       sources."buffer-equal-constant-time-1.0.1"
       sources."ecdsa-sig-formatter-1.0.7"
       sources."base64-url-1.3.2"
@@ -18105,7 +18114,7 @@ in
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -18202,7 +18211,7 @@ in
       sources."http-basic-2.5.1"
       sources."promise-7.1.1"
       sources."asap-2.0.5"
-      sources."os-homedir-1.0.1"
+      sources."os-homedir-1.0.2"
       sources."mute-stream-0.0.6"
     ];
     buildInputs = globalBuildInputs;
@@ -18305,7 +18314,7 @@ in
       sources."camelcase-2.1.1"
       sources."currently-unhandled-0.4.1"
       sources."signal-exit-3.0.1"
-      sources."array-find-index-1.0.1"
+      sources."array-find-index-1.0.2"
       sources."hosted-git-info-2.1.5"
       sources."is-builtin-module-1.0.0"
       sources."validate-npm-package-license-3.0.1"
@@ -18337,8 +18346,8 @@ in
       sources."indent-string-2.1.0"
       sources."strip-indent-1.0.1"
       sources."repeating-2.0.1"
-      sources."is-finite-1.0.1"
-      sources."number-is-nan-1.0.0"
+      sources."is-finite-1.0.2"
+      sources."number-is-nan-1.0.1"
       sources."get-stdin-4.0.1"
       sources."sort-keys-1.1.2"
       sources."is-plain-obj-1.1.0"
@@ -18349,7 +18358,7 @@ in
         ];
       })
       sources."klaw-1.3.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       (sources."rimraf-2.5.4" // {
         dependencies = [
           sources."glob-7.1.0"
@@ -18369,7 +18378,7 @@ in
         ];
       })
       sources."ms-0.7.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-tmpdir-1.0.2"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -18504,7 +18513,7 @@ in
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -18638,7 +18647,7 @@ in
       sources."camelcase-2.1.1"
       sources."currently-unhandled-0.4.1"
       sources."signal-exit-3.0.1"
-      sources."array-find-index-1.0.1"
+      sources."array-find-index-1.0.2"
       sources."hosted-git-info-2.1.5"
       sources."is-builtin-module-1.0.0"
       sources."semver-5.3.0"
@@ -18664,8 +18673,8 @@ in
       sources."indent-string-2.1.0"
       sources."strip-indent-1.0.1"
       sources."repeating-2.0.1"
-      sources."is-finite-1.0.1"
-      sources."number-is-nan-1.0.0"
+      sources."is-finite-1.0.2"
+      sources."number-is-nan-1.0.1"
       sources."airplay-js-0.2.16"
       sources."clivas-0.1.4"
       sources."inquirer-0.8.5"
@@ -18730,7 +18739,7 @@ in
       sources."blob-to-buffer-1.2.6"
       sources."magnet-uri-5.1.4"
       sources."parse-torrent-file-4.0.0"
-      sources."simple-get-2.2.2"
+      sources."simple-get-2.2.3"
       sources."thirty-two-1.0.2"
       sources."uniq-1.0.1"
       sources."bencode-0.10.0"
@@ -18793,7 +18802,7 @@ in
       sources."fs.realpath-1.0.0"
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
@@ -18808,7 +18817,7 @@ in
         ];
       })
       sources."re-emitter-1.1.3"
-      sources."buffer-equals-1.0.3"
+      sources."buffer-equals-1.0.4"
       sources."k-bucket-0.6.0"
       (sources."k-rpc-3.7.0" // {
         dependencies = [
@@ -19039,7 +19048,7 @@ in
       sources."inherits-2.0.3"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -19435,8 +19444,8 @@ in
       sources."lodash.pad-4.5.1"
       sources."lodash.padend-4.6.1"
       sources."lodash.padstart-4.6.1"
-      sources."os-homedir-1.0.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-homedir-1.0.2"
+      sources."os-tmpdir-1.0.2"
       sources."debuglog-1.0.1"
       sources."readdir-scoped-modules-1.0.2"
       sources."util-extend-1.0.3"
@@ -19505,8 +19514,8 @@ in
       sources."rc-1.1.6"
       sources."deep-extend-0.4.1"
       sources."strip-json-comments-1.0.4"
-      sources."is-finite-1.0.1"
-      sources."number-is-nan-1.0.0"
+      sources."is-finite-1.0.2"
+      sources."number-is-nan-1.0.1"
       (sources."inquirer-0.10.1" // {
         dependencies = [
           sources."lodash-3.10.1"
@@ -19528,7 +19537,7 @@ in
       sources."restore-cursor-1.0.1"
       sources."exit-hook-1.1.1"
       sources."onetime-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
       sources."lodash._getnative-3.9.1"
       sources."osx-release-1.1.0"
@@ -19955,7 +19964,7 @@ in
       sources."is-retry-allowed-1.1.0"
       sources."is-stream-1.1.0"
       sources."lowercase-keys-1.0.0"
-      sources."node-status-codes-2.0.0"
+      sources."node-status-codes-2.0.1"
       sources."timed-out-2.0.0"
       sources."unzip-response-2.0.1"
       sources."url-parse-lax-1.0.0"
@@ -19981,7 +19990,7 @@ in
       sources."camelcase-2.1.1"
       sources."currently-unhandled-0.4.1"
       sources."signal-exit-3.0.1"
-      sources."array-find-index-1.0.1"
+      sources."array-find-index-1.0.2"
       sources."hosted-git-info-2.1.5"
       sources."is-builtin-module-1.0.0"
       sources."semver-5.3.0"
@@ -20005,8 +20014,8 @@ in
       sources."indent-string-2.1.0"
       sources."strip-indent-1.0.1"
       sources."repeating-2.0.1"
-      sources."is-finite-1.0.1"
-      sources."number-is-nan-1.0.0"
+      sources."is-finite-1.0.2"
+      sources."number-is-nan-1.0.1"
       sources."get-stdin-4.0.1"
     ];
     buildInputs = globalBuildInputs;
@@ -20020,10 +20029,10 @@ in
   eslint = nodeEnv.buildNodePackage {
     name = "eslint";
     packageName = "eslint";
-    version = "3.6.1";
+    version = "3.7.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/eslint/-/eslint-3.6.1.tgz";
-      sha1 = "39eeabcfd8d2fe046fb8754b4cf97182abde0d9d";
+      url = "https://registry.npmjs.org/eslint/-/eslint-3.7.0.tgz";
+      sha1 = "27499b403de70f8832815c3550330bad67292a57";
     };
     dependencies = [
       sources."chalk-1.1.3"
@@ -20114,7 +20123,7 @@ in
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -20131,10 +20140,10 @@ in
       sources."restore-cursor-1.0.1"
       sources."exit-hook-1.1.1"
       sources."onetime-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
       sources."mute-stream-0.0.5"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."generate-function-2.0.0"
       sources."generate-object-property-1.2.0"
       sources."jsonpointer-2.0.0"
@@ -20158,7 +20167,7 @@ in
       sources."ajv-keywords-1.1.1"
       sources."slice-ansi-0.0.4"
       sources."co-4.6.0"
-      sources."os-homedir-1.0.1"
+      sources."os-homedir-1.0.2"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -20239,7 +20248,7 @@ in
       sources."nssocket-0.5.3"
       sources."object-assign-3.0.0"
       sources."optimist-0.6.1"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       (sources."prettyjson-1.1.3" // {
         dependencies = [
           sources."colors-1.1.2"
@@ -20373,9 +20382,9 @@ in
       sources."string-width-1.0.2"
       sources."strip-ansi-3.0.1"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."ansi-regex-2.0.0"
       sources."deep-extend-0.4.1"
       sources."ini-1.3.4"
@@ -20535,7 +20544,7 @@ in
       sources."inherits-2.0.3"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -20720,7 +20729,7 @@ in
       sources."camelcase-2.1.1"
       sources."currently-unhandled-0.4.1"
       sources."signal-exit-3.0.1"
-      sources."array-find-index-1.0.1"
+      sources."array-find-index-1.0.2"
       sources."hosted-git-info-2.1.5"
       sources."is-builtin-module-1.0.0"
       sources."validate-npm-package-license-3.0.1"
@@ -20745,8 +20754,8 @@ in
       sources."indent-string-2.1.0"
       sources."strip-indent-1.0.1"
       sources."repeating-2.0.1"
-      sources."is-finite-1.0.1"
-      sources."number-is-nan-1.0.0"
+      sources."is-finite-1.0.2"
+      sources."number-is-nan-1.0.1"
       sources."time-stamp-1.0.1"
       sources."glogg-1.0.0"
       sources."sparkles-1.0.0"
@@ -20828,13 +20837,13 @@ in
       sources."is-primitive-2.0.0"
       sources."expand-tilde-1.2.2"
       sources."global-modules-0.2.3"
-      sources."os-homedir-1.0.1"
+      sources."os-homedir-1.0.2"
       sources."global-prefix-0.1.4"
       sources."is-windows-0.2.0"
       sources."ini-1.3.4"
       sources."osenv-0.1.3"
       sources."which-1.2.11"
-      sources."os-tmpdir-1.0.1"
+      sources."os-tmpdir-1.0.2"
       sources."isexe-1.1.2"
       sources."lodash.assignwith-4.2.0"
       sources."lodash.isempty-4.4.0"
@@ -20916,7 +20925,7 @@ in
       sources."redis-0.10.3"
       sources."lru-cache-2.5.2"
       sources."minimist-0.0.8"
-      sources."eventemitter3-2.0.1"
+      sources."eventemitter3-2.0.2"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -20970,7 +20979,7 @@ in
       sources."inflight-1.0.5"
       sources."inherits-2.0.3"
       sources."minimatch-3.0.3"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -21059,7 +21068,7 @@ in
       sources."inflight-1.0.5"
       sources."inherits-2.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."date-now-0.1.4"
       sources."domhandler-2.3.0"
@@ -21215,7 +21224,7 @@ in
       sources."glob-parent-2.0.0"
       sources."is-binary-path-1.0.1"
       sources."is-glob-2.0.1"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."readdirp-2.1.0"
       sources."fsevents-1.0.14"
       sources."arrify-1.0.1"
@@ -21288,9 +21297,9 @@ in
       sources."string-width-1.0.2"
       sources."strip-ansi-3.0.1"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."ansi-regex-2.0.0"
       sources."deep-extend-0.4.1"
       sources."ini-1.3.4"
@@ -21454,7 +21463,7 @@ in
       sources."yeast-0.1.2"
       sources."better-assert-1.0.2"
       sources."callsite-1.0.0"
-      sources."os-tmpdir-1.0.1"
+      sources."os-tmpdir-1.0.2"
       sources."lru-cache-2.2.4"
     ];
     buildInputs = globalBuildInputs;
@@ -21675,7 +21684,7 @@ in
       sources."unique-stream-2.2.1"
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
@@ -21937,7 +21946,7 @@ in
       sources."fs.realpath-1.0.0"
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
@@ -21953,9 +21962,9 @@ in
       sources."signal-exit-3.0.1"
       sources."string-width-1.0.2"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."config-chain-1.1.10"
       sources."ini-1.3.4"
       sources."nopt-3.0.6"
@@ -21963,8 +21972,8 @@ in
       sources."uid-number-0.0.5"
       sources."proto-list-1.2.4"
       sources."abbrev-1.0.9"
-      sources."os-homedir-1.0.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-homedir-1.0.2"
+      sources."os-tmpdir-1.0.2"
       sources."block-stream-0.0.9"
       sources."fstream-1.0.10"
       (sources."fs-extra-0.6.4" // {
@@ -22013,7 +22022,7 @@ in
       sources."fs.realpath-1.0.0"
       sources."inflight-1.0.5"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -22040,12 +22049,12 @@ in
       sources."string-width-1.0.2"
       sources."strip-ansi-3.0.1"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."ansi-regex-2.0.0"
-      sources."os-homedir-1.0.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-homedir-1.0.2"
+      sources."os-tmpdir-1.0.2"
       sources."array-index-1.0.0"
       sources."debug-2.2.0"
       sources."es6-symbol-3.1.0"
@@ -22151,7 +22160,7 @@ in
       sources."debug-2.2.0"
       sources."express-4.14.0"
       sources."glob-5.0.15"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."rc-1.1.6"
       sources."semver-4.3.6"
       sources."serve-favicon-2.3.0"
@@ -22180,8 +22189,8 @@ in
       })
       sources."uid-0.0.2"
       sources."rimraf-2.2.8"
-      sources."os-homedir-1.0.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-homedir-1.0.2"
+      sources."os-tmpdir-1.0.2"
       sources."base64-js-0.0.8"
       (sources."xmlbuilder-4.0.0" // {
         dependencies = [
@@ -22209,7 +22218,7 @@ in
       sources."camelcase-2.1.1"
       sources."currently-unhandled-0.4.1"
       sources."signal-exit-3.0.1"
-      sources."array-find-index-1.0.1"
+      sources."array-find-index-1.0.2"
       sources."hosted-git-info-2.1.5"
       sources."is-builtin-module-1.0.0"
       sources."validate-npm-package-license-3.0.1"
@@ -22234,8 +22243,8 @@ in
       sources."indent-string-2.1.0"
       sources."strip-indent-1.0.1"
       sources."repeating-2.0.1"
-      sources."is-finite-1.0.1"
-      sources."number-is-nan-1.0.0"
+      sources."is-finite-1.0.2"
+      sources."number-is-nan-1.0.1"
       sources."get-stdin-4.0.1"
       sources."ms-0.7.1"
       sources."accepts-1.3.3"
@@ -22325,7 +22334,7 @@ in
       sources."string-width-1.0.2"
       sources."strip-ansi-3.0.1"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
       sources."ansi-regex-2.0.0"
       sources."aws-sign2-0.6.0"
@@ -22467,9 +22476,9 @@ in
       sources."string-width-1.0.2"
       sources."strip-ansi-3.0.1"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."ansi-regex-2.0.0"
       sources."deep-extend-0.4.1"
       sources."ini-1.3.4"
@@ -22552,7 +22561,7 @@ in
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -22602,7 +22611,7 @@ in
       sources."inherits-2.0.3"
       sources."is-binary-path-1.0.1"
       sources."is-glob-2.0.1"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."readdirp-2.1.0"
       sources."fsevents-1.0.14"
       sources."arrify-1.0.1"
@@ -22681,9 +22690,9 @@ in
       sources."string-width-1.0.2"
       sources."strip-ansi-3.0.1"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."ansi-regex-2.0.0"
       sources."deep-extend-0.4.1"
       sources."ini-1.3.4"
@@ -22799,12 +22808,12 @@ in
       sources."repeating-1.1.3"
       sources."semver-diff-2.1.0"
       sources."string-length-1.0.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-tmpdir-1.0.2"
       sources."osenv-0.1.3"
       sources."uuid-2.0.3"
       sources."write-file-atomic-1.2.0"
       sources."xdg-basedir-2.0.0"
-      sources."os-homedir-1.0.1"
+      sources."os-homedir-1.0.2"
       sources."imurmurhash-0.1.4"
       sources."slide-1.1.6"
       sources."package-json-1.2.0"
@@ -22829,7 +22838,7 @@ in
         ];
       })
       sources."stream-shift-1.0.0"
-      sources."is-finite-1.0.1"
+      sources."is-finite-1.0.2"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -22888,12 +22897,13 @@ in
       sources."xml2js-0.4.17"
       sources."node-red-node-feedparser-0.1.5"
       sources."node-red-node-email-0.1.11"
-      (sources."node-red-node-twitter-0.1.6" // {
+      (sources."node-red-node-twitter-0.1.7" // {
         dependencies = [
-          sources."request-2.67.0"
-          sources."bl-1.0.3"
-          sources."qs-5.2.1"
+          sources."request-2.75.0"
+          sources."bl-1.1.2"
+          sources."form-data-2.0.0"
           sources."http-signature-1.1.1"
+          sources."tough-cookie-2.3.1"
           sources."readable-stream-2.0.6"
           sources."isarray-1.0.0"
           sources."assert-plus-0.2.0"
@@ -22978,7 +22988,7 @@ in
       sources."graceful-fs-4.1.9"
       sources."jsonfile-2.4.0"
       sources."klaw-1.3.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."rimraf-2.5.4"
       sources."glob-7.1.0"
       sources."fs.realpath-1.0.0"
@@ -23188,7 +23198,9 @@ in
       sources."utf7-1.0.2"
       sources."twitter-ng-0.6.2"
       sources."oauth-0.9.14"
+      sources."aws4-1.4.1"
       sources."is-typedarray-1.0.0"
+      sources."asynckit-0.4.0"
       sources."jsprim-1.3.1"
       (sources."sshpk-1.10.1" // {
         dependencies = [
@@ -23251,9 +23263,9 @@ in
       sources."signal-exit-3.0.1"
       sources."string-width-1.0.2"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."deep-extend-0.4.1"
       sources."ini-1.3.4"
       sources."strip-json-comments-1.0.4"
@@ -23517,7 +23529,7 @@ in
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
       sources."fs.realpath-1.0.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."promzard-0.3.0"
       sources."lodash._createset-4.0.3"
       sources."lodash._root-3.0.1"
@@ -23533,9 +23545,9 @@ in
       sources."signal-exit-3.0.1"
       sources."string-width-1.0.2"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."array-index-1.0.0"
       sources."debug-2.2.0"
       sources."es6-symbol-3.1.0"
@@ -23556,8 +23568,8 @@ in
       sources."process-nextick-args-1.0.7"
       sources."string_decoder-0.10.31"
       sources."util-deprecate-1.0.2"
-      sources."os-homedir-1.0.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-homedir-1.0.2"
+      sources."os-tmpdir-1.0.2"
       sources."mute-stream-0.0.6"
       sources."util-extend-1.0.3"
       sources."json-parse-helpfulerror-1.0.3"
@@ -23785,7 +23797,7 @@ in
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -23802,9 +23814,9 @@ in
       sources."signal-exit-3.0.1"
       sources."string-width-1.0.2"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       (sources."config-chain-1.1.10" // {
         dependencies = [
           sources."ini-1.3.4"
@@ -23993,7 +24005,7 @@ in
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
       sources."fs.realpath-1.0.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."promzard-0.3.0"
       sources."lodash._createset-4.0.3"
       sources."lodash._root-3.0.1"
@@ -24009,9 +24021,9 @@ in
       sources."signal-exit-3.0.1"
       sources."string-width-1.0.2"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."array-index-1.0.0"
       sources."debug-2.2.0"
       sources."es6-symbol-3.1.0"
@@ -24032,8 +24044,8 @@ in
       sources."process-nextick-args-1.0.7"
       sources."string_decoder-0.10.31"
       sources."util-deprecate-1.0.2"
-      sources."os-homedir-1.0.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-homedir-1.0.2"
+      sources."os-tmpdir-1.0.2"
       sources."mute-stream-0.0.6"
       sources."util-extend-1.0.3"
       sources."buffer-shims-1.0.0"
@@ -24149,7 +24161,7 @@ in
       })
       sources."deep-extend-0.4.1"
       sources."strip-json-comments-1.0.4"
-      sources."is-finite-1.0.1"
+      sources."is-finite-1.0.2"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -24255,9 +24267,9 @@ in
       sources."supports-color-2.0.0"
       sources."ansi-regex-2.0.0"
       sources."string-width-1.0.2"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."array-flatten-2.1.0"
       sources."deep-equal-1.0.1"
       sources."dns-equal-1.0.0"
@@ -24280,7 +24292,7 @@ in
       sources."camelcase-2.1.1"
       sources."currently-unhandled-0.4.1"
       sources."signal-exit-3.0.1"
-      sources."array-find-index-1.0.1"
+      sources."array-find-index-1.0.2"
       sources."hosted-git-info-2.1.5"
       sources."is-builtin-module-1.0.0"
       sources."semver-5.3.0"
@@ -24306,7 +24318,7 @@ in
       sources."indent-string-2.1.0"
       sources."strip-indent-1.0.1"
       sources."repeating-2.0.1"
-      sources."is-finite-1.0.1"
+      sources."is-finite-1.0.2"
       sources."get-stdin-4.0.1"
       sources."cli-width-1.1.1"
       sources."figures-1.7.0"
@@ -24323,7 +24335,7 @@ in
       sources."blob-to-buffer-1.2.6"
       sources."magnet-uri-5.1.4"
       sources."parse-torrent-file-4.0.0"
-      sources."simple-get-2.2.2"
+      sources."simple-get-2.2.3"
       sources."thirty-two-1.0.2"
       sources."uniq-1.0.1"
       sources."bencode-0.10.0"
@@ -24380,7 +24392,7 @@ in
       sources."fs.realpath-1.0.0"
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
@@ -24396,7 +24408,7 @@ in
       })
       sources."debug-2.2.0"
       sources."re-emitter-1.1.3"
-      sources."buffer-equals-1.0.3"
+      sources."buffer-equals-1.0.4"
       sources."k-bucket-0.6.0"
       (sources."k-rpc-3.7.0" // {
         dependencies = [
@@ -24655,7 +24667,7 @@ in
       sources."fs.realpath-1.0.0"
       sources."inflight-1.0.5"
       sources."minimatch-3.0.3"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
@@ -24705,7 +24717,7 @@ in
       sources."graceful-fs-4.1.9"
       sources."jsonfile-2.4.0"
       sources."klaw-1.3.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."rimraf-2.5.4"
       sources."glob-7.1.0"
       sources."fs.realpath-1.0.0"
@@ -24831,7 +24843,7 @@ in
       sources."inherits-2.0.3"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -25445,7 +25457,7 @@ in
       sources."inflight-1.0.5"
       sources."inherits-2.0.3"
       sources."minimatch-3.0.3"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
@@ -25508,7 +25520,7 @@ in
       sources."inherits-2.0.3"
       sources."minimatch-3.0.3"
       sources."once-1.4.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."wrappy-1.0.2"
       sources."brace-expansion-1.1.6"
       sources."balanced-match-0.4.2"
@@ -25683,7 +25695,7 @@ in
       sources."camelcase-1.2.1"
       sources."decamelize-1.2.0"
       sources."window-size-0.1.0"
-      sources."os-tmpdir-1.0.1"
+      sources."os-tmpdir-1.0.2"
       sources."rimraf-2.2.8"
       sources."cycle-1.0.3"
       sources."eyes-0.1.8"
@@ -25828,7 +25840,7 @@ in
       })
       sources."octicons-3.5.0"
       sources."open-0.0.5"
-      sources."os-homedir-1.0.1"
+      sources."os-homedir-1.0.2"
       sources."passport-0.3.2"
       sources."passport-local-1.0.0"
       (sources."raven-0.11.0" // {
@@ -26123,7 +26135,7 @@ in
       sources."balanced-match-0.4.2"
       sources."concat-map-0.0.1"
       sources."fs.realpath-1.0.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."promzard-0.3.0"
       sources."lodash._createset-4.0.3"
       sources."lodash._root-3.0.1"
@@ -26147,7 +26159,7 @@ in
       sources."lodash.pad-4.5.1"
       sources."lodash.padend-4.6.1"
       sources."lodash.padstart-4.6.1"
-      sources."os-tmpdir-1.0.1"
+      sources."os-tmpdir-1.0.2"
       sources."mute-stream-0.0.6"
       sources."util-extend-1.0.3"
       sources."json-parse-helpfulerror-1.0.3"
@@ -26337,9 +26349,9 @@ in
       sources."is-utf8-0.2.1"
       sources."read-pkg-1.1.0"
       sources."path-type-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -26410,7 +26422,7 @@ in
       sources."graceful-fs-4.1.9"
       sources."jsonfile-2.4.0"
       sources."klaw-1.3.0"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."rimraf-2.5.4"
       sources."glob-7.1.0"
       sources."fs.realpath-1.0.0"
@@ -26493,7 +26505,7 @@ in
       sources."is-property-1.0.2"
       sources."throttleit-1.0.0"
       sources."isexe-1.1.2"
-      sources."os-tmpdir-1.0.1"
+      sources."os-tmpdir-1.0.2"
       sources."underscore-1.8.3"
     ];
     buildInputs = globalBuildInputs;
@@ -26636,7 +26648,7 @@ in
       sources."glob-parent-2.0.0"
       sources."is-binary-path-1.0.1"
       sources."is-glob-2.0.1"
-      sources."path-is-absolute-1.0.0"
+      sources."path-is-absolute-1.0.1"
       sources."readdirp-2.1.0"
       sources."fsevents-1.0.14"
       sources."arrify-1.0.1"
@@ -26705,9 +26717,9 @@ in
       sources."string-width-1.0.2"
       sources."strip-ansi-3.0.1"
       sources."wide-align-1.1.0"
-      sources."code-point-at-1.0.0"
+      sources."code-point-at-1.0.1"
       sources."is-fullwidth-code-point-1.0.0"
-      sources."number-is-nan-1.0.0"
+      sources."number-is-nan-1.0.1"
       sources."ansi-regex-2.0.0"
       sources."deep-extend-0.4.1"
       sources."ini-1.3.4"
