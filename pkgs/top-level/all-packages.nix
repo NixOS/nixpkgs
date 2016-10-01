@@ -666,6 +666,8 @@ in
 
   btfs = callPackage ../os-specific/linux/btfs { };
 
+  burpsuite = callPackage ../tools/networking/burpsuite {};
+
   cabal2nix = haskell.lib.overrideCabal haskellPackages.cabal2nix (drv: {
     isLibrary = false;
     enableSharedExecutables = false;
