@@ -1014,4 +1014,7 @@ self: super: {
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
+  # https://github.com/fpco/store/issues/77
+  store = dontCheck super.store;
+
 }
