@@ -12150,6 +12150,8 @@ in
 
   containerd = callPackage ../applications/virtualization/containerd { };
 
+  convchain = callPackage ../tools/graphics/convchain {};
+
   cpp_ethereum = callPackage ../applications/misc/webthree-umbrella {
     withOpenCL = true;
 
