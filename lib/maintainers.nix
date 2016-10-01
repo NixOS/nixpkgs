@@ -290,6 +290,7 @@
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
+  nhooyr = "Anmol Sethi <anmol@aubble.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
   NikolaMandic = "Ratko Mladic <nikola@mandic.email>";

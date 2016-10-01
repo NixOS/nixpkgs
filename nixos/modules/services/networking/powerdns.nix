@@ -35,7 +35,6 @@ in {
         Restart="on-failure";
         RestartSec="1";
         StartLimitInterval="0";
-        PrivateTmp=true;
         PrivateDevices=true;
         CapabilityBoundingSet="CAP_CHOWN CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT";
         NoNewPrivileges=true;
