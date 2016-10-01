@@ -22562,7 +22562,7 @@ in modules // {
       homepage = "http://sqlmap.org";
       license = licenses.gpl2;
       description = "Automatic SQL injection and database takeover tool";
-			maintainers = with stdenv.lib.maintainers; [ sqlmap ];
+			maintainers = with stdenv.lib.maintainers; [ bennofs ];
     };
   };
 
