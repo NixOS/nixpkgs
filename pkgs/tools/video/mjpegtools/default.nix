@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [ libdv libjpeg libpng pkgconfig ]
-              ++ lib.optional (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
+              ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
 
   NIX_CFLAGS_COMPILE = lib.optional (!withMinimal) "-I${SDL.dev}/include/SDL";
 
