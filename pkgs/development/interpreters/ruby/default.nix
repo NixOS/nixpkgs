@@ -166,17 +166,6 @@ let
     ) args; in self;
 
 in {
-  ruby_1_9_3 = generic {
-    majorVersion = "1";
-    minorVersion = "9";
-    teenyVersion = "3";
-    patchLevel = "551";
-    sha256 = {
-      src = "1s2ibg3s2iflzdv7rfxi1qqkvdbn2dq8gxdn0nxrb77ls5ffanxv";
-      git = "1r9xzzxmci2ajb34qb4y1w424mz878zdgzxkfp9w60agldxnb36s";
-    };
-  };
-
   ruby_2_0_0 = generic {
     majorVersion = "2";
     minorVersion = "0";
