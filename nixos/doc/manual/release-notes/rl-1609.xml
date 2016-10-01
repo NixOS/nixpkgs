@@ -49,7 +49,62 @@ has the following highlights: </para>
 <para>The following new services were added since the last release:</para>
 
 <itemizedlist>
-  <listitem><para><literal>(this will get automatically generated at release time)</literal></para></listitem>
+  <listitem><para><literal>hardware/video/amdgpu.nix</literal></para></listitem>
+  <listitem><para><literal>hardware/video/displaylink.nix</listitem></para></literal>
+  <listitem><para><literal>programs/info.nix</listitem></para></literal>
+  <listitem><para><literal>programs/mosh.nix</listitem></para></literal>
+  <listitem><para><literal>programs/spacefm.nix</listitem></para></literal>
+  <listitem><para><literal>programs/tmux.nix</listitem></para></literal>
+  <listitem><para><literal>programs/xonsh.nix</listitem></para></literal>
+  <listitem><para><literal>security/chromium-suid-sandbox.nix</listitem></para></literal>
+  <listitem><para><literal>security/hidepid.nix</listitem></para></literal>
+  <listitem><para><literal>services/audio/squeezelite.nix</listitem></para></literal>
+  <listitem><para><literal>services/backup/znapzend.nix</listitem></para></literal>
+  <listitem><para><literal>services/continuous-integration/buildkite-agent.nix</listitem></para></literal>
+  <listitem><para><literal>services/continuous-integration/hydra/default.nix</listitem></para></literal>
+  <listitem><para><literal>services/continuous-integration/gocd-agent/default.nix</listitem></para></literal>
+  <listitem><para><literal>services/continuous-integration/gocd-server/default.nix</listitem></para></literal>
+  <listitem><para><literal>services/development/hoogle.nix</listitem></para></literal>
+  <listitem><para><literal>services/editors/emacs.nix</listitem></para></literal>
+  <listitem><para><literal>services/games/factorio.nix</listitem></para></literal>
+  <listitem><para><literal>services/games/terraria.nix</listitem></para></literal>
+  <listitem><para><literal>services/logging/awstats.nix</listitem></para></literal>
+  <listitem><para><literal>services/logging/graylog.nix</listitem></para></literal>
+  <listitem><para><literal>services/misc/emby.nix</listitem></para></literal>
+  <listitem><para><literal>services/misc/mantisbt.nix</listitem></para></literal>
+  <listitem><para><literal>services/misc/nzbget.nix</listitem></para></literal>
+  <listitem><para><literal>services/misc/packagekit.nix</listitem></para></literal>
+  <listitem><para><literal>services/misc/sonarr.nix</listitem></para></literal>
+  <listitem><para><literal>services/misc/spice-vdagentd.nix</listitem></para></literal>
+  <listitem><para><literal>services/misc/taskserver</listitem></para></literal>
+  <listitem><para><literal>services/network-filesystems/tahoe.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/coturn.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/ferm.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/gdomap.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/libreswan.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/logmein-hamachi.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/mfi.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/mjpg-streamer.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/mosquitto.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/nntp-proxy.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/offlineimap.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/pptpd.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/sniproxy.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/smokeping.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/toxvpn.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/xl2tpd.nix</listitem></para></literal>
+  <listitem><para><literal>services/networking/zerobin.nix</listitem></para></literal>
+  <listitem><para><literal>services/security/oauth2_proxy.nix</listitem></para></literal>
+  <listitem><para><literal>services/torrent/flexget.nix</listitem></para></literal>
+  <listitem><para><literal>services/web-apps/mattermost.nix</listitem></para></literal>
+  <listitem><para><literal>services/web-apps/tt-rss.nix</listitem></para></literal>
+  <listitem><para><literal>services/web-servers/caddy.nix</listitem></para></literal>
+  <listitem><para><literal>services/web-servers/lighttpd/inginious.nix</listitem></para></literal>
+  <listitem><para><literal>services/x11/compton.nix</listitem></para></literal>
+  <listitem><para><literal>services/x11/xbanish.nix</listitem></para></literal>
+  <listitem><para><literal>system/boot/loader/systemd-boot/systemd-boot.nix</listitem></para></literal>
+  <listitem><para><literal>system/boot/plymouth.nix</listitem></para></literal>
+  <listitem><para><literal>virtualisation/xe-guest-utilities.nix</listitem></para></literal>
 </itemizedlist>
 
 <para>When upgrading from a previous release, please be aware of the
