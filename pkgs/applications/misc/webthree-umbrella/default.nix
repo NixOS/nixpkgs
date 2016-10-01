@@ -84,22 +84,10 @@ stdenv.mkDerivation rec {
     curl
     libmicrohttpd
     mesa
-    (optional withOpenCL [
-      opencl-headers
-      ocl-icd
-    ])
-    (optional withGUI [
-      qtwebengine
-      qtbase
-      qtdeclarative
-    ])
-    (optional withProfiling gperftools)
-    (optional withEVMJIT [
-      llvm
-      zlib
-      ncurses
-    ])
-  ];
+  ] ++ optionals withOpenCL [ opencl-headers ocl-icd ]
+    ++ optionals withGUI [ qtwebengine qtbase qtdeclarative ]
+    ++ optional withProfiling gperftools
+    ++ optionals withEVMJIT [ llvm zlib ncurses ];
 
   runPath = with stdenv.lib; (makeLibraryPath (flatten [ stdenv.cc.cc buildInputs ]));
 
