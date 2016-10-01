@@ -473,9 +473,8 @@ in
             };
 
             extraVeths = mkOption {
-              type = types.attrsOf types.optionSet;
+              type = with types; attrsOf (submodule networkOptions);
               default = {};
-              options = networkOptions;
               description = ''
                 Extra veth-pairs to be created for the container
               '';
@@ -490,8 +489,7 @@ in
             };
 
             bindMounts = mkOption {
-              type = types.loaOf types.optionSet;
-              options = [ bindMountOpts ];
+              type = with types; loaOf (submodule bindMountOpts);
               default = {};
               example = { "/home" = { hostPath = "/home/alice";
                                       isReadOnly = false; };
