@@ -57,6 +57,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1a5ws0amy2wf9vh4rxk9vn8822zfyizfprhrlnndwfps6mxd63np";
   };
 
+  buildInputs = with python3Packages; [ pytest ];
+
+  checkPhase = "py.test";
+
   propagatedBuildInputs = with python3Packages;
     [ flask dateutil pygments livereload wheel markdown2 flaskbabel tornado
       click
