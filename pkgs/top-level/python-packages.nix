@@ -10537,8 +10537,6 @@ in modules // {
     };
   };
 
-  pep8 = self.pycodestyle;
-
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
     version = "3.0.4";
@@ -17598,6 +17596,23 @@ in modules // {
       homepage = "http://getpelican.com/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ offline prikhi garbas ];
+    };
+  };
+
+  pep8 = buildPythonPackage rec {
+    name = "pep8-${version}";
+    version = "1.7.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pep8/${name}.tar.gz";
+      sha256 = "a113d5f5ad7a7abacef9df5ec3f2af23a20a28005921577b15dd584d099d5900";
+    };
+
+    meta = {
+      homepage = "http://pep8.readthedocs.org/";
+      description = "Python style guide checker";
+      license = licenses.mit;
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
