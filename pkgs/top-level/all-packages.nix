@@ -11594,6 +11594,8 @@ in
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
   lohit-fonts = recurseIntoAttrs ( callPackages ../data/fonts/lohit-fonts { } );
 
+  maia-icon-theme = callPackage ../data/icons/maia-icon-theme { };
+
   marathi-cursive = callPackage ../data/fonts/marathi-cursive { };
 
   man-pages = callPackage ../data/documentation/man-pages { };
