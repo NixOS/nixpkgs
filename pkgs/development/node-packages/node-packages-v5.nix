@@ -11232,76 +11232,49 @@ let
         sha1 = "20ce4891909ce9f35b088c94fab40e2c96f473ac";
       };
     };
-    "escodegen-1.8.1" = {
-      name = "escodegen";
-      packageName = "escodegen";
-      version = "1.8.1";
+    "csslint-0.10.0" = {
+      name = "csslint";
+      packageName = "csslint";
+      version = "0.10.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/escodegen/-/escodegen-1.8.1.tgz";
-        sha1 = "5a5b53af4693110bebb0867aa3430dd3b70a1018";
+        url = "https://registry.npmjs.org/csslint/-/csslint-0.10.0.tgz";
+        sha1 = "3a6a04e7565c8e9d19beb49767c7ec96e8365805";
       };
     };
-    "handlebars-4.0.5" = {
-      name = "handlebars";
-      packageName = "handlebars";
-      version = "4.0.5";
+    "jshint-2.8.0" = {
+      name = "jshint";
+      packageName = "jshint";
+      version = "2.8.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/handlebars/-/handlebars-4.0.5.tgz";
-        sha1 = "92c6ed6bb164110c50d4d8d0fbddc70806c6f8e7";
+        url = "https://registry.npmjs.org/jshint/-/jshint-2.8.0.tgz";
+        sha1 = "1d09a3bd913c4cadfa81bf18d582bd85bffe0d44";
       };
     };
-    "supports-color-3.1.2" = {
-      name = "supports-color";
-      packageName = "supports-color";
-      version = "3.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/supports-color/-/supports-color-3.1.2.tgz";
-        sha1 = "72a262894d9d408b956ca05ff37b2ed8a6e2a2d5";
-      };
-    };
-    "estraverse-1.9.3" = {
-      name = "estraverse";
-      packageName = "estraverse";
-      version = "1.9.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/estraverse/-/estraverse-1.9.3.tgz";
-        sha1 = "af67f2dc922582415950926091a4005d29c9bb44";
-      };
-    };
-    "source-map-0.2.0" = {
-      name = "source-map";
-      packageName = "source-map";
-      version = "0.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/source-map/-/source-map-0.2.0.tgz";
-        sha1 = "dab73fbcfc2ba819b4de03bd6f6eaa48164b3f9d";
-      };
-    };
-    "has-flag-1.0.0" = {
-      name = "has-flag";
-      packageName = "has-flag";
+    "xml-1.0.0" = {
+      name = "xml";
+      packageName = "xml";
       version = "1.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/has-flag/-/has-flag-1.0.0.tgz";
-        sha1 = "9d9e793165ce017a00f00418c43f942a7b1d11fa";
+        url = "https://registry.npmjs.org/xml/-/xml-1.0.0.tgz";
+        sha1 = "de3ee912477be2f250b60f612f34a8c4da616efe";
       };
     };
-    "when-3.4.6" = {
-      name = "when";
-      packageName = "when";
-      version = "3.4.6";
+    "parserlib-0.2.5" = {
+      name = "parserlib";
+      packageName = "parserlib";
+      version = "0.2.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/when/-/when-3.4.6.tgz";
-        sha1 = "8fbcb7cc1439d2c3a68c431f1516e6dcce9ad28c";
+        url = "https://registry.npmjs.org/parserlib/-/parserlib-0.2.5.tgz";
+        sha1 = "85907dd8605aa06abb3dd295d50bb2b8fa4dd117";
       };
     };
-    "cli-1.0.0" = {
+    "cli-0.6.6" = {
       name = "cli";
       packageName = "cli";
-      version = "1.0.0";
+      version = "0.6.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/cli/-/cli-1.0.0.tgz";
-        sha1 = "ee07dfc1390e3f2e6a9957cf88e1d4bfa777719d";
+        url = "https://registry.npmjs.org/cli/-/cli-0.6.6.tgz";
+        sha1 = "02ad44a380abf27adac5e6f0cdd7b043d74c53e3";
       };
     };
     "exit-0.1.2" = {
@@ -11392,6 +11365,78 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz";
         sha1 = "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0";
+      };
+    };
+    "escodegen-1.8.1" = {
+      name = "escodegen";
+      packageName = "escodegen";
+      version = "1.8.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/escodegen/-/escodegen-1.8.1.tgz";
+        sha1 = "5a5b53af4693110bebb0867aa3430dd3b70a1018";
+      };
+    };
+    "handlebars-4.0.5" = {
+      name = "handlebars";
+      packageName = "handlebars";
+      version = "4.0.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/handlebars/-/handlebars-4.0.5.tgz";
+        sha1 = "92c6ed6bb164110c50d4d8d0fbddc70806c6f8e7";
+      };
+    };
+    "supports-color-3.1.2" = {
+      name = "supports-color";
+      packageName = "supports-color";
+      version = "3.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/supports-color/-/supports-color-3.1.2.tgz";
+        sha1 = "72a262894d9d408b956ca05ff37b2ed8a6e2a2d5";
+      };
+    };
+    "estraverse-1.9.3" = {
+      name = "estraverse";
+      packageName = "estraverse";
+      version = "1.9.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/estraverse/-/estraverse-1.9.3.tgz";
+        sha1 = "af67f2dc922582415950926091a4005d29c9bb44";
+      };
+    };
+    "source-map-0.2.0" = {
+      name = "source-map";
+      packageName = "source-map";
+      version = "0.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/source-map/-/source-map-0.2.0.tgz";
+        sha1 = "dab73fbcfc2ba819b4de03bd6f6eaa48164b3f9d";
+      };
+    };
+    "has-flag-1.0.0" = {
+      name = "has-flag";
+      packageName = "has-flag";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/has-flag/-/has-flag-1.0.0.tgz";
+        sha1 = "9d9e793165ce017a00f00418c43f942a7b1d11fa";
+      };
+    };
+    "when-3.4.6" = {
+      name = "when";
+      packageName = "when";
+      version = "3.4.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/when/-/when-3.4.6.tgz";
+        sha1 = "8fbcb7cc1439d2c3a68c431f1516e6dcce9ad28c";
+      };
+    };
+    "cli-1.0.0" = {
+      name = "cli";
+      packageName = "cli";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/cli/-/cli-1.0.0.tgz";
+        sha1 = "ee07dfc1390e3f2e6a9957cf88e1d4bfa777719d";
       };
     };
     "bluebird-3.4.6" = {
@@ -20931,6 +20976,80 @@ in
     meta = {
       description = "Complete high-scaled reverse-proxy solution";
       homepage = https://github.com/dotcloud/hipache;
+      license = "MIT";
+    };
+    production = true;
+  };
+  htmlhint = nodeEnv.buildNodePackage {
+    name = "htmlhint";
+    packageName = "htmlhint";
+    version = "0.9.13";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/htmlhint/-/htmlhint-0.9.13.tgz";
+      sha1 = "08163cb1e6aa505048ebb0b41063a7ca07dc6c88";
+    };
+    dependencies = [
+      sources."async-1.4.2"
+      sources."colors-1.0.3"
+      sources."commander-2.6.0"
+      sources."csslint-0.10.0"
+      sources."glob-5.0.15"
+      (sources."jshint-2.8.0" // {
+        dependencies = [
+          sources."minimatch-2.0.10"
+        ];
+      })
+      sources."parse-glob-3.0.4"
+      sources."strip-json-comments-1.0.4"
+      sources."xml-1.0.0"
+      sources."parserlib-0.2.5"
+      sources."inflight-1.0.5"
+      sources."inherits-2.0.3"
+      sources."minimatch-3.0.3"
+      sources."once-1.4.0"
+      sources."path-is-absolute-1.0.1"
+      sources."wrappy-1.0.2"
+      sources."brace-expansion-1.1.6"
+      sources."balanced-match-0.4.2"
+      sources."concat-map-0.0.1"
+      (sources."cli-0.6.6" // {
+        dependencies = [
+          sources."glob-3.2.11"
+          sources."minimatch-0.3.0"
+        ];
+      })
+      sources."console-browserify-1.1.0"
+      sources."exit-0.1.2"
+      sources."htmlparser2-3.8.3"
+      sources."shelljs-0.3.0"
+      sources."lodash-3.7.0"
+      sources."lru-cache-2.7.3"
+      sources."sigmund-1.0.1"
+      sources."date-now-0.1.4"
+      sources."domhandler-2.3.0"
+      sources."domutils-1.5.1"
+      sources."domelementtype-1.3.0"
+      sources."readable-stream-1.1.14"
+      sources."entities-1.0.0"
+      (sources."dom-serializer-0.1.0" // {
+        dependencies = [
+          sources."domelementtype-1.1.3"
+          sources."entities-1.1.1"
+        ];
+      })
+      sources."core-util-is-1.0.2"
+      sources."isarray-0.0.1"
+      sources."string_decoder-0.10.31"
+      sources."glob-base-0.3.0"
+      sources."is-dotfile-1.0.2"
+      sources."is-extglob-1.0.0"
+      sources."is-glob-2.0.1"
+      sources."glob-parent-2.0.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "A Static Code Analysis Tool for HTML";
+      homepage = "https://github.com/yaniswang/HTMLHint#readme";
       license = "MIT";
     };
     production = true;
