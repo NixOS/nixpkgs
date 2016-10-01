@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [ makeWrapper xorg.libXt ]
-    ++ stdenv.lib.optional doCheck [ perlPackages.TestCommand perlPackages.TestHarness ];
+    ++ stdenv.lib.optionals doCheck [ perlPackages.TestCommand perlPackages.TestHarness ];
 
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 

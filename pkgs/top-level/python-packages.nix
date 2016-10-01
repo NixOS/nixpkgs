@@ -2016,7 +2016,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with stdenv.lib; with pkgs; [ modules.curses zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma self.pycrypto ]
-      ++ optional visualizationSupport [ pyqtgraph ];
+      ++ optional visualizationSupport pyqtgraph;
 
     meta = with stdenv.lib; {
       homepage = "http://binwalk.org";
