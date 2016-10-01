@@ -3,8 +3,12 @@
 with stdenv.lib;
 let
   inherit (builtins) elemAt;
+  archOverrides = {
+    "i686" = "x86";
+  };
   info = splitString "-" stdenv.system;
-  arch = elemAt info 0;
+  arch = (elemAt info 0);
+  elasticArch = archOverrides."${arch}" or arch;
   plat = elemAt info 1;
   shas = {
     "x86_64-linux"  = "1md3y3a8rxvf37lnfc56kbirv2rjl68pa5672yxhfmjngrr20rcw";
@@ -16,7 +20,7 @@ in stdenv.mkDerivation rec {
   version = "4.6.0";
 
   src = fetchurl {
-    url = "https://download.elastic.co/kibana/kibana/${name}-${plat}-${arch}.tar.gz";
+    url = "https://download.elastic.co/kibana/kibana/${name}-${plat}-${elasticArch}.tar.gz";
     sha256 = shas."${stdenv.system}";
   };
 
