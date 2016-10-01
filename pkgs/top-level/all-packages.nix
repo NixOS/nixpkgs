@@ -3622,6 +3622,8 @@ in
 
   storebrowse = callPackage ../tools/system/storebrowse { };
 
+  syntex = callPackage ../tools/graphics/syntex {};
+
   fusesmb = callPackage ../tools/filesystems/fusesmb { samba = samba3; };
 
   sl = callPackage ../tools/misc/sl { };
