@@ -24,7 +24,7 @@ with lib;
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time, ping client connections to avoid timeouts
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "without-password";
+  services.openssh.permitRootLogin = "prohibit-password";
   services.openssh.extraConfig = ''
     ClientAliveInterval 180
   '';
