@@ -11969,18 +11969,18 @@ in modules // {
     # If you need these, you can just add them to your environment.
 
     name = "hypothesis-${version}";
-    version = "3.1.0";
+    version = "3.5.2";
 
     # Upstream prefers github tarballs
     src = pkgs.fetchFromGitHub {
-      owner = "DRMacIver";
+      owner = "HypothesisWorks";
       repo = "hypothesis";
       rev = "${version}";
-      sha256 = "1fhdb2vwc4blas5fvcly6pmha8psqm4bhi67jz32ypjryzk09iyf";
+      sha256 = "030rf4gn4b0hylr90wazilwa3bc038fcqng0wibcx67mqaq035n4";
     };
 
     buildInputs = with self; [ flake8 pytest flaky ];
-    propagatedBuildInputs = with self; ([] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
+    propagatedBuildInputs = with self; ([ uncompyle6 ] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
 
     # https://github.com/DRMacIver/hypothesis/issues/300
     checkPhase = ''
