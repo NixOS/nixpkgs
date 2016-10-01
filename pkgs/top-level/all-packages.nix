@@ -16598,6 +16598,8 @@ in
 
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
+  cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
+
   crashplan = callPackage ../applications/backup/crashplan { };
 
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
