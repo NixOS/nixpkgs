@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   # FIXME: enable for gnome3
   configureFlags = [ "--disable-migration" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "The GNOME Terminal Emulator";
     homepage = https://wiki.gnome.org/Apps/Terminal/;
