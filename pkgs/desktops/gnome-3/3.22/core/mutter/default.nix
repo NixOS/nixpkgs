@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, libcanberra_gtk2, zenity, libcanberra_gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libudev, libinput
-, libgudev }:
+, libgudev, xwayland }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   # fatal error: gio/gunixfdlist.h: No such file or directory
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
-  configureFlags = "--with-x --disable-static --enable-shape --enable-sm --enable-startup-notification --enable-xsync --enable-verbose-mode --with-libcanberra";
+  configureFlags = "--with-x --disable-static --enable-shape --enable-sm --enable-startup-notification --enable-xsync --enable-verbose-mode --with-libcanberra --with-xwayland-path=${xwayland}/bin/Xwayland";
 
   buildInputs = with gnome3;
     [ pkgconfig intltool glib gobjectIntrospection gtk gsettings_desktop_schemas upower
