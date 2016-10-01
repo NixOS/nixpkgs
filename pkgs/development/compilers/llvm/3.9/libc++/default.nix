@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  cmakeFlags =
-    [ "-DCMAKE_BUILD_TYPE=Release"
+  cmakeFlags = [
       "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
       "-DLIBCXX_LIBCPPABI_VERSION=2"
       "-DLIBCXX_CXX_ABI=libcxxabi"
