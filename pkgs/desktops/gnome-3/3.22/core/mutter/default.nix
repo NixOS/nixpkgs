@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   #./x86.patch ./math.patch
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;
