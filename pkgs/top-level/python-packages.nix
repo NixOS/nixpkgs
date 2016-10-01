@@ -22548,6 +22548,24 @@ in modules // {
     };
   };
 
+  sqlmap = buildPythonPackage {
+    name = "sqlmap-1.0.9.post5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sqlmap/sqlmap-1.0.9.post5.tar.gz";
+      sha256 = "0g8sjky8anrmcisc697b5qndp88qmay35kng9sz9x46wd3agm9pa";
+    };
+
+		propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    meta = with pkgs.stdenv.lib; {
+      homepage = "http://sqlmap.org";
+      license = licenses.gpl2;
+      description = "Automatic SQL injection and database takeover tool";
+			maintainers = with stdenv.lib.maintainers; [ sqlmap ];
+    };
+  };
+
   pgpdump = self.buildPythonPackage rec {
     name = "pgpdump-1.5";
 
