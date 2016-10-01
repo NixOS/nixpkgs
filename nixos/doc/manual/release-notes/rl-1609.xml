@@ -109,6 +109,13 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
+  <para>
+     Using packages compiled with older Wayland may yield an error "undefined reference to `wl_proxy_*`".
+     Please upgrade those packages and <link xlink:href="https://github.com/NixOS/nixpkgs/issues/16779">see bug report for more details.</link>
+  </para>
+  </listitem>
+
+  <listitem>
     <para>Gitlab's maintainance script
     <command>gitlab-runner</command> was removed and split up into the
     more clearer <command>gitlab-run</command> and
