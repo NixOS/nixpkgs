@@ -1,10 +1,6 @@
 { stdenv, fetchurl, pkgconfig, ncurses, ocaml, findlib, ocaml_pcre, camlzip
 , gnutls, nettle }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
 stdenv.mkDerivation {
   name = "ocamlnet-4.1.1";
 
@@ -27,7 +23,7 @@ stdenv.mkDerivation {
       -enable-pcre
       -disable-gtk2
       -with-nethttpd
-      -datadir $out/lib/ocaml/${ocaml_version}/ocamlnet
+      -datadir $out/lib/ocaml/${ocaml.version}/ocamlnet
     )
   '';
 

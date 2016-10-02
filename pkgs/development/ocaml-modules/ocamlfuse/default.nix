@@ -1,9 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, camlidl, fuse, findlib }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
 stdenv.mkDerivation rec {
   name = "ocamlfuse-2.7-3";
   src = fetchFromGitHub {

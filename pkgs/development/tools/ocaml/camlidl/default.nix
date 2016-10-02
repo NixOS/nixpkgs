@@ -1,13 +1,12 @@
 {stdenv, fetchurl, makeWrapper, gcc, ocaml, ncurses}:
+
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "camlidl";
-  version = "1.05";
   webpage = "http://caml.inria.fr/pub/old_caml_site/camlidl/";
 in
-stdenv.mkDerivation {
-
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "1.05";
 
   src = fetchurl {
     url = "http://caml.inria.fr/pub/old_caml_site/distrib/bazar-ocaml/${pname}-${version}.tar.gz";
@@ -19,13 +18,13 @@ stdenv.mkDerivation {
   preBuild = ''
     mv config/Makefile.unix config/Makefile
     substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out
-    substituteInPlace config/Makefile --replace OCAMLLIB=/usr/local/lib/ocaml OCAMLLIB=$out/lib/ocaml/${ocaml_version}/site-lib/camlidl
+    substituteInPlace config/Makefile --replace OCAMLLIB=/usr/local/lib/ocaml OCAMLLIB=$out/lib/ocaml/${ocaml.version}/site-lib/camlidl
     substituteInPlace config/Makefile --replace CPP=/lib/cpp CPP=${gcc}/bin/cpp
-    mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib/camlidl/caml
+    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/caml
   '';
 
   postInstall = ''
-    cat >$out/lib/ocaml/${ocaml_version}/site-lib/camlidl/META <<EOF
+    cat >$out/lib/ocaml/${ocaml.version}/site-lib/camlidl/META <<EOF
     # Courtesy of GODI
     description = "Stub generator"
     version = "${version}"

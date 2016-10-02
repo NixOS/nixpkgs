@@ -1,9 +1,5 @@
 {stdenv, fetchurl, m4, ncurses, ocaml, writeText}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
 stdenv.mkDerivation rec {
   name = "ocaml-findlib-${version}";
   version = "1.6.1";
@@ -23,7 +19,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(
       -bindir $out/bin
       -mandir $out/share/man
-      -sitelib $out/lib/ocaml/${ocaml_version}/site-lib
+      -sitelib $out/lib/ocaml/${ocaml.version}/site-lib
       -config $out/etc/findlib.conf
     )
   '';
@@ -35,10 +31,10 @@ stdenv.mkDerivation rec {
 
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {
-        if test -d "''$1/lib/ocaml/${ocaml_version}/site-lib"; then
-            export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml_version}/site-lib/"
+        if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib"; then
+            export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/"
         fi
-        export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml_version}/site-lib/"
+        export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
         if test -n "$createFindlibDestdir"; then
           mkdir -p $OCAMLFIND_DESTDIR
         fi

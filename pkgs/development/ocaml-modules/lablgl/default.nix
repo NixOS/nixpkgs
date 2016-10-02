@@ -1,13 +1,12 @@
 {stdenv, fetchurl, ocaml, lablgtk, findlib, mesa, freeglut, camlp4 } :
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "lablgl";
-  version = "1.05";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "1.05";
 
   src = fetchurl { 
     url = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/dist/lablgl-${version}.tar.gz";
@@ -22,8 +21,8 @@ stdenv.mkDerivation {
   preConfigure = ''
     substituteInPlace Makefile.config \
       --subst-var-by BINDIR $out/bin \
-      --subst-var-by INSTALLDIR $out/lib/ocaml/${ocaml_version}/site-lib/lablgl \
-      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml_version}/site-lib/lablgl \
+      --subst-var-by INSTALLDIR $out/lib/ocaml/${ocaml.version}/site-lib/lablgl \
+      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml.version}/site-lib/lablgl \
       --subst-var-by TKINCLUDES "" \
       --subst-var-by XINCLUDES ""
   '';
@@ -33,7 +32,7 @@ stdenv.mkDerivation {
   buildFlags = "lib libopt glut glutopt";
 
   postInstall = ''
-    cp ./META $out/lib/ocaml/${ocaml_version}/site-lib/lablgl
+    cp ./META $out/lib/ocaml/${ocaml.version}/site-lib/lablgl
   '';
 
   meta = with stdenv.lib; {
