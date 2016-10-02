@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "14kxq7nlkalgmlxpijs78fr0zr2ha9xykzqfbr7lh3zn0r79k5a3";
   };
 
-  buildInputs = [ cmake coreutils which libuuid ];
-  propagatedBuildInputs = [ tqt3 mesa ];
+  buildInputs = [ cmake coreutils which ];
+  propagatedBuildInputs = [ tqt3 mesa libuuid ];
   setupHook = ./setup-hook.sh;
 
   cmakeFlags = [

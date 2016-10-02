@@ -151,3 +151,4 @@ stdenv.mkDerivation rec {
 }
 # Heavily based on QT-3 expression
 # TODO: multiple inputs
+# Warning: autotool build, will be deprecated by cmake in the future
