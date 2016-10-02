@@ -1201,6 +1201,8 @@ in
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
+  c14 = callPackage ../applications/networking/c14 { };
+
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   clamav = callPackage ../tools/security/clamav { };
