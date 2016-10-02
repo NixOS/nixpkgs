@@ -67,8 +67,9 @@ in
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
-              DefaultDependencies = false;
             };
+
+            unitConfig.DefaultDependencies = false;
 
             script =
               ''
