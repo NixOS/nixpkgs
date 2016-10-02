@@ -13754,6 +13754,10 @@ in
 
   nedit = callPackage ../applications/editors/nedit { };
 
+  notepadqq = callPackage ../applications/editors/notepadqq {
+    qtbase = qt55;
+  };
+
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     # No need to build Emacs - notmuch.el works just fine without
     # byte-compilation. Use emacsPackages.notmuch if you want to
