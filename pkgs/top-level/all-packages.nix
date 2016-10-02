@@ -2822,6 +2822,8 @@ in
 
   nextcloud = callPackage ../servers/nextcloud { };
 
+  nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   ngrok = callPackage ../tools/networking/ngrok { };
