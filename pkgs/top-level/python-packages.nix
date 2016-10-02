@@ -6182,12 +6182,22 @@ in modules // {
   };
 
   EditorConfig = buildPythonPackage rec {
-    name = "EditorConfig-0.12.0";
+    name = "EditorConfig-${version}";
+    version = "0.12.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/E/EditorConfig/${name}.tar.gz";
-      sha256 = "1ah5hnrjw8r3pq586rh1w1ykqpb2dwzhhjc04d0n95fza1a3k9zd";
+    # fetchgit used to ensure test submodule is available
+    src = pkgs.fetchgit {
+      url = "https://github.com/editorconfig/editorconfig-core-py";
+      rev = "refs/tags/v${version}";
+      sha256 = "0svk7id7ncygj2rnxhm7602xizljyidk4xgrl6i0xgq3829cz4bl";
     };
+
+    buildInputs = [ pkgs.cmake ];
+    checkPhase = ''
+      cmake .
+      # utf_8_char fails with python3
+      ctest -E "utf_8_char" .
+    '';
 
     meta = {
       homepage = "http://editorconfig.org";
