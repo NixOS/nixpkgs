@@ -233,6 +233,10 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.renderproto];
   };
 
+  libXp = attrs: attrs // {
+    outputs = [ "out" "dev" ];
+  };
+
   libXpm = attrs: attrs // {
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
