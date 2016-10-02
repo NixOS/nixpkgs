@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A minimal, zero-config, BSD licensed, readline replacement";
     maintainers = with stdenv.lib.maintainers; [ mpsyco ];
     platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.free;
+    license = stdenv.lib.licenses.bsd2;
   };
 }
