@@ -208,8 +208,6 @@
         let
           kernel = pkgs.linux_grsec_nixos.override {
             extraConfig = ''
-              GRKERNSEC y
-              PAX y
               GRKERNSEC_CONFIG_AUTO y
               GRKERNSEC_CONFIG_SERVER y
               GRKERNSEC_CONFIG_SECURITY y
