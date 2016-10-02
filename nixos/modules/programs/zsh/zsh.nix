@@ -84,6 +84,14 @@ in
         type = types.bool;
       };
 
+      enableSyntaxHighlighting = mkOption {
+        default = false;
+        description = ''
+          Enable zsh-syntax-highlighting
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -119,6 +127,10 @@ in
         done
 
         ${if cfg.enableCompletion then "autoload -U compinit && compinit" else ""}
+
+        ${optionalString (cfg.enableSyntaxHighlighting)
+          "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+        }
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
       '';
@@ -182,7 +194,8 @@ in
     environment.etc."zinputrc".source = ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
-      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
+      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions
+      ++ optional cfg.enableSyntaxHighlighting pkgs.zsh-syntax-highlighting;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
 

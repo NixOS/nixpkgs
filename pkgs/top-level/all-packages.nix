@@ -4339,6 +4339,8 @@ in
 
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
 
+  zsh-syntax-highlighting = callPackage ../shells/zsh-syntax-highlighting { };
+
   zstd = callPackage ../tools/compression/zstd { };
 
   zsync = callPackage ../tools/compression/zsync { };
