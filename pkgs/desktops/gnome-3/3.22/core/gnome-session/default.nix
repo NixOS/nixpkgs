@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/gnome-session" \
       --prefix PATH : "${glib.dev}/bin" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
+      --suffix XDG_DATA_DIRS : "${gnome3.gnome_shell}/share"
   '';
 
   meta = with stdenv.lib; {
