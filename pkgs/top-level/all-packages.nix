@@ -8248,6 +8248,8 @@ in
   lightning = callPackage ../development/libraries/lightning { };
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
+  
+  linenoise = callPackage ../development/libraries/linenoise { };
 
   lirc = callPackage ../development/libraries/lirc { };
 

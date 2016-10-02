@@ -277,6 +277,7 @@
   mounium = "Katona László <muoniurn@gmail.com>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
   mpscholten = "Marc Scholten <marc@mpscholten.de>";
+  mpsyco = "Francis St-Amour <fr.st-amour@gmail.com>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
   msteen = "Matthijs Steen <emailmatthijs@gmail.com>";
