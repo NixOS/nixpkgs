@@ -10547,7 +10547,7 @@ in modules // {
     };
 
     buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe_0_4 ];
+    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe ];
 
     meta = {
       description = "Code checking using pep8 and pyflakes";
@@ -13487,24 +13487,6 @@ in modules // {
         sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
       }}" test_mccabe.py
     '';
-
-    buildInputs = with self; [ pytestrunner pytest ];
-
-    meta = {
-      description = "McCabe checker, plugin for flake8";
-      homepage = "https://github.com/flintwork/mccabe";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
-
-  mccabe_0_4 = buildPythonPackage (rec {
-    name = "mccabe-0.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
-    };
 
     buildInputs = with self; [ pytestrunner pytest ];
 
