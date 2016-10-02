@@ -8,148 +8,150 @@ in
     options.services.tahoe = {
       introducers = mkOption {
         default = {};
-        type = types.loaOf types.optionSet;
+        type = with types; loaOf (submodule {
+          options = {
+            nickname = mkOption {
+              type = types.str;
+              description = ''
+                The nickname of this Tahoe introducer.
+              '';
+            };
+            tub.port = mkOption {
+              default = 3458;
+              type = types.int;
+              description = ''
+                The port on which the introducer will listen.
+              '';
+            };
+            tub.location = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                The external location that the introducer should listen on.
+
+                If specified, the port should be included.
+              '';
+            };
+            package = mkOption {
+              default = pkgs.tahoelafs;
+              defaultText = "pkgs.tahoelafs";
+              type = types.package;
+              example = literalExample "pkgs.tahoelafs";
+              description = ''
+                The package to use for the Tahoe LAFS daemon.
+              '';
+            };
+          };
+        });
         description = ''
           The Tahoe introducers.
         '';
-        options = {
-          nickname = mkOption {
-            type = types.str;
-            description = ''
-              The nickname of this Tahoe introducer.
-            '';
-          };
-          tub.port = mkOption {
-            default = 3458;
-            type = types.int;
-            description = ''
-              The port on which the introducer will listen.
-            '';
-          };
-          tub.location = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            description = ''
-              The external location that the introducer should listen on.
-
-              If specified, the port should be included.
-            '';
-          };
-          package = mkOption {
-            default = pkgs.tahoelafs;
-            defaultText = "pkgs.tahoelafs";
-            type = types.package;
-            example = literalExample "pkgs.tahoelafs";
-            description = ''
-              The package to use for the Tahoe LAFS daemon.
-            '';
-          };
-        };
       };
       nodes = mkOption {
         default = {};
-        type = types.loaOf types.optionSet;
+        type = with types; loaOf (submodule {
+          options = {
+            nickname = mkOption {
+              type = types.str;
+              description = ''
+                The nickname of this Tahoe node.
+              '';
+            };
+            tub.port = mkOption {
+              default = 3457;
+              type = types.int;
+              description = ''
+                The port on which the tub will listen.
+
+                This is the correct setting to tweak if you want Tahoe's storage
+                system to listen on a different port.
+              '';
+            };
+            tub.location = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                The external location that the node should listen on.
+
+                This is the setting to tweak if there are multiple interfaces
+                and you want to alter which interface Tahoe is advertising.
+
+                If specified, the port should be included.
+              '';
+            };
+            web.port = mkOption {
+              default = 3456;
+              type = types.int;
+              description = ''
+                The port on which the Web server will listen.
+
+                This is the correct setting to tweak if you want Tahoe's WUI to
+                listen on a different port.
+              '';
+            };
+            client.introducer = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                The furl for a Tahoe introducer node.
+
+                Like all furls, keep this safe and don't share it.
+              '';
+            };
+            client.helper = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                The furl for a Tahoe helper node.
+
+                Like all furls, keep this safe and don't share it.
+              '';
+            };
+            client.shares.needed = mkOption {
+              default = 3;
+              type = types.int;
+              description = ''
+                The number of shares required to reconstitute a file.
+              '';
+            };
+            client.shares.happy = mkOption {
+              default = 7;
+              type = types.int;
+              description = ''
+                The number of distinct storage nodes required to store
+                a file.
+              '';
+            };
+            client.shares.total = mkOption {
+              default = 10;
+              type = types.int;
+              description = ''
+                The number of shares required to store a file.
+              '';
+            };
+            storage.enable = mkEnableOption "storage service";
+            storage.reservedSpace = mkOption {
+              default = "1G";
+              type = types.str;
+              description = ''
+                The amount of filesystem space to not use for storage.
+              '';
+            };
+            helper.enable = mkEnableOption "helper service";
+            package = mkOption {
+              default = pkgs.tahoelafs;
+              defaultText = "pkgs.tahoelafs";
+              type = types.package;
+              example = literalExample "pkgs.tahoelafs";
+              description = ''
+                The package to use for the Tahoe LAFS daemon.
+              '';
+            };
+          };
+        });
         description = ''
           The Tahoe nodes.
         '';
-        options = {
-          nickname = mkOption {
-            type = types.str;
-            description = ''
-              The nickname of this Tahoe node.
-            '';
-          };
-          tub.port = mkOption {
-            default = 3457;
-            type = types.int;
-            description = ''
-              The port on which the tub will listen.
-
-              This is the correct setting to tweak if you want Tahoe's storage
-              system to listen on a different port.
-            '';
-          };
-          tub.location = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            description = ''
-              The external location that the node should listen on.
-
-              This is the setting to tweak if there are multiple interfaces
-              and you want to alter which interface Tahoe is advertising.
-
-              If specified, the port should be included.
-            '';
-          };
-          web.port = mkOption {
-            default = 3456;
-            type = types.int;
-            description = ''
-              The port on which the Web server will listen.
-
-              This is the correct setting to tweak if you want Tahoe's WUI to
-              listen on a different port.
-            '';
-          };
-          client.introducer = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            description = ''
-              The furl for a Tahoe introducer node.
-
-              Like all furls, keep this safe and don't share it.
-            '';
-          };
-          client.helper = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            description = ''
-              The furl for a Tahoe helper node.
-
-              Like all furls, keep this safe and don't share it.
-            '';
-          };
-          client.shares.needed = mkOption {
-            default = 3;
-            type = types.int;
-            description = ''
-              The number of shares required to reconstitute a file.
-            '';
-          };
-          client.shares.happy = mkOption {
-            default = 7;
-            type = types.int;
-            description = ''
-              The number of distinct storage nodes required to store
-              a file.
-            '';
-          };
-          client.shares.total = mkOption {
-            default = 10;
-            type = types.int;
-            description = ''
-              The number of shares required to store a file.
-            '';
-          };
-          storage.enable = mkEnableOption "storage service";
-          storage.reservedSpace = mkOption {
-            default = "1G";
-            type = types.str;
-            description = ''
-              The amount of filesystem space to not use for storage.
-            '';
-          };
-          helper.enable = mkEnableOption "helper service";
-          package = mkOption {
-            default = pkgs.tahoelafs;
-            defaultText = "pkgs.tahoelafs";
-            type = types.package;
-            example = literalExample "pkgs.tahoelafs";
-            description = ''
-              The package to use for the Tahoe LAFS daemon.
-            '';
-          };
-        };
       };
     };
     config = mkMerge [

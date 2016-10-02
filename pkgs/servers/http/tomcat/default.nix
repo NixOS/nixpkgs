@@ -5,12 +5,12 @@ let
   common = { versionMajor, versionMinor, sha256 } @ args: stdenv.mkDerivation (rec {
     name = "apache-tomcat-${version}";
     version = "${versionMajor}.${versionMinor}";
-    
+
     src = fetchurl {
       url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${name}.tar.gz";
       inherit sha256;
     };
-    
+
     outputs = [ "out" "webapps" ];
     installPhase =
       ''
@@ -19,7 +19,7 @@ let
         mkdir -p $webapps/webapps
         mv $out/webapps $webapps/
       '';
-    
+
     meta = {
       homepage = https://tomcat.apache.org/;
       description = "An implementation of the Java Servlet and JavaServer Pages technologies";
@@ -39,8 +39,8 @@ in {
 
   tomcat7 = common {
     versionMajor = "7";
-    versionMinor = "0.70";
-    sha256 = "0x4chqb7kkmadmhf2hlank856hw2vpgjl14fak74ybimlcb3dwqk";
+    versionMinor = "0.72";
+    sha256 = "1nx5pmz3bq3n20fdspqh8ljqy1nj67rwi1vsqjpkrvd996x7p73p";
   };
 
   tomcat8 = common {
@@ -54,11 +54,11 @@ in {
     versionMinor = "5.5";
     sha256 = "0idfxjrw5q45f531gyjnv6xjkbj9nhy2v1w4z7558z96230a0fqj";
   };
-  
+
   tomcatUnstable = common {
     versionMajor = "9";
     versionMinor = "0.0.M10";
     sha256 = "0p3pqwz9zjvr9w73divsyaa53mbazf0icxfs06wvgxsvkbgj5gq9";
   };
-  
+
 }

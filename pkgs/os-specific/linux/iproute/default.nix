@@ -3,11 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-4.5.0";
+  name = "iproute2-${version}";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "0jj9phsi8m2sbnz7bbh9cf9vckm67hs62ab5srdwnrg4acpjj59z";
+    sha256 = "14kvpdlxq8204f5ayfdfb6mc0423mbf3px9q0spdly9sng7xnq4g";
   };
 
   patches = lib.optionals enableFan [
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     "LIBDIR=$(out)/lib"
     "SBINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man"
+    "BASH_COMPDIR=$(out)/share/bash-completion/completions"
     "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
   ];
 

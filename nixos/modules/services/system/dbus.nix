@@ -8,7 +8,7 @@ let
 
   cfg = config.services.dbus;
 
-  homeDir = "/var/run/dbus";
+  homeDir = "/run/dbus";
 
   systemExtraxml = concatStrings (flip concatMap cfg.packages (d: [
     "<servicedir>${d}/share/dbus-1/system-services</servicedir>"
@@ -20,14 +20,22 @@ let
     "<includedir>${d}/etc/dbus-1/session.d</includedir>"
   ]));
 
-  configDir = pkgs.stdenv.mkDerivation {
-    name = "dbus-conf";
+  daemonArgs = "--address=systemd: --nofork --nopidfile --systemd-activation";
 
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    buildCommand = ''
+  configDir = pkgs.runCommand "dbus-conf"
+    { preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
       mkdir -p $out
+
+      cp ${pkgs.dbus.out}/share/dbus-1/{system,session}.conf $out
+
+      # avoid circular includes
+      sed -ri 's@(<include ignore_missing="yes">/etc/dbus-1/(system|session)\.conf</include>)@<!-- \1 -->@g' $out/{system,session}.conf
+
+      # include by full path
+      sed -ri "s@/etc/dbus-1/(system|session)-@$out/\1-@" $out/{system,session}.conf
 
       sed '${./dbus-system-local.conf.in}' \
         -e 's,@servicehelper@,${config.security.wrapperDir}/dbus-daemon-launch-helper,g' \
@@ -38,7 +46,6 @@ let
         -e 's,@extra@,${sessionExtraxml},' \
         > "$out/session-local.conf"
     '';
-  };
 
 in
 
@@ -75,10 +82,15 @@ in
         '';
       };
 
+      socketActivated = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Make the user instance socket activated.
+        '';
+      };
     };
-
   };
-
 
   ###### implementation
 
@@ -117,13 +129,29 @@ in
       config.system.path
     ];
 
-    # Don't restart dbus-daemon. Bad things tend to happen if we do.
-    systemd.services.dbus.reloadIfChanged = true;
+    systemd.services.dbus = {
+      # Don't restart dbus-daemon. Bad things tend to happen if we do.
+      reloadIfChanged = true;
+      restartTriggers = [ configDir ];
+      serviceConfig.ExecStart = [
+        ""
+        "${lib.getBin pkgs.dbus}/bin/dbus-daemon --config-file=${configDir}/system.conf ${daemonArgs}"
+      ];
+    };
 
-    systemd.services.dbus.restartTriggers = [ configDir ];
+    systemd.user = {
+      services.dbus = {
+        # Don't restart dbus-daemon. Bad things tend to happen if we do.
+        reloadIfChanged = true;
+        restartTriggers = [ configDir ];
+        serviceConfig.ExecStart = [
+          ""
+          "${lib.getBin pkgs.dbus}/bin/dbus-daemon --config-file=${configDir}/session.conf ${daemonArgs}"
+        ];
+      };
+      sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
+    };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
-
   };
-
 }

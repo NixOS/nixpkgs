@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, gnome3, pygtk
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, gnome3
 , gtk_doc, gtk3, python, lua, libX11, libXext, libXrender, gobjectIntrospection
 }:
 

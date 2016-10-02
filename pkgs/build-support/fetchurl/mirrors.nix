@@ -70,6 +70,11 @@ rec {
     ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/
   ];
 
+  # Trinity DE mirrors
+  tde = [
+    http://tde-mirror.yosemite.net/trinity/releases/
+  ];
+
   # Mirrors of ftp://ftp.kde.org/pub/kde/.
   kde = [
     "http://download.kde.org/download.php?url="

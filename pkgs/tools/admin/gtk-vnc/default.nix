@@ -1,10 +1,12 @@
 { stdenv, fetchurl, gobjectIntrospection
-, python, gtk2, pygtk, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
+, gtk2, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
 , libffi, cyrus_sasl, intltool, perl, perlPackages, libpulseaudio
-, kbproto, libX11, libXext, xextproto, pygobject2, libgcrypt, gtk3, vala_0_23
-, pygobject3, libogg, enableGTK3 ? false, libgpgerror }:
+, kbproto, libX11, libXext, xextproto, libgcrypt, gtk3, vala_0_23
+, libogg, enableGTK3 ? false, libgpgerror, pythonPackages }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) pygobject3 pygobject2 pygtk python;
+in stdenv.mkDerivation rec {
   name = "gtk-vnc-${version}";
   version = "0.5.3";
 

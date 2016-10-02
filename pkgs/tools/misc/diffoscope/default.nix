@@ -30,9 +30,9 @@ pythonPackages.buildPythonApplication rec {
   # Also these libraries: python3-guestfs
   # FIXME: move xxd into a separate package so we don't have to pull in all of vim.
   propagatedBuildInputs = (with pythonPackages; [ debian libarchive-c python_magic tlsh ]) ++
-    [ acl binutils bzip2 cbfstool cdrkit cpio diffutils e2fsprogs file gettext
+    map lib.getBin ([ acl binutils bzip2 cbfstool cdrkit cpio diffutils e2fsprogs file gettext
       gzip libcaca poppler_utils rpm sng sqlite squashfsTools unzip vim xz
-    ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ];
+    ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ]);
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 

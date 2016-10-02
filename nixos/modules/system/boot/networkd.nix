@@ -471,8 +471,7 @@ let
 
     addresses = mkOption {
       default = [ ];
-      type = types.listOf types.optionSet;
-      options = [ addressOptions ];
+      type = with types; listOf (submodule [ addressOptions ]);
       description = ''
         A list of address sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
@@ -482,8 +481,7 @@ let
 
     routes = mkOption {
       default = [ ];
-      type = types.listOf types.optionSet;
-      options = [ routeOptions ];
+      type = with types; listOf (submodule [ routeOptions ]);
       description = ''
         A list of route sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
@@ -624,35 +622,32 @@ in
 
     systemd.network.links = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ linkOptions ];
+      type = with types; attrsOf (submodule [ linkOptions ]);
       description = "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ netdevOptions ];
+      type = with types; attrsOf (submodule [ netdevOptions ]);
       description = "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ networkOptions networkConfig ];
+      type = with types; attrsOf (submodule [ networkOptions networkConfig ]);
       description = "Definition of systemd networks.";
     };
 
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
+      type = with types; attrsOf (submodule (
+        { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        };
+        }));
     };
 
   };

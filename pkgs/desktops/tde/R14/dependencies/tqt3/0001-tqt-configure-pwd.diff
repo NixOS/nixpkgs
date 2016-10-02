@@ -1,0 +1,15 @@
+diff -Naur dependencies-old/tqt3/configure dependencies/tqt3/configure
+--- dependencies-old/tqt3/configure	2015-01-08 10:50:12.000000000 -0200
++++ dependencies/tqt3/configure	2015-01-08 10:55:15.000000000 -0200
+@@ -15,9 +15,9 @@
+ relconf=`basename $0`
+ # the directory of this script is the "source tree"
+ relpath=`dirname $0`
+-relpath=`(cd $relpath; /bin/pwd)`
++relpath=`(cd $relpath; pwd)`
+ # the current directory is the "build tree" or "object tree"
+-outpath=`/bin/pwd`
++outpath=`pwd`
+ 
+ # later cache the command line in config.status
+ OPT_CMDLINE=`echo $@ | sed "s,-v ,,g; s,-v$,,g"`

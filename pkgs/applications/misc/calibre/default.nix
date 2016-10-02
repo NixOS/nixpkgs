@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.66.0";
+  version = "2.68.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1dbv6p9cq9zj51zvhfy2b7aic2zqa44lmfmq7k7fkqcgb6wmanic";
+    sha256 = "0mn6wdws1xxc4yvhp5vdzb5i5c9dsmamyms1njdzs5fv754rszpm";
   };
 
   inherit python;
@@ -129,14 +129,14 @@ stdenv.mkDerivation rec {
     ];
     categories = "Office";
     extraEntries = ''
-      Actions=ebook-edit ebook-viewer
+      Actions=Edit;Viewer;
 
-      [Desktop Action ebook-edit]
+      [Desktop Action Edit]
       Name=Edit E-book
       Icon=@out@/share/calibre/images/tweak.png
       Exec=@out@/bin/ebook-edit --detach %F
 
-      [Desktop Action ebook-viewer]
+      [Desktop Action Viewer]
       Name=E-book Viewer
       Icon=@out@/share/calibre/images/viewer.png
       Exec=@out@/bin/ebook-viewer --detach %F

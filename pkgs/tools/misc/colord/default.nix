@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchgit, bashCompletion
+{ stdenv, fetchzip, fetchgit, bash-completion
 , glib, polkit, pkgconfig, intltool, gusb, libusb1, lcms2, sqlite, systemd, dbus
 , automake, autoconf, libtool, gtk_doc, which, gobjectIntrospection, argyllcms
 , libgudev, sane-backends }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ glib polkit pkgconfig intltool gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
-                  bashCompletion argyllcms automake autoconf libgudev sane-backends ];
+                  bash-completion argyllcms automake autoconf libgudev sane-backends ];
 
   postInstall = ''
     mkdir -p $out/etc/bash_completion.d

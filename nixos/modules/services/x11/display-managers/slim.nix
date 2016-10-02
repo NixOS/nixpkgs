@@ -26,15 +26,13 @@ let
   # Unpack the SLiM theme, or use the default.
   slimThemesDir =
     let
-      unpackedTheme = pkgs.stdenv.mkDerivation {
-        name = "slim-theme";
-        buildCommand = ''
+      unpackedTheme = pkgs.runCommand "slim-theme" {}
+        ''
           mkdir -p $out
           cd $out
           unpackFile ${cfg.theme}
           ln -s * default
         '';
-      };
     in if cfg.theme == null then "${pkgs.slim}/share/slim/themes" else unpackedTheme;
 
 in

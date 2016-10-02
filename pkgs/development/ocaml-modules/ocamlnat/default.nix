@@ -1,10 +1,14 @@
-{stdenv, fetchurl, ocaml, findlib, ounit}:
+{stdenv, lib, fetchurl, ocaml, findlib, ounit}:
 
-stdenv.mkDerivation {
-  name = "ocamlnat-0.1.1";
+# https://github.com/bmeurer/ocamlnat/issues/3
+assert lib.versionOlder ocaml.version "4";
+
+stdenv.mkDerivation rec {
+  name = "ocamlnat-${version}";
+  version = "0.1.1";
 
   src = fetchurl {
-    url = http://benediktmeurer.de/files/source/ocamlnat-0.1.1.tar.bz2;
+    url = "http://benediktmeurer.de/files/source/${name}.tar.bz2";
     sha256 = "0dyvy0j6f47laxhnadvm71z1py9hz9zd49hamf6bij99cggb2ij1";
   };
 

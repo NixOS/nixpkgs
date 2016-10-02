@@ -5,15 +5,16 @@ with lib;
 let
   cfg = config.services.matrix-synapse;
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
-  mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${if r.compress then "true" else "false"}}'';
-  mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${if l.tls then "true" else "false"}, x_forwarded: ${if l.x_forwarded then "true" else "false"}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
+  mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${fromBool r.compress}}'';
+  mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${fromBool l.tls}, x_forwarded: ${fromBool l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
+  fromBool = x: if x then "true" else "false";
   configFile = pkgs.writeText "homeserver.yaml" ''
 tls_certificate_path: "${cfg.tls_certificate_path}"
 ${optionalString (cfg.tls_private_key_path != null) ''
 tls_private_key_path: "${cfg.tls_private_key_path}"
 ''}
 tls_dh_params_path: "${cfg.tls_dh_params_path}"
-no_tls: ${if cfg.no_tls then "true" else "false"}
+no_tls: ${fromBool cfg.no_tls}
 ${optionalString (cfg.bind_port != null) ''
 bind_port: ${toString cfg.bind_port}
 ''}
@@ -25,7 +26,7 @@ bind_host: "${cfg.bind_host}"
 ''}
 server_name: "${cfg.server_name}"
 pid_file: "/var/run/matrix-synapse.pid"
-web_client: ${if cfg.web_client then "true" else "false"}
+web_client: ${fromBool cfg.web_client}
 ${optionalString (cfg.public_baseurl != null) ''
 public_baseurl: "${cfg.public_baseurl}"
 ''}
@@ -53,14 +54,14 @@ media_store_path: "/var/lib/matrix-synapse/media"
 uploads_path: "/var/lib/matrix-synapse/uploads"
 max_upload_size: "${cfg.max_upload_size}"
 max_image_pixels: "${cfg.max_image_pixels}"
-dynamic_thumbnails: ${if cfg.dynamic_thumbnails then "true" else "false"}
+dynamic_thumbnails: ${fromBool cfg.dynamic_thumbnails}
 url_preview_enabled: False
 recaptcha_private_key: "${cfg.recaptcha_private_key}"
 recaptcha_public_key: "${cfg.recaptcha_public_key}"
-enable_registration_captcha: ${if cfg.enable_registration_captcha then "true" else "false"}
+enable_registration_captcha: ${fromBool cfg.enable_registration_captcha}
 turn_uris: ${builtins.toJSON cfg.turn_uris}
 turn_shared_secret: "${cfg.turn_shared_secret}"
-enable_registration: ${if cfg.enable_registration then "true" else "false"}
+enable_registration: ${fromBool cfg.enable_registration}
 ${optionalString (cfg.registration_shared_secret != null) ''
 registration_shared_secret: "${cfg.registration_shared_secret}"
 ''}
@@ -68,9 +69,15 @@ recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
 turn_user_lifetime: "${cfg.turn_user_lifetime}"
 user_creation_max_duration: ${cfg.user_creation_max_duration}
 bcrypt_rounds: ${cfg.bcrypt_rounds}
-allow_guest_access: {if cfg.allow_guest_access then "true" else "false"}
-enable_metrics: ${if cfg.enable_metrics then "true" else "false"}
-report_stats: ${if cfg.report_stats then "true" else "false"}
+allow_guest_access: ${fromBool cfg.allow_guest_access}
+trusted_third_party_id_servers: ${builtins.toJSON cfg.trusted_third_party_id_servers}
+room_invite_state_types: ${builtins.toJSON cfg.room_invite_state_types}
+${optionalString (cfg.macaroon_secret_key != null) ''
+  macaroon_secret_key: "${cfg.macaroon_secret_key}"
+''}
+expire_access_token: ${fromBool cfg.expire_access_token}
+enable_metrics: ${fromBool cfg.enable_metrics}
+report_stats: ${fromBool cfg.report_stats}
 signing_key_path: "/var/lib/matrix-synapse/homeserver.signing.key"
 key_refresh_interval: "${cfg.key_refresh_interval}"
 perspectives:
@@ -467,6 +474,34 @@ in {
           Allows users to register as guests without a password/email/etc, and
           participate in rooms hosted on this server which have been made
           accessible to anonymous users.
+        '';
+      };
+      trusted_third_party_id_servers = mkOption {
+        type = types.listOf types.str;
+        default = ["matrix.org"];
+        description = ''
+          The list of identity servers trusted to verify third party identifiers by this server.
+        '';
+      };
+      room_invite_state_types = mkOption {
+        type = types.listOf types.str;
+        default = ["m.room.join_rules" "m.room.canonical_alias" "m.room.avatar" "m.room.name"];
+        description = ''
+          A list of event types that will be included in the room_invite_state
+        '';
+      };
+      macaroon_secret_key = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Secret key for authentication tokens
+        '';
+      };
+      expire_access_token = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable access token expiration.
         '';
       };
       key_refresh_interval = mkOption {

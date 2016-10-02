@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
-, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc, ntdb, tdb, tevent
-, ldb, popt, iniparser, libbsd, libarchive, libiconv, gettext
+, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc
+, popt, iniparser, libbsd, libarchive, libiconv, gettext
 , kerberos, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
 , gnutls, libgcrypt, libgpgerror
 , ncurses, libunwind, libibverbs, librdmacm, systemd
@@ -18,12 +18,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "samba-4.3.8";
+  name = "samba-4.3.11";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "041b5frh4ikcka922aqhqjvlv4w2s7jycyykpvsknj0a79ncd79p";
+    sha256 = "1v2grwivm6rasz1ganbybs0ikz1lydaniy65kxf1v8rl1qqngach";
   };
+
+  outputs = [ "out" "dev" "man" ];
 
   patches =
     [ ./4.x-no-persistent-install.patch
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-      docbook_xml_dtd_45 */ readline talloc ntdb tdb tevent ldb popt iniparser
+      docbook_xml_dtd_45 */ readline talloc popt iniparser
       libbsd libarchive zlib acl fam libiconv gettext libunwind kerberos
     ]
     ++ optionals stdenv.isLinux [ libaio pam systemd ]
@@ -60,9 +62,6 @@ stdenv.mkDerivation rec {
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
-      "--bundled-libraries=NONE"
-      "--private-libraries=NONE"
-      "--builtin-libraries=NONE"
     ]
     ++ optional (!enableDomainController) "--without-ad-dc"
     ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ];

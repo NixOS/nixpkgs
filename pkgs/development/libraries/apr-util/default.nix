@@ -43,11 +43,14 @@ stdenv.mkDerivation rec {
     ++ optional ldapSupport openldap
     ++ optional stdenv.isFreeBSD cyrus_sasl;
 
-  # Give apr1 access to sed for runtime invocations
   postInstall = ''
     for f in $out/lib/*.la $out/lib/apr-util-1/*.la; do
-      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
+      substituteInPlace $f \
+        --replace "${expat.dev}/lib" "${expat.out}/lib" \
+        --replace "${openssl.dev}/lib" "${openssl.out}/lib"
     done
+
+    # Give apr1 access to sed for runtime invocations.
     wrapProgram $dev/bin/apu-1-config --prefix PATH : "${gnused}/bin"
   '';
 

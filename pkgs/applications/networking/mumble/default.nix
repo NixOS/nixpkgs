@@ -37,6 +37,7 @@ let
       "CONFIG+=no-bundled-speex"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
+      ++ optional (!iceSupport) "CONFIG+=no-ice"
       ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''

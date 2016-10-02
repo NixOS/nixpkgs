@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python
+{ fetchurl, stdenv, python2
 
 , enableStandardFeatures ? false
 , sourceHighlight ? null
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w71nk527lq504njmaf0vzr93pgahkgzzxzglrq6bay8cw2rvnvq";
   };
 
-  buildInputs = [ python unzip ];
+  buildInputs = [ python2 unzip ];
 
   # install filters early, so their shebangs are patched too
   patchPhase = with stdenv.lib; ''
@@ -247,7 +247,7 @@ stdenv.mkDerivation rec {
         -i a2x.py
   '' + ''
     for n in $(find "$out" . -name \*.py); do
-      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python}/bin/python,g" "$n"
+      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python2}/bin/python,g" "$n"
       chmod +x "$n"
     done
 

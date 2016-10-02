@@ -1,12 +1,14 @@
-{ stdenv, fetchzip, cmake, libusb, pkgconfig, freeglut, mesa, libXi, libXmu }:
+{ stdenv, fetchFromGitHub, cmake, libusb, pkgconfig, freeglut, mesa, libXi, libXmu }:
 
 stdenv.mkDerivation rec {
   name = "freenect-${version}";
-  version = "0.5.2";
+  version = "0.5.5";
 
-  src = fetchzip {
-    url = "https://github.com/OpenKinect/libfreenect/archive/v${version}.tar.gz";
-    sha256 = "04p4q19fkh97bn7kf0xsk6mrig2aj10i3s9z6hdrr70l6dfpf4w9";
+  src = fetchFromGitHub {
+    owner = "OpenKinect";
+    repo = "libfreenect";
+    rev = "v${version}";
+    sha256 = "0qmbagfkxjgbwd2ajn7i5lkic9gx5y02bsnmqm7cjay99zfw9ifx";
   };
 
   buildInputs = [ libusb freeglut mesa libXi libXmu ];

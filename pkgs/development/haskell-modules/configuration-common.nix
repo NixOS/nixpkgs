@@ -43,9 +43,10 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "0an1rafbv48m04g7crfj2qrk64d98yrjn2z4hfv2pybwmqdmx78z";
+      sha256 = "11xgnryvwh3a1dcd5bczrh6wwf23xa74p31cqvnhf2s6q8cb0aai";
       rev = drv.version;
     };
+    doCheck = false;  # version 6.20160907 has a test suite failure; reported upstream
   })).overrideScope (self: super: {
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
@@ -274,8 +275,8 @@ self: super: {
   HerbiePlugin = dontCheck super.HerbiePlugin;
 
   # These packages try to access the network.
-  amqp-conduit = dontCheck super.amqp-conduit;
   amqp = dontCheck super.amqp;
+  amqp-conduit = dontCheck super.amqp-conduit;
   bitcoin-api = dontCheck super.bitcoin-api;
   bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   bitx-bitcoin = dontCheck super.bitx-bitcoin;          # http://hydra.cryp.to/build/926187/log/raw
@@ -285,9 +286,11 @@ self: super: {
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
+  hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
-  hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
+  hoogle_5_0_4 = super.hoogle_5_0_4.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
+  mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
@@ -763,41 +766,50 @@ self: super: {
   });
 
   # Fine-tune the build.
-  structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
+  structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
+    # Bump version to latest git-version to get support for Emacs 25.x.
+    version = "1.0.20-28-g1ffb4db";
+    src = pkgs.fetchFromGitHub {
+      owner = "chrisdone";
+      repo = "structured-haskell-mode";
+      sha256 = "1vrycvqp4n2pp6sq7z2v0zkqz6662nvacm7cla5hrrzl157cg0j5";
+      rev = "1ffb4db1e7049d4089fea430d4f20bce2eff263d";
+    };
+    patches = [ (pkgs.fetchpatch {
+                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/140.patch";
+                  sha256 = "1zwyxfmkl04dy34mbifk24qj9g0sfpz0j8rm688qdah8lavp44df";
+                })
+                (pkgs.fetchpatch {
+                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/141.patch";
+                  sha256 = "1bqgzw8cvxs0yg3yipsayksf7djccslamksm0nkw0kfp22axzmng";
+                })
+              ];
+    jailbreak = false;
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
-    # Byte-compile elisp code for Emacs.
-    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    # Make elisp files available at a location where people expect it. We
+    # cannot easily byte-compile these files, unfortunately, because they
+    # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
-      pushd >/dev/null $lispdir
-      for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
-          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
-          -f batch-byte-compile $i
-      done
-      popd >/dev/null
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-"*"/elisp" )
       mkdir -p $out/share/emacs
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
-  });
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_18_2;
+  };
 
-  # Byte-compile elisp code for Emacs.
+  # # Make elisp files available at a location where people expect it.
   hindent = overrideCabal super.hindent (drv: {
-    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    # We cannot easily byte-compile these files, unfortunately, because they
+    # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
-      pushd >/dev/null $lispdir
-      for i in *.el; do
-        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
-          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
-          -f batch-byte-compile $i
-      done
-      popd >/dev/null
       mkdir -p $out/share/emacs
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
+    doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   });
 
   # https://github.com/yesodweb/Shelly.hs/issues/106
@@ -959,10 +971,16 @@ self: super: {
   });
 
   # https://github.com/commercialhaskell/stack/issues/2263
-  stack = appendPatch super.stack (pkgs.fetchpatch {
-    url = "https://github.com/commercialhaskell/stack/commit/7f7f1a5f67f4ecdd1f3009495f1ff101dd38047e.patch";
-    sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
+  stack = (dontJailbreak super.stack).overrideScope (self: super: {
+    http-client = self.http-client_0_5_3_2;
+    http-client-tls = self.http-client-tls_0_3_3;
+    http-conduit = self.http-conduit_2_2_2_1;
+    optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
+    criterion = super.criterion.override { inherit (super) optparse-applicative; };
   });
+
+  # Test suite fails a QuickCheck property.
+  optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
 
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
@@ -989,9 +1007,14 @@ self: super: {
     preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
     # https://github.com/idris-lang/Idris-dev/issues/2499
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+    # test suite cannot find its own "idris" binary
+    doCheck = false;
   });
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
+
+  # https://github.com/fpco/store/issues/77
+  store = dontCheck super.store;
 
 }

@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ...} :
 
 {
-  name = "sddm";
+  name = "kde5";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ttuegel ];
   };

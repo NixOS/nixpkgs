@@ -1,12 +1,12 @@
 { stdenv, buildEnv, fetchurl, mono, unzip }:
 
 let
-  version = "1.5.4";
+  version = "1.6.3";
   drv = stdenv.mkDerivation {
     name = "keefox-${version}";
     src = fetchurl {
       url    = "https://github.com/luckyrat/KeeFox/releases/download/v${version}/${version}.xpi";
-      sha256 = "c7c30770beb0ea32cbdee5311d03a9910fb7772695af3aa655e4ae64cd4d8335";
+      sha256 = "dc26c51a6b3690d4bec527c3732a72f67a85b804c60db5e699260552e2dd2bd9";
     };
 
     meta = {

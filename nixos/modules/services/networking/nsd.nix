@@ -71,6 +71,7 @@ let
       # interfaces
     ${forEach "  ip-address: " cfg.interfaces}
 
+      ip-freebind:         ${yesOrNo  cfg.ipFreebind}
       hide-version:        ${yesOrNo  cfg.hideVersion}
       identity:            "${cfg.identity}"
       ip-transparent:      ${yesOrNo  cfg.ipTransparent}
@@ -84,7 +85,7 @@ let
       reuseport:           ${yesOrNo  cfg.reuseport}
       round-robin:         ${yesOrNo  cfg.roundRobin}
       server-count:        ${toString cfg.serverCount}
-      ${if cfg.statistics == null then "" else "statistics:          ${toString cfg.statistics}"}
+      ${maybeToString "statistics: " cfg.statistics}
       tcp-count:           ${toString cfg.tcpCount}
       tcp-query-count:     ${toString cfg.tcpQueryCount}
       tcp-timeout:         ${toString cfg.tcpTimeout}
@@ -117,7 +118,8 @@ let
   '';
 
   yesOrNo = b: if b then "yes" else "no";
-  maybeString = pre: s: if s == null then "" else ''${pre} "${s}"'';
+  maybeString = prefix: x: if x == null then "" else ''${prefix} "${s}"'';
+  maybeToString = prefix: x: if x == null then "" else ''${prefix} ${toString s}'';
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
 
@@ -145,6 +147,11 @@ let
       ${maybeString "outgoing-interface: " zone.outgoingInterface}
     ${forEach     "  rrl-whitelist: "      zone.rrlWhitelist}
       ${maybeString "zonestats: "          zone.zoneStats}
+
+      ${maybeToString "max-refresh-time: " zone.maxRefreshSecs}
+      ${maybeToString "min-refresh-time: " zone.minRefreshSecs}
+      ${maybeToString "max-retry-time:   " zone.maxRetrySecs}
+      ${maybeToString "min-retry-time:   " zone.minRetrySecs}
 
       allow-axfr-fallback: ${yesOrNo       zone.allowAXFRFallback}
     ${forEach     "  allow-notify: "       zone.allowNotify}
@@ -240,6 +247,44 @@ let
           Use imports or pkgs.lib.readFile if you don't want this data in your config file.
         '';
       };
+
+      maxRefreshSecs = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Limit refresh time for secondary zones. This is the timer which
+          checks to see if the zone has to be refetched when it expires.
+          Normally the value from the SOA record is used, but this  option
+          restricts that value.
+        '';
+      };
+
+      minRefreshSecs = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Limit refresh time for secondary zones.
+        '';
+      };
+
+      maxRetrySecs = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Limit retry time for secondary zones. This is the timeout after
+          a failed fetch attempt for the zone. Normally the value from
+          the SOA record is used, but this option restricts that value.
+        '';
+      };
+
+      minRetrySecs = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Limit retry time for secondary zones.
+        '';
+      };
+
 
       notify = mkOption {
         type = types.listOf types.str;
@@ -363,6 +408,15 @@ in
       default = [ "127.0.0.0" "::1" ];
       description = ''
         What addresses the server should listen to.
+      '';
+    };
+
+    ipFreebind = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to bind to nonlocal addresses and interfaces that are down.
+        Similar to ip-transparent.
       '';
     };
 
