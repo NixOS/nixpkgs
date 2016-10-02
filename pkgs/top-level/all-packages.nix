@@ -8321,7 +8321,6 @@ in
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
-      wayland = wayland_1_9; # work-around for #16779
     };
     in mo.drivers
   );
