@@ -102,8 +102,8 @@ in
       };
 
       permitRootLogin = mkOption {
-        default = "without-password";
-        type = types.enum ["yes" "without-password" "forced-commands-only" "no"];
+        default = "prohibit-password";
+        type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
         description = ''
           Whether the root user can login using ssh.
         '';
