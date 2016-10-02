@@ -29490,12 +29490,12 @@ in modules // {
   };
 
   hidapi = buildPythonPackage rec{
-    version = "0.7.99.post12";
+    version = "0.7.99.post15";
     name = "hidapi-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hidapi/${name}.tar.gz";
-      sha256 = "1jaj0y5vn5yk033q01wacsz379mf3sy66d6gz072ycfr5rahcp59";
+      sha256 = "09wlr1d7mx80974bsq62j4pk80234jgl7ip4br0y43q6999dpcr0";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libusb1 pkgs.udev cython ];
