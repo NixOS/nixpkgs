@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost sqlite ];
 
+  postPatch = ''
+    # Enabling optimization (implied by fortify hardening) causes htons
+    # to be re-defined as a macro, turning this use of :: into a syntax error.
+    sed -i '104a#undef htons' src/udpTracker.cpp
+  '';
+
   installPhase = ''
     mkdir -p $out/bin $out/etc/
     cp udpt $out/bin
