@@ -9263,7 +9263,7 @@ in
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
                                           IOKit CFNetwork Security ApplicationServices
-                                          CoreText IOSurface ImageIO GLUT;
+                                          CoreText IOSurface ImageIO OpenGL GLUT;
   };
 
   vtkWithQt4 = vtk.override { qtLib = qt4; };
