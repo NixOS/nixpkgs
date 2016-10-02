@@ -29537,15 +29537,15 @@ in modules // {
   };
 
   trezor = buildPythonPackage rec{
-    version = "0.6.11";
+    version = "0.7.4";
     name = "trezor-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/trezor/${name}.tar.gz";
-      sha256 = "0nqbjj0mvkp314hpq36px12hxbyidmhsdflq3121l4g9y3scfbnx";
+      sha256 = "18nr76jkdg24sb3r8cfbiq12b95gnh0amc0r1wx9mmg3pwq6jx6y";
     };
 
-    propagatedBuildInputs = with self; [ protobuf2_6 hidapi ];
+    propagatedBuildInputs = with self; [ protobuf3_0 hidapi ];
 
     buildInputs = with self; [ ecdsa mnemonic ];
 
