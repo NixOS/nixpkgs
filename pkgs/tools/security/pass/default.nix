@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
     git
     gnupg
     gnused
-    procps
     pwgen
     tree
     which
-  ] ++ ifEnable x11Support [ dmenu xclip xdotool ]);
+  ] ++ stdenv.lib.optional stdenv.isLinux procps
+    ++ ifEnable x11Support [ dmenu xclip xdotool ]);
 
   postFixup = ''
     # Fix program name in --help
