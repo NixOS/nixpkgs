@@ -21873,8 +21873,8 @@ in modules // {
     };
     propagatedBuildInputs = with self; [ capstone filebytes readline ];
     meta = with pkgs.stdenv.lib; {
-      homepage = "";
-      license = "";
+      homepage = "https://scoding.de/ropper/";
+      license = licenses.gpl2;
       description = "Show information about files in different file formats";
       maintainers = with maintainers; [ bennofs ];
     };
