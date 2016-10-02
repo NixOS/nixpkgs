@@ -97,7 +97,6 @@ in
         environment = {
           GDM_X_SERVER = "${cfg.xserverBin} ${cfg.xserverArgs}";
           GDM_SESSIONS_DIR = "${cfg.session.desktops}";
-          XDG_CONFIG_DIRS = "${gnome3.gnome_settings_daemon}/etc/xdg";
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${config.system.path}/share/icons";
         };

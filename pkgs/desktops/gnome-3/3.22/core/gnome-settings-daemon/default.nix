@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix PATH : "${glib.dev}/bin" \
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
-    mkdir -p "$out/share/gnome/autostart"
-    cp "$out/etc/xdg/autostart/gnome-settings-daemon.desktop" "$out/share/gnome/autostart"
   '';
 
   meta = with stdenv.lib; {

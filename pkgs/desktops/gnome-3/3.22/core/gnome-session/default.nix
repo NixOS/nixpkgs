@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${glib.dev}/bin" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : "${gnome3.gnome_shell}/share"
+      --suffix XDG_DATA_DIRS : "${gnome3.gnome_shell}/share" \
+      --suffix XDG_CONFIG_DIRS : "${gnome3.gnome_settings_daemon}/etc/xdg"
   '';
 
   meta = with stdenv.lib; {
