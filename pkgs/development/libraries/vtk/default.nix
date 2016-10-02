@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
                                   "-DCMAKE_OSX_DEPLOYMENT_TARGET="
                                   "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ];
 
-  doCheck = !stdenv.isDarwin;
-
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-7.0|' ./Parallel/Core/CMakeLists.txt
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
