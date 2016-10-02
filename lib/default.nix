@@ -15,11 +15,6 @@ let
   meta = import ./meta.nix;
   sources = import ./sources.nix;
 
-  # module system
-  modules = import ./modules.nix;
-  options = import ./options.nix;
-  types = import ./types.nix;
-
   # constants
   licenses = import ./licenses.nix;
   platforms = import ./platforms.nix;
@@ -33,11 +28,14 @@ let
   sandbox = import ./sandbox.nix;
   fetchers = import ./fetchers.nix;
 
+  # NixOS lib
+  nixos = import ../nixos/lib;
+
 in
   { inherit trivial
             attrsets lists strings stringsWithDeps
             customisation maintainers meta sources
-            modules options types
+            nixos
             licenses platforms systems
             debug misc
             sandbox fetchers;
@@ -45,6 +43,6 @@ in
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
   // trivial // lists // strings // stringsWithDeps // attrsets // sources
-  // options // types // meta // debug // misc // modules
+  // meta // debug // misc
   // systems
   // customisation

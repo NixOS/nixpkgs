@@ -1,4 +1,9 @@
-pkgs: with pkgs.lib;
+with {
+  inherit (import ./.) 
+    types
+    any elem hasPrefix
+    substring stringLength replaceChars;
+};
 
 rec {
 

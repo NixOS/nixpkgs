@@ -23,8 +23,13 @@
 , # !!! See comment about check in lib/modules.nix
   check ? true
 , prefix ? []
-, lib ? import ../../lib
 }:
+
+with {
+  inherit (import ./.)
+    mkDefault mkIf mkForce
+    evalModules;
+};
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
@@ -36,8 +41,8 @@ let
     _file = ./eval-config.nix;
     key = _file;
     config = {
-      nixpkgs.system = lib.mkDefault system_;
-      _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
+      nixpkgs.system = mkDefault system_;
+      _module.args.pkgs = mkIf (pkgs_ != null) (mkForce pkgs_);
     };
   };
 
@@ -45,7 +50,7 @@ in rec {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
-  inherit (lib.evalModules {
+  inherit (evalModules {
     inherit prefix check;
     modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
