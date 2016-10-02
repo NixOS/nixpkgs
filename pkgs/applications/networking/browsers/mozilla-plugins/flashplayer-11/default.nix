@@ -94,6 +94,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
+  preferLocalBuild = true;
+
   outputs = [ "out" ] ++ lib.optional is-i686 "sa";
 
   installPhase = ''
