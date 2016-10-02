@@ -10562,6 +10562,21 @@ in modules // {
     };
   };
 
+  filebytes = buildPythonPackage rec {
+    name = "filebytes-0.9.12";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/filebytes/${name}.tar.gz";
+      sha256 = "6cd1c4ca823f6541c963a317e55382609789802dedad08209f4d038369e3f0ac";
+    };
+    propagatedBuildInputs = [ ];
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://scoding.de/filebytes-introduction";
+      license = licenses.gpl2;
+      description = "Scripts to parse ELF, PE, Mach-O and OAT (Android Runtime)";
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
     version = "2.6.2";
@@ -21850,6 +21865,20 @@ in modules // {
      };
   };
 
+  ropper = buildPythonApplication rec {
+    name = "ropper-1.10.10";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/ropper/${name}.tar.gz";
+      sha256 = "1676e07947a19df9d17002307a7555c2647a4224d6f2869949e8fc4bd18f2e87";
+    };
+    propagatedBuildInputs = with self; [ capstone filebytes readline ];
+    meta = with pkgs.stdenv.lib; {
+      homepage = "";
+      license = "";
+      description = "Show information about files in different file formats";
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
 
 
   routes = buildPythonPackage rec {
