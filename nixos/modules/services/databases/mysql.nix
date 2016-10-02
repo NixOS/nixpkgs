@@ -167,6 +167,7 @@ in
     systemd.services.mysql =
       { description = "MySQL Server";
 
+        after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
