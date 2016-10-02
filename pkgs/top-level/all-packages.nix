@@ -3892,6 +3892,8 @@ in
 
   udftools = callPackage ../tools/filesystems/udftools {};
 
+  udpt = callPackage ../servers/udpt { };
+
   udptunnel = callPackage ../tools/networking/udptunnel { };
 
   ufraw = callPackage ../applications/graphics/ufraw { };
