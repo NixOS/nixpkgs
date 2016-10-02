@@ -22,20 +22,10 @@ stdenv.mkDerivation rec {
     libX11 mesa libXpm libXext libXxf86vm alsaLib
     # sdl
     SDL
+    zlib libvorbis curl
   ];
 
   sourceRoot = "Xonotic/source/darkplaces";
-
-  #patchPhase = ''
-  #  substituteInPlace glquake.h \
-  #    --replace 'typedef char GLchar;' '/*typedef char GLchar;*/'
-  #'';
-
-  NIX_LDFLAGS = ''
-    -rpath ${zlib.out}/lib
-    -rpath ${libvorbis.out}/lib
-    -rpath ${curl.out}/lib
-  '';
 
   buildPhase = ''
     DP_FS_BASEDIR="$out/share/xonotic"
@@ -43,6 +33,7 @@ stdenv.mkDerivation rec {
     make DP_FS_BASEDIR=$DP_FS_BASEDIR sdl-release
     make DP_FS_BASEDIR=$DP_FS_BASEDIR sv-release
   '';
+  enableParallelBuilding = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
