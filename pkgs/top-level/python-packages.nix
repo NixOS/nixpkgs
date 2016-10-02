@@ -29619,12 +29619,12 @@ in modules // {
   };
 
   trezor_agent = buildPythonPackage rec{
-    version = "0.6.5";
+    version = "0.7.0";
     name = "trezor_agent-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/trezor_agent/${name}.tar.gz";
-      sha256 = "074vzy5qrx7fa2svqdwj1p6nbpxa8xmhfych9qa2kpcq32dg7a8s";
+      sha256 = "1x1gwih6w8kxhpgmcp0v1k7mpmfsqiikkjca291sd0v2if24x7q1";
     };
 
     propagatedBuildInputs = with self; [ trezor ecdsa ed25519 mnemonic keepkey semver ];
