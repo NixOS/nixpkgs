@@ -154,43 +154,45 @@ let
   };
 
   dbOptions = {
-    type = mkOption {
-      description = "Rippled database type.";
-      type = types.enum ["rocksdb" "nudb"];
-      default = "rocksdb";
-    };
+    options = {
+      type = mkOption {
+        description = "Rippled database type.";
+        type = types.enum ["rocksdb" "nudb"];
+        default = "rocksdb";
+      };
 
-    path = mkOption {
-      description = "Location to store the database.";
-      type = types.path;
-      default = cfg.databasePath;
-    };
+      path = mkOption {
+        description = "Location to store the database.";
+        type = types.path;
+        default = cfg.databasePath;
+      };
 
-    compression = mkOption {
-      description = "Whether to enable snappy compression.";
-      type = types.nullOr types.bool;
-      default = null;
-    };
+      compression = mkOption {
+        description = "Whether to enable snappy compression.";
+        type = types.nullOr types.bool;
+        default = null;
+      };
 
-    onlineDelete = mkOption {
-      description = "Enable automatic purging of older ledger information.";
-      type = types.addCheck (types.nullOr types.int) (v: v > 256);
-      default = cfg.ledgerHistory;
-    };
+      onlineDelete = mkOption {
+        description = "Enable automatic purging of older ledger information.";
+        type = types.addCheck (types.nullOr types.int) (v: v > 256);
+        default = cfg.ledgerHistory;
+      };
 
-    advisoryDelete = mkOption {
-      description = ''
-	If set, then require administrative RPC call "can_delete"
-	to enable online deletion of ledger records.
-      '';
-      type = types.nullOr types.bool;
-      default = null;
-    };
+      advisoryDelete = mkOption {
+        description = ''
+	        If set, then require administrative RPC call "can_delete"
+	        to enable online deletion of ledger records.
+        '';
+        type = types.nullOr types.bool;
+        default = null;
+      };
 
-    extraOpts = mkOption {
-      description = "Extra database options.";
-      type = types.lines;
-      default = "";
+      extraOpts = mkOption {
+        description = "Extra database options.";
+        type = types.lines;
+        default = "";
+      };
     };
   };
 
@@ -213,8 +215,7 @@ in
 
       ports = mkOption {
 	description = "Ports exposed by rippled";
-	type = types.attrsOf types.optionSet;
-	options = [portOptions];
+	type = with types; attrsOf (submodule portOptions);
 	default = {
 	  rpc = {
 	    port = 5005;
@@ -238,8 +239,7 @@ in
 
       nodeDb = mkOption {
 	description = "Rippled main database options.";
-	type = types.nullOr types.optionSet;
-	options = dbOptions;
+	type = with types; nullOr (submodule dbOptions);
 	default = {
 	  type = "rocksdb";
 	  extraOpts = ''
@@ -254,15 +254,13 @@ in
 
       tempDb = mkOption {
 	description = "Rippled temporary database options.";
-	type = types.nullOr types.optionSet;
-	options = dbOptions;
+	type = with types; nullOr (submodule dbOptions);
 	default = null;
       };
 
       importDb = mkOption {
 	description = "Settings for performing a one-time import.";
-	type = types.nullOr types.optionSet;
-	options = dbOptions;
+	type = with types; nullOr (submodule dbOptions);
 	default = null;
       };
 

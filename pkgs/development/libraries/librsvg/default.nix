@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ]
-    ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
+    ++ stdenv.lib.optional enableIntrospection gobjectIntrospection;
 
   propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
 

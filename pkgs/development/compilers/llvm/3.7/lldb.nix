@@ -31,7 +31,6 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLDB_PATH_TO_LLVM_BUILD=${llvm}"
     "-DLLDB_PATH_TO_CLANG_BUILD=${clang-unwrapped}"
     "-DPYTHON_VERSION_MAJOR=2"

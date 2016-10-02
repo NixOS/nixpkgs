@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
-    ++ optional withKerberos [ kerberos ];
+    ++ optional withKerberos kerberos;
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.

@@ -70,6 +70,7 @@
   ./programs/fish.nix
   ./programs/freetds.nix
   ./programs/info.nix
+  ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/man.nix
@@ -216,6 +217,7 @@
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
   ./services/mail/postsrsd.nix
+  ./services/mail/postgrey.nix
   ./services/mail/spamassassin.nix
   ./services/mail/rspamd.nix
   ./services/mail/rmilter.nix
@@ -345,6 +347,7 @@
   ./services/networking/ferm.nix
   ./services/networking/firefox/sync-server.nix
   ./services/networking/firewall.nix
+  ./services/networking/flannel.nix
   ./services/networking/flashpolicyd.nix
   ./services/networking/freenet.nix
   ./services/networking/gale.nix

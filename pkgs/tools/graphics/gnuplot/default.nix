@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
     ++ lib.optional withLua lua
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
-    ++ lib.optional withQt [ qt ]
+    ++ lib.optional withQt qt
     # compiling with wxGTK causes a malloc (double free) error on darwin
     ++ lib.optional (withWxGTK && !stdenv.isDarwin) wxGTK;
 

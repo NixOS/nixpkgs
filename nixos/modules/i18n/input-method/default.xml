@@ -56,8 +56,18 @@ i18n.inputMethod = {
   <listitem><para>Table (<literal>ibus-engines.table</literal>): An input method 
       that load tables of input methods.</para></listitem>
   <listitem><para>table-others (<literal>ibus-engines.table-others</literal>): 
-      Various table-based input methods.</para></listitem>
+      Various table-based input methods. To use this, and any other table-based
+      input methods, it must appear in the list of engines along with
+      <literal>table</literal>. For example:
+<programlisting>
+ibus.engines = with pkgs.ibus-engines; [ table table-others ];
+</programlisting>
+  </para></listitem>
 </itemizedlist>
+
+<para>To use any input method, the package must be added in the configuration,
+  as shown above, and also (after running <literal>nixos-rebuild</literal>) the
+  input method must be added from IBus' preference dialog.</para>
 </section>
 
 <section><title>Fcitx</title>

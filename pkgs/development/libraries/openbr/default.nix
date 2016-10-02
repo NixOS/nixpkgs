@@ -18,10 +18,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
-
   meta = {
     description = "Open Source Biometric Recognition";
     homepage = http://openbiometrics.org/;

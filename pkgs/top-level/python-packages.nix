@@ -2016,7 +2016,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with stdenv.lib; with pkgs; [ modules.curses zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma self.pycrypto ]
-      ++ optional visualizationSupport [ pyqtgraph ];
+      ++ optional visualizationSupport pyqtgraph;
 
     meta = with stdenv.lib; {
       homepage = "http://binwalk.org";
@@ -8286,6 +8286,37 @@ in modules // {
     inherit pythonOlder;
   };
 
+  pypoppler = buildPythonPackage rec {
+    name = "pypoppler-${version}";
+    version = "0.12.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pypoppler/${name}.tar.gz";
+      sha256 = "47e6ac99e5b114b9abf2d1dd1bca06f22c028d025432512989f659142470810f";
+    };
+
+    NIX_CFLAGS_COMPILE="-I${pkgs.poppler.dev}/include/poppler/";
+    buildInputs = [ pkgs.pkgconfig pkgs.poppler.dev ];
+    propagatedBuildInputs = with self; [ pycairo pygobject2 ];
+
+    patches = [
+      ../development/python-modules/pypoppler-0.39.0.patch
+      ../development/python-modules/pypoppler-poppler.c.patch
+    ];
+
+    # Not supported.
+    disabled = isPy3k;
+
+    # No tests in archive
+    doCheck = false;
+
+    meta = {
+      homepage = https://code.launchpad.net/~mriedesel/poppler-python/main;
+      description = "Python bindings for poppler-glib, unofficial branch including bug fixes, and removal of gtk dependencies";
+      license = licenses.gpl2;
+    };
+  };
+
   python-axolotl = buildPythonPackage rec {
     name = "python-axolotl-${version}";
     version = "0.1.7";
@@ -9407,12 +9438,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.9";
+    version = "1.9.10";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "136ypwacj4av6xqmbfp6lhlr0171ws2knv74h0r59ssaaffznh73";
+      sha256 = "007w2pshbk1s6gfgp8717fwz01l8mcmd2lkxdgqqgd11bag7qfjv";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -9431,12 +9462,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.14";
+    version = "1.8.15";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "0ka6slangri68qaf91gl10l9m14f6waj4ncz543rbcpvj25w90jj";
+      sha256 = "1kga849ixd6sz6svhv8dysyjr03wphqgl4wjw2yczmc5r4x58gl6";
     };
 
     # too complicated to setup
@@ -10489,6 +10520,23 @@ in modules // {
     };
   };
 
+  pycodestyle = buildPythonPackage rec {
+    name = "pycodestyle-${version}";
+    version = "2.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pycodestyle/${name}.tar.gz";
+      sha256 = "1rz2v8506mdjdyxcnv9ygiw6v0d4dqx8z5sjyjm0w2v32h5l5w1p";
+    };
+
+    meta = {
+      description = "Python style guide checker (formerly called pep8)";
+      homepage = https://pycodestyle.readthedocs.io;
+      license = licenses.mit;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
     version = "2.5.4";
@@ -10506,6 +10554,35 @@ in modules // {
       homepage = http://pypi.python.org/pypi/flake8;
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  flake8_3 = buildPythonPackage rec {
+    name = "flake8-${version}";
+    version = "3.0.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flake8/${name}.tar.gz";
+      sha256 = "03cpdrjxh0fyi2qpdxbbrmxw7whiq3xr3p958gr6yzghk34i1hml";
+    };
+
+    buildInputs = with self; [ nose mock pytestrunner pytest ];
+    propagatedBuildInputs = with self; [ pyflakes mccabe enum34 configparser pycodestyle ];
+
+    patches = [
+      ../development/python-modules/flake8/move-pytest-config-to-pytest-ini.patch
+    ];
+
+    # Tests fail due to missing ini file.
+    preCheck = ''
+      touch tox.ini
+    '';
+
+    meta = {
+      description = "Code checking using pep8 and pyflakes";
+      homepage = http://pypi.python.org/pypi/flake8;
+      license = licenses.mit;
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -13395,21 +13472,12 @@ in modules // {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.4.0";
+    name = "mccabe-0.5.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
+      sha256 = "1zss8c5cn8wvxsbjzv70dxymybh3cjzrjl19vxfbnyvmidng0wrl";
     };
-
-    # See https://github.com/flintwork/mccabe/issues/31
-    postPatch = ''
-      cp "${pkgs.fetchurl {
-        url = "https://raw.githubusercontent.com/flintwork/mccabe/"
-            + "e8aea16d28e92bd3c62601275762fc9c16808f6c/test_mccabe.py";
-        sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
-      }}" test_mccabe.py
-    '';
 
     buildInputs = with self; [ pytestrunner pytest ];
 
@@ -20325,16 +20393,25 @@ in modules // {
 
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
-    version = "16.0.0";
+    version = "16.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
-      sha256 = "0zfijaxlq4vgi6jz0d4i5xq9ygqnyps6br7lmigjhqnh8gp10g9n";
+      sha256 = "88f7ada2a71daf2c78a4f139b19d57551b4c8be01f53a1cb5c86c2f3bf01355f";
     };
 
-    # 12 tests failing, 26 error out
-    doCheck = false;
+    preCheck = ''
+      sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
+    '';
 
+    checkPhase = ''
+      runHook preCheck
+      export LANG="en_US.UTF-8";
+      py.test;
+      runHook postCheck
+    '';
+
+    buildInputs = [ pkgs.openssl self.pytest pkgs.glibcLocales ];
     propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
   };
 
@@ -22503,6 +22580,24 @@ in modules // {
       description = "Object Relational Manager for providing an object interface to your database";
       homepage = "http://www.sqlobject.org/";
       license = licenses.lgpl21;
+    };
+  };
+
+  sqlmap = buildPythonPackage {
+    name = "sqlmap-1.0.9.post5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sqlmap/sqlmap-1.0.9.post5.tar.gz";
+      sha256 = "0g8sjky8anrmcisc697b5qndp88qmay35kng9sz9x46wd3agm9pa";
+    };
+
+		propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    meta = with pkgs.stdenv.lib; {
+      homepage = "http://sqlmap.org";
+      license = licenses.gpl2;
+      description = "Automatic SQL injection and database takeover tool";
+			maintainers = with stdenv.lib.maintainers; [ bennofs ];
     };
   };
 

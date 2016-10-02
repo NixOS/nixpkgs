@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     # cannot find postgresql libs on macos x
     license = licenses.gpl2;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ maintainers.mic92 maintainers.nhooyr ];
   };
 }

@@ -25,6 +25,10 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else
                     path = "plugins/rack";
                     inputs = [ ruby ];
                   })
+                  (lib.nameValuePair "cgi" {
+                    path = "plugins/cgi";
+                    inputs = [ ];
+                  })
                 ];
 
     getPlugin = name:

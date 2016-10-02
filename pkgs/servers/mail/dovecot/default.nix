@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     "--with-lucene"
     "--with-icu"
   ] ++ lib.optional (stdenv.isLinux) "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    ++ lib.optional (stdenv.isDarwin) "--enable-static"
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite";
@@ -70,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "http://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [viric peti rickynils];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

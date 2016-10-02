@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, useSetUID, dbus, libxml2, pam, pkgconfig, pmount, pythonPackages, writeScript }:
+{ stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkgconfig, pmount, pythonPackages, writeScript }:
 
 let
 
