@@ -667,7 +667,6 @@ in
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
-      before = [ "network-interfaces.target" ];
       restartTriggers = [ config.environment.etc."systemd/network".source ];
     };
 

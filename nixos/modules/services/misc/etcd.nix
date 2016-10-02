@@ -143,9 +143,9 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.etcd = {
-      description = "Etcd Daemon";
+      description = "etcd key-value store";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
 
       environment = (filterAttrs (n: v: v != null) {
         ETCD_NAME = cfg.name;
@@ -168,12 +168,18 @@ in {
         ETCD_INITIAL_CLUSTER_TOKEN = cfg.initialClusterToken;
       }) // (mapAttrs' (n: v: nameValuePair "ETCD_${n}" v) cfg.extraConf);
 
+      unitConfig = {
+        Documentation = "https://github.com/coreos/etcd";
+      };
+
       serviceConfig = {
         Type = "notify";
         ExecStart = "${pkgs.etcd.bin}/bin/etcd";
         User = "etcd";
         PermissionsStartOnly = true;
+        LimitNOFILE = 40000;
       };
+
       preStart = ''
         mkdir -m 0700 -p ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown etcd ${cfg.dataDir}; fi
