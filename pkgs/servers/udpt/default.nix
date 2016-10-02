@@ -6,6 +6,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningEnable = [ "pie" ];
+
   src = fetchFromGitHub {
     owner = "naim94a";
     repo = "udpt";
