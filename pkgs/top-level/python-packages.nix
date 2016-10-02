@@ -10539,15 +10539,15 @@ in modules // {
 
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "2.5.4";
+    version = "2.6.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "0bs9cz4fr99r2rwig1b8jwaadl1nan7kgpdzqwj0bwbckwbmh7nc";
+      sha256 = "0y57hzal0j84dh9i1g1g6dc4aywvrnhy2fjmmbglpv5ajihxh713";
     };
 
     buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe_0_4 ];
+    propagatedBuildInputs = with self; [ pyflakes pycodestyle mccabe ];
 
     meta = {
       description = "Code checking using pep8 and pyflakes";
@@ -10567,7 +10567,7 @@ in modules // {
     };
 
     buildInputs = with self; [ nose mock pytestrunner pytest ];
-    propagatedBuildInputs = with self; [ pyflakes mccabe enum34 configparser pycodestyle ];
+    propagatedBuildInputs = with self; [ pyflakes mccabe_0_5 enum34 configparser pycodestyle ];
 
     patches = [
       ../development/python-modules/flake8/move-pytest-config-to-pytest-ini.patch
@@ -11969,18 +11969,18 @@ in modules // {
     # If you need these, you can just add them to your environment.
 
     name = "hypothesis-${version}";
-    version = "3.1.0";
+    version = "3.5.2";
 
     # Upstream prefers github tarballs
     src = pkgs.fetchFromGitHub {
-      owner = "DRMacIver";
+      owner = "HypothesisWorks";
       repo = "hypothesis";
       rev = "${version}";
-      sha256 = "1fhdb2vwc4blas5fvcly6pmha8psqm4bhi67jz32ypjryzk09iyf";
+      sha256 = "030rf4gn4b0hylr90wazilwa3bc038fcqng0wibcx67mqaq035n4";
     };
 
     buildInputs = with self; [ flake8 pytest flaky ];
-    propagatedBuildInputs = with self; ([] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
+    propagatedBuildInputs = with self; ([ uncompyle6 ] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
 
     # https://github.com/DRMacIver/hypothesis/issues/300
     checkPhase = ''
@@ -12003,6 +12003,36 @@ in modules // {
     };
   };
 
+
+  xdis = buildPythonPackage rec {
+    name = "xdis-${version}";
+    version = "2.3.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/x/xdis/${name}.tar.gz";
+      sha256 = "1bi53n9fifjz2ja5inm546vzhjpgwx6n0qrhp106fss7bdm44a4v";
+    };
+    propagatedBuildInputs = with self; [ nose ];
+    meta = {
+      description = "Python cross-version byte-code disassembler and marshal routines";
+      homepage = https://github.com/rocky/python-xdis/;
+      license = licenses.mit;
+    };
+  };
+
+  uncompyle6 = buildPythonPackage rec {
+    name = "uncompyle6-${version}";
+    version = "2.8.3";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uncompyle6/${name}.tar.gz";
+      sha256 = "0hx5sji6qjvnq1p0zhvyk5hgracpv2w6iar1j59qwllxv115ffi1";
+    };
+    propagatedBuildInputs = with self; [ spark_parser xdis ];
+    meta = {
+      description = "Python cross-version byte-code deparser";
+      homepage = http://github.com/rocky/python-uncompyle6/;
+      license = licenses.mit;
+    };
+  };
 
   lsi = buildPythonPackage rec {
     name = "lsi-${version}";
@@ -13498,12 +13528,12 @@ in modules // {
     };
   });
 
-  mccabe_0_4 = buildPythonPackage (rec {
-    name = "mccabe-0.4.0";
+  mccabe_0_5 = buildPythonPackage (rec {
+    name = "mccabe-0.5.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
+      sha256 = "1zss8c5cn8wvxsbjzv70dxymybh3cjzrjl19vxfbnyvmidng0wrl";
     };
 
     buildInputs = with self; [ pytestrunner pytest ];
@@ -13512,10 +13542,9 @@ in modules // {
       description = "McCabe checker, plugin for flake8";
       homepage = "https://github.com/flintwork/mccabe";
       license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
+      maintainers = with maintainers; [ ];
     };
   });
-
 
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.2.5";
