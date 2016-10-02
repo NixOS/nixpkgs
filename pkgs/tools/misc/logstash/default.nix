@@ -21,12 +21,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -r {Gemfile*,vendor,lib,bin} $out
-    mv $out/bin/plugin $out/bin/logstash-plugin
 
     wrapProgram $out/bin/logstash \
        --set JAVA_HOME "${jre}"
 
     wrapProgram $out/bin/rspec \
+       --set JAVA_HOME "${jre}"
+
+    wrapProgram $out/bin/logstash-plugin \
        --set JAVA_HOME "${jre}"
   '';
 
