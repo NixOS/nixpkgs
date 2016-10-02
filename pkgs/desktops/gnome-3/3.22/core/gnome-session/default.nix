@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     for desktopFile in $(grep -rl "Exec=gnome-session" $out/share)
     do
       echo "Patching gnome-session path in: $desktopFile"
-      sed -i "s,^Exec=gnome-session,Exec=$out/bin/gnome-session," $desktopFile
+      sed -i "s,^Exec=gnome-session,Exec=$out/bin/gnome-session --debug," $desktopFile
     done
     wrapProgram "$out/bin/gnome-session" \
       --prefix PATH : "${glib.dev}/bin" \
