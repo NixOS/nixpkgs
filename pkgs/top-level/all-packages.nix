@@ -12175,15 +12175,7 @@ in
 
   convchain = callPackage ../tools/graphics/convchain {};
 
-  cpp_ethereum = callPackage ../applications/misc/webthree-umbrella {
-    withOpenCL = true;
-
-    # withEVMJIT = true;
-    # inherit (pkgs.llvmPackages_38) llvm;
-
-    # withGUI = true;
-    # inherit (pkgs.qt5) qtwebengine qtbase qtdeclarative;
-  };
+  cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
   csdp = callPackage ../applications/science/math/csdp {
     liblapack = liblapackWithoutAtlas;
