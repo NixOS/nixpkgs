@@ -889,13 +889,13 @@ in modules // {
   };
 
   ansible2 = buildPythonPackage rec {
-    version = "2.1.1.0";
+    version = "2.1.2.0";
     name = "ansible-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "12v7smivjz8d2skk5qxl83nmkxqxypjm8b7ld40sjfwj4g0kkrv1";
+      sha256 = "1sr12ryn2dc28009bkfl6f8rp94ychbr9i7wlf6an1bw76ysfdww";
     };
 
     prePatch = ''
@@ -4390,11 +4390,11 @@ in modules // {
 
   mahotas = buildPythonPackage rec {
     name = "python-mahotas-${version}";
-    version = "1.4.1";
+    version = "1.4.2";
 
     src = pkgs.fetchurl {
-      url = "https://github.com/luispedro/mahotas/archive/release-${version}.tar.gz";
-      sha256 = "a684d339a3a4135f6f7161851161174755e9ea643b856b0bb48abd5515041ab6";
+      url = "https://github.com/luispedro/mahotas/archive/v${version}.tar.gz";
+      sha256 = "1mvsxh0pa5vdvbknlv1m68n7gw2cv4pyqgqp3r770rnmf6nxbp7m";
     };
 
     buildInputs = with self; [
@@ -4411,7 +4411,7 @@ in modules // {
 
     meta = with stdenv.lib; {
       description = "Computer vision package based on numpy";
-      homepage = https://readthedocs.org/projects/mahotas/;
+      homepage = http://mahotas.readthedocs.io/;
       maintainers = with maintainers; [ luispedro ];
       license = licenses.mit;
       platforms = platforms.linux;
@@ -6207,6 +6207,31 @@ in modules // {
     };
   };
 
+  EditorConfig = buildPythonPackage rec {
+    name = "EditorConfig-${version}";
+    version = "0.12.0";
+
+    # fetchgit used to ensure test submodule is available
+    src = pkgs.fetchgit {
+      url = "https://github.com/editorconfig/editorconfig-core-py";
+      rev = "refs/tags/v${version}";
+      sha256 = "0svk7id7ncygj2rnxhm7602xizljyidk4xgrl6i0xgq3829cz4bl";
+    };
+
+    buildInputs = [ pkgs.cmake ];
+    checkPhase = ''
+      cmake .
+      # utf_8_char fails with python3
+      ctest -E "utf_8_char" .
+    '';
+
+    meta = {
+      homepage = "http://editorconfig.org";
+      description = "EditorConfig File Locator and Interpreter for Python";
+      license = stdenv.lib.licenses.psfl;
+    };
+  };
+
   elasticsearch = buildPythonPackage (rec {
     name = "elasticsearch-1.9.0";
 
@@ -7240,11 +7265,11 @@ in modules // {
 
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
-    version = "0.5.1";
+    version = "0.6";
 
     src = pkgs.fetchurl {
       url = "https://github.com/luispedro/imread/archive/release-${version}.tar.gz";
-      sha256 = "12d7ba3523ba50d67d526e9797e041021dd9cd4acf9567a9bf73c8ae0b689d4a";
+      sha256 = "0i14bc67200zhzxc41g5dfp2m0pr1zaa2gv59p2va1xw0ji2dc0f";
     };
 
     buildInputs = with self; [
@@ -7259,7 +7284,7 @@ in modules // {
 
     meta = with stdenv.lib; {
       description = "Python package to load images as numpy arrays";
-      homepage = https://readthedocs.org/projects/imread/;
+      homepage = https://imread.readthedocs.io/en/latest/;
       maintainers = with maintainers; [ luispedro ];
       license = licenses.mit;
       platforms = platforms.linux;
@@ -7363,6 +7388,26 @@ in modules // {
     meta = with stdenv.lib; {
       description = "A python wrapper for the various Internet Archive APIs";
       homepage = "https://github.com/jjjake/internetarchive";
+    };
+  };
+
+  jsbeautifier = buildPythonApplication rec {
+    name = "jsbeautifier-1.6.4";
+
+    propagatedBuildInputs = with self; [ six ];
+
+    buildInputs = with self; [ EditorConfig pytest six ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jsbeautifier/${name}.tar.gz";
+      sha256 = "074n8f4ncz5pf0jkkf6i6by30qnaj5208sszaf9p86kgdigcdaf8";
+    };
+
+    meta = {
+      homepage    = "http://jsbeautifier.org";
+      description = "JavaScript unobfuscator and beautifier.";
+      license     = stdenv.lib.licenses.mit;
+      maintainers = with maintainers; [ apeyroux ];
     };
   };
 
