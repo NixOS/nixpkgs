@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/etc/
     cp udpt $out/bin
     cp udpt.conf $out/etc/
+    runHook postInstall
   '';
 
   meta = {
