@@ -38,5 +38,6 @@ let
     lxqt-common = callPackage ./core/lxqt-common { };
     lxqt-config = callPackage ./core/lxqt-config { };
     lxqt-globalkeys = callPackage ./core/lxqt-globalkeys { };
+    lxqt-notificationd = callPackage ./core/lxqt-notificationd { };
 
 in self
