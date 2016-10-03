@@ -111,6 +111,8 @@ in
 
     services.dbus.packages = [ gdm ];
 
+    systemd.user.services.dbus.wantedBy = [ "default.target" ];
+
     programs.dconf.profiles.gdm = "${gdm}/share/dconf/profile/gdm";
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
