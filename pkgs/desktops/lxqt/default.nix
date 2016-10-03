@@ -29,5 +29,6 @@ let
     ### BASE
     libqtxdg = callPackage ./base/libqtxdg { };
     libsysstat = callPackage ./base/libsysstat { };
+    liblxqt = callPackage ./base/liblxqt { };
 
 in self
