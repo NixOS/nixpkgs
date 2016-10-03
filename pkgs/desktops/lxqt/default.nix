@@ -34,5 +34,6 @@ let
     ### CORE 1
     libfm-qt = callPackage ./core/libfm-qt { };
     lxqt-about = callPackage ./core/lxqt-about { };
+    lxqt-admin = callPackage ./core/lxqt-admin { };
 
 in self
