@@ -1,4 +1,4 @@
-{
+let self = {
   "14.04".ap-northeast-1.hvm-ebs = "ami-71c6f470";
   "14.04".ap-northeast-1.pv-ebs = "ami-4dcbf84c";
   "14.04".ap-northeast-1.pv-s3 = "ami-8fc4f68e";
@@ -180,4 +180,6 @@
   "16.09".us-west-2.hvm-s3 = "ami-93fc25f3";
   "16.09".us-west-2.pv-ebs = "ami-14fe2774";
   "16.09".us-west-2.pv-s3 = "ami-74f12814";
-}
+
+  latest = self."16.09";
+}; in self
