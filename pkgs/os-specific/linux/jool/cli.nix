@@ -13,6 +13,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ autoreconfHook pkgconfig libnl ];
 
+  postPatch = ''
+    chmod u+w -R ../common
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://www.jool.mx/;
     description = "Fairly compliant SIIT and Stateful NAT64 for Linux - CLI tools";
