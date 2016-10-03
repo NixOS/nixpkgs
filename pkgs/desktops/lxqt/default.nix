@@ -36,5 +36,6 @@ let
     lxqt-about = callPackage ./core/lxqt-about { };
     lxqt-admin = callPackage ./core/lxqt-admin { };
     lxqt-common = callPackage ./core/lxqt-common { };
+    lxqt-config = callPackage ./core/lxqt-config { };
 
 in self
