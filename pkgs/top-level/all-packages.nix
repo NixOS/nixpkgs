@@ -16053,6 +16053,8 @@ in
 
     in makeOverridable makePackages extra;
 
+  lxqt = recurseIntoAttrs (callPackage ../desktops/lxqt { });
+
   mate = recurseIntoAttrs (callPackage ../desktops/mate {
     callPackage = newScope pkgs.mate;
   });
