@@ -7,6 +7,7 @@
   go,
   jshon,
   lib,
+  pkgs,
   pigz,
   runCommand,
   shadow,
@@ -22,6 +23,10 @@
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
 
 rec {
+
+  examples = import ./examples.nix {
+    inherit pkgs buildImage pullImage shadowSetup;
+  };
 
   pullImage = callPackage ./pull.nix {};
 
