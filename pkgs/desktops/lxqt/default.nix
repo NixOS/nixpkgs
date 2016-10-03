@@ -49,4 +49,7 @@ let
     pavucontrol-qt = callPackage ./core/pavucontrol-qt { };
     qtermwidget = callPackage ./core/qtermwidget { };
 
+    ### CORE 2
+    lxqt-panel = callPackage ./core/lxqt-panel { };
+
 in self
