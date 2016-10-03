@@ -54,4 +54,7 @@ let
     lxqt-runner = callPackage ./core/lxqt-runner { };
     pcmanfm-qt = callPackage ./core/pcmanfm-qt { };
 
+    ### OPTIONAL
+    qterminal = callPackage ./optional/qterminal { };
+
 in self
