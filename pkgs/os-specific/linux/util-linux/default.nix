@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-    # CVE-2016-2779
     (fetchpatch {
+      name = "CVE-2016-2779.diff";
       url = https://github.com/karelzak/util-linux/commit/8e4925016875c6a4f2ab4f833ba66f0fc57396a2.patch;
-      sha256 = "0parn2zq21lh22r2ixmhqchm4jx2mwj84i9h92225hr4240xxndx";
+      sha256 = "0kmigkq4s1b1ijrq8vcg2a5cw4qnm065m7cb1jn1q1f4x99ycy60";
   })];
 
   outputs = [ "bin" "dev" "out" "man" ];
