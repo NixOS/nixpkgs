@@ -7406,6 +7406,7 @@ in modules // {
       homepage    = "http://jsbeautifier.org";
       description = "JavaScript unobfuscator and beautifier.";
       license     = stdenv.lib.licenses.mit;
+      maintainers = with maintainers; [ apeyroux ];
     };
   };
 
