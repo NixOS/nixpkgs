@@ -98,7 +98,7 @@ with stdenv.lib;
   HIPPI y
   MTD_COMPLEX_MAPPINGS y # needed for many devices
   SCSI_LOWLEVEL y # enable lots of SCSI devices
-  SCSI_LOWLEVEL_PCMCIA y
+  SCSI_LOWLEVEL_PCMCIA? y
   SCSI_SAS_ATA y  # added to enable detection of hard drive
   SPI y # needed for many devices
   SPI_MASTER y
@@ -364,16 +364,16 @@ with stdenv.lib;
     PINCTRL_BAYTRAIL y # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
   ''}
   MMC_BLOCK_MINORS 32 # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
-  PPP_MULTILINK y # PPP multilink support
-  PPP_FILTER y
+  PPP_MULTILINK? y # PPP multilink support
+  PPP_FILTER? y
   REGULATOR y # Voltage and Current Regulator Support
   RC_DEVICES? y # Enable IR devices
   RT2800USB_RT55XX? y
   SCHED_AUTOGROUP y
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
-  SLIP_COMPRESSED y # CSLIP compressed headers
-  SLIP_SMART y
+  SLIP_COMPRESSED? y # CSLIP compressed headers
+  SLIP_SMART? y
   HWMON y
   THERMAL_HWMON y # Hardware monitoring support
   ${optionalString (versionAtLeast version "3.15") ''
