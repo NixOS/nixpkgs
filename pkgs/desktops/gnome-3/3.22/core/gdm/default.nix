@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--sysconfdir=/etc"
                      "--localstatedir=/var"
-                     "--with-systemd=yes"
                      "--with-plymouth=yes"
                      "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
