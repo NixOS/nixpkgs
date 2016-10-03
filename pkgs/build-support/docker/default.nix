@@ -10,6 +10,7 @@
   pkgs,
   pigz,
   runCommand,
+  rsync,
   shadow,
   stdenv,
   storeDir ? builtins.storeDir,
@@ -120,7 +121,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        buildInputs = [ utillinux e2fsprogs jshon ];
+        buildInputs = [ utillinux e2fsprogs jshon rsync ];
       } ''
       rm -rf $out
 
@@ -238,7 +239,7 @@ rec {
     runCommand "docker-layer-${name}" {
       inherit baseJson contents extraCommands;
 
-      buildInputs = [ jshon ];
+      buildInputs = [ jshon rsync ];
     }
     ''
       mkdir layer
@@ -246,9 +247,8 @@ rec {
         echo "Adding contents..."
         for item in $contents; do
           echo "Adding $item"
-          cp -drf $item/* layer/
+          rsync -a $item/ layer/
         done
-        chmod -R ug+w layer/
       else
         echo "No contents to add to layer."
       fi
@@ -310,9 +310,8 @@ rec {
         echo "Adding contents..."
         for item in ${toString contents}; do
           echo "Adding $item..."
-          cp -drf $item/* layer/
+          rsync -a $item/ layer/
         done
-        chmod -R ug+w layer/
       '';
 
       postMount = ''
