@@ -52,5 +52,6 @@ let
     ### CORE 2
     lxqt-panel = callPackage ./core/lxqt-panel { };
     lxqt-runner = callPackage ./core/lxqt-runner { };
+    pcmanfm-qt = callPackage ./core/pcmanfm-qt { };
 
 in self
