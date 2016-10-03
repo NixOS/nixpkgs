@@ -276,7 +276,6 @@
       telegraf = 256;
       gitlab-runner = 257;
       postgrey = 258;
-      dunst = 259;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -523,7 +522,6 @@
       #telegraf = 256; # unused
       gitlab-runner = 257;
       postgrey = 258;
-      dunst = 259;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
