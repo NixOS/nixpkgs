@@ -3,11 +3,15 @@
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify }:
 
 stdenv.mkDerivation rec {
+  bits = if stdenv.system == "x86_64-linux" then "x64"
+         else "ia32";
   version = "4.0.4";
   name = "franz-${version}";
   src = fetchurl {
-    url = "https://github.com/meetfranz/franz-app/releases/download/4.0.4/Franz-linux-x64-${version}.tgz";
-    sha256 = "0ssym0jfrig474g6j67g1jfybjkxnyhbqqjvrs8z6ihwlyd3rrk5";
+    url = "https://github.com/meetfranz/franz-app/releases/download/4.0.4/Franz-linux-${bits}-${version}.tgz";
+    sha256 = if bits == "x64" then
+      "0ssym0jfrig474g6j67g1jfybjkxnyhbqqjvrs8z6ihwlyd3rrk5" else
+      "16l9jma2hiwzl9l41yhrwribcgmxca271rq0cfbbm9701mmmciyy";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = http://meetfranz.com;
     license = licenses.free;
     maintainers = [ stdenv.lib.maintainers.gnidorah ];
-    platforms = ["x86_64-linux"];
+    platforms = ["i686-linux" "x86_64-linux"];
     hydraPlatforms = [];
   };
 }
