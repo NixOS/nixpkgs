@@ -39,5 +39,6 @@ let
     lxqt-config = callPackage ./core/lxqt-config { };
     lxqt-globalkeys = callPackage ./core/lxqt-globalkeys { };
     lxqt-notificationd = callPackage ./core/lxqt-notificationd { };
+    lxqt-openssh-askpass = callPackage ./core/lxqt-openssh-askpass { };
 
 in self
