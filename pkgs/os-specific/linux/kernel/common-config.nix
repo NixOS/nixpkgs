@@ -138,7 +138,7 @@ with stdenv.lib;
   L2TP_V3 y
   L2TP_IP m
   L2TP_ETH m
-  BRIDGE_VLAN_FILTERING y
+  BRIDGE_VLAN_FILTERING? y
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
