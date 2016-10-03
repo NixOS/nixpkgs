@@ -43,5 +43,7 @@ let
     lxqt-openssh-askpass = callPackage ./core/lxqt-openssh-askpass { };
     lxqt-policykit = callPackage ./core/lxqt-policykit { };
     lxqt-powermanagement = callPackage ./core/lxqt-powermanagement { };
+    lxqt-qtplugin = callPackage ./core/lxqt-qtplugin { };
+    lxqt-session = callPackage ./core/lxqt-session { };
 
 in self
