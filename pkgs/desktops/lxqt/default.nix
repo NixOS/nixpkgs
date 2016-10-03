@@ -46,5 +46,7 @@ let
     lxqt-qtplugin = callPackage ./core/lxqt-qtplugin { };
     lxqt-session = callPackage ./core/lxqt-session { };
     lxqt-sudo = callPackage ./core/lxqt-sudo { };
+    pavucontrol-qt = callPackage ./core/pavucontrol-qt { };
+    qtermwidget = callPackage ./core/qtermwidget { };
 
 in self
