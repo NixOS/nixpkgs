@@ -431,12 +431,6 @@ with lib;
       description = "Extra configuration to append to the config file.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.dunst;
-      defaultText = "pkgs.dunst";
-      description = "dunst derivation to use.";
-    };
   };
 
 
@@ -450,7 +444,7 @@ with lib;
       serviceConfig = {
         Type = "dbus";
         BusName = "org.freedesktop.Notifications";
-        ExecStart = "${cfg.package}/bin/dunst -config ${dunstConf}";
+        ExecStart = "${pkgs.dunst}/bin/dunst -config ${dunstConf}";
         Restart = "always";
         RestartSec = 3;
       };
