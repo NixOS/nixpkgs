@@ -421,7 +421,7 @@ in {
         description = "Kubernetes Api Server";
         wantedBy = [ "multi-user.target" ];
         requires = ["kubernetes-setup.service"];
-        after = [ "network-interfaces.target" "etcd.service" ];
+        after = [ "network.target" "etcd.service" "kubernetes-setup.service" ];
         serviceConfig = {
           ExecStart = let
             authorizationPolicyFile =
@@ -468,7 +468,7 @@ in {
       systemd.services.kube-scheduler = {
         description = "Kubernetes Scheduler Service";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "kubernetes-apiserver.service" ];
+        after = [ "network.target" "kubernetes-apiserver.service" ];
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-scheduler \
             --address=${cfg.scheduler.address} \
@@ -487,7 +487,7 @@ in {
       systemd.services.kube-controller-manager = {
         description = "Kubernetes Controller Manager Service";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "kubernetes-apiserver.service" ];
+        after = [ "network.target" "kubernetes-apiserver.service" ];
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-controller-manager \
             --address=${cfg.controllerManager.address} \
@@ -511,7 +511,7 @@ in {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "multi-user.target" ];
         requires = ["kubernetes-setup.service"];
-        after = [ "network-interfaces.target" "etcd.service" "docker.service" ];
+        after = [ "network.target" "etcd.service" "docker.service" "kubernetes-setup.service" ];
         path = [ pkgs.gitMinimal pkgs.openssh ];
         script = ''
           export PATH="/bin:/sbin:/usr/bin:/usr/sbin:$PATH"
@@ -542,7 +542,7 @@ in {
       systemd.services.kube-proxy = {
         description = "Kubernetes Proxy Service";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "etcd.service" ];
+        after = [ "network.target" "etcd.service" ];
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-proxy \
             --master=${cfg.proxy.master} \

@@ -23,11 +23,11 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "11.4.20";
+  version = "11.4.21";
   sha256 =
     {
-      "x86_64-linux" = "1mnjc00y1vs3c22hqf328idgsrrlq097kld67ab9q8d6l8r8qkr6";
-      "i686-linux"   = "1s7m56if2wq34sc8aq46xnhrrnbhnsfi85jw0yp4dpcdwv6s38v5";
+      "x86_64-linux" = "179ajawqy43jhgvysc386hdyz9hdandwvh8m2y2rassvycn9kr8z";
+      "i686-linux"   = "1y4z9rb06f2a3cj51xawgpzgar9x7gvr4jrazncqfpfqkv7zayv1";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =

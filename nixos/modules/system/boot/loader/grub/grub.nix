@@ -131,51 +131,51 @@ in
           to the respective devices corresponding to those partitions.
         '';
 
-        type = types.listOf types.optionSet;
+        type = with types; listOf (submodule {
+          options = {
 
-        options = {
+            path = mkOption {
+              example = "/boot1";
+              type = types.str;
+              description = ''
+                The path to the boot directory where GRUB will be written. Generally
+                this boot path should double as an EFI path.
+              '';
+            };
 
-          path = mkOption {
-            example = "/boot1";
-            type = types.str;
-            description = ''
-              The path to the boot directory where GRUB will be written. Generally
-              this boot path should double as an EFI path.
-            '';
+            efiSysMountPoint = mkOption {
+              default = null;
+              example = "/boot1/efi";
+              type = types.nullOr types.str;
+              description = ''
+                The path to the efi system mount point. Usually this is the same
+                partition as the above path and can be left as null.
+              '';
+            };
+
+            efiBootloaderId = mkOption {
+              default = null;
+              example = "NixOS-fsid";
+              type = types.nullOr types.str;
+              description = ''
+                The id of the bootloader to store in efi nvram.
+                The default is to name it NixOS and append the path or efiSysMountPoint.
+                This is only used if <literal>boot.loader.efi.canTouchEfiVariables</literal> is true.
+              '';
+            };
+
+            devices = mkOption {
+              default = [ ];
+              example = [ "/dev/sda" "/dev/sdb" ];
+              type = types.listOf types.str;
+              description = ''
+                The path to the devices which will have the GRUB MBR written.
+                Note these are typically device paths and not paths to partitions.
+              '';
+            };
+
           };
-
-          efiSysMountPoint = mkOption {
-            default = null;
-            example = "/boot1/efi";
-            type = types.nullOr types.str;
-            description = ''
-              The path to the efi system mount point. Usually this is the same
-              partition as the above path and can be left as null.
-            '';
-          };
-
-          efiBootloaderId = mkOption {
-            default = null;
-            example = "NixOS-fsid";
-            type = types.nullOr types.str;
-            description = ''
-              The id of the bootloader to store in efi nvram.
-              The default is to name it NixOS and append the path or efiSysMountPoint.
-              This is only used if <literal>boot.loader.efi.canTouchEfiVariables</literal> is true.
-            '';
-          };
-
-          devices = mkOption {
-            default = [ ];
-            example = [ "/dev/sda" "/dev/sdb" ];
-            type = types.listOf types.str;
-            description = ''
-              The path to the devices which will have the GRUB MBR written.
-              Note these are typically device paths and not paths to partitions.
-            '';
-          };
-
-        };
+        });
       };
 
       configurationName = mkOption {

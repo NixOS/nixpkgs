@@ -296,35 +296,35 @@ let
   };
 
   addressOptions = {
-
-    addressConfig = mkOption {
-      default = {};
-      example = { Address = "192.168.0.100/24"; };
-      type = types.addCheck (types.attrsOf unitOption) checkAddress;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Address]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+    options = {
+      addressConfig = mkOption {
+        default = {};
+        example = { Address = "192.168.0.100/24"; };
+        type = types.addCheck (types.attrsOf unitOption) checkAddress;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Address]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
-
   };
 
   routeOptions = {
-
-    routeConfig = mkOption {
-      default = {};
-      example = { Gateway = "192.168.0.1"; };
-      type = types.addCheck (types.attrsOf unitOption) checkRoute;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Route]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+    options = {
+      routeConfig = mkOption {
+        default = {};
+        example = { Gateway = "192.168.0.1"; };
+        type = types.addCheck (types.attrsOf unitOption) checkRoute;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Route]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
-
   };
 
   networkOptions = commonNetworkOptions // {
@@ -471,8 +471,7 @@ let
 
     addresses = mkOption {
       default = [ ];
-      type = types.listOf types.optionSet;
-      options = [ addressOptions ];
+      type = with types; listOf (submodule addressOptions);
       description = ''
         A list of address sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
@@ -482,8 +481,7 @@ let
 
     routes = mkOption {
       default = [ ];
-      type = types.listOf types.optionSet;
-      options = [ routeOptions ];
+      type = with types; listOf (submodule routeOptions);
       description = ''
         A list of route sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
@@ -624,35 +622,32 @@ in
 
     systemd.network.links = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ linkOptions ];
+      type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
       description = "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ netdevOptions ];
+      type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
       description = "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ networkOptions networkConfig ];
+      type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
       description = "Definition of systemd networks.";
     };
 
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
+      type = with types; attrsOf (submodule (
+        { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        };
+        }));
     };
 
   };
@@ -672,7 +667,6 @@ in
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
-      before = [ "network-interfaces.target" ];
       restartTriggers = [ config.environment.etc."systemd/network".source ];
     };
 

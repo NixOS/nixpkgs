@@ -170,7 +170,7 @@ in
 
         description = "Define the virtual hosts";
 
-        type = types.loaOf types.optionSet;
+        type = with types; loaOf (submodule vHostOpts);
 
         example = {
           myhost = {
@@ -186,7 +186,6 @@ in
           };
         };
 
-        options = [ vHostOpts ];
       };
 
       ssl = mkOption {

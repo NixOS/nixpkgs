@@ -510,7 +510,7 @@ in {
       systemd.services.graphiteApi = {
         description = "Graphite Api Interface";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        after = [ "network.target" ];
         environment = {
           PYTHONPATH = let
               aenv = pkgs.python.buildEnv.override {
@@ -547,7 +547,7 @@ in {
       systemd.services.seyren = {
         description = "Graphite Alerting Dashboard";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "mongodb.service" ];
+        after = [ "network.target" "mongodb.service" ];
         environment = seyrenConfig;
         serviceConfig = {
           ExecStart = "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
@@ -570,7 +570,7 @@ in {
       systemd.services.graphitePager = {
         description = "Graphite Pager Alerting Daemon";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "redis.service" ];
+        after = [ "network.target" "redis.service" ];
         environment = {
           REDIS_URL = cfg.pager.redisUrl;
           GRAPHITE_URL = cfg.pager.graphiteUrl;

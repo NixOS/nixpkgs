@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper perl LWP URI HTMLParser ]
-   ++ stdenv.lib.optional doCheck [ HTTPServerSimple Parent ];
+   ++ stdenv.lib.optionals doCheck [ HTTPServerSimple Parent ];
 
   configurePhase = ''
     for i in swec tests/{runTests,testServer}

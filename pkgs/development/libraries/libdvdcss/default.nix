@@ -1,8 +1,10 @@
-{ stdenv, fetchurl }:
+{stdenv, fetchurl, IOKit}:
 
 stdenv.mkDerivation rec {
   name = "libdvdcss-${version}";
   version = "1.4.0";
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin IOKit;
 
   src = fetchurl {
     url = "http://get.videolan.org/libdvdcss/${version}/${name}.tar.bz2";
@@ -13,6 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.videolan.org/developers/libdvdcss.html;
     description = "A library for decrypting DVDs";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

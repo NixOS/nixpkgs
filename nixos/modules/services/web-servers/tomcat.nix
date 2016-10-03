@@ -139,7 +139,7 @@ in
     systemd.services.tomcat = {
       description = "Apache Tomcat server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
 

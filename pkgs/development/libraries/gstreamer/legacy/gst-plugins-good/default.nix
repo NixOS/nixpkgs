@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig glib gstreamer gst_plugins_base ]
-    ++ lib.optional stdenv.isLinux [ libpulseaudio ]
+    ++ lib.optional stdenv.isLinux libpulseaudio
     ++ libintlOrEmpty
     ++ lib.optionals (!minimalDeps)
       [ aalib libcaca cairo libdv flac libjpeg libpng speex

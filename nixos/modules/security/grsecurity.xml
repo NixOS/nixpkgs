@@ -149,6 +149,10 @@
 
         <listitem><para>Trusted path execution: a desirable feature, but
         requires some more work to operate smoothly on NixOS.</para></listitem>
+
+        <listitem><para>Module hardening: would break user initiated module
+        loading. Might enable this at some point, depending on the potential
+        breakage.</para></listitem>
       </itemizedlist>
     </para></listitem>
 
@@ -208,8 +212,6 @@
         let
           kernel = pkgs.linux_grsec_nixos.override {
             extraConfig = ''
-              GRKERNSEC y
-              PAX y
               GRKERNSEC_CONFIG_AUTO y
               GRKERNSEC_CONFIG_SERVER y
               GRKERNSEC_CONFIG_SECURITY y

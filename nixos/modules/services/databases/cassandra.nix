@@ -377,7 +377,7 @@ in {
     systemd.services.cassandra = {
       description = "Cassandra Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       environment = cassandraEnvironment;
       restartTriggers = [ cassandraConfFile cassandraLogFile cassandraRackFile ];
       serviceConfig = {

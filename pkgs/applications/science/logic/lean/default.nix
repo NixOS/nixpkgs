@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   postInstall = ''
     wrapProgram $out/bin/linja --prefix PATH : $out/bin:${ninja}/bin
   '';
