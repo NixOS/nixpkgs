@@ -149,6 +149,22 @@ in
         '';
       };
 
+      autoRepeatDelay = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Sets the autorepeat delay (length of time in milliseconds that a key must be depressed before autorepeat starts).
+        '';
+      };
+
+      autoRepeatInterval = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Sets the autorepeat interval (length of time in milliseconds that should elapse between autorepeat-generated keystrokes).
+        '';
+      };
+
       inputClassSections = mkOption {
         type = types.listOf types.lines;
         default = [];
@@ -536,7 +552,9 @@ in
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
-        ++ optional (!cfg.enableTCP) "-nolisten tcp";
+        ++ optional (!cfg.enableTCP) "-nolisten tcp"
+        ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
+        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}";
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++
