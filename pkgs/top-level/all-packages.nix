@@ -3350,6 +3350,8 @@ in
 
   radvd = callPackage ../tools/networking/radvd { };
 
+  rambox = callPackage ../applications/networking/instant-messengers/rambox { };
+
   ranger = callPackage ../applications/misc/ranger { };
 
   rarcrack = callPackage ../tools/security/rarcrack { };
