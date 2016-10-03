@@ -26,4 +26,7 @@ let
       echo --------------------------------------------------------
     '';
 
+    ### BASE
+    libqtxdg = callPackage ./base/libqtxdg { };
+
 in self
