@@ -31,4 +31,7 @@ let
     libsysstat = callPackage ./base/libsysstat { };
     liblxqt = callPackage ./base/liblxqt { };
 
+    ### CORE 1
+    libfm-qt = callPackage ./core/libfm-qt { };
+
 in self
