@@ -1680,6 +1680,8 @@ in
 
   fprint_demo = callPackage ../tools/security/fprint_demo { };
 
+  franz = callPackage ../applications/networking/instant-messengers/franz { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk { };
@@ -3349,6 +3351,8 @@ in
   radamsa = callPackage ../tools/security/radamsa { };
 
   radvd = callPackage ../tools/networking/radvd { };
+
+  rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
   ranger = callPackage ../applications/misc/ranger { };
 
