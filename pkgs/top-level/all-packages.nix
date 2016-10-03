@@ -1680,6 +1680,8 @@ in
 
   fprint_demo = callPackage ../tools/security/fprint_demo { };
 
+  franz = callPackage ../applications/networking/instant-messengers/franz { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk { };
