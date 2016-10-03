@@ -49,7 +49,62 @@ has the following highlights: </para>
 <para>The following new services were added since the last release:</para>
 
 <itemizedlist>
-  <listitem><para><literal>(this will get automatically generated at release time)</literal></para></listitem>
+  <listitem><para><literal>hardware/video/amdgpu.nix</literal></para></listitem>
+  <listitem><para><literal>hardware/video/displaylink.nix</literal></para></listitem>
+  <listitem><para><literal>programs/info.nix</literal></para></listitem>
+  <listitem><para><literal>programs/mosh.nix</literal></para></listitem>
+  <listitem><para><literal>programs/spacefm.nix</literal></para></listitem>
+  <listitem><para><literal>programs/tmux.nix</literal></para></listitem>
+  <listitem><para><literal>programs/xonsh.nix</literal></para></listitem>
+  <listitem><para><literal>security/chromium-suid-sandbox.nix</literal></para></listitem>
+  <listitem><para><literal>security/hidepid.nix</literal></para></listitem>
+  <listitem><para><literal>services/audio/squeezelite.nix</literal></para></listitem>
+  <listitem><para><literal>services/backup/znapzend.nix</literal></para></listitem>
+  <listitem><para><literal>services/continuous-integration/buildkite-agent.nix</literal></para></listitem>
+  <listitem><para><literal>services/continuous-integration/hydra/default.nix</literal></para></listitem>
+  <listitem><para><literal>services/continuous-integration/gocd-agent/default.nix</literal></para></listitem>
+  <listitem><para><literal>services/continuous-integration/gocd-server/default.nix</literal></para></listitem>
+  <listitem><para><literal>services/development/hoogle.nix</literal></para></listitem>
+  <listitem><para><literal>services/editors/emacs.nix</literal></para></listitem>
+  <listitem><para><literal>services/games/factorio.nix</literal></para></listitem>
+  <listitem><para><literal>services/games/terraria.nix</literal></para></listitem>
+  <listitem><para><literal>services/logging/awstats.nix</literal></para></listitem>
+  <listitem><para><literal>services/logging/graylog.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/emby.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/mantisbt.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/nzbget.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/packagekit.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/sonarr.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/spice-vdagentd.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/taskserver</literal></para></listitem>
+  <listitem><para><literal>services/network-filesystems/tahoe.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/coturn.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/ferm.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/gdomap.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/libreswan.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/logmein-hamachi.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/mfi.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/mjpg-streamer.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/mosquitto.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/nntp-proxy.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/offlineimap.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/pptpd.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/sniproxy.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/smokeping.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/toxvpn.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/xl2tpd.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/zerobin.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/oauth2_proxy.nix</literal></para></listitem>
+  <listitem><para><literal>services/torrent/flexget.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/mattermost.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/tt-rss.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-servers/caddy.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-servers/lighttpd/inginious.nix</literal></para></listitem>
+  <listitem><para><literal>services/x11/compton.nix</literal></para></listitem>
+  <listitem><para><literal>services/x11/xbanish.nix</literal></para></listitem>
+  <listitem><para><literal>system/boot/loader/systemd-boot/systemd-boot.nix</literal></para></listitem>
+  <listitem><para><literal>system/boot/plymouth.nix</literal></para></listitem>
+  <listitem><para><literal>virtualisation/xe-guest-utilities.nix</literal></para></listitem>
 </itemizedlist>
 
 <para>When upgrading from a previous release, please be aware of the
@@ -106,6 +161,13 @@ following incompatible changes:</para>
       to forbid any modifications inside the folder. See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18365">
       the pull request</link> for what bugs this caused.
     </para>
+  </listitem>
+
+  <listitem>
+  <para>
+     Using packages compiled with older Wayland may yield an error "undefined reference to `wl_proxy_*`".
+     Please upgrade those packages and <link xlink:href="https://github.com/NixOS/nixpkgs/issues/16779">see bug report for more details.</link>
+  </para>
   </listitem>
 
   <listitem>
