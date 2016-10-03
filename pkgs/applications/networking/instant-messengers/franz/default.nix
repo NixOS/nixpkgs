@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     description = "A free messaging app that combines chat & messaging services into one application";
     homepage = http://meetfranz.com;
     license = licenses.free;
+    maintainers = [ stdenv.lib.maintainers.gnidorah ];
     platforms = ["x86_64-linux"];
+    hydraPlatforms = [];
   };
 }

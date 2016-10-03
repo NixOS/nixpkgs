@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     description = "Free and Open Source messaging and emailing app that combines common web applications into one";
     homepage = http://rambox.pro;
     license = licenses.mit;
+    maintainers = [ stdenv.lib.maintainers.gnidorah ];
     platforms = ["x86_64-linux"];
+    hydraPlatforms = [];
   };
 }
