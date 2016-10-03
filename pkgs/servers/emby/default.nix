@@ -28,8 +28,7 @@ stdenv.mkDerivation rec {
     cp -r MediaBrowser.Server.Mono/bin/Release\ Mono/* $out/bin/
 
     makeWrapper "${mono}/bin/mono" $out/bin/MediaBrowser.Server.Mono \
-      --add-flags "$out/bin/MediaBrowser.Server.Mono.exe -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe" \
-      --prefix LD_LIBRARY_PATH ':' "${ffmpeg}/bin"
+      --add-flags "$out/bin/MediaBrowser.Server.Mono.exe -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe"
   '';
 
   meta = {
