@@ -3,14 +3,14 @@
 }:
 
 let 
-  version = "11";
+  version = "12";
   termite = stdenv.mkDerivation {
     name = "termite-${version}";
 
     src = fetchgit {
       url = "https://github.com/thestinger/termite";
       rev = "refs/tags/v${version}";
-      sha256 = "1cw4yw7n9m2si8b7zcfyz9pyihncabxm5g39v1mxslfajxgwzmd8";
+      sha256 = "0s6dyg3vcqk5qcx90bs24wdnd3p56rdjdcanx4pcxvp6ksjl61jz";
     };
 
     postPatch = "sed '1i#include <math.h>' -i termite.cc";

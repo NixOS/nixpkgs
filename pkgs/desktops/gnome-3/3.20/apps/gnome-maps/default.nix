@@ -1,6 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, gnome3, gtk3
 , gobjectIntrospection, gdk_pixbuf, librsvg, autoreconfHook
-, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, file, libsoup }:
+, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, file, libsoup
+, webkitgtk }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
                   gnome3.geocode_glib libchamplain file libsoup
                   gdk_pixbuf librsvg autoreconfHook
                   gnome3.gsettings_desktop_schemas gnome3.evolution_data_server
-                  gnome3.gnome_online_accounts gnome3.defaultIconTheme ];
+                  gnome3.gnome_online_accounts gnome3.defaultIconTheme
+                  webkitgtk ];
 
   patches = [ ./soup.patch ];
 

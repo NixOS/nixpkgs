@@ -17,7 +17,7 @@ let
       [Desktop Entry]
       Name=IBus
       Type=Application
-      Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim --cache=refresh
+      Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim
     '';
   };
 in

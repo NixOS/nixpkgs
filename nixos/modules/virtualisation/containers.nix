@@ -502,8 +502,7 @@ in
             };
 
             allowedDevices = mkOption {
-              type = types.listOf types.optionSet;
-              options = [ allowedDeviceOpts ];
+              type = with types; listOf (submodule allowedDeviceOpts);
               default = [];
               example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               description = ''

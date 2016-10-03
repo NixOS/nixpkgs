@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "1ahdz1ynbab001441lqqlfphysr867rjcndq93z66mr5v3r1spvm";
+      sha256 = "0nxwf3b63gzb04svb6z1hi3qf95i90pwda5gpmlrfrq6250n3bpi";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0mln1mqy3c7k4c449w5knjnc4dv0ckl0i7q47p2pldxjjf5n2887";
+      sha256 = "1gm23i0snhcm4svciypm0qiviiqv9zpiyplkh22baccs7li3kih1";
     };
 
   };
@@ -243,6 +243,7 @@ in stdenv.mkDerivation rec {
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew ncurses
       libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
+      gdb
     ]
     ++ lib.optional kdeIntegration kde4.kdelibs;
 

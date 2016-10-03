@@ -208,9 +208,9 @@ in
     # networking.firewall.allowedUDPPorts = ...
 
     systemd.services.cjdns = {
-      description = "encrypted networking for everybody";
-      wantedBy = [ "network.target" ];
-      after = [ "networkSetup.service" "network-interfaces.target" ];
+      description = "cjdns: routing engine designed for security, scalability, speed and ease of use";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       preStart = if cfg.confFile != "" then "" else ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys

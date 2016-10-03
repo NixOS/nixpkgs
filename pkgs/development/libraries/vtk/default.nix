@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, cmake, mesa, libX11, xproto, libXt
 , qtLib ? null
 # Darwin support
-, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT
+, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
 , ApplicationServices, CoreText, IOSurface, cf-private, ImageIO, xpc, libobjc }:
 
 with stdenv.lib;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     then [ cmake mesa libX11 xproto libXt ] ++ optional (qtLib != null) qtLib
     else [ cmake qtLib xpc CoreServices DiskArbitration IOKit cf-private
            CFNetwork Security ApplicationServices CoreText IOSurface ImageIO
-           GLUT ];
+           OpenGL GLUT ];
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ Cocoa libobjc ];
 
 
@@ -42,9 +42,8 @@ stdenv.mkDerivation rec {
     ++ optional (qtLib != null) [ "-DVTK_USE_QT:BOOL=ON" ]
     ++ optional stdenv.isDarwin [ "-DBUILD_TESTING:BOOL=OFF"
                                   "-DCMAKE_OSX_SYSROOT="
-                                  "-DCMAKE_OSX_DEPLOYMENT_TARGET=" ];
-
-  doCheck = !stdenv.isDarwin;
+                                  "-DCMAKE_OSX_DEPLOYMENT_TARGET="
+                                  "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-7.0|' ./Parallel/Core/CMakeLists.txt
