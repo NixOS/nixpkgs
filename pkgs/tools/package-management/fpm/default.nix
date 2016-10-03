@@ -1,13 +1,9 @@
 { lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
-  name = "fpm-${version}";
-
-  version = (import gemset).fpm.version;
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  pname = "fpm";
+  gemdir = ./.;
 
   meta = with lib; {
     description = "Tool to build packages for multiple platforms with ease";
