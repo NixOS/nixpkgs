@@ -249,9 +249,9 @@ with stdenv.lib;
     NFS_V4_2 y
     NFS_V4_SECURITY_LABEL y
   ''}
-  CIFS_XATTR y
-  CIFS_POSIX y
-  CIFS_FSCACHE y
+  CIFS_XATTR? y
+  CIFS_POSIX? y
+  CIFS_FSCACHE? y
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
   ''}
