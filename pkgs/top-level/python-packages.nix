@@ -7239,11 +7239,11 @@ in modules // {
 
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
-    version = "0.5.1";
+    version = "0.6";
 
     src = pkgs.fetchurl {
       url = "https://github.com/luispedro/imread/archive/release-${version}.tar.gz";
-      sha256 = "12d7ba3523ba50d67d526e9797e041021dd9cd4acf9567a9bf73c8ae0b689d4a";
+      sha256 = "0i14bc67200zhzxc41g5dfp2m0pr1zaa2gv59p2va1xw0ji2dc0f";
     };
 
     buildInputs = with self; [
@@ -7258,7 +7258,7 @@ in modules // {
 
     meta = with stdenv.lib; {
       description = "Python package to load images as numpy arrays";
-      homepage = https://readthedocs.org/projects/imread/;
+      homepage = https://imread.readthedocs.io/en/latest/;
       maintainers = with maintainers; [ luispedro ];
       license = licenses.mit;
       platforms = platforms.linux;
