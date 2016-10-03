@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
+{ lib, stdenv, fetchurl, pkgconfig, zlib, libseccomp, fetchpatch, autoreconfHook, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
 
 stdenv.mkDerivation rec {
   name = "util-linux-${version}";
@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-  ];
+    # CVE-2016-2779
+    (fetchpatch {
+      url = https://github.com/karelzak/util-linux/commit/8e4925016875c6a4f2ab4f833ba66f0fc57396a2.patch;
+      sha256 = "0parn2zq21lh22r2ixmhqchm4jx2mwj84i9h92225hr4240xxndx";
+  })];
 
   outputs = [ "bin" "dev" "out" "man" ];
 
@@ -50,9 +54,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
-  nativeBuildInputs = [ pkgconfig ];
+  # autoreconfHook is required for CVE-2016-2779
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  # libseccomp is required for CVE-2016-2779
   buildInputs =
-    [ zlib pam ]
+    [ zlib pam libseccomp ]
     ++ lib.optional (ncurses != null) ncurses
     ++ lib.optional (systemd != null) systemd
     ++ lib.optional (perl != null) perl;
