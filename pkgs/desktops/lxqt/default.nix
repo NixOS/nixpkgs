@@ -38,7 +38,10 @@ let
     lxqt-common = callPackage ./core/lxqt-common { };
     lxqt-config = callPackage ./core/lxqt-config { };
     lxqt-globalkeys = callPackage ./core/lxqt-globalkeys { };
+    lxqt-l10n = callPackage ./core/lxqt-l10n { };
     lxqt-notificationd = callPackage ./core/lxqt-notificationd { };
     lxqt-openssh-askpass = callPackage ./core/lxqt-openssh-askpass { };
+    lxqt-policykit = callPackage ./core/lxqt-policykit { };
+    lxqt-powermanagement = callPackage ./core/lxqt-powermanagement { };
 
 in self
