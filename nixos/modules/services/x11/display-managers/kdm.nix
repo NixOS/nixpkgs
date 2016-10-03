@@ -54,19 +54,17 @@ let
       ''}
     '';
 
-  kdmrc = pkgs.stdenv.mkDerivation {
-    name = "kdmrc";
-    config = defaultConfig + cfg.extraConfig;
-    preferLocalBuild = true;
-    buildCommand =
-      ''
-        echo "$config" > $out
+  kdmrc = pkgs.runCommand "kdmrc"
+    { config = defaultConfig + cfg.extraConfig;
+      preferLocalBuild = true;
+    }
+    ''
+      echo "$config" > $out
 
-        # The default kdmrc would add "-nolisten tcp", and we already
-        # have that managed by nixos. Hence the grep.
-        cat ${kdebase_workspace}/share/config/kdm/kdmrc | grep -v nolisten >> $out
-      '';
-  };
+      # The default kdmrc would add "-nolisten tcp", and we already
+      # have that managed by nixos. Hence the grep.
+      cat ${kdebase_workspace}/share/config/kdm/kdmrc | grep -v nolisten >> $out
+    '';
 
 in
 

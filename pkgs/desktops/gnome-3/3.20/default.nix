@@ -46,17 +46,14 @@ let
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x webkitgtk212x gtk3 gtkmm3 libcanberra_gtk2
-    clutter-gst clutter_gtk;
+    clutter clutter-gst clutter_gtk cogl gtkvnc;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
-  clutter = pkgs.clutter_1_26;
-  cogl = pkgs.cogl_1_22;
   gtk = gtk3;
   gtkmm = gtkmm3;
-  gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
   vala = pkgs.vala_0_32;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
   webkitgtk = webkitgtk212x;
@@ -270,7 +267,6 @@ let
   glade = callPackage ./apps/glade { };
 
   gnome-boxes = callPackage ./apps/gnome-boxes {
-    gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
     spice_gtk = pkgs.spice_gtk;
   };
 

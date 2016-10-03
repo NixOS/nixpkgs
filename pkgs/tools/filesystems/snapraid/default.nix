@@ -2,12 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "snapraid-${version}";
-  version = "8.1";
+  version = "10.0";
 
   src = fetchurl {
     url = "https://github.com/amadvance/snapraid/releases/download/v${version}/snapraid-${version}.tar.gz";
-    sha256 = "0pafqn9ismn4j3fsx8fgf008qwh2c6f8mjfjijah6d5c349rmy3b";
+    sha256 = "1mhs0gl285a5y2bw6k04lrnyg1pp2am7dfcsvg0w4vr5h2ag3p7p";
   };
+
+  doCheck = true;
 
   meta = {
     homepage = http://www.snapraid.it/;

@@ -81,12 +81,11 @@ in
         { office1 = { model = "MFC-7860DW"; ip = "192.168.1.2"; };
           office2 = { model = "MFC-7860DW"; nodename = "BRW0080927AFBCE"; };
         };
-      type = types.loaOf types.optionSet;
+      type = with types; loaOf (submodule netDeviceOpts);
       description = ''
         The list of network devices that will be registered against the brscan4
         sane backend.
       '';
-      options = [ netDeviceOpts ];
     };
   };
 

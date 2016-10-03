@@ -197,8 +197,7 @@ in
       devices = mkOption {
         default = [];
         example = [ { device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; } ];
-        type = types.listOf types.optionSet;
-        options = [ smartdOpts ];
+        type = with types; listOf (submodule smartdOpts);
         description = "List of devices to monitor.";
       };
 

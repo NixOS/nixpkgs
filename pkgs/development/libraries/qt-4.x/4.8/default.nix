@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     sha256 = "183fca7n7439nlhxyg1z7aky0izgbyll3iwakw4gwivy16aj5272";
   };
 
+  outputs = [ "out" "dev" ];
+
+  outputInclude = "out";
+
+  setOutputFlags = false;
+
   # The version property must be kept because it will be included into the QtSDK package name
   version = vers;
 
@@ -87,8 +93,8 @@ stdenv.mkDerivation rec {
       -docdir $out/share/doc/${name}
       -plugindir $out/lib/qt4/plugins
       -importdir $out/lib/qt4/imports
-      -examplesdir $out/share/doc/${name}/examples
-      -demosdir $out/share/doc/${name}/demos
+      -examplesdir $TMPDIR/share/doc/${name}/examples
+      -demosdir $TMPDIR/share/doc/${name}/demos
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
     "
@@ -98,6 +104,7 @@ stdenv.mkDerivation rec {
   '';
 
   prefixKey = "-prefix ";
+
   configureFlags =
     ''
       -v -no-separate-debug-info -release -no-fast -confirm-license -opensource
@@ -152,6 +159,11 @@ stdenv.mkDerivation rec {
     find . -name "Makefile*" | xargs sed -i 's/^\(LINK[[:space:]]* = clang++\)/\1 ${NIX_LDFLAGS}/'
     sed -i 's/^\(LIBS[[:space:]]*=.*$\)/\1 -lobjc/' ./src/corelib/Makefile.Release
   '';
+
+  postInstall =
+    ''
+      rm -rf $out/tests
+    '';
 
   crossAttrs = let
     isMingw = stdenv.cross.libc == "msvcrt";

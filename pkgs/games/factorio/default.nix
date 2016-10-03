@@ -114,6 +114,7 @@ let
       wrapProgram $out/bin/factorio                                \
         --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$libPath \
         --run "$out/share/factorio/update-config.sh"               \
+        --argv0 "" \
         --add-flags "-c \$HOME/.factorio/config.cfg ${optionalString (mods != []) "--mod-directory=${modDir}"}"
 
         # TODO Currently, every time a mod is changed/added/removed using the

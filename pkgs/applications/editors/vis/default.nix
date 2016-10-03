@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libtermkey
     lua
     lpeg
-  ] ++ stdenv.lib.optional stdenv.isLinux [
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
     acl
     libselinux
   ];

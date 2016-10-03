@@ -23,6 +23,6 @@ buildGoPackage rec {
     description = "Docker Machine is a tool that lets you install Docker Engine on virtual hosts, and manage Docker Engine on the hosts.";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline tailhook ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

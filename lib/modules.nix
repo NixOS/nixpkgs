@@ -1,4 +1,5 @@
 with import ./lists.nix;
+with import ./strings.nix;
 with import ./trivial.nix;
 with import ./attrsets.nix;
 with import ./options.nix;
@@ -544,6 +545,84 @@ rec {
     warn = true;
     use = builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
+
+  /* Return a module that causes a warning to be shown if any of the "from"
+     option is defined; the defined values can be used in the "mergeFn" to set
+     the "to" value.
+     This function can be used to merge multiple options into one that has a
+     different type.
+
+     "mergeFn" takes the module "config" as a parameter and must return a value
+     of "to" option type.
+
+       mkMergedOptionModule
+         [ [ "a" "b" "c" ]
+           [ "d" "e" "f" ] ]
+         [ "x" "y" "z" ]
+         (config:
+           let value = p: getAttrFromPath p config;
+           in
+           if      (value [ "a" "b" "c" ]) == true then "foo"
+           else if (value [ "d" "e" "f" ]) == true then "bar"
+           else "baz")
+
+     - options.a.b.c is a removed boolean option
+     - options.d.e.f is a removed boolean option
+     - options.x.y.z is a new str option that combines a.b.c and d.e.f
+       functionality
+
+     This show a warning if any a.b.c or d.e.f is set, and set the value of
+     x.y.z to the result of the merge function 
+  */
+  mkMergedOptionModule = from: to: mergeFn:
+    { config, options, ... }:
+    {
+      options = foldl recursiveUpdate {} (map (path: setAttrByPath path (mkOption {
+        visible = false;
+        # To use the value in mergeFn without triggering errors
+        default = "_mkMergedOptionModule";
+      })) from);
+
+      config = {
+        warnings = filter (x: x != "") (map (f:
+          let val = getAttrFromPath f config;
+              opt = getAttrFromPath f options;
+          in
+          optionalString 
+            (val != "_mkMergedOptionModule")
+            "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
+        ) from);
+      } // setAttrByPath to (mkMerge
+             (optional 
+               (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from)
+               (mergeFn config)));
+    };
+
+  /* Single "from" version of mkMergedOptionModule.
+     Return a module that causes a warning to be shown if the "from" option is
+     defined; the defined value can be used in the "mergeFn" to set the "to"
+     value.
+     This function can be used to change an option into another that has a
+     different type.
+
+     "mergeFn" takes the module "config" as a parameter and must return a value of
+     "to" option type.
+
+       mkChangedOptionModule [ "a" "b" "c" ] [ "x" "y" "z" ]
+         (config:
+           let value = getAttrFromPath [ "a" "b" "c" ] config;
+           in
+           if   value > 100 then "high"
+           else "normal")
+
+     - options.a.b.c is a removed int option
+     - options.x.y.z is a new str option that supersedes a.b.c
+
+     This show a warning if a.b.c is set, and set the value of x.y.z to the
+     result of the change function
+  */
+  mkChangedOptionModule = from: to: changeFn:
+    mkMergedOptionModule [ from ] to changeFn;
 
   /* Like ‘mkRenamedOptionModule’, but doesn't show a warning. */
   mkAliasOptionModule = from: to: doRename {

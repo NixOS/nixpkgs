@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     glib
     gtk2
     gst_all_1.gstreamer
-    gst_plugins
     gnome2.GConf
     gnome2.gnome_icon_theme
     libnotify
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
     libunique
     intltool
     wrapGAppsHook
-  ];
+  ] ++ gst_plugins;
 
   propagatedUserEnvPkgs = [ gnome2.GConf.out ];
 

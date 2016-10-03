@@ -160,7 +160,7 @@ in
     systemd.services.influxdb = {
       description = "InfluxDB Server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''${cfg.package}/bin/influxd -config "${configFile}"'';
         User = "${cfg.user}";

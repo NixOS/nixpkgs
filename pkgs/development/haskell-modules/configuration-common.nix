@@ -160,8 +160,10 @@ self: super: {
   ABList = dontCheck super.ABList;
 
   # https://github.com/haskell/vector/issues/47
-  vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
+  # https://github.com/haskell/vector/issues/138
+  vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
+  # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
     else super.halive;
@@ -971,10 +973,16 @@ self: super: {
   });
 
   # https://github.com/commercialhaskell/stack/issues/2263
-  stack = appendPatch super.stack (pkgs.fetchpatch {
-    url = "https://github.com/commercialhaskell/stack/commit/7f7f1a5f67f4ecdd1f3009495f1ff101dd38047e.patch";
-    sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
+  stack = (dontJailbreak super.stack).overrideScope (self: super: {
+    http-client = self.http-client_0_5_3_2;
+    http-client-tls = self.http-client-tls_0_3_3;
+    http-conduit = self.http-conduit_2_2_2_1;
+    optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
+    criterion = super.criterion.override { inherit (super) optparse-applicative; };
   });
+
+  # Test suite fails a QuickCheck property.
+  optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
 
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
@@ -1007,5 +1015,8 @@ self: super: {
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
+
+  # https://github.com/fpco/store/issues/77
+  store = dontCheck super.store;
 
 }

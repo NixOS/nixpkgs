@@ -11,12 +11,11 @@ stdenv.mkDerivation {
   patchPhase = ''
     patchShebangs ./script/
   '';
-  builder = builtins.toFile "builder.sh" ''
-    source $stdenv/setup
-    mkdir -p $out/bin
-    cp -r $src/* .
-    chmod -R +w src
+  buildPhase = ''
     ./script/mlton.sh
+  '';
+  installPhase = ''
+    mkdir -p $out/bin
     mv ./bin/redprl $out/bin
   '';
   meta = {

@@ -1,13 +1,13 @@
 { fetchurl, stdenv, mesa, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
-libpng, zlib, bash }:
+libpng, zlib, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "torcs-1.3.5";
+  name = "torcs-1.3.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/torcs/${name}.tar.bz2";
-    sha256 = "170ff98smkkv1sk4nbz9w0alhmmbr32djmgbc08lcfhf0lj2ni38";
+    sha256 = "0kdq0sc7dsfzlr0ggbxggcbkivc6yp30nqwjwcaxg9295s3b06wa";
   };
 
   patchPhase = ''
@@ -15,13 +15,18 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ mesa freeglut libX11 plib openal freealut libXrandr xproto
-    libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis ];
+    libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis makeWrapper ];
 
   nativeBuildInputs = [ bash ];
 
   installTargets = "install datainstall";
 
   hardeningDisable = [ "format" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/torcs \
+      --prefix LD_LIBRARY_PATH : ${mesa}/lib
+  '';
 
   meta = {
     description = "Car racing game";

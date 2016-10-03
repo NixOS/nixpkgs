@@ -104,7 +104,7 @@ let
       "CONFIG+=no-client"
     ];
 
-    buildInputs = [ libcap ] ++ optional iceSupport [ zeroc_ice ];
+    buildInputs = [ libcap ] ++ optional iceSupport zeroc_ice;
   };
 
   stableSource = rec {

@@ -18,94 +18,96 @@ in
 
       networks = mkOption {
         default = { };
-        type = types.loaOf types.optionSet;
+        type = with types; loaOf (submodule {
+          options = {
+
+            extraConfig = mkOption {
+              default = "";
+              type = types.lines;
+              description = ''
+                Extra lines to add to the tinc service configuration file.
+              '';
+            };
+
+            name = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                The name of the node which is used as an identifier when communicating
+                with the remote nodes in the mesh. If null then the hostname of the system
+                is used.
+              '';
+            };
+
+            ed25519PrivateKeyFile = mkOption {
+              default = null;
+              type = types.nullOr types.path;
+              description = ''
+                Path of the private ed25519 keyfile.
+              '';
+            };
+
+            debugLevel = mkOption {
+              default = 0;
+              type = types.addCheck types.int (l: l >= 0 && l <= 5);
+              description = ''
+                The amount of debugging information to add to the log. 0 means little
+                logging while 5 is the most logging. <command>man tincd</command> for
+                more details.
+              '';
+            };
+
+            hosts = mkOption {
+              default = { };
+              type = types.loaOf types.lines;
+              description = ''
+                The name of the host in the network as well as the configuration for that host.
+                This name should only contain alphanumerics and underscores.
+              '';
+            };
+
+            interfaceType = mkOption {
+              default = "tun";
+              type = types.addCheck types.str (n: n == "tun" || n == "tap");
+              description = ''
+                The type of virtual interface used for the network connection
+              '';
+            };
+
+            listenAddress = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                The ip adress to bind to.
+              '';
+            };
+
+            package = mkOption {
+              type = types.package;
+              default = pkgs.tinc_pre;
+              defaultText = "pkgs.tinc_pre";
+              description = ''
+                The package to use for the tinc daemon's binary.
+              '';
+            };
+
+            chroot = mkOption {
+              default = true;
+              type = types.bool;
+              description = ''
+                Change process root directory to the directory where the config file is located (/etc/tinc/netname/), for added security.
+                The chroot is performed after all the initialization is done, after writing pid files and opening network sockets.
+
+                Note that tinc can't run scripts anymore (such as tinc-down or host-up), unless it is setup to be runnable inside chroot environment.
+              '';
+            };
+          };
+        });
+
         description = ''
           Defines the tinc networks which will be started.
           Each network invokes a different daemon.
         '';
-        options = {
-
-          extraConfig = mkOption {
-            default = "";
-            type = types.lines;
-            description = ''
-              Extra lines to add to the tinc service configuration file.
-            '';
-          };
-
-          name = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            description = ''
-              The name of the node which is used as an identifier when communicating
-              with the remote nodes in the mesh. If null then the hostname of the system
-              is used.
-            '';
-          };
-
-          ed25519PrivateKeyFile = mkOption {
-            default = null;
-            type = types.nullOr types.path;
-            description = ''
-              Path of the private ed25519 keyfile.
-            '';
-          };
-
-          debugLevel = mkOption {
-            default = 0;
-            type = types.addCheck types.int (l: l >= 0 && l <= 5);
-            description = ''
-              The amount of debugging information to add to the log. 0 means little
-              logging while 5 is the most logging. <command>man tincd</command> for
-              more details.
-            '';
-          };
-
-          hosts = mkOption {
-            default = { };
-            type = types.loaOf types.lines;
-            description = ''
-              The name of the host in the network as well as the configuration for that host.
-              This name should only contain alphanumerics and underscores.
-            '';
-          };
-
-          interfaceType = mkOption {
-            default = "tun";
-            type = types.addCheck types.str (n: n == "tun" || n == "tap");
-            description = ''
-              The type of virtual interface used for the network connection
-            '';
-          };
-
-          listenAddress = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            description = ''
-              The ip adress to bind to.
-            '';
-          };
-
-          package = mkOption {
-            type = types.package;
-            default = pkgs.tinc_pre;
-            defaultText = "pkgs.tinc_pre";
-            description = ''
-              The package to use for the tinc daemon's binary.
-            '';
-          };
-
-          chroot = mkOption {
-            default = true;
-            type = types.bool;
-            description = ''
-              Change process root directory to the directory where the config file is located (/etc/tinc/netname/), for added security.
-              The chroot is performed after all the initialization is done, after writing pid files and opening network sockets.
-
-              Note that tinc can't run scripts anymore (such as tinc-down or host-up), unless it is setup to be runnable inside chroot environment.
-            '';
-          };
-        };
       };
     };
 
@@ -149,8 +151,8 @@ in
       ("tinc.${network}")
       ({
         description = "Tinc Daemon - ${network}";
-        wantedBy = [ "network.target" ];
-        after = [ "network-interfaces.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
         path = [ data.package ];
         restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
           ++ mapAttrsToList (host: _ : config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;

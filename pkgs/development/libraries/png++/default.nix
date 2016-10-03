@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   postCheck = "cat test/test.log";
 
   buildInputs = [ ]
-    ++ stdenv.lib.optional docSupport [ doxygen ];
+    ++ stdenv.lib.optional docSupport doxygen;
 
   propagatedBuildInputs = [ libpng ];
 

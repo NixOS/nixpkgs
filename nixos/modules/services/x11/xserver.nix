@@ -71,15 +71,11 @@ let
     monitors = reverseList (foldl mkMonitor [] xrandrHeads);
   in concatMapStrings (getAttr "value") monitors;
 
-  configFile = pkgs.stdenv.mkDerivation {
-    name = "xserver.conf";
-
-    xfs = optionalString (cfg.useXFS != false)
-      ''FontPath "${toString cfg.useXFS}"'';
-
-    inherit (cfg) config;
-
-    buildCommand =
+  configFile = pkgs.runCommand "xserver.conf"
+    { xfs = optionalString (cfg.useXFS != false)
+        ''FontPath "${toString cfg.useXFS}"'';
+      inherit (cfg) config;
+    }
       ''
         echo 'Section "Files"' >> $out
         echo $xfs >> $out
@@ -102,7 +98,6 @@ let
 
         echo "$config" >> $out
       ''; # */
-  };
 
 in
 
@@ -151,6 +146,22 @@ in
         default = false;
         description = ''
           Whether to allow the X server to accept TCP connections.
+        '';
+      };
+
+      autoRepeatDelay = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Sets the autorepeat delay (length of time in milliseconds that a key must be depressed before autorepeat starts).
+        '';
+      };
+
+      autoRepeatInterval = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Sets the autorepeat interval (length of time in milliseconds that should elapse between autorepeat-generated keystrokes).
         '';
       };
 
@@ -509,7 +520,6 @@ in
 
         environment =
           {
-            XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
             LD_LIBRARY_PATH = concatStringsSep ":" (
               [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" "/run/opengl-driver/lib" ]
@@ -541,7 +551,9 @@ in
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
-        ++ optional (!cfg.enableTCP) "-nolisten tcp";
+        ++ optional (!cfg.enableTCP) "-nolisten tcp"
+        ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
+        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}";
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++

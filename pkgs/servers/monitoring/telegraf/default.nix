@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "telegraf-${version}";
-  version = "1.0.0";
+  version = "1.0.1";
 
   goPackagePath = "github.com/influxdata/telegraf";
 
@@ -12,10 +12,9 @@ buildGoPackage rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "${version}";
-    sha256 = "0kbh4gba4rrbykdl9wsyijh0xi5ksrch99fn4gj5gbbmd383pdzv";
+    sha256 = "1qn90rybdb2ybdyfk2f2yqpsgrya95bgiglmxnf2x1fapjpm7434";
   };
 
-  # Generated with the `gdm2nix.rb` script and the `Godeps` file from the influxdb repo root.
   goDeps = ./. + builtins.toPath "/deps-${version}.nix";
 
   meta = with lib; {

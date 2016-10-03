@@ -258,7 +258,7 @@ in
           let
             mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
             device'  = escapeSystemdPath fs.device;
-            device'' = "${device}.device";
+            device'' = "${device'}.device";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
             wantedBy = [ mountPoint' ];

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "An \"Iterative Closest Point\" library for 2-D/3-D mapping in robotic";
     license = licenses.bsd3;
-    platforms   = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ cryptix ];
   };
 }

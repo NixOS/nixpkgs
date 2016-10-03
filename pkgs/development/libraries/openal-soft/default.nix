@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake ]
     ++ optional alsaSupport alsaLib
     ++ optional pulseSupport libpulseaudio
-    ++ optional stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+    ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
   NIX_LDFLAGS = []
     ++ optional alsaSupport "-lasound"

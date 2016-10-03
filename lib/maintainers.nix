@@ -37,6 +37,7 @@
   andsild = "Anders Sildnes <andsild@gmail.com>";
   aneeshusa = "Aneesh Agrawal <aneeshusa@gmail.com>";
   antono = "Antono Vasiljev <self@antono.info>";
+  apeyroux = "Alexandre Peyroux <alex@px.io>";
   ardumont = "Antoine R. Dumont <eniotna.t@gmail.com>";
   aristid = "Aristid Breitkreuz <aristidb@gmail.com>";
   arobyn = "Alexei Robyn <shados@shados.net>";
@@ -166,6 +167,7 @@
   giogadi = "Luis G. Torres <lgtorres42@gmail.com>";
   gleber = "Gleb Peregud <gleber.p@gmail.com>";
   globin = "Robin Gloster <mail@glob.in>";
+  gnidorah = "Alex Ivanov <yourbestfriend@opmbx.org>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   Gonzih = "Max Gonzih <gonzih@gmail.com>";
   gpyh = "Yacine Hmito <yacine.hmito@gmail.com>";
@@ -233,6 +235,7 @@
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   lowfatcomputing = "Andreas Wagner <andreas.wagner@lowfatcomputing.org>";
   lsix = "Lancelot SIX <lsix@lancelotsix.com>";
+  lucas8 = "Luc Chabassier <luc.linux@mailoo.org>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
   lukasepple = "Lukas Epple <post@lukasepple.de>";
@@ -277,6 +280,7 @@
   mounium = "Katona László <muoniurn@gmail.com>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
   mpscholten = "Marc Scholten <marc@mpscholten.de>";
+  mpsyco = "Francis St-Amour <fr.st-amour@gmail.com>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
   msteen = "Matthijs Steen <emailmatthijs@gmail.com>";
@@ -290,6 +294,7 @@
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
+  nhooyr = "Anmol Sethi <anmol@aubble.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
   NikolaMandic = "Ratko Mladic <nikola@mandic.email>";
@@ -389,8 +394,8 @@
   skeidel = "Sven Keidel <svenkeidel@gmail.com>";
   skrzyp = "Jakub Skrzypnik <jot.skrzyp@gmail.com>";
   sleexyz = "Sean Lee <freshdried@gmail.com>";
-  smironov = "Sergey Mironov <ierton@gmail.com>";
   solson = "Scott Olson <scott@solson.me>";
+  smironov = "Sergey Mironov <grrwlf@gmail.com>";
   spacefrogg = "Michael Raitza <spacefrogg-nixos@meterriblecrew.net>";
   spencerjanssen = "Spencer Janssen <spencerjanssen@gmail.com>";
   spinus = "Tomasz Czyż <tomasz.czyz@gmail.com>";

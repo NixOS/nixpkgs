@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ optional wxSupport [ mesa wxGTK xorg.libX11 ]
-      ++ optional odbcSupport [ unixODBC ]
-      ++ optional stdenv.isDarwin [ Carbon Cocoa ];
+    ] ++ optionals wxSupport [ mesa wxGTK xorg.libX11 ]
+      ++ optional odbcSupport unixODBC
+      ++ optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
