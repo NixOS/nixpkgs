@@ -1,5 +1,7 @@
 { stdenv, fetchurl, zsh }:
 
+# To make use of this derivation, use the `programs.zsh.enableSyntaxHighlighting` option
+
 let
 
   pkgName = "zsh-syntax-highlighting";
