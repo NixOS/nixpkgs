@@ -8,11 +8,11 @@ let
   majorVersion = "0.11";
 in
 stdenv.mkDerivation rec {
-  name = "folks-${majorVersion}.2";
+  name = "folks-${majorVersion}.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/folks/${majorVersion}/${name}.tar.xz";
-    sha256 = "0q9hny6a38zn0gamv0ji0pn3jw6bpn2i0fr6vbzkhm9h9ws0cqvz";
+    sha256 = "2a2828a7c87fd39e5786f8f2cf0ebe47576a74974f1355c478a6dc747d7bcb64";
   };
 
   propagatedBuildInputs = [ glib gnome3.libgee sqlite ];
