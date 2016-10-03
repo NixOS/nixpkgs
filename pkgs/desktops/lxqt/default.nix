@@ -45,5 +45,6 @@ let
     lxqt-powermanagement = callPackage ./core/lxqt-powermanagement { };
     lxqt-qtplugin = callPackage ./core/lxqt-qtplugin { };
     lxqt-session = callPackage ./core/lxqt-session { };
+    lxqt-sudo = callPackage ./core/lxqt-sudo { };
 
 in self
