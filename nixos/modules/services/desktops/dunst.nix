@@ -446,7 +446,7 @@ with lib;
     environment.systemPackages = [ pkgs.dunst ];
     systemd.user.services.dunst = {
       description = "Dunst: lightweight and customizable notification daemon";
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical.target" ];
       serviceConfig = {
         Type = "dbus";
         BusName = "org.freedesktop.Notifications";
