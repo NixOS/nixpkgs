@@ -65,6 +65,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Boost Software License 1.0";
   };
 
+  beerware = spdx {
+    spdxId = "Beerware";
+    fullName = ''Beerware License'';
+  };
+
   bsd2 = spdx {
     spdxId = "BSD-2-Clause";
     fullName = ''BSD 2-clause "Simplified" License'';
