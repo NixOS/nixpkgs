@@ -6,8 +6,8 @@ let
   self = rec {
 
     # For compiling information, see:
-    # - https://github.com/lxde/lxqt/wiki/Building-from-source  
-      
+    # - https://github.com/lxde/lxqt/wiki/Building-from-source
+  
     standardPatch = ''
       for file in $(find . -name CMakeLists.txt); do
         substituteInPlace $file \
@@ -21,7 +21,7 @@ let
         echo $file
         grep --color=always DESTINATION $file || true
         grep --color=always share/lxqt/translations $file || true
-        grep --color=always platformthemes $file || true
+        grep --color=always platform $file || true
       done
       echo --------------------------------------------------------
     '';
@@ -56,5 +56,7 @@ let
 
     ### OPTIONAL
     qterminal = callPackage ./optional/qterminal { };
+   
+  };
 
 in self

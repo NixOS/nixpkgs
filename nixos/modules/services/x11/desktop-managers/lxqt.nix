@@ -31,6 +31,7 @@ in
     };
 
     environment.systemPackages = [
+      pkgs.kde5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
       pkgs.kde5.oxygen-icons5 # default icon theme
       pkgs.libfm
       pkgs.libfm-extra

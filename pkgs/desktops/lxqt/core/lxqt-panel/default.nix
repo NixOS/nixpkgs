@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt, xorg,
-libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache, lxmenu-data }:
+libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache,
+lxmenu-data }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
     qt5.libdbusmenu
     kde5.kwindowsystem
     kde5.solid
+    kde5.kguiaddons
     lxqt.liblxqt
     lxqt.libqtxdg
     lxqt.lxqt-globalkeys
