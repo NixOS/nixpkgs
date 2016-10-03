@@ -4391,11 +4391,11 @@ in modules // {
 
   mahotas = buildPythonPackage rec {
     name = "python-mahotas-${version}";
-    version = "1.4.1";
+    version = "1.4.2";
 
     src = pkgs.fetchurl {
-      url = "https://github.com/luispedro/mahotas/archive/release-${version}.tar.gz";
-      sha256 = "a684d339a3a4135f6f7161851161174755e9ea643b856b0bb48abd5515041ab6";
+      url = "https://github.com/luispedro/mahotas/archive/v${version}.tar.gz";
+      sha256 = "1mvsxh0pa5vdvbknlv1m68n7gw2cv4pyqgqp3r770rnmf6nxbp7m";
     };
 
     buildInputs = with self; [
@@ -4412,7 +4412,7 @@ in modules // {
 
     meta = with stdenv.lib; {
       description = "Computer vision package based on numpy";
-      homepage = https://readthedocs.org/projects/mahotas/;
+      homepage = http://mahotas.readthedocs.io/;
       maintainers = with maintainers; [ luispedro ];
       license = licenses.mit;
       platforms = platforms.linux;
