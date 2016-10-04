@@ -259,15 +259,15 @@ with stdenv.lib;
     CEPH_FS_POSIX_ACL? y
   ''}
   ${optionalString (versionAtLeast version "3.13") ''
-    SQUASHFS_FILE_DIRECT y
-    SQUASHFS_DECOMP_MULTI_PERCPU y
+    SQUASHFS_FILE_DIRECT? y
+    SQUASHFS_DECOMP_MULTI_PERCPU? y
   ''}
-  SQUASHFS_XATTR y
-  SQUASHFS_ZLIB y
-  SQUASHFS_LZO y
-  SQUASHFS_XZ y
+  SQUASHFS_XATTR? y
+  SQUASHFS_ZLIB? y
+  SQUASHFS_LZO? y
+  SQUASHFS_XZ? y
   ${optionalString (versionAtLeast version "3.19") ''
-    SQUASHFS_LZ4 y
+    SQUASHFS_LZ4? y
   ''}
 
   # Native Language Support modules, needed by some filesystems
