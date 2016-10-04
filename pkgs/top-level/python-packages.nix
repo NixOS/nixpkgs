@@ -3997,20 +3997,20 @@ in modules // {
   };
 
   cookiecutter = buildPythonPackage rec {
-    version = "1.3.0";
+    version = "1.4.0";
     name = "cookiecutter-${version}";
 
-    # dependency problems, next release of cookiecutter should unblock these
-    disabled = isPy3k || isPyPy;
+    # not sure why this is broken
+    disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://github.com/audreyr/cookiecutter/archive/${version}.tar.gz";
-      sha256 = "1vchjvh7591nczz2zz55aghk9mhpm6kqgm62d05d4mjrx9xjkdcg";
+      sha256 = "1clxnabmc5s4b519r1sxyj1163x833ir8xcypmdfpf6r9kbb35vn";
     };
 
-    buildInputs = with self; [ itsdangerous  ];
+    buildInputs = with self; [ itsdangerous pytest freezegun docutils ];
     propagatedBuildInputs = with self; [
-          jinja2 future binaryornot click whichcraft ruamel_yaml ];
+          jinja2 future binaryornot click whichcraft poyo jinja2_time ];
 
     meta = {
       homepage = https://github.com/audreyr/cookiecutter;
@@ -8262,6 +8262,22 @@ in modules // {
       license = licenses.lgpl21Plus;
       maintainers = with maintainers; [ sepi ];
       platforms = platforms.all;
+    };
+  };
+
+  poyo = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "poyo-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/poyo/${name}.tar.gz";
+      sha256 = "1f48ffl0j1f2lmgabajps7v8w90ppxbp5168gh8kh27bjd8xk5ca";
+    };
+
+    meta = {
+      homepage = https://github.com/hackebrot/poyo;
+      description = "A lightweight YAML Parser for Python";
+      license = licenses.mit;
     };
   };
 
@@ -12699,6 +12715,23 @@ in modules // {
     };
   };
 
+  jinja2_time = buildPythonPackage rec {
+    version = "0.2.0";
+    name = "jinja2-time-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jinja2-time/${name}.tar.gz";
+      sha256 = "0h0dr7cfpjnjj8bgl2vk9063a53649pn37wnlkd8hxjy656slkni";
+    };
+
+    propagatedBuildInputs = with self; [ arrow jinja2 ];
+
+    meta = {
+      homepage = https://github.com/hackebrot/jinja2-time;
+      description = "Jinja2 Extension for Dates and Times";
+      license = licenses.mit;
+    };
+  };
 
   jmespath = buildPythonPackage rec {
     name = "jmespath-0.7.1";
@@ -27096,6 +27129,8 @@ in modules // {
       url = "https://github.com/pydanny/whichcraft/archive/${version}.tar.gz";
       sha256 = "1xqp66knzlb01k30qic40vzwl51jmlsb8r96iv60m2ca6623abbv";
     };
+
+    buildInputs = with self; [ pytest ];
 
     meta = {
       homepage = https://github.com/pydanny/whichcraft;
