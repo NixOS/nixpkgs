@@ -1772,6 +1772,8 @@ in
 
   gengetopt = callPackage ../development/tools/misc/gengetopt { };
 
+  geteltorito = callPackage ../tools/misc/geteltorito { };
+
   getmail = callPackage ../tools/networking/getmail { };
 
   getopt = callPackage ../tools/misc/getopt { };
@@ -10806,6 +10808,7 @@ in
         # when adding a new linux version
         # !!! 4.7 patch doesn't apply, 4.8 patch not up yet, will keep checking
         # kernelPatches.cpu-cgroup-v2."4.7"
+        kernelPatches.modinst_arg_list_too_long
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu

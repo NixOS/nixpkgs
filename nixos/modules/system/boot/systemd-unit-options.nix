@@ -77,6 +77,12 @@ in rec {
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
+    documentation = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = "A list of URIs referencing documentation for this unit or its configuration.";
+    };
+
     requires = mkOption {
       default = [];
       type = types.listOf types.str;

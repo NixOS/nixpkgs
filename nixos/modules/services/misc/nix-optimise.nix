@@ -21,7 +21,7 @@ in
       };
 
       dates = mkOption {
-        default = "03:45";
+        default = ["03:45"];
         type = types.listOf types.str;
         description = ''
           Specification (in the format described by
