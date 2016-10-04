@@ -1,0 +1,43 @@
+diff -Naur pakcs-1.11.4-upstream/Makefile pakcs-1.11.4/Makefile
+--- pakcs-1.11.4-upstream/Makefile	2014-10-24 05:12:37.000000000 -0430
++++ pakcs-1.11.4/Makefile	2015-01-05 16:26:39.256709080 -0430
+@@ -94,7 +94,6 @@
+ install: cleanoldinfos installscripts copylibs
+ 	@echo "PAKCS installation configuration (file pakcsinitrc):"
+ 	@cat pakcsinitrc
+-	$(MAKE) frontend
+ 	# pre-compile all libraries:
+ 	@cd lib && $(MAKE) fcy
+ 	# install the Curry2Prolog compiler as a saved system:
+@@ -145,10 +144,6 @@
+ # compile the tools:
+ .PHONY: tools
+ tools:
+-	# compile the Curry Port Name Server demon:
+-	@if [ -r bin/pakcs ] ; then cd cpns       && $(MAKE) ; fi
+-	# compile the event handler demon for dynamic web pages:
+-	@if [ -r bin/pakcs ] ; then cd www        && $(MAKE) ; fi
+ 	@if [ -r bin/pakcs ] ; then cd currytools && $(MAKE) ; fi
+ 	@if [ -r bin/pakcs ] ; then cd tools      && $(MAKE) ; fi
+ 
+diff -Naur pakcs-1.11.4-upstream/scripts/pakcs.sh pakcs-1.11.4/scripts/pakcs.sh
+--- pakcs-1.11.4-upstream/scripts/pakcs.sh	2014-10-24 05:06:07.000000000 -0430
++++ pakcs-1.11.4/scripts/pakcs.sh	2015-01-05 16:26:15.697982791 -0430
+@@ -16,7 +16,7 @@
+ # use readline wrapper rlwrap if it is installed and we have tty as stdin:
+ USERLWRAP=no
+ if tty -s ; then
+-  RLWRAP=`which rlwrap`
++  RLWRAP=`type -P rlwrap`
+   if [ -x "$RLWRAP" ] ; then
+     USERLWRAP=yes
+   fi
+@@ -29,7 +29,7 @@
+ done
+ 
+ if [ $USERLWRAP = yes ] ; then
+-  exec rlwrap -c -f "$PAKCSHOME/tools/rlwrap" "$REPL" ${1+"$@"}
++  exec rlwrap -a -c -f "$PAKCSHOME/tools/rlwrap" "$REPL" ${1+"$@"}
+ else
+   exec "$REPL" ${1+"$@"}
+ fi
