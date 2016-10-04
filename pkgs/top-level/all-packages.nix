@@ -1748,6 +1748,8 @@ in
 
   gengetopt = callPackage ../development/tools/misc/gengetopt { };
 
+  geteltorito = callPackage ../tools/misc/geteltorito { };
+
   getmail = callPackage ../tools/networking/getmail { };
 
   getopt = callPackage ../tools/misc/getopt { };
