@@ -1,8 +1,11 @@
 { stdenv, fetchurl }:
-
+let pkgs = import <nixpkgs> {};
+in
 stdenv.mkDerivation rec {
   name = "lsof-${version}";
   version = "4.89";
+
+  buildInputs = [ pkgs.ncurses ];
 
   src = fetchurl {
     urls =
@@ -22,12 +25,14 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
+  
+  patches = [ ./dfile.patch ];
 
-  preBuild = "sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;';";
+  preBuild = "sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;' -e s/-lcurses/-lncurses/ ;";
 
   configurePhase = ''
     # Stop build scripts from searching global include paths
-    export LSOF_INCLUDE=/$(md5sum <(echo $name) | awk '{print $1}')
+    # export LSOF_INCLUDE=/$(md5sum <(echo $name) | awk '{print $1}')
     ./Configure -n ${if stdenv.isDarwin then "darwin" else "linux"}
   '';
 
