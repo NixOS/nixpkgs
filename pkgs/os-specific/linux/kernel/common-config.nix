@@ -232,22 +232,22 @@ with stdenv.lib;
   BTRFS_FS_POSIX_ACL y
   UBIFS_FS_ADVANCED_COMPR? y
   ${optionalString (versionAtLeast version "4.0" && versionOlder version "4.6") ''
-    NFSD_PNFS y
+    NFSD_PNFS? y
   ''}
-  NFSD_V2_ACL y
-  NFSD_V3 y
-  NFSD_V3_ACL y
-  NFSD_V4 y
+  NFSD_V2_ACL? y
+  NFSD_V3? y
+  NFSD_V3_ACL? y
+  NFSD_V4? y
   ${optionalString (versionAtLeast version "3.11") ''
-    NFSD_V4_SECURITY_LABEL y
+    NFSD_V4_SECURITY_LABEL? y
   ''}
-  NFS_FSCACHE y
-  NFS_SWAP y
-  NFS_V3_ACL y
+  NFS_FSCACHE? y
+  NFS_SWAP? y
+  NFS_V3_ACL? y
   ${optionalString (versionAtLeast version "3.11") ''
-    NFS_V4_1 y  # NFSv4.1 client support
-    NFS_V4_2 y
-    NFS_V4_SECURITY_LABEL y
+    NFS_V4_1? y  # NFSv4.1 client support
+    NFS_V4_2? y
+    NFS_V4_SECURITY_LABEL? y
   ''}
   CIFS_XATTR? y
   CIFS_POSIX? y
@@ -434,7 +434,7 @@ with stdenv.lib;
   DEVTMPFS y
 
   # Easier debugging of NFS issues.
-  SUNRPC_DEBUG y
+  SUNRPC_DEBUG? y
 
   # Virtualisation.
   PARAVIRT? y
