@@ -210,11 +210,11 @@ with stdenv.lib;
   # ACLs for all filesystems that support them.
   FANOTIFY y
   TMPFS y
-  EXT2_FS_XATTR y
-  EXT2_FS_POSIX_ACL y
-  EXT2_FS_SECURITY y
+  EXT2_FS_XATTR? y
+  EXT2_FS_POSIX_ACL? y
+  EXT2_FS_SECURITY? y
   ${optionalString (versionOlder version "4.0") ''
-    EXT2_FS_XIP y # Ext2 execute in place support
+    EXT2_FS_XIP? y # Ext2 execute in place support
   ''}
   EXT3_FS_POSIX_ACL y
   EXT3_FS_SECURITY y
