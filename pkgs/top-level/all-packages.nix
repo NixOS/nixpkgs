@@ -12498,8 +12498,7 @@ in
 
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
-    proofgeneral_4_2 = callPackage ../applications/editors/emacs-modes/proofgeneral/4.2.nix {
-      texinfo = texinfo4 ;
+    proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral/4.4.nix {
       texLive = texlive.combine { inherit (texlive) scheme-basic cm-super ec; };
     };
     proofgeneral_4_3_pre = callPackage ../applications/editors/emacs-modes/proofgeneral/4.3pre.nix {
@@ -12510,7 +12509,6 @@ in
       texinfo = texinfo4 ;
       texLive = texlive.combine { inherit (texlive) scheme-basic cm-super ec; };
     };
-    proofgeneral = self.proofgeneral_4_2;
 
     quack = callPackage ../applications/editors/emacs-modes/quack { };
 
