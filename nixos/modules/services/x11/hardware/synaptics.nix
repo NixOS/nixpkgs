@@ -169,10 +169,10 @@ in {
 
   config = mkIf cfg.enable {
 
-    services.xserver.modules = [ pkg ];
+    services.xserver.modules = [ pkg.out ];
 
     environment.etc."${etcFile}".source =
-      "${pkg}/share/X11/xorg.conf.d/50-synaptics.conf";
+      "${pkg.out}/share/X11/xorg.conf.d/50-synaptics.conf";
 
     environment.systemPackages = [ pkg ];
 
@@ -204,6 +204,13 @@ in {
           ${cfg.additionalOptions}
         EndSection
       '';
+
+    assertions = [
+      {
+        assertion = !config.services.xserver.libinput.enable;
+        message = "Synaptics and libinput are incompatible, you cannot enable both (in services.xserver).";
+      }
+    ];
 
   };
 

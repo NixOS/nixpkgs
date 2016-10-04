@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/akopytov/sysbench.git;
     rev = "2b3042883090c9cf8cb9be2b24d3590cdcee112f";
-    sha256 = "0di6jc9ybnqk3pqg45lks2c9003l74xz4g619haw36fvbi28aql6";
+    sha256 = "1xlb3fracha3wva3dmmjk36b262vblynkmiz8n0mn1vkc78bssaw";
   };
 
   preAutoreconf = ''

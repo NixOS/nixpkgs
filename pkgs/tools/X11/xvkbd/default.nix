@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configurePhase = '' xmkmf -a '';
 
   meta = with stdenv.lib; {
-    description = "virtual keyboard for X window system";
+    description = "Virtual keyboard for X window system";
     longDescription = ''
       xvkbd is a virtual (graphical) keyboard program for X Window System which provides
       facility to enter characters onto other clients (softwares) by clicking on a

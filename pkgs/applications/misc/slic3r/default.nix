@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/alexrj/Slic3r";
     rev = "refs/tags/${version}";
-    sha256 = "1xwl8ay5m6pwrrnhbmnmpwyh4wc8hsi4ldzgq98f4bh6szj6jh4z";
+    sha256 = "1z8h11k29b7z49z5k8ikyfiijyycy1q3krlzi8hfd0vdybvymw21";
   };
 
   buildInputs = with perlPackages; [ perl makeWrapper which
     EncodeLocale MathClipper ExtUtilsXSpp threads
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
-    ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild
+    ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild LWP
   ];
 
   desktopItem = makeDesktopItem {

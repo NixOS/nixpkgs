@@ -2,5 +2,10 @@
   "userBlacklist": [
     "civodul",
     "jhasse"
-  ]
+  ],
+  "alwaysNotifyForPaths": [
+    { "name": "FRidh", "files": ["pkgs/top-level/python-packages.nix", "pkgs/development/interpreters/python/*", "pkgs/development/python-modules/*" ] },
+    { "name": "copumpkin", "files": ["pkgs/stdenv/darwin/*", "pkgs/os-specific/darwin/apple-source-releases/*"] }
+  ],
+  "fileBlacklist": ["pkgs/top-level/all-packages.nix"]
 }

@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
     rev    = "bfb38b1a3c5e37d43188bbd02365a87bebc8d122";
-    sha256 = "0g9gh915ywawqf1gq7pwkhrhbh79w7si4g34ryml7a6mnmvx8b52";
+    sha256 = "0bm7vqg3bk716xmw2af99p44zizfhknq9z3cphf7klfdrr7ibqm5";
   };
 
   buildInputs = [ cmake perl go ];
   enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   installPhase = ''
     mkdir -p $out/bin $out/include $out/lib

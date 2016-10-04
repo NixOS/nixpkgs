@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   ] else null;
 
   meta = {
-    description = "command line option parsing library";
+    description = "Command line option parsing library";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

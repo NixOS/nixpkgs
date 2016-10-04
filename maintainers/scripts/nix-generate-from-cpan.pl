@@ -278,13 +278,13 @@ sub get_deps {
     foreach my $n ( $deps->required_modules ) {
         next if $n eq "perl";
 
-        # Hacky way to figure out if this module is part of Perl.
-        if ( $n !~ /^JSON/ && $n !~ /^YAML/ && $n !~ /^Module::Pluggable/  && $n !~ /^if$/ ) {
-            eval "use $n;";
-            if ( !$@ ) {
-                DEBUG("skipping Perl-builtin module $n");
-                next;
-            }
+        # Figure out whether the module is a core module by attempting
+        # to `use` the module in a pure Perl interpreter and checking
+        # whether it succeeded. Note, $^X is a magic variable holding
+        # the path to the running Perl interpreter.
+        if ( system("env -i $^X -M$n -e1 >/dev/null 2>&1") == 0 ) {
+            DEBUG("skipping Perl-builtin module $n");
+            next;
         }
 
         my $pkg = module_to_pkg( $cb, $n );
@@ -395,15 +395,20 @@ my $meta = read_meta($pkg_path);
 
 DEBUG( "metadata: ", encode_json( $meta->as_struct ) ) if defined $meta;
 
+my @runtime_deps = sort( uniq( get_deps( $cb, $meta, "runtime" ) ) );
+INFO("runtime deps: @runtime_deps");
+
 my @build_deps = sort( uniq(
         get_deps( $cb, $meta, "configure" ),
         get_deps( $cb, $meta, "build" ),
         get_deps( $cb, $meta, "test" )
 ) );
-INFO("build deps: @build_deps");
 
-my @runtime_deps = sort( uniq( get_deps( $cb, $meta, "runtime" ) ) );
-INFO("runtime deps: @runtime_deps");
+# Filter out runtime dependencies since those are already handled.
+my %in_runtime_deps = map { $_ => 1 } @runtime_deps;
+@build_deps = grep { not $in_runtime_deps{$_} } @build_deps;
+
+INFO("build deps: @build_deps");
 
 my $homepage = $meta ? $meta->resources->{homepage} : undef;
 INFO("homepage: $homepage") if defined $homepage;

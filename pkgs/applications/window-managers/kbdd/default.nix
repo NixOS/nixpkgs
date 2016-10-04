@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/qnikst/kbdd;
     rev = "47dee0232f157cd865e43d92005a2ba107f6fd75";
-    sha256 = "1b9a66d216326a9759cad26393fbf8259fe7a0c2dd1075047fc989f0e52d969f";
+    sha256 = "1ys9w1lncsfg266g9sfnm95an2add3g51mryg0hnrzcqa4knz809";
   };
 
   buildInputs = [ pkgconfig xorg.libX11 dbus_glib autoreconfHook ];

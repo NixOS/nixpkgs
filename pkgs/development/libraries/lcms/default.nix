@@ -8,11 +8,14 @@ stdenv.mkDerivation {
     sha256 = "1abkf8iphwyfs3z305z3qczm3z1i9idc1lz4gvfg92jnkz5k5bl0";
   };
 
-  outputs = [ "dev" "out" "bin" "man" ];
+  patches = [ ./cve-2013-4276.patch ];
+
+  outputs = [ "bin" "dev" "out" "man" ];
 
   meta = {
     description = "Color management engine";
     homepage = http://www.littlecms.com/;
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

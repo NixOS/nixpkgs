@@ -3,23 +3,23 @@
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
 , net_snmp, openssl, polkit
 , bash, coreutils, utillinux
-, qtSupport ? true, qt4, pyqt4
+, qtSupport ? true, qt4
 , withPlugin ? false
 }:
 
 let
 
   name = "hplip-${version}";
-  version = "3.16.3";
+  version = "3.16.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1501qdnkjp1ybgagy5188fmf6cgmj5555ygjl3543nlbwcp31lj2";
+    sha256 = "1nay65q1zmx2jxiwn66n7mlr73azacz5097gw98kqqf90dh522f6";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "03q730w0kbh8i55i95vfb59yc0kjxz01hjpb3l05w2jw3hmfzvdp";
+    sha256 = "15qrcd3ndnxri6pfdfmsjyv2f3zfkig80yghs76jbsm106rp8g3q";
   };
 
   hplipState =
@@ -40,7 +40,7 @@ let
   hplipArch = hplipPlatforms."${stdenv.system}"
     or (throw "HPLIP not supported on ${stdenv.system}");
 
-  pluginArches = [ "x86_32" "x86_64" ];
+  pluginArches = [ "x86_32" "x86_64" "arm32" ];
 
 in
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   pythonPath = with pythonPackages; [
     dbus
     pillow
-    pygobject
+    pygobject2
     recursivePthLoader
     reportlab
     usbutils
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     find . -type f -exec sed -i \
       -e s,/etc/hp,$out/etc/hp, \
       -e s,/etc/sane.d,$out/etc/sane.d, \
-      -e s,/usr/include/libusb-1.0,${libusb1}/include/libusb-1.0, \
+      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0, \
       -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor, \
       -e s,/usr/lib/systemd/system,$out/lib/systemd/system, \
       -e s,/var/lib/hp,$out/var/lib/hp, \

@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [pkgconfig freetype libXft pango fontconfig];
 
-  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
+  NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
 
   meta = {
     description = "An advanced font engine";
     maintainers = [ stdenv.lib.maintainers.raskin ];
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

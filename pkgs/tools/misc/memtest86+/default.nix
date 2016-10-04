@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
 
+  hardeningDisable = [ "stackprotector" "pic" ];
+
   buildFlags = "memtest.bin";
 
   installPhase = ''
@@ -34,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.memtest.org/;
     description = "A tool to detect memory errors";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

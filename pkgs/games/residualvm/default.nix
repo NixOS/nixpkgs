@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ stdenv SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ]
-    ++ optional openglSupport [ mesa ];
+    ++ optional openglSupport mesa;
 
-  configureFlags="--enable-all-engines";
+  configureFlags = [ "--enable-all-engines" ];
 
   meta = {
     description = "Interpreter for LucasArts' Lua-based 3D adventure games";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake }:
+{ stdenv, fetchurl, autoconf, automake, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "unrtf-${version}";
@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoconf automake ];
+
+  buildInputs = [ ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
 
   preConfigure = "./bootstrap";
 

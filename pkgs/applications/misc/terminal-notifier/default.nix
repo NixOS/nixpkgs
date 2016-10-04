@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "09x7vl0kddivqq3pyrk6sg1f0sv5l7nj0bmblq222zk3b09bgg8p";
   };
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/Applications

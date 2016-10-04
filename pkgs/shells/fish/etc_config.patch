@@ -1,17 +1,12 @@
-commit 0ec07a7018bd69513b0bca6e2f22dbf8575a5b5e
-Author: Jakob Gillich <jakob@gillich.me>
-Date:   Fri Dec 25 01:59:29 2015 +0100
-
-    load /etc/fish/config.fish if it exists
-
 diff --git a/etc/config.fish b/etc/config.fish
-index 0683f40..33f4da7 100644
+index 9be6f07..61c9ae2 100644
 --- a/etc/config.fish
 +++ b/etc/config.fish
-@@ -37,3 +37,6 @@ if status --is-login
-        end
- end
-
+@@ -12,3 +12,7 @@
+ # if status --is-interactiv
+ #   ...
+ # end
++
 +if test -f /etc/fish/config.fish
 +  source /etc/fish/config.fish
 +end

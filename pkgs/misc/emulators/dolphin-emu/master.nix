@@ -1,4 +1,4 @@
-{ stdenv, gcc5, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
+{ stdenv, gcc, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
 , gettext, git, libpthreadstubs, libXrandr, libXext, readline
 , openal, libXdmcp, portaudio, fetchgit, libusb, libevdev
 , libpulseaudio ? null }:
@@ -8,21 +8,20 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/dolphin-emu/dolphin.git;
     rev = "5097a22844b850b429872f4de390bd958b11a616";
-    sha256 = "1qizkahbimpmgjs51av1cdmnnyvbz0j0gknmi5vdc38vrzxvwkrf";
+    sha256 = "09jx61cxvfimnq1snkv6w3m9qidrgp0j0w81c7pbkpmcwysz8xya";
     fetchSubmodules = false;
   };
 
   cmakeFlags = ''
     -DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include
     -DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include
-    -DGTK2_INCLUDE_DIRS=${gtk2}/include/gtk-2.0
-    -DCMAKE_BUILD_TYPE=Release
+    -DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0
     -DENABLE_LTO=True
   '';
 
   enableParallelBuilding = true;
 
-  buildInputs = [ gcc5 pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
+  buildInputs = [ gcc pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   libevdev git libXdmcp portaudio libusb libpulseaudio ];
 

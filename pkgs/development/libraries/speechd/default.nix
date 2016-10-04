@@ -6,17 +6,19 @@
 
 stdenv.mkDerivation rec {
   name = "speech-dispatcher-${version}";
-  version = "0.8.3";
+  version = "0.8.5";
 
   src = fetchurl {
     url = "http://www.freebsoft.org/pub/projects/speechd/${name}.tar.gz";
-    sha256 = "0kqy7z4l59n2anc7xn588w4rkacig1hajx8c53qrh90ypar978ln";
+    sha256 = "18jlxnhlahyi6njc6l6576hfvmzivjjgfjyd2n7vvrvx9inphjrb";
   };
 
   buildInputs = [ intltool libtool glib dotconf libsndfile libao python3Packages.python ]
              ++ lib.optional withEspeak espeak
              ++ lib.optional withPico svox;
   nativeBuildInputs = [ pkgconfig python3Packages.wrapPython ];
+
+  hardeningDisable = [ "format" ];
 
   pythonPath = with python3Packages; [ pyxdg ];
 

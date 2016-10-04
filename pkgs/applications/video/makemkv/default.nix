@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
           + ":" + stdenv.cc.cc + "/lib64";
 
   meta = with stdenv.lib; {
-    description = "convert blu-ray and dvd to mkv";
+    description = "Convert blu-ray and dvd to mkv";
     longDescription = ''
       makemkv is a one-click QT application that transcodes an encrypted
       blu-ray or DVD disc into a more portable set of mkv files, preserving

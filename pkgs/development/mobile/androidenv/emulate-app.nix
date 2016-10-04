@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     
     for i in $(seq 5554 2 5584)
     do
-        if [ -z "$(${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb devices | grep emulator-$i)" ]
+        if [ -z "$(${androidsdkComposition}/libexec/platform-tools/adb devices | grep emulator-$i)" ]
         then
             port=$i
             break
@@ -61,10 +61,10 @@ stdenv.mkDerivation {
     
     # Create a virtual android device for testing if it does not exists
     
-    if [ "$(${androidsdkComposition}/libexec/android-sdk-*/tools/android list avd | grep 'Name: device')" = "" ]
+    if [ "$(${androidsdkComposition}/libexec/tools/android list avd | grep 'Name: device')" = "" ]
     then
         # Create a virtual android device
-        yes "" | ${androidsdkComposition}/libexec/android-sdk-*/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion} $NIX_ANDROID_AVD_FLAGS
+        yes "" | ${androidsdkComposition}/libexec/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion} $NIX_ANDROID_AVD_FLAGS
     
         ${stdenv.lib.optionalString enableGPU ''
           # Enable GPU acceleration
@@ -77,24 +77,24 @@ stdenv.mkDerivation {
     fi
     
     # Launch the emulator
-    ${androidsdkComposition}/libexec/android-sdk-*/tools/emulator -avd device -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
+    ${androidsdkComposition}/libexec/tools/emulator -avd device -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
 
     # Wait until the device has completely booted
     
     echo "Waiting until the emulator has booted the device and the package manager is ready..." >&2
     
-    ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port wait-for-device
+    ${androidsdkComposition}/libexec/platform-tools/adb -s emulator-$port wait-for-device
     
     echo "Device state has been reached" >&2
     
-    while [ -z "$(${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell getprop dev.bootcomplete | grep 1)" ]
+    while [ -z "$(${androidsdkComposition}/libexec/platform-tools/adb -s emulator-$port shell getprop dev.bootcomplete | grep 1)" ]
     do
         sleep 5
     done
     
     echo "dev.bootcomplete property is 1" >&2
     
-    #while [ -z "$(${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell getprop sys.boot_completed | grep 1)" ]
+    #while [ -z "$(${androidsdkComposition}/libexec/platform-tools/adb -s emulator-$port shell getprop sys.boot_completed | grep 1)" ]
     #do
         #sleep 5
     #done
@@ -106,7 +106,7 @@ stdenv.mkDerivation {
     ${stdenv.lib.optionalString (app != null) ''
       # Install the App through the debugger, if it has not been installed yet
       
-      if [ -z "${package}" ] || [ "$(${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell pm list packages | grep package:${package})" = "" ]
+      if [ -z "${package}" ] || [ "$(${androidsdkComposition}/libexec/platform-tools/adb -s emulator-$port shell pm list packages | grep package:${package})" = "" ]
       then
           if [ -d "${app}" ]
           then
@@ -115,12 +115,12 @@ stdenv.mkDerivation {
               appPath="${app}"
           fi
           
-          ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port install "$appPath"
+          ${androidsdkComposition}/libexec/platform-tools/adb -s emulator-$port install "$appPath"
       fi
     
       # Start the application
       ${stdenv.lib.optionalString (package != null && activity != null) ''
-          ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/${activity}
+          ${androidsdkComposition}/libexec/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/${activity}
       ''}
     ''}
     EOF

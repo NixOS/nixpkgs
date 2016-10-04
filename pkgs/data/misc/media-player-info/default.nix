@@ -28,5 +28,6 @@ in
       homepage = "http://www.freedesktop.org/wiki/Software/media-player-info/";
       license = licenses.bsd3;
       maintainers = with maintainers; [ ttuegel ];
+      platforms = with platforms; linux;
     };
   }

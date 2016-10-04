@@ -12,17 +12,20 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "cec0df18671adfe62a34d3810543f76f76206b212b2b61791fe026214c77507c";
+    sha256 = (lib.importJSON ../upstream-info.json).guest;
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
+
+  hardeningDisable = [ "pic" ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 
   installPhase = ''
     mkdir -p $out
     cp -r install/* $out
-
   '';
 
   buildCommand = with xorg; ''
@@ -75,7 +78,7 @@ stdenv.mkDerivation {
 
     for i in lib/VBoxOGL*.so
     do
-        patchelf --set-rpath $out/lib:${dbus.lib}/lib:${libXcomposite.out}/lib:${libXdamage.out}/lib:${libXext.out}/lib:${libXfixes.out}/lib $i
+        patchelf --set-rpath ${lib.makeLibraryPath [ "$out" dbus libXcomposite libXdamage libXext libXfixes ]} $i
     done
 
     # FIXME: Virtualbox 4.3.22 moved VBoxClient-all (required by Guest Additions

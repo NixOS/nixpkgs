@@ -28,8 +28,6 @@
       <!-- /var/cache/fontconfig is useful for non-nixos systems -->
       <cachedir>/var/cache/fontconfig</cachedir>
 
-      <!-- fontconfig distribution conf.d -->
-      <include><xsl:value-of select="$fontconfig" />/etc/fonts/conf.d</include>
       <!-- versioned system-wide config -->
       <include ignore_missing="yes">/etc/fonts/<xsl:value-of select="$fontconfigConfigVersion" />/conf.d</include>
 

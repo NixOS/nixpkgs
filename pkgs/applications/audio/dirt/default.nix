@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tidalcycles/Dirt";
     license = licenses.gpl3;
     maintainers = with maintainers; [ anderspapitto ];
+    platforms = with platforms; linux;
   };
 }

@@ -1,11 +1,11 @@
 { fetchurl, fetchpatch, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsl-2.1";
+  name = "gsl-2.2";
 
   src = fetchurl {
     url = "mirror://gnu/gsl/${name}.tar.gz";
-    sha256 = "0rhcia9jhr3p1f1wybwyllwqfs9bggz99i3mi5lpyqcpff1hdbar";
+    sha256 = "1pyq2c0j91z955746myn29c89jwkd435s2cbj8ks2hpag6d0mr2d";
   };
 
   patches = [
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
       fitting.  There are over 1000 functions in total with an
       extensive test suite.
     '';
+    platforms = stdenv.lib.platforms.unix;
   };
 }

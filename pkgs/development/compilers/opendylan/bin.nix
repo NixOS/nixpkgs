@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     for a in "$out"/lib/*.so; do 
       patchelf --set-rpath "$out/lib:${boehmgc.out}/lib" "$a"
     done
-    sed -i -e "s|\-lgc|\-L${boehmgc}\/lib -lgc|" $out/lib/config.jam
+    sed -i -e "s|\-lgc|\-L${boehmgc.out}\/lib -lgc|" $out/lib/config.jam
     wrapProgram $out/bin/dylan-compiler --suffix PATH : ${gcc}/bin
   '';
 
@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     homepage = http://opendylan.org;
     description = "A multi-paradigm functional and object-oriented programming language";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

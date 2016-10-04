@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "libtomcrypt-1.17";
 
   src = fetchurl {
-    url = "http://libtom.org/files/crypt-1.17.tar.bz2";
+    url = "https://github.com/libtom/libtomcrypt/releases/download/1.17/crypt-1.17.tar.bz2";
     sha256 = "e33b47d77a495091c8703175a25c8228aff043140b2554c08a3c3cd71f79d116";
   };
 
@@ -22,5 +22,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://libtom.org/?page=features&newsitems=5&whatfile=crypt";
     description = "A fairly comprehensive, modular and portable cryptographic toolkit";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = https://gerrit.wikimedia.org/r/p/openzim.git;
     rev = "165eab3e154c60b5b6436d653dc7c90f56cf7456";
-    sha256 = "0x0d3rx6zcc8k66nqkacmwdvslrz70h9bliqawzv90ribq3alb0q";
+    sha256 = "076ixsq4lis0rkk7p049g02bidc7bggl9kf2wzmgmsnx396mqymf";
   };
   buildInputs = [ automake autoconf libtool lzma ];
   setSourceRoot = "cd openzim-*/zimlib; export sourceRoot=`pwd`";
@@ -17,5 +17,6 @@ stdenv.mkDerivation {
     homepage =  http://www.openzim.org/wiki/Zimlib;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ robbinch ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

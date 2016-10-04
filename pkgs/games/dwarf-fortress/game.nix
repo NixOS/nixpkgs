@@ -3,10 +3,18 @@
 }:
 
 let
-  baseVersion = "42";
-  patchVersion = "06";
+  baseVersion = "43";
+  patchVersion = "05";
   dfVersion = "0.${baseVersion}.${patchVersion}";
   libpath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.glibc dwarf-fortress-unfuck SDL ];
+  platform =
+    if stdenv.system == "x86_64-linux" then "linux"
+    else if stdenv.system == "i686-linux" then "linux32"
+    else throw "Unsupported platform";
+  sha256 =
+    if stdenv.system == "x86_64-linux" then "1r0b96yrdf24m9476k5x7rmp3faxr0kfwwdf35agpvlb1qbi6v45"
+    else if stdenv.system == "i686-linux" then "16l1lydpkbnl3zhz4i2snmjk7pps8vmw3zv0bjgr8dncbsrycd03"
+    else throw "Unsupported platform";
 
 in
 
@@ -16,8 +24,8 @@ stdenv.mkDerivation {
   name = "dwarf-fortress-original-${dfVersion}";
 
   src = fetchurl {
-    url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-    sha256 = "17y9zq9xn1g0a501w4vkinb0n2yjiczsi2g7r6zggr41pxrqxpq3";
+    url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_${platform}.tar.bz2";
+    inherit sha256;
   };
 
   installPhase = ''
@@ -39,11 +47,11 @@ stdenv.mkDerivation {
 
   passthru = { inherit baseVersion patchVersion dfVersion; };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A single-player fantasy game with a randomly generated adventure world";
     homepage = http://www.bay12games.com/dwarves;
-    license = lib.licenses.unfreeRedistributable;
-    platforms = [ "i686-linux" ];
-    maintainers = with lib.maintainers; [ a1russell robbinch roconnor the-kenny abbradar ];
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar ];
   };
 }

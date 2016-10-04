@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.code.sf.net/p/isync/isync";
     inherit rev;
-    sha256 = "1flm9lkgf1pa6aa678xr0yj5fxwh8c9jpjzd4002f4jjmcf4w57s";
+    sha256 = "02bm5m3bwpfns7qdwfybyl4fwa146n55v67pdchkhxaqpa4ddws1";
   };
 
   buildInputs = [ openssl pkgconfig db cyrus_sasl autoconf automake ];

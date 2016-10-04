@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.0";
+  version = "2.1.1";
   name = "graylog-${version}";
 
   src = fetchurl {
     url = "https://packages.graylog2.org/releases/graylog/graylog-${version}.tgz";
-    sha256 = "0qn2rf2aarfr34387fiv34rmav20c66b4zs9bkm8gpvj0laxrqh2";
+    sha256 = "0p7vx6b4k6lzxi0v9x44wbrvplw93288lpixpwckc0xx0r7js07z";
   };
 
   dontBuild = true;

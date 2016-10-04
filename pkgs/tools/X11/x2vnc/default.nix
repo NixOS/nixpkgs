@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
       xorg.libXrandr xorg.randrproto
     ];
 
-  preInstall = "mkdir -p $out";
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://fredrik.hubbe.net/x2vnc.html;
     description = "A program to control a remote VNC server";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

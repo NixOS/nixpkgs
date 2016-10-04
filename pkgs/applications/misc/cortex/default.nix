@@ -26,6 +26,7 @@ stdenv.mkDerivation {
     description = "An ncurses reddit browser and monitor";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = with platforms; unix;
   };
 
 }

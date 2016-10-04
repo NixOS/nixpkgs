@@ -1,12 +1,13 @@
 { stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
 , alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
-, mesa_noglu, xcbutilkeysyms }:
+, mesa_noglu, xcbutilkeysyms, xdg_utils, libtool }:
 
 let
 
-  version = "4.0.1631";
+  version = "4.27.0.1658";
 
   rpath = stdenv.lib.makeLibraryPath [
+    xdg_utils
     xorg.libXext
     xorg.libSM
     xorg.libICE
@@ -30,6 +31,7 @@ let
     dbus
     alsaLib
     zlib
+    libtool
     libxml2
     libxslt
     expat
@@ -42,7 +44,7 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
-        sha256 = "1ip79zq7j7842sf254296wvvd236w7c764r8wgjdyxzqyvfjfd81";
+        sha256 = "1f0rgy5p9xcxfll6prir49vb7hjlnqx6xjaxlimhca4l30jvdsvn";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";

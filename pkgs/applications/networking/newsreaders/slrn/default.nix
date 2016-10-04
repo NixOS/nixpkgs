@@ -18,7 +18,7 @@ stdenv.mkDerivation {
       -e "s|/bin/rm|rm|"
   '';
 
-  configureFlags = "--with-slang=${slang} --with-ssl=${openssl}";
+  configureFlags = "--with-slang=${slang.dev} --with-ssl=${openssl.dev}";
 
   buildInputs = [ slang ncurses openssl ];
 
@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     homepage = http://slrn.sourceforge.net/index.html;
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
+    platforms = with platforms; linux;
   };
 }

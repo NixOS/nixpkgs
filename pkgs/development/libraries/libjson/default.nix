@@ -15,5 +15,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://libjson.sourceforge.net/";
     description = "A JSON reader and writer";
     longDescription = "A JSON reader and writer which is super-effiecient and usually runs circles around other JSON libraries. It's highly customizable to optimize for your particular project, and very lightweight. For Windows, OSX, or Linux. Works in any language.";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

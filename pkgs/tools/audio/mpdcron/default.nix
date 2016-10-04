@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url    = https://github.com/alip/mpdcron.git;
     rev    = "1dd16181c32f33e7754bbe21841c8e70b28f8ecd";
-    sha256 = "1h3n433jn9yg74i218pkxzrngsjpnf0z02lakfldl6j1s9di2pn3";
+    sha256 = "0ayr9a5f6i4z3wx486dp77ffzs61077b8w871pqr3yypwamcjg6b";
   };
 
   meta = {

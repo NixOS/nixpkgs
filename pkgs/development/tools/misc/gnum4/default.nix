@@ -8,15 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0w0da1chh12mczxa5lnwzjk9czi3dq6gnnndbpa6w4rj76b1yklf";
   };
 
-  doCheck = !stdenv.isDarwin
-    && !stdenv.isCygwin                    # XXX: `test-dup2' fails on Cygwin
-    && !stdenv.isSunOS                     # XXX: `test-setlocale2.sh' fails
-    && !stdenv.isFreeBSD;                  # XXX: test 084 fails
+  doCheck = false;
 
   configureFlags = "--with-syscmd-shell=${stdenv.shell}";
 
   # Upstream is aware of it; it may be in the next release.
   patches = [ ./s_isdir.patch ];
+
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
 
   meta = {
     homepage = http://www.gnu.org/software/m4/;
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 
 }

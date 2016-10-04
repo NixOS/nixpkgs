@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "016lpdv35z0qsw1cprdc2k5qzkdi5waj6qmr0a2q6ljn9g2kpv7b";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   # TODO: enable xmodmap support, needs xmodmap DB
   propagatedBuildInputs = with xorg; [ libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     description = "Library providing high-level API for X Keyboard Extension known as XKB";
     homepage = http://freedesktop.org/wiki/Software/LibXklavier;
     license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
   };
 }
 

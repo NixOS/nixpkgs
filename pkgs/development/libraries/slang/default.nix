@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "0aqd2cjabj6nhd4r3dc4vhqif2bf3dmqnrn2gj0xm4gqyfd177jy";
   };
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   # Fix some wrong hardcoded paths
   preConfigure = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/bin/ln|ln|" src/Makefile.in
     sed -i -e "s|-ltermcap|-lncurses|" ./configure
   '';
-  configureFlags = "--with-png=${libpng} --with-z=${zlib} --with-pcre=${pcre} --with-readline=${readline}";
+  configureFlags = "--with-png=${libpng.dev} --with-z=${zlib.dev} --with-pcre=${pcre.dev} --with-readline=${readline.dev}";
   buildInputs = [ pcre libpng zlib readline ];
   propagatedBuildInputs = [ ncurses ];
 

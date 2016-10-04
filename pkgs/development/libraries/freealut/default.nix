@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     homepage = "http://openal.org/";
     description = "Free implementation of OpenAL's ALUT standard";
     license = stdenv.lib.licenses.lgpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

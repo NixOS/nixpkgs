@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack, libtermkey
-, libtool, libuv, lpeg, lua, luajit, luaMessagePack, luabitop, ncurses, perl
-, pkgconfig, unibilium, makeWrapper, vimUtils
+{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
+, libtool, libuv, luajit, luaPackages, man, ncurses, perl, pkgconfig
+, unibilium, makeWrapper, vimUtils, xsel
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
@@ -21,10 +21,10 @@ let
     version = "2015-11-06";
 
     src = fetchFromGitHub {
-      sha256 = "090pyf1n5asaw1m2l9bsbdv3zd753aq1plb0w0drbc2k43ds7k3g";
-      rev = "a9c7c6fd20fa35e0ad3e0e98901ca12dfca9c25c";
-      repo = "libvterm";
       owner = "neovim";
+      repo = "libvterm";
+      rev = "487f21dbf65f1c28962fef3f064603f415fbaeb2";
+      sha256 = "1fig6v0qk0ylr7lqqk0d6x5yywb9ymh85vay4spw5b5r5p0ky7yx";
     };
 
     buildInputs = [ perl ];
@@ -39,7 +39,7 @@ let
       description = "VT220/xterm/ECMA-48 terminal emulator library";
       homepage = http://www.leonerd.org.uk/code/libvterm/;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx ];
+      maintainers = with maintainers; [ nckx garbas ];
       platforms = platforms.unix;
     };
   };
@@ -60,33 +60,28 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.1.3";
+    version = "0.1.5";
 
     src = fetchFromGitHub {
-      sha256 = "1bkyfxsgb7894848nphsi6shr8bvi9z6ch0zvh2df7vkkzji8chr";
-      rev = "v${version}";
-      repo = "neovim";
       owner = "neovim";
+      repo = "neovim";
+      rev = "v${version}";
+      sha256 = "1ihlgm2h7147xyd5wrwg61vsnmkqc9j3ghsida4g2ilr7gw9c85y";
     };
 
     enableParallelBuilding = true;
 
     buildInputs = [
-      glib
       libtermkey
       libuv
-      # For some reason, `luajit` has to be listed after `lua`. See
-      # https://github.com/NixOS/nixpkgs/issues/14442
-      lua
-      luajit
-      lpeg
-      luaMessagePack
-      luabitop
       libmsgpack
       ncurses
       neovimLibvterm
       unibilium
-    ] ++ optional withJemalloc jemalloc;
+      luajit
+      luaPackages.lua
+    ] ++ optional withJemalloc jemalloc
+      ++ lualibs;
 
     nativeBuildInputs = [
       cmake
@@ -95,10 +90,22 @@ let
       pkgconfig
     ];
 
-    LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;${luabitop}/lib/lua/5.2/?.so";
-    LUA_PATH="${luaMessagePack}/share/lua/5.1/?.lua";
+    LUA_PATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaPath lualibs);
+    LUA_CPATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaCPath lualibs);
 
-    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
+
+    cmakeFlags = [
+      "-DLUA_PRG=${luaPackages.lua}/bin/lua"
+    ];
+
+    # triggers on buffer overflow bug while running tests
+    hardeningDisable = [ "fortify" ];
+
+    preConfigure = ''
+      substituteInPlace runtime/autoload/man.vim \
+        --replace /usr/bin/man ${man}/bin/man
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
       export DYLD_LIBRARY_PATH=${jemalloc}/lib
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
@@ -108,6 +115,7 @@ let
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \
                 $out/bin/nvim
+      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPyGUI ''

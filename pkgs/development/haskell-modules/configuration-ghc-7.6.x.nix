@@ -40,10 +40,10 @@ self: super: {
   xhtml = self.xhtml_3000_2_1;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = dontCheck self.binary_0_8_3_0; };
+  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = dontCheck self.binary_0_8_4_1; };
 
   # Avoid inconsistent 'binary' versions from 'text' and 'Cabal'.
-  cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_8_3_0; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_8_4_1; });
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
@@ -96,7 +96,11 @@ self: super: {
   # Needs void on pre 7.10.x compilers.
   conduit = addBuildDepend super.conduit self.void;
 
-  # Needs nats on pre 7.10.x compilers.
-  semigroups = addBuildDepend super.semigroups self.nats;
+  # Needs additional inputs on pre 7.10.x compilers.
+  semigroups = addBuildDepends super.semigroups (with self; [bytestring-builder nats tagged unordered-containers transformers]);
+  lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
+
+  # Haddock doesn't cope with the new markup.
+  bifunctors = dontHaddock super.bifunctors;
 
 }

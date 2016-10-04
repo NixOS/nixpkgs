@@ -7,7 +7,7 @@ agda.mkDerivation (self: rec {
   src = fetchgit {
     url = "https://github.com/copumpkin/categories.git";
     rev = version;
-    sha256 = "cb7e8c911e10ab582c077208f5f6675711c0d65f0d9d679639d4b67a467cc4de";
+    sha256 = "15x834f7jn2s816b9vz8nm8p424ppzv6v9nayaawyl43qmaaaa5p";
   };
 
   buildDepends = [ AgdaStdlib ];

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey, unzip, gnused }:
 
-let 
-  version = "12.1.51"; 
+let
+  version = "12.1.51";
   isLinux = (stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux");
 in
 
@@ -29,13 +29,8 @@ else stdenv.mkDerivation {
     else
       null;
 
-  # common
-  buildPhase = "true";
-  # no patch or build phase for darwin
-  phases = 
-    [ "unpackPhase" ] ++ 
-    (stdenv.lib.optionals (isLinux) [ "patchPhase" "buildPhase" ]) ++
-    [ "installPhase" ];
+  dontBuild = true;
+
   installPhase = if (isLinux)
     then "installPhase"
     else ''
@@ -48,7 +43,7 @@ else stdenv.mkDerivation {
       mkdir -p "$out"/share/man
       mv -v man3 "$out"/share/man
     '';
- 
+
 
   # darwin-specific
   buildInputs = stdenv.lib.optional (stdenv.system == "x86_64-darwin") unzip;

@@ -152,12 +152,12 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "8.8.0";
+    version = "9.0.1";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/8.8/${name}.zip";
-      sha256 = "1i1m7g5128q21njgrkiw71y4vi4aqzz8xdd4iv80j3nsvhbv6cnm";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.0/${name}.zip";
+      sha256 = "0vdx0j9ci533wnk7y17qjvjyqx38hlrdw67z6pi05vfv3r6ys39x";
     };
 
     meta = with stdenv.lib; {
@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.16.0.201603042325";
+    version = "6.19.1.201607051943";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.16.0/net.sf.eclipsecs-updatesite_${version}.zip";
-      sha256 = "0bm1linyw82bryblyabcx89zqw1ingh8mx62bwp3qj05yc9ksnly";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.19.1/net.sf.eclipsecs-updatesite_${version}.zip";
+      sha256 = "03aah57g0cgxym95p1wcj2h69xy3r9c0vv7js3gpmw1hx8w9sjsf";
     };
 
     meta = with stdenv.lib; {
@@ -322,12 +322,12 @@ rec {
 
   gnuarmeclipse = buildEclipseUpdateSite rec {
     name = "gnuarmeclipse-${version}";
-    version = "2.11.1-201512141335";
+    version = "3.1.1-201606210758";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/gnuarmeclipse/plug-ins/releases/download/v${version}/ilg.gnuarmeclipse.repository-${version}.zip";
-      sha256 = "1ijvnahfw2wc860la7kj8b52z2sfm8k1yk62bl0d4lq60y3aycg9";
+      sha256 = "1g77jlhfa3csaxxps1z5lasrd9l2p5ajnddnq9ra5syw8ggkdc2h";
     };
 
     meta = with stdenv.lib; {
@@ -341,12 +341,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.5.1";
+    version = "4.6";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/org.eclipse.jdt-4.5.1.zip";
-      sha256 = "0nxi552vvpjalnsqhc0zi6fgaj9p22amxsiczpv7za4kr7m47x73";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/org.eclipse.jdt-4.6.zip";
+      sha256 = "0raz8d09fnnx19l012l5frca97qavfivvygn3mvsllcyskhqc5hg";
     };
 
     meta = with stdenv.lib; {
@@ -355,6 +355,31 @@ rec {
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  rustdt = buildEclipseUpdateSite rec {
+    name = "rustdt-${version}";
+    version = "0.6.2";
+    owner = "RustDT";
+    repo = "rustdt.github.io";
+    rev = "5cbe753008c40555c493092a6f4ae1ffbff0b3ce";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
+      sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
+      extraPostFetch =
+        ''
+          mv "$out/${repo}-${rev}/releases/local-repo"/* "$out/"
+        '';
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/RustDT;
+      description = "Rust development tooling";
+      license = licenses.epl10;
+      platforms = platforms.all;
     };
   };
 
@@ -378,16 +403,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.11.201604020423";
+    version = "6.9.12.201607091356";
 
     srcFeature = fetchurl {
       url = "http://beust.com/eclipse-old/eclipse_${version}/features/org.testng.eclipse_${version}.jar";
-      sha256 = "1cp7f6f0525wqwjj4pyrp0q0ii7zcd5gwd5acaq9jjb13xgw8vav";
+      sha256 = "06c6885d3ggg1i085zhfwayj06jn4v1jip9zz40921vpq0iand54";
     };
 
     srcPlugin = fetchurl {
       url = "http://beust.com/eclipse-old/eclipse_${version}/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "04m07cdfw0isp27ykx6dbrlcdw33rxww7vnavanygxxnlpyvyas3";
+      sha256 = "0bpyb9bnh8kglajmdzb7pr21i1sly73kwdjbygg75ad7z37l58br";
     };
 
     meta = with stdenv.lib; {

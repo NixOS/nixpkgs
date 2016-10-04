@@ -2,7 +2,7 @@
 , libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2
 , lvm2, utillinux, procps, texinfo, perl, pythonPackages
 , glib, bridge-utils, xorg, pixman, iproute, udev, bison
-, flex, cmake, ocaml, ocamlPackages, figlet, libaio, yajl
+, flex, cmake, ocamlPackages, figlet, libaio, yajl
 , checkpolicy, transfig, glusterfs, acl, fetchgit, xz, spice
 , spice_protocol, usbredir, alsaLib, quilt
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
@@ -40,13 +40,15 @@ stdenv.mkDerivation {
       dev86 iasl pciutils bzip2 xz texinfo perl yajl
       pythonPackages.python pythonPackages.wrapPython
       glib bridge-utils pixman iproute udev bison xorg.libX11
-      flex ocaml ocamlPackages.findlib figlet libaio
+      flex ocamlPackages.ocaml ocamlPackages.findlib figlet libaio
       checkpolicy pythonPackages.markdown transfig
       glusterfs acl cmake spice spice_protocol usbredir
       alsaLib quilt
     ];
 
   pythonPath = [ pythonPackages.curses ];
+
+  hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
   patches = stdenv.lib.optionals ((xenserverPatched == false) && (builtins.hasAttr "xenPatches" xenConfig)) xenConfig.xenPatches;
 
@@ -99,9 +101,6 @@ stdenv.mkDerivation {
         --replace /usr/sbin/vgs ${lvm2}/sbin/vgs \
         --replace /usr/sbin/lvs ${lvm2}/sbin/lvs
 
-      substituteInPlace tools/hotplug/Linux/network-bridge \
-        --replace /usr/bin/logger ${utillinux}/bin/logger
-
       substituteInPlace tools/xenmon/xenmon.py \
         --replace /usr/bin/pkill ${procps}/bin/pkill
 
@@ -140,6 +139,9 @@ stdenv.mkDerivation {
       mkdir -p tools/include/gnu
       touch tools/include/gnu/stubs-32.h
     '';
+
+  # Fix build on Glibc 2.24.
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # TODO: Flask needs more testing before enabling it by default.
   #makeFlags = "XSM_ENABLE=y FLASK_ENABLE=y PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";

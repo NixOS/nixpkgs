@@ -6,12 +6,14 @@
 
 stdenv.mkDerivation rec {
   name = "musescore-${version}";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchzip {
     url = "https://github.com/musescore/MuseScore/archive/v${version}.tar.gz";
-    sha256 = "12a83v4i830gj76z5744034y1vvwzgy27mjbjp508yh9bd328yqw";
+    sha256 = "067f4li48qfhz2barj70zpf2d2mlii12npx07jx9xjkkgz84z4c9";
   };
+
+  hardeningDisable = [ "relro" "bindnow" ];
 
   makeFlags = [
     "PREFIX=$(out)"

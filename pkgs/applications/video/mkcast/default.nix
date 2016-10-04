@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, wmctrl, pythonPackages, byzanz
-, xdpyinfo, makeWrapper, gtk, xorg, gnome3 }:
+, xdpyinfo, makeWrapper, gtk2, xorg, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "mkcast-2015-03-13";
@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "15wp3n3z8gw7kjdxs4ahda17n844awhxsqbql5ipsdhqfxah2d8p";
   };
 
-  buildInputs = with pythonPackages; [ makeWrapper pygtk gtk xlib ];
+  buildInputs = with pythonPackages; [ makeWrapper pygtk gtk2 xlib ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     for f in $out/bin/*; do #*/
-      wrapProgram $f --prefix PATH : "${xdpyinfo}/bin:${wmctrl}/bin/:${byzanz}/bin/:${gnome3.gnome_terminal}/bin/:$out/bin"
+      wrapProgram $f --prefix PATH : "${stdenv.lib.makeBinPath [ xdpyinfo wmctrl byzanz gnome3.gnome_terminal ]}:$out/bin"
     done
 
     rm -r screenkey/.bzr
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "A tool for creating GIF screencasts of a terminal, with key presses overlaid";
     homepage = https://github.com/KeyboardFire/mkcast;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ iElectric pSub ];
+    maintainers = with maintainers; [ domenkozar pSub ];
   };
 }

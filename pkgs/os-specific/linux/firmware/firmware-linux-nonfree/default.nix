@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "firmware-linux-nonfree-${version}";
-  version = "2016-01-26";
+  version = "2016-07-12";
 
   # This repo is built by merging the latest versions of
   # http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wkennington";
     repo = "linux-firmware";
-    rev = "0922e78fc8431c2cc6585eb66e5b75f566644ac8";
-    sha256 = "07hv4kgbsxndhm1va6k6scy083886aap3naq1l4jdz7dnph4ir02";
+    rev = "cccb6a0da98372bd66787710249727ad6b0aaf72";
+    sha256 = "1c7h8i37nbyy37zqhybxd3y6aqabfv4nrdkjg789w67mdnn6hka0";
   };
 
   preInstall = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://packages.debian.org/sid/firmware-linux-nonfree;
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington fpletz ];
     priority = 6; # give precedence to kernel firmware
   };
 

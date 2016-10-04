@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
-, wrapGAppsHook, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
+{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl
+, wrapGAppsHook, virtinst, gnome_python, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
 , avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3, system-libvirt
 }:
@@ -9,19 +9,19 @@ with pythonPackages;
 
 buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.3.1";
+  version = "1.4.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "0lqd9ix7k4jswqzxarnvxfbq6rvpcm8rrc1if86nw67ms1dh2i36";
+    sha256 = "1jnawqjmcqd2db78ngx05x7cxxn3iy1sb4qfgbwcn045qh6a8cdz";
   };
 
   propagatedBuildInputs =
     [ eventlet greenlet gflags netaddr carrot routes
       PasteDeploy m2crypto ipy twisted
       distutils_extra simplejson readline glanceclient cheetah lockfile httplib2
-      urlgrabber virtinst pyGtkGlade pythonDBus gnome_python pygobject3
+      urlgrabber virtinst pyGtkGlade dbus-python gnome_python pygobject3
       libvirt libxml2Python ipaddr vte libosinfo gobjectIntrospection gtk3 mox
       gtkvnc libvirt-glib glib gsettings_desktop_schemas gnome3.defaultIconTheme
       wrapGAppsHook
@@ -39,7 +39,7 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    ${glib}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
+    ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
   # Failed tests

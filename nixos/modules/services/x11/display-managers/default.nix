@@ -32,6 +32,12 @@ let
     ''
       #! ${pkgs.bash}/bin/bash
 
+      ${optionalString cfg.displayManager.logToJournal ''
+        if [ -z "$_DID_SYSTEMD_CAT" ]; then
+          _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$@"
+        fi
+      ''}
+
       . /etc/profile
       cd "$HOME"
 
@@ -39,7 +45,7 @@ let
       sessionType="$1"
       if [ "$sessionType" = default ]; then sessionType=""; fi
 
-      ${optionalString (!cfg.displayManager.job.logsXsession) ''
+      ${optionalString (!cfg.displayManager.job.logsXsession && !cfg.displayManager.logToJournal) ''
         exec > ~/.xsession-errors 2>&1
       ''}
 
@@ -82,6 +88,8 @@ let
       # Work around KDE errors when a user first logs in and
       # .local/share doesn't exist yet.
       mkdir -p $HOME/.local/share
+
+      unset _DID_SYSTEMD_CAT
 
       ${cfg.displayManager.sessionCommands}
 
@@ -126,12 +134,8 @@ let
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 
-      ${optionalString (cfg.startDbusSession && cfg.updateDbusEnvironment) ''
-        ${pkgs.glib}/bin/gdbus call --session \
-          --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
-          --method org.freedesktop.DBus.UpdateActivationEnvironment \
-          "{$(env | ${pkgs.gnused}/bin/sed "s/'/\\\\'/g; s/\([^=]*\)=\(.*\)/'\1':'\2'/" \
-                  | ${pkgs.coreutils}/bin/paste -sd,)}"
+      ${optionalString cfg.updateDbusEnvironment ''
+        ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
       ''}
 
       test -n "$waitPID" && wait "$waitPID"
@@ -278,6 +282,16 @@ in
 
       };
 
+      logToJournal = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          By default, the stdout/stderr of sessions is written
+          to <filename>~/.xsession-errors</filename>. When this option
+          is enabled, it will instead be written to the journal.
+        '';
+      };
+
     };
 
   };
@@ -287,7 +301,8 @@ in
   };
 
   imports = [
-   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ])
+   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
+     "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
   ];
 
 }

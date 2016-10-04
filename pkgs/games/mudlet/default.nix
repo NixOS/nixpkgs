@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.wyvie ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
+    broken = true;
   };
 }

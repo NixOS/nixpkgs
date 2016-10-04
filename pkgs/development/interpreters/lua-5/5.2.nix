@@ -97,7 +97,6 @@ stdenv.mkDerivation rec {
       for configuration, scripting, and rapid prototyping.
     '';
     license = stdenv.lib.licenses.mit;
-    hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

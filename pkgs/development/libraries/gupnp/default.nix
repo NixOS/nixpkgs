@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib gssdp libsoup libxml2 libuuid ];
 
   postInstall = ''
-    ln -sv ${libsoup}/include/*/libsoup $out/include
+    ln -sv ${libsoup.dev}/include/libsoup-2*/libsoup $out/include
     ln -sv ${libxml2.dev}/include/*/libxml $out/include
     ln -sv ${gssdp}/include/*/libgssdp $out/include
   '';

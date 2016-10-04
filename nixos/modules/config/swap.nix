@@ -30,8 +30,7 @@ let
         description = ''
           If this option is set, ‘device’ is interpreted as the
           path of a swapfile that will be created automatically
-          with the indicated size (in megabytes) if it doesn't
-          exist.
+          with the indicated size (in megabytes).
         '';
       };
 
@@ -55,6 +54,10 @@ let
           WARNING: Don't try to hibernate when you have at least one swap partition with
           this option enabled! We have no way to set the partition into which hibernation image
           is saved, so if your image ends up on an encrypted one you would lose it!
+
+          WARNING #2: Do not use /dev/disk/by-uuid/… or /dev/disk/by-label/… as your swap device
+          when using randomEncryption as the UUIDs and labels will get erased on every boot when
+          the partition is encrypted. Best to use /dev/disk/by-partuuid/…
         '';
       };
 
@@ -73,7 +76,7 @@ let
     config = rec {
       device = mkIf options.label.isDefined
         "/dev/disk/by-label/${config.label}";
-      deviceName = escapeSystemdPath config.device;
+      deviceName = lib.replaceChars ["\\"] [""] (escapeSystemdPath config.device);
       realDevice = if config.randomEncryption then "/dev/mapper/${deviceName}" else config.device;
     };
 
@@ -122,6 +125,8 @@ in
 
         createSwapDevice = sw:
           assert sw.device != "";
+          assert !(sw.randomEncryption && lib.hasPrefix "/dev/disk/by-uuid"  sw.device);
+          assert !(sw.randomEncryption && lib.hasPrefix "/dev/disk/by-label" sw.device);
           let realDevice' = escapeSystemdPath sw.realDevice;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
@@ -132,9 +137,13 @@ in
             script =
               ''
                 ${optionalString (sw.size != null) ''
-                  if [ ! -e "${sw.device}" ]; then
+                  currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
+                  if [ "${toString sw.size}" != "$currentSize" ]; then
                     fallocate -l ${toString sw.size}M "${sw.device}" ||
                       dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
+                    if [ "${toString sw.size}" -lt "$currentSize" ]; then
+                      truncate --size "${toString sw.size}M" "${sw.device}"
+                    fi
                     chmod 0600 ${sw.device}
                     ${optionalString (!sw.randomEncryption) "mkswap ${sw.realDevice}"}
                   fi

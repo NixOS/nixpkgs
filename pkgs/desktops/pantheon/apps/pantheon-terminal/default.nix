@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, cmake, vala, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper }:
+{ stdenv, fetchurl, perl, cmake, vala_0_23, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper }:
 
 stdenv.mkDerivation rec {
   majorVersion = "0.3";
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with gnome3; [
-    perl cmake vala pkgconfig glib gtk3 granite libnotify gettext makeWrapper
+    perl cmake vala_0_23 pkgconfig glib gtk3 granite libnotify gettext makeWrapper
     vte_290 libgee gsettings_desktop_schemas defaultIconTheme
   ];
   meta = {
-    description = "elementary OS's terminal";
+    description = "Elementary OS's terminal";
     longDescription = "A super lightweight, beautiful, and simple terminal. It's designed to be setup with sane defaults and little to no configuration. It's just a terminal, nothing more, nothing less. Designed for elementary OS.";
     homepage = https://launchpad.net/pantheon-terminal;
     license = stdenv.lib.licenses.gpl3;

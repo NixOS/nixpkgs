@@ -21,7 +21,7 @@ Alternatively, you can use a systemd unit that does the same in the
 background:
 
 <screen>
-$ systemctl start nix-gc.service
+# systemctl start nix-gc.service
 </screen>
 
 You can tell NixOS in <filename>configuration.nix</filename> to run

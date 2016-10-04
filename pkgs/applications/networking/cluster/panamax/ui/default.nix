@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "git://github.com/CenturyLinkLabs/panamax-ui";
-    sha256 = "0vwy0gazfx3zkf2bx862jspidgn5p97d3jaq99x38qfhxp554sn9";
+    sha256 = "01k0h0rjqp5arvwxm2xpfxjsag5qw0qqlg7hx4v8f6jsyc4wmjfl";
   };
 
   buildInputs = [ makeWrapper env.ruby openssl sqlite bundler ];

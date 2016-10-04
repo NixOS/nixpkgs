@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://catch-lib.net";
     license = licenses.boost;
     maintainers = with maintainers; [ edwtjo ];
+    platforms = with platforms; unix;
   };
 }

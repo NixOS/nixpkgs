@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
   
   configureFlags = []
-    ++ stdenv.lib.optionals sslSupport [ "--with-ssl=${openssl}" ];
+    ++ stdenv.lib.optionals sslSupport [ "--with-ssl=${openssl.dev}" ];
   
   buildInputs = [ ncurses gzip ];
   nativeBuildInputs = [ ncurses ];
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://lynx.isc.org/;
     description = "A text-mode web browser";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

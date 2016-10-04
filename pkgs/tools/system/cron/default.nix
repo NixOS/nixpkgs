@@ -9,14 +9,26 @@ stdenv.mkDerivation {
 
   unpackCmd = "(mkdir cron && cd cron && sh $curSrc)";
 
+  hardeningEnable = [ "pie" ];
+
   preBuild = ''
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
     makeFlags="DESTROOT=$out"
 
     # We want to ignore the $glibc/include/paths.h definition of
-    # sendmail path
-    echo "#undef _PATH_SENDMAIL" >> pathnames.h
-    echo '#define _PATH_SENDMAIL "${sendmailPath}"' >> pathnames.h
+    # sendmail path.
+    # Also set a usable default PATH (#16518).
+    cat >> pathnames.h <<__EOT__
+    #undef _PATH_SENDMAIL
+    #define _PATH_SENDMAIL "${sendmailPath}"
+
+    #undef _PATH_DEFPATH
+    #define _PATH_DEFPATH "/var/setuid-wrappers:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/usr/bin:/bin"
+    __EOT__
+
+    # Implicit saved uids do not work here due to way NixOS uses setuid wrappers
+    # (#16518).
+    echo "#undef HAVE_SAVED_UIDS" >> externs.h
   '';
 
   preInstall = "mkdir -p $out/bin $out/sbin $out/share/man/man1 $out/share/man/man5 $out/share/man/man8";

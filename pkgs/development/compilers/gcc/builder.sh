@@ -70,10 +70,6 @@ if test "$noSysDirs" = "1"; then
         # gcj in.
         unset LIBRARY_PATH
         unset CPATH
-        if test -z "$crossStageStatic"; then
-            EXTRA_TARGET_CFLAGS="-B${libcCross}/lib -idirafter ${libcCross}/include"
-            EXTRA_TARGET_LDFLAGS="-Wl,-L${libcCross}/lib -Wl,-rpath,${libcCross}/lib -Wl,-rpath-link,${libcCross}/lib"
-        fi
     else
         if test -z "$NIX_CC_CROSS"; then
             EXTRA_TARGET_CFLAGS="$EXTRA_FLAGS"
@@ -90,15 +86,16 @@ if test "$noSysDirs" = "1"; then
             extraFlags="$(cat $NIX_CC_CROSS/nix-support/libc-cflags)"
             extraLDFlags="$(cat $NIX_CC_CROSS/nix-support/libc-ldflags) $(cat $NIX_CC_CROSS/nix-support/libc-ldflags-before)"
 
-            # Use *real* header files, otherwise a limits.h is generated
-            # that does not include Glibc's limits.h (notably missing
-            # SSIZE_MAX, which breaks the build).
-            NIX_FIXINC_DUMMY_CROSS=$(cat $NIX_CC_CROSS/nix-support/orig-libc)/include
-
             # The path to the Glibc binaries such as `crti.o'.
             glibc_dir="$(cat $NIX_CC_CROSS/nix-support/orig-libc)"
             glibc_libdir="$glibc_dir/lib"
-            configureFlags="$configureFlags --with-native-system-header-dir=$glibc_dir/include"
+            glibc_devdir="$(cat $NIX_CC_CROSS/nix-support/orig-libc-dev)"
+            configureFlags="$configureFlags --with-native-system-header-dir=$glibc_devdir/include"
+
+            # Use *real* header files, otherwise a limits.h is generated
+            # that does not include Glibc's limits.h (notably missing
+            # SSIZE_MAX, which breaks the build).
+            NIX_FIXINC_DUMMY_CROSS="$glibc_devdir/include"
 
             extraFlags="-I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
             extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
@@ -201,23 +198,20 @@ postConfigure() {
 
 
 preInstall() {
-    # Make ‘lib64’ a symlink to ‘lib’.
+    # Make ‘lib64’ symlinks to ‘lib’.
     if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
-        mkdir -p $out/lib
-        ln -s lib $out/lib64
+        mkdir -p "$out/lib"
+        ln -s lib "$out/lib64"
+        mkdir -p "$lib/lib"
+        ln -s lib "$lib/lib64"
     fi
 }
 
 
 postInstall() {
-    mkdir -p "$lib" # some configs don't have anything to put into $lib
-
     # Move runtime libraries to $lib.
     moveToOutput "lib/lib*.so*" "$lib"
     moveToOutput "lib/lib*.la"  "$lib"
-    if [ -d "$lib/lib" ]; then
-        ln -s lib "$lib/lib64" # for *.la
-    fi
     moveToOutput "share/gcc-*/python" "$lib"
 
     for i in "$lib"/lib/*.{la,py}; do
@@ -232,19 +226,21 @@ postInstall() {
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
 
-    # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
-    for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
-        PREV_RPATH=`patchelf --print-rpath "$i"`
-        NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
-        patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-    done
+    if type "patchelf"; then
+	# Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
+	for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
+            PREV_RPATH=`patchelf --print-rpath "$i"`
+            NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
+            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
+	done
 
-    # For some reason the libs retain RPATH to $out
-    for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
-        PREV_RPATH=`patchelf --print-rpath "$i"`
-        NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
-        patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-    done
+	# For some reason the libs retain RPATH to $out
+	for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
+            PREV_RPATH=`patchelf --print-rpath "$i"`
+            NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
+            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
+	done
+    fi
 
     # Get rid of some "fixed" header files
     rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux}

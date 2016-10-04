@@ -3,19 +3,17 @@
 , enableX11 ? false, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "netpbm-10.66.00";
+  name = "netpbm-10.70.00";
 
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${name}.tar.xz";
-    sha256 = "1z33pxdir92m7jlvp5c2q44gxwj7jyf8skiqkr71kgirw4w4zsbz";
+    sha256 = "14vxmzbwsy4rzrqjnzr4cvz1s0amacq69faps3v1j1kr05lcns0j";
   };
 
   postPatch = /* CVE-2005-2471, from Arch */ ''
     substituteInPlace converter/other/pstopnm.c \
       --replace '"-DSAFER"' '"-DPARANOIDSAFER"'
   '';
-
-  NIX_CFLAGS_COMPILE = "-fPIC"; # Gentoo adds this on every platform
 
   buildInputs =
     [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libtiff ]
@@ -26,7 +24,7 @@ stdenv.mkDerivation rec {
     echo "STATICLIB_TOO = n" >> config.mk
     substituteInPlace "config.mk" \
         --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff.out}/lib/libtiff.so" \
-        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include"
+        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff.dev}/include"
   '';
 
   preBuild = ''

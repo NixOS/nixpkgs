@@ -1,14 +1,18 @@
 { stdenv, fetchurl, nasm }:
 
 stdenv.mkDerivation rec {
-  name = "libjpeg-turbo-1.4.2";
+  name = "libjpeg-turbo-1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/libjpeg-turbo/${name}.tar.gz";
-    sha256 = "0gi349hp1x7mb98s4mf66sb2xay2kjjxj9ihrriw0yiy0k9va6sj";
+    sha256 = "0pq3lav976d6a1d16yyqrj1b4gmhk1ca4zar6zp00avxlqqpqfcz";
   };
 
-  outputs = [ "dev" "out" "doc" "bin" ];
+  patches =
+    stdenv.lib.optional (stdenv.cross.libc or null == "msvcrt")
+      ./mingw-boolean.patch;
+
+  outputs = [ "bin" "dev" "out" "doc" ];
 
   nativeBuildInputs = [ nasm ];
 

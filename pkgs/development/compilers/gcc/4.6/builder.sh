@@ -209,7 +209,9 @@ postInstall() {
     # Move runtime libraries to $lib.
     mkdir -p $lib/lib
     ln -s lib $lib/lib64
-    mv -v $out/lib/lib*.so $out/lib/lib*.so.*[0-9] $out/lib/*.la $lib/lib/
+    moveToOutput "lib/lib*.so"        "$lib"
+    moveToOutput "lib/lib*.so.*[0-9]" "$lib"
+    moveToOutput "lib/*.la"           "$lib"
     for i in $lib/lib/*.la; do
         substituteInPlace $i --replace $out $lib
     done

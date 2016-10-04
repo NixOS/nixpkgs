@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons ebzzry codyopel ];
+    maintainers = with maintainers; [ ebzzry codyopel ];
   };
 }

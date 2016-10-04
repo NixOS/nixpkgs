@@ -4,14 +4,14 @@ with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
 
 let
-  testVMConfig = vmName: attrs: { config, pkgs, ... }: let
+  testVMConfig = vmName: attrs: { config, pkgs, lib, ... }: let
     guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
     miniInit = ''
       #!${pkgs.stdenv.shell} -xe
-      export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
-      mkdir -p /etc/dbus-1 /var/run/dbus
+      mkdir -p /var/run/dbus
       cat > /etc/passwd <<EOF
       root:x:0:0::/root:/bin/false
       messagebus:x:1:1::/var/run/dbus:/bin/false
@@ -20,9 +20,9 @@ let
       root:x:0:
       messagebus:x:1:
       EOF
-      cp -v "${pkgs.dbus.daemon}/etc/dbus-1/system.conf" \
-        /etc/dbus-1/system.conf
-      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork --system
+
+      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork \
+        --config-file="${pkgs.dbus.daemon}/share/dbus-1/system.conf"
 
       ${guestAdditions}/bin/VBoxService
       ${(attrs.vmScript or (const "")) pkgs}
@@ -144,6 +144,7 @@ let
       "--uart1 0x3F8 4"
       "--uartmode1 client /run/virtualbox-log-${name}.sock"
       "--memory 768"
+      "--audio none"
     ] ++ (attrs.vmFlags or []));
 
     controllerFlags = mkFlags [
@@ -273,9 +274,12 @@ let
 
       sub shutdownVM_${name} {
         $machine->succeed(ru "touch ${sharePath}/shutdown");
-        $machine->waitUntilSucceeds(
-          "test ! -e ${sharePath}/shutdown ".
-          "  -a ! -e ${sharePath}/boot-done"
+        $machine->execute(
+          'set -e; i=0; '.
+          'while test -e ${sharePath}/shutdown '.
+          '        -o -e ${sharePath}/boot-done; do '.
+          'sleep 1; i=$(($i + 1)); [ $i -le 3600 ]; '.
+          'done'
         );
         waitForShutdown_${name};
       }
@@ -314,6 +318,9 @@ let
 
     test2.vmFlags = hostonlyVMFlags;
     test2.vmScript = dhcpScript;
+
+    headless.virtualisation.virtualbox.headless = true;
+    headless.services.xserver.enable = false;
   };
 
   mkVBoxTest = name: testScript: makeTest {
@@ -326,6 +333,7 @@ let
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
       virtualisation.virtualbox.host.enable = true;
+      services.xserver.displayManager.auto.user = "alice";
       users.extraUsers.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
       in lib.mkIf enableHardening (lib.singleton "vboxusers");
@@ -363,7 +371,9 @@ in mapAttrs mkVBoxTest {
   simple-gui = ''
     createVM_simple;
     $machine->succeed(ru "VirtualBox &");
-    $machine->waitForWindow(qr/Oracle VM VirtualBox Manager/);
+    $machine->waitUntilSucceeds(
+      ru "xprop -name 'Oracle VM VirtualBox Manager'"
+    );
     $machine->sleep(5);
     $machine->screenshot("gui_manager_started");
     $machine->sendKeys("ret");
@@ -380,6 +390,7 @@ in mapAttrs mkVBoxTest {
     $machine->sendKeys("ctrl-q");
     $machine->sleep(5);
     $machine->screenshot("gui_manager_stopped");
+    destroyVM_simple;
   '';
 
   simple-cli = ''
@@ -397,6 +408,16 @@ in mapAttrs mkVBoxTest {
     });
 
     shutdownVM_simple;
+    destroyVM_simple;
+  '';
+
+  headless = ''
+    createVM_headless;
+    $machine->succeed(ru("VBoxHeadless --startvm headless & disown %1"));
+    waitForStartup_headless;
+    waitForVMBoot_headless;
+    shutdownVM_headless;
+    destroyVM_headless;
   '';
 
   host-usb-permissions = ''

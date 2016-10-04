@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = git://repo.or.cz/smatch.git;
     rev = "23656e3e578b700cbf96d043f039e6341a3ba5b9";
-    sha256 = "09a44967d4cff026c67062f778e251d0b432af132e9d59a47b7d3167f379adfa";
+    sha256 = "0r43qi6vryqg450fj73yjwbb7gzcgx64rhrhb3r1m6a252srijiy";
   };
 
   buildInputs = [sqlite pkgconfig perl]
@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     description = "A semantic analysis tool for C";
     homepage = "http://smatch.sourceforge.net/";
     license = stdenv.lib.licenses.free; /* OSL, see http://www.opensource.org */
+    platforms = stdenv.lib.platforms.linux;
   };
 }

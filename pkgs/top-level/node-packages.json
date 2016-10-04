@@ -136,7 +136,7 @@
 , "optimist"
 , "optparse"
 , "owl-deepcopy"
-, "parsoid"
+, { "parsoid": "0.4.1" }
 , "passport"
 , "passport-http"
 , "passport-local"
@@ -150,6 +150,7 @@
 , "react-tools"
 , "redis"
 , "rethinkdb"
+, "rollup"
 , "s3http"
 , "selenium-webdriver"
 , "semver"
@@ -164,6 +165,7 @@
 , "sockjs"
 , "source-map"
 , "stylus"
+, "svgo"
 , "tar"
 , "temp"
 , "tern"
@@ -178,6 +180,7 @@
 , "webdrvr"
 , "webpack"
 , "winston"
+, "wscat"
 , "wu"
 , "x509"
 , { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }

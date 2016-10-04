@@ -471,7 +471,7 @@ in
   <listitem> <para>
     A newly packaged TeX Live 2015 is provided in <literal>pkgs.texlive</literal>,
     split into 6500 nix packages. For basic user documentation see
-    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/release-15.09/pkgs/tools/typesetting/tex/texlive-new/default.nix#L1"
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/release-15.09/pkgs/tools/typesetting/tex/texlive/default.nix#L1"
       >the source</link>.
     Beware of <link xlink:href="https://github.com/NixOS/nixpkgs/issues/9757"
       >an issue</link> when installing a too large package set.

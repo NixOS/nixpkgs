@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

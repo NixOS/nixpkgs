@@ -12,5 +12,6 @@ stdenv.mkDerivation rec {
     homepage = http://log4cpp.sourceforge.net/;
     description = "A logging framework for C++ patterned after Apache log4j";
     license = stdenv.lib.licenses.lgpl21Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

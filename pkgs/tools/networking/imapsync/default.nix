@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with perlPackages; [ perl openssl MailIMAPClient TermReadKey
-    IOSocketSSL DigestHMAC URI FileCopyRecursive IOTee UnicodeString ];
+    IOSocketSSL DigestHMAC URI FileCopyRecursive IOTee UnicodeString
+    DataUniqid JSONWebToken TestMockGuard LWP CryptOpenSSLRSA
+    LWPProtocolHttps
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.linux-france.org/prj/imapsync/;

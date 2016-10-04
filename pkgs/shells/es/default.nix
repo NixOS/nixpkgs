@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://github.com/wryun/es-shell";
     rev = "fdf29d5296ce3a0ef96d2b5952cff07878753975";
-    sha256 = "1hj0g8r59ry9l50h4gdal38nf8lvb3cgl6c9bx5aabkw5i778dfk";
+    sha256 = "12faa9b5ffwydgwyjp57zr19sqap2ma3crj6wd2rx1hv30dkll7p";
   };
 
   buildInputs = [ readline yacc libtool autoconf automake ];
@@ -42,5 +42,9 @@ stdenv.mkDerivation {
     license = licenses.publicDomain;
     maintainers = [ maintainers.sjmackenzie ];
     platforms = platforms.all;
+  };
+
+  passthru = {
+    shellPath = "/bin/es";
   };
 }

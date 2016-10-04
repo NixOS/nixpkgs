@@ -38,11 +38,14 @@ stdenv.mkDerivation {
                       --replace /bin/bash ${bash}/bin/bash;
   '';
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+
   makeFlags = "DESTDIR=$(out) prefix=";
 
   meta = {
-    description = "a collection of postfix-related tools";
+    description = "A collection of postfix-related tools";
     license = with lib.licenses; [ bsd3 ];
     homepage = https://github.com/Fruneau/pfixtools;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -7,6 +7,8 @@ stdenv.mkDerivation {
   name = "lprof-1.11.4.1";
   buildInputs = [ scons qt3 lcms1 libtiff vigra ];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     export QTDIR=${qt3}
     export qt_directory=${qt3}
@@ -28,6 +30,7 @@ stdenv.mkDerivation {
      -e "s/not config.CheckHeader('tiff.h')/False/" \
      -e "s/not config.CheckCXXHeader('vigra\/impex.hxx')/False/" \
      \
+     -e "s/^\(      'LDFLAGS'.*\)/\1\n,'hardeningDisable' : os.environ['hardeningDisable']/" \
      -e "s/^\(      'LDFLAGS'.*\)/\1\n,'NIX_CFLAGS_COMPILE' : os.environ['NIX_CFLAGS_COMPILE']/" \
      -e "s/^\(      'LDFLAGS'.*\)/\1\n,'NIX_LDFLAGS' : os.environ['NIX_LDFLAGS']/"
 
@@ -42,5 +45,6 @@ stdenv.mkDerivation {
     description = "Little CMS ICC profile construction set";
     homepage = "http://sourceforge.net/projects/lprof";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

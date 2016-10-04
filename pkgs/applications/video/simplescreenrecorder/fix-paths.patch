@@ -1,0 +1,35 @@
+diff --git a/scripts/ssr-glinject b/scripts/ssr-glinject
+index 48be48d..5038d4c 100755
+--- a/scripts/ssr-glinject
++++ b/scripts/ssr-glinject
+@@ -59,6 +59,6 @@ do
+ 	fi
+ done
+ 
+-echo "ssr-glinject: LD_PRELOAD = $LD_PRELOAD:libssr-glinject.so"
++echo "ssr-glinject: LD_PRELOAD = $LD_PRELOAD:@out@/lib/libssr-glinject.so"
+ echo "ssr-glinject: command = $@"
+-LD_PRELOAD="$LD_PRELOAD:libssr-glinject.so" "$@"
++LD_PRELOAD="$LD_PRELOAD:@out@/lib/libssr-glinject.so" "$@"
+diff --git a/src/AV/Input/GLInjectInput.cpp b/src/AV/Input/GLInjectInput.cpp
+index 6b378f8..cbcf82b 100644
+--- a/src/AV/Input/GLInjectInput.cpp
++++ b/src/AV/Input/GLInjectInput.cpp
+@@ -96,7 +96,7 @@ void GLInjectInput::SetCapturing(bool capturing) {
+ bool GLInjectInput::LaunchApplication(const QString& channel, bool relax_permissions, const QString& command, const QString& working_directory) {
+ 
+ 	// prepare command
+-	QString full_command = "LD_PRELOAD=\"libssr-glinject.so\" ";
++	QString full_command = "LD_PRELOAD=\"@out@/lib/libssr-glinject.so\" ";
+ 	full_command += "SSR_CHANNEL=\"" + ShellEscape(channel) + "\" ";
+ 	if(relax_permissions)
+ 		full_command += "SSR_STREAM_RELAX_PERMISSIONS=1 ";
+@@ -106,7 +106,7 @@ bool GLInjectInput::LaunchApplication(const QString& channel, bool relax_permiss
+ 	QStringList args;
+ 	args.push_back("-c");
+ 	args.push_back(full_command);
+-	return QProcess::startDetached("/bin/sh", args, working_directory);
++	return QProcess::startDetached("@sh@", args, working_directory);
+ 
+ }
+ 

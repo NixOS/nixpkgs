@@ -18,5 +18,6 @@ stdenv.mkDerivation {
     homepage = http://judy.sourceforge.net/;
     license = stdenv.lib.licenses.lgpl21Plus;
     description = "State-of-the-art C library that implements a sparse dynamic array";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

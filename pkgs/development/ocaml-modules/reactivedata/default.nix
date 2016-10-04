@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_react, opam}:
+{stdenv, fetchurl, ocaml, findlib, ocaml_react, camlp4, opam}:
 
 let
   ocamlVersion = stdenv.lib.getVersion ocaml;
@@ -7,13 +7,13 @@ in
 assert stdenv.lib.versionAtLeast ocamlVersion "3.11";
 
 stdenv.mkDerivation {
-  name = "ocaml-reactiveData-0.1";
+  name = "ocaml-reactiveData-0.2";
   src = fetchurl {
-    url = https://github.com/hhugo/reactiveData/archive/0.1.tar.gz;
-    sha256 = "056y9in6j6rpggdf8apailvs1m30wxizpyyrj08xyfxgv91mhxgw";
+    url = https://github.com/ocsigen/reactiveData/archive/0.2.tar.gz;
+    sha256 = "0rskcxnyjn8sxqnncdm6rh9wm99nha5m5sc83fywgzs64xfl43fq";
   };
 
-  buildInputs = [ocaml findlib opam];
+  buildInputs = [ocaml findlib opam camlp4 ];
   propagatedBuildInputs = [ocaml_react];
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An OCaml module for functional reactive programming (FRP) based on React";
-    homepage = https://github.com/hhugo/reactiveData;
+    homepage = https://github.com/ocsigen/reactiveData;
     license = licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ vbgl ];

@@ -41,7 +41,7 @@ self: super: {
   unix = null;
 
   # These packages are core libraries in GHC 7.10.x, but not here.
-  binary = self.binary_0_8_3_0;
+  binary = self.binary_0_8_4_1;
   deepseq = self.deepseq_1_3_0_1;
   haskeline = self.haskeline_0_7_2_1;
   hoopl = self.hoopl_3_10_2_0;
@@ -56,8 +56,7 @@ self: super: {
   Cabal_1_18_1_7 = dontJailbreak super.Cabal_1_18_1_7;
 
   # We have no working cabal-install at the moment.
-  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
-  cabal-install = self.cabal-install_1_18_1_0;
+  cabal-install = markBroken super.cabal-install;
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;

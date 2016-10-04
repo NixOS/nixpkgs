@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  outputs = [ "dev" "out" "static" ];
+  outputs = [ "out" "dev" "static" ];
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
       export CC=$crossConfig-gcc
     fi
   '';
+
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
 
   configureFlags = stdenv.lib.optional (!static) "--shared";
 
@@ -47,25 +50,28 @@ stdenv.mkDerivation rec {
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc "
-                     + stdenv.lib.optionalString (stdenv.isFreeBSD) "-fPIC";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc";
 
   crossAttrs = {
     dontStrip = static;
+    dontSetConfigureCross = true;
   } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
-    configurePhase=''
-      installFlags="BINARY_PATH=$out/bin INCLUDE_PATH=$out/include LIBRARY_PATH=$out/lib"
-    '';
+    installFlags = [
+      "BINARY_PATH=$(out)/bin"
+      "INCLUDE_PATH=$(dev)/include"
+      "LIBRARY_PATH=$(out)/lib"
+    ];
     makeFlags = [
       "-f" "win32/Makefile.gcc"
       "PREFIX=${stdenv.cross.config}-"
-    ] ++ (if static then [] else [ "SHARED_MODE=1" ]);
+    ] ++ stdenv.lib.optional (!static) "SHARED_MODE=1";
+
+    # Non-typical naming confuses libtool which then refuses to use zlib's DLL
+    # in some cases, e.g. when compiling libpng.
+    postInstall = postInstall + "ln -s zlib1.dll $out/bin/libz.dll";
   } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
     makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
-
-  # CYGXXX: This is not needed anymore and non-functional, but left not to trigger rebuilds
-  cygwinConfigureEnableShared = if (!stdenv.isCygwin) then true else null;
 
   passthru.version = version;
 

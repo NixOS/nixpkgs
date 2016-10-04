@@ -129,7 +129,7 @@ in {
     systemd.services.elasticsearch = {
       description = "Elasticsearch Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       path = [ pkgs.inetutils ];
       environment = {
         ES_HOME = cfg.dataDir;
@@ -157,11 +157,14 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
-    users.extraUsers = singleton {
-      name = "elasticsearch";
-      uid = config.ids.uids.elasticsearch;
-      description = "Elasticsearch daemon user";
-      home = cfg.dataDir;
+    users = {
+      groups.elasticsearch.gid = config.ids.gids.elasticsearch;
+      users.elasticsearch = {
+        uid = config.ids.uids.elasticsearch;
+        description = "Elasticsearch daemon user";
+        home = cfg.dataDir;
+        group = "elasticsearch";
+      };
     };
   };
 }

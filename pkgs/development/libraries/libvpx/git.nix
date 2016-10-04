@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
   /* DO NOT under any circumstance ever just bump the git commit without
      confirming changes have not been made to the configure system */
     rev = "f4c29ae9ea16c502c980a81ca9683327d5051929";
-    sha256 = "1d5m3dryfdrsf3mi6bcbsndyhihzksqalzfvi21fbxxkk1imsb9x";
+    sha256 = "1w17vpcy44wlpr2icbwhcf3mrinybwy0bhif30p707hbxfxrj474";
   };
 
   patchPhase = ''patchShebangs .'';
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
 
   configureFlags = [

@@ -1,15 +1,16 @@
-{ stdenv, cacert, git, cargo, rustRegistry }:
+{ stdenv, cacert, git, rust, rustRegistry }:
 { name, depsSha256
 , src ? null
 , srcs ? null
 , sourceRoot ? null
+, logLevel ? ""
 , buildInputs ? []
 , cargoUpdateHook ? ""
 , ... } @ args:
 
 let
   fetchDeps = import ./fetchcargo.nix {
-    inherit stdenv cacert git cargo rustRegistry;
+    inherit stdenv cacert git rust rustRegistry;
   };
 
   cargoDeps = fetchDeps {
@@ -22,7 +23,7 @@ in stdenv.mkDerivation (args // {
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  buildInputs = [ git cargo cargo.rustc ] ++ buildInputs;
+  buildInputs = [ git rust.cargo rust.rustc ] ++ buildInputs;
 
   configurePhase = args.configurePhase or "true";
 
@@ -42,6 +43,8 @@ in stdenv.mkDerivation (args // {
     EOF
 
     export CARGO_HOME="$(realpath deps)"
+    export RUST_LOG=${logLevel}
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
     # Let's find out which $indexHash cargo uses for file:///dev/null
     (cd $sourceRoot && cargo fetch &>/dev/null) || true

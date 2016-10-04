@@ -25,12 +25,14 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = ftp://ftp.trolltech.com/qt/source/qt-x11-free-3.3.8.tar.bz2;
+    url = http://download.qt.io/archive/qt/3/qt-x11-free-3.3.8.tar.bz2;
     sha256 = "0jd4g3bwkgk2s4flbmgisyihm7cam964gzb3pawjlkhas01zghz8";
   };
 
   nativeBuildInputs = [ which ];
   propagatedBuildInputs = [libpng xlibsWrapper libXft libXrender zlib libjpeg];
+
+  hardeningDisable = [ "format" ];
 
   configureFlags = "
     -v
@@ -39,15 +41,15 @@ stdenv.mkDerivation {
     -I${xextproto}/include
     ${if openglSupport then "-dlopen-opengl
       -L${mesa}/lib -I${mesa}/include
-      -L${libXmu}/lib -I${libXmu}/include" else ""}
+      -L${libXmu.out}/lib -I${libXmu.dev}/include" else ""}
     ${if threadSupport then "-thread" else "-no-thread"}
-    ${if xrenderSupport then "-xrender -L${libXrender}/lib -I${libXrender}/include" else "-no-xrender"}
+    ${if xrenderSupport then "-xrender -L${libXrender.out}/lib -I${libXrender.dev}/include" else "-no-xrender"}
     ${if xrandrSupport then "-xrandr
-      -L${libXrandr}/lib -I${libXrandr}/include
+      -L${libXrandr.out}/lib -I${libXrandr.dev}/include
       -I${randrproto}/include" else "-no-xrandr"}
-    ${if xineramaSupport then "-xinerama -L${libXinerama}/lib -I${libXinerama}/include" else "-no-xinerama"}
-    ${if cursorSupport then "-L${libXcursor}/lib -I${libXcursor}/include" else ""}
-    ${if mysqlSupport then "-qt-sql-mysql -L${mysql.lib}/lib/mysql -I${mysql.lib}/include/mysql" else ""}
+    ${if xineramaSupport then "-xinerama -L${libXinerama.out}/lib -I${libXinerama.dev}/include" else "-no-xinerama"}
+    ${if cursorSupport then "-L${libXcursor.out}/lib -I${libXcursor.dev}/include" else ""}
+    ${if mysqlSupport then "-qt-sql-mysql -L${stdenv.lib.getLib mysql.client}/lib/mysql -I${mysql.client}/include/mysql" else ""}
     ${if xftSupport then "-xft
       -L${libXft.out}/lib -I${libXft.dev}/include
       -L${libXft.freetype.out}/lib -I${libXft.freetype.dev}/include
@@ -69,4 +71,8 @@ stdenv.mkDerivation {
   ];
 
   passthru = {inherit mysqlSupport;};
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

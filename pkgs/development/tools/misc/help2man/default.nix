@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gettext, LocaleGettext, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.47.3";
+  name = "help2man-1.47.4";
 
   src = fetchurl {
     url = "mirror://gnu/help2man/${name}.tar.xz";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, autoconf, automake
+{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake
 , ruby, file, xdg_utils, gettext, expat, qt5, boost
 , libebml, zlib, libmatroska, libogg, libvorbis, flac
 , withGUI ? true
@@ -10,22 +10,21 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "8.9.0";
+  version = "9.4.2";
 
-  src = fetchgit {
-    url = "https://github.com/mbunkus/mkvtoolnix.git";
-    rev = "54e6b52b3dde07f89da4542997ef059e18802128";
-    sha256 = "1hm9f9q60c0axmmlsalazsiil8gk3v8q6cl5qxsfa95m51i39878";
+  src = fetchFromGitHub {
+    owner = "mbunkus";
+    repo = "mkvtoolnix";
+    rev = "release-${version}";
+    sha256 = "1dyhlpik8d9z78dg47cha313r0dm9fcjg6hzkmzd2ng9yrq5pmdy";
   };
 
-  nativeBuildInputs = [ gettext ruby ];
+  nativeBuildInputs = [ pkgconfig autoconf automake gettext ruby ];
 
   buildInputs = [
-    pkgconfig autoconf automake expat
-    file xdg_utils boost libebml zlib
-    libmatroska libogg libvorbis flac
-    (optional withGUI qt5.qtbase)
-  ];
+    expat file xdg_utils boost libebml zlib libmatroska libogg
+    libvorbis flac
+  ] ++ optional withGUI qt5.qtbase;
 
   preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "./drake -j $NIX_BUILD_CORES";
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-magic"
     "--enable-optimization"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--disable-debug"
     "--disable-profiling"
     "--disable-precompiled-headers"

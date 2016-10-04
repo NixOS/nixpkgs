@@ -62,6 +62,18 @@ in
         description = "Whether to enable authentication against an LDAP server.";
       };
 
+      loginPam = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to include authentication against LDAP in login PAM";
+      };
+
+      nsswitch = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to include lookup against LDAP in NSS";
+      };
+
       server = mkOption {
         example = "ldap://ldap.example.org/";
         description = "The URL of the LDAP server.";
@@ -192,7 +204,7 @@ in
     system.activationScripts = mkIf insertLdapPassword {
       ldap = stringAfter [ "etc" "groups" "users" ] ''
         if test -f "${cfg.bind.password}" ; then
-          echo "bindpw "$(cat ${cfg.bind.password})"" | cat ${ldapConfig} - > /etc/ldap.conf.bindpw
+          echo "bindpw "$(cat ${cfg.bind.password})"" | cat ${ldapConfig.source} - > /etc/ldap.conf.bindpw
           mv -fT /etc/ldap.conf.bindpw /etc/ldap.conf
           chmod 600 /etc/ldap.conf
         fi

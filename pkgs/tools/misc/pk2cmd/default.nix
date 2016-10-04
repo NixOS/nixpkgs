@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1yjpi2qshnqfpan4w3ggakkr3znfrx5cxkny92ka7v9na3g2fc4h";
   };
 
-  makeFlags = [ "LIBUSB=${libusb}" "linux" ];
+  makeFlags = [ "LIBUSB=${libusb.dev}" "linux" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/pk2

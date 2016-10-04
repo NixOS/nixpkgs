@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem
 , jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
+, openjdk
 , mesa, openal
 , useAlsa ? false, alsaOss ? null }:
 with stdenv.lib;
@@ -7,15 +8,10 @@ with stdenv.lib;
 assert useAlsa -> alsaOss != null;
 
 let
-  icon = fetchurl {
-    url = "https://hydra-media.cursecdn.com/minecraft.gamepedia.com/c/c5/Grass.png";
-    sha256 = "438c0f63e379e92af1b5b2e06cc5e3365ee272810af65ebc102304bce4fa8c4b";
-  };
-
   desktopItem = makeDesktopItem {
     name = "minecraft";
     exec = "minecraft";
-    icon = "${icon}";
+    icon = "minecraft";
     comment = "A sandbox-building game";
     desktopName = "Minecraft";
     genericName = "minecraft";
@@ -49,6 +45,9 @@ in stdenv.mkDerivation {
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
+
+    ${openjdk}/bin/jar xf $out/minecraft.jar favicon.png
+    install -D favicon.png $out/share/icons/hicolor/32x32/apps/minecraft.png
   '';
 
   meta = {

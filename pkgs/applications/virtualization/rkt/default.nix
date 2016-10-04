@@ -2,27 +2,30 @@
   cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper, glibc }:
 
 let
-  coreosImageRelease = "991.0.0";
-  coreosImageSystemdVersion = "225";
+  # Always get the information from 
+  # https://github.com/coreos/rkt/blob/v${VERSION}/stage1/usr_from_coreos/coreos-common.mk
+  coreosImageRelease = "1151.0.0";
+  coreosImageSystemdVersion = "231";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
-  stage1Flavours = [ "coreos" "fly" "host" ];
+  stage1Flavours = [ "coreos" "fly" ];
+  stage1Dir = "lib/rkt/stage1-images";
 
 in stdenv.mkDerivation rec {
-  version = "1.5.1";
+  version = "1.15.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
   src = fetchFromGitHub {
-      rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "1y99m0ay9qj5a0rb657abdjmwjvqi9dh3k6xr0npmx6vnvwpxs58";
+      rev = "v${version}";
+      sha256 = "0ppi6r3wr69s6ka1j9xljvq3rw2chp8syyvqcx6ijnzjbwgbwar3";
   };
 
   stage1BaseImage = fetchurl {
     url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "1vaimrbynhjh4f30rq92bv1h3c1lxnf8isx5c2qvnn3lghypss9k";
+    sha256 = "1j75ad1g217aqar84m9ycl2m71g821hq9yahl4bgjaipx9xnj23g";
   };
 
   buildInputs = [
@@ -39,6 +42,7 @@ in stdenv.mkDerivation rec {
       --with-coreos-local-pxe-image-path=${stage1BaseImage}
       --with-coreos-local-pxe-image-systemd-version=v${coreosImageSystemdVersion}
       " else "" }
+      --with-stage1-default-location=$out/${stage1Dir}/stage1-${builtins.elemAt stage1Flavours 0}.aci
     );
   '';
 
@@ -48,7 +52,11 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -Rv $BUILDDIR/bin/* $out/bin
+    cp -Rv $BUILDDIR/target/bin/rkt $out/bin
+
+    mkdir -p $out/lib/rkt/stage1-images/
+    cp -Rv $BUILDDIR/target/bin/stage1-*.aci $out/${stage1Dir}/
+
     wrapProgram $out/bin/rkt \
       --prefix LD_LIBRARY_PATH : ${systemd}/lib \
       --prefix PATH : ${iptables}/bin

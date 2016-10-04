@@ -23,12 +23,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     docFixes
+    ./relocation.patch
     ./ghc-7.x-dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
   ];
 
   buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
 
   enableParallelBuilding = true;
+
+  outputs = [ "out" "doc" ];
 
   preConfigure = ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -42,6 +45,7 @@ stdenv.mkDerivation rec {
     "--with-gcc=${stdenv.cc}/bin/cc"
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--datadir=$doc/share/doc/ghc"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${binutils}/bin:${coreutils}/bin"' $i
+      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
     done
   '';
 
@@ -69,7 +73,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with stdenv.lib.maintainers; [ marcweber andres simons ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;
   };
 

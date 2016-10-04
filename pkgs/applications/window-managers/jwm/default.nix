@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, libtool, which, xorg,
-  libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp, libXmu,
-  libpng, libjpeg, expat, xproto, xextproto, xineramaproto, librsvg, gettext,
+{ stdenv, fetchurl, pkgconfig, automake, autoconf, libtool, gettext, which,
+  xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp,
+  libXmu, libpng, libjpeg, expat, xproto, xextproto, xineramaproto, librsvg,
   freetype, fontconfig }:
 
 stdenv.mkDerivation rec {
   name = "jwm-${version}";
-  version = "1495";
+  version = "1548";
   
   src = fetchurl {
      url = "https://github.com/joewing/jwm/archive/s${version}.tar.gz";
-     sha256 = "0sn9la3k36k1d9qyxab1sbv2mqicq2w7q4wgy4bj8d48zc8xjy6v";
+     sha256 = "1ih5y7567vwcbnkjwm3cc9iq4n9rzz818mkh6ryli9ld230hla5r";
   };
 
-  nativeBuildInputs = [ pkgconfig automake autoconf libtool which gettext ];
+  nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
 
   buildInputs = [ libX11 libXext libXinerama libXpm libXft xorg.libXrender
     libXau libXdmcp libXmu libpng libjpeg expat xproto xextproto xineramaproto
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://joewing.net/projects/jwm/";
-    description = "A window manager for X11 that requires only Xlib";
+    description = "Joe's Window Manager is a light-weight X11 window manager";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
     platforms   = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

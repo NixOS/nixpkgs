@@ -1,6 +1,18 @@
-{stdenv, fetchurl, fetchpatch, nasm, SDL, zlib, libpng, ncurses, mesa}:
+{stdenv, fetchurl, fetchpatch, nasm, SDL, zlib, libpng, ncurses, mesa
+, makeDesktopItem }:
 
-stdenv.mkDerivation {
+let
+  desktopItem = makeDesktopItem {
+    name = "zsnes";
+    exec = "zsnes";
+    icon = "zsnes";
+    comment = "A SNES emulator";
+    desktopName = "zsnes";
+    genericName = "zsnes";
+    categories = "Game;";
+  };
+
+in stdenv.mkDerivation {
   name = "zsnes-1.51";
 
   src = fetchurl {
@@ -39,10 +51,25 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--enable-release" ];
 
+  postInstall = ''
+    function installIcon () {
+        mkdir -p $out/share/icons/hicolor/$1/apps/
+        cp icons/$1x32.png $out/share/icons/hicolor/$1/apps/zsnes.png
+    }
+    installIcon "16x16"
+    installIcon "32x32"
+    installIcon "48x48"
+    installIcon "64x64"
+
+    mkdir -p $out/share/applications
+    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+  '';
+
   meta = {
     description = "A Super Nintendo Entertainment System Emulator";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
     homepage = http://www.zsnes.com;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

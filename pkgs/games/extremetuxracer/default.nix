@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mesa, libX11, xproto, tcl, freeglut
+{ stdenv, fetchurl, mesa, libX11, xproto, tcl, freeglut, freetype
 , SDL, SDL_mixer, SDL_image, libXi, inputproto
 , libXmu, libXext, xextproto, libXt, libSM, libICE
 , libpng, pkgconfig, gettext, intltool
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    mesa libX11 xproto tcl freeglut
+    mesa libX11 xproto tcl freeglut freetype
     SDL SDL_mixer SDL_image libXi inputproto
     libXmu libXext xextproto libXt libSM libICE
     libpng pkgconfig gettext intltool
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://sourceforge.net/projects/extremetuxracer/;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libgphoto2 libexif popt libjpeg readline libtool ];
 
   meta = {
-    description = "a ready to use set of digital camera software applications";
+    description = "A ready to use set of digital camera software applications";
     longDescription = ''
 
       A set of command line utilities for manipulating over 1400 different

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl
+, IOKit ? null }:
 
 stdenv.mkDerivation rec {
   name = "libstatgrab-0.91";
@@ -8,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1azinx2yzs442ycwq6p15skl3mscmqj7fd5hq7fckhjp92735s83";
   };
 
+  buildInputs = [] ++ stdenv.lib.optional stdenv.isDarwin IOKit;
+
   meta = with stdenv.lib; {
     homepage = http://www.i-scream.org/libstatgrab/;
-    description = "a library that provides cross platforms access to statistics about the running system";
+    description = "A library that provides cross platforms access to statistics about the running system";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

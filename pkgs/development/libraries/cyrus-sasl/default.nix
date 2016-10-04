@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hvvbcsg21nlncbgs0cgn3iwlnb3vannzwsp6rwvnn9ba4v53g4g";
   };
 
-  outputs = [ "dev" "bin" "out" "man" "docdev" ];
+  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   buildInputs =
     [ openssl db gettext kerberos ]
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     );
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
   ];
 
   # Set this variable at build-time to make sure $out can be evaluated.
@@ -49,8 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://cyrusimap.web.cmu.edu/";
-    description = "library for adding authentication support to connection-based protocols";
+    description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons ];
   };
 }

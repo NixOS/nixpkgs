@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     dpkg-deb -x ${src} ./
   '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/bin"

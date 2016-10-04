@@ -14,8 +14,11 @@ stdenv.mkDerivation rec {
     sed -i -e s,/usr/local/bin,$out/bin, Makefile
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Unarchiver of ARJ files";
-    license = stdenv.lib.licenses.free;
+    license = licenses.free;
+    maintainers = with maintainers; [ nckx ];
+    # Vulnerable to CVE-2015-0557 & possibly CVE-2015-0556, CVE-2015-2782:
+    broken = true;
   };
 }

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://chromium.googlesource.com/breakpad/breakpad";
     rev = "512cac3a1b69721ab727f3079f4d29e4580467b1";
-    sha256 = "0v7k7racdl2f16mbi3r0vkbkagh0gf6ksnpf3ri28b9pjfngkl5s";
+    sha256 = "1ksilbdpi1krycxkidqd1dlly95qf7air3zy8h5zfnagrlkz7zzx";
   };
 
   breakpad_lss = fetchgit {
@@ -21,4 +21,8 @@ stdenv.mkDerivation {
     cp -r $breakpad_lss src/third_party/lss
     chmod +w -R src/third_party/lss
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

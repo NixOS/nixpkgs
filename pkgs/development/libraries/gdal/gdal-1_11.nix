@@ -19,18 +19,20 @@ composableDerivation.composableDerivation {} (fixed: rec {
     ./python.patch
   ];
 
+  hardeningDisable = [ "format" ];
+
   # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
   # Unset CC and CXX as they confuse libtool.
   preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";
 
   configureFlags = [
-    "--with-jpeg=${libjpeg}"
-    "--with-libtiff=${libtiff}" # optional (without largetiff support)
-    "--with-libpng=${libpng}"   # optional
-    "--with-libz=${zlib}"       # optional
+    "--with-jpeg=${libjpeg.dev}"
+    "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
+    "--with-libpng=${libpng.dev}"   # optional
+    "--with-libz=${zlib.dev}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.lib}/bin/mysql_config"
+    "--with-mysql=${mysql.lib.dev}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional

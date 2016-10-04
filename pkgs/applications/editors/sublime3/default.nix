@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, glib, xorg, cairo, gtk, pango, makeWrapper, openssl, bzip2,
+{ fetchurl, stdenv, glib, xorg, cairo, gtk2, pango, makeWrapper, openssl, bzip2,
   pkexecPath ? "/var/setuid-wrappers/pkexec", libredirect,
   gksuSupport ? false, gksu}:
 
@@ -6,8 +6,8 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert gksuSupport -> gksu != null;
 
 let
-  build = "3103";
-  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk cairo pango];
+  build = "3126";
+  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo pango];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
     ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
 in let
@@ -20,13 +20,13 @@ in let
         fetchurl {
           name = "sublimetext-${build}.tar.bz2";
           url = "https://download.sublimetext.com/sublime_text_3_build_${build}_x32.tar.bz2";
-          sha256 = "1qidnczndyhyp9rfzmpqah00lrx7z1a0fy7a13lzwqq3gslhwf1l";
+          sha256 = "0acff4wj1s61x3xszdd93lkhaqa26lb7ryqdxnbphxzhf2jfzzwj";
         }
       else
         fetchurl {
           name = "sublimetext-${build}.tar.bz2";
           url = "https://download.sublimetext.com/sublime_text_3_build_${build}_x64.tar.bz2";
-          sha256 = "1x8kb3prs6wa5s5rj0gfq96zx6k5q3s168yhfsa36x2szi6x6y4x";
+          sha256 = "0ykj33fq86iv7f9zx76h90pl9y86iri0idhlj09a6prhk8p17nqq";
         };
 
     dontStrip = true;
@@ -76,7 +76,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = https://www.sublimetext.com/;
-    maintainers = with maintainers; [ wmertens demin-dmitriy ];
+    maintainers = with maintainers; [ wmertens demin-dmitriy zimbatm ];
     license = licenses.unfree;
     platforms = platforms.linux;
   };

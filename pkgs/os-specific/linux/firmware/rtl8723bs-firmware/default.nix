@@ -1,7 +1,7 @@
 { stdenv, linuxPackages }:
 with stdenv.lib;
 stdenv.mkDerivation {
-  name = "rtl8723bs-firmware-${linuxPackages.rtl8723bs.rev}";
+  name = "rtl8723bs-firmware-${linuxPackages.rtl8723bs.version}";
   inherit (linuxPackages.rtl8723bs) src;
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -17,5 +17,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/hadess/rtl8723bs;
     license = licenses.unfreeRedistributableFirmware;
     maintainers = with maintainers; [ elitak ];
+    platforms = with platforms; linux;
   };
 }

@@ -5,11 +5,22 @@ with utils;
 
 let
 
-  fileSystems = attrValues config.fileSystems;
+  fileSystems' = toposort fsBefore (attrValues config.fileSystems);
+
+  fileSystems = if fileSystems' ? "result"
+                then # use topologically sorted fileSystems everywhere
+                     fileSystems'.result
+                else # the assertion below will catch this,
+                     # but we fall back to the original order
+                     # anyway so that other modules could check
+                     # their assertions too
+                     (attrValues config.fileSystems);
 
   prioOption = prio: optionalString (prio != null) " pri=${toString prio}";
 
-  fileSystemOpts = { name, config, ... }: {
+  specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
+
+  coreFileSystemOpts = { name, config, ... }: {
 
     options = {
 
@@ -26,13 +37,6 @@ let
         description = "Location of the device.";
       };
 
-      label = mkOption {
-        default = null;
-        example = "root-partition";
-        type = types.nullOr types.str;
-        description = "Label of the device (if any).";
-      };
-
       fsType = mkOption {
         default = "auto";
         example = "ext3";
@@ -44,12 +48,28 @@ let
         default = [ "defaults" ];
         example = [ "data=journal" ];
         description = "Options used to mount the file system.";
-      } // (if versionAtLeast lib.nixpkgsVersion "16.09" then {
         type = types.listOf types.str;
-      } else {
-        type = types.either types.commas (types.listOf types.str);
-        apply = x: if isList x then x else lib.strings.splitString "," (builtins.trace "warning: passing a comma-separated string for filesystem options is deprecated; use a list of strings instead. This will become a hard error in 16.09." x);
-      });
+      };
+
+    };
+
+    config = {
+      mountPoint = mkDefault name;
+      device = mkIf (elem config.fsType specialFSTypes) (mkDefault config.fsType);
+    };
+
+  };
+
+  fileSystemOpts = { config, ... }: {
+
+    options = {
+
+      label = mkOption {
+        default = null;
+        example = "root-partition";
+        type = types.nullOr types.str;
+        description = "Label of the device (if any).";
+      };
 
       autoFormat = mkOption {
         default = false;
@@ -91,8 +111,6 @@ let
     };
 
     config = {
-      mountPoint = mkDefault name;
-      device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
       options = mkIf config.autoResize [ "x-nixos.autoresize" ];
 
       # -F needed to allow bare block device without partitions
@@ -100,6 +118,13 @@ let
     };
 
   };
+
+  # Makes sequence of `specialMount device mountPoint options fsType` commands.
+  # `systemMount` should be defined in the sourcing script.
+  makeSpecialMounts = mounts:
+    pkgs.writeText "mounts.sh" (concatMapStringsSep "\n" (mount: ''
+      specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
+    '') mounts);
 
 in
 
@@ -111,17 +136,18 @@ in
 
     fileSystems = mkOption {
       default = {};
-      example = {
-        "/".device = "/dev/hda1";
-        "/data" = {
-          device = "/dev/hda2";
-          fsType = "ext3";
-          options = [ "data=journal" ];
-        };
-        "/bigdisk".label = "bigdisk";
-      };
-      type = types.loaOf types.optionSet;
-      options = [ fileSystemOpts ];
+      example = literalExample ''
+        {
+          "/".device = "/dev/hda1";
+          "/data" = {
+            device = "/dev/hda2";
+            fsType = "ext3";
+            options = [ "data=journal" ];
+          };
+          "/bigdisk".label = "bigdisk";
+        }
+      '';
+      type = types.loaOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = "/"</literal>).  Each
@@ -153,12 +179,33 @@ in
       description = "Names of supported filesystem types.";
     };
 
+    boot.specialFileSystems = mkOption {
+      default = {};
+      type = types.loaOf (types.submodule coreFileSystemOpts);
+      internal = true;
+      description = ''
+        Special filesystems that are mounted very early during boot.
+      '';
+    };
+
   };
 
 
   ###### implementation
 
   config = {
+
+    assertions = let
+      ls = sep: concatMapStringsSep sep (x: x.mountPoint);
+    in [
+      { assertion = ! (fileSystems' ? "cycle");
+        message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
+      }
+    ];
+
+    # Export for use in other modules
+    system.build.fileSystems = fileSystems;
+    system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues config.boot.specialFileSystems)).result;
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
@@ -173,9 +220,12 @@ in
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
       in ''
         # This is a generated file.  Do not edit!
+        #
+        # To make changes, edit the fileSystems and swapDevices NixOS options
+        # in your /etc/nixos/configuration.nix file.
 
         # Filesystems.
-        ${flip concatMapStrings fileSystems (fs:
+        ${concatMapStrings (fs:
             (if fs.device != null then fs.device
              else if fs.label != null then "/dev/disk/by-label/${fs.label}"
              else throw "No device specified for mount point ‘${fs.mountPoint}’.")
@@ -186,7 +236,7 @@ in
             + " " + (if skipCheck fs then "0" else
                      if fs.mountPoint == "/" then "1" else "2")
             + "\n"
-        )}
+        ) fileSystems}
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
@@ -206,14 +256,15 @@ in
 
         formatDevice = fs:
           let
-            mountPoint' = escapeSystemdPath fs.mountPoint;
-            device' = escapeSystemdPath fs.device;
+            mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
+            device'  = escapeSystemdPath fs.device;
+            device'' = "${device'}.device";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
-            wantedBy = [ "${mountPoint'}.mount" ];
-            before = [ "${mountPoint'}.mount" "systemd-fsck@${device'}.service" ];
-            requires = [ "${device'}.device" ];
-            after = [ "${device'}.device" ];
+            wantedBy = [ mountPoint' ];
+            before = [ mountPoint' "systemd-fsck@${device'}.service" ];
+            requires = [ device'' ];
+            after = [ device'' ];
             path = [ pkgs.utillinux ] ++ config.system.fsPackages;
             script =
               ''
@@ -231,6 +282,23 @@ in
           };
 
       in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
+
+    # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
+    boot.specialFileSystems = {
+      "/proc" = { fsType = "proc"; options = [ "nosuid" "noexec" "nodev" ]; };
+      "/run" = { fsType = "tmpfs"; options = [ "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
+      "/dev" = { fsType = "devtmpfs"; options = [ "nosuid" "strictatime" "mode=755" "size=${config.boot.devSize}" ]; };
+      "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
+      "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "gid=${toString config.ids.gids.tty}" ]; };
+
+      # To hold secrets that shouldn't be written to disk (generally used for NixOps, harmless elsewhere)
+      "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" "gid=${toString config.ids.gids.keys}" ]; };
+    } // optionalAttrs (!config.boot.isContainer) {
+      # systemd-nspawn populates /sys by itself, and remounting it causes all
+      # kinds of weird issues (most noticeably, waiting for host disk device
+      # nodes).
+      "/sys" = { fsType = "sysfs"; options = [ "nosuid" "noexec" "nodev" ]; };
+    };
 
   };
 

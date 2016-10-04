@@ -10,12 +10,24 @@ stdenv.mkDerivation {
     sha256 = "1ip78x20hjqvm08kxhp6gb8hf6k5n6sxyx6kk2yvvq53djzh7yv7";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ cmake pkgconfig automoc4 ];
 
   propagatedBuildInputs = [ polkit glib qt4 ];
 
+  postFixup =
+    ''
+      for i in $dev/lib/cmake/*/*.cmake; do
+        echo "fixing $i"
+        substituteInPlace $i \
+          --replace "\''${PACKAGE_PREFIX_DIR}/lib" $out/lib
+      done
+    '';
+
   meta = {
     description = "A Qt wrapper around PolKit";
     maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
 , libpng, libtiff, lcms2
 , mj2Support ? true # MJ2 executables
 , jpwlLibSupport ? true # JPWL library & executables
@@ -11,7 +11,7 @@
 , testsSupport ? false
 , jdk ? null
 # Inherit generics
-, branch, sha256, version, ...
+, branch, version, revision, sha256, ...
 }:
 
 assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
@@ -25,11 +25,15 @@ in
 
 stdenv.mkDerivation rec {
   name = "openjpeg-${version}";
-  
-  src = fetchurl {
-    url = "mirror://sourceforge/openjpeg.mirror/${version}/openjpeg-${version}.tar.gz";
+
+  src = fetchFromGitHub {
+    owner = "uclouvain";
+    repo = "openjpeg";
+    rev = revision;
     inherit sha256;
   };
+
+  outputs = [ "out" "dev" ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_NAME_DIR=\${CMAKE_INSTALL_PREFIX}/lib"

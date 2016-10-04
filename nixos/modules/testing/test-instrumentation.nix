@@ -113,6 +113,16 @@ let kernel = config.boot.kernelPackages.kernel; in
     # Make it easy to log in as root when running the test interactively.
     users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
 
+    services.xserver.displayManager.logToJournal = true;
+
+    # Bump kdm's X server start timeout to account for heavily loaded
+    # VM host systems.
+    services.xserver.displayManager.kdm.extraConfig =
+      ''
+        [X-:*-Core]
+        ServerTimeout=240
+      '';
+
   };
 
 }

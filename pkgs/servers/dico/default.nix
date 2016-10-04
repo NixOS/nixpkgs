@@ -1,17 +1,19 @@
 { fetchurl, stdenv, libtool, gettext, zlib, readline, gsasl
-, guile, python, pcre, libffi }:
+, guile, python, pcre, libffi, groff }:
 
 stdenv.mkDerivation rec {
-  name = "dico-2.2";
+  name = "dico-2.3";
 
   src = fetchurl {
     url = "mirror://gnu/dico/${name}.tar.xz";
-    sha256 = "04pjks075x20d19l623mj50bw64g8i41s63z4kzzqcbg9qg96x64";
+    sha256 = "13by0zimx90v2j8v7n4k9y3xwmh4q9jdc2f4f8yjs3x7f5bzm2pk";
   };
+
+  hardeningDisable = [ "format" ];
 
   # XXX: Add support for GNU SASL.
   buildInputs =
-    [ libtool gettext zlib readline gsasl guile python pcre libffi ];
+    [ libtool gettext zlib readline gsasl guile python pcre libffi groff ];
 
   # dicod fails to load modules, so the tests fail
   doCheck = false;

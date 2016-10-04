@@ -187,44 +187,43 @@ in
 
       outTunnels = mkOption {
         default = {};
-        type = with types; loaOf optionSet;
+        type = with types; loaOf (submodule ( 
+          { name, config, ... }: {
+            options = commonTunOpts name;
+            config = {
+              name = mkDefault name;
+            };
+          }
+        ));
         description = ''
           Connect to someone as a client and establish a local accept endpoint
         '';
-        options = [ ({ name, config, ... }: {
-          options = commonTunOpts name;
-          config = {
-            name = mkDefault name;
-          };
-        }) ];
       };
 
       inTunnels = mkOption {
         default = {};
-        type = with types; loaOf optionSet;
+        type = with types; loaOf (submodule (
+          { name, config, ... }: {
+            options = {
+              inPort = mkOption {
+                type = types.int;
+                default = 0;
+                description = "Service port. Default to the tunnel's listen port.";
+              };
+              accessList = mkOption {
+                type = with types; listOf str;
+                default = [];
+                description = "I2P nodes that are allowed to connect to this service.";
+              };
+            } // commonTunOpts name;
+            config = {
+              name = mkDefault name;
+            };
+          }
+        ));
         description = ''
           Serve something on I2P network at port and delegate requests to address inPort.
         '';
-        options = [ ({ name, config, ... }: {
-
-          options = {
-            inPort = mkOption {
-              type = types.int;
-              default = 0;
-              description = "Service port. Default to the tunnel's listen port.";
-            };
-            accessList = mkOption {
-              type = with types; listOf str;
-              default = [];
-              description = "I2P nodes that are allowed to connect to this service.";
-            };
-          } // commonTunOpts name;
-
-          config = {
-            name = mkDefault name;
-          };
-
-        }) ];
       };
     };
   };

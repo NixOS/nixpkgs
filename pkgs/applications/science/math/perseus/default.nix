@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, unzip, gcc48 }:
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "perseus-4-beta";
   version = "4-beta";
-  buildInputs = [unzip gcc48];
+  buildInputs = [ unzip ];
+
+  hardeningDisable = [ "stackprotector" ];
 
   src = fetchurl {
     url = "http://www.sas.upenn.edu/~vnanda/source/perseus_4_beta.zip";
@@ -13,7 +15,7 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   buildPhase = ''
-    g++ Pers.cpp -O3 -o perseus
+    g++ Pers.cpp -O3 -fpermissive -o perseus
   '';
 
   installPhase = ''
@@ -30,7 +32,7 @@ stdenv.mkDerivation {
       around datasets arising from point samples, images, distance
       matrices and so forth.
     '';
-    homepage = "www.sas.upenn.edu/~vnanda/perseus/index.html";
+    homepage = "http://www.sas.upenn.edu/~vnanda/perseus/index.html";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [erikryb];
     platforms = stdenv.lib.platforms.linux;

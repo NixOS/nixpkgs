@@ -3,11 +3,11 @@
 assert stdenv.isLinux -> libcap != null;
 
 stdenv.mkDerivation rec {
-  name = "ntp-4.2.8p6";
+  name = "ntp-4.2.8p8";
 
   src = fetchurl {
     url = "http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
-    sha256 = "0j509gd0snj8dq15rhfv2v4wisfaabya1gmgqslk1kisawf0wgaq";
+    sha256 = "1vlpgd0dk2wkpmmf869sfxi8f46sfnmjgk51vl8n6vj5y2sx1cra";
   };
 
   configureFlags = [
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libcap openssl ];
+
+  hardeningEnable = [ "pie" ];
 
   postInstall = ''
     rm -rf $out/share/doc

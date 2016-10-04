@@ -1,0 +1,30 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -74,6 +74,16 @@ PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.12])
+ AC_SUBST(GLIB_CFLAGS)
+ AC_SUBST(GLIB_LIBS)
+ 
++#include <libxml/uri.h>
++PKG_CHECK_MODULES(LIBXML2, libxml-2.0)
++AC_SUBST(LIBXML2_CFLAGS)
++AC_SUBST(LIBXML2_LIBS)
++
++#include <xmlsec/xmlenc.h>
++PKG_CHECK_MODULES(XMLSEC, xmlsec1-openssl)
++AC_SUBST(XMLSEC_CFLAGS)
++AC_SUBST(XMLSEC_LIBS)
++
+ # Test to see if we can include lasso/utils.h
+ # AC_CHECK_HEADER won't work correctly unless we specifiy the include directories
+ # found in the LASSO_CFLAGS. Save and restore CFLAGS and CPPFLAGS.
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -25,7 +25,7 @@
+ all:	mod_auth_mellon.la
+ 
+ mod_auth_mellon.la: $(SRC) auth_mellon.h auth_mellon_compat.h
+-	@APXS2@ -Wc,"-std=c99 @OPENSSL_CFLAGS@ @LASSO_CFLAGS@ @CURL_CFLAGS@ @GLIB_CFLAGS@ @CFLAGS@" -Wl,"@OPENSSL_LIBS@ @LASSO_LIBS@ @CURL_LIBS@ @GLIB_LIBS@" -Wc,-Wall -Wc,-g -c $(SRC)
++	@APXS2@ -Wc,"-std=c99 @OPENSSL_CFLAGS@ @LASSO_CFLAGS@ @CURL_CFLAGS@ @GLIB_CFLAGS@ @CFLAGS@ @LIBXML2_CFLAGS@ @XMLSEC_CFLAGS@ @CFLAGS@" -Wl,"@OPENSSL_LIBS@ @LASSO_LIBS@ @CURL_LIBS@ @GLIB_LIBS@ @LIBXML2_LIBS@ @XMLSEC_LIBS@" -Wc,-Wall -Wc,-g -c $(SRC)
+ 
+ 
+ # Building configure (for distribution)

@@ -11,7 +11,7 @@ in antBuild {
 
   src = fetchgit {
     url = "https://github.com/junit-team/junit.git";
-    sha256 = "019azv0cfy2zs45c7g3r952gvjmikkq76p2ydr4q5252r0pzy9dr";
+    sha256 = "1cn5dhs6vpbfbcmnm2vb1212n0kblv8cxrvnwmksjxd6bzlkac1k";
     rev = "c2e4d911fadfbd64444fb285342a8f1b72336169";
   };
 

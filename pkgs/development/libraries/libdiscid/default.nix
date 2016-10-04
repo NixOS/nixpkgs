@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://musicbrainz.org/doc/libdiscid;
     maintainers = with maintainers; [ ehmry ];
     license = licenses.lgpl21;
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

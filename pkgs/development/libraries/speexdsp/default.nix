@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patches = [ ./build-fix.patch ];
   postPatch = "sed '3i#include <stdint.h>' -i ./include/speex/speexdsp_config_types.h.in";
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ fftw ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     hompage = http://www.speex.org/;
-    description = "an Open Source/Free Software patent-free audio compression format designed for speech";
+    description = "An Open Source/Free Software patent-free audio compression format designed for speech";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

@@ -4,7 +4,7 @@
 , tex ? texlive.combine { # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar
       fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
-      multirow overpic pdfpages rotating stmaryrd subfigure titlesec wasysym
+      multirow overpic pdfpages graphics stmaryrd subfigure titlesec wasysym
       # pkgs below don't seem requested by dblatex, but our manual fails without them
       ec zapfding symbol eepic times rsfs cs tex4ht courier helvetic ly1;
   }
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
             -e 's|cmd = "inkscape|cmd = "${inkscape}/bin/inkscape|g' \
             -e 's|cmd = "fig2dev|cmd = "${transfig}/bin/fig2dev|g' \
             -e 's|cmd = \["ps2pdf|cmd = ["${ghostscript}/bin/ps2pdf|g' \
-            -e 's|cmd = "convert|cmd = "${imagemagick}/bin/convert|g' \
+            -e 's|cmd = "convert|cmd = "${imagemagick.out}/bin/convert|g' \
             -i "$file"
     done
   '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     python ./setup.py install --prefix="$out" --use-python-path --verbose
@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     description = "A program to convert DocBook to DVI, PostScript or PDF via LaTeX or ConTeXt";
     homepage = http://dblatex.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

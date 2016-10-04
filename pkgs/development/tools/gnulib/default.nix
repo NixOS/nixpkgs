@@ -8,14 +8,15 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "http://git.savannah.gnu.org/r/gnulib.git";
     rev = "92b60e61666f008385d9b7f7443da17c7a44d1b1";
-    sha256 = "0xpxq8vqdl0niib961dnsrgjq6kbpyap6nnydzp15dvzfhzgz189";
+    sha256 = "0sa1dndvaxhw0zyc19al5cmpgzlwnnznjz89lw1b4vj3xn7avjnr";
   };
 
   installPhase = "mkdir -p $out; mv * $out/";
 
   meta = {
     homepage = "http://www.gnu.org/software/gnulib/";
-    description = "central location for code to be shared among GNU packages";
+    description = "Central location for code to be shared among GNU packages";
     license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

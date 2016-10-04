@@ -13,8 +13,10 @@ pythonPackages.buildPythonApplication rec {
 
   buildInputs = with pythonPackages; [ nose ];
 
+  # Automatic tests cannot be run because it needs to import some local modules for tests.
+  doCheck = false;
   checkPhase = ''
-    nosetests $out
+    nosetests
   '';
 
   propagatedBuildInputs = with pythonPackages; [
@@ -30,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     homepage = http://furius.ca/beancount/;
-    description = "double-entry bookkeeping computer language";
+    description = "Double-entry bookkeeping computer language";
     longDescription = ''
         A double-entry bookkeeping computer language that lets you define
         financial transaction records in a text file, read them in memory,

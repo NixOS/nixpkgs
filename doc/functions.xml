@@ -89,20 +89,27 @@ in ...</programlisting>
   <title>&lt;pkg&gt;.overrideDerivation</title>
 
   <warning>
-    <para>Do not use this function in Nixpkgs. Because it breaks
-    package abstraction and doesn’t provide error checking for
-    function arguments, it is only intended for ad-hoc customisation
-    (such as in <filename>~/.nixpkgs/config.nix</filename>).</para>
+    <para>Do not use this function in Nixpkgs as it evaluates a Derivation
+    before modifying it, which breaks package abstraction and removes
+    error-checking of function arguments. In addition, this
+    evaluation-per-function application incurs a performance penalty,
+    which can become a problem if many overrides are used.
+    It is only intended for ad-hoc customisation, such as in
+    <filename>~/.nixpkgs/config.nix</filename>.
+   </para>
   </warning>
 
   <para>
-    The function <varname>overrideDerivation</varname> is usually available for all the
-    derivations in the nixpkgs expression (<varname>pkgs</varname>).
+    The function <varname>overrideDerivation</varname> creates a new derivation
+    based on an existing one by overriding the original's attributes with
+    the attribute set produced by the specified function.
+    This function is available on all
+    derivations defined using the <varname>makeOverridable</varname> function.
+    Most standard derivation-producing functions, such as
+    <varname>stdenv.mkDerivation</varname>, are defined using this
+    function, which means most packages in the nixpkgs expression,
+    <varname>pkgs</varname>, have this function.
   </para> 
-  <para>
-    It is used to create a new derivation by overriding the attributes of
-    the original derivation according to the given function.
-  </para>
 
   <para>
     Example usage:
@@ -118,15 +125,29 @@ in ...</programlisting>
   </para>
 
   <para>
-    In the above example, the name, src and patches of the derivation
-    will be overridden, while all other attributes will be retained from the
-    original derivation.
+    In the above example, the <varname>name</varname>, <varname>src</varname>,
+    and <varname>patches</varname> of the derivation will be overridden, while
+    all other attributes will be retained from the original derivation.
   </para>
 
   <para>
     The argument <varname>oldAttrs</varname> is used to refer to the attribute set of
     the original derivation.
   </para>
+
+  <note>
+    <para>
+      A package's attributes are evaluated *before* being modified by
+      the <varname>overrideDerivation</varname> function.
+      For example, the <varname>name</varname> attribute reference
+      in <varname>url = "mirror://gnu/hello/${name}.tar.gz";</varname>
+      is filled-in *before* the <varname>overrideDerivation</varname> function
+      modifies the attribute set. This means that overriding the
+      <varname>name</varname> attribute, in this example, *will not* change the
+      value of the <varname>url</varname> attribute. Instead, we need to override
+      both the <varname>name</varname> *and* <varname>url</varname> attributes.
+    </para>
+  </note>
 
 </section>
 
@@ -164,42 +185,18 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
 
 
 <section xml:id="sec-fhs-environments">
-  <title>buildFHSChrootEnv/buildFHSUserEnv</title>
+  <title>buildFHSUserEnv</title>
 
   <para>
-    <function>buildFHSChrootEnv</function> and
-    <function>buildFHSUserEnv</function> provide a way to build and run
-    FHS-compatible lightweight sandboxes. They get their own isolated root with
-    binded <filename>/nix/store</filename>, so their footprint in terms of disk
+    <function>buildFHSUserEnv</function> provides a way to build and run
+    FHS-compatible lightweight sandboxes. It creates an isolated root with
+    bound <filename>/nix/store</filename>, so its footprint in terms of disk
     space needed is quite small. This allows one to run software which is hard or
     unfeasible to patch for NixOS -- 3rd-party source trees with FHS assumptions,
     games distributed as tarballs, software with integrity checking and/or external
-    self-updated binaries.
-  </para>
-
-  <para>
-    <function>buildFHSChrootEnv</function> allows to create persistent
-    environments, which can be constructed, deconstructed and entered by
-    multiple users at once. A downside is that it requires
-    <literal>root</literal> access for both those who create and destroy and
-    those who enter it. It can be useful to create environments for daemons that
-    one can enter and observe.
-  </para>
-
-  <para>
-    <function>buildFHSUserEnv</function> uses Linux namespaces feature to create
+    self-updated binaries. It uses Linux namespaces feature to create
     temporary lightweight environments which are destroyed after all child
-    processes exit. It does not require root access, and can be useful to create
-    sandboxes and wrap applications.
-  </para>
-
-  <para>
-    Those functions both rely on <function>buildFHSEnv</function>, which creates
-    an actual directory structure given a list of necessary packages and extra
-    build commands.
-    <function>buildFHSChrootEnv</function> and <function>buildFHSUserEnv</function>
-    both accept those arguments which are passed to
-    <function>buildFHSEnv</function>:
+    processes exit, without root user rights requirement. Accepted arguments are:
   </para>
 
   <variablelist>
@@ -213,14 +210,16 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
     <term><literal>targetPkgs</literal></term>
 
     <listitem><para>Packages to be installed for the main host's architecture
-    (i.e. x86_64 on x86_64 installations).</para></listitem>
+    (i.e. x86_64 on x86_64 installations). Along with libraries binaries are also
+    installed.</para></listitem>
     </varlistentry>
 
     <varlistentry>
     <term><literal>multiPkgs</literal></term>
 
     <listitem><para>Packages to be installed for all architectures supported by
-    a host (i.e. i686 and x86_64 on x86_64 installations).</para></listitem>
+    a host (i.e. i686 and x86_64 on x86_64 installations). Only libraries are
+    installed by default.</para></listitem>
     </varlistentry>
 
     <varlistentry>
@@ -233,29 +232,33 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
     <varlistentry>
     <term><literal>extraBuildCommandsMulti</literal></term>
 
-    <listitem><para>Like <literal>extraBuildCommandsMulti</literal>, but
+    <listitem><para>Like <literal>extraBuildCommands</literal>, but
     executed only on multilib architectures.</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term><literal>extraOutputsToInstall</literal></term>
+
+    <listitem><para>Additional derivation outputs to be linked for both
+    target and multi-architecture packages.</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term><literal>extraInstallCommands</literal></term>
+
+    <listitem><para>Additional commands to be executed for finalizing the
+    derivation with runner script.</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term><literal>runScript</literal></term>
+
+    <listitem><para>A command that would be executed inside the sandbox and
+    passed all the command line arguments. It defaults to
+    <literal>bash</literal>.</para></listitem>
     </varlistentry>
   </variablelist>
 
-  <para>
-    Additionally, <function>buildFHSUserEnv</function> accepts
-    <literal>runScript</literal> parameter, which is a command that would be
-    executed inside the sandbox and passed all the command line arguments. It
-    default to <literal>bash</literal>.
-  </para>
-  <para>
-    It also uses <literal>CHROOTENV_EXTRA_BINDS</literal> environment variable
-    for binding extra directories in the sandbox to outside places. The format of
-    the variable is <literal>/mnt=test-mnt:/data</literal>, where
-    <literal>/mnt</literal> would be mounted as <literal>/test-mnt</literal>
-    and <literal>/data</literal> would be mounted as <literal>/data</literal>.
-    <literal>extraBindMounts</literal> array argument to
-    <function>buildFHSUserEnv</function> function is prepended to this variable.
-    Latter entries take priority if defined several times -- i.e. in case of
-    <literal>/data=data1:/data=data2</literal> the actual bind path would be
-    <literal>/data2</literal>.
-  </para>
   <para>
     One can create a simple environment using a <literal>shell.nix</literal>
     like that:

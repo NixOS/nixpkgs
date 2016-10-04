@@ -93,13 +93,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "cmus-${version}";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
-    rev    = "0306cc74c5073a85cf8619c61da5b94a3f863eaa";
-    sha256 = "18w9mznb843nzkrcqvshfha51mlpdl92zlvb5wfc5dpgrbf37728";
+    rev    = "v${version}";
+    sha256 = "0xd96py21bl869qlv1353zw7xsgq6v5s8szr0ldr63zj5fgc2ps5";
   };
 
   patches = [ ./option-debugging.patch ];
@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     homepage = https://cmus.github.io/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.oxij ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

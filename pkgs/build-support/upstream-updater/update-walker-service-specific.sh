@@ -9,7 +9,7 @@ SF_version_dir () {
 }
 
 SF_version_tarball () {
-  version_link '[.]tar[.].*/download$'
+  version_link "${1:-[.]tar[.]}.*/download\$"
 }
 
 GH_latest () {

@@ -19,6 +19,7 @@
 , haddock-api
 , ghcjs-prim
 , regex-posix
+, callPackage
 
 , bootPkgs, gmp
 , jailbreak-cabal
@@ -97,6 +98,8 @@ in mkDerivation (rec {
       --replace "@CC@"     "${stdenv.cc}/bin/cc"
   '';
   preBuild = ''
+    export HOME="$TMP"
+
     local topDir=$out/lib/ghcjs-${version}
     mkdir -p $topDir
 
@@ -126,7 +129,7 @@ in mkDerivation (rec {
         --with-gmp-libraries ${gmp.out}/lib
   '';
   passthru = let
-    ghcjsNodePkgs = pkgs.nodePackages.override {
+    ghcjsNodePkgs = callPackage ../../../top-level/node-packages.nix {
       generated = ./node-packages-generated.nix;
       self = ghcjsNodePkgs;
     };
@@ -136,6 +139,36 @@ in mkDerivation (rec {
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
     inherit (ghcjsNodePkgs) "socket.io";
+
+    # This is the list of the Stage 1 packages that are built into a booted ghcjs installation
+    # It can be generated with the command:
+    # nix-shell -p haskell.packages.ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/^\([^_]*\)\(.*\)$/      \"\1\"/'"
+    stage1Packages = [
+      "array"
+      "base"
+      "binary"
+      "rts"
+      "bytestring"
+      "containers"
+      "deepseq"
+      "directory"
+      "filepath"
+      "ghc-prim"
+      "ghcjs-prim"
+      "integer-gmp"
+      "old-locale"
+      "pretty"
+      "primitive"
+      "process"
+      "template-haskell"
+      "time"
+      "transformers"
+      "unix"
+    ];
+
+    mkStage2 = import ./stage2.nix {
+      inherit ghcjsBoot;
+    };
   };
 
   homepage = "https://github.com/ghcjs/ghcjs";

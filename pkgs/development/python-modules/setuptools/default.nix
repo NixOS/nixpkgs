@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
-  name = "${python.executable}-${shortName}";
+  name = "${python.libPrefix}-${shortName}";
 
-  version = "19.4";  # 18.4 and up breaks python34Packages.characteristic and many others
+  version = "26.1.1";  # 18.4 and up breaks python34Packages.characteristic and many others
 
   src = fetchurl {
     url = "mirror://pypi/s/setuptools/${shortName}.tar.gz";
-    sha256 = "214bf29933f47cf25e6faa569f710731728a07a19cae91ea64f826051f68a8cf";
+    sha256 = "475ce28993d7cb75335942525b9fac79f7431a7f6e8a0079c0f2680641379481";
   };
 
   buildInputs = [ python wrapPython ];
@@ -21,10 +21,13 @@ stdenv.mkDerivation rec {
       wrapPythonPrograms
   '';
 
+  pythonPath = [];
+
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = http://pypi.python.org/pypi/setuptools;
     license = with lib.licenses; [ psfl zpt20 ];
     platforms = platforms.all;
+    priority = 10;
   };
 }

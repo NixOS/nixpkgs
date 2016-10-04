@@ -7,12 +7,12 @@
 }:
 mkDerivation {
   pname = "tinc";
-  version = "20160419";
+  version = "20160924";
   src = fetchFromGitHub {
     owner = "sol";
     repo = "tinc";
-    rev = "b9f7cc1076098b1f99f20655052c9fd34598d891";
-    sha256 = "1f0k7a4vxdd2cd2h5qwska9hfw7ig6q2rx87d09fg2xlix96g81r";
+    rev = "f5ba99264930a2af2f24770a23af2613acdac631";
+    sha256 = "19mvswpjak9dxpd4w86fz1wv0zkn6ippc37gdkhyg4xcj9jn21a9";
   };
   isLibrary = false;
   isExecutable = true;
@@ -37,5 +37,6 @@ mkDerivation {
   description = "A dependency manager for Haskell";
   homepage = "https://github.com/sol/tinc#readme";
   license = stdenv.lib.licenses.mit;
+  hydraPlatforms = stdenv.lib.platforms.none;
   maintainers = [ stdenv.lib.maintainers.robbinch ];
 }

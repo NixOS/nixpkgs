@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "Setuid-safe wrapper for chroot";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nckx ];
+    platforms = with platforms; unix;
   };
 }

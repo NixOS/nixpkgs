@@ -23,7 +23,7 @@ let
       substituteInPlace ./configure \
         --replace " -static" "" \
         ${stdenv.lib.optionalString (stdenv.cc.libc != null) ''
-          --replace /usr/include/iconv.h ${stdenv.cc.libc}/include/iconv.h
+          --replace /usr/include/iconv.h ${stdenv.lib.getDev stdenv.cc.libc}/include/iconv.h
         ''}
     '';
 
@@ -46,8 +46,8 @@ in
     ]
     ++ stdenv.lib.optional enableJabber "--with-jabber=${minmay}"
     ++ stdenv.lib.optional enableSnmp "--with-net-snmp"
-    ++ stdenv.lib.optional enableSsh "--with-ssh2=${libssh2}"
-    ++ stdenv.lib.optional enableLdap "--with-ldap=${openldap}";
+    ++ stdenv.lib.optional enableSsh "--with-ssh2=${libssh2.dev}"
+    ++ stdenv.lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
     postPatch = ''
       sed -i -e 's/iksemel/minmay/g' configure src/libs/zbxmedia/jabber.c
@@ -96,7 +96,7 @@ in
       homepage = http://www.zabbix.com/;
       license = licenses.gpl2;
       maintainers = [ maintainers.eelco ];
-      platforms = platforms.linux ++ platforms.darwin;
+      platforms = platforms.linux;
     };
   };
 

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/purcell/darcs-to-git.git";
     rev = "e5fee32495908fe0f7d700644c7b37347b7a0a5b";
-    sha256 = "0ycp7pzv9g9pgj25asiby3p3m5vg5czqf4rpy2mavjqhiblxlcv5";
+    sha256 = "0lxcx0x0m1cv2j4x9ykpjf6r2zg6lh5rya016x93vkmlzxm3f0ji";
   };
 
   patchPhase = let
@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     description = "Converts a Darcs repository into a Git repository";
     homepage = "http://www.sanityinc.com/articles/converting-darcs-repositories-to-git";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

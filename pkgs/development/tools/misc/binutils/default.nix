@@ -2,7 +2,7 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
-let basename = "binutils-2.26"; in
+let basename = "binutils-2.27"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1ngc2h3knhiw8s22l8y6afycfaxr5grviqy7mwvm4bsl14cf9b62";
+    sha256 = "125clslv17xh1sab74343fg6v31msavpmaa1c1394zsqa773g5rn";
   };
 
   patches = [
@@ -32,20 +32,17 @@ stdenv.mkDerivation rec {
     # This is needed, for instance, so that running "ldd" on a binary that is
     # PaX-marked to disable mprotect doesn't fail with permission denied.
     ./pt-pax-flags.patch
-
-    # Bug fix backported from binutils master.
-    ./fix-bsymbolic.patch
-
-   # Bug fix backported from binutils master.
-    ./fix-update-symbol-version.patch
   ];
 
-  outputs = (optional (cross == null) "dev") ++ [ "out" "info" ];
+  outputs = [ "out" "info" ] ++ (optional (cross == null) "dev");
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
+
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
     # Clear the default library search path.

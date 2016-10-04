@@ -1,12 +1,12 @@
 {stdenv, fetchurl, ocaml, findlib, piqi, ulex, easy-format, xmlm, base64, camlp4}:
 
 stdenv.mkDerivation rec {
-  version = "0.7.4";
+  version = "0.7.5";
   name    = "piqi-ocaml-${version}";
 
   src = fetchurl {
     url = "https://github.com/alavrik/piqi-ocaml/archive/v${version}.tar.gz";
-    sha256 = "064c74f031l847q6s1vilj77n7h7i84jn8c83yid9nha3dssaf7m";
+    sha256 = "0ngz6y8i98i5v2ma8nk6mc83pdsmf2z0ks7m3xi6clfg3zqbddrv";
   };
 
   buildInputs = [ocaml findlib piqi base64 camlp4];

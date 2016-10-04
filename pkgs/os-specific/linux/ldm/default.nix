@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = meta.repositories.git;
     rev = "refs/tags/v${version}";
-    sha256 = "0kkby3a0xgh1lmkbzpsi4am2rqjv3ccgdpic99aw1c76y0ca837y";
+    sha256 = "0lxfypnbamfx6p9ar5k9wra20gvwn665l4pp2j4vsx4yi5q7rw2n";
   };
 
   buildInputs = [ udev utillinux ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sed '16i#include <sys/stat.h>' -i ldm.c
   '';
 
-  buildPhase = "make ldm";
+  buildFlags = "ldm";
 
   installPhase = ''
     mkdir -p $out/bin

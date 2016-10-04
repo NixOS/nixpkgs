@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/kkaempf/sblim-sfcc.git";
     rev = "f70fecb410a53531e4fe99d39cf81b581819cac9";
-    sha256 = "1dlhjvi888kz3bq56n0f86f25ny48a18rm4rgb4rx04aimas3dvj";
+    sha256 = "1hsxim284qzldh599gf6khxj80g8q5263xl3lj3hdndxbhbs843v";
   };
 
   preConfigure = "./autoconfiscate.sh";

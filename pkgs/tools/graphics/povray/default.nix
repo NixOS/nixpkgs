@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/POV-Ray/povray.git";
     rev = "39ce8a24e50651904010dda15872d63be15d7c37";
-    sha256 = "0d56631d9daacb8967ed359025f56acf0bd505d1d9e752859e8ff8656ae72d20";
+    sha256 = "1nbs9vwf6fn3jkm0myfnbn7nrc17q8ppzmr4h7kj49nr0710ifw0";
   };
 
 

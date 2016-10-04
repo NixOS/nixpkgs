@@ -18,14 +18,14 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.47.1";
+  name = "curl-7.50.3";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "13z9gba3q2ybp50z0gdkzhwcx9m0i7qkvm278yz4pql2jfml7inx";
+    sha256 = "1v6q83qsrf7dgp3y5fa5vkppgqyy82pnsk8z9b4047b6fvclfwvv";
   };
 
-  outputs = [ "dev" "out" "bin" "man" "docdev" ];
+  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   nativeBuildInputs = [ pkgconfig perl ];
 
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
       "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
       "--disable-manual"
-      ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
-      ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
+      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
+      ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
       ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
-      ( if idnSupport then "--with-libidn=${libidn}" else "--without-libidn" )
+      ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";

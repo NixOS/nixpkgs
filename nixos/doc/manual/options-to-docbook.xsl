@@ -11,6 +11,7 @@
   <xsl:output method='xml' encoding="UTF-8" />
 
   <xsl:param name="revision" />
+  <xsl:param name="program" />
 
 
   <xsl:template match="/expr/list">
@@ -188,7 +189,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:when>
-            <xsl:when test="$revision != 'local' and contains(@value, 'nixops') and contains(@value, '/nix/')">
+            <xsl:when test="$revision != 'local' and $program = 'nixops' and contains(@value, '/nix/')">
               <xsl:attribute name="xlink:href">https://github.com/NixOS/nixops/blob/<xsl:value-of select="$revision"/>/nix/<xsl:value-of select="substring-after(@value, '/nix/')"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>

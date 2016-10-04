@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, gtk, glib, gdk_pixbuf, dpkg, libXext, libXfixes
+{ stdenv, fetchurl, xorg, gtk2, glib, gdk_pixbuf, dpkg, libXext, libXfixes
 , libXrender, libuuid, libXrandr, libXcomposite, libpulseaudio
 }:
 
@@ -7,21 +7,21 @@ with stdenv.lib;
 let
 
   rpathInstaller = makeLibraryPath
-    [gtk glib stdenv.cc.cc];
+    [gtk2 glib stdenv.cc.cc];
 
   rpathPlugin = makeLibraryPath
-    ([ stdenv.cc.cc gtk glib xorg.libX11 gdk_pixbuf libXext libXfixes libXrender libXrandr libXcomposite libpulseaudio ] ++ optional (libuuid != null) libuuid);
+    ([ stdenv.cc.cc gtk2 glib xorg.libX11 gdk_pixbuf libXext libXfixes libXrender libXrandr libXcomposite libpulseaudio ] ++ optional (libuuid != null) libuuid);
 
 in
 
 stdenv.mkDerivation rec {
   name = "bluejeans-${version}";
 
-  version = "2.125.24.5";
+  version = "2.160.66.8";
 
   src = fetchurl {
     url = "https://swdl.bluejeans.com/skinny/bjnplugin_${version}-1_amd64.deb";
-    sha256 = "0lxxd7icfqcpg5rb4njkk4ybxmisv4c509yisznxspi49qfxirwq";
+    sha256 = "1wf9jgd2717gfzm2wb0hxj4i76kczhgnwfhhpiy15zkqdcsmczsr";
   };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];

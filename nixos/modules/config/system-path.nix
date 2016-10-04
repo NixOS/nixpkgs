@@ -38,8 +38,8 @@ let
       pkgs.strace
       pkgs.su
       pkgs.time
-      pkgs.texinfoInteractive
       pkgs.utillinux
+      pkgs.which # 88K size
     ];
 
 in
@@ -76,7 +76,7 @@ in
       extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "doc" "info" "docdev" ];
+        example = [ "doc" "info" "devdoc" ];
         description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
       };
 
@@ -102,7 +102,8 @@ in
     environment.pathsToLink =
       [ "/bin"
         "/etc/xdg"
-        "/info"
+        "/etc/gtk-2.0"
+        "/etc/gtk-3.0"
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/applications"
@@ -110,7 +111,6 @@ in
         "/share/doc"
         "/share/emacs"
         "/share/icons"
-        "/share/info"
         "/share/menus"
         "/share/mime"
         "/share/nano"

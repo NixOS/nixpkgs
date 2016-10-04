@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.tuxfamily.org/gitroot/non/fltk.git";
     rev = "5719b0044d9f267de5391fab006370cc7f4e70bd";
-    sha256 = "7ecedb049e00cc9a1bb0e0e2f02e5a734c873653b68551e6573474c04abe1821";
+    sha256 = "1wpqy5kk6sk31qyx1c6gdslcqcbczgji6lk8w1l8kri0s908ywyj";
   };
 
   buildInputs = [

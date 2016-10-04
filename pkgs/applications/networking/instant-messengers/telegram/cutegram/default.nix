@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/Aseman-Land/Cutegram.git";
     rev = "1dbe2792fb5a1760339379907f906e236c09db84";
-    sha256 = "080153bpa92jpi0zdrfajrn0yqy3jp8m4704sirbz46dv7471rzl";
+    sha256 = "146vd3ri05da2asxjjxibnqmb685lgwl2kaz7mwb7ja7vi4149f0";
   };
 
   buildInputs =

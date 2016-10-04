@@ -24,7 +24,7 @@ rec {
      Example:
        concat = fold (a: b: a + b) "z"
        concat [ "a" "b" "c" ]
-       => "abcnul"
+       => "abcz"
   */
   fold = op: nul: list:
     let
@@ -68,18 +68,7 @@ rec {
        imap (i: v: "${v}-${toString i}") ["a" "b"]
        => [ "a-1" "b-2" ]
   */
-  imap =
-    if builtins ? genList then
-      f: list: genList (n: f (n + 1) (elemAt list n)) (length list)
-    else
-      f: list:
-      let
-        len = length list;
-        imap' = n:
-          if n == len
-            then []
-            else [ (f (n + 1) (elemAt list n)) ] ++ imap' (n + 1);
-      in imap' 0;
+  imap = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
 
   /* Map and concatenate the result.
 
@@ -100,7 +89,7 @@ rec {
   */
   flatten = x:
     if isList x
-    then foldl' (x: y: x ++ (flatten y)) [] x
+    then concatMap (y: flatten y) x
     else [x];
 
   /* Remove elements equal to 'e' from a list.  Useful for buildInputs.
@@ -216,17 +205,11 @@ rec {
        range 3 2
        => [ ]
   */
-  range =
-    if builtins ? genList then
-      first: last:
-        if first > last
-        then []
-        else genList (n: first + n) (last - first + 1)
+  range = first: last:
+    if first > last then
+      []
     else
-      first: last:
-        if last < first
-        then []
-        else [first] ++ range (first + 1) last;
+      genList (n: first + n) (last - first + 1);
 
   /* Splits the elements of a list in two lists, `right' and
      `wrong', depending on the evaluation of a predicate.
@@ -235,12 +218,12 @@ rec {
        partition (x: x > 2) [ 5 1 2 3 4 ]
        => { right = [ 5 3 4 ]; wrong = [ 1 2 ]; }
   */
-  partition = pred:
+  partition = builtins.partition or (pred:
     fold (h: t:
       if pred h
       then { right = [h] ++ t.right; wrong = t.wrong; }
       else { right = t.right; wrong = [h] ++ t.wrong; }
-    ) { right = []; wrong = []; };
+    ) { right = []; wrong = []; });
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined
@@ -250,19 +233,9 @@ rec {
        zipListsWith (a: b: a + b) ["h" "l"] ["e" "o"]
        => ["he" "lo"]
   */
-  zipListsWith =
-    if builtins ? genList then
-      f: fst: snd: genList (n: f (elemAt fst n) (elemAt snd n)) (min (length fst) (length snd))
-    else
-      f: fst: snd:
-      let
-        len = min (length fst) (length snd);
-        zipListsWith' = n:
-          if n != len then
-            [ (f (elemAt fst n) (elemAt snd n)) ]
-            ++ zipListsWith' (n + 1)
-          else [];
-      in zipListsWith' 0;
+  zipListsWith = f: fst: snd:
+    genList
+      (n: f (elemAt fst n) (elemAt snd n)) (min (length fst) (length snd));
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest.
@@ -280,11 +253,88 @@ rec {
        reverseList [ "b" "o" "j" ]
        => [ "j" "o" "b" ]
   */
-  reverseList =
-    if builtins ? genList then
-      xs: let l = length xs; in genList (n: elemAt xs (l - n - 1)) l
-    else
-      fold (e: acc: acc ++ [ e ]) [];
+  reverseList = xs:
+    let l = length xs; in genList (n: elemAt xs (l - n - 1)) l;
+
+  /* Depth-First Search (DFS) for lists `list != []`.
+
+     `before a b == true` means that `b` depends on `a` (there's an
+     edge from `b` to `a`).
+
+     Examples:
+
+         listDfs true hasPrefix [ "/home/user" "other" "/" "/home" ]
+           == { minimal = "/";                  # minimal element
+                visited = [ "/home/user" ];     # seen elements (in reverse order)
+                rest    = [ "/home" "other" ];  # everything else
+              }
+
+         listDfs true hasPrefix [ "/home/user" "other" "/" "/home" "/" ]
+           == { cycle   = "/";                  # cycle encountered at this element
+                loops   = [ "/" ];              # and continues to these elements
+                visited = [ "/" "/home/user" ]; # elements leading to the cycle (in reverse order)
+                rest    = [ "/home" "other" ];  # everything else
+
+   */
+
+  listDfs = stopOnCycles: before: list:
+    let
+      dfs' = us: visited: rest:
+        let
+          c = filter (x: before x us) visited;
+          b = partition (x: before x us) rest;
+        in if stopOnCycles && (length c > 0)
+           then { cycle = us; loops = c; inherit visited rest; }
+           else if length b.right == 0
+                then # nothing is before us
+                     { minimal = us; inherit visited rest; }
+                else # grab the first one before us and continue
+                     dfs' (head b.right)
+                          ([ us ] ++ visited)
+                          (tail b.right ++ b.wrong);
+    in dfs' (head list) [] (tail list);
+
+  /* Sort a list based on a partial ordering using DFS. This
+     implementation is O(N^2), if your ordering is linear, use `sort`
+     instead.
+
+     `before a b == true` means that `b` should be after `a`
+     in the result.
+
+     Examples:
+
+         toposort hasPrefix [ "/home/user" "other" "/" "/home" ]
+           == { result = [ "/" "/home" "/home/user" "other" ]; }
+
+         toposort hasPrefix [ "/home/user" "other" "/" "/home" "/" ]
+           == { cycle = [ "/home/user" "/" "/" ]; # path leading to a cycle
+                loops = [ "/" ]; }                # loops back to these elements
+
+         toposort hasPrefix [ "other" "/home/user" "/home" "/" ]
+           == { result = [ "other" "/" "/home" "/home/user" ]; }
+
+         toposort (a: b: a < b) [ 3 2 1 ] == { result = [ 1 2 3 ]; }
+
+   */
+
+  toposort = before: list:
+    let
+      dfsthis = listDfs true before list;
+      toporest = toposort before (dfsthis.visited ++ dfsthis.rest);
+    in
+      if length list < 2
+      then # finish
+           { result =  list; }
+      else if dfsthis ? "cycle"
+           then # there's a cycle, starting from the current vertex, return it
+                { cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
+                  inherit (dfsthis) loops; }
+           else if toporest ? "cycle"
+                then # there's a cycle somewhere else in the graph, return it
+                     toporest
+                # Slow, but short. Can be made a bit faster with an explicit stack.
+                else # there are no cycles
+                     { result = [ dfsthis.minimal ] ++ toporest.result; };
 
   /* Sort a list based on a comparator function which compares two
      elements and returns true if the first argument is strictly below
@@ -320,19 +370,7 @@ rec {
        take 2 [ ]
        => [ ]
   */
-  take =
-    if builtins ? genList then
-      count: sublist 0 count
-    else
-      count: list:
-        let
-          len = length list;
-          take' = n:
-            if n == len || n == count
-              then []
-            else
-              [ (elemAt list n) ] ++ take' (n + 1);
-        in take' 0;
+  take = count: sublist 0 count;
 
   /* Remove the first (at most) N elements of a list.
 
@@ -342,19 +380,7 @@ rec {
        drop 2 [ ]
        => [ ]
   */
-  drop =
-    if builtins ? genList then
-      count: list: sublist count (length list) list
-    else
-      count: list:
-        let
-          len = length list;
-          drop' = n:
-            if n == -1 || n < count
-              then []
-            else
-              drop' (n - 1) ++ [ (elemAt list n) ];
-        in drop' (len - 1);
+  drop = count: list: sublist count (length list) list;
 
   /* Return a list consisting of at most ‘count’ elements of ‘list’,
      starting at index ‘start’.
@@ -427,9 +453,5 @@ rec {
        => [ 1 4 5 ]
   */
   subtractLists = e: filter (x: !(elem x e));
-
-  /*** deprecated stuff ***/
-
-  deepSeqList = throw "removed 2016-02-29 because unused and broken";
 
 }

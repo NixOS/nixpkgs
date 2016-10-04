@@ -22,6 +22,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = http://christian.amsuess.com/tools/arandr/;
     description = "A simple visual front end for XRandR";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    maintainers = [ stdenv.lib.maintainers.domenkozar ];
   };
 }

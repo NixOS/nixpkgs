@@ -1,15 +1,15 @@
 { stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, swt, gtk2, glib, libXtst }:
 
 let
-  version = "4.6.0";
-  rev = "3"; #tracks unversioned changes that occur on download.code42.com from time to time
+  version = "4.7.0";
+  rev = "2"; #tracks unversioned changes that occur on download.code42.com from time to time
 
 in stdenv.mkDerivation rec {
   name = "crashplan-${version}-r${rev}";
 
   crashPlanArchive = fetchurl {
     url = "https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "0crrx8gy132xcpjfah08qhsl8g2arx14p5mpypcihl9j6mldi6mz";
+    sha256 = "1vi6dqf8kc90axrgdcf6rwnhynxgxkc0qn6pbdp2gvkxdqxrprn8";
   };
 
   srcs = [ crashPlanArchive ];
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     description = "An online/offline backup solution";
     homepage = "http://www.crashplan.org";
     license = licenses.unfree;
-    maintainers = with maintainers; [ sztupi iElectric ];
+    maintainers = with maintainers; [ sztupi domenkozar ];
   };
 
   buildInputs = [ makeWrapper cpio ];
@@ -81,6 +81,6 @@ in stdenv.mkDerivation rec {
       --replace crashplan/skin skin \
       --replace bin/CrashPlanDesktop CrashPlanDesktop
 
-    wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${gtk2}/lib:${glib}/lib:${libXtst}/lib"
+    wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ gtk2 glib libXtst ]}"
   '';
 }

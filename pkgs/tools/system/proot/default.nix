@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
     owner = "cedric-vincent";
   };
 
-  buildInputs = [ talloc ];
+  buildInputs = [ talloc ] ++ stdenv.lib.optional enableStatic stdenv.cc.libc.static;
   nativeBuildInputs = [ docutils ];
 
   enableParallelBuilding = true;
 
   preBuild = stdenv.lib.optionalString enableStatic ''
-    export LDFLAGS="-static -L${talloc}/lib"
+    export LDFLAGS="-static"
   '';
 
   makeFlags = [ "-C src" ];

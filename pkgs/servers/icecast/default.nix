@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 libxslt curl libvorbis libtheora speex libkate libopus ];
 
+  hardeningEnable = [ "pie" ];
+
   meta = {
     description = "Server software for streaming multimedia";
 
@@ -27,6 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.icecast.org;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }
 

@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-standalone-module"
     "--enable-static"
-    "--with-curl=${curl}"
-    "--with-apxs=${apacheHttpd}/bin/apxs"
-    "--with-pcre=${pcre}"
-    "--with-apr=${apr}"
-    "--with-apu=${aprutil}/bin/apu-1-config"
-    "--with-libxml=${libxml2}"
+    "--with-curl=${curl.dev}"
+    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
+    "--with-pcre=${pcre.dev}"
+    "--with-apr=${apr.dev}"
+    "--with-apu=${aprutil.dev}/bin/apu-1-config"
+    "--with-libxml=${libxml2.dev}"
   ];
 
   outputs = ["out" "nginx"];

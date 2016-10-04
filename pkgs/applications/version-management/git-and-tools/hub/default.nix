@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
-  version = "2.2.3";
+  version = "2.2.8";
 
   src = fetchgit {
     url = https://github.com/github/hub.git;
     rev = "refs/tags/v${version}";
-    sha256 = "0iwpy50jvb8w3nn6q857j9c3k7bp17azj8yc5brh04dpkyfysm02";
+    sha256 = "1fv4jb9vsbkscnb79gss2mwnd1yf9jhgzw1mhimhx25xizbx1fck";
   };
 
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/bin"
-    cp hub "$out/bin/"
+    cp bin/hub "$out/bin/"
 
     mkdir -p "$out/share/man/man1"
     cp "man/hub.1" "$out/share/man/man1/"
@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/zsh/site-functions"
     cp "etc/hub.zsh_completion" "$out/share/zsh/site-functions/_hub"
 
-# Broken: https://github.com/github/hub/issues/592
-#    mkdir -p "$out/etc/bash_completion.d"
-#    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
+    mkdir -p "$out/etc/bash_completion.d"
+    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
 
 # Should we also install provided git-hooks?
 # ?
@@ -44,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = https://hub.github.com/;
     maintainers = with maintainers; [ the-kenny ];
+    platforms = with platforms; unix;
   };
 }

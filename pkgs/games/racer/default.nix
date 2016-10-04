@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Car racing game";
     homepage = http://hippo.nipax.cz/download.en.php;
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip
-, coreutils, gnugrep, which, git, python, unzip, jdk }:
+, coreutils, gnugrep, which, git, python, unzip }:
 
-{ name, product, version, build, src, meta } @ attrs:
+{ name, product, version, src, wmClass, jdk, meta } @ attrs:
 
 with stdenv.lib;
 
@@ -11,7 +11,7 @@ let loName = toLower product;
 in
 
 with stdenv; lib.makeOverridable mkDerivation rec {
-  inherit name build src meta;
+  inherit name src meta;
   desktopItem = makeDesktopItem {
     name = execName;
     exec = execName;
@@ -20,6 +20,9 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     genericName = meta.description;
     categories = "Application;Development;";
     icon = execName;
+    extraEntries = ''
+      StartupWMClass=${wmClass}
+    '';
   };
 
   buildInputs = [ makeWrapper patchelf p7zip unzip ];
@@ -59,7 +62,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     item=${desktopItem}
 
     makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
-      --prefix PATH : "$out/libexec/${name}:${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
+      --prefix PATH : "$out/libexec/${name}:${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
       --set ANDROID_JAVA_HOME "$jdk" \

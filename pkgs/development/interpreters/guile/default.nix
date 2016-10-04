@@ -7,11 +7,11 @@
  else stdenv.mkDerivation)
 
 (rec {
-  name = "guile-2.0.11";
+  name = "guile-2.0.12";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "1qh3j7308qvsjgwf7h94yqgckpbgz2k3yqdkzsyhqcafvfka9l5f";
+    sha256 = "1sdpjq0jf1h65w29q0zprj4x6kdp5jskkvbnlwphy9lvdxrqg0fy";
   };
 
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
@@ -97,10 +97,10 @@
       # /usr/include/mp.h from OpenSolaris.  See
       # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
       # for details.
-      "--with-libgmp-prefix=${gmp}"
+      "--with-libgmp-prefix=${gmp.dev}"
 
       # Same for these (?).
-      "--with-libreadline-prefix=${readline}"
+      "--with-libreadline-prefix=${readline.dev}"
       "--with-libunistring-prefix=${libunistring}"
 
       # See below.

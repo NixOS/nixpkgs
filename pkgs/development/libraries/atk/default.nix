@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
 
 let
-  ver_maj = "2.18";
+  ver_maj = "2.20";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/atk/${ver_maj}/${name}.tar.xz";
-    sha256 = "ce6c48d77bf951083029d5a396dd552d836fff3c1715d3a7022e917e46d0c92b";
+    sha256 = "493a50f6c4a025f588d380a551ec277e070b28a82e63ef8e3c06b3ee7c1238f0";
   };
 
   enableParallelBuilding = true;
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = libintlOrEmpty;
 

@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, unzip, cmake, libtiff, expat, zlib, libpng, libjpeg }:
+{ stdenv, fetchFromGitHub, unzip, cmake, libtiff, expat, zlib, libpng, libjpeg }:
 stdenv.mkDerivation {
-  name = "vxl-1.17.0";
+  name = "vxl-1.17.0-nix1";
 
-  src = fetchurl {
-    url = mirror://sourceforge/vxl/vxl-1.17.0.zip;
-    sha256 = "1qg7i8h201pa8jljg7vph4rlxk6n5cj9f9gd1hkkmbw6fh44lsxh";
+  src = fetchFromGitHub {
+    owner = "vxl";
+    repo = "vxl";
+    rev = "777c0beb7c8b30117400f6fc9a6d63bf8cb7c67a";
+    sha256 = "0xpkwwb93ka6c3da8zjhfg9jk5ssmh9ifdh1by54sz6c7mbp55m8";
   };
 
   buildInputs = [ cmake unzip libtiff expat zlib libpng libjpeg ];
@@ -19,8 +21,6 @@ stdenv.mkDerivation {
       "");
 
   enableParallelBuilding = true;
-
-  patches = [ ./gcc5.patch ];
 
   meta = {
     description = "C++ Libraries for Computer Vision Research and Implementation";

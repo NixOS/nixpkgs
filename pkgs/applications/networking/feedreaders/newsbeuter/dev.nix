@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/akrennmair/newsbeuter.git";
     rev = "1427bdb0705806368db39576a9b803df82fa0415";
-    sha256 = "b29a304a46bf56b439d0d35ea586f7fd0fbf1a5565dca95de76e774885d8b64b";
+    sha256 = "1g47b8pxkz84r5m3avkjb7p2i88crcrp9gxwhq7xdfywrgg9pgnd";
   };
 
   buildInputs
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "An open-source RSS/Atom feed reader for text terminals";
     maintainers = with maintainers; [ lovek323 ];
     license     = licenses.mit;
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 }

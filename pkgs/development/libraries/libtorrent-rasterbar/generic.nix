@@ -9,7 +9,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "libtorrent-rasterbar-${version}";
-  
+
   src = fetchurl {
     url = "https://github.com/arvidn/libtorrent/archive/libtorrent-${formattedVersion}.tar.gz";
     inherit sha256;
@@ -26,16 +26,17 @@ stdenv.mkDerivation rec {
     "--with-libgeoip=system"
     "--with-libiconv=yes"
     "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--with-libiconv=yes"
   ];
 
   enableParallelBuilding = true;
-  
+
   meta = with stdenv.lib; {
     homepage = http://www.rasterbar.com/products/libtorrent/;
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];
+    platforms = platforms.linux;
   };
 }

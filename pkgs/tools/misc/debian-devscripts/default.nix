@@ -1,26 +1,29 @@
 {stdenv, fetchurl, perl, CryptSSLeay, LWP, unzip, xz, dpkg, TimeDate, DBFile
-, FileDesktopEntry, libxslt, docbook_xsl, python3, setuptools, makeWrapper
+, FileDesktopEntry, libxslt, docbook_xsl, makeWrapper
+, python3Packages
 , perlPackages, curl, gnupg, diffutils
 , sendmailPath ? "/var/setuid-wrappers/sendmail"
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.16.4";
+let
+  inherit (python3Packages) python setuptools;
+in stdenv.mkDerivation rec {
+  version = "2.16.6";
   name = "debian-devscripts-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    sha256 = "0hxvxf8fc76lmrf57l9liwx1xjbxk2ldamln8xnwqlg37laxi3v2";
+    sha256 = "0lkhilwb1gsnk8q14wkrl78s0w3l8aghsaz00vprmkmcc3j1x14h";
   };
 
   buildInputs = [ perl CryptSSLeay LWP unzip xz dpkg TimeDate DBFile 
-    FileDesktopEntry libxslt python3 setuptools makeWrapper
+    FileDesktopEntry libxslt python setuptools makeWrapper
     perlPackages.ParseDebControl perlPackages.LWPProtocolHttps
     curl gnupg diffutils ];
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
-    tgtpy="$out/lib/${python3.libPrefix}/site-packages"
+    tgtpy="$out/lib/${python.libPrefix}/site-packages"
     mkdir -p "$tgtpy"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
     find po4a scripts -type f -exec sed -r \
@@ -59,5 +62,6 @@ stdenv.mkDerivation rec {
     description = ''Debian package maintenance scripts'';
     license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
     maintainers = with maintainers; [raskin];
+    platforms = with platforms; linux;
   };
 }

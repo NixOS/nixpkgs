@@ -75,7 +75,7 @@ index 0000000..a2f9918
 +
 +let b:current_syntax = "nix"
 +
-+" thanks to iElectric
++" thanks to domenkozar
 +" scan backwards to find begining of multiline statements
 +syn sync ccomment nixMultiLineComment minlines=10 maxlines=500
 +syn sync ccomment nixStringIndented minlines=10 maxlines=500

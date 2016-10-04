@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     version = "20160105";
     maintainers = [ maintainers.dochang ];
+    platforms = platforms.unix;
   };
 
 }

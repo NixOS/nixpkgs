@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url    = meta.repositories.git;
     rev    = "refs/tags/v${version}";
-    sha256 = "1q7rbf0j54jh17qs76b6k9hzv4sh4044qfzidjrp6gx576ysrvsf";
+    sha256 = "1l890pg0h2hqpkabsnwc6pq2qi8mfv58qzaaicc9y62rq5nmrrws";
   };
 
   buildInputs = [ autoreconfHook ];

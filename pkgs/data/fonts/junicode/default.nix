@@ -19,5 +19,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://junicode.sourceforge.net/;
     description = "A Unicode font";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

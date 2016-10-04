@@ -38,6 +38,5 @@ stdenv.mkDerivation {
       software.
     '';
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

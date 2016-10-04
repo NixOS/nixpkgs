@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     homepage = http://www.timkay.com/aws/;
     description = "Command-line utility for working with Amazon EC2, S3, SQS, ELB, IAM and SDB";
     license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

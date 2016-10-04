@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g87d3z9275dniaqzkf56qfgzp1msd89nqqhhm2gkc6iga072spz";
   };
 
-  patches = [ ./fix-7.2.2-clang.patch ];
+  patches = [ ./fix-7.2.2-clang.patch ./relocation.patch ];
 
   buildInputs = [ ghc perl gmp ncurses ];
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     maintainers = [
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.andres
-      stdenv.lib.maintainers.simons
+      stdenv.lib.maintainers.peti
     ];
     platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.
     inherit (ghc.meta) license;

@@ -5,7 +5,7 @@
          xml:id="sec-x11">
 
 <title>X Window System</title>
-    
+
 <para>The X Window System (X11) provides the basis of NixOS’ graphical
 user interface.  It can be enabled as follows:
 <programlisting>
@@ -48,7 +48,7 @@ services.xserver.autorun = false;
 </programlisting>
 The X server can then be started manually:
 <screen>
-$ systemctl start display-manager.service
+# systemctl start display-manager.service
 </screen>
 </para>
 
@@ -115,5 +115,14 @@ services.xserver.synaptics.twoFingerScroll = true;
 
 </simplesect>
 
+<simplesect><title>GTK/Qt themes</title>
+
+<para>GTK themes can be installed either to user profile or system-wide (via
+<literal>system.environmentPackages</literal>). To make Qt 5 applications look similar
+to GTK2 ones, you can install <literal>qt5.qtbase.gtk</literal> package into your
+system environment. It should work for all Qt 5 library versions.
+</para>
+
+</simplesect>
 
 </chapter>

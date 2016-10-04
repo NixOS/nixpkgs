@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
-, writeText
+, writeText, gcc
 }:
 
 with stdenv.lib;
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     url = "http://www.openwall.com/john/j/${name}.tar.xz";
     sha256 = "08q92sfdvkz47rx6qjn7qv57cmlpy7i7rgddapq5384mb413vjds";
   };
+
+  patches = [ ./gcc5.patch ];
 
   postPatch = ''
     sed -ri -e '
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
   preConfigure = "cd src";
   configureFlags = [ "--disable-native-macro" ];
 
-  buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 ];
+  buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 gcc ];
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [ "-DJOHN_SYSTEMWIDE=1" ];

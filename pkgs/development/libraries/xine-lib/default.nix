@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xine-lib-1.2.4";
-  
+  name = "xine-lib-1.2.6";
+
   src = fetchurl {
     url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "1pdv7bs683ily548arv4wsxabslyf3x3laij5jb921dxyx71nnww";
+    sha256 = "01d0nv4zhr4k8id5n4rmw13llrjsv9dhwg1a773c1iqpi1ris15x";
   };
 
   nativeBuildInputs = [ pkgconfig perl ];
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
   ];
 
-  NIX_LDFLAGS = "-rpath ${libdvdcss}/lib -L${libdvdcss}/lib -ldvdcss";
-  
+  NIX_LDFLAGS = "-lxcb-shm";
+
   propagatedBuildInputs = [zlib];
 
   enableParallelBuilding = true;
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xine-project.org/;
     description = "A high-performance, portable and reusable multimedia playback engine";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

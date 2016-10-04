@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake4Hook ];
 
   preConfigure = ''
-    substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT4@@ ${poppler_qt4}
+    substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT4@@ ${poppler_qt4.dev}
     lrelease diffpdf.pro
   '';
 

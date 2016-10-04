@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/zeromq/jzmq.git;
     rev = "946fd39780423b2df6e5efd9fa2cd863fd79c9db";
-    sha256 = "0j6kfmngqw2gpyxc1ak67d65l208vrb0h8bm8svclia8b339m37a";
+    sha256 = "08pqh673fcqwm68hmnsmzrz4vzlwr0x9hdysic5k5mh7z411xzmp";
   };
 
   buildInputs = [ automake autoconf libtool pkgconfig zeromq2 jdk ];
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.zeromq.org";
     description = "Java bindings for ZeroMQ";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

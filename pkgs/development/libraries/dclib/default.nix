@@ -9,4 +9,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [libxml2 openssl bzip2];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

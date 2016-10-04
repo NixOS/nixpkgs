@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.8.8";
+  version = "0.8.11";
 
   src = fetchFromGitHub {
     owner  = "manuelschneid3r";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "1mqxy5xbvgzykg2vvr2d1p9kr2viga1pqxslkg9y1x05kdhr2zal";
+    sha256 = "12ag30l3dd05hg0d08ax4c8dvp24lgd677szkq445xzvvhggxr37";
   };
 
   nativeBuildInputs = [ cmake makeQtWrapper ];
@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     wrapQtProgram $out/bin/albert
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage    = https://github.com/manuelSchneid3r/albert;
     description = "Desktop agnostic launcher";
-    license     = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.ericsagnes ];
+    license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ericsagnes ];
+    platforms   = platforms.linux;
   };
 }

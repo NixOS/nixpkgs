@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = https://code.google.com/p/googlemock/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.auntie ];
+    platforms = stdenv.lib.platforms.unix;
   };
 
   passthru = { source = src; };

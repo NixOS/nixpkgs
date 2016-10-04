@@ -34,6 +34,6 @@ stdenv.mkDerivation {
     description = "Haskell mode for Emacs";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

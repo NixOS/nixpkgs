@@ -32,13 +32,11 @@ let
   '';
 
   # Perform substitutions in all udev rules files.
-  udevRules = stdenv.mkDerivation {
-    name = "udev-rules";
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    buildCommand = ''
+  udevRules = pkgs.runCommand "udev-rules"
+    { preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
       mkdir -p $out
       shopt -s nullglob
       set +o pipefail
@@ -58,7 +56,7 @@ let
       # Fix some paths in the standard udev rules.  Hacky.
       for i in $out/*.rules; do
         substituteInPlace $i \
-          --replace \"/sbin/modprobe \"${config.system.sbin.modprobe}/sbin/modprobe \
+          --replace \"/sbin/modprobe \"${pkgs.kmod}/bin/modprobe \
           --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
           --replace \"/sbin/blkid \"${pkgs.utillinux}/sbin/blkid \
           --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount \
@@ -130,15 +128,12 @@ let
         ln -s /dev/null $out/80-drivers.rules
       ''}
     ''; # */
-  };
 
-  hwdbBin = stdenv.mkDerivation {
-    name = "hwdb.bin";
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    buildCommand = ''
+  hwdbBin = pkgs.runCommand "hwdb.bin"
+    { preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
       mkdir -p etc/udev/hwdb.d
       for i in ${toString ([udev] ++ cfg.packages)}; do
         echo "Adding hwdb files for package $i"
@@ -151,7 +146,6 @@ let
       ${udev}/bin/udevadm hwdb --update --root=$(pwd)
       mv etc/udev/hwdb.bin $out
     '';
-  };
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
@@ -193,6 +187,7 @@ in
           <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
           will be included.
         '';
+        apply = map getBin;
       };
 
       path = mkOption {
@@ -315,8 +310,7 @@ in
       '';
 
     systemd.services.systemd-udevd =
-      { environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
-        restartTriggers = cfg.packages;
+      { restartTriggers = cfg.packages;
       };
 
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, yacc }:
+{ stdenv, fetchpatch, fetchurl, yacc }:
 
 let
 
@@ -14,6 +14,15 @@ in stdenv.mkDerivation {
 
   buildInputs = [ yacc ];
 
+  patches = [
+    # CVE-2012-0808
+    (fetchpatch {
+       name = "as31-mkstemps.patch";
+       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=655496;filename=as31-mkstemps.patch;msg=5";
+       sha256 = "0iia4wa8m141bwz4588yxb1dp2qwhapcii382sncm6jvwyngwh21";
+     })
+  ];
+
   preConfigure = ''
     chmod +x ./configure
   '';
@@ -26,5 +35,6 @@ in stdenv.mkDerivation {
     homepage = "http://wiki.erazor-zone.de/wiki:projects:linux:as31";
     description = "An 8031/8051 assembler by Ken Stauffer and Theo Deraadt which produces a variety of object code output formats";
     maintainers = with maintainers; [ aneeshusa ];
+    platforms = with platforms; unix;
   };
 }

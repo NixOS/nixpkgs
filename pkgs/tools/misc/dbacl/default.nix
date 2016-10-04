@@ -12,5 +12,6 @@ stdenv.mkDerivation rec {
     longDescription = "a digramic Bayesian classifier for text recognition.";
     maintainers = [ stdenv.lib.maintainers.garbas ];
     license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

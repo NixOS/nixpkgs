@@ -17,8 +17,8 @@ assert enableThreading -> (stdenv ? glibc);
 let
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
-  libcInc = libc.dev or libc;
-  libcLib = libc.out or libc;
+  libcInc = lib.getDev libc;
+  libcLib = lib.getLib libc;
   common = { version, sha256 }: stdenv.mkDerivation rec {
     name = "perl-${version}";
 
@@ -28,7 +28,7 @@ let
     };
 
     # TODO: Add a "dev" output containing the header files.
-    outputs = [ "out" "man" "docdev" ];
+    outputs = [ "out" "man" "devdoc" ];
     setOutputFlags = false;
 
     patches =
@@ -68,11 +68,14 @@ let
 
     enableParallelBuilding = true;
 
+    # FIXME needs gcc 4.9 in bootstrap tools
+    hardeningDisable = [ "stackprotector" ];
+
     preConfigure =
       ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-    '' + optionalString stdenv.isArm ''
-      configureFlagsArray=(-Dldflags="-lm -lrt")
+      '' + optionalString (stdenv.isArm || stdenv.isMips) ''
+        configureFlagsArray=(-Dldflags="-lm -lrt")
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
       '' + optionalString (!enableThreading) ''
@@ -102,7 +105,9 @@ let
       # TODO: removing those paths would be cleaner than overwriting with nonsense.
       substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
         --replace "${libcInc}" /no-such-path \
-        --replace "${stdenv.cc.cc or "/no-such-path"}" /no-such-path \
+        --replace "${
+            if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+          }" /no-such-path \
         --replace "$man" /no-such-path
     ''; # */
 
@@ -125,8 +130,8 @@ in rec {
   };
 
   perl522 = common {
-    version = "5.22.1";
-    sha256 = "09wg24w5syyafyv87l6z8pxwz4bjgcdj996bx5844k6m9445sirb";
+    version = "5.22.2";
+    sha256 = "1hl3v85ggm027v9h2ycas4z5i3401s2k2l3qpnw8q5mahmiikbc1";
   };
 
 }

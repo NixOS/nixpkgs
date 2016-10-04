@@ -8,6 +8,7 @@ let
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa Foundation;
+    inherit (pkgs) gettext gfortran;
   };
 
   # Generates package templates given per-repository settings
@@ -251,7 +252,7 @@ let
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
-    curl = [ pkgs.curl ];
+    curl = [ pkgs.curl.dev ];
     devEMF = [ pkgs.xorg.libXft ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
@@ -265,6 +266,8 @@ let
     gmp = [ pkgs.gmp ];
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
+    h5 = [ pkgs.hdf5-cpp pkgs.which ];
+    h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp ];
@@ -278,7 +281,7 @@ let
     mwaved = [ pkgs.fftw ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
-    openssl = [ pkgs.openssl ];
+    openssl = [ pkgs.openssl.dev ];
     outbreaker = [ pkgs.gsl_1 ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
@@ -307,6 +310,7 @@ let
     rgl = [ pkgs.mesa pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2 ];
+    rhdf5 = [ pkgs.zlib ];
     Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
     Rhtslib = [ pkgs.zlib ];
     RJaCGH = [ pkgs.zlib ];
@@ -346,7 +350,7 @@ let
     sprint = [ pkgs.openmpi ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl_1 ];
-    stringi = [ pkgs.icu ];
+    stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
     TAQMNGR = [ pkgs.zlib ];
@@ -361,17 +365,17 @@ let
     WhopGenome = [ pkgs.zlib ];
     XBRL = [ pkgs.zlib pkgs.libxml2 ];
     xml2 = [ pkgs.libxml2 ];
-    XML = [ pkgs.libtool pkgs.libxml2 pkgs.xmlsec pkgs.libxslt ];
+    XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
     affyPLM = [ pkgs.zlib ];
     bamsignals = [ pkgs.zlib ];
     BitSeq = [ pkgs.zlib ];
     DiffBind = [ pkgs.zlib ];
-    ShortRead = [ pkgs.zlib ];
+    ShortRead = [ pkgs.zlib.dev ];
     oligo = [ pkgs.zlib ];
     gmapR = [ pkgs.zlib ];
     Rsubread = [ pkgs.zlib ];
-    XVector = [ pkgs.zlib ];
-    Rsamtools = [ pkgs.zlib ];
+    XVector = [ pkgs.zlib.dev ];
+    Rsamtools = [ pkgs.zlib.dev ];
     rtracklayer = [ pkgs.zlib ];
     affyio = [ pkgs.zlib ];
     VariantAnnotation = [ pkgs.zlib ];
@@ -389,7 +393,7 @@ let
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
     gmatrix = [ pkgs.cudatoolkit ];
-    RCurl = [ pkgs.curl ];
+    RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
     RGtk2 = [ pkgs.pkgconfig ];
@@ -1137,22 +1141,10 @@ let
     "choroplethr" # depends on broken package acs
     "acs" # broken build
     "spray" # depends on broken package partitions
-    "simmr" # depends on broken package rjags
-    "morse" # depends on broken package rjags
-    "gemtc" # depends on broken package rjags
-    "EasyMARK" # depends on broken package rjags
-    "PVAClone" # depends on broken package rjags
-    "sharx" # depends on broken package rjags
-    "dcmle" # depends on broken package rjags
-    "dclone" # depends on broken package rjags
-    "CNVrd2" # depends on broken package rjags
-    "bayescount" # depends on broken package rjags
-    "BANOVA" # depends on broken package rjags
-    "rjags" # broken build
+    "CNVrd2" # broken build
     "proteoQC" # depends on broken package rTANDEM
     "PGA" # depends on broken package rTANDEM
     "MBESS" # depends on broken package OpenMx
-    "IONiseR" # depends on broken package rhdf5
     "DOQTL" # depends on broken package rhdf5
     "DmelSGI" # depends on broken package rhdf5
     "flowDiv" # depends on broken package ncdfFlow
@@ -1211,13 +1203,11 @@ let
     "ARTool" # depends on broken package nlopt
     "AssetPricing" # broken build
     "AtelieR" # broken build
-    "auRoc" # depends on broken package rjags
+    "auRoc" # depends on broken package MBESS
     "AutoModel" # depends on broken package car
     "bamdit" # broken build
-    "BANOVA" # broken build
     "bapred" # depends on broken package lme4
     "bartMachine" # depends on broken package nlopt
-    "bayescount" # broken build
     "bayesDem" # depends on broken package nlopt
     "bayesLife" # depends on broken package nlopt
     "BayesMed" # broken build
@@ -1283,7 +1273,6 @@ let
     "covmat" # depends on broken package VIM
     "cplexAPI" # build is broken
     "cquad" # depends on broken package car
-    "crmPack" # depends on broken package rjags
     "CrypticIBDcheck" # depends on broken package nlopt
     "ctsem" # depends on broken package OpenMx
     "cudaBayesreg" # build is broken
@@ -1293,7 +1282,7 @@ let
     "datafsm" # depends on broken package caret
     "dbConnect" # broken build
     "DBKGrad" # depends on broken package rpanel
-    "dcmle" # broken build
+    #"dcmle" # broken build
     "ddst" # broken build
     "Deducer" # depends on broken package nlopt
     "DeducerExtras" # depends on broken package nlopt
@@ -1305,7 +1294,7 @@ let
     "DEGraph" # depends on broken package RCytoscape
     "destiny" # depends on broken package VIM
     "DiagTest3Grp" # depends on broken package nlopt
-    "diffHic" # depends on broken package rhdf5
+    "diffHic" # depends on broken package edgeR
     "difR" # depends on broken package nlopt
     "DirichletMultinomial" # Build Is Broken
     "DistatisR" # depends on broken package nlopt
@@ -1318,9 +1307,9 @@ let
     "drsmooth" # depends on broken package nlopt
     "dynlm" # depends on broken package nlopt
     "easyanova" # depends on broken package nlopt
-    "EasyMARK" # broken build
     "ecd" # depends on broken package polynom
     "edge" # depends on broken package nlopt
+    "edgeR" # broken url
     "eeptools" # depends on broken package nlopt
     "EffectLiteR" # depends on broken package nlopt
     "effects" # depends on broken package nlopt
@@ -1370,8 +1359,6 @@ let
     "gcmr" # depends on broken package nlopt
     "GDAtools" # depends on broken package nlopt
     "gdtools" # broken build
-    "gemtc" # broken build
-    "GENE_E" # depends on broken package rhdf5
     "GENESIS" # broken build
     "genridge" # depends on broken package nlopt
     "geojsonio" # depends on broken package V8
@@ -1394,8 +1381,6 @@ let
     "GUIDE" # depends on broken package rpanel
     "GWAF" # depends on broken package nlopt
     "GWASTools" # broken build
-    "h5" # build is broken
-    "h5vc" # depends on broken package rhdf5
     "hbsae" # depends on broken package nlopt
     "heplots" # depends on broken package nlopt
     "HiDimMaxStable" # broken build
@@ -1422,7 +1407,6 @@ let
     "inSilicoMerging" # build is broken
     "INSPEcT" # depends on broken GenomicFeatures
     "interplot" # depends on broken arm
-    "IONiseR" # depends on broken rhdf5
     "IsingFit" # depends on broken package nlopt
     "ITEMAN" # depends on broken package car
     "iteRates" # broken build
@@ -1499,7 +1483,6 @@ let
     "mlVAR" # depends on broken package nlopt
     "MM" # broken build
     "mongolite" # build is broken
-    "morse" # broken build
     "mosaic" # depends on broken package nlopt
     "mpoly" # broken build
     "mRMRe" # broken build
@@ -1577,7 +1560,6 @@ let
     "PSAboot" # depends on broken package nlopt
     "ptw" # depends on broken nloptr
     "PurBayes" # broken build
-    "PVAClone" # broken build
     "pvca" # depends on broken package nlopt
     "PythonInR" # broken build
     "QFRM" # broken build
@@ -1662,9 +1644,7 @@ let
     "REST" # depends on broken package nlopt
     "rgbif" # depends on broken package V8
     "Rgnuplot" # broken build
-    "rhdf5" # build is broken
     "rjade" # depends on broken package V8
-    "rjags" # broken build
     "rJPSGCS" # build is broken
     "rLindo" # build is broken
     "RLRsim" # depends on broken package lme4
@@ -1724,10 +1704,8 @@ let
     "seqHMM" # depends on broken package nloptr
     "seqTools" # build is broken
     "SharpeR" # broken build
-    "sharx" # broken build
     "shinyTANDEM" # depends on broken package rTANDEM
     "SIBER" # broken build
-    "simmr" # broken build
     "simPop" # depends on broken package VIM
     "simr" # depends on broken package lme4
     "SJava" # broken build
@@ -1860,13 +1838,13 @@ let
 
     Rmpfr = old.Rmpfr.overrideDerivation (attrs: {
       configureFlags = [
-        "--with-mpfr-include=${pkgs.mpfr}/include"
+        "--with-mpfr-include=${pkgs.mpfr.dev}/include"
       ];
     });
 
     RVowpalWabbit = old.RVowpalWabbit.overrideDerivation (attrs: {
       configureFlags = [
-        "--with-boost=${pkgs.boost.dev}" "--with-boost-libdir=${pkgs.boost.lib}/lib"
+        "--with-boost=${pkgs.boost.dev}" "--with-boost-libdir=${pkgs.boost.out}/lib"
       ];
     });
 
@@ -1922,7 +1900,7 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
-      OPENSSL_INCLUDES = "${pkgs.openssl}/include";
+      OPENSSL_INCLUDES = "${pkgs.openssl.dev}/include";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {

@@ -1,16 +1,16 @@
-{stdenv, stdenv_32bit, zlib_32bit, fetchurl, unzip}:
+{stdenv, zlib, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  version = "23.0.1";
+  version = "24.0.2";
   name = "android-platform-tools-r${version}";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "https://dl.google.com/android/repository/platform-tools_r${version}-linux.zip";
-      sha1 = "94dcc5072b3d0d74cc69e4101958b6c2e227e738";
+      sha256 = "0y36mlwh4kb77d3vcpqxqwkxsadllap6g6jjylf3rb7blh5l4zw6";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "https://dl.google.com/android/repository/platform-tools_r${version}-macosx.zip";
-      sha1 = "c461d66f3ca9fbae8ea0fa1a49c203b3b6fd653f";
+      sha256 = "1whfhdwjir2sv2pfypagva813yn0fx8idi6c2mxhddv2mlws6zk4";
     }
     else throw "System ${stdenv.system} not supported!";
 
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
       ''
         for i in adb dmtracedump fastboot hprof-conv sqlite3
         do
-            patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:`pwd`/lib $i
+            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
+            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib:`pwd`/lib64 $i
         done
         
         for i in etc1tool
         do
-            patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit}/lib:`pwd`/lib $i
+            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
+            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib:${zlib.out}/lib:`pwd`/lib64 $i
         done
     ''}
 

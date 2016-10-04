@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "16z0gc7a9dkarwn0l6rvg5jdhw1q4qyn4501zlchy0zxqddz0sx6";
   };
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     substituteInPlace Makefile \
     --replace "CC=gcc" ""
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "fast translation from LTL formulae to Buchi automata";
+    description = "Fast translation from LTL formulae to Buchi automata";
     homepage    = "http://www.lsv.ens-cachan.fr/~gastin/ltl2ba";
     license     = stdenv.lib.licenses.gpl2Plus;
     platforms   = stdenv.lib.platforms.darwin ++ stdenv.lib.platforms.linux;

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wm9pjbwq53s3n3nwvsyf0q8lbmhiy2ln3bn5ncihr9vf5cwhzbq";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ pkgconfig intltool glib libxfce4util gtk libxfce4ui ];
 

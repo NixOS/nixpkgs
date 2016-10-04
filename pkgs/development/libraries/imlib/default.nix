@@ -9,8 +9,12 @@ stdenv.mkDerivation {
 
   configureFlags = "
     --disable-shm
-    --x-includes=${libX11}/include
-    --x-libraries=${libX11}/lib";
+    --x-includes=${libX11.dev}/include
+    --x-libraries=${libX11.out}/lib";
 
   buildInputs = [libjpeg libXext libX11 xextproto libtiff libungif libpng];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

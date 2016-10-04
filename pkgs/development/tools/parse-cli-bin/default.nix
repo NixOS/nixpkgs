@@ -1,15 +1,12 @@
 { stdenv, fetchurl }:
 
-let
-  version = "3.0.1";
-
-in stdenv.mkDerivation rec {
-
+stdenv.mkDerivation rec {
   name = "parse-cli-bin-${version}";
+  version = "3.0.5";
 
   src = fetchurl {
-    url    = "https://github.com/ParsePlatform/parse-cli/releases/download/release_${version}/parse_linux";
-    sha256 = "d68eccc1d9408b60901b149d2b4710f3cfd0eabe5772d2e222c06870fdeca3c7";
+    url = "https://github.com/ParsePlatform/parse-cli/releases/download/release_${version}/parse_linux";
+    sha256 = "1iyfizbbxmr87wjgqiwqds51irgw6l3vm9wn89pc3zpj2zkyvf5h";
   };
 
   meta = with stdenv.lib; {
@@ -25,5 +22,4 @@ in stdenv.mkDerivation rec {
     cp "$src" "$out/bin/parse"
     chmod +x "$out/bin/parse"
   '';
-
 }

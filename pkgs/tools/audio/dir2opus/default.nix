@@ -25,9 +25,10 @@ stdenv.mkDerivation rec {
 
   postFixup = "wrapPythonPrograms";
 
-  meta = with stdenv.lib;
-    { homepage = https://github.com/ehmry/dir2opus;
-      maintainers = [ maintainers.ehmry ];
-      license = licenses.gpl2;
-    };
+  meta = with stdenv.lib; {
+    homepage = https://github.com/ehmry/dir2opus;
+    maintainers = [ maintainers.ehmry ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+  };
 }

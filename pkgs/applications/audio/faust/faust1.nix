@@ -25,7 +25,6 @@ let
   };
 
   faust = stdenv.mkDerivation {
-
     name = "faust-${version}";
 
     inherit src;
@@ -107,9 +106,7 @@ let
 
       inherit src;
 
-      configurePhase = ":";
-
-      buildPhase = ":";
+      dontBuild = true;
 
       installPhase = ''
         runHook preInstall
@@ -173,8 +170,8 @@ let
             --set FAUST_LIB_PATH "${faust}/lib/faust" \
             --prefix PATH : "$PATH" \
             --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \
-            --set NIX_CFLAGS_COMPILE "\"$NIX_CFLAGS_COMPILE\"" \
-            --set NIX_LDFLAGS "\"$NIX_LDFLAGS\""
+            --set NIX_CFLAGS_COMPILE "$NIX_CFLAGS_COMPILE" \
+            --set NIX_LDFLAGS "$NIX_LDFLAGS"
         done
       '';
     });

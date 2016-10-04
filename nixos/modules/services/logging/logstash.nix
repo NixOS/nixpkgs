@@ -51,12 +51,6 @@ in
         description = "Logging verbosity level.";
       };
 
-      watchdogTimeout = mkOption {
-        type = types.int;
-        default = 10;
-        description = "Set watchdog timeout value in seconds.";
-      };
-
       filterWorkers = mkOption {
         type = types.int;
         default = 1;
@@ -105,7 +99,7 @@ in
             prune {
               whitelist_names => [
                 "type", "@timestamp", "@version",
-                "MESSAGE", "PRIORITY", "SYSLOG_FACILITY",
+                "MESSAGE", "PRIORITY", "SYSLOG_FACILITY"
               ]
             }
           }
@@ -140,7 +134,6 @@ in
           "-w ${toString cfg.filterWorkers} " +
           ops havePluginPath "--pluginpath ${pluginPath} " +
           "${verbosityFlag} " +
-          "--watchdog-timeout ${toString cfg.watchdogTimeout} " +
           "-f ${writeText "logstash.conf" ''
             input {
               ${cfg.inputConfig}

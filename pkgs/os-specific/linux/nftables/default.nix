@@ -2,11 +2,11 @@
 , flex, bison, libmnl, libnftnl, gmp, readline }:
 
 stdenv.mkDerivation rec {
-  name = "nftables-0.5";
+  name = "nftables-0.6";
 
   src = fetchurl {
     url = "http://netfilter.org/projects/nftables/files/${name}.tar.bz2";
-    sha256 = "1mhaw7ys7ma5786xyfccgar389jsj2zp7qmvghsgr96q6grxzdhz";
+    sha256 = "0bbcrn9nz75daic8bq7rspvcw3ck7l82vqcvkyyg4mhwbxjn5pny";
   };
 
   configureFlags = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig docbook2x flex bison libmnl libnftnl gmp readline ];
 
   meta = with stdenv.lib; {
-    description = "the project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
+    description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = http://netfilter.org/projects/nftables;
     license = licenses.gpl2;
     platforms = platforms.linux;

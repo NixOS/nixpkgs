@@ -42,13 +42,14 @@ let
       inherit src;
 
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.fixQtModuleCMakeConfig self.qmakeHook ];
+      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.qmakeHook ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
-      dontFixLibtool = args.dontFixLibtool or true;
 
-      outputs = args.outputs or [ "dev" "out" ];
+      outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
+
+      setupHook = ./setup-hook.sh;
 
       enableParallelBuilding = args.enableParallelBuilding or true;
 
@@ -65,7 +66,7 @@ let
         harfbuzz = pkgs.harfbuzz-icu;
         cups = if stdenv.isLinux then pkgs.cups else null;
         # GNOME dependencies are not used unless gtkStyle == true
-        inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+        inherit (pkgs.gnome2) libgnomeui GConf gnome_vfs;
         bison = pkgs.bison2; # error: too few arguments to function 'int yylex(...
         inherit developerBuild decryptSslTraffic;
       };
@@ -91,7 +92,7 @@ let
       qtsensors = callPackage ./qtsensors.nix {};
       qtserialport = callPackage ./qtserialport {};
       qtsvg = callPackage ./qtsvg.nix {};
-      qttools = callPackage ./qttools.nix {};
+      qttools = callPackage ./qttools {};
       qttranslations = callPackage ./qttranslations.nix {};
       /* qtwayland = not packaged */
       /* qtwebchannel = not packaged */
@@ -112,7 +113,6 @@ let
       ];
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      fixQtModuleCMakeConfig = makeSetupHook { } ./fix-qt-module-cmake-config.sh;
       qmakeHook = makeSetupHook { substitutions = { qt_dev = qtbase.dev; lndir = pkgs.xorg.lndir; }; } ./qmake-hook.sh;
 
     };

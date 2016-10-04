@@ -12,12 +12,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ autoreconfHook gettext texinfo ncurses readline ];
 
-  configureFlags = [ "--with-curses=${ncurses.dev}" "--with-readline=${readline}" ];
+  configureFlags = [ "--with-curses=${ncurses.dev}" "--with-readline=${readline.dev}" ];
 
   meta = with stdenv.lib; {
     description = "A viewer for info files";
     homepage = https://alioth.debian.org/projects/pinfo/;
     license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }
 

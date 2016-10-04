@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/skalibs";
     rev = "refs/tags/v${version}";
-    sha256 = "1c5ap14f2yr3izz8s1blgp5g4r898kzppay7xrga2j216i51zfpw";
+    sha256 = "1x52mgf39yiijsj63x0ibp6d3nj0d4z9k9lisa4rzsxs7846za4a";
   };
 
   dontDisableStatic = true;

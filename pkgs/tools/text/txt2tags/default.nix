@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "A KISS markup language";
     license  = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

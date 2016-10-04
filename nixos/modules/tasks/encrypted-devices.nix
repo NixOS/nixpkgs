@@ -3,7 +3,7 @@
 with lib;
 
 let
-  fileSystems = attrValues config.fileSystems ++ config.swapDevices;
+  fileSystems = config.system.build.fileSystems ++ config.swapDevices;
   encDevs = filter (dev: dev.encrypted.enable) fileSystems;
   keyedEncDevs = filter (dev: dev.encrypted.keyFile != null) encDevs;
   keylessEncDevs = filter (dev: dev.encrypted.keyFile == null) encDevs;

@@ -14,9 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ mesa_noglu ];
 
+  outputs = [ "out" "dev" ];
+
   meta = {
     description = "OpenGL utility library";
     homepage = http://cgit.freedesktop.org/mesa/glu/;
     license = stdenv.lib.licenses.sgi-b-20;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -10,9 +10,8 @@ cross:
 , preConfigure ? "", ... }@args:
 
 let
-
-  version = "2.23";
-  sha256 = "1lk9a8jv5kyx8hp0wmfzjyk047q95ybyjqbyw5idl7414jxqml1b";
+  version = "2.24";
+  sha256 = "1ghzp41ryvsqxn4rhrm8r25wc33m2jf8zrcc1pj3jxyk8ad9a0by";
 in
 
 assert cross != null -> gccCross != null;
@@ -83,7 +82,6 @@ stdenv.mkDerivation ({
       "--enable-add-ons"
       "--enable-obsolete-rpc"
       "--sysconfdir=/etc"
-      "--localedir=/var/run/current-system/sw/lib/locale"
       "libc_cv_ssp=no"
       (if linuxHeaders != null
        then "--with-headers=${linuxHeaders}/include"
@@ -112,7 +110,7 @@ stdenv.mkDerivation ({
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
-  outputs = [ "dev" "out" "bin" "static" ];
+  outputs = [ "out" "bin" "dev" "static" ];
 
   buildInputs = lib.optionals (cross != null) [ gccCross ]
     ++ lib.optionals withGd [ gd libpng ];
@@ -183,6 +181,6 @@ stdenv.mkDerivation ({
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ lib.maintainers.eelco ];
-    #platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux;
   } // meta;
 })

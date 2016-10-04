@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, libglade, openbox,
+{ stdenv, fetchurl, pkgconfig, gtk2, libglade, openbox,
   imlib2, libstartup_notification, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig gtk libglade openbox imlib2 libstartup_notification makeWrapper
+    pkgconfig gtk2 libglade openbox imlib2 libstartup_notification makeWrapper
   ];
 
   postInstall = ''
@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "http://openbox.org/wiki/ObConf";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.lhvwb ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

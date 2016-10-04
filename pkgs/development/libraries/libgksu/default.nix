@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, makeWrapper, gtk, gnome, gnome3,
+{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, gtk2, gnome2, gnome3,
   libstartup_notification, libgtop, perl, perlXMLParser,
   autoreconfHook, intltool, gtk_doc, docbook_xsl, xauth, sudo
 }:
@@ -12,6 +12,19 @@ stdenv.mkDerivation rec {
     url = "http://people.debian.org/~kov/gksu/${name}.tar.gz";
     sha256 = "1brz9j3nf7l2gd3a5grbp0s3nksmlrp6rxmgp5s6gjvxcb1wzy92";
   };
+
+  nativeBuildInputs = [
+    pkgconfig autoreconfHook intltool gtk_doc docbook_xsl wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk2 gnome2.GConf libstartup_notification
+    gnome3.libgnome_keyring libgtop gnome2.libglade perl perlXMLParser
+  ];
+
+  enableParallelBuilding = true;
+
+  hardeningDisable = [ "format" ];
 
   patches = [
         # Patches from the gentoo ebuild
@@ -54,19 +67,6 @@ stdenv.mkDerivation rec {
     intltoolize --force --copy --automake
   '';
 
-  buildInputs = [
-    pkgconfig makeWrapper gtk gnome.GConf libstartup_notification
-    gnome3.libgnome_keyring libgtop gnome.libglade perl perlXMLParser
-    autoreconfHook intltool gtk_doc docbook_xsl
-  ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/gksu-properties" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-  '';
-
-  enableParallelBuilding = true;
-
   meta = {
     description = "A library for integration of su into applications";
     longDescription = ''
@@ -78,5 +78,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.nongnu.org/gksu/";
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.romildo ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

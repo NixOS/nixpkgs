@@ -16,12 +16,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "v4l-utils-1.6.3";
+  name = "v4l-utils-1.10.1";
 
   src = fetchurl {
     url = "http://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "0k46z5gqjzg702m2vs4sv6sxynq1sj14m0pgwvl2gkgg3dfbyjhn";
+    sha256 = "1h1nhg5cmmzlbipak526nk4bm6d0yb217mll75f3rpg7kz1cqiv1";
   };
+
+  outputs = [ "out" "dev" ];
 
   configureFlags = [
     "--enable-libv4l"
@@ -36,15 +38,15 @@ stdenv.mkDerivation rec {
     "--disable-qv4l2"
   ]);
 
-  postInstall = ''
+  postFixup = ''
     # Create symlink for V4l1 compatibility
-    ln -s $out/include/libv4l1-videodev.h $out/include/videodev.h
+    ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ alsaLib libX11 qt4 qt5 ];
-  
+
   propagatedBuildInputs = [ libjpeg ];
 
   meta = with stdenv.lib; {

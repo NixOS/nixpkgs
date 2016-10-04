@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tool to examine and tune power saving features";
-    homepage = https://www.kernel.org.org/;
+    homepage = https://www.kernel.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

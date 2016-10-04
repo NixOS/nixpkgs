@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Source code highlighting tool";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

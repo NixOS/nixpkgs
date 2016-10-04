@@ -1,4 +1,5 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl
+, IOKit ? null }:
 
 let
   version = "6.4";
@@ -18,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "11bsxcghh7adzdklcslamlynydxb708vfz892d5w7agdq405ddza";
   };
 
+  buildInputs = [] ++ stdenv.lib.optional stdenv.isDarwin IOKit;
+
   patchPhase = ''
     cp ${driverdb} drivedb.h
     sed -i -e 's@which which >/dev/null || exit 1@alias which="type -p"@' update-smart-drivedb.in
@@ -28,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://smartmontools.sourceforge.net/;
     license = licenses.gpl2Plus;
     platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.simons ];
+    maintainers = [ maintainers.peti ];
   };
 }

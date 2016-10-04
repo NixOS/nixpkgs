@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/bin"
     makeWrapper "$out/share/neo4j/bin/neo4j" "$out/bin/neo4j" \
-        --prefix PATH : "${jre}/bin:${which}/bin:${gnused}/bin"
+        --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gnused ]}"
     makeWrapper "$out/share/neo4j/bin/neo4j-shell" "$out/bin/neo4j-shell" \
-        --prefix PATH : "${jre}/bin:${which}/bin:${gnused}/bin"
+        --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gnused ]}"
   '';
 
   meta = with stdenv.lib; {
-    description = "a highly scalable, robust (fully ACID) native graph database";
+    description = "A highly scalable, robust (fully ACID) native graph database";
     homepage = "http://www.neo4j.org/";
     license = licenses.gpl3;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, intltool, xorg }:
+{ stdenv, fetchurl, pkgconfig, gtk2, intltool, xorg }:
 
 let
   ver_maj = "2.31";
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "17isfjvrzgj5znld2a7zsk9vd39q9wnsysnw5jr8iz410z935xw3";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  buildInputs = [ pkgconfig gtk intltool xorg.libX11 xorg.libXres ];
+  buildInputs = [ pkgconfig gtk2 intltool xorg.libX11 xorg.libXres ];
   # ?another optional: startup-notification
 
   configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK

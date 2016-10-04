@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35 }:
 
 # Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
-if isPy35 then throw "shiboken not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "${python.libPrefix}-pyside-shiboken-${version}";
   version = "1.2.4";
 
@@ -19,6 +19,7 @@ if isPy35 then throw "shiboken not supported for interpreter ${python.executable
     substituteInPlace generator/CMakeLists.txt --replace \
       \"$\{GENERATORRUNNER_PLUGIN_DIR}\" lib/generatorrunner/
   '';
+  patches = if isPy35 then [ ./shiboken_py35.patch ] else null;
 
   cmakeFlags = if isPy3k then "-DUSE_PYTHON3=TRUE" else null;
 

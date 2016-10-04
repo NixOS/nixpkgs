@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL, ftgl, pkgconfig, libpng, libjpeg, pcre
-, SDL_image, glew, mesa, boost, glm
+, SDL_image, freetype, glew, mesa, boost, glm
 }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa
-    boost glm
+    boost glm freetype
   ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
   NIX_CFLAGS_COMPILE = "-fpermissive " + # fix build with newer gcc versions
                        "-std=c++11"; # fix build with glm >= 0.9.6.0

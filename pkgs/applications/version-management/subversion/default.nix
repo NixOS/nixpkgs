@@ -7,7 +7,7 @@
 , saslSupport ? false
 , stdenv, fetchurl, apr, aprutil, zlib, sqlite
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
-, sasl ? null, serf ? null
+, sasl ? null, serf ? null, openssl
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -27,9 +27,9 @@ let
     };
 
   # Can't do separate $lib and $bin, as libs reference bins
-  outputs = [ "dev" "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
 
-    buildInputs = [ zlib apr aprutil sqlite ]
+    buildInputs = [ zlib apr aprutil sqlite openssl ]
       ++ stdenv.lib.optional httpSupport serf
       ++ stdenv.lib.optional pythonBindings python
       ++ stdenv.lib.optional perlBindings perl
@@ -37,16 +37,20 @@ let
 
     patches = [ ./apr-1.patch ];
 
+    # SVN build seems broken on gcc5:
+    # https://gcc.gnu.org/gcc-5/porting_to.html
+    CPPFLAGS = "-P";
+
     configureFlags = ''
       ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
-      ${if httpServer then "--with-apxs=${apacheHttpd}/bin/apxs" else "--without-apxs"}
+      ${if httpServer then "--with-apxs=${apacheHttpd.dev}/bin/apxs" else "--without-apxs"}
       ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
       ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
       --disable-keychain
       ${if saslSupport then "--with-sasl=${sasl}" else "--without-sasl"}
       ${if httpSupport then "--with-serf=${serf}" else "--without-serf"}
-      --with-zlib=${zlib}
-      --with-sqlite=${sqlite}
+      --with-zlib=${zlib.dev}
+      --with-sqlite=${sqlite.dev}
     '';
 
     preBuild = ''
@@ -71,11 +75,13 @@ let
       mkdir -p $out/share/bash-completion/completions
       cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
 
-    for f in $out/lib/*.la; do
-      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
-      substituteInPlace $f --replace "${zlib.dev}/lib" "${zlib.out}/lib"
-      substituteInPlace $f --replace "${sqlite.dev}/lib" "${sqlite.out}/lib"
-    done
+      for f in $out/lib/*.la; do
+        substituteInPlace $f \
+          --replace "${expat.dev}/lib" "${expat.out}/lib" \
+          --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
+          --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
+          --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+      done
     '';
 
     inherit perlBindings pythonBindings;
@@ -86,7 +92,7 @@ let
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
       homepage = http://subversion.apache.org/;
       maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
-      hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -99,13 +105,13 @@ let
 in {
 
   subversion18 = common {
-    version = "1.8.15";
-    sha256 = "0b68rjy1sjd66nqcswrm1bhda3vk2ngkgs6drcanmzbcd3vs366g";
+    version = "1.8.16";
+    sha256 = "0imkxn25n6sbcgfldrx4z29npjprb1lxjm5fb89q4297161nx3zi";
   };
 
   subversion19 = common {
-    version = "1.9.3";
-    sha256 = "8bbf6bb125003d88ee1c22935a36b7b1ab7d957e0c8b5fbfe5cb6310b6e86ae0";
+    version = "1.9.4";
+    sha256 = "16cjkvvq628hbznkhqkppzs8nifcr7k43s5y4c32cgwqmgigjrqj";
   };
 
 }

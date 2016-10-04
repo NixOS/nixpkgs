@@ -15,7 +15,7 @@
 , glibc
 , gst_plugins_base
 , gstreamer
-, gtk
+, gtk2
 , kerberos
 , libX11
 , libXScrnSaver
@@ -26,7 +26,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra
+, libcanberra_gtk2
 , libgnome
 , libgnomeui
 , mesa
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
-    inherit (source) sha256;
+    inherit (source) sha512;
   };
 
   phases = "unpackPhase installPhase";
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
       glibc
       gst_plugins_base
       gstreamer
-      gtk
+      gtk2
       kerberos
       libX11
       libXScrnSaver
@@ -98,14 +98,14 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra
+      libcanberra_gtk2
       libgnome
       libgnomeui
       mesa
       nspr
       nss
       pango
-    ] + ":" + stdenv.lib.makeSearchPathOutputs "lib64" ["lib"] [
+    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 

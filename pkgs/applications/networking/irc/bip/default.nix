@@ -30,10 +30,7 @@ in stdenv.mkDerivation {
     }
   ];
 
-  postPatch = ''
-  '';
-
-  configureFlags = [ "--disable-pie" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   buildInputs = [ bison flex autoconf automake openssl ];
 
@@ -43,5 +40,6 @@ in stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     downloadPage= "https://projects.duckcorp.org/projects/bip/files";
     inherit version;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

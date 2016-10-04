@@ -37,6 +37,6 @@ stdenv.mkDerivation {
       details and threading mechanisms for scalability and performance.
     '';
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ simons thoughtpolice ];
+    maintainers = with stdenv.lib.maintainers; [ peti thoughtpolice ];
   };
 }

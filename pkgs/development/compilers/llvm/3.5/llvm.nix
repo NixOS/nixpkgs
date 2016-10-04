@@ -47,11 +47,13 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enableSharedLibraries
     "-DBUILD_SHARED_LIBS=ON"
     ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
+    "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
     ++ stdenv.lib.optionals ( isDarwin) [
     "-DCMAKE_CXX_FLAGS=-stdlib=libc++"
     "-DCAN_TARGET_i386=false"
   ];
+
+  patches = [ ./fix-15974.patch ];
 
   postBuild = ''
     rm -fR $out
@@ -75,3 +77,4 @@ in stdenv.mkDerivation rec {
     platforms   = stdenv.lib.platforms.all;
   };
 }
+

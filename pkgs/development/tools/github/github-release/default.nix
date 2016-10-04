@@ -47,5 +47,6 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = https://github.com/aktau/github-release;
     maintainers = with maintainers; [ ardumont ];
+    platforms = with platforms; unix;
   };
 }

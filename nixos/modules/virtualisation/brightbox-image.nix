@@ -20,7 +20,7 @@ in
 
           postVM =
             ''
-              PATH=$PATH:${pkgs.gnutar}/bin:${pkgs.gzip}/bin
+              PATH=$PATH:${lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
               pushd $out
               ${pkgs.qemu_kvm}/bin/qemu-img convert -c -O qcow2 $diskImageBase nixos.qcow2
               rm $diskImageBase
@@ -94,7 +94,7 @@ in
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.timeout = 0;
+  boot.loader.timeout = 0;
 
   # Don't put old configurations in the GRUB menu.  The user has no
   # way to select them anyway.
@@ -103,7 +103,7 @@ in
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "without-password";
+  services.openssh.permitRootLogin = "prohibit-password";
 
   # Force getting the hostname from Google Compute.
   networking.hostName = mkDefault "";
@@ -116,8 +116,8 @@ in
 
       wantedBy = [ "multi-user.target" "sshd.service" ];
       before = [ "sshd.service" ];
-      wants = [ "ip-up.target" ];
-      after = [ "ip-up.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       path = [ pkgs.wget pkgs.iproute ];
 

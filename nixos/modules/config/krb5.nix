@@ -173,6 +173,8 @@ in
             ${cfg.domainRealm} = ${cfg.defaultRealm}
             .mit.edu = ATHENA.MIT.EDU
             mit.edu = ATHENA.MIT.EDU
+            .exchange.mit.edu = EXCHANGE.MIT.EDU
+            exchange.mit.edu = EXCHANGE.MIT.EDU
             .media.mit.edu = MEDIA-LAB.MIT.EDU
             media.mit.edu = MEDIA-LAB.MIT.EDU
             .csail.mit.edu = CSAIL.MIT.EDU

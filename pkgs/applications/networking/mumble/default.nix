@@ -37,6 +37,7 @@ let
       "CONFIG+=no-bundled-speex"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
+      ++ optional (!iceSupport) "CONFIG+=no-ice"
       ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
@@ -103,16 +104,16 @@ let
       "CONFIG+=no-client"
     ];
 
-    buildInputs = [ libcap ] ++ optional iceSupport [ zeroc_ice ];
+    buildInputs = [ libcap ] ++ optional iceSupport zeroc_ice;
   };
 
   stableSource = rec {
-    version = "1.2.15";
+    version = "1.2.16";
     qtVersion = 4;
 
     src = fetchurl {
       url = "https://github.com/mumble-voip/mumble/releases/download/${version}/mumble-${version}.tar.gz";
-      sha256 = "1yjywzybgq23ry5s2yihggs13ffrphhwl6rlp6lq79rkwvafa9v5";
+      sha256 = "1ikswfm7zhwqcwcc1fwk0i9jjgqng49s0yilw50s34bgg1h3im7b";
     };
   };
 
@@ -124,7 +125,7 @@ let
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
       rev = "0502fa67b036bae9f07a586d9f05a8bf74c24291";
-      sha256 = "073v8nway17j1n1lm70x508722b1q3vb6h4fvmcbbma3d22y1h45";
+      sha256 = "07c1r26i0b5z7i787nr4mc60799skdzsh764ckk3gdi76agp2r2z";
     };
   };
 in {

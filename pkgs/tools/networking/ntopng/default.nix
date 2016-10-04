@@ -1,10 +1,10 @@
 { stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
 , geoip, geolite-legacy, sqlite, which, autoreconfHook, git
-, pkgconfig, groff, curl, json_c
+, pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool
 }:
 
 # ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
-# directory.
+# directory, but we use luajit, zeromq, and rrdtool from nixpkgs
 
 stdenv.mkDerivation rec {
   name = "ntopng-2.0";
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy
-    sqlite which autoreconfHook git pkgconfig groff curl json_c ];
+    sqlite which autoreconfHook git pkgconfig groff curl json_c luajit zeromq
+    rrdtool ];
 
 
   autoreconfPhase = ''
@@ -48,13 +49,15 @@ stdenv.mkDerivation rec {
 
     rm -rf httpdocs/geoip
     ln -s ${geolite-legacy}/share/GeoIP httpdocs/geoip
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    sed 's|LIBS += -lstdc++.6||' -i Makefile
   '';
 
   meta = with stdenv.lib; {
     description = "High-speed web-based traffic analysis and flow collection tool";
     homepage = http://www.ntop.org/products/ntop/;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

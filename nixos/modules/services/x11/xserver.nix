@@ -14,8 +14,9 @@ let
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
     virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
-    ati = { modules = with pkgs.xorg; [ xf86videoati glamoregl ]; };
-    intel = { modules = with pkgs.xorg; [ xf86videointel glamoregl ]; };
+
+    # modesetting does not have a xf86videomodesetting package as it is included in xorgserver
+    modesetting = {};
   };
 
   fontsForXServer =
@@ -70,15 +71,11 @@ let
     monitors = reverseList (foldl mkMonitor [] xrandrHeads);
   in concatMapStrings (getAttr "value") monitors;
 
-  configFile = pkgs.stdenv.mkDerivation {
-    name = "xserver.conf";
-
-    xfs = optionalString (cfg.useXFS != false)
-      ''FontPath "${toString cfg.useXFS}"'';
-
-    inherit (cfg) config;
-
-    buildCommand =
+  configFile = pkgs.runCommand "xserver.conf"
+    { xfs = optionalString (cfg.useXFS != false)
+        ''FontPath "${toString cfg.useXFS}"'';
+      inherit (cfg) config;
+    }
       ''
         echo 'Section "Files"' >> $out
         echo $xfs >> $out
@@ -101,7 +98,6 @@ let
 
         echo "$config" >> $out
       ''; # */
-  };
 
 in
 
@@ -150,6 +146,22 @@ in
         default = false;
         description = ''
           Whether to allow the X server to accept TCP connections.
+        '';
+      };
+
+      autoRepeatDelay = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Sets the autorepeat delay (length of time in milliseconds that a key must be depressed before autorepeat starts).
+        '';
+      };
+
+      autoRepeatInterval = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Sets the autorepeat interval (length of time in milliseconds that should elapse between autorepeat-generated keystrokes).
         '';
       };
 
@@ -445,7 +457,7 @@ in
            then { modules = [xorg.${"xf86video" + name}]; }
            else null)
           knownVideoDrivers;
-      in optional (driver != null) ({ inherit name; driverName = name; } // driver));
+      in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
     assertions =
       [ { assertion = config.security.polkit.enable;
@@ -462,7 +474,14 @@ in
           { source = "${cfg.xkbDir}";
             target = "X11/xkb";
           }
-        ]);
+        ])
+      # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
+      ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
+        [{
+          source = xorg.xf86inputevdev.out + "/share" + cfgPath;
+          target = cfgPath;
+        }]
+      );
 
     environment.systemPackages =
       [ xorg.xorgserver.out
@@ -478,6 +497,7 @@ in
         xorg.xauth
         pkgs.xterm
         pkgs.xdg_utils
+        xorg.xf86inputevdev.out # get evdev.4 man page
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
@@ -500,10 +520,9 @@ in
 
         environment =
           {
-            XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
             LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" ]
+              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" "/run/opengl-driver/lib" ]
               ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 
@@ -519,6 +538,7 @@ in
         serviceConfig = {
           Restart = "always";
           RestartSec = "200ms";
+          SyslogIdentifier = "display-manager";
         };
       };
 
@@ -526,16 +546,19 @@ in
       [ "-terminate"
         "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
+        # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
+        "-verbose" "3" "-logfile" "/dev/null"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
-        ++ optionals (cfg.display != null) [ "-logfile" "/var/log/X.${toString cfg.display}.log" ]
-        ++ optional (!cfg.enableTCP) "-nolisten tcp";
+        ++ optional (!cfg.enableTCP) "-nolisten tcp"
+        ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
+        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}";
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++
       [ xorg.xorgserver.out
-        xorg.xf86inputevdev
+        xorg.xf86inputevdev.out
       ];
 
     services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";
@@ -642,6 +665,8 @@ in
 
         ${xrandrMonitorSections}
       '';
+
+    fonts.enableDefaultFonts = mkDefault true;
 
   };
 

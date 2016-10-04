@@ -5,11 +5,11 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url    = "https://git.kernel.org/pub/scm/network/nfc/neard.git";
-    sha256 = "08327b536ad8460a08bdceeec48c561e75ca56e5e0ee034c40d02cd1545906c0";
+    sha256 = "07dny1l8n46v0yn30zqa8bkyj8ay01xphc124nhf2sqwbff7nf2m";
   };
 
   buildInputs = [ autoreconfHook pkgconfig systemd glib dbus libnl pythonPackages.python pythonPackages.wrapPython ];
-  pythonPath = [ pythonPackages.pygobject pythonPackages.dbus pythonPackages.pygtk ];
+  pythonPath = [ pythonPackages.pygobject2 pythonPackages.dbus-python pythonPackages.pygtk ];
 
   configureFlags = [ "--disable-debug" "--enable-tools" "--enable-ese" "--with-systemdsystemunitdir=$out/lib/systemd/system" ];
 

@@ -11,6 +11,9 @@ let
                    config.services.dnsmasq.resolveLocalQueries;
   hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
 
+  resolvconfOptions = cfg.resolvconfOptions
+    ++ optional cfg.dnsSingleRequest "single-request"
+    ++ optional cfg.dnsExtensionMechanism "ends0";
 in
 
 {
@@ -23,6 +26,19 @@ in
       example = "192.168.0.1 lanlocalhost";
       description = ''
         Additional entries to be appended to <filename>/etc/hosts</filename>.
+      '';
+    };
+
+    networking.hostConf = lib.mkOption {
+      type = types.lines;
+      default = "multi on";
+      example = ''
+        multi on
+        reorder on
+        trim lan
+      '';
+      description = ''
+        The contents of <filename>/etc/host.conf</filename>. See also <citerefentry><refentrytitle>host.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
       '';
     };
 
@@ -59,6 +75,14 @@ in
       '';
     };
 
+    networking.resolvconfOptions = lib.mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "ndots:1" "rotate" ];
+      description = ''
+        Set the options in <filename>/etc/resolv.conf</filename>.
+      '';
+    };
 
     networking.proxy = {
 
@@ -160,6 +184,9 @@ in
             ${cfg.extraHosts}
           '';
 
+        # /etc/host.conf: resolver configuration file
+        "host.conf".text = cfg.hostConf;
+
         # /etc/resolvconf.conf: Configuration for openresolv.
         "resolvconf.conf".text =
             ''
@@ -171,12 +198,9 @@ in
               # Invalidate the nscd cache whenever resolv.conf is
               # regenerated.
               libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
-            '' + optionalString cfg.dnsSingleRequest ''
-              # only send one DNS request at a time
-              resolv_conf_options+=' single-request'
-            '' + optionalString cfg.dnsExtensionMechanism ''
-              # enable extension mechanisms for DNS
-              resolv_conf_options+=' edns0'
+            '' + optionalString (length resolvconfOptions > 0) ''
+              # Options as described in resolv.conf(5)
+              resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
             '' + optionalString hasLocalResolver ''
               # This hosts runs a full-blown DNS resolver.
               name_servers='127.0.0.1'
@@ -215,16 +239,16 @@ in
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
 
-    # The ‘ip-up’ target is started when we have IP connectivity.  So
-    # services that depend on IP connectivity (like ntpd) should be
-    # pulled in by this target.
-    systemd.targets.ip-up.description = "Services Requiring IP Connectivity";
+    # The ‘ip-up’ target is kept for backwards compatibility.
+    # New services should use systemd upstream targets:
+    # See https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
+    systemd.targets.ip-up.description = "Services Requiring IP Connectivity (deprecated)";
 
     # This is needed when /etc/resolv.conf is being overriden by networkd
     # and other configurations. If the file is destroyed by an environment
     # activation then it must be rebuilt so that applications which interface
     # with /etc/resolv.conf directly don't break.
-    system.activationScripts.resolvconf = stringAfter [ "etc" "tmpfs" "var" ]
+    system.activationScripts.resolvconf = stringAfter [ "etc" "specialfs" "var" ]
       ''
         # Systemd resolved controls its own resolv.conf
         rm -f /run/resolvconf/interfaces/systemd

@@ -1,7 +1,7 @@
 { stdenv, lib, bundlerEnv, ruby, curl }:
 
 bundlerEnv {
-  name = "fluentd-0.12.6";
+  name = "fluentd-0.14.0";
 
   inherit ruby;
   gemfile = ./Gemfile;

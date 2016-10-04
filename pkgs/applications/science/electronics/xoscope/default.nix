@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk, pkgconfig}:
+{stdenv, fetchurl, gtk2, pkgconfig}:
 
 stdenv.mkDerivation rec {
   name = "xoscope-2.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "00xlvvqyw6l1ljbsx1vgx2v1jfh0xacz1a0yhq1dj6yxf5wh58x8";
   };
 
-  buildInputs = [ gtk pkgconfig ];
+  buildInputs = [ gtk2 pkgconfig ];
 
   # from: https://aur.archlinux.org/packages.php?ID=12140&detail=1
   patches = [ ./gtkdepre.diff ];

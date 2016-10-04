@@ -8,6 +8,8 @@ buildPerlPackage rec {
     sha256 = "1a7rxrddkrsfxb2wj01ha91ld0vapfkqcy8j9p08l76zz2l8p2v1";
   };
 
+  outputs = [ "out" ];
+
   buildInputs = [ DBDmysql ] ;
 
   preConfigure = ''

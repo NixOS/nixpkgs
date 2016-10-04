@@ -1,22 +1,32 @@
-{ fetchurl, stdenv, flex, bison, freetype, zlib, libpng
-, perl }:
+{ stdenv, fetchFromGitHub
+, autoreconfHook, flex, bison, perl
+, zlib, freetype, libpng, giflib
+}:
 
 stdenv.mkDerivation rec {
-  name = "ming-0.4.5";
+  pname = "ming";
+  version = "0.4.7";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ming/${name}.tar.bz2";
-    sha256 = "1sws4cs9i9hysr1l0b8hsmqf4gh06ldc24fw6avzr9y3vydhinl2";
+  src = fetchFromGitHub {
+    repo = "libming";
+    owner = "libming";
+    rev = "${pname}-${stdenv.lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "17ngz1n1mnknixzchywkhbw9s3scad8ajmk97gx14xbsw1603gd2";
   };
 
   # We don't currently build the Python, Perl, PHP, etc. bindings.
   # Perl is needed for the test suite, though.
 
-  buildInputs = [ flex bison freetype zlib libpng perl ];
+  outputs = [ "bin" "dev" "out" ];
+  nativeBuildInputs = [ autoreconfHook flex bison perl ];
+  buildInputs = [ freetype zlib libpng giflib ];
+
+  postFixup = ''moveToOutput "bin/ming-config" $dev'';
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Library for generating Flash `.swf' files";
 
     longDescription = ''
@@ -28,6 +38,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.libming.org/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
   };
 }

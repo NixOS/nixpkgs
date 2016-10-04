@@ -1,20 +1,23 @@
 { stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
-, gettext, libpthreadstubs, libXrandr, libXext, readline
-, openal, libXdmcp, portaudio, SDL, wxGTK30, fetchurl
+, gettext, libpthreadstubs, libXrandr, libXext, readline, openal
+, libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
 , libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-4.0.2";
-  src = fetchurl {
-    url = https://github.com/dolphin-emu/dolphin/archive/4.0.2.tar.gz;
-    sha256 = "0a8ikcxdify9d7lqz8fn2axk2hq4q1nvbcsi1b8vb9z0mdrhzw89";
+  name = "dolphin-emu-${version}";
+  version = "5.0";
+
+  src = fetchFromGitHub {
+    owner  = "dolphin-emu";
+    repo   = "dolphin";
+    rev    = version;
+    sha256 = "07mlfnh0hwvk6xarcg315x7z2j0qbg9g7cm040df9c8psiahc3g6";
   };
 
   cmakeFlags = ''
     -DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include
     -DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include
-    -DGTK2_INCLUDE_DIRS=${gtk2}/include/gtk-2.0
-    -DCMAKE_BUILD_TYPE=Release
+    -DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0
     -DENABLE_LTO=True
   '';
 
@@ -22,14 +25,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
-                  libXdmcp portaudio SDL wxGTK30 libpulseaudio ];
+                  libevdev libXdmcp portaudio libusb libpulseaudio ];
 
   meta = {
     homepage = http://dolphin-emu.org/;
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
-    broken = true;
+    # x86_32 is an unsupported platform.
+    # Enable generic build if you really want a JIT-less binary.
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -236,6 +236,11 @@ BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
 
 
+# Dummy implementation of the paxmark function. On Linux, this is
+# overwritten by paxctl's setup hook.
+paxmark() { true; }
+
+
 # Execute the pre-hook.
 if [ -z "$shell" ]; then export shell=$SHELL; fi
 runHook preHook
@@ -369,14 +374,10 @@ fi
 export NIX_BUILD_CORES
 
 
-# Dummy implementation of the paxmark function. On Linux, this is
-# overwritten by paxctl's setup hook.
-paxmark() { true; }
-
-
 # Prevent OpenSSL-based applications from using certificates in
 # /etc/ssl.
-if [ -z "$SSL_CERT_FILE" ]; then
+# Leave it in shells for convenience.
+if [ -z "$SSL_CERT_FILE" ] && [ -z "$IN_NIX_SHELL" ]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
@@ -389,6 +390,11 @@ substitute() {
     local input="$1"
     local output="$2"
 
+    if [ ! -f "$input" ]; then
+      echo "substitute(): file '$input' does not exist"
+      return 1
+    fi
+
     local -a params=("$@")
 
     local n p pattern replacement varName content
@@ -398,7 +404,7 @@ substitute() {
     content="${content%X}"
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
-        p=${params[$n]}
+        p="${params[$n]}"
 
         if [ "$p" = --replace ]; then
             pattern="${params[$((n + 1))]}"
@@ -408,9 +414,16 @@ substitute() {
 
         if [ "$p" = --subst-var ]; then
             varName="${params[$((n + 1))]}"
+            n=$((n + 1))
+            # check if the used nix attribute name is a valid bash name
+            if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+                echo "WARNING: substitution variables should be valid bash names,"
+                echo "  \"$varName\" isn't and therefore was skipped; it might be caused"
+                echo "  by multi-line phases in variables - see #14907 for details."
+                continue
+            fi
             pattern="@$varName@"
             replacement="${!varName}"
-            n=$((n + 1))
         fi
 
         if [ "$p" = --subst-var-by ]; then
@@ -434,19 +447,23 @@ substituteInPlace() {
 }
 
 
+# Substitute all environment variables that do not start with an upper-case
+# character or underscore. Note: other names that aren't bash-valid
+# will cause an error during `substitute --subst-var`.
 substituteAll() {
     local input="$1"
     local output="$2"
+    local -a args=()
 
     # Select all environment variables that start with a lowercase character.
-    for envVar in $(env | sed -e $'s/^\([a-z][^=]*\)=.*/\\1/; t \n d'); do
+    for varName in $(env | sed -e $'s/^\([a-z][^= \t]*\)=.*/\\1/; t \n d'); do
         if [ "$NIX_DEBUG" = "1" ]; then
-            echo "$envVar -> ${!envVar}"
+            echo "@${varName}@ -> '${!varName}'"
         fi
-        args="$args --subst-var $envVar"
+        args+=("--subst-var" "$varName")
     done
 
-    substitute "$input" "$output" $args
+    substitute "$input" "$output" "${args[@]}"
 }
 
 
@@ -816,6 +833,10 @@ showPhaseHeader() {
 
 
 genericBuild() {
+    if [ -f "$buildCommandPath" ]; then
+        . "$buildCommandPath"
+        return
+    fi
     if [ -n "$buildCommand" ]; then
         eval "$buildCommand"
         return

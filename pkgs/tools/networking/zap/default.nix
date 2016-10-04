@@ -2,18 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "zap-${version}";
-  version = "2.4.3";
+  version = "2.5.0";
   src = fetchFromGitHub {
     owner = "zaproxy";
     repo = "zaproxy";
     rev ="${version}";
-    sha256 = "1np9jxy09j8wzqcxw3c71x9hwrrbkjlz7qw903kv43wr74mv2snd";
+    sha256 = "12bd0f2zrs7cvcyy2xj31m3szxrr2ifdjyd24z047qm465z3hj33";
   };
 
   buildInputs = [ jdk ant ];
 
   buildPhase = ''
     cd build
+    echo -n "${version}" > version.txt
     ant -f build.xml setup init  compile dist copy-source-to-build package-linux
   '';
 

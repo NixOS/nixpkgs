@@ -16,8 +16,11 @@ stdenv.mkDerivation {
 
     chmod a+x $out/bin/xvfb-run
     wrapProgram $out/bin/xvfb-run \
-      --set XKB_BINDIR "${xkbcomp}/bin" \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux gawk coreutils ]}
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

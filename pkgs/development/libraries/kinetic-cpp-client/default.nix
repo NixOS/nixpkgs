@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/Seagate/kinetic-cpp-client.git";
     rev = "015085a5c89db0398f80923053f36b9e0611e107";
-    sha256 = "15iwlfjwnyswiwssdjg6qiflhddh66nv07xji4yhz1s4vqhk3nrx";
+    sha256 = "0gm34sl6lyidnxgg1lrhkxkxqj8z1y2cqn7zhzz2f1k50pigi5da";
   };
 
   patches = [ ./build-fix.patch ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Seagate/kinetic-cpp-client;
-    description = "code for producing C and C++ kinetic clients";
+    description = "Code for producing C and C++ kinetic clients";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

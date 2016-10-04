@@ -9,7 +9,7 @@ let
   common = { name, src }: stdenv.mkDerivation rec {
     inherit name src;
 
-    outputs = [ "dev" "out" "man" "doc" ];
+    outputs = [ "out" "dev" "man" "doc" ];
 
     nativeBuildInputs = [ perl pkgconfig ];
 
@@ -41,7 +41,7 @@ let
 
     installFlags = "sysconfdir=$(out)/etc";
 
-    doInstallCheck = false;
+    doInstallCheck = true;
 
     separateDebugInfo = stdenv.isLinux;
 
@@ -89,10 +89,10 @@ in rec {
   nix = nixStable;
 
   nixStable = common rec {
-    name = "nix-1.11.2";
+    name = "nix-1.11.4";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "fc1233814ebb385a2a991c1fb88c97b344267281e173fea7d9acd3f9caf969d6";
+      sha256 = "937779ed2efaa3dec210250635401980acb99a6fea6d7374fbaea78231b36d34";
     };
   };
 

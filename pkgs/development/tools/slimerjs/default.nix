@@ -3,13 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="slimerjs";
-    version="0.9.6.2015.08.20";
+    version="0.10.1";
     name="${baseName}-${version}";
-    hash="0wry296iv63bmvm3qbkbgk42nbs80cbir0kv27v0ah5f6kvjc9cq";
-    #url="http://download.slimerjs.org/releases/0.9.6/slimerjs-0.9.6.zip";
-    url = "https://github.com/laurentj/slimerjs.git";
-    rev = "87e0ff1d666897754a914131d8f1744195ee4d7a";
-    sha256="0ifgr8pi40id7vcv8ipc754bys22bhij0kkhd691285x19f52alc";
+    hash="14xfhn9v3mn4m7hfa36750vp7qgmnc5yfrdkjymzm8g9fz39ddx2";
+    url="http://download.slimerjs.org/releases/0.10.1/slimerjs-0.10.1.zip";
+    sha256="14xfhn9v3mn4m7hfa36750vp7qgmnc5yfrdkjymzm8g9fz39ddx2";
   };
   buildInputs = [
     unzip zip
@@ -18,12 +16,12 @@ in
 stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs;
-  #src = fetchurl {
-  #  inherit (s) url sha256;
-  #};
-  src = fetchgit {
-    inherit (s) url sha256 rev;
+  src = fetchurl {
+    inherit (s) url sha256;
   };
+  #src = fetchgit {
+  #  inherit (s) url sha256 rev;
+  #};
   preConfigure = ''
     test -d src && cd src
     test -f omni.ja || zip omni.ja -r */
@@ -36,7 +34,7 @@ stdenv.mkDerivation {
     echo 'export SLIMERJSLAUNCHER=${firefox}/bin/firefox' >>  "$out/bin/slimerjs"
     echo "'$out/lib/slimerjs/slimerjs' \"\$@\"" >> "$out/bin/slimerjs"
     chmod a+x "$out/bin/slimerjs"
-    sed -e 's@MaxVersion=[34][0-9][.]@MaxVersion=50.@' -i "$out/lib/slimerjs/application.ini"
+    sed -e 's@MaxVersion=[3456][0-9][.]@MaxVersion=99.@' -i "$out/lib/slimerjs/application.ini"
   '';
   meta = {
     inherit (s) version;

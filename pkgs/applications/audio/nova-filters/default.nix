@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://klingt.org/~tim/nova-filters/;
     description = "LADSPA plugins based on filters of nova";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

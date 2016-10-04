@@ -4,21 +4,22 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "rustfmt-${version}";
-  version = "0.4";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "rustfmt";
-    rev = "19768da5c97c108a05e6f545b73ba4b76d1b1788";
-    sha256 = "0f2m0gvlqlybcjl2xqwxlp5hjkhd30kx25dq56k5x0r3808ijksg";
+    rev = "d022f05f340b9aa4956ca315f5e424a6d3ab3248";
+    sha256 = "1w6ll3802061wbggqhk31pmzws423qm7jc4hyxk8a6pf9ksp0nk5";
   };
 
-  depsSha256 = "1lbcpvp7xhyl96w7jfd18w6py60nwllr93jna5j33zvnip61cpf5";
+  depsSha256 = "13rrhgzxxx5gwpwvyxw03m5xng9c1xyaycmqpi123ma3ps5822jf";
 
   meta = with stdenv.lib; {
     description = "A tool for formatting Rust code according to style guidelines";
     homepage = https://github.com/nrc/rustfmt;
     license = with licenses; [ mit asl20 ];
     maintainers = [ maintainers.globin ];
+    platforms = platforms.all;
   };
 }

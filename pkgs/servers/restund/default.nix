@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
-  NIX_LDFLAGS='' -L${mysql.lib}/lib/mysql '';
+  NIX_LDFLAGS='' -L${stdenv.lib.getLib mysql.client}/lib/mysql '';
   meta = {
     homepage = "http://www.creytiv.com/restund.html";
     platforms = with stdenv.lib.platforms; linux;

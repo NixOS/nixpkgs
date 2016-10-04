@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-rc";
     rev = "refs/tags/v${version}";
-    sha256 = "0x9ghi1f7zqphzlzyz67z7n7mnnyxf1hghi2wa2f8cdl70nfdi2f";
+    sha256 = "1gh72q1h1ds53yrzp481nvzaxkhhpm2kv59pfx4x564gxwdvq3a6";
   };
 
   dontDisableStatic = true;
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://skarnet.org/software/s6-rc/;
-    description = "a service manager for s6-based systems";
+    description = "A service manager for s6-based systems";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ pmahoney ];

@@ -4,10 +4,10 @@
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
-, dbus_libs, gtk, gdk_pixbuf, gcc
+, dbus_libs, gtk2, gdk_pixbuf, gcc
 
 # Will crash without.
-, libudev
+, systemd
 
 # Loaded at runtime.
 , libexif
@@ -44,8 +44,8 @@ let
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite
     alsaLib libXdamage libXtst libXrandr expat cups
-    dbus_libs gtk gdk_pixbuf gcc
-    libudev
+    dbus_libs gtk2 gdk_pixbuf gcc
+    systemd
     libexif
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     tar xf data.tar.xz
   '';
 
-  rpath = makeLibraryPath deps + ":" + makeSearchPathOutputs "lib64" ["lib"] deps;
+  rpath = makeLibraryPath deps + ":" + makeSearchPathOutput "lib" "lib64" deps;
   binpath = makeBinPath deps;
 
   installPhase = ''

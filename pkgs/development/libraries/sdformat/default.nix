@@ -16,8 +16,16 @@ stdenv.mkDerivation rec {
 
   inherit name;
 
+  prePatch = ''
+    substituteInPlace cmake/sdf_config.cmake.in --replace "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@" "@LIB_INSTALL_DIR@"
+  '';
+
   enableParallelBuilding = true;
   buildInputs = [
     cmake boost ruby ignition.math2 tinyxml
   ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

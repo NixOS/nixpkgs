@@ -16,8 +16,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Gateway between FUSE and libarchive: allows mounting of cpio, .tar.gz, .tar.bz2 archives";
     license = stdenv.lib.licenses.gpl2;
-
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

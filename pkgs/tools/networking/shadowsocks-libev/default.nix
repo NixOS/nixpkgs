@@ -1,32 +1,44 @@
-{ withPolarSSL ? false
+{ withMbedTLS ? true
+, enableSystemSharedLib ? true
 , stdenv, fetchurl, zlib
 , openssl ? null
-, polarssl ? null
+, mbedtls ? null
+, libev ? null
+, libsodium ? null
+, udns ? null
+, asciidoc
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
 }:
 
 let
 
-  version = "2.4.5";
-  sha256 = "08bf7f240ee39fa700aac636ca84b65f2f0cfbcfa63a0783afb05872940067e2";
+  version = "2.5.0";
+  sha256 = "6841e0efa1c01caef5a827f463ee304dc9e48fb4751cc9256316df5ab4490ae0";
 
 in
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  inherit version;
   name = "shadowsocks-libev-${version}";
   src = fetchurl {
     url = "https://github.com/shadowsocks/shadowsocks-libev/archive/v${version}.tar.gz";
     inherit sha256;
   };
 
-  buildInputs = [ zlib ]
-                ++ stdenv.lib.optional (!withPolarSSL) openssl
-                ++ stdenv.lib.optional withPolarSSL polarssl;
+  buildInputs = [ zlib asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt ]
+                ++ optional (!withMbedTLS) openssl
+                ++ optional withMbedTLS mbedtls
+                ++ optionals enableSystemSharedLib [libev libsodium udns];
 
-  configureFlags = stdenv.lib.optional (withPolarSSL)
-                     [ "--with-crypto-library=polarssl"
-                       "--with-polarssl=${polarssl}"
-                     ];
+  configureFlags = optional withMbedTLS
+                     [ "--with-crypto-library=mbedtls"
+                       "--with-mbedtls=${mbedtls}"
+                     ]
+                   ++ optional enableSystemSharedLib "--enable-system-shared-lib";
 
   meta = {
     description = "A lightweight secured SOCKS5 proxy";
@@ -35,8 +47,8 @@ stdenv.mkDerivation rec {
       It is a port of Shadowsocks created by @clowwindy, which is maintained by @madeye and @linusyang.
     '';
     homepage = https://github.com/shadowsocks/shadowsocks-libev;
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.nfjinjing ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.nfjinjing ];
+    platforms = platforms.all;
   };
 }

@@ -1,16 +1,17 @@
-{stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
-let
+stdenv.mkDerivation rec {
+  name = "raspberrypi-firmware-${version}";
+  version = "1.20160620";
 
-  rev = "1.20160315";
-
-in stdenv.mkDerivation {
-  name = "raspberrypi-firmware-${rev}";
-
-  src = fetchurl {
-    url = "https://github.com/raspberrypi/firmware/archive/${rev}.tar.gz";
-    sha256 = "0a7ycv01s0kk84szsh51hy2mjjil1dzdk0g7k83h50d5nya090fl";
+  src = fetchFromGitHub {
+    owner = "raspberrypi";
+    repo = "firmware";
+    rev = version;
+    sha256 = "06g691px0abndp5zvz2ba1g675rcqb64n055h5ahgnlck5cdpawg";
   };
+
+  dontStrip = true;    # Stripping breaks some of the binaries
 
   installPhase = ''
     mkdir -p $out/share/raspberrypi/boot
@@ -19,8 +20,10 @@ in stdenv.mkDerivation {
     cp opt/vc/LICENCE $out/share/raspberrypi
 
     for f in $out/bin/*; do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f"
-      patchelf --set-rpath "$out/lib" "$f"
+      if isELF "$f"; then
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f"
+        patchelf --set-rpath "$out/lib" "$f"
+      fi
     done
   '';
 

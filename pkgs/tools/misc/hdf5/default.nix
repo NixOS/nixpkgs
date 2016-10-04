@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = []
     ++ optional (gfortran != null) gfortran
-    ++ optional (zlib != null) zlib
     ++ optional (szip != null) szip;
 
   propagatedBuildInputs = []
+    ++ optional (zlib != null) zlib
     ++ optional (mpi != null) mpi;
 
   configureFlags = []
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
     homepage = http://www.hdfgroup.org/HDF5/;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

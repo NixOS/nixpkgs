@@ -21,4 +21,8 @@ stdenv.mkDerivation {
     done
   ''; # */
   allowedReferences = ["out"];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

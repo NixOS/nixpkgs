@@ -2,19 +2,19 @@
 
 let
   name = "source-highlight";
-  version = "3.1.7";
+  version = "3.1.8";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/src-highlite/${name}-${version}.tar.gz";
-    sha256 = "1s49ld8cnpzhhwq0r7s0sfm3cg3nhhm0wla27lwraifrrl3y1cp1";
+    sha256 = "18xdalxg7yzrxc1njzgw7aryq2jdm7zq2yqz41sc7k6il5z6lcq1";
   };
 
   buildInputs = [ boost ];
 
-  configureFlags = [ "--with-boost=${boost.lib}" ];
+  configureFlags = [ "--with-boost=${boost.out}" ];
 
   enableParallelBuilding = false;
 

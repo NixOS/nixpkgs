@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Web Services / SOAP / WSDL engine, the successor to the widely used Apache Axis SOAP stack";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

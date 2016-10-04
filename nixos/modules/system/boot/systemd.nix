@@ -14,6 +14,7 @@ let
   upstreamSystemUnits =
     [ # Targets.
       "basic.target"
+      "busnames.target"
       "sysinit.target"
       "sockets.target"
       "graphical.target"
@@ -120,7 +121,6 @@ let
       "systemd-poweroff.service"
       "halt.target"
       "systemd-halt.service"
-      "ctrl-alt-del.target"
       "shutdown.target"
       "umount.target"
       "final.target"
@@ -141,6 +141,7 @@ let
       "user.slice"
       "machine.slice"
       "systemd-machined.service"
+      "systemd-nspawn@.service"
 
       # Temporary file creation / cleanup.
       "systemd-tmpfiles-clean.service"
@@ -162,7 +163,6 @@ let
       "systemd-hostnamed.service"
       "systemd-binfmt.service"
     ]
-
     ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
@@ -184,6 +184,8 @@ let
       "systemd-exit.service"
       "timers.target"
     ];
+
+  boolToString = value: if value then "yes" else "no";
 
   makeJobScript = name: text:
     let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
@@ -212,8 +214,10 @@ let
         // optionalAttrs (config.restartTriggers != [])
           { X-Restart-Triggers = toString config.restartTriggers; }
         // optionalAttrs (config.description != "") {
-          Description = config.description;
-        } // optionalAttrs (config.onFailure != []) {
+          Description = config.description; }
+        // optionalAttrs (config.documentation != []) {
+          Documentation = toString config.documentation; }
+        // optionalAttrs (config.onFailure != []) {
           OnFailure = toString config.onFailure;
         };
     };
@@ -389,13 +393,13 @@ in
     systemd.units = mkOption {
       description = "Definition of systemd units.";
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
+      type = with types; attrsOf (submodule (
+        { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        };
+        }));
     };
 
     systemd.packages = mkOption {
@@ -406,43 +410,37 @@ in
 
     systemd.targets = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ targetOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig] );
       description = "Definition of systemd target units.";
     };
 
     systemd.services = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ serviceOptions unitConfig serviceConfig ];
+      type = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ]);
       description = "Definition of systemd service units.";
     };
 
     systemd.sockets = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ socketOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = socketOptions; } unitConfig ]);
       description = "Definition of systemd socket units.";
     };
 
     systemd.timers = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ timerOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ]);
       description = "Definition of systemd timer units.";
     };
 
     systemd.paths = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ pathOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = pathOptions; } unitConfig ]);
       description = "Definition of systemd path units.";
     };
 
     systemd.mounts = mkOption {
       default = [];
-      type = types.listOf types.optionSet;
-      options = [ mountOptions unitConfig mountConfig ];
+      type = with types; listOf (submodule [ { options = mountOptions; } unitConfig mountConfig ]);
       description = ''
         Definition of systemd mount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
@@ -452,8 +450,7 @@ in
 
     systemd.automounts = mkOption {
       default = [];
-      type = types.listOf types.optionSet;
-      options = [ automountOptions unitConfig automountConfig ];
+      type = with types; listOf (submodule [ { options = automountOptions; } unitConfig automountConfig ]);
       description = ''
         Definition of systemd automount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
@@ -483,6 +480,15 @@ in
       default = "multi-user.target";
       type = types.str;
       description = "Default unit started when the system boots.";
+    };
+
+    systemd.ctrlAltDelUnit = mkOption {
+      default = "reboot.target";
+      type = types.str;
+      example = "poweroff.target";
+      description = ''
+        Target that should be started when Ctrl-Alt-Delete is pressed.
+      '';
     };
 
     systemd.globalEnvironment = mkOption {
@@ -562,6 +568,16 @@ in
       '';
     };
 
+    systemd.user.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultCPUAccounting=yes";
+      description = ''
+        Extra config options for systemd user instances. See man systemd-user.conf for
+        available options.
+      '';
+    };
+
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -581,34 +597,37 @@ in
     systemd.user.units = mkOption {
       description = "Definition of systemd per-user units.";
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
+      type = with types; attrsOf (submodule (
+        { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        };
+        }));
     };
 
     systemd.user.services = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ serviceOptions unitConfig serviceConfig ];
+      type = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ] );
       description = "Definition of systemd per-user service units.";
     };
 
     systemd.user.timers = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ timerOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ] );
       description = "Definition of systemd per-user timer units.";
     };
 
     systemd.user.sockets = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ socketOptions unitConfig ];
+      type = with types; attrsOf (submodule [ { options = socketOptions; } unitConfig ] );
       description = "Definition of systemd per-user socket units.";
+    };
+
+    systemd.user.targets = mkOption {
+      default = {};
+      type = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig] );
+      description = "Definition of systemd per-user target units.";
     };
 
     systemd.additionalUpstreamSystemUnits = mkOption {
@@ -656,6 +675,11 @@ in
         ${config.systemd.extraConfig}
       '';
 
+      "systemd/user.conf".text = ''
+        [Manager]
+        ${config.systemd.user.extraConfig}
+      '';
+
       "systemd/journald.conf".text = ''
         [Journal]
         RateLimitInterval=${config.services.journald.rateLimitInterval}
@@ -669,6 +693,7 @@ in
 
       "systemd/logind.conf".text = ''
         [Login]
+        KillUserProcesses=no
         ${config.services.logind.extraConfig}
       '';
 
@@ -688,6 +713,8 @@ in
 
       "systemd/system-generators" = { source = generators; };
     });
+
+    services.dbus.enable = true;
 
     system.activationScripts.systemd = stringAfter [ "groups" ]
       ''
@@ -715,18 +742,6 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
-    systemd.targets.network-online.after = [ "ip-up.target" ];
-
-    systemd.targets.network-pre = {
-      wantedBy = [ "network.target" ];
-      before = [ "network.target" ];
-    };
-
-    systemd.targets.remote-fs-pre = {
-      wantedBy = [ "remote-fs.target" ];
-      before = [ "remote-fs.target" ];
-    };
-
     systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
@@ -743,6 +758,7 @@ in
     systemd.user.units =
          mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.user.sockets
+      // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.user.targets
       // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.user.timers;
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
@@ -750,13 +766,6 @@ in
         "SYSFS" "PROC_FS" "FHANDLE" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
         "TMPFS_XATTR" "SECCOMP"
       ];
-
-    environment.shellAliases =
-      { start = "systemctl start";
-        stop = "systemctl stop";
-        restart = "systemctl restart";
-        status = "systemctl status";
-      };
 
     users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
     users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
@@ -768,7 +777,7 @@ in
         { wantedBy = [ "timers.target" ];
           timerConfig.OnCalendar = service.startAt;
         })
-        (filterAttrs (name: service: service.startAt != "") cfg.services);
+        (filterAttrs (name: service: service.enable && service.startAt != "") cfg.services);
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.user.timers =
@@ -798,6 +807,10 @@ in
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
+    systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
+    systemd.services.systemd-logind.stopIfChanged = false;
+    systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
+    systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.automount" ];

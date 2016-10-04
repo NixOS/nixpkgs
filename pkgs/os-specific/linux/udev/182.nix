@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
                      "--disable-introspection"
                    ];
 
+  postPatch = ''
+    sed -i 's:input.h:input-event-codes.h:' Makefile.in
+    sed -i '20a#include <stdint.h>' src/mtd_probe/mtd_probe.h
+  '';
+
   NIX_LDFLAGS = [ "-lrt" ];
 
   meta = with stdenv.lib; {

@@ -26,4 +26,8 @@ stdenv.mkDerivation {
   installTargets = [ "install" "install-sendmail" ];
   
   buildInputs = stdenv.lib.optional tlsSupport openssl;
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

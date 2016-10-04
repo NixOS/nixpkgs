@@ -12,7 +12,6 @@ let
       modules =
         [ ../modules/installer/cd-dvd/installation-cd-minimal.nix
           ../modules/testing/test-instrumentation.nix
-          { key = "serial"; }
         ];
     }).config.system.build.isoImage;
 
@@ -30,20 +29,25 @@ let
         '';
     };
 in {
+
     biosCdrom = makeBootTest "bios-cdrom" ''
         cdrom => glob("${iso}/iso/*.iso")
       '';
+
     biosUsb = makeBootTest "bios-usb" ''
         usb => glob("${iso}/iso/*.iso")
       '';
+
     uefiCdrom = makeBootTest "uefi-cdrom" ''
         cdrom => glob("${iso}/iso/*.iso"),
         bios => '${pkgs.OVMF}/FV/OVMF.fd'
       '';
+
     uefiUsb = makeBootTest "uefi-usb" ''
         usb => glob("${iso}/iso/*.iso"),
         bios => '${pkgs.OVMF}/FV/OVMF.fd'
       '';
+
     netboot = let
       config = (import ../lib/eval-config.nix {
           inherit system;

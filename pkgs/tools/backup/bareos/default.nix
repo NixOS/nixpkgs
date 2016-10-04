@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
     "--enable-dynamic-cats-backends"
     "--enable-sql-pooling"
     "--enable-scsi-crypto"
-  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline}" ]
+  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline.dev}" ]
     ++ optional (python != null) "--with-python=${python}"
-    ++ optional (openssl != null) "--with-openssl=${openssl}"
-    ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
+    ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
+    ++ optional (sqlite != null) "--with-sqlite3=${sqlite.dev}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
-    ++ optional (libmysql != null) "--with-mysql=${libmysql}"
-    ++ optional (zlib != null) "--with-zlib=${zlib}"
+    ++ optional (libmysql != null) "--with-mysql=${libmysql.dev}"
+    ++ optional (zlib != null) "--with-zlib=${zlib.dev}"
     ++ optional (lzo != null) "--with-lzo=${lzo}"
     ++ optional (jansson != null) "--with-jansson=${jansson}"
     ++ optional (acl != null) "--enable-acl"

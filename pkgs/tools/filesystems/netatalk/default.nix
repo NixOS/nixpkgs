@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconv, pam, openssl, acl }:
+{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconv, pam, openssl, acl, ed, glibc }:
 
 stdenv.mkDerivation rec{
   name = "netatalk-3.1.7";
@@ -14,12 +14,28 @@ stdenv.mkDerivation rec{
 
   configureFlags = [
     "--with-bdb=${db}"
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--with-lockfile=/run/lock/netatalk"
     "--localstatedir=/var/lib"
   ];
 
-  enableParallelBuild = true;
+  # Expose librpcsvc to the linker for afpd
+  # Fixes errors that showed up when closure-size was merged:
+  # afpd-nfsquota.o: In function `callaurpc':
+  # netatalk-3.1.7/etc/afpd/nfsquota.c:78: undefined reference to `xdr_getquota_args'
+  # netatalk-3.1.7/etc/afpd/nfsquota.c:78: undefined reference to `xdr_getquota_rslt'
+  postConfigure = ''
+    ${ed}/bin/ed -v etc/afpd/Makefile << EOF
+    /^afpd_LDADD
+    /am__append_2
+    a
+      ${glibc.static}/lib/librpcsvc.a \\
+    .
+    w
+    EOF
+  '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Apple Filing Protocol Server";

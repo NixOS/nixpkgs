@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/fletcher/MultiMarkdown-4.git";
     fetchSubmodules = true;
     rev = "dd060247518715ef2b52be22b8f49d0e6d2c3a8b";
-    sha256 = "0s7rcxgmv1almlic7bky426x52h7g1pjdhi3y8wf84fpx8c7b6g2";
+    sha256 = "11f246r30q2fx4xw7valhqjj4mc4ydj5fv5f2kbl5h93y69q0bw7";
   };
 
   preBuild = ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     # licensed under GPLv2+ or MIT:
     # https://raw.githubusercontent.com/fletcher/MultiMarkdown-4/master/LICENSE
     license = with stdenv.lib.licenses; [ gpl2Plus ];
-    hydraPlatforms = platforms.all;
+    platforms = platforms.all;
     maintainers = with stdenv.lib.maintainers; [ lowfatcomputing ];
   };
 }

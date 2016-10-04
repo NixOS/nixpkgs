@@ -12,8 +12,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool openssl expat libgcrypt ];
 
+  patchPhase = ''
+    substituteInPlace configure \
+      --replace "/usr/local/ssl/include" "${openssl.dev}/include" \
+      --replace "/usr/local/ssl/lib" "${openssl.out}/lib"
+  '';
+
   configureFlags = [
-    "--with-ssl-dir=${openssl}/"
     "--with-tls"
   ];
 

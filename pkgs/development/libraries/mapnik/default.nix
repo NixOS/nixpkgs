@@ -1,16 +1,20 @@
-{ stdenv, fetchurl
+{ stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
 , libwebp, libxml2, proj, python, scons, sqlite, zlib
 }:
 
 stdenv.mkDerivation rec {
   name = "mapnik-${version}";
-  version = "3.0.9";
+  version = "3.0.12";
 
-  src = fetchurl {
-    url = "https://mapnik.s3.amazonaws.com/dist/v${version}/mapnik-v${version}.tar.bz2";
-    sha256 = "1nnkamwq4vcg4q2lbqn7cn8sannxszzjxcxsllksby055d9nfgrs";
+  src = fetchzip {
+    # this one contains all git submodules and is cheaper than fetchgit
+    url = "https://github.com/mapnik/mapnik/releases/download/v${version}/mapnik-v${version}.tar.bz2";
+    sha256 = "02w360fxk0pfkk0zbwc134jq7rkkib58scs5k67j8np6fx6gag6i";
   };
+
+  # a distinct dev output makes python-mapnik fail
+  outputs = [ "out" ];
 
   nativeBuildInputs = [ python scons ];
 

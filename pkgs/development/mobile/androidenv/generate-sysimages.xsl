@@ -7,7 +7,7 @@
   <xsl:output omit-xml-declaration="yes" indent="no" />
 
   <xsl:template match="/sdk:sdk-sys-img">
-    <xsl:for-each select="sdk:system-image">
+    <xsl:for-each select="sdk:system-image"><xsl:sort select="sdk:api-level" data-type="number"/><xsl:sort select="sdk:abi"/>
   sysimg_<xsl:value-of select="sdk:abi" />_<xsl:value-of select="sdk:api-level" /> = buildSystemImage {
     name = "sysimg-<xsl:value-of select="sdk:abi" />-<xsl:value-of select="sdk:api-level" />";
     src = fetchurl {

@@ -1,21 +1,30 @@
-{ stdenv, fetchzip, ocaml, findlib }:
+{ stdenv, fetchFromGitHub, ocaml, findlib }:
 
-stdenv.mkDerivation {
-  name = "ocaml-ppx_tools-0.99.2";
-  src = fetchzip {
-    url = https://github.com/alainfrisch/ppx_tools/archive/ppx_tools_0.99.2.tar.gz;
-    sha256 = "1m09r2sjcb37i4dyhpbk9n2wxkcvpib6bvairsird91fm9w0vqw7";
-  };
+let
+  version =
+  if stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.03" then "5.0+4.03.0" else "5.0+4.02.0";
+in
+  stdenv.mkDerivation {
+    name = "ocaml-ppx_tools-${version}";
+    src = fetchFromGitHub {
+      owner = "alainfrisch";
+      repo = "ppx_tools";
+      rev = version;
+      sha256 = if version == "5.0+4.03.0"
+      then "061v1fl5z7z3ywi4ppryrlcywnvnqbsw83ppq72qmkc7ma4603jg"
+      else "16drjk0qafjls8blng69qiv35a84wlafpk16grrg2i3x19p8dlj8"
+      ;
+    };
 
-  buildInputs = [ ocaml findlib ];
+    buildInputs = [ ocaml findlib ];
 
-  createFindlibDestdir = true;
+    createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
-    description = "Tools for authors of ppx rewriters";
-    homepage = http://www.lexifi.com/ppx_tools;
-    license = licenses.mit;
-    platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [ vbgl ];
-  };
-}
+    meta = with stdenv.lib; {
+      description = "Tools for authors of ppx rewriters";
+      homepage = http://www.lexifi.com/ppx_tools;
+      license = licenses.mit;
+      platforms = ocaml.meta.platforms or [];
+      maintainers = with maintainers; [ vbgl ];
+    };
+  }

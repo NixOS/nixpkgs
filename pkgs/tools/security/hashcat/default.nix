@@ -1,49 +1,39 @@
-{ stdenv, fetchurl, p7zip, patchelf, gmp }:
+{ stdenv, fetchurl, gmp }:
 
 assert stdenv.isLinux;
 
 let
-  bits    = if stdenv.system == "x86_64-linux" then "64" else "32";
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc gmp ];
-
-  fixBin = x: ''
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath} ${x}
-  '';
+  bits = if stdenv.system == "x86_64-linux" then "64" else "32";
 in
 stdenv.mkDerivation rec {
   name    = "hashcat-${version}";
-  version = "0.49";
+  version = "2.00";
 
   src = fetchurl {
-    url    = "http://hashcat.net/files/${name}.7z";
-    sha256 = "0va07flncihgmnri5wj0jn636w86x5qwm4jmj2halcyg7qwqijh2";
+    name = "${name}.tar.gz";
+    url = "https://codeload.github.com/hashcat/hashcat/tar.gz/${version}";
+    sha256 = "0i2l4i1jkdhj9bkvycgd2nf809kki3jp83y0vrd4iwsdbbbyc9b3";
   };
 
-  buildInputs = [ p7zip patchelf ];
+  buildInputs = [ gmp ];
 
-  unpackPhase = "7z x $src > /dev/null && cd ${name}";
+  buildFlags = [ "posix${bits}" ]
+    ++ stdenv.lib.optionals (bits == "64") [ "posixXOP" "posixAVX" ];
 
+  # Upstream Makefile doesn't have 'install' target
   installPhase = ''
     mkdir -p $out/bin $out/libexec
     cp -R * $out/libexec
 
-    echo -n "/" > $out/bin/eula.accepted
     ln -s $out/libexec/hashcat-cli${bits}.bin $out/bin/hashcat
     ln -s $out/libexec/hashcat-cliXOP.bin $out/bin/hashcat-xop
     ln -s $out/libexec/hashcat-cliAVX.bin $out/bin/hashcat-avx
   '';
 
-  fixupPhase = ''
-    ${fixBin "$out/libexec/hashcat-cli${bits}.bin"}
-    ${fixBin "$out/libexec/hashcat-cliXOP.bin"}
-    ${fixBin "$out/libexec/hashcat-cliAVX.bin"}
-  '';
-
   meta = {
     description = "Fast password cracker";
     homepage    = "http://hashcat.net/hashcat/";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
+    license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };

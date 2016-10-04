@@ -208,9 +208,9 @@ in
     # networking.firewall.allowedUDPPorts = ...
 
     systemd.services.cjdns = {
-      description = "encrypted networking for everybody";
-      wantedBy = [ "network.target" ];
-      after = [ "networkSetup.service" "network-interfaces.target" ];
+      description = "cjdns: routing engine designed for security, scalability, speed and ease of use";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       preStart = if cfg.confFile != "" then "" else ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
@@ -253,7 +253,7 @@ in
     networking.extraHosts = "${cjdnsHosts}";
 
     assertions = [
-      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile == "" );
+      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != "" );
         message = "Neither cjdns.ETHInterface.bind nor cjdns.UDPInterface.bind defined.";
       }
       { assertion = config.networking.enableIPv6;

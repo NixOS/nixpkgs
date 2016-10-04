@@ -8,13 +8,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "salt-${version}";
-  version = "2015.8.8";
+  version = "2016.3.3";
 
   disabled = pythonPackages.isPy3k;
 
   src = fetchurl {
     url = "mirror://pypi/s/salt/${name}.tar.gz";
-    sha256 = "1xcfcs50pyammb60myph4f8bi2r6iwkxwsnnhrjwvkv2ymxwxv5j";
+    sha256 = "1djjglnh6203y8dirziz5w6zh2lgszxp8ivi86nb7fgijj2h61jr";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -26,7 +26,6 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
     pyzmq
     requests
-    salttesting
     tornado
   ] ++ extraInputs;
 
@@ -34,7 +33,7 @@ pythonPackages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
-      --subst-var-by "libcrypto" "${openssl}/lib/libcrypto.so"
+      --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
   '';
 
   # The tests fail due to socket path length limits at the very least;

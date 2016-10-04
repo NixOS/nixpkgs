@@ -7,14 +7,13 @@
 
 let
   ccargs = lib.concatStringsSep " " ([
-    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl}/include/sasl"
+    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
-    "-fPIE" "-fstack-protector-all" "--param" "ssp-buffer-size=4" "-O2" "-D_FORTIFY_SOURCE=2"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysql}/include/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${lib.getDev libmysql}/include/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE");
    auxlibs = lib.concatStringsSep " " ([
-     "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl" "-pie" "-Wl,-z,relro,-z,now"
+     "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
    ] ++ lib.optional withPgSQL "-lpq"
      ++ lib.optional withMySQL "-lmysqlclient"
      ++ lib.optional withSQLite "-lsqlite3");
@@ -23,17 +22,20 @@ in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.0.4";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "03msimdzxndm1nskljarws45wpqk020ckfcrmn1p3pxrfq8yh75q";
+    sha256 = "0sqgsfq3dqilfcr2z9wi7g12mcma690j8qvs8v93gszrdgpb9f8s";
   };
 
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withMySQL libmysql
                 ++ lib.optional withSQLite sqlite;
+
+  hardeningDisable = [ "format" ];
+  hardeningEnable = [ "pie" ];
 
   patches = [
     ./postfix-script-shell.patch
@@ -75,9 +77,9 @@ in stdenv.mkDerivation rec {
     cp -rv installdir/etc $out
     sed -e '/^PATH=/d' -i $out/libexec/postfix/post-install
     wrapProgram $out/libexec/postfix/post-install \
-      --prefix PATH ":" ${coreutils}/bin:${findutils}/bin:${gnugrep}/bin
+      --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep ]}
     wrapProgram $out/libexec/postfix/postfix-script \
-      --prefix PATH ":" ${coreutils}/bin:${findutils}/bin:${gnugrep}/bin:${gawk}/bin:${gnused}/bin
+      --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
 
   meta = {

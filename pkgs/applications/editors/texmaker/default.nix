@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "texmaker";
-  version = "4.4.1";
+  version = "4.5";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${name}.tar.bz2";
-    sha256 = "1d5lb4sibdhvzgfr0zi48j92b4acvvvdy2biqi3jzjdnzy9r94w0";
+    sha256 = "056njk6j8wma23mlp7xa3rgfaxx0q8ynwx8wkmj7iy0b85p9ds9c";
   };
 
   buildInputs = [ qt4 poppler_qt4 zlib ];
   nativeBuildInputs = [ pkgconfig poppler qmake4Hook ];
-  NIX_CFLAGS_COMPILE="-I${poppler}/include/poppler";
+  NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags DESKTOPDIR=$out/share/applications ICONDIR=$out/share/pixmaps"

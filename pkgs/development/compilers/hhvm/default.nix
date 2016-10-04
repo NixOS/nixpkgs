@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, libmemcached, pcre
-, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
+, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
 , libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
@@ -8,18 +8,18 @@
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.12.1";
+  version = "3.15.0";
 
   # use git version since we need submodules
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "f516f1bb9046218f89885a220354c19dda6d8f4d";
-    sha256 = "1jdw6j394z7ksg4wdcnm7lkcs7iam5myx6k18w8hr595s1dfk3sj";
+    rev    = "92a682ebaa3c85b84857852d8621f528607fe27d";
+    sha256 = "0mn3bfvhdf6b4lflyjfjyr7nppkq505xkaaagk111fqy91rdzd3b";
     fetchSubmodules = true;
   };
 
   buildInputs =
-    [ cmake pkgconfig boost libunwind mariadb libmemcached pcre gdb git perl
+    [ cmake pkgconfig boost libunwind mariadb.client libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
@@ -29,11 +29,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false; # occasional build problems;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
-  MYSQL_INCLUDE_DIR="${mariadb}/include/mysql";
-  MYSQL_DIR=mariadb;
 
   # work around broken build system
-  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
+  NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
 
   prePatch = ''
     substituteInPlace hphp/util/generate-buildinfo.sh \
@@ -47,8 +45,6 @@ stdenv.mkDerivation rec {
       hphp/runtime/ext_zend_compat/php-src/main/*.h
     patchShebangs .
   '';
-
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   meta = {
     description = "High-performance JIT compiler for PHP/Hack";

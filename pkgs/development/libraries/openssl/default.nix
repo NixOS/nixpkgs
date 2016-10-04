@@ -8,7 +8,7 @@ let
   opensslCrossSystem = stdenv.cross.openssl.system or
     (throw "openssl needs its platform name cross building");
 
-  common = { version, sha256 }: stdenv.mkDerivation rec {
+  common = args@{ version, sha256, patches ? [] }: stdenv.mkDerivation rec {
     name = "openssl-${version}";
 
     src = fetchurl {
@@ -17,13 +17,14 @@ let
     };
 
     patches =
-      [ ./use-etc-ssl-certs.patch ]
+      (args.patches or [])
+      ++ optional (versionOlder version "1.1.0") ./use-etc-ssl-certs.patch
       ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
       ++ optional
            (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
            ./darwin-arch.patch;
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
   setOutputFlags = false;
 
     nativeBuildInputs = [ perl ];
@@ -57,20 +58,20 @@ let
           rm "$out/lib/"*.a
       fi
 
-    mkdir -p $bin
-    mv $out/bin $bin/
+      mkdir -p $bin
+      mv $out/bin $bin/
 
-    mkdir $dev
-    mv $out/include $dev/
+      mkdir $dev
+      mv $out/include $dev/
 
       # remove dependency on Perl at runtime
-    rm -r $out/etc/ssl/misc
+      rm -r $out/etc/ssl/misc
 
       rmdir $out/etc/ssl/{certs,private}
     '';
 
     postFixup = ''
-    # Check to make sure the main output doesn't depend on perl
+      # Check to make sure the main output doesn't depend on perl
       if grep -r '${perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1
@@ -97,7 +98,7 @@ let
       homepage = http://www.openssl.org/;
       description = "A cryptographic library that implements the SSL and TLS protocols";
       platforms = stdenv.lib.platforms.all;
-      maintainers = [ stdenv.lib.maintainers.simons ];
+      maintainers = [ stdenv.lib.maintainers.peti ];
       priority = 10; # resolves collision with ‘man-pages’
     };
   };
@@ -105,13 +106,18 @@ let
 in {
 
   openssl_1_0_1 = common {
-    version = "1.0.1t";
-    sha256 = "4a6ee491a2fdb22e519c76fdc2a628bb3cec12762cd456861d207996c8a07088";
+    version = "1.0.1u";
+    sha256 = "0fb7y9pwbd76pgzd7xzqfrzibmc0vf03sl07f34z5dhm2b5b84j3";
   };
 
   openssl_1_0_2 = common {
-    version = "1.0.2h";
-    sha256 = "1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919";
+    version = "1.0.2j";
+    sha256 = "0cf4ar97ijfc7mg35zdgpad6x8ivkdx9qii6mz35khi1ps9g5bz7";
+  };
+
+  openssl_1_1_0 = common {
+    version = "1.1.0b";
+    sha256 = "1xznrqvb1dbngv2k2nb6da6fdw00c01sy2i36yjdxr4vpxrf0pd4";
   };
 
 }

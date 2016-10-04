@@ -176,13 +176,13 @@ rec {
       ${optionalString (type == "system") ''
         # Stupid misc. symlinks.
         ln -s ${cfg.defaultUnit} $out/default.target
-
+        ln -s ${cfg.ctrlAltDelUnit} $out/ctrl-alt-del.target
         ln -s rescue.target $out/kbrequest.target
 
         mkdir -p $out/getty.target.wants/
         ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-        ln -s ../local-fs.target ../remote-fs.target ../network.target \
+        ln -s ../local-fs.target ../remote-fs.target \
         ../nss-lookup.target ../nss-user-lookup.target ../swap.target \
         $out/multi-user.target.wants/
       ''}

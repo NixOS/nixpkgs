@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";
-  version = "0.7.0";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "GrayHatter";
     repo = "uTox";
     rev = "v${version}";
-    sha256 = "1md8fw6zqd3giskd89i56dgrsl83vn27xwr8k22263wkj1fxxw4c";
+    sha256 = "0ahwdwqhi1gmvw80jihc1ba4cqqnx8ifjnzazxidfdky4ikzccmn";
   };
 
   buildInputs = [ pkgconfig libtoxcore-dev dbus libvpx libX11 openal freetype
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ iElectric jgeerds ];
+    maintainers = with maintainers; [ domenkozar jgeerds ];
     platforms = platforms.all;
   };
 }

@@ -95,11 +95,27 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net40/*" ];
   };
 
-  NUnit = fetchNuGet {
+  NUnit3 = fetchNuGet {
+    baseName = "NUnit";
+    version = "3.0.1";
+    sha256 = "1g3j3kvg9vrapb1vjgq65nvn1vg7bzm66w7yjnaip1iww1yn1b0p";
+    outputFiles = [ "lib/*" ];
+  };
+
+  NUnit2 = fetchNuGet {
     baseName = "NUnit";
     version = "2.6.4";
     sha256 = "1acwsm7p93b1hzfb83ia33145x0w6fvdsfjm9xflsisljxpdx35y";
     outputFiles = [ "lib/*" ];
+  };
+
+  NUnit = NUnit2;
+
+  NUnitConsole = fetchNuGet {
+    baseName = "NUnit.Console";
+    version = "3.0.1";
+    sha256 = "154bqwm2n95syv8nwd67qh8qsv0b0h5zap60sk64z3kd3a9ffi5p";
+    outputFiles = [ "tools/*" ];
   };
 
   MaxMindDb = fetchNuGet {
@@ -146,8 +162,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   SharpFont = fetchNuGet {
     baseName = "SharpFont";
-    version = "3.0.1";
-    sha256 = "1g639i8mbxc6qm0xqsf4mc0shv8nwdaidllka2xxwyksbq54skhs";
+    version = "3.1.0";
+    sha256 = "137y514i4zi0i0qsx7nv4ibl4kifbr8xr23rqdkwf7yxf88jjmh2";
     outputFiles = [ "lib/*" "config/*" ];
   };
 
@@ -167,8 +183,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   MonoNat = fetchNuGet {
     baseName = "Mono.Nat";
-    version = "1.2.21";
-    sha256 = "011xhmjrx6w5h110fcp40l95k3qj1gkzz3axgbfy0s8haf5hsf7s";
+    version = "1.2.24";
+    sha256 = "0vfkach11kkcd9rcqz3s38m70d5spyb21gl99iqnkljxj5555wjs";
     outputFiles = [ "lib/*" ];
   };
 
@@ -473,6 +489,54 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   };
   # };
 
+  GitVersionTree = buildDotnetPackage rec {
+    baseName = "GitVersionTree";
+    version = "2013-10-01";
+
+    src = fetchFromGitHub {
+      owner = "crc8";
+      repo = "GitVersionTree";
+      rev = "58dc39c43cffea44f721ee4425835e56518f7da2";
+      sha256 = "0mna5pkpqkdr5jgn8paz004h1pa24ncsvmi2c8s4gp94nfw34x05";
+    };
+
+    buildInputs = with pkgs; [ ed ];
+
+    postPatch = ''
+      ed -v -p: -s GitVersionTree/Program.cs << EOF
+      /Main()
+      c
+      static void Main(string[] args)
+      .
+      /EnableVisualStyles
+      i
+      Reg.Write("GitPath", "${pkgs.gitMinimal}/bin/git");
+      Reg.Write("GraphvizPath", "${pkgs.graphviz}/bin/dot");
+      if (args.Length > 0) {
+        Reg.Write("GitRepositoryPath", args[0]);
+      }
+      .
+      w
+      EOF
+
+      substituteInPlace GitVersionTree/Forms/MainForm.cs \
+        --replace 'Directory.GetParent(Application.ExecutablePath)' 'Environment.CurrentDirectory' \
+        --replace '\\' '/' \
+        --replace '@"\"' '"/"'
+    '';
+
+    outputFiles = [ "GitVersionTree/bin/Release/*" ];
+    exeFiles = [ "GitVersionTree.exe" ];
+
+    meta = with stdenv.lib; {
+      description = "A tool to help visualize git revisions and branches";
+      homepage = https://github.com/crc8/GitVersionTree;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ obadz ];
+      platforms = platforms.all;
+    };
+  };
+
   MathNetNumerics = buildDotnetPackage rec {
     baseName = "MathNet.Numerics";
     version = "3.7.0";
@@ -516,7 +580,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
     };
 
-    buildInputs = [ pkgs.gtk-sharp ];
+    buildInputs = [ pkgs.gtk-sharp-2_0 ];
 
     meta = {
       description = "A generic framework for creating extensible applications";

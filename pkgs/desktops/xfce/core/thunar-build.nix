@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./thunarx_plugins_directory.patch ];
 
+  postPatch = ''
+    sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
+  '';
+
   buildInputs = [
     pkgconfig intltool
     gtk dbus_glib libstartup_notification libnotify libexif pcre udev

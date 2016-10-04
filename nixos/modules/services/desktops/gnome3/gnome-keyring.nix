@@ -36,7 +36,7 @@ in
 
     environment.systemPackages = [ gnome3.gnome_keyring ];
 
-    services.dbus.packages = [ gnome3.gnome_keyring ];
+    services.dbus.packages = [ gnome3.gnome_keyring gnome3.gcr ];
 
   };
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, buildPythonApplication, pythonPackages }:
+{ stdenv, fetchgit, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
 
   name = "grabserial-20141120";
   namePrefix = "";

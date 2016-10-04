@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     "--with-dbi-libdir=${libdbi}/lib"
   ] ++ optionals (libmysql != null) [
     "--with-mysql"
-    "--with-mysql-incdir=${libmysql}/include/mysql"
-    "--with-mysql-libdir=${libmysql}/lib/mysql"
   ] ++ optionals (postgresql != null) [
     "--with-pgsql"
     "--with-pgsql_incdir=${postgresql}/include"

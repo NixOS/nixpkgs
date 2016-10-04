@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-dns";
     rev = "refs/tags/v${version}";
-    sha256 = "033pijilkvj3vw94aqrvavr4mqafm7kcc8ql8lc3ma6lqkx4xyak";
+    sha256 = "1f9a4bjpsqhs9aq0zam74mj6zn1ffaljgp98hqj9j83d2jlvqpv5";
   };
 
   dontDisableStatic = true;

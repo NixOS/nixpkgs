@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/ab{put,build}-sourceforge \
-      --prefix PATH ":" "${openssh}/bin:${rsync}/bin"
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ openssh rsync ]}"
   '';
 
   meta = {

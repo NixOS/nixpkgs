@@ -9,12 +9,12 @@ with stdenv.lib.strings;
 
 let
 
-  version = "2016-04-27";
+  version = "2016-07-19";
 
   src = fetchgit {
     url = "git://git.code.sf.net/p/faudiostream/code";
-    rev = "931fca3e649f99ef09025d37bd6a7dc70a03e6f6";
-    sha256 = "05yam8jfdnziysvpxa5w118k5bbl103vamyqgka6vyhjjizp1nx7";
+    rev = "16c22dc0193c10521b1dc16f98443d9c206bb5dd";
+    sha256 = "01rbcjfhpd5casi72ffi1j95f65ji60l629sgav93pvs0kpdacz5";
   };
 
   meta = with stdenv.lib; {
@@ -175,8 +175,8 @@ let
             --set FAUSTINC "${faust}/include/faust" \
             --prefix PATH : "$PATH" \
             --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \
-            --set NIX_CFLAGS_COMPILE "\"$NIX_CFLAGS_COMPILE\"" \
-            --set NIX_LDFLAGS "\"$NIX_LDFLAGS\""
+            --set NIX_CFLAGS_COMPILE "$NIX_CFLAGS_COMPILE" \
+            --set NIX_LDFLAGS "$NIX_LDFLAGS"
         done
       '';
     });

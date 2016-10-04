@@ -30,8 +30,8 @@ let
           boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
         ''}
 
-        ${optionalString (bootLoader == "gummiboot") ''
-          boot.loader.gummiboot.enable = true;
+        ${optionalString (bootLoader == "systemd-boot") ''
+          boot.loader.systemd-boot.enable = true;
         ''}
 
         hardware.enableAllFirmware = lib.mkForce false;
@@ -57,7 +57,7 @@ let
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
-        + optionalString (bootLoader == "gummiboot") ''bios => "${pkgs.OVMF}/FV/OVMF.fd", '';
+        + optionalString (bootLoader == "systemd-boot") ''bios => "${pkgs.OVMF}/FV/OVMF.fd", '';
     in
     ''
       $machine->start;
@@ -159,7 +159,7 @@ let
 
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
-    , bootLoader ? "grub" # either "grub" or "gummiboot"
+    , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid"
     , enableOCR ? false, meta ? {}
     }:
@@ -195,22 +195,27 @@ let
             virtualisation.qemu.diskInterface =
               if grubVersion == 1 then "scsi" else "virtio";
 
-            boot.loader.gummiboot.enable = mkIf (bootLoader == "gummiboot") true;
+            boot.loader.systemd-boot.enable = mkIf (bootLoader == "systemd-boot") true;
 
             hardware.enableAllFirmware = mkForce false;
 
             # The test cannot access the network, so any packages we
             # need must be included in the VM.
-            system.extraDependencies =
-              [ pkgs.sudo
-                pkgs.docbook5
-                pkgs.docbook5_xsl
-                pkgs.unionfs-fuse
-                pkgs.ntp
-                pkgs.nixos-artwork
-                pkgs.gummiboot
-                pkgs.perlPackages.XMLLibXML
-                pkgs.perlPackages.ListCompare
+            system.extraDependencies = with pkgs;
+              [ sudo
+                libxml2.bin
+                libxslt.bin
+                docbook5
+                docbook5_xsl
+                unionfs-fuse
+                ntp
+                nixos-artwork
+                perlPackages.XMLLibXML
+                perlPackages.ListCompare
+
+                # add curl so that rather than seeing the test attempt to download
+                # curl's tarball, we see what it's trying to download
+                curl
               ]
               ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
               ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
@@ -250,7 +255,7 @@ in {
         '';
     };
 
-  # Simple GPT/UEFI configuration using Gummiboot with 3 partitions: ESP, swap & root filesystem
+  # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
   simpleUefiGummiboot = makeInstallerTest "simpleUefiGummiboot"
     { createPartitions =
         ''
@@ -270,7 +275,7 @@ in {
               "mount LABEL=BOOT /mnt/boot",
           );
         '';
-        bootLoader = "gummiboot";
+        bootLoader = "systemd-boot";
     };
 
   # Same as the previous, but now with a separate /boot partition.
@@ -360,14 +365,8 @@ in {
           "mount LABEL=boot /mnt/boot",
         );
       '';
-      # XXX: Currently, generate-config doesn't detect LUKS yet.
       extraConfig = ''
         boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-        boot.initrd.luks.devices = lib.singleton {
-          name = "cryptroot";
-          device = "/dev/vda3";
-          preLVM = true;
-        };
       '';
       enableOCR = true;
       preBootCommands = ''
@@ -403,8 +402,6 @@ in {
               "mkdir /mnt/boot",
               "mount LABEL=boot /mnt/boot",
               "udevadm settle",
-              "mdadm --verbose -W /dev/md0", # wait for sync to finish; booting off an unsynced device tends to fail
-              "mdadm --verbose -W /dev/md1",
           );
         '';
       preBootCommands = ''

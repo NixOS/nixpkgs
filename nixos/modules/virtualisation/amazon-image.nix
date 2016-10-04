@@ -11,16 +11,23 @@ with lib;
 let cfg = config.ec2; in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-grow-partition.nix ./amazon-init.nix ];
+  imports = [ ../profiles/headless.nix ./ec2-data.nix ./grow-partition.nix ./amazon-init.nix ];
 
   config = {
+
+    virtualisation.growPartition = cfg.hvm;
 
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
       autoResize = true;
     };
 
+    boot.extraModulePackages =
+      [ config.boot.kernelPackages.ixgbevf
+        config.boot.kernelPackages.ena
+      ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
+    boot.initrd.availableKernelModules = [ "ixgbevf" "ena" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
@@ -32,8 +39,8 @@ let cfg = config.ec2; in
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
     boot.loader.grub.device = if cfg.hvm then "/dev/xvda" else "nodev";
-    boot.loader.grub.timeout = 0;
     boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
+    boot.loader.timeout = 0;
 
     boot.initrd.postDeviceCommands =
       ''
@@ -131,7 +138,7 @@ let cfg = config.ec2; in
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
     services.openssh.enable = true;
-    services.openssh.permitRootLogin = "without-password";
+    services.openssh.permitRootLogin = "prohibit-password";
 
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";

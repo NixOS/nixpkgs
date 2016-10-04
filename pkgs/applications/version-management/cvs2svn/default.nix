@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [python makeWrapper];
 
-  buildPhase = "true";
+  dontBuild = true;
   installPhase = ''
     python ./setup.py install --prefix=$out
     for i in bzr svn git; do
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "A tool to convert CVS repositories to Subversion repositories";
     homepage = http://cvs2svn.tigris.org/;
     maintainers = [ lib.maintainers.makefu ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

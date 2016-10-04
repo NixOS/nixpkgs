@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) cups cups-pk-helper cups_filters gutenprint;
+  inherit (pkgs) cups cups-pk-helper cups-filters gutenprint;
 
   cfg = config.services.printing;
 
@@ -34,7 +34,7 @@ let
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
-      [ cups.out additionalBackends cups_filters pkgs.ghostscript ]
+      [ cups.out additionalBackends cups-filters pkgs.ghostscript ]
       ++ optional cfg.gutenprint gutenprint
       ++ cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" "/bin" ];
@@ -329,7 +329,7 @@ in
 
         path = [ cups ];
 
-        serviceConfig.ExecStart = "${cups_filters}/bin/cups-browsed";
+        serviceConfig.ExecStart = "${cups-filters}/bin/cups-browsed";
 
         restartTriggers = [ browsedFile ];
       };

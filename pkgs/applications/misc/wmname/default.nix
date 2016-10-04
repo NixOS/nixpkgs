@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
   preConfigure = [ ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'' ];
 
   meta = {
-      description = "Prints or set the window manager name property of the root window";
-      homepage = "http://tools.suckless.org/wmname";
-      license = stdenv.lib.licenses.mit;
+    description = "Prints or set the window manager name property of the root window";
+    homepage = "http://tools.suckless.org/wmname";
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

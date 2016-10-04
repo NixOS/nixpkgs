@@ -2,14 +2,14 @@
 , svrcore, icu, net_snmp, kerberos, pcre, perlPackages
 }:
 let
-  version = "1.3.3.9";
+  version = "1.3.5.4";
 in
 stdenv.mkDerivation rec {
   name = "389-ds-base-${version}";
 
   src = fetchurl {
     url = "http://directory.fedoraproject.org/binaries/${name}.tar.bz2";
-    sha256 = "1qqwv5j60f38hz4xpbzn4pixhkj07yjzbp7kz7cvfkgvdwy9jqxx";
+    sha256 = "1f1r4wky8x39jdabnd277f6m0snnzh9f0wvsr8x4rnvkckjphbx8";
   };
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-openldap"
     "--with-db=${db}"
-    "--with-sasl=${cyrus_sasl}"
+    "--with-sasl=${cyrus_sasl.dev}"
     "--with-netsnmp=${net_snmp}"
   ];
   
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://directory.fedoraproject.org/;
-    description = "enterprise-class Open Source LDAP server for Linux";
+    description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];

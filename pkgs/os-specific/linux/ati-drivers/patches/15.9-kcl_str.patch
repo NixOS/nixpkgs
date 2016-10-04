@@ -1,0 +1,14 @@
+--- a/common/lib/modules/fglrx/build_mod/kcl_str.c	2015-09-13 13:47:30.000000000 -0400
++++ b/common/lib/modules/fglrx/build_mod/kcl_str.c	2015-09-13 13:49:42.000000000 -0400
+@@ -169,7 +169,11 @@ int ATI_API_CALL KCL_STR_Strnicmp(const
+                                   const char* s2,
+                                   KCL_TYPE_SizeSigned count)
+ {
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,0,0)
+     return strnicmp(s1, s2, count);
++#else
++    return strncasecmp(s1, s2, count);
++#endif
+ }
+ 
+ /** \brief Locate character in string

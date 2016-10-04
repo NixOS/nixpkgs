@@ -11,18 +11,18 @@ else
 
 edk2 = stdenv.mkDerivation {
   name = "edk2-2014-12-10";
-  
+
   src = fetchgit {
     url = git://github.com/tianocore/edk2;
     rev = "684a565a04";
-    sha256 = "1l46396f48v91z5b8lh3b0f0lcd7z5f86i1nrpc7l5gf7gx3117j";
+    sha256 = "0s9ywb8w7xzlnmm4kwzykxkrdaw53b7pky121cc9wjkllzqwyxrb";
   };
 
   buildInputs = [ libuuid pythonFull ];
 
-  buildPhase = ''
-    make -C BaseTools
-  '';
+  makeFlags = "-C BaseTools";
+
+  hardeningDisable = [ "format" "fortify" ];
 
   installPhase = ''
     mkdir -vp $out

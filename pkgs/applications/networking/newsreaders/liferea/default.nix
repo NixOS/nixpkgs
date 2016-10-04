@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, intltool, python, pygobject3
+{ stdenv, fetchurl, pkgconfig, intltool, pythonPackages
 , glib, gnome3, pango, libxml2, libxslt, sqlite, libsoup, glib_networking
 , webkitgtk, json_glib, gobjectIntrospection, gst_all_1
 , libnotify
 , makeWrapper
 }:
 
-let pname = "liferea";
-    version = "1.10.19";
-in
-stdenv.mkDerivation rec {
+let
+  pname = "liferea";
+  version = "1.10.19";
+  inherit (pythonPackages) python pygobject3;
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
         --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules:${glib_networking.out}/lib/gio/modules" \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gtk.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 

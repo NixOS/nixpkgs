@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, emacs, python }:
+{ stdenv, fetchFromGitHub, emacs, python }:
 
 stdenv.mkDerivation rec {
-  name = "cask-0.7.3";
+  version = "0.7.4";
+  name = "cask-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/cask/cask.git";
-    rev = "717b64a9ba7640ec366e8573da0c01f9c4d57b0c";
-    sha256 = "0j18rzgpibisfcci6kcgjs8nlkfi1dw33dxp6ab6zaiarydwgcs5";
+  src = fetchFromGitHub {
+    owner = "cask";
+    repo = "cask";
+    rev = "v${version}";
+    sha256 = "1hvm6r6a8rgjwnn2mcamwqrmhz424vlr4mbvbri3wmn0ikbk510l";
   };
 
   buildInputs = [ emacs python ];

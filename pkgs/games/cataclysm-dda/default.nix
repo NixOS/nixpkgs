@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     sed -i Makefile \
       -e 's,-Werror,,g' \
       -e 's,\(DATA_PREFIX=$(PREFIX)/share/\)cataclysm-dda/,\1,g'
+
+    sed '1i#include <cmath>' \
+      -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
   '';
 
   makeFlags = "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1";

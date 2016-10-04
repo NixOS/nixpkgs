@@ -4,8 +4,13 @@ with lib;
 
 let
   cfg = config.virtualisation.virtualbox.host;
-  virtualbox = config.boot.kernelPackages.virtualbox.override {
-    inherit (cfg) enableHardening;
+
+  virtualbox = pkgs.virtualbox.override {
+    inherit (cfg) enableHardening headless;
+  };
+
+  kernelModules = config.boot.kernelPackages.virtualbox.override {
+    inherit virtualbox;
   };
 
 in
@@ -47,11 +52,20 @@ in
         </para></important>
       '';
     };
+
+    headless = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Use VirtualBox installation without GUI and Qt dependency. Useful to enable on servers
+        and when virtual machines are controlled only via SSH.
+      '';
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [{
     boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];
-    boot.extraModulePackages = [ virtualbox ];
+    boot.extraModulePackages = [ kernelModules ];
     environment.systemPackages = [ virtualbox ];
 
     security.setuidOwners = let

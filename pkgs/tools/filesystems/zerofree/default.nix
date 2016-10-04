@@ -1,11 +1,12 @@
 { stdenv, fetchurl, e2fsprogs }:
 
 stdenv.mkDerivation rec {
-  name = "zerofree-1.0.3";
+  name = "zerofree-${version}";
+  version = "1.0.4";
 
   src = fetchurl {
-    url = "http://intgat.tigress.co.uk/rmy/uml/zerofree-1.0.3.tgz";
-    sha256 = "3acfda860be0f0ddcb5c982ff3b4475b1ee8cc35a90ae2a910e93261dbe0ccf6";
+    url = "http://frippery.org/uml/${name}.tgz";
+    sha256 = "0f38mvn3wfacapayl54q04qlz4in417pfm6gapgm7dhyjs9y5yd7";
   };
 
   buildInputs = [ e2fsprogs ];
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
 '';
 
   meta = {
-    homepage = http://intgat.tigress.co.uk/rmy/uml/index.html;
-    description = "zero free blocks from ext2, ext3 and ext4 file-systems";
+    homepage = http://frippery.org/uml/index.html;
+    description = "Zero free blocks from ext2, ext3 and ext4 file-systems";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.theuni ];
   };

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl
+, CoreServices ? null }:
 
 let version = "4.12"; in
 
@@ -6,11 +7,11 @@ stdenv.mkDerivation {
   name = "nspr-${version}";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
+    url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
     sha256 = "1pk98bmc5xzbl62q5wf2d6mryf0v95z6rsmxz27nclwiaqg0mcg0";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   preConfigure = ''
@@ -26,6 +27,8 @@ stdenv.mkDerivation {
     find $out -name "*.a" -delete
     moveToOutput share "$dev" # just aclocal
   '';
+
+  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 

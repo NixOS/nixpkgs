@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python
+{ fetchurl, stdenv, python2
 
 , enableStandardFeatures ? false
 , sourceHighlight ? null
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w71nk527lq504njmaf0vzr93pgahkgzzxzglrq6bay8cw2rvnvq";
   };
 
-  buildInputs = [ python unzip ];
+  buildInputs = [ python2 unzip ];
 
   # install filters early, so their shebangs are patched too
   patchPhase = with stdenv.lib; ''
@@ -223,7 +223,7 @@ stdenv.mkDerivation rec {
 
     sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
         -e "s|run('lilypond|run('${lilypond}/bin/lilypond|g" \
-        -e "s|run('convert|run('${imagemagick}/bin/convert|g" \
+        -e "s|run('convert|run('${imagemagick.out}/bin/convert|g" \
         -i "filters/music/music2png.py"
 
     sed -e 's|filter="source-highlight|filter="${sourceHighlight}/bin/source-highlight|' \
@@ -235,7 +235,7 @@ stdenv.mkDerivation rec {
     # use it to work around an impurity in the tetex package; tetex tools
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook5_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${tetex}/bin:${coreutils}/bin:${gnused}/bin')|" \
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook5_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ tetex coreutils gnused ]}')|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
@@ -247,7 +247,7 @@ stdenv.mkDerivation rec {
         -i a2x.py
   '' + ''
     for n in $(find "$out" . -name \*.py); do
-      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python}/bin/python,g" "$n"
+      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python2}/bin/python,g" "$n"
       chmod +x "$n"
     done
 
@@ -271,7 +271,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.methods.co.nz/asciidoc/";
     license = licenses.gpl2Plus;
-    hydraPlatforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

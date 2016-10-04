@@ -1,11 +1,11 @@
 { fetchurl, stdenv, guile, ncurses, libffi }:
 
 stdenv.mkDerivation rec {
-  name = "guile-ncurses-1.4";
+  name = "guile-ncurses-1.7";
 
   src = fetchurl {
     url = "mirror://gnu/guile-ncurses/${name}.tar.gz";
-    sha256 = "070wl664lsm14hb6y9ch97x9q6cns4k6nxgdzbdzi5byixn74899";
+    sha256 = "153vv75gb7l62sp3666rc97i63rnaqbx2rjar7d9b5w81fhwv4r5";
   };
 
   buildInputs = [ guile ncurses libffi ];

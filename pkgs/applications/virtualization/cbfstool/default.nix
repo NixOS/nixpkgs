@@ -7,10 +7,12 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "http://review.coreboot.org/p/coreboot";
     rev = "5d866213f42fd22aed80abb5a91d74f6d485ac3f";
-    sha256 = "148155829jbabsgg1inmcpqmwbg0fgp8a685bzybv9j4ibasi0z2";
+    sha256 = "1fki5670pmz1wb0yg0a0hb5cap78mgbvdhj8m2xly2kndwicg40p";
   };
 
   buildInputs = [ iasl flex bison ];
+
+  hardeningDisable = [ "fortify" ];
 
   buildPhase = ''
     export LEX=${flex}/bin/flex

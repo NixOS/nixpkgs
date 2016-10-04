@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, libxml2, libxslt, perl, perlPackages, gconf, guile
-, intltool, glib, gtk, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
+, intltool, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
 , webkit, glibcLocales, gsettings_desktop_schemas, makeWrapper, dconf, file
 , gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
 , pango, gdk_pixbuf
@@ -13,11 +13,11 @@ Two cave-ats right now:
 */
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.6.9";
+  name = "gnucash-2.6.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0iw25l1kv60cg6fd2vg11mcvzmjqnc5p9lp3rjy06ghkjfrn3and";
+    sha256 = "0x84f07p30pwhriamv8ifljgw755cj87rc12jy1xddf47spyj7rp";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     intltool pkgconfig libxml2 libxslt glibcLocales file gettext swig enchant
     bzip2 isocodes
     # glib, gtk...
-    glib gtk goffice webkit
+    glib gtk2 goffice webkit
     # gnome...
     dconf gconf libgnomecanvas gsettings_desktop_schemas
     # financial
@@ -72,14 +72,14 @@ stdenv.mkDerivation rec {
         --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${name}" \
         --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"  \
-        --prefix PATH ":" "$out/bin:${perl}/bin:${gconf}/bin"
+        --prefix PATH ":" "$out/bin:${stdenv.lib.makeBinPath [ perl gconf ]}"
     done
 
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   # The following settings fix failures in the test suite. It's not required otherwise.
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ guile glib gtk pango gdk_pixbuf ];
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ guile glib gtk2 pango gdk_pixbuf ];
   preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
   doCheck = true;
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnucash.org/;
 
-    maintainers = [ stdenv.lib.maintainers.simons stdenv.lib.maintainers.iElectric ];
+    maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

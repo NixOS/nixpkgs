@@ -25,16 +25,14 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Protocol Buffers - Google's data interchange format";
-
     longDescription =
       '' Protocol Buffers are a way of encoding structured data in an
          efficient yet extensible format.  Google uses Protocol Buffers for
          almost all of its internal RPC protocols and file formats.
       '';
-
     license = "mBSD";
-
     homepage = https://developers.google.com/protocol-buffers/;
+    platforms = stdenv.lib.platforms.unix;
   };
 
   passthru.version = version;

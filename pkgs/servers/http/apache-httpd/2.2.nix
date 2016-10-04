@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   # FIXME: -dev depends on -doc
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
   propagatedBuildInputs = [ apr ]; # otherwise mod_* fail to find includes often
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
   configureFlags = ''
-    --with-z=${zlib}
-    --with-pcre=${pcre}
+    --with-z=${zlib.dev}
+    --with-pcre=${pcre.dev}
     --enable-mods-shared=all
     --enable-authn-alias
     ${if proxySupport then "--enable-proxy" else ""}
-    ${if sslSupport then "--enable-ssl --with-ssl=${openssl}" else ""}
+    ${if sslSupport then "--enable-ssl --with-ssl=${openssl.dev}" else ""}
     ${if ldapSupport then "--enable-ldap --enable-authnz-ldap" else ""}
     --with-mpm=${mpm}
     --enable-cache
@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     homepage    = http://httpd.apache.org/;
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ eelco simons lovek323 ];
+    maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
   };
 }

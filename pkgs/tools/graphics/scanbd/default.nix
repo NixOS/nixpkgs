@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, dbus, libconfuse, sane-backends, systemd }:
+, dbus, libconfuse, libjpeg, sane-backends, systemd }:
 
 stdenv.mkDerivation rec {
   name = "scanbd-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ dbus libconfuse sane-backends systemd ];
+  buildInputs = [ dbus libconfuse libjpeg sane-backends systemd ];
 
   configureFlags = [
     "--disable-Werror"

@@ -49,7 +49,7 @@ in
         serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
       };
 
-    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" ];
+    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" "modesetting" ];
 
     services.xserver.config =
       ''
@@ -77,7 +77,7 @@ in
         KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
 
         # Allow systemd dependencies on vboxguest.
-        KERNEL=="vboxguest", TAG+="systemd"
+        SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
       '';
   };
 

@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     ./CVE-2016-1283.patch
   ];
 
-  outputs = [ "dev" "out" "bin" "doc" "man" ];
+  outputs = [ "bin" "dev" "out" "doc" "man" ];
 
   configureFlags = [
     "--enable-jit"
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     moveToOutput bin/pcre-config "$dev"
   ''
     + optionalString (variant != null) ''
-    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.so.*.*.*
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
   '';
 
   crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
@@ -62,6 +62,5 @@ in stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.simons ];
   };
 }

@@ -17,7 +17,7 @@ let
       [Desktop Entry]
       Name=IBus
       Type=Application
-      Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim --cache=refresh
+      Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim
     '';
   };
 in
@@ -30,10 +30,9 @@ in
         example = literalExample "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
-            engines =
-              lib.concatStringsSep ", "
-              (map (name: "<literal>${name}</literal>")
-               (lib.attrNames pkgs.ibus-engines));
+            enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
+            engines = concatStringsSep ", "
+              (map (name: "<literal>${name}</literal>") (attrNames enginesDrv));
           in
             "Enabled IBus engines. Available engines are: ${engines}.";
       };
@@ -41,9 +40,11 @@ in
   };
 
   config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
+    i18n.inputMethod.package = ibusPackage;
+
     # Without dconf enabled it is impossible to use IBus
     environment.systemPackages = with pkgs; [
-      ibusPackage ibus-qt gnome3.dconf ibusAutostart
+      ibus-qt gnome3.dconf ibusAutostart
     ];
 
     environment.variables = {

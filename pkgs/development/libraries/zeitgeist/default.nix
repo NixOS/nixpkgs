@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, sqlite, gnome3, vala
+{ stdenv, fetchurl, pkgconfig, glib, sqlite, gnome3, vala_0_23
 , intltool, libtool, python, dbus_libs, telepathy_glib
 , gtk3, json_glib, librdf_raptor2, pythonPackages, dbus_glib }:
 
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "07pnc7kmjpd0ncm32z6s3ny5p4zl52v9lld0n0f8sp6cw87k12p0";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   configureScript = "./autogen.sh";
 
   configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];
 
   buildInputs = [ pkgconfig glib sqlite gnome3.gnome_common intltool
-                  libtool python dbus_libs telepathy_glib vala dbus_glib
+                  libtool python dbus_libs telepathy_glib vala_0_23 dbus_glib
                   gtk3 json_glib librdf_raptor2 pythonPackages.rdflib ];
 
   prePatch = "patchShebangs .";

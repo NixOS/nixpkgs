@@ -1,4 +1,4 @@
-{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs,
+{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs, ncurses,
  cmake, anthy, automoc4, m17n_lib, m17n_db}:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     gtk2
     gtk3
     kdelibs
+    ncurses
     cmake
     anthy
     automoc4

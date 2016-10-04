@@ -48,8 +48,8 @@ stdenv.mkDerivation {
       --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/usr/share/:$out/share/:$GSETTINGS_SCHEMAS_PATH"     \
       --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"                         \
-      --set LUA_PATH '"${luaKitPath};${luaPath};"'                      \
-      --set LUA_CPATH '"${luaCPath};"'
+      --set LUA_PATH '${luaKitPath};${luaPath};'                      \
+      --set LUA_CPATH '${luaCPath};'
   '';
 
 }

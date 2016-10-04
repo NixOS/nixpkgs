@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/evopedia/evopedia_qt;
     rev = "refs/tags/v${version}";
-    sha256 = "1biq9zaj8nhxx1pixidsn97iwp9qy1yslgl0znpa4d4p35jcg48g";
+    sha256 = "0snp5qiywj306kfaywvkl7j34fivgxcb8dids1lzmbqq5xcpqqvc";
   };
 
   buildInputs = [ bzip2 qt4 libX11 ];

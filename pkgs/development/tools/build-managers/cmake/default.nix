@@ -10,8 +10,8 @@ assert wantPS -> (ps != null);
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "3.4";
-  minorVersion = "3";
+  majorVersion = "3.6";
+  minorVersion = "0";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "1yl0z422gr7zfc638chifv343vx0ig5gasvrh7nzf7b15488qgxp";
+    sha256 = "0w3n2i02jpbgai4dxsigm1c1i1qb5v70wyxckzwrxvs0ri0fs1gx";
   };
 
   patches =
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     optional (stdenv ? glibc) ./search-path-3.2.patch
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" ];
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
@@ -47,12 +47,14 @@ stdenv.mkDerivation rec {
     ''
       fixCmakeFiles .
       substituteInPlace Modules/Platform/UnixPaths.cmake \
-        --subst-var-by glibc_bin ${glibc.bin or glibc} \
-        --subst-var-by glibc_dev ${glibc.dev or glibc} \
-        --subst-var-by glibc_lib ${glibc.out or glibc}
+        --subst-var-by glibc_bin ${getBin glibc} \
+        --subst-var-by glibc_dev ${getDev glibc} \
+        --subst-var-by glibc_lib ${getLib glibc}
+      substituteInPlace Modules/FindCxxTest.cmake \
+        --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
     '';
   configureFlags =
-    [ "--docdir=/share/doc/${name}"
+    [ "--docdir=share/doc/${name}"
       "--no-system-jsoncpp"
     ]
     ++ optional (!stdenv.isCygwin) "--system-libs"
@@ -63,10 +65,6 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   enableParallelBuilding = true;
-
-  preInstall = ''mkdir "$doc" '';
-
-  postInstall = ''moveToOutput "share/cmake-*/Help" "$doc" '';
 
   meta = with stdenv.lib; {
     homepage = http://www.cmake.org/;

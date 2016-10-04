@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, file, which, intltool, findutils, xdg_utils, pycairo,
+{ stdenv, fetchurl, file, which, intltool, findutils, xdg_utils,
   gnome3, pythonPackages, wrapGAppsHook }:
 
 pythonPackages.buildPythonApplication rec {
   majorver = "1.4";
-  minorver = "1";
+  minorver = "2";
   version = "${majorver}.${minorver}";
   name = "catfish-${version}";
 
   src = fetchurl {
     url = "https://launchpad.net/catfish-search/${majorver}/${version}/+download/${name}.tar.bz2";
-    sha256 = "0dc9xq1l1w22xk1hg63mgwr0920jqxrwfzmkhif01yms1m7vfdv8";
+    sha256 = "0j3by9yfs4j9za3s5qdxrsm7idmps69pimc9d0mjyakvviy0izm3";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ pythonPackages.buildPythonApplication rec {
     gnome3.dconf
     pythonPackages.pyxdg
     pythonPackages.ptyprocess
-    pycairo
+    pythonPackages.pycairo
   ];
 
   propagatedBuildInputs = [
@@ -34,8 +34,9 @@ pythonPackages.buildPythonApplication rec {
     xdg_utils
     findutils
   ];
-  
+
   preFixup = ''
+    rm "$out/${pythonPackages.python.sitePackages}/catfish_lib/catfishconfig.pyc"
     for f in \
       "$out/${pythonPackages.python.sitePackages}/catfish_lib/catfishconfig.py" \
       "$out/share/applications/catfish.desktop"

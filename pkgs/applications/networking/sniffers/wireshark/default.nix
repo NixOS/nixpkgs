@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
 , gnutls, libgcrypt, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
 , zlib
-, withGtk ? false, gtk ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
+, withGtk ? false, gtk2 ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
 , withQt ? false, qt4 ? null
 }:
 
-assert withGtk -> !withQt && gtk != null;
+assert withGtk -> !withQt && gtk2 != null;
 assert withQt -> !withGtk && qt4 != null;
 
 with stdenv.lib;
 
 let
-  version = "2.0.2";
+  version = "2.2.0";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 in
 
@@ -20,14 +20,14 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.bz2";
-    sha256 = "1hdrnsllkfbvfwsvlqvvky0z91q63mbbnjcri56nb9c5403zn8g9";
+    sha256 = "010i7wpsv2231pwb1xdqs0xfwywi3514siidv6wnrfpw3rs7x156";
   };
 
   buildInputs = [
     bison flex perl pkgconfig libpcap lua5 openssl libgcrypt gnutls
     geoip libnl c-ares python libcap glib zlib
   ] ++ optional withQt qt4
-    ++ (optionals withGtk [gtk pango cairo gdk_pixbuf]);
+    ++ (optionals withGtk [gtk2 pango cairo gdk_pixbuf]);
 
   patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
@@ -69,6 +69,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ simons bjornfor fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ bjornfor fpletz ];
   };
 }

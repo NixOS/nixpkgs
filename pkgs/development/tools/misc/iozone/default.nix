@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, gnuplot }:
 
 let
   target = if stdenv.system == "i686-linux" then
@@ -28,13 +28,25 @@ stdenv.mkDerivation rec {
 
   buildFlags = target;
 
+  enableParallelBuilding = true;
+
   installPhase = ''
-    mkdir -p $out/{bin,share/doc,share/man/man1}
+    mkdir -p $out/{bin,share/doc,libexec,share/man/man1}
     install docs/iozone.1 $out/share/man/man1/
     install docs/Iozone_ps.gz $out/share/doc/
     install -s src/current/{iozone,fileop,pit_server} $out/bin/
+    install src/current/{gnu3d.dem,Generate_Graphs,gengnuplot.sh} $out/libexec/
+    ln -s $out/libexec/Generate_Graphs $out/bin/iozone_generate_graphs
     # License copy is mandated by the license, but it's not in the tarball.
     install ${license} $out/share/doc/Iozone_License.txt
+  '';
+
+  preFixup = ''
+    sed -i "1i#! $shell" $out/libexec/Generate_Graphs
+    substituteInPlace $out/libexec/Generate_Graphs \
+      --replace ./gengnuplot.sh $out/libexec/gengnuplot.sh \
+      --replace 'gnuplot ' "${gnuplot}/bin/gnuplot " \
+      --replace gnu3d.dem $out/libexec/gnu3d.dem
   '';
 
   meta = {

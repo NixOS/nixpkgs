@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares
+{ stdenv, lib, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares
 , pkgconfig, runCommand, which, libtool
 
 # apple frameworks
@@ -20,10 +20,10 @@ let
   })
   // ({ cares = c-ares; });
 
-  sharedConfigureFlags = name: [
+  sharedConfigureFlags = name: let drv = builtins.getAttr name deps; in [
     "--shared-${name}"
-    "--shared-${name}-includes=${builtins.getAttr name deps}/include"
-    "--shared-${name}-libpath=${builtins.getAttr name deps}/lib"
+    "--shared-${name}-includes=${lib.getDev drv}/include"
+    "--shared-${name}-libpath=${lib.getLib drv}/lib"
   ];
 
   inherit (stdenv.lib) concatMap optional optionals maintainers licenses platforms;

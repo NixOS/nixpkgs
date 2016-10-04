@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.netfilter.org/projects/libnetfilter_queue/";
-    description = "userspace API to packets queued by the kernel packet filter";
+    description = "Userspace API to packets queued by the kernel packet filter";
 
     platforms = stdenv.lib.platforms.linux;
   };

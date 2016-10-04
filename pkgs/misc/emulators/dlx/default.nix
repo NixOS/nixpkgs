@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   makeFlags = "LINK=gcc CFLAGS=-O2";
 
+  hardeningDisable = [ "format" ];
+
   installPhase = ''
     mkdir -p $out/include/dlx $out/share/dlx/{examples,doc} $out/bin
     mv -v masm mon dasm $out/bin/
@@ -24,5 +26,6 @@ stdenv.mkDerivation {
     homepage = "http://www.davidviner.com/dlx.php";
     description = "DLX Simulator";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

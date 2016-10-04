@@ -19,7 +19,7 @@ fails to boot.  After the system has booted, you can make the selected
 configuration the default for subsequent boots:
 
 <screen>
-$ /run/current-system/bin/switch-to-configuration boot</screen>
+# /run/current-system/bin/switch-to-configuration boot</screen>
 
 </para>
 
@@ -27,12 +27,12 @@ $ /run/current-system/bin/switch-to-configuration boot</screen>
 system:
 
 <screen>
-$ nixos-rebuild switch --rollback</screen>
+# nixos-rebuild switch --rollback</screen>
 
 This is equivalent to running:
 
 <screen>
-$ /nix/var/nix/profiles/system-<replaceable>N</replaceable>-link/bin/switch-to-configuration switch</screen>
+# /nix/var/nix/profiles/system-<replaceable>N</replaceable>-link/bin/switch-to-configuration switch</screen>
 
 where <replaceable>N</replaceable> is the number of the NixOS system
 configuration.  To get a list of the available configurations, do:

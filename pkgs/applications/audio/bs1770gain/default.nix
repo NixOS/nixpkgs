@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ffmpeg sox ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
   meta = {
     description = "A audio/video loudness scanner implementing ITU-R BS.1770";
     license = stdenv.lib.licenses.gpl2Plus;

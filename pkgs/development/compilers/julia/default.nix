@@ -33,10 +33,10 @@ let
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "9ab431a88fe255dd21e19a11f7fa2dd95774abf4";
+  libuvVersion = "efb40768b7c7bd9f173a7868f74b92b1c5a61a0e";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "1bh973lbrzrjk7pcjbjnh4n92qldi81ql3aqsclywn2yg07a36h5";
+    sha256 = "1znkxyv1cy9pjap7afypipzsn04533ni3pqjd191fdgw2sv9cal7";
   };
 
   rmathVersion = "0.1";
@@ -48,12 +48,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.4.2";
+  version = "0.4.6";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "04i5kjji5553lkdxz3wgflg1mav5ivwy2dascjy8jprqpq33aknk";
+    sha256 = "17wsppmsf782icyzri34zha61wfx4brfq4h68qg17w6zimd2plg5";
   };
 
   prePatch = ''
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     arpack fftw fftwSinglePrec gmp libgit2 libunwind llvmShared mpfr
-    pcre2 openblas openlibm openspecfun readline suitesparse utf8proc
+    pcre2.dev openblas openlibm openspecfun readline suitesparse utf8proc
     zlib
   ] ++
     stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices] ;
@@ -121,6 +121,8 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_OPENSPECFUN=1"
       "USE_SYSTEM_PATCHELF=1"
       "USE_SYSTEM_PCRE=1"
+      "PCRE_CONFIG=${pcre2.dev}/bin/pcre2-config"
+      "PCRE_INCL_PATH=${pcre2.dev}/include/pcre2.h"
       "USE_SYSTEM_READLINE=1"
       "USE_SYSTEM_UTF8PROC=1"
       "USE_SYSTEM_ZLIB=1"
@@ -151,7 +153,7 @@ stdenv.mkDerivation rec {
     for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
         wrapProgram "$prog" \
             --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
-            --prefix PATH : "${curl}/bin"
+            --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
     done
   '';
 
@@ -161,5 +163,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    broken = stdenv.isi686;
   };
 }

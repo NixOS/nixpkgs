@@ -8,10 +8,10 @@
 , libusb1, pciutils, nss
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, libudev, kerberos
+, nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk, dbus_glib
+, glib, gtk2, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
 
@@ -56,8 +56,9 @@ let
     use_system_flac = true;
     use_system_libevent = true;
     use_system_libexpat = true;
-    use_system_libjpeg = true;
-    use_system_libpng = versionOlder upstream-info.version "51.0.0.0";
+    # XXX: System libjpeg fails to link for version 52.0.2743.10
+    use_system_libjpeg = versionOlder upstream-info.version "52.0.2743.10";
+    use_system_libpng = false;
     use_system_libwebp = true;
     use_system_libxml = true;
     use_system_opus = true;
@@ -112,10 +113,10 @@ let
     buildInputs = defaultDependencies ++ [
       which
       python perl pkgconfig
-      nspr nss libudev
+      nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk dbus_glib
+      glib gtk2 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
       pythonPackages.gyp pythonPackages.ply pythonPackages.jinja2
@@ -123,38 +124,40 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio
-      ++ optional (versionOlder version "51.0.0.0") libexif;
+      ++ optional pulseSupport libpulseaudio;
 
     patches = [
-      ./patches/build_fixes_46.patch
       ./patches/widevine.patch
-      (if versionOlder version "50.0.0.0"
-       then ./patches/nix_plugin_paths_46.patch
-       else ./patches/nix_plugin_paths_50.patch)
+      ./patches/glibc-2.24.patch
+      (if versionOlder version "52.0.0.0"
+       then ./patches/nix_plugin_paths_50.patch
+       else ./patches/nix_plugin_paths_52.patch)
     ];
 
     postPatch = ''
+      # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
+      substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
+        --replace \
+          'return sandbox_binary;' \
+          'return base::FilePath(GetDevelSandboxPath());'
+
       sed -i -r \
         -e 's/-f(stack-protector)(-all)?/-fno-\1/' \
         -e 's|/bin/echo|echo|' \
         -e "/python_arch/s/: *'[^']*'/: '""'/" \
         build/common.gypi chrome/chrome_tests.gypi
 
-      ${optionalString (versionOlder version "51.0.0.0") ''
-        sed -i -e '/module_path *=.*libexif.so/ {
-          s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
-        }' chrome/utility/media_galleries/image_metadata_extractor.cc
-      ''}
-
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${libudev.out}/lib/\1!' \
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         gpu/config/gpu_info_collector_linux.cc
-    '' + optionalString (!versionOlder version "51.0.0.0") ''
+
       sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
         chrome/browser/ui/webui/engagement/site_engagement_ui.cc
+    '' + optionalString (versionAtLeast version "52.0.0.0") ''
+      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
+        third_party/pdfium/xfa/fxbarcode/utils.h
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
@@ -185,9 +188,6 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
       google_default_client_id = "404761575300.apps.googleusercontent.com";
       google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
-
-    } // optionalAttrs (versionOlder version "51.0.0.0") {
-      use_system_libexif = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

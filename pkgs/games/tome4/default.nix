@@ -1,13 +1,14 @@
-{stdenv, fetchurl, openal, libvorbis, mesa_glu, premake4, SDL2, SDL2_image, SDL2_ttf}:
+{stdenv, fetchurl, openal, libpng, libvorbis, mesa_glu, premake4, SDL2, SDL2_image, SDL2_ttf }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.3";
+  version = "1.4.6";
   name = "tome4-${version}";
   src = fetchurl {
     url = "http://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "d4c6d6aa0cb73b28172cebf89e4271b0a51c6e7dea744ce9c6d6042dd076e9cd";
+    sha256 = "12pi2lw1k6l3p209nnkh4nfv3ppp8kpd6mkh1324c81z6mh6w4wg";
   };
-  buildInputs = [ mesa_glu openal libvorbis SDL2 SDL2_ttf SDL2_image premake4 ];
+  buildInputs = [ mesa_glu openal libpng libvorbis SDL2 SDL2_ttf SDL2_image premake4 ];
+  NIX_CFLAGS_COMPILE = [ "-I${SDL2_image}/include/SDL2" "-I${SDL2_ttf}/include/SDL2" ];
   preConfigure = ''
     sed -e "s@/opt/SDL-2.0/include/SDL2@${SDL2}/include/SDL2@g" -e "s@/usr/include/GL@/run/opengl-driver/include@g" -i premake4.lua
     premake4 gmake
@@ -26,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "Tales of Maj'eyal (rogue-like game)";
     maintainers = [ stdenv.lib.maintainers.chattered  ];
     license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

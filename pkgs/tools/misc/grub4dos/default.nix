@@ -6,16 +6,18 @@ let arch =
   else abort "Unknown architecture";
 in stdenv.mkDerivation rec {
   name = "grub4dos-${version}";
-  version = "0.4.6a-2016-04-26";
+  version = "0.4.6a-2016-08-06";
 
   src = fetchFromGitHub {
     owner = "chenall";
     repo = "grub4dos";
-    rev = "61d8229375c679436d56376518456723b2025e1a";
-    sha256 = "1r4jmvykk5cvpf1kysykvksa9vfy7p29q20x72inw2pbhipj0f10";
+    rev = "99d6ddbe7611f942d2708d77a620d6aa94a284d1";
+    sha256 = "0gnllk0qkx6d0azf7v9cr0b23gp577avksz0f4dl3v3ldgi0dksq";
   };
 
   nativeBuildInputs = [ nasm ];
+
+  hardeningDisable = [ "stackprotector" ];
 
   configureFlags = [ "--host=${arch}-pc-linux-gnu" ];
 
@@ -32,7 +34,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
     license = licenses.gpl2;
   };
 }

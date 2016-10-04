@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, python, pygtk, gettext, texinfo
+{ stdenv, fetchurl, pkgconfig, pythonPackages, gettext, texinfo
 , ghostscript, pysqlite, librsvg, gdk_pixbuf, txt2man, timidity, mpg123
 , alsaUtils, vorbis-tools, csound, lilypond
 , makeWrapper
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygtk;
+in stdenv.mkDerivation rec {
   name = "solfege-3.22.2";
 
   src = fetchurl {

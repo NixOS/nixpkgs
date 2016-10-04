@@ -11,16 +11,20 @@ stdenv.mkDerivation rec {
     owner = "Cyan4973";
   };
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = stdenv.lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" "INCLUDEDIR=$(dev)/include" ];
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
   patches = [ ./install-on-freebsd.patch ] ;
+
+  postInstall = "rm $out/lib/*.a";
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";

@@ -29,7 +29,7 @@ setPath "@path@"
 # Normally, stage 1 mounts the root filesystem read/writable.
 # However, in some environments, stage 2 is executed directly, and the
 # root is read-only.  So make it writable here.
-if [ "$container" != systemd-nspawn ]; then
+if [ -z "$container" ]; then
     mount -n -o remount,rw none /
 fi
 
@@ -37,10 +37,16 @@ fi
 # Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
 # stage 1, we need to do that here.
 if [ ! -e /proc/1 ]; then
-    mkdir -m 0755 -p /proc
-    mount -n -t proc proc /proc
-    mkdir -m 0755 -p /dev
-    mount -t devtmpfs devtmpfs /dev
+    specialMount() {
+        local device="$1"
+        local mountPoint="$2"
+        local options="$3"
+        local fsType="$4"
+
+        mkdir -m 0755 -p "$mountPoint"
+        mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
+    }
+    source @earlyMountScript@
 fi
 
 
@@ -85,11 +91,6 @@ done
 
 
 # More special file systems, initialise required directories.
-if ! mountpoint -q /dev/shm; then
-    mkdir -m 0755 /dev/shm
-    mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
-fi
-mkdir -m 0755 -p /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var /var/log /var/lib /var/db
@@ -110,24 +111,6 @@ rm -f /etc/{group,passwd,shadow}.lock
 rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 
 
-# Create a tmpfs on /run to hold runtime state for programs such as
-# udev (if stage 1 hasn't already done so).
-if ! mountpoint -q /run; then
-    rm -rf /run
-    mkdir -m 0755 -p /run
-    mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
-fi
-
-# Create a ramfs on /run/keys to hold secrets that shouldn't be
-# written to disk (generally used for NixOps, harmless elsewhere).
-if ! mountpoint -q /run/keys; then
-    rm -rf /run/keys
-    mkdir /run/keys
-    mount -t ramfs ramfs /run/keys
-    chown 0:96 /run/keys
-    chmod 0750 /run/keys
-fi
-
 mkdir -m 0755 -p /run/lock
 
 
@@ -147,13 +130,6 @@ fi
 if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
     cat /etc/resolv.conf | resolvconf -m 1000 -a host
 fi
-
-
-# Create /var/setuid-wrappers as a tmpfs.
-rm -rf /var/setuid-wrappers
-mkdir -m 0755 -p /var/setuid-wrappers
-mount -t tmpfs -o "mode=0755" tmpfs /var/setuid-wrappers
-
 
 # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
 # Only at this point are all the necessary prerequisites ready for these commands.
@@ -205,6 +181,5 @@ exec {logOutFd}>&- {logErrFd}>&-
 # Start systemd.
 echo "starting systemd..."
 PATH=/run/current-system/systemd/lib/systemd \
-    MODULE_DIR=/run/booted-system/kernel-modules/lib/modules \
     LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
     exec systemd

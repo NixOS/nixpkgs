@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ groff ];
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = ''
     mkdir build-dir/
     cp mksh.1 dot.mkshrc build-dir/
@@ -42,5 +44,9 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     maintainers = with maintainers; [ AndersonTorres nckx ];
     platforms = platforms.unix;
+  };
+
+  passthru = {
+    shellPath = "/bin/mksh";
   };
 }

@@ -7,8 +7,8 @@
 
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub
+, perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, fetchFromGitHub, libmpack
 }:
 
 let
@@ -18,6 +18,11 @@ let
   _self = with self; {
   inherit lua;
   inherit (stdenv.lib) maintainers;
+
+  # helper functions for dealing with LUA_PATH and LUA_CPATH
+  getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
+  getLuaPath    = lib : getPath lib "lua";
+  getLuaCPath   = lib : getPath lib "so";
 
   #define build lua package function
   buildLuaPackage = callPackage ../development/lua-modules/generic lua;
@@ -184,14 +189,26 @@ let
       sha256 = "0j8jx8bjicvp9khs26xjya8c495wrpb7parxfnabdqa5nnsxjrwb";
     };
 
-    patchPhase = ''
-      sed -e "s,^LUAPREFIX_linux.*,LUAPREFIX_linux=$out," \
-          -i src/makefile
+    patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/makefile --replace gcc cc \
+        --replace 10.3 10.5
     '';
 
-    meta = {
+    preBuild = ''
+      makeFlagsArray=(
+        LUAV=${lua.luaversion}
+        PLAT=${if stdenv.isDarwin then "macosx"
+               else if stdenv.isFreeBSD then "freebsd"
+               else if stdenv.isLinux then "linux"
+               else if stdenv.isSunOS then "solaris"
+               else throw "unsupported platform"}
+        prefix=$out
+      );
+    '';
+
+    meta = with stdenv.lib; {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = with platforms; [darwin linux freebsd illumos];
       maintainers = with maintainers; [ mornfall ];
     };
   };
@@ -271,11 +288,11 @@ let
     buildPhase = let
       luaVariable = "LUA_PATH=${luastdlib}/share/lua/${lua.luaversion}/?.lua";
 
-      pcreVariable = "PCRE_DIR=${pcre}";
+      pcreVariable = "PCRE_DIR=${pcre.dev}";
       onigVariable = "ONIG_DIR=${oniguruma}";
       gnuVariable = "GNU_INCDIR=${gnulib}/lib";
       treVariable = "TRE_DIR=${tre}";
-      posixVariable = "POSIX_DIR=${glibc}";
+      posixVariable = "POSIX_DIR=${glibc.dev}";
     in ''
       sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' \
           -i Makefile
@@ -363,22 +380,6 @@ let
     };
   };
 
-  luaMessagePack = buildLuaPackage rec {
-    name = "lua-MessagePack-${version}";
-    version = "0.3.1";
-    src = fetchzip {
-      url = "https://github.com/fperrad/lua-MessagePack/archive/${version}.tar.gz";
-      sha256 = "1xlif8fkwd8bb78wrvf2z309p7apms350lbg6qavylsvz57lkjm6";
-    };
-    buildInputs = [ unzip ];
-
-    meta = {
-      homepage = "http://fperrad.github.io/lua-MessagePack/index.html";
-      hydraPlatforms = stdenv.lib.platforms.linux;
-      license = stdenv.lib.licenses.mit;
-    };
-  };
-
   lgi = stdenv.mkDerivation rec {
     name = "lgi-${version}";
     version = "0.7.2";
@@ -405,6 +406,29 @@ let
     '';
   };
 
+  mpack = buildLuaPackage rec {
+    name = "lua-mpack-${libmpack.version}";
+    src = libmpack.src;
+    sourceRoot = "libmpack-${libmpack.rev}-src/binding/lua";
+    buildInputs = [ libmpack ]; #libtool lua pkgconfig ];
+    dontBuild = true;
+    preInstall = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+    '';
+    NIX_CFLAGS_COMPILE = "-Wno-error -fpic";
+    installFlags = [
+      "USE_SYSTEM_LUA=yes"
+      "LUA_VERSION_MAJ_MIN="
+      "LUA_CMOD_INSTALLDIR=$$out/lib/lua/${lua.luaversion}"
+    ];
+    meta = {
+      description = "Simple implementation of msgpack in C Lua 5.1";
+      homepage = "https://github.com/tarruda/libmpack";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.1.3";
@@ -415,7 +439,7 @@ let
     };
 
     meta = with stdenv.lib; {
-      description = "vicious widgets for window managers";
+      description = "Vicious widgets for window managers";
       homepage    = http://git.sysphere.org/vicious/;
       license     = licenses.gpl2;
       maintainers = with maintainers; [ makefu ];

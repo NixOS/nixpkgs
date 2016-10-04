@@ -94,8 +94,8 @@ $ nix-build -A 'config.systemd.units."httpd.service".unit'
 <screen>
 $ cp $(nix-build -A 'config.systemd.units."httpd.service".unit')/httpd.service \
     /run/systemd/system/tmp-httpd.service
-$ systemctl daemon-reload
-$ systemctl start tmp-httpd.service
+# systemctl daemon-reload
+# systemctl start tmp-httpd.service
 </screen>
 
       Note that the unit must not have the same name as any unit in

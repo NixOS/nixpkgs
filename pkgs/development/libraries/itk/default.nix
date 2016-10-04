@@ -1,18 +1,17 @@
 {stdenv, fetchurl, cmake, libX11, libuuid, xz}:
 
 stdenv.mkDerivation rec {
-  name = "itk-4.0.0";
+  name = "itk-4.10.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/itk/InsightToolkit-4.0.0.tar.xz;
-    sha256 = "05z49sw612cbyiaghcsda0xylrkf06jh81ql79si5632w1hpgbd9";
+    url = mirror://sourceforge/itk/InsightToolkit-4.10.0.tar.xz;
+    sha256 = "0pxijhqsnwcp9jv1d8p11hsj90k8ajpwxhrnn8kk8c56k7y1207a";
   };
 
   cmakeFlags = [
     "-DBUILD_TESTING=OFF"
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_CXX_FLAGS=-fPIC"
   ];
 
   enableParallelBuilding = true;

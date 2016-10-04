@@ -18,5 +18,6 @@ stdenv.mkDerivation {
     homepage = http://www.newbreedsoftware.com/vectoroids/;
     description = "Clone of the classic arcade game Asteroids by Atari";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

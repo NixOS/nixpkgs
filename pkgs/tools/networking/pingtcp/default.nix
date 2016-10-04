@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   # This project uses git submodules, which fetchFromGitHub doesn't support:
   src = fetchgit {
-    sha256 = "0an4dbwcp2qv1n068q0s34lz88vl1z2rqfh3j9apbq7bislsrwdd";
+    sha256 = "1cv84n30y03s1b83apxxyn2jv5ss1pywsahrfrpkb6zcgzzrcqn8";
     rev = "refs/tags/v${version}";
     url = "https://github.com/LanetNetwork/pingtcp.git";
   };

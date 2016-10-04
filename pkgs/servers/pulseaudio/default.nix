@@ -34,16 +34,16 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "8.0";
+  version = "9.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "128rrlvrgb4ia3pbzipf5mi6nvrpm6zmxn5r3bynqiikhvify3k9";
+    sha256 = "11j682g2mn723sz3bh4i44ggq29z053zcggy0glzn63zh9mxdly3";
   };
 
   patches = [ ./caps-fix.patch ];
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig intltool autoreconfHook ];
 

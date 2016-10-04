@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://github.com/HaxeFoundation/haxe.git";
-    sha256 = "1p4yja6flv2r04q9lcrjxia3f3fsmhi3d88s0lz0nf0r4m61bjz0";
+    sha256 = "0d8s9yqsqcbr2lfw4xnmg7vzgb6k1jq6hlwwaf1kmn9wxpvcc6x9";
     fetchSubmodules = true;
 
     # Tag 3.1.3

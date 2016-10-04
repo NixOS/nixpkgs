@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "Support library for Reiser4";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

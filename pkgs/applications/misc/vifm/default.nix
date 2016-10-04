@@ -1,30 +1,30 @@
-{ pkgs, fetchurl, stdenv, ncurses, utillinux, file, libX11, which, groff }:
+{ stdenv, fetchurl
+, pkgconfig
+, ncurses, libX11
+, utillinux, file, which, groff
+}:
 
-let
+stdenv.mkDerivation rec {
   name = "vifm-${version}";
-  version = "0.8";
-
-in stdenv.mkDerivation {
-  inherit name;
+  version = "0.8.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/vifm/vifm/${name}.tar.bz2";
-    sha256 = "1syyvdcgwnvjxzmpf9f4gfi0ipwmlavg11zr7wiz8qplvi86psv9";
+    sha256 = "07r15kq7kjl3a41sd11ncpsii866xxps4f90zh3lv8jqcrv6silb";
   };
 
-  buildInputs = [ utillinux ncurses file libX11 which groff ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses libX11 utillinux file which groff ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A vi-like file manager";
-    maintainers = with pkgs.lib.maintainers; [ raskin garbas ];
-    platforms = pkgs.lib.platforms.linux;
-    license = pkgs.lib.licenses.gpl2;
-  };
-
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://vifm.sf.net";
-    };
+    maintainers = with maintainers; [ raskin garbas ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+    downloadPage = "http://vifm.info/downloads.shtml";
+    homepage = "http://vifm.info/";
+    inherit version;
+    updateWalker = true;
   };
 }
 

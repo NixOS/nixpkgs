@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   makeFlags = ["target=linux"];
   installFlags = ["installdir=$(out)"];
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [openssl];
 
   preFixup = ''
@@ -36,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = http://gogonet.gogo6.com;
     description = "Client to connect to the Freenet6 IPv6 tunnel broker service";
     maintainers = [stdenv.lib.maintainers.bluescreen303];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

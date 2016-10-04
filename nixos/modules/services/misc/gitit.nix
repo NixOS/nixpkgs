@@ -663,7 +663,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ curl ]
-             ++ optional cfg.pdfExport texLiveFull
+             ++ optional cfg.pdfExport texlive.combined.scheme-basic
 	     ++ optional (cfg.repositoryType == "darcs") darcs
 	     ++ optional (cfg.repositoryType == "mercurial") mercurial
 	     ++ optional (cfg.repositoryType == "git") git;

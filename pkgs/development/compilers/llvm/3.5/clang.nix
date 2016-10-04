@@ -15,7 +15,6 @@ in stdenv.mkDerivation {
   buildInputs = [ cmake libedit libxml2 llvm ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
   ] ++
   # Maybe with compiler-rt this won't be needed?
@@ -50,6 +49,5 @@ in stdenv.mkDerivation {
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.all;
-    broken      = true;
   };
 }

@@ -6,11 +6,13 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/dsd/fprint_demo";
     rev = "5d86c3f778bf97a29b73bdafbebd1970e560bfb0";
-    sha256 = "fe5bbf8d062fedd6fa796e50c5bd95fef49580eb0a890f78d6f55bd51cc94234";
+    sha256 = "1rysqd8kdqgis1ykrbkiy1bcxav3vna8zdgbamyxw4hj5764xdcm";
   };
 
   buildInputs = [ libfprint gtk2 ];
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
+
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/fprint/fprint_demo/";

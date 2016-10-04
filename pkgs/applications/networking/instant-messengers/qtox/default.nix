@@ -4,7 +4,7 @@
   qtbase, qtsvg, qttools, qmakeHook, qttranslations, sqlcipher }:
 
 let
-  version = "1.3.0";
+  version = "1.5.0";
   revision = "v${version}";
 in
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       owner = "tux3";
       repo = "qTox";
       rev = revision;
-      sha256 = "0z2rxsa23vpl4q0h63mybw7kv8n1sm6nwb93l0cc046a3n9axid8";
+      sha256 = "1na2qqzbdbjfw8kymxw5jfglslmw18fz3vpw805pqg4d5y7f7vsi";
   };
 
   buildInputs =
@@ -43,9 +43,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp qtox $out/bin
     wrapQtProgram $out/bin/qtox
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

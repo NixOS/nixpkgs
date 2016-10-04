@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     inherit rev;
     url    = "https://github.com/khvzak/bluez-tools.git";
-    sha256 = "3f264d14ba8ef1b0d3c45e621a5c685035a60d789da64f64d25055047f45c55b";
+    sha256 = "0ylk10gfqlwmiz1k355axdhraixc9zym9f87xhag23934x64m8wa";
   };
   preConfigure = ''
     ./autogen.sh
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     description = "Command line bluetooth manager for Bluez5";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.dasuxullebt ];
+    platforms = platforms.unix;
   };
 
 }

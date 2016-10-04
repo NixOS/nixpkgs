@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "-DLIBUSB_INCLUDE_DIRS=${libusb1}/include/libusb-1.0";
+  cmakeFlags = "-DLIBUSB_INCLUDE_DIRS=${libusb1.dev}/include/libusb-1.0";
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ python pythonPackages.pyramid_mako orc libusb1 boost ];

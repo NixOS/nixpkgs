@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = with stdenv.lib; {
-    description = "a wrapper for the user, group and hosts NSS API";
+    description = "A wrapper for the user, group and hosts NSS API";
     homepage = "https://git.samba.org/?p=uid_wrapper.git;a=summary";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wkennington ];

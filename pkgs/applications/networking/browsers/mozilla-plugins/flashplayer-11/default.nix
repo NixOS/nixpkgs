@@ -14,7 +14,7 @@
 , libXcursor
 , libXt
 , libvdpau
-, gtk
+, gtk2
 , glib
 , pango
 , cairo
@@ -70,11 +70,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "11.2.202.616";
+  version = "11.2.202.635";
 
   src = fetchurl {
     url = "https://fpdownload.macromedia.com/pub/flashplayer/installers/archive/fp_${version}_archive.zip";
-    sha256 = "0y4bjkla6ils4crmx61pi31s4gscy8rgiv7xccx1z0g6hba9j73l";
+    sha256 = "0xlaf6152ksknigrv6fsasscyfnjkxml4nl22apiwzb34nrbzk3m";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
+
+  preferLocalBuild = true;
 
   outputs = [ "out" ] ++ lib.optional is-i686 "sa";
 
@@ -118,7 +120,7 @@ stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath
     [ zlib alsaLib curl nspr fontconfig freetype expat libX11
-      libXext libXrender libXcursor libXt gtk glib pango atk cairo gdk_pixbuf
+      libXext libXrender libXcursor libXt gtk2 glib pango atk cairo gdk_pixbuf
       libvdpau nss
     ];
 

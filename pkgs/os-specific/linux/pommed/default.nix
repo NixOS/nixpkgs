@@ -7,7 +7,7 @@
 , alsaLib
 , audiofile
 , pkgconfig
-, gtk
+, gtk2
 , gettext
 , libXpm
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     audiofile
     dbus_glib
     pkgconfig
-    gtk
+    gtk2
     gettext
     libXpm
   ];

@@ -3,7 +3,7 @@
 
 # Optional dependencies
 , libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
-, pyqt4 ? null, pythonDBus ? null, xdg_utils ? null
+, pyqt4 ? null, dbus-python ? null, xdg_utils ? null
 
 # Other Flags
 , prefix ? ""
@@ -20,7 +20,7 @@ let
   optDbus_cplusplus = shouldUsePkg dbus_cplusplus;
   optAlsaLib = shouldUsePkg alsaLib;
   optPyqt4 = shouldUsePkg pyqt4;
-  optPythonDBus = shouldUsePkg pythonDBus;
+  optPythonDBus = shouldUsePkg dbus-python;
   optXdg_utils = shouldUsePkg xdg_utils;
 in
 stdenv.mkDerivation rec {

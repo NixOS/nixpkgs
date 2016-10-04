@@ -8,7 +8,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "icewm-${version}";
-  version = "1.3.10";
+  version = "1.3.12";
 
   buildInputs =
   [ cmake gettext libjpeg libtiff libungif libpng imlib expat
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bbidulock/icewm/archive/${version}.tar.gz";
-    sha256 = "01i7a21gf810spmzjx32dxsmx4527qivs744rhvhaw4gr00amrns";
+    sha256 = "0cmjnf0yvafwg73qy5wq7ghiknpn1jf1978c1yj7yabyn07zxq77";
   };
 
   preConfigure = ''

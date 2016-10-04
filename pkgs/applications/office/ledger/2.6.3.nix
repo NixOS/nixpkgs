@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

@@ -279,7 +279,7 @@ fileSystems."/example" = {
 
   <listitem>
     <para><literal>services.xserver.vaapiDrivers</literal> has been removed. Use
-    <literal>services.hardware.opengl.extraPackages{,32}</literal> instead. You can
+    <literal>hardware.opengl.extraPackages{,32}</literal> instead. You can
     also specify VDPAU drivers there.</para>
   </listitem>
 
@@ -383,6 +383,41 @@ services.syncthing = {
       in your <filename>/etc/nixos/hardware-configuration.nix</filename>.
       More discussion is on <link xlink:href="https://github.com/NixOS/nixpkgs/pull/12595">
       the github issue</link>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The <literal>services.xserver.startGnuPGAgent</literal> option has been removed.
+      GnuPG 2.1.x changed the way the gpg-agent works, and that new approach no
+      longer requires (or even supports) the "start everything as a child of the
+      agent" scheme we've implemented in NixOS for older versions.
+      To configure the gpg-agent for your X session, add the following code to
+      <filename>~/.bashrc</filename> or some file that’s sourced when your shell is started:
+    <programlisting>
+GPG_TTY=$(tty)
+export GPG_TTY
+    </programlisting>
+      If you want to use gpg-agent for SSH, too, add the following to your session
+      initialization (e.g. <literal>displayManager.sessionCommands</literal>)
+    <programlisting>
+gpg-connect-agent /bye
+unset SSH_AGENT_PID
+export SSH_AUTH_SOCK="''${HOME}/.gnupg/S.gpg-agent.ssh"
+    </programlisting>
+      and make sure that
+    <programlisting>
+enable-ssh-support
+    </programlisting>
+      is included in your <filename>~/.gnupg/gpg-agent.conf</filename>.
+      You will need to use <command>ssh-add</command> to re-add your ssh keys.
+      If gpg’s automatic transformation of the private keys to the new format fails,
+      you will need to re-import your private keyring as well:
+    <programlisting>
+gpg --import ~/.gnupg/secring.gpg
+    </programlisting>
+    The <command>gpg-agent(1)</command> man page has more details about this subject,
+    i.e. in the "EXAMPLES" section.
     </para>
   </listitem>
 </itemizedlist>

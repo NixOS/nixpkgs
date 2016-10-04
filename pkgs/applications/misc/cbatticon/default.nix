@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight and fast battery icon that sits in the system tray";
     homepage = https://github.com/valr/cbatticon;
     license = licenses.gpl2;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
     platforms = platforms.linux;
   };
 }

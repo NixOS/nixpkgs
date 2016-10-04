@@ -18,7 +18,7 @@ buildPythonPackage rec {
   setupPyBuildFlags =
     [ "--hdf5=${hdf5}"
       "--lzo=${lzo}"
-      "--bzip2=${bzip2}"
+      "--bzip2=${bzip2.dev}"
     ];
 
   # Run the test suite.

@@ -22,5 +22,6 @@ stdenv.mkDerivation {
   meta = {
     description = "A Unicode font";
     maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

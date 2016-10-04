@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, gettext }:
+{ stdenv, fetchurl, gettext, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "axel-${version}";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/a/axel/axel_${version}.orig.tar.gz";
-    sha256 = "17j6kp4askr1q5459ak71m1bm0qa3dyqbxvi5ifh2bjvjlp516mx";
+    sha256 = "174x4bp4gcwmpf94hdsdxlpk7q7ldgpsicry7x2pa9zw4yz86wl0";
   };
 
-  buildInputs = [ gettext ];
+  buildInputs = [ gettext autoreconfHook ];
 
   installFlags = [ "ETCDIR=$(out)/etc" ];
 

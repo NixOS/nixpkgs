@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cairo, fontconfig, freetype, gdk_pixbuf, glib
-, glibc, gtk, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
+, glibc, gtk2, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
 , libXi, libXrender, libXext
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mv chromedriver $out/bin
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
     wrapProgram "$out/bin/chromedriver" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib cairo fontconfig freetype gdk_pixbuf glib gtk libX11 nspr nss pango libXrender gconf libXext libXi ]}:\$LD_LIBRARY_PATH"
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib cairo fontconfig freetype gdk_pixbuf glib gtk2 libX11 nspr nss pango libXrender gconf libXext libXi ]}:\$LD_LIBRARY_PATH"
   '';
 
   meta = with stdenv.lib; {

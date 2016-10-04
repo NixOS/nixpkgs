@@ -35,10 +35,6 @@ self:
     });
 
     overrides = {
-      ac-php = super.ac-php.override {
-        inherit (self.melpaPackages) company popup;
-      };
-
       # upstream issue: mismatched filename
       ack-menu = markBroken super.ack-menu;
 
@@ -55,9 +51,6 @@ self:
 
       # upstream issue: missing file header
       connection = markBroken super.connection;
-
-      # upstream issue: missing file header
-      crux = markBroken super.crux;
 
       # upstream issue: missing file header
       dictionary = markBroken super.dictionary;
@@ -134,10 +127,6 @@ self:
 
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
-
-      spaceline = super.spaceline.override {
-        inherit (self.melpaPackages) powerline;
-      };
 
       # upstream issue: missing file header
       speech-tagger = markBroken super.speech-tagger;

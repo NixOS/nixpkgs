@@ -1,14 +1,15 @@
 { stdenv, fetchurl, which, m4, python
 , protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
+, pythonPackages, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   name = "rethinkdb-${version}";
-  version = "2.3.0";
+  version = "2.3.5";
 
   src = fetchurl {
-    url = "http://download.rethinkdb.com/dist/${name}.tgz";
-    sha256 = "0b787ibnrmziypiw86yx4gpmlj4ima6j6g9hzshbpilxy7lrq1cb";
+    url = "https://download.rethinkdb.com/dist/${name}.tgz";
+    sha256 = "047fz3r0rn95mqr5p1xfdprf0hq4avq2a1q8zsdifxxid7hyx2nx";
   };
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -28,13 +29,18 @@ stdenv.mkDerivation rec {
     "--lib-path=${jemalloc}/lib"
   ];
 
-  buildInputs = [ protobuf boost zlib curl openssl icu ]
+  buildInputs = [ protobuf boost zlib curl openssl icu makeWrapper ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) jemalloc
     ++ stdenv.lib.optional stdenv.isDarwin libtool;
 
   nativeBuildInputs = [ which m4 python ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/rethinkdb \
+      --prefix PATH ":" "${pythonPackages.rethinkdb}/bin"
+  '';
 
   meta = {
     description = "An open-source distributed database built with love";

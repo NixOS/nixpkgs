@@ -13,9 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoreconfHook systemd fcgi pkgconfig ];
 
+  # systemd 230 no longer has libsystemd-daemon as a separate entity from libsystemd
+  postPatch = ''
+    substituteInPlace configure.ac --replace libsystemd-daemon libsystemd
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://nginx.localdomain.pl/wiki/FcgiWrap;
     description = "Simple server for running CGI applications over FastCGI";
     maintainers = with maintainers; [ lethalman ];
+    platforms = with platforms; linux;
   };
 }

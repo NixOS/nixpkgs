@@ -10,7 +10,6 @@
 , libgnomeui ? null
 , libgnomeprint ? null
 , libgnomeprintui ? null
-, gnomepanel ? null
 , libxml2
 , monoDLLFixer
 }:
@@ -35,7 +34,6 @@ stdenv.mkDerivation {
   buildInputs = [
     pkgconfig mono glib pango gtk3 GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
-    gnomepanel
   ];
 
   dontStrip = true;
@@ -44,5 +42,9 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit gtk3;
+  };
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
   };
 }

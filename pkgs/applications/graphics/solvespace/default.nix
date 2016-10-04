@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "solvespace-2.0";
   src = fetchgit {
     url = "https://github.com/jwesthues/solvespace.git";
-    sha256 = "0sakxkmj2f0k27f67wy1xz2skpnwzg15yqrf7av97pgc5s8xb3da";
+    sha256 = "0m6zlx1kiqxkm6szdsnywwr6spnb7xjg6vqsq30nrr44cx37w861";
     rev = "e587d0e";
   };
 

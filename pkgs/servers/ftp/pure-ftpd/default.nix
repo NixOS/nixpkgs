@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.pureftpd.org;
     license = licenses.isc; # with some parts covered by BSD3(?)
     maintainers = [ maintainers.lethalman ];
+    platforms = platforms.linux;
   };
 
 }

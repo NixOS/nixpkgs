@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, copyPathsToStore, fixQtModuleCMakeConfig
+{ stdenv, lib, fetchurl, copyPathsToStore
 , srcs
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
@@ -8,7 +8,7 @@
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
 , coreutils, bison, flex, gdb, gperf, lndir, ruby
-, python, perl, pkgconfig
+, patchelf, perl, pkgconfig, python
 
 # optional dependencies
 , cups ? null
@@ -19,13 +19,16 @@
 , buildExamples ? false
 , buildTests ? false
 , developerBuild ? false
-, gtkStyle ? false, libgnomeui, GConf, gnome_vfs, gtk
+, libgnomeui, GConf, gnome_vfs, gtk2
 , decryptSslTraffic ? false
 }:
 
 let
   inherit (srcs.qt5) version;
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
+
+  # Search path for Gtk plugin
+  gtkLibPath = lib.makeLibraryPath [ gtk2 gnome_vfs libgnomeui GConf ];
 
   dontInvalidateBacking = fetchurl {
     url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=0f68f8920573cdce1729a285a92ac8582df32841;hp=24c50f8dcf7fa61ac3c3d4d6295c259a104a2b8c";
@@ -43,7 +46,7 @@ stdenv.mkDerivation {
 
   sourceRoot = "qt-everywhere-opensource-src-${version}";
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" "gtk" ];
 
   postUnpack = ''
     mv qtbase-opensource-src-${version} ./qt-everywhere-opensource-src-${version}/qtbase
@@ -51,7 +54,6 @@ stdenv.mkDerivation {
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
-    ++ lib.optional gtkStyle ./dlopen-gtkstyle.patch
     ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
     ++ lib.optional mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
 
@@ -89,14 +91,6 @@ stdenv.mkDerivation {
         qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
         --replace "@libX11@" "${libX11.out}"
     ''
-    + lib.optionalString gtkStyle ''
-      substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk.out}"
-      substituteInPlace qtbase/src/widgets/styles/qgtkstyle_p.cpp \
-        --replace "@gtk@" "${gtk.out}" \
-        --replace "@gnome_vfs@" "${gnome_vfs.out}" \
-        --replace "@libgnomeui@" "${libgnomeui.out}" \
-        --replace "@gconf@" "${GConf.out}"
-    ''
     + lib.optionalString mesaSupported ''
       substituteInPlace \
         qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
@@ -106,23 +100,11 @@ stdenv.mkDerivation {
         --replace "@mesa_inc@" "${mesa.dev}"
     '';
 
+
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
-
-    _multioutQtDevs() {
-        # We cannot simply set these paths in configureFlags because libQtCore retains
-        # references to the paths it was built with.
-        moveToOutput "bin" "$dev"
-        moveToOutput "include" "$dev"
-        moveToOutput "mkspecs" "$dev"
-
-        # The destination directory must exist or moveToOutput will do nothing
-        mkdir -p "$dev/share"
-        moveToOutput "share/doc" "$dev"
-    }
-    preFixupHooks+=(_multioutQtDevs)
 
     configureFlags+="\
         -plugindir $out/lib/qt5/plugins \
@@ -149,7 +131,7 @@ stdenv.mkDerivation {
     -rpath
     -optimized-qmake
     -strip
-    -reduce-relocations
+    -no-reduce-relocations
     -system-proxies
     -pkg-config
 
@@ -165,7 +147,7 @@ stdenv.mkDerivation {
     -xcb
     -qpa xcb
     -${lib.optionalString (cups == null) "no-"}cups
-    -${lib.optionalString (!gtkStyle) "no-"}gtkstyle
+    -gtkstyle
 
     -no-eglfs
     -no-directfb
@@ -228,32 +210,68 @@ stdenv.mkDerivation {
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
     ++ lib.optional (postgresql != null) postgresql
-    ++ lib.optionals gtkStyle [gnome_vfs.out libgnomeui.out gtk GConf];
+    # FIXME: move to the main list on rebuild.
+    ++ [gnome_vfs.out libgnomeui.out gtk2 GConf];
 
-  nativeBuildInputs = [ fixQtModuleCMakeConfig lndir python perl pkgconfig ];
+  nativeBuildInputs = [ lndir patchelf perl pkgconfig python ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
+
+  postInstall = ''
+    find "$out" -name "*.cmake" | while read file; do
+        substituteInPlace "$file" \
+            --subst-var-by NIX_OUT "$out" \
+            --subst-var-by NIX_DEV "$dev"
+    done
+  '';
+
+  preFixup = ''
+    # We cannot simply set these paths in configureFlags because libQtCore retains
+    # references to the paths it was built with.
+    moveToOutput "bin" "$dev"
+    moveToOutput "include" "$dev"
+    moveToOutput "mkspecs" "$dev"
+
+    # The destination directory must exist or moveToOutput will do nothing
+    mkdir -p "$dev/share"
+    moveToOutput "share/doc" "$dev"
+
+    # Move the QGtkStyle plugin to the gtk output
+    mkdir -p "$gtk/lib/qt5/plugins/platformthemes"
+    mv "$out/lib/qt5/plugins/platformthemes/libqgtk2.so" "$gtk/lib/qt5/plugins/platformthemes"
+    rm "$out/lib/cmake/Qt5Gui/Qt5Gui_QGtk2ThemePlugin.cmake"
+
+    # Set RPATH for QGtkStyle plugin
+    qgtk2="$gtk/lib/qt5/plugins/platformthemes/libqgtk2.so"
+    qgtk2_RPATH="$(patchelf --print-rpath "$qgtk2")"
+    qgtk2_RPATH="$qgtk2_RPATH''${qgtk2_RPATH:+:}${gtkLibPath}"
+    patchelf "$qgtk2" \
+        --add-needed libgtk-x11-2.0.so \
+        --add-needed libgnomeui-2.so \
+        --add-needed libgnomevfs-2.so \
+        --add-needed libgconf-2.so \
+        --set-rpath "$qgtk2_RPATH"
+  '';
 
   postFixup =
     ''
       # Don't retain build-time dependencies like gdb and ruby.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
 
-      fixQtModuleCMakeConfig "Concurrent"
-      fixQtModuleCMakeConfig "Core"
-      fixQtModuleCMakeConfig "DBus"
-      fixQtModuleCMakeConfig "Gui"
-      fixQtModuleCMakeConfig "Network"
-      fixQtModuleCMakeConfig "OpenGL"
-      fixQtModuleCMakeConfig "OpenGLExtensions"
-      fixQtModuleCMakeConfig "PrintSupport"
-      fixQtModuleCMakeConfig "Sql"
-      fixQtModuleCMakeConfig "Test"
-      fixQtModuleCMakeConfig "Widgets"
-      fixQtModuleCMakeConfig "Xml"
+      # Move libtool archives and qmake projects
+      if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
+          pushd "''${!outputLib}"
+          find lib -name '*.a' -o -name '*.la' -o -name '*.prl' | \
+              while read -r file; do
+                  mkdir -p "''${!outputDev}/$(dirname "$file")"
+                  mv "''${!outputLib}/$file" "''${!outputDev}/$file"
+              done
+          popd
+      fi
     '';
 
+  inherit lndir;
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

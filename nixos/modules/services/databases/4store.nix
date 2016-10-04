@@ -53,7 +53,8 @@ with lib;
     services.avahi.enable = true;
 
     systemd.services."4store" = {
-      wantedBy = [ "ip-up.target" ];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       preStart = ''
         mkdir -p ${stateDir}/

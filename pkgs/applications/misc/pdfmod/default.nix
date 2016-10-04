@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gnome_doc_utils, intltool
-, mono, gtk-sharp, gnome-sharp, hyena
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gnome_doc_utils, intltool, lib
+, mono, gtk-sharp-2_0, gnome-sharp, hyena
 , which, makeWrapper, glib, gnome3, poppler, wrapGAppsHook
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   }) ];
 
   buildInputs = [
-    pkgconfig gnome_doc_utils intltool mono gtk-sharp gnome-sharp
+    pkgconfig gnome_doc_utils intltool mono gtk-sharp-2_0 gnome-sharp
     hyena which makeWrapper wrapGAppsHook
   ];
 
@@ -31,14 +31,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     makeWrapper "${mono}/bin/mono" "$out/bin/pdfmod" \
       --add-flags "$out/lib/pdfmod/PdfMod.exe" \
-      --prefix MONO_GAC_PREFIX : ${gtk-sharp} \
+      --prefix MONO_GAC_PREFIX : ${gtk-sharp-2_0} \
       --prefix MONO_GAC_PREFIX : ${gnome-sharp} \
-      --prefix LD_LIBRARY_PATH : ${glib}/lib \
-      --prefix LD_LIBRARY_PATH : ${gtk-sharp}/lib \
-      --prefix LD_LIBRARY_PATH : ${gnome-sharp}/lib \
-      --prefix LD_LIBRARY_PATH : ${gtk-sharp.gtk}/lib \
-      --prefix LD_LIBRARY_PATH : ${gnome3.gconf}/lib \
-      --prefix LD_LIBRARY_PATH : ${poppler.out}/lib
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gnome-sharp gnome3.gconf gtk-sharp-2_0 gtk-sharp-2_0.gtk poppler ]}
   '';
 
   dontStrip = true;

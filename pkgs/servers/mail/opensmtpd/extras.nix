@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libevent
-    libasr python2 lua5 perl mariadb postgresql sqlite hiredis ];
+    libasr python2 lua5 perl mariadb.client postgresql sqlite hiredis ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-privsep-user=smtpd"
-    "--with-libevent-dir=${libevent}"
+    "--with-libevent-dir=${libevent.dev}"
 
     "--with-filter-clamav"
     "--with-filter-dkim-signer"

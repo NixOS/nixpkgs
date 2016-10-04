@@ -1,8 +1,7 @@
 [<img src="http://nixos.org/logo/nixos-hires.png" width="500px" alt="logo" />](https://nixos.org/nixos)
 
 [![Build Status](https://travis-ci.org/NixOS/nixpkgs.svg?branch=master)](https://travis-ci.org/NixOS/nixpkgs)
-[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
-[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
+[![Code Triagers Badge](https://www.codetriage.com/nixos/nixpkgs/badges/users.svg)](https://www.codetriage.com/nixos/nixpkgs)
 
 Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
 manager. It is periodically built and tested by the [hydra](http://hydra.nixos.org/)
@@ -14,12 +13,12 @@ build daemon as so-called channels. To get channel information via git, add
 ```
 
 For stability and maximum binary package support, it is recommended to maintain
-custom changes on top of one of the channels, e.g. `nixos-16.03` for the latest
+custom changes on top of one of the channels, e.g. `nixos-16.09` for the latest
 release and `nixos-unstable` for the latest successful build of master:
 
 ```
 % git remote update channels
-% git rebase channels/nixos-16.03
+% git rebase channels/nixos-16.09
 ```
 
 For pull-requests, please rebase onto nixpkgs `master`.
@@ -31,11 +30,11 @@ For pull-requests, please rebase onto nixpkgs `master`.
 * [Documentation (Nix Expression Language chapter)](https://nixos.org/nix/manual/#ch-expression-language)
 * [Manual (How to write packages for Nix)](https://nixos.org/nixpkgs/manual/)
 * [Manual (NixOS)](https://nixos.org/nixos/manual/)
-* [Nix Wiki](https://nixos.org/wiki/)
+* [Nix Wiki](https://nixos.org/wiki/) (deprecated, see milestone ["Move the Wiki!"](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Move+the+wiki%21%22))
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for 16.03 release](https://hydra.nixos.org/jobset/nixos/release-16.03)
+* [Continuous package builds for 16.09 release](https://hydra.nixos.org/jobset/nixos/release-16.09)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for 16.03 release](https://hydra.nixos.org/job/nixos/release-16.03/tested#tabs-constituents)
+* [Tests for 16.09 release](https://hydra.nixos.org/job/nixos/release-16.09/tested#tabs-constituents)
 
 Communication:
 

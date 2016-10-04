@@ -17,6 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://josefsson.org/git2cl/";
-    description = "convert git logs to GNU style ChangeLog files";
+    description = "Convert git logs to GNU style ChangeLog files";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

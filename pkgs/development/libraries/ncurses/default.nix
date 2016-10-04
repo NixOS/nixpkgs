@@ -1,26 +1,28 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, pkgconfig
 
+, abiVersion
 , mouseSupport ? false
 , unicode ? true
 
 , gpm
-
-# Extra Options
-, abiVersion ? "5"
 }:
-
+let
+  version = if abiVersion == "5" then "5.9" else "6.0";
+  sha256 = if abiVersion == "5"
+    then "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh"
+    else "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
+in
 stdenv.mkDerivation rec {
-  name = "ncurses-5.9";
+  name = "ncurses-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/ncurses/${name}.tar.gz";
-    sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
+    inherit sha256;
   };
 
-  # gcc-5.patch should be removed after 5.9
-  patches = [ ./clang.patch ./gcc-5.patch ];
+  patches = [ ./clang.patch ] ++ lib.optional (abiVersion == "5" && stdenv.cc.isGNU) ./gcc-5.patch;
 
-  outputs = [ "dev" "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
   configureFlags = [
@@ -33,6 +35,7 @@ stdenv.mkDerivation rec {
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''

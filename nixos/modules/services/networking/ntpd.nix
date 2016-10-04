@@ -82,6 +82,8 @@ in
       { description = "NTP Daemon";
 
         wantedBy = [ "multi-user.target" ];
+        wants = [ "time-sync.target" ];
+        before = [ "time-sync.target" ];
 
         preStart =
           ''

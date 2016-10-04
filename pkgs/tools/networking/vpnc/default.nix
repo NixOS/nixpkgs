@@ -49,10 +49,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.unix-ag.uni-kl.de/~massar/vpnc/";
-    description = "virtual private network (VPN) client for Cisco's VPN concentrators";
+    description = "Virtual private network (VPN) client for Cisco's VPN concentrators";
     license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

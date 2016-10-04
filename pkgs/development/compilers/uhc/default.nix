@@ -4,14 +4,14 @@
 
 let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [fgl vector syb uulib network binary hashable uhc-util mtl transformers directory containers array process filepath shuffle uuagc] );
 in stdenv.mkDerivation rec {
-  version = "1.1.9.3";
+  version = "1.1.9.4";
   name = "uhc-${version}";
 
   src = fetchFromGitHub {
     owner = "UU-ComputerScience";
     repo = "uhc";
     rev = "v${version}";
-    sha256 = "1r3mja77dqj2ncgp1d9nnc7dhp3gzrb1b1qvml3rq2321mn3m2ad";
+    sha256 = "1s84csk6zgzj09igxgdza7gb52jdn3jsr8lygl5xplshv8yzl34n";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";

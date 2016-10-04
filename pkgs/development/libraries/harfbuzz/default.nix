@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "1.1.2";
+  version = "1.3.2";
   inherit (stdenv.lib) optional optionals optionalString;
 in
 
@@ -14,10 +14,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.bz2";
-    sha256 = "07s6z3hbrb4rdfgzmln169wxz4nm5y7qbr02ik5c7drxpn85fb2a";
+    sha256 = "09z0ki9w76v0bh4rdkds7zsb7vf721iaiyidcdy9ii885wvschw5";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   configureFlags = [
@@ -38,12 +38,19 @@ stdenv.mkDerivation {
     rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
     ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.la
     ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
+    ${optionalString stdenv.isDarwin ''
+      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
+      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
+    ''}
   '';
 
   meta = with stdenv.lib; {
     description = "An OpenType text shaping engine";
     homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
+    downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
     maintainers = [ maintainers.eelco ];
     platforms = with platforms; linux ++ darwin;
+    inherit version;
+    updateWalker = true;
   };
 }

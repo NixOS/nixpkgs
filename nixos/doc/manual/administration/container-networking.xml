@@ -13,7 +13,7 @@ create</literal>, it gets it own private IPv4 address in the range
 address as follows:
 
 <screen>
-$ nixos-container show-ip foo
+# nixos-container show-ip foo
 10.233.4.2
 
 $ ping -c1 10.233.4.2

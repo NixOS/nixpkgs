@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "antimicro-${version}";
-  version = "2.18.2";
+  version = "2.22";
 
   src = fetchFromGitHub {
-    owner = "7185";
+    owner = "AntiMicro";
     repo = "antimicro";
     rev = "${version}";
-    sha256 = "1mqw5idn57yj6c1w8y0byzh0xafcpbhaa6czgljh206abwfixjmk";
+    sha256 = "102fh9ysd2dmfc6b73bj88m064jhlglqrz2gd7k9jccadxpbp3mq";
   };
 
   buildInputs = [
@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GUI for mapping keyboard and mouse controls to a gamepad";
-    homepage = "https://github.com/Ryochan7/antimicro";
+    inherit (src.meta) homepage;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl3;
+    platforms = with platforms; linux;
   };
 }

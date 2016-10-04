@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     cp ding.png $out/share/pixmaps/
     cp ding.desktop $out/share/applications/
 
-    wrapProgram $out/bin/ding --prefix PATH : ${gnugrep}/bin:${aspellEnv}/bin:${tk}/bin:${fortune}/bin --prefix ASPELL_CONF : "\"prefix ${aspellEnv};\""
+    wrapProgram $out/bin/ding --prefix PATH : ${stdenv.lib.makeBinPath [ gnugrep aspellEnv tk fortune ]} --prefix ASPELL_CONF : "\"prefix ${aspellEnv};\""
   '';
 
   meta = with stdenv.lib; {

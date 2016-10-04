@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
     rev = "53458838505efef91ed069d0a7d970b6b3588eba";
-    sha256 = "0fb4dxfvvqy8lnm9c91sxwn5wbcw8grfpm52zag25vrls251aih3";
+    sha256 = "1wjzgy5yyi52fn4si2m8zrbbzqsh3p75avfx744jmxj5gpq5qa92";
   };
 
   patchPhase = ''

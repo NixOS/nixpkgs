@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-libxml2=${libxml2}"
-    "--with-libxslt=${libxslt}"
+    "--with-libxml2=${libxml2.dev}"
+    "--with-libxslt=${libxslt.dev}"
   ];
 
   meta = with stdenv.lib; { 
     description = "PostgreSQL administration GUI tool";
     homepage = http://www.pgadmin.org;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ iElectric wmertens ];
+    maintainers = with maintainers; [ domenkozar wmertens ];
     platforms = platforms.unix;
   };
 }

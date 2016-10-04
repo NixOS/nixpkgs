@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames ];
   meta = {
-    description = "a classic single player falling blocks puzzle game";
+    description = "A classic single player falling blocks puzzle game";
   };
 }

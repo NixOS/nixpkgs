@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.anjbe.name/rgbds/";
     description = "An assembler/linker package that produces Game Boy programs";
     license = licenses.free;
-    maintainers = with maintainers; [ mbauer ];
+    maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
   };
 }

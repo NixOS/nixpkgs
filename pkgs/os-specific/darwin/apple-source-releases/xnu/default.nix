@@ -30,11 +30,12 @@ appleDerivation {
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
       --replace "/usr/include" "/include" \
       --replace "/usr/local/include" "/include" \
-      --replace "MIG=" "# " \
-      --replace "MIGCC=" "# " \
+      --replace 'MIG=`' "# " \
+      --replace 'MIGCC=`' "# " \
       --replace " -o 0" "" \
       --replace '$SRC/$mig' '-I$DSTROOT/include $SRC/$mig' \
-      --replace '$SRC/servers/netname.defs' '-I$DSTROOT/include $SRC/servers/netname.defs'
+      --replace '$SRC/servers/netname.defs' '-I$DSTROOT/include $SRC/servers/netname.defs' \
+      --replace '$BUILT_PRODUCTS_DIR/mig_hdr' '$BUILT_PRODUCTS_DIR'
 
     patchShebangs .
   '';
@@ -46,9 +47,9 @@ appleDerivation {
     cat > sdk/usr/local/libexec/availability.pl <<EOF
       #!$SHELL
       if [ "\$1" == "--macosx" ]; then
-        echo 10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9
+        echo 10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11
       elif [ "\$1" == "--ios" ]; then
-        echo 2.0 2.1 2.2 3.0 3.1 3.2 4.0 4.1 4.2 4.3 5.0 5.1 6.0 6.1 7.0
+        echo 2.0 2.1 2.2 3.0 3.1 3.2 4.0 4.1 4.2 4.3 5.0 5.1 6.0 6.1 7.0 8.0 9.0
       fi
     EOF
     chmod +x sdk/usr/local/libexec/availability.pl
@@ -56,7 +57,7 @@ appleDerivation {
     export SDKROOT_RESOLVED=$PWD/sdk
     export HOST_SDKROOT_RESOLVED=$PWD/sdk
     export PLATFORM=MacOSX
-    export SDKVERSION=10.7
+    export SDKVERSION=10.11
 
     export CC=cc
     export CXX=c++
@@ -87,13 +88,13 @@ appleDerivation {
     make installhdrs
 
     mv $out/usr/include $out
-    rmdir $out/usr
 
     # TODO: figure out why I need to do this
     cp libsyscall/wrappers/*.h $out/include
     mkdir -p $out/include/os
     cp libsyscall/os/tsd.h $out/include/os/tsd.h
     cp EXTERNAL_HEADERS/AssertMacros.h $out/include
+    cp EXTERNAL_HEADERS/Availability*.h $out/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/
 
     # Build the mach headers we crave
     export MIGCC=cc
@@ -101,10 +102,20 @@ appleDerivation {
     export SRCROOT=$PWD/libsyscall
     export DERIVED_SOURCES_DIR=$out/include
     export SDKROOT=$out
+    export OBJROOT=$PWD
+    export BUILT_PRODUCTS_DIR=$out
     libsyscall/xcodescripts/mach_install_mig.sh
 
     # Get rid of the System prefix
     mv $out/System/* $out/
+
+    # TODO: do I need this?
+    mv $out/internal_hdr/include/mach/*.h $out/include/mach
+
+    # Get rid of some junk lying around
+    rm -rf $out/internal_hdr
+    rm -rf $out/usr
+    rm -rf $out/local
 
     # Add some symlinks
     ln -s $out/Library/Frameworks/System.framework/Versions/B \

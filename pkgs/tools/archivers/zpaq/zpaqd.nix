@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="zpaqd";
-    version="707";
+    version="715";
     name="${baseName}-${version}";
-    hash="0012jzs2gk232shgx60323jd3g1i5ab5sjydynz2d1k3dkjxs688";
-    url="http://mattmahoney.net/dc/zpaqd707.zip";
-    sha256="0012jzs2gk232shgx60323jd3g1i5ab5sjydynz2d1k3dkjxs688";
+    hash="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
+    url="http://mattmahoney.net/dc/zpaqd715.zip";
+    sha256="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
   };
   isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
   isx86 = stdenv.isi686 || stdenv.isx86_64;
@@ -44,7 +44,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit (s) version;
     description = "ZPAQ archive (de)compressor and algorithm development tool";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin nckx ];

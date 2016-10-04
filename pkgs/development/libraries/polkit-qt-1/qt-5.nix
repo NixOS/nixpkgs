@@ -5,7 +5,7 @@ with stdenv.lib;
 stdenv.mkDerivation {
   name = "polkit-qt-1-qt5-0.112.0";
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://kde/stable/apps/KDE4.x/admin/polkit-qt-1-0.112.0.tar.bz2";
@@ -25,5 +25,6 @@ stdenv.mkDerivation {
   meta = {
     description = "A Qt wrapper around PolKit";
     maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

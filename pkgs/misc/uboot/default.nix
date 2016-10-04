@@ -10,14 +10,16 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2016.01";
-
-    nativeBuildInputs = [ bc dtc ];
+    version = "2016.05";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "1md5jpq5n9jh08s7sdkjrvg2q7kpzwa7yrpgl9581ncrjfx2yyg5";
+      sha256 = "0wdivib8kbm17qr6r7n7wyzg5vnwpagvwk5m0z80rbssc5sj5l47";
     };
+
+    nativeBuildInputs = [ bc dtc ];
+
+    hardeningDisable = [ "all" ];
 
     configurePhase = ''
       make ${defconfig}
@@ -68,6 +70,12 @@ in rec {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootBeagleboneBlack = buildUBoot rec {
+    defconfig = "am335x_boneblack_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["MLO" "u-boot.img"];
+  };
+
   ubootJetsonTK1 = buildUBoot rec {
     defconfig = "jetson-tk1_defconfig";
     targetPlatforms = ["armv7l-linux"];
@@ -86,12 +94,16 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
-  # Intended only for QEMU's vexpress-a9 emulation target!
-  ubootVersatileExpressCA9 = buildUBoot rec {
-    defconfig = "vexpress_ca9x4_defconfig";
+  ubootRaspberryPi2 = buildUBoot rec {
+    defconfig = "rpi_2_defconfig";
     targetPlatforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot"];
-    patches = [ ./vexpress-Use-config_distro_bootcmd.patch ];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi3 = buildUBoot rec {
+    defconfig = "rpi_3_32b_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
   };
 
   ubootWandboard = buildUBoot rec {

@@ -148,7 +148,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         ExecStart = ''
-          ${cfg.package}/bin/bosun -c ${configFile}
+          ${cfg.package.bin}/bin/bosun -c ${configFile}
         '';
       };
     };

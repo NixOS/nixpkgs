@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bwwv1g9lchaq6qmhvj1pp3hnyqr64ydd4j38x94pmprs4d27b83";
   };
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   buildInputs =
     [ pkgconfig ] ++
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://xiph.org/ao/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

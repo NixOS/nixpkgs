@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/vysheng/tg.git";
-    sha256 = "07x6172nyipbz4bk7n417a2ydj5r7y1ch2zl3hp79nckfw11fix7";
+    sha256 = "07sss5cnw2ygd7mp8f5532lmj7qm6ywqf4cjaq5g13i8igzqzwzj";
     rev = "6547c0b21b977b327b3c5e8142963f4bc246187a";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig mesa xlibsWrapper imagemagick libtiff bzip2 ];
 
-  NIX_CFLAGS_COMPILE = "-I${imagemagick}/include/ImageMagick";
+  NIX_CFLAGS_COMPILE = "-I${imagemagick.dev}/include/ImageMagick";
   NIX_LDFLAGS= "-rpath ${libXext}/lib";
 
   meta = {
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
       original collection, plus a few others.
     '';
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

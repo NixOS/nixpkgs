@@ -1,15 +1,16 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, gtk3 }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3 }:
 
-stdenv.mkDerivation {
-  name = "screen-message-0.23";
+stdenv.mkDerivation rec {
+  name = "screen-message-${version}";
+  version = "0.24";
 
-  srcs = fetchgit {
-    url = "git://git.nomeata.de/darcs-mirror-screen-message.debian.git";
-    rev = "refs/tags/0_23-1";
-    sha256 = "fddddd28703676b2908af71cca7225e6c7bdb15b2fdfd67679cac129028a431c";
+  src = fetchurl {
+    url = "mirror://debian/pool/main/s/screen-message/screen-message_${version}.orig.tar.gz";
+    sha256 = "1v03axr7471fmzxccl3ckv73j8gfcj615y5maxvm5phy0sd6rl49";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig gtk3 ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gtk3 ];
 
   # screen-message installs its binary in $(prefix)/games per default
   makeFlags = [ "execgamesdir=$(out)/bin" ];
@@ -19,5 +20,6 @@ stdenv.mkDerivation {
     description = "Displays a short text fullscreen in an X11 window";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.fpletz ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

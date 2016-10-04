@@ -10,7 +10,8 @@ let
 
   interfaces = attrValues config.networking.interfaces;
 
-  enableDHCP = config.networking.useDHCP || any (i: i.useDHCP == true) interfaces;
+  enableDHCP = config.networking.dhcpcd.enable &&
+        (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
 
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
@@ -61,7 +62,6 @@ let
       ${cfg.extraConfig}
     '';
 
-  # Hook for emitting ip-up/ip-down events.
   exitHook = pkgs.writeText "dhcpcd.exit-hook"
     ''
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
@@ -73,13 +73,7 @@ let
           # applies to openntpd.
           ${config.systemd.package}/bin/systemctl try-restart ntpd.service
           ${config.systemd.package}/bin/systemctl try-restart openntpd.service
-
-          ${config.systemd.package}/bin/systemctl start ip-up.target
       fi
-
-      #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
-      #    ${config.systemd.package}/bin/systemctl start ip-down.target
-      #fi
 
       ${cfg.runHook}
     '';
@@ -91,6 +85,15 @@ in
   ###### interface
 
   options = {
+
+    networking.dhcpcd.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable dhcpcd for device configuration. This is mainly to
+        explicitly disable dhcpcd (for example when using networkd).
+      '';
+    };
 
     networking.dhcpcd.persistent = mkOption {
       type = types.bool;
@@ -154,10 +157,9 @@ in
     systemd.services.dhcpcd =
       { description = "DHCP Client";
 
-        wantedBy = [ "network.target" ];
-        # Work-around to deal with problems where the kernel would remove &
-        # re-create Wifi interfaces early during boot.
-        after = [ "network-interfaces.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        wants = [ "network.target" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by

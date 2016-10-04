@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
+  # FIXME: Remove as soon as kmscon > 8 comes along.
+  postPatch = ''
+    sed -i -e 's/libsystemd-daemon libsystemd-login/libsystemd/g' configure
+  '';
+
   configureFlags = [
     "--enable-multi-seat"
     "--disable-debug"

@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.riverbankcomputing.com/software/qscintilla/intro;
     license = stdenv.lib.licenses.gpl2; # and gpl3 and commercial
+    platforms = stdenv.lib.platforms.unix;
   };
 }

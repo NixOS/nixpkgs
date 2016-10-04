@@ -1,5 +1,11 @@
 { lib, stdenv, buildEnv, haskell, nodejs, fetchurl, fetchpatch, makeWrapper }:
 
+# To update:
+# 1) Update versions in ./update-elm.rb and run it.
+# 2) Checkout elm-reactor and run `elm-package install -y` inside.
+# 3) Run ./elm2nix.rb in elm-reactor's directory.
+# 4) Move the resulting 'package.nix' to 'packages/elm-reactor-elm.nix'.
+
 let
   makeElmStuff = deps:
     let json = builtins.toJSON (lib.mapAttrs (name: info: info.version) deps);
@@ -34,7 +40,7 @@ let
       EOF
     '' + lib.concatStrings cmds;
 
-  hsPkgs = haskell.packages.ghc7103.override {
+  hsPkgs = haskell.packages.ghc801.override {
     overrides = self: super:
       let hlib = haskell.lib;
           elmRelease = import ./packages/release.nix { inherit (self) callPackage; };
@@ -57,13 +63,20 @@ let
                 '';
             });
 
+            /*
+            This is not a core Elm package, and it's hosted on GitHub.
+            To update, run:
+
+                cabal2nix --jailbreak --revision refs/tags/foo http://github.com/avh4/elm-format > packages/elm-format.nix
+
+            where foo is a tag for a new version, for example "0.3.1-alpha".
+            */
+            elm-format = self.callPackage ./packages/elm-format.nix { };
+
           };
       in elmPkgs // {
         inherit elmPkgs;
         elmVersion = elmRelease.version;
-
-        # To unbreak elm-compiler
-        language-ecmascript = self.language-ecmascript_0_17_0_2;
       };
   };
 in hsPkgs.elmPkgs // {

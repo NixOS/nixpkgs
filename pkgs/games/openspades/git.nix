@@ -14,12 +14,17 @@ stdenv.mkDerivation rec {
     sha256 = "0vyvmgim03q8pcmfa1i0njr4w1lpjq5g3b47f67v9b5c5jcjycwn";
   };
 
-  nativeBuildInputs = 
+  postPatch = "sed '1i#include <cmath>' -i Sources/Client/{,Client}Player.cpp";
+
+  nativeBuildInputs =
     with stdenv.lib;
     [ cmake curl glew makeWrapper mesa SDL2 SDL2_image unzip wget zlib ]
     ++ lib.optional withOpenal openal;
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DOPENSPADES_INSTALL_BINARY=bin" "-DOPENSPADES_RESOURCES=NO" ];
+  cmakeFlags = [
+    "-DOPENSPADES_INSTALL_BINARY=bin"
+    "-DOPENSPADES_RESOURCES=NO"
+  ];
 
   #enableParallelBuilding = true;
 

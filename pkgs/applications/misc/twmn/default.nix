@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/sboli/twmn.git";
     rev = "9492a47e25547e602dd57efd807033677c90b150";
-    sha256 = "9c91e9d3d6d7f9d90d34da6f1a4b9f3dee65605c1e43729417d6921c54dded6b";
+    sha256 = "1a68gka9gyxyzhc9rn8df59rzcdwkjw90cxp1kk0rdfp6svhxhsa";
   };
 
   buildInputs = [ qtbase qtx11extras pkgconfig boost qmakeHook ];
@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp bin/* "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = {

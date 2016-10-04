@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/UnNetHack/UnNetHack";
     rev = "63677eb256b5a75430f190cfb0f76bdd9bd0b9dd";
-    sha256 = "48a80ef83308b91d4aa86598e30e5b5ce9a5b2da2a763fe921698990c3243969";
+    sha256 = "0w6vyg0j2xdvr5vdlyf3dwliyxjzcr5fdbx5maygxiql44j104v3";
   };
 
   buildInputs = [ ncurses ];

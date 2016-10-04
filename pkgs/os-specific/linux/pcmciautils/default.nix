@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
       hotpluggable bus system.
     ";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -6,7 +6,7 @@ agda.mkDerivation (self: rec {
   src = fetchgit {
     url = "https://github.com/jonsterling/Agda-Sheaves.git";
     rev = version;
-    sha256 = "39e0e4a1f05e359c099cf50a5ec7dd2db7b55f98dcc019f1e4667dca8b37f001";
+    sha256 = "1gjffyyi4gk9z380yw2wm0jg0a01zy8dnw7jrcc7222swisk5s2d";
   };
 
   everythingFile = "sheaves.agda";
@@ -19,5 +19,6 @@ agda.mkDerivation (self: rec {
     license = stdenv.lib.licenses.cc-by-40;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    broken = true;  # replaced by constructive-sheaf-semantics
   };
 })

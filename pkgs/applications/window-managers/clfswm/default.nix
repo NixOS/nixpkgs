@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://gitlab.common-lisp.net/clfswm/clfswm.git";
     rev = "refs/heads/master";
-    sha256 = "1hkm6bn5xww932w34l13bg87m5hsnwnd0i1lka6sw0cq8whndya0";
+    sha256 = "0hynzh3a1zr719cxfb0k4cvh5lskzs616hwn7p942isyvhwzhynd";
   };
 
   buildInputs = [

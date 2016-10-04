@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://gnupg.org/";
-    description = "free implementation of the OpenPGP standard for encrypting and signing data";
+    description = "Free implementation of the OpenPGP standard for encrypting and signing data";
     license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''

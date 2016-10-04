@@ -56,6 +56,6 @@ in
       homepage = http://wiki.github.com/joelthelion/autojump;
       license = stdenv.lib.licenses.gpl3;
       platforms = stdenv.lib.platforms.all;
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
+      maintainers = [ stdenv.lib.maintainers.domenkozar ];
     };
   }

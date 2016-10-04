@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1b7mi1l20jhj09kyh0bq14qzz8vdhhyf35gzwsq43mn6rc7h0b4f";
   };
 
-  preInstall = ''
+  prePatch = ''
     sed -i -e "s|/usr/local/bin|$out/bin|g" -e "s|/usr/share|$out/share|g" Makefile antiword.h
   '';
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     description = "Convert MS Word documents to plain text or PostScript";
     license = stdenv.lib.licenses.gpl2;
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

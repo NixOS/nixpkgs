@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames ];
   meta = {
-    description = "the KDE version of Gnu-Lactic Konquest";
+    description = "The KDE version of Gnu-Lactic Konquest";
   };
 }

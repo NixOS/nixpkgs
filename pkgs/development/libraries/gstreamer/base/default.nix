@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-1.8.0";
+  name = "gst-plugins-base-1.8.2";
 
   meta = {
     description = "Base plugins and helper libraries";
@@ -15,8 +15,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-    sha256 = "08hmg7fp519wim1fm04r7f2q2020ssdninawqsbrqjsvs70srh5b";
+    sha256 = "9d7109c8fb0a5dec8edb17b0053c59a46aba7ddf48dc48ea822ebbbd4339d38d";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     pkgconfig python gobjectIntrospection
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gstreamer ];
 
-  configureFlags = if stdenv.isDarwin then [ 
+  configureFlags = if stdenv.isDarwin then [
     # Does not currently build on Darwin
     "--disable-libvisual"
     # Undefined symbols _cdda_identify and _cdda_identify_scsi in cdparanoia

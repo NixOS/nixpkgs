@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, poppler, poppler_data, makeWrapper }:
+{ fetchurl, stdenv, pkgconfig, poppler, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "pdfgrep-${version}";
@@ -9,21 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "6e8bcaf8b219e1ad733c97257a97286a94124694958c27506b2ea7fc8e532437";
   };
 
-  buildInputs = [ pkgconfig poppler poppler_data makeWrapper ];
+  buildInputs = [ pkgconfig poppler makeWrapper ];
 
   patchPhase = ''
     sed -i -e "s%cpp/poppler-document.h%poppler/cpp/poppler-document.h%" pdfgrep.cc
     sed -i -e "s%cpp/poppler-page.h%poppler/cpp/poppler-page.h%" pdfgrep.cc
   '';
 
-  # workarround since it can't be hardcoded in pdfgrep
-  preFixup = ''
-    wrapProgram "$out/bin/pdfgrep" \
-      --set POPPLER_DATADIR "${poppler_data}/share/poppler"
-  '';
-
   meta = {
-    description = "a tool to search text in PDF files";
+    description = "A tool to search text in PDF files";
     homepage = http://pdfgrep.sourceforge.net/;
     license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [qknight];

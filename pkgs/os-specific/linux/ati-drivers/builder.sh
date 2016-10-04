@@ -1,4 +1,3 @@
-# What is LIBGL_DRIVERS_PATH used for?
 # TODO gentoo removes some tools because there are xorg sources (?)
 
 source $stdenv/setup
@@ -6,14 +5,13 @@ set -x
 
 die(){ echo $@; exit 1; }
 
-mkdir fglrx # custom unpack:
-cd fglrx
 unzip $src
-cd ..
-run_file=$(echo fglrx/amd-driver-installer-*)
+run_file=fglrx-$build/amd-driver-installer-$build-x86.x86_64.run
 sh $run_file --extract .
 
-eval "$patchPhase1"
+for patch in $patches;do
+    patch -p1 < $patch
+done
 
 case "$system" in
   x86_64-linux)
@@ -33,9 +31,9 @@ esac
 
 if test -z "$libsOnly"; then
 
-  kernelVersion=$(cd ${kernel}/lib/modules && ls)
-  kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/build)
-  linuxsources=$(echo ${kernel}/lib/modules/$kernelVersion/source)
+  kernelVersion=$(cd ${kernelDir}/lib/modules && ls)
+  kernelBuild=$(echo ${kernelDir}/lib/modules/$kernelVersion/build)
+  linuxsources=$(echo ${kernelDir}/lib/modules/$kernelVersion/source)
 
   # note: maybe the .config file should be used to determine this ?
   # current kbuild infrastructure allows using CONFIG_* defines
@@ -231,7 +229,7 @@ fi
     fglrx_dri.so \
     libaticaldd.so
   do
-    patchelf --set-rpath $gcc/$lib_arch/ $out/lib/$pelib2
+    patchelf --set-rpath $glibcDir/lib/:$libStdCxx/lib/ $out/lib/$pelib2
   done
 }
 
@@ -244,13 +242,14 @@ if test -z "$libsOnly"; then
   tar xfz ../common/usr/src/ati/fglrx_sample_source.tgz
   eval "$patchPhaseSamples"
 
+
   ( # build and install fgl_glxgears
-    cd fgl_glxgears; 
+    cd fgl_glxgears;
     gcc -DGL_ARB_texture_multisample=1 -g \
     -I$mesa/include \
     -I$out/include \
     -L$mesa/lib -lGL -lGLU -lX11 -lm \
-    -o $out/bin/fgl_glxgears -Wall  fgl_glxgears.c
+    -o $out/bin/fgl_glxgears -Wall fgl_glxgears.c
   )
 
   true || ( # build and install
@@ -263,16 +262,16 @@ if test -z "$libsOnly"; then
     # a symlink named libfglrx_gamma.so.1 linking to libfglrx_gamma.so.1.0 in $out/lib/
 
     cd programs/fglrx_gamma
-    gcc -fPIC -I${libXxf86vm}/include \
-	    -I${xf86vidmodeproto}/include \
-	    -I$out/X11R6/include \
-	    -L$out/lib \
-	    -Wall -lm -lfglrx_gamma -lX11 -lXext -o $out/bin/fglrx_xgamma fglrx_xgamma.c 
+    gcc -fPIC -I${libXxf86vm.dev}/include \
+      -I${xf86vidmodeproto}/include \
+      -I$out/X11R6/include \
+      -L$out/lib \
+      -Wall -lm -lfglrx_gamma -lX11 -lXext -o $out/bin/fglrx_xgamma fglrx_xgamma.c
   )
 
   {
     # patch and copy statically linked qt libs used by amdcccle
-    patchelf --set-interpreter $(echo $glibc/lib/ld-linux*.so.2) $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtCore.so.4 &&
+    patchelf --set-interpreter $(echo $glibcDir/lib/ld-linux*.so.2) $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtCore.so.4 &&
     patchelf  --set-rpath $gcc/$lib_arch/ $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtCore.so.4 &&
     patchelf --set-rpath $gcc/$lib_arch/:$out/share/ati/:$libXrender/lib/:$libSM/lib/:$libICE/lib/:$libfontconfig/lib/:$libfreetype/lib/ $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtGui.so.4 &&
     mkdir -p $out/share/ati
@@ -285,7 +284,7 @@ if test -z "$libsOnly"; then
     patchelf --shrink-rpath $BIN/amdcccle
     for prog in $BIN/*; do
       cp -f $prog $out/bin &&
-      patchelf --set-interpreter $(echo $glibc/lib/ld-linux*.so.2) $out/bin/$(basename $prog) &&
+      patchelf --set-interpreter $(echo $glibcDir/lib/ld-linux*.so.2) $out/bin/$(basename $prog) &&
       wrapProgram $out/bin/$(basename $prog) --prefix LD_LIBRARY_PATH : $out/lib/:$gcc/lib/:$out/share/ati/:$libXinerama/lib/:$libXrandr/lib/:$libfontconfig/lib/:$libfreetype/lib/:$LD_LIBRARY_PATH
     done
   }

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  version = "v0.99.2";
+  version = "v0.99.4";
   name = "fastjson-${version}";
   src = fetchFromGitHub {
     repo = "libfastjson";
     owner = "rsyslog";
-    rev = "eabae907c9d991143e17da278a239819f2e8ae1c";
-    sha256 = "17fhaqdn0spc4p0848ahcy68swm6l5yd3bx6bdzxmmwj1jdrmvzk";
+    rev = "6e057a094cb225c9d80d8d6e6b1f36ca88a942dd";
+    sha256 = "1pn207p9zns0aqm6z5l5fdgb94wyyhaw83lyvyfdxmai74nbqs65";
   };
 
   buildInputs = [ autoconf automake libtool ];
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rsyslog/libfastjson";
     license = licenses.mit;
     maintainers = with maintainers; [ nequissimus ];
+    platforms = with platforms; unix;
   };
 }

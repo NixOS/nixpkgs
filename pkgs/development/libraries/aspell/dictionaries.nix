@@ -56,11 +56,11 @@ in {
   };
 
   en = buildDict {
-    shortName = "en-7.1-0";
+    shortName = "en-2016.06.26-0";
     fullName = "English";
     src = fetchurl {
-      url = mirror://gnu/aspell/dict/en/aspell6-en-7.1-0.tar.bz2;
-      sha256 = "02ldfiny4iakgfgy4sdrzjqdzi7l1rmb6y30lv31kfy5x31g77gz";
+      url = mirror://gnu/aspell/dict/en/aspell6-en-2016.06.26-0.tar.bz2;
+      sha256 = "1clzsfq2cbgp6wvfr2qwfsd2nziipml5m5vqm45r748wczlxihv1";
     };
   };
 
@@ -203,5 +203,13 @@ in {
     };
   };
 
+  uk = buildDict {
+    shortName = "uk-1.4.0-0";
+    fullName = "Ukrainian";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/uk/aspell6-uk-1.4.0-0.tar.bz2;
+      sha256 = "137i4njvnslab6l4s291s11xijr5jsy75lbdph32f9y183lagy9m";
+    };
+  };
 
 }

@@ -9,6 +9,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch
+    ++ stdenv.lib.optional (stdenv.cross.libc or null == "msvcrt")
+        (fetchpatch {
+          name = "mingw.patch";
+          url = "http://git.gnome.org/browse/libxslt/patch/?id=ab5810bf27cd63";
+          sha256 = "0kkqq3fv2k3q86al38vp6zwxazpvp5kslcjnmrq4ax5cm2zvsjk3";
+        })
     ++ [
       (fetchpatch {
         name = "CVE-2015-7995.patch";
@@ -17,7 +23,7 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "bin" "dev" "out" "doc" ];
 
   buildInputs = [ libxml2 ];
 

@@ -6,6 +6,8 @@ fixupOutputHooks+=('if [ -z "$dontPatchELF" ]; then patchELF "$prefix"; fi')
 
 patchELF() {
     local dir="$1"
+    [ -e "$dir" ] || return 0
+
     header "shrinking RPATHs of ELF executables and libraries in $dir"
 
     local i

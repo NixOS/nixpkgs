@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "http://das.nasophon.de/klick/";
     description = "Advanced command-line metronome for JACK";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 

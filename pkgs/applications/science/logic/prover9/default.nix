@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1l2i3d3h5z7nnbzilb6z92r0rbx0kh6yaxn2c5qhn3000xcfsay3";
   };
 
-  phases = "unpackPhase patchPhase buildPhase installPhase";
+  hardeningDisable = [ "format" ];
 
   patchPhase = ''
     RM=$(type -tp rm)
@@ -22,6 +22,8 @@ stdenv.mkDerivation {
   '';
 
   buildFlags = "all";
+
+  checkPhase = "make test1";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -37,7 +39,7 @@ stdenv.mkDerivation {
       for first-order and equational logic. Prover9 is a successor of
       the Otter Prover. This is the LADR command-line version.
     '';
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [];
   };
 }

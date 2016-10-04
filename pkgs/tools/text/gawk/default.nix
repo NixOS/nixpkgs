@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin locale;
 
   configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
-    ++ [(if interactive then "--with-readline=${readline}" else "--without-readline")];
+    ++ [(if interactive then "--with-readline=${readline.dev}" else "--without-readline")];
 
   postInstall = "rm $out/bin/gawk-*";
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     inherit rev;
     url = https://github.com/ruediger/VobSub2SRT.git;
-    sha256 = "8e867a021ac529e7607627d5944b95bb9f1378ffabd8837e7a028663a8ce5adf";
+    sha256 = "1rpanrv8bgdh95v2320qbd44xskncvq6y84cbbfc86gw0qxpd9cb";
   };
 
   buildInputs = [ cmake libtiff pkgconfig ];

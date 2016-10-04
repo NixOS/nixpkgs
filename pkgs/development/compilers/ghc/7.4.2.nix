@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vc3zmxqi4gflssmj35n5c8idbvyrhd88abi50whbirwlf4i5vpj";
   };
 
-  patches = [ ./fix-7.4.2-clang.patch ];
+  patches = [ ./fix-7.4.2-clang.patch ./relocation.patch ];
 
   buildInputs = [ ghc perl gmp ncurses ];
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     maintainers = [
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.andres
-      stdenv.lib.maintainers.simons
+      stdenv.lib.maintainers.peti
     ];
     inherit (ghc.meta) license platforms;
   };

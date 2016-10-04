@@ -3,13 +3,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.22.1";
+  version = "0.32.0";
   name = "flow-${version}";
+
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "11d04g8rvjv2q79pmrjjx8lmmm1ix8kih7wc0adln0ap5123ph46";
+    sha256 = "17v2qb9xsjv4lj62x553knnhb7z43y2frzvs0q1hvamw8wyp086h";
   };
 
   installPhase = ''
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "A static type checker for JavaScript";
     homepage = http://flowtype.org;
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ puffnfresh globin ];
   };
 }

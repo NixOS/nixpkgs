@@ -4,11 +4,12 @@
 , enableTNC ? false }:
 
 stdenv.mkDerivation rec {
-  name = "strongswan-5.3.2";
+  name = "strongswan-${version}";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "09gjrd5f8iykh926y35blxlm2hlzpw15m847d8vc9ga29s6brad4";
+    sha256 = "0m449i5s51ikqh36s1sp4rvw60wqyv0j12kyd31yl9b7mjc3jijq";
   };
 
   dontPatchELF = true;

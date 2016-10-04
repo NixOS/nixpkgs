@@ -1,13 +1,13 @@
 { stdenv, fetchurl, mesa, SDL, SDL_mixer, plib, libjpeg }:
 let
-  version = "0.9.12";
+  version = "0.9.13";
 in
 stdenv.mkDerivation rec {
   name = "crrcsim-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/crrcsim/${name}.tar.gz";
-    sha256 = "1yx3cn7ilwj92v6rk3zm565ap92vmky4r39na814lfglkzn6l5id";
+    sha256 = "abe59b35ebb4322f3c48e6aca57dbf27074282d4928d66c0caa40d7a97391698";
   };
 
   buildInputs = [

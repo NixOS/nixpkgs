@@ -9,7 +9,7 @@ py.buildPythonApplication rec {
   src = fetchgit {
     url = "https://github.com/sommer/loxodo.git";
     rev = "6c56efb4511fd6f645ad0f8eb3deafc8071c5795";
-    sha256 = "02whmv4am8cz401rplplqzbipkyf0wd69z43sd3yw05rh7f3xbs2";
+    sha256 = "1cg0dfcv57ps54f1a0ksib7hgkrbdi9q699w302xyyfyvjcb5dd2";
   };
 
   propagatedBuildInputs = with py; [ wxPython python.modules.readline ];

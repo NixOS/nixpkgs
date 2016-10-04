@@ -1,9 +1,8 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
 , platformTools, buildTools, support, supportRepository, platforms, sysimages, addons
-, zlib_32bit
-, libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit, alsaLib_32bit
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
-, freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils
+, freetype, fontconfig, glib, gtk2, atk, file, jdk, coreutils, libpulseaudio, dbus
+, zlib, glxinfo, xkeyboardconfig
 }:
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false, useGooglePlayServices ? false }:
 
@@ -11,16 +10,16 @@ with { inherit (stdenv.lib) makeLibraryPath; };
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "24.4";
+  version = "25.2.2";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
-      sha1 = "eec87cdb9778718e4073b4ca326a46cdd084f901";
+      url = "http://dl.google.com/android/repository/tools_r${version}-linux.zip";
+      sha256 = "0q53yq8fjc10kr4fz3rap5vsil3297w5nn4kw1z0ms7yz1d1im8h";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
-      sha1 = "a9b6f025a9691aef430b19b52e01844dbbcbf6b4";
+      url = "http://dl.google.com/android/repository/tools_r${version}-macosx.zip";
+      sha256 = "1wq7xm0rhy0h6qylv7fq9mhf8hqihrr1nzf7d322rc3g0jfrdrcl";
     }
     else throw "platform not ${stdenv.system} supported!";
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec
     cd $out/libexec
     unpackFile $src
-    cd android-sdk-*/tools
+    cd tools
 
     for f in android traceview draw9patch hierarchyviewer monitor ddms screenshot2 uiautomatorviewer monkeyrunner jobb lint
     do
@@ -39,16 +38,24 @@ stdenv.mkDerivation rec {
     ''
       # There are a number of native binaries. We must patch them to let them find the interpreter and libstdc++
       
-      for i in emulator emulator-arm emulator-mips emulator-x86 mksdcard
+      for i in mksdcard
       do
           patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
-          patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
+          patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib $i
       done
-      
+
+      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
+        for i in bin64/{mkfs.ext4,fsck.ext4,e2fsck,tune2fs,resize2fs}
+        do
+            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
+            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64 $i
+        done
+      ''}
+
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
         # We must also patch the 64-bit emulator instances, if needed
         
-        for i in emulator64-arm emulator64-mips emulator64-x86
+        for i in emulator emulator64-arm emulator64-mips emulator64-x86 emulator64-crash-service emulator-check qemu/linux-x86_64/qemu-system-*
         do
             patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
             patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64 $i
@@ -60,31 +67,25 @@ stdenv.mkDerivation rec {
       
       wrapProgram `pwd`/android \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ glib gtk libXtst ]}
+        --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ glib gtk2 libXtst ]}
     
       wrapProgram `pwd`/uiautomatorviewer \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
     
       wrapProgram `pwd`/hierarchyviewer \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
       
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
-    
-      for i in emulator emulator-arm emulator-mips emulator-x86
-      do
-          wrapProgram `pwd`/$i \
-            --prefix PATH : ${file}/bin \
-            --suffix LD_LIBRARY_PATH : `pwd`/lib:${makeLibraryPath [ libX11_32bit libxcb_32bit libXau_32bit libXdmcp_32bit libXext_32bit mesa_32bit ]}
-      done
-      
+
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
-        for i in emulator64-arm emulator64-mips emulator64-x86
+        for i in emulator emulator64-arm emulator64-mips emulator64-x86 emulator64-crash-service
         do
             wrapProgram `pwd`/$i \
-              --prefix PATH : ${file}/bin \
-              --suffix LD_LIBRARY_PATH : `pwd`/lib:${makeLibraryPath [ libX11 libxcb libXau libXdmcp libXext mesa alsaLib ]}
+              --prefix PATH : ${stdenv.lib.makeBinPath [ file glxinfo ]} \
+              --suffix LD_LIBRARY_PATH : `pwd`/lib64:`pwd`/lib64/qt/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext mesa alsaLib zlib libpulseaudio dbus.lib ]} \
+              --suffix QT_XKB_CONFIG_ROOT : ${xkeyboardconfig}/share/X11/xkb
         done
       ''}
     ''}
@@ -100,7 +101,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk atk stdenv.cc.cc libXtst ]}
+          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk2 atk stdenv.cc.cc libXtst ]}
 
         cd ../..
       ''
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk atk stdenv.cc.cc libXtst ]}
+          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk2 atk stdenv.cc.cc libXtst ]}
 
         cd ../..
       ''
@@ -205,7 +206,7 @@ stdenv.mkDerivation rec {
     
     mkdir -p $out/bin
 
-    for i in $out/libexec/android-sdk-*/tools/*
+    for i in $out/libexec/tools/*
     do
         if [ ! -d $i ] && [ -x $i ]
         then
@@ -213,7 +214,7 @@ stdenv.mkDerivation rec {
         fi
     done
     
-    for i in $out/libexec/android-sdk-*/platform-tools/*
+    for i in $out/libexec/platform-tools/*
     do
         if [ ! -d $i ] && [ -x $i ]
         then
@@ -221,7 +222,7 @@ stdenv.mkDerivation rec {
         fi
     done
 
-    for i in $out/libexec/android-sdk-*/build-tools/*/*
+    for i in $out/libexec/build-tools/*/*
     do
         if [ ! -d $i ] && [ -x $i ]
         then
@@ -231,4 +232,9 @@ stdenv.mkDerivation rec {
   '';
   
   buildInputs = [ unzip makeWrapper ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+    hydraPlatforms = [];
+  };
 }

@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     "--enable-preferences-extension"
     "--enable-long-usernames"
     "--enable-external-lookup"
-  ] ++ lib.optional withMySQL "--with-mysql-includes=${libmysql}/include/mysql"
+  ] ++ lib.optional withMySQL "--with-mysql-includes=${lib.getDev libmysql}/include/mysql"
     ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
 
   # Lots of things are hardwired to paths like sysconfdir. That's why we install with both "prefix" and "DESTDIR"
@@ -99,10 +99,10 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://dspam.nuclearelephant.com/;
+    homepage = "http://nuclearelephant.com/";
     description = "Community Driven Antispam Filter";
     license = licenses.agpl3;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };
 }

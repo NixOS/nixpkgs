@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/less/less.js.git;
     rev = "refs/tags/v${version}";
-    sha256 = "0r8bcad247v5fyh543a7dppmfbf49ai4my3vcizk42fsbnjs8q2x";
+    sha256 = "1af1xbh1pjpfsx0jp69syji6w9750nigk652yk46jrja3z1scb4s";
   };
 
   phases = [ "installPhase" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "LESS to CSS compiler";
     homepage = http://lesscss.org/;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
 }

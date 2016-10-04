@@ -11,5 +11,8 @@ stdenv.mkDerivation {
   installPhase = "cd xmove; make install install.man MANDIR=\${out}/man/man1 BINDIR=\${out}/bin; cd .. ; cd xmovectrl ; make install install.man MANDIR=\${out}/man/man1 BINDIR=\${out}/bin; cd ..";
 
   buildInputs = [libX11 libXi imake xauth libXau];
-}
 
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
+}

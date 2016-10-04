@@ -1,4 +1,4 @@
-From d7e56abcae8bcb85dc935e94418a2f0e9956941b Mon Sep 17 00:00:00 2001
+From e08583ddb8445241c38c88d828271be908d52f9f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
 Date: Mon, 17 Feb 2014 20:52:50 +0000
 Subject: [PATCH 1/2] Import LD_LIBRARY_PATH to allow running 'scons check'
@@ -9,17 +9,17 @@ Subject: [PATCH 1/2] Import LD_LIBRARY_PATH to allow running 'scons check'
  1 file changed, 1 insertion(+)
 
 diff --git a/SConstruct b/SConstruct
-index 14e2f59..86b94bc 100644
+index fe444a2..f73c87e 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -215,6 +215,7 @@ import_env = (
-     'PKG_CONFIG_LIBDIR',      # Pass more environment variables to pkg-config (required for crossbuilds)
+@@ -220,6 +220,7 @@ import_env = (
      'STAGING_DIR',     # Required by the OpenWRT and CeroWrt builds.
      'STAGING_PREFIX',  # Required by the OpenWRT and CeroWrt builds.
+     'WRITE_PAD',       # So we can test WRITE_PAD values on the fly.
 +    'LD_LIBRARY_PATH', # Allows running 'scons check' without 'chrpath'
      )
  envs = {}
  for var in import_env:
 -- 
-1.9.0
+2.9.0
 

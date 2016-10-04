@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     homepage = http://ipafont.ipa.go.jp/ipafont/;
     license = stdenv.lib.licenses.ipa;
     maintainers = [ stdenv.lib.maintainers.auntie ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

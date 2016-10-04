@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://modpython.org/;
     description = "An Apache module that embeds the Python interpreter within the server";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

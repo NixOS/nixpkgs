@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     homepage = "http://www.cs.mun.ca/~gstarkes/wmaker/dockapps/time.html#wmcalclock";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bstrik ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

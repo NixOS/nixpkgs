@@ -2,7 +2,7 @@
 , texinfo, gnused }:
 
 let
-  version = "3.1";
+  version = "3.1.1";
 in
 
 stdenv.mkDerivation {
@@ -13,12 +13,14 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/ledger/ledger.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1l5y4k830jyw7n1nnhssci3qahq091fj5cxcr77znk20nclz851s";
+    sha256 = "1j4p7djkmdmd858hylrsc3inamh9z0vkfl98s9wiqfmrzw51pmxp";
   };
 
   buildInputs = [ cmake boost gmp mpfr libedit python texinfo gnused ];
 
   enableParallelBuilding = true;
+
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
   # Skip byte-compiling of emacs-lisp files because this is currently
   # broken in ledger...
@@ -40,6 +42,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons the-kenny jwiegley ];
+    maintainers = with stdenv.lib.maintainers; [ peti the-kenny jwiegley ];
   };
 }

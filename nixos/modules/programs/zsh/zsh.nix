@@ -25,7 +25,10 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          Whether to configure zsh as an interactive shell.
+          Whether to configure zsh as an interactive shell. To enable zsh for
+          a particular user, use the <option>users.users.&lt;name?&gt;.shell</option>
+          option for that user. To enable zsh system-wide use the
+          <option>users.defaultUserShell</option> option.
         '';
         type = types.bool;
       };
@@ -81,6 +84,14 @@ in
         type = types.bool;
       };
 
+      enableSyntaxHighlighting = mkOption {
+        default = false;
+        description = ''
+          Enable zsh-syntax-highlighting
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -99,9 +110,9 @@ in
 
       interactiveShellInit = ''
         # history defaults
-        export SAVEHIST=2000
-        export HISTSIZE=2000
-        export HISTFILE=$HOME/.zsh_history
+        SAVEHIST=2000
+        HISTSIZE=2000
+        HISTFILE=$HOME/.zsh_history
 
         setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
 
@@ -116,6 +127,12 @@ in
         done
 
         ${if cfg.enableCompletion then "autoload -U compinit && compinit" else ""}
+
+        ${optionalString (cfg.enableSyntaxHighlighting)
+          "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+        }
+
+        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
       '';
 
     };
@@ -177,7 +194,8 @@ in
     environment.etc."zinputrc".source = ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
-      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
+      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions
+      ++ optional cfg.enableSyntaxHighlighting pkgs.zsh-syntax-highlighting;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
 

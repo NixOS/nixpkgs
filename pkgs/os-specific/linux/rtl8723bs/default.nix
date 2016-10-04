@@ -1,15 +1,17 @@
 { stdenv, fetchFromGitHub, nukeReferences, kernel }:
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "rtl8723bs-${kernel.version}-${rev}";
-  rev = "6918e9b2ff297b1cc7fde193e72452c33c10e1c8";
+  name = "rtl8723bs-${kernel.version}-${version}";
+  version = "2016-04-11";
 
   src = fetchFromGitHub {
     owner = "hadess";
     repo = "rtl8723bs";
-    inherit rev;
-    sha256 = "07srd457wnz29nvvq02wz66s387bhjbydnmbs3qr7ljprabhsgmi";
+    rev = "11ab92d8ccd71c80f0102828366b14ef6b676fb2";
+    sha256 = "05q7mf12xcb00v6ba4wwvqi53q7ph5brfkj17xf6vkx4jr7xxnmm";
   };
+
+  hardeningDisable = [ "pic" ];
 
   buildInputs = [ nukeReferences ];
 
@@ -32,8 +34,9 @@ stdenv.mkDerivation rec {
     description = "Realtek SDIO Wi-Fi driver";
     homepage = "https://github.com/hadess/rtl8723bs";
     license = stdenv.lib.licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" "armv7l-linux" ];
-    broken = ! versionAtLeast kernel.version "3.19";
+    platforms = stdenv.lib.platforms.linux;
+    broken = (! versionAtLeast kernel.version "3.19")
+      || (kernel.features.grsecurity or false);
     maintainers = with maintainers; [ elitak ];
   };
 }

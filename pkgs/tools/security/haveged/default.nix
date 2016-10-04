@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.issihosts.com/haveged/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    maintainers = [ stdenv.lib.maintainers.domenkozar ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

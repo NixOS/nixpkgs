@@ -24,5 +24,6 @@ You drive a toy wood engine in many levels and you must collect all the coaches
 to win.
     '';
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

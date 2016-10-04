@@ -1,10 +1,10 @@
-{ fetchurl, stdenv, python, makeWrapper, lib
-, xpdf, pillow, pyopengl, pygame
-, setuptools, mesa, freeglut }:
+{ fetchurl, stdenv, pythonPackages, makeWrapper, lib
+, xpdf, mesa, freeglut }:
 
-let version = "0.10.5";
-in
- stdenv.mkDerivation {
+let
+  inherit (pythonPackages) python pyopengl pygame setuptools pillow;
+  version = "0.10.5";
+in stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
     # See http://keyj.s2000.ws/?p=77 for details.
 
@@ -45,7 +45,7 @@ in
                      (map (path:
                             path + "/lib/${python.libPrefix}/site-packages")
                           [ pillow pyopengl pygame setuptools ])} \
-         --prefix LIBRARY_PATH ":" "${mesa}/lib:${freeglut}/lib"
+         --prefix LIBRARY_PATH ":" "${lib.makeLibraryPath [ mesa freeglut ]}"
     '';
 
     meta = {

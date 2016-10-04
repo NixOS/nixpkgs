@@ -1,6 +1,5 @@
 { supportedSystems
-, packageSet ? (import ./../..)
-, allowTexliveBuilds ? false
+, packageSet ? (import ../..)
 , scrubJobs ? true
 }:
 
@@ -11,7 +10,6 @@ rec {
   # Ensure that we don't build packages marked as unfree.
   allPackages = args: packageSet (args // {
     config.allowUnfree = false;
-    config.allowTexliveBuilds = allowTexliveBuilds;
     config.inHydra = true;
   });
 

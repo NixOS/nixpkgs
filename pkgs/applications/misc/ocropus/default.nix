@@ -52,7 +52,7 @@ pythonPackages.buildPythonApplication rec {
     description = "Open source document analysis and OCR system";
     license = licenses.asl20;
     homepage = https://github.com/tmbdev/ocropy/;
-    maintainers = with maintainers; [ iElectric nckx viric ];
+    maintainers = with maintainers; [ domenkozar nckx viric ];
     platforms = platforms.linux;
   };
 }

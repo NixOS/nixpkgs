@@ -54,19 +54,17 @@ let
       ''}
     '';
 
-  kdmrc = pkgs.stdenv.mkDerivation {
-    name = "kdmrc";
-    config = defaultConfig + cfg.extraConfig;
-    preferLocalBuild = true;
-    buildCommand =
-      ''
-        echo "$config" > $out
+  kdmrc = pkgs.runCommand "kdmrc"
+    { config = defaultConfig + cfg.extraConfig;
+      preferLocalBuild = true;
+    }
+    ''
+      echo "$config" > $out
 
-        # The default kdmrc would add "-nolisten tcp", and we already
-        # have that managed by nixos. Hence the grep.
-        cat ${kdebase_workspace}/share/config/kdm/kdmrc | grep -v nolisten >> $out
-      '';
-  };
+      # The default kdmrc would add "-nolisten tcp", and we already
+      # have that managed by nixos. Hence the grep.
+      cat ${kdebase_workspace}/share/config/kdm/kdmrc | grep -v nolisten >> $out
+    '';
 
 in
 
@@ -139,7 +137,7 @@ in
             mkdir -m 0755 -p /var/lib/kdm
             chown kdm /var/lib/kdm
             ${(optionalString (config.system.boot.loader.id == "grub" && config.system.build.grub != null) "PATH=${config.system.build.grub}/sbin:$PATH ") +
-              "KDEDIRS=/run/current-system/sw exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon"}
+              "KDEDIRS=/run/current-system/sw exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon -logfile /dev/stderr"}
           '';
         logsXsession = true;
       };

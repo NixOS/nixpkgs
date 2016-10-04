@@ -8,7 +8,7 @@
 , freetype
 , gdk_pixbuf
 , glib
-, gtk
+, gtk2
 , libjpeg_turbo
 , mesa_glu
 , mesa_noglu
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     freetype
     gdk_pixbuf
     glib
-    gtk
+    gtk2
     libjpeg_turbo
     mesa_glu
     mesa_noglu
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://zandronum.com/;
-    description = "multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software. Binary version for online play";
+    description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software. Binary version for online play";
     maintainers = [ stdenv.lib.maintainers.lassulus ];
     # Binary version has different version string than source code version.
     license = stdenv.lib.licenses.unfreeRedistributable;

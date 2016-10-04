@@ -8,11 +8,11 @@
 assert gestures -> libstroke != null;
 
 stdenv.mkDerivation rec {
-  name = "fvwm-2.6.5";
+  name = "fvwm-2.6.6";
 
   src = fetchurl {
-    url = "ftp://ftp.fvwm.org/pub/fvwm/version-2/${name}.tar.bz2";
-    sha256 = "1ks8igvmzm0m0sra05k8xzc8vkqy3gv1qskl6davw1irqnarjm11";
+    url = "https://github.com/fvwmorg/fvwm/releases/download/version-2_6_6/${name}.tar.gz";
+    sha256 = "c5de085ff25b2128a401a80225481e63335f815f84eea139f80a5f66e606dc2c";
   };
 
   buildInputs = [
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "http://fvwm.org";
     description = "A multiple large virtual desktop window manager";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

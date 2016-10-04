@@ -63,7 +63,6 @@ in rec {
       imagemagick
       jdk
       linux
-      mysql51
       mysql55
       nginx
       nodejs

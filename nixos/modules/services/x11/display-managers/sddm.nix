@@ -27,6 +27,7 @@ let
     ${cfg.stopScript}
   '';
 
+
   cfgFile = pkgs.writeText "sddm.conf" ''
     [General]
     HaltCommand=${pkgs.systemd}/bin/systemctl poweroff
@@ -45,7 +46,7 @@ let
     HideUsers=${concatStringsSep "," dmcfg.hiddenUsers}
     HideShells=/run/current-system/sw/bin/nologin
 
-    [XDisplay]
+    [X11]
     MinimumVT=${toString xcfg.tty}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
@@ -99,7 +100,7 @@ in
 
       theme = mkOption {
         type = types.str;
-        default = "maui";
+        default = "";
         description = ''
           Greeter theme to use.
         '';
@@ -154,7 +155,7 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Automatically log in as the sepecified <option>autoLogin.user</option>.
+                Automatically log in as <option>autoLogin.user</option>.
               '';
             };
 
@@ -162,7 +163,7 @@ in
               type = types.nullOr types.str;
               default = null;
               description = ''
-                User to be used for the autologin.
+                User to be used for the automatic login.
               '';
             };
 
@@ -170,8 +171,8 @@ in
               type = types.bool;
               default = false;
               description = ''
-                If true automatic login will kick in again on session exit, otherwise it
-                will work only the first time.
+                If true automatic login will kick in again on session exit (logout), otherwise it
+                will only log in automatically when the display-manager is started.
               '';
             };
           };

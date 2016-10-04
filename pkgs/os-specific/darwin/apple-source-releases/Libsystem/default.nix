@@ -5,42 +5,7 @@
 appleDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
 
-  buildInputs = [ cpio libpthread ];
-
-  systemlibs = [ "cache"
-                 "commonCrypto"
-                 "compiler_rt"
-                 "copyfile"
-                 "corecrypto"
-                 "dispatch"
-                 "dyld"
-                 "keymgr"
-                 "kxld"
-                 "launch"
-                 "macho"
-                 "quarantine"
-                 "removefile"
-                 "system_asl"
-                 "system_blocks"
-                 # "system_c" # special re-export here to hide newer functions
-                 "system_configuration"
-                 "system_dnssd"
-                 "system_info"
-                 # "system_kernel" # special re-export here to hide newer functions
-                 "system_m"
-                 "system_malloc"
-                 "system_network"
-                 "system_notify"
-                 "system_platform"
-                 "system_pthread"
-                 "system_sandbox"
-                 # does not exist in El Capitan beta
-                 # FIXME: does anything on yosemite actually need this?
-                 # "system_stats"
-                 "unc"
-                 "unwind"
-                 "xpc"
-               ];
+  buildInputs = [ cpio ];
 
   installPhase = ''
     export NIX_ENFORCE_PURITY=
@@ -53,8 +18,8 @@ appleDerivation rec {
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} ${libclosure} ${CarbonHeaders} \
-               ${libdispatch} ${ncurses} ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
-               ${Libnotify} ${mDNSResponder} ${launchd} ${libutil}; do
+               ${libdispatch} ${ncurses.dev} ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
+               ${Libnotify} ${mDNSResponder} ${launchd} ${libutil} ${libpthread}; do
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
 
@@ -91,33 +56,9 @@ appleDerivation rec {
     # The startup object files
     cp ${Csu}/lib/* $out/lib
 
-    # selectively re-export functions from libsystem_c and libsystem_kernel
-    # to provide a consistent interface across OSX verions
-    mkdir -p $out/lib/system
-    ld -macosx_version_min 10.7 -arch x86_64 -dylib \
-       -o $out/lib/system/libsystem_c.dylib \
-       /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_c_symbols}
-
-    ld -macosx_version_min 10.7 -arch x86_64 -dylib \
-       -o $out/lib/system/libsystem_kernel.dylib \
-       /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_kernel_symbols}
-
-    # Set up the actual library link
-    clang -c -o CompatibilityHacks.o -Os CompatibilityHacks.c
-    clang -c -o init.o -Os init.c
-    ld -macosx_version_min 10.7 \
-       -arch x86_64 \
-       -dylib \
-       -o $out/lib/libSystem.dylib \
-       CompatibilityHacks.o init.o \
-       -compatibility_version 1.0 \
-       -current_version 1197.1.1 \
-       -reexport_library $out/lib/system/libsystem_c.dylib \
-       -reexport_library $out/lib/system/libsystem_kernel.dylib \
-        ${stdenv.lib.concatStringsSep " "
-          (map (l: "-reexport_library /usr/lib/system/lib${l}.dylib") systemlibs)}
+    # OMG impurity
+    ln -s /usr/lib/libSystem.B.dylib $out/lib/libSystem.B.dylib
+    ln -s /usr/lib/libSystem.dylib $out/lib/libSystem.dylib
 
     # Set up links to pretend we work like a conventional unix (Apple's design, not mine!)
     for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do

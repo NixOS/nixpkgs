@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     cmake RetroFE/Source -BRetroFE/Build -DCMAKE_BUILD_TYPE=Release \
       -DVERSION_MAJOR=0 -DVERSION_MINOR=0 -DVERSION_BUILD=0 \
-      -DGSTREAMER_BASE_INCLUDE_DIRS='${gst_all_1.gst-plugins-base}/include/gstreamer-1.0'
+      -DGSTREAMER_BASE_INCLUDE_DIRS='${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0'
   '';
 
   buildPhase = ''
@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     homepage = http://retrofe.com;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];
+    platforms = with platforms; linux;
   };
 }

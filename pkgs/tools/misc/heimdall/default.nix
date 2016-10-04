@@ -18,9 +18,9 @@ stdenv.mkDerivation {
   '';
   enableParallelBuilding = true;
   cmakeFlags = [
-    "-DQt5Widgets_DIR=${qt5.qtbase}/lib/cmake/Qt5Widgets"
-    "-DQt5Gui_DIR=${qt5.qtbase}/lib/cmake/Qt5Gui"
-    "-DQt5Core_DIR=${qt5.qtbase}/lib/cmake/Qt5Core"
+    "-DQt5Widgets_DIR=${qt5.qtbase.dev}/lib/cmake/Qt5Widgets"
+    "-DQt5Gui_DIR=${qt5.qtbase.dev}/lib/cmake/Qt5Gui"
+    "-DQt5Core_DIR=${qt5.qtbase.dev}/lib/cmake/Qt5Core"
     "-DBUILD_TYPE=Release"
   ];
 
@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     homepage = "http://www.glassechidna.com.au/products/heimdall/";
     description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

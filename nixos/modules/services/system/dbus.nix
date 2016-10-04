@@ -8,57 +8,44 @@ let
 
   cfg = config.services.dbus;
 
-  homeDir = "/var/run/dbus";
+  homeDir = "/run/dbus";
 
-  configDir = pkgs.stdenv.mkDerivation {
-    name = "dbus-conf";
+  systemExtraxml = concatStrings (flip concatMap cfg.packages (d: [
+    "<servicedir>${d}/share/dbus-1/system-services</servicedir>"
+    "<includedir>${d}/etc/dbus-1/system.d</includedir>"
+  ]));
 
-    preferLocalBuild = true;
-    allowSubstitutes = false;
+  sessionExtraxml = concatStrings (flip concatMap cfg.packages (d: [
+    "<servicedir>${d}/share/dbus-1/services</servicedir>"
+    "<includedir>${d}/etc/dbus-1/session.d</includedir>"
+  ]));
 
-    buildCommand = ''
+  daemonArgs = "--address=systemd: --nofork --nopidfile --systemd-activation";
+
+  configDir = pkgs.runCommand "dbus-conf"
+    { preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
       mkdir -p $out
 
-      cp -v ${pkgs.dbus.daemon}/etc/dbus-1/system.conf $out/system.conf
+      cp ${pkgs.dbus.out}/share/dbus-1/{system,session}.conf $out
 
-      # !!! Hm, these `sed' calls are rather error-prone...
+      # avoid circular includes
+      sed -ri 's@(<include ignore_missing="yes">/etc/dbus-1/(system|session)\.conf</include>)@<!-- \1 -->@g' $out/{system,session}.conf
 
-      # Tell the daemon where the setuid wrapper around
-      # dbus-daemon-launch-helper lives.
-      sed -i $out/system.conf \
-          -e 's|<servicehelper>.*/libexec/dbus-daemon-launch-helper|<servicehelper>${config.security.wrapperDir}/dbus-daemon-launch-helper|'
+      # include by full path
+      sed -ri "s@/etc/dbus-1/(system|session)-@$out/\1-@" $out/{system,session}.conf
 
-      # Add the system-services and system.d directories to the system
-      # bus search path.
-      sed -i $out/system.conf \
-          -e 's|<standard_system_servicedirs/>|${systemServiceDirs}|' \
-          -e 's|<includedir>system.d</includedir>|${systemIncludeDirs}|'
+      sed '${./dbus-system-local.conf.in}' \
+        -e 's,@servicehelper@,${config.security.wrapperDir}/dbus-daemon-launch-helper,g' \
+        -e 's,@extra@,${systemExtraxml},' \
+        > "$out/system-local.conf"
 
-      cp ${pkgs.dbus.daemon}/etc/dbus-1/session.conf $out/session.conf
-
-      # Add the services and session.d directories to the session bus
-      # search path.
-      sed -i $out/session.conf \
-          -e 's|<standard_session_servicedirs />|${sessionServiceDirs}&|' \
-          -e 's|<includedir>session.d</includedir>|${sessionIncludeDirs}|'
-    ''; # */
-  };
-
-  systemServiceDirs = concatMapStrings
-    (d: "<servicedir>${d}/share/dbus-1/system-services</servicedir> ")
-    cfg.packages;
-
-  systemIncludeDirs = concatMapStrings
-    (d: "<includedir>${d}/etc/dbus-1/system.d</includedir> ")
-    cfg.packages;
-
-  sessionServiceDirs = concatMapStrings
-    (d: "<servicedir>${d}/share/dbus-1/services</servicedir> ")
-    cfg.packages;
-
-  sessionIncludeDirs = concatMapStrings
-    (d: "<includedir>${d}/etc/dbus-1/session.d</includedir> ")
-    cfg.packages;
+      sed '${./dbus-session-local.conf.in}' \
+        -e 's,@extra@,${sessionExtraxml},' \
+        > "$out/session-local.conf"
+    '';
 
 in
 
@@ -72,7 +59,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         internal = true;
         description = ''
           Whether to start the D-Bus message bus daemon, which is
@@ -82,26 +69,34 @@ in
 
       packages = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Packages whose D-Bus configuration files should be included in
-          the configuration of the D-Bus system-wide message bus.
-          Specifically, every file in
+          the configuration of the D-Bus system-wide or session-wide
+          message bus.  Specifically, files in the following directories
+          will be included into their respective DBus configuration paths:
           <filename><replaceable>pkg</replaceable>/etc/dbus-1/system.d</filename>
-          is included.
+          <filename><replaceable>pkg</replaceable>/share/dbus-1/system-services</filename>
+          <filename><replaceable>pkg</replaceable>/etc/dbus-1/session.d</filename>
+          <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
         '';
       };
 
+      socketActivated = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Make the user instance socket activated.
+        '';
+      };
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus_tools ];
+    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
     environment.etc = singleton
       { source = configDir;
@@ -121,7 +116,7 @@ in
 
     security.setuidOwners = singleton
       { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus_daemon.out}/libexec/dbus-daemon-launch-helper";
+        source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
         owner = "root";
         group = "messagebus";
         setuid = true;
@@ -129,18 +124,34 @@ in
         permissions = "u+rx,g+rx,o-rx";
       };
 
-    services.dbus.packages =
-      [ "/nix/var/nix/profiles/default"
-        config.system.path
+    services.dbus.packages = [
+      pkgs.dbus.out
+      config.system.path
+    ];
+
+    systemd.services.dbus = {
+      # Don't restart dbus-daemon. Bad things tend to happen if we do.
+      reloadIfChanged = true;
+      restartTriggers = [ configDir ];
+      serviceConfig.ExecStart = [
+        ""
+        "${lib.getBin pkgs.dbus}/bin/dbus-daemon --config-file=${configDir}/system.conf ${daemonArgs}"
       ];
+    };
 
-    # Don't restart dbus-daemon. Bad things tend to happen if we do.
-    systemd.services.dbus.reloadIfChanged = true;
-
-    systemd.services.dbus.restartTriggers = [ configDir ];
+    systemd.user = {
+      services.dbus = {
+        # Don't restart dbus-daemon. Bad things tend to happen if we do.
+        reloadIfChanged = true;
+        restartTriggers = [ configDir ];
+        serviceConfig.ExecStart = [
+          ""
+          "${lib.getBin pkgs.dbus}/bin/dbus-daemon --config-file=${configDir}/session.conf ${daemonArgs}"
+        ];
+      };
+      sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
+    };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
-
   };
-
 }

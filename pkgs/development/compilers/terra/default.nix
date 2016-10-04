@@ -1,41 +1,66 @@
-{ stdenv, lua, fetchFromGitHub, fetchurl, which, llvm, clang, ncurses }:
+{ stdenv, fetchFromGitHub, fetchurl, llvmPackages, ncurses, lua }:
 
-let luajitArchive = "LuaJIT-2.0.4.tar.gz";
-    luajitSrc = fetchurl {
-      url = "http://luajit.org/download/${luajitArchive}";
-      sha256 = "0zc0y7p6nx1c0pp4nhgbdgjljpfxsb5kgwp4ysz22l1p2bms83v2";
-    };
-in stdenv.mkDerivation rec {
+let
+  luajitArchive = "LuaJIT-2.0.4.tar.gz";
+  luajitSrc = fetchurl {
+    url = "http://luajit.org/download/${luajitArchive}";
+    sha256 = "0zc0y7p6nx1c0pp4nhgbdgjljpfxsb5kgwp4ysz22l1p2bms83v2";
+  };
+in
+
+stdenv.mkDerivation rec {
   name = "terra-git-${version}";
-  version = "2016-01-06";
+  version = "2016-06-09";
 
   src = fetchFromGitHub {
     owner = "zdevito";
     repo = "terra";
-    rev = "914cb98b8adcd50b2ec8205ef5d6914d3547e281";
-    sha256 = "1q0dm9gkx2lh2d2sfgly6j5nw32qigmlj3phdvjp26bz99cvxq46";
+    rev = "22696f178be8597af555a296db804dba820638ba";
+    sha256 = "1c2i9ih331304bh31c5gh94fx0qa49rsn70pvczvdfhi8pmcms6g";
   };
 
-  patchPhase = ''
+  outputs = [ "bin" "dev" "out" "static" ];
+
+  postPatch = ''
     substituteInPlace Makefile --replace \
       '-lcurses' '-lncurses'
   '';
 
-  configurePhase = ''
+  preBuild = ''
+    cat >Makefile.inc<<EOF
+    CLANG = ${stdenv.lib.getBin llvmPackages.clang-unwrapped}/bin/clang
+    LLVM_CONFIG = ${stdenv.lib.getBin llvmPackages.llvm}/bin/llvm-config
+    EOF
+
     mkdir -p build
     cp ${luajitSrc} build/${luajitArchive}
   '';
 
   installPhase = ''
-    mkdir -p $out
-    cp -r "release/"* $out
+    mkdir -pv $out/lib
+    cp -v release/lib/terra.so $out/lib
+
+    mkdir -pv $bin/bin
+    cp -v release/bin/terra $bin/bin
+
+    mkdir -pv $static/lib
+    cp -v release/lib/libterra.a $static/lib
+
+    mkdir -pv $dev/include
+    cp -rv release/include/terra $dev/include
+  ''
+  ;
+
+  postFixup = ''
+    paxmark m $bin/bin/terra
   '';
 
-  buildInputs = [ which lua llvm clang ncurses ];
+  buildInputs = with llvmPackages; [ lua llvm clang-unwrapped ncurses ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "A low-level counterpart to Lua";
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jb55 ];
     license = licenses.mit;
   };

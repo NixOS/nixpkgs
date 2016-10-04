@@ -9,10 +9,13 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
-  
+
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
+
   # For cross-compiling, native glibc is needed for the "gencat" program.
   crossAttrs = {
-    nativeBuildInputs = [ glibc ];
+    nativeBuildInputs = [ gettext glibc ];
   };
 
   # Libelf's custom NLS macros fail to determine the catalog file extension on
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
   # FIXME: Eventually make Gettext a build input on all platforms.
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-nls";
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   meta = {
     description = "ELF object file access library";

@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   dontPatchElf = true;
 
   patchPhase = ''
-    sed -i -e 's@\./data@'$out/data@ share/base_config.h Makefile
-    sed -i -e 's@\./locale@'$out/locale@ share/base_config.h Makefile
+    sed -i -e 's@\./data@'$out/share/neverball/data@ share/base_config.h Makefile
+    sed -i -e 's@\./locale@'$out/share/neverball/locale@ share/base_config.h Makefile
     sed -i -e 's@-lvorbisfile@-lvorbisfile -lX11 -lgcc_s@' Makefile
   '';
 
@@ -22,12 +22,14 @@ stdenv.mkDerivation rec {
   preConfigure = "export HOME=$TMPDIR";
 
   installPhase = ''
-    mkdir -p $out/bin $out
-    cp -R data locale $out
+    mkdir -p $out/bin $out/share/neverball
+    cp -R data locale $out/share/neverball
     cp neverball $out/bin
     cp neverputt $out/bin
     cp mapc $out/bin
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://neverball.org/;

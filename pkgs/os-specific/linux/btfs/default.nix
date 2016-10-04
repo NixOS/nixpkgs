@@ -1,24 +1,23 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake,
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig,
   python, boost, fuse, libtorrentRasterbar, curl }:
 
 stdenv.mkDerivation rec {
   name = "btfs-${version}";
-  version = "2.8";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "btfs";
-    rev = "0567010e553b290eaa50b1afaa717dd7656c82de";
-    sha256 = "1x3x1v7fhcfcpffprf63sb720nxci2ap2cq92jy1xd68kmshdmwd";
+    rev = "daeb2fd43795f0bb9a4861279b6064b35186ff25";
+    sha256 = "1apvf1gp5973s4wlzwndxp711yd9pj9zf2ypdssfxv2a3rihly2b";
   };
-  
+
   buildInputs = [
-    pkgconfig autoconf automake boost
+    boost autoreconfHook pkgconfig
     fuse libtorrentRasterbar curl
   ];
 
-  preConfigure = ''
-    autoreconf -i
+  preInstall = ''
     substituteInPlace scripts/btplay \
       --replace "/usr/bin/env python" "${python}/bin/python"
   '';

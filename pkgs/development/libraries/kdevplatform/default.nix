@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "195134bde11672de38838f4b341ed28c58042374ca12beedacca9d30e6ab4a2b";
   };
 
-  patches = [ ./gettext.patch ];
+  patches = [
+    ./gettext.patch     # build error caused by CMake update
+    ./dependency.patch  # build error: https://phabricator.kde.org/D1160
+  ];
 
   propagatedBuildInputs = [ kdelibs qt4 phonon ];
   buildInputs = [ apr aprutil subversion boost qjson grantlee ];

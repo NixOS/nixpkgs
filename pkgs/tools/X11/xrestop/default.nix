@@ -10,4 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig xorg.libX11 xorg.libXres xorg.libXext ncurses ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2 pkgconfig ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "A GTK+ front-end for command line archiving tools";
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    maintainers = [ stdenv.lib.maintainers.domenkozar ];
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
   };

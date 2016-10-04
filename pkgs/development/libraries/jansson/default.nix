@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "jansson-2.7";
+  name = "jansson-2.8";
 
   src = fetchurl {
     url = "http://www.digip.org/jansson/releases/${name}.tar.gz";
-    sha256 = "1mvq9p85khsl818i4vbszyfab0fd45mdrwrxjkzw05mk1xcyc1br";
+    sha256 = "0v7v82mv7x44rpcxmrpnmb8hqimx67qwsp2cz9mv3y0f37iykwnf";
   };
 
   meta = with stdenv.lib; {

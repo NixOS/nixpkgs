@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pam, python3, tcsh, libxslt, perl, ArchiveZip
+{ stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip
 , CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, gtk, libmspack, getopt, file, cairo, which
+, bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
@@ -19,22 +19,14 @@
 }:
 
 let
+  primary-src = import ./still-primary-src.nix { inherit fetchurl; };
+in
+
+with { inherit (primary-src) major minor subdir version; };
+
+let
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
-  major = "5";
-  minor = "0";
-  patch = "5";
-  tweak = "2";
-  subdir = "${major}.${minor}.${patch}";
-  version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
-
-  fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
-    inherit name md5;
-    url = if brief then
-            "http://dev-www.libreoffice.org/src/${subDir}${name}"
-          else
-            "http://dev-www.libreoffice.org/src/${subDir}${md5}-${name}";
-  };
 
   fetchSrc = {name, sha256}: fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
@@ -42,32 +34,39 @@ let
   };
 
   srcs = {
-    third_party = [ (fetchurl rec {
+    third_party = [ (let md5 = "185d60944ea767075d27247c3162b3bc"; in fetchurl rec {
         url = "http://dev-www.libreoffice.org/extern/${md5}-${name}";
-        md5 = "185d60944ea767075d27247c3162b3bc";
+        sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
         name = "unowinreg.dll";
-      }) ] ++ (map fetchThirdParty (import ./libreoffice-srcs-still.nix));
+      }) ] ++ (map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;})) (import ./libreoffice-srcs-still.nix));
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "13cbfiqaycy8cxji5jfwfbgar8l4fzhg3aaggavsrwsmbvrqpbb7";
+      sha256 = "1mzsz9pd2k1lpvwf7r5q90qmdp57160362cmlxaj6bxz52gr9f2i";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0an081aj63hfhxv0k8h92vly0rnglbcpqax2pinybryk4dnljr36";
+      sha256 = "1qqpggcanchz0qqasc5xvginrpa5rx7ahj3dw2vk7n34xaarnni6";
     };
 
   };
 in stdenv.mkDerivation rec {
   name = "libreoffice-${version}";
 
-  src = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "120vcxpxzs0za76fyfry281ysv6d1ianb37d1yq8py8chkdjkrqy";
-  };
+  inherit (primary-src) src;
+
+  # we only have this problem on i686 ATM
+  patches = if stdenv.is64bit then null else [
+    (fetchurl {
+      name = "disable-flaky-tests.diff";
+      url = "https://anonscm.debian.org/git/pkg-openoffice/libreoffice.git/plain"
+        + "/patches/disable-flaky-tests.diff?h=libreoffice_5.1.5_rc2-1";
+      sha256 = "1v1aiqdi64iijjraj6v4ljzclrd9lqan54hmy2h6m20x3ab005wb";
+    })
+  ];
 
   # Openoffice will open libcups dynamically, so we link it directly
   # to make its dlopen work.
@@ -76,7 +75,9 @@ in stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead 
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal";
+  # curl upgrade to 7.50.0 (#17152) changes the libcurl headers slightly and
+  # therefore requires the -fpermissive flag until this package gets updated
+  NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal -fpermissive";
 
   # If we call 'configure', 'make' will then call configure again without parameters.
   # It's their system.
@@ -85,7 +86,7 @@ in stdenv.mkDerivation rec {
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
-  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
+  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.md5 or f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
@@ -124,6 +125,10 @@ in stdenv.mkDerivation rec {
     sed -e /CppunitTest_sd_tiledrendering/d -i sd/Module_sd.mk
     # one more fragile test?
     sed -e '/CPPUNIT_TEST(testTdf96536);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
+    # rendering-dependent test
+    sed -e '/CPPUNIT_ASSERT_EQUAL(11148L, pOleObj->GetLogicRect().getWidth());/d ' -i sc/qa/unit/subsequent_filters-test.cxx
+    # one more fragile test?
+    sed -e '/CPPUNIT_TEST(testTdf77014);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
   '';
 
   makeFlags = "SHELL=${bash}/bin/bash";
@@ -172,7 +177,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "${if withHelp then "" else "--without-help"}"
     "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
     "--with-commons-logging-jar=${commonsLogging}/share/java/commons-logging-1.2.jar"
@@ -230,14 +235,14 @@ in stdenv.mkDerivation rec {
   buildInputs = with xorg;
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gtk3 gtk
+      freetype GConf getopt gnome_vfs gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
       gst_all_1.gst-plugins-base gsettings_desktop_schemas glib
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
-      python3 sablotron sane-backends tcsh unzip vigra which zip zlib
+      python3 sablotron sane-backends unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew ncurses
@@ -245,11 +250,16 @@ in stdenv.mkDerivation rec {
     ]
     ++ lib.optional kdeIntegration kde4.kdelibs;
 
+  passthru = {
+    inherit srcs;
+  };
+
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite (Still/stable release)";
     homepage = http://libreoffice.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 }

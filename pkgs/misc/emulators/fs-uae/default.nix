@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, gettext, gtk, SDL, zlib, glib, openal, mesa, lua, freetype }:
+, gettext, gtk2, SDL, zlib, glib, openal, mesa, lua, freetype }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec{
     sha256 = "05wngvpqj8kj4wzi5jzzhvs19iljb3m6ba1l2hk4rz68b400ndv6";
   };
 
-  buildInputs = [ pkgconfig gettext gtk SDL zlib glib openal mesa lua freetype ];
+  buildInputs = [ pkgconfig gettext gtk2 SDL zlib glib openal mesa lua freetype ];
 
   phases = "unpackPhase buildPhase installPhase";
 
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec{
     license = licenses.gpl2Plus;
     homepage = http://fs-uae.net;
     maintainers = [ maintainers.AndersonTorres ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 # TODO: testing and Python GUI support

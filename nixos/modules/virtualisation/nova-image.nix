@@ -27,11 +27,11 @@ with lib;
 
   boot.kernelParams = [ "console=ttyS0" ];
   boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.timeout = 0;
+  boot.loader.timeout = 0;
 
   # Allow root logins
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "without-password";
+  services.openssh.permitRootLogin = "prohibit-password";
 
   # Put /tmp and /var on /ephemeral0, which has a lot more space.
   # Unfortunately we can't do this with the `fileSystems' option

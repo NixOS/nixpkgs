@@ -12,5 +12,6 @@ stdenv.mkDerivation {
     description = "Event loop library";
     homepage = http://liboop.ofb.net/;
     license = "LGPL";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

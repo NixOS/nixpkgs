@@ -9,6 +9,7 @@ let
 
   header = {
     description = "Syncthing service";
+    after = [ "network.target" ];
     environment = {
       STNORESTART = "yes";
       STNOUPGRADE = "yes";
@@ -20,6 +21,18 @@ let
     Restart = "on-failure";
     SuccessExitStatus = "2 3 4";
     RestartForceExitStatus="3 4";
+  };
+
+  iNotifyHeader = {
+    description = "Syncthing Inotify File Watcher service";
+    after = [ "network.target" "syncthing.service" ];
+    requires = [ "syncthing.service" ];
+  };
+
+  iNotifyService = {
+    SuccessExitStatus = "2";
+    RestartForceExitStatus = "3";
+    Restart = "on-failure";
   };
 
 in
@@ -37,6 +50,12 @@ in
         to Dropbox and Bittorrent Sync. Initial interface will be
         available on http://127.0.0.1:8384/.
       '';
+
+      useInotify = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Provide syncthing-inotify as a service.";
+      };
 
       systemService = mkOption {
         type = types.bool;
@@ -111,27 +130,40 @@ in
         config.ids.gids.syncthing;
     };
 
-    environment.systemPackages = [ cfg.package ];
+    systemd.services = {
+      syncthing = mkIf cfg.systemService (header // {
+          wants = mkIf cfg.useInotify [ "syncthing-inotify.service" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = service // {
+            User = cfg.user;
+            Group = cfg.group;
+            PermissionsStartOnly = true;
+            ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+          };
+      });
 
-    systemd.services = mkIf cfg.systemService {
-      syncthing = header // {
-        after = [ "network.target" ];
+      syncthing-inotify = mkIf (cfg.systemService && cfg.useInotify) (iNotifyHeader // {
         wantedBy = [ "multi-user.target" ];
-        serviceConfig = service // {
+        serviceConfig = iNotifyService // {
           User = cfg.user;
-          Group = cfg.group;
-          PermissionsStartOnly = true;
-          ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+          ExecStart = "${pkgs.syncthing-inotify.bin}/bin/syncthing-inotify -home=${cfg.dataDir} -logflags=0";
         };
-      };
+      });
     };
 
-    systemd.user.services =  {
+    systemd.user.services = {
       syncthing = header // {
         serviceConfig = service // {
-          ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser";
+          ExecStart = "${cfg.package}/bin/syncthing -no-browser";
         };
       };
+
+      syncthing-inotify = mkIf cfg.useInotify (iNotifyHeader // {
+        serviceConfig = iNotifyService // {
+          ExecStart = "${pkgs.syncthing-inotify.bin}/bin/syncthing-inotify -logflags=0";
+        };
+      });
     };
+
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
       echo wrapping $i
       makeWrapper  $pkipath/$i $out/bin/taskd-pki-$i \
-        --prefix PATH : ${gnutls}/bin/
+        --prefix PATH : ${stdenv.lib.makeBinPath [ gnutls ]}
     done
   '';
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
-    gcc -O2 hardlink.c -o $out/bin/hardlink
+    cc -O2 hardlink.c -o $out/bin/hardlink
     mv hardlink.1 $out/share/man/man1/hardlink.1
   '';
 
@@ -24,8 +24,6 @@ stdenv.mkDerivation {
     homepage = "http://pkgs.fedoraproject.org/cgit/hardlink.git/";
     description = "Consolidate duplicate files via hardlinks";
     license = stdenv.lib.licenses.gpl2Plus;
-
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

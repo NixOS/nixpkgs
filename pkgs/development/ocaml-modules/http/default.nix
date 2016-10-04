@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = http://ocaml-http.forge.ocamlcore.org/;
     platforms = ocaml.meta.platforms or [];
-    description = "do it yourself (OCaml) HTTP daemon";
+    description = "Do it yourself (OCaml) HTTP daemon";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ roconnor vbgl ];
   };

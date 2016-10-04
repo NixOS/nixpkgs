@@ -1,11 +1,8 @@
 { stdenv, fetchurl, dpkg, gettext, gawk, perl, wget, coreutils, fakeroot }:
 
 let
-
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
-
 # There is also cdebootstrap now. Is that easier to maintain?
-
   makedev = stdenv.mkDerivation {
     name = "makedev-for-debootstrap";
     src = fetchurl {
@@ -27,11 +24,7 @@ let
       chmod +x $t
     '';
   };
-  
-in
-
-stdenv.mkDerivation rec {
-
+in stdenv.mkDerivation rec {
   name = "debootstrap-${version}";
   version = "1.0.80";
 
@@ -44,21 +37,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dpkg gettext gawk perl ];
 
-  buildPhase = ":";
+  dontBuild = true;
 
   # If you have to update the patch for functions a vim regex like this
   # can help you identify which lines are used to write scripts on TARGET and
   # which should /bin/ paths should be replaced:
   # \<echo\>\|\/bin\/\|^\s*\<cat\>\|EOF\|END
   installPhase = ''
-
     sed -i \
       -e 's@/usr/bin/id@id@' \
       -e 's@/usr/bin/dpkg@${dpkg}/bin/dpkg@' \
       -e 's@/usr/bin/sha@${coreutils}/bin/sha@' \
       -e 's@/bin/sha@${coreutils}/bin/sha@' \
       debootstrap
-
 
     for file in functions debootstrap; do
       substituteInPlace "$file" \
@@ -103,7 +94,7 @@ stdenv.mkDerivation rec {
     inherit makedev;
   };
 
-  meta = { 
+  meta = {
     description = "Tool to create a Debian system in a chroot";
     homepage = http://packages.debian.org/de/lenny/debootstrap; # http://code.erisian.com.au/Wiki/debootstrap
     license = stdenv.lib.licenses.gpl2; # gentoo says so.. ?

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/sshock/AFFLIBv3/";
     rev = "refs/tags/v${version}";
-    sha256 = "11wpjbyja6cn0828sw3951s7dbly11abijk41my3cpy9wnvmiggh";
+    sha256 = "08www22njllqz1j3jkmgn1p36sifxrjd6qlsa7ch4kqy4jaaka1k";
     name = "afflib-${version}-checkout";
   };
 

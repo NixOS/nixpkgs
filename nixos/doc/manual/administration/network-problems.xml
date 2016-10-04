@@ -18,14 +18,14 @@ You can disable the use of the binary cache by adding <option>--option
 use-binary-caches false</option>, e.g.
 
 <screen>
-$ nixos-rebuild switch --option use-binary-caches false
+# nixos-rebuild switch --option use-binary-caches false
 </screen>
 
 If you have an alternative binary cache at your disposal, you can use
 it instead:
 
 <screen>
-$ nixos-rebuild switch --option binary-caches http://my-cache.example.org/
+# nixos-rebuild switch --option binary-caches http://my-cache.example.org/
 </screen>
 
 </para>

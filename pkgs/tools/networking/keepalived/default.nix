@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   # It doesn't know about the include/libnl<n> directory
-  NIX_CFLAGS_COMPILE="-I${libnl}/include/libnl3";
+  NIX_CFLAGS_COMPILE="-I${libnl.dev}/include/libnl3";
   NIX_LDFLAGS="-lnl-3 -lnl-genl-3";
 
   configureFlags = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://keepalived.org;
-    description = "routing software written in C";
+    description = "Routing software written in C";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];

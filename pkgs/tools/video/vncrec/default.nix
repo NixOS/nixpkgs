@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1yp6r55fqpdhc8cgrgh9i0mzxmkls16pgf8vfcpng1axr7cigyhc";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [
     libX11 xproto imake gccmakedep libXt libXmu libXaw
     libXext xextproto libSM libICE libXpm libXp
@@ -24,5 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "VNC recorder";
     homepage = http://ronja.twibright.com/utils/vncrec/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

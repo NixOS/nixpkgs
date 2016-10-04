@@ -2,11 +2,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "opentsdb-${version}";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "https://github.com/OpenTSDB/opentsdb/releases/download/${version}/opentsdb-${version}.tar.gz";
-    sha256 = "17wbdvrv83dr18dqxxsk73c1a7jlbw19algvz0hsz9a1k7aiy29b";
+    url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "1dfzfsagpviqbifz81pik7pzvadz71kls1idi7jiq7z27vcd92an";
   };
 
   buildInputs = [ autoconf automake curl jdk makeWrapper nettools python ];

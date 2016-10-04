@@ -77,6 +77,12 @@ in rec {
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
+    documentation = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = "A list of URIs referencing documentation for this unit or its configuration.";
+    };
+
     requires = mkOption {
       default = [];
       type = types.listOf types.str;
@@ -193,7 +199,7 @@ in rec {
 
     path = mkOption {
       default = [];
-      apply = ps: "${makeBinPath ps}:${makeSearchPathOutputs "sbin" ["bin"] ps}";
+      apply = ps: "${makeBinPath ps}:${makeSearchPathOutput "bin" "sbin" ps}";
       description = ''
         Packages added to the service's <envar>PATH</envar>
         environment variable.  Both the <filename>bin</filename>
@@ -309,7 +315,7 @@ in rec {
     };
 
     startAt = mkOption {
-      type = types.str;
+      type = with types; either str (listOf str);
       default = "";
       example = "Sun 14:00:00";
       description = ''

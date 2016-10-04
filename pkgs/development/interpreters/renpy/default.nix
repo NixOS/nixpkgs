@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, python, cython, pkgconfig, wrapPython
-, pygame, SDL, libpng, ffmpeg, freetype, glew, mesa, fribidi, zlib
+{ stdenv, fetchurl, pythonPackages, pkgconfig, SDL
+, libpng, ffmpeg, freetype, glew, mesa, fribidi, zlib
 }:
+
+with pythonPackages;
 
 stdenv.mkDerivation {
   name = "renpy-6.17.6";
@@ -25,7 +27,7 @@ stdenv.mkDerivation {
   pythonPath = [ pygame ];
 
   RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: "${path}") [
-    SDL libpng ffmpeg freetype glew mesa fribidi zlib
+    SDL SDL.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out mesa fribidi zlib
   ]);
 
   buildPhase = ''

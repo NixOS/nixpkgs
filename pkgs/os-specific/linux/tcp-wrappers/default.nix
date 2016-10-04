@@ -15,7 +15,40 @@ stdenv.mkDerivation {
      })
   ];
 
-  builder = ./builder.sh;
+  prePatch = ''
+    cd upstream/tarballs
+    tar xzvf *
+    cd tcp_wrappers_7.6
+  '';
+
+  postPatch = ''
+    for patch in debian/patches/*; do
+      echo "applying Debian patch \`$(basename $patch)'..."
+      patch --batch -p1 < $patch
+    done
+  '';
+
+  buildPhase = ''
+    make REAL_DAEMON_DIR="$out/sbin" linux
+  '';
+
+  installPhase = ''
+    mkdir -p "$out/sbin"
+    cp -v safe_finger tcpd tcpdchk tcpdmatch try-from "$out/sbin"
+
+    mkdir -p "$out/lib"
+    cp -v shared/lib*.so* "$out/lib"
+
+    mkdir -p "$out/include"
+    cp -v *.h "$out/include"
+
+    mkdir -p "$out/man"
+    for i in 3 5 8;
+    do
+      mkdir -p "$out/man/man$i"
+      cp *.$i "$out/man/man$i" ;
+    done
+  '';
 
   meta = {
     description = "TCP Wrappers, a network logger, also known as TCPD or LOG_TCP";
@@ -32,7 +65,7 @@ stdenv.mkDerivation {
     '';
 
     homepage = ftp://ftp.porcupine.org/pub/security/index.html;
-
     license = "BSD-style";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

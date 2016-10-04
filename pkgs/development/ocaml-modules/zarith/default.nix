@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib";
 
   meta = with stdenv.lib; {
-    description = "fast, arbitrary precision OCaml integers";
+    description = "Fast, arbitrary precision OCaml integers";
     homepage    = "http://forge.ocamlcore.org/projects/zarith";
     license     = licenses.lgpl2;
     platforms   = ocaml.meta.platforms or [];

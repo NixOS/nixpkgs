@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  configureFlags = "--x-includes=${libX11}/include --x-libraries=${libX11}/lib";
+  configureFlags = "--x-includes=${libX11.dev}/include --x-libraries=${libX11.out}/lib";
 
   meta = {
     description = "High quality rendering engine for C++";
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.antigrain.com/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

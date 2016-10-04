@@ -1,9 +1,7 @@
-{ stdenv, fetchurl, buildPythonApplication, pycrypto }:
+{ stdenv, fetchurl, pythonPackages }:
 
-buildPythonApplication rec {
-  namePrefix = "";
+pythonPackages.buildPythonApplication rec {
   name = "volatility-2.4";
-
 
   src = fetchurl {
     url = "http://downloads.volatilityfoundation.org/releases/2.4/${name}.tar.gz";
@@ -12,11 +10,11 @@ buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pycrypto ];
+  propagatedBuildInputs = [ pythonPackages.pycrypto ];
 
   meta = with stdenv.lib; {
     homepage = https://code.google.com/p/volatility;
-    description = "advanced memory forensics framework";
+    description = "Advanced memory forensics framework";
     maintainers = with maintainers; [ bosu ];
     license = stdenv.lib.licenses.gpl2Plus;
   };

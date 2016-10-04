@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   # Debian uses '-fpermissive' to bypass some errors on char* constantness.
   CXXFLAGS = "-O2 -fpermissive";
 
+  hardeningDisable = [ "format" ];
+
   configureFlags = "--enable-a4-paper";
 
   postInstall = stdenv.lib.optionalString (base14Fonts != null) ''
@@ -35,9 +37,9 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.foolabs.com/xpdf/";
-    description = "viewer for Portable Document Format (PDF) files";
+    description = "Viewer for Portable Document Format (PDF) files";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

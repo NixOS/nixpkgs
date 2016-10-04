@@ -1,15 +1,18 @@
 { stdenv, composableDerivation, fetchurl, xapian, pkgconfig, zlib
-, python ? null, php ? null, ruby ? null }:
+, python ? null, sphinx ? null, php ? null, ruby ? null }:
+
+assert (python != null) -> (sphinx != null);
 
 let inherit (composableDerivation) wwf; in
 
 composableDerivation.composableDerivation {} rec {
 
-  name = "xapian-bindings-1.2.23";
+  name = "xapian-bindings-${version}";
+  version = (builtins.parseDrvName xapian.name).version;
 
   src = fetchurl {
-    url = "http://oligarchy.co.uk/xapian/1.2.23/${name}.tar.xz";
-    sha256 = "05929d9bq9df25kh2i6gk2w09w7p5qknf9cc7mrm2g46finbbd0r";
+    url = "http://oligarchy.co.uk/xapian/${version}/${name}.tar.xz";
+    sha256 = "0lv2zblayfax4v7z3sj067b0av0phf3gc2s2d1cvkw0bkl07mv1s";
   };
 
   buildInputs = [ xapian pkgconfig zlib ];
@@ -19,7 +22,18 @@ composableDerivation.composableDerivation {} rec {
          wwf {
            name = "python";
            enable = {
-            buildInputs = [ python ];
+            buildInputs = [ python sphinx ];
+
+            # Our `sphinx-build` binary is a shell wrapper around
+            # `sphinx-build` python code. Makefile tries to execute it
+            # using python2 and fails. Fixing that here.
+            patchPhase = ''
+              for a in python/Makefile* ; do
+                substituteInPlace $a \
+                  --replace '$(PYTHON2) $(SPHINX_BUILD)' '$(SPHINX_BUILD)'
+              done
+            '';
+
             # export same env vars as in pythonNew
             preConfigure = ''
               export PYTHON_LIB=$out/lib/${python.libPrefix}/site-packages
@@ -69,5 +83,6 @@ composableDerivation.composableDerivation {} rec {
     homepage = xapian.meta.homepage;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

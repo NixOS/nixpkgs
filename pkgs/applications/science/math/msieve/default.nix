@@ -20,9 +20,10 @@ stdenv.mkDerivation {
                    cp msieve $out/bin/'';
 
   meta = {
-    description = "a C library implementing a suite of algorithms to factor large integers";
+    description = "A C library implementing a suite of algorithms to factor large integers";
     license = stdenv.lib.licenses.publicDomain;
     homepage = http://msieve.sourceforge.net/;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
+    platforms = [ "x86_64-linux" ];
   };
 }

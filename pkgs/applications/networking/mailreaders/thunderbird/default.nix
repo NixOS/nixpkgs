@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, which, m4, gtk, pango, perl, python, zip, libIDL
+{ stdenv, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
@@ -13,20 +13,19 @@
   enableOfficialBranding ? false
 }:
 
-let version = "45.0"; in
+let version = "45.3.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
   name = "thunderbird-${verName}";
 
   src = fetchurl {
-    url = "http://archive.mozilla.org/pub/thunderbird/releases/"
-      + "${verName}/source/thunderbird-${verName}.source.tar.xz";
-    sha256 = "0rynfyxgpvfla17zniaq84slc02kg848qawkjmdbnv74y6bkhs8m";
+    url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
+    sha512 = "1226b35535d68b9c088ab8692f61120c99951e1ecbae4739ced711665a3237d248202831831f00536c724e2f6359db4601fa5c90f2793433eab4bd9dab0c1165";
   };
 
   buildInputs = # from firefox30Pkgs.xulrunner, without gstreamer and libvpx
-    [ pkgconfig which libpng gtk perl zip libIDL libjpeg zlib bzip2
+    [ pkgconfig which libpng gtk2 perl zip libIDL libjpeg zlib bzip2
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
@@ -91,6 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  requiredSystemFeatures = [ "big-parallel" ];
 
   buildPhase =  "../mozilla/mach build";
 

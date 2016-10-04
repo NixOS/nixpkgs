@@ -50,7 +50,7 @@ let inherit (lib) nv nvs; in
   # nice features:
   # declaring "optional featuers" is modular. For instance:
   #   flags.curl = {
-  #     configureFlags = ["--with-curl=${curl}" "--with-curlwrappers"];
+  #     configureFlags = ["--with-curl=${curl.dev}" "--with-curlwrappers"];
   #     buildInputs = [curl openssl];
   #   };
   #   flags.other = { .. }

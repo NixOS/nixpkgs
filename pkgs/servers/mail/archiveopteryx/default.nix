@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "An advanced PostgreSQL-based IMAP/POP server";
     license = licenses.postgresql;
     maintainers = [ maintainers.phunehehe ];
+    platforms = platforms.linux;
   };
 }

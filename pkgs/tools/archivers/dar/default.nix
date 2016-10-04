@@ -9,11 +9,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib bzip2 openssl lzo libgcrypt gpgme xz ]
-    ++ stdenv.lib.optional stdenv.isLinux [ attr e2fsprogs ];
+    ++ stdenv.lib.optionals stdenv.isLinux [ attr e2fsprogs ];
 
   configureFlags = [ "--disable-dar-static" ];
 
   enableParallelBuilding = true;
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://dar.linux.free.fr/;

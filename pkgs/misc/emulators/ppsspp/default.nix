@@ -16,11 +16,13 @@ stdenv.mkDerivation rec{
     url = "https://github.com/hrydgard/ppsspp.git";
     rev = "8c8e5de89d52b8bcb968227d96cbf049d04d1241";
     fetchSubmodules = true;
-    sha256 = "71dfa0be045f31969b1d6ab4f1adf6a208f9ef4834d708bc7bf6d9195efb5f80";
+    sha256 = "1q21qskzni0nvz2yi2m17gjh4i9nrs2l4fm4y2dww9m29xpvzw3x";
   };
 
   buildInputs = [ zlib libpng pkgconfig qt4 qmake4Hook ]
                 ++ (if withGamepads then [ SDL ] else [ ]);
+
+  qmakeFlags = [ "PPSSPPQt.pro" ];
 
   preConfigure = "cd Qt";
   installPhase = "mkdir -p $out/bin && cp ppsspp $out/bin";

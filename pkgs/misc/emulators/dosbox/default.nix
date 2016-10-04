@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec { 
   name = "dosbox-0.74";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/dosbox/${name}.tar.gz";
     sha256 = "01cfjc5bs08m4w79nbxyv7rnvzq2yckmgrbq36njn06lw8b4kxqk";
@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
     ];
 
   patchFlags = "-p0";
-  
+
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ SDL mesa ];
-    
+
   desktopItem = makeDesktopItem {
     name = "dosbox";
     exec = "dosbox";
@@ -37,5 +39,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.dosbox.com/;
     description = "A DOS emulator";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

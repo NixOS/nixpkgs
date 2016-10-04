@@ -10,7 +10,7 @@ let
   inherit (stdenv.lib) optionals optionalString;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-1.8.0";
+  name = "gst-plugins-good-1.8.2";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Good Plugins";
@@ -21,13 +21,15 @@ stdenv.mkDerivation rec {
       code, LGPL or LGPL-compatible for the supporting library).
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-    sha256 = "0kczdvqxvl8kxiy2d7czv16jp73hv9k3nykh47ckihnv8x6i6362";
+    sha256 = "8d7549118a3b7a009ece6bb38a05b66709c551d32d2adfd89eded4d1d7a23944";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig python ];
 
@@ -39,6 +41,11 @@ stdenv.mkDerivation rec {
   ]
   ++ libintlOrEmpty
   ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
+
+  preFixup = ''
+    mkdir -p "$dev/lib/gstreamer-1.0"
+    mv "$out/lib/gstreamer-1.0/"*.la "$dev/lib/gstreamer-1.0"
+  '';
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 }

@@ -1,32 +1,38 @@
-{stdenv, glibc, fetchFromGitHub, llvm, makeWrapper, openssl, pcre2 }:
+{stdenv, glibc, fetchFromGitHub, llvm, makeWrapper, openssl, pcre2, coreutils }:
 
 stdenv.mkDerivation {
-  name = "ponyc-0.2.1";
+  name = "ponyc-2016-07-26";
 
   src = fetchFromGitHub {
-    owner = "CausalityLtd";
+    owner = "ponylang";
     repo = "ponyc";
-    rev = "0.2.1";
-    sha256 = "1wmvqrj9v2kjqha9fcs10vfnhdxhc3rf67wpn36ldhs1hq0k25jy";
+    rev = "4eec8a9b0d9936b2a0249bd17fd7a2caac6aaa9c";
+    sha256 = "184x2jivp7826i60rf0dpx0a9dg5rsj56dv0cll28as4nyqfmna2";
   };
 
   buildInputs = [ llvm makeWrapper ];
 
-  makeFlags = [ "config=release" ];
-  doCheck = true;
-  checkTarget = "test";
-
-  patchPhase = ''
-    sed 's|/usr/lib/x86_64-linux-gnu/|${glibc.out}/lib/|g' -i src/libponyc/codegen/genexe.c
-    sed 's|/lib/x86_64-linux-gnu/|${stdenv.cc.cc.lib}/lib/|g' -i src/libponyc/codegen/genexe.c
-  '';
+  # Disable problematic networking tests
+  patches = [ ./disable-tests.patch ];
 
   preBuild = ''
-      export LLVM_CONFIG=${llvm}/bin/llvm-config
-    '';
+    # Fix tests
+    substituteInPlace packages/process/_test.pony \
+        --replace "/bin/cat" "${coreutils}/bin/cat"
+
+    export LLVM_CONFIG=${llvm}/bin/llvm-config
+  '';
+
+  makeFlags = [ "config=release" ];
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
+
+  checkTarget = "test";
 
   preCheck = ''
-    export LIBRARY_PATH="$out/lib:${openssl.out}/lib:${pcre2}/lib"
+    export LIBRARY_PATH="$out/lib:${stdenv.lib.makeLibraryPath [ openssl pcre2 ]}"
   '';
 
   installPhase = ''
@@ -43,5 +49,6 @@ stdenv.mkDerivation {
     homepage = http://www.ponylang.org;
     license = stdenv.lib.licenses.bsd2;
     maintainers = [ stdenv.lib.maintainers.doublec ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

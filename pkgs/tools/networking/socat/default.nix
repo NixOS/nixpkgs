@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, readline }:
 
 stdenv.mkDerivation rec {
   name = "socat-1.7.3.1";
@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1apvi7sahcl44arnq1ad2y6lbfqnmvx7nhz9i3rkk0f382anbnnj";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl readline ];
 
   patches = [ ./enable-ecdhe.patch ./libressl-fixes.patch ];
+
+  hardeningEnable = [ "pie" ];
 
   meta = {
     description = "A utility for bidirectional data transfer between two independent data channels";

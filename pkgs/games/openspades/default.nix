@@ -16,14 +16,21 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Sources/Client/Client_Input.cpp --replace "isnan(" "std::isnan("
     substituteInPlace Sources/Client/Corpse.cpp --replace "isnan(" "std::isnan("
-    substituteInPlace Sources/Draw/SWMapRenderer.cpp --replace "isnan(" "std::isnan(" --replace "isinf(" "std::isinf("
+    substituteInPlace Sources/Draw/SWMapRenderer.cpp \
+      --replace "isnan(" "std::isnan(" --replace "isinf(" "std::isinf("
+    sed '1i#include <cmath>' -i Sources/Client/{Player,Client_Input,Corpse}.cpp \
+      -i Sources/Draw/SWMapRenderer.cpp
+    sed '1i#include <math.h>' -i Sources/Draw/SWFeatureLevel.h
   '';
 
-  nativeBuildInputs = 
+  nativeBuildInputs =
     [ cmake curl glew makeWrapper mesa SDL2 SDL2_image unzip wget zlib ]
     ++ lib.optional withOpenal openal;
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DOPENSPADES_INSTALL_BINARY=bin" "-DOPENSPADES_RESOURCES=NO" ];
+  cmakeFlags = [
+    "-DOPENSPADES_INSTALL_BINARY=bin"
+    "-DOPENSPADES_RESOURCES=NO"
+  ];
 
   enableParallelBuilding = true;
 

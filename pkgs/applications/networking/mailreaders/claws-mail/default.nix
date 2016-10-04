@@ -1,6 +1,6 @@
 { fetchurl, stdenv, wrapGAppsHook
-, curl, dbus, dbus_glib, enchant, gtk, gnutls, gnupg, gpgme, hicolor_icon_theme
-, libarchive, libcanberra, libetpan, libnotify, libsoup, libxml2, networkmanager
+, curl, dbus, dbus_glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor_icon_theme
+, libarchive, libcanberra_gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
 , glib_networking, gsettings_desktop_schemas
 
@@ -32,7 +32,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
-  version = "3.13.2";
+  version = "3.14.0";
 
   meta = {
     description = "The user-friendly, lightweight, and fast email client";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "1l8ankx0qpq1ix1an8viphcf11ksh53jsrm1xjmq8cjbh5910wva";
+    sha256 = "0nfchgga3ir91s8rky0a0vnz8cgj2f6h716wh3cmb466a01xfss6";
   };
 
   patches = [ ./mime.patch ];
@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-    [ curl dbus dbus_glib gtk gnutls gsettings_desktop_schemas hicolor_icon_theme
+    [ curl dbus dbus_glib gtk2 gnutls gsettings_desktop_schemas hicolor_icon_theme
       libetpan perl pkgconfig python wrapGAppsHook glib_networking
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
     ++ optional enablePluginArchive libarchive
-    ++ optional enablePluginNotificationSounds libcanberra
+    ++ optional enablePluginNotificationSounds libcanberra_gtk2
     ++ optional enablePluginNotificationDialogs libnotify
     ++ optional enablePluginFancy libsoup
     ++ optional enablePluginRssyl libxml2

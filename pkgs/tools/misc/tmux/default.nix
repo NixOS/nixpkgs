@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, libevent, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, libevent, pkgconfig, makeWrapper }:
 
 let
 
@@ -13,18 +13,20 @@ in
 
 stdenv.mkDerivation rec {
   name = "tmux-${version}";
-  version = "2.2";
+  version = "2.3";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "04k9yxjp357sdw6365z6qx87vmwygl3v3wpvd78pp63ky5hzbbay";
+    sha256 = "14c6iw0p3adz7w8jm42w9f3s1zph9is10cbwdjgh5bvifrhxrary";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
-  buildInputs = [ ncurses libevent ];
+  buildInputs = [ ncurses libevent makeWrapper ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -32,8 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    cp -v ${bashCompletion}/completions/tmux $out/etc/bash_completion.d/tmux
+    mkdir -p $out/share/bash-completion/completions
+    cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
   '';
 
   meta = {

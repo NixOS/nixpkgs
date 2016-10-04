@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "uncrustify";
-  version = "0.61";
+  version = "0.63";
 
   src = fetchurl {
     url = "mirror://sourceforge/uncrustify/${product}-${version}.tar.gz";
-    sha256 = "1df0e5a2716e256f0a4993db12f23d10195b3030326fdf2e07f8e6421e172df9";
+    sha256 = "1qravjzmips3m7asbsd0qllmprrl1rshjlmnfq68w84d38sb3yyz";
   };
 
   meta = with stdenv.lib; {

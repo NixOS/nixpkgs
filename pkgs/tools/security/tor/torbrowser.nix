@@ -1,24 +1,24 @@
 { stdenv, fetchurl, makeDesktopItem
-, libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk
+, libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk2
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
 }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
+    stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
   ];
 in
 
 stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "5.5.5";
+  version = "6.0.5";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
     sha256 = if stdenv.is64bit then
-      "0k6v41j880fb4zdxk1v13kmizdaz5rwvi5lskdbdi68iml4p53gj" else
-      "04mqjmnxwa75yi8gmdwadkzrzikgxn08bkvr50zdm7id9fj4nkza";
+      "fc917bd702b1275cae3f7fa8036c3c44af9b4f003f3d4a8fbb9f6c0974277ad4" else
+      "e0c3ce406b6de082692ce3db52b6e04053e205194b26fbf0eee9014be543d98d";
   };
 
   desktopItem = makeDesktopItem {
@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
     if [ ! -d \$HOME ]; then
       mkdir -p \$HOME && cp -R $out/share/tor-browser/Browser/TorBrowser/Data \$HOME/ && chmod -R +w \$HOME
       echo "pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/Data/Tor/\");" >> \
+        ~/Data/Browser/profile.default/preferences/extension-overrides.js
+      echo "pref(\"extensions.torlauncher.torrc-defaults_path\", \"\$HOME/Data/Tor/torrc-defaults\");" >> \
+        ~/Data/Browser/profile.default/preferences/extension-overrides.js
+      echo "pref(\"extensions.torlauncher.tor_path\", \"$out/share/tor-browser/Browser/TorBrowser/Tor/tor\");" >> \
         ~/Data/Browser/profile.default/preferences/extension-overrides.js
     fi
     export FONTCONFIG_PATH=\$HOME/Data/fontconfig

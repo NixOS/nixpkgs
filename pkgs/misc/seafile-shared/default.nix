@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, automake, autoconf, pkgconfig, curl, libtool, vala, python, intltool, fuse, ccnet}:
+{stdenv, fetchurl, which, automake, autoconf, pkgconfig, curl, libtool, vala_0_23, python, intltool, fuse, ccnet}:
 
 stdenv.mkDerivation rec
 {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec
     sha256 = "ec166c86a41e7ab3b1ae97a56326ab4a2b1ec38686486b956c3d153b8023c670";
   };
 
-  buildInputs = [ which automake autoconf pkgconfig libtool vala python intltool fuse ];
+  buildInputs = [ which automake autoconf pkgconfig libtool vala_0_23 python intltool fuse ];
   propagatedBuildInputs = [ ccnet curl ];
 
   preConfigure = ''

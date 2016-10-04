@@ -1,6 +1,6 @@
 { fetchurl, stdenv, gettext, intltool, makeWrapper, pkgconfig
 , geoclue2
-, guiSupport ? true, hicolor_icon_theme, gtk3, python, pygobject3, pyxdg
+, guiSupport ? true, hicolor_icon_theme, librsvg, gtk3, python, pygobject3, pyxdg
 , drmSupport ? true, libdrm
 , randrSupport ? true, libxcb
 , vidModeSupport ? true, libX11, libXxf86vm
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ geoclue2 ]
-    ++ stdenv.lib.optionals guiSupport [ hicolor_icon_theme gtk3 python
-      pygobject3 pyxdg ]
+    ++ stdenv.lib.optionals guiSupport [ hicolor_icon_theme librsvg gtk3
+      python pygobject3 pyxdg ]
     ++ stdenv.lib.optionals drmSupport [ libdrm ]
     ++ stdenv.lib.optionals randrSupport [ libxcb ]
     ++ stdenv.lib.optionals vidModeSupport [ libX11 libXxf86vm ];
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/redshift-gtk/redshift-gtk \
       --replace "/usr/bin/env python3" "${python}/bin/${python.executable}"
   '';
-
   postInstall = stdenv.lib.optionalString guiSupport ''
     wrapProgram "$out/bin/redshift-gtk" \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix XDG_DATA_DIRS : "$out/share:${hicolor_icon_theme}/share"

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.linuxsampler.org;
-    description = "graphical frontend to LinuxSampler";
+    description = "Graphical frontend to LinuxSampler";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

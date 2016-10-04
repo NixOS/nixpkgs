@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/harryhaaren/openAV-ArtyFX.git";
     rev = "3a8cb9a5e4ffaf27a497a31cc9cd6f2e79622d5b";
-    sha256 = "2e3f6ab6f829c0ec177e85f4e419286616cf35fb7303445caa09d3438cac27d5";
+    sha256 = "0nsmycm64a686ysfnmdvnaazijvfj90z5wyp96kyr81nsrbcv2ij";
   };
 
   buildInputs = [ cairomm cmake libjack2 libpthreadstubs libXdmcp libxshmfence libsndfile lv2 ntk pkgconfig   ];

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base glib qt4 ];
   propagatedBuildInputs = [ boost ];
   nativeBuildInputs = [ cmake automoc4 flex bison pkgconfig ];

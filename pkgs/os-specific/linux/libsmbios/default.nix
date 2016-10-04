@@ -25,10 +25,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://linux.dell.com/libsmbios/main";
-    description = "a library to obtain BIOS information";
+    description = "A library to obtain BIOS information";
     license = stdenv.lib.licenses.gpl2Plus; # alternatively, under the Open Software License version 2.1
-
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

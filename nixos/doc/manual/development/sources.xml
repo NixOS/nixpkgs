@@ -70,7 +70,7 @@ sources, you need to tell <command>nixos-rebuild</command> about them
 using the <option>-I</option> flag:
 
 <screen>
-$ nixos-rebuild switch -I nixpkgs=<replaceable>/my/sources</replaceable>/nixpkgs
+# nixos-rebuild switch -I nixpkgs=<replaceable>/my/sources</replaceable>/nixpkgs
 </screen>
 
 </para>

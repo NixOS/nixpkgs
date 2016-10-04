@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib mesa SDL SDL_ttf SDL_mixer SDL_image guile gettext ];
 
+  hardeningDisable = [ "format" ];
+
   CFLAGS = optionalString debug "-g -O0";
   CXXFLAGS = CFLAGS;
   dontStrip = debug;
@@ -29,5 +31,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://trackballs.sourceforge.net/;
     description = "3D Marble Madness clone";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

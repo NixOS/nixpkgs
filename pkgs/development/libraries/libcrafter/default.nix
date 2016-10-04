@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "High level C++ network packet sniffing and crafting library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.lethalman ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

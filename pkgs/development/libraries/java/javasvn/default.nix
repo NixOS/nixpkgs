@@ -6,8 +6,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://tmate.org/svn/org.tmatesoft.svn_1.0.6.standalone.zip;
-    md5 = "459cae849eceef04cd65fd6fb54affcc";
+    sha256 = "0l2s3jqi5clzj5jz962i7gmy8ims51ma60mm5iflsl00dwbmgrqf";
   };
   
   inherit unzip;
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

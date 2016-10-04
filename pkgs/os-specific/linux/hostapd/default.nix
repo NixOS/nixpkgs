@@ -1,14 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libnl, openssl, sqlite ? null }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "hostapd-${version}";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "0zv5pnfrp6z7jjbskzgdb2rlmlbvdxmmis7ca94x5jy9s5mypq3g";
+    sha256 = "0jn77r39ysshkzihv5rjbdajqazci59v2yab4rn05my09najs9wf";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/voidlinux/void-packages/a7bcbc258ba9884bccde831c0ae2069cade99e41/srcpkgs/wpa_supplicant/patches/patch-src_crypto_tls_openssl_c";
+      sha256 = "1ifa2i54a7ijsha197dyldal3m4q5i05ih2sk15f5a5ybb6x7vmp";
+      addPrefixes = true;
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libnl openssl sqlite ];

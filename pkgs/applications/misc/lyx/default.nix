@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.4";
+  version = "2.1.5";
   name = "lyx-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.1.x/${name}.tar.xz";
-    sha256 = "0apkir1rw3msdpps0y0c8skr293h6c4l48c1vx0w4brz337lhdfi";
+    sha256 = "1wrcxsvr5kx8cfdabshzmcjrb3rmy5bh74njnzpq9m5xms8parrf";
   };
 
   configureFlags = [
@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
 
   # python is run during runtime to do various tasks
   postFixup = ''
-    sed '1s:/usr/bin/python:${python}/bin/python:'
-
     wrapProgram "$out/bin/lyx" \
       --prefix PATH : '${python}/bin'
   '';

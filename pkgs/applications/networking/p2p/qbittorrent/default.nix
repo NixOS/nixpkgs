@@ -10,26 +10,24 @@ assert guiSupport -> (dbus_libs != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "3.3.4";
+  version = "3.3.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "1f4impsjck8anl39pwypsck7j6xw0dl18qd0b4xi23r45jvx9l60";
+    sha256 = "0h2ccqmjnm0x0qjvd0vz5hk7dy9qbqhiqvxywqjhip7sj1585p3j";
   };
 
-  nativeBuildInputs = [ pkgconfig which qmakeHook ];
+  nativeBuildInputs = [ pkgconfig which ];
 
   buildInputs = [ boost libtorrentRasterbar qt5.qtbase qt5.qttools ]
     ++ optional guiSupport dbus_libs;
 
-  dontUseQmakeConfigure = true;
-
   preConfigure = ''
-    export QT_QMAKE="$qtOut/bin"
+    export QT_QMAKE=$(dirname "$QMAKE")
   '';
 
   configureFlags = [
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--with-boost=${boost.dev}"
     (if guiSupport then "" else "--disable-gui")
     (if webuiSupport then "" else "--disable-webui")

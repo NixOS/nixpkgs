@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "1j0mbcf10aj6zi1nxql45f9817jd2ndcpd7x123sjmyr7q9m8iiy";
   };
 
+  enableParallelBuilding = true;
+
   patchPhase = ''
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake
   '';
@@ -45,6 +47,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd source
+  '';
+
+  postInstall = ''
+    rm $out/lib/*.a
   '';
 
   nativeBuildInputs = [ cmake yasm ];

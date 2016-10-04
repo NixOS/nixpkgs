@@ -12,5 +12,6 @@ stdenv.mkDerivation rec {
     description = "An interpreter for RFC 3028 Sieve and various extensions";
     homepage = "http://sodabrew.com/libsieve/";
     license = licenses.lgpl21;
+    platforms = platforms.unix;
   };
 }

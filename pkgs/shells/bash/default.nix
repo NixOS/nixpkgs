@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = if (!interactive) # conditional to avoid mass rebuild ATM
-    then [ "out" "doc" ]
-    else [ "out" "doc" "info" ];
+  hardeningDisable = [ "format" ];
+
+  outputs = [ "out" "doc" "info" ];
 
   # the man pages are small and useful enough
   outputMan = if interactive then "out" else null;
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.all;
 
-    maintainers = [ maintainers.simons ];
+    maintainers = [ maintainers.peti ];
   };
 
   passthru = {

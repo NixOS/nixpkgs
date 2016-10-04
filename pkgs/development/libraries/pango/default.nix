@@ -5,18 +5,18 @@
 with stdenv.lib;
 
 let
-  ver_maj = "1.38";
-  ver_min = "1";
+  ver_maj = "1.40";
+  ver_min = "2";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
-    sha256 = "1dsf45m51i4rcyvh5wlxxrjfhvn5b67d5ckjc6vdcxbddjgmc80k";
+    sha256 = "90582a02bc89318d205814fc097f2e9dd164d26da5f27c53ea42d583b34c3cd1";
   };
 
-  outputs = [ "dev" "out" "bin" "docdev" ];
+  outputs = [ "bin" "dev" "out" "devdoc" ];
 
   buildInputs = [ gobjectIntrospection ];
   nativeBuildInputs = [ pkgconfig ];

@@ -31,7 +31,7 @@ and you run <command>nixos-rebuild</command>, specifying your own
 Nixpkgs tree:
 
 <screen>
-$ nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs</screen>
+# nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs</screen>
 
 </para>
 

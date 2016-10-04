@@ -11,15 +11,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt4 exiv2 openexr fftwSinglePrec libtiff ];
   nativeBuildInputs = [ qmake4Hook ];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
-    export CPATH="${ilmbase}/include/OpenEXR:$CPATH"
+    export CPATH="${ilmbase.dev}/include/OpenEXR:$CPATH"
   '';
 
   qmakeFlags = [
-    "EXIV2PATH=${exiv2}/include/exiv2"
-    "OPENEXRDIR=${openexr}/include/OpenEXR"
-    "FFTW3DIR=${fftwSinglePrec}/include"
-    "LIBTIFFDIR=${libtiff}/include"
+    "EXIV2PATH=${exiv2.dev}/include/exiv2"
+    "OPENEXRDIR=${openexr.dev}/include/OpenEXR"
+    "FFTW3DIR=${fftwSinglePrec.dev}/include"
+    "LIBTIFFDIR=${libtiff.dev}/include"
   ];
 
   meta = {

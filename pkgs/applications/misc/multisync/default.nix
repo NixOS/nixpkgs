@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk, glib, ORBit2, libbonobo, libtool, pkgconfig
+{ stdenv, fetchurl, gtk2, glib, ORBit2, libbonobo, libtool, pkgconfig
 , libgnomeui, GConf, automake, autoconf }:
 
 stdenv.mkDerivation {
@@ -10,14 +10,14 @@ stdenv.mkDerivation {
   };
   
   buildInputs =
-    [ gtk glib ORBit2 libbonobo libtool pkgconfig libgnomeui GConf
+    [ gtk2 glib ORBit2 libbonobo libtool pkgconfig libgnomeui GConf
       automake autoconf
     ];
     
   preConfigure = "./autogen.sh"; # install.sh is not contained in the tar
 
   meta = {
-    description = "modular program to synchronize calendars, addressbooks and other PIM data between pcs, mobile devices etc";
+    description = "Modular program to synchronize calendars, addressbooks and other PIM data between pcs, mobile devices etc";
   };
 }
 

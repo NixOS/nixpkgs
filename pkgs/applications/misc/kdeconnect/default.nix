@@ -3,7 +3,6 @@
 , fetchurl
 , extra-cmake-modules
 , makeQtWrapper
-, qtquick1
 , kcmutils
 , kconfigwidgets
 , kdbusaddons
@@ -17,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   name = "kdeconnect-${version}";
-  version = "0.9g";
+  version = "1.0";
 
   src = fetchurl {
-    url = http://download.kde.org/unstable/kdeconnect/0.9/src/kdeconnect-kde-0.9g.tar.xz;
-    sha256 = "4033754057bbc993b1d4350959afbe1d17a4f1e56dd60c6df6abca5a321ee1b8";
+    url = http://download.kde.org/stable/kdeconnect/1.0/src/kdeconnect-kde-1.0.tar.xz;
+    sha256 = "0pd8qw0w6akc7yzmsr0sjkfj3nw6rgm5xvq41g61ak8pp05syzr0";
   };
 
   buildInputs = [
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
     kconfigwidgets
     kdbusaddons
     qca-qt5
-    qtquick1
     ki18n
     kiconthemes
     knotifications

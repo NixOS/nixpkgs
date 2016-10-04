@@ -2,11 +2,11 @@
 sftpPath ? "/var/run/current-system/sw/libexec/sftp-server" }:
 
 stdenv.mkDerivation rec {
-  name = "dropbear-2016.73";
+  name = "dropbear-2016.74";
 
   src = fetchurl {
     url = "http://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
-    sha256 = "1mzg18jss1bsmcnn88zv7kv5yj01hzimndnd5636hfq9kgva8qaw";
+    sha256 = "14c8f4gzixf0j9fkx68jgl85q7b05852kk0vf09gi6h0xmafl817";
   };
 
   dontDisableStatic = enableStatic;
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "A small footprint implementation of the SSH 2 protocol";
     license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

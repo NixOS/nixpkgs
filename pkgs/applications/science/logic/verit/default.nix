@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook flex bison ];
   buildInputs = [ gmp ];
 
+  # --disable-static actually enables static linking here...
+  dontDisableStatic = true;
+
   makeFlags = [ "LEX=${flex}/bin/flex" ];
 
   preInstall = ''

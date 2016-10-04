@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://git.debian.org/xtrace/xtrace.git";
     rev = "refs/tags/xtrace-1.3.1";
-    sha256 = "0csjw88ynzzcmx1jlb65c74r2sp9dzxn00airsxxfsipb74049d0";
+    sha256 = "1g26hr6rl7bbb9cwqk606nbbapslq3wnsy8j28azrgi8hgfqhjfi";
   };
 
   buildInputs = [ libX11 makeWrapper autoreconfHook ];

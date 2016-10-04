@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export LIBXSLT_PREFIX=${libxslt}
-      export LIBXML_PREFIX=${libxml2}
+      export LIBXSLT_PREFIX=${libxslt.dev}
+      export LIBXML_PREFIX=${libxml2.dev}
       export LIBXSLT_LIBS=$(pkg-config --libs libxslt libexslt)
       export LIBXML_LIBS=$(pkg-config --libs libxml-2.0)
     '';
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "A command line tool for manipulating and querying XML data";
     homepage = http://xmlstar.sourceforge.net/;
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

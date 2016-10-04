@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "RSA utility";
     homepage = http://bmrsa.sourceforge.net/;
     license = licenses.gpl1;
+    platforms = platforms.linux;
   };
 }

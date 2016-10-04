@@ -7,8 +7,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  
-  name = "ocaml-4.00.1";
+  name = "ocaml-${version}";
+  version = "4.00.1";
   
   src = fetchurl {
     url = "http://caml.inria.fr/pub/distrib/ocaml-4.00/${name}.tar.bz2";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
         and a documentation generator (ocamldoc).
       '';
 
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; linux;
   };
 
 }

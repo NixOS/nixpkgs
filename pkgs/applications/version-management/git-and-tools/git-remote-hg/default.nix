@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     inherit rev;
     url = "git://github.com/fingolfin/git-remote-hg.git";
-    sha256 = "7c61c8f2be47d96c4244f0f8a3c8f9b994994b15dbe1754581f746888d705463";
+    sha256 = "0cmlfdxfabrs3x10mfjfap8wz67s8xk2pjn2wlcj9k2v84gji60m";
   };
 
   buildInputs = [ mercurial.python mercurial makeWrapper
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/felipec/git-remote-hg";
-    description = "semi-official Mercurial bridge from Git project, once installed, it allows you to clone, fetch and push to and from Mercurial repositories as if they were Git ones";
+    description = "Semi-official Mercurial bridge from Git project, once installed, it allows you to clone, fetch and push to and from Mercurial repositories as if they were Git ones";
     license = licenses.gpl2;
     maintainers = [ maintainers.garbas ];
+    platforms = platforms.unix;
   };
 }

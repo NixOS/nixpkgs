@@ -11,7 +11,7 @@ buildPerlPackage rec {
   preConfigure = ''
     cat > config.in <<EOF
       BUILD_ZLIB   = False
-      INCLUDE      = ${zlib}/include
+      INCLUDE      = ${zlib.dev}/include
       LIB          = ${zlib.out}/lib
       OLD_ZLIB     = False
       GZIP_OS_CODE = AUTO_DETECT

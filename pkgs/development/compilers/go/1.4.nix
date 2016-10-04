@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre ];
   propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
 
+  hardeningDisable = [ "all" ];
+
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
   preUnpack = ''
@@ -58,7 +60,7 @@ stdenv.mkDerivation rec {
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
 
     # Find the loader dynamically
-    LOADER="$(find ${libc.out or libc}/lib -name ld-linux\* | head -n 1)"
+    LOADER="$(find ${lib.getLib libc}/lib -name ld-linux\* | head -n 1)"
 
     # Replace references to the loader
     find src/cmd -name asm.c -exec sed -i "s,/lib/ld-linux.*\.so\.[0-9],$LOADER," {} \;
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
            else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
+  CGO_ENABLED = 0;
 
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "arachne-pnr-${version}";
-  version = "2015.12.29";
+  version = "2016.08.18";
 
   src = fetchFromGitHub {
     owner = "cseed";
     repo = "arachne-pnr";
-    rev = "1a4fdf96a7fd08806c032d41a2443c8e17c72c80";
-    sha256 = "1dj7ycffwkmlsh12117fbybkdfnlhxbbxkbfgwfyvcgmg3cacgl1";
+    rev = "52e69ed207342710080d85c7c639480e74a021d7";
+    sha256 = "15bdw5yxj76lxrwksp6liwmr6l1x77isf4bs50ys9rsnmiwh8c3w";
   };
 
   preBuild = ''
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/cseed/arachne-pnr;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.shell ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

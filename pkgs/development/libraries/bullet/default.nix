@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://code.google.com/p/bullet/;
     license = stdenv.lib.licenses.zlib;
     maintainers = with stdenv.lib.maintainers; [ aforemny ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

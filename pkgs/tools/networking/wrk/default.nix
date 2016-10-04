@@ -1,18 +1,17 @@
-{ stdenv, fetchgit, openssl }:
+{ stdenv, fetchFromGitHub, openssl, perl }:
 
-let
-  version = "4.0.0";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "wrk-${version}";
+  version = "4.0.2";
 
-  src = fetchgit {
-    url = "https://github.com/wg/wrk.git";
-    rev = "7cdede916a53da253c995767a92eec36a245a2cc";
-    sha256 = "0m8i5pk2rj40v28bzrskkzw54v9jqdby52dwfcypannhlhgqnhy2";
+  src = fetchFromGitHub {
+    owner = "wg";
+    repo = "wrk";
+    rev = version;
+    sha256 = "1qg6w8xz4pr227h1gxrbm6ylhqvspk95hvq2f9iakni7s56pkh1w";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl perl ];
   
   installPhase = ''
     mkdir -p $out/bin

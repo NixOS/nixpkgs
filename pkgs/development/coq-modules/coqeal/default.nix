@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/CoqEAL/CoqEAL.git;
     rev = "7522037d5e01e651e705d782f4f91fc68c46866e";
-    sha256 = "1cvjz0yyqihdx1hp1h9x5x14kv9qf3rjhgqq4f7rv8bxcv9p1gv3";
+    sha256 = "0kbnsrycd0hjni311i8xc5xinn4ia8rnqi328sdfqzvvyky37fgj";
   };
 
   propagatedBuildInputs = [ mathcomp ];

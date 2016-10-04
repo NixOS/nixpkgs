@@ -60,33 +60,33 @@ the <literal>nixos-14.12</literal> channel.  To see which NixOS
 channel you’re subscribed to, run the following as root:
 
 <screen>
-$ nix-channel --list | grep nixos
+# nix-channel --list | grep nixos
 nixos https://nixos.org/channels/nixos-unstable
 </screen>
 
 To switch to a different NixOS channel, do
 
 <screen>
-$ nix-channel --add https://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
+# nix-channel --add https://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
 </screen>
 
 (Be sure to include the <literal>nixos</literal> parameter at the
 end.)  For instance, to use the NixOS 14.12 stable channel:
 
 <screen>
-$ nix-channel --add https://nixos.org/channels/nixos-14.12 nixos
+# nix-channel --add https://nixos.org/channels/nixos-14.12 nixos
 </screen>
 
 If you have a server, you may want to use the “small” channel instead:
 
 <screen>
-$ nix-channel --add https://nixos.org/channels/nixos-14.12-small nixos
+# nix-channel --add https://nixos.org/channels/nixos-14.12-small nixos
 </screen>
 
 And if you want to live on the bleeding edge:
 
 <screen>
-$ nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+# nix-channel --add https://nixos.org/channels/nixos-unstable nixos
 </screen>
 
 </para>
@@ -95,7 +95,7 @@ $ nix-channel --add https://nixos.org/channels/nixos-unstable nixos
 channel by running
 
 <screen>
-$ nixos-rebuild switch --upgrade
+# nixos-rebuild switch --upgrade
 </screen>
 
 which is equivalent to the more verbose <literal>nix-channel --update

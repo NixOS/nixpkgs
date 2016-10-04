@@ -37,7 +37,6 @@
 # that point into the user's profile.
 
 let
-  shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   installer = writeScript "xquartz-install" ''
     NIX_LINK=$HOME/.nix-profile
 
@@ -61,7 +60,6 @@ let
     sudo launchctl load -w /Library/LaunchDaemons/$daemonName
   '';
   fontDirs = [
-    xorg.fontbhttf
     xorg.fontbhlucidatypewriter100dpi
     xorg.fontbhlucidatypewriter75dpi
     ttf_bitstream_vera
@@ -98,9 +96,13 @@ let
   };
 in stdenv.mkDerivation {
   name = "xquartz";
+
   buildInputs = [ ruby makeWrapper ];
+
   unpackPhase = "sourceRoot=.";
-  buildPhase = ":";
+
+  dontBuild = true;
+
   installPhase = ''
     cp -rT ${xorg.xinit} $out
     chmod -R u+w $out
@@ -128,18 +130,16 @@ in stdenv.mkDerivation {
       --replace "@FONTCONFIG_FILE@"   "$fontsConfPath"
 
     wrapProgram $out/bin/Xquartz \
-      --set XQUARTZ_X11 $out/Applications/XQuartz.app/Contents/MacOS/X11 \
-      --set XKB_BINDIR "${xorg.xkbcomp}/bin"
+      --set XQUARTZ_X11 $out/Applications/XQuartz.app/Contents/MacOS/X11
 
     defaultStartX="$out/bin/startx -- $out/bin/Xquartz"
 
     ruby ${./patch_plist.rb} \
-      ${shellEscape (builtins.toXML {
+      ${lib.escapeShellArg (builtins.toXML {
         XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
         XQUARTZ_DEFAULT_SHELL  = "${shell}";
         XQUARTZ_DEFAULT_STARTX = "@STARTX@";
         FONTCONFIG_FILE        = "@FONTCONFIG_FILE@";
-        XKB_BINDIR             = "${xorg.xkbcomp}/bin";
       })} \
       $out/Applications/XQuartz.app/Contents/Info.plist
     substituteInPlace $out/Applications/XQuartz.app/Contents/Info.plist \
@@ -179,6 +179,7 @@ in stdenv.mkDerivation {
       --replace "@DEFAULT_CLIENT@"  "${xterm}/bin/xterm" \
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
   '';
+
   meta = with lib; {
     platforms   = platforms.darwin;
     maintainers = with maintainers; [ cstrahan ];

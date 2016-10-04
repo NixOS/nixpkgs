@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   name = "ghostscript-${version}";
 
   src = fetchurl {
-    url = "http://downloads.ghostscript.com/public/${name}.tar.bz2";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs918/${name}.tar.bz2";
     inherit sha256;
   };
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec freetype cups/libs ijs
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
-    sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib}/include@" -i configure.ac
+    sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
 
     autoconf
   '' + lib.optionalString cupsSupport ''

@@ -23,6 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Utility for switching between keyboard layouts";
+    platforms = stdenv.lib.platforms.linux;
   };
 
 }

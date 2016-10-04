@@ -22,7 +22,7 @@ in
 rec {
   name = "quake3";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ iElectric eelco chaoflow ];
+    maintainers = [ domenkozar eelco chaoflow ];
   };
 
   # TODO: lcov doesn't work atm

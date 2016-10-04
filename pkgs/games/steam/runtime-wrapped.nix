@@ -22,6 +22,7 @@ let
     xlibs.libXcursor
     xlibs.libXrender
     xlibs.libXScrnSaver
+    xlibs.libXxf86vm
     xlibs.libXi
     xlibs.libSM
     xlibs.libICE
@@ -82,6 +83,7 @@ let
   ] ++ lib.optional (!newStdcpp) gcc48.cc;
 
   overridePkgs = with pkgs; [
+    libgpgerror
     libpulseaudio
     alsaLib
     openalSoft
@@ -93,18 +95,18 @@ let
                else overridePkgs;
   steamRuntime = lib.optional (!nativeOnly) steam-runtime;
 
+  allPkgs = ourRuntime ++ steamRuntime;
+
 in stdenv.mkDerivation rec {
   name = "steam-runtime-wrapped";
-
-  allPkgs = ourRuntime ++ steamRuntime;
 
   nativeBuildInputs = [ perl ];
 
   builder = ./build-wrapped.sh;
 
   installPhase = ''
-    buildDir "${toString steam-runtime.libs}" "$allPkgs"
-    buildDir "${toString steam-runtime.bins}" "$allPkgs"
+    buildDir "${toString steam-runtime.libs}" "${toString (map lib.getLib allPkgs)}"
+    buildDir "${toString steam-runtime.bins}" "${toString (map lib.getBin allPkgs)}"
   '';
 
   meta.hydraPlatforms = [];

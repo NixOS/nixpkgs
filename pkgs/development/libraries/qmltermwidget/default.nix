@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/Swordfish90/qmltermwidget.git";
     rev = "refs/tags/v${version}";
-    sha256 = "19pz27jsdpa3pybj8sghmmd1zqgr73js1mp3875rhx158dav37nz";
+    sha256 = "0ca500mzcqglkj0i6km0z512y3a025dbm24605xyv18l6y0l2ny3";
   };
 
   buildInputs = [ qtbase qtquick1 ];

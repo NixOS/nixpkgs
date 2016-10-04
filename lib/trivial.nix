@@ -62,14 +62,16 @@ rec {
     isInt add sub lessThan
     seq deepSeq genericClosure;
 
+  inherit (import ./strings.nix) fileContents;
+
   # Return the Nixpkgs version number.
   nixpkgsVersion =
     let suffixFile = ../.version-suffix; in
-    readFile ../.version
-    + (if pathExists suffixFile then readFile suffixFile else "pre-git");
+    fileContents ../.version
+    + (if pathExists suffixFile then fileContents suffixFile else "pre-git");
 
   # Whether we're being called by nix-shell.
-  inNixShell = builtins.getEnv "IN_NIX_SHELL" == "1";
+  inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
 
   # Return minimum/maximum of two numbers.
   min = x: y: if x < y then x else y;
@@ -96,4 +98,19 @@ rec {
   */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
+
+  /* See https://github.com/NixOS/nix/issues/749. Eventually we'd like these
+     to expand to Nix builtins that carry metadata so that Nix can filter out
+     the INFO messages without parsing the message string.
+
+     Usage:
+     {
+       foo = lib.warn "foo is deprecated" oldFoo;
+     }
+
+     TODO: figure out a clever way to integrate location information from
+     something like __unsafeGetAttrPos.
+  */
+  warn = msg: builtins.trace "WARNING: ${msg}";
+  info = msg: builtins.trace "INFO: ${msg}";
 }

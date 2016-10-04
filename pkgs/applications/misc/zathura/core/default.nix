@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils, file, makeWrapper, zathura_icon, sqlite, glib }:
+{ stdenv, lib, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils
+, file, makeWrapper, sqlite, glib
+, synctexSupport ? true, texlive ? null }:
+
+assert synctexSupport -> texlive != null;
 
 stdenv.mkDerivation rec {
   version = "0.3.6";
@@ -9,36 +13,36 @@ stdenv.mkDerivation rec {
     sha256 = "0fyb5hak0knqvg90rmdavwcmilhnrwgg1s5ykx9wd3skbpi8nsh8";
   };
 
-  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite glib ];
+  icon = ./icon.xpm;
 
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/gio-unix-2.0";
+  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite glib
+  ] ++ lib.optional synctexSupport texlive.bin.core;
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [
     "PREFIX=$(out)"
     "RSTTOMAN=${docutils}/bin/rst2man.py"
     "VERBOSE=1"
     "TPUT=${ncurses.out}/bin/tput"
-  ];
+  ] ++ lib.optional synctexSupport "WITH_SYNCTEX=1";
 
   postInstall = ''
     wrapProgram "$out/bin/zathura" \
-      --prefix PATH ":" "${file}/bin" \
+      --prefix PATH ":" "${lib.makeBinPath [ file ]}" \
       --prefix XDG_CONFIG_DIRS ":" "$out/etc"
 
+    install -Dm644 $icon $out/share/pixmaps/pwmt.xpm
     mkdir -pv $out/etc
-    echo "set window-icon ${zathura_icon}" > $out/etc/zathurarc
+    echo "set window-icon $out/share/pixmaps/pwmt.xpm" > $out/etc/zathurarc
+    echo "Icon=pwmt" >> $out/share/applications/zathura.desktop
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pwmt.org/projects/zathura/;
     description = "A core component for zathura PDF viewer";
-    license = stdenv.lib.licenses.zlib;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
-
-    # Set lower priority in order to provide user with a wrapper script called
-    # 'zathura' instead of real zathura executable. The wrapper will build
-    # plugin path argument before executing the original.
-    priority = 1;
+    license = licenses.zlib;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ garbas ];
   };
 }

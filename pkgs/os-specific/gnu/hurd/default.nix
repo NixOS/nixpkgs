@@ -87,7 +87,7 @@ stdenv.mkDerivation ({
 //
 
 (if headersOnly
- then { buildPhase = ":"; installPhase = "make install-headers"; }
+ then { dontBuild = true; installPhase = "make install-headers"; }
  else (if (cross != null)
        then {
          crossConfig = cross.config;

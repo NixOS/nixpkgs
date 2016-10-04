@@ -1,9 +1,9 @@
-{ stdenv
+{ kdeDerivation
 , lib
 , fetchgit
-, extra-cmake-modules
+, ecm
 , kdoctools
-, makeQtWrapper
+, kdeWrapper
 , qtscript
 , kconfig
 , kcrash
@@ -13,54 +13,55 @@
 , kiconthemes
 , kinit
 , khtml
+, konsole
 , kparts
 , ktexteditor
 , kwindowsystem
 , poppler
 }:
 
-stdenv.mkDerivation rec {
-  name = "kile-${version}";
-  version = "2016-02-14";
+let
+  unwrapped =
+    kdeDerivation rec {
+      name = "kile-${version}";
+      version = "2016-07-25";
 
-  src = fetchgit {
-    url = git://anongit.kde.org/kile.git;
-    rev = "7b238c42580abc936816d4ea0df61d0cbbefecc4";
-    sha256 = "f37d531489a84911b47664697bb3bddc0ba5591854749c17fb0c6b1e71dbc6ee";
+      src = fetchgit {
+        url = git://anongit.kde.org/kile.git;
+        rev = "9cad4757df2493a6099b89114340493c6b436d0b";
+        sha256 = "0kikrkssfd7bj580iwsipirbz2klxvk0f7nfg5y9mkv0pnchx2mj";
 
-  };
+      };
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-    makeQtWrapper
-  ];
+      nativeBuildInputs = [ ecm kdoctools ];
 
-  buildInputs = [
-    qtscript
-    kconfig
-    kcrash
-    kdbusaddons
-    kdelibs4support
-    kdoctools
-    kguiaddons
-    kiconthemes
-    kinit
-    khtml
-    kparts
-    ktexteditor
-    kwindowsystem
-    poppler
-  ];
+      buildInputs = [
+        kconfig
+        kcrash
+        kdbusaddons
+        kdelibs4support
+        kdoctools
+        kguiaddons
+        kiconthemes
+        kinit
+        khtml
+        kparts
+        ktexteditor
+        kwindowsystem
+        poppler
+        qtscript
+      ];
 
-  postInstall = ''
-    wrapQtProgram "$out/bin/kile"
-  '';
-
-  meta = {
-    description = "Kile is a user friendly TeX/LaTeX authoring tool for the KDE desktop environment";
-    homepage = https://www.kde.org/applications/office/kile/;
-    maintainers = with lib.maintainers; [ fridh ];
-    license = lib.licenses.gpl2Plus;
-  };
+      meta = {
+        description = "Kile is a user friendly TeX/LaTeX authoring tool for the KDE desktop environment";
+        homepage = https://www.kde.org/applications/office/kile/;
+        maintainers = with lib.maintainers; [ fridh ];
+        license = lib.licenses.gpl2Plus;
+      };
+    };
+in
+kdeWrapper unwrapped
+{
+  targets = [ "bin/kile" ];
+  paths = [ konsole.unwrapped ];
 }

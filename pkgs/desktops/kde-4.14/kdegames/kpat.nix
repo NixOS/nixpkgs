@@ -3,6 +3,6 @@ kde {
   buildInputs = [ kdelibs libkdegames ];
   nativeBuildInputs = [ shared_mime_info ];
   meta = {
-    description = "a relaxing card sorting game";
+    description = "A relaxing card sorting game";
   };
 }

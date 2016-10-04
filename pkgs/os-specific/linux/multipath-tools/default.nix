@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, lvm2, libaio, gzip, readline, udev }:
+{ stdenv, fetchurl, lvm2, libaio, gzip, readline, systemd, liburcu }:
 
 stdenv.mkDerivation rec {
-  name = "multipath-tools-0.5.0";
+  name = "multipath-tools-0.6.2";
 
   src = fetchurl {
-    url = "http://christophe.varoqui.free.fr/multipath-tools/${name}.tar.bz2";
-    sha256 = "1yd6l1l1c62xjr1xnij2x49kr416anbgfs4y06r86kp9hkmz2g7i";
+    name = "${name}.tar.gz";
+    url = "http://git.opensvc.com/?p=multipath-tools/.git;a=snapshot;h=e165b73a16fc9027aa3306df40052038c175be1b;sf=tgz";
+    sha256 = "159hxvbk9kh1qay9x04w0gsqzg0hkl5yghfc1wi9kv2n5pcwbkpm";
   };
 
   postPatch = ''
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ gzip ];
-  buildInputs = [ udev lvm2 libaio readline ];
+  buildInputs = [ systemd lvm2 libaio readline liburcu ];
 
   makeFlags = [
     "LIB=lib"

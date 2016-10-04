@@ -1,12 +1,17 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "jemalloc-4.0.3";
+  name = "jemalloc-4.1.1";
 
   src = fetchurl {
     url = "http://www.canonware.com/download/jemalloc/${name}.tar.bz2";
-    sha256 = "1mpnfaniaybv8kh7yjqq2g595l2i08m7adg238k5igzf61n6ixzi";
+    sha256 = "1bmdr51wxiir595k2r6z9a7rcgm42kkgnr586xir7vdcndr3pwf8";
   };
+
+  # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
+  # then stops downstream builds (mariadb in particular) from detecting it. This
+  # option should remove the prefix and give us a working jemalloc.
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--with-jemalloc-prefix=";
 
   meta = with stdenv.lib; {
     homepage = http://www.canonware.com/jemalloc/index.html;

@@ -1,15 +1,16 @@
-{ stdenv, fetchgit
-, pass, rofi, coreutils, utillinux, xdotool, gnugrep, pwgen, findutils
-, makeWrapper }:
+{ stdenv, fetchFromGitHub, pass, rofi, coreutils, utillinux, xdotool, gnugrep
+, libnotify, pwgen, findutils, gawk, gnused, xclip, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   name = "rofi-pass-${version}";
-  version = "1.3.1";
+  version = "1.4.3";
 
-  src = fetchgit {
-    url = "https://github.com/carnager/rofi-pass";
-    rev = "refs/tags/${version}";
-    sha256 = "1r206fq96avhlgkf2fzf8j2a25dav0s945qv66hwvqwhxq74frrv";
+  src = fetchFromGitHub {
+    owner = "carnager";
+    repo = "rofi-pass";
+    rev = version;
+    sha256 = "09wpkxg5b7xicdisgbhlfr8vs1iv7z9sc58pjl0p198yap57khq5";
   };
 
   buildInputs = [ makeWrapper ];
@@ -18,20 +19,24 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -a $src/rofi-pass $out/bin/rofi-pass
+    cp -a rofi-pass $out/bin/rofi-pass
 
     mkdir -p $out/share/doc/rofi-pass/
-    cp -a $src/config.example $out/share/doc/rofi-pass/config.example
+    cp -a config.example $out/share/doc/rofi-pass/config.example
   '';
 
   wrapperPath = with stdenv.lib; makeBinPath [
     coreutils
     findutils
+    gawk
     gnugrep
+    gnused
+    libnotify
     pass
     pwgen
     rofi
     utillinux
+    xclip
     xdotool
   ];
 
@@ -47,5 +52,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/carnager/rofi-pass;
     maintainers = with stdenv.lib.maintainers; [ hiberno the-kenny ];
     license = stdenv.lib.licenses.gpl3;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

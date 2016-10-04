@@ -7,7 +7,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchgit {
     url = "git://github.com/pagekite/Mailpile";
     rev = "refs/tags/${version}";
-    sha256 = "0h84cc9kwb0m4admqjkpg4pllxlh095rmzvrql45kz71fpnxs780";
+    sha256 = "118b5zwfwmzj38p0mkj3r1s09jxg8x38y0a42b21imzpmli5vpb5";
   };
 
   patchPhase = ''
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/mailpile \
-      --prefix PATH ":" "${gnupg1orig}/bin:${openssl.bin}/bin"
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1orig openssl ]}"
   '';
 
   meta = with stdenv.lib; {
@@ -29,6 +29,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://www.mailpile.is/;
     license = [ licenses.asl20 licenses.agpl3 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

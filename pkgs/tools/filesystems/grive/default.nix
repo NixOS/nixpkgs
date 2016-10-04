@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/Grive/grive.git";
     rev = "51e42914f3666ee6e0bc16a4c78f60b117265c24";
-    sha256 = "f2b978cc93a2d16262c7b78c62019b2a58044eaef4ca95feaa74dfd4dfcbfa36";
+    sha256 = "11cqfcjl128nfg1rjvpvr9x1x2ch3kyliw4vi14n51zqp82f9ysb";
   };
 
   buildInputs = [cmake libgcrypt json_c curl expat stdenv binutils boost];
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "an open source (experimental) Linux client for Google Drive";
+    description = "An open source (experimental) Linux client for Google Drive";
     homepage = https://github.com/Grive/grive;
     license = stdenv.lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

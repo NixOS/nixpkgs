@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cp Makefile.AP2 Makefile
-    makeFlags="top_dir=${apacheHttpd}/share prefix=$out"
+    makeFlags="top_dir=${apacheHttpd.dev}/share prefix=$out"
   '';
 
   meta = {
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

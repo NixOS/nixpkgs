@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation (rec {
 
-  name = "ocaml-3.10.0";
+  name = "ocaml-${version}";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "http://caml.inria.fr/pub/distrib/ocaml-3.10/${name}.tar.bz2";
@@ -27,6 +28,7 @@ stdenv.mkDerivation (rec {
     homepage = http://caml.inria.fr/ocaml;
     license = with stdenv.lib.licenses; [ qpl lgpl2 ];
     description = "Most popular variant of the Caml language";
+    platforms = stdenv.lib.platforms.linux;
   };
 
 })

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk, gsl
+{ stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk2, gsl
 , pkgconfig, gtksourceview, pango, gettext, libglade
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vri2pzvmm38qaihfvwlry30f40lcnps4blg59ixic4q20ldxf5d";
   };
 
-  buildInputs = [ libxml2 readline zlib perl cairo gtk gsl pkgconfig
+  buildInputs = [ libxml2 readline zlib perl cairo gtk2 gsl pkgconfig
     gtksourceview pango gettext libglade ];
 
   doCheck = false;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.gnu.org/software/pspp/";
-    description = "a free replacement for SPSS, a program for statistical analysis of sampled data";
+    description = "A free replacement for SPSS, a program for statistical analysis of sampled data";
     license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''
@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

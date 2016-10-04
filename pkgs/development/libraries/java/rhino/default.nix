@@ -14,11 +14,13 @@ stdenv.mkDerivation {
   name = "rhino-${version}";
 
   src = fetchurl {
-    url = "https://ftp.mozilla.org/pub/js/rhino1_7R2.zip";
+    url = "mirror://mozilla/js/rhino1_7R2.zip";
     sha256 = "1p32hkghi6bkc3cf2dcqyaw5cjj7403mykcp0fy8f5bsnv0pszv7";
   };
 
   patches = [ ./gcj-type-mismatch.patch ];
+
+  hardeningDisable = [ "fortify" "format" ];
 
   preConfigure =
     ''
@@ -53,5 +55,6 @@ stdenv.mkDerivation {
     homepage = http://www.mozilla.org/rhino/;
 
     license = with licenses; [ mpl11 /* or */ gpl2Plus ];
+    platforms = platforms.linux;
   };
 }

@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     homepage = http://ofb.net/~egnor/xml2/;
     description = "Tools for command line processing of XML, HTML, and CSV";
     license = licenses.gpl2Plus;
+    platforms = platforms.all;
     maintainers = [ maintainers.rycee ];
   };
 }

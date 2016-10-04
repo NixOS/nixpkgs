@@ -6,36 +6,32 @@
  }:
 
 composableDerivation.composableDerivation {} (fixed: rec {
-  version = "2.0.2";
+  version = "2.1.1";
   name = "gdal-${version}";
 
   src = fetchurl {
     url = "http://download.osgeo.org/gdal/${version}/${name}.tar.gz";
-    sha256 = "db7722caf8d9dd798ec18012b9cacf40a518918466126a88b9fd277bd7d40cc4";
+    sha256 = "55fc6ffbe76e9d2e7e6cf637010e5d4bba6a966d065f40194ff798544198236b";
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ (stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ]);
 
-  patches = [
-    # This ensures that the python package is installed into gdal's prefix,
-    # rather than trying to install into python's prefix.
-    ./python.patch
-  ];
+  hardeningDisable = [ "format" ];
 
   # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
   # Unset CC and CXX as they confuse libtool.
   preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";
 
   configureFlags = [
-    "--with-jpeg=${libjpeg}"
-    "--with-libtiff=${libtiff}" # optional (without largetiff support)
-    "--with-libpng=${libpng}"   # optional
-    "--with-libz=${zlib}"       # optional
+    "--with-jpeg=${libjpeg.dev}"
+    "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
+    "--with-libpng=${libpng.dev}"   # optional
+    "--with-libz=${zlib.dev}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.lib}/bin/mysql_config"
+    "--with-mysql=${mysql.lib.dev}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional

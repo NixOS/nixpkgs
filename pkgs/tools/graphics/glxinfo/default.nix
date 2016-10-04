@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xlibsWrapper, mesa}:
+{ stdenv, fetchurl, xlibsWrapper, mesa_noglu }:
 
 let version = "8.3.0"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1vqb7s5m3fcg2csbiz45mha1pys2xx6rhw94fcyvapqdpm5iawy1";
   };
 
-  buildInputs = [xlibsWrapper mesa];
+  buildInputs = [ xlibsWrapper mesa_noglu ];
 
   configurePhase = "true";
 
@@ -24,4 +24,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp glxinfo glxgears $out/bin/
   ";
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool
-, libusb1, libxml2, pkgconfig, sane-backends, vala, wrapGAppsHook }:
+, libusb1, libxml2, pkgconfig, sane-backends, vala_0_23, wrapGAppsHook
+, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
@@ -11,14 +12,33 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cairo colord glib gusb gtk3 libusb1 libxml2 sane-backends
-    vala ];
+    vala_0_23 ];
   nativeBuildInputs = [ intltool itstool pkgconfig wrapGAppsHook ];
 
   configureFlags = [ "--disable-packagekit" ];
 
+  patchPhase = ''
+    sed -i -e 's#Icon=scanner#Icon=simple-scan#g' ./data/simple-scan.desktop.in
+  '';
+
   preBuild = ''
     # Clean up stale .c files referencing packagekit headers as of 3.20.0:
     make clean
+  '';
+
+  postInstall = ''
+    (
+    cd ${gnome3.defaultIconTheme}/share/icons/Adwaita
+
+    for f in `find . | grep 'scanner\.'` 
+    do
+      local outFile="`echo "$out/share/icons/hicolor/$f" | sed \
+        -e 's#/devices/#/apps/#g' \
+        -e 's#scanner\.#simple-scan\.#g'`"
+      mkdir -p "`realpath -m "$outFile/.."`"
+      cp "$f" "$outFile"
+    done
+    )
   '';
 
   enableParallelBuilding = true;

@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pSub ];
     homepage = http://www.azzit.de/dotconf/;
     license = licenses.lgpl21Plus;
+    platforms = with platforms; unix;
   };
 }

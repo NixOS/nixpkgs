@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, python, intltool, pkgconfig, libX11, gtk
-, ldns, pythonDBus, pythonPackages
+{ stdenv, fetchurl, python, intltool, pkgconfig, libX11
+, ldns, pythonPackages
 
 , enableJingle ? true, farstream ? null, gst_plugins_bad ? null
 ,                      libnice ? null
 , enableE2E ? true
 , enableRST ? true
-, enableSpelling ? true, gtkspell ? null
+, enableSpelling ? true, gtkspell2 ? null
 , enableNotifications ? false
 , extraPythonPackages ? pkgs: []
 }:
@@ -14,18 +14,18 @@ assert enableJingle -> farstream != null && gst_plugins_bad != null
                     && libnice != null;
 assert enableE2E -> pythonPackages.pycrypto != null;
 assert enableRST -> pythonPackages.docutils != null;
-assert enableSpelling -> gtkspell != null;
+assert enableSpelling -> gtkspell2 != null;
 assert enableNotifications -> pythonPackages.notify != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gajim-${version}";
-  version = "0.16.5";
+  version = "0.16.6";
 
   src = fetchurl {
     url = "http://www.gajim.org/downloads/0.16/gajim-${version}.tar.bz2";
-    sha256 = "14fhcqnkqygh91132dnf1idayj4r3iqbwb44sd3mxv20n6ribh55";
+    sha256 = "1p3qwzy07f0wkika9yigyiq167l2k6wn12flqa7x55z4ihbysmqk";
   };
 
   patches = [
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e '0,/^[^#]/ {
       /^[^#]/i export \\\
-        PYTHONPATH="'"$PYTHONPATH\''${PYTHONPATH:+:}\$PYTHONPATH"'" \\\
         GST_PLUGIN_PATH="'"\$GST_PLUGIN_PATH''${GST_PLUGIN_PATH:+:}${""
         }$GST_PLUGIN_PATH"'"
     }' scripts/gajim.in
@@ -48,26 +47,43 @@ stdenv.mkDerivation rec {
       src/features_window.py
     sed -i -e "s|'drill'|'${ldns}/bin/drill'|" src/common/resolver.py
   '' + optionalString enableSpelling ''
-    sed -i -e 's|=.*find_lib.*|= "${gtkspell}/lib/libgtkspell.so"|'   \
+    sed -i -e 's|=.*find_lib.*|= "${gtkspell2}/lib/libgtkspell.so"|'   \
       src/gtkspell.py
   '';
 
   buildInputs = [
-    python intltool pkgconfig libX11
-    pythonPackages.pygobject pythonPackages.pyGtkGlade
+    python libX11
+  ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ];
+
+  nativeBuildInputs = [
+    pythonPackages.wrapPython intltool pkgconfig
+  ];
+
+  propagatedBuildInputs = [
+    pythonPackages.pygobject2 pythonPackages.pyGtkGlade
     pythonPackages.sqlite3 pythonPackages.pyasn1
     pythonPackages.pyxdg
     pythonPackages.nbxmpp
-    pythonPackages.pyopenssl pythonDBus
-  ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
-    ++ optional enableE2E pythonPackages.pycrypto
+    pythonPackages.pyopenssl pythonPackages.dbus-python
+  ] ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
     ++ optional enableNotifications pythonPackages.notify
     ++ extraPythonPackages pythonPackages;
 
-  postInstall = ''
+  postFixup = ''
     install -m 644 -t "$out/share/gajim/icons/hicolor" \
                       "icons/hicolor/index.theme"
+
+    buildPythonPath "$out"
+
+    for i in $out/bin/*; do
+      name="$(basename "$i")"
+      if [ "$name" = "gajim-history-manager" ]; then
+        name="history_manager"
+      fi
+
+      patchPythonScript "$out/share/gajim/src/$name.py"
+    done
   '';
 
   enableParallelBuilding = true;
@@ -79,5 +95,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin maintainers.aszlig ];
     downloadPage = "http://gajim.org/downloads.php";
     updateWalker = true;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

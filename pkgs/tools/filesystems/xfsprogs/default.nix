@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gettext, libuuid, readline }:
 
 stdenv.mkDerivation rec {
-  name = "xfsprogs-4.2.0";
+  name = "xfsprogs-4.5.0";
 
   src = fetchurl {
     urls = map (dir: "ftp://oss.sgi.com/projects/xfs/${dir}/${name}.tar.gz")
       [ "cmd_tars" "previous" ];
-    sha256 = "0q2j1rrh37kqyihaq5lc31xdi36lgg9asidaad0fada61ynv3six";
+    sha256 = "1y49rwvbbvqdq2a1x7p5i05bcfyv6xhmrfwafl6vvvw494qyp6z4";
   };
 
   prePatch = ''
@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     # This patch fixes shared libs installation, still not fixed in 4.2.0
-    ./4.2.0-sharedlibs.patch
+    ./4.3.0-sharedlibs.patch
   ];
 
-  buildInputs = [ gettext libuuid readline ];
+  propagatedBuildInputs = [ libuuid ];
+  buildInputs = [ gettext readline ];
 
-  outputs = [ "dev" "out" "bin" ]; # TODO: review xfs
+  outputs = [ "bin" "dev" "out" ]; # TODO: review xfs
 
   preConfigure = ''
     NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"

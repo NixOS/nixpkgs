@@ -9,7 +9,7 @@
 
     Logging
     -------
-    
+
     `/tmp/br_cupswrapper_ml1.log` when `DEBUG > 0` in `brother_lpdwrapper_BrGenML1`.
     Note that when `DEBUG > 1` the wrapper stops performing its function. Better
     keep `DEBUG == 1` unless this is desirable.
@@ -29,7 +29,7 @@
         Fixed.
 
      3.  >  perl: warning: Falling back to the standard locale ("C").
-    
+
             are supported and installed on your system.
             LANG = "en_US.UTF-8"
             LC_ALL = (unset),
@@ -67,12 +67,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups perl coreutils gnused gnugrep brgenml1lpr ];
 
-  configurePhase = ":";
-  buildPhase = ":";
+  dontBuild = true;
 
   patchPhase = ''
     WRAPPER=opt/brother/Printers/BrGenML1/cupswrapper/brother_lpdwrapper_BrGenML1
-    PAPER_CFG=opt/brother/Printers/BrGenML1/cupswrapper/paperconfigml1  
+    PAPER_CFG=opt/brother/Printers/BrGenML1/cupswrapper/paperconfigml1
 
     substituteInPlace $WRAPPER \
       --replace "basedir =~" "basedir = \"${brgenml1lpr}/opt/brother/Printers/BrGenML1\"; #" \

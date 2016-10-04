@@ -12,4 +12,8 @@ in stdenv.mkDerivation {
     makeWrapper ${taffybarEnv}/bin/taffybar $out/bin/taffybar \
       --set NIX_GHC "${taffybarEnv}/bin/ghc"
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

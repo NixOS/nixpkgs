@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     url = "git://github.com/scheme/scsh.git";
     rev = "f99b8c5293628cfeaeb792019072e3a96841104f";
     fetchSubmodules = true;
-    sha256 = "0fz1r0bmiii9ld91r84dqkqwhnqk0h6drdycq93zcy5ndyn12fqp";
+    sha256 = "0ci2h9hhv8pl12sdyl2qwal3dhmd7zgm1pjnmd4kg8r1hnm6vidx";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -19,5 +19,6 @@ stdenv.mkDerivation {
     homepage = http://www.scsh.net/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ joachifm ];
+    platforms = with platforms; unix;
   };
 }

@@ -52,7 +52,7 @@ in
          --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
 
       wrapProgram "$out/bin/abcde" --prefix PATH ":" \
-        "$out/bin:${which}/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbis-tools}/bin:${id3v2}/bin:${eyeD3}/bin:${lame}/bin:${flac}/bin"
+        ${stdenv.lib.makeBinPath [ "$out" which libcdio cddiscid wget vorbis-tools id3v2 eyeD3 lame flac ]}
 
       wrapProgram "$out/bin/cddb-tool" --prefix PATH ":" \
         "${wget}/bin"
@@ -72,5 +72,6 @@ in
         Ogg/Vorbis, MP3, FLAC, Ogg/Speex and/or MPP/MP+ (Musepack)
         format, and tags them, all in one go.
       '';
+      platforms = stdenv.lib.platforms.linux;
     };
   }

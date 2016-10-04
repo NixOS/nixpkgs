@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
       readability measures.
     '';
     license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

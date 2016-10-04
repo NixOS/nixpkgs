@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
   
   meta = {
     homepage = http://www.abisource.com/enchant;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

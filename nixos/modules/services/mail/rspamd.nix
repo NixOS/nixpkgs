@@ -8,7 +8,7 @@ let
 
   mkBindSockets = socks: concatStringsSep "\n" (map (each: "  bind_socket = \"${each}\"") socks);
 
-  rspamdConf =
+   rspamdConfFile = pkgs.writeText "rspamd.conf"
     ''
       .include "$CONFDIR/common.conf"
 
@@ -18,8 +18,7 @@ let
       }
 
       logging {
-        type = "file";
-        filename = "$LOGDIR/rspamd.log";
+        type = "syslog";
         .include "$CONFDIR/logging.inc"
       }
 
@@ -33,7 +32,6 @@ let
         .include "$CONFDIR/worker-controller.inc"
       }
    '';
-   rspamdConfFile = pkgs.writeText "rspamd.conf" rspamdConf;
 
 in
 
@@ -45,10 +43,7 @@ in
 
     services.rspamd = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to run the rspamd daemon.";
-      };
+      enable = mkEnableOption "Whether to run the rspamd daemon.";
 
       debug = mkOption {
         default = false;
@@ -58,7 +53,7 @@ in
       bindSocket = mkOption {
         type = types.listOf types.str;
         default = [
-          "/run/rspamd.sock mode=0666 owner=${cfg.user}"
+          "/run/rspamd/rspamd.sock mode=0666 owner=${cfg.user}"
         ];
         description = ''
           List of sockets to listen, in format acceptable by rspamd
@@ -97,7 +92,6 @@ in
         '';
        };
     };
-
   };
 
 
@@ -128,18 +122,15 @@ in
 
       serviceConfig = {
         ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c ${rspamdConfFile} -f";
-        RuntimeDirectory = "/var/lib/rspamd";
-        PermissionsStartOnly = true;
         Restart = "always";
+        RuntimeDirectory = "rspamd";
+        PrivateTmp = true;
       };
 
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p /var/{lib,log}/rspamd
+        ${pkgs.coreutils}/bin/mkdir -p /var/lib/rspamd
         ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} /var/lib/rspamd
       '';
-
     };
-
   };
-
 }

@@ -2,16 +2,16 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "backblaze-b2-${version}";
-  version = "0.4.4";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
-    rev = "74a5e567925899f1fc6204aa85d4c84c0d0e511a";
-    sha256 = "1g9j5s69w6n70nb18rvx3gm9f4gi1vis23ib8rn2v1khv6z2acqp";
+    rev = "3a4cd3f0b5309f79f98c2e0d51afc19fb2fe4201";
+    sha256 = "1gl1z7zg3s1xgx45i6b1bvx9iwviiiinl4my00h66qkhrw7ag8p1";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ six ];
+  propagatedBuildInputs = with pythonPackages; [ futures requests2 six tqdm4 ];
 
   checkPhase = ''
     python test_b2_command_line.py test

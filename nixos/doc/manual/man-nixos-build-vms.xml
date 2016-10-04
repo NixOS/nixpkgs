@@ -1,7 +1,7 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xi="http://www.w3.org/2001/XInclude">
-  
+
 <refmeta>
   <refentrytitle><command>nixos-build-vms</command></refentrytitle>
   <manvolnum>8</manvolnum>
@@ -42,10 +42,10 @@ points to the generated virtual network.
       services.openssh.enable = true;
       nixpkgs.system = "i686-linux";
       deployment.targetHost = "test1.example.net";
-      
+
       # Other NixOS options
     };
-    
+
   test2 = {pkgs, config, ...}:
     {
       services.openssh.enable = true;
@@ -53,7 +53,7 @@ points to the generated virtual network.
       environment.systemPackages = [ pkgs.lynx ];
       nixpkgs.system = "x86_64-linux";
       deployment.targetHost = "test2.example.net";
-      
+
       # Other NixOS options
     };
 }

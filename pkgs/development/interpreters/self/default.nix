@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url    = "https://github.com/russellallen/self";
     rev    = "d16bcaad3c5092dae81ad0b16d503f2a53b8ef86";
-    sha256 = "966025b71542e44fc830b951f404f5721ad410ed24f7236fd0cd820ea0fc5731";
+    sha256 = "1dhs6209407j0ll9w9id31vbawdrm9nz1cjak8g8hixrw1nid4i5";
   };
 
   buildInputs = [ ncurses xorg.libX11 xorg.libXext makeWrapper cmake ];

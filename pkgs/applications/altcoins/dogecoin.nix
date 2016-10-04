@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--with-incompatible-bdb"
-                     "--with-boost-libdir=${boost.lib}/lib" ]
+                     "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui" ];
 
   meta = {
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.dogecoin.com/;
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo offline AndersonTorres ];
+    platforms = with platforms; linux;
   };
 }

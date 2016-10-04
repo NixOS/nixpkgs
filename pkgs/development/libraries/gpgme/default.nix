@@ -9,14 +9,14 @@ let
   gpgProgram = if useGnupg1 then "gpg" else "gpg2";
 in
 stdenv.mkDerivation rec {
-  name = "gpgme-1.6.0";
+  name = "gpgme-1.7.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "17892sclz3yg45wbyqqrzzpq3l0icbnfl28f101b3062g8cy97dh";
+    sha256 = "0j6capvv6lcr6p763lr2ygzkzkj5lqm7fnbfc1xaygib1znmzxbi";
   };
 
-  outputs = [ "dev" "out" "info" ];
+  outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
   propagatedBuildInputs = [ libgpgerror glib libassuan pth ];

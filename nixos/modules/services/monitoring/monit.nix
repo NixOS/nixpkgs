@@ -36,11 +36,16 @@ in
     ];
 
     systemd.services.monit = {
-      description = "Monit system watcher";
-      after = [ "network-interfaces.target" ];
+      description = "Pro-active monitoring utility for unix systems";
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${pkgs.monit}/bin/monit -I -c /etc/monit.conf";
-      serviceConfig.Restart = "always";
+      serviceConfig = {
+        ExecStart = "${pkgs.monit}/bin/monit -I -c /etc/monit.conf";
+        ExecStop = "${pkgs.monit}/bin/monit -c /etc/monit.conf quit";
+        ExecReload = "${pkgs.monit}/bin/monit -c /etc/monit.conf reload";
+        KillMode = "process";
+        Restart = "always";
+      };
     };
   };
 }

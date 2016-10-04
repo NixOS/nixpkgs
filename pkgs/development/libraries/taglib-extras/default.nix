@@ -13,4 +13,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/modules/FindTaglib.cmake
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

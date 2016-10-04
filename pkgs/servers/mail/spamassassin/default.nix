@@ -45,6 +45,6 @@ buildPerlPackage rec {
     description = "Open-Source Spam Filter";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

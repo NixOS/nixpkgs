@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, coreutils, gnused, getopt, pwgen, git, tree, gnupg, which
+, coreutils, gnused, getopt, pwgen, git, tree, gnupg, which, procps
 , makeWrapper
 
 , xclip ? null, xdotool ? null, dmenu ? null
@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ ./program-name.patch ] ++
-    stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+    [ ./program-name.patch
+      ./set-correct-program-name-for-sleep.patch
+    ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
   buildInputs = [ makeWrapper ];
 
@@ -63,14 +64,15 @@ stdenv.mkDerivation rec {
 
   wrapperPath = with stdenv.lib; makeBinPath ([
     coreutils
-    gnused
     getopt
     git
     gnupg
+    gnused
     pwgen
     tree
     which
-  ] ++ ifEnable x11Support [ dmenu xclip xdotool ]);
+  ] ++ stdenv.lib.optional stdenv.isLinux procps
+    ++ ifEnable x11Support [ dmenu xclip xdotool ]);
 
   postFixup = ''
     # Fix program name in --help

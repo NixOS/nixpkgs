@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "uget-${version}";
-  version = "2.0.5";
+  version = "2.0.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/urlget/${name}.tar.gz";
-    sha256 = "0cqz8cd8dyciam07w6ipgzj52zhf9q0zvg6ag6wz481sxkpdnfh3";
+    sha256 = "0919cf7lfk1djdl003cahqjvafdliv7v2l8r5wg95n4isqggdk75";
   };
 
   nativeBuildInputs = [ pkgconfig intltool makeWrapper ];

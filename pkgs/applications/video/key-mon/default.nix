@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication, gnome, librsvg, pygtk, pythonPackages }:
+{ stdenv, fetchurl, gnome2, librsvg, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "key-mon-${version}";
   version = "1.17";
   namePrefix = "";
@@ -11,7 +11,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs =
-    [ gnome.python_rsvg librsvg pygtk pythonPackages.xlib ];
+    [ gnome2.python_rsvg librsvg pythonPackages.pygtk pythonPackages.xlib ];
 
   doCheck = false;
 

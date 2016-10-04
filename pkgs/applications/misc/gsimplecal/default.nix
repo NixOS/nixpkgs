@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     '';
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

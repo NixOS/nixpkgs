@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPythonApplication, pythonPackages, pygtk, pygobject, python }:
+{ stdenv, lib, fetchurl, pythonPackages }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -7,7 +7,7 @@
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 #
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "zim-${version}";
   version = "0.65";
   namePrefix = "";
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "15pdq4fxag85qjsrdmmssiq85qsk5vnbp8mrqnpvx8lm8crz6hjl";
   };
 
-  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk pythonPackages.pyxdg pygobject ];
+  propagatedBuildInputs = with pythonPackages; [ sqlite3 pyGtkGlade pyxdg pygobject2 ];
 
   preBuild = ''
     export HOME=$TMP

@@ -153,7 +153,7 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.diod}/sbin/diod -f -c ${diodConfig}";
-        Capabilities = "cap_net_bind_service+=ep";
+        CapabilityBoundingSet = "cap_net_bind_service+=ep";
       };
     };
   };

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libclthreads libX11 libXft xorg.xproto ];
 
-  NIX_CFLAGS_COMPILE = "-I${xorg.xproto}/include -I${libXft}/include";
+  NIX_CFLAGS_COMPILE = "-I${xorg.xproto}/include -I${libXft.dev}/include";
 
   patchPhase = ''
     sed -e "s@ldconfig@@" -i Makefile

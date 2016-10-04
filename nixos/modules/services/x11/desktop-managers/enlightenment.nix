@@ -7,7 +7,7 @@ let
   e = pkgs.enlightenment;
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.enlightenment;
-  GST_PLUGIN_PATH = lib.makeSearchPathOutputs "lib/gstreamer-1.0" ["lib"] [
+  GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
     pkgs.gst_all_1.gst-plugins-base
     pkgs.gst_all_1.gst-plugins-good
     pkgs.gst_all_1.gst-plugins-bad
@@ -29,13 +29,13 @@ in
   config = mkIf (xcfg.enable && cfg.enable) {
 
     environment.systemPackages = [
-      e.efl e.evas e.emotion e.elementary e.enlightenment
+      e.efl e.enlightenment
       e.terminology e.econnman
       pkgs.xorg.xauth # used by kdesu
-      pkgs.gtk # To get GTK+'s themes.
+      pkgs.gtk2 # To get GTK+'s themes.
       pkgs.tango-icon-theme
       pkgs.shared_mime_info
-      pkgs.gnome.gnomeicontheme
+      pkgs.gnome2.gnomeicontheme
       pkgs.xorg.xcursorthemes
     ];
 

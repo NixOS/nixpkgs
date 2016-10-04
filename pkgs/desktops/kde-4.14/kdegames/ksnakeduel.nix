@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames ];
   meta = {
-    description = "a simple Tron-Clone";
+    description = "A simple Tron-Clone";
   };
 }

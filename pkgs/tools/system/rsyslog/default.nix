@@ -11,11 +11,11 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.17.0";
+  name = "rsyslog-8.21.0";
 
   src = fetchurl {
     url = "http://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "1fazpbllr3wk8aw41zk7b6iirds4h8j3im080nf8my2cjssij7pc";
+    sha256 = "1arrhc9fw79sp7dxkf7gyfwibyr2i1000pfds5c7n43mgglgvcdx";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis
   ] ++ stdenv.lib.optional stdenv.isLinux systemd;
+
+  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--sysconfdir=/etc"

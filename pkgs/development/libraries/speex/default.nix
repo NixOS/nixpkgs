@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -i '/AC_CONFIG_MACRO_DIR/i PKG_PROG_PKG_CONFIG' configure.ac
   '';
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ fftw speexdsp ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     hompage = http://www.speex.org/;
-    description = "an Open Source/Free Software patent-free audio compression format designed for speech";
+    description = "An Open Source/Free Software patent-free audio compression format designed for speech";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

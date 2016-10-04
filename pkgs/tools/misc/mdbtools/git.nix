@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "http://github.com/brianb/mdbtools.git";
     rev = "9ab40e83e6789015c965c92bdb62f92f8cdd0dbd";
-    sha256 = "18j1a9y9xhl7hhx30zvmx2n4w7dc8c7sdr6722sf3mh5230mvv59";
+    sha256 = "0hlf5lk86xm0bpdlpk4a1zyfvbim76dhvmybxga2p7mbb1jc825l";
   };
 
   buildInputs = [
@@ -27,5 +27,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = ".mdb (MS Access) format tools";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

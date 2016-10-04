@@ -1,21 +1,21 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "expat-2.1.0";
+  name = "expat-2.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/expat/${name}.tar.gz";
-    sha256 = "11pblz61zyxh68s5pdcbhc30ha1b2vfjd83aiwfg4vc15x3hadw2";
+    url = "mirror://sourceforge/expat/${name}.tar.bz2";
+    sha256 = "1zq4lnwjlw8s9mmachwfvfjf2x3lk24jm41746ykhdcvs7r0zrfr";
   };
 
-  patches = [ ./CVE-2015-1283.patch ];
-
-  outputs = [ "dev" "out" ]; # TODO: fix referrers
+  outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
 
   configureFlags = stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
   outputMan = "dev"; # tiny page for a dev tool
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.libexpat.org/;

@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     description = "Qt Mobility";
     homepage = http://qt.nokia.com/products/qt-addons/mobility;
     maintainers = with stdenv.lib.maintainers; [qknight];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
 

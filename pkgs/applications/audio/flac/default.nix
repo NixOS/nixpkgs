@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   #doCheck = true; # takes lots of time
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "bin" "dev" "out" "doc" ];
 
   meta = with stdenv.lib; {
     homepage = http://xiph.org/flac/;

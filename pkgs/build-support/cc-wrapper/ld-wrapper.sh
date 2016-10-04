@@ -47,8 +47,10 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" \
     params=("${rest[@]}")
 fi
 
+LD=@prog@
+source @out@/nix-support/add-hardening.sh
 
-extra=()
+extra=(${hardeningLDFlags[@]})
 extraBefore=()
 
 if [ -z "$NIX_LDFLAGS_SET" ]; then
@@ -56,7 +58,7 @@ if [ -z "$NIX_LDFLAGS_SET" ]; then
     extraBefore+=($NIX_LDFLAGS_BEFORE)
 fi
 
-extra+=($NIX_LDFLAGS_AFTER)
+extra+=($NIX_LDFLAGS_AFTER $NIX_LDFLAGS_HARDEN)
 
 
 # Add all used dynamic libraries to the rpath.

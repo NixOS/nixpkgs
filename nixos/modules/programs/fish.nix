@@ -84,19 +84,19 @@ in
 
       set fish_function_path $fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions
 
-      fenv source ${config.system.build.setEnvironment} 1> /dev/null
-      fenv source /etc/fish/foreign-env/shellInit 1> /dev/null
+      fenv source ${config.system.build.setEnvironment} > /dev/null ^&1
+      fenv source /etc/fish/foreign-env/shellInit > /dev/null
 
       ${cfg.shellInit}
 
-      if builtin status --is-login
-        fenv source /etc/fish/foreign-env/loginShellInit 1> /dev/null
+      if status --is-login
+        fenv source /etc/fish/foreign-env/loginShellInit > /dev/null
         ${cfg.loginShellInit}
       end
 
-      if builtin status --is-interactive
+      if status --is-interactive
         ${fishAliases}
-        fenv source /etc/fish/foreign-env/interactiveShellInit 1> /dev/null
+        fenv source /etc/fish/foreign-env/interactiveShellInit > /dev/null
         ${cfg.interactiveShellInit}
       end
     '';

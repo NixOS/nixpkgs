@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     '';
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

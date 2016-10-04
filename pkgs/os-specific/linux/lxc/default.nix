@@ -12,11 +12,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "lxc-${version}";
-  version = "2.0.0";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "1r0hgk91n3frrmla1681l74ag5sngbbkdagvjfqzxwcf9l8pwwsv";
+    sha256 = "10lm7vfw4j7arcynmgyjqd8v2fqn7spbablj42j26kmzljcydj8l";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://lxc.sourceforge.net";
-    description = "userspace tools for Linux Containers, a lightweight virtualization system";
+    description = "Userspace tools for Linux Containers, a lightweight virtualization system";
     license = licenses.lgpl21Plus;
 
     longDescription = ''
@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ simons wkennington globin fpletz ];
+    maintainers = with maintainers; [ wkennington globin fpletz ];
   };
 }

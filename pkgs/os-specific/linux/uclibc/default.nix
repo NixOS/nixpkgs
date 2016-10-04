@@ -79,6 +79,8 @@ stdenv.mkDerivation {
     make oldconfig
   '';
 
+  hardeningDisable = [ "stackprotector" ];
+
   # Cross stripping hurts.
   dontStrip = cross != null;
 
@@ -104,6 +106,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.uclibc.org/;
     description = "A small implementation of the C library";
+    maintainers = with stdenv.lib.maintainers; [ rasendubi ];
     license = stdenv.lib.licenses.lgpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

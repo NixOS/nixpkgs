@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libtool}:
 
 stdenv.mkDerivation {
-  name = "libtommath-0.39";
+  name = "libtommath-1.0";
   
   src = fetchurl {
-    url = http://math.libtomcrypt.com/files/ltm-0.39.tar.bz2;
-    sha256 = "1kjx8rrw62nanzc5qp8fj6r3ybhw8ca60ahkyb70f10aiij49zs2";
+    url = https://github.com/libtom/libtommath/releases/download/v1.0/ltm-1.0.tar.xz;
+    sha256 = "0v5mpd8zqjfs2hr900w1mxifz23xylyjdqyx1i1wl7q9xvwpsflr";
   };
 
   buildInputs = [libtool];
@@ -22,5 +22,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://math.libtomcrypt.com/;
     description = "A library for integer-based number-theoretic applications";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

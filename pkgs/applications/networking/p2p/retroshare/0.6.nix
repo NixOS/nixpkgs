@@ -36,7 +36,8 @@ stdenv.mkDerivation {
     qmakeFlags="$qmakeFlags DESTDIR=$out"
   '';
 
-  enableParallelBuilding = true;
+  # gui/settings/PluginsPage.h:25:28: fatal error: ui_PluginsPage.h: No such file or directory
+  enableParallelBuilding = false;
 
   postInstall = ''
     mkdir -p $out/bin
@@ -56,6 +57,6 @@ stdenv.mkDerivation {
     homepage = http://retroshare.sourceforge.net/;
     #license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

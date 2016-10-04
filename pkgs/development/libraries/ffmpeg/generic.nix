@@ -13,9 +13,9 @@
 , optimizationsDeveloper ? true
 , extraWarningsDeveloper ? false
 # Darwin frameworks
-, Cocoa
+, Cocoa, darwinFrameworks ? [ Cocoa ]
 # Inherit generics
-, branch, sha256, version, ...
+, branch, sha256, version, patches ? [], ...
 }:
 
 /* Maintainer notes:
@@ -69,9 +69,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  patchPhase = ''patchShebangs .'';
+  postPatch = ''patchShebangs .'';
+  inherit patches;
 
-  outputs = [ "dev" "out" "bin" ]
+  outputs = [ "bin" "dev" "out" ]
     ++ optional (reqMin "1.0") "doc" ; # just dev-doc
   setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
 
@@ -152,7 +153,7 @@ stdenv.mkDerivation rec {
     ++ optionals (!isDarwin && !isArm) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isArm) libva
     ++ optional isLinux alsaLib
-    ++ optional isDarwin Cocoa
+    ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
     ++ optional sdlSupport SDL;
 

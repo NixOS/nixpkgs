@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.nongnu.org/g-wrap/;
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.taktoa ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

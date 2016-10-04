@@ -50,7 +50,8 @@ stdenv.mkDerivation rec {
         -C src/ocaml-output
   '';
 
-  doCheck = true;
+  # https://github.com/FStarLang/FStar/issues/676
+  doCheck = false;
 
   preCheck = "ulimit -s unlimited";
 
@@ -64,10 +65,6 @@ stdenv.mkDerivation rec {
   installFlags = "-C src/ocaml-output";
 
   postInstall = ''
-    # Workaround for FStarLang/FStar#456
-    mv $out/lib/fstar/* $out/lib/
-    rmdir $out/lib/fstar
-
     wrapProgram $out/bin/fstar.exe --prefix PATH ":" "${z3}/bin"
   '';
 
@@ -75,6 +72,6 @@ stdenv.mkDerivation rec {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
     license = licenses.asl20;
-    platforms = with platforms; linux;
+    platforms = with platforms; darwin ++ linux;
   };
 }

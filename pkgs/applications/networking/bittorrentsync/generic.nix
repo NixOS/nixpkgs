@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage    = https://www.getsync.com/;
     license     = stdenv.lib.licenses.unfreeRedistributable;
     platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iElectric thoughtpolice cwoac ];
+    maintainers = with stdenv.lib.maintainers; [ domenkozar thoughtpolice cwoac ];
   };
 }

@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa, glew
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu, mesa_noglu, glew
 , cudaSupport ? false, cudatoolkit
 }:
 
 stdenv.mkDerivation {
-  name = "opensubdiv-3.0.4";
+  name = "opensubdiv-3.0.5";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
-    rev = "v3_0_4";
-    sha256 = "14ylpzk4121gi3fl02dwmqjp5sbaqpkm4gd0lh6jijccdih0xsc0";
+    rev = "v3_0_5";
+    sha256 = "16xv4cw1k75wgd4ddr0sa87wd46ygbn2k2avh9c1mfd405p80d92";
   };
+
+  outputs = [ "out" "dev" ];
 
   patches =
     [ # Fix for building with cudatoolkit 7.
@@ -21,7 +23,7 @@ stdenv.mkDerivation {
     ];
 
   buildInputs =
-    [ cmake pkgconfig mesa
+    [ cmake pkgconfig mesa_glu mesa_noglu
       # FIXME: these are not actually needed, but the configure script wants them.
       glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor xorg.libXinerama
     ]
@@ -36,6 +38,8 @@ stdenv.mkDerivation {
     ];
 
   enableParallelBuilding = true;
+
+  postInstall = "rm $out/lib/*.a";
 
   meta = {
     description = "An Open-Source subdivision surface library";

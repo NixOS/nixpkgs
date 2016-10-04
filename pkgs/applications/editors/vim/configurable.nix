@@ -1,7 +1,7 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{pkgs, source ? "default", fetchurl, fetchhg, stdenv, ncurses, pkgconfig, gettext
-, composableDerivation, lib, config, glib, gtk, python, perl, tcl, ruby
+args@{pkgs, source ? "default", fetchurl, fetchFromGitHub, stdenv, ncurses, pkgconfig, gettext
+, composableDerivation, lib, config, glib, gtk2, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 
@@ -42,7 +42,7 @@ composableDerivation {
 } (fix: rec {
 
     name = "vim_configurable-${version}";
-    version = "7.4.826";
+    version = "8.0.0005";
 
     enableParallelBuilding = true; # test this
 
@@ -50,10 +50,11 @@ composableDerivation {
       builtins.getAttr source {
       "default" =
         # latest release
-      args.fetchhg {
-            url = "http://vim.googlecode.com/hg/";
-            rev = "v${version}";
-            sha256 = "01m67lvnkz0ad28ifj964zcg63y5hixplbnzas5xarj8vl3pc5a0";
+      args.fetchFromGitHub {
+        owner = "vim";
+        repo = "vim";
+        rev = "v${version}";
+        sha256 = "0ys3l3dr43vjad1f096ch1sl3x2ajsqkd03rdn6n812m7j4wipx0";
       };
 
       "vim-nox" =
@@ -68,17 +69,11 @@ composableDerivation {
 
     prePatch = "cd src";
 
-    # if darwin support is enabled, we want to make sure we're not building with
-    # OS-installed python framework
-    patches = stdenv.lib.optionals
-      (stdenv.isDarwin && (config.vim.darwin or true))
-      [ ./python_framework.patch ];
-
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
     nativeBuildInputs
-      = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
+      = [ ncurses pkgconfig gtk2 libX11 libXext libSM libXpm libXt libXaw libXau
           libXmu glib libICE ];
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
@@ -190,6 +185,8 @@ composableDerivation {
   '';
 
   dontStrip = 1;
+
+  hardeningDisable = [ "fortify" ];
 
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor";

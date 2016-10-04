@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
 
     homepage = https://github.com/jgeboski/bitlbee-steam;
     license = licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0n5rhwl83yv8qm0zrbaxnyrf8x1i3b6si927518mwfxs96jrdkdh";
   };
 
+  patches = [ ./relocation.patch ];
+
   buildInputs = [ ghc perl gmp ncurses ];
 
   enableParallelBuilding = true;
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with stdenv.lib.maintainers; [ marcweber andres simons ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;
   };
 

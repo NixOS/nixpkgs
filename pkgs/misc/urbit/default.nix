@@ -1,21 +1,25 @@
-{ stdenv, fetchgit, gcc, gmp, libsigsegv, openssl, automake, autoconf, ragel,
+{ stdenv, fetchFromGitHub, gcc, gmp, libsigsegv, openssl, automake, autoconf, ragel,
   cmake, re2c, libtool, ncurses, perl, zlib, python }:
 
 stdenv.mkDerivation rec {
 
   name = "urbit-${version}";
-  version = "2015.09.26";
+  version = "2016-06-02";
 
-  src = fetchgit {
-    url = "https://github.com/urbit/urbit.git";
-    rev = "c9592664c797b2dd74f26886528656f8a7058640";
-    sha256 = "0sgrxnmpqh54mgar81wlb6gff8c0pc24p53xwxr448g5shvnzjx9";
+  src = fetchFromGitHub {
+    owner = "urbit";
+    repo = "urbit";
+    rev = "8c113559872e4a97bce3f3ee5b370ad9545c7459";
+    sha256 = "055qdpp4gm0v04pddq4380pdsi0gp2ybgv1d2lchkhwsnjyl46jl";
   };
 
   buildInputs = with stdenv.lib; [
     gcc gmp libsigsegv openssl automake autoconf ragel cmake re2c libtool
     ncurses perl zlib python
   ];
+
+  # uses 'readdir_r' deprecated by glibc 2.24
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   configurePhase = ''
     :
@@ -34,9 +38,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "an operating function";
-    homepage = http://urbit.org/preview/~2015.9.25/materials;
+    description = "An operating function";
+    homepage = http://urbit.org;
     license = licenses.mit;
     maintainers = with maintainers; [ mudri ];
+    platforms = with platforms; linux;
   };
 }

@@ -20,13 +20,13 @@ assert buildKernel -> kernel != null && spl != null;
 stdenv.mkDerivation rec {
   name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
-  version = "0.6.5.6";
+  version = "0.6.5.8";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "zfs";
     rev = "zfs-${version}";
-    sha256 = "0lsb93y5zbwc8fafxzm9vyfpr6fmvl8h86ny4llbd2xy2hnfwk2i";
+    sha256 = "0qccz1832p3i80qlrrrypypspb9sy9hmpgcfx9vmhnqmkf0yri4a";
   };
 
   patches = [ ./nix-build.patch ];
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
+
+  hardeningDisable = [ "pic" ];
 
   preConfigure = ''
     substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "umount -t zfs"           "${utillinux}/bin/umount -t zfs"
@@ -107,6 +109,6 @@ stdenv.mkDerivation rec {
     homepage = http://zfsonlinux.org/;
     license = licenses.cddl;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming wizeman wkennington ];
+    maintainers = with maintainers; [ jcumming wizeman wkennington fpletz ];
   };
 }

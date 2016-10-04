@@ -30,4 +30,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ vpnc openssl gnutls libxml2 zlib ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

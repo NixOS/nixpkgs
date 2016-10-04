@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "dpkg-${version}";
-  version = "1.18.6";
+  version = "1.18.10";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "18nywp0gs8bnywll9qrcg8g1fli4p5xd6h8sazhsmrxgp8iw62yx";
+    sha256 = "1ibdidmc8nfiigadfpl3xrccrxw6hvmqiqqizy1v265s87d28m82";
   };
 
   postPatch = ''
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "--disable-dselect"
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
+    (stdenv.lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
+    (stdenv.lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
   ];
 
   preConfigure = ''
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "The Debian package manager";
     homepage = http://wiki.debian.org/Teams/Dpkg;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ mornfall nckx ];
   };
 }

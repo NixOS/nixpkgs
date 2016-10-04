@@ -9,13 +9,24 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake mesa tcl tk file libXmu qt4 freetype ];
 
-  preUnpack = ''
-    sourceRoot=`pwd`/ros/adm/cmake
-    cmakeFlags="$cmakeFlags -DINSTALL_DIR=$out -D3RDPARTY_TCL_DIR=${tcl} -D3RDPARTY_FREETYPE_DIR=${freetype}"
-  '';
+  sourceRoot = "ros/adm/cmake";
+
+  cmakeFlags = [
+    "-D3RDPARTY_TCL_DIR=${tcl}"
+    "-D3RDPARTY_FREETYPE_DIR=${freetype.dev}"
+
+    # Not used on Linux but must be defined during configuration.
+    "-D3RDPARTY_FREETYPE_DLL=${freetype.dev}"
+  ];
 
   # https://bugs.freedesktop.org/show_bug.cgi?id=83631
   NIX_CFLAGS_COMPILE = "-DGLX_GLXEXT_LEGACY";
+
+  hardeningDisable = [ "format" ];
+
+  preConfigure = ''
+    cmakeFlags="$cmakeFlags -DINSTALL_DIR=$out"
+  '';
 
   postInstall = ''
     mv $out/inc $out/include

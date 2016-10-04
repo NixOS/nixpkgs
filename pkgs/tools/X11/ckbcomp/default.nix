@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://anonscm.debian.org/d-i/console-setup.git";
     rev = "refs/tags/${version}";
-    sha256 = "0za7y5v5rsl9da67rfiwzyfaia4xgnavqdadq0l6v8blc2kcsxr7";
+    sha256 = "1whli40ik5izyfs0m8d08gq8zcsdjscnxbsvxyxvdnkrvzw4izdz";
   };
 
   buildInputs = [ perl ];

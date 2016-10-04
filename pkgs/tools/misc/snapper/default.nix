@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "snapper-${version}";
-  version = "0.2.8";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1rj8vy6hq140pbnc7mjjb34mfqdgdah1dmlv2073izdgakh7p38j";
+    sha256 = "12c2ygaanr4gny4ixnly4vpi0kv7snbg3khr3i5zwridhmdzz9hm";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [
-    "-I${libxml2}/include/libxml2"
+    "-I${libxml2.dev}/include/libxml2"
   ];
 
   postInstall = ''

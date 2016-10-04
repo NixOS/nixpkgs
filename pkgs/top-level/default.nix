@@ -6,7 +6,7 @@
 
 
 { # The system (e.g., `i686-linux') for which to build the packages.
-  system ? builtins.currentSystem
+  system
 
 , # The standard environment to use.  Only used for bootstrapping.  If
   # null, the default standard environment is used.
@@ -19,53 +19,27 @@
                && system != "x86_64-solaris"
                && system != "x86_64-kfreebsd-gnu")
 
-  # More flags for the bootstrapping of stdenv.
-, gccWithCC ? true
-, gccWithProfiling ? true
-
-, # Allow a configuration attribute set to be passed in as an
-  # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
-  # ~/.nixpkgs/config.nix.
-  config ? null
+, # Allow a configuration attribute set to be passed in as an argument.
+  config ? {}
 
 , crossSystem ? null
 , platform ? null
 }:
 
 
-let config_ = config; platform_ = platform; in # rename the function arguments
+let configExpr = config; platform_ = platform; in # rename the function arguments
 
 let
 
   lib = import ../../lib;
 
-  # The contents of the configuration file found at $NIXPKGS_CONFIG or
-  # $HOME/.nixpkgs/config.nix.
-  # for NIXOS (nixos-rebuild): use nixpkgs.config option
+  # Allow both:
+  # { /* the config */ } and
+  # { pkgs, ... } : { /* the config */ }
   config =
-    let
-      toPath = builtins.toPath;
-      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
-      pathExists = name:
-        builtins ? pathExists && builtins.pathExists (toPath name);
-
-      configFile = getEnv "NIXPKGS_CONFIG";
-      homeDir = getEnv "HOME";
-      configFile2 = homeDir + "/.nixpkgs/config.nix";
-
-      configExpr =
-        if config_ != null then config_
-        else if configFile != "" && pathExists configFile then import (toPath configFile)
-        else if homeDir != "" && pathExists configFile2 then import (toPath configFile2)
-        else {};
-
-    in
-      # allow both:
-      # { /* the config */ } and
-      # { pkgs, ... } : { /* the config */ }
-      if builtins.isFunction configExpr
-        then configExpr { inherit pkgs; }
-        else configExpr;
+    if builtins.isFunction configExpr
+    then configExpr { inherit pkgs; }
+    else configExpr;
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
 
@@ -84,8 +58,7 @@ let
     else config.platform or platformAuto;
 
   topLevelArguments = {
-    inherit system bootStdenv noSysDirs gccWithCC gccWithProfiling config
-      crossSystem platform lib;
+    inherit system bootStdenv noSysDirs config crossSystem platform lib;
   };
 
   # Allow packages to be overridden globally via the `packageOverrides'

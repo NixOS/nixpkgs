@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.0.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
-    owner = "GoogleCloudPlatform";
+    owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "12wqw9agiz07wlw1sd0n41fn6xf74zn5sv37hslfa77w2d4ri5yb";
+    sha256 = "1a3y0f1l008ywkwwygg9vn2rb722c54i3pbgqks38gw1yyvgbiih";
   };
 
   buildInputs = [ makeWrapper which go iptables rsync ];
 
   buildPhase = ''
     GOPATH=$(pwd):$(pwd)/Godeps/_workspace
-    mkdir -p $(pwd)/Godeps/_workspace/src/github.com/GoogleCloudPlatform
-    ln -s $(pwd) $(pwd)/Godeps/_workspace/src/github.com/GoogleCloudPlatform/kubernetes
+    mkdir -p $(pwd)/Godeps/_workspace/src/k8s.io
+    ln -s $(pwd) $(pwd)/Godeps/_workspace/src/k8s.io/kubernetes
 
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
     patchShebangs ./hack
@@ -38,17 +38,17 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/kube-proxy" --prefix PATH : "${iptables}/bin"
-    wrapProgram "$out/bin/kubelet" --prefix PATH : "${utillinux}/bin:${procps-ng}/bin"
+    wrapProgram "$out/bin/kubelet" --prefix PATH : "${stdenv.lib.makeBinPath [ utillinux procps-ng ]}"
     chmod +x "$out/libexec/kubernetes/safe_format_and_mount"
-    wrapProgram "$out/libexec/kubernetes/safe_format_and_mount" --prefix PATH : "${e2fsprogs}/bin:${utillinux}/bin"
+    wrapProgram "$out/libexec/kubernetes/safe_format_and_mount" --prefix PATH : "${stdenv.lib.makeBinPath [ e2fsprogs utillinux ]}"
     substituteInPlace "$out"/libexec/kubernetes/cluster/update-storage-objects.sh \
       --replace KUBE_OUTPUT_HOSTBIN KUBE_BIN
   '';
 
   meta = with stdenv.lib; {
-    description = "Open source implementation of container cluster management";
+    description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
-    homepage = https://github.com/GoogleCloudPlatform;
+    homepage = http://kubernetes.io;
     maintainers = with maintainers; [offline];
     platforms = [ "x86_64-linux" ];
   };

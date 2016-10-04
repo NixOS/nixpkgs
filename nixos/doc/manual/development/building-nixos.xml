@@ -25,7 +25,7 @@ $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd
 suggested by the following command:
 
 <screen>
-$ mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
+# mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
 
 </para>
 

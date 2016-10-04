@@ -1,10 +1,24 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash }:
+{ stdenv, fetchurl, jre, makeWrapper, bash,
+  majorVersion ? "0.9" }:
 
 let
-  kafkaVersion = "0.8.2.1";
-  scalaVersion = "2.10";
-
+  versionMap = {
+    "0.8" = { kafkaVersion = "0.8.2.1";
+              scalaVersion = "2.10";
+              sha256 = "1klri23fjxbzv7rmi05vcqqfpy7dzi1spn2084y1dxsi1ypfkvc9";
+            };
+    "0.9" = { kafkaVersion = "0.9.0.1";
+              scalaVersion = "2.11";
+              sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
+            };
+    "0.10" = { kafkaVersion = "0.10.0.1";
+               scalaVersion = "2.11";
+               sha256 = "0bdhzbhmm87a47162hyazcjmfibqg9r3ryzfjag7r0nxxmd64wrd";
+             };
+  };
 in
+
+with versionMap.${majorVersion};
 
 stdenv.mkDerivation rec {
   version = "${scalaVersion}-${kafkaVersion}";
@@ -12,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/kafka/${kafkaVersion}/kafka_${version}.tgz";
-    sha256 = "1klri23fjxbzv7rmi05vcqqfpy7dzi1spn2084y1dxsi1ypfkvc9";
+    inherit sha256;
   };
 
   buildInputs = [ jre makeWrapper bash ];

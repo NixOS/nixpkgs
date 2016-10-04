@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/texinfo/;
     branch = "4.13";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

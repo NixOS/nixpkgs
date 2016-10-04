@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://linux.dell.com/biosdevname.git;
     rev = "refs/tags/v${version}";
-    sha256 = "11g2pziss0i65mr4y3mwjlcdgpygaxa06lr4q8plmrwl9cick1qa";
+    sha256 = "059s3qyky9i497c9wnrjml15sknpsqbv01ww7q95bf9ybhdqqq8w";
   };
 
   buildInputs = [

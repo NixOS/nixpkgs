@@ -3,7 +3,7 @@
 import ./make-test.nix ({pkgs, ... }: {
   name = "printing";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ iElectric eelco chaoflow jgeerds ];
+    maintainers = [ domenkozar eelco chaoflow jgeerds ];
   };
 
   nodes = {

@@ -1,23 +1,27 @@
 { stdenv, fetchsvn, pkgconfig, autoreconfHook, gnutls33, freetype
 , SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, libjack2, libvorbis
-, libsndfile, libogg
+, libSM, libsndfile, libogg
 }:
 
-stdenv.mkDerivation {
-  name = "freewheeling-100";
+stdenv.mkDerivation rec {
+  name = "freewheeling-${version}";
+  version = "100";
 
   src = fetchsvn {
     url = svn://svn.code.sf.net/p/freewheeling/code;
-    rev = 100;
+    rev = version;
     sha256 = "1m6z7p93xyha25qma9bazpzbp04pqdv5h3yrv6851775xsyvzksv";
   };
 
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    pkgconfig autoreconfHook gnutls33 freetype SDL SDL_gfx SDL_ttf
-    liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg
+    gnutls33 freetype SDL SDL_gfx SDL_ttf
+    liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg libSM
   ];
 
   patches = [ ./am_path_sdl.patch ./xml.patch ];
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "A live looping instrument with JACK and MIDI support";
@@ -33,7 +37,6 @@ stdenv.mkDerivation {
         software, released under the GNU GPL license.
     '' ;
 
-    version = "r100";
     homepage = "http://freewheeling.sourceforge.net";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.sepi ];

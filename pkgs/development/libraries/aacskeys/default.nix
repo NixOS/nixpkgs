@@ -41,5 +41,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://forum.doom9.org/showthread.php?t=123311;
     description = "A library and program to retrieve decryption keys for HD discs";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

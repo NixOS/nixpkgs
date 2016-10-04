@@ -1,7 +1,9 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
-, wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null }:
+, wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null
+, enableDebugInfo ? false
+, Carbon ? null, Cocoa ? null }:
 
 assert wxSupport -> mesa != null && wxGTK != null && xorg != null;
 assert odbcSupport -> unixODBC != null;
@@ -17,10 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "1rvyfh22g1fir1i4xn7v2md868wcmhajwhfsq97v7kn5kd2m7khp";
   };
 
+  debugInfo = enableDebugInfo;
+
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ optional wxSupport [ mesa wxGTK xorg.libX11 ]
-      ++ optional odbcSupport [ unixODBC ];
+    ] ++ optionals wxSupport [ mesa wxGTK xorg.libX11 ]
+      ++ optional odbcSupport unixODBC
+      ++ optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
@@ -29,7 +34,7 @@ stdenv.mkDerivation rec {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags= "--with-ssl=${openssl} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
+  configureFlags= "--with-ssl=${openssl.dev} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
 
   postInstall = let
     manpages = fetchurl {
@@ -49,7 +54,7 @@ stdenv.mkDerivation rec {
   # Some erlang bin/ scripts run sed and awk
   postFixup = ''
     wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"
-    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${gnused}/bin/:${gawk}/bin"
+    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnused gawk ]}"
   '';
 
   setupHook = ./setup-hook.sh;
@@ -68,8 +73,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    # Note: Maintainer of prev. erlang version was simons. If he wants
-    # to continue maintaining erlang I'm totally ok with that.
     maintainers = [ maintainers.the-kenny ];
   };
 }

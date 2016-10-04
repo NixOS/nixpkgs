@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Shamir Secret Sharing Scheme";
     homepage = http://point-at-infinity.org/ssss/;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "rewritefs-${version}";
-  version = "2016-02-08";
+  version = "2016-07-27";
 
   src = fetchFromGitHub {
     owner = "sloonz";
     repo = "rewritefs";
-    rev = "3ac0d1789bb9d48dbeddc6721d00eef19d1dc956";
-    sha256 = "0bj8mq5hd52afmy01dyhqsx2rby7injhg96x9z3gyv0r90wa59bh";
+    rev = "fe19d389746bdffcc1cc7b3e3156dbacd04b4e9b";
+    sha256 = "15bcxprkxf0xqxljsqhb0jpi7p1vwqcb00sjs7nzrj7vh2p7mqla";
   };
  
   buildInputs = [ pkgconfig fuse pcre ];

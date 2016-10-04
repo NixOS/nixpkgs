@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   configurePhase = ''
     tar xf ${mupen64plus.src}
     APIDIR=$(eval echo `pwd`/mupen64plus*/source/mupen64plus-core/src/api)
-    export CXXFLAGS="-I${libX11}/include/X11 -DLIBDIR=\\\"${mupen64plus}/lib/\\\""
+    export CXXFLAGS="-I${libX11.dev}/include/X11 -DLIBDIR=\\\"${mupen64plus}/lib/\\\""
     export LDFLAGS="-lwx_gtk2u_adv-2.9"
     python waf configure --mupenapi=$APIDIR --wxconfig=`type -P wx-config` --prefix=$out
   '';

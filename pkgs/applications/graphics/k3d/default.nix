@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, unzip, ftgl, glew, asciidoc
+{ stdenv, fetchFromGitHub, unzip, ftgl, glew, asciidoc
 , cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm, glibmm, gtkglext, pangox_compat, libXmu }:
+, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0.3";
+  version = "0.8.0.5";
   name = "k3d-${version}";
-  src = fetchurl {
-    url = "https://github.com/K-3D/k3d/archive/${name}.zip";
-    sha256 = "09ywwvlk8hh1357pnal96kc40ma4jq7776hqk0609rgz13s6babp";
+  src = fetchFromGitHub {
+    owner = "K-3D";
+    repo = "k3d";
+    rev = name;
+    sha256 = "0q05d51vhnmrq887n15frpwkhx8w7n20h2sc1lpr338jzpryihb3";
   };
   
   cmakeFlags = "-DK3D_BUILD_DOCS=false -DK3D_BUILD_GUIDE=false";
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
      cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
      boost boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff
      gettext intltool perl unzip ftgl glew asciidoc
-     gtkmm glibmm gtkglext pangox_compat libXmu
+     gtkmm2 glibmm gtkglext pangox_compat libXmu
     ];
 
   #doCheck = false;

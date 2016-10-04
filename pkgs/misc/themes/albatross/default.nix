@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "A desktop Suite for Xfce";
     homepage = http://shimmerproject.org/our-projects/albatross/;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

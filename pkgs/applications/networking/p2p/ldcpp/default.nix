@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, scons, pkgconfig, gtk, bzip2, libglade, openssl
+{ stdenv, fetchurl, scons, pkgconfig, gtk2, bzip2, libglade, openssl
 , libX11, boost, zlib, libnotify }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = http://launchpad.net/linuxdcpp/1.1/1.1.0/+download/linuxdcpp-1.1.0.tar.bz2;
     sha256 = "12i92hirmwryl1qy0n3jfrpziwzb82f61xca9jcjwyilx502f0b6";
   };
-  buildInputs = [ scons pkgconfig gtk bzip2 libglade openssl libX11 boost libnotify ];
+  buildInputs = [ scons pkgconfig gtk2 bzip2 libglade openssl libX11 boost libnotify ];
 
   installPhase = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lX11";
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Direct Connect client";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

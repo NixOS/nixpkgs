@@ -19,7 +19,7 @@
 
 # Supplementary packages required only by the wrapper.
 , bash, kde_runtime, kde_baseapps, makeWrapper, oxygen_icons
-, phonon_backend_vlc /*phonon_backend_gstreamer,*/
+, phonon-backend-vlc /*phonon-backend-gstreamer,*/
 , ffmpegthumbs /*mplayerthumbs*/
 , runCommand, shared_mime_info, writeScriptBin
 }:
@@ -71,7 +71,7 @@ let
     # Help digiKam find libusb, otherwise gphoto2 support is disabled
     cmakeFlags = [
       "-DLIBUSB_LIBRARIES=${libusb1.out}/lib"
-      "-DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0"
+      "-DLIBUSB_INCLUDE_DIR=${libusb1.dev}/include/libusb-1.0"
       "-DENABLE_BALOOSUPPORT=ON"
       "-DENABLE_KDEPIMLIBSSUPPORT=ON"
       "-DENABLE_LCMS2=ON" ] 
@@ -93,7 +93,7 @@ let
   kdePkgs = [
     build # digikam's own build
     kdelibs kdepimlibs kde_runtime kde_baseapps libkdcraw oxygen_icons
-    /*phonon_backend_gstreamer*/ phonon_backend_vlc
+    /*phonon-backend-gstreamer*/ phonon-backend-vlc
     ffmpegthumbs /*mplayerthumbs*/ shared_mime_info ]
   # Optional build time dependencies
   ++ [
@@ -208,7 +208,7 @@ TODO
  -  Per lib `KDELIBS` environment variable export. See above in-code TODO comment.
  -  Missing optional `qt_soap` or `herqq` (av + normal package) dependencies. Those are not
     yet (or not fully) packaged in nix. Mainly required for upnp export.
- -  Possibility to use the `phonon_backend_gstreamer` with its own user specified set of backend.
+ -  Possibility to use the `phonon-backend-gstreamer` with its own user specified set of backend.
  -  Allow user to disable optional features or dependencies reacting properly.
  -  Compile `kipiplugins` as a separate package (so that it can be used by other kde packages
     and so that this package's build time is reduced).

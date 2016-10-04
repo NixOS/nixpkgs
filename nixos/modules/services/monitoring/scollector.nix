@@ -119,7 +119,7 @@ in {
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/scollector -conf=${conf} ${lib.concatStringsSep " " cfg.extraOpts}";
+        ExecStart = "${cfg.package.bin}/bin/scollector -conf=${conf} ${lib.concatStringsSep " " cfg.extraOpts}";
       };
     };
 

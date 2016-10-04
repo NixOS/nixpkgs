@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   configurePhase = "makeFlags=PREFIX=$out";
 
+  hardeningDisable = [ "format" ];
+
   postInstall = ''
     sed -i -e 's|exec wish|exec ${tk}/bin/wish|' $out/lib/ssvnc/util/ssvnc.tcl
     sed -i -e 's|/usr/bin/perl|${perl}/bin/perl|' $out/lib/ssvnc/util/ss_vncviewer

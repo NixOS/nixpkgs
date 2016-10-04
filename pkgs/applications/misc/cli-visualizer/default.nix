@@ -7,8 +7,12 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/dpayne/cli-visualizer.git";
     rev = "bc0104eb57e7a0b3821510bc8f93cf5d1154fa8e";
-    sha256 = "7b0c69a16b4854149522e2d0ec544412fb368cecba771d1e9481330ed86c8cb7";
+    sha256 = "16768gyi85mkizfn874q2q9xf32knw08z27si3k5bk99492dxwzw";
   };
+
+  postPatch = ''
+    sed '1i#include <cmath>' -i src/Transformer/SpectrumCircleTransformer.cpp
+  '';
 
   buildInputs = [ fftw ncurses libpulseaudio ];
 

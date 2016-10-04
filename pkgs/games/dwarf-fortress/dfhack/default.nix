@@ -5,8 +5,9 @@
 }:
 
 let
-  dfVersion = "0.42.06";
+  dfVersion = "0.43.03";
   version = "${dfVersion}-r1";
+
   rev = "refs/tags/${version}";
   # revision of library/xml submodule
   xmlRev = "98cc1e01886aaea161d651cf97229ad08e9782b0";
@@ -14,7 +15,7 @@ let
   fakegit = writeScriptBin "git" ''
     #! ${stdenv.shell}
     if [ "$*" = "describe --tags --long" ]; then
-      echo "${dfVersion}-unknown"
+      echo "${version}-unknown"
     elif [ "$*" = "rev-parse HEAD" ]; then
       if [ "$(dirname "$(pwd)")" = "xml" ]; then
         echo "${xmlRev}"
@@ -35,7 +36,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/DFHack/dfhack";
     inherit rev;
-    sha256 = "0h9y9z4d9lirgpcvj5r2znmfi2avdrgrffi9p63gxp1a3mv9fdm1";
+    sha256 = "0m5kqpaz0ypji4c32w0hhbsicvgvnjh56pqvq7af6pqqnyg1nzcx";
   };
 
   patches = [ ./use-system-libraries.patch ];
@@ -44,9 +45,11 @@ in stdenv.mkDerivation rec {
   # we can't use native Lua; upstream uses private headers
   buildInputs = [ zlib jsoncpp protobuf tinyxml ];
 
+  cmakeFlags = [ "-DEXTERNAL_TINYXML=ON" ];
+
   enableParallelBuilding = true;
 
-  passthru = { inherit dfVersion; };
+  passthru = { inherit version dfVersion; };
 
   meta = with stdenv.lib; {
     description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";

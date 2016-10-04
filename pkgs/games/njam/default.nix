@@ -14,11 +14,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net ];
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./logfile.patch ];
 
   meta = {
     homepage = http://trackballs.sourceforge.net/;
     description = "Cross-platform pacman-like game";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

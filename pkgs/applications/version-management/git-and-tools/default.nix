@@ -15,6 +15,7 @@ let
       perlPackages.MIMEBase64 perlPackages.AuthenSASL
       perlPackages.DigestHMAC
     ];
+    gitwebPerlLibs = with perlPackages; [ CGI HTMLParser ];
   };
 
 in
@@ -22,6 +23,8 @@ rec {
   # Try to keep this generally alphabetized
 
   darcsToGit = callPackage ./darcs-to-git { };
+
+  diff-so-fancy = callPackage ./diff-so-fancy { };
 
   git = appendToName "minimal" gitBase;
 
@@ -37,10 +40,10 @@ rec {
     svnSupport = true;
   }));
 
-  git-annex = pkgs.haskellPackages.git-annex-with-assistant;
+  git-annex = pkgs.haskellPackages.git-annex;
   gitAnnex = git-annex;
 
-  git-annex-remote-b2 = pkgs.goPackages.git-annex-remote-b2;
+  git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };

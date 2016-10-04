@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "mlt-${version}";
-  version = "0.9.6";
+  version = "6.2.0";
 
   src = fetchurl {
     url = "https://github.com/mltframework/mlt/archive/v${version}.tar.gz";
-    sha256 = "0s8ypg0q50zfcmq527y8cbdvzxhiqidm1923k28ar8jqmjp45ssh";
+    sha256 = "1zwzfgxrcbwkxnkiwv0a1rzxdnnaly90yyarl9wdw84nx11ffbnx";
   };
 
   buildInputs = [
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
     "--enable-opengl"
   ];
+
+  CXXFLAGS = "-std=c++11";
 
   enableParallelBuilding = true;
 

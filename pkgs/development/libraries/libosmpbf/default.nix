@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/scrosby/OSM-binary;
     description = "C library to read and write OpenStreetMap PBF files";
     license = stdenv.lib.licenses.lgpl3;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

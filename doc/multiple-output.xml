@@ -29,15 +29,15 @@
 
 <section><title>Using a split package</title>
   <para>In the Nix language the individual outputs can be reached explicitly as attributes, e.g. <varname>coreutils.info</varname>, but the typical case is just using packages as build inputs.</para>
-  <para>When a multiple-output derivation gets into a build input of another derivation, the first output is added (<varname>.dev</varname> by convention) and also <varname>propagatedBuildOutputs</varname> of that package which by default contain <varname>$outputBin</varname> and <varname>$outputLib</varname>. (See <xref linkend="multiple-output-file-type-groups" />.)</para>
+  <para>When a multiple-output derivation gets into a build input of another derivation, the <varname>dev</varname> output is added if it exists, otherwise the first output is added. In addition to that, <varname>propagatedBuildOutputs</varname> of that package which by default contain <varname>$outputBin</varname> and <varname>$outputLib</varname> are also added. (See <xref linkend="multiple-output-file-type-groups" />.)</para>
 </section>
 
 
 <section><title>Writing a split derivation</title>
   <para>Here you find how to write a derivation that produces multiple outputs.</para>
   <para>In nixpkgs there is a framework supporting multiple-output derivations. It tries to cover most cases by default behavior.  You can find the source separated in &lt;<filename>nixpkgs/pkgs/build-support/setup-hooks/multiple-outputs.sh</filename>&gt;; it's relatively well-readable.  The whole machinery is triggered by defining the <varname>outputs</varname> attribute to contain the list of desired output names (strings).</para>
-  <programlisting>outputs = [ "dev" "out" "bin" "doc" ];</programlisting>
-  <para>Often such a single line is enough.  For each output an equally named environment variable is passed to the builder and contains the path in nix store for that output.  By convention, the first output should usually be <varname>dev</varname>; typically you also want to have the main <varname>out</varname> output, as it catches any files that didn't get elsewhere.</para>
+  <programlisting>outputs = [ "bin" "dev" "out" "doc" ];</programlisting>
+  <para>Often such a single line is enough.  For each output an equally named environment variable is passed to the builder and contains the path in nix store for that output.  By convention, the first output should contain the executable programs provided by the package as that output is used by Nix in string conversions, allowing references to binaries like <literal>${pkgs.perl}/bin/perl</literal> to always work. Typically you also want to have the main <varname>out</varname> output, as it catches any files that didn't get elsewhere.</para>
 
   <note><para>There is a special handling of the <varname>debug</varname> output, described at <xref linkend="stdenv-separateDebugInfo" />.</para></note>
 
@@ -63,7 +63,7 @@
         </para></listitem></varlistentry>
       <varlistentry><term><varname>
         $outputDocdev</varname></term><listitem><para>
-        is for <emphasis>developer</emphasis> documentation.  Currently we count gtk-doc and man3 pages in there.  It goes to <varname>docdev</varname> or is removed (!) by default.  This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
+        is for <emphasis>developer</emphasis> documentation.  Currently we count gtk-doc and man3 pages in there.  It goes to <varname>devdoc</varname> or is removed (!) by default.  This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
         </para></listitem></varlistentry>
       <varlistentry><term><varname>
         $outputMan</varname></term><listitem><para>

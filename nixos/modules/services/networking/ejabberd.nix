@@ -13,7 +13,7 @@ let
 
   ectl = ''${cfg.package}/bin/ejabberdctl ${if cfg.configFile == null then "" else "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
-  dumps = lib.concatMapStringsSep " " lib.escapeShellArg cfg.loadDumps;
+  dumps = lib.escapeShellArgs cfg.loadDumps;
 
 in {
 
@@ -111,10 +111,10 @@ in {
       description = "ejabberd server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.findutils pkgs.coreutils ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
+      path = [ pkgs.findutils pkgs.coreutils pkgs.runit ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
 
       serviceConfig = {
-        Type = "forking";
+        ExecStart = ''${ectl} foreground'';
         # FIXME: runit is used for `chpst` -- can we get rid of this?
         ExecStop = ''${pkgs.runit}/bin/chpst -u "${cfg.user}:${cfg.group}" ${ectl} stop'';
         ExecReload = ''${pkgs.runit}/bin/chpst -u "${cfg.user}:${cfg.group}" ${ectl} reload_config'';
@@ -132,29 +132,24 @@ in {
 
         mkdir -p -m750 "${cfg.spoolDir}"
         chown -R "${cfg.user}:${cfg.group}" "${cfg.spoolDir}"
+
+        if [ -z "$(ls -A '${cfg.spoolDir}')" ]; then
+          touch "${cfg.spoolDir}/.firstRun"
+        fi
       '';
 
-      script = ''
-        [ -z "$(ls -A '${cfg.spoolDir}')" ] && firstRun=1
-
-        ${ectl} start
-
-        count=0
+      postStart = ''
         while ! ${ectl} status >/dev/null 2>&1; do
-          if [ $count -eq 30 ]; then
-            echo "ejabberd server hasn't started in 30 seconds, giving up"
-            exit 1
-          fi
-
-          count=$((count++))
-          sleep 1
+          if ! kill -0 "$MAINPID"; then exit 1; fi
+          sleep 0.1
         done
 
-        if [ -n "$firstRun" ]; then
+        if [ -e "${cfg.spoolDir}/.firstRun" ]; then
+          rm "${cfg.spoolDir}/.firstRun"
           for src in ${dumps}; do
             find "$src" -type f | while read dump; do
               echo "Loading configuration dump at $dump"
-              ${ectl} load "$dump"
+              chpst -u "${cfg.user}:${cfg.group}" ${ectl} load "$dump"
             done
           done
         fi

@@ -12,7 +12,7 @@
 
 let
 
-  basename = "gdb-7.11";
+  basename = "gdb-7.11.1";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
   # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1hg5kwwdvi9b9nxzxfjnx8fx3gip75fqyvkp82xpf3b3rcb42hvs";
+    sha256 = "0w7wi1llznlqdqk2lmzygz2xylb2c9mh580s9i0rypkmwfj6s8g9";
   };
 
   nativeBuildInputs = [ pkgconfig texinfo perl ]
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = with stdenv.lib;
-    [ "--with-gmp=${gmp}" "--with-mpfr=${mpfr}" "--with-system-readline"
-      "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat}"
+    [ "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
+      "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
       "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
     ]
     ++ optional (target != null) "--target=${target.config}"

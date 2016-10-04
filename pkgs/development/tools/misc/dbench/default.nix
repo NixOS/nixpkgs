@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://git.samba.org/sahlberg/dbench.git;
     rev = "65b19870ed8d25bff14cafa1c30beb33f1fb6597";
-    sha256 = "0hzn7xr58y7f01hp02d0ciy2n5awskypfbdc56ff1vkr1b12i2p9";
+    sha256 = "16lcbwmmx8z5i73k3dnf54yffrpx7ql3y9k3cpkss9dcyxb1p83i";
   };
 
   buildInputs = [ autoconf popt zlib ];

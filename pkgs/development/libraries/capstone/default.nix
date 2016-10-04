@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake ];
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   meta = {
-    description = "advanced disassembly library";
+    description = "Advanced disassembly library";
     homepage    = "http://www.capstone-engine.org";
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.linux;

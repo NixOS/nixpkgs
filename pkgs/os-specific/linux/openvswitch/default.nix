@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, makeWrapper
-, openssl, python27, iproute, perl, kernel ? null }:
+{ stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
+, procps, libcap_ng, openssl, python27, iproute , perl
+, kernel ? null }:
 
 with stdenv.lib;
 
 let
   _kernel = kernel;
 in stdenv.mkDerivation rec {
-  version = "2.3.1";
+  version = "2.5.0";
   name = "openvswitch-${version}";
 
   src = fetchurl {
     url = "http://openvswitch.org/releases/${name}.tar.gz";
-    sha256 = "1lmwyhm5wmdv1l4v1v5xd36d5ra21jz9ix57nh1lgm8iqc0lj5r1";
+    sha256 = "08bgsqjjn2q5hvxsjqs7n3jir7k7291wlj3blsqhacjhmpxm9nil";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  buildInputs = [ makeWrapper openssl python27 perl ];
+  buildInputs = [ makeWrapper pkgconfig utillinux openssl libcap_ng python27
+                  perl procps which ];
 
   configureFlags = [
     "--localstatedir=/var"
@@ -30,6 +32,15 @@ in stdenv.mkDerivation rec {
     "RUNDIR=$(TMPDIR)/dummy"
     "PKIDIR=$(TMPDIR)/dummy"
   ];
+
+  postBuild = ''
+    # fix tests
+    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${python27.interpreter}'
+    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${python27.interpreter}'
+  '';
+
+  enableParallelBuilding = true;
+  doCheck = false; # bash-completion test fails with "compgen: command not found"
 
   postInstall = ''
     cp debian/ovs-monitor-ipsec $out/share/openvswitch/scripts

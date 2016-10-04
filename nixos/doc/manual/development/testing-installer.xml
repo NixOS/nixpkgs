@@ -12,14 +12,14 @@ properly:
 
 <screen>
 $ nix-build -A config.system.build.nixos-install
-$ mount -t tmpfs none /mnt
-$ ./result/bin/nixos-install</screen>
+# mount -t tmpfs none /mnt
+# ./result/bin/nixos-install</screen>
 
 To start a login shell in the new NixOS installation in
 <filename>/mnt</filename>:
 
 <screen>
-$ ./result/bin/nixos-install --chroot
+# ./result/bin/nixos-install --chroot
 </screen>
 
 </para>

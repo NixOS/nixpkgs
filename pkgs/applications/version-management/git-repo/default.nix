@@ -19,5 +19,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://source.android.com/source/downloading.html";
     description = "Android's repo management tool";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

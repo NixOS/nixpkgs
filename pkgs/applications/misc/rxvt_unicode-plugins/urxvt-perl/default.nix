@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/effigies/urxvt-perl";
     license = licenses.gpl3;
     maintainers = with maintainers; [ cstrahan ];
+    platforms = with platforms; unix;
   };
 }

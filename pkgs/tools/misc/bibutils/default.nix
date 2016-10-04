@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "http://sourceforge.net/p/bibutils/home/Bibutils/";
     license = licenses.gpl2;
     maintainers = [ maintainers.garrison ];
+    platforms = platforms.linux;
   };
 }

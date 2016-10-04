@@ -23,7 +23,7 @@ in rec {
     src = fetchgit {
       url = meta.repositories.git;
       rev = "fe0f368e1fcab2b89d5c94209822d9b616cea840";
-      sha256 = "1knbkj1dm45s741qndsfclmk3pyxnihgwq2i1n75ip3wv8i1bf4b";
+      sha256 = "1s8bqqlwy9kmcpmavil558rd2b0wigjlzp2lpqpcqrd1cg25g4a7";
     };
 
     meta = with stdenv.lib; {
@@ -63,7 +63,7 @@ in rec {
     src = fetchgit {
       url = meta.repositories.git;
       rev = "8691abf75becc1f3d7b5bb5ad68dad17cd21863b";
-      sha256 = "0pd89p00yfir4lvw0107lc3qxzx8bgbm5lqq0lpwb6cahv3ipdra";
+      sha256 = "0mgfajljy035051b2sx70i8xrb51zw9q2z64kf85zw1lynihzyh4";
     };
 
     meta = with stdenv.lib; {
@@ -101,7 +101,7 @@ in rec {
     src = fetchgit {
       url = "https://github.com/jreese/znc-push.git";
       rev = "717a2b1741eee75456b0862ef76dbb5af906e936";
-      sha256 = "1lr5bhcy8156f7sbah7kjgz4g4mhkkwgvwjd2rxpbwnpq3ssza9k";
+      sha256 = "1ih1hf11mqgi0cfh6v70v3b93xrw83xcb80psmijcqxi7kwjn404";
     };
 
     meta = {

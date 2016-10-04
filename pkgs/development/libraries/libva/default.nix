@@ -4,14 +4,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-1.6.2";
+  name = "libva-${version}";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva/${name}.tar.bz2";
-    sha256 = "1l4bij21shqbfllbxicmqgmay4v509v9hpxyyia9wm7gvsfg05y4";
+    sha256 = "04rczbnbi70y1ziy9ab59szi3glk9q35hshlws0bcj2ndbqirmjx";
   };
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -19,10 +20,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi mesa_noglu ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
-  configureFlags = lib.optionals (!minimal) [
-    "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri"
-    "--enable-glx"
-  ];
+  configureFlags =
+    [ "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri" ] ++
+    lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
 
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "VAAPI library: Video Acceleration API";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ garbas ];
   };
 }

@@ -1,8 +1,6 @@
 { stdenv, lib, fetchurl, xdg_utils, pkgs, pkgsi686Linux }:
 
 let
-  version = "11.0.53191";
-
   ld32 =
     if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
     else if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
@@ -11,18 +9,20 @@ let
 
   mkLdPath = ps: lib.makeLibraryPath (with ps; [ qt4 dbus alsaLib ]);
 
-  deps = ps: (with ps; [ dbus alsaLib fontconfig freetype libpng libjpeg ]) ++ (with ps.xlibs; [ libX11 libXext libXdamage libXrandr libXrender libXfixes libSM libXtst ]);
+  deps = ps: (with ps; [ dbus alsaLib fontconfig freetype libpng12 libjpeg ]) ++ (with ps.xlibs; [ libX11 libXext libXdamage libXrandr libXrender libXfixes libSM libXtst ]);
   tvldpath32 = lib.makeLibraryPath (with pkgsi686Linux; [ qt4 "$out/share/teamviewer/tv_bin/wine" ] ++ deps pkgsi686Linux);
   tvldpath64 = lib.makeLibraryPath (deps pkgs);
-
 in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   name = "teamviewer-${version}";
+  version = "11.0.57095";
+
   src = fetchurl {
     # There is a 64-bit package, but it has no differences apart from Debian dependencies.
     # Generic versioned packages (teamviewer_${version}_i386.tar.xz) are not available for some reason.
     url = "http://download.teamviewer.com/download/teamviewer_${version}_i386.deb";
-    sha256 = "1yr4c7d6hymw7kvca2jqxzaz6rw5xr66iby77aknd0v4afh4yzz3";
+    sha256 = "0gdqy6b3np8ndlrq5cwgsys6ad529904133za51r20cj528n7rx3";
   };
 
   unpackPhase = ''

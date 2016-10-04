@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip, libffi, readline }:
+{ stdenv, fetchurl, pkgconfig, nspr, perl, python2, zip, libffi, readline }:
 
 stdenv.mkDerivation rec {
   version = "17.0.0";
   name = "spidermonkey-${version}";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/js/mozjs${version}.tar.gz";
+    url = "mirror://mozilla/js/mozjs${version}.tar.gz";
     sha256 = "1fig2wf4f10v43mqx67y68z6h77sy900d1w0pz9qarrqx57rc7ij";
   };
 
-  outputs = [ "dev" "out" "lib" ];
+  outputs = [ "out" "dev" "lib" ];
 
   propagatedBuildInputs = [ nspr ];
 
-  buildInputs = [ pkgconfig perl python zip libffi readline ];
+  buildInputs = [ pkgconfig perl python2 zip libffi readline ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     homepage = https://developer.mozilla.org/en/SpiderMonkey;
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }
 

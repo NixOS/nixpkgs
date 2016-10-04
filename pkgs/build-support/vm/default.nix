@@ -2,7 +2,7 @@
 , kernel ? pkgs.linux
 , img ? "bzImage"
 , rootModules ?
-    [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
+    [ "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
 }:
 
 with pkgs;
@@ -123,8 +123,9 @@ rec {
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
-    mkdir -p /fs/dev /fs/dev/shm
+    mkdir -p /fs/dev/shm /fs/dev/pts
     mount -t tmpfs -o "mode=1777" none /fs/dev/shm
+    mount -t devpts none /fs/dev/pts
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
@@ -218,6 +219,7 @@ rec {
     ${qemuProg} \
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
+      -device virtio-rng-pci \
       -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
       -drive file=$diskImage,if=virtio,cache=unsafe,werror=report \
@@ -260,9 +262,12 @@ rec {
       exit 1
     fi
 
-    eval "$postVM"
+    exitCode="$(cat xchg/in-vm-exit)"
+    if [ "$exitCode" != "0" ]; then
+      exit "$exitCode"
+    fi
 
-    exit $(cat xchg/in-vm-exit)
+    eval "$postVM"
   '';
 
 
@@ -319,6 +324,7 @@ rec {
     origArgs = args;
     origBuilder = builder;
     QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
+    passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
 
@@ -572,10 +578,11 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS }:
+    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512 }:
 
     runInLinuxVM (stdenv.mkDerivation {
-      inherit name postInstall;
+      inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
 
@@ -584,7 +591,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${dpkg}/bin:${dpkg}/bin:${glibc.bin}/bin:${lzma.bin}/bin
+        PATH=$PATH:${stdenv.lib.makeBinPath [ dpkg dpkg glibc lzma ]}
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
@@ -734,7 +741,8 @@ rec {
   makeImageFromDebDist =
     { name, fullName, size ? 4096, urlPrefix
     , packagesList ? "", packagesLists ? [packagesList]
-    , packages, extraPackages ? [], postInstall ? "" }:
+    , packages, extraPackages ? [], postInstall ? ""
+    , QEMU_OPTS ? "", memSize ? 512 }:
 
     let
       expr = debClosureGenerator {
@@ -743,7 +751,7 @@ rec {
       };
     in
       (fillDiskWithDebs {
-        inherit name fullName size postInstall;
+        inherit name fullName size postInstall QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;};
       }) // {inherit expr;};
 
@@ -1120,6 +1128,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora24i386 = {
+      name = "fedora-24-i386";
+      fullName = "Fedora 24 (i386)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/24/Everything/i386/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "6928e251628da7a74b79180739a43784e534eaa744ba4bcb18c847dff541f344";
+      };
+      urlPrefix = mirror://fedora/linux/releases/24/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora24x86_64 = {
+      name = "fedora-24-x86_64";
+      fullName = "Fedora 24 (x86_64)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/24/Everything/x86_64/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "8dcc989396ed27fadd252ba9b655019934bc3d9915f186f1f2f27e71eba7b42f";
+      };
+      urlPrefix = mirror://fedora/linux/releases/24/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1180,6 +1214,30 @@ rec {
       packages = commonOpenSUSEPackages;
     };
 
+    opensuse132i386 = {
+      name = "opensuse-13.2-i586";
+      fullName = "openSUSE 13.2 (i586)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/13.2/repo/oss/suse/repodata/485e4f44e3c3ef3133accb589480933c2fe48dedfc44a7e5f9d5437cd9122a99-primary.xml.gz;
+        sha256 = "0klzmk680as4sb6h1wl0ynj0dds3m70qim66wwbiqlnnp6xkf83y";
+      };
+      urlPrefix = mirror://opensuse/13.2/repo/oss/suse/;
+      archs = ["noarch" "i586"];
+      packages = commonOpenSUSEPackages;
+    };
+
+    opensuse132x86_64 = {
+      name = "opensuse-13.2-x86_64";
+      fullName = "openSUSE 13.2 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/13.2/repo/oss/suse/repodata/485e4f44e3c3ef3133accb589480933c2fe48dedfc44a7e5f9d5437cd9122a99-primary.xml.gz;
+        sha256 = "0klzmk680as4sb6h1wl0ynj0dds3m70qim66wwbiqlnnp6xkf83y";
+      };
+      urlPrefix = mirror://opensuse/13.2/repo/oss/suse/;
+      archs = ["noarch" "x86_64"];
+      packages = commonOpenSUSEPackages;
+    };
+
     centos65i386 = {
       name = "centos-6.5-i386";
       fullName = "CentOS 6.5 (i386)";
@@ -1189,7 +1247,7 @@ rec {
       };
       urlPrefix = http://vault.centos.org/6.5/os/i386;
       archs = ["noarch" "i386"];
-      packages = commonCentOSPackages;
+      packages = commonCentOSPackages ++ [ "procps" ];
     };
 
     centos65x86_64 = {
@@ -1201,7 +1259,20 @@ rec {
       };
       urlPrefix = http://vault.centos.org/6.5/os/x86_64/;
       archs = ["noarch" "x86_64"];
-      packages = commonCentOSPackages;
+      packages = commonCentOSPackages ++ [ "procps" ];
+    };
+
+    # Note: no i386 release for 7.x
+    centos71x86_64 = {
+      name = "centos-7.1-x86_64";
+      fullName = "CentOS 7.1 (x86_64)";
+      packagesList = fetchurl {
+        url = http://vault.centos.org/7.1.1503/os/x86_64/repodata/1386c5af55bda40669bb5ed91e0a22796c3ed7325367506109b09ea2657f22bd-primary.xml.gz;
+        sha256 = "1g92gxjs57mh15hm0rsk6bbkwv3r4851xnaypdlhd95xanpwb1hk";
+      };
+      urlPrefix = http://vault.centos.org/7.1.1503/os/x86_64;
+      archs = ["noarch" "x86_64"];
+      packages = commonCentOSPackages ++ [ "procps-ng" ];
     };
 
   };
@@ -1793,44 +1864,44 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.9-wheezy-i386";
-      fullName = "Debian 7.9 Wheezy (i386)";
+      name = "debian-7.11-wheezy-i386";
+      fullName = "Debian 7.11 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "a390176680327fd52d6aada6dd8eee051c94ce49d80f0a68dc90ef51b81c3169";
+        sha256 = "57ea423dc1c0cc082cae580360f8e7192c9fd60e2ef775a4ce7f48784277462d";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.9-wheezy-amd64";
-      fullName = "Debian 7.9 Wheezy (amd64)";
+      name = "debian-7.11-wheezy-amd64";
+      fullName = "Debian 7.11 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "818d78c648505f91cb99f269178d4f62b56d4209cd51bebbc9bf2bd31c8c7156";
+        sha256 = "b400e459ce2f8af8621182c3a9ea843f0df3dc2d5662e6c6204f9406f5ff2d41";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8i386 = {
-      name = "debian-8.4-jessie-i386";
-      fullName = "Debian 8.4 Jessie (i386)";
+      name = "debian-8.6-jessie-i386";
+      fullName = "Debian 8.6 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "1j8swc1nzsi20vbcmya2sv0fzcnz7lhwb32lxabgcwm3xlkzlg58";
+        sha256 = "b915c936233609af3ecf9272cd53fbdb2144d463e8472a30507aa112ef5e6a6b";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.4-jessie-amd64";
-      fullName = "Debian 8.4 Jessie (amd64)";
+      name = "debian-8.6-jessie-amd64";
+      fullName = "Debian 8.6 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "0kipisyjkhczghzqj4a8y1n4az9c4c8lsj8sw7js13b053lpj6ga";
+        sha256 = "8b80b6608a8fc72509b949efe1730077f0e8383b29c6aed5f86d9f9b51a631d8";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1877,7 +1948,6 @@ rec {
     "patch"
     "perl"
     "pkgconfig"
-    "procps"
     "rpm"
     "rpm-build"
     "tar"

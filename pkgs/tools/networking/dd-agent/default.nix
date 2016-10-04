@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
     python
     unzip
     makeWrapper
+    pythonPackages.requests2
     pythonPackages.psycopg2
     pythonPackages.psutil
     pythonPackages.ntplib
     pythonPackages.simplejson
     pythonPackages.pyyaml
-    pythonPackages.requests
     pythonPackages.pymongo
     pythonPackages.docker
   ];
@@ -36,11 +36,19 @@ stdenv.mkDerivation rec {
     ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
     ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
 
+    cat > $out/bin/dd-jmxfetch <<EOF
+    #!/usr/bin/env bash
+    exec ${python}/bin/python $out/agent/jmxfetch.py $@
+    EOF
+    chmod a+x $out/bin/dd-jmxfetch
+
     wrapProgram $out/bin/dd-forwarder \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/bin/dd-agent \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/bin/dogstatsd \
+      --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/bin/dd-jmxfetch \
       --prefix PYTHONPATH : $PYTHONPATH
 
     patchShebangs $out
@@ -51,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.datadoghq.com;
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice iElectric ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice domenkozar ];
   };
 }

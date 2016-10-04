@@ -1,10 +1,11 @@
 { lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
-, zlib, withGtk ? false, gtk ? null }:
+, libiberty
+, zlib, withGtk ? false, gtk2 ? null }:
 
 with lib;
 
-assert withGtk -> gtk != null;
+assert withGtk -> gtk2 != null;
 assert versionAtLeast kernel.version "3.12";
 
 stdenv.mkDerivation {
@@ -22,18 +23,16 @@ stdenv.mkDerivation {
 
   # perf refers both to newt and slang
   # binutils is required for libbfd.
-  nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt flex bison ];
-  buildInputs = [ python perl newt slang pkgconfig libunwind binutils zlib ] ++
-    stdenv.lib.optional withGtk gtk;
+  nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
+      flex bison libiberty ];
+  buildInputs = [ elfutils python perl newt slang pkgconfig libunwind binutils zlib ] ++
+    stdenv.lib.optional withGtk gtk2;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
-  NIX_CFLAGS_COMPILE = "-I${elfutils}/include -Wno-error=cpp -Wno-error=bool-compare";
-  NIX_CFLAGS_LINK = "-L${elfutils}/lib";
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp -Wno-error=bool-compare -Wno-error=deprecated-declarations";
 
   installFlags = "install install-man ASCIIDOC8=1";
-
-  inherit elfutils;
 
   crossAttrs = {
     /* I don't want cross-python or cross-perl -

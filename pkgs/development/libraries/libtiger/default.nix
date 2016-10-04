@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     homepage = http://code.google.com/p/libtiger/;
     authors = [ "Vincent Penquerc'h" ];
     description = "A rendering library for Kate streams using Pango and Cairo";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

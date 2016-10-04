@@ -152,8 +152,6 @@ let
     };
   };
 
-  mkShellStr = val: "'${replaceStrings ["'"] ["'\\''"] val}'";
-
   certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
   nixos-taskserver = pkgs.buildPythonPackage {
@@ -536,6 +534,7 @@ in {
     (mkIf (cfg.enable && cfg.listenHost != "localhost") {
       networking.firewall.allowedTCPPorts = [ cfg.listenPort ];
     })
-    { meta.doc = ./taskserver.xml; }
   ];
+
+  meta.doc = ./doc.xml;
 }

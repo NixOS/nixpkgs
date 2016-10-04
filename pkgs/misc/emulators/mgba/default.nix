@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/mgba-emu/mgba.git";
     rev = "be2641c77b4a438e0db487bc82b43bc27a26e0c2";
-    sha256 = "0ygsmmp24w14x5fm2qz2v68p59bs2ravn22axrg2ipn5skkgrvxz";
+    sha256 = "1wxywfbkgqvb0j9cyz4nwsfzhxrdjcmvz1k7rljmy4bz1pjcglj1";
   };
 
   buildInputs = [
@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
+    platforms = with platforms; linux;
   };
 }

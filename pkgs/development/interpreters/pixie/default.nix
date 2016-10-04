@@ -3,7 +3,7 @@
   variant ? "jit", buildWithPypy ? false }:
 
 let
-  commit-count = "1333";
+  commit-count = "1356";
   common-flags = "--thread --gcrootfinder=shadowstack --continuation";
   variants = {
     jit = { flags = "--opt=jit"; target = "target.py"; };
@@ -13,16 +13,16 @@ let
   };
   pixie-src = fetchgit {
     url = "https://github.com/pixie-lang/pixie.git";
-    rev = "36ce07e1cd85ca82eedadf366bef3bb57a627a2a";
-    sha256 = "1b3v99c0is33w029r15qvd0mkrc5n1mrvjjmfpcd9yvhvqb2vcjs";
+    rev = "d2a4267ea088f711af36a74928e8dfd8360584ad";
+    sha256 = "1asf6yx7zy9cx4bsg8iai57dy3r3m45xcmkmw2vix70xvfy23ryf";
   };
-  pypy-tag = "81254";
+  pypy-tag = "91db1a9";
   pypy-src = fetchurl {
     name = "pypy-src-${pypy-tag}";
     url = "https://bitbucket.org/pypy/pypy/get/${pypy-tag}.tar.bz2";
-    sha256 = "1cs9xqs1rmzdcnwxxkbvy064s5cbp6vvzhn2jmyzh5kg4di1r3bn";
+    sha256 = "0ylbqvhbcp5m09l15i2q2h3a0vjd055x2r37cq71lkhgmmaxrwbq";
   };
-  libs = [ libffi libedit libuv boost.dev boost.lib zlib ];
+  libs = [ libffi libedit libuv boost.dev boost.out zlib ];
   include-path = stdenv.lib.concatStringsSep ":"
                    (map (p: "${p}/include") libs);
   library-path = stdenv.lib.concatStringsSep ":"
@@ -47,7 +47,7 @@ let
     patchPhase = ''
       (cd pixie-src
        patch -p1 < ${./load_paths.patch}
-       libraryPaths='["${libuv}" "${libedit}" "${libffi}" "${boost.dev}" "${boost.lib}" "${zlib}"]'
+       libraryPaths='["${libuv}" "${libedit}" "${libffi.dev}" "${boost.dev}" "${boost.out}" "${zlib.dev}"]'
        export libraryPaths
        substituteAllInPlace ./pixie/ffi-infer.pxi)
     '';
@@ -63,11 +63,17 @@ let
       mkdir -p $out/share $out/bin
       cp pixie-src/pixie-vm $out/share/pixie-vm
       cp -R pixie-src/pixie $out/share/pixie
-      makeWrapper $out/share/pixie-vm $out/bin/pxi \
+      makeWrapper $out/share/pixie-vm $out/bin/pixie-vm \
         --prefix LD_LIBRARY_PATH : ${library-path} \
         --prefix C_INCLUDE_PATH : ${include-path} \
         --prefix LIBRARY_PATH : ${library-path} \
         --prefix PATH : ${bin-path}
+      cat > $out/bin/pxi <<EOF
+      #!$shell
+      >&2 echo "[\$\$] WARNING: 'pxi' is a deprecated alias for 'pixie-vm', please update your scripts."
+      exec $out/bin/pixie-vm "\$@"
+      EOF
+      chmod +x $out/bin/pxi
     '';
     meta = {
       description = "A clojure-like lisp, built with the pypy vm toolkit";

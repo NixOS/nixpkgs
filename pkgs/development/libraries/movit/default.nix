@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wyl5xl4pkw17pkxsdg8idqvsgm4fxapd0r4dw9wlxw250915nmf";
   };
 
+  outputs = [ "out" "dev" ];
+
   GTEST_DIR = "${gtest}";
 
   propagatedBuildInputs = [ eigen epoxy ];

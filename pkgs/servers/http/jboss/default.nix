@@ -21,5 +21,6 @@ stdenv.mkDerivation {
     description = "Open Source J2EE application server";
     license = licenses.lgpl21;
     maintainers = [ maintainers.sander ];
+    platforms = platforms.unix;
   };
 }

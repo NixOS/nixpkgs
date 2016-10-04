@@ -7,11 +7,15 @@
 <title>Imperative Container Management</title>
 
 <para>We’ll cover imperative container management using
-<command>nixos-container</command> first. You create a container with
+<command>nixos-container</command> first.
+Be aware that container management is currently only possible
+as <literal>root</literal>.</para>
+
+<para>You create a container with
 identifier <literal>foo</literal> as follows:
 
 <screen>
-$ nixos-container create foo
+# nixos-container create foo
 </screen>
 
 This creates the container’s root directory in
@@ -25,7 +29,7 @@ line. For instance, to create a container that has
 <literal>root</literal>:
 
 <screen>
-$ nixos-container create foo --config 'services.openssh.enable = true; \
+# nixos-container create foo --config 'services.openssh.enable = true; \
   users.extraUsers.root.openssh.authorizedKeys.keys = ["ssh-dss AAAAB3N…"];'
 </screen>
 
@@ -35,7 +39,7 @@ $ nixos-container create foo --config 'services.openssh.enable = true; \
 run:
 
 <screen>
-$ nixos-container start foo
+# nixos-container start foo
 </screen>
 
 This command will return as soon as the container has booted and has
@@ -46,7 +50,7 @@ Thus, if something went wrong, you can get status info using
 <command>systemctl</command>:
 
 <screen>
-$ systemctl status container@foo
+# systemctl status container@foo
 </screen>
 
 </para>
@@ -55,7 +59,7 @@ $ systemctl status container@foo
 root using the <command>root-login</command> operation:
 
 <screen>
-$ nixos-container root-login foo
+# nixos-container root-login foo
 [root@foo:~]#
 </screen>
 
@@ -65,7 +69,7 @@ authentication).  You can also get a regular login prompt using the
 the host:
 
 <screen>
-$ nixos-container login foo
+# nixos-container login foo
 foo login: alice
 Password: ***
 </screen>
@@ -74,7 +78,7 @@ With <command>nixos-container run</command>, you can execute arbitrary
 commands in the container:
 
 <screen>
-$ nixos-container run foo -- uname -a
+# nixos-container run foo -- uname -a
 Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
 </screen>
 
@@ -86,17 +90,17 @@ container. First, on the host, you can edit
 and run
 
 <screen>
-$ nixos-container update foo
+# nixos-container update foo
 </screen>
 
 This will build and activate the new configuration. You can also
 specify a new configuration on the command line:
 
 <screen>
-$ nixos-container update foo --config 'services.httpd.enable = true; \
+# nixos-container update foo --config 'services.httpd.enable = true; \
   services.httpd.adminAddr = "foo@example.org";'
 
-$ curl http://$(nixos-container show-ip foo)/
+# curl http://$(nixos-container show-ip foo)/
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">…
 </screen>
 
@@ -116,7 +120,7 @@ start</literal>, respectively, or by using
 destroy a container, including its file system, do
 
 <screen>
-$ nixos-container destroy foo
+# nixos-container destroy foo
 </screen>
 
 </para>

@@ -1,14 +1,11 @@
-{ pkgs, stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook,
-  python, buildPythonApplication, isPy3k,
-  gnome3, gtk3, gobjectIntrospection,
-  dbus, pygobject3, mpd2 }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
+, python3Packages, gnome3, gtk3, gobjectIntrospection}:
 
-with pkgs.lib;
-
-buildPythonApplication rec {
+let
+  inherit (python3Packages) buildPythonApplication python isPy3k dbus-python pygobject3 mpd2;
+in buildPythonApplication rec {
   name = "sonata-${version}";
   version = "1.7b1";
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "multani";
@@ -38,7 +35,7 @@ buildPythonApplication rec {
 
   # The optional tagpy dependency (for editing metadata) is not yet
   # included because it's difficult to build.
-  pythonPath = [ dbus pygobject3 mpd2 ];
+  pythonPath = [ dbus-python pygobject3 mpd2 ];
 
   meta = {
     description = "An elegant client for the Music Player Daemon";

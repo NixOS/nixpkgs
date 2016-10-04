@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     sed <"frontends/snipe" >"$out/bin/snipe" \
-      -e "2i export PATH=\"$out/bin:${coreutils}/bin:${gawk}/bin:${bash}/bin:${which}/bin:\$PATH\""
+      -e "2i export PATH=\"$out/bin:${stdenv.lib.makeBinPath [ coreutils gawk bash which ]}:\$PATH\""
     chmod 555 "$out/bin/snipe"
   '';
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     description = "Simple, lightweight tool for sniping eBay auctions";
     homepage    = http://esniper.sourceforge.net;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 simons ];
+    maintainers = with maintainers; [ lovek323 peti ];
     platforms   = platforms.all;
   };
 }

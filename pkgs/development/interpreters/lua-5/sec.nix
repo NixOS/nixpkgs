@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lua5 openssl ];
 
+  hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
+
   preBuild = ''
     makeFlagsArray=(
       linux
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/brunoos/luasec";
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.flosse ];
   };
 }

@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/peco/peco";
     rev = "4952013023ae1d92c10d826e6970c5a68959678d";
-    sha256 = "02fwmxhaydx9m6q146amq1aw44abzisskkblmv1sjxrm37x81l31";
+    sha256 = "15blxy6a9ph6hm5wn14p025qidbspjy6hhmp4zbbgpxx2l1x8fpg";
   };
 
   buildInputs = [ go ];

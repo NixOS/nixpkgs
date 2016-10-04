@@ -24,16 +24,19 @@ doNotDisplayTwice rec {
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bar = lemonbar;  # added 2015-01-16
   bar-xft = lemonbar-xft;  # added 2015-01-16
+  bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
-  buildbotSlave = buildbot-slave;  # added 2014-12-09
   bundler_HEAD = bundler; # added 2015-11-15
+  checkbashism = checkbashisms; # added 2016-08-16
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
+  cifs_utils = cifs-utils; # added 2016-08
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
   conkerorWrapper = conkeror; # added 2015-01
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
+  cups_filters = cups-filters; # added 2016-08
   cv = progress; # added 2015-09-06
   debian_devscripts = debian-devscripts; # added 2016-03-23
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
@@ -43,16 +46,21 @@ doNotDisplayTwice rec {
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
+  foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11
+  fuse_zip = fuse-zip; # added 2016-04-27
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
+  gnustep-make = gnustep.make; # added 2016-7-6
   htmlTidy = html-tidy;  # added 2014-12-06
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
+  keybase-go = keybase;  # added 2016-08-24
+  letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
@@ -62,6 +70,7 @@ doNotDisplayTwice rec {
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   manpages = man-pages; # added 2015-12-06
+  man_db = man-db; # added 2016-05
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
   module_init_tools = kmod; # added 2016-04-22
@@ -70,18 +79,13 @@ doNotDisplayTwice rec {
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   ncat = nmap;  # added 2016-01-26
   nfsUtils = nfs-utils;  # added 2014-12-06
-  phonon_qt5 = qt5.phonon;  # added 2015-12-19
-  phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19
+  owncloudclient = owncloud-client;  # added 2016-08
+  pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
-  qtcreator = qt5.qtcreator;  # added 2015-12-19
+  QmidiNet = qmidinet;  # added 2016-05-22
   quake3game = ioquake3; # added 2016-01-14
-  quassel_kf5 = kde5.quassel; # added 2015-09-30
-  quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
-  quasselClient_kf5 = kde5.quasselClient; # added 2015-09-30
-  quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
-  quasselDaemon_qt5 = kde5.quasselDaemon; # added 2015-09-30
   qwt6 = qt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rekonqWrapper = rekonq; # added 2015-01
@@ -93,12 +97,15 @@ doNotDisplayTwice rec {
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
   scim = sc-im; # added 2016-01-22
-  signon = qt5.signon;  # added 2015-12-19
+  spaceOrbit = space-orbit; # addewd 2016-05-23
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  sshfsFuse = sshfs-fuse; # added 2016-09
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
+  ucsFonts = ucs-fonts; # added 2016-07-15
+  usb_modeswitch = usb-modeswitch; # added 2016-05-10
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
@@ -107,4 +114,21 @@ doNotDisplayTwice rec {
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
-}
+  m3d-linux = m33-linux; # added 2016-08-13
+
+  inherit (ocaml-ng) # added 2016-09-14
+    ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
+    ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
+    ocamlPackages_4_03
+    ocamlPackages_latest;
+} // (with ocaml-ng; { # added 2016-09-14
+  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
+  ocaml_3_10_0 = ocamlPackages_3_10_0.ocaml;
+  ocaml_3_11_2 = ocamlPackages_3_11_2.ocaml;
+  ocaml_3_12_1 = ocamlPackages_3_12_1.ocaml;
+  ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
+  ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
+  ocaml_4_02   = ocamlPackages_4_02.ocaml;
+  ocaml_4_03   = ocamlPackages_4_03.ocaml;
+  ocaml        = ocamlPackages.ocaml;
+})

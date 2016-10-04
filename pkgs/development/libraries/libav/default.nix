@@ -17,7 +17,7 @@
 
 assert faacSupport -> enableUnfree;
 
-with { inherit (stdenv.lib) optional optionals; };
+with { inherit (stdenv.lib) optional optionals hasPrefix; };
 
 /* ToDo:
     - more deps, inspiration: http://packages.ubuntu.com/raring/libav-tools
@@ -27,7 +27,7 @@ with { inherit (stdenv.lib) optional optionals; };
 let
   result = {
     libav_0_8 = libavFun "0.8.17" "31ace2daeb8c105deed9cd3476df47318d417714";
-    libav_11  = libavFun  "11.6"  "2296cbd7afe98591eb164cebe436dcb5582efc9d";
+    libav_11  = libavFun  "11.8"  "y18hmrzy7jqq7h9ys54nrr4s49mkzsfh";
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
@@ -37,6 +37,10 @@ let
       url = "${meta.homepage}/releases/${name}.tar.xz";
       inherit sha1; # upstream directly provides sha1 of releases over https
     };
+
+    patches = []
+      ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
+      ++ optional (vpxSupport && hasPrefix "11."  version) ./vpxenc-11.6-libvpx-1.5.patch;
 
     preConfigure = "patchShebangs doc/texi2pod.pl";
 
@@ -81,7 +85,7 @@ let
 
     enableParallelBuilding = true;
 
-    outputs = [ "dev" "out" "bin" ];
+    outputs = [ "bin" "dev" "out" ];
     setOutputFlags = false;
 
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.

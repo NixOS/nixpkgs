@@ -3,15 +3,17 @@
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2016-01-11";
+  name = "xfstests-2016-08-26";
 
   src = fetchgit {
-    url = "git://oss.sgi.com/xfs/cmds/xfstests.git";
-    rev = "dfe582dd396f16ddce1909baab7376e00af07792";
-    sha256 = "0hbgccmhcxn5nm87nq13kpi3rcbjadlj65kd03bfjqxhm4gx732q";
+    url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
+    rev = "21eb9d303cff056753a3104602ff674d468af52e";
+    sha256 = "175nfdjfakxij7cmajjv2ycsiv4hkmx7b94nsylqrg51drx3jkji";
   };
 
   buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];
+
+  hardeningDisable = [ "format" ];
 
   patchPhase = ''
     # Patch the destination directory
@@ -68,11 +70,11 @@ stdenv.mkDerivation {
 
     chmod a+rx "$dir"
     cd "$dir"
-    for f in check common ltp src tests; do
+    for f in $(cd @out@/lib/xfstests; echo *); do
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap lvm2 perl procps psmisc su utillinux which xfsprogs]}:$PATH
+    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap lvm2 perl procps psmisc utillinux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 

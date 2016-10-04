@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtkmm, libjack2, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, gtkmm2, libjack2, pkgconfig }:
 
 stdenv.mkDerivation  rec {
   name = "seq24-${version}";
@@ -9,11 +9,13 @@ stdenv.mkDerivation  rec {
     sha256 = "1qpyb7355s21sgy6gibkybxpzx4ikha57a8w644lca6qy9mhcwi3";
   };
 
-  buildInputs = [ alsaLib gtkmm libjack2 ];
+  patches = [ ./mutex_no_nameclash.patch ];
+
+  buildInputs = [ alsaLib gtkmm2 libjack2 ];
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
-    description = "minimal loop based midi sequencer";
+    description = "Minimal loop based midi sequencer";
     homepage = "http://www.filter24.org/seq24";
     license = licenses.gpl2;
     platforms = platforms.linux;

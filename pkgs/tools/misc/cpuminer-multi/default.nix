@@ -2,8 +2,8 @@
 , aesni ? true }:
 
 let
-  rev = "977dad27e18627e5b723800f5f4201e385fe0d2e";
-  date = "20140723";
+  rev = "8393e03089c0abde61bd5d72aba8f926c3d6eca4";
+  date = "20160316";
 in
 stdenv.mkDerivation rec {
   name = "cpuminer-multi-${date}-${stdenv.lib.strings.substring 0 7 rev}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     inherit rev;
     url = https://github.com/wolf9466/cpuminer-multi.git;
-    sha256 = "9c438c6cd9f40273822f3d3103a370e43e8a40368695ed5e01ae87297dce7843";
+    sha256 = "11dg4rra4dgfb9x6q85irn0hrkx2lkwyrdpgdh10pag09s3vhy4v";
   };
 
   buildInputs = [ autoconf automake curl jansson ];
@@ -27,5 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/wolf9466/cpuminer-multi;
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
+    # does not build on i686 https://github.com/lucasjones/cpuminer-multi/issues/27
+    platforms = [ "x86_64-linux" ]; 
   };
 }

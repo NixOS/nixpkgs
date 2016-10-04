@@ -33,7 +33,11 @@ while [ "$#" -gt 0 ]; do
         action="$i"
         ;;
       --install-grub)
-        export NIXOS_INSTALL_GRUB=1
+        echo "$0: --install-grub deprecated, use --install-bootloader instead" >&2
+        export NIXOS_INSTALL_BOOTLOADER=1
+        ;;
+      --install-bootloader)
+        export NIXOS_INSTALL_BOOTLOADER=1
         ;;
       --no-build-nix)
         buildNix=
@@ -214,9 +218,9 @@ fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" ]; then
-    if p=$(nix-instantiate --find-file nixpkgs/nixos/modules/installer/tools/nixos-rebuild.sh "${extraBuildFlags[@]}"); then
+    if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
         export _NIXOS_REBUILD_REEXEC=1
-        exec $SHELL -e $p "${origArgs[@]}"
+        exec $p/bin/nixos-rebuild "${origArgs[@]}"
         exit 1
     fi
 fi
@@ -257,9 +261,9 @@ fi
 prebuiltNix() {
     machine="$1"
     if [ "$machine" = x86_64 ]; then
-        echo /nix/store/xryr9g56h8yjddp89d6dw12anyb4ch7c-nix-1.10
+        echo @nix_x86_64_linux@
     elif [[ "$machine" =~ i.86 ]]; then
-        echo /nix/store/2w92k5wlpspf0q2k9mnf2z42prx3bwmv-nix-1.10
+        echo @nix_i686_linux@
     else
         echo "$0: unsupported platform"
         exit 1

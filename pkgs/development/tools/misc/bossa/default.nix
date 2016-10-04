@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/shumatech/BOSSA;
     rev = "0f0a41cb1c3a65e909c5c744d8ae664e896a08ac"; /* arduino branch */
-    sha256 = "01y8r45fw02rps9q995mv82bxrm6p0mysv4wir5glpagrhnyw7md";
+    sha256 = "0xg79kli1ypw9zyl90mm6vfk909jinmk3lnl8sim6v2yn8shs9cn";
   };
 
   patches = [ ./bossa-no-applet-build.patch ];

@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   patches = [ ./getcwd-chroot.patch ];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     # Apply the Debian patches.
     for p in "debian/patches/"*; do
@@ -23,8 +25,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://cvs.nongnu.org";
     description = "Concurrent Versions System - a source control system";
-
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

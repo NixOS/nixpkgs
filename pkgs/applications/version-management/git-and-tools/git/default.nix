@@ -2,7 +2,7 @@
 , gnugrep, gzip, openssh
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs
+, svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "2.8.0";
+  version = "2.10.0";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -19,8 +19,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0k77b5x41k80fqqmkmg59rdvs92xgp73iigh01l49h383r7rl2cs";
+    sha256 = "1rr9zyafb6q3wixyjar6cc7z7vdh1dqa4b5irz3gz1df02n68cy7";
   };
+
+  hardeningDisable = [ "format" ];
 
   patches = [
     ./docbook2texi.patch
@@ -37,7 +39,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
+  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv perl]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];
@@ -102,6 +104,11 @@ stdenv.mkDerivation {
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi
+      # Give access to CGI.pm and friends (was removed from perl core in 5.22)
+      for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
+          sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
+              "$out/share/gitweb/gitweb.cgi"
+      done
 
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
@@ -165,6 +172,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons the-kenny wmertens ];
+    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens ];
   };
 }

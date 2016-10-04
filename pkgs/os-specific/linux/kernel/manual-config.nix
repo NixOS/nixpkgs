@@ -74,7 +74,7 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
-    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; propagatedBuildOutputs = ""; }) // {
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches configfile;
       };
@@ -93,7 +93,7 @@ let
             echo "stripping FHS paths in \`$mf'..."
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
-        sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
+        sed -i Makefile -e 's|= depmod|= ${kmod}/bin/depmod|'
       '';
 
       configurePhase = ''
@@ -188,7 +188,7 @@ let
         find -empty -type d -delete
 
         # Remove reference to kmod
-        sed -i Makefile -e 's|= ${kmod}/sbin/depmod|= depmod|'
+        sed -i Makefile -e 's|= ${kmod}/bin/depmod|= depmod|'
       '' else optionalString installsFirmware ''
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
@@ -221,6 +221,8 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   nativeBuildInputs = [ perl bc nettools openssl ] ++ optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
+
+  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"

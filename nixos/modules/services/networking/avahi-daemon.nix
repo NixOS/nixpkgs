@@ -7,10 +7,6 @@ let
 
   cfg = config.services.avahi;
 
-  # We must escape interfaces due to the systemd interpretation
-  subsystemDevice = interface:
-    "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device";
-
   avahiDaemonConf = with cfg; pkgs.writeText "avahi-daemon.conf" ''
     [server]
     ${# Users can set `networking.hostName' to the empty string, when getting
@@ -24,6 +20,7 @@ let
     use-ipv4=${if ipv4 then "yes" else "no"}
     use-ipv6=${if ipv6 then "yes" else "no"}
     ${optionalString (interfaces!=null) "allow-interfaces=${concatStringsSep "," interfaces}"}
+    ${optionalString (domainName!=null) "domain-name=${domainName}"}
 
     [wide-area]
     enable-wide-area=${if wideArea then "yes" else "no"}
@@ -65,8 +62,17 @@ in
         '';
       };
 
+      domainName = mkOption {
+        type = types.str;
+        default = "local";
+        description = ''
+          Domain name for all advertisements.
+        '';
+      };
+
       browseDomains = mkOption {
-        default = [ "0pointer.de" "zeroconf.org" ];
+        default = [ ];
+        example = [ "0pointer.de" "zeroconf.org" ];
         description = ''
           List of non-local DNS domains to be browsed.
         '';
@@ -170,14 +176,8 @@ in
     environment.systemPackages = [ pkgs.avahi ];
 
     systemd.services.avahi-daemon =
-      let
-        deps = optionals (cfg.interfaces!=null) (map subsystemDevice cfg.interfaces);
-      in
       { description = "Avahi daemon";
-        wantedBy = [ "ip-up.target" ];
-        bindsTo = deps;
-        after = deps;
-        before = [ "ip-up.target" ];
+        wantedBy = [ "multi-user.target" ];
         # Receive restart event after resume
         partOf = [ "post-resume.target" ];
 

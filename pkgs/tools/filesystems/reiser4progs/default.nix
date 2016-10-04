@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libaal];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     substituteInPlace configure --replace " -static" ""
   '';
@@ -23,5 +25,6 @@ stdenv.mkDerivation rec {
     inherit version;
     homepage = http://www.namesys.com/;
     description = "Reiser4 utilities";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

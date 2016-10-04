@@ -3,16 +3,16 @@
 }:
 
 let # not very usable ATM
-  version = "0pre-2015-10-18";
+  version = "0.2.1";
 in
 stdenv.mkDerivation {
   name = "neovim-qt-${version}";
 
   src = fetchFromGitHub {
-    repo = "neovim-qt";
     owner = "equalsraf";
-    rev = "03236e2";
-    sha256 = "0hhwpnj7yfqdk7yiwrq0x6n4xx30brj9clxmxx796421rlcrxypq";
+    repo = "neovim-qt";
+    rev = "v${version}";
+    sha256 = "0mqs2f7l05q2ayj77czr5fnpr7fa00qrmjdjxglbwxdxswcsz88n";
   };
 
   # It tries to download libmsgpack; let's use ours.
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
     # Similar enough to FindMsgpack
     set(MSGPACK_INCLUDE_DIRS ${libmsgpack}/include PARENT_SCOPE)
-    set(MSGPACK_LIBRARIES msgpack PARENT_SCOPE)
+    set(MSGPACK_LIBRARIES msgpackc PARENT_SCOPE)
   '';
     in "echo '${use-msgpack}' > third-party/CMakeLists.txt";
 
@@ -34,9 +34,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    mv ./bin/nvim-qt "$out/bin/"
+  postInstall = ''
     wrapProgram "$out/bin/nvim-qt" --prefix PATH : "${neovim}/bin"
   '';
 

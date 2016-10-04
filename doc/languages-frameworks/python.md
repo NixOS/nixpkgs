@@ -78,18 +78,16 @@ containing
 ```nix
 with import <nixpkgs> {};
 
-(pkgs.python35.buildEnv.override  {
-  extraLibs = with pkgs.python35Packages; [ numpy toolz ];
-}).env
+(pkgs.python35.withPackages (ps: [ps.numpy ps.toolz])).env
 ```
 executing `nix-shell` gives you again a Nix shell from which you can run Python.
 
 What's happening here?
 
 1. We begin with importing the Nix Packages collections. `import <nixpkgs>` import the `<nixpkgs>` function, `{}` calls it and the `with` statement brings all attributes of `nixpkgs` in the local scope. Therefore we can now use `pkgs`.
-2. Then we create a Python 3.5 environment with `pkgs.buildEnv`. Because we want to use it with a custom set of Python packages, we override it.
-3. The `extraLibs` argument of the original `buildEnv` function can be used to specify which packages should be included. We want `numpy` and `toolz`. Again, we use the `with` statement to bring a set of attributes into the local scope.
-4. And finally, for in interactive use we return the environment.
+2. Then we create a Python 3.5 environment with the `withPackages` function.
+3. The `withPackages` function expects us to provide a function as an argument that takes the set of all python packages and returns a list of packages to include in the environment. Here, we select the packages `numpy` and `toolz` from the package set.
+4. And finally, for in interactive use we return the environment by using the `env` attribute.
 
 ### Developing with Python
 
@@ -187,10 +185,7 @@ with import <nixpkgs> {};
       };
     };
 
-  in pkgs.python35.buildEnv.override rec {
-
-    extraLibs = [ pkgs.python35Packages.numpy toolz ];
-}
+  in pkgs.python35.withPackages (ps: [ps.numpy toolz])
 ).env
 ```
 
@@ -199,8 +194,11 @@ locally defined package as well as `numpy` which is build according to the
 definition in Nixpkgs. What did we do here? Well, we took the Nix expression
 that we used earlier to build a Python environment, and said that we wanted to
 include our own version of `toolz`. To introduce our own package in the scope of
-`buildEnv.override` we used a
+`withPackages` we used a
 [`let`](http://nixos.org/nix/manual/#sec-constructs) expression.
+You can see that we used `ps.numpy` to select numpy from the nixpkgs package set (`ps`).
+But we do not take `toolz` from the nixpkgs package set this time.
+Instead, `toolz` will resolve to our local definition that we introduced with `let`.
 
 ### Handling dependencies
 
@@ -293,8 +291,8 @@ pyfftw = buildPythonPackage rec {
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
 
-  LDFLAGS="-L${pkgs.fftw}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
-  CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
+  LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
+  CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
   '';
 
   meta = {
@@ -359,7 +357,7 @@ own packages. The important functions here are `import` and `callPackage`.
 
 ### Including a derivation using `callPackage`
 
-Earlier we created a Python environment using `buildEnv`, and included the
+Earlier we created a Python environment using `withPackages`, and included the
 `toolz` package via a `let` expression.
 Let's split the package definition from the environment definition.
 
@@ -394,9 +392,7 @@ with import <nixpkgs> {};
 
 ( let
     toolz = pkgs.callPackage ~/path/to/toolz/release.nix { pkgs=pkgs; buildPythonPackage=pkgs.python35Packages.buildPythonPackage; };
-  in pkgs.python35.buildEnv.override rec {
-    extraLibs = [ pkgs.python35Packages.numpy  toolz ];
-}
+  in pkgs.python35.withPackages (ps: [ ps.numpy toolz ])
 ).env
 ```
 
@@ -450,6 +446,7 @@ Each interpreter has the following attributes:
 - `libPrefix`. Name of the folder in `${python}/lib/` for corresponding interpreter.
 - `interpreter`. Alias for `${python}/bin/${executable}`.
 - `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
+- `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, ie `python3.4`.
 
@@ -484,7 +481,7 @@ and the aliases
 #### `buildPythonPackage` function
 
 The `buildPythonPackage` function is implemented in
-`pkgs/development/python-modules/generic/default.nix`
+`pkgs/development/interpreters/python/build-python-package.nix`
 
 and can be used as:
 
@@ -506,9 +503,12 @@ and can be used as:
 
 The `buildPythonPackage` mainly does four things:
 
-* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to build a wheel binary zipfile.
+* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to
+  build a wheel binary zipfile.
 * In the `installPhase`, it installs the wheel file using `pip install *.whl`.
-* In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to wrap all programs in the `$out/bin/*` directory to include `$PYTHONPATH` and `$PATH` environment variables.
+* In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
+  wrap all programs in the `$out/bin/*` directory to include `$PATH`
+  environment variable and add dependent libraries to script's `sys.path`.
 * In the `installCheck` phase, `${python.interpreter} setup.py test` is ran.
 
 As in Perl, dependencies on other Python packages can be specified in the
@@ -534,6 +534,9 @@ All parameters from `mkDerivation` function are still supported.
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `makeWrapperArgs`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `installFlags`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"].
+* `format`: Format of the source. Options are `setup` for when the source has a `setup.py` and `setuptools` is used to build a wheel, and `wheel` in case the source is already a binary wheel. The default value is `setup`.
+* `catchConflicts` If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
+* `checkInputs` Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
 
 #### `buildPythonApplication` function
 
@@ -547,7 +550,7 @@ Python environments can be created using the low-level `pkgs.buildEnv` function.
 This example shows how to create an environment that has the Pyramid Web Framework.
 Saving the following as `default.nix`
 
-    with import {};
+    with import <nixpkgs> {};
 
     python.buildEnv.override {
       extraLibs = [ pkgs.pythonPackages.pyramid ];
@@ -564,10 +567,10 @@ You can also use the `env` attribute to create local environments with needed
 packages installed. This is somewhat comparable to `virtualenv`. For example,
 running `nix-shell` with the following `shell.nix`
 
-    with import {};
+    with import <nixpkgs> {};
 
     (python3.buildEnv.override {
-      extraLibs = with python3Packages; [ numpy requests ];
+      extraLibs = with python3Packages; [ numpy requests2 ];
     }).env
 
 will drop you into a shell where Python will have the
@@ -580,6 +583,37 @@ specified packages in its path.
 * `postBuild`: Shell command executed after the build of environment.
 * `ignoreCollisions`: Ignore file collisions inside the environment (default is `false`).
 
+#### python.withPackages function
+
+The `python.withPackages` function provides a simpler interface to the `python.buildEnv` functionality.
+It takes a function as an argument that is passed the set of python packages and returns the list 
+of the packages to be included in the environment. Using the `withPackages` function, the previous
+example for the Pyramid Web Framework environment can be written like this:
+
+    with import <nixpkgs> {};
+
+    python.withPackages (ps: [ps.pyramid])
+
+`withPackages` passes the correct package set for the specific interpreter version as an 
+argument to the function. In the above example, `ps` equals `pythonPackages`.
+But you can also easily switch to using python3:
+    
+    with import <nixpkgs> {};
+
+    python3.withPackages (ps: [ps.pyramid])
+
+Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
+
+As `python.withPackages` simply uses `python.buildEnv` under the hood, it also supports the `env`
+attribute. The `shell.nix` file from the previous section can thus be also written like this:
+
+    with import <nixpkgs> {};
+
+    (python33.withPackages (ps: [ps.numpy ps.requests2])).env
+
+In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
+such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
+
 ### Development mode
 
 Development or editable mode is supported. To develop Python packages
@@ -590,7 +624,7 @@ Warning: `shellPhase` is executed only if `setup.py` exists.
 
 Given a `default.nix`:
 
-    with import {};
+    with import <nixpkgs> {};
 
     buildPythonPackage { name = "myproject";
 
@@ -599,7 +633,7 @@ Given a `default.nix`:
     src = ./.; }
 
 Running `nix-shell` with no arguments should give you
-the environment in which the package would be build with
+the environment in which the package would be built with
 `nix-build`.
 
 Shortcut to setup environments with C headers/libraries and python packages:
@@ -619,6 +653,56 @@ community to help save time. No tool is preferred at the moment.
 
 ## FAQ
 
+### How can I install a working Python environment?
+
+As explained in the user's guide installing individual Python packages
+imperatively with `nix-env -i` or declaratively in `environment.systemPackages`
+is not supported. However, it is possible to install a Python environment with packages (`python.buildEnv`).
+
+In the following examples we create an environment with Python 3.5, `numpy` and `ipython`.
+As you might imagine there is one limitation here, and that's you can install
+only one environment at a time. You will notice the complaints about collisions
+when you try to install a second environment.
+
+#### Environment defined in separate `.nix` file
+
+Create a file, e.g. `build.nix`, with the following expression
+```nix
+with import <nixpkgs> {};
+with python35Packages;
+
+python.withPackages (ps: with ps; [ numpy ipython ])
+```
+and install it in your profile with
+```
+nix-env -if build.nix
+```
+Now you can use the Python interpreter, as well as the extra packages that you added to the environment.
+
+#### Environment defined in `~/.nixpkgs/config.nix`
+
+If you prefer to, you could also add the environment as a package override to the Nixpkgs set.
+```
+  packageOverrides = pkgs: with pkgs; with python35Packages; {
+    myEnv = python.withPackages (ps: with ps; [ numpy ipython ]);
+  };
+```
+and install it in your profile with
+```
+nix-env -iA nixos.blogEnv
+```
+Note that I'm using the attribute path here.
+
+#### Environment defined in `/etc/nixos/configuration.nix`
+
+For the sake of completeness, here's another example how to install the environment system-wide.
+
+```nix
+environment.systemPackages = with pkgs; [
+  (python35Packages.python.withPackages (ps: callPackage ../packages/common-python-packages.nix { pythonPackages = ps; }))
+];
+```
+
 ### How to solve circular dependencies?
 
 Consider the packages `A` and `B` that depend on each other. When packaging `B`,
@@ -632,8 +716,8 @@ Python attribute sets are created for each interpreter version. We will therefor
 In the following example we change the name of the package `pandas` to `foo`.
 ```
 newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
+  python35Packages = (super.python35Packages.override { self = python35Packages;})
+    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
   };
 });
 ```
@@ -644,13 +728,12 @@ with import <nixpkgs> {};
 (let
 
 newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
+  python35Packages = (super.python35Packages.override { self = python35Packages;})
+    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
   };
 });
-in newpkgs.python35.buildEnv.override{
-  extraLibs = [newpkgs.python35Packages.blaze ];
-}).env
+in newpkgs.python35.withPackages (ps: [ps.blaze])
+).env
 ```
 A typical use case is to switch to another version of a certain package. For example, in the Nixpkgs repository we have multiple versions of `django` and `scipy`.
 In the following example we use a different version of `scipy`. All packages in `newpkgs` will now use the updated `scipy` version.
@@ -661,15 +744,49 @@ with import <nixpkgs> {};
 
 newpkgs = pkgs.overridePackages(self: super: rec {
   python35Packages = super.python35Packages.override {
-    self = python35Packages // { scipy = python35Packages.scipy_0_16;};
+    self = python35Packages // { scipy = python35Packages.scipy_0_17;};
   };
 });
-in pkgs.python35.buildEnv.override{
-  extraLibs = [newpkgs.python35Packages.blaze ];
-}).env
+in newpkgs.python35.withPackages (ps: [ps.blaze])
+).env
 ```
 The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
 
+A similar example but now using `django`
+```
+with import <nixpkgs> {};
+
+(let
+
+newpkgs = pkgs.overridePackages(self: super: rec {
+  python27Packages = (super.python27Packages.override {self = python27Packages;})
+    // { django = super.python27Packages.django_1_9; };
+});
+in newpkgs.python27.withPackages (ps: [ps.django_guardian ])
+).env
+```
+
+### `python setup.py bdist_wheel` cannot create .whl
+
+Executing `python setup.py bdist_wheel` in a `nix-shell `fails with
+```
+ValueError: ZIP does not support timestamps before 1980
+```
+This is because files are included that depend on items in the Nix store which have a timestamp of, that is, it corresponds to January the 1st, 1970 at 00:00:00. And as the error informs you, ZIP does not support that.
+The command `bdist_wheel` takes into account `SOURCE_DATE_EPOCH`, and `nix-shell` sets this to 1. By setting it to a value corresponding to 1980 or later, or by unsetting it, it is possible to build wheels.
+
+Use 1980 as timestamp:
+```
+nix-shell --run "SOURCE_DATE_EPOCH=315532800 python3 setup.py bdist_wheel"
+```
+or the current time:
+```
+nix-shell --run "SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel"
+```
+or unset:
+"""
+nix-shell --run "unset SOURCE_DATE_EPOCH; python3 setup.py bdist_wheel"
+"""
 
 ### `install_data` / `data_files` problems
 

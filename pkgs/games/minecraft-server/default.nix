@@ -2,12 +2,14 @@
 
 stdenv.mkDerivation rec {
   name    = "minecraft-server-${version}";
-  version = "1.9";
+  version = "1.10.2";
 
   src  = fetchurl {
     url    = "http://s3.amazonaws.com/Minecraft.Download/versions/${version}/minecraft_server.${version}.jar";
-    sha256 = "0z9sgnal55ari1dj4vac975wi9gk5hq30nhkw8155xbi1ksrg9rq";
+    sha256 = "08bss3laa265aavdgivzsv7asd5s2sdqnlqr767j3yf54y14cpqr";
   };
+
+  preferLocalBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/minecraft

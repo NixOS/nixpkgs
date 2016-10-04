@@ -3,7 +3,7 @@
   cln,
   cmake,
   fetchgit,
-  gcc5,
+  gcc,
   ginac,
   jamomacore,
   kde5,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/OSSIA/i-score.git";
     rev = "ede2453b139346ae46702b5e2643c5488f8c89fb";
-    sha256 = "04li771nj0k8gym7vg6rnawjkp2f6d5m5mby26h0k6ksf7hg7h70";
+    sha256 = "0cl9vdmxkshdacgpp7s2rg40b7xbsjrzw916jds9i3rpq1pcy5pj";
     leaveDotGit = true;
     deepClone = true;
   };
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     cln
     cmake
     ginac
-    gcc5
+    gcc
     jamomacore
     kde5.kdnssd
     libsndfile

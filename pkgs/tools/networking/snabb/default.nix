@@ -22,14 +22,16 @@ stdenv.mkDerivation rec {
     done
 
     # We need a way to pass $PATH to the scripts
-    sed -i '2iexport PATH=${git}/bin:${mariadb}/bin:${which}/bin:${procps}/bin:${coreutils}/bin' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
-    sed -i '2iexport PATH=${git}/bin:${coreutils}/bin:${diffutils}/bin:${nettools}/bin' src/program/snabbnfv/neutron_sync_agent/neutron_sync_agent.sh.inc
+    sed -i '2iexport PATH=${stdenv.lib.makeBinPath [ git mariadb which procps coreutils ]}' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
+    sed -i '2iexport PATH=${stdenv.lib.makeBinPath [ git coreutils diffutils nettools ]}' src/program/snabbnfv/neutron_sync_agent/neutron_sync_agent.sh.inc
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp src/snabb $out/bin
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/SnabbCo/snabbswitch;
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.lukego maintainers.iElectric ];
+    maintainers = [ maintainers.lukego maintainers.domenkozar ];
   };
 }
 

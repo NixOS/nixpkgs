@@ -55,7 +55,7 @@ stdenv.mkDerivation {
       --replace "RUN+=\"/bin/sh" "RUN+=\"${stdenv.shell}"
 
     substituteInPlace $out/lib/libsane.la \
-      --replace "-ljpeg" "-L${libjpeg}/lib -ljpeg"
+      --replace "-ljpeg" "-L${libjpeg.out}/lib -ljpeg"
   '' + stdenv.lib.concatStrings (builtins.map installFirmware compatFirmware);
 
   meta = with stdenv.lib; {
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     homepage = "http://www.sane-project.org/";
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ nckx simons ];
+    maintainers = with maintainers; [ nckx peti ];
     platforms = platforms.linux;
   };
 }

@@ -1,33 +1,39 @@
 { stdenv, fetchurl, ocaml, findlib, which, ocsigen_server, ocsigen_deriving,
   js_of_ocaml, ocaml_react, ocaml_lwt, calendar, cryptokit, tyxml,
   ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
-  reactivedata, opam}:
+  reactivedata, opam, ppx_tools, camlp4}:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
+let ocamlVersion = (stdenv.lib.getVersion ocaml);
+  in
+
+(
+assert stdenv.lib.versionAtLeast ocamlVersion "4";
 
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "4.2.0";
+  version = "5.0.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = https://github.com/ocsigen/eliom/archive/4.2.tar.gz;
-    sha256 = "0gbqzgn6xgpq6irz2sfr92qj3hjcwl45wy0inc4ps5r15nvq1l9h";
+    url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
+    sha256 = "1g9wq2qpn0sgzyb6iq0h9afq5p68il4h8pc7jppqsislk87m09k7";
   };
 
   patches = [ ./camlp4.patch ];
 
   buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
-                 js_of_ocaml ocaml_optcomp opam];
+                 js_of_ocaml ocaml_optcomp opam ppx_tools camlp4 ];
 
   propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ipaddr
                             calendar cryptokit ocamlnet ocaml_react ocaml_ssl
                             ocaml_pcre ];
 
+  preConfigure = stdenv.lib.optionalString (!stdenv.lib.versionAtLeast ocamlVersion "4.02") ''
+      export PPX=false
+    '';
+
   installPhase =
-  let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
-  in
   ''opam-installer --script --prefix=$out ${pname}.install > install.sh
     sh install.sh
     ln -s $out/lib/${pname} $out/lib/ocaml/${ocamlVersion}/site-lib/
@@ -55,4 +61,4 @@ stdenv.mkDerivation rec
 
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };
-}
+})

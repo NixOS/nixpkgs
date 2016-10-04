@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''sed -e '/curl\/types\.h/d' -i src/xitk/download.c'';
 
-  configureFlags = "--with-readline=${readline}";
+  configureFlags = "--with-readline=${readline.dev}";
   
   LIRC_CFLAGS="-I${lirc}/include";
   LIRC_LIBS="-L ${lirc}/lib -llirc_client";
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
   meta = { 
     homepage = http://www.xine-project.org/;
     description = "Xlib-based interface to Xine, a video player";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

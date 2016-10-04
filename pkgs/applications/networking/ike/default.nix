@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     for file in "$out"/bin/* "$out"/sbin/*; do
-        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${openssl.out}/lib:${gcc.cc}/lib:${stdenv.glibc.out}/lib::${gcc.cc}/lib64:${stdenv.glibc.out}/lib64:${libedit}/lib:${qt4}/lib"
+        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${stdenv.lib.makeLibraryPath [ openssl gcc.cc stdenv.cc.libc libedit qt4 ]}"
     done
   '';
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.shrew.net/software;
     description = "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
     platforms = platforms.unix;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
     license = licenses.sleepycat;
   };
 }

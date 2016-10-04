@@ -21,9 +21,9 @@ index 22015ff..2821192 100644
 -    FILE *ldc = popen("/sbin/ldconfig -r", "r");
 -#endif
 +    FILE *ldc = popen("true", "r");
+     if (ldc == NULL) return; // ignore errors in running ldconfig (other than whatever might have been printed to stderr)
  
      while (!feof(ldc)) {
-         ssize_t n = getline(&line, &sz, ldc);
 -- 
 2.5.2
 

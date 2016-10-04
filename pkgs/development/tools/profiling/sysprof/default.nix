@@ -1,5 +1,5 @@
 { fetchurl, stdenv, binutils
-, pkgconfig, gtk, glib, pango, libglade }:
+, pkgconfig, gtk2, glib, pango, libglade }:
 
 stdenv.mkDerivation rec {
   name = "sysprof-1.2.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wb4d844rsy8qjg3z5m6rnfm72da4xwzrrkkb1q5r10sq1pkrw5s";
   };
 
-  buildInputs = [ binutils pkgconfig gtk glib pango libglade ];
+  buildInputs = [ binutils pkgconfig gtk2 glib pango libglade ];
 
   meta = {
     homepage = http://sysprof.com/;
@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
       do not need to be recompiled.  In fact they don't even have to
       be restarted.
     '';
+    platforms = stdenv.lib.platforms.linux;
   };
 }
