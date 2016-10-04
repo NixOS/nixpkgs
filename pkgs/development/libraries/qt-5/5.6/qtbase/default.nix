@@ -7,7 +7,7 @@
 , openssl, dbus, glib, udev, libxml2, libxslt, pcre16
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
-, coreutils, bison, flex, gdb, gperf, lndir, ruby
+, coreutils, bison, flex, gdb, gperf, lndir
 , patchelf, perl, pkgconfig, python
 
 # optional dependencies
@@ -180,7 +180,7 @@ stdenv.mkDerivation {
   ++ lib.optional mesaSupported mesa;
 
   buildInputs =
-    [ bison flex gperf ruby ]
+    [ bison flex gperf ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
@@ -213,7 +213,7 @@ stdenv.mkDerivation {
 
   postFixup =
     ''
-      # Don't retain build-time dependencies like gdb and ruby.
+      # Don't retain build-time dependencies like gdb.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
 
       # Move libtool archives and qmake projects
