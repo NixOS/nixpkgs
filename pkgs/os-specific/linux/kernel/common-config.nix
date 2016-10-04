@@ -253,10 +253,10 @@ with stdenv.lib;
   CIFS_POSIX? y
   CIFS_FSCACHE? y
   ${optionalString (versionAtLeast version "3.12") ''
-    CEPH_FSCACHE y
+    CEPH_FSCACHE? y
   ''}
   ${optionalString (versionAtLeast version "3.14") ''
-    CEPH_FS_POSIX_ACL y
+    CEPH_FS_POSIX_ACL? y
   ''}
   ${optionalString (versionAtLeast version "3.13") ''
     SQUASHFS_FILE_DIRECT y
