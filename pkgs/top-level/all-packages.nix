@@ -15667,6 +15667,8 @@ in
 
   tintin = callPackage ../games/tintin { };
 
+  tinyfugue = callPackage ../games/tinyfugue { };
+
   tome4 = callPackage ../games/tome4 { };
 
   trackballs = callPackage ../games/trackballs {
