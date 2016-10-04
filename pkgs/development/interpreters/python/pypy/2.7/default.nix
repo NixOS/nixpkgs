@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, xlibsWrapper, libX11
-, makeWrapper, callPackage, self, pypyPackages, gdbm, db }:
+, makeWrapper, callPackage, self, gdbm, db }:
 
 assert zlibSupport -> zlib != null;
 
@@ -119,10 +119,8 @@ let
       inherit zlibSupport libPrefix;
       executable = "pypy";
       isPypy = true;
-      buildEnv = callPackage ../../wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
       sitePackages = "site-packages";
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = pypyPackages; };
     };
 
     enableParallelBuilding = true;  # almost no parallelization without STM

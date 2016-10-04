@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, self, callPackage, python27Packages
+{ stdenv, fetchurl, self, callPackage
 , bzip2, openssl, gettext
 
 , includeModules ? false
@@ -8,6 +8,10 @@
 , tcl ? null, tk ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
 , zlib ? null, zlibSupport ? true
 , expat, libffi
+
+
+, pkgOverrides ? (self: super: {})
+, pkgs
 
 , CF, configd
 }:
@@ -159,13 +163,11 @@ let
       inherit zlibSupport;
       isPy2 = true;
       isPy27 = true;
-      buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
       libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       interpreter = "${self}/bin/${executable}";
-    };
+    } // (import ../../interpreter.nix {inherit stdenv pkgs; overrides=pkgOverrides; python=self;});
 
     enableParallelBuilding = true;
 
