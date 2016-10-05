@@ -8,7 +8,6 @@ assert versionAtLeast (getVersion ocpIndent) "1.4.2";
 
 let
   version = "1.1.4";
-  ocaml_version = getVersion ocaml;
   srcs = {
     "4.03.0" = {
       rev = "${version}-4.03";
@@ -27,7 +26,7 @@ let
   src = fetchFromGitHub ({
     owner = "OCamlPro";
     repo = "ocp-index";
-  } // srcs."${ocaml_version}");
+  } // srcs."${ocaml.version}");
 in
 
 stdenv.mkDerivation {

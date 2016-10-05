@@ -1,13 +1,12 @@
 { stdenv, fetchurl, ocaml, findlib, opam, xmlm, topkg }:
+
 let
   pname = "uucd";
-  version = "4.0.0";
   webpage = "http://erratique.ch/software/${pname}";
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 stdenv.mkDerivation rec {
-
   name = "ocaml-${pname}-${version}";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     opam-installer --script --prefix=$out ${pname}.install > install.sh
     sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml_version}/site-lib/
+    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/
   '';
 
   propagatedBuildInputs = [ xmlm ];

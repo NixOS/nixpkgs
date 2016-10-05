@@ -212,7 +212,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 - [ ] build time only dependencies are declared in `nativeBuildInputs`
 - [ ] source is fetched using the appropriate function
 - [ ] phases are respected
-- [ ] patches that are remotely available are fetched with `fetchPatch`
+- [ ] patches that are remotely available are fetched with `fetchpatch`
 
 ##### Possible improvements
 

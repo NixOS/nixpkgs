@@ -6,8 +6,6 @@ let
       packageSet = self:
         with self; let inherit (self) callPackage; in
   {
-    ocaml_version = self.ocaml.version; #TODO: remove all mentions of ocaml_version
-
     callPackage = newScope self;
 
     inherit ocaml;
@@ -37,7 +35,7 @@ let
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
 
     async_p4 =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/async { }
       else null;
 
@@ -53,26 +51,26 @@ let
     bitstring_git   = callPackage ../development/ocaml-modules/bitstring { };
 
     bitstring =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then bitstring_git
       else bitstring_2_0_4;
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
-      if lib.versionOlder "4.03" ocaml_version
+      if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/tools/ocaml/camlp4/4_03.nix { }
-      else if lib.versionOlder "4.02" ocaml_version
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/tools/ocaml/camlp4 { }
       else null;
 
     camlp5_old_strict =
-      if lib.versionOlder "4.00" ocaml_version
+      if lib.versionOlder "4.00" ocaml.version
       then camlp5_6_strict
       else callPackage ../development/tools/ocaml/camlp5/5.15.nix { };
 
     camlp5_old_transitional =
-      if lib.versionOlder "4.00" ocaml_version
+      if lib.versionOlder "4.00" ocaml.version
       then camlp5_6_transitional
       else callPackage ../development/tools/ocaml/camlp5/5.15.nix {
         transitional = true;
@@ -227,7 +225,7 @@ let
     };
 
     lablgtk-extras =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/lablgtk-extras { }
       else callPackage ../development/ocaml-modules/lablgtk-extras/1.4.nix { };
 
@@ -237,7 +235,7 @@ let
 
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { };
     lambdaTerm =
-      if lib.versionOlder "4.01" ocaml_version
+      if lib.versionOlder "4.01" ocaml.version
       then callPackage ../development/ocaml-modules/lambda-term { }
       else lambdaTerm-1_6;
 
@@ -274,7 +272,7 @@ let
     core_p4 = callPackage ../development/ocaml-modules/core { };
 
     ocamlbuild =
-    if lib.versionOlder "4.03" ocaml_version then
+    if lib.versionOlder "4.03" ocaml.version then
     callPackage ../development/tools/ocaml/ocamlbuild { }
     else
     null;
@@ -368,11 +366,11 @@ let
     type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
     type_conv_112_01_01 = callPackage ../development/ocaml-modules/type_conv/112.01.01.nix { };
     type_conv =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then type_conv_112_01_01
-      else if lib.versionOlder "4.00" ocaml_version
+      else if lib.versionOlder "4.00" ocaml.version
       then type_conv_109_60_01
-      else if lib.versionOlder "3.12" ocaml_version
+      else if lib.versionOlder "3.12" ocaml.version
       then type_conv_108_08_00
       else null;
 
@@ -381,11 +379,11 @@ let
     sexplib_112_24_01 = callPackage ../development/ocaml-modules/sexplib/112.24.01.nix { };
 
     sexplib_p4 =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then sexplib_112_24_01
-      else if lib.versionOlder "4.00" ocaml_version
+      else if lib.versionOlder "4.00" ocaml.version
       then sexplib_111_25_00
-      else if lib.versionOlder "3.12" ocaml_version
+      else if lib.versionOlder "3.12" ocaml.version
       then sexplib_108_08_00
       else null;
 
@@ -407,17 +405,17 @@ let
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
     ppx_blob =
-      if lib.versionAtLeast ocaml_version "4.02"
+      if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_blob {}
       else null;
 
     ppx_deriving =
-      if lib.versionAtLeast ocaml_version "4.02"
+      if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_deriving {}
       else null;
 
     ppx_tools =
-      if lib.versionAtLeast ocaml_version "4.02"
+      if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
       else null;
 
@@ -534,74 +532,74 @@ let
 
     # Core sublibs
     typerep =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/typerep.nix {}
       else typerep_p4;
 
     fieldslib =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {}
       else fieldslib_p4;
 
     sexplib =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
       else sexplib_p4;
 
     variantslib =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/variantslib.nix {}
       else variantslib_p4;
 
     bin_prot =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {}
       else bin_prot_p4;
 
     core_kernel =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {}
       else core_kernel_p4;
 
     core =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core.nix {}
       else core_p4;
 
     re2 =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/re2.nix {}
       else re2_p4;
 
     textutils =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/textutils.nix {}
       else textutils_p4;
 
     core_extended =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core-extended.nix {}
       else core_extended_p4;
 
     async_kernel =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-kernel.nix {}
       else async_kernel_p4;
 
     async_rpc_kernel = callPackage ../development/ocaml-modules/janestreet/async-rpc-kernel.nix {};
 
     async_unix =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-unix.nix {}
       else async_unix_p4;
 
     async_extra =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-extra.nix {}
       else async_extra_p4;
 
     async =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async.nix {}
       else async_p4;
 

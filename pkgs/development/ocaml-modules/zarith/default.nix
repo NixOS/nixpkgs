@@ -1,10 +1,6 @@
 { stdenv, fetchurl, ocaml, findlib, pkgconfig, gmp, perl }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
-assert stdenv.lib.versionAtLeast ocaml_version "3.12.1";
+assert stdenv.lib.versionAtLeast ocaml.version "3.12.1";
 
 stdenv.mkDerivation rec {
   name = "zarith-${version}";
@@ -22,9 +18,9 @@ stdenv.mkDerivation rec {
     substituteInPlace ./z_pp.pl --replace '/usr/bin/perl' '${perl}/bin/perl'
   '';
   configurePhase = ''
-    ./configure -installdir $out/lib/ocaml/${ocaml_version}/site-lib
+    ./configure -installdir $out/lib/ocaml/${ocaml.version}/site-lib
   '';
-  preInstall = "mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib";
+  preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib";
 
   meta = with stdenv.lib; {
     description = "Fast, arbitrary precision OCaml integers";

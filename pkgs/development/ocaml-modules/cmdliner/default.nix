@@ -2,15 +2,14 @@
 
 let
   pname = "cmdliner";
-  version = "0.9.8";
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
-assert stdenv.lib.versionAtLeast ocaml_version "3.12";
+assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
   name = "ocaml-${pname}-${version}";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "http://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
@@ -27,7 +26,7 @@ stdenv.mkDerivation {
   installPhase   = ''
     opam-installer --script --prefix=$out ${pname}.install > install.sh
     sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml_version}/site-lib/
+    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/
   '';
 
   meta = with stdenv.lib; {
