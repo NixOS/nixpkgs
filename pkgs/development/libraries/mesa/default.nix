@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, systemd
+, file, expat, libdrm, xorg, wayland, systemd, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
 , libelf, libvdpau, python2
 , grsecEnabled ? false
@@ -71,11 +71,13 @@ stdenv.mkDerivation {
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
     "--with-egl-platforms=x11,wayland,drm"
-    (optionalString (stdenv.system != "armv7l-linux")
-      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast")
-    (optionalString (stdenv.system != "armv7l-linux")
-      "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast")
-
+  ]
+    ++ optionals (stdenv.system != "armv7l-linux") [
+      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
+      "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
+      "--with-vulkan-drivers=intel"
+  ]
+    ++ [
     (enableFeature enableTextureFloats "texture-float")
     (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
@@ -112,7 +114,7 @@ stdenv.mkDerivation {
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC
-    libomxil-bellagio libva libpthreadstubs
+    libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
     (python2.withPackages (ps: [ ps.Mako ]))
   ] ++ optional stdenv.isLinux systemd;
 
@@ -134,8 +136,13 @@ stdenv.mkDerivation {
       $out/lib/vdpau         \
       $out/lib/bellagio      \
       $out/lib/libxatracker* \
+      $out/lib/libvulkan_* \
+
+    # move share/vulkan/icd.d/
+    mv $out/share/ $drivers/
 
     mv $out/lib/dri/* $drivers/lib/dri
+    rmdir "$out/lib/dri"
 
     # move libOSMesa to $osmesa, as it's relatively big
     mkdir -p {$osmesa,$drivers}/lib/
