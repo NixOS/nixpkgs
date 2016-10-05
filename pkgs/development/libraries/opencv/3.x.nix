@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, unzip
-, zlib
+{ lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, cmake, pkgconfig, unzip
+, zlib, bzip2
 , enableIpp ? false
 , enableContrib ? false
 , enablePython ? false, pythonPackages
@@ -14,6 +14,7 @@
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? false, eigen
+, darwin
 }:
 
 let
@@ -58,6 +59,8 @@ stdenv.mkDerivation rec {
       ''
         mkdir -p $(dirname ${ippicvArchive})
         ln -s ${ippicv}    ${ippicvArchive}
+      '' + lib.optionalString stdenv.isDarwin ''
+        sed -i "s|    INSTALL_NAME_DIR lib|    INSTALL_NAME_DIR $out/lib|" ./cmake/OpenCVModule.cmake
       '';
 
   buildInputs =
@@ -74,13 +77,26 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
+    ++ lib.optional enableContrib bzip2
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkgconfig unzip ] ++
+    lib.optionals stdenv.isDarwin
+                  (with darwin.apple_sdk.frameworks;
+                   [AVFoundation OpenCL QuartzCore QTKit AppKit Cocoa
+                    VideoDecodeAcceleration]);
 
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+
+  # Address a bug that causes highgui applications built with
+  # OpenCV-3.1 to eventually crash on darwin.
+  patches = lib.optional stdenv.isDarwin
+    (fetchpatch {
+       url = https://github.com/opencv/opencv/commit/a2bda999211e8be9fbc5d40038fdfc9399de31fc.patch;
+       sha256 = "1dmq6gqsy1rzf57acr6kn4xy03vdmmk9b9kn1s0sv5ck9kgc2rfl";
+  });
 
   cmakeFlags = [
     "-DWITH_IPP=${if enableIpp then "ON" else "OFF"}"
@@ -90,7 +106,12 @@ stdenv.mkDerivation rec {
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
-  ] ++ lib.optionals enableContrib [ "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules" ];
+  ] ++ lib.optionals enableContrib [ "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules"
+  ] ++ lib.optionals stdenv.isDarwin [
+     "-DWITH_QT=OFF" "-DWITH_QUICKTIME=OFF" "-DWITH_AVFOUNDATION=ON"
+     "-DBUILD_ZLIB=OFF" "-DBUILD_TIFF=OFF" "-DBUILD_JASPER=OFF"
+     "-DBUILD_JPEG=OFF" "-DBUILD_PNG=OFF" "-DBUILD_OPENEXR=OFF"
+  ];
 
   enableParallelBuilding = true;
 
@@ -103,6 +124,6 @@ stdenv.mkDerivation rec {
     homepage = http://opencv.org/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [viric flosse];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }
