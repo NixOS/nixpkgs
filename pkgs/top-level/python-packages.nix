@@ -22270,10 +22270,10 @@ in modules // {
   };
 
   scipy_0_18 = self.buildScipyPackage rec {
-    version = "0.18.0";
+    version = "0.18.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-      sha256 = "f01784fb1c2bc246d4211f2482ecf4369db5abaecb9d5afb9d94f6c59663286a";
+      sha256 = "8ab6e9c808bf2fb3e8576cd8cf07226d9cdc18b012c06d9708429a821ac6634e";
     };
     numpy = self.numpy;
   };
