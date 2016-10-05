@@ -27941,11 +27941,11 @@ in modules // {
 
   uncertainties = buildPythonPackage rec {
     name = "uncertainties-${version}";
-    version = "2.4.8.1";
+    version = "3.0.1";
 
     src = pkgs.fetchurl {
-       url = "https://github.com/lebigot/uncertainties/archive/${version}.tar.gz";
-       sha256 = "1j5z0h5l3plsywsmwjpaggkr6rn5cjxw0lhkwgl6a8a25f8bz4pz";
+       url = "mirror://pypi/u/uncertainties/${name}.tar.gz";
+       sha256 = "de0765cac6911e5afa93ee941063a07b4a98dbd9c314c5eea4ab14bfff0054a4";
     };
 
     buildInputs = with self; [ nose numpy ];
