@@ -14857,30 +14857,6 @@ in modules // {
     };
   };
 
-
-  netlib = buildPythonPackage rec {
-    baseName = "netlib";
-    name = "${baseName}-${version}";
-    disabled = (!isPy27);
-    version = "0.14.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/netlib/${name}.tar.gz";
-      sha256 = "0xcfjym780wjr32p3g50w2gifqy3589898idzd3fwgj93akv04ng";
-    };
-
-    propagatedBuildInputs = with self; [ pyopenssl pyasn1 certifi passlib
-      ipaddress backports_ssl_match_hostname_3_4_0_2 hpack ];
-
-    doCheck = false;
-
-    meta = {
-      description = "Man-in-the-middle proxy";
-      homepage = "https://github.com/cortesi/netlib";
-      license = licenses.mit;
-    };
-  };
-
   nevow = buildPythonPackage (rec {
     name = "nevow-${version}";
     version = "0.11.1";
