@@ -12745,12 +12745,12 @@ in modules // {
   };
 
   jupyter_client = buildPythonPackage rec {
-    version = "4.3.0";
+    version = "4.4.0";
     name = "jupyter_client-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_client/${name}.tar.gz";
-      sha256 = "70b2e88403835a1d54b83858783d9e5e5771fa4bb6f6904e0b5bb8cfde4b99dd";
+      sha256 = "c99a52fac2e5b7a3b714e9252ebf72cbf97536d556ae2b5082baccc3e5cd52ee";
     };
 
     buildInputs = with self; [ nose ];
