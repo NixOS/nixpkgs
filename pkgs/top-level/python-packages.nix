@@ -9220,12 +9220,12 @@ in modules // {
 
   django_1_10 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.10.1";
+    version = "1.10.2";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-      sha256 = "1wr438yykg0m5s9xini36hc826di55jm6by8syplczxnbjrcbrnn";
+      sha256 = "1qdwgkwlq5wl0wn247d9gid49xpz4qggk0lcdqxq8d7v1cmg29z1";
     };
 
     patches = [
