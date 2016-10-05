@@ -14,7 +14,7 @@ let
           --replace "DESTINATION \''${LXQT_ETC_XDG_DIR}" "DESTINATION etc/xdg" \
           --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
           --replace "DESTINATION \"\''${LXQT_SHARE_DIR}" "DESTINATION \"share/lxqt" \
-          --replace "DESTINATION \"\''${LXQT_GRAPHICS_DIR}" "DESTINATION \"share/lxqt/graphhics" \
+          --replace "DESTINATION \"\''${LXQT_GRAPHICS_DIR}" "DESTINATION \"share/lxqt/graphics" \
           --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"lib/qt5/plugins" \
           --replace "\''${LXQT_TRANSLATIONS_DIR}" share/lxqt/translations
         echo ============================
