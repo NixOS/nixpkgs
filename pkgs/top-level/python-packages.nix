@@ -12459,16 +12459,16 @@ in modules // {
 
 
   ipywidgets = buildPythonPackage rec {
-    version = "4.1.1";
+    version = "5.2.2";
     name = "ipywidgets-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipywidgets/${name}.tar.gz";
-      sha256 = "ceeb325e45ade9537c2d115fed9d522e5c6e90bb161592e2f0807375dc661028";
+      sha256 = "baf6098f054dd5eacc2934b8ea3bef908b81ca8660d839f1f940255a72c660d2";
     };
 
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook];
+    propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook widgetsnbextension ];
 
     meta = {
       description = "IPython HTML widgets for Jupyter";
