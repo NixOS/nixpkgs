@@ -21,12 +21,10 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin garbas ];
     platforms = platforms.linux;
     license = licenses.gpl2;
-  };
-
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://vifm.sf.net";
-    };
+    downloadPage = "http://vifm.info/downloads.shtml";
+    homepage = "http://vifm.info/";
+    inherit version;
+    updateWalker = true;
   };
 }
 

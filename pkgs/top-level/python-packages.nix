@@ -889,13 +889,13 @@ in modules // {
   };
 
   ansible2 = buildPythonPackage rec {
-    version = "2.1.1.0";
+    version = "2.1.2.0";
     name = "ansible-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "12v7smivjz8d2skk5qxl83nmkxqxypjm8b7ld40sjfwj4g0kkrv1";
+      sha256 = "1sr12ryn2dc28009bkfl6f8rp94ychbr9i7wlf6an1bw76ysfdww";
     };
 
     prePatch = ''
@@ -7387,6 +7387,26 @@ in modules // {
     meta = with stdenv.lib; {
       description = "A python wrapper for the various Internet Archive APIs";
       homepage = "https://github.com/jjjake/internetarchive";
+    };
+  };
+
+  jsbeautifier = buildPythonApplication rec {
+    name = "jsbeautifier-1.6.4";
+
+    propagatedBuildInputs = with self; [ six ];
+
+    buildInputs = with self; [ EditorConfig pytest six ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jsbeautifier/${name}.tar.gz";
+      sha256 = "074n8f4ncz5pf0jkkf6i6by30qnaj5208sszaf9p86kgdigcdaf8";
+    };
+
+    meta = {
+      homepage    = "http://jsbeautifier.org";
+      description = "JavaScript unobfuscator and beautifier.";
+      license     = stdenv.lib.licenses.mit;
+      maintainers = with maintainers; [ apeyroux ];
     };
   };
 

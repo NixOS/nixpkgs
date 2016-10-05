@@ -1682,6 +1682,8 @@ in
 
   fprint_demo = callPackage ../tools/security/fprint_demo { };
 
+  franz = callPackage ../applications/networking/instant-messengers/franz { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk { };
@@ -1768,6 +1770,8 @@ in
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
 
   gengetopt = callPackage ../development/tools/misc/gengetopt { };
+
+  geteltorito = callPackage ../tools/misc/geteltorito { };
 
   getmail = callPackage ../tools/networking/getmail { };
 
@@ -3351,6 +3355,8 @@ in
   radamsa = callPackage ../tools/security/radamsa { };
 
   radvd = callPackage ../tools/networking/radvd { };
+
+  rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
   ranger = callPackage ../applications/misc/ranger { };
 
@@ -10766,20 +10772,7 @@ in
       ];
   };
 
-  linux_4_8 = callPackage ../os-specific/linux/kernel/linux-4.8.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # !!! 4.7 patch doesn't apply, 4.8 patch not up yet, will keep checking
-        # kernelPatches.cpu-cgroup-v2."4.7"
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
+  /* See https://github.com/NixOS/nixpkgs/issues/19213 before adding Linux 4.8 */
 
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
@@ -10938,7 +10931,7 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_8;
+  linuxPackages_latest = linuxPackages_4_7;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -10951,7 +10944,6 @@ in
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4 linuxPackages_4_4);
   linuxPackages_4_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_7 linuxPackages_4_7);
-  linuxPackages_4_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_8 linuxPackages_4_8);
   # Don't forget to update linuxPackages_latest!
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.

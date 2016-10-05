@@ -97,7 +97,9 @@ pkgs.stdenv.mkDerivation {
 
     cp -r $dst/images $dst/epub/OEBPS
     echo "application/epub+zip" > mimetype
-    zip -0Xq  "$dst/Nixpkgs Contributors Guide - NixOS community.epub" mimetype
-    zip -Xr9D "$dst/Nixpkgs Contributors Guide - NixOS community.epub" $dst/epub/*
+    manual="$dst/nixpkgs-manual.epub"
+    zip -0Xq "$manual" mimetype
+    cd $dst/epub && zip -Xr9D "$manual" *
+    rm -rf $dst/epub
   '';
 }
