@@ -72,7 +72,7 @@
             <term><varname>emacs25-nox</varname></term>
             <listitem>
               <para>
-                Emacs 24 built without any dependency on X11
+                Emacs 25 built without any dependency on X11
                 libraries.
               </para>
             </listitem>
