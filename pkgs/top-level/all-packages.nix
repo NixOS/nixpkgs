@@ -857,6 +857,8 @@ in
 
   interlock = callPackage ../servers/interlock {};
 
+  languagetool = callPackage ../tools/text/languagetool {  };
+
   long-shebang = callPackage ../misc/long-shebang {};
 
   mathics = pythonPackages.mathics;
