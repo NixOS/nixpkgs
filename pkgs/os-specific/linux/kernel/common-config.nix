@@ -395,7 +395,7 @@ with stdenv.lib;
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
-  RT_GROUP_SCHED? y
+  RT_GROUP_SCHED n
   CGROUP_DEVICE? y
   MEMCG y
   MEMCG_SWAP y
