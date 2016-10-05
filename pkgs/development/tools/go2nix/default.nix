@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "go2nix-${version}";
-  version = "0.1.0";
+  version = "1.1.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/kamilchm/go2nix";
@@ -12,10 +12,10 @@ buildGoPackage rec {
     inherit rev;
     owner = "kamilchm";
     repo = "go2nix";
-    sha256 = "10nz7gva3n6wk01wphrjjb31sy33kf9ji03zr849x21a669fnmjf";
+    sha256 = "1idxgn9yf8shw4mq4d7rhf8fvb2s1lli4r4ck0h8ddf1s9q8p63s";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   buildInputs = [ go-bindata goimports makeWrapper ];
   preBuild = ''go generate ./...'';
@@ -27,4 +27,11 @@ buildGoPackage rec {
   '';
 
   allowGoReference = true;
+
+  meta = with stdenv.lib; {
+    description = "Go apps packaging for Nix";
+    homepage = https://github.com/kamilchm/go2nix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamilchm ];
+  };
 }

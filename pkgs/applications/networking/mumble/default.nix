@@ -37,6 +37,7 @@ let
       "CONFIG+=no-bundled-speex"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
+      ++ optional (!iceSupport) "CONFIG+=no-ice"
       ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
@@ -103,7 +104,7 @@ let
       "CONFIG+=no-client"
     ];
 
-    buildInputs = [ libcap ] ++ optional iceSupport [ zeroc_ice ];
+    buildInputs = [ libcap ] ++ optional iceSupport zeroc_ice;
   };
 
   stableSource = rec {

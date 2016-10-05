@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     arpack fftw fftwSinglePrec gmp libgit2 libunwind llvmShared mpfr
-    pcre2 openblas openlibm openspecfun readline suitesparse utf8proc
+    pcre2.dev openblas openlibm openspecfun readline suitesparse utf8proc
     zlib
   ] ++
     stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices] ;
@@ -121,6 +121,8 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_OPENSPECFUN=1"
       "USE_SYSTEM_PATCHELF=1"
       "USE_SYSTEM_PCRE=1"
+      "PCRE_CONFIG=${pcre2.dev}/bin/pcre2-config"
+      "PCRE_INCL_PATH=${pcre2.dev}/include/pcre2.h"
       "USE_SYSTEM_READLINE=1"
       "USE_SYSTEM_UTF8PROC=1"
       "USE_SYSTEM_ZLIB=1"

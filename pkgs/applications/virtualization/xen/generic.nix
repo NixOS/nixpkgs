@@ -2,7 +2,7 @@
 , libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2
 , lvm2, utillinux, procps, texinfo, perl, pythonPackages
 , glib, bridge-utils, xorg, pixman, iproute, udev, bison
-, flex, cmake, ocaml, ocamlPackages, figlet, libaio, yajl
+, flex, cmake, ocamlPackages, figlet, libaio, yajl
 , checkpolicy, transfig, glusterfs, acl, fetchgit, xz, spice
 , spice_protocol, usbredir, alsaLib, quilt
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       dev86 iasl pciutils bzip2 xz texinfo perl yajl
       pythonPackages.python pythonPackages.wrapPython
       glib bridge-utils pixman iproute udev bison xorg.libX11
-      flex ocaml ocamlPackages.findlib figlet libaio
+      flex ocamlPackages.ocaml ocamlPackages.findlib figlet libaio
       checkpolicy pythonPackages.markdown transfig
       glusterfs acl cmake spice spice_protocol usbredir
       alsaLib quilt

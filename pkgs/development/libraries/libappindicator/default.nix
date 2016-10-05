@@ -5,13 +5,15 @@
 , glib, dbus_glib, gtkVersion
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, python, pygobject2, pygtk, gobjectIntrospection, vala_0_23
+, pythonPackages, gobjectIntrospection, vala_0_23
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
 with lib;
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygobject2 pygtk;
+in stdenv.mkDerivation rec {
   name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libappindicator-${postfix}-${version}";
   version = "${versionMajor}.${versionMinor}";

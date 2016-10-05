@@ -56,7 +56,7 @@ let
     };
 
   importGodeps = { depsFile }:
-    map dep2src (lib.importJSON depsFile);
+    map dep2src (import depsFile);
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
@@ -178,6 +178,16 @@ go.stdenv.mkDerivation (
       mv $file.tmp $file
       chmod +x $file
     done < <(find $bin/bin -type f 2>/dev/null)
+  '';
+
+  shellHook = ''
+    d=$(mktemp -d "--suffix=-$name")
+  '' + toString (map (dep: ''
+     mkdir -p "$d/src/$(dirname "${dep.goPackagePath}")"
+     ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
+  ''
+  ) goPath) + ''
+    export GOPATH="$d:$GOPATH"
   '';
 
   disallowedReferences = lib.optional (!allowGoReference) go

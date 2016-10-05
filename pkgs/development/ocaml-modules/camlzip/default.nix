@@ -1,9 +1,8 @@
 {stdenv, fetchurl, zlib, ocaml, findlib}:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   param =
-    if stdenv.lib.versionAtLeast ocaml_version "4.02"
+    if stdenv.lib.versionAtLeast ocaml.version "4.02"
     then {
       version = "1.06";
       url = "1616";
@@ -45,7 +44,7 @@ stdenv.mkDerivation {
   inherit (param) installTargets;
 
   postInstall = ''
-    ln -s $out/lib/ocaml/${ocaml_version}/site-lib/{,caml}zip
+    ln -s $out/lib/ocaml/${ocaml.version}/site-lib/{,caml}zip
   '';
 
   meta = {

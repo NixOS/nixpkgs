@@ -14,7 +14,7 @@ let
   # files), segfault sometimes and consume significant resources.
   # They can be re-enabled in the KDE System Settings under "Desktop
   # Search".
-  nepomukConfig = pkgs.writeTextFile
+  disableNepomuk = pkgs.writeTextFile
     { name = "nepomuk-config";
       destination = "/share/config/nepomukserverrc";
       text =
@@ -69,6 +69,18 @@ in
         defaultText = "pkgs.kde4.kde_workspace";
         type = types.package;
         description = "Custom kde-workspace, used for NixOS rebranding.";
+      };
+
+      enablePIM = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to enable PIM support. Note that enabling this pulls in Akonadi and MariaDB as dependencies.";
+      };
+
+      enableNepomuk = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable Nepomuk (deprecated).";
       };
     };
   };
@@ -138,7 +150,6 @@ in
 
           pkgs.kde4.kde_wallpapers # contains kdm's default background
           pkgs.kde4.oxygen_icons
-          pkgs.virtuoso # to enable Nepomuk to find Virtuoso
 
           # Starts KDE's Polkit authentication agent.
           pkgs.kde4.polkit_kde_agent
@@ -149,20 +160,26 @@ in
           xorg.xmessage # so that startkde can show error messages
           xorg.xset # used by startkde, non-essential
           xorg.xauth # used by kdesu
-          pkgs.shared_desktop_ontologies # used by nepomuk
-          pkgs.strigi # used by nepomuk
+        ]
+      ++ optionals cfg.enablePIM
+        [ pkgs.kde4.kdepim_runtime
           pkgs.kde4.akonadi
           pkgs.mysql # used by akonadi
-          pkgs.kde4.kdepim_runtime
         ]
-      ++ lib.optional config.hardware.pulseaudio.enable pkgs.kde4.kmix  # Perhaps this should always be enabled
-      ++ lib.optional config.hardware.bluetooth.enable pkgs.kde4.bluedevil
-      ++ lib.optional config.networking.networkmanager.enable pkgs.kde4.plasma-nm
-      ++ [ nepomukConfig ] ++ phononBackendPackages;
+      ++ (if cfg.enableNepomuk then
+        [ pkgs.shared_desktop_ontologies # used by nepomuk
+          pkgs.strigi # used by nepomuk
+          pkgs.virtuoso # to enable Nepomuk to find Virtuoso
+        ] else
+        [ disableNepomuk ])
+      ++ optional config.hardware.pulseaudio.enable pkgs.kde4.kmix  # Perhaps this should always be enabled
+      ++ optional config.hardware.bluetooth.enable pkgs.kde4.bluedevil
+      ++ optional config.networking.networkmanager.enable pkgs.kde4.plasma-nm
+      ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
 
-    environment.profileRelativeEnvVars = mkIf (lib.elem "gstreamer" cfg.phononBackends) {
+    environment.profileRelativeEnvVars = mkIf (elem "gstreamer" cfg.phononBackends) {
       GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
     };
 

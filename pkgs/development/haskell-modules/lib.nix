@@ -62,6 +62,8 @@ rec {
   doHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = true; });
   dontHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = false; });
 
+  disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
+
   sdistTarball = pkg: pkgs.lib.overrideDerivation pkg (drv: {
     name = "${drv.pname}-source-${drv.version}";
     buildPhase = "./Setup sdist";

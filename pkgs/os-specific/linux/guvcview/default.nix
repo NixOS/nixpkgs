@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       portaudio
       udev
       gsl
-    ] ++ stdenv.lib.optional pulseaudioSupport [ libpulseaudio ];
+    ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   meta = {
     description = "A simple interface for devices supported by the linux UVC driver";

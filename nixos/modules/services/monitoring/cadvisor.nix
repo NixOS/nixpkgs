@@ -90,6 +90,7 @@ in {
             ${optionalString cfg.storageDriverSecure "-storage_driver_secure"}
           ''}
         '';
+        TimeoutStartSec=300;
       };
     };
 

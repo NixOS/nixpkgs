@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, python3, makeWrapper, pygtk
-, webkit, glib_networking, gsettings_desktop_schemas, pythonPackages
+{ stdenv, fetchurl, pkgconfig, python3, makeWrapper
+, webkit, glib_networking, gsettings_desktop_schemas, python2Packages
 }:
 # This package needs python3 during buildtime,
 # but Python 2 + packages during runtime.
@@ -40,5 +40,5 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig python3 makeWrapper ];
 
   buildInputs = [ gsettings_desktop_schemas webkit ];
-  propagatedBuildInputs = [ pygtk pythonPackages.six ];
+  propagatedBuildInputs = with python2Packages; [ pygtk six ];
 }

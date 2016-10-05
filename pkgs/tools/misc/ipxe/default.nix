@@ -1,22 +1,20 @@
-{ stdenv, fetchgit, perl, cdrkit, syslinux }:
+{ stdenv, fetchgit, perl, cdrkit, syslinux, xz, openssl }:
 
 let
-  date = "20141124";
-  rev = "5cbdc41778622c07429e00f5aee383b575532bf0";
+  date = "20160831";
+  rev = "827dd1bfee67daa683935ce65316f7e0f057fe1c";
 in
 
 stdenv.mkDerivation {
   name = "ipxe-${date}-${builtins.substring 0 7 rev}";
 
-  buildInputs = [ perl cdrkit syslinux ];
+  buildInputs = [ perl cdrkit syslinux xz openssl ];
 
   src = fetchgit {
     url = git://git.ipxe.org/ipxe.git;
-    sha256 = "0wiy3kag6x8a2a71pc9za9izmac8gdz90vaqp2mwgih6p2lz01zq";
+    sha256 = "11w8b0vln3skfn8r1cvzngslz12njdkwmnacyq3qffb96k2dn2ww";
     inherit rev;
   };
-
-  preConfigure = "cd src";
 
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
@@ -28,11 +26,17 @@ stdenv.mkDerivation {
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
     ];
 
-  installPhase =
-    ''
-      mkdir $out
-      cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
-    '';
+
+  configurePhase = ''
+    echo "#define  DOWNLOAD_PROTO_HTTPS" >> src/config/general.h
+  '';
+
+  preBuild = "cd src";
+
+  installPhase = ''
+    mkdir -p $out
+    cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
+  '';
 
   meta = with stdenv.lib;
     { description = "Network boot firmware";

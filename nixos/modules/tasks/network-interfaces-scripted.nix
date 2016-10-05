@@ -54,16 +54,22 @@ in
         networkSetup =
           { description = "Networking Setup";
 
-            after = [ "network-interfaces.target" "network-pre.target" ];
-            before = [ "network.target" ];
-            wantedBy = [ "network.target" ];
+            after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
+            before = [ "network.target" "shutdown.target" ];
+            wants = [ "network.target" ];
+            conflicts = [ "shutdown.target" ];
+            wantedBy = [ "multi-user.target" ];
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
             path = [ pkgs.iproute ];
 
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = true;
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+
+            unitConfig.DefaultDependencies = false;
 
             script =
               ''
@@ -108,8 +114,12 @@ in
           in
           nameValuePair "network-addresses-${i.name}"
           { description = "Address configuration of ${i.name}";
-            wantedBy = [ "network-interfaces.target" ];
-            before = [ "network-interfaces.target" ];
+            wantedBy = [ "network-setup.service" ];
+            # propagate stop and reload from network-setup
+            partOf = [ "network-setup.service" ];
+            # order before network-setup because the routes that are configured
+            # there may need ip addresses configured
+            before = [ "network-setup.service" ];
             bindsTo = [ (subsystemDevice i.name) ];
             after = [ (subsystemDevice i.name) "network-pre.target" ];
             serviceConfig.Type = "oneshot";
@@ -129,20 +139,11 @@ in
                   echo "checking ip ${address}..."
                   if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
                     echo "added ip ${address}..."
-                    restart_network_setup=true
                   elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
                     echo "failed to add ${address}"
                     exit 1
                   fi
-                '')
-              + optionalString (ips != [ ])
-                ''
-                  if [ "$restart_network_setup" = "true" ]; then
-                    # Ensure that the default gateway remains set.
-                    # (Flushing this interface may have removed it.)
-                    ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
-                  fi
-                '';
+                '');
             preStop = flip concatMapStrings (ips) (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
@@ -156,10 +157,11 @@ in
 
         createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
-            requires = [ "dev-net-tun.device" ];
+            bindsTo = [ "dev-net-tun.device" ];
             after = [ "dev-net-tun.device" "network-pre.target" ];
-            wantedBy = [ "network.target" (subsystemDevice i.name) ];
-            before = [ "network-interfaces.target" (subsystemDevice i.name) ];
+            wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
+            partOf = [ "network-setup.service" ];
+            before = [ "network-setup.service" (subsystemDevice i.name) ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";
@@ -180,12 +182,12 @@ in
             deps = map subsystemDevice v.interfaces;
           in
           { description = "Bridge Interface ${n}";
-            wantedBy = [ "network.target" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps ++ optional v.rstp "mstpd.service";
-            partOf = optional v.rstp "mstpd.service";
+            partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
             after = [ "network-pre.target" "mstpd.service" ] ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-interfaces.target" (subsystemDevice n) ];
+            before = [ "network-setup.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -222,11 +224,11 @@ in
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
-            wantedBy = [ "network.target" "vswitchd.service" ] ++ deps;
+            wantedBy = [ "network-setup.service" "vswitchd.service" ] ++ deps;
             bindsTo =  [ "vswitchd.service" (subsystemDevice n) ] ++ deps;
-            partOf = [ "vswitchd.service" ];
+            partOf = [ "network-setup.service" "vswitchd.service" ];
             after = [ "network-pre.target" "vswitchd.service" ] ++ deps;
-            before = [ "network-interfaces.target" ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute config.virtualisation.vswitch.package ];
@@ -254,11 +256,12 @@ in
             deps = map subsystemDevice v.interfaces;
           in
           { description = "Bond Interface ${n}";
-            wantedBy = [ "network.target" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
+            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-interfaces.target" (subsystemDevice n) ];
+            before = [ "network-setup.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute pkgs.gawk ];
@@ -291,10 +294,11 @@ in
             deps = [ (subsystemDevice v.interface) ];
           in
           { description = "Vlan Interface ${n}";
-            wantedBy = [ "network.target" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
+            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-interfaces.target" (subsystemDevice n) ];
+            before = [ "network-setup.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -315,10 +319,11 @@ in
             deps = optional (v.dev != null) (subsystemDevice v.dev);
           in
           { description = "6-to-4 Tunnel Interface ${n}";
-            wantedBy = [ "network.target" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
+            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-interfaces.target" (subsystemDevice n) ];
+            before = [ "network-setup.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -342,10 +347,11 @@ in
             deps = [ (subsystemDevice v.interface) ];
           in
           { description = "Vlan Interface ${n}";
-            wantedBy = [ "network.target" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
+            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-interfaces.target" (subsystemDevice n) ];
+            before = [ "network-setup.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];

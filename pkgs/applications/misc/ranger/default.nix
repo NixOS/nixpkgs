@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication, python, w3m, file }:
+{ stdenv, fetchurl, pythonPackages, w3m, file, less }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "ranger-1.7.2";
 
   meta = {
@@ -15,11 +15,13 @@ buildPythonApplication rec {
     sha256 = "0yaviybviwdvfg2a0pf2kk28g10k245499xmbpqlai7fv91f7xll";
   };
 
-  propagatedBuildInputs = [ python.modules.curses file ];
+  propagatedBuildInputs = [ pythonPackages.python.modules.curses file ];
 
   preConfigure = ''
     substituteInPlace ranger/ext/img_display.py \
       --replace /usr/lib/w3m ${w3m}/libexec/w3m
+    substituteInPlace ranger/__init__.py \
+      --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${stdenv.lib.getBin less}/bin/less'"
 
     for i in ranger/config/rc.conf doc/config/rc.conf ; do
       substituteInPlace $i --replace /usr/share $out/share

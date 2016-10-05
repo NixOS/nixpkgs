@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
-{ fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
-, which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
-, vim_configurable, vimPlugins, xkb_switch, git, rustracerd, fzf
+{ fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
+, which, fetchgit, llvmPackages
+, xkb_switch, rustracerd, fzf
 , Cocoa ? null
 }:
 
@@ -80,7 +80,9 @@ rec {
   neosnippet          = neosnippet-vim;
   nerdcommenter       = The_NERD_Commenter;
   nerdtree            = The_NERD_tree;
+  polyglot            = vim-polyglot;
   quickrun            = vim-quickrun;
+  repeat              = vim-repeat;
   signature           = vim-signature;
   stylish-haskell     = vim-stylish-haskell;
   stylishHaskell      = stylish-haskell; # backwards compat, added 2014-10-18
@@ -92,6 +94,7 @@ rec {
   tmux-navigator      = vim-tmux-navigator;
   tmuxNavigator       = tmux-navigator; # backwards compat, added 2014-10-18
   tslime              = tslime-vim;
+  unite               = unite-vim;
   vimproc             = vimproc-vim;
   vimshell            = vimshell-vim;
   watchdogs           = vim-watchdogs;
@@ -101,7 +104,7 @@ rec {
 
   fzfWrapper = buildVimPluginFrom2Nix {
     name = fzf.name;
-    src = "${fzf}/share/go/src/github.com/junegunn/fzf";
+    src = fzf.src;
     dependencies = [];
   };
 
@@ -299,6 +302,23 @@ rec {
 
   };
 
+  ctrlp-cmatcher = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ctrlp-cmatcher-2016-09-22";
+    src = fetchgit {
+      url = "git://github.com/JazzCore/ctrlp-cmatcher";
+      rev = "6c36334f106b6fd981d23e724e9a618734cab43a";
+      sha256 = "1573kd6xf3n8sxlz2j4zadai4rnc7k3s9c54648yfzickwn57d8q";
+    };
+    dependencies = [];
+
+    buildInputs = [ python ];
+
+    buildPhase = ''
+      patchShebangs .
+      ./install.sh
+    '';
+  };
+
   ctrlp-z = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "ctrlp-z-2015-10-17";
     src = fetchgit {
@@ -492,6 +512,17 @@ rec {
       url = "git://github.com/eagletmt/neco-ghc";
       rev = "7f02a9c25fb272a87d2be092826e2cd3094c620d";
       sha256 = "1fcfk45qb96h6y4zb3p0104iyqc85q1synn9ah56zp6hnkkyffbw";
+    };
+    dependencies = [];
+
+  };
+
+  acp = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "acp-2013-02-05";
+    src = fetchgit {
+      url = "git://github.com/eikenb/acp";
+      rev = "5c627cec37d0d3b1670cb250d84e176e8b0c644e";
+      sha256 = "0h7s4nvxin7m2caka7g1hhlxj1bbiwsvw8s2lqwlh7nq43v23ghg";
     };
     dependencies = [];
 
@@ -838,6 +869,17 @@ rec {
 
   };
 
+  rainbow = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "rainbow-2016-08-08";
+    src = fetchgit {
+      url = "git://github.com/luochen1990/rainbow";
+      rev = "eeb35ccece20f2648b44580c484c6e57eec3c92b";
+      sha256 = "0s1ygjm5czzj1idrw4f13gg60zljznb6bs7fps4i3wl2mbmw5641";
+    };
+    dependencies = [];
+
+  };
+
   vim-xkbswitch = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-xkbswitch-2016-01-31";
     src = fetchgit {
@@ -1141,6 +1183,17 @@ rec {
       url = "git://github.com/tpope/vim-eunuch";
       rev = "5ee2b82b565e6c6d80f1cb7735c78f66a159b198";
       sha256 = "108v98qy49w2pgzndmqc9nydmsql2bnbcc849wshvkxgca349ixc";
+    };
+    dependencies = [];
+
+  };
+
+  vim-repeat = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-repeat-2015-05-09";
+    src = fetchgit {
+      url = "git://github.com/tpope/vim-repeat";
+      rev = "7a6675f092842c8f81e71d5345bd7cdbf3759415";
+      sha256 = "0p8g5y3vyl1765lj1r8jpc06l465f9bagivq6k8ndajbg049brl7";
     };
     dependencies = [];
 

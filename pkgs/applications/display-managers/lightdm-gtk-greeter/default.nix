@@ -18,6 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "031iv7zrpv27zsvahvfyrm75zdrh7591db56q89k8cjiiy600r1j";
   };
 
+  patches = [
+    (fetchurl {
+      name = "lightdm-gtk-greeter-2.0.1-lightdm-1.19.patch";
+      url = "https://588764.bugs.gentoo.org/attachment.cgi?id=442616";
+      sha256 = "0r383kjkvq9yanjc1lk878xc5g8993pjgxylqhhjb5rkpi1mbfsv";
+    })
+  ];
+
   buildInputs = [ pkgconfig lightdm intltool makeWrapper ]
     ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
 

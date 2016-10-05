@@ -20,13 +20,13 @@ assert buildKernel -> kernel != null && spl != null;
 stdenv.mkDerivation rec {
   name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
-  version = "0.6.5.7";
+  version = "0.6.5.8";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "zfs";
     rev = "zfs-${version}";
-    sha256 = "17mshxyp8k7i9a7ys0rznhkz83f6650pby9ka48d6gzgcwv9nnsm";
+    sha256 = "0qccz1832p3i80qlrrrypypspb9sy9hmpgcfx9vmhnqmkf0yri4a";
   };
 
   patches = [ ./nix-build.patch ];
@@ -109,6 +109,6 @@ stdenv.mkDerivation rec {
     homepage = http://zfsonlinux.org/;
     license = licenses.cddl;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming wizeman wkennington ];
+    maintainers = with maintainers; [ jcumming wizeman wkennington fpletz ];
   };
 }

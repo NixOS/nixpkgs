@@ -1,20 +1,20 @@
-{ stdenv, fetchzip, ocaml, oasis, findlib, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, ounit }:
 
-let version = "2.0.1"; in
+let version = "2.2"; in
 
 stdenv.mkDerivation {
   name = "ocaml-qtest-${version}";
   src = fetchzip {
     url = "https://github.com/vincent-hugot/iTeML/archive/v${version}.tar.gz";
-    sha256 = "00sir7q7z78s22w8fzrgw9gqm7r8ww0bgwqxrq6nsbbclgxj9c6i";
+    sha256 = "1k68z8kby1f9s5j9xbn9bz8yhk59aalffz8gj5d1y5zhyalifrlz";
   };
 
-  buildInputs = [ ocaml oasis findlib ];
+  buildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ ounit ];
 
-  buildPhase = "ocaml do.ml qtest build $out";
   createFindlibDestdir = true;
-  installPhase = "ocaml do.ml qtest install $out";
+  installFlags = [ "BIN=$(out)/bin" ];
+  preInstall = "mkdir -p $out/bin";
 
   meta = {
     description = "Inline (Unit) Tests for OCaml (formerly “qtest”)";

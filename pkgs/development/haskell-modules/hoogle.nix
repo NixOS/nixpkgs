@@ -23,7 +23,7 @@
 # This will build mmorph and monadControl, and have the hoogle installation
 # refer to their documentation via symlink so they are not garbage collected.
 
-{ lib, stdenv, hoogle, rehoo, writeText
+{ lib, stdenv, hoogle, writeText
 , ghc, packages ? [ ghc.ghc ]
 }:
 
@@ -54,7 +54,7 @@ let
 in
 stdenv.mkDerivation {
   name = "hoogle-local-0.1";
-  buildInputs = [hoogle rehoo];
+  buildInputs = [ghc hoogle];
 
   phases = [ "buildPhase" ];
 
@@ -68,22 +68,11 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/doc/hoogle
 
-    function import_dbs() {
-        find $1 -name '*.txt' | while read f; do
-          newname=$(basename "$f" | tr '[:upper:]' '[:lower:]')
-          if [[ -f $f && ! -f ./$newname ]]; then
-            cp -p $f "./$newname"
-            hoogle convert -d "$(dirname $f)" "./$newname"
-          fi
-        done
-    }
-
     echo importing builtin packages
     for docdir in ${ghc.doc}/${docLibGlob}/*; do
       name="$(basename $docdir)"
       ${opts isGhcjs ''docdir="$docdir/html"''}
       if [[ -d $docdir ]]; then
-        import_dbs $docdir
         ln -sfn $docdir $out/share/doc/hoogle/$name
       fi
     done
@@ -92,10 +81,9 @@ stdenv.mkDerivation {
     for i in $docPackages; do
       if [[ ! $i == $out ]]; then
         for docdir in $i/share/doc/*-${ghcName}-*/* $i/share/doc/*; do
-          name=`basename $docdir`
+          name="$(basename $docdir)"
           docdir=$docdir/html
           if [[ -d $docdir ]]; then
-            import_dbs $docdir
             ln -sfn $docdir $out/share/doc/hoogle/$name
           fi
         done
@@ -103,13 +91,7 @@ stdenv.mkDerivation {
     done
 
     echo building hoogle database
-    # FIXME: rehoo is marked as depricated on Hackage
-    chmod 644 *.hoo *.txt
-    rehoo -j$NIX_BUILD_CORES -c64 .
-
-    mv default.hoo .x
-    rm -fr downloads *.dep *.txt *.hoo
-    mv .x $out/share/doc/hoogle/default.hoo
+    hoogle generate --database $out/share/doc/hoogle/default.hoo --local=$out/share/doc/hoogle
 
     echo building haddock index
     # adapted from GHC's gen_contents_index

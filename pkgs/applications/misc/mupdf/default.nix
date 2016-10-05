@@ -18,15 +18,19 @@ stdenv.mkDerivation rec {
       url = "http://git.ghostscript.com/?p=mupdf.git;a=commitdiff_plain;h=39b0f07dd960f34e7e6bf230ffc3d87c41ef0f2e;hp=fa1936405b6a84e5c9bb440912c23d532772f958";
       sha256 = "1g9fkd1f5rx1z043vr9dj4934qf7i4nkvbwjc61my9azjrrc3jv7";
     })
+    (fetchpatch {
+      name = "mupdf-696941-fix-use-after-free.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=fa1936405b6a84e5c9bb440912c23d532772f958";
+      sha256 = "02j9b6my1h3rb0sz9yp6gi7c4ldi3mz0z9s5i8g9cl0arxyzys5h";
+    })
     # Compatibility with new openjpeg
     (fetchpatch {
-      name = "mupdf-1.5-openjpeg-2.1.0.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/mupdf-1.5-openjpeg-2.1.0.patch?h=packages/mupdf&id=ca5e3ef6c7788ccfb6011d785078bc47762f19e5";
-      sha256 = "0f18793q9fd22h3lclm8wahvc8az4v08an6lzy8mczrkl8mcgm3k";
+      name = "mupdf-1.9a-openjpeg-2.1.1.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/mupdf/trunk/0001-mupdf-openjpeg.patch?id=9083dac2a398bfe694d31a0c6a0a839c5a756e53";
+      sha256 = "14ndgy3w1sl25km9bcc2zfcxrcihqjw1sdzkpcw5g1mi7gcgxp3g";
     })
   ];
 
-  NIX_CFLAGS_COMPILE= [ "-fPIC" ];
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama freetype libjpeg jbig2dec openjpeg ];
@@ -78,7 +82,7 @@ stdenv.mkDerivation rec {
     repositories.git = git://git.ghostscript.com/mupdf.git;
     description = "Lightweight PDF viewer and toolkit written in portable C";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric vrthra ];
+    maintainers = with maintainers; [ viric vrthra fpletz ];
     platforms = platforms.linux;
   };
 }

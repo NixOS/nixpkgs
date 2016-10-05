@@ -1,14 +1,12 @@
 { stdenv, fetchurl, ocaml, findlib, camlp4 }:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.1";
   pname = "ulex";
-
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "1.1";
 
   src = fetchurl {
     url = "http://www.cduce.org/download/${pname}-${version}.tar.gz";

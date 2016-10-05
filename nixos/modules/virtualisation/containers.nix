@@ -12,21 +12,21 @@ let
         ''
         echo "Bringing ${name} up"
         ip link set dev ${name} up
-        ${optionalString (cfg . "localAddress" or null != null) ''
+        ${optionalString (cfg.localAddress != null) ''
           echo "Setting ip for ${name}"
-          ip addr add ${cfg . "localAddress"} dev ${name}
+          ip addr add ${cfg.localAddress} dev ${name}
         ''}
-        ${optionalString (cfg . "localAddress6" or null != null) ''
+        ${optionalString (cfg.localAddress6 != null) ''
           echo "Setting ip6 for ${name}"
-          ip -6 addr add ${cfg . "localAddress6"} dev ${name}
+          ip -6 addr add ${cfg.localAddress6} dev ${name}
         ''}
-        ${optionalString (cfg . "hostAddress" or null != null) ''
+        ${optionalString (cfg.hostAddress != null) ''
           echo "Setting route to host for ${name}"
-          ip route add ${cfg . "hostAddress"} dev ${name}
+          ip route add ${cfg.hostAddress} dev ${name}
         ''}
-        ${optionalString (cfg . "hostAddress6" or null != null) ''
+        ${optionalString (cfg.hostAddress6 != null) ''
           echo "Setting route6 to host for ${name}"
-          ip -6 route add ${cfg . "hostAddress6"} dev ${name}
+          ip -6 route add ${cfg.hostAddress6} dev ${name}
         ''}
         ''
         );
@@ -56,9 +56,7 @@ let
             ip -6 route add default via $HOST_ADDRESS6
           fi
 
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg . "extraVeths" or {})}
-          ip a
-          ip r
+          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
 
         # Start the regular stage 1 script.
@@ -67,7 +65,8 @@ let
     );
 
   nspawnExtraVethArgs = (name: cfg: "--network-veth-extra=${name}");
-  startScript = (cfg:
+
+  startScript = cfg:
     ''
       mkdir -p -m 0755 "$root/etc" "$root/var/lib"
       mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/containers
@@ -92,11 +91,7 @@ let
         fi
       fi
 
-      ${if cfg . "extraVeths" or null != null then
-        ''extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg . "extraVeths" or {})}"''
-        else
-          ''# No extra veth pairs to create''
-      }
+      extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)}"
 
       for iface in $INTERFACES; do
         extraFlags+=" --network-interface=$iface"
@@ -134,11 +129,13 @@ let
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv PATH="$PATH" \
+        ${if cfg.additionalCapabilities != null then
+          ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+        } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
-    ''
-    );
+    '';
 
-  preStartScript = (cfg:
+  preStartScript = cfg:
     ''
       # Clean up existing machined registration and interfaces.
       machinectl terminate "$INSTANCE" 2> /dev/null || true
@@ -151,45 +148,43 @@ let
       ${concatStringsSep "\n" (
         mapAttrsToList (name: cfg:
           ''ip link del dev ${name} 2> /dev/null || true ''
-        ) cfg . "extraVeths" or {}
+        ) cfg.extraVeths
       )}
-   ''
-    );
+   '';
+
   postStartScript = (cfg:
     let
-      ipcall = (cfg: ipcmd: variable: attribute:
-        if cfg . attribute or null == null then
+      ipcall = cfg: ipcmd: variable: attribute:
+        if cfg.${attribute} == null then
           ''
             if [ -n "${variable}" ]; then
               ${ipcmd} add ${variable} dev $ifaceHost
             fi
           ''
         else
-          ''${ipcmd} add ${cfg . attribute} dev $ifaceHost''
-        );
-      renderExtraVeth = (name: cfg:
-        if cfg . "hostBridge" or null != null then
+          ''${ipcmd} add ${cfg.${attribute}} dev $ifaceHost'';
+      renderExtraVeth = name: cfg:
+        if cfg.hostBridge != null then
           ''
             # Add ${name} to bridge ${cfg.hostBridge}
             ip link set dev ${name} master ${cfg.hostBridge} up
           ''
         else
           ''
-          # Set IPs and routes for ${name}
-          ${optionalString (cfg . "hostAddress" or null != null) ''
-            ip addr add ${cfg . "hostAddress"} dev ${name}
-          ''}
-          ${optionalString (cfg . "hostAddress6" or null != null) ''
-            ip -6 addr add ${cfg . "hostAddress6"} dev ${name}
-          ''}
-          ${optionalString (cfg . "localAddress" or null != null) ''
-            ip route add ${cfg . "localAddress"} dev ${name}
-          ''}
-          ${optionalString (cfg . "localAddress6" or null != null) ''
-            ip -6 route add ${cfg . "localAddress6"} dev ${name}
-          ''}
-          ''
-        );
+            # Set IPs and routes for ${name}
+            ${optionalString (cfg.hostAddress != null) ''
+              ip addr add ${cfg.hostAddress} dev ${name}
+            ''}
+            ${optionalString (cfg.hostAddress6 != null) ''
+              ip -6 addr add ${cfg.hostAddress6} dev ${name}
+            ''}
+            ${optionalString (cfg.localAddress != null) ''
+              ip route add ${cfg.localAddress} dev ${name}
+            ''}
+            ${optionalString (cfg.localAddress6 != null) ''
+              ip -6 route add ${cfg.localAddress6} dev ${name}
+            ''}
+          '';
     in
       ''
         if [ "$PRIVATE_NETWORK" = 1 ]; then
@@ -202,7 +197,7 @@ let
             ${ipcall cfg "ip route" "$LOCAL_ADDRESS" "localAddress"}
             ${ipcall cfg "ip -6 route" "$LOCAL_ADDRESS6" "localAddress6"}
           fi
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg . "extraVeths" or {})}
+          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
 
         # Get the leader PID so that we can signal it in
@@ -212,6 +207,41 @@ let
         machinectl show "$INSTANCE" | sed 's/Leader=\(.*\)/\1/;t;d' > "/run/containers/$INSTANCE.pid"
       ''
   );
+
+  serviceDirectives = cfg: {
+    ExecReload = pkgs.writeScript "reload-container"
+      ''
+        #! ${pkgs.stdenv.shell} -e
+        ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
+          bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
+      '';
+
+    SyslogIdentifier = "container %i";
+
+    EnvironmentFile = "-/etc/containers/%i.conf";
+
+    Type = "notify";
+
+    # Note that on reboot, systemd-nspawn returns 133, so this
+    # unit will be restarted. On poweroff, it returns 0, so the
+    # unit won't be restarted.
+    RestartForceExitStatus = "133";
+    SuccessExitStatus = "133";
+
+    Restart = "on-failure";
+
+    # Hack: we don't want to kill systemd-nspawn, since we call
+    # "machinectl poweroff" in preStop to shut down the
+    # container cleanly. But systemd requires sending a signal
+    # (at least if we want remaining processes to be killed
+    # after the timeout). So send an ignored signal.
+    KillMode = "mixed";
+    KillSignal = "WINCH";
+
+    DevicePolicy = "closed";
+    DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
+  };
+
 
   system = config.nixpkgs.system;
 
@@ -242,6 +272,27 @@ let
     };
 
   };
+
+  allowedDeviceOpts = { name, config, ... }: {
+    options = {
+      node = mkOption {
+        example = "/dev/net/tun";
+        type = types.str;
+        description = "Path to device node";
+      };
+      modifier = mkOption {
+        example = "rw";
+        type = types.str;
+        description = ''
+          Device node access modifier. Takes a combination
+          <literal>r</literal> (read), <literal>w</literal> (write), and
+          <literal>m</literal> (mknod). See the
+          <literal>systemd.resource-control(5)</literal> man page for more
+          information.'';
+      };
+    };
+  };
+
 
   mkBindFlag = d:
                let flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
@@ -307,6 +358,17 @@ let
 
   };
 
+  dummyConfig =
+    {
+      extraVeths = {};
+      additionalCapabilities = [];
+      allowedDevices = [];
+      hostAddress = null;
+      hostAddress6 = null;
+      localAddress = null;
+      localAddress6 = null;
+    };
+
 in
 
 {
@@ -367,6 +429,26 @@ in
               '';
             };
 
+            additionalCapabilities = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
+              description = ''
+                Grant additional capabilities to the container.  See the
+                capabilities(7) and systemd-nspawn(1) man pages for more
+                information.
+              '';
+            };
+            enableTun = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Allows the container to create and setup tunnel interfaces
+                by granting the <literal>NET_ADMIN</literal> capability and
+                enabling access to <literal>/dev/net/tun</literal>.
+              '';
+            };
+
             privateNetwork = mkOption {
               type = types.bool;
               default = false;
@@ -391,9 +473,8 @@ in
             };
 
             extraVeths = mkOption {
-              type = types.attrsOf types.optionSet;
+              type = with types; attrsOf (submodule networkOptions);
               default = {};
-              options = networkOptions;
               description = ''
                 Extra veth-pairs to be created for the container
               '';
@@ -408,8 +489,7 @@ in
             };
 
             bindMounts = mkOption {
-              type = types.loaOf types.optionSet;
-              options = [ bindMountOpts ];
+              type = with types; loaOf (submodule bindMountOpts);
               default = {};
               example = { "/home" = { hostPath = "/home/alice";
                                       isReadOnly = false; };
@@ -419,6 +499,15 @@ in
                 ''
                   An extra list of directories that is bound to the container.
                 '';
+            };
+
+            allowedDevices = mkOption {
+              type = with types; listOf (submodule allowedDeviceOpts);
+              default = [];
+              example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              description = ''
+                A list of device nodes to which the containers has access to.
+              '';
             };
 
           } // networkOptions;
@@ -451,7 +540,7 @@ in
         containers.  Each container appears as a service
         <literal>container-<replaceable>name</replaceable></literal>
         on the host system, allowing it to be started and stopped via
-        <command>systemctl</command> .
+        <command>systemctl</command>.
       '';
     };
 
@@ -470,11 +559,11 @@ in
       environment.INSTANCE = "%i";
       environment.root = "/var/lib/containers/%i";
 
-      preStart = preStartScript {};
+      preStart = preStartScript dummyConfig;
 
-      script = startScript {};
+      script = startScript dummyConfig;
 
-      postStart = postStartScript {};
+      postStart = postStartScript dummyConfig;
 
       preStop =
         ''
@@ -487,59 +576,39 @@ in
 
       restartIfChanged = false;
 
-      serviceConfig = {
-        ExecReload = pkgs.writeScript "reload-container"
-          ''
-            #! ${pkgs.stdenv.shell} -e
-            ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
-              bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
-          '';
-
-        SyslogIdentifier = "container %i";
-
-        EnvironmentFile = "-/etc/containers/%i.conf";
-
-        Type = "notify";
-
-        # Note that on reboot, systemd-nspawn returns 133, so this
-        # unit will be restarted. On poweroff, it returns 0, so the
-        # unit won't be restarted.
-        RestartForceExitStatus = "133";
-        SuccessExitStatus = "133";
-
-        Restart = "on-failure";
-
-        # Hack: we don't want to kill systemd-nspawn, since we call
-        # "machinectl poweroff" in preStop to shut down the
-        # container cleanly. But systemd requires sending a signal
-        # (at least if we want remaining processes to be killed
-        # after the timeout). So send an ignored signal.
-        KillMode = "mixed";
-        KillSignal = "WINCH";
-
-        DevicePolicy = "closed";
-      };
+      serviceConfig = serviceDirectives dummyConfig;
     };
   in {
     systemd.services = listToAttrs (filter (x: x.value != null) (
       # The generic container template used by imperative containers
       [{ name = "container@"; value = unit; }]
       # declarative containers
-      ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (
-        unit // {
-          preStart = preStartScript cfg;
-          script = startScript cfg;
-          postStart = postStartScript cfg;
-        } // (
-        if cfg.autoStart then
-          {
-            wantedBy = [ "multi-user.target" ];
-            wants = [ "network.target" ];
-            after = [ "network.target" ];
-            restartTriggers = [ cfg.path ];
-            reloadIfChanged = true;
-          }
-        else {})
+      ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
+          config = cfg // (
+          if cfg.enableTun then
+            {
+              allowedDevices = cfg.allowedDevices
+                ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              additionalCapabilities = cfg.additionalCapabilities
+                ++ [ "CAP_NET_ADMIN" ];
+            }
+          else {});
+        in
+          unit // {
+            preStart = preStartScript config;
+            script = startScript config;
+            postStart = postStartScript config;
+            serviceConfig = serviceDirectives config;
+          } // (
+          if config.autoStart then
+            {
+              wantedBy = [ "multi-user.target" ];
+              wants = [ "network.target" ];
+              after = [ "network.target" ];
+              restartTriggers = [ config.path ];
+              reloadIfChanged = true;
+            }
+          else {})
       )) config.containers)
     ));
 

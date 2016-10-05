@@ -1,13 +1,12 @@
 {stdenv, fetchurl, which, ocaml, findlib, camlzip, extlib, camlp4}:
+
 let
   pname = "javalib";
-  version = "2.3";
   webpage = "http://sawja.inria.fr/";
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 stdenv.mkDerivation rec {
-
   name = "ocaml-${pname}-${version}";
+  version = "2.3";
 
   src = fetchurl {
     url = "https://gforge.inria.fr/frs/download.php/33090/${pname}-${version}.tar.bz2";
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     make ptrees;
     make installptrees;
-    export OCAMLPATH=$out/lib/ocaml/${ocaml_version}/site-lib/:$OCAMLPATH;
+    export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH;
   '';
 
   propagatedBuildInputs = [ camlzip extlib ];

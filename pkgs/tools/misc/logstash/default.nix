@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper, jre  }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.4";
+  version = "2.4.0";
   name = "logstash-${version}";
 
   src = fetchurl {
     url = "https://download.elasticsearch.org/logstash/logstash/logstash-${version}.tar.gz";
-    sha256 = "10wm4f5ygzifk84c1n9yyj285ccn2zd2m61y6hyf6wirvhys0qkz";
+    sha256 = "1k27hb6q1r26rp3y9pb2ry92kicw83mi352dzl2y4h0gbif46b32";
   };
 
   dontBuild         = true;
@@ -14,10 +14,22 @@ stdenv.mkDerivation rec {
   dontStrip         = true;
   dontPatchShebangs = true;
 
+  buildInputs = [
+    makeWrapper jre
+  ];
+
   installPhase = ''
     mkdir -p $out
     cp -r {Gemfile*,vendor,lib,bin} $out
-    mv $out/bin/plugin $out/bin/logstash-plugin
+
+    wrapProgram $out/bin/logstash \
+       --set JAVA_HOME "${jre}"
+
+    wrapProgram $out/bin/rspec \
+       --set JAVA_HOME "${jre}"
+
+    wrapProgram $out/bin/logstash-plugin \
+       --set JAVA_HOME "${jre}"
   '';
 
   meta = with stdenv.lib; {

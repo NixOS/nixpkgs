@@ -62,5 +62,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

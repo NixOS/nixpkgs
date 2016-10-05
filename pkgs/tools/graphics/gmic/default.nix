@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gmic-${version}";
-  version = "1.7.4";
+  version = "1.7.7";
 
   src = fetchurl {
     url = "http://gmic.eu/files/source/gmic_${version}.tar.gz";
-    sha256 = "1k4swqi1adq479b6zdpvy5kdpkvjkfihkj9iwgw9mgi0xdqikjry";
+    sha256 = "0shcxgq8nc391c0y0zh3l87g3p7fvsmgshi1x1jvvwwq1b9nf6vp";
   };
 
   buildInputs = [ fftw zlib libjpeg libtiff libpng ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     buildFlagsArray=( \
       CURL_CFLAGS= CURL_LIBS= \
-      EXR_CFLAGS= EXR_LIBS= \
+      OPENEXR_CFLAGS= OPENEXR_LIBS= \
       OPENCV_CFLAGS= OPENCV_LIBS= \
       X11_CFLAGS="-Dcimg_display=0" X11_LIBS= \
       cli \
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = http://gmic.eu/;
     license = licenses.cecill20;
     maintainers = [ maintainers.rycee ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

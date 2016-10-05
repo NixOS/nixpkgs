@@ -50,7 +50,7 @@ in {
       };
 
     systemd.services.foldingathome = {
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -m 0755 -p ${stateDir}

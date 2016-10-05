@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, coq, ocamlPackages
+{ stdenv, lib, fetchurl
+, coq, ocaml, findlib, menhir
 , tools ? stdenv.cc
 }:
+
+assert lib.versionAtLeast ocaml.version "4.02";
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vhbs1fmr9x2imqyd6yfvkbz763jhjfm9wk4nizf9rn1cvxrjqa4";
   };
 
-  buildInputs = [ coq ] ++ (with ocamlPackages; [ ocaml findlib menhir ]);
+  buildInputs = [ coq ocaml findlib menhir ];
 
   enableParallelBuilding = true;
 

@@ -18,7 +18,6 @@ let
 
   poolName = "tt-rss";
   phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
-  virtualHostName = "tt-rss";
 
   tt-rss-config = pkgs.writeText "config.php" ''
     <?php
@@ -34,10 +33,10 @@ let
       define('MYSQL_CHARSET', 'UTF8');
 
       define('DB_TYPE', '${cfg.database.type}');
-      define('DB_HOST', '${cfg.database.host}');
+      define('DB_HOST', '${optionalString (cfg.database.host != null) cfg.database.host}');
       define('DB_USER', '${cfg.database.user}');
       define('DB_NAME', '${cfg.database.name}');
-      define('DB_PASS', '${escape ["'" "\\"] cfg.database.password}');
+      define('DB_PASS', '${optionalString (cfg.database.password != null) (escape ["'" "\\"] cfg.database.password)}');
       define('DB_PORT', '${toString dbPort}');
 
       define('AUTH_AUTO_CREATE', ${boolToString cfg.auth.autoCreate});
@@ -91,12 +90,21 @@ let
 
       enable = mkEnableOption "tt-rss";
 
+      root = mkOption {
+        type = types.path;
+        default = "/var/lib/tt-rss";
+        example = "/var/lib/tt-rss";
+        description = ''
+          Root of the application.
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "nginx";
         example = "nginx";
         description = ''
-          User account under which both the service and the web-application run.
+          User account under which both the update daemon and the web-application run.
         '';
       };
 
@@ -110,17 +118,13 @@ let
         '';
       };
 
-      # TODO: Re-enable after https://github.com/NixOS/nixpkgs/pull/15862 is merged
-
-      # virtualHost = mkOption {
-      #   type = types.str;
-      #   default = "${virtualHostName}";
-      #   description = ''
-      #     Name of existing nginx virtual host that is used to run web-application.
-      #     If not specified a host will be created automatically with
-      #     default values.
-      #   '';
-      # };
+      virtualHost = mkOption {
+        type = types.nullOr types.str;
+        default = "tt-rss";
+        description = ''
+          Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
+        '';
+      };
 
       database = {
         type = mkOption {
@@ -132,10 +136,10 @@ let
         };
 
         host = mkOption {
-          type = types.str;
-          default = "localhost";
+          type = types.nullOr types.str;
+          default = null;
           description = ''
-            Host of the database.
+            Host of the database. Leave null to use Unix domain socket.
           '';
         };
 
@@ -362,7 +366,7 @@ let
 
       singleUserMode = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
 
         description = ''
           Operate in single user mode, disables all functionality related to
@@ -445,17 +449,15 @@ let
 
   ###### implementation
 
-  config = let
-    root = "/var/lib/tt-rss";
-  in mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
-    services.phpfpm.poolConfigs = if cfg.pool == "${poolName}" then {
+    services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
       "${poolName}" = ''
         listen = "${phpfpmSocketName}";
         listen.owner = nginx
         listen.group = nginx
         listen.mode = 0600
-        user = nginx
+        user = ${cfg.user}
         pm = dynamic
         pm.max_children = 75
         pm.start_servers = 10
@@ -464,36 +466,26 @@ let
         pm.max_requests = 500
         catch_workers_output = 1
       '';
-    } else {};
+    };
 
-    # TODO: Re-enable after https://github.com/NixOS/nixpkgs/pull/15862 is merged
+    services.nginx.virtualHosts = mkIf (cfg.virtualHost != null) {
+      "${cfg.virtualHost}" = {
+        root = "${cfg.root}";
 
-    # services.nginx.virtualHosts = if cfg.virtualHost == "${virtualHostName}" then {
-    #   "${virtualHostName}" = {
-    #     root = "${root}";
-    #     extraConfig = ''
-    #       access_log  /var/log/nginx-${virtualHostName}-access.log;
-    #       error_log   /var/log/nginx-${virtualHostName}-error.log;
-    #     '';
+        locations."/" = {
+          index = "index.php";
+        };
 
-    #     locations."/" = {
-    #       extraConfig = ''
-    #         index index.php;
-    #       '';
-    #     };
-
-    #     locations."~ \.php$" = {
-    #       extraConfig = ''
-    #         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    #         fastcgi_pass unix:${phpfpmSocketName};
-    #         fastcgi_index index.php;
-    #         fastcgi_param SCRIPT_FILENAME ${root}/$fastcgi_script_name;
-
-    #         include ${pkgs.nginx}/conf/fastcgi_params;
-    #       '';
-    #     };
-    #   };
-    # } else {};
+        locations."~ \.php$" = {
+          extraConfig = ''
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            fastcgi_pass unix:${phpfpmSocketName};
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME ${cfg.root}/$fastcgi_script_name;
+          '';
+        };
+      };
+    };
 
 
     systemd.services.tt-rss = let
@@ -503,35 +495,34 @@ let
         description = "Tiny Tiny RSS feeds update daemon";
 
         preStart = let
-          callSql = if cfg.database.type == "pgsql" then (e: ''
-                 ${optionalString (cfg.database.password != null)
-                   "PGPASSWORD=${cfg.database.password}"} ${pkgs.postgresql95}/bin/psql \
-                     -U ${cfg.database.user}                                            \
-                     -h ${cfg.database.host}                                            \
-                     --port ${toString dbPort}                                          \
-                     -c '${e}'                                                          \
-                     ${cfg.database.name}'')
+          callSql = e:
+              if cfg.database.type == "pgsql" then ''
+                  ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
+                  ${pkgs.postgresql95}/bin/psql \
+                    -U ${cfg.database.user} \
+                    ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \
+                    -c '${e}' \
+                    ${cfg.database.name}''
 
-               else if cfg.database.type == "mysql" then (e: ''
-                 echo '${e}' | ${pkgs.mysql}/bin/mysql                  \
-                   ${optionalString (cfg.database.password != null)
-                     "-p${cfg.database.password}"}                      \
-                   -u ${cfg.database.user}                              \
-                   -h ${cfg.database.host}                              \
-                   -P ${toString dbPort}                                \
-                   ${cfg.database.name}'')
+              else if cfg.database.type == "mysql" then ''
+                  echo '${e}' | ${pkgs.mysql}/bin/mysql \
+                    -u ${cfg.database.user} \
+                    ${optionalString (cfg.database.password != null) "-p${cfg.database.password}"} \
+                    ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} -P ${toString dbPort}"} \
+                    ${cfg.database.name}''
 
-               else "";
+              else "";
 
         in ''
-          rm -rf "${root}/*"
-          mkdir -m 755 -p "${root}"
-          cp -r "${pkgs.tt-rss}/"* "${root}"
-          ln -sf "${tt-rss-config}" "${root}/config.php"
-          chown -R "${cfg.user}" "${root}"
-          chmod -R 755 "${root}"
-        '' + (optionalString (cfg.database.type == "pgsql") ''
+          rm -rf "${cfg.root}/*"
+          mkdir -m 755 -p "${cfg.root}"
+          cp -r "${pkgs.tt-rss}/"* "${cfg.root}"
+          ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
+          chown -R "${cfg.user}" "${cfg.root}"
+          chmod -R 755 "${cfg.root}"
+        ''
 
+        + (optionalString (cfg.database.type == "pgsql") ''
           exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
           | tail -n+3 | head -n-2 | sed -e 's/[ \n\t]*//')
 
@@ -540,8 +531,9 @@ let
           else
             echo 'The database contains some data. Leaving it as it is.'
           fi;
-        '') + (optionalString (cfg.database.type == "mysql") ''
+        '')
 
+        + (optionalString (cfg.database.type == "mysql") ''
           exists=$(${callSql "select count(*) > 0 from information_schema.tables where table_schema = schema()"} \
           | tail -n+2 | sed -e 's/[ \n\t]*//')
 
@@ -554,7 +546,7 @@ let
 
         serviceConfig = {
           User = "${cfg.user}";
-          ExecStart = "${pkgs.php}/bin/php /var/lib/tt-rss/update.php --daemon";
+          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon";
           StandardOutput = "syslog";
           StandardError = "syslog";
           PermissionsStartOnly = true;

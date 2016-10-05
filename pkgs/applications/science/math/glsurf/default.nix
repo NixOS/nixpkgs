@@ -1,9 +1,5 @@
 { stdenv, fetchdarcs, ocaml, findlib,  lablgl, camlimages, mesa, freeglut, ocaml_mysql, mysql, mlgmp, mpfr, gmp, libtiff, libjpeg, libpng, giflib }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
 stdenv.mkDerivation {
   name = "glsurf-3.3";
 
@@ -27,5 +23,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.lama.univ-savoie.fr/~raffalli/glsurf;
     description = "A program to draw implicit surfaces and curves";
+    broken = true;
   };
 }

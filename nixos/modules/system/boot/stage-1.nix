@@ -134,10 +134,9 @@ let
     ''; # */
 
 
-  udevRules = pkgs.stdenv.mkDerivation {
-    name = "udev-rules";
-    allowedReferences = [ extraUtils ];
-    buildCommand = ''
+  udevRules = pkgs.runCommand "udev-rules"
+    { allowedReferences = [ extraUtils ]; }
+    ''
       mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
@@ -176,7 +175,6 @@ let
       substituteInPlace $out/60-persistent-storage.rules \
         --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
     ''; # */
-  };
 
 
   # The init script of boot stage 1 (loading kernel modules for
@@ -198,9 +196,10 @@ let
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: (sd ? label || hasPrefix "/dev/" sd.device) && !sd.randomEncryption 
-                    # Don't include zram devices
-                    && !(hasPrefix "/dev/zram" sd.device)) config.swapDevices);
+                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption
+                             # Don't include zram devices
+                             && !(hasPrefix "/dev/zram" sd.device)
+                            ) config.swapDevices);
 
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
@@ -229,16 +228,12 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = pkgs.stdenv.mkDerivation {
-            name = "initrd-kmod-blacklist-ubuntu";
-            builder = pkgs.writeText "builder.sh" ''
-              source $stdenv/setup
+        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu"
+            { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
+            ''
               target=$out
-
               ${pkgs.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';
-            src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-          };
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
         { object = pkgs.kmod-debian-aliases;

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, cups }:
 
 let
-  version = "1.6.5";
+  version = "1.6.8";
 in
   stdenv.mkDerivation {
 
     name = "epson-escpr-${version}";
   
     src = fetchurl {
-      url = "https://download3.ebz.epson.net/dsc/f/03/00/04/54/27/b73564748bfde7b7ce625e20d4a3257d447bec79/epson-inkjet-printer-escpr-1.6.5-1lsb3.2.tar.gz"; 
-      sha256 = "1cd9e0506bf181e1476bd8305f1c6b8dbc4354eab9415d0d5529850856129e4c"; 
+      url = "https://download3.ebz.epson.net/dsc/f/03/00/05/10/61/125006df4ffc84861395c1158a02f1f73e6f1753/epson-inkjet-printer-escpr-1.6.8-1lsb3.2.tar.gz";
+      sha256 = "02v8ljzw6xhfkz1x8m50mblcckgfbpa89fc902wcmi2sy8fihgh4";
     }; 
 
     patches = [ ./cups-filter-ppd-dirs.patch ]; 

@@ -59,20 +59,20 @@
         <variablelist>
           <varlistentry>
             <term><varname>emacs</varname></term>
-            <term><varname>emacs24</varname></term>
+            <term><varname>emacs25</varname></term>
             <listitem>
               <para>
-                The latest stable version of Emacs 24 using the <link
+                The latest stable version of Emacs 25 using the <link
                 xlink:href="http://www.gtk.org">GTK+ 2</link> widget
                 toolkit.
               </para>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term><varname>emacs24-nox</varname></term>
+            <term><varname>emacs25-nox</varname></term>
             <listitem>
               <para>
-                Emacs 24 built without any dependency on X11
+                Emacs 25 built without any dependency on X11
                 libraries.
               </para>
             </listitem>
@@ -83,15 +83,6 @@
               <para>
                 Emacs 24 with the "Mac port" patches, providing a more
                 native look and feel under OS X.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><varname>emacs25pre</varname></term>
-            <listitem>
-              <para>
-                A pretest version of what will become the first
-                version of Emacs 25.
               </para>
             </listitem>
           </varlistentry>

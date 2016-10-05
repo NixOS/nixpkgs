@@ -1,19 +1,20 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "xmpp-client-${version}";
-  version = "20160110-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "525bd26cf5f56ec5aee99464714fd1d019c119ff";
+  version = "20160916-${stdenv.lib.strings.substring 0 7 rev}";
+  rev = "abbf9020393e8caae3e8996a16ce48446e31cf0e";
 
   goPackagePath = "github.com/agl/xmpp-client";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "agl";
+    repo = "xmpp-client";
     inherit rev;
-    url = "https://github.com/agl/xmpp-client";
-    sha256 = "0a1r08zs723ikcskmn6ylkdi3frcd0i0lkx30i9q39ilf734v253";
+    sha256 = "0j9mfr208cachzm39i8b94v5qk9hws278vv2ms9ma4wn16wns81s";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "An XMPP client with OTR support";

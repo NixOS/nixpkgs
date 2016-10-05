@@ -19,12 +19,13 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 
   installPhase = ''
     mkdir -p $out
     cp -r install/* $out
-
   '';
 
   buildCommand = with xorg; ''

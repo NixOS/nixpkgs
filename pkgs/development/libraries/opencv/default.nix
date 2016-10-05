@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
     sha256 = "1k29rxlvrhgc5hadg2nc50wa3d2ls9ndp373257p756a0aividxh";
   };
 
+  patches =
+    [ # Don't include a copy of the CMake status output in the
+      # build. This causes a runtime dependency on GCC.
+      ./no-build-info.patch
+    ];
+
+  outputs = [ "out" "dev" ];
+
   buildInputs =
        [ zlib ]
     ++ lib.optional enablePython pythonPackages.python

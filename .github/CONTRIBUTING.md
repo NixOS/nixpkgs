@@ -28,5 +28,8 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
   * Not start with the package name
   * Not have a dot at the end
 
-See the nixpkgs manual for more details on how to [Submit changes to nixpkgs](http://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download-by-type/doc/manual#chap-submitting-changes).
+See the nixpkgs manual for more details on how to [Submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).
 
+## Reviewing contributions
+
+See the nixpkgs manual for more details on how to [Review contributions](http://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download-by-type/doc/manual#chap-reviewing-contributions).

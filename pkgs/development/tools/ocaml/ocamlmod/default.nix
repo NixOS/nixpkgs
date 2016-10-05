@@ -1,11 +1,12 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
-stdenv.mkDerivation {
-  name = "ocamlmod-0.0.7";
+stdenv.mkDerivation rec {
+  name = "ocamlmod-${version}";
+  version = "0.0.8";
 
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/1350/ocamlmod-0.0.7.tar.gz;
-    sha256 = "11kg7wh0gy492ma5c6bcjh6frv1a9lh9f26hiys2i0d1ky8s0ad3";
+    url = "http://forge.ocamlcore.org/frs/download.php/1544/${name}.tar.gz";
+    sha256 = "1w0w8lfyymvk300dv13gvhrddpcyknvyp4g2yvq2vaw7khkhjs9g";
   };
 
   buildInputs = [ocaml findlib];
