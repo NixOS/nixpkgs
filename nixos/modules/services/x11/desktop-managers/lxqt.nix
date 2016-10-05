@@ -33,6 +33,7 @@ in
     environment.systemPackages = [
       pkgs.kde5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
       pkgs.kde5.oxygen-icons5 # default icon theme
+      pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
       pkgs.libfm
       pkgs.libfm-extra
       pkgs.lxmenu-data
@@ -65,8 +66,9 @@ in
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [
-      "/share/lxqt"
       "/share/desktop-directories"
+      "/share/icons"
+      "/share/lxqt"
     ];
 
   };
