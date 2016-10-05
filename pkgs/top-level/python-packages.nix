@@ -12373,12 +12373,12 @@ in modules // {
   };
 
   ipyparallel = buildPythonPackage rec {
-    version = "5.0.1";
+    version = "5.2.0";
     name = "ipyparallel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipyparallel/${name}.tar.gz";
-      sha256 = "1cpydbm1k02y5m4grp0c1z5lbgkpp5f4xp3j5v49g9lmd70ikqs8";
+      sha256 = "d99e760f1a136b1c402755a4ab51a8d7cb87c892cccadf641948a5e886c8a455";
     };
 
     buildInputs = with self; [ nose ];
