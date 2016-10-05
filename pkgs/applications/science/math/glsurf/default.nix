@@ -1,9 +1,5 @@
 { stdenv, fetchdarcs, ocaml, findlib,  lablgl, camlimages, mesa, freeglut, ocaml_mysql, mysql, mlgmp, mpfr, gmp, libtiff, libjpeg, libpng, giflib }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
 stdenv.mkDerivation {
   name = "glsurf-3.3";
 

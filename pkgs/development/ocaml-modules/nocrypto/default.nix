@@ -1,14 +1,10 @@
 { stdenv, fetchzip, ocaml, findlib, cstruct, type_conv, zarith, ounit }:
 
-let
-  version = "0.5.1";
-  ocaml_version = stdenv.lib.getVersion ocaml;
-in
+assert stdenv.lib.versionAtLeast ocaml.version "4.01";
 
-assert stdenv.lib.versionAtLeast ocaml_version "4.01";
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ocaml-nocrypto-${version}";
+  version = "0.5.1";
 
   src = fetchzip {
     url = "https://github.com/mirleft/ocaml-nocrypto/archive/${version}.tar.gz";

@@ -1,9 +1,5 @@
 {stdenv, fetchurl, ocaml, findlib, camlp4}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
 stdenv.mkDerivation {
   name = "ounit-2.0.0";
 
