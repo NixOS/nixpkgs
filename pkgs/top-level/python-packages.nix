@@ -15480,10 +15480,10 @@ in modules // {
   };
 
   numpy_1_11 = self.buildNumpyPackage rec {
-    version = "1.11.1";
+    version = "1.11.2";
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
-      sha256 = "1kbpsnqfabpbczh3ly2d4jrwq2d1gqlshlpk5dm8bk3r77284h6w";
+      sha256 = "04db2fbd64e2e7c68e740b14402b25af51418fc43a59d9e54172b38b906b0f69";
     };
   };
 
