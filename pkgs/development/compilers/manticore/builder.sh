@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@shell@
 
 source $stdenv/setup
 echo "Building Manticore research compiler."

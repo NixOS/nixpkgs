@@ -1,13 +1,12 @@
 {stdenv, fetchurl, ocaml, findlib, gmp, mpfr, ncurses }:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "mlgmp";
-  version = "20120224";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "20120224";
 
   src = fetchurl {
     url = "http://www-verimag.imag.fr/~monniaux/download/${pname}_${version}.tar.gz";
@@ -15,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   makeFlags = [ 
-    "DESTDIR=$(out)/lib/ocaml/${ocaml_version}/site-lib/gmp"
+    "DESTDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/gmp"
   ];
 
   preConfigure = "make clean";
@@ -26,7 +25,7 @@ stdenv.mkDerivation {
   propagatedbuildInputs = [gmp mpfr ncurses];
 
   postInstall  = ''
-     cp ${./META} $out/lib/ocaml/${ocaml_version}/site-lib/gmp/META
+     cp ${./META} $out/lib/ocaml/${ocaml.version}/site-lib/gmp/META
   '';
 
   meta = {

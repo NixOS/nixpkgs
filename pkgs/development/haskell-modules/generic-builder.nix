@@ -180,6 +180,11 @@ stdenv.mkDerivation ({
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
+    ${optionalString (stdenv.lib.versionOlder "8" ghc.version) ''
+      ipid=$(echo $(basename "$out") | cut -d- -f1)
+      configureFlags+=" --ipid=$ipid"
+    ''}
+
     local inputClosure=""
     for i in $propagatedNativeBuildInputs $nativeBuildInputs; do
       findInputs $i inputClosure propagated-native-build-inputs
