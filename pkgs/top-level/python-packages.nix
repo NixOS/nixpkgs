@@ -1270,12 +1270,11 @@ in modules // {
   });
 
   attrs = buildPythonPackage (rec {
-    pname = "attrs";
-    version = "16.0.0";
-    name = "attrs-16.0.0";
+    name = "attrs-${version}";
+    version = "16.2.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/attrs/${name}.tar.gz";
-      sha256 = "1g4asv3hbx5aqz7hjzq3q6ss2cpv1rdv66sp5d21cdyjajj2fs6y";
+      sha256 = "136f2ec0f94ec77ff2990830feee965d608cab1e8922370e3abdded383d52001";
     };
 
     # Mac OS X needs clang for testing
