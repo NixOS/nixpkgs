@@ -13,9 +13,16 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # Drop removed ControlGroup stanza
     (fetchpatch {
-      url = "https://anonscm.debian.org/cgit/pkg-multimedia/rtkit.git/plain/debian/patches/0002-Drop-Removed-ControlGroup-stanza.patch?id=21f2c6be6985c777cbf113c67043353406744050";
+      url = "http://git.0pointer.net/rtkit.git/patch/?id=6c28e20c0be2f616a025059fda0ffac84e7f4f17";
       sha256 = "0lsxk5nv08i1wjb4xh20i5fcwg3x0qq0k4f8bc0r9cczph2sv7ck";
+    })
+
+    # security patch: Pass uid of caller to polkit
+    (fetchpatch {
+      url = "http://git.0pointer.net/rtkit.git/patch/?id=88d4082ef6caf6b071d749dca1c50e7edde914cc";
+      sha256 = "0hp1blbi359qz8fmr6nj4w9yc0jf3dd176f8pn25wdj38n13qkix";
     })
   ];
 
