@@ -16552,11 +16552,11 @@ in modules // {
 
   Kajiki = buildPythonPackage rec {
     name = "Kajiki-${version}";
-    version = "0.5.2";
+    version = "0.5.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/K/Kajiki/${name}.tar.gz";
-      sha256 = "1ayhr4g5q2hhh50fd33dkb7l8z8n2hnnx3lmhivzg3paf47b3ssz";
+      sha256 = "effcae388e25c3358eb0bbd733448509d11a1ec500e46c69241fc673021f0517";
     };
 
     propagatedBuildInputs = with self; [
