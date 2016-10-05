@@ -12343,12 +12343,12 @@ in modules // {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.3.1";
+    version = "4.5.0";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipykernel/${name}.tar.gz";
-      sha256 = "0gycnxzq3nnmh6xlc24n3b4qc28gli0lw4a9yg2yzm74lgmd66c2";
+      sha256 = "245a798edb8fd751b95750d8645d736dd739a020e7fc7d5627dac4d1c35d8295";
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
