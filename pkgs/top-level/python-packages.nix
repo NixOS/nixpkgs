@@ -2615,7 +2615,7 @@ in modules // {
 
   blaze = buildPythonPackage rec {
     name = "blaze-${version}";
-    version = "0.10.1";
+    version = "0.10.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/blaze/${name}.tar.gz";
@@ -17267,17 +17267,18 @@ in modules // {
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
     name = "pandas-${version}";
-    version = "0.18.1";
+    version = "0.19.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pandas/${name}.tar.gz";
-      sha256 = "1ckpxrvvjj6zxmn68icd9hib8qcpx9b35f6izxnr25br5ilq7r6j";
+      sha256 = "4697606cdf023c6b7fcb74e48aaf25cf282a1a00e339d2d274cf1b663748805b";
     };
 
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ] ++ optional isDarwin pkgs.libcxx;
     propagatedBuildInputs = with self; [
+      cython
       dateutil
       scipy
       numexpr
