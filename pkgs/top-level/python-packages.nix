@@ -18627,6 +18627,23 @@ in modules // {
     };
   };
 
+  ptpython = buildPythonPackage rec {
+    name = "ptpython-0.35";
+    propagatedBuildInputs = with self;
+        [ wcwidth six prompt_toolkit docopt jedi pygments];
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/ptpython/${name}.tar.gz";
+      sha256 = "e0d380fbccb03ed33a7f33d96988e66fbd286bc813c9ceea84a1b3b5615a5660";
+    };
+
+    meta = {
+      description = "An advanced Python REPL";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ mlieberman85 ];
+      platforms = platforms.all;
+    };
+  };
+
   publicsuffix = buildPythonPackage rec {
     name = "publicsuffix-${version}";
     version = "1.0.2";
