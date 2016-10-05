@@ -10039,6 +10039,7 @@ in
 
   mongodb = callPackage ../servers/nosql/mongodb {
     sasl = cyrus_sasl;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
