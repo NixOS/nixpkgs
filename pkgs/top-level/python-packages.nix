@@ -22912,13 +22912,13 @@ in modules // {
   };
 
   Theano = buildPythonPackage rec {
-    name = "Theano-0.8.1";
+    name = "Theano-0.8.2";
 
     disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/T/Theano/${name}.tar.gz";
-      sha256 = "17dikk94r8bzkxg976srqlhj5c7phs9gl837iabyfdpixkbrl79g";
+      sha256 = "7463c8f7ed1a787bf881f36d38a38607150186697e7ce7e78bfb94b7c6af8930";
     };
 
     #preCheck = ''
