@@ -869,6 +869,8 @@ in
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
+  languagetool = callPackage ../tools/text/languagetool {  };
+
   long-shebang = callPackage ../misc/long-shebang {};
 
   mathics = pythonPackages.mathics;
