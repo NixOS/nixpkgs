@@ -179,9 +179,6 @@ self: super: {
   vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
     [ self.mtl self.mwc-random ];
 
-  # Trigger rebuild to mitigate broken packaes on Hydra.
-  amazonka-core = triggerRebuild super.amazonka-core 1;
-
   # https://github.com/thoughtpolice/hs-ed25519/issues/13
   ed25519 = dontCheck super.ed25519;
 
@@ -212,6 +209,6 @@ self: super: {
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
 
-  generic-deriving = self.generic-deriving_1_10_5;
+
 
 }
