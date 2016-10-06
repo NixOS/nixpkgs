@@ -2,14 +2,14 @@
 , automake, autoconf, libtool, pkgconfig, gnome3, gst_all_1, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.2";
+  version = "1.3.3";
   name = "corebird-${version}";
 
   src = fetchFromGitHub {
     owner = "baedert";
     repo = "corebird";
     rev = version;
-    sha256 = "1ps4l37dyj2pmzcly9jb95y7cqa8zm8hyfja5prsqj7pbka1fibn";
+    sha256 = "09k0jrhjqrmpvyz5pf1g7wkidflkhpvw5869a95vnhfxjd45kzs3";
   };
 
   preConfigure = ''

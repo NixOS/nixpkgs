@@ -1,7 +1,6 @@
 {stdenv, fetchurl, ocaml, transitional ? false}:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   metafile = ./META;
 in
 
@@ -19,11 +18,11 @@ stdenv.mkDerivation {
   prefixKey = "-prefix ";
 
   preConfigure = "configureFlagsArray=(" +  (if transitional then "--transitional" else "--strict") +
-                  " --libdir $out/lib/ocaml/${ocaml_version}/site-lib)";
+                  " --libdir $out/lib/ocaml/${ocaml.version}/site-lib)";
 
   buildFlags = "world.opt";
 
-  postInstall = "cp ${metafile} $out/lib/ocaml/${ocaml_version}/site-lib/camlp5/META";
+  postInstall = "cp ${metafile} $out/lib/ocaml/${ocaml.version}/site-lib/camlp5/META";
 
   meta = with stdenv.lib; {
     description = "Preprocessor-pretty-printer for OCaml";
