@@ -24303,6 +24303,28 @@ in modules // {
     };
   };
 
+  twine = buildPythonPackage rec {
+    name = "twine-${version}";
+    version = "1.8.1";
+
+    src = pkgs.fetchurl {
+      url    = "mirror://pypi/t/twine/${name}.tar.gz";
+      sha256 = "68b663691a947b844f92853c992d42bb68b6333bffc9ab7f661346b001c1da82";
+    };
+
+    propagatedBuildInputs = with self; [ clint pkginfo requests2 requests_toolbelt ];
+
+    # Requires network
+    doCheck = false;
+
+    meta = {
+      description = "Collection of utilities for interacting with PyPI";
+      homepage = https://github.com/pypa/twine;
+      license = licenses.asl20;
+      maintainer = with maintainers; [ fridh ];
+    };
+  };
+
   twisted = buildPythonPackage rec {
 
     name = "Twisted-${version}";
