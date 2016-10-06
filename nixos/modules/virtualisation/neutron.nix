@@ -118,7 +118,8 @@ let
   '';
   utils_env = pkgs.buildEnv {
     name = "utils";
-    paths = with pkgs; [package_set ebtables bridge-utils iproute procps conntrack_tools iputils dnsmasq coreutils iptables ipset ];
+    paths = with pkgs; [package_set ebtables bridge-utils iproute procps conntrack_tools iputils dnsmasq coreutils  ipset
+      (lib.overrideDerivation iptables (attrs: { configureFlags = iptables.configureFlags + '' --disable-nftables''; })) ];
   };
   package_set = pkgs.python.buildEnv.override {
     extraLibs = [ cfg.package ] ++ cfg.extraPackages;
