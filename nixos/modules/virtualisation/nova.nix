@@ -257,12 +257,12 @@ in {
 	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-role-add --tenant service --user nova --role admin
         fi
         '';
-      path = with pkgs; [ cfg.package mysql openssl config.programs.ssh.package "/var/setuid-wrappers/" pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
+      path = with pkgs; [ cfg.package mysql openssl config.programs.ssh.package "/var/setuid-wrappers/" pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk pkgs.iptables ];
       serviceConfig = {
         PermissionsStartOnly = true; # preStart must be run as root
         TimeoutStartSec = "900"; # 15min for initial db migrations
-        User = "nova";
-        Group = "nova";
+        # User = "nova";
+        # Group = "nova";
         ExecStart = "${cfg.package}/bin/nova-api --config-file=${novaConf}";
       };
     };
