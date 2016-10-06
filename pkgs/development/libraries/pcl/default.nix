@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qt4
-, libusb1, libpcap, libXt, libpng, Cocoa, AGL, cf-private
+, libusb1, libpcap, libXt, libpng, Cocoa, AGL, cf-private, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
                   libpng vtk qt4 libXt ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa AGL cf-private ];
   cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_SYSROOT=" "-DCMAKE_OSX_DEPLOYMENT_TARGET=" ];
+    "-DCMAKE_OSX_SYSROOT=" "-DCMAKE_OSX_DEPLOYMENT_TARGET="
+    "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
+  ];
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
     NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed "s,[[:space:]]*-F$NIX_STORE/[[:alnum:]]*-CF-osx-[[:digit:].]*/Library/Frameworks,,g")

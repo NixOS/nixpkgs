@@ -8616,7 +8616,7 @@ in
   pcl = callPackage ../development/libraries/pcl {
     vtk = vtkWithQt4;
     inherit (darwin) cf-private;
-    inherit (darwin.apple_sdk.frameworks) Cocoa AGL;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AGL OpenGL;
   };
 
   pcre = callPackage ../development/libraries/pcre { };
