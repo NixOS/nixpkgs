@@ -32,8 +32,8 @@ in
 
     environment.systemPackages = [
       pkgs.kde5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
+      pkgs.kde5.libkscreen # provides plugins for screen management software
       pkgs.kde5.oxygen-icons5 # default icon theme
-      pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
       pkgs.libfm
       pkgs.libfm-extra
       pkgs.lxmenu-data
@@ -62,6 +62,7 @@ in
       pkgs.lxqt.qtermwidget
       pkgs.menu-cache
       pkgs.openbox # default window manager
+      pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
     ];
 
     # Link some extra directories in /run/current-system/software/share
