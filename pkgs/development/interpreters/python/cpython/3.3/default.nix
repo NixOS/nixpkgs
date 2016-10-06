@@ -26,6 +26,7 @@ let
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
+  sitePackages = "lib/${libPrefix}/site-packages";
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 lzma gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
@@ -79,8 +80,25 @@ stdenv.mkDerivation {
     echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
   '';
 
+  postFixup = ''
+    # Get rid of retained dependencies on -dev packages, and remove
+    # some $TMPDIR references to improve binary reproducibility.
+    for i in $out/lib/python${majorVersion}/_sysconfigdata.py $out/lib/python${majorVersion}/config-${majorVersion}m/Makefile; do
+      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+    done
+
+    # FIXME: should regenerate this.
+    rm $out/lib/python${majorVersion}/__pycache__/_sysconfigdata.cpython*
+
+    # tkinter goes in a separate output
+    mkdir -p $tkinter/${sitePackages}
+    mv $out/lib/${libPrefix}/lib-dynload/_tkinter* $tkinter/${sitePackages}/
+  '';
+
+  outputs = ["out" "tkinter"];
+
   passthru = rec {
-    inherit libPrefix;
+    inherit libPrefix sitePackages;
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
@@ -93,7 +111,6 @@ stdenv.mkDerivation {
     isPy3 = true;
     isPy33 = true;
     is_py3k = true;  # deprecated
-    sitePackages = "lib/${libPrefix}/site-packages";
     interpreter = "${self}/bin/${executable}";
   };
 
