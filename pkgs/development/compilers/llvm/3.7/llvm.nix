@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
     sourceRoot=$PWD/llvm
     unpackFile ${compiler-rt_src}
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
+    sed -i 's/-compatibility_version .* -current_version/-compatibility_version 1 -current_version/g' $sourceRoot/tools/llvm-shlib/CMakeLists.txt
   '';
 
   buildInputs = [ perl groff cmake libxml2 python libffi ]
@@ -37,6 +38,7 @@ in stdenv.mkDerivation rec {
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
+    sed -i 's/-compatibility_version .* -current_version/-compatibility_version 1 -current_version/g' $PWD/tools/lto/CMakeFiles/LTO.dir/link.txt
     mkdir -p $out/
     ln -sv $PWD/lib $out
   '';
