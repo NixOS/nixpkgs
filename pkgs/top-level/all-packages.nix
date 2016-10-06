@@ -7095,6 +7095,8 @@ in
     gnupg1 = gnupg1orig;
   };
 
+  pgpdump = callPackage ../tools/security/pgpdump { };
+
   gpgstats = callPackage ../tools/security/gpgstats { };
 
   gpshell = callPackage ../development/tools/misc/gpshell { };
