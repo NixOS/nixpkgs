@@ -285,6 +285,7 @@ in rec {
       inherit (pkgs.darwin) dyld;
       cc   = pkgs.llvmPackages.clang-unwrapped;
       libc = pkgs.darwin.Libsystem;
+      llvm = pkgs.llvmPackages.clang-unwrapped.llvm;
     };
 
     extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
