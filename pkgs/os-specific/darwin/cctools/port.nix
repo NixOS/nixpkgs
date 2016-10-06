@@ -18,7 +18,7 @@ let
     buildInputs = [ autoconf automake libtool_2 openssl libuuid ] ++
       # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
       stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
+      stdenv.lib.optionals stdenv.isDarwin [ llvm libcxxabi libobjc ];
 
     patches = [
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
@@ -83,6 +83,10 @@ in {
       #!${stdenv.shell}
       EOF
       chmod +x $out/bin/dsymutil
+      exe="$out/bin/ld"
+    '' + stdenv.lib.optionalString (stdenv.isDarwin) ''
+      install_name_tool -add_rpath ${llvm}/lib $exe
+      install_name_tool -change '@rpath/libLTO.3.7.dylib' '@rpath/libLTO.dylib' $exe
     '';
   });
 
