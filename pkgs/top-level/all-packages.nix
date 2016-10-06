@@ -74,6 +74,8 @@ in
     else
       stdenv);
 
+  stdenvNoCC = stdenv.override { cc = null; };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -867,6 +869,8 @@ in
   interlock = callPackage ../servers/interlock {};
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
+
+  languagetool = callPackage ../tools/text/languagetool {  };
 
   long-shebang = callPackage ../misc/long-shebang {};
 
@@ -3043,6 +3047,8 @@ in
     nix = nixUnstable;
   };
 
+  pakcs = callPackage ../development/compilers/pakcs {};
+
   pal = callPackage ../tools/misc/pal { };
 
   pandoc = haskell.lib.overrideCabal haskellPackages.pandoc (drv: {
@@ -5057,6 +5063,8 @@ in
   nasm = callPackage ../development/compilers/nasm { };
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
+
+  obliv-c = callPackage ../development/compilers/obliv-c {};
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
 
@@ -7108,6 +7116,8 @@ in
   gpgme = callPackage ../development/libraries/gpgme {
     gnupg1 = gnupg1orig;
   };
+
+  pgpdump = callPackage ../tools/security/pgpdump { };
 
   gpgstats = callPackage ../tools/security/gpgstats { };
 
@@ -15344,7 +15354,6 @@ in
   crack_attack = callPackage ../games/crack-attack { };
 
   crafty = callPackage ../games/crafty { };
-  craftyFull = appendToName "full" (crafty.override { fullVariant = true; });
 
   crawlTiles = crawl.override {
     tileMode = true;

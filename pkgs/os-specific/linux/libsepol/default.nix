@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  # -Wno-sign-compare is needed because the current flex 2.5 generates code
-  # that throws warnings
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all -Wno-sign-compare";
+  # Temporary work-around for problems after flex security update:
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=835542
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
 
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")

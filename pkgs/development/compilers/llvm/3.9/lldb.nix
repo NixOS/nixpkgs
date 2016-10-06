@@ -41,7 +41,6 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_MAIN_INCLUDE_DIR=${llvm}/include"
   ];
 

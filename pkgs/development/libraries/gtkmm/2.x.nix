@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vpmjqv0aqb1ds0xi6nigxnhlr0c74090xzi15b92amlzkrjyfj4";
   };
 
+  patches = [ ./gtkmm-2.24.4-missing-operator.patch ];
+
   nativeBuildInputs = [pkgconfig];
 
   propagatedBuildInputs = [ glibmm gtk2 atkmm cairomm pangomm ];

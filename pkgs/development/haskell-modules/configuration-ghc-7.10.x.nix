@@ -179,9 +179,6 @@ self: super: {
   vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
     [ self.mtl self.mwc-random ];
 
-  # Trigger rebuild to mitigate broken packaes on Hydra.
-  amazonka-core = triggerRebuild super.amazonka-core 1;
-
   # https://github.com/thoughtpolice/hs-ed25519/issues/13
   ed25519 = dontCheck super.ed25519;
 
@@ -190,6 +187,7 @@ self: super: {
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
   # GHC versions prior to 8.x require additional build inputs.
+  attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
   Glob_0_7_10 = addBuildDepends super.Glob_0_7_10 (with self; [semigroups]);
   aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
@@ -212,6 +210,6 @@ self: super: {
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
 
-  generic-deriving = self.generic-deriving_1_10_5;
+
 
 }

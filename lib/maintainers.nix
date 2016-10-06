@@ -272,6 +272,7 @@
   mingchuan = "Ming Chuan <ming@culpring.com>";
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   mirrexagon = "Andrew Abbott <mirrexagon@mirrexagon.com>";
+  mlieberman85 = "Michael Lieberman <mlieberman85@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
   moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
@@ -335,6 +336,7 @@
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
+  primeos = "Michael Weiss <dev.primeos@gmail.com>";
   profpatsch = "Profpatsch <mail@profpatsch.de>";
   proglodyte = "Proglodyte <proglodyte23@gmail.com>";
   pshendry = "Paul Hendry <paul@pshendry.com>";
