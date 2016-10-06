@@ -99,7 +99,6 @@ let
   };
 
   wrapArgs = "--set PYTHONPATH \"$(toPythonPath $lib)\""
-    + " --prefix PYTHONPATH : \"$(toPythonPath ${python.modules.readline})\""
     + " --prefix PYTHONPATH : \"$(toPythonPath ${pythonPackages.flask})\""
     + " --set PATH \"$out/bin\"";
 in

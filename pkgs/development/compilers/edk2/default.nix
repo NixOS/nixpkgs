@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libuuid, pythonFull, iasl }:
+{ stdenv, fetchgit, libuuid, python, iasl }:
 
 let
 
@@ -18,7 +18,7 @@ edk2 = stdenv.mkDerivation {
     sha256 = "0s9ywb8w7xzlnmm4kwzykxkrdaw53b7pky121cc9wjkllzqwyxrb";
   };
 
-  buildInputs = [ libuuid pythonFull ];
+  buildInputs = [ libuuid python python.tkinter ];
 
   makeFlags = "-C BaseTools";
 
@@ -40,7 +40,7 @@ edk2 = stdenv.mkDerivation {
 
   passthru = {
     setup = projectDscPath: attrs: {
-      buildInputs = [ pythonFull ] ++
+      buildInputs = [ python python.tkinter ] ++
         stdenv.lib.optionals (attrs ? buildInputs) attrs.buildInputs;
 
       configurePhase = ''

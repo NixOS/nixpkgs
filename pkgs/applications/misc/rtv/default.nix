@@ -17,7 +17,6 @@ pythonPackages.buildPythonApplication rec {
     six
     praw
     kitchen
-    python.modules.curses
     praw
   ] ++ lib.optional (!pythonPackages.isPy3k) futures;
 
