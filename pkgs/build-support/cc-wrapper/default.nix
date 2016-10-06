@@ -10,6 +10,7 @@
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
+, llvm ? null
 }:
 
 with stdenv.lib;
@@ -22,6 +23,8 @@ assert !nativeLibc -> libc != null;
 # For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
 assert cc.langVhdl or false -> zlib != null;
 
+assert llvm != null -> isClang;
+
 let
 
   ccVersion = (builtins.parseDrvName cc.name).version;
@@ -30,6 +33,7 @@ let
   libc_bin = if nativeLibc then null else getBin libc;
   libc_dev = if nativeLibc then null else getDev libc;
   libc_lib = if nativeLibc then null else getLib libc;
+  llvm_lib = if llvm != null then getLib llvm else "";
   cc_solib = getLib cc;
   binutils_bin = if nativeTools then "" else getBin binutils;
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
@@ -43,7 +47,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
+  inherit cc shell libc_bin libc_dev libc_lib llvm_lib binutils_bin coreutils_bin;
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   passthru = { inherit libc nativeTools nativeLibc nativePrefix isGNU isClang; };

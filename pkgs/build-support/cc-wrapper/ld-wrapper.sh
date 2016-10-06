@@ -167,6 +167,9 @@ if [ "$NIX_SET_BUILD_ID" = 1 ]; then
     fi
 fi
 
+if [ -n "@llvm_lib@" ]; then
+  export DYLD_LIBRARY_PATH="@llvm_lib@/lib:$DYLD_LIBRARY_PATH"
+fi
 
 # Optionally print debug info.
 if [ -n "$NIX_DEBUG" ]; then
@@ -178,6 +181,10 @@ if [ -n "$NIX_DEBUG" ]; then
   for i in ${extra[@]}; do
       echo "  $i" >&2
   done
+  if [ -n "@llvm_lib@" ]; then
+    echo "DYLD_LIBRARY_PATH variable for @prog@:" >&2
+    echo "  $DYLD_LIBRARY_PATH" >&2
+  fi
 fi
 
 if [ -n "$NIX_LD_WRAPPER_EXEC_HOOK" ]; then
