@@ -1341,6 +1341,17 @@ rec {
 
   };
 
+  Rename = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "Rename-2011-08-30";
+    src = fetchgit {
+      url = "git://github.com/vim-scripts/Rename";
+      rev = "b240f28d2ede65fa77cd99fe045efe79202f7a34";
+      sha256 = "1d1myg4zyc281zcc1ba9idbgcgxndb4a0jwqr4yqxhhzdgszw46r";
+    };
+    dependencies = [];
+
+  };
+
   a-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "a-vim-2010-11-06";
     src = fetchgit {
