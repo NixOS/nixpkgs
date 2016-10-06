@@ -14253,6 +14253,7 @@ let self = _self // overrides; _self = with self; {
         substituteInPlace Makefile.PL --replace '"cpp"' '"gcc -E"'
         substituteInPlace Makefile.PL --replace '_LASTENTRY\z' '_LASTENTRY\z|CURL_DID_MEMORY_FUNC_TYPEDEFS\z'
       '';
+    NIX_CFLAGS_COMPILE = "-DCURL_STRICTER";
     doCheck = false; # performs network access
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "09c5gjhcz97ghfrv9zkgfb1wckvmqnhbzga0xidbm1ir7640di8l";
   };
 
-  outputDocdev = "out";
+  outputDevdoc = "out";
 
   preConfigure = "
     patchShebangs ./configure

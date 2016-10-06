@@ -62,7 +62,7 @@ import ./make-test.nix ({ pkgs, ... }: {
     boot.initrd.kernelModules = [ "kcanary" ];
 
     boot.initrd.extraUtilsCommands = let
-      compile = name: source: pkgs.runCommand name { inherit source; } ''
+      compile = name: source: pkgs.runCommandCC name { inherit source; } ''
         mkdir -p "$out/bin"
         echo "$source" | gcc -Wall -o "$out/bin/$name" -xc -
       '';

@@ -1,0 +1,11 @@
+--- gtkmm-2.24.4/gtk/gtkmm/menushell.cc.orig	2016-08-26 21:55:08.858311055 +0000
++++ gtkmm-2.24.4/gtk/gtkmm/menushell.cc	2016-08-26 21:55:33.206310578 +0000
+@@ -130,7 +130,7 @@ MenuList::iterator MenuList::insert(Menu
+ {
+   const Glib::RefPtr<Gtk::MenuItem> item = element.get_child();
+ 
+-  g_return_val_if_fail(item != 0, position);
++  g_return_val_if_fail(!!item, position);
+   g_return_val_if_fail(gparent() != 0, position);
+ 
+   int pos = -1;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, self, callPackage, python27Packages
+{ stdenv, fetchurl, fetchpatch, self, callPackage, python27Packages
 , bzip2, openssl, gettext
 
 , includeModules ? false
@@ -22,10 +22,14 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  version = "${majorVersion}.12";
+  minorVersion = "12";
+  minorVersionSuffix = "";
+  pythonVersion = majorVersion;
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
+  libPrefix = "python${majorVersion}";
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
     sha256 = "0y7rl603vmwlxm6ilkhc51rx2mfj14ckcz40xxgs0ljnvlhp30yp";
   };
 
@@ -44,6 +48,14 @@ let
       ./deterministic-build.patch
 
       ./properly-detect-curses.patch
+
+      # FIXME: get rid of this after the next release, when the commit referenced here makes
+      # it in. We need it until then because it breaks compilation of programs that use
+      # locale with clang 3.8 and higher.
+      (fetchpatch {
+        url    = "https://hg.python.org/cpython/raw-rev/e0ec3471cb09";
+        sha256 = "1jdgb70jw942r4kmr01qll7mk1di8jx0qiabmp20jhnmha246ivq";
+      })
     ] ++ optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -150,18 +162,21 @@ let
 
         paxmark E $out/bin/python${majorVersion}
 
+        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
+        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+
         ${optionalString includeModules "$out/bin/python ./setup.py build_ext"}
 
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
       '';
 
     passthru = rec {
+      inherit libPrefix;
       inherit zlibSupport;
       isPy2 = true;
       isPy27 = true;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
       withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
-      libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       interpreter = "${self}/bin/${executable}";

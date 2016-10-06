@@ -6,13 +6,13 @@
 let
   baseParams = rec {
     name = "cctools-port-${version}";
-    version = "877.5";
+    version = "886";
 
     src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      rev    = "7d405492b09fa27546caaa989b8493829365deab";
-      sha256 = "0nj1q5bqdx5jm68dispybxc7wnkb6p8p2igpnap9q6qyv2r9p07w";
+      rev    = "02f0b8ecd87a3951653d838a321ae744815e21a5";
+      sha256 = "0bzyabzr5dvbxglr74d0kbrk2ij5x7s5qcamqi1v546q1had1wz1";
     };
 
     buildInputs = [ autoconf automake libtool_2 openssl libuuid ] ++

@@ -82,7 +82,7 @@ stdenv.mkDerivation ({
       "--enable-add-ons"
       "--enable-obsolete-rpc"
       "--sysconfdir=/etc"
-      "libc_cv_ssp=no"
+      "--enable-stackguard-randomization"
       (if linuxHeaders != null
        then "--with-headers=${linuxHeaders}/include"
        else "--without-headers")
