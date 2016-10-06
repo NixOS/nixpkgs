@@ -3038,6 +3038,8 @@ in
     nix = nixUnstable;
   };
 
+  pakcs = callPackage ../development/compilers/pakcs {};
+
   pal = callPackage ../tools/misc/pal { };
 
   pandoc = haskell.lib.overrideCabal haskellPackages.pandoc (drv: {
