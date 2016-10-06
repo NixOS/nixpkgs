@@ -273,6 +273,7 @@ self: super: {
   xmlgen = dontCheck super.xmlgen;
   hapistrano = dontCheck super.hapistrano;
   HerbiePlugin = dontCheck super.HerbiePlugin;
+  wai-cors = dontCheck super.wai-cors;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
