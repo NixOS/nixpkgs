@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus, libcap }:
+{ stdenv, fetchurl, pkgconfig, dbus, libcap, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "rtkit-0.11";
