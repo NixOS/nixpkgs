@@ -57,8 +57,8 @@ let
   platform = if platform_ != null then platform_
     else config.platform or platformAuto;
 
-  topLevelArguments = {
-    inherit system bootStdenv noSysDirs config crossSystem platform lib;
+  topLevelArgs = {
+    inherit system bootStdenv noSysDirs config crossSystem platform;
   };
 
   # Allow packages to be overridden globally via the `packageOverrides'
@@ -85,24 +85,24 @@ let
           inherit lib; inherit (self) stdenv; inherit (self.xorg) lndir;
         });
 
-      stdenvDefault = self: super: (import ./stdenv.nix topLevelArguments) {} pkgs;
+      stdenvArgs = topLevelArgs // {
+        inherit lib;
+        allPackages = args: import ./. (topLevelArgs // args);
+      };
+      stdenvDefault = self: super: import ./stdenv.nix stdenvArgs;
 
-      allPackagesArgs = topLevelArguments // { inherit pkgsWithOverrides; };
+      allPackagesArgs = topLevelArgs // { inherit lib pkgsWithOverrides; };
       allPackages = self: super:
         let res = import ./all-packages.nix allPackagesArgs res self;
         in res;
 
       aliases = self: super: import ./aliases.nix super;
 
-      # stdenvOverrides is used to avoid circular dependencies for building
-      # the standard build environment. This mechanism uses the override
-      # mechanism to implement some staged compilation of the stdenv.
-      #
-      # We don't want stdenv overrides in the case of cross-building, or
-      # otherwise the basic overridden packages will not be built with the
-      # crossStdenv adapter.
+      # stdenvOverrides is used to avoid having multiple of versions
+      # of certain dependencies that were used in bootstrapping the
+      # standard environment.
       stdenvOverrides = self: super:
-        lib.optionalAttrs (crossSystem == null && super.stdenv ? overrides)
+        lib.optionalAttrs (super.stdenv ? overrides)
           (super.stdenv.overrides super);
 
       customOverrides = self: super:

@@ -292,12 +292,10 @@ rec {
       ];
       */
 
-    overrides = pkgs: {
-      gcc = cc;
-
+    overrides = lib.overrideNativeDrvs {
       inherit (stage4.pkgs)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf
+        gcc glibc gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl paxctl zlib pcre;
     };
   };
