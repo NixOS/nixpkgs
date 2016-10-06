@@ -11549,6 +11549,8 @@ in
 
   cabin = callPackage ../data/fonts/cabin { };
 
+  camingo-code = callPackage ../data/fonts/camingo-code { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
