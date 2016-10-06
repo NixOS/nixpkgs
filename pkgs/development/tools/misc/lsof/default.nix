@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     # Stop build scripts from searching global include paths
-    export LSOF_INCLUDE=${stdenv.libc}/include
+    export LSOF_INCLUDE=${stdenv.cc.libc}/include
     ./Configure -n ${if stdenv.isDarwin then "darwin" else "linux"}
   '';
   
