@@ -56,6 +56,7 @@ let
 
     ### OPTIONAL
     qterminal = callPackage ./optional/qterminal { };
+    compton-conf = callPackage ./optional/compton-conf { };
    
   };
 

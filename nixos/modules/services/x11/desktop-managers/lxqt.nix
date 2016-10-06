@@ -37,6 +37,7 @@ in
       pkgs.libfm
       pkgs.libfm-extra
       pkgs.lxmenu-data
+      pkgs.lxqt.compton-conf
       pkgs.lxqt.libfm-qt
       pkgs.lxqt.liblxqt
       pkgs.lxqt.libqtxdg
