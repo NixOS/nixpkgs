@@ -1,6 +1,41 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages, fetchurl }:
 
-pythonPackages.buildPythonApplication rec {
+let
+
+  tornado_4_0_1 = pythonPackages.buildPythonPackage rec {
+    name = "tornado-${version}";
+    version = "4.0.1";
+
+    propagatedBuildInputs = with pythonPackages; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
+
+    src = fetchurl {
+      url = "mirror://pypi/t/tornado/${name}.tar.gz";
+      sha256 = "00crp5vnasxg7qyjv89qgssb69vd7qr13jfghdryrcbnn9l8c1df";
+    };
+  };
+
+  sockjs-tornado = pythonPackages.buildPythonPackage rec {
+    name = "sockjs-tornado-${version}";
+    version = "1.0.2";
+
+    src = fetchurl {
+      url = "mirror://pypi/s/sockjs-tornado/${name}.tar.gz";
+      sha256 = "15lcy40h2cm0l8aknbrk48p2sni5wzybsqjx1hxwpk9lfa1xryyv";
+    };
+
+    # This is needed for compatibility with OctoPrint
+    propagatedBuildInputs = [ tornado_4_0_1 ];
+
+    meta = with stdenv.lib; {
+      description = "SockJS python server implementation on top of Tornado framework";
+      homepage = http://github.com/mrjoes/sockjs-tornado/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
+in pythonPackages.buildPythonApplication rec {
   name = "OctoPrint-${version}";
   version = "1.2.15";
 
