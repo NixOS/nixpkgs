@@ -13838,7 +13838,13 @@ in
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
-  opusTools = callPackage ../applications/audio/opus-tools { };
+  opusTools = lib.deprecate.warnRenamed {
+    oldName   = "opusTools";
+    newName   = "opus-tools";
+    removedAt = lib.releases.next;
+    reason    = "Consistency with vorbis-tools";
+  } opus-tools;
+  opus-tools = callPackage ../applications/audio/opus-tools { };
 
   orpie = callPackage ../applications/misc/orpie { gsl = gsl_1; };
 

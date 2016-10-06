@@ -24,10 +24,12 @@ let
   licenses = import ./licenses.nix;
   platforms = import ./platforms.nix;
   systems = import ./systems.nix;
+  releases = import ./releases.nix;
 
   # misc
   debug = import ./debug.nix;
   misc = import ./deprecated.nix;
+  deprecate = import ./deprecate.nix;
 
   # domain-specific
   sandbox = import ./sandbox.nix;
@@ -38,8 +40,8 @@ in
             attrsets lists strings stringsWithDeps
             customisation maintainers meta sources
             modules options types
-            licenses platforms systems
-            debug misc
+            licenses platforms systems releases
+            debug misc deprecate
             sandbox fetchers;
   }
   # !!! don't include everything at top-level; perhaps only the most
