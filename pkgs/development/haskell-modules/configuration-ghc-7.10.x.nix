@@ -190,6 +190,7 @@ self: super: {
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
   # GHC versions prior to 8.x require additional build inputs.
+  attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
   Glob_0_7_10 = addBuildDepends super.Glob_0_7_10 (with self; [semigroups]);
   aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";

@@ -14,7 +14,7 @@ let
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-    exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} "$@"
+    exec systemd-cat ${dmcfg.xserverBin} ${dmcfg.xserverArgs} "$@"
   '';
 
   Xsetup = pkgs.writeScript "Xsetup" ''
