@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [
+      ./RH-1380296-NEWKEYS-null-pointer-deref.patch
       ./locale_archive.patch
       ./fix-host-key-algorithms-plus.patch
     ]
