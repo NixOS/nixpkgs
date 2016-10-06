@@ -5191,6 +5191,7 @@ in
     isGNU = baseCC.isGNU or false;
     isClang = baseCC.isClang or false;
     inherit libc extraBuildCommands;
+    llvm = baseCC.llvm or null;
   };
 
   wrapCC = wrapCCWith (callPackage ../build-support/cc-wrapper) stdenv.cc.libc "";
