@@ -24322,37 +24322,6 @@ in modules // {
     };
   };
 
-  twisted_11 = buildPythonPackage rec {
-    # NOTE: When updating please check if new versions still cause issues
-    # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
-    disabled = isPy3k;
-
-    name = "Twisted-13.2.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
-    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
-    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
-    # details.
-    postInstall = "$out/bin/twistd --help > /dev/null";
-
-    meta = {
-      homepage = http://twistedmatrix.com/;
-      description = "Twisted, an event-driven networking engine written in Python";
-      longDescription = ''
-        Twisted is an event-driven networking engine written in Python
-        and licensed under the MIT license.
-      '';
-      license = licenses.mit;
-      maintainers = [ ];
-    };
-  };
-
   twisted = buildPythonPackage rec {
 
     name = "Twisted-${version}";
