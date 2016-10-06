@@ -4,11 +4,12 @@
 stdenv.mkDerivation rec {
   name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname   = "NetworkManager-vpnc";
-  version = networkmanager.version;
+  major   = "1.2";
+  version = "${major}.4";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${networkmanager.major}/${pname}-${version}.tar.xz";
-    sha256 = "e900f6500026f8c3ee4feb92e1d0a0c0abbee9ba507dad915b47a8ab7df9e1f3";
+    url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
+    sha256 = "39c7516418e90208cb534c19628ce40fd50eba0a08b2ebaef8da85720b10fb05";
   };
 
   buildInputs = [ vpnc networkmanager libsecret ]
