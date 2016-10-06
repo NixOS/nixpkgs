@@ -107,7 +107,7 @@ rec {
         fi
       '';
 
-      serviceConfig.ExecStart = "${pkgs.kippo.twisted/bin/twistd -y ${pkgs.kippo}/src/kippo.tac --syslog --rundir=${cfg.varPath}/ --pidfile=${cfg.pidPath}/kippo.pid --prefix=kippo -n";
+      serviceConfig.ExecStart = "${pkgs.kippo.twisted}/bin/twistd -y ${pkgs.kippo}/src/kippo.tac --syslog --rundir=${cfg.varPath}/ --pidfile=${cfg.pidPath}/kippo.pid --prefix=kippo -n";
       serviceConfig.PermissionsStartOnly = true;
       serviceConfig.User = "kippo"; 
       serviceConfig.Group = "kippo"; 
