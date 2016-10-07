@@ -14315,6 +14315,8 @@ in
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
+  styx = callPackage ../applications/misc/styx { };
+
   tecoc = callPackage ../applications/editors/tecoc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
