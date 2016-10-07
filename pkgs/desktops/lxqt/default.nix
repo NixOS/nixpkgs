@@ -57,6 +57,7 @@ let
     ### OPTIONAL
     qterminal = callPackage ./optional/qterminal { };
     compton-conf = callPackage ./optional/compton-conf { };
+    obconf-qt = callPackage ./optional/obconf-qt { };
    
   };
 

@@ -57,6 +57,7 @@ in
       pkgs.lxqt.lxqt-runner
       pkgs.lxqt.lxqt-session
       pkgs.lxqt.lxqt-sudo
+      pkgs.lxqt.obconf-qt
       pkgs.lxqt.pavucontrol-qt
       pkgs.lxqt.pcmanfm-qt
       pkgs.lxqt.qterminal
