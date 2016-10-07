@@ -17599,8 +17599,14 @@ in modules // {
     buildInputs = with self; [ mock scripttest virtualenv pretend pytest ];
     # Pip wants pytest, but tests are not distributed
     doCheck = false;
-  };
 
+    meta = {
+      description = "The PyPA recommended tool for installing Python packages";
+      license = licenses.mit;
+      homepage = https://pip.pypa.io/;
+      priority = 10;
+    };
+  };
 
   pika = buildPythonPackage rec {
     name = "pika-${version}";
