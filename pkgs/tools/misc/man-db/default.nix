@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpipeline, db, groff }:
+{ stdenv, fetchurl, pkgconfig, libpipeline, db, groff, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "man-db-2.7.5";
@@ -11,9 +11,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ libpipeline db groff ];
-  troff="${groff}/bin/groff";
 
   postPatch = ''
     substituteInPlace src/man_db.conf.in \
@@ -27,13 +26,13 @@ stdenv.mkDerivation rec {
     # Don't try /etc/man_db.conf by default, so we avoid error messages.
     "--with-config-file=\${out}/etc/man_db.conf"
     "--with-systemdtmpfilesdir=\${out}/lib/tmpfiles.d"
-    "--with-eqn=${groff}/bin/eqn"
-    "--with-neqn=${groff}/bin/neqn"
-    "--with-nroff=${groff}/bin/nroff"
-    "--with-pic=${groff}/bin/pic"
-    "--with-refer=${groff}/bin/refer"
-    "--with-tbl=${groff}/bin/tbl"
   ];
+
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      wrapProgram "$i" --prefix PATH : "${groff}/bin"
+    done
+  '';
 
   enableParallelBuilding = true;
 
