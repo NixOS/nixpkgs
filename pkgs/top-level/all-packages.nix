@@ -2296,6 +2296,8 @@ in
 
   less = callPackage ../tools/misc/less { };
 
+  lf = callPackage ../tools/misc/lf {};
+
   libcpuid = callPackage ../tools/misc/libcpuid { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
