@@ -85,13 +85,14 @@ stdenv.mkDerivation {
      done
 
      siteStart="$out/share/emacs/site-lisp/site-start.el"
+     siteStartByteCompiled="$siteStart"c
 
      # A dependency may have brought the original siteStart, delete it and
      # create our own
      # Begin the new site-start.el by loading the original, which sets some
      # NixOS-specific paths. Paths are searched in the reverse of the order
      # they are specified in, so user and system profile paths are searched last.
-     rm -f $siteStart
+     rm -f $siteStart $siteStartByteCompiled
      cat >"$siteStart" <<EOF
 (load-file "$emacs/share/emacs/site-lisp/site-start.el")
 (add-to-list 'load-path "$out/share/emacs/site-lisp")

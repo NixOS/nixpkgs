@@ -6,6 +6,7 @@
 , withGTK2 ? true, gtk2 ? null
 , withGTK3 ? false, gtk3 ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
+, withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 }:
 
@@ -24,7 +25,9 @@ let
     else "lucid";
 in
 stdenv.mkDerivation rec {
-  name = "emacs-25.1";
+  name = "emacs-${version}${versionModifier}";
+  version = "25.1";
+  versionModifier = "";
 
   src = fetchurl {
     url = "mirror://gnu//emacs/${name}.tar.xz";
@@ -71,9 +74,23 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  installTargets = "tags install";
+
   postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp/
+    mkdir -p $out/share/emacs/site-lisp
     cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
+    $out/bin/emacs --batch -f batch-byte-compile $out/share/emacs/site-lisp/site-start.el
+
+    rm -rf $out/var
+    rm -rf $out/share/emacs/${version}/site-lisp
+  '' + lib.optionalString withCsrc ''
+    for srcdir in src lisp lwlib ; do
+      dstdir=$out/share/emacs/${version}/$srcdir
+      mkdir -p $dstdir
+      find $srcdir -name "*.[chm]" -exec cp {} $dstdir \;
+      cp $srcdir/TAGS $dstdir
+      echo '((nil . ((tags-file-name . "TAGS"))))' > $dstdir/.dir-locals.el
+    done
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
