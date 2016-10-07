@@ -22,7 +22,7 @@ makeWrapper() {
     local original=$1
     local wrapper=$2
     local params varName value command separator n fileNames
-    local argv0 flagsBefore flags
+    local argv0 flagsBefore flags extraFlagsArray
 
     mkdir -p "$(dirname $wrapper)"
 
