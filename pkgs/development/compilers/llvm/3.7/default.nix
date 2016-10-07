@@ -31,5 +31,7 @@ let
     libcxx = callPackage ./libc++ {};
 
     libcxxabi = callPackage ./libc++abi.nix {};
+
+    libunwind = callPackage ./libunwind.nix {};
   };
 in self

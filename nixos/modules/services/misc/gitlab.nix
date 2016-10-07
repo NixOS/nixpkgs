@@ -123,7 +123,7 @@ let
       makeWrapper ${cfg.packages.gitlab.env}/bin/bundle $out/bin/gitlab-bundle \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip config.services.postgresql.package ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
       makeWrapper $out/bin/gitlab-bundle $out/bin/gitlab-rake \

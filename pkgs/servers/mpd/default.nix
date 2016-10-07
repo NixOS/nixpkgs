@@ -101,6 +101,7 @@ in stdenv.mkDerivation rec {
       (mkFlag opusSupport "opus")
       (mkFlag soundcloudSupport "soundcloud")
       "--enable-debug"
+      "--disable-oss"
     ]
     ++ opt stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";

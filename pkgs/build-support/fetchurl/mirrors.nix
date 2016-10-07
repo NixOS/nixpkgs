@@ -12,11 +12,11 @@ rec {
   sourceforge = [
     http://downloads.sourceforge.net/
     http://prdownloads.sourceforge.net/
-    http://heanet.dl.sourceforge.net/sourceforge/
-    http://surfnet.dl.sourceforge.net/sourceforge/
     http://dfn.dl.sourceforge.net/sourceforge/
-    http://osdn.dl.sourceforge.net/sourceforge/
+    http://heanet.dl.sourceforge.net/sourceforge/
     http://kent.dl.sourceforge.net/sourceforge/
+    http://surfnet.dl.sourceforge.net/sourceforge/
+    http://osdn.dl.sourceforge.net/sourceforge/
   ];
 
   # SourceForge.jp.
@@ -35,7 +35,6 @@ rec {
     http://mirrors.kernel.org/gnu/
     ftp://mirror.cict.fr/gnu/
     ftp://ftp.cs.tu-berlin.de/pub/gnu/
-    ftp://ftp.chg.ru/pub/gnu/
     ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/
 
     # This one is the master repository, and thus it's always up-to-date.
@@ -66,7 +65,6 @@ rec {
     http://www.all.kernel.org/pub/
     http://ramses.wh2.tu-dresden.de/pub/mirrors/kernel.org/
     http://linux-kernel.uio.no/pub/
-    http://kernel.osuosl.org/pub/
     ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/
   ];
 
@@ -129,14 +127,12 @@ rec {
 
   samba = [
     http://samba.org/ftp/
-    http://ftp.riken.jp/net/samba
   ];
 
   # BitlBee mirrors, see http://www.bitlbee.org/main.php/mirrors.html .
   bitlbee = [
     http://get.bitlbee.org/
     http://get.bitlbee.be/
-    http://get.us.bitlbee.org/
     http://ftp.snt.utwente.nl/pub/software/bitlbee/
     http://bitlbee.intergenia.de/
   ];
@@ -149,8 +145,6 @@ rec {
     ftp://ftp.imagemagick.org/pub/ImageMagick/
     http://ftp.fifi.org/ImageMagick/
     ftp://ftp.fifi.org/ImageMagick/
-    http://imagemagick.mirrorcatalogs.com/
-    ftp://imagemagick.mirrorcatalogs.com/imagemagick
   ];
 
   # CPAN mirrors.
@@ -166,7 +160,6 @@ rec {
   # Debian.
   debian = [
     http://httpredir.debian.org/debian/
-    ftp://ftp.au.debian.org/debian/
     ftp://ftp.de.debian.org/debian/
     ftp://ftp.es.debian.org/debian/
     ftp://ftp.fr.debian.org/debian/
@@ -191,11 +184,9 @@ rec {
   # See: https://mirrors.fedoraproject.org/publiclist (but not all carry old content).
   fedora = [
     http://archives.fedoraproject.org/pub/fedora/
-    http://fedora.osuosl.org/
     http://ftp.nluug.nl/pub/os/Linux/distr/fedora/
     http://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/
     http://fedora.bhs.mirrors.ovh.net/
-    http://mirror.csclub.uwaterloo.ca/fedora/
     http://ftp.linux.cz/pub/linux/fedora/
     http://ftp.heanet.ie/pub/fedora/
     http://mirror.1000mbps.com/fedora/
@@ -219,7 +210,6 @@ rec {
     http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/
     http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/
     http://opensuse.mirror.server4you.net/distribution/
-    http://ftp.nsysu.edu.tw/Linux/OpenSuSE/distribution/
   ];
 
   # Gnome (see http://ftp.gnome.org/pub/GNOME/MIRRORS).
@@ -234,10 +224,6 @@ rec {
     http://ftp.acc.umu.se/pub/GNOME/
     http://ftp.belnet.be/mirror/ftp.gnome.org/
     http://ftp.df.lth.se/pub/gnome/
-    http://linorg.usp.br/gnome/
-    http://mirror.aarnet.edu.au/pub/GNOME/
-    ftp://ftp.cse.buffalo.edu/pub/Gnome/
-    ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/
   ];
 
   xfce = [
@@ -248,10 +234,6 @@ rec {
     http://mirror.perldude.de/archive.xfce.org/
     http://archive.be2.xfce.org/
     http://ftp.udc.es/xfce/
-    http://archive.al-us.xfce.org/
-    http://mirror.yongbok.net/X11/xfce-mirror/
-    http://mirrors.tummy.com/pub/archive.xfce.org/
-    http://xfce.mirror.uber.com.au/
   ];
 
   # X.org.
@@ -267,13 +249,11 @@ rec {
     ftp://ftp.inria.fr/pub/Apache/
     http://apache.cict.fr/
     ftp://ftp.fu-berlin.de/unix/www/apache/
-    ftp://crysys.hit.bme.hu/pub/apache/dist/
     http://mirror.cc.columbia.edu/pub/software/apache/
     http://www.apache.org/dist/
     http://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
     http://apache.cs.uu.nl/dist/
-    http://apache.cs.utah.edu/
   ];
 
   postgresql = [
@@ -297,10 +277,10 @@ rec {
     # http://bioconductor.fmrp.usp.br/
     # http://mirror.aarnet.edu.au/pub/bioconductor/
     # http://watson.nci.nih.gov/bioc_mirror/
-    http://bioconductor.jp/packages/
     http://bioconductor.statistik.tu-dortmund.de/packages/
     http://mirrors.ebi.ac.uk/bioconductor/packages/
     http://mirrors.ustc.edu.cn/bioc/
+    http://bioconductor.jp/packages/
   ];
 
   # Hackage mirrors

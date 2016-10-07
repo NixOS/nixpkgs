@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, cmake, gettext, gstreamer, gst_plugins_base
 , liblastfm, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist
 , usbmuxd, libmtp, gvfs, libcdio, libspotify, protobuf, qca2, pkgconfig
-, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
+, sparsehash, config, runCommand, gst_plugins, wrapGAppsHook }:
 
 let
   withSpotify = config.clementine.spotify or false;
@@ -77,7 +77,7 @@ let
     '';
     postInstall = ''
       mkdir -p $out/libexec/clementine
-      mv $out/bin/clementine-spotifyblob $out/libexec/clementine
+      mv $out/bin/clementine-spotifyblob $out/libexec/clementine/
       rmdir $out/bin
     '';
     enableParallelBuilding = true;
@@ -98,7 +98,8 @@ with stdenv.lib;
 runCommand "clementine-${version}"
 {
   inherit blob free;
-  buildInputs = [ makeWrapper ] ++ gst_plugins; # for the setup-hooks
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = gst_plugins;
   dontPatchELF = true;
   dontStrip = true;
   meta = {
@@ -115,9 +116,13 @@ runCommand "clementine-${version}"
 }
 ''
   mkdir -p $out/bin
-  makeWrapper "$free/bin/${exeName}" "$out/bin/${exeName}" \
-      ${optionalString withSpotify "--set CLEMENTINE_SPOTIFYBLOB \"$blob/libexec/clementine\""} \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+  ln -s "$free/bin/${exeName}" "$out/bin/${exeName}"
+
+  ${optionalString withSpotify ''
+    gappsWrapperArgs+=(--set CLEMENTINE_SPOTIFYBLOB "$blob/libexec/clementine")
+  ''}
+
+  wrapGAppsHook
 
   mkdir -p $out/share
   for dir in applications icons kde4; do

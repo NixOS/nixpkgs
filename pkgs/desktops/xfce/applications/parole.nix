@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, intltool, gst_all_1
+{ stdenv, fetchurl, wrapGAppsHook, pkgconfig, intltool, gst_all_1
 , gtk, dbus_glib, libxfce4ui, libxfce4util, xfconf
 , taglib, libnotify
 , withGstPlugins ? true
@@ -15,20 +15,18 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
 
   buildInputs = [
-    makeWrapper 
     gtk dbus_glib libxfce4ui libxfce4util xfconf
     taglib libnotify
-  ] ++ (with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav]);
+  ] ++ (stdenv.lib.optionals withGstPlugins
+    (with gst_all_1; [
+      gst-plugins-base gst-plugins-good gst-plugins-bad
+      gst-plugins-ugly gst-libav
+    ]));
 
   configureFlags = [ "--with-gstreamer=1.0" ];
-
-  postInstall = stdenv.lib.optionalString withGstPlugins ''
-    wrapProgram "$out/bin/parole" --prefix \
-      GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
-  '';
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/applications/${p_name}";

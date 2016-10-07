@@ -9,10 +9,6 @@ let
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
 
-  # We must escape interfaces due to the systemd interpretation
-  subsystemDevice = interface:
-    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
-
   interfaceIps = i:
     i.ip4 ++ optionals cfg.enableIPv6 i.ip6
     ++ optional (i.ipAddress != null) {
@@ -157,11 +153,10 @@ in
 
         createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
-            bindsTo = [ "dev-net-tun.device" ];
-            after = [ "dev-net-tun.device" "network-pre.target" ];
-            wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
-            partOf = [ "network-setup.service" ];
-            before = [ "network-setup.service" (subsystemDevice i.name) ];
+            requires = optionals (!config.boot.isContainer) [ "dev-net-tun.device" ];
+            after = [ "network-pre.target" ] ++ (optionals (!config.boot.isContainer) [ "dev-net-tun.device" ]);
+            wantedBy = [ "network.target" (subsystemDevice i.name) ];
+            before = [ "network-interfaces.target" (subsystemDevice i.name) ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";

@@ -201,7 +201,6 @@ in
           Group = cfg.group;
           ExecStart = "${pkgs.mattermost}/bin/mattermost-platform";
           WorkingDirectory = "${cfg.statePath}";
-          PrivateTmp = true;
           Restart = "always";
           RestartSec = "10";
           LimitNOFILE = "49152";

@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences
+, coreutils, attr
 , configFile ? "all"
 
 # Userspace dependencies
@@ -20,20 +21,20 @@ assert buildKernel -> kernel != null && spl != null;
 stdenv.mkDerivation rec {
   name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
-  version = "0.6.5.8";
+  version = "0.7.0-rc1";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "zfs";
     rev = "zfs-${version}";
-    sha256 = "0qccz1832p3i80qlrrrypypspb9sy9hmpgcfx9vmhnqmkf0yri4a";
+    sha256 = "1bs42h2az47mx0jpjjfp209n5z2g6dybfykryndpcaw8a7m1sijc";
   };
 
   patches = [ ./nix-build.patch ];
 
   buildInputs = [ autoreconfHook nukeReferences ]
     ++ optionals buildKernel [ spl ]
-    ++ optionals buildUser [ zlib libuuid python ];
+    ++ optionals buildUser [ zlib libuuid python attr ];
 
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";

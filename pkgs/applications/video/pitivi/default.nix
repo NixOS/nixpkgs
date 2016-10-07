@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     gobjectIntrospection gtk3 librsvg gnome3.gnome_desktop
-    gnome3.defaultIconTheme
+    gnome3.defaultIconTheme gnome3.dconf
     gnome3.gsettings_desktop_schemas libnotify
     gst-transcoder
   ] ++ (with gst; [

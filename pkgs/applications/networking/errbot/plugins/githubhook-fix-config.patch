@@ -1,0 +1,95 @@
+diff --git a/githubhook.py b/githubhook.py
+index e9c0912..c5bcd64 100644
+--- a/githubhook.py
++++ b/githubhook.py
+@@ -7,7 +7,7 @@ import logging
+ 
+ from errbot import BotPlugin, botcmd, webhook
+ from errbot.templating import tenv
+-from config import BOT_PREFIX, CHATROOM_FN
++import errbot.backends.base
+ from bottle import abort, response
+ 
+ log = logging.getLogger(name='errbot.plugins.GithubHook')
+@@ -23,10 +23,10 @@ DEFAULT_EVENTS = ['commit_comment', 'issue_comment', 'issues',
+ 
+ DEFAULT_CONFIG = { 'default_events': DEFAULT_EVENTS, 'repositories': {}, }
+ 
+-REQUIRED_HEADERS = ['X-Hub-Signature', 'X-Github-Event']
++REQUIRED_HEADERS = ['X-Github-Event']
+ 
+-HELP_MSG = ('Please see the output of `{0}github help` for usage '
+-            'and configuration instructions.'.format(BOT_PREFIX))
++HELP_MSG = ('Please see the output of `!github help` for usage '
++            'and configuration instructions.')
+ 
+ REPO_UNKNOWN = 'The repository {0} is unknown to me.'
+ EVENT_UNKNOWN = 'Unknown event {0}, skipping.'
+@@ -352,7 +352,7 @@ class GithubHook(BotPlugin):
+             abort(400)
+ 
+         event_type = request.get_header('X-Github-Event').lower()
+-        signature = request.get_header('X-Hub-Signature')
++        #signature = request.get_header('X-Hub-Signature')
+         body = request.json
+ 
+         if event_type == 'ping':
+@@ -370,23 +370,23 @@ class GithubHook(BotPlugin):
+             response.status = 204
+             return None
+ 
+-        token = self.get_token(repo)
+-        if token is None:
+-            # No token, no validation. Accept the payload since it's not their
+-            # fault that the user hasn't configured a token yet but log a
+-            # message about it and discard it.
+-            log.info('Message received for {0} but no token '
+-                     'configured'.format(repo))
+-            response.status = 204
+-            return None
+-
+-        if not self.valid_message(request.body, token, signature):
+-            ip = request.get_header('X-Real-IP')
+-            if ip is None:
+-                log.warn('Event received for {0} but could not validate it.'.format(repo))
+-            else:
+-                log.warn('Event received for {0} from {1} but could not validate it.'.format(repo, ip))
+-            abort(403)
++        #token = self.get_token(repo)
++        #if token is None:
++        #    # No token, no validation. Accept the payload since it's not their
++        #    # fault that the user hasn't configured a token yet but log a
++        #    # message about it and discard it.
++        #    log.info('Message received for {0} but no token '
++        #             'configured'.format(repo))
++        #    response.status = 204
++        #    return None
++
++        #if not self.valid_message(request.body, token, signature):
++        #    ip = request.get_header('X-Real-IP')
++        #    if ip is None:
++        #        log.warn('Event received for {0} but could not validate it.'.format(repo))
++        #    else:
++        #        log.warn('Event received for {0} from {1} but could not validate it.'.format(repo, ip))
++        #    abort(403)
+ 
+         # Dispatch the message. Check explicitly with hasattr first. When
+         # using a try/catch with AttributeError errors in the
+@@ -404,10 +404,14 @@ class GithubHook(BotPlugin):
+         # - join the room (this won't do anything if we're already joined)
+         # - send the message
+         if message and message is not None:
+-            for room in self.get_routes(repo):
+-                events = self.get_events(repo, room)
++            for room_name in self.get_routes(repo):
++                events = self.get_events(repo, room_name)
+                 if event_type in events or '*' in events:
+-                    self.join_room(room, username=CHATROOM_FN)
++                    room = self.query_room(room_name)
++                    try:
++                        room.join(username=self._bot.bot_config.CHATROOM_FN)
++                    except errbot.backends.base.RoomError as e:
++                        self.log.info(e)
+                     self.send(room, message, message_type='groupchat')
+         response.status = 204
+         return None

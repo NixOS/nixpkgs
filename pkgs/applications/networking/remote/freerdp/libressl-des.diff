@@ -1,0 +1,22 @@
+diff --git a/libfreerdp-core/ntlmssp.c b/libfreerdp-core/ntlmssp.c
+index e285836..84ad319 100644
+--- a/libfreerdp-core/ntlmssp.c
++++ b/libfreerdp-core/ntlmssp.c
+@@ -456,7 +456,7 @@ void ntlmssp_compute_lm_hash(char* password, char* hash)
+ 	char text[14];
+ 	char des_key1[8];
+ 	char des_key2[8];
+-	des_key_schedule ks;
++	DES_key_schedule ks;
+ 
+ 	/* LM("password") = E52CAC67419A9A224A3B108F3FA6CB6D */
+ 
+@@ -530,7 +530,7 @@ void ntlmssp_compute_lm_response(char* password, char* challenge, char* response
+ 	char des_key1[8];
+ 	char des_key2[8];
+ 	char des_key3[8];
+-	des_key_schedule ks;
++	DES_key_schedule ks;
+ 
+ 	/* A LM hash is 16-bytes long, but the LM response uses a LM hash null-padded to 21 bytes */
+ 	memset(hash, '\0', 21);

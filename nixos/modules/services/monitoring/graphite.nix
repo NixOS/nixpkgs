@@ -50,7 +50,7 @@ let
     chown -R graphite:graphite /run/${name}
   '';
 
-  carbonEnv = {
+  carbonEnvironment = {
     PYTHONPATH = let
       cenv = pkgs.python.buildEnv.override {
         extraLibs = [ pkgs.python27Packages.carbon ];
@@ -61,6 +61,14 @@ let
     GRAPHITE_ROOT = dataDir;
     GRAPHITE_CONF_DIR = configDir;
     GRAPHITE_STORAGE_DIR = dataDir;
+  };
+
+  carbonEnv = with pkgs; python.buildEnv.override {
+    extraLibs = with pythonPackages; [ twisted carbon whisper ];
+  };
+
+  graphiteWebEnv = with pkgs; python.buildEnv.override {
+    extraLibs = with pythonPackages; [ waitress graphite_web django_1_5 ];
   };
 
 in {
@@ -387,8 +395,9 @@ in {
       systemd.services.carbonCache = let name = "carbon-cache"; in {
         description = "Graphite Data Storage Backend";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        environment = carbonEnv;
+        after = [ "network-interfaces.target" ];
+        environment = carbonEnvironment;
+        path = [ carbonEnv ];
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -397,7 +406,6 @@ in {
           PIDFile="/run/${name}/${name}.pid";
         };
         preStart = mkPidFileDir name + ''
-
           mkdir -p ${cfg.dataDir}/whisper
           chmod 0700 ${cfg.dataDir}/whisper
           chown -R graphite:graphite ${cfg.dataDir}
@@ -410,8 +418,8 @@ in {
         enable = cfg.carbon.enableAggregator;
         description = "Carbon Data Aggregator";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        environment = carbonEnv;
+        after = [ "network-interfaces.target" ];
+        environment = carbonEnvironment;
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -426,8 +434,8 @@ in {
       systemd.services.carbonRelay = let name = "carbon-relay"; in {
         description = "Carbon Data Relay";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        environment = carbonEnv;
+        after = [ "network-interfaces.target" ];
+        environment = carbonEnvironment;
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -441,6 +449,7 @@ in {
     (mkIf (cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay) {
       environment.systemPackages = [
         pkgs.pythonPackages.carbon
+        pkgs.pythonPackages.whisper
       ];
     })
 
@@ -448,8 +457,8 @@ in {
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        path = [ pkgs.perl ];
+        after = [ "network-interfaces.target" ];
+        path = [ graphiteWebEnv pkgs.perl ];
         environment = {
           PYTHONPATH = let
               penv = pkgs.python.buildEnv.override {
@@ -469,7 +478,7 @@ in {
         };
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.python27Packages.waitress}/bin/waitress-serve \
+            ${graphiteWebEnv}/bin/waitress-serve \
             --host=${cfg.web.listenAddress} --port=${toString cfg.web.port} \
             --call django.core.handlers.wsgi:WSGIHandler'';
           User = "graphite";
@@ -482,10 +491,10 @@ in {
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
             # populate database
-            ${pkgs.python27Packages.graphite_web}/bin/manage-graphite.py syncdb --noinput
+            ${graphiteWebEnv}/bin/manage-graphite.py syncdb --noinput
 
             # create index
-            ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
+            ${graphiteWebEnv}/bin/build-index.sh
 
             touch ${dataDir}/db-created
 

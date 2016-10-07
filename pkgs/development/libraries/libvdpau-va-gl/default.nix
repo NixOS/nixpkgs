@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libX11, libpthreadstubs, libXau, libXdmcp
-, libXext, libvdpau, glib, libva, ffmpeg, mesa_glu }:
+, libXext, libvdpau, libva, ffmpeg, mesa_glu }:
 
 stdenv.mkDerivation rec {
   name = "libvdpau-va-gl-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libX11 libpthreadstubs libXau libXdmcp libXext libvdpau glib libva ffmpeg mesa_glu ];
+  buildInputs = [ libX11 libpthreadstubs libXau libXdmcp libXext libvdpau libva ffmpeg mesa_glu ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/i-rinat/libvdpau-va-gl;

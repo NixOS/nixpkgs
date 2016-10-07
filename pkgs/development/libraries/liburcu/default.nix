@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.6";
+  version = "0.9.1";
   name = "liburcu-${version}";
 
   src = fetchurl {
     url = "http://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
-    sha256 = "08dbfkdj4pm9s3q56nwa1vzldkf1jav61g2r4xq7mfhlw2yd79di";
+    sha256 = "05c7znx1dfaqwf7klw8h02y3cjaqzg1w8kwmpb4rgv2vv7lpilpq";
   };
 
   meta = with stdenv.lib; {

@@ -28,11 +28,12 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
+
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    ncurses openssl zlib pcre jemalloc
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
+    ncurses openssl zlib pcre
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   cmakeFlags = [
@@ -60,6 +61,7 @@ common = rec { # attributes common to both builds
     "-DPLUGIN_AUTH_GSSAPI_CLIENT=NO"
   ]
     ++ optional stdenv.isDarwin "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+    ++ optional (!stdenv.isLinux) "-DWITH_JEMALLOC=no" # bad build at least on Darwin
     ;
 
   preConfigure = ''

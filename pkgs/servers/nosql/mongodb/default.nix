@@ -62,6 +62,7 @@ in stdenv.mkDerivation rec {
       # keeping dependencies to build inputs in the final output.
       # We remove the build flags from buildInfo data.
       ./forget-build-dependencies.patch
+
       (fetchpatch {
         url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
         name = "boost160.patch";

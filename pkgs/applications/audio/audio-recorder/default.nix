@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib
-, pkgconfig, intltool, autoconf, makeWrapper
-, glib, dbus, gtk3, libdbusmenu-gtk3, libappindicator-gtk3, gst_all_1
+, pkgconfig, intltool, autoconf, wrapGAppsHook, hicolor_icon_theme
+, glib, dbus, gtk3, libdbusmenu-gtk3, libappindicator-gtk3, gst_all_1, gnome3
 , pulseaudioSupport ? true, libpulseaudio ? null }:
 
 with lib;
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1cdlqhfqw2mg51f068j2lhn8mzxggzsbl560l4pl4fxgmpjywpkj";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool autoconf makeWrapper ];
+  nativeBuildInputs = [ pkgconfig intltool autoconf wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
-    glib dbus gtk3 libdbusmenu-gtk3 libappindicator-gtk3
+    glib dbus gtk3 libdbusmenu-gtk3 libappindicator-gtk3 hicolor_icon_theme gnome3.dconf
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
   ] ++ optional pulseaudioSupport libpulseaudio;
 
@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
                 'PKG_CHECK_MODULES(GIO, gio-2.0 >= $GLIB_REQUIRED gio-unix-2.0)'
     autoconf
     intltoolize
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/audio-recorder \
-      --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
   meta = with stdenv.lib; {

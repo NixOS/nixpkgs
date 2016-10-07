@@ -35,6 +35,8 @@ mkChromiumDerivation (base: rec {
     done
   '';
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   passthru = { inherit sandboxExecutableName; };
 
   meta = {
@@ -44,6 +46,5 @@ mkChromiumDerivation (base: rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["x86_64-linux"] else [];
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 })

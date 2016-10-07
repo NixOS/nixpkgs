@@ -334,8 +334,9 @@ in
 
   useOldCXXAbi = makeSetupHook { } ../build-support/setup-hooks/use-old-cxx-abi.sh;
 
-  iconConvTools = callPackage ../build-support/icon-conv-tools {};
+  generateDiffieHellman = callPackage ../build-support/dhparams.nix { };
 
+  iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
   ### TOOLS
 
@@ -622,9 +623,7 @@ in
 
   bochs = callPackage ../applications/virtualization/bochs { };
 
-  borgbackup = callPackage ../tools/backup/borg {
-    python3Packages = python34Packages;
-  };
+  borgbackup = callPackage ../tools/backup/borg { };
 
   boomerang = callPackage ../development/tools/boomerang { };
 
@@ -1123,6 +1122,10 @@ in
   collectd = callPackage ../tools/system/collectd {
     libmysql = mysql.lib;
     libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
+  };
+
+  collectdMinimal = callPackage ../tools/system/collectd {
+    minimal = true;
   };
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
@@ -2081,7 +2084,7 @@ in
 
   horst = callPackage ../tools/networking/horst { };
 
-  host = callPackage ../tools/networking/host { };
+  host = bind.host;
 
   hping = callPackage ../tools/networking/hping { };
 
@@ -2399,18 +2402,22 @@ in
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
     libtool = darwin.cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
+    openssl = openssl_1_0_2;
   };
 
   nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
+    openssl = openssl_1_0_2;
   };
 
   nodejs-5_x = callPackage ../development/web/nodejs/v5.nix {
     libtool = darwin.cctools;
+    openssl = openssl_1_0_2;
   };
 
   nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
     libtool = darwin.cctools;
+    openssl = openssl_1_0_2;
   };
 
   nodejs = if stdenv.system == "armv5tel-linux" then
@@ -3688,7 +3695,9 @@ in
 
   sshpass = callPackage ../tools/networking/sshpass { };
 
-  sslscan = callPackage ../tools/security/sslscan { };
+  sslscan = callPackage ../tools/security/sslscan {
+    openssl = openssl_1_0_1;
+  };
 
   sslmate = callPackage ../development/tools/sslmate { };
 
@@ -3712,7 +3721,9 @@ in
 
   stun = callPackage ../tools/networking/stun { };
 
-  stunnel = callPackage ../tools/networking/stunnel { };
+  stunnel = callPackage ../tools/networking/stunnel {
+    openssl = openssl_1_1_0;
+  };
 
   strongswan = callPackage ../tools/networking/strongswan { };
 
@@ -3792,7 +3803,9 @@ in
 
   textadept = callPackage ../applications/editors/textadept { };
 
-  thc-hydra = callPackage ../tools/security/thc-hydra { };
+  thc-hydra = callPackage ../tools/security/thc-hydra {
+    openssl = openssl_1_0_2;
+  };
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
@@ -6196,7 +6209,9 @@ in
 
   phantomjs = callPackage ../development/tools/phantomjs { };
 
-  phantomjs2 = callPackage ../development/tools/phantomjs2 { };
+  phantomjs2 = callPackage ../development/tools/phantomjs2 {
+    openssl = openssl_1_0_2;
+  };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
@@ -6456,6 +6471,7 @@ in
   apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
+    openssl = openssl_1_0_2;
     bdbSupport = true;
     db = if stdenv.isFreeBSD then db47 else db;
     # XXX: only the db_185 interface was available through
@@ -7081,7 +7097,7 @@ in
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
-  gnutls = gnutls34;
+  gnutls = gnutls35;
 
   gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
     guileBindings = config.gnutls.guile or false;
@@ -8209,7 +8225,9 @@ in
 
   libviper = callPackage ../development/libraries/libviper { };
 
-  libvpx = callPackage ../development/libraries/libvpx { };
+  libvpx = libvpx_1_5;
+  libvpx_1_5 = callPackage ../development/libraries/libvpx { };
+  libvpx_1_4 = callPackage ../development/libraries/libvpx/1.4.nix { };
   libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
@@ -8585,7 +8603,7 @@ in
 
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
-  openssl = openssl_1_0_2;
+  openssl = libressl;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
@@ -9748,6 +9766,7 @@ in
   apacheHttpd = pkgs.apacheHttpd_2_4;
 
   apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
+    openssl = openssl_1_0_2;
     sslSupport = true;
   };
 
@@ -9782,6 +9801,10 @@ in
 
   archiveopteryx = callPackage ../servers/mail/archiveopteryx/default.nix { };
 
+  atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
+  atlassian-crowd = callPackage ../servers/atlassian/crowd.nix { };
+  atlassian-jira = callPackage ../servers/atlassian/jira.nix { };
+
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
   cassandra_1_2 = callPackage ../servers/nosql/cassandra/1.2.nix { };
@@ -9807,6 +9830,7 @@ in
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   bind = callPackage ../servers/dns/bind { };
+  dnsutils = bind.dnsutils;
 
   bird = callPackage ../servers/bird { };
   bird6 = bird.override { enableIPv6 = true; };
@@ -9815,6 +9839,7 @@ in
   scollector = bosun;
 
   charybdis = callPackage ../servers/irc/charybdis {};
+  charybdis-darkfasel = callPackage ../servers/irc/charybdis/darkfasel.nix {};
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
@@ -9855,7 +9880,7 @@ in
 
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
-    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
+    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib lualdap luadbi;
   };
 
   elasticmq = callPackage ../servers/elasticmq { };
@@ -10015,7 +10040,9 @@ in
 
   rmilter = callPackage ../servers/mail/rmilter { };
 
-  rspamd = callPackage ../servers/mail/rspamd { };
+  rspamd = callPackage ../servers/mail/rspamd {
+    openssl = openssl_1_0_2;
+  };
 
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
@@ -10149,6 +10176,7 @@ in
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
+  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-bridge = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
@@ -10295,7 +10323,9 @@ in
 
   unifi = callPackage ../servers/unifi { };
 
-  virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
+  virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix {
+    openssl = openssl_1_0_2;
+  };
 
   virtuoso7 = callPackage ../servers/sql/virtuoso/7.x.nix { };
 
@@ -10596,7 +10626,9 @@ in
 
   hibernate = callPackage ../os-specific/linux/hibernate { };
 
-  hostapd = callPackage ../os-specific/linux/hostapd { };
+  hostapd = callPackage ../os-specific/linux/hostapd {
+    openssl = openssl_1_0_2;
+  };
 
   htop = callPackage ../tools/system/htop {
     inherit (darwin) IOKit;
@@ -10954,7 +10986,7 @@ in
   };
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_4;
+  linuxPackages = linuxPackages_4_7;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -12327,6 +12359,8 @@ in
 
   docker-machine = callPackage ../applications/networking/cluster/docker-machine { };
 
+  docker-distribution = callPackage ../applications/virtualization/docker-distribution { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
@@ -12607,6 +12641,8 @@ in
   errbot = callPackage ../applications/networking/errbot {
     pythonPackages = python3Packages;
   };
+  errbot-plugin-githubhook = callPackage ../applications/networking/errbot/plugins/githubhook.nix { };
+  errbot-plugin-xmppbridge = callPackage ../applications/networking/errbot/plugins/xmppbridge.nix { };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
@@ -12774,7 +12810,6 @@ in
     inherit (gnome2) libIDL;
     inherit (pythonPackages) pysqlite;
     libpng = libpng_apng;
-    enableGTK3 = false;
   }) firefox-unwrapped firefox-esr-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -13034,7 +13069,7 @@ in
 
   google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
 
-  googleearth = callPackage_i686 ../applications/misc/googleearth { };
+  googleearth = callPackage ../applications/misc/googleearth { };
 
   google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
     libpng = libpng12;
@@ -13596,6 +13631,8 @@ in
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
   mopidy-spotify-tunigo = callPackage ../applications/audio/mopidy-spotify-tunigo { };
+
+  mopidy-subsonic = callPackage ../applications/audio/mopidy-subsonic { };
 
   mopidy-youtube = callPackage ../applications/audio/mopidy-youtube { };
 
@@ -15374,6 +15411,8 @@ in
 
   fairymax = callPackage ../games/fairymax {};
 
+  fava = callPackage ../applications/office/fava {};
+
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
   flightgear = qt5.callPackage ../games/flightgear { };
@@ -15522,6 +15561,8 @@ in
   openmw = callPackage ../games/openmw { };
 
   openra = callPackage ../games/openra { lua = lua5_1; };
+
+  openrct2 = callPackage_i686 ../games/openrct2 { };
 
   openrw = callPackage ../games/openrw { };
 
@@ -17275,4 +17316,8 @@ in
   zoom-us = qt55.callPackage ../applications/networking/instant-messengers/zoom-us {};
 
   xulrunner = firefox-unwrapped;
+
+  wo-istes-jetzt = callPackage ../tools/misc/wo-istes-jetzt { };
+
+  privacyidea = callPackage ../servers/privacyidea { };
 }

@@ -234,7 +234,7 @@ in
 
       binaryCaches = mkOption {
         type = types.listOf types.str;
-        default = [ https://cache.nixos.org/ ];
+        default = [ https://cache.nixos.org/ https://hydra.mayflower.de/ ];
         description = ''
           List of binary cache URLs used to obtain pre-built binaries
           of Nix packages.
@@ -243,7 +243,7 @@ in
 
       trustedBinaryCaches = mkOption {
         type = types.listOf types.str;
-        default = [ ];
+        default = [ https://hydra.mayflower.de/ ];
         example = [ http://hydra.nixos.org/ ];
         description = ''
           List of binary cache URLs that non-root users can use (in
@@ -267,6 +267,7 @@ in
 
       binaryCachePublicKeys = mkOption {
         type = types.listOf types.str;
+        default = [];
         example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
         description = ''
           List of public keys used to sign binary caches. If
@@ -330,8 +331,10 @@ in
   ###### implementation
 
   config = {
-
-    nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+    nix.binaryCachePublicKeys = [
+      "hydra.mayflower.de:9knPU2SJ2xyI0KTJjtUKOGUVdR2/3cOB4VNDQThcfaY="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 

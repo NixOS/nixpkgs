@@ -8,13 +8,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "rmilter-${version}";
-  version = "1.8.5";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "rmilter";
     rev = version;
-    sha256 = "1bfql9v243iw3v87kjgwcx4xxw7g5nv1rsi9gk8p7xg5mzrhi3bn";
+    sha256 = "1nmkv1h69yxfl20mf0x2wcx71crpnqif95xhslzahfbkm40m6fdc";
   };
 
   nativeBuildInputs = [ bison cmake flex ];

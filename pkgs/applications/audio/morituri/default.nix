@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, pythonPackages, cdparanoia, cdrdao
+{ stdenv, fetchgit,  pythonPackages, cdparanoia, cdrdao
 , gst_python, gst_plugins_base, gst_plugins_good
-, utillinux, makeWrapper, substituteAll, autoreconfHook }:
+, utillinux, substituteAll, autoreconfHook , wrapGAppsHook }:
 
 let
   inherit (pythonPackages) python;
@@ -22,9 +22,9 @@ in stdenv.mkDerivation rec {
     CDDB
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook wrapGAppsHook ];
   buildInputs = [
-    python cdparanoia cdrdao utillinux makeWrapper
+    python cdparanoia cdrdao utillinux
     gst_plugins_base gst_plugins_good
   ] ++ pythonPath;
 
@@ -39,11 +39,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  postInstall = ''
-    wrapProgram "$out/bin/rip" \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
-  '';
+  wrapPrefixVariables = "PYTHONPATH";
 
   meta = with stdenv.lib; {
     homepage = http://thomas.apestaart.org/morituri/trac/;

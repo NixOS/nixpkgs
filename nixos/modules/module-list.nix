@@ -95,6 +95,7 @@
   ./security/audit.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
+  ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
   ./security/hidepid.nix
@@ -119,6 +120,7 @@
   ./services/audio/ympd.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
+  ./services/backup/borgbackup.nix
   ./services/backup/crashplan.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
@@ -234,7 +236,9 @@
   ./services/misc/dictd.nix
   ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
+  ./services/misc/docker-registry.nix
   ./services/misc/emby.nix
+  ./services/misc/errbot.nix
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
@@ -261,7 +265,6 @@
   ./services/misc/octoprint.nix
   ./services/misc/packagekit.nix
   ./services/misc/parsoid.nix
-  ./services/misc/phd.nix
   ./services/misc/plex.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
@@ -292,9 +295,11 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
-  ./services/monitoring/prometheus/default.nix
-  ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/alertmanager.nix
+  ./services/monitoring/prometheus/default.nix
+  ./services/monitoring/prometheus/nginx-exporter.nix
+  ./services/monitoring/prometheus/node-exporter.nix
+  ./services/monitoring/prometheus/snmp-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -401,6 +406,7 @@
   ./services/networking/prosody.nix
   ./services/networking/quagga.nix
   ./services/networking/quassel.nix
+  ./services/networking/quicktun.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
@@ -480,7 +486,12 @@
   ./services/ttys/agetty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
+  ./services/web-apps/atlassian/confluence.nix
+  ./services/web-apps/atlassian/crowd.nix
+  ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/mattermost.nix
+  ./services/web-apps/phabricator.nix
+  ./services/web-apps/privacyidea.nix
   ./services/web-apps/pump.io.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix

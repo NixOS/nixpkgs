@@ -30,7 +30,7 @@ wrapGAppsHook() {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$prefix/share")
   fi
 
-  for v in $wrapPrefixVariables GST_PLUGIN_SYSTEM_PATH_1_0 GI_TYPELIB_PATH GRL_PLUGIN_PATH; do
+  for v in $wrapPrefixVariables GST_PLUGIN_SYSTEM_PATH GST_PLUGIN_SYSTEM_PATH_1_0 GI_TYPELIB_PATH GRL_PLUGIN_PATH; do
     eval local dummy="\$$v"
     gappsWrapperArgs+=(--prefix $v : "$dummy")
   done

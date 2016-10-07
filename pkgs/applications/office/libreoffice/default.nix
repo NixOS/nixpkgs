@@ -247,6 +247,8 @@ in stdenv.mkDerivation rec {
     ]
     ++ lib.optional kdeIntegration kde4.kdelibs;
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   passthru = {
     inherit srcs;
   };
