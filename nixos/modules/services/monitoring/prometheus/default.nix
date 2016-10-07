@@ -300,13 +300,14 @@ let
       };
       regex = mkOption {
         type = types.str;
+        default = "(.*)";
         description = ''
           Regular expression against which the extracted value is matched.
         '';
       };
       replacement = mkOption {
         type = types.str;
-        default = "";
+        default = "$1";
         description = ''
           Replacement value against which a regex replace is performed if the
           regular expression matches.
@@ -314,6 +315,7 @@ let
       };
       action = mkOption {
         type = types.enum ["replace" "keep" "drop"];
+        default = "replace";
         description = ''
           Action to perform based on regex matching.
         '';
