@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "A library interface for TQt";
     homepage = http://www.trinitydesktop.org;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTores ];
+    maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
 }

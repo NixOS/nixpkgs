@@ -21,7 +21,7 @@ stdenv.mkDerivation rec{
     description = "D-Bus API bindings for TDE";
     homepage = http://www.trinitydesktop.org;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTores ];
+    maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
 }

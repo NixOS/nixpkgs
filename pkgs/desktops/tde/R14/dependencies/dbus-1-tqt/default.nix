@@ -22,7 +22,7 @@ stdenv.mkDerivation rec{
     description = "A backport of Harald Fernengel's Qt4 D-bus bindings";
     homepage = http://www.trinitydesktop.org;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTores ];
+    maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
 }
