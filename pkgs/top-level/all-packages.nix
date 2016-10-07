@@ -14404,6 +14404,8 @@ in
 
   smtube = qt55.callPackage ../applications/video/smtube {};
 
+  sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
+
   sup = callPackage ../applications/networking/mailreaders/sup {
     ruby = ruby_2_3.override { cursesSupport = true; };
   };
