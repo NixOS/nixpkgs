@@ -7,7 +7,7 @@ let
   mkConfigFile = pkgs.writeText "snmp.yml" (builtins.toJSON cfg.configuration);
 in {
   options = {
-    services.prometheus.snmp-exporter = {
+    services.prometheus.snmpExporter = {
       enable = mkEnableOption "prometheus snmp exporter";
 
       user = mkOption {
