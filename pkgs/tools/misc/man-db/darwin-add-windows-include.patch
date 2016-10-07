@@ -1,0 +1,8 @@
+--- /dev/null
++++ b/windows.h
+@@ -0,0 +1,5 @@
++typedef intptr_t;
++#define INVALID_HANDLE_VALUE -1
++#ifndef POSIX_FADV_WILLNEED
++#define POSIX_FADV_WILLNEED 0x02
++#endif
