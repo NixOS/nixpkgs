@@ -643,6 +643,11 @@ self: super: {
     '';
   }));
 
+  # Requires optparse-applicative 0.13.0.0
+  diagrams-pgf = super.diagrams-pgf.overrideScope (self: super: {
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
 
