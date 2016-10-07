@@ -14,8 +14,8 @@ let
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
-in
 
+self =
 stdenv.mkDerivation {
   name = "coq-${version}";
 
@@ -62,6 +62,22 @@ stdenv.mkDerivation {
     envHooks=(''${envHooks[@]} addCoqPath)
   '';
 
+  passthru = {
+    emacsBufferSetup = pkgs: ''
+      ; Propagate coq paths to children
+      (inherit-local-permanent coq-prog-name "${self}/bin/coqtop")
+      (inherit-local-permanent coq-dependency-analyzer "${self}/bin/coqdep")
+      (inherit-local-permanent coq-compiler "${self}/bin/coqc")
+      ; If the coq-library path was already set, re-set it based on our current coq
+      (when (fboundp 'get-coq-library-directory)
+        (inherit-local-permanent coq-library-directory (get-coq-library-directory))
+        (coq-prog-args))
+      ; Pass proof-general's coq flags to flycheck command (pretty ugly, should probably be part of PG)
+      (inherit-local-permanent flycheck-command-wrapper-function (lambda (cmd)
+        (append (funcall (default-value 'flycheck-command-wrapper-function) cmd) (coq-coqtop-prog-args coq-load-path))))
+    '';
+  };
+
   meta = with stdenv.lib; {
     description = "Formal proof management system";
     longDescription = ''
@@ -76,4 +92,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl ];
     platforms = platforms.unix;
   };
-}
+}; in self
