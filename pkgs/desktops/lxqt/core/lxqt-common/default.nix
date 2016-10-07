@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   postPatch = lxqt.standardPatch
   + ''
     substituteInPlace ./startlxqt.in \
+      --replace  "cp " "cp --no-preserve=mode " \
       --replace xmessage "${xmessage}"/bin/xmessage
   '';
 
