@@ -100,7 +100,7 @@
       <listitem>
         <para>
           Use https://lwn.net/Vulnerabilities/ and 
-          <link xlink:href="https://github.com/NixOS/nixpkgs/search?utf8=%E2%9C%93&q=vulnerabilities&type=Issues">triage vulnerabilities in an issue</link>.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/search?utf8=%E2%9C%93&amp;q=vulnerabilities&amp;type=Issues">triage vulnerabilities in an issue</link>.
         </para>
       </listitem>
       <listitem>
