@@ -12,22 +12,22 @@ stdenv.mkDerivation rec {
     sha256 = "12znxzj1j5fflw2mkkrns9n7qg6sf207652zrdyf7h2jdyzzb73x";
   };
 
-  buildInputs = [ nim ];
+  buildInputs = [ nim openssl ];
 
   patchPhase = ''
     substituteInPlace src/nimble.nim.cfg --replace "./vendor/nim" "${nim}/share"
+    cat >>src/nimble.nim.cfg <<END
+--clib:crypto
+END
   '';
 
   buildPhase = ''
-    nim c src/nimble
+    cd src && nim c -d:release nimble
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp src/nimble $out/bin
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [stdenv.cc.libc openssl]}" \
-        --add-needed libcrypto.so \
-        "$out/bin/nimble"
+    cp nimble $out/bin
   '';
 
   dontStrip = true;
