@@ -495,7 +495,7 @@ dumpVars() {
 stripHash() {
     strippedName=$(basename $1);
     if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
-        strippedName=$(echo "$strippedName" | cut -c34-)
+        echo "$strippedName" | cut -c34-
     fi
 }
 
