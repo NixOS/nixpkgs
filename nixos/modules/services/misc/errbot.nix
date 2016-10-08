@@ -19,7 +19,7 @@ let
 
     BOT_ADMINS = (${concatMapStringsSep "," (name: "'${name}'") instanceCfg.admins})
 
-    BOT_IDENTITY = ${instanceCfg.identity}
+    BOT_IDENTITY = ${builtins.toJSON instanceCfg.identity}
 
     ${instanceCfg.extraConfig}
   '';
@@ -33,43 +33,42 @@ in {
           dataDir = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = "Gitlab state directory, logs are stored here.";
+            description = "Data directory for errbot instance.";
           };
 
           plugins = mkOption {
             type = types.listOf types.path;
             default = [];
-            description = "Gitlab path for backups.";
+            description = "List of errbot plugin derivations.";
           };
 
           logLevel = mkOption {
             type = types.str;
             default = "INFO";
-            description = "Gitlab database hostname.";
+            description = "Errbot log level";
           };
 
           admins = mkOption {
             type = types.listOf types.str;
             default = [];
-            description = "Gitlab database user password.";
+            description = "List of identifiers of errbot admins.";
           };
 
           backend = mkOption {
             type = types.str;
             default = "XMPP";
-            description = "Gitlab database name.";
+            description = "Errbot backend name.";
           };
 
           identity = mkOption {
-            type = types.str;
-            default = "{}";
-            description = "Gitlab database user.";
+            type = types.attrs;
+            description = "Errbot identity configuration";
           };
 
           extraConfig = mkOption {
             type = types.lines;
             default = "";
-            description = "extraConfig";
+            description = "String to be appended to the config verbatim";
           };
         };
       });
