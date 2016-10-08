@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ounit }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
 
 stdenv.mkDerivation {
   name = "ocaml-fileutils-0.5.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0xs96nlrrm335mcsgsxnqzspiqyfn26b0jjxm72br7c7ax534n47";
   };
 
-  buildInputs = [ ocaml findlib ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild ounit ];
 
   configureFlags = "--enable-tests";
   doCheck = true;

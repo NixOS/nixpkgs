@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, opam}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam }:
 let
   pname = "uunf";
   webpage = "http://erratique.ch/software/${pname}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "16cgjy1m0m61srv1pmlc3gr0y40kd4724clvpagdnz68raz4zmn0";
   };
 
-  buildInputs = [ ocaml findlib opam ];
+  buildInputs = [ ocaml findlib ocamlbuild opam ];
 
   createFindlibDestdir = true;
 

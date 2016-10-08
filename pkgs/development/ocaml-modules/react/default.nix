@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, opam}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam }:
 
 stdenv.mkDerivation {
   name = "ocaml-react-1.2.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   unpackCmd = "tar xjf $src";
-  buildInputs = [ocaml findlib opam];
+  buildInputs = [ ocaml findlib ocamlbuild opam ];
 
   createFindlibDestdir = true;
 

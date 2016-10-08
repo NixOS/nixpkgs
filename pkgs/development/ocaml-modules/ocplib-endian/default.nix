@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, cppo }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, cppo }:
 
 let version = "0.8"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "12xjvzw245mj4s02dgi4k2sx5gam7wxi4mbxmz6k18zg64n48yjd";
   };
 
-  buildInputs = [ ocaml findlib cppo ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo ];
 
   createFindlibDestdir = true;
 

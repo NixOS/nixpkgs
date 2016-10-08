@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, ounit }:
 
 let version = "2.2"; in
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1k68z8kby1f9s5j9xbn9bz8yhk59aalffz8gj5d1y5zhyalifrlz";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ounit ];
 
   createFindlibDestdir = true;

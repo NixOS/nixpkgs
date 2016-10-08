@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
   name = "ocaml-safepass-1.3";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0lb8xbpyc5d1zml7s7mmcr6y2ipwdp7qz73lkv9asy7dyi6cj15g";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   createFindlibDestdir = true;
 

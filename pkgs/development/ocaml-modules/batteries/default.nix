@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, qtest }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, qtest }:
 
 let version = "2.5.2"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "01v7sp8vsqlfrmpji5pkrsjl43r3q8hk1a4z4lmyy9y2i0fqwl07";
   };
 
-  buildInputs = [ ocaml findlib qtest ];
+  buildInputs = [ ocaml findlib ocamlbuild qtest ];
 
   configurePhase = "true"; 	# Skip configure
 
