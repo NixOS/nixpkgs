@@ -45,14 +45,14 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Bitcoin thin-client";
+    description = "A lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
-    homepage = https://electrum.org;
+    homepage = https://electrum.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ ehmry joachifm np ];
   };
