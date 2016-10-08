@@ -2867,6 +2867,8 @@ in
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
+  nixbot = callPackage ../tools/misc/nixbot {};
+
   nkf = callPackage ../tools/text/nkf {};
 
   nlopt = callPackage ../development/libraries/nlopt {};
