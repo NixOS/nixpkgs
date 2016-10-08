@@ -322,6 +322,18 @@ clone_user_rev() {
     fi
 }
 
+json_escape() {
+    local s="$1"
+    s="${s//\\/\\\\}" # \
+    s="${s//\"/\\\"}" # "
+    s="${s//^H/\\\b}" # \b (backspace)
+    s="${s//^L/\\\f}" # \f (form feed)
+    s="${s//
+/\\\n}" # \n (newline)
+    s="${s//^M/\\\r}" # \r (carriage return)
+    s="${s//   /\\t}" # \t (tab)
+    echo "$s"
+}
 
 print_results() {
     hash="$1"
@@ -338,17 +350,15 @@ print_results() {
         fi
     fi
     if test -n "$hash"; then
-        echo "{"
-        echo "  \"url\": \"$url\","
-        echo "  \"rev\": \"$fullRev\","
-        echo "  \"date\": \"$commitDateStrict8601\","
-        echo -n "  \"$hashType\": \"$hash\""
-        if test -n "$fetchSubmodules"; then
-            echo ","
-            echo -n "  \"fetchSubmodules\": true"
-        fi
-        echo ""
-        echo "}"
+        cat <<EOF
+{
+  "url": "$(json_escape "$url")",
+  "rev": "$(json_escape "$fullRev")",
+  "date": "$(json_escape "$commitDateStrict8601")",
+  "$(json_escape "$hashType")": "$(json_escape "$hash")",
+  "fetchSubmodules": $([[ -n "fetchSubmodules" ]] && echo true || echo false)
+}
+EOF
     fi
 }
 
