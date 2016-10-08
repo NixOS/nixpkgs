@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ iasl flex bison ];
 
   hardeningDisable = [ "fortify" ];
+  CFLAGS = "-Wno-error=sign-compare";
 
   buildPhase = ''
     export LEX=${flex}/bin/flex
@@ -34,4 +35,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-
