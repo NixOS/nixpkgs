@@ -61,13 +61,17 @@
     url = "http://downloads.arduino.cc/liblistSerials/liblistSerials-1.1.4.zip";
     sha256 = "1w0zs155hs5b87i5wj049hfj2jsnf9jk30qq93wz1mxab01261v0";
   };
+  "build/shared/WiFi101-Updater-ArduinoIDE-Plugin-0.8.0.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/releases/download/v0.8.0/WiFi101-Updater-ArduinoIDE-Plugin-0.8.0.zip";
+    sha256 = "0fp4mb1qa3w02hrwd51wf261l8ywcl36mi9wipsrgx2y29pk759z";
+  };
 }
 // optionalAttrs (system == "x86_64-linux") {
   "build/arduino-builder-linux64-1.3.21_r1.tar.bz2" = fetchurl {
     url = "http://downloads.arduino.cc/tools/arduino-builder-linux64-1.3.21_r1.tar.bz2";
     sha256 = "1cqx5smzm4dhbj2ah191vbbxi0l7xj95c5gcdbgqm9283hrpfrn7";
   };
-  "build/linux/avr-gcc-4.9.2-arduino5-x86_64-pc-linux-gnu.tar.bz2" = fetchurl {
+  "build/linux/avr-gcc-4.9.2-atmel3.5.3-arduino2-x86_64-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "http://downloads.arduino.cc/tools/avr-gcc-4.9.2-atmel3.5.3-arduino2-x86_64-pc-linux-gnu.tar.bz2";
     sha256 = "124icbjh28cax6pgg6bzrfdi27shsn9mjjshgrr93pczpg8sc0rr";
   };
