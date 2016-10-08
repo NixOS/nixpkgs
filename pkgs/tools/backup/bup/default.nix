@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : ${concatStringsSep ":" (map (x: "$(toPythonPath ${x})")
         (with pythonPackages;
          [ setuptools tornado ]
-         ++ stdenv.lib.optional (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))}
+         ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))}
   '';
 
   meta = {
