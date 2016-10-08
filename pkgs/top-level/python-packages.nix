@@ -13165,11 +13165,11 @@ in modules // {
   };
 
   libcloud = buildPythonPackage (rec {
-    name = "libcloud-0.18.0";
+    name = "libcloud-1.2.1";
 
     src = pkgs.fetchurl {
-      url = mirror://pypi/a/apache-libcloud/apache-libcloud-0.18.0.tar.bz2;
-      sha256 = "0ahdp14ddly074qg5cksxdhqaws0kj445xmhz1y7lzspsp6fk1xg";
+      url = "mirror://pypi/a/apache-libcloud/apache-${name}.tar.bz2";
+      sha256 = "0qlhyz5f32xg8i10biyzqscks8d28vklk63hvj45vzy1amw60kqz";
     };
 
     buildInputs = with self; [ mock ];
@@ -18142,8 +18142,14 @@ in modules // {
     buildInputs = with self; [ mock scripttest virtualenv pretend pytest ];
     # Pip wants pytest, but tests are not distributed
     doCheck = false;
-  };
 
+    meta = {
+      description = "The PyPA recommended tool for installing Python packages";
+      license = licenses.mit;
+      homepage = https://pip.pypa.io/;
+      priority = 10;
+    };
+  };
 
   pika = buildPythonPackage rec {
     name = "pika-${version}";
@@ -27735,12 +27741,12 @@ in modules // {
 
   IMAPClient = buildPythonPackage rec {
     name = "IMAPClient-${version}";
-    version = "0.11";
+    version = "0.13";
     disabled = isPy34 || isPy35;
 
     src = pkgs.fetchurl {
       url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
-      sha256 = "1w54h8gz25qf6ggazzp6xf7kvsyiadsjfkkk17gm0p6pmzvvccbn";
+      sha256 = "0v7kd1crdbff0rmh4ddm5qszkis6hpk9084qh94al8h7g4y9l3is";
     };
 
     buildInputs = with self; [ mock ];
@@ -29255,15 +29261,25 @@ in modules // {
 
   mps-youtube = buildPythonPackage rec {
     name = "mps-youtube-${version}";
-    version = "0.2.6";
+    version = "0.2.7.1";
 
     disabled = (!isPy3k);
+
+    # disabled due to error in loading unittest
+    # don't know how to make test from: <mps_youtube. ...>
+    doCheck = false;
+
+    # before check create a directory and redirect XDG_CONFIG_HOME to it
+    preCheck = ''
+      mkdir -p check-phase
+      export XDG_CONFIG_HOME=$(pwd)/check-phase
+    '';
 
     src = pkgs.fetchFromGitHub {
       owner = "mps-youtube";
       repo = "mps-youtube";
       rev = "v${version}";
-      sha256 = "1vbf60z2birbm7wc9irxy0jf5x3y32ncl8fw52v19xyx7fq10jrm";
+      sha256 = "16zn5gwb3568w95lr21b88zkqlay61p1541sa9c3x69zpi8v0pys";
     };
 
     propagatedBuildInputs = with self; [ pafy ];
@@ -29577,12 +29593,12 @@ in modules // {
   };
 
   hidapi = buildPythonPackage rec{
-    version = "0.7.99.post12";
+    version = "0.7.99.post15";
     name = "hidapi-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hidapi/${name}.tar.gz";
-      sha256 = "1jaj0y5vn5yk033q01wacsz379mf3sy66d6gz072ycfr5rahcp59";
+      sha256 = "09wlr1d7mx80974bsq62j4pk80234jgl7ip4br0y43q6999dpcr0";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libusb1 pkgs.udev cython ];
@@ -29624,15 +29640,15 @@ in modules // {
   };
 
   trezor = buildPythonPackage rec{
-    version = "0.6.11";
+    version = "0.7.4";
     name = "trezor-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/trezor/${name}.tar.gz";
-      sha256 = "0nqbjj0mvkp314hpq36px12hxbyidmhsdflq3121l4g9y3scfbnx";
+      sha256 = "18nr76jkdg24sb3r8cfbiq12b95gnh0amc0r1wx9mmg3pwq6jx6y";
     };
 
-    propagatedBuildInputs = with self; [ protobuf2_6 hidapi ];
+    propagatedBuildInputs = with self; [ protobuf3_0 hidapi ];
 
     buildInputs = with self; [ ecdsa mnemonic ];
 
@@ -29648,15 +29664,15 @@ in modules // {
   };
 
   keepkey = buildPythonPackage rec{
-    version = "0.7.0";
+    version = "0.7.3";
     name = "keepkey-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/k/keepkey/${name}.tar.gz";
-      sha256 = "1ikyp4jpydskznsrlwmxh9sn7b64aldwj2lf0phmb19r5kk06qmp";
+      sha256 = "14d2r8dlx997ypgma2k8by90acw7i3l7hfq4gar9lcka0lqfj714";
     };
 
-    propagatedBuildInputs = with self; [ protobuf2_6 hidapi ];
+    propagatedBuildInputs = with self; [ protobuf3_0 hidapi ];
 
     buildInputs = with self; [ ecdsa mnemonic ];
 
@@ -29706,12 +29722,12 @@ in modules // {
   };
 
   trezor_agent = buildPythonPackage rec{
-    version = "0.6.5";
+    version = "0.7.0";
     name = "trezor_agent-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/trezor_agent/${name}.tar.gz";
-      sha256 = "074vzy5qrx7fa2svqdwj1p6nbpxa8xmhfych9qa2kpcq32dg7a8s";
+      sha256 = "1x1gwih6w8kxhpgmcp0v1k7mpmfsqiikkjca291sd0v2if24x7q1";
     };
 
     propagatedBuildInputs = with self; [ trezor ecdsa ed25519 mnemonic keepkey semver ];

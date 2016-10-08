@@ -1,14 +1,12 @@
-{ stdenv, perl, ronn, fetchFromGitHub }:
+{ stdenv, perl, ronn, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "geteltorito-${version}";
   version = "0.6";
 
-  src = fetchFromGitHub {
-      owner = "Profpatsch";
-      repo = "geteltorito";
-      rev = version;
-      sha256 = "05bcn3pam29xmsz1ykyqsdbkz8y23kcrvvhm987f65wd1g741f75";
+  src = fetchurl {
+    url = "https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/geteltorito-${version}.tar.gz";
+    sha256 = "1gkbm9ahj2mgqrkrfpibzclsriqgsbsvjh19fr815vpd9f6snkxv";
   };
 
   buildInputs = [ perl ronn ];

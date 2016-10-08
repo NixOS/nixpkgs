@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/nslookup $dnsutils
     moveToOutput bin/nsupdate $dnsutils
     ln -sf $dnsutils/bin/{dig,nslookup,nsupdate} $bin/bin
+    ln -sf $host/bin/host $dnsutils/bin
 
     for f in "$out/lib/"*.la; do
       sed -i $f -e 's|-L${openssl.dev}|-L${openssl.out}|g'

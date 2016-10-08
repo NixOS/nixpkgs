@@ -527,6 +527,7 @@
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
   ./services/x11/redshift.nix
+  ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
@@ -569,6 +570,7 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
+  ./system/boot/systemd-nspawn.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc.nix

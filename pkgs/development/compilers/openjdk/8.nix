@@ -1,8 +1,11 @@
-{ stdenv, fetchurl, cpio, pkgconfig, file, which, unzip, zip, xorg, cups, freetype
-, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
+{ stdenv, lib, fetchurl, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
+, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib, lndir
+, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor
+, libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
 , enableInfinality ? true # font rendering patch
+, enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
 }:
 
 let
@@ -65,10 +68,11 @@ let
 
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [
-      cpio file which unzip zip
-      xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
-      xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-      cups freetype alsaLib perl liberation_ttf fontconfig bootjdk zlib
+      cpio file which unzip zip perl bootjdk zlib cups freetype alsaLib
+      libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
+      libXi libXinerama libXcursor lndir fontconfig
+    ] ++ lib.optionals (!minimal && enableGnome2) [
+      gtk2 gnome_vfs GConf glib
     ];
 
     prePatch = ''
@@ -82,10 +86,12 @@ let
       ./fix-java-home-jdk8.patch
       ./read-truststore-from-env-jdk8.patch
       ./currency-date-range-jdk8.patch
-    ] ++ (if enableInfinality then [
+    ] ++ lib.optionals (!minimal && enableInfinality) [
       ./004_add-fontconfig.patch
       ./005_enable-infinality.patch
-    ] else []);
+    ] ++ lib.optionals (!minimal && enableGnome2) [
+      ./swing-use-gtk.patch
+    ];
 
     preConfigure = ''
       chmod +x configure
@@ -101,21 +107,22 @@ let
       "--enable-unlimited-crypto"
       "--disable-debug-symbols"
       "--disable-freetype-bundling"
+      "--with-zlib=system"
+      "--with-giflib=system"
+      "--with-stdc++lib=dynamic"
 
       # glibc 2.24 deprecated readdir_r so we need this
       # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
       "--with-extra-cflags=\"-Wno-error=deprecated-declarations\""
-    ] ++ (if minimal then [
-      "--disable-headful"
-      "--with-zlib=bundled"
-      "--with-giflib=bundled"
-    ] else [
-      "--with-zlib=system"
-    ]);
+    ] ++ lib.optional minimal "--disable-headful";
 
-    NIX_LDFLAGS= if minimal then null else "-lfontconfig";
+    NIX_LDFLAGS= lib.optionals (!minimal) [
+      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
+    ] ++ lib.optionals (!minimal && enableGnome2) [
+      "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+    ];
 
-    buildFlags = "all";
+    buildFlags = [ "all" ];
 
     installPhase = ''
       mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
@@ -135,12 +142,19 @@ let
 
       # Remove crap from the installation.
       rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
+      ${lib.optionalString minimal ''
+        rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
+        rm $out/lib/openjdk/jre/bin/policytool
+        rm $out/lib/openjdk/bin/{policytool,appletviewer}
+      ''}
 
       # Move the JRE to a separate output and setup fallback fonts
       mv $out/lib/openjdk/jre $jre/lib/openjdk/
       mkdir $out/lib/openjdk/jre
-      mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
-      lndir ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
+      ${lib.optionalString (!minimal) ''
+        mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
+        lndir ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
+      ''}
       lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
       rm -rf $out/lib/openjdk/jre/bina

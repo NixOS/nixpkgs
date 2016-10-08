@@ -43,6 +43,15 @@ following incompatible changes:</para>
       <literal>radicale</literal>.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      The Yama LSM is now enabled by default in the kernel,
+      which prevents ptracing non-child processes.
+      This means you will not be able to attach gdb to an existing process,
+      but will need to start that process from gdb (so it is a child).
+    </para>
+  </listitem>
 </itemizedlist>
 
 

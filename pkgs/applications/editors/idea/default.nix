@@ -240,24 +240,24 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2016.2.2";
+    version = "2016.2.3";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1v6vy4xh0n8wdjc25clxg57z7ria11x1zdba4j1hjs2z6l80kxbb";
+      sha256 = "0nph0dp0a2y6vrbc1a2d5iy1fzhm4wbkp6kpdk6mcfpnz5ppz84f";
     };
     wmClass = "jetbrains-pycharm-ce";
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2016.2.2";
+    version = "2016.2.3";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "08x2x6lhr9100lmw1dq8rkz4mlyj4avcj2hpbd5qqybx9j4g6g44";
+      sha256 = "0pjgdwpkbf6fgrhml97inmsjavz1n9l4ns1pnhv3mssnribg3vm1";
     };
     wmClass = "jetbrains-pycharm";
   };
