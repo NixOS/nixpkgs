@@ -58,9 +58,7 @@ let
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
-      if lib.versionOlder "4.03" ocaml.version
-      then callPackage ../development/tools/ocaml/camlp4/4_03.nix { }
-      else if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/tools/ocaml/camlp4 { }
       else null;
 
@@ -707,7 +705,7 @@ in rec
 
   ocamlPackages_4_02 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.02.nix { }) (self: super: { });
 
-  ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.02.nix { }) (self: super: { });
+  ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.03.nix { }) (self: super: { });
 
   ocamlPackages_latest = ocamlPackages_4_03;
 
