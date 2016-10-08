@@ -43,6 +43,15 @@ following incompatible changes:</para>
       <literal>radicale</literal>.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      The <literal>stripHash</literal> bash function in <literal>stdenv</literal>
+      changed according to its documentation; it now outputs the stripped name to
+      <literal>stdout</literal> instead of putting it in the variable
+      <literal>strippedName</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 
