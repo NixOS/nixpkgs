@@ -12096,6 +12096,8 @@ in
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
+  bspwm-unstable = callPackage ../applications/window-managers/bspwm/unstable.nix { };
+
   bvi = callPackage ../applications/editors/bvi { };
 
   bviplus = callPackage ../applications/editors/bviplus { };
