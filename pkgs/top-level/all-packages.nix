@@ -14187,6 +14187,8 @@ in
 
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
+  sxhkd-unstable = callPackage ../applications/window-managers/sxhkd/unstable.nix { };
+
   mpop = callPackage ../applications/networking/mpop {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
