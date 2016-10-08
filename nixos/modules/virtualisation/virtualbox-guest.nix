@@ -17,6 +17,7 @@ in
 
   options.virtualisation.virtualbox.guest.enable = mkOption {
     default = false;
+    type = types.bool;
     description = "Whether to enable the VirtualBox service and other guest additions.";
   };
 

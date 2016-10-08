@@ -16,6 +16,7 @@ in
     virtualisation.xen.enable =
       mkOption {
         default = false;
+        type = types.bool;
         description =
           ''
             Setting this option enables the Xen hypervisor, a
