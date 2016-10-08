@@ -13774,6 +13774,8 @@ in
 
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
+  sxhkd-git = callPackage ../applications/window-managers/sxhkd/git.nix { };
+
   mpop = callPackage ../applications/networking/mpop {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
