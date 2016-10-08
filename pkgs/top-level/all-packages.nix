@@ -11619,6 +11619,8 @@ in
   inconsolata = callPackage ../data/fonts/inconsolata {};
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
+  input-fonts = callPackage ../data/fonts/input-fonts { };
+
   iosevka = callPackage ../data/fonts/iosevka { };
 
   ipafont = callPackage ../data/fonts/ipafont {};
