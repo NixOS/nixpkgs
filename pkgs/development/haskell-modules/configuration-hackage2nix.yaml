@@ -2112,6 +2112,7 @@ dont-distribute-packages:
   cufft:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   gloss-raster-accelerate:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   libnvvm:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  nvvm:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   Obsidian:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   patch-image:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   yices-easy:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
