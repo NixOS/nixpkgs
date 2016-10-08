@@ -66,156 +66,152 @@ in
   options = {
     services.borgbackup.jobs = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
+      description = "Borgbackup jobs.";
+      type = types.attrsOf (types.submodule {
+        options = {
+          repository = mkOption {
+            type = types.str;
+            example = "user@hostname:backup";
+            description = ''
+              Path to borg repository.
+            '';
+          };
 
-      description = ''
-        Borgbackup jobs.
-      '';
+          archive = mkOption {
+            type = types.str;
+            default = "{hostname}-{now:%Y-%m-%d-%H-%M}";
+            example = "{hostname}-{user}-{now:%Y-%m-%d-%H-%M}";
+            description = ''
+              Archive name pattern for individual backups.
 
-      options = {
-        repository = mkOption {
-          type = types.str;
-          example = "user@hostname:backup";
-          description = ''
-            Path to borg repository.
-          '';
+              The format is described in
+              <citerefentry><refentrytitle>borg</refentrytitle>
+              <manvolnum>1</manvolnum></citerefentry>.
+            '';
+          };
+
+          paths = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            example = [ "/var/backups" "/etc/nixos" ];
+            description = ''
+              List of paths or path patterns to backup.
+            '';
+          };
+
+          passphrase = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Passphrase to use for encrypted repositories, if any.
+            '';
+          };
+
+          compression = mkOption {
+            type = types.str;
+            default = "lz4";
+            example = "lzma,1";
+            description = ''
+              Compression method to use for backups.
+
+              The format is described in
+              <citerefentry><refentrytitle>borg</refentrytitle>
+              <manvolnum>1</manvolnum></citerefentry>.
+            '';
+          };
+
+          excludes = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            example = [ "*.pyc" "*.o" ];
+            description = ''
+              Patterns for paths to exclude from backups.
+
+              The format is described in
+              <citerefentry><refentrytitle>borg</refentrytitle>
+              <manvolnum>1</manvolnum></citerefentry>.
+            '';
+          };
+
+          prune.enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Whether to prune the respository after creating a backup.
+            '';
+          };
+
+          prune.prefix = mkOption {
+            type = types.str;
+            default = ''''${config.networking.hostname}-'';
+            example = "hostname-";
+            description = ''
+              Prefix of archives in the repository to prune.
+            '';
+          };
+
+          prune.keep.within = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10d";
+            description = "How long to keep backups.";
+          };
+
+          prune.keep.hourly = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "24";
+            description = "How many backups to keep per hour.";
+          };
+
+          prune.keep.daily = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "7";
+            description = "How many backups to keep per day.";
+          };
+
+          prune.keep.weekly = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "4";
+            description = "How many backups to keep per week.";
+          };
+
+          prune.keep.monthly = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "12";
+            description = "How many backups to keep per month.";
+          };
+
+          prune.keep.yearly = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "5";
+            description = "How many backups to keep per year.";
+          };
+
+          preBackup = mkOption {
+            type = types.lines;
+            default = "";
+            description = "Script to execute before the backup job.";
+          };
+
+          interval = mkOption {
+            type = types.str;
+            default = "daily";
+            example = "hourly";
+            description = ''
+              When to run borg create backup job.
+
+              The format is described in
+              <citerefentry><refentrytitle>systemd.time</refentrytitle>
+              <manvolnum>7</manvolnum></citerefentry>.
+            '';
+          };
         };
-
-        archive = mkOption {
-          type = types.str;
-          default = "{hostname}-{now:%Y-%m-%d-%H-%M}";
-          example = "{hostname}-{user}-{now:%Y-%m-%d-%H-%M}";
-          description = ''
-            Archive name pattern for individual backups.
-
-            The format is described in
-            <citerefentry><refentrytitle>borg</refentrytitle>
-            <manvolnum>1</manvolnum></citerefentry>.
-          '';
-        };
-
-        paths = mkOption {
-          type = types.listOf types.str;
-          default = [];
-          example = [ "/var/backups" "/etc/nixos" ];
-          description = ''
-            List of paths or path patterns to backup.
-          '';
-        };
-
-        passphrase = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            Passphrase to use for encrypted repositories, if any.
-          '';
-        };
-
-        compression = mkOption {
-          type = types.str;
-          default = "lz4";
-          example = "lzma,1";
-          description = ''
-            Compression method to use for backups.
-
-            The format is described in
-            <citerefentry><refentrytitle>borg</refentrytitle>
-            <manvolnum>1</manvolnum></citerefentry>.
-          '';
-        };
-
-        excludes = mkOption {
-          type = types.listOf types.str;
-          default = [];
-          example = [ "*.pyc" "*.o" ];
-          description = ''
-            Patterns for paths to exclude from backups.
-
-            The format is described in
-            <citerefentry><refentrytitle>borg</refentrytitle>
-            <manvolnum>1</manvolnum></citerefentry>.
-          '';
-        };
-
-        prune.enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether to prune the respository after creating a backup.
-          '';
-        };
-
-        prune.prefix = mkOption {
-          type = types.str;
-          default = ''''${config.networking.hostname}-'';
-          example = "hostname-";
-          description = ''
-            Prefix of archives in the repository to prune.
-          '';
-        };
-
-        prune.keep.within = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          example = "10d";
-          description = "How long to keep backups.";
-        };
-
-        prune.keep.hourly = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          example = "24";
-          description = "How many backups to keep per hour.";
-        };
-
-        prune.keep.daily = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          example = "7";
-          description = "How many backups to keep per day.";
-        };
-
-        prune.keep.weekly = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          example = "4";
-          description = "How many backups to keep per week.";
-        };
-
-        prune.keep.monthly = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          example = "12";
-          description = "How many backups to keep per month.";
-        };
-
-        prune.keep.yearly = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          example = "5";
-          description = "How many backups to keep per year.";
-        };
-
-        preBackup = mkOption {
-          type = types.lines;
-          default = "";
-          description = "Script to execute before the backup job.";
-        };
-
-        interval = mkOption {
-          type = types.str;
-          default = "daily";
-          example = "hourly";
-          description = ''
-            When to run borg create backup job.
-
-            The format is described in
-            <citerefentry><refentrytitle>systemd.time</refentrytitle>
-            <manvolnum>7</manvolnum></citerefentry>.
-          '';
-        };
-      };
-
+      });
     };
   };
 
