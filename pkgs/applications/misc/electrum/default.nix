@@ -1,21 +1,5 @@
 { stdenv, fetchurl, pythonPackages }:
 
-let
-  jsonrpclib = pythonPackages.buildPythonPackage rec {
-    version = "0.1.7";
-    name = "jsonrpclib-${version}";
-    src = fetchurl {
-      url = "mirror://pypi/j/jsonrpclib/${name}.tar.gz";
-      sha256 = "02vgirw2bcgvpcxhv5hf3yvvb4h5wzd1lpjx8na5psdmaffj6l3z";
-    };
-    propagatedBuildInputs = [ pythonPackages.cjson ];
-    meta = {
-      homepage = https://pypi.python.org/pypi/jsonrpclib;
-      license = stdenv.lib.licenses.asl20;
-    };
-  };
-in
-
 pythonPackages.buildPythonApplication rec {
   name = "electrum-${version}";
   version = "2.6.4";
