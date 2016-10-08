@@ -42,6 +42,7 @@ in
       pkgs.lxqt.liblxqt
       pkgs.lxqt.libqtxdg
       pkgs.lxqt.libsysstat
+      pkgs.lxqt.lximage-qt
       pkgs.lxqt.lxqt-about
       pkgs.lxqt.lxqt-admin
       pkgs.lxqt.lxqt-common
