@@ -490,6 +490,7 @@
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/mattermost.nix
+  ./services/web-apps/nixbot.nix
   ./services/web-apps/phabricator.nix
   ./services/web-apps/privacyidea.nix
   ./services/web-apps/pump.io.nix
