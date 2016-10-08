@@ -58,6 +58,7 @@ let
     qterminal = callPackage ./optional/qterminal { };
     compton-conf = callPackage ./optional/compton-conf { };
     obconf-qt = callPackage ./optional/obconf-qt { };
+    lximage-qt = callPackage ./optional/lximage-qt { };
    
   };
 
