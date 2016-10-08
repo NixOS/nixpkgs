@@ -13897,6 +13897,8 @@ in
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
+  openmpt123 = callPackage ../applications/audio/openmpt123 {};
+
   opusfile = callPackage ../applications/audio/opusfile { };
 
   opusTools = callPackage ../applications/audio/opus-tools { };
