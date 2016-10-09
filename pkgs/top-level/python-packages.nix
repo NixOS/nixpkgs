@@ -30580,8 +30580,8 @@ in modules // {
     postPatch = ''
       rm tests/test_reading.py
     '';
-    checkPhase = ''
-      py.test
+    checkPhase =  ''
+      py.test -k "not test_timelimit"
     '';
 
     meta = {
