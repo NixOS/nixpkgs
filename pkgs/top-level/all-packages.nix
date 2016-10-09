@@ -7478,7 +7478,7 @@ in
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hydra = callPackage ../development/tools/misc/hydra {};
+  hydra = callPackage ../development/tools/misc/hydra { stdenv = overrideCC stdenv gcc6; };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
