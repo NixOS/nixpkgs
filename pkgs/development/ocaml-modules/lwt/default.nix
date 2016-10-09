@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4, ppx_tools }:
+{ stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocamlbuild, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4, ppx_tools }:
 
 let
   inherit (stdenv.lib) optional getVersion versionAtLeast;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gmhm282r8yi0gwcv0g2s7qchkfjmhqbqf4j9frlyv665ink9kxl";
   };
 
-  buildInputs = [ ocaml_oasis pkgconfig which cryptopp ocaml findlib glib ncurses camlp4 ppx_tools ];
+  buildInputs = [ ocaml_oasis pkgconfig which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ ocaml_react ocaml_ssl ocaml_text libev ];
 
