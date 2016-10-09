@@ -3218,6 +3218,11 @@
     github = "sengaya";
     name = "Thilo Uttendorfer";
   };
+  sephalon = {
+    email = "me@sephalon.net";
+    github = "sephalon";
+    name = "Stefan Wiehler";
+  };
   sepi = {
     email = "raffael@mancini.lu";
     github = "sepi";

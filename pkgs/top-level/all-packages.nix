@@ -4209,6 +4209,8 @@ with pkgs;
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
 
+  pcsc-scm-scl011 = callPackage ../tools/security/pcsc-scm-scl011 { };
+
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
   pdf2htmlEX = callPackage ../tools/typesetting/pdf2htmlEX { };
