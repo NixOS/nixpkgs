@@ -21555,27 +21555,6 @@ in modules // {
     };
   };
 
-  Whoosh = buildPythonPackage rec {
-    name = "Whoosh-${version}";
-    version = "2.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/Whoosh/Whoosh-${version}.tar.gz";
-      sha256 = "1xx8rqk1v2xs7mxvy9q4sgz2qmgvhf6ygbqjng3pl83ka4f0xz6d";
-    };
-
-    propagatedBuildInputs = with self; [
-
-    ];
-    buildInputs = with self; [
-      pytest
-    ];
-
-    meta = with stdenv.lib; {
-      homepage = "http://bitbucket.org/mchaput/whoosh";
-    };
-  };
-
   pysolr = buildPythonPackage rec {
     name = "pysolr-${version}";
     version = "3.3.3";
@@ -21611,7 +21590,7 @@ in modules // {
 
     buildInputs = with self; [ coverage mock nose geopy ];
     propagatedBuildInputs = with self; [
-      django_1_6 dateutil_1_5 Whoosh pysolr elasticsearch
+      django_1_6 dateutil_1_5 whoosh pysolr elasticsearch
     ];
 
     patchPhase = ''
