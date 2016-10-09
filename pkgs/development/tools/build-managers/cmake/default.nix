@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
         --subst-var-by glibc_lib ${getLib glibc}
       substituteInPlace Modules/FindCxxTest.cmake \
         --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
+      configureFlags="--parallel=''${NIX_BUILD_CORES:-1} $configureFlags"
     '';
   configureFlags =
     [ "--docdir=share/doc/${name}"

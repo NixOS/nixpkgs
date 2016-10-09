@@ -50,9 +50,12 @@ stdenv.mkDerivation rec {
   CMAKE_PREFIX_PATH = concatStringsSep ":"
     (concatMap (p: [ (p.dev or p) (p.out or p) ]) buildInputs);
 
-  configureFlags =
-    "--docdir=/share/doc/${name} --mandir=/share/man --system-libs --no-system-libarchive"
-    + stdenv.lib.optionalString useQt4 " --qt-gui";
+  configureFlags = [
+    "--docdir=/share/doc/${name}"
+    "--mandir=/share/man"
+    "--system-libs"
+    "--no-system-libarchive"
+   ] ++ stdenv.lib.optional useQt4 "--qt-gui";
 
   setupHook = ./setup-hook.sh;
 
@@ -66,6 +69,7 @@ stdenv.mkDerivation rec {
         --subst-var-by glibc_bin ${getBin glibc} \
         --subst-var-by glibc_dev ${getDev glibc} \
         --subst-var-by glibc_lib ${getLib glibc}
+      configureFlags="--parallel=''${NIX_BUILD_CORES:-1} $configureFlags"
     '';
 
   meta = {
