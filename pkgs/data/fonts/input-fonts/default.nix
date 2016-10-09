@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       characters — but without the limitations of a fixed width.
     '';
     homepage = http://input.fontbureau.com;
-    license = licenses.proprietary;
+    license = licenses.unfree;
     maintainers = with maintainers; [ romildo ];
     platforms = platforms.all;
   };
