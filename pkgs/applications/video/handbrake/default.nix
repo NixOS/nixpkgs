@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
     lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
   ] ++ buildInputsX;
 
-
   src = fetchurl {
     url = "http://download.handbrake.fr/releases/${version}/HandBrake-${version}.tar.bz2";
     sha256 = "1w720y3bplkz187wgvy4a4xm0vpppg45mlni55l6yi8v2bfk14pv";
@@ -73,6 +72,11 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd build
+  '';
+
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ x265 ];
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}")
   '';
 
   meta = {
