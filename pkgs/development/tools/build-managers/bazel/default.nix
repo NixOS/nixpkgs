@@ -10,7 +10,7 @@ let
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.philandstuff ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 
   bootstrapEnv = buildFHSUserEnv {
@@ -23,7 +23,7 @@ let
 
   bazelBinary = stdenv.mkDerivation rec {
     name = "bazel-${version}";
-  
+
     src = fetchFromGitHub {
       owner = "bazelbuild";
       repo = "bazel";
@@ -48,11 +48,11 @@ let
       export LD_LIBRARY_PATH="${buildTimeLibPath}:$LD_LIBRARY_PATH"
       ./compile.sh
     '';
-  
+
     buildPhase = ''
       bazel-bootstrap-env ${buildWrapper}
     '';
-  
+
     installPhase = ''
       mkdir -p $out/bin
       cp output/bazel $out/bin/
@@ -60,10 +60,10 @@ let
           --suffix PATH ":" "${runTimeBinPath}" \
           --suffix LD_LIBRARY_PATH ":" "${runTimeLibPath}"
     '';
-  
+
     dontStrip = true;
     dontPatchELF = true;
-  
+
     inherit meta;
   };
 
