@@ -61,20 +61,16 @@ let
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2016-04-15";
+  version = "2016-10-09";
+
+  inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "177bf25d648092826a75369191503a3f2bb763a4";
-    sha256 = "0ngipzm2i2vz5ygfd70hh82d027snpl85r8ncn1rxlkak0g8fxsl";
+    rev = "96dc9ccecb48754ed13624ec930a429f0177e643";
+    sha256 = "0skl26hhbcjm2bv7b2d6xdpaihrsffgwx7h5xzslps3ndan5adis";
   };
-
-  patches = [(fetchpatch {
-    name = "cmath.diff";
-    url = https://github.com/vcunat/hydra/commit/3c6fca1ba299.diff; # https://github.com/NixOS/hydra/pull/337
-    sha256 = "02m9q304ay45s7xfkm2y7lppakrkx3hrq39mm6348isnbqmbarc0";
-  })];
 
   buildInputs =
     [ makeWrapper autoconf automake libtool unzip nukeReferences pkgconfig sqlite libpqxx
