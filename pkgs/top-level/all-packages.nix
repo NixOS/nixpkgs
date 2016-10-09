@@ -170,6 +170,10 @@ in
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+  homeassistant = callPackage ../servers/home-automation/homeassistant {
+    pythonPackages = python35Packages;
+  };
+
   packer = callPackage ../development/tools/packer {
     # Go 1.7 changed the linker flag format
     buildGoPackage = buildGo16Package;

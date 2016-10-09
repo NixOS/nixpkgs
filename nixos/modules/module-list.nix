@@ -194,6 +194,7 @@
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/hardware/thermald.nix
+  ./services/home-automation/homeassistant.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix

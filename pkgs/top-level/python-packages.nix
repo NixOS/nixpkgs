@@ -4699,6 +4699,23 @@ in modules // {
     };
   };
 
+  pytest-cov = buildPythonPackage rec {
+    name = "pytest-cov-2.4.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-cov/${name}.tar.gz";
+      sha256 = "03c2qc42r4bczyw93gd7n0qi1h1jfhw7fnbhi33c3vp1hs81gm2k";
+    };
+
+    propagatedBuildInputs = with self; [ pytest coverage ];
+
+    meta = {
+      maintainers = with maintainers; [ peterhoeg ];
+      platforms = platforms.unix;
+    };
+  };
+
+
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
     src = pkgs.fetchurl {
@@ -30078,6 +30095,27 @@ in modules // {
     };
   };
 
+  voluptuous = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "voluptuous";
+    version = "0.9.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/${pname}/${name}.tar.gz";
+      sha256 = "0s651rxvnwri8dwq5zy8s8f65qif2zzdbv3bpfm4qxbklbyi2npd";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    meta = {
+      description = "Data validation library";
+      homepage    = https://github.com/alecthomas/voluptuous;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ peterhoeg ];
+      platforms   = platforms.all;
+    };
+  };
+
   ramlfications = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "ramlfications";
@@ -30195,4 +30233,102 @@ in modules // {
     };
   };
 
+  netdisco = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "netdisco";
+    version = "0.7.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/${pname}/${name}.tar.gz";
+      sha256 = "17383nin5ls347my9wmxk1kmsn02sw26p4f8vl2d61mdd5parx9m";
+    };
+
+    propagatedBuildInputs = with self; [
+      requests2
+      zeroconf
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Discover devices on your local network";
+      homepage = https://home-assistant.io;
+      platforms = platforms.all;
+      license = licenses.mit;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
+
+  static3 = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "static3";
+    version = "0.7.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "1j275ys1byh8w55nginyjflxr4rmgrzfy2xj5sphfmf79g342ik7";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [
+      pytest-cov
+      tox
+      webtest
+    ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A really simple WSGI way to serve static (or mixed) content";
+      homepage = https://home-assistant.io;
+      platforms = platforms.all;
+      license = licenses.mit;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
+
+  zeroconf = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "zeroconf";
+    version = "0.17.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/z/${pname}/${name}.tar.gz";
+      sha256 = "1qy5wvhvp9r7xw9qbg7vchqss55h35fryajgws5grg9k72kvl55n";
+    };
+
+    propagatedBuildInputs = with self; [
+      enum-compat
+      netifaces
+      six
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Pure Python Multicast DNS Service Discovery Library (Bonjour/Avahi compatible)";
+      homepage = https://github.com/jstasiak/python-zeroconf;
+      platforms = platforms.all;
+      license = licenses.mit;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
+
+  enum-compat = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "enum-compat";
+    version = "0.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/e/${pname}/${name}.tar.gz";
+      sha256 = "14j1i963jic2vncbf9k5nq1vvv8pw2zsg7yvwhm7d9c6h7qyz74k";
+    };
+
+    meta = with stdenv.lib; {
+      description = "enum/enum34 compatibility package";
+      homepage = https://github.com/jstasiak/enum-compat;
+      platforms = platforms.all;
+      license = licenses.mit;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+};
 }
