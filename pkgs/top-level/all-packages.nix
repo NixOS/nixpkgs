@@ -2095,6 +2095,8 @@ in
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
+  httpstat = callPackage ../tools/networking/httpstat { };
+
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
