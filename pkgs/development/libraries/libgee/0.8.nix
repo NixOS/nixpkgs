@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     homepage = "http://live.gnome.org/Libgee";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }
