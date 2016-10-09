@@ -13,4 +13,5 @@ rec {
   dbus-1-tqt = callPackage ./dependencies/dbus-1-tqt { };
   libart-lgpl = callPackage ./dependencies/libart-lgpl { };
   tqca-tls = callPackage ./dependencies/tqca-tls { };
+  avahi-tqt =  callPackage ./dependencies/avahi-tqt { };
 }

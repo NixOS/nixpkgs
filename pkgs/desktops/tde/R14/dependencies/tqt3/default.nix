@@ -99,15 +99,17 @@ stdenv.mkDerivation rec {
       then "-L${cups.out}/lib -I${cups.dev}/include"
       else ""}
     ${if mysqlSupport
-      then "-qt-sql-mysql -L${mysql.lib}/lib
-      -I${mysql.lib}/include/mysql"
+      then "-qt-sql-mysql -L${mysql.out}/lib
+      -I${mysql.out}/include/mysql"
       else ""}
     ${if postgresqlSupport
-    then "-qt-sql-psql -L${postgresql.lib}/lib
-    -I${postgresql.out}/include -I${postgresql.out}/include/server"
-    else ""}
-    ${if sqliteSupport then "-qt-sql-sqlite
-      -L${sqlite.out}/lib/sqlite -I${sqlite.dev}/include" else ""}
+     then "-qt-sql-psql -L${postgresql.lib}/lib
+     -I${postgresql.out}/include -I${postgresql.out}/include/server"
+     else ""}
+    ${if sqliteSupport
+      then "-qt-sql-sqlite -L${sqlite.out}/lib/sqlite
+      -I${sqlite.dev}/include"
+      else ""}
     ${if odbcSupport
       then "-qt-sql-odbc -L${unixODBC}/lib -I${unixODBC}/include"
       else ""}
@@ -123,6 +125,9 @@ stdenv.mkDerivation rec {
         --replace "/usr" "/FAILURE"
     done
   '';
+
+  # Workaround for a compilation 'error'
+  hardeningDisable = [ "format" ];
 
   configurePhase = ''
     cd tqt3
