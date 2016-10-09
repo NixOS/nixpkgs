@@ -7646,6 +7646,8 @@ in
 
   libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
 
+  libgee_0_8 = callPackage ../development/libraries/libgee/0.8.nix { };
+
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
