@@ -6447,6 +6447,8 @@ in
 
   global = callPackage ../development/tools/misc/global { };
 
+  gn = callPackage ../development/tools/build-managers/gn { };
+
   gnome_doc_utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
 
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
