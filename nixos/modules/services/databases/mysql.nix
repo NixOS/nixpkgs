@@ -53,7 +53,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.mysql;
-        example = literalExample "pkgs.mysql";
+        defaultText = "pkgs.mysql";
+        example = literalExample "pkgs.mysql55";
         description = "
           Which MySQL derivation to use.
         ";
