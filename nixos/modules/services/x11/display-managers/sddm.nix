@@ -251,6 +251,7 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
+    environment.systemPackages = [ pkgs.sddm ];
 
     users.extraGroups.sddm.gid = config.ids.gids.sddm;
 
