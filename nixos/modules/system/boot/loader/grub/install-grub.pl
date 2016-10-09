@@ -65,6 +65,7 @@ my $efiSysMountPoint = get("efiSysMountPoint");
 my $gfxmodeEfi = get("gfxmodeEfi");
 my $gfxmodeBios = get("gfxmodeBios");
 my $bootloaderId = get("bootloaderId");
+my $forceInstall = get("forceInstall");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -531,13 +532,14 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
     foreach my $dev (@deviceTargets) {
         next if $dev eq "nodev";
         print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
-        if ($grubTarget eq "") {
-            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", Cwd::abs_path($dev)) == 0
-                or die "$0: installation of GRUB on $dev failed\n";
-        } else {
-            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
-                or die "$0: installation of GRUB on $dev failed\n";
+        my @command = ("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", Cwd::abs_path($dev));
+        if ($forceInstall eq "true") {
+            push @command, "--force";
         }
+        if ($grubTarget ne "") {
+            push @command, "--target=$grubTarget";
+        }
+        (system @command) == 0 or die "$0: installation of GRUB on $dev failed\n";
     }
 }
 
@@ -546,6 +548,9 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
 if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both")) {
     print STDERR "installing the GRUB $grubVersion EFI boot loader into $efiSysMountPoint...\n";
     my @command = ("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint");
+    if ($forceInstall eq "true") {
+        push @command, "--force";
+    }
     if ($canTouchEfiVariables eq "true") {
         push @command, "--bootloader-id=$bootloaderId";
     } else {
