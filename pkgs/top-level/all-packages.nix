@@ -9820,6 +9820,7 @@ in
   archiveopteryx = callPackage ../servers/mail/archiveopteryx/default.nix { };
 
   atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
+  atlassian-jira = callPackage ../servers/atlassian/jira.nix { };
 
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
