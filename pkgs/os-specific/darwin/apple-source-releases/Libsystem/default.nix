@@ -56,9 +56,40 @@ appleDerivation rec {
     # The startup object files
     cp ${Csu}/lib/* $out/lib
 
-    # OMG impurity
-    ln -s /usr/lib/libSystem.B.dylib $out/lib/libSystem.B.dylib
-    ln -s /usr/lib/libSystem.dylib $out/lib/libSystem.dylib
+    # Narrowly speaking, these would work if we re-exported libsystem_c and libsystem_kernel,
+    # but we also need to run the original central libsystem constructor (which initializes
+    # a ton of crap for its consitutent libraries) so we link against the central library here.
+    mkdir -p $out/lib/system
+    ld -macosx_version_min 10.7 -arch x86_64 -dylib \
+       -o $out/lib/system/libsystem_c.dylib \
+       /usr/lib/libSystem.dylib \
+       -reexported_symbols_list ${./system_c_symbols}
+
+    ld -macosx_version_min 10.7 -arch x86_64 -dylib \
+       -o $out/lib/system/libsystem_kernel.dylib \
+       /usr/lib/libSystem.dylib \
+       -reexported_symbols_list ${./system_kernel_symbols}
+
+    libs=$(otool -arch x86_64 -L /usr/lib/libSystem.dylib | tail -n +3 | awk '{ print $1 }')
+
+
+    for i in $libs; do
+      if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then
+        args="$args -reexport_library $i"
+      fi
+    done
+
+    ld -macosx_version_min 10.7 \
+       -arch x86_64 \
+       -dylib \
+       -o $out/lib/libSystem.B.dylib \
+       -compatibility_version 1.0 \
+       -current_version 1226.10.1 \
+       -reexport_library $out/lib/system/libsystem_c.dylib \
+       -reexport_library $out/lib/system/libsystem_kernel.dylib \
+       $args
+
+    ln -s libSystem.B.dylib $out/lib/libSystem.dylib
 
     # Set up links to pretend we work like a conventional unix (Apple's design, not mine!)
     for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
