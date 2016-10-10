@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
-, libart_lgpl, qt4, python, cups, fontconfig, libjpeg
+, libart_lgpl, qt4, pythonFull, cups, fontconfig, libjpeg
 , zlib, libpng, xorg, cairo, podofo, aspell, boost, cmake }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with xorg;
     [ pkgconfig cmake freetype lcms libtiff libxml2 libart_lgpl qt4
-      python cups fontconfig
+      pythonFull cups fontconfig
       libjpeg zlib libpng podofo aspell cairo
       boost # for internal 2geom library
       libXaw libXext libX11 libXtst libXi libXinerama
