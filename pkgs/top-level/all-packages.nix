@@ -16675,6 +16675,8 @@ in
 
   pari = callPackage ../applications/science/math/pari {};
 
+  ratpoints = callPackage ../applications/science/math/ratpoints {};
+
   calc = callPackage ../applications/science/math/calc { };
 
   pcalc = callPackage ../applications/science/math/pcalc { };
