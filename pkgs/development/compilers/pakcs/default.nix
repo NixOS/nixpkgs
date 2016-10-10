@@ -82,7 +82,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ swiPrologLocked makeWrapper glibcLocales rlwrap tk which ];
 
-  patches = [ ./adjust-buildsystem.patch ];
+  patches = [
+    ./adjust-buildsystem.patch
+    ./case-insensitive.patch
+  ];
 
   configurePhase = ''
     # Phony HOME.
@@ -151,6 +154,6 @@ stdenv.mkDerivation rec {
     '';
 
     maintainers = [ stdenv.lib.maintainers.gnidorah ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
