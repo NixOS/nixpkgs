@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, zlib, imlib2, pkgconfig, libX11 }:
+{ stdenv, fetchurl, ncurses, zlib, imlib2, pkgconfig, libX11, libXext }:
 
 stdenv.mkDerivation rec {
   name = "libcaca-0.99.beta19";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
-  propagatedBuildInputs = [ ncurses zlib imlib2 pkgconfig libX11 ];
+  propagatedBuildInputs = [ ncurses zlib imlib2 pkgconfig libX11 ]
+   ++ stdenv.lib.optional stdenv.isDarwin libXext;
 
   postInstall = ''
     mkdir -p $dev/bin
