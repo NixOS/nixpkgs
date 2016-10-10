@@ -5101,6 +5101,8 @@ in
 
   ponyc = callPackage ../development/compilers/ponyc { };
 
+  pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
+
   rgbds = callPackage ../development/compilers/rgbds { };
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
