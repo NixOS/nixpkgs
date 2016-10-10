@@ -6989,6 +6989,8 @@ in
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
+  givaro = callPackage ../development/libraries/givaro {};
+
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/git2 (
