@@ -1,4 +1,4 @@
-{stdenv, fetchgit, gnome3, automake, autoconf, which, libtool, pkgconfig, graphviz, glib, libgee_0_8, gobjectIntrospection, expat}:
+{stdenv, fetchgit, gnome3, automake, autoconf, which, libtool, pkgconfig, graphviz, glib, gobjectIntrospection, expat}:
 stdenv.mkDerivation rec {
   version = "2016-10-09";
   name = "valadoc-unstable-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ automake autoconf which gnome3.vala libtool pkgconfig gobjectIntrospection ];
-  buildInputs = [ graphviz glib libgee_0_8 expat ];
+  buildInputs = [ graphviz glib gnome3.libgee expat ];
 
   preConfigure = "./autogen.sh";
 
