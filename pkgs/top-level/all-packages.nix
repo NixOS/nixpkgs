@@ -5204,6 +5204,8 @@ in
 
   vala_0_32 = callPackage ../development/compilers/vala/0.32.nix { };
 
+  valadoc = callPackage ../development/tools/valadoc { };
+
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
@@ -7649,6 +7651,8 @@ in
   libgdata = gnome3.libgdata;
 
   libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
+
+  libgee_0_8 = callPackage ../development/libraries/libgee/0.8.nix { };
 
   libgig = callPackage ../development/libraries/libgig { };
 

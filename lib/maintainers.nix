@@ -240,7 +240,7 @@
   lucas8 = "Luc Chabassier <luc.linux@mailoo.org>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
-  lukasepple = "Lukas Epple <post@lukasepple.de>";
+  sternenseemann = "Lukas Epple <post@lukasepple.de>";
   lukego = "Luke Gorrie <luke@snabb.co>";
   lw = "Sergey Sofeychuk <lw@fmap.me>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
