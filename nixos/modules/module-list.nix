@@ -84,6 +84,7 @@
   ./programs/ssmtp.nix
   ./programs/tmux.nix
   ./programs/venus.nix
+  ./programs/vim.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
