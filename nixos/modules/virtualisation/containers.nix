@@ -484,7 +484,7 @@ in
             };
 
             extraVeths = mkOption {
-              type = with types; attrsOf (submodule networkOptions);
+              type = with types; attrsOf (submodule { options = networkOptions; });
               default = {};
               description = ''
                 Extra veth-pairs to be created for the container

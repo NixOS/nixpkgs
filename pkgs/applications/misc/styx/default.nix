@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "styx-${version}";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner  = "styx-static";
     repo   = "styx";
     rev    = "v${version}";
-    sha256 = "0lz6mfawschfjg4mvfsqz9dv884x2lcg787zjdlnhdi5yqmjx29r";
+    sha256 = "1bcd0ss628mhchrl85fy6acxcxqvm1d3qywfaxhikahl1r7inpwg";
   };
 
   server = caddy.bin;
@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     asciidoctor $sourceRoot/doc/manual.doc -o $out/share/doc/styx/index.html
 
     substituteAllInPlace $out/bin/styx
-    substituteAllInPlace $out/share/styx/sample/templates/feed.nix
     substituteAllInPlace $out/share/doc/styx/index.html
   '';
 

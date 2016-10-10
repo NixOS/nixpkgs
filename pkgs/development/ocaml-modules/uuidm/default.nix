@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation rec {
   version = "0.9.5";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar -xf $curSrc";
 
-  buildInputs = [ocaml findlib];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $prefix";
   buildPhase = "ocaml setup.ml -build";

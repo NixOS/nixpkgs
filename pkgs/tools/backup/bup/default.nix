@@ -22,12 +22,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ git pythonPackages.python ];
   nativeBuildInputs = [ pandoc perl makeWrapper ];
 
-  patches = optional stdenv.isDarwin (fetchurl {
-    url = "https://github.com/bup/bup/commit/75d089e7cdb7a7eb4d69c352f56dad5ad3aa1f97.diff";
-    sha256 = "05kp47p30a45ip0fg090vijvzc7ijr0alc3y8kjl6bvv3gliails";
-    name = "darwin_10_10.patch";
-  });
-
   postPatch = ''
     patchShebangs .
     substituteInPlace Makefile --replace "-Werror" ""
@@ -49,7 +43,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bup \
       --prefix PATH : ${git}/bin \
       --prefix PYTHONPATH : ${concatStringsSep ":" (map (x: "$(toPythonPath ${x})")
-        (with pythonPackages; [ pyxattr pylibacl setuptools fuse tornado ]))}
+        (with pythonPackages;
+         [ setuptools tornado ]
+         ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))}
   '';
 
   meta = {

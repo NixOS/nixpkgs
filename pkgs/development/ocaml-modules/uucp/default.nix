@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam }:
 
 let
   inherit (stdenv.lib) getVersion versionAtLeast;
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     sha256 = "1vm5f2ppdrnk19j0ppjiqz56qf5bzyk26gs0lz071s7iblk459jz";
   };
 
-  buildInputs = [ ocaml findlib opam ];
+  buildInputs = [ ocaml findlib ocamlbuild opam ];
 
   createFindlibDestdir = true;
 

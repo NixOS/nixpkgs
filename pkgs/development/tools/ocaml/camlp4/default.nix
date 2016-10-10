@@ -1,17 +1,25 @@
-{stdenv, fetchzip, which, ocaml}:
+{ stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.02";
+let param = {
+  "4.02.3" = {
+     version = "4.02+6";
+     sha256 = "06yl4q0qazl7g25b0axd1gdkfd4qpqzs1gr5fkvmkrcbz113h1hj"; };
+  "4.03.0" = {
+     version = "4.03+1";
+     sha256 = "1f2ndch6f1m4fgnxsjb94qbpwjnjgdlya6pard44y6n0dqxi1wsq"; };
+  }."${ocaml.version}";
+in
 
 stdenv.mkDerivation rec {
   name = "camlp4-${version}";
-  version = "4.02+6";
+  inherit (param) version;
 
   src = fetchzip {
     url = "https://github.com/ocaml/camlp4/archive/${version}.tar.gz";
-    sha256 = "06yl4q0qazl7g25b0axd1gdkfd4qpqzs1gr5fkvmkrcbz113h1hj";
+    inherit (param) sha256;
   };
 
-  buildInputs = [ which ocaml ];
+  buildInputs = [ which ocaml ocamlbuild ];
 
   dontAddPrefix = true;
 
@@ -27,7 +35,6 @@ stdenv.mkDerivation rec {
     substituteInPlace camlp4/META.in \
     --replace +camlp4 $out/lib/ocaml/${ocaml.version}/site-lib/camlp4
   '';
-
 
   makeFlags = "all";
 

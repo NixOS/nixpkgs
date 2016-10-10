@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Icons based on Breeze and Super Flat Remix";
     homepage = https://github.com/manjaro/artwork-maia;
-    licence = licenses.free;
+    license = licenses.free;
     maintainers = [ maintainers.mounium ];
     platforms = platforms.all;
   };

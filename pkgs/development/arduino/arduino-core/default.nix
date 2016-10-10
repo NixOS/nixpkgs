@@ -16,14 +16,14 @@ let
   ncurses5 = ncurses.override { abiVersion = "5"; };
 in
 stdenv.mkDerivation rec {
-  version = "1.6.9";
+  version = "1.6.12";
   name = "arduino${stdenv.lib.optionalString (withGui == false) "-core"}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = "${version}";
-    sha256 = "0ksd6mkcf41114n0h37q80y1bz3a2q3z8kg6m9i11c3wrj8n80np";
+    sha256 = "0rz8dv1mncwx2wkafakxqdi2y0rq3f72fr57cg0z5hgdgdm89lkh";
   };
 
   buildInputs = [ jdk ant libusb libusb1 unzip zlib ncurses5 readline ];
@@ -43,13 +43,8 @@ stdenv.mkDerivation rec {
       cp -v $file_src $file_dst
     done
 
-    # Loop above creates library_index.json.gz, package_index.json.gz and package_index.json.sig in
-    # current directory. And now we can inject them into build process.
-    library_index_url=file://$(pwd)/library_index.json
-    package_index_url=file://$(pwd)/package_index.json
-
     cd ./arduino-core && ant
-    cd ../build && ant -Dlibrary_index_url=$library_index_url -Dpackage_index_url=$package_index_url
+    cd ../build && ant 
     cd ..
   '';
 

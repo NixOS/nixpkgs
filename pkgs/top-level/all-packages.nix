@@ -378,6 +378,8 @@ in
 
   afl = callPackage ../tools/security/afl { };
 
+  afpfs-ng = callPackage ../tools/filesystems/afpfs-ng/default.nix { };
+
   aha = callPackage ../tools/text/aha { };
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
@@ -499,6 +501,8 @@ in
   djmount = callPackage ../tools/filesystems/djmount { };
 
   elvish = callPackage ../shells/elvish { };
+
+  enpass = callPackage ../tools/security/enpass { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
@@ -2097,6 +2101,8 @@ in
   httping = callPackage ../tools/networking/httping {};
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
+
+  httpstat = callPackage ../tools/networking/httpstat { };
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
@@ -15577,6 +15583,8 @@ in
 
   openlierox = callPackage ../games/openlierox { };
 
+  openclonk = callPackage ../games/openclonk { };
+
   openmw = callPackage ../games/openmw { };
 
   openra = callPackage ../games/openra { lua = lua5_1; };
@@ -16868,6 +16876,8 @@ in
   libjack2-git = callPackage ../misc/jackaudio/git.nix { };
 
   keynav = callPackage ../tools/X11/keynav { };
+
+  kops = callPackage ../applications/networking/cluster/kops { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
 

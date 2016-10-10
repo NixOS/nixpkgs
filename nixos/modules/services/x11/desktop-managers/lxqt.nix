@@ -66,6 +66,7 @@ in
       pkgs.menu-cache
       pkgs.openbox # default window manager
       pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
+      pkgs.xscreensaver
     ];
 
     # Link some extra directories in /run/current-system/software/share

@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, udev, libgudev, polkit, dbus_glib, ppp, intltool, pkgconfig, libmbim, libqmi }:
+{ stdenv, fetchurl, udev, libgudev, polkit, dbus_glib, ppp, intltool, pkgconfig
+, libmbim, libqmi, systemd }:
 
 stdenv.mkDerivation rec {
   name = "ModemManager-${version}";
-  version = "1.4.6";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/ModemManager/${name}.tar.xz";
-    sha256 = "1kd5nn5rm88c8rgmzwy2fsf3cr7fai7r85mi61kcby0hcgsapv8c";
+    sha256 = "14v31j916h63z7af107rias1zbb2y94p3jg77zhzhrn1v6c46m74";
   };
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  buildInputs = [ udev libgudev polkit dbus_glib ppp libmbim libqmi ];
+  buildInputs = [ udev libgudev polkit dbus_glib ppp libmbim libqmi systemd ];
 
   configureFlags = [
     "--with-polkit"
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    "--with-suspend-resume=systemd"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];

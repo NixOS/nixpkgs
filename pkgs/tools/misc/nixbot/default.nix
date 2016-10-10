@@ -1,18 +1,25 @@
-{ python3Packages, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
-  name = "nixbot-unstable-2016-10-08";
+  name = "nixbot-unstable-2016-10-09";
 
   src = fetchFromGitHub {
     owner = "domenkozar";
     repo = "nixbot";
-    rev = "62cf804a76c55a365d3e95d003e3126b20f6b124";
-    sha256 = "0x9x9dhcqyd4frgwl39sksjd4lwni6vrqss9b9phm5gxhgmhsqvp";
+    rev = "dc490e4954cb08f0eff97f74ad39dedb54670aa9";
+    sha256 = "1l8rlhd2b7x5m79vb2vgszachygasv0pk8drnwgxyvsn0k88xcan";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    pygit2 pyramid pyramid_chameleon pyramid_debugtoolbar waitress github3_py
+    pygit2 pyramid waitress github3_py
   ];
 
   doCheck = false;
+
+  meta = with stdenv.lib; {
+    desciption = "Github bot for reviewing/testing pull requests with the help of Hydra";
+    maintainers = with maintainers; [ domenkozar fpletz globin ];
+    license = licenses.asl20;
+    homepage = https://github.com/domenkozar/nixbot;
+  };
 }
