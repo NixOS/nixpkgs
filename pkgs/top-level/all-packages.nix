@@ -6885,6 +6885,8 @@ in
 
   fmod42416 = callPackage ../development/libraries/fmod/4.24.16.nix { };
 
+  fplll = callPackage ../development/libraries/fplll {};
+
   freeimage = callPackage ../development/libraries/freeimage { };
 
   freetts = callPackage ../development/libraries/freetts { };
