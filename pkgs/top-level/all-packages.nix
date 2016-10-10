@@ -7076,6 +7076,8 @@ in
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr/default.nix { };
+  
+  mpfi = callPackage ../development/libraries/mpfi { };
 
   # A GMP fork
   mpir = callPackage ../development/libraries/mpir {};
