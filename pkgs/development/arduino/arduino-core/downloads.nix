@@ -85,7 +85,7 @@
     url = "http://downloads.arduino.cc/tools/arduino-builder-linux32-1.3.21_r1.tar.bz2";
     sha256 = "1prfwb5scprvd74gihd78ibsdy3806b0fsjhgyj9in4w1q8s3dxj";
   };
-  "build/linux/avr-gcc-4.9.2-arduino5-i686-pc-linux-gnu.tar.bz2" = fetchurl {
+  "build/linux/avr-gcc-4.9.2-atmel3.5.3-arduino2-i686-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "http://downloads.arduino.cc/tools/avr-gcc-4.9.2-atmel3.5.3-arduino2-i686-pc-linux-gnu.tar.bz2";
     sha256 = "0s7chsp1jyk477zvfaraf0yacvlzahkwqxpws4k0kjadghg9a27i";
   };
