@@ -2252,6 +2252,8 @@ in
 
   less = callPackage ../tools/misc/less { };
 
+  lhasa = callPackage ../tools/compression/lhasa {};
+
   libcpuid = callPackage ../tools/misc/libcpuid { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
