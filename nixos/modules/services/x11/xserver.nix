@@ -529,6 +529,10 @@ in
           Restart = "always";
           RestartSec = "200ms";
           SyslogIdentifier = "display-manager";
+          # Stop restarting if the display manager stops (crashes) 3 times
+          # in 3 seconds.
+          StartLimitInterval = "3s";
+          StartLimitBurst = "3";
         };
       };
 
