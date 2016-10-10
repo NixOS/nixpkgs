@@ -61,6 +61,7 @@ in
       pkgs.lxqt.obconf-qt
       pkgs.lxqt.pavucontrol-qt
       pkgs.lxqt.pcmanfm-qt
+      pkgs.lxqt.qps
       pkgs.lxqt.qterminal
       pkgs.lxqt.qtermwidget
       pkgs.menu-cache
