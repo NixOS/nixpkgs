@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner  = "IJHack";
-    repo   = "qtpass";
+    repo   = "QtPass";
     rev    = "v${version}";
     sha256 = "0jxb15jn6vv54wb2z52wv9b2mq38xff8akyzwj5xx2332bc9xra2";
   };
