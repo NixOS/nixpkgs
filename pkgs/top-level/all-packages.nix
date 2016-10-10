@@ -871,6 +871,8 @@ in
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
+  hexio = callPackage ../development/tools/hexio { };
+
   interlock = callPackage ../servers/interlock {};
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
@@ -5720,6 +5722,8 @@ in
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
   apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
 
+  asn2quickder = callPackage ../development/tools/asn2quickder {};
+
   astyle = callPackage ../development/tools/misc/astyle { };
 
   electron = callPackage ../development/tools/electron { };
@@ -8885,6 +8889,8 @@ in
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
+
+  quickder = callPackage ../development/libraries/quickder {};
 
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
 
