@@ -16678,6 +16678,7 @@ in
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
   pari = callPackage ../applications/science/math/pari {};
+  pari_alpha = callPackage ../applications/science/math/pari/alpha.nix {};
 
   ratpoints = callPackage ../applications/science/math/ratpoints {};
 
