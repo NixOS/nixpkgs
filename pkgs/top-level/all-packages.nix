@@ -16545,6 +16545,8 @@ in
 
   gappa = callPackage ../applications/science/logic/gappa { };
 
+  gfan = callPackage ../applications/science/math/gfan {};
+
   ginac = callPackage ../applications/science/math/ginac { };
 
   glucose = callPackage ../applications/science/logic/glucose { };
