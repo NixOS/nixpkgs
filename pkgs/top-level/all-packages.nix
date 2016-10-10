@@ -6603,6 +6603,8 @@ in
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
+  cddlib = callPackage ../development/libraries/cddlib {};
+
   cdk = callPackage ../development/libraries/cdk {};
 
   cimg = callPackage  ../development/libraries/cimg { };
