@@ -6970,6 +6970,8 @@ in
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gf2x = callPackage ../development/libraries/gf2x {};
+
   gd = callPackage ../development/libraries/gd {
     libtiff = null;
     libXpm = null;
