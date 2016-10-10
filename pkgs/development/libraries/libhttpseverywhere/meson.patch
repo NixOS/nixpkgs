@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index c20c2f9..f40bb2b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -19,7 +19,7 @@
+ # If not, see http://www.gnu.org/licenses/.
+ #*********************************************************************
+ 
+-project ('httpseverywhere', ['vala','c'])
++project ('httpseverywhere', 'vala','c')
+ 
+ pkgconfig = import('pkgconfig')
+ 
