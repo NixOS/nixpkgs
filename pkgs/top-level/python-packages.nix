@@ -28287,6 +28287,18 @@ in modules // {
     ];
   };
 
+  pynac = buildPythonPackage rec {
+    name = "pynac-${version}";
+    version = "0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://sourceforge/project/pynac/pynac/pynac-0.2/pynac-0.2.tar.gz";
+      sha256 = "0avzqqcxl54karjmla9jbsyid98mva36lxahwmrsx5h40ys2ggxp";
+    };
+
+    propagatedBuildInputs = with self; [];
+  };
+
   pymacaroons-pynacl = buildPythonPackage rec {
     name = "pymacaroons-pynacl-${version}";
     version = "0.9.3";
