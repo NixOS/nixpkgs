@@ -7001,6 +7001,7 @@ in
 
   givaro = callPackage ../development/libraries/givaro {};
   givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
+  givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
