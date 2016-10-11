@@ -100,13 +100,13 @@ let
 
     # Perform a reverse-path test to refuse spoofers
     # For now, we just drop, as the raw table doesn't have a log-refuse yet
-    ${optionalString (kernelHasRPFilter && cfg.checkReversePath) ''
+    ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
       # Clean up rpfilter rules
       ip46tables -t raw -D PREROUTING -j nixos-fw-rpfilter 2> /dev/null || true
       ip46tables -t raw -F nixos-fw-rpfilter 2> /dev/null || true
       ip46tables -t raw -N nixos-fw-rpfilter 2> /dev/null || true
 
-      ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter -j RETURN
+      ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
 
       # Allows this host to act as a DHCPv4 server
       iptables -t raw -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN
@@ -200,7 +200,7 @@ let
     # Clean up after added ruleset
     ip46tables -D INPUT -j nixos-fw 2>/dev/null || true
 
-    ${optionalString (kernelHasRPFilter && cfg.checkReversePath) ''
+    ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
       ip46tables -t raw -D PREROUTING -j nixos-fw-rpfilter 2>/dev/null || true
     ''}
 
@@ -373,7 +373,7 @@ in
 
     networking.firewall.checkReversePath = mkOption {
       default = kernelHasRPFilter;
-      type = types.bool;
+      type = types.either types.bool (types.enum ["strict" "loose"]);
       description =
         ''
           Performs a reverse path filter test on a packet.
@@ -381,7 +381,8 @@ in
           that the packet arrived on, it is refused.
 
           If using asymmetric routing or other complicated routing,
-          disable this setting and setup your own counter-measures.
+          set this option to loose mode or disable it and setup your
+          own counter-measures.
 
           (needs kernel 3.3+)
         '';
@@ -482,7 +483,7 @@ in
       options nf_conntrack nf_conntrack_helper=0
     '';
 
-    assertions = [ { assertion = ! cfg.checkReversePath || kernelHasRPFilter;
+    assertions = [ { assertion = (cfg.checkReversePath != false) || kernelHasRPFilter;
                      message = "This kernel does not support rpfilter"; }
                    { assertion = cfg.autoLoadConntrackHelpers || kernelCanDisableHelpers;
                      message = "This kernel does not support disabling conntrack helpers"; }

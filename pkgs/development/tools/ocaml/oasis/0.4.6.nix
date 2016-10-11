@@ -1,5 +1,6 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_data_notation, type_conv, camlp4,
- ocamlmod, ocamlify, ounit, expect}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, camlp4
+, ocaml_data_notation, type_conv, ocamlmod, ocamlify, ounit, expect
+}:
 
 stdenv.mkDerivation {
   name = "ocaml-oasis-0.4.6";
@@ -13,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [
-      ocaml findlib type_conv ocamlmod ocamlify ounit camlp4
+      ocaml findlib ocamlbuild type_conv ocamlmod ocamlify ounit camlp4
     ];
 
   propagatedBuildInputs = [ ocaml_data_notation ];

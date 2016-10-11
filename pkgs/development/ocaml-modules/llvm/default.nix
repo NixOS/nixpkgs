@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   configurePhase = ''
     mkdir build
     cd build
-    ../configure CC=gcc CXX=g++ --disable-compiler-version-checks --prefix=$out \
+    ../configure --disable-compiler-version-checks --prefix=$out \
     --disable-doxygen --disable-docs --with-ocaml-libdir=$OCAMLFIND_DESTDIR/llvm \
     --enable-static
     '';

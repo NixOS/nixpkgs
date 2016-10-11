@@ -284,6 +284,7 @@ with stdenv.lib;
   RANDOMIZE_BASE? y
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
+  SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
   ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
@@ -395,7 +396,7 @@ with stdenv.lib;
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
-  RT_GROUP_SCHED? y
+  RT_GROUP_SCHED n
   CGROUP_DEVICE? y
   MEMCG y
   MEMCG_SWAP y

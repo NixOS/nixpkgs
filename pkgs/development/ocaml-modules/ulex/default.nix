@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, camlp4 }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, camlp4 }:
 
 let
   pname = "ulex";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ camlp4 ];
 
   buildFlags = "all all.opt";

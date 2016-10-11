@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
     lcms2 libiptcdata libcanberra_gtk2 fftw expat pcre libsigcxx ];
 
+  patches = [
+    ./fix-glibmm-output.patch
+  ];
+
   cmakeFlags = [
     "-DPROC_TARGET_NUMBER=2"
   ];

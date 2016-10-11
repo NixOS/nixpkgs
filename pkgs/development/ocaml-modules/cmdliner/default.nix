@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, opam}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam }:
 
 let
   pname = "cmdliner";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   unpackCmd = "tar xjf $src";
-  buildInputs = [ ocaml findlib opam ];
+  buildInputs = [ ocaml findlib ocamlbuild opam ];
 
   createFindlibDestdir = true;
 

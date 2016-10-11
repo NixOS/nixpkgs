@@ -14,9 +14,11 @@ NixOS.</para>
 <xi:include href="sources.xml" />
 <xi:include href="writing-modules.xml" />
 <xi:include href="building-parts.xml" />
+<xi:include href="writing-documentation.xml" />
 <xi:include href="building-nixos.xml" />
 <xi:include href="nixos-tests.xml" />
 <xi:include href="testing-installer.xml" />
 <xi:include href="reviewing-contributions.xml" />
+<xi:include href="releases.xml" />
 
 </part>

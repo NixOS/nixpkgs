@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A Material Design-like flat theme for GTK3, GTK2, and GNOME Shell";
     homepage = https://github.com/nana-4/Flat-Plat;
-    licence = licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = [ maintainers.mounium ];
     platforms = platforms.all;
   };

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, ocaml, findlib, ncurses}:
+{ stdenv, fetchurl, zlib, ocaml, findlib, ocamlbuild, ncurses }:
 
 assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k2f2ixm7jcsgrzn9lz1hm9qqgq71lk9lxy3v3cwsd8xdrj3jrnv";
   };
 
-  buildInputs = [zlib ocaml findlib ncurses];
+  buildInputs = [ zlib ocaml findlib ocamlbuild ncurses ];
 
   buildFlags = "setup.data build";
 

@@ -66,6 +66,14 @@ in
         ";
       };
 
+      extraFlags = mkOption {
+        default = "";
+        example = "-6";
+        description = "
+          Additional command line flags to be passed to the dhcpd daemon.
+        ";
+      };
+
       configFile = mkOption {
         default = null;
         description = "
@@ -138,6 +146,7 @@ in
           { ExecStart = "@${pkgs.dhcp}/sbin/dhcpd dhcpd"
               + " -pf /run/dhcpd/dhcpd.pid -cf ${configFile}"
               + " -lf ${stateDir}/dhcpd.leases -user dhcpd -group nogroup"
+              + " ${cfg.extraFlags}"
               + " ${toString cfg.interfaces}";
             Restart = "always";
             Type = "forking";

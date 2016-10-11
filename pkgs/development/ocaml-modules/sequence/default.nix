@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, qtest, ounit }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, ounit }:
 
 let version = "0.6"; in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0mky5qas3br2x4y14dzcky212z624ydqnx8mw8w00x0c1xjpafkb";
   };
 
-  buildInputs = [ ocaml findlib qtest ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild qtest ounit ];
 
   configureFlags = [
     "--enable-tests"

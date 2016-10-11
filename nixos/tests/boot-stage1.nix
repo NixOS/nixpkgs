@@ -3,7 +3,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
   machine = { config, pkgs, lib, ... }: {
     boot.extraModulePackages = let
-      compileKernelModule = name: source: pkgs.runCommand name rec {
+      compileKernelModule = name: source: pkgs.runCommandCC name rec {
         inherit source;
         kdev = config.boot.kernelPackages.kernel.dev;
         kver = config.boot.kernelPackages.kernel.modDirVersion;

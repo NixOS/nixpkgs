@@ -18,11 +18,11 @@ assert enableTk -> (tcl != null)
 
 buildPythonPackage rec {
   name = "matplotlib-${version}";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "mirror://pypi/m/matplotlib/${name}.tar.gz";
-    sha256 = "3ab8d968eac602145642d0db63dd8d67c85e9a5444ce0e2ecb2a8fedc7224d40";
+    sha256 = "1g7bhr6v3wdxyx29rfxgf57l9w19s79cdlpyi0h4y0c5ywwxr9d0";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";

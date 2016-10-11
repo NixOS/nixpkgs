@@ -113,4 +113,7 @@ rec {
   */
   warn = msg: builtins.trace "WARNING: ${msg}";
   info = msg: builtins.trace "INFO: ${msg}";
+
+  fetchMD5warn = name: context : data : warn
+    "Deprecated use of MD5 hash in ${name} to fetch ${context}" data;
 }

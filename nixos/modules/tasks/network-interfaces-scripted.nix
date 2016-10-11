@@ -46,6 +46,23 @@ in
     systemd.services =
       let
 
+        deviceDependency = dev:
+          if (config.boot.isContainer == false)
+          then
+            # Trust udev when not in the container
+            [ (subsystemDevice dev) ]
+          else
+            # When in the container, check whether the interface is built from other definitions
+            if (hasAttr dev cfg.bridges) ||
+               (hasAttr dev cfg.bonds) ||
+               (hasAttr dev cfg.macvlans) ||
+               (hasAttr dev cfg.sits) ||
+               (hasAttr dev cfg.vlans) ||
+               (hasAttr dev cfg.vswitches) ||
+               (hasAttr dev cfg.wlanInterfaces)
+            then [ "${dev}-netdev.service" ]
+            else [];
+
         networkLocalCommands = {
           after = [ "network-setup.service" ];
           bindsTo = [ "network-setup.service" ];
@@ -120,8 +137,8 @@ in
             # order before network-setup because the routes that are configured
             # there may need ip addresses configured
             before = [ "network-setup.service" ];
-            bindsTo = [ (subsystemDevice i.name) ];
-            after = [ (subsystemDevice i.name) "network-pre.target" ];
+            bindsTo = deviceDependency i.name;
+            after = [ "network-pre.target" ] ++ (deviceDependency i.name);
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -179,7 +196,7 @@ in
 
         createBridgeDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = map subsystemDevice v.interfaces;
+            deps = concatLists (map deviceDependency v.interfaces);
           in
           { description = "Bridge Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
@@ -220,7 +237,7 @@ in
 
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = map subsystemDevice v.interfaces;
+            deps = concatLists (map deviceDependency v.interfaces);
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
@@ -253,7 +270,7 @@ in
 
         createBondDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = map subsystemDevice v.interfaces;
+            deps = concatLists (map deviceDependency v.interfaces);
           in
           { description = "Bond Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
@@ -291,7 +308,7 @@ in
 
         createMacvlanDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = [ (subsystemDevice v.interface) ];
+            deps = deviceDependency v.interface;
           in
           { description = "Vlan Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
@@ -316,7 +333,7 @@ in
 
         createSitDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = optional (v.dev != null) (subsystemDevice v.dev);
+            deps = optional (v.dev != null) (deviceDependency v.dev);
           in
           { description = "6-to-4 Tunnel Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
@@ -344,7 +361,7 @@ in
 
         createVlanDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = [ (subsystemDevice v.interface) ];
+            deps = deviceDependency v.interface;
           in
           { description = "Vlan Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];

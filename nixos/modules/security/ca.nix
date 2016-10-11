@@ -4,10 +4,16 @@ with lib;
 
 let
 
+  cfg = config.security.pki;
+
+  cacertPackage = pkgs.cacert.override {
+    blacklist = cfg.caCertificateBlacklist;
+  };
+
   caCertificates = pkgs.runCommand "ca-certificates.crt"
     { files =
-        config.security.pki.certificateFiles ++
-        [ (builtins.toFile "extra.crt" (concatStringsSep "\n" config.security.pki.certificates)) ];
+        cfg.certificateFiles ++
+        [ (builtins.toFile "extra.crt" (concatStringsSep "\n" cfg.certificates)) ];
      }
     ''
       cat $files > $out
@@ -52,11 +58,27 @@ in
       '';
     };
 
+    security.pki.caCertificateBlacklist = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [
+        "WoSign" "WoSign China"
+        "CA WoSign ECC Root"
+        "Certification Authority of WoSign G2"
+      ];
+      description = ''
+        A list of blacklisted CA certificate names that won't be imported from
+        the Mozilla Trust Store into
+        <filename>/etc/ssl/certs/ca-certificates.crt</filename>. Use the
+        names from that file.
+      '';
+    };
+
   };
 
   config = {
 
-    security.pki.certificateFiles = [ "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ];
+    security.pki.certificateFiles = [ "${cacertPackage}/etc/ssl/certs/ca-bundle.crt" ];
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caCertificates;

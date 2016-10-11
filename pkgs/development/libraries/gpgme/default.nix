@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
     "--enable-fixed-path=${gpgStorePath}/bin"
   ];
 
+  NIX_CFLAGS_COMPILE =
+    with stdenv; lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+
   meta = with stdenv.lib; {
     homepage = "http://www.gnupg.org/related_software/gpgme";
     description = "Library for making GnuPG easier to use";

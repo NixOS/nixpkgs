@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, gcc, ocaml, ncurses}:
+{ stdenv, fetchurl, makeWrapper, ocaml, ncurses }:
 
 let
   pname = "camlidl";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mv config/Makefile.unix config/Makefile
     substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out
     substituteInPlace config/Makefile --replace OCAMLLIB=/usr/local/lib/ocaml OCAMLLIB=$out/lib/ocaml/${ocaml.version}/site-lib/camlidl
-    substituteInPlace config/Makefile --replace CPP=/lib/cpp CPP=${gcc}/bin/cpp
+    substituteInPlace config/Makefile --replace CPP=/lib/cpp CPP=${stdenv.cc}/bin/cpp
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/caml
   '';
 

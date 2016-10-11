@@ -1,12 +1,14 @@
-{ stdenv, fetchzip, git, gnupg, makeQtWrapper, pass, qtbase, qtsvg, qttools, qmakeHook }:
+{ stdenv, fetchFromGitHub, git, gnupg, makeQtWrapper, pass, qtbase, qtsvg, qttools, qmakeHook }:
 
 stdenv.mkDerivation rec {
   name = "qtpass-${version}";
-  version = "1.1.3";
+  version = "1.1.4";
 
-  src = fetchzip {
-    url = "https://github.com/IJHack/qtpass/archive/v${version}.tar.gz";
-    sha256 = "114rqvd2jl98c75zmhdwfmp44kxa4v459naiivb4w020d60ziq7l";
+  src = fetchFromGitHub {
+    owner  = "IJHack";
+    repo   = "QtPass";
+    rev    = "v${version}";
+    sha256 = "0jxb15jn6vv54wb2z52wv9b2mq38xff8akyzwj5xx2332bc9xra2";
   };
 
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];

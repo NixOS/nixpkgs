@@ -110,6 +110,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Creative Commons Attribution Non Commercial Share Alike 4.0";
   };
 
+  cc-by-nd-30 = spdx {
+    spdxId = "CC-BY-ND-3.0";
+    fullName = "Creative Commons Attribution-No Derivative Works v3.00";
+  };
+
   cc-by-sa-25 = spdx {
     spdxId = "CC-BY-SA-2.5";
     fullName = "Creative Commons Attribution Share Alike 2.5";

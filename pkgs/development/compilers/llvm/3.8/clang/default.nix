@@ -39,7 +39,10 @@ let
       ln -sv $out/bin/clang $out/bin/cpp
 
       mkdir -p $python/bin $python/share/clang/
-      mv $out/bin/{git-clang-format,scan-view,set-xcode-analyzer} $python/bin
+      mv $out/bin/{git-clang-format,scan-view} $python/bin
+      if [ -e $out/bin/set-xcode-analyzer ]; then
+        mv $out/bin/set-xcode-analyzer $python/bin
+      fi
       mv $out/share/clang/*.py $python/share/clang
 
       rm $out/bin/c-index-test

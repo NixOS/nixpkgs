@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     "--enable-systemd"
     "--enable-iproute2"
     "IPROUTE=${iproute}/sbin/ip" ]
-    ++ optional pkcs11Support "--enable-pkcs11";
+    ++ optional pkcs11Support "--enable-pkcs11"
+    ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
 
   postInstall = ''
     mkdir -p $out/share/doc/openvpn/examples
@@ -40,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = http://openvpn.net/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

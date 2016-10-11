@@ -437,6 +437,7 @@
   ./services/networking/wakeonlan.nix
   ./services/networking/websockify.nix
   ./services/networking/wicd.nix
+  ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
   ./services/networking/xl2tpd.nix
@@ -480,6 +481,7 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/web-apps/mattermost.nix
+  ./services/web-apps/nixbot.nix
   ./services/web-apps/pump.io.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
@@ -515,6 +517,7 @@
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
   ./services/x11/redshift.nix
+  ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
@@ -557,6 +560,7 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
+  ./system/boot/systemd-nspawn.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc.nix
