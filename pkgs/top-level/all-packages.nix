@@ -7000,6 +7000,7 @@ in
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
   givaro = callPackage ../development/libraries/givaro {};
+  givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
