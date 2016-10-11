@@ -2888,11 +2888,11 @@ in modules // {
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.41.0";
+    version = "2.42.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "1n33bfbkpijyy6awjq7a8lrw4hw2lmwv5l7j0am6d34gpa8my75l";
+      sha256 = "04ywn8xszk57s87jnkv4j1hswc6ra7z811y9lawfvhvnfshrpx5d";
     };
 
     checkPhase = ''
