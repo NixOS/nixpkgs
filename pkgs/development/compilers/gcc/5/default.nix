@@ -220,8 +220,7 @@ stdenv.mkDerivation ({
     inherit sha256;
   };
 
-  # FIXME stackprotector needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" "format" ];
+  hardeningDisable = [ "format" ];
 
   inherit patches;
 
