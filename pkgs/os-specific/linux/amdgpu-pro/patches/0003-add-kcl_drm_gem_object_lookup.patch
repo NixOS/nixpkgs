@@ -1,0 +1,204 @@
+From 2637dfe990e4c277bc724f6ba48e6661506805ec Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sun, 21 Aug 2016 16:37:34 -0300
+Subject: [PATCH 3/8] add kcl_drm_gem_object_lookup
+
+---
+ amd/amdgpu/amdgpu_atpx_handler.c    |  4 ++++
+ amd/amdgpu/amdgpu_bo_list.c         |  2 +-
+ amd/amdgpu/amdgpu_cs.c              |  2 +-
+ amd/amdgpu/amdgpu_display.c         |  2 +-
+ amd/amdgpu/amdgpu_gem.c             | 10 +++++-----
+ amd/amdgpu/dce_v10_0.c              |  2 +-
+ amd/amdgpu/dce_v11_0.c              |  2 +-
+ amd/amdgpu/dce_v8_0.c               |  2 +-
+ amd/backport/include/kcl/kcl_drm.h  | 11 +++++++++++
+ amd/dal/amdgpu_dm/amdgpu_dm_types.c |  2 +-
+ 10 files changed, 27 insertions(+), 12 deletions(-)
+
+diff --git a/amd/amdgpu/amdgpu_atpx_handler.c b/amd/amdgpu/amdgpu_atpx_handler.c
+index cc9b998..7e47478 100644
+--- a/amd/amdgpu/amdgpu_atpx_handler.c
++++ b/amd/amdgpu/amdgpu_atpx_handler.c
+@@ -565,7 +565,11 @@ void amdgpu_register_atpx_handler(void)
+ 	if (!r)
+ 		return;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0)
++	vga_switcheroo_register_handler(&amdgpu_atpx_handler, 0);
++#else
+ 	vga_switcheroo_register_handler(&amdgpu_atpx_handler);
++#endif
+ }
+ 
+ /**
+diff --git a/amd/amdgpu/amdgpu_bo_list.c b/amd/amdgpu/amdgpu_bo_list.c
+index 35d0856..1d163ec 100644
+--- a/amd/amdgpu/amdgpu_bo_list.c
++++ b/amd/amdgpu/amdgpu_bo_list.c
+@@ -106,7 +106,7 @@ static int amdgpu_bo_list_set(struct amdgpu_device *adev,
+ 		struct amdgpu_bo *bo;
+ 		struct mm_struct *usermm;
+ 
+-		gobj = drm_gem_object_lookup(adev->ddev, filp, info[i].bo_handle);
++		gobj = kcl_drm_gem_object_lookup(adev->ddev, filp, info[i].bo_handle);
+ 		if (!gobj) {
+ 			r = -ENOENT;
+ 			goto error_free;
+diff --git a/amd/amdgpu/amdgpu_cs.c b/amd/amdgpu/amdgpu_cs.c
+index d16ed26..b0390b5 100644
+--- a/amd/amdgpu/amdgpu_cs.c
++++ b/amd/amdgpu/amdgpu_cs.c
+@@ -92,7 +92,7 @@ static int amdgpu_cs_user_fence_chunk(struct amdgpu_cs_parser *p,
+ {
+ 	struct drm_gem_object *gobj;
+ 
+-	gobj = drm_gem_object_lookup(p->adev->ddev, p->filp,
++	gobj = kcl_drm_gem_object_lookup(p->adev->ddev, p->filp,
+ 				     data->handle);
+ 	if (gobj == NULL)
+ 		return -EINVAL;
+diff --git a/amd/amdgpu/amdgpu_display.c b/amd/amdgpu/amdgpu_display.c
+index 46326b3..9b5441f 100644
+--- a/amd/amdgpu/amdgpu_display.c
++++ b/amd/amdgpu/amdgpu_display.c
+@@ -594,7 +594,7 @@ amdgpu_user_framebuffer_create(struct drm_device *dev,
+ 	struct amdgpu_framebuffer *amdgpu_fb;
+ 	int ret;
+ 
+-	obj = drm_gem_object_lookup(dev, file_priv, mode_cmd->handles[0]);
++	obj = kcl_drm_gem_object_lookup(dev, file_priv, mode_cmd->handles[0]);
+ 	if (obj ==  NULL) {
+ 		dev_err(&dev->pdev->dev, "No GEM object associated to handle 0x%08X, "
+ 			"can't create framebuffer\n", mode_cmd->handles[0]);
+diff --git a/amd/amdgpu/amdgpu_gem.c b/amd/amdgpu/amdgpu_gem.c
+index 0069aec..d10c282 100644
+--- a/amd/amdgpu/amdgpu_gem.c
++++ b/amd/amdgpu/amdgpu_gem.c
+@@ -397,7 +397,7 @@ int amdgpu_mode_dumb_mmap(struct drm_file *filp,
+ 	struct drm_gem_object *gobj;
+ 	struct amdgpu_bo *robj;
+ 
+-	gobj = drm_gem_object_lookup(dev, filp, handle);
++	gobj = kcl_drm_gem_object_lookup(dev, filp, handle);
+ 	if (gobj == NULL) {
+ 		return -ENOENT;
+ 	}
+@@ -461,7 +461,7 @@ int amdgpu_gem_wait_idle_ioctl(struct drm_device *dev, void *data,
+ 	int r = 0;
+ 	long ret;
+ 
+-	gobj = drm_gem_object_lookup(dev, filp, handle);
++	gobj = kcl_drm_gem_object_lookup(dev, filp, handle);
+ 	if (gobj == NULL) {
+ 		return -ENOENT;
+ 	}
+@@ -495,7 +495,7 @@ int amdgpu_gem_metadata_ioctl(struct drm_device *dev, void *data,
+ 	int r = -1;
+ 
+ 	DRM_DEBUG("%d \n", args->handle);
+-	gobj = drm_gem_object_lookup(dev, filp, args->handle);
++	gobj = kcl_drm_gem_object_lookup(dev, filp, args->handle);
+ 	if (gobj == NULL)
+ 		return -ENOENT;
+ 	robj = gem_to_amdgpu_bo(gobj);
+@@ -643,7 +643,7 @@ int amdgpu_gem_va_ioctl(struct drm_device *dev, void *data,
+ 		return -EINVAL;
+ 	}
+ 
+-	gobj = drm_gem_object_lookup(dev, filp, args->handle);
++	gobj = kcl_drm_gem_object_lookup(dev, filp, args->handle);
+ 	if (gobj == NULL)
+ 		return -ENOENT;
+ 	rbo = gem_to_amdgpu_bo(gobj);
+@@ -705,7 +705,7 @@ int amdgpu_gem_op_ioctl(struct drm_device *dev, void *data,
+ 	struct amdgpu_bo *robj;
+ 	int r;
+ 
+-	gobj = drm_gem_object_lookup(dev, filp, args->handle);
++	gobj = kcl_drm_gem_object_lookup(dev, filp, args->handle);
+ 	if (gobj == NULL) {
+ 		return -ENOENT;
+ 	}
+diff --git a/amd/amdgpu/dce_v10_0.c b/amd/amdgpu/dce_v10_0.c
+index 7554dd7..6d38754 100644
+--- a/amd/amdgpu/dce_v10_0.c
++++ b/amd/amdgpu/dce_v10_0.c
+@@ -2594,7 +2594,7 @@ static int dce_v10_0_crtc_cursor_set2(struct drm_crtc *crtc,
+ 		return -EINVAL;
+ 	}
+ 
+-	obj = drm_gem_object_lookup(crtc->dev, file_priv, handle);
++	obj = kcl_drm_gem_object_lookup(crtc->dev, file_priv, handle);
+ 	if (!obj) {
+ 		DRM_ERROR("Cannot find cursor object %x for crtc %d\n", handle, amdgpu_crtc->crtc_id);
+ 		return -ENOENT;
+diff --git a/amd/amdgpu/dce_v11_0.c b/amd/amdgpu/dce_v11_0.c
+index d9c9b88..93dbc1a 100644
+--- a/amd/amdgpu/dce_v11_0.c
++++ b/amd/amdgpu/dce_v11_0.c
+@@ -2604,7 +2604,7 @@ static int dce_v11_0_crtc_cursor_set2(struct drm_crtc *crtc,
+ 		return -EINVAL;
+ 	}
+ 
+-	obj = drm_gem_object_lookup(crtc->dev, file_priv, handle);
++	obj = kcl_drm_gem_object_lookup(crtc->dev, file_priv, handle);
+ 	if (!obj) {
+ 		DRM_ERROR("Cannot find cursor object %x for crtc %d\n", handle, amdgpu_crtc->crtc_id);
+ 		return -ENOENT;
+diff --git a/amd/amdgpu/dce_v8_0.c b/amd/amdgpu/dce_v8_0.c
+index 7a027ce..c56a298 100644
+--- a/amd/amdgpu/dce_v8_0.c
++++ b/amd/amdgpu/dce_v8_0.c
+@@ -2501,7 +2501,7 @@ static int dce_v8_0_crtc_cursor_set2(struct drm_crtc *crtc,
+ 		return -EINVAL;
+ 	}
+ 
+-	obj = drm_gem_object_lookup(crtc->dev, file_priv, handle);
++	obj = kcl_drm_gem_object_lookup(crtc->dev, file_priv, handle);
+ 	if (!obj) {
+ 		DRM_ERROR("Cannot find cursor object %x for crtc %d\n", handle, amdgpu_crtc->crtc_id);
+ 		return -ENOENT;
+diff --git a/amd/backport/include/kcl/kcl_drm.h b/amd/backport/include/kcl/kcl_drm.h
+index a65ee25..5a8a7b3 100644
+--- a/amd/backport/include/kcl/kcl_drm.h
++++ b/amd/backport/include/kcl/kcl_drm.h
+@@ -3,6 +3,7 @@
+ 
+ #include <linux/version.h>
+ #include <drm/drmP.h>
++#include <drm/drm_gem.h>
+ 
+ #if defined(BUILD_AS_DKMS)
+ extern int drm_pcie_get_max_link_width(struct drm_device *dev, u32 *mlw);
+@@ -123,4 +124,14 @@ static inline int kcl_drm_universal_plane_init(struct drm_device *dev, struct dr
+ #endif
+ }
+ 
++static inline struct drm_gem_object *kcl_drm_gem_object_lookup(struct drm_device *dev,
++                                 struct drm_file *filp,
++                                 u32 handle) {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 7, 0)
++    return drm_gem_object_lookup(filp, handle);
++#else
++    return drm_gem_object_lookup(dev, filp, handle);
++#endif
++}
++
+ #endif /* AMDGPU_BACKPORT_KCL_DRM_H */
+diff --git a/amd/dal/amdgpu_dm/amdgpu_dm_types.c b/amd/dal/amdgpu_dm/amdgpu_dm_types.c
+index 3f357a5..2e2d2e6 100644
+--- a/amd/dal/amdgpu_dm/amdgpu_dm_types.c
++++ b/amd/dal/amdgpu_dm/amdgpu_dm_types.c
+@@ -152,7 +152,7 @@ static int dm_crtc_pin_cursor_bo_new(
+ 
+ 		amdgpu_crtc = to_amdgpu_crtc(crtc);
+ 
+-		obj = drm_gem_object_lookup(crtc->dev, file_priv, handle);
++		obj = kcl_drm_gem_object_lookup(crtc->dev, file_priv, handle);
+ 
+ 		if (!obj) {
+ 			DRM_ERROR(
+-- 
+2.9.3
+

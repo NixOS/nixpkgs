@@ -1,0 +1,25 @@
+From c9f2501131da0d9173e21f7e8ff5741a7fcfedb6 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sun, 21 Aug 2016 16:58:45 -0300
+Subject: [PATCH 8/8] fix apparent typo in bandwidth_calcs causing array error
+
+---
+ amd/dal/dc/calcs/bandwidth_calcs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/amd/dal/dc/calcs/bandwidth_calcs.c b/amd/dal/dc/calcs/bandwidth_calcs.c
+index 8a19139..c4ededd 100644
+--- a/amd/dal/dc/calcs/bandwidth_calcs.c
++++ b/amd/dal/dc/calcs/bandwidth_calcs.c
+@@ -3181,7 +3181,7 @@ static void calculate_bandwidth(
+ 																	bw_int_to_fixed(
+ 																		2),
+ 																	vbios->mcifwrmc_urgent_latency),
+-																results->dmif_burst_time[i][j]),
++																results->dmif_burst_time[results->y_clk_level][results->sclk_level]),
+ 															results->mcifwr_burst_time[results->y_clk_level][results->sclk_level])),
+ 														results->dispclk),
+ 													bw_int_to_fixed(
+-- 
+2.9.3
+
