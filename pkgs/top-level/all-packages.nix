@@ -7363,6 +7363,8 @@ in
 
   imv = callPackage ../applications/graphics/imv/default.nix { };
 
+  iml = callPackage ../development/libraries/iml { };
+
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
