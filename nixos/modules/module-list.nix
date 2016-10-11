@@ -24,6 +24,7 @@
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/vpnc.nix
+  ./config/vulkan.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
   ./hardware/cpu/amd-microcode.nix
