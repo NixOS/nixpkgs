@@ -7711,6 +7711,8 @@ in
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
+  libgap = callPackage ../development/libraries/libgap { };
+
   libgdata = gnome3.libgdata;
 
   libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
