@@ -1,16 +1,13 @@
-{ stdenv
-, fetchurl
-, pythonPackages
-}:
+{ stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot-worker";
-  version = "0.9.0rc3";
+  version = "0.9.0rc4";
 
   src = fetchurl {
     url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-    sha256 = "0wqn2176rk7hc27r4hfy5qnxp0nr9iis5nyzg5x07xljnsspnhy1";
+    sha256 = "1fv40pki1awv5f2z9vd7phjk7dlsy1cp4blsy2vdhqwbc7112a8c";
   };
 
   buildInputs = with pythonPackages; [ setuptoolsTrial mock ];
@@ -21,5 +18,6 @@ pythonPackages.buildPythonApplication (rec {
     description = "Buildbot Worker Daemon";
     maintainers = with maintainers; [ nand0p ryansydnor ];
     platforms = platforms.all;
+    license = licenses.gpl2;
   };
 })
