@@ -333,7 +333,7 @@ in
 
         createSitDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = optional (v.dev != null) (deviceDependency v.dev);
+            deps = optionals (v.dev != null) (deviceDependency v.dev);
           in
           { description = "6-to-4 Tunnel Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
