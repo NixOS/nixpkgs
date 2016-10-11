@@ -409,8 +409,8 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are available on
-Nix and are available as `python26`, `python27`, `python33`, `python34` and
+Versions 2.7, 3.4 and 3.5 of the CPython interpreter are available on
+Nix and are available as `python27`, `python34` and
 `python35`. The PyPy interpreter is also available as `pypy`. Currently, the
 aliases `python` and `python3` correspond to respectively `python27` and
 `python35`. The Nix expressions for the interpreters can be found in
@@ -419,7 +419,7 @@ aliases `python` and `python3` correspond to respectively `python27` and
 
 #### Missing modules standard library
 
-The interpreters `python26` and `python27` do not include modules that
+The interpreter `python27` does not include modules that
 require external dependencies. This is done in order to reduce the closure size.
 The following modules need to be added as `buildInput` explicitly:
 
@@ -432,7 +432,7 @@ The following modules need to be added as `buildInput` explicitly:
 * `python.modules.tkinter`
 * `python.modules.readline`
 
-For convenience `python27Full` and `python26Full` are provided with all
+For convenience `python27Full` is provided with all
 modules included.
 
 All packages depending on any Python interpreter get appended
@@ -466,9 +466,7 @@ Based on the packages defined in `pkgs/top-level/python-packages.nix` an
 attribute set is created for each available Python interpreter. The available
 sets are
 
-* `pkgs.python26Packages`
 * `pkgs.python27Packages`
-* `pkgs.python33Packages`
 * `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.pypyPackages`
@@ -526,7 +524,7 @@ as the interpreter unless overriden otherwise.
 
 All parameters from `mkDerivation` function are still supported.
 
-* `namePrefix`: Prepended text to `${name}` parameter. Defaults to `"python3.3-"` for Python 3.3, etc. Set it to `""` if you're packaging an application or a command line tool.
+* `namePrefix`: Prepended text to `${name}` parameter. Defaults to `"python3.5-"` for Python 3.5, etc. Set it to `""` if you're packaging an application or a command line tool.
 * `disabled`: If `true`, package is not build for particular python interpreter version. Grep around `pkgs/top-level/python-packages.nix` for examples.
 * `setupPyBuildFlags`: List of flags passed to `setup.py build_ext` command.
 * `pythonPath`: List of packages to be added into `$PYTHONPATH`. Packages in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
@@ -609,7 +607,7 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 
     with import <nixpkgs> {};
 
-    (python33.withPackages (ps: [ps.numpy ps.requests2])).env
+    (python35.withPackages (ps: [ps.numpy ps.requests2])).env
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.

@@ -5505,16 +5505,9 @@ in
   python2Packages = python27Packages;
   python3Packages = python35Packages;
 
-  python26 = callPackage ../development/interpreters/python/cpython/2.6 {
-    db = db47;
-    self = python26;
-  };
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
     inherit (darwin) CF configd;
-  };
-  python33 = callPackage ../development/interpreters/python/cpython/3.3 {
-    self = python33;
   };
   python34 = hiPrio (callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
@@ -5537,10 +5530,6 @@ in
 
   pythonFull = python2Full;
   python2Full = python27Full;
-  python26Full = python26.override {
-    includeModules = true;
-    self = python26Full;
-  };
   python27Full = python27.override {
     includeModules = true;
     self = python27Full;
@@ -9707,22 +9696,12 @@ in
 
   # `nix-env -i python-nose` installs for 2.7, the default python.
   # Therefore we do not recurse into attributes here, in contrast to
-  # python27Packages. `nix-env -iA python26Packages.nose` works
+  # python27Packages. `nix-env -iA python34Packages.nose` works
   # regardless.
-  python26Packages = callPackage ./python-packages.nix {
-    python = python26;
-    self = python26Packages;
-  };
-
   python27Packages = lib.hiPrioSet (recurseIntoAttrs (callPackage ./python-packages.nix {
     python = python27;
     self = python27Packages;
   }));
-
-  python33Packages = callPackage ./python-packages.nix {
-    python = python33;
-    self = python33Packages;
-  };
 
   python34Packages = callPackage ./python-packages.nix {
     python = python34;
