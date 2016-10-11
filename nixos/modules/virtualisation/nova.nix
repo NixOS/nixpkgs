@@ -152,6 +152,13 @@ in {
           '';
       };
 
+      endpointPublic = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = ''
+        '';
+      };
+
       extraConfig = mkOption {
         default = "";
         type = types.lines;
@@ -251,7 +258,7 @@ in {
         then
 	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-create --type compute --name nova
 	    ID=$(keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get nova | awk '/ id / { print $4 }')
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} endpoint-create --region RegionOne --service $ID --internalurl 'http://localhost:8774/v2/%(tenant_id)s' --adminurl 'http://localhost:8774/v2/%(tenant_id)s' --publicurl 'http://localhost:8774/v2/%(tenant_id)s'
+	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} endpoint-create --region RegionOne --service $ID --internalurl 'http://localhost:8774/v2/%(tenant_id)s' --adminurl 'http://localhost:8774/v2/%(tenant_id)s' --publicurl 'http://${cfg.endpointPublic}:8774/v2/%(tenant_id)s'
 
 	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-create --name nova --tenant service --pass asdasd
 	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-role-add --tenant service --user nova --role admin

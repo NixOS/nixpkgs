@@ -59,6 +59,35 @@ in {
         the main Keystone configuration file.
       '';
     };
+
+        endpointPublic = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = ''
+      '';
+    };
+
+    keystoneAdminUsername = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
+
+    keystoneAdminPassword = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
+
+    keystoneAdminTenant = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+      '';
+    };
+
   };
 
 
@@ -119,15 +148,15 @@ in {
 	    if ! keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken tenant-get service
 	    then
                 keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken tenant-create --name service
-                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken tenant-create --name admin
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken tenant-create --name ${cfg.keystoneAdminTenant}
                 # TODO: change password
-                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken user-create --name admin --tenant admin --pass admin
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken user-create --name ${cfg.keystoneAdminUsername} --tenant ${cfg.keystoneAdminTenant} --pass ${cfg.keystoneAdminPassword}
                 keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken role-create --name admin
                 keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken role-create --name Member
-                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken user-role-add --tenant admin --user admin --role admin
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken user-role-add --tenant ${cfg.keystoneAdminTenant} --user ${cfg.keystoneAdminUsername} --role admin
                 keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken service-create --type identity --name keystone
                 ID=$(keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken service-get keystone | awk '/ id / { print $4 }')
-                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken endpoint-create --region RegionOne --service $ID --publicurl http://localhost:5000/v2.0 --adminurl http://localhost:35357/v2.0 --internalurl http://localhost:5000/v2.0
+                keystone --os-endpoint http://localhost:35357/v2.0 --os-token SuperSecreteKeystoneToken endpoint-create --region RegionOne --service $ID --publicurl http://{cfg.endpointPublic}:5000/v2.0 --adminurl http://localhost:35357/v2.0 --internalurl http://localhost:5000/v2.0
             fi
 	'';
         serviceConfig = {
