@@ -6,7 +6,7 @@
 }:
 let
 inherit (builtins) filter map elem;
-inherit (lib) getAttr concatMap flip;
+inherit (lib) getAttr concatMap flip attrNames;
 
 # mapping from nixpkgs hardening flags to their compiler / linker meanings
 hardeningFlagMap = {
@@ -37,8 +37,18 @@ hardeningFlagMap = {
   };
 };
 
+# handle special case enabled = "all"
+hardeningEnable' = if elem "all" hardeningEnable
+  then attrNames hardeningFlagMap
+  else hardeningEnable;
+
+# same for disable = "all"
+hardeningDisable' = if elem "all" hardeningDisable
+  then attrNames hardeningFlagMap
+  else hardeningDisable;
+
 # filter out disabled flags
-enabledFlags = filter (x: ! elem x hardeningDisable) hardeningEnable;
+enabledFlags = filter (x: ! elem x hardeningDisable') hardeningEnable';
 
 # filter out unsupported flags
 supportedEnabledFlags = filter (flip elem hardeningSupported) enabledFlags;

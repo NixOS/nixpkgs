@@ -114,7 +114,7 @@ let
     , __propagatedImpureHostDeps ? []
     , sandboxProfile ? ""
     , propagatedSandboxProfile ? ""
-    , hardeningEnable ? [ "fortify" "stackprotector" "pic" "strictoverflow" "format" "relro" "bindnow" ]
+    , hardeningEnable ? [ "all" ]
     , hardeningDisable ? [ ]
     , ... } @ attrs:
     let
