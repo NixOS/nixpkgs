@@ -38,6 +38,7 @@
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
   ./hardware/video/amdgpu.nix
+  ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/displaylink.nix
