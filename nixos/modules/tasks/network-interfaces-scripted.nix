@@ -50,7 +50,7 @@ in
           if (config.boot.isContainer == false)
           then
             # Trust udev when not in the container
-            [ (subsystemDevice dev) ]
+            optional (dev != null) (subsystemDevice dev)
           else
             # When in the container, check whether the interface is built from other definitions
             if (hasAttr dev cfg.bridges) ||
@@ -333,7 +333,7 @@ in
 
         createSitDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = optionals (v.dev != null) (deviceDependency v.dev);
+            deps = deviceDependency v.dev;
           in
           { description = "6-to-4 Tunnel Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
