@@ -45,10 +45,8 @@ in
       "amd/amdapfxx.blb".source = package + "/etc/amd/amdapfxx.blb";
       "gbm/gbm.conf".source = package + "/etc/gbm/gbm.conf";
       "OpenCL/vendors/amdocl64.icd".source = package + "/etc/OpenCL/vendors/amdocl64.icd";
-      "vulkan/icd.d/amd_icd64.json".source = package + "/etc/vulkan/icd.d/amd_icd64.json";
     } // optionalAttrs opengl.driSupport32Bit {
       "OpenCL/vendors/amdocl32.icd".source = package32 + "/etc/OpenCL/vendors/amdocl32.icd";
-      "vulkan/icd.d/amd_icd32.json".source = package32 + "/etc/vulkan/icd.d/amd_icd32.json";
     };
 
   };
