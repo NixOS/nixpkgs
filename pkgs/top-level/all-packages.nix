@@ -7087,6 +7087,7 @@ in
   cpp-hocon = callPackage ../development/libraries/cpp-hocon { };
 
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
+  uri = callPackage ../development/libraries/uri { };
 
   cppcms = callPackage ../development/libraries/cppcms { };
 
