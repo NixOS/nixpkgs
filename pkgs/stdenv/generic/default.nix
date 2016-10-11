@@ -208,6 +208,7 @@ let
           inherit (import ./hardening.nix {
             inherit lib;
             inherit hardeningEnable hardeningDisable;
+            hardeningSupported = result.cc.cc.hardeningSupported or [];
           }) hardeningCFlags hardeningLDFlags;
 
           # Inputs built by the cross compiler.

@@ -1,4 +1,9 @@
-{ lib, hardeningEnable, hardeningDisable }:
+{ lib
+# toolchain supported flags
+, hardeningSupported
+# package level flags
+, hardeningEnable, hardeningDisable
+}:
 let
 inherit (builtins) filter map elem;
 inherit (lib) getAttr concatMap flip;
@@ -35,7 +40,10 @@ hardeningFlagMap = {
 # filter out disabled flags
 enabledFlags = filter (x: ! elem x hardeningDisable) hardeningEnable;
 
-enabledFlagsMap = map (flip getAttr hardeningFlagMap) enabledFlags;
+# filter out unsupported flags
+supportedEnabledFlags = filter (flip elem hardeningSupported) enabledFlags;
+
+enabledFlagsMap = map (flip getAttr hardeningFlagMap) supportedEnabledFlags;
 
 in {
   hardeningCFlags = concatMap (x: x.C or []) enabledFlagsMap;
