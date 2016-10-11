@@ -114,6 +114,8 @@ let
     , __propagatedImpureHostDeps ? []
     , sandboxProfile ? ""
     , propagatedSandboxProfile ? ""
+    , hardeningEnable ? [ "fortify" "stackprotector" "pic" "strictoverflow" "format" "relro" "bindnow" ]
+    , hardeningDisable ? [ ]
     , ... } @ attrs:
     let
       pos' =
@@ -203,6 +205,10 @@ let
           system = result.system;
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
+          inherit (import ./hardening.nix {
+            inherit lib;
+            inherit hardeningEnable hardeningDisable;
+          }) hardeningCFlags hardeningLDFlags;
 
           # Inputs built by the cross compiler.
           buildInputs = if crossConfig != null then buildInputs' else [];

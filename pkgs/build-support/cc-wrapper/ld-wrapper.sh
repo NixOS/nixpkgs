@@ -48,7 +48,6 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" \
 fi
 
 LD=@prog@
-source @out@/nix-support/add-hardening.sh
 
 extra=(${hardeningLDFlags[@]})
 extraBefore=()
