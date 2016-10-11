@@ -92,12 +92,13 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -r usr/bin $out/bin
+    cp -r usr/share $out/share
     cp -r etc $out/etc
+    mv $out/etc/vulkan $out/share
     cp -r usr/include $out/include
     cp -r usr/lib/${libArch} $out/lib
     mv $out/lib/amdgpu-pro/* $out/lib/
     rmdir $out/lib/amdgpu-pro
-    cp -r usr/share $out/share
   '' + optionalString (!libsOnly) ''
     if [ -d $out/lib/xorg ]; then
       rm $out/lib/xorg
@@ -133,7 +134,7 @@ in stdenv.mkDerivation rec {
         perl -pi -e 's:${libReplaceDir}:${libCompatDir}:g' "$out/lib/$lib"
       fi
     done
-    substituteInPlace "$out/etc/vulkan/icd.d/amd_icd${bitness}.json" --replace "/usr/lib/${libArch}" "$out/lib"
+    substituteInPlace "$out/share/vulkan/icd.d/amd_icd${bitness}.json" --replace "/usr/lib/${libArch}" "$out/lib"
   '';
 
   buildInputs = [
