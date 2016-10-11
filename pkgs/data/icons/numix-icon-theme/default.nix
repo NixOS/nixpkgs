@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2016-06-10";
+  version = "2016-10-05";
 
   package-name = "numix-icon-theme";
 
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = package-name;
-    rev = "8196e9eaa5a60b5c02a9e37a4ca768b07966b41f";
-    sha256 = "0cyv0r66vil54y6w317msddq2fjs9zhrdx17m3bx85xpqz67zq5i";
+    rev = "e03eb71454c176a98733eafa268ff79995f8159d";
+    sha256 = "1f8prwq9zvzfk0ncwzbrwkpjggc8nadny81dqv1cr0014jc85bxi";
   };
 
   dontBuild = true;
