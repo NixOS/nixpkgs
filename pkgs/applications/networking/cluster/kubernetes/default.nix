@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.2.4";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1a3y0f1l008ywkwwygg9vn2rb722c54i3pbgqks38gw1yyvgbiih";
+    sha256 = "0w0f9chmrvkqrrsd5cdf3cwgcybw4472rfmwv0xq2v74lgd89mmm";
   };
 
   buildInputs = [ makeWrapper which go iptables rsync ];
@@ -20,15 +20,13 @@ stdenv.mkDerivation rec {
 
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
     patchShebangs ./hack
-    hack/build-go.sh --use_go_build
 
-    (cd cluster/addons/dns/kube2sky && go build ./kube2sky.go)
+    hack/build-go.sh --use_go_build
   '';
 
   installPhase = ''
     mkdir -p "$out/bin" "$out"/libexec/kubernetes/cluster
     cp _output/local/go/bin/{kube*,hyperkube} "$out/bin/"
-    cp cluster/addons/dns/kube2sky/kube2sky "$out/bin/"
     cp cluster/saltbase/salt/helpers/safe_format_and_mount "$out/libexec/kubernetes"
     cp -R hack "$out/libexec/kubernetes"
     cp cluster/update-storage-objects.sh "$out/libexec/kubernetes/cluster"
