@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
       libX11 inputproto libXt libXpm libXft libXtst xextproto libXi
       fontconfig freetype readline ];
 
+  inherit patches;
+
   meta = with stdenv.lib; {
     homepage = "http://www.nongnu.org/ratpoison/";
     description = "Simple mouse-free tiling window manager";
