@@ -263,6 +263,8 @@ let
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
+    mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
+
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
       lwt = ocaml_lwt;
     };
