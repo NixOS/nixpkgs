@@ -33,9 +33,10 @@ stdenv.mkDerivation rec {
     description = "Open Source, Distributed, RESTful Search Engine";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [
-      maintainers.offline
-      maintainers.markWot
+    maintainers = with maintainers; [
+      offline
+      markWot
+      mbbx6spp
     ];
   };
 }
