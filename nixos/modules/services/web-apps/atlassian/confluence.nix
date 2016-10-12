@@ -108,9 +108,7 @@ in
       environment = {
         CONF_USER = cfg.user;
         JAVA_HOME = "${cfg.jrePackage}";
-        CATALINA_OPTS = concatStringsSep " " (cfg.catalinaOptions ++ [
-          #"-Djavax.net.ssl.trustStore=${cfg.home}/cacerts"
-        ]);
+        CATALINA_OPTS = concatStringsSep " " cfg.catalinaOptions;
       };
 
       preStart = ''

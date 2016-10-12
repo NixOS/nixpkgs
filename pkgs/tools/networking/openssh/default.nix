@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [
+      ./RH-1380296-NEWKEYS-null-pointer-deref.patch
       ./locale_archive.patch
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966

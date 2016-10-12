@@ -90,6 +90,9 @@ stdenv.mkDerivation {
     # Disable fragile linker-output-non-utf8 test
     rm -vr src/test/run-make/linker-output-non-utf8/
 
+    # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
+    rm -vr src/test/run-pass/issue-36023.rs
+
     # Useful debugging parameter
     # export VERBOSE=1
   '' +

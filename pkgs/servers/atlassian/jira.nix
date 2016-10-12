@@ -22,4 +22,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp -rva . $out
   '';
+
+  meta = with stdenv.lib; {
+    description = "Proprietary issue tracking product, also providing project management functions";
+    homepage = https://www.atlassian.com/software/jira;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ fpletz globin ];
+  };
 }

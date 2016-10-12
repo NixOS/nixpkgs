@@ -4,7 +4,9 @@ with lib;
 
 let
 
-  kernel = config.boot.kernelPackages.kernel;
+  inherit (config.boot) kernelPatches;
+
+  inherit (config.boot.kernelPackages) kernel;
 
   kernelModulesConf = pkgs.writeText "nixos.conf"
     ''
@@ -21,6 +23,11 @@ in
 
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
+      apply = kernelPackages: kernelPackages.extend (self: super: {
+        kernel = super.kernel.override {
+          kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+        };
+      });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
       defaultText = "pkgs.linuxPackages";
@@ -37,6 +44,13 @@ in
         then it also needs to contain an attribute
         <varname>nvidia_x11</varname>.
       '';
+    };
+
+    boot.kernelPatches = mkOption {
+      type = types.listOf types.attrs;
+      default = [];
+      example = literalExample "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
+      description = "A list of additional patches to apply to the kernel.";
     };
 
     boot.kernelParams = mkOption {

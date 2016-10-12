@@ -31,13 +31,13 @@ in {
       type = types.attrsOf (types.submodule {
         options = {
           dataDir = mkOption {
-            type = types.nullOr types.str;
+            type = types.nullOr types.path;
             default = null;
             description = "Data directory for errbot instance.";
           };
 
           plugins = mkOption {
-            type = types.listOf types.path;
+            type = types.listOf types.package;
             default = [];
             description = "List of errbot plugin derivations.";
           };
@@ -91,11 +91,17 @@ in {
         chown -R errbot:errbot ${dataDir}
       '';
       serviceConfig = {
+<<<<<<< HEAD
         Type = "simple";
         User = "errbot";
         Group = "errbot";
         Restart = "on-failure";
         ExecStart="${pkgs.errbot}/bin/errbot -c ${mkConfigFile instanceCfg dataDir}";
+=======
+        User = "errbot";
+        Restart = "on-failure";
+        ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigFile instanceCfg dataDir}";
+>>>>>>> upstream/master
         PermissionsStartOnly = true;
       };
     })) cfg.instances;

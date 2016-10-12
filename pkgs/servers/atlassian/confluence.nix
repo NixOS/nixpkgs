@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    description = "Team collaboration software written in Java and mainly used in corporate environments";
+    homepage = https://www.atlassian.com/software/confluence;
     license = licenses.unfree;
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

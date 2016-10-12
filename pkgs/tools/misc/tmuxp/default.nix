@@ -2,20 +2,17 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "tmuxp-${version}";
-  version = "1.2.0";
+  version = "1.2.2";
 
   namePrefix = "";
 
   src = fetchurl {
     url = "mirror://pypi/t/tmuxp/${name}.tar.gz";
-    sha256 = "05z5ssv9glsqmcy9fdq06bawy1274dnzqsqd3a4z4jd0w6j09smn";
+    sha256 = "1g37pdxs0wmnskqm7qsqm0ygwpc1dxk1d7lrzpgs717zxaak8vln";
   };
 
   patchPhase = ''
-    # Dependencies required for testing shouldn't pinned to
-    # a specific version.
-    substituteInPlace requirements/test.txt \
-      --replace "==" ">="
+    sed -i 's/==.*$//' requirements/test.txt
   '';
 
   buildInputs = with pythonPackages; [

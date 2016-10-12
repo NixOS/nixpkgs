@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     description = "Firmware for Intel 2200BG cards";
     homepage = http://ipw2200.sourceforge.net/firmware.php;
     license = stdenv.lib.licenses.unfreeRedistributableFirmware;
-    maintainers = with maintainers; [ lukasepple ];
+    maintainers = with maintainers; [ sternenseemann ];
     platforms = with platforms; linux;
   };
 }

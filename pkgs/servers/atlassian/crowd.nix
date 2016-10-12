@@ -26,4 +26,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp -rva . $out
   '';
+
+  meta = with stdenv.lib; {
+    description = "Single sign-on and identity management tool";
+    homepage = https://www.atlassian.com/software/crowd;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ fpletz globin ];
+  };
 }

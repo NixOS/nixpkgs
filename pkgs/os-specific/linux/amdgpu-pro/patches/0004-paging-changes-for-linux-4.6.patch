@@ -1,0 +1,42 @@
+From 2bd83488ccea22bb9e399986c171cccc3b6beb93 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sun, 21 Aug 2016 16:40:32 -0300
+Subject: [PATCH 4/8] paging changes for linux-4.6
+
+---
+ amd/amdgpu/amdgpu_ttm.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/amd/amdgpu/amdgpu_ttm.c b/amd/amdgpu/amdgpu_ttm.c
+index 7bdebde..8b676c2 100644
+--- a/amd/amdgpu/amdgpu_ttm.c
++++ b/amd/amdgpu/amdgpu_ttm.c
+@@ -548,8 +548,12 @@ int amdgpu_ttm_tt_get_user_pages(struct ttm_tt *ttm, struct page **pages)
+ 		list_add(&guptask.list, &gtt->guptasks);
+ 		spin_unlock(&gtt->guptasklock);
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0)
++		r = get_user_pages(userptr, num_pages, write, 0, p, NULL);
++#else
+ 		r = get_user_pages(current, current->mm, userptr, num_pages,
+-				   write, 0, p, NULL);
++			write, 0, p, NULL);
++#endif
+ 
+ 		spin_lock(&gtt->guptasklock);
+ 		list_del(&guptask.list);
+@@ -625,7 +629,11 @@ static void amdgpu_ttm_tt_unpin_userptr(struct ttm_tt *ttm)
+ 			set_page_dirty(page);
+ 
+ 		mark_page_accessed(page);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0)
++		put_page(page);
++#else
+ 		page_cache_release(page);
++#endif
+ 	}
+ 
+ 	sg_free_table(ttm->sg);
+-- 
+2.9.3
+
