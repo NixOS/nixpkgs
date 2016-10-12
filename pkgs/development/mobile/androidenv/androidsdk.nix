@@ -1,8 +1,9 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
-, platformTools, buildTools, support, supportRepository, platforms, sysimages, addons
+, platformTools, buildTools, support, supportRepository, platforms, sysimages, addons, sources
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
 , freetype, fontconfig, glib, gtk2, atk, file, jdk, coreutils, libpulseaudio, dbus
 , zlib, glxinfo, xkeyboardconfig
+, includeSources
 }:
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false, useGooglePlayServices ? false }:
 
@@ -164,6 +165,22 @@ stdenv.mkDerivation rec {
      else ""}
       
     cd ../..
+
+    # Symlink required sources
+    mkdir -p sources
+    cd sources
+
+    ${if includeSources then
+        stdenv.lib.concatMapStrings (platformVersion:
+        if (builtins.hasAttr ("source_"+platformVersion) sources) then
+          let
+            source = builtins.getAttr ("source_"+platformVersion) sources;
+          in
+          "ln -s ${source}/* android-${platformVersion}\n"
+        else "") platformVersions
+      else ""}
+
+    cd ..
 
     # Symlink required platforms
    
