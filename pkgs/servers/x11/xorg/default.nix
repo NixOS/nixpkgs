@@ -955,11 +955,11 @@ let
   }) // {inherit videoproto libX11 libXext xextproto xproto ;};
 
   libXvMC = (mkDerivation "libXvMC" {
-    name = "libXvMC-1.0.9";
+    name = "libXvMC-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXvMC-1.0.9.tar.bz2;
-      sha256 = "0mjp1b21dvkaz7r0iq085r92nh5vkpmx99awfgqq9hgzyvgxf0q7";
+      url = mirror://xorg/individual/lib/libXvMC-1.0.10.tar.bz2;
+      sha256 = "0bpffxr5dal90a8miv2w0rif61byqxq2f5angj4z1bnznmws00g5";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto libXv ];
     meta.platforms = stdenv.lib.platforms.unix;
