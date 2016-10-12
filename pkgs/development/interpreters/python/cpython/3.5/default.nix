@@ -27,6 +27,7 @@ let
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
+  sitePackages = "lib/${libPrefix}/site-packages";
 
   buildInputs = filter (p: p != null) [
     zlib
@@ -108,10 +109,17 @@ stdenv.mkDerivation {
 
     # FIXME: should regenerate this.
     rm $out/lib/python${majorVersion}/__pycache__/_sysconfigdata.cpython*
+
+    # tkinter goes in a separate output
+    mkdir -p $tkinter/${sitePackages}
+    mv $out/lib/${libPrefix}/tkinter $tkinter/${sitePackages}/
+    mv $out/lib/${libPrefix}/lib-dynload/_tkinter* $tkinter/${sitePackages}/tkinter
   '';
 
+  outputs = ["out" "tkinter"];
+
   passthru = rec {
-    inherit libPrefix;
+    inherit libPrefix sitePackages;
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = false;
@@ -124,7 +132,6 @@ stdenv.mkDerivation {
     isPy3 = true;
     isPy35 = true;
     is_py3k = true;  # deprecated
-    sitePackages = "lib/${libPrefix}/site-packages";
     interpreter = "${self}/bin/${executable}";
   };
 
