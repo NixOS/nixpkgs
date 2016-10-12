@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
     meson.py --prefix "$out" ..
   '';
 
-  buildPhase = "ninja";
+  buildPhase = ''
+    ninja
+    ninja devhelp
+  '';
 
   installPhase = "ninja install";
 
