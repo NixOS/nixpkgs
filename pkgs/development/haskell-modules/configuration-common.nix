@@ -46,7 +46,6 @@ self: super: {
       sha256 = "1j29ydbw86j3qd4qb4l348pcnjd24irgdra9ss2afi6w2pn60yjn";
       rev = drv.version;
     };
-    doCheck = false;  # version 6.20160907 has a test suite failure; reported upstream
   })).overrideScope (self: super: {
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
