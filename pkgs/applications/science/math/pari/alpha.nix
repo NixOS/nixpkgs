@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, readline }:
+{ stdenv, fetchurl, gmp, readline, perl }:
 
 stdenv.mkDerivation rec {
   version = "2.8.0.alpha";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [gmp readline];
+  nativeBuildInputs = [perl];
 
   configureScript = "./Configure";
   configureFlags =
