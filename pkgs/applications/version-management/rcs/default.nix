@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ed ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   NIX_CFLAGS_COMPILE = [ "-std=c99" ];
 

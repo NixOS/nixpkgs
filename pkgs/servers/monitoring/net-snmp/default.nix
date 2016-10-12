@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, autoreconfHook, file, openssl, perl, unzip }:
+{ stdenv, fetchurl, autoreconfHook, file, openssl, perl, unzip
+, IOKit ? null, DiskArbitration ? null, ApplicationServices ? null }:
 
 stdenv.mkDerivation rec {
   name = "net-snmp-5.7.3";
@@ -16,6 +17,9 @@ stdenv.mkDerivation rec {
 
       # http://comments.gmane.org/gmane.network.net-snmp.user/32434
       substituteInPlace "man/Makefile.in" --replace 'grep -vE' '@EGREP@ -v'
+
+      ln -s "darwin13.h" "include/net-snmp/system/darwin14.h"
+      ln -s "darwin13.h" "include/net-snmp/system/darwin15.h"
     '';
 
   configureFlags =
@@ -27,7 +31,8 @@ stdenv.mkDerivation rec {
       "--with-openssl=${openssl.dev}"
     ] ++ stdenv.lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
 
-  buildInputs = [ autoreconfHook file perl unzip openssl ];
+  buildInputs = [ autoreconfHook file perl unzip openssl ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit DiskArbitration ApplicationServices ];
 
   enableParallelBuilding = true;
 

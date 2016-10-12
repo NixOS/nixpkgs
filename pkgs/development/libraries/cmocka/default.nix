@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  postPatch = ''
+    substituteInPlace cmake/Modules/DefineCompilerFlags.cmake \
+      --replace "(GNU|Clang)" "GNU"
+  '';
+
   meta = with stdenv.lib; {
     description = "Lightweight library to simplify and generalize unit tests for C";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, freetds, readline }:
+{ stdenv, fetchurl, freetds, readline, libiconv }:
 
 stdenv.mkDerivation rec {
   version = "2.5.16.1";
@@ -9,6 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "1wi0hdmhk7l8nrz4j3kaa177mmxyklmzhj7sq1gj4q6fb8v1yr6n";
   };
 
+  NIX_CFLAGS_COMPILE = "-DHAVE_STRERROR";
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure \
+      --replace libct.so libct.dylib
+  '';
+
   preConfigure =
     ''
     export SYBASE=${freetds}
@@ -17,6 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetds
     readline
+    libiconv
   ];
 
   meta = {

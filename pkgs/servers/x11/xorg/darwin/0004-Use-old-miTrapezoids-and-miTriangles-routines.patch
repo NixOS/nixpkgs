@@ -1,7 +1,7 @@
-From b229a04bde765424542eeba17a7e2bc25785a890 Mon Sep 17 00:00:00 2001
+From 963cad095b31c534f827019cb0b83a96b37cbef2 Mon Sep 17 00:00:00 2001
 From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
 Date: Sat, 2 Nov 2013 11:00:23 -0700
-Subject: [PATCH 4/6] Use old miTrapezoids and miTriangles routines
+Subject: [PATCH 5003/5005] Use old miTrapezoids and miTriangles routines
 
 Reverts commits:
     788ccb9a8bcf6a4fb4054c507111eec3338fb969
@@ -19,10 +19,10 @@ Signed-off-by: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
  5 files changed, 201 insertions(+), 4 deletions(-)
 
 diff --git a/fb/fbpict.c b/fb/fbpict.c
-index c8378ad..cafb027 100644
+index 7ea0b66..434d890 100644
 --- a/fb/fbpict.c
 +++ b/fb/fbpict.c
-@@ -499,10 +499,8 @@ fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
+@@ -508,10 +508,8 @@ fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
      ps->UnrealizeGlyph = fbUnrealizeGlyph;
      ps->CompositeRects = miCompositeRects;
      ps->RasterizeTrapezoid = fbRasterizeTrapezoid;
@@ -34,7 +34,7 @@ index c8378ad..cafb027 100644
      return TRUE;
  }
 diff --git a/render/mipict.c b/render/mipict.c
-index a725104..e14293a 100644
+index 4b85512..a39eb2c 100644
 --- a/render/mipict.c
 +++ b/render/mipict.c
 @@ -575,8 +575,8 @@ miPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
@@ -49,10 +49,10 @@ index a725104..e14293a 100644
      ps->RasterizeTrapezoid = 0; /* requires DDX support */
      ps->AddTraps = 0;           /* requires DDX support */
 diff --git a/render/mipict.h b/render/mipict.h
-index 23ce9e8..e0f1d4c 100644
+index 3241be4..8ee7a8a 100644
 --- a/render/mipict.h
 +++ b/render/mipict.h
-@@ -122,6 +122,16 @@ miCompositeRects(CARD8 op,
+@@ -102,9 +102,36 @@ miCompositeRects(CARD8 op,
                   xRenderColor * color, int nRect, xRectangle *rects);
  
  extern _X_EXPORT void
@@ -65,22 +65,14 @@ index 23ce9e8..e0f1d4c 100644
 +	     int	    ntri,
 +	     xTriangle	    *tris);
 +
-+extern _X_EXPORT void
- 
- miTriStrip(CARD8 op,
-            PicturePtr pSrc,
-@@ -137,10 +147,27 @@ miTriFan(CARD8 op,
-          PictFormatPtr maskFormat,
-          INT16 xSrc, INT16 ySrc, int npoints, xPointFixed * points);
- 
 +extern _X_EXPORT PicturePtr
-+miCreateAlphaPicture (ScreenPtr	    pScreen, 
-+		      PicturePtr    pDst,
-+		      PictFormatPtr pPictFormat,
-+		      CARD16	    width,
-+		      CARD16	    height);
++miCreateAlphaPicture (ScreenPtr            pScreen, 
++                     PicturePtr    pDst,
++                     PictFormatPtr pPictFormat,
++                     CARD16        width,
++                     CARD16        height);
 +
- extern _X_EXPORT void
++extern _X_EXPORT void
   miTrapezoidBounds(int ntrap, xTrapezoid * traps, BoxPtr box);
  
  extern _X_EXPORT void
@@ -293,5 +285,4 @@ index 922f22a..bdca9ca 100644
 +}
 +
 -- 
-2.3.2 (Apple Git-55)
-
+2.8.1

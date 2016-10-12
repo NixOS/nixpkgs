@@ -1,9 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, blas }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, blas
+, Accelerate ? null, CoreGraphics ? null }:
 
 stdenv.mkDerivation rec {
   version = "1.6.2";
   name = "vmmlib-${version}";
-  buildInputs = [ stdenv pkgconfig cmake boost blas ];
+  buildInputs = [ stdenv pkgconfig cmake boost blas ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics ];
 
   src = fetchFromGitHub {
     owner = "VMML";
@@ -16,9 +18,14 @@ stdenv.mkDerivation rec {
 		./disable-cpack.patch   #disable the need of cpack/rpm
 	    ];
   
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "gcc" "cc"
+  '';
+
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkTarget = "test";
 

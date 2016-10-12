@@ -6600,7 +6600,9 @@ in
 
   chmlib = callPackage ../development/libraries/chmlib { };
 
-  chromaprint = callPackage ../development/libraries/chromaprint { };
+  chromaprint = callPackage ../development/libraries/chromaprint {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics;
+  };
 
   cilaterm = callPackage ../development/libraries/cil-aterm {
     stdenv = overrideInStdenv stdenv [gnumake380];
@@ -6747,7 +6749,9 @@ in
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
 
-  vmmlib = callPackage ../development/libraries/vmmlib {};
+  vmmlib = callPackage ../development/libraries/vmmlib {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics;
+  };
 
   enchant = callPackage ../development/libraries/enchant { };
 
@@ -10130,7 +10134,9 @@ in
 
   neo4j = callPackage ../servers/nosql/neo4j { };
 
-  net_snmp = callPackage ../servers/monitoring/net-snmp { };
+  net_snmp = callPackage ../servers/monitoring/net-snmp {
+    inherit (darwin.apple_sdk.frameworks) IOKit DiskArbitration ApplicationServices;
+  };
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
 
@@ -14121,6 +14127,7 @@ in
 
   qscreenshot = callPackage ../applications/graphics/qscreenshot {
     qt = qt4;
+    inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
   qsynth = callPackage ../applications/audio/qsynth { };
