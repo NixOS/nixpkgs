@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # darwin build fails with format hardening since v7.12
+  hardeningDisable = stdenv.lib.optionals stdenv.isDarwin [ "format" ];
+
   configureFlags = with stdenv.lib;
     [ "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
       "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
