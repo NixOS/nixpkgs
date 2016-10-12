@@ -108,6 +108,7 @@
   danbst = "Danylo Hlynskyi <abcz2.uprola@gmail.com>";
   davidak = "David Kleuker <post@davidak.de>";
   davidrusu = "David Rusu <davidrusu.me@gmail.com>";
+  davorb = "Davor Babic <davor@davor.se>";
   dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
   dbrock = "Daniel Brockman <daniel@brockman.se>";
   deepfire = "Kosyrev Serge <_deepfire@feelingofgreen.ru>";
