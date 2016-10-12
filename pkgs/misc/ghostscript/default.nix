@@ -9,7 +9,7 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
   version = "9.18";
-  sha256 = "18ad90za28dxybajqwf3y3dld87cgkx1ljllmcnc7ysspfxzbnl3";
+  sha256 = "83daf5bbbb5afbc32cab944a1afa7ceca046dbf0c3712cd5f2bd21a13e484da1";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
