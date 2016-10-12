@@ -5204,8 +5204,6 @@ in
 
   vala_0_23 = callPackage ../development/compilers/vala/0.23.nix { };
 
-  vala_0_26 = callPackage ../development/compilers/vala/0.26.nix { };
-
   vala_0_28 = callPackage ../development/compilers/vala/0.28.nix { };
 
   vala_0_32 = callPackage ../development/compilers/vala/0.32.nix { };
@@ -13969,7 +13967,6 @@ in
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
-    inherit (gnome3) libgee;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 

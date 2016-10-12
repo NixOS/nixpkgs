@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig, vala_0_26, gtk3, libgee
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig, gnome3
 , poppler, libpthreadstubs, gstreamer, gst-plugins-base, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "pdfpc";
-  version = "4.0.2";
+  version = "4.0.2-unstable-2016-09-24";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
-    rev = "v${version}";
-    sha256 = "0151i9msagcqcfaddgd1vkmman0qgqy6s3714sqas568r4r9ngdk";
+    rev = "b7816ea373d52e178e0784770ce985975a4f7a35";
+    sha256 = "17nnqcz4jh8p3r0nidmdc9qz1c9l8jqs07cs16hg2j2g1p343kgx";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ gstreamer gst-plugins-base vala_0_26 gtk3 libgee poppler
-                  libpthreadstubs makeWrapper librsvg ];
+  buildInputs = [ gstreamer gst-plugins-base poppler
+                  libpthreadstubs makeWrapper librsvg ]
+                ++ (with gnome3; [ vala gtk3 libgee]);
 
   postInstall = ''
     wrapProgram $out/bin/pdfpc \

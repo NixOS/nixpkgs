@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gtk3, vala_0_26, pkgconfig, gnome3 }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3 }:
 
 stdenv.mkDerivation rec {
   version = "1.2";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1d1gfmzmr5ra2rnjc6rbz31mf3hk7q04lh4i1hljgk7fh90dacb6";
   };
 
-  buildInputs = [ cmake gtk3 vala_0_26 pkgconfig gnome3.libgee ];
+  buildInputs = [ cmake pkgconfig ]
+                ++ (with gnome3; [ gtk3 vala libgee ]);
 
   meta = with stdenv.lib; {
       description = "A fast dmenu-like gtk3 application launcher";
