@@ -69,9 +69,13 @@ rec {
   #
   #     nix-repl> obj
   #     { __unfix__ = «lambda»; bar = "bar"; extend = «lambda»; foo = "foo + "; foobar = "foo + bar"; }
-  makeExtensible = rattrs:
+  makeExtensible = makeExtensibleWithCustomName "extend";
+
+  # Same as `makeExtensible` but the name of the extending attribute is
+  # customized.
+  makeExtensibleWithCustomName = extenderName: rattrs:
     fix' rattrs // {
-      extend = f: makeExtensible (extends f rattrs);
+      ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
    };
 
   # Flip the order of the arguments of a binary function.

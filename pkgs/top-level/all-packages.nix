@@ -6,7 +6,6 @@
  * Hint: ### starts category names.
  */
 { system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
-, pkgsWithOverrides
 , ... }:
 self: pkgs:
 
@@ -34,19 +33,6 @@ in
   callPackages = lib.callPackagesWith defaultScope;
 
   newScope = extra: lib.callPackageWith (defaultScope // extra);
-
-  # Easily override this package set.
-  # Warning: this function is very expensive and must not be used
-  # from within the nixpkgs repository.
-  #
-  # Example:
-  #  pkgs.overridePackages (self: super: {
-  #    foo = super.foo.override { ... };
-  #  }
-  #
-  # The result is `pkgs' where all the derivations depending on `foo'
-  # will use the new version.
-  overridePackages = f: pkgsWithOverrides f;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: (import ../..) {
