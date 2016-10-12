@@ -1553,7 +1553,7 @@ default-package-overrides:
   - shake-language-c ==0.10.0
   - shakespeare ==2.0.11.1
   - shell-conduit ==4.5.2
-  - ShellCheck ==0.4.4
+  - shellcheck ==0.4.4
   - shelly ==1.6.8
   - shortcut-links ==0.4.2.0
   - should-not-typecheck ==2.1.0

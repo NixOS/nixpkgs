@@ -6315,7 +6315,7 @@ in
   sbt = callPackage ../development/tools/build-managers/sbt { };
   simpleBuildTool = sbt;
 
-  shellcheck = self.haskellPackages.ShellCheck;
+  shellcheck = self.haskellPackages.shellcheck;
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
