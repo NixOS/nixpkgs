@@ -1,0 +1,96 @@
+From 9b97761fca47866d14f299c0c224d618bafc65e1 Mon Sep 17 00:00:00 2001
+From: Dylan Lloyd <dylan@disinclined.org>
+Date: Mon, 23 Nov 2015 20:32:06 -0800
+Subject: [PATCH] support separate SSLKeyFile & SSLDHParamFile configuration
+
+---
+ include/znc/znc.h   |  4 ++++
+ src/Listener.cpp    |  2 ++
+ src/znc.cpp         | 16 +++++++++++++++-
+ 3 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/include/znc/znc.h b/include/znc/znc.h
+index cf2326e..21a46d9 100644
+--- a/include/znc/znc.h
++++ b/include/znc/znc.h
+@@ -117,6 +117,8 @@ public:
+ 	CString GetUserPath() const;
+ 	CString GetModPath() const;
+ 	CString GetPemLocation() const;
++	CString GetKeyLocation() const;
++	CString GetDHParamLocation() const;
+ 	const CString& GetConfigFile() const { return m_sConfigFile; }
+ 	bool WritePemFile();
+ 	const VCString& GetBindHosts() const { return m_vsBindHosts; }
+@@ -213,6 +215,8 @@ protected:
+ 	CString                m_sStatusPrefix;
+ 	CString                m_sPidFile;
+ 	CString                m_sSSLCertFile;
++	CString                m_sSSLKeyFile;
++	CString                m_sSSLDHParamFile;
+ 	CString                m_sSSLCiphers;
+ 	CString                m_sSSLProtocols;
+ 	VCString               m_vsBindHosts;
+diff --git a/src/Listener.cpp b/src/Listener.cpp
+index 4fc9edd..0e706b3 100644
+--- a/src/Listener.cpp
++++ b/src/Listener.cpp
+@@ -34,6 +34,8 @@ bool CListener::Listen() {
+ 	if (IsSSL()) {
+ 		bSSL = true;
+ 		m_pListener->SetPemLocation(CZNC::Get().GetPemLocation());
++		m_pListener->SetKeyLocation(CZNC::Get().GetKeyLocation());
++		m_pListener->SetDHParamLocation(CZNC::Get().GetDHParamLocation());
+ 	}
+ #endif
+ 
+diff --git a/src/znc.cpp b/src/znc.cpp
+index 78cda1a..dbd3eb5 100644
+--- a/src/znc.cpp
++++ b/src/znc.cpp
+@@ -346,7 +346,7 @@ void CZNC::InitDirs(const CString& sArgvPath, const CString& sDataDir) {
+ 		m_sZNCPath = sDataDir;
+ 	}
+ 
+-	m_sSSLCertFile = m_sZNCPath + "/znc.pem";
++	m_sSSLCertFile = m_sSSLKeyFile = m_sSSLDHParamFile = m_sZNCPath + "/znc.pem";
+ }
+ 
+ CString CZNC::GetConfPath(bool bAllowMkDir) const {
+@@ -395,6 +395,14 @@ CString CZNC::GetPemLocation() const {
+ 	return CDir::ChangeDir("", m_sSSLCertFile);
+ }
+ 
++CString CZNC::GetKeyLocation() const {
++	return CDir::ChangeDir("", m_sSSLKeyFile);
++}
++
++CString CZNC::GetDHParamLocation() const {
++	return CDir::ChangeDir("", m_sSSLDHParamFile);
++}
++
+ CString CZNC::ExpandConfigPath(const CString& sConfigFile, bool bAllowMkDir) {
+ 	CString sRetPath;
+ 
+@@ -444,6 +452,8 @@ bool CZNC::WriteConfig() {
+ 	config.AddKeyValuePair("AnonIPLimit", CString(m_uiAnonIPLimit));
+ 	config.AddKeyValuePair("MaxBufferSize", CString(m_uiMaxBufferSize));
+ 	config.AddKeyValuePair("SSLCertFile", CString(m_sSSLCertFile));
++	config.AddKeyValuePair("SSLKeyFile", CString(m_sSSLKeyFile));
++	config.AddKeyValuePair("SSLDHParamFile", CString(m_sSSLDHParamFile));
+ 	config.AddKeyValuePair("ProtectWebSessions", CString(m_bProtectWebSessions));
+ 	config.AddKeyValuePair("HideVersion", CString(m_bHideVersion));
+ 	config.AddKeyValuePair("Version", CString(VERSION_STR));
+@@ -1090,6 +1100,10 @@ bool CZNC::DoRehash(CString& sError)
+ 		m_sStatusPrefix = sVal;
+ 	if (config.FindStringEntry("sslcertfile", sVal))
+ 		m_sSSLCertFile = sVal;
++	if (config.FindStringEntry("sslkeyfile", sVal))
++		m_sSSLKeyFile = sVal;
++	if (config.FindStringEntry("ssldhparamfile", sVal))
++		m_sSSLDHParamFile = sVal;
+ 	if (config.FindStringEntry("sslciphers", sVal))
+ 		m_sSSLCiphers = sVal;
+ 	if (config.FindStringEntry("skin", sVal))
+2.9.0
+
