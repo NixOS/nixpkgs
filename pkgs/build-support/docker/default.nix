@@ -204,9 +204,17 @@ EOF
         mount --rbind /sys mnt/sys
         mount --rbind /nix/store mnt/nix/store
 
+        rmdirChecked() {
+          for dir in "$@"; do
+            if [ $(stat -f "$dir" -c "%T") != "overlayfs" ]; then
+              rmdir --ignore-fail-on-non-empty "$dir"
+            fi
+          done
+        }
+
         unshare -imnpuf --mount-proc chroot mnt ${runAsRootScript}
         umount -R mnt/dev mnt/sys mnt/nix/store
-        rmdir --ignore-fail-on-non-empty mnt/dev mnt/proc mnt/sys mnt/nix/store mnt/nix
+        rmdirChecked mnt/dev mnt/proc mnt/sys mnt/nix/store mnt/nix
       '';
  
       postUmount = ''
