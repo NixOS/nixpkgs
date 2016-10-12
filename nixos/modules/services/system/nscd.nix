@@ -64,9 +64,7 @@ in
         restartTriggers = [ config.environment.etc.hosts.source config.environment.etc."nsswitch.conf".source ];
 
         serviceConfig =
-          { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd -f ${cfgFile}";
-            Type = "forking";
-            PIDFile = "/run/nscd/nscd.pid";
+          { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd -F -f ${cfgFile}";
             Restart = "always";
             ExecReload =
               [ "${pkgs.glibc.bin}/sbin/nscd --invalidate passwd"
@@ -74,16 +72,6 @@ in
                 "${pkgs.glibc.bin}/sbin/nscd --invalidate hosts"
               ];
           };
-
-        # Urgggggh... Nscd forks before opening its socket and writing
-        # its pid. So wait until it's ready.
-        postStart =
-          ''
-            while ! ${pkgs.glibc.bin}/sbin/nscd -g -f ${cfgFile} > /dev/null; do
-              sleep 0.2
-            done
-          '';
       };
-
   };
 }
