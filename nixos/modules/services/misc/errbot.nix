@@ -91,17 +91,9 @@ in {
         chown -R errbot:errbot ${dataDir}
       '';
       serviceConfig = {
-<<<<<<< HEAD
-        Type = "simple";
-        User = "errbot";
-        Group = "errbot";
-        Restart = "on-failure";
-        ExecStart="${pkgs.errbot}/bin/errbot -c ${mkConfigFile instanceCfg dataDir}";
-=======
         User = "errbot";
         Restart = "on-failure";
         ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigFile instanceCfg dataDir}";
->>>>>>> upstream/master
         PermissionsStartOnly = true;
       };
     })) cfg.instances;
