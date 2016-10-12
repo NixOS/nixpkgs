@@ -24655,6 +24655,23 @@ in {
     };
   };
 
+  # Tkinter/tkinter is part of the Python standard library.
+  # To reduce closure size its put in a separate output, `python.tkinter`.
+  # This alias was added to make this output work like any other Python package.
+  tkinter = mkPythonDerivation rec {
+    name = "tkinter-${python.version}";
+    src = python.tkinter;
+
+    disabled = isPy26 || isPyPy;
+
+    installPhase = ''
+      mkdir -p $out
+      cp -R ${python.tkinter}/* $out
+    '';
+
+    inherit (python) meta;
+  };
+
   tlslite = buildPythonPackage rec {
     name = "tlslite-${version}";
     version = "0.4.8";

@@ -422,7 +422,7 @@ exists.
 
 #### Missing `tkinter` module standard library
 
-To reduce closure size the `Tkinter`/`tkinter` module is available as `python.tkinter`.
+To reduce closure size the `Tkinter`/`tkinter` is put in a separate output. The `tkinter` is available as `python35Packages.tkinter`.
 
 #### Attributes on interpreters packages
 
