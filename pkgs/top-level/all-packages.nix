@@ -6825,6 +6825,8 @@ in
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
+  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {};
+
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
