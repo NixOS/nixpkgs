@@ -3710,7 +3710,7 @@ in
   sshpass = callPackage ../tools/networking/sshpass { };
 
   sslscan = callPackage ../tools/security/sslscan {
-    openssl = openssl_1_0_1;
+    openssl = openssl_1_0_1.override { enableSSL2 = true; };
   };
 
   sslmate = callPackage ../development/tools/sslmate { };
