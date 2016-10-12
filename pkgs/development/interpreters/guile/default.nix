@@ -1,5 +1,9 @@
-{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, coverageAnalysis ? null, gnu ? null }:
+{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig
+, boehmgc, libunistring, libffi, gawk, makeWrapper
+, coverageAnalysis ? null
+, gnu ? null
+, libiconv # darwin
+}:
 
 # Do either a coverage analysis build or a standard build.
 (if coverageAnalysis != null
@@ -15,7 +19,9 @@
   };
 
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
-  buildInputs = [ readline libtool libunistring libffi ];
+  buildInputs = [ readline libtool libunistring libffi ]
+    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+
   propagatedBuildInputs = [ gmp boehmgc ]
 
     # XXX: These ones aren't normally needed here, but since
