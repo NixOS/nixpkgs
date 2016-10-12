@@ -17145,6 +17145,8 @@ in
   vips = callPackage ../tools/graphics/vips { };
   nip2 = callPackage ../tools/graphics/nip2 { };
 
+  VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
+
   wavegain = callPackage ../applications/audio/wavegain { };
 
   wcalc = callPackage ../applications/misc/wcalc { };
