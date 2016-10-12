@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
   preConfigure =
     '' configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site" '';
 
+  postFixup =
+    '' for f in $out/share/guile/site/ncurses/**.scm; do \
+           substituteInPlace $f \
+             --replace "libguile-ncurses" "$out/lib/libguile-ncurses"; \
+       done
+    '';
+
   doCheck = false;  # XXX: 1 of 65 tests failed
 
   meta = {
