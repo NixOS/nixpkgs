@@ -1,5 +1,6 @@
 { stdenv, fetchurl, perl
-, withCryptodev ? false, cryptodevHeaders }:
+, withCryptodev ? false, cryptodevHeaders
+, enableSSL2 ? false }:
 
 with stdenv.lib;
 
@@ -44,7 +45,7 @@ let
     ] ++ stdenv.lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
-    ];
+    ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2";
 
   makeFlags = [ "MANDIR=$(man)/share/man" ];
 
