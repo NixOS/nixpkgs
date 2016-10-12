@@ -60,11 +60,13 @@ rec {
         { override = newArgs: makeOverridable f (overrideWith newArgs);
           overrideDerivation = fdrv:
             makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
+          originalArgs = origArgs;
         })
       else if builtins.isFunction ff then
         { override = newArgs: makeOverridable f (overrideWith newArgs);
           __functor = self: ff;
           overrideDerivation = throw "overrideDerivation not yet supported for functors";
+          originalArgs = origArgs;
         }
       else ff;
 
@@ -108,6 +110,7 @@ rec {
       pkgs = f finalArgs;
       mkAttrOverridable = name: pkg: pkg // {
         override = newArgs: mkAttrOverridable name (f (finalArgs // newArgs)).${name};
+        originalArgs = finalArgs;
       };
     in lib.mapAttrs mkAttrOverridable pkgs;
 
