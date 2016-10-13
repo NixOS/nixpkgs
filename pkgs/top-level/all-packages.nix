@@ -6522,6 +6522,7 @@ in
   };
 
   arb = callPackage ../development/libraries/arb {};
+  arb-git = callPackage ../development/libraries/arb/git.nix {};
 
   armadillo = callPackage ../development/libraries/armadillo {};
 
