@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
         --subst-var-by libc_lib ${getLib cc.libc}
       substituteInPlace Modules/FindCxxTest.cmake \
         --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
+      configureFlags="--parallel=''${NIX_BUILD_CORES:-1} $configureFlags"
     '';
   configureFlags =
     [ "--docdir=share/doc/${name}"

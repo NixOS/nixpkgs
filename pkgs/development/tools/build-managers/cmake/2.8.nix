@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
         --subst-var-by libc_bin ${getBin cc.libc} \
         --subst-var-by libc_dev ${getDev cc.libc} \
         --subst-var-by libc_lib ${getLib cc.libc}
+      configureFlags="--parallel=''${NIX_BUILD_CORES:-1} $configureFlags"
     '';
 
   meta = {
