@@ -187,6 +187,7 @@ let
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
            "__impureHostDeps" "__propagatedImpureHostDeps"
+           "hardeningEnable" "hardeningDisable"
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
           computedSandboxProfile =
