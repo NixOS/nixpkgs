@@ -15963,6 +15963,11 @@ with pkgs;
     vte = gnome3.vte;
   };
 
+  sayonara  = libsForQt5.callPackage ../applications/audio/sayonara {
+    inherit (gst_all_1) gst-plugins-base gst-plugins-bad gst-plugins-ugly;
+    pulseaudio = libpulseaudio;
+  };
+
   sbagen = callPackage ../applications/misc/sbagen { };
 
   scantailor = callPackage ../applications/graphics/scantailor {
