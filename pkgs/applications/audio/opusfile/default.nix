@@ -1,16 +1,17 @@
 { stdenv, fetchurl, pkgconfig, openssl, libogg, libopus }:
 
 stdenv.mkDerivation rec {
-  name = "opusfile-0.6";
+  name = "opusfile-0.8";
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/opus/${name}.tar.gz";
-    sha256 = "19iys2kld75k0210b807i4illrdmj3cmmnrgxlc9y4vf6mxp2a14";
+    sha256 = "192mp2jgn5s9815h31ybzsfipmbppmdhwx1dymrk26xarz9iw8rc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libogg ];
   propagatedBuildInputs = [ libopus ];
   patches = [ ./include-multistream.patch ];
+  configureFlags = [ "--disable-examples" ];
 
   meta = {
     description = "High-level API for decoding and seeking in .opus files";
