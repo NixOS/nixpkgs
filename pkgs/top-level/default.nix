@@ -101,15 +101,15 @@ let
     lib.optionalAttrs (bootStdenv == null)
       ((config.packageOverrides or (super: {})) super);
 
-  # The complete chain of package set builders, applied from bottom to top
-  toFix = lib.fold lib.extends (self: {}) [
-    configOverrides
-    stdenvOverrides
-    aliases
-    allPackages
-    stdenvDefault
-    trivialBuilders
+  # The complete chain of package set builders, applied from top to bottom
+  toFix = lib.foldl' (lib.flip lib.extends) (self: {}) [
     stdenvAdapters
+    trivialBuilders
+    stdenvDefault
+    allPackages
+    aliases
+    stdenvOverrides
+    configOverrides
   ];
 
   # Use `overridePackages` to easily override this package set.
