@@ -262,6 +262,11 @@ in
   } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; };
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
+
+  fetchdata = callPackage ../build-support/fetchdata {
+    fetchers = pkgs;
+  };
+
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
 
   resolveMirrorURLs = {url}: fetchurl {
