@@ -1492,7 +1492,7 @@ in {
         url = "mirror://pypi/a/aws-shell/aws-shell-${version}.tar.gz";
       };
     propagatedBuildInputs = with self; [
-      configobj prompt_toolkit awscli boto3 pygments sqlite3 mock pytest
+      configobj prompt_toolkit awscli boto3 pygments mock pytest
       pytestcov unittest2 tox
     ];
 
@@ -2586,7 +2586,7 @@ in {
       sha256 = "1j4f51dxic39mdwf6alj7gd769wy6mhk916v031wjali51xkh3xb";
     };
 
-    buildInputs = with self; [ hypothesis sqlite3 ];
+    buildInputs = with self; [ hypothesis ];
 
     propagatedBuildInputs = with self; [ chardet ];
 
@@ -5426,7 +5426,7 @@ in {
       sha256 = "671969d00719fa3e80476b128dc9232025926884d0110d4d235abdd9c3508fc0";
     };
 
-    buildInputs = with self; [ mock sqlite3 ];
+    buildInputs = with self; [ mock ];
 
     propagatedBuildInputs = with self; [ self.six requests2 ];
 
@@ -9735,7 +9735,7 @@ in {
     doCheck = false;
 
     # Requires Django >= 1.8
-    buildInputs = with self ; [ sqlite3 django ];
+    buildInputs = with self; [ django ];
 
     meta = {
       description = "Django extension that provides database and form color fields";
@@ -9834,7 +9834,7 @@ in {
       sha256 = "1m7y3brk3697hr2cvkzl8dry4pp7wkmhvxmf8db1ardz1r9d8895";
     };
 
-    buildInputs = with self ; [ pytestrunner pytestdjango django_environ mock sqlite3 ];
+    buildInputs = with self ; [ pytestrunner pytestdjango django_environ mock ];
     propagatedBuildInputs = with self ; [ django six ];
 
     checkPhase = ''
@@ -12497,7 +12497,7 @@ in {
 
     propagatedBuildInputs = with self;
       [ backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit
-      simplegeneric traitlets requests2 pathlib2 pexpect sqlite3 ]
+      simplegeneric traitlets requests2 pathlib2 pexpect ]
       ++ optionals stdenv.isDarwin [appnope];
 
     LC_ALL="en_US.UTF-8";
@@ -13663,9 +13663,6 @@ in {
       dateutil
       colorama
       six
-
-      readline
-      sqlite3
     ];
 
     meta = {
@@ -18954,7 +18951,7 @@ in {
 
     disabled = isPy3k || isPyPy;
 
-    propagatedBuildInputs = with self; [ sqlite3 vobject lxml requests urwid pyxdg ];
+    propagatedBuildInputs = with self; [ vobject lxml requests urwid pyxdg ];
 
     meta = {
       description = "Command-line interface carddav client";
