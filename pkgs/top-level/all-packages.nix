@@ -13676,6 +13676,8 @@ in
 
   mpc_cli = callPackage ../applications/audio/mpc { };
 
+  clerk = callPackage ../applications/audio/clerk { };
+
   ncmpc = callPackage ../applications/audio/ncmpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
