@@ -27,12 +27,12 @@
 , mpcSupport ? true, libmpcdec ? null
 , tremorSupport ? false, tremor ? null
 , vorbisSupport ? true, libvorbis ? null
+, opusSupport ? true, opusfile ? null
 , wavpackSupport ? true, wavpack ? null
 
 # can't make these work, something is broken
-#, aacSupport ? true, faac ? null
 #, mp4Support ? true, mp4v2 ? null
-#, opusSupport ? true, opusfile ? null
+#, aacSupport ? true, faac ? null
 
 # not in nixpkgs
 #, vtxSupport ? true, libayemu ? null
@@ -81,8 +81,8 @@ let
     (mkFlag tremorSupport  "CONFIG_TREMOR=y"  tremor)
     (mkFlag vorbisSupport  "CONFIG_VORBIS=y"  libvorbis)
     (mkFlag wavpackSupport "CONFIG_WAVPACK=y" wavpack)
+    (mkFlag opusSupport   "CONFIG_OPUS=y"     opusfile)
 
-    #(mkFlag opusSupport   "CONFIG_OPUS=y"    opusfile)
     #(mkFlag mp4Support    "CONFIG_MP4=y"     mp4v2)
     #(mkFlag aacSupport    "CONFIG_AAC=y"     faac)
 
