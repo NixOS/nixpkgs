@@ -1368,7 +1368,6 @@ let
     "gmatrix" # depends on broken package cudatoolkit
     "gMCP" # build is broken
     "gmum_r" # broken build
-    "Goslate" # depends on broken package PythonInR
     "GPC" # broken build
     "gplm" # depends on broken package nlopt
     "gpuR" # depends on GPU-specific header files
@@ -1735,7 +1734,6 @@ let
     "systemfit" # depends on broken package nlopt
     "TcGSA" # depends on broken package nlopt
     "TDMR" # depends on broken package nlopt
-    "TextoMineR"  # depends on broken package FactoMineR
     "TFBSTools" # depends on broken package DirichletMultinomial
     "tigerstats" # depends on broken package nlopt
     "TLBC" # depends on broken package caret
