@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0jvzxr8r6cy6ipknkw95qf8rz69nqdv5nky87h1vcp5pf8mgza1h";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pygments requests2 curses ];
+  propagatedBuildInputs = with pythonPackages; [ pygments requests2 ];
 
   doCheck = false;
 

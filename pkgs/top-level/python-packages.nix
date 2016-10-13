@@ -901,7 +901,7 @@ in {
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six readline
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six
     ] ++ optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
@@ -6794,7 +6794,7 @@ in {
       repo = "GateOne";
       sha256 = "1ghrawlqwv7wnck6alqpbwy9mpv0y21cw2jirrvsxaracmvgk6vv";
     };
-    propagatedBuildInputs = with self; [tornado futures html5lib readline pkgs.openssl pkgs.cacert pkgs.openssh];
+    propagatedBuildInputs = with self; [tornado futures html5lib pkgs.openssl pkgs.cacert pkgs.openssh];
     meta = {
       homepage = https://liftoffsoftware.com/;
       description = "GateOne is a web-based terminal emulator and SSH client";
@@ -15689,7 +15689,7 @@ in {
       sha256 = "1v49sym6mrci9dxy0a7cpbp4bv6fg2ijj6rwk4wzg18c2x4qzkhn";
     };
 
-    propagatedBuildInputs = with self; [ curses livestreamer ];
+    propagatedBuildInputs = with self; [ livestreamer ];
 
     meta = {
       homepage = https://github.com/gapato/livestreamer-curses;
@@ -21931,7 +21931,7 @@ in {
 
     disabled = isPy3k;
 
-    propagatedBuildInputs = with self; [ pkgs.root readline numpy matplotlib ];
+    propagatedBuildInputs = with self; [ pkgs.root numpy matplotlib ];
 
     meta = {
       homepage = "http://www.rootpy.org";
@@ -22003,7 +22003,7 @@ in {
       url = "mirror://pypi/r/ropper/${name}.tar.gz";
       sha256 = "1676e07947a19df9d17002307a7555c2647a4224d6f2869949e8fc4bd18f2e87";
     };
-    propagatedBuildInputs = with self; [ capstone filebytes readline ];
+    propagatedBuildInputs = with self; [ capstone filebytes ];
     meta = with pkgs.stdenv.lib; {
       homepage = "https://scoding.de/ropper/";
       license = licenses.gpl2;

@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   # Fix up python path so the lockfile library is on it.
   PYTHONPATH = stdenv.lib.makeSearchPathOutput "lib" python.sitePackages [
-    pythonPackages.curses pythonPackages.lockfile
+    pythonPackages.lockfile
   ];
 
   buildPhase = ''

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     cp -R src/TorCtl $out/libexec
 
     wrapProgram $out/bin/arm \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pythonPackages.curses}):$out/libexec:$PYTHONPATH" \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$out/libexec:$PYTHONPATH" \
       --set TERMINFO "${ncurses.out}/share/terminfo" \
       --set TERM "xterm"
   '';

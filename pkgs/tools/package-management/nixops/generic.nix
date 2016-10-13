@@ -14,7 +14,6 @@ pythonPackages.buildPythonApplication {
   pythonPath =
     [ pythonPackages.prettytable
       pythonPackages.boto
-      pythonPackages.sqlite3
       pythonPackages.hetzner
       pythonPackages.libcloud
       pythonPackages.azure-storage

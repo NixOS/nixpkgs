@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "15pdq4fxag85qjsrdmmssiq85qsk5vnbp8mrqnpvx8lm8crz6hjl";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ sqlite3 pyGtkGlade pyxdg pygobject2 ];
+  propagatedBuildInputs = with pythonPackages; [ pyGtkGlade pyxdg pygobject2 ];
 
   preBuild = ''
     export HOME=$TMP

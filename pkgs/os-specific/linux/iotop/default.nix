@@ -8,8 +8,6 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0nzprs6zqax0cwq8h7hnszdl3d2m4c2d4vjfxfxbnjfs9sia5pis";
   };
 
-  propagatedBuildInputs = [ pythonPackages.curses ];
-
   doCheck = false;
 
   meta = {

@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     pythonPackages.pygobject2 pythonPackages.pyGtkGlade
-    pythonPackages.sqlite3 pythonPackages.pyasn1
+    pythonPackages.pyasn1
     pythonPackages.pyxdg
     pythonPackages.nbxmpp
     pythonPackages.pyopenssl pythonPackages.dbus-python
