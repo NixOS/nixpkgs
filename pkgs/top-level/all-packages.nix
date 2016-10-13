@@ -15283,7 +15283,9 @@ in
 
   zed = callPackage ../applications/editors/zed { };
 
-  zeroc_ice = callPackage ../development/libraries/zeroc-ice { };
+  zeroc_ice = callPackage ../development/libraries/zeroc-ice {
+    openssl = openssl_1_0_2;
+  };
 
   zexy = callPackage ../applications/audio/pd-plugins/zexy  { };
 
