@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
       # ToDo: not working and probably useless until gnome3 from x-updates
     ]);
 
+  configureFlags = stdenv.lib.optional (!gnomeSupport) "--disable-gcr";
+
   enableParallelBuilding = true;
 
   # ToDo: one probably should specify schemas for samba and others here
