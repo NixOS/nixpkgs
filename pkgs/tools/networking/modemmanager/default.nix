@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ModemManager-${version}";
-  version = "1.4.6";
+  version = "1.4.16";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/ModemManager/${name}.tar.xz";
-    sha256 = "1kd5nn5rm88c8rgmzwy2fsf3cr7fai7r85mi61kcby0hcgsapv8c";
+    sha256 = "1qhbi1mv8l2dvpw7fmw2p2fd51y0x3v1pqgnahd1ndfial3vqwss";
   };
 
   nativeBuildInputs = [ intltool pkgconfig ];

@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname   = "NetworkManager-openvpn";
-  version = networkmanager.version;
+  version = "1.2.6";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${networkmanager.major}/${pname}-${version}.tar.xz";
-    sha256 = "47a6d219a781eff8491c7876b7fb95b12dcfb8f8a05f916f95afc65c7babddef";
+    sha256 = "1c0z7x5kkxi1mjimww7kpvci4071sviv1n3wk6r6r1wa1axy4wr3";
   };
 
   buildInputs = [ openvpn networkmanager libsecret ]

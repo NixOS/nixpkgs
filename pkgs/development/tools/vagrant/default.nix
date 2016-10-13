@@ -4,7 +4,7 @@
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 let
-  version = "1.8.5";
+  version = "1.8.6";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -13,8 +13,8 @@ let
   };
 
   sha256 = {
-    "x86_64-linux" = "1na5hxm3ilx268hk68dpgkks1jjh9q7p3ksjx8ssiijq6df47vih";
-    "i686-linux"   = "16psr5s0azpzavizh74085z7wygkfs4ribsfalvbd96phkrkp2wp";
+    "x86_64-linux" = "1nkhf160hcl02yvafj6hq53j204qqxyvxjngnmf4f5md8dmkpn76";
+    "i686-linux"   = "0mr4pn7nggjdsqyxh1z2mflvvmpzhbxh5gax501d2hi8xr0y68df";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch = builtins.replaceStrings ["-linux"] [""] stdenv.system;
@@ -28,22 +28,11 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  # Remove the patchFlags/patches when 1.8.6 is released
-  patchFlags = [
-    "-p1"
-    "-d ./opt/vagrant/embedded/gems/gems/vagrant-${version}"
-  ];
-  patches = (fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/mitchellh/vagrant/pull/7611.diff";
-    name = "fix_incorrect_ssh_keys_permissions.patch";
-    sha256 = "0lqa9xpg79ggp9fc8gzb5lv675ydj2p8l55bx4hs1hf8zz2c1hjf";
-  });
-
   meta = with stdenv.lib; {
     description = "A tool for building complete development environments";
     homepage    = http://vagrantup.com;
     license     = licenses.mit;
-    maintainers = with maintainers; [ lovek323 globin jgeerds ];
+    maintainers = with maintainers; [ lovek323 globin jgeerds kamilchm ];
     platforms   = platforms.linux;
   };
 

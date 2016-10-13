@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libelf }:
 
 stdenv.mkDerivation rec {
-  name = "libdwarf-20160613";
+  name = "libdwarf-20161001";
 
   src = fetchurl {
     url = "http://www.prevanders.net/${name}.tar.gz";
-    sha256 = "1nfdfn5xf3n485pvpb853awyxxnvrg207i0wmrr7bhk8fcxdxbn0";
+    sha512 = "2c522ae0b6e2afffd09e2e79562987fd819b197c9bce4900b6a4fd176b5ff229e88c6b755cfbae7831e7160ddeb3bfe2afbf39d756d7e75ec31ace0668554048";
   };
 
   configureFlags = " --enable-shared --disable-nonshared";

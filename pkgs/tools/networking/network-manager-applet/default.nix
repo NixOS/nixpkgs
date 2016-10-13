@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   name    = "${pname}-${version}";
   pname   = "network-manager-applet";
-  version = networkmanager.version;
+  version = "1.2.4";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${networkmanager.major}/${name}.tar.xz";
-    sha256 = "02b42e7c17c9cd6c840563750da92ce58da1ec621df7f0c2402016026e727756";
+    sha256 = "0ym31m55hj65mmbq2yihy49z5x5z1qpx7jalk64kwx1rr5b2kxyz";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ];
