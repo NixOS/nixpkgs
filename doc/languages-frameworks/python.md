@@ -416,28 +416,13 @@ aliases `python` and `python3` correspond to respectively `python27` and
 `python35`. The Nix expressions for the interpreters can be found in
 `pkgs/development/interpreters/python`.
 
-
-#### Missing modules standard library
-
-The interpreters `python26` and `python27` do not include modules that
-require external dependencies. This is done in order to reduce the closure size.
-The following modules need to be added as `buildInput` explicitly:
-
-* `python.modules.bsddb`
-* `python.modules.curses`
-* `python.modules.curses_panel`
-* `python.modules.crypt`
-* `python.modules.gdbm`
-* `python.modules.sqlite3`
-* `python.modules.tkinter`
-* `python.modules.readline`
-
-For convenience `python27Full` and `python26Full` are provided with all
-modules included.
-
 All packages depending on any Python interpreter get appended
 `out/{python.sitePackages}` to `$PYTHONPATH` if such directory
 exists.
+
+#### Missing `tkinter` module standard library
+
+To reduce closure size the `Tkinter`/`tkinter` is put in a separate output. The `tkinter` is available as `python35Packages.tkinter`.
 
 #### Attributes on interpreters packages
 
@@ -448,7 +433,7 @@ Each interpreter has the following attributes:
 - `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
-- `executable`. Name of the interpreter executable, ie `python3.4`.
+- `executable`. Name of the interpreter executable, e.g. `python3.4`.
 
 ### Building packages and applications
 

@@ -1,8 +1,5 @@
 { stdenv, fetchurl, fetchpatch, self, callPackage, python27Packages
 , bzip2, openssl, gettext
-
-, includeModules ? false
-
 , db, gdbm, ncurses, sqlite, readline
 
 , tcl ? null, tk ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
@@ -27,6 +24,7 @@ let
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
+  sitePackages = "lib/${libPrefix}/site-packages";
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
@@ -113,10 +111,8 @@ let
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl ]
     ++ optionals stdenv.isCygwin [ expat libffi ]
-    ++ optionals includeModules (
-        [ db gdbm ncurses sqlite readline
-        ] ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    )
+    ++ [ db gdbm ncurses sqlite readline ]
+    ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     ++ optional zlibSupport zlib
     ++ optional stdenv.isDarwin CF;
 
@@ -129,7 +125,8 @@ let
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
-  python = stdenv.mkDerivation {
+
+in stdenv.mkDerivation {
     name = "python-${version}";
     pythonVersion = majorVersion;
 
@@ -165,20 +162,25 @@ let
         # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
         echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
-        ${optionalString includeModules "$out/bin/python ./setup.py build_ext"}
-
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
       '';
 
+    postFixup = optionalString x11Support ''
+      # tkinter goes in a separate output
+      mkdir -p $tkinter/${sitePackages}
+      mv $out/lib/${libPrefix}/lib-dynload/_tkinter* $tkinter/${sitePackages}/
+    '';
+
+    outputs = ["out"] ++ optional x11Support "tkinter";
+
     passthru = rec {
-      inherit libPrefix;
+      inherit libPrefix sitePackages;
       inherit zlibSupport;
       isPy2 = true;
       isPy27 = true;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
       withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
       executable = libPrefix;
-      sitePackages = "lib/${libPrefix}/site-packages";
       interpreter = "${self}/bin/${executable}";
     };
 
@@ -200,99 +202,4 @@ let
       platforms = stdenv.lib.platforms.all;
       maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
     };
-  };
-
-
-  # This function builds a Python module included in the main Python
-  # distribution in a separate derivation.
-  buildInternalPythonModule =
-    { moduleName
-    , internalName ? "_" + moduleName
-    , deps
-    }:
-    if includeModules then null else stdenv.mkDerivation rec {
-      name = "python-${moduleName}-${python.version}";
-
-      inherit src patches preConfigure postConfigure configureFlags;
-
-      buildInputs = [ python ] ++ deps;
-
-      # We need to set this for python.buildEnv
-      pythonPath = [];
-
-      inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
-
-      # non-python gdbm has a libintl dependency on i686-cygwin, not on x86_64-cygwin
-      buildPhase = (if (stdenv.system == "i686-cygwin" && moduleName == "gdbm") then ''
-          sed -i setup.py -e "s:libraries = \['gdbm'\]:libraries = ['gdbm', 'intl']:"
-      '' else '''') + ''
-          substituteInPlace setup.py --replace 'self.extensions = extensions' \
-            'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
-
-          python ./setup.py build_ext
-          [ -z "$(find build -name '*_failed.so' -print)" ]
-        '';
-
-      installPhase =
-        ''
-          dest=$out/lib/${python.libPrefix}/site-packages
-          mkdir -p $dest
-          cp -p $(find . -name "*.${if stdenv.isCygwin then "dll" else "so"}") $dest/
-        '';
-    };
-
-
-  # The Python modules included in the main Python distribution, built
-  # as separate derivations.
-  modules = {
-
-    bsddb = buildInternalPythonModule {
-      moduleName = "bsddb";
-      deps = [ db ];
-    };
-
-    curses = buildInternalPythonModule {
-      moduleName = "curses";
-      deps = [ ncurses ];
-    };
-
-    curses_panel = buildInternalPythonModule {
-      moduleName = "curses_panel";
-      deps = [ ncurses modules.curses ];
-    };
-
-    crypt = buildInternalPythonModule {
-      moduleName = "crypt";
-      internalName = "crypt";
-      deps = optional (stdenv ? glibc) stdenv.glibc;
-    };
-
-    gdbm = buildInternalPythonModule {
-      moduleName = "gdbm";
-      internalName = "gdbm";
-      deps = [ gdbm ] ++ stdenv.lib.optional stdenv.isCygwin gettext;
-    };
-
-    sqlite3 = buildInternalPythonModule {
-      moduleName = "sqlite3";
-      deps = [ sqlite ];
-    };
-
-  } // optionalAttrs x11Support {
-
-    tkinter = if stdenv.isCygwin then null else (buildInternalPythonModule {
-      moduleName = "tkinter";
-      deps = [ tcl tk xlibsWrapper libX11 ];
-    });
-
-  } // {
-
-    readline = buildInternalPythonModule {
-      moduleName = "readline";
-      internalName = "readline";
-      deps = [ readline ];
-    };
-
-  };
-
-in python // { inherit modules; }
+  }

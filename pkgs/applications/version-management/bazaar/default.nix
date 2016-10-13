@@ -10,9 +10,6 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1cysix5k3wa6y7jjck3ckq3abls4gvz570s0v0hxv805nwki4i8d";
   };
 
-  # Readline support is needed by bzrtools.
-  propagatedBuildInputs = [ pythonPackages.python.modules.readline ];
-
   doCheck = false;
 
   # Bazaar can't find the certificates alone
