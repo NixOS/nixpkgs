@@ -5287,7 +5287,10 @@ in
   erlangR16 = callPackage ../development/interpreters/erlang/R16.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
-  erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
+  erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    odbcSupport = true;
+  };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
