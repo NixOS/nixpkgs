@@ -1,14 +1,25 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, makeDesktopItem
 , xorg, gtk2, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify }:
 
-stdenv.mkDerivation rec {
+let
   bits = if stdenv.system == "x86_64-linux" then "x64"
          else "ia32";
+
   version = "4.0.4";
+
+  desktopItem = makeDesktopItem rec {
+    name = "Franz";
+    exec = name;
+    icon = "franz";
+    desktopName = name;
+    genericName = "Franz messenger";
+    categories = "Network;";
+  };
+in stdenv.mkDerivation rec {
   name = "franz-${version}";
   src = fetchurl {
-    url = "https://github.com/meetfranz/franz-app/releases/download/4.0.4/Franz-linux-${bits}-${version}.tgz";
+    url = "https://github.com/meetfranz/franz-app/releases/download/${version}/Franz-linux-${bits}-${version}.tgz";
     sha256 = if bits == "x64" then
       "0ssym0jfrig474g6j67g1jfybjkxnyhbqqjvrs8z6ihwlyd3rrk5" else
       "16l9jma2hiwzl9l41yhrwribcgmxca271rq0cfbbm9701mmmciyy";
@@ -36,6 +47,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/franz
     cp -r * $out/share/franz
     ln -s $out/share/franz/Franz $out/bin
+
+    mkdir -p $out/share/applications $out/share/pixmaps
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
+    ln -s $out/share/franz/resources/app.asar.unpacked/assets/franz.png $out/share/pixmaps
   '';
 
   meta = with stdenv.lib; {

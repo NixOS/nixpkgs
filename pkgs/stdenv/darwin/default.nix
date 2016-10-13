@@ -6,14 +6,14 @@
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/62540508837664e9b366e36d1265502db4329a6e/${file}";
+    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/33f59c9d11b8d5014dfd18cc11a425f6393c884a/${file}";
     inherit sha256 system executable;
   }; in {
-    sh      = fetch { file = "sh";    sha256 = "1qpg16qbqqkmcr5an4d73p6q55izhlzmdd3nvid8gp7f3f9spbz7"; };
-    bzip2   = fetch { file = "bzip2"; sha256 = "1g67sh51fa2ws9wch5gznvrmmh27mks3dbnp6gvac43qxdnv6mpz"; };
-    mkdir   = fetch { file = "mkdir"; sha256 = "1lkp6y33lsrj9yif1cfrw5g021pffynrdscrz3ds19hslg55w4dw"; };
-    cpio    = fetch { file = "cpio";  sha256 = "115pgrl0pcq2h4yfqrmfvffl0dcabw4mgkc91aphd913wrzfmlz9"; };
-    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "1ak16xrj41l15ads5l2kfgbyrb1lczzhmi8nln5h0np8r3w9frw9"; executable = false; };
+    sh      = fetch { file = "sh";    sha256 = "1rx4kg6358xdj05z0m139a0zn4f4zfmq4n4vimlmnwyfiyn4x7wk"; };
+    bzip2   = fetch { file = "bzip2"; sha256 = "104qnhzk79vkbp2yi0kci6lszgfppvrwk3rgxhry842ly1xz2r7l"; };
+    mkdir   = fetch { file = "mkdir"; sha256 = "0d91c19xjzmqisncvldv79d7ddzai9l7vcmajhwlwwv74g6da5yl"; };
+    cpio    = fetch { file = "cpio";  sha256 = "0lw057bmcqls96j0gv1n3mgl66q31mba7i413cbkkaf0rfzz3dxj"; };
+    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "13ihbj002pis3fgy1d9c4fi7flca21z9brjsjkklm82h5b4nlwxl"; executable = false; };
   }
 }:
 

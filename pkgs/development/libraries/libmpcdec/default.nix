@@ -1,13 +1,16 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "libmpcdec-1.2.6";
+
   src = fetchurl {
     url = http://files.musepack.net/source/libmpcdec-1.2.6.tar.bz2;
-    md5 = "7f7a060e83b4278acf4b77d7a7b9d2c0";
+    sha256 = "1a0jdyga1zfi4wgkg3905y6inghy3s4xfs5m4x7pal08m0llkmab";
   };
 
   meta = {
+    description = "Musepack SV7 decoder library";
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

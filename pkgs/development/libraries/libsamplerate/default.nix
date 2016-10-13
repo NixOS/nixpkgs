@@ -4,20 +4,18 @@ let
   inherit (stdenv.lib) optionals optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "libsamplerate-0.1.8";
+  name = "libsamplerate-0.1.9";
 
   src = fetchurl {
     url = "http://www.mega-nerd.com/SRC/${name}.tar.gz";
-    sha256 = "01hw5xjbjavh412y63brcslj5hi9wdgkjd3h9csx5rnm8vglpdck";
+    sha256 = "1ha46i0nbibq0pl0pjwcqiyny4hj8lp1bnl4dpxm64zjw9lb2zha";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libsndfile ]
     ++ optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
-  # maybe interesting configure flags:
-  #--disable-fftw          disable usage of FFTW
-  #--disable-cpu-clip      disable tricky cpu specific clipper
+  configureFlags = [ "--disable-fftw" ];
 
   outputs = [ "bin" "dev" "out" ];
 

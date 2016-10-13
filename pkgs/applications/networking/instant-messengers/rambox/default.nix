@@ -1,11 +1,27 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, makeDesktopItem
 , xorg, gtk2, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify }:
 
-stdenv.mkDerivation rec {
+let
   bits = if stdenv.system == "x86_64-linux" then "x64"
          else "ia32";
+
   version = "0.4.4";
+
+  myIcon = fetchurl {
+    url = "https://raw.githubusercontent.com/saenzramiro/rambox/9e4444e6297dd35743b79fe23f8d451a104028d5/resources/Icon.png";
+    sha256 = "0r00l4r5mlbgn689i3rp6ks11fgs4h2flvrlggvm2qdd974d1x0b";
+  };
+
+  desktopItem = makeDesktopItem rec {
+    name = "Rambox";
+    exec = name;
+    icon = myIcon;
+    desktopName = name;
+    genericName = "Rambox messenger";
+    categories = "Network;";
+  };
+in stdenv.mkDerivation rec {
   name = "rambox-${version}";
   src = fetchurl {
     url = "https://github.com/saenzramiro/rambox/releases/download/${version}/Rambox-${version}-${bits}.tar.gz";
@@ -32,6 +48,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/rambox
     cp -r * $out/share/rambox
     ln -s $out/share/rambox/Rambox $out/bin
+
+    mkdir -p $out/share/applications
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   meta = with stdenv.lib; {

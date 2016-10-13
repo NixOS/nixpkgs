@@ -38,6 +38,7 @@
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
   ./hardware/video/amdgpu.nix
+  ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/displaylink.nix
@@ -84,6 +85,7 @@
   ./programs/ssmtp.nix
   ./programs/tmux.nix
   ./programs/venus.nix
+  ./programs/vim.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
@@ -234,7 +236,9 @@
   ./services/misc/dictd.nix
   ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
+  ./services/misc/docker-registry.nix
   ./services/misc/emby.nix
+  ./services/misc/errbot.nix
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
@@ -480,6 +484,9 @@
   ./services/ttys/agetty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
+  ./services/web-apps/atlassian/confluence.nix
+  ./services/web-apps/atlassian/crowd.nix
+  ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nixbot.nix
   ./services/web-apps/pump.io.nix
