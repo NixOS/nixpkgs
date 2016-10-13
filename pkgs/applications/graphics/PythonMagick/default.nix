@@ -2,7 +2,7 @@
 
 let
 
-  version = "0.9.12";
+  version = "0.9.14";
 
 in
 
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   name = "pythonmagick-${version}";
 
   src = fetchurl {
-    url = "http://www.imagemagick.org/download/python/releases/PythonMagick-${version}.tar.xz";
-    sha256 = "1l1kr3d7l40fkxgs6mrlxj65alv2jizm9hhgg9i9g90a8qj8642b";
+    url = "mirror://imagemagick/python/releases/PythonMagick-${version}.tar.xz";
+    sha256 = "1flkdfi3c19wy2qcfzax1cqvmmri10rvmhc2y85gmagqvv01zz22";
   };
 
   buildInputs = [python boost pkgconfig imagemagick];
