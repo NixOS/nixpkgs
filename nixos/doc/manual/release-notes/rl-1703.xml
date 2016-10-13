@@ -50,6 +50,7 @@ following incompatible changes:</para>
       which prevents ptracing non-child processes.
       This means you will not be able to attach gdb to an existing process,
       but will need to start that process from gdb (so it is a child).
+    </para>
   </listitem>
 
   <listitem>
