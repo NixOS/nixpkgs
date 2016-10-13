@@ -37,23 +37,14 @@ hardeningFlagMap = {
   };
 };
 
-# handle special case enabled = "all"
-hardeningEnable' = if elem "all" hardeningEnable
-  then attrNames hardeningFlagMap
-  else hardeningEnable;
+enabledFlags =
+  if elem "all" hardeningDisable then []
+  else filter (x: ! elem x hardeningDisable) (
+    if elem "all" hardeningEnable then hardeningSupported
+    else filter (flip elem hardeningSupported) hardeningEnable
+  );
 
-# same for disable = "all"
-hardeningDisable' = if elem "all" hardeningDisable
-  then attrNames hardeningFlagMap
-  else hardeningDisable;
-
-# filter out disabled flags
-enabledFlags = filter (x: ! elem x hardeningDisable') hardeningEnable';
-
-# filter out unsupported flags
-supportedEnabledFlags = filter (flip elem hardeningSupported) enabledFlags;
-
-enabledFlagsMap = map (flip getAttr hardeningFlagMap) supportedEnabledFlags;
+enabledFlagsMap = map (flip getAttr hardeningFlagMap) enabledFlags;
 
 in {
   hardeningCFlags = concatMap (x: x.C or []) enabledFlagsMap;
