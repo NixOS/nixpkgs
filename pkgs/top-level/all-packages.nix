@@ -15404,7 +15404,9 @@ in
     gtk = gtk2;
   };
 
-  kodiPlain = callPackage ../applications/video/kodi { };
+  kodiPlain = callPackage ../applications/video/kodi {
+    libva = libva-full;
+  };
   xbmcPlain = self.kodiPlain;
 
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {
