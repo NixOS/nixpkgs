@@ -9912,10 +9912,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   OpenGL = buildPerlPackage rec {
-    name = "OpenGL-0.6703";
+    name = "OpenGL-0.70";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHM/${name}.tar.gz";
-      sha256 = "0k2k8zg84qj1ry77i9dvmfdfpg13s6117wy5bc4nvnzv37qcvy32";
+      sha256 = "1q3lz168q081iwl9jg21fbzhp9la79gav9mv6nmh2jab83s2l3mj";
     };
 
     buildInputs = with pkgs; [ mesa mesa_glu freeglut xorg.libX11 xorg.libXi xorg.libXmu xorg.libXext xdummy ];
