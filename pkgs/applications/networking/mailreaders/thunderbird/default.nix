@@ -113,6 +113,11 @@ stdenv.mkDerivation rec {
       EOF
     '';
 
+    postFixup =
+      ''
+        paxmark m $out/lib/thunderbird-${version}/thunderbird
+      '';
+
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
     homepage = http://www.mozilla.org/thunderbird/;
