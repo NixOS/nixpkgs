@@ -1,6 +1,7 @@
 { pkgs
 , kernel ? pkgs.linux
 , img ? "bzImage"
+, storeDir ? builtins.storeDir
 , rootModules ?
     [ "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
 }:
@@ -128,8 +129,8 @@ rec {
     mount -t devpts none /fs/dev/pts
 
     echo "mounting Nix store..."
-    mkdir -p /fs/nix/store
-    mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,cache=loose
+    mkdir -p /fs${storeDir}
+    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -172,7 +173,7 @@ rec {
     # apparent KVM > 1.5.2 bug.
     ${pkgs.utillinux}/bin/hwclock -s
 
-    export NIX_STORE=/nix/store
+    export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
     export TMPDIR=/tmp
     export PATH=/empty
@@ -220,7 +221,7 @@ rec {
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
-      -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
+      -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
       -drive file=$diskImage,if=virtio,cache=unsafe,werror=report \
       -kernel ${kernel}/${img} \
@@ -298,7 +299,7 @@ rec {
 
   /* Run a derivation in a Linux virtual machine (using Qemu/KVM).  By
      default, there is no disk image; the root filesystem is a tmpfs,
-     and /nix/store is shared with the host (via the 9P protocol).
+     and the nix store is shared with the host (via the 9P protocol).
      Thus, any pure Nix derivation should run unmodified, e.g. the
      call
 
@@ -434,8 +435,8 @@ rec {
         chroot=$(type -tP chroot)
 
         # Make the Nix store available in /mnt, because that's where the RPMs live.
-        mkdir -p /mnt/nix/store
-        ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
+        mkdir -p /mnt${storeDir}
+        ${utillinux}/bin/mount -o bind ${storeDir} /mnt${storeDir}
 
         # Newer distributions like Fedora 18 require /lib etc. to be
         # symlinked to /usr.
@@ -474,7 +475,7 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt/nix/store /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
+        ${utillinux}/bin/umount /mnt${storeDir} /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
         ${utillinux}/bin/umount /mnt
       '';
 
@@ -605,8 +606,8 @@ rec {
         done
 
         # Make the Nix store available in /mnt, because that's where the .debs live.
-        mkdir -p /mnt/inst/nix/store
-        ${utillinux}/bin/mount -o bind /nix/store /mnt/inst/nix/store
+        mkdir -p /mnt/inst${storeDir}
+        ${utillinux}/bin/mount -o bind ${storeDir} /mnt/inst${storeDir}
         ${utillinux}/bin/mount -o bind /proc /mnt/proc
         ${utillinux}/bin/mount -o bind /dev /mnt/dev
 
@@ -654,7 +655,7 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt/inst/nix/store
+        ${utillinux}/bin/umount /mnt/inst${storeDir}
         ${utillinux}/bin/umount /mnt/proc
         ${utillinux}/bin/umount /mnt/dev
         ${utillinux}/bin/umount /mnt
