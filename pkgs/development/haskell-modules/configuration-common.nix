@@ -982,7 +982,7 @@ self: super: {
   stack = (dontJailbreak super.stack).overrideScope (self: super: {
     http-client = self.http-client_0_5_3_2;
     http-client-tls = self.http-client-tls_0_3_3;
-    http-conduit = self.http-conduit_2_2_2_1;
+    http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
   });
