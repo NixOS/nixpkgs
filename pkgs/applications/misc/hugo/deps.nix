@@ -130,8 +130,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/viper";
-      rev = "c1ccc378a054ea8d4e38d8c67f6938d4760b53dd";
-      sha256 = "0lpdzalqhqp9pwsg63inkxwjji7m0pp42ryw1499bqbjp97hriq0";
+      rev = "ec4eb2fa8549869ae7a2accd4fcc83d1c0555c15";
+      sha256 = "018niqyrg09andj3g08jalflq2ypz9bp7qb1mbk50kfly29lkih7";
     };
   }
   {
@@ -139,8 +139,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/pflag";
-      rev = "367864438f1b1a3c7db4da06a2f55b144e6784e0";
-      sha256 = "03c6654hv4v1fj79i5sri3p9q2afqgicka4nicb6fr4kcfkkgbfp";
+      rev = "b83537d79690b75cac5e021b036ae16792bf0f20";
+      sha256 = "19blhq00rnynv11nnvixisx4h1429rp5bik13k661ixw0421qqyx";
     };
   }
   {
@@ -312,6 +312,33 @@
       url = "https://github.com/PuerkitoBio/urlesc";
       rev = "5fa9ff0392746aeae1c4b37fcc42c65afa7a9587";
       sha256 = "0dppkmfs0hb5vcqli191x9yss5vvlx29qxjcywhdfirc89rn0sni";
+    };
+  }
+  {
+    goPackagePath = "github.com/nicksnyder/go-i18n";
+    fetch = {
+      type = "git";
+      url = "https://github.com/nicksnyder/go-i18n";
+      rev = "e6c90c3ceece7f43060f843b495c3c9c031f5575";
+      sha256 = "1i1hqvq05lk12wnrhayca66pvfbyjnj7dm0lr0hn5qhb2i8k84kd";
+    };
+  }
+  {
+    goPackagePath = "github.com/pelletier/go-toml";
+    fetch = {
+      type = "git";
+      url = "https://github.com/pelletier/go-toml";
+      rev = "45932ad32dfdd20826f5671da37a5f3ce9f26a8d";
+      sha256 = "1rs25xqlpz2j9gqii144qnkvhsgzhwgy9ild7yvxhnbs2mybgix7";
+    };
+  }
+  {
+    goPackagePath = "github.com/pelletier/go-buffruneio";
+    fetch = {
+      type = "git";
+      url = "https://github.com/pelletier/go-buffruneio";
+      rev = "df1e16fde7fc330a0ca68167c23bf7ed6ac31d6d";
+      sha256 = "0jwn2g4jfdb3wvpqisd8h055099pwx6c5i3bb4zxk5l9vybg1c5f";
     };
   }
 ]

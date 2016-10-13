@@ -7,8 +7,8 @@ let
   libglnx-src = fetchFromGitHub {
     owner  = "GNOME";
     repo   = "libglnx";
-    rev    = "769522753c25537e520adc322fa62e5390272add";
-    sha256 = "0gfc8dl63xpmf73dwb1plj7cymq7z6w6wq5m06yx8jymwhq7x1l8";
+    rev    = "36396b49ad6636c9959f3dfac5e04d41584b1a92";
+    sha256 = "146flrpzybm2s12wg05rnglnfd2f2jx3xzvns2pq28kvg09bgcfn";
   };
 
   bsdiff-src = fetchFromGitHub {
@@ -17,15 +17,16 @@ let
     rev    = "1edf9f656850c0c64dae260960fabd8249ea9c60";
     sha256 = "1h71d2h2d3anp4msvpaff445rnzdxii3id2yglqk7af9i43kdsn1";
   };
-in stdenv.mkDerivation rec {
-  rev = "v2016.5";
-  name = "ostree-${rev}";
+
+  version = "2016.11";
+in stdenv.mkDerivation {
+  name = "ostree-${version}";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev    = "v${version}";
     owner  = "ostreedev";
     repo   = "ostree";
-    sha256 = "1dfyhzgv94ldjv2l4jxf4xhks2z5ljljqa3k579qskds755n6kvg";
+    sha256 = "19xmg01mxdykx74r9ra11hc15qd1fjqbxdn23jrn2pcvz8dw9zgc";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,8 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
+
+    configureFlags+="--with-systemdsystemunitdir=$out/lib/systemd/system"
   '';
 
   meta = with stdenv.lib; {
