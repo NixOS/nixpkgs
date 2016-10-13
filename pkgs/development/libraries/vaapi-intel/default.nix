@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-intel-driver-1.7.1";
+  name = "libva-intel-driver-1.7.2";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver/${name}.tar.bz2";
-    sha256 = "1dfw2sip4nwzfqpc1nryck4drk416zjszh8738w0s0sq81x73mqy";
+    sha256 = "1g371q9p31i57fkidjp2akvrbaadpyx3bwmg5kn72sc2mbv7p7h9";
   };
 
   patchPhase = ''
