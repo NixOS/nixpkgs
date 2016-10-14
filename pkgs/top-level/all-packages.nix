@@ -5490,7 +5490,7 @@ in
   };
   purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
 
-  python = python2;
+  python = python3;
   python2 = python27;
   python3 = python35;
 
@@ -5500,7 +5500,7 @@ in
   pythonSmall = python.override {x11Support = false;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
-  pythonPackages = python2Packages;
+  pythonPackages = python3Packages;
   python2Packages = python27Packages;
   python3Packages = python35Packages;
 
