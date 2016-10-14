@@ -60,7 +60,8 @@ let
     obconf-qt = callPackage ./optional/obconf-qt { };
     lximage-qt = callPackage ./optional/lximage-qt { };
     qps = callPackage ./optional/qps { };
-   
+    screengrab = callPackage ./optional/screengrab { };
+
   };
 
 in self
