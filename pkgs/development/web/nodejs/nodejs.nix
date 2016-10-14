@@ -6,7 +6,8 @@
 , preBuild ? ""
 , extraConfigFlags ? []
 , extraBuildInputs ? []
-, ...
+, patches ? [],
+ ...
 }:
 
 assert stdenv.system != "armv5tel-linux";
@@ -44,7 +45,7 @@ in stdenv.mkDerivation {
     PATH=$out/bin:$PATH patchShebangs $out
   '';
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
+  patches = patches ++ stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
 
   buildInputs = extraBuildInputs
     ++ [ python which zlib libuv openssl ]

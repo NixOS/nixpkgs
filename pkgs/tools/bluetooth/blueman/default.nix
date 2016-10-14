@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
 , obex_data_server, xdg_utils, libnotify, dconf, gsettings_desktop_schemas, dnsmasq, dhcp
-, withPulseAudio ? true, libpulseaudio }:
+, hicolor_icon_theme , withPulseAudio ? true, libpulseaudio }:
 
 let
   binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp ];
@@ -16,7 +16,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig pythonPackages.wrapPython pythonPackages.cython ];
 
-  buildInputs = [ bluez gtk3 pythonPackages.python libnotify dconf gsettings_desktop_schemas ]
+  buildInputs = [ bluez gtk3 pythonPackages.python libnotify dconf
+                  gsettings_desktop_schemas hicolor_icon_theme ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 

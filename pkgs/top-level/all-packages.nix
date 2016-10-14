@@ -1567,6 +1567,8 @@ in
       pillow;
   };
 
+  fastd = callPackage ../tools/networking/fastd { };
+
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
   fcitx = callPackage ../tools/inputmethods/fcitx {
@@ -2306,7 +2308,7 @@ in
   less = callPackage ../tools/misc/less { };
 
   lf = callPackage ../tools/misc/lf {};
-  
+
   lhasa = callPackage ../tools/compression/lhasa {};
 
   libcpuid = callPackage ../tools/misc/libcpuid { };
@@ -2418,10 +2420,6 @@ in
     libtool = darwin.cctools;
   };
 
-  nodejs-5_x = callPackage ../development/web/nodejs/v5.nix {
-    libtool = darwin.cctools;
-  };
-
   nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
     libtool = darwin.cctools;
   };
@@ -2433,10 +2431,6 @@ in
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
-  };
-
-  nodePackages_5_x = callPackage ../development/node-packages/default-v5.nix {
-    nodejs = pkgs.nodejs-5_x;
   };
 
   nodePackages_4_x = callPackage ../development/node-packages/default-v4.nix {
@@ -5280,7 +5274,10 @@ in
   erlangR16 = callPackage ../development/interpreters/erlang/R16.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
-  erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
+  erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    odbcSupport = true;
+  };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
@@ -8164,6 +8161,8 @@ in
   libu2f-host = callPackage ../development/libraries/libu2f-host { };
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
+
+  libuecc = callPackage ../development/libraries/libuecc { };
 
   libui = callPackage ../development/libraries/libui { };
 
@@ -15043,7 +15042,9 @@ in
     gtk = gtk2;
   };
 
-  kodiPlain = callPackage ../applications/video/kodi { };
+  kodiPlain = callPackage ../applications/video/kodi {
+    libva = libva-full;
+  };
   xbmcPlain = kodiPlain;
 
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {
