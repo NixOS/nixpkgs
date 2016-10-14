@@ -2,7 +2,7 @@
 
 bundlerEnv {
   inherit ruby;
-  pName = "riemann-dash";
+  pname = "riemann-dash";
   gemdir = ./.;
 
   meta = with lib; {

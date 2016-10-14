@@ -2,7 +2,7 @@
 
 bundlerEnv {
   inherit ruby;
-  pName = "foreman";
+  pname = "foreman";
   gemdir = ./.;
 
   meta = with lib; {
