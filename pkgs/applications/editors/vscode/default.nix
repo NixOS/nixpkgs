@@ -1,32 +1,27 @@
-{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
-  makeWrapper, libXScrnSaver }:
+{ stdenv, lib, callPackage, fetchOneOf, unzip, atomEnv, makeDesktopItem }:
 
 let
   version = "1.6.1";
   rev = "9e4e44c19e393803e2b05fe2323cf4ed7e36880e";
-
-  sha256 = if stdenv.system == "i686-linux"    then "1aks84siflpjbd2s9y1f0vvvf3nas4f50cimjf25lijxzjxrlivy"
-      else if stdenv.system == "x86_64-linux"  then "05kbi081ih64fadj4k74grkk9ca3wga6ybwgs5ld0bal4ilw1q6i"
-      else if stdenv.system == "x86_64-darwin" then "00p2m8b0l3pkf5k74szw6kcql3j1fjnv3rwnhy24wfkg4b4ah2x9"
-      else throw "Unsupported system: ${stdenv.system}";
-
   urlBase = "https://az764295.vo.msecnd.net/stable/${rev}/";
-
-  urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-stable-code_${version}-1476372351_i386.tar.gz"
-      else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-stable-code_${version}-1476373175_amd64.tar.gz"
-      else if stdenv.system == "x86_64-darwin" then
-        urlBase + "VSCode-darwin-stable.zip"
-      else throw "Unsupported system: ${stdenv.system}";
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
     inherit version;
 
-    src = fetchurl {
-      url = urlStr;
-      inherit sha256;
+    src = fetchOneOf stdenv.system {
+      "i686-linux" = {
+        url = "${urlBase}/code-stable-code_${version}-1476372351_i386.tar.gz";
+        sha256 = "1aks84siflpjbd2s9y1f0vvvf3nas4f50cimjf25lijxzjxrlivy";
+      };
+      "x86_64-linux" = {
+        url = "${urlBase}/code-stable-code_${version}-1476373175_amd64.tar.gz";
+        sha256 = "05kbi081ih64fadj4k74grkk9ca3wga6ybwgs5ld0bal4ilw1q6i";
+      };
+      "x86_64-darwin" = {
+        url = "${urlBase}/VSCode-darwin-stable.zip";
+        sha256 = "00p2m8b0l3pkf5k74szw6kcql3j1fjnv3rwnhy24wfkg4b4ah2x9";
+      };
     };
 
     desktopItem = makeDesktopItem {
