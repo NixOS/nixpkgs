@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  pname = "vertex-theme";
+  pname = "theme-vertex";
   version = "20161009";
 
   src = fetchFromGitHub {
     owner = "horst3180";
-    repo = pname;
+    repo = "vertex-theme";
     rev = "c861918a7fccf6d0768d45d790a19a13bb23485e";
     sha256 = "13abgl18m04sj44gqipxbagpan4jqral65w59rgnhb6ldxgnhg33";
   };

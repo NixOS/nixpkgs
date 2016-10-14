@@ -16181,7 +16181,7 @@ in
     in
       recurseIntoAttrs (lib.makeScope qt5.newScope merged);
 
-  vertex-theme = callPackage ../misc/themes/vertex { };
+  theme-vertex = callPackage ../misc/themes/vertex { };
 
   xfce = xfce4-12;
   xfce4-12 = recurseIntoAttrs (callPackage ../desktops/xfce { });
