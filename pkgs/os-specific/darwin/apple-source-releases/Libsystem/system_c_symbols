@@ -234,8 +234,6 @@ __os_assert_log_ctx
 __os_assumes_log
 __os_assumes_log_ctx
 __os_avoid_tail_call
-__os_crash
-__os_crash_callback
 __os_debug_log
 __os_debug_log_error_str
 __putenvp
@@ -267,7 +265,6 @@ __unsetenvp
 __utmpxname
 _a64l
 _abort
-_abort_report_np
 _abs
 _acl_add_flag_np
 _acl_add_perm
