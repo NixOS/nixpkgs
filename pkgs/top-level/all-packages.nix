@@ -691,7 +691,6 @@ in
   caddy = callPackage ../servers/caddy { };
 
   calamares = qt5.callPackage ../tools/misc/calamares rec {
-    python = python3;
     boost = pkgs.boost.override { python=python3; };
     libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost=boost; };
   };
@@ -1022,9 +1021,7 @@ in
 
   burp = callPackage ../tools/backup/burp { };
 
-  buku = callPackage ../applications/misc/buku {
-    pythonPackages = python3Packages;
-  };
+  buku = callPackage ../applications/misc/buku {};
 
   byzanz = callPackage ../applications/video/byzanz {};
 
@@ -1379,8 +1376,7 @@ in
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
-    pythonPackages = python3Packages;
-    rpm = rpm.override { python = python3; };
+    rpm = rpm.override;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -2890,9 +2886,7 @@ in
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
-  nox = callPackage ../tools/package-management/nox {
-    pythonPackages = python3Packages;
-  };
+  nox = callPackage ../tools/package-management/nox {};
 
   nq = callPackage ../tools/system/nq { };
 
@@ -3743,7 +3737,6 @@ in
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
-    pythonPackages = python3Packages;
    };
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
@@ -5539,7 +5532,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
+  pypi2nix = callPackage ../development/tools/pypi2nix {};
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -6166,9 +6159,7 @@ in
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
-  nixbang = callPackage ../development/tools/misc/nixbang {
-      pythonPackages = python3Packages;
-  };
+  nixbang = callPackage ../development/tools/misc/nixbang {};
 
   nexus = callPackage ../development/tools/repository-managers/nexus { };
 
@@ -9131,7 +9122,7 @@ in
 
   stlport = callPackage ../development/libraries/stlport { };
 
-  streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
+  streamlink = callPackage ../applications/video/streamlink {};
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
@@ -12102,7 +12093,6 @@ in
 
   blender = callPackage  ../applications/misc/blender {
     cudatoolkit = cudatoolkit75;
-    python = python35;
   };
 
   bluefish = callPackage ../applications/editors/bluefish {
@@ -12644,9 +12634,7 @@ in
 
   eq10q = callPackage ../applications/audio/eq10q { };
 
-  errbot = callPackage ../applications/networking/errbot {
-    pythonPackages = python3Packages;
-  };
+  errbot = callPackage ../applications/networking/errbot {};
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
@@ -14031,9 +14019,7 @@ in
 
   purple-facebook = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-facebook { };
 
-  pithos = callPackage ../applications/audio/pithos {
-    pythonPackages = python3Packages;
-  };
+  pithos = callPackage ../applications/audio/pithos {};
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
@@ -15317,9 +15303,7 @@ in
 
   bastet = callPackage ../games/bastet {};
 
-  beancount = callPackage ../applications/office/beancount {
-      pythonPackages = python3Packages;
-  };
+  beancount = callPackage ../applications/office/beancount {};
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
@@ -17153,9 +17137,7 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  wikicurses = callPackage ../applications/misc/wikicurses {
-    pythonPackages = python3Packages;
-  };
+  wikicurses = callPackage ../applications/misc/wikicurses {};
 
   wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
