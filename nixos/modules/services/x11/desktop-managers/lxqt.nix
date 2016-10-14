@@ -64,6 +64,7 @@ in
       pkgs.lxqt.qps
       pkgs.lxqt.qterminal
       pkgs.lxqt.qtermwidget
+      pkgs.lxqt.screengrab
       pkgs.menu-cache
       pkgs.openbox # default window manager
       pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
