@@ -89,6 +89,9 @@ in stdenv.mkDerivation {
 
     # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
     echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+
+    # Use Python3 as default python
+    ln -s "$out/bin/python3" "$out/bin/python"
   '';
 
   postFixup = ''
