@@ -1,6 +1,6 @@
-{ pkgspath ? ../../.., test-pkgspath ? pkgspath }:
+{ pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem }:
 
-with import pkgspath { system = builtins.currentSystem; };
+with import pkgspath { inherit system; };
 
 let
   llvmPackages = llvmPackages_37;
