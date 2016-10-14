@@ -17335,6 +17335,10 @@ in
 
   zimg = callPackage ../development/libraries/zimg { };
 
+  zk-shell = callPackage ../applications/misc/zk-shell {
+    inherit (pythonPackages) buildPythonApplication;
+  };
+
   zuki-themes = callPackage ../misc/themes/zuki { };
 
   zoom-us = qt55.callPackage ../applications/networking/instant-messengers/zoom-us {};
