@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, python3, python3Packages
+{ stdenv, fetchFromGitHub, python3Packages
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1d5a9k1llzn9q1qv1bfwc7gfflabh4riplz9jj0hf04b279y1bj0";
   };
 
-  propagatedBuildInputs = [ python3 python3Packages.pyqt4 ];
+  propagatedBuildInputs = [ python3Packages.pyqt4 ];
 
   patchPhase = ''
       substituteInPlace ./setup.py \

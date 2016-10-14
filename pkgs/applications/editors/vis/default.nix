@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, unzip, pkgconfig, makeWrapper
+{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
 , ncurses, libtermkey, lpeg, lua
 , acl ? null, libselinux ? null
-, version ? "2016-07-15"
-, rev ? "5c2cee9461ef1199f2e80ddcda699595b11fdf08"
-, sha256 ? "1jmsv72hq0c2f2rnpllvd70cmxbjwfhynzwaxx24f882zlggwsnd"
+, version ? "2016-08-24"
+, rev ? "010dcd60ffda37027908f2a0b20c751b83ca975e"
+, sha256 ? "0bpbyi5yq50zw0hkh326pmdcnm91paf1yz4853dcq63y0ddv89jp"
 }:
 
 stdenv.mkDerivation rec {
-  name = "vis-nightly-${version}";
+  name = "vis-unstable-${version}";
   inherit version;
 
   src = fetchFromGitHub {
@@ -17,15 +17,14 @@ stdenv.mkDerivation rec {
     owner = "martanne";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   buildInputs = [
-    unzip pkgconfig
     ncurses
     libtermkey
     lua
     lpeg
-  ] ++ stdenv.lib.optional stdenv.isLinux [
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
     acl
     libselinux
   ];
@@ -34,18 +33,38 @@ stdenv.mkDerivation rec {
   LUA_PATH="${lpeg}/share/lua/${lua.luaversion}/?.lua";
 
   postInstall = ''
+    mkdir -p "$out/share/applications"
+    cp $desktopItem/share/applications/* $out/share/applications
     echo wrapping $out/bin/vis with runtime environment
     wrapProgram $out/bin/vis \
       --prefix LUA_CPATH : "${lpeg}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "${lpeg}/share/lua/${lua.luaversion}/?.lua" \
-      --prefix VIS_PATH : "$out/share/vis"
+      --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
+
+  desktopItem = makeDesktopItem rec {
+    name = "vis";
+    exec = "vis %U";
+    type = "Application";
+    icon = "accessories-text-editor";
+    comment = meta.description;
+    desktopName = "vis";
+    genericName = "Text editor";
+    categories = stdenv.lib.concatStringsSep ";" [
+      "Application" "Development" "IDE"
+    ];
+    mimeType = stdenv.lib.concatStringsSep ";" [
+      "text/plain" "application/octet-stream"
+    ];
+    startupNotify = "false";
+    terminal = "true";
+  };
 
   meta = with stdenv.lib; {
     description = "A vim like editor";
     homepage = http://github.com/martanne/vis;
     license = licenses.isc;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = platforms.unix;
   };
 }

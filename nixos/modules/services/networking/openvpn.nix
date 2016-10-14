@@ -56,7 +56,7 @@ let
       description = "OpenVPN instance ‘${name}’";
 
       wantedBy = optional cfg.autoStart "multi-user.target";
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
 
       path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
 
@@ -116,52 +116,54 @@ in
         attribute name.
       '';
 
-      type = types.attrsOf types.optionSet;
+      type = with types; attrsOf (submodule {
 
-      options = {
+        options = {
 
-        config = mkOption {
-          type = types.lines;
-          description = ''
-            Configuration of this OpenVPN instance.  See
-            <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
-            for details.
-          '';
+          config = mkOption {
+            type = types.lines;
+            description = ''
+              Configuration of this OpenVPN instance.  See
+              <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+              for details.
+            '';
+          };
+
+          up = mkOption {
+            default = "";
+            type = types.lines;
+            description = ''
+              Shell commands executed when the instance is starting.
+            '';
+          };
+
+          down = mkOption {
+            default = "";
+            type = types.lines;
+            description = ''
+              Shell commands executed when the instance is shutting down.
+            '';
+          };
+
+          autoStart = mkOption {
+            default = true;
+            type = types.bool;
+            description = "Whether this OpenVPN instance should be started automatically.";
+          };
+
+          updateResolvConf = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              Use the script from the update-resolv-conf package to automatically
+              update resolv.conf with the DNS information provided by openvpn. The
+              script will be run after the "up" commands and before the "down" commands.
+            '';
+          };
+
         };
 
-        up = mkOption {
-          default = "";
-          type = types.lines;
-          description = ''
-            Shell commands executed when the instance is starting.
-          '';
-        };
-
-        down = mkOption {
-          default = "";
-          type = types.lines;
-          description = ''
-            Shell commands executed when the instance is shutting down.
-          '';
-        };
-
-        autoStart = mkOption {
-          default = true;
-          type = types.bool;
-          description = "Whether this OpenVPN instance should be started automatically.";
-        };
-
-        updateResolvConf = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            Use the script from the update-resolv-conf package to automatically
-            update resolv.conf with the DNS information provided by openvpn. The
-            script will be run after the "up" commands and before the "down" commands.
-          '';
-        };
-
-      };
+      });
 
     };
 

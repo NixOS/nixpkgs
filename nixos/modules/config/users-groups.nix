@@ -131,13 +131,12 @@ let
       };
 
       subUidRanges = mkOption {
-        type = types.listOf types.optionSet;
+        type = with types; listOf (submodule subordinateUidRange);
         default = [];
         example = [
           { startUid = 1000; count = 1; }
           { startUid = 100001; count = 65534; }
         ];
-        options = [ subordinateUidRange ];
         description = ''
           Subordinate user ids that user is allowed to use.
           They are set into <filename>/etc/subuid</filename> and are used
@@ -146,13 +145,12 @@ let
       };
 
       subGidRanges = mkOption {
-        type = types.listOf types.optionSet;
+        type = with types; listOf (submodule subordinateGidRange);
         default = [];
         example = [
           { startGid = 100; count = 1; }
           { startGid = 1001; count = 999; }
         ];
-        options = [ subordinateGidRange ];
         description = ''
           Subordinate group ids that user is allowed to use.
           They are set into <filename>/etc/subgid</filename> and are used
@@ -310,32 +308,36 @@ let
   };
 
   subordinateUidRange = {
-    startUid = mkOption {
-      type = types.int;
-      description = ''
-        Start of the range of subordinate user ids that user is
-        allowed to use.
-      '';
-    };
-    count = mkOption {
-      type = types.int;
-      default = 1;
-      description = ''Count of subordinate user ids'';
+    options = {
+      startUid = mkOption {
+        type = types.int;
+        description = ''
+          Start of the range of subordinate user ids that user is
+          allowed to use.
+        '';
+      };
+      count = mkOption {
+        type = types.int;
+        default = 1;
+        description = ''Count of subordinate user ids'';
+      };
     };
   };
 
   subordinateGidRange = {
-    startGid = mkOption {
-      type = types.int;
-      description = ''
-        Start of the range of subordinate group ids that user is
-        allowed to use.
-      '';
-    };
-    count = mkOption {
-      type = types.int;
-      default = 1;
-      description = ''Count of subordinate group ids'';
+    options = {
+      startGid = mkOption {
+        type = types.int;
+        description = ''
+          Start of the range of subordinate group ids that user is
+          allowed to use.
+        '';
+      };
+      count = mkOption {
+        type = types.int;
+        default = 1;
+        description = ''Count of subordinate group ids'';
+      };
     };
   };
 
@@ -428,7 +430,7 @@ in {
 
     users.users = mkOption {
       default = {};
-      type = types.loaOf types.optionSet;
+      type = with types; loaOf (submodule userOpts);
       example = {
         alice = {
           uid = 1234;
@@ -444,7 +446,6 @@ in {
         Additional user accounts to be created automatically by the system.
         This can also be used to set options for root.
       '';
-      options = [ userOpts ];
     };
 
     users.groups = mkOption {
@@ -453,11 +454,10 @@ in {
         { students.gid = 1001;
           hackers = { };
         };
-      type = types.loaOf types.optionSet;
+      type = with types; loaOf (submodule groupOpts);
       description = ''
         Additional groups to be created automatically by the system.
       '';
-      options = [ groupOpts ];
     };
 
     # FIXME: obsolete - will remove.

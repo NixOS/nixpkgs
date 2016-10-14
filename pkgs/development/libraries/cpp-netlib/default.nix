@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost, openssl }:
+{ stdenv, fetchurl, cmake, boost, openssl, asio }:
 
 stdenv.mkDerivation rec {
   name = "cpp-netlib-${version}";
@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake boost openssl ];
 
+  # This can be removed when updating to 0.13, see https://github.com/cpp-netlib/cpp-netlib/issues/629
+  propagatedBuildInputs = [ asio ];
+
   cmakeFlags = [
     "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
-    "-DCMAKE_BUILD_TYPE=RELEASE"
   ];
 
   enableParallelBuilding = true;

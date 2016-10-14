@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk, glib, pkgconfig, libgnome, libgnomeui, vte
+{ stdenv, fetchurl, gtk2, glib, pkgconfig, libgnome, libgnomeui, vte
 , curl, cdparanoia, libid3tag, ncurses, libtool }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zb6zpq7qmn6bflbgfwisyg3vrjr23yi1c1kqvwndl1f0shr8qyl";
   };
 
-  buildInputs = [ gtk glib pkgconfig libgnome libgnomeui vte curl cdparanoia
+  buildInputs = [ gtk2 glib pkgconfig libgnome libgnomeui vte curl cdparanoia
     libid3tag ncurses libtool ];
 
   hardeningDisable = [ "format" ];

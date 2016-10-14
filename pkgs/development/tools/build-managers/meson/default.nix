@@ -1,10 +1,11 @@
 { lib, python3Packages, fetchurl }:
 python3Packages.buildPythonPackage rec {
-  name = "meson-0.32.0";
+  version = "0.35.0";
+  name = "meson-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/m/meson/${name}.tar.gz";
-    sha256 = "1i5m4q53sr55aw8kx761kh0rsfwkpq0gfa0c0k3jf66y4aml6n54";
+    sha256 = "0w4vian55cwcv2m5qzn73aznf9a0y24cszqb7dkpahrb9yrg25l3";
   };
 
   meta = with lib; {

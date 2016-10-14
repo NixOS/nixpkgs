@@ -3,31 +3,29 @@
 stdenv.mkDerivation rec {
   name = "nimble-${version}";
 
-  version = "0.7.4";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "nimble";
     rev = "v${version}";
-    sha256 = "1l477f1zlqpc738jg47pz599cwjasgy9jqdsplj3ywd12xfqpc96";
+    sha256 = "12znxzj1j5fflw2mkkrns9n7qg6sf207652zrdyf7h2jdyzzb73x";
   };
 
-  buildInputs = [ nim ];
+  buildInputs = [ nim openssl ];
 
   patchPhase = ''
     substituteInPlace src/nimble.nim.cfg --replace "./vendor/nim" "${nim}/share"
+    echo "--clib:crypto" >> src/nimble.nim.cfg
   '';
 
   buildPhase = ''
-    nim c src/nimble
+    cd src && nim c -d:release nimble
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp src/nimble $out/bin
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [stdenv.cc.libc openssl]}" \
-        --add-needed libcrypto.so \
-        "$out/bin/nimble"
+    cp nimble $out/bin
   '';
 
   dontStrip = true;

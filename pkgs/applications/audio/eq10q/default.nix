@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fftw, gtkmm, libxcb, lv2, pkgconfig, xorg }:
+{ stdenv, fetchurl, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig, xorg }:
 stdenv.mkDerivation rec {
   name = "eq10q-${version}";
   version = "2.0";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "08vlfly0qqrfqiwpn5g5php680icpk97pwnwjadmj5syhgvi0i3h";
   };
 
-  buildInputs = [ cmake fftw gtkmm libxcb lv2 pkgconfig xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
+  buildInputs = [ cmake fftw gtkmm2 libxcb lv2 pkgconfig xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
 
   installFlags = ''
     DESTDIR=$(out)

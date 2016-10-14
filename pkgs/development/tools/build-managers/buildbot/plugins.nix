@@ -1,44 +1,40 @@
-{ stdenv
-, fetchurl
-, pythonPackages
-}:
+{ stdenv, fetchurl, pythonPackages }:
 
 let
   buildbot-pkg = pythonPackages.buildPythonPackage rec {
-    name = "buildbot-pkg-${version}";
-    version = "0.9.0rc2";
+    name = "${pname}-${version}";
+    pname = "buildbot-pkg";
+    version = "0.9.0rc4";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/95/47/1fef931d410cc24127564c2e193e7c1c184f5c5f481930f77c6d6840cfab/${name}.tar.gz";
-      sha256 = "01wc9bmqq1rfayqnjm7rkjhbcj7h6ah4vv10s6hglnq9s4axvxp6";
+      url = "mirror://pypi/b/${pname}/${name}.tar.gz";
+      sha256 = "0dfdyc3x0926dynzdl9w7z0p84w287l362mxdl3r6wl87gkisr10";
     };
 
     propagatedBuildInputs = with pythonPackages; [ setuptools ];
-
-    # doesn't seem to break without this...
-    patchPhase = ''
-      sed -i.bak -e '/"setuptools >= 21.2.1",/d' setup.py
-    '';
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot Packaging Helper";
       maintainers = with maintainers; [ nand0p ryansydnor ];
       platforms = platforms.all;
+      license = licenses.gpl2;
     };
   };
 
 in {
 
   www = pythonPackages.buildPythonPackage rec {
-    name = "buildbot_www-${version}";
-    version = "0.9.0rc2";
+    name = "${pname}-${version}";
+    pname = "buildbot_www";
+    version = "0.9.0rc4";
 
     # NOTE: wheel is used due to buildbot circular dependency
     format = "wheel";
+
     src = fetchurl {
-      url = "https://pypi.python.org/packages/e0/d7/f1023cdb7340a15ee1fc9916e87c4d634405a87164a051e2c59bf9d51ef1/${name}-py2-none-any.whl";
-      sha256 = "1006x56x4w4p2mbrzm7jy51c0xxz48lzhdwvx7j4hrjs07mapndj";
+      url = "https://pypi.python.org/packages/78/45/b43bd85695cd0178f8bac9c3b394062e9eb46f489b655c11e950e54278a2/${name}-py2-none-any.whl";
+      sha256 = "0ixi0y0jhbql55swsvy0jin1v6xf4q4mw9p5n9sll2h10lyp9h0p";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];
@@ -48,16 +44,18 @@ in {
       description = "Buildbot UI";
       maintainers = with maintainers; [ nand0p ryansydnor ];
       platforms = platforms.all;
+      license = licenses.gpl2;
     };
   };
 
   console-view = pythonPackages.buildPythonPackage rec {
-    name = "buildbot-console-view-${version}";
-    version = "0.9.0rc2";
+    name = "${pname}-${version}";
+    pname = "buildbot-console-view";
+    version = "0.9.0rc4";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/f4/51/e24cc1b596e5b262a272cba3687476a13ec7d9ea24bf1f4fd0cd72902bb6/${name}.tar.gz";
-      sha256 = "0970gq1sxnfd0nlrnd3mj25i3cginlw2pj5ffqsd57n5hlqg48ib";
+      url = "mirror://pypi/b/${pname}/${name}.tar.gz";
+      sha256 = "1fig635yg5dgn239g9wzfpw9wc3p91lcl9nnig9k7fijz85pwrva";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];
@@ -67,16 +65,18 @@ in {
       description = "Buildbot Console View Plugin";
       maintainers = with maintainers; [ nand0p ryansydnor ];
       platforms = platforms.all;
+      license = licenses.gpl2;
     };
   };
 
   waterfall-view = pythonPackages.buildPythonPackage rec {
-    name = "buildbot-waterfall-view-${version}";
-    version = "0.9.0rc2";
+    name = "${pname}-${version}";
+    pname = "buildbot-waterfall-view";
+    version = "0.9.0rc4";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/c2/21/3895355b05f91977a8b8e5435f85354e927c2ef547a25432a6bacf792a67/${name}.tar.gz";
-      sha256 = "1zybrbbsyplv93zkin8cb3z1bqqr6px4p203ldcpn7lds5s9vk00";
+      url = "mirror://pypi/b/${pname}/${name}.tar.gz";
+      sha256 = "08kh966grj9b4mif337vv7bqy5ixz8xz31ml63wysjb65djnjbk8";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];
@@ -86,6 +86,7 @@ in {
       description = "Buildbot Waterfall View Plugin";
       maintainers = with maintainers; [ nand0p ryansydnor ];
       platforms = platforms.all;
+      license = licenses.gpl2;
     };
   };
 }

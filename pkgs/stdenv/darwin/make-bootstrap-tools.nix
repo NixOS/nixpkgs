@@ -1,8 +1,10 @@
-{ system ? builtins.currentSystem }:
+{ pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem }:
 
-with import ../../.. { inherit system; };
+with import pkgspath { inherit system; };
 
-rec {
+let
+  llvmPackages = llvmPackages_37;
+in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
@@ -19,17 +21,15 @@ rec {
     buildInputs = [nukeReferences cpio];
 
     buildCommand = ''
-      mkdir -p $out/bin $out/lib
+      mkdir -p $out/bin $out/lib $out/lib/system
 
-      # Our (fake) loader
-      cp -d ${darwin.dyld}/lib/dyld $out/lib/
-
-      # C standard library stuff
-      cp -d ${darwin.Libsystem}/lib/*.o $out/lib/
-      cp -d ${darwin.Libsystem}/lib/*.dylib $out/lib/
+      # We're not going to bundle the actual libSystem.dylib; instead we reconstruct it on
+      # the other side. See the notes in stdenv/darwin/default.nix for more information.
+      # We also need the .o files for various low-level boot stuff.
+      cp -d ${darwin.Libsystem}/lib/*.o $out/lib
+      cp -d ${darwin.Libsystem}/lib/system/*.dylib $out/lib/system
 
       # Resolv is actually a link to another package, so let's copy it properly
-      rm $out/lib/libresolv.9.dylib
       cp -L ${darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
 
       cp -rL ${darwin.Libsystem}/include $out
@@ -78,11 +78,11 @@ rec {
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
-      cp -d ${libcxx}/lib/libc++*.dylib $out/lib
-      cp -d ${libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${libcxx}/include/c++     $out/include
+      cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
 
       cp -d ${icu.out}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
@@ -107,33 +107,26 @@ rec {
         done
       }
 
-      fix_dyld() {
-        # This is clearly a hack. Once we have an install_name_tool-alike that can patch dyld, this will be nicer.
-        ${perl}/bin/perl -i -0777 -pe 's/\/nix\/store\/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-dyld-239\.4\/lib\/dyld/\/usr\/lib\/dyld\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00/sg' "$1"
-      }
-
       # Strip executables even further
       for i in $out/bin/*; do
         if test -x $i -a ! -L $i; then
           chmod +w $i
-
-          fix_dyld $i
           strip $i || true
         fi
       done
 
       for i in $out/bin/* $out/lib/*.dylib $out/lib/clang/*/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
-        if test -x $i -a ! -L $i; then
+        if test -x "$i" -a ! -L "$i"; then
           echo "Adding rpath to $i"
           rpathify $i
         fi
       done
 
       nuke-refs $out/lib/*
+      nuke-refs $out/lib/system/*
       nuke-refs $out/lib/clang/*/lib/darwin/*
       nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
 
-      set -x
       mkdir $out/.pack
       mv $out/* $out/.pack
       mv $out/.pack $out/pack
@@ -147,10 +140,6 @@ rec {
       chmod u+w $out/on-server/*
       strip $out/on-server/*
       nuke-refs $out/on-server/*
-
-      for i in $out/on-server/*; do
-        fix_dyld $i
-      done
 
       (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
     '';
@@ -294,8 +283,8 @@ rec {
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   test-pkgs = let
-    stdenv = import ./. { inherit system bootstrapFiles; };
-  in import ../../.. {
+    stdenv = import (test-pkgspath + "/pkgs/stdenv/darwin") { inherit system bootstrapFiles; };
+  in import test-pkgspath {
     inherit system;
     bootStdenv = stdenv.stdenvDarwin;
   };

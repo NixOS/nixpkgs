@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = [
-    pythonPackages.pygobject
+    pythonPackages.pygobject2
     pythonPackages.pygtk
   ];
 

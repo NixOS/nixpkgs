@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip
 , CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, gtk, libmspack, getopt, file, cairo, which
+, bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
@@ -19,22 +19,14 @@
 }:
 
 let
+  primary-src = import ./default-primary-src.nix { inherit fetchurl; };
+in
+
+with { inherit (primary-src) major minor subdir version; };
+
+let
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
-  major = "5";
-  minor = "2";
-  patch = "0";
-  tweak = "4";
-  subdir = "${major}.${minor}.${patch}";
-  version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
-
-  fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
-    inherit name md5;
-    url = if brief then
-            "http://dev-www.libreoffice.org/src/${subDir}${name}"
-          else
-            "http://dev-www.libreoffice.org/src/${subDir}${md5}-${name}";
-  };
 
   fetchSrc = {name, sha256}: fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
@@ -42,32 +34,29 @@ let
   };
 
   srcs = {
-    third_party = [ (fetchurl rec {
+    third_party = [ (let md5 = "185d60944ea767075d27247c3162b3bc"; in fetchurl rec {
         url = "http://dev-www.libreoffice.org/extern/${md5}-${name}";
-        md5 = "185d60944ea767075d27247c3162b3bc";
+        sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
         name = "unowinreg.dll";
-      }) ] ++ (map fetchThirdParty (import ./libreoffice-srcs.nix));
+      }) ] ++ (map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;})) (import ./libreoffice-srcs.nix));
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0a3dnqm9k1skp7jvg354fdn84y0ylvnjzpd4v2r2mbz8vc4p3ld5";
+      sha256 = "0nxwf3b63gzb04svb6z1hi3qf95i90pwda5gpmlrfrq6250n3bpi";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "1gyakwbbsd3aykf0gsanyg6p4g4qixj1rh6qxspln70afl3kxm90";
+      sha256 = "1gm23i0snhcm4svciypm0qiviiqv9zpiyplkh22baccs7li3kih1";
     };
 
   };
 in stdenv.mkDerivation rec {
   name = "libreoffice-${version}";
 
-  src = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1v3bbk2afq61gs3l4qvc1r6y0ylr21jzbm3wcnyq9c3bbyw43pj7";
-  };
+  inherit (primary-src) src;
 
   # Openoffice will open libcups dynamically, so we link it directly
   # to make its dlopen work.
@@ -87,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
-  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
+  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.md5 or f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
@@ -242,7 +231,7 @@ in stdenv.mkDerivation rec {
   buildInputs = with xorg;
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gtk3 gtk
+      freetype GConf getopt gnome_vfs gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
@@ -254,6 +243,7 @@ in stdenv.mkDerivation rec {
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew ncurses
       libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
+      gdb
     ]
     ++ lib.optional kdeIntegration kde4.kdelibs;
 

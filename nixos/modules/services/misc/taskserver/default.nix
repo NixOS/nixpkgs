@@ -154,7 +154,7 @@ let
 
   certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
-  nixos-taskserver = pkgs.buildPythonPackage {
+  nixos-taskserver = pkgs.pythonPackages.buildPythonPackage {
     name = "nixos-taskserver";
     namePrefix = "";
 

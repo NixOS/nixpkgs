@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   postBuild = "rm -fR $out";
 
   cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
     "-DCMAKE_CXX_FLAGS=-std=c++11"

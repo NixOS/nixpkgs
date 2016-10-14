@@ -29,7 +29,37 @@ following incompatible changes:</para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>
+      <literal>gnome</literal> alias has been removed along with
+      <literal>gtk</literal>, <literal>gtkmm</literal> and several others.
+      Now you need to use versioned attributes, like <literal>gnome3</literal>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The attribute name of the Radicale daemon has been changed from
+      <literal>pythonPackages.radicale</literal> to
+      <literal>radicale</literal>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The Yama LSM is now enabled by default in the kernel,
+      which prevents ptracing non-child processes.
+      This means you will not be able to attach gdb to an existing process,
+      but will need to start that process from gdb (so it is a child).
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The <literal>stripHash</literal> bash function in <literal>stdenv</literal>
+      changed according to its documentation; it now outputs the stripped name to
+      <literal>stdout</literal> instead of putting it in the variable
+      <literal>strippedName</literal>.
+    </para>
   </listitem>
 </itemizedlist>
 

@@ -1,32 +1,35 @@
-{ stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, darwin ? null
 , buildEnv, bundler, bundix
 } @ args:
 
 let
-  op = stdenv.lib.optional;
-  ops = stdenv.lib.optionals;
-  opString = stdenv.lib.optionalString;
+  op = lib.optional;
+  ops = lib.optionals;
+  opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygemsSrc = import ./rubygems-src.nix { inherit fetchurl; };
+  rubygemsPatch = fetchpatch {
+    url = "https://github.com/zimbatm/rubygems/compare/v2.6.6...v2.6.6-nix.patch";
+    sha256 = "0297rdb1m6v75q8665ry9id1s74p9305dv32l95ssf198liaihhd";
+  };
   unpackdir = obj:
     lib.removeSuffix ".tgz"
       (lib.removeSuffix ".tar.gz" obj.name);
 
-  generic = { majorVersion, minorVersion, teenyVersion, patchLevel, sha256 }: let
-    versionNoPatch = "${majorVersion}.${minorVersion}.${teenyVersion}";
-    version = "${versionNoPatch}-p${patchLevel}";
-    fullVersionName = if patchLevel != "0" && stdenv.lib.versionOlder versionNoPatch "2.1"
-      then version
-      else versionNoPatch;
-    tag = "v" + stdenv.lib.replaceChars ["." "p" "-"] ["_" "_" ""] fullVersionName;
-    isRuby20 = majorVersion == "2" && minorVersion == "0";
-    isRuby21 = majorVersion == "2" && minorVersion == "1";
+  # Contains the ruby version heuristics
+  rubyVersion = import ./ruby-version.nix { inherit lib; };
+
+  generic = { version, sha256 }: let
+    ver = version;
+    tag = ver.gitTag;
+    isRuby20 = ver.majMin == "2.0";
+    isRuby21 = ver.majMin == "2.1";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
-      { stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
+      { stdenv, lib, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
@@ -46,13 +49,11 @@ let
           rev    = tag;
           sha256 = sha256.git;
         } else fetchurl {
-          url = "http://cache.ruby-lang.org/pub/ruby/${majorVersion}.${minorVersion}/ruby-${fullVersionName}.tar.gz";
+          url = "http://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
           sha256 = sha256.src;
         };
       in
       stdenv.mkDerivation rec {
-        inherit version;
-
         name = "ruby-${version}";
 
         srcs = [ rubySrc rubygemsSrc ];
@@ -85,13 +86,16 @@ let
         hardeningDisable = lib.optional isRuby20 [ "format" ];
 
         patches =
-          [ ./gem_hook.patch ] ++
           (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops patchLevel;
-          })."${versionNoPatch}";
+            inherit patchSet useRailsExpress ops;
+            patchLevel = ver.patchLevel;
+          })."${ver.majMinTiny}";
 
         postUnpack = ''
           cp -r ${unpackdir rubygemsSrc} ${sourceRoot}/rubygems
+          pushd ${sourceRoot}/rubygems
+          patch -p1 < ${rubygemsPatch}
+          popd
         '' + opString isRuby21 ''
           rm "$sourceRoot/enc/unicode/name2ctype.h"
         '';
@@ -152,25 +156,28 @@ let
         };
 
         passthru = rec {
-          inherit majorVersion minorVersion teenyVersion patchLevel version;
+          version = ver;
           rubyEngine = "ruby";
           baseRuby = baseruby;
-          libPath = "lib/${rubyEngine}/${versionNoPatch}";
-          gemPath = "lib/${rubyEngine}/gems/${versionNoPatch}";
+          libPath = "lib/${rubyEngine}/${ver.libDir}";
+          gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
           devEnv = import ./dev.nix {
             inherit buildEnv bundler bundix;
             ruby = self;
           };
+
+          # deprecated 2016-09-21
+          majorVersion = ver.major;
+          minorVersion = ver.minor;
+          teenyVersion = ver.tiny;
+          patchLevel = ver.patchLevel;
         };
       }
     ) args; in self;
 
 in {
   ruby_1_9_3 = generic {
-    majorVersion = "1";
-    minorVersion = "9";
-    teenyVersion = "3";
-    patchLevel = "551";
+    version = rubyVersion "1" "9" "3" "p551";
     sha256 = {
       src = "1s2ibg3s2iflzdv7rfxi1qqkvdbn2dq8gxdn0nxrb77ls5ffanxv";
       git = "1r9xzzxmci2ajb34qb4y1w424mz878zdgzxkfp9w60agldxnb36s";
@@ -178,10 +185,7 @@ in {
   };
 
   ruby_2_0_0 = generic {
-    majorVersion = "2";
-    minorVersion = "0";
-    teenyVersion = "0";
-    patchLevel = "647";
+    version = rubyVersion "2" "0" "0" "p647";
     sha256 = {
       src = "1v2vbvydarcx5801gx9lc6gr6dfi0i7qbzwhsavjqbn79rdsz2n8";
       git = "186pf4q9xymzn4zn1sjppl1skrl5f0159ixz5cz8g72dmmynq3g3";
@@ -189,10 +193,7 @@ in {
   };
 
   ruby_2_1_10 = generic {
-    majorVersion = "2";
-    minorVersion = "1";
-    teenyVersion = "10";
-    patchLevel = "0";
+    version = rubyVersion "2" "1" "10" "";
     sha256 = {
       src = "086x66w51lg41abjn79xb7f6xsryymkcc3nvakmkjnjyg96labpv";
       git = "133phd5r5y0np5lc9nqif93l7yb13yd52aspyl6c46z5jhvhyvfi";
@@ -200,10 +201,7 @@ in {
   };
 
   ruby_2_2_5 = generic {
-    majorVersion = "2";
-    minorVersion = "2";
-    teenyVersion = "5";
-    patchLevel = "0";
+    version = rubyVersion "2" "2" "5" "";
     sha256 = {
       src = "1qrmlcyc0cy9hgafb1wny2h90rjyyh6d72nvr2h4xjm4jwbb7i1h";
       git = "0k0av6ypyq08c9axm721f0xi2bcp1443l7ydbxv4v8x4vsxdkmq2";
@@ -211,10 +209,7 @@ in {
   };
 
   ruby_2_3_1 = generic {
-    majorVersion = "2";
-    minorVersion = "3";
-    teenyVersion = "1";
-    patchLevel = "0";
+    version = rubyVersion "2" "3" "1" "";
     sha256 = {
       src = "1kbxg72las93w0y553cxv3lymy2wvij3i3pg1y9g8aq3na676z5q";
       git = "0dv1rf5f9lj3icqs51bq7ljdcf17sdclmxm9hilwxps5l69v5q9r";

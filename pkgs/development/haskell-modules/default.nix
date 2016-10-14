@@ -6,12 +6,13 @@
 
 let
 
-  allCabalFiles = pkgs.fetchFromGitHub {
-     owner = "commercialhaskell";
-     repo = "all-cabal-hashes";
-     rev = "72f1318540eff69544eb8c14a16f630d0c5448b8";
-     sha256 = "1czi1rajk2726mqrw3qp7a43h26acbjw54ll3ns063yzg9hg469m";
-   };
+  allCabalFiles = stdenv.mkDerivation {
+    name = "all-cabal-hashes-0";
+    buildCommand = ''
+      mkdir -p $out
+      tar -C $out --strip-components=1 -x -f ${builtins.fetchurl "https://github.com/commercialhaskell/all-cabal-hashes/archive/hackage.tar.gz"}
+    '';
+  };
 
   inherit (stdenv.lib) fix' extends;
 
@@ -49,7 +50,7 @@ let
         overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
       };
 
-      mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome // scope;
+      mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
@@ -87,7 +88,7 @@ let
             packages = selectFrom self;
             hoogle = callPackage ./hoogle.nix {
               inherit packages;
-              hoogle = self.hoogle_4_2_43;
+              hoogle = self.hoogle_5_0_4;
             };
           in withPackages (packages ++ [ hoogle ]);
 

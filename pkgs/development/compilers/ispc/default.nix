@@ -1,5 +1,5 @@
 {stdenv, fetchFromGitHub, bash, which, m4, python, bison, flex, llvmPackages, clangWrapSelf,
-testedTargets ? ["sse4" "host"]
+testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
 # TODO: patch LLVM so Skylake-EX works better (patch included in ispc github) - needed for LLVM 3.9?
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wwsyvn44hd5iyi5779l5378x096307slpyl29wrsmfp66796693";
   };
 
-  enableParallelBuilding = true;
+  # there are missing dependencies in the Makefile, causing sporadic build failures
+  enableParallelBuilding = false;
 
   doCheck = true;
 

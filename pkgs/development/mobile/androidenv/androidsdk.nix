@@ -1,8 +1,9 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
-, platformTools, buildTools, support, supportRepository, platforms, sysimages, addons
+, platformTools, buildTools, support, supportRepository, platforms, sysimages, addons, sources
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
-, freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils, libpulseaudio, dbus
+, freetype, fontconfig, glib, gtk2, atk, file, jdk, coreutils, libpulseaudio, dbus
 , zlib, glxinfo, xkeyboardconfig
+, includeSources
 }:
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false, useGooglePlayServices ? false }:
 
@@ -10,16 +11,16 @@ with { inherit (stdenv.lib) makeLibraryPath; };
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "25.1.7";
+  version = "25.2.2";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/repository/tools_r${version}-linux.zip";
-      sha1 = "p03br08zfq0j7aar5638z8fdh5n9x1in";
+      sha256 = "0q53yq8fjc10kr4fz3rap5vsil3297w5nn4kw1z0ms7yz1d1im8h";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/repository/tools_r${version}-macosx.zip";
-      sha1 = "7fzlfms37cfk25kk4f9zriy63djmbi8g";
+      sha256 = "1wq7xm0rhy0h6qylv7fq9mhf8hqihrr1nzf7d322rc3g0jfrdrcl";
     }
     else throw "platform not ${stdenv.system} supported!";
 
@@ -67,15 +68,15 @@ stdenv.mkDerivation rec {
       
       wrapProgram `pwd`/android \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ glib gtk libXtst ]}
+        --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ glib gtk2 libXtst ]}
     
       wrapProgram `pwd`/uiautomatorviewer \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk libXtst ]}
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
     
       wrapProgram `pwd`/hierarchyviewer \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk libXtst ]}
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
       
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
 
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk atk stdenv.cc.cc libXtst ]}
+          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk2 atk stdenv.cc.cc libXtst ]}
 
         cd ../..
       ''
@@ -114,7 +115,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk atk stdenv.cc.cc libXtst ]}
+          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk2 atk stdenv.cc.cc libXtst ]}
 
         cd ../..
       ''
@@ -164,6 +165,22 @@ stdenv.mkDerivation rec {
      else ""}
       
     cd ../..
+
+    # Symlink required sources
+    mkdir -p sources
+    cd sources
+
+    ${if includeSources then
+        stdenv.lib.concatMapStrings (platformVersion:
+        if (builtins.hasAttr ("source_"+platformVersion) sources) then
+          let
+            source = builtins.getAttr ("source_"+platformVersion) sources;
+          in
+          "ln -s ${source}/* android-${platformVersion}\n"
+        else "") platformVersions
+      else ""}
+
+    cd ..
 
     # Symlink required platforms
    

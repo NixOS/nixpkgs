@@ -3,7 +3,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
   machine = { config, pkgs, lib, ... }: {
     boot.extraModulePackages = let
-      compileKernelModule = name: source: pkgs.runCommand name rec {
+      compileKernelModule = name: source: pkgs.runCommandCC name rec {
         inherit source;
         kdev = config.boot.kernelPackages.kernel.dev;
         kver = config.boot.kernelPackages.kernel.modDirVersion;
@@ -62,7 +62,7 @@ import ./make-test.nix ({ pkgs, ... }: {
     boot.initrd.kernelModules = [ "kcanary" ];
 
     boot.initrd.extraUtilsCommands = let
-      compile = name: source: pkgs.runCommand name { inherit source; } ''
+      compile = name: source: pkgs.runCommandCC name { inherit source; } ''
         mkdir -p "$out/bin"
         echo "$source" | gcc -Wall -o "$out/bin/$name" -xc -
       '';

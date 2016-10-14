@@ -1,10 +1,10 @@
 { stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, glib, gnome
+, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, glib, gnome2
 , libnotify, nspr, nss, systemd, xorg }:
 
 let
 
-  version = "2.1.2";
+  version = "2.2.1";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -16,10 +16,10 @@ let
     fontconfig
     freetype
     glib
-    gnome.GConf
-    gnome.gdk_pixbuf
-    gnome.gtk
-    gnome.pango
+    gnome2.GConf
+    gnome2.gdk_pixbuf
+    gnome2.gtk
+    gnome2.pango
     libnotify
     nspr
     nss
@@ -43,7 +43,7 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://slack-ssb-updates.global.ssl.fastly.net/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "0bmz9d0p6676lzl4qxy6xmcampr2ilkc0mhh67860kcxjaz6sms6";
+        sha256 = "1x08bmkanllv3lpi2s722xs7qia8igf6zxzkc3g7vs5jms3mdrad";
       }
     else
       throw "Slack is not supported on ${stdenv.system}";

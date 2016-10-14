@@ -90,8 +90,18 @@ stdenv.mkDerivation {
     # Disable fragile linker-output-non-utf8 test
     rm -vr src/test/run-make/linker-output-non-utf8/
 
+    # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
+    rm -vr src/test/run-pass/issue-36023.rs
+
     # Useful debugging parameter
     # export VERBOSE=1
+  '' +
+  # In src/compiler-rt/cmake/config-ix.cmake, the cmake build falls
+  # back to darwin 10.4. This causes the OS name to be recorded as
+  # "10.4" rather than the expected "osx". But mk/rt.mk expects the
+  # built library name to have an "_osx" suffix on darwin.
+  optionalString stdenv.isDarwin ''
+    substituteInPlace mk/rt.mk --replace "_osx" "_10.4"
   '';
 
   preConfigure = ''
@@ -118,7 +128,13 @@ stdenv.mkDerivation {
 
   preCheck = ''
     export TZDIR=${tzdata}/share/zoneinfo
-    ${optionalString stdenv.isDarwin "export TMPDIR=/tmp"}
+  '' +
+  # Ensure TMPDIR is set, and disable a test that removing the HOME
+  # variable from the environment falls back to another home
+  # directory.
+  optionalString stdenv.isDarwin ''
+    export TMPDIR=/tmp
+    sed -i '28s/home_dir().is_some()/true/' ./src/test/run-pass/env-home-dir.rs
   '';
 
   # Disable doCheck on Darwin to work around upstream issue

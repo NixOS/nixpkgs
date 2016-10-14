@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1jkijdawmnj5yps0yaj47nyfmcah0krwmqsjvicm3sl0dhwmac4w";
   };
 
-  goDeps = ./haproxy-exporter_deps.json;
+  goDeps = ./haproxy-exporter_deps.nix;
 
   meta = with stdenv.lib; {
     description = "HAProxy Exporter for the Prometheus monitoring system";

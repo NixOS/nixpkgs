@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "ODBC driver manager for Unix";
     homepage = http://www.unixodbc.org/;
     license = licenses.lgpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

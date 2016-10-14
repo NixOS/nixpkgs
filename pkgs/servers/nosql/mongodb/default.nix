@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger
+, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security
 }:
 
 # Note:
@@ -22,8 +22,8 @@ let version = "3.2.9";
 
     buildInputs = [
       sasl boost gperftools pcre-cpp snappy
-      zlib libyamlcpp sasl openssl libpcap
-    ]; # ++ optional stdenv.is64bit wiredtiger;
+      zlib libyamlcpp sasl openssl.dev openssl.out libpcap
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
     other-args = concatStringsSep " " ([
       "--ssl"
@@ -80,6 +80,11 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2latlng.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2latlngrect.cc --replace drem remainder
+  '' + stdenv.lib.optionalString stdenv.isi686 ''
+
+    # don't fail by default on i686
+    substituteInPlace src/mongo/db/storage/storage_options.h \
+      --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
   buildPhase = ''

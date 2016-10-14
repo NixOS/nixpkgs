@@ -1,11 +1,12 @@
-{ kdeFramework, lib
-, ecm
-, qtdeclarative
+{
+  kdeFramework, lib,
+  bison, ecm, flex,
+  qtdeclarative
 }:
 
 kdeFramework {
   name = "solid";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ bison ecm flex ];
   propagatedBuildInputs = [ qtdeclarative ];
 }

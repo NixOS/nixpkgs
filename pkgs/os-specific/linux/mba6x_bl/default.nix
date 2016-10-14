@@ -6,13 +6,14 @@ let pkgName = "mba6x_bl";
 in
 
 stdenv.mkDerivation rec {
-  name = "${pkgName}-2016-02-12";
+  name = "${pkgName}-${version}";
+  version = "2016-04-22";
 
   src = fetchFromGitHub {
     owner = "patjak";
     repo = pkgName;
-    rev = "9c2de8a24e7d4e8506170a19d32d6f11f380a142";
-    sha256 = "1zaypai8lznqcaszb6an643amsvr5qjnqj6aq6jkr0qk37x0fjff";
+    rev = "d05c125efe182376ddab30d486994ec00e144650";
+    sha256 = "15h90z3ijq4lv37nmx70xqggcvn21vr7mki2psk1jyj88in3j3xn";
   };
 
   enableParallelBuilding = true;

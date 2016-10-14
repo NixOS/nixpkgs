@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   name = "audacious-${version}";
-  version = "3.7.2";
+  version = "3.8";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}-gtk3.tar.bz2";
-    sha256 = "1pvyxi8niy70nv13kc16g2vaywwahmg2650fa7v4rlbmykifk75z";
+    sha256 = "0rpdzf9pb52lcswxypwh4nq3qkjzliw42v39nm5rlwwxdq6bm99q";
   };
 
   pluginsSrc = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}-gtk3.tar.bz2";
-    sha256 = "0gxka0lp9a35k2xgq8bx69wyv83dvrqnpwcsqliy3h3yz6v1fv2v";
+    sha256 = "0j9svdqdjvj5spx1vfp0m63xh8xwk8naqsikdxfxbb68xk33rxb9";
   };
 
   nativeBuildInputs = [

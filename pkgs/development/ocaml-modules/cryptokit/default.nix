@@ -1,24 +1,21 @@
-{stdenv, fetchurl, zlib, ocaml, findlib, ncurses}:
+{ stdenv, fetchurl, zlib, ocaml, findlib, ocamlbuild, ncurses }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
+assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
-assert stdenv.lib.versionAtLeast ocaml_version "3.12";
-
-stdenv.mkDerivation {
-  name = "cryptokit-1.10";
+stdenv.mkDerivation rec {
+  name = "cryptokit-${version}";
+  version = "1.10";
 
   src = fetchurl {
     url = http://forge.ocamlcore.org/frs/download.php/1493/cryptokit-1.10.tar.gz;
     sha256 = "1k2f2ixm7jcsgrzn9lz1hm9qqgq71lk9lxy3v3cwsd8xdrj3jrnv";
   };
 
-  buildInputs = [zlib ocaml findlib ncurses];
+  buildInputs = [ zlib ocaml findlib ocamlbuild ncurses ];
 
   buildFlags = "setup.data build";
 
-  preBuild = "mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib/cryptokit";
+  preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/cryptokit";
 
   meta = {
     homepage = "http://pauillac.inria.fr/~xleroy/software.html";

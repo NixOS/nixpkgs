@@ -54,12 +54,6 @@ self: super: {
     broken = true;   # needs template-haskell >=2.9 && <2.11
   }) {};
 
-  # https://github.com/ygale/timezone-series/issues/2
-  timezone-series = appendPatch super.timezone-series (pkgs.fetchpatch {
-    url = "https://github.com/ryantrinkle/timezone-series/commit/f8dece8c016db6476e2bb0d4f972769a76f6ff40.patch";
-    sha256 = "01wxhknsnn7lyl9v8viz7m5zhmyi3bqpbva7d3dx1dxn0nmkfh6a";
-  });
-
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/bmillwood/applicative-quoters/pull/7.patch";

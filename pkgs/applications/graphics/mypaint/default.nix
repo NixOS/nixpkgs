@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, gettext, glib, gtk, hicolor_icon_theme, json_c
-, lcms2, libpng , makeWrapper, pkgconfig, pygtk, python, pythonPackages
+{ stdenv, fetchurl, gettext, glib, gtk2, hicolor_icon_theme, json_c
+, lcms2, libpng , makeWrapper, pkgconfig, pythonPackages
 , scons, swig
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygtk numpy;
+in stdenv.mkDerivation rec {
   name = "mypaint-${version}";
   version = "1.1.0";
 
@@ -13,11 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gettext glib gtk json_c lcms2 libpng makeWrapper pkgconfig pygtk
+    gettext glib gtk2 json_c lcms2 libpng makeWrapper pkgconfig pygtk
     python scons swig
   ];
 
-  propagatedBuildInputs = [ hicolor_icon_theme pythonPackages.numpy ];
+  propagatedBuildInputs = [ hicolor_icon_theme numpy ];
 
   buildPhase = "scons prefix=$out";
 

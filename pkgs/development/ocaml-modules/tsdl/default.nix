@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ctypes, result, SDL2, pkgconfig, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ctypes, result, SDL2, pkgconfig, opam }:
 
 let
   inherit (stdenv.lib) getVersion;
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "02x0wsy5nxagxrh07yb2h4yqqy1bxryp2gwrylds0j6ybqsv4shm";
   };
 
-  buildInputs = [ ocaml findlib result pkgconfig opam ];
+  buildInputs = [ ocaml findlib ocamlbuild result pkgconfig opam ];
   propagatedBuildInputs = [ SDL2 ctypes ];
 
   createFindlibDestdir = true;

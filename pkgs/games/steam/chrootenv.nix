@@ -51,6 +51,7 @@ in buildFHSUserEnv rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm
+    mono
 
     (steamPackages.steam-runtime-wrapped.override {
       inherit nativeOnly runtimeOnly newStdcpp;

@@ -1,7 +1,7 @@
 {stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
 hwloc, jre, liblapack, blas, hdf5, expat, ncurses, readline, qt4, webkit, which,
 lp_solve, omniorb, sqlite, libatomic_ops, pkgconfig, file, gettext, flex, bison,
-doxygen, boost, openscenegraph, gnome, pangox_compat, xorg, git, bash, gtk, makeWrapper }:
+doxygen, boost, openscenegraph, gnome2, pangox_compat, xorg, git, bash, gtk2, makeWrapper }:
 
 let
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   buildInputs = [autoconf cmake automake libtool gfortran clang gnumake
     hwloc jre liblapack blas hdf5 expat ncurses readline qt4 webkit which
     lp_solve omniorb sqlite libatomic_ops pkgconfig file gettext flex bison
-    doxygen boost openscenegraph gnome.gtkglext pangox_compat xorg.libXmu
-    git gtk makeWrapper];
+    doxygen boost openscenegraph gnome2.gtkglext pangox_compat xorg.libXmu
+    git gtk2 makeWrapper];
 
   hardeningDisable = [ "format" ];
 

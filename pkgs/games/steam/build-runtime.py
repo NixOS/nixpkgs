@@ -20,18 +20,10 @@ def parse_args():
 	return parser.parse_args()
 
 
-def install_deb (basename, deb, md5, dest_dir):
+def install_deb (basename, deb, dest_dir):
 	installtag_dir=os.path.join(dest_dir, "installed")
 	if not os.access(installtag_dir, os.W_OK):
 		os.makedirs(installtag_dir)
-
-	#
-	# Write the tag file and checksum to the 'installed' subdirectory
-	#
-	with open(os.path.join(installtag_dir,basename),"w") as f:
-		subprocess.check_call(['dpkg-deb', '-c', deb], stdout=f)
-	with open(os.path.join(installtag_dir,basename+".md5"),"w") as f:
-                f.write("%s  %s.deb\n" % (md5, basename))
 
 	#
 	# Unpack the package into the dest_dir
@@ -98,7 +90,7 @@ print ("Creating Steam Runtime in %s" % args.runtime)
 with open(args.input) as pkgfile:
 	pkgs = json.load(pkgfile)
 	for pkg in pkgs:
-		install_deb(pkg["name"], pkg["source"], pkg["md5"], args.runtime)
+		install_deb(pkg["name"], pkg["source"], args.runtime)
 
 fix_debuglinks()
 fix_symlinks()

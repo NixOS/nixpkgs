@@ -8,7 +8,7 @@ let
 
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
-  etc = pkgs.stdenv.mkDerivation {
+  etc = pkgs.stdenvNoCC.mkDerivation {
     name = "etc";
 
     builder = ./make-etc.sh;
@@ -33,7 +33,6 @@ in
   options = {
 
     environment.etc = mkOption {
-      type = types.loaOf types.optionSet;
       default = {};
       example = literalExample ''
         { example-configuration-file =
@@ -47,7 +46,8 @@ in
         Set of files that have to be linked in <filename>/etc</filename>.
       '';
 
-      options = singleton ({ name, config, ... }:
+      type = with types; loaOf (submodule (
+        { name, config, ... }:
         { options = {
 
             enable = mkOption {
@@ -117,7 +117,7 @@ in
               in mkDefault (pkgs.writeText name' config.text));
           };
 
-        });
+        }));
 
     };
 

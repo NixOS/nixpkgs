@@ -16,7 +16,6 @@ let
     buildInputs = [ cmake libedit libxml2 llvm python ];
 
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DCMAKE_CXX_FLAGS=-std=c++11"
     ] ++
     # Maybe with compiler-rt this won't be needed?
@@ -34,7 +33,7 @@ let
     # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
       ln -sv ${llvm}/lib/LLVMgold.so $out/lib
-      ln -sv ${llvm}/lib/clang/3.9.0/lib $out/lib/clang/3.9.0/
+      ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
       ln -sv $out/bin/clang $out/bin/cpp
     '';
 

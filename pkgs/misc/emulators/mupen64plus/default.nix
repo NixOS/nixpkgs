@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, pkgconfig, SDL, gtk, mesa, SDL_ttf}:
+{stdenv, fetchurl, which, pkgconfig, SDL, gtk2, mesa, SDL_ttf}:
 
 stdenv.mkDerivation {
   name = "mupen64plus-1.5";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0gygfgyr2sg4yx77ijk133d1ra0v1yxi4xjxrg6kp3zdjmhdmcjq";
   };
 
-  buildInputs = [ which pkgconfig SDL gtk mesa SDL_ttf ];
+  buildInputs = [ which pkgconfig SDL gtk2 mesa SDL_ttf ];
 
   hardeningDisable = [ "format" ];
 

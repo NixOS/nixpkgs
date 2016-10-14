@@ -29,6 +29,30 @@ profile. The set of available libraries can be discovered by running the
 command `nix-env -f "<nixpkgs>" -qaP -A rPackages`. The first column from that
 output is the name that has to be passed to rWrapper in the code snipped above.
 
+However, if you'd like to add a file to your project source to make the
+environment available for other contributors, you can create a `default.nix`
+file like so:
+```nix
+let
+  pkgs = import <nixpkgs> {};
+  stdenv = pkgs.stdenv;
+in with pkgs; {
+  myProject = stdenv.mkDerivation {
+    name = "myProject";
+    version = "1";
+    src = if pkgs.lib.inNixShell then null else nix;
+
+    buildInputs = with rPackages; [
+      R
+      ggplot2
+      knitr
+    ];
+  };
+}
+```
+and then run `nix-shell .` to be dropped into a shell with those packages
+available.
+
 ## Updating the package set
 
 ```bash

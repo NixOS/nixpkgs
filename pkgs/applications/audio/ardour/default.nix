@@ -1,9 +1,10 @@
-{ stdenv, fetchFromGitHub, alsaLib, aubio, boost, cairomm, curl, doxygen, dbus, fftw
-, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtk, gtkmm, libjack2
+{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, doxygen
+, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtkmm2, libjack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper, pango
-, perl, pkgconfig, python, rubberband, serd, sord-svn, sratom, suil, taglib, vampSDK }:
+, libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper
+, perl, pkgconfig, python, rubberband, serd, sord-svn, sratom
+, taglib, vampSDK, dbus, fftw, pango, suil, libarchive }:
 
 let
 
@@ -15,26 +16,26 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "4.7";
+  tag = "5.4";
 
 in
 
 stdenv.mkDerivation rec {
   name = "ardour-${tag}";
 
-  src = fetchFromGitHub {
-    owner = "Ardour";
-    repo = "ardour";
-    rev = "d84a8222f2b6dab5028b2586f798535a8766670e";
-    sha256 = "149gswphz77m3pkzsn2nqbm6yvcfa3fva560bcvjzlgb73f64q5l";
+  src = fetchgit {
+    url = "git://git.ardour.org/ardour/ardour.git";
+    rev = "bb3312c3bb9c6ed9b75ac6739a6ee720ddf86c86";
+    sha256 = "1yrg0d86k9fqw7lmzjglilbadb4cjqxqkf6ii4bjs6rihj6b0qrf";
   };
 
   buildInputs =
     [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
-      glibmm graphviz gtk gtkmm libjack2 libgnomecanvas libgnomecanvasmm liblo
+      glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv-svn lv2
-      makeWrapper pango perl pkgconfig python rubberband serd sord-svn sratom suil taglib vampSDK
+      makeWrapper pango perl pkgconfig python rubberband serd sord-svn
+      sratom suil taglib vampSDK libarchive
     ];
 
   # ardour's wscript has a "tarball" target but that required the git revision
@@ -57,11 +58,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/applications"
     cat > "$out/share/applications/ardour.desktop" << EOF
     [Desktop Entry]
-    Name=Ardour 4
+    Name=Ardour 5
     GenericName=Digital Audio Workstation
     Comment=Multitrack harddisk recorder
-    Exec=$out/bin/ardour4
-    Icon=$out/share/ardour4/icons/ardour_icon_256px.png
+    Exec=$out/bin/ardour5
+    Icon=$out/share/ardour5/icons/ardour_icon_256px.png
     Terminal=false
     Type=Application
     X-MultipleArgs=false

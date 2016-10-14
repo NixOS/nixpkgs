@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, libX11, libXmu, libXpm, gtk, libpng, libjpeg, libtiff, librsvg
+, libX11, libXmu, libXpm, gtk2, libpng, libjpeg, libtiff, librsvg
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "e14542cc81ea06e64dd4708546f5fd3f5e01884c3e4617885c7ef22af8cf3965";
   };
   buildInputs =
-    [ pkgconfig libX11 libXmu libXpm gtk libpng libjpeg libtiff librsvg ];
+    [ pkgconfig libX11 libXmu libXpm gtk2 libpng libjpeg libtiff librsvg ];
 
   preConfigure = "patchShebangs .";
 

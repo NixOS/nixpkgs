@@ -471,10 +471,10 @@
     debbugs = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib, soap-client }:
     elpaBuild {
         pname = "debbugs";
-        version = "0.10";
+        version = "0.11";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/debbugs-0.10.tar";
-          sha256 = "0vrsa70h6ipsq01qr9qzlaw1704xqviby321ri6w69wkwlcjkpin";
+          url = "https://elpa.gnu.org/packages/debbugs-0.11.tar";
+          sha256 = "10v9s7ayvfzd6j6hqfc9zihxgmsc2j0xhxrgy3ah30qkqn6z8w6n";
         };
         packageRequires = [ cl-lib soap-client ];
         meta = {
@@ -711,10 +711,10 @@
       }) {};
     exwm = callPackage ({ elpaBuild, fetchurl, lib, xelb }: elpaBuild {
         pname = "exwm";
-        version = "0.10";
+        version = "0.11";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/exwm-0.10.tar";
-          sha256 = "1c8558dxy7a2m61a0bc0p5vrdw3nw03zq9s8wxgmdvlklyzbqa22";
+          url = "https://elpa.gnu.org/packages/exwm-0.11.tar";
+          sha256 = "108n09b6512y05rskq754hzwc5nzqmkq1lfrarl34my41wsc1qnf";
         };
         packageRequires = [ xelb ];
         meta = {
@@ -767,10 +767,10 @@
     ggtags = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "ggtags";
-        version = "0.8.11";
+        version = "0.8.12";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ggtags-0.8.11.el";
-          sha256 = "1q2bp2b7lylf7n6c1psfn5swyjg0y78ykm0ak2kd84pbyhqak2mq";
+          url = "https://elpa.gnu.org/packages/ggtags-0.8.12.el";
+          sha256 = "0ny3llk021g6r0s75xdm4hzpbxv393ddm2r6f2xdk8kqnq4gnirp";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1336,10 +1336,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20160905";
+        version = "20161003";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20160905.tar";
-          sha256 = "118xq8bsiwa6nfxm14ww5dmyf5r0cv69lf748cj39bcvg1qm94vn";
+          url = "https://elpa.gnu.org/packages/org-20161003.tar";
+          sha256 = "077v69l3w5q0rfbj1mm92cs2pz5yh3p89qnxxj0zn3g5m0dg9yjm";
         };
         packageRequires = [];
         meta = {
@@ -1529,10 +1529,10 @@
     rudel = callPackage ({ cl-generic, cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "rudel";
-        version = "0.3";
+        version = "0.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/rudel-0.3.tar";
-          sha256 = "041yac9a7hbz1fpmjlmc31ggcgg90fmw08z6bkzly2141yky8yh1";
+          url = "https://elpa.gnu.org/packages/rudel-0.3.1.tar";
+          sha256 = "0glqa68g509p0s2vcc0i8kzlddnc9brd9jqhnm5rzxz4i050cvnz";
         };
         packageRequires = [ cl-generic cl-lib emacs ];
         meta = {
@@ -1687,10 +1687,10 @@
       }) {};
     stream = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "stream";
-        version = "2.2.1";
+        version = "2.2.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/stream-2.2.1.el";
-          sha256 = "1d91ddak5whb7kln216vhcsl707h5kirc6aqbkw82skhpg4c3ap1";
+          url = "https://elpa.gnu.org/packages/stream-2.2.3.el";
+          sha256 = "1y9nh5473p0dd149g675nybsdnzp8c4mq3wdql066nir7scz6rhy";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2061,10 +2061,10 @@
     ztree = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "ztree";
-        version = "1.0.3";
+        version = "1.0.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ztree-1.0.3.tar";
-          sha256 = "1mwzk48sah4w5jmlmzqxnwhnlnc2mf25ayhgymv24sv8c6hdllsw";
+          url = "https://elpa.gnu.org/packages/ztree-1.0.4.tar";
+          sha256 = "0xiiaa660s8z7901siwvmqkqz30agfzsy3zcyry2r017m3ghqjph";
         };
         packageRequires = [ cl-lib ];
         meta = {

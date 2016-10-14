@@ -74,7 +74,6 @@
       rtkit = 45;
       dovecot2 = 46;
       dovenull2 = 47;
-      unbound = 48;
       prayer = 49;
       mpd = 50;
       clamav = 51;
@@ -120,7 +119,6 @@
       minidlna = 91;
       elasticsearch = 92;
       tcpcryptd = 93; # tcpcryptd uses a hard-coded uid. We patch it in Nixpkgs to match this choice.
-      #connman = 94; # unused
       firebird = 95;
       #keys = 96; # unused
       haproxy = 97;
@@ -141,7 +139,7 @@
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
-      monetdb = 115;
+      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       rippled = 116;
       murmur = 117;
       foundationdb = 118;
@@ -274,6 +272,10 @@
       gocd-server = 252;
       terraria = 253;
       mattermost = 254;
+      prometheus = 255;
+      telegraf = 256;
+      gitlab-runner = 257;
+      postgrey = 258;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -330,7 +332,6 @@
       #rtkit = 45; # unused
       dovecot2 = 46;
       #dovenull = 47; # unused
-      #unbound = 48; # unused
       prayer = 49;
       mpd = 50;
       clamav = 51;
@@ -376,7 +377,6 @@
       minidlna = 91;
       elasticsearch = 92;
       #tcpcryptd = 93; # unused
-      connman = 94;
       firebird = 95;
       keys = 96;
       haproxy = 97;
@@ -395,7 +395,7 @@
       #ngircd = 112; # unused
       btsync = 113;
       #minecraft = 114; # unused
-      monetdb = 115;
+      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       #ripped = 116; # unused
       #murmur = 117; # unused
       foundationdb = 118;
@@ -518,6 +518,10 @@
       gocd-server = 252;
       terraria = 253;
       mattermost = 254;
+      prometheus = 255;
+      #telegraf = 256; # unused
+      gitlab-runner = 257;
+      postgrey = 258;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, gettext, pythonPackages
-, gtk, gdk_pixbuf, upower
+, gtk2, gdk_pixbuf, upower
 , makeWrapper }:
 
 let
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig gettext python gtk pygtk dbus-python gdk_pixbuf upower makeWrapper ];
+  [ pkgconfig gettext python gtk2 pygtk dbus-python gdk_pixbuf upower makeWrapper ];
 
   configurePhase = "true";
 

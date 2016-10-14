@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, fetchurl, ocaml, unzip, ncurses, curl }:
+{ stdenv, lib, fetchgit, fetchurl, ocaml, unzip, ncurses, curl }:
 
 # Opam 1.1 only works with ocaml >= 3.12.1 according to ./configure
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12.1";
+assert lib.versionAtLeast ocaml.version "3.12.1";
 
 let
   srcs = {

@@ -14,7 +14,6 @@ stdenv.mkDerivation {
   buildInputs = [ cmake ncurses zlib python ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DLLD_PATH_TO_LLVM_BUILD=${llvm}"
   ];

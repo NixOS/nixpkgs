@@ -63,7 +63,6 @@ in
         ];
       systemd.services."softether-init" = {
         description = "SoftEther VPN services initial task";
-        wantedBy = [ "network-interfaces.target" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = false;
@@ -84,8 +83,9 @@ in
     (mkIf (cfg.vpnserver.enable) {
       systemd.services.vpnserver = {
         description = "SoftEther VPN Server";
-        after = [ "softether-init.service" ];
-        wantedBy = [ "network-interfaces.target" ];
+        after = [ "softether-init.service" "network.target" ];
+        wants = [ "softether-init.service" ];
+        wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "forking";
           ExecStart = "${pkg}/bin/vpnserver start";
@@ -104,8 +104,9 @@ in
     (mkIf (cfg.vpnbridge.enable) {
       systemd.services.vpnbridge = {
         description = "SoftEther VPN Bridge";
-        after = [ "softether-init.service" ];
-        wantedBy = [ "network-interfaces.target" ];
+        after = [ "softether-init.service" "network.target" ];
+        wants = [ "softether-init.service" ];
+        wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "forking";
           ExecStart = "${pkg}/bin/vpnbridge start";
@@ -124,8 +125,9 @@ in
     (mkIf (cfg.vpnclient.enable) {
       systemd.services.vpnclient = {
         description = "SoftEther VPN Client";
-        after = [ "softether-init.service" ];
-        wantedBy = [ "network-interfaces.target" ];
+        after = [ "softether-init.service" "network.target" ];
+        wants = [ "softether-init.service" ];
+        wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "forking";
           ExecStart = "${pkg}/bin/vpnclient start";

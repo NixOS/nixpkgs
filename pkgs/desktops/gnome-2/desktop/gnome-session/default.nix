@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, cairo, dbus, gtk, pango, atk, libXau, libXtst, inputproto
-, intltool, libglade, startup_notification, GConf, upower }:
+, intltool, libglade, startup_notification, GConf, upower, libSM }:
 
 stdenv.mkDerivation {
   name = "gnome-session-2.32.1";
@@ -11,7 +11,10 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ dbus_glib gtk libXau libXtst inputproto libglade startup_notification
-      GConf upower
+      GConf upower libSM
     ];
   nativeBuildInputs = [ pkgconfig intltool ];
+
+  # gconf-sanity-check-2 not found
+  meta.broken = true;
 }

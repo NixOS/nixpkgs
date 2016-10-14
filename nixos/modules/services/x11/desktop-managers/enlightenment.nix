@@ -32,10 +32,10 @@ in
       e.efl e.enlightenment
       e.terminology e.econnman
       pkgs.xorg.xauth # used by kdesu
-      pkgs.gtk # To get GTK+'s themes.
+      pkgs.gtk2 # To get GTK+'s themes.
       pkgs.tango-icon-theme
       pkgs.shared_mime_info
-      pkgs.gnome.gnomeicontheme
+      pkgs.gnome2.gnomeicontheme
       pkgs.xorg.xcursorthemes
     ];
 

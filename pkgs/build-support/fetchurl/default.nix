@@ -20,13 +20,7 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
-  impureEnvVars = [
-    # We borrow these environment variables from the caller to allow
-    # easy proxy configuration.  This is impure, but a fixed-output
-    # derivation like fetchurl is allowed to do so since its result is
-    # by definition pure.
-    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
-
+  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars ++ [
     # This variable allows the user to pass additional options to curl
     "NIX_CURL_FLAGS"
 
@@ -118,7 +112,8 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
   outputHashAlgo = if outputHashAlgo != "" then outputHashAlgo else
       if sha512 != "" then "sha512" else if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
   outputHash = if outputHash != "" then outputHash else
-      if sha512 != "" then sha512 else if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
+      if sha512 != "" then sha512 else if sha256 != "" then sha256 else if sha1 != "" then sha1 else
+        (stdenv.lib.fetchMD5warn "fetchurl" (builtins.head urls_) md5);
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 

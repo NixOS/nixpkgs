@@ -98,7 +98,7 @@ in {
         ];
         description = ''
           Specifies startup command line arguments to pass to Go.CD agent
-          java process.  Example contains debug and gcLog arguments.
+          java process.
         '';
       };
 

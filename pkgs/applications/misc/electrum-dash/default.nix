@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication, pythonPackages, slowaes }:
+{ stdenv, fetchurl, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "electrum-dash-${version}";
   version = "2.4.1";
 
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     dns
     ecdsa
     pbkdf2
-    protobuf
+    protobuf3_0
     pyasn1
     pyasn1-modules
     pycrypto

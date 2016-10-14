@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, pkgconfig, gtk }:
+{ stdenv, fetchurl, perl, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation {
   name = "eboard-1.1.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./eboard.patch ];
 
-  buildInputs = [ gtk ];
+  buildInputs = [ gtk2 ];
   nativeBuildInputs = [ perl pkgconfig ];
 
   hardeningDisable = [ "format" ];

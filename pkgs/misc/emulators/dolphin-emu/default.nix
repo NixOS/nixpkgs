@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     -DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include
     -DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include
     -DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0
-    -DCMAKE_BUILD_TYPE=Release
     -DENABLE_LTO=True
   '';
 

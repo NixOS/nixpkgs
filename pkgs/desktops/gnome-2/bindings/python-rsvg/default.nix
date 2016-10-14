@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, gnome, librsvg, pkgconfig, pygtk, python, gtk }:
+{ stdenv, fetchurl, gnome2, librsvg, pkgconfig, python27Packages, gtk }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python27Packages) python pygtk;
+in stdenv.mkDerivation rec {
   ver_maj = "2.32";
   ver_min = "0";
   version = "${ver_maj}.${ver_min}";
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "python waf install";
 
-  buildInputs = [ gtk gnome.gnome_python librsvg pkgconfig pygtk python ];
+  buildInputs = [ gtk gnome2.gnome_python librsvg pkgconfig pygtk python ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.pygtk.org";

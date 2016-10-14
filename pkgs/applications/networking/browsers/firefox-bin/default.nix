@@ -2,6 +2,7 @@
 , alsaLib
 , atk
 , cairo
+, curl
 , cups
 , dbus_glib
 , dbus_libs
@@ -25,7 +26,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra
+, libcanberra_gtk2
 , libgnome
 , libgnomeui
 , defaultIconTheme
@@ -75,6 +76,7 @@ stdenv.mkDerivation {
       alsaLib
       atk
       cairo
+      curl
       cups
       dbus_glib
       dbus_libs
@@ -98,7 +100,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra
+      libcanberra_gtk2
       libgnome
       libgnomeui
       mesa

@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, gtk, libXft
-, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, libXft
+, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
-, gsl, python, numpy, pyxml, lxml, poppler, imagemagick, libwpg, librevenge
+, gsl, python, poppler, imagemagick, libwpg, librevenge
 , libvisio, libcdr, libexif, unzip, automake114x, autoconf
 , boxMakerPlugin ? false # boxmaker plugin
 }:
 
 let 
+  pythonEnv = python.withPackages(ps: with ps; [ pyxml numpy lxml ]);
 
 boxmaker = fetchurl {
   # http://www.inkscapeforum.com/viewtopic.php?f=11&t=10403
@@ -42,15 +43,13 @@ stdenv.mkDerivation rec {
       --replace "#if __cplusplus >= 201103L" "#if true"
   '';
 
-  propagatedBuildInputs = [
-    # Python is used at run-time to execute scripts, e.g., those from
-    # the "Effects" menu.
-    python pyxml numpy lxml
-  ];
+  # Python is used at run-time to execute scripts, e.g., those from
+  # the "Effects" menu.
+  propagatedBuildInputs = [ pythonEnv ];
 
   buildInputs = [
-    pkgconfig perl perlXMLParser gtk libXft libpng zlib popt boehmgc
-    libxml2 libxslt glib gtkmm glibmm libsigcxx lcms boost gettext
+    pkgconfig perl perlXMLParser libXft libpng zlib popt boehmgc
+    libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     makeWrapper intltool gsl poppler imagemagick libwpg librevenge
     libvisio libcdr libexif automake114x autoconf
   ] ++ stdenv.lib.optional boxMakerPlugin unzip;
@@ -71,13 +70,6 @@ stdenv.mkDerivation rec {
     }
 
     # Make sure PyXML modules can be found at run-time.
-    for i in "$out/bin/"*
-    do
-      wrapProgram "$i" --prefix PYTHONPATH :      \
-       "$(toPythonPath ${pyxml}):$(toPythonPath ${lxml}):$(toPythonPath ${numpy})"  \
-       --prefix PATH : ${python}/bin ||  \
-        exit 2
-    done
     rm "$out/share/icons/hicolor/icon-theme.cache"
   '';
 

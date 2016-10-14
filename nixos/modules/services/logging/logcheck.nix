@@ -62,42 +62,46 @@ let
   };
 
   ignoreOptions = {
-    level = levelOption;
+    options = {
+      level = levelOption;
 
-    regex = mkOption {
-      default = "";
-      type = types.str;
-      description = ''
-        Regex specifying which log lines to ignore.
-      '';
+      regex = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          Regex specifying which log lines to ignore.
+        '';
+      };
     };
   };
 
   ignoreCronOptions = {
-    user = mkOption {
-      default = "root";
-      type = types.str;
-      description = ''
-        User that runs the cronjob.
-      '';
-    };
+    options = {
+      user = mkOption {
+        default = "root";
+        type = types.str;
+        description = ''
+          User that runs the cronjob.
+        '';
+      };
 
-    cmdline = mkOption {
-      default = "";
-      type = types.str;
-      description = ''
-        Command line for the cron job. Will be turned into a regex for the logcheck ignore rule.
-      '';
-    };
+      cmdline = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          Command line for the cron job. Will be turned into a regex for the logcheck ignore rule.
+        '';
+      };
 
-    timeArgs = mkOption {
-      default = null;
-      type = types.nullOr (types.str);
-      example = "02 06 * * *";
-      description = ''
-        "min hr dom mon dow" crontab time args, to auto-create a cronjob too.
-        Leave at null to not do this and just add a logcheck ignore rule.
-      '';
+      timeArgs = mkOption {
+        default = null;
+        type = types.nullOr (types.str);
+        example = "02 06 * * *";
+        description = ''
+          "min hr dom mon dow" crontab time args, to auto-create a cronjob too.
+          Leave at null to not do this and just add a logcheck ignore rule.
+        '';
+      };
     };
   };
 
@@ -180,8 +184,7 @@ in
         description = ''
           This option defines extra ignore rules.
         '';
-        type = types.loaOf types.optionSet;
-        options = [ ignoreOptions ];
+        type = with types; loaOf (submodule ignoreOptions);
       };
 
       ignoreCron = mkOption {
@@ -189,8 +192,7 @@ in
         description = ''
           This option defines extra ignore rules for cronjobs.
         '';
-        type = types.loaOf types.optionSet;
-        options = [ ignoreOptions ignoreCronOptions ];
+        type = with types; loaOf (submodule ignoreCronOptions);
       };
 
       extraGroups = mkOption {

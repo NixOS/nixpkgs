@@ -5,7 +5,7 @@
 
 { pkgs, gimp }:
 let
-  inherit (pkgs) stdenv fetchurl pkgconfig glib;
+  inherit (pkgs) stdenv fetchurl pkgconfig glib fetchFromGitHub;
   inherit (gimp) targetPluginDir targetScriptDir;
 
   pluginDerivation = a: stdenv.mkDerivation ({
@@ -57,6 +57,7 @@ rec {
       sed -e 's,^\(GIMP_PLUGIN_DIR=\).*,\1'"$out/${gimp.name}-plugins", \
        -e 's,^\(GIMP_DATA_DIR=\).*,\1'"$out/share/${gimp.name}", -i configure
     '';
+    hardeningDisable = [ "format" ];
     meta = with stdenv.lib; {
       description = "The GIMP Animation Package";
       homepage = http://www.gimp.org;
@@ -114,6 +115,25 @@ rec {
       installPlugins resynth
       installScripts smart-{enlarge,remove}.scm
     ";
+  };
+
+  resynthesizer2 = pluginDerivation {
+    /* menu:
+      Filters/Map/Resynthesize
+      Filters/Enhance/Smart enlarge
+      Filters/Enhance/Smart sharpen
+      Filters/Enhance/Smart remove selection
+    */
+    name = "resynthesizer-2.0.1";
+    buildInputs = [ gimp pkgs.fftw pkgs.autoreconfHook ] 
+      ++ gimp.nativeBuildInputs;
+    makeFlags = "GIMP_LIBDIR=$out/lib/gimp/2.0/";
+    src = fetchFromGitHub {
+      owner = "bootchk";
+      repo = "resynthesizer";
+      rev = "2.0.1";
+      sha256 = "1d214s0jsqxz83l9dd8vhnz3siw9fyw7xdhhir25ra7jiwxc99hd";
+    };
   };
 
   texturize = pluginDerivation {

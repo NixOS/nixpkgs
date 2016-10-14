@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
 
-  version = "0.8.19";
+  version = "0.8.20";
   name = "irssi-${version}";
 
   src = fetchurl {
     urls = [ "https://github.com/irssi/irssi/releases/download/${version}/${name}.tar.gz" ];
-    sha256 = "0ny8dry1b8siyc5glaxcwzng0d2mxnwxk74v64f8xplqhrvlnkzy";
+    sha256 = "0riz2wsdcs5hx5rwynm99fi01973lfrss21y8qy30dw2m9v0zqpm";
   };
 
   buildInputs = [ pkgconfig ncurses glib openssl perl libintlOrEmpty ];

@@ -10,7 +10,8 @@ let
 
   interfaces = attrValues config.networking.interfaces;
 
-  enableDHCP = config.networking.useDHCP || any (i: i.useDHCP == true) interfaces;
+  enableDHCP = config.networking.dhcpcd.enable &&
+        (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
 
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
@@ -85,6 +86,15 @@ in
 
   options = {
 
+    networking.dhcpcd.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable dhcpcd for device configuration. This is mainly to
+        explicitly disable dhcpcd (for example when using networkd).
+      '';
+    };
+
     networking.dhcpcd.persistent = mkOption {
       type = types.bool;
       default = false;
@@ -147,10 +157,9 @@ in
     systemd.services.dhcpcd =
       { description = "DHCP Client";
 
-        wantedBy = [ "network.target" ];
-        # Work-around to deal with problems where the kernel would remove &
-        # re-create Wifi interfaces early during boot.
-        after = [ "network-interfaces.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        wants = [ "network.target" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by

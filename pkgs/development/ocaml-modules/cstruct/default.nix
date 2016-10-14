@@ -1,5 +1,5 @@
-{stdenv, writeText, fetchurl, ocaml, ocplib-endian, sexplib, findlib,
- async ? null, lwt ? null, camlp4}:
+{stdenv, writeText, fetchurl, ocaml, ocplib-endian, sexplib_p4, findlib,
+ async_p4 ? null, lwt ? null, camlp4}:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
   };
 
   configureFlags = stdenv.lib.strings.concatStringsSep " " ((if lwt != null then ["--enable-lwt"] else []) ++
-                                          (if async != null then ["--enable-async"] else []));
+                                          (if async_p4 != null then ["--enable-async"] else []));
   buildInputs = [ocaml findlib camlp4];
-  propagatedBuildInputs = [ocplib-endian sexplib lwt async];
+  propagatedBuildInputs = [ocplib-endian sexplib_p4 lwt async_p4];
 
   createFindlibDestdir = true;
   dontStrip = true;

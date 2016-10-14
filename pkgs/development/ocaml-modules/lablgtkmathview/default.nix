@@ -1,14 +1,12 @@
 {stdenv, fetchurl, pkgconfig, ocaml, findlib, gmetadom, gtkmathview, lablgtk }:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.7.2";
   pname = "lablgtkmathview";
-
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "0.7.2";
 
   src = fetchurl {
     url = "http://helm.cs.unibo.it/mml-widget/sources/${pname}-${version}.tar.gz";
@@ -22,7 +20,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [gtkmathview];
 
   prePatch = ''
-    substituteInPlace Makefile.in --replace "PROPCC = @OCAML_LIB_DIR@" "PROPCC = ${lablgtk}/lib/ocaml/${ocaml_version}/site-lib"
+    substituteInPlace Makefile.in --replace "PROPCC = @OCAML_LIB_DIR@" "PROPCC = ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib"
   '';
 
   buildPhase = ''

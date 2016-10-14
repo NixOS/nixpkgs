@@ -18,7 +18,7 @@ let
 
   prioOption = prio: optionalString (prio != null) " pri=${toString prio}";
 
-  specialFSTypes = [ "proc" "sysfs" "tmpfs" "devtmpfs" "devpts" ];
+  specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
   coreFileSystemOpts = { name, config, ... }: {
 
@@ -258,7 +258,7 @@ in
           let
             mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
             device'  = escapeSystemdPath fs.device;
-            device'' = "${device}.device";
+            device'' = "${device'}.device";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
             wantedBy = [ mountPoint' ];
@@ -290,6 +290,9 @@ in
       "/dev" = { fsType = "devtmpfs"; options = [ "nosuid" "strictatime" "mode=755" "size=${config.boot.devSize}" ]; };
       "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
       "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "gid=${toString config.ids.gids.tty}" ]; };
+
+      # To hold secrets that shouldn't be written to disk (generally used for NixOps, harmless elsewhere)
+      "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" "gid=${toString config.ids.gids.keys}" ]; };
     } // optionalAttrs (!config.boot.isContainer) {
       # systemd-nspawn populates /sys by itself, and remounting it causes all
       # kinds of weird issues (most noticeably, waiting for host disk device

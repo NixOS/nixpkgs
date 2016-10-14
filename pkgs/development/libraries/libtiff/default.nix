@@ -7,10 +7,7 @@ stdenv.mkDerivation rec {
   name = "libtiff-${version}";
 
   src = fetchurl {
-    urls =
-      [ "ftp://ftp.remotesensing.org/pub/libtiff/tiff-${version}.tar.gz"
-        "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz"
-      ];
+    url = "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
     sha256 = "136nf1rj9dp5jgv1p7z4dk0xy3wki1w0vfjbk82f645m0w4samsd";
   };
 

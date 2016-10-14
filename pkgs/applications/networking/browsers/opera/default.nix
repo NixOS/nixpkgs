@@ -2,7 +2,7 @@
 , freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
 , libuuid, cups, xz
 , gstreamer, gst_plugins_base, libxml2
-, gtkSupport ? true, glib, gtk, pango, gdk_pixbuf, cairo, atk
+, gtkSupport ? true, glib, gtk2, pango, gdk_pixbuf, cairo, atk
 , kdeSupport ? false, qt4, kdelibs
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       libXft freetype fontconfig libXrender libuuid expat
       gstreamer libxml2 gst_plugins_base
     ]
-    ++ stdenv.lib.optionals gtkSupport [ glib gtk pango gdk_pixbuf cairo atk ]
+    ++ stdenv.lib.optionals gtkSupport [ glib gtk2 pango gdk_pixbuf cairo atk ]
     ++ stdenv.lib.optionals kdeSupport [ kdelibs qt4 ];
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
@@ -84,5 +84,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.opera.com;
     description = "Web browser";
     license = stdenv.lib.licenses.unfree;
+    # Marked as broken due to needing an update for security issues.
+    # See: https://github.com/NixOS/nixpkgs/issues/18856
+    broken = true;
   };
 }

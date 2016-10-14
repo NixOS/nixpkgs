@@ -1,19 +1,19 @@
 { stdenv, fetchurl, pkgconfig, intltool, libtool
-, glib, dbus, udev, libgudev, udisks2, libgcrypt
+, glib, dbus, udev, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, samba, libmtp
-, gnomeSupport ? false, gnome,libgnome_keyring, gconf, makeWrapper }:
+, gnomeSupport ? false, gnome, makeWrapper }:
 
 let
-  ver_maj = "1.22";
-  version = "${ver_maj}.4";
+  ver_maj = "1.30";
+  version = "${ver_maj}.1";
 in
 stdenv.mkDerivation rec {
   name = "gvfs-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${ver_maj}/${name}.tar.xz";
-    sha256 = "57e33faad35aba72be3822099856aca847f391626cf3ec734b42e64ba31f6484";
+    sha256 = "e752e7bb46e64e4025f63428d4f5247e3e5c0d0b5eeb4f81dbf1cd7b75f59d7b";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libtool ];
@@ -21,12 +21,14 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ makeWrapper glib dbus udev libgudev udisks2 libgcrypt
       libgphoto2 avahi libarchive fuse libcdio
-      libxml2 libxslt docbook_xsl samba libmtp
+      libxml2 libxslt docbook_xsl samba libmtp libcap polkit
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
-      gtk libsoup libgnome_keyring gconf
+      gtk libsoup libgnome_keyring gconf gcr
       # ToDo: not working and probably useless until gnome3 from x-updates
     ]);
+
+  configureFlags = stdenv.lib.optional (!gnomeSupport) "--disable-gcr";
 
   enableParallelBuilding = true;
 

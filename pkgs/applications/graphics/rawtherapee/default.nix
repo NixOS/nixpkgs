@@ -1,26 +1,34 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk, cmake, pixman, libpthreadstubs, gtkmm, libXau
-, libXdmcp, lcms2, libiptcdata, libcanberra, fftw, expat, pcre, libsigcxx 
-, mercurial  # Not really needed for anything, but it fails if it does not find 'hg'
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm2, libXau
+, libXdmcp, lcms2, libiptcdata, libcanberra_gtk2, fftw, expat, pcre, libsigcxx
 }:
 
 stdenv.mkDerivation rec {
-  name = "rawtherapee-4.2";
-  
+  version = "4.2.1025";
+  name = "rawtherapee-" + version;
+
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
-    rev = "4.2";
-    sha256 = "1v4px239vlmk9l8wbzlvlyni4ns12icxmgfz21m86jkd10pj5dgr";
+    rev = "dc4bbe906ba92ddc66f98a3c26ce19822bfb99ab";
+    sha256 = "0c5za9s8533fiyl32378dq9rgd5044xi8y0wm2gkr7krbdnx74l3";
   };
-  
-  buildInputs = [ pkgconfig gtk cmake pixman libpthreadstubs gtkmm libXau libXdmcp
-    lcms2 libiptcdata mercurial libcanberra fftw expat pcre libsigcxx ];
 
-  patchPhase = ''
-    patch -p1 < ${./sigc++_fix.patch}
+  buildInputs = [ pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
+    lcms2 libiptcdata libcanberra_gtk2 fftw expat pcre libsigcxx ];
+
+  patches = [
+    ./fix-glibmm-output.patch
+  ];
+
+  cmakeFlags = [
+    "-DPROC_TARGET_NUMBER=2"
+  ];
+
+  CMAKE_CXX_FLAGS = "-std=c++11 -Wno-deprecated-declarations -Wno-unused-result";
+
+  postUnpack = ''
+    echo "set(HG_VERSION $version)" > $sourceRoot/ReleaseInfo.cmake
   '';
-
-  NIX_CFLAGS_COMPILE = "-std=gnu++11 -Wno-deprecated-declarations -Wno-unused-result";
 
   enableParallelBuilding = true;
 
@@ -28,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "RAW converter and digital photo processing software";
     homepage = http://www.rawtherapee.com/;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric jcumming mahe];
+    maintainers = with stdenv.lib.maintainers; [ viric jcumming mahe the-kenny ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

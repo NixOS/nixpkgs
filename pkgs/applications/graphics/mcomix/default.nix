@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication, python27Packages }:
+{ stdenv, fetchurl, python27Packages }:
 
-buildPythonApplication rec {
-    namePrefix = "";
+python27Packages.buildPythonApplication rec {
     name = "mcomix-${version}";
     version = "1.2.1";
 

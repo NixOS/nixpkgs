@@ -6,9 +6,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   buildInputs = [mercurial];
 
-  impureEnvVars = [
-    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
-  ];
+  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
 
   # Nix <= 0.7 compatibility.
   id = md5;
@@ -17,7 +15,8 @@ stdenv.mkDerivation {
 
   outputHashAlgo = if md5 != null then "md5" else "sha256";
   outputHashMode = "recursive";
-  outputHash = if md5 != null then md5 else sha256;
+  outputHash = if md5 != null then
+    (stdenv.lib.fetchMD5warn "fetchhg" url md5) else sha256;
 
   inherit url rev;
   preferLocalBuild = true;

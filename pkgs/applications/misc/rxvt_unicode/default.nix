@@ -52,6 +52,7 @@ stdenv.mkDerivation (rec {
   meta = {
     description = "A clone of the well-known terminal emulator rxvt";
     homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
+    downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";
     maintainers = [ stdenv.lib.maintainers.mornfall ];
     platforms = stdenv.lib.platforms.unix;
   };

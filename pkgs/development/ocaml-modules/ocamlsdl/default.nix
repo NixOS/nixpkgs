@@ -1,13 +1,12 @@
 {stdenv, fetchurl, ocaml, pkgconfig, findlib, SDL, SDL_image, SDL_mixer, SDL_ttf, SDL_gfx, lablgl }: 
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "ocamlsdl";
-  version = "0.9.1";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "0.9.1";
 
   src = fetchurl { 
     url = "mirror://sourceforge/project/ocamlsdl/OCamlSDL/ocamlsdl-0.9.1/ocamlsdl-0.9.1.tar.gz";

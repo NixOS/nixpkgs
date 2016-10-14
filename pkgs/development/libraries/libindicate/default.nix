@@ -4,13 +4,15 @@
 , pkgconfig, autoconf
 , glib, dbus_glib, libdbusmenu-glib
 , gtkVersion, gtk2 ? null, gtk3 ? null
-, python, pygobject, pygtk, gobjectIntrospection, vala_0_23, gnome_doc_utils
-, monoSupport ? false, mono ? null, gtk-sharp ? null
+, pythonPackages, gobjectIntrospection, vala_0_23, gnome_doc_utils
+, monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
 with lib;
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygobject2 pygtk;
+in stdenv.mkDerivation rec {
   name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libindicate-${postfix}-${version}";
   version = "${versionMajor}.${versionMinor}";
@@ -26,9 +28,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib dbus_glib libdbusmenu-glib
-    python pygobject pygtk gobjectIntrospection vala_0_23 gnome_doc_utils
+    python pygobject2 pygtk gobjectIntrospection vala_0_23 gnome_doc_utils
   ] ++ (if gtkVersion == "2"
-    then [ gtk2 ] ++ optionals monoSupport [ mono gtk-sharp ]
+    then [ gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ gtk3 ]);
 
   postPatch = ''

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
-  src = fetch "libcxx" "0yr3fh8vj38289b9cwk37zsy7x98dcd3kjy7xxy8mg20p48lb01n";
+  src = fetch "libcxx" "1k7f9qk5bgwa02ksh6yr9hccwcbhmcdzl1fpbdw6s2c89iwg7mvp";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -18,12 +18,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  cmakeFlags =
-    [ "-DCMAKE_BUILD_TYPE=Release"
-      "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
-      "-DLIBCXX_LIBCPPABI_VERSION=2"
-      "-DLIBCXX_CXX_ABI=libcxxabi"
-    ];
+  cmakeFlags = [
+    "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
+    "-DLIBCXX_LIBCPPABI_VERSION=2"
+    "-DLIBCXX_CXX_ABI=libcxxabi"
+  ];
 
   enableParallelBuilding = true;
 

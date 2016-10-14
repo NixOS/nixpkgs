@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, runCommand, gcc, zlib }:
+{ stdenv, fetchurl, fetchpatch, runCommand, zlib }:
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";
@@ -15,43 +15,49 @@ let ccache = stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace 'objs) $(extra_libs)' 'objs)'
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
-  passthru = {
+  passthru = let
+      unwrappedCC = stdenv.cc.cc;
+    in {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
     links = extraConfig: stdenv.mkDerivation rec {
       name = "ccache-links";
       passthru = {
-        inherit gcc;
-        isGNU = true;
+        isClang = unwrappedCC.isClang or false;
+        isGNU = unwrappedCC.isGNU or false;
       };
-      inherit (gcc.cc) lib;
+      inherit (unwrappedCC) lib;
       buildCommand = ''
         mkdir -p $out/bin
-        if [ -x "${gcc.cc}/bin/gcc" ]; then
-          cat > $out/bin/gcc << EOF
-          #!/bin/sh
-          ${extraConfig}
-          exec ${ccache}/bin/ccache ${gcc.cc}/bin/gcc "\$@"
+
+        wrap() {
+          local cname="$1"
+          if [ -x "${unwrappedCC}/bin/$cname" ]; then
+            cat > $out/bin/$cname << EOF
+        #!/bin/sh
+        ${extraConfig}
+        exec ${ccache}/bin/ccache ${unwrappedCC}/bin/$cname "\$@"
         EOF
-          chmod +x $out/bin/gcc
-        fi
-        if [ -x "${gcc.cc}/bin/g++" ]; then
-          cat > $out/bin/g++ << EOF
-          #!/bin/sh
-          ${extraConfig}
-          exec ${ccache}/bin/ccache ${gcc.cc}/bin/g++ "\$@"
-        EOF
-          chmod +x $out/bin/g++
-        fi
-        for executable in $(ls ${gcc.cc}/bin); do
+            chmod +x $out/bin/$cname
+          fi
+        }
+
+        wrap cc
+        wrap c++
+        wrap gcc
+        wrap g++
+        wrap clang
+        wrap clang++
+
+        for executable in $(ls ${unwrappedCC}/bin); do
           if [ ! -x "$out/bin/$executable" ]; then
-            ln -s ${gcc.cc}/bin/$executable $out/bin/$executable
+            ln -s ${unwrappedCC}/bin/$executable $out/bin/$executable
           fi
         done
-        for file in $(ls ${gcc.cc} | grep -vw bin); do
-          ln -s ${gcc.cc}/$file $out/$file
+        for file in $(ls ${unwrappedCC} | grep -vw bin); do
+          ln -s ${unwrappedCC}/$file $out/$file
         done
       '';
     };
@@ -63,7 +69,7 @@ let ccache = stdenv.mkDerivation rec {
     downloadPage = https://ccache.samba.org/download.html;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nckx ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 };
 in ccache

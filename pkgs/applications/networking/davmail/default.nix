@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, jre, glib, libXtst, gtk, makeWrapper }:
+{ fetchurl, stdenv, jre, glib, libXtst, gtk2, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "davmail-4.7.2";
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
   mkdir -p $out/bin
   cp ./* $out/bin/ -R
-  wrapProgram $out/bin/davmail.sh --prefix PATH : ${jre}/bin --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk libXtst ]}
+  wrapProgram $out/bin/davmail.sh --prefix PATH : ${jre}/bin --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
    '';
 }

@@ -113,7 +113,7 @@ in {
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       environment = { ZOOCFGDIR = configDir; };
       serviceConfig = {
         ExecStart = ''

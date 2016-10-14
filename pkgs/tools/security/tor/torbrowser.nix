@@ -1,24 +1,24 @@
 { stdenv, fetchurl, makeDesktopItem
-, libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk
+, libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk2
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
 }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
+    stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
   ];
 in
 
 stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "6.0.4";
+  version = "6.0.5";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
     sha256 = if stdenv.is64bit then
-      "14ds39frkg4hbim0icb372crink902f7i6mqj6dmbaiz2fi88y8q" else
-      "1d2mg46dg5y16h5lwzq0ilv3zk8aqy3vg3j4a5c3wzsxj0hpl4v5";
+      "fc917bd702b1275cae3f7fa8036c3c44af9b4f003f3d4a8fbb9f6c0974277ad4" else
+      "e0c3ce406b6de082692ce3db52b6e04053e205194b26fbf0eee9014be543d98d";
   };
 
   desktopItem = makeDesktopItem {

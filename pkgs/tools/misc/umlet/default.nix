@@ -1,14 +1,14 @@
 { stdenv, fetchurl, jre, unzip }:
 
 stdenv.mkDerivation rec {
-  major = "13";
-  minor = "3";
+  major = "14";
+  minor = "2";
   version = "${major}.${minor}";
   name = "umlet-${version}";
 
   src = fetchurl {
-    url = "http://www.umlet.com/umlet_${major}_${minor}/umlet_${version}.zip";
-    sha256 = "0fbr51xknk98qz576lcl25qz0s1snns2yb0j54d77xkw7pnxmvzr";
+    url = "http://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
+    sha256 = "1fcc7ms92vcc4b8jh56bd3zrqdb0bwhbbzdxycc952fb0j6m62fw";
   };
 
   buildInputs = [ unzip ];

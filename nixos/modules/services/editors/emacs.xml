@@ -43,9 +43,10 @@
     <title>Installing <application>Emacs</application></title>
 
     <para>
-      Emacs can installed in the normal way for Nix (see <xref
-      linkend="sec-package-management" />). In addition, a NixOS
-      <emphasis>service</emphasis> can be enabled.
+      Emacs can be installed in the normal way for Nix (see
+      <xref linkend="sec-package-management" />).
+      In addition, a NixOS <emphasis>service</emphasis>
+      can be enabled.
     </para>
 
     <section>
@@ -59,20 +60,20 @@
         <variablelist>
           <varlistentry>
             <term><varname>emacs</varname></term>
-            <term><varname>emacs24</varname></term>
+            <term><varname>emacs25</varname></term>
             <listitem>
               <para>
-                The latest stable version of Emacs 24 using the <link
+                The latest stable version of Emacs 25 using the <link
                 xlink:href="http://www.gtk.org">GTK+ 2</link> widget
                 toolkit.
               </para>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term><varname>emacs24-nox</varname></term>
+            <term><varname>emacs25-nox</varname></term>
             <listitem>
               <para>
-                Emacs 24 built without any dependency on X11
+                Emacs 25 built without any dependency on X11
                 libraries.
               </para>
             </listitem>
@@ -83,15 +84,6 @@
               <para>
                 Emacs 24 with the "Mac port" patches, providing a more
                 native look and feel under OS X.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><varname>emacs25pre</varname></term>
-            <listitem>
-              <para>
-                A pretest version of what will become the first
-                version of Emacs 25.
               </para>
             </listitem>
           </varlistentry>
@@ -572,6 +564,55 @@ services.emacs.install = true;
       available man pages. For example, type <literal>M-x woman
       &lt;RET&gt; nixos-rebuild &lt;RET&gt;.</literal>
     </para>
+  </section>
+
+  <section xml:id="sec-emacs-docbook-xml">
+    <title>Editing DocBook 5 XML Documents</title>
+    <para>
+      Emacs includes <link
+      xlink:href="https://www.gnu.org/software/emacs/manual/html_node/nxml-mode/Introduction.html">nXML</link>,
+      a major-mode for validating and editing XML documents.
+      When editing DocBook 5.0 documents, such as
+      <link linkend="book-nixos-manual">this one</link>,
+      nXML needs to be configured with the relevant schema, which is
+      not included.
+    </para>
+
+    <para>
+      To install the DocBook 5.0 schemas, either add
+      <varname>pkgs.docbook5</varname> to
+      <varname>environment.systemPackages</varname> (<link
+      linkend="sec-declarative-package-mgmt">NixOS</link>), or run
+      <literal>nix-env -i pkgs.docbook5</literal>
+      (<link linkend="sec-ad-hoc-packages">Nix</link>).
+    </para>
+
+    <para>
+      Then customize the variable <varname>rng-schema-locating-files</varname> to include <filename>~/.emacs.d/schemas.xml</filename> and put the following text into that file:
+      <example xml:id="ex-emacs-docbook-xml">
+        <title>nXML Schema Configuration (<filename>~/.emacs.d/schemas.xml</filename>)</title>
+        <programlisting language="xml"><![CDATA[
+<?xml version="1.0"?>
+<!--
+  To let emacs find this file, evaluate:
+  (add-to-list 'rng-schema-locating-files "~/.emacs.d/schemas.xml")
+-->
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <!--
+    Use this variation if pkgs.docbook5 is added to environment.systemPackages
+  -->
+  <namespace ns="http://docbook.org/ns/docbook"
+             uri="/run/current-system/sw/share/xml/docbook-5.0/rng/docbookxi.rnc"/>
+  <!--
+    Use this variation if installing schema with "nix-env -iA pkgs.docbook5".
+  <namespace ns="http://docbook.org/ns/docbook"
+             uri="../.nix-profile/share/xml/docbook-5.0/rng/docbookxi.rnc"/>
+  -->
+</locatingRules>
+]]></programlisting>
+    </example>
+  </para>
+
   </section>
 </section>
 

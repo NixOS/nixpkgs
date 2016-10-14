@@ -1,8 +1,9 @@
-{ fetchurl, stdenv, pkgconfig, python, gstreamer
-, gst_plugins_base, pygobject
+{ fetchurl, stdenv, pkgconfig, pythonPackages, gstreamer, gst_plugins_base
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygobject2;
+in stdenv.mkDerivation rec {
   name = "gst-python-0.10.22";
 
   src = fetchurl {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = [ ./disable-testFake.patch ];
 
   buildInputs =
-    [ pkgconfig gst_plugins_base pygobject ]
+    [ pkgconfig gst_plugins_base pygobject2 ]
     ;
 
   propagatedBuildInputs = [ gstreamer python ];

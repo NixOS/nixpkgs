@@ -14,7 +14,7 @@ let
     name = "mesa-drivers+txc-${p.mesa_drivers.version}";
     paths =
       [ p.mesa_drivers
-        p.mesa_noglu # mainly for libGL
+        p.mesa_drivers.out # mainly for libGL
         (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
       ];
   };

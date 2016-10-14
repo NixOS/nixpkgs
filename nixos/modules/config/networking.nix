@@ -29,6 +29,19 @@ in
       '';
     };
 
+    networking.hostConf = lib.mkOption {
+      type = types.lines;
+      default = "multi on";
+      example = ''
+        multi on
+        reorder on
+        trim lan
+      '';
+      description = ''
+        The contents of <filename>/etc/host.conf</filename>. See also <citerefentry><refentrytitle>host.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      '';
+    };
+
     networking.dnsSingleRequest = lib.mkOption {
       type = types.bool;
       default = false;
@@ -171,6 +184,9 @@ in
             ${cfg.extraHosts}
           '';
 
+        # /etc/host.conf: resolver configuration file
+        "host.conf".text = cfg.hostConf;
+
         # /etc/resolvconf.conf: Configuration for openresolv.
         "resolvconf.conf".text =
             ''
@@ -232,7 +248,7 @@ in
     # and other configurations. If the file is destroyed by an environment
     # activation then it must be rebuilt so that applications which interface
     # with /etc/resolv.conf directly don't break.
-    system.activationScripts.resolvconf = stringAfter [ "etc" "tmpfs" "var" ]
+    system.activationScripts.resolvconf = stringAfter [ "etc" "specialfs" "var" ]
       ''
         # Systemd resolved controls its own resolv.conf
         rm -f /run/resolvconf/interfaces/systemd

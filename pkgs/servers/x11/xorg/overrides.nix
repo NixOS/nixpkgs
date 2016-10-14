@@ -192,6 +192,7 @@ in
 
   libXi = attrs: attrs // {
     outputs = [ "out" "dev" "doc" ];
+    propagatedBuildInputs = [ xorg.libXfixes ];
   };
 
   libXinerama = attrs: attrs // {
@@ -230,6 +231,10 @@ in
   libXvMC = attrs: attrs // {
     outputs = [ "out" "dev" "doc" ];
     buildInputs = attrs.buildInputs ++ [xorg.renderproto];
+  };
+
+  libXp = attrs: attrs // {
+    outputs = [ "out" "dev" ];
   };
 
   libXpm = attrs: attrs // {
@@ -421,7 +426,7 @@ in
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
       # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
-      commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
+      commonPatches = [ ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
@@ -449,16 +454,15 @@ in
           "--enable-xcsecurity"         # enable SECURITY extension
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway
+          "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
           "--enable-glamor"
         ];
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled
           ln -s /var/tmp $out/share/X11/xkb/compiled
           wrapProgram $out/bin/Xephyr \
-            --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
             --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
           wrapProgram $out/bin/Xvfb \
-            --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
             --set XORG_DRI_DRIVER_PATH ${args.mesa}/lib/dri \
             --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
@@ -530,10 +534,6 @@ in
   xcursorthemes = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.xcursorgen];
     configureFlags = "--with-cursordir=$(out)/share/icons";
-  };
-
-  xinput = attrs: attrs // {
-    propagatedBuildInputs = [xorg.libXfixes];
   };
 
   xinit = attrs: attrs // {

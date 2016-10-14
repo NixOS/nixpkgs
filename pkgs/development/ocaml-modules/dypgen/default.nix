@@ -1,13 +1,12 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "dypgen";
-  version = "20120619-1";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "20120619-1";
 
   src = fetchurl {
     url = "http://dypgen.free.fr/dypgen-20120619-1.tar.bz2";
@@ -22,7 +21,7 @@ stdenv.mkDerivation {
     make
   '';
 
-  makeFlags = "BINDIR=$(out)/bin  MANDIR=$(out)/usr/share/man/man1 DYPGENLIBDIR=$(out)/lib/ocaml/${ocaml_version}/site-lib";
+  makeFlags = "BINDIR=$(out)/bin  MANDIR=$(out)/usr/share/man/man1 DYPGENLIBDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib";
 
   meta = {
     homepage = http://dypgen.free.fr;

@@ -107,7 +107,28 @@ core = stdenv.mkDerivation rec {
     mv ./texmf.cnf "$out/share/texmf-dist/web2c/"
     cp ../texk/tests/TeXLive/*.pm "$out/share/texmf-dist/scripts/texlive/TeXLive/"
     cp ../texk/texlive/linked_scripts/scripts.lst "$out/share/texmf-dist/scripts/texlive/"
-  '' + /* doc location identical with individual TeX pkgs */ ''
+  '' +
+    (let extraScripts =
+          ''
+            tex4ht/ht.sh
+            tex4ht/htcontext.sh
+            tex4ht/htcopy.pl
+            tex4ht/htlatex.sh
+            tex4ht/htmex.sh
+            tex4ht/htmove.pl
+            tex4ht/httex.sh
+            tex4ht/httexi.sh
+            tex4ht/htxelatex.sh
+            tex4ht/htxetex.sh
+            tex4ht/mk4ht.pl
+            tex4ht/xhlatex.sh
+          '';
+      in
+        ''
+          echo -e 'texmf_scripts="$texmf_scripts\n${extraScripts}"' \
+            >> "$out/share/texmf-dist/scripts/texlive/scripts.lst"
+        '')
+  + /* doc location identical with individual TeX pkgs */ ''
     mkdir -p "$doc/doc"
     mv "$doc"/share/{man,info} "$doc"/doc
     rmdir "$doc"/share
