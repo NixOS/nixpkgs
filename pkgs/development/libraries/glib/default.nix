@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, python
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, python
 , libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
 
 # this is just for tests (not in closure of any regular package)
@@ -51,7 +51,13 @@ stdenv.mkDerivation rec {
     sha256 = "f25e751589cb1a58826eac24fbd4186cda4518af772806b666a3f91f66e6d3f4";
   };
 
-  patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
+  patches = optional stdenv.isDarwin ./darwin-compilation.patch
+    ++ optional doCheck ./skip-timer-test.patch
+    ++ optional doCheck (fetchpatch {
+        name = "test-regex.diff"; # https://bugzilla.gnome.org/show_bug.cgi?id=767240
+        url = "https://git.gnome.org/browse/glib/patch/?id=6d1178b2d9";
+        sha256 = "1n8i2kxc78rp3vwiapwdcr8lnacrn3qbdz0vi8ihf76j1sh07n5c";
+      });
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
