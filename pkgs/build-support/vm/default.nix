@@ -538,8 +538,7 @@ rec {
 
       # Hacky: RPM looks for <basename>.spec inside the tarball, so
       # strip off the hash.
-      stripHash "$src"
-      srcName="$strippedName"
+      srcName="$(stripHash "$src")"
       cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
       export HOME=/tmp/home

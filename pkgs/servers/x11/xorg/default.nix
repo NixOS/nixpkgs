@@ -680,11 +680,11 @@ let
   }) // {inherit windowswmproto libX11 libXext xextproto ;};
 
   libX11 = (mkDerivation "libX11" {
-    name = "libX11-1.6.3";
+    name = "libX11-1.6.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libX11-1.6.3.tar.bz2;
-      sha256 = "04c1vj53xq2xgyxx5vhln3wm2d76hh1n95fvs3myhligkz1sfcfg";
+      url = mirror://xorg/individual/lib/libX11-1.6.4.tar.bz2;
+      sha256 = "0hg46i6h92pmb7xp1cis2j43zq3fkdz89p0yv35w4vm17az4iixp";
     };
     buildInputs = [pkgconfig inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -779,11 +779,11 @@ let
   }) // {inherit libX11 xextproto xproto ;};
 
   libXfixes = (mkDerivation "libXfixes" {
-    name = "libXfixes-5.0.1";
+    name = "libXfixes-5.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfixes-5.0.1.tar.bz2;
-      sha256 = "0rs7qgzr6dpr62db7sd91c1b47hzhzfr010qwnpcm8sg122w1gk3";
+      url = mirror://xorg/individual/lib/libXfixes-5.0.2.tar.bz2;
+      sha256 = "1slsk898386xii0r3l7szwwq3s6y2m4dsj0x93ninjh8xkghxllv";
     };
     buildInputs = [pkgconfig fixesproto libX11 xextproto xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -823,11 +823,11 @@ let
   }) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (mkDerivation "libXi" {
-    name = "libXi-1.7.6";
+    name = "libXi-1.7.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.6.tar.bz2;
-      sha256 = "1b5p0l19ynmd6blnqr205wyngh6fagl35nqb4v05dw60rr9aachz";
+      url = mirror://xorg/individual/lib/libXi-1.7.7.tar.bz2;
+      sha256 = "0c70n4aq0ba628wr88ih4740nci9d9f6y3v96sx376vvlm7q6vwr";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -889,22 +889,22 @@ let
   }) // {inherit presentproto libX11 xextproto xproto ;};
 
   libXrandr = (mkDerivation "libXrandr" {
-    name = "libXrandr-1.5.0";
+    name = "libXrandr-1.5.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXrandr-1.5.0.tar.bz2;
-      sha256 = "0n6ycs1arf4wb1cal9il6v7vbxbf21qhs9sbfl8xndgwnxclk1kg";
+      url = mirror://xorg/individual/lib/libXrandr-1.5.1.tar.bz2;
+      sha256 = "06pmphx8lp3iywqnh88fvbfb0d8xgkx0qpvan49akpja1vxfgy8z";
     };
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto xproto libXrender ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit randrproto renderproto libX11 libXext xextproto xproto libXrender ;};
 
   libXrender = (mkDerivation "libXrender" {
-    name = "libXrender-0.9.9";
+    name = "libXrender-0.9.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXrender-0.9.9.tar.bz2;
-      sha256 = "06myx7044qqdswxndsmd82fpp670klnizkgzdm194h51h1wyabzw";
+      url = mirror://xorg/individual/lib/libXrender-0.9.10.tar.bz2;
+      sha256 = "0j89cnb06g8x79wmmnwzykgkkfdhin9j7hjpvsxwlr3fz1wmjvf0";
     };
     buildInputs = [pkgconfig renderproto libX11 xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -933,33 +933,33 @@ let
   }) // {inherit libICE kbproto libSM libX11 xproto ;};
 
   libXtst = (mkDerivation "libXtst" {
-    name = "libXtst-1.2.2";
+    name = "libXtst-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXtst-1.2.2.tar.bz2;
-      sha256 = "1ngn161nq679ffmbwl81i2hn75jjg5b3ffv6n4jilpvyazypy2pg";
+      url = mirror://xorg/individual/lib/libXtst-1.2.3.tar.bz2;
+      sha256 = "012jpyj7xfm653a9jcfqbzxyywdmwb2b5wr1dwylx14f3f54jma6";
     };
     buildInputs = [pkgconfig inputproto recordproto libX11 libXext xextproto libXi ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto recordproto libX11 libXext xextproto libXi ;};
 
   libXv = (mkDerivation "libXv" {
-    name = "libXv-1.0.10";
+    name = "libXv-1.0.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXv-1.0.10.tar.bz2;
-      sha256 = "09a5j6bisysiipd0nw6s352565bp0n6gbyhv5hp63s3cd3w95zjm";
+      url = mirror://xorg/individual/lib/libXv-1.0.11.tar.bz2;
+      sha256 = "125hn06bd3d8y97hm2pbf5j55gg4r2hpd3ifad651i4sr7m16v6j";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit videoproto libX11 libXext xextproto xproto ;};
 
   libXvMC = (mkDerivation "libXvMC" {
-    name = "libXvMC-1.0.9";
+    name = "libXvMC-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXvMC-1.0.9.tar.bz2;
-      sha256 = "0mjp1b21dvkaz7r0iq085r92nh5vkpmx99awfgqq9hgzyvgxf0q7";
+      url = mirror://xorg/individual/lib/libXvMC-1.0.10.tar.bz2;
+      sha256 = "0bpffxr5dal90a8miv2w0rif61byqxq2f5angj4z1bnznmws00g5";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto libXv ];
     meta.platforms = stdenv.lib.platforms.unix;
