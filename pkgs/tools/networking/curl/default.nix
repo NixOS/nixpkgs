@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v6q83qsrf7dgp3y5fa5vkppgqyy82pnsk8z9b4047b6fvclfwvv";
   };
 
+  patches = [ ./nix-ssl-cert-file.patch ];
+
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   nativeBuildInputs = [ pkgconfig perl ];
