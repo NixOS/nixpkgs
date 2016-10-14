@@ -1,22 +1,23 @@
 { stdenv, fetchurl
 , bzip2
 , gdbm
-, libX11, xproto
 , lzma
 , ncurses
 , openssl
 , readline
 , sqlite
-, tcl, tk
+, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? !stdenv.isCygwin
 , zlib
 , callPackage
 , self
 , python35Packages
-
 , CF, configd
 }:
 
-assert readline != null -> ncurses != null;
+assert x11Support -> tcl != null
+                  && tk != null
+                  && xproto != null
+                  && libX11 != null;
 
 with stdenv.lib;
 
@@ -30,21 +31,11 @@ let
   sitePackages = "lib/${libPrefix}/site-packages";
 
   buildInputs = filter (p: p != null) [
-    zlib
-    bzip2
-    lzma
-    gdbm
-    sqlite
-    readline
-    ncurses
-    openssl
-    tcl
-    tk
-    libX11
-    xproto
-  ] ++ optionals stdenv.isDarwin [ CF configd ];
-in
-stdenv.mkDerivation {
+    zlib bzip2 lzma gdbm sqlite readline ncurses openssl ]
+    ++ optionals x11Support [ tcl tk libX11 xproto ]
+    ++ optionals stdenv.isDarwin [ CF configd ];
+
+in stdenv.mkDerivation {
   name = "python3-${version}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
@@ -110,27 +101,21 @@ stdenv.mkDerivation {
     # FIXME: should regenerate this.
     rm $out/lib/python${majorVersion}/__pycache__/_sysconfigdata.cpython*
 
+  '' + optionalString x11Support ''
     # tkinter goes in a separate output
     mkdir -p $tkinter/${sitePackages}
     mv $out/lib/${libPrefix}/lib-dynload/_tkinter* $tkinter/${sitePackages}/
   '';
 
-  outputs = ["out" "tkinter"];
+  outputs = ["out"] ++ optional x11Support "tkinter";
 
   passthru = rec {
-    inherit libPrefix sitePackages;
-    zlibSupport = zlib != null;
-    sqliteSupport = sqlite != null;
-    dbSupport = false;
-    readlineSupport = readline != null;
-    opensslSupport = openssl != null;
-    tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
+    inherit libPrefix sitePackages x11Support;
     executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; };
     withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python35Packages; };
     isPy3 = true;
     isPy35 = true;
-    is_py3k = true;  # deprecated
     interpreter = "${self}/bin/${executable}";
   };
 

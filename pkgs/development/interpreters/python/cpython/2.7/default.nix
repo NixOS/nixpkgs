@@ -1,15 +1,23 @@
-{ stdenv, fetchurl, fetchpatch, self, callPackage, python27Packages
-, bzip2, openssl, gettext
-, db, gdbm, ncurses, sqlite, readline
-
+{ stdenv, fetchurl
+, bzip2
+, gdbm
+, fetchpatch
+, ncurses
+, openssl
+, readline
+, sqlite
 , tcl ? null, tk ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
-, zlib ? null, zlibSupport ? true
-, expat, libffi
-
+, zlib
+, callPackage
+, self
+, python27Packages
+, gettext
+, db
+, expat
+, libffi
 , CF, configd
 }:
 
-assert zlibSupport -> zlib != null;
 assert x11Support -> tcl != null
                   && tk != null
                   && xlibsWrapper != null
@@ -109,14 +117,11 @@ let
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl ]
+    [ bzip2 openssl zlib ]
     ++ optionals stdenv.isCygwin [ expat libffi ]
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    ++ optional zlibSupport zlib
-    ++ optional stdenv.isDarwin CF;
-
-  propagatedBuildInputs = optional stdenv.isDarwin configd;
+    ++ optionals stdenv.isDarwin [ CF configd ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
@@ -130,7 +135,7 @@ in stdenv.mkDerivation {
     name = "python-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs propagatedBuildInputs
+    inherit majorVersion version src patches buildInputs
             preConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
@@ -174,13 +179,12 @@ in stdenv.mkDerivation {
     outputs = ["out"] ++ optional x11Support "tkinter";
 
     passthru = rec {
-      inherit libPrefix sitePackages;
-      inherit zlibSupport;
-      isPy2 = true;
-      isPy27 = true;
+      inherit libPrefix sitePackages x11Support;
+      executable = libPrefix;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
       withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
-      executable = libPrefix;
+      isPy2 = true;
+      isPy27 = true;
       interpreter = "${self}/bin/${executable}";
     };
 
