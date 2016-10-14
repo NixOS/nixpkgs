@@ -307,6 +307,8 @@ let
     inherit lib;
   };
 
+  gn = callPackage ../applications/editors/emacs-modes/gn { };
+
   shorten = melpaBuild rec {
     pname   = "shorten";
     version = circe.version;
