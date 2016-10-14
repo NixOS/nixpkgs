@@ -267,6 +267,8 @@ in
     fetchers = pkgs;
   };
 
+  fetchOneOf = callPackage ../build-support/fetchdata/one-of.nix { };
+
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
 
   resolveMirrorURLs = {url}: fetchurl {
