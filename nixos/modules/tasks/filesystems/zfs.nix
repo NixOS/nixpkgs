@@ -318,11 +318,20 @@ in
             '';
           };
 
-      in listToAttrs (map createImportService dataPools ++ map createSyncService allPools) // {
-        "zfs-mount" = { after = [ "systemd-modules-load.service" ]; };
-        "zfs-share" = { after = [ "systemd-modules-load.service" ]; };
-        "zfs-zed" = { after = [ "systemd-modules-load.service" ]; };
-      };
+      in listToAttrs (map createImportService dataPools ++
+                      map createSyncService allPools)
+        // (
+          let
+            unitOpts = {
+              after = [ "systemd-modules-load.service" ];
+              wantedBy = [ "zfs.target" ];
+            };
+          in {
+            "zfs-mount" = unitOpts;
+            "zfs-share" = unitOpts;
+            "zfs-zed" = unitOpts;
+          }
+        );
 
       systemd.targets."zfs-import" =
         let
