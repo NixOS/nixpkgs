@@ -1,6 +1,7 @@
 { stdenv, fetchurl, ncurses, openssl, aspell, gnutls
 , zlib, curl , pkgconfig, libgcrypt
 , cmake, makeWrapper, libobjc, libiconv
+, asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
@@ -28,7 +29,13 @@ stdenv.mkDerivation rec {
     sha256 = "0d1wcpsxx13clcf1ygcn5hsa1pjkck4xznbjbxphbdxd5whsbv3k";
   };
 
-  cmakeFlags = with stdenv.lib; []
+  outputs = [ "out" "doc" ];
+
+  enableParallelBuilding = true;
+  cmakeFlags = with stdenv.lib; [
+    "-DENABLE_MAN=ON"
+    "-DENABLE_DOC=ON"
+  ]
     ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
     ++ optional (!guileSupport) "-DENABLE_GUILE=OFF"
     ++ optional (!luaSupport)   "-DENABLE_LUA=OFF"
@@ -41,7 +48,8 @@ stdenv.mkDerivation rec {
       ncurses python openssl aspell gnutls zlib curl pkgconfig
       libgcrypt pycrypto makeWrapper
       cmake
-    ]
+      asciidoctor
+      ]
     ++ optionals stdenv.isDarwin [ pync libobjc ]
     ++ optional  guileSupport    guile
     ++ optional  luaSupport      lua5
