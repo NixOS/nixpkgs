@@ -4,18 +4,20 @@ mesa_glu , xkeyboard_config }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.21.2";
+  version = "0.21.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "0fi5dxrprnvhnn2y51gnfpsjj44snriqi20k20a73vhaqxfn8xx8";
+    sha256 = "1ljzcq775njhbcaj8vdnypf2rgc6yqqdwfkf7c22603qvv9if1dr";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ efl libXdmcp libxcb
-    xcbutilkeysyms libXrandr libffi pam alsaLib luajit bzip2
-    libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
+  buildInputs = [
+    efl libXdmcp libxcb xcbutilkeysyms libXrandr libffi pam alsaLib
+    luajit bzip2 libpthreadstubs gdbm
+  ] ++
+    stdenv.lib.optionals stdenv.isLinux [ libcap ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${efl}/include/ecore-imf-1"
@@ -49,11 +51,11 @@ stdenv.mkDerivation rec {
     ln -sv /var/setuid-wrappers/e_freqset $CPUFREQ_DIRPATH/freqset
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.bsd2;
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }
