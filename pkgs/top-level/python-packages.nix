@@ -4146,9 +4146,16 @@ in {
     # For testing
     nativeBuildInputs = with self; [ numpy pkgs.ncurses ];
 
+    # cython's testsuite requires npy_isinf to return sign of the infinity, but
+    # a C99 conformant is only required to return a non zero value
+    patches = [ ../development/python-modules/cython_test.patch ];
+
+    # cython's testsuite is not working very well with libc++
+    # We are however optimistic about things outside of testsuite still working
     checkPhase = ''
       export HOME="$NIX_BUILD_TOP"
-      ${python.interpreter} runtests.py
+      ${python.interpreter} runtests.py \
+        ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
     '';
 
     meta = {
