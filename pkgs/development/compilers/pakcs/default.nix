@@ -136,10 +136,10 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${tk}/bin" \
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
     description = "An implementation of the multi-paradigm declarative language Curry";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
 
     longDescription = ''
       PAKCS is an implementation of the multi-paradigm declarative language
@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
       with dynamic web pages, prototyping embedded systems).
     '';
 
-    maintainers = [ stdenv.lib.maintainers.gnidorah ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ kkallio gnidorah ];
+    platforms = platforms.unix;
   };
 }
