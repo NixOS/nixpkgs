@@ -14198,6 +14198,10 @@ in
     fltk = fltk13;
   };
 
+  inherit (callPackage ../applications/virtualization/rancher-compose {})
+    rancher-compose
+    rancher-compose_0_10;
+
   renoise = callPackage ../applications/audio/renoise {
     demo = false;
   };
