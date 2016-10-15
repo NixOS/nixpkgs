@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
     binaries="$(find "$out"/* \( -type f -o -type l \) -perm -111 \! -name '*.so' -maxdepth 1)"
     ln -s "$out"/*/{include,lib} "$out"
     mkdir -p "$out/bin"
-    ln -s $binaries "$out/bin"
+    for b in $binaries; do
+      bbn="$(basename "$b")"
+      echo -e '#! ${stdenv.shell}\n"'"$b"'" "$@"' > "$out/bin/$bbn"
+      chmod a+x "$out/bin/$bbn"
+    done
   '';
 
   enableParallelBuild = true;
