@@ -11803,6 +11803,8 @@ in
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
+  raleway = callPackage ../data/fonts/raleway { };
+
   roboto = callPackage ../data/fonts/roboto { };
 
   roboto-mono = callPackage ../data/fonts/roboto-mono { };
