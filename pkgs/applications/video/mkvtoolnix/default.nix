@@ -19,12 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "1dyhlpik8d9z78dg47cha313r0dm9fcjg6hzkmzd2ng9yrq5pmdy";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake gettext ruby ];
+  nativeBuildInputs = [
+    autoconf automake
+    pkgconfig gettext ruby
+  ];
 
   buildInputs = [
-    expat file xdg_utils boost libebml zlib libmatroska libogg
-    libvorbis flac
-  ] ++ optional withGUI qt5.qtbase;
+    expat file xdg_utils
+    boost libebml zlib
+    libmatroska libogg libvorbis flac
+    (optional withGUI qt5.full)
+  ];
 
   preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "./drake -j $NIX_BUILD_CORES";
