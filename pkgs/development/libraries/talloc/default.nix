@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     "--builtin-libraries=replace"
   ];
 
-  postInstall = ''		
-    ar qf $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o		
+  postInstall = ''
+    ar q $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o
   '';
 
   meta = with stdenv.lib; {
