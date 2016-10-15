@@ -1,24 +1,22 @@
-{stdenv, lib, fetchurl, perl, libedit, ncurses5, gmp}:
+{stdenv, lib, fetchOneOf, perl, libedit, ncurses5, gmp}:
 
 stdenv.mkDerivation rec {
   version = "6.10.2";
 
   name = "ghc-${version}-binary";
 
-  src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        # This binary requires libedit.so.0 (rather than libedit.so.2).
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
-        sha256 = "1fw0zr2qshlpk8s0d16k27zcv5263nqdg2xds5ymw8ff6qz9rz9b";
-      }
-    else if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        # Idem.
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
-        sha256 = "1rd2j7lmcfsm2rdfb5g6q0l8dz3sxadk5m3d2f69d4a6g4p4h7jj";
-      }
-    else throw "cannot bootstrap GHC on this platform";
+  src = fetchOneOf stdenv.system {
+    "i686-linux" = {
+      # This binary requires libedit.so.0 (rather than libedit.so.2).
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
+      sha256 = "1fw0zr2qshlpk8s0d16k27zcv5263nqdg2xds5ymw8ff6qz9rz9b";
+    };
+    "x86_64-linux" = {
+      # Idem.
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
+      sha256 = "1rd2j7lmcfsm2rdfb5g6q0l8dz3sxadk5m3d2f69d4a6g4p4h7jj";
+    };
+  };
 
   buildInputs = [perl];
 
