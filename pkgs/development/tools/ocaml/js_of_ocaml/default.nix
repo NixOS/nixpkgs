@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving, camlp4,
+{ stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving, ppx_deriving, camlp4,
  cmdliner, tyxml, reactivedata, cppo, which, base64}:
 
 stdenv.mkDerivation {
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1dali1akyd4zmkwav0d957ynxq2jj6cc94r4xiaql7ca89ajz4jj";
     };
 
-  buildInputs = [ocaml findlib menhir ocsigen_deriving
+  buildInputs = [ ocaml findlib menhir ocsigen_deriving ppx_deriving
                  cmdliner tyxml reactivedata cppo which base64];
   propagatedBuildInputs = [ ocaml_lwt camlp4 ];
 
