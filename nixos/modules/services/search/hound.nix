@@ -57,6 +57,10 @@ in {
 
       config = mkOption {
         type = types.str;
+        description = ''
+          The full configuration of the Hound daemon. Note the dbpath
+          should be an absolute path to a writable location on disk.
+        '';
         example = ''
           {
              "max-concurrent-indexers" : 2,
