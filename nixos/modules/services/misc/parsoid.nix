@@ -91,7 +91,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.nodePackages.parsoid}/lib/node_modules/parsoid/api/server.js -c ${confFile} -n ${toString cfg.workers}";
+        ExecStart = "${pkgs.nodePackages.parsoid}/lib/node_modules/parsoid/bin/server.js -c ${confFile} -n ${toString cfg.workers}";
       };
     };
 
