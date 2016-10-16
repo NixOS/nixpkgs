@@ -95,14 +95,14 @@ in rec {
 
   push = zncDerivation rec {
     name = "znc-push-${version}";
-    version = "git-2016-07-28";
+    version = "git-2016-10-12";
     module_name = "push";
 
     src = fetchFromGitHub {
       owner = "jreese";
       repo = "znc-push";
-      rev = "ca11c9b10062a7399a7f2a1b9653c9cc15854bb8";
-      sha256 = "0qk2qzjawy89p7s0cac2sjdbf8wmks592xc5c3i5gj10l0iyri5w";
+      rev = "cf08b9e0f483f03c28d72dd78df932cbef141f10";
+      sha256 = "0xpwjw8csyrg736g1jc1n8d6804x6kbdkrvldzhk9ldj4iwqz7ay";
     };
 
     meta = {
