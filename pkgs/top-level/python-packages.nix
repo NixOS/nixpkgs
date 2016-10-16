@@ -11703,14 +11703,14 @@ in modules // {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.6.2";
+    version = "2.7.1_1";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "0gysvx1yai303gb9ks5z3jy1qk7ilnwwy30l7gp3kyfbv2cifbb1";
+      sha256 = "0gc2qgpzmy7q31z8b11ls4ifb0lwrz94xnz1kj27kc369a01gbxv";
     };
 
     doCheck = false;
