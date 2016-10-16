@@ -231,6 +231,7 @@
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/bepasty.nix
+  ./services/misc/bitcoind.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
   ./services/misc/cfdyndns.nix
