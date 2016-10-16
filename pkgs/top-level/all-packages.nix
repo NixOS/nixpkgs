@@ -12572,6 +12572,8 @@ in
 
   electrum = callPackage ../applications/misc/electrum { };
 
+  electrum-server = callPackage ../applications/misc/electrum/server.nix { };
+
   electrum-dash = callPackage ../applications/misc/electrum-dash { };
 
   elinks = callPackage ../applications/networking/browsers/elinks { };
