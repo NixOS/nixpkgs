@@ -7,7 +7,7 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? !stdenv.isCygwin
+, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? false
 , zlib
 , callPackage
 , self
@@ -90,14 +90,6 @@ in stdenv.mkDerivation {
     # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
     echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
   '';
-
-  postFixup = optionalString x11Support ''
-    # tkinter goes in a separate output
-    mkdir -p $tkinter/${sitePackages}
-    mv $out/lib/${libPrefix}/lib-dynload/_tkinter* $tkinter/${sitePackages}/
-  '';
-
-  outputs = ["out"] ++ optional x11Support "tkinter";
 
   passthru = rec {
     inherit libPrefix sitePackages x11Support;

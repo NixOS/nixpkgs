@@ -6,7 +6,7 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? !stdenv.isCygwin
+, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? false
 , zlib
 , callPackage
 , self
@@ -100,14 +100,7 @@ in stdenv.mkDerivation {
 
     # FIXME: should regenerate this.
     rm $out/lib/python${majorVersion}/__pycache__/_sysconfigdata.cpython*
-
-  '' + optionalString x11Support ''
-    # tkinter goes in a separate output
-    mkdir -p $tkinter/${sitePackages}
-    mv $out/lib/${libPrefix}/lib-dynload/_tkinter* $tkinter/${sitePackages}/
   '';
-
-  outputs = ["out"] ++ optional x11Support "tkinter";
 
   passthru = rec {
     inherit libPrefix sitePackages x11Support;

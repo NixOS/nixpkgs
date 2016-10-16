@@ -24675,20 +24675,24 @@ in {
   };
 
   # Tkinter/tkinter is part of the Python standard library.
-  # To reduce closure size its put in a separate output, `python.tkinter`.
-  # This alias was added to make this output work like any other Python package.
-  tkinter = mkPythonDerivation rec {
+  # The Python interpreters in Nixpkgs come without tkinter by default.
+  # To make the module available, we make it available as any other
+  # Python package.
+  tkinter = let
+    py = python.override{x11Support=true;};
+  in mkPythonDerivation rec {
     name = "tkinter-${python.version}";
-    src = python.tkinter;
+    src = py;
 
     disabled = isPy26 || isPyPy;
 
     installPhase = ''
-      mkdir -p $out
-      cp -R ${python.tkinter}/* $out
+      mkdir -p $out/${py.sitePackages}
+      ls -Al lib/${py.libPrefix}/lib-dynload/ | grep tkinter
+      mv lib/${py.libPrefix}/lib-dynload/_tkinter* $out/${py.sitePackages}/
     '';
 
-    inherit (python) meta;
+    inherit (py) meta;
   };
 
   tlslite = buildPythonPackage rec {
