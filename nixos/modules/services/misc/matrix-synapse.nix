@@ -561,7 +561,11 @@ in {
           mkdir -p /var/lib/matrix-synapse
           chmod 700 /var/lib/matrix-synapse
           chown -R matrix-synapse:matrix-synapse /var/lib/matrix-synapse
-          ${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory /var/lib/matrix-synapse/ --generate-keys
+          ${cfg.package}/bin/homeserver \
+            --config-path ${configFile} \
+            --keys-directory /var/lib/matrix-synapse/ \
+            --generate-keys \
+            --report-stats ${if cfg.report_stats then "yes" else "no"}
         fi
       '';
       serviceConfig = {
