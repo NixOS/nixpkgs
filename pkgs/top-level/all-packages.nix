@@ -15503,6 +15503,8 @@ in
 
   freeorion = callPackage ../games/freeorion { };
 
+  frotz = callPackage ../games/frotz { };
+
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };
   };
