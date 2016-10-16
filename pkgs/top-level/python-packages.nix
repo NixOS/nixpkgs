@@ -19277,7 +19277,6 @@ in modules // {
     };
   });
 
-
   pycurl2 = buildPythonPackage (rec {
     name = "pycurl2-7.20.0";
     disabled = isPy3k;
