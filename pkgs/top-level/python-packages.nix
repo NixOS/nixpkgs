@@ -31123,4 +31123,25 @@ in {
       maintainers = with maintainers; [ bennofs ];
     };
   };
+
+  yamllint = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "yamllint";
+    version = "0.5.2";
+
+    src = pkgs.fetchurl{
+      url = "mirror://pypi/y/${pname}/${name}.tar.gz";
+      sha256 = "0brdy1crhfng10hlw0420bv10c2xnjk8ndnhssybkzym47yrzg84";
+    };
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [  pyyaml ];
+
+    meta = {
+      homepage = "https://github.com/adrienverge/yamllint";
+      description = "A linter for YAML files";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ mikefaille ];
+    };
+  };
 }
