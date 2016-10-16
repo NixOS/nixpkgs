@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       It also has a sister display family, Raleway Dots.
     '';
 
-    homepage = src.homepage;
+    homepage = src.meta.homepage;
     license = stdenv.lib.licenses.ofl;
 
     maintainers = with stdenv.lib.maintainers; [ profpatsch ];
