@@ -51,6 +51,7 @@ doNotDisplayTwice rec {
   fuse_zip = fuse-zip; # added 2016-04-27
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
+  googleAuthenticator = google-authenticator # added 2016-10-16
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6

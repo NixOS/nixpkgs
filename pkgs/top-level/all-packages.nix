@@ -1876,7 +1876,7 @@ in
   # rename to upower-notify?
   go-upower-notify = callPackage ../tools/misc/upower-notify { };
 
-  googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
+  google-authenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
 
