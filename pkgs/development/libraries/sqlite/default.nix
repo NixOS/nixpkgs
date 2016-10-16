@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     "-DSQLITE_ENABLE_FTS3_PARENTHESIS"
     "-DSQLITE_ENABLE_FTS3_TOKENIZER"
     "-DSQLITE_ENABLE_FTS4"
+    "-DSQLITE_ENABLE_FTS5"
     "-DSQLITE_ENABLE_RTREE"
     "-DSQLITE_ENABLE_STMT_SCANSTATUS"
     "-DSQLITE_ENABLE_UNLOCK_NOTIFY"
@@ -45,6 +46,9 @@ stdenv.mkDerivation {
       ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64 -D_LARGEFILE64_SOURCE"
     fi
+
+    # Necessary for FTS5 on Linux
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lm"
 
     echo ""
     echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
