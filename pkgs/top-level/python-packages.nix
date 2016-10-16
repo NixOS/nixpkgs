@@ -30673,14 +30673,14 @@ in {
 
   jaraco_functools = buildPythonPackage rec {
     name = "jaraco.functools-${version}";
-    version = "1.11";
+    version = "1.15.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jaraco.functools/${name}.tar.gz";
-      sha256 = "08n7vxdbsl0637b1ap2x3rg698d2as0wzvvpx05dzkrdgsgxrx3g";
+      sha256 = "1nhl0pjc7acxznhadg9wq1a6ls17ja2np8vf9psq8j66716mk2ya";
     };
 
-    propagatedBuildInputs = with self; [ backports_functools_lru_cache ];
+    propagatedBuildInputs = with self; [ more-itertools backports_functools_lru_cache ];
 
     doCheck = false;
 
