@@ -16,12 +16,12 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
-    inherit (src) homepage;
+  meta = {
+    inherit (src.meta) homepage;
 
     description = "Lightning fast code searching made easy";
     license = stdenv.lib.licenses.mit;
-    maintainers = with lib.maintainers; [ grahamc ];
+    maintainers = with stdenv.lib.maintainers; [ grahamc ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
