@@ -28236,26 +28236,6 @@ in {
   };
 
 
-  moreItertools = buildPythonPackage rec {
-    name = "more-itertools-2.2";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
-      sha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    meta = {
-      homepage = https://more-itertools.readthedocs.org;
-      description = "Expansion of the itertools module";
-      license = licenses.mit;
-    };
-  };
-
-
   uncertainties = buildPythonPackage rec {
     name = "uncertainties-${version}";
     version = "3.0.1";
@@ -30055,7 +30035,7 @@ in {
 	ndg-httpsclient
 	dateutil
 	inflection
-	moreItertools
+	more-itertools
 	requests2
 	pandas
      ];
@@ -30671,6 +30651,8 @@ in {
     };
   };
 
+  moreItertools = self.more-itertools;
+
   more-itertools = buildPythonPackage rec {
     name = "more-itertools-${version}";
     version = "2.2";
@@ -30680,7 +30662,13 @@ in {
       sha256 = "1q3wqsg44z01g7i5z6j1wc0nf5c5h8g77xny6fia2gddqw2jxrlk";
     };
 
-    doCheck = false;
+    propagatedBuildInputs = with self; [ nose ];
+
+    meta = {
+      homepage = https://more-itertools.readthedocs.org;
+      description = "Expansion of the itertools module";
+      license = licenses.mit;
+    };
   };
 
   jaraco_functools = buildPythonPackage rec {
