@@ -282,6 +282,7 @@
       stanchion = 262;
       riak-cs = 263;
       bitcoind = 264;
+      electrum-server = 265;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -534,6 +535,7 @@
       stanchion = 262;
       riak-cs = 263;
       #bitcoind = 264; # unused
+      #electrum-server = 265; # unused
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
