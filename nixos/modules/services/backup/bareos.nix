@@ -32,7 +32,7 @@ let
         WorkingDirectory = "${libDir}"
         ${concatMapStrings ({ protocol, addr, ... }: ''
           FDAddresses = { ${protocol} = { addr = ${addr} }} '') fd_cfg.listen}
-        Compatible = ${fd_cfg.compatible}
+        Compatible = ${boolSwitch fd_cfg.compatible}
         ${optionalString fd_cfg.tls.enable ''
           TLS Enable = ${boolSwitch fd_cfg.tls.enable}
           TLS Require = ${boolSwitch fd_cfg.tls.require}
@@ -79,8 +79,7 @@ in {
         type = with types; listOf (submodule {
           options = {
             protocol = mkOption {
-              type = types.nullOr types.str;
-              default = null;
+              type = types.enum ["ipv4" "ipv6"];
               description = ''
                 IP type, IPv4 or IPv6.
               '';
@@ -97,7 +96,7 @@ in {
       };
 
       compatible = mkOption {
-         default = "yes";
+         default = true;
          description = ''
            Run Bareos in Compatibility mode.
          '';
