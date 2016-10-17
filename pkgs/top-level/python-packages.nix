@@ -28365,6 +28365,7 @@ in {
       description = "A smart imaging service";
       homepage = https://github.com/globocom/thumbor/wiki;
       license = licenses.mit;
+      broken = true;
     };
   };
 
