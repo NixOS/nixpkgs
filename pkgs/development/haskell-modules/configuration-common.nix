@@ -1028,6 +1028,9 @@ self: super: {
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
 
+  # https://github.com/roelvandijk/terminal-progress-bar/issues/13
+  terminal-progress-bar = doJailbreak super.terminal-progress-bar;
+
   # https://github.com/vshabanov/HsOpenSSL/issues/11
   HsOpenSSL = doJailbreak super.HsOpenSSL;
 
