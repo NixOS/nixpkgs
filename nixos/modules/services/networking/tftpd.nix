@@ -13,6 +13,7 @@ with lib;
       default = false;
       description = ''
         Whether to enable tftpd, a Trivial File Transfer Protocol server.
+        The server will be run as an xinetd service.
       '';
     };
 
