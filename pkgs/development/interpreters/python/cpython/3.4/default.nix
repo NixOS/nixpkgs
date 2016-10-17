@@ -96,6 +96,7 @@ in stdenv.mkDerivation {
     ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
     ln -s "$out/bin/python3" "$out/bin/python"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
+    ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
   '';
 
   postFixup = ''
