@@ -4,7 +4,7 @@
 #
 # Example usage:
 #
-#     fetchmulti stdenv.system {
+#     fetchOneOf stdenv.system {
 #        "x86_64-linux" = {
 #          url = "http://example.com/x86-linux.tar.gz";
 #          sha256 = "...";
