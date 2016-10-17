@@ -19,7 +19,7 @@ with lib;
 
     services.tftpd.path = mkOption {
       type = types.path;
-      default = "/home/tftp";
+      default = "/srv/tftp";
       description = ''
         Where the tftp server files are stored.
       '';
