@@ -53,6 +53,7 @@ let
     kio-extras = callPackage ./kio-extras.nix {};
     kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
+    kwalletmanager = callPackage ./kwalletmanager.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
