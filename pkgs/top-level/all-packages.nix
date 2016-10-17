@@ -608,6 +608,8 @@ in
 
   bibutils = callPackage ../tools/misc/bibutils { };
 
+  bibtex2html = callPackage ../tools/misc/bibtex2html { };
+
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   bins = callPackage ../tools/graphics/bins { };
