@@ -6249,13 +6249,16 @@ in {
     };
   };
 
-  easy-process = buildPythonPackage rec {
-    name = "EasyProcess-0.1.9";
+  EasyProcess = buildPythonPackage rec {
+    name = "EasyProcess-0.2.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/E/EasyProcess/${name}.tar.gz";
-      sha256 = "c9980c0b0eeab97969305d8829bed966a3e28a77284e4f45a9b38fb23ce83633";
+      sha256 = "94e241cadc9a46f55b5c06000df85618849602e7e1865b8de87576b90a22e61f";
     };
+
+    # No tests
+    doCheck = false;
 
     meta = {
       description = "Easy to use python subprocess interface";
@@ -6419,7 +6422,6 @@ in {
       pymongo_2_9_1
       simplejson
       werkzeug
-
     ];
 
     # tests call a running mongodb instance
@@ -25436,7 +25438,7 @@ in {
   virtual-display = buildPythonPackage rec {
     name = "PyVirtualDisplay-0.1.5";
 
-    propagatedBuildInputs = with self; [ easy-process ];
+    propagatedBuildInputs = with self; [ EasyProcess ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyVirtualDisplay/${name}.tar.gz";
