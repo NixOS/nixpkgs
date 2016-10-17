@@ -252,16 +252,21 @@ in {
             sleep 1
         done
 
+	export OS_AUTH_URL=http://localhost:5000/v2.0
+	export OS_USERNAME=${cfg.keystoneAdminUsername}
+	export OS_PASSWORD=${cfg.keystoneAdminPassword}
+	export OS_TENANT_NAME=${cfg.keystoneAdminTenant}
+
         # If the service nova doesn't exist, we consider nova
         # is not initialized
-        if ! keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get nova
+        if ! keystone service-get nova
         then
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-create --type compute --name nova
-	    ID=$(keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get nova | awk '/ id / { print $4 }')
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} endpoint-create --region RegionOne --service $ID --internalurl 'http://localhost:8774/v2/%(tenant_id)s' --adminurl 'http://localhost:8774/v2/%(tenant_id)s' --publicurl 'http://${cfg.endpointPublic}:8774/v2/%(tenant_id)s'
+	    keystone service-create --type compute --name nova
+	    ID=$(keystone service-get nova | awk '/ id / { print $4 }')
+	    keystone endpoint-create --region RegionOne --service $ID --internalurl 'http://localhost:8774/v2/%(tenant_id)s' --adminurl 'http://localhost:8774/v2/%(tenant_id)s' --publicurl 'http://${cfg.endpointPublic}:8774/v2/%(tenant_id)s'
 
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-create --name nova --tenant service --pass asdasd
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-role-add --tenant service --user nova --role admin
+	    keystone user-create --name nova --tenant service --pass asdasd
+	    keystone user-role-add --tenant service --user nova --role admin
         fi
         '';
       path = with pkgs; [ cfg.package mysql openssl config.programs.ssh.package "/var/setuid-wrappers/" pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk pkgs.iptables ];
