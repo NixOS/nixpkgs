@@ -251,16 +251,21 @@ in {
             sleep 1
         done
 
+	export OS_AUTH_URL=http://localhost:5000/v2.0
+	export OS_USERNAME=${cfg.keystoneAdminUsername}
+	export OS_PASSWORD=${cfg.keystoneAdminPassword}
+	export OS_TENANT_NAME=${cfg.keystoneAdminTenant}
+
         # If the service neutron doesn't exist, we consider neutron is
         # not initialized
-        if ! keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get neutron
+        if ! keystone service-get neutron
         then
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-create --type network --name neutron
-	    ID=$(keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} service-get neutron | awk '/ id / { print $4 }')
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} endpoint-create --region RegionOne --service $ID --internalurl http://localhost:9696 --adminurl http://localhost:9696 --publicurl http://${cfg.endpointPublic}:9696
+	    keystone service-create --type network --name neutron
+	    ID=$(keystone service-get neutron | awk '/ id / { print $4 }')
+	    keystone endpoint-create --region RegionOne --service $ID --internalurl http://localhost:9696 --adminurl http://localhost:9696 --publicurl http://${cfg.endpointPublic}:9696
 
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-create --name neutron --tenant service --pass asdasd
-	    keystone --os-auth-url http://localhost:5000/v2.0 --os-username ${cfg.keystoneAdminUsername} --os-password ${cfg.keystoneAdminPassword} --os-tenant-name ${cfg.keystoneAdminTenant} user-role-add --tenant service --user neutron --role admin
+	    keystone user-create --name neutron --tenant service --pass asdasd
+	    keystone user-role-add --tenant service --user neutron --role admin
         fi
         '';
       serviceConfig = {
