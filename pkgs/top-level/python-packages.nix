@@ -4041,6 +4041,7 @@ in {
       homepage = https://github.com/cablehead/python-consul;
       license = licenses.mit;
       maintainers = with maintainers; [ desiderius ];
+      broken = true;
     };
   });
 
