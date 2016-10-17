@@ -2298,6 +2298,8 @@ in
 
   kronometer = qt5.callPackage ../tools/misc/kronometer { };
 
+  peruse = qt5.callPackage ../tools/misc/peruse { };
+
   kst = qt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
   kytea = callPackage ../tools/text/kytea { };
@@ -8832,6 +8834,8 @@ in
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
     grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
+
+    kirigami = callPackage ../development/libraries/kirigami { };
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
 
