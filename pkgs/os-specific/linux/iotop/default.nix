@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "iotop-0.6";
 
   src = fetchurl {
