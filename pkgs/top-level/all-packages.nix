@@ -5681,9 +5681,9 @@ in
 
   augeas = callPackage ../tools/system/augeas { };
 
-  ansible = pythonPackages.ansible;
+  ansible = python2Packages.ansible;
 
-  ansible2 = pythonPackages.ansible2;
+  ansible2 = python2Packages.ansible2;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
