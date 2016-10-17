@@ -5482,9 +5482,17 @@ in
   };
   purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
 
+  # Python interpreters. All standard library modules are included except for tkinter, which is
+  # available as `pythonPackages.tkinter` and can be used as any other Python package.
   python = python2;
   python2 = python27;
   python3 = python35;
+
+  # Python interpreter that is build with all modules, including tkinter.
+  # These are for compatibility and should not be used inside Nixpkgs.
+  pythonFull = python.override{x11Support=true;};
+  python2Full = python2.override{x11Support=true;};
+  python3Full = python3.override{x11Support=true;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python2Packages;
