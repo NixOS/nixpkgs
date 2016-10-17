@@ -6856,6 +6856,7 @@ in {
       homepage = "https://cloud.google.com/compute/docs/gcutil/";
       license = licenses.asl20;
       maintainers = with maintainers; [ phreedom ];
+      broken = true;
     };
   };
 
