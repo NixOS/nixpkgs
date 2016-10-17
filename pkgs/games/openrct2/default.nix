@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libpng, jansson, curl
-, SDL2, SDL2_ttf, speexdsp, expat }:
+, SDL2, SDL2_ttf, speexdsp, expat, fontconfig }:
 
 stdenv.mkDerivation rec {
   name = "openrct2-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ libpng jansson SDL2 SDL2_ttf curl speexdsp expat ];
+  buildInputs = [ libpng jansson SDL2 SDL2_ttf curl speexdsp expat fontconfig ];
 
   meta = with stdenv.lib; {
     description = "";
