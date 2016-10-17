@@ -11928,6 +11928,8 @@ in {
       ../development/python-modules/gyp/no-darwin-cflags.patch
     ];
 
+    disabled = isPy3k;
+
     meta = {
       description = "A tool to generate native build files";
       homepage = https://chromium.googlesource.com/external/gyp/+/master/README.md;
