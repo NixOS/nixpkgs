@@ -14072,6 +14072,7 @@ in {
       description = ''Man-in-the-middle proxy'';
       homepage = "http://mitmproxy.org/";
       license = licenses.mit;
+      broken = true;
     };
   };
 
