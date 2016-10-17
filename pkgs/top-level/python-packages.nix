@@ -11633,6 +11633,9 @@ in {
       sha256 = "07rqwfpbv13mk6gg8mf0bmvcf6siyffjpgai1xd8ky7r801j4xb4";
     };
 
+    # SyntaxError in tests.
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [ gevent ];
 
   };
