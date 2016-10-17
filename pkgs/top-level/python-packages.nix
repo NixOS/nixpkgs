@@ -20597,6 +20597,13 @@ in {
     LC_ALL = "en_US.UTF-8";
     buildInputs = [ pkgs.glibcLocales ];
 
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover -s Tests
+    '';
+
+    # Tests broken on Python 3.x
+    doCheck = !(isPy3k);
+
     meta = {
       description = "A Pure-Python library built as a PDF toolkit";
       homepage = "http://mstamy2.github.com/PyPDF2/";
