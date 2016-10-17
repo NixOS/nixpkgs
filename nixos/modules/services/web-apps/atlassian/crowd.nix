@@ -6,7 +6,12 @@ let
 
   cfg = config.services.crowd;
 
-  pkg = pkgs.atlassian-crowd;
+  pkg = pkgs.atlassian-crowd.override {
+    home = cfg.home;
+    port = cfg.listenPort;
+    proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
+    openidPassword = cfg.openidPassword;
+  };
 
 in
 
@@ -43,6 +48,11 @@ in
         type = types.int;
         default = 8092;
         description = "Port to listen on.";
+      };
+
+      openidPassword = mkOption {
+        type = types.str;
+        description = "Application password for OpenID server.";
       };
 
       catalinaOptions = mkOption {
@@ -119,10 +129,10 @@ in
       };
 
       preStart = ''
-        mkdir -p ${cfg.home}/{logs,work}
+        mkdir -p ${cfg.home}/{logs,work,database}
 
         mkdir -p /run/atlassian-crowd
-        ln -sf ${cfg.home}/{work,server.xml} /run/atlassian-crowd
+        ln -sf ${cfg.home}/{database,work,server.xml} /run/atlassian-crowd
 
         chown -R ${cfg.user} ${cfg.home}
 
@@ -134,7 +144,6 @@ in
       '';
 
       script = "${pkg}/start_crowd.sh";
-      #stopScript  = "${pkg}/bin/stop_crowd.sh";
 
       serviceConfig = {
         User = cfg.user;
