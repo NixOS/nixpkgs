@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
+{ stdenv, fetchOneOf, zlib, libX11, libXext, libSM, libICE
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
 , alsaLib, dbus_libs, cups, libexif, ffmpeg, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
@@ -10,25 +10,24 @@
 }:
 
 let
+  pname = "vivaldi";
   version = "1.4";
   build = "589.29-1";
   fullVersion = "stable_${version}.${build}";
-
-  info = if stdenv.is64bit then {
-      arch = "amd64";
-      sha256 = "14sb58qrqnqcpkzacwnwfln558p018zargppxq21p5ic8s92v1g6";
-    } else {
-      arch = "i386";
-      sha256 = "0c4l9ji5xlxwzcjsrvxjkx53j76y777fj6hh7plfkkanlrfkryac";
-    };
+  baseURL = "https://downloads.vivaldi.com/stable/${pname}-${fullVersion}";
 
 in stdenv.mkDerivation rec {
-  product    = "vivaldi";
-  name       = "${product}-${version}";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    inherit (info) sha256;
-    url = "https://downloads.vivaldi.com/stable/${product}-${fullVersion}_${info.arch}.deb";
+  src = fetchOneOf stdenv.system {
+    "x86_64-linux" = {
+      url = "${baseURL}_amd64.deb";
+      sha256 = "14sb58qrqnqcpkzacwnwfln558p018zargppxq21p5ic8s92v1g6";
+    };
+    "i686-linux" = {
+      url = "${baseURL}_i386.deb";
+      sha256 = "0c4l9ji5xlxwzcjsrvxjkx53j76y777fj6hh7plfkkanlrfkryac";
+    };
   };
 
   unpackPhase = ''
