@@ -1,32 +1,28 @@
-{stdenv, fetchurl, perl, ncurses5, gmp, libiconv}:
+{stdenv, fetchOneOf, perl, ncurses5, gmp, libiconv}:
 
 stdenv.mkDerivation rec {
   version = "7.0.4";
 
   name = "ghc-${version}-binary";
 
-  src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
-        sha256 = "0mfnihiyjl06f5w1yrjp36sw9g67g2ymg5sdl0g23h1pab99jx63";
-      }
-    else if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
-        sha256 = "0mc4rhqcxz427wq4zgffmnn0d2yjqvy6af4x9mha283p1gdj5q99";
-      }
-    else if stdenv.system == "i686-darwin" then
-      fetchurl {
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-apple-darwin.tar.bz2";
-        sha256 = "0qj45hslrrr8zfks8m1jcb3awwx9rh35ndnpfmb0gwb6j7azq5n3";
-      }
-    else if stdenv.system == "x86_64-darwin" then
-      fetchurl {
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.bz2";
-        sha256 = "1m2ml88p1swf4dnv2vq8hz4drcp46n3ahpfi05wh01ajkf8hnn3l";
-      }
-    else throw "cannot bootstrap GHC on this platform";
+  src = fetchOneOf stdenv.system {
+    "i686-linux" = {
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
+      sha256 = "0mfnihiyjl06f5w1yrjp36sw9g67g2ymg5sdl0g23h1pab99jx63";
+    };
+    "x86_64-linux" = {
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
+      sha256 = "0mc4rhqcxz427wq4zgffmnn0d2yjqvy6af4x9mha283p1gdj5q99";
+    };
+    "i686-darwin" = {
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-apple-darwin.tar.bz2";
+      sha256 = "0qj45hslrrr8zfks8m1jcb3awwx9rh35ndnpfmb0gwb6j7azq5n3";
+    };
+    "x86_64-darwin" = {
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.bz2";
+      sha256 = "1m2ml88p1swf4dnv2vq8hz4drcp46n3ahpfi05wh01ajkf8hnn3l";
+    };
+  };
 
   buildInputs = [perl];
 

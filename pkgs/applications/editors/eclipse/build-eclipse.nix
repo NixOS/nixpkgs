@@ -1,9 +1,13 @@
-{ stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender, zlib, jdk, glib, gtk2, libXtst, webkitgtk2, makeWrapper, ... }:
+{ stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender, zlib
+, jdk, glib, gtk2, libXtst, webkitgtk2, makeWrapper, fetchOneOf, ... 
+}:
 
-{ name, src ? builtins.getAttr stdenv.system sources, sources ? null, description }:
+{ name, sources, description }:
 
 stdenv.mkDerivation rec {
-  inherit name src;
+  inherit name;
+
+  src = fetchOneOf stdenv.system sources;
 
   desktopItem = makeDesktopItem {
     name = "Eclipse";

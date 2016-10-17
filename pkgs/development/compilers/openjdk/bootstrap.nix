@@ -1,35 +1,28 @@
-{ stdenv, runCommand, glibc, fetchurl, file
+{ stdenv, runCommand, glibc, fetchOneOf, file
 
 , version
 }:
 
 let
   # !!! These should be on nixos.org
-  src = if glibc.system == "x86_64-linux" then
-    (if version == "8" then
-      fetchurl {
-        url = "https://www.dropbox.com/s/a0lsq2ig4uguky5/openjdk8-bootstrap-x86_64-linux.tar.xz?dl=1";
-        sha256 = "18zqx6jhm3lizn9hh6ryyqc9dz3i96pwaz8f6nxfllk70qi5gvks";
-      }
-    else if version == "7" then
-      fetchurl {
-        url = "https://www.dropbox.com/s/rssfbeommrfbsjf/openjdk7-bootstrap-x86_64-linux.tar.xz?dl=1";
-        sha256 = "024gg2sgg4labxbc1nhn8lxls2p7d9h3b82hnsahwaja2pm1hbra";
-      }
-    else throw "No bootstrap for version")
-  else if glibc.system == "i686-linux" then
-    (if version == "8" then
-      fetchurl {
-        url = "https://www.dropbox.com/s/rneqjhlerijsw74/openjdk8-bootstrap-i686-linux.tar.xz?dl=1";
-        sha256 = "1yx04xh8bqz7amg12d13rw5vwa008rav59mxjw1b9s6ynkvfgqq9";
-      }
-    else if version == "7" then
-      fetchurl {
-        url = "https://www.dropbox.com/s/6xe64td7eg2wurs/openjdk7-bootstrap-i686-linux.tar.xz?dl=1";
-        sha256 = "0xwqjk1zx8akziw8q9sbjc1rs8s7c0w6mw67jdmmi26cwwp8ijnx";
-      }
-    else throw "No bootstrap for version")
-  else throw "No bootstrap for system";
+  src = fetchOneOf "${glibc.system}-jdk${version}" {
+    "x86_64-linux-jdk7" = {
+      url = "https://www.dropbox.com/s/rssfbeommrfbsjf/openjdk7-bootstrap-x86_64-linux.tar.xz?dl=1";
+      sha256 = "024gg2sgg4labxbc1nhn8lxls2p7d9h3b82hnsahwaja2pm1hbra";
+    };
+    "x86_64-linux-jdk8" = {
+      url = "https://www.dropbox.com/s/a0lsq2ig4uguky5/openjdk8-bootstrap-x86_64-linux.tar.xz?dl=1";
+      sha256 = "18zqx6jhm3lizn9hh6ryyqc9dz3i96pwaz8f6nxfllk70qi5gvks";
+    };
+    "i686-linux-jdk7" = {
+      url = "https://www.dropbox.com/s/6xe64td7eg2wurs/openjdk7-bootstrap-i686-linux.tar.xz?dl=1";
+      sha256 = "0xwqjk1zx8akziw8q9sbjc1rs8s7c0w6mw67jdmmi26cwwp8ijnx";
+    };
+    "i686-linux-jdk8" = {
+      url = "https://www.dropbox.com/s/rneqjhlerijsw74/openjdk8-bootstrap-i686-linux.tar.xz?dl=1";
+      sha256 = "1yx04xh8bqz7amg12d13rw5vwa008rav59mxjw1b9s6ynkvfgqq9";
+    };
+  };
 
   bootstrap = runCommand "openjdk-bootstrap" {
     passthru.home = "${bootstrap}/lib/openjdk";

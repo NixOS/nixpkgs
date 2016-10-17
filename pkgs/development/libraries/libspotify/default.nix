@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey, unzip, gnused }:
+{ stdenv, fetchOneOf, libspotify, alsaLib, readline, pkgconfig, apiKey, unzip, gnused }:
 
 let
   version = "12.1.51";
@@ -10,24 +10,20 @@ then throw "Check https://developer.spotify.com/technologies/libspotify/ for a t
 else stdenv.mkDerivation {
   name = "libspotify-${version}";
 
-  src =
-    if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Linux-x86_64-release.tar.gz";
-        sha256 = "0n0h94i4xg46hfba95n3ypah93crwb80bhgsg00f6sms683lx8a3";
-      }
-    else if stdenv.system == "x86_64-darwin" then
-      fetchurl {
-        url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Darwin-universal.zip";
-        sha256 = "1gcgrc8arim3hnszcc886lmcdb4iigc08abkaa02l6gng43ky1c0";
-      }
-    else if stdenv.system == "i686-linux" then
-      fetchurl {
-        url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Linux-i686-release.tar.gz";
-        sha256 = "1bjmn64gbr4p9irq426yap4ipq9rb84zsyhjjr7frmmw22xb86ll";
-      }
-    else
-      null;
+  src = fetchOneOf stdenv.system {
+    "x86_64-linux" = {
+      url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Linux-x86_64-release.tar.gz";
+      sha256 = "0n0h94i4xg46hfba95n3ypah93crwb80bhgsg00f6sms683lx8a3";
+    };
+    "x86_64-darwin" = {
+      url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Darwin-universal.zip";
+      sha256 = "1gcgrc8arim3hnszcc886lmcdb4iigc08abkaa02l6gng43ky1c0";
+    };
+    "i686-linux" = {
+      url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Linux-i686-release.tar.gz";
+      sha256 = "1bjmn64gbr4p9irq426yap4ipq9rb84zsyhjjr7frmmw22xb86ll";
+    };
+  };
 
   dontBuild = true;
 
