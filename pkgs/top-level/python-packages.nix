@@ -30417,6 +30417,8 @@ in {
       sha256 = "08n7vxdbsl0637b1ap2x3rg698d2as0wzvvpx05dzkrdgsgxrx3g";
     };
 
+    propagatedBuildInputs = with self; [ backports_functools_lru_cache ];
+
     doCheck = false;
 
     buildInputs = with self; [ setuptools_scm ];
