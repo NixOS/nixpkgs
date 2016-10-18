@@ -772,6 +772,8 @@ in
 
   ddate = callPackage ../tools/misc/ddate { };
 
+  dehydrated = callPackage ../tools/admin/dehydrated { };
+
   deis = callPackage ../development/tools/deis {};
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
