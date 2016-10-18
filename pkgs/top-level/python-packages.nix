@@ -17887,7 +17887,12 @@ in {
       url = "https://github.com/GreenSteam/pep257/archive/${version}.tar.gz";
       sha256 = "0v8aq0xzsa7clazszxl42904c3jpq69lg8a5hg754bqcqf72hfrn";
     };
-    buildInputs = with self; [ pytest ];
+    LC_ALL="en_US.UTF-8";
+    buildInputs = with self; [ pkgs.glibcLocales pytest ];
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       homepage = https://github.com/GreenSteam/pep257/;
