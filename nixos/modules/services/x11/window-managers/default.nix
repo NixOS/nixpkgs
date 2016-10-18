@@ -26,6 +26,7 @@ in
     ./sawfish.nix
     ./stumpwm.nix
     ./spectrwm.nix
+    ./sway.nix
     ./twm.nix
     ./windowmaker.nix
     ./wmii.nix
