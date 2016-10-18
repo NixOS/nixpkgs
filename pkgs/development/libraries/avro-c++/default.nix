@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost155, pythonPackages
+{ stdenv, fetchurl, cmake, boost155, python2
 }:
 
 let version = "1.7.5"; in
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [
     cmake
     boost155
-    pythonPackages.python
+    python2
   ];
 
   enableParallelBuilding = true;
