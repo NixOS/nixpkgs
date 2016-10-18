@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, libuuid, python, iasl }:
+{ stdenv, fetchgit, libuuid, python2, iasl }:
 
 let
-  pythonEnv = python.withPackages(ps: [ps.tkinter]);
+  pythonEnv = python2.withPackages(ps: [ps.tkinter]);
 
 targetArch = if stdenv.isi686 then
   "IA32"
