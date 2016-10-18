@@ -3,7 +3,7 @@
 ## User Guide
 
 Several versions of Python are available on Nix as well as a high amount of
-packages. The default interpreter is CPython 2.7.
+packages. The default interpreter is CPython 3.5.
 
 ### Using Python
 
@@ -409,11 +409,11 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are available on
-Nix and are available as `python26`, `python27`, `python33`, `python34` and
-`python35`. The PyPy interpreter is also available as `pypy`. Currently, the
-aliases `python` and `python3` correspond to respectively `python27` and
-`python35`. The Nix expressions for the interpreters can be found in
+Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are as respectively
+`python26`, `python27`, `python33`, `python34` and `python35`. The PyPy interpreter
+is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
+`python35`. The default interpreter, `python`, maps to `python3`.
+The Nix expressions for the interpreters can be found in
 `pkgs/development/interpreters/python`.
 
 All packages depending on any Python interpreter get appended
@@ -460,8 +460,9 @@ sets are
 
 and the aliases
 
-* `pkgs.pythonPackages` pointing to `pkgs.python27Packages`
+* `pkgs.python2Packages` pointing to `pkgs.python27Packages`
 * `pkgs.python3Packages` pointing to `pkgs.python35Packages`
+* `pkgs.pythonPackages` pointing to `pkgs.python3Packages`
 
 #### `buildPythonPackage` function
 
