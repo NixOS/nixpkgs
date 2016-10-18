@@ -6,14 +6,14 @@ let
 
   kodi-platform = stdenv.mkDerivation rec {
     project = "kodi-platform";
-    version = "15.2";
+    version = "17.1";
     name = "${project}-${version}";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = project;
-      rev = "45d6ad1984fdb1dc855076ff18484dbec33939d1";
-      sha256 = "1fai33mwyv5ab47b16i692g7a3vcnmxavx13xin2gh16y0qm62hi";
+      rev = "c8188d82678fec6b784597db69a68e74ff4986b5";
+      sha256 = "1r3gs3c6zczmm66qcxh9mr306clwb3p7ykzb70r3jv5jqggiz199";
     };
 
     buildInputs = [ cmake kodi libcec_platform tinyxml ];
@@ -219,13 +219,13 @@ in
   pvr-hts = (mkKodiPlugin rec {
     plugin = "pvr-hts";
     namespace = "pvr.hts";
-    version = "2.2.13";
+    version = "3.4.4";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hts";
-      rev = "3274354511e970e2101c2aa437001b2f245f80da";
-      sha256 = "0i7cb61pjv6vbj3x96cm1n4w91mvc8z6lxa8ykjasrrbi95ph7ld";
+      rev = "343ca980982d87c778696e42e52eff763cadee4a";
+      sha256 = "03jk45nk1c5j7zwj6l8s8jyf6ijhisp1r16xg6n5561bm3cfk0b9";
     };
 
     meta = with stdenv.lib; {
