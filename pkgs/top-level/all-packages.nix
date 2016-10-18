@@ -1470,7 +1470,7 @@ in
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
-  ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { python = python2; };
+  ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { };
 
   editres = callPackage ../tools/graphics/editres { };
 
