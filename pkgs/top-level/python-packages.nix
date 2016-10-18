@@ -12374,6 +12374,9 @@ in {
       sha256 = "07mxp4mla7fwfc032f3mxrhjarnhkjqdxxibf9ba87c93z3dq8jj";
     };
 
+    # requires network
+    doCheck = false;
+
     buildInputs = with self; [ html5lib ];
     propagatedBuildInputs = (with self; [ six beautifulsoup4 ])
                          ++ (with pkgs; [ ffmpeg swftools rtmpdump ]);
