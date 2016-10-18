@@ -15,11 +15,11 @@ let
         If left at the default value, $HOME/.config/sway/config will be used.
       '';
     };
-    enableDebug = mkOption {
+    debug = mkOption {
       default = false;
       type = types.bool;
       description = ''
-        Enable full logging, including debug information.
+        Whether to enable full logging, including debug information.
       '';
     };
     extraSessionCommands = mkOption {
@@ -41,7 +41,7 @@ let
           ${optionalString (cfg.configFile != null)
             "-c \"${cfg.configFile}\""
           } \
-          ${optionalString (cfg.enableDebug)
+          ${optionalString (cfg.debug)
             "-d"
           } &
         waitPID=$!
