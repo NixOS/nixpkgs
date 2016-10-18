@@ -62,6 +62,9 @@ let
     spectacle = callPackage ./spectacle.nix {};
 
     l10n = pkgs.recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib pkgs; });
+
+    # External packages
+    kipi-plugins = callPackage ../../../applications/graphics/kipi-plugins/5.x.nix {};
   };
 
 in packages
