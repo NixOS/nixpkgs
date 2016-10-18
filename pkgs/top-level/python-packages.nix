@@ -25966,7 +25966,6 @@ in {
   wxPython = self.wxPython30;
 
   wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
-    pythonPackages = self;
     wxGTK = pkgs.wxGTK30;
   };
 
