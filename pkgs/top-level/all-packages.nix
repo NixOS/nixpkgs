@@ -3687,7 +3687,7 @@ in
   sshuttle = callPackage ../tools/security/sshuttle { };
 
   ssldump = callPackage ../tools/networking/ssldump { };
-  
+
   sstp = callPackage ../tools/networking/sstp {};
 
   sudo = callPackage ../tools/security/sudo { };
@@ -7781,7 +7781,7 @@ in
   };
 
   libgumbo = callPackage ../development/libraries/libgumbo { };
-  
+
   libhangul = callPackage ../development/libraries/libhangul { };
 
   libharu = callPackage ../development/libraries/libharu { };
@@ -13952,9 +13952,7 @@ in
 
   openscad = callPackage ../applications/graphics/openscad {};
 
-  opera = callPackage ../applications/networking/browsers/opera {
-    inherit (pkgs.kde4) kdelibs;
-  };
+  opera = callPackage ../applications/networking/browsers/opera {};
 
   osmctools = callPackage ../applications/misc/osmctools { };
 
