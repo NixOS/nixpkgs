@@ -12805,7 +12805,6 @@ in
 
   inherit (callPackages ../applications/networking/browsers/firefox {
     inherit (gnome2) libIDL;
-    inherit (pythonPackages) pysqlite;
     libpng = libpng_apng;
     enableGTK3 = false;
   }) firefox-unwrapped firefox-esr-unwrapped;
