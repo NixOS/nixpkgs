@@ -62,5 +62,8 @@ in nodePackages.buildNodePackage rec {
 
       Groove Basin supports Last.fm scrobbling.
     '';
+    # groovebasin was built with nodejs 0.10 which reached end of LTS
+    # in October 216, it doesn't built with nodejs 4.x
+    broken = true;
   };
 }
