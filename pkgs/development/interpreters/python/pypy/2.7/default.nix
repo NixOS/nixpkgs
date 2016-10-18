@@ -34,7 +34,7 @@ let
       patch lib-python/2.7/test/test_pyexpat.py < '${expatch}'
     '';
 
-    buildInputs = [ bzip2 openssl pkgconfig python python.tkinter libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
+    buildInputs = [ bzip2 openssl pkgconfig python libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
