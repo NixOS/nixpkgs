@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.1";
+  version = "2.12.2";
   name = "hexchat-${version}";
 
   src = fetchurl {
     url = "http://dl.hexchat.net/hexchat/${name}.tar.xz";
-    sha256 = "0svwz9ldrry1sn35jywgpacjj1cf3xl3k74ynwn8rjvxs73b00aj";
+    sha256 = "1xnclfbrgbkqndxygi5f27q00jd7yy54jbd1061jmhxa6wzpibbd";
   };
 
   nativeBuildInputs = [
