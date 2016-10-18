@@ -59,6 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = with python3Packages; [ pytest ];
 
+  doCheck = false;
   checkPhase = "py.test";
 
   propagatedBuildInputs = with python3Packages;
