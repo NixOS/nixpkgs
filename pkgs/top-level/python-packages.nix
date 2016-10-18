@@ -15430,12 +15430,15 @@ in {
     name = "ntplib-0.3.3";
     src = pkgs.fetchurl {
       url = mirror://pypi/n/ntplib/ntplib-0.3.3.tar.gz;
-
       sha256 = "c4621b64d50be9461d9bd9a71ba0b4af06fbbf818bbd483752d95c1a4e273ede";
     };
 
+    # Require networking
+    doCheck = false;
+
     meta = {
       description = "Python NTP library";
+      license = licenses.mit;
     };
   };
 
