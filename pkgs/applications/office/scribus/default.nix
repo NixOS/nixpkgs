@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
-, libart_lgpl, qt4, python, cups, fontconfig, libjpeg
+, libart_lgpl, qt4, python2, cups, fontconfig, libjpeg
 , zlib, libpng, xorg, cairo, podofo, aspell, boost, cmake }:
 
 let
-  pythonEnv = python.withPackages(ps: [ps.tkinter]);
+  pythonEnv = python2.withPackages(ps: [ps.tkinter]);
 in stdenv.mkDerivation rec {
   name = "scribus-1.4.6";
 
