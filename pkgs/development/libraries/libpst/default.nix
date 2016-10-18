@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, boost, python, libgsf,
+{ stdenv, fetchurl, autoreconfHook, boost, python2, libgsf,
   pkgconfig, bzip2, xmlto, gettext, imagemagick, doxygen }:
 
 stdenv.mkDerivation rec {
@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
       sha256 = "06mcaga36i65n1ifr5pw6ghcb1cjfqwrmm1xmaw1sckqf2iqx2by";
     };
 
-  buildInputs = [ autoreconfHook boost python libgsf pkgconfig bzip2
-		  xmlto gettext imagemagick doxygen ];
+  buildInputs = [ autoreconfHook boost python2 libgsf pkgconfig bzip2
+    xmlto gettext imagemagick doxygen
+  ];
 
   doCheck = true;
 
