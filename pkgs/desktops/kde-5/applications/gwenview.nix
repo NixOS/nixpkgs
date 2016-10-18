@@ -1,8 +1,8 @@
 {
   kdeApp, lib, kdeWrapper,
   ecm, kdoctools,
-  baloo, exiv2, kactivities, kdelibs4support, kio, lcms2, libkdcraw, libkipi,
-  phonon, qtsvg, qtx11extras
+  baloo, exiv2, kactivities, kdelibs4support, kio, kipi-plugins, lcms2,
+  libkdcraw, libkipi, phonon, qtsvg, qtx11extras
 }:
 
 let
@@ -20,4 +20,7 @@ let
       ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/gwenview" ]; }
+kdeWrapper unwrapped {
+  targets = [ "bin/gwenview" ];
+  paths = [ kipi-plugins ];
+}
