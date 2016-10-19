@@ -316,7 +316,7 @@ in rec {
 
     startAt = mkOption {
       type = with types; either str (listOf str);
-      default = "";
+      default = [];
       example = "Sun 14:00:00";
       description = ''
         Automatically start this unit at the given date/time, which
@@ -326,6 +326,7 @@ in rec {
         to adding a corresponding timer unit with
         <option>OnCalendar</option> set to the value given here.
       '';
+      apply = v: if isList v then v else [ v ];
     };
 
   };
