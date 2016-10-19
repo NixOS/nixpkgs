@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
-, libxml2, libxslt, makeWrapper, p7zip, xar, gzip, cpio }:
+, libxml2, libxslt, makeWrapper, p7zip, xar, gzip, cpio, coreutils }:
 
 let
   version = "1.8.6";
