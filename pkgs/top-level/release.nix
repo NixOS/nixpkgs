@@ -21,57 +21,52 @@ with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
 
-  unstable = pkgs.releaseTools.aggregate
-    { name = "nixpkgs-${jobs.tarball.version}";
-      meta.description = "Release-critical builds for the Nixpkgs unstable channel";
-      constituents =
-        [ jobs.tarball
-          jobs.metrics
-          jobs.manual
-          jobs.lib-tests
-          jobs.stdenv.x86_64-linux
-          jobs.stdenv.i686-linux
-          jobs.stdenv.x86_64-darwin
-          jobs.linux.x86_64-linux
-          jobs.linux.i686-linux
-          jobs.python.x86_64-linux
-          jobs.python.i686-linux
-          jobs.python.x86_64-darwin
-          jobs.python3.x86_64-linux
-          jobs.python3.i686-linux
-          jobs.python3.x86_64-darwin
-          # Many developers use nix-repl
-          jobs.nix-repl.x86_64-linux
-          jobs.nix-repl.i686-linux
-          jobs.nix-repl.x86_64-darwin
-          # Needed by travis-ci to test PRs
-          jobs.nox.i686-linux
-          jobs.nox.x86_64-linux
-          jobs.nox.x86_64-darwin
-          # Ensure that X11/GTK+ are in order.
-          jobs.thunderbird.x86_64-linux
-          jobs.thunderbird.i686-linux
-          # Ensure that basic stuff works on darwin
-          jobs.git.x86_64-darwin
-          jobs.mysql.x86_64-darwin
-          jobs.vim.x86_64-darwin
-        ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
-    };
-
   lib = pkgs.lib;
 
   jobs =
-    rec { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
       manual = import ../../doc;
       lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
 
-      # for consistency with NixOS tested job
-      tested = unstable;
-      inherit unstable;
-
+      unstable = pkgs.releaseTools.aggregate
+        { name = "nixpkgs-${jobs.tarball.version}";
+          meta.description = "Release-critical builds for the Nixpkgs unstable channel";
+          constituents =
+            [ jobs.tarball
+              jobs.metrics
+              jobs.manual
+              jobs.lib-tests
+              jobs.stdenv.x86_64-linux
+              jobs.stdenv.i686-linux
+              jobs.stdenv.x86_64-darwin
+              jobs.linux.x86_64-linux
+              jobs.linux.i686-linux
+              jobs.python.x86_64-linux
+              jobs.python.i686-linux
+              jobs.python.x86_64-darwin
+              jobs.python3.x86_64-linux
+              jobs.python3.i686-linux
+              jobs.python3.x86_64-darwin
+              # Many developers use nix-repl
+              jobs.nix-repl.x86_64-linux
+              jobs.nix-repl.i686-linux
+              jobs.nix-repl.x86_64-darwin
+              # Needed by travis-ci to test PRs
+              jobs.nox.i686-linux
+              jobs.nox.x86_64-linux
+              jobs.nox.x86_64-darwin
+              # Ensure that X11/GTK+ are in order.
+              jobs.thunderbird.x86_64-linux
+              jobs.thunderbird.i686-linux
+              # Ensure that basic stuff works on darwin
+              jobs.git.x86_64-darwin
+              jobs.mysql.x86_64-darwin
+              jobs.vim.x86_64-darwin
+            ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
+        };
 
       stdenvBootstrapTools.i686-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "i686-linux"; }) dist test; };

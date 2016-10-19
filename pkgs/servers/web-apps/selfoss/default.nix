@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "selfoss-${version}";
-  version = "2.15";
+  name = "selfoss-unstable-${version}";
+  version = "2016-07-31";
 
   src = fetchFromGitHub {
     owner = "SSilence";
     repo = "selfoss";
-    rev = version;
-    sha256 = "0ljpyd354yalpnqwj6xk9b9mq4h6p8jbqznapj7nvfybas8faq15";
+    rev = "ceb431ad9208e2c5e31dafe593c75e5eb8b65cf7";
+    sha256 = "00vrpw7sb95x6lwpaxrlzxyj98k98xblqcrjr236ykv0ha97xv30";
   };
 
   buildPhases = ["unpackPhase" "installPhase"];

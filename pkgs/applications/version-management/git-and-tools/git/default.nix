@@ -7,6 +7,7 @@
 , withManual ? true
 , pythonSupport ? true
 , sendEmailSupport
+, darwin
 }:
 
 let
@@ -42,7 +43,9 @@ stdenv.mkDerivation {
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv perl]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
-    ++ stdenv.lib.optionals guiSupport [tcl tk];
+    ++ stdenv.lib.optionals guiSupport [tcl tk]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
+
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
@@ -51,17 +54,28 @@ stdenv.mkDerivation {
   # without this, git fails when trying to check for /etc/gitconfig existence
   propagatedSandboxProfile = stdenv.lib.sandbox.allowDirectoryList "/etc";
 
-  makeFlags = "prefix=\${out} sysconfdir=/etc/ PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
+  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
       + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
-      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else "");
+      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else " sysconfdir=/etc/ ");
 
+  # build git-credential-osxkeychain if darwin
+  postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+    pushd $PWD/contrib/credential/osxkeychain/
+    make
+    popd
+  '';
 
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
   #doCheck = true;
 
   installFlags = "NO_INSTALL_HARDLINKS=1";
+
+  preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/bin
+    mv $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin
+  '';
 
   postInstall =
     ''
@@ -157,7 +171,15 @@ stdenv.mkDerivation {
        for prog in bin/gitk libexec/git-core/git-gui; do
          notSupported "$out/$prog"
        done
-     '');
+     '')
+   + stdenv.lib.optionalString stdenv.isDarwin ''
+    # enable git-credential-osxkeychain by default if darwin
+    cat > $out/etc/gitconfig << EOF
+[credential]
+	helper = osxkeychain
+EOF
+  '';
+
 
   enableParallelBuilding = true;
 

@@ -46,7 +46,6 @@ self: super: {
       sha256 = "1j29ydbw86j3qd4qb4l348pcnjd24irgdra9ss2afi6w2pn60yjn";
       rev = drv.version;
     };
-    doCheck = false;  # version 6.20160907 has a test suite failure; reported upstream
   })).overrideScope (self: super: {
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
@@ -983,7 +982,7 @@ self: super: {
   stack = (dontJailbreak super.stack).overrideScope (self: super: {
     http-client = self.http-client_0_5_3_2;
     http-client-tls = self.http-client-tls_0_3_3;
-    http-conduit = self.http-conduit_2_2_2_1;
+    http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
   });
@@ -1028,6 +1027,9 @@ self: super: {
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
+
+  # https://github.com/roelvandijk/terminal-progress-bar/issues/13
+  terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
   # https://github.com/vshabanov/HsOpenSSL/issues/11
   HsOpenSSL = doJailbreak super.HsOpenSSL;

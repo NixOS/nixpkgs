@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Fast and Secure Tunneling Daemon";
     homepage = https://projects.universe-factory.net/projects/fastd/wiki;
     license = with licenses; [ bsd2 bsd3 ];
-    platform = platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
   };
 }

@@ -52,6 +52,22 @@ following incompatible changes:</para>
       but will need to start that process from gdb (so it is a child).
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      The <literal>stripHash</literal> bash function in <literal>stdenv</literal>
+      changed according to its documentation; it now outputs the stripped name to
+      <literal>stdout</literal> instead of putting it in the variable
+      <literal>strippedName</literal>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>PHP now scans for extra configuration .ini files in /etc/php.d
+    instead of /etc. This prevents accidentally loading non-PHP .ini files
+    that may be in /etc.
+    </para>
+  </listitem>
 </itemizedlist>
 
 

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "httpie-0.9.3";
+  name = "httpie-0.9.6";
   namePrefix = "";
 
   src = fetchurl {
     url = "mirror://pypi/h/httpie/${name}.tar.gz";
-    sha256 = "0jvzxr8r6cy6ipknkw95qf8rz69nqdv5nky87h1vcp5pf8mgza1h";
+    sha256 = "1cch5y0hr9qpfn9m4nw5796c2x7v3m1ni4psjm26ajsl8pw90jx6";
   };
 
   propagatedBuildInputs = with pythonPackages; [ pygments requests2 curses ];

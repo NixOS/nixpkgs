@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam, qrencode }:
+{ stdenv, lib, fetchurl, pam, qrencode }:
 
 stdenv.mkDerivation rec {
   name = "google-authenticator-1.0";
@@ -20,10 +20,11 @@ stdenv.mkDerivation rec {
     cp google-authenticator $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = https://code.google.com/p/google-authenticator/;
     description = "Two-step verification, with pam module";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aneeshusa ];
+    platforms = platforms.linux;
   };
 }

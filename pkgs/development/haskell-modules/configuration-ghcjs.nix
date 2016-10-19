@@ -129,4 +129,5 @@ self: super:
   # triggers an internal pattern match failure in haddock
   # https://github.com/haskell/haddock/issues/553
   wai = dontHaddock super.wai;
+  cereal = addBuildDepend super.cereal [ self.fail ];
 }

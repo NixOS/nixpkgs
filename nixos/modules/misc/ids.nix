@@ -276,6 +276,7 @@
       telegraf = 256;
       gitlab-runner = 257;
       postgrey = 258;
+      hound = 259;
 
       phabricator = 999;
 
@@ -524,6 +525,7 @@
       #telegraf = 256; # unused
       gitlab-runner = 257;
       postgrey = 258;
+      hound = 259;
 
       phabricator = 999;
 

@@ -490,12 +490,14 @@ dumpVars() {
 }
 
 
-# Utility function: return the base name of the given path, with the
+# Utility function: echo the base name of the given path, with the
 # prefix `HASH-' removed, if present.
 stripHash() {
-    strippedName=$(basename $1);
+    local strippedName="$(basename "$1")";
     if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
-        strippedName=$(echo "$strippedName" | cut -c34-)
+        echo "$strippedName" | cut -c34-
+    else
+        echo "$strippedName"
     fi
 }
 
@@ -506,12 +508,10 @@ _defaultUnpack() {
 
     if [ -d "$fn" ]; then
 
-        stripHash "$fn"
-
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -pr --reflink=auto "$fn" $strippedName
+        cp -pr --reflink=auto "$fn" "$(stripHash "$fn")"
 
     else
 

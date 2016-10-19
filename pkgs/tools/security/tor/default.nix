@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/${name}.tar.gz";
-    sha256 = "05jkvhbgyq81fcmk1xpl3yw97ljj5sg9pngl27zlmgl7p0xjfp1z";
+    sha256 = "3f5c273bb887be4aff11f4d99b9e2e52d293b81ff4f6302b730161ff16dc5316";
   };
 
   nativeBuildInputs = [ pkgconfig ];

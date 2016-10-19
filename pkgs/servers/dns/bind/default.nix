@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libtool, perl, libxml2
+{ stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
 , libseccomp ? null }:
 
 let version = "9.10.4-P3"; in
@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
     "--without-pkcs11"
     "--without-purify"
     "--without-python"
-    "--enable-seccomp"
-  ];
+  ] ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) "--enable-seccomp";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
