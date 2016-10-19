@@ -167,7 +167,7 @@ in {
                 keystone user-role-add --tenant ${cfg.keystoneAdminTenant} --user ${cfg.keystoneAdminUsername} --role admin
                 keystone service-create --type identity --name keystone
                 ID=$(keystone service-get keystone | awk '/ id / { print $4 }')
-                keystone endpoint-create --region RegionOne --service $ID --publicurl http://{cfg.endpointPublic}:5000/v2.0 --adminurl http://localhost:35357/v2.0 --internalurl http://localhost:5000/v2.0
+                keystone endpoint-create --region RegionOne --service $ID --publicurl http://${cfg.endpointPublic}:5000/v2.0 --adminurl http://localhost:35357/v2.0 --internalurl http://localhost:5000/v2.0
             fi
 	'';
         serviceConfig = {
