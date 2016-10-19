@@ -1,9 +1,12 @@
 { stdenv, fetchurl, pkgconfig, gtk, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst_plugins_base, GConf, setfile
-, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
+, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true
+, withWebKit ? false, webkitgtk2 ? null
 }:
 
+
 assert withMesa -> mesa != null;
+assert withWebKit -> webkitgtk2 != null;
 
 with stdenv.lib;
 
@@ -22,6 +25,7 @@ stdenv.mkDerivation {
     [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst_plugins_base GConf ]
     ++ optional withMesa mesa
+    ++ optional withWebKit webkitgtk2
     ++ optional stdenv.isDarwin setfile;
 
   nativeBuildInputs = [ pkgconfig ];
@@ -34,7 +38,9 @@ stdenv.mkDerivation {
     ++ optional withMesa "--with-opengl"
     ++ optionals stdenv.isDarwin
       # allow building on 64-bit
-      [ "--with-cocoa" "--enable-universal-binaries" ];
+      [ "--with-cocoa" "--enable-universal-binaries" ]
+    ++ optionals withWebKit
+      ["--enable-webview" "--enable-webview-webkit"];
 
   SEARCH_LIB = optionalString withMesa "${mesa}/lib";
 
