@@ -10753,10 +10753,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodWeaver = buildPerlPackage rec {
-    name = "Pod-Weaver-4.014";
+    name = "Pod-Weaver-4.015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "5ca76396710e077b91e12ce32de82514d4785c49eb1ad95b9278045d77c260f5";
+      sha256 = "5af25b29a55783e495a9df5ef6293240e2c9ab02764613d79f1ed50b12dec5ae";
     };
     buildInputs = [ PPI SoftwareLicense TestDifferences ];
     propagatedBuildInputs = [ ConfigMVP ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli MixinLinewise ModuleRuntime Moose ParamsUtil PodElemental StringFlogger StringFormatter StringRewritePrefix namespaceautoclean ];
