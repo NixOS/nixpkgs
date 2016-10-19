@@ -63,10 +63,8 @@ python3Packages.buildPythonApplication rec {
   checkPhase = "py.test";
 
   propagatedBuildInputs = with python3Packages;
-    [ flask dateutil pygments livereload wheel markdown2 flaskbabel tornado
-      click
-      beancount-pygments-lexer ] ++
-    [ beancount ];
+    [ flask dateutil pygments wheel markdown2 flaskbabel tornado
+      click beancount ];
 
   meta = {
     homepage = https://github.com/aumayr/fava;
