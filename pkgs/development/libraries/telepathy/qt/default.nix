@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cmake, qtbase, pkgconfig, pythonPackages, dbus_glib, dbus_daemon
+{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python2Packages, dbus_glib, dbus_daemon
 , telepathy_farstream, telepathy_glib, fetchpatch }:
 
 let
-  inherit (pythonPackages) python dbus-python;
+  inherit (python2Packages) python dbus-python;
 in stdenv.mkDerivation rec {
   name = "telepathy-qt-0.9.6.1";
 
