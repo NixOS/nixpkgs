@@ -60,4 +60,7 @@ self: super: {
     sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
 
+  # https://github.com/nkaretnikov/titlecase/issues/6
+  titlecase = doJailbreak super.titlecase;
+
 }
