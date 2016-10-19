@@ -20,7 +20,7 @@ let
       enableParallelBuilding = true;
 
       buildInputs = [ flex bison pkgconfig ]
-      ++ lib.optional stdenv.isLinux [systemd ];
+        ++ lib.optional stdenv.isLinux systemd;
 
       configureFlags = [
         "EXTENSION_DIR=$(out)/lib/php/extensions"
