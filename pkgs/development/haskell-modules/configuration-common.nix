@@ -780,19 +780,9 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
       repo = "structured-haskell-mode";
-      sha256 = "1vrycvqp4n2pp6sq7z2v0zkqz6662nvacm7cla5hrrzl157cg0j5";
-      rev = "1ffb4db1e7049d4089fea430d4f20bce2eff263d";
+      rev = "dde5104ee28e1c63ca9fbc37c969f8e319b4b903";
+      sha256 = "0g5qpnxzr9qmgzvsld5mg94rb28xb8kd1a02q045r6zlmv1zx7lp";
     };
-    patches = [ (pkgs.fetchpatch {
-                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/140.patch";
-                  sha256 = "1zwyxfmkl04dy34mbifk24qj9g0sfpz0j8rm688qdah8lavp44df";
-                })
-                (pkgs.fetchpatch {
-                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/141.patch";
-                  sha256 = "1bqgzw8cvxs0yg3yipsayksf7djccslamksm0nkw0kfp22axzmng";
-                })
-              ];
-    jailbreak = false;
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
