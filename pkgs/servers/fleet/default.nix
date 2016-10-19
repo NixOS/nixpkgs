@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
     description = "A distributed init system";
     homepage = http://coreos.com/using-coreos/clustering/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ cstrahan offline ];
+    maintainers = with maintainers; [
+      cstrahan
+      jgeerds
+      offline
+    ];
     platforms = platforms.unix;
   };
 }
