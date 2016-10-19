@@ -15,10 +15,16 @@
 , libcxxabi
 , debugVersion ? false
 , enableSharedLibraries ? true
+, darwin
 }:
 
 let
   src = fetch "llvm" "0j49lkd5d7nnpdqzaybs2472bvcxyx0i4r3iccwf3kj2v9wk3iv6";
+  shlib = if stdenv.isDarwin then "dylib" else "so";
+
+  # Used when creating a version-suffixed symlink of libLLVM.dylib
+  shortVersion = with stdenv.lib;
+    concatStringsSep "." (take 2 (splitString "." version));
 in stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
@@ -33,7 +39,8 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
 
   buildInputs = [ perl groff cmake libxml2 python libffi ]
-    ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
+    ++ stdenv.lib.optionals stdenv.isDarwin
+         [ libcxxabi darwin.cctools darwin.apple_sdk.libs.xpc ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -70,6 +77,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+    "-DCMAKE_LIBTOOL=${darwin.cctools}/bin/libtool"
   ];
 
   postBuild = ''
@@ -81,13 +89,17 @@ in stdenv.mkDerivation rec {
   postInstall = ""
   + stdenv.lib.optionalString (enableSharedLibraries) ''
     moveToOutput "lib/libLLVM-*" "$lib"
-    moveToOutput "lib/libLLVM.so" "$lib"
+    moveToOutput "lib/libLLVM.${shlib}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
   ''
   + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    install_name_tool -id $out/lib/libLLVM.dylib $out/lib/libLLVM.dylib
-    ln -s $out/lib/libLLVM.dylib $out/lib/libLLVM-${version}.dylib
+    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
+    install_name_tool -id $lib/lib/libLLVM.dylib $lib/lib/libLLVM.dylib
+    install_name_tool -change @rpath/libLLVM.dylib $lib/lib/libLLVM.dylib $out/bin/llvm-config
+    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
+    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${version}.dylib
   '';
 
   enableParallelBuilding = true;
