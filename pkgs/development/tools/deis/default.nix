@@ -1,10 +1,10 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "deis-${version}";
-  version = "1.13.0";
+  version = "1.13.3";
   rev = "v${version}";
-  
+
   goPackagePath = "github.com/deis/deis";
   subPackages = [ "client" ];
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "deis";
     repo = "deis";
-    sha256 = "1qv9lxqx7m18029lj8cw3k7jngvxs4iciwrypdy0gd2nnghc68sw";
+    sha256 = "15q44jyjms8fdmly0z4sn4ymf1dx6cmdavgixjixdj2wbjw0yi2p";
   };
 
   preBuild = ''
