@@ -919,7 +919,10 @@ in modules // {
       homepage = "http://www.ansible.com";
       description = "A simple automation tool";
       license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ copumpkin ];
+      maintainers = with maintainers; [
+        copumpkin
+        jgeerds
+      ];
       platforms = with platforms; linux ++ darwin;
     };
   };
