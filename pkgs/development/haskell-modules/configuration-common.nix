@@ -8,7 +8,7 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_4; };
+  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
 
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
@@ -969,7 +969,7 @@ self: super: {
   });
 
   # https://github.com/commercialhaskell/stack/issues/2263
-  stack = (dontJailbreak super.stack).overrideScope (self: super: {
+  stack = super.stack.overrideScope (self: super: {
     http-client = self.http-client_0_5_3_2;
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
