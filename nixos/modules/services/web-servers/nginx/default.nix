@@ -374,12 +374,13 @@ in
       description = "Nginx Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart =
-        ''
+      preStart = ''
         mkdir -p ${cfg.stateDir}/logs
         chmod 700 ${cfg.stateDir}
         chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
-        '';
+
+        ${cfg.package}/bin/nginx -t -c ${configFile} -p ${cfg.stateDir}
+      '';
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
