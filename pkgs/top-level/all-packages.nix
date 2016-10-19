@@ -774,6 +774,8 @@ in
 
   deis = callPackage ../development/tools/deis {};
 
+  deisctl = callPackage ../development/tools/deisctl {};
+
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
