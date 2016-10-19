@@ -24,4 +24,14 @@ buildGoPackage rec {
   preBuild = ''
     export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace
   '';
+
+  meta = with stdenv.lib; {
+    homepage = https://deis.io;
+    description = "A command line utility used to interact with the Deis open source PaaS.";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      jgeerds
+    ];
+  };
 }
