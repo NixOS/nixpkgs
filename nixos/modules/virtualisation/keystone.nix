@@ -7,7 +7,7 @@ let
   keystoneConf = pkgs.writeText "keystone.conf" ''
     [DEFAULT]
     # TODO: openssl rand -hex 10
-    admin_token = SuperSecreteKeystoneToken
+    admin_token = ${cfg.adminToken}
     policy_file=${cfg.package}/etc/policy.json
 
     [database]
@@ -88,6 +88,14 @@ in {
       '';
     };
 
+    adminToken = mkOption {
+      type = types.str;
+      default = "mySuperToken";
+      description = ''
+        This is the admin token used to boostrap keystone,
+        ie. to provision first resources.''
+      '';
+    };
   };
 
 
@@ -144,7 +152,7 @@ in {
             done
 
 	    export OS_SERVICE_ENDPOINT=http://localhost:35357/v2.0
-	    export OS_SERVICE_TOKEN=SuperSecreteKeystoneToken
+	    export OS_SERVICE_TOKEN=${cfg.adminToken}
 
 	    # If the tenant service doesn't exist, we consider
 	    # keystone is not initialized
