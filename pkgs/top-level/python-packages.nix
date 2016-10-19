@@ -13440,11 +13440,14 @@ in {
       url = "https://github.com/openstack/pylockfile/archive/${version}.tar.gz";
     };
 
-    doCheck = true;
     OSLO_PACKAGE_VERSION = "${version}";
     buildInputs = with self; [
       pbr nose sphinx_1_2
     ];
+
+    checkPhase = ''
+      nosetests
+    '';
 
     meta = {
       homepage = http://launchpad.net/pylockfile;
