@@ -883,7 +883,10 @@ in modules // {
       homepage = "http://www.ansible.com";
       description = "A simple automation tool";
       license = with licenses; [ gpl3] ;
-      maintainers = with maintainers; [ joamaki ];
+      maintainers = with maintainers; [
+        jgeerds
+        joamaki
+      ];
       platforms = with platforms; linux ++ darwin;
     };
   };
