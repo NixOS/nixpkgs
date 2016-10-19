@@ -7,12 +7,12 @@ let
   # master branch of the beancount repository (as the maintainer does not
   # release versions).
   beancount = python3Packages.buildPythonPackage rec {
-    version = "2.0b11";
+    version = "2.0b12";
     name = "beancount-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/beancount/${name}.tar.gz";
-      sha256 = "0x7mflb6s1s0jd3pbcyf9rk19fj78spwpyb8ha7nslklfizml7qh";
+      sha256 = "0n0wyi2yhmf8l46l5z68psk4rrzqkgqaqn93l0wnxsmp1nmqly9z";
     };
 
     buildInputs = with python3Packages; [ nose ];
@@ -49,12 +49,12 @@ let
 
 in
 python3Packages.buildPythonApplication rec {
-  version = "0.3.0";
+  version = "1.0";
   name = "fava-${version}";
 
   src = fetchurl {
     url = "https://github.com/aumayr/fava/releases/download/v${version}/beancount-fava-${version}.tar.gz";
-    sha256 = "1a5ws0amy2wf9vh4rxk9vn8822zfyizfprhrlnndwfps6mxd63np";
+    sha256 = "1yks1vy4cskv1h4dib0zx2cl8xz4kz4qx9n8v76w3di21w2gmak3";
   };
 
   buildInputs = with python3Packages; [ pytest ];
