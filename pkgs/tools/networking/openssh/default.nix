@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       ./RH-1380296-NEWKEYS-null-pointer-deref.patch
       ./locale_archive.patch
       ./fix-host-key-algorithms-plus.patch
+      ./fix-CVE-2016-8858.patch
     ]
     ++ optional withGssapiPatches gssapiSrc;
 
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = with maintainers; [ eelco aneeshusa ];
     broken = hpnSupport; # probably after 6.7 update
   };
 }
