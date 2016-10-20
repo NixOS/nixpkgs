@@ -18,6 +18,7 @@ use by adding the following snippet to your $HOME/.nixpkgs/config.nix file:
                 reshape2
                 yaml
                 optparse
+                data_table
                 ];
         };
     };
