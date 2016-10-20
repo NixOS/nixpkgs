@@ -89,6 +89,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.quassel-webserver = {
+      enable = true;
       description = "A web server/client for Quassel";
       serviceConfig = {
         ExecStart = "${quassel-webserver}/lib/node_modules/quassel-webserver/bin/www -p ${cfg.port} -m ${if cfg.useHttps == true then "https" else "http"} -c ${settingsFile}";
