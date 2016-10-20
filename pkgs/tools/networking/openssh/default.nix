@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
+      ./fix-CVE-2016-8858.patch
     ]
     ++ optional withGssapiPatches gssapiSrc;
 
@@ -92,7 +93,7 @@ stdenv.mkDerivation rec {
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = with maintainers; [ eelco aneeshusa ];
     broken = hpnSupport; # probably after 6.7 update
   };
 }
