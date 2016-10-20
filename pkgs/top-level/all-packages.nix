@@ -5107,7 +5107,9 @@ in
     stdenv = overrideCC stdenv gcc49;
   };
 
-  ponyc = callPackage ../development/compilers/ponyc { };
+  ponyc = callPackage ../development/compilers/ponyc {
+    llvm = llvm_38;
+  };
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
 
