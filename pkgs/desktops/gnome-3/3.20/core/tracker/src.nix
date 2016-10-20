@@ -1,11 +1,11 @@
 fetchurl: rec {
-  major = "1.10";
-  minor = "1";
+  major = "1.8";
+  minor = "0";
   name = "tracker-${major}.${minor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tracker/${major}/${name}.tar.xz";
-    sha256 = "14a13wbsx2ragscdwb47df4cr0sn42sl1pfwvlrndggbm367isk7";
+    sha256 = "0zchaahk4w7dwanqk1vx0qgnyrlzlp81krwawfx3mv5zffik27x1";
   };
 
 }
