@@ -390,7 +390,7 @@ let
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
     gmatrix = [ pkgs.cudatoolkit ];
-    RCurl = [ pkgs.curl.lib ];
+    RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
     RGtk2 = [ pkgs.pkgconfig ];
@@ -682,7 +682,6 @@ let
     "vegan"
     "vegan3d"
     "vegclust"
-    "VIMGUI"
     "WMCapacity"
     "x12GUI"
     "xergm"
@@ -764,7 +763,6 @@ let
     "Metab" # broken build
     "Crossover" # broken build
     "CardinalWorkflows" # broken build
-    "spoccutils" # depends on broken package spocc
     "mapr" # depends on broken package spocc
     "vmsbase" # broken build
     "vcfR" # broken build
@@ -873,7 +871,6 @@ let
     "stepNorm" # depends on broken package limma
     "RBM" # depends on broken package limma
     "saps" # depends on broken package limma
-    "PharmacoGx" # depends on broken package limma
     "piano" # depends on broken package limma
     "OLINgui" # depends on broken package limma
     "OLIN" # depends on broken package limma
@@ -1160,17 +1157,14 @@ let
     "tadaatoolbox" # depends on broken package car
     "lavaan_shiny" # depends on broken package car
     "RcmdrPlugin_GWRM" # depends on broken package car
-    "TextoMineR" # depends on broken package car
     "pcaBootPlot" # depends on broken package car
     "ClustGeo" # depends on broken package car
     "preproviz" # depends on broken package car
-    "hsdar" # depends on broken package car
     "DecisionCurve" # depends on broken package car
     "CONDOP" # depends on broken package car
     "EnsemblePenReg" # depends on broken package car
     "EnsembleBase" # depends on broken package car
     "fullfact" # depends on broken package car
-    "clusterSEs" # depends on broken package car
     "ggiraph" # depends on broken package gdtools
     "rvg" # depends on broken package gdtools
     "ggpmisc" # depends on broken package polynom
@@ -1258,7 +1252,6 @@ let
     "CLME" # depends on broken package nlopt
     "clpAPI" # build is broken
     "clusterPower" # depends on broken package nlopt
-    "clusterSEs" # depends on broken AER
     "ClustGeo" # depends on broken FactoMineR
     "CNORfuzzy" # depends on broken package nlopt
     "CNVPanelizer" # depends on broken cn.mops
@@ -1366,7 +1359,6 @@ let
     "gmatrix" # depends on broken package cudatoolkit
     "gMCP" # build is broken
     "gmum_r" # broken build
-    "Goslate" # depends on broken package PythonInR
     "GPC" # broken build
     "gplm" # depends on broken package nlopt
     "gpuR" # depends on GPU-specific header files
@@ -1481,7 +1473,6 @@ let
     "mlma" # depends on broken package lme4
     "mlmRev" # depends on broken package nlopt
     "MLSeq" # depends on broken package nlopt
-    "mlVAR" # depends on broken package nlopt
     "MM" # broken build
     "mongolite" # build is broken
     "mosaic" # depends on broken package nlopt
@@ -1499,7 +1490,6 @@ let
     "MXM" # broken build
     "NanoStringDiff" # broken build
     "NanoStringQCPro" # build is broken
-    "nCal" # depends on broken package nlopt
     "ncdfFlow" # build is broken
     "NCIgraph" # depends on broken package RCytoscape
     "NHPoisson" # depends on broken package nlopt
@@ -1586,7 +1576,6 @@ let
     "Rblpapi" # broken build
     "Rchemcpp" # depends on broken package ChemmineR
     "rchess" # depends on broken package V8
-    "Rchoice" # depends on broken package car
     "Rcmdr" # depends on broken package nlopt
     "RcmdrMisc" # depends on broken package nlopt
     "RcmdrPlugin_BCA" # depends on broken package nlopt
@@ -1726,7 +1715,6 @@ let
     "specmine" # depends on broken package caret
     "splm" # depends on broken package car
     "spocc" # depends on broken package V8
-    "spoccutils" # depends on broken spocc
     "ssmrob" # depends on broken package nlopt
     "StatMethRank" # broken build
     "stepp" # depends on broken package nlopt
@@ -1737,7 +1725,6 @@ let
     "systemfit" # depends on broken package nlopt
     "TcGSA" # depends on broken package nlopt
     "TDMR" # depends on broken package nlopt
-    "TextoMineR"  # depends on broken package FactoMineR
     "TFBSTools" # depends on broken package DirichletMultinomial
     "tigerstats" # depends on broken package nlopt
     "TLBC" # depends on broken package caret
@@ -1759,17 +1746,14 @@ let
     "variancePartition" # depends on broken package lme4
     "VBmix" # broken build
     "VIM" # depends on broken package nlopt
-    "VIMGUI" # depends on broken package nlopt
     "vows" # depends on broken package nlopt
     "webp" # build is broken
     "wfe" # depends on broken package nlopt
-    "wordbankr" # depends on broken package RMySQL
     "xergm" # depends on broken package nlopt
     "xps" # build is broken
     "ZeligChoice" # depends on broken package AER
     "Zelig" # depends on broken package AER
     "zetadiv" # depends on broken package nlopt
-    "zoib" # broken build
   ];
 
   otherOverrides = old: new: {
