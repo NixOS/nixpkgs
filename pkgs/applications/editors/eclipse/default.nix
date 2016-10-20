@@ -80,6 +80,22 @@ rec {
   };
   eclipse_cpp_36 = eclipse-cpp-36; # backward compatibility, added 2016-01-30
 
+  eclipse-modeling-46 = buildEclipse {
+    name = "eclipse-modeling-4.6";
+    description = "Eclipse Modeling Tools";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/1a/eclipse-modeling-neon-1a-linux-gtk-x86_64.tar.gz;
+          sha1 = "3695fd049c4cca2d235f424557e19877795a8183";
+        }
+      else
+        fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/1a/eclipse-modeling-neon-1a-linux-gtk.tar.gz;
+          sha1 = "fa0694a0b44e8e9c2301417f84dba45cf9ac6e61";
+        };
+  };
+
   eclipse-modeling-36 = buildEclipse {
     name = "eclipse-modeling-3.6.2";
     description = "Eclipse Modeling Tools (includes Incubating components)";
