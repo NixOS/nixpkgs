@@ -31,7 +31,7 @@ in {
       };
       pkg = mkOption {
         default = pkgs.quassel-webserver;
-	description = "The quassel-webserver package";
+        description = "The quassel-webserver package";
       };
       quasselCoreHost = mkOption {
         default = "";
@@ -40,14 +40,17 @@ in {
       };
       quasselCorePort = mkOption {
         default = 4242;
+        type = types.int;
         description = "The default quassel core port";
       };
       initialBacklogLimit = mkOption {
         default = 20;
+        type = types.int;
         description = "Amount of backlogs to fetch per buffer on connection";
       };
       backlogLimit = mkOption {
         default = 100;
+        type = types.int;
         description = "Amount of backlogs to fetch per buffer after first retrieval";
       };
       secureCore = mkOption {
@@ -57,23 +60,28 @@ in {
       };
       theme = mkOption {
         default = "default";
+        type = types.str;
         description = "default or darksolarized";
       };
       prefixPath = mkOption {
         default = "";
+        type = types.str;
         description = "Configure this if you use a reverse proxy. Must start with a '/'";
         example = "/quassel";
       };
       port = mkOption {
         default = "60443";
+        type = types.int;
         description = "The port the quassel webserver should listen on";
       };
       useHttps = mkOption {
         default = true;
+        type = types.bool;
         description = "Whether the quassel webserver connection should be a https connection";
       };
       forceHostAndPort = mkOption {
         default = false;
+        type = types.bool;
         description = "Force the users to use the quasselCoreHost and quasselCorePort defaults";
       };
     };
