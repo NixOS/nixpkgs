@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
 
   name = "${pname}-${version}";
   pname = "activator";
-  version = "1.3.10";
+  version = "1.3.11";
 
   src = fetchurl {
     url = "http://downloads.typesafe.com/typesafe-${pname}/${version}/typesafe-${name}.zip";
-    sha256 = "43693f041c8422ee06a2a90a805fd7b0e258dc85da31f0a4dca340dfd119b4ce";
+    sha256 = "1xpdh0mh97jiyh835524whq8n6rkvi1bl9fj9mc9fv73x4y2fg9k";
   };
 
   buildInputs = [ unzip jre ];
