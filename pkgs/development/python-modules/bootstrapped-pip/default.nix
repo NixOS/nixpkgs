@@ -14,7 +14,7 @@ let
     sha256 = "0533cr5w14da8wdb2q4py6aizvbvsdbk3sj7m1jx9lwznvnlf5n3";
   };
 in stdenv.mkDerivation rec {
-  name = "python-${python.version}-bootstrapped-pip-${version}";
+  name = "python${python.version}-bootstrapped-pip-${version}";
   version = "8.1.2";
 
   src = fetchurl {
