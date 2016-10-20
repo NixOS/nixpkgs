@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ncurses, openssl, aspell, gnutls
 , zlib, curl , pkgconfig, libgcrypt
-, cmake, makeWrapper, libobjc, libiconv
+, cmake, makeWrapper, libobjc, libresolv, libiconv
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       cmake
       asciidoctor
       ]
-    ++ optionals stdenv.isDarwin [ pync libobjc ]
+    ++ optionals stdenv.isDarwin [ pync libobjc libresolv ]
     ++ optional  guileSupport    guile
     ++ optional  luaSupport      lua5
     ++ optional  perlSupport     perl
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
     # Fix '_res_9_init: undefined symbol' error
-    + (stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1");
+    + (stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
   postInstall = with stdenv.lib; ''
     NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"
