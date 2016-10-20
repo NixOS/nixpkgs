@@ -345,6 +345,7 @@
   proglodyte = "Proglodyte <proglodyte23@gmail.com>";
   pshendry = "Paul Hendry <paul@pshendry.com>";
   psibi = "Sibi <sibi@psibi.in>";
+  pstn = "Philipp Steinpaß <philipp@xndr.de>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   puffnfresh = "Brian McKenna <brian@brianmckenna.org>";
   pxc = "Patrick Callahan <patrick.callahan@latitudeengineering.com>";
