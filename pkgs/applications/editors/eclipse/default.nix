@@ -108,22 +108,21 @@ rec {
 
   ################### Eclipse Scala SDK ################################################################################
 
-  eclipse-scala-sdk-40 = buildEclipse {
-    name = "eclipse-scala-sdk-4.0.0";
+  eclipse-scala-sdk-441 = buildEclipse {
+    name = "eclipse-scala-sdk-4.4.1";
     description = "Eclipse IDE for Scala Developers";
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl { # tested
-          url = http://downloads.typesafe.com/scalaide-pack/4.0.0.vfinal-luna-211-20150305/scala-SDK-4.0.0-vfinal-2.11-linux.gtk.x86_64.tar.gz;
-          sha256  = "b65c5e8160e72c8389537e9e427138e6daa2065f9df3a943a86e40dd1543dd83";
+          url = http://downloads.typesafe.com/scalaide-pack/4.4.1-vfinal-luna-211-20160504/scala-SDK-4.4.1-vfinal-2.11-linux.gtk.x86_64.tar.gz;
+          sha256  = "4c2d1ac68384e12a11a851cf0fc7757aea087eba69329b21d539382a65340d27";
         }
       else
         fetchurl { # untested
-          url = http://downloads.typesafe.com/scalaide-pack/4.0.0.vfinal-luna-211-20150305/scala-SDK-4.0.0-vfinal-2.11-linux.gtk.x86.tar.gz;
-          sha256 = "f422aea5903c97d212264a5a43c6ebc638aecbd4ce5e6078d92618725bc5d31e";
+          url = http://downloads.typesafe.com/scalaide-pack/4.4.1-vfinal-luna-211-20160504/scala-SDK-4.4.1-vfinal-2.11-linux.gtk.x86.tar.gz;
+          sha256 = "35383cb09567187e14a30c15de9fd9aa0eef99e4bbb342396ce3acd11fb5cbac";
         };
   };
-  eclipse_scala_sdk_40 = eclipse-scala-sdk-40; # backward compatibility, added 2016-01-30
 
 
   ################### Eclipse SDK ######################################################################################
