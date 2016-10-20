@@ -1,0 +1,9 @@
+= Apple MacBook Pro 10,1 =
+
+I presume the associated configuration also will work with to other 10,x models.
+
+If you don't have an Ethernet adapter, make sure your NixOS installer has a sufficiently modern kernel or you will be stuck without internet and unable to installer.
+
+Note that (with NixPkgs circa late October 2016) Linux 4.8.1 does not work: everything will boot through X, but then manually-run commands accessing peripherals (nmcli, lspci, etc) will hang inexplicably.
+
+Thankfully no tweaking of the BIOS or similar was needed. Do note that if your MacOS partition is encrypted, you will have an easier time shrinking it from within MacOS, but this is standard advice.
