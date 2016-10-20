@@ -504,6 +504,7 @@ in
       { description = "X11 Server";
 
         after = [ "systemd-udev-settle.service" "local-fs.target" "acpid.service" "systemd-logind.service" ];
+        wants = [ "systemd-udev-settle.service" ];
 
         restartIfChanged = false;
 
