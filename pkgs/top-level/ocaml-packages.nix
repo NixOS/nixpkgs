@@ -441,6 +441,8 @@ let
 
     typerep_p4 = callPackage ../development/ocaml-modules/typerep { };
 
+    uchar = callPackage ../development/ocaml-modules/uchar { };
+
     utop = callPackage ../development/tools/ocaml/utop { };
 
     uuidm = callPackage ../development/ocaml-modules/uuidm { };

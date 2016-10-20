@@ -883,7 +883,10 @@ in modules // {
       homepage = "http://www.ansible.com";
       description = "A simple automation tool";
       license = with licenses; [ gpl3] ;
-      maintainers = with maintainers; [ joamaki ];
+      maintainers = with maintainers; [
+        jgeerds
+        joamaki
+      ];
       platforms = with platforms; linux ++ darwin;
     };
   };
@@ -916,7 +919,10 @@ in modules // {
       homepage = "http://www.ansible.com";
       description = "A simple automation tool";
       license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ copumpkin ];
+      maintainers = with maintainers; [
+        copumpkin
+        jgeerds
+      ];
       platforms = with platforms; linux ++ darwin;
     };
   };
@@ -14254,8 +14260,6 @@ in modules // {
       sha256 = "1gfrxf71xll1w6zb69znqg5c9j0g7036fsalkvqprh2id640cl3a";
     };
 
-    propagatedBuildInputs = [ pkgs.mpd_clientlib ];
-
     buildInputs = with self; [ mock ];
     patchPhase = ''
       sed -i -e '/tests_require/d' \
@@ -14266,7 +14270,7 @@ in modules // {
       description = "A Python client module for the Music Player Daemon";
       homepage = "https://github.com/Mic92/python-mpd2";
       license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ rvl ];
+      maintainers = with maintainers; [ rvl mic92 ];
     };
   };
 
@@ -29251,6 +29255,10 @@ in modules // {
     patches = [ ../development/python-modules/suds-0.4-CVE-2013-2217.patch ];
 
     meta = with stdenv.lib; {
+      # Broken for security issues:
+      # - https://github.com/NixOS/nixpkgs/issues/19678
+      # - https://lwn.net/Vulnerabilities/559200/
+      broken = true;
       description = "Lightweight SOAP client";
       homepage = https://fedorahosted.org/suds;
       license = licenses.lgpl3Plus;

@@ -6,13 +6,7 @@ buildGoPackage rec {
   rev = "v${version}";
 
   goPackagePath = "github.com/deis/deis";
-  subPackages = [ "client" ];
-
-  postInstall = ''
-    if [ -f "$bin/bin/client" ]; then
-      mv "$bin/bin/client" "$bin/bin/deis"
-    fi
-  '';
+  subPackages = [ "deisctl" ];
 
   src = fetchFromGitHub {
     inherit rev;
@@ -27,7 +21,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     homepage = https://deis.io;
-    description = "A command line utility used to interact with the Deis open source PaaS.";
+    description = "A command-line utility used to provision and operate a Deis cluster.";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [

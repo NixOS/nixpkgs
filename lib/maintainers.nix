@@ -213,6 +213,7 @@
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
+  kaiha = "Kai Harries <kai.harries@gmail.com>";
   kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
   kampfschlaefer = "Arnold Krille <arnold@arnoldarts.de>";
   kevincox = "Kevin Cox <kevincox@kevincox.ca>";
@@ -452,6 +453,7 @@
   vizanto = "Danny Wilson <danny@prime.vc>";
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
   vmandela = "Venkateswara Rao Mandela <venkat.mandela@gmail.com>";
+  volhovm = "Mikhail Volkhov <volhovm.cs@gmail.com>";
   vozz = "Oliver Hunt <oliver.huntuk@gmail.com>";
   vrthra = "Rahul Gopinath <rahul@gopinath.org>";
   wedens = "wedens <kirill.wedens@gmail.com>";

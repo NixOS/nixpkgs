@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp "$src/fonts/OTF v3.000 Fontlab"/*.otf $out/share/fonts/truetype
+    mkdir -p $out/share/fonts/opentype
+    cp "$src/fonts/OTF v3.000 Fontlab"/*.otf $out/share/fonts/opentype
     find -type f -maxdepth 1 -exec cp "{}" $out/ \;
   '';
 

@@ -609,6 +609,8 @@ in
 
   bibutils = callPackage ../tools/misc/bibutils { };
 
+  bibtex2html = callPackage ../tools/misc/bibtex2html { };
+
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   bins = callPackage ../tools/graphics/bins { };
@@ -772,6 +774,8 @@ in
   ddate = callPackage ../tools/misc/ddate { };
 
   deis = callPackage ../development/tools/deis {};
+
+  deisctl = callPackage ../development/tools/deisctl {};
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
@@ -12723,7 +12727,7 @@ in
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
-  keepassx2-http = callPackage ../applications/misc/keepassx/2.0-http.nix { };
+  keepassx-reboot = callPackage ../applications/misc/keepassx/reboot.nix { };
 
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
@@ -13826,6 +13830,8 @@ in
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
   };
+
+  scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
   shotcut = qt5.callPackage ../applications/video/shotcut { };
 
@@ -17404,4 +17410,6 @@ in
   wo-istes-jetzt = callPackage ../tools/misc/wo-istes-jetzt { };
 
   privacyidea = callPackage ../servers/privacyidea { };
+
+  nitrokey-app = callPackage ../tools/security/nitrokey-app { };
 }
