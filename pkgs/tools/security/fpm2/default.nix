@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "FPM2 is GTK2 port from Figaro's Password Manager originally developed by John Conneely, with some new enhancements.";
     homepage    = http://als.regnet.cz/fpm2/;
     license     = licenses.gpl2;
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ hce ];
   };
 }
