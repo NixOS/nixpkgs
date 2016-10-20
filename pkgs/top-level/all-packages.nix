@@ -17376,4 +17376,6 @@ in
   xulrunner = firefox-unwrapped;
 
   nitrokey-app = callPackage ../tools/security/nitrokey-app { };
+
+  fpm2 = callPackage ../tools/security/fpm2 { };
 }
