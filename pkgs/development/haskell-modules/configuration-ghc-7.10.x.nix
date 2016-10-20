@@ -37,10 +37,7 @@ self: super: {
   xhtml = null;
 
   # Enable latest version of cabal-install.
-  cabal-install = (doDistribute (dontJailbreak (dontCheck (super.cabal-install)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
-
-  # Jailbreaking is required for the test suite only (which we don't run).
-  Cabal_1_24_0_0 = dontJailbreak (dontCheck super.Cabal_1_24_0_0);
+  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
 
   # Build jailbreak-cabal with the latest version of Cabal.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_0_0; };
@@ -148,7 +145,7 @@ self: super: {
   tasty-rerun = dontHaddock (appendConfigureFlag super.tasty-rerun "--ghc-option=-XFlexibleContexts");
 
   # http://hub.darcs.net/ivanm/graphviz/issue/5
-  graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./patches/graphviz-fix-ghc710.patch));
+  graphviz = dontCheck (appendPatch super.graphviz ./patches/graphviz-fix-ghc710.patch);
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
@@ -168,6 +165,7 @@ self: super: {
 
   # haddock-api >= 2.17 is GHC 8.0 only
   haddock-api = self.haddock-api_2_16_1;
+  haddock-library = self.haddock-library_1_2_1;
 
   # lens-family-th >= 0.5.0.0 is GHC 8.0 only
   lens-family-th = self.lens-family-th_0_4_1_0;
@@ -178,9 +176,6 @@ self: super: {
   # https://github.com/fpco/stackage/issues/1112
   vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
     [ self.mtl self.mwc-random ];
-
-  # Trigger rebuild to mitigate broken packaes on Hydra.
-  amazonka-core = triggerRebuild super.amazonka-core 1;
 
   # https://github.com/thoughtpolice/hs-ed25519/issues/13
   ed25519 = dontCheck super.ed25519;
@@ -213,6 +208,6 @@ self: super: {
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
 
-  generic-deriving = self.generic-deriving_1_10_5;
+
 
 }

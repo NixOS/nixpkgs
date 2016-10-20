@@ -8,7 +8,7 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_4; };
+  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
 
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
@@ -43,10 +43,9 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "11xgnryvwh3a1dcd5bczrh6wwf23xa74p31cqvnhf2s6q8cb0aai";
+      sha256 = "1j29ydbw86j3qd4qb4l348pcnjd24irgdra9ss2afi6w2pn60yjn";
       rev = drv.version;
     };
-    doCheck = false;  # version 6.20160907 has a test suite failure; reported upstream
   })).overrideScope (self: super: {
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
@@ -160,8 +159,10 @@ self: super: {
   ABList = dontCheck super.ABList;
 
   # https://github.com/haskell/vector/issues/47
-  vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
+  # https://github.com/haskell/vector/issues/138
+  vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
+  # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
     else super.halive;
@@ -267,6 +268,7 @@ self: super: {
   snowball = dontCheck super.snowball;
   sophia = dontCheck super.sophia;
   test-sandbox = dontCheck super.test-sandbox;
+  texrunner = dontCheck super.texrunner;
   users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   xkbcommon = dontCheck super.xkbcommon;
@@ -640,6 +642,11 @@ self: super: {
     '';
   }));
 
+  # Requires optparse-applicative 0.13.0.0
+  diagrams-pgf = super.diagrams-pgf.overrideScope (self: super: {
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
 
@@ -773,19 +780,9 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
       repo = "structured-haskell-mode";
-      sha256 = "1vrycvqp4n2pp6sq7z2v0zkqz6662nvacm7cla5hrrzl157cg0j5";
-      rev = "1ffb4db1e7049d4089fea430d4f20bce2eff263d";
+      rev = "dde5104ee28e1c63ca9fbc37c969f8e319b4b903";
+      sha256 = "0g5qpnxzr9qmgzvsld5mg94rb28xb8kd1a02q045r6zlmv1zx7lp";
     };
-    patches = [ (pkgs.fetchpatch {
-                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/140.patch";
-                  sha256 = "1zwyxfmkl04dy34mbifk24qj9g0sfpz0j8rm688qdah8lavp44df";
-                })
-                (pkgs.fetchpatch {
-                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/141.patch";
-                  sha256 = "1bqgzw8cvxs0yg3yipsayksf7djccslamksm0nkw0kfp22axzmng";
-                })
-              ];
-    jailbreak = false;
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
@@ -972,10 +969,10 @@ self: super: {
   });
 
   # https://github.com/commercialhaskell/stack/issues/2263
-  stack = (dontJailbreak super.stack).overrideScope (self: super: {
+  stack = super.stack.overrideScope (self: super: {
     http-client = self.http-client_0_5_3_2;
     http-client-tls = self.http-client-tls_0_3_3;
-    http-conduit = self.http-conduit_2_2_2_1;
+    http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
   });
@@ -1017,5 +1014,14 @@ self: super: {
 
   # https://github.com/fpco/store/issues/77
   store = dontCheck super.store;
+
+  # https://github.com/bmillwood/applicative-quoters/issues/6
+  applicative-quoters = doJailbreak super.applicative-quoters;
+
+  # https://github.com/roelvandijk/terminal-progress-bar/issues/13
+  terminal-progress-bar = doJailbreak super.terminal-progress-bar;
+
+  # https://github.com/vshabanov/HsOpenSSL/issues/11
+  HsOpenSSL = doJailbreak super.HsOpenSSL;
 
 }
