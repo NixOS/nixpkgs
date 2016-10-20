@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.6.4";
+  version = "2.7.8";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0rpqpspmrmgm0bhsnlnhlwhag6zg8hnv5bcw5vkqmv86891kpd9a";
+    sha256 = "0p4dx5fks68avzxkknawv094xxf7322hgm068js4v56qirvxm563";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -33,14 +33,13 @@ pythonPackages.buildPythonApplication rec {
     # amodem
   ];
 
-  preInstall = ''
-    mkdir -p $out/share
-    sed -i 's@usr_share = .*@usr_share = os.getenv("out")+"/share"@' setup.py
+  preBuild = ''
+    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
   '';
 
-  doCheck = true;
-  checkPhase = ''
+  doInstallCheck = true;
+  installCheckPhase = ''
     $out/bin/electrum help >/dev/null
   '';
 

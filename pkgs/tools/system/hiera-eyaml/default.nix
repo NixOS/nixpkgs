@@ -2,7 +2,7 @@
 
 bundlerEnv {
   inherit ruby;
-  pName = "hiera-eyaml";
+  pname = "hiera-eyaml";
   gemdir = ./.;
 
   meta = with lib; {

@@ -1,19 +1,24 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, zlib, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, zlib, pkgconfig, libuuid }:
 
 stdenv.mkDerivation rec{
-  version = "1.0.0";
+  version = "1.4.0";
   name = "netdata-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "firehol";
     repo = "netdata";
-    sha256 = "03107ny98zks05p44jzypkk4lw8lbvmqja5b537ln6cnrgp20yvq";
+    sha256 = "1wknxci2baj6f7rl8z8j7haaz122jmbb74aw7i3xbj2y61cs58n8";
   };
 
-  buildInputs = [ autoreconfHook zlib pkgconfig ];
+  buildInputs = [ autoreconfHook zlib pkgconfig libuuid ];
 
-  patches = [ ./web_access.patch ];
+  preConfigure = ''
+    export ZLIB_CFLAGS=" "
+    export ZLIB_LIBS="-lz"
+    export UUID_CFLAGS=" "
+    export UUID_LIBS="-luuid"
+  '';
 
   meta = with stdenv.lib; {
     description = "Real-time performance monitoring tool";

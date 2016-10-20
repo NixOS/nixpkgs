@@ -535,7 +535,7 @@ in
 
   androidsdk_extras = self.androidenv.androidsdk_6_0_extras;
 
-  arc-gtk-theme = callPackage ../misc/themes/arc { };
+  arc-theme = callPackage ../misc/themes/arc { };
 
   adapta-gtk-theme = callPackage ../misc/themes/adapta { };
 
@@ -2827,6 +2827,8 @@ in
   networkmanager_vpnc = callPackage ../tools/networking/network-manager/vpnc.nix { };
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
+
+  networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan.nix { };
 
   networkmanagerapplet = newScope gnome2 ../tools/networking/network-manager-applet { };
 
@@ -7219,7 +7221,7 @@ in
   gts = callPackage ../development/libraries/gts { };
 
   gvfs = callPackage ../development/libraries/gvfs {
-    gnome = self.gnome2;
+    gnome = self.gnome3;
   };
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
@@ -7256,6 +7258,8 @@ in
   hivex = callPackage ../development/libraries/hivex {
     inherit (perlPackages) IOStringy;
   };
+
+  hound = callPackage ../development/tools/misc/hound { };
 
   hspell = callPackage ../development/libraries/hspell { };
 
@@ -11736,6 +11740,8 @@ in
 
   orbitron = callPackage ../data/fonts/orbitron { };
 
+  overpass = callPackage ../data/fonts/overpass { };
+
   oxygenfonts = callPackage ../data/fonts/oxygenfonts { };
 
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
@@ -11786,6 +11792,8 @@ in
   r4rs = callPackage ../data/documentation/rnrs/r4rs.nix { };
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
+
+  raleway = callPackage ../data/fonts/raleway { };
 
   roboto = callPackage ../data/fonts/roboto { };
 
@@ -13660,6 +13668,8 @@ in
 
   mpc_cli = callPackage ../applications/audio/mpc { };
 
+  clerk = callPackage ../applications/audio/clerk { };
+
   ncmpc = callPackage ../applications/audio/ncmpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
@@ -15083,10 +15093,9 @@ in
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { stdenv = overrideCC stdenv gcc49; };
-  xen_4_5_2 = callPackage ../applications/virtualization/xen/4.5.2.nix { stdenv = overrideCC stdenv gcc49; };
-  xen_xenServer = callPackage ../applications/virtualization/xen/4.5.0.nix { xenserverPatched = true; stdenv = overrideCC stdenv gcc49; };
-  xen = xen_4_5_2;
+  xen_4_5 = callPackage ../applications/virtualization/xen/4.5.nix { stdenv = overrideCC stdenv gcc49; };
+  xen_xenServer = callPackage ../applications/virtualization/xen/4.5.nix { xenserverPatched = true; stdenv = overrideCC stdenv gcc49; };
+  xen = xen_4_5;
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
@@ -15894,6 +15903,8 @@ in
   });
 
   gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
+
+  gnome3_22 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.22 { });
 
   gnome3 = gnome3_20;
 
@@ -17015,6 +17026,9 @@ in
   mfcj470dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj470dwcupswrapper { };
   mfcj470dwlpr = callPackage_i686 ../misc/cups/drivers/mfcj470dwlpr { };
 
+  mfcj6510dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj6510dwcupswrapper { };
+  mfcj6510dwlpr = callPackage_i686 ../misc/cups/drivers/mfcj6510dwlpr { };
+
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung { };
   samsung-unified-linux-driver = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
 
@@ -17310,6 +17324,10 @@ in
   maphosts = callPackage ../tools/networking/maphosts {};
 
   zimg = callPackage ../development/libraries/zimg { };
+
+  zk-shell = callPackage ../applications/misc/zk-shell {
+    inherit (pythonPackages) buildPythonApplication;
+  };
 
   zuki-themes = callPackage ../misc/themes/zuki { };
 

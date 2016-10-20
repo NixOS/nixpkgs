@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://erratique.ch/software/react/releases/react-1.2.0.tbz;
-    sha256 = "1gymn8hy7ga0l9qymmb1jcnnkqvy7l2zr87xavzqz0dfi9ci8dm7";
+    sha256 = "0knhgbngphv5sp1yskfd97crf169qhpc0igr6w7vqw0q36lswyl8";
   };
 
   unpackCmd = "tar xjf $src";

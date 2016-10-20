@@ -1314,10 +1314,10 @@
   mail_room = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "00jaj42z6rhgpxprs7wb0a9gq33zsfalah3ddpynxldij5iz8mg0";
+      sha256 = "15zjqscdzm4rv8qpz8y8334nc5kvlqp0xk4wiics98hbjs8cd59i";
       type = "gem";
     };
-    version = "0.8.0";
+    version = "0.8.1";
   };
   method_source = {
     source = {
@@ -2299,10 +2299,10 @@
   sentry-raven = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0fjfq3hkfv3a415mk6cjwknnxg9d71x0b8x7szgbwhyqa8ahj3j3";
+      sha256 = "18k3n1yv077h28wszamhlifja7z2kxjdlm48aslc7zf7rm14fq90";
       type = "gem";
     };
-    version = "1.1.0";
+    version = "2.0.2";
   };
   settingslogic = {
     source = {

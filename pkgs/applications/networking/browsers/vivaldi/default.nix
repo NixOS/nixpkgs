@@ -11,15 +11,15 @@
 
 let
   version = "1.4";
-  build = "589.29-1";
+  build = "589.38-1";
   fullVersion = "stable_${version}.${build}";
 
   info = if stdenv.is64bit then {
       arch = "amd64";
-      sha256 = "14sb58qrqnqcpkzacwnwfln558p018zargppxq21p5ic8s92v1g6";
+      sha256 = "08qdpl5dkb2snpqlk3rsqlyl9rfas9v6bbcw2p4kzazhinak5hv3";
     } else {
       arch = "i386";
-      sha256 = "0c4l9ji5xlxwzcjsrvxjkx53j76y777fj6hh7plfkkanlrfkryac";
+      sha256 = "0wpaglc1aaam5bqxgvf5zwcbr0xll8yj63l19q792l51j1vkv56q";
     };
 
 in stdenv.mkDerivation rec {

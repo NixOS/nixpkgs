@@ -2,7 +2,7 @@
 
 bundlerEnv {
   inherit ruby;
-  pName = "travis";
+  pname = "travis";
   gemdir = ./.;
 
   meta = with lib; {
