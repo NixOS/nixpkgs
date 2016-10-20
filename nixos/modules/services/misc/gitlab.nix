@@ -463,6 +463,7 @@ in {
 
     systemd.services.gitlab = {
       after = [ "network.target" "postgresql.service" "redis.service" ];
+      requires = [ "gitlab-sidekiq.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
