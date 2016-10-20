@@ -70,7 +70,7 @@ in {
         example = "/quassel";
       };
       port = mkOption {
-        default = "60443";
+        default = 60443;
         type = types.int;
         description = "The port the quassel webserver should listen on";
       };
@@ -92,7 +92,7 @@ in {
       enable = true;
       description = "A web server/client for Quassel";
       serviceConfig = {
-        ExecStart = "${quassel-webserver}/lib/node_modules/quassel-webserver/bin/www -p ${cfg.port} -m ${if cfg.useHttps == true then "https" else "http"} -c ${settingsFile}";
+        ExecStart = "${quassel-webserver}/lib/node_modules/quassel-webserver/bin/www -p ${toString cfg.port} -m ${if cfg.useHttps == true then "https" else "http"} -c ${settingsFile}";
         WantedBy = [ "multi-user.target" ];
       };
     };
