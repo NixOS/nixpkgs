@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, cmake, perl
-, file, glib, gmime, libevent, luajit, openssl, pcre, pkgconfig, sqlite }:
+, file, glib, gmime, libevent, luajit, openssl, pcre, pkgconfig, sqlite, ragel }:
 
 let libmagic = file;  # libmagic provided by file package ATM
 in
 
 stdenv.mkDerivation rec {
   name = "rspamd-${version}";
-  version = "1.2.8";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "rspamd";
     rev = version;
-    sha256 = "0hshaf6hlrnjkv733ahizmkmb01jc1i1yglsw9dwzr4ikkhflnwv";
+    sha256 = "0k0qy351wlwvn3ggkz4q1cy3cx1745w7vnyc2mpinwq2mjm3izc6";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ glib gmime libevent libmagic luajit openssl pcre sqlite];
+  buildInputs = [ glib gmime libevent libmagic luajit openssl pcre sqlite ragel ];
 
   postPatch = ''
     substituteInPlace conf/common.conf --replace "\$CONFDIR/rspamd.conf.local" "/etc/rspamd/rspamd.conf.local"
