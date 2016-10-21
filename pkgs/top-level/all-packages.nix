@@ -15955,8 +15955,6 @@ in
     libcanberra = self.libcanberra_gtk2;
   });
 
-  gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
-
   gnome3_22 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.22 { });
 
   gnome3 = gnome3_20;
