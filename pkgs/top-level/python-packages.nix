@@ -4890,11 +4890,11 @@ in modules // {
 
   pytestflakes = buildPythonPackage rec {
     name = "pytest-flakes-${version}";
-    version = "1.0.0";
+    version = "1.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-flakes/${name}.tar.gz";
-      sha256 = "0vvfprga6k4v2zq1qsr3yq1bjl22vygfsnvyn3hh80cc2386dk6h";
+      sha256 = "9c2271654294020e134624020a2144cb93b7334809d70fb3f470cd31ec788a3a";
     };
 
     propagatedBuildInputs = with self ; [ pytest pyflakes pytestcache ];
