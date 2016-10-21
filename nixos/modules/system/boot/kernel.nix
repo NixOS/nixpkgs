@@ -200,8 +200,8 @@ in
         "hid_generic" "hid_lenovo"
         "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
 
-        # Misc. stuff.
-        "pcips2" "atkbd"
+        # Misc. keyboard stuff.
+        "pcips2" "atkbd" "i8042"
 
         # To wait for SCSI devices to appear.
         "scsi_wait_scan"
