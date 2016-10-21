@@ -15906,7 +15906,7 @@ in
 
   gnome3_22 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.22 { });
 
-  gnome3 = gnome3_20;
+  gnome3 = gnome3_22;
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
