@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.maintainers; [ veprbl ];
   };
 }
