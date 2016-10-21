@@ -89,11 +89,10 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.quassel-webserver = {
-      enable = true;
       description = "A web server/client for Quassel";
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${quassel-webserver}/lib/node_modules/quassel-webserver/bin/www -p ${toString cfg.port} -m ${if cfg.useHttps == true then "https" else "http"} -c ${settingsFile}";
-        WantedBy = [ "multi-user.target" ];
       };
     };
   };
