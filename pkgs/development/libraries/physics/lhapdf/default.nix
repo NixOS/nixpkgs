@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, python }:
+{ stdenv, fetchurl, boost, python2 }:
 
 stdenv.mkDerivation rec {
   name = "lhapdf-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sgbaxv8clcfy4d96fkwfyqcd4b29i0hwv32ry4vy69j5qiki0f2";
   };
 
-  buildInputs = [ boost python ];
+  buildInputs = [ boost python2 ];
 
   patches = [ ./distutils-c++.patch ];
 
