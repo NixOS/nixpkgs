@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python
+{ stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
 , libX11, libXpm, libXft, libXext, zlib, lzma, gsl, Cocoa }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "00f3v3l8nimfkcxpn9qpyh3h23na0mi4wkds2y5gwqh8wh3jryq9";
   };
 
-  buildInputs = [ cmake pcre pkgconfig python zlib lzma gsl ]
+  buildInputs = [ cmake pcre pkgconfig python2 zlib lzma gsl ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa ]
     ;
@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.maintainers; [ veprbl ];
   };
 }
