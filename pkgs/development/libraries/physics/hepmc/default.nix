@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl2;
     homepage    = http://lcgapp.cern.ch/project/simu/HepMC/;
     platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.maintainers; [ veprbl ];
   };
 }

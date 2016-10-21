@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl2;
     homepage    = https://agile.hepforge.org/trac/wiki/Sacrifice;
     platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.maintainers; [ veprbl ];
   };
 }

@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl2;
     homepage    = http://home.thep.lu.se/~torbjorn/Pythia.html;
     platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.maintainers; [ veprbl ];
   };
 }

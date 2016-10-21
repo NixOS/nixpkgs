@@ -447,6 +447,7 @@
   vbgl = "Vincent Laporte <Vincent.Laporte@gmail.com>";
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
+  veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   vizanto = "Danny Wilson <danny@prime.vc>";
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
