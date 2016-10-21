@@ -3,15 +3,15 @@
 
 stdenv.mkDerivation rec {
   name = "ragel-${version}";
-  version = "7.0.0.6";
+  version = "6.9";
 
   src = fetchurl {
     url = "http://www.colm.net/files/ragel/${name}.tar.gz";
-    sha256 = "1ns3kbcvhinn4rwm54ajg49d1la8filxskl3rgbwws0irzw507vs";
+    sha256 = "02k6rwh8cr95f1p5sjjr3wa6dilg06572xz1v71dk8awmc7vw1vf";
   };
 
   buildInputs = stdenv.lib.optional build-manual [ transfig ghostscript tex ];
-   
+
   preConfigure = stdenv.lib.optional build-manual ''
     sed -i "s/build_manual=no/build_manual=yes/g" DIST
   '';
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-colm=${colm}" ];
 
   doCheck = true;
-  
+
   meta = with stdenv.lib; {
     homepage = http://www.complang.org/ragel;
     description = "State machine compiler";
