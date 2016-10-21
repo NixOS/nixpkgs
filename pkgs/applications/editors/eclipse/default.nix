@@ -12,8 +12,7 @@ rec {
 
   buildEclipse = callPackage ./build-eclipse.nix { };
 
-
-  ################### Eclipse CPP ######################################################################################
+  ### Eclipse CPP
 
   eclipse-cpp-46 = buildEclipse {
     name = "eclipse-cpp-4.6.0";
@@ -49,8 +48,7 @@ rec {
   };
   eclipse_cpp_37 = eclipse-cpp-37; # backward compatibility, added 2016-01-30
 
-
-  ################### Eclipse Modeling  ################################################################################
+  ### Eclipse Modeling
 
   eclipse-modeling-46 = buildEclipse {
     name = "eclipse-modeling-4.6";
@@ -85,8 +83,7 @@ rec {
   };
   eclipse_modeling_36 = eclipse-modeling-36; # backward compatibility, added 2016-01-30
 
-
-  ################### Eclipse Platform #################################################################################
+  ### Eclipse Platform
 
   eclipse-platform = eclipse-platform-46;
 
@@ -105,8 +102,7 @@ rec {
     };
   };
 
-
-  ################### Eclipse Scala SDK ################################################################################
+  ### Eclipse Scala SDK
 
   eclipse-scala-sdk-441 = buildEclipse {
     name = "eclipse-scala-sdk-4.4.1";
@@ -124,8 +120,7 @@ rec {
         };
   };
 
-
-  ################### Eclipse SDK ######################################################################################
+  ### Eclipse SDK
 
   eclipse-sdk-46 = buildEclipse {
     name = "eclipse-sdk-4.6";
@@ -158,9 +153,10 @@ rec {
   };
   eclipse_sdk_37 = eclipse-sdk-37; # backward compatibility, added 2016-01-30
 
+  ### Environments
 
-  ################### Eclipse with Plugins #############################################################################
-
+  # Function that assembles a complete Eclipse environment from an
+  # Eclipse package and list of Eclipse plugins.
   eclipseWithPlugins = { eclipse, plugins ? [], jvmArgs ? [] }:
     let
       # Gather up the desired plugins.
@@ -194,6 +190,8 @@ rec {
 
         ln -s ${eclipse}/share $out/
       '';
+
+  ### Plugins
 
   plugins = callPackage ./plugins.nix { };
 
