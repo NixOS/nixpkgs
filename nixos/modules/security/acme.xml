@@ -84,6 +84,7 @@ security.acme.certs."foo.example.com" = {
 services.nginx.httpConfig = ''
   server {
     server_name foo.example.com;
+    listen 80;
     listen [::]:80;
 
     location /.well-known/acme-challenge {
