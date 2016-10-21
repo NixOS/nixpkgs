@@ -1897,6 +1897,24 @@ in modules // {
     };
   };
 
+  beancount-pygments-lexer = buildPythonPackage (rec {
+    version = "0.1.2";
+    name = "beancount-pygments-lexer-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/beancount-pygments-lexer/${name}.tar.gz";
+      sha256 = "0qil39ckf6jhlgjwlxjrfphmx5zs9zhp0b92mrw99kbi06f1qcdq";
+    };
+
+    buildInputs = with self; [ pygments ];
+
+    meta = {
+      homepage = https://github.com/aumayr/beancount-pygments-lexer/;
+      license = licenses.mit;
+      description = "pygments-Lexer for beancount-files";
+    };
+  });
+
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
     disabled = isPy3k;
@@ -4797,6 +4815,16 @@ in modules // {
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
       sha256 = "1n6igbc1b138wx1q5gca4pqw1j6nsyicfxds5n0b5989kaxqmh8j";
+    };
+  };
+
+  pytest_30 = self.pytest_27.override rec {
+    name = "pytest-3.0.3";
+
+    propagatedBuildInputs = with self; [ hypothesis py ];
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest/${name}.tar.gz";
+      sha256 = "1rxydacrdb8s312l3bn0ybrqsjp13abzyim1x21s80386l5504zj";
     };
   };
 
@@ -15663,6 +15691,25 @@ in modules // {
       license = licenses.bsd2;
       description = "Python exposure of dynd";
       maintainers = with maintainers; [ teh ];
+    };
+  };
+
+  livereload = buildPythonPackage rec {
+    version = "2.4.1";
+    name = "livereload-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/lepture/python-livereload/archive/v${version}.tar.gz";
+      sha256 = "0m8b4f6wkrsh45ldqrq2l9ynv2dzlgb34bkwc7hzi0cihsfgwaca";
+    };
+
+    buildInputs = with self; [ tornado six ];
+
+    meta = {
+      homepage = https://github.com/lepture/python-livereload;
+      description = ''livereload server in python'';
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ matthiasbeyer ];
     };
   };
 
