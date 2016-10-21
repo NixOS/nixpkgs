@@ -41,41 +41,43 @@ let
   ];
 
   instanceOptions = {
+    options = {
 
-    execConfig = mkOption {
-      default = {};
-      example = { Parameters = "/bin/sh"; };
-      type = types.addCheck (types.attrsOf unitOption) checkExec;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Exec]</literal> section of this unit. See
-        <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
-    };
+      execConfig = mkOption {
+        default = {};
+        example = { Parameters = "/bin/sh"; };
+        type = types.addCheck (types.attrsOf unitOption) checkExec;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Exec]</literal> section of this unit. See
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
 
-    filesConfig = mkOption {
-      default = {};
-      example = { Bind = [ "/home/alice" ]; };
-      type = types.addCheck (types.attrsOf unitOption) checkFiles;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Files]</literal> section of this unit. See
-        <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
-    };
+      filesConfig = mkOption {
+        default = {};
+        example = { Bind = [ "/home/alice" ]; };
+        type = types.addCheck (types.attrsOf unitOption) checkFiles;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Files]</literal> section of this unit. See
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
 
-    networkConfig = mkOption {
-      default = {};
-      example = { Private = false; };
-      type = types.addCheck (types.attrsOf unitOption) checkNetwork;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Network]</literal> section of this unit. See
-        <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+      networkConfig = mkOption {
+        default = {};
+        example = { Private = false; };
+        type = types.addCheck (types.attrsOf unitOption) checkNetwork;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Network]</literal> section of this unit. See
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
 
   };
@@ -99,8 +101,7 @@ in {
 
     systemd.nspawn = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ instanceOptions ];
+      type = with types; attrsOf (submodule instanceOptions);
       description = "Definition of systemd-nspawn configurations.";
     };
 

@@ -50,7 +50,7 @@ self: super: {
   hashable = dontCheck super.hashable;
 
   # https://github.com/peti/jailbreak-cabal/issues/9
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = dontJailbreak self.Cabal_1_20_0_4; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_20_0_4; };
 
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
