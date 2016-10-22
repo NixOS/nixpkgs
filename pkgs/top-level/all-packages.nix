@@ -7788,7 +7788,7 @@ in
   };
 
   libgumbo = callPackage ../development/libraries/libgumbo { };
-  
+
   libhangul = callPackage ../development/libraries/libhangul { };
 
   libharu = callPackage ../development/libraries/libharu { };
@@ -13207,7 +13207,8 @@ in
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
-  hyperterm = callPackage ../applications/misc/hyperterm { inherit (gnome2) GConf; };
+  hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
+  hyperterm = self.hyper;
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 

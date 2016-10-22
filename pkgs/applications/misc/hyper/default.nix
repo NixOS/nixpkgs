@@ -11,11 +11,11 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "0.7.6";
-  name = "hyperterm-${version}";
+  version = "0.8.3";
+  name = "hyper-${version}";
   src = fetchurl {
-    url = https://github.com/zeit/hyperterm/releases/download/v0.7.1/hyperterm-0.7.1.deb;
-    sha256 = "1xdwhmzlkg1ly1xgsbv99xk4x1g1x270vx1b12dvf10ck5x9v63a";
+    url = "https://github.com/zeit/hyper/releases/download/${version}/hyper-${version}-amd64.deb";
+    sha256 = "1683gc0fhifn89l9h67yz02pk1xz7p5l3qpiyddr9w21qr9h3lhq";
   };
   buildInputs = [ dpkg ];
   unpackPhase = ''
@@ -25,16 +25,16 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     mkdir -p "$out/bin"
-    ln -s "$out/opt/HyperTerm/HyperTerm" "$out/bin/HyperTerm"
     mv opt "$out/"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:\$ORIGIN" "$out/opt/HyperTerm/HyperTerm"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}" "$out/opt/HyperTerm/resources/app/node_modules/child_pty/build/Release/exechelper"
+    ln -s "$out/opt/Hyper/Hyper" "$out/bin/Hyper"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:\$ORIGIN" "$out/opt/Hyper/Hyper"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}" "$out/opt/Hyper/resources/app/node_modules/child_pty/build/Release/exechelper"
     mv usr/* "$out/"
   '';
   dontPatchELF = true;
   meta = with lib; {
     description = "A terminal built on web technologies";
-    homepage    = https://hyperterm.org/;
+    homepage    = https://hyper.is/;
     maintainers = with maintainers; [ puffnfresh ];
     license     = licenses.mit;
     platforms   = [ "i686-linux" "x86_64-linux" ];
