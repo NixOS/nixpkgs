@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     rm -r $out/share/go/pkg/bootstrap
-    mv $out/share/go/bin $out/bin
+    ln -s $out/share/go/bin $out/bin
   '';
 
   setupHook = ./setup-hook.sh;
