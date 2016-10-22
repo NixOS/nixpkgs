@@ -14,13 +14,19 @@ let
   getRev = name: builtins.substring 0 40 (builtins.readFile "${src}/${name}_revision");
 in
 
-assert getRev "spirv-tools" == spirv-tools.src.rev;
-assert getRev "spirv-headers" == spirv-tools.headers.rev;
-assert getRev "glslang" == glslang.src.rev;
-
 stdenv.mkDerivation rec {
   name = "vulkan-loader-${version}";
   inherit version src;
+
+  prePatch = ''
+    if [ "$(cat '${src}/spirv-tools_revision')" != '${spirv-tools.src.rev}' ] \
+      || [ "$(cat '${src}/spirv-headers_revision')" != '${spirv-tools.headers.rev}' ] \
+      || [ "$(cat '${src}/glslang_revision')" != '${glslang.src.rev}' ]
+    then
+      echo "Version mismatch, aborting!"
+      false
+    fi
+  '';
 
   buildInputs = [ cmake pkgconfig git python3 python3Packages.lxml
                   glslang spirv-tools x11 libxcb wayland
