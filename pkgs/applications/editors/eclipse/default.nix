@@ -123,16 +123,16 @@ rec {
   ### Eclipse SDK
 
   eclipse-sdk-46 = buildEclipse {
-    name = "eclipse-sdk-4.6";
+    name = "eclipse-sdk-4.6.1";
     description = "Eclipse Neon Classic";
     sources = {
       "x86_64-linux" = fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/eclipse-SDK-4.6-linux-gtk-x86_64.tar.gz;
-          sha256 = "4d7a39ce4e04ba1f5179f6a72926eb86ed506d97842a3bf4247814491c508e0a";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.1-201609071200/eclipse-SDK-4.6.1-linux-gtk-x86_64.tar.gz;
+          sha256 = "1mr7sj4whz23iwz5j6mbqd80a39177qv0r7b6cip7dji4n2agl8j";
         };
       "i686-linux" = fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/eclipse-SDK-4.6-linux-gtk.tar.gz;
-          sha256 = "d9e1d390cac504a17a65d4a22ebb8da6a592bcc54491912cbc29577990d77014";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.1-201609071200/eclipse-SDK-4.6.1-linux-gtk.tar.gz;
+          sha256 = "0kgj0zpgzwx90q13c4mr8swf63azd56532ycxgq2rbs0d1qbl87j";
         };
     };
   };
