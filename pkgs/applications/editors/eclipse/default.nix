@@ -88,16 +88,16 @@ rec {
   eclipse-platform = eclipse-platform-46;
 
   eclipse-platform-46 = buildEclipse {
-    name = "eclipse-platform-4.6";
+    name = "eclipse-platform-4.6.1";
     description = "Eclipse platform";
     sources = {
       "x86_64-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/eclipse-SDK-4.6-linux-gtk-x86_64.tar.gz;
-          sha256 = "02lfa0f4j53q4ks3nal4jxnm1vc6xck2k9zng58izfh49v73jyjd";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.1-201609071200/eclipse-SDK-4.6.1-linux-gtk-x86_64.tar.gz;
+          sha256 = "1mr7sj4whz23iwz5j6mbqd80a39177qv0r7b6cip7dji4n2agl8j";
         };
       "i686-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/eclipse-SDK-4.6-linux-gtk.tar.gz;
-          sha256 = "053hsy87jmr9phn934a4qny959d6inxjx8nlcmxa2165ra8d7qfr";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.1-201609071200/eclipse-SDK-4.6.1-linux-gtk.tar.gz;
+          sha256 = "0kgj0zpgzwx90q13c4mr8swf63azd56532ycxgq2rbs0d1qbl87j";
         };
     };
   };
