@@ -2079,6 +2079,8 @@ in
     inherit gfortran;
   });
 
+  hecate = callPackage ../applications/editors/hecate { };
+
   heimdall = callPackage ../tools/misc/heimdall { };
 
   hevea = callPackage ../tools/typesetting/hevea { };
