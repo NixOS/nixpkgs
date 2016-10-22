@@ -20975,7 +20975,7 @@ in modules // {
 
   # - duplicate of whoosh
   # - alias added for backward-compatibility (removed in the next version)
-  Whoosh = whoosh;
+  Whoosh = self.whoosh;
 
   pysolr = buildPythonPackage rec {
     name = "pysolr-${version}";

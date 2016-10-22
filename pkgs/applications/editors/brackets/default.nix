@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildEnv, gtk, glib, gdk_pixbuf, alsaLib, nss, nspr, gconf
+{ stdenv, fetchurl, buildEnv, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, gconf
 , cups, libgcrypt_1_5, systemd, makeWrapper, dbus }:
 let
   bracketsEnv = buildEnv {
