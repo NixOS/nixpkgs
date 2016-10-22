@@ -7,12 +7,12 @@ in
 
 rec {
   rustc = callPackage ./rustc.nix {
-    shortVersion = "1.12.0";
+    shortVersion = "1.12.1";
     isRelease = true;
     forceBundledLLVM = false;
     configureFlags = [ "--release-channel=stable" ];
-    srcRev = "3191fbae9da539442351f883bdabcad0d72efcb6";
-    srcSha = "1mpw6c5jfxy60g786wl8g0ncwikqfbcj67jrdpj3jacywxsxzlby";
+    srcRev = "d4f39402a0c2c2b94ec0375cd7f7f6d7918113cd";
+    srcSha = "1lpykjy96rwz4jy28rf7ijca0q9lvckgnbzvcdsrspd5rs2ywfwr";
 
     patches = [
       ./patches/disable-lockfile-check.patch
