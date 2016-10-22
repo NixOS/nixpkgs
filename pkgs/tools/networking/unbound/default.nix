@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "unbound-${version}";
-  version = "1.5.9";
+  version = "1.5.10";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "01328cfac99ab5b8c47115151896a244979e442e284eb962c0ea84b7782b6990";
+    sha256 = "11lli8jgq4n917gcx6nw728g1hqc2lszwlxa5mdb78m2ri7qp6x3";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
-    homepage = http://www.unbound.net;
+    homepage = https://www.unbound.net;
     maintainers = with maintainers; [ ehmry fpletz ];
     platforms = stdenv.lib.platforms.unix;
   };
