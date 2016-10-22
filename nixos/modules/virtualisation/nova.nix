@@ -59,7 +59,7 @@ let
     compute_driver = libvirt.LibvirtDriver
 
     [database]
-    connection = mysql://nova:nova@localhost/nova
+    connection = mysql://nova:${cfg.dbPassword}@${cfg.dbHost}/nova
 
     [glance]
     host = localhost
@@ -152,6 +152,18 @@ in {
           '';
       };
 
+      dbHost = mkOption {
+        default = "localhost";
+        description = "The location of the database server";
+        example = "localhost";
+      };
+
+      dbPassword = mkOption {
+        default = "nova";
+        description = "The mysql password";
+        example = "nova";
+      };
+    
       endpointPublic = mkOption {
         type = types.str;
         default = "localhost";
@@ -230,8 +242,8 @@ in {
         chown -R nova:nova /var/lock/nova /var/lib/nova/
 
         ${pkgs.mysql}/bin/mysql -u root -N -e "CREATE DATABASE nova;" || true
-        ${pkgs.mysql}/bin/mysql -u root -N -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'nova';"
-        ${pkgs.mysql}/bin/mysql -u root -N -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'nova';"
+        ${pkgs.mysql}/bin/mysql -u root -N -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'${cfg.dbHost}' IDENTIFIED BY '${cfg.dbPassword}';"
+        ${pkgs.mysql}/bin/mysql -u root -N -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY '${cfg.dbPassword}';"
 
         # Initialise the database
         ${cfg.package}/bin/nova-manage --config-file=${novaConf} db sync

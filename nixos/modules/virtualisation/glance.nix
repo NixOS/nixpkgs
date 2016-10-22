@@ -6,7 +6,7 @@ let
   cfg = config.virtualisation.glance;
   commonConf = ''
     [database]
-    connection = mysql://glance:glance@localhost/glance
+    connection = mysql://glance:${cfg.dbPassword}@${cfg.dbHost}/glance
     notification_driver = noop
 
     [keystone_authtoken]
@@ -61,6 +61,18 @@ in {
         want to enable some of Nova's services on other machines,
         and use a database such as MySQL.
       '';
+    };
+
+    dbHost = mkOption {
+      default = "localhost";
+      description = "The location of the database server";
+      example = "localhost";
+    };
+
+    dbPassword = mkOption {
+      default = "glance";
+      description = "The mysql password";
+      example = "glance";
     };
     
     endpointPublic = mkOption {
@@ -117,8 +129,8 @@ in {
 
         # TODO: move out of here
         mysql -u root -N -e "create database glance;" || true
-        mysql -u root -N -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'glance';"
-        mysql -u root -N -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'glance';"
+        mysql -u root -N -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'${cfg.dbHost}' IDENTIFIED BY '${cfg.dbPassword}';"
+        mysql -u root -N -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY '${cfg.dbPassword}';"
 
         # Initialise the database
         ${cfg.package}/bin/glance-manage --config-file=${glanceApiConf} --config-file=${glanceRegistryConf} db_sync
