@@ -4022,10 +4022,9 @@ in
     gnutls = null;
   };
 
-  openconnect_gnutls = lowPrio (openconnect.override {
+  openconnect_gnutls = callPackage ../tools/networking/openconnect.nix {
     openssl = null;
-    gnutls = gnutls;
-  });
+  };
 
   vtun = callPackage ../tools/networking/vtun { };
 
