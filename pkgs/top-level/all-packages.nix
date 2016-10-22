@@ -652,6 +652,7 @@ in
 
   brltty = callPackage ../tools/misc/brltty {
     alsaSupport = (!stdenv.isDarwin);
+    systemdSupport = stdenv.isLinux;
   };
   bro = callPackage ../applications/networking/ids/bro { };
 
