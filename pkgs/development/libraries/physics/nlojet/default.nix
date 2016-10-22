@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl2;
     description = "Implementation of calculation of the hadron jet cross sections";
     platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.maintainers; [ veprbl ];
+    maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };
 }
