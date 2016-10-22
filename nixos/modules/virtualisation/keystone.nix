@@ -11,7 +11,7 @@ let
     policy_file=${cfg.package}/etc/policy.json
 
     [database]
-    connection = mysql://keystone:keystone@localhost/keystone
+    connection = mysql://${cfg.dbUser}:${cfg.dbPassword}@${cfg.dbHost}/${cfg.dbName}
 
     [paste_deploy]
     config_file = ${cfg.package}/etc/keystone-paste.ini
@@ -93,9 +93,30 @@ in {
       default = "mySuperToken";
       description = ''
         This is the admin token used to boostrap keystone,
-        ie. to provision first resources.''
-      '';
+        ie. to provision first resources.'';
     };
+
+    dbHost = mkOption {
+      default = "localhost";
+      description = "The location of the database server.";
+      example = "localhost";
+    };
+    dbName = mkOption {
+      default = "keystone";
+      description = "Name of the database that holds the Keystone data.";
+      example = "localhost";
+    };
+    dbUser = mkOption {
+      default = "keystone";
+      description = "The dbUser, read: the username, for the database.";
+      example = "keystone";
+    };
+    dbPassword = mkOption {
+      default = "keystone";
+      description = "The mysql password to the respective dbUser.";
+      example = "keystone";
+    };
+
   };
 
 
@@ -125,9 +146,9 @@ in {
           mkdir -m 755 -p /var/lib/keystone
 
           # TODO: move out of here
-          mysql -u root -N -e "create database keystone;" || true
-          mysql -u root -N -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'keystone';"
-          mysql -u root -N -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'keystone';"
+          mysql -u root -N -e "create database ${cfg.dbName};" || true
+          mysql -u root -N -e "GRANT ALL PRIVILEGES ON ${cfg.dbName}.* TO '${cfg.dbUser}'@'${cfg.dbHost}' IDENTIFIED BY '${cfg.dbPassword}';"
+          mysql -u root -N -e "GRANT ALL PRIVILEGES ON ${cfg.dbName}.* TO '${cfg.dbUser}'@'%' IDENTIFIED BY '${cfg.dbPassword}';"
 
           # Initialise the database
           ${cfg.package}/bin/keystone-manage --config-file=${keystoneConf} db_sync

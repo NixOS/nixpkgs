@@ -108,7 +108,7 @@ let
     password = asdasd
 
     [database]
-    connection = mysql://neutron:neutron@localhost/neutron
+    connection = mysql://neutron:${cfg.dbPassword}@${cfg.dbHost}/neutron
 
     [oslo_concurrency]
     lock_path = /var/lock/neutron
@@ -166,6 +166,18 @@ in {
         want to enable some of Nova's services on other machines,
         and use a database such as MySQL.
       '';
+    };
+    
+    dbHost = mkOption {
+      default = "localhost";
+      description = "The location of the database server";
+      example = "localhost";
+    };
+
+    dbPassword = mkOption {
+      default = "neutron";
+      description = "The mysql password";
+      example = "neutron";
     };
     
     endpointPublic = mkOption {
@@ -229,8 +241,8 @@ in {
 
         # TODO: move out of here
         mysql -u root -N -e "create database neutron;" || true
-        mysql -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'neutron';"
-        mysql -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'neutron';"
+        mysql -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'${cfg.dbHost}' IDENTIFIED BY '${cfg.dbPassword}';"
+        mysql -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY '${cfg.dbPassword}';"
 
         # Initialise the database
         ${package_set}/bin/neutron-db-manage --config-file ${neutronConf} --config-file ${ml2PluginConf} upgrade head
