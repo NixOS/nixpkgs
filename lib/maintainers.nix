@@ -444,6 +444,7 @@
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   uralbash = "Svintsov Dmitry <root@uralbash.ru>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
+  uwap = "uwap <me@uwap.name>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
   vanzef = "Ivan Solyankin <vanzef@gmail.com>";
   vbgl = "Vincent Laporte <Vincent.Laporte@gmail.com>";
