@@ -164,14 +164,6 @@ following incompatible changes:</para>
       PHP has been upgraded to 7.0
     </para>
   </listitem>
-
-  <listitem>
-    <para>PHP now scans for extra configuration .ini files in /etc/php.d
-    instead of /etc. This prevents accidentally loading non-PHP .ini files
-    that may be in /etc.
-    </para>
-  </listitem>
-
 </itemizedlist>
 
 

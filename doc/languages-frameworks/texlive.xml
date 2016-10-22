@@ -35,6 +35,7 @@ texlive.combine {
       You can list packages e.g. by <command>nix-repl</command>.
       <programlisting>
 $ nix-repl
+nix-repl> :l &lt;nixpkgs>
 nix-repl> texlive.collection-&lt;TAB>
       </programlisting>
     </para></listitem>

@@ -68,6 +68,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "bindnow" "relro" ];
 
+  # Fix pkgconfig file that gets broken with multiple outputs
+  postFixup = ''
+    sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_old=.*|includedir_old=$dev/include/opencv|"
+    sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
+  '';
+
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
   meta = {

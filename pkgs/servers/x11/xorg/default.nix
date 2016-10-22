@@ -1880,11 +1880,11 @@ let
   }) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
 
   xf86videonouveau = (mkDerivation "xf86videonouveau" {
-    name = "xf86-video-nouveau-1.0.12";
+    name = "xf86-video-nouveau-1.0.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-nouveau-1.0.12.tar.bz2;
-      sha256 = "07irv1zkk0rkyn1d7f2gn1icgcz2ix0pwv74sjian763gynmg80f";
+      url = mirror://xorg/individual/driver/xf86-video-nouveau-1.0.13.tar.bz2;
+      sha256 = "1js7vak68g2800f1cy5r41wl5x2j7dbmbd7zxypzfgcw2fx454kd";
     };
     buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -2353,11 +2353,11 @@ let
   }) // {inherit ;};
 
   xorgserver = (mkDerivation "xorgserver" {
-    name = "xorg-server-1.18.3";
+    name = "xorg-server-1.18.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.18.3.tar.bz2;
-      sha256 = "1ka206v4nbw6qz072gh0543aq44azq2zv9f0yysy5nvwa4i9qwza";
+      url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
+      sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
     };
     buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
     meta.platforms = stdenv.lib.platforms.unix;

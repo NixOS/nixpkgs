@@ -207,6 +207,9 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
+    # lightdm uses the accounts daemon to rember language/window-manager per user
+    services.accounts-daemon.enable = true;
+
     security.pam.services.lightdm = {
       allowNullPassword = true;
       startSession = true;

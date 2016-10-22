@@ -58,5 +58,6 @@ in stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ cdepillabout ];
     platforms = platforms.linux;
+    broken = true; # https://github.com/NixOS/nixpkgs/issues/19579
   };
 }

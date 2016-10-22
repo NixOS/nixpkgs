@@ -4,24 +4,20 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-uniemoji-${version}";
-  version = "2016-09-20";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "salty-horse";
     repo = "ibus-uniemoji";
-    rev = "c8931a4807a721168e45463ecba00805adb3fe8d";
-    sha256 = "0fydxkdjsbfbrbb8238rfnshmhp11c38hsa7y2gp1ii6mkjngb1j";
+    rev = "v${version}";
+    sha256 = "121zh3q0li1k537fcvbd4ns4jgl9bbb9gm9ihy8cfxgirv38lcfa";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyxdg python-Levenshtein ];
 
   makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc"
-                "PYTHON=${python3Packages.python.interpreter}" ];
-
-  postPatch = ''
-    sed -i "s,/etc/xdg/,$out/etc/xdg/," uniemoji.py
-    sed -i "s,/usr/share/,$out/share/,g" uniemoji.xml.in
-  '';
+                "PYTHON=${python3Packages.python.interpreter}"
+              ];
 
   meta = with stdenv.lib; {
     isIbusEngine = true;

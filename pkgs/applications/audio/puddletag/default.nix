@@ -1,33 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, pythonPackages, makeWrapper, chromaprint }:
+{ stdenv, fetchFromGitHub, python2Packages, makeWrapper, chromaprint }:
 
-with lib;
-with pythonPackages;
+let
+  pypkgs = python2Packages;
 
-buildPythonApplication rec {
-  version = "1.1.1";
+in pypkgs.buildPythonApplication rec {
   name = "puddletag-${version}";
-  namePrefix = "";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "keithgg";
     repo = "puddletag";
-    rev = "1.1.1";
+    rev = version;
     sha256 = "0zmhc01qg64fb825b3kj0mb0r0d9hms30nqvhdks0qnv7ahahqrx";
   };
 
   sourceRoot = "${name}-src/source";
 
-  disabled = isPy3k;
+  disabled = pypkgs.isPy3k; # work to support python 3 has not begun
 
   outputs = [ "out" ];
 
-  propagatedBuildInputs = [
-    chromaprint
+  propagatedBuildInputs = [ chromaprint ] ++ (with pypkgs; [
     configobj
     mutagen
     pyparsing
     pyqt4
-  ];
+  ]);
 
   doCheck = false;   # there are no tests
   dontStrip = true;  # we are not generating any binaries
@@ -36,7 +34,7 @@ buildPythonApplication rec {
     siteDir=$(toPythonPath $out)
     mkdir -p $siteDir
     PYTHONPATH=$PYTHONPATH:$siteDir
-    ${python.interpreter} setup.py install --prefix $out
+    ${pypkgs.python.interpreter} setup.py install --prefix $out
   '';
 
   meta = with stdenv.lib; {

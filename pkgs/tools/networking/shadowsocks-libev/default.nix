@@ -11,12 +11,13 @@
 , docbook_xml_dtd_45
 , docbook_xsl
 , libxslt
+, pcre
 }:
 
 let
 
-  version = "2.5.0";
-  sha256 = "6841e0efa1c01caef5a827f463ee304dc9e48fb4751cc9256316df5ab4490ae0";
+  version = "2.5.5";
+  sha256 = "46a72367b7301145906185f1e4136e39d6792d27643826e409ab708351b6d0dd";
 
 in
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ zlib asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt ]
+  buildInputs = [ zlib asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt pcre ]
                 ++ optional (!withMbedTLS) openssl
                 ++ optional withMbedTLS mbedtls
                 ++ optionals enableSystemSharedLib [libev libsodium udns];

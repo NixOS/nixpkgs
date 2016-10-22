@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, python, pythonPackages, makeWrapper, gettext }:
+{ stdenv, fetchurl, pythonPackages, makeWrapper, gettext, git }:
 
-pythonPackages.buildPythonApplication rec {
+let
+  inherit (pythonPackages) buildPythonApplication pyqt4 sip pyinotify python mock;
+in buildPythonApplication rec {
   name = "git-cola-${version}";
-  version = "2.5";
+  version = "2.8";
 
   src = fetchurl {
     url = "https://github.com/git-cola/git-cola/archive/v${version}.tar.gz";
-    sha256 = "0ybjmlwm1plnvqi20y91ci7sgldzwlwn86vyyn9a157h7lf4ngb8";
+    sha256 = "19ff7i0h5fznrkm17lp3xkxwkq27whhiil6y6bm16b1wny5hjqlr";
   };
 
-  buildInputs = [ makeWrapper gettext ];
-  propagatedBuildInputs = with pythonPackages; [ pyqt4 sip pyinotify ];
+  buildInputs = [ git makeWrapper gettext ];
+  propagatedBuildInputs = [ pyqt4 sip pyinotify ];
 
   # HACK: wrapPythonPrograms adds 'import sys; sys.argv[0] = "git-cola"', but
   # "import __future__" must be placed above that. This removes the argv[0] line.
@@ -25,6 +27,8 @@ pythonPackages.buildPythonApplication rec {
       /import sys; sys.argv/d
     }'
   '';
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/git-cola/git-cola;

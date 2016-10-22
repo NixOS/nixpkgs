@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp */*.otf $out/share/fonts/truetype
+    mkdir -p $out/share/fonts/opentype
+    cp */*.otf $out/share/fonts/opentype
+    # for Raleway, where the fonts are already in /share/…
+    cp */share/fonts/opentype/*.otf $out/share/fonts/opentype
   '';
 
   meta = {

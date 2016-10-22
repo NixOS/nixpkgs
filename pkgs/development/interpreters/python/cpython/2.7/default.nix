@@ -96,7 +96,7 @@ let
     '' + optionalString stdenv.isDarwin ''
       substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
       substituteInPlace Lib/multiprocessing/__init__.py \
-        --replace 'os.popen(comm)' 'os.popen("nproc")'
+        --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
     '';
 
   configureFlags = [

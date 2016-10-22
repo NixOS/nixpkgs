@@ -128,9 +128,11 @@ in {
     in {
       description = "WPA Supplicant";
 
-      after = [ "network.target" ] ++ lib.concatMap deviceUnit ifaces;
+      after = lib.concatMap deviceUnit ifaces;
+      before = [ "network.target" ];
+      wants = [ "network.target" ];
       requires = lib.concatMap deviceUnit ifaces;
-      wantedBy = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       path = [ pkgs.wpa_supplicant ];
 

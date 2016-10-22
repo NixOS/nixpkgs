@@ -175,11 +175,20 @@ in
 
     environment.systemPackages = [ pkgs.avahi ];
 
+    systemd.sockets.avahi-daemon =
+      { description = "Avahi mDNS/DNS-SD Stack Activation Socket";
+        listenStreams = [ "/var/run/avahi-daemon/socket" ];
+        wantedBy = [ "sockets.target" ];
+      };
+
     systemd.services.avahi-daemon =
-      { description = "Avahi daemon";
+      { description = "Avahi mDNS/DNS-SD Stack";
         wantedBy = [ "multi-user.target" ];
-        # Receive restart event after resume
-        partOf = [ "post-resume.target" ];
+        requires = [ "avahi-daemon.socket" ];
+
+        serviceConfig."NotifyAccess" = "main";
+        serviceConfig."BusName" = "org.freedesktop.Avahi";
+        serviceConfig."Type" = "dbus";
 
         path = [ pkgs.coreutils pkgs.avahi ];
 

@@ -392,6 +392,8 @@ in
     security.acme.certs = filterAttrs (n: v: v != {}) (
       mapAttrs (vhostName: vhostConfig:
         optionalAttrs vhostConfig.enableACME {
+          user = cfg.user;
+          group = cfg.group;
           webroot = vhostConfig.acmeRoot;
           extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
           postRun = ''

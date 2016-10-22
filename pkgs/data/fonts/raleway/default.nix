@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp "$src/fonts/OTF v3.000 Fontlab"/*.otf $out/share/fonts/truetype
+    mkdir -p $out/share/fonts/opentype
+    cp "$src/fonts/OTF v3.000 Fontlab"/*.otf $out/share/fonts/opentype
     find -type f -maxdepth 1 -exec cp "{}" $out/ \;
   '';
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       It also has a sister display family, Raleway Dots.
     '';
 
-    homepage = src.homepage;
+    homepage = src.meta.homepage;
     license = stdenv.lib.licenses.ofl;
 
     maintainers = with stdenv.lib.maintainers; [ profpatsch ];
