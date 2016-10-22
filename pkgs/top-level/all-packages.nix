@@ -395,6 +395,8 @@ in
 
   albert = qt5.callPackage ../applications/misc/albert {};
 
+  amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
+
   ammonite-repl = callPackage ../development/tools/ammonite {};
 
   amtterm = callPackage ../tools/system/amtterm {};
