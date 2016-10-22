@@ -15,7 +15,7 @@
 , db
 , expat
 , libffi
-, CF, configd
+, CF, configd, coreutils
 }:
 
 assert x11Support -> tcl != null
