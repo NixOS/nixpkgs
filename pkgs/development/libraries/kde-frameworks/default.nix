@@ -40,7 +40,6 @@ let
       let
         inherit (args) name;
         inherit (srcs."${name}") src version;
-        qtVersion = (builtins.parseDrvName self.qtbase.name).version;
       in kdeDerivation (args // {
         name = "${name}-${version}";
         inherit src;
@@ -51,7 +50,7 @@ let
           ];
           platforms = lib.platforms.linux;
           homepage = "http://www.kde.org";
-          broken = builtins.compareVersions qtVersion "5.6.0" < 0;
+          broken = builtins.compareVersions self.qtbase.version "5.6.0" < 0;
         } // (args.meta or {});
       });
 
