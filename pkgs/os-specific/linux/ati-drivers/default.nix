@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel ? null, which
+{ stdenv, lib, fetchurl, kernel ? null, which
 , xorg, makeWrapper, glibc, patchelf, unzip
 , fontconfig, freetype, mesa # for fgl_glxgears
 , # Whether to build the libraries only (i.e. not the kernel module or
@@ -75,9 +75,12 @@ stdenv.mkDerivation rec {
     ./patches/15.9-preempt.patch
     ./patches/15.9-sep_printf.patch ]
   ++ optionals ( kernel != null &&
-                 (builtins.compareVersions kernel.version "4.6") >= 0 )
+                 (lib.versionAtLeast kernel.version "4.6") )
                [ ./patches/kernel-4.6-get_user_pages.patch
-                 ./patches/kernel-4.6-page_cache_release-put_page.patch ];
+                 ./patches/kernel-4.6-page_cache_release-put_page.patch ]
+  ++ optionals ( kernel != null &&
+                 (lib.versionAtLeast kernel.version "4.7") )
+               [ ./patches/4.7-arch-cpu_has_pge-v2.patch ];
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
