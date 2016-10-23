@@ -4,7 +4,7 @@
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, pango
 , systemd, libXScrnSaver }:
 
-let version = "0.0.8"; in
+let version = "0.0.9"; in
 
 stdenv.mkDerivation {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
     src = fetchurl {
         url = "https://cdn-canary.discordapp.com/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "1g48jxiswpfvbgjs4dyywmzj9kncvrgpajhixk3acizdmfmsyqkk";
+        sha256 = "72f692cea62b836220f40d81d110846f9cde9a0fba7a8d47226d89e0980255b9";
     };
 
     libPath = stdenv.lib.makeLibraryPath [
