@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
 buildPythonApplication rec {
   version = "1.0.0";
@@ -12,7 +12,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = (with pythonPackages; [
-    ansi kazoo nose six tabulate twitter readline
+    ansi kazoo nose six tabulate twitter
   ]);
 
   #requires a running zookeeper, don't know how to fix that for the moment

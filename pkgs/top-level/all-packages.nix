@@ -17400,9 +17400,7 @@ in
 
   zimg = callPackage ../development/libraries/zimg { };
 
-  zk-shell = callPackage ../applications/misc/zk-shell {
-    inherit (pythonPackages) buildPythonApplication;
-  };
+  zk-shell = callPackage ../applications/misc/zk-shell { };
 
   zuki-themes = callPackage ../misc/themes/zuki { };
 
