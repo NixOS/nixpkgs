@@ -396,6 +396,8 @@ in
 
   albert = qt5.callPackage ../applications/misc/albert {};
 
+  amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
+
   ammonite-repl = callPackage ../development/tools/ammonite {};
 
   amtterm = callPackage ../tools/system/amtterm {};
@@ -565,7 +567,7 @@ in
     qt4Support = config.avahi.qt4Support or false;
   };
 
-  avro-cpp = callPackage ../development/libraries/avro-c++ { };
+  avro-cpp = callPackage ../development/libraries/avro-c++ { boost = boost160; };
 
   aws = callPackage ../tools/virtualization/aws { };
 
@@ -649,6 +651,7 @@ in
 
   brltty = callPackage ../tools/misc/brltty {
     alsaSupport = (!stdenv.isDarwin);
+    systemdSupport = stdenv.isLinux;
   };
   bro = callPackage ../applications/networking/ids/bro { };
 
@@ -2081,6 +2084,8 @@ in
   hdf5-fortran = appendToName "fortran" (hdf5.override {
     inherit gfortran;
   });
+
+  hecate = callPackage ../applications/editors/hecate { };
 
   heimdall = callPackage ../tools/misc/heimdall { };
 
@@ -4026,16 +4031,15 @@ in
     SDL = SDL_sixel;
   };
 
-  openconnect = openconnect_openssl;
+  openconnect = openconnect_gnutls;
 
   openconnect_openssl = callPackage ../tools/networking/openconnect.nix {
     gnutls = null;
   };
 
-  openconnect_gnutls = lowPrio (openconnect.override {
+  openconnect_gnutls = callPackage ../tools/networking/openconnect.nix {
     openssl = null;
-    gnutls = gnutls;
-  });
+  };
 
   vtun = callPackage ../tools/networking/vtun { };
 
@@ -4862,6 +4866,8 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
+  glslang = callPackage ../development/compilers/glslang { };
+
   go_bootstrap = callPackage ../development/compilers/go/1.4.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5120,7 +5126,7 @@ in
   };
 
   ponyc = callPackage ../development/compilers/ponyc {
-    llvm = llvm_38;
+    llvm = llvm_39;
   };
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
@@ -5753,6 +5759,8 @@ in
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
+  awf = callPackage ../development/tools/misc/awf { };
+
   electron = callPackage ../development/tools/electron { };
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
@@ -6366,6 +6374,8 @@ in
   speedtest-cli = callPackage ../tools/networking/speedtest-cli { };
 
   spin = callPackage ../development/tools/analysis/spin { };
+
+  spirv-tools = callPackage ../development/tools/spirv-tools { };
 
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
@@ -7794,7 +7804,7 @@ in
   };
 
   libgumbo = callPackage ../development/libraries/libgumbo { };
-  
+
   libhangul = callPackage ../development/libraries/libhangul { };
 
   libharu = callPackage ../development/libraries/libharu { };
@@ -9382,6 +9392,8 @@ in
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
 
+  vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
+
   vtkWithQt4 = vtk.override { qtLib = qt4; };
 
   vxl = callPackage ../development/libraries/vxl {
@@ -10379,6 +10391,8 @@ in
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
+  shaarli = callPackage ../servers/web-apps/shaarli { };
+
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
   unifi = callPackage ../servers/unifi { };
@@ -10392,6 +10406,8 @@ in
   virtuoso = virtuoso6;
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
+
+  wallabag = callPackage ../servers/web-apps/wallabag { };
 
   winstone = callPackage ../servers/http/winstone { };
 
@@ -11824,6 +11840,8 @@ in
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
+  shaderc = callPackage ../development/compilers/shaderc { };
+
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
@@ -12189,6 +12207,8 @@ in
   };
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
+
+  bspwm-unstable = callPackage ../applications/window-managers/bspwm/unstable.nix { };
 
   bvi = callPackage ../applications/editors/bvi { };
 
@@ -13218,7 +13238,8 @@ in
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
-  hyperterm = callPackage ../applications/misc/hyperterm { inherit (gnome2) GConf; };
+  hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
+  hyperterm = self.hyper;
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
@@ -13663,7 +13684,9 @@ in
 
   MMA = callPackage ../applications/audio/MMA { };
 
-  mmex = callPackage ../applications/office/mmex { };
+  mmex = callPackage ../applications/office/mmex {
+    wxGTK30 = wxGTK30.override { withWebKit  = true ; };
+  };
 
   moc = callPackage ../applications/audio/moc {
     ffmpeg = ffmpeg_2;
@@ -13873,6 +13896,8 @@ in
 
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
+  sxhkd-unstable = callPackage ../applications/window-managers/sxhkd/unstable.nix { };
+
   mpop = callPackage ../applications/networking/mpop {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -13947,6 +13972,8 @@ in
     inherit (gnome2) libglade;
   };
 
+  oblogout = callPackage ../tools/X11/oblogout { };
+
   obs-studio = qt5.callPackage ../applications/video/obs-studio {
     alsaSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or true;
@@ -13980,9 +14007,7 @@ in
 
   openscad = callPackage ../applications/graphics/openscad {};
 
-  opera = callPackage ../applications/networking/browsers/opera {
-    inherit (pkgs.kde4) kdelibs;
-  };
+  opera = callPackage ../applications/networking/browsers/opera {};
 
   osmctools = callPackage ../applications/misc/osmctools { };
 
@@ -14230,6 +14255,8 @@ in
     tag = "-daemon-qt5";
     withKDE = false;
   };
+
+  quassel-webserver = callPackage ../applications/networking/irc/quassel-webserver { };
 
   quirc = callPackage ../tools/graphics/quirc {};
 
@@ -14982,6 +15009,7 @@ in
 
   weechat = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
+    inherit (darwin) libresolv;
   };
 
   westonLite = callPackage ../applications/window-managers/weston {
@@ -15517,6 +15545,8 @@ in
   freedink = callPackage ../games/freedink { };
 
   freeorion = callPackage ../games/freeorion { };
+
+  frotz = callPackage ../games/frotz { };
 
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };
@@ -16417,6 +16447,10 @@ in
     cmake = cmakeCurses;
   });
 
+  ### PHYSICS
+
+  sacrifice = callPackage ../applications/science/physics/sacrifice {};
+
   ### SCIENCE/PROGRAMMING
 
   plm = callPackage ../applications/science/programming/plm { };
@@ -16740,6 +16774,8 @@ in
 
   ### SCIENCE / PHYSICS
 
+  fastjet = callPackage ../development/libraries/physics/fastjet { };
+
   geant4 = callPackage ../development/libraries/physics/geant4 {
     enableMultiThreading = true;
     enableG3toG4         = false;
@@ -16765,6 +16801,22 @@ in
   };
 
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
+
+  hepmc = callPackage ../development/libraries/physics/hepmc { };
+
+  herwig = callPackage ../development/libraries/physics/herwig { };
+
+  lhapdf = callPackage ../development/libraries/physics/lhapdf { };
+
+  nlojet = callPackage ../development/libraries/physics/nlojet { };
+
+  pythia = callPackage ../development/libraries/physics/pythia { };
+
+  rivet = callPackage ../development/libraries/physics/rivet { };
+
+  thepeg = callPackage ../development/libraries/physics/thepeg { };
+
+  yoda = callPackage ../development/libraries/physics/yoda { };
 
   ### MISC
 

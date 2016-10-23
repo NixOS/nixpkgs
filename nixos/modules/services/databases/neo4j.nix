@@ -22,11 +22,7 @@ let
       dbms.connector.https.encryption=TLS
       dbms.connector.https.address=${cfg.listenAddress}:${toString cfg.httpsPort}
     ''}
-    org.neo4j.server.webadmin.rrdb.location=${cfg.dataDir}/data/rrd
-    org.neo4j.server.webadmin.data.uri=/db/data/
-    org.neo4j.server.webadmin.management.uri=/db/manage/
-    org.neo4j.server.db.tuning.properties=${cfg.package}/share/neo4j/conf/neo4j.properties
-    org.neo4j.server.manage.console_engines=shell
+    dbms.shell.enabled=true
     ${cfg.extraServerConfig}
   '';
 
@@ -56,6 +52,18 @@ in {
       type = types.int;
     };
 
+    enableBolt = mkOption {
+      description = "Enable bolt for Neo4j.";
+      default = true;
+      type = types.bool;
+    };
+
+    boltPort = mkOption {
+      description = "Neo4j port to listen for BOLT traffic.";
+      default = 7687;
+      type = types.int;
+    };
+
     enableHttps = mkOption {
       description = "Enable https for Neo4j.";
       default = false;
@@ -79,7 +87,6 @@ in {
       default = "";
       type = types.lines;
     };
-
   };
 
   ###### implementation
@@ -115,5 +122,4 @@ in {
       home = cfg.dataDir;
     };
   };
-
 }
