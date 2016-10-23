@@ -54,7 +54,7 @@ in
       };
 
       configDir = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         default = null;
         description = "Use this optional config directory instead of using slapd.conf";
         example = "/var/db/slapd.d";
