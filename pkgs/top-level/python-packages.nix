@@ -30753,4 +30753,17 @@ in modules // {
     };
   };
 
+  uWSGI = buildPythonPackage rec {
+    name = "uWSGI-2.0.14";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uwsgi/${name}.tar.gz";
+      sha256 = "21b3d1ef926d835ff23576193a2c60d4c896d8e21567850cf0677a4764122887";
+    };
+    meta = with pkgs.stdenv.lib; {
+      description = "The uWSGI server";
+      homepage = "https://uwsgi-docs.readthedocs.io/en/latest/";
+      license = licenses.gplv2;
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
 }
