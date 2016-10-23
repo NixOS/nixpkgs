@@ -30688,4 +30688,69 @@ in modules // {
       platforms   = platforms.all;
     };
   };
+
+  pwntools = buildPythonPackage rec {
+    name = "pwntools-${version}";
+    version = "3.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pwntools/${name}.tar.gz";
+      sha256 = "1siyky6iq2b155sfjhx10yg2ihvjp2s3kr6i0n5z9v5pi0r7gc6d";
+    };
+    propagatedBuildInputs = with self; [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pypandoc pyserial dateutil requests2 tox pkgs.pandoc ];
+
+    meta = {
+      homepage = "http://pwntools.com";
+      description = "CTF framework and exploit development library";
+      license = licenses.mit;
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
+  ROPGadget = buildPythonPackage rec {
+    name = "ROPGadget-5.4";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/R/ROPGadget/${name}.tar.gz";
+      sha256 = "19wly4x3mq73c91pplqjk0c7sx6710887czh514qk5l7j0ky6dxg";
+    };
+    propagatedBuildInputs = with self; [ capstone ];
+    meta = with pkgs.stdenv.lib; {
+      description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
+      homepage = "http://shell-storm.org/project/ROPgadget/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
+  packaging = buildPythonPackage rec {
+    name = "packaging-16.7";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/packaging/${name}.tar.gz";
+      sha256 = "07h18mrpqs0lv2x4fl43pqi0xj6hdrmrnm6v9q634yliagg6q91f";
+    };
+    propagatedBuildInputs = with self; [ pyparsing six ];
+    meta = with pkgs.stdenv.lib; {
+      description = "Core utilities for Python packages";
+      homepage = "https://github.com/pypa/packaging";
+      license = [ licenses.bsd2 licenses.asl2 ];
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
+  pypandoc = buildPythonPackage rec {
+    name = "pypandoc-1.2.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pypandoc/${name}.zip";
+      sha256 = "1sxmgrpy0a0yy3nyxiymzqrw715gm23s01fq53q4vgn79j47jakm";
+    };
+    propagatedBuildInputs = with self; [ self.pip ];
+    buildInputs = [ pkgs.pandoc pkgs.texlive.combined.scheme-small pkgs.haskellPackages.pandoc-citeproc ];
+    meta = with pkgs.stdenv.lib; {
+      description = "Thin wrapper for pandoc";
+      homepage = "https://github.com/bebraw/pypandoc";
+      license = licenses.mit;
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
 }
