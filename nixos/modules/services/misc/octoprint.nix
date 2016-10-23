@@ -73,7 +73,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.lines;
+        type = types.attrs;
         default = {};
         description = "Extra options which are added to OctoPrint's YAML configuration file.";
       };
