@@ -288,12 +288,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2016.2.2";
+    version = "2016.2.4";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "0n2fvhjasklshyfcbwwn6wahzld8x65bid08245awdqv33p87bq6";
+      sha256 = "1h61l44xnbcdb26q8ylb25sj3rs43nxki203i2jra2i6j5jzxrvg";
     };
     wmClass = "jetbrains-webstorm";
   };
