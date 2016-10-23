@@ -2038,4 +2038,15 @@ rec {
     dependencies = [];
 
   };
+
+  auto-pairs = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "auto-pairs-2016-07-17";
+    src = fetchgit {
+      url = "git://github.com/jiangmiao/auto-pairs";
+      rev = "1b3a1efb078fdf74d4013308b63de57dfda0cc8e";
+      sha256 = "1g5gb9xvc9xw3rxg8p4w3qcsdl3xfpi5ax380916aq237kmrnzdk";
+    };
+    dependencies = [];
+
+  };
 }
