@@ -2049,4 +2049,15 @@ rec {
     dependencies = [];
 
   };
+
+  editorconfig-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "editorconfig-vim-2016-07-16";
+    src = fetchgit {
+      url = "git://github.com/editorconfig/editorconfig-vim";
+      rev = "a459b8cfef00100da40fd69c8ae92c4d1e63e1d2";
+      sha256 = "03slzk7jgr348f59pxghmd9giwla63lxmwvripg99zrlgl0pvp5g";
+    };
+    dependencies = [];
+
+  };
 }
