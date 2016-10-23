@@ -10382,6 +10382,8 @@ in
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
+  wallabag = callPackage ../servers/web-apps/wallabag { };
+
   winstone = callPackage ../servers/http/winstone { };
 
   xinetd = callPackage ../servers/xinetd { };
