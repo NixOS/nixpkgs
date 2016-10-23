@@ -129,6 +129,7 @@
   dochang = "Desmond O. Chang <dochang@gmail.com>";
   domenkozar = "Domen Kozar <domen@dev.si>";
   doublec = "Chris Double <chris.double@double.co.nz>";
+  dpaetzel = "David Pätzel <david.a.paetzel@gmail.com>";
   drets = "Dmytro Rets <dmitryrets@gmail.com>";
   drewkett = "Andrew Burkett <burkett.andrew@gmail.com>";
   dtzWill = "Will Dietz <nix@wdtz.org>";

@@ -31725,6 +31725,8 @@ EOF
     };
   };
 
+  urlscan = callPackage ../applications/misc/urlscan { };
+
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "wp_export_parser";
