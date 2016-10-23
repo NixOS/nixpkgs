@@ -30753,4 +30753,5 @@ in modules // {
     };
   };
 
+  urlscan = callPackage ../applications/misc/urlscan { };
 }
