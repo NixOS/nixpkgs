@@ -30758,21 +30758,4 @@ in modules // {
       maintainers = with maintainers; [ bennofs ];
     };
   };
-
-  uWSGI = buildPythonPackage rec {
-    name = "uWSGI-${version}";
-    version = "2.0.14";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/uwsgi/uwsgi-${version}.tar.gz";
-      sha256 = "21b3d1ef926d835ff23576193a2c60d4c896d8e21567850cf0677a4764122887";
-    };
-    buildInputs = [ pkgs.ncurses.dev ];
-    doCheck = false;
-    meta = with pkgs.stdenv.lib; {
-      description = "The uWSGI server";
-      homepage = "https://uwsgi-docs.readthedocs.io/en/latest/";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ bennofs ];
-    };
-  };
 }
