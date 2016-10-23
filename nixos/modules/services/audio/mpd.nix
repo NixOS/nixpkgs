@@ -49,7 +49,7 @@ in {
       };
 
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         description = ''
           Extra directives added to to the end of MPD's configuration file,

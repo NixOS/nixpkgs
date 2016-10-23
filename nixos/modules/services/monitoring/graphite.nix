@@ -167,7 +167,7 @@ in {
             CACHE_TYPE: 'filesystem'
             CACHE_DIR: '/tmp/graphite-api-cache'
         '';
-        type = types.str;
+        type = types.lines;
       };
     };
 
