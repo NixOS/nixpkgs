@@ -77,6 +77,7 @@
   ./programs/man.nix
   ./programs/mosh.nix
   ./programs/nano.nix
+  ./programs/oblogout.nix
   ./programs/screen.nix
   ./programs/shadow.nix
   ./programs/shell.nix
