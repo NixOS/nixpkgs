@@ -454,6 +454,7 @@
   veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   vizanto = "Danny Wilson <danny@prime.vc>";
+  vklquevs = "vklquevs <vklquevs@gmail.com>";
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
   vmandela = "Venkateswara Rao Mandela <venkat.mandela@gmail.com>";
   volhovm = "Mikhail Volkhov <volhovm.cs@gmail.com>";

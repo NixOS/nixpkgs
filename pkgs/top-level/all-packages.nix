@@ -13770,6 +13770,8 @@ in
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
+  mtpaint = callPackage ../applications/graphics/mtpaint { };
+
   multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
 
   multimon-ng = callPackage ../applications/misc/multimon-ng { };
