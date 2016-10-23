@@ -5114,6 +5114,7 @@ in
 
   opa = callPackage ../development/compilers/opa {
     nodejs = nodejs-4_x;
+    ocamlPackages = ocamlPackages_4_02;
   };
 
   inherit (ocaml-ng.ocamlPackages_4_01_0) opam_1_0_0;
