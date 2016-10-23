@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   version = "1.0.0";
   name = "zk-shell-" + version;
 
