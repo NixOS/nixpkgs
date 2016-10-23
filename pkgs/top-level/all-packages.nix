@@ -14795,6 +14795,8 @@ in
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
+  unigine-valley = callPackage ../applications/graphics/unigine-valley { };
+
   inherit (ocamlPackages) unison;
 
   unpaper = callPackage ../tools/graphics/unpaper { };
