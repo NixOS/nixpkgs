@@ -5749,6 +5749,8 @@ in
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
+  awf = callPackage ../development/tools/misc/awf { };
+
   electron = callPackage ../development/tools/electron { };
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
