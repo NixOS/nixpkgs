@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = with gnome3;
     [ itstool libxml2 intltool glib gtk gsettings_desktop_schemas dconf
       exiv2 libjpeg libtiff gstreamer libraw libsoup libsecret libchamplain
-      librsvg libwebp json_glib webkit lcms2 bison flex hicolor_icon_theme ];
+      librsvg libwebp json_glib webkit lcms2 bison flex hicolor_icon_theme defaultIconTheme ];
 
   enableParallelBuilding = true;
 
