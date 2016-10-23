@@ -30771,7 +30771,7 @@ in modules // {
     meta = with pkgs.stdenv.lib; {
       description = "The uWSGI server";
       homepage = "https://uwsgi-docs.readthedocs.io/en/latest/";
-      license = licenses.gplv2;
+      license = licenses.gpl2;
       maintainers = with maintainers; [ bennofs ];
     };
   };
