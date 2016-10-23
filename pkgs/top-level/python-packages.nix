@@ -2208,6 +2208,9 @@ in modules // {
       patchShebangs src/make.sh
     '';
     propagatedBuildInputs = [ ];
+    preCheck = ''
+      mv src/libcapstone.so capstone
+    '';
     meta = with pkgs.stdenv.lib; {
       homepage = "http://www.capstone-engine.org/";
       license = licenses.bsdOriginal;
@@ -30699,6 +30702,8 @@ in modules // {
     };
     propagatedBuildInputs = with self; [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pypandoc pyserial dateutil requests2 tox pkgs.pandoc ];
 
+    disabled = isPy3k;
+
     meta = {
       homepage = "http://pwntools.com";
       description = "CTF framework and exploit development library";
@@ -30729,6 +30734,7 @@ in modules // {
       sha256 = "07h18mrpqs0lv2x4fl43pqi0xj6hdrmrnm6v9q634yliagg6q91f";
     };
     propagatedBuildInputs = with self; [ pyparsing six ];
+    buildInputs = with self; [ pytest pretend ];
     meta = with pkgs.stdenv.lib; {
       description = "Core utilities for Python packages";
       homepage = "https://github.com/pypa/packaging";
@@ -30754,11 +30760,14 @@ in modules // {
   };
 
   uWSGI = buildPythonPackage rec {
-    name = "uWSGI-2.0.14";
+    name = "uWSGI-${version}";
+    version = "2.0.14";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/u/uwsgi/${name}.tar.gz";
+      url = "mirror://pypi/u/uwsgi/uwsgi-${version}.tar.gz";
       sha256 = "21b3d1ef926d835ff23576193a2c60d4c896d8e21567850cf0677a4764122887";
     };
+    buildInputs = [ pkgs.ncurses.dev ];
+    doCheck = false;
     meta = with pkgs.stdenv.lib; {
       description = "The uWSGI server";
       homepage = "https://uwsgi-docs.readthedocs.io/en/latest/";
