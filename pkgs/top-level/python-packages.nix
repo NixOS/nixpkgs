@@ -30732,7 +30732,7 @@ in modules // {
     meta = with pkgs.stdenv.lib; {
       description = "Core utilities for Python packages";
       homepage = "https://github.com/pypa/packaging";
-      license = [ licenses.bsd2 licenses.asl2 ];
+      license = [ licenses.bsd2 licenses.asl20 ];
       maintainers = with maintainers; [ bennofs ];
     };
   };
