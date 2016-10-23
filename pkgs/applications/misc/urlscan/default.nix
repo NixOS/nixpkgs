@@ -15,7 +15,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ urwid ];
 
   # FIXME doesn't work with 2.7; others than 2.7 and 3.5 were not tested (yet)
-  disabled = ! isPy35;
+  disabled = !pythonOlder "3.5";
 
   meta = with stdenv.lib; {
     description = "Mutt and terminal url selector (similar to urlview)";
