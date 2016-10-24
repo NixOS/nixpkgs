@@ -47,7 +47,7 @@ with lib;
         export HOME=/tmp
         mkdir /var/log/openfire || true
         mkdir /etc/openfire || true
-        for i in ${openfire}/conf.inst/*; do
+        for i in ${pkgs.openfire}/conf.inst/*; do
             if ! test -f /etc/openfire/$(basename $i); then
                 cp $i /etc/openfire/
             fi
