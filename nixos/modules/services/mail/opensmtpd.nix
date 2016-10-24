@@ -61,7 +61,7 @@ in {
       };
 
       procPackages = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.package;
         default = [];
         description = ''
           Packages to search for filters, tables, queues, and schedulers.
