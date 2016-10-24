@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "nimble-${version}";
 
-  version = "0.7.8";
+  version = "0.7.10";
 
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "nimble";
     rev = "v${version}";
-    sha256 = "12znxzj1j5fflw2mkkrns9n7qg6sf207652zrdyf7h2jdyzzb73x";
+    sha256 = "1bcv8chir73nn6x7q8n3sw2scf3m0x2w9gkkzx162ryivza1nm1r";
   };
 
   buildInputs = [ nim openssl ];
