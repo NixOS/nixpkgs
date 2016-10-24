@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cmake, boost, pythonPackages
+{ stdenv, fetchurl, cmake, boost, pythonPackages, llvmPackages
+, libcxxSupport ? false
 }:
 
 let version = "1.8.1"; in
@@ -15,11 +16,14 @@ stdenv.mkDerivation {
     cmake
     boost
     pythonPackages.python
-  ];
+  ] ++ stdenv.lib.optionals libcxxSupport [ llvmPackages.clang llvmPackages.libcxx llvmPackages.libcxxabi ];
 
   preConfigure = ''
     substituteInPlace test/SchemaTests.cc --replace "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"
     substituteInPlace test/buffertest.cc --replace "BOOST_MESSAGE" "BOOST_TEST_MESSAGE"
+  '' + stdenv.lib.optionalString libcxxSupport ''
+    export CXX=clang++
+    export CXXFLAGS="-nostdinc++ -I${llvmPackages.libcxx}/include/c++/v1"
   '';
 
   enableParallelBuilding = true;
