@@ -165,3 +165,5 @@
 "vimwiki"
 "vinegar"
 "vundle"
+"github:jiangmiao/auto-pairs"
+"github:editorconfig/editorconfig-vim"
