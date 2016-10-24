@@ -15542,6 +15542,8 @@ in
 
   gltron = callPackage ../games/gltron { };
 
+  gmad = callPackage ../games/gmad { };
+
   gnubg = callPackage ../games/gnubg { };
 
   gnuchess = callPackage ../games/gnuchess { };
