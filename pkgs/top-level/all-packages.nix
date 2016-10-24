@@ -16804,6 +16804,8 @@ in
 
   blackbird = callPackage ../misc/themes/blackbird { };
 
+  bootil = callPackage ../development/libraries/bootil { };
+
   brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
