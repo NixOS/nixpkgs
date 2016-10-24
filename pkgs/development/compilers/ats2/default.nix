@@ -9,25 +9,6 @@ let
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-contrib-${versionPkg}.tgz" ;
     sha256 = "0kc4nx1904745c1rkj9yfbayidw7rks1mwq0lxmvsgghn98dxwjn" ;
   };
-in
-
-stdenv.mkDerivation rec {
-  name    = "ats2-${version}";
-  version = versionPkg;
-
-    src = fetchurl {
-    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
-    sha256 = "140xy129fr11bdf4bj6qya9mf0fhnv2x7ksb9j46pf2yzrsrks8g";
-  };
-
-  buildInputs = [ gmp ];
-
-  setupHook = let
-      hookFiles = [ ./setup-hook.sh ] ++ stdenv.lib.optionals withContrib [ ./setup-contrib-hook.sh ] ;
-    in
-      builtins.toFile "setupHook.sh" (stdenv.lib.concatMapStringsSep "\n" builtins.readFile hookFiles) ;
-
-  patches = [ ./installed-lib-directory-version.patch ];
 
   postInstallContrib = stdenv.lib.optionalString withContrib
   ''
@@ -42,6 +23,29 @@ stdenv.mkDerivation rec {
     mkdir -p $siteLispDir ;
     install -m 0644 -v ./utils/emacs/*.el $siteLispDir ;
   '';
+in
+
+stdenv.mkDerivation rec {
+  name    = "ats2-${version}";
+  version = versionPkg;
+
+  src = fetchurl {
+    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
+    sha256 = "140xy129fr11bdf4bj6qya9mf0fhnv2x7ksb9j46pf2yzrsrks8g";
+  };
+
+  buildInputs = [ gmp ];
+
+  setupHook = with stdenv.lib;
+    let
+      hookFiles =
+        [ ./setup-hook.sh ]
+        ++ optional withContrib ./setup-contrib-hook.sh;
+    in
+      builtins.toFile "setupHook.sh"
+      (concatMapStringsSep "\n" builtins.readFile hookFiles);
+
+  patches = [ ./installed-lib-directory-version.patch ];
 
   postInstall = postInstallContrib + postInstallEmacs;
 
