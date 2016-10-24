@@ -48,12 +48,12 @@ in {
       };
 
       serverConfiguration = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         example = ''
           listen on lo
           accept for any deliver to lmtp localhost:24
-        ''; 
+        '';
         description = ''
           The contents of the smtpd.conf configuration file. See the
           OpenSMTPD documentation for syntax information. If this option
