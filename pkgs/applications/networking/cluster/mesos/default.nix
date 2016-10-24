@@ -46,6 +46,13 @@ in stdenv.mkDerivation rec {
     pythonProtobuf
   ];
 
+  tarWithGzip = lib.overrideDerivation gnutar (oldAttrs: {
+    buildInputs = [ makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/tar --prefix PATH ":" "${gzip}/bin"
+    '';
+  });
+
   preConfigure = ''
     substituteInPlace 3rdparty/stout/include/stout/os/posix/fork.hpp \
       --subst-var-by sh ${bash}/bin/bash
