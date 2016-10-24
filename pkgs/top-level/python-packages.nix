@@ -1067,7 +1067,7 @@ in {
       license = licenses.free;
     };
   } else null;
-
+  
   funcsigs = buildPythonPackage rec {
     name = "funcsigs-1.0.2";
 
@@ -14337,7 +14337,7 @@ in {
       broken = true;
     };
   };
-
+  
   mock = buildPythonPackage (rec {
     name = "mock-2.0.0";
 
@@ -30386,15 +30386,19 @@ in {
 
   tensorflowNoGpuSupport = buildPythonPackage rec {
     name = "tensorflow";
-    version = "0.9.0";
+    version = "0.10.0";
     format = "wheel";
 
     src = pkgs.fetchurl {
-      url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
-      sha256 = "15v7iyry8bmp5wcc1rr4bkp80f3887rl99zqf8pys5bad4gldbkh";
+      url = if stdenv.isDarwin then
+        "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-py2-none-any.whl" else
+        "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
+      sha256 = if stdenv.isDarwin then
+        "1gjybh3j3rn34bzhsxsfdbqgsr4jh50qyx2wqywvcb24fkvy40j9" else
+        "15v7iyry8bmp5wcc1rr4bkp80f3887rl99zqf8pys5bad4gldbkh";
     };
 
-    propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig ];
+    propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig mock];
 
     preFixup = ''
       RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
@@ -30407,6 +30411,7 @@ in {
       description = "TensorFlow helps the tensors flow (no gpu support)";
       homepage = http://tensorflow.org;
       license = licenses.asl20;
+      platforms = with platforms; linux ++ darwin;
     };
   };
 
