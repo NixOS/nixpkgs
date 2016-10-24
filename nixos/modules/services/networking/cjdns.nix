@@ -95,8 +95,8 @@ in
       };
 
       confFile = mkOption {
-        type = types.str;
-        default = "";
+        type = types.nullOr types.path;
+        default = null;
         example = "/etc/cjdroute.conf";
         description = ''
           Ignore all other cjdns options and load configuration from this file.
@@ -119,7 +119,7 @@ in
 
       admin = {
         bind = mkOption {
-          type = types.string;
+          type = types.str;
           default = "127.0.0.1:11234";
           description = ''
             Bind the administration port to this address and port.
@@ -129,7 +129,7 @@ in
 
       UDPInterface = {
         bind = mkOption {
-          type = types.string;
+          type = types.str;
           default = "";
           example = "192.168.1.32:43211";
           description = ''
@@ -154,6 +154,7 @@ in
 
       ETHInterface = {
         bind = mkOption {
+          type = types.str;
           default = "";
           example = "eth0";
           description =
@@ -212,7 +213,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      preStart = if cfg.confFile != "" then "" else ''
+      preStart = if cfg.confFile != null then "" else ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
 
         if [ -z "$CJDNS_PRIVATE_KEY" ]; then
@@ -234,7 +235,7 @@ in
       '';
 
       script = (
-        if cfg.confFile != "" then "${pkg}/bin/cjdroute < ${cfg.confFile}" else
+        if cfg.confFile != null then "${pkg}/bin/cjdroute < ${cfg.confFile}" else
           ''
             source /etc/cjdns.keys
             echo '${cjdrouteConf}' | sed \
@@ -253,7 +254,7 @@ in
     networking.extraHosts = "${cjdnsHosts}";
 
     assertions = [
-      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != "" );
+      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );
         message = "Neither cjdns.ETHInterface.bind nor cjdns.UDPInterface.bind defined.";
       }
       { assertion = config.networking.enableIPv6;
