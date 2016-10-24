@@ -438,7 +438,7 @@ rec {
                      < image/repositories)
 
           for l in image/*/layer.tar; do
-            ls_tar image/*/layer.tar >> baseFiles
+            ls_tar $l >> baseFiles
           done
         fi
 
