@@ -229,7 +229,7 @@ in
         fi
 
         if [ -z "$CJDNS_ADMIN_PASSWORD" ]; then
-            echo "CJDNS_ADMIN_PASSWORD=$(${pkgs.coreutils}/bin/head -c 96 /dev/urandom | ${pkgs.coreutils}/bin/tr -dc A-Za-z0-9)" \
+            echo "CJDNS_ADMIN_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 96)" \
                 >> /etc/cjdns.keys
         fi
       '';
