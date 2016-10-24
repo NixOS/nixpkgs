@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     sha256 = "11y2w6jgngj4rxiy136mkcs02l52rxk60kapyfc4rgrxz5hli3ym";
   };
 
-  buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick pcre pkgconfig mesa fltk zlib curl openblas libsndfile
-    fftw fftwSinglePrec qrupdate arpack libwebp ]
+  buildInputs = [ gfortran readline ncurses perl flex texinfo qhull
+    graphicsmagick pcre pkgconfig fltk zlib curl openblas libsndfile fftw
+    fftwSinglePrec qrupdate arpack libwebp ]
     ++ (stdenv.lib.optional (qt != null) qt)
     ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
     ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (jdk != null) jdk)
     ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
     ++ (stdenv.lib.optional (python != null) python)
-    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [mesa libX11])
+    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ mesa libX11 ])
     ;
 
   doCheck = !stdenv.isDarwin;
