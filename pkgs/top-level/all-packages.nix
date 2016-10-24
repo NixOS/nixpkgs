@@ -2465,6 +2465,8 @@ in
 
   npm2nix = nodePackages.npm2nix;
 
+  kea = callPackage ../tools/networking/kea { };
+
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
