@@ -1,17 +1,16 @@
 { config, lib, pkgs, ... }:
 
-with pkgs;
 with lib;
 
 let
 
   cfg = config.services.opensmtpd;
-  conf = writeText "smtpd.conf" cfg.serverConfiguration;
+  conf = pkgs.writeText "smtpd.conf" cfg.serverConfiguration;
   args = concatStringsSep " " cfg.extraServerArgs;
 
   sendmail = pkgs.runCommand "opensmtpd-sendmail" {} ''
     mkdir -p $out/bin
-    ln -s ${opensmtpd}/sbin/smtpctl $out/bin/sendmail
+    ln -s ${pkgs.opensmtpd}/sbin/smtpctl $out/bin/sendmail
   '';
 
 in {
@@ -100,7 +99,7 @@ in {
     systemd.services.opensmtpd = let
       procEnv = pkgs.buildEnv {
         name = "opensmtpd-procs";
-        paths = [ opensmtpd ] ++ cfg.procPackages;
+        paths = [ pkgs.opensmtpd ] ++ cfg.procPackages;
         pathsToLink = [ "/libexec/opensmtpd" ];
       };
     in {
