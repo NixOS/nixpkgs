@@ -112,11 +112,11 @@ in
           "49275fut6tmzu354pq70sr5b95qq0vj"
         ];
         description = ''
-          Any remote cjdns nodes that offer these passwords on 
+          Any remote cjdns nodes that offer these passwords on
           connection will be allowed to route through this node.
         '';
       };
-    
+
       admin = {
         bind = mkOption {
           type = types.string;
