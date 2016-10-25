@@ -10858,20 +10858,6 @@ in
       ];
   };
 
-  linux_4_7 = callPackage ../os-specific/linux/kernel/linux-4.7.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        kernelPatches.cpu-cgroup-v2."4.7"
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_4_8 = callPackage ../os-specific/linux/kernel/linux-4.8.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -11060,7 +11046,6 @@ in
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
-  linuxPackages_4_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_7);
   linuxPackages_4_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_8);
   # Don't forget to update linuxPackages_latest!
 
