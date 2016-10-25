@@ -248,6 +248,9 @@ in
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";
+
+        ProtectHome = true;
+        PrivateTmp = true;
       };
     };
 
