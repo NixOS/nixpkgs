@@ -82,6 +82,15 @@ let
       ./2.7.3-dylib.patch
       ./2.7.3-getpath-exe-extension.patch
       ./2.7.3-no-libm.patch
+    ] ++ optionals (!(stdenv.cc.isGNU or false)) [
+
+      # Patch from http://bugs.python.org/issue1222585 adapted to work with
+      # `patch -p1' and with a last hunk removed
+      # Upstream distutils is calling C compiler to compile C++ code, which
+      # only works for GCC and Apple Clang. This makes distutils to call C++
+      # compiler when needed.
+      ./python-2.7-distutils-C++.patch
+
     ];
 
   preConfigure = ''

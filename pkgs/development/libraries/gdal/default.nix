@@ -39,16 +39,9 @@ composableDerivation.composableDerivation {} (fixed: rec {
     (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
   ];
 
-  # Prevent this:
-  #
-  #   Checking .pth file support in /nix/store/xkrmb8xnvqxzjwsdmasqmsdh1a5y2y99-gdal-1.11.2/lib/python2.7/site-packages/
-  #   /nix/store/pbi1lgank10fy0xpjckbdpgacqw34dsz-python-2.7.9/bin/python -E -c pass
-  #   TEST FAILED: /nix/store/xkrmb8xnvqxzjwsdmasqmsdh1a5y2y99-gdal-1.11.2/lib/python2.7/site-packages/ does NOT support .pth files
-  #   error: bad install directory or PYTHONPATH
   preBuild = ''
-    pythonInstallDir=$out/lib/${pythonPackages.python.libPrefix}/site-packages
-    mkdir -p $pythonInstallDir
-    export PYTHONPATH=''${PYTHONPATH:+''${PYTHONPATH}:}$pythonInstallDir
+    substituteInPlace swig/python/GNUmakefile \
+      --replace "ifeq (\$(STD_UNIX_LAYOUT),\"TRUE\")" "ifeq (1,1)"
   '';
 
   postInstall = ''
