@@ -28,21 +28,18 @@ let
     };
   };
 
-  peers = mapAttrsToList (n: v: v) (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo);
-
-  pubs  = toString (map (p: if p.hostname == "" then "" else p.publicKey) peers);
-  hosts = toString (map (p: if p.hostname == "" then "" else p.hostname)  peers);
-
-  cjdnsHosts =
-    if hosts != "" then
-      import (pkgs.stdenv.mkDerivation {
-        name = "cjdns-hosts";
-        builder = ./cjdns-hosts.sh;
-
-        inherit (pkgs) cjdns;
-        inherit pubs hosts;
-      })
-    else "";
+  # Additional /etc/hosts entries for peers with an associated hostname
+  cjdnsExtraHosts = import (pkgs.runCommand "cjdns-hosts" {}
+    # Generate a builder that produces an output usable as a Nix string value
+    ''
+      exec >$out
+      echo \'\'
+      ${concatStringsSep "\n" (mapAttrsToList (k: v:
+          optionalString (v.hostname != "")
+            "echo $(${pkgs.cjdns}/bin/publictoip6 ${x.key}) ${x.host}")
+          (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
+      echo \'\'
+    '');
 
   parseModules = x:
     x // { connectTo = mapAttrs (name: value: { inherit (value) password publicKey; }) x.connectTo; };
@@ -254,7 +251,7 @@ in
       };
     };
 
-    networking.extraHosts = "${cjdnsHosts}";
+    networking.extraHosts = cjdnsExtraHosts;
 
     assertions = [
       { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );
