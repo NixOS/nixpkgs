@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (config.boot) kernelPatches;
+  inherit (config.boot) kernelPatches kernelOverrides;
 
   inherit (config.boot.kernelPackages) kernel;
 
@@ -24,9 +24,9 @@ in
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       apply = kernelPackages: kernelPackages.extend (self: super: {
-        kernel = super.kernel.override {
+        kernel = overrideDerivation (super.kernel.override {
           kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
-        };
+        }) (origAttrs: kernelOverrides origAttrs);
       });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
@@ -51,6 +51,19 @@ in
       default = [];
       example = literalExample "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
       description = "A list of additional patches to apply to the kernel.";
+    };
+
+    boot.kernelOverrides = mkOption {
+      default = origAttrs: {};
+      example = literalExample ''
+        origAttrs: {
+          postUnpack = '''
+            rm -f .config
+          ''';
+        }
+      '';
+      defaultText = "origAttrs: {}";
+      description = "Overrides for kernel derivation.";
     };
 
     boot.kernelParams = mkOption {
