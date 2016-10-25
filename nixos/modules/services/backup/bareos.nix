@@ -80,13 +80,14 @@ in {
           options = {
             protocol = mkOption {
               type = types.enum ["ipv4" "ipv6"];
+              default = "ipv4";
               description = ''
                 IP type, IPv4 or IPv6.
               '';
             };
             addr = mkOption {
               type = types.nullOr types.str;
-              default = null;
+              default = "127.0.0.1";
               description = ''
                 IP address client should listen on.
               '';
