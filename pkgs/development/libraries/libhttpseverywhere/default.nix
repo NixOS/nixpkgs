@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libhttpseverywhere-${version}";
-  version = "0.2.0";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "grindhold";
     repo  = "libhttpseverywhere";
     rev = "${version}";
-    sha256 = "06yljz7xxh9v48awgmzma6avrnzs2kqh1ydd2hx4b1x2vgf8nfbb";
+    sha256 = "0ggg1kw5yjakqqpnmjcbcpnq5m4lhc76javh8waqv2klr5mxd2a7";
   };
 
   nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];
