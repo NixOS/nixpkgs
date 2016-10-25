@@ -80,8 +80,11 @@ buildPythonPackage rec {
   postFixup = ''
     mkdir -p $tests/${python.sitePackages}/matplotlib/tests
     mv $out/${python.sitePackages}/matplotlib/tests $tests/${python.sitePackages}/matplotlib/
+    echo "from pkgutil import extend_path; __path__ = extend_path(__path__, __name__)" >> "$out/${python.sitePackages}/matplotlib/__init__.py"
+    echo "from pkgutil import extend_path; __path__ = extend_path(__path__, __name__)" > "$tests/${python.sitePackages}/matplotlib/__init__.py"
     mkdir -p $tests/nix-support
     echo $out > $tests/nix-support/propagated-native-build-inputs
+    export PYTHONPATH="$tests/${python.sitePackages}:$PYTHONPATH"
   '';
 
   outputs = [ "out" "tests" ];
