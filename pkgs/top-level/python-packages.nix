@@ -12675,6 +12675,25 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  mayavi = buildPythonPackage rec {
+    name = "mayavi-${version}";
+    version = "4.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mayavi/${name}.tar.gz";
+      sha256 = "363dbd127477d9a6a7558ef852ecfe48f4688c3f631c1ede2dead78115e8f0a8";
+    };
+
+    buildInputs = [ pkgs.vtk ];
+    propagatedBuildInputs = with self; [ apptools traits traitsui numpy ];
+
+    meta = {
+      description = "The Mayavi scientific data 3-dimensional visualizer";
+      homepage = http://docs.enthought.com/mayavi/mayavi/;
+      license = licenses.bsd3;
+      maintainer = with maintainers; [ fridh ];
+    };
+  };
 
   mccabe = callPackage ../development/python-modules/mccabe { };
 
