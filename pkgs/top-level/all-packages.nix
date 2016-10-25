@@ -2337,6 +2337,8 @@ in
 
   lnav = callPackage ../tools/misc/lnav { };
 
+  loc = callPackage ../development/misc/loc { };
+
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
   logstash = callPackage ../tools/misc/logstash { };
