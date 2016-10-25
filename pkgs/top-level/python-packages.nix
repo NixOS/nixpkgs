@@ -18169,6 +18169,8 @@ in {
 
   pyext = callPackage ../development/python-modules/pyext { };
 
+  pyface = callPackage ../development/python-modules/pyface { };
+
   pyfantom = buildPythonPackage rec {
      name = "pyfantom-${version}";
      version = "unstable-2013-12-18";
