@@ -76,9 +76,12 @@ buildPythonPackage rec {
     sed -i 's/test_invisible_Line_rendering/noop/' lib/matplotlib/tests/test_lines.py
   '';
 
+  # Move tests in separate output
   postFixup = ''
     mkdir -p $tests/${python.sitePackages}/matplotlib/tests
     mv $out/${python.sitePackages}/matplotlib/tests $tests/${python.sitePackages}/matplotlib/
+    mkdir -p $tests/nix-support
+    echo $out > $tests/nix-support/propagated-native-build-inputs
   '';
 
   outputs = [ "out" "tests" ];
