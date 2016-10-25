@@ -23656,6 +23656,28 @@ in {
     };
   };
 
+  traitsui = buildPythonPackage rec {
+    name = "traitsui-${version}";
+    version = "5.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/traitsui/${name}.tar.gz";
+      sha256 = "8f68b4a4fcc23837fda89af66a0100fb23f0574204838b4790f5109a69924fb8";
+    };
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ traits pyface ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    meta = {
+      description = "Traits-capable user interfaces";
+      homepage = https://docs.enthought.com/traitsui;
+      license = licenses.bsd3;
+    };
+  };
 
   transaction = buildPythonPackage rec {
     name = "transaction-${version}";
