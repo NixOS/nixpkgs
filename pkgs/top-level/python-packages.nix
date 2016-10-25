@@ -1033,11 +1033,11 @@ in modules // {
   } else null;
 
   funcsigs = buildPythonPackage rec {
-    name = "funcsigs-0.4";
+    name = "funcsigs-1.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/funcsigs/${name}.tar.gz";
-      sha256 = "d83ce6df0b0ea6618700fe1db353526391a8a3ada1b7aba52fed7a61da772033";
+      sha256 = "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7";
     };
 
     buildInputs = with self; [
@@ -14085,11 +14085,11 @@ in modules // {
   };
 
   mock = buildPythonPackage (rec {
-    name = "mock-1.3.0";
+    name = "mock-2.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mock/${name}.tar.gz";
-      sha256 = "1xm0xkaz8d8d26kdk09f2n9vn543ssd03vmpkqlmgq3crjz7s90y";
+      sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";
     };
 
     buildInputs = with self; [ unittest2 ];
@@ -30087,6 +30087,41 @@ in modules // {
       description = "TensorFlow helps the tensors flow (no gpu support)";
       homepage = http://tensorflow.org;
       license = licenses.asl20;
+    };
+  };
+
+  tensorflowCuDNN = buildPythonPackage rec {
+    name = "tensorflow";
+    version = "0.11.0rc0";
+    format = "wheel";
+
+    src = pkgs.fetchurl {
+      url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
+      sha256 = "1r8zlz95sw7bnjzg5zdbpa9dj8wmp8cvvgyl9sv3amsscagnnfj5";
+    };
+
+    buildInputs = with self; [ pkgs.swig ];
+    propagatedBuildInputs = with self; [ numpy six protobuf3_0 pkgs.cudatoolkit75 pkgs.cudnn5_cudatoolkit75 pkgs.gcc49 self.mock ];
+
+    # Note that we need to run *after* the fixup phase because the
+    # libraries are loaded at runtime. If we run in preFixup then
+    # patchelf --shrink-rpath will remove the cuda libraries.
+    postFixup = let rpath = stdenv.lib.makeLibraryPath [
+      pkgs.gcc49.cc.lib
+      pkgs.zlib pkgs.cudatoolkit75
+      pkgs.cudnn5_cudatoolkit75
+      pkgs.linuxPackages.nvidia_x11
+    ]; in ''
+      find $out -name '*.so' -exec patchelf --set-rpath "${rpath}" {} \;
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "TensorFlow helps the tensors flow (no gpu support)";
+      homepage = http://tensorflow.org;
+      license = licenses.asl20;
+      platforms   = platforms.linux;
     };
   };
 
