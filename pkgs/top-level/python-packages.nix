@@ -19260,7 +19260,7 @@ in modules // {
       sha256 = "0hqsap82zklhi5fxhc69kxrwzb0g9566f7sdpz7f9gyxkmyam839";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl ];
+    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -19268,6 +19268,11 @@ in modules // {
     preConfigure = ''
       substituteInPlace setup.py --replace '--static-libs' '--libs'
       export PYCURL_SSL_LIBRARY=openssl
+    '';
+
+    #TODO no idea why this is needed
+    postInstall = ''
+      ln -s ${pkgs.openssl.out}/lib/libcrypto* $out/lib/
     '';
 
     meta = {
