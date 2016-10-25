@@ -877,6 +877,7 @@ in modules // {
 
     propagatedBuildInputs = with self; [
       pycrypto paramiko jinja2 pyyaml httplib2 boto six
+      netaddr
     ] ++ optional windowsSupport pywinrm;
 
     meta = {
