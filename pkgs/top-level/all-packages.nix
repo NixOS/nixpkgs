@@ -3225,6 +3225,8 @@ in
 
   pius = callPackage ../tools/security/pius { };
 
+  pixiewps = callPackage ../tools/networking/pixiewps {};
+
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
