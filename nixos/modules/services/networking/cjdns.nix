@@ -201,7 +201,7 @@ in
 
   };
 
-  config = mkIf config.services.cjdns.enable {
+  config = mkIf cfg.enable {
 
     boot.kernelModules = [ "tun" ];
 
