@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, self, callPackage, python27Packages
-, bzip2, openssl, gettext
+, bzip2, openssl, gettext, coreutils
 
 , includeModules ? false
 
@@ -90,7 +90,7 @@ let
     '' + optionalString stdenv.isDarwin ''
       substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
       substituteInPlace Lib/multiprocessing/__init__.py \
-        --replace 'os.popen(comm)' 'os.popen("nproc")'
+        --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
     '';
 
   configureFlags = [

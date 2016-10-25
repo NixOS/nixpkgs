@@ -1,14 +1,16 @@
 { stdenv, fetchFromGitHub, freetype, libX11, libXt, libXft
+, version ? "2016-10-08"
+, rev ? "a17c4a9c2a1af2de0a756fe16d482e0db88c0541"
+, sha256 ? "03xmfzlijz4gbmr7l0pb1gl9kmlz1ab3hr8d51innvlasy4g6xgj"
 }:
 
 stdenv.mkDerivation rec {
-  name = "deadpixi-sam-unstable";
-  version = "2016-09-15";
+  inherit version;
+  name = "deadpixi-sam-unstable-${version}";
     src = fetchFromGitHub {
+      inherit sha256 rev;
       owner = "deadpixi";
       repo = "sam";
-      rev = "a6a8872246e8634d884b0ce52bc3be9770ab1b0f";
-      sha256 = "1zr8dl0vp1xic3dq69h4bp2fcxsjhrzasfl6ayvkibjd6z5dn07p";
     };
 
   postPatch = ''

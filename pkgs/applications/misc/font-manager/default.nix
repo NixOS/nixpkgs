@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, makeWrapper, automake, autoconf, libtool,
   pkgconfig, file, intltool, libxml2, json_glib , sqlite, itstool,
-  vala_0_32, gnome3, wrapGAppsHook
+  librsvg, vala_0_34, gnome3, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   name = "font-manager-${version}";
-  version = "2016-06-04";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner  = "FontManager";
     repo   = "master";
-    rev    = "07b47c153494f19ced291c84437349253c5bde4d";
-    sha256 = "13pjmvx31fr8fqhl5qwawhawfl7as9c50qshzzig8n5g7vb5v1i0";
+    rev    = version;
+    sha256 = "0qwi1mn2sc2q5cs28rga8i3cn34ylybs949vjnh97dl2rvlc0x06";
     };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     automake autoconf libtool
     file
     intltool
-    vala_0_32
+    vala_0_34
     gnome3.yelp_tools
     wrapGAppsHook
   ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     json_glib
     sqlite
     itstool
+    librsvg
     gnome3.gtk
     gnome3.gucharmap
     gnome3.libgee
@@ -40,7 +41,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     NOCONFIGURE=true ./autogen.sh
-    chmod +x configure;
     substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
   '';
 

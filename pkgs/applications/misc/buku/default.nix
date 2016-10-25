@@ -1,21 +1,22 @@
 { stdenv, pythonPackages, fetchFromGitHub,
 }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "2.4";
+with pythonPackages; buildPythonApplication rec {
+  version = "2.5";
   name = "buku-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "0rmvlpp1pzzgn1hf87ksigj9kp60gfwkvxymb4wiz7dqa57b1q0n";
+    sha256 = "0m6km37zylinsblwm2p8pm760xlsf9m82xyws3762xs8zxbnfmsd";
   };
 
   buildInputs = [
-    pythonPackages.cryptography
-    pythonPackages.beautifulsoup4
+    cryptography
+    beautifulsoup4
   ];
+  propagatedBuildInputs = [ beautifulsoup4 ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 

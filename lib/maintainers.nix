@@ -10,6 +10,7 @@
   aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
+  abigailbuccaneer = "Abigail Bunyan <abigailbuccaneer@gmail.com>";
   aboseley = "Adam Boseley <adam.boseley@gmail.com>";
   abuibrahim = "Ruslan Babayev <ruslan@babayev.com>";
   acowley = "Anthony Cowley <acowley@gmail.com>";
@@ -213,11 +214,13 @@
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
+  kaiha = "Kai Harries <kai.harries@gmail.com>";
   kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
   kampfschlaefer = "Arnold Krille <arnold@arnoldarts.de>";
   kevincox = "Kevin Cox <kevincox@kevincox.ca>";
   khumba = "Bryan Gardiner <bog@khumba.net>";
   KibaFox = "Kiba Fox <kiba.fox@foxypossibilities.com>";
+  kierdavis = "Kier Davis <kierdavis@gmail.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
@@ -302,6 +305,7 @@
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
   nhooyr = "Anmol Sethi <anmol@aubble.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
+  nicknovitski = "Nick Novitski <nixpkgs@nicknovitski.com>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
   NikolaMandic = "Ratko Mladic <nikola@mandic.email>";
   np = "Nicolas Pouillard <np.nix@nicolaspouillard.fr>";
@@ -344,6 +348,7 @@
   proglodyte = "Proglodyte <proglodyte23@gmail.com>";
   pshendry = "Paul Hendry <paul@pshendry.com>";
   psibi = "Sibi <sibi@psibi.in>";
+  pstn = "Philipp Steinpaß <philipp@xndr.de>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   puffnfresh = "Brian McKenna <brian@brianmckenna.org>";
   pxc = "Patrick Callahan <patrick.callahan@latitudeengineering.com>";
@@ -442,15 +447,19 @@
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   uralbash = "Svintsov Dmitry <root@uralbash.ru>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
+  uwap = "uwap <me@uwap.name>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
   vanzef = "Ivan Solyankin <vanzef@gmail.com>";
   vbgl = "Vincent Laporte <Vincent.Laporte@gmail.com>";
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
+  veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   vizanto = "Danny Wilson <danny@prime.vc>";
+  vklquevs = "vklquevs <vklquevs@gmail.com>";
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
   vmandela = "Venkateswara Rao Mandela <venkat.mandela@gmail.com>";
+  volhovm = "Mikhail Volkhov <volhovm.cs@gmail.com>";
   vozz = "Oliver Hunt <oliver.huntuk@gmail.com>";
   vrthra = "Rahul Gopinath <rahul@gopinath.org>";
   wedens = "wedens <kirill.wedens@gmail.com>";

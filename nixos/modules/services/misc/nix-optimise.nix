@@ -41,7 +41,7 @@ in
     systemd.services.nix-optimise =
       { description = "Nix Store Optimiser";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
-        startAt = optional cfg.automatic cfg.dates;
+        startAt = optionals cfg.automatic cfg.dates;
       };
 
   };

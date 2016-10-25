@@ -13,6 +13,11 @@ let
       inherit sha256;
     };
 
+    buildFlagsArray = ''
+      -ldflags=
+          -X github.com/rancher/rancher-compose/version.VERSION=${version}
+    '';
+
     excludedPackages = "scripts";
 
     meta = with lib; {

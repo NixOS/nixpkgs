@@ -111,7 +111,7 @@ in
     };
 
     extraConfig = mkOption {
-      type = types.str;
+      type = types.lines;
       default = "";
       example = "mail_debug = yes";
       description = "Additional entries to put verbatim into Dovecot's config file.";

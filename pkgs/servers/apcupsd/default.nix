@@ -6,11 +6,11 @@ assert enableCgiScripts -> gd != null;
 
 stdenv.mkDerivation rec {
   pname = "apcupsd";
-  name = "${pname}-3.14.13";
+  name = "${pname}-3.14.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "1y83bly5bgpjbfaxxwmdk2mndbi4cw0svq5z9n6byj043phbvv2p";
+    sha256 = "0rwqiyzlg9p0szf3x6q1ppvrw6f6dbpn2rc5z623fk3bkdalhxyv";
   };
 
   buildInputs = [ pkgconfig utillinux man ] ++ stdenv.lib.optional enableCgiScripts gd;

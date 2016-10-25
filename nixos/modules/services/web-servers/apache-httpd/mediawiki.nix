@@ -288,6 +288,7 @@ in
     };
 
     extraConfig = mkOption {
+      type = types.lines;
       default = "";
       example =
         ''

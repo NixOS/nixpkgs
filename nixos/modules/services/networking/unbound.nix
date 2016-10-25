@@ -79,7 +79,7 @@ in
 
       extraConfig = mkOption {
         default = "";
-        type = types.str;
+        type = types.lines;
         description = ''
           Extra unbound config. See
           <citerefentry><refentrytitle>unbound.conf</refentrytitle><manvolnum>8

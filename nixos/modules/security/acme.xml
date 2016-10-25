@@ -74,7 +74,28 @@ options for the <literal>security.acme</literal> module.</para>
 </para>
 
 <programlisting>
+security.acme.certs."foo.example.com" = {
+  webroot = "/var/www/challenges";
+  email = "foo@example.com";
+  user = "nginx";
+  group = "nginx";
+  postRun = "systemctl restart nginx.service";
+};
 services.nginx.httpConfig = ''
+  server {
+    server_name foo.example.com;
+    listen 80;
+    listen [::]:80;
+
+    location /.well-known/acme-challenge {
+      root /var/www/challenges;
+    }
+
+    location / {
+      return 301 https://$host$request_uri;
+    }
+  }
+
   server {
     server_name foo.example.com;
     listen 443 ssl;

@@ -2,19 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "libhttpseverywhere-${version}";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "grindhold";
     repo  = "libhttpseverywhere";
     rev = "${version}";
-    sha256 = "1b8bcg4jp2h3nwk1g7jgswsipqzkjq2gb017v07wb7nvl6kdi0rc";
+    sha256 = "06yljz7xxh9v48awgmzma6avrnzs2kqh1ydd2hx4b1x2vgf8nfbb";
   };
 
   nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];
   buildInputs = [ glib gnome3.libgee libxml2 json_glib libsoup libarchive ];
-
-  patches = [ ./meson.patch ];
 
   configurePhase = ''
     mkdir build
@@ -28,6 +26,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = "ninja install";
+
+  doCheck = true;
+
+  checkPhase = "./httpseverywhere_test";
 
   meta = {
     description = "library to use HTTPSEverywhere in desktop applications";

@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
 , ncurses, libtermkey, lpeg, lua
 , acl ? null, libselinux ? null
-, version ? "2016-08-24"
-, rev ? "010dcd60ffda37027908f2a0b20c751b83ca975e"
-, sha256 ? "0bpbyi5yq50zw0hkh326pmdcnm91paf1yz4853dcq63y0ddv89jp"
+, version ? "2016-10-09"
+, rev ? "b0c9b0063d0b9ed9a7f93c69779749130b353ff1"
+, sha256 ? "0g3242g3r2w38ld3w71f79qp7zzy3zhanff2nhwkwmyq89js8s90"
 }:
 
 stdenv.mkDerivation rec {

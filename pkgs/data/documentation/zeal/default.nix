@@ -2,14 +2,14 @@
 , qtimageformats, qtwebkit, qtx11extras, xcbutilkeysyms, qmakeHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.0";
+  version = "0.3.1";
   name = "zeal-${version}";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
     rev = "v${version}";
-    sha256 = "1f0nsnily2lsrraj1f8j34lqhiskiyq22clkci7w4h2zfv35j1s0";
+    sha256 = "14ld7zm15677jdlasnfa6c42kiswd4d6yg1db50xbk2yflzzwqqa";
   };
 
   buildInputs = [

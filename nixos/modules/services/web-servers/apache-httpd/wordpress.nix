@@ -212,6 +212,7 @@ in
           example = "[ \"en_GB\" \"de_DE\" ];";
     };
     extraConfig = mkOption {
+      type = types.lines;
       default = "";
       example =
         ''

@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     "--with-libsoup=yes"
   ];
 
+  patches = [ ./PppdPath.patch ];
+
   buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp
                   bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ];
 

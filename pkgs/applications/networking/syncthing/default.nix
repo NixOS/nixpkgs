@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, go }:
+{ stdenv, lib, fetchFromGitHub, go, pkgs }:
 
 stdenv.mkDerivation rec {
   version = "0.14.8";
@@ -25,11 +25,24 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/etc/systemd/{system,user}
+
     cp bin/* $out/bin
+  '' + lib.optionalString (stdenv.isLinux) ''
+    substitute etc/linux-systemd/system/syncthing-resume.service \
+               $out/etc/systemd/system/syncthing-resume.service \
+               --replace /usr/bin/pkill ${pkgs.procps}/bin/pkill
+
+    substitute etc/linux-systemd/system/syncthing@.service \
+               $out/etc/systemd/system/syncthing@.service \
+               --replace /usr/bin/syncthing $out/bin/syncthing
+
+    substitute etc/linux-systemd/user/syncthing.service \
+               $out/etc/systemd/user/syncthing.service \
+               --replace /usr/bin/syncthing $out/bin/syncthing
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.syncthing.net/;
     description = "Open Source Continuous File Synchronization";
     license = stdenv.lib.licenses.mpl20;
