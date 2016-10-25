@@ -13,6 +13,9 @@ stdenv.mkDerivation rec{
 
   buildInputs = [ autoreconfHook zlib pkgconfig libuuid ];
 
+  # Allow UI to load when running as non-root
+  patches = [ ./web_access.patch ];
+
   preConfigure = ''
     export ZLIB_CFLAGS=" "
     export ZLIB_LIBS="-lz"
