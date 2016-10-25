@@ -7,9 +7,10 @@ let
 in {
   options.services.vnstat = {
     enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
-        Wether to enable update of network usage statistics via vnstatd.
+        Whether to enable update of network usage statistics via vnstatd.
       '';
     };
   };
