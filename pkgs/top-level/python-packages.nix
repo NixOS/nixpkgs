@@ -12312,6 +12312,32 @@ in modules // {
 
   icdiff = callPackage ../tools/text/icdiff {};
 
+  imageio = buildPythonPackage rec {
+    name = "imageio-${version}";
+    version = "1.6";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/imageio/imageio/archive/v${version}.tar.gz";
+      sha256 = "195snkk3fsbjqd5g1cfsd9alzs5q45gdbi2ka9ph4yxqb31ijrbv";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ numpy ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # Tries to write in /var/tmp/.imageio
+    doCheck = false;
+
+    meta = {
+      description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
+      homepage = http://imageio.github.io/;
+      license = licenses.bsd2;
+    };
+  };
+
   importlib = buildPythonPackage rec {
     name = "importlib-1.0.2";
 
