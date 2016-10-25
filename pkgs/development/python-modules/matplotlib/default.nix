@@ -6,6 +6,7 @@
 , enableGtk3 ? false, cairo
 , enableTk ? false, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
 , Cocoa, Foundation, CoreData, cf-private, libobjc, libcxx
+, glibcLocales
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -28,8 +29,9 @@ buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   XDG_RUNTIME_DIR = "/tmp";
+  LC_ALL="en_US.UTF-8";
 
-  buildInputs = [ python which sphinx stdenv ]
+  buildInputs = [ python which sphinx stdenv glibcLocales ]
     ++ stdenv.lib.optional enableGhostscript ghostscript
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation CoreData
                                               cf-private libobjc ];
@@ -61,12 +63,9 @@ buildPythonPackage rec {
       "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
 
   checkPhase = ''
-    ${python.interpreter} tests.py
-  '';
+    ${python.interpreter} tests.py --no-network
 
-  # The entry point for running tests, tests.py, is not included in the release.
-  # https://github.com/matplotlib/matplotlib/issues/6017
-  doCheck = false;
+  '';
 
   prePatch = ''
     # Failing test: ERROR: matplotlib.tests.test_style.test_use_url
@@ -76,6 +75,13 @@ buildPythonPackage rec {
     # Transient errors
     sed -i 's/test_invisible_Line_rendering/noop/' lib/matplotlib/tests/test_lines.py
   '';
+
+  postFixup = ''
+    mkdir -p $tests/${python.sitePackages}/matplotlib/tests
+    mv $out/${python.sitePackages}/matplotlib/tests $tests/${python.sitePackages}/matplotlib/
+  '';
+
+  outputs = [ "out" "tests" ];
 
   meta = with stdenv.lib; {
     description = "Python plotting library, making publication quality plots";
