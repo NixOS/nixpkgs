@@ -74,6 +74,8 @@ in
     else
       stdenv);
 
+  stdenvNoCC = stdenv.override { cc = null; };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -3038,6 +3040,8 @@ in
     nix = nixUnstable;
   };
 
+  pakcs = callPackage ../development/compilers/pakcs {};
+
   pal = callPackage ../tools/misc/pal { };
 
   pandoc = haskell.lib.overrideCabal haskellPackages.pandoc (drv: {
@@ -4362,12 +4366,12 @@ in
 
   ### SHELLS
 
-  bash = lowPrio (callPackage ../shells/bash {
+  bash = lowPrio (callPackage ../shells/bash/4.3.nix {
     texinfo = null;
     interactive = stdenv.isCygwin; # patch for cygwin requires readline support
   });
 
-  bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
+  bashInteractive = appendToName "interactive" (callPackage ../shells/bash/4.4.nix {
     interactive = true;
   });
 
@@ -4636,7 +4640,9 @@ in
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_14;
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
+    cloog = if !stdenv.isDarwin then cloog else null;
+    texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
   }));
 
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
@@ -4651,9 +4657,9 @@ in
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_11;
+    isl = if !stdenv.isDarwin then isl_0_11 else null;
 
-    cloog = cloog_0_18_0;
+    cloog = if !stdenv.isDarwin then cloog_0_18_0 else null;
   }));
 
   gcc5 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5 {
@@ -4668,7 +4674,7 @@ in
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_14;
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
 
   gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
@@ -4683,7 +4689,7 @@ in
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_14;
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
 
   gfortran = if !stdenv.isDarwin then gfortran5
@@ -5065,6 +5071,8 @@ in
   nasm = callPackage ../development/compilers/nasm { };
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
+
+  obliv-c = callPackage ../development/compilers/obliv-c {};
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
 
@@ -6358,7 +6366,7 @@ in
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
-  texinfo6 = callPackage ../development/tools/misc/texinfo/6.1.nix { };
+  texinfo6 = callPackage ../development/tools/misc/texinfo/6.3.nix { };
   texinfo = texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
@@ -7114,6 +7122,8 @@ in
     gnupg1 = gnupg1orig;
   };
 
+  pgpdump = callPackage ../tools/security/pgpdump { };
+
   gpgstats = callPackage ../tools/security/gpgstats { };
 
   gpshell = callPackage ../development/tools/misc/gpshell { };
@@ -7463,7 +7473,9 @@ in
 
   libburn = callPackage ../development/libraries/libburn { };
 
-  libcaca = callPackage ../development/libraries/libcaca { };
+  libcaca = callPackage ../development/libraries/libcaca {
+    inherit (xlibs) libX11;
+  };
 
   libcanberra_gtk3 = callPackage ../development/libraries/libcanberra {
     gtk = pkgs.gtk3;
@@ -8893,6 +8905,8 @@ in
   readline62 = callPackage ../development/libraries/readline/6.2.nix { };
 
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
+
+  readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
 
@@ -10497,6 +10511,8 @@ in
     libobjc = apple-source-releases.objc4;
 
     stubs = callPackages ../os-specific/darwin/stubs {};
+
+    usr-include = callPackage ../os-specific/darwin/usr-include {};
   };
 
   devicemapper = lvm2;
@@ -11553,6 +11569,8 @@ in
   docbook5_xsl = docbook_xsl_ns;
 
   cabin = callPackage ../data/fonts/cabin { };
+
+  camingo-code = callPackage ../data/fonts/camingo-code { };
 
   dosis = callPackage ../data/fonts/dosis { };
 
@@ -14318,6 +14336,8 @@ in
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
+  styx = callPackage ../applications/misc/styx { };
+
   tecoc = callPackage ../applications/editors/tecoc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
@@ -15322,7 +15342,6 @@ in
   crack_attack = callPackage ../games/crack-attack { };
 
   crafty = callPackage ../games/crafty { };
-  craftyFull = appendToName "full" (crafty.override { fullVariant = true; });
 
   crawlTiles = crawl.override {
     tileMode = true;

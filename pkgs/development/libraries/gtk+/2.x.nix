@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput share/gtk-2.0/demo "$devdoc"
+    # The updater is needed for nixos env and it's tiny.
+    moveToOutput bin/gtk-update-icon-cache "$out"
   '';
 
   passthru = {

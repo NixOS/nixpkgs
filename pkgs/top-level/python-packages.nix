@@ -2056,6 +2056,34 @@ in modules // {
     };
   };
 
+  biopython = buildPythonPackage rec {
+    name = "biopython-${version}";
+    version = "1.68";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/biopython/${name}.tar.gz";
+      sha256 = "07qc7nz0k77y8hf8s18rscvibvm91zw0kkq7ylrhisf8vp8hkp6i";
+    };
+
+    propagatedBuildInputs = with self; [ numpy ];
+    # Checks try to write to $HOME, which does not work with nix
+    doCheck = false;
+    meta = {
+      description = "Python library for bioinformatics";
+
+      longDescription = ''
+        Biopython is a set of freely available tools for biological computation
+        written in Python by an international team of developers. It is a
+        distributed collaborative effort to develop Python libraries and
+        applications which address the needs of current and future work in
+        bioinformatics.
+      '';
+
+      homepage = http://biopython.org/wiki/Documentation;
+      maintainers = with maintainers; [ luispedro ];
+    };
+  };
+
   bedup = buildPythonPackage rec {
     version = "0.10.1";
     name = "bedup-${version}";
@@ -13136,11 +13164,11 @@ in modules // {
   };
 
   libcloud = buildPythonPackage (rec {
-    name = "libcloud-0.18.0";
+    name = "libcloud-1.2.1";
 
     src = pkgs.fetchurl {
-      url = mirror://pypi/a/apache-libcloud/apache-libcloud-0.18.0.tar.bz2;
-      sha256 = "0ahdp14ddly074qg5cksxdhqaws0kj445xmhz1y7lzspsp6fk1xg";
+      url = "mirror://pypi/a/apache-libcloud/apache-${name}.tar.bz2";
+      sha256 = "0qlhyz5f32xg8i10biyzqscks8d28vklk63hvj45vzy1amw60kqz";
     };
 
     buildInputs = with self; [ mock ];
@@ -22846,26 +22874,7 @@ in modules // {
     };
   };
 
-  sockjs-tornado = buildPythonPackage rec {
-    name = "sockjs-tornado-${version}";
-    version = "1.0.2";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sockjs-tornado/${name}.tar.gz";
-      sha256 = "15lcy40h2cm0l8aknbrk48p2sni5wzybsqjx1hxwpk9lfa1xryyv";
-    };
-
-    # This is needed for compatibility with OctoPrint
-    propagatedBuildInputs = with self; [ tornado_4_0_1 ];
-
-    meta = {
-      description = "SockJS python server implementation on top of Tornado framework";
-      homepage = http://github.com/mrjoes/sockjs-tornado/;
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
 
   sopel = buildPythonPackage rec {
     name = "sopel-6.3.1";
@@ -24994,34 +25003,25 @@ in modules // {
     };
   };
 
-  twisted_11 = buildPythonPackage rec {
-    # NOTE: When updating please check if new versions still cause issues
-    # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
-    disabled = isPy3k;
+  twine = buildPythonPackage rec {
+    name = "twine-${version}";
+    version = "1.8.1";
 
-    name = "Twisted-13.2.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
+      url    = "mirror://pypi/t/twine/${name}.tar.gz";
+      sha256 = "68b663691a947b844f92853c992d42bb68b6333bffc9ab7f661346b001c1da82";
     };
 
-    propagatedBuildInputs = with self; [ zope_interface ];
+    propagatedBuildInputs = with self; [ clint pkginfo requests2 requests_toolbelt ];
 
-    # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
-    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
-    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
-    # details.
-    postInstall = "$out/bin/twistd --help > /dev/null";
+    # Requires network
+    doCheck = false;
 
     meta = {
-      homepage = http://twistedmatrix.com/;
-      description = "Twisted, an event-driven networking engine written in Python";
-      longDescription = ''
-        Twisted is an event-driven networking engine written in Python
-        and licensed under the MIT license.
-      '';
-      license = licenses.mit;
-      maintainers = [ ];
+      description = "Collection of utilities for interacting with PyPI";
+      homepage = https://github.com/pypa/twine;
+      license = licenses.asl20;
+      maintainer = with maintainers; [ fridh ];
     };
   };
 
@@ -26784,18 +26784,6 @@ in modules // {
     };
   };
 
-  tornado_4_0_1 = buildPythonPackage rec {
-    name = "tornado-${version}";
-    version = "4.0.1";
-
-    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tornado/${name}.tar.gz";
-      sha256 = "00crp5vnasxg7qyjv89qgssb69vd7qr13jfghdryrcbnn9l8c1df";
-    };
-  };
-
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
     version = "0.3.1";
@@ -27654,12 +27642,12 @@ in modules // {
 
   IMAPClient = buildPythonPackage rec {
     name = "IMAPClient-${version}";
-    version = "0.11";
+    version = "0.13";
     disabled = isPy34 || isPy35;
 
     src = pkgs.fetchurl {
       url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
-      sha256 = "1w54h8gz25qf6ggazzp6xf7kvsyiadsjfkkk17gm0p6pmzvvccbn";
+      sha256 = "0v7kd1crdbff0rmh4ddm5qszkis6hpk9084qh94al8h7g4y9l3is";
     };
 
     buildInputs = with self; [ mock ];

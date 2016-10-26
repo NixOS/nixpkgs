@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, libpulseaudio, libnotify, pkgconfig }:
+{ stdenv, fetchFromGitHub, libpulseaudio, libnotify, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "ponymix-${version}";
   version = "5";
-  src = fetchurl {
-    url = "http://code.falconindy.com/archive/ponymix/${name}.tar.xz";
-    sha256 = "0qn2kms9h9b7da2xzkdgzrykhhdywr4psxnz03j8rg7wa9nwfw0x";
+
+  src = fetchFromGitHub {
+    owner  = "falconindy";
+    repo   = "ponymix";
+    rev    = version;
+    sha256 = "08yp7fprmzm6px5yx2rvzri0l60bra5h59l26pn0k071a37ks1rb";
   };
 
   buildInputs = [ libpulseaudio libnotify ];
@@ -13,9 +16,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''substituteInPlace Makefile --replace "\$(DESTDIR)/usr" "$out"'';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "CLI PulseAudio Volume Control";
     homepage = "http://github.com/falconindy/ponymix";
-    license = "mit";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 }

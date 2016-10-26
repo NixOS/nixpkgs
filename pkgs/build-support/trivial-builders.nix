@@ -1,15 +1,23 @@
-{ lib, stdenv, lndir }:
+{ lib, stdenv, stdenvNoCC, lndir }:
+
+let
+
+  runCommand' = stdenv: name: env: buildCommand:
+    stdenv.mkDerivation ({
+      inherit name buildCommand;
+      passAsFile = [ "buildCommand" ];
+    } // env);
+
+in
 
 rec {
 
   # Run the shell command `buildCommand' to produce a store path named
   # `name'.  The attributes in `env' are added to the environment
   # prior to running the command.
-  runCommand = name: env: buildCommand:
-    stdenv.mkDerivation ({
-      inherit name buildCommand;
-      passAsFile = [ "buildCommand" ];
-    } // env);
+  runCommand = runCommandNoCC;
+  runCommandNoCC = runCommand' stdenvNoCC;
+  runCommandCC = runCommand' stdenv;
 
 
   # Create a single file.

@@ -5,9 +5,11 @@
 assert zlibSupport -> zlib != null;
 
 let
-
-  majorVersion = "5.4.1";
-  version = "${majorVersion}";
+  majorVersion = "5.4";
+  minorVersion = "1";
+  minorVersionSuffix = "";
+  pythonVersion = "2.7";
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "pypy${majorVersion}";
 
   pypy = stdenv.mkDerivation rec {
@@ -113,6 +115,9 @@ let
 
        # verify cffi modules
        $out/bin/pypy -c "import Tkinter;import sqlite3;import curses"
+
+        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
+        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
     '';
 
     passthru = rec {
