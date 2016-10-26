@@ -13,15 +13,15 @@ let
     allowImportFromDerivation = true;
   };
 
-  kernelOverrides = origAttrs: derivation (origKernel.drvAttrs // {
+  kernelOverrides = origAttrs: origKernel.drvAttrs // {
     configurePhase = ''
       runHook preConfigure
-      mkdir ../build
+      mkdir -p ../build
       make $makeFlags "''${makeFlagsArray[@]}" mrproper
       make $makeFlags "''${makeFlagsArray[@]}" KCONFIG_ALLCONFIG=${configfile} allnoconfig
       runHook postConfigure
     '';
-  });
+  };
 
    kernelPackages = pkgs.linuxPackagesFor origKernel;
 in {
