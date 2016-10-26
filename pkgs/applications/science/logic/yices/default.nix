@@ -10,10 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "1wfq6hcm54h0mqmbs1ip63i0ywlwnciav86sbzk3gafxyzg1nd0c";
   };
 
+  patchPhase = ''patchShebangs tests/regress/check.sh'';
+
   configureFlags = [ "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
                      "--with-static-gmp-include-dir=${gmp-static.dev}/include"
                    ];
   buildInputs = [ gmp-static gperf autoreconfHook ];
+
+  enableParallelBuilding = true;
+  doCheck = true;
 
   installPhase = ''make install LDCONFIG=true'';
 
