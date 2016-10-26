@@ -3,21 +3,9 @@
 with builtins;
 
 let
-  removeAttrs = e: k: filter (x: x."${k}" != e."${k}");
-
-  uniqueAttrs = list: key:
-    if list == [] then []
-    else
-      let
-        x = head list;
-        xs = uniqueAttrs (lib.drop 1 list) key;
-      in [x] ++ removeAttrs x key xs;
-
-  uniqueReqKernConfig = uniqueAttrs config.system.requiredKernelConfig "configLine";
-
   configfile = storePath (toFile "config" (lib.concatStringsSep "\n"
-    (map (getAttr "configLine") uniqueReqKernConfig))
-  );
+    (lib.unique (catAttrs "configLine" config.system.requiredKernelConfig))
+  ));
 
   origKernel = pkgs.buildLinux {
     inherit (pkgs.linux) src version;
@@ -35,7 +23,7 @@ let
     '';
   });
 
-   kernelPackages = pkgs.linuxPackagesFor kernel;
+   kernelPackages = pkgs.linuxPackagesFor origKernel;
 in {
   boot.kernelOverrides = kernelOverrides;
   boot.kernelPackages = kernelPackages;
