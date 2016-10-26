@@ -1,4 +1,4 @@
-{ newScope, stdenv, makeWrapper, makeDesktopItem, ed
+{ newScope, stdenv, makeWrapper, makeDesktopItem, ed, overrideCC, pkgs
 
 # package customization
 , channel ? "stable"
@@ -24,6 +24,10 @@ let
   common = if gnRequired then ./common-gn.nix else ./common.nix;
 
   chromium = {
+    stdenv = overrideCC stdenv (pkgs.callPackage ./cc-wrapper {
+      name = "rspfile";
+      inherit (stdenv.cc) nativeTools nativeLibc nativePrefix cc libc;
+    });
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage common {
