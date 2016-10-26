@@ -8,11 +8,11 @@ assert kernel != null -> !(kernel.features.grsecurity or false);
 let
   name = "wireguard-unstable-${version}";
 
-  version = "2016-10-01";
+  version = "2016-10-25";
 
   src = fetchurl {
-    url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-experimental-0.0.20161001.tar.xz";
-    sha256 = "1j1s276lgp17yrlc46bgsbpwp635cvvv6b3ap49aq5h7jixvnfmc";
+    url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-experimental-0.0.20161025.tar.xz";
+    sha256 = "09rhap3dzb8rcq1a1af9inf1qz7161yghafbgpbnd9dg016vhgs3";
   };
 
   meta = with stdenv.lib; {
