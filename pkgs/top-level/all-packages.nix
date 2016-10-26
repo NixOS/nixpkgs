@@ -869,6 +869,8 @@ in
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
+  languagetool = callPackage ../tools/text/languagetool {  };
+
   long-shebang = callPackage ../misc/long-shebang {};
 
   mathics = pythonPackages.mathics;
@@ -3787,6 +3789,8 @@ in
   textadept = callPackage ../applications/editors/textadept { };
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
+
+  thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   tiled = qt5.callPackage ../applications/editors/tiled { };
 

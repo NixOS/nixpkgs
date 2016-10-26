@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "accountsservice-${version}";
-  version = "0.6.42";
+  version = "0.6.43";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "0zh0kjpdc631qh36plcgpwvnmh9wj8l5cki3aw5r09w6y7198r75";
+    sha256 = "1k6n9079001sgcwlkq0bz6mkn4m8y4dwf6hs1qm85swcld5ajfzd";
   };
 
   buildInputs = [ pkgconfig glib intltool libtool makeWrapper
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-create-dirs.patch
-    ./Add-nixbld-to-user-blacklist.patch
     ./Disable-methods-that-change-files-in-etc.patch
   ];
 

@@ -1019,4 +1019,10 @@ self: super: {
   # https://github.com/fpco/store/issues/77
   store = dontCheck super.store;
 
+  # https://github.com/bmillwood/applicative-quoters/issues/6
+  applicative-quoters = doJailbreak super.applicative-quoters;
+
+  # https://github.com/vshabanov/HsOpenSSL/issues/11
+  HsOpenSSL = doJailbreak super.HsOpenSSL;
+
 }
