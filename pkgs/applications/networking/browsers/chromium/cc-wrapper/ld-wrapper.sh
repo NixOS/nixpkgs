@@ -14,9 +14,29 @@ fi
 
 source @out@/nix-support/utils.sh
 
+# Expand @command-files on parameters
+
+readFile() {
+    while IFS='' read -r line || [[ -n "$line" ]]; do
+        echo "$line"
+    done < "$1"
+}
+
+expandRsps() {
+    for param in $@; do
+        if [[ "$param" =~ @.* ]]; then
+            readParams=( $(readFile "${param:1}") )
+            expandRsps "${readParams[@]}"
+        else
+            echo "$param"
+        fi
+    done
+}
+
+rspflags=( $(expandRsps "$@") )
 
 # Optionally filter out paths not refering to the store.
-params=("$@")
+params=( "$@" )
 if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" \
         -a \( -z "$NIX_IGNORE_LD_THROUGH_GCC" -o -z "$NIX_LDFLAGS_SET" \) ]; then
     rest=()
@@ -101,7 +121,7 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
     rpath=""
 
     # First, find all -L... switches.
-    allParams=("${params[@]}" ${extra[@]})
+    allParams=("${params[@]}" "${extra[@]}" "${rspflags[@]}")
     n=0
     while [ $n -lt ${#allParams[*]} ]; do
         p=${allParams[n]}
