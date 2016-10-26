@@ -53,7 +53,7 @@ in
           };
 
           extraConfig = mkOption {
-            type = types.str;
+            type = types.lines;
             description = ''
               Extra configuration for bepasty server to be appended on the
               configuration.

@@ -54,8 +54,8 @@ in
       };
 
       configDir = mkOption {
-        type = types.path;
-        default = "";
+        type = types.nullOr types.path;
+        default = null;
         description = "Use this optional config directory instead of using slapd.conf";
         example = "/var/db/slapd.d";
       };
@@ -103,7 +103,7 @@ in
         mkdir -p ${cfg.dataDir}
         chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
       '';
-      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -h \"${concatStringsSep " " cfg.urlList}\" ${if cfg.configDir == "" then "-f "+configFile else "-F "+cfg.configDir}";
+      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -h \"${concatStringsSep " " cfg.urlList}\" ${if cfg.configDir == null then "-f "+configFile else "-F "+cfg.configDir}";
     };
 
     users.extraUsers.openldap =

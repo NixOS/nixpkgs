@@ -28,7 +28,7 @@ in {
       };
       serviceConfig = {
         ExecStart = "${pkgs.brltty}/bin/brltty --no-daemon";
-        Type = "simple";        # Change to notidy after next releae
+        Type = "notify";
         TimeoutStartSec = 5;
         TimeoutStopSec = 10;
         Restart = "always";

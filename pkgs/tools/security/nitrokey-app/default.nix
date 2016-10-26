@@ -1,21 +1,18 @@
-{ stdenv, cmake, fetchFromGitHub, libappindicator-gtk2, libnotify, libusb1, pkgconfig
-, qt5 }:
+{ stdenv, cmake, fetchFromGitHub, libusb1, pkgconfig, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "nitrokey-app";
-  version = "0.4";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app";
     rev = "v${version}";
-    sha256 = "0h131847pllsr7rk7nn8vlj74byb5f14cl9h3g3pmlq5zj8ylfkx";
+    sha256 = "0acb2502r3wa0mry6h8sz1k16zaa4bgnhxwxqd1vd1y42xc6g9bw";
   };
 
   buildInputs = [
     cmake
-    libappindicator-gtk2
-    libnotify
     libusb1
     pkgconfig
     qt5.qtbase
@@ -24,6 +21,7 @@ stdenv.mkDerivation rec {
      ./FixInstallDestination.patch
      ./HeaderPath.patch
   ];
+  cmakeFlags = "-DHAVE_LIBAPPINDICATOR=NO";
   meta = {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";
     longDescription  = ''

@@ -3,7 +3,7 @@
 with lib;
 
 let
-  nodePackages = callPackage <nixpkgs/pkgs/top-level/node-packages.nix> {
+  nodePackages = callPackage ../../../../top-level/node-packages.nix {
     neededNatives = [ python ];
     self = nodePackages;
     generated = ./quassel-webserver.nix;

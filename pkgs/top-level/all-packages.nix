@@ -395,6 +395,8 @@ in
 
   albert = qt5.callPackage ../applications/misc/albert {};
 
+  amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
+
   ammonite-repl = callPackage ../development/tools/ammonite {};
 
   amtterm = callPackage ../tools/system/amtterm {};
@@ -650,6 +652,7 @@ in
 
   brltty = callPackage ../tools/misc/brltty {
     alsaSupport = (!stdenv.isDarwin);
+    systemdSupport = stdenv.isLinux;
   };
   bro = callPackage ../applications/networking/ids/bro { };
 
@@ -2268,6 +2271,8 @@ in
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
 
+  kargo = callPackage ../tools/misc/kargo { };
+
   kazam = callPackage ../applications/video/kazam { };
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
@@ -2457,6 +2462,8 @@ in
   nologin = shadow;
 
   npm2nix = nodePackages.npm2nix;
+
+  kea = callPackage ../tools/networking/kea { };
 
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
@@ -3338,7 +3345,7 @@ in
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
 
-  qastools = callPackage ../tools/audio/qastools { };
+  qastools = qt5.callPackage ../tools/audio/qastools { };
 
   qesteidutil = qt5.callPackage ../tools/security/qesteidutil { } ;
   qdigidoc = qt5.callPackage ../tools/security/qdigidoc { } ;
@@ -4500,7 +4507,7 @@ in
 
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.stdenv;
-  libcxxStdenv = stdenvAdapters.overrideCC stdenv (clangWrapSelf llvmPackages.clang-unwrapped);
+  libcxxStdenv = lowPrio llvmPackages.libcxxStdenv;
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -5100,7 +5107,7 @@ in
   };
 
   ponyc = callPackage ../development/compilers/ponyc {
-    llvm = llvm_38;
+    llvm = llvm_39;
   };
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
@@ -5227,7 +5234,9 @@ in
     inherit libc extraBuildCommands;
   };
 
-  wrapCC = wrapCCWith (callPackage ../build-support/cc-wrapper) stdenv.cc.libc "";
+  ccWrapperFun = callPackage ../build-support/cc-wrapper;
+
+  wrapCC = wrapCCWith ccWrapperFun stdenv.cc.libc "";
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: callPackage ../build-support/gcc-wrapper-old {
     nativeTools = stdenv.cc.nativeTools or false;
@@ -5731,6 +5740,8 @@ in
   asn2quickder = callPackage ../development/tools/asn2quickder {};
 
   astyle = callPackage ../development/tools/misc/astyle { };
+
+  awf = callPackage ../development/tools/misc/awf { };
 
   electron = callPackage ../development/tools/electron { };
 
@@ -6500,6 +6511,9 @@ in
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
+  arb = callPackage ../development/libraries/arb {};
+  arb-git = callPackage ../development/libraries/arb/git.nix {};
+
   armadillo = callPackage ../development/libraries/armadillo {};
 
   assimp = callPackage ../development/libraries/assimp { };
@@ -6579,6 +6593,8 @@ in
   ccnx = callPackage ../development/libraries/ccnx { };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
+
+  cddlib = callPackage ../development/libraries/cddlib {};
 
   cdk = callPackage ../development/libraries/cdk {};
 
@@ -6753,6 +6769,8 @@ in
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
+  eclib = callPackage ../development/libraries/eclib {};
+
   eigen = callPackage ../development/libraries/eigen {};
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
@@ -6797,6 +6815,9 @@ in
   };
 
   fcgi = callPackage ../development/libraries/fcgi { };
+
+  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {};
+  fflas-ffpack_1 = callPackage ../development/libraries/fflas-ffpack/1.nix {};
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -6855,6 +6876,8 @@ in
 
   flann = callPackage ../development/libraries/flann { };
 
+  flint = callPackage ../development/libraries/flint { };
+
   flite = callPackage ../development/libraries/flite { };
 
   fltk13 = callPackage ../development/libraries/fltk { };
@@ -6863,6 +6886,9 @@ in
   fmod = callPackage ../development/libraries/fmod { };
 
   fmod42416 = callPackage ../development/libraries/fmod/4.24.16.nix { };
+
+  fplll = callPackage ../development/libraries/fplll {};
+  fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
 
   freeimage = callPackage ../development/libraries/freeimage { };
 
@@ -6949,6 +6975,8 @@ in
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gf2x = callPackage ../development/libraries/gf2x {};
+
   gd = callPackage ../development/libraries/gd {
     libtiff = null;
     libXpm = null;
@@ -6965,6 +6993,10 @@ in
   giblib = callPackage ../development/libraries/giblib { };
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
+
+  givaro = callPackage ../development/libraries/givaro {};
+  givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
+  givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
@@ -7049,6 +7081,11 @@ in
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr/default.nix { };
+  
+  mpfi = callPackage ../development/libraries/mpfi { };
+
+  # A GMP fork
+  mpir = callPackage ../development/libraries/mpir {};
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
@@ -7324,6 +7361,8 @@ in
   };
 
   imv = callPackage ../applications/graphics/imv/default.nix { };
+
+  iml = callPackage ../development/libraries/iml { };
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
@@ -7671,6 +7710,8 @@ in
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
+  libgap = callPackage ../development/libraries/libgap { };
+
   libgdata = gnome3.libgdata;
 
   libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
@@ -7778,7 +7819,7 @@ in
   };
 
   libgumbo = callPackage ../development/libraries/libgumbo { };
-  
+
   libhangul = callPackage ../development/libraries/libhangul { };
 
   libharu = callPackage ../development/libraries/libharu { };
@@ -9179,6 +9220,8 @@ in
 
   t1lib = callPackage ../development/libraries/t1lib { };
 
+  tachyon = callPackage ../development/libraries/tachyon {};
+
   taglib = callPackage ../development/libraries/taglib { };
   taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
 
@@ -10370,6 +10413,8 @@ in
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
+  wallabag = callPackage ../servers/web-apps/wallabag { };
+
   winstone = callPackage ../servers/http/winstone { };
 
   xinetd = callPackage ../servers/xinetd { };
@@ -10837,20 +10882,6 @@ in
       ];
   };
 
-  linux_4_7 = callPackage ../os-specific/linux/kernel/linux-4.7.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        kernelPatches.cpu-cgroup-v2."4.7"
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_4_8 = callPackage ../os-specific/linux/kernel/linux-4.8.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -11039,7 +11070,6 @@ in
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
-  linuxPackages_4_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_7);
   linuxPackages_4_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_8);
   # Don't forget to update linuxPackages_latest!
 
@@ -13191,7 +13221,8 @@ in
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
-  hyperterm = callPackage ../applications/misc/hyperterm { inherit (gnome2) GConf; };
+  hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
+  hyperterm = self.hyper;
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
@@ -13748,6 +13779,8 @@ in
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
+  mtpaint = callPackage ../applications/graphics/mtpaint { };
+
   multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
 
   multimon-ng = callPackage ../applications/misc/multimon-ng { };
@@ -13922,6 +13955,8 @@ in
     inherit (gnome2) libglade;
   };
 
+  oblogout = callPackage ../tools/X11/oblogout { };
+
   obs-studio = qt5.callPackage ../applications/video/obs-studio {
     alsaSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or true;
@@ -13955,9 +13990,7 @@ in
 
   openscad = callPackage ../applications/graphics/openscad {};
 
-  opera = callPackage ../applications/networking/browsers/opera {
-    inherit (pkgs.kde4) kdelibs;
-  };
+  opera = callPackage ../applications/networking/browsers/opera {};
 
   osmctools = callPackage ../applications/misc/osmctools { };
 
@@ -14769,6 +14802,8 @@ in
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
+  unigine-valley = callPackage ../applications/graphics/unigine-valley { };
+
   inherit (ocamlPackages) unison;
 
   unpaper = callPackage ../tools/graphics/unpaper { };
@@ -15511,6 +15546,8 @@ in
   };
 
   gltron = callPackage ../games/gltron { };
+
+  gmad = callPackage ../games/gmad { };
 
   gnubg = callPackage ../games/gnubg { };
 
@@ -16340,6 +16377,8 @@ in
 
   metis = callPackage ../development/libraries/science/math/metis {};
 
+  nauty = callPackage ../applications/science/math/nauty {};
+
   sage = callPackage ../applications/science/math/sage { };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
@@ -16347,6 +16386,8 @@ in
   suitesparse = suitesparse_4_4;
 
   superlu = callPackage ../development/libraries/science/math/superlu {};
+
+  symmetrica = callPackage ../applications/science/math/symmetrica {};
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
@@ -16501,6 +16542,8 @@ in
 
   gappa = callPackage ../applications/science/logic/gappa { };
 
+  gfan = callPackage ../applications/science/math/gfan {};
+
   ginac = callPackage ../applications/science/math/ginac { };
 
   glucose = callPackage ../applications/science/logic/glucose { };
@@ -16637,11 +16680,15 @@ in
 
   geogebra = callPackage ../applications/science/math/geogebra { };
 
-  maxima = callPackage ../applications/science/math/maxima { };
+  maxima = callPackage ../applications/science/math/maxima { ecl = null; };
+  maxima-ecl = callPackage ../applications/science/math/maxima { sbcl = null; };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
   pari = callPackage ../applications/science/math/pari {};
+  pari_alpha = callPackage ../applications/science/math/pari/alpha.nix {};
+
+  ratpoints = callPackage ../applications/science/math/ratpoints {};
 
   calc = callPackage ../applications/science/math/calc { };
 
@@ -16652,6 +16699,9 @@ in
   };
 
   singular = callPackage ../applications/science/math/singular {};
+  libsingular = callPackage ../applications/science/math/singular {
+    asLibsingular = true;
+  };
 
   scilab = callPackage ../applications/science/math/scilab {
     withXaw3d = false;
@@ -16777,6 +16827,8 @@ in
   beep = callPackage ../misc/beep { };
 
   blackbird = callPackage ../misc/themes/blackbird { };
+
+  bootil = callPackage ../development/libraries/bootil { };
 
   brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
 

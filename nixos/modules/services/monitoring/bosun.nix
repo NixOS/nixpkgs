@@ -107,7 +107,7 @@ in {
       };
 
       extraConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration options for Bosun. You should describe your

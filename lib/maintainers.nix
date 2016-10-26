@@ -10,6 +10,7 @@
   aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
+  abigailbuccaneer = "Abigail Bunyan <abigailbuccaneer@gmail.com>";
   aboseley = "Adam Boseley <adam.boseley@gmail.com>";
   abuibrahim = "Ruslan Babayev <ruslan@babayev.com>";
   acowley = "Anthony Cowley <acowley@gmail.com>";
@@ -219,6 +220,7 @@
   kevincox = "Kevin Cox <kevincox@kevincox.ca>";
   khumba = "Bryan Gardiner <bog@khumba.net>";
   KibaFox = "Kiba Fox <kiba.fox@foxypossibilities.com>";
+  kierdavis = "Kier Davis <kierdavis@gmail.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
@@ -454,6 +456,7 @@
   veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   vizanto = "Danny Wilson <danny@prime.vc>";
+  vklquevs = "vklquevs <vklquevs@gmail.com>";
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
   vmandela = "Venkateswara Rao Mandela <venkat.mandela@gmail.com>";
   volhovm = "Mikhail Volkhov <volhovm.cs@gmail.com>";

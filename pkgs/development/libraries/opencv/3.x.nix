@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l0w12czavgs0wzw1c594g358ilvfg2fn32cn8z7pv84zxj4g429";
   };
 
-  postPatch =
+  preConfigure =
     let ippicvVersion = "20151201";
         ippicvPlatform = if stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux" then "linux"
                          else throw "ICV is not available for this platform (or not yet supported by this package)";

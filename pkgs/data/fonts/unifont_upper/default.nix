@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "unifont_upper-${version}";
-  version = "9.0.01";
+  version = "9.0.03";
 
   ttf = fetchurl {
-    url = "http://unifoundry.com/pub/unifont-9.0.01/font-builds/${name}.ttf";
-    sha256 = "06b7na4vb2fjn0zn14bmarzn6vb3ndkysixc89kmb2cc24kfpix1";
+    url = "http://unifoundry.com/pub/unifont-${version}/font-builds/${name}.ttf";
+    sha256 = "015v39y6nnyz4ld006349jzk9isyaqp4cnvmz005ylfnicl4zwhi";
   };
 
   phases = "installPhase";

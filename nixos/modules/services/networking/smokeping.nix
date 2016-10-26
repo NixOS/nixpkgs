@@ -244,7 +244,7 @@ in
         description = "Target configuration";
       };
       extraConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         description = "Any additional customization not already included.";
       };

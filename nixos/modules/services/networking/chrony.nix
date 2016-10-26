@@ -51,6 +51,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration directives that should be added to
