@@ -1387,7 +1387,6 @@ in
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
-    rpm = rpm.override;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
