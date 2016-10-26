@@ -25,7 +25,7 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
-  version = "1.2.9";
+  version = "1.2.10";
   name = "${pname}-${version}";
 
   src =
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
       fetchurl {
         name = "saleae-logic-${version}-32bit.zip";
         url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(32-bit).zip";
-        sha256 = "1ji3va507z0mq5fc49z9yyik04f5m5mipylshvcz5kfnibavyyhi";
+        sha256 = "1dyrj07cgj2fvwi1sk97vady9ri8f8n7mxy9zyzmw9isngs7bmll";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         name = "saleae-logic-${version}-64bit.zip";
         url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
-        sha256 = "1d4hmp756ysfk5i1ys4mlkd1czbdw0zqznkzx08pyqk93zc7b16s";
+        sha256 = "1skx2pfnic7pyss7c69qb7kg2xvflpxf112xkf9awk516dw1w4h7";
       }
     else
       abort "Saleae Logic software requires i686-linux or x86_64-linux";
