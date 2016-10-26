@@ -6489,10 +6489,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Importer = buildPerlPackage rec {
-    name = "Importer-0.014";
+    name = "Importer-0.024";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "79b088cdead749d2c5a8cf585456cba064b4847c003a28d02d10a6cc2231b989";
+      sha256 = "1d19760ceb366b664985ace9a7ee1b54a438b1e060a5bca6eff0c6a35b07a557";
     };
     meta = {
       description = "Alternative but compatible interface to modules that export symbols";
