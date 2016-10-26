@@ -3,9 +3,9 @@
 with builtins;
 
 let
-  configfile = storePath (toFile "config" (lib.concatStringsSep "\n"
+  configfile = storePath (toFile "config" ((lib.concatStringsSep "\n"
     (lib.unique (catAttrs "configLine" config.system.requiredKernelConfig))
-  ));
+  ) + "\n"));
 
   origKernel = pkgs.buildLinux {
     inherit (pkgs.linux) src version;
