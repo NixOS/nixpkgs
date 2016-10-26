@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       fetchurl {
         name = "saleae-logic-${version}-32bit.zip";
         url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(32-bit).zip";
-        sha256 = "0000004xgv8v8l12shimhhn54nn0dldbxz1gpbx92ysd8q8x1q79";
+        sha256 = "1ji3va507z0mq5fc49z9yyik04f5m5mipylshvcz5kfnibavyyhi";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
