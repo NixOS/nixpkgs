@@ -12,7 +12,7 @@ in buildPythonPackage (args // rec {
   buildInputs = args.buildInputs or [ gfortran nose ];
   propagatedBuildInputs = args.propagatedBuildInputs or [ passthru.blas ];
 
-  patches = lib.optionals isPy27 [
+  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # See cpython 2.7 patches.
     # numpy.distutils is used by cython during it's check phase
     ./numpy-distutils-C++.patch
