@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "0.9.23";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/p/pmount/pmount_${version}.orig.tar.bz2";
-    sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
+    url = "https://launchpad.net/ubuntu/trusty/+source/pmount/0.9.23-2/+files/pmount_${version}.orig.tar.bz2";
+    sha256 = "0dm01sh5nnf2bk0jc0z87qxy2hbxcbxs4ba4kng8w3ki1clzqf6v";
   };
 
   buildInputs = [ intltool utillinux ];
