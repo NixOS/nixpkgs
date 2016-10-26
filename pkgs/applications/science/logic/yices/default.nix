@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
                    ];
   buildInputs = [ gmp-static gperf autoreconfHook ];
 
+  installPhase = ''make install LDCONFIG=true'';
+
   meta = {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://yices.csl.sri.com";
