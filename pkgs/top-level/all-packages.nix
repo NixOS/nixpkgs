@@ -4546,6 +4546,27 @@ in
 
   drumstick = callPackage ../development/libraries/drumstick { };
 
+  #ec-compiler2 = rec {
+  #  erlang = callPackage ../development/interpreters/erlang/R18.nix { 
+  #    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  #  };
+  #
+  #  elixir = callPackage ../development/interpreters/elixir { };
+  #
+  #  nodejs = callPackage ../development/web/nodejs/v6.nix { 
+  #    libtool = darwin.cctools;
+  #  };
+  #};
+
+  ec-compiler = with pkgs; buildEnv {
+    name = "ec-compiler";
+    paths = [
+      erlangR18
+      elixir
+      nodejs
+    ];
+  };
+  
   ecl = callPackage ../development/compilers/ecl { };
 
   eql = callPackage ../development/compilers/eql {};
