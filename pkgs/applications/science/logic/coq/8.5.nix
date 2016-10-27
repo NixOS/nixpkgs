@@ -57,7 +57,11 @@ stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = "revision coq coqide";
+  buildFlags = "revision coq coqide bin/votour";
+
+  postInstall = ''
+    cp bin/votour $out/bin/
+  '';
 
   meta = with stdenv.lib; {
     description = "Coq proof assistant";
