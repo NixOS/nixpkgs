@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "pari-${version}";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
+    url = "http://pari.math.u-bordeaux.fr/pub/pari/testing/${name}.tar.gz";
     sha256 = "1nrjybrqv55p669rmlkghb940hzf63vnpn34sbwhy9zlbw3hg305";
   };
 
