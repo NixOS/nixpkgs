@@ -37,11 +37,11 @@ in {
         description = "First separator character in generated addresses";
       };
 
-      bindAddress = mkOption {
-        type = types.str;
-        default = "127.0.0.1";
-        description = "Socket listen address";
-      };
+      # bindAddress = mkOption { # uncomment once 1.5 is released
+      #   type = types.str;
+      #   default = "127.0.0.1";
+      #   description = "Socket listen address";
+      # };
 
       forwardPort = mkOption {
         type = types.int;
@@ -110,7 +110,7 @@ in {
       path = [ pkgs.coreutils ];
 
       serviceConfig = {
-        ExecStart = ''${pkgs.postsrsd}/sbin/postsrsd "-s${cfg.secretsFile}" "-d${cfg.domain}" -a${cfg.separator} -l${cfg.bindAddress} -f${toString cfg.forwardPort} -r${toString cfg.reversePort} -t${toString cfg.timeout} "-X${concatStringsSep "," cfg.excludeDomains}"'';
+        ExecStart = ''${pkgs.postsrsd}/sbin/postsrsd "-s${cfg.secretsFile}" "-d${cfg.domain}" -a${cfg.separator} -f${toString cfg.forwardPort} -r${toString cfg.reversePort} -t${toString cfg.timeout} "-X${concatStringsSep "," cfg.excludeDomains}"'';
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = true;
