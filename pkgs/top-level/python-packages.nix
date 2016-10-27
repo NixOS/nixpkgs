@@ -8144,12 +8144,12 @@ in modules // {
   };
 
   passlib = buildPythonPackage rec {
-    version = "1.6.2";
+    version = "1.6.5";
     name    = "passlib-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/passlib/passlib-${version}.tar.gz";
-      sha256 = "e987f6000d16272f75314c7147eb015727e8532a3b747b1a8fb58e154c68392d";
+      sha256 = "1z27wdxs5rj5xhhqfzvzn3yg682irkxw6dcs5jj7mcf97psk8gd8";
     };
 
     buildInputs = with self; [ nose pybcrypt];
