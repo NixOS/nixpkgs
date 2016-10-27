@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gmp, readline, perl }:
 
 stdenv.mkDerivation rec {
-  version = "2.8.0.alpha";
-  name = "pari-${version}";
+  version = "2.8.1.beta";
+  name = "pari-unstable-${version}";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/testing/${name}.tar.gz";
-    sha256 = "1nrjybrqv55p669rmlkghb940hzf63vnpn34sbwhy9zlbw3hg305";
+    url = "http://pari.math.u-bordeaux.fr/pub/pari/unstable/pari-${version}.tar.gz";
+    sha256 = "167dcqrqsblqrd7z5pb8jrs9xqm8138mik0s4ihlqcq6c3wndhv1";
   };
 
   buildInputs = [gmp readline];
