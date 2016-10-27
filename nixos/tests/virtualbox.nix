@@ -11,10 +11,10 @@ let
       #!${pkgs.stdenv.shell} -xe
       export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
-      mkdir -p /var/run/dbus
+      mkdir -p /run/dbus
       cat > /etc/passwd <<EOF
       root:x:0:0::/root:/bin/false
-      messagebus:x:1:1::/var/run/dbus:/bin/false
+      messagebus:x:1:1::/run/dbus:/bin/false
       EOF
       cat > /etc/group <<EOF
       root:x:0:
