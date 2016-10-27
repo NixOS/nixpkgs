@@ -3151,11 +3151,11 @@ in {
 
   devpi-common = buildPythonPackage rec {
     name = "devpi-common";
-    version = "2.0.8";
+    version = "3.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/devpi-common/devpi-common-${version}.tar.gz";
-      sha256 = "a059c4099002d4af8f3ccfc8a9f4bf133b20ea404049b21a31fc1003e1d79452";
+      sha256 = "0l3a7iyk596x6pvzg7604lzzi012qszr804fqn6f517zcy1xz23j";
     };
 
     propagatedBuildInputs = [ self.requests2 self.py ];
@@ -3164,7 +3164,7 @@ in {
       homepage = https://bitbucket.org/hpk42/devpi;
       description = "Utilities jointly used by devpi-server and devpi-client";
       license = licenses.mit;
-      maintainers = with maintainers; [ lewo ];
+      maintainers = with maintainers; [ lewo makefu ];
     };
   };
 
