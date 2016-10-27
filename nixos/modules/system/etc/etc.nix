@@ -8,7 +8,7 @@ let
 
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
-  etc = pkgs.stdenv.mkDerivation {
+  etc = pkgs.stdenvNoCC.mkDerivation {
     name = "etc";
 
     builder = ./make-etc.sh;

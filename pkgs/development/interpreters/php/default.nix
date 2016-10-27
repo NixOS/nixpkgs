@@ -2,7 +2,7 @@
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv }:
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd }:
 
 let
 
@@ -19,11 +19,13 @@ let
 
       enableParallelBuilding = true;
 
-      buildInputs = [ flex bison pkgconfig ];
+      buildInputs = [ flex bison pkgconfig ]
+        ++ lib.optional stdenv.isLinux systemd;
 
       configureFlags = [
         "EXTENSION_DIR=$(out)/lib/php/extensions"
-      ] ++ lib.optional stdenv.isDarwin "--with-iconv=${libiconv}";
+      ] ++ lib.optional stdenv.isDarwin "--with-iconv=${libiconv}"
+        ++ lib.optional stdenv.isLinux  "--with-fpm-systemd";
 
       flags = {
 
@@ -270,7 +272,7 @@ let
         done
 
         [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
-        ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out $configureFlags
+        ./configure --with-config-file-scan-dir=/etc/php.d --with-config-file-path=$out/etc --prefix=$out $configureFlags
       '';
 
       postInstall = ''
@@ -300,12 +302,12 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.26";
-    sha256 = "0dk2ifn50iv8jvw2jyw2pr9xqnkksxfv9qbpay84na54hf0anynl";
+    version = "5.6.27";
+    sha256 = "0g1adx231c738694gc4bh8x65c7fwsqdbm42n9xwrsdncyhd6xrv";
   };
 
   php70 = generic {
-    version = "7.0.11";
-    sha256 = "1wgpkfzpiap29nxjzqjjvpgirpg61n61xbqq9f25i60lq6fp56zr";
+    version = "7.0.12";
+    sha256 = "09va788b9zk5igzmsfxr593ly174qf9kmihd4fq3kclgzsa75i1q";
   };
 }

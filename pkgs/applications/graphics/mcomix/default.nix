@@ -9,7 +9,7 @@ python27Packages.buildPythonApplication rec {
       sha256 = "0fzsf9pklhfs1rzwzj64c0v30b74nk94p93h371rpg45qnfiahvy";
     };
 
-    propagatedBuildInputs = with python27Packages; [ pygtk pillow sqlite3 ];
+    propagatedBuildInputs = with python27Packages; [ pygtk pillow ];
 
     meta = {
       description = "Image viewer designed to handle comic books";

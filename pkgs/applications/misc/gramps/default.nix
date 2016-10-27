@@ -17,7 +17,7 @@ in buildPythonApplication rec {
     sha256 = "0jdps7yx2mlma1hdj64wssvnqd824xdvw0bmn2dnal5fn3h7h060";
   };
 
-  pythonPath = with pythonPackages; [ pygobject3 pycairo bsddb ] ++ [ pango ];
+  pythonPath = with pythonPackages; [ pygobject3 pycairo ] ++ [ pango ];
 
   # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
   # install flag.

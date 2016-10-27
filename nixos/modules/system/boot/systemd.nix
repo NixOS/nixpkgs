@@ -185,6 +185,8 @@ let
       "timers.target"
     ];
 
+  boolToString = value: if value then "yes" else "no";
+
   makeJobScript = name: text:
     let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
         x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
@@ -212,8 +214,10 @@ let
         // optionalAttrs (config.restartTriggers != [])
           { X-Restart-Triggers = toString config.restartTriggers; }
         // optionalAttrs (config.description != "") {
-          Description = config.description;
-        } // optionalAttrs (config.onFailure != []) {
+          Description = config.description; }
+        // optionalAttrs (config.documentation != []) {
+          Documentation = toString config.documentation; }
+        // optionalAttrs (config.onFailure != []) {
           OnFailure = toString config.onFailure;
         };
     };
@@ -620,6 +624,12 @@ in
       description = "Definition of systemd per-user socket units.";
     };
 
+    systemd.user.targets = mkOption {
+      default = {};
+      type = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig] );
+      description = "Definition of systemd per-user target units.";
+    };
+
     systemd.additionalUpstreamSystemUnits = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -748,6 +758,7 @@ in
     systemd.user.units =
          mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.user.sockets
+      // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.user.targets
       // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.user.timers;
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
@@ -766,7 +777,7 @@ in
         { wantedBy = [ "timers.target" ];
           timerConfig.OnCalendar = service.startAt;
         })
-        (filterAttrs (name: service: service.enable && service.startAt != "") cfg.services);
+        (filterAttrs (name: service: service.enable && service.startAt != []) cfg.services);
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.user.timers =
@@ -774,7 +785,7 @@ in
         { wantedBy = [ "timers.target" ];
           timerConfig.OnCalendar = service.startAt;
         })
-        (filterAttrs (name: service: service.startAt != "") cfg.user.services);
+        (filterAttrs (name: service: service.startAt != []) cfg.user.services);
 
     systemd.sockets.systemd-journal-gatewayd.wantedBy =
       optional config.services.journald.enableHttpGateway "sockets.target";

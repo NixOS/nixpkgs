@@ -1,27 +1,30 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "maia-icon-theme";
+stdenv.mkDerivation rec {
+  name = "maia-icon-theme-${version}";
+  version = "2016-09-16";
 
   src = fetchFromGitHub {
     owner = "manjaro";
     repo = "artwork-maia";
-    rev = "23235fa56e6111d30e9f92576030cc855a0facbe";
-    sha256 = "1d5bv13gds1nx88pc6a9gkrz1lb8sji0wcc5h3bf4mjw0q072nfr";
+    rev = "f6718cd9c383adb77af54b694c47efa4d581f5b5";
+    sha256 = "0f9l3k9abgg8islzddrxgbxaw6vbai5bvz5qi1v2fzir7ykx7bgj";
   };
 
   dontBuild = true;
   
   installPhase = ''
     install -dm 755 $out/share/icons
-    rm icons/CMakeLists.txt
-    cp -dr --no-preserve='ownership' icons $out/share/icons/Maia
+    for f in "" "-dark"; do
+      rm icons$f/CMakeLists.txt
+      cp -dr --no-preserve='ownership' icons$f $out/share/icons/maia$f
+    done
   '';
 
   meta = with stdenv.lib; {
     description = "Icons based on Breeze and Super Flat Remix";
     homepage = https://github.com/manjaro/artwork-maia;
-    licence = licenses.free;
+    license = licenses.free;
     maintainers = [ maintainers.mounium ];
     platforms = platforms.all;
   };

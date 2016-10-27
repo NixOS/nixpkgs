@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "2016-04-30";
 
   src = fetchFromGitHub {
-    owner = "moka-project";
+    owner = "snwh";
     repo = package-name;
     rev = "2006c5281eb988c799068734f289a85443800cda";
     sha256 = "0nisfl92y6hrbakp9qxi0ygayl6avkzrhwirg6854bwqjy2dvjv9";

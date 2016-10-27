@@ -1,4 +1,4 @@
-{lib, python, buildPythonPackage, isPyPy, gfortran, nose, blas}:
+{lib, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
 
 args:
 
@@ -11,6 +11,12 @@ in buildPythonPackage (args // rec {
   disabled = isPyPy;
   buildInputs = args.buildInputs or [ gfortran nose ];
   propagatedBuildInputs = args.propagatedBuildInputs or [ passthru.blas ];
+
+  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
+    # See cpython 2.7 patches.
+    # numpy.distutils is used by cython during it's check phase
+    ./numpy-distutils-C++.patch
+  ];
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py

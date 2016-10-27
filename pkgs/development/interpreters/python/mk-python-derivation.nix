@@ -69,13 +69,13 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   doCheck = false;
   doInstallCheck = doCheck;
 
-  postFixup = attrs.postFixup or ''
+  postFixup = ''
     wrapPythonPrograms
   '' + lib.optionalString catchConflicts ''
     # check if we have two packages with the same name in closure and fail
     # this shouldn't happen, something went wrong with dependencies specs
     ${python.interpreter} ${./catch_conflicts.py}
-  '';
+  '' + attrs.postFixup or '''';
 
   passthru = {
     inherit python; # The python interpreter

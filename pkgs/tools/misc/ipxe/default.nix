@@ -27,8 +27,12 @@ stdenv.mkDerivation {
     ];
 
 
+  enabledOptions = [ "DOWNLOAD_PROTO_HTTPS" ];
+
   configurePhase = ''
-    echo "#define  DOWNLOAD_PROTO_HTTPS" >> src/config/general.h
+    runHook preConfigure
+    for opt in $enabledOptions; do echo "#define $opt" >> src/config/general.h; done
+    runHook postConfigure
   '';
 
   preBuild = "cd src";

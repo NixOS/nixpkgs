@@ -61,6 +61,7 @@ in
       };
 
      extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = "Verbatim contents of <filename>cntlm.conf</filename>.";
      };

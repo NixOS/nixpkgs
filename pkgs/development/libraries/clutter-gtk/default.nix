@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   major = "1.8";
-  minor = "0";
+  minor = "2";
   name = "clutter-gtk-${major}.${minor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/clutter-gtk/${major}/${name}.tar.xz";
-    sha256 = "07dzvx0b3fsswxnpxgk0adjgccnrvbxsd971naqwndnfivbgjbkl";
+    sha256 = "da27d486325490ad3f65d2abf9413aeb8b4a8f7b559e4b2f73567a5344a26b94";
   };
 
   propagatedBuildInputs = [ clutter gtk3 ];

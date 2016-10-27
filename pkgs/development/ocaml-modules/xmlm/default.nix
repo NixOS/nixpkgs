@@ -1,23 +1,21 @@
-{stdenv, fetchurl, ocaml, findlib, opam}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam }:
 let
   pname = "xmlm";
-  version = "1.2.0";
   webpage = "http://erratique.ch/software/${pname}";
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
-assert stdenv.lib.versionAtLeast ocaml_version "3.12";
+assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
 stdenv.mkDerivation rec {
-
   name = "ocaml-${pname}-${version}";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
     sha256 = "1jywcrwn5z3gkgvicr004cxmdaqfmq8wh72f81jqz56iyn5024nh";
   };
 
-  buildInputs = [ ocaml findlib opam ];
+  buildInputs = [ ocaml findlib ocamlbuild opam ];
 
   createFindlibDestdir = true;
 
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     opam-installer --script --prefix=$out ${pname}.install > install.sh
     sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml_version}/site-lib/
+    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/
   '';
 
   meta = with stdenv.lib; {

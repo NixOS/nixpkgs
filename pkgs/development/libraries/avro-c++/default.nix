@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, cmake, boost155, pythonPackages
-}:
+{ stdenv, fetchurl, cmake, boost, python2}:
 
-let version = "1.7.5"; in
+let version = "1.8.1"; in
 
 stdenv.mkDerivation {
   name = "avro-c++-${version}";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
-    sha256 = "064ssbbgrc3hyalzj8rn119bsrnyk1vlpkhl8gghv96jgqbpdyb3";
+    sha256 = "6559755ac525e908e42a2aa43444576cba91e522fe989088ee7f70c169bcc403";
   };
 
   buildInputs = [
     cmake
-    boost155
-    pythonPackages.python
+    python2
+    boost
   ];
+
+  preConfigure = ''
+    substituteInPlace test/SchemaTests.cc --replace "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"
+    substituteInPlace test/buffertest.cc --replace "BOOST_MESSAGE" "BOOST_TEST_MESSAGE"
+  '';
 
   enableParallelBuilding = true;
 

@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
     substituteInPlace $out/bin/bleachbit --replace "#!/usr/bin/env python" "#!${pythonPackages.python.interpreter}"
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk sqlite3 ];
+  propagatedBuildInputs = with pythonPackages; [ pygtk ];
 
   meta = {
     homepage = "http://bleachbit.sourceforge.net";

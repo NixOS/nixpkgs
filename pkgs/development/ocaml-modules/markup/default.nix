@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, uutf, lwt }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, uutf, lwt }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-markup";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0d3wi22v7h0iqzq8dgl0g4fj2wb67gvmbzdckacifghinrx762k3";
     };
 
-  buildInputs = [ocaml findlib];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   installPhase = "make ocamlfind-install";
   

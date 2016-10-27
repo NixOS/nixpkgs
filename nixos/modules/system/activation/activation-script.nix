@@ -145,6 +145,7 @@ in
         ${pkgs.e2fsprogs}/bin/chattr -f -i /var/empty || true
         find /var/empty -mindepth 1 -delete
         chmod 0555 /var/empty
+        chown root:root /var/empty
         ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
       '';
 

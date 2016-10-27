@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite pkgconfig cairo
   readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.client blas ]
-    ++ (with pythonPackages; [ python dateutil wxPython30 numpy sqlite3 ]);
+    ++ (with pythonPackages; [ python dateutil wxPython30 numpy ]);
 
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"

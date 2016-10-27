@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "2.7";
   release = ".0";
   name = "bazaar-${version}${release}";
@@ -9,9 +9,6 @@ pythonPackages.buildPythonApplication rec {
     url = "https://launchpad.net/bzr/${version}/${version}${release}/+download/bzr-${version}${release}.tar.gz";
     sha256 = "1cysix5k3wa6y7jjck3ckq3abls4gvz570s0v0hxv805nwki4i8d";
   };
-
-  # Readline support is needed by bzrtools.
-  propagatedBuildInputs = [ pythonPackages.python.modules.readline ];
 
   doCheck = false;
 

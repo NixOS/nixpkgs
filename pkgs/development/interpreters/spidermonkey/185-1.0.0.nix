@@ -1,4 +1,4 @@
-{ stdenv, autoconf213, fetchurl, pkgconfig, nspr, perl, python, zip }:
+{ stdenv, autoconf213, fetchurl, pkgconfig, nspr, perl, python2, zip }:
 
 stdenv.mkDerivation rec {
   version = "185-1.0.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  buildInputs = [ pkgconfig perl python zip ];
+  buildInputs = [ pkgconfig perl python2 zip ];
   nativeBuildInputs = if stdenv.isArm then [ autoconf213 ] else [];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";

@@ -1,60 +1,50 @@
 { stdenv, fetchurl
 , glibc
 , bzip2
-, db
 , gdbm
-, libX11, xproto
 , lzma
 , ncurses
 , openssl
 , readline
 , sqlite
-, tcl, tk
+, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? false
 , zlib
 , callPackage
 , self
 , python36Packages
-
 , CF, configd
 }:
 
-assert readline != null -> ncurses != null;
-
+assert x11Support -> tcl != null
+                  && tk != null
+                  && xproto != null
+                  && libX11 != null;
 with stdenv.lib;
 
 let
   majorVersion = "3.6";
+  minorVersion = "0";
+  minorVersionSuffix = "b2";
   pythonVersion = majorVersion;
-  version = "${majorVersion}.0a3";
-  fullVersion = "${version}";
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
+  libPrefix = "python${majorVersion}";
+  sitePackages = "lib/${libPrefix}/site-packages";
 
   buildInputs = filter (p: p != null) [
-    glibc
-    zlib
-    bzip2
-    lzma
-    gdbm
-    sqlite
-    db
-    readline
-    ncurses
-    openssl
-    tcl
-    tk
-    libX11
-    xproto
-  ] ++ optionals stdenv.isDarwin [ CF configd ];
-in
-stdenv.mkDerivation {
-  name = "python3-${fullVersion}";
+    zlib bzip2 lzma gdbm sqlite readline ncurses openssl ]
+    ++ optionals x11Support [ tcl tk libX11 xproto ]
+    ++ optionals stdenv.isDarwin [ CF configd ];
+
+in stdenv.mkDerivation {
+  name = "python3-${version}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
   inherit buildInputs;
 
   src = fetchurl {
-    url = "https://www.python.org/ftp/python/${majorVersion}.0/Python-${fullVersion}.tar.xz";
-    sha256 = "08c3598bwihibwca9lwxq923sjq9shvgv3wxv4vkga2n6hf63l1c";
+    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
+    sha256 = "1sk990n2xm5vhn3ys2cp427dx0z14cx3sz1za5f2fcwrp524bz9s";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -72,8 +62,6 @@ stdenv.mkDerivation {
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
      ''}
-
-    substituteInPlace ./Lib/plat-generic/regen --replace "/usr/include" ${glibc.dev}/include
 
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"
@@ -98,23 +86,27 @@ stdenv.mkDerivation {
 
     ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
     paxmark E $out/bin/python${majorVersion}
+
+    # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
+    echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+
+    # Use Python3 as default python
+    ln -s "$out/bin/idle3" "$out/bin/idle"
+    ln -s "$out/bin/pip3" "$out/bin/pip"
+    ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
+    ln -s "$out/bin/python3" "$out/bin/python"
+    ln -s "$out/bin/python3-config" "$out/bin/python-config"
+    ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
   '';
 
   passthru = rec {
-    zlibSupport = zlib != null;
-    sqliteSupport = sqlite != null;
-    dbSupport = db != null;
-    readlineSupport = readline != null;
-    opensslSupport = openssl != null;
-    tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
-    libPrefix = "python${majorVersion}";
-    executable = "python${majorVersion}m";
+    inherit libPrefix sitePackages x11Support;
+    executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; };
     withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python36Packages; };
     isPy3 = true;
     isPy35 = true;
     is_py3k = true;  # deprecated
-    sitePackages = "lib/${libPrefix}/site-packages";
     interpreter = "${self}/bin/${executable}";
   };
 

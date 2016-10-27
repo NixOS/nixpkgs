@@ -2,15 +2,15 @@
 , python, pyserial, pygtk
 }:
 let
-  version = "0.4.1";
+  version = "20161018";
 in
 stdenv.mkDerivation rec {
-  name = "chirp-${version}";
+  name = "chirp-daily-${version}";
   inherit version;
 
   src = fetchurl {
-    url = "http://chirp.danplanet.com/download/0.4.1/chirp-${version}.tar.gz";
-    sha256 = "17iihghqjprn2hld193qw0yl1kkrf6m0fp57l7ibkflxr0nnb7cc";
+    url = "http://trac.chirp.danplanet.com/chirp_daily/daily-${version}/chirp-daily-${version}.tar.gz";
+    sha256 = "0f3r919az4vvcgxzqmxvhrxa2byzk5algy7srzzs15ihkvyxcwkb";
   };
 
   buildInputs = [

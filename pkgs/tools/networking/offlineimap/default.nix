@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, sqlite3 }:
+{ stdenv, fetchFromGitHub, pythonPackages, }:
 
 pythonPackages.buildPythonApplication rec {
   version = "7.0.6";
@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ sqlite3 pythonPackages.six ];
+  propagatedBuildInputs = [ pythonPackages.six ];
 
   meta = {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";

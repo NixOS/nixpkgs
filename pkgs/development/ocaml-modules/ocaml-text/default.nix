@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, libiconv, ocaml, findlib, ncurses }:
+{ stdenv, fetchzip, libiconv, ocaml, findlib, ocamlbuild, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "ocaml-text-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "11jamdfn5s19a0yvl012q1xvdk1grkp4rkrn819imqrvdplqkn1y";
   };
 
-  buildInputs = [ocaml findlib ncurses libiconv];
+  buildInputs = [ ocaml findlib ocamlbuild ncurses libiconv ];
 
   configurePhase = "iconv_prefix=${libiconv} ocaml setup.ml -configure";
 

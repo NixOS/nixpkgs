@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages, xmlsec, which, dnsmasq }:
+{ stdenv, fetchurl, python2Packages, xmlsec, which, dnsmasq }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "neutron-${version}";
   version = "7.0.0";
   namePrefix = "";
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   # https://github.com/openstack/neutron/blob/stable/liberty/requirements.txt
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
    pbr paste PasteDeploy routes debtcollector eventlet greenlet httplib2 requests2
    jinja2 keystonemiddleware netaddr retrying sqlalchemy webob alembic six
    stevedore pecan ryu networking-hyperv MySQL_python
@@ -34,7 +34,7 @@ pythonPackages.buildPythonApplication rec {
   '';
   patches = [ ./neutron-iproute-4.patch ];
 
-  buildInputs = with pythonPackages; [
+  buildInputs = with python2Packages; [
     cliff coverage fixtures mock subunit requests-mock oslosphinx testrepository
     testtools testresources testscenarios webtest oslotest os-testr tempest-lib
     ddt pep8

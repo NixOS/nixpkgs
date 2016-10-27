@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, libotr, automake, autoconf, libtool, glib, pkgconfig, irssi }:
+{ stdenv, fetchurl, fetchFromGitHub, libotr, automake, autoconf, libtool, glib, pkgconfig, irssi }:
 
+let
+  versionFix = fetchurl {
+    url = https://patch-diff.githubusercontent.com/raw/cryptodotis/irssi-otr/pull/60.patch;
+    sha256 = "18fk9nbzf3fvhvvvkrxv5l004hhimapqb6ra09m83268kbl4q3jy";
+  };
+in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "irssi-otr-${version}";
@@ -12,11 +18,13 @@ stdenv.mkDerivation rec {
     sha256 = "1hm1whx1wzlx4fh4xf2y68rx9x6whi8bsbrhd6hqjhskg5msssrg";
   };
 
-  patchPhase = ''
+  prePatch = ''
     sed -i 's,/usr/include/irssi,${irssi}/include/irssi,' src/Makefile.am
     sed -i "s,/usr/lib/irssi,$out/lib/irssi," configure.ac
     sed -i "s,/usr/share/irssi,$out/share/irssi," help/Makefile.am
   '';
+
+  patches = [ versionFix ];
 
   preConfigure = "sh ./bootstrap";
 

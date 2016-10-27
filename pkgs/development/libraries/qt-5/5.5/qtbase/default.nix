@@ -7,8 +7,8 @@
 , openssl, dbus, glib, udev, libxml2, libxslt, pcre16
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
-, coreutils, bison, flex, gdb, gperf, lndir, ruby
-, patchelf, perl, pkgconfig, python
+, coreutils, bison, flex, gdb, gperf, lndir
+, patchelf, perl, pkgconfig, python2
 
 # optional dependencies
 , cups ? null
@@ -205,7 +205,7 @@ stdenv.mkDerivation {
   ++ lib.optional mesaSupported mesa;
 
   buildInputs =
-    [ bison flex gperf ruby ]
+    [ bison flex gperf ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
@@ -213,7 +213,7 @@ stdenv.mkDerivation {
     # FIXME: move to the main list on rebuild.
     ++ [gnome_vfs.out libgnomeui.out gtk2 GConf];
 
-  nativeBuildInputs = [ lndir patchelf perl pkgconfig python ];
+  nativeBuildInputs = [ lndir patchelf perl pkgconfig python2 ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
@@ -256,7 +256,7 @@ stdenv.mkDerivation {
 
   postFixup =
     ''
-      # Don't retain build-time dependencies like gdb and ruby.
+      # Don't retain build-time dependencies like gdb.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
 
       # Move libtool archives and qmake projects

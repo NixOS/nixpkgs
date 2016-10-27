@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, gtk2, gtk3, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
+, yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
 , autoconf213, which
@@ -34,7 +34,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
-      xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
+      xorg.libXScrnSaver xorg.scrnsaverproto
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx /* cairo */
       icu libpng jemalloc
@@ -141,8 +141,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "49.0";
-    sha512 = "9431f86dec5587131699ae57ae428be168e4d6c7d1d48df643c10540e8e18bc5eadfcd08bb204950be611c87d35d8a40aa8ece454b7dfa3992239639c2d688a9";
+    version = "49.0.2";
+    sha512 = "e9daa62c8e645ec034f1435afb579ddb5c503db313ea0cc3e48b7508f8368028979de07ca1426cc4c0f3ae82756f39dcb3b349712d520b8503a34afbd443fb1e";
   };
 
   firefox-esr-unwrapped = common {

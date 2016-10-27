@@ -33,8 +33,8 @@ stdenv.mkDerivation {
         cp -R $d $out/usr/share/games/micropolis
       done
       cp Micropolis $out/usr/share/games/micropolis
-      cat > $out/bin/micropolis << EOF 
-      #!/bin/bash
+      cat > $out/bin/micropolis << EOF
+      #!${stdenv.shell}
       cd $out/usr/share/games/micropolis
       ./Micropolis
       EOF

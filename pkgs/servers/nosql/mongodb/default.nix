@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger
+, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security
 }:
 
 # Note:
@@ -22,8 +22,8 @@ let version = "3.2.9";
 
     buildInputs = [
       sasl boost gperftools pcre-cpp snappy
-      zlib libyamlcpp sasl openssl libpcap
-    ]; # ++ optional stdenv.is64bit wiredtiger;
+      zlib libyamlcpp sasl openssl.dev openssl.out libpcap
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
     other-args = concatStringsSep " " ([
       "--ssl"

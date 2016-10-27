@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, pgocaml, camlp4 }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, pgocaml, camlp4 }:
 
 stdenv.mkDerivation {
   name = "ocaml-macaque-0.7.2";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "14i0a8cndzndjmlkyhf31r451q99cnkndgxcj0id4qjqhdl4bmjv";
   };
 
-  buildInputs = [ ocaml findlib camlp4 ];
+  buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
   propagatedBuildInputs = [ pgocaml ];
 
   createFindlibDestdir = true;

@@ -1,13 +1,15 @@
 { stdenv, lib, fetchurl, substituteAll, lame, mplayer
-, libpulseaudio, python, pyqt4, qt4, wrapPython
-, pysqlite, sqlalchemy, pyaudio, beautifulsoup, httplib2, matplotlib
+, libpulseaudio
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
 , plotsSupport ? true
+, python2Packages
 }:
 
 let
-    version = "2.0.35";
+    version = "2.0.36";
+    inherit (python2Packages) python wrapPython sqlalchemy pyaudio beautifulsoup httplib2 matplotlib pyqt4;
+    qt4 = pyqt4.qt;
 in
 stdenv.mkDerivation rec {
     name = "anki-${version}";
@@ -16,10 +18,10 @@ stdenv.mkDerivation rec {
         "http://ankisrs.net/download/mirror/${name}.tgz"
         "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "1d7k38xzw1nbg83d1aqxf2f76fv3hn2fry99k3vf4lgmhndj52mv";
+      sha256 = "070p0jmx6cy7kp9bfcgpgkzpyqkcj81wy8gmacns03n5rlq8487v";
     };
 
-    pythonPath = [ pyqt4 pysqlite sqlalchemy pyaudio beautifulsoup httplib2 ]
+    pythonPath = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]
               ++ lib.optional plotsSupport matplotlib;
 
     buildInputs = [ python wrapPython lame mplayer libpulseaudio ];

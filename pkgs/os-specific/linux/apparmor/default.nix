@@ -82,7 +82,6 @@ let
     buildInputs = [
       perl
       pythonPackages.python
-      pythonPackages.readline
       libapparmor
       libapparmor.python
     ];

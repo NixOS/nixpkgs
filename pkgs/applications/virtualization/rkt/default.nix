@@ -2,7 +2,7 @@
   cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper, glibc }:
 
 let
-  # Always get the information from 
+  # Always get the information from
   # https://github.com/coreos/rkt/blob/v${VERSION}/stage1/usr_from_coreos/coreos-common.mk
   coreosImageRelease = "1151.0.0";
   coreosImageSystemdVersion = "231";
@@ -12,7 +12,7 @@ let
   stage1Dir = "lib/rkt/stage1-images";
 
 in stdenv.mkDerivation rec {
-  version = "1.15.0";
+  version = "1.17.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
       owner = "coreos";
       repo = "rkt";
       rev = "v${version}";
-      sha256 = "0ppi6r3wr69s6ka1j9xljvq3rw2chp8syyvqcx6ijnzjbwgbwar3";
+      sha256 = "1jbdnbd2h58zd5irllim6cfa9bf0fdk5nr8qxpjnsgd1fsyhkpld";
   };
 
   stage1BaseImage = fetchurl {
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     cp -Rv $BUILDDIR/target/bin/stage1-*.aci $out/${stage1Dir}/
 
     wrapProgram $out/bin/rkt \
-      --prefix LD_LIBRARY_PATH : ${systemd}/lib \
+      --prefix LD_LIBRARY_PATH : ${systemd.lib}/lib \
       --prefix PATH : ${iptables}/bin
   '';
 

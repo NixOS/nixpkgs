@@ -44,7 +44,7 @@ let
       throw "whitelistedLicenses and blacklistedLicenses are not mutually exclusive.";
 
   hasLicense = attrs:
-    builtins.hasAttr "meta" attrs && builtins.hasAttr "license" attrs.meta;
+    attrs ? meta.license;
 
   hasWhitelistedLicense = assert areLicenseListsValid; attrs:
     hasLicense attrs && builtins.elem attrs.meta.license whitelist;
@@ -128,8 +128,7 @@ let
       throwEvalHelp = { reason, errormsg }:
         # uppercase the first character of string s
         let up = s: with lib;
-          let cs = lib.stringToCharacters s;
-          in concatStrings (singleton (toUpper (head cs)) ++ tail cs);
+          (toUpper (substring 0 1 s)) + (substring 1 (stringLength s) s);
         in
         assert builtins.elem reason ["unfree" "broken" "blacklisted"];
 

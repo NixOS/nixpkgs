@@ -113,6 +113,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = "
           Extra lines to be added verbatim to the generated named configuration file.

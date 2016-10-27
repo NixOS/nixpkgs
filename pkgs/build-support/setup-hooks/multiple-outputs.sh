@@ -16,6 +16,7 @@ _assignFirst() {
     echo "Error: _assignFirst found no valid variant!"
     return 1 # none found
 }
+
 # Same as _assignFirst, but only if "$1" = ""
 _overrideFirst() {
     if [ -z "${!1}" ]; then
@@ -37,9 +38,10 @@ _overrideFirst outputInclude "$outputDev"
 _overrideFirst outputLib "lib" "out"
 
 _overrideFirst outputDoc "doc" "out"
-_overrideFirst outputDocdev "devdoc" REMOVE # documentation for developers
+_overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
 _overrideFirst outputMan "man" "doc" "$outputBin"
+_overrideFirst outputDevman "devman" "devdoc" "$outputMan"
 _overrideFirst outputInfo "info" "doc" "$outputMan"
 
 
@@ -136,11 +138,11 @@ _multioutDocs() {
 
     moveToOutput share/info "${!outputInfo}"
     moveToOutput share/doc "${!outputDoc}"
-    moveToOutput share/gtk-doc "${!outputDocdev}"
+    moveToOutput share/gtk-doc "${!outputDevdoc}"
 
     # the default outputMan is in $bin
     moveToOutput share/man "${!outputMan}"
-    moveToOutput share/man/man3 "${!outputDocdev}"
+    moveToOutput share/man/man3 "${!outputDevman}"
 }
 
 # Move development-only stuff to the desired outputs.

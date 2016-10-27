@@ -50,7 +50,8 @@ stdenv.mkDerivation {
 
   outputHashAlgo = if sha256 == "" then "md5" else "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then md5 else sha256;
+  outputHash = if sha256 == "" then
+    (stdenv.lib.fetchMD5warn "fetchgit" url md5) else sha256;
 
   inherit url rev leaveDotGit fetchSubmodules deepClone branchName;
 

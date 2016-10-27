@@ -2,15 +2,11 @@
 , re2_p4, async_extra_p4, sexplib_p4, async_shell, core_extended_p4, async_find
 , cohttp, uri, tzdata}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.1.3";
-in
+assert stdenv.lib.versionOlder "4.02" ocaml.version;
 
-assert stdenv.lib.versionOlder "4.02" ocaml_version;
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "trv-${version}";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "afiniate";

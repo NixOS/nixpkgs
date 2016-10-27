@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, fftw, libjack2, libsamplerate
-, libsndfile, pkgconfig, python
+, libsndfile, pkgconfig, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib fftw libjack2 libsamplerate libsndfile pkgconfig python
+    alsaLib fftw libjack2 libsamplerate libsndfile pkgconfig python2
   ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = "${python2.interpreter} waf configure --prefix=$out";
 
-  buildPhase = "python waf";
+  buildPhase = "${python2.interpreter} waf";
 
-  installPhase = "python waf install";
+  installPhase = "${python2.interpreter} waf install";
 
   meta = with stdenv.lib; { 
     description = "Library for audio labelling";

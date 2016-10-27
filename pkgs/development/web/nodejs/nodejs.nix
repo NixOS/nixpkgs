@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
+{ stdenv, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
 , pkgconfig, runCommand, which, libtool
 , version
 , sha256 ? null
@@ -6,7 +6,8 @@
 , preBuild ? ""
 , extraConfigFlags ? []
 , extraBuildInputs ? []
-, ...
+, patches ? [],
+ ...
 }:
 
 assert stdenv.system != "armv5tel-linux";
@@ -44,10 +45,10 @@ in stdenv.mkDerivation {
     PATH=$out/bin:$PATH patchShebangs $out
   '';
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
+  patches = patches ++ stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
 
   buildInputs = extraBuildInputs
-    ++ [ python which zlib libuv openssl ]
+    ++ [ python2 which zlib libuv openssl ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
     ++ optionals stdenv.isDarwin [ pkgconfig libtool ];
   setupHook = ./setup-hook.sh;

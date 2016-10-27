@@ -180,7 +180,7 @@ with stdenv.lib;
   VGA_SWITCHEROO y # Hybrid graphics support
   DRM_GMA600 y
   DRM_GMA3600 y
-  ${optionalString (versionAtLeast version "4.5") ''
+  ${optionalString (versionAtLeast version "4.5" && (versionOlder version "4.9")) ''
     DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
   ''}
 
@@ -210,6 +210,7 @@ with stdenv.lib;
   # ACLs for all filesystems that support them.
   FANOTIFY y
   TMPFS y
+  FS_ENCRYPTION? m
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
@@ -219,6 +220,7 @@ with stdenv.lib;
   EXT3_FS_POSIX_ACL y
   EXT3_FS_SECURITY y
   EXT4_FS_POSIX_ACL y
+  EXT4_ENCRYPTION? ${if versionOlder version "4.8" then "m" else "y"}
   EXT4_FS_SECURITY y
   REISERFS_FS_XATTR? y
   REISERFS_FS_POSIX_ACL? y
@@ -231,6 +233,10 @@ with stdenv.lib;
   OCFS2_DEBUG_MASKLOG? n
   BTRFS_FS_POSIX_ACL y
   UBIFS_FS_ADVANCED_COMPR? y
+  F2FS_FS m
+  F2FS_FS_SECURITY? y
+  F2FS_FS_ENCRYPTION? y
+  UDF_FS m
   ${optionalString (versionAtLeast version "4.0" && versionOlder version "4.6") ''
     NFSD_PNFS y
   ''}
@@ -284,6 +290,7 @@ with stdenv.lib;
   RANDOMIZE_BASE? y
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
+  SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
   ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
@@ -395,7 +402,7 @@ with stdenv.lib;
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
-  RT_GROUP_SCHED? y
+  RT_GROUP_SCHED n
   CGROUP_DEVICE? y
   MEMCG y
   MEMCG_SWAP y

@@ -25,16 +25,48 @@
 #
 # Use this package at your own risk.
 
-{stdenv, pkgs, config, fetchurl, ... }:
+{stdenv, fetchurl, pythonPackages }:
 
-stdenv.mkDerivation rec {
+let
+
+  twisted_13 = pythonPackages.buildPythonPackage rec {
+    # NOTE: When updating please check if new versions still cause issues
+    # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
+    disabled = pythonPackages.isPy3k;
+
+    name = "Twisted-13.2.0";
+    src = fetchurl {
+      url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
+      sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ zope_interface ];
+
+    # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
+    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
+    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
+    # details.
+    postInstall = "$out/bin/twistd --help > /dev/null";
+
+    meta = with stdenv.lib; {
+      homepage = http://twistedmatrix.com/;
+      description = "Twisted, an event-driven networking engine written in Python";
+      longDescription = ''
+        Twisted is an event-driven networking engine written in Python
+        and licensed under the MIT license.
+      '';
+      license = licenses.mit;
+    };
+  };
+
+in stdenv.mkDerivation rec {
     name = "kippo-${version}";
     version = "0.8";
     src = fetchurl {
       url = "https://kippo.googlecode.com/files/kippo-${version}.tar.gz";
       sha1 = "f57a5cf88171cb005afe44a4b33cb16f825c33d6";
     };
-    buildInputs = with pkgs.pythonPackages; [ pycrypto pyasn1 twisted_11 ];
+    buildInputs = with pythonPackages; [ pycrypto pyasn1 twisted_13 ];
     installPhase = ''
         substituteInPlace ./kippo.tac --replace "kippo.cfg" "$out/src/kippo.cfg"
         substituteInPlace ./kippo.cfg --replace "log_path = log" "log_path = /var/log/kippo" \
@@ -50,6 +82,8 @@ stdenv.mkDerivation rec {
         mv ./* $out/src 
         mv $out/src/utils/* $out/bin
         '';
+
+    passthru.twisted = twisted_13;
 
     meta = with stdenv.lib; {
       homepage = https://code.google.com/p/kippo;

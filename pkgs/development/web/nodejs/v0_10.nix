@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares
+{ stdenv, lib, fetchurl, openssl, python2, zlib, v8, utillinux, http-parser, c-ares
 , pkgconfig, runCommand, which, libtool
 
 # apple frameworks
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
     (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
   '';
 
-  buildInputs = [ python which ]
+  buildInputs = [ python2 which ]
     ++ (optional stdenv.isLinux utillinux)
     ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool CoreServices ApplicationServices Foundation ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Carbon ];

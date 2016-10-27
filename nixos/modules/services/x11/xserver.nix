@@ -515,6 +515,7 @@ in
       { description = "X11 Server";
 
         after = [ "systemd-udev-settle.service" "local-fs.target" "acpid.service" "systemd-logind.service" ];
+        wants = [ "systemd-udev-settle.service" ];
 
         restartIfChanged = false;
 
@@ -539,21 +540,26 @@ in
           Restart = "always";
           RestartSec = "200ms";
           SyslogIdentifier = "display-manager";
+          # Stop restarting if the display manager stops (crashes) 2 times
+          # in one minute. Starting X typically takes 3-4s.
+          StartLimitInterval = "30s";
+          StartLimitBurst = "3";
         };
       };
 
-    services.xserver.displayManager.xserverArgs =
-      [ "-terminate"
+    services.xserver.displayManager.xserverArgs = mkDefault (
+      [ #"-terminate"
         "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
         # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
-        "-verbose" "3" "-logfile" "/dev/null"
-      ] ++ optional (cfg.display != null) ":${toString cfg.display}"
-        ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
+        #"-verbose" "3" "-logfile" "/dev/null"
+      ] #++ optional (cfg.display != null) ":${toString cfg.display}"
+        #++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
-        ++ optional (!cfg.enableTCP) "-nolisten tcp"
+        #++ optional (!cfg.enableTCP) "-nolisten tcp");
         ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
-        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}";
+        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
+);
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++

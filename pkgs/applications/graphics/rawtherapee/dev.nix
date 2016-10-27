@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rawtherapee-git-2016-09-21";
+  name = "rawtherapee-git-2016-10-10";
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
-    rev = "2d0e5e4feeac9801994d82c5931531f508deb2e9";
-    sha256 = "1d9bi3b6cslm0rhhqf0rx47nlnsnky284vqsxyq3mss6bd8880xh";
+    rev = "0821eea7b6a4ac2fce1fcf644e06078e161e41e3";
+    sha256 = "1nwb6b1qrpdyigwig7bvr42lf7na1ngm0q2cislcvb2v1nmk6nlz";
   };
 
   buildInputs = [ pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp

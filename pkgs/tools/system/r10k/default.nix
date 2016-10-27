@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, makeWrapper, docker, git, gnutar, gzip, ruby }:
+{ stdenv, lib, bundlerEnv, makeWrapper, git, gnutar, gzip, ruby }:
 
 stdenv.mkDerivation rec {
   name = "r10k-${version}";
@@ -21,14 +21,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/r10k $out/bin/r10k \
-      --set PATH ${stdenv.lib.makeBinPath [ docker git gnutar gzip ]}
+      --set PATH ${stdenv.lib.makeBinPath [ git gnutar gzip ]}
   '';
 
   meta = with lib; {
     description = "Puppet environment and module deployment";
     homepage    = https://github.com/puppetlabs/r10k;
-    license 	= licenses.asl20;
+    license     = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
-    platforms 	= docker.meta.platforms;
   };
 }

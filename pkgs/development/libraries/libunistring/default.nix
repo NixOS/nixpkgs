@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.isDarwin [ ./clang.patch ];
 
-  propagatedBuildInputs = [ libiconv ];
+  propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
   configureFlags = [
     "--with-libiconv-prefix=${libiconv}"
