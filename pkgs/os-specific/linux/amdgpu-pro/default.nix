@@ -1,6 +1,7 @@
 { stdenv, fetchurl, elfutils, mesa_noglu
 , xorg, patchelf, openssl, libdrm, libudev
 , libxcb, libxshmfence, epoxy, perl, zlib
+, fetchFromGitHub
 , libsOnly ? false, kernel ? null
 }:
 
@@ -42,6 +43,13 @@ in stdenv.mkDerivation rec {
     curlOpts = "--referer http://support.amd.com/en-us/kb-articles/Pages/AMDGPU-PRO-Beta-Driver-for-Vulkan-Release-Notes.aspx";
   };
 
+  vulkanOverlay = fetchFromGitHub {
+    owner = "Lucretia";
+    repo = "vulkan-overlay";
+    rev = "70558192e7ac16103e1ec6100c1bebd6f162c818";
+    sha256 = "1ycl55m3wc72q0a6pkyhhzji7llliw8076aiynr60jyv6cnmcgdz";
+  };
+
   hardeningDisable = [ "pic" "format" ];
 
   inherit libsOnly;
@@ -55,21 +63,18 @@ in stdenv.mkDerivation rec {
   '';
 
   modulePatches = [
-    ./patches/0001-add-OS-detection-for-arch.patch
-    ./patches/0002-update-kcl_ttm_bo_reserve-for-linux-4.7.patch
-    ./patches/0003-add-kcl_drm_gem_object_lookup.patch
-    ./patches/0004-paging-changes-for-linux-4.6.patch
-    ./patches/0005-LRU-stuff-isn-t-available-until-4.7.x.patch
-    ./patches/0006-Change-name-of-vblank_disable_allowed-to-vblank_disa.patch
-    ./patches/0007-Remove-connector-parameter-from-__drm_atomic_helper_.patch
-    ./patches/0008-fix-apparent-typo-in-bandwidth_calcs-causing-array-e.patch
-    ./patches/0009-disable-dal-by-default.patch
-    ./patches/0010-remove-dependency-on-System.map.patch
+    ./patches/0001-Add-vga-switcheroo-handler-flag-for-4.8.patch
+    ./patches/0002-Remove-dependency-on-System.map.patch
+    ./patches/0003-disable-dal-by-default.patch
   ];
 
   patchPhase = optionalString (!libsOnly) ''
     pushd usr/src/amdgpu-pro-${build}
-    for patch in $modulePatches; do echo $patch; patch -p1 < $patch; done
+    for patch in $vulkanOverlay/sys-kernel/amdgpu-pro-dkms/files/${build}/*.patch $modulePatches
+    do
+      echo $patch
+      patch -f -p1 < $patch || true
+    done
     popd
   '';
 

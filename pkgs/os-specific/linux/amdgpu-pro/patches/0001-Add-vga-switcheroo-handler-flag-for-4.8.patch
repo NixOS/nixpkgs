@@ -1,0 +1,27 @@
+From c41b07cad36b1019e8d8debc8d46a7f2673982b7 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 26 Oct 2016 22:19:05 -0300
+Subject: [PATCH 1/2] Add vga switcheroo handler flag for 4.8
+
+---
+ amd/amdgpu/amdgpu_atpx_handler.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/amd/amdgpu/amdgpu_atpx_handler.c b/amd/amdgpu/amdgpu_atpx_handler.c
+index cc9b998..e48d935 100644
+--- a/amd/amdgpu/amdgpu_atpx_handler.c
++++ b/amd/amdgpu/amdgpu_atpx_handler.c
+@@ -565,7 +565,9 @@ void amdgpu_register_atpx_handler(void)
+ 	if (!r)
+ 		return;
+ 
+-	vga_switcheroo_register_handler(&amdgpu_atpx_handler);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0)
++	vga_switcheroo_register_handler(&amdgpu_atpx_handler, 0);
++#endif
+ }
+ 
+ /**
+-- 
+2.10.0
+
