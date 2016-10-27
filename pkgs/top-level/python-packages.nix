@@ -1452,13 +1452,13 @@ in {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.10.51";
+    version = "1.11.10";
 
     namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "19n7r6fwnwpi0cyrqh20w80mrcj0b6j3if5p58hi1k3fdp60nscq";
+      sha256 = "174lfpai5cga1ml2bwswjil6h544m57js9ki7hqkr9gdbpa8pyrk";
     };
 
     # No tests included
@@ -2978,12 +2978,12 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.4.41"; # This version is required by awscli
+    version = "1.4.67"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "0c3abr2rxiilqklika8x360pr0mgx7hlhbhj8w72izs2r6ww4dys";
+      sha256 = "15fh3ng33mcbhm76pk9qqglf342qj471gfcqxv0nrl9f8sn3v60q";
     };
 
     propagatedBuildInputs =
@@ -5630,11 +5630,11 @@ in {
 
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
-    version = "2.4.2";
+    version = "2.5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "3e95445c1db500a344079a47b171c45ef18f57d188dffdb0e4165c71bea8eb3d";
+      sha256 = "1v9j9fmf8g911yg6k01xa2db6dx3wv73zkk7fncsj7vagjqgs20l";
     };
 
     propagatedBuildInputs = with self; [ self.six ];
@@ -12888,11 +12888,11 @@ in {
   };
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.7.1";
+    name = "jmespath-0.9.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jmespath/${name}.tar.gz";
-      sha256 = "1lazbx65imassd7h24z49za001rvx1lmx8r0l21h4izs7pp14nnd";
+      sha256 = "0g9xvl69y7nr3w7ag4fsp6sm4fqf6vrqjw7504x2hzrrsh3ampq8";
     };
 
     buildInputs = with self; [ nose ];
@@ -22344,12 +22344,12 @@ in {
   };
 
   s3transfer = buildPythonPackage rec {
-    version = "0.0.1"; # This version is required by awscli
+    version = "0.1.9";
     name = "s3transfer-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "0ma31zvv7gy240xgd1zw853lpzkdci6mapzpg3x4vycann6yvf9b";
+      sha256 = "0m67nhdnp2pd11j8h4bgz63zq0mvn2f205vrxmr3my8m45kpvb8p";
     };
 
     foo = 1;
