@@ -3,7 +3,8 @@
 , libpng
 , netcdf, hdf5 , curl
 , netcdfSupport ? true
- }:
+, pythonSupport ? !stdenv.isDarwin
+}:
 
 composableDerivation.composableDerivation {} (fixed: rec {
   version = "2.1.1";
@@ -33,7 +34,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql.lib.dev}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
-    "--with-python"               # optional
+    "--with-python${if pythonSupport then "" else "=no"}"
     "--with-static-proj4=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
     (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
@@ -53,6 +54,6 @@ composableDerivation.composableDerivation {} (fixed: rec {
     homepage = http://www.gdal.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 })
