@@ -8834,7 +8834,7 @@ in
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
     mesa = mesa_noglu;
-    inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+    inherit (pkgs.gnome2) libgnomeui GConf gnome_vfs;
     cups = if stdenv.isLinux then cups else null;
 
     # XXX: mariadb doesn't built on fbsd as of nov 2015
