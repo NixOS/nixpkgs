@@ -498,8 +498,7 @@ eval "exec $logOutFd>&- $logErrFd>&-"
 #
 # Storage daemons are distinguished by an @ in front of their command line:
 # https://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
-local pidsToKill="$(pgrep -v -f '^@')"
-for pid in $pidsToKill; do
+for pid in $(pgrep -v -f '^@'); do
     # Make sure we don't kill kernel processes, see #15226 and:
     # http://stackoverflow.com/questions/12213445/identifying-kernel-threads
     readlink "/proc/$pid/exe" &> /dev/null || continue
