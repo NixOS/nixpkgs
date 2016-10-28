@@ -252,10 +252,10 @@ stdenv.mkDerivation {
 
       # some linkers on some platforms don't support specific -z flags
       hardening_unsupported_flags=""
-      if [[ "$($ldPath/ld -z now 2>&1 || true)" =~ "unknown option" ]]; then
+      if [[ "$($ldPath/ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" bindnow"
       fi
-      if [[ "$($ldPath/ld -z relro 2>&1 || true)" =~ "unknown option" ]]; then
+      if [[ "$($ldPath/ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" relro"
       fi
 

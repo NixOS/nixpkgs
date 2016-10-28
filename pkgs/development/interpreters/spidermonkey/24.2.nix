@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip, libffi, readline }:
+{ stdenv, fetchurl, pkgconfig, nspr, perl, python2, zip, libffi, readline }:
 
 stdenv.mkDerivation rec {
   version = "24.2.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  buildInputs = [ pkgconfig perl python zip libffi readline ];
+  buildInputs = [ pkgconfig perl python2 zip libffi readline ];
 
   postPatch = ''
     # Fixes an issue with version detection under perl 5.22.x

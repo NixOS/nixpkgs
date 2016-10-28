@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, docutils, python }:
+{ stdenv, fetchFromGitHub, docutils, python2 }:
 
 stdenv.mkDerivation rec {
   name = "git-hub-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "sociomantic-tsunami";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
   nativeBuildInputs = [ docutils ];
 
   postPatch = ''

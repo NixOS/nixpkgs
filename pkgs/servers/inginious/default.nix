@@ -1,7 +1,9 @@
-{ pkgs, lib, pythonPackages }:
+{ pkgs, lib, python2Packages }:
 with lib;
 
 let
+  pythonPackages = python2Packages;
+
   docker_1_7_2 = pythonPackages.docker.override rec {
     name = "docker-py-1.7.2";
 

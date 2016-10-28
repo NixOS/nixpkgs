@@ -1,5 +1,7 @@
 { stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, encfs
-, glib , gnome3, gtk3, libgnome_keyring, vala_0_23, wrapGAppsHook, xorg }:
+, glib , gnome3, gtk3, libgnome_keyring, vala_0_23, wrapGAppsHook, xorg
+, libgee_0_6
+}:
 
 stdenv.mkDerivation rec {
   version = "1.8.16";
@@ -11,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ autoconf automake intltool libtool pkgconfig vala_0_23 glib encfs
-    gtk3 libgnome_keyring gnome3.libgee_1 xorg.libSM xorg.libICE
+    gtk3 libgnome_keyring libgee_0_6 xorg.libSM xorg.libICE
     wrapGAppsHook ];
 
   patches = [ ./makefile-mkdir.patch ];
@@ -30,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.spacefrogg ];
+    broken = true;
   };
 }

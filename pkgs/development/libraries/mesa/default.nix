@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, systemd
 , llvmPackages, libffi, libomxil-bellagio, libva
-, libelf, libvdpau, python
+, libelf, libvdpau, python2
 , grsecEnabled ? false
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 }:
@@ -113,7 +113,7 @@ stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs
-    (python.withPackages (ps: [ ps.Mako ]))
+    (python2.withPackages (ps: [ ps.Mako ]))
   ] ++ optional stdenv.isLinux systemd;
 
 

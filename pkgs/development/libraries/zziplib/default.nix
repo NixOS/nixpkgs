@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl, python, zip, xmlto, zlib }:
+{ fetchurl, stdenv, perl, python2, zip, xmlto, zlib }:
 
 stdenv.mkDerivation rec {
   name = "zziplib-0.13.58";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -i -e s,--export-dynamic,, configure
   '';
 
-  buildInputs = [ perl python zip xmlto zlib ];
+  buildInputs = [ perl python2 zip xmlto zlib ];
 
   doCheck = true;
 
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = http://zziplib.sourceforge.net/;
 
     maintainers = [ ];
-    platforms = python.meta.platforms;
+    platforms = python2.meta.platforms;
   };
 }

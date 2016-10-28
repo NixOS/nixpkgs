@@ -4,7 +4,7 @@
 # python wrappers
 , python, swig2, numpy, scipy, matplotlib
 # grc - the gnu radio companion
-, cheetahTemplate, pygtk
+, cheetah, pygtk
 # gr-wavelet: collection of wavelet blocks
 , gsl
 # gr-qtgui: the Qt-based GUI
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    cheetahTemplate numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
+    cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
   ];
 
   enableParallelBuilding = true;

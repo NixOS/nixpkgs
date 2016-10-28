@@ -7,11 +7,11 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "corosync-2.3.4";
+  name = "corosync-2.4.1";
 
   src = fetchurl {
     url = "http://build.clusterlabs.org/corosync/releases/${name}.tar.gz";
-    sha256 = "1m276b060fjghr93hdzfag81whi5ph65dc2ka8ln1igm3kxr7bix";
+    sha256 = "0w8m97ih7a2g99pmjsckw4xwbgzv96xdgg62s2a4qbgnw4yl637y";
   };
 
   buildInputs = [

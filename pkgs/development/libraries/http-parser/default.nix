@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gyp, utillinux, python, fixDarwinDylibNames }:
+{ stdenv, fetchurl, python2Packages, utillinux, fixDarwinDylibNames }:
 
 let
   version = "2.7.0";
@@ -17,9 +17,9 @@ in stdenv.mkDerivation {
   buildFlags = [ "BUILDTYPE=Release" ];
 
   buildInputs =
-    [ gyp ]
+    [ python2Packages.gyp ]
     ++ stdenv.lib.optional stdenv.isLinux utillinux
-    ++ stdenv.lib.optionals stdenv.isDarwin [ python fixDarwinDylibNames ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ python2Packages.python fixDarwinDylibNames ];
 
   doCheck = !stdenv.isDarwin;
 

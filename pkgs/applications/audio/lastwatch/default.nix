@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, pythonPackages }:
+{ stdenv, fetchgit, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "lastwatch-${version}";
   namePrefix = "";
   version = "0.4.1";
@@ -11,13 +11,11 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0nlng3595j5jvnikk8i5hb915zak5zsmfn2306cc4gfcns9xzjwp";
   };
 
-  pythonPath = [
-    pythonPackages.pyinotify
-    pythonPackages.pylast
-    pythonPackages.mutagen
+  propagatedBuildInputs = with python2Packages; [
+    pyinotify
+    pylast
+    mutagen
   ];
-
-  propagatedBuildInputs = pythonPath;
 
   meta = {
     homepage = "https://github.com/aszlig/LastWatch";

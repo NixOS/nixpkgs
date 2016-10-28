@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication {
     sha256 = "0nhkkv1n0lqf3zn17pxg5cgryv1wwlj4hfmhixwd76rcy8gs45dh";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ sqlite3 pyGtkGlade ];
+  propagatedBuildInputs = with pythonPackages; [ pyGtkGlade ];
 
   # Testing fails.
   doCheck = false;

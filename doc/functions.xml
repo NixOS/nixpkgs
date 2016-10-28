@@ -52,6 +52,20 @@ in ...</programlisting>
     It's equivalent to <varname>pkgs</varname> in the above example.
   </para>
 
+  <para>
+    Note that in previous versions of nixpkgs, this method replaced any changes from <link 
+    linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>,
+    along with that from previous calls if this function was called repeatedly.
+    Now those previous changes will be preserved so this function can be "chained" meaningfully.
+    To recover the old behavior, make sure <varname>config.packageOverrides<varname> is unset,
+    and call this only once off a "freshly" imported nixpkgs:
+
+    <programlisting>let
+  pkgs = import &lt;nixpkgs&gt; { config: {}; };
+  newpkgs = pkgs.overridePackages ...;
+in ...</programlisting>
+  </para>
+
 </section>
 
 <section xml:id="sec-pkg-override">

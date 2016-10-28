@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghostscript, texinfo, imagemagick, texi2html, guile
-, python, gettext, flex, perl, bison, pkgconfig, dblatex
+, python2, gettext, flex, perl, bison, pkgconfig, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , fetchsvn, makeWrapper, t1utils
 , texlive, tex ? texlive.combine {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec{
 
   buildInputs =
     [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
-      python gettext flex perl bison pkgconfig fontconfig freetype pango
+      python2 gettext flex perl bison pkgconfig fontconfig freetype pango
       fontforge help2man groff makeWrapper t1utils
     ];
 

@@ -141,6 +141,13 @@ in
     buildInputs = [ imagemagick pkgconfig which ];
   };
 
+  ruby-terminfo = attrs: {
+    buildInputs = [ ncurses ];
+    buildFlags = [
+      "--with-cflags=-I${ncurses.dev}/include"
+      "--with-ldflags=-L${ncurses.out}/lib"
+    ];
+  };
   rugged = attrs: {
     buildInputs = [ cmake pkgconfig openssl libssh2 zlib ];
   };

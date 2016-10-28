@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgcrypt, libnl, pkgconfig, pythonPackages, wireless-regdb }:
+{ stdenv, fetchurl, libgcrypt, libnl, pkgconfig, python2Packages, wireless-regdb }:
 
 stdenv.mkDerivation rec {
   name = "crda-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgcrypt libnl ];
   nativeBuildInputs = [
-    pkgconfig pythonPackages.m2crypto pythonPackages.python
+    pkgconfig python2Packages.m2crypto python2Packages.python
   ];
 
   postPatch = ''

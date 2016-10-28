@@ -3,7 +3,7 @@
 , perl
 , groff
 , cmake
-, python
+, python2
 , libffi
 , binutils
 , libxml2
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
+  buildInputs = [ perl groff cmake libxml2 python2 libffi ]
     ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
 
   propagatedBuildInputs = [ ncurses zlib ];

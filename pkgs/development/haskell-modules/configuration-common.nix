@@ -167,6 +167,13 @@ self: super: {
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
     else super.halive;
 
+  # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
+  hakyll = if pkgs.stdenv.isDarwin
+    then dontCheck (overrideCabal super.hakyll (drv: {
+      testToolDepends = [];
+    }))
+    else super.hakyll;
+
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
   hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;

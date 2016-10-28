@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, python, ruby, bison, gperf, cmake
+{ stdenv, fetchurl, perl, python2, ruby, bison, gperf, cmake
 , pkgconfig, gettext, gobjectIntrospection, libnotify
 , gtk2, gtk3, wayland, libwebp, enchant, xlibs, libxkbcommon, epoxy, at_spi2_core
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gst-plugins-base.dev}/include/gstreamer-1.0";
 
   nativeBuildInputs = [
-    cmake perl python ruby bison gperf sqlite
+    cmake perl python2 ruby bison gperf sqlite
     pkgconfig gettext gobjectIntrospection
   ];
 

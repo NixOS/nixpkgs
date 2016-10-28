@@ -4518,7 +4518,7 @@ dont-distribute-packages:
   HROOT-io:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   HROOT-math:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   HROOT:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
-  hruby:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
+  hruby:                                        [ i686-linux, x86_64-darwin ]
   hs-blake2:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   hs-carbon-examples:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   hs-cdb:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
