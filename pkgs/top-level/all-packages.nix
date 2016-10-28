@@ -2788,8 +2788,6 @@ in
 
   nco = callPackage ../development/libraries/nco { };
 
-  nc6 = callPackage ../tools/networking/nc6 { };
-
   ncftp = callPackage ../tools/networking/ncftp { };
 
   ncompress = callPackage ../tools/compression/ncompress { };

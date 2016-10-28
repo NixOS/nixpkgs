@@ -32,7 +32,7 @@ core-packages:
   - xhtml-3000.2.1
 
 default-package-overrides:
-  # LTS Haskell 7.4
+  # LTS Haskell 7.5
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -138,7 +138,7 @@ default-package-overrides:
   - ansi-wl-pprint ==0.6.7.3
   - ansigraph ==0.2.0.0
   - api-field-json-th ==0.1.0.1
-  - app-settings ==0.2.0.8
+  - app-settings ==0.2.0.9
   - appar ==0.1.4
   - apply-refact ==0.3.0.0
   - arbtt ==0.9.0.10
@@ -179,7 +179,7 @@ default-package-overrides:
   - base64-bytestring ==1.0.0.1
   - base64-string ==0.2
   - basic-prelude ==0.6.1
-  - bcrypt ==0.0.9
+  - bcrypt ==0.0.10
   - benchpress ==0.2.2.8
   - bencode ==0.6.0.0
   - bento ==0.1.0
@@ -192,7 +192,7 @@ default-package-overrides:
   - binary-orphans ==0.1.5.1
   - binary-parser ==0.5.2
   - binary-search ==1.0.0.3
-  - binary-tagged ==0.1.4.0
+  - binary-tagged ==0.1.4.1
   - binary-typed ==1.0
   - bindings-DSL ==1.0.23
   - bindings-GLFW ==3.1.2.2
@@ -305,8 +305,8 @@ default-package-overrides:
   - circle-packing ==0.1.0.5
   - clash-lib ==0.6.21
   - clash-prelude ==0.10.14
-  - clash-systemverilog ==0.6.9
-  - clash-verilog ==0.6.9
+  - clash-systemverilog ==0.6.10
+  - clash-verilog ==0.6.10
   - clash-vhdl ==0.6.16
   - classy-prelude ==1.0.0.2
   - classy-prelude-conduit ==1.0.0
@@ -428,7 +428,7 @@ default-package-overrides:
   - dependent-sum ==0.3.2.2
   - dependent-sum-template ==0.0.0.5
   - derive ==2.5.26
-  - deriving-compat ==0.3.3
+  - deriving-compat ==0.3.4
   - descriptive ==0.9.4
   - diagrams ==1.3.0.1
   - diagrams-cairo ==1.3.1.1
@@ -461,7 +461,7 @@ default-package-overrides:
   - djinn-lib ==0.0.1.2
   - dlist ==0.8.0.2
   - dlist-instances ==0.1.1.1
-  - dns ==2.0.7
+  - dns ==2.0.8
   - do-list ==1.0.1
   - dockerfile ==0.1.0.1
   - docopt ==0.7.0.4
@@ -469,7 +469,7 @@ default-package-overrides:
   - doctest-discover ==0.1.0.7
   - doctest-prop ==0.2.0.1
   - docvim ==0.3.2.1
-  - dotenv ==0.3.0.3
+  - dotenv ==0.3.1.0
   - dotnet-timespan ==0.0.1.0
   - double-conversion ==2.0.1.0
   - download ==0.3.2.4
@@ -826,7 +826,7 @@ default-package-overrides:
   - heaps ==0.3.3
   - hebrew-time ==0.1.1
   - hedis ==0.9.4
-  - here ==1.2.8
+  - here ==1.2.9
   - heredoc ==0.2.0.0
   - hex ==0.1.2
   - hexstring ==0.11.1
@@ -844,7 +844,7 @@ default-package-overrides:
   - histogram-fill ==0.8.4.1
   - hit ==0.6.3
   - hjsmin ==0.2.0.2
-  - hjsonpointer ==1.0.0.1
+  - hjsonpointer ==1.0.0.2
   - hjsonschema ==1.1.0.1
   - hledger ==0.27.1
   - hledger-interest ==1.4.4
@@ -892,13 +892,13 @@ default-package-overrides:
   - hsemail ==1.7.7
   - HSet ==0.0.0
   - hset ==2.2.0
-  - hsexif ==0.6.0.9
+  - hsexif ==0.6.0.10
   - hsignal ==0.2.7.4
   - hslogger ==1.2.10
   - hslua ==0.4.1
   - hsndfile ==0.8.0
   - hsndfile-vector ==0.5.2
-  - HsOpenSSL ==0.11.3.1
+  - HsOpenSSL ==0.11.3.2
   - HsOpenSSL-x509-system ==0.1.0.3
   - hsp ==0.10.0
   - hspec ==2.2.3
@@ -946,7 +946,7 @@ default-package-overrides:
   - human-readable-duration ==0.2.0.3
   - HUnit ==1.3.1.2
   - HUnit-approx ==1.0
-  - hunit-dejafu ==0.3.0.2
+  - hunit-dejafu ==0.3.0.3
   - hvect ==0.3.1.0
   - hw-bits ==0.1.0.1
   - hw-conduit ==0.0.0.11
@@ -958,12 +958,12 @@ default-package-overrides:
   - hweblib ==0.6.3
   - hworker ==0.1.0.1
   - hworker-ses ==0.1.1.0
-  - hxt ==9.3.1.15
+  - hxt ==9.3.1.16
   - hxt-charproperties ==9.2.0.1
   - hxt-css ==0.1.0.3
   - hxt-http ==9.1.5.2
   - hxt-pickle-utils ==0.1.0.3
-  - hxt-regex-xmlschema ==9.2.0.2
+  - hxt-regex-xmlschema ==9.2.0.3
   - hxt-unicode ==9.0.2.4
   - hybrid-vectors ==0.2.1
   - hyphenation ==0.6
@@ -1004,7 +1004,7 @@ default-package-overrides:
   - io-storage ==0.3
   - io-streams ==1.3.5.0
   - io-streams-haproxy ==1.0.0.1
-  - ip6addr ==0.5.1.3
+  - ip6addr ==0.5.1.4
   - iproute ==1.7.1
   - IPv6Addr ==0.6.1.0
   - irc ==0.6.1.0
@@ -1033,7 +1033,7 @@ default-package-overrides:
   - json-rpc-generic ==0.2.1.2
   - json-schema ==0.7.4.1
   - JuicyPixels ==3.2.8
-  - JuicyPixels-extra ==0.1.0
+  - JuicyPixels-extra ==0.1.1
   - JuicyPixels-scale-dct ==0.1.1.2
   - jwt ==0.7.2
   - kan-extensions ==5.0.1
@@ -1261,7 +1261,7 @@ default-package-overrides:
   - openpgp-asciiarmor ==0.1
   - opensource ==0.1.0.0
   - openssl-streams ==1.2.1.0
-  - operational ==0.2.3.3
+  - operational ==0.2.3.4
   - operational-class ==0.3.0.0
   - opml-conduit ==0.5.0.1
   - optional-args ==1.0.1
@@ -1274,7 +1274,7 @@ default-package-overrides:
   - osdkeys ==0.0
   - overloaded-records ==0.4.2.0
   - package-description-remote ==0.2.0.0
-  - packdeps ==0.4.2.1
+  - packdeps ==0.4.3
   - pager ==0.1.1.0
   - pagerduty ==0.0.7
   - pagination ==0.1.1
@@ -1330,7 +1330,7 @@ default-package-overrides:
   - pipes-cliff ==0.12.0.0
   - pipes-concurrency ==2.0.6
   - pipes-csv ==1.4.3
-  - pipes-extras ==1.0.5
+  - pipes-extras ==1.0.7
   - pipes-fastx ==0.3.0.0
   - pipes-group ==1.0.5
   - pipes-http ==1.0.4
@@ -1411,7 +1411,7 @@ default-package-overrides:
   - quickcheck-assertions ==0.2.0
   - quickcheck-combinators ==0.0.1
   - quickcheck-instances ==0.3.12
-  - quickcheck-io ==0.1.3
+  - quickcheck-io ==0.1.4
   - quickcheck-properties ==0.1
   - quickcheck-simple ==0.1.0.1
   - quickcheck-text ==0.1.2.1
@@ -1436,7 +1436,7 @@ default-package-overrides:
   - readable ==0.3.1
   - ReadArgs ==1.2.2
   - readline ==1.0.3.0
-  - rebase ==1
+  - rebase ==1.0.2.1
   - redis-io ==0.7.0
   - redis-resp ==0.4.0
   - reducers ==3.12.1
@@ -1460,7 +1460,7 @@ default-package-overrides:
   - regex-tdfa ==1.2.2
   - regex-tdfa-text ==1.0.0.3
   - reinterpret-cast ==0.1.0
-  - relational-query ==0.8.3.1
+  - relational-query ==0.8.3.2
   - relational-query-HDBC ==0.6.0.2
   - relational-record ==0.1.5.1
   - relational-schemas ==0.1.3.1
@@ -1536,7 +1536,7 @@ default-package-overrides:
   - servant-mock ==0.8.1.1
   - servant-purescript ==0.3.1.5
   - servant-server ==0.8.1
-  - servant-subscriber ==0.5.0.2
+  - servant-subscriber ==0.5.0.3
   - servant-swagger ==1.1.2
   - servant-swagger-ui ==0.2.0.2.1.5
   - servant-yaml ==0.1.0.0
@@ -1569,7 +1569,7 @@ default-package-overrides:
   - simple-session ==0.10.1.1
   - simple-smt ==0.6.0
   - simple-templates ==0.8.0.1
-  - singleton-bool ==0.1.1.0
+  - singleton-bool ==0.1.2.0
   - singletons ==2.2
   - siphash ==1.0.3
   - skein ==1.0.9.4
@@ -1598,7 +1598,7 @@ default-package-overrides:
   - speculation ==1.5.0.3
   - speedy-slice ==0.1.3
   - sphinx ==0.6.0.1
-  - Spintax ==0.1.0.0
+  - Spintax ==0.1.0.1
   - splice ==0.6.1.1
   - split ==0.2.3.1
   - Spock ==0.11.0.0
@@ -1780,7 +1780,7 @@ default-package-overrides:
   - turtle ==1.2.8
   - turtle-options ==0.1.0.4
   - twitter-conduit ==0.2.1
-  - twitter-feed ==0.2.0.10
+  - twitter-feed ==0.2.0.11
   - twitter-types ==0.7.2.2
   - twitter-types-lens ==0.7.2
   - type-aligned ==0.9.6
@@ -1865,7 +1865,7 @@ default-package-overrides:
   - wai-conduit ==3.0.0.3
   - wai-cors ==0.2.5
   - wai-eventsource ==3.0.0
-  - wai-extra ==3.0.18
+  - wai-extra ==3.0.19
   - wai-logger ==2.3.0
   - wai-middleware-caching ==0.1.0.2
   - wai-middleware-caching-lru ==0.1.0.0
@@ -1904,7 +1904,7 @@ default-package-overrides:
   - weigh ==0.0.3
   - werewolf ==1.5.1.1
   - werewolf-slack ==1.0.2.0
-  - wikicfp-scraper ==0.1.0.4
+  - wikicfp-scraper ==0.1.0.5
   - Win32 ==2.3.1.1
   - Win32-extras ==0.2.0.1
   - Win32-notify ==0.3.0.1
@@ -1952,11 +1952,11 @@ default-package-overrides:
   - xss-sanitize ==0.3.5.7
   - yackage ==0.8.1
   - yahoo-finance-api ==0.1.0.0
-  - yaml ==0.8.18.7
+  - yaml ==0.8.20
   - Yampa ==0.10.5
   - YampaSynth ==0.2
   - yarr ==1.4.0.2
-  - yes-precure5-command ==5.5.2
+  - yes-precure5-command ==5.5.3
   - yesod ==1.4.3
   - yesod-auth ==1.4.13.5
   - yesod-auth-account ==1.4.3
