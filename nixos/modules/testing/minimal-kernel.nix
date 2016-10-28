@@ -1,28 +1,25 @@
 { config, pkgs, lib, ... }:
 
+with builtins;
+
 let
-  configfile = builtins.storePath (builtins.toFile "config" (lib.concatStringsSep "\n"
-    (map (builtins.getAttr "configLine") config.system.requiredKernelConfig))
-  );
+  configfile = toFile "config" ((lib.concatStringsSep "\n"
+    (lib.unique (catAttrs "configLine" config.system.requiredKernelConfig))
+  ) + "\n");
 
-  origKernel = pkgs.buildLinux {
-    inherit (pkgs.linux) src version;
-    inherit configfile;
+  kernel = lib.makeOverridable (kernel: lib.overrideDerivation kernel (origAttrs: {
     allowImportFromDerivation = true;
-    kernelPatches = [ pkgs.kernelPatches.cifs_timeout_2_6_38 ];
-  };
 
-  kernel = origKernel // (derivation (origKernel.drvAttrs // {
     configurePhase = ''
       runHook preConfigure
-      mkdir ../build
+      mkdir -p ../build
       make $makeFlags "''${makeFlagsArray[@]}" mrproper
       make $makeFlags "''${makeFlagsArray[@]}" KCONFIG_ALLCONFIG=${configfile} allnoconfig
       runHook postConfigure
     '';
-  }));
+  })) pkgs.linuxPackages.kernel;
 
-   kernelPackages = pkgs.linuxPackagesFor kernel;
+  kernelPackages = pkgs.linuxPackagesFor kernel;
 in {
   boot.kernelPackages = kernelPackages;
 }
