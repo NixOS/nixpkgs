@@ -463,7 +463,6 @@ self: super: {
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
-  wai-app-file-cgi = dontCheck super.wai-app-file-cgi;
   wai-logger = dontCheck super.wai-logger;
   WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
   webdriver = dontCheck super.webdriver;
@@ -1030,5 +1029,12 @@ self: super: {
 
   # https://github.com/vshabanov/HsOpenSSL/issues/11
   HsOpenSSL = doJailbreak super.HsOpenSSL;
+
+  # https://github.com/NixOS/nixpkgs/issues/19612
+  wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
+    http-client = self.http-client_0_5_3_2;
+    http-client-tls = self.http-client-tls_0_3_3;
+    http-conduit = self.http-conduit_2_2_3;
+  });
 
 }
