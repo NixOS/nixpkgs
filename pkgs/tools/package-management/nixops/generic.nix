@@ -14,7 +14,6 @@ python2Packages.buildPythonApplication {
   pythonPath = with python2Packages;
     [ prettytable
       boto
-      sqlite3
       hetzner
       libcloud
       azure-storage

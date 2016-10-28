@@ -46,7 +46,7 @@ rec {
       };
       extraConfig = mkOption {
         default = "";
-        type = types.string;
+        type = types.lines;
         description = ''Extra verbatim configuration added to the end of kippo.cfg.'';
       };
     };

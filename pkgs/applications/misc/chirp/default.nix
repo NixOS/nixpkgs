@@ -2,7 +2,7 @@
 , python, pyserial, pygtk
 }:
 let
-  version = "20160601";
+  version = "20161018";
 in
 stdenv.mkDerivation rec {
   name = "chirp-daily-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://trac.chirp.danplanet.com/chirp_daily/daily-${version}/chirp-daily-${version}.tar.gz";
-    sha256 = "1zjrk0rrwiz5v86bd34snpjbajj2ikv95lfn4nnjdxgcdq9a3878";
+    sha256 = "0f3r919az4vvcgxzqmxvhrxa2byzk5algy7srzzs15ihkvyxcwkb";
   };
 
   buildInputs = [

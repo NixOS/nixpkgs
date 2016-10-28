@@ -230,7 +230,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         description = "Extra configuration to put into mumur.ini.";
       };

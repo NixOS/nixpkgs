@@ -201,6 +201,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = '''';
         description = "Additional prosody configuration";
       };

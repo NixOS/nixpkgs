@@ -92,8 +92,6 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
-    pythonPackages.python.modules.sqlite3
-    pythonPackages.python.modules.readline
   ] ++ optional enableAcoustid     pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate

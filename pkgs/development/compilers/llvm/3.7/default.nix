@@ -1,4 +1,4 @@
-{ newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
+{ newScope, stdenv, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun }:
 let
   callPackage = newScope (self // { inherit stdenv isl version fetch; });
 
@@ -24,7 +24,18 @@ let
 
     clang = wrapCC self.clang-unwrapped;
 
+    libcxxClang = ccWrapperFun {
+      cc = self.clang-unwrapped;
+      isClang = true;
+      inherit (self) stdenv;
+      /* FIXME is this right? */
+      inherit (stdenv.cc) libc nativeTools nativeLibc;
+      extraPackages = [ self.libcxx self.libcxxabi ];
+    };
+
     stdenv = overrideCC stdenv self.clang;
+
+    libcxxStdenv = overrideCC stdenv self.libcxxClang;
 
     lldb = callPackage ./lldb.nix {};
 

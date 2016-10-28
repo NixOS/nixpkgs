@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, python, zip, libffi, readline }:
+{ stdenv, fetchurl, pkgconfig, perl, python2, zip, libffi, readline }:
 
 stdenv.mkDerivation rec {
   version = "31.5.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1q8icql5hh1g3gzg5fp4rl9rfagyhm9gilfn3dgi7qn4i1mrfqsd";
   };
 
-  buildInputs = [ pkgconfig perl python zip libffi readline ];
+  buildInputs = [ pkgconfig perl python2 zip libffi readline ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 

@@ -21,7 +21,7 @@ assert (kernel.version == grsecPatch.kver);
 
 overrideDerivation (kernel.override {
   inherit modDirVersion;
-  kernelPatches = [ grsecPatch ] ++ kernelPatches ++ (kernel.kernelPatches or []);
+  kernelPatches = lib.unique ([ grsecPatch ] ++ kernelPatches ++ (kernel.kernelPatches or []));
   extraConfig = ''
     GRKERNSEC y
     PAX y

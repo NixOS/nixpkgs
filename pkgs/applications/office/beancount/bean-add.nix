@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "09xdsskk5rc3xsf1v1vq7nkdxrxy8w2fixx2vdv8c97ak6a4hrca";
   };
 
-  propagatedBuildInputs = with python3Packages; [ python readline ];
+  propagatedBuildInputs = with python3Packages; [ python ];
 
   installPhase = ''
     mkdir -p $out/bin/

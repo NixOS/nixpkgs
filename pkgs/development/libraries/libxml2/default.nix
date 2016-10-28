@@ -1,7 +1,9 @@
-{ stdenv, lib, fetchurl, zlib, xz, python, findXMLCatalogs, libiconv, fetchpatch
+{ stdenv, lib, fetchurl, zlib, xz, python2, findXMLCatalogs, libiconv, fetchpatch
 , supportPython ? (! stdenv ? cross) }:
 
-stdenv.mkDerivation rec {
+let
+  python = python2;
+in stdenv.mkDerivation rec {
   name = "libxml2-${version}";
   version = "2.9.4";
 

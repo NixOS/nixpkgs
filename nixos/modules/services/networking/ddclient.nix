@@ -89,7 +89,7 @@ in
 
       extraConfig = mkOption {
         default = "";
-        type = str;
+        type = lines;
         description = ''
           Extra configuration. Contents will be added verbatim to the configuration file.
         '';

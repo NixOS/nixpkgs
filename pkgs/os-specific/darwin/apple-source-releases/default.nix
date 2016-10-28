@@ -22,6 +22,7 @@ let
       ppp           = "809.50.2";
       libclosure    = "65";
       Libinfo       = "477.50.4";
+      Libsystem     = "1226.10.1";
       removefile    = "41";
       libresolv     = "60";
 
@@ -204,7 +205,7 @@ let
     Libnotify       = applePackage "Libnotify"         "osx-10.11.6"     "14rhhfzb75r9jf3kyj8fzd01n09n7km1fsdj3dzl3lkkp1sir78m" {};
     libpthread      = applePackage "libpthread"        "osx-10.11.6"     "1kbw738cmr9pa7pz1igmajs307clfq7gv2vm1sqdzhcnnjxbl28w" {};
     libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
-    Libsystem       = applePackage "Libsystem"         "osx-10.9.5"      "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim1gw43x4lvz4qydpp5kg2rh" {};
+    Libsystem       = applePackage "Libsystem"         "osx-10.11.6"     "1nfkmbqml587v2s1d1y2s2v8nmr577jvk51y6vqrfvsrhdhc2w94" {};
     libutil         = applePackage "libutil"           "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
     libunwind       = applePackage "libunwind"         "osx-10.11.6"     "16nhx2pahh9d62mvszc88q226q5lwjankij276fxwrm8wb50zzlx" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.11.6"     "069incq28a78yh1bnr17h9cd5if5mwqpq8ahnkyxxx25fkaxgzcf" {};

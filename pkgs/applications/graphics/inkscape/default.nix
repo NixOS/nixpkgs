@@ -1,13 +1,13 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
-, gsl, python, poppler, imagemagick, libwpg, librevenge
+, gsl, python2, poppler, imagemagick, libwpg, librevenge
 , libvisio, libcdr, libexif, unzip, automake114x, autoconf
 , boxMakerPlugin ? false # boxmaker plugin
 }:
 
 let 
-  pythonEnv = python.withPackages(ps: with ps; [ pyxml numpy lxml ]);
+  python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
 
 boxmaker = fetchurl {
   # http://www.inkscapeforum.com/viewtopic.php?f=11&t=10403
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   # Python is used at run-time to execute scripts, e.g., those from
   # the "Effects" menu.
-  propagatedBuildInputs = [ pythonEnv ];
+  propagatedBuildInputs = [ python2Env ];
 
   buildInputs = [
     pkgconfig perl perlXMLParser libXft libpng zlib popt boehmgc

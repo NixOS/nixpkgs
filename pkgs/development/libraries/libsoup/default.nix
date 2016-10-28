@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
+, gnomeSupport ? true, libgnome_keyring3, sqlite, glib_networking, gobjectIntrospection
 , valaSupport ? true, vala_0_32
 , libintlOrEmpty
 , intltool, python }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals valaSupport [ vala_0_32 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
-    ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];
+    ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring3 ];
   passthru.propagatedUserEnvPackages = [ glib_networking.out ];
 
   # glib_networking is a runtime dependency, not a compile-time dependency

@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, cmake, boost, pythonPackages
-}:
+{ stdenv, fetchurl, cmake, boost, python2}:
 
 let version = "1.8.1"; in
 
@@ -13,8 +12,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     cmake
+    python2
     boost
-    pythonPackages.python
   ];
 
   preConfigure = ''

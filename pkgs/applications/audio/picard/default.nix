@@ -1,9 +1,10 @@
-{ stdenv, pythonPackages, fetchurl, gettext
+{ stdenv, python2Packages, fetchurl, gettext
 , pkgconfig, libofa, ffmpeg, chromaprint
 }:
 
 let
   version = "1.3.2";
+  pythonPackages = python2Packages;
 in pythonPackages.buildPythonApplication {
   name = "picard-${version}";
   namePrefix = "";

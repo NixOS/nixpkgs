@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "gitfs-0.2.5";
 
   src = fetchFromGitHub {
@@ -15,7 +15,12 @@ pythonPackages.buildPythonApplication rec {
     echo > requirements.txt
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ atomiclong fusepy pygit2 ];
+  buildInputs = with python2Packages; [ pytest pytestcov mock ];
+  propagatedBuildInputs = with python2Packages; [ atomiclong fusepy pygit2 ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = {
     description = "A FUSE filesystem that fully integrates with git";

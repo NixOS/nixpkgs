@@ -8,7 +8,7 @@
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
 , coreutils, bison, flex, gdb, gperf, lndir
-, patchelf, perl, pkgconfig, python
+, patchelf, perl, pkgconfig, python2
 
 # optional dependencies
 , cups ? null
@@ -213,7 +213,7 @@ stdenv.mkDerivation {
     # FIXME: move to the main list on rebuild.
     ++ [gnome_vfs.out libgnomeui.out gtk2 GConf];
 
-  nativeBuildInputs = [ lndir patchelf perl pkgconfig python ];
+  nativeBuildInputs = [ lndir patchelf perl pkgconfig python2 ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";

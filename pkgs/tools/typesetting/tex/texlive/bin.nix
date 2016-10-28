@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl
 , texlive
-, zlib, bzip2, ncurses, libpng, flex, bison, libX11, libICE, xproto
+, zlib, bzip2, ncurses, libiconv, libpng, flex, bison, libX11, libICE, xproto
 , freetype, t1lib, gd, libXaw, icu, ghostscript, ed, libXt, libXpm, libXmu, libXext
 , xextproto, perl, libSM, ruby, expat, curl, libjpeg, python, fontconfig, pkgconfig
 , poppler, libpaper, graphite2, zziplib, harfbuzz, texinfo, potrace, gmp, mpfr
@@ -296,7 +296,7 @@ xindy = stdenv.mkDerivation {
     pkgconfig perl
     (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
   ];
-  buildInputs = [ clisp ];
+  buildInputs = [ clisp libiconv ];
 
   configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" ];
 

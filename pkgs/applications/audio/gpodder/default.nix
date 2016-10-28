@@ -30,7 +30,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    feedparser dbus-python mygpoclient sqlite3 pygtk eyeD3
+    feedparser dbus-python mygpoclient pygtk eyeD3
   ] ++ stdenv.lib.optional ipodSupport libgpod;
 
   checkPhase = ''

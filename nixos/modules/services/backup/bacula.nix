@@ -340,6 +340,7 @@ in {
 
       extraConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration for Bacula Director Daemon.
         '';

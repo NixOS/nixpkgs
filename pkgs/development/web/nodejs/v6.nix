@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
+{ stdenv, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
 , pkgconfig, runCommand, which, libtool, fetchpatch
 , callPackage
 , darwin ? null

@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-libav gst-validate
   ]) ++ (with python3Packages; [
-    python pygobject3 gst-python pyxdg numpy pycairo sqlite3 matplotlib
+    python pygobject3 gst-python pyxdg numpy pycairo matplotlib
     dbus-python
   ]);
 

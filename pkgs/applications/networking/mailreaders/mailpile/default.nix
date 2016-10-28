@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   buildInputs = with pythonPackages; [ nose mock ];
   propagatedBuildInputs = with pythonPackages; [
     makeWrapper pillow jinja2 spambayes pythonPackages.lxml
-    python.modules.readline pgpdump gnupg1orig
+    pgpdump gnupg1orig
   ];
 
   postInstall = ''

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, docbook_xsl, dbus_libs, dbus_glib, expat, gettext
 , gsettings_desktop_schemas, gdk_pixbuf, gtk2, gtk3, hicolor_icon_theme
 , imagemagick, itstool, librsvg, libtool, libxslt, lockfile, makeWrapper
-, pkgconfig, pythonFull, pythonPackages, vte }:
+, pkgconfig, python, pythonPackages, vte }:
 
 # TODO: Still getting following warning.
 # WARNING **: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ docbook_xsl expat imagemagick itstool librsvg libtool libxslt
-      makeWrapper pkgconfig pythonFull pythonPackages.lockfile ];
+      makeWrapper pkgconfig python pythonPackages.lockfile ];
 
   propagatedBuildInputs =
     [ dbus_libs dbus_glib gdk_pixbuf gettext gsettings_desktop_schemas gtk2 gtk3 hicolor_icon_theme vte ];
@@ -29,8 +29,8 @@ in stdenv.mkDerivation rec {
                          "-I${dbus_libs.lib}/lib/dbus-1.0/include" ];
 
   # Fix up python path so the lockfile library is on it.
-  PYTHONPATH = stdenv.lib.makeSearchPathOutput "lib" pythonFull.sitePackages [
-    pythonPackages.curses pythonPackages.lockfile
+  PYTHONPATH = stdenv.lib.makeSearchPathOutput "lib" python.sitePackages [
+    pythonPackages.lockfile
   ];
 
   buildPhase = ''

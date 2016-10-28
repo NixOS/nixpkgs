@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, xlibsWrapper, libX11
+, sqlite, openssl, ncurses, python, expat, tcl, tk, xlibsWrapper, libX11
 , makeWrapper, callPackage, self, pypyPackages, gdbm, db }:
 
 assert zlibSupport -> zlib != null;
@@ -34,7 +34,7 @@ let
       patch lib-python/2.7/test/test_pyexpat.py < '${expatch}'
     '';
 
-    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
+    buildInputs = [ bzip2 openssl pkgconfig python libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
@@ -62,7 +62,7 @@ let
     '';
 
     buildPhase = ''
-      ${pythonFull.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
+      ${python.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
     '';
 
     setupHook = ./setup-hook.sh;

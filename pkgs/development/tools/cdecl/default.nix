@@ -3,8 +3,8 @@
 stdenv.mkDerivation {
   name = "cdecl-2.5";
   src = fetchurl {
-    url = "http://cdecl.org/files/cdecl-blocks-2.5.tar.gz";
-    md5 = "c1927e146975b1c7524cbaf07a7c10f8";
+    url = "http://www.cdecl.org/files/cdecl-blocks-2.5.tar.gz";
+    sha256 = "1b7k0ra30hh8mg8fqv0f0yzkaac6lfg6n376drgbpxg4wwml1rly";
   };
 
   patches = [ ./cdecl-2.5-lex.patch ];
