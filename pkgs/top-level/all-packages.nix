@@ -9897,37 +9897,30 @@ in
   # regardless.
   python26Packages = callPackage ./python-packages.nix {
     python = python26;
-    self = python26Packages;
   };
 
   python27Packages = lib.hiPrioSet (recurseIntoAttrs (callPackage ./python-packages.nix {
     python = python27;
-    self = python27Packages;
   }));
 
   python33Packages = callPackage ./python-packages.nix {
     python = python33;
-    self = python33Packages;
   };
 
   python34Packages = callPackage ./python-packages.nix {
     python = python34;
-    self = python34Packages;
   };
 
   python35Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
     python = python35;
-    self = python35Packages;
   });
 
   python36Packages = (callPackage ./python-packages.nix {
     python = python36;
-    self = python36Packages;
   });
 
   pypyPackages = callPackage ./python-packages.nix {
     python = pypy;
-    self = pypyPackages;
   };
 
   ### DEVELOPMENT / R MODULES

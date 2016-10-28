@@ -1,6 +1,13 @@
-{ pkgs, stdenv, python, self }:
+{ pkgs
+, stdenv
+, python
+, overrides ? (self: super: {})
+}:
 
 with pkgs.lib;
+
+let
+  packages = ( self:
 
 let
   pythonAtLeast = versionAtLeast python.pythonVersion;
@@ -31323,4 +31330,7 @@ in {
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
     (pkgs.zeitgeist.override{python2Packages=self;}).py;
 
-}
+
+});
+
+in fix' (extends overrides packages)
