@@ -77,9 +77,9 @@ let
     };
 
   trivialBuilders = self: super:
-    (import ../build-support/trivial-builders.nix {
+    import ../build-support/trivial-builders.nix {
       inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.xorg) lndir;
-    });
+    };
 
   stdenvDefault = self: super: (import ./stdenv.nix topLevelArguments) pkgs;
 
