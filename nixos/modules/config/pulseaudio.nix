@@ -78,6 +78,32 @@ let
     }
   '');
 
+  # Create a directory full of configuration files for PulseAudio to use for
+  # various modules. Packages are scanned similiar how udev does it.
+  alsaMixerConf = stdenv.mkDerivation {
+    name = "pulseaudio-alsamixer";
+
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+
+    buildCommand = ''
+      mkdir -p $out/{profile-sets,paths}
+      shopt -s nullglob
+      set +o pipefail
+
+      function copy_dir() {
+        for j in $1/$2/*; do
+          cat $j > $out/$2/$(basename $j)
+        done
+      }
+
+      for i in ${overriddenPackage.out} ${toString cfg.packages}; do
+        echo "Adding ALSA configuration for package $i"
+        copy_dir $i/share/pulseaudio/alsa-mixer profile-sets
+        copy_dir $i/share/pulseaudio/alsa-mixer paths
+      done
+    '';
+  };
 in {
 
   options = {
@@ -136,6 +162,18 @@ in {
         default = "";
         description = ''
           Extra configuration appended to pulse/client.conf file.
+        '';
+      };
+
+      packages = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          List of packages containing additional PulseAudio configuration.
+          All files found in the following directories:
+          <filename><replaceable>pkg</replaceable>/share/lib/pulseaudio/alsa-mixer/profile-sets</filename>
+          <filename><replaceable>pkg</replaceable>/share/lib/pulseaudio/alsa-mixer/paths</filename>
+          will be included.
         '';
       };
 
@@ -204,10 +242,14 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
 
-      environment.etc = singleton {
-        target = "asound.conf";
-        source = alsaConf;
-      };
+      environment.etc = [
+        { target = "asound.conf";
+          source = alsaConf;
+        }
+        { target = "pulse/alsa-mixer";
+          source = alsaMixerConf;
+        }
+      ];
 
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;

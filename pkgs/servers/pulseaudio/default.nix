@@ -66,7 +66,12 @@ stdenv.mkDerivation rec {
       ++ lib.optional zeroconfSupport  avahi
     );
 
-  preConfigure = ''
+  preConfigure = lib.optionalString (!libOnly) ''
+    mixerDir="/etc/pulse/alsa-mixer"
+    sed -i "src/Makefile.am" \
+        -e 's|\(PA.*PATHS.*\)=".*"|\1\\\"'$mixerDir'/paths\\\"|g' \
+        -e 's|\(PA.*PROFILE_SETS.*\).".*"|\1\\\"'$mixerDir'/profile-sets\\\"|g'
+  '' + ''
     # Performs and autoreconf
     export NOCONFIGURE="yes"
     patchShebangs bootstrap.sh
