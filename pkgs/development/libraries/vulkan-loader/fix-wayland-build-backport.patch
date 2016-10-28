@@ -1,0 +1,38 @@
+commit bf251db8ed4672a6ea86b9daa0df9d9891d665c1
+Author: Jeremy Hayes <jeremy@lunarg.com>
+Date:   Fri Oct 14 15:09:35 2016 -0600
+
+    demos: fix cubepp on wayland errors
+    
+    Change-Id: I74fe07d170ee0e403357a018554ac9d6c754b6b5
+
+diff --git a/demos/cube.cpp b/demos/cube.cpp
+index 8d410bf..a0c7c47 100644
+--- a/demos/cube.cpp
++++ b/demos/cube.cpp
+@@ -2823,18 +2823,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine,
+ #elif __linux__
+ 
+ #if defined(VK_USE_PLATFORM_WAYLAND_KHR)
+-static void handle_ping(void *data UNUSED, wl_shell_surface *shell_surface,
++static void handle_ping(void *data, wl_shell_surface *shell_surface,
+                         uint32_t serial) {
+     wl_shell_surface_pong(shell_surface, serial);
+ }
+ 
+-static void handle_configure(void *data UNUSED,
+-                             wl_shell_surface *shell_surface UNUSED,
+-                             uint32_t edges UNUSED, int32_t width UNUSED,
+-                             int32_t height UNUSED) {}
++static void handle_configure(void *data,
++                             wl_shell_surface *shell_surface,
++                             uint32_t edges, int32_t width,
++                             int32_t height) {}
+ 
+-static void handle_popup_done(void *data UNUSED,
+-                              wl_shell_surface *shell_surface UNUSED) {}
++static void handle_popup_done(void *data,
++                              wl_shell_surface *shell_surface) {}
+ 
+ static const wl_shell_surface_listener shell_surface_listener = {
+     handle_ping, handle_configure, handle_popup_done};
