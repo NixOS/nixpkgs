@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mplus-${version}";
-  version = "061";
+  version = "062";
 
   src = fetchurl {
     url = "mirror://sourceforgejp/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
-    sha256 = "1yrv65l2y8f9jmpalqb5iiay7z1x3754mnqpgp2bax72g8k8728g";
+    sha256 = "1f44vmnma5njhfiz351gwblxmdh9njv486864zrxqaa1h5pvdhha";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
