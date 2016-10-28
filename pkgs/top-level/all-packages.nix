@@ -6,7 +6,6 @@
  * Hint: ### starts category names.
  */
 { system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
-, pkgsWithOverrides
 , ... }:
 self: pkgs:
 
@@ -34,19 +33,6 @@ in
   callPackages = lib.callPackagesWith defaultScope;
 
   newScope = extra: lib.callPackageWith (defaultScope // extra);
-
-  # Easily override this package set.
-  # Warning: this function is very expensive and must not be used
-  # from within the nixpkgs repository.
-  #
-  # Example:
-  #  pkgs.overridePackages (self: super: {
-  #    foo = super.foo.override { ... };
-  #  }
-  #
-  # The result is `pkgs' where all the derivations depending on `foo'
-  # will use the new version.
-  overridePackages = f: pkgsWithOverrides f;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: (import ../..) {
@@ -698,6 +684,7 @@ in
   caddy = callPackage ../servers/caddy { };
 
   calamares = qt5.callPackage ../tools/misc/calamares rec {
+    python = python3;
     boost = pkgs.boost.override { python=python3; };
     libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost=boost; };
   };
@@ -1032,7 +1019,9 @@ in
 
   burp = callPackage ../tools/backup/burp { };
 
-  buku = callPackage ../applications/misc/buku {};
+  buku = callPackage ../applications/misc/buku {
+    pythonPackages = python3Packages;
+  };
 
   byzanz = callPackage ../applications/video/byzanz {};
 
@@ -1387,6 +1376,8 @@ in
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
+    pythonPackages = python3Packages;
+    rpm = rpm.override { python = python3; };
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -2905,7 +2896,9 @@ in
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
-  nox = callPackage ../tools/package-management/nox {};
+  nox = callPackage ../tools/package-management/nox {
+    pythonPackages = python3Packages;
+  };
 
   nq = callPackage ../tools/system/nq { };
 
@@ -3758,6 +3751,7 @@ in
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
+    pythonPackages = python3Packages;
    };
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
@@ -4785,16 +4779,19 @@ in
     version = "4.7-2013q3-20130916";
     releaseType = "update";
     sha256 = "1bd9bi9q80xn2rpy0rn1vvj70rh15kb7dmah0qs4q2rv78fqj40d";
+    ncurses = pkgsi686Linux.ncurses5;
   };
   gcc-arm-embedded-4_8 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
     version = "4.8-2014q1-20140314";
     releaseType = "update";
     sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
+    ncurses = pkgsi686Linux.ncurses5;
   };
   gcc-arm-embedded-4_9 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
     version = "4.9-2015q1-20150306";
     releaseType = "update";
     sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
+    ncurses = pkgsi686Linux.ncurses5;
   };
   gcc-arm-embedded-5 = pkgs.callPackage_i686 ../development/compilers/gcc-arm-embedded {
     dirName = "5.0";
@@ -4802,6 +4799,7 @@ in
     version = "5.4-2016q2-20160622";
     releaseType = "update";
     sha256 = "1r0rqbnw7rf94f5bsa3gi8bick4xb7qnp1dkvdjfbvqjvysvc44r";
+    ncurses = pkgsi686Linux.ncurses5;
   };
   gcc-arm-embedded = gcc-arm-embedded-5;
 
@@ -5562,7 +5560,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix {};
+  pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -6197,7 +6195,9 @@ in
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
-  nixbang = callPackage ../development/tools/misc/nixbang {};
+  nixbang = callPackage ../development/tools/misc/nixbang {
+      pythonPackages = python3Packages;
+  };
 
   nexus = callPackage ../development/tools/repository-managers/nexus { };
 
@@ -9207,7 +9207,7 @@ in
 
   stlport = callPackage ../development/libraries/stlport { };
 
-  streamlink = callPackage ../applications/video/streamlink {};
+  streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
@@ -12178,6 +12178,7 @@ in
 
   blender = callPackage  ../applications/misc/blender {
     cudatoolkit = cudatoolkit75;
+    python = python35;
   };
 
   bluefish = callPackage ../applications/editors/bluefish {
@@ -12721,7 +12722,9 @@ in
 
   eq10q = callPackage ../applications/audio/eq10q { };
 
-  errbot = callPackage ../applications/networking/errbot {};
+  errbot = callPackage ../applications/networking/errbot {
+    pythonPackages = python3Packages;
+  };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
@@ -14118,7 +14121,9 @@ in
 
   purple-facebook = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-facebook { };
 
-  pithos = callPackage ../applications/audio/pithos {};
+  pithos = callPackage ../applications/audio/pithos {
+    pythonPackages = python3Packages;
+  };
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
@@ -15408,7 +15413,9 @@ in
 
   bastet = callPackage ../games/bastet {};
 
-  beancount = callPackage ../applications/office/beancount {};
+  beancount = callPackage ../applications/office/beancount {
+      pythonPackages = python3Packages;
+  };
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
@@ -17292,7 +17299,9 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  wikicurses = callPackage ../applications/misc/wikicurses {};
+  wikicurses = callPackage ../applications/misc/wikicurses {
+    pythonPackages = python3Packages;
+  };
 
   wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
