@@ -28991,12 +28991,12 @@ in {
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.1.9";
+    version = "0.1.10";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "09q7yz0v9i90grp4cmb1w8dps58q9xny7sb12kgmd8gcr8xwk4dx";
+      sha256 = "1n6xxh0n250qbvrdl0cw114d890nfv6d0wjk5wpr505sg2bg9jx4";
     };
 
     buildInputs = with self; [ nose ];
@@ -29023,22 +29023,18 @@ in {
 
   neovim_gui = buildPythonPackage rec {
     name = "neovim-pygui-${self.neovim.version}";
-    version = "0.1.2";
+    version = "0.1.3";
     disabled = !isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "neovim";
       repo = "python-gui";
       rev = version;
-      sha256 = "0sc5apxwxgfj57q7d9cih404jgvczbp7slz5z8wqdyxpxlb42pn2";
+      sha256 = "1vpvr3zm3f9sxg1z1cl7f7gi8v1xksjdvxj62qnw65aqj3zqxnkz";
     };
 
-    buildInputs = with self; [ neovim ];
-
     propagatedBuildInputs = [
-      self.msgpack
-      self.greenlet
-      self.trollius
+      self.neovim
       self.click
       self.pygobject3
       pkgs.gobjectIntrospection
