@@ -13,7 +13,7 @@ assert stdenv.cc ? libc;
 let
   os = stdenv.lib.optionalString;
   majorVersion = "3.6";
-  minorVersion = "0";
+  minorVersion = "2";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "0w3n2i02jpbgai4dxsigm1c1i1qb5v70wyxckzwrxvs0ri0fs1gx";
+    sha256 = "0imkz04ncz6cv5659qfd4scm99k3siq7zrrsa8pvp663d8mf76hq";
   };
 
   # Don't search in non-Nix locations such as /usr, but do search in our libc.
