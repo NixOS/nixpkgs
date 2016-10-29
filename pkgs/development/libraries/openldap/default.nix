@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    chmod +x $out/lib/*.so
+    chmod +x "$out"/lib/*.{so,dylib}
   '';
 
   meta = with stdenv.lib; {
