@@ -39,6 +39,7 @@ let
     sha256 = "0y7rl603vmwlxm6ilkhc51rx2mfj14ckcz40xxgs0ljnvlhp30yp";
   };
 
+  hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
   patches =
     [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
       ./search-path.patch
@@ -82,7 +83,7 @@ let
       ./2.7.3-dylib.patch
       ./2.7.3-getpath-exe-extension.patch
       ./2.7.3-no-libm.patch
-    ] ++ optionals (!(stdenv.cc.isGNU or false)) [
+    ] ++ optionals hasDistutilsCxxPatch [
 
       # Patch from http://bugs.python.org/issue1222585 adapted to work with
       # `patch -p1' and with a last hunk removed
@@ -180,7 +181,7 @@ in stdenv.mkDerivation {
       '';
 
     passthru = rec {
-      inherit libPrefix sitePackages x11Support;
+      inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
       executable = libPrefix;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
       withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };

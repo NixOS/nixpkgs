@@ -3,11 +3,11 @@
 let optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "lmdb-${version}";
-  version = "0.9.16";
+  version = "0.9.18";
 
   src = fetchzip {
     url = "https://github.com/LMDB/lmdb/archive/LMDB_${version}.tar.gz";
-    sha256 = "1lkmngscijwiz09gdkqygdp87x55vp8gb4fh4vq7s34k4jv0327l";
+    sha256 = "01j384kxg36kym060pybr5p6mjw0xv33bqbb8arncdkdq57xk8wg";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";

@@ -43,7 +43,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1j29ydbw86j3qd4qb4l348pcnjd24irgdra9ss2afi6w2pn60yjn";
+      sha256 = "1nd1q5c4jr9s6xczyv464zq4y10rk8c1av22nfb28abrskxagcjc";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
@@ -166,6 +166,13 @@ self: super: {
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
     else super.halive;
+
+  # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
+  hakyll = if pkgs.stdenv.isDarwin
+    then dontCheck (overrideCabal super.hakyll (drv: {
+      testToolDepends = [];
+    }))
+    else super.hakyll;
 
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
@@ -456,7 +463,6 @@ self: super: {
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
-  wai-app-file-cgi = dontCheck super.wai-app-file-cgi;
   wai-logger = dontCheck super.wai-logger;
   WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
   webdriver = dontCheck super.webdriver;
@@ -970,7 +976,7 @@ self: super: {
 
   # https://github.com/commercialhaskell/stack/issues/2263
   stack = super.stack.overrideScope (self: super: {
-    http-client = self.http-client_0_5_3_2;
+    http-client = self.http-client_0_5_3_3;
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
@@ -1023,5 +1029,12 @@ self: super: {
 
   # https://github.com/vshabanov/HsOpenSSL/issues/11
   HsOpenSSL = doJailbreak super.HsOpenSSL;
+
+  # https://github.com/NixOS/nixpkgs/issues/19612
+  wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
+    http-client = self.http-client_0_5_3_2;
+    http-client-tls = self.http-client-tls_0_3_3;
+    http-conduit = self.http-conduit_2_2_3;
+  });
 
 }

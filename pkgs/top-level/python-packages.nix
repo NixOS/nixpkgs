@@ -1452,13 +1452,13 @@ in {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.10.51";
+    version = "1.11.10";
 
     namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "19n7r6fwnwpi0cyrqh20w80mrcj0b6j3if5p58hi1k3fdp60nscq";
+      sha256 = "174lfpai5cga1ml2bwswjil6h544m57js9ki7hqkr9gdbpa8pyrk";
     };
 
     # No tests included
@@ -2941,16 +2941,16 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.3.1";
+    version = "1.4.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "1rbwcslk9dgayrg3vy3m0bqj767hdy1aphy5wjgz925bsydgxdg6";
+      sha256 = "19ij6cs2n3p5fgipbrq1dybq2sjjvlhg9n5a5sv9wi95x9wqi5wb";
     };
 
-    propagatedBuildInputs = [ self.botocore self.jmespath ] ++
+    propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
                             (if isPy3k then [] else [self.futures]);
     buildInputs = [ self.docutils self.nose self.mock ];
     checkPhase = ''
@@ -2978,12 +2978,12 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.4.41"; # This version is required by awscli
+    version = "1.4.67"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "0c3abr2rxiilqklika8x360pr0mgx7hlhbhj8w72izs2r6ww4dys";
+      sha256 = "15fh3ng33mcbhm76pk9qqglf342qj471gfcqxv0nrl9f8sn3v60q";
     };
 
     propagatedBuildInputs =
@@ -3151,11 +3151,11 @@ in {
 
   devpi-common = buildPythonPackage rec {
     name = "devpi-common";
-    version = "2.0.8";
+    version = "3.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/devpi-common/devpi-common-${version}.tar.gz";
-      sha256 = "a059c4099002d4af8f3ccfc8a9f4bf133b20ea404049b21a31fc1003e1d79452";
+      sha256 = "0l3a7iyk596x6pvzg7604lzzi012qszr804fqn6f517zcy1xz23j";
     };
 
     propagatedBuildInputs = [ self.requests2 self.py ];
@@ -3164,7 +3164,7 @@ in {
       homepage = https://bitbucket.org/hpk42/devpi;
       description = "Utilities jointly used by devpi-server and devpi-client";
       license = licenses.mit;
-      maintainers = with maintainers; [ lewo ];
+      maintainers = with maintainers; [ lewo makefu ];
     };
   };
 
@@ -5630,11 +5630,11 @@ in {
 
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
-    version = "2.4.2";
+    version = "2.5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "3e95445c1db500a344079a47b171c45ef18f57d188dffdb0e4165c71bea8eb3d";
+      sha256 = "1v9j9fmf8g911yg6k01xa2db6dx3wv73zkk7fncsj7vagjqgs20l";
     };
 
     propagatedBuildInputs = with self; [ self.six ];
@@ -8168,12 +8168,12 @@ in {
   };
 
   passlib = buildPythonPackage rec {
-    version = "1.6.2";
+    version = "1.6.5";
     name    = "passlib-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/passlib/passlib-${version}.tar.gz";
-      sha256 = "e987f6000d16272f75314c7147eb015727e8532a3b747b1a8fb58e154c68392d";
+      sha256 = "1z27wdxs5rj5xhhqfzvzn3yg682irkxw6dcs5jj7mcf97psk8gd8";
     };
 
     buildInputs = with self; [ nose pybcrypt];
@@ -12888,11 +12888,11 @@ in {
   };
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.7.1";
+    name = "jmespath-0.9.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jmespath/${name}.tar.gz";
-      sha256 = "1lazbx65imassd7h24z49za001rvx1lmx8r0l21h4izs7pp14nnd";
+      sha256 = "0g9xvl69y7nr3w7ag4fsp6sm4fqf6vrqjw7504x2hzrrsh3ampq8";
     };
 
     buildInputs = with self; [ nose ];
@@ -13721,6 +13721,38 @@ in {
     };
   };
 
+  markdown-macros = buildPythonPackage rec {
+    name = "markdown-macros-${version}";
+    version = "0.1.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/markdown-macros/${name}.tar.gz";
+      sha256 = "1lzvrb7nci22yp21ab2qqc9p0fhkazqj29vw0wln2r4ckb2nbawv";
+    };
+
+    patches = [
+      # Fixes a bug with markdown>2.4
+      (pkgs.fetchpatch {
+        url = "https://github.com/wnielson/markdown-macros/pull/1.patch";
+        sha256 = "17njbgq2srzkf03ar6yn92frnsbda3g45cdi529fdh0x8mmyxci0";
+      })
+    ];
+
+    prePatch = ''
+      substituteInPlace setup.py --replace "distribute" "setuptools"
+    '';
+
+    propagatedBuildInputs = with self; [ markdown ];
+
+    doCheck = false;
+
+    meta = {
+      description = "An extension for python-markdown that makes writing trac-like macros easy";
+      homepage = https://github.com/wnielson/markdown-macros;
+      license = licenses.mit;
+      maintainers = [ maintainers.abigailbuccaneer ];
+    };
+  };
 
   mathics = buildPythonPackage rec {
     name = "mathics-${version}";
@@ -17193,11 +17225,11 @@ in {
 
   fasteners = buildPythonPackage rec {
     name = "fasteners-${version}";
-    version = "0.13.0";
+    version = "0.14.1";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fasteners/fasteners-0.13.0.tar.gz";
-      sha256 = "0nghdq3zihiqg10dp76ls7yn44m5wjncyz7fk8isagkrspkh9a3n";
+      url = "mirror://pypi/f/fasteners/${name}.tar.gz";
+      sha256 = "063y20kx01ihbz2mziapmjxi2cd0dq48jzg587xdsdp07xvpcz22";
     };
 
     propagatedBuildInputs = with self; [ six monotonic testtools ];
@@ -17669,6 +17701,29 @@ in {
       description = "Appendable key-value storage";
       license = with licenses; [ bsd3 ];
       homepage = http://github.com/dask/partd/;
+    };
+  };
+
+  patch = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    version = "1.16";
+    pname = "patch";
+
+    src = pkgs.fetchzip {
+      url = "mirror://pypi/p/${pname}/${name}.zip";
+      sha256 = "1nj55hvyvzax4lxq7vkyfbw91pianzr3hp7ka7j12pgjxccac50g";
+      stripRoot = false;
+    };
+
+    # No tests included in archive
+    doCheck = false;
+
+    meta = {
+      description = "A library to parse and apply unified diffs";
+      homepage = https://github.com/techtonik/python-patch/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.igsha ];
     };
   };
 
@@ -22312,12 +22367,12 @@ in {
   };
 
   s3transfer = buildPythonPackage rec {
-    version = "0.0.1"; # This version is required by awscli
+    version = "0.1.9";
     name = "s3transfer-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "0ma31zvv7gy240xgd1zw853lpzkdci6mapzpg3x4vycann6yvf9b";
+      sha256 = "0m67nhdnp2pd11j8h4bgz63zq0mvn2f205vrxmr3my8m45kpvb8p";
     };
 
     foo = 1;
@@ -22468,16 +22523,19 @@ in {
 
   scikitimage = buildPythonPackage rec {
     name = "scikit-image-${version}";
-    version = "0.11.3";
+    version = "0.12.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/scikit-image/${name}.tar.gz";
-      sha256 = "768e568f3299966c294b7eb8cd114fc648f7bfaef422ee9cc750dd8d9d09e44b";
+      sha256 = "1iypjww5hk46i9vzg2zlfc9w4vdw029cfyakkkl02isj1qpiknl2";
     };
 
-    buildInputs = with self; [ cython nose numpy six ];
+    buildInputs = with self; [ cython dask nose numpy scipy six ];
 
-    propagatedBuildInputs = with self; [ pillow matplotlib networkx scipy ];
+    propagatedBuildInputs = with self; [ pillow matplotlib networkx scipy six numpy ];
+
+    # the test fails because the loader cannot create test objects!
+    doCheck = false;
 
     meta = {
       description = "Image processing routines for SciPy";

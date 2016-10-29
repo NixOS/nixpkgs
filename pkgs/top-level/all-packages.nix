@@ -1845,8 +1845,12 @@ in
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
-  gnupg20 = callPackage ../tools/security/gnupg/20.nix { };
-  gnupg21 = callPackage ../tools/security/gnupg/21.nix { };
+  gnupg20 = callPackage ../tools/security/gnupg/20.nix {
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
+  };
+  gnupg21 = callPackage ../tools/security/gnupg/21.nix {
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
+  };
   gnupg = gnupg21;
 
   gnuplot = callPackage ../tools/graphics/gnuplot { qt = qt4; };
@@ -2413,11 +2417,6 @@ in
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
-    libtool = darwin.cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
-  };
-
   nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
   };
@@ -2426,10 +2425,7 @@ in
     libtool = darwin.cctools;
   };
 
-  nodejs = if stdenv.system == "armv5tel-linux" then
-    nodejs-0_10
-  else
-    nodejs-4_x;
+  nodejs = nodejs-4_x;
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
@@ -2439,14 +2435,7 @@ in
     nodejs = pkgs.nodejs-4_x;
   };
 
-  nodePackages_0_10 = callPackage ../development/node-packages/default-v0_10.nix {
-    nodejs = pkgs.nodejs-0_10;
-  };
-
-  nodePackages = if stdenv.system == "armv5tel-linux" then
-    nodePackages_0_10
-  else
-    nodePackages_4_x;
+  nodePackages = nodePackages_4_x;
 
   # Can be used as a user shell
   nologin = shadow;
@@ -2797,8 +2786,6 @@ in
   neural-style = callPackage ../tools/graphics/neural-style {};
 
   nco = callPackage ../development/libraries/nco { };
-
-  nc6 = callPackage ../tools/networking/nc6 { };
 
   ncftp = callPackage ../tools/networking/ncftp { };
 
@@ -5092,7 +5079,7 @@ in
   inherit (ocamlPackages) ocaml-top;
 
   opa = callPackage ../development/compilers/opa {
-    nodejs = nodejs-0_10;
+    nodejs = nodejs-4_x;
   };
 
   inherit (ocaml-ng.ocamlPackages_4_01_0) opam_1_0_0;
@@ -6300,6 +6287,8 @@ in
   };
 
   redo = callPackage ../development/tools/build-managers/redo { };
+
+  reno = callPackage ../development/tools/reno { };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
 
@@ -8842,7 +8831,7 @@ in
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
     mesa = mesa_noglu;
-    inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+    inherit (pkgs.gnome2) libgnomeui GConf gnome_vfs;
     cups = if stdenv.isLinux then cups else null;
 
     # XXX: mariadb doesn't built on fbsd as of nov 2015
@@ -10010,7 +9999,7 @@ in
 
   grafana = callPackage ../servers/monitoring/grafana { };
 
-  groovebasin = callPackage ../applications/audio/groovebasin { nodejs = nodejs-0_10; };
+  groovebasin = callPackage ../applications/audio/groovebasin { nodejs = nodejs-4_x; };
 
   haka = callPackage ../tools/security/haka { };
 
@@ -10177,9 +10166,7 @@ in
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
-  influxdb = callPackage ../servers/nosql/influxdb/v0.nix { };
-
-  influxdb10 = callPackage ../servers/nosql/influxdb/v1.nix { };
+  influxdb = callPackage ../servers/nosql/influxdb { };
 
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
     inherit (darwin) cctools;
@@ -16702,7 +16689,7 @@ in
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
   pari = callPackage ../applications/science/math/pari {};
-  pari_alpha = callPackage ../applications/science/math/pari/alpha.nix {};
+  pari-unstable = callPackage ../applications/science/math/pari/unstable.nix {};
 
   ratpoints = callPackage ../applications/science/math/ratpoints {};
 

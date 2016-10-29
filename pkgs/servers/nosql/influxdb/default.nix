@@ -1,16 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub, src, version }:
+{ lib, buildGoPackage, fetchFromGitHub, }:
 
 buildGoPackage rec {
   name = "influxdb-${version}";
+  version = "1.0.2";
+
+  src = fetchFromGitHub {
+    owner = "influxdata";
+    repo = "influxdb";
+    rev = "v${version}";
+    sha256 = "0z8y995gm2hpxny7l5nx5fjc5c26hfgvghwmzva8d1mrlnapcsyc";
+  };
 
   goPackagePath = "github.com/influxdata/influxdb";
 
   excludedPackages = "test";
-  
-  inherit src;
 
-  # Generated with the `gdm2nix.rb` script and the `Godeps` file from the
-  # influxdb repo root.
+  # Generated with the nix2go
   goDeps = ./. + builtins.toPath "/deps-${version}.nix";
 
   meta = with lib; {

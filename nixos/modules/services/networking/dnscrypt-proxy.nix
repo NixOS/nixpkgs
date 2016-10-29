@@ -35,7 +35,11 @@ in
 
   options = {
     services.dnscrypt-proxy = {
-      enable = mkEnableOption "DNSCrypt client proxy";
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to enable the DNSCrypt client proxy";
+      };
 
       localAddress = mkOption {
         default = "127.0.0.1";
