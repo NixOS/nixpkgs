@@ -17,15 +17,10 @@
 let
   callPackage = newScope chromium;
 
-  # XXX: This is an ugly hack for the transition to GN:
-  inherit (stdenv.lib) versionAtLeast;
-  gnRequired = versionAtLeast chromium.upstream-info.version "54.0.0.0";
-  common = if gnRequired then ./common-gn.nix else ./common.nix;
-
   chromium = {
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
-    mkChromiumDerivation = callPackage common {
+    mkChromiumDerivation = callPackage ./common.nix {
       inherit enableSELinux enableNaCl enableHotwording gnomeSupport
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport;
     };
