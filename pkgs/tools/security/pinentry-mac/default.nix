@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     mv build/Release/pinentry-mac.app $out/Applications
   '';
 
+  passthru = {
+    binaryPath = "Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac";
+  };
+
   meta = {
     description = "Pinentry for GPG on Mac";
     license = stdenv.lib.licenses.gpl2Plus;
