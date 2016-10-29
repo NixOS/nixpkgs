@@ -1,6 +1,11 @@
-{ callPackage, pkgs }:
+{ callPackage, boost162, openssl_1_1_0, pkgs }:
 
 rec {
+  zcash = callPackage ./zcash {
+    withGui = false;
+    boost = boost162;
+    openssl = openssl_1_1_0;
+  };
 
   bitcoin  = callPackage ./bitcoin.nix { withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { withGui = false; };

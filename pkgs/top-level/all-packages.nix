@@ -12066,14 +12066,7 @@ in
 
   altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins {
     callPackage = newScope { boost = boost155; };
-  } ) // (
-    let callPackage = newScope { boost = boost162; openssl = openssl_1_1_0; };
-    in {
-      zcash = callPackage ../applications/altcoins/zcash {
-        withGui = false;
-        inherit callPackage;
-      };
-    });
+  });
 
   bitcoin = altcoins.bitcoin;
   zcash = altcoins.zcash;

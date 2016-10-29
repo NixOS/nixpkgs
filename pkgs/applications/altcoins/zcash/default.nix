@@ -2,7 +2,7 @@
 , zlib, gtest, gmock, miniupnpc, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent
 , withGui }:
 
-let snark = callPackage ./snark { };
+let snark = callPackage ./snark { inherit boost openssl; };
 in
 with stdenv.lib;
 stdenv.mkDerivation rec{
