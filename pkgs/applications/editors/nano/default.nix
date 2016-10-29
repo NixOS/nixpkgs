@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
     homepage = http://www.nano-editor.org/;
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [
+      jgeerds
+      joachifm
+    ];
     platforms = platforms.all;
   };
 }
