@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gitflow";
-  version = "1.10.0";
+  version = "1.10.2";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "petervanderdoes";
     repo = pname;
     rev = version;
-    sha256 = "1l67yizbcmgkhz8qn1zam2p04y8ha9b2gb2d89rff9y528b2m5z6";
+    sha256 = "1i8bwi83qcqvi8zrkjn4mp2v8v7y11fd520wpg2jgy5hqyz34chg";
   };
 
   preBuild = ''
