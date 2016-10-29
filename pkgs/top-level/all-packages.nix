@@ -6288,6 +6288,8 @@ in
 
   redo = callPackage ../development/tools/build-managers/redo { };
 
+  reno = callPackage ../development/tools/reno { };
+
   re2c = callPackage ../development/tools/parsing/re2c { };
 
   remake = callPackage ../development/tools/build-managers/remake { };
