@@ -28,7 +28,6 @@
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
-, hiDPISupport ? false
 
 , upstream-info
 }:
@@ -154,7 +153,6 @@ let
     } // {
       treat_warnings_as_errors = false;
       is_clang = false;
-      enable_hidpi = hiDPISupport;
 
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys

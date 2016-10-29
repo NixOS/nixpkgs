@@ -12,7 +12,6 @@
 , enableWideVine ? false
 , cupsSupport ? true
 , pulseSupport ? false
-, hiDPISupport ? false
 }:
 
 let
@@ -32,8 +31,7 @@ let
 
     mkChromiumDerivation = callPackage common {
       inherit enableSELinux enableNaCl enableHotwording gnomeSupport gnome
-              gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              hiDPISupport;
+              gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport;
     };
 
     browser = callPackage ./browser.nix { inherit channel; };
