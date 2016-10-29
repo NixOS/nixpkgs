@@ -1,67 +1,65 @@
 { stdenv, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool
-, version
-, sha256 ? null
-, src ? fetchurl { url = "https://nodejs.org/download/release/v${version}/node-v${version}.tar.xz"; inherit sha256; }
-, preBuild ? ""
-, extraConfigFlags ? []
-, extraBuildInputs ? []
-, patches ? [],
- ...
+, pkgconfig, runCommand, which, libtool, fetchpatch
+, callPackage
+, darwin ? null
+, enableNpm ? true
 }:
 
-assert stdenv.system != "armv5tel-linux";
+with stdenv.lib;
 
 let
 
-  deps = {
-    inherit openssl zlib libuv;
-  } // (stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
-    inherit http-parser;
-  });
+  inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
-  sharedConfigureFlags = name: [
+  sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs (!stdenv.isDarwin) { inherit http-parser; });
+
+  sharedConfigureFlags = concatMap (name: [
     "--shared-${name}"
-    "--shared-${name}-includes=${builtins.getAttr name deps}/include"
-    "--shared-${name}-libpath=${builtins.getAttr name deps}/lib"
-  ];
+    "--shared-${name}-libpath=${getLib sharedLibDeps.${name}}/lib"
+  ]) (builtins.attrNames sharedLibDeps);
 
-  inherit (stdenv.lib) concatMap optional optionals maintainers licenses platforms;
+  extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
+in
 
-in stdenv.mkDerivation {
+  rec {
 
-  inherit version src preBuild;
-
-  name = "nodejs-${version}";
-
-  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ] ++ extraConfigFlags;
-  dontDisableStatic = true;
-  prePatch = ''
-    patchShebangs .
-    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
-  '';
-
-  postInstall = ''
-    PATH=$out/bin:$PATH patchShebangs $out
-  '';
-
-  patches = patches ++ stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
-
-  buildInputs = extraBuildInputs
+    buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
     ++ [ python2 which zlib libuv openssl ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
     ++ optionals stdenv.isDarwin [ pkgconfig libtool ];
-  setupHook = ./setup-hook.sh;
 
-  enableParallelBuilding = true;
+    configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
 
-  passthru.interpreterName = "nodejs";
+    dontDisableStatic = true;
 
-  meta = {
-    description = "Event-driven I/O framework for the V8 JavaScript engine";
-    homepage = http://nodejs.org;
-    license = licenses.mit;
-    maintainers = [ maintainers.goibhniu maintainers.havvy maintainers.gilligan maintainers.cko ];
-    platforms = platforms.linux ++ platforms.darwin;
-  };
+    enableParallelBuilding = true;
+
+    passthru.interpreterName = "nodejs";
+
+
+    setupHook = ./setup-hook.sh;
+
+    patches = optionals stdenv.isDarwin [ ./no-xcode.patch ];
+
+    preBuild = optionalString stdenv.isDarwin ''
+      sed -i -e "s|tr1/type_traits|type_traits|g" \
+      -e "s|std::tr1|std|" src/util.h
+    '';
+
+    prePatch = ''
+      patchShebangs .
+      sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
+    '';
+
+    postInstall = ''
+      PATH=$out/bin:$PATH patchShebangs $out
+    '';
+
+    meta = {
+      description = "Event-driven I/O framework for the V8 JavaScript engine";
+      homepage = http://nodejs.org;
+      license = licenses.mit;
+      maintainers = with maintainers; [ goibhniu havvy gilligan cko ];
+      platforms = platforms.linux ++ platforms.darwin;
+    };
 }
