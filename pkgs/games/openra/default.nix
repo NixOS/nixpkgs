@@ -1,10 +1,10 @@
 { stdenv, fetchurl, mono, makeWrapper, lua
 , SDL2, freetype, openal, systemd, pkgconfig,
-  dotnetPackages, gnome3
+  dotnetPackages, gnome3, curl, unzip
 }:
 
 let
-  version = "20160508";
+  version = "20161019";
 in stdenv.mkDerivation rec {
   name = "openra-${version}";
 
@@ -19,15 +19,15 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/OpenRA/OpenRA/archive/release-${version}.tar.gz";
-    sha256 = "1vr5bvdkh0n5569ga2h7ggj43vnzr37hfqkfnsis1sg4vgwrnzr7";
+    sha256 = "1psmq3kb2whkavh5pm0xc4m5b4bihvrl8pfrk851iqg1cs22bg0w";
   };
 
   dontStrip = true;
 
   buildInputs = with dotnetPackages;
-     [ NUnit3 NewtonsoftJson MonoNat FuzzyLogicLibrary SmartIrc4net SharpZipLib MaxMindGeoIP2 MaxMindDb SharpFont StyleCopMSBuild StyleCopPlusMSBuild RestSharp NUnitConsole ]
-     ++ [ lua gnome3.zenity ];
-  nativeBuildInputs = [ mono makeWrapper lua pkgconfig ];
+     [ NUnit3 NewtonsoftJson MonoNat FuzzyLogicLibrary SmartIrc4net SharpZipLib MaxMindGeoIP2 MaxMindDb SharpFont StyleCopMSBuild StyleCopPlusMSBuild RestSharp NUnitConsole OpenNAT ]
+     ++ [ curl unzip lua gnome3.zenity ];
+  nativeBuildInputs = [ curl unzip mono makeWrapper lua pkgconfig ];
 
   patchPhase = ''
     mkdir Support
@@ -42,6 +42,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = let dotnetPackagesDlls = with dotnetPackages; [
+    "${OpenNAT}/lib/dotnet/Open.NAT/net45/Open.Nat.dll"
     "${MonoNat}/lib/dotnet/Mono.Nat/net40/Mono.Nat.dll"
     "${FuzzyLogicLibrary}/lib/dotnet/FuzzyLogicLibrary/Release/FuzzyLogicLibrary.dll"
     "${SmartIrc4net}/lib/dotnet/SmartIrc4net/net40/SmarIrc4net*"
