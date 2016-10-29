@@ -1041,4 +1041,8 @@ self: super: {
     http-conduit = self.http-conduit_2_2_3;
   });
 
+  # https://hydra.nixos.org/build/42769611/nixlog/1/raw
+  # note: the library is unmaintained, no upstream issue
+  dataenc = doJailbreak super.dataenc;
+
 }
