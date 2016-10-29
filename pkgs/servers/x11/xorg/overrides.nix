@@ -217,6 +217,7 @@ in
 
   libXrender = attrs: attrs // {
     outputs = [ "out" "dev" "doc" ];
+    propagatedBuildInputs = [ xorg.renderproto ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
