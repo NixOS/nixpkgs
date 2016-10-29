@@ -17114,6 +17114,8 @@ in
 
   pt = callPackage ../applications/misc/pt { };
 
+  pyload = callPackage ../applications/networking/pyload {};
+
   uae = callPackage ../misc/emulators/uae { };
 
   fsuae = callPackage ../misc/emulators/fs-uae { };

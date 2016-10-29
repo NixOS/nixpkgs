@@ -19417,7 +19417,7 @@ in {
       sha256 = "0hqsap82zklhi5fxhc69kxrwzb0g9566f7sdpz7f9gyxkmyam839";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl ];
+    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -19427,13 +19427,17 @@ in {
       export PYCURL_SSL_LIBRARY=openssl
     '';
 
+    #TODO no idea why this is needed
+    postInstall = ''
+      ln -s ${pkgs.openssl.out}/lib/libcrypto* $out/lib/
+    '';
+
     meta = {
       homepage = http://pycurl.sourceforge.net/;
       description = "Python wrapper for libcurl";
       platforms = platforms.linux;
     };
   });
-
 
   pycurl2 = buildPythonPackage (rec {
     name = "pycurl2-7.20.0";
