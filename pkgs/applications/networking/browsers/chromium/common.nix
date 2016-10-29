@@ -57,8 +57,7 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libjpeg" "libpng" "libvpx" "libwebp" "libxml" "libxslt" "re2"
-    "snappy" "yasm" "zlib"
+    "flac" "libwebp" "libxml" "libxslt" "snappy" "yasm"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -70,7 +69,7 @@ let
     libevent expat libjpeg snappy
     libpng libxml2 libxslt libcap
     xdg_utils yasm minizip libwebp
-    libusb1 re2 zlib libvpx
+    libusb1 re2 zlib
   ];
 
   # build paths and release info
