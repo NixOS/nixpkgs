@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, gx, gx-go }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchgx }:
 
 buildGoPackage rec {
   name = "ipfs-${version}";
@@ -7,6 +7,13 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/ipfs/go-ipfs";
 
+  extraSrcPaths = [
+    (fetchgx {
+      inherit name src;
+      sha256 = "0mm1rs2mbs3rmxfcji5yal9ai3v1w75kk05bfyhgzmcjvi6lwpyb";
+    })
+  ];
+
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "go-ipfs";
@@ -14,15 +21,11 @@ buildGoPackage rec {
     sha256 = "06iq7fmq7p0854aqrnmd0f0jvnxy9958wvw7ibn754fdfii9l84l";
   };
 
-  buildInputs = [ gx gx-go ];
-
-  # Extra build step for gx dependecies
-  preBuild = ''
-    (cd "go/src/${goPackagePath}"; gx install)
-  '';
-
   meta = with stdenv.lib; {
     description = "A global, versioned, peer-to-peer filesystem";
+    homepage = https://ipfs.io/;
     license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
   };
 }
