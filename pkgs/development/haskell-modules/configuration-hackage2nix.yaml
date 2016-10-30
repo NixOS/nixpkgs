@@ -32,7 +32,7 @@ core-packages:
   - xhtml-3000.2.1
 
 default-package-overrides:
-  # LTS Haskell 7.5
+  # LTS Haskell 7.6
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -146,7 +146,7 @@ default-package-overrides:
   - array-memoize ==0.6.0
   - arrow-list ==0.7
   - ascii-progress ==0.3.3.0
-  - asciidiagram ==1.3.1.2
+  - asciidiagram ==1.3.2
   - asn1-encoding ==0.9.4
   - asn1-parse ==0.9.4
   - asn1-types ==0.3.2
@@ -264,7 +264,7 @@ default-package-overrides:
   - cabal-src ==0.3.0.2
   - cache ==0.1.0.0
   - cacophony ==0.8.0
-  - cairo ==0.13.3.0
+  - cairo ==0.13.3.1
   - call-stack ==0.1.0
   - camfort ==0.900
   - carray ==0.1.6.5
@@ -631,7 +631,7 @@ default-package-overrides:
   - gi-pango ==1.0.3
   - gi-soup ==2.4.3
   - gi-webkit ==3.0.3
-  - gio ==0.13.3.0
+  - gio ==0.13.3.1
   - gipeda ==0.3.2.2
   - giphy-api ==0.4.0.0
   - git-fmt ==0.4.1.0
@@ -645,7 +645,7 @@ default-package-overrides:
   - gl ==0.7.8.1
   - glabrous ==0.1.2.0
   - GLFW-b ==1.4.8.1
-  - glib ==0.13.4.0
+  - glib ==0.13.4.1
   - Glob ==0.7.12
   - gloss ==1.10.2.3
   - gloss-rendering ==1.10.3.3
@@ -762,10 +762,10 @@ default-package-overrides:
   - grouped-list ==0.2.1.2
   - groupoids ==4.0
   - groups ==0.4.0.0
-  - gtk ==0.14.5
+  - gtk ==0.14.6
   - gtk2hs-buildtools ==0.13.2.1
-  - gtk3 ==0.14.5
-  - gtksourceview3 ==0.13.3.0
+  - gtk3 ==0.14.6
+  - gtksourceview3 ==0.13.3.1
   - H ==0.9.0.1
   - hackage-db ==1.22
   - hackage-mirror ==0.1.1.1
@@ -846,9 +846,9 @@ default-package-overrides:
   - hjsmin ==0.2.0.2
   - hjsonpointer ==1.0.0.2
   - hjsonschema ==1.1.0.1
-  - hledger ==0.27.1
+  - hledger ==1.0.1
   - hledger-interest ==1.4.4
-  - hledger-lib ==0.27.1
+  - hledger-lib ==1.0.1
   - hlibgit2 ==0.18.0.15
   - hlibsass ==0.1.5.0
   - hlint ==1.9.35
@@ -876,7 +876,7 @@ default-package-overrides:
   - hPDB ==1.2.0.9
   - hPDB-examples ==1.2.0.7
   - HPDF ==1.4.10
-  - hpio ==0.8.0.3
+  - hpio ==0.8.0.4
   - hprotoc ==2.4.0
   - hquantlib ==0.0.3.2
   - hreader ==1.0.2
@@ -938,7 +938,7 @@ default-package-overrides:
   - http-date ==0.0.6.1
   - http-link-header ==1.0.2
   - http-media ==0.6.4
-  - http-reverse-proxy ==0.4.3.1
+  - http-reverse-proxy ==0.4.3.2
   - http-streams ==0.8.4.0
   - http-types ==0.9.1
   - http2 ==1.6.2
@@ -950,7 +950,7 @@ default-package-overrides:
   - hvect ==0.3.1.0
   - hw-bits ==0.1.0.1
   - hw-conduit ==0.0.0.11
-  - hw-diagnostics ==0.0.0.4
+  - hw-diagnostics ==0.0.0.5
   - hw-parser ==0.0.0.1
   - hw-prim ==0.1.0.3
   - hw-rankselect ==0.3.0.0
@@ -990,7 +990,7 @@ default-package-overrides:
   - inline-r ==0.9.0.0
   - insert-ordered-containers ==0.1.0.1
   - integration ==0.2.1
-  - intero ==0.1.18
+  - intero ==0.1.19
   - interpolate ==0.1.0
   - interpolatedstring-perl6 ==1.0.0
   - IntervalMap ==0.5.1.1
@@ -1008,8 +1008,8 @@ default-package-overrides:
   - iproute ==1.7.1
   - IPv6Addr ==0.6.1.0
   - irc ==0.6.1.0
-  - irc-client ==0.4.4.0
-  - irc-conduit ==0.2.1.0
+  - irc-client ==0.4.4.1
+  - irc-conduit ==0.2.1.1
   - irc-ctcp ==0.1.3.0
   - irc-dcc ==2.0.0
   - islink ==0.1.0.0
@@ -1050,7 +1050,7 @@ default-package-overrides:
   - lackey ==0.4.1
   - language-c ==0.5.0
   - language-c-quote ==0.11.7
-  - language-dockerfile ==0.3.4.0
+  - language-dockerfile ==0.3.5.0
   - language-ecmascript ==0.17.1.0
   - language-fortran ==0.5.1
   - language-glsl ==0.2.0
@@ -1148,7 +1148,7 @@ default-package-overrides:
   - MissingH ==1.4.0.1
   - mmap ==0.5.9
   - mmorph ==1.0.6
-  - mockery ==0.3.3
+  - mockery ==0.3.4
   - modify-fasta ==0.8.2.1
   - moesocks ==1.0.0.41
   - monad-control ==1.0.1.0
@@ -1200,7 +1200,7 @@ default-package-overrides:
   - MusicBrainz ==0.2.4
   - mustache ==2.1
   - mutable-containers ==0.3.3
-  - mwc-probability ==1.2.1
+  - mwc-probability ==1.2.2
   - mwc-random ==0.13.4.0
   - mwc-random-monad ==0.7.3.1
   - nagios-check ==0.3.2
@@ -1280,15 +1280,15 @@ default-package-overrides:
   - pagination ==0.1.1
   - palette ==0.1.0.4
   - pandoc ==1.17.1
-  - pandoc-citeproc ==0.10.1.2
+  - pandoc-citeproc ==0.10.2.2
   - pandoc-types ==1.16.1.1
-  - pango ==0.13.3.0
+  - pango ==0.13.3.1
   - parallel ==3.2.1.0
   - parallel-io ==0.3.3
   - parseargs ==0.2.0.7
   - parsec ==3.1.11
   - parsers ==0.12.4
-  - partial-handler ==1.0.1
+  - partial-handler ==1.0.2
   - path ==0.5.9
   - path-extra ==0.0.3
   - path-io ==1.2.0
@@ -1378,7 +1378,7 @@ default-package-overrides:
   - primitive ==0.6.1.0
   - process-extras ==0.4.1.4
   - product-profunctors ==0.7.1.0
-  - profiteur ==0.3.0.2
+  - profiteur ==0.3.0.3
   - profunctor-extras ==4.0
   - profunctors ==5.2
   - project-template ==0.2.0
@@ -1390,7 +1390,7 @@ default-package-overrides:
   - protobuf-simple ==0.1.0.2
   - protocol-buffers ==2.4.0
   - protocol-buffers-descriptor ==2.4.0
-  - protolude ==0.1.8
+  - protolude ==0.1.10
   - proxied ==0.2
   - psql-helpers ==0.1.0.0
   - PSQueue ==1.1
@@ -1406,6 +1406,7 @@ default-package-overrides:
   - quantum-random ==0.6.3
   - QuasiText ==0.1.2.6
   - questioner ==0.1.1.0
+  - quickbench ==1.0
   - QuickCheck ==2.8.2
   - quickcheck-arbitrary-adt ==0.2.0.0
   - quickcheck-assertions ==0.2.0
@@ -1470,7 +1471,7 @@ default-package-overrides:
   - repa-io ==3.4.1.1
   - RepLib ==0.5.4
   - reroute ==0.4.0.1
-  - resolve-trivial-conflicts ==0.3.2.2
+  - resolve-trivial-conflicts ==0.3.2.3
   - resource-pool ==0.2.3.2
   - resourcet ==1.1.8
   - rest-client ==0.5.1.1
@@ -1597,7 +1598,7 @@ default-package-overrides:
   - spdx ==0.2.1.0
   - speculation ==1.5.0.3
   - speedy-slice ==0.1.3
-  - sphinx ==0.6.0.1
+  - sphinx ==0.6.0.2
   - Spintax ==0.1.0.1
   - splice ==0.6.1.1
   - split ==0.2.3.1
@@ -1713,7 +1714,7 @@ default-package-overrides:
   - test-framework-th ==0.2.4
   - test-simple ==0.1.8
   - testing-feat ==0.4.0.3
-  - texmath ==0.8.6.6
+  - texmath ==0.8.6.7
   - text ==1.2.2.1
   - text-all ==0.3.0.2
   - text-binary ==0.2.1.1
@@ -1859,7 +1860,7 @@ default-package-overrides:
   - vinyl ==0.5.2
   - vinyl-utils ==0.3.0.0
   - void ==0.7.1
-  - vty ==5.11.1
+  - vty ==5.11.3
   - wai ==3.2.1.1
   - wai-app-static ==3.1.6.1
   - wai-conduit ==3.0.0.3
@@ -1896,8 +1897,8 @@ default-package-overrides:
   - web-routes-wai ==0.24.3
   - webdriver ==0.8.4
   - webdriver-angular ==0.1.11
-  - webkitgtk3 ==0.14.2.0
-  - webkitgtk3-javascriptcore ==0.14.2.0
+  - webkitgtk3 ==0.14.2.1
+  - webkitgtk3-javascriptcore ==0.14.2.1
   - webpage ==0.0.4
   - webrtc-vad ==0.1.0.3
   - websockets ==0.9.7.0
@@ -1909,7 +1910,7 @@ default-package-overrides:
   - Win32-extras ==0.2.0.1
   - Win32-notify ==0.3.0.1
   - with-location ==0.1.0
-  - withdependencies ==0.2.3
+  - withdependencies ==0.2.4
   - witherable ==0.1.3.3
   - wizards ==1.0.2
   - wl-pprint ==1.2
@@ -1968,7 +1969,7 @@ default-package-overrides:
   - yesod-eventsource ==1.4.0.1
   - yesod-fay ==0.8.0
   - yesod-fb ==0.3.4
-  - yesod-form ==1.4.7.1
+  - yesod-form ==1.4.8
   - yesod-form-richtext ==0.1.0.0
   - yesod-gitrepo ==0.2.1.0
   - yesod-gitrev ==0.1.0.0
@@ -1991,7 +1992,7 @@ default-package-overrides:
   - zip ==0.1.3
   - zip-archive ==0.3.0.5
   - zippers ==0.2.2
-  - zlib ==0.6.1.1
+  - zlib ==0.6.1.2
   - zlib-bindings ==0.1.1.5
   - zlib-lens ==0.1.2.1
   - zoom-refs ==0.0.0.1
