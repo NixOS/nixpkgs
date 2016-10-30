@@ -356,14 +356,14 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
         <programlisting><![CDATA[
 { pkgs ? import <nixpkgs> {} }:
 let
-  myEmacs = pkgs.lib.overrideDerivation (pkgs.emacs.override {
+  myEmacs = (pkgs.emacs.override {
     # Use gtk3 instead of the default gtk2
     withGTK3 = true;
     withGTK2 = false;
-  }) (attrs: {
+  }).overrideAttrs (attrs: {
     # I don't want emacs.desktop file because I only use
     # emacsclient.
-    postInstall = attrs.postInstall + ''
+    postInstall = (attrs.postInstall or "") + ''
       rm $out/share/applications/emacs.desktop
     '';
   });
