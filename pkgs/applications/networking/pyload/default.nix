@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey, gdbm }:
+{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey }:
 pythonPackages.buildPythonApplication rec {
   version = "0.4.9-next";
   name = "pyLoad-" + version;
