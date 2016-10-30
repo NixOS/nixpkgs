@@ -23,7 +23,7 @@ getVersion=0
 nonFlagArgs=0
 [[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
 
-params=("$@")
+expandResponseParams "$@"
 n=0
 while [ $n -lt ${#params[*]} ]; do
     p=${params[n]}
