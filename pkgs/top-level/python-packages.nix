@@ -25186,6 +25186,7 @@ in {
       sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
     };
 
+    doCheck = false;
     propagatedBuildInputs = with self; [ requests2 six requests_oauthlib ];
 
     meta = {
