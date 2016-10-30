@@ -8,7 +8,7 @@ mkdir $out/nix-support
 cflagsCompile="-B$out/bin/"
 
 if test -z "$nativeLibc" -a -n "$libc"; then
-    cflagsCompile="$cflagsCompile -B$gccLibs/lib -B$libc/lib/ -isystem $libc/include"
+    cflagsCompile="$cflagsCompile -B$gccLibs/lib -B$libc/lib/ -isystem $libc_dev/include"
     ldflags="$ldflags -L$libc/lib"
     # Get the proper dynamic linker for glibc and uclibc. 
     dlinker=`eval 'echo $libc/lib/ld*.so.?'`
