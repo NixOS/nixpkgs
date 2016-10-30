@@ -3,17 +3,17 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  version = "0.3.0";
+  version = "0.3.3";
   name = "loc-${version}";
 
   src = fetchFromGitHub {
-    owner = "caga";
+    owner = "cgag";
     repo = "loc";
-    rev = "v0.3.0";
-    sha256 = "1ckrf77s1glrqi0gvrv9wqmip4i97dk0arn0iz87jg4q2wfss85k";
+    rev = "e2dfe2c1452f25f58974b545292b11dc450afd3d";
+    sha256 = "1kp5iawig6304gs1289aivgsq44zhnn0ykqv9ymwpvj0g12l4l8r";
   };
 
-  depsSha256 = "1ckrf77s1glrqi0gvrv9wqmip4i97dk0arn0iz87jg4q2wfss85k";
+  depsSha256 = "01jww6d4dzb5pq6vcrp3xslhxic0vp0gicsddda4adzqg1lab8c2";
 
   meta = {
     homepage = "http://github.com/cgag/loc";
