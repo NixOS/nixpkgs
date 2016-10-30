@@ -297,6 +297,7 @@
   ./services/monitoring/longview.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
+  ./services/monitoring/munin-ng.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/node-exporter.nix

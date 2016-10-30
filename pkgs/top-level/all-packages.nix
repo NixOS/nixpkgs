@@ -10188,6 +10188,7 @@ in
   nagios = callPackage ../servers/monitoring/nagios { };
 
   munin = callPackage ../servers/monitoring/munin { };
+  muninUnstable = callPackage ../servers/monitoring/munin/unstable.nix { };
 
   nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official-2.x.nix { };
 
