@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''make install LDCONFIG=true'';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://yices.csl.sri.com";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.unfreeRedistributable;
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }
