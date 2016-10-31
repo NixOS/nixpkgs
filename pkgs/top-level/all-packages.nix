@@ -250,6 +250,8 @@ in
   fetchNuGet = callPackage ../build-support/fetchnuget { };
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
 
+  fetchgx = callPackage ../build-support/fetchgx { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
@@ -2326,6 +2328,8 @@ in
   };
 
   lnav = callPackage ../tools/misc/lnav { };
+
+  loc = callPackage ../development/misc/loc { };
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
@@ -5505,6 +5509,7 @@ in
   pythonFull = python.override{x11Support=true;};
   python2Full = python2.override{x11Support=true;};
   python3Full = python3.override{x11Support=true;};
+  python27Full = python2Full;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python2Packages;
@@ -6045,7 +6050,6 @@ in
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
   gnumake380 = callPackage ../development/tools/build-managers/gnumake/3.80 { };
-  gnumake381 = callPackage ../development/tools/build-managers/gnumake/3.81 { };
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
   gnumake3 = gnumake382;
   gnumake40 = callPackage ../development/tools/build-managers/gnumake/4.0 { };
@@ -9934,10 +9938,6 @@ in
   dictdDBs = recurseIntoAttrs (callPackages ../servers/dict/dictd-db.nix {});
 
   dictDBCollector = callPackage ../servers/dict/dictd-db-collector.nix {};
-
-  dictdWiktionary = callPackage ../servers/dict/dictd-wiktionary.nix {};
-
-  dictdWordnet = callPackage ../servers/dict/dictd-wordnet.nix {};
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
@@ -17114,6 +17114,8 @@ in
   PPSSPP = callPackage ../misc/emulators/ppsspp { SDL = SDL2; };
 
   pt = callPackage ../applications/misc/pt { };
+
+  pyload = callPackage ../applications/networking/pyload {};
 
   uae = callPackage ../misc/emulators/uae { };
 

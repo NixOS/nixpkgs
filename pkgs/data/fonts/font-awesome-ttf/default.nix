@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "font-awesome-${version}";
-  version = "4.6.3";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner  = "FortAwesome";
     repo   = "Font-Awesome";
     rev    = "v${version}";
-    sha256 = "135k1xskksqzriad9zzcxa79iprldyp2bnmc22wslak0dvjz74w0";
+    sha256 = "0w30y26jp8nvxa3iiw7ayl6rkza1rz62msl9xw3srvxya1c77grc";
   };
 
   buildCommand = ''
