@@ -193,6 +193,22 @@ rec {
     type = "pom";
   };
 
+  mavenParent_11 = fetchMaven {
+    version = "11";
+    baseName = "maven-parent";
+    package = "/org/apache/maven";
+    sha512 = "315cgnn7mvwq5kyrln3nw85x3893zdd4dg267gk9xkig1mwjpa86l6yyd6qnrwxywcrgn0wmn2l781yvwip9rys4dd9jmbma2qhzapp";
+    type = "pom";
+  };
+
+  mavenParent_13 = fetchMaven {
+    version = "13";
+    baseName = "maven-parent";
+    package = "/org/apache/maven";
+    sha512 = "315cgnn7mvwq5kyrln3nw85x3893zdd4dg267gk9xkig1mwjpa86l6yyd6qnrwxywcrgn0wmn2l781yvwip9rys4dd9jmbma2qhzapp";
+    type = "pom";
+  };
+
   mavenParent_15 = fetchMaven {
     version = "15";
     baseName = "maven-parent";

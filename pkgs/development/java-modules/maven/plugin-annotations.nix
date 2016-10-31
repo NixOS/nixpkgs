@@ -1,7 +1,7 @@
 { fetchMaven }:
 
 rec {
-  mavenPluginAnnotations = map (obj: fetchMaven {
+  mavenPluginAnnotations_3_1 = map (obj: fetchMaven {
     version = "3.1";
     baseName = "maven-plugin-annotations";
     package = "/org/apache/maven/plugin-tools";

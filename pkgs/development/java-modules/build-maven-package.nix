@@ -4,10 +4,12 @@
 with builtins;
 with lib;
 
-stdenv.mkDerivation rec {
+let
+  mavenMinimal = import ./maven-minimal.nix { inherit pkgs lib stdenv maven; };
+in stdenv.mkDerivation rec {
   inherit mavenDeps src name meta m2Path;
 
-  flatDeps = unique (flatten (mavenDeps ++ pkgs.javaPackages.mavenPlugins.mavenMinimal));
+  flatDeps = unique (flatten (mavenDeps ++ mavenMinimal.mavenMinimal));
 
   propagatedBuildInput = [ maven ] ++ flatDeps;
 

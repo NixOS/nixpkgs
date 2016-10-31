@@ -1,9 +1,9 @@
 { fetchMaven }:
 
 rec {
-  mavenSurefireBooter_2_12_4 = map (obj: fetchMaven {
+  mavenSurefireApi_2_12_4 = map (obj: fetchMaven {
     version = "2.12.4";
-    baseName = "maven-surefire-booter";
+    baseName = "maven-surefire-api";
     package = "/org/apache/maven/surefire";
     sha512 = obj.sha512;
     type = obj.type;
