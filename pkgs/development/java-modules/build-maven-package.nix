@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     echo "<settings><mirrors>\
         <mirror><id>tmpm2</id><url>file://$out/m2</url><mirrorOf>*</mirrorOf></mirror></mirrors>\
         <localRepository>$out/m2</localRepository></settings>" >> $out/m2/settings.xml
-    ${maven}/bin/mvn clean install -Dmaven.test.skip=true -gs $out/m2/settings.xml
+    ${maven}/bin/mvn clean package -Dmaven.test.skip=true -Danimal.sniffer.skip=true -gs $out/m2/settings.xml
     cp -v ./target/*.jar $out/target/
   '';
 }

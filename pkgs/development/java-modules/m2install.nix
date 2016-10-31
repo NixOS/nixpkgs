@@ -1,10 +1,10 @@
 { stdenv, fetchurl }:
-{ version, baseName, package, sha512, type ? "jar" }:
+{ version, baseName, package, sha512, type ? "jar", suffix ? "" }:
 
 let
   name = "${baseName}-${version}";
   m2Path = "${package}/${baseName}/${version}";
-  m2File = "${name}.${type}";
+  m2File = "${name}${suffix}.${type}";
   src = fetchurl rec {
       inherit sha512;
       url = "mirror://maven/${m2Path}/${m2File}";

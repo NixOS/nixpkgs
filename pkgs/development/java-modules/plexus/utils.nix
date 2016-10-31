@@ -67,6 +67,17 @@ rec {
     { type = "pom"; sha512 = "29knasqhkvjif27gm3ycqhc206ycgc9920mccw7biybxmiqqajyfvv74f02sqpavlk5h6l45cfb20bmldwfznvzz9bw4zhvc12s9y5h"; }
   ];
 
+  plexusUtils_1_5_6 = map (obj: fetchMaven {
+    version = "1.5.6";
+    baseName = "plexus-utils";
+    package = "/org/codehaus/plexus";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "26p385szy6sphplalxc9750f29z7fnvmaz7m1fv0mx7p7qmvkk6pm5m4kl636m8jsflkfmzh4f4y5vj5vhxypfyc4pdzfsp9xyc3vwq"; }
+    { type = "pom"; sha512 = "261yv9sgjmslxjsfx7fj1ma53ld930qxic4br5m88wv96skyni09w2nh9sslgrmpxj3q89ykhq3fciscn40066v1qn0h0f6lbk3w68r"; }
+  ];
+
   plexusUtils_1_5_8 = map (obj: fetchMaven {
     version = "1.5.8";
     baseName = "plexus-utils";

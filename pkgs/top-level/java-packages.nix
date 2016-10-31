@@ -13,6 +13,12 @@ in {
   inherit (callPackage ../development/java-modules/eclipse/aether-util.nix { inherit fetchMaven; })
     aetherUtil_0_9_0_M2;
 
+  inherit (callPackage ../development/java-modules/apache/ant.nix { inherit fetchMaven; })
+    ant_1_8_2;
+
+  inherit (callPackage ../development/java-modules/apache/ant-launcher.nix { inherit fetchMaven; })
+    antLauncher_1_8_2;
+
   inherit (callPackage ../development/java-modules/beanshell/bsh.nix { inherit fetchMaven; })
     bsh_2_0_b4;
 
@@ -23,9 +29,13 @@ in {
   inherit (callPackage ../development/java-modules/apache/commons-cli.nix { inherit fetchMaven; })
     commonsCli_1_0;
 
+  inherit (callPackage ../development/java-modules/apache/commons-io.nix { inherit fetchMaven; })
+    commonsIo_2_1;
+
   inherit (callPackage ../development/java-modules/apache/commons-lang.nix { inherit fetchMaven; })
     commonsLang_2_1
-    commonsLang_2_3;
+    commonsLang_2_3
+    commonsLang_2_6;
 
   inherit (callPackage ../development/java-modules/apache/commons-lang3.nix { inherit fetchMaven; })
     commonsLang3_3_1;
@@ -65,6 +75,7 @@ in {
     mavenArtifactManager_2_2_1;
 
   inherit (callPackage ../development/java-modules/maven/common-artifact-filters.nix { inherit fetchMaven; })
+    mavenCommonArtifactFilters_1_2
     mavenCommonArtifactFilters_1_3
     mavenCommonArtifactFilters_1_4;
 
@@ -107,7 +118,8 @@ in {
     mavenMonitor_2_2_1;
 
   inherit (callPackage ../development/java-modules/maven/plugin-annotations.nix { inherit fetchMaven; })
-    mavenPluginAnnotations_3_1;
+    mavenPluginAnnotations_3_1
+    mavenPluginAnnotations_3_2;
 
   inherit (callPackage ../development/java-modules/maven/plugin-api.nix { inherit fetchMaven; })
     mavenPluginApi_2_0_6
@@ -136,6 +148,7 @@ in {
     mavenProfile_2_2_1;
 
   inherit (callPackage ../development/java-modules/maven/project.nix { inherit fetchMaven; })
+    mavenProject_2_0_1
     mavenProject_2_0_6
     mavenProject_2_0_9
     mavenProject_2_2_1;
@@ -161,17 +174,24 @@ in {
     mavenSharedUtils_0_1;
 
   inherit (callPackage ../development/java-modules/maven/surefire-api.nix { inherit fetchMaven; })
-    mavenSurefireApi_2_12_4;
+    mavenSurefireApi_2_12_4
+    mavenSurefireApi_2_17;
 
   inherit (callPackage ../development/java-modules/maven/surefire-booter.nix { inherit fetchMaven; })
-    mavenSurefireBooter_2_12_4;
+    mavenSurefireBooter_2_12_4
+    mavenSurefireBooter_2_17;
 
   inherit (callPackage ../development/java-modules/maven/surefire-common.nix { inherit fetchMaven; })
-    mavenSurefireCommon_2_12_4;
+    mavenSurefireCommon_2_12_4
+    mavenSurefireCommon_2_17;
 
   inherit (callPackage ../development/java-modules/maven/toolchain.nix { inherit fetchMaven; })
     mavenToolchain_1_0
-    mavenToolchain_2_0_9;
+    mavenToolchain_2_0_9
+    mavenToolchain_2_2_1;
+
+  inherit (callPackage ../development/java-modules/mojo/animal-sniffer.nix { inherit fetchMaven; })
+    mojoAnimalSniffer_1_11;
 
   inherit (callPackage ../development/java-modules/plexus/archiver.nix { inherit fetchMaven; })
     plexusArchiver_2_1;
@@ -180,7 +200,8 @@ in {
     plexusBuildApi_0_0_4;
 
   inherit (callPackage ../development/java-modules/plexus/classworlds.nix { inherit fetchMaven; })
-    plexusClassworlds_2_2_2;
+    plexusClassworlds_2_2_2
+    plexusClassworlds_2_4;
 
   inherit (callPackage ../development/java-modules/plexus/compiler-api.nix { inherit fetchMaven; })
     plexusCompilerApi_2_2;
@@ -224,6 +245,7 @@ in {
     plexusUtils_1_4_5
     plexusUtils_1_5_1
     plexusUtils_1_5_5
+    plexusUtils_1_5_6
     plexusUtils_1_5_8
     plexusUtils_1_5_15
     plexusUtils_2_0_5
@@ -232,6 +254,21 @@ in {
     plexusUtils_3_0_5
     plexusUtils_3_0_8;
 
+  inherit (callPackage ../development/java-modules/sisu/guice.nix { inherit fetchMaven; })
+    sisuGuice_2_9_4;
+
+  inherit (callPackage ../development/java-modules/sisu/inject-bean.nix { inherit fetchMaven; })
+    sisuInjectBean_2_1_1;
+
+  inherit (callPackage ../development/java-modules/sisu/inject-plexus.nix { inherit fetchMaven; })
+    sisuInjectPlexus_2_1_1;
+
   inherit (callPackage ../development/java-modules/apache/xbean-reflect.nix { inherit fetchMaven; })
     xbeanReflect_3_4;
+
+  inherit (callPackage ../development/java-modules/xerces/impl.nix { inherit fetchMaven; })
+    xercesImpl_2_8_0;
+
+  inherit (callPackage ../development/java-modules/xml-apis { inherit fetchMaven; })
+    xmlApis_1_3_03;
 }

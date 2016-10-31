@@ -1,6 +1,17 @@
 { fetchMaven }:
 
 rec {
+  mavenCommonArtifactFilters_1_2 = map (obj: fetchMaven {
+    version = "1.2";
+    baseName = "maven-common-artifact-filters";
+    package = "/org/apache/maven/shared";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "pom"; sha512 = "33g4qwxxnwdzx8h5xh5gjx8ijy6cmc5iyv0jgn70hvz1zqnilr49ibzjnichyb3m77zma30zb1njgw7fbnlx177ph5h2w0radkh3m88"; }
+    { type = "jar"; sha512 = "1z55x8hrb9g4kk21jsk9n4r26ncgsxinr18nmjgxsrcbaxcjhxbhx3nin24gwvcy6zh2d6gv26dng8i90ccc1qxvpmga2ahk68jfyjk"; }
+  ];
+
   mavenCommonArtifactFilters_1_3 = map (obj: fetchMaven {
     version = "1.3";
     baseName = "maven-common-artifact-filters";
