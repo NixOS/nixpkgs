@@ -92,14 +92,14 @@ in
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "local-fs.target" ];
-      path  = [ pkgs.ipfs pkgs.runit ];
+      path  = [ pkgs.ipfs pkgs.su pkgs.bash ];
 
       preStart =
         ''
           install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
           if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
             cd ${cfg.dataDir}
-            ${pkgs.runit}/bin/chpst -u "${cfg.user}:${cfg.group}" ipfs init
+            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c "${ipfs}/bin/ipfs init"
           fi
         '';
 
