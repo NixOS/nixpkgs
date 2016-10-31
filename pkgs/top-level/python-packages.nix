@@ -364,6 +364,24 @@ in {
     };
   };
 
+  altair = buildPythonPackage rec {
+    name = "altair-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/altair/${name}.tar.gz";
+      sha256 = "024drhmiw8w3dl7dbal0pvnlfd3sv4n1rqywv2jb488b3fzm704r";
+    };
+
+    propagatedBuildInputs = with self; [ vega pandas ipython traitlets ];
+
+    meta = {
+      description = "A declarative statistical visualization library for Python.";
+      homepage = https://github.com/altair-viz/altair;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
   vega = buildPythonPackage rec {
     name = "vega-0.4.4";
 
