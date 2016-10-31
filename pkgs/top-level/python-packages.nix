@@ -10706,6 +10706,9 @@ in {
 
     buildInputs = [ self.django ];
 
+    # There is no test embedded
+    doCheck = false;
+
     meta = {
       description = "A snapshot of django-filebrowser for the Mezzanine CMS";
       longDescription = ''
