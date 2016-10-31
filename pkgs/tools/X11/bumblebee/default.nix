@@ -90,13 +90,6 @@ in stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    # Substitute the path to the actual modinfo program in module.c.
-    # Note: module.c also calls rmmod and modprobe, but those just have to
-    # be in PATH, and thus no action for them is required.
-
-    substituteInPlace src/module.c \
-      --replace "/sbin/modinfo" "${kmod}/sbin/modinfo"
-
     # Don't use a special group, just reuse wheel.
     substituteInPlace configure \
       --replace 'CONF_GID="bumblebee"' 'CONF_GID="wheel"'
