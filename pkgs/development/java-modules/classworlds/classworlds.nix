@@ -1,6 +1,17 @@
 { fetchMaven }:
 
 rec {
+  classworlds_1_1_alpha2 = map (obj: fetchMaven {
+    version = "1.1-alpha-2";
+    baseName = "classworlds";
+    package = "/classworlds";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "pom"; sha512 = "027b0s13ck41wg75z7bz1zxazdxp56llxlg4z9kp01wys1sbkng8s0i0mxyvjaq61q5lg2gfrxypnzg7vha23vq57hkdhwyksjdcd5c"; }
+    { type = "jar"; sha512 = "36vir8jja85cg7khaf2qjln7m8q5iq0n43vvkxkwwngv67ffpvqqz6j1fscvl16hzb0nf6j9gzkcrgk3mk9jl49vrj3fw7c173m4xzb"; }
+  ];
+
   classworlds_1_1 = map (obj: fetchMaven {
     version = "1.1";
     baseName = "classworlds";

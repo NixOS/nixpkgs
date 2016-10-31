@@ -30,7 +30,7 @@ rec {
     sha512 = obj.sha512;
     type = obj.type;
   }) [
-    { type = "jar"; sha512 = "2v315cv62k3lmi23msk5rj9bijsafcajw7053jdzzk4zv03vdpdndm5cr995azrpdcvkcdq2m8zh5pdf44nzcdf2rvpm4nxdc2wr5rl"; }
-    { type = "pom"; sha512 = "05iif04frjgbmg7zb3jygn9av2ja48vs2z35b2zrlmgf3s1fxqlr4wxylrrmmk8r0hvg4qmg5j0inm414n0v4ipn08hrpzik5nhdfgy"; }
+    { type = "jar"; sha512 = "13lgj34xf9wgwx87z5gbqmq3f3l2dqprk68ji1vig49k2ngxfa8xz3a8qh7gbl9l234gkbdl3dcsafr158bi0m3n5myrczbz0wfcia7"; }
+    { type = "pom"; sha512 = "0m6fqn507a36rpk0bzwv2zzl1gngcf3h4lrbw8abkmyq7npaqcg57fb5wy6cm30r2cjv2vffrdi142wjxzvrqdr08lmi5nf57gi1sng"; }
   ];
 }

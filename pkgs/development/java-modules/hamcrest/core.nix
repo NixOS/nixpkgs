@@ -1,7 +1,6 @@
 { fetchMaven }:
 
 rec {
-  # Ant build, just fetch the binary
   hamcrestCore_1_3 = map (obj: fetchMaven {
     version = "1.3";
     baseName = "hamcrest-core";

@@ -23,6 +23,17 @@ rec {
     { type = "pom"; sha512 = "0g0cbqihzxyaa1b0z9a7qb8lkhcm8bzxi7qnqaab2n2zaaql6jyy7cf4z4yzqw3yfj7ylqvydiwp32j2c7nqacyx0hmcydqkqg46kxv"; }
   ];
 
+  mavenArtifact_2_2_1 = map (obj: fetchMaven {
+    version = "2.2.1";
+    baseName = "maven-artifact";
+    package = "/org/apache/maven";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "1wfffq39ay1cdzany6x0d6h7icdqrvmj4py35a8i2aw94bc8mf6cam7lf8z7jjckhrnb7yxbqz6pj8sxsgpkwnl2q4flqaczr8nnx4j"; }
+    { type = "pom"; sha512 = "099hkdbccd9cf6w64c37z1b2i54h4y0bfx5n56birikgy3s92rrl4x454gvw3wnrpvhkikwvdyw9dv03w40rn50kdwgy0mxc3zgs6l4"; }
+  ];
+
   mavenArtifact_3_0_3 = map (obj: fetchMaven {
     version = "3.0.3";
     baseName = "maven-artifact";

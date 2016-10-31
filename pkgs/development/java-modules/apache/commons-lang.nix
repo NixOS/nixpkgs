@@ -1,6 +1,17 @@
 { fetchMaven }:
 
 rec {
+  commonsLang_2_1 = map (obj: fetchMaven {
+    version = "2.1";
+    baseName = "commons-lang";
+    package = "/commons-lang";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "pom"; sha512 = "1hr3q67cn0nk5kn9vdfs8155cw814jf20jk7dsn3cn0a6l2j6dx297z6akz5f62dkkn0nj4pac7z4wvnawisnvzhpg6q6qhwj7wwc8n"; }
+    { type = "jar"; sha512 = "2phbi7q2k3v48gyys7s0yw8xaa9kpczwif5jfqgfarzf7il1r0vplpwgwcnlsxpifjjnap7lw0yq38zp0mbajp7h8p5z0qp7gisa4m3"; }
+  ];
+
   commonsLang_2_3 = map (obj: fetchMaven {
     version = "2.3";
     baseName = "commons-lang";

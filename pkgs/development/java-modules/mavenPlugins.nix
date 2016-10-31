@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib, maven }:
+{ pkgs, stdenv, maven }:
 
 with pkgs;
 with pkgs.javaPackages;

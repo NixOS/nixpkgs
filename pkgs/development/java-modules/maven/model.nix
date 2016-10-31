@@ -30,8 +30,8 @@ rec {
     sha512 = obj.sha512;
     type = obj.type;
   }) [
-    { type = "jar"; sha512 = "14pxgdcim20x9lisf510nazzlcjxv9fpqabkdn0d86qa7d9270m4fmya5crasx2np9h0gxl407d77vcjf99fdxizg7i32w35yljqp3z"; }
-    { type = "pom"; sha512 = "2vvyawhfq0gwa54ir5l2drcfxphkd47ghwgz89v3vsqgjry714vp01pa5a6yjlwfd45mknyrb71ws6dki4zjgzhdm09ck7cxg5qkpr9"; }
+    { type = "jar"; sha512 = "1f9ndvsxpiyybmr5p4pl0xrvxap17grad10vr0pskvx8g8phy7w7kmihhg8gd8m91nbikpaqycm54dp5xmhqzyq85dqapxbiy2m599v"; }
+    { type = "pom"; sha512 = "11imkxiw9wbgnv7zpghdmgpf02v668z78xr5v0cqyay88ph7wjbscwllbgx3v6rayffx64jbhlvsw97m9sdncrfih2c9wkvfp5m48kn"; }
   ];
 
   mavenModel_3_0_3 = map (obj: fetchMaven {
