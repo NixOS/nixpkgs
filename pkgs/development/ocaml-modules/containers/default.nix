@@ -4,10 +4,9 @@
 let
 
   mkpath = p:
-    let v = stdenv.lib.getVersion ocaml; in
-      "${p}/lib/ocaml/${v}/site-lib";
+      "${p}/lib/ocaml/${ocaml.version}/site-lib";
 
-  version = "0.18";
+  version = "0.20";
 
 in
 
@@ -18,7 +17,7 @@ stdenv.mkDerivation {
     owner = "c-cube";
     repo = "ocaml-containers";
     rev = "${version}";
-    sha256 = "169j8vqg8h70wbldjg610jqikfk23ggw8zypmpzv3piym5p1dfiw";
+    sha256 = "1gwflgdbvj293cwi434aafrsgpdgj2sv7r1ghm4l4k5xn17l0qzg";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild cppo gen sequence qtest ounit ocaml_oasis qcheck ];
