@@ -8,9 +8,7 @@ let
   cfg = config.services.ipfs;
 
 
-  ipfsFlags = ''${if cfg.autoMigrate then "--migrate" else ""}
-                ${if cfg.enableGC    then "--enable-gc" else ""}
-                ${toString cfg.extraFlags}'';
+  ipfsFlags = ''${if cfg.autoMigrate then "--migrate" else ""} ${if cfg.enableGC then "--enable-gc" else ""} ${toString cfg.extraFlags}'';
 
 in
 
@@ -98,8 +96,7 @@ in
 
       preStart =
         ''
-          mkdir -m 0755 -p ${cfg.dataDir}
-          chown ${cfg.user}:${cfg.group} ${cfg.dataDir}
+          install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
           if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
             cd ${cfg.dataDir}
             ${pkgs.runit}/bin/chpst -u "${cfg.user}:${cfg.group}" ipfs init
@@ -108,7 +105,6 @@ in
 
       serviceConfig = {
         ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags}";
-        Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = true;
