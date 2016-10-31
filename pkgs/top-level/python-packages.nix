@@ -13967,6 +13967,7 @@ in {
       url = "https://github.com/stephenmcd/mezzanine/archive/${version}.tar.gz";
       sha256 = "1cd7d3dji8q4mvcnf9asxn8j109pd5g5d5shr6xvn0iwr35qprgi";
     };
+    patches = [ ../development/python-modules/mezzanine/writable_settings.patch ];
 
     disabled = isPyPy;
 
