@@ -115,7 +115,7 @@ in {
         chown smtpq.root /var/spool/smtpd/purge
         chmod 700 /var/spool/smtpd/purge
       '';
-      serviceConfig.ExecStart = "${opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
+      serviceConfig.ExecStart = "${pkgs.opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
     };
 

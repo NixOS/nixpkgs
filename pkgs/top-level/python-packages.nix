@@ -1452,13 +1452,13 @@ in {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.10.51";
+    version = "1.11.10";
 
     namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "19n7r6fwnwpi0cyrqh20w80mrcj0b6j3if5p58hi1k3fdp60nscq";
+      sha256 = "174lfpai5cga1ml2bwswjil6h544m57js9ki7hqkr9gdbpa8pyrk";
     };
 
     # No tests included
@@ -2941,16 +2941,16 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.3.1";
+    version = "1.4.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "1rbwcslk9dgayrg3vy3m0bqj767hdy1aphy5wjgz925bsydgxdg6";
+      sha256 = "19ij6cs2n3p5fgipbrq1dybq2sjjvlhg9n5a5sv9wi95x9wqi5wb";
     };
 
-    propagatedBuildInputs = [ self.botocore self.jmespath ] ++
+    propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
                             (if isPy3k then [] else [self.futures]);
     buildInputs = [ self.docutils self.nose self.mock ];
     checkPhase = ''
@@ -2978,12 +2978,12 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.4.41"; # This version is required by awscli
+    version = "1.4.67"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "0c3abr2rxiilqklika8x360pr0mgx7hlhbhj8w72izs2r6ww4dys";
+      sha256 = "15fh3ng33mcbhm76pk9qqglf342qj471gfcqxv0nrl9f8sn3v60q";
     };
 
     propagatedBuildInputs =
@@ -4055,6 +4055,16 @@ in {
       broken = true;
     };
   });
+
+  contexter = buildPythonPackage rec {
+    name = "contexter-${version}";
+    version = "0.1.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/contexter/${name}.tar.gz";
+      sha256 = "0xrnkjya29ya0hkj8y4k9ni2mnr58i6r0xfqlj7wk07v4jfrkc8n";
+    };
+  };
 
   contextlib2 = buildPythonPackage rec {
     name = "contextlib2-${version}";
@@ -5629,11 +5639,11 @@ in {
 
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
-    version = "2.4.2";
+    version = "2.5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "3e95445c1db500a344079a47b171c45ef18f57d188dffdb0e4165c71bea8eb3d";
+      sha256 = "1v9j9fmf8g911yg6k01xa2db6dx3wv73zkk7fncsj7vagjqgs20l";
     };
 
     propagatedBuildInputs = with self; [ self.six ];
@@ -12889,11 +12899,11 @@ in {
   };
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.7.1";
+    name = "jmespath-0.9.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jmespath/${name}.tar.gz";
-      sha256 = "1lazbx65imassd7h24z49za001rvx1lmx8r0l21h4izs7pp14nnd";
+      sha256 = "0g9xvl69y7nr3w7ag4fsp6sm4fqf6vrqjw7504x2hzrrsh3ampq8";
     };
 
     buildInputs = with self; [ nose ];
@@ -19488,7 +19498,7 @@ in {
       sha256 = "0v5w66ir3siimfzg3kc8hfrrilwwnbxq5bvipmrpyxar0kw715vf";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl ];
+    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -19498,13 +19508,17 @@ in {
       export PYCURL_SSL_LIBRARY=openssl
     '';
 
+    #TODO no idea why this is needed
+    postInstall = ''
+      ln -s ${pkgs.openssl.out}/lib/libcrypto* $out/lib/
+    '';
+
     meta = {
       homepage = http://pycurl.sourceforge.net/;
       description = "Python wrapper for libcurl";
       platforms = platforms.linux;
     };
   });
-
 
   pycurl2 = buildPythonPackage (rec {
     name = "pycurl2-7.20.0";
@@ -22464,12 +22478,12 @@ in {
   };
 
   s3transfer = buildPythonPackage rec {
-    version = "0.0.1"; # This version is required by awscli
+    version = "0.1.9";
     name = "s3transfer-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "0ma31zvv7gy240xgd1zw853lpzkdci6mapzpg3x4vycann6yvf9b";
+      sha256 = "0m67nhdnp2pd11j8h4bgz63zq0mvn2f205vrxmr3my8m45kpvb8p";
     };
 
     foo = 1;
@@ -22620,16 +22634,19 @@ in {
 
   scikitimage = buildPythonPackage rec {
     name = "scikit-image-${version}";
-    version = "0.11.3";
+    version = "0.12.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/scikit-image/${name}.tar.gz";
-      sha256 = "768e568f3299966c294b7eb8cd114fc648f7bfaef422ee9cc750dd8d9d09e44b";
+      sha256 = "1iypjww5hk46i9vzg2zlfc9w4vdw029cfyakkkl02isj1qpiknl2";
     };
 
-    buildInputs = with self; [ cython nose numpy six ];
+    buildInputs = with self; [ cython dask nose numpy scipy six ];
 
-    propagatedBuildInputs = with self; [ pillow matplotlib networkx scipy ];
+    propagatedBuildInputs = with self; [ pillow matplotlib networkx scipy six numpy ];
+
+    # the test fails because the loader cannot create test objects!
+    doCheck = false;
 
     meta = {
       description = "Image processing routines for SciPy";
@@ -23373,6 +23390,18 @@ in {
       homepage = https://github.com/trbs/pid/;
       license = licenses.asl20;
     };
+  };
+
+  pip2nix = buildPythonPackage rec {
+    name = "pip2nix-${version}";
+    version = "0.3.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pip2nix/${name}.tar.gz";
+      sha256 = "1s76i8r4khq8y5r6g4218jg2c6qldmw5xhzymxad51ii8hafpwq6";
+    };
+
+    propagatedBuildInputs = with self; [ click configobj contexter jinja2 pytest ];
   };
 
   pychef = buildPythonPackage rec {
@@ -25250,6 +25279,7 @@ in {
       sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
     };
 
+    doCheck = false;
     propagatedBuildInputs = with self; [ requests2 six requests_oauthlib ];
 
     meta = {
@@ -29077,12 +29107,12 @@ in {
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.1.9";
+    version = "0.1.10";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "09q7yz0v9i90grp4cmb1w8dps58q9xny7sb12kgmd8gcr8xwk4dx";
+      sha256 = "1n6xxh0n250qbvrdl0cw114d890nfv6d0wjk5wpr505sg2bg9jx4";
     };
 
     buildInputs = with self; [ nose ];
@@ -29109,22 +29139,18 @@ in {
 
   neovim_gui = buildPythonPackage rec {
     name = "neovim-pygui-${self.neovim.version}";
-    version = "0.1.2";
+    version = "0.1.3";
     disabled = !isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "neovim";
       repo = "python-gui";
       rev = version;
-      sha256 = "0sc5apxwxgfj57q7d9cih404jgvczbp7slz5z8wqdyxpxlb42pn2";
+      sha256 = "1vpvr3zm3f9sxg1z1cl7f7gi8v1xksjdvxj62qnw65aqj3zqxnkz";
     };
 
-    buildInputs = with self; [ neovim ];
-
     propagatedBuildInputs = [
-      self.msgpack
-      self.greenlet
-      self.trollius
+      self.neovim
       self.click
       self.pygobject3
       pkgs.gobjectIntrospection
