@@ -2,6 +2,10 @@
 
 with lib;
 
+let
+  cfg = config.services.dictd;
+in
+
 {
 
   ###### interface
@@ -20,7 +24,7 @@ with lib;
 
       DBs = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = with pkgs.dictdDBs; [ wiktionary wordnet ];
         example = [ pkgs.dictdDBs.nld2eng ];
         description = ''List of databases to make available.'';
       };
@@ -34,8 +38,8 @@ with lib;
 
   config = let dictdb = pkgs.dictDBCollector { dictlist = map (x: {
                name = x.name;
-               filename = x; } ) config.services.dictd.DBs; };
-  in mkIf config.services.dictd.enable {
+               filename = x; } ) cfg.DBs; };
+  in mkIf cfg.enable {
 
     # get the command line client on system path to make some use of the service
     environment.systemPackages = [ pkgs.dict ];
