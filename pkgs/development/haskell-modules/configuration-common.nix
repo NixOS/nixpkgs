@@ -149,6 +149,7 @@ self: super: {
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-js = dontHaddock super.shakespeare-js;
   shakespeare-text = dontHaddock super.shakespeare-text;
+  swagger = dontHaddock super.swagger;  # http://hydra.cryp.to/build/2035868/nixlog/1/raw
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
