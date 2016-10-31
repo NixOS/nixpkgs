@@ -1,4 +1,4 @@
-{ stdenv, maven, lib }:
+{ stdenv, maven, lib, pkgs }:
 { mavenDeps, src, name, meta, m2Path, ... }:
 
 with builtins;
@@ -7,7 +7,7 @@ with lib;
 stdenv.mkDerivation rec {
   inherit mavenDeps src name meta m2Path;
 
-  flatDeps = flatten mavenDeps;
+  flatDeps = unique (flatten (mavenDeps ++ pkgs.javaPackages.mavenPlugins.mavenMinimal));
 
   propagatedBuildInput = [ maven ] ++ flatDeps;
 

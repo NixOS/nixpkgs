@@ -9,8 +9,134 @@ let
 in rec {
   inherit mavenbuild fetchMaven poms;
 
-  # Standard plugins used by pretty much every Maven build
-  mavenDefault = lib.flatten [ aetherUtil_0_9_0_M2 bsh_2_0_b4 classworlds_1_1 commonsCli_1_0 commonsLang_2_3 mavenArtifact_2_0_9 mavenArtifact_3_0_3 mavenArtifactManager_2_0_9 mavenClean_2_5 mavenCommonArtifactFilters_1_4 mavenCompiler_3_1 mavenCore_2_0_9 mavenDependencyTree_2_1 mavenDoxiaSinkApi_1_0_alpha10 mavenEnforcer_1_3_1 mavenEnforcerApi_1_3_1 mavenEnforcerRules_1_3_1 mavenErrorDiagnostics_2_0_9 mavenInstall_2_4 mavenJar_2_4 mavenModel_2_0_9 mavenModel_3_0_3 mavenMonitor_2_0_9 mavenPluginApi_2_0_6 mavenPluginApi_2_0_9 mavenPluginApi_3_0_3 mavenPluginDescriptor_2_0_9 mavenPluginParameterDocumenter_2_0_9 mavenPluginRegistry_2_0_9 mavenProfile_2_0_9 mavenProject_2_0_9 mavenReplacer_1_5_3 mavenReportingApi_2_0_9 mavenRepositoryMetadata_2_0_9 mavenResources_2_6 mavenSettings_2_0_9 mavenSurefire_2_17 plexusComponentAnnotations_1_5_5 plexusContainerDefault_1_0_alpha9_stable1 plexusI18n_1_0_beta6 plexusInteractivityApi_1_0_alpha4 plexusUtils_1_5_8 plexusUtils_2_0_6 plexusUtils_3_0 ] ++ (with poms; [ aether_0_9_0_M2 animalSnifferParent_1_11 apache_10 apache_11 apache_13 apache_3 apache_4 apache_6 beanshell_2_0_b4 codehausParent_4 doxia_1_0_alpha10 doxia_1_0 enforcer_1_3_1 hamcrestParent_1_3 maven_2_0_6 maven_2_0_9 maven_3_0_3 mavenParent_15 mavenParent_21 mavenParent_22 mavenParent_23 mavenParent_5 mavenParent_6 mavenParent_8 mavenPlugins_22 mavenPlugins_23 mavenPlugins_24 mavenReporting_2_0_9 mavenSharedComponents_17 mavenSharedComponents_19 mojoParent_32 plexus_1_0_4 plexus_2_0_2 plexus_2_0_7 plexusComponents_1_1_4 plexusContainers_1_0_3 plexusContainers_1_5_5 sonatypeForgeParent_5 sonatypeParent_7 sonatypeSpiceParent_16 surefire_2_17 ]);
+  # "Minimal"
+  mavenMinimal = lib.flatten
+[
+classworlds_1_1
+commonsCli_1_0
+findbugsJsr305_2_0_1
+junit_3_8_1
+mavenArchiver_2_5
+mavenArtifact_2_0_6
+mavenArtifact_2_0_9
+mavenArtifactManager_2_0_6
+mavenArtifactManager_2_0_9
+mavenArtifactManager_2_2_1
+mavenClean_2_5
+mavenCompiler_3_1
+mavenCore_2_0_6
+mavenCore_2_0_9
+mavenCore_2_2_1
+mavenDoxiaSinkApi_1_0_alpha7
+mavenErrorDiagnostics_2_0_6
+mavenErrorDiagnostics_2_0_9
+mavenErrorDiagnostics_2_2_1
+mavenFiltering_1_1
+mavenInstall_2_4
+mavenJar_2_4
+mavenModel_2_0_6
+mavenModel_2_0_9
+mavenModel_2_2_1
+mavenMonitor_2_0_6
+mavenMonitor_2_0_9
+mavenMonitor_2_2_1
+mavenPluginDescriptor_2_0_6
+mavenPluginDescriptor_2_0_9
+mavenPluginDescriptor_2_2_1
+mavenPluginParameterDocumenter_2_0_6
+mavenPluginParameterDocumenter_2_0_9
+mavenPluginParameterDocumenter_2_2_1
+mavenProfile_2_0_6
+mavenProfile_2_0_9
+mavenProfile_2_2_1
+mavenProject_2_0_6
+mavenProject_2_0_9
+mavenPluginAnnotations_3_1
+mavenPluginApi_2_0_6
+mavenPluginApi_2_0_9
+mavenPluginApi_2_2_1
+mavenPluginRegistry_2_0_6
+mavenPluginRegistry_2_0_9
+mavenPluginRegistry_2_2_1
+mavenReportingApi_2_0_6
+mavenReportingApi_2_0_9
+mavenRepositoryMetadata_2_0_6
+mavenRepositoryMetadata_2_0_9
+mavenRepositoryMetadata_2_2_1
+mavenResources_2_6
+mavenSettings_2_0_6
+mavenSettings_2_0_9
+mavenSettings_2_2_1
+mavenSharedIncremental_1_1
+mavenSharedUtils_0_1
+mavenSurefire_2_12_4
+mavenSurefireApi_2_12_4
+mavenSurefireBooter_2_12_4
+mavenSurefireCommon_2_12_4
+mavenToolchain_1_0
+mavenToolchain_2_0_9
+plexusBuildApi_0_0_4
+plexusCompilerApi_2_2
+plexusContainerDefault_1_0_alpha9_stable1
+plexusInteractivityApi_1_0_alpha4
+plexusInterpolation_1_13
+plexusUtils_1_5_1
+plexusUtils_2_0_5
+plexusUtils_3_0
+]
+++
+(with
+poms;
+[
+apache_3
+apache_4
+apache_5
+apache_6
+apache_9
+apache_10
+apache_11
+apache_13
+doxia_1_0_alpha7
+maven_2_0_6
+maven_2_0_9
+maven_2_2_1
+mavenParent_5
+mavenParent_8
+mavenParent_11
+mavenParent_13
+mavenParent_21
+mavenParent_22
+mavenParent_23
+mavenPlugins_22
+mavenPlugins_23
+mavenPlugins_24
+mavenPluginTools_3_1
+mavenReporting_2_0_6
+mavenReporting_2_0_9
+mavenSharedComponents_12
+mavenSharedComponents_17
+mavenSharedComponents_18
+mavenSharedComponents_19
+plexus_1_0_4
+plexus_1_0_11
+plexus_2_0_3
+plexus_2_0_6
+plexus_2_0_7
+plexus_3_3_1
+plexusCompiler_2_2
+plexusComponents_1_1_15
+plexusComponents_1_3_1
+plexusComponentAnnotations_1_5_5
+plexusContainers_1_0_3
+plexusContainers_1_5_5
+sonatypeForgeParent_3
+sonatypeForgeParent_5
+sonatypeForgeParent_10
+sonatypeSpiceParent_10
+sonatypeSpiceParent_16
+sonatypeSpiceParent_17
+surefire_2_12_4
+]);
 
   animalSniffer_1_11 = map (obj: fetchMaven {
     version = "1.11";
@@ -98,6 +224,17 @@ in rec {
   }) [
     { type = "pom"; sha512 = "3rki0dhs3y7w9vbvwf2i7hmq9vismcfq79cdzd3qfs9bva4qxikx939idg8jmwnwaqww4q3wmgwg5vx3n910m8m2xr83x6y0dm62vbk"; }
     { type = "jar"; sha512 = "3j8smsx6wk085iic5qhknrszixxna6szmvk2rn9zkn75ffjr7ham72hw9cmxf5160j73n8f2cmcbw1x462fqy12fqqpmzx08i1sbwcv"; }
+  ];
+
+  mavenSurefire_2_12_4 = map (obj: fetchMaven rec {
+    version = "2.12.4";
+    baseName = "maven-surefire-plugin";
+    package = "/org/apache/maven/plugins";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "pom"; sha512 = "3qkzmh5fk3s7y3qy91qck1nc0yadwsizxy61wp410dspsd73cchqll7vjl11cj6k5kywjxsl9dihy2gp949nh8380lbvs11g83wrgmv"; }
+    { type = "jar"; sha512 = "2sjq2l8i97h3ay8wwrsi75cfs9d1im5ar2sn2zv4q6xsv4v3hh5y481l9xwc5dnbcfdjs38ald0z60pxpcyiqrng6h69s2ws8fhb0mm"; }
   ];
 
   mavenSurefire_2_17 = map (obj: fetchMaven rec {
