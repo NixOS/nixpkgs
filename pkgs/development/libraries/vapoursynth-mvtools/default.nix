@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-mvtools-${version}";
-  version = "16";
+  version = "17";
 
   src = fetchFromGitHub {
     owner = "dubhater";
     repo  = "vapoursynth-mvtools";
-    rev    = "48959b868c18fa8066502f957734cbd5fb9762a0";
-    sha256 = "15xpqvfzhv0kcf3gyghni4flazi1mmj2iy6zw5834phqr52yg07z";
+    rev    = "a2f5607420af8b8e76c0a6a06a517649bfa2c187";
+    sha256 = "06nq46jjyfpv74i27w2m6j64avs6shl99mk601m5h5mmdgm2mvcg";
   };
 
   buildInputs = [
