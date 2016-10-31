@@ -16484,6 +16484,7 @@ in
     domains = callPackage ../development/coq-modules/domains {};
 
     fiat = callPackage ../development/coq-modules/fiat {};
+    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
 
     flocq = callPackage ../development/coq-modules/flocq {};
 
@@ -16526,6 +16527,8 @@ in
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
 
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
+
+    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
 
   };
 
