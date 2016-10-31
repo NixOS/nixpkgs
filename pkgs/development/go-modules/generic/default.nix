@@ -1,4 +1,4 @@
-{ go, govers, parallel, lib, fetchgit, fetchhg }:
+{ go, govers, parallel, lib, fetchgit, fetchhg, rsync }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -16,6 +16,10 @@
 
 # Extra sources to include in the gopath
 , extraSrcs ? [ ]
+
+# Extra gopaths containing src subfolder
+# with sources to include in the gopath
+, extraSrcPaths ? [ ]
 
 # go2nix dependency file
 , goDeps ? null
@@ -85,6 +89,9 @@ go.stdenv.mkDerivation (
     chmod -R u+w goPath/*
     mv goPath/* "go/src/${goPackagePath}"
     rmdir goPath
+
+  '') + (lib.optionalString (extraSrcPaths != []) ''
+    ${rsync}/bin/rsync -a ${lib.concatMapStrings (p: "${p}/src") extraSrcPaths} go
 
   '') + ''
     export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
