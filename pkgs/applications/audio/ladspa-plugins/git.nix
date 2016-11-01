@@ -2,12 +2,12 @@
 , perl, perlPackages }:
 
 stdenv.mkDerivation {
-  name = "swh-plugins-git-2015-03-04";
+  name = "swh-plugins-git-2016-08-17";
 
   src = fetchgit {
     url = https://github.com/swh/ladspa.git;
-    rev = "4b8437e8037cace3d5bf8ce6d1d1da0182aba686";
-    sha256 = "1rmqm4780dhp0pj2scl3k7m8hpp1x6w6ln4wwg954zb9570rqaxx";
+    rev = "8b50f3434b8b30dff16020d17608ced9ee04477b";
+    sha256 = "1c98z2xxz9pgcb4dg99gz8qrylh5cnag0j18a52d88ifsy24isvq";
   };
 
   buildInputs = [ autoreconfHook fftw ladspaH libxml2 pkgconfig perl perlPackages.XMLParser ];
