@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0yaviybviwdvfg2a0pf2kk28g10k245499xmbpqlai7fv91f7xll";
   };
 
-  propagatedBuildInputs = [ pythonPackages.python.modules.curses file ];
+  propagatedBuildInputs = [ file ];
 
   preConfigure = ''
     substituteInPlace ranger/ext/img_display.py \

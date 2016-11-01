@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, pythonPackages, pkgconfig
+{ stdenv, lib, fetchurl, pythonPackages, pkgconfig
 , xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
 , ffmpeg, x264, libvpx, libwebp
-, libfakeXinerama }:
+, libfakeXinerama
+, gst_all_1, pulseaudioLight, gobjectIntrospection }:
+
+with lib;
 
 let
   inherit (pythonPackages) python cython buildPythonApplication;
 in buildPythonApplication rec {
-  name = "xpra-0.17.5";
+  name = "xpra-0.17.6";
   namePrefix = "";
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "01k5iax42820pblfadig8rqfa1wlcgpakmjp142gx3fg59fnav3i";
+    sha256 = "1z7v58m45g10icpv22qg4dipafcfsdqkxqz73z3rwsb6r0kdyrpj";
   };
 
   buildInputs = [
@@ -26,11 +29,19 @@ in buildPythonApplication rec {
 
     ffmpeg libvpx x264 libwebp
 
+    gobjectIntrospection
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-libav
+
     makeWrapper
   ];
 
   propagatedBuildInputs = with pythonPackages; [
     pillow pygtk pygobject2 rencode pycrypto cryptography pycups lz4 dbus-python
+    netifaces numpy websockify pygobject3 gst-python
   ];
 
   preBuild = ''
@@ -49,8 +60,10 @@ in buildPythonApplication rec {
       --set FONTCONFIG_FILE "${fontsConf}" \
       --set XPRA_LOG_DIR "\$HOME/.xpra" \
       --set XPRA_INSTALL_PREFIX "$out" \
+      --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
+      --set GST_PLUGIN_SYSTEM_PATH_1_0 "$GST_PLUGIN_SYSTEM_PATH_1_0" \
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux ]}
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudioLight ]} \
   '';
 
   preCheck = "exit 0";
@@ -65,7 +78,7 @@ in buildPythonApplication rec {
   meta = {
     homepage = http://xpra.org/;
     description = "Persistent remote applications for X";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ tstrobel offline ];
   };
 }

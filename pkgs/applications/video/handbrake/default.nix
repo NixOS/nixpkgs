@@ -12,7 +12,7 @@
 # TODO: package and use libappindicator
 
 { stdenv, config, fetchurl,
-  python, pkgconfig, yasm,
+  python2, pkgconfig, yasm,
   autoconf, automake, libtool, m4,
   libass, libsamplerate, fribidi, libxml2, bzip2,
   libogg, libtheora, libvorbis, libdvdcss, a52dec, fdk_aac,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  nativeBuildInputs = [ python pkgconfig yasm autoconf automake libtool m4 ];
+  nativeBuildInputs = [ python2 pkgconfig yasm autoconf automake libtool m4 ];
   buildInputs = [
     fribidi fontconfig freetype hicolor_icon_theme
     libass libsamplerate libxml2 bzip2

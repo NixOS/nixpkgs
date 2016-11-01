@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pkgconfig, mesa_noglu, glib, gdk_pixbuf, xorg, libintlOrEmpty
-, pangoSupport ? true, pango, cairo, gobjectIntrospection
+, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland
 , gstreamerSupport ? true, gst_all_1 }:
 
 let
   ver_maj = "1.22";
-  ver_min = "0";
+  ver_min = "2";
 in
 stdenv.mkDerivation rec {
   name = "cogl-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/cogl/${ver_maj}/${name}.tar.xz";
-    sha256 = "689dfb5d14fc1106e9d2ded0f7930dcf7265d0bc84fa846b4f03941633eeaa91";
+    sha256 = "03f0ha3qk7ca0nnkkcr1garrm1n1vvfqhkz9lwjm592fnv6ii9rr";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -19,11 +19,13 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-introspection"
     "--enable-kms-egl-platform"
+    "--enable-wayland-egl-platform"
+    "--enable-wayland-egl-server"
   ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst"
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
-      glib gdk_pixbuf gobjectIntrospection
+      glib gdk_pixbuf gobjectIntrospection wayland
       mesa_noglu libXrandr libXfixes libXcomposite libXdamage
     ]
     ++ libintlOrEmpty

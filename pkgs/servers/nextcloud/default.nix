@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/
-    cp -R ./* $out/
+    cp -R . $out/
   '';
 
   meta = {

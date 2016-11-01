@@ -11,9 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "45f1cee4067598cf2ca8ae6f89d03789b86f9e3bf196236119868653420d7cdd";
   };
 
-  propagatedBuildInputs = with pythonPackages;
-  [ sqlite3 ];
-
   buildInputs = with pythonPackages;
   [ python gettext wrapPython pygtk dbus-python pygtksourceview ];
 

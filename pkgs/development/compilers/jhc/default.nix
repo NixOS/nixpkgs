@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ghc ];
 
+  preConfigure = ''
+    configureFlagsArray+=("CC=cc")
+    configureFlagsArray+=("--with-hsc2hs=${ghc}/bin/hsc2hs --cc=cc")
+  '';
+
   meta = {
     description = "Whole-program, globally optimizing Haskell compiler";
     homepage = "http://repetae.net/computer/jhc/";

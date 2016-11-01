@@ -3,14 +3,14 @@
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, x11Support ? true
+, pinentry ? null, guiSupport ? true
 , adns ? null, gnutls ? null, libusb ? null, openldap ? null
 , readline ? null, zlib ? null, bzip2 ? null
 }:
 
 with stdenv.lib;
 
-assert x11Support -> pinentry != null;
+assert guiSupport -> pinentry != null;
 
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
     readline libusb gnutls adns openldap zlib bzip2
   ];
 
+  patches = [ ./fix-libusb-include-path.patch ];
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
-  configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
+  pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
+  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;

@@ -7,7 +7,7 @@
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss
 
-, python, pythonPackages, perl, pkgconfig
+, python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
@@ -38,6 +38,8 @@ buildFun:
 with stdenv.lib;
 
 let
+  inherit (python2Packages) python gyp ply jinja2;
+
   # The additional attributes for creating derivations based on the chromium
   # source tree.
   extraAttrs = buildFun base;
@@ -119,7 +121,7 @@ let
       glib gtk2 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-      pythonPackages.gyp pythonPackages.ply pythonPackages.jinja2
+      gyp ply jinja2
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux

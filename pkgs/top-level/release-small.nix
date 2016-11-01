@@ -130,7 +130,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   portmap = linux;
   procps = linux;
   python = allBut cygwin;
-  pythonFull = linux;
   readline = all;
   rlwrap = all;
   rpm = linux;

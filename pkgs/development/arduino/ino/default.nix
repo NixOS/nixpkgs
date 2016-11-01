@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pythonPackages, picocom
+{ stdenv, fetchurl, python2Packages, picocom
 , avrdude, arduino-core, avrgcclibc }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "ino-0.3.6";
   namePrefix = "";
 
@@ -11,9 +11,15 @@ pythonPackages.buildPythonApplication rec {
   };
 
   # TODO: add avrgcclibc, it must be rebuild with C++ support
-  propagatedBuildInputs =
-    [ arduino-core avrdude picocom pythonPackages.configobj
-      pythonPackages.jinja2 pythonPackages.pyserial pythonPackages.six ];
+  propagatedBuildInputs = with python2Packages; [
+    arduino-core
+    avrdude
+    picocom
+    configobj
+    jinja2
+    pyserial
+    six
+  ];
 
   patchPhase = ''
     echo "Patching Arduino distribution path"

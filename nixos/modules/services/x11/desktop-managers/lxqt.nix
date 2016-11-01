@@ -61,9 +61,11 @@ in
       pkgs.lxqt.obconf-qt
       pkgs.lxqt.pavucontrol-qt
       pkgs.lxqt.pcmanfm-qt
+      pkgs.lxqt.qlipper
       pkgs.lxqt.qps
       pkgs.lxqt.qterminal
       pkgs.lxqt.qtermwidget
+      pkgs.lxqt.screengrab
       pkgs.menu-cache
       pkgs.openbox # default window manager
       pkgs.qt5.qtsvg # provides QT5 plugins for svg icons

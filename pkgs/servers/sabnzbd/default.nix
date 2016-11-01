@@ -1,7 +1,7 @@
-{stdenv, fetchurl, python, par2cmdline, unzip, unrar, p7zip, makeWrapper}:
+{stdenv, fetchurl, python2, par2cmdline, unzip, unrar, p7zip, makeWrapper}:
 
 let
-  pythonEnv = python.withPackages(ps: with ps; [ pyopenssl python.modules.sqlite3 cheetah]);
+  pythonEnv = python2.withPackages(ps: with ps; [ pyopenssl cheetah]);
   path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
   version = "1.1.0";

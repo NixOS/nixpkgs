@@ -34,6 +34,21 @@ stdenv.mkDerivation {
 
   inherit blas64;
 
+  # Some hardening features are disabled due to sporadic failures in
+  # OpenBLAS-based programs. The problem may not be with OpenBLAS itself, but
+  # with how these flags interact with hardening measures used downstream.
+  # In either case, OpenBLAS must only be used by trusted code--it is
+  # inherently unsuitable for security-conscious applications--so there should
+  # be no objection to disabling these hardening measures.
+  hardeningDisable = [
+    # don't modify or move the stack
+    "stackprotector" "pic"
+    # don't alter index arithmetic
+    "strictoverflow"
+    # don't interfere with dynamic target detection.
+    "relro" "bindnow"
+  ];
+
   nativeBuildInputs = optionals stdenv.isDarwin [coreutils] ++ [gfortran perl which];
 
   makeFlags =

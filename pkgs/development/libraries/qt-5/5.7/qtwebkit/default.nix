@@ -1,7 +1,7 @@
 { qtSubmodule, stdenv, qtdeclarative, qtlocation, qtsensors
 , fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1
-, bison2, flex, gdb, gperf, perl, pkgconfig, python, ruby
+, bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , substituteAll
 , flashplayerFix ? false
 }:
@@ -13,7 +13,7 @@ qtSubmodule {
   qtInputs = [ qtdeclarative qtlocation qtsensors ];
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ];
   nativeBuildInputs = [
-    bison2 flex gdb gperf perl pkgconfig python ruby
+    bison2 flex gdb gperf perl pkgconfig python2 ruby
   ];
   patches =
     let dlopen-webkit-nsplugin = substituteAll {

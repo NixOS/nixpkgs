@@ -102,7 +102,6 @@ in
             pkgs.setuptools
             pkgs.pythonPackages.genshi
             pkgs.pythonPackages.psycopg2
-            pkgs.python.modules.sqlite3
             subversion
           ];
     };

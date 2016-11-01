@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff }:
+{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
   name = "openldap-2.4.44";
@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ openssl cyrus_sasl db groff ];
+  buildInputs = [ openssl cyrus_sasl db groff libtool ];
 
   configureFlags =
     [ "--enable-overlays"
       "--disable-dependency-tracking"   # speeds up one-time build
+      "--enable-modules"
     ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
@@ -34,6 +35,10 @@ stdenv.mkDerivation rec {
 
     rm -rf $out/var
     rm -r libraries/*/.libs
+  '';
+
+  postInstall = ''
+    chmod +x "$out"/lib/*.{so,dylib}
   '';
 
   meta = with stdenv.lib; {

@@ -22,6 +22,9 @@ let
 
     patches = [
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+      # See https://github.com/tpoechtrager/cctools-port/issues/24. Remove when that's fixed.
+      ./undo-unknown-triple.patch
     ];
 
     enableParallelBuilding = true;

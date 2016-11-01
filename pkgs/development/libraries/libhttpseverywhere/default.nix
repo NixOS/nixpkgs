@@ -1,20 +1,19 @@
-{stdenv, fetchFromGitHub, gnome3, glib, json_glib, libxml2, libarchive, libsoup, gobjectIntrospection, meson, ninja, pkgconfig,  valadoc}:
+{stdenv, fetchurl, gnome3, glib, json_glib, libxml2, libarchive, libsoup, gobjectIntrospection, meson, ninja, pkgconfig,  valadoc}:
 
 stdenv.mkDerivation rec {
-  name = "libhttpseverywhere-${version}";
-  version = "0.1.0";
+  major = "0.2";
+  minor = "3";
+  version = "${major}.${minor}";
 
-  src = fetchFromGitHub {
-    owner = "grindhold";
-    repo  = "libhttpseverywhere";
-    rev = "${version}";
-    sha256 = "1b8bcg4jp2h3nwk1g7jgswsipqzkjq2gb017v07wb7nvl6kdi0rc";
+  name = "libhttpseverywhere-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/libhttpseverywhere/${major}/libhttpseverywhere-${version}.tar.xz";
+    sha256 = "0ndk6yyfcd7iwwkv4rkivhd08k0x8v03gnp9dk1ms4bxb1l2i8l1";
   };
 
   nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];
   buildInputs = [ glib gnome3.libgee libxml2 json_glib libsoup libarchive ];
-
-  patches = [ ./meson.patch ];
 
   configurePhase = ''
     mkdir build
@@ -29,9 +28,13 @@ stdenv.mkDerivation rec {
 
   installPhase = "ninja install";
 
+  doCheck = true;
+
+  checkPhase = "./httpseverywhere_test";
+
   meta = {
     description = "library to use HTTPSEverywhere in desktop applications";
-    homepage    = https://github.com/grindhold/libhttpseverywhere;
+    homepage    = https://git.gnome.org/browse/libhttpseverywhere;
     license     = stdenv.lib.licenses.lgpl3;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ sternenseemann ];

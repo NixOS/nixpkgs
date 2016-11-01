@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnum4, pkgconfig, python
+{ stdenv, fetchurl, gnum4, pkgconfig, python2
 , intel-gpu-tools, libdrm, libva, libX11, mesa_noglu, wayland
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "--enable-wayland"
   ];
 
-  nativeBuildInputs = [ gnum4 pkgconfig python ];
+  nativeBuildInputs = [ gnum4 pkgconfig python2 ];
 
   buildInputs = [ intel-gpu-tools libdrm libva libX11 mesa_noglu wayland ];
 

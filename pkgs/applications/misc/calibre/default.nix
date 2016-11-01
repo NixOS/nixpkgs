@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.68.0";
+  version = "2.70.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0mn6wdws1xxc4yvhp5vdzb5i5c9dsmamyms1njdzs5fv754rszpm";
+    sha256 = "18iv1c2nx93gkfqa3k2m42dk4p59b9zp08fggb6imc1xqh2icfch";
   };
 
   inherit python;
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     python pyqt5 sip poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
   ] ++ (with pythonPackages; [
-    apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow sqlite3
+    apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
     # the following are distributed with calibre, but we use upstream instead
     chardet cherrypy html5lib odfpy routes
   ]);

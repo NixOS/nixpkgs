@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     harfbuzz fribidi m17n_lib openssl libssh2
   ];
 
+  patches = [ ./x_shortcut.c.patch ]; #fixes numlock in 3.7.2. should be safe to remove by 3.7.3 since it's already in the trunk: https://bitbucket.org/arakiken/mlterm/commits/4820d42c7abfe1760a5ea35492c83be469c642b3
+
   #bad configure.ac and Makefile.in everywhere
   preConfigure = ''
     sed -ie 's;-L/usr/local/lib -R/usr/local/lib;;g' \
@@ -91,7 +93,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/mlterm/;
+    homepage = http://mlterm.sourceforge.net/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = with platforms; linux;

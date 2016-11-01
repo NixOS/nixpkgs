@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, libtiff
 , webkit, libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, jasper
-, pythonPackages, libart_lgpl, libexif, gettext, xorg }:
+, python2Packages, libart_lgpl, libexif, gettext, xorg }:
 
 let
-  inherit (pythonPackages) pygtk wrapPython python;
+  inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   name = "gimp-${version}";
   version = "2.8.18";

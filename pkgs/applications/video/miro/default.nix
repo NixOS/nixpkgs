@@ -75,7 +75,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pygobject2 pygtk pycurl sqlite3 mutagen pycairo dbus-python
+    pygobject2 pygtk pycurl mutagen pycairo dbus-python
     pywebkitgtk] ++ [ libtorrentRasterbar
     gst_python gst_plugins_base gst_plugins_good gst_ffmpeg
   ] ++ optional enableBonjour avahi;

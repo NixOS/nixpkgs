@@ -1,37 +1,41 @@
-{ stdenv, fetchurl, autoconf, automake, openssl, libxml2 }:
+{ stdenv, fetchzip, autoconf, automake, openssl, libxml2, fetchFromGitHub, ncurses }:
 
 let
-  scrypt_src = fetchurl {
-    url = "http://masterpasswordapp.com/libscrypt-b12b554.tar.gz";
-    sha256 = "02vz4i66v1acd15xjgki4ilmmp28m6a5603gi4hf8id3d3ndl9n7";
+  scrypt_src = fetchzip {
+    url = "http://www.tarsnap.com/scrypt/scrypt-1.2.0.tgz";
+    sha256 = "0ahylib2pimlhjcm566kpim6n16jci5v749xwdkr9ivgfjrv3xn4";
   };
 
 in stdenv.mkDerivation {
-  name = "mpw-2.1-cli4";
+  name = "mpw-2.1-6834f36";
 
-  srcs = [
-    (fetchurl {
-      url = "https://ssl.masterpasswordapp.com/mpw-2.1-cli4-0-gf6b2287.tar.gz";
-      sha256 = "141bzb3nj18rbnbpdvsri8cdwwwxz4d6akyhfa834542xf96b9vf";
-    })
-    scrypt_src
-  ];
-
-  sourceRoot = ".";
+  src = fetchFromGitHub {
+    owner = "Lyndir";
+    repo = "MasterPassword";
+    rev = "6834f3689f5dfd4e59ad6959961d349c224977ee";
+    sha256 = "0zlpx3hb1y2l60hg961h05lb9yf3xb5phnyycvazah2674gkwb2p";
+  };
 
   postUnpack = ''
-    cp -R libscrypt-b12b554/* lib/scrypt
+    sourceRoot+=/MasterPassword/C
   '';
 
   prePatch = ''
     patchShebangs .
+    mkdir lib/scrypt/src
+    cp -R --no-preserve=ownership ${scrypt_src}/* lib/scrypt/src
+    chmod +w -R lib/scrypt/src
+    substituteInPlace lib/scrypt/src/libcperciva/cpusupport/Build/cpusupport.sh \
+      --replace dirname "$(type -P dirname)"
+    substituteInPlace lib/scrypt/src/Makefile.in --replace "command -p mv" "mv"
   '';
 
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
-  buildInputs = [ autoconf automake openssl libxml2 ];
+  buildInputs = [ autoconf automake openssl libxml2 ncurses ];
 
   buildPhase = ''
+    substituteInPlace build --replace '"curses"' '"ncurses"'
     targets="mpw mpw-tests" ./build
   '';
 

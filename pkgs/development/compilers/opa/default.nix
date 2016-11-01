@@ -63,5 +63,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = with stdenv.lib.platforms; linux;
+    # opa was built with nodejs 0.10 which reached end of LTS
+    # in October 216, it doesn't built with nodejs 4.x
+    broken = true;
   };
 }

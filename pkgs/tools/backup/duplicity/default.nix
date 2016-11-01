@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pythonPackages, librsync, ncftp, gnupg, rsync, makeWrapper
+{ stdenv, fetchurl, python2Packages, librsync, ncftp, gnupg, rsync, makeWrapper
 }:
 
 let
   version = "0.7.07.1";
-  inherit (pythonPackages) boto ecdsa lockfile paramiko pycrypto python setuptools;
+  inherit (python2Packages) boto cffi cryptography ecdsa enum idna ipaddress lockfile paramiko pyasn1 pycrypto python setuptools six;
 in stdenv.mkDerivation {
   name = "duplicity-${version}";
 
@@ -15,10 +15,10 @@ in stdenv.mkDerivation {
   installPhase = ''
     python setup.py install --prefix=$out
     wrapProgram $out/bin/duplicity \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${idna}):$(toPythonPath ${cffi}):$(toPythonPath ${ipaddress}):$(toPythonPath ${pyasn1}):$(toPythonPath ${six}):$(toPythonPath ${enum}):$(toPythonPath ${setuptools}):$(toPythonPath ${cryptography}):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
     wrapProgram $out/bin/rdiffdir \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})"
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${idna}):$(toPythonPath ${cffi}):$(toPythonPath ${ipaddress}):$(toPythonPath ${pyasn1}):$(toPythonPath ${six}):$(toPythonPath ${enum}):$(toPythonPath ${setuptools}):$(toPythonPath ${cryptography}):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})"
   '';
 
   buildInputs = [ python librsync makeWrapper setuptools ];

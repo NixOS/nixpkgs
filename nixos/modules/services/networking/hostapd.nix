@@ -140,7 +140,7 @@ in
           ieee80211n=1
           ht_capab=[HT40-][SHORT-GI-40][DSSS_CCK-40]
           '';
-        type = types.string;
+        type = types.lines;
         description = "Extra configuration options to put in hostapd.conf.";
       };
     };

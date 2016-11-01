@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libpaper, gperf, file, perl }:
+{ stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl }:
 
 stdenv.mkDerivation rec {
   name = "a2ps-4.14";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/defs.in --replace "/bin/rm" "rm"
   '';
 
-  nativeBuildInputs = [ file perl ];
+  nativeBuildInputs = [ autoconf file bison perl ];
   buildInputs = [ libpaper gperf ];
 
   meta = with stdenv.lib; {
