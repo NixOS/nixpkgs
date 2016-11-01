@@ -2327,6 +2327,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
+
   lnav = callPackage ../tools/misc/lnav { };
 
   loc = callPackage ../development/misc/loc { };
