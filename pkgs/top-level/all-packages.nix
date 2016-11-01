@@ -7072,7 +7072,7 @@ in
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr/default.nix { };
-  
+
   mpfi = callPackage ../development/libraries/mpfi { };
 
   # A GMP fork
@@ -12769,6 +12769,8 @@ in
   };
 
   fmit = qt5.callPackage ../applications/audio/fmit { };
+
+  fmsynth = callPackage ../applications/audio/fmsynth { };
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
