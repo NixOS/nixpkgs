@@ -5519,7 +5519,7 @@ in
   python3Packages = python35Packages;
 
   python26 = callPackage ../development/interpreters/python/cpython/2.6 {
-    db = db47;
+    db = db4;
     self = python26;
   };
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
@@ -6500,7 +6500,7 @@ in
 
   aprutil = callPackage ../development/libraries/apr-util {
     bdbSupport = true;
-    db = if stdenv.isFreeBSD then db47 else db;
+    db = if stdenv.isFreeBSD then db4 else db;
     # XXX: only the db_185 interface was available through
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
@@ -6714,9 +6714,6 @@ in
   # bsd-like license
   db = db5;
   db4 = db48;
-  db44 = callPackage ../development/libraries/db/db-4.4.nix { };
-  db45 = callPackage ../development/libraries/db/db-4.5.nix { };
-  db47 = callPackage ../development/libraries/db/db-4.7.nix { };
   db48 = callPackage ../development/libraries/db/db-4.8.nix { };
   db5 = db53;
   db53 = callPackage ../development/libraries/db/db-5.3.nix { };
