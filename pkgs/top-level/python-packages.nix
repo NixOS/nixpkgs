@@ -2199,7 +2199,7 @@ in {
       description = "A decorator for caching properties in classes";
       homepage = https://github.com/pydanny/cached-property;
       license = licenses.bsd3;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ ericsagnes ];
     };
   };
