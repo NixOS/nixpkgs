@@ -60,4 +60,10 @@ self: super: {
     sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
 
+  xxhash = overrideCabal super.xxhash (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      sed -i -e 's| && <4.7||g' xxhash.cabal
+    '';
+  });
+
 }
