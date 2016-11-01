@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, unzip, curl, makeWrapper }:
+{ stdenv, fetchurl, unzip, curl, makeWrapper, which }:
 
 stdenv.mkDerivation {
-  name = "dmd-2.067.1";
+  name = "dmd-2.070.2";
 
   src = fetchurl {
-    url = http://downloads.dlang.org/releases/2015/dmd.2.067.1.zip;
-    sha256 = "0ny99vfllvvgcl79pwisxcdnb3732i827k9zg8c0j4s0n79k5z94";
+    url = http://downloads.dlang.org/releases/2016/dmd.2.070.2.zip;
+    sha256 = "011cfa86bee8dd924bde870e338687d728d4d81578f8a9803401ed405cef70dd";
   };
 
-  buildInputs = [ unzip curl makeWrapper ];
+  buildInputs = [ unzip curl makeWrapper which ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
       # Allow to use "clang++", commented in Makefile
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   # Buid and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
       cd src/dmd
-      make -f posix.mak INSTALL_DIR=$out
+      make -f posix.mak INSTALL_DIR=$out AUTO_BOOTSTRAP=1
       export DMD=$PWD/dmd
       cd ../druntime
       make -f posix.mak INSTALL_DIR=$out DMD=$DMD
