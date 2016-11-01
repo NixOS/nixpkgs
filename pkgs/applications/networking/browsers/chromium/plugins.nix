@@ -1,5 +1,7 @@
 { stdenv
 , jshon
+, fetchzip
+, enablePepperFlash ? false
 , enableWideVine ? false
 
 , upstream-info
@@ -8,6 +10,8 @@
 with stdenv.lib;
 
 let
+  mkrpath = p: "${makeSearchPathOutput "lib" "lib64" p}:${makeLibraryPath p}";
+
   # Generate a shell fragment that emits flags appended to the
   # final makeWrapper call for wrapping the browser's main binary.
   #
@@ -59,16 +63,13 @@ let
       ! find -iname '*.so' -exec ldd {} + | grep 'not found'
     '';
 
-    patchPhase = let
-      rpaths = [ stdenv.cc.cc ];
-      mkrpath = p: "${makeSearchPathOutput "lib" "lib64" p}:${makeLibraryPath p}";
-    in ''
+    patchPhase = ''
       for sofile in libwidevinecdm.so libwidevinecdmadapter.so; do
         chmod +x "$sofile"
-        patchelf --set-rpath "${mkrpath rpaths}" "$sofile"
+        patchelf --set-rpath "${mkrpath [ stdenv.cc.cc ]}" "$sofile"
       done
 
-      patchelf --set-rpath "$out/lib:${mkrpath rpaths}" \
+      patchelf --set-rpath "$out/lib:${mkrpath [ stdenv.cc.cc ]}" \
         libwidevinecdmadapter.so
     '';
 
@@ -90,6 +91,48 @@ let
       }}
     '';
   };
+
+  flash = stdenv.mkDerivation rec {
+    name = "flashplayer-ppapi-${version}";
+    version = "23.0.0.205";
+
+    src = fetchzip {
+      url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/"
+          + "${version}/flash_player_ppapi_linux.x86_64.tar.gz";
+      sha256 = "0gj5d8475qcplm3iqs3hkq0i6qkmbhci1zp3ljnhafc6xz0avyhj";
+      stripRoot = false;
+    };
+
+    patchPhase = ''
+      chmod +x libpepflashplayer.so
+      patchelf --set-rpath "${mkrpath [ stdenv.cc.cc ]}" libpepflashplayer.so
+    '';
+
+    doCheck = true;
+    checkPhase = ''
+      ! find -iname '*.so' -exec ldd {} + | grep 'not found'
+    '';
+
+    installPhase = ''
+      flashVersion="$(
+        "${jshon}/bin/jshon" -F manifest.json -e version -u
+      )"
+
+      install -vD libpepflashplayer.so "$out/lib/libpepflashplayer.so"
+
+      ${mkPluginInfo {
+        allowedVars = [ "out" "flashVersion" ];
+        flags = [
+          "--ppapi-flash-path=@out@/lib/libpepflashplayer.so"
+          "--ppapi-flash-version=@flashVersion@"
+        ];
+      }}
+    '';
+
+    dontStrip = true;
+  };
+
 in {
-  enabled = optional enableWideVine widevine;
+  enabled = optional enableWideVine widevine
+         ++ optional enablePepperFlash flash;
 }
