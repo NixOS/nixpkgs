@@ -25,6 +25,8 @@ buildGoPackage rec {
     substitute $src/etc/linux-systemd/user/syncthing-inotify.service \
                $bin/etc/systemd/user/syncthing-inotify.service \
                --replace /usr/bin/syncthing-inotify $bin/bin/syncthing-inotify
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -delete_rpath $out/lib -add_rpath $bin $bin/bin/syncthing-inotify
   '';
 
   meta = with stdenv.lib; {
