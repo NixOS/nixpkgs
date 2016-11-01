@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lv2 pkgconfig python serd sord sratom ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = "${python.interpreter} waf configure --prefix=$out";
 
-  buildPhase = "python waf";
+  buildPhase = "${python.interpreter} waf";
 
-  installPhase = "python waf install";
+  installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
     homepage = http://drobilla.net/software/lilv;
