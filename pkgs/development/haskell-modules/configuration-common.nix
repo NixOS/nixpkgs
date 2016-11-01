@@ -1041,4 +1041,15 @@ self: super: {
     http-conduit = self.http-conduit_2_2_3;
   });
 
+  # http-api-data_0.3.x requires QuickCheck > 2.9
+  http-api-data_0_3_2 = dontCheck super.http-api-data_0_3_2;
+  servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
+    http-api-data = self.http-api-data_0_3_2;
+  });
+  servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
+    http-api-data = self.http-api-data_0_3_2;
+    servant-server = self.servant-server_0_9_1_1;
+    servant = self.servant_0_9_1_1;
+  });
+
 }
