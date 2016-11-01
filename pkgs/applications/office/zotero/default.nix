@@ -77,6 +77,5 @@ stdenv.mkDerivation {
     description = "Collect, organize, cite, and share your research sources";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel ];
   };
 }
