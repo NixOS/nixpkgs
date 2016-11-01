@@ -8701,7 +8701,7 @@ in
   };
 
   opensubdiv = callPackage ../development/libraries/opensubdiv {
-    cudatoolkit = cudatoolkit75;
+    cudatoolkit = cudatoolkit8;
   };
 
   openwsman = callPackage ../development/libraries/openwsman {};
@@ -12168,7 +12168,7 @@ in
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
-    cudatoolkit = cudatoolkit75;
+    cudatoolkit = cudatoolkit8;
     python = python35;
   };
 
