@@ -28,7 +28,7 @@ let
     browser = callPackage ./browser.nix { inherit channel; };
 
     plugins = callPackage ./plugins.nix {
-      inherit enableWideVine;
+      inherit enablePepperFlash enableWideVine;
     };
   };
 
