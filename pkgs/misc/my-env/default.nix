@@ -41,7 +41,7 @@
       # this is the example we will be using
       nixEnv = complicatedMyEnv {
         name = "nix";
-        buildInputs = [ libtool stdenv perl curl bzip2 openssl db45 autoconf automake zlib ];
+        buildInputs = [ libtool stdenv perl curl bzip2 openssl db5 autoconf automake zlib ];
       };
     };
   }

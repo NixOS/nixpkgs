@@ -6712,7 +6712,6 @@ in
   # bsd-like license
   db = db5;
   db4 = db48;
-  db45 = callPackage ../development/libraries/db/db-4.5.nix { };
   db47 = callPackage ../development/libraries/db/db-4.7.nix { };
   db48 = callPackage ../development/libraries/db/db-4.8.nix { };
   db5 = db53;
