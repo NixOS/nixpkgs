@@ -4821,6 +4821,8 @@ in
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
   });
 
+  all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
+
   inherit (ocamlPackages) haxe;
 
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
