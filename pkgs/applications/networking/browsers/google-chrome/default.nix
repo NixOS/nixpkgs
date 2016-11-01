@@ -1,9 +1,9 @@
-{ stdenv, buildEnv, fetchurl, patchelf, bash
+{ stdenv, buildEnv, fetchapt, patchelf, bash
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite
-, alsaLib, libXdamage, libXtst, libXrandr, expat, cups
+, libxcb, alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus_libs, gtk2, gdk_pixbuf, gcc
 
 # Will crash without.
@@ -25,14 +25,9 @@
 
 # Necessary for USB audio devices.
 , pulseSupport ? true, libpulseaudio ? null
-
-# Only needed for getting information about upstream binaries
-, chromium
 }:
 
 with stdenv.lib;
-
-with chromium.upstream-info;
 
 let
   opusWithCustomModes = libopus.override {
@@ -43,7 +38,7 @@ let
     stdenv.cc.cc
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite
-    alsaLib libXdamage libXtst libXrandr expat cups
+    libxcb alsaLib libXdamage libXtst libXrandr expat cups
     dbus_libs gtk2 gdk_pixbuf gcc
     systemd
     libexif
@@ -52,11 +47,13 @@ let
     bzip2 libcap
   ] ++ optional pulseSupport libpulseaudio;
 in stdenv.mkDerivation rec {
-  inherit version;
 
-  name = "google-chrome-${version}";
+  name = "google-chrome-${channel}";
 
-  src = binary;
+  src = fetchapt {
+    repository = https://dl.google.com/linux/chrome/deb;
+    package = name;
+  };
 
   buildInputs = [ patchelf ];
 
@@ -70,9 +67,9 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     case ${channel} in
-      beta) appname=chrome-beta      dist=beta     ;;
-      dev)  appname=chrome-unstable  dist=unstable ;;
-      *)    appname=chrome           dist=stable   ;;
+      beta)      appname=chrome-beta      dist=beta     ;;
+      unstable)  appname=chrome-unstable  dist=unstable ;;
+      *)         appname=chrome           dist=stable   ;;
     esac
 
     exe=$out/bin/google-chrome-$dist
