@@ -16206,6 +16206,8 @@ in
 
     in makeOverridable makePackages extra;
 
+  lumina = callPackage ../desktops/lumina { };
+
   lxqt = recurseIntoAttrs (callPackage ../desktops/lxqt { });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate {
