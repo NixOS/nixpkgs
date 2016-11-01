@@ -32,7 +32,7 @@ core-packages:
   - xhtml-3000.2.1
 
 default-package-overrides:
-  # LTS Haskell 7.6
+  # LTS Haskell 7.7
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -284,9 +284,9 @@ default-package-overrides:
   - ChannelT ==0.0.0.2
   - charset ==0.3.7.1
   - charsetdetect-ae ==1.1.0.1
-  - Chart ==1.8
-  - Chart-cairo ==1.8
-  - Chart-diagrams ==1.8
+  - Chart ==1.8.1
+  - Chart-cairo ==1.8.1
+  - Chart-diagrams ==1.8.1
   - ChasingBottoms ==1.3.1.2
   - cheapskate ==0.1.0.5
   - cheapskate-highlight ==0.1.0.0
@@ -421,7 +421,7 @@ default-package-overrides:
   - dbus ==0.10.12
   - debian-build ==0.10.1.0
   - Decimal ==0.4.2
-  - declarative ==0.2.2
+  - declarative ==0.2.3
   - deepseq-generics ==0.2.0.0
   - dejafu ==0.4.0.0
   - dependent-map ==0.2.3.0
@@ -811,7 +811,7 @@ default-package-overrides:
   - haskoin-core ==0.4.0
   - hasql ==0.19.15.2
   - hastache ==0.6.1
-  - hasty-hamiltonian ==1.1.3
+  - hasty-hamiltonian ==1.1.4
   - HaTeX ==3.17.0.2
   - hatex-guide ==1.3.1.5
   - hbayes ==0.5.2
@@ -847,7 +847,7 @@ default-package-overrides:
   - hjsonpointer ==1.0.0.2
   - hjsonschema ==1.1.0.1
   - hledger ==1.0.1
-  - hledger-interest ==1.4.4
+  - hledger-interest ==1.5
   - hledger-lib ==1.0.1
   - hlibgit2 ==0.18.0.15
   - hlibsass ==0.1.5.0
@@ -901,11 +901,11 @@ default-package-overrides:
   - HsOpenSSL ==0.11.3.2
   - HsOpenSSL-x509-system ==0.1.0.3
   - hsp ==0.10.0
-  - hspec ==2.2.3
+  - hspec ==2.2.4
   - hspec-attoparsec ==0.1.0.2
   - hspec-contrib ==0.3.0
-  - hspec-core ==2.2.3
-  - hspec-discover ==2.2.3
+  - hspec-core ==2.2.4
+  - hspec-discover ==2.2.4
   - hspec-expectations ==0.7.2
   - hspec-expectations-pretty-diff ==0.7.2.4
   - hspec-golden-aeson ==0.2.0.3
@@ -1121,7 +1121,7 @@ default-package-overrides:
   - matrix ==0.3.5.0
   - maximal-cliques ==0.1.1
   - mbox ==0.3.3
-  - mcmc-types ==1.0.1
+  - mcmc-types ==1.0.2
   - megaparsec ==5.0.1
   - memory ==0.13
   - MemoTrie ==0.6.4
@@ -1139,7 +1139,7 @@ default-package-overrides:
   - microlens-mtl ==0.1.10.0
   - microlens-platform ==0.3.7.0
   - microlens-th ==0.4.1.0
-  - mighty-metropolis ==1.0.2
+  - mighty-metropolis ==1.0.3
   - mime-mail ==0.4.11
   - mime-mail-ses ==0.3.2.3
   - mime-types ==0.1.0.7
@@ -1307,7 +1307,7 @@ default-package-overrides:
   - pdfinfo ==1.5.4
   - pem ==0.2.2
   - permutation ==0.5.0.5
-  - persistable-record ==0.4.0.3
+  - persistable-record ==0.4.1.0
   - persistable-types-HDBC-pg ==0.0.1.4
   - persistent ==2.6
   - persistent-postgresql ==2.6
@@ -1597,7 +1597,7 @@ default-package-overrides:
   - sourcemap ==0.1.6
   - spdx ==0.2.1.0
   - speculation ==1.5.0.3
-  - speedy-slice ==0.1.3
+  - speedy-slice ==0.1.4
   - sphinx ==0.6.0.2
   - Spintax ==0.1.0.1
   - splice ==0.6.1.1
