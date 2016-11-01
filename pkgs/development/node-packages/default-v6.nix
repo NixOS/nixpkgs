@@ -1,7 +1,7 @@
 {pkgs, system, nodejs}:
 
 let
-  nodePackages = import ./composition-v5.nix {
+  nodePackages = import ./composition-v6.nix {
     inherit pkgs system nodejs;
   };
 in

@@ -2431,7 +2431,7 @@ in
     libtool = darwin.cctools;
   };
 
-  nodejs = nodejs-4_x;
+  nodejs = nodejs-6_x;
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
