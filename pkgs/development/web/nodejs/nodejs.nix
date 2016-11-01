@@ -42,6 +42,7 @@ in stdenv.mkDerivation {
   '';
 
   postInstall = ''
+    paxmark m $out/bin/node
     PATH=$out/bin:$PATH patchShebangs $out
   '';
 
