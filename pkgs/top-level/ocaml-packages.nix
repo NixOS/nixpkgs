@@ -625,7 +625,6 @@ let
 
     ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
-    opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
     opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
     opam = callPackage ../development/tools/ocaml/opam { };
 
