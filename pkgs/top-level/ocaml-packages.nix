@@ -625,8 +625,6 @@ let
 
     ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
-    opam = callPackage ../development/tools/ocaml/opam { };
-
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 
     trv = callPackage ../development/tools/misc/trv { };

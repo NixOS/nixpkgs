@@ -5111,7 +5111,7 @@ in
     nodejs = nodejs-4_x;
   };
 
-  inherit (ocamlPackages) opam;
+  opam = callPackage ../development/tools/ocaml/opam { };
 
   picat = callPackage ../development/compilers/picat {
     stdenv = overrideCC stdenv gcc49;
