@@ -9761,6 +9761,9 @@ in {
     name = "Django-${version}";
     version = "1.6.11";
 
+    # Support to python-3.4 and higher was introduced in django_1_7
+    disabled = !(isPy26 || isPy27 || isPy33);
+
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.6/${name}.tar.gz";
       sha256 = "0misvia78c14y07zs5xsb9lv54q0v217jpaindrmhhw4wiryal3y";
@@ -10747,6 +10750,9 @@ in {
     };
 
     buildInputs = [ self.django ];
+
+    # There is no test embedded
+    doCheck = false;
 
     meta = {
       description = "A snapshot of django-filebrowser for the Mezzanine CMS";
@@ -14003,6 +14009,7 @@ in {
       url = "https://github.com/stephenmcd/mezzanine/archive/${version}.tar.gz";
       sha256 = "1cd7d3dji8q4mvcnf9asxn8j109pd5g5d5shr6xvn0iwr35qprgi";
     };
+    patches = [ ../development/python-modules/mezzanine/writable_settings.patch ];
 
     disabled = isPyPy;
 
