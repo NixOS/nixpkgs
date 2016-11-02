@@ -6,6 +6,7 @@
  * Hint: ### starts category names.
  */
 { system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
+, nixpkgsFun
 , ... }:
 self: pkgs:
 
@@ -35,10 +36,9 @@ in
   newScope = extra: lib.callPackageWith (defaultScope // extra);
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: (import ../..) {
+  forceSystem = system: kernel: nixpkgsFun {
     inherit system;
     platform = platform // { kernelArch = kernel; };
-    inherit bootStdenv noSysDirs config crossSystem;
   };
 
   # Used by wine, firefox with debugging version of Flash, ...
@@ -4254,9 +4254,7 @@ in
     # load into the Ben Nanonote
     gccCross =
       let
-        pkgsCross = (import ../..) {
-          inherit system;
-          inherit bootStdenv noSysDirs config;
+        pkgsCross = nixpkgsFun {
           # Ben Nanonote system
           crossSystem = {
             config = "mipsel-unknown-linux";

@@ -24,13 +24,12 @@
 
 , crossSystem ? null
 , platform ? null
-}:
+} @ args:
 
 
 let configExpr = config; platform_ = platform; in # rename the function arguments
 
 let
-
   lib = import ../../lib;
 
   # Allow both:
@@ -58,8 +57,19 @@ let
     else config.platform or platformAuto;
 
   topLevelArguments = {
-    inherit system bootStdenv noSysDirs config crossSystem platform lib;
+    inherit system bootStdenv noSysDirs config crossSystem platform lib nixpkgsFun;
   };
+
+  # A few packages make a new package set to draw their dependencies from.
+  # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
+  # give `all-packages.nix` all the arguments to this function, even ones that
+  # don't concern it, we give it this function to "re-call" nixpkgs, inheriting
+  # whatever arguments it doesn't explicitly provide. This way,
+  # `all-packages.nix` doesn't know more than it needs too.
+  #
+  # It's OK that `args` doesn't include the defaults: they'll be
+  # deterministically inferred the same way.
+  nixpkgsFun = newArgs: import ./. (args // newArgs);
 
   stdenvAdapters = self: super:
     let res = import ../stdenv/adapters.nix self; in res // {
@@ -71,7 +81,7 @@ let
       inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.xorg) lndir;
     });
 
-  stdenvDefault = self: super: (import ./stdenv.nix topLevelArguments) {} pkgs;
+  stdenvDefault = self: super: (import ./stdenv.nix topLevelArguments) pkgs;
 
   allPackages = self: super:
     let res = import ./all-packages.nix topLevelArguments res self;
