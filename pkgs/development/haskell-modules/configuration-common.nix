@@ -1051,4 +1051,7 @@ self: super: {
     librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
   });
 
+  # horribly outdated (X11 interface changed a lot)
+  sindre = markBroken super.sindre;
+
 }
