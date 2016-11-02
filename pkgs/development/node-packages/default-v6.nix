@@ -29,9 +29,13 @@ nodePackages // {
         sha1 = "26220f7e43ee3c0d714860db61c4d0ecc9bb3d89";
       }} $TMPDIR/webdrvr/chromedriver_linux64.zip
     '';
-    
+
     dontNpmInstall = true; # We face an error with underscore not found, but the package will work fine if we ignore this.
   });
+
+  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
+    postInstall = "npm run-script prepublish";
+  };
 
   bower2nix = nodePackages.bower2nix.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
