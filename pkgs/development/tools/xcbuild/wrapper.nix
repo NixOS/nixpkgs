@@ -60,5 +60,9 @@ stdenv.mkDerivation {
       --set DEVELOPER_DIR "${developer}"
   '';
 
+  passthru = {
+    raw = xcbuild;
+  };
+
   preferLocalBuild = true;
 }
