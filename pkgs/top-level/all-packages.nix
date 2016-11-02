@@ -5516,7 +5516,6 @@ in
   pythonFull = python.override{x11Support=true;};
   python2Full = python2.override{x11Support=true;};
   python3Full = python3.override{x11Support=true;};
-  python27Full = python2Full;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python2Packages;
