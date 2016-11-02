@@ -12749,6 +12749,8 @@ in
 
   evopedia = callPackage ../applications/misc/evopedia { };
 
+  exercism = callPackage ../applications/misc/exercism { };
+
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
