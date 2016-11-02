@@ -16,6 +16,10 @@ let
   sharedConfigureFlags = concatMap (name: [
     "--shared-${name}"
     "--shared-${name}-libpath=${getLib sharedLibDeps.${name}}/lib"
+    /** Closure notes: we explicitly avoid specifying --shared-*-includes,
+     *  as that would put the paths into bin/nodejs.
+     *  Including pkgconfig in build inputs would also have the same effect!
+     */
   ]) (builtins.attrNames sharedLibDeps);
 
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
