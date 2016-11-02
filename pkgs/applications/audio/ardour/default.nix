@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./tools/
   '';
 
-  configurePhase = "${python2.interpreter} waf configure --optimize --docs --with-backends=jack,alsa --prefix=$out";
+  configurePhase = "${python2.interpreter} waf configure --optimize --docs --with-backends=jack,alsa,dummy --prefix=$out";
 
   buildPhase = "${python2.interpreter} waf";
 
