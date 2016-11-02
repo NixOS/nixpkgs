@@ -208,11 +208,10 @@ in
 
         networks = mkOption {
           default = { };
-          type = types.loaOf types.optionSet;
+          type = with types; loaOf (submodule networkOpts);
           description = ''
             IRC networks to connect the user to.
           '';
-          options = [ networkOpts ];
           example = {
             "freenode" = {
               server = "chat.freenode.net";
