@@ -12775,6 +12775,8 @@ in
 
   fmit = qt5.callPackage ../applications/audio/fmit { };
 
+  fmsynth = callPackage ../applications/audio/fmsynth { };
+
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
   font-manager = callPackage ../applications/misc/font-manager { };
