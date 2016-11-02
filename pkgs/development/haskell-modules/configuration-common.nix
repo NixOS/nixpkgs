@@ -142,7 +142,6 @@ self: super: {
   HDBC-odbc = dontHaddock super.HDBC-odbc;
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
-  hspec-discover = dontHaddock super.hspec-discover;
   http-client-conduit = dontHaddock super.http-client-conduit;
   http-client-multipart = dontHaddock super.http-client-multipart;
   markdown-unlit = dontHaddock super.markdown-unlit;
