@@ -299,7 +299,6 @@ self: super: {
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
-  hoogle_5_0_4 = super.hoogle_5_0_4.override { haskell-src-exts = self.haskell-src-exts_1_19_0; };
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
@@ -983,6 +982,9 @@ self: super: {
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
   });
+
+  # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_0; };
 
   # Test suite fails a QuickCheck property.
   optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
