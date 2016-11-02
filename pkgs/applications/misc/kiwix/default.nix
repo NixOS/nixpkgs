@@ -1,5 +1,5 @@
 { stdenv, callPackage, overrideCC, fetchurl, makeWrapper, pkgconfig
-, zip, python, zlib, which, icu, libmicrohttpd, lzma, ctpp2, aria2, wget, bc
+, zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
 , libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus_glib
 , gtk2, gdk_pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
 }:
@@ -28,6 +28,7 @@ let
               then { tar = xulrunner64_tar; sdk = xulrunnersdk64_tar; }
               else { tar = xulrunner32_tar; sdk = xulrunnersdk32_tar; };
 
+  ctpp2 = callPackage ../../../development/libraries/ctpp2 { inherit stdenv; };
   xapian = callPackage ../../../development/libraries/xapian { inherit stdenv; };
   zimlib = callPackage ../../../development/libraries/zimlib { inherit stdenv; };
 
