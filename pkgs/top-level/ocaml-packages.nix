@@ -630,7 +630,7 @@ let
       then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
       else {}
     ) // {
-      coq = coq_8_5;
+      coq = pkgs.coq_8_5;
     });
 
     haxe = callPackage ../development/compilers/haxe { };
@@ -670,24 +670,6 @@ let
 
     unison = callPackage ../applications/networking/sync/unison {
       enableX11 = config.unison.enableX11 or true;
-    };
-
-    coq = callPackage ../applications/science/logic/coq {
-      camlp5 = camlp5_transitional;
-    };
-
-    coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {
-      camlp5 = camlp5_transitional;
-    };
-
-    coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
-      camlp5 = camlp5_transitional;
-    };
-
-    coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
-      make = pkgs.gnumake3;
-      camlp5 = camlp5_transitional;
-      lablgtk = lablgtk_2_14;
     };
 
     hol_light = callPackage ../applications/science/logic/hol_light {

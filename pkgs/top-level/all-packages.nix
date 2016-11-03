@@ -16487,13 +16487,27 @@ in
 
   aspino = callPackage ../applications/science/logic/aspino {};
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) coq;
+  coq = callPackage ../applications/science/logic/coq {
+    inherit (ocamlPackages_4_01_0) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages_4_01_0.camlp5_transitional;
+  };
 
-  inherit (ocamlPackages) coq_HEAD;
+  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {
+    inherit (ocamlPackages) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
 
-  inherit (ocamlPackages) coq_8_5;
+  coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
+    inherit (ocamlPackages) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
 
-  inherit (ocaml-ng.ocamlPackages_3_12_1) coq_8_3;
+  coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
+    make = pkgs.gnumake3;
+    inherit (ocamlPackages_3_12_1) ocaml findlib;
+    camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
+    lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
+  };
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
 
