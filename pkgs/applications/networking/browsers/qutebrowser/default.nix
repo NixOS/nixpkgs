@@ -72,7 +72,6 @@ in buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonPrograms
     mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
     makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
 
