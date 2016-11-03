@@ -263,6 +263,10 @@ let
       lwt = ocaml_lwt;
     };
 
+    notty = callPackage ../development/ocaml-modules/notty {
+      lwt = ocaml_lwt;
+    };
+
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
