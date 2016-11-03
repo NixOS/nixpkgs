@@ -416,6 +416,8 @@ let
       then callPackage ../development/ocaml-modules/ppx_deriving {}
       else null;
 
+    ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
+
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
