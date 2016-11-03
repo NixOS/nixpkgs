@@ -1,7 +1,8 @@
 { stdenv, fetchurl, perl, python2, ruby, bison, gperf, cmake
 , pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls
 , gtk2, gtk3, wayland, libwebp, enchant, xlibs, libxkbcommon, epoxy, at_spi2_core
-, libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
+, libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11_kit
+, libidn
 , enableGeoLocation ? true, geoclue2, sqlite
 , gst-plugins-base
 }:
@@ -11,7 +12,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.14.1";
+  version = "2.14.2";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1dffnz20psgc604azhbzn9a6cdhafar9dw74w3bbwrfy531pcb9f";
+    sha256 = "0mjmcxhafh6l6j062z2nwfqbbvfyx16iqrzrbajswijh23awpnrf";
   };
 
   # see if we can clean this up....
@@ -49,8 +50,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2 wayland libwebp enchant libnotify gnutls
-    libxml2 libsecret libxslt harfbuzz libpthreadstubs
+    gtk2 wayland libwebp enchant libnotify gnutls pcre nettle libidn
+    libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11_kit
     gst-plugins-base libxkbcommon epoxy at_spi2_core
   ] ++ optional enableGeoLocation geoclue2
     ++ (with xlibs; [ libXdmcp libXt libXtst ]);
