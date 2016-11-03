@@ -11582,7 +11582,9 @@ in
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
-  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
+  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant {
+    openssl = openssl_1_1_0;
+  };
 
   wpa_supplicant_gui = callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 
