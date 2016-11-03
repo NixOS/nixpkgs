@@ -824,6 +824,8 @@ in
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
+  ecasound = callPackage ../applications/audio/ecasound { };
+
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
