@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # all fail
 
+  patches = [ ./ignore_wrapper.patch ];
+
   meta = with stdenv.lib; {
     description = "Tool that generates a compilation database for clang tooling";
     longDescription = ''
