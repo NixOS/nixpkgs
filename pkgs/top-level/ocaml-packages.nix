@@ -22,6 +22,8 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
+    astring = callPackage ../development/ocaml-modules/astring { };
+
     async_extra_p4 = callPackage ../development/ocaml-modules/async_extra { };
 
     async_find = callPackage ../development/ocaml-modules/async_find { };
