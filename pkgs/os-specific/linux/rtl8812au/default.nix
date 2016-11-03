@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Grawp";
     repo = "rtl8812au_rtl8821au";
-    rev = "9c5b2978ab079081dd1e981353be681a1cf495de";
-    sha256 = "0bx1vgs2qldwwhdgklbqz2vy9x4jg7cj3d6w6cpkndkcr7h0m5vz";
+    rev = "d716b38abf5ca7da72d2be0adfcebe98cceeda8f";
+    sha256 = "01z5p2vps3an69bbzca7ig14llc5rd6067pgs47kkhfjbsbws4ry";
   };
 
   hardeningDisable = [ "pic" ];
