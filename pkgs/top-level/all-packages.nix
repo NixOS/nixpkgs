@@ -461,6 +461,8 @@ in
 
   azure-cli = nodePackages.azure-cli;
 
+  azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
