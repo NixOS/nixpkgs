@@ -845,6 +845,8 @@ in
 
   fzf = callPackage ../tools/misc/fzf { };
 
+  azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
+
   fzy = callPackage ../tools/misc/fzy { };
 
   gdrivefs = python27Packages.gdrivefs;
