@@ -159,6 +159,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/riak.nix
+  ./services/databases/stanchion.nix
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/geoclue2.nix
