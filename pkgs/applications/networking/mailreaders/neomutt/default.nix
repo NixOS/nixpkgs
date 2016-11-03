@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.neomutt.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ hiberno cstrahan vrthra ];
+    maintainers = with maintainers; [ cstrahan vrthra ];
   };
 }

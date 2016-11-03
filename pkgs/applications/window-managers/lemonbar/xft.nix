@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A lightweight xcb based bar with XFT-support";
     homepage = https://github.com/krypt-n/bar;
-    maintainers = [ stdenv.lib.maintainers.hiberno ];
     license = "Custom";
     platforms = stdenv.lib.platforms.linux;
   };
