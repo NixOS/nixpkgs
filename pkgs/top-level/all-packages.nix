@@ -864,7 +864,7 @@ in
 
   goa = callPackage ../development/tools/goa { };
 
-  gringo = callPackage ../tools/misc/gringo { };
+  clingo = callPackage ../tools/misc/clingo { };
 
   gti = callPackage ../tools/misc/gti { };
 
