@@ -7,7 +7,6 @@ let
 
   cfg = config.services.ipfs;
 
-
   ipfsFlags = ''${if cfg.autoMigrate then "--migrate" else ""} ${if cfg.enableGC then "--enable-gc" else ""} ${toString cfg.extraFlags}'';
 
 in
@@ -20,13 +19,7 @@ in
 
     services.ipfs = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to start a daemon for the Interplanetary
-          file system (IPFS).
-        '';
-      };
+      enable = mkEnableOption "Interplanetary File System";
 
       user = mkOption {
         type = types.str;
@@ -47,6 +40,7 @@ in
       };
 
       autoMigrate = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether IPFS should try to migrate the file system automatically.
@@ -54,9 +48,10 @@ in
       };
 
       enableGC = mkOption {
+        type = types.bool;
         default = false;
         description = ''
-          Whether to enable automatic garbadge collection.
+          Whether to enable automatic garbage collection.
         '';
       };
 
@@ -73,18 +68,20 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.ipfs ];
 
-    users.extraUsers = optionalAttrs (cfg.user == "ipfs") singleton {
-      name = "ipfs";
-      group = cfg.group;
-      home = cfg.dataDir;
-      createHome = false;
-      uid = config.ids.uids.ipfs;
-      description = "IPFS daemon user";
+    users.extraUsers = mkIf (cfg.user == "ipfs") {
+      ipfs = {
+        group = cfg.group;
+        home = cfg.dataDir;
+        createHome = false;
+        uid = config.ids.uids.ipfs;
+        description = "IPFS daemon user";
+      };
     };
 
-    users.extraGroups = optionalAttrs (cfg.group == "ipfs") singleton {
-      name = "ipfs";
-      gid = config.ids.gids.ipfs;
+    users.extraGroups = mkIf (cfg.group == "ipfs") {
+      ipfs = {
+        gid = config.ids.gids.ipfs;
+      };
     };
 
     systemd.services.ipfs = {
