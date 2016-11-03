@@ -280,7 +280,11 @@ in
       (mapAttrsToList (name: cfg:
         { assertion = !(cfg.lowmem && cfg.verylowmem);
           message = "You cannot set both lowmem and verylowmem";
-        }) cfg.archives);
+        }) cfg.archives) ++ [
+          { assertion = length (unique (mapAttrsToList (name: x: x.keyfile) cfg.archives)) == length (attrNames cfg.archives);
+            message = "Using same key for different archives is not supported in NixOS";
+          }
+        ];
 
     systemd.services."tarsnap@" = {
       description = "Tarsnap archive '%i'";
