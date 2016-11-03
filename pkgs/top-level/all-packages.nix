@@ -14601,6 +14601,8 @@ in
     git = gitMinimal;
   };
 
+  ssr = callPackage ../applications/audio/soundscape-renderer {};
+
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stp = callPackage ../applications/science/logic/stp {};
