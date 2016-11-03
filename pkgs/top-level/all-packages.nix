@@ -771,6 +771,8 @@ in
 
   deisctl = callPackage ../development/tools/deisctl {};
 
+  devmem2 = callPackage ../os-specific/linux/devmem2 { };
+
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
