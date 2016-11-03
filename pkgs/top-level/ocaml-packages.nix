@@ -257,7 +257,9 @@ let
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
-    nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
+    nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
+      lwt = ocaml_lwt;
+    };
 
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
