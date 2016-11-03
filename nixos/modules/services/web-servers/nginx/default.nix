@@ -12,7 +12,7 @@ let
   ) cfg.virtualHosts;
 
   configFile = pkgs.writeText "nginx.conf" ''
-    pid /run/nginx/nginx.pid;
+    user ${cfg.user} ${cfg.group};
     error_log stderr;
     daemon off;
 
@@ -387,13 +387,6 @@ in
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
-        User = cfg.user;
-        Group = cfg.group;
-        RuntimeDirectory = "nginx";
-        NoNewPrivileges = "yes";
-        PrivateTmp = "yes";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
     };
 
