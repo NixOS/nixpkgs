@@ -78,8 +78,8 @@ let
     notify_nova_on_port_status_changes = True
     notify_nova_on_port_data_changes = True
     nova_url = http://localhost:8774/v2
-    nova_admin_username = nova
-    nova_admin_password = asdasd
+    nova_admin_username = ${cfg.novaServiceUsername}
+    nova_admin_password = ${cfg.novaServicePassword}
     nova_admin_auth_url = http://localhost:35357/v2.0
 
     api_paste_config = ${package_set}/etc/neutron/api-paste.ini
@@ -89,8 +89,8 @@ let
     project_domain_id = default
     project_name = service
     user_domain_id = default
-    password = asdasd
-    username = nova
+    password = ${cfg.novaServicePassword}
+    username = ${cfg.novaServiceUsername}
     auth_url = http://localhost:35357
     auth_plugin = password
 
@@ -104,8 +104,8 @@ let
     project_name = service
     project_domain_id = default
     user_domain_id = default
-    username = neutron
-    password = asdasd
+    username = ${cfg.serviceUsername}
+    password = ${cfg.servicePassword}
 
     [database]
     connection = mysql://neutron:${cfg.dbPassword}@${cfg.dbHost}/neutron
@@ -168,6 +168,28 @@ in {
       '';
     };
     
+    novaServiceUsername = mkOption {
+      default = "nova";
+      description = "The username of the nova service tenant";
+      example = "nova";
+    };
+    novaServicePassword = mkOption {
+      default = "nova";
+      description = "The password of the nova service user";
+      example = "nova";
+    };
+
+    serviceUsername = mkOption {
+      default = "neutron";
+      description = "The username used for the neutron service tenant";
+      example = "neutron";
+    };
+    servicePassword = mkOption {
+      default = "neutron";
+      description = "The password of the neutron service user";
+      example = "neutron";
+    };
+
     dbHost = mkOption {
       default = "localhost";
       description = "The location of the database server";
@@ -276,8 +298,8 @@ in {
 	    ID=$(keystone service-get neutron | awk '/ id / { print $4 }')
 	    keystone endpoint-create --region RegionOne --service $ID --internalurl http://localhost:9696 --adminurl http://localhost:9696 --publicurl http://${cfg.endpointPublic}:9696
 
-	    keystone user-create --name neutron --tenant service --pass asdasd
-	    keystone user-role-add --tenant service --user neutron --role admin
+	    keystone user-create --name ${cfg.serviceUsername} --tenant service --pass ${cfg.servicePassword}
+	    keystone user-role-add --tenant service --user ${cfg.serviceUsername} --role admin
         fi
         '';
       serviceConfig = {

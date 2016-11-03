@@ -16,8 +16,8 @@ let
     project_name = service
     project_domain_id = default
     user_domain_id = default
-    username = glance
-    password = asdasd
+    username = ${cfg.serviceUsername}
+    password = ${cfg.servicePassword}
 
     [glance_store]
     default_store = file
@@ -61,6 +61,17 @@ in {
         want to enable some of Nova's services on other machines,
         and use a database such as MySQL.
       '';
+    };
+
+    serviceUsername = mkOption {
+      default = "glance";
+      description = "The username used for the glance service tenant";
+      example = "glance";
+    };
+    servicePassword = mkOption {
+      default = "glance";
+      description = "The password of the glance service user";
+      example = "glance";
     };
 
     dbHost = mkOption {
@@ -164,8 +175,8 @@ in {
 	    ID=$(keystone service-get glance | awk '/ id / { print $4 }')
 	    keystone endpoint-create --region RegionOne --service $ID --internalurl http://localhost:9292 --adminurl http://localhost:9292 --publicurl http://${cfg.endpointPublic}:9292
 
-	    keystone user-create --name glance --tenant service --pass asdasd
-	    keystone user-role-add --tenant service --user glance --role admin
+	    keystone user-create --name ${cfg.serviceUsername} --tenant service --pass ${cfg.servicePassword}
+	    keystone user-role-add --tenant service --user ${cfg.serviceUsername} --role admin
         fi
         '';
       serviceConfig = {

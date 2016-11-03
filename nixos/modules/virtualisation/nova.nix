@@ -71,13 +71,13 @@ let
     project_name = service
     project_domain_id = default
     user_domain_id = default
-    username = nova
-    password = asdasd
+    username = ${cfg.serviceUsername}
+    password = ${cfg.serviceUsername}
 
     [neutron]
     url=http://localhost:9696
-    admin_username = neutron
-    admin_password = asdasd
+    admin_username = {cfg.neutronServiceUsername}
+    admin_password = {cfg.neutronServicePassword}
     admin_tenant_name = service
     admin_auth_url = http://localhost:5000/v2.0
     auth_strategy = keystone
@@ -150,6 +150,28 @@ in {
             want to enable some of Nova's services on other machines,
             and use a database such as MySQL.
           '';
+      };
+
+      neutronServiceUsername = mkOption {
+        default = "neutron";
+        description = "The username of the neutron service tenant";
+        example = "neutron";
+      };
+      neutronServicePassword = mkOption {
+        default = "neutron";
+        description = "The password of the neutron service user";
+        example = "neutron";
+      };
+
+      serviceUsername = mkOption {
+        default = "nova";
+        description = "The username used for the nova service tenant";
+        example = "nova";
+      };
+      servicePassword = mkOption {
+        default = "nova";
+        description = "The password of the nova service user";
+        example = "nova";
       };
 
       dbHost = mkOption {
@@ -277,8 +299,8 @@ in {
 	    ID=$(keystone service-get nova | awk '/ id / { print $4 }')
 	    keystone endpoint-create --region RegionOne --service $ID --internalurl 'http://localhost:8774/v2/%(tenant_id)s' --adminurl 'http://localhost:8774/v2/%(tenant_id)s' --publicurl 'http://${cfg.endpointPublic}:8774/v2/%(tenant_id)s'
 
-	    keystone user-create --name nova --tenant service --pass asdasd
-	    keystone user-role-add --tenant service --user nova --role admin
+	    keystone user-create --name ${cfg.serviceUsername} --tenant service --pass ${cfg.servicePassword}
+	    keystone user-role-add --tenant service --user ${cfg.serviceUsername} --role admin
         fi
         '';
       path = with pkgs; [ cfg.package mysql openssl config.programs.ssh.package "/var/setuid-wrappers/" pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk pkgs.iptables ];
