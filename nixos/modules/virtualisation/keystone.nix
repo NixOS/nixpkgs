@@ -6,7 +6,6 @@ let
   cfg = config.virtualisation.keystone;
   keystoneConf = pkgs.writeText "keystone.conf" ''
     [DEFAULT]
-    # TODO: openssl rand -hex 10
     admin_token = ${cfg.adminToken}
     policy_file=${cfg.package}/etc/policy.json
 
@@ -35,12 +34,6 @@ in {
       description = "This option enables Keystone.";
     };
 
-    databaseConnection = mkOption {
-      type = types.string;
-      description = ''
-      '';
-    };
-
     extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -50,7 +43,7 @@ in {
       '';
     };
 
-        endpointPublic = mkOption {
+    endpointPublic = mkOption {
       type = types.str;
       default = "localhost";
       description = ''
