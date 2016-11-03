@@ -29,20 +29,10 @@ in {
       '';
     };
 
-    # TODO: s/Nova/Keystone/
-    enableSingleNode = mkOption {
+    enable = mkOption {
       default = false;
       type = types.bool;
-      description = ''
-        This option enables Nova, also known as OpenStack Compute,
-        a cloud computing system, as a single-machine
-        installation.  That is, all of Nova's components are
-        enabled on this machine, using SQLite as Nova's database.
-        This is useful for evaluating and experimenting with Nova.
-        However, for a real cloud computing environment, you'll
-        want to enable some of Nova's services on other machines,
-        and use a database such as MySQL.
-      '';
+      description = "This option enables Keystone.";
     };
 
     databaseConnection = mkOption {
@@ -120,12 +110,13 @@ in {
   };
 
 
-  config = mkIf cfg.enableSingleNode {
+  config = mkIf cfg.enable {
     # Note: when changing the default, make it conditional on
     # ‘system.stateVersion’ to maintain compatibility with existing
     # systems!
     virtualisation.keystone.package = mkDefault pkgs.keystone;
 
+    # TODO: don't enable mysql if dbHost is not localhost
     services.mysql.enable = mkDefault true;
     services.mysql.package = mkDefault pkgs.mysql;
 
