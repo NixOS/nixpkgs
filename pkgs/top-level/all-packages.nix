@@ -6,6 +6,7 @@
  * Hint: ### starts category names.
  */
 { system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
+, nixpkgsFun
 , ... }:
 self: pkgs:
 
@@ -35,10 +36,9 @@ in
   newScope = extra: lib.callPackageWith (defaultScope // extra);
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: (import ../..) {
+  forceSystem = system: kernel: nixpkgsFun {
     inherit system;
     platform = platform // { kernelArch = kernel; };
-    inherit bootStdenv noSysDirs config crossSystem;
   };
 
   # Used by wine, firefox with debugging version of Flash, ...
@@ -1266,9 +1266,10 @@ in
     cudatoolkit6
     cudatoolkit65
     cudatoolkit7
-    cudatoolkit75;
+    cudatoolkit75
+    cudatoolkit8;
 
-  cudatoolkit = cudatoolkit7;
+  cudatoolkit = cudatoolkit8;
 
   cudnn = callPackage ../development/libraries/science/math/cudnn/default.nix {};
 
@@ -1520,7 +1521,9 @@ in
 
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
-  encfs = callPackage ../tools/filesystems/encfs { };
+  encfs = callPackage ../tools/filesystems/encfs {
+    tinyxml2 = tinyxml-2;
+  };
 
   enscript = callPackage ../tools/text/enscript { };
 
@@ -2330,6 +2333,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
+
   lnav = callPackage ../tools/misc/lnav { };
 
   loc = callPackage ../development/misc/loc { };
@@ -2424,9 +2429,18 @@ in
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
+  nodejs = nodejs-6_x;
+
+  nodejs-slim = nodejs-slim-6_x;
+
   nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
     openssl = openssl_1_0_2;
+  };
+
+  nodejs-slim-4_x = callPackage ../development/web/nodejs/v4.nix {
+    libtool = darwin.cctools;
+    enableNpm = false;
   };
 
   nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
@@ -2434,7 +2448,19 @@ in
     openssl = openssl_1_0_2;
   };
 
-  nodejs = nodejs-4_x;
+  nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix {
+    libtool = darwin.cctools;
+    enableNpm = false;
+  };
+
+  nodejs-7_x = callPackage ../development/web/nodejs/v7.nix {                                                                                                 
+    libtool = darwin.cctools;                                                                                                                                 
+  };                                                                                                                                                          
+                                                                                                                                                              
+  nodejs-slim-7_x = callPackage ../development/web/nodejs/v7.nix {                                                                                            
+    libtool = darwin.cctools;                                                                                                                                 
+    enableNpm = false;                                                                                                                                        
+  };
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
@@ -2444,7 +2470,7 @@ in
     nodejs = pkgs.nodejs-4_x;
   };
 
-  nodePackages = nodePackages_4_x;
+  nodePackages = nodePackages_6_x;
 
   # Can be used as a user shell
   nologin = shadow;
@@ -2804,7 +2830,9 @@ in
 
   netboot = callPackage ../tools/networking/netboot {};
 
-  netcat = callPackage ../tools/networking/netcat { };
+  netcat = netcat-openbsd;
+
+  netcat-gnu = callPackage ../tools/networking/netcat-gnu { };
 
   netcat-openbsd = callPackage ../tools/networking/netcat-openbsd { };
 
@@ -4246,9 +4274,7 @@ in
     # load into the Ben Nanonote
     gccCross =
       let
-        pkgsCross = (import ../..) {
-          inherit system;
-          inherit bootStdenv noSysDirs config;
+        pkgsCross = nixpkgsFun {
           # Ben Nanonote system
           crossSystem = {
             config = "mipsel-unknown-linux";
@@ -4825,6 +4851,8 @@ in
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
   });
+
+  all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
 
   inherit (ocamlPackages) haxe;
 
@@ -5518,7 +5546,6 @@ in
   pythonFull = python.override{x11Support=true;};
   python2Full = python2.override{x11Support=true;};
   python3Full = python3.override{x11Support=true;};
-  python27Full = python2Full;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python2Packages;
@@ -5526,7 +5553,7 @@ in
   python3Packages = python35Packages;
 
   python26 = callPackage ../development/interpreters/python/cpython/2.6 {
-    db = db47;
+    db = db4;
     self = python26;
   };
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
@@ -6510,7 +6537,7 @@ in
   aprutil = callPackage ../development/libraries/apr-util {
     openssl = openssl_1_0_2;
     bdbSupport = true;
-    db = if stdenv.isFreeBSD then db47 else db;
+    db = if stdenv.isFreeBSD then db4 else db;
     # XXX: only the db_185 interface was available through
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
@@ -6724,9 +6751,6 @@ in
   # bsd-like license
   db = db5;
   db4 = db48;
-  db44 = callPackage ../development/libraries/db/db-4.4.nix { };
-  db45 = callPackage ../development/libraries/db/db-4.5.nix { };
-  db47 = callPackage ../development/libraries/db/db-4.7.nix { };
   db48 = callPackage ../development/libraries/db/db-4.8.nix { };
   db5 = db53;
   db53 = callPackage ../development/libraries/db/db-5.3.nix { };
@@ -7085,7 +7109,7 @@ in
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr/default.nix { };
-  
+
   mpfi = callPackage ../development/libraries/mpfi { };
 
   # A GMP fork
@@ -8711,7 +8735,7 @@ in
   };
 
   opensubdiv = callPackage ../development/libraries/opensubdiv {
-    cudatoolkit = cudatoolkit75;
+    cudatoolkit = cudatoolkit8;
   };
 
   openwsman = callPackage ../development/libraries/openwsman {};
@@ -12188,7 +12212,7 @@ in
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
-    cudatoolkit = cudatoolkit75;
+    cudatoolkit = cudatoolkit8;
     python = python35;
   };
 
@@ -12796,6 +12820,8 @@ in
   };
 
   fmit = qt5.callPackage ../applications/audio/fmit { };
+
+  fmsynth = callPackage ../applications/audio/fmsynth { };
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
@@ -16514,6 +16540,7 @@ in
     domains = callPackage ../development/coq-modules/domains {};
 
     fiat = callPackage ../development/coq-modules/fiat {};
+    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
 
     flocq = callPackage ../development/coq-modules/flocq {};
 
@@ -16556,6 +16583,8 @@ in
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
 
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
+
+    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
 
   };
 
@@ -17017,7 +17046,7 @@ in
     libopus = libopus.override { withCustomModes = true; };
   };
   libjack2 = jack2Full.override { prefix = "lib"; };
-  libjack2-git = callPackage ../misc/jackaudio/git.nix { };
+  libjack2Unstable = callPackage ../misc/jackaudio/unstable.nix { };
 
   keynav = callPackage ../tools/X11/keynav { };
 
@@ -17192,6 +17221,7 @@ in
   mfcj6510dwlpr = callPackage_i686 ../misc/cups/drivers/mfcj6510dwlpr { };
 
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung { };
+  samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
   samsung-unified-linux-driver = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
 
   sane-backends = callPackage ../applications/graphics/sane/backends {

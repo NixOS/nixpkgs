@@ -30,13 +30,13 @@
 let
   unwrapped = let
     pname = "konversation";
-    version = "1.6.1";
+    version = "1.6.2";
   in kdeDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
       url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-      sha256 = "28346d6629261a5328c43ffa09c12e37743b3ef4f4bc4c411d39bc19f7bf06c6";
+      sha256 = "1798sslwz7a3h1v524ra33p0j5iqvcg0v1insyvb5qp4kv11slmn";
     };
 
     buildInputs = [

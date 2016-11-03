@@ -10,7 +10,7 @@ let
     inherit nodejs;
   };
 in
-import ./node-packages-v5.nix {
+import ./node-packages-v6.nix {
   inherit (pkgs) fetchurl fetchgit;
   inherit nodeEnv;
 }

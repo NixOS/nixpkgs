@@ -364,6 +364,48 @@ in {
     };
   };
 
+  altair = buildPythonPackage rec {
+    name = "altair-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/altair/${name}.tar.gz";
+      sha256 = "024drhmiw8w3dl7dbal0pvnlfd3sv4n1rqywv2jb488b3fzm704r";
+    };
+
+    propagatedBuildInputs = with self; [ vega pandas ipython traitlets ];
+
+    meta = {
+      description = "A declarative statistical visualization library for Python.";
+      homepage = https://github.com/altair-viz/altair;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+  vega = buildPythonPackage rec {
+    name = "vega-0.4.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vega/${name}.tar.gz";
+      sha256 = "08k92afnk0bivm07h1l5nh26xl2rfp7qn03aq17q1hr3fs5r6cdm";
+    };
+
+    propagatedBuildInputs = with self; [ jupyter_core pandas ];
+
+    meta = {
+      description = " An IPython/Jupyter widget for Vega and Vega-Lite.";
+      longDescription = ''
+        To use this you have to enter a nix-shell with vega. Then run:
+
+        jupyter nbextension install --user --py vega
+        jupyter nbextension enable --user vega
+      '';
+      homepage = https://github.com/vega/ipyvega;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
   acme_0_5_0 = buildPythonPackage rec {
     version = "0.5.0";
     name = "acme-${version}";
@@ -2199,7 +2241,7 @@ in {
       description = "A decorator for caching properties in classes";
       homepage = https://github.com/pydanny/cached-property;
       license = licenses.bsd3;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ ericsagnes ];
     };
   };
@@ -9720,6 +9762,9 @@ in {
     name = "Django-${version}";
     version = "1.6.11";
 
+    # Support to python-3.4 and higher was introduced in django_1_7
+    disabled = !(isPy26 || isPy27 || isPy33);
+
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.6/${name}.tar.gz";
       sha256 = "0misvia78c14y07zs5xsb9lv54q0v217jpaindrmhhw4wiryal3y";
@@ -10706,6 +10751,9 @@ in {
     };
 
     buildInputs = [ self.django ];
+
+    # There is no test embedded
+    doCheck = false;
 
     meta = {
       description = "A snapshot of django-filebrowser for the Mezzanine CMS";
@@ -13962,6 +14010,7 @@ in {
       url = "https://github.com/stephenmcd/mezzanine/archive/${version}.tar.gz";
       sha256 = "1cd7d3dji8q4mvcnf9asxn8j109pd5g5d5shr6xvn0iwr35qprgi";
     };
+    patches = [ ../development/python-modules/mezzanine/writable_settings.patch ];
 
     disabled = isPyPy;
 
@@ -17744,11 +17793,11 @@ in {
 
   partd = buildPythonPackage rec {
     name = "partd-${version}";
-    version = "0.3.3";
+    version = "0.3.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/partd/${name}.tar.gz";
-      sha256 = "0fgrkfhgpm0hf5gs6wvgv7p9ls2kvgk0mc5hkmjw5slfbkn3fz8v";
+      sha256 = "1wl8kifdljnpbz0ls7mbbc9j23fc5xzm639im7h88spyg02w68hm";
     };
 
     buildInputs = with self; [ pytest ];
@@ -17756,6 +17805,7 @@ in {
     propagatedBuildInputs = with self; [ locket numpy pandas pyzmq toolz ];
 
     checkPhase = ''
+      rm partd/tests/test_zmq.py # requires network & fails
       py.test
     '';
 

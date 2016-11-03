@@ -1,18 +1,10 @@
-{ pkgs, stdenv, ghc
+{ pkgs, stdenv, ghc, all-cabal-hashes
 , compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
 }:
 
 let
-
-  allCabalFiles = stdenv.mkDerivation {
-    name = "all-cabal-hashes-0";
-    buildCommand = ''
-      mkdir -p $out
-      tar -C $out --strip-components=1 -x -f ${builtins.fetchurl "https://github.com/commercialhaskell/all-cabal-hashes/archive/hackage.tar.gz"}
-    '';
-  };
 
   inherit (stdenv.lib) fix' extends;
 
@@ -69,8 +61,8 @@ let
         installPhase = ''
           export HOME="$TMP"
           mkdir $out
-          hash=$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' ${allCabalFiles}/${name}/${version}/${name}.json)
-          cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} --sha256=$hash ${allCabalFiles}/${name}/${version}/${name}.cabal >$out/default.nix
+          hash=$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' ${all-cabal-hashes}/${name}/${version}/${name}.json)
+          cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} --sha256=$hash ${all-cabal-hashes}/${name}/${version}/${name}.cabal >$out/default.nix
         '';
       };
 

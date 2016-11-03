@@ -1041,4 +1041,17 @@ self: super: {
     http-conduit = self.http-conduit_2_2_3;
   });
 
+  # https://hydra.nixos.org/build/42769611/nixlog/1/raw
+  # note: the library is unmaintained, no upstream issue
+  dataenc = doJailbreak super.dataenc;
+
+  libsystemd-journal = overrideCabal super.libsystemd-journal (old: {
+    # https://github.com/ocharles/libsystemd-journal/pull/17
+    jailbreak = true;
+    librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
+  });
+
+  # horribly outdated (X11 interface changed a lot)
+  sindre = markBroken super.sindre;
+
 }

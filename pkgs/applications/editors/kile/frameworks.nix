@@ -24,12 +24,12 @@ let
   unwrapped =
     kdeDerivation rec {
       name = "kile-${version}";
-      version = "2016-07-25";
+      version = "2016-10-24";
 
       src = fetchgit {
         url = git://anongit.kde.org/kile.git;
-        rev = "9cad4757df2493a6099b89114340493c6b436d0b";
-        sha256 = "0kikrkssfd7bj580iwsipirbz2klxvk0f7nfg5y9mkv0pnchx2mj";
+        rev = "e005e2ac140881aa7610bd363d181cf306f91f80";
+        sha256 = "1labv8jagsfk0k7nvxh90in9464avzdabgs215y1h658zjh1wpy4";
 
       };
 

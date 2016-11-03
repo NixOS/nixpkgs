@@ -1,16 +1,16 @@
 { stdenv, fetchurl, cmake, gettext, pkgconfig, extra-cmake-modules, makeQtWrapper
-, qtquickcontrols, qtwebkit
+, qtquickcontrols, qtwebkit, qttools
 , kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
 , kjobwidgets, kcmutils, kio, knewstuff, knotifyconfig, kparts, ktexteditor
-, threadweaver, kxmlgui, kwindowsystem
+, threadweaver, kxmlgui, kwindowsystem, grantlee
 , plasma-framework, krunner, kdevplatform, kdevelop-pg-qt, shared_mime_info
-, libksysguard, llvmPackages
+, libksysguard, llvmPackages, makeWrapper
 }:
 
 let
   pname = "kdevelop";
-  version = "5.0";
-  dirVersion = "5.0.0";
+  version = "5.0.2";
+  dirVersion = "5.0.2";
 
 in
 stdenv.mkDerivation rec {
@@ -18,22 +18,25 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${dirVersion}/src/${name}.tar.xz";
-    sha256 = "5e034b8670f4ba13ccb2948c28efa0b54df346e85b648078698cca8974ea811c";
+    sha256 = "9b017901167723230dee8b565cdc7b0e61762415ffcc0a32708f04f7ab668666";
   };
 
-  nativeBuildInputs = [ cmake gettext pkgconfig extra-cmake-modules makeQtWrapper ];
+  nativeBuildInputs = [
+    cmake gettext pkgconfig extra-cmake-modules makeWrapper makeQtWrapper
+  ];
 
   buildInputs = [
     qtquickcontrols qtwebkit
     kconfig kdeclarative kdoctools kiconthemes ki18n kitemmodels kitemviews
     kjobwidgets kcmutils kio knewstuff knotifyconfig kparts ktexteditor
-    threadweaver kxmlgui kwindowsystem plasma-framework krunner
+    threadweaver kxmlgui kwindowsystem grantlee plasma-framework krunner
     kdevplatform kdevelop-pg-qt shared_mime_info libksysguard
     llvmPackages.llvm llvmPackages.clang-unwrapped
   ];
 
   postInstall = ''
     wrapQtProgram "$out/bin/kdevelop"
+    wrapProgram "$out/bin/kdevelop!" --prefix PATH ":" "${qttools}/bin"
   '';
 
   meta = with stdenv.lib; {

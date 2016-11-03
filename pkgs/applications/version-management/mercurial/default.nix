@@ -7,9 +7,7 @@ let
   version = "3.9.2";
   name = "mercurial-${version}";
   inherit (python2Packages) docutils hg-git dulwich python;
-in
-
-stdenv.mkDerivation {
+in python2Packages.mkPythonDerivation {
   inherit name;
 
   src = fetchurl {
@@ -19,10 +17,10 @@ stdenv.mkDerivation {
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  buildInputs = [ python makeWrapper docutils unzip ];
+  buildInputs = [ makeWrapper docutils unzip ];
 
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin
-    [ ApplicationServices cf-private ];
+  propagatedBuildInputs = [ hg-git dulwich ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices cf-private ];
 
   makeFlags = "PREFIX=$(out)";
 
@@ -42,7 +40,6 @@ stdenv.mkDerivation {
     ''
       for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
-          --prefix PYTHONPATH : "$(toPythonPath "$out ${hg-git}"):$(toPythonPath "$out ${dulwich}")" \
           $WRAP_TK
       done
 

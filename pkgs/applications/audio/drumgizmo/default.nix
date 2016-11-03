@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.10";
+  version = "0.9.11";
   name = "drumgizmo-${version}";
 
   src = fetchurl {
     url = "http://www.drumgizmo.org/releases/${name}/${name}.tar.gz";
-    sha256 = "142si734lsyywxhn7msiz053ir96kl5im3h1jql3vhcb4807f3d1";
+    sha256 = "04hf3nhccwr98n2081rrvfccz50nly6k3gbk9zxccp1522qz5xvf";
   };
 
   configureFlags = [ "--enable-lv2" ];
