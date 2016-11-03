@@ -187,7 +187,6 @@
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
   hce = "Hans-Christian Esperer <hc@hcesperer.org>";
   henrytill = "Henry Till <henrytill@gmail.com>";
-  hiberno = "Christian Lask <hiberno@hiberno.net>";
   hinton = "Tom Hinton <t@larkery.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
   iand675 = "Ian Duncan <ian@iankduncan.com>";
