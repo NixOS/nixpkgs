@@ -7424,8 +7424,6 @@ in
 
   jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
 
-  jetty_util = callPackage ../development/libraries/java/jetty-util { };
-
   jshon = callPackage ../development/tools/parsing/jshon { };
 
   json_glib = callPackage ../development/libraries/json-glib { };
