@@ -2450,13 +2450,13 @@ in
     enableNpm = false;
   };
 
-  nodejs-7_x = callPackage ../development/web/nodejs/v7.nix {                                                                                                 
-    libtool = darwin.cctools;                                                                                                                                 
-  };                                                                                                                                                          
-                                                                                                                                                              
-  nodejs-slim-7_x = callPackage ../development/web/nodejs/v7.nix {                                                                                            
-    libtool = darwin.cctools;                                                                                                                                 
-    enableNpm = false;                                                                                                                                        
+  nodejs-7_x = callPackage ../development/web/nodejs/v7.nix {
+    libtool = darwin.cctools;
+  };
+
+  nodejs-slim-7_x = callPackage ../development/web/nodejs/v7.nix {
+    libtool = darwin.cctools;
+    enableNpm = false;
   };
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
@@ -3420,7 +3420,7 @@ in
   rtmpdump_gnutls = rtmpdump.override { gnutlsSupport = true; opensslSupport = false; };
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
-  
+
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x {};
 
   recordmydesktop = callPackage ../applications/video/recordmydesktop { };
@@ -5693,8 +5693,6 @@ in
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
   ecj = callPackage ../development/eclipse/ecj { };
-
-  jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
   jruby = callPackage ../development/interpreters/jruby { };
 
