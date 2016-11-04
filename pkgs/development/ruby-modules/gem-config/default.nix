@@ -89,6 +89,10 @@ in
   msgpack = attrs: {
     buildInputs = [ libmsgpack ];
   };
+  
+  mysql = attrs: {
+    buildInputs = [ mysql.lib zlib openssl ];
+  };
 
   mysql2 = attrs: {
     buildInputs = [ mysql.lib zlib openssl ];
