@@ -2236,8 +2236,6 @@ in
 
   jhead = callPackage ../tools/graphics/jhead { };
 
-  jing = callPackage ../tools/text/xml/jing { };
-
   jmespath = callPackage ../development/tools/jmespath { };
 
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
