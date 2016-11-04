@@ -1,0 +1,141 @@
+From 623ad8ea5c3ac8720d00a2ced4b6163aae38c119 Mon Sep 17 00:00:00 2001
+From: Konstantin Baierer <unixprog@gmail.com>
+Date: Sun, 11 Oct 2015 13:32:58 +0200
+Subject: [PATCH] fixed dbus interface headers
+
+---
+ src/value-client-stub.h |  8 ++++----
+ src/value-daemon-stub.h | 50 +++++++++++++++++++++++++------------------------
+ 2 files changed, 30 insertions(+), 28 deletions(-)
+
+diff --git a/src/value-client-stub.h b/src/value-client-stub.h
+index 3c820b9..2a23fa8 100644
+--- a/src/value-client-stub.h
++++ b/src/value-client-stub.h
+@@ -26,10 +26,10 @@ static
+ inline
+ #endif
+ gboolean
+-uk_ac_cam_db538_VolumeNotification_notify (DBusGProxy *proxy, const gint IN_volume, GError **error)
++uk_ac_cam_db538_VolumeNotification_notify (DBusGProxy *proxy, const gint IN_volume, const gboolean IN_muted, GError **error)
+ 
+ {
+-  return dbus_g_proxy_call (proxy, "notify", error, G_TYPE_INT, IN_volume, G_TYPE_INVALID, G_TYPE_INVALID);
++  return dbus_g_proxy_call (proxy, "notify", error, G_TYPE_INT, IN_volume, G_TYPE_BOOLEAN, IN_muted, G_TYPE_INVALID, G_TYPE_INVALID);
+ }
+ 
+ typedef void (*uk_ac_cam_db538_VolumeNotification_notify_reply) (DBusGProxy *proxy, GError *error, gpointer userdata);
+@@ -49,14 +49,14 @@ static
+ inline
+ #endif
+ DBusGProxyCall*
+-uk_ac_cam_db538_VolumeNotification_notify_async (DBusGProxy *proxy, const gint IN_volume, uk_ac_cam_db538_VolumeNotification_notify_reply callback, gpointer userdata)
++uk_ac_cam_db538_VolumeNotification_notify_async (DBusGProxy *proxy, const gint IN_volume, const gboolean IN_muted, uk_ac_cam_db538_VolumeNotification_notify_reply callback, gpointer userdata)
+ 
+ {
+   DBusGAsyncData *stuff;
+   stuff = g_slice_new (DBusGAsyncData);
+   stuff->cb = G_CALLBACK (callback);
+   stuff->userdata = userdata;
+-  return dbus_g_proxy_begin_call (proxy, "notify", uk_ac_cam_db538_VolumeNotification_notify_async_callback, stuff, _dbus_glib_async_data_free, G_TYPE_INT, IN_volume, G_TYPE_INVALID);
++  return dbus_g_proxy_begin_call (proxy, "notify", uk_ac_cam_db538_VolumeNotification_notify_async_callback, stuff, _dbus_glib_async_data_free, G_TYPE_INT, IN_volume, G_TYPE_BOOLEAN, IN_muted, G_TYPE_INVALID);
+ }
+ #endif /* defined DBUS_GLIB_CLIENT_WRAPPERS_uk_ac_cam_db538_VolumeNotification */
+ 
+diff --git a/src/value-daemon-stub.h b/src/value-daemon-stub.h
+index 39efb57..b6a18bd 100644
+--- a/src/value-daemon-stub.h
++++ b/src/value-daemon-stub.h
+@@ -10,7 +10,7 @@ G_BEGIN_DECLS
+ 
+ #ifdef G_ENABLE_DEBUG
+ #define g_marshal_value_peek_boolean(v)  g_value_get_boolean (v)
+-#define g_marshal_value_peek_char(v)     g_value_get_char (v)
++#define g_marshal_value_peek_char(v)     g_value_get_schar (v)
+ #define g_marshal_value_peek_uchar(v)    g_value_get_uchar (v)
+ #define g_marshal_value_peek_int(v)      g_value_get_int (v)
+ #define g_marshal_value_peek_uint(v)     g_value_get_uint (v)
+@@ -55,32 +55,33 @@ G_BEGIN_DECLS
+ #endif /* !G_ENABLE_DEBUG */
+ 
+ 
+-/* BOOLEAN:INT,POINTER */
+-extern void dbus_glib_marshal_volume_object_BOOLEAN__INT_POINTER (GClosure     *closure,
+-                                                                  GValue       *return_value,
+-                                                                  guint         n_param_values,
+-                                                                  const GValue *param_values,
+-                                                                  gpointer      invocation_hint,
+-                                                                  gpointer      marshal_data);
++/* BOOLEAN:INT,BOOLEAN,POINTER */
++extern void dbus_glib_marshal_volume_object_BOOLEAN__INT_BOOLEAN_POINTER (GClosure     *closure,
++                                                                          GValue       *return_value,
++                                                                          guint         n_param_values,
++                                                                          const GValue *param_values,
++                                                                          gpointer      invocation_hint,
++                                                                          gpointer      marshal_data);
+ void
+-dbus_glib_marshal_volume_object_BOOLEAN__INT_POINTER (GClosure     *closure,
+-                                                      GValue       *return_value G_GNUC_UNUSED,
+-                                                      guint         n_param_values,
+-                                                      const GValue *param_values,
+-                                                      gpointer      invocation_hint G_GNUC_UNUSED,
+-                                                      gpointer      marshal_data)
++dbus_glib_marshal_volume_object_BOOLEAN__INT_BOOLEAN_POINTER (GClosure     *closure,
++                                                              GValue       *return_value G_GNUC_UNUSED,
++                                                              guint         n_param_values,
++                                                              const GValue *param_values,
++                                                              gpointer      invocation_hint G_GNUC_UNUSED,
++                                                              gpointer      marshal_data)
+ {
+-  typedef gboolean (*GMarshalFunc_BOOLEAN__INT_POINTER) (gpointer     data1,
+-                                                         gint         arg_1,
+-                                                         gpointer     arg_2,
+-                                                         gpointer     data2);
+-  register GMarshalFunc_BOOLEAN__INT_POINTER callback;
++  typedef gboolean (*GMarshalFunc_BOOLEAN__INT_BOOLEAN_POINTER) (gpointer     data1,
++                                                                 gint         arg_1,
++                                                                 gboolean     arg_2,
++                                                                 gpointer     arg_3,
++                                                                 gpointer     data2);
++  register GMarshalFunc_BOOLEAN__INT_BOOLEAN_POINTER callback;
+   register GCClosure *cc = (GCClosure*) closure;
+   register gpointer data1, data2;
+   gboolean v_return;
+ 
+   g_return_if_fail (return_value != NULL);
+-  g_return_if_fail (n_param_values == 3);
++  g_return_if_fail (n_param_values == 4);
+ 
+   if (G_CCLOSURE_SWAP_DATA (closure))
+     {
+@@ -92,11 +93,12 @@ dbus_glib_marshal_volume_object_BOOLEAN__INT_POINTER (GClosure     *closure,
+       data1 = g_value_peek_pointer (param_values + 0);
+       data2 = closure->data;
+     }
+-  callback = (GMarshalFunc_BOOLEAN__INT_POINTER) (marshal_data ? marshal_data : cc->callback);
++  callback = (GMarshalFunc_BOOLEAN__INT_BOOLEAN_POINTER) (marshal_data ? marshal_data : cc->callback);
+ 
+   v_return = callback (data1,
+                        g_marshal_value_peek_int (param_values + 1),
+-                       g_marshal_value_peek_pointer (param_values + 2),
++                       g_marshal_value_peek_boolean (param_values + 2),
++                       g_marshal_value_peek_pointer (param_values + 3),
+                        data2);
+ 
+   g_value_set_boolean (return_value, v_return);
+@@ -108,13 +110,13 @@ G_END_DECLS
+ 
+ #include <dbus/dbus-glib.h>
+ static const DBusGMethodInfo dbus_glib_volume_object_methods[] = {
+-  { (GCallback) volume_object_notify, dbus_glib_marshal_volume_object_BOOLEAN__INT_POINTER, 0 },
++  { (GCallback) volume_object_notify, dbus_glib_marshal_volume_object_BOOLEAN__INT_BOOLEAN_POINTER, 0 },
+ };
+ 
+ const DBusGObjectInfo dbus_glib_volume_object_object_info = {  1,
+   dbus_glib_volume_object_methods,
+   1,
+-"uk.ac.cam.db538.VolumeNotification\0notify\0S\0volume\0I\0i\0\0\0",
++"uk.ac.cam.db538.VolumeNotification\0notify\0S\0volume\0I\0i\0muted\0I\0b\0\0\0",
+ "\0",
+ "\0"
+ };
