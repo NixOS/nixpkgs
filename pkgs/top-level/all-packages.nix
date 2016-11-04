@@ -7422,8 +7422,6 @@ in
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
-  jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
-
   jshon = callPackage ../development/tools/parsing/jshon { };
 
   json_glib = callPackage ../development/libraries/json-glib { };
