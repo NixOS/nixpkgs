@@ -2672,13 +2672,15 @@ in {
 
   bitbucket_api = buildPythonPackage rec {
     name = "bitbucket-api-0.4.4";
+    # python3 does not support relative imports
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bitbucket-api/${name}.tar.gz";
       sha256 = "e890bc3893d59a6f203c1eb2bae60e78ac4d3869da7ea4fb104dca588aea85b2";
     };
 
-    propagatedBuildInputs = with self; [ requests_oauth2 nose sh ];
+    propagatedBuildInputs = with self; [ requests_oauthlib nose sh ];
 
     doCheck = false;
 
@@ -21781,13 +21783,17 @@ in {
 
   requests_oauth2 = buildPythonPackage rec {
     name = "requests-oauth2-0.1.1";
+    # python3 does not support relative imports
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = https://github.com/maraujop/requests-oauth2/archive/0.1.1.tar.gz;
       sha256 = "1aij66qg9j5j4vzyh64nbg72y7pcafgjddxsi865racsay43xfqg";
     };
 
-    propagatedBuildInputs = with self; [ requests_oauthlib ];
+    propagatedBuildInputs = with self; [ requests2 ];
+    # no tests in tarball
+    doCheck = false;
 
     meta = {
       description = "Python's Requests OAuth2 (Open Authentication) plugin";
