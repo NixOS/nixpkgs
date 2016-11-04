@@ -53,6 +53,9 @@ qtSubmodule {
     libcap
     pciutils
   ];
+  patches = [
+    ./chromium-clang-update-py.patch
+  ];
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
