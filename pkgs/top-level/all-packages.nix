@@ -4449,8 +4449,6 @@ in
 
   ### DEVELOPMENT / COMPILERS
 
-  abc = callPackage ../development/compilers/abc/default.nix { };
-
   aldor = callPackage ../development/compilers/aldor { };
 
   aliceml = callPackage ../development/compilers/aliceml { };
