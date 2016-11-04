@@ -1132,8 +1132,6 @@ in
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
-  cowsay = callPackage ../tools/misc/cowsay { };
-
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
