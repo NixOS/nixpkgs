@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.scala-lang.org/files/archive/${name}.tgz";
-    sha256 = "1g34fw2nib9bzk1qw68a4wvh4zy09y5yqvnlq4yw250f6lqfi17r";
+    sha256 = "085k7zl9v3vxaqwq0r0yyj53cb6syvq2safn4fgz3w00ks2fyxw2";
   };
 
   propagatedBuildInputs = [ jre ] ;
