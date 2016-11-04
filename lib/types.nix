@@ -179,16 +179,21 @@ rec {
       name = "element or list of ${elemType.name}s";
       check = x: isList x || elemType.check x;
       merge = loc: defs:
-        let
-          defs' = filterOverrides defs;
-          res = (head defs').value;
-        in
-        if isList res then concatLists (getValues defs')
-        else if lessThan 1 (length defs') then
-          throw "The option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
-        else if !isString res then
-          throw "The option `${showOption loc}' does not have a string value, in ${showFiles (getFiles defs)}."
-        else res;
+        map (x: x.value) (filter (x: x ? value) (concatLists (imap (n: def:
+          if isList def.value then
+            imap (m: def':
+              (mergeDefinitions
+                (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
+                elemType
+                [{ inherit (def) file; value = def'; }]
+              ).optionalValue
+            ) def.value
+          else
+            singleton (mergeDefinitions loc elemType [ def ]).optionalValue
+        ) defs)));
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: loeOf (elemType.substSubModules m);
     };
 
     uniq = elemType: mkOptionType {
