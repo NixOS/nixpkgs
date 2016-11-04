@@ -7353,8 +7353,6 @@ in
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
-  iksemel = callPackage ../development/libraries/iksemel { };
-
   ilbc = callPackage ../development/libraries/ilbc { };
 
   ilixi = callPackage ../development/libraries/ilixi { };
