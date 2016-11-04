@@ -4103,8 +4103,6 @@ in
 
   tradcpp = callPackage ../development/tools/tradcpp { };
 
-  trang = callPackage ../tools/text/xml/trang { };
-
   tre = callPackage ../development/libraries/tre { };
 
   ts = callPackage ../tools/system/ts { };
