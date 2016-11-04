@@ -1726,8 +1726,6 @@ in
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
 
-  g500-control = callPackage ../tools/misc/g500-control { };
-
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
   };
