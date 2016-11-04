@@ -14070,6 +14070,7 @@ in {
       license = licenses.free;
       maintainers = with maintainers; [ prikhi ];
       platforms = platforms.linux;
+      broken = true; # broken dependency of django within filebrowser_safe
     };
   };
 
