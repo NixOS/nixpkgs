@@ -429,6 +429,8 @@ let
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
+    sedlex = callPackage ../development/ocaml-modules/sedlex { };
+
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
