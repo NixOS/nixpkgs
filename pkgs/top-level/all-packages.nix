@@ -1720,8 +1720,6 @@ in
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
-  fuse-zip = callPackage ../tools/filesystems/fuse-zip { };
-
   exfat = callPackage ../tools/filesystems/exfat { };
 
   dos2unix = callPackage ../tools/text/dos2unix { };
