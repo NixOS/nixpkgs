@@ -100,12 +100,6 @@
         value.</para></listitem>
   </varlistentry>
   <varlistentry>
-    <term><varname>types.loeOf</varname> <replaceable>t</replaceable></term>
-    <listitem><para>A list or an element of <replaceable>t</replaceable> type. 
-        Multiple definitions are merged according to the 
-        values.</para></listitem>
-  </varlistentry>
-  <varlistentry>
     <term><varname>types.nullOr</varname> <replaceable>t</replaceable></term>
     <listitem><para><literal>null</literal> or type 
         <replaceable>t</replaceable>. Multiple definitions are merged according 
