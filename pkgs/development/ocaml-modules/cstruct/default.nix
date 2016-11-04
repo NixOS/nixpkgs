@@ -1,40 +1,20 @@
-{stdenv, buildOcaml, fetchFromGitHub, writeText,
- ocaml, ocplib-endian, sexplib_p4, findlib, ounit, camlp4,
- async_p4  ? null, lwt     ? null, ppx_tools ? null,
- withAsync ? true, withLwt ? true, withPpx   ? true}:
+{stdenv, writeText, fetchurl, ocaml, ocplib-endian, sexplib_p4, findlib,
+ async_p4 ? null, lwt ? null, camlp4}:
 
-with stdenv.lib;
-assert withAsync -> async_p4 != null;
-assert withLwt -> lwt != null;
-assert withPpx -> ppx_tools != null;
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
-buildOcaml rec {
-  name = "cstruct";
-  version = "2.3.0";
+stdenv.mkDerivation {
+  name = "ocaml-cstruct-1.6.0";
 
-  minimumSupportedOcamlVersion = "4.02";
-
-  src = fetchFromGitHub {
-    owner = "mirage";
-    repo = "ocaml-cstruct";
-    rev = "v${version}";
-    sha256 = "19spsgkry41dhsbm6ij71kws90bqp7wiggc6lsqdl43xxvbgdmys";
+  src = fetchurl {
+    url = https://github.com/mirage/ocaml-cstruct/archive/v1.6.0.tar.gz;
+    sha256 = "0f90a1b7a03091cf22a3ccb11a0cce03b6500f064ad3766b5ed81418ac008ece";
   };
 
-  configureFlags = [ "--enable-tests" ] ++
-                   optional withLwt [ "--enable-lwt" ] ++
-                   optional withAsync [ "--enable-async" ] ++
-                   optional withPpx ["--enable-ppx"];
-  configurePhase = "./configure --prefix $out $configureFlags";
-
-  buildInputs = [ ocaml findlib camlp4 ounit ];
-  propagatedBuildInputs = [ocplib-endian sexplib_p4 ] ++
-                          optional withPpx ppx_tools ++
-                          optional withAsync async_p4 ++
-                          optional withLwt lwt;
-
-  doCheck = true;
-  checkTarget = "test";
+  configureFlags = stdenv.lib.strings.concatStringsSep " " ((if lwt != null then ["--enable-lwt"] else []) ++
+                                          (if async_p4 != null then ["--enable-async"] else []));
+  buildInputs = [ocaml findlib camlp4];
+  propagatedBuildInputs = [ocplib-endian sexplib_p4 lwt async_p4];
 
   createFindlibDestdir = true;
   dontStrip = true;
