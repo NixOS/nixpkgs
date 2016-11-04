@@ -983,7 +983,7 @@ self: super: {
   });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_0; };
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
 
   # Test suite fails a QuickCheck property.
   optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
