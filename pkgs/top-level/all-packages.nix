@@ -8469,8 +8469,6 @@ in
 
   minizip = callPackage ../development/libraries/minizip { };
 
-  minmay = callPackage ../development/libraries/minmay { };
-
   miro = callPackage ../applications/video/miro {
     avahi = avahi.override {
       withLibdnssdCompat = true;
