@@ -6655,8 +6655,6 @@ in
 
   cl = callPackage ../development/libraries/cl { };
 
-  clanlib = callPackage ../development/libraries/clanlib { };
-
   classads = callPackage ../development/libraries/classads { };
 
   classpath = callPackage ../development/libraries/java/classpath {
