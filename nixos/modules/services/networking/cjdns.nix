@@ -36,7 +36,7 @@ let
       echo \'\'
       ${concatStringsSep "\n" (mapAttrsToList (k: v:
           optionalString (v.hostname != "")
-            "echo $(${pkgs.cjdns}/bin/publictoip6 ${x.key}) ${x.host}")
+            "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}")
           (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
       echo \'\'
     '');
