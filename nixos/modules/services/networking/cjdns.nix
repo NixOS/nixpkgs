@@ -204,11 +204,28 @@ in
     boot.kernelModules = [ "tun" ];
 
     # networking.firewall.allowedUDPPorts = ...
+    systemd.services.cjdns-restart = {
+      description = "cjdns: restart after resuming from sleep, hibernation, hybrid-sleep and hybrid-suspend; and other failures";
+      wantedBy = ["sleep.target"];
+      bindsTo = ["network-online.target"];
+      after = ["sleep.target" "network-online.target"];
 
+      script = 
+        "
+          ${config.systemd.package}/bin/systemctl systemctl reset-failed cjdns.service
+          ${config.systemd.package}/bin/systemctl restart cjdns.service
+        ";
+      postStop = "${config.systemd.package}/bin/systemctl systemctl reset-failed cjdns-restart.service";
+      serviceConfig = {
+        StartLimitInterval = 0; 
+        };
+    };
+      
     systemd.services.cjdns = {
       description = "cjdns: routing engine designed for security, scalability, speed and ease of use";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      bindsTo = [ "network-online.target" ];
 
       preStart = if cfg.confFile != null then "" else ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
@@ -241,10 +258,13 @@ in
                 | ${pkg}/bin/cjdroute
          ''
       );
-
+      
+      onFailure = ["cjdns-restart.service"];
       serviceConfig = {
         Type = "forking";
-        Restart = "on-failure";
+        Restart = "always";
+        StartLimitInterval = 0;
+        RestartSec = 1;
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
         AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_RAW";
         ProtectSystem = "full";
