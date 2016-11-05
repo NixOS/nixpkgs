@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, curl, makeWrapper }:
+{ stdenv, fetchurl, unzip, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "dmd-2.067.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0ny99vfllvvgcl79pwisxcdnb3732i827k9zg8c0j4s0n79k5z94";
   };
 
-  buildInputs = [ unzip curl makeWrapper ];
+  nativeBuildInputs = [ unzip makeWrapper ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
       # Allow to use "clang++", commented in Makefile
