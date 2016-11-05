@@ -45,8 +45,8 @@ elements.)</para>
 <varname>overrideAttrs</varname>.  While the
 <varname>override</varname> mechanism above overrides the arguments of
 a package function, <varname>overrideAttrs</varname> allows
-changing the <emphasis>attributes</emphasis> of the function.  This
-permits changing any aspect of the package, such as the source code.
+changing the <emphasis>attributes</emphasis> passed to <literal>mkDerivation</literal>.
+This permits changing any aspect of the package, such as the source code.
 For instance, if you want to override the source code of Emacs, you
 can say:
 
