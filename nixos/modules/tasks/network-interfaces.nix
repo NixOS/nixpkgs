@@ -245,7 +245,7 @@ let
 
       virtualType = mkOption {
         default = null;
-        type = types.nullOr (types.addCheck types.str (v: v == "tun" || v == "tap"));
+        type = with types; nullOr (enum [ "tun" "tap" ]);
         description = ''
           The explicit type of interface to create. Accepts tun or tap strings.
           Also accepts null to implicitly detect the type of device.
