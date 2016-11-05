@@ -3,7 +3,7 @@
 with pkgs;
 
 let
-  lib = pkgs.lib;
+  lib = pkgs.lib.nixos;
 
   # Remove invisible and internal options.
   optionsList = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
