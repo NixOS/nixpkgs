@@ -1,12 +1,11 @@
 { stdenv, fetchurl, unzip, curl, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "dmd-${version}";
-  version = "2.070.2";
+stdenv.mkDerivation {
+  name = "dmd-2.067.1";
 
   src = fetchurl {
-    url = "http://downloads.dlang.org/releases/2.x/${version}/dmd.${version}.zip";
-    sha256 = "1pbhxxf41v816j0aky3q2pcd8a6phy3363l7vr5r5pg8ps3gl701";
+    url = http://downloads.dlang.org/releases/2015/dmd.2.067.1.zip;
+    sha256 = "0ny99vfllvvgcl79pwisxcdnb3732i827k9zg8c0j4s0n79k5z94";
   };
 
   buildInputs = [ unzip curl makeWrapper ];
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   # Buid and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
       cd src/dmd
-      make -f posix.mak INSTALL_DIR=$out AUTO_BOOTSTRAP=1
+      make -f posix.mak INSTALL_DIR=$out
       export DMD=$PWD/dmd
       cd ../druntime
       make -f posix.mak INSTALL_DIR=$out DMD=$DMD
