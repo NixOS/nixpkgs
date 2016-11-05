@@ -377,6 +377,8 @@ in
 
   afl = callPackage ../tools/security/afl { };
 
+  agrep = callPackage ../tools/text/agrep { };
+
   aha = callPackage ../tools/text/aha { };
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
