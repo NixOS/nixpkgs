@@ -291,7 +291,6 @@ self: super: {
   bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   bitx-bitcoin = dontCheck super.bitx-bitcoin;          # http://hydra.cryp.to/build/926187/log/raw
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
-  dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   digitalocean-kzs = dontCheck super.digitalocean-kzs;  # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
@@ -1066,5 +1065,9 @@ self: super: {
 
   # horribly outdated (X11 interface changed a lot)
   sindre = markBroken super.sindre;
+
+  # https://github.com/jmillikin/haskell-dbus/pull/7
+  # http://hydra.cryp.to/build/498404/log/raw
+  dbus = dontCheck (appendPatch super.dbus ./patches/hdbus-semicolons.patch);
 
 }
