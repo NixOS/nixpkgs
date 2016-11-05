@@ -3,7 +3,7 @@
   ecm, kdoctools,
   lm_sensors,
   kconfig, kcoreaddons, kdelibs4support, ki18n, kiconthemes, kitemviews,
-  knewstuff, libksysguard, lm_sensors, qtwebkit
+  knewstuff, libksysguard, qtwebkit
 }:
 
 plasmaPackage {
