@@ -1058,8 +1058,6 @@ self: super: {
   dataenc = doJailbreak super.dataenc;
 
   libsystemd-journal = overrideCabal super.libsystemd-journal (old: {
-    # https://github.com/ocharles/libsystemd-journal/pull/17
-    jailbreak = true;
     librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
   });
 
