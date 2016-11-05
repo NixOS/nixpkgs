@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "http://wildfiregames.com/0ad/";
     license = licenses.cc-by-sa-30;
     platforms = platforms.linux;
+    hydraPlatforms = [];
   };
 }
