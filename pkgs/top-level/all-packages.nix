@@ -5130,7 +5130,9 @@ in
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
-  rtags = callPackage ../development/tools/rtags/default.nix {};
+  rtags = callPackage ../development/tools/rtags/default.nix {
+    inherit (darwin) apple_sdk;
+  };
 
   rust = rustStable;
   rustStable = callPackage ../development/compilers/rust {};
