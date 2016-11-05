@@ -1397,7 +1397,10 @@ in
 
   disper = callPackage ../tools/misc/disper { };
 
-  dmd = callPackage ../development/compilers/dmd { };
+  dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix { };
+  dmd = callPackage ../development/compilers/dmd {
+    bootstrapDmd = dmd_2_067_1;
+  };
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
