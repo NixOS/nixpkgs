@@ -5483,7 +5483,7 @@ in
     glpk = null;
     suitesparse = null;
     jdk = null;
-    openblas = openblas;
+    openblas = if stdenv.isDarwin then openblasCompat else openblas;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     qt = qt4;
