@@ -187,7 +187,6 @@
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
   hce = "Hans-Christian Esperer <hc@hcesperer.org>";
   henrytill = "Henry Till <henrytill@gmail.com>";
-  hiberno = "Christian Lask <hiberno@hiberno.net>";
   hinton = "Tom Hinton <t@larkery.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
   iand675 = "Ian Duncan <ian@iankduncan.com>";
@@ -360,6 +359,7 @@
   rardiol = "Ricardo Ardissone <ricardo.ardissone@gmail.com>";
   rasendubi = "Alexey Shmalko <rasen.dubi@gmail.com>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
+  rbasso = "Rafael Basso <rbasso@sharpgeeks.net>";
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
   redvers = "Redvers Davies <red@infect.me>";
   refnil = "Martin Lavoie <broemartino@gmail.com>";

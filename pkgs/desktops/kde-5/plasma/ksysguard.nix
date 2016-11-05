@@ -1,6 +1,6 @@
 { plasmaPackage, ecm, kdoctools, kconfig
 , kcoreaddons, kdelibs4support, ki18n, kitemviews, knewstuff
-, kiconthemes, libksysguard
+, kiconthemes, libksysguard, qtwebkit
 }:
 
 plasmaPackage {
@@ -8,6 +8,6 @@ plasmaPackage {
   nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     kconfig kcoreaddons kitemviews knewstuff kiconthemes libksysguard
-    kdelibs4support ki18n
+    kdelibs4support ki18n qtwebkit
   ];
 }

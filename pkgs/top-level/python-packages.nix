@@ -364,6 +364,48 @@ in {
     };
   };
 
+  altair = buildPythonPackage rec {
+    name = "altair-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/altair/${name}.tar.gz";
+      sha256 = "024drhmiw8w3dl7dbal0pvnlfd3sv4n1rqywv2jb488b3fzm704r";
+    };
+
+    propagatedBuildInputs = with self; [ vega pandas ipython traitlets ];
+
+    meta = {
+      description = "A declarative statistical visualization library for Python.";
+      homepage = https://github.com/altair-viz/altair;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+  vega = buildPythonPackage rec {
+    name = "vega-0.4.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vega/${name}.tar.gz";
+      sha256 = "08k92afnk0bivm07h1l5nh26xl2rfp7qn03aq17q1hr3fs5r6cdm";
+    };
+
+    propagatedBuildInputs = with self; [ jupyter_core pandas ];
+
+    meta = {
+      description = " An IPython/Jupyter widget for Vega and Vega-Lite.";
+      longDescription = ''
+        To use this you have to enter a nix-shell with vega. Then run:
+
+        jupyter nbextension install --user --py vega
+        jupyter nbextension enable --user vega
+      '';
+      homepage = https://github.com/vega/ipyvega;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
   acme_0_5_0 = buildPythonPackage rec {
     version = "0.5.0";
     name = "acme-${version}";
@@ -885,13 +927,13 @@ in {
   };
 
   ansible2 = buildPythonPackage rec {
-    version = "2.1.2.0";
+    version = "2.2.0.0";
     name = "ansible-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "1sr12ryn2dc28009bkfl6f8rp94ychbr9i7wlf6an1bw76ysfdww";
+      sha256 = "11l5814inr44ammp0sh304rqx2382fr629c0pbwf0k1rjg99iwfr";
     };
 
     prePatch = ''
@@ -2199,7 +2241,7 @@ in {
       description = "A decorator for caching properties in classes";
       homepage = https://github.com/pydanny/cached-property;
       license = licenses.bsd3;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ ericsagnes ];
     };
   };
@@ -2630,13 +2672,15 @@ in {
 
   bitbucket_api = buildPythonPackage rec {
     name = "bitbucket-api-0.4.4";
+    # python3 does not support relative imports
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bitbucket-api/${name}.tar.gz";
       sha256 = "e890bc3893d59a6f203c1eb2bae60e78ac4d3869da7ea4fb104dca588aea85b2";
     };
 
-    propagatedBuildInputs = with self; [ requests_oauth2 nose sh ];
+    propagatedBuildInputs = with self; [ requests_oauthlib nose sh ];
 
     doCheck = false;
 
@@ -5333,6 +5377,23 @@ in {
       maintainers = with maintainers; [ fridh ];
     };
   };
+
+  datrie = buildPythonPackage rec {
+    name = "datrie";
+    version = "0.7.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/datrie/datrie-${version}.tar.gz";
+      sha256 = "08r0if7dry2q7p34gf7ffyrlnf4bdvnprxgydlfxgfnvq8f3f4bs";
+    };
+    meta = {
+      description = "Super-fast, efficiently stored Trie for Python";
+      homepage = "https://github.com/kmike/datrie";
+      license = licenses.lgpl2;
+      maintainers = with maintainers; [ lewo ];
+    };
+  };
+
 
   distributed = buildPythonPackage rec {
 
@@ -9612,12 +9673,12 @@ in {
 
   django_1_10 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.10.2";
+    version = "1.10.3";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-      sha256 = "1qdwgkwlq5wl0wn247d9gid49xpz4qggk0lcdqxq8d7v1cmg29z1";
+      sha256 = "0c4c8zs7kzb0bdlpy4vlzv6va26dbazr32h91rldf6waxs6z14kg";
     };
 
     patches = [
@@ -9644,12 +9705,12 @@ in {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.10";
+    version = "1.9.11";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "007w2pshbk1s6gfgp8717fwz01l8mcmd2lkxdgqqgd11bag7qfjv";
+      sha256 = "17bxmfp92bdwjachjqb5zdlay5fhv4125hc85ln4ggyz0f5zvp6s";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -9668,12 +9729,12 @@ in {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.15";
+    version = "1.8.16";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "1kga849ixd6sz6svhv8dysyjr03wphqgl4wjw2yczmc5r4x58gl6";
+      sha256 = "1pc1j3q64v65c573xwx64apjnf2v19nzxsidjiyp02c6l8bsyji2";
     };
 
     # too complicated to setup
@@ -9718,6 +9779,9 @@ in {
   django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.6.11";
+
+    # Support to python-3.4 and higher was introduced in django_1_7
+    disabled = !(isPy26 || isPy27 || isPy33);
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.6/${name}.tar.gz";
@@ -10705,6 +10769,9 @@ in {
     };
 
     buildInputs = [ self.django ];
+
+    # There is no test embedded
+    doCheck = false;
 
     meta = {
       description = "A snapshot of django-filebrowser for the Mezzanine CMS";
@@ -11810,6 +11877,28 @@ in {
       description = "A wrapper for the GitHub API written in python";
       license = licenses.bsd3;
       maintainers = with maintainers; [ pSub ];
+    };
+  };
+
+  github-webhook = buildPythonPackage rec {
+    name = "github-webhook-${version}";
+    version = "unstable-2016-03-11";
+
+    # There is a PyPI package but an older one.
+    src = pkgs.fetchgit {
+      url = "https://github.com/bloomberg/python-github-webhook.git";
+      rev = "ca1855479ee59c4373da5425dbdce08567605d49";
+      sha256 = "0mqwig9281iyzbphp1d21a4pqdrf98vs9k8lqpqx6spzgqaczx5f";
+    };
+
+    propagatedBuildInputs = with self; [ flask ];
+    # No tests
+    doCheck = false;
+
+    meta = {
+      description = "A framework for writing webhooks for GitHub";
+      license = licenses.mit;
+      homepage = https://github.com/bloomberg/python-github-webhook;
     };
   };
 
@@ -13961,6 +14050,7 @@ in {
       url = "https://github.com/stephenmcd/mezzanine/archive/${version}.tar.gz";
       sha256 = "1cd7d3dji8q4mvcnf9asxn8j109pd5g5d5shr6xvn0iwr35qprgi";
     };
+    patches = [ ../development/python-modules/mezzanine/writable_settings.patch ];
 
     disabled = isPyPy;
 
@@ -17479,20 +17569,17 @@ in {
     };
   };
 
-  pandas = self.pandas_18;
-
-  pandas_18 = let
+  pandas = let
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
     name = "pandas-${version}";
-    version = "0.19.0";
+    version = "0.19.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pandas/${name}.tar.gz";
-      sha256 = "4697606cdf023c6b7fcb74e48aaf25cf282a1a00e339d2d274cf1b663748805b";
+      sha256 = "2509feaeda72fce03675e2eccd2284bb1cadb6a0737008a5e741fe2431d47421";
     };
-
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ] ++ optional isDarwin pkgs.libcxx;
@@ -17692,11 +17779,11 @@ in {
 
   partd = buildPythonPackage rec {
     name = "partd-${version}";
-    version = "0.3.3";
+    version = "0.3.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/partd/${name}.tar.gz";
-      sha256 = "0fgrkfhgpm0hf5gs6wvgv7p9ls2kvgk0mc5hkmjw5slfbkn3fz8v";
+      sha256 = "1wl8kifdljnpbz0ls7mbbc9j23fc5xzm639im7h88spyg02w68hm";
     };
 
     buildInputs = with self; [ pytest ];
@@ -17704,6 +17791,7 @@ in {
     propagatedBuildInputs = with self; [ locket numpy pandas pyzmq toolz ];
 
     checkPhase = ''
+      rm partd/tests/test_zmq.py # requires network & fails
       py.test
     '';
 
@@ -21714,13 +21802,17 @@ in {
 
   requests_oauth2 = buildPythonPackage rec {
     name = "requests-oauth2-0.1.1";
+    # python3 does not support relative imports
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = https://github.com/maraujop/requests-oauth2/archive/0.1.1.tar.gz;
       sha256 = "1aij66qg9j5j4vzyh64nbg72y7pcafgjddxsi865racsay43xfqg";
     };
 
-    propagatedBuildInputs = with self; [ requests_oauthlib ];
+    propagatedBuildInputs = with self; [ requests2 ];
+    # no tests in tarball
+    doCheck = false;
 
     meta = {
       description = "Python's Requests OAuth2 (Open Authentication) plugin";
@@ -28186,26 +28278,6 @@ in {
   };
 
 
-  moreItertools = buildPythonPackage rec {
-    name = "more-itertools-2.2";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
-      sha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    meta = {
-      homepage = https://more-itertools.readthedocs.org;
-      description = "Expansion of the itertools module";
-      license = licenses.mit;
-    };
-  };
-
-
   uncertainties = buildPythonPackage rec {
     name = "uncertainties-${version}";
     version = "3.0.1";
@@ -30005,7 +30077,7 @@ in {
 	ndg-httpsclient
 	dateutil
 	inflection
-	moreItertools
+	more-itertools
 	requests2
 	pandas
      ];
@@ -30621,6 +30693,8 @@ in {
     };
   };
 
+  moreItertools = self.more-itertools;
+
   more-itertools = buildPythonPackage rec {
     name = "more-itertools-${version}";
     version = "2.2";
@@ -30630,19 +30704,25 @@ in {
       sha256 = "1q3wqsg44z01g7i5z6j1wc0nf5c5h8g77xny6fia2gddqw2jxrlk";
     };
 
-    doCheck = false;
+    propagatedBuildInputs = with self; [ nose ];
+
+    meta = {
+      homepage = https://more-itertools.readthedocs.org;
+      description = "Expansion of the itertools module";
+      license = licenses.mit;
+    };
   };
 
   jaraco_functools = buildPythonPackage rec {
     name = "jaraco.functools-${version}";
-    version = "1.11";
+    version = "1.15.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jaraco.functools/${name}.tar.gz";
-      sha256 = "08n7vxdbsl0637b1ap2x3rg698d2as0wzvvpx05dzkrdgsgxrx3g";
+      sha256 = "1nhl0pjc7acxznhadg9wq1a6ls17ja2np8vf9psq8j66716mk2ya";
     };
 
-    propagatedBuildInputs = with self; [ backports_functools_lru_cache ];
+    propagatedBuildInputs = with self; [ more-itertools backports_functools_lru_cache ];
 
     doCheck = false;
 

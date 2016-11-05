@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     description = "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
     license     = licenses.gpl3;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ hiberno ];
   };
 }

@@ -129,6 +129,9 @@ let
           $out/bin/ruby setup.rb
           popd
 
+          # Remove unnecessary groff reference from runtime closure, since it's big
+          sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
+
           # Bundler tries to create this directory
           mkdir -pv $out/${passthru.gemPath}
           mkdir -p $out/nix-support

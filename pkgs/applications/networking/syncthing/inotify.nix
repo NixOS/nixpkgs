@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "syncthing-inotify-${version}";
-  version = "0.8.3";
+  version = "0.8.4";
 
   goPackagePath = "github.com/syncthing/syncthing-inotify";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "syncthing";
     repo = "syncthing-inotify";
     rev = "v${version}";
-    sha256 = "194pbz9zzxaz0vri93czpbsxl85znlba2gy61mjgyr0dm2h4s6yw";
+    sha256 = "0iix4gd5zh2ydn429jmcf0pr1pxxd1wq1vp5ciq9bavhvnim9clw";
   };
 
   goDeps = ./inotify-deps.nix;
@@ -25,6 +25,8 @@ buildGoPackage rec {
     substitute $src/etc/linux-systemd/user/syncthing-inotify.service \
                $bin/etc/systemd/user/syncthing-inotify.service \
                --replace /usr/bin/syncthing-inotify $bin/bin/syncthing-inotify
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -delete_rpath $out/lib -add_rpath $bin $bin/bin/syncthing-inotify
   '';
 
   meta = with stdenv.lib; {

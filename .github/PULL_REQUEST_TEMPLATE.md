@@ -9,7 +9,7 @@
     on non-NixOS)
 - Built on platform(s)
    - [ ] NixOS
-   - [ ] OS X
+   - [ ] macOS
    - [ ] Linux
 - [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nox --run "nox-review wip"`
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)

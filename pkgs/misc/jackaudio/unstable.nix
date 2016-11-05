@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
-, bash, libsamplerate, libsndfile, readline
+, bash, libsamplerate, libsndfile, readline, eigen, celt
 
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
@@ -23,21 +23,21 @@ let
   optLibopus = shouldUsePkg libopus;
 in
 stdenv.mkDerivation rec {
-  name = "${prefix}jack2-${version}";
-  version = "2015-09-03";
+  name = "${prefix}jack2-unstable-${version}";
+  version = "2016-08-18";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
-    rev = "2e8c5502c692a25f1c0213f3f7eeba1f4434da3c";
-    sha256 = "0r1xdshm251yqb748r5l5f6xpznhwlqyyxkky7vgx5m2q51qb0a1";
+    rev = "f2ece2418c875eb7e7ac3d25fbb484ddda47ab46";
+    sha256 = "0cvb0m6qz3k8a5njwyw65l4y3izi2rsh512hv5va97kjc6wzzx4j";
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
   buildInputs = [
     python
 
-    libsamplerate libsndfile readline
+    libsamplerate libsndfile readline eigen celt
 
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ];

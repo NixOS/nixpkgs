@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
-  version = "2.11.0";
+  version = "2.11.2";
   name = "${pname}-${version}";
   altname="Texstudio";
 
   src = fetchurl {
     url = "mirror://sourceforge/texstudio/${name}.tar.gz";
-    sha256 = "170e6d68952251e8c64589b0d147cb7692005e135cc6fc14579c6fd593f54307";
+    sha256 = "1p6ja5y5902y814f3f5mafh0y8vj682ghrarx1pbm4r5ap8x9z82";
   };
 
   buildInputs = [ qt4 qmake4Hook poppler_qt4 zlib pkgconfig ];
