@@ -198,8 +198,9 @@ in
 
     systemd.services.cjdns = {
       description = "cjdns: routing engine designed for security, scalability, speed and ease of use";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" "sleep.target"];
+      after = [ "network-online.target" ];
+      bindsTo = [ "network-online.target" ];
 
       preStart = if cfg.confFile != null then "" else ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
@@ -235,7 +236,9 @@ in
 
       serviceConfig = {
         Type = "forking";
-        Restart = "on-failure";
+        Restart = "always";
+        StartLimitInterval = 0;
+        RestartSec = 1;
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
         AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_RAW";
         ProtectSystem = "full";
