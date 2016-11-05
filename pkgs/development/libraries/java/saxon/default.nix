@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "saxon-6.5.3";
@@ -8,8 +8,13 @@ stdenv.mkDerivation {
     md5 = "7b8c7c187473c04d2abdb40d8ddab5c6";
   };
 
-  inherit unzip;
-  buildInputs = [unzip];
+  nativeBuildInputs = [ unzip ];
+
+  # still leaving in root as well, in case someone is relying on that
+  preFixup = ''
+    mkdir -p "$out/share/java"
+    cp -s "$out"/*.jar "$out/share/java/"
+  '';
 
   meta = {
     platforms = stdenv.lib.platforms.unix;

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jdk ant saxon ];
 
-  preBuild = "CLASSPATH='${saxon}/saxon.jar'; echo CLASSPATH=$CLASSPATH; ant";
+  preBuild = "ant";
 
   installPhase = ''
     mkdir -p "$out"/{share/java,bin}
