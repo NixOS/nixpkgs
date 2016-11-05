@@ -300,6 +300,7 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/netdata.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/alertmanager.nix
