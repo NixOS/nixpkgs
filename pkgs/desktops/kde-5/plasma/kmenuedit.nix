@@ -1,11 +1,14 @@
-{ plasmaPackage, ecm, kdoctools, ki18n, kxmlgui
-, kdbusaddons, kiconthemes, kio, sonnet, kdelibs4support
+{
+  plasmaPackage,
+  ecm, kdoctools,
+  kdbusaddons, kdelibs4support, khotkeys, ki18n, kiconthemes, kio, kxmlgui,
+  sonnet
 }:
 
 plasmaPackage {
   name = "kmenuedit";
   nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
-    kdelibs4support ki18n kio sonnet kxmlgui kdbusaddons kiconthemes
+    kdbusaddons kdelibs4support khotkeys ki18n kiconthemes kio kxmlgui sonnet
   ];
 }
