@@ -23,9 +23,9 @@ stdenv.mkDerivation {
   buildInputs = [ xcbuild ];
   buildCommand = ''
     mkdir -p $out/
-    /usr/bin/plutil -convert xml1 -o $out/SDKSettings.plist ${writeText "SDKSettings.json" (builtins.toJSON SDKSettings)}
+    plutil -convert xml1 -o $out/SDKSettings.plist ${writeText "SDKSettings.json" (builtins.toJSON SDKSettings)}
 
     mkdir -p $out/System/Library/CoreServices/
-    /usr/bin/plutil -convert xml1 -o $out/System/Library/CoreServices/SystemVersion.plist ${writeText "SystemVersion.plist" (builtins.toJSON SystemVersion)}
+    plutil -convert xml1 -o $out/System/Library/CoreServices/SystemVersion.plist ${writeText "SystemVersion.plist" (builtins.toJSON SystemVersion)}
   '';
 }

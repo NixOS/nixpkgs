@@ -1,19 +1,18 @@
 { stdenv, callPackage, makeWrapper, writeText, CoreServices, ImageIO, CoreGraphics
-, cctools, bootstrap_cmds}:
+, cctools, bootstrap_cmds, binutils}:
 
 let
 
   toolchainName = "com.apple.dt.toolchain.XcodeDefault";
   platformName = "com.apple.platform.macosx";
-  sdkName = "macosx10.9";
+  sdkName = "macosx10.10";
 
   xcbuild = callPackage ./default.nix {
     inherit CoreServices ImageIO CoreGraphics;
   };
 
   toolchain = callPackage ./toolchain.nix {
-    inherit cctools bootstrap_cmds toolchainName xcbuild;
-    cc = stdenv.cc;
+    inherit cctools bootstrap_cmds toolchainName xcbuild binutils;
   };
 
   sdk = callPackage ./sdk.nix {
@@ -29,7 +28,7 @@ let
   };
 
   xcconfig = writeText "nix.xcconfig" ''
-SDKROOT=${sdkName}
+    SDKROOT=${sdkName}
   '';
 
 in

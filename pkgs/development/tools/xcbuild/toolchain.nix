@@ -1,5 +1,6 @@
 {stdenv, writeText, toolchainName, xcbuild
-, cc, cctools, llvm, yacc, flex, m4, unifdef, bootstrap_cmds}:
+, cc, llvm, cctools, gcc, bootstrap_cmds, binutils
+, yacc, flex, m4, unifdef, gperf, indent, ctags, makeWrapper}:
 
 let
 
@@ -11,11 +12,11 @@ in
 
 stdenv.mkDerivation {
   name = "nixpkgs.xctoolchain";
-  buildInputs = [ xcbuild ];
-  propagatedBuildInputs = [ cc cctools llvm ];
+  buildInputs = [ xcbuild makeWrapper ];
+  propagatedBuildInputs = [ cc cctools llvm gcc bootstrap_cmds binutils yacc flex m4 unifdef gperf indent ];
   buildCommand = ''
     mkdir -p $out
-    /usr/bin/plutil -convert xml1 -o $out/ToolchainInfo.plist ${writeText "ToolchainInfo.plist" (builtins.toJSON ToolchainInfo)}
+    plutil -convert xml1 -o $out/ToolchainInfo.plist ${writeText "ToolchainInfo.plist" (builtins.toJSON ToolchainInfo)}
 
     mkdir -p $out/usr/include
     mkdir -p $out/usr/lib
@@ -27,10 +28,8 @@ stdenv.mkDerivation {
     ln -s ${cc}/bin/cpp
     ln -s ${cc}/bin/c++
     ln -s ${cc}/bin/cc
-    ln -s cc clang
     ln -s c++ clang++
-    ln -s cc c89
-    ln -s cc c99
+    ln -s cc clang
 
     ln -s ${cctools}/bin/ar
     ln -s ${cctools}/bin/as
@@ -66,7 +65,9 @@ stdenv.mkDerivation {
     ln -s ${yacc}/bin/bison
     ln -s ${flex}/bin/flex
     ln -s ${flex}/bin/flex++
+
     ln -s flex lex
+
     ln -s ${m4}/bin/m4
     ln -s m4 gm4
 
@@ -74,27 +75,31 @@ stdenv.mkDerivation {
     ln -s ${unifdef}/bin/unifdefall
 
     ln -s ${bootstrap_cmds}/bin/mig
+
+    ln -s ${gperf}/bin/gperf
+    ln -s ${gcc}/bin/gcov
+    ln -s ${gcc}/bin/mkdep
+    ln -s ${indent}/bin/indent
+    ln -s ${binutils}/bin/lipo
+    ln -s ${ctags}/bin/ctags
   '';
 }
 
 # other commands in /bin/
 #   asa
-#   cmpdylib
-#   ctags
-#   ctf_insert
+#   cmpdylib (in cctools)
+#   ctf_insert (in cctools)
 #   dwarfdump
-#   gcov
-#   gperf
-#   indent
-#   lipo
 #   lorder
-#   mkdep
 #   rebase
-#   rpcgen
+#   rpcgen (in developer_cmds)
+#   what
+
+
+# swift: see #11463
 #   swift
 #   swift-compress
 #   swift-demangle
 #   swift-stdlib-tool
 #   swift-update
 #   swiftc
-#   what

@@ -6432,7 +6432,7 @@ in
 
   xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
-    inherit (darwin) cctools bootstrap_cmds;
+    inherit (darwin) cctools bootstrap_cmds binutils;
   };
 
   xmlindent = callPackage ../development/web/xmlindent {};
@@ -17378,5 +17378,7 @@ in
 
   nitrokey-app = callPackage ../tools/security/nitrokey-app { };
 
-  adv_cmds = callPackage ../os-specific/darwin/apple-source-releases/adv_cmds/xcode.nix {};
+  adv_cmds = callPackage ../os-specific/darwin/apple-source-releases/adv_cmds/xcode.nix {
+    inherit (darwin.apple_sdk.libs) xpc;
+  };
 }
