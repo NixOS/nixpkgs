@@ -82,9 +82,9 @@ in {
       description = "syslog-ng daemon";
       preStart = "mkdir -p /{var,run}/syslog-ng";
       wantedBy = [ "multi-user.target" ];
-      after = [ "multi-user.target" ]; # makes sure hostname etc is set
+      after = [ "network.target" ]; # makes sure hostname etc is set
       serviceConfig = {
-        Type = "notify";
+        Type = "simple";
         StandardOutput = "null";
         Restart = "on-failure";
         ExecStart = "${cfg.package}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";
