@@ -2550,7 +2550,7 @@ in {
       sha256 = "0y0rdxbiwm03zv6vpvapqilrird3h8ijz7xmb0j7ds5j4p6q3g24";
     };
 
-    disabled = pythonOlder "3.3";	# Library does not support versions older than 3.3
+    disabled = pythonOlder "3.3"; # Library does not support versions older than 3.3
   };
 
   iowait = buildPythonPackage rec {
@@ -11164,15 +11164,16 @@ in {
     doCheck = false;
 
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ paver feedparser sqlalchemy pyyaml rpyc
-	    beautifulsoup_4_1_3 html5lib pyrss2gen pynzb progressbar jinja2 flask
-	    cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
+    propagatedBuildInputs = with self; [
+      paver feedparser sqlalchemy pyyaml rpyc
+      beautifulsoup_4_1_3 html5lib pyrss2gen pynzb progressbar jinja2 flask
+      cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
       guessit pathpy apscheduler ]
-	# enable deluge and transmission plugin support, if they're installed
-	++ stdenv.lib.optional (pkgs.config.pythonPackages.deluge or false)
-	    pythonpackages.deluge
-	++ stdenv.lib.optional (pkgs.transmission != null)
-	    self.transmissionrpc;
+    # enable deluge and transmission plugin support, if they're installed
+    ++ stdenv.lib.optional (pkgs.config.pythonPackages.deluge or false)
+      pythonpackages.deluge
+    ++ stdenv.lib.optional (pkgs.transmission != null)
+      self.transmissionrpc;
 
     meta = {
       homepage = http://flexget.com/;
@@ -23141,7 +23142,7 @@ in {
       homepage = "http://sqlmap.org";
       license = licenses.gpl2;
       description = "Automatic SQL injection and database takeover tool";
-			maintainers = with stdenv.lib.maintainers; [ bennofs ];
+      maintainers = with stdenv.lib.maintainers; [ bennofs ];
     };
   };
 
@@ -25846,10 +25847,10 @@ in {
         mv "$wrapper" "$wrapped"
 
         cat > "$wrapper" <<- EOF
-	export PATH="$PATH:\$PATH"
-	export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
-	source "$wrapped"
-	EOF
+        export PATH="$PATH:\$PATH"
+        export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
+        source "$wrapped"
+        EOF
 
         chmod -x "$wrapped"
         chmod +x "$wrapper"
@@ -28834,28 +28835,28 @@ in {
 
   ofxclient = buildPythonPackage rec {
     name = "ofxclient-1.3.8";
-	src = pkgs.fetchurl {
-	  url = "mirror://pypi/o/ofxclient/${name}.tar.gz";
-	  sha256 = "99ab03bffdb30d9ec98724898f428f8e73129483417d5892799a0f0d2249f233";
-	};
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/o/ofxclient/${name}.tar.gz";
+      sha256 = "99ab03bffdb30d9ec98724898f428f8e73129483417d5892799a0f0d2249f233";
+    };
 
-	# ImportError: No module named tests
-	doCheck = false;
+    # ImportError: No module named tests
+    doCheck = false;
 
-	propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
+    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
   };
 
   ofxhome = buildPythonPackage rec {
-	name = "ofxhome-0.3.1";
-	src = pkgs.fetchurl {
-	  url = "mirror://pypi/o/ofxhome/${name}.tar.gz";
-	  sha256 = "0000db437fd1a8c7c65cea5d88ce9d3b54642a1f4844dde04f860e29330ac68d";
-	};
+    name = "ofxhome-0.3.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/o/ofxhome/${name}.tar.gz";
+      sha256 = "0000db437fd1a8c7c65cea5d88ce9d3b54642a1f4844dde04f860e29330ac68d";
+    };
 
-	buildInputs = with self; [ nose ];
+    buildInputs = with self; [ nose ];
 
-	# ImportError: No module named tests
-	doCheck = false;
+    # ImportError: No module named tests
+    doCheck = false;
 
     meta = {
       homepage = "https://github.com/captin411/ofxhome";
@@ -28865,13 +28866,13 @@ in {
   };
 
   ofxparse = buildPythonPackage rec {
-	name = "ofxparse-0.14";
-	src = pkgs.fetchurl {
-	  url = "mirror://pypi/o/ofxparse/${name}.tar.gz";
-	  sha256 = "d8c486126a94d912442d040121db44fbc4a646ea70fa935df33b5b4dbfbbe42a";
-	};
+    name = "ofxparse-0.14";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/o/ofxparse/${name}.tar.gz";
+      sha256 = "d8c486126a94d912442d040121db44fbc4a646ea70fa935df33b5b4dbfbbe42a";
+    };
 
-	propagatedBuildInputs = with self; [ six beautifulsoup4 ];
+    propagatedBuildInputs = with self; [ six beautifulsoup4 ];
 
     meta = {
       homepage = "http://sites.google.com/site/ofxparse";
@@ -30102,34 +30103,33 @@ in {
     };
   };
 
-
   Quandl = buildPythonPackage rec {
-     version = "3.0.0";
-     name = "Quandl-${version}";
+    version = "3.0.0";
+    name = "Quandl-${version}";
 
-     src = pkgs.fetchurl {
-       url= "mirror://pypi/q/quandl/${name}.tar.gz";
-       sha256 = "d4e698eb39291e0b281975813054101f3dfb379dead10d34d7b536e1aad60584";
-     };
+    src = pkgs.fetchurl {
+      url= "mirror://pypi/q/quandl/${name}.tar.gz";
+      sha256 = "d4e698eb39291e0b281975813054101f3dfb379dead10d34d7b536e1aad60584";
+    };
 
-     propagatedBuildInputs = with self; [
-	numpy
-	ndg-httpsclient
-	dateutil
-	inflection
-	more-itertools
-	requests2
-	pandas
-     ];
+    propagatedBuildInputs = with self; [
+      numpy
+      ndg-httpsclient
+      dateutil
+      inflection
+      more-itertools
+      requests2
+      pandas
+    ];
 
-     #No tests in archive
-     doCheck = false;
+    # No tests in archive
+    doCheck = false;
 
-     meta = {
-       homepage = https://github.com/quandl/quandl-python;
-       description = "A Python library for Quandl’s RESTful API";
-       maintainers = with maintainers; [ NikolaMandic ];
-     };
+    meta = {
+      homepage = https://github.com/quandl/quandl-python;
+      description = "A Python library for Quandl’s RESTful API";
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
   };
 
   queuelib = buildPythonPackage rec {
