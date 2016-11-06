@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export LIBCLANG_CXXFLAGS="-isystem ${llvmPackages.clang.cc}/include $(llvm-config --cxxflags) " \
-
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib" \
 
   '' + lib.optionalString stdenv.isDarwin ''
