@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
       url = "${p}/07-CVE-2016-5323.patch";
       sha256 = "1j6w8g6qizkx5h4aq95kxzx6bgkn4jhc8l22swwhvlkichsh4910";
     })
-    (fetchpatch {
+    (fetchurl {
       url = "${p}/08-CVE-2016-3623_CVE-2016-3624.patch";
       sha256 = "1xnvwjvgyxi387h1sdiyp4360a3176jmipb7ghm8vwiz7cisdn9z";
     })
-    (fetchpatch {
+    (fetchurl {
       url = "${p}/09-CVE-2016-5652.patch";
       sha256 = "1yqfq32gzh21ab2jfqkq13gaz0nin0492l06adzsyhr5brvdhnx8";
     })
-    (fetchpatch {
+    (fetchurl {
       url = "${p}/10-CVE-2016-3658.patch";
       sha256 = "01kb8rfk30fgjf1hy0m088yhjfld1yyh4bk3gkg8jx3dl9bd076d";
     })
