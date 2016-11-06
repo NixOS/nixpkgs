@@ -25,101 +25,75 @@ let
 
   clientRestrictions = concatStringsSep ", " (clientAccess ++ dnsBl);
 
-  mainCf =
-    ''
-      compatibility_level = 9999
+  mainCf = let
+    escape = lib.replaceStrings ["$"] ["$$"];
+    mkList = items: "\n" + lib.concatMapStringsSep "\n  " escape items;
+    mkVal = value:
+      if lib.isList value then mkList value
+        else " " + (if value == true then "yes"
+        else if value == false then "no"
+        else toString value);
+    mkEntry = name: value: "${escape name} =${mkVal value}";
+  in lib.concatStringsSep "\n" (lib.mapAttrsToList mkEntry cfg.config) + "\n" + cfg.extraConfig;
 
-      mail_owner = ${user}
-      default_privs = nobody
+  defaultConf = {
+    compatibility_level  = "9999";
+    mail_owner           = user;
+    default_privs        = "nobody";
 
-      # NixOS specific locations
-      data_directory = /var/lib/postfix/data
-      queue_directory = /var/lib/postfix/queue
+    # NixOS specific locations
+    data_directory       = "/var/lib/postfix/data";
+    queue_directory      = "/var/lib/postfix/queue";
 
-      # Default location of everything in package
-      meta_directory = ${pkgs.postfix}/etc/postfix
-      command_directory = ${pkgs.postfix}/bin
-      sample_directory = /etc/postfix
-      newaliases_path = ${pkgs.postfix}/bin/newaliases
-      mailq_path = ${pkgs.postfix}/bin/mailq
-      readme_directory = no
-      sendmail_path = ${pkgs.postfix}/bin/sendmail
-      daemon_directory = ${pkgs.postfix}/libexec/postfix
-      manpage_directory = ${pkgs.postfix}/share/man
-      html_directory = ${pkgs.postfix}/share/postfix/doc/html
-      shlib_directory = no
+    # Default location of everything in package
+    meta_directory       = "${pkgs.postfix}/etc/postfix";
+    command_directory    = "${pkgs.postfix}/bin";
+    sample_directory     = "/etc/postfix";
+    newaliases_path      = "${pkgs.postfix}/bin/newaliases";
+    mailq_path           = "${pkgs.postfix}/bin/mailq";
+    readme_directory     = false;
+    sendmail_path        = "${pkgs.postfix}/bin/sendmail";
+    daemon_directory     = "${pkgs.postfix}/libexec/postfix";
+    manpage_directory    = "${pkgs.postfix}/share/man";
+    html_directory       = "${pkgs.postfix}/share/postfix/doc/html";
+    shlib_directory      = false;
 
-    ''
-    + optionalString config.networking.enableIPv6 ''
-      inet_protocols = all
-    ''
-    + (if cfg.networks != null then
-        ''
-          mynetworks = ${concatStringsSep ", " cfg.networks}
-        ''
-      else if cfg.networksStyle != "" then
-        ''
-          mynetworks_style = ${cfg.networksStyle}
-        ''
-      else
-        "")
-    + optionalString (cfg.hostname != "") ''
-      myhostname = ${cfg.hostname}
-    ''
-    + optionalString (cfg.domain != "") ''
-      mydomain = ${cfg.domain}
-    ''
-    + optionalString (cfg.origin != "") ''
-      myorigin = ${cfg.origin}
-    ''
-    + optionalString (cfg.destination != null) ''
-      mydestination = ${concatStringsSep ", " cfg.destination}
-    ''
-    + optionalString (cfg.relayDomains != null) ''
-      relay_domains = ${concatStringsSep ", " cfg.relayDomains}
-    ''
-    + ''
-      local_recipient_maps =
+    inet_protocols       = mkIf config.networking.enableIPv6 "all";
+    mynetworks           = mkIf (cfg.networks != null) cfg.networks;
+    mynetworks_style     = mkIf (cfg.networksStyle != "")
+                            cfg.networksStyle;
+    myhostname           = mkIf (cfg.hostname != "") cfg.hostname;
+    mydomain             = mkIf (cfg.domain != "") cfg.domain;
+    myorigin             = mkIf (cfg.origin != "") cfg.origin;
+    mydestination        = mkIf (cfg.destination != null) cfg.destination;
+    relay_domains        = mkIf (cfg.relayDomains != null) cfg.relayDomains;
+    local_recipient_maps = "";
+    relayhost            = if cfg.lookupMX || cfg.relayHost == ""
+                             then cfg.relayHost
+                             else "[${cfg.relayHost}]";
+    mail_spool_directory = "/var/spool/mail/";
+    setgid_group         = setgidGroup;
 
-      relayhost = ${if cfg.lookupMX || cfg.relayHost == "" then
-          cfg.relayHost
-        else
-          "[" + cfg.relayHost + "]"}
+    recipient_delimiter  = mkIf (cfg.recipientDelimiter != "")
+                             cfg.recipientDelimiter;
+    alias_maps           = mkIf haveAliases "hash:/etc/postfix/aliases";
+    transport_maps       = mkIf haveTransport "hash:/etc/postfx/transport";
+    virtual_alias_maps   = mkIf haveVirtual "hash:/etc/postfix/virtual";
+    smtpd_client_restrictions = mkIf (cfg.dnsBlacklists != [])
+                                  clientRestrictions;
+  } // (if (cfg.sslCert != "") then {
+    smtp_tls_CAfile = cfg.sslCACert;
+    smtp_tls_cert_file = cfg.sslCert;
+    smtp_tls_key_file = cfg.sslKey;
 
-      mail_spool_directory = /var/spool/mail/
+    smtp_use_tls = true;
 
-      setgid_group = ${setgidGroup}
-    ''
-    + optionalString (cfg.sslCert != "") ''
+    smtpd_tls_CAfile = cfg.sslCACert;
+    smtpd_tls_cert_file = cfg.sslCert;
+    smtpd_tls_key_file = cfg.sslKey;
 
-      smtp_tls_CAfile = ${cfg.sslCACert}
-      smtp_tls_cert_file = ${cfg.sslCert}
-      smtp_tls_key_file = ${cfg.sslKey}
-
-      smtp_use_tls = yes
-
-      smtpd_tls_CAfile = ${cfg.sslCACert}
-      smtpd_tls_cert_file = ${cfg.sslCert}
-      smtpd_tls_key_file = ${cfg.sslKey}
-
-      smtpd_use_tls = yes
-    ''
-    + optionalString (cfg.recipientDelimiter != "") ''
-      recipient_delimiter = ${cfg.recipientDelimiter}
-    ''
-    + optionalString haveAliases ''
-      alias_maps = hash:/etc/postfix/aliases
-    ''
-    + optionalString haveTransport ''
-      transport_maps = hash:/etc/postfix/transport
-    ''
-    + optionalString haveVirtual ''
-      virtual_alias_maps = hash:/etc/postfix/virtual
-    ''
-    + optionalString (cfg.dnsBlacklists != []) ''
-      smtpd_client_restrictions = ${clientRestrictions}
-    ''
-    + cfg.extraConfig;
+    smtpd_use_tls = true;
+  } else {});
 
   masterCf = ''
     # ==========================================================================
@@ -354,6 +328,18 @@ in
         ";
       };
 
+      config = mkOption {
+        type = with types; attrsOf (either bool (either str (listOf str)));
+        default = defaultConf;
+        description = ''
+          The main.cf configuration file as key value set.
+        '';
+        example = {
+          mail_owner = "postfix";
+          smtp_use_tls = true;
+        };
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -545,6 +531,9 @@ in
     })
     (mkIf (cfg.dnsBlacklists != []) {
       services.postfix.mapFiles."client_access" = checkClientAccessFile;
+    })
+    (mkIf (cfg.extraConfig != "") {
+      warnings = [ "The services.postfix.extraConfig option was deprecated. Please use services.postfix.config instead." ];
     })
   ]);
 
