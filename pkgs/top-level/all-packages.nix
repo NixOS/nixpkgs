@@ -15296,8 +15296,6 @@ in
 
   xtrace = callPackage ../tools/X11/xtrace { };
 
-  xlaunch = callPackage ../tools/X11/xlaunch { };
-
   xmacro = callPackage ../tools/X11/xmacro { };
 
   xmove = callPackage ../applications/misc/xmove { };
