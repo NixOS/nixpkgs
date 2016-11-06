@@ -44,7 +44,7 @@ let
 
     [linux_bridge]
     # TODO: changeme
-    physical_interface_mappings = public:enp0s2
+    physical_interface_mappings = public:${cfg.publicInterface}
 
     [vxlan]
     enable_vxlan = False
@@ -274,9 +274,14 @@ in {
         ${package_set}/bin/neutron-db-manage --config-file ${neutronConf} --config-file ${ml2PluginConf} upgrade head
       '';
       postStart = ''
+	export OS_AUTH_URL=http://localhost:5000/v2.0
+	export OS_USERNAME=${cfg.keystoneAdminUsername}
+	export OS_PASSWORD=${cfg.keystoneAdminPassword}
+	export OS_TENANT_NAME=${cfg.keystoneAdminTenant}
+
         # Wait until the keystone is available for use
         count=0
-        while ! curl -s  http://localhost:35357/v2.0 > /dev/null 
+        while ! keystone user-get ${cfg.keystoneAdminUsername} > /dev/null
         do
             if [ $count -eq 30 ]
             then
@@ -288,11 +293,6 @@ in {
             count=$((count++))
             sleep 1
         done
-
-	export OS_AUTH_URL=http://localhost:5000/v2.0
-	export OS_USERNAME=${cfg.keystoneAdminUsername}
-	export OS_PASSWORD=${cfg.keystoneAdminPassword}
-	export OS_TENANT_NAME=${cfg.keystoneAdminTenant}
 
         # If the service neutron doesn't exist, we consider neutron is
         # not initialized
