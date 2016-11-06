@@ -7424,6 +7424,25 @@ in {
     };
   };
 
+  hsaudiotag = buildPythonPackage (rec {
+    name = "hsaudiotag-1.1.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/hsaudiotag/${name}.tar.gz";
+      sha256 = "15hgm128p8nysfi0jb127awga3vlj0iw82l50swjpvdh01m7rda8";
+    };
+
+    # no tests
+    doCheck = false;
+
+    meta = {
+      description = "A pure Python library that lets one to read metadata from media files";
+      homepage = http://hg.hardcoded.net/hsaudiotag/;
+      license = licenses.bsd3;
+    };
+  });
+
   httpauth = buildPythonPackage rec {
     version = "0.3";
     name = "httpauth-${version}";
