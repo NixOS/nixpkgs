@@ -62,23 +62,45 @@
     <listitem><para>A string. Multiple definitions are concatenated with a 
         collon <literal>":"</literal>.</para></listitem>
   </varlistentry>
-  <varlistentry>
-    <term><varname>types.separatedString</varname> 
-      <replaceable>sep</replaceable></term>
-    <listitem><para>A string with a custom separator 
-        <replaceable>sep</replaceable>, e.g. <literal>types.separatedString 
-          "|"</literal>.</para></listitem>
-  </varlistentry>
 </variablelist>
 
  </section>
 
+ <section><title>Value Types</title>
+
+   <para>Value types are type that take a value parameter. The only value type 
+     in the library is <literal>enum</literal>.</para>
+
+<variablelist>
+  <varlistentry>
+    <term><varname>types.enum</varname> <replaceable>l</replaceable></term>
+    <listitem><para>One element of the list <replaceable>l</replaceable>, e.g. 
+        <literal>types.enum [ "left" "right" ]</literal>. Multiple definitions 
+        cannot be merged.</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><varname>types.separatedString</varname>
+      <replaceable>sep</replaceable></term>
+    <listitem><para>A string with a custom separator
+        <replaceable>sep</replaceable>, e.g. <literal>types.separatedString
+          "|"</literal>.</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><varname>types.submodule</varname> <replaceable>o</replaceable></term>
+    <listitem><para>A set of sub options <replaceable>o</replaceable>.
+        <replaceable>o</replaceable> can be an attribute set or a function
+        returning an attribute set. Submodules are used in composed types to
+        create modular options. Submodule are detailed in <xref
+          linkend='section-option-types-submodule' />.</para></listitem>
+  </varlistentry>
+</variablelist>
+ </section>
+
  <section><title>Composed Types</title>
 
-   <para>Composed types allow to create complex types by taking another type(s) 
-     or value(s) as parameter(s).
-     It is possible to compose types multiple times, e.g. <literal>with types; 
-       nullOr (enum [ "left" "right" ])</literal>.</para>
+   <para>Composed types are types that take a type as parameter. <literal>listOf 
+       int</literal> and <literal>either int str</literal> are examples of 
+     composed types.</para>
 
 <variablelist>
   <varlistentry>
@@ -100,12 +122,6 @@
         value.</para></listitem>
   </varlistentry>
   <varlistentry>
-    <term><varname>types.loeOf</varname> <replaceable>t</replaceable></term>
-    <listitem><para>A list or an element of <replaceable>t</replaceable> type. 
-        Multiple definitions are merged according to the 
-        values.</para></listitem>
-  </varlistentry>
-  <varlistentry>
     <term><varname>types.nullOr</varname> <replaceable>t</replaceable></term>
     <listitem><para><literal>null</literal> or type 
         <replaceable>t</replaceable>. Multiple definitions are merged according 
@@ -118,26 +134,12 @@
         once.</para></listitem>
   </varlistentry>
   <varlistentry>
-    <term><varname>types.enum</varname> <replaceable>l</replaceable></term>
-    <listitem><para>One element of the list <replaceable>l</replaceable>, e.g. 
-        <literal>types.enum [ "left" "right" ]</literal>. Multiple definitions 
-        cannot be merged</para></listitem>
-  </varlistentry>
-  <varlistentry>
     <term><varname>types.either</varname> <replaceable>t1</replaceable> 
       <replaceable>t2</replaceable></term>
     <listitem><para>Type <replaceable>t1</replaceable> or type 
         <replaceable>t2</replaceable>, e.g. <literal>with types; either int 
           str</literal>. Multiple definitions cannot be 
         merged.</para></listitem>
-  </varlistentry>
-  <varlistentry>
-    <term><varname>types.submodule</varname> <replaceable>o</replaceable></term>
-    <listitem><para>A set of sub options <replaceable>o</replaceable>. 
-        <replaceable>o</replaceable> can be an attribute set or a function 
-        returning an attribute set. Submodules are used in composed types to 
-        create modular options. Submodule are detailed in <xref 
-          linkend='section-option-types-submodule' />.</para></listitem>
   </varlistentry>
 </variablelist>
 
@@ -196,7 +198,6 @@ options.mod = mkOption {
   description = "submodule example";
   type = with types; listOf (submodule modOptions);
 };</screen></example>
-
 
 <section><title>Composed with <literal>listOf</literal></title>
 
@@ -323,9 +324,13 @@ code before creating a new type.</para>
 <variablelist>
   <varlistentry>
     <term><varname>name</varname></term>
-    <listitem><para>A string representation of the type function name, name 
-        usually changes accordingly parameters passed to 
-        types.</para></listitem>
+    <listitem><para>A string representation of the type function 
+        name.</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><varname>definition</varname></term>
+    <listitem><para>Description of the type used in documentation. Give 
+        information of the type and any of its arguments.</para></listitem>
   </varlistentry>
   <varlistentry>
     <term><varname>check</varname></term>
@@ -387,6 +392,53 @@ code before creating a new type.</para>
         <literal>composedType</literal> that take an <literal>elemtype</literal> 
         type parameter, this function should be defined as <literal>m: 
           composedType (elemType.substSubModules m)</literal>.</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><varname>typeMerge</varname></term>
+    <listitem><para>A function to merge multiple type declarations. Takes the 
+        type to merge <literal>functor</literal> as parameter. A 
+        <literal>null</literal> return value means that type cannot be 
+        merged.</para>
+      <variablelist>
+        <varlistentry>
+          <term><replaceable>f</replaceable></term>
+          <listitem><para>The type to merge  
+              <literal>functor</literal>.</para></listitem>
+        </varlistentry>
+      </variablelist>
+      <para>Note: There is a generic <literal>defaultTypeMerge</literal> that 
+        work with most of value and composed types.</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><varname>functor</varname></term>
+    <listitem><para>An attribute set representing the type. It is used for type 
+        operations and has the following keys:</para>
+      <variablelist>
+        <varlistentry>
+          <term><varname>type</varname></term>
+          <listitem><para>The type function.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><varname>wrapped</varname></term>
+          <listitem><para>Holds the type parameter for composed types.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><varname>payload</varname></term>
+          <listitem><para>Holds the value parameter for value types. 
+              The types that have a <literal>payload</literal> are the
+              <literal>enum</literal>, <literal>separatedString</literal> and
+              <literal>submodule</literal> types.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><varname>binOp</varname></term>
+          <listitem><para>A binary operation that can merge the payloads of two 
+              same types. Defined as a function that take two payloads as 
+              parameters and return the payloads merged.</para></listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
   </varlistentry>
 </variablelist>
 

@@ -221,7 +221,7 @@ in
         type = types.string;
         default = ''
           + FPing
-          binary = ${pkgs.fping}/bin/fping
+          binary = ${config.security.wrapperDir}/fping
         '';
         description = "Probe configuration";
       };

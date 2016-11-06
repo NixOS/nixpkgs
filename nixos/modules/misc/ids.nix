@@ -277,6 +277,7 @@
       gitlab-runner = 257;
       postgrey = 258;
       hound = 259;
+      leaps = 260;
 
       phabricator = 999;
 
@@ -526,6 +527,7 @@
       gitlab-runner = 257;
       postgrey = 258;
       hound = 259;
+      leaps = 260;
 
       phabricator = 999;
 

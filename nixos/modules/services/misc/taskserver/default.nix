@@ -292,7 +292,7 @@ in {
       };
 
       allowedClientIDs = mkOption {
-        type = with types; loeOf (either (enum ["all" "none"]) str);
+        type = with types; either str (listOf str);
         default = [];
         example = [ "[Tt]ask [2-9]+" ];
         description = ''
@@ -306,7 +306,7 @@ in {
       };
 
       disallowedClientIDs = mkOption {
-        type = with types; loeOf (either (enum ["all" "none"]) str);
+        type = with types; either str (listOf str);
         default = [];
         example = [ "[Tt]ask [2-9]+" ];
         description = ''

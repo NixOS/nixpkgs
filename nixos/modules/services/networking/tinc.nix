@@ -68,7 +68,7 @@ in
 
             interfaceType = mkOption {
               default = "tun";
-              type = types.addCheck types.str (n: n == "tun" || n == "tap");
+              type = types.enum [ "tun" "tap" ];
               description = ''
                 The type of virtual interface used for the network connection
               '';

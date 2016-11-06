@@ -927,13 +927,13 @@ in {
   };
 
   ansible2 = buildPythonPackage rec {
-    version = "2.1.2.0";
+    version = "2.2.0.0";
     name = "ansible-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "1sr12ryn2dc28009bkfl6f8rp94ychbr9i7wlf6an1bw76ysfdww";
+      sha256 = "11l5814inr44ammp0sh304rqx2382fr629c0pbwf0k1rjg99iwfr";
     };
 
     prePatch = ''
@@ -2672,13 +2672,15 @@ in {
 
   bitbucket_api = buildPythonPackage rec {
     name = "bitbucket-api-0.4.4";
+    # python3 does not support relative imports
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bitbucket-api/${name}.tar.gz";
       sha256 = "e890bc3893d59a6f203c1eb2bae60e78ac4d3869da7ea4fb104dca588aea85b2";
     };
 
-    propagatedBuildInputs = with self; [ requests_oauth2 nose sh ];
+    propagatedBuildInputs = with self; [ requests_oauthlib nose sh ];
 
     doCheck = false;
 
@@ -5375,20 +5377,73 @@ in {
     };
   };
 
+  datrie = buildPythonPackage rec {
+    name = "datrie";
+    version = "0.7.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/datrie/datrie-${version}.tar.gz";
+      sha256 = "08r0if7dry2q7p34gf7ffyrlnf4bdvnprxgydlfxgfnvq8f3f4bs";
+    };
+    meta = {
+      description = "Super-fast, efficiently stored Trie for Python";
+      homepage = "https://github.com/kmike/datrie";
+      license = licenses.lgpl2;
+      maintainers = with maintainers; [ lewo ];
+    };
+  };
+
+  heapdict = buildPythonPackage rec {
+    name = "HeapDict-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/H/HeapDict/${name}.tar.gz";
+      sha256 = "0nhvxyjq6fp6zd7jzmk5x4fg6xhakqx9lhkp5yadzkqn0rlf7ja0";
+    };
+    doCheck = !isPy3k;
+    meta = {
+      description = "a heap with decrease-key and increase-key operations.";
+      homepage = http://stutzbachenterprises.com;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
+  zict = buildPythonPackage rec {
+
+    name = "zict-${version}";
+    version = "0.0.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/z/zict/${name}.tar.gz";
+      sha256 = "1xsrlzrih0qmxvxqhk2c5vhzxirf509fppzdfyardl50jpsllni6";
+    };
+
+    propagatedBuildInputs = with self; [ heapdict ];
+
+    meta = {
+      description = "Mutable mapping tools.";
+      homepage = https://github.com/dask/zict;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
   distributed = buildPythonPackage rec {
 
     name = "distributed-${version}";
-    version = "1.10.0";
+    version = "1.13.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/distributed/${name}.tar.gz";
-      sha256 = "11bp2rs52fhcqlgyrlh3cf31ck07mys38mrkf98vjl380lyjj357";
+      sha256 = "0nka6hqz986j1fhvfmxffgvmnxh66giq9a3ml58jsaf0riq9mjrc";
     };
 
     buildInputs = with self; [ pytest docutils ];
     propagatedBuildInputs = with self; [
       dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
-      psutil botocore
+      psutil botocore zict lz4
     ] ++ (if !isPy3k then [ singledispatch ] else []);
 
     # py.test not picking up local config file, even when running
@@ -11862,6 +11917,28 @@ in {
     };
   };
 
+  github-webhook = buildPythonPackage rec {
+    name = "github-webhook-${version}";
+    version = "unstable-2016-03-11";
+
+    # There is a PyPI package but an older one.
+    src = pkgs.fetchgit {
+      url = "https://github.com/bloomberg/python-github-webhook.git";
+      rev = "ca1855479ee59c4373da5425dbdce08567605d49";
+      sha256 = "0mqwig9281iyzbphp1d21a4pqdrf98vs9k8lqpqx6spzgqaczx5f";
+    };
+
+    propagatedBuildInputs = with self; [ flask ];
+    # No tests
+    doCheck = false;
+
+    meta = {
+      description = "A framework for writing webhooks for GitHub";
+      license = licenses.mit;
+      homepage = https://github.com/bloomberg/python-github-webhook;
+    };
+  };
+
   goobook = buildPythonPackage rec {
     name = "goobook-1.9";
     disabled = isPy3k;
@@ -13610,6 +13687,8 @@ in {
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
 
+    hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
+
     meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
       homepage = http://lxml.de;
@@ -13627,6 +13706,8 @@ in {
     };
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
+
+    hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
 
     meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
@@ -17580,20 +17661,17 @@ in {
     };
   };
 
-  pandas = self.pandas_18;
-
-  pandas_18 = let
+  pandas = let
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
     name = "pandas-${version}";
-    version = "0.19.0";
+    version = "0.19.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pandas/${name}.tar.gz";
-      sha256 = "4697606cdf023c6b7fcb74e48aaf25cf282a1a00e339d2d274cf1b663748805b";
+      sha256 = "2509feaeda72fce03675e2eccd2284bb1cadb6a0737008a5e741fe2431d47421";
     };
-
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ] ++ optional isDarwin pkgs.libcxx;
@@ -21861,13 +21939,17 @@ in {
 
   requests_oauth2 = buildPythonPackage rec {
     name = "requests-oauth2-0.1.1";
+    # python3 does not support relative imports
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = https://github.com/maraujop/requests-oauth2/archive/0.1.1.tar.gz;
       sha256 = "1aij66qg9j5j4vzyh64nbg72y7pcafgjddxsi865racsay43xfqg";
     };
 
-    propagatedBuildInputs = with self; [ requests_oauthlib ];
+    propagatedBuildInputs = with self; [ requests2 ];
+    # no tests in tarball
+    doCheck = false;
 
     meta = {
       description = "Python's Requests OAuth2 (Open Authentication) plugin";
@@ -28329,26 +28411,6 @@ in {
   };
 
 
-  moreItertools = buildPythonPackage rec {
-    name = "more-itertools-2.2";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
-      sha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    meta = {
-      homepage = https://more-itertools.readthedocs.org;
-      description = "Expansion of the itertools module";
-      license = licenses.mit;
-    };
-  };
-
-
   uncertainties = buildPythonPackage rec {
     name = "uncertainties-${version}";
     version = "3.0.1";
@@ -30148,7 +30210,7 @@ in {
 	ndg-httpsclient
 	dateutil
 	inflection
-	moreItertools
+	more-itertools
 	requests2
 	pandas
      ];
@@ -30764,6 +30826,8 @@ in {
     };
   };
 
+  moreItertools = self.more-itertools;
+
   more-itertools = buildPythonPackage rec {
     name = "more-itertools-${version}";
     version = "2.2";
@@ -30773,19 +30837,25 @@ in {
       sha256 = "1q3wqsg44z01g7i5z6j1wc0nf5c5h8g77xny6fia2gddqw2jxrlk";
     };
 
-    doCheck = false;
+    propagatedBuildInputs = with self; [ nose ];
+
+    meta = {
+      homepage = https://more-itertools.readthedocs.org;
+      description = "Expansion of the itertools module";
+      license = licenses.mit;
+    };
   };
 
   jaraco_functools = buildPythonPackage rec {
     name = "jaraco.functools-${version}";
-    version = "1.11";
+    version = "1.15.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jaraco.functools/${name}.tar.gz";
-      sha256 = "08n7vxdbsl0637b1ap2x3rg698d2as0wzvvpx05dzkrdgsgxrx3g";
+      sha256 = "1nhl0pjc7acxznhadg9wq1a6ls17ja2np8vf9psq8j66716mk2ya";
     };
 
-    propagatedBuildInputs = with self; [ backports_functools_lru_cache ];
+    propagatedBuildInputs = with self; [ more-itertools backports_functools_lru_cache ];
 
     doCheck = false;
 

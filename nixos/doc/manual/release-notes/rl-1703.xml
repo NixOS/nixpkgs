@@ -75,7 +75,10 @@ following incompatible changes:</para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>Module type system have a new extensible option types feature that
+      allow to extend certain types, such as enum, through multiple option
+      declarations of the same option across multiple modules.
+    </para>
   </listitem>
 </itemizedlist>
 

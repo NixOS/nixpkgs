@@ -36,7 +36,7 @@ let
       echo \'\'
       ${concatStringsSep "\n" (mapAttrsToList (k: v:
           optionalString (v.hostname != "")
-            "echo $(${pkgs.cjdns}/bin/publictoip6 ${x.key}) ${x.host}")
+            "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}")
           (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
       echo \'\'
     '');
@@ -245,7 +245,10 @@ in
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";
-
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_RAW";
+        ProtectSystem = "full";
+        MemoryDenyWriteExecute = true;
         ProtectHome = true;
         PrivateTmp = true;
       };
