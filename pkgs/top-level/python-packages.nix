@@ -16341,6 +16341,27 @@ in {
     };
   });
 
+  plyvel = buildPythonPackage (rec {
+    name = "plyvel-0.9";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/plyvel/${name}.tar.gz";
+      sha256 = "1scq75qyks9vmjd19bx57f2y60mkdr44ajvb12p3cjg439l96zaq";
+    };
+
+    buildInputs = with self; [ pkgs.leveldb ]
+                            ++ optional isPy3k pytest;
+
+    # no tests for python2
+    doCheck = isPy3k;
+
+    meta = {
+      description = "Fast and feature-rich Python interface to LevelDB";
+      homepage = https://github.com/wbolster/plyvel;
+      license = licenses.bsd3;
+    };
+  });
+
   osc = buildPythonPackage (rec {
     name = "osc-0.133+git";
     disabled = isPy3k;
