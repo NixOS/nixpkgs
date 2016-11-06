@@ -130,4 +130,55 @@ runTests {
     expected = false;
   };
 
+
+  /* Generator tests */
+  # these tests assume attributes are converted to lists
+  # in alphabetical order
+
+  testToINIEmpty = {
+    expr = generators.toINI {} {};
+    expected = "";
+  };
+
+  testToINIEmptySection = {
+    expr = generators.toINI {} { foo = {}; bar = {}; };
+    expected = ''
+      [bar]
+
+      [foo]
+    '';
+  };
+
+  testToINIDefaultEscapes = {
+    expr = generators.toINI {} {
+      "no [ and ] allowed unescaped" = {
+        "and also no = in keys" = 42;
+      };
+    };
+    expected = ''
+      [no \[ and \] allowed unescaped]
+      and also no \= in keys=42
+    '';
+  };
+
+  testToINIDefaultFull = {
+    expr = generators.toINI {} {
+      "section 1" = {
+        attribute1 = 5;
+        x = "Me-se JarJar Binx";
+      };
+      "foo[]" = {
+        "he\\h=he" = "this is okay";
+      };
+    };
+    expected = ''
+      [foo\[\]]
+      he\h\=he=this is okay
+
+      [section 1]
+      attribute1=5
+      x=Me-se JarJar Binx
+    '';
+  };
+
 }
