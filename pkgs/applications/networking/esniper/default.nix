@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl, curl, coreutils, gawk, bash, which }:
 
 stdenv.mkDerivation {
-  name = "esniper-2.31.0";
+  name = "esniper-2.32.0";
 
   src = fetchurl {
     url    = "mirror://sourceforge/esniper/esniper-2-31-0.tgz";
