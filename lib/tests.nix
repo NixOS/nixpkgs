@@ -181,4 +181,27 @@ runTests {
     '';
   };
 
+  /* right now only invocation check */
+  testToJSONSimple =
+    let val = {
+      foobar = [ "baz" 1 2 3 ];
+    };
+    in {
+      expr = generators.toJSON {} val;
+      # trival implementation
+      expected = builtins.toJSON val;
+  };
+
+  /* right now only invocation check */
+  testToYAMLSimple =
+    let val = {
+      list = [ { one = 1; } { two = 2; } ];
+      all = 42;
+    };
+    in {
+      expr = generators.toYAML {} val;
+      # trival implementation
+      expected = builtins.toJSON val;
+  };
+
 }

@@ -10,7 +10,7 @@ let
   flipMapAttrs = flip libAttr.mapAttrs;
 in
 
-{
+rec {
 
   /* Generates an INI-style config file from an
    * attrset of sections to an attrset of key-value pairs.
@@ -50,4 +50,18 @@ in
     in
       # map input to ini sections
       mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
+
+
+  /* Generates JSON from an arbitrary (non-function) value.
+    * For more information see the documentation of the builtin.
+    */
+  toJSON = {}: builtins.toJSON;
+
+
+  /* YAML has been a strict superset of JSON since 1.2, so we
+    * use toJSON. Before it only had a few differences referring
+    * to implicit typing rules, so it should work with older
+    * parsers as well.
+    */
+  toYAML = {}@args: toJSON args;
 }
