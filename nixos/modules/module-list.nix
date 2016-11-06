@@ -251,6 +251,7 @@
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
   ./services/misc/ihaskell.nix
+  ./services/misc/leaps.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
   ./services/misc/matrix-synapse.nix
