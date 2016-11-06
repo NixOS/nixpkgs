@@ -205,6 +205,14 @@ in
 
     services.xserver.displayManager = {
 
+      select = mkOption {
+        type = with types; nullOr (enum [ ]);
+        default = null;
+        description = ''
+          Select which display manager to use.
+        '';
+      };
+
       xauthBin = mkOption {
         internal = true;
         default = "${xorg.xauth}/bin/xauth";
@@ -343,6 +351,17 @@ in
   imports = [
    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
      "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
+
+   # backward compatibility for pre extensible option types
+   (mkMergedOptionModule
+     (map
+       (dm: [ "services" "xserver" "displayManager" dm "enable" ])
+       [ "auto" "gdm" "kdm" "lightdm" "sddm" "slim" ])
+     [ "services" "xserver" "displayManager" "select" ]
+     (config:
+       findFirst (dm:
+         (getAttrFromPath [ "services" "xserver" "displayManager" dm "enable" ] config) == true
+       ) null [ "auto" "gdm" "kdm" "lightdm" "sddm" "slim" ]))
   ];
 
 }

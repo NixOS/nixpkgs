@@ -45,13 +45,19 @@ in
 
   options = {
 
+    services.xserver.displayManager.select = mkOption {
+      type = with types; nullOr (enum [ "slim" ]);
+      example = "slim";
+    };
+
     services.xserver.displayManager.slim = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = config.services.xserver.enable;
+      enabled = mkOption {
+        type     = types.bool;
+        internal = true;
+        default  = dmcfg.select == "slim";
         description = ''
-          Whether to enable SLiM as the display manager.
+          Option to abstract slim usage.
         '';
       };
 
@@ -126,7 +132,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf dmcfg.slim.enabled {
 
     services.xserver.displayManager.job =
       { environment =

@@ -75,15 +75,11 @@ in
 {
   options = {
 
-    services.xserver.displayManager.sddm = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable sddm as the display manager.
-        '';
-      };
+    services.xserver.displayManager.select = mkOption {
+      type = with types; nullOr (enum [ "sddm" ]);
+    };
 
+    services.xserver.displayManager.sddm = {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -183,7 +179,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (dmcfg.select == "sddm") {
 
     assertions = [
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
@@ -199,8 +195,6 @@ in
         '';
       }
     ];
-
-    services.xserver.displayManager.slim.enable = false;
 
     services.xserver.displayManager.job = {
       logsXsession = true;

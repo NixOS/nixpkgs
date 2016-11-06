@@ -117,7 +117,7 @@ in
 
   };
 
-  config = mkIf (ldmcfg.enable && cfg.enable) {
+  config = mkIf ((dmcfg.select == "lightdm") && cfg.enable) {
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
       package = wrappedGtkGreeter;

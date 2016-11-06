@@ -15,17 +15,11 @@ in
 
   options = {
 
-    services.xserver.displayManager.auto = {
+    services.xserver.displayManager.select = mkOption {
+      type = with types; nullOr (enum [ "auto" ]);
+    };
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable the fake "auto" display manager, which
-          automatically logs in the user specified in the
-          <option>user</option> option.  This is mostly useful for
-          automated tests.
-        '';
-      };
+    services.xserver.displayManager.auto = {
 
       user = mkOption {
         default = "root";
@@ -36,17 +30,12 @@ in
 
   };
 
-
-  ###### implementation
-
-  config = mkIf cfg.enable {
-
+  config = mkIf (dmcfg.select == "auto") {
     services.xserver.displayManager.slim = {
-      enable = true;
-      autoLogin = true;
+      enabled     = true;
+      autoLogin   = true;
       defaultUser = cfg.user;
     };
-
   };
 
 }

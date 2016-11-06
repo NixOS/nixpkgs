@@ -516,6 +516,8 @@ in
 
   config = mkIf cfg.enable {
 
+    services.xserver.displayManager.select = mkDefault "slim";
+
     hardware.opengl.enable = mkDefault true;
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
