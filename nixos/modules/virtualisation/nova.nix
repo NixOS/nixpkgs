@@ -270,9 +270,14 @@ in {
         ${cfg.package}/bin/nova-manage --config-file=${novaConf} db sync
       '';
       postStart = ''
+	export OS_AUTH_URL=http://localhost:5000/v2.0
+	export OS_USERNAME=${cfg.keystoneAdminUsername}
+	export OS_PASSWORD=${cfg.keystoneAdminPassword}
+	export OS_TENANT_NAME=${cfg.keystoneAdminTenant}
+
         # Wait until the keystone is available for use
         count=0
-        while ! curl -s  http://localhost:35357/v2.0 > /dev/null 
+        while ! keystone user-get ${cfg.keystoneAdminUsername} > /dev/null
         do
             if [ $count -eq 30 ]
             then
@@ -284,11 +289,6 @@ in {
             count=$((count++))
             sleep 1
         done
-
-	export OS_AUTH_URL=http://localhost:5000/v2.0
-	export OS_USERNAME=${cfg.keystoneAdminUsername}
-	export OS_PASSWORD=${cfg.keystoneAdminPassword}
-	export OS_TENANT_NAME=${cfg.keystoneAdminTenant}
 
         # If the service nova doesn't exist, we consider nova
         # is not initialized
