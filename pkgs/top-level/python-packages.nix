@@ -30837,7 +30837,10 @@ in {
       sha256 = "1q3wqsg44z01g7i5z6j1wc0nf5c5h8g77xny6fia2gddqw2jxrlk";
     };
 
-    propagatedBuildInputs = with self; [ nose ];
+    buildInputs = with self; [ nose ];
+
+    # fails due to synatax error on python 3.5
+    doCheck = false;
 
     meta = {
       homepage = https://more-itertools.readthedocs.org;
