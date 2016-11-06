@@ -166,6 +166,12 @@ in {
       '';
     };
     
+    publicInterface = mkOption {
+      default = "eth0";
+      description = "The pysical interface name used by the linuxbridge agent";
+      example = "eth1";
+    };
+
     novaServiceUsername = mkOption {
       default = "nova";
       description = "The username of the nova service tenant";
