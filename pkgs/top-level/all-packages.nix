@@ -790,6 +790,8 @@ in
     aspellDicts_en = aspellDicts.en;
   };
 
+  dirb = callPackage ../tools/networking/dirb { };
+
   direnv = callPackage ../tools/misc/direnv { };
 
   discount = callPackage ../tools/text/discount { };
