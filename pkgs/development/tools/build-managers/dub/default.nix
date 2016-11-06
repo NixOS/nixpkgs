@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "dub-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    sha256 = "07s52hmh9jc3i4jfx4j4a91m44qrr933pwfwczzijhybj2wmpjhh";
+    sha256 = "1smzlfs5gjmrlghccdgn04qzy5b8l0xm8y2virayb2adrwqviscm";
     rev = "v${version}";
     repo = "dub";
     owner = "D-Programming-Language";

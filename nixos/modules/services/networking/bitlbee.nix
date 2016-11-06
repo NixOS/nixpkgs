@@ -7,11 +7,6 @@ let
   cfg = config.services.bitlbee;
   bitlbeeUid = config.ids.uids.bitlbee;
 
-  authModeCheck = v:
-    v == "Open" ||
-    v == "Closed" ||
-    v == "Registered";
-
   bitlbeeConfig = pkgs.writeText "bitlbee.conf"
     ''
     [settings]
@@ -67,7 +62,7 @@ in
 
       authMode = mkOption {
         default = "Open";
-        type = types.addCheck types.str authModeCheck;
+        type = types.enum [ "Open" "Closed" "Registered" ];
         description = ''
           The following authentication modes are available:
             Open -- Accept connections from anyone, use NickServ for user authentication.

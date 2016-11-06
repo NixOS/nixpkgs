@@ -741,6 +741,8 @@ in
 
   corosync = callPackage ../servers/corosync { };
 
+  cowsay = callPackage ../tools/misc/cowsay { };
+
   cherrytree = callPackage ../applications/misc/cherrytree { };
 
   chntpw = callPackage ../tools/security/chntpw { };
@@ -883,8 +885,6 @@ in
   long-shebang = callPackage ../misc/long-shebang {};
 
   mathics = pythonPackages.mathics;
-
-  mcrl = callPackage ../tools/misc/mcrl { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
@@ -1133,8 +1133,6 @@ in
   };
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
-
-  cowsay = callPackage ../tools/misc/cowsay { };
 
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
@@ -1399,7 +1397,10 @@ in
 
   disper = callPackage ../tools/misc/disper { };
 
-  dmd = callPackage ../development/compilers/dmd { };
+  dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix { };
+  dmd = callPackage ../development/compilers/dmd {
+    bootstrapDmd = dmd_2_067_1;
+  };
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
@@ -1724,15 +1725,11 @@ in
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
-  fuse-zip = callPackage ../tools/filesystems/fuse-zip { };
-
   exfat = callPackage ../tools/filesystems/exfat { };
 
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
-
-  g500-control = callPackage ../tools/misc/g500-control { };
 
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
@@ -2242,7 +2239,8 @@ in
 
   jhead = callPackage ../tools/graphics/jhead { };
 
-  jing = callPackage ../tools/text/xml/jing { };
+  jing = self.jing-trang;
+  jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
   jmespath = callPackage ../development/tools/jmespath { };
 
@@ -2450,13 +2448,13 @@ in
     enableNpm = false;
   };
 
-  nodejs-7_x = callPackage ../development/web/nodejs/v7.nix {                                                                                                 
-    libtool = darwin.cctools;                                                                                                                                 
-  };                                                                                                                                                          
-                                                                                                                                                              
-  nodejs-slim-7_x = callPackage ../development/web/nodejs/v7.nix {                                                                                            
-    libtool = darwin.cctools;                                                                                                                                 
-    enableNpm = false;                                                                                                                                        
+  nodejs-7_x = callPackage ../development/web/nodejs/v7.nix {
+    libtool = darwin.cctools;
+  };
+
+  nodejs-slim-7_x = callPackage ../development/web/nodejs/v7.nix {
+    libtool = darwin.cctools;
+    enableNpm = false;
   };
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
@@ -3420,7 +3418,7 @@ in
   rtmpdump_gnutls = rtmpdump.override { gnutlsSupport = true; opensslSupport = false; };
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
-  
+
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x {};
 
   recordmydesktop = callPackage ../applications/video/recordmydesktop { };
@@ -3928,8 +3926,6 @@ in
 
   ttyrec = callPackage ../tools/misc/ttyrec { };
 
-  ttysnoop = callPackage ../os-specific/linux/ttysnoop {};
-
   ttylog = callPackage ../tools/misc/ttylog { };
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
@@ -4111,7 +4107,7 @@ in
 
   tradcpp = callPackage ../development/tools/tradcpp { };
 
-  trang = callPackage ../tools/text/xml/trang { };
+  trang = self.jing-trang;
 
   tre = callPackage ../development/libraries/tre { };
 
@@ -4448,8 +4444,6 @@ in
 
 
   ### DEVELOPMENT / COMPILERS
-
-  abc = callPackage ../development/compilers/abc/default.nix { };
 
   aldor = callPackage ../development/compilers/aldor { };
 
@@ -5492,7 +5486,7 @@ in
     glpk = null;
     suitesparse = null;
     jdk = null;
-    openblas = openblas;
+    openblas = if stdenv.isDarwin then openblasCompat else openblas;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     qt = qt4;
@@ -5693,8 +5687,6 @@ in
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
   ecj = callPackage ../development/eclipse/ecj { };
-
-  jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
   jruby = callPackage ../development/interpreters/jruby { };
 
@@ -6343,11 +6335,6 @@ in
 
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
-  # couldn't find the source yet
-  seleniumRCBin = callPackage ../development/tools/selenium/remote-control {
-    jre = jdk;
-  };
-
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
@@ -6658,8 +6645,6 @@ in
   };
 
   cl = callPackage ../development/libraries/cl { };
-
-  clanlib = callPackage ../development/libraries/clanlib { };
 
   classads = callPackage ../development/libraries/classads { };
 
@@ -7370,8 +7355,6 @@ in
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
-  iksemel = callPackage ../development/libraries/iksemel { };
-
   ilbc = callPackage ../development/libraries/ilbc { };
 
   ilixi = callPackage ../development/libraries/ilixi { };
@@ -7429,10 +7412,6 @@ in
   jbigkit = callPackage ../development/libraries/jbigkit { };
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
-
-  jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
-
-  jetty_util = callPackage ../development/libraries/java/jetty-util { };
 
   jshon = callPackage ../development/tools/parsing/jshon { };
 
@@ -8492,8 +8471,6 @@ in
 
   minizip = callPackage ../development/libraries/minizip { };
 
-  minmay = callPackage ../development/libraries/minmay { };
-
   miro = callPackage ../applications/video/miro {
     avahi = avahi.override {
       withLibdnssdCompat = true;
@@ -8682,7 +8659,6 @@ in
   openh264 = callPackage ../development/libraries/openh264 { };
 
   openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
-  openjpeg_2_0 = callPackage ../development/libraries/openjpeg/2.0.nix { };
   openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
   openjpeg = openjpeg_2_1;
 
@@ -10573,8 +10549,6 @@ in
   coredns = callPackage ../servers/dns/coredns { };
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
-
-  cryopid = callPackage ../os-specific/linux/cryopid { };
 
   criu = callPackage ../os-specific/linux/criu { };
 
@@ -12684,8 +12658,6 @@ in
     scalaMode1 = callPackage ../applications/editors/emacs-modes/scala-mode/v1.nix { };
     scalaMode2 = callPackage ../applications/editors/emacs-modes/scala-mode/v2.nix { };
 
-    stratego = callPackage ../applications/editors/emacs-modes/stratego { };
-
     structuredHaskellMode = haskellPackages.structured-haskell-mode;
 
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
@@ -13487,10 +13459,6 @@ in
   ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
 
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
-    fftw = fftwSinglePrec;
-  };
-
-  ladspaPlugins-git = callPackage ../applications/audio/ladspa-plugins/git.nix {
     fftw = fftwSinglePrec;
   };
 
@@ -16349,8 +16317,6 @@ in
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
   paml = callPackage ../applications/science/biology/paml { };
-
-  pal2nal = callPackage ../applications/science/biology/pal2nal { };
 
   plink = callPackage ../applications/science/biology/plink/default.nix { };
 

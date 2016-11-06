@@ -47,7 +47,6 @@ doNotDisplayTwice rec {
   firefoxWrapper = firefox;           # 2015-09
   foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11
-  fuse_zip = fuse-zip; # added 2016-04-27
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   googleAuthenticator = google-authenticator; # added 2016-10-16

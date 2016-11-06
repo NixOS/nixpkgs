@@ -1,20 +1,20 @@
-{ plasmaPackage, substituteAll, ecm, kdoctools
-, attica, baloo, boost, fontconfig, kactivities, kactivities-stats
-, kauth, kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons
-, kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications
-, knotifyconfig, kpeople, krunner, kwallet, kwin, phonon
-, plasma-framework, plasma-workspace, qtdeclarative, qtx11extras
-, qtsvg, libXcursor, libXft, libxkbfile, xf86inputevdev
-, xf86inputsynaptics, xinput, xkeyboard_config, xorgserver
-, libcanberra_kde, libpulseaudio, utillinux
-, qtquickcontrols, ksysguard
+{
+  plasmaPackage, substituteAll,
+  ecm, kdoctools,
+  attica, baloo, boost, fontconfig, ibus, kactivities, kactivities-stats, kauth,
+  kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons,
+  kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications, knotifyconfig,
+  kpeople, krunner, ksysguard, kwallet, kwin, libXcursor, libXft,
+  libcanberra_kde, libpulseaudio, libxkbfile, phonon, plasma-framework,
+  plasma-workspace, qtdeclarative, qtquickcontrols, qtsvg, qtx11extras, xf86inputevdev,
+  xf86inputsynaptics, xinput, xkeyboard_config, xorgserver, utillinux
 }:
 
 plasmaPackage rec {
   name = "plasma-desktop";
   nativeBuildInputs = [ ecm kdoctools ];
   buildInputs = [
-    attica boost fontconfig kcmutils kdbusaddons kded kitemmodels knewstuff
+    attica boost fontconfig ibus kcmutils kdbusaddons kded kitemmodels knewstuff
     knotifications knotifyconfig kwallet libcanberra_kde libXcursor
     libpulseaudio libXft libxkbfile phonon qtsvg xf86inputevdev
     xf86inputsynaptics xkeyboard_config xinput baloo kactivities

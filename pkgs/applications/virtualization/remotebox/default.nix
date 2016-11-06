@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "remotebox-${version}";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchurl {
     url = "http://remotebox.knobgoblin.org.uk/downloads/RemoteBox-${version}.tar.bz2";
-    sha256 = "0c73i53wdjd2m2sdgq3r3xp30irxh5z5rak2rk79yb686s6bv759";
+    sha256 = "0pyi433pwbpyh58p08q8acav7mk90gchgjghvl9f8wqafx7bp404";
   };
 
   buildInputs = with perlPackages; [ perl Glib Gtk2 Pango SOAPLite ];
