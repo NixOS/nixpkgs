@@ -61,7 +61,7 @@ composableDerivation {
           }.src;
       };
 
-    prePatch = "cd src";
+    patches = [ ./cflags-prune.diff ];
 
     # if darwin support is enabled, we want to make sure we're not building with
     # OS-installed python framework
@@ -72,26 +72,22 @@ composableDerivation {
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
-    nativeBuildInputs
-      = [ ncurses pkgconfig gtk2 libX11 libXext libSM libXpm libXt libXaw libXau
+    nativeBuildInputs = [ pkgconfig ];
+
+    buildInputs
+      = [ ncurses gtk2 libX11 libXext libSM libXpm libXt libXaw libXau
           libXmu glib libICE ];
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
         ftNix = {
-          # because we cd to src in the main patch phase, we can't just add this
-          # patch to the list, we have to apply it manually
-          postPatch = ''
-            cd ../runtime
-            patch -p2 < ${./ft-nix-support.patch}
-            cd ..
-          '';
+          patches = [ ./ft-nix-support.patch ];
         };
       }
       // edf {
         name = "darwin";
         enable = {
-          nativeBuildInputs = [ CoreServices CoreData Cocoa Foundation libobjc cf-private ];
+          buildInputs = [ CoreServices CoreData Cocoa Foundation libobjc cf-private ];
           NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
             "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
         };
@@ -105,7 +101,7 @@ composableDerivation {
         name = "python";
         feat = "python${if python ? isPy3 then "3" else ""}interp";
         enable = {
-          nativeBuildInputs = [ python ];
+          buildInputs = [ python ];
         } // lib.optionalAttrs stdenv.isDarwin {
           configureFlags
             = [ "--enable-python${if python ? isPy3 then "3" else ""}interp=yes"
@@ -114,13 +110,13 @@ composableDerivation {
         };
       }
 
-      // edf { name = "tcl"; feat = "tclinterp"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
-      // edf { name = "ruby"; feat = "rubyinterp"; enable = { nativeBuildInputs = [ruby]; };} #Include Ruby interpreter.
+      // edf { name = "tcl"; feat = "tclinterp"; enable = { buildInputs = [tcl]; }; } #Include Tcl interpreter.
+      // edf { name = "ruby"; feat = "rubyinterp"; enable = { buildInputs = [ruby]; };} #Include Ruby interpreter.
       // edf {
         name = "lua";
         feat = "luainterp";
         enable = {
-          nativeBuildInputs = [lua];
+          buildInputs = [lua];
           configureFlags = [
             "--with-lua-prefix=${args.lua}"
             "--enable-luainterp"
@@ -172,16 +168,11 @@ composableDerivation {
     */
 
   postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-    rpath=`patchelf --print-rpath $out/bin/vim`;
-    for i in $nativeBuildInputs; do
-      echo adding $i/lib
-      rpath=$rpath:$i/lib
-    done
-    echo $nativeBuildInputs
-    echo $rpath
-    patchelf --set-rpath $rpath $out/bin/{vim,gvim}
+    patchelf --set-rpath \
+      "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
+      "$out"/bin/{vim,gvim}
 
-    ln -sfn ${nixosRuntimepath} $out/share/vim/vimrc
+    ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '';
 
   dontStrip = 1;
