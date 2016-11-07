@@ -1,8 +1,8 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
-  mptcpVersion = "0.91";
-  modDirVersion = "4.1.26";
+  mptcpVersion = "0.91.2";
+  modDirVersion = "4.1.35";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
 
   extraMeta = {
@@ -12,7 +12,7 @@ import ./generic.nix (args // rec {
 
   src = fetchurl {
     url = "https://github.com/multipath-tcp/mptcp/archive/v${mptcpVersion}.tar.gz";
-    sha256 = "0rbvgz89j5wk781y201qdxy2kz4gmlamb72wdbxj8mxv92x56lh3";
+    sha256 = "1jfxycg8i99ry2cr2ksarvqjzlr46sp192wkpb4sb2mynbzf3dmk";
   };
 
   kernelPatches = args.kernelPatches;
