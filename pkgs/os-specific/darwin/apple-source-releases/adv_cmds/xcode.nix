@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ xcbuild libcxx ];
-  #NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   meta = {
     platforms = stdenv.lib.platforms.darwin;

@@ -3,7 +3,7 @@ xcbuildPhase() {
 
     echo "running xcodebuild"
 
-    xcodebuild OTHER_CFLAGS="$NIX_CFLAGS_COMPILE"
+    xcodebuild
 
     runHook postConfigure
 }
