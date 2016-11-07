@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   name = "CharacterCompressor-${version}";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "CharacterCompressor";
     rev = "V${version}";
-    sha256 = "0ci27v5k10prsmcd0g6q5vhr31mz8hsmrsdk436vfbcv3s108rcc";
+    sha256 = "1h0bhjhx023476gbijq842b6f8z71zcyn4c9mddwyb18w9cdamp5";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2gui ];
+  buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
     faust2jaqt -vec -time -t 99999 CharacterCompressor.dsp
-    faust2lv2 -vec -time -gui -t 99999 CharacterCompressor.dsp
     faust2jaqt -vec -time -t 99999 CharacterCompressorMono.dsp
+    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "lib/CharacterCompressor.lib"
+    faust2lv2 -vec -time -gui -t 99999 CharacterCompressor.dsp
     faust2lv2 -vec -time -gui -t 99999 CharacterCompressorMono.dsp
   '';
 

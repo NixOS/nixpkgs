@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   name = "LazyLimiter-${version}";
-  version = "0.3.01";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "LazyLimiter";
-    rev = "v${version}";
-    sha256 = "1yx9d5cakmqbiwb1j9v2af9h5lqzahl3kaamnyk71cf4i8g7zp3l";
+    rev = "V${version}";
+    sha256 = "10xdydwmsnkx8hzsm74pa546yahp29wifydbc48yywv3sfj5anm7";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2gui ];
+  buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
-    faust2jaqt -t 99999 LazyLimiter.dsp
-    faust2lv2 -gui -t 99999 LazyLimiter.dsp
+    faust2jaqt -vec -time -t 99999 LazyLimiter.dsp
+    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "GUI.lib"
+    faust2lv2 -vec -time -t 99999  -gui LazyLimiter.dsp
   '';
 
   installPhase = ''
