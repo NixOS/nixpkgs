@@ -1,7 +1,7 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{pkgs, source ? "default", fetchurl, fetchFromGitHub, stdenv, ncurses, pkgconfig, gettext
-, composableDerivation, lib, config, glib, gtk, python, perl, tcl, ruby
+args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
+, composableDerivation, writeText, lib, config, glib, gtk2, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 
@@ -11,8 +11,9 @@ args@{pkgs, source ? "default", fetchurl, fetchFromGitHub, stdenv, ncurses, pkgc
 , ... }: with args;
 
 
-let inherit (args.composableDerivation) composableDerivation edf;
-  nixosRuntimepath = pkgs.writeText "nixos-vimrc" ''
+let
+  inherit (args.composableDerivation) composableDerivation edf;
+  nixosRuntimepath = writeText "nixos-vimrc" ''
     set nocompatible
     syntax on
 
@@ -37,25 +38,18 @@ let inherit (args.composableDerivation) composableDerivation edf;
       source /etc/vim/vimrc
     endif
   '';
+
+  common = callPackage ./common.nix {};
 in
 composableDerivation {
 } (fix: rec {
 
     name = "vim_configurable-${version}";
-    version = "7.4.826";
 
-    enableParallelBuilding = true; # test this
+    inherit (common) version hardeningDisable enableParallelBuilding meta;
 
-    src =
-      builtins.getAttr source {
-      "default" =
-        # latest release
-      args.fetchFromGitHub {
-        owner = "vim";
-        repo = "vim";
-        rev = "v${version}";
-        sha256 = "04hp2gqbbj9h872bgj1g9xcaj5qlg9q45v6by2ch9n105dng9aj3";
-      };
+    src = builtins.getAttr source {
+      "default" = common.src; # latest release
 
       "vim-nox" =
           {
@@ -79,7 +73,7 @@ composableDerivation {
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
     nativeBuildInputs
-      = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
+      = [ ncurses pkgconfig gtk2 libX11 libXext libSM libXpm libXt libXaw libXau
           libXmu glib libICE ];
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
@@ -191,15 +185,5 @@ composableDerivation {
   '';
 
   dontStrip = 1;
-
-  hardeningDisable = [ "fortify" ];
-
-  meta = with stdenv.lib; {
-    description = "The most popular clone of the VI editor";
-    homepage    = http://www.vim.org;
-    license = licenses.vim;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-  };
 })
 
