@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   name = "constant-detune-chorus-${version}";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "constant-detune-chorus";
-    rev = "v${version}";
-    sha256 = "1ks2k6pflqyi2cs26bnbypphyrrgn0xf31l31kgx1qlilyc57vln";
+    rev = "V${version}";
+    sha256 = "1sipmc25fr7w7xqx1r0y6i2zwfkgszzwvhk1v15mnsb3cqvk8ybn";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2gui ];
+  buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
-    faust2jaqt -t 99999 ConstantDetuneChorus.dsp
-    faust2lv2 -gui -t 99999 ConstantDetuneChorus.dsp
+    faust2jaqt -time -vec -t 99999 ConstantDetuneChorus.dsp
+    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "ConstantDetuneChorus.dsp"
+    faust2lv2  -time -vec -t 99999 -gui ConstantDetuneChorus.dsp
   '';
 
   installPhase = ''

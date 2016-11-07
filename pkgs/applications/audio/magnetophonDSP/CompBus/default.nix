@@ -1,22 +1,28 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   name = "CompBus-${version}";
-  version = "1.1.02";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "CompBus";
-    rev = "v${version}";
-    sha256 = "025vi60caxk3j2vxxrgbc59xlyr88vgn7k3127s271zvpyy7apwh";
+    rev = "V${version}";
+    sha256 = "0yhj680zgk4dn4fi8j3apm72f3z2mjk12amf2a7p0lwn9iyh4a2z";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2gui ];
+  buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
     for f in *.dsp;
     do
-      faust2jaqt -t 99999 $f
-      faust2lv2 -gui -t 99999 $f
+      faust2jaqt -time -vec -double -t 99999 $f
+    done
+
+    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "CompBus.lib"
+
+    for f in *.dsp;
+    do
+      faust2lv2  -time -vec -double -gui -t 99999 $f
     done
   '';
 

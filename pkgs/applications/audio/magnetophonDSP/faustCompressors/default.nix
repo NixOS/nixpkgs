@@ -1,22 +1,28 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "faustCompressors-${version}";
-  version = "0.1.1";
+  name = "faustCompressors-v${version}";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "faustCompressors";
     rev = "v${version}";
-    sha256 = "0x5nd2cjhknb4aclhkkjaywx75bi2wj22prgv8n47czi09jcj0jb";
+    sha256 = "0mkram2hm7i5za7pfn5crh2arbajk8praksxzgjx90rrxwl1y3d1";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2gui ];
+  buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
     for f in *.dsp;
     do
-      faust2jaqt -double -t 99999 $f
-      faust2lv2 -double -gui -t 99999 $f
+      faust2jaqt -time -double -t 99999 $f
+    done
+
+    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "compressors.lib"
+
+    for f in *.dsp;
+    do
+      faust2lv2  -time -double -gui -t 99999 $f
     done
   '';
 

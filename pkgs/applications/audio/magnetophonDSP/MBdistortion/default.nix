@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   name = "MBdistortion-${version}";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "MBdistortion";
-    rev = "v${version}";
-    sha256 = "1rmvfi48hg8ybfw517zgj3fjj2xzckrmv8x131i26vj0fv7svjsp";
+    rev = "V${version}";
+    sha256 = "0mdzaqmxzgspfgx9w1hdip18y17hwpdcgjyq1rrfm843vkascwip";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2gui ];
+  buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
-    faust2jaqt -t 99999 MBdistortion.dsp
-    faust2lv2 -gui -t 99999 MBdistortion.dsp
+    faust2jaqt -time -vec -t 99999 MBdistortion.dsp
+    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "MBdistortion.dsp"
+    faust2lv2 -time -vec -gui -t 99999 MBdistortion.dsp
   '';
 
   installPhase = ''

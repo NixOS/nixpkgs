@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   name = "RhythmDelay-${version}";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "RhythmDelay";
-    rev = "v${version}";
-    sha256 = "0n938nm08mf3lz92k6v07k1469xxzmfkgclw40jgdssfcfa16bn7";
+    rev = "V${version}";
+    sha256 = "1j0bjl9agz43dcrcrbiqd7fv7xsxgd65s4ahhv5pvcr729y0fxg4";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2gui ];
+  buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
-    faust2jaqt -t 99999 RhythmDelay.dsp
-    faust2lv2 -gui -t 99999 RhythmDelay.dsp
+    faust2jaqt -time -vec -t 99999 RhythmDelay.dsp
+    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "RhythmDelay.dsp"
+    faust2lv2  -time -vec -t 99999 -gui RhythmDelay.dsp
   '';
 
   installPhase = ''
