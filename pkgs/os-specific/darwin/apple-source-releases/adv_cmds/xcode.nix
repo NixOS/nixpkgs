@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xcbuild, xpc }:
+{ stdenv, fetchurl, xcbuild, libcxx }:
 
 stdenv.mkDerivation {
   name = "adv_cmds";
@@ -9,11 +9,12 @@ stdenv.mkDerivation {
   };
 
   patchPhase = ''
-    substituteInPlace pkill/pkill.c \
-      --replace '#include <xpc/xpc.h>' ""
+    substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
+      --replace "FD201DC214369B4200906237 /* pkill.c in Sources */," ""
   '';
 
-  buildInputs = [ xcbuild xpc ];
+  buildInputs = [ xcbuild libcxx ];
+  #NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   meta = {
     platforms = stdenv.lib.platforms.darwin;

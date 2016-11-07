@@ -17378,7 +17378,5 @@ in
 
   nitrokey-app = callPackage ../tools/security/nitrokey-app { };
 
-  adv_cmds = callPackage ../os-specific/darwin/apple-source-releases/adv_cmds/xcode.nix {
-    inherit (darwin.apple_sdk.libs) xpc;
-  };
+  adv_cmds = callPackage ../os-specific/darwin/apple-source-releases/adv_cmds/xcode.nix {};
 }
