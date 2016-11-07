@@ -440,6 +440,20 @@ rec {
 
   };
 
+  clighter8 = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "clighter8-2016-11-08";
+    src = fetchgit {
+      url = "git://github.com/bbchung/clighter8";
+      rev = "a264494b6dd3e7636fa31b8aee9b3a42a635a69f";
+      sha256 = "1dg22yfr0za7milqzm7xywa6j9dfs2kvkjlwa046jjkjaqzlfx48";
+    };
+    dependencies = [];
+    preFixup = ''
+      sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc}/lib/libclang.so')|" \
+        -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
+    '';
+  };
+
   neomake = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "neomake-2016-11-04";
     src = fetchgit {
