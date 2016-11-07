@@ -1278,6 +1278,10 @@ in
     cudatoolkit = cudatoolkit75;
   };
 
+  cudnn5_cudatoolkit80 = callPackage ../development/libraries/science/math/cudnn/8.0-5.0 {
+    cudatoolkit = cudatoolkit8;
+  };
+
   curlFull = curl.override {
     idnSupport = true;
     ldapSupport = true;
