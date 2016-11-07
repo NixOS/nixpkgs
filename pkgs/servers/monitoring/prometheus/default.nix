@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "prometheus-${version}";
-  version = "1.1.2";
+  version = "1.3.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/prometheus";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "1k0lfmfkyibjan590wyswr65yr940w8d1zma6k3l2hc025xpi2i4";
+    sha256 = "1q29ndi6dnflmv18y2qakipvialy7yfl308kv2vq9y2difij4pwi";
   };
 
   docheck = true;
