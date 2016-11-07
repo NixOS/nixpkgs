@@ -16,7 +16,7 @@
 #
 # To use at startup, see hardware.bumblebee options.
 
-{ stdenv, lib, fetchurl, pkgconfig, help2man, makeWrapper
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, help2man, makeWrapper
 , glib, libbsd
 , libX11, libXext, xorgserver, xkbcomp, kmod, xkeyboard_config, xf86videonouveau
 , nvidia_x11, virtualgl, primusLib
@@ -49,13 +49,13 @@ let
 
   xmodules = lib.concatStringsSep "," (map (x: "${x.out or x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
 
-  modprobePatch = fetchurl {
+  modprobePatch = fetchpatch {
     url = "https://github.com/Bumblebee-Project/Bumblebee/commit/1ada79fe5916961fc4e4917f8c63bb184908d986.patch";
-    sha256 = "0x9qvhw6sn606dqcp3394irj6jjhw3h75k3lpbys6gha1yshgjps";
+    sha256 = "02vq3vba6nx7gglpjdfchws9vjhs1x02a543yvqrxqpvvdfim2x2";
   };
-  libkmodPatch = fetchurl {
+  libkmodPatch = fetchpatch {
     url = "https://github.com/Bumblebee-Project/Bumblebee/commit/deceb14cdf2c90ff64ebd1010a674305464587da.patch";
-    sha256 = "0j2v0lncjfn2nw3324q3n69lw3yz3hah6bscc8xn9a2df2dcawj1";
+    sha256 = "00c05i5lxz7vdbv445ncxac490vbl5g9w3vy3gd71qw1f0si8vwh";
   };
 
 in stdenv.mkDerivation rec {
@@ -104,9 +104,8 @@ in stdenv.mkDerivation rec {
 
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
-  buildInputs = [ libX11 glib libbsd ]
-  ++ [ kmod automake111x autoconf ];
-  nativeBuildInputs = [ makeWrapper pkgconfig help2man ];
+  buildInputs = [ libX11 glib libbsd kmod ];
+  nativeBuildInputs = [ makeWrapper pkgconfig help2man automake111x autoconf ];
 
   # The order of LDPATH is very specific: First X11 then the host
   # environment then the optional sub architecture paths.
