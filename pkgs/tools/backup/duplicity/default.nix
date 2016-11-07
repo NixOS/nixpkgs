@@ -3,8 +3,7 @@
 
 let
   version = "0.7.07.1";
-  inherit (python2Packages) boto cffi cryptography ecdsa enum idna ipaddress lockfile paramiko pyasn1 pycrypto python setuptools six;
-in stdenv.mkDerivation {
+in python2Packages.buildPythonApplication {
   name = "duplicity-${version}";
 
   src = fetchurl {
@@ -12,16 +11,21 @@ in stdenv.mkDerivation {
     sha256 = "594c6d0e723e56f8a7114d57811c613622d535cafdef4a3643a4d4c89c1904f8";
   };
 
-  installPhase = ''
-    python setup.py install --prefix=$out
+  postInstall = ''
     wrapProgram $out/bin/duplicity \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${idna}):$(toPythonPath ${cffi}):$(toPythonPath ${ipaddress}):$(toPythonPath ${pyasn1}):$(toPythonPath ${six}):$(toPythonPath ${enum}):$(toPythonPath ${setuptools}):$(toPythonPath ${cryptography}):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
-    wrapProgram $out/bin/rdiffdir \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${idna}):$(toPythonPath ${cffi}):$(toPythonPath ${ipaddress}):$(toPythonPath ${pyasn1}):$(toPythonPath ${six}):$(toPythonPath ${enum}):$(toPythonPath ${setuptools}):$(toPythonPath ${cryptography}):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})"
   '';
 
-  buildInputs = [ python librsync makeWrapper setuptools ];
+  buildInputs = [ librsync makeWrapper ];
+
+  # Inputs for tests. These are added to buildInputs when doCheck = true
+  checkInputs = with python2Packages; [ lockfile mock pexpect ];
+
+  # Many problematic tests
+  doCheck = false;
+
+  propagatedBuildInputs = with python2Packages; [ boto cffi cryptography ecdsa enum idna
+    ipaddress lockfile paramiko pyasn1 pycrypto six ];
 
   meta = {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
