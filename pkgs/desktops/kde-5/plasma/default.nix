@@ -78,7 +78,9 @@ let
     plasma-desktop = callPackage ./plasma-desktop {};
     plasma-integration = callPackage ./plasma-integration.nix {};
     plasma-nm = callPackage ./plasma-nm {};
-    plasma-pa = callPackage ./plasma-pa.nix {};
+    plasma-pa = callPackage ./plasma-pa.nix {
+      inherit (pkgs.gnome3) gconf;
+    };
     plasma-workspace = callPackage ./plasma-workspace {};
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
     polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
