@@ -3931,6 +3931,7 @@ in
   ttylog = callPackage ../tools/misc/ttylog { };
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
+  twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap/v3.nix {};
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
