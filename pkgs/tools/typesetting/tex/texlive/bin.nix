@@ -279,6 +279,10 @@ xdvi = stdenv.mkDerivation {
   # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
 };
 
+} # un-indented
+
+// stdenv.lib.optionalAttrs (!stdenv.isDarwin) # see #20062
+{
 
 xindy = stdenv.mkDerivation {
   name = "texlive-xindy.bin-${version}";
@@ -309,6 +313,6 @@ xindy = stdenv.mkDerivation {
   '';
 };
 
+}
 
-} # un-indented
 
