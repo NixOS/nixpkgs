@@ -1,7 +1,7 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{pkgs, source ? "default", fetchurl, fetchFromGitHub, stdenv, ncurses, pkgconfig, gettext
-, composableDerivation, lib, config, glib, gtk2, python, perl, tcl, ruby
+args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
+, composableDerivation, writeText, lib, config, glib, gtk2, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 
@@ -11,8 +11,9 @@ args@{pkgs, source ? "default", fetchurl, fetchFromGitHub, stdenv, ncurses, pkgc
 , ... }: with args;
 
 
-let inherit (args.composableDerivation) composableDerivation edf;
-  nixosRuntimepath = pkgs.writeText "nixos-vimrc" ''
+let
+  inherit (args.composableDerivation) composableDerivation edf;
+  nixosRuntimepath = writeText "nixos-vimrc" ''
     set nocompatible
     syntax on
 
@@ -37,25 +38,18 @@ let inherit (args.composableDerivation) composableDerivation edf;
       source /etc/vim/vimrc
     endif
   '';
+
+  common = callPackage ./common.nix {};
 in
 composableDerivation {
 } (fix: rec {
 
     name = "vim_configurable-${version}";
-    version = "8.0.0005";
 
-    enableParallelBuilding = true; # test this
+    inherit (common) version hardeningDisable enableParallelBuilding meta;
 
-    src =
-      builtins.getAttr source {
-      "default" =
-        # latest release
-      args.fetchFromGitHub {
-        owner = "vim";
-        repo = "vim";
-        rev = "v${version}";
-        sha256 = "0ys3l3dr43vjad1f096ch1sl3x2ajsqkd03rdn6n812m7j4wipx0";
-      };
+    src = builtins.getAttr source {
+      "default" = common.src; # latest release
 
       "vim-nox" =
           {
@@ -185,15 +179,5 @@ composableDerivation {
   '';
 
   dontStrip = 1;
-
-  hardeningDisable = [ "fortify" ];
-
-  meta = with stdenv.lib; {
-    description = "The most popular clone of the VI editor";
-    homepage    = http://www.vim.org;
-    license = licenses.vim;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-  };
 })
 
