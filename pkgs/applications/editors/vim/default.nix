@@ -14,7 +14,7 @@ in
 stdenv.mkDerivation rec {
   name = "vim-${version}";
 
-  inherit (common) version src hardeningDisable enableParallelBuilding meta;
+  inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
 
   buildInputs = [ ncurses pkgconfig ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];

@@ -13,6 +13,13 @@ rec {
 
   hardeningDisable = [ "fortify" ];
 
+  postPatch =
+    # Use man from $PATH; escape sequences are still problematic.
+    ''
+      substituteInPlace runtime/ftplugin/man.vim \
+        --replace "/usr/bin/man " "man "
+    '';
+
   meta = with lib; {
     description = "The most popular clone of the VI editor";
     homepage    = http://www.vim.org;

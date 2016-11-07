@@ -46,7 +46,7 @@ composableDerivation {
 
     name = "vim_configurable-${version}";
 
-    inherit (common) version hardeningDisable enableParallelBuilding meta;
+    inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
     src = builtins.getAttr source {
       "default" = common.src; # latest release
