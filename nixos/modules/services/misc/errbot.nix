@@ -8,7 +8,7 @@ let
     name = "errbot-plugins";
     paths = plugins;
   };
-  mkConfigFile = instanceCfg: dataDir: pkgs.writeText "errbot-config.py" ''
+  mkConfigDir = instanceCfg: dataDir: pkgs.writeTextDir "config.py" ''
     import logging
     BACKEND = '${instanceCfg.backend}'
     BOT_DATA_DIR = '${dataDir}'
@@ -93,7 +93,7 @@ in {
       serviceConfig = {
         User = "errbot";
         Restart = "on-failure";
-        ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigFile instanceCfg dataDir}";
+        ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
         PermissionsStartOnly = true;
       };
     })) cfg.instances;
