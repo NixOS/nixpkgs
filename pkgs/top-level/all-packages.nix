@@ -2382,6 +2382,8 @@ in
 
   most = callPackage ../tools/misc/most { };
 
+  motion = callPackage ../applications/video/motion { };
+
   mkcast = callPackage ../applications/video/mkcast { };
 
   multitail = callPackage ../tools/misc/multitail { };
