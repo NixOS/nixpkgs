@@ -1351,10 +1351,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20161031";
+        version = "20161102";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20161031.tar";
-          sha256 = "0b4dzdimdkp7116cyyq80n4h71qc477akiblbabnpb8sg87qqg7r";
+          url = "https://elpa.gnu.org/packages/org-20161102.tar";
+          sha256 = "12v9jhakdxcmlw9zrcrh1fwi3kh6z0qva90hpnr0zjqyj72i0wir";
         };
         packageRequires = [];
         meta = {
