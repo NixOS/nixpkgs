@@ -135,7 +135,7 @@ let
             server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
             ${acmeLocation}
             location / {
-              return 301 https://$host${optionalString (port != 443) ":${port}"}$request_uri;
+              return 301 https://$host${optionalString (port != 443) ":${toString port}"}$request_uri;
             }
           }
         ''}
