@@ -40,8 +40,8 @@ program that provides a graphical login prompt and manages the X
 server) is SLiM. You can select an alternative one by picking one
 of the following lines:
 <programlisting>
-services.xserver.displayManager.sddm.enable = true;
-services.xserver.displayManager.lightdm.enable = true;
+services.xserver.displayManager.select = "sddm";
+services.xserver.displayManager.select = "lightdm";
 </programlisting>
 </para>
 

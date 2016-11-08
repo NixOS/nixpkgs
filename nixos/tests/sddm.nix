@@ -12,7 +12,7 @@ let
       machine = { lib, ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
-        services.xserver.displayManager.sddm.enable = true;
+        services.xserver.displayManager.select = "sddm";
         services.xserver.windowManager.default = "icewm";
         services.xserver.windowManager.icewm.enable = true;
         services.xserver.desktopManager.default = "none";
@@ -42,8 +42,8 @@ let
       machine = { lib, ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
+        services.xserver.displayManager.select = "sddm";
         services.xserver.displayManager.sddm = {
-          enable = true;
           autoLogin = {
             enable = true;
             user = "alice";

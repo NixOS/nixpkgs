@@ -11,8 +11,8 @@ with lib;
   services.xserver = {
     enable = true;
     # GDM doesn't start in virtual machines with ISO
+    displayManager.select = "slim";
     displayManager.slim = {
-      enable = true;
       defaultUser = "root";
       autoLogin = true;
     };

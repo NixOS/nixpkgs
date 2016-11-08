@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine = { lib, ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
-    services.xserver.displayManager.lightdm.enable = true;
+    services.xserver.displayManager.select = "lightdm";
     services.xserver.windowManager.default = "icewm";
     services.xserver.windowManager.icewm.enable = true;
     services.xserver.desktopManager.default = "none";

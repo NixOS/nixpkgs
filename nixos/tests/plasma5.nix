@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ...} :
   machine = { lib, ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
-    services.xserver.displayManager.sddm.enable = true;
+    services.xserver.displayManager.select = "sddm";
     services.xserver.desktopManager.plasma5.enable = true;
     services.xserver.desktopManager.default = "plasma5";
     virtualisation.memorySize = 1024;

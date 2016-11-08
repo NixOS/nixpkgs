@@ -11,9 +11,8 @@ import ./make-test.nix ({ pkgs, ...} : {
     services.xserver.windowManager.default = "icewm";
     services.xserver.windowManager.icewm.enable = true;
     services.xserver.desktopManager.default = "none";
+    services.xserver.displayManager.select = "slim";
     services.xserver.displayManager.slim = {
-      enable = true;
-
       # Use a custom theme in order to get best OCR results
       theme = pkgs.runCommand "slim-theme-ocr" {
         nativeBuildInputs = [ pkgs.imagemagick ];

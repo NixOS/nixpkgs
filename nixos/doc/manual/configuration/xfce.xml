@@ -43,7 +43,7 @@ services.compton = {
         You can, for example, select KDE’s
         <command>sddm</command> instead:
         <programlisting>
-services.xserver.displayManager.sddm.enable = true;
+services.xserver.displayManager.select = "sddm";
         </programlisting>
     </para>
 
