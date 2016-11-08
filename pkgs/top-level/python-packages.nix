@@ -13448,7 +13448,7 @@ in {
   };
 
   libxml2 = if isPy3k then throw "libxml2 not supported for interpreter ${python.executable}" else
-    (pkgs.libxml2.override{supportPython=true; python2=python;}).py;
+    (pkgs.libxml2.override{pythonSupport=true; python2=python;}).py;
 
   libxslt = if isPy3k then throw "libxslt not supported for interpreter ${python.executable}" else
     (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;}).py;
