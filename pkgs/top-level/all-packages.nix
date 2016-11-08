@@ -5,9 +5,9 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
+{ system, noSysDirs, config, crossSystem, platform, lib
 , nixpkgsFun
-, ... }:
+}:
 self: pkgs:
 
 with pkgs;

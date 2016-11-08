@@ -5,7 +5,7 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-{ system, allPackages ? import ../.., platform, config, lib }:
+{ system, allPackages ? import ../.., platform, config, crossSystem, lib }:
 
 
 rec {
@@ -36,10 +36,16 @@ rec {
   # Linux standard environment.
   inherit (import ./linux { inherit system allPackages platform config lib; }) stdenvLinux;
 
-  inherit (import ./darwin { inherit system allPackages platform config;}) stdenvDarwin;
+  inherit (import ./darwin { inherit system allPackages platform config; }) stdenvDarwin;
+
+  inherit (import ./cross { inherit system allPackages platform crossSystem config lib; }) stdenvCross;
+
+  inherit (import ./custom { inherit system allPackages platform crossSystem config lib; }) stdenvCustom;
 
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
+    if crossSystem != null then stdenvCross else
+    if config ? replaceStdenv then stdenvCustom else
     if system == "i686-linux" then stdenvLinux else
     if system == "x86_64-linux" then stdenvLinux else
     if system == "armv5tel-linux" then stdenvLinux else
