@@ -8,6 +8,19 @@
  import Graphics.X11.Xlib
  import Graphics.X11.Xlib.Extras (Event)
  import Data.Typeable
+@@ -433,7 +433,11 @@
+
+ -- | Return the path to @~\/.xmonad@.
+ getXMonadDir :: MonadIO m => m String
+-getXMonadDir = io $ getAppUserDataDirectory "xmonad"
++getXMonadDir = io $ do e <- userExists; if e then user else (return "/etc/xmonad")
++  where
++  user = getAppUserDataDirectory "xmonad"
++  userExists = user >>= doesDirectoryExist
++
+
+ -- | 'recompile force', recompile @~\/.xmonad\/xmonad.hs@ when any of the
+ -- following apply:
 @@ -463,6 +464,7 @@ recompile force = io $ do
          err  = base ++ ".errors"
          src  = base ++ ".hs"
@@ -23,7 +36,7 @@
 -            waitForProcess =<< runProcess "ghc" ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-main-is", "main", "-v0", "-o",binn] (Just dir)
 +            waitForProcess =<< runProcess ghc ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-main-is", "main", "-v0", "-o",binn] (Just dir)
                                      Nothing Nothing Nothing (Just h)
- 
+
          -- re-enable SIGCHLD:
 @@ -480,6 +482,7 @@ recompile force = io $ do
          -- now, if it fails, run xmessage to let the user know:
