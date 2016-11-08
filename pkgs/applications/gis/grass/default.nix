@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, mysql, pythonPackages
+, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite pkgconfig cairo
   readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.client blas ]
-    ++ (with pythonPackages; [ python dateutil wxPython30 numpy ]);
+    ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   postInstall = ''
     wrapProgram $out/bin/grass70 \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${pythonPackages.python}/bin/${pythonPackages.python.executable}
+    --set GRASS_PYTHON ${python2Packages.python}/bin/${python2Packages.python.executable}
     ln -s $out/grass-*/lib $out/lib
   '';
 
