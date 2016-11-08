@@ -11,7 +11,7 @@
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk, dbus_glib
+, glib, gtk, gtk3, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
 
@@ -100,7 +100,8 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optional (versionAtLeast version "56.0.0.0") gtk3;
 
     patches = [
       ./patches/glibc-2.24.patch
