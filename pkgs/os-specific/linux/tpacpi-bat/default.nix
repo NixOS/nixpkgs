@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, perl, kmod }:
+{ stdenv, fetchFromGitHub, perl, kmod }:
 
 # Requires the acpi_call kernel module in order to run.
 stdenv.mkDerivation rec {
-  name = "tpacpi-bat";
+  name = "tpacpi-bat-${version}";
+  version = "3.0";
 
-  src = fetchgit {
-    url = "https://github.com/teleshoes/tpacpi-bat.git";
-    rev = "06ec1d5c7e0766b43b5acb98dd61aa96360da6be";
+  src = fetchFromGitHub {
+    owner = "teleshoes";
+    repo = "tpacpi-bat";
+    rev = "v${version}";
     sha256 = "0l72qvjk5j7sg9x4by7an0xwx65x10dx82fky8lnwlwfv54vgg8l";
   };
 
