@@ -62,7 +62,7 @@ in
   };
 
   config = mkIf config.hardware.bumblebee.enable {
-    boot.blacklistedKernelModules = [ "nouveau" "nvidia" ];
+    boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
     boot.kernelModules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch ] ++ optional useNvidia kernel.nvidia_x11;
 
