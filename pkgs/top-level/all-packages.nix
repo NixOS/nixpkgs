@@ -11413,6 +11413,8 @@ in
 
   tiptop = callPackage ../os-specific/linux/tiptop { };
 
+  tpacpi-bat = callPackage ../os-specific/linux/tpacpi-bat { };
+
   trinity = callPackage ../os-specific/linux/trinity { };
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
