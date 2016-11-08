@@ -21,7 +21,9 @@ xcbuildInstallPhase () {
 
 if [ -z "$dontUseXcbuild" ]; then
     buildPhase=xcbuildBuildPhase
-    installPhase=xcbuildInstallPhase
+    if [ -z "$installPhase" ]; then
+        installPhase=xcbuildInstallPhase
+    fi
 fi
 
 # if [ -d "*.xcodeproj" ]; then
