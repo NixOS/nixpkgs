@@ -2988,6 +2988,8 @@ in
 
   oh-my-zsh = callPackage ../shells/oh-my-zsh { };
 
+  opencc = callPackage ../tools/text/opencc { };
+
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
