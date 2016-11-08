@@ -13447,6 +13447,12 @@ in {
     clblas = pkgs.clblas-cuda;
   };
 
+  libxml2 = if isPy3k then throw "libxml2 not supported for interpreter ${python.executable}" else
+    (pkgs.libxml2.override{pythonSupport=true; python2=python;}).py;
+
+  libxslt = if isPy3k then throw "libxslt not supported for interpreter ${python.executable}" else
+    (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;}).py;
+
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
     version = "2016.05.06";
