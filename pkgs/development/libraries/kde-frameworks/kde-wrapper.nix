@@ -37,7 +37,13 @@ stdenv.mkDerivation {
         fi
     done
 
-    mkdir -p "$out/nix-support"
-    ln -s "$env/nix-support/propagated-user-env-packages" "$out/nix-support/"
+    if [ -a "$drv/share" ]; then
+        ln -s "$drv/share" "$out"
+    fi
+
+    if [ -a "$drv/nix-support/propagated-user-env-packages" ]; then
+        mkdir -p "$out/nix-support"
+        ln -s "$drv/nix-support/propagated-user-env-packages" "$out/nix-support/"
+    fi
   '';
 }
