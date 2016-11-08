@@ -5,7 +5,7 @@ with import ./lib.nix { inherit pkgs; };
 self: super: {
 
   # Some packages need a non-core version of Cabal.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_1_0; });
 
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
@@ -43,7 +43,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1nd1q5c4jr9s6xczyv464zq4y10rk8c1av22nfb28abrskxagcjc";
+      sha256 = "1np1v2x5n9dl39cbwlqbjap1j5120q4n8p18cm1884vdxidbkc01";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
@@ -142,13 +142,13 @@ self: super: {
   HDBC-odbc = dontHaddock super.HDBC-odbc;
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
-  hspec-discover = dontHaddock super.hspec-discover;
   http-client-conduit = dontHaddock super.http-client-conduit;
   http-client-multipart = dontHaddock super.http-client-multipart;
   markdown-unlit = dontHaddock super.markdown-unlit;
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-js = dontHaddock super.shakespeare-js;
   shakespeare-text = dontHaddock super.shakespeare-text;
+  swagger = dontHaddock super.swagger;  # http://hydra.cryp.to/build/2035868/nixlog/1/raw
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
@@ -291,14 +291,12 @@ self: super: {
   bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   bitx-bitcoin = dontCheck super.bitx-bitcoin;          # http://hydra.cryp.to/build/926187/log/raw
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
-  dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   digitalocean-kzs = dontCheck super.digitalocean-kzs;  # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
-  hoogle_5_0_4 = super.hoogle_5_0_4.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
@@ -801,7 +799,7 @@ self: super: {
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
   })).override {
-    haskell-src-exts = self.haskell-src-exts_1_18_2;
+    haskell-src-exts = self.haskell-src-exts_1_19_0;
   };
 
   # # Make elisp files available at a location where people expect it.
@@ -976,12 +974,15 @@ self: super: {
 
   # https://github.com/commercialhaskell/stack/issues/2263
   stack = super.stack.overrideScope (self: super: {
-    http-client = self.http-client_0_5_3_3;
+    http-client = self.http-client_0_5_3_4;
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
   });
+
+  # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
 
   # Test suite fails a QuickCheck property.
   optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
@@ -1015,15 +1016,26 @@ self: super: {
     doCheck = false;
   });
 
+  # http-api-data_0.3.x requires QuickCheck > 2.9, but overriding that version
+  # is hard because of transitive dependencies, so we just disable tests.
+  http-api-data_0_3_2 = dontCheck super.http-api-data_0_3_2;
+
+  # Fix build for latest versions of servant and servant-client.
+  servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
+    http-api-data = self.http-api-data_0_3_2;
+  });
+  servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
+    http-api-data = self.http-api-data_0_3_2;
+    servant-server = self.servant-server_0_9_1_1;
+    servant = self.servant_0_9_1_1;
+  });
+
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
   # https://github.com/fpco/store/issues/77
   store = dontCheck super.store;
-
-  store_0_3 = super.store_0_3.overrideScope (self: super: {
-    store-core = self.store-core_0_3;
-  });
+  store_0_3 = super.store_0_3.overrideScope (self: super: { store-core = self.store-core_0_3; });
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
@@ -1040,5 +1052,23 @@ self: super: {
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
   });
+
+  # https://hydra.nixos.org/build/42769611/nixlog/1/raw
+  # note: the library is unmaintained, no upstream issue
+  dataenc = doJailbreak super.dataenc;
+
+  libsystemd-journal = overrideCabal super.libsystemd-journal (old: {
+    librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
+  });
+
+  # horribly outdated (X11 interface changed a lot)
+  sindre = markBroken super.sindre;
+
+  # https://github.com/jmillikin/haskell-dbus/pull/7
+  # http://hydra.cryp.to/build/498404/log/raw
+  dbus = dontCheck (appendPatch super.dbus ./patches/hdbus-semicolons.patch);
+
+  # Test suite occasionally runs for 1+ days on Hydra.
+  distributed-process-tests = dontCheck super.distributed-process-tests;
 
 }

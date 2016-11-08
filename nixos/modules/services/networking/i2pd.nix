@@ -10,7 +10,7 @@ let
 
   extip = "EXTIP=\$(${pkgs.curl.bin}/bin/curl -sf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
 
-  toYesNo = b: if b then "yes" else "no";
+  toYesNo = b: if b then "true" else "false";
 
   mkEndpointOpt = name: addr: port: {
     enable = mkEnableOption name;
@@ -28,6 +28,17 @@ let
       type = types.int;
       default = port;
       description = "Bind port for ${name} endoint. Default: " + toString port;
+    };
+  };
+
+  mkKeyedEndpointOpt = name: addr: port: keyFile:
+  (mkEndpointOpt name addr port) // {
+    keys = mkOption {
+      type = types.str;
+      default = "";
+      description = ''
+        File to persist ${lib.toUpper name} keys.
+      '';
     };
   };
 
@@ -63,19 +74,49 @@ let
     };
   } // mkEndpointOpt name "127.0.0.1" 0;
 
-  i2pdConf = pkgs.writeText "i2pd.conf" ''
-      ipv6 = ${toYesNo cfg.enableIPv6}
-      notransit = ${toYesNo cfg.notransit}
-      floodfill = ${toYesNo cfg.floodfill}
-      ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
-      ${flip concatMapStrings
-        (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
-        (proto: let portStr = toString proto.port; in ''
-      [${proto.name}]
-      address = ${proto.address}
-      port = ${toString proto.port}
-      enabled = ${toYesNo proto.enable}
-      '')
+  i2pdConf = pkgs.writeText "i2pd.conf"
+  ''
+  ipv4 = ${toYesNo cfg.enableIPv4}
+  ipv6 = ${toYesNo cfg.enableIPv6}
+  notransit = ${toYesNo cfg.notransit}
+  floodfill = ${toYesNo cfg.floodfill}
+  netid = ${toString cfg.netid}
+  ${if isNull cfg.bandwidth then "" else "bandwidth = ${toString cfg.bandwidth}" }
+  ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
+
+  [limits]
+  transittunnels = ${toString cfg.limits.transittunnels}
+
+  [upnp]
+  enabled = ${toYesNo cfg.upnp.enable}
+  name = ${cfg.upnp.name}
+
+  [precomputation]
+  elgamal = ${toYesNo cfg.precomputation.elgamal}
+
+  [reseed]
+  verify = ${toYesNo cfg.reseed.verify}
+  file = ${cfg.reseed.file}
+  urls = ${builtins.concatStringsSep "," cfg.reseed.urls}
+
+  [addressbook]
+  defaulturl = ${cfg.addressbook.defaulturl}
+  subscriptions = ${builtins.concatStringsSep "," cfg.addressbook.subscriptions}
+  ${flip concatMapStrings
+      (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
+      (proto: let portStr = toString proto.port; in
+        ''
+          [${proto.name}]
+          enabled = ${toYesNo proto.enable}
+          address = ${proto.address}
+          port = ${toString proto.port}
+          ${if proto ? keys then "keys = ${proto.keys}" else ""}
+          ${if proto ? auth then "auth = ${toYesNo proto.auth}" else ""}
+          ${if proto ? user then "user = ${proto.user}" else ""}
+          ${if proto ? pass then "pass = ${proto.pass}" else ""}
+          ${if proto ? outproxy then "outproxy = ${proto.outproxy}" else ""}
+          ${if proto ? outproxyPort then "outproxyport = ${toString proto.outproxyPort}" else ""}
+        '')
       }
   '';
 
@@ -114,7 +155,7 @@ let
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
     ${if isNull cfg.extIp then extip else ""}
-    ${pkgs.i2pd}/bin/i2pd --log=1 \
+    ${pkgs.i2pd}/bin/i2pd \
       --host=${if isNull cfg.extIp then "$EXTIP" else cfg.extIp} \
       --conf=${i2pdConf} \
       --tunconf=${i2pdTunnelConf}
@@ -135,6 +176,8 @@ in
         default = false;
         description = ''
           Enables I2Pd as a running service upon activation.
+          Please read http://i2pd.readthedocs.io/en/latest/ for further
+          configuration help.
         '';
       };
 
@@ -162,11 +205,35 @@ in
         '';
       };
 
+      netid = mkOption {
+        type = types.int;
+        default = 2;
+        description = ''
+          I2P overlay netid.
+        '';
+      };
+
+      bandwidth = mkOption {
+        type = with types; nullOr int;
+        default = null;
+        description = ''
+           Set a router bandwidth limit integer in kbps or letters: L (32), O (256), P (2048), X (>9000)
+        '';
+      };
+
       port = mkOption {
         type = with types; nullOr int;
         default = null;
         description = ''
           I2P listen port. If no one is given the router will pick between 9111 and 30777.
+        '';
+      };
+
+      enableIPv4 = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enables IPv4 connectivity. Enabled by default.
         '';
       };
 
@@ -178,16 +245,141 @@ in
         '';
       };
 
-      proto.http = mkEndpointOpt "http" "127.0.0.1" 7070;
+      upnp = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enables UPnP.
+          '';
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "I2Pd";
+          description = ''
+            Name i2pd appears in UPnP forwardings list.
+          '';
+        };
+      };
+
+      precomputation.elgamal = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Use ElGamal precomputated tables.
+        '';
+      };
+
+      reseed = {
+        verify = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Request SU3 signature verification
+          '';
+        };
+
+        file = mkOption {
+          type = types.str;
+          default = "";
+          description = ''
+            Full path to SU3 file to reseed from
+          '';
+        };
+
+        urls = mkOption {
+          type = with types; listOf str;
+          default = [
+            "https://reseed.i2p-project.de/"
+            "https://i2p.mooo.com/netDb/"
+            "https://netdb.i2p2.no/"
+            "https://us.reseed.i2p2.no:444/"
+            "https://uk.reseed.i2p2.no:444/"
+            "https://i2p.manas.ca:8443/"
+          ];
+          description = ''
+            Reseed URLs
+          '';
+        };
+      };
+
+      addressbook = {
+       defaulturl = mkOption {
+          type = types.str;
+          default = "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt";
+          description = ''
+            AddressBook subscription URL for initial setup
+          '';
+        };
+       subscriptions = mkOption {
+          type = with types; listOf str;
+          default = [
+            "http://inr.i2p/export/alive-hosts.txt"
+            "http://i2p-projekt.i2p/hosts.txt"
+            "http://stats.i2p/cgi-bin/newhosts.txt"
+          ];
+          description = ''
+            AddressBook subscription URLs
+          '';
+        };
+      };
+
+      limits.transittunnels = mkOption {
+        type = types.int;
+        default = 2500;
+        description = ''
+          Maximum number of active transit sessions
+        '';
+      };
+
+      proto.http = (mkEndpointOpt "http" "127.0.0.1" 7070) // {
+        auth = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enable authentication for webconsole.
+          '';
+        };
+        user = mkOption {
+          type = types.str;
+          default = "i2pd";
+          description = ''
+            Username for webconsole access
+          '';
+        };
+        pass = mkOption {
+          type = types.str;
+          default = "i2pd";
+          description = ''
+            Password for webconsole access.
+          '';
+        };
+      };
+
+      proto.httpProxy = mkKeyedEndpointOpt "httpproxy" "127.0.0.1" 4446 "";
+      proto.socksProxy = (mkKeyedEndpointOpt "socksproxy" "127.0.0.1" 4447 "")
+      // {
+        outproxy = mkOption {
+          type = types.str;
+          default = "127.0.0.1";
+          description = "Upstream outproxy bind address.";
+        };
+        outproxyPort = mkOption {
+          type = types.int;
+          default = 4444;
+          description = "Upstream outproxy bind port.";
+        };
+      };
+
       proto.sam = mkEndpointOpt "sam" "127.0.0.1" 7656;
       proto.bob = mkEndpointOpt "bob" "127.0.0.1" 2827;
+      proto.i2cp = mkEndpointOpt "i2cp" "127.0.0.1" 7654;
       proto.i2pControl = mkEndpointOpt "i2pcontrol" "127.0.0.1" 7650;
-      proto.httpProxy = mkEndpointOpt "httpproxy" "127.0.0.1" 4446;
-      proto.socksProxy = mkEndpointOpt "socksproxy" "127.0.0.1" 4447;
 
       outTunnels = mkOption {
         default = {};
-        type = with types; loaOf (submodule ( 
+        type = with types; loaOf (submodule (
           { name, config, ... }: {
             options = commonTunOpts name;
             config = {

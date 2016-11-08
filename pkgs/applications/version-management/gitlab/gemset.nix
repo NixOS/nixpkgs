@@ -937,6 +937,7 @@
       type = "gem";
     };
     version = "1.4.0";
+    meta.priority = 10; # lower priority, exectuable conflicts with gitlab-markdown
   };
   gitlab-flowdock-git-hook = {
     dependencies = ["flowdock" "gitlab-grit" "multi_json"];
@@ -954,6 +955,14 @@
       type = "gem";
     };
     version = "2.8.1";
+  };
+  gitlab-markup = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0yxwp4q0dwiykxv24x2yhvnn59wmw1jv0vz3d8hjw44nn9jxn25a";
+      type = "gem";
+    };
+    version = "1.5.0";
   };
   gitlab_git = {
     source = {

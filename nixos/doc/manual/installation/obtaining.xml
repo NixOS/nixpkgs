@@ -32,7 +32,7 @@ running NixOS system through several other means:
   <listitem>
     <para>Using AMIs for Amazon’s EC2.  To find one for your region
     and instance type, please refer to the <link
-    xlink:href="https://github.com/NixOS/nixops/blob/master/nix/ec2-amis.nix">list
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/ec2-amis.nix">list
     of most recent AMIs</link>.</para>
   </listitem>
   <listitem>

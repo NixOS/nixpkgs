@@ -52,6 +52,7 @@ in buildFHSUserEnv rec {
     gst_all_1.gst-plugins-ugly
     libdrm
     mono
+    xorg.xkeyboardconfig
 
     (steamPackages.steam-runtime-wrapped.override {
       inherit nativeOnly runtimeOnly newStdcpp;
