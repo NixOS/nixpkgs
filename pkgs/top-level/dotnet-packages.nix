@@ -181,6 +181,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "bin/*" ];
   };
 
+  OpenNAT = fetchNuGet {
+    baseName = "Open.NAT";
+    version = "2.1.0";
+    sha256 = "1jyd30fwycdwx5ck96zhp2xf20yz0sp7g3pjbqhmay4kd322mfwk";
+    outputFiles = [ "lib/*" ];
+  };
+
   MonoNat = fetchNuGet {
     baseName = "Mono.Nat";
     version = "1.2.24";

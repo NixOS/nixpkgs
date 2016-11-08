@@ -1,22 +1,22 @@
 { stdenv, fetchurl, alsaLib, libjack2, dbus, qt5 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.2";
+  version = "0.4.3";
   name = "qjackctl-${version}";
 
   # some dependencies such as killall have to be installed additionally
 
   src = fetchurl {
     url = "mirror://sourceforge/qjackctl/${name}.tar.gz";
-    sha256 = "0pmgkqgkapbma42zqb5if4ngmj183rxl8bhjm7mhyhgq4bzll76g";
+    sha256 = "01wyyynxy21kim0gplzvfij7275a1jz68hdx837d2j1w5x2w7zbb";
   };
 
-  buildInputs = [ 
+  buildInputs = [
     qt5.full
     qt5.qtx11extras
-    alsaLib 
+    alsaLib
     libjack2
-    dbus 
+    dbus
   ];
 
   configureFlags = "--enable-jack-version";

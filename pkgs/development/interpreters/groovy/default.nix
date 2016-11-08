@@ -15,8 +15,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
+    mkdir -p $out/share/doc/groovy
     rm bin/*.bat
-    mv * $out
+    mv {bin,conf,embeddable,grooid,indy,lib} $out
+    mv {licenses,LICENSE,NOTICE} $out/share/doc/groovy
 
     sed -i 's#which#${which}/bin/which#g' $out/bin/startGroovy
 
@@ -26,8 +28,6 @@ stdenv.mkDerivation rec {
             --prefix PATH ":" "${jdk}/bin"
     done
   '';
-
-  phases = "unpackPhase installPhase";
 
   meta = with stdenv.lib; {
     description = "An agile dynamic language for the Java Platform";

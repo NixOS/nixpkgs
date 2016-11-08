@@ -395,10 +395,14 @@ rec {
 
       layer =
         if runAsRoot == null
-        then mkPureLayer { inherit name baseJson contents extraCommands; }
-        else mkRootLayer { inherit name baseJson fromImage fromImageName
-                                   fromImageTag contents runAsRoot diskSize
-                                   extraCommands; };
+        then mkPureLayer {
+          name = baseName;
+          inherit baseJson contents extraCommands;
+        } else mkRootLayer {
+          name = baseName;
+          inherit baseJson fromImage fromImageName fromImageTag
+                  contents runAsRoot diskSize extraCommands;
+        };
       result = runCommand "docker-image-${baseName}.tar.gz" {
         buildInputs = [ jshon pigz coreutils findutils ];
         imageName = name;

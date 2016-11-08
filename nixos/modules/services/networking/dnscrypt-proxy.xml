@@ -49,8 +49,8 @@
   <para>
     <programlisting>
       {
-      services.dnsmasq.enable = true;
-      services.dnsmasq.servers = [ "127.0.0.1#43" ];
+        services.dnsmasq.enable = true;
+        services.dnsmasq.servers = [ "127.0.0.1#43" ];
       }
     </programlisting>
   </para>
@@ -60,12 +60,9 @@
   <para>
     <programlisting>
       {
-      networking.nameservers = [ "127.0.0.1" ];
-      services.unbound.enable = true;
-      services.unbound.forwardAddresses = [ "127.0.0.1@43" ];
-      services.unbound.extraConfig = ''
-        do-not-query-localhost: no
-      '';
+        networking.nameservers = [ "127.0.0.1" ];
+        services.unbound.enable = true;
+        services.unbound.forwardAddresses = [ "127.0.0.1@43" ];
       }
     </programlisting>
   </para>

@@ -31,6 +31,7 @@
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
+, drmSupport         ? true,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , jackaudioSupport   ? false, libjack2      ? null
 
@@ -65,6 +66,7 @@ assert youtubeSupport     -> available youtube-dl;
 assert vapoursynthSupport -> available vapoursynth;
 assert jackaudioSupport   -> available libjack2;
 assert vaapiSupport       -> available libva;
+assert drmSupport         -> available libdrm;
 
 let
   # Purity: Waf is normally downloaded by bootstrap.py, but
@@ -133,6 +135,7 @@ in stdenv.mkDerivation rec {
     ++ optional sdl2Support        SDL2
     ++ optional cacaSupport        libcaca
     ++ optional vaapiSupport       libva
+    ++ optional drmSupport         libdrm
     ++ optional vapoursynthSupport vapoursynth
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals x11Support        [ libX11 libXext mesa libXxf86vm ]

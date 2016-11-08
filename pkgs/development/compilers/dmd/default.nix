@@ -1,14 +1,19 @@
-{ stdenv, fetchurl, unzip, curl, makeWrapper }:
+{ stdenv, fetchurl
+, makeWrapper, unzip, which
 
-stdenv.mkDerivation {
-  name = "dmd-2.067.1";
+# Versions 2.070.2 and up require a working dmd compiler to build:
+, bootstrapDmd }:
+
+stdenv.mkDerivation rec {
+  name = "dmd-${version}";
+  version = "2.070.2";
 
   src = fetchurl {
-    url = http://downloads.dlang.org/releases/2015/dmd.2.067.1.zip;
-    sha256 = "0ny99vfllvvgcl79pwisxcdnb3732i827k9zg8c0j4s0n79k5z94";
+    url = "http://downloads.dlang.org/releases/2.x/${version}/dmd.${version}.zip";
+    sha256 = "1pbhxxf41v816j0aky3q2pcd8a6phy3363l7vr5r5pg8ps3gl701";
   };
 
-  buildInputs = [ unzip curl makeWrapper ];
+  nativeBuildInputs = [ bootstrapDmd makeWrapper unzip which ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
       # Allow to use "clang++", commented in Makefile

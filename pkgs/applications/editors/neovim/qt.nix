@@ -3,7 +3,7 @@
 }:
 
 let # not very usable ATM
-  version = "0.2.1";
+  version = "0.2.3";
 in
 stdenv.mkDerivation {
   name = "neovim-qt-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "equalsraf";
     repo = "neovim-qt";
     rev = "v${version}";
-    sha256 = "0mqs2f7l05q2ayj77czr5fnpr7fa00qrmjdjxglbwxdxswcsz88n";
+    sha256 = "0ichqph7nfw3934jf0sp81bqd376xna3f899cc2xg88alb4f16dv";
   };
 
   # It tries to download libmsgpack; let's use ours.

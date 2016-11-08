@@ -58,6 +58,9 @@ rec {
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
     };
+    ghcjsHEAD = packages.ghc801.callPackage ../development/compilers/ghcjs/head.nix {
+      bootPkgs = packages.ghc801;
+    };
 
     jhc = callPackage ../development/compilers/jhc {
       inherit (packages.ghc763) ghcWithPackages;
@@ -124,6 +127,10 @@ rec {
     };
     ghcjs = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjs;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+    };
+    ghcjsHEAD = callPackage ../development/haskell-modules {
+      ghc = compiler.ghcjsHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
 

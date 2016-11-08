@@ -4,7 +4,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   p_name  = "xfce4-whiskermenu-plugin";
-  version = "1.5.3";
+  version = "1.6.1";
 
   name = "${p_name}-${version}";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "gottcode";
     repo = "xfce4-whiskermenu-plugin";
     rev = "v${version}";
-    sha256 = "07gmf9x3pw6xajklj0idahbnv0psnkhiqhb88bmkp344jirsx6ba";
+    sha256 = "19hldrrgy7qmrncv5rfsclybycjp9rjfnslhm996h62d2p675qpc";
   };
 
   nativeBuildInputs = [ cmake pkgconfig intltool ];

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, sqlite, zlib, proj, geos, libiconv }:
+{ stdenv, lib, fetchurl, pkgconfig, libxml2, sqlite, zlib, proj, geos, libiconv }:
+
+with lib;
 
 stdenv.mkDerivation rec {
   name = "libspatialite-4.2.0";
@@ -14,7 +16,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  postInstall = "" + optionalString stdenv.isDarwin ''
+    ln -s $out/lib/mod_spatialite.{so,dylib}
+  '';
+
+  meta = {
     description = "Extensible spatial index library in C++";
     homepage = https://www.gaia-gis.it/fossil/libspatialite;
     # They allow any of these

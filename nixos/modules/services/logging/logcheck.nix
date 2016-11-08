@@ -55,9 +55,9 @@ let
 
   levelOption = mkOption {
     default = "server";
-    type = types.str;
+    type = types.enum [ "workstation" "server" "paranoid" ];
     description = ''
-      Set the logcheck level. Either "workstation", "server", or "paranoid".
+      Set the logcheck level.
     '';
   };
 

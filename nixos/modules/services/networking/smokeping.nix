@@ -221,7 +221,7 @@ in
         type = types.string;
         default = ''
           + FPing
-          binary = ${pkgs.fping}/bin/fping
+          binary = ${config.security.wrapperDir}/fping
         '';
         description = "Probe configuration";
       };
@@ -284,10 +284,10 @@ in
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
         rm -f ${smokepingHome}/cropper
         ln -s ${cfg.package}/htdocs/cropper ${smokepingHome}/cropper
-        chown -R ${cfg.user} ${smokepingHome}
         cp ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
+        chown -R ${cfg.user} ${smokepingHome}
       '';
       script = ''${cfg.package}/bin/smokeping --config=${configPath} --nodaemon'';
     };
