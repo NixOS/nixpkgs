@@ -22,7 +22,8 @@ let
 
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableSELinux enableNaCl enableHotwording gnomeSupport
-              gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport;
+              gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
+              enableWideVine;
     };
 
     browser = callPackage ./browser.nix { inherit channel; };

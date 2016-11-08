@@ -23,6 +23,7 @@
 , enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
 , enableHotwording ? false
+, enableWideVine ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
@@ -102,10 +103,9 @@ let
       ++ optional pulseSupport libpulseaudio;
 
     patches = [
-      ./patches/widevine.patch
       ./patches/glibc-2.24.patch
       ./patches/nix_plugin_paths_52.patch
-    ];
+    ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -147,6 +147,7 @@ let
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;
       enable_hotwording = enableHotwording;
+      enable_widevine = enableWideVine;
       selinux = enableSELinux;
       use_cups = cupsSupport;
     } // {
