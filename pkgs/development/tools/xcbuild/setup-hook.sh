@@ -1,15 +1,27 @@
-xcbuildPhase() {
-    runHook preConfigure
+xcbuildBuildPhase() {
+    export DSTROOT=$out
+
+    runHook preBuild
 
     echo "running xcodebuild"
 
-    xcodebuild
+    xcodebuild OTHER_CFLAGS="$NIX_CFLAGS_COMPILE" OTHER_LDFLAGS="$NIX_LDFLAGS" build
 
-    runHook postConfigure
+    runHook postBuild
 }
 
-if [ -z "$dontUseXcbuild" -a -z "$configurePhase" ]; then
-    configurePhase=xcbuildPhase
+xcbuildInstallPhase () {
+    runHook preInstall
+
+    # not implemented
+    # xcodebuild install
+
+    runHook postInstall
+}
+
+if [ -z "$dontUseXcbuild" ]; then
+    buildPhase=xcbuildBuildPhase
+    installPhase=xcbuildInstallPhase
 fi
 
 # if [ -d "*.xcodeproj" ]; then
