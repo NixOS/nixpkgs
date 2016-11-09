@@ -2667,6 +2667,7 @@ in {
     };
   };
 
+  # Should be moved out of python-packages.nix
   bitbucket-cli = buildPythonPackage rec {
     name = "bitbucket-cli-0.5.1";
     src = pkgs.fetchurl {
