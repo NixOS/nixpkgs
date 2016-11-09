@@ -14259,6 +14259,8 @@ in
 
   quirc = callPackage ../tools/graphics/quirc {};
 
+  quiterss = qt5.callPackage ../applications/networking/newsreaders/quiterss {};
+
   quodlibet = callPackage ../applications/audio/quodlibet { };
 
   quodlibet-with-gst-plugins = callPackage ../applications/audio/quodlibet {
