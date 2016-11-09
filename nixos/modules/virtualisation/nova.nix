@@ -76,8 +76,8 @@ let
 
     [neutron]
     url=http://localhost:9696
-    admin_username = {cfg.neutronServiceUsername}
-    admin_password = {cfg.neutronServicePassword}
+    admin_username = ${cfg.neutronServiceUsername}
+    admin_password = ${cfg.neutronServicePassword}
     admin_tenant_name = service
     admin_auth_url = http://localhost:5000/v2.0
     auth_strategy = keystone
