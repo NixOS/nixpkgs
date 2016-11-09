@@ -13530,6 +13530,9 @@ in {
     clblas = pkgs.clblas-cuda;
   };
 
+  libplist = if isPy3k then throw "libplist not supported for interpreter ${python.executable}" else
+    (pkgs.libplist.override{python2Packages=self; }).py;
+
   libxml2 = if isPy3k then throw "libxml2 not supported for interpreter ${python.executable}" else
     (pkgs.libxml2.override{pythonSupport=true; python2=python;}).py;
 
