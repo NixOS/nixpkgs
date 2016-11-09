@@ -1074,4 +1074,7 @@ self: super: {
   # https://github.com/mulby/diff-parse/issues/9
   diff-parse = doJailbreak super.diff-parse;
 
+  # https://github.com/josefs/STMonadTrans/issues/4
+  STMonadTrans = dontCheck super.STMonadTrans;
+
 }
