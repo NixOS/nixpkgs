@@ -1,4 +1,4 @@
-{ newScope, stdenv, makeWrapper, makeDesktopItem, ed
+{ newScope, stdenv, makeWrapper, makeDesktopItem, ed, overrideCC, pkgs
 
 # package customization
 , channel ? "stable"
@@ -12,19 +12,22 @@
 , enableWideVine ? false
 , cupsSupport ? true
 , pulseSupport ? false
-, hiDPISupport ? false
 }:
 
 let
   callPackage = newScope chromium;
 
   chromium = {
+    stdenv = overrideCC stdenv (pkgs.callPackage ./cc-wrapper {
+      name = "rspfile";
+      inherit (stdenv.cc) nativeTools nativeLibc nativePrefix cc libc;
+    });
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableSELinux enableNaCl enableHotwording gnomeSupport
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              hiDPISupport;
+              enableWideVine;
     };
 
     browser = callPackage ./browser.nix { inherit channel; };
