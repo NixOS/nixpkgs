@@ -12303,9 +12303,7 @@ in
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
-  calibre = qt5.callPackage ../applications/misc/calibre {
-    inherit (pythonPackages) pyqt5 sip;
-  };
+  calibre = qt5.callPackage ../applications/misc/calibre { };
 
   camlistore = callPackage ../applications/misc/camlistore { };
 
