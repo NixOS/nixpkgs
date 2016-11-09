@@ -6805,6 +6805,8 @@ in
 
   cpp-hocon = callPackage ../development/libraries/cpp-hocon { };
 
+  cpp-ipfs-api = callPackage ../development/libraries/cpp-ipfs-api { };
+
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
   uri = callPackage ../development/libraries/uri { };
 
