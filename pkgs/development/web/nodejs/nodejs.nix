@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool, fetchpatch
+, pkgconfig, runCommand, which, libtool, fetchpatch, paxctl, config
 , callPackage
 , darwin ? null
 , enableNpm ? true
@@ -30,6 +30,7 @@ in
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
     ++ [ python2 which zlib libuv openssl ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
+    ++ optionals config.security.grsecurity.enable [paxctl]
     ++ optionals stdenv.isDarwin [ pkgconfig libtool ];
 
     configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
@@ -57,6 +58,7 @@ in
 
     postInstall = ''
       PATH=$out/bin:$PATH patchShebangs $out
+      ${optionalString config.security.grsecurity.enable "paxctl -Cm $out/bin/node"}
     '';
 
     meta = {

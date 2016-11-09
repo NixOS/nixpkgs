@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool
+{ stdenv, config, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
+, pkgconfig, runCommand, which, libtool, paxctl
 , callPackage
 }@args:
 
