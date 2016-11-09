@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A 3D editor with support for procedural editing";
-    homepage = "http://k-3d.org/";
+    homepage = http://www.k-3d.org/;
     platforms = with stdenv.lib.platforms;
       linux;
     maintainers = with stdenv.lib.maintainers;
