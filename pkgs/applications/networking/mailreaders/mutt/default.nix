@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "0idkamdiwj9fgqaz1vzkfg78cnmkzp74skv0ibw2xjfq6ds9hghx";
   };
 
+  patchPhase = optionalString (openssl != null ) ''
+    sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
+  '';
+
   buildInputs =
     [ ncurses which perl ]
     ++ optional headerCache  gdbm
