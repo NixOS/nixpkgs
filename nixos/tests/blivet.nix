@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: with pkgs.pythonPackages; rec {
+import ./make-test.nix ({ pkgs, ... }: with pkgs.python2Packages; rec {
   name = "blivet";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig ];
