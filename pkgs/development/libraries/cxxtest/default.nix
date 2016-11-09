@@ -1,6 +1,8 @@
-{ stdenv, fetchFromGitHub, pythonPackages}:
+{ stdenv, fetchFromGitHub, python2Packages}:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2Packages) python wrapPython;
+in stdenv.mkDerivation rec {
   version = "4.4";
   name = "cxxtest";
 
@@ -11,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
   };
 
-  buildInputs = with pythonPackages; [ python wrapPython ];
+  buildInputs = [ python wrapPython ];
 
   installPhase = ''
     cd python
-    python setup.py install --prefix=$out
+    ${python.interpreter} setup.py install --prefix=$out
     cd ..
 
     mkdir -p $out/include
