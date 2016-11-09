@@ -106,6 +106,7 @@ let
     patches = [
       ./patches/glibc-2.24.patch
       ./patches/nix_plugin_paths_52.patch
+      ./patches/ui_resources_200_percent.patch
     ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
