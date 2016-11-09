@@ -16,8 +16,8 @@
 
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
-  propagatedBuildInputs = [ gmp boehmgc ]
 
+  propagatedBuildInputs = [ gmp boehmgc ]
     # XXX: These ones aren't normally needed here, but since
     # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
@@ -27,11 +27,9 @@
   # A native Guile 2.0 is needed to cross-build Guile.
   selfNativeBuildInput = true;
 
-  # Guile 2.0.11 repeatable fails with 8-core parallel building because
-  # libguile/vm-i-system.i is not created in time
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
-  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch ] ++
+  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch ./fix-test.patch ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   # Explicitly link against libgcc_s, to work around the infamous
