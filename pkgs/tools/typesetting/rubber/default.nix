@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, pythonPackages, texinfo }:
+{ fetchurl, stdenv, python2Packages, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "rubber-1.3";
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "09715apfd6a0haz1mqsxgm8sj4rwzi38gcz2kz020zxk5rh0dksh";
   };
 
-  buildInputs = [ python texinfo ];
-  nativeBuildInputs = [ pythonPackages.wrapPython ];
+  buildInputs = [ python2Packages.python texinfo ];
+  nativeBuildInputs = [ python2Packages.wrapPython ];
 
   patchPhase = ''
     substituteInPlace configure --replace which "type -P"
