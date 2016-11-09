@@ -2668,13 +2668,18 @@ in {
   };
 
   bitbucket-cli = buildPythonPackage rec {
-    name = "bitbucket-cli-0.4.1";
+    name = "bitbucket-cli-0.5.1";
     src = pkgs.fetchurl {
        url = "mirror://pypi/b/bitbucket-cli/${name}.tar.gz";
-       sha256 = "d8909627ae7a46519379c6343698d49f9ffd5de839ff44796974828d843a9419";
+       sha256 = "d881e21ec7ebfa006cfca6d10a5b7229aa59990568f8c6b8e3364769fa38b6f6";
     };
 
-    pythonPath = [ self.requests ];
+    propagatedBuildInputs = [ self.requests2 ];
+
+    # No tests
+    doCheck = false;
+
+    disabled = isPy3k;
 
     meta = {
       description = "Bitbucket command line interface";
