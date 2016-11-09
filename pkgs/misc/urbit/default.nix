@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, gcc, gmp, libsigsegv, openssl, automake, autoconf, ragel,
-  cmake, re2c, libtool, ncurses, perl, zlib, python }:
+  cmake, re2c, libtool, ncurses, perl, zlib, python2 }:
 
 stdenv.mkDerivation rec {
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with stdenv.lib; [
     gcc gmp libsigsegv openssl automake autoconf ragel cmake re2c libtool
-    ncurses perl zlib python
+    ncurses perl zlib python2
   ];
 
   # uses 'readdir_r' deprecated by glibc 2.24
