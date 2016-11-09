@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
 stdenv.mkDerivation rec {
   name = "dstat-${version}";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "16286z3y2lc9nsq8njzjkv6k2vyxrj9xiixj1k3gnsbvhlhkirj6";
   };
 
-  buildInputs = with pythonPackages; [ python-wifi wrapPython ];
+  buildInputs = with python2Packages; [ python-wifi wrapPython ];
 
-  pythonPath = with pythonPackages; [ python-wifi ];
+  pythonPath = with python2Packages; [ python-wifi ];
 
   patchPhase = ''
-    sed -i -e 's|/usr/bin/env python|${python}/bin/python|' \
+    sed -i -e 's|/usr/bin/env python|${python2Packages.python.interpreter}|' \
            -e "s|/usr/share/dstat|$out/share/dstat|" dstat
   '';
 
