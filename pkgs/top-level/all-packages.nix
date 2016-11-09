@@ -749,6 +749,8 @@ in
 
   chntpw = callPackage ../tools/security/chntpw { };
 
+  clipster = callPackage ../tools/misc/clipster { };
+
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
   };
