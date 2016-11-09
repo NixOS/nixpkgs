@@ -14425,6 +14425,8 @@ in
     gtk = gtk3;
   };
 
+  shashlik = callPackage ../misc/emulators/shashlik { };
+
   shfmt = callPackage ../tools/text/shfmt { };
 
   shutter = callPackage ../applications/graphics/shutter { };
