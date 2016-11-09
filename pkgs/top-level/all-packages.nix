@@ -1606,7 +1606,7 @@ in
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
-  Fabric = pythonPackages.Fabric;
+  Fabric = python2Packages.Fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
 
