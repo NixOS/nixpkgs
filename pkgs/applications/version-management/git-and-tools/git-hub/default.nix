@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, docutils, python2 }:
+{ stdenv, fetchFromGitHub, docutils, python2Packages }:
 
 stdenv.mkDerivation rec {
   name = "git-hub-${version}";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     owner = "sociomantic-tsunami";
   };
 
-  buildInputs = [ python2 ];
-  nativeBuildInputs = [ docutils ];
+  buildInputs = [ python2Packages.python ];
+  nativeBuildInputs = [ python2Packages.docutils ];
 
   postPatch = ''
     substituteInPlace Makefile --replace rst2man rst2man.py
