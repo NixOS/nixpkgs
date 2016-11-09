@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "protobuf-${version}";
 
-  version = "3.0.0";
+  version = "3.0.2";
   # make sure you test also -A pythonPackages.protobuf
   src = fetchFromGitHub {
     owner = "google";
     repo = "protobuf";
     rev = "v${version}";
-    sha256 = "05qkcl96lkdama848m7q3nzzzdckjc158iiyvgmln0zi232xx7g7";
+    sha256 = "16wmr1fgdqpf84fkq90cxvccfsxx7h0q0wzqkbg8vdjmka412g09";
   };
 
   postPatch = ''
