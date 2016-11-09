@@ -1,6 +1,6 @@
 { stdenv, fetchurl, which, m4, python
 , protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
-, pythonPackages, makeWrapper
+, python2Packages, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (!stdenv.isDarwin) jemalloc
     ++ stdenv.lib.optional stdenv.isDarwin libtool;
 
-  nativeBuildInputs = [ which m4 python ];
+  nativeBuildInputs = [ which m4 python2Packages.python ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
     wrapProgram $out/bin/rethinkdb \
-      --prefix PATH ":" "${pythonPackages.rethinkdb}/bin"
+      --prefix PATH ":" "${python2Packages.rethinkdb}/bin"
   '';
 
   meta = {
