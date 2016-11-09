@@ -15227,7 +15227,7 @@ in {
 
   netaddr = buildPythonPackage rec {
     name = "netaddr-0.7.18";
-    disabled = isPy35;  # https://github.com/drkjam/netaddr/issues/117
+    doCheck = !isPy35;  # https://github.com/drkjam/netaddr/issues/117
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/netaddr/${name}.tar.gz";
