@@ -1,26 +1,27 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, syslogng
+{ stdenv, fetchurl, pkgconfig, glib, syslogng
 , eventlog, perl, python, yacc, riemann_c_client, libivykis, protobufc
 }:
 
 stdenv.mkDerivation rec {
   name = "syslog-ng-incubator-${version}";
-  version = "141106-54179c5";
+  version = "0.5.0";
 
-  src = fetchFromGitHub {
-    owner = "balabit";
-    repo = "syslog-ng-incubator";
-    rev = "54179c5f733487fe97ee856bc27130d0b09f3d5a";
-    sha256 = "1y099f7pdan1441ycycd67igcwbla2m2cgnxjfvdw76llvi35sam";
+  src = fetchurl {
+    url = "https://github.com/balabit/syslog-ng-incubator/releases/download/${name}/${name}.tar.xz";
+    sha256 = "1was8g3ckghs6fb7zz6dlp506m65cfi6l7iyj0wp5cqc9cff05gk";
   };
 
+  patches = [ ./add-config-h-includes.patch ];
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoreconfHook pkgconfig glib syslogng eventlog perl python
+    glib syslogng eventlog /* perl */ python
     yacc riemann_c_client libivykis protobufc
   ];
 
   configureFlags = [
-    "--without-ivykis"
     "--with-module-dir=$(out)/lib/syslog-ng"
+    "--disable-perl" # fails to build
   ];
 
   meta = with stdenv.lib; {
