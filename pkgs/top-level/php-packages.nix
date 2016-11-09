@@ -112,32 +112,13 @@ let
     sha256 = "0qpfbkfy4wlnsfq4vc4q5wvaia83l89ky33s08gqrcfp3p1adn88";
   };
 
-  zmq = if isPhp7 then zmqPhp7 else zmq11;
+  zmq = buildPecl {
+    name = "zmq-1.1.3";
 
-  zmq11 = assert !isPhp7; buildPecl {
-    name = "zmq-1.1.2";
-
-    sha256 = "0ccz73p8pkda3y9p9qbr3m19m0yrf7k2bvqgbaly3ibgh9bazc69";
+    sha256 = "1kj487vllqj9720vlhfsmv32hs2dy2agp6176mav6ldx31c3g4n4";
 
     configureFlags = [
-      "--with-zmq=${pkgs.zeromq2}"
-    ];
-
-    buildInputs = [ pkgs.pkgconfig ];
-  };
-
-  # Not released yet
-  zmqPhp7 = assert isPhp7; buildPecl rec {
-    name = "zmq-php7";
-
-    src = fetchgit {
-      url = "https://github.com/mkoppanen/php-zmq";
-      rev = "94d2b87d195f870775b153b42c29f30da049f4db";
-      sha256 = "51a25b1029800d8abe03c5c08c50d6aee941c95c741dc22d2f853052511f4296";
-    };
-
-    configureFlags = [
-      "--with-zmq=${pkgs.zeromq2}"
+      "--with-zmq=${pkgs.zeromq}"
     ];
 
     buildInputs = [ pkgs.pkgconfig ];
