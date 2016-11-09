@@ -416,6 +416,8 @@ let
       then callPackage ../development/ocaml-modules/ppx_deriving {}
       else null;
 
+    ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
+
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
@@ -624,10 +626,6 @@ let
     haxe = callPackage ../development/compilers/haxe { };
 
     ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
-
-    opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
-    opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
-    opam = callPackage ../development/tools/ocaml/opam { };
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 

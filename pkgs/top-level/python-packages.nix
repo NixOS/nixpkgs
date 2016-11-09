@@ -12343,6 +12343,9 @@ in {
     buildInputs = with self; [ flake8 pytest flaky ];
     propagatedBuildInputs = with self; ([ uncompyle6 ] ++ optionals isPy27 [ enum34  ]);
 
+    # Fails randomly in tests/cover/test_conjecture_engine.py::test_interleaving_engines.
+    doCheck = false;
+
     # https://github.com/DRMacIver/hypothesis/issues/300
     checkPhase = ''
       ${python.interpreter} -m pytest tests/cover
@@ -18283,10 +18286,10 @@ in {
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "1.1.0";
+    version = "1.3.1";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "155avdckg93w3rmx0mz17wi6vcaba3lcppv9qwa6xlxfds9yzvlq";
+      sha256 = "18i5pwli36d5d0xh1d7dc80iq85w7vcalphg8hipjclhg2h72bp0";
       rev = "v${version}";
       repo = "pgcli";
       owner = "dbcli";
@@ -18321,10 +18324,10 @@ in {
 
   pgspecial = buildPythonPackage rec {
     name = "pgspecial-${version}";
-    version = "1.5.0";
+    version = "1.6.0";
 
     src = pkgs.fetchurl {
-      sha256 = "14bqlwcnbyn3ikzg5wr7iqrlfwbcy5vaa5n1mmgg305yal34lk6d";
+      sha256 = "09ilalpgcl86f79648qsjm87dqi97bc70y51nrf0b3i1py3mhs2m";
       url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
     };
 
@@ -24313,11 +24316,11 @@ in {
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
-    version = "0.1.19";
+    version = "0.2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sqlparse/${name}.tar.gz";
-      sha256 = "1s2fvaxgh9kqzrd6iwy5h7i61ckn05plx9np13zby93z3hdbx5nq";
+      sha256 = "08dszglfhf1c4rwqinkbp4x55v0b90rgm1fxc1l4dy965imjjinl";
     };
 
     buildInputs = with self; [ pytest ];

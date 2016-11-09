@@ -5,9 +5,9 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
+{ system, noSysDirs, config, crossSystem, platform, lib
 , nixpkgsFun
-, ... }:
+}:
 self: pkgs:
 
 with pkgs;
@@ -3022,7 +3022,7 @@ in
   openssh =
     callPackage ../tools/networking/openssh {
       hpnSupport = false;
-      withKerberos = false;
+      withKerberos = stdenv.isDarwin;
       etcDir = "/etc/ssh";
       pam = if stdenv.isLinux then pam else null;
     };
@@ -5146,9 +5146,7 @@ in
     nodejs = nodejs-4_x;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) opam_1_0_0;
-  inherit (ocaml-ng.ocamlPackages_4_01_0) opam_1_1;
-  inherit (ocamlPackages) opam;
+  opam = callPackage ../development/tools/ocaml/opam { };
 
   picat = callPackage ../development/compilers/picat {
     stdenv = overrideCC stdenv gcc49;
@@ -6103,6 +6101,8 @@ in
   github-release = callPackage ../development/tools/github/github-release { };
 
   global = callPackage ../development/tools/misc/global { };
+
+  gn = callPackage ../development/tools/build-managers/gn { };
 
   gnome_doc_utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
 
@@ -12300,7 +12300,6 @@ in
     pulseSupport = config.pulseaudio or true;
     enablePepperFlash = config.chromium.enablePepperFlash or false;
     enableWideVine = config.chromium.enableWideVine or false;
-    hiDPISupport = config.chromium.hiDPISupport or false;
     gnome = gnome2;
   };
 
@@ -14282,6 +14281,8 @@ in
   quassel-webserver = callPackage ../applications/networking/irc/quassel-webserver { };
 
   quirc = callPackage ../tools/graphics/quirc {};
+
+  quiterss = qt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
   quodlibet = callPackage ../applications/audio/quodlibet { };
 
@@ -17315,7 +17316,7 @@ in
 
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_39;
   });
 
   vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {

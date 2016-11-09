@@ -1071,4 +1071,7 @@ self: super: {
   # Test suite occasionally runs for 1+ days on Hydra.
   distributed-process-tests = dontCheck super.distributed-process-tests;
 
+  # https://github.com/mulby/diff-parse/issues/9
+  diff-parse = doJailbreak super.diff-parse;
+
 }
