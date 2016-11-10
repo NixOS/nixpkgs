@@ -2368,6 +2368,8 @@ in
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  libmarble-ssrf = qt55.callPackage ../development/libraries/libmarble-ssrf { };
+
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
   memtester = callPackage ../tools/system/memtester { };
