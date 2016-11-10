@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ./contacts-*/Build/Products/Default-*/contacts $out/bin
+    cp ./contacts-*/Build/Products/Default/contacts $out/bin
   '';
 
   NIX_LDFLAGS = " -F${Foundation}/Library/Frameworks/ -F${AddressBook}/Library/Frameworks/";

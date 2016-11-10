@@ -5,6 +5,7 @@ let
   Info = {
     CFBundleIdentifier = platformName;
     Type = "Platform";
+    Name = "macosx";
   };
 
   Version = {
