@@ -88,7 +88,7 @@ in
         chown ${clamavUser}:${clamavGroup} ${runDir}
       '';
       serviceConfig = {
-        ExecStart = "${pkg}/bin/clamd --config-file=${clamdConfigFile}";
+        ExecStart = "${pkg}/sbin/clamd --config-file=${clamdConfigFile}";
         Type = "forking";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
