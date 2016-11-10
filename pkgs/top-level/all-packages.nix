@@ -3718,6 +3718,11 @@ in
 
   sstp = callPackage ../tools/networking/sstp {};
 
+  subsurface =
+    qt55.callPackage ../applications/misc/subsurface {
+        libgit2 = pkgs.libgit2_0_23;
+    };
+
   sudo = callPackage ../tools/security/sudo { };
 
   suidChroot = callPackage ../tools/system/suid-chroot { };
