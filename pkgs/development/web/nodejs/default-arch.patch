@@ -1,0 +1,24 @@
+diff --git a/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py b/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+index 30f27d5..eb178a5 100644
+--- a/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
++++ b/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+@@ -1018,12 +1018,15 @@ class XcodeSettings(object):
+     # Since the value returned by this function is only used when ARCHS is not
+     # set, then on iOS we return "i386", as the default xcode project generator
+     # does not set ARCHS if it is not set in the .gyp file.
+-    if self.isIOS:
++    try:
++      if self.isIOS:
++        return 'i386'
++      version, build = self._XcodeVersion()
++      if version >= '0500':
++        return 'x86_64'
+       return 'i386'
+-    version, build = self._XcodeVersion()
+-    if version >= '0500':
++    except:
+       return 'x86_64'
+-    return 'i386'
+ 
+ class MacPrefixHeader(object):
+   """A class that helps with emulating Xcode's GCC_PREFIX_HEADER feature.
