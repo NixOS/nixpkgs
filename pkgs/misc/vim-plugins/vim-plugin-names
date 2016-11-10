@@ -35,6 +35,7 @@
 "github:ctrlpvim/ctrlp.vim"
 "github:derekelkins/agda-vim"
 "github:digitaltoad/vim-jade"
+"github:dracula/vim"
 "github:eagletmt/neco-ghc"
 "github:eikenb/acp"
 "github:elmcast/elm-vim"

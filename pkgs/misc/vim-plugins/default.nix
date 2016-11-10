@@ -520,6 +520,16 @@ rec {
 
   };
 
+  dracula = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "dracula-2016-09-21";
+    src = fetchgit {
+      url = "git://github.com/dracula/vim";
+      rev = "926dfbab01128322f6326bdd10de2856b1fa3232";
+      sha256 = "1kqd367qa2dnz3qf10lyw7hacahylc94axc6f6f5nw4cklm1g8yv";
+    };
+    dependencies = [];
+  };
+
   vim-jade = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-jade-2016-10-31";
     src = fetchgit {
