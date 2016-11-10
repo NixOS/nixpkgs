@@ -1,5 +1,5 @@
 {stdenv, writeText, toolchainName, xcbuild
-, cc, llvm, cctools, gcc, bootstrap_cmds, binutils
+, llvm, cctools, gcc, bootstrap_cmds, binutils
 , yacc, flex, m4, unifdef, gperf, indent, ctags, makeWrapper}:
 
 let
@@ -13,7 +13,11 @@ in
 stdenv.mkDerivation {
   name = "nixpkgs.xctoolchain";
   buildInputs = [ xcbuild makeWrapper ];
-  propagatedBuildInputs = [ cc cctools llvm gcc bootstrap_cmds binutils yacc flex m4 unifdef gperf indent ];
+
+  propagatedBuildInputs = [ llvm gcc yacc flex m4 unifdef gperf indent ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ cctools bootstrap_cmds binutils ];
+  ## cctools should build on Linux but it doesn't currentl
+
   buildCommand = ''
     mkdir -p $out
     plutil -convert xml1 -o $out/ToolchainInfo.plist ${writeText "ToolchainInfo.plist" (builtins.toJSON ToolchainInfo)}
@@ -25,32 +29,11 @@ stdenv.mkDerivation {
 
     mkdir -p $out/usr/bin
     cd $out/usr/bin
-    ln -s ${cc}/bin/cpp
-    ln -s ${cc}/bin/c++
-    ln -s ${cc}/bin/cc
+    ln -s ${stdenv.cc}/bin/cpp
+    ln -s ${stdenv.cc}/bin/c++
+    ln -s ${stdenv.cc}/bin/cc
     ln -s c++ clang++
     ln -s cc clang
-
-    ln -s ${cctools}/bin/ar
-    ln -s ${cctools}/bin/as
-    ln -s ${cctools}/bin/nm
-    ln -s ${cctools}/bin/nmedit
-    ln -s ${cctools}/bin/ld
-    ln -s ${cctools}/bin/libtool
-    ln -s ${cctools}/bin/strings
-    ln -s ${cctools}/bin/strip
-    ln -s ${cctools}/bin/install_name_tool
-    ln -s ${cctools}/bin/bitcode_strip
-    ln -s ${cctools}/bin/codesign_allocate
-    ln -s ${cctools}/bin/dsymutil
-    ln -s ${cctools}/bin/dyldinfo
-    ln -s ${cctools}/bin/otool
-    ln -s ${cctools}/bin/unwinddump
-    ln -s ${cctools}/bin/size
-    ln -s ${cctools}/bin/segedit
-    ln -s ${cctools}/bin/pagestuff
-    ln -s ${cctools}/bin/ranlib
-    ln -s ${cctools}/bin/redo_prebinding
 
     ln -s ${llvm}/bin/llvm-cov
     ln -s ${llvm}/bin/llvm-dsymutil
@@ -74,14 +57,35 @@ stdenv.mkDerivation {
     ln -s ${unifdef}/bin/unifdef
     ln -s ${unifdef}/bin/unifdefall
 
-    ln -s ${bootstrap_cmds}/bin/mig
-
     ln -s ${gperf}/bin/gperf
     ln -s ${gcc}/bin/gcov
     ln -s ${gcc}/bin/mkdep
     ln -s ${indent}/bin/indent
-    ln -s ${binutils}/bin/lipo
     ln -s ${ctags}/bin/ctags
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    ln -s ${bootstrap_cmds}/bin/mig
+    ln -s ${binutils}/bin/lipo
+
+    ln -s ${cctools}/bin/ar
+    ln -s ${cctools}/bin/as
+    ln -s ${cctools}/bin/nm
+    ln -s ${cctools}/bin/nmedit
+    ln -s ${cctools}/bin/ld
+    ln -s ${cctools}/bin/libtool
+    ln -s ${cctools}/bin/strings
+    ln -s ${cctools}/bin/strip
+    ln -s ${cctools}/bin/install_name_tool
+    ln -s ${cctools}/bin/bitcode_strip
+    ln -s ${cctools}/bin/codesign_allocate
+    ln -s ${cctools}/bin/dsymutil
+    ln -s ${cctools}/bin/dyldinfo
+    ln -s ${cctools}/bin/otool
+    ln -s ${cctools}/bin/unwinddump
+    ln -s ${cctools}/bin/size
+    ln -s ${cctools}/bin/segedit
+    ln -s ${cctools}/bin/pagestuff
+    ln -s ${cctools}/bin/ranlib
+    ln -s ${cctools}/bin/redo_prebinding
   '';
 }
 

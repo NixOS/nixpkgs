@@ -12,7 +12,7 @@ let
   };
 
   toolchain = callPackage ./toolchain.nix {
-    inherit cctools bootstrap_cmds toolchainName xcbuild binutils;
+    inherit cctools bootstrap_cmds toolchainName xcbuild binutils stdenv;
   };
 
   sdk = callPackage ./sdk.nix {
