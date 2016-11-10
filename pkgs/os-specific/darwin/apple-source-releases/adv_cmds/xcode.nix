@@ -1,14 +1,7 @@
-{ stdenv, fetchurl, xcbuild, libcxx }:
+{ stdenv, appleDerivation, fetchurl, xcbuild, libcxx }:
 
-stdenv.mkDerivation {
-  name = "adv_cmds";
-
-  src = fetchurl {
-    url = "https://opensource.apple.com/tarballs/adv_cmds/adv_cmds-163.tar.gz";
-    sha256 = "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q";
-  };
-
-  # remove pkill from build
+appleDerivation {
+  # disable pkill from build
   patchPhase = ''
     substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
       --replace "FD201DC214369B4200906237 /* pkill.c in Sources */," ""
@@ -17,11 +10,19 @@ stdenv.mkDerivation {
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
     mkdir -p $out/bin/
+    install adv_cmds-*/Build/Products/Release-*/* $out/bin/
 
-    for cmd in cap_mkdb finger fingerd gencat last locale lsvfs ps stty tabs tty whois
-    do
-      install adv_cmds-*/Build/Products/Release-*/$cmd $out/bin/$cmd
+    for n in 1 8; do
+      mkdir -p $out/share/man/man$n
+      install */*.$n $out/share/man/man$n
     done
+
+    mkdir -p $out/System/Library/LaunchDaemons
+    install fingerd/finger.plist $out/System/Library/LaunchDaemons
+
+    # from variant_links.sh
+    # ln -s $out/bin/pkill $out/bin/pgrep
+    # ln -s $out/share/man/man1/pkill.1 $out/share/man/man1/pgrep.1
   '';
 
   buildInputs = [ xcbuild libcxx ];

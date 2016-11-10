@@ -17377,6 +17377,4 @@ in
   xulrunner = firefox-unwrapped;
 
   nitrokey-app = callPackage ../tools/security/nitrokey-app { };
-
-  adv_cmds = callPackage ../os-specific/darwin/apple-source-releases/adv_cmds/xcode.nix {};
 }
