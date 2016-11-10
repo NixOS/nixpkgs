@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls
+, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK2 ? true, gtk2 ? null
@@ -34,13 +34,33 @@ stdenv.mkDerivation rec {
     sha256 = "0cwgyiyymnx4xdg99dm2drfxcyhy2jmyf0rkr9fwj9mwwf77kwhr";
   };
 
-  patches = lib.optional stdenv.isDarwin ./at-fdcwd.patch;
+  patches = (lib.optional stdenv.isDarwin ./at-fdcwd.patch) ++ [
+    ## Fixes a segfault in emacs 25.1
+    ## http://lists.gnu.org/archive/html/emacs-devel/2016-10/msg00917.html
+    ## https://debbugs.gnu.org/cgi/bugreport.cgi?bug=24358
+    (fetchurl {
+      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=9afea93ed536fb9110ac62b413604cf4c4302199;
+      sha256 = "1iifyfqh7qfdfsrpqgz2l7z0l7alvma57jlklyq258qyjg0pc8n4"; })
+    (fetchurl {
+      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=71ca4f6a43bad06192cbc4bb8c7a2d69c179b7b0;
+      sha256 = "0vadqvcigca0j891yis1mhjn18rg4l9qj621q6vzip46ka6qig0d"; })
+    (fetchurl {
+      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=1047496722a58ef5b736dae64d32adeb58c5055c;
+      sha256 = "01lfa89qw7y0spcy57hm1ymijb57i6kvhb9z9impcxwza60lbi7b"; })
+    (fetchurl {
+      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=96ac0c3ebce825e60595794f99e703ec8302e240;
+      sha256 = "0bmkrm356fbwc8wsiqh2w706mq5r9q4ic4m8vzdj099ihnf121nn"; })
+    (fetchurl {
+      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=43986d16fb6ad78a627250e14570ea70bdb1f23a;
+      sha256 = "0kp8dgs7fjgvidhm2y84jrxad78mxi0c47jhyszj5644qqxm47cr";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ];
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
+    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext libselinux ]
     ++ lib.optional stdenv.isLinux dbus
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
