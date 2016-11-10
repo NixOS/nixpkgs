@@ -7665,6 +7665,8 @@ in
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
+  libdivecomputer = callPackage ../development/libraries/libdivecomputer { };
+
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
 
   libdmtx = callPackage ../development/libraries/libdmtx { };
