@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "proverif-${version}";
-  version = "1.94";
+  version = "1.95";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/proverif/proverif${version}.tar.gz";
-    sha256 = "0dv2hgk76y0ap7dwf80qd94dmxjw47c50iavxgq5702k1d6qap56";
+    sha256 = "01viwi6sccdxk723ycy1shklz8g29j5i3wj2mcwb3j7advvqmws2";
   };
 
   buildInputs = [ ocaml ];
