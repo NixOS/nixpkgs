@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     cp ./contacts-*/Build/Products/Default/contacts $out/bin
   '';
 
+  ## FIXME: the framework setup hook isn't adding these correctly
   NIX_LDFLAGS = " -F${Foundation}/Library/Frameworks/ -F${AddressBook}/Library/Frameworks/";
 
   meta = with stdenv.lib; {

@@ -5,8 +5,10 @@ appleDerivation rec {
 
   NIX_CFLAGS_COMPILE = " -I./unbound -I${xnu}/Library/Frameworks/System.framework/Headers/ -D__APPLE_USE_RFC_2292 -DIPV6_DONTFRAG=14 -DINET6";
 
+  # "spray" requires some files that aren't compiling correctly in xcbuild.
+  # "rtadvd" seems to fail with some missing constants.
+  # We disable spray and rtadvd here for now.
   patchPhase = ''
-    # disable spray, rtadvd
     substituteInPlace network_cmds.xcodeproj/project.pbxproj \
       --replace "7294F0EA0EE8BAC80052EC88 /* PBXTargetDependency */," "" \
       --replace "7216D34D0EE89FEC00AE70E4 /* PBXTargetDependency */," ""
@@ -22,14 +24,16 @@ appleDerivation rec {
       install */*.$n $out/share/man/man$n
     done
 
-    mkdir -p $out/etc/
-    install rtadvd.tproj/rtadvd.conf ip6addrctl.tproj/ip6addrctl.conf $out/etc/
+    # TODO: patch files to load from $out/ instead of /usr/
 
-    mkdir -p $out/local/OpenSourceVersions/
-    install network_cmds.plist $out/local/OpenSourceVersions/
+    # mkdir -p $out/etc/
+    # install rtadvd.tproj/rtadvd.conf ip6addrctl.tproj/ip6addrctl.conf $out/etc/
 
-    mkdir -p $out/System/Library/LaunchDaemons
-    install kdumpd.tproj/com.apple.kdumpd.plist $out/System/Library/LaunchDaemons
+    # mkdir -p $out/local/OpenSourceVersions/
+    # install network_cmds.plist $out/local/OpenSourceVersions/
+
+    # mkdir -p $out/System/Library/LaunchDaemons
+    # install kdumpd.tproj/com.apple.kdumpd.plist $out/System/Library/LaunchDaemons
  '';
 
   meta = {

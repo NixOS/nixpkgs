@@ -17,7 +17,6 @@ appleDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "";
     maintainers = with maintainers; [ matthewbauer ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;

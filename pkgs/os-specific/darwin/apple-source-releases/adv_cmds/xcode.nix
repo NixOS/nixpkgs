@@ -1,7 +1,13 @@
 { stdenv, appleDerivation, fetchurl, xcbuild, libcxx }:
 
 appleDerivation {
-  # disable pkill from build
+
+  # pkill requires special private headers that are unavailable in
+  # NixPkgs. These ones are needed:
+  #  - xpc/xpxc.h
+  #  - os/base_private.h
+  #  - _simple.h
+  # We disable it here for now. TODO: build pkill inside adv_cmds
   patchPhase = ''
     substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
       --replace "FD201DC214369B4200906237 /* pkill.c in Sources */," ""
