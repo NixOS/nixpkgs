@@ -277,7 +277,8 @@ in
         ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
         Restart = "always";
         User = "dnscrypt-proxy";
-
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         PrivateTmp = true;
         PrivateDevices = true;
         ProtectHome = true;
