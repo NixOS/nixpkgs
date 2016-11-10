@@ -26,15 +26,6 @@ stdenv.mkDerivation {
         done
     done
 
-    for p in $propagated; do
-        for s in applications dbus-1 desktop-directories icons mime polkit-1; do
-            if [ -d "$p/share/$s" ]; then
-                propagatedUserEnvPkgs+=" $p"
-                break
-            fi
-        done
-    done
-
     runHook postInstall
   '';
 }

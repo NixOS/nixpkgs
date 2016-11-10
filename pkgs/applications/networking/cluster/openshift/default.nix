@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, go, which }:
 
 let
-  version = "1.3.0";
+  version = "1.3.1";
   versionMajor = "1";
   versionMinor = "3";
 in
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "07s7xv8x8pch68j7lsw29im0axi07x32ag9wh9aqa0y570q9xgxy";
+    sha256 = "1kxa1k38hvi1vg52p82mmkmp9k4bbbm2pryzapsxwga7d8x4bnbh";
   };
 
   buildInputs = [ go which ];
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = http://www.openshift.org;
     maintainers = with maintainers; [offline];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

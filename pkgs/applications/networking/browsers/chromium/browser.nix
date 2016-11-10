@@ -18,6 +18,11 @@ mkChromiumDerivation (base: rec {
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
+    if [ -e "$buildPath/libwidevinecdmadapter.so" ]; then
+      cp -v "$buildPath/libwidevinecdmadapter.so" \
+            "$libExecPath/libwidevinecdmadapter.so"
+    fi
+
     mkdir -p "$sandbox/bin"
     cp -v "$buildPath/chrome_sandbox" "$sandbox/bin/${sandboxExecutableName}"
 

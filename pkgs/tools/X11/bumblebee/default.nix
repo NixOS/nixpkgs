@@ -16,10 +16,11 @@
 #
 # To use at startup, see hardware.bumblebee options.
 
-{ stdenv, lib, fetchurl, pkgconfig, help2man, makeWrapper
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, help2man, makeWrapper
 , glib, libbsd
 , libX11, libXext, xorgserver, xkbcomp, kmod, xkeyboard_config, xf86videonouveau
 , nvidia_x11, virtualgl, primusLib
+, automake111x, autoconf
 # The below should only be non-null in a x86_64 system. On a i686
 # system the above nvidia_x11 and virtualgl will be the i686 packages.
 # TODO: Confusing. Perhaps use "SubArch" instead of i686?
@@ -48,6 +49,15 @@ let
 
   xmodules = lib.concatStringsSep "," (map (x: "${x.out or x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
 
+  modprobePatch = fetchpatch {
+    url = "https://github.com/Bumblebee-Project/Bumblebee/commit/1ada79fe5916961fc4e4917f8c63bb184908d986.patch";
+    sha256 = "02vq3vba6nx7gglpjdfchws9vjhs1x02a543yvqrxqpvvdfim2x2";
+  };
+  libkmodPatch = fetchpatch {
+    url = "https://github.com/Bumblebee-Project/Bumblebee/commit/deceb14cdf2c90ff64ebd1010a674305464587da.patch";
+    sha256 = "00c05i5lxz7vdbv445ncxac490vbl5g9w3vy3gd71qw1f0si8vwh";
+  };
+
 in stdenv.mkDerivation rec {
   name = "bumblebee-${version}";
 
@@ -56,7 +66,12 @@ in stdenv.mkDerivation rec {
     sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 
-  patches = [ ./nixos.patch ];
+  patches = [
+    ./nixos.patch
+
+    modprobePatch
+    libkmodPatch
+  ];
 
   # By default we don't want to use a display device
   nvidiaDeviceOptions = lib.optionalString (!useDisplayDevice) ''
@@ -75,13 +90,6 @@ in stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    # Substitute the path to the actual modinfo program in module.c.
-    # Note: module.c also calls rmmod and modprobe, but those just have to
-    # be in PATH, and thus no action for them is required.
-
-    substituteInPlace src/module.c \
-      --replace "/sbin/modinfo" "${kmod}/sbin/modinfo"
-
     # Don't use a special group, just reuse wheel.
     substituteInPlace configure \
       --replace 'CONF_GID="bumblebee"' 'CONF_GID="wheel"'
@@ -96,8 +104,8 @@ in stdenv.mkDerivation rec {
 
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
-  buildInputs = [ libX11 glib libbsd ];
-  nativeBuildInputs = [ makeWrapper pkgconfig help2man ];
+  buildInputs = [ libX11 glib libbsd kmod ];
+  nativeBuildInputs = [ makeWrapper pkgconfig help2man automake111x autoconf ];
 
   # The order of LDPATH is very specific: First X11 then the host
   # environment then the optional sub architecture paths.

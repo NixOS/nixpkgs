@@ -5,9 +5,9 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
+{ system, noSysDirs, config, crossSystem, platform, lib
 , nixpkgsFun
-, ... }:
+}:
 self: pkgs:
 
 with pkgs;
@@ -368,6 +368,8 @@ in
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng/default.nix { };
 
+  agrep = callPackage ../tools/text/agrep { };
+
   aha = callPackage ../tools/text/aha { };
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
@@ -459,6 +461,8 @@ in
   aws_shell = pythonPackages.aws_shell;
 
   azure-cli = nodePackages.azure-cli;
+
+  azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
@@ -746,6 +750,8 @@ in
 
   chntpw = callPackage ../tools/security/chntpw { };
 
+  clipster = callPackage ../tools/misc/clipster { };
+
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
   };
@@ -786,6 +792,8 @@ in
     aspellDicts_de = aspellDicts.de;
     aspellDicts_en = aspellDicts.en;
   };
+
+  dirb = callPackage ../tools/networking/dirb { };
 
   direnv = callPackage ../tools/misc/direnv { };
 
@@ -1277,6 +1285,10 @@ in
 
   cudnn5_cudatoolkit75 = callPackage ../development/libraries/science/math/cudnn/7.5-5.0 {
     cudatoolkit = cudatoolkit75;
+  };
+
+  cudnn5_cudatoolkit80 = callPackage ../development/libraries/science/math/cudnn/8.0-5.0 {
+    cudatoolkit = cudatoolkit8;
   };
 
   curlFull = curl.override {
@@ -2379,6 +2391,8 @@ in
 
   most = callPackage ../tools/misc/most { };
 
+  motion = callPackage ../applications/video/motion { };
+
   mkcast = callPackage ../applications/video/mkcast { };
 
   multitail = callPackage ../tools/misc/multitail { };
@@ -2735,6 +2749,8 @@ in
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
+  molly-guard = callPackage ../os-specific/linux/molly-guard { };
+
   monit = callPackage ../tools/system/monit { };
 
   moreutils = callPackage ../tools/misc/moreutils {
@@ -2985,6 +3001,8 @@ in
 
   oh-my-zsh = callPackage ../shells/oh-my-zsh { };
 
+  opencc = callPackage ../tools/text/opencc { };
+
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
@@ -3017,7 +3035,7 @@ in
   openssh =
     callPackage ../tools/networking/openssh {
       hpnSupport = false;
-      withKerberos = false;
+      withKerberos = stdenv.isDarwin;
       etcDir = "/etc/ssh";
       pam = if stdenv.isLinux then pam else null;
     };
@@ -3171,8 +3189,6 @@ in
   pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
-
-  pdfjam = callPackage ../tools/typesetting/pdfjam { };
 
   pdfmod = callPackage ../applications/misc/pdfmod { };
 
@@ -3940,6 +3956,7 @@ in
   ttylog = callPackage ../tools/misc/ttylog { };
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
+  twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap/v3.nix {};
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
@@ -5125,9 +5142,7 @@ in
     nodejs = nodejs-4_x;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) opam_1_0_0;
-  inherit (ocaml-ng.ocamlPackages_4_01_0) opam_1_1;
-  inherit (ocamlPackages) opam;
+  opam = callPackage ../development/tools/ocaml/opam { };
 
   picat = callPackage ../development/compilers/picat {
     stdenv = overrideCC stdenv gcc49;
@@ -5141,7 +5156,9 @@ in
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
-  rtags = callPackage ../development/tools/rtags/default.nix {};
+  rtags = callPackage ../development/tools/rtags/default.nix {
+    inherit (darwin) apple_sdk;
+  };
 
   rust = rustStable;
   rustStable = callPackage ../development/compilers/rust {};
@@ -5230,7 +5247,7 @@ in
 
   tinycc = callPackage ../development/compilers/tinycc { };
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) trv;
+  inherit (ocaml-ng.ocamlPackages_4_02) trv;
 
   bupc = callPackage ../development/compilers/bupc { };
 
@@ -6080,6 +6097,8 @@ in
   github-release = callPackage ../development/tools/github/github-release { };
 
   global = callPackage ../development/tools/misc/global { };
+
+  gn = callPackage ../development/tools/build-managers/gn { };
 
   gnome_doc_utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
 
@@ -9033,6 +9052,7 @@ in
   lilv-svn = callPackage ../development/libraries/audio/lilv/lilv-svn.nix { };
 
   lv2 = callPackage ../development/libraries/audio/lv2 { };
+  lv2Unstable = callPackage ../development/libraries/audio/lv2/unstable.nix { };
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
@@ -10845,7 +10865,6 @@ in
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.hiddev_CVE_2016_5829
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11254,6 +11273,8 @@ in
 
   godep = callPackage ../development/tools/godep { };
 
+  godef = callPackage ../development/tools/godef { };
+
   goimports = callPackage ../development/tools/goimports { };
 
   govers = callPackage ../development/tools/govers { };
@@ -11429,6 +11450,8 @@ in
   tcp_wrappers = callPackage ../os-specific/linux/tcp-wrappers { };
 
   tiptop = callPackage ../os-specific/linux/tiptop { };
+
+  tpacpi-bat = callPackage ../os-specific/linux/tpacpi-bat { };
 
   trinity = callPackage ../os-specific/linux/trinity { };
 
@@ -12281,8 +12304,6 @@ in
     amdappsdk = amdappsdk28;
   };
 
-  CharacterCompressor = callPackage ../applications/audio/CharacterCompressor { };
-
   chatzilla = callPackage ../applications/networking/irc/chatzilla { };
 
   chirp = callPackage ../applications/misc/chirp {
@@ -12294,7 +12315,6 @@ in
     pulseSupport = config.pulseaudio or true;
     enablePepperFlash = config.chromium.enablePepperFlash or false;
     enableWideVine = config.chromium.enableWideVine or false;
-    hiDPISupport = config.chromium.hiDPISupport or false;
     gnome = gnome2;
   };
 
@@ -12331,13 +12351,9 @@ in
 
   communi = qt5.callPackage ../applications/networking/irc/communi { };
 
-  CompBus = callPackage ../applications/audio/CompBus { };
-
   compiz = callPackage ../applications/window-managers/compiz {
     inherit (gnome2) GConf ORBit2 metacity;
   };
-
-  constant-detune-chorus = callPackage ../applications/audio/constant-detune-chorus { };
 
   copyq = callPackage ../applications/misc/copyq { };
 
@@ -13494,8 +13510,6 @@ in
 
   caps = callPackage ../applications/audio/caps { };
 
-  LazyLimiter = callPackage ../applications/audio/LazyLimiter { };
-
   lastwatch = callPackage ../applications/audio/lastwatch { };
 
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
@@ -13625,6 +13639,19 @@ in
 
   lyx = callPackage ../applications/misc/lyx { };
 
+  magnetophonDSP = {
+    CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
+    CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
+    ConstantDetuneChorus  = callPackage ../applications/audio/magnetophonDSP/ConstantDetuneChorus { };
+    faustCompressors =  callPackage ../applications/audio/magnetophonDSP/faustCompressors { };
+    LazyLimiter = callPackage ../applications/audio/magnetophonDSP/LazyLimiter { };
+    MBdistortion = callPackage ../applications/audio/magnetophonDSP/MBdistortion { };
+    pluginUtils = callPackage ../applications/audio/magnetophonDSP/pluginUtils  { };
+    RhythmDelay = callPackage ../applications/audio/magnetophonDSP/RhythmDelay { };
+    VoiceOfFaust = callPackage ../applications/audio/magnetophonDSP/VoiceOfFaust { };
+    shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand  { };
+  };
+
   makeself = callPackage ../applications/misc/makeself { };
 
   marathon = callPackage ../applications/networking/cluster/marathon { };
@@ -13632,8 +13659,6 @@ in
   marp = callPackage ../applications/office/marp { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
-
-  MBdistortion = callPackage ../applications/audio/MBdistortion { };
 
   mcpp = callPackage ../development/compilers/mcpp { };
 
@@ -14274,6 +14299,8 @@ in
 
   quirc = callPackage ../tools/graphics/quirc {};
 
+  quiterss = qt5.callPackage ../applications/networking/newsreaders/quiterss {};
+
   quodlibet = callPackage ../applications/audio/quodlibet { };
 
   quodlibet-with-gst-plugins = callPackage ../applications/audio/quodlibet {
@@ -14339,8 +14366,6 @@ in
   retroshare = callPackage ../applications/networking/p2p/retroshare { };
 
   retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix { });
-
-  RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
 
   ricochet = qt55.callPackage ../applications/networking/instant-messengers/ricochet { };
 
@@ -14992,7 +15017,7 @@ in
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
-  VoiceOfFaust = callPackage ../applications/audio/VoiceOfFaust { };
+  volnoti = callPackage ../applications/misc/volnoti { };
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
@@ -15325,8 +15350,6 @@ in
   };
 
   xtrace = callPackage ../tools/X11/xtrace { };
-
-  xlaunch = callPackage ../tools/X11/xlaunch { };
 
   xmacro = callPackage ../tools/X11/xmacro { };
 
@@ -16254,6 +16277,8 @@ in
 
     in makeOverridable makePackages extra;
 
+  lumina = callPackage ../desktops/lumina { };
+
   lxqt = recurseIntoAttrs (callPackage ../desktops/lxqt { });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate {
@@ -16948,14 +16973,12 @@ in
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-  faust = faust2;
+  faust = self.faust2;
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
-  faust1git = callPackage ../applications/audio/faust/faust1git.nix { };
-
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
-    llvm = llvm_37;
+    llvm = llvm_38;
   };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
@@ -16971,10 +16994,6 @@ in
   faust2jaqt = callPackage ../applications/audio/faust/faust2jaqt.nix { };
 
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
-
-  faust2lv2gui = callPackage ../applications/audio/faust/faust2lv2gui.nix { };
-
-  faustCompressors =  callPackage ../applications/audio/faustCompressors { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
@@ -17318,7 +17337,7 @@ in
 
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_39;
   });
 
   vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {

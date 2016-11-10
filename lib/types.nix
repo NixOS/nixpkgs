@@ -333,7 +333,15 @@ rec {
       name = "either";
       description = "${t1.description} or ${t2.description}";
       check = x: t1.check x || t2.check x;
-      merge = mergeOneOption;
+      merge = loc: defs:
+        let
+          defList = map (d: d.value) defs;
+        in
+          if   all (x: t1.check x) defList
+               then t1.merge loc defs
+          else if all (x: t2.check x) defList
+               then t2.merge loc defs
+          else mergeOneOption loc defs;
       typeMerge = f':
         let mt1 = t1.typeMerge (elemAt f'.wrapped 0).functor;
             mt2 = t2.typeMerge (elemAt f'.wrapped 1).functor;

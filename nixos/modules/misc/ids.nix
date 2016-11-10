@@ -278,6 +278,7 @@
       postgrey = 258;
       hound = 259;
       leaps = 260;
+      ipfs  = 261;
 
       phabricator = 999;
 
@@ -528,6 +529,7 @@
       postgrey = 258;
       hound = 259;
       leaps = 260;
+      ipfs = 261;
 
       phabricator = 999;
 

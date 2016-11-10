@@ -1067,7 +1067,7 @@ in {
       license = licenses.free;
     };
   } else null;
-
+  
   funcsigs = buildPythonPackage rec {
     name = "funcsigs-1.0.2";
 
@@ -6065,14 +6065,22 @@ in {
 
   docker = buildPythonPackage rec {
     name = "docker-py-${version}";
-    version = "1.9.0";
+    version = "1.10.6";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-py/${name}.tar.gz";
-      sha256 = "0zkdgz6akzfdda29y4bwa444r0sr2py5pwvvh6bnsy25lwabkikd";
+      sha256 = "05f49f6hnl7npmi7kigg0ibqk8s3fhzx1ivvz1kqvlv4ay3paajc";
     };
 
-    propagatedBuildInputs = with self; [ six requests2 websocket_client ipaddress backports_ssl_match_hostname ];
+    propagatedBuildInputs = with self; [
+      six
+      requests2
+      websocket_client
+      ipaddress
+      backports_ssl_match_hostname
+      docker_pycreds
+    ];
 
     # Version conflict
     doCheck = false;
@@ -6097,6 +6105,28 @@ in {
     meta = {
       description = "Functionality needed to operate the pseudo-tty (PTY) allocated to a docker container";
       homepage = https://github.com/d11wtq/dockerpty;
+      license = licenses.asl20;
+    };
+  };
+
+  docker_pycreds = buildPythonPackage rec {
+    name = "docker-pycreds-${version}";
+    version = "0.2.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/docker-pycreds/${name}.tar.gz";
+      sha256 = "0j3k5wk3bww5y0f2rvgzsin0q98k0i9j308vpsmxidw0y8n3m0wk";
+    };
+
+    doCheck = false; # require docker-credential-helpers binaries
+
+    propagatedBuildInputs = with self; [
+      six
+    ];
+
+    meta = {
+      description = "Python bindings for the docker credentials store API.";
+      homepage = https://github.com/shin-/dockerpy-creds;
       license = licenses.asl20;
     };
   };
@@ -7131,16 +7161,16 @@ in {
   };
 
   git-up = buildPythonPackage rec {
-    version = "1.4.1";
+    version = "1.4.2";
     name = "git-up-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/git-up/${name}.zip";
-      sha256 = "1nsdzjnla0926fzfsqnwyzg3f7g253n8lk4wgw8nj2rv0awbdmas";
+      sha256 = "121ia5gyjy7js6fbsx9z98j2qpq7rzwpsj8gnfvsbz2d69g0vl7q";
     };
 
     buildInputs = with self; [ pkgs.git nose ];
-    propagatedBuildInputs = with self; [ colorama docopt GitPython six termcolor ];
+    propagatedBuildInputs = with self; [ click colorama docopt GitPython six termcolor ];
 
     # git fails to run as it cannot detect the email address, so we set it
     # $HOME is by default not a valid dir, so we have to set that too
@@ -7610,25 +7640,27 @@ in {
   };
 
   jug = buildPythonPackage rec {
-    version = "1.2.2";
+    version = "1.3.0";
     name = "jug-${version}";
     buildInputs = with self; [ nose numpy ];
     propagatedBuildInputs = with self; [
+      bottle
       pyyaml
       redis
       six
+
       pkgs.zlib
     ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "1riski56b93i8fddgixmmrh6cbprwv44r5wnzcqg9khky1wkg4ls";
+      sha256 = "1262v63f1jljfd3rqvavzc2xfcray1m7vhqav3p6wlymgd342wrl";
     };
 
     meta = {
       description = "A Task-Based Parallelization Framework";
       license = licenses.mit;
-      url = https://jug.readthedocs.org/;
+      url = https://jug.readthedocs.io/;
       maintainers = with maintainers; [ luispedro ];
     };
   };
@@ -12342,6 +12374,9 @@ in {
     buildInputs = with self; [ flake8 pytest flaky ];
     propagatedBuildInputs = with self; ([ uncompyle6 ] ++ optionals isPy27 [ enum34  ]);
 
+    # Fails randomly in tests/cover/test_conjecture_engine.py::test_interleaving_engines.
+    doCheck = false;
+
     # https://github.com/DRMacIver/hypothesis/issues/300
     checkPhase = ''
       ${python.interpreter} -m pytest tests/cover
@@ -14336,7 +14371,7 @@ in {
       broken = true;
     };
   };
-
+  
   mock = buildPythonPackage (rec {
     name = "mock-2.0.0";
 
@@ -18333,10 +18368,10 @@ in {
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "1.1.0";
+    version = "1.3.1";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "155avdckg93w3rmx0mz17wi6vcaba3lcppv9qwa6xlxfds9yzvlq";
+      sha256 = "18i5pwli36d5d0xh1d7dc80iq85w7vcalphg8hipjclhg2h72bp0";
       rev = "v${version}";
       repo = "pgcli";
       owner = "dbcli";
@@ -18371,10 +18406,10 @@ in {
 
   pgspecial = buildPythonPackage rec {
     name = "pgspecial-${version}";
-    version = "1.5.0";
+    version = "1.6.0";
 
     src = pkgs.fetchurl {
-      sha256 = "14bqlwcnbyn3ikzg5wr7iqrlfwbcy5vaa5n1mmgg305yal34lk6d";
+      sha256 = "09ilalpgcl86f79648qsjm87dqi97bc70y51nrf0b3i1py3mhs2m";
       url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
     };
 
@@ -18683,11 +18718,12 @@ in {
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-3.3.1";
+    name = "Pillow-${version}";
+    version = "3.4.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/Pillow/${name}.tar.gz";
-      sha256 = "3491ca65d9fdba4db094ab3f8e17170425e7dd670e507921a665a1975d1b3df1";
+      sha256 = "0ee9975c05602e755ff5000232e0335ba30d507f6261922a658ee11b1cec36d1";
     };
 
     # Check is disabled because of assertion errors, see
@@ -18722,18 +18758,14 @@ in {
 
     meta = {
       homepage = "https://python-pillow.github.io/";
-
       description = "Fork of The Python Imaging Library (PIL)";
-
       longDescription = ''
         The Python Imaging Library (PIL) adds image processing
         capabilities to your Python interpreter.  This library
         supports many file formats, and provides powerful image
         processing and graphics capabilities.
       '';
-
       license = "http://www.pythonware.com/products/pil/license.htm";
-
       maintainers = with maintainers; [ goibhniu prikhi ];
     };
   };
@@ -23228,11 +23260,11 @@ in {
   };
 
   sqlmap = buildPythonPackage {
-    name = "sqlmap-1.0.9.post5";
+    name = "sqlmap-1.0.11";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sqlmap/sqlmap-1.0.9.post5.tar.gz";
-      sha256 = "0g8sjky8anrmcisc697b5qndp88qmay35kng9sz9x46wd3agm9pa";
+      url = "mirror://pypi/s/sqlmap/sqlmap-1.0.11.tar.gz";
+      sha256 = "1x4amyjqnd9j5g2kp9nvg8pr5sqzbhr8gd0m6d671bshvgj568vr";
     };
 
     meta = with pkgs.stdenv.lib; {
@@ -24408,11 +24440,11 @@ in {
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
-    version = "0.1.19";
+    version = "0.2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sqlparse/${name}.tar.gz";
-      sha256 = "1s2fvaxgh9kqzrd6iwy5h7i61ckn05plx9np13zby93z3hdbx5nq";
+      sha256 = "08dszglfhf1c4rwqinkbp4x55v0b90rgm1fxc1l4dy965imjjinl";
     };
 
     buildInputs = with self; [ pytest ];
@@ -30477,15 +30509,19 @@ in {
 
   tensorflowNoGpuSupport = buildPythonPackage rec {
     name = "tensorflow";
-    version = "0.9.0";
+    version = "0.10.0";
     format = "wheel";
 
     src = pkgs.fetchurl {
-      url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
-      sha256 = "15v7iyry8bmp5wcc1rr4bkp80f3887rl99zqf8pys5bad4gldbkh";
+      url = if stdenv.isDarwin then
+        "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-py2-none-any.whl" else
+        "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
+      sha256 = if stdenv.isDarwin then
+        "1gjybh3j3rn34bzhsxsfdbqgsr4jh50qyx2wqywvcb24fkvy40j9" else
+        "15v7iyry8bmp5wcc1rr4bkp80f3887rl99zqf8pys5bad4gldbkh";
     };
 
-    propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig ];
+    propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig mock];
 
     preFixup = ''
       RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
@@ -30498,6 +30534,7 @@ in {
       description = "TensorFlow helps the tensors flow (no gpu support)";
       homepage = http://tensorflow.org;
       license = licenses.asl20;
+      platforms = with platforms; linux ++ darwin;
     };
   };
 
@@ -31215,6 +31252,27 @@ in {
       homepage = "https://github.com/bebraw/pypandoc";
       license = licenses.mit;
       maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
+  yamllint = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "yamllint";
+    version = "0.5.2";
+
+    src = pkgs.fetchurl{
+      url = "mirror://pypi/y/${pname}/${name}.tar.gz";
+      sha256 = "0brdy1crhfng10hlw0420bv10c2xnjk8ndnhssybkzym47yrzg84";
+    };
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [  pyyaml ];
+
+    meta = {
+      homepage = "https://github.com/adrienverge/yamllint";
+      description = "A linter for YAML files";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ mikefaille ];
     };
   };
 }

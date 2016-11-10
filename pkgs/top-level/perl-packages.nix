@@ -7778,10 +7778,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999726";
+    name = "Math-BigInt-1.999727";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "dc3d9502c8633939000d04e7fbabcfc10fb8febb31c8e874a7bd60201c2228c4";
+      sha256 = "4539b8e55f828a9f370b46cd6ef6618c95cb15302384a8f84c2a1fec66d4e33e";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
