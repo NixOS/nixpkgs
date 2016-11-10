@@ -941,6 +941,8 @@ in
     hiredis = null;
   };
 
+  mar1d = callPackage ../games/mar1d { } ;
+
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
