@@ -2,17 +2,15 @@
 
 # module requires Linux >= 4.1 https://www.wireguard.io/install/#kernel-requirements
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.1";
-# module is incompatible with the PaX constification plugin
-assert kernel != null -> !(kernel.features.grsecurity or false);
 
 let
-  name = "wireguard-unstable-${version}";
+  name = "wireguard-experimental-${version}";
 
-  version = "2016-10-25";
+  version = "0.0.20161110";
 
   src = fetchurl {
-    url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-experimental-0.0.20161025.tar.xz";
-    sha256 = "09rhap3dzb8rcq1a1af9inf1qz7161yghafbgpbnd9dg016vhgs3";
+    url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-experimental-${version}.tar.xz";
+    sha256 = "13z416k64gnkp9248h846h40ph83ms7l9mm9b9xpki17j5q7hm10";
   };
 
   meta = with stdenv.lib; {
