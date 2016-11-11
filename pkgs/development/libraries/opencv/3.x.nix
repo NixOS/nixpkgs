@@ -46,14 +46,14 @@ stdenv.mkDerivation rec {
     let ippicvVersion = "20151201";
         ippicvPlatform = if stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux" then "linux"
                          else throw "ICV is not available for this platform (or not yet supported by this package)";
-        ippicvHash = if ippicvPlatform == "linux" then "808b791a6eac9ed78d32a7666804320e"
+        ippicvHash = if ippicvPlatform == "linux" then "1nph0w0pdcxwhdb5lxkb8whpwd9ylvwl97hn0k425amg80z86cs3"
                      else throw "ippicvHash: impossible";
 
         ippicvName = "ippicv_${ippicvPlatform}_${ippicvVersion}.tgz";
         ippicvArchive = "3rdparty/ippicv/downloads/linux-${ippicvHash}/${ippicvName}";
         ippicv = fetchurl {
           url = "https://github.com/Itseez/opencv_3rdparty/raw/ippicv/master_${ippicvVersion}/ippicv/${ippicvName}";
-          md5 = ippicvHash;
+          sha256 = ippicvHash;
         };
     in lib.optionalString enableIpp
       ''
