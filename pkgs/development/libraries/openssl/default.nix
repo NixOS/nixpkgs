@@ -116,8 +116,8 @@ in {
   };
 
   openssl_1_1_0 = common {
-    version = "1.1.0b";
-    sha256 = "1xznrqvb1dbngv2k2nb6da6fdw00c01sy2i36yjdxr4vpxrf0pd4";
+    version = "1.1.0c";
+    sha256 = "1xfn5ydl14myd9wgxm4nxy5a42cpp1g12ijf3g9m4mz0l90n8hzw";
   };
 
 }
