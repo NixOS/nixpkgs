@@ -1,26 +1,20 @@
-{ fetchurl, stdenv, i3 }:
+{ fetchurl, stdenv, i3, autoreconfHook }:
 
 i3.overrideDerivation (super : rec {
 
   name = "i3-gaps-${version}";
-  version = "4.12";
-  releaseDate = "2016-03-06";
+  version = "4.13";
+  releaseDate = "2016-11-08";
 
   src = fetchurl {
     url = "https://github.com/Airblader/i3/archive/${version}.tar.gz";
-    sha256 = "1i9l993cak85fcw12zgrb5cpspmjixr3yf8naa4zb8589mg4rb8s";
+    sha256 = "0w959nx2crn00fckqwb5y78vcr1j9mvq5lh25wyjszx04pjhf378";
   };
 
-  postUnpack = ''
-      echo -n "${version} (${releaseDate}, branch \\\"gaps-next\\\")" > ./i3-${version}/I3_VERSION
-      echo -n "${version}" > ./i3-${version}/VERSION
-  '';
+  nativeBuildInputs = super.nativeBuildInputs ++ [ autoreconfHook ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
-    for program in $out/bin/i3-sensible-*; do
-      sed -i 's/which/command -v/' $program
-    done
+  postUnpack = ''
+      echo -n "${version} (${releaseDate})" > ./i3-${version}/I3_VERSION
   '';
 
 }) // {
