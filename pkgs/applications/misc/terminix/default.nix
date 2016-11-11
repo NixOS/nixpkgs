@@ -60,6 +60,6 @@ meta = with stdenv.lib; {
     homepage = https://github.com/gnunn1/terminix;
     license = licenses.mpl20;
     platforms = platforms.linux;
-    maintainers = [ maintainers.gnunn1 ];
+    maintainers = [ maintainers.dyrnade ];
   };
 }
