@@ -25,6 +25,7 @@ in
 
     services.xserver.desktopManager.session = singleton {
       name = "lxqt";
+      bgSupport = true;
       start = ''
         exec ${pkgs.lxqt.lxqt-common}/bin/startlxqt
       '';
