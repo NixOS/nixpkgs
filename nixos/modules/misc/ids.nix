@@ -84,7 +84,7 @@
       spamd = 56;
       #networkmanager = 57; # unused
       nslcd = 58;
-      #scanner = 59; # unused
+      scanner = 59;
       nginx = 60;
       chrony = 61;
       #systemd-journal = 62; # unused
