@@ -212,10 +212,8 @@ in
 
       script = 
         "
-          ${config.systemd.package}/bin/systemctl systemctl reset-failed cjdns.service
           ${config.systemd.package}/bin/systemctl restart cjdns.service
         ";
-      postStop = "${config.systemd.package}/bin/systemctl systemctl reset-failed cjdns-restart.service";
       serviceConfig = {
         StartLimitInterval = 0; 
         };
