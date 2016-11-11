@@ -14,6 +14,7 @@
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? false, eigen
+, enableCuda ? false, cudatoolkit, gcc49
 }:
 
 let
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
+    ++ lib.optional enableCuda [ cudatoolkit gcc49 ]
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -90,7 +92,10 @@ stdenv.mkDerivation rec {
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
-  ] ++ lib.optionals enableContrib [ "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules" ];
+    (opencvFlag "CUDA" enableCuda)
+    (opencvFlag "CUBLAS" enableCuda)
+  ] ++ lib.optionals enableContrib [ "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules" ]
+  ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ];
 
   enableParallelBuilding = true;
 
