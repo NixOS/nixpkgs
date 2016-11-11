@@ -46,10 +46,13 @@ in
 
   callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
 
-  forceNativeDrv = drv : if crossSystem == null then drv else
-    (drv // { crossDrv = drv.nativeDrv; });
-
-  stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
+  forceNativeDrv = drv:
+    # Even when cross compiling, some packages come from the stdenv's
+    # bootstrapping package set. Those packages are only built for the native
+    # platform.
+    if crossSystem != null && drv ? crossDrv
+    then drv // { crossDrv = drv.nativeDrv; }
+    else drv;
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
