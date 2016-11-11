@@ -1,11 +1,7 @@
 { stdenv, fetchurl, dpkg, busybox, systemd }:
 
 stdenv.mkDerivation rec {
-<<<<<<< HEAD
-  name = "molly-guard";
-=======
   name = "molly-guard-${version}";
->>>>>>> upstream/master
   version = "0.6.3";
 
   src = fetchurl {
