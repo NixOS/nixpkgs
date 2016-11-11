@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       --replace 'LOS::AppPrefix()+"share/fluxbox' "\"${fluxbox}/share/fluxbox"
   '';
 
-  qmakeFlags = [ "LINUX_DISTRO=NixOS" ];
+  qmakeFlags = [ "LINUX_DISTRO=NixOS" "CONFIG+=WITH_I18N" ];
 
   enableParallelBuilding = true;
 

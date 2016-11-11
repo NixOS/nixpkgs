@@ -461,6 +461,8 @@ in
 
   azure-cli = nodePackages.azure-cli;
 
+  azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
@@ -748,6 +750,8 @@ in
   cherrytree = callPackage ../applications/misc/cherrytree { };
 
   chntpw = callPackage ../tools/security/chntpw { };
+
+  clipster = callPackage ../tools/misc/clipster { };
 
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
@@ -1812,15 +1816,11 @@ in
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
 
-  gitlab = callPackage ../applications/version-management/gitlab {
-    ruby = ruby_2_2;
-  };
+  gitlab = callPackage ../applications/version-management/gitlab { };
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
-  gitlab-shell = callPackage ../applications/version-management/gitlab-shell {
-    ruby = ruby_2_2;
-  };
+  gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
 
@@ -2989,6 +2989,8 @@ in
   offlineimap = callPackage ../tools/networking/offlineimap { };
 
   oh-my-zsh = callPackage ../shells/oh-my-zsh { };
+
+  opencc = callPackage ../tools/text/opencc { };
 
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
@@ -8717,6 +8719,7 @@ in
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
   openssl = openssl_1_0_2;
+  openssl-steam = openssl_1_0_2-steam;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
@@ -8727,7 +8730,8 @@ in
     })
     openssl_1_0_1
     openssl_1_0_2
-    openssl_1_1_0;
+    openssl_1_1_0
+    openssl_1_0_2-steam;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -9623,7 +9627,6 @@ in
     static = true;
   }));
 
-  zeromq2 = callPackage ../development/libraries/zeromq/2.x.nix {};
   zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
   zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix {};
   zeromq = zeromq4;
@@ -11261,6 +11264,8 @@ in
   golint = callPackage ../development/tools/golint { };
 
   godep = callPackage ../development/tools/godep { };
+
+  godef = callPackage ../development/tools/godef { };
 
   goimports = callPackage ../development/tools/goimports { };
 

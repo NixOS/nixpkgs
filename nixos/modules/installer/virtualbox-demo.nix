@@ -18,5 +18,5 @@ with lib;
 
   # Add some more video drivers to give X11 a shot at working in
   # VMware and QEMU.
-  services.xserver.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" ];
+  services.xserver.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" "modesetting" ];
 }

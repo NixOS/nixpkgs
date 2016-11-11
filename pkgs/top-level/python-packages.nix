@@ -4091,12 +4091,14 @@ in {
 
     buildInputs = with self; [ requests2 six pytest ];
 
+    # No tests distributed. https://github.com/cablehead/python-consul/issues/133
+    doCheck = false;
+
     meta = {
       description = "Python client for Consul (http://www.consul.io/)";
       homepage = https://github.com/cablehead/python-consul;
       license = licenses.mit;
       maintainers = with maintainers; [ desiderius ];
-      broken = true;
     };
   });
 
@@ -6066,14 +6068,22 @@ in {
 
   docker = buildPythonPackage rec {
     name = "docker-py-${version}";
-    version = "1.9.0";
+    version = "1.10.6";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-py/${name}.tar.gz";
-      sha256 = "0zkdgz6akzfdda29y4bwa444r0sr2py5pwvvh6bnsy25lwabkikd";
+      sha256 = "05f49f6hnl7npmi7kigg0ibqk8s3fhzx1ivvz1kqvlv4ay3paajc";
     };
 
-    propagatedBuildInputs = with self; [ six requests2 websocket_client ipaddress backports_ssl_match_hostname ];
+    propagatedBuildInputs = with self; [
+      six
+      requests2
+      websocket_client
+      ipaddress
+      backports_ssl_match_hostname
+      docker_pycreds
+    ];
 
     # Version conflict
     doCheck = false;
@@ -6098,6 +6108,28 @@ in {
     meta = {
       description = "Functionality needed to operate the pseudo-tty (PTY) allocated to a docker container";
       homepage = https://github.com/d11wtq/dockerpty;
+      license = licenses.asl20;
+    };
+  };
+
+  docker_pycreds = buildPythonPackage rec {
+    name = "docker-pycreds-${version}";
+    version = "0.2.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/docker-pycreds/${name}.tar.gz";
+      sha256 = "0j3k5wk3bww5y0f2rvgzsin0q98k0i9j308vpsmxidw0y8n3m0wk";
+    };
+
+    doCheck = false; # require docker-credential-helpers binaries
+
+    propagatedBuildInputs = with self; [
+      six
+    ];
+
+    meta = {
+      description = "Python bindings for the docker credentials store API.";
+      homepage = https://github.com/shin-/dockerpy-creds;
       license = licenses.asl20;
     };
   };
@@ -18617,11 +18649,12 @@ in {
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-3.3.1";
+    name = "Pillow-${version}";
+    version = "3.4.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/Pillow/${name}.tar.gz";
-      sha256 = "3491ca65d9fdba4db094ab3f8e17170425e7dd670e507921a665a1975d1b3df1";
+      sha256 = "0ee9975c05602e755ff5000232e0335ba30d507f6261922a658ee11b1cec36d1";
     };
 
     # Check is disabled because of assertion errors, see
@@ -18656,18 +18689,14 @@ in {
 
     meta = {
       homepage = "https://python-pillow.github.io/";
-
       description = "Fork of The Python Imaging Library (PIL)";
-
       longDescription = ''
         The Python Imaging Library (PIL) adds image processing
         capabilities to your Python interpreter.  This library
         supports many file formats, and provides powerful image
         processing and graphics capabilities.
       '';
-
       license = "http://www.pythonware.com/products/pil/license.htm";
-
       maintainers = with maintainers; [ goibhniu prikhi ];
     };
   };
@@ -23136,11 +23165,11 @@ in {
   };
 
   sqlmap = buildPythonPackage {
-    name = "sqlmap-1.0.9.post5";
+    name = "sqlmap-1.0.11";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sqlmap/sqlmap-1.0.9.post5.tar.gz";
-      sha256 = "0g8sjky8anrmcisc697b5qndp88qmay35kng9sz9x46wd3agm9pa";
+      url = "mirror://pypi/s/sqlmap/sqlmap-1.0.11.tar.gz";
+      sha256 = "1x4amyjqnd9j5g2kp9nvg8pr5sqzbhr8gd0m6d671bshvgj568vr";
     };
 
     meta = with pkgs.stdenv.lib; {
@@ -30398,7 +30427,7 @@ in {
         "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
       sha256 = if stdenv.isDarwin then
         "1gjybh3j3rn34bzhsxsfdbqgsr4jh50qyx2wqywvcb24fkvy40j9" else
-        "15v7iyry8bmp5wcc1rr4bkp80f3887rl99zqf8pys5bad4gldbkh";
+        "0g05pa4z6kdy0giz7hjgjgwf4zzr5l8cf1zh247ymixlikn3fnpx";
     };
 
     propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig mock];
