@@ -1,10 +1,29 @@
-{ stdenv, fetchurl, perlSupport, libX11, libXt, libXft, ncurses, perl,
-  fontconfig, freetype, pkgconfig, libXrender, gdkPixbufSupport, gdk_pixbuf,
-  unicode3Support }:
+{ stdenv, fetchurl, makeDesktopItem, perlSupport, libX11, libXt, libXft,
+  ncurses, perl, fontconfig, freetype, pkgconfig, libXrender,
+  gdkPixbufSupport, gdk_pixbuf, unicode3Support }:
 
 let
   pname = "rxvt-unicode";
   version = "9.22";
+
+  desktopItem = makeDesktopItem {
+    name = "${pname}";
+    exec = "urxvt";
+    icon = "utilities-terminal";
+    comment = meta.description;
+    desktopName = "URxvt";
+    genericName = "${pname}";
+    categories = "System;TerminalEmulator;";
+  };
+
+  meta = with stdenv.lib; {
+    description = "A clone of the well-known terminal emulator rxvt";
+    homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
+    downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";
+    maintainers = [ maintainers.mornfall ];
+    platforms = platforms.unix;
+  };
+
 in
 
 stdenv.mkDerivation (rec {
@@ -47,13 +66,6 @@ stdenv.mkDerivation (rec {
   postInstall = ''
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+    cp -r ${desktopItem}/share/applications/ $out/share/
   '';
-
-  meta = {
-    description = "A clone of the well-known terminal emulator rxvt";
-    homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
-    downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
-    platforms = stdenv.lib.platforms.unix;
-  };
 })
