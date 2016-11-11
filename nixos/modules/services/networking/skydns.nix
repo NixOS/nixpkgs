@@ -11,7 +11,7 @@ in {
 
     etcd = {
       machines = mkOption {
-        default = [ "http://localhost:4001" ];
+        default = [ "http://127.0.0.1:2379" ];
         type = types.listOf types.str;
         description = "Skydns list of etcd endpoints to connect to.";
       };
