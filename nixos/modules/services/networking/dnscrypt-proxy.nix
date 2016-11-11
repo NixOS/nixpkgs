@@ -263,7 +263,7 @@ in
     systemd.services.dnscrypt-proxy = {
       description = "dnscrypt-proxy daemon";
 
-      after = [ "network-online.target" ]
+      after = [ "network.target" ]
         ++ optional apparmorEnabled "apparmor.service"
         ++ optional useUpstreamResolverList "init-dnscrypt-proxy-statedir.service";
 
