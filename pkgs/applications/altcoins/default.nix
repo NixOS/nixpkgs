@@ -67,4 +67,7 @@ rec {
     withGui = false;
     openssl = openssl_1_1_0;
   };
+
+  zcashNh = callPackage ./zcash-nh.nix { };
+
 }
