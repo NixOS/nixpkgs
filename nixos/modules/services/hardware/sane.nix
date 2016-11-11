@@ -17,12 +17,21 @@ let
     '';
   };
 
+  netConf = pkgs.writeTextFile {
+    name = "net.conf";
+    destination = "/etc/sane.d/net.conf";
+    text = ''
+      ${lib.optionalString config.services.saned.enable "localhost"}
+      ${config.hardware.sane.netConf}
+    '';
+  };
+
   env = {
     SANE_CONFIG_DIR = config.hardware.sane.configDir;
     LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
   };
 
-  backends = [ pkg ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
+  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
   saneConfig = pkgs.mkSaneConfig { paths = backends; };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
@@ -70,6 +79,15 @@ in
       type = types.string;
       internal = true;
       description = "The value of SANE_CONFIG_DIR.";
+    };
+
+    hardware.sane.netConf = mkOption {
+      type = types.lines;
+      default = "";
+      example = "192.168.0.16";
+      description = ''
+        Network hosts that should be probed for remote scanners.
+      '';
     };
 
     services.saned.enable = mkOption {

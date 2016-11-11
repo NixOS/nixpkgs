@@ -13,7 +13,7 @@ let installSanePath = path: ''
       if [ -e "${path}/etc/sane.d" ]; then
         find "${path}/etc/sane.d" -maxdepth 1 -not -type d | while read conf; do
           name="$(basename $conf)"
-          if [ "$name" = "dll.conf" ] || [ "$name" = "saned.conf" ]; then
+          if [ "$name" = "dll.conf" ] || [ "$name" = "saned.conf" ] || [ "$name" = "net.conf" ]; then
             cat "$conf" >> "$out/etc/sane.d/$name"
           else
             ln -s "$conf" "$out/etc/sane.d/$name"
