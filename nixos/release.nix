@@ -221,7 +221,7 @@ in rec {
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
-  #tests.cjdns = callTest tests/cjdns.nix {};
+  tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
   tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
   tests.containers-bridge = callTest tests/containers-bridge.nix {};
