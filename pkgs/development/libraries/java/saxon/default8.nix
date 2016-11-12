@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "saxonb-8.8";
   src = fetchurl {
     url = mirror://sourceforge/saxon/saxonb8-8j.zip;
-    md5 = "35c4c376174cfe340f179d2e44dd84f0";
+    sha256 = "15bzrfyd2f1045rsp9dp4znyhmizh1pm97q8ji2bc0b43q23xsb8";
   };
 
   buildInputs = [unzip];

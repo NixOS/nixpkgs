@@ -9,7 +9,7 @@ let
   opensslCrossSystem = stdenv.cross.openssl.system or
     (throw "openssl needs its platform name cross building");
 
-  common = args@{ version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+  common = args@{ version, sha256, patches ? [], configureFlags ? [], makeDepend ? false }: stdenv.mkDerivation rec {
     name = "openssl-${version}";
 
     src = fetchurl {
@@ -45,7 +45,10 @@ let
     ] ++ stdenv.lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
-    ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2";
+    ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
+    ++ args.configureFlags or [];
+
+    postConfigure = if makeDepend then "make depend" else null;
 
   makeFlags = [ "MANDIR=$(man)/share/man" ];
 
@@ -117,8 +120,16 @@ in {
   };
 
   openssl_1_1_0 = common {
-    version = "1.1.0b";
-    sha256 = "1xznrqvb1dbngv2k2nb6da6fdw00c01sy2i36yjdxr4vpxrf0pd4";
+    version = "1.1.0c";
+    sha256 = "1xfn5ydl14myd9wgxm4nxy5a42cpp1g12ijf3g9m4mz0l90n8hzw";
+  };
+
+  openssl_1_0_2-steam = common {
+    version = "1.0.2j";
+    sha256 = "0cf4ar97ijfc7mg35zdgpad6x8ivkdx9qii6mz35khi1ps9g5bz7";
+    configureFlags = [ "no-engine" ];
+    makeDepend = true;
+    patches = [ ./openssl-fix-cpuid_setup.patch ];
   };
 
 }

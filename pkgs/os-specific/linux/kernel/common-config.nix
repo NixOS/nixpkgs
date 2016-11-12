@@ -258,6 +258,7 @@ with stdenv.lib;
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
+  CIFS_SMB2 y
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
   ''}
@@ -341,6 +342,7 @@ with stdenv.lib;
   CGROUPS y # used by systemd
   FHANDLE y # used by systemd
   SECCOMP y # used by systemd >= 231
+  SECCOMP_FILTER y # ditto
   POSIX_MQUEUE y
   FRONTSWAP y
   FUSION y # Fusion MPT device support

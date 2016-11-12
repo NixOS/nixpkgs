@@ -64,7 +64,7 @@ in rec {
     csv2nix = name: src: import (runCommand "${name}.nix" {
       src = builtins.fetchurl src;
     } ''
-      esc() { echo "\"$(echo "$1" | sed -e 's/"\\$/\\&/')\""; }
+      esc() { echo "\"$(echo "$1" | sed -e 's/"\\$/\\&/')\""; } # ohai emacs "
       IFS=, read -r -a headings <<< "$(head -n1 "$src")"
       echo "[" > "$out"
       tail -n +2 "$src" | while IFS=, read -r -a line; do

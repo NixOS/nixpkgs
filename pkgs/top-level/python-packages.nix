@@ -4091,12 +4091,14 @@ in {
 
     buildInputs = with self; [ requests2 six pytest ];
 
+    # No tests distributed. https://github.com/cablehead/python-consul/issues/133
+    doCheck = false;
+
     meta = {
       description = "Python client for Consul (http://www.consul.io/)";
       homepage = https://github.com/cablehead/python-consul;
       license = licenses.mit;
       maintainers = with maintainers; [ desiderius ];
-      broken = true;
     };
   });
 
@@ -7454,6 +7456,44 @@ in {
       maintainers = with maintainers; [ goibhniu ];
     };
   };
+
+  hsaudiotag = buildPythonPackage (rec {
+    name = "hsaudiotag-1.1.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/hsaudiotag/${name}.tar.gz";
+      sha256 = "15hgm128p8nysfi0jb127awga3vlj0iw82l50swjpvdh01m7rda8";
+    };
+
+    # no tests
+    doCheck = false;
+
+    meta = {
+      description = "A pure Python library that lets one to read metadata from media files";
+      homepage = http://hg.hardcoded.net/hsaudiotag/;
+      license = licenses.bsd3;
+    };
+  });
+
+  hsaudiotag3k = buildPythonPackage (rec {
+    name = "hsaudiotag3k-1.1.3";
+    disabled = !isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/hsaudiotag3k/${name}.tar.gz";
+      sha256 = "0bv5k5594byr2bmhh77xv10fkdpckcmxg3w380yp30aqf83rcsx3";
+    };
+
+    # no tests
+    doCheck = false;
+
+    meta = {
+      description = "A pure Python library that lets one to read metadata from media files";
+      homepage = http://hg.hardcoded.net/hsaudiotag/;
+      license = licenses.bsd3;
+    };
+  });
 
   httpauth = buildPythonPackage rec {
     version = "0.3";
@@ -16387,6 +16427,27 @@ in {
       license = licenses.bsd3;
 
       maintainers = [ ];
+    };
+  });
+
+  plyvel = buildPythonPackage (rec {
+    name = "plyvel-0.9";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/plyvel/${name}.tar.gz";
+      sha256 = "1scq75qyks9vmjd19bx57f2y60mkdr44ajvb12p3cjg439l96zaq";
+    };
+
+    buildInputs = with self; [ pkgs.leveldb ]
+                            ++ optional isPy3k pytest;
+
+    # no tests for python2
+    doCheck = isPy3k;
+
+    meta = {
+      description = "Fast and feature-rich Python interface to LevelDB";
+      homepage = https://github.com/wbolster/plyvel;
+      license = licenses.bsd3;
     };
   });
 
@@ -30423,6 +30484,24 @@ in {
     };
   };
 
+  send2trash = buildPythonPackage (rec {
+    name = "Send2Trash-1.3.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/S/Send2Trash/${name}.tar.gz";
+      sha256 = "1zjq5ki02l0vl4f1xymsnqyxipx6q81a435p46db07l3mqg4dx1k";
+    };
+
+    # no tests
+    doCheck = false;
+
+    meta = {
+      description = "Send file to trash natively under Mac OS X, Windows and Linux";
+      homepage = https://github.com/hsoft/send2trash;
+      license = licenses.bsd3;
+    };
+  });
+
   sigtools = buildPythonPackage rec {
     name = "sigtools-${version}";
     version = "1.1a3";
@@ -30518,7 +30597,7 @@ in {
         "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
       sha256 = if stdenv.isDarwin then
         "1gjybh3j3rn34bzhsxsfdbqgsr4jh50qyx2wqywvcb24fkvy40j9" else
-        "15v7iyry8bmp5wcc1rr4bkp80f3887rl99zqf8pys5bad4gldbkh";
+        "0g05pa4z6kdy0giz7hjgjgwf4zzr5l8cf1zh247ymixlikn3fnpx";
     };
 
     propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig mock];

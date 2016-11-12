@@ -1446,6 +1446,8 @@ in
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
+  drone = callPackage ../development/tools/continuous-integration/drone { };
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
@@ -1819,15 +1821,11 @@ in
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
 
-  gitlab = callPackage ../applications/version-management/gitlab {
-    ruby = ruby_2_2;
-  };
+  gitlab = callPackage ../applications/version-management/gitlab { };
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
-  gitlab-shell = callPackage ../applications/version-management/gitlab-shell {
-    ruby = ruby_2_2;
-  };
+  gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
 
@@ -8716,6 +8714,7 @@ in
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
   openssl = libressl;
+  openssl-steam = openssl_1_0_2-steam;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
@@ -8726,7 +8725,8 @@ in
     })
     openssl_1_0_1
     openssl_1_0_2
-    openssl_1_1_0;
+    openssl_1_1_0
+    openssl_1_0_2-steam;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -11258,6 +11258,8 @@ in
   };
 
   go-bindata = callPackage ../development/tools/go-bindata { };
+
+  go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
   gocode = callPackage ../development/tools/gocode { };
 
