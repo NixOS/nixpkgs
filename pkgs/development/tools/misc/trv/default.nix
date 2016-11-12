@@ -1,6 +1,7 @@
 {stdenv, fetchFromGitHub, ocaml, findlib, camlp4, core_p4, async_p4, async_unix_p4
 , re2_p4, async_extra_p4, sexplib_p4, async_shell, core_extended_p4, async_find
-, cohttp, uri, tzdata}:
+, cohttp, conduit, magic-mime, uri, tzdata
+}:
 
 assert stdenv.lib.versionOlder "4.02" ocaml.version;
 
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ ocaml findlib camlp4 ];
+  buildInputs = [ ocaml findlib camlp4 conduit magic-mime ];
   propagatedBuildInputs = [ core_p4 async_p4 async_unix_p4
                             async_extra_p4 sexplib_p4 async_shell core_extended_p4
                             async_find cohttp uri re2_p4 ];
