@@ -14909,6 +14909,20 @@ in {
     };
   };
 
+  pint = buildPythonPackage rec {
+    name = "pint-${version}";
+    version = "0.7.2";
+
+    meta = {
+      description = "Physical quantities module";
+      license = licenses.bsd3;
+    };
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/c5/e5/1c317a30e51810d6ac1d744a6c232569c5a06d4478bdd20c2f0614d117e7/Pint-0.7.2.tar.gz";
+      sha256 = "1bbp5s34gcb9il2wyz4spznshahwbjvwi5bhjm7bnxk358spvf9q";
+    };
+  };
 
   plover = buildPythonPackage rec {
     name = "plover-${version}";
