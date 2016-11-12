@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "01g88b9b1510jbks9v4xr4hyw8zy9nivxsl86xi810xi7qb53np1";
   };
 
-  buildInputs = [ makeWrapper jre8 which gawk ];
+  buildInputs = [ makeWrapper jre which gawk ];
 
   installPhase = ''
     mkdir -p "$out/share/neo4j"
