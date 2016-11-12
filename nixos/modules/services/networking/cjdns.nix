@@ -242,7 +242,7 @@ in
                 | ${pkg}/bin/cjdroute
          ''
       );
-      
+
       serviceConfig = {
         Type = "forking";
         Restart = "always";
