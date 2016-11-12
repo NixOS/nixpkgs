@@ -6,18 +6,18 @@ let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
-      sha256 = "0k05ybvnv0zx4vfx55jyhia38qqysaj68mapq0gwgf74k3a943g2";
+      sha256 = "1skbzmrcjbw00a3jnbl2llqwz3ahsgvq74mjav68s2hw1wjidvk6";
     }
     else {
       arch = "i386";
       gcclib = "${stdenv.cc.cc.lib}/lib";
-      sha256 = "09z9idmp7idcq0alwkla9kal9h82dx11jqh678lc4rviqggxzxhp";
+      sha256 = "09h71i3k9d24ki81jdwhnav63fqbc44glbx228s9g3cr4ap41jcx";
     };
 in 
 stdenv.mkDerivation rec {
 
   name = "yandex-disk-${version}";
-  version = "0.1.5.948";
+  version = "0.1.5.978";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
