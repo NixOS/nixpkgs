@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct, type_conv, zarith, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, cstruct, type_conv, zarith, ocaml_lwt, ounit }:
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "15gffvixk12ghsfra9amfszd473c8h188zfj03ngvblbdm0d80m0";
   };
 
-  buildInputs = [ ocaml findlib type_conv ounit ];
+  buildInputs = [ ocaml findlib type_conv ocaml_lwt ounit ];
   propagatedBuildInputs = [ cstruct zarith ];
 
   configureFlags = "--enable-tests";
