@@ -1,0 +1,21 @@
+diff -rc db-4.4.20.NC-old/os/os_flock.c db-4.4.20.NC/os/os_flock.c
+*** db-4.4.20.NC-old/os/os_flock.c	Mon Jun 20 16:59:01 2005
+--- db-4.4.20.NC/os/os_flock.c	Wed Jun  7 17:01:49 2006
+***************
+*** 36,41 ****
+--- 36,50 ----
+  
+  	DB_ASSERT(F_ISSET(fhp, DB_FH_OPENED) && fhp->fd != -1);
+  
++ #ifdef __CYGWIN__
++ 	/*
++ 	 * Windows file locking interferes with read/write operations, so we
++ 	 * map the ranges to an area past the end of the file.
++ 	 */
++ 	DB_ASSERT(offset < (off_t) 1 << 62);
++ 	offset += (off_t) 1 << 62;
++ #endif
++ 
+  #ifdef HAVE_FCNTL
+  	fl.l_start = offset;
+  	fl.l_len = 1;
