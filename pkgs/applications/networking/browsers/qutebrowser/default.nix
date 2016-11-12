@@ -24,12 +24,12 @@ let
 
 in buildPythonApplication rec {
   name = "qutebrowser-${version}";
-  version = "0.8.2";
+  version = "0.8.4";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1kfxjdn1dqla8d8gcggp55zcgf4zb77knkfshd213my0iw2yzgcf";
+    sha256 = "0wc6iq7rw89625v595bs4y8spzhid6nnz2gq67f2kbjppk2rikpm";
   };
 
   # Needs tox
