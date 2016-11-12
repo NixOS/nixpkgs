@@ -20,8 +20,8 @@
   #nix.maxJobs = 8;
   ## END from generated hardware-configuration
 
-  # Use the gummiboot efi boot loader. (From default generated configuration.nix)
-  boot.loader.gummiboot.enable = true;
+  # Use the systemd-boot efi boot loader. (From default generated configuration.nix)
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Honestly forget if needed or just better for touchpad.
