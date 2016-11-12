@@ -86,7 +86,7 @@ in
         chown ${u} ${dir}
 
         if ! test -d "${cfg.directory}" ; then
-          mkdir -p -m 755 ${cfg.directory} ||
+          (mkdir -p -m 755 ${cfg.directory} && chown ${u} ${cfg.directory}) ||
             exit 1
         fi
 
