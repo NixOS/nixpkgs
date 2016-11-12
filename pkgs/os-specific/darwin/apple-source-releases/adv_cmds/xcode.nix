@@ -8,9 +8,13 @@ appleDerivation {
   #  - os/base_private.h
   #  - _simple.h
   # We disable it here for now. TODO: build pkill inside adv_cmds
+
+  # We also disable locale here because of some issues with a missing
+  # "lstdc++".
   patchPhase = ''
     substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
-      --replace "FD201DC214369B4200906237 /* pkill.c in Sources */," ""
+      --replace "FD201DC214369B4200906237 /* pkill.c in Sources */," "" \
+      --replace "FDF278D60FC6204E00D7A3C6 /* locale.cc in Sources */," ""
   '';
 
   # temporary install phase until xcodebuild has "install" support

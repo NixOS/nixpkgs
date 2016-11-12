@@ -23,10 +23,6 @@ let
     inherit sdk platformName xcbuild;
   };
 
-  developer = callPackage ./developer.nix {
-    inherit platform toolchain xcbuild;
-  };
-
   xcconfig = writeText "nix.xcconfig" ''
     SDKROOT=${sdkName}
   '';
@@ -50,13 +46,22 @@ stdenv.mkDerivation {
       ln -s $file
     done
 
+    mkdir -p $out/Library/Xcode/
+    ln -s ${xcbuild}/Library/Xcode/Specifications $out/Library/Xcode/Specifications
+
+    mkdir -p $out/Platforms/
+    ln -s ${platform} $out/Platforms/
+
+    mkdir -p $out/Toolchains/
+    ln -s ${toolchain} $out/Toolchains/
+
     wrapProgram $out/bin/xcodebuild \
       --add-flags "-xcconfig ${xcconfig}" \
       --add-flags "DERIVED_DATA_DIR=." \
-      --set DEVELOPER_DIR "${developer}"
+      --set DEVELOPER_DIR "$out"
     wrapProgram $out/bin/xcrun \
       --add-flags "-sdk ${sdkName}" \
-      --set DEVELOPER_DIR "${developer}"
+      --set DEVELOPER_DIR "$out"
   '';
 
   passthru = {

@@ -12,33 +12,11 @@ let
     ProjectName = "OSXPlatformSupport";
   };
 
-  Tools = [
-    {
-      Identifier = "com.apple.build-tools.nmedit";
-      Type = "Tool";
-      Name = "Nmedit";
-    }
-    {
-      Identifier = "com.apple.compilers.resource-copier";
-      Type = "Tool";
-      Name = "Resource Copier";
-    }
-    {
-      Identifier = "com.apple.compilers.yacc";
-      Type = "Tool";
-      Name = "Yacc";
-      InputFileTypes = [ "sourcecode.yacc" ];
-      ExecDescription = "Yacc $(InputFile)";
-    }
-    {
-      Identifier = "com.apple.compilers.lex";
-      Type = "Tool";
-      Name = "Lex";
-      ExecDescription = "Lex $(InputFile)";
-      InputFileTypes = [ "sourcecode.lex" ];
-    }
-  ];
+  # These files are all based off of Xcode spec fies found in
+  # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Speciications/.
 
+  # Based off of the MacOSX Architectures.xcpsec file. All i386 stuff
+  # is removed because NixPkgs only supports darwin-x86_64.
   Architectures = [
     {
 		  Identifier = "Standard";
@@ -81,6 +59,8 @@ let
     }
   ];
 
+  # Based off of the MacOSX Package Types.xcpsec file. Only keep the
+  # bare minimum needed.
   PackageTypes = [
     {
       Identifier = "com.apple.package-type.mach-o-executable";
@@ -123,6 +103,9 @@ let
     }
   ];
 
+  # Based off of the MacOSX Product Types.xcpsec file. All
+  # bundles/wrapper are removed, because we prefer dynamic products in
+  # NixPkgs.
   ProductTypes = [
     {
       Identifier = "com.apple.product-type.tool";
@@ -158,7 +141,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/Developer/Library/Xcode/Specifications/
     cd $out/Developer/Library/Xcode/Specifications/
-    plutil -convert xml1 -o Tools.xcspec ${writeText "Tools.xcspec" (builtins.toJSON Tools)}
     plutil -convert xml1 -o Architectures.xcspec ${writeText "Architectures.xcspec" (builtins.toJSON Architectures)}
     plutil -convert xml1 -o PackageTypes.xcspec ${writeText "PackageTypes.xcspec" (builtins.toJSON PackageTypes)}
     plutil -convert xml1 -o ProductTypes.xcspec ${writeText "ProductTypes.xcspec" (builtins.toJSON ProductTypes)}

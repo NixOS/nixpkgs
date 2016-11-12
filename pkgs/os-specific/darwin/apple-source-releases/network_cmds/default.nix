@@ -3,7 +3,7 @@
 appleDerivation rec {
   buildInputs = [ xcbuild openssl xnu Librpcsvc libpcap developer_cmds ];
 
-  NIX_CFLAGS_COMPILE = " -I./unbound -I${xnu}/Library/Frameworks/System.framework/Headers/ -D__APPLE_USE_RFC_2292 -DIPV6_DONTFRAG=14 -DINET6";
+  NIX_CFLAGS_COMPILE = " -I./unbound -I${xnu}/Library/Frameworks/System.framework/Headers/";
 
   # "spray" requires some files that aren't compiling correctly in xcbuild.
   # "rtadvd" seems to fail with some missing constants.
