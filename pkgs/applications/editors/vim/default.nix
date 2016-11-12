@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, ncurses, gettext, pkgconfig
+{ stdenv, fetchurl, callPackage, ncurses, gettext, pkgconfig
 # default vimrc
 , vimrc ? fetchurl {
     name = "default-vimrc";
@@ -8,18 +8,13 @@
 # apple frameworks
 , Carbon, Cocoa }:
 
+let
+  common = callPackage ./common.nix {};
+in
 stdenv.mkDerivation rec {
   name = "vim-${version}";
-  version = "7.4.1585";
 
-  src = fetchFromGitHub {
-    owner = "vim";
-    repo = "vim";
-    rev = "v${version}";
-    sha256 = "1kjdwpka269i4cyl0rmnmzg23dl26g65k26h32w8ayzfm3kbj123";
-  };
-
-  enableParallelBuilding = true;
+  inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
 
   buildInputs = [ ncurses pkgconfig ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
@@ -29,8 +24,6 @@ stdenv.mkDerivation rec {
     "--enable-multibyte"
     "--enable-nls"
   ];
-
-  hardeningDisable = [ "fortify" ];
 
   postInstall = ''
     ln -s $out/bin/vim $out/bin/vi
@@ -62,12 +55,4 @@ stdenv.mkDerivation rec {
   # patchPhase = ''
   #   sed -i -e 's/as_fn_error.*int32.*/:/' src/auto/configure
   # '';
-
-  meta = with stdenv.lib; {
-    description = "The most popular clone of the VI editor";
-    homepage    = http://www.vim.org;
-    license = licenses.vim;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-  };
 }
