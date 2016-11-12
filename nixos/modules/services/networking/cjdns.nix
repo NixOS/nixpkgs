@@ -204,24 +204,10 @@ in
     boot.kernelModules = [ "tun" ];
 
     # networking.firewall.allowedUDPPorts = ...
-    systemd.services.cjdns-restart = {
-      description = "cjdns: restart after resuming from sleep, hibernation, hybrid-sleep and hybrid-suspend; and other failures";
-      wantedBy = ["sleep.target"];
-      bindsTo = ["network-online.target"];
-      after = ["sleep.target" "network-online.target"];
 
-      script = 
-        "
-          ${config.systemd.package}/bin/systemctl restart cjdns.service
-        ";
-      serviceConfig = {
-        StartLimitInterval = 0; 
-        };
-    };
-      
     systemd.services.cjdns = {
       description = "cjdns: routing engine designed for security, scalability, speed and ease of use";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" "sleep.target"];
       after = [ "network-online.target" ];
       bindsTo = [ "network-online.target" ];
 
@@ -257,7 +243,6 @@ in
          ''
       );
       
-      onFailure = ["cjdns-restart.service"];
       serviceConfig = {
         Type = "forking";
         Restart = "always";
