@@ -10153,7 +10153,9 @@ in
 
   popa3d = callPackage ../servers/mail/popa3d { };
 
-  postfix = callPackage ../servers/mail/postfix { };
+  postfix = callPackage ../servers/mail/postfix {
+    openssl = openssl_1_1_0;
+  };
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
 
