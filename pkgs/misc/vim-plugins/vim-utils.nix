@@ -30,7 +30,7 @@ vim-with-plugins in PATH:
       # provide plugin which can be loaded manually:
       { name = "phpCompletion"; tag = "lazy"; }
 
-      # full ducomentation at github.com/MarcWeber/vim-addon-manager
+      # full documentation at github.com/MarcWeber/vim-addon-manager
     ];
 
     # there is a pathogen implementation as well, but its startup is slower and [VAM] has more feature
