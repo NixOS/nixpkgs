@@ -1,14 +1,14 @@
-From 49d45957ddaafe13a9cc7bacd1b9665fe9c517ac Mon Sep 17 00:00:00 2001
+From 942064886eae63ed7aa0a63c07e9f175898dddf7 Mon Sep 17 00:00:00 2001
 From: David McFarland <corngood@gmail.com>
 Date: Thu, 25 Aug 2016 22:17:06 -0300
-Subject: [PATCH] disable dal by default
+Subject: [PATCH 14/14] disable dal by default
 
 ---
  amd/amdgpu/amdgpu_drv.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/amd/amdgpu/amdgpu_drv.c b/amd/amdgpu/amdgpu_drv.c
-index 793528b..9a4dfcc 100644
+index 66f3242..df62815 100644
 --- a/amd/amdgpu/amdgpu_drv.c
 +++ b/amd/amdgpu/amdgpu_drv.c
 @@ -79,7 +79,7 @@ int amdgpu_vm_block_size = -1;
@@ -21,5 +21,5 @@ index 793528b..9a4dfcc 100644
  int amdgpu_sched_hw_submission = 2;
  int amdgpu_powerplay = -1;
 -- 
-2.9.3
+2.10.1
 
