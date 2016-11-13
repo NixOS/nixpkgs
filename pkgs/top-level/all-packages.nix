@@ -4592,6 +4592,7 @@ in
 
   clang = llvmPackages.clang;
 
+  clang-svn = llvmPackages-svn.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
@@ -5119,6 +5120,7 @@ in
 
   llvm = llvmPackages.llvm;
 
+  llvm-svn = llvmPackages-svn.llvm;
   llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
@@ -5154,6 +5156,10 @@ in
   };
 
   llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 {
+    inherit (stdenvAdapters) overrideCC;
+  };
+
+  llvmPackages-svn = callPackage ../development/compilers/llvm/svn {
     inherit (stdenvAdapters) overrideCC;
   };
 
