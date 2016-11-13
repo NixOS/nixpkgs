@@ -8,7 +8,7 @@ rec {
   };
   vanillaStdenv = (import ../. (args // argClobber // {
     allPackages = args: allPackages (argClobber // args);
-  })).stdenv // {
+  })) // {
     # Needed elsewhere as a hacky way to pass the target
     cross = crossSystem;
   };

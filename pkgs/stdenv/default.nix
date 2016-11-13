@@ -8,7 +8,7 @@
 { system, allPackages ? import ../.., platform, config, crossSystem, lib }:
 
 
-rec {
+let
 
 
   # The native (i.e., impure) build environment.  This one uses the
@@ -43,7 +43,7 @@ rec {
   inherit (import ./custom { inherit system allPackages platform crossSystem config lib; }) stdenvCustom;
 
   # Select the appropriate stdenv for the platform `system'.
-  stdenv =
+in
     if crossSystem != null then
       if crossSystem.useiOSCross or false then stdenvCrossiOS
       else stdenvCross else
@@ -60,5 +60,4 @@ rec {
     if system == "i686-cygwin" then stdenvNative else
     if system == "x86_64-cygwin" then stdenvNative else
     if system == "x86_64-freebsd" then stdenvFreeBSD else
-    stdenvNative;
-}
+    stdenvNative
