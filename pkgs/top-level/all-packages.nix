@@ -12994,6 +12994,8 @@ in
 
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
+  getxbook = callPackage ../applications/misc/getxbook {};
+
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
     inherit (gnome2) libart_lgpl;
     webkit = null;
