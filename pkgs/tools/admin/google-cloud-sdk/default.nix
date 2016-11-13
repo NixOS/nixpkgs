@@ -2,6 +2,9 @@
 
 with python27Packages;
 
+# other systems not supported yet
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+
 stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
   version = "134.0.0";
