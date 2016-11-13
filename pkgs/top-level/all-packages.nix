@@ -16350,6 +16350,8 @@ in
   paml = callPackage ../applications/science/biology/paml { };
 
   plink = callPackage ../applications/science/biology/plink/default.nix { };
+  
+  plink-ng = callPackage ../applications/science/biology/plink-ng/default.nix { };
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
 
