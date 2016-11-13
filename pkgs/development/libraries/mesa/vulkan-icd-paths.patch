@@ -1,0 +1,26 @@
+diff --git a/src/amd/vulkan/Makefile.am b/src/amd/vulkan/Makefile.am
+index c559a95..733fbaa 100644
+--- a/src/amd/vulkan/Makefile.am
++++ b/src/amd/vulkan/Makefile.am
+@@ -166,7 +166,7 @@ dev_icd.json : dev_icd.json.in
+ 
+ radeon_icd.@host_cpu@.json : radeon_icd.json.in
+ 	$(AM_V_GEN) $(SED) \
+-		-e "s#@install_libdir@#${libdir}#" \
++		-e "s#@install_libdir@#${drivers}/lib#" \
+ 		< $(srcdir)/radeon_icd.json.in > $@
+ 
+ include $(top_srcdir)/install-lib-links.mk
+diff --git a/src/intel/vulkan/Makefile.am b/src/intel/vulkan/Makefile.am
+index 4a7bb18..2dee07d 100644
+--- a/src/intel/vulkan/Makefile.am
++++ b/src/intel/vulkan/Makefile.am
+@@ -178,7 +178,7 @@ dev_icd.json : dev_icd.json.in
+ 
+ intel_icd.@host_cpu@.json : intel_icd.json.in
+ 	$(AM_V_GEN) $(SED) \
+-		-e "s#@install_libdir@#${libdir}#" \
++		-e "s#@install_libdir@#${drivers}/lib#" \
+ 		< $(srcdir)/intel_icd.json.in > $@
+ 
+ # Libvulkan with dummy gem. Used for unit tests.
