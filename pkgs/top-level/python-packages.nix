@@ -8973,14 +8973,17 @@ in {
       sha256 = "0g5w1cira1bl9f2ji11cbr9daj947nrfydydymjp4bbxbpl2jnaq";
     };
 
-    doCheck = pythonOlder "3.5";
-
     buildInputs = with self; [
       decorator
       appdirs
       six
       numpy
+      pytest
     ];
+
+    checkPhase = ''
+      py.test -k 'not test_persistent_dict'
+    '';
 
     meta = {
       homepage = https://github.com/inducer/pytools/;
