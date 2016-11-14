@@ -198,6 +198,7 @@
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   javaguirre = "Javier Aguirre <contacto@javaguirre.net>";
   jb55 = "William Casarin <bill@casarin.me>";
+  jbedo = "Justin Bedő <cu@cua0.org>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jefdaj = "Jeffrey David Johnson <jefdaj@gmail.com>";
   jfb = "James Felix Black <james@yamtime.com>";

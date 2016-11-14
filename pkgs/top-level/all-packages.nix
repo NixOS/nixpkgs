@@ -282,6 +282,8 @@ in
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
+  singularity-tools = callPackage ../build-support/singularity-tools { };
+
   srcOnly = args: callPackage ../build-support/src-only args;
 
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
@@ -13255,6 +13257,8 @@ in
   hyperterm = self.hyper;
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
+
+  singularity = callPackage ../applications/virtualization/singularity { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
