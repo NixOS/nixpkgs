@@ -4,11 +4,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   p_name  = "xfce4-eyes-plugin";
   ver_maj = "4.4";
-  ver_min = "3";
+  ver_min = "4";
 
   src = fetchurl {
     url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0z4161i14m73i515ymhj34c1ycz5fmjmbczdd8plx3nvrxdk76jb";
+    sha256 = "1jh02hylvsvfpxrx0bq6fzgy6vnxf9qakgpbfvr63lfkd1dyh314";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
