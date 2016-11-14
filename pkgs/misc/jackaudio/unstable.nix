@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     python waf configure --prefix=$out \
       ${optionalString (optDbus != null) "--dbus"} \
       --classic \
-      --profile \
       ${optionalString (optLibffado != null) "--firewire"} \
       ${optionalString (optAlsaLib != null) "--alsa"} \
       --autostart=${if (optDbus != null) then "dbus" else "classic"} \

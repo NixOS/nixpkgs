@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.remotesensing.org/geotiff/geotiff.html;
     license = stdenv.lib.licenses.mit;
     maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

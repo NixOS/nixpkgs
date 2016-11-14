@@ -86,6 +86,10 @@ rec {
         ZRAM m
         NETCONSOLE m
 
+        # Disable OABI to have seccomp_filter (required for systemd)
+        # https://github.com/raspberrypi/firmware/issues/651
+        OABI_COMPAT n
+
         # Fail to build
         DRM n
         SCSI_ADVANSYS n
@@ -187,6 +191,10 @@ rec {
 
         ZRAM m
 
+        # Disable OABI to have seccomp_filter (required for systemd)
+        # https://github.com/raspberrypi/firmware/issues/651
+        OABI_COMPAT n
+
         # Fail to build
         DRM n
         SCSI_ADVANSYS n
@@ -267,6 +275,10 @@ rec {
         CIFS_ACL y
 
         ZRAM m
+
+        # Disable OABI to have seccomp_filter (required for systemd)
+        # https://github.com/raspberrypi/firmware/issues/651
+        OABI_COMPAT n
 
         # Fail to build
         DRM n

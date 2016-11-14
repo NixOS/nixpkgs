@@ -19,7 +19,8 @@ in
   # E.g., if KDE is enabled, it supersedes xterm.
   imports = [
     ./none.nix ./xterm.nix ./xfce.nix ./kde4.nix ./kde5.nix
-    ./lxqt.nix ./enlightenment.nix ./gnome3.nix ./kodi.nix
+    ./lumina.nix ./lxqt.nix ./enlightenment.nix ./gnome3.nix
+    ./kodi.nix
   ];
 
   options = {

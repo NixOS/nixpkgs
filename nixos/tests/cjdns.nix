@@ -57,7 +57,6 @@ import ./make-test.nix ({ pkgs, ...} : {
                   connectTo."192.168.0.1:1024}" =
                     { password = carolPassword;
                       publicKey = carolPubKey;
-                      hostname = "carol";
                     };
                 };
             };

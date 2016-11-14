@@ -1,32 +1,36 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam }:
+{ stdenv, buildOcaml, fetchurl, ocaml, findlib, ocamlbuild, opam, cmdliner}:
 let
   pname = "uutf";
   webpage = "http://erratique.ch/software/${pname}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "3.12";
+buildOcaml rec {
+  name = pname;
+  version = "0.9.4";
 
-stdenv.mkDerivation rec {
-  name = "ocaml-${pname}-${version}";
-  version = "0.9.3";
+  minimumSupportedOcamlVersion = "4.00.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "0xvq20knmq25902ijpbk91ax92bkymsqkbfklj1537hpn64lydhz";
+    sha256 = "1f71fyawxal42x6g82539bv0ava2smlar6rmxxz1cyq3l0i6fw0k";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam ];
+  buildInputs = [ ocaml findlib ocamlbuild opam cmdliner ];
 
   createFindlibDestdir = true;
 
   unpackCmd = "tar xjf $src";
 
-  buildPhase = "./pkg/build true";
+  buildPhase = ''
+    ocaml pkg/build.ml \
+      native=true \
+      native-dynlink=true \
+      cmdliner=true
+  '';
 
   installPhase = ''
-    opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/
+    opam-installer --prefix=$out --script ${pname}.install | sh
+    ln -s $out/lib/uutf $out/lib/ocaml/${ocaml.version}/site-lib/
   '';
 
   meta = with stdenv.lib; {

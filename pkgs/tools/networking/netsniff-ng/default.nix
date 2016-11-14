@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "netsniff-ng-${version}";
-  version = "0.6.1";
+  version = "0.6.2";
 
   # Upstream recommends and supports git
   src = fetchFromGitHub rec {
     repo = "netsniff-ng";
     owner = repo;
     rev = "v${version}";
-    sha256 = "0nl0xq7dwhryrd8i5iav8fj4x9jrna0afhfim5nrx2kwp5yylnvi";
+    sha256 = "1lz4hwgwdq3znlqjmvl7cw3g3ilbayn608h0hwqdf7v2jq6n67kg";
   };
 
   buildInputs = [ bison flex geoip geolite-legacy libcli libnet libnl

@@ -118,7 +118,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
       "ulimit -c unlimited; ".
       "chromium $args \"$url\" & disown"
     );
-    $machine->waitForText(qr/Type to search or enter a URL to navigate/);
+    $machine->waitForText(qr/startup done/);
     $machine->waitUntilSucceeds("${xdo "check-startup" ''
       search --sync --onlyvisible --name "startup done"
       # close first start help popup

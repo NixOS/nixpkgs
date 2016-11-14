@@ -20,14 +20,13 @@ composableDerivation.composableDerivation {} (fixed: rec {
 
   hardeningDisable = [ "format" ];
 
-  # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
   # Unset CC and CXX as they confuse libtool.
-  preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";
+  preConfigure = "unset CC CXX";
 
   configureFlags = [
     "--with-jpeg=${libjpeg.dev}"
     "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
-    "--with-libpng=${libpng.dev}"   # optional
+    "--with-png=${libpng.dev}"      # optional
     "--with-libz=${zlib.dev}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"
@@ -53,6 +52,6 @@ composableDerivation.composableDerivation {} (fixed: rec {
     homepage = http://www.gdal.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 })
