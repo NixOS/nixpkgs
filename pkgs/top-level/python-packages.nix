@@ -20128,6 +20128,8 @@ in {
     };
   };
 
+  pyopencl = callPackage ../development/python-modules/pyopencl { };
+
   pyrr = buildPythonPackage rec {
     name = "pyrr-${version}";
     version = "0.7.2";
