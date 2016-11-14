@@ -141,22 +141,18 @@ in
         kde5.konsole
         kde5.print-manager
 
-        # Oxygen icons moved to KDE Frameworks 5.16 and later.
-        (kde5.oxygen-icons or kde5.oxygen-icons5)
+        # Install Breeze icons if available
+        (kde5.breeze-icons or kde5.oxygen-icons5 or kde5.oxygen-icons)
         pkgs.hicolor_icon_theme
 
-        kde5.kde-gtk-config
+        kde5.kde-gtk-config kde5.breeze-gtk
 
-        pkgs.phonon-backend-gstreamer
         pkgs.qt5.phonon-backend-gstreamer
       ]
 
       # Plasma 5.5 and later has a Breeze GTK theme.
       # If it is not available, Orion is very similar to Breeze.
       ++ lib.optional (!(lib.hasAttr "breeze-gtk" kde5)) pkgs.orion
-
-      # Install Breeze icons if available
-      ++ lib.optional (lib.hasAttr "breeze-icons" kde5) kde5.breeze-icons
 
       # Install activity manager if available
       ++ lib.optional (lib.hasAttr "kactivitymanagerd" kde5) kde5.kactivitymanagerd
@@ -217,7 +213,6 @@ in
         kde5.ecm # for the setup-hook
         kde5.plasma-workspace
         kde5.breeze-icons
-        (kde5.oxygen-icons or kde5.oxygen-icons5)
       ];
     };
 
