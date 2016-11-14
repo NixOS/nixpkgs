@@ -53,21 +53,14 @@ with lib;
   # Don't start the X server by default.
   services.xserver.autorun = mkForce false;
 
-  # Custom kde-workspace adding some icons on the desktop
   system.activationScripts.installerDesktop = let
-    openManual = pkgs.writeScript "nixos-manual.sh" ''
-      #!${pkgs.stdenv.shell}
-      cd ${config.system.build.manual.manual}/share/doc/nixos/
-      firefox ./index.html
-    '';
-
     desktopFile = pkgs.writeText "nixos-manual.desktop" ''
       [Desktop Entry]
       Version=1.0
       Type=Application
       Name=NixOS Manual
-      Exec=${openManual}
-      Icon=firefox
+      Exec=firefox ${config.system.build.manual.manual}/share/doc/nixos/index.html
+      Icon=text-html
     '';
 
   in ''
