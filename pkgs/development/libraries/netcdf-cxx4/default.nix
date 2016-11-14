@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ netcdf hdf5 curl ];
   doCheck = true;
 
+  passthru = {
+    inherit hdf5;
+  };
+
   meta = {
     description = "C++ API to manipulate netcdf files";
     homepage = "http://www.unidata.ucar.edu/software/netcdf/";
