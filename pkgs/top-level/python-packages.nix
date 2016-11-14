@@ -15734,41 +15734,7 @@ in {
     };
   };
 
-  numba = buildPythonPackage rec {
-    version = "0.27.0";
-    name = "numba-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numba/${name}.tar.gz";
-      sha256 = "5fc8069cdc839b8b44ac6c54260902f60cbd77bd027b20999970a81cce7008ba";
-    };
-
-    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
-
-    propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
-    # Future work: add Cuda support.
-    #propagatedBuildInputs = with self; [numpy llvmlite argparse pkgs.cudatoolkit6];
-    #buildPhase = ''
-    #  export NUMBAPRO_CUDA_DRIVER=
-    #  export NUMBAPRO_NVVM=${pkgs.cudatoolkit6}
-    #  export NUMBAPRO_LIBDEVICE=
-    #'';
-
-    # Copy test script into $out and run the test suite.
-    checkPhase = ''
-      cp runtests.py $out/${python.sitePackages}/numba/runtests.py
-      ${python.interpreter} $out/${python.sitePackages}/numba/runtests.py
-    '';
-    # ImportError: cannot import name '_typeconv'
-    doCheck = false;
-
-    meta = {
-      homepage = http://numba.pydata.org/;
-      license = licenses.bsd2;
-      description = "Compiling Python code using LLVM";
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  numba = callPackage ../development/python-modules/numba { };
 
   numexpr = buildPythonPackage rec {
     version = "2.5.2";
