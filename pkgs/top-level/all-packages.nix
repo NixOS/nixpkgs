@@ -9530,11 +9530,6 @@ in
 
   xapian = callPackage ../development/libraries/xapian { };
 
-  xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
-    php = php56;
-    sphinx = pythonPackages.sphinx;
-  };
-
   xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
     libmagic = file;
   };
