@@ -827,6 +827,8 @@ in
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
+  ecasound = callPackage ../applications/audio/ecasound { };
+
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
@@ -14607,6 +14609,8 @@ in
   src = callPackage ../applications/version-management/src/default.nix {
     git = gitMinimal;
   };
+
+  ssr = callPackage ../applications/audio/soundscape-renderer {};
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
