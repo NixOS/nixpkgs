@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, systemd, openssl
+, file, expat, libdrm, xorg, wayland, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
 , libelf, libvdpau, python2
 , grsecEnabled ? false
@@ -112,7 +112,7 @@ stdenv.mkDerivation {
     libffi wayland libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
     (python2.withPackages (ps: [ ps.Mako ]))
-  ] ++ optional stdenv.isLinux systemd;
+  ];
 
 
   enableParallelBuilding = true;
