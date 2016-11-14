@@ -14881,7 +14881,7 @@ in {
 
   plover = buildPythonPackage rec {
     name = "plover-${version}";
-    version = "3.0.0";
+    version = "3.1.0";
     disabled = !isPy27;
 
     meta = {
@@ -14892,7 +14892,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "1jja37nhiypdx1z6cazp8ffsf0z3yqmpdbprpdzf668lcb422rl0";
+      sha256 = "1zdlgyjp93sfvk6by7rsh9hj4ijzplglrxpcpkcir6c3nq2bixl4";
     };
 
     # This is a fix for https://github.com/pypa/pip/issues/3624 causing regression https://github.com/pypa/pip/issues/3781
