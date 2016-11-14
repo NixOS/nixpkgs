@@ -14878,6 +14878,22 @@ in {
     };
   };
 
+  pint = buildPythonPackage rec {
+    name = "pint-${version}";
+    version = "0.7.2";
+
+    meta = {
+      description = "Physical quantities module";
+      license = licenses.bsd3;
+      homepage = "https://github.com/hgrecco/pint/";
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pint/Pint-${version}.tar.gz";
+      sha256 = "1bbp5s34gcb9il2wyz4spznshahwbjvwi5bhjm7bnxk358spvf9q";
+    };
+  };
+
   pygal = buildPythonPackage rec {
     version = "2.0.10";
     name = "pygal-${version}";
