@@ -213,7 +213,7 @@ let
     ppp             = applePackage "ppp"               "osx-10.11.6"     "1dql6r1v0vbcs04958nn2i6p31yfsxyy51jca63bm5mf0gxalk3f" {};
     removefile      = applePackage "removefile"        "osx-10.11.6"     "1b6r74ry3k01kypvlaclf33fha15pcm0kzx9zrymlg66wg0s0i3r" {};
     Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
-    xnu             = applePackage "xnu"               "osx-10.11.6"     "0yhziq4dqqcbjpf6vyqn8xhwva2zb525gndkx8cp8alzwp76jnr9" {};
+    xnu             = applePackage "xnu"               "osx-10.11.6"     "1vij2q5bpvp1sd2maf154mjk9g5z5hxyzcg5wcd4z7i8j5h36xnv" {};
 
     libsecurity_apple_csp      = libsecPackage "libsecurity_apple_csp"      "osx-10.7.5" "1ngyn1ik27n4x981px3kfd1z1n8zx7r5w812b6qfjpy5nw4h746w" {};
     libsecurity_apple_cspdl    = libsecPackage "libsecurity_apple_cspdl"    "osx-10.7.5" "1svqa5fhw7p7njzf8bzg7zgc5776aqjhdbnlhpwmr5hmz5i0x8r7" {};
