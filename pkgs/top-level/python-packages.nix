@@ -14878,33 +14878,6 @@ in {
     };
   };
 
-
-  plover = buildPythonPackage rec {
-    name = "plover-${version}";
-    version = "3.1.0";
-    disabled = !isPy27;
-
-    meta = {
-      description = "OpenSteno Plover stenography software";
-      maintainers = with maintainers; [ twey kovirobi ];
-      license = licenses.gpl2;
-    };
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "1zdlgyjp93sfvk6by7rsh9hj4ijzplglrxpcpkcir6c3nq2bixl4";
-    };
-
-    # This is a fix for https://github.com/pypa/pip/issues/3624 causing regression https://github.com/pypa/pip/issues/3781
-    postPatch = ''
-     substituteInPlace setup.py --replace " in sys_platform" " == sys_platform"
-    '';
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ six setuptools pyserial appdirs hidapi
-                                         wxPython xlib pkgs.wmctrl ];
-  };
-
   pygal = buildPythonPackage rec {
     version = "2.0.10";
     name = "pygal-${version}";
