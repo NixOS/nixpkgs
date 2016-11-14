@@ -218,7 +218,7 @@ let
     ppp             = applePackage "ppp"               "osx-10.10.5"     "01v7i0xds185glv8psvlffylfcfhbx1wgsfg74kx5rh3lyrigwrb" {};
     removefile      = applePackage "removefile"        "osx-10.10.5"     "1f2jw5irq6fz2jv5pag1w2ivfp8659v74f0h8kh0yx0rqw4asm33" {};
     Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
-    xnu             = applePackage "xnu"               "osx-10.11.6"     "0yhziq4dqqcbjpf6vyqn8xhwva2zb525gndkx8cp8alzwp76jnr9" {};
+    xnu             = applePackage "xnu"               "osx-10.11.6"     "1vij2q5bpvp1sd2maf154mjk9g5z5hxyzcg5wcd4z7i8j5h36xnv" {};
 
     # Pending work... we can't change the above packages in place because the bootstrap depends on them, so we detach the expressions
     # here so we can work on them.
