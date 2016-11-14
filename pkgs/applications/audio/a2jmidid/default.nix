@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
-, pythonPackages}:
+, python2Packages}:
 
 let
-  inherit (pythonPackages) python dbus-python;
+  inherit (python2Packages) python dbus-python;
 in stdenv.mkDerivation rec {
   name = "a2jmidid-${version}";
   version = "8";
