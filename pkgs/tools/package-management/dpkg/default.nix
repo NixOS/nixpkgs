@@ -9,13 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0njd8pdq1vx70sjlgymi79lijg05fmd8vxnqndzhjjb0a8cf920p";
   };
 
-#  postPatch = ''
-#    # dpkg tries to force some dependents like debian-devscripts to use
-#    # -fstack-protector-strong - not (yet?) a good idea. Disable for now:
-#    substituteInPlace scripts/Dpkg/Vendor/Debian.pm \
-#      --replace "stackprotectorstrong => 1" "stackprotectorstrong => 0"
-#  '';
-
   configureFlags = [
     "--disable-dselect"
     "--with-admindir=/var/lib/dpkg"
