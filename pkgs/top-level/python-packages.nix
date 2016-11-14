@@ -2200,6 +2200,29 @@ in {
     };
   };
 
+  buildnotify = buildPythonPackage rec {
+    name = "BuildNotify-${version}";
+    version = "0.3.5";
+
+    disabled = !isPy27;
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/buildnotify/${name}.tar.gz";
+      sha256 = "0659i9k579b456f3mnnfq6mxp0zg90jwmsimks2wd4n0mknq1fny";
+    };
+
+    propagatedBuildInputs = with self; [ dateutil setuptools pytz pyqt4 ];
+
+    meta = {
+      description = "Cruise Control build monitor";
+      homepage = https://bitbucket.org/Anay/buildnotify/wiki/Home;
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ vikstrous ];
+      platforms = platforms.unix;
+    };
+  };
+
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
 
