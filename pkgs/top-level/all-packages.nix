@@ -12460,6 +12460,8 @@ in
 
   docker-machine = callPackage ../applications/networking/cluster/docker-machine { };
 
+  docker-machine-kvm = callPackage ../applications/networking/cluster/docker-machine-kvm { };
+
   docker-distribution = callPackage ../applications/virtualization/docker-distribution { };
 
   doodle = callPackage ../applications/search/doodle { };
