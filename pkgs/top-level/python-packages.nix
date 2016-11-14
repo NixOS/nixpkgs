@@ -18419,12 +18419,13 @@ in {
   };
 
   pip = buildPythonPackage rec {
-    version = "8.1.2";
-    name = "pip-${version}";
+    pname = "pip";
+    version = "9.0.1";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pip/pip-${version}.tar.gz";
-      sha256 = "0cmpsy9lr9diskkypswm9s8glgr7w3crzh1im4zqlqv7z8zv092d";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "09f243e1a7b461f654c26a725fa373211bb7ff17a9300058b205c61658ca940d";
     };
 
     # pip detects that we already have bootstrapped_pip "installed", so we need
