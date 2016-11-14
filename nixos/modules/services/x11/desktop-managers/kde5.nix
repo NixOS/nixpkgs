@@ -22,6 +22,15 @@ in
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
+      enableQt4Support = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable support for Qt 4-based applications. Particularly, install the
+          Qt 4 version of the Breeze theme and a default backend for Phonon.
+        '';
+      };
+
     };
 
   };
@@ -105,7 +114,7 @@ in
         kde5.sonnet
         kde5.threadweaver
 
-        kde5.breeze
+        kde5.breeze-qt5
         kde5.kactivitymanagerd
         kde5.kde-cli-tools
         kde5.kdecoration
@@ -159,6 +168,8 @@ in
 
       # frameworkintegration was split with plasma-integration in Plasma 5.6
       ++ lib.optional (lib.hasAttr "plasma-integration" kde5) kde5.plasma-integration
+
+      ++ lib.optionals cfg.enableQt4Support [ kde5.breeze-qt4 pkgs.phonon-backend-gstreamer ]
 
       # Optional hardware support features
       ++ lib.optional config.hardware.bluetooth.enable kde5.bluedevil

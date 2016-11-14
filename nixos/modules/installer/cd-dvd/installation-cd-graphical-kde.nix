@@ -18,7 +18,10 @@ with lib;
       autoLogin = true;
     };
 
-    desktopManager.kde5.enable = true;
+    desktopManager.kde5 = {
+      enable = true;
+      enableQt4Support = false;
+    };
 
     # Enable touchpad support for many laptops.
     synaptics.enable = true;
