@@ -21852,6 +21852,8 @@ in {
     };
   };
 
+  reikna = callPackage ../development/python-modules/reikna { };
+
   repocheck = buildPythonPackage rec {
     name = "repocheck-2015-08-05";
     disabled = isPy26 || isPy27;
