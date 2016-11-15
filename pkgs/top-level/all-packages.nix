@@ -10624,6 +10624,10 @@ in
 
     swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation {};
 
+    ios-cross = callPackage ../os-specific/darwin/ios-cross {
+      inherit (darwin) binutils;
+    };
+
     xcode = callPackage ../os-specific/darwin/xcode {};
 
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};

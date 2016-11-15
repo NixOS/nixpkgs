@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgs }:
+{ stdenv, fetchurl, fetchzip, pkgs, fetchurlBoot }:
 
 let
   # This attrset can in theory be computed automatically, but for that to work nicely we need
@@ -123,7 +123,14 @@ let
     };
   };
 
-  fetchApple = version: sha256: name: fetchurl {
+  fetchApple = version: sha256: name: let
+    # When cross-compiling, fetchurl depends on libiconv, resulting
+    # in an infinite recursion without this. It's not clear why this
+    # worked fine when not cross-compiling
+    fetch = if name == "libiconv"
+      then fetchurlBoot
+      else fetchurl;
+  in fetch {
     url = "http://www.opensource.apple.com/tarballs/${name}/${name}-${versions.${version}.${name}}.tar.gz";
     inherit sha256;
   };
