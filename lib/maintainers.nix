@@ -201,6 +201,7 @@
   jbedo = "Justin Bedő <cu@cua0.org>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jefdaj = "Jeffrey David Johnson <jefdaj@gmail.com>";
+  jerith666 = "Matt McHenry <github@matt.mchenryfamily.org>";
   jfb = "James Felix Black <james@yamtime.com>";
   jgeerds = "Jascha Geerds <jascha@jgeerds.name>";
   jgillich = "Jakob Gillich <jakob@gillich.me>";
