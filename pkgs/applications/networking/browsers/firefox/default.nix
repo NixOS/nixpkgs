@@ -70,6 +70,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--enable-jemalloc"
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk2"
+      "--with-google-api-keyfile=ga"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
@@ -85,6 +86,11 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
+
+      # Google API key used by Chromium and Firefox.
+      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+      # please get your own set of keys.
+      echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" >ga
     '';
 
   preInstall =
