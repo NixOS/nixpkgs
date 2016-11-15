@@ -104,7 +104,8 @@ in {
     mavenFiltering_1_1;
 
   inherit (callPackage ../development/java-modules/maven-hello { inherit mavenbuild; })
-    mavenHello_1_0;
+    mavenHello_1_0
+    mavenHello_1_1;
 
   inherit (callPackage ../development/java-modules/maven/model.nix { inherit fetchMaven; })
     mavenModel_2_0_6

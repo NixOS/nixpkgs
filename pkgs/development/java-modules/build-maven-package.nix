@@ -1,5 +1,5 @@
 { stdenv, maven, pkgs }:
-{ mavenDeps, src, name, meta, m2Path, ... }:
+{ mavenDeps, src, name, meta, m2Path, skipTests ? true, ... }:
 
 with builtins;
 with stdenv.lib;
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     echo "<settings><mirrors>\
         <mirror><id>tmpm2</id><url>file://$out/m2</url><mirrorOf>*</mirrorOf></mirror></mirrors>\
         <localRepository>$out/m2</localRepository></settings>" >> $out/m2/settings.xml
-    ${maven}/bin/mvn clean package -Dmaven.test.skip=true -Danimal.sniffer.skip=true -gs $out/m2/settings.xml
+    ${maven}/bin/mvn clean package -Dmaven.test.skip=${if skipTests then "true" else "false"} -Danimal.sniffer.skip=true -gs $out/m2/settings.xml
     cp -v ./target/*.jar $out/target/
   '';
 }
