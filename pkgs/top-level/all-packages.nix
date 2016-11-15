@@ -8598,7 +8598,8 @@ in
     grsecEnabled = true;
     llvmPackages = llvmPackages_39;
   })
-    mesa_13_0_2;
+    mesa_13_0_2
+    mesa_13_1_0-git;
 
   mesa_current = mesa_13_0_2;
 

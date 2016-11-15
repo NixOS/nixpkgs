@@ -6,10 +6,10 @@
 , grsecEnabled ? false
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 , version
-, sha256
+, sha256 ? null
 , extraPatches ? []
 , ...
-}:
+} @args :
 
 
 /** Packaging design:
@@ -36,14 +36,14 @@ let
 in stdenv.mkDerivation {
   name = "mesa-noglu-${version}";
 
-  src = fetchurl {
+  src = args.src or (fetchurl {
     urls = [
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
     inherit sha256;
-  };
+  });
 
   prePatch = "patchShebangs .";
 
