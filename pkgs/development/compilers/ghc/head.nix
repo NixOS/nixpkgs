@@ -24,12 +24,11 @@ in stdenv.mkDerivation (rec {
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "091zpb9vqqy4jqh4q7sz04dh1yfdczaaikbxi5ppim01gzbxwn65";
+    sha256 = "1ryggmz961qd0fl50rkjjvi6g9azwla2vx9310a9nzjaj5x6ib4y";
   };
 
   postUnpack = ''
-    chmod -R +w ghc
-    pushd ghc
+    pushd ghc-${builtins.substring 0 7 rev}
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
     patchShebangs .
@@ -44,7 +43,7 @@ in stdenv.mkDerivation (rec {
   preConfigure = commonPreConfigure;
 
   configureFlags = [
-    "CC=cc"
+    "CC=${stdenv.cc}/bin/cc"
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
