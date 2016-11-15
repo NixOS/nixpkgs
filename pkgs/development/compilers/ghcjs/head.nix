@@ -165,7 +165,7 @@ in mkDerivation (rec {
       "unix"
     ];
 
-    mkStage2 = import ./stage2.nix {
+    mkStage2 = import ./head_stage2.nix {
       inherit ghcjsBoot;
     };
   };
