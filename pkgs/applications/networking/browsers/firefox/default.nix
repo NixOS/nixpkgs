@@ -70,6 +70,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--enable-jemalloc"
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk2"
+      "--with-google-api-keyfile=ga"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
@@ -85,6 +86,9 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
+
+      # Google API key used for geolocation
+      cat >ga <<<"AIzaSyAeBuGRUrxHr4_eHhrCwdkl0G-O4qR5UXs"
     '';
 
   preInstall =
