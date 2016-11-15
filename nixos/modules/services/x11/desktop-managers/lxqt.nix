@@ -32,6 +32,7 @@ in
     };
 
     environment.systemPackages = [
+      pkgs.gvfs
       pkgs.kde5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
       pkgs.kde5.libkscreen # provides plugins for screen management software
       pkgs.kde5.oxygen-icons5 # default icon theme
@@ -79,6 +80,8 @@ in
       "/share/icons"
       "/share/lxqt"
     ];
+
+    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
 
   };
 }
