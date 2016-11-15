@@ -1067,7 +1067,7 @@ in {
       license = licenses.free;
     };
   } else null;
-  
+
   funcsigs = buildPythonPackage rec {
     name = "funcsigs-1.0.2";
 
@@ -6224,6 +6224,25 @@ in {
       description = "Add flag to ignore unicode literal prefixes in doctests";
       license = with licenses; [ asl20 ];
       homepage = http://github.com/gnublade/doctest-ignore-unicode;
+    };
+  };
+
+  docx2txt = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "docx2txt";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/${pname}/${name}.tar.gz";
+      sha256 = "0f0kzs5mnphjnv6g21xfsjaj8fs9mgs6s849qnpq7r65fijhqx14";
+    };
+
+    meta = {
+       homepage = "https://github.com/ankushshah89/python-docx2txt";
+       description = "A python-based utility to extract text from docx files";
+       license = licenses.mit;
+       platforms = platforms.linux;
+       maintainers = with maintainers; [ hbunke ];
     };
   };
 
@@ -14379,7 +14398,7 @@ in {
       broken = true;
     };
   };
-  
+
   mock = buildPythonPackage (rec {
     name = "mock-2.0.0";
 
@@ -31210,4 +31229,6 @@ in {
       license = licenses.mit;
     };
   };
+
+
 }
