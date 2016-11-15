@@ -4,13 +4,17 @@ with stdenv.lib;
 with pkgs.javaPackages;
 
 let
+  collections = import ./collections.nix { inherit pkgs; };
   fetchMaven = pkgs.callPackage ./m2install.nix { };
-  poms = import ./poms.nix { inherit fetchMaven; };
   plugins = import ./mavenPlugins.nix { inherit stdenv pkgs maven; };
+  poms = import ./poms.nix { inherit fetchMaven; };
 in rec {
   # Maven needs all of these to function
   mavenMinimal = flatten
-    [
+    collections.mavenLibs_2_0_6
+    ++ collections.mavenLibs_2_0_9
+    ++ collections.mavenLibs_2_2_1
+    ++ [
       classworlds_1_1_alpha2
       classworlds_1_1
       commonsCli_1_0
@@ -23,54 +27,10 @@ in rec {
       junit_3_8_2
       log4j_1_2_12
       mavenArchiver_2_5
-      mavenArtifact_2_0_6
-      mavenArtifact_2_0_9
-      mavenArtifact_2_2_1
-      mavenArtifactManager_2_0_6
-      mavenArtifactManager_2_0_9
-      mavenArtifactManager_2_2_1
       mavenCommonArtifactFilters_1_3
-      mavenCore_2_0_6
-      mavenCore_2_0_9
-      mavenCore_2_2_1
       mavenDoxiaSinkApi_1_0_alpha7
-      mavenErrorDiagnostics_2_0_6
-      mavenErrorDiagnostics_2_0_9
-      mavenErrorDiagnostics_2_2_1
       mavenFiltering_1_1
-      mavenModel_2_0_6
-      mavenModel_2_0_9
-      mavenModel_2_2_1
-      mavenMonitor_2_0_6
-      mavenMonitor_2_0_9
-      mavenMonitor_2_2_1
-      mavenPluginDescriptor_2_0_6
-      mavenPluginDescriptor_2_0_9
-      mavenPluginDescriptor_2_2_1
-      mavenPluginParameterDocumenter_2_0_6
-      mavenPluginParameterDocumenter_2_0_9
-      mavenPluginParameterDocumenter_2_2_1
-      mavenProfile_2_0_6
-      mavenProfile_2_0_9
-      mavenProfile_2_2_1
-      mavenProject_2_0_6
-      mavenProject_2_0_9
-      mavenProject_2_2_1
       mavenPluginAnnotations_3_1
-      mavenPluginApi_2_0_6
-      mavenPluginApi_2_0_9
-      mavenPluginApi_2_2_1
-      mavenPluginRegistry_2_0_6
-      mavenPluginRegistry_2_0_9
-      mavenPluginRegistry_2_2_1
-      mavenReportingApi_2_0_6
-      mavenReportingApi_2_0_9
-      mavenRepositoryMetadata_2_0_6
-      mavenRepositoryMetadata_2_0_9
-      mavenRepositoryMetadata_2_2_1
-      mavenSettings_2_0_6
-      mavenSettings_2_0_9
-      mavenSettings_2_2_1
       mavenSharedIncremental_1_1
       mavenSharedUtils_0_1
       mavenSurefireApi_2_12_4
