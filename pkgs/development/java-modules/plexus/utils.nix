@@ -12,6 +12,17 @@ rec {
     { type = "pom"; sha512 = "35mm9fkfw1wljabr4lz6l5mq3mxgl7k87whlcz5qlddsbxy0j69j4xgf1fvjlyp06nqq2wz574v54aqpxgp8s6jwjyz9wyvqvsyka8d"; }
   ];
 
+  plexusUtils_1_0_5 = map (obj: fetchMaven {
+    version = "1.0.5";
+    baseName = "plexus-utils";
+    package = "/org/codehaus/plexus";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "2wj0xyywifivqq1rnmd3lj7c4kgprcyq3rb4v4y5rr89isdm40hnfhziz0zakyysk8wqw4l4wp3lg7vxhs3yd44rdfm0czvkjl726zj"; }
+    { type = "pom"; sha512 = "1pz98avnr6pml058mg2db79rpxckcxkgpl8z373l055kppsy1pvmkhjahkjpzfrg63pdsk2kgm2ls9ji5697whpbm7xcwi8j3ssx791"; }
+  ];
+
   plexusUtils_1_1 = map (obj: fetchMaven {
     version = "1.1";
     baseName = "plexus-utils";
@@ -43,6 +54,17 @@ rec {
   }) [
     { type = "jar"; sha512 = "1f20xhp8jnkc70fy6b0fbhb16pvbwp83k4dwwar4r5570yn24j09iqlk8bhz6ra8pnkh0jz0idg61wrlz9mghzbmgdn6f2dj25dzr8s"; }
     { type = "pom"; sha512 = "0liqhpc9pn81vn04qz4j3101jc33hygb415jnwpf0dhph3jay88l49gd9s1bwq6x4npn2v6863vidb8hdh5f8wd20k6m1lqhdpv882j"; }
+  ];
+
+  plexusUtils_1_4_9 = map (obj: fetchMaven {
+    version = "1.4.9";
+    baseName = "plexus-utils";
+    package = "/org/codehaus/plexus";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "12fhq89mqj8m5y0ks8h39ig2q4nr3qlygjwygp9wg60dkfqrm6rscfrycs18pqd9y9fkhk8rqi96gq2vy8wg1v1a24h2wlzak1d22ip"; }
+    { type = "pom"; sha512 = "23fpn9f8gq0a3hi2mlwzjpbr3kyrsr4wl58zyq8i6xbdnnfx0wfwc2xsfn8yp3mq2pjjpdlza9l3qdmwsyzmrz8micvms8bladpvcmv"; }
   ];
 
   plexusUtils_1_5_1 = map (obj: fetchMaven {

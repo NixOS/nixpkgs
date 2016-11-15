@@ -1,6 +1,17 @@
 { fetchMaven }:
 
 rec {
+  mavenPluginDescriptor_2_0_1 = map (obj: fetchMaven {
+    version = "2.0.1";
+    baseName = "maven-plugin-descriptor";
+    package = "/org/apache/maven";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "2gwjmn4xnxh2hy9nnlr107q1fpnyy2yhkajvj2snpl1xmpn76m1vvj64zf52l9grpvpx91b0pvd8pxa8hzmh8kqdf1w3wqjg5k1p4zf"; }
+    { type = "pom"; sha512 = "0g9hl6i0kqfrifjmykrg5pfb2xh35by3dc1nfa4i1434xr1fzi4y5avdqaw3zlvhnybi611qxv1g2ydnwkq9mgnvjq8fis4ir60g82s"; }
+  ];
+
   mavenPluginDescriptor_2_0_6 = map (obj: fetchMaven {
     version = "2.0.6";
     baseName = "maven-plugin-descriptor";

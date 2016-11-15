@@ -2,9 +2,11 @@
 
 with pkgs.javaPackages;
 
-rec {
-  mavenHelloRec = { mavenDeps, sha512, version, skipTests }: mavenbuild rec {
-    inherit mavenDeps sha512 version skipTests;
+let
+  poms = import ../poms.nix { inherit fetchMaven; };
+in rec {
+  mavenHelloRec = { mavenDeps, sha512, version, skipTests ? true, quiet ? true }: mavenbuild rec {
+    inherit mavenDeps sha512 version skipTests quiet;
 
     name = "maven-hello-${version}";
     src = pkgs.fetchFromGitHub {
@@ -32,9 +34,10 @@ rec {
   };
 
   mavenHello_1_1 = mavenHelloRec {
-    mavenDeps = [ junit_4_12 ];
-    sha512 = "3dhgl5z3nzqskjjcggrjyz37r20b0m5vhfzbx382qyqcy4d2jdhkl7v1ajhcg8vkz0qdzq85k09w5is81hybv8sd09h3hgb3rrigdaq";
+    mavenDeps = [ junit_4_12 mavenSurefireJunit4_2_12_4 hamcrestCore_1_3 ] ++ (with poms; [ surefireProviders_2_12_4 ]);
+    sha512 = "2f13592blvfgwad61174fza99ncb5jlch4sjjindk1pcaixqw26fnjfxb4ck80cknkihvcsylhviyfvhpm1ivvpg0zkicxva37cr4ri";
     version = "1.1";
     skipTests = false;
+    quiet = false;
   };
 }

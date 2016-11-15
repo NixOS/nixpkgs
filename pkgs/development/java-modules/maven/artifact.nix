@@ -1,6 +1,17 @@
 { fetchMaven }:
 
 rec {
+  mavenArtifact_2_0_1 = map (obj: fetchMaven {
+    version = "2.0.1";
+    baseName = "maven-artifact";
+    package = "/org/apache/maven";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "3xmim81k0p3l7fpgr8xlbj3mcz83d1rw3nwzdlrnwh3nkc5xryxl8fx499351vjlmjs009bhd68a20v59y3flxz8hxiy07cijgcbqnx"; }
+    { type = "pom"; sha512 = "30y2mirgqvdm3gdalxkzjljswh9xhygsw6v2jfrd9y61wqng2hzyn7dawkn5q4cyiknmw1b9660pvbnysvh3rbic75lhw5xqqgdjmih"; }
+  ];
+
   mavenArtifact_2_0_6 = map (obj: fetchMaven {
     version = "2.0.6";
     baseName = "maven-artifact";
@@ -10,6 +21,17 @@ rec {
   }) [
     { type = "jar"; sha512 = "3kkv5kf3k5in69aplawkr0cr2cviyjgf8k6r6qvgxk53i3jmh7qylzrwkrd9bxclkjkgyg77cffxm48qhxm9pyqncdbwjldsmmdfb4f"; }
     { type = "pom"; sha512 = "37kvfxcpfajjn9lmvh5kay4y61ri1190hxxgiil8fqfvmvcm02jcqzfi4ry0nzc80g5fsarsd3s2ns2d8l0lnqjp28nn51dixm9a55w"; }
+  ];
+
+  mavenArtifact_2_0_8 = map (obj: fetchMaven {
+    version = "2.0.8";
+    baseName = "maven-artifact";
+    package = "/org/apache/maven";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "0i2xd2fkvp5glb7yx8zhh96px4v2yq0bgxa6xxcy6if0sn8c3vps8jmd1z3ys27jzj1gvwgg4rpa17k0nk1c8szz1v7vwvyhp7s22pi"; }
+    { type = "pom"; sha512 = "37563kfswgk9yfzm46vk4nr44rncdd3y705vgg20lj4nsrqn7iwg55fx1a4f039gbaf8dzb6xwp0ypyspsx9q742wkwrsr5q41d99v7"; }
   ];
 
   mavenArtifact_2_0_9 = map (obj: fetchMaven {

@@ -1,6 +1,17 @@
 { fetchMaven }:
 
 rec {
+  mavenDoxiaSinkApi_1_0_alpha6 = map (obj: fetchMaven {
+    version = "1.0-alpha-6";
+    baseName = "doxia-sink-api";
+    package = "/org/apache/maven/doxia";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "pom"; sha512 = "156j8ic3m2j23nrh074j567qxcsqi8ahpl97ba68l88cq08al1z7mh72hm8jz24lq04kxkrf3r1icqbpki10jgv7qma0cpz86yw27x2"; }
+    { type = "jar"; sha512 = "12yqdygds5w4dx8zxq4ss65a28pqrhavzzmgi3n7473r1k5r3kiw5h5bm71zdhccv5lgb4lb9p9lswa2pjkwriykfm3fj0l3924x6dk"; }
+  ];
+
   mavenDoxiaSinkApi_1_0_alpha7 = map (obj: fetchMaven {
     version = "1.0-alpha-7";
     baseName = "doxia-sink-api";

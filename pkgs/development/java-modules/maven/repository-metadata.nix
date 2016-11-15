@@ -1,6 +1,17 @@
 { fetchMaven }:
 
 rec {
+  mavenRepositoryMetadata_2_0_1 = map (obj: fetchMaven {
+    version = "2.0.1";
+    baseName = "maven-repository-metadata";
+    package = "/org/apache/maven";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "3aq5k4ifam2lm6mny7zyjlylcpk6is2jnas81w6z5p6qd5jfwfj1i3g89y0vsl7mamh2rp7xncx60mvqr0jm9hxgx8ibjcynkq92kaf"; }
+    { type = "pom"; sha512 = "29nynsxh8k1q91whs4glca3qxigid32dx70c87jvk1x1cfc8s78bvm6lzr14x7wvw5i5n61lrqvq5mc6mzsi8xmspaqjhm2m7azyx7y"; }
+  ];
+
   mavenRepositoryMetadata_2_0_6 = map (obj: fetchMaven {
     version = "2.0.6";
     baseName = "maven-repository-metadata";

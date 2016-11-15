@@ -1,5 +1,5 @@
 { stdenv, maven, pkgs }:
-{ mavenDeps, src, name, meta, m2Path, skipTests ? true, ... }:
+{ mavenDeps, src, name, meta, m2Path, skipTests ? true, quiet ? true, ... }:
 
 with builtins;
 with stdenv.lib;
@@ -13,8 +13,8 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInput = [ maven ] ++ flatDeps;
 
-  find = ''find ${foldl' (x: y: x + " " + y) "" (map (x: x + "/m2/") flatDeps)} -type d -printf '%P\n' | xargs -I {} mkdir -p $out/m2/{}'';
-  copy = ''cp -rs ${foldl' (x: y: x + " " + y) "" (map (x: x + "/m2/*") flatDeps)} $out/m2'';
+  find = ''find ${foldl' (x: y: x + " " + y) "" (map (x: x + "/m2") flatDeps)} -type d -printf '%P\n' | xargs -I {} mkdir -p $out/m2/{}'';
+  copy = ''cp -rsfu ${foldl' (x: y: x + " " + y) "" (map (x: x + "/m2/*") flatDeps)} $out/m2'';
 
   phases = [ "unpackPhase" "buildPhase" ];
 
@@ -23,10 +23,12 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/m2/${m2Path}
     ${optionalString (length flatDeps > 0) find}
     ${optionalString (length flatDeps > 0) copy}
+    if [ -f $out/m2/settings.xml ]; then rm $out/m2/settings.xml; fi
     echo "<settings><mirrors>\
-        <mirror><id>tmpm2</id><url>file://$out/m2</url><mirrorOf>*</mirrorOf></mirror></mirrors>\
-        <localRepository>$out/m2</localRepository></settings>" >> $out/m2/settings.xml
-    ${maven}/bin/mvn clean package -Dmaven.test.skip=${if skipTests then "true" else "false"} -Danimal.sniffer.skip=true -gs $out/m2/settings.xml
+      <mirror><id>tmpm2</id><url>file://$out/m2</url><mirrorOf>*</mirrorOf></mirror></mirrors>\
+      <localRepository>$out/m2/</localRepository></settings>" >> $out/m2/settings.xml
+    ${maven}/bin/mvn ${optionalString (quiet) "-q"} clean package -Dmaven.test.skip=${if skipTests then "true" else "false"} -Danimal.sniffer.skip=true -gs $out/m2/settings.xml
+    cp ./target/*.jar $out/m2/${m2Path}
     cp -v ./target/*.jar $out/target/
   '';
 }

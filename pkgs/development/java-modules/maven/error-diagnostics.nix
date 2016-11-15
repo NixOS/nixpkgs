@@ -1,6 +1,17 @@
 { fetchMaven }:
 
 rec {
+  mavenErrorDiagnostics_2_0_1 = map (obj: fetchMaven {
+    version = "2.0.1";
+    baseName = "maven-error-diagnostics";
+    package = "/org/apache/maven";
+    sha512 = obj.sha512;
+    type = obj.type;
+  }) [
+    { type = "jar"; sha512 = "2jva1b8myaxy6y56rkqh8lynj36rj1apsgasc8i9qrigrw2wjk9yhsywv2ylmbspva1aypn23di7bd5bfb7vhaxhlqrlakdx5pqv7kh"; }
+    { type = "pom"; sha512 = "250x4ajr37nlch6n502ggfmr558hvhdxfgwjr28svvbxlyhk73h2nz9r95gvkfymv32dml8j1d4cgy3zs3qy2wzb679pnyckjwpdq9z"; }
+  ];
+
   mavenErrorDiagnostics_2_0_6 = map (obj: fetchMaven {
     version = "2.0.6";
     baseName = "maven-error-diagnostics";

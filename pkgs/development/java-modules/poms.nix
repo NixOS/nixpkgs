@@ -105,6 +105,14 @@ rec {
     type = "pom";
   };
 
+  asmParent_4_0 = fetchMaven {
+    version = "4.0";
+    baseName = "asm-parent";
+    package = "/org/ow2/asm";
+    sha512 = "2vysz9nn1pn1qzd40n7d2njmcpz7qi37pi73k9ajjmmbzwza6h8gc1pvadfqxlnih47gzc1wn3hqrc1sqd3b84kh8nrznwjcp10y0lf";
+    type = "pom";
+  };
+
   backportUtilConcurrent_3_1 = fetchMaven {
     version = "3.1";
     baseName = "backport-util-concurrent";
@@ -129,6 +137,14 @@ rec {
     type = "pom";
   };
 
+  commonsParent_11 = fetchMaven {
+    version = "11";
+    baseName = "commons-parent";
+    package = "/org/apache/commons";
+    sha512 = "3986i0mnawni27fqf74zfb1n9wvyn502nvslfmbwz5m3rgvhfdb7r1wj7qz8g3wznfvh3wd99h83d94300yvy6cilqy5sj9gfwxk3jv";
+    type = "pom";
+  };
+
   commonsParent_17 = fetchMaven {
     version = "17";
     baseName = "commons-parent";
@@ -142,6 +158,14 @@ rec {
     baseName = "commons-parent";
     package = "/org/apache/commons";
     sha512 = "1sm8g7iwyc5gi4w73yx3p1f1l81kw8d5wzqzqgdgy7k7hfvmsxlm5r9n99h9r0g5y494ad46hjzf8cwjf8am4rv0qzhrmsqkxyd24wk";
+    type = "pom";
+  };
+
+  doxia_1_0_alpha6 = fetchMaven {
+    version = "1.0-alpha-6";
+    baseName = "doxia";
+    package = "/org/apache/maven/doxia";
+    sha512 = "0ya69g2xfzawf30r2n45n85h2bag0ihd2cbkd0896ykwndx62jyagc594f9pkvb8x9vwgq1dkhfc5lfw1sjcmsxm9dmyzvy2nmykpsy";
     type = "pom";
   };
 
@@ -214,6 +238,14 @@ rec {
     baseName = "maven";
     package = "/org/apache/maven";
     sha512 = "2k58pvcrdc52zsq6id4vl8a45srxllm2m49namqkzix4356haphk3i06px9jcc2cmkqw7bcpqh5xvvmkds5vhp2b9y9b0i2lcfgx8jw";
+    type = "pom";
+  };
+
+  maven_2_0_8 = fetchMaven {
+    version = "2.0.8";
+    baseName = "maven";
+    package = "/org/apache/maven";
+    sha512 = "0mzlba0vbanxvdgfvj3kq6xw211j40b6hk6w0b7lc686m2c26vgxks9iisgm10888lq140i6510813326bs9yb053hqfvnz3m72lkss";
     type = "pom";
   };
 
@@ -353,6 +385,14 @@ rec {
     type = "pom";
   };
 
+  mavenReporting_2_0_1 = fetchMaven {
+    version = "2.0.1";
+    baseName = "maven-reporting";
+    package = "/org/apache/maven/reporting";
+    sha512 = "3ns0j0w3g3xzvi4y2nbz7yl3w0bq6npvkpy56c2s2m8z0b0007vw97qm3z7b6iicwck69g9001qqqanhzr35x1qbzlqzrx5v271hvfa";
+    type = "pom";
+  };
+
   mavenReporting_2_0_6 = fetchMaven {
     version = "2.0.6";
     baseName = "maven-reporting";
@@ -366,6 +406,22 @@ rec {
     baseName = "maven-reporting";
     package = "/org/apache/maven/reporting";
     sha512 = "0cg49pq6rvk7c84xwnpq2p47b7y973sy9qfgzcq06bnrqm6cj26h8k7d9kpp3q3rd2hlw10db4sjfx0crlai27cbbz41i5m22lq21s5";
+    type = "pom";
+  };
+
+  mavenReporting_2_2_1 = fetchMaven {
+    version = "2.2.1";
+    baseName = "maven-reporting";
+    package = "/org/apache/maven/reporting";
+    sha512 = "02gs0nk2hihvayh7gxn1ncbq7nq1hbpr40whby6c58adk7g6jq3cn84fi8svcv10w915f696drav1cimjpizcyjn00if1iql59dmfda";
+    type = "pom";
+  };
+
+  mavenSharedComponents_7 = fetchMaven {
+    version = "7";
+    baseName = "maven-shared-components";
+    package = "/org/apache/maven/shared";
+    sha512 = "35zwvraafv86jpyfvfmi76n9bzmahq5z90j9axb3b6d0wfvildz5qb43kw27si2ldwghiwsfh2jikd3gf9ms553pfillf4baab13dp6";
     type = "pom";
   };
 
@@ -414,6 +470,14 @@ rec {
     baseName = "mojo-parent";
     package = "/org/codehaus/mojo";
     sha512 = "15pzaqpdcr8c2w2b2ms3qc5d3r0flmzqav6h45nmg1l8nv7529lp6dkilhkwqag1i94vh8dvqnkxm475j9v2hxmz981azrvz7984z8w";
+    type = "pom";
+  };
+
+  ow2_1_3 = fetchMaven {
+    version = "1.3";
+    baseName = "ow2";
+    package = "/org/ow2";
+    sha512 = "1jqfqqmh19lvrjk45zzzp895jbxb8giw8sn1qdvwhh1yqxr1z5vkv98n4g0ib2l359qmb9fal4d21ba57zmbl0rqxqlggv9c5l87gfs";
     type = "pom";
   };
 
@@ -542,6 +606,14 @@ rec {
     baseName = "plexus-components";
     package = "/org/codehaus/plexus";
     sha512 = "02kdl9z8nz26h4qf9mrdm8s1y2gy1f57n825yy0y3qifavlv51k2yxza7mjsdl1dwrq84c4qlj79iqlisnhrppfy0ncbbblnbir1yln";
+    type = "pom";
+  };
+
+  plexusComponents_1_1_6 = fetchMaven {
+    version = "1.1.6";
+    baseName = "plexus-components";
+    package = "/org/codehaus/plexus";
+    sha512 = "1m6f5xzp6mk1n0svznqc8l5x3klr9kk75223ms31q65llx765dxvrsmkjlzgshb0ipb9nfxwk9hs5fvf5dgh0xlzrnc1w2pnqdi8jnh";
     type = "pom";
   };
 
@@ -758,6 +830,14 @@ rec {
     baseName = "surefire";
     package = "/org/apache/maven/surefire";
     sha512 = "3yraw37xwayyrvwa62y6li3wbzrha08j389psz16j1dawxmg78zlm2x1jmgz3nzdb60n9kk143606bgs3vrf7ri9d5pwkg9lvw7hk92";
+    type = "pom";
+  };
+
+  surefireProviders_2_12_4 = fetchMaven {
+    version = "2.12.4";
+    baseName = "surefire-providers";
+    package = "/org/apache/maven/surefire";
+    sha512 = "08di6wgiihz9svrdpkdvhlipdp83byd1s844fnjqfk3z0g5a72lpq718zy27rk41jma3hclmr4pv0g5dvbhf3v8hy92iby8w5rcxv5x";
     type = "pom";
   };
 

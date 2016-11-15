@@ -27,7 +27,8 @@ in {
     classworlds_1_1;
 
   inherit (callPackage ../development/java-modules/apache/commons-cli.nix { inherit fetchMaven; })
-    commonsCli_1_0;
+    commonsCli_1_0
+    commonsCli_1_2;
 
   inherit (callPackage ../development/java-modules/apache/commons-io.nix { inherit fetchMaven; })
     commonsIo_2_1;
@@ -49,6 +50,9 @@ in {
   inherit (callPackage ../development/java-modules/google/collections.nix { inherit fetchMaven; })
     googleCollections_1_0;
 
+  inherit (callPackage ../development/java-modules/hamcrest/all.nix { inherit fetchMaven; })
+    hamcrestAll_1_3;
+
   inherit (callPackage ../development/java-modules/hamcrest/core.nix { inherit fetchMaven; })
     hamcrestCore_1_3;
 
@@ -64,12 +68,15 @@ in {
     mavenArchiver_2_5;
 
   inherit (callPackage ../development/java-modules/maven/artifact.nix { inherit fetchMaven; })
+    mavenArtifact_2_0_1
     mavenArtifact_2_0_6
+    mavenArtifact_2_0_8
     mavenArtifact_2_0_9
     mavenArtifact_2_2_1
     mavenArtifact_3_0_3;
 
   inherit (callPackage ../development/java-modules/maven/artifact-manager.nix { inherit fetchMaven; })
+    mavenArtifactManager_2_0_1
     mavenArtifactManager_2_0_6
     mavenArtifactManager_2_0_9
     mavenArtifactManager_2_2_1;
@@ -80,6 +87,7 @@ in {
     mavenCommonArtifactFilters_1_4;
 
   inherit (callPackage ../development/java-modules/maven/core.nix { inherit fetchMaven; })
+    mavenCore_2_0_1
     mavenCore_2_0_6
     mavenCore_2_0_9
     mavenCore_2_2_1;
@@ -88,6 +96,7 @@ in {
     mavenDependencyTree_2_1;
 
   inherit (callPackage ../development/java-modules/maven/doxia-sink-api.nix { inherit fetchMaven; })
+    mavenDoxiaSinkApi_1_0_alpha6
     mavenDoxiaSinkApi_1_0_alpha7
     mavenDoxiaSinkApi_1_0_alpha10;
 
@@ -96,6 +105,7 @@ in {
     mavenEnforcerRules_1_3_1;
 
   inherit (callPackage ../development/java-modules/maven/error-diagnostics.nix { inherit fetchMaven; })
+    mavenErrorDiagnostics_2_0_1
     mavenErrorDiagnostics_2_0_6
     mavenErrorDiagnostics_2_0_9
     mavenErrorDiagnostics_2_2_1;
@@ -108,12 +118,14 @@ in {
     mavenHello_1_1;
 
   inherit (callPackage ../development/java-modules/maven/model.nix { inherit fetchMaven; })
+    mavenModel_2_0_1
     mavenModel_2_0_6
     mavenModel_2_0_9
     mavenModel_2_2_1
     mavenModel_3_0_3;
 
   inherit (callPackage ../development/java-modules/maven/monitor.nix { inherit fetchMaven; })
+    mavenMonitor_2_0_1
     mavenMonitor_2_0_6
     mavenMonitor_2_0_9
     mavenMonitor_2_2_1;
@@ -123,27 +135,35 @@ in {
     mavenPluginAnnotations_3_2;
 
   inherit (callPackage ../development/java-modules/maven/plugin-api.nix { inherit fetchMaven; })
+    mavenPluginApi_2_0_1
     mavenPluginApi_2_0_6
     mavenPluginApi_2_0_9
     mavenPluginApi_2_2_1
     mavenPluginApi_3_0_3;
 
   inherit (callPackage ../development/java-modules/maven/plugin-descriptor.nix { inherit fetchMaven; })
+    mavenPluginDescriptor_2_0_1
     mavenPluginDescriptor_2_0_6
     mavenPluginDescriptor_2_0_9
     mavenPluginDescriptor_2_2_1;
 
   inherit (callPackage ../development/java-modules/maven/plugin-parameter-documenter.nix { inherit fetchMaven; })
+    mavenPluginParameterDocumenter_2_0_1
     mavenPluginParameterDocumenter_2_0_6
     mavenPluginParameterDocumenter_2_0_9
     mavenPluginParameterDocumenter_2_2_1;
 
   inherit (callPackage ../development/java-modules/maven/plugin-registry.nix { inherit fetchMaven; })
+    mavenPluginRegistry_2_0_1
     mavenPluginRegistry_2_0_6
     mavenPluginRegistry_2_0_9
     mavenPluginRegistry_2_2_1;
 
+  inherit (callPackage ../development/java-modules/maven/plugin-testing-harness.nix { inherit fetchMaven; })
+    mavenPluginTestingHarness_1_1;
+
   inherit (callPackage ../development/java-modules/maven/profile.nix { inherit fetchMaven; })
+    mavenProfile_2_0_1
     mavenProfile_2_0_6
     mavenProfile_2_0_9
     mavenProfile_2_2_1;
@@ -151,19 +171,24 @@ in {
   inherit (callPackage ../development/java-modules/maven/project.nix { inherit fetchMaven; })
     mavenProject_2_0_1
     mavenProject_2_0_6
+    mavenProject_2_0_8
     mavenProject_2_0_9
     mavenProject_2_2_1;
 
   inherit (callPackage ../development/java-modules/maven/reporting-api.nix { inherit fetchMaven; })
+    mavenReportingApi_2_0_1
     mavenReportingApi_2_0_6
-    mavenReportingApi_2_0_9;
+    mavenReportingApi_2_0_9
+    mavenReportingApi_2_2_1;
 
   inherit (callPackage ../development/java-modules/maven/repository-metadata.nix { inherit fetchMaven; })
+    mavenRepositoryMetadata_2_0_1
     mavenRepositoryMetadata_2_0_6
     mavenRepositoryMetadata_2_0_9
     mavenRepositoryMetadata_2_2_1;
 
   inherit (callPackage ../development/java-modules/maven/settings.nix { inherit fetchMaven; })
+    mavenSettings_2_0_1
     mavenSettings_2_0_6
     mavenSettings_2_0_9
     mavenSettings_2_2_1;
@@ -186,6 +211,9 @@ in {
     mavenSurefireCommon_2_12_4
     mavenSurefireCommon_2_17;
 
+  inherit (callPackage ../development/java-modules/maven/surefire-junit4.nix { inherit fetchMaven; })
+    mavenSurefireJunit4_2_12_4;
+
   inherit (callPackage ../development/java-modules/maven/toolchain.nix { inherit fetchMaven; })
     mavenToolchain_1_0
     mavenToolchain_2_0_9
@@ -194,7 +222,14 @@ in {
   inherit (callPackage ../development/java-modules/mojo/animal-sniffer.nix { inherit fetchMaven; })
     mojoAnimalSniffer_1_11;
 
+  inherit (callPackage ../development/java-modules/mojo/java-boot-classpath-detector.nix { inherit fetchMaven; })
+    mojoJavaBootClasspathDetector_1_11;
+
+  inherit (callPackage ../development/java-modules/ow2/asm-all.nix { inherit fetchMaven; })
+    ow2AsmAll_4_0;
+
   inherit (callPackage ../development/java-modules/plexus/archiver.nix { inherit fetchMaven; })
+    plexusArchiver_1_0_alpha7
     plexusArchiver_2_1;
 
   inherit (callPackage ../development/java-modules/plexus/build-api.nix { inherit fetchMaven; })
@@ -241,9 +276,11 @@ in {
 
   inherit (callPackage ../development/java-modules/plexus/utils.nix { inherit fetchMaven; })
     plexusUtils_1_0_4
+    plexusUtils_1_0_5
     plexusUtils_1_1
     plexusUtils_1_4_1
     plexusUtils_1_4_5
+    plexusUtils_1_4_9
     plexusUtils_1_5_1
     plexusUtils_1_5_5
     plexusUtils_1_5_6
