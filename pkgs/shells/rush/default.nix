@@ -1,14 +1,14 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "rush-1.7";
+  name = "rush-1.8";
 
   src = fetchurl {
     url = "mirror://gnu/rush/${name}.tar.gz";
-    sha256 = "0fh0gbbp0iiq3wbkf503xb40r8ljk42vyj9bnlflbz82d6ipy1rm";
+    sha256 = "1vxdb81ify4xcyygh86250pi50krb16dkj42i5ii4ns3araiwckz";
   };
 
-  patches = [ ./gets.patch ];
+  patches = [ ./fix-format-security-error.patch ];
 
   doCheck = true;
 
