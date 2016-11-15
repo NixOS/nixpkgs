@@ -16,7 +16,7 @@ let
 
     ${cfg.daemon.extraConfig}
   '';
-  pkg = pkgs.clamav.override { freshclamConf = cfg.updater.config; };
+  pkg = pkgs.clamav;
 in
 {
   options = {
