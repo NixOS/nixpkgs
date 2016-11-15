@@ -2377,6 +2377,8 @@ in
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  libmarble-ssrf = qt55.callPackage ../development/libraries/libmarble-ssrf { };
+
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -3724,6 +3726,11 @@ in
   ssldump = callPackage ../tools/networking/ssldump { };
 
   sstp = callPackage ../tools/networking/sstp {};
+
+  subsurface =
+    qt55.callPackage ../applications/misc/subsurface {
+        libgit2 = pkgs.libgit2_0_23;
+    };
 
   sudo = callPackage ../tools/security/sudo { };
 
@@ -7044,6 +7051,7 @@ in
   );
 
   libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
+  libgit2_0_23 = callPackage ../development/libraries/git2/0.23.nix { };
 
   gle = callPackage ../development/libraries/gle { };
 
@@ -7679,6 +7687,8 @@ in
   libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
+
+  libdivecomputer = callPackage ../development/libraries/libdivecomputer { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
 
