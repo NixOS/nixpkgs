@@ -10,11 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "0yh2q318bnmf2152g2h1yvzgqbswn0wvbzb8p4kf7v057shxcyqn";
   };
 
+  # don't install sample config files into the absolute sysconfdir folder
+  postPatch = ''
+    substituteInPlace Makefile.in --replace ' etc ' ' '
+  '';
+
   buildInputs = [
     zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre
   ];
 
   configureFlags = [
+    "--sysconfdir=/etc/clamav"
     "--with-zlib=${zlib.dev}"
     "--with-libbz2-prefix=${bzip2.dev}"
     "--with-iconv-dir=${libiconv}"
@@ -25,6 +31,11 @@ stdenv.mkDerivation rec {
     "--with-pcre=${pcre.dev}"
     "--enable-milter"
   ];
+
+  postInstall = ''
+    mkdir $out/etc
+    cp etc/*.sample $out/etc
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.clamav.net;
