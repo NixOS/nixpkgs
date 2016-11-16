@@ -1,0 +1,107 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python3Packages.aiohttp
+#  #! nix-shell -i python -p 'python3.withPackages(ps: [ps.aiohttp])'
+import asyncio
+import aiohttp
+
+import json
+
+INDEX = "https://pypi.io/pypi"
+"""url of PyPI"""
+
+FILENAME_PACKAGES = "packages.txt"
+FILENAME_HASHES = "hashes.json"
+
+NSEMAPHORE = 200
+"""Maximum amount of concurrent requests"""
+
+NTIMEOUT = 2
+"""Timeout in seconds"""
+
+EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip', 'whl']
+"""Permitted file extensions. These are evaluated from left to right and the first occurance is returned."""
+
+def load_package_names(filename):
+    """Load names of packages we like to retrieve hashes for."""
+    with open(filename, 'r') as f:
+        names = f.read().splitlines()
+    return names
+
+def write_hashes(filename, data):
+    """Write hashes to json file."""
+
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=2, sort_keys=True)
+
+
+async def _fetch(session, url, sem):
+    async with sem:
+        with aiohttp.Timeout(NTIMEOUT):
+            async with session.get(url) as response:
+                return await response.json()
+
+
+async def _fetch_all(session, urls, loop, sem):
+    tasks = [loop.create_task(_fetch(session, url, sem)) for url in urls]
+    results = await asyncio.gather(*tasks, return_exceptions=False)
+    return results
+
+def _get_json_from_api(names, index=INDEX):
+#def _get_and_write_data(folder, packages, index=INDEX):
+    """Yield JSON information obtained from PyPI index given an iterable of package names.
+
+    :param packages: Iterable of package names.
+    :param index: url with packages index. By default `INDEX` is used.
+    """
+    loop = asyncio.get_event_loop()
+    urls = ("{}/{}/json".format(index, package) for package in names)
+    connector = aiohttp.TCPConnector(share_cookies=True, loop=loop)
+    with aiohttp.ClientSession(loop=loop, connector=connector) as session:
+        sem = asyncio.Semaphore(NSEMAPHORE)
+        data = loop.run_until_complete(_fetch_all(session, urls, loop, sem))
+        #logger.info("Finished retrieved JSON from PyPI")
+    loop.close()
+    return data
+
+def _extract_src_and_hash(json, version, extensions=EXTENSIONS):
+    """Obtain url and hash for a given version and list of allowable extensions.
+    :param json: json retrieved from PyPI
+    """
+    if not json['releases']:
+        msg = "Package {}: No releases available.".format(json['info']['name'])
+        raise ValueError(msg)
+    else:
+        # We use ['releases'] and not ['urls'] because we want to have the possibility for different version.
+        for extension in extensions:
+            for possible_file in json['releases'][version]:
+                if possible_file['filename'].endswith(extension):
+                    src = {'url': str(possible_file['url']),
+                            'sha256': str(possible_file['digests']['sha256']),
+                            }
+                    return src
+        else:
+            msg = "Package {}: No release for version {} with valid file extension available.".format(json['info']['name'], version)
+            raise ValueError(msg)
+
+
+def _get_relevant_data(json):
+    name = json['info']['name']
+    data = {}
+    data['version'] = json['info']['version']
+    # Get source archive of this version
+    data.update(_extract_src_and_hash(json, data['version']))
+    return name, data
+
+def get_hashes(names):
+    """Retrieve hashes of packages."""
+    raw_data = _get_json_from_api(names)
+    #print(raw_data)
+
+    return {name : x for name, x in map(_get_relevant_data, raw_data)}
+
+
+if __name__ == '__main__':
+
+    names = load_package_names(FILENAME_PACKAGES)
+    data = get_hashes(names)
+    write_hashes(FILENAME_HASHES, data)

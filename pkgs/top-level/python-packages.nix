@@ -26,10 +26,12 @@ let
   });
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
+  fetchpypi = callPackage ../development/python-modules/support/fetchpypi {filename=../development/python-modules/support/fetchpypi/hashes.json; };
 
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit fetchpypi;
 
   # helpers
 
@@ -15594,13 +15596,10 @@ in {
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.2.3";
-    name = "notebook-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "39a9603d3fe88b60de2903680c965cf643acf2c16fb2c6bac1d905e1042b5851";
-    };
+    pname = "notebook";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     LC_ALL = "en_US.UTF-8";
 
@@ -15820,7 +15819,7 @@ in {
     blas = pkgs.openblasCompat;
   };
 
-  numpy = self.numpy_1_11;
+  numpy = self.numpy_latest;
 
   numpy_1_10 = self.buildNumpyPackage rec {
     version = "1.10.4";
@@ -15836,6 +15835,12 @@ in {
       url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
       sha256 = "04db2fbd64e2e7c68e740b14402b25af51418fc43a59d9e54172b38b906b0f69";
     };
+  };
+
+  numpy_latest = self.buildNumpyPackage rec {
+    pname = "numpy";
+    src = fetchpypi pname;
+    version = src.meta.version;
   };
 
   numpydoc = buildPythonPackage rec {
@@ -22671,7 +22676,7 @@ in {
     gfortran = pkgs.gfortran;
   };
 
-  scipy = self.scipy_0_18;
+  scipy = self.scipy_latest;
 
   scipy_0_17 = self.buildScipyPackage rec {
     version = "0.17.1";
@@ -22688,6 +22693,13 @@ in {
       url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
       sha256 = "8ab6e9c808bf2fb3e8576cd8cf07226d9cdc18b012c06d9708429a821ac6634e";
     };
+    numpy = self.numpy;
+  };
+
+  scipy_latest = self.buildNumpyPackage rec {
+    pname = "numpy";
+    src = fetchpypi pname;
+    version = src.meta.version;
     numpy = self.numpy;
   };
 

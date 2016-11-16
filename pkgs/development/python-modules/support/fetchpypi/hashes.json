@@ -1,0 +1,17 @@
+{
+  "notebook": {
+    "sha256": "39a9603d3fe88b60de2903680c965cf643acf2c16fb2c6bac1d905e1042b5851",
+    "url": "https://files.pythonhosted.org/packages/81/a1/20af1a3ea6090343b029d31f882c7e4c061133e0c25808835b1b59a187f8/notebook-4.2.3.tar.gz",
+    "version": "4.2.3"
+  },
+  "numpy": {
+    "sha256": "04db2fbd64e2e7c68e740b14402b25af51418fc43a59d9e54172b38b906b0f69",
+    "url": "https://files.pythonhosted.org/packages/16/f5/b432f028134dd30cfbf6f21b8264a9938e5e0f75204e72453af08d67eb0b/numpy-1.11.2.tar.gz",
+    "version": "1.11.2"
+  },
+  "scipy": {
+    "sha256": "8ab6e9c808bf2fb3e8576cd8cf07226d9cdc18b012c06d9708429a821ac6634e",
+    "url": "https://files.pythonhosted.org/packages/22/41/b1538a75309ae4913cdbbdc8d1cc54cae6d37981d2759532c1aa37a41121/scipy-0.18.1.tar.gz",
+    "version": "0.18.1"
+  }
+}
