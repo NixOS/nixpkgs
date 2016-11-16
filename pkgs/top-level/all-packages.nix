@@ -2285,6 +2285,8 @@ in
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
+  jsduck = callPackage ../development/tools/jsduck { };
+
   jwhois = callPackage ../tools/networking/jwhois { };
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
@@ -16391,7 +16393,7 @@ in
   paml = callPackage ../applications/science/biology/paml { };
 
   plink = callPackage ../applications/science/biology/plink/default.nix { };
-  
+
   plink-ng = callPackage ../applications/science/biology/plink-ng/default.nix { };
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
