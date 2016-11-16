@@ -25171,7 +25171,7 @@ in {
       sha256 = "0kljfrfq0c2rmxf8am57333ia41kd0snbm2rnqbdy816hgpcq5a1";
     };
 
-    propagatedBuildInputs = with self; [ six pillow ];
+    propagatedBuildInputs = with self; [ six pillow pymaging_png ];
 
     meta = {
       description = "Quick Response code generation for Python";
