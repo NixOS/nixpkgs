@@ -74,7 +74,7 @@ in
 
     services.zope2.instances = mkOption {
       default = {};
-      type = with types; loaOf (submodule zope2Opts);
+      type = with types; attrsOf (submodule zope2Opts);
       example = literalExample ''
         {
           plone01 = {
