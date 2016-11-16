@@ -24935,12 +24935,12 @@ in {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.2.2";
+    version = "4.3.1";
     name = "traitlets-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/traitlets/${name}.tar.gz";
-      sha256 = "7d7e3070484b2fe490fa55e0acf7023afc5ed9ddabec57405f25c355158e152a";
+      sha256 = "ba8c94323ccbe8fd792e45d8efe8c95d3e0744cc8c085295b607552ab573724c";
     };
 
     buildInputs = with self; [ nose mock ];
