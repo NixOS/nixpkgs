@@ -27,13 +27,11 @@ in stdenv.mkDerivation (rec {
     sha256 = "1ryggmz961qd0fl50rkjjvi6g9azwla2vx9310a9nzjaj5x6ib4y";
   };
 
-  postUnpack = ''
-    pushd ghc-${builtins.substring 0 7 rev}
+  postPatch = ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
     patchShebangs .
     ./boot
-    popd
   '';
 
   buildInputs = commonBuildInputs;
