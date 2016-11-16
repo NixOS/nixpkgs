@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "2.10.1";
+  version = "2.10.2";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1ijd1b6szvfw0dmqa3dz1m5g5hbkl9xkb86a9qcjrz0w0vwjvhx9";
+    sha256 = "0wc64dzcxrzgi6kwcljz6y3cwm3ajdgf6aws7g58azbhvl1jk04l";
   };
 
   hardeningDisable = [ "format" ];

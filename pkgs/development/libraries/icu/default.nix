@@ -16,9 +16,6 @@ stdenv.mkDerivation ({
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  makeFlags = stdenv.lib.optionalString stdenv.isDarwin
-    "CXXFLAGS=-headerpad_max_install_names";
-
   # FIXME: This fixes dylib references in the dylibs themselves, but
   # not in the programs in $out/bin.
   buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;

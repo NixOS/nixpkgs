@@ -1,48 +1,47 @@
 { stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex
+, autoconf, automake, happy, alex, cross ? null
 }:
 
 let
   inherit (bootPkgs) ghc;
 
-in stdenv.mkDerivation rec {
-  version = "8.1.20161109";
-  name = "ghc-${version}";
-  rev = "2e8463b232054b788b73e6551947a9434aa76009";
+  commonBuildInputs = [ ghc perl autoconf automake happy alex ];
 
-  src = fetchgit {
-    url = "git://git.haskell.org/ghc.git";
-    inherit rev;
-    sha256 = "12nxai5qqnw42syhd0vzl2f9f8z28rc0fsa7g771dyzpqglak90l";
-  };
+  version = "8.1.20161115";
 
-  patches = [
-    ./ghc-HEAD-dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
-  ];
-
-  postUnpack = ''
-    pushd ghc-${builtins.substring 0 7 rev}
-    echo ${version} >VERSION
-    echo ${rev} >GIT_COMMIT_ID
-    patchShebangs .
-    ./boot
-    popd
-  '';
-
-  buildInputs = [ ghc perl autoconf automake happy alex ];
-
-  enableParallelBuilding = true;
-
-  preConfigure = ''
+  commonPreConfigure =  ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
+in stdenv.mkDerivation (rec {
+  inherit version;
+  name = "ghc-${version}";
+  rev = "017d11e0a36866b05ace32ece1af11adf652a619";
+
+  src = fetchgit {
+    url = "git://git.haskell.org/ghc.git";
+    inherit rev;
+    sha256 = "1ryggmz961qd0fl50rkjjvi6g9azwla2vx9310a9nzjaj5x6ib4y";
+  };
+
+  postPatch = ''
+    echo ${version} >VERSION
+    echo ${rev} >GIT_COMMIT_ID
+    patchShebangs .
+    ./boot
+  '';
+
+  buildInputs = commonBuildInputs;
+
+  enableParallelBuilding = true;
+
+  preConfigure = commonPreConfigure;
 
   configureFlags = [
-    "--with-cc=${stdenv.cc}/bin/cc"
+    "CC=${stdenv.cc}/bin/cc"
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
@@ -76,4 +75,22 @@ in stdenv.mkDerivation rec {
     inherit (ghc.meta) license platforms;
   };
 
-}
+} // stdenv.lib.optionalAttrs (cross != null) {
+  name = "${cross.config}-ghc-${version}";
+
+  # Some fixes for cross-compilation to iOS. See https://phabricator.haskell.org/D2710 (D2711,D2712,D2713)
+  patches = [ ./D2710.patch ./D2711.patch ./D2712.patch ./D2713.patch ];
+
+  preConfigure = commonPreConfigure + ''
+    sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
+  '';
+
+  configureFlags = [
+    "CC=${cross.config}-cc"
+    "--target=${cross.config}"
+  ];
+
+  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
+
+  dontSetConfigureCross = true;
+})

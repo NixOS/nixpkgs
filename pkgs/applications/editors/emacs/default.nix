@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals srcRepo [ autoconf automake texinfo ];
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext libselinux ]
-    ++ lib.optional stdenv.isLinux dbus
+    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
+    ++ lib.optionals stdenv.isLinux [ dbus libselinux ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
