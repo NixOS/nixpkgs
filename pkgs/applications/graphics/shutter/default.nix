@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg }:
+{ stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg }:
 
 let
   perlModules = with perlPackages;
@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
     url = "http://shutter-project.org/wp-content/uploads/releases/tars/${name}.tar.gz";
     sha256 = "09cn3scwy98wqxkrjhnmxhpfnnynlbb41856yn5m3zwzqrxiyvak";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "http://svnweb.mageia.org/packages/cauldron/shutter/current/SOURCES/CVE-2015-0854.patch?revision=880308&view=co";
+      name = "CVE-2015-0854.patch";
+      sha256 = "14r18sxz3ylf39cn9b85snjhjxdk6ngq4vnpljwghw2q5430nb12";
+    })
+  ];
 
   buildInputs = [ perl makeWrapper gdk_pixbuf librsvg ] ++ perlModules;
 
