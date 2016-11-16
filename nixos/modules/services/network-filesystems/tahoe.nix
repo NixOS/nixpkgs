@@ -8,7 +8,7 @@ in
     options.services.tahoe = {
       introducers = mkOption {
         default = {};
-        type = with types; loaOf (submodule {
+        type = with types; attrsOf (submodule {
           options = {
             nickname = mkOption {
               type = types.str;
@@ -49,7 +49,7 @@ in
       };
       nodes = mkOption {
         default = {};
-        type = with types; loaOf (submodule {
+        type = with types; attrsOf (submodule {
           options = {
             nickname = mkOption {
               type = types.str;
