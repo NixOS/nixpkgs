@@ -1,4 +1,8 @@
-#! /bin/sh -e
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p qemu awscli ec2_ami_tools jq
+
+# To start with do: nix-shell -p awscli --run "aws configure"
+
 
 set -o pipefail
 #set -x
