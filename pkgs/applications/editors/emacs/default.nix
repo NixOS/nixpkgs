@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
-    ++ lib.optional stdenv.isLinux [ dbus libselinux ]
+    ++ lib.optionals stdenv.isLinux [ dbus libselinux ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
