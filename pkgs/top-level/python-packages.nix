@@ -25051,16 +25051,12 @@ in {
 
   qrcode = buildPythonPackage rec {
     name = "qrcode-${version}";
-    version = "5.1";
+    version = "5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/q/qrcode/${name}.tar.gz";
-      sha256 = "0skzrvhjnnacrz52jml4i050vdx5lfcd3np172srxjaghdgfxg9k";
+      sha256 = "0kljfrfq0c2rmxf8am57333ia41kd0snbm2rnqbdy816hgpcq5a1";
     };
-
-    # Errors in several tests:
-    # TypeError: must be str, not bytes
-    disabled = isPy3k;
 
     propagatedBuildInputs = with self; [ six pillow ];
 
