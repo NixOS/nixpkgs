@@ -31,6 +31,11 @@ core-packages:
   - unix-2.7.2.0
   - xhtml-3000.2.1
 
+  # Hack: The following package is a core package of GHCJS. If we don't declare
+  # it, then hackage2nix will generate a Hackage database where all dependants
+  # if this library are maked as "broken".
+  - ghcjs-base-0
+
 default-package-overrides:
   # LTS Haskell 7.9
   - abstract-deque ==0.3
