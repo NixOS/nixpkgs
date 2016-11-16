@@ -606,6 +606,10 @@ let
         '';
     };
 
+  unitFiles = map (name: {
+    target = "systemd/network/${name}";
+    source = "${cfg.units.${name}.unit}/${name}";
+  }) (attrNames cfg.units);
 in
 
 {
@@ -657,17 +661,15 @@ in
     systemd.additionalUpstreamSystemUnits =
       [ "systemd-networkd.service" "systemd-networkd-wait-online.service" ];
 
-    systemd.network.units =
-      mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
+    systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
       // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
       // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
 
-    environment.etc."systemd/network".source =
-      generateUnits "network" cfg.units [] [];
+    environment.etc = unitFiles;
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ config.environment.etc."systemd/network".source ];
+      restartTriggers = map (f: f.source) (unitFiles);
     };
 
     systemd.services.systemd-networkd-wait-online = {
