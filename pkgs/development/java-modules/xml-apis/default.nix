@@ -3,8 +3,8 @@
 rec {
   xmlApis_1_3_03 = map (obj: fetchMaven {
     version = "1.3.03";
-    baseName = "xml-apis";
-    package = "/xml-apis";
+    artifactId = "xml-apis";
+    groupId = "xml-apis";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

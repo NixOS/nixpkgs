@@ -3,8 +3,8 @@
 rec {
   findbugsJsr305_2_0_1 = map (obj: fetchMaven {
     version = "2.0.1";
-    baseName = "jsr305";
-    package = "/com/google/code/findbugs";
+    artifactId = "jsr305";
+    groupId = "com.google.code.findbugs";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

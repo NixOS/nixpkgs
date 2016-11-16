@@ -10,8 +10,8 @@ in rec {
 
   animalSniffer_1_11 = map (obj: fetchMaven {
     version = "1.11";
-    baseName = "animal-sniffer-maven-plugin";
-    package = "/org/codehaus/mojo";
+    artifactId = "animal-sniffer-maven-plugin";
+    groupId = "org.codehaus.mojo";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -21,8 +21,8 @@ in rec {
 
   mavenClean_2_5 = map (obj: fetchMaven rec {
     version = "2.5";
-    baseName = "maven-clean-plugin";
-    package = "/org/apache/maven/plugins";
+    artifactId = "maven-clean-plugin";
+    groupId = "org.apache.maven.plugins";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -32,8 +32,8 @@ in rec {
 
   mavenCompiler_3_1 = map (obj: fetchMaven rec {
     version = "3.1";
-    baseName = "maven-compiler-plugin";
-    package = "/org/apache/maven/plugins";
+    artifactId = "maven-compiler-plugin";
+    groupId = "org.apache.maven.plugins";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -43,8 +43,8 @@ in rec {
 
   mavenEnforcer_1_3_1 = map (obj: fetchMaven rec {
     version = "1.3.1";
-    baseName = "maven-enforcer-plugin";
-    package = "/org/apache/maven/plugins";
+    artifactId = "maven-enforcer-plugin";
+    groupId = "org.apache.maven.plugins";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -54,8 +54,8 @@ in rec {
 
   mavenInstall_2_4 = map (obj: fetchMaven rec {
     version = "2.4";
-    baseName = "maven-install-plugin";
-    package = "/org/apache/maven/plugins";
+    artifactId = "maven-install-plugin";
+    groupId = "org.apache.maven.plugins";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -65,8 +65,8 @@ in rec {
 
   mavenJar_2_4 = map (obj: fetchMaven rec {
     version = "2.4";
-    baseName = "maven-jar-plugin";
-    package = "/org/apache/maven/plugins";
+    artifactId = "maven-jar-plugin";
+    groupId = "org.apache.maven.plugins";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -76,8 +76,8 @@ in rec {
 
   mavenReplacer_1_5_3 = map (obj: fetchMaven rec {
     version = "1.5.3";
-    baseName = "replacer";
-    package = "/com/google/code/maven-replacer-plugin";
+    artifactId = "replacer";
+    groupId = "com.google.code.maven-replacer-plugin";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -87,8 +87,8 @@ in rec {
 
   mavenResources_2_6 = map (obj: fetchMaven rec {
     version = "2.6";
-    baseName = "maven-resources-plugin";
-    package = "/org/apache/maven/plugins";
+    artifactId = "maven-resources-plugin";
+    groupId = "org.apache.maven.plugins";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -98,8 +98,8 @@ in rec {
 
   mavenSurefire_2_12_4 = map (obj: fetchMaven rec {
     version = "2.12.4";
-    baseName = "maven-surefire-plugin";
-    package = "/org/apache/maven/plugins";
+    artifactId = "maven-surefire-plugin";
+    groupId = "org.apache.maven.plugins";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -109,8 +109,8 @@ in rec {
 
   mavenSurefire_2_17 = map (obj: fetchMaven rec {
     version = "2.17";
-    baseName = "maven-surefire-plugin";
-    package = "/org/apache/maven/plugins";
+    artifactId = "maven-surefire-plugin";
+    groupId = "org.apache.maven.plugins";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

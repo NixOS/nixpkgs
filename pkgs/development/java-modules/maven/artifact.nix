@@ -3,8 +3,8 @@
 rec {
   mavenArtifact_2_0_1 = map (obj: fetchMaven {
     version = "2.0.1";
-    baseName = "maven-artifact";
-    package = "/org/apache/maven";
+    artifactId = "maven-artifact";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   mavenArtifact_2_0_6 = map (obj: fetchMaven {
     version = "2.0.6";
-    baseName = "maven-artifact";
-    package = "/org/apache/maven";
+    artifactId = "maven-artifact";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -25,8 +25,8 @@ rec {
 
   mavenArtifact_2_0_8 = map (obj: fetchMaven {
     version = "2.0.8";
-    baseName = "maven-artifact";
-    package = "/org/apache/maven";
+    artifactId = "maven-artifact";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -36,8 +36,8 @@ rec {
 
   mavenArtifact_2_0_9 = map (obj: fetchMaven {
     version = "2.0.9";
-    baseName = "maven-artifact";
-    package = "/org/apache/maven";
+    artifactId = "maven-artifact";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -47,8 +47,8 @@ rec {
 
   mavenArtifact_2_2_1 = map (obj: fetchMaven {
     version = "2.2.1";
-    baseName = "maven-artifact";
-    package = "/org/apache/maven";
+    artifactId = "maven-artifact";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -58,8 +58,8 @@ rec {
 
   mavenArtifact_3_0_3 = map (obj: fetchMaven {
     version = "3.0.3";
-    baseName = "maven-artifact";
-    package = "/org/apache/maven";
+    artifactId = "maven-artifact";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

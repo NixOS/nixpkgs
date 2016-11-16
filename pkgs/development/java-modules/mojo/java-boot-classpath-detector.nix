@@ -3,8 +3,8 @@
 rec {
   mojoJavaBootClasspathDetector_1_11 = map (obj: fetchMaven {
     version = "1.11";
-    baseName = "java-boot-classpath-detector";
-    package = "/org/codehaus/mojo";
+    artifactId = "java-boot-classpath-detector";
+    groupId = "org.codehaus.mojo";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

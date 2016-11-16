@@ -3,8 +3,8 @@
 rec {
   plexusInterpolation_1_11 = map (obj: fetchMaven {
     version = "1.11";
-    baseName = "plexus-interpolation";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-interpolation";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   plexusInterpolation_1_12 = map (obj: fetchMaven {
     version = "1.12";
-    baseName = "plexus-interpolation";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-interpolation";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -25,8 +25,8 @@ rec {
 
   plexusInterpolation_1_13 = map (obj: fetchMaven {
     version = "1.13";
-    baseName = "plexus-interpolation";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-interpolation";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -36,8 +36,8 @@ rec {
 
   plexusInterpolation_1_15 = map (obj: fetchMaven {
     version = "1.15";
-    baseName = "plexus-interpolation";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-interpolation";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

@@ -3,8 +3,8 @@
 rec {
   googleCollections_1_0 = map (obj: fetchMaven {
     version = "1.0";
-    baseName = "google-collections";
-    package = "/com/google/collections";
+    artifactId = "google-collections";
+    groupId = "com.google.collections";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

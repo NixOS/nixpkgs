@@ -3,8 +3,8 @@
 rec {
   aetherUtil_0_9_0_M2 = map (obj: fetchMaven {
     version = "0.9.0.M2";
-    baseName = "aether-util";
-    package = "/org/eclipse/aether";
+    artifactId = "aether-util";
+    groupId = "org.eclipse.aether";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

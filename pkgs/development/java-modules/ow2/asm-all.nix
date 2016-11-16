@@ -3,8 +3,8 @@
 rec {
   ow2AsmAll_4_0 = map (obj: fetchMaven {
     version = "4.0";
-    baseName = "asm-all";
-    package = "/org/ow2/asm";
+    artifactId = "asm-all";
+    groupId = "org.ow2.asm";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

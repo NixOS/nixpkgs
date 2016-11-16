@@ -3,8 +3,8 @@
 rec {
   commonsLang_2_1 = map (obj: fetchMaven {
     version = "2.1";
-    baseName = "commons-lang";
-    package = "/commons-lang";
+    artifactId = "commons-lang";
+    groupId = "commons-lang";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   commonsLang_2_3 = map (obj: fetchMaven {
     version = "2.3";
-    baseName = "commons-lang";
-    package = "/commons-lang";
+    artifactId = "commons-lang";
+    groupId = "commons-lang";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -25,8 +25,8 @@ rec {
 
   commonsLang_2_6 = map (obj: fetchMaven {
     version = "2.6";
-    baseName = "commons-lang";
-    package = "/commons-lang";
+    artifactId = "commons-lang";
+    groupId = "commons-lang";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

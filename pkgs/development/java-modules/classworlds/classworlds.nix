@@ -3,8 +3,8 @@
 rec {
   classworlds_1_1_alpha2 = map (obj: fetchMaven {
     version = "1.1-alpha-2";
-    baseName = "classworlds";
-    package = "/classworlds";
+    artifactId = "classworlds";
+    groupId = "classworlds";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   classworlds_1_1 = map (obj: fetchMaven {
     version = "1.1";
-    baseName = "classworlds";
-    package = "/classworlds";
+    artifactId = "classworlds";
+    groupId = "classworlds";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

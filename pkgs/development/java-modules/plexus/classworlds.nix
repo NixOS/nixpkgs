@@ -3,8 +3,8 @@
 rec {
   plexusClassworlds_2_2_2 = map (obj: fetchMaven {
     version = "2.2.2";
-    baseName = "plexus-classworlds";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-classworlds";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   plexusClassworlds_2_4 = map (obj: fetchMaven {
     version = "2.4";
-    baseName = "plexus-classworlds";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-classworlds";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

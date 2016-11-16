@@ -3,8 +3,8 @@
 rec {
   commonsCli_1_0 = map (obj: fetchMaven {
     version = "1.0";
-    baseName = "commons-cli";
-    package = "/commons-cli";
+    artifactId = "commons-cli";
+    groupId = "commons-cli";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   commonsCli_1_2 = map (obj: fetchMaven {
     version = "1.2";
-    baseName = "commons-cli";
-    package = "/commons-cli";
+    artifactId = "commons-cli";
+    groupId = "commons-cli";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

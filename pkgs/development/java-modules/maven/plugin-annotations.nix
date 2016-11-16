@@ -3,8 +3,8 @@
 rec {
   mavenPluginAnnotations_3_1 = map (obj: fetchMaven {
     version = "3.1";
-    baseName = "maven-plugin-annotations";
-    package = "/org/apache/maven/plugin-tools";
+    artifactId = "maven-plugin-annotations";
+    groupId = "org.apache.maven.plugin-tools";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   mavenPluginAnnotations_3_2 = map (obj: fetchMaven {
     version = "3.2";
-    baseName = "maven-plugin-annotations";
-    package = "/org/apache/maven/plugin-tools";
+    artifactId = "maven-plugin-annotations";
+    groupId = "org.apache.maven.plugin-tools";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

@@ -3,8 +3,8 @@
 rec {
   plexusIo_2_0_2 = map (obj: fetchMaven {
     version = "2.0.2";
-    baseName = "plexus-io";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-io";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

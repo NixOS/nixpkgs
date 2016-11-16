@@ -3,8 +3,8 @@
 rec {
   plexusCompilerManager_2_2 = map (obj: fetchMaven {
     version = "2.2";
-    baseName = "plexus-compiler-manager";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-compiler-manager";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

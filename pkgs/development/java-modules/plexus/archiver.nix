@@ -3,8 +3,8 @@
 rec {
   plexusArchiver_1_0_alpha7 = map (obj: fetchMaven {
     version = "1.0-alpha-7";
-    baseName = "plexus-archiver";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-archiver";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   plexusArchiver_2_1 = map (obj: fetchMaven {
     version = "2.1";
-    baseName = "plexus-archiver";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-archiver";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

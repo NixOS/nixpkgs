@@ -3,8 +3,8 @@
 rec {
   plexusInteractivityApi_1_0_alpha4 = map (obj: fetchMaven {
     version = "1.0-alpha-4";
-    baseName = "plexus-interactivity-api";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-interactivity-api";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

@@ -3,8 +3,8 @@
 rec {
   mavenDoxiaSinkApi_1_0_alpha6 = map (obj: fetchMaven {
     version = "1.0-alpha-6";
-    baseName = "doxia-sink-api";
-    package = "/org/apache/maven/doxia";
+    artifactId = "doxia-sink-api";
+    groupId = "org.apache.maven.doxia";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   mavenDoxiaSinkApi_1_0_alpha7 = map (obj: fetchMaven {
     version = "1.0-alpha-7";
-    baseName = "doxia-sink-api";
-    package = "/org/apache/maven/doxia";
+    artifactId = "doxia-sink-api";
+    groupId = "org.apache.maven.doxia";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -25,8 +25,8 @@ rec {
 
   mavenDoxiaSinkApi_1_0_alpha10 = map (obj: fetchMaven {
     version = "1.0-alpha-10";
-    baseName = "doxia-sink-api";
-    package = "/org/apache/maven/doxia";
+    artifactId = "doxia-sink-api";
+    groupId = "org.apache.maven.doxia";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

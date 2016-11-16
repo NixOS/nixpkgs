@@ -3,8 +3,8 @@
 rec {
   mavenDependencyTree_2_1 = map (obj: fetchMaven {
     version = "2.1";
-    baseName = "maven-dependency-tree";
-    package = "/org/apache/maven/shared";
+    artifactId = "maven-dependency-tree";
+    groupId = "org.apache.maven.shared";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

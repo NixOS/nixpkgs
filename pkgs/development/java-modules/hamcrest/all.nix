@@ -3,8 +3,8 @@
 rec {
   hamcrestAll_1_3 = map (obj: fetchMaven {
     version = "1.3";
-    baseName = "hamcrest-all";
-    package = "/org/hamcrest";
+    artifactId = "hamcrest-all";
+    groupId = "org.hamcrest";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

@@ -3,8 +3,8 @@
 rec {
   plexusContainerDefault_1_0_alpha9 = map (obj: fetchMaven {
     version = "1.0-alpha-9";
-    baseName = "plexus-container-default";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-container-default";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   plexusContainerDefault_1_0_alpha9_stable1 = map (obj: fetchMaven {
     version = "1.0-alpha-9-stable-1";
-    baseName = "plexus-container-default";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-container-default";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -25,8 +25,8 @@ rec {
 
   plexusContainerDefault_1_5_5 = map (obj: fetchMaven {
     version = "1.5.5";
-    baseName = "plexus-container-default";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-container-default";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

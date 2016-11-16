@@ -3,8 +3,8 @@
 rec {
   commonsLoggingApi_1_1 = map (obj: fetchMaven {
     version = "1.1";
-    baseName = "commons-logging-api";
-    package = "/commons-logging";
+    artifactId = "commons-logging-api";
+    groupId = "commons-logging";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

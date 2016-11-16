@@ -30,8 +30,8 @@ in rec {
 
   junit_3_8_1 = map (obj: fetchMaven {
     version = "3.8.1";
-    baseName = "junit";
-    package = "/junit";
+    artifactId = "junit";
+    groupId = "junit";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -41,8 +41,8 @@ in rec {
 
   junit_3_8_2 = map (obj: fetchMaven {
     version = "3.8.2";
-    baseName = "junit";
-    package = "/junit";
+    artifactId = "junit";
+    groupId = "junit";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

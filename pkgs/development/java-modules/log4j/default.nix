@@ -3,8 +3,8 @@
 rec {
   log4j_1_2_12 = map (obj: fetchMaven {
     version = "1.2.12";
-    baseName = "log4j";
-    package = "/log4j";
+    artifactId = "log4j";
+    groupId = "log4j";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

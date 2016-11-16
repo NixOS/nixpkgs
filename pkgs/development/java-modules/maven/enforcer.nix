@@ -3,8 +3,8 @@
 rec {
   mavenEnforcerApi_1_3_1 = map (obj: fetchMaven {
     version = "1.3.1";
-    baseName = "enforcer-api";
-    package = "/org/apache/maven/enforcer";
+    artifactId = "enforcer-api";
+    groupId = "org.apache.maven.enforcer";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   mavenEnforcerRules_1_3_1 = map (obj: fetchMaven {
     version = "1.3.1";
-    baseName = "enforcer-rules";
-    package = "/org/apache/maven/enforcer";
+    artifactId = "enforcer-rules";
+    groupId = "org.apache.maven.enforcer";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

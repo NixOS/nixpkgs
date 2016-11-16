@@ -3,8 +3,8 @@
 rec {
   mavenToolchain_1_0 = map (obj: fetchMaven {
     version = "1.0";
-    baseName = "maven-toolchain";
-    package = "/org/apache/maven";
+    artifactId = "maven-toolchain";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   mavenToolchain_2_0_9 = map (obj: fetchMaven {
     version = "2.0.9";
-    baseName = "maven-toolchain";
-    package = "/org/apache/maven";
+    artifactId = "maven-toolchain";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -25,8 +25,8 @@ rec {
 
   mavenToolchain_2_2_1 = map (obj: fetchMaven {
     version = "2.2.1";
-    baseName = "maven-toolchain";
-    package = "/org/apache/maven";
+    artifactId = "maven-toolchain";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

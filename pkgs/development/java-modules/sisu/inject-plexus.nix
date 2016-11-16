@@ -3,8 +3,8 @@
 rec {
   sisuInjectPlexus_2_1_1 = map (obj: fetchMaven {
     version = "2.1.1";
-    baseName = "sisu-inject-plexus";
-    package = "/org/sonatype/sisu";
+    artifactId = "sisu-inject-plexus";
+    groupId = "org.sonatype.sisu";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

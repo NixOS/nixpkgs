@@ -3,8 +3,8 @@
 rec {
   bsh_2_0_b4 = map (obj: fetchMaven {
     version = "2.0b4";
-    baseName = "bsh";
-    package = "/org/beanshell";
+    artifactId = "bsh";
+    groupId = "org.beanshell";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

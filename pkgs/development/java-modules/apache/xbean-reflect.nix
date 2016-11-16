@@ -3,8 +3,8 @@
 rec {
   xbeanReflect_3_4 = map (obj: fetchMaven {
     version = "3.4";
-    baseName = "xbean-reflect";
-    package = "/org/apache/xbean";
+    artifactId = "xbean-reflect";
+    groupId = "org.apache.xbean";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

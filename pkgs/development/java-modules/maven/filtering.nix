@@ -3,8 +3,8 @@
 rec {
   mavenFiltering_1_1 = map (obj: fetchMaven {
     version = "1.1";
-    baseName = "maven-filtering";
-    package = "/org/apache/maven/shared";
+    artifactId = "maven-filtering";
+    groupId = "org.apache.maven.shared";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

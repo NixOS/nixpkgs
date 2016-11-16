@@ -3,8 +3,8 @@
 rec {
   plexusComponentAnnotations_1_5_5 = map (obj: fetchMaven {
     version = "1.5.5";
-    baseName = "plexus-component-annotations";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-component-annotations";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

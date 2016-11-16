@@ -3,8 +3,8 @@
 rec {
   sisuGuice_2_9_4 = map (obj: fetchMaven {
     version = "2.9.4";
-    baseName = "sisu-guice";
-    package = "/org/sonatype/sisu";
+    artifactId = "sisu-guice";
+    groupId = "org.sonatype.sisu";
     suffix = "-no_aop";
     sha512 = obj.sha512;
     type = obj.type;

@@ -3,8 +3,8 @@
 rec {
   commonsLang3_3_1 = map (obj: fetchMaven {
     version = "3.1";
-    baseName = "commons-lang3";
-    package = "/org/apache/commons";
+    artifactId = "commons-lang3";
+    groupId = "org.apache.commons";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

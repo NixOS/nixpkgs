@@ -3,8 +3,8 @@
 rec {
   mavenSurefireJunit4_2_12_4 = map (obj: fetchMaven {
     version = "2.12.4";
-    baseName = "surefire-junit4";
-    package = "/org/apache/maven/surefire";
+    artifactId = "surefire-junit4";
+    groupId = "org.apache.maven.surefire";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

@@ -3,8 +3,8 @@
 rec {
   plexusUtils_1_0_4 = map (obj: fetchMaven {
     version = "1.0.4";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   plexusUtils_1_0_5 = map (obj: fetchMaven {
     version = "1.0.5";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -25,8 +25,8 @@ rec {
 
   plexusUtils_1_1 = map (obj: fetchMaven {
     version = "1.1";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -36,8 +36,8 @@ rec {
 
   plexusUtils_1_4_1 = map (obj: fetchMaven {
     version = "1.4.1";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -47,8 +47,8 @@ rec {
 
   plexusUtils_1_4_5 = map (obj: fetchMaven {
     version = "1.4.5";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -58,8 +58,8 @@ rec {
 
   plexusUtils_1_4_9 = map (obj: fetchMaven {
     version = "1.4.9";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -69,8 +69,8 @@ rec {
 
   plexusUtils_1_5_1 = map (obj: fetchMaven {
     version = "1.5.1";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -80,8 +80,8 @@ rec {
 
   plexusUtils_1_5_5 = map (obj: fetchMaven {
     version = "1.5.5";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -91,8 +91,8 @@ rec {
 
   plexusUtils_1_5_6 = map (obj: fetchMaven {
     version = "1.5.6";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -102,8 +102,8 @@ rec {
 
   plexusUtils_1_5_8 = map (obj: fetchMaven {
     version = "1.5.8";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -113,8 +113,8 @@ rec {
 
   plexusUtils_1_5_15 = map (obj: fetchMaven {
     version = "1.5.15";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -124,8 +124,8 @@ rec {
 
   plexusUtils_2_0_5 = map (obj: fetchMaven {
     version = "2.0.5";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -135,8 +135,8 @@ rec {
 
   plexusUtils_2_0_6 = map (obj: fetchMaven {
     version = "2.0.6";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -146,8 +146,8 @@ rec {
 
   plexusUtils_3_0 = map (obj: fetchMaven {
     version = "3.0";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -157,8 +157,8 @@ rec {
 
   plexusUtils_3_0_5 = map (obj: fetchMaven {
     version = "3.0.5";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -168,8 +168,8 @@ rec {
 
   plexusUtils_3_0_8 = map (obj: fetchMaven {
     version = "3.0.8";
-    baseName = "plexus-utils";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-utils";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

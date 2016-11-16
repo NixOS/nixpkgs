@@ -3,8 +3,8 @@
 rec {
   xercesImpl_2_8_0 = map (obj: fetchMaven {
     version = "2.8.0";
-    baseName = "xercesImpl";
-    package = "/xerces";
+    artifactId = "xercesImpl";
+    groupId = "xerces";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

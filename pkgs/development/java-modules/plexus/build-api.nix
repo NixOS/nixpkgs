@@ -3,8 +3,8 @@
 rec {
   plexusBuildApi_0_0_4 = map (obj: fetchMaven {
     version = "0.0.4";
-    baseName = "plexus-build-api";
-    package = "/org/sonatype/plexus";
+    artifactId = "plexus-build-api";
+    groupId = "org.sonatype.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

@@ -3,8 +3,8 @@
 rec {
   mavenArchiver_2_5 = map (obj: fetchMaven {
     version = "2.5";
-    baseName = "maven-archiver";
-    package = "/org/apache/maven";
+    artifactId = "maven-archiver";
+    groupId = "org.apache.maven";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

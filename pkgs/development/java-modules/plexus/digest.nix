@@ -3,8 +3,8 @@
 rec {
   plexusDigest_1_0 = map (obj: fetchMaven {
     version = "1.0";
-    baseName = "plexus-digest";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-digest";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

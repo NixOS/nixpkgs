@@ -3,8 +3,8 @@
 rec {
   mavenSurefireBooter_2_12_4 = map (obj: fetchMaven {
     version = "2.12.4";
-    baseName = "surefire-booter";
-    package = "/org/apache/maven/surefire";
+    artifactId = "surefire-booter";
+    groupId = "org.apache.maven.surefire";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   mavenSurefireBooter_2_17 = map (obj: fetchMaven {
     version = "2.17";
-    baseName = "surefire-booter";
-    package = "/org/apache/maven/surefire";
+    artifactId = "surefire-booter";
+    groupId = "org.apache.maven.surefire";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

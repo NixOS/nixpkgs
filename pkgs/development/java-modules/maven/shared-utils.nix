@@ -3,8 +3,8 @@
 rec {
   mavenSharedUtils_0_1 = map (obj: fetchMaven {
     version = "0.1";
-    baseName = "maven-shared-utils";
-    package = "/org/apache/maven/shared";
+    artifactId = "maven-shared-utils";
+    groupId = "org.apache.maven.shared";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

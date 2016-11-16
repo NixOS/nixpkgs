@@ -3,8 +3,8 @@
 rec {
   mavenCommonArtifactFilters_1_2 = map (obj: fetchMaven {
     version = "1.2";
-    baseName = "maven-common-artifact-filters";
-    package = "/org/apache/maven/shared";
+    artifactId = "maven-common-artifact-filters";
+    groupId = "org.apache.maven.shared";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -14,8 +14,8 @@ rec {
 
   mavenCommonArtifactFilters_1_3 = map (obj: fetchMaven {
     version = "1.3";
-    baseName = "maven-common-artifact-filters";
-    package = "/org/apache/maven/shared";
+    artifactId = "maven-common-artifact-filters";
+    groupId = "org.apache.maven.shared";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
@@ -25,8 +25,8 @@ rec {
 
   mavenCommonArtifactFilters_1_4 = map (obj: fetchMaven {
     version = "1.4";
-    baseName = "maven-common-artifact-filters";
-    package = "/org/apache/maven/shared";
+    artifactId = "maven-common-artifact-filters";
+    groupId = "org.apache.maven.shared";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

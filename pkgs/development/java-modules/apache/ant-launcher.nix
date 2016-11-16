@@ -3,8 +3,8 @@
 rec {
   antLauncher_1_8_2 = map (obj: fetchMaven {
     version = "1.8.2";
-    baseName = "ant-launcher";
-    package = "/org/apache/ant";
+    artifactId = "ant-launcher";
+    groupId = "org.apache.ant";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

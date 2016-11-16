@@ -3,8 +3,8 @@
 rec {
   commonsIo_2_1 = map (obj: fetchMaven {
     version = "2.1";
-    baseName = "commons-io";
-    package = "/commons-io";
+    artifactId = "commons-io";
+    groupId = "commons-io";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

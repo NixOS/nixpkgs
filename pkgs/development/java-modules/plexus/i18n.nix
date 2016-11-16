@@ -3,8 +3,8 @@
 rec {
   plexusI18n_1_0_beta6 = map (obj: fetchMaven {
     version = "1.0-beta-6";
-    baseName = "plexus-i18n";
-    package = "/org/codehaus/plexus";
+    artifactId = "plexus-i18n";
+    groupId = "org.codehaus.plexus";
     sha512 = obj.sha512;
     type = obj.type;
   }) [

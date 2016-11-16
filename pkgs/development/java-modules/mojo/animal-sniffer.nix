@@ -3,8 +3,8 @@
 rec {
   mojoAnimalSniffer_1_11 = map (obj: fetchMaven {
     version = "1.11";
-    baseName = "animal-sniffer";
-    package = "/org/codehaus/mojo";
+    artifactId = "animal-sniffer";
+    groupId = "org.codehaus.mojo";
     sha512 = obj.sha512;
     type = obj.type;
   }) [
