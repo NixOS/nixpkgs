@@ -2458,13 +2458,10 @@ in {
   };
 
   cycler = buildPythonPackage rec {
-    name = "cycler-${version}";
-    version = "0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cycler/${name}.tar.gz";
-      sha256 = "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8";
-    };
+    pname = "Cycler";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ coverage nose ];
     propagatedBuildInputs = with self; [ six ];
@@ -2735,13 +2732,10 @@ in {
   };
 
   blaze = buildPythonPackage rec {
-    name = "blaze-${version}";
-    version = "0.11.0";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/blaze/blaze/archive/${version}.tar.gz";
-      sha256 = "07zrrxkmdqk84xvdmp29859zcfzlpx5pz6g62l28nqp6n6a7yq9a";
-    };
+    pname = "blaze";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [
@@ -4227,21 +4221,14 @@ in {
   };
 
   cython = buildPythonPackage rec {
-    name = "Cython-${version}";
-    version = "0.24.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cython/${name}.tar.gz";
-      sha256 = "84808fda00508757928e1feadcf41c9f78e9a9b7167b6649ab0933b76f75e7b9";
-    };
+    pname = "Cython";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pkgs.pkgconfig pkgs.gdb ];
     # For testing
     nativeBuildInputs = with self; [ numpy pkgs.ncurses ];
-
-    # cython's testsuite requires npy_isinf to return sign of the infinity, but
-    # a C99 conformant is only required to return a non zero value
-    patches = [ ../development/python-modules/cython_test.patch ];
 
     # cython's testsuite is not working very well with libc++
     # We are however optimistic about things outside of testsuite still working
@@ -4261,13 +4248,10 @@ in {
   };
 
   cytoolz = buildPythonPackage rec {
-    name = "cytoolz-${version}";
-    version = "0.8.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/c/cytoolz/cytoolz-${version}.tar.gz";
-      sha256 = "2239890c8fe2da3eba82947c6a68cfa406e5a5045911c9ab3de8113462372629";
-    };
+    pname = "cytoolz";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     # Extension types
     disabled = isPyPy;
@@ -5360,13 +5344,10 @@ in {
   });
 
   dask = buildPythonPackage rec {
-    name = "dask-${version}";
-    version = "0.11.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dask/${name}.tar.gz";
-      sha256 = "ef32490c0b156584a71576dccec4dfe550a0cd81a9c131a4ee2e43c241b601c3";
-    };
+    pname = "dask";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ cloudpickle  numpy toolz dill pandas partd ];
@@ -5556,13 +5537,10 @@ in {
   };
 
   datashape = buildPythonPackage rec {
-    name = "datashape-${version}";
-    version = "0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/D/DataShape/${name}.tar.gz";
-      sha256 = "2356ea690c3cf003c1468a243a9063144235de45b080b3652de4f3d44e57d783";
-    };
+    pname = "DataShape";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pytest mock ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
@@ -12733,13 +12711,10 @@ in {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.5.1";
-    name = "ipykernel-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipykernel/${name}.tar.gz";
-      sha256 = "520c855c6652651c6796a3dd8bc89d533023ac65c5ccf812908187d6f0e461da";
-    };
+    pname = "ipykernel";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
     propagatedBuildInputs = with self; [
@@ -12763,13 +12738,10 @@ in {
   };
 
   ipyparallel = buildPythonPackage rec {
-    version = "5.2.0";
-    name = "ipyparallel-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipyparallel/${name}.tar.gz";
-      sha256 = "d99e760f1a136b1c402755a4ab51a8d7cb87c892cccadf641948a5e886c8a455";
-    };
+    pname = "ipyparallel";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ];
 
@@ -12789,13 +12761,10 @@ in {
   };
 
   ipython = buildPythonPackage rec {
-    version = "5.1.0";
-    name = "ipython-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipython/${name}.tar.gz";
-      sha256 = "7ef4694e1345913182126b219aaa4a0047e191af414256da6772cf249571b961";
-    };
+    pname = "ipython";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace setup.py --replace "'gnureadline'" " "
@@ -12824,13 +12793,10 @@ in {
   };
 
   ipython_genutils = buildPythonPackage rec {
-    version = "0.1.0";
-    name = "ipython_genutils-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipython_genutils/${name}.tar.gz";
-      sha256 = "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6";
-    };
+    pname = "ipython_genutils";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ];
@@ -12847,15 +12813,11 @@ in {
     };
   };
 
-
   ipywidgets = buildPythonPackage rec {
-    version = "5.2.2";
-    name = "ipywidgets-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipywidgets/${name}.tar.gz";
-      sha256 = "baf6098f054dd5eacc2934b8ea3bef908b81ca8660d839f1f940255a72c660d2";
-    };
+    pname = "ipywidgets";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook widgetsnbextension ];
@@ -13152,13 +13114,10 @@ in {
   };
 
   jupyter_client = buildPythonPackage rec {
-    version = "4.4.0";
-    name = "jupyter_client-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jupyter_client/${name}.tar.gz";
-      sha256 = "c99a52fac2e5b7a3b714e9252ebf72cbf97536d556ae2b5082baccc3e5cd52ee";
-    };
+    pname = "jupyter_client";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq] ++ optional isPyPy py;
@@ -13179,13 +13138,10 @@ in {
   };
 
   jupyter_core = buildPythonPackage rec {
-    version = "4.2.0";
-    name = "jupyter_core-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jupyter_core/${name}.tar.gz";
-      sha256 = "44ec837a53bebf4e937112d3f9ccf31fee4f8db3e406dd0dd4f0378a354bed9c";
-    };
+    pname = "jupyter_core";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pytest mock ];
     propagatedBuildInputs = with self; [ ipython traitlets];
@@ -13558,13 +13514,10 @@ in {
   };
 
   line_profiler = buildPythonPackage rec{
-    version = "1.0";
-    name = "line_profiler-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/line_profiler/${name}.tar.gz";
-      sha256 = "a9e0c9ffa814f1215107c86c890afa8e63bec5a37d951f6f9d3668c1df2b1900";
-    };
+    pname = "line_profiler";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ cython ];
 
@@ -14659,13 +14612,10 @@ in {
   };
 
   multipledispatch = buildPythonPackage rec {
-    name = "multipledispatch-${version}";
-    version = "0.4.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/multipledispatch/${name}.tar.gz";
-      sha256 = "07d41fb3ed25e8424536e48a8566f88a0f9926ca4b6174bff6aa16c98251b92e";
-    };
+    pname = "multipledispatch";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     meta = {
       homepage = http://github.com/mrocklin/multipledispatch/;
@@ -15116,13 +15066,10 @@ in {
   };
 
   nbconvert = buildPythonPackage rec {
-    version = "4.2.0";
-    name = "nbconvert-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbconvert/${name}.tar.gz";
-      sha256 = "1ik3k1s8dnqcc6hcrzi1wwy6f5kxfz8rnyahvpy984kl49snv52m";
-    };
+    pname = "nbconvert";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [nose ipykernel ];
 
@@ -15144,13 +15091,10 @@ in {
   };
 
   nbformat = buildPythonPackage rec {
-    version = "4.0.1";
-    name = "nbformat-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbformat/${name}.tar.gz";
-      sha256 = "5261c957589b9dfcd387c338d59375162ba9ca82c69e378961a1f4e641285db5";
-    };
+    pname = "nbformat";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ipython_genutils traitlets jsonschema jupyter_core];
@@ -15475,13 +15419,10 @@ in {
   };
 
   nose-exclude = buildPythonPackage rec {
-    name = "nose-exclude-${version}";
-    version = "0.4.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nose-exclude/${name}.tar.gz";
-      sha256 = "44466a9bcb56d2e568750f91504d1278c74eabb259a305b06e975b87b51635da";
-    };
+    pname = "nose-exclude";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     propagatedBuildInputs = with self; [ nose ];
 
@@ -15863,13 +15804,10 @@ in {
   };
 
   numtraits = buildPythonPackage rec {
-    name = "numtraits-${version}";
-    version = "0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numtraits/${name}.tar.gz";
-      sha256 = "2fca9a6c9334f7358ef1a3e2e64ccaa6a479fc99fc096910e0d5fbe8edcdfd7e";
-    };
+    pname = "numtraits";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ numpy traitlets];
@@ -16121,13 +16059,10 @@ in {
   };
 
   odo = buildPythonPackage rec {
-    name = "odo-${version}";
-    version= "0.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/odo/${name}.tar.gz";
-      sha256 = "1mh5k69d9ph9jd07jl9yqh78rbnh5cjspi1q530v3ml7ivjzz4p8";
-    };
+    pname = "odo";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ datashape numpy pandas toolz multipledispatch networkx ];
@@ -17641,13 +17576,10 @@ in {
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
-    name = "pandas-${version}";
-    version = "0.19.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pandas/${name}.tar.gz";
-      sha256 = "2509feaeda72fce03675e2eccd2284bb1cadb6a0737008a5e741fe2431d47421";
-    };
+    pname = "pandas";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ] ++ optional isDarwin pkgs.libcxx;
@@ -18571,13 +18503,10 @@ in {
   };
 
   pysoundfile = buildPythonPackage rec {
-    name = "pysoundfile-${version}";
-    version = "0.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PySoundFile/PySoundFile-${version}.tar.gz";
-      sha256 = "72c3e23b7c9998460ec78176084ea101e3439596ab29df476bc8508708df84df";
-    };
+    pname = "PySoundFile";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ numpy pkgs.libsndfile cffi ];
@@ -19841,13 +19770,10 @@ in {
   };
 
   pyfftw = buildPythonPackage rec {
-    name = "pyfftw-${version}";
-    version = "0.10.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
-      sha256 = "739b436b7c0aeddf99a48749380260364d2dc027cf1d5f63dafb5f50068ede1a";
-    };
+    pname = "pyFFTW";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
 
@@ -21742,13 +21668,10 @@ in {
   };
 
   qtconsole = buildPythonPackage rec {
-    version = "4.2.1";
-    name = "qtconsole-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/q/qtconsole/${name}.tar.gz";
-      sha256 = "1vqqx9hdvrg2d336wjyw0vr5b5v97kflkqqvr7ryicr8als7vv15";
-    };
+    pname = "qtconsole";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
     propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt4];
@@ -22728,14 +22651,12 @@ in {
 
 
   scikitlearn = buildPythonPackage rec {
-    name = "scikit-learn-${version}";
-    version = "0.18";
-    disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
+    pname = "scikit-learn";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/scikit-learn/${name}.tar.gz";
-      sha256 = "240009789d6495240b332e059cbd2499f4d2981c93873983c9e1d5189f90315f";
-    };
+    disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ numpy scipy numpy.blas ];
@@ -22775,11 +22696,10 @@ in {
   };
 
   seaborn = buildPythonPackage rec {
-    name = "seaborn-0.7.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/seaborn/${name}.tar.gz";
-      sha256 = "0pawrqc3mxpwd5g9pvi9gba02637bh5c8ldpp8izfwpfn52469zs";
-    };
+    pname = "seaborn";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ pandas matplotlib ];
@@ -23272,13 +23192,10 @@ in {
   };
 
   sounddevice = buildPythonPackage rec {
-    name = "sounddevice-${version}";
-    version = "0.3.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sounddevice/${name}.tar.gz";
-      sha256 = "f6c4120357c1458b23bd0d466c66808efdefad397bf97b1162600d079d4665ae";
-    };
+    pname = "sounddevice";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     propagatedBuildInputs = with self; [ cffi numpy pkgs.portaudio ];
 
@@ -24373,13 +24290,10 @@ in {
   };
 
   statsmodels = buildPythonPackage rec {
-    name = "statsmodels-${version}";
-    version = "0.6.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/statsmodels/${name}.tar.gz";
-      sha256 = "be4e44374aec9e848b73e5a230dee190ac0c4519e1d40f69a5813190b13ec676";
-    };
+    pname = "statsmodels";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [numpy scipy pandas patsy cython matplotlib];
@@ -24651,13 +24565,10 @@ in {
   };
 
   tabulate = buildPythonPackage rec {
-    version = "0.7.5";
-    name = "tabulate-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tabulate/${name}.tar.gz";
-      sha256 = "9071aacbd97a9a915096c1aaf0dc684ac2672904cd876db5904085d6dac9810e";
-    };
+    pname = "tabulate";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ];
 
@@ -24952,13 +24863,10 @@ in {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.3.1";
-    name = "traitlets-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/traitlets/${name}.tar.gz";
-      sha256 = "ba8c94323ccbe8fd792e45d8efe8c95d3e0744cc8c085295b607552ab573724c";
-    };
+    pname = "traitlets";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     LC_ALL = "en_US.UTF-8";
 
@@ -25103,13 +25011,10 @@ in {
   };
 
   toolz = buildPythonPackage rec{
-    name = "toolz-${version}";
-    version = "0.8.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
-    };
+    pname = "toolz";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ nose ];
 
@@ -25404,13 +25309,10 @@ in {
   };
 
   twine = buildPythonPackage rec {
-    name = "twine-${version}";
-    version = "1.8.1";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/t/twine/${name}.tar.gz";
-      sha256 = "68b663691a947b844f92853c992d42bb68b6333bffc9ab7f661346b001c1da82";
-    };
+    pname = "twine";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     propagatedBuildInputs = with self; [ clint pkginfo requests2 requests_toolbelt ];
 
@@ -26189,13 +26091,10 @@ in {
   };
 
   widgetsnbextension = buildPythonPackage rec {
-    name = "widgetsnbextension-${version}";
-    version = "1.2.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/widgetsnbextension/${name}.tar.gz";
-      sha256 = "c618cfb32978c9517caf0b4ef3aec312f8dd138577745e7b0d4abfcc7315ce51";
-    };
+    pname = "widgetsnbextension";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     propagatedBuildInputs = with self; [ notebook ];
 
@@ -26348,13 +26247,10 @@ in {
   });
 
   xarray = buildPythonPackage rec {
-    name = "xarray-${version}";
-    version = "0.8.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xarray/${name}.tar.gz";
-      sha256 = "4da06e38baea65c51347ba0770db416ebf003dbad5637215d2b25b191f2be1fb";
-    };
+    pname = "xarray";
+    name = "${pname}-${version}";
+    src = fetchpypi pname;
+    version = src.meta.version;
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [numpy pandas];
