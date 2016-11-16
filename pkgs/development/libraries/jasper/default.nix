@@ -1,11 +1,14 @@
 { stdenv, fetchurl, fetchpatch, unzip, libjpeg, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "jasper-1.900.21";
+  name = "jasper-1.900.28";
 
   src = fetchurl {
+    # You can find this code on Github at https://github.com/mdadams/jasper
+    # however note at https://www.ece.uvic.ca/~frodo/jasper/#download
+    # not all tagged releases are for distribution.
     url = "http://www.ece.uvic.ca/~mdadams/jasper/software/${name}.tar.gz";
-    sha256 = "1cypmlzq5vmbacsn8n3ls9p7g64scv3fzx88qf8c270dz10s5j79";
+    sha256 = "0nsiblsfpfa0dahsk6hw9cd18fp9c8sk1z5hdp19m33c0bf92ip9";
   };
 
   # newer reconf to recognize a multiout flag
