@@ -1067,7 +1067,7 @@ in {
       license = licenses.free;
     };
   } else null;
-  
+
   funcsigs = buildPythonPackage rec {
     name = "funcsigs-1.0.2";
 
@@ -14410,7 +14410,7 @@ in {
       broken = true;
     };
   };
-  
+
   mock = buildPythonPackage (rec {
     name = "mock-2.0.0";
 
@@ -20950,6 +20950,24 @@ in {
       homepage = http://pymacs.progiciels-bpi.ca;
       license = licenses.gpl2;
       maintainers = with maintainers; [ goibhniu ];
+    };
+  };
+
+  pymaging = buildPythonPackage rec {
+    name = "pymaging-unstable-2016-11-16";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "ojii";
+      repo = "pymaging";
+      rev = "596a08fce5664e58d6e8c96847393fbe987783f2";
+      sha256 = "18g3n7kfrark30l4vzykh0gdbnfv5wb1zvvjbs17sj6yampypn38";
+    };
+
+    meta = {
+      description = "Pure Python imaging library with Python 2.6, 2.7, 3.1+ support";
+      homepage    = http://pymaging.rtfd.org;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ mic92 ];
     };
   };
 
