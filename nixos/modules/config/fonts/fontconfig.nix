@@ -301,9 +301,7 @@ in
           };
 
           style = mkOption {
-            type = types.str // {
-              check = flip elem ["none" "slight" "medium" "full"];
-            };
+            type = types.enum ["none" "slight" "medium" "full"];
             default = "full";
             description = ''
               TrueType hinting style, one of <literal>none</literal>,
@@ -329,9 +327,7 @@ in
             default = "rgb";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
             description = ''
-              Subpixel order, one of <literal>none</literal>,
-              <literal>rgb</literal>, <literal>bgr</literal>,
-              <literal>vrgb</literal>, or <literal>vbgr</literal>.
+              Subpixel order.
             '';
           };
 
@@ -339,9 +335,7 @@ in
             default = "default";
             type = types.enum ["none" "default" "light" "legacy"];
             description = ''
-              FreeType LCD filter, one of <literal>none</literal>,
-              <literal>default</literal>, <literal>light</literal>, or
-              <literal>legacy</literal>.
+              FreeType LCD filter.
             '';
           };
 
