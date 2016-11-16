@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng, CoreServices, CoreGraphics, ImageIO }:
+{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng, CoreServices, CoreGraphics, ImageIO, ninja }:
 
 let
   googletest = fetchFromGitHub {
@@ -16,13 +16,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name    = "xcbuild-${stdenv.lib.substring 0 8 version}";
-  version = "49f8a5923f1381f87ac03ad4c1b138d1d2b74369";
+  version = "0ab861abcc11185a17d59608f96a015752a6fadc";
 
   src = fetchFromGitHub {
     owner  = "facebook";
     repo   = "xcbuild";
     rev    = version;
-    sha256 = "0l107xkh7dab2xc58dqyrrhpd1gp12cpzh0wrx0i9jbh0idbwnk0";
+    sha256 = "12h0rn8v0js2vph2pwp5wvcrfkj12nz365i5qxw9miyfn4msnz26";
   };
 
   prePatch = ''
@@ -39,5 +39,6 @@ in stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  buildInputs = [ cmake zlib libxml2 libpng CoreServices CoreGraphics ImageIO ];
+  buildInputs = [ cmake zlib libxml2 libpng ninja ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
 }

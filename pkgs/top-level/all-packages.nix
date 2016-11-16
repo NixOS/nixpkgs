@@ -764,7 +764,9 @@ in
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
-  contacts = callPackage ../tools/misc/contacts { };
+  contacts = callPackage ../tools/misc/contacts {
+    inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
+  };
 
   coturn = callPackage ../servers/coturn { };
 
@@ -6491,7 +6493,11 @@ in
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
-  xcbuild  = callPackage ../development/tools/xcbuild { inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO; };
+  xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
+    inherit (darwin) cctools bootstrap_cmds binutils;
+    stdenv = clangStdenv;
+  };
 
   xmlindent = callPackage ../development/web/xmlindent {};
 
