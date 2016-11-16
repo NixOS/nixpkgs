@@ -12325,6 +12325,8 @@ in
     pulseaudioSupport = config.pulseaudio or false;
   };
 
+  cni = callPackage ../applications/networking/cluster/cni {};
+
   communi = qt5.callPackage ../applications/networking/irc/communi { };
 
   compiz = callPackage ../applications/window-managers/compiz {
