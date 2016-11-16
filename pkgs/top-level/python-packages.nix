@@ -15197,14 +15197,19 @@ in {
 
   slixmpp = buildPythonPackage rec {
     name = "slixmpp-${version}";
-    version = "1.1";
+    version = "1.2.1";
 
     disabled = pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
-      sha256 = "030ca7e71cbb7e17fb48f83db97779fdbac0b4424cef01245f3276a110b30a6c";
+      sha256 = "0fwngxf2pnmpk8vhv4pfxvl1ya3nxr4kc2z6jrh2imynbry3xfj9";
     };
+
+    patchPhase = ''
+      substituteInPlace slixmpp/thirdparty/gnupg.py \
+        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
+    '';
 
     propagatedBuildInputs = with self ; [ aiodns pyasn1 pkgs.gnupg1 pyasn1-modules];
 
@@ -29362,28 +29367,28 @@ in {
     };
   };
 
-  poezio = buildPythonPackage rec {
+  poezio = buildPythonApplication rec {
     name = "poezio-${version}";
-    version = "0.9";
+    version = "0.10";
 
-    namePrefix = "";
     disabled = pythonOlder "3.4";
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr ];
-
-    checkPhase = ''
-      PYTHONPATH="$PYTHONPATH:$out/${python.sitePackages}/poezio" make test
-    '';
-
-    patches =
-      let patch_base = ../development/python-modules/poezio;
-      in [ "${patch_base}/make_default_config_writable.patch" ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/91/${name}.tar.xz";
-      sha256 = "1vc7zn4rp0ds0cdh1xcmbwx6w2qh4pnpzi5mdnj3rpl7xdr6jqzi";
+      url = "http://dev.louiz.org/attachments/download/102/${name}.tar.gz";
+      sha256 = "1mm0c3250p0kh7lmmjlp05hbc7byn9lknafgb906xmp4vx1p4kjn";
     };
+
+    patches = [
+      ../development/python-modules/poezio/fix_gnupg_import.patch
+      ../development/python-modules/poezio/fix_plugins_imports.patch
+    ];
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       description = "Free console XMPP client";
