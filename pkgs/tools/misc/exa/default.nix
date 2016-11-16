@@ -36,5 +36,6 @@ buildRustPackage rec {
     homepage = http://bsago.me/exa;
     license = licenses.mit;
     maintainer = [ maintainers.ehegnes ];
+    broken = true;
   };
 }
