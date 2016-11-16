@@ -63,7 +63,6 @@ let
 
     kdeWrapper = import ./kde-wrapper.nix {
       inherit (pkgs) stdenv lib makeWrapper;
-      inherit kdeEnv;
     };
 
     attica = callPackage ./attica.nix {};
