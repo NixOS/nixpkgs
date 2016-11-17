@@ -17558,4 +17558,6 @@ in
   nitrokey-app = callPackage ../tools/security/nitrokey-app { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
+
+  terminix = callPackage ../applications/misc/terminix { };
 }
