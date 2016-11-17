@@ -1,6 +1,11 @@
-/* Functions that generate widespread config file
+/* Functions that generate widespread file
  * formats from nix data structures.
+ *
+ * They all follow a similar interface:
+ * generator { config-attrs } data
+ *
  * Tests can be found in ./tests.nix
+ * Documentation in the manual, #sec-generators
  */
 with import ./trivial.nix;
 let

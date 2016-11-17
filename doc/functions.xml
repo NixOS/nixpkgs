@@ -8,252 +8,295 @@
   The nixpkgs repository has several utility functions to manipulate Nix expressions.
 </para>
 
-<section xml:id="sec-pkgs-overridePackages">
-  <title>pkgs.overridePackages</title>
+<section xml:id="sec-overrides">
+  <title>Overriding</title>
 
   <para>
-    This function inside the nixpkgs expression (<varname>pkgs</varname>)
-    can be used to override the set of packages itself.
-  </para>
-  <para>
-    Warning: this function is expensive and must not be used from within
-    the nixpkgs repository.
-  </para>
-  <para>
-    Example usage:
-
-    <programlisting>let
-  pkgs = import &lt;nixpkgs&gt; {};
-  newpkgs = pkgs.overridePackages (self: super: {
-    foo = super.foo.override { ... };
-  };
-in ...</programlisting>
+    Sometimes one wants to override parts of
+    <literal>nixpkgs</literal>, e.g. derivation attributes, the results of
+    derivations or even the whole package set.
   </para>
 
-  <para>
-    The resulting <varname>newpkgs</varname> will have the new <varname>foo</varname>
-    expression, and all other expressions depending on <varname>foo</varname> will also
-    use the new <varname>foo</varname> expression.
-  </para>
+  <section xml:id="sec-pkgs-overridePackages">
+    <title>pkgs.overridePackages</title>
 
-  <para>
-    The behavior of this function is similar to <link 
-    linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>.
-  </para>
-
-  <para>
-    The <varname>self</varname> parameter refers to the final package set with the
-    applied overrides. Using this parameter may lead to infinite recursion if not
-    used consciously.
-  </para>
-
-  <para>
-    The <varname>super</varname> parameter refers to the old package set.
-    It's equivalent to <varname>pkgs</varname> in the above example.
-  </para>
-
-  <para>
-    Note that in previous versions of nixpkgs, this method replaced any changes from <link 
-    linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>,
-    along with that from previous calls if this function was called repeatedly.
-    Now those previous changes will be preserved so this function can be "chained" meaningfully.
-    To recover the old behavior, make sure <varname>config.packageOverrides</varname> is unset,
-    and call this only once off a "freshly" imported nixpkgs:
-
-    <programlisting>let
-  pkgs = import &lt;nixpkgs&gt; { config: {}; };
-  newpkgs = pkgs.overridePackages ...;
-in ...</programlisting>
-  </para>
-
-</section>
-
-<section xml:id="sec-pkg-override">
-  <title>&lt;pkg&gt;.override</title>
-
-  <para>
-    The function <varname>override</varname> is usually available for all the
-    derivations in the nixpkgs expression (<varname>pkgs</varname>).
-  </para>
-  <para>
-    It is used to override the arguments passed to a function.
-  </para>
-  <para>
-    Example usages:
-
-    <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
-    <programlisting>pkgs.overridePackages (self: super: {
-  foo = super.foo.override { barSupport = true ; };
-})</programlisting>
-    <programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
-  mydep = pkgs.mydep.override { ... };
-})</programlisting>
-  </para>
-
-  <para>
-    In the first example, <varname>pkgs.foo</varname> is the result of a function call
-    with some default arguments, usually a derivation.
-    Using <varname>pkgs.foo.override</varname> will call the same function with
-    the given new arguments.
-  </para>
-
-</section>
-
-<section xml:id="sec-pkg-overrideAttrs">
-  <title>&lt;pkg&gt;.overrideAttrs</title>
-
-  <para>
-    The function <varname>overrideAttrs</varname> allows overriding the
-    attribute set passed to a <varname>stdenv.mkDerivation</varname> call,
-    producing a new derivation based on the original one.
-    This function is available on all derivations produced by the
-    <varname>stdenv.mkDerivation</varname> function, which is most packages
-    in the nixpkgs expression <varname>pkgs</varname>.
-  </para>
-
-  <para>
-    Example usage:
-
-    <programlisting>helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
-  separateDebugInfo = true;
-});</programlisting>
-  </para>
-
-  <para>
-    In the above example, the <varname>separateDebugInfo</varname> attribute is
-    overriden to be true, thus building debug info for
-    <varname>helloWithDebug</varname>, while all other attributes will be
-    retained from the original <varname>hello</varname> package.
-  </para>
-
-  <para>
-    The argument <varname>oldAttrs</varname> is conventionally used to refer to
-    the attr set originally passed to <varname>stdenv.mkDerivation</varname>.
-  </para>
-
-  <note>
     <para>
-      Note that <varname>separateDebugInfo</varname> is processed only by the
-      <varname>stdenv.mkDerivation</varname> function, not the generated, raw
-      Nix derivation. Thus, using <varname>overrideDerivation</varname> will
-      not work in this case, as it overrides only the attributes of the final
-      derivation. It is for this reason that <varname>overrideAttrs</varname>
-      should be preferred in (almost) all cases to
-      <varname>overrideDerivation</varname>, i.e. to allow using
-      <varname>sdenv.mkDerivation</varname> to process input arguments, as well
-      as the fact that it is easier to use (you can use the same attribute
-      names you see in your Nix code, instead of the ones generated (e.g.
-      <varname>buildInputs</varname> vs <varname>nativeBuildInputs</varname>,
-      and involves less typing.
+      This function inside the nixpkgs expression (<varname>pkgs</varname>)
+      can be used to override the set of packages itself.
     </para>
-  </note>
-
-</section>
-
-
-<section xml:id="sec-pkg-overrideDerivation">
-  <title>&lt;pkg&gt;.overrideDerivation</title>
-
-  <warning>
-    <para>You should prefer <varname>overrideAttrs</varname> in almost all
-    cases, see its documentation for the reasons why.
-    <varname>overrideDerivation</varname> is not deprecated and will continue
-    to work, but is less nice to use and does not have as many abilities as
-    <varname>overrideAttrs</varname>.
-    </para>
-  </warning>
-
-  <warning>
-    <para>Do not use this function in Nixpkgs as it evaluates a Derivation
-    before modifying it, which breaks package abstraction and removes
-    error-checking of function arguments. In addition, this
-    evaluation-per-function application incurs a performance penalty,
-    which can become a problem if many overrides are used.
-    It is only intended for ad-hoc customisation, such as in
-    <filename>~/.nixpkgs/config.nix</filename>.
-   </para>
-  </warning>
-
-  <para>
-    The function <varname>overrideDerivation</varname> creates a new derivation
-    based on an existing one by overriding the original's attributes with
-    the attribute set produced by the specified function.
-    This function is available on all
-    derivations defined using the <varname>makeOverridable</varname> function.
-    Most standard derivation-producing functions, such as
-    <varname>stdenv.mkDerivation</varname>, are defined using this
-    function, which means most packages in the nixpkgs expression,
-    <varname>pkgs</varname>, have this function.
-  </para> 
-
-  <para>
-    Example usage:
-
-    <programlisting>mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
-  name = "sed-4.2.2-pre";
-  src = fetchurl {
-    url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-    sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
-  };
-  patches = [];
-});</programlisting>
-  </para>
-
-  <para>
-    In the above example, the <varname>name</varname>, <varname>src</varname>,
-    and <varname>patches</varname> of the derivation will be overridden, while
-    all other attributes will be retained from the original derivation.
-  </para>
-
-  <para>
-    The argument <varname>oldAttrs</varname> is used to refer to the attribute set of
-    the original derivation.
-  </para>
-
-  <note>
     <para>
-      A package's attributes are evaluated *before* being modified by
-      the <varname>overrideDerivation</varname> function.
-      For example, the <varname>name</varname> attribute reference
-      in <varname>url = "mirror://gnu/hello/${name}.tar.gz";</varname>
-      is filled-in *before* the <varname>overrideDerivation</varname> function
-      modifies the attribute set. This means that overriding the
-      <varname>name</varname> attribute, in this example, *will not* change the
-      value of the <varname>url</varname> attribute. Instead, we need to override
-      both the <varname>name</varname> *and* <varname>url</varname> attributes.
+      Warning: this function is expensive and must not be used from within
+      the nixpkgs repository.
     </para>
-  </note>
+    <para>
+      Example usage:
+
+      <programlisting>let
+    pkgs = import &lt;nixpkgs&gt; {};
+    newpkgs = pkgs.overridePackages (self: super: {
+      foo = super.foo.override { ... };
+    };
+  in ...</programlisting>
+    </para>
+
+    <para>
+      The resulting <varname>newpkgs</varname> will have the new <varname>foo</varname>
+      expression, and all other expressions depending on <varname>foo</varname> will also
+      use the new <varname>foo</varname> expression.
+    </para>
+
+    <para>
+      The behavior of this function is similar to <link 
+      linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>.
+    </para>
+
+    <para>
+      The <varname>self</varname> parameter refers to the final package set with the
+      applied overrides. Using this parameter may lead to infinite recursion if not
+      used consciously.
+    </para>
+
+    <para>
+      The <varname>super</varname> parameter refers to the old package set.
+      It's equivalent to <varname>pkgs</varname> in the above example.
+    </para>
+
+    <para>
+      Note that in previous versions of nixpkgs, this method replaced any changes from <link 
+      linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>,
+      along with that from previous calls if this function was called repeatedly.
+      Now those previous changes will be preserved so this function can be "chained" meaningfully.
+      To recover the old behavior, make sure <varname>config.packageOverrides</varname> is unset,
+      and call this only once off a "freshly" imported nixpkgs:
+
+      <programlisting>let
+    pkgs = import &lt;nixpkgs&gt; { config: {}; };
+    newpkgs = pkgs.overridePackages ...;
+  in ...</programlisting>
+    </para>
+
+  </section>
+
+  <section xml:id="sec-pkg-override">
+    <title>&lt;pkg&gt;.override</title>
+
+    <para>
+      The function <varname>override</varname> is usually available for all the
+      derivations in the nixpkgs expression (<varname>pkgs</varname>).
+    </para>
+    <para>
+      It is used to override the arguments passed to a function.
+    </para>
+    <para>
+      Example usages:
+
+      <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
+      <programlisting>pkgs.overridePackages (self: super: {
+    foo = super.foo.override { barSupport = true ; };
+  })</programlisting>
+      <programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
+    mydep = pkgs.mydep.override { ... };
+  })</programlisting>
+    </para>
+
+    <para>
+      In the first example, <varname>pkgs.foo</varname> is the result of a function call
+      with some default arguments, usually a derivation.
+      Using <varname>pkgs.foo.override</varname> will call the same function with
+      the given new arguments.
+    </para>
+
+  </section>
+
+  <section xml:id="sec-pkg-overrideAttrs">
+    <title>&lt;pkg&gt;.overrideAttrs</title>
+
+    <para>
+      The function <varname>overrideAttrs</varname> allows overriding the
+      attribute set passed to a <varname>stdenv.mkDerivation</varname> call,
+      producing a new derivation based on the original one.
+      This function is available on all derivations produced by the
+      <varname>stdenv.mkDerivation</varname> function, which is most packages
+      in the nixpkgs expression <varname>pkgs</varname>.
+    </para>
+
+    <para>
+      Example usage:
+
+      <programlisting>helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
+    separateDebugInfo = true;
+  });</programlisting>
+    </para>
+
+    <para>
+      In the above example, the <varname>separateDebugInfo</varname> attribute is
+      overriden to be true, thus building debug info for
+      <varname>helloWithDebug</varname>, while all other attributes will be
+      retained from the original <varname>hello</varname> package.
+    </para>
+
+    <para>
+      The argument <varname>oldAttrs</varname> is conventionally used to refer to
+      the attr set originally passed to <varname>stdenv.mkDerivation</varname>.
+    </para>
+
+    <note>
+      <para>
+        Note that <varname>separateDebugInfo</varname> is processed only by the
+        <varname>stdenv.mkDerivation</varname> function, not the generated, raw
+        Nix derivation. Thus, using <varname>overrideDerivation</varname> will
+        not work in this case, as it overrides only the attributes of the final
+        derivation. It is for this reason that <varname>overrideAttrs</varname>
+        should be preferred in (almost) all cases to
+        <varname>overrideDerivation</varname>, i.e. to allow using
+        <varname>sdenv.mkDerivation</varname> to process input arguments, as well
+        as the fact that it is easier to use (you can use the same attribute
+        names you see in your Nix code, instead of the ones generated (e.g.
+        <varname>buildInputs</varname> vs <varname>nativeBuildInputs</varname>,
+        and involves less typing.
+      </para>
+    </note>
+
+  </section>
+
+
+  <section xml:id="sec-pkg-overrideDerivation">
+    <title>&lt;pkg&gt;.overrideDerivation</title>
+
+    <warning>
+      <para>You should prefer <varname>overrideAttrs</varname> in almost all
+      cases, see its documentation for the reasons why.
+      <varname>overrideDerivation</varname> is not deprecated and will continue
+      to work, but is less nice to use and does not have as many abilities as
+      <varname>overrideAttrs</varname>.
+      </para>
+    </warning>
+
+    <warning>
+      <para>Do not use this function in Nixpkgs as it evaluates a Derivation
+      before modifying it, which breaks package abstraction and removes
+      error-checking of function arguments. In addition, this
+      evaluation-per-function application incurs a performance penalty,
+      which can become a problem if many overrides are used.
+      It is only intended for ad-hoc customisation, such as in
+      <filename>~/.nixpkgs/config.nix</filename>.
+    </para>
+    </warning>
+
+    <para>
+      The function <varname>overrideDerivation</varname> creates a new derivation
+      based on an existing one by overriding the original's attributes with
+      the attribute set produced by the specified function.
+      This function is available on all
+      derivations defined using the <varname>makeOverridable</varname> function.
+      Most standard derivation-producing functions, such as
+      <varname>stdenv.mkDerivation</varname>, are defined using this
+      function, which means most packages in the nixpkgs expression,
+      <varname>pkgs</varname>, have this function.
+    </para> 
+
+    <para>
+      Example usage:
+
+      <programlisting>mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
+    name = "sed-4.2.2-pre";
+    src = fetchurl {
+      url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
+      sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
+    };
+    patches = [];
+  });</programlisting>
+    </para>
+
+    <para>
+      In the above example, the <varname>name</varname>, <varname>src</varname>,
+      and <varname>patches</varname> of the derivation will be overridden, while
+      all other attributes will be retained from the original derivation.
+    </para>
+
+    <para>
+      The argument <varname>oldAttrs</varname> is used to refer to the attribute set of
+      the original derivation.
+    </para>
+
+    <note>
+      <para>
+        A package's attributes are evaluated *before* being modified by
+        the <varname>overrideDerivation</varname> function.
+        For example, the <varname>name</varname> attribute reference
+        in <varname>url = "mirror://gnu/hello/${name}.tar.gz";</varname>
+        is filled-in *before* the <varname>overrideDerivation</varname> function
+        modifies the attribute set. This means that overriding the
+        <varname>name</varname> attribute, in this example, *will not* change the
+        value of the <varname>url</varname> attribute. Instead, we need to override
+        both the <varname>name</varname> *and* <varname>url</varname> attributes.
+      </para>
+    </note>
+
+  </section>
+
+  <section xml:id="sec-lib-makeOverridable">
+    <title>lib.makeOverridable</title>
+
+    <para>
+      The function <varname>lib.makeOverridable</varname> is used to make the result
+      of a function easily customizable. This utility only makes sense for functions
+      that accept an argument set and return an attribute set.
+    </para>
+
+    <para>
+      Example usage:
+
+      <programlisting>f = { a, b }: { result = a+b; }
+  c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
+
+    </para>
+
+    <para>
+      The variable <varname>c</varname> is the value of the <varname>f</varname> function
+      applied with some default arguments. Hence the value of <varname>c.result</varname>
+      is <literal>3</literal>, in this example.
+    </para>
+
+    <para>
+      The variable <varname>c</varname> however also has some additional functions, like
+      <link linkend="sec-pkg-override">c.override</link> which can be used to
+      override the default arguments. In this example the value of
+      <varname>(c.override { a = 4; }).result</varname> is 6.
+    </para>
+
+  </section>
 
 </section>
 
-<section xml:id="sec-lib-makeOverridable">
-  <title>lib.makeOverridable</title>
+<section xml:id="sec-generators">
+  <title>Generators</title>
 
   <para>
-    The function <varname>lib.makeOverridable</varname> is used to make the result
-    of a function easily customizable. This utility only makes sense for functions
-    that accept an argument set and return an attribute set.
+    Generators are functions that create file formats from nix
+    data structures, e. g. for configuration files.
+    There are generators available for: <literal>INI</literal>,
+    <literal>JSON</literal> and <literal>YAML</literal>
   </para>
 
   <para>
-    Example usage:
-
-    <programlisting>f = { a, b }: { result = a+b; }
-c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
-
+    All generators follow a similar call interface: <code>generatorName
+    configFunctions data</code>, where <literal>configFunctions</literal> is a
+    set of user-defined functions that format variable parts of the content.
+    They each have common defaults, so often they do not need to be set
+    manually. An example is <code>mkSectionName ? (name: libStr.escape [ "[" "]"
+    ] name)</code> from the <literal>INI</literal> generator. It gets the name
+    of a section and returns a sanitized name. The default
+    <literal>mkSectionName</literal> escapes <literal>[</literal> and
+    <literal>]</literal> with a backslash. 
   </para>
 
-  <para>
-    The variable <varname>c</varname> is the value of the <varname>f</varname> function
-    applied with some default arguments. Hence the value of <varname>c.result</varname>
-    is <literal>3</literal>, in this example.
-  </para>
+  <note><para>Nix store paths can be converted to strings by enclosing a
+  derivation attribute like so: <code>"${drv}"</code>.</para></note>
 
   <para>
-    The variable <varname>c</varname> however also has some additional functions, like
-    <link linkend="sec-pkg-override">c.override</link> which can be used to
-    override the default arguments. In this example the value of
-    <varname>(c.override { a = 4; }).result</varname> is 6.
+    Detailed documentation for each generator can be found in
+    <literal>lib/generators.nix</literal>.
   </para>
 
 </section>
@@ -370,37 +413,37 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
 </section>
 
 <section xml:id="sec-pkgs-dockerTools">
- <title>pkgs.dockerTools</title>
+<title>pkgs.dockerTools</title>
 
- <para>
+<para>
   <varname>pkgs.dockerTools</varname> is a set of functions for creating and
   manipulating Docker images according to the
   <link xlink:href="https://github.com/docker/docker/blob/master/image/spec/v1.md#docker-image-specification-v100">
-   Docker Image Specification v1.0.0
+  Docker Image Specification v1.0.0
   </link>. Docker itself is not used to perform any of the operations done by these
   functions.
- </para>
+</para>
 
- <warning>
+<warning>
   <para>
-   The <varname>dockerTools</varname> API is unstable and may be subject to
-   backwards-incompatible changes in the future.
+  The <varname>dockerTools</varname> API is unstable and may be subject to
+  backwards-incompatible changes in the future.
   </para>
- </warning>
+</warning>
 
- <section xml:id="ssec-pkgs-dockerTools-buildImage">
+<section xml:id="ssec-pkgs-dockerTools-buildImage">
   <title>buildImage</title>
 
   <para>
-   This function is analogous to the <command>docker build</command> command,
-   in that can used to build a Docker-compatible repository tarball containing
-   a single image with one or multiple layers. As such, the result
-   is suitable for being loaded in Docker with <command>docker load</command>.
+  This function is analogous to the <command>docker build</command> command,
+  in that can used to build a Docker-compatible repository tarball containing
+  a single image with one or multiple layers. As such, the result
+  is suitable for being loaded in Docker with <command>docker load</command>.
   </para>
 
   <para>
-   The parameters of <varname>buildImage</varname> with relative example values are
-   described below:
+  The parameters of <varname>buildImage</varname> with relative example values are
+  described below:
   </para>
 
   <example xml:id='ex-dockerTools-buildImage'><title>Docker build</title>
@@ -408,11 +451,11 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
   buildImage {
     name = "redis"; <co xml:id='ex-dockerTools-buildImage-1' />
     tag = "latest"; <co xml:id='ex-dockerTools-buildImage-2' />
-    
+
     fromImage = someBaseImage; <co xml:id='ex-dockerTools-buildImage-3' />
     fromImageName = null; <co xml:id='ex-dockerTools-buildImage-4' />
     fromImageTag = "latest"; <co xml:id='ex-dockerTools-buildImage-5' />
-    
+
     contents = pkgs.redis; <co xml:id='ex-dockerTools-buildImage-6' />
     runAsRoot = '' <co xml:id='ex-dockerTools-buildImage-runAsRoot' />
       #!${stdenv.shell}
@@ -431,131 +474,131 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
   </example>
 
   <para>The above example will build a Docker image <literal>redis/latest</literal>
-   from the given base image. Loading and running this image in Docker results in
-   <literal>redis-server</literal> being started automatically.
+  from the given base image. Loading and running this image in Docker results in
+  <literal>redis-server</literal> being started automatically.
   </para>
 
   <calloutlist>
-   <callout arearefs='ex-dockerTools-buildImage-1'>
+  <callout arearefs='ex-dockerTools-buildImage-1'>
     <para>
-     <varname>name</varname> specifies the name of the resulting image.
-     This is the only required argument for <varname>buildImage</varname>.
+    <varname>name</varname> specifies the name of the resulting image.
+    This is the only required argument for <varname>buildImage</varname>.
     </para>
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-buildImage-2'>
+  <callout arearefs='ex-dockerTools-buildImage-2'>
     <para>
-     <varname>tag</varname> specifies the tag of the resulting image.
-     By default it's <literal>latest</literal>.
+    <varname>tag</varname> specifies the tag of the resulting image.
+    By default it's <literal>latest</literal>.
     </para>
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-buildImage-3'>
+  <callout arearefs='ex-dockerTools-buildImage-3'>
     <para>
-     <varname>fromImage</varname> is the repository tarball containing the base image.
-     It must be a valid Docker image, such as exported by <command>docker save</command>.
-     By default it's <literal>null</literal>, which can be seen as equivalent
-     to <literal>FROM scratch</literal> of a <filename>Dockerfile</filename>.
+    <varname>fromImage</varname> is the repository tarball containing the base image.
+    It must be a valid Docker image, such as exported by <command>docker save</command>.
+    By default it's <literal>null</literal>, which can be seen as equivalent
+    to <literal>FROM scratch</literal> of a <filename>Dockerfile</filename>.
     </para>
-   </callout>
-   
-   <callout arearefs='ex-dockerTools-buildImage-4'>
-    <para>
-     <varname>fromImageName</varname> can be used to further specify
-     the base image within the repository, in case it contains multiple images.
-     By default it's <literal>null</literal>, in which case
-     <varname>buildImage</varname> will peek the first image available
-     in the repository.
-    </para>
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-buildImage-5'>
+  <callout arearefs='ex-dockerTools-buildImage-4'>
     <para>
-     <varname>fromImageTag</varname> can be used to further specify the tag
-     of the base image within the repository, in case an image contains multiple tags.
-     By default it's <literal>null</literal>, in which case
-     <varname>buildImage</varname> will peek the first tag available for the base image.
+    <varname>fromImageName</varname> can be used to further specify
+    the base image within the repository, in case it contains multiple images.
+    By default it's <literal>null</literal>, in which case
+    <varname>buildImage</varname> will peek the first image available
+    in the repository.
     </para>
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-buildImage-6'>
+  <callout arearefs='ex-dockerTools-buildImage-5'>
     <para>
-     <varname>contents</varname> is a derivation that will be copied in the new
-     layer of the resulting image. This can be similarly seen as
-     <command>ADD contents/ /</command> in a <filename>Dockerfile</filename>.
-     By default it's <literal>null</literal>.
+    <varname>fromImageTag</varname> can be used to further specify the tag
+    of the base image within the repository, in case an image contains multiple tags.
+    By default it's <literal>null</literal>, in which case
+    <varname>buildImage</varname> will peek the first tag available for the base image.
     </para>
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-buildImage-runAsRoot'>
+  <callout arearefs='ex-dockerTools-buildImage-6'>
     <para>
-     <varname>runAsRoot</varname> is a bash script that will run as root
-     in an environment that overlays the existing layers of the base image with
-     the new resulting layer, including the previously copied
-     <varname>contents</varname> derivation.
-     This can be similarly seen as
-     <command>RUN ...</command> in a <filename>Dockerfile</filename>.
-     
-     <note>
+    <varname>contents</varname> is a derivation that will be copied in the new
+    layer of the resulting image. This can be similarly seen as
+    <command>ADD contents/ /</command> in a <filename>Dockerfile</filename>.
+    By default it's <literal>null</literal>.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-dockerTools-buildImage-runAsRoot'>
+    <para>
+    <varname>runAsRoot</varname> is a bash script that will run as root
+    in an environment that overlays the existing layers of the base image with
+    the new resulting layer, including the previously copied
+    <varname>contents</varname> derivation.
+    This can be similarly seen as
+    <command>RUN ...</command> in a <filename>Dockerfile</filename>.
+
+    <note>
       <para>
-       Using this parameter requires the <literal>kvm</literal>
-       device to be available.
+      Using this parameter requires the <literal>kvm</literal>
+      device to be available.
       </para>
-     </note>
+    </note>
     </para>
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-buildImage-8'>
+  <callout arearefs='ex-dockerTools-buildImage-8'>
     <para>
-     <varname>config</varname> is used to specify the configuration of the
-     containers that will be started off the built image in Docker.
-     The available options are listed in the
-     <link xlink:href="https://github.com/docker/docker/blob/master/image/spec/v1.md#container-runconfig-field-descriptions">
+    <varname>config</varname> is used to specify the configuration of the
+    containers that will be started off the built image in Docker.
+    The available options are listed in the
+    <link xlink:href="https://github.com/docker/docker/blob/master/image/spec/v1.md#container-runconfig-field-descriptions">
       Docker Image Specification v1.0.0
-     </link>.
+    </link>.
     </para>
-   </callout>
+  </callout>
 
   </calloutlist>
 
   <para>
-   After the new layer has been created, its closure
-   (to which <varname>contents</varname>, <varname>config</varname> and
-   <varname>runAsRoot</varname> contribute) will be copied in the layer itself.
-   Only new dependencies that are not already in the existing layers will be copied.
+  After the new layer has been created, its closure
+  (to which <varname>contents</varname>, <varname>config</varname> and
+  <varname>runAsRoot</varname> contribute) will be copied in the layer itself.
+  Only new dependencies that are not already in the existing layers will be copied.
   </para>
 
   <para>
-   At the end of the process, only one new single layer will be produced and
-   added to the resulting image.
+  At the end of the process, only one new single layer will be produced and
+  added to the resulting image.
   </para>
 
   <para>
-   The resulting repository will only list the single image
-   <varname>image/tag</varname>. In the case of <xref linkend='ex-dockerTools-buildImage'/>
-   it would be <varname>redis/latest</varname>.
+  The resulting repository will only list the single image
+  <varname>image/tag</varname>. In the case of <xref linkend='ex-dockerTools-buildImage'/>
+  it would be <varname>redis/latest</varname>.
   </para>
 
   <para>
-   It is possible to inspect the arguments with which an image was built
-   using its <varname>buildArgs</varname> attribute.
+  It is possible to inspect the arguments with which an image was built
+  using its <varname>buildArgs</varname> attribute.
   </para>
 
- </section>
+</section>
 
- <section xml:id="ssec-pkgs-dockerTools-fetchFromRegistry">
+<section xml:id="ssec-pkgs-dockerTools-fetchFromRegistry">
   <title>pullImage</title>
 
   <para>
-   This function is analogous to the <command>docker pull</command> command,
-   in that can be used to fetch a Docker image from a Docker registry.
-   Currently only registry <literal>v1</literal> is supported.
-   By default <link xlink:href="https://hub.docker.com/">Docker Hub</link>
-   is used to pull images.
+  This function is analogous to the <command>docker pull</command> command,
+  in that can be used to fetch a Docker image from a Docker registry.
+  Currently only registry <literal>v1</literal> is supported.
+  By default <link xlink:href="https://hub.docker.com/">Docker Hub</link>
+  is used to pull images.
   </para>
 
   <para>
-   Its parameters are described in the example below:
+  Its parameters are described in the example below:
   </para>
 
   <example xml:id='ex-dockerTools-pullImage'><title>Docker pull</title>
@@ -573,73 +616,73 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
   </example>
 
   <calloutlist>
-   <callout arearefs='ex-dockerTools-pullImage-1'>
+  <callout arearefs='ex-dockerTools-pullImage-1'>
     <para>
-     <varname>imageName</varname> specifies the name of the image to be downloaded,
-     which can also include the registry namespace (e.g. <literal>library/debian</literal>).
-     This argument is required.
+    <varname>imageName</varname> specifies the name of the image to be downloaded,
+    which can also include the registry namespace (e.g. <literal>library/debian</literal>).
+    This argument is required.
     </para>
-   </callout>
-   
-   <callout arearefs='ex-dockerTools-pullImage-2'>
-    <para>
-     <varname>imageTag</varname> specifies the tag of the image to be downloaded.
-     By default it's <literal>latest</literal>.
-    </para>
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-pullImage-3'>
+  <callout arearefs='ex-dockerTools-pullImage-2'>
     <para>
-     <varname>imageId</varname>, if specified this exact image will be fetched, instead
-     of <varname>imageName/imageTag</varname>. However, the resulting repository
-     will still be named <varname>imageName/imageTag</varname>.
-     By default it's <literal>null</literal>.
+    <varname>imageTag</varname> specifies the tag of the image to be downloaded.
+    By default it's <literal>latest</literal>.
     </para>
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-pullImage-4'>
+  <callout arearefs='ex-dockerTools-pullImage-3'>
     <para>
-     <varname>sha256</varname> is the checksum of the whole fetched image.
-     This argument is required.
+    <varname>imageId</varname>, if specified this exact image will be fetched, instead
+    of <varname>imageName/imageTag</varname>. However, the resulting repository
+    will still be named <varname>imageName/imageTag</varname>.
+    By default it's <literal>null</literal>.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-dockerTools-pullImage-4'>
+    <para>
+    <varname>sha256</varname> is the checksum of the whole fetched image.
+    This argument is required.
     </para>
 
     <note>
-     <para>The checksum is computed on the unpacked directory, not on the final tarball.</para>
+    <para>The checksum is computed on the unpacked directory, not on the final tarball.</para>
     </note>
 
-   </callout>
+  </callout>
 
-   <callout arearefs='ex-dockerTools-pullImage-5'>
+  <callout arearefs='ex-dockerTools-pullImage-5'>
     <para>
-     In the above example the default values are shown for the variables
-     <varname>indexUrl</varname> and <varname>registryVersion</varname>.
-     Hence by default the Docker.io registry is used to pull the images.
+    In the above example the default values are shown for the variables
+    <varname>indexUrl</varname> and <varname>registryVersion</varname>.
+    Hence by default the Docker.io registry is used to pull the images.
     </para>
-   </callout>
+  </callout>
   </calloutlist>
-   
- </section>
-  
- <section xml:id="ssec-pkgs-dockerTools-exportImage">
+
+</section>
+
+<section xml:id="ssec-pkgs-dockerTools-exportImage">
   <title>exportImage</title>
 
   <para>
-   This function is analogous to the <command>docker export</command> command,
-   in that can used to flatten a Docker image that contains multiple layers.
-   It is in fact the result of the merge of all the layers of the image.
-   As such, the result is suitable for being imported in Docker
-   with <command>docker import</command>.
+  This function is analogous to the <command>docker export</command> command,
+  in that can used to flatten a Docker image that contains multiple layers.
+  It is in fact the result of the merge of all the layers of the image.
+  As such, the result is suitable for being imported in Docker
+  with <command>docker import</command>.
   </para>
 
   <note>
-   <para>
+  <para>
     Using this function requires the <literal>kvm</literal>
     device to be available.
-   </para>
+  </para>
   </note>
 
   <para>
-   The parameters of <varname>exportImage</varname> are the following:
+  The parameters of <varname>exportImage</varname> are the following:
   </para>
 
   <example xml:id='ex-dockerTools-exportImage'><title>Docker export</title>
@@ -648,35 +691,35 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
     fromImage = someLayeredImage;
     fromImageName = null;
     fromImageTag = null;
-    
+
     name = someLayeredImage.name;
   }
   </programlisting>
   </example>
 
   <para>
-   The parameters relative to the base image have the same synopsis as
-   described in <xref linkend='ssec-pkgs-dockerTools-buildImage'/>, except that
-   <varname>fromImage</varname> is the only required argument in this case.
+  The parameters relative to the base image have the same synopsis as
+  described in <xref linkend='ssec-pkgs-dockerTools-buildImage'/>, except that
+  <varname>fromImage</varname> is the only required argument in this case.
   </para>
 
   <para>
-   The <varname>name</varname> argument is the name of the derivation output,
-   which defaults to <varname>fromImage.name</varname>.
+  The <varname>name</varname> argument is the name of the derivation output,
+  which defaults to <varname>fromImage.name</varname>.
   </para>
- </section>
+</section>
 
- <section xml:id="ssec-pkgs-dockerTools-shadowSetup">
+<section xml:id="ssec-pkgs-dockerTools-shadowSetup">
   <title>shadowSetup</title>
 
   <para>
-   This constant string is a helper for setting up the base files for managing
-   users and groups, only if such files don't exist already.
-   It is suitable for being used in a
-   <varname>runAsRoot</varname> <xref linkend='ex-dockerTools-buildImage-runAsRoot'/> script for cases like
-   in the example below:
+  This constant string is a helper for setting up the base files for managing
+  users and groups, only if such files don't exist already.
+  It is suitable for being used in a
+  <varname>runAsRoot</varname> <xref linkend='ex-dockerTools-buildImage-runAsRoot'/> script for cases like
+  in the example below:
   </para>
-  
+
   <example xml:id='ex-dockerTools-shadowSetup'><title>Shadow base files</title>
   <programlisting>
   buildImage {
@@ -695,13 +738,13 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
   </example>
 
   <para>
-   Creating base files like <literal>/etc/passwd</literal> or
-   <literal>/etc/login.defs</literal> are necessary for shadow-utils to
-   manipulate users and groups.
+  Creating base files like <literal>/etc/passwd</literal> or
+  <literal>/etc/login.defs</literal> are necessary for shadow-utils to
+  manipulate users and groups.
   </para>
-  
- </section>
- 
+
+</section>
+
 </section>
 
 </chapter>
