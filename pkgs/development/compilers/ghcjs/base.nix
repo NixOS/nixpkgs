@@ -57,6 +57,35 @@
     src = ghcjsBootSrc;
   }
 , shims ? import ./shims.nix { inherit fetchFromGitHub; }
+
+# This is the list of the Stage 1 packages that are built into a booted ghcjs installation
+# It can be generated with the command:
+# nix-shell -p haskell.packages.ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/^\([^_]*\)\(.*\)$/      \"\1\"/'"
+, stage1Packages ? [
+    "array"
+    "base"
+    "binary"
+    "bytestring"
+    "containers"
+    "deepseq"
+    "directory"
+    "filepath"
+    "ghc-boot"
+    "ghc-boot-th"
+    "ghc-prim"
+    "ghci"
+    "ghcjs-prim"
+    "ghcjs-th"
+    "integer-gmp"
+    "pretty"
+    "primitive"
+    "process"
+    "rts"
+    "template-haskell"
+    "time"
+    "transformers"
+    "unix"
+  ]
 }:
 let
   inherit (bootPkgs) ghc;
@@ -141,32 +170,7 @@ in mkDerivation (rec {
     inherit nodejs ghcjsBoot;
     inherit (ghcjsNodePkgs) "socket.io";
 
-    # This is the list of the Stage 1 packages that are built into a booted ghcjs installation
-    # It can be generated with the command:
-    # nix-shell -p haskell.packages.ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/^\([^_]*\)\(.*\)$/      \"\1\"/'"
-    stage1Packages = [
-      "array"
-      "base"
-      "binary"
-      "rts"
-      "bytestring"
-      "containers"
-      "deepseq"
-      "directory"
-      "filepath"
-      "ghc-prim"
-      "ghcjs-prim"
-      "integer-gmp"
-      "old-locale"
-      "pretty"
-      "primitive"
-      "process"
-      "template-haskell"
-      "time"
-      "transformers"
-      "unix"
-    ];
-
+    inherit stage1Packages;
     mkStage2 = import ./stage2.nix {
       inherit ghcjsBoot;
     };
