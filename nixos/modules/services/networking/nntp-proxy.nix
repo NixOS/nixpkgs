@@ -148,11 +148,11 @@ in
       };
 
       verbosity = mkOption {
-        type = types.str;
+        type = types.enum [ "error" "warning" "notice" "info" "debug" ];
         default = "info";
         example = "error";
         description = ''
-          Verbosity level (error, warning, notice, info, debug)
+          Verbosity level
         '';
       };
 
