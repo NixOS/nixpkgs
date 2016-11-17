@@ -1878,6 +1878,8 @@ in
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
+  gocryptfs = callPackage ../tools/filesystems/gocrypfs { };
+
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
   go-pup = callPackage ../development/tools/pup { };
