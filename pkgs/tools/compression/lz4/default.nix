@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
-  version = "131";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
-    sha256 = "1bhvcq8fxxsqnpg5qa6k3nsyhq0nl0iarh08sqzclww27hlpyay2";
-    rev = "r${version}";
+    sha256 = "0b9yhgiqsdaqgq03vkgalrpbbw7p9a8n8j1nqipra5vw182jrvl0";
+    rev = "v${version}";
     repo = "lz4";
     owner = "Cyan4973";
   };
@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
-
-  patches = [ ./install-on-freebsd.patch ] ;
 
   postInstall = "rm $out/lib/*.a";
 
