@@ -2085,5 +2085,14 @@ rec {
 
   };
 
+  vim-jsdoc = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-jsdoc-2016-11-05";
+    src = fetchgit {
+      url = "git://github.com/heavenshell/vim-jsdoc";
+      rev = "45c7c7cef440a29f7bf24436640413e3d5d578ff";
+      sha256 = "0kr4p01pyrz9w7yfh50gsz6n60qvnqxsr1055hvsyx36nzw6l3za";
+    };
+    dependencies = [];
 
+  };
 }
