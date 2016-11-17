@@ -1018,14 +1018,14 @@ self: super: {
 
   # http-api-data_0.3.x requires QuickCheck > 2.9, but overriding that version
   # is hard because of transitive dependencies, so we just disable tests.
-  http-api-data_0_3_2 = dontCheck super.http-api-data_0_3_2;
+  http-api-data_0_3_3 = dontCheck super.http-api-data_0_3_3;
 
   # Fix build for latest versions of servant and servant-client.
   servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_2;
+    http-api-data = self.http-api-data_0_3_3;
   });
   servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_2;
+    http-api-data = self.http-api-data_0_3_3;
     servant-server = self.servant-server_0_9_1_1;
     servant = self.servant_0_9_1_1;
   });

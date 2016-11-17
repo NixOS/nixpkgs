@@ -54,7 +54,7 @@ import ./make-test.nix ({ pkgs, ...} : {
           services.cjdns =
             { UDPInterface =
                 { bind = "0.0.0.0:1024";
-                  connectTo."192.168.0.1:1024}" =
+                  connectTo."192.168.0.1:1024" =
                     { password = carolPassword;
                       publicKey = carolPubKey;
                     };
