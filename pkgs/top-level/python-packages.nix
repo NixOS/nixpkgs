@@ -2458,14 +2458,8 @@ in {
     };
   };
 
-  cycler = buildPythonPackage rec {
-    name = "cycler-${version}";
-    version = "0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cycler/${name}.tar.gz";
-      sha256 = "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8";
-    };
+  cycler = buildPyPIPackage rec {
+    pname = "Cycler";
 
     buildInputs = with self; [ coverage nose ];
     propagatedBuildInputs = with self; [ six ];
@@ -2735,14 +2729,8 @@ in {
     };
   };
 
-  blaze = buildPythonPackage rec {
-    name = "blaze-${version}";
-    version = "0.11.0";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/blaze/blaze/archive/${version}.tar.gz";
-      sha256 = "07zrrxkmdqk84xvdmp29859zcfzlpx5pz6g62l28nqp6n6a7yq9a";
-    };
+  blaze = buildPyPIPackage rec {
+    pname = "blaze";
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [
@@ -4227,14 +4215,8 @@ in {
     propagatedBuildInputs = with self; [ pycrypto boto3 docutils ];
   };
 
-  cython = buildPythonPackage rec {
-    name = "Cython-${version}";
-    version = "0.24.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cython/${name}.tar.gz";
-      sha256 = "84808fda00508757928e1feadcf41c9f78e9a9b7167b6649ab0933b76f75e7b9";
-    };
+  cython = buildPyPIPackage rec {
+    pname = "Cython";
 
     buildInputs = with self; [ pkgs.pkgconfig pkgs.gdb ];
     # For testing
@@ -4261,14 +4243,8 @@ in {
     };
   };
 
-  cytoolz = buildPythonPackage rec {
-    name = "cytoolz-${version}";
-    version = "0.8.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/c/cytoolz/cytoolz-${version}.tar.gz";
-      sha256 = "2239890c8fe2da3eba82947c6a68cfa406e5a5045911c9ab3de8113462372629";
-    };
+  cytoolz = buildPyPIPackage rec {
+    pname = "cytoolz";
 
     # Extension types
     disabled = isPyPy;
@@ -5360,14 +5336,8 @@ in {
     };
   });
 
-  dask = buildPythonPackage rec {
-    name = "dask-${version}";
-    version = "0.11.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dask/${name}.tar.gz";
-      sha256 = "ef32490c0b156584a71576dccec4dfe550a0cd81a9c131a4ee2e43c241b601c3";
-    };
+  dask = buildPyPIPackage rec {
+    pname = "dask";
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ cloudpickle  numpy toolz dill pandas partd ];
@@ -5556,14 +5526,8 @@ in {
     };
   };
 
-  datashape = buildPythonPackage rec {
-    name = "datashape-${version}";
-    version = "0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/D/DataShape/${name}.tar.gz";
-      sha256 = "2356ea690c3cf003c1468a243a9063144235de45b080b3652de4f3d44e57d783";
-    };
+  datashape = buildPyPIPackage rec {
+    pname = "DataShape";
 
     buildInputs = with self; [ pytest mock ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
@@ -25169,14 +25133,8 @@ in {
     };
   };
 
-  toolz = buildPythonPackage rec{
-    name = "toolz-${version}";
-    version = "0.8.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
-    };
+  toolz = buildPyPIPackage rec{
+    pname = "toolz";
 
     buildInputs = with self; [ nose ];
 
