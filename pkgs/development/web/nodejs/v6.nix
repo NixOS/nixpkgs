@@ -3,6 +3,7 @@
 , callPackage
 , darwin ? null
 , enableNpm ? true
+, enableSsl ? true
 }@args:
 
 let

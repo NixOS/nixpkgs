@@ -3,6 +3,7 @@
 , callPackage
 , darwin ? null
 , enableNpm ? true
+, enableSsl? true
 }:
 
 with stdenv.lib;
@@ -11,7 +12,8 @@ let
 
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
-  sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs (!stdenv.isDarwin) { inherit http-parser; });
+  sharedLibDeps = { inherit zlib libuv; } // (optionalAttrs (!stdenv.isDarwin) { inherit http-parser; }) 
+    // (optionalAttrs (enableSsl) { inherit openssl; });
 
   sharedConfigureFlags = concatMap (name: [
     "--shared-${name}"
@@ -22,13 +24,15 @@ let
      */
   ]) (builtins.attrNames sharedLibDeps);
 
-  extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
+  extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ] 
+    ++ optionals (!enableSsl) [ "--without-ssl --without-inspector" ]; /* inspector flag necessary until upstream fixes #nodejs/node/9510 */
 in
 
   rec {
 
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-    ++ [ python2 which zlib libuv openssl ]
+    ++ [ python2 which zlib libuv ]
+    ++ optionals (enableSsl) [ openssl ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
     ++ optionals stdenv.isDarwin [ pkgconfig libtool ];
 
