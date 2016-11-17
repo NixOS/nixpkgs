@@ -63,6 +63,68 @@ let
     screengrab = callPackage ./optional/screengrab { };
     qlipper = callPackage ./optional/qlipper { };
 
+    preRequisitePackages = [
+      pkgs.gvfs # virtual file systems support for PCManFM-QT
+      pkgs.kde5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
+      pkgs.kde5.libkscreen # provides plugins for screen management software
+      pkgs.libfm
+      pkgs.libfm-extra
+      pkgs.lxmenu-data
+      pkgs.menu-cache
+      pkgs.openbox # default window manager
+      pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
+    ];
+
+    corePackages = [
+      ### BASE
+      libqtxdg
+      libsysstat
+      liblxqt
+
+      ### CORE 1
+      libfm-qt
+      lxqt-about
+      lxqt-admin
+      lxqt-common
+      lxqt-config
+      lxqt-globalkeys
+      lxqt-l10n
+      lxqt-notificationd
+      lxqt-openssh-askpass
+      lxqt-policykit
+      lxqt-powermanagement
+      lxqt-qtplugin
+      lxqt-session
+      lxqt-sudo
+      pavucontrol-qt
+
+      ### CORE 2
+      lxqt-panel
+      lxqt-runner
+      pcmanfm-qt
+    ];
+
+    optionalPackages = [
+      ### LXQt project
+      qterminal
+      compton-conf
+      obconf-qt
+      lximage-qt
+
+      ### QtDesktop project
+      qps
+      screengrab
+
+      ### Qlipper
+      qlipper
+
+      ### Default icon theme
+      pkgs.kde5.oxygen-icons5
+
+      ### Screen saver
+      pkgs.xscreensaver
+    ];
+
   };
 
 in self
