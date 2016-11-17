@@ -129,7 +129,9 @@ with stdenv.lib;
   IPV6_MROUTE y
   IPV6_MROUTE_MULTIPLE_TABLES y
   IPV6_PIMSM_V2 y
-  IPV6_FOU_TUNNEL m
+  ${optionalString (versionAtLeast version "4.7") ''
+    IPV6_FOU_TUNNEL m
+  ''}
   CLS_U32_PERF y
   CLS_U32_MARK y
   ${optionalString (stdenv.system == "x86_64-linux") ''
