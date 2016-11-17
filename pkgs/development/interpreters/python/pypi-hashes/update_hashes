@@ -9,12 +9,15 @@ from iso8601 import parse_date
 from pkg_resources import parse_version
 import subprocess
 import fuzzywuzzy.fuzz as fz
+import os
+
+DIR = os.path.dirname(__file__)
 
 INDEX = "https://pypi.io/pypi"
 """url of PyPI"""
 
-FILENAME_PACKAGES = "packages.txt"
-FILENAME_HASHES = "hashes.json"
+FILENAME_PACKAGES = os.path.join(DIR, "packages.txt")
+FILENAME_HASHES = os.path.join(DIR, "hashes.json")
 
 NSEMAPHORE = 200
 """Maximum amount of concurrent requests"""
