@@ -24,7 +24,7 @@ with lib;
       copy_bin_and_libs ${pkgs.gnused}/bin/sed
       copy_bin_and_libs ${pkgs.utillinux}/sbin/sfdisk
       copy_bin_and_libs ${pkgs.utillinux}/sbin/lsblk
-      cp -v ${pkgs.cloud-utils}/bin/growpart $out/bin/growpart
+      cp -v ${pkgs.cloud-utils}/bin/.growpart-wrapped $out/bin/growpart
       ln -s sed $out/bin/gnused
     '';
 
