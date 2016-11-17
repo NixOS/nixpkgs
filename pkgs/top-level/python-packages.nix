@@ -11652,6 +11652,13 @@ in {
     };
   };
 
+  fuzzywuzzy = buildPyPIPackage rec {
+    pname = "fuzzywuzzy";
+    buildInputs = with self; [ pycodestyle ];
+    propagatedBuildInputs = with self; [ python-Levenshtein ];
+    meta.maintainer = maintainers.fridh;
+  };
+
   gcovr = buildPythonPackage rec {
     name = "gcovr-2.4";
 

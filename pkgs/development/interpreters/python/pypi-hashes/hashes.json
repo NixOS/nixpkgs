@@ -83,6 +83,19 @@
       }
     }
   },
+  "fuzzywuzzy": {
+    "latest_version": "0.14.0",
+    "meta": {
+      "description": "Fuzzy string matching in python",
+      "homepage": "https://github.com/seatgeek/fuzzywuzzy"
+    },
+    "versions": {
+      "0.14.0": {
+        "sha256": "8f2308ae51556a5195e19f2bd7f3d72daebd23d0d53fa6bcbaf4d31c2a39a5b9",
+        "url": "https://files.pythonhosted.org/packages/04/4d/1c9ae2b56fa1ad9a69999b9f82b05e44d3af97d042a5f8950745a44cd8f1/fuzzywuzzy-0.14.0.tar.gz"
+      }
+    }
+  },
   "toolz": {
     "latest_version": "0.8.0",
     "meta": {
