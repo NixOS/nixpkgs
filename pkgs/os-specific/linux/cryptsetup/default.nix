@@ -1,8 +1,8 @@
 { stdenv, fetchurl, devicemapper, openssl, libuuid, pkgconfig, popt
-, enablePython ? false, python ? null
+, enablePython ? false, python2 ? null
 }:
 
-assert enablePython -> python != null;
+assert enablePython -> python2 != null;
 
 stdenv.mkDerivation rec {
   name = "cryptsetup-1.7.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
                 ++ stdenv.lib.optional enablePython "--enable-python";
 
   buildInputs = [ devicemapper openssl libuuid pkgconfig popt ]
-             ++ stdenv.lib.optional enablePython python;
+             ++ stdenv.lib.optional enablePython python2;
 
   meta = {
     homepage = https://gitlab.com/cryptsetup/cryptsetup/;
