@@ -29,7 +29,7 @@
 , messagelib
 , openldap
 , pimcommon
-, qt5
+, qtwebengine
 , solid
 }:
 
@@ -43,7 +43,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-contacts
     akonadi-mime
     boost
@@ -71,7 +71,7 @@ kdeApp {
     messagelib
     openldap
     pimcommon
-    qt5.qtwebengine
+    qtwebengine
     solid
   ];
 }

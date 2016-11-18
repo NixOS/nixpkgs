@@ -26,7 +26,7 @@
 , libical
 , libkdepim
 , pimcommon
-, qt5
+, qtwebengine
 , solid
 }:
 
@@ -40,7 +40,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-contacts
     akonadi-mime
     boost
@@ -65,7 +65,7 @@ kdeApp {
     libical
     libkdepim
     pimcommon
-    qt5.qtwebengine
+    qtwebengine
     solid
   ];
 }

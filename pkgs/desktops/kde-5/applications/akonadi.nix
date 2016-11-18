@@ -1,44 +1,48 @@
 { boost
 , ecm
 , kdeApp
+, kdeWrapper
 , kdesignerplugin
 , kitemmodels
 , lib
-, makeQtWrapper
 , mariadb
 , postgresql
 , shared_mime_info
 }:
 
-kdeApp {
-  name = "akonadi";
-  meta = {
-    description = "KDE PIM Storage Service";
-    license = with lib.licenses; [ gpl2 ];
-    homepage = http://pim.kde.org/akonadi;
-    maintainers = with lib.maintainers; [ vandenoever ];
-  };
-  nativeBuildInputs = [
-    ecm
-    makeQtWrapper
+let
+  unwrapped =
+    kdeApp {
+      name = "akonadi";
+      meta = {
+        description = "KDE PIM Storage Service";
+        license = with lib.licenses; [ gpl2 ];
+        homepage = http://pim.kde.org/akonadi;
+        maintainers = with lib.maintainers; [ vandenoever ];
+      };
+      nativeBuildInputs = [
+        ecm
+      ];
+      buildInputs = [
+        boost
+        kdesignerplugin
+        kitemmodels
+      ];
+      propagatedBuildInputs = [
+        mariadb
+        postgresql
+      ];
+    };
+in
+kdeWrapper unwrapped
+{
+  targets = [
+    "bin/akonadi_agent_launcher"
+    "bin/akonadi_agent_server"
+    "bin/akonadi_control"
+    "bin/akonadi_rds"
+    "bin/akonadictl"
+    "bin/akonadiserver"
+    "bin/asapcat"
   ];
-  buildInputs = [
-    boost
-    kdesignerplugin
-    kitemmodels
-  ];
-  propagatedBuildInputs = [
-    mariadb
-    postgresql
-  ];
-
-  postInstall = ''
-    wrapQtProgram "$out/bin/akonadi_agent_launcher"
-    wrapQtProgram "$out/bin/akonadi_agent_server"
-    wrapQtProgram "$out/bin/akonadi_control"
-    wrapQtProgram "$out/bin/akonadi_rds"
-    wrapQtProgram "$out/bin/akonadictl"
-    wrapQtProgram "$out/bin/akonadiserver"
-    wrapQtProgram "$out/bin/asapcat"
-  '';
 }

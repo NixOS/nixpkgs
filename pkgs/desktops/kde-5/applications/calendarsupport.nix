@@ -38,7 +38,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-calendar
     akonadi-contacts
     akonadi-mime

@@ -33,7 +33,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-contacts
     boost
     cyrus_sasl

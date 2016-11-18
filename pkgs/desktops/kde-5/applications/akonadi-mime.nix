@@ -19,7 +19,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     boost
     kdbusaddons
     kio

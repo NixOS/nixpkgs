@@ -29,7 +29,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     boost
     cyrus_sasl
     grantlee

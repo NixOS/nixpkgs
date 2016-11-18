@@ -21,7 +21,7 @@
 , kross
 , lib
 , libical
-, qt5
+, qtwebengine
 , shared_mime_info
 , syndication
 }:
@@ -36,7 +36,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-calendar
     boost
     cyrus_sasl
@@ -56,7 +56,7 @@ kdeApp {
     kpimtextedit
     kross
     libical
-    qt5.qtwebengine
+    qtwebengine
     shared_mime_info
     syndication
   ];

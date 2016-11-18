@@ -23,7 +23,7 @@
 , libical
 , libkleo
 , pimcommon
-, qt5
+, qtwebengine
 , solid
 }:
 
@@ -37,7 +37,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-contacts
     boost
     cyrus_sasl
@@ -59,7 +59,7 @@ kdeApp {
     libical
     libkleo
     pimcommon
-    qt5.qtwebengine
+    qtwebengine
     solid
   ];
 }

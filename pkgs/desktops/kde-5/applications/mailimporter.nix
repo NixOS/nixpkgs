@@ -34,7 +34,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-contacts
     akonadi-mime
     boost

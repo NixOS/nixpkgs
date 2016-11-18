@@ -12,7 +12,7 @@
 , kmime
 , lib
 , libical
-, qt5
+, qtwebengine
 }:
 
 kdeApp {
@@ -25,7 +25,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-mime
     boost
     grantlee
@@ -36,6 +36,6 @@ kdeApp {
     kio
     kmime
     libical
-    qt5.qtwebengine
+    qtwebengine
   ];
 }

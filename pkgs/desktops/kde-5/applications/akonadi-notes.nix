@@ -20,7 +20,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     boost
     kcompletion
     ki18n

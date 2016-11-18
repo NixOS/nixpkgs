@@ -35,7 +35,8 @@
 , libkleo
 , openldap
 , pimcommon
-, qt5
+, qtwebengine
+, qtwebkit
 , solid
 }:
 
@@ -49,7 +50,7 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    akonadi
+    akonadi.unwrapped
     akonadi-contacts
     akonadi-mime
     akonadi-notes
@@ -83,8 +84,8 @@ kdeApp {
     libkleo
     openldap
     pimcommon
-    qt5.qtwebengine
-    qt5.qtwebkit
+    qtwebengine
+    qtwebkit
     solid
   ];
 }
