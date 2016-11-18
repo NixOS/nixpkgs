@@ -1,20 +1,30 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct, type_conv, zarith, ocaml_lwt, ounit }:
+{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib
+, cstruct, zarith, ounit, ocaml_oasis, ppx_sexp_conv, sexplib
+, lwt ? null}:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
+with stdenv.lib;
+let withLwt = lwt != null; in
 
-stdenv.mkDerivation rec {
-  name = "ocaml-nocrypto-${version}";
-  version = "0.5.1";
+buildOcaml rec {
+  name = "nocrypto";
+  version = "0.5.3";
 
-  src = fetchzip {
-    url = "https://github.com/mirleft/ocaml-nocrypto/archive/${version}.tar.gz";
-    sha256 = "15gffvixk12ghsfra9amfszd473c8h188zfj03ngvblbdm0d80m0";
+  minimumSupportedOcamlVersion = "4.02";
+
+  src = fetchFromGitHub {
+    owner  = "mirleft";
+    repo   = "ocaml-nocrypto";
+    rev    = "v${version}";
+    sha256 = "0m3yvqpgfffqp15mcl08b78cv8zw25rnp6z1pkj5aimz6xg3gqbl";
   };
 
-  buildInputs = [ ocaml findlib type_conv ocaml_lwt ounit ];
-  propagatedBuildInputs = [ cstruct zarith ];
+  buildInputs = [ ocaml ocaml_oasis findlib ounit ppx_sexp_conv ];
+  propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt lwt;
 
-  configureFlags = "--enable-tests";
+  configureFlags = [ "--enable-tests" ] ++ optional withLwt ["--enable-lwt"];
+
+  configurePhase = "./configure --prefix $out $configureFlags";
+
   doCheck = true;
   checkTarget = "test";
   createFindlibDestdir = true;
@@ -22,7 +32,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://github.com/mirleft/ocaml-nocrypto;
     description = "Simplest possible crypto to support TLS";
-    platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

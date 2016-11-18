@@ -1,5 +1,5 @@
-{ stdenv, writeText, fetchFromGitHub, ocaml, ocplib-endian, sexplib_p4, findlib, ppx_tools
-, async_p4 ? null, lwt ? null, camlp4
+{ stdenv, writeText, fetchFromGitHub, ocaml, ocplib-endian, sexplib, findlib, ppx_tools
+, async ? null, lwt ? null
 }:
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";
@@ -22,10 +22,10 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
-  configureFlags = [ "${opt lwt}-lwt" "${opt async_p4}-async" "${opt ppx_tools}-ppx" ];
+  configureFlags = [ "${opt lwt}-lwt" "${opt async}-async" "${opt ppx_tools}-ppx" ];
 
-  buildInputs = [ ocaml findlib ppx_tools camlp4 lwt async_p4 ];
-  propagatedBuildInputs = [ ocplib-endian sexplib_p4 ];
+  buildInputs = [ ocaml findlib ppx_tools lwt async ];
+  propagatedBuildInputs = [ ocplib-endian sexplib ];
 
   createFindlibDestdir = true;
   dontStrip = true;
