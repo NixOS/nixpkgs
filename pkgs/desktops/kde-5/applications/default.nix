@@ -62,6 +62,7 @@ let
     kidentitymanagement = callPackage ./kidentitymanagement.nix {};
     kimap = callPackage ./kimap.nix {};
     kio-extras = callPackage ./kio-extras.nix {};
+    kldap = callPackage ./kldap.nix {};
     kmbox = callPackage ./kmbox.nix {};
     kmime = callPackage ./kmime.nix {};
     kompare = callPackage ./kompare.nix {};
