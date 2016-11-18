@@ -498,6 +498,8 @@ in
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
+  bugseverywhere = callPackage ../applications/version-management/bugseverywhere { };
+
   djmount = callPackage ../tools/filesystems/djmount { };
 
   elvish = callPackage ../shells/elvish { };

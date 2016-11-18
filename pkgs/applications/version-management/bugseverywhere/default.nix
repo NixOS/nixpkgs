@@ -1,9 +1,10 @@
-{ stdenv, pythonPackages, fetchurl }:
+{ stdenv, python2Packages, fetchurl }:
 
 #
-# Upstream stopped development of this package. If this package does not build
-# anymore, feel free to remove it by reverting the appropriate patch
-# (git log --grep bugseverywhere)
+# Note that there is a github mirror at
+# https://github.com/aaiyer/bugseverywhere/
+# which is ahead of this very package, so upgrading to a newer version might be
+# possible even if bugseverywhere-1.1.1 is broken (on pypi or elsewhere).
 #
 pythonPackages.buildPythonApplication rec {
     version = "1.1.1";
@@ -18,7 +19,16 @@ pythonPackages.buildPythonApplication rec {
     # There are no tests in the repository.
     doCheck = false;
 
-    buildInputs = with pythonPackages; [
+    postInstall = ''
+      mkdir -p $out/{${pythonPackages.python.sitePackages},bin}/
+      cp libbe* -r $out/${pythonPackages.python.sitePackages}/
+
+      cp be $out/bin/
+      chmod +x $out/bin/be
+    '';
+
+
+    propagatedBuildInputs = with pythonPackages; [
         jinja2
         cherrypy
     ];
