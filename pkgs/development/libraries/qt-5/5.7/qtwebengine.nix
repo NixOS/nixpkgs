@@ -9,7 +9,7 @@
 
 , bison, flex, git, which, gperf
 , coreutils
-, pkgconfig, python
+, pkgconfig, python2
 
 }:
 
@@ -17,7 +17,7 @@ qtSubmodule {
   name = "qtwebengine";
   qtInputs = [ qtquickcontrols qtlocation qtwebchannel ];
   buildInputs = [ bison flex git which gperf ];
-  nativeBuildInputs = [ pkgconfig python coreutils ];
+  nativeBuildInputs = [ pkgconfig python2 coreutils ];
   doCheck = true;
 
   enableParallelBuilding = true;
