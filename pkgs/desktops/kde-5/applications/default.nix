@@ -46,7 +46,6 @@ let
     kalarmcal = callPackage ./kalarmcal.nix {};
     kate = callPackage ./kate.nix {};
     kblog = callPackage ./kblog.nix {};
-    kdenlive = callPackage ./kdenlive.nix {};
     kcalc = callPackage ./kcalc.nix {};
     kcalcore = callPackage ./kcalcore.nix {};
     kcalutils = callPackage ./kcalutils.nix {};
@@ -54,7 +53,9 @@ let
     kcontacts = callPackage ./kcontacts.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
+    kdenlive = callPackage ./kdenlive.nix {};
     kdf = callPackage ./kdf.nix {};
+    kdgantt2 = callPackage ./kdgantt2.nix {};
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
     khelpcenter = callPackage ./khelpcenter.nix {};
     kholidays = callPackage ./kholidays.nix {};
