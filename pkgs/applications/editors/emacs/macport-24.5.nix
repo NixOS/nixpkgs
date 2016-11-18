@@ -1,5 +1,6 @@
 { stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+, autoconf, automake
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext ];
+  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext autoconf automake ];
 
   propagatedBuildInputs = [
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
