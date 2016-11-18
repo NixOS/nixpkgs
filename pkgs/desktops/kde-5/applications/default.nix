@@ -43,6 +43,7 @@ let
     gpgmepp = callPackage ./gpgmepp.nix {};
     grantleetheme = callPackage ./grantleetheme.nix {};
     gwenview = callPackage ./gwenview.nix {};
+    kalarmcal = callPackage ./kalarmcal.nix {};
     kate = callPackage ./kate.nix {};
     kblog = callPackage ./kblog.nix {};
     kdenlive = callPackage ./kdenlive.nix {};
