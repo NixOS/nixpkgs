@@ -11,11 +11,12 @@ let blas64_ = blas64; in
 let local = config.openblas.preferLocalBuild or false;
     binary =
       { i686-linux = "32";
+        armv7l-linux = "32";
         x86_64-linux = "64";
         x86_64-darwin = "64";
       }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
     genericFlags =
-      [ "DYNAMIC_ARCH=1"
+      [ "DYNAMIC_ARCH=${if stdenv.system == "armv7l-linux" then "0" else "1"}"
         "NUM_THREADS=64"
       ];
     localFlags = config.openblas.flags or
@@ -50,7 +51,9 @@ stdenv.mkDerivation {
       "BINARY=${binary}"
       "USE_OPENMP=${if stdenv.isDarwin then "0" else "1"}"
       "INTERFACE64=${if blas64 then "1" else "0"}"
-    ];
+    ]
+    ++
+    optionals (stdenv.system == "armv7l-linux") ["TARGET=ARMV7"];
 
   doCheck = true;
   checkTarget = "tests";
