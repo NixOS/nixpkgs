@@ -51,6 +51,7 @@ let
     kcalcore = callPackage ./kcalcore.nix {};
     kcalutils = callPackage ./kcalutils.nix {};
     kcolorchooser = callPackage ./kcolorchooser.nix {};
+    kcontacts = callPackage ./kcontacts.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
     kdf = callPackage ./kdf.nix {};
