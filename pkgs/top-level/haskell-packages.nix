@@ -49,10 +49,8 @@ rec {
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
       bootPkgs = packages.ghc7103;
       inherit (bootPkgs) alex happy;
-    };
-    # TODO: how should we support multiple versions of this?
-    ghcCross = compiler.ghcHEAD.override {
-      cross = crossSystem;
+      inherit crossSystem;
+      selfPkgs = packages.ghcHEAD;
     };
     ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix rec {
       bootPkgs = packages.ghc784;
@@ -125,7 +123,11 @@ rec {
       ghc = compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    # TODO Support for ghcCross here
+    # TODO Support for multiple variants here
+    ghcCross = callPackage ../development/haskell-modules {
+      ghc = compiler.ghcHEAD.crossCompiler;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
+    };
     ghcNokinds = callPackage ../development/haskell-modules {
       ghc = compiler.ghcNokinds;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-nokinds.nix { };

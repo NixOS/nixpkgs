@@ -26,7 +26,7 @@
       echo "-target ${prefix} -arch ${arch} -idirafter ${sdk}/usr/include ${if simulator then "-mios-simulator-version-min=7.0" else "-miphoneos-version-min=7.0"}" >> $out/nix-support/cc-cflags
 
       # Purposefully overwrite libc-ldflags-before, cctools ld doesn't know dynamic-linker and cc-wrapper doesn't do cross-compilation well enough to adjust
-      echo "-arch ${arch} -L${sdk}/usr/lib -L${sdk}/usr/lib/system" > $out/nix-support/libc-ldflags-before
+      echo "-arch ${arch} -L${sdk}/usr/lib -iphoneos_version_min 7.0.0" > $out/nix-support/libc-ldflags-before
     '';
   };
 in {
