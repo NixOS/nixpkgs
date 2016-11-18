@@ -1,22 +1,30 @@
 { akonadi
+, akonadi-contacts
+, akonadi-mime
 , boost
+, cyrus_sasl
 , ecm
 , kcalcore
+, kcalutils
+, kcontacts
 , kdeApp
 , kdelibs4support
 , kdoctools
-, kholidays
 , kidentitymanagement
+, kio
+, kitemmodels
+, kmailtransport
+, kmime
 , kpimtextedit
 , lib
 , libical
+, syndication
 }:
 
 kdeApp {
-  name = "kalarmcal";
+  name = "akonadi-calendar";
   meta = {
-    description = "The KAlarm client library";
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = with lib.licenses; [ lgpl2 ];
     maintainers = with lib.maintainers; [ vandenoever ];
   };
   nativeBuildInputs = [
@@ -24,13 +32,22 @@ kdeApp {
   ];
   buildInputs = [
     akonadi
+    akonadi-contacts
+    akonadi-mime
     boost
+    cyrus_sasl
     kcalcore
+    kcalutils
+    kcontacts
     kdelibs4support
     kdoctools
-    kholidays
     kidentitymanagement
+    kio
+    kitemmodels
+    kmailtransport
+    kmime
     kpimtextedit
     libical
+    syndication
   ];
 }

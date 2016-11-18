@@ -1,38 +1,49 @@
-{ ecm
-, grantlee
+{ akonadi
+, akonadi-mime
+, boost
+, ecm
 , kcalcore
+, kcmutils
 , kconfig
-, kcoreaddons
+, kcontacts
+, kcrash
 , kdeApp
 , kdelibs4support
 , kdoctools
 , ki18n
-, kidentitymanagement
-, kpimtextedit
+, kitemmodels
+, kmime
+, krunner
 , lib
 , libical
+, xapian
 }:
 
 kdeApp {
-  name = "kcalutils";
+  name = "akonadi-search";
   meta = {
-    description = "The KDE calendar utility library ";
-    license = with lib.licenses; [ lgpl2Plus ];
+    license = with lib.licenses; [ lgpl2 ];
     maintainers = with lib.maintainers; [ vandenoever ];
   };
   nativeBuildInputs = [
     ecm
   ];
   buildInputs = [
-    grantlee
+    akonadi
+    akonadi-mime
+    boost
     kcalcore
+    kcmutils
     kconfig
-    kcoreaddons
+    kcontacts
+    kcrash
     kdelibs4support
     kdoctools
     ki18n
-    kidentitymanagement
-    kpimtextedit
+    kitemmodels
+    kmime
+    krunner
     libical
+    xapian
   ];
 }

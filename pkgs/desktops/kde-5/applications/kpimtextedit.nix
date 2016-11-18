@@ -1,4 +1,4 @@
-{ extra-cmake-modules
+{ ecm
 , grantlee
 , kcoreaddons
 , kdeApp
@@ -18,7 +18,7 @@ kdeApp {
     maintainers = with lib.maintainers; [ vandenoever ];
   };
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
   ];
   buildInputs = [
     grantlee

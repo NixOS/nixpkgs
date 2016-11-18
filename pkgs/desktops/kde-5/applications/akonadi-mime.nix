@@ -1,14 +1,16 @@
-{ ecm
-, grantlee
-, kdeApp
-, ki18n
-, kiconthemes
-, knewstuff
+{ akonadi
+, boost
+, ecm
 , lib
+, kdeApp
+, kdbusaddons
+, kio
+, kitemmodels
+, kmime
 }:
 
 kdeApp {
-  name = "grantleetheme";
+  name = "akonadi-mime";
   meta = {
     license = with lib.licenses; [ lgpl2 ];
     maintainers = with lib.maintainers; [ vandenoever ];
@@ -17,9 +19,11 @@ kdeApp {
     ecm
   ];
   buildInputs = [
-    grantlee
-    ki18n
-    kiconthemes
-    knewstuff
+    akonadi
+    boost
+    kdbusaddons
+    kio
+    kitemmodels
+    kmime
   ];
 }
