@@ -2,6 +2,7 @@
 { fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, llvmPackages
 , xkb_switch, rustracerd, fzf
+, python3
 , Cocoa ? null
 }:
 
@@ -1501,6 +1502,23 @@ rec {
     };
     dependencies = ["vim-misc"];
 
+  };
+
+  deoplete-go = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "deoplete-go-2016-11-12";
+    src = fetchgit {
+      url = "git://github.com/zchee/deoplete-go";
+      rev = "807b5536e7cebd06d0ce7b7d54c021a82774aee2";
+      sha256 = "1ragxnlzpf17f1wdy512hkz6bd673gzl16f14v78873rcyxpiw53";
+    };
+    dependencies = [];
+    buildInputs = [ python3 ]; 
+    buildPhase = ''
+      pushd ./rplugin/python3/deoplete/ujson
+      python3 setup.py build --build-base=$PWD/build --build-lib=$PWD/build
+      popd
+      find ./rplugin/ -name "ujson*.so" -exec mv -v {} ./rplugin/python3/ \;
+    '';
   };
 
   deoplete-jedi = buildVimPluginFrom2Nix { # created by nix#NixDerivation
