@@ -41,6 +41,7 @@ let
     };
     filelight = callPackage ./filelight.nix {};
     gpgmepp = callPackage ./gpgmepp.nix {};
+    grantleetheme = callPackage ./grantleetheme.nix {};
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
     kblog = callPackage ./kblog.nix {};
