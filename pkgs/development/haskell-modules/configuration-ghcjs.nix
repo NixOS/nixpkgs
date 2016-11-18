@@ -130,4 +130,13 @@ self: super:
   # https://github.com/haskell/haddock/issues/553
   wai = dontHaddock super.wai;
   cereal = addBuildDepend super.cereal [ self.fail ];
+
+  entropy = overrideCabal super.entropy (old: {
+    postPatch = old.postPatch or "" + ''
+      # cabal doesn’t find ghc in this script, since it’s in the bootPkgs
+      sed -e '/Simple.Program/a import Distribution.Simple.Program.Types' \
+          -e 's|mConf.*=.*$|mConf = Just $ simpleConfiguredProgram "ghc" (FoundOnSystem "${self.ghc.bootPkgs.ghc}/bin/ghc")|g' -i Setup.hs
+    '';
+  });
+
 }
