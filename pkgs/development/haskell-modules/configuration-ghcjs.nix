@@ -139,4 +139,15 @@ self: super:
     '';
   });
 
+
+  # https://github.com/kazu-yamamoto/logger/issues/97
+  fast-logger = overrideCabal super.fast-logger (old: {
+    postPatch = old.postPatch or "" + ''
+      # remove the Safe extensions, since ghcjs-boot directory
+      # doesn’t provide Trustworthy
+      sed -ie '/LANGUAGE Safe/d' System/Log/FastLogger/*.hs
+      cat System/Log/FastLogger/Date.hs
+    '';
+  });
+
 }
