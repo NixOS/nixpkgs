@@ -125,5 +125,14 @@ kdeApp {
     qt5.qtx11extras
     syndication
   ];
-  propagatedUserEnvPkgs = [ akonadi kdepim-runtime ];
+  enableParallelBuilding = true;
+  propagatedUserEnvPkgs = [ akonadi kdepim-runtime qt5.qtwebengine ];
+  postInstall = ''
+    ln -s ${qt5.qtwebengine}/libexec/QtWebEngineProcess $out/bin
+    ln -s ${qt5.qtwebengine}/resources/icudtl.dat $out/bin
+    ln -s ${qt5.qtwebengine}/resources/qtwebengine_resources.pak $out/bin
+    ln -s ${qt5.qtwebengine}/resources/qtwebengine_resources_100p.pak $out/bin
+    ln -s ${qt5.qtwebengine}/resources/qtwebengine_resources_200p.pak $out/bin
+    ln -s ${qt5.qtwebengine}/translations/qtwebengine_locales $out/bin
+  '';
 }
