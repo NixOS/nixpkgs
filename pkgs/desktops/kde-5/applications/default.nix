@@ -61,11 +61,12 @@ let
     kholidays = callPackage ./kholidays.nix {};
     kidentitymanagement = callPackage ./kidentitymanagement.nix {};
     kimap = callPackage ./kimap.nix {};
-    kmime = callPackage ./kmime.nix {};
-    kpimtextedit = callPackage ./kpimtextedit.nix {};
     kio-extras = callPackage ./kio-extras.nix {};
+    kmbox = callPackage ./kmbox.nix {};
+    kmime = callPackage ./kmime.nix {};
     kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
+    kpimtextedit = callPackage ./kpimtextedit.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
