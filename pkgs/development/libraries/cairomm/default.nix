@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ cairo libsigcxx ];
   buildInputs = [ fontconfig freetype ]
