@@ -152,6 +152,7 @@ kdeWrapper unwrapped
     "bin/kontact"
     "bin/korganizer"
     "bin/sieveeditor"
+    "bin/akonadiconsole"
   ];
   paths = [ kdepim-runtime ];
 }
