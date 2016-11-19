@@ -129,8 +129,12 @@ let
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv PATH="$PATH" \
+        ${optionalString (cfg.readOnly) ''--read-only''} \
         ${if cfg.additionalCapabilities != null then
           ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+        } \
+        ${if cfg.tmpfs != null && cfg.tmpfs != [] then
+          ''--tmpfs="${concatStringsSep ":" cfg.tmpfs}"'' else ""
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
@@ -367,6 +371,8 @@ let
       hostAddress6 = null;
       localAddress = null;
       localAddress6 = null;
+      readOnly = false;
+      tmpfs = null;
     };
 
 in
@@ -507,6 +513,23 @@ in
               example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
+              '';
+            };
+
+            readOnly = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Mount the root file system read-only for the container.
+              '';
+            };
+
+            tmpfs = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "/var" ];
+              description = ''
+                Mount a tmpfs file system into the container.
               '';
             };
 
