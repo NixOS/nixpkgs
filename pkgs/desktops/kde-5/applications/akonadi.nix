@@ -2,6 +2,7 @@
 , ecm
 , kdeApp
 , kdeWrapper
+, kdepim-runtime
 , kdesignerplugin
 , kitemmodels
 , lib
@@ -41,8 +42,10 @@ kdeWrapper unwrapped
     "bin/akonadi_agent_server"
     "bin/akonadi_control"
     "bin/akonadi_rds"
+    "bin/akonadiconsole"
     "bin/akonadictl"
     "bin/akonadiserver"
     "bin/asapcat"
   ];
+  paths = [ kdepim-runtime ];
 }

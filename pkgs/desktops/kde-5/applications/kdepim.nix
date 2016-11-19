@@ -129,8 +129,7 @@ let
         qtx11extras
         syndication
       ];
-      enableParallelBuilding = true;
-      propagatedUserEnvPkgs = [ akonadi kdepim-runtime ];
+      propagatedUserEnvPkgs = [ akonadi ];
       postInstall = ''
         ln -s ${qtwebengine}/libexec/QtWebEngineProcess $out/bin
         ln -s ${qtwebengine}/resources/icudtl.dat $out/bin
@@ -154,4 +153,5 @@ kdeWrapper unwrapped
     "bin/korganizer"
     "bin/sieveeditor"
   ];
+  paths = [ kdepim-runtime ];
 }

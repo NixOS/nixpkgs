@@ -1,5 +1,8 @@
 { akonadi
+, akonadi-mime
 , akonadi-calendar
+, akonadi-contacts
+, akonadi-notes
 , boost
 , cyrus_sasl
 , ecm
@@ -9,6 +12,7 @@
 , kcontacts
 , kdeApp
 , kdelibs4support
+, kdepim
 , kdoctools
 , kholidays
 , kidentitymanagement
@@ -37,7 +41,10 @@ kdeApp {
   ];
   buildInputs = [
     akonadi.unwrapped
+    akonadi-mime
     akonadi-calendar
+    akonadi-contacts
+    akonadi-notes
     boost
     cyrus_sasl
     kalarmcal
@@ -59,5 +66,8 @@ kdeApp {
     qtwebengine
     shared_mime_info
     syndication
+  ];
+  propagatedBuildInputs = [
+    kdepim.unwrapped
   ];
 }
