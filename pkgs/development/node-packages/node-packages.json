@@ -31,6 +31,7 @@
 , "karma"
 , { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }
 , "lcov-result-merger"
+, "maildev"
 , "meat"
 , "nijs"
 , "node2nix"

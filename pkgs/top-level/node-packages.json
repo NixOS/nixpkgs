@@ -107,6 +107,7 @@
 , "lcov-result-merger"
 , "less"
 , "ltx"
+, "maildev"
 , "marked"
 , "meat"
 , "mkdirp"
