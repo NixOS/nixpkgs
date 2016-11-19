@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, python, ninja, libevent, xdg-user-dirs }:
+{ stdenv, fetchgit, fetchurl, python2, ninja, libevent, xdg-user-dirs }:
 
 let
   date = "20161008";
@@ -61,11 +61,11 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-levent";
 
-  nativeBuildInputs = [ python ninja ];
+  nativeBuildInputs = [ python2 ninja ];
   buildInputs = [ libevent ];
 
   buildPhase = ''
-    python tools/gn/bootstrap/bootstrap.py -v -s --no-clean
+    python2 tools/gn/bootstrap/bootstrap.py -v -s --no-clean
   '';
 
   installPhase = ''
