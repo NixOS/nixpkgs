@@ -10,7 +10,7 @@ with pkgs; rec {
   
   libxml2 = (pkgs.libxml2.override {
     stdenv = emscriptenStdenv;
-    supportPython = false;
+    pythonSupport = false;
   }).overrideDerivation
     (old: { 
       buildInputs = old.buildInputs ++ [ autoreconfHook pkgconfig zlib nodejs ];

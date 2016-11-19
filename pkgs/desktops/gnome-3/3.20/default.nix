@@ -307,7 +307,7 @@ let
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
-  anjuta = callPackage ./devtools/anjuta { };
+  anjuta = callPackage ./devtools/anjuta { python=pkgs.python2; };
 
   devhelp = callPackage ./devtools/devhelp { };
 
