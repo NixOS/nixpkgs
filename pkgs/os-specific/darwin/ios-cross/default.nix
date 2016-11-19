@@ -6,7 +6,16 @@
 , stdenv
 , coreutils
 , gnugrep
-}: { prefix, arch, simulator ? false }: let
+}:
+
+/* As of this writing, known-good prefix/arch/simulator triples:
+ * aarch64-apple-darwin14 | arm64  | false
+ * arm-apple-darwin10     | armv7  | false
+ * i386-apple-darwin11    | i386   | true
+ * x86_64-apple-darwin14  | x86_64 | true
+ */
+
+{ prefix, arch, simulator ? false }: let
   sdkType = if simulator then "Simulator" else "OS";
 
   sdk = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}10.0.sdk";
