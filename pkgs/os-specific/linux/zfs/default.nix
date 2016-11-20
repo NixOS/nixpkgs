@@ -21,13 +21,13 @@ assert buildKernel -> kernel != null && spl != null;
 stdenv.mkDerivation rec {
   name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
-  version = "0.7.0-rc1";
+  version = "0.7.0-rc2";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "zfs";
     rev = "zfs-${version}";
-    sha256 = "1bs42h2az47mx0jpjjfp209n5z2g6dybfykryndpcaw8a7m1sijc";
+    sha256 = "197y2jyav9h1ksri9kzqvrwmzpb58mlgw27vfvgd4bvxpwfxq53s";
   };
 
   patches = [ ./nix-build.patch ];
