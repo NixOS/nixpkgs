@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kmysm1x7smxs9k483nin6bx1rx0av8xrqjx9yf73hc7r4anhqzp";
   };
   
-  buildInputs = [ pkgconfig perl glib gpm slang zip unzip file gettext libX11 libICE e2fsprogs
-    libssh2 openssl ];
+  buildInputs = [ pkgconfig perl glib slang zip unzip file gettext libX11 libICE
+    libssh2 openssl ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   configureFlags = [ "--enable-vfs-smb" ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     repositories.git = git://github.com/MidnightCommander/mc.git;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     updateWalker = true;
   };
 }
