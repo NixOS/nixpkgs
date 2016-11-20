@@ -15649,6 +15649,8 @@ in
 
   gnugo = callPackage ../games/gnugo { };
 
+  gogui = callPackage ../games/gogui {};
+
   gtypist = callPackage ../games/gtypist { };
 
   gzdoom = callPackage ../games/gzdoom { };
