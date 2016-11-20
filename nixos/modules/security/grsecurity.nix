@@ -6,14 +6,6 @@ let
   cfg = config.security.grsecurity;
   grsecLockPath = "/proc/sys/kernel/grsecurity/grsec_lock";
 
-  # Ascertain whether ZFS is required for booting the system; grsecurity is
-  # currently incompatible with ZFS, rendering the system unbootable.
-  zfsNeededForBoot = filter
-    (fs: (fs.neededForBoot
-          || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
-          && fs.fsType == "zfs")
-    config.system.build.fileSystems != [];
-
   # Ascertain whether NixOS container support is required
   containerSupportRequired =
     config.boot.enableContainers && config.containers != {};
@@ -131,12 +123,6 @@ in
       "kernel.grsecurity.chroot_restrict_nice" = mkForce 0;
       "kernel.grsecurity.chroot_caps" = mkForce 0;
     };
-
-    assertions = [
-      { assertion = !zfsNeededForBoot;
-        message = "grsecurity is currently incompatible with ZFS";
-      }
-    ];
 
   };
 }
