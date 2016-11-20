@@ -1102,4 +1102,15 @@ self: super: {
   STMonadTrans = dontCheck super.STMonadTrans;
 
   socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
+
+  # 0.5.6 invokes $PAGER in a way that crashes if there are args such as $PAGER="less -R"
+  ghc-core = overrideCabal super.ghc-core (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner  = "shachaf";
+      repo   = "ghc-core";
+      rev    = "630196adf0bebf073328325302453ef1c409fd9a";
+      sha256 = "05jzpjy5zkri2faw5jnq5vh12mx58lrb0zfzz4h598miq2vc8848";
+    };
+    version = "2012-12-15";
+  });
 }
