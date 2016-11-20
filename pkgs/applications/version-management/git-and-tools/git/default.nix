@@ -93,6 +93,7 @@ stdenv.mkDerivation {
       # Install contrib stuff.
       mkdir -p $out/share/git
       mv contrib $out/share/git/
+      ln -s "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/
       mkdir -p $out/share/emacs/site-lisp
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/etc/bash_completion.d
