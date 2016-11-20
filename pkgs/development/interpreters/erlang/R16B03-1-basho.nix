@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       repository.
     '';
 
-    platforms = platforms.unix;
+    platforms = ["x86_64-linux" "x86_64-darwin"];
     license = stdenv.lib.licenses.asl20;
     maintainers = with maintainers; [ mdaiter ];
   };
