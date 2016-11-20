@@ -1,0 +1,12 @@
+diff -ruN a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+--- a/scripts/Makefile.modinst	2016-11-15 07:49:06.000000000 +0100
++++ b/scripts/Makefile.modinst	2016-11-18 13:45:07.977270500 +0100
+@@ -9,7 +9,7 @@
+ 
+ #
+ 
+-__modules := $(sort $(shell grep -h '\.ko$$' /dev/null $(wildcard $(MODVERDIR)/*.mod)))
++__modules := $(shell find $(MODVERDIR) -name '*.mod' -exec grep -h '\.ko$$' '{}' \; | sort)
+ modules := $(patsubst %.o,%.ko,$(wildcard $(__modules:.ko=.o)))
+ 
+ PHONY += $(modules)

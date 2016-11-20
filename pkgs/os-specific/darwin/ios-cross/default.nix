@@ -6,7 +6,16 @@
 , stdenv
 , coreutils
 , gnugrep
-}: { prefix, arch, simulator ? false }: let
+}:
+
+/* As of this writing, known-good prefix/arch/simulator triples:
+ * aarch64-apple-darwin14 | arm64  | false
+ * arm-apple-darwin10     | armv7  | false
+ * i386-apple-darwin11    | i386   | true
+ * x86_64-apple-darwin14  | x86_64 | true
+ */
+
+{ prefix, arch, simulator ? false }: let
   sdkType = if simulator then "Simulator" else "OS";
 
   sdk = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}10.0.sdk";
@@ -26,7 +35,7 @@
       echo "-target ${prefix} -arch ${arch} -idirafter ${sdk}/usr/include ${if simulator then "-mios-simulator-version-min=7.0" else "-miphoneos-version-min=7.0"}" >> $out/nix-support/cc-cflags
 
       # Purposefully overwrite libc-ldflags-before, cctools ld doesn't know dynamic-linker and cc-wrapper doesn't do cross-compilation well enough to adjust
-      echo "-arch ${arch} -L${sdk}/usr/lib -L${sdk}/usr/lib/system" > $out/nix-support/libc-ldflags-before
+      echo "-arch ${arch} -L${sdk}/usr/lib ${lib.optionalString simulator "-L${sdk}/usr/lib/system "}-i${if simulator then "os_simulator" else "phoneos"}_version_min 7.0.0" > $out/nix-support/libc-ldflags-before
     '';
   };
 in {

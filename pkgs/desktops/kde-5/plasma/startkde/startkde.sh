@@ -6,6 +6,36 @@ export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}@QT_PLUGIN_PATH@"
 export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}@QML_IMPORT_PATH@"
 export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}@QML2_IMPORT_PATH@"
 
+# Set the default GTK 2 theme
+if ! [ -e $HOME/.gtkrc-2.0 ] \
+     && [ -e /run/current-system/sw/share/themes/Breeze/gtk-2.0/gtkrc ]; then
+    cat >$HOME/.gtkrc-2.0 <<EOF
+# Default GTK+ 2 config for NixOS KDE 5
+include "/run/current-system/sw/share/themes/Breeze/gtk-2.0/gtkrc"
+gtk-theme-name="Breeze"
+gtk-icon-theme-name="breeze"
+gtk-fallback-icon-theme="hicolor"
+gtk-cursor-theme-name="breeze_cursors"
+gtk-toolbar-style=GTK_TOOLBAR_ICONS
+gtk-menu-images=1
+gtk-button-images=1
+EOF
+fi
+
+if ! [ -e $HOME/.config/gtk-3.0/settings.ini ] \
+       && [ -e /run/current-system/sw/share/themes/Breeze/gtk-3.0 ]; then
+    cat >$HOME/.config/gtk-3.0/settings.ini <<EOF
+[Settings]
+gtk-theme-name=Breeze
+gtk-icon-theme-name=breeze
+gtk-fallback-icon-theme=hicolor
+gtk-cursor-theme-name=breeze_cursors
+gtk-toolbar-style=GTK_TOOLBAR_ICONS
+gtk-menu-images=1
+gtk-button-images=1
+EOF
+fi
+
 # The KDE icon cache is supposed to update itself
 # automatically, but it uses the timestamp on the icon
 # theme directory as a trigger.  Since in Nix the
@@ -70,6 +100,14 @@ fi
 # We need to create config folder so we can write startupconfigkeys
 configDir=$(qtpaths --writable-path GenericConfigLocation)
 mkdir -p "$configDir"
+
+if ! [ -e $configDir/kcminputrc ]; then
+    cat >$configDir/kcminputrc <<EOF
+[Mouse]
+cursorTheme=breeze_cursors
+cursorSize=0
+EOF
+fi
 
 THEME=org.kde.breeze
 #This is basically setting defaults so we can use them with kstartupconfig5

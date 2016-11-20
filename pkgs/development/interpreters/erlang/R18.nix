@@ -20,7 +20,7 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}"
   + "${optionalString javacSupport "-javac"}";
-  version = "18.3.4";
+  version = "18.3.4.4";
 
   # Minor OTP releases are not always released as tarbals at
   # http://erlang.org/download/ So we have to download from
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "erlang";
     repo = "otp";
     rev = "OTP-${version}";
-    sha256 = "1f8nhybzsdmjvkmkzpjj3wj9jzx8mihlvi6gfp47fxkalansz39h";
+    sha256 = "0wilm21yi9m3v6j26vc04hsa58cxca5z4q9yxx71hm81cbm1xbwk";
   };
 
   buildInputs =

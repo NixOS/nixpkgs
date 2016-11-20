@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, itstool, pythonPackages, intltool, wrapGAppsHook
+{ stdenv, fetchurl, itstool, python2Packages, intltool, wrapGAppsHook
 , libxml2, gobjectIntrospection, gtk3, gnome3, cairo, file
 }:
 
@@ -6,7 +6,7 @@
 let
   minor = "3.16";
   version = "${minor}.2";
-  inherit (pythonPackages) python buildPythonApplication pycairo pygobject3;
+  inherit (python2Packages) python buildPythonApplication pycairo pygobject3;
 in buildPythonApplication rec {
   name = "meld-${version}";
 

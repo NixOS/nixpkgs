@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, fftw, zlib, libjpeg, libtiff, libpng }:
+{ stdenv, fetchurl, fftw, zlib, libjpeg, libtiff, libpng, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "gmic-${version}";
-  version = "1.7.7";
+  version = "1.7.8";
 
   src = fetchurl {
     url = "http://gmic.eu/files/source/gmic_${version}.tar.gz";
-    sha256 = "0shcxgq8nc391c0y0zh3l87g3p7fvsmgshi1x1jvvwwq1b9nf6vp";
+    sha256 = "1921s0n2frj8q95l8lm8was64cypnychgcgcavx9q8qljzbk4brs";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ fftw zlib libjpeg libtiff libpng ];
 

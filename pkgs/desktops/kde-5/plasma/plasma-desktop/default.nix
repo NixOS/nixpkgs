@@ -38,4 +38,9 @@ plasmaPackage rec {
     "-DEvdev_INCLUDE_DIRS=${xf86inputevdev.dev}/include/xorg"
     "-DSynaptics_INCLUDE_DIRS=${xf86inputsynaptics.dev}/include/xorg"
   ];
+  postInstall = ''
+    # Display ~/Desktop contents on the desktop by default.
+    sed -i "$out/share/plasma/shells/org.kde.plasma.desktop/contents/defaults" \
+        -e 's/Containment=org.kde.desktopcontainment/Containment=org.kde.plasma.folder/'
+  '';
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex, cross ? null
+, autoconf, automake, happy, alex, crossSystem, selfPkgs, cross ? null
 }:
 
 let
@@ -26,6 +26,10 @@ in stdenv.mkDerivation (rec {
     inherit rev;
     sha256 = "1ryggmz961qd0fl50rkjjvi6g9azwla2vx9310a9nzjaj5x6ib4y";
   };
+
+  # This shouldn't be necessary since 1ad1edbb32ce01ba8b47d8e8dad357b0edd6a4dc, but
+  # see http://hydra.cryp.to/build/2061608/nixlog/1/raw
+  patches = [ ./ghc-HEAD-dont-pass-linker-flags-via-response-files.patch ];
 
   postPatch = ''
     echo ${version} >VERSION
@@ -66,6 +70,11 @@ in stdenv.mkDerivation (rec {
 
   passthru = {
     inherit bootPkgs;
+  } // stdenv.lib.optionalAttrs (crossSystem != null) {
+    crossCompiler = selfPkgs.ghc.override {
+      cross = crossSystem;
+      bootPkgs = selfPkgs;
+    };
   };
 
   meta = {
@@ -86,11 +95,24 @@ in stdenv.mkDerivation (rec {
   '';
 
   configureFlags = [
-    "CC=${cross.config}-cc"
+    "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
+    "LD=${stdenv.binutilsCross}/bin/${cross.config}-ld"
+    "AR=${stdenv.binutilsCross}/bin/${cross.config}-ar"
+    "NM=${stdenv.binutilsCross}/bin/${cross.config}-nm"
+    "RANLIB=${stdenv.binutilsCross}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
+    "--enable-bootstrap-with-devel-snapshot"
   ];
 
   buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
 
   dontSetConfigureCross = true;
+
+  passthru = {
+    inherit bootPkgs cross;
+
+    cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
+
+    ld = "${stdenv.binutilsCross}/bin/${cross.config}-ld";
+  };
 })

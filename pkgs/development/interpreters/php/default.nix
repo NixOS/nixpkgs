@@ -302,12 +302,12 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.27";
-    sha256 = "0g1adx231c738694gc4bh8x65c7fwsqdbm42n9xwrsdncyhd6xrv";
+    version = "5.6.28";
+    sha256 = "13sl8z5inwyzmi1d5z4g42nq3n8gjdl4876h65bbd86mmbsa6pn5";
   };
 
   php70 = generic {
-    version = "7.0.12";
-    sha256 = "09va788b9zk5igzmsfxr593ly174qf9kmihd4fq3kclgzsa75i1q";
+    version = "7.0.13";
+    sha256 = "1hc8zry3mrggfh1yxvm255xal5h6bxf0p3wdq307w48j719bp46h";
   };
 }

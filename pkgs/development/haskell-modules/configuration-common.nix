@@ -4,6 +4,11 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Some Hackage packages reference this attribute, which exists only in the
+  # GHCJS package set. We provide a dummy version here to fix potential
+  # evaluation errors.
+  ghcjs-base = null;
+
   # Some packages need a non-core version of Cabal.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_1_0; });
 
@@ -1077,4 +1082,5 @@ self: super: {
   # https://github.com/josefs/STMonadTrans/issues/4
   STMonadTrans = dontCheck super.STMonadTrans;
 
+  socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
 }

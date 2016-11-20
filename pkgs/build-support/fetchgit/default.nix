@@ -26,7 +26,7 @@ in
    Cloning branches will make the hash check fail when there is an update.
    But not all patches we want can be accessed by tags.
 
-   The workaround is getting the last n commits so that it's likly that they
+   The workaround is getting the last n commits so that it's likely that they
    still contain the hash we want.
 
    for now : increase depth iteratively (TODO)

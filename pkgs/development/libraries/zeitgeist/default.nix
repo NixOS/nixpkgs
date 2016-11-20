@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, sqlite, gnome3, vala_0_23
 , intltool, libtool, python, dbus_libs, telepathy_glib
-, gtk3, json_glib, librdf_raptor2, pythonPackages, dbus_glib }:
+, gtk3, json_glib, librdf_raptor2, python2Packages, dbus_glib }:
 
 stdenv.mkDerivation rec {
   version = "0.9.15";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib sqlite gnome3.gnome_common intltool
                   libtool python dbus_libs telepathy_glib vala_0_23 dbus_glib
-                  gtk3 json_glib librdf_raptor2 pythonPackages.rdflib ];
+                  gtk3 json_glib librdf_raptor2 python2Packages.rdflib ];
 
   prePatch = "patchShebangs .";
 

@@ -130,4 +130,78 @@ runTests {
     expected = false;
   };
 
+
+  /* Generator tests */
+  # these tests assume attributes are converted to lists
+  # in alphabetical order
+
+  testToINIEmpty = {
+    expr = generators.toINI {} {};
+    expected = "";
+  };
+
+  testToINIEmptySection = {
+    expr = generators.toINI {} { foo = {}; bar = {}; };
+    expected = ''
+      [bar]
+
+      [foo]
+    '';
+  };
+
+  testToINIDefaultEscapes = {
+    expr = generators.toINI {} {
+      "no [ and ] allowed unescaped" = {
+        "and also no = in keys" = 42;
+      };
+    };
+    expected = ''
+      [no \[ and \] allowed unescaped]
+      and also no \= in keys=42
+    '';
+  };
+
+  testToINIDefaultFull = {
+    expr = generators.toINI {} {
+      "section 1" = {
+        attribute1 = 5;
+        x = "Me-se JarJar Binx";
+      };
+      "foo[]" = {
+        "he\\h=he" = "this is okay";
+      };
+    };
+    expected = ''
+      [foo\[\]]
+      he\h\=he=this is okay
+
+      [section 1]
+      attribute1=5
+      x=Me-se JarJar Binx
+    '';
+  };
+
+  /* right now only invocation check */
+  testToJSONSimple =
+    let val = {
+      foobar = [ "baz" 1 2 3 ];
+    };
+    in {
+      expr = generators.toJSON {} val;
+      # trival implementation
+      expected = builtins.toJSON val;
+  };
+
+  /* right now only invocation check */
+  testToYAMLSimple =
+    let val = {
+      list = [ { one = 1; } { two = 2; } ];
+      all = 42;
+    };
+    in {
+      expr = generators.toYAML {} val;
+      # trival implementation
+      expected = builtins.toJSON val;
+  };
+
 }
