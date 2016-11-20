@@ -1082,4 +1082,5 @@ self: super: {
   # https://github.com/josefs/STMonadTrans/issues/4
   STMonadTrans = dontCheck super.STMonadTrans;
 
+  socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
 }
