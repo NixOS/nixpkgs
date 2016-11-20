@@ -12694,8 +12694,6 @@ in
 
     notmuch = lowPrio (pkgs.notmuch.override { inherit emacs; });
 
-    notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
-
     ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
 
     offlineimap = callPackage ../applications/editors/emacs-modes/offlineimap {};
@@ -14027,10 +14025,11 @@ in
     # byte-compilation. Use emacsPackages.notmuch if you want to
     # byte-compiled files
     emacs = null;
-    sphinx = pythonPackages.sphinx;
   };
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
+
+  notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
   # Open Stack
   nova = callPackage ../applications/virtualization/openstack/nova.nix { };
