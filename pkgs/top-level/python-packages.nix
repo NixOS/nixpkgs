@@ -767,6 +767,8 @@ in {
     rev = "0.3.7";
     name = "alot-${rev}";
 
+    disabled = isPy3k;
+
     src = pkgs.fetchFromGitHub {
       owner = "pazz";
       repo = "alot";
