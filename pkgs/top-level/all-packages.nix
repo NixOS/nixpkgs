@@ -10245,6 +10245,10 @@ in
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
+  riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
+    erlang = erlang_basho_R16B03;  
+  };
+
   stanchion = callPackage ../servers/nosql/riak-cs/stanchion.nix {
     erlang = erlang_basho_R16B03;
   };
