@@ -494,13 +494,13 @@ in {
   };
 
   afew = buildPythonPackage rec {
-    rev = "3f1e5e93119788984c2193292c988ac81ecb0a45";
-    name = "afew-git-2016-01-04";
+    rev = "b19a88fa1c06cc03ed6c636475cf4361b616d128";
+    name = "afew-git-2016-02-29";
 
     src = pkgs.fetchurl {
       url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "1fi19g2j1qilh7ikp7pzn6sagkn76g740zdxgnsqmmvl2zk2yhrw";
+      sha256 = "0idlyrk29bmjw3w74vn0c1a6s59phx9zhzghf2cpyqf9qdhxib8k";
     };
 
     buildInputs = with self; [ pkgs.dbacl ];
