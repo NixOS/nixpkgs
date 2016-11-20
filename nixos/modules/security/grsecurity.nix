@@ -27,7 +27,14 @@ in
 
   options.security.grsecurity = {
 
-    enable = mkEnableOption "grsecurity/PaX";
+    enable = mkOption {
+      type = types.bool;
+      example = true;
+      default = false;
+      description = ''
+        Enable grsecurity/PaX.
+      '';
+    };
 
     lockTunables = mkOption {
       type = types.bool;
