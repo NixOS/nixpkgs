@@ -93,6 +93,10 @@ stdenv.mkDerivation {
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
     rm -vr src/test/run-pass/issue-36023.rs
 
+    # Disable test getting stuck on hydra - possible fix:
+    # https://reviews.llvm.org/rL281650
+    rm -vr src/test/run-pass/issue-36474.rs
+
     # Useful debugging parameter
     # export VERBOSE=1
   '' +
