@@ -1113,4 +1113,9 @@ self: super: {
     };
     version = "2012-12-15";
   });
+
+  # Encountered missing dependencies: hspec >=1.3 && <2.1
+  # https://github.com/rampion/ReadArgs/issues/8
+  ReadArgs = doJailbreak super.ReadArgs;
+
 }
