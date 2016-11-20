@@ -289,6 +289,7 @@
   mlieberman85 = "Michael Lieberman <mlieberman85@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
+  montag451 = "montag451 <montag451@laposte.net>";
   moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
   moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
