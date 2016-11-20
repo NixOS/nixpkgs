@@ -65,19 +65,9 @@ in
 
   config = mkIf cfg.enable {
 
-    # Allow the user to select a different package set, subject to the stated
-    # required kernel config
     boot.kernelPackages = mkDefault pkgs.linuxPackages_grsec_nixos;
 
     boot.kernelParams = optional cfg.disableEfiRuntimeServices "noefi";
-
-    system.requiredKernelConfig = with config.lib.kernelConfig;
-      [ (isEnabled "GRKERNSEC")
-        (isEnabled "PAX")
-        (isYes "GRKERNSEC_SYSCTL")
-        (isYes "GRKERNSEC_SYSCTL_DISTRO")
-        (isNo "GRKERNSEC_NO_RBAC")
-      ];
 
     nixpkgs.config.grsecurity = true;
 

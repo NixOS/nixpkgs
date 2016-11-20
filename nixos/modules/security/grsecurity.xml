@@ -225,11 +225,9 @@
   </para>
 
   <para>
-    The NixOS module makes several assumptions about the kernel and so may be
-    incompatible with your customised kernel.  Most of these assumptions are
-    encoded as assertions &#x2014; mismatches should ideally result in a build
-    failure.  Currently, the only way to work around incompatibilities is to
-    eschew the NixOS module and do all configuration yourself.
+    The NixOS module makes several assumptions about the kernel and so
+    may be incompatible with your customised kernel. Currently, the only way
+    to work around incompatibilities is to eschew the NixOS module.
   </para>
 
   </sect1>
