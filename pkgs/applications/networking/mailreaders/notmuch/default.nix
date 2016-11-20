@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
     ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
   checkTarget = "test";
 
   patchPhase = ''
