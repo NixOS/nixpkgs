@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
       "0gq0ywk1jr0apl39dnm0vwdwg1inr7fari3cmfz3fvaym7gc8fki";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  phases = [ "unpackPhase" "installPhase" "postFixup" ];
 
   deps = with xorg; [
    gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
@@ -51,6 +51,10 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications
+  '';
+
+  postFixup = ''
+    paxmark m $out/share/rambox/Rambox
   '';
 
   meta = with stdenv.lib; {
