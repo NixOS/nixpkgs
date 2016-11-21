@@ -918,6 +918,7 @@ in
 
   long-shebang = callPackage ../misc/long-shebang {};
 
+  magic-wormhole = callPackage ../tools/misc/magic-wormhole {};
   mathics = pythonPackages.mathics;
 
   meson = callPackage ../development/tools/build-managers/meson { };
