@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p qemu awscli ec2_ami_tools jq ec2_api_tools
+#! nix-shell -i bash -p qemu ec2_ami_tools jq ec2_api_tools awscli
 
 # To start with do: nix-shell -p awscli --run "aws configure"
 
