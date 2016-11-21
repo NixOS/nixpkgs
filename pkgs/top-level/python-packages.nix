@@ -12472,6 +12472,28 @@ in {
     };
   };
 
+  hkdf = buildPythonPackage rec {
+    name = "hkdf-${version}";
+    version = "0.0.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/hkdf/${name}.tar.gz";
+      sha256 = "1jhxk5vhxmxxjp3zj526ry521v9inzzl8jqaaf0ma65w6k332ak2";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    meta = {
+      description = "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)";
+      homepage = "https://github.com/casebeer/python-hkdf";
+      license = licenses.bsd2;
+    };
+  };
+
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.10";
@@ -13783,7 +13805,6 @@ in {
       homepage = http://www.darwinsys.com/file/;
     };
   };
-
 
   m2crypto = buildPythonPackage rec {
     version = "0.24.0";
@@ -23126,6 +23147,30 @@ in {
       homepage = http://sigal.saimon.org/en/latest/index.html;
       license = licenses.bsd3;
       platforms = platforms.unix;
+    };
+  };
+
+  spake2 = buildPythonPackage rec {
+    name = "spake2-${version}";
+    version = "0.7";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/spake2/${name}.tar.gz";
+      sha256 = "0rmplicbbid41qrvwc1ckyp211ban01ardms5yqqq16ixrc18a6j";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [ hkdf ];
+
+    checkPhase = ''
+      py.test $out
+    '';
+
+    meta = {
+      description = "SPAKE2 password-authenticated key exchange library";
+      homepage = "http://github.com/warner/python-spake2";
+      license = licenses.mit;
     };
   };
 
