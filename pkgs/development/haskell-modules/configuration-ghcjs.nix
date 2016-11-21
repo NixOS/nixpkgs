@@ -96,10 +96,15 @@ self: super:
      }) {};
 
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
-    libraryHaskellDepends = [ self.ghcjs-base ] ++
-      removeLibraryHaskellDepends [
-        "glib" "gtk" "gtk3" "webkitgtk" "webkitgtk3"
-      ] drv.libraryHaskellDepends;
+    libraryHaskellDepends = with self; [
+      ghcjs-base ghcjs-dom-jsffi text transformers
+    ];
+    configureFlags = [ "-fjsffi" "-f-webkit" ];
+  });
+
+  ghcjs-dom-jsffi = overrideCabal super.ghcjs-dom-jsffi (drv: {
+    libraryHaskellDepends = [ self.ghcjs-base self.text ];
+    isLibrary = true;
   });
 
   ghc-paths = overrideCabal super.ghc-paths (drv: {
@@ -153,13 +158,12 @@ self: super:
   });
 
   semigroups = addBuildDepends super.semigroups [ self.hashable self.unordered-containers self.text self.tagged ];
-  # triggers an internal pattern match failure in haddock
-  # https://github.com/haskell/haddock/issues/553
-  wai = dontHaddock super.wai;
 
   transformers-compat = overrideCabal super.transformers-compat (drv: {
     configureFlags = [];
   });
 
-
+  # triggers an internal pattern match failure in haddock
+  # https://github.com/haskell/haddock/issues/553
+  wai = dontHaddock super.wai;
 }
