@@ -20,10 +20,7 @@ buildGoPackage rec {
   postInstall = ''
     rm $bin/bin/man
     wrapProgram "$bin/bin/aptly" \
-      --prefix PATH ":" "${gnupg1compat}/bin" \
-      --prefix PATH ":" "${bzip2.bin}/bin" \
-      --prefix PATH ":" "${xz.bin}/bin" \
-      --prefix PATH ":" "${graphviz}/bin"
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1compat bzip2 xz graphviz ]}"
   '';
 
   meta = with stdenv.lib; {
