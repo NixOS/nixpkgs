@@ -41,6 +41,7 @@ in
         type = types.path;
         description = "The Disnix package";
         default = pkgs.disnix;
+        defaultText = "pkgs.disnix";
       };
 
     };
