@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libcap ? null, libseccomp ? null }:
+{ stdenv, fetchurl, openssl, perl, libcap ? null, libseccomp ? null }:
 
 assert stdenv.isLinux -> libcap != null;
 assert stdenv.isLinux -> libseccomp != null;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "--enable-libseccomp"
   ];
 
-  buildInputs = [ libcap openssl libseccomp ];
+  buildInputs = [ libcap openssl libseccomp perl ];
 
   hardeningEnable = [ "pie" ];
 
