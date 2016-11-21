@@ -5,7 +5,7 @@ drv:
 { targets, paths ? [] }:
 
 stdenv.mkDerivation {
-  inherit (drv) name;
+  inherit (drv) name meta;
 
   paths = builtins.map lib.getBin ([drv] ++ paths);
   inherit drv targets;
