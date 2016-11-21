@@ -23,8 +23,8 @@
 # This will build mmorph and monadControl, and have the hoogle installation
 # refer to their documentation via symlink so they are not garbage collected.
 
-{ lib, stdenv, hoogle, writeText
-, ghc, packages ? [ ghc.ghc ]
+{ lib, stdenv, hoogle, writeText, ghc
+, packages
 }:
 
 let
@@ -51,6 +51,9 @@ let
     else writeText "ghcjs-prologue.txt" ''
       This index includes documentation for many Haskell modules.
     '';
+
+  docPackages = lib.closePropagation packages;
+
 in
 stdenv.mkDerivation {
   name = "hoogle-local-0.1";
@@ -58,14 +61,9 @@ stdenv.mkDerivation {
 
   phases = [ "buildPhase" ];
 
-  docPackages = (lib.closePropagation packages);
+  inherit docPackages;
 
   buildPhase = ''
-    if [ -z "$docPackages" ]; then
-        echo "ERROR: The packages attribute has not been set"
-        exit 1
-    fi
-
     mkdir -p $out/share/doc/hoogle
 
     echo importing builtin packages
