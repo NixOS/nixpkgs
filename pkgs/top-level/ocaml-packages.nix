@@ -339,6 +339,8 @@ let
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
+    otr = callPackage ../development/ocaml-modules/otr { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
@@ -641,7 +643,7 @@ let
       then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
       else {}
     );
-    
+
     glsurf = callPackage ../applications/science/math/glsurf {
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;
