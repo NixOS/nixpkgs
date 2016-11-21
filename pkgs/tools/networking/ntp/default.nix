@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, autoreconfHook, libcap ? null, openssl ? null }:
+{ stdenv, fetchurl, openssl, libcap ? null, libseccomp ? null }:
 
 assert stdenv.isLinux -> libcap != null;
+assert stdenv.isLinux -> libseccomp != null;
 
 stdenv.mkDerivation rec {
   name = "ntp-4.2.8p9";
@@ -16,10 +17,12 @@ stdenv.mkDerivation rec {
     "--with-openssl-libdir=${openssl.out}/lib"
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
-  ] ++ stdenv.lib.optional (libcap != null) "--enable-linuxcaps";
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    "--enable-linuxcaps"
+    "--enable-libseccomp"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libcap openssl ];
+  buildInputs = [ libcap openssl libseccomp ];
 
   hardeningEnable = [ "pie" ];
 
