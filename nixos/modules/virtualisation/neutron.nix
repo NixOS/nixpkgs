@@ -43,7 +43,6 @@ let
     enable_ipset = True
 
     [linux_bridge]
-    # TODO: changeme
     physical_interface_mappings = public:${cfg.publicInterface}
 
     [vxlan]
@@ -72,8 +71,7 @@ let
     enable_isolated_metadata = True
     external_network_bridge =
 
-    # TODO: changeme
-    metadata_proxy_shared_secret = METADATA_SECRET
+    metadata_proxy_shared_secret = ${cfg.sharedMetadataSecret}
 
     notify_nova_on_port_status_changes = True
     notify_nova_on_port_data_changes = True
@@ -165,7 +163,13 @@ in {
           Neutron's services on other machines.
       '';
     };
-    
+
+    sharedMetadataSecret = mkOption {
+      default = "METADATA_SECRET";
+      description = "Shared secret to sign instance-id request";
+      example = "METADATA_SECRET";
+    };
+
     publicInterface = mkOption {
       default = "eth0";
       description = "The pysical interface name used by the linuxbridge agent";
@@ -177,6 +181,7 @@ in {
       description = "The username of the nova service tenant";
       example = "nova";
     };
+
     novaServicePassword = mkOption {
       default = "nova";
       description = "The password of the nova service user";
