@@ -370,6 +370,10 @@ let
 
     textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
 
+    tls = callPackage ../development/ocaml-modules/tls {
+      lwt = ocaml_lwt;
+    };
+
     type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
     type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
     type_conv_112_01_01 = callPackage ../development/ocaml-modules/type_conv/112.01.01.nix { };
