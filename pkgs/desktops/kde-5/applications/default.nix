@@ -65,6 +65,8 @@ let
 
     # External packages
     kipi-plugins = callPackage ../../../applications/graphics/kipi-plugins/5.x.nix {};
+    ktorrent = callPackage ../../../applications/networking/p2p/ktorrent/5.nix { };
+    libktorrent = callPackage ../../../development/libraries/libktorrent/5.nix { };
   };
 
 in packages

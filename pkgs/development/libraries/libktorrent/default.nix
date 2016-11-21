@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "A BiTtorrent library used by KTorrent";
+    description = "A BitTorrent library used by KTorrent";
     homepage = http://ktorrent.pwsp.net;
     inherit (kdelibs.meta) platforms;
   };

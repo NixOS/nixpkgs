@@ -64,6 +64,7 @@ let
     baloo = callPackage ./baloo.nix {};
     bluez-qt = callPackage ./bluez-qt.nix {};
     breeze-icons = callPackage ./breeze-icons.nix {};
+    # FIXME: this collides with the "ecm" package.
     ecm =
       let drv = { cmake, ecmNoHooks, pkgconfig, qtbase, qttools }:
             makeSetupHook
