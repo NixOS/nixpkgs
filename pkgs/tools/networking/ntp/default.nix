@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, libcap ? null, openssl ? null }:
+{ stdenv, fetchurl, autoreconfHook, perl, libcap ? null, openssl ? null }:
 
 assert stdenv.isLinux -> libcap != null;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (libcap != null) "--enable-linuxcaps";
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libcap openssl ];
+  buildInputs = [ libcap openssl perl ];
 
   hardeningEnable = [ "pie" ];
 
