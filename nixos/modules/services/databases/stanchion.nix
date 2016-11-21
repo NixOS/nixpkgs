@@ -20,7 +20,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.stanchion;
+        defaultText = "pkgs.stanchion";
         example = literalExample "pkgs.stanchion";
         description = ''
           Stanchion package to use.
