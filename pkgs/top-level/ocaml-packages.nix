@@ -158,6 +158,8 @@ let
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
+    erm_xmpp_0_3 = callPackage ../development/ocaml-modules/erm_xmpp/0.3.nix { };
+
     estring = callPackage ../development/ocaml-modules/estring { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
