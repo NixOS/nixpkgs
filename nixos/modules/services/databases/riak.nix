@@ -20,6 +20,8 @@ in
 
       package = mkOption {
         type = types.package;
+        default = pkgs.riak;
+        defaultText = "pkgs.riak";
         example = literalExample "pkgs.riak";
         description = ''
           Riak package to use.
