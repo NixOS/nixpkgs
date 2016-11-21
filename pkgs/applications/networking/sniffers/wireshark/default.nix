@@ -3,6 +3,7 @@
 , zlib
 , withGtk ? false, gtk2 ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
 , withQt ? false, qt4 ? null
+, ApplicationServices, SystemConfiguration, gmp
 }:
 
 assert withGtk -> !withQt && gtk2 != null;
@@ -25,9 +26,11 @@ stdenv.mkDerivation {
 
   buildInputs = [
     bison flex perl pkgconfig libpcap lua5 openssl libgcrypt gnutls
-    geoip libnl c-ares python libcap glib zlib
+    geoip c-ares python glib zlib
   ] ++ optional withQt qt4
-    ++ (optionals withGtk [gtk2 pango cairo gdk_pixbuf]);
+    ++ (optionals withGtk [gtk2 pango cairo gdk_pixbuf])
+    ++ optionals stdenv.isLinux [ libcap libnl ]
+    ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
   patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
@@ -68,7 +71,7 @@ stdenv.mkDerivation {
       experts. It runs on UNIX, OS X and Windows.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ bjornfor fpletz ];
   };
 }
