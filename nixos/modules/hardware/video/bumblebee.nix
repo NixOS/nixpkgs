@@ -70,8 +70,8 @@ in
 
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";
-      wantedBy = [ "display-manager.service" ];
-      path = [ kernel.bbswitch bumblebee ];
+      wantedBy = [ "multi-user.target" ];
+      before = [ "display-manager.service" ];
       serviceConfig = {
         ExecStart = "${bumblebee}/bin/bumblebeed --use-syslog -g ${cfg.group} --driver ${cfg.driver}";
       };
