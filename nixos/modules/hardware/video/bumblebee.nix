@@ -22,49 +22,61 @@ in
 {
 
   options = {
-    hardware.bumblebee.enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Enable the bumblebee daemon to manage Optimus hybrid video cards.
-        This should power off secondary GPU until its use is requested
-        by running an application with optirun.
+    hardware.bumblebee = {
 
-        Only nvidia driver is supported so far.
-      '';
-    };
-    hardware.bumblebee.group = mkOption {
-      default = "wheel";
-      example = "video";
-      type = types.str;
-      description = ''Group for bumblebee socket'';
-    };
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable the bumblebee daemon to manage Optimus hybrid video cards.
+          This should power off secondary GPU until its use is requested
+          by running an application with optirun.
+        '';
+      };
 
-    hardware.bumblebee.connectDisplay = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Set to true if you intend to connect your discrete card to a
-        monitor. This option will set up your Nvidia card for EDID
-        discovery and to turn on the monitor signal.
+      group = mkOption {
+        default = "wheel";
+        example = "video";
+        type = types.str;
+        description = ''Group for bumblebee socket'';
+      };
 
-        Only nvidia driver is supported so far.
-      '';
-    };
+      connectDisplay = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Set to true if you intend to connect your discrete card to a
+          monitor. This option will set up your Nvidia card for EDID
+          discovery and to turn on the monitor signal.
 
-    hardware.bumblebee.driver = mkOption {
-      default = "nvidia";
-      type = types.enum [ "nvidia" "nouveau" ];
-      description = ''
-        Set driver used by bumblebeed. Supported are nouveau and nvidia.
-      '';
+          Only nvidia driver is supported so far.
+        '';
+      };
+
+      driver = mkOption {
+        default = "nvidia";
+        type = types.enum [ "nvidia" "nouveau" ];
+        description = ''
+          Set driver used by bumblebeed. Supported are nouveau and nvidia.
+        '';
+      };
+
+      bbswitch = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Set to true if you want to use bbswitch for power management of
+          unused card.
+        '';
+      };
+
     };
   };
 
-  config = mkIf config.hardware.bumblebee.enable {
+  config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
-    boot.kernelModules = [ "bbswitch" ];
-    boot.extraModulePackages = [ kernel.bbswitch ] ++ optional useNvidia kernel.nvidia_x11;
+    boot.kernelModules = optional cfg.bbswitch [ "bbswitch" ];
+    boot.extraModulePackages = optional cfg.bbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11;
 
     environment.systemPackages = [ bumblebee primus ];
 
