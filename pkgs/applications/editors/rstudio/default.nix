@@ -5,7 +5,7 @@ let
   ginVer = "1.5";
   gwtVer = "2.5.1";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "RStudio-${version}";
 
   buildInputs = [ cmake boost155 zlib openssl R qt4 libuuid unzip ant jdk makeWrapper ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     sha256 = "0fjr2rcr8lnywj54mzhg9i4xz1b6fh8yv12p5i2q5mgfld2xymy4";
   };
 
-  hunspellDicts = builtins.attrValues hunspellDicts;
+  hunspellDictionaries = builtins.attrValues hunspellDicts;
 
   mathJaxSrc = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-20.zip;
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       mv gwt-$gwtVer $GWT_LIB_DIR/gwt/$gwtVer
 
       mkdir dependencies/common/dictionaries
-      for dict in $hunspellDicts; do
+      for dict in $hunspellDictionaries; do
           for i in "$dict/share/hunspell/"*
 	  do ln -sv $i dependencies/common/dictionaries/
 	  done
