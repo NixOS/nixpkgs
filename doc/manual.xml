@@ -20,6 +20,7 @@
   <xi:include href="package-notes.xml" />
   <xi:include href="coding-conventions.xml" />
   <xi:include href="submitting-changes.xml" />
+  <xi:include href="reviewing-contributions.xml" />
   <xi:include href="contributing.xml" />
 
 </book>
