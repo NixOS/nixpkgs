@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libiconv, npth
-, gettext, texinfo, pcsclite
+, gettext, texinfo, pcsclite, sqlite
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba libiconv npth gettext texinfo
-    readline libusb gnutls adns openldap zlib bzip2
+    readline libusb gnutls adns openldap zlib bzip2 sqlite
   ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
