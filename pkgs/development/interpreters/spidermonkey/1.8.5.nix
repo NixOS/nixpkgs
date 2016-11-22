@@ -1,11 +1,11 @@
-{ stdenv, autoconf213, fetchurl, pkgconfig, nspr, perl, python2, zip }:
+{ stdenv, lib, autoconf213, fetchurl, pkgconfig, nspr, perl, python2, zip }:
 
 stdenv.mkDerivation rec {
-  version = "185-1.0.0";
   name = "spidermonkey-${version}";
+  version = "1.8.5";
 
   src = fetchurl {
-    url = "mirror://mozilla/js/js${version}.tar.gz";
+    url = "mirror://mozilla/js/js185-1.0.0.tar.gz";
     sha256 = "5d12f7e1f5b4a99436685d97b9b7b75f094d33580227aa998c406bbae6f2a687";
   };
 
@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr.dev}/include/nspr"
     export LIBXUL_DIST=$out
-    ${if stdenv.isArm then "autoreconf --verbose --force" else ""}
+    ${lib.optionalString stdenv.isArm "autoreconf --verbose --force"}
   '';
 
   patches = stdenv.lib.optionals stdenv.isArm [
     # Explained below in configureFlags for ARM
-    ./findvanilla.patch
+    ./1.8.5-findvanilla.patch
     # Fix for hard float flags.
-    ./arm-flags.patch
+    ./1.8.5-arm-flags.patch
   ];
 
   patchFlags = "-p3";
