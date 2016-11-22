@@ -61,7 +61,7 @@ for type in $types; do
                     ami=$(aws ec2 copy-image \
                         --region "$region" \
                         --source-region "$prevRegion" --source-image-id "$prevAmi" \
-                        --name "$name" --description "$description" | json -q .ImageId)
+                        --name "$name" --description "$description" | jq -r '.ImageId')
                     if [ "$ami" = null ]; then break; fi
                 else
 
