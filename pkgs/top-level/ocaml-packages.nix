@@ -339,6 +339,8 @@ let
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
+    ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
+
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
