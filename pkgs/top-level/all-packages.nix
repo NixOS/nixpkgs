@@ -13352,6 +13352,7 @@ in
     inherit (gnome2) libart_lgpl;
     webkit = null;
     lcms = lcms2;
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
   gimp = gimp_2_8;
