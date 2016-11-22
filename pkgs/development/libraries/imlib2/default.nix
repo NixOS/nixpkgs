@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
   configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
     ++ optional (!x11Support) "--without-x";
 
+  outputs = [ "out" "bin" "dev" ];
+
+  postInstall = ''
+    moveToOutput bin/imlib2-config "$dev"
+  '';
+
   meta = {
     description = "Image manipulation library";
 
