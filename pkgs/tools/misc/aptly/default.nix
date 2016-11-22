@@ -15,7 +15,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/smira/aptly";
   goDeps = ./deps.nix;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     rm $bin/bin/man
