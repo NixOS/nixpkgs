@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchurl, zlib, readline, libossp_uuid, openssl }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, makeWrapper }:
 
 let
 
-  common = { version, sha256, psqlSchema } @ args: stdenv.mkDerivation (rec {
+  common = { version, sha256, psqlSchema } @ args:
+   let atLeast = lib.versionAtLeast version; in stdenv.mkDerivation (rec {
     name = "postgresql-${version}";
 
     src = fetchurl {
@@ -14,7 +15,7 @@ let
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline openssl ]
+      [ zlib readline openssl makeWrapper ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     enableParallelBuilding = true;
@@ -30,9 +31,9 @@ let
       ++ lib.optional (!stdenv.isDarwin) "--with-ossp-uuid";
 
     patches =
-      [ (if lib.versionAtLeast version "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
-        ./less-is-more.patch
-        ./hardcode-pgxs-path.patch
+      [ (if atLeast "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
+        (if atLeast "9.6" then ./less-is-more-96.patch             else ./less-is-more.patch)
+        (if atLeast "9.6" then ./hardcode-pgxs-path-96.patch       else ./hardcode-pgxs-path.patch)
         ./specify_pkglibdir_at_runtime.patch
       ];
 
@@ -41,10 +42,11 @@ let
     LC_ALL = "C";
 
     postConfigure =
-      ''
-        # Hardcode the path to pgxs so pg_config returns the path in $out
-        substituteInPlace "src/bin/pg_config/pg_config.c" --replace HARDCODED_PGXS_PATH $out/lib
-      '';
+      let path = if atLeast "9.6" then "src/common/config_info.c" else "src/bin/pg_config/pg_config.c"; in
+        ''
+          # Hardcode the path to pgxs so pg_config returns the path in $out
+          substituteInPlace "${path}" --replace HARDCODED_PGXS_PATH $out/lib
+        '';
 
     postInstall =
       ''
@@ -54,6 +56,12 @@ let
 
         # Prevent a retained dependency on gcc-wrapper.
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
+      '';
+
+    postFixup =
+      ''
+        # initdb needs access to "locale" command from glibc.
+        wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
     disallowedReferences = [ stdenv.cc ];
@@ -104,5 +112,10 @@ in {
     sha256 = "157kf6mdazmxfmd11f0akya2xcz6sfgprn7yqc26dpklps855ih2";
   };
 
+  postgresql96 = common {
+    version = "9.6.1";
+    psqlSchema = "9.6";
+    sha256 = "1k8zwnabsl8f7vlp3azm4lrklkb9jkaxmihqf0mc27ql9451w475";
+  };
 
 }
