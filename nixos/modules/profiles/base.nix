@@ -42,8 +42,6 @@
     # Some compression/archiver tools.
     pkgs.unzip
     pkgs.zip
-    pkgs.dar # disk archiver
-    pkgs.cabextract
   ];
 
   # Include support for various filesystems.
