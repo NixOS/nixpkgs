@@ -1391,6 +1391,8 @@ in
 
   ddrescue = callPackage ../tools/system/ddrescue { };
 
+  dejadup = callPackage ../applications/backup/dejadup { };
+
   deluge = pythonPackages.deluge;
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
