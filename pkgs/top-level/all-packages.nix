@@ -14169,6 +14169,8 @@ in
 
   phototonic = qt5.callPackage ../applications/graphics/phototonic { };
 
+  phrasendrescher = callPackage ../tools/security/phrasendrescher { };
+
   phwmon = callPackage ../applications/misc/phwmon { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
