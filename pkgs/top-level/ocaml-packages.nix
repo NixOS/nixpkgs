@@ -158,6 +158,8 @@ let
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
+    erm_xmpp_0_3 = callPackage ../development/ocaml-modules/erm_xmpp/0.3.nix { };
+
     estring = callPackage ../development/ocaml-modules/estring { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
@@ -263,6 +265,10 @@ let
       lwt = ocaml_lwt;
     };
 
+    notty = callPackage ../development/ocaml-modules/notty {
+      lwt = ocaml_lwt;
+    };
+
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
@@ -339,6 +345,8 @@ let
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
+    otr = callPackage ../development/ocaml-modules/otr { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
@@ -365,6 +373,10 @@ let
     };
 
     textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
+
+    tls = callPackage ../development/ocaml-modules/tls {
+      lwt = ocaml_lwt;
+    };
 
     type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
     type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
@@ -641,7 +653,7 @@ let
       then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
       else {}
     );
-    
+
     glsurf = callPackage ../applications/science/math/glsurf {
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;

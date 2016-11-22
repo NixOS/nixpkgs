@@ -80,9 +80,9 @@ let
       };
   };
 in hsPkgs.elmPkgs // {
-  elm = buildEnv {
+  elm = lib.hiPrio (buildEnv {
     name = "elm-${hsPkgs.elmVersion}";
     paths = lib.mapAttrsToList (name: pkg: pkg) hsPkgs.elmPkgs;
     pathsToLink = [ "/bin" ];
-  };
+  });
 }

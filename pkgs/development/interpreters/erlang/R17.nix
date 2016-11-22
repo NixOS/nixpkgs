@@ -6,6 +6,7 @@
 , javacSupport ? false, openjdk ? null
 , enableHipe ? true
 , enableDebugInfo ? false
+, enableDirtySchedulers ? false
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
   configureFlags= [
     "--with-ssl=${openssl.dev}"
   ] ++ optional enableHipe "--enable-hipe"
+    ++ optional enableDirtySchedulers "--enable-dirty-schedulers"
     ++ optional wxSupport "--enable-wx"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional javacSupport "--with-javac"

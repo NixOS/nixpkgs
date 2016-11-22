@@ -88,6 +88,7 @@
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
+  ckampka = "Christian Kampka <christian@kampka.net>";
   cko = "Christine Koppelt <christine.koppelt@gmail.com>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
   cmcdragonkai = "Roger Qiu <roger.qiu@matrix.ai>";
@@ -289,6 +290,7 @@
   mlieberman85 = "Michael Lieberman <mlieberman85@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
+  montag451 = "montag451 <montag451@laposte.net>";
   moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
   moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";

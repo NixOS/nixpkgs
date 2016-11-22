@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     description = "A set of utilities to handle ELF objects";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
-    maintainers = lib.maintainers.eelco;
+    maintainers = [ lib.maintainers.eelco ];
   };
 }

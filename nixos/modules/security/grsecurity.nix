@@ -6,14 +6,6 @@ let
   cfg = config.security.grsecurity;
   grsecLockPath = "/proc/sys/kernel/grsecurity/grsec_lock";
 
-  # Ascertain whether ZFS is required for booting the system; grsecurity is
-  # currently incompatible with ZFS, rendering the system unbootable.
-  zfsNeededForBoot = filter
-    (fs: (fs.neededForBoot
-          || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
-          && fs.fsType == "zfs")
-    config.system.build.fileSystems != [];
-
   # Ascertain whether NixOS container support is required
   containerSupportRequired =
     config.boot.enableContainers && config.containers != {};
@@ -27,7 +19,14 @@ in
 
   options.security.grsecurity = {
 
-    enable = mkEnableOption "grsecurity/PaX";
+    enable = mkOption {
+      type = types.bool;
+      example = true;
+      default = false;
+      description = ''
+        Enable grsecurity/PaX.
+      '';
+    };
 
     lockTunables = mkOption {
       type = types.bool;
@@ -58,19 +57,9 @@ in
 
   config = mkIf cfg.enable {
 
-    # Allow the user to select a different package set, subject to the stated
-    # required kernel config
     boot.kernelPackages = mkDefault pkgs.linuxPackages_grsec_nixos;
 
     boot.kernelParams = optional cfg.disableEfiRuntimeServices "noefi";
-
-    system.requiredKernelConfig = with config.lib.kernelConfig;
-      [ (isEnabled "GRKERNSEC")
-        (isEnabled "PAX")
-        (isYes "GRKERNSEC_SYSCTL")
-        (isYes "GRKERNSEC_SYSCTL_DISTRO")
-        (isNo "GRKERNSEC_NO_RBAC")
-      ];
 
     nixpkgs.config.grsecurity = true;
 
@@ -134,12 +123,6 @@ in
       "kernel.grsecurity.chroot_restrict_nice" = mkForce 0;
       "kernel.grsecurity.chroot_caps" = mkForce 0;
     };
-
-    assertions = [
-      { assertion = !zfsNeededForBoot;
-        message = "grsecurity is currently incompatible with ZFS";
-      }
-    ];
 
   };
 }

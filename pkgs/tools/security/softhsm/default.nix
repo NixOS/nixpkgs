@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/var";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.opendnssec.org/softhsm;
     description = "Cryptographic store accessible through a PKCS #11 interface";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = stdenv.lib.maintainers.leenaars;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd2;
+    maintainers = [ maintainers.leenaars ];
+    platforms = platforms.linux;
   };
 }

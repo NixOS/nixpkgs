@@ -86,6 +86,8 @@
     "transformers"
     "unix"
   ]
+
+, stage2 ? import ./stage2.nix
 }:
 let
   inherit (bootPkgs) ghc;
@@ -171,7 +173,7 @@ in mkDerivation (rec {
     inherit (ghcjsNodePkgs) "socket.io";
 
     inherit stage1Packages;
-    mkStage2 = import ./stage2.nix {
+    mkStage2 = stage2 {
       inherit ghcjsBoot;
     };
   };

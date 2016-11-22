@@ -422,6 +422,8 @@ in
 
   apt-offline = callPackage ../tools/misc/apt-offline { };
 
+  aptly = callPackage ../tools/misc/aptly { };
+
   apulse = callPackage ../misc/apulse { };
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
@@ -1310,6 +1312,10 @@ in
   };
 
   cudnn5_cudatoolkit80 = callPackage ../development/libraries/science/math/cudnn/8.0-5.0 {
+    cudatoolkit = cudatoolkit8;
+  };
+
+  cudnn51_cudatoolkit80 = callPackage ../development/libraries/science/math/cudnn/8.0-5.1 {
     cudatoolkit = cudatoolkit8;
   };
 
@@ -4507,6 +4513,8 @@ in
   aliceml = callPackage ../development/compilers/aliceml { };
 
   arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
+
+  asn1c = callPackage ../development/compilers/asn1c { };
 
   aspectj = callPackage ../development/compilers/aspectj { };
 
@@ -10264,6 +10272,14 @@ in
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
+  riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
+    erlang = erlang_basho_R16B03;  
+  };
+
+  stanchion = callPackage ../servers/nosql/riak-cs/stanchion.nix {
+    erlang = erlang_basho_R16B03;
+  };
+
   influxdb = callPackage ../servers/nosql/influxdb { };
 
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
@@ -12082,6 +12098,12 @@ in
 
   abook = callPackage ../applications/misc/abook { };
 
+  acd-cli = callPackage ../applications/networking/sync/acd_cli {
+    inherit (python35Packages)
+      buildPythonApplication appdirs colorama dateutil
+      requests2 requests_toolbelt sqlalchemy fusepy;
+  };
+
   adobe-reader = callPackage_i686 ../applications/misc/adobe-reader { };
 
   aeolus = callPackage ../applications/audio/aeolus { };
@@ -12973,6 +12995,7 @@ in
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
     withQt = false;
     withGtk = false;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
   };
   wireshark-gtk = wireshark-cli.override { withGtk = true; };
   wireshark-qt = wireshark-cli.override { withQt = true; };
@@ -14846,7 +14869,7 @@ in
   tig = gitAndTools.tig;
 
   tilda = callPackage ../applications/misc/tilda {
-    vte = gnome3.vte_290;
+    vte = gnome3.vte;
     gtk = gtk3;
   };
 
@@ -15681,6 +15704,8 @@ in
   gnuchess = callPackage ../games/gnuchess { };
 
   gnugo = callPackage ../games/gnugo { };
+
+  gogui = callPackage ../games/gogui {};
 
   gtypist = callPackage ../games/gtypist { };
 
@@ -17618,4 +17643,6 @@ in
   nitrokey-app = callPackage ../tools/security/nitrokey-app { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
+
+  simplenote = callPackage ../applications/misc/simplenote { };
 }
