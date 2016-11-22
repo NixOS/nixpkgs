@@ -5,11 +5,11 @@ qmakeHook, makeQtWrapper }:
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "16.10";
+  version = "16.11";
 
   src = fetchurl {
     url = "https://github.com/mltframework/shotcut/archive/v${version}.tar.gz";
-    sha256 = "0brskci86bwdj2ahjfvv3v254ligjn97bm0f6c8yg46r0jb8q5xw";
+    sha256 = "1w02wbk5q7kvqgyip2w94zg4bhdxlh82b4mxarhv0b6v0imy60dq";
   };
 
   buildInputs = [ SDL frei0r gettext mlt pkgconfig qtbase qtmultimedia qtwebkit
