@@ -106,7 +106,7 @@ let
         qtconnectivity qtdeclarative qtdoc qtenginio qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
         qtsensors qtserialport qtsvg qttools qttranslations qtwayland
-        qtwebsockets qtx11extras qtxmlpatterns
+        qtwebchannel qtwebengine qtwebsockets qtx11extras qtxmlpatterns
       ];
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
