@@ -156,12 +156,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2016.2.5";
+    version = "2016.3";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0d1pssnrn36fibwsyjh30fsd5hn7qw3nljdnwg40q52skilcdk0v";
+      sha256 = "1bp2a1x8nl5flklf160n7ka5clnb0xx9gwv5zd9li2bsf04zlzf3";
     };
     wmClass = "jetbrains-idea-ce";
   };
@@ -192,12 +192,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2016.2.5";
+    version = "2016.3";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "0g8v3fw3610gyi25x489vlb72200rgb3b4rwh0igr4w35gwdv91h";
+      sha256 = "1sax3sjhsyvb9qfnn0gc74p3ym6j5f30mmapd4irq9fk4bsl8c31";
     };
     wmClass = "jetbrains-idea";
   };
