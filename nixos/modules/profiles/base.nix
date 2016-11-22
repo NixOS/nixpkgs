@@ -8,6 +8,7 @@
   # the system.
   environment.systemPackages = [
     pkgs.w3m-nox # needed for the manual anyway
+    pkgs.man-db # pulled in by w3m anyway and it's nice to have docs
     pkgs.testdisk # useful for repairing boot problems
     pkgs.mssys # for writing Microsoft boot sectors / MBRs
     pkgs.efibootmgr
