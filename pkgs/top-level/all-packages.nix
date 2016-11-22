@@ -2989,6 +2989,7 @@ in
 
   ntp = callPackage ../tools/networking/ntp {
     libcap = if stdenv.isLinux then libcap else null;
+    openssl = openssl_1_1_0;
   };
 
   numdiff = callPackage ../tools/text/numdiff { };
