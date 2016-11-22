@@ -791,6 +791,8 @@ in
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
+  dante = callPackage ../servers/dante { };
+
   datamash = callPackage ../tools/misc/datamash { };
 
   datefudge = callPackage ../tools/system/datefudge { };
