@@ -1,24 +1,25 @@
 { stdenv, fetchurl, pkgconfig, gst-plugins-base, bzip2, libva, wayland
 , libdrm, udev, xorg, mesa, yasm, gstreamer, gst-plugins-bad, nasm
-, libvpx
+, libvpx, python
 }:
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "0.7.0";
+  version = "1.10.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/software/vaapi/releases/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.bz2";
-    sha256 = "14jal2g5mf8r59w8420ixl3kg50vcmy56446ncwd0xrizd6yms5b";
+    url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
+    sha256 = "0d6sw5j7x3ah7zlcipy7w3fwag0fqxyfgc8q4phnazgk16kcmblr";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = with stdenv.lib; [ pkgconfig bzip2 ];
+  nativeBuildInputs = [ pkgconfig bzip2 ];
 
   buildInputs = [
     gstreamer gst-plugins-base gst-plugins-bad libva wayland libdrm udev
-    xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr xorg.libSM xorg.libICE mesa nasm libvpx
+    xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr xorg.libSM
+    xorg.libICE mesa nasm libvpx python
   ];
 
   preConfigure = "
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-builtin-libvpx --with-gstreamer-api=1.0";
 
   meta = {
-    homepage = "http://www.freedesktop.org";
+    homepage = "http://gstreamer.freedesktop.org";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];
