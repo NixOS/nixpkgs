@@ -15105,13 +15105,15 @@ in
   # Version without X11
   w3m-nox = w3m.override {
     x11Support = false;
+    imlib2 = imlib2-nox;
   };
 
   # Version for batch text processing, not a good browser
   w3m-batch = w3m.override {
     graphicsSupport = false;
-    x11Support = false;
     mouseSupport = false;
+    x11Support = false;
+    imlib2 = imlib2-nox;
   };
 
   weechat = callPackage ../applications/networking/irc/weechat {
