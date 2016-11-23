@@ -1,34 +1,35 @@
-diff -Naur a/3rdparty/libprocess/3rdparty/stout/include/Makefile.am b/3rdparty/libprocess/3rdparty/stout/include/Makefile.am
---- a/3rdparty/libprocess/3rdparty/stout/include/Makefile.am	2016-09-02 15:20:04.834457344 +0200
-+++ b/3rdparty/libprocess/3rdparty/stout/include/Makefile.am	2016-09-02 15:21:00.190983981 +0200
-@@ -62,7 +62,6 @@
-   stout/os/chroot.hpp			\
-   stout/os/close.hpp			\
-   stout/os/constants.hpp		\
--  stout/os/direntsize.hpp		\
-   stout/os/environment.hpp		\
-   stout/os/exists.hpp			\
-   stout/os/fcntl.hpp			\
-@@ -101,7 +100,6 @@
-   stout/os/posix/bootid.hpp		\
-   stout/os/posix/chown.hpp		\
-   stout/os/posix/chroot.hpp		\
--  stout/os/posix/direntsize.hpp		\
-   stout/os/posix/exists.hpp		\
-   stout/os/posix/fcntl.hpp		\
-   stout/os/posix/fork.hpp		\
-@@ -118,7 +116,6 @@
-   stout/os/raw/environment.hpp		\
-   stout/os/windows/bootid.hpp		\
-   stout/os/windows/chroot.hpp		\
--  stout/os/windows/direntsize.hpp	\
-   stout/os/windows/exists.hpp		\
-   stout/os/windows/fcntl.hpp		\
-   stout/os/windows/fork.hpp		\
-diff --git a/3rdparty/libprocess/3rdparty/stout/include/stout/os/direntsize.hpp b/3rdparty/libprocess/3rdparty/stout/include/stout/os/direntsize.hpp
+diff --git a/3rdparty/stout/include/Makefile.am b/3rdparty/stout/include/Makefile.am
+index 1f2ee85..b0b08d8 100644
+--- a/3rdparty/stout/include/Makefile.am
++++ b/3rdparty/stout/include/Makefile.am
+@@ -64,7 +64,6 @@ nobase_include_HEADERS =			\
+   stout/os/chroot.hpp				\
+   stout/os/close.hpp				\
+   stout/os/constants.hpp			\
+-  stout/os/direntsize.hpp			\
+   stout/os/environment.hpp			\
+   stout/os/exists.hpp				\
+   stout/os/fcntl.hpp				\
+@@ -108,7 +107,6 @@ nobase_include_HEADERS =			\
+   stout/os/posix/chown.hpp			\
+   stout/os/posix/chroot.hpp			\
+   stout/os/posix/close.hpp			\
+-  stout/os/posix/direntsize.hpp			\
+   stout/os/posix/exists.hpp			\
+   stout/os/posix/fcntl.hpp			\
+   stout/os/posix/fork.hpp			\
+@@ -134,7 +132,6 @@ nobase_include_HEADERS =			\
+   stout/os/windows/bootid.hpp			\
+   stout/os/windows/chroot.hpp			\
+   stout/os/windows/close.hpp			\
+-  stout/os/windows/direntsize.hpp		\
+   stout/os/windows/exists.hpp			\
+   stout/os/windows/fcntl.hpp			\
+   stout/os/windows/fork.hpp			\
+diff --git a/3rdparty/stout/include/stout/os/direntsize.hpp b/3rdparty/stout/include/stout/os/direntsize.hpp
 deleted file mode 100644
-index 819f99a89862491e99873bdedc603317b91266b0..0000000000000000000000000000000000000000
---- a/3rdparty/libprocess/3rdparty/stout/include/stout/os/direntsize.hpp
+index 819f99a..0000000
+--- a/3rdparty/stout/include/stout/os/direntsize.hpp
 +++ /dev/null
 @@ -1,26 +0,0 @@
 -// Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,10 +58,10 @@ index 819f99a89862491e99873bdedc603317b91266b0..00000000000000000000000000000000
 -
 -
 -#endif // __STOUT_OS_DIRENTSIZE_HPP__
-diff --git a/3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/direntsize.hpp b/3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/direntsize.hpp
+diff --git a/3rdparty/stout/include/stout/os/posix/direntsize.hpp b/3rdparty/stout/include/stout/os/posix/direntsize.hpp
 deleted file mode 100644
-index 9d8f72eb607a288e77f92b39b91542ff5eb2fa21..0000000000000000000000000000000000000000
---- a/3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/direntsize.hpp
+index 9d8f72e..0000000
+--- a/3rdparty/stout/include/stout/os/posix/direntsize.hpp
 +++ /dev/null
 @@ -1,42 +0,0 @@
 -// Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,10 +106,10 @@ index 9d8f72eb607a288e77f92b39b91542ff5eb2fa21..00000000000000000000000000000000
 -} // namespace os {
 -
 -#endif // __STOUT_OS_POSIX_DIRENTSIZE_HPP__
-diff --git a/3rdparty/libprocess/3rdparty/stout/include/stout/os/windows/direntsize.hpp b/3rdparty/libprocess/3rdparty/stout/include/stout/os/windows/direntsize.hpp
+diff --git a/3rdparty/stout/include/stout/os/windows/direntsize.hpp b/3rdparty/stout/include/stout/os/windows/direntsize.hpp
 deleted file mode 100644
-index 7c8c7a06f478b3a80341a874494cff21f71fc397..0000000000000000000000000000000000000000
---- a/3rdparty/libprocess/3rdparty/stout/include/stout/os/windows/direntsize.hpp
+index 7c8c7a0..0000000
+--- a/3rdparty/stout/include/stout/os/windows/direntsize.hpp
 +++ /dev/null
 @@ -1,43 +0,0 @@
 -// Licensed under the Apache License, Version 2.0 (the "License");
