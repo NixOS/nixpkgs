@@ -30,6 +30,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  # Breaks dfhack because of inlining.
+  hardeningDisable = [ "fortify" ];
+
   passthru.dfVersion = "0.43.05";
 
   meta = with stdenv.lib; {
