@@ -16,11 +16,11 @@ let
 
   sockjs-tornado = pythonPackages.buildPythonPackage rec {
     name = "sockjs-tornado-${version}";
-    version = "1.0.2";
+    version = "1.0.3";
 
     src = fetchurl {
       url = "mirror://pypi/s/sockjs-tornado/${name}.tar.gz";
-      sha256 = "15lcy40h2cm0l8aknbrk48p2sni5wzybsqjx1hxwpk9lfa1xryyv";
+      sha256 = "16cff40nniqsyvda1pb2j3b4zwmrw7y2g1vqq78lp20xpmhnwwkd";
     };
 
     # This is needed for compatibility with OctoPrint
