@@ -1,45 +1,54 @@
-{ stdenv, lib, fetchFromGitHub, perl, makeWrapper, systemd, iw, rfkill, hdparm, ethtool, inetutils
-, kmod, pciutils, smartmontools, x86_energy_perf_policy, gawk, gnugrep, coreutils
+{ stdenv, lib, fetchFromGitHub, perl, makeWrapper, file, systemd, iw, rfkill
+, hdparm, ethtool, inetutils , kmod, pciutils, smartmontools
+, x86_energy_perf_policy, gawk, gnugrep, coreutils, utillinux
 , enableRDW ? false, networkmanager
 }:
 
 let
   paths = lib.makeBinPath
           ([ iw rfkill hdparm ethtool inetutils systemd kmod pciutils smartmontools
-             x86_energy_perf_policy gawk gnugrep coreutils
+             x86_energy_perf_policy gawk gnugrep coreutils utillinux
            ]
            ++ lib.optional enableRDW networkmanager
           );
 
 in stdenv.mkDerivation rec {
   name = "tlp-${version}";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
         owner = "linrunner";
         repo = "TLP";
         rev = "${version}";
-        sha256 = "19fvk0xz6i2ryf41akk4jg1c4sb4rcyxdl9fr0w4lja7g76d5zww";
+        sha256 = "1gwi0h9klhdvqfqvmn297l1vyhj4g9dqvf50lcbswry02mvnd2vn";
       };
 
   makeFlags = [ "DESTDIR=$(out)"
-                "TLP_LIBDIR=/lib"
-                "TLP_SBIN=/bin"
-                "TLP_BIN=/bin"
+                "TLP_SBIN=$(out)/bin"
+                "TLP_BIN=$(out)/bin"
+                "TLP_TLIB=$(out)/share/tlp-pm"
+                "TLP_PLIB=$(out)/lib/pm-utils"
+                "TLP_ULIB=$(out)/lib/udev"
+                "TLP_NMDSP=$(out)/etc/NetworkManager/dispatcher.d"
+                "TLP_SHCPL=$(out)/share/bash-completion/completions"
+                "TLP_MAN=$(out)/share/man"
+
                 "TLP_NO_INIT=1"
                 "TLP_NO_PMUTILS=1"
               ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper file ];
 
   buildInputs = [ perl ];
 
-  installTargets = [ "install-tlp" ] ++ stdenv.lib.optional enableRDW "install-rdw";
+  installTargets = [ "install-tlp" "install-man" ] ++ stdenv.lib.optional enableRDW "install-rdw";
 
   postInstall = ''
-    for i in $out/bin/* $out/lib/udev/tlp-*; do
-      sed -i "s,/usr/lib/,$out/lib/,g" "$i"
-      if [[ "$(basename "$i")" = tlp-*list ]]; then
+    cp -r $out/$out/* $out
+    rm -rf $out/$(echo "$NIX_STORE" | cut -d "/" -f2)
+
+    for i in $out/bin/* $out/lib/udev/tlp-* ${lib.optionalString enableRDW "$out/etc/NetworkManager/dispatcher.d/*"}; do
+      if file "$i" | grep -q Perl; then
         # Perl script; use wrapProgram
         wrapProgram "$i" \
           --prefix PATH : "${paths}"
@@ -47,21 +56,6 @@ in stdenv.mkDerivation rec {
         # Bash script
         sed -i '2iexport PATH=${paths}:$PATH' "$i"
       fi
-    done
-
-    for i in $out/lib/udev/rules.d/*; do
-      sed -i "s,RUN+=\",\\0$out,g; s,/usr/sbin,/bin,g" "$i"
-    done
-
-    for i in man/*; do
-      install -D $i $out/share/man/man''${i##*.}/$(basename $i)
-    done
-  '' + lib.optionalString enableRDW ''
-    for i in $out/etc/NetworkManager/dispatcher.d/*; do
-      sed -i \
-        -e "s,/usr/lib/,$out/lib/,g" \
-        -e '2iexport PATH=${paths}:$PATH' \
-        "$i"
     done
   '';
 
