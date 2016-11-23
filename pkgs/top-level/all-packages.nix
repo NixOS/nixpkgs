@@ -14627,11 +14627,12 @@ in
     ffmpeg = ffmpeg_2;
   };
 
-  spotify = callPackage ../applications/audio/spotify {
-    inherit (gnome2) GConf;
-    libgcrypt = libgcrypt_1_5;
-    libpng = libpng12;
-  };
+  spotify = if stdenv.isDarwin then callPackage ../applications/audio/spotify/darwin.nix {}
+    else callPackage ../applications/audio/spotify {
+      inherit (gnome2) GConf;
+      libgcrypt = libgcrypt_1_5;
+      libpng = libpng12;
+    };
 
   libspotify = callPackage ../development/libraries/libspotify {
     apiKey = config.libspotify.apiKey or null;
