@@ -9889,29 +9889,6 @@ in {
     };
   };
 
-  django_1_5 = buildPythonPackage rec {
-    name = "Django-${version}";
-    version = "1.5.12";
-
-    src = pkgs.fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.5/${name}.tar.gz";
-      sha256 = "1vbcvn6ncg7hq5i1w95h746vkq9lmp120vx63h3p56z5nsz7gpmk";
-    };
-
-    # too complicated to setup
-    doCheck = false;
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
-  };
-
   django_appconf = buildPythonPackage rec {
     name = "django-appconf-${version}";
     version = "1.0.1";
@@ -10061,21 +10038,21 @@ in {
   };
 
   django_tagging = buildPythonPackage rec {
-    name = "django-tagging-0.3.1";
+    name = "django-tagging-0.4.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
-      sha256 = "e5fbeb7ca6e0c22a9a96239095dff508040ec95171e51c69e6f8ada72ea4bce2";
+      sha256 = "00ki1g6pb2lnaj4lh0s865mmlf4kdwx7a6n38iy5qz9qv4xrvz4q";
     };
 
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ django_1_5 ];
+    propagatedBuildInputs = with self; [ django ];
 
     meta = {
       description = "A generic tagging application for Django projects";
-      homepage = http://code.google.com/p/django-tagging/;
+      homepage = https://github.com/Fantomas42/django-tagging;
     };
   };
 
@@ -27838,14 +27815,15 @@ in {
 
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
-    version = "0.9.12";
+    disabled = isPy3k;
+    version = "0.9.15";
 
     src = pkgs.fetchurl rec {
       url = "mirror://pypi/g/graphite-web/${name}.tar.gz";
-      sha256 = "472a4403fd5b5364939aee10e78f171b1489e5f6bfe6f150ed9cae8476410114";
+      sha256 = "1c0kclbv8shv9nvjx19wqm4asia58s3qmd9fapchc6y9fjpjax6q";
     };
 
-    propagatedBuildInputs = with self; [ django_1_5 django_tagging whisper pycairo ldap memcached ];
+    propagatedBuildInputs = with self; [ django django_tagging whisper pycairo ldap memcached ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
