@@ -7,11 +7,11 @@
 let
   pdfjs = stdenv.mkDerivation rec {
     name = "pdfjs-${version}";
-    version = "1.4.20";
+    version = "1.5.188";
 
     src = fetchurl {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-      sha256 = "1ca1fzyc5qnan6gavcd8bnfqriqqvgdsf4m8ka4nayf50k64xxj9";
+      sha256 = "1y3yaqfgjj96qzvbm5200x68j5hy1qs7l2mqm3kbbj2b58z9f1qv";
     };
 
     nativeBuildInputs = [ unzip ];
