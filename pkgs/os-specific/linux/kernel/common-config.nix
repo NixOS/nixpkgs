@@ -27,6 +27,8 @@ with stdenv.lib;
     MODULE_COMPRESS_XZ y
   ''}
 
+  KERNEL_XZ y
+
   # Debugging.
   DEBUG_KERNEL y
   TIMER_STATS y
