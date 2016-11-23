@@ -7,9 +7,9 @@ let
   self = rec {
     dwarf-fortress-original = callPackage ./game.nix { };
 
-    dfhack = callPackage_i686 ./dfhack {
-      inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
-      protobuf = with pkgsi686Linux; protobuf.override {
+    dfhack = callPackage ./dfhack {
+      inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
+      protobuf = with pkgs; protobuf.override {
         stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
       };
     };

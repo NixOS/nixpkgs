@@ -5,12 +5,15 @@
 }:
 
 let
-  dfVersion = "0.43.03";
-  version = "${dfVersion}-r1";
+  dfVersion = "0.43.05";
+  # version = "${dfVersion}-r1";
+  # rev = "refs/tags/${version}";
+  version = "${dfVersion}-alpha2";
+  rev = "13eb5e702beb6d8e40c0e17be64cda9a8d9d1efb";
+  sha256 = "18i8qfhhfnfrpa519akwagn73q2zns1pry2sdfag63vffxh60zr5";
 
-  rev = "refs/tags/${version}";
   # revision of library/xml submodule
-  xmlRev = "98cc1e01886aaea161d651cf97229ad08e9782b0";
+  xmlRev = "84f6e968a9ec5515f9dbef96b445e3fc83f83e8b";
 
   fakegit = writeScriptBin "git" ''
     #! ${stdenv.shell}
@@ -35,8 +38,7 @@ in stdenv.mkDerivation rec {
   # Beware of submodules
   src = fetchgit {
     url = "https://github.com/DFHack/dfhack";
-    inherit rev;
-    sha256 = "0m5kqpaz0ypji4c32w0hhbsicvgvnjh56pqvq7af6pqqnyg1nzcx";
+    inherit rev sha256;
   };
 
   patches = [ ./use-system-libraries.patch ];
