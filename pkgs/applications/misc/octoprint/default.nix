@@ -37,13 +37,13 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   name = "OctoPrint-${version}";
-  version = "1.2.15";
+  version = "1.2.17";
 
   src = fetchFromGitHub {
     owner = "foosel";
     repo = "OctoPrint";
     rev = version;
-    sha256 = "0qfragp7n8m7l5l30s5fz1x7xzini2sdh2y3m1ahs7ay8zp4xk56";
+    sha256 = "1di2f5npwsfckx5p2fl23bl5zi75i0aksd9qy4sa3zmw672337fh";
   };
 
   # We need old Tornado
@@ -67,6 +67,7 @@ in pythonPackages.buildPythonApplication rec {
       -e 's,Flask-Principal>=[^"]*,Flask-Principal,g' \
       -e 's,markdown>=[^"]*,markdown,g' \
       -e 's,Flask-Assets>=[^"]*,Flask-Assets,g' \
+      -e 's,Flask-Login>=[^"]*,Flask-Login,g' \
       -e 's,rsa>=[^"]*,rsa,g' \
       -e 's,PyYAML>=[^"]*,PyYAML,g' \
       setup.py
