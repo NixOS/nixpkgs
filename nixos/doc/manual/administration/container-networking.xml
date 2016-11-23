@@ -47,4 +47,12 @@ where <literal>eth0</literal> should be replaced with the desired
 external interface. Note that <literal>ve-+</literal> is a wildcard
 that matches all container interfaces.</para>
 
+<para>If you are using Network Manager, you need to explicitly prevent
+it from managing container interfaces:
+
+<programlisting>
+networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
+</programlisting>
+</para>
+
 </section>

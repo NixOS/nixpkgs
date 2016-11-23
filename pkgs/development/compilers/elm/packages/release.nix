@@ -2,7 +2,7 @@
 # Please, do not modify it by hand!
 { callPackage }:
 {
-  version = "0.17.1";
+  version = "0.18.0";
   packages = {
     elm-compiler = callPackage ./elm-compiler.nix { };
     elm-package = callPackage ./elm-package.nix { };

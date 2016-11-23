@@ -345,12 +345,10 @@ let
       };
 
       rrlWhitelist = mkOption {
-        type = types.listOf types.str;
+        type = with types; listOf (enum [ "nxdomain" "error" "referral" "any" "rrsig" "wildcard" "nodata" "dnskey" "positive" "all" ]);
         default = [];
         description = ''
           Whitelists the given rrl-types.
-          The RRL classification types are:  nxdomain,  error, referral, any,
-          rrsig, wildcard, nodata, dnskey, positive, all
         '';
       };
 

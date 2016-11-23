@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd";
   };
 
+  outputs = [ "out" "dev" ];
+
   propagatedBuildInputs = [ atk glibmm ];
 
   nativeBuildInputs = [ pkgconfig ];

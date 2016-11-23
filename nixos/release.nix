@@ -228,6 +228,7 @@ in rec {
   tests.containers-imperative = callTest tests/containers-imperative.nix {};
   tests.containers-extra_veth = callTest tests/containers-extra_veth.nix {};
   tests.containers-physical_interfaces = callTest tests/containers-physical_interfaces.nix {};
+  tests.containers-tmpfs = callTest tests/containers-tmpfs.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
   tests.ecryptfs = callTest tests/ecryptfs.nix {};

@@ -1,5 +1,5 @@
 { stdenv, fetchurl,
-  boost, clasp, cmake, clingo, re2c
+  boost, clasp, cmake, gringo, re2c
 }:
 
 let
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "029035vcdk527ssf126i8ipi5zs73gqpbrg019pvm9r24rf0m373";
   };
 
-  buildInputs = [ boost clasp cmake clingo re2c ];
+  buildInputs = [ boost clasp cmake gringo re2c ];
 
   buildPhase = ''
     cmake -DCMAKE_BUILD_TYPE=Release \
-      -DGRINGO_LOC=${clingo}/bin/gringo \
+      -DGRINGO_LOC=${gringo}/bin/gringo \
       -DCLASP_LOC=${clasp}/bin/clasp \
       -DENCODING_LOC=$out/share/aspcud/specification.lp \
       .

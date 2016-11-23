@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, openssl, lzo, zlib, yacc, flex }:
 
 stdenv.mkDerivation rec {
-  name = "vtun-3.0.3";
+  name = "vtun-3.0.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/vtun/${name}.tar.gz";
-    sha256 = "1jxrxp3klhc8az54d5qn84cbc0vdafg319jh84dxkrswii7vxp39";
+    sha256 = "1fcqzn2bdjw31j1hvv6lg99v2phhszm29kp2xambxzp32mmxzy5b";
   };
 
   patches = [

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib/pidgin/
-    cp bin/*.so $out/lib/pidgin/
+    cp bin/*.so $out/lib/pidgin/ #*/
     cp tg-server.tglpub $out/lib/pidgin/server.tglpub
     mkdir -p $out/pixmaps/pidgin/protocols/{16,22,48}
     cp imgs/telegram16.png $out/pixmaps/pidgin/protocols/16
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     cp imgs/telegram48.png $out/pixmaps/pidgin/protocols/48
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/majn/telegram-purple;
     description = "Telegram for Pidgin / libpurple";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = stdenv.lib.maintainers.jagajaga;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.jagajaga ];
+    platforms = platforms.linux;
   };
 }

@@ -228,8 +228,6 @@ in
 
   config = mkIf cfg.enable {
 
-    programs.ssh.setXAuthLocation = mkForce cfg.forwardX11;
-
     users.extraUsers.sshd =
       { isSystemUser = true;
         description = "SSH privilege separation user";

@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "${version}";
-    sha256 = "02sldgbsxifd7s3awjj0a4wf7rrcz2xin02b6ygyqxyhj1kqj8i6";
+    sha256 = "0i3bmfs54s6m8im5gjm5ccyz31gpvp9cghxjxj46l0g77ncij7dj";
   };
 
   goDeps = ./. + builtins.toPath "/deps-${version}.nix";

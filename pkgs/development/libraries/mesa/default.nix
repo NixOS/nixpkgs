@@ -132,12 +132,17 @@ stdenv.mkDerivation {
       $out/lib/vdpau         \
       $out/lib/bellagio      \
       $out/lib/libxatracker* \
-      $out/lib/libvulkan_* \
+      $out/lib/libvulkan_*
 
     # move share/vulkan/icd.d/
     mv $out/share/ $drivers/
+    # Update search path used by Vulkan (it's pointing to $out but
+    # drivers are in $drivers)
+    for js in $drivers/share/vulkan/icd.d/*.json; do
+      substituteInPlace "$js" --replace "$out" "$drivers"
+    done
 
-    mv $out/lib/dri/* $drivers/lib/dri
+    mv $out/lib/dri/* $drivers/lib/dri # */
     rmdir "$out/lib/dri"
 
     # move libOSMesa to $osmesa, as it's relatively big

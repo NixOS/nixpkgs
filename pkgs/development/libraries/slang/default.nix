@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pcre, libpng, zlib, readline }:
+{ stdenv, fetchurl, ncurses, pcre, libpng, zlib, readline, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "slang-2.3.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|-ltermcap|-lncurses|" ./configure
   '';
   configureFlags = "--with-png=${libpng.dev} --with-z=${zlib.dev} --with-pcre=${pcre.dev} --with-readline=${readline.dev}";
-  buildInputs = [ pcre libpng zlib readline ];
+  buildInputs = [ pcre libpng zlib readline ] ++ stdenv.lib.optionals (stdenv.isDarwin) [ libiconv ];
   propagatedBuildInputs = [ ncurses ];
 
   postInstall = ''

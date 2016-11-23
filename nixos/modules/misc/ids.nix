@@ -84,7 +84,7 @@
       spamd = 56;
       #networkmanager = 57; # unused
       nslcd = 58;
-      #scanner = 59; # unused
+      scanner = 59;
       nginx = 60;
       chrony = 61;
       #systemd-journal = 62; # unused
@@ -279,6 +279,8 @@
       hound = 259;
       leaps = 260;
       ipfs  = 261;
+      stanchion = 262;
+      riak-cs = 263;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -528,6 +530,8 @@
       hound = 259;
       leaps = 260;
       ipfs = 261;
+      stanchion = 262;
+      riak-cs = 263;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

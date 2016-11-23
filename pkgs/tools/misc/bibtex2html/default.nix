@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A collection of tools for translating from BibTeX to HTML";
     homepage = https://www.lri.fr/~filliatr/bibtex2html/;
-    licence = licenses.gpl2;
+    license = licenses.gpl2;
     platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.scolobb ];
   };

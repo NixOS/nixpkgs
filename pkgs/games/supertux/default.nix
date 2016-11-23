@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "supertux-${version}";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://github.com/SuperTux/supertux/releases/download/v${version}/SuperTux-v${version}-Source.tar.gz";
-    sha256 = "0fx7c7m6mfanqy7kln7yf6abb5l3r68picf32js2yls11jj0vbng";
+    sha256 = "1i8avad7w7ikj870z519j383ldy29r6f956bs38cbr8wk513pp69";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
