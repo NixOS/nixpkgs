@@ -11440,6 +11440,8 @@ in
     rcshutdown = "/etc/rc.d/rc.shutdown";
   };
 
+  skopeo = callPackage ../development/tools/skopeo { };
+
   smem = callPackage ../os-specific/linux/smem { };
 
   statifier = callPackage ../os-specific/linux/statifier { };
