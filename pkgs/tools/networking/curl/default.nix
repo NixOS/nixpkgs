@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     optional sslSupport openssl ++
     optional scpSupport libssh2;
 
+  patches = stdenv.lib.optional http2Support ./fix-http2-window-size.patch;
+
   # for the second line see http://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
