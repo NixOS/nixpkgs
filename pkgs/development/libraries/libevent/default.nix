@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, openssl, findutils }:
+{ stdenv, fetchurl, openssl, findutils }:
 
 let version = "2.0.22"; in
 stdenv.mkDerivation {
@@ -12,7 +12,6 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isCygwin findutils;
 
   meta = with stdenv.lib; {
