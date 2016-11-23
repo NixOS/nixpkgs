@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
-  version = "1.14.1";
+  version = "1.16.1";
 
   # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "0d7sk3pfkajhkmcqa7zx4rjg1pkwqraxxs7bxbwbm67r8wwqw87j";
+    sha256 = "069pw84f8gg21npapn7y1sizwn6w35692zaq5g45gy8hdbmcl8yc";
   };
 
   # Configure script searches for a symbol which does not exist in jemalloc on Darwin
