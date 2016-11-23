@@ -7539,6 +7539,8 @@ in
     gtk = gtk2;
   };
 
+  gtk-mac-bundler = callPackage ../development/tools/gtk-mac-bundler {};
+
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
