@@ -123,6 +123,11 @@ stdenv.mkDerivation rec {
       url = "http://git.qemu.org/?p=qemu.git;a=patch;h=8caed3d564672e8bc6d2e4c6a35228afd01f4723";
       sha256 = "19sq6fh7nh8wrk52skky4vwm80029lhm093g11f539krmzjgipik";
     })
+    (fetchpatch {
+      name = "qemu-CVE-2016-7907.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=070c4b92b8cd5390889716677a0b92444d6e087a";
+      sha256 = "0in89697r6kwkf302v3cg16390q7qs33n2b4kba26m4x65632dxm";
+    })
 
     # FIXME: Fix for CVE-2016-9101 not yet ready: https://lists.gnu.org/archive/html/qemu-devel/2016-10/msg03024.html
 
