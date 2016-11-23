@@ -41,7 +41,7 @@ main(Args) ->
     {ok, RequiredData} = gather_required_data_from_the_environment(ArgData),
     do_the_bootstrap(RequiredData).
 
-%% @doc There are two modes 'registery_only' where the register is
+%% @doc There are two modes 'registry_only' where the register is
 %% created from hex and everything else.
 -spec do_the_bootstrap(#data{}) -> ok.
 do_the_bootstrap(RequiredData = #data{registry_only = true}) ->
@@ -55,7 +55,7 @@ do_the_bootstrap(RequiredData) ->
 %% @doc
 %% Argument parsing is super simple only because we want to keep the
 %% dependencies minimal. For now there can be two entries on the
-%% command line, "registery-only" and "debug-info"
+%% command line, "registry-only" and "debug-info"
 -spec parse_args([string()]) -> #data{}.
 parse_args(Args0) ->
     PossibleArgs = sets:from_list(["registry-only", "debug-info"]),
@@ -146,13 +146,14 @@ make_symlink(Path, TargetFile) ->
 
 %% @doc
 %% This takes an app name in the standard OTP <name>-<version> format
-%% and returns just the app name. Why? because rebar is doesn't
+%% and returns just the app name. Why? because rebar doesn't
 %% respect OTP conventions in some cases.
 -spec fixup_app_name(string()) -> string().
 fixup_app_name(FileName) ->
     case string:tokens(FileName, "-") of
         [Name] -> Name;
-        [Name, _Version] -> Name
+        [Name, _Version] -> Name;
+        [Name, _Version, _Tag] -> Name
     end.
 
 -spec bootstrap_registry(#data{}) -> ok.
