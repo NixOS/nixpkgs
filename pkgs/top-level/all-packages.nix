@@ -7515,6 +7515,10 @@ in
 
   gtk-sharp-beans = callPackage ../development/libraries/gtk-sharp-beans { };
 
+  gtk-mac-integration = callPackage ../development/libraries/gtk-mac-integration {
+    gtk = gtk2;
+  };
+
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
