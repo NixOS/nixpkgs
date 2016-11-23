@@ -7,15 +7,12 @@
 # http://vlc-bluray.whoknowsmy.name/
 # https://wiki.archlinux.org/index.php/BluRay
 
-let baseName = "libaacs";
-    version  = "0.8.1";
-in
-
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
+stdenv.mkDerivation rec {
+  name = "libaacs-${version}";
+  version  = "0.8.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/${baseName}/${version}/${baseName}-${version}.tar.bz2";
+    url = "http://get.videolan.org/libaacs/${version}/${name}.tar.bz2";
     sha256 = "1s5v075hnbs57995r6lljm79wgrip3gnyf55a0y7bja75jh49hwm";
   };
 
@@ -24,7 +21,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ yacc flex ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.videolan.org/developers/libaacs.html;
+    homepage = "https://www.videolan.org/developers/libaacs.html";
     description = "Library to access AACS protected Blu-Ray disks";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

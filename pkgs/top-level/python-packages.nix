@@ -1456,7 +1456,7 @@ in {
     propagatedBuildInputs = with self; [ unidecode regex ];
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/dimka665/awesome-slugify;
+      homepage = "https://github.com/dimka665/awesome-slugify";
       description = "Python flexible slugify function";
       license = licenses.gpl3;
       platforms = platforms.all;
@@ -8698,7 +8698,7 @@ in {
     };
 
     meta = {
-      homepage = https://github.com/tgalal/python-axolotl;
+      homepage = "https://github.com/tgalal/python-axolotl";
       description = "Curve25519 with ed25519 signatures";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl3;
@@ -8723,7 +8723,7 @@ in {
     '';
 
     meta = {
-      homepage = https://launchpad.net/pypolicyd-spf/;
+      homepage = "https://launchpad.net/pypolicyd-spf/";
       description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.asl20;
@@ -8926,7 +8926,7 @@ in {
     };
 
     meta = {
-      homepage = http://bmsi.com/python/milter.html;
+      homepage = "http://bmsi.com/python/milter.html";
       description = "Python API for Sendmail Milters (SPF)";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl2;
@@ -9081,7 +9081,7 @@ in {
     };
 
     meta = {
-      homepage = http://sarge.readthedocs.org/;
+      homepage = "http://sarge.readthedocs.org/";
       description = "A wrapper for subprocess which provides command pipeline functionality";
       license = licenses.bsd3;
       platform = platforms.all;
@@ -11047,7 +11047,7 @@ in {
     doCheck = false;
 
     meta = {
-      homepage = http://github.com/miracle2k/flask-assets;
+      homepage = "https://github.com/maxcountryman/flask-login";
       description = "User session management for Flask";
       license = licenses.mit;
       platforms = platforms.all;
@@ -11092,7 +11092,7 @@ in {
     propagatedBuildInputs = with self; [ flask blinker nose ];
 
     meta = {
-      homepage = http://packages.python.org/Flask-Principal/;
+      homepage = "http://packages.python.org/Flask-Principal/";
       description = "Identity management for flask";
       license = licenses.bsd2;
       platforms = platforms.all;
@@ -11131,7 +11131,7 @@ in {
     propagatedBuildInputs = with self; [ flask ];
 
     meta = {
-      homepage = http://github.com/smurfix/flask-script;
+      homepage = "http://github.com/smurfix/flask-script";
       description = "Scripting support for Flask";
       license = licenses.bsd3;
       platforms = platforms.all;
@@ -13369,7 +13369,7 @@ in {
     };
 
     meta = {
-      homepage = https://github.com/jlhutch/pylru;
+      homepage = "https://github.com/jlhutch/pylru";
       description = "A least recently used (LRU) cache implementation";
       license = licenses.gpl2;
       platforms = platforms.all;

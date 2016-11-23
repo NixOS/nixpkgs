@@ -28,7 +28,7 @@ let
 
     meta = with stdenv.lib; {
       description = "SockJS python server implementation on top of Tornado framework";
-      homepage = http://github.com/mrjoes/sockjs-tornado/;
+      homepage = "http://github.com/mrjoes/sockjs-tornado/";
       license = licenses.mit;
       platforms = platforms.all;
       maintainers = with maintainers; [ abbradar ];
