@@ -28,7 +28,6 @@ in buildPythonPackage rec {
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
     sed -i -r -e 's|"(u?mount)"|"${utillinux}/bin/\1"|' blivet/util.py
-    sed -i -e '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
   '';
 
   propagatedBuildInputs = [
