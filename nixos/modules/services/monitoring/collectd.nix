@@ -9,7 +9,7 @@ let
     BaseDir "${cfg.dataDir}"
     PIDFile "${cfg.pidFile}"
     AutoLoadPlugin ${if cfg.autoLoadPlugin then "true" else "false"}
-    Hostname ${config.networking.hostName}
+    Hostname "${config.networking.hostName}"
 
     LoadPlugin syslog
     <Plugin "syslog">
