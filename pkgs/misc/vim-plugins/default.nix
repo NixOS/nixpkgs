@@ -2,7 +2,7 @@
 { fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, llvmPackages
 , xkb_switch, rustracerd, fzf
-, python3
+, python3, boost, icu
 , Cocoa ? null
 }:
 
@@ -2112,5 +2112,27 @@ rec {
     };
     dependencies = [];
 
+  };
+
+  cpsm = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "cpsm-2016-09-21";
+    src = fetchgit {
+      url = "git://github.com/nixprime/cpsm";
+      rev = "565ab53a66fa52c46d80adf6981b07f4bdffcb1d";
+      sha256 = "125gcnqrg2276sp715q924cxwjxwsv3j4m0n1zj17w9srnpn4r1k";
+    };
+    dependencies = [];
+    buildInputs = [
+      python3
+      stdenv
+      cmake
+      boost
+      icu
+    ];
+    buildPhase = ''
+      patchShebangs .
+      export PY3=ON
+      ./install.sh
+    '';
   };
 }
