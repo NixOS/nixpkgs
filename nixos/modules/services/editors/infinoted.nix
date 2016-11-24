@@ -74,7 +74,7 @@ in {
     };
 
     extraConfig = mkOption {
-      type = types.str;
+      type = types.lines;
       default = ''
         [autosave]
         interval=10
