@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "libarchive-${version}";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "1lngng84k1kkljl74q0cdqc3s82vn2kimfm02dgm4d6m7x71mvkj";
+    sha256 = "03q6y428rg723c9fj1vidzjw46w1vf8z0h95lkvz1l9jw571j739";
   };
 
   outputs = [ "out" "lib" "dev" ];
