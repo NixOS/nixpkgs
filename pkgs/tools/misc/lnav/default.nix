@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pcre, sqlite, ncurses,
+{ stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses,
   readline, zlib, bzip2, autoconf, automake }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     zlib
     bzip2
     ncurses
-    pcre
+    pcre-cpp
     readline
     sqlite
   ];
