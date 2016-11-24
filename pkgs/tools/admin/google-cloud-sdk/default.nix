@@ -2,20 +2,23 @@
 
 with python27Packages;
 
+# other systems not supported yet
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+
 stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "122.0.0";
+  version = "134.0.0";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "0nx348yx1avbb34bpj316fb7jzyzkylscyx8kv183rg4s1q2f798";
+        sha256 = "0pv2whqqcjvz3x02rn08vyssvbqxsncqvx9916v2ycdpiymffdz0";
       }
     else
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "0jhw8yv2kv0fs64rzvddx3szzpn74nqnd3rbd9wx2vi6nmffkrwv";
+        sha256 = "1kji861ii4ig73scg64lijcqdg2p0d2i2af1fdbkils0imwa3m5l";
       };
 
   buildInputs = [python27 makeWrapper];

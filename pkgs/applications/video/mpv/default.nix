@@ -31,6 +31,7 @@
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
+, drmSupport         ? true,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , jackaudioSupport   ? false, libjack2      ? null
 
@@ -65,6 +66,7 @@ assert youtubeSupport     -> available youtube-dl;
 assert vapoursynthSupport -> available vapoursynth;
 assert jackaudioSupport   -> available libjack2;
 assert vaapiSupport       -> available libva;
+assert drmSupport         -> available libdrm;
 
 let
   # Purity: Waf is normally downloaded by bootstrap.py, but
@@ -77,13 +79,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "1v1qfppysi0qn40q9z7cx9gs7pcrz2hn1g44iynygvgj29h1gify";
+    sha256 = "0mv8fs2zxp6pvpi5xdrpvvqcaa5f0c83jdfi0pfqnwbpkz1kb9s6";
   };
 
   patchPhase = ''
@@ -133,6 +135,7 @@ in stdenv.mkDerivation rec {
     ++ optional sdl2Support        SDL2
     ++ optional cacaSupport        libcaca
     ++ optional vaapiSupport       libva
+    ++ optional drmSupport         libdrm
     ++ optional vapoursynthSupport vapoursynth
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals x11Support        [ libX11 libXext mesa libXxf86vm ]
@@ -157,6 +160,11 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
       --prefix PYTHONPATH : "$(toPythonPath ${vapoursynth}):$PYTHONPATH"
+  '' + ''
+
+    cp TOOLS/umpv $out/bin
+    wrapProgram $out/bin/umpv \
+      --set MPV "$out/bin/mpv"
   '';
 
   meta = with stdenv.lib; {

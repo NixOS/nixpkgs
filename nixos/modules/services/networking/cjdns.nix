@@ -19,33 +19,21 @@ let
         type = types.str;
         description = "Public key at the opposite end of the tunnel.";
       };
-      hostname = mkOption {
-        default = "";
-        example = "foobar.hype";
-        type = types.str;
-        description = "Optional hostname to add to /etc/hosts; prevents reverse lookup failures.";
-      };
     };
   };
 
-  peers = mapAttrsToList (n: v: v) (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo);
-
-  pubs  = toString (map (p: if p.hostname == "" then "" else p.publicKey) peers);
-  hosts = toString (map (p: if p.hostname == "" then "" else p.hostname)  peers);
-
-  cjdnsHosts =
-    if hosts != "" then
-      import (pkgs.stdenv.mkDerivation {
-        name = "cjdns-hosts";
-        builder = ./cjdns-hosts.sh;
-
-        inherit (pkgs) cjdns;
-        inherit pubs hosts;
-      })
-    else "";
-
-  parseModules = x:
-    x // { connectTo = mapAttrs (name: value: { inherit (value) password publicKey; }) x.connectTo; };
+  # check for the required attributes, otherwise
+  # permit attributes not undefined here
+  checkPeers = x:
+    x // {
+      connectTo = mapAttrs
+        (name: value:
+          if !hasAttr "publicKey" value then abort "cjdns peer ${name} missing a publicKey" else
+          if !hasAttr "password"  value then abort "cjdns peer ${name} missing a password"  else
+          value
+        )
+      x.connectTo;
+    };
 
   # would be nice to  merge 'cfg' with a //,
   # but the json nesting is wacky.
@@ -56,8 +44,8 @@ let
     };
     authorizedPasswords = map (p: { password = p; }) cfg.authorizedPasswords;
     interfaces = {
-      ETHInterface = if (cfg.ETHInterface.bind != "") then [ (parseModules cfg.ETHInterface) ] else [ ];
-      UDPInterface = if (cfg.UDPInterface.bind != "") then [ (parseModules cfg.UDPInterface) ] else [ ];
+      ETHInterface = if (cfg.ETHInterface.bind != "") then [ (checkPeers cfg.ETHInterface) ] else [ ];
+      UDPInterface = if (cfg.UDPInterface.bind != "") then [ (checkPeers cfg.UDPInterface) ] else [ ];
     };
 
     privateKey = "@CJDNS_PRIVATE_KEY@";
@@ -95,8 +83,8 @@ in
       };
 
       confFile = mkOption {
-        type = types.str;
-        default = "";
+        type = types.nullOr types.path;
+        default = null;
         example = "/etc/cjdroute.conf";
         description = ''
           Ignore all other cjdns options and load configuration from this file.
@@ -112,14 +100,14 @@ in
           "49275fut6tmzu354pq70sr5b95qq0vj"
         ];
         description = ''
-          Any remote cjdns nodes that offer these passwords on 
+          Any remote cjdns nodes that offer these passwords on
           connection will be allowed to route through this node.
         '';
       };
-    
+
       admin = {
         bind = mkOption {
-          type = types.string;
+          type = types.str;
           default = "127.0.0.1:11234";
           description = ''
             Bind the administration port to this address and port.
@@ -129,7 +117,7 @@ in
 
       UDPInterface = {
         bind = mkOption {
-          type = types.string;
+          type = types.str;
           default = "";
           example = "192.168.1.32:43211";
           description = ''
@@ -137,12 +125,12 @@ in
           '';
          };
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+          type = types.attrsOf (types.attrsOf types.str);
           default = { };
           example = {
             "192.168.1.1:27313" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+              user      = "foobar";
+              password  = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
               publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
             };
           };
@@ -154,6 +142,7 @@ in
 
       ETHInterface = {
         bind = mkOption {
+          type = types.str;
           default = "";
           example = "eth0";
           description =
@@ -181,12 +170,12 @@ in
         };
 
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+          type = types.attrsOf (types.attrsOf types.str);
           default = { };
           example = {
             "01:02:03:04:05:06" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+              user      = "foobar";
+              password  = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
               publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
             };
           };
@@ -201,7 +190,7 @@ in
 
   };
 
-  config = mkIf config.services.cjdns.enable {
+  config = mkIf cfg.enable {
 
     boot.kernelModules = [ "tun" ];
 
@@ -212,7 +201,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      preStart = if cfg.confFile != "" then "" else ''
+      preStart = if cfg.confFile != null then "" else ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
 
         if [ -z "$CJDNS_PRIVATE_KEY" ]; then
@@ -228,13 +217,13 @@ in
         fi
 
         if [ -z "$CJDNS_ADMIN_PASSWORD" ]; then
-            echo "CJDNS_ADMIN_PASSWORD=$(${pkgs.coreutils}/bin/head -c 96 /dev/urandom | ${pkgs.coreutils}/bin/tr -dc A-Za-z0-9)" \
+            echo "CJDNS_ADMIN_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 96)" \
                 >> /etc/cjdns.keys
         fi
       '';
 
       script = (
-        if cfg.confFile != "" then "${pkg}/bin/cjdroute < ${cfg.confFile}" else
+        if cfg.confFile != null then "${pkg}/bin/cjdroute < ${cfg.confFile}" else
           ''
             source /etc/cjdns.keys
             echo '${cjdrouteConf}' | sed \
@@ -247,13 +236,17 @@ in
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_RAW";
+        ProtectSystem = "full";
+        MemoryDenyWriteExecute = true;
+        ProtectHome = true;
+        PrivateTmp = true;
       };
     };
 
-    networking.extraHosts = "${cjdnsHosts}";
-
     assertions = [
-      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != "" );
+      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );
         message = "Neither cjdns.ETHInterface.bind nor cjdns.UDPInterface.bind defined.";
       }
       { assertion = config.networking.enableIPv6;

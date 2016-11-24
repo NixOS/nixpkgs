@@ -7,11 +7,11 @@
 }:
 mkDerivation {
   pname = "elm-compiler";
-  version = "0.17.1";
+  version = "0.18";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-compiler";
-    sha256 = "17y0jlii81mnjywknblcv1nfja51slmwrhz9x8w144b0sblcj0if";
-    rev = "e44deafaf9cbf3749484070f267f03a368711adb";
+    sha256 = "09fmrbfpc1kzc3p9h79w57b9qjhajdswc4jfm9gyjw95vsiwasgh";
+    rev = "eb97f2a5dd5421c708a91b71442e69d02453cc80";
   };
   isLibrary = true;
   isExecutable = true;
@@ -35,4 +35,7 @@ mkDerivation {
   homepage = "http://elm-lang.org";
   description = "Values to help with elm-package, elm-make, and elm-lang.org.";
   license = stdenv.lib.licenses.bsd3;
+  # added manually since tests are not passing
+  # https://travis-ci.org/elm-lang/elm-compiler/builds/176845852
+  doCheck = false;
 }

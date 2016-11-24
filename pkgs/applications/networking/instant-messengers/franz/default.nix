@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
       "16l9jma2hiwzl9l41yhrwribcgmxca271rq0cfbbm9701mmmciyy";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  phases = [ "unpackPhase" "installPhase" "postFixup" ];
 
   deps = with xorg; [
    gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
@@ -51,6 +51,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/applications $out/share/pixmaps
     ln -s ${desktopItem}/share/applications/* $out/share/applications
     ln -s $out/share/franz/resources/app.asar.unpacked/assets/franz.png $out/share/pixmaps
+  '';
+
+  postFixup = ''
+    paxmark m $out/share/franz/Franz
   '';
 
   meta = with stdenv.lib; {

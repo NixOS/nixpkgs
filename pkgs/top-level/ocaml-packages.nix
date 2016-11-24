@@ -22,6 +22,8 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
+    astring = callPackage ../development/ocaml-modules/astring { };
+
     async_extra_p4 = callPackage ../development/ocaml-modules/async_extra { };
 
     async_find = callPackage ../development/ocaml-modules/async_find { };
@@ -156,6 +158,8 @@ let
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
+    erm_xmpp_0_3 = callPackage ../development/ocaml-modules/erm_xmpp/0.3.nix { };
+
     estring = callPackage ../development/ocaml-modules/estring { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
@@ -257,7 +261,13 @@ let
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
-    nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
+    nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
+      lwt = ocaml_lwt;
+    };
+
+    notty = callPackage ../development/ocaml-modules/notty {
+      lwt = ocaml_lwt;
+    };
 
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
@@ -329,16 +339,22 @@ let
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
+    ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
+
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
+    otr = callPackage ../development/ocaml-modules/otr { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
+    ptime = callPackage ../development/ocaml-modules/ptime { };
 
     re2_p4 = callPackage ../development/ocaml-modules/re2 { };
 
@@ -359,6 +375,10 @@ let
     };
 
     textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
+
+    tls = callPackage ../development/ocaml-modules/tls {
+      lwt = ocaml_lwt;
+    };
 
     type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
     type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
@@ -412,6 +432,8 @@ let
       then callPackage ../development/ocaml-modules/ppx_deriving {}
       else null;
 
+    ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
+
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
@@ -428,6 +450,8 @@ let
     re = callPackage ../development/ocaml-modules/re { };
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
+
+    sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
@@ -612,16 +636,12 @@ let
       then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
       else {}
     ) // {
-      coq = coq_8_5;
+      coq = pkgs.coq_8_5;
     });
 
     haxe = callPackage ../development/compilers/haxe { };
 
     ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
-
-    opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
-    opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
-    opam = callPackage ../development/tools/ocaml/opam { };
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 
@@ -635,7 +655,7 @@ let
       then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
       else {}
     );
-    
+
     glsurf = callPackage ../applications/science/math/glsurf {
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;
@@ -652,24 +672,6 @@ let
 
     unison = callPackage ../applications/networking/sync/unison {
       enableX11 = config.unison.enableX11 or true;
-    };
-
-    coq = callPackage ../applications/science/logic/coq {
-      camlp5 = camlp5_transitional;
-    };
-
-    coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {
-      camlp5 = camlp5_transitional;
-    };
-
-    coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
-      camlp5 = camlp5_transitional;
-    };
-
-    coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
-      make = pkgs.gnumake3;
-      camlp5 = camlp5_transitional;
-      lablgtk = lablgtk_2_14;
     };
 
     hol_light = callPackage ../applications/science/logic/hol_light {

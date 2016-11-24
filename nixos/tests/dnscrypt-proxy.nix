@@ -22,8 +22,6 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    $client->start;
-    $client->waitForUnit("sockets.target");
     $client->waitForUnit("dnsmasq");
 
     # The daemon is socket activated; sending a single ping should activate it.

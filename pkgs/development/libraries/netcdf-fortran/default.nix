@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ netcdf hdf5 curl gfortran ];
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Fortran API to manipulate netcdf files";
-    homepage = "http://www.unidata.ucar.edu/software/netcdf/";
-    license = stdenv.lib.licenses.free;
-    maintainers = stdenv.lib.maintainers.bzizou;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = http://www.unidata.ucar.edu/software/netcdf/;
+    license = licenses.free;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.unix;
   };
 }

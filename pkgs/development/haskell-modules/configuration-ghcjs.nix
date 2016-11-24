@@ -1,3 +1,7 @@
+# GHCJS package fixes
+#
+# Please insert new packages *alphabetically*
+# in the OTHER PACKAGES section.
 { pkgs }:
 
 let
@@ -8,6 +12,8 @@ in
 with import ./lib.nix { inherit pkgs; };
 
 self: super:
+
+## GENERAL SETUP BASE PACKAGES
 
   let # The stage 1 packages
       stage1 = pkgs.lib.genAttrs super.ghc.stage1Packages (pkg: null);
@@ -47,24 +53,26 @@ self: super:
   terminfo = self.terminfo_0_4_0_1;
   xhtml = self.xhtml_3000_2_1;
 
-  pqueue = overrideCabal super.pqueue (drv: {
-    postPatch = ''
-      sed -i -e '12s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
-      sed -i -e '64s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
-      sed -i -e '32s|null|Data.PQueue.Internals.null|' Data/PQueue/Min.hs
-      sed -i -e '32s|null|Data.PQueue.Max.null|' Data/PQueue/Max.hs
-      sed -i -e '42s|null|Data.PQueue.Prio.Internals.null|' Data/PQueue/Prio/Min.hs
-      sed -i -e '42s|null|Data.PQueue.Prio.Max.null|' Data/PQueue/Prio/Max.hs
+
+## OTHER PACKAGES
+
+  cereal = addBuildDepend super.cereal [ self.fail ];
+
+  entropy = overrideCabal super.entropy (old: {
+    postPatch = old.postPatch or "" + ''
+      # cabal doesn’t find ghc in this script, since it’s in the bootPkgs
+      sed -e '/Simple.Program/a import Distribution.Simple.Program.Types' \
+          -e 's|mConf.*=.*$|mConf = Just $ simpleConfiguredProgram "ghc" (FoundOnSystem "${self.ghc.bootPkgs.ghc}/bin/ghc")|g' -i Setup.hs
     '';
   });
 
-  transformers-compat = overrideCabal super.transformers-compat (drv: {
-    configureFlags = [];
-  });
-
-  profunctors = overrideCabal super.profunctors (drv: {
-    preConfigure = ''
-      sed -i 's/^{-# ANN .* #-}//' src/Data/Profunctor/Unsafe.hs
+  # https://github.com/kazu-yamamoto/logger/issues/97
+  fast-logger = overrideCabal super.fast-logger (old: {
+    postPatch = old.postPatch or "" + ''
+      # remove the Safe extensions, since ghcjs-boot directory
+      # doesn’t provide Trustworthy
+      sed -ie '/LANGUAGE Safe/d' System/Log/FastLogger/*.hs
+      cat System/Log/FastLogger/Date.hs
     '';
   });
 
@@ -88,15 +96,42 @@ self: super:
      }) {};
 
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
-    libraryHaskellDepends = [ self.ghcjs-base ] ++
-      removeLibraryHaskellDepends [
-        "glib" "gtk" "gtk3" "webkitgtk" "webkitgtk3"
-      ] drv.libraryHaskellDepends;
+    libraryHaskellDepends = with self; [
+      ghcjs-base ghcjs-dom-jsffi text transformers
+    ];
+    configureFlags = [ "-fjsffi" "-f-webkit" ];
+  });
+
+  ghcjs-dom-jsffi = overrideCabal super.ghcjs-dom-jsffi (drv: {
+    libraryHaskellDepends = [ self.ghcjs-base self.text ];
+    isLibrary = true;
   });
 
   ghc-paths = overrideCabal super.ghc-paths (drv: {
     patches = [ ./patches/ghc-paths-nix-ghcjs.patch ];
   });
+
+  http2 = addBuildDepends super.http2 [ self.aeson self.aeson-pretty self.hex self.unordered-containers self.vector self.word8 ];
+  # ghcjsBoot uses async 2.0.1.6, protolude wants 2.1.*
+
+  pqueue = overrideCabal super.pqueue (drv: {
+    postPatch = ''
+      sed -i -e '12s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
+      sed -i -e '64s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
+      sed -i -e '32s|null|Data.PQueue.Internals.null|' Data/PQueue/Min.hs
+      sed -i -e '32s|null|Data.PQueue.Max.null|' Data/PQueue/Max.hs
+      sed -i -e '42s|null|Data.PQueue.Prio.Internals.null|' Data/PQueue/Prio/Min.hs
+      sed -i -e '42s|null|Data.PQueue.Prio.Max.null|' Data/PQueue/Prio/Max.hs
+    '';
+  });
+
+  profunctors = overrideCabal super.profunctors (drv: {
+    preConfigure = ''
+      sed -i 's/^{-# ANN .* #-}//' src/Data/Profunctor/Unsafe.hs
+    '';
+  });
+
+  protolude = doJailbreak super.protolude;
 
   # reflex 0.3, made compatible with the newest GHCJS.
   reflex = overrideCabal super.reflex (drv: {
@@ -122,12 +157,13 @@ self: super:
       ] drv.libraryHaskellDepends;
   });
 
-  http2 = addBuildDepends super.http2 [ self.aeson self.aeson-pretty self.hex self.unordered-containers self.vector self.word8 ];
-  # ghcjsBoot uses async 2.0.1.6, protolude wants 2.1.*
-  protolude = doJailbreak super.protolude;
   semigroups = addBuildDepends super.semigroups [ self.hashable self.unordered-containers self.text self.tagged ];
+
+  transformers-compat = overrideCabal super.transformers-compat (drv: {
+    configureFlags = [];
+  });
+
   # triggers an internal pattern match failure in haddock
   # https://github.com/haskell/haddock/issues/553
   wai = dontHaddock super.wai;
-  cereal = addBuildDepend super.cereal [ self.fail ];
 }

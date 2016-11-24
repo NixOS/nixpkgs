@@ -141,5 +141,5 @@ rec {
   };
 
 
-  stdenv = stdenvBoot2;
+  stdenvNative = stdenvBoot2;
 }

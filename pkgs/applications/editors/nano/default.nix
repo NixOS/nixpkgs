@@ -12,10 +12,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.7.0";
+  version = "2.7.1";
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "08cmnca3s377z74yjw1afz59l2h9s40wsa9wxw5y4x5f2jaz6spq";
+    sha256 = "1kapx0fyp0a0pvsdd1n59pm3acrimdrp7ciglg098wqxhdlvwp6z";
   };
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
   buildInputs = [ ncurses ];
@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
     homepage = http://www.nano-editor.org/;
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [
+      jgeerds
+      joachifm
+    ];
     platforms = platforms.all;
   };
 }

@@ -4,9 +4,8 @@
 
 # Options from inherited versions
 , version, sha256
-, extraPatches ? [ ]
+, patchSrc ? "src", extraPatches ? [ ]
 , license ? stdenv.lib.licenses.sleepycat
-, branch ? null
 , drvArgs ? {}
 }:
 
@@ -36,11 +35,16 @@ stdenv.mkDerivation (rec {
     rm -rf $out/docs
   '';
 
+  doCheck = true;
+
+  checkPhase = ''
+    make examples_c examples_cxx
+  '';
+
   meta = with stdenv.lib; {
     homepage = "http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/index.html";
     description = "Berkeley DB";
     license = license;
     platforms = platforms.unix;
-    branch = branch;
   };
 } // drvArgs)

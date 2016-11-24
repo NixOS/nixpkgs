@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, callPackage }:
 
 let
  # Probably a bug in some FreeDict release files, but easier to trivially
@@ -82,4 +82,6 @@ in rec {
     dbName = "mueller-names";
     locale = "en_UK";
   };
+  wordnet = callPackage ./dictd-wordnet.nix {};
+  wiktionary = callPackage ./dictd-wiktionary.nix {};
 }

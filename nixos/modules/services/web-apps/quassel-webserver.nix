@@ -31,6 +31,8 @@ in {
       };
       pkg = mkOption {
         default = pkgs.quassel-webserver;
+        defaultText = "pkgs.quassel-webserver";
+        type = types.package;
         description = "The quassel-webserver package";
       };
       quasselCoreHost = mkOption {

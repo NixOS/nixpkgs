@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "styx-${version}";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner  = "styx-static";
     repo   = "styx";
     rev    = "v${version}";
-    sha256 = "1bcd0ss628mhchrl85fy6acxcxqvm1d3qywfaxhikahl1r7inpwg";
+    sha256 = "0wyibdyi4ld0kfhng5ldb2rlgjrci014fahxn7nnchlg7dvcc5ni";
   };
 
   server = caddy.bin;
@@ -19,13 +19,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    install -D -m 777 $sourceRoot/styx.sh $out/bin/styx
+    install -D -m 777 styx.sh $out/bin/styx
 
     mkdir -p $out/share/styx
-    cp -r $sourceRoot/sample $out/share/styx
+    cp -r lib $out/share/styx
+    cp -r scaffold $out/share/styx
 
     mkdir -p $out/share/doc/styx
-    asciidoctor $sourceRoot/doc/manual.doc -o $out/share/doc/styx/index.html
+    asciidoctor doc/manual.adoc -o $out/share/doc/styx/index.html
 
     substituteAllInPlace $out/bin/styx
     substituteAllInPlace $out/share/doc/styx/index.html

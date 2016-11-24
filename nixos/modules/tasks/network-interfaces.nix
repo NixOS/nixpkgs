@@ -245,7 +245,7 @@ let
 
       virtualType = mkOption {
         default = null;
-        type = types.nullOr (types.addCheck types.str (v: v == "tun" || v == "tap"));
+        type = with types; nullOr (enum [ "tun" "tap" ]);
         description = ''
           The explicit type of interface to create. Accepts tun or tap strings.
           Also accepts null to implicitly detect the type of device.
@@ -782,13 +782,12 @@ in
           };
 
           type = mkOption {
-            type = types.string;
+            type = types.enum [ "managed" "ibss" "monitor" "mesh" "wds" ];
             default = "managed";
             example = "ibss";
             description = ''
-              The type of the WLAN interface. The type has to be either <literal>managed</literal>,
-              <literal>ibss</literal>, <literal>monitor</literal>, <literal>mesh</literal> or <literal>wds</literal>.
-              Also, the type has to be supported by the underlying hardware of the device.
+              The type of the WLAN interface.
+              The type has to be supported by the underlying hardware of the device.
             '';
           };
 
@@ -799,17 +798,11 @@ in
           };
 
           flags = mkOption {
-            type = types.nullOr types.string;
+            type = with types; nullOr (enum [ "none" "fcsfail" "control" "otherbss" "cook" "active" ]);
             default = null;
             example = "control";
             description = ''
-              Flags for interface of type <literal>monitor</literal>. The valid flags are:
-              none:     no special flags
-              fcsfail:  show frames with FCS errors
-              control:  show control frames
-              otherbss: show frames from other BSSes
-              cook:     use cooked mode
-              active:   use active mode (ACK incoming unicast packets)
+              Flags for interface of type <literal>monitor</literal>.
             '';
           };
 

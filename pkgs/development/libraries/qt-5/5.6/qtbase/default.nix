@@ -115,7 +115,6 @@ stdenv.mkDerivation {
     -widgets
     -opengl desktop
     -qml-debug
-    -nis
     -iconv
     -icu
     -pch

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "ragel-${version}";
-  version = "7.0.0.6";
+  version = "7.0.0.9";
 
   src = fetchurl {
     url = "http://www.colm.net/files/ragel/${name}.tar.gz";
-    sha256 = "1ns3kbcvhinn4rwm54ajg49d1la8filxskl3rgbwws0irzw507vs";
+    sha256 = "1w2jhfg3fxl15gcmm7z3jbi6splgc83mmwcfbp08lfc8sg2wmrmr";
   };
 
   buildInputs = stdenv.lib.optional build-manual [ transfig ghostscript tex ];

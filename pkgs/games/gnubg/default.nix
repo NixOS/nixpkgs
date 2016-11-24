@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, python, gtk2 }:
+{ stdenv, fetchurl, pkgconfig, glib, python, gtk2, readline }:
 
 let version = "1.04.000"; in
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0gsfl6qbj529d1jg3bkyj9m7bvb566wd7pq5fslgg5yn6c6rbjk6";
   };
 
-  buildInputs = [ pkgconfig python glib gtk2 ];
+  buildInputs = [ pkgconfig python glib gtk2 readline ];
 
   configureFlags = [ "--with-gtk" "--with--board3d" ];
 

@@ -3,23 +3,23 @@
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, x11Support ? true
+, pinentry ? null, guiSupport ? true
 , adns ? null, gnutls ? null, libusb ? null, openldap ? null
 , readline ? null, zlib ? null, bzip2 ? null
 }:
 
 with stdenv.lib;
 
-assert x11Support -> pinentry != null;
+assert guiSupport -> pinentry != null;
 
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.1.15";
+  version = "2.1.16";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1pgz02gd84ab94w4xdg67p9z8kvkyr9d523bvcxxd2hviwh1m362";
+    sha256 = "0i483m9q032a0s50f1izb213g4h5i7pcgn395m6hvl3sg2kadfa9";
   };
 
   buildInputs = [
@@ -27,12 +27,15 @@ stdenv.mkDerivation rec {
     readline libusb gnutls adns openldap zlib bzip2
   ];
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
   patches = [ ./fix-libusb-include-path.patch ];
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
-  configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
+  pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
+  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;

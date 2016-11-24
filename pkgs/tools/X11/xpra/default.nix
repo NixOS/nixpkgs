@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pythonPackages, pkgconfig
+{ stdenv, lib, fetchurl, python2Packages, pkgconfig
 , xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
 , ffmpeg, x264, libvpx, libwebp
@@ -8,13 +8,13 @@
 with lib;
 
 let
-  inherit (pythonPackages) python cython buildPythonApplication;
+  inherit (python2Packages) python cython buildPythonApplication;
 in buildPythonApplication rec {
-  name = "xpra-0.17.5";
+  name = "xpra-0.17.6";
   namePrefix = "";
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "01k5iax42820pblfadig8rqfa1wlcgpakmjp142gx3fg59fnav3i";
+    sha256 = "1z7v58m45g10icpv22qg4dipafcfsdqkxqz73z3rwsb6r0kdyrpj";
   };
 
   buildInputs = [
@@ -39,7 +39,7 @@ in buildPythonApplication rec {
     makeWrapper
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pillow pygtk pygobject2 rencode pycrypto cryptography pycups lz4 dbus-python
     netifaces numpy websockify pygobject3 gst-python
   ];

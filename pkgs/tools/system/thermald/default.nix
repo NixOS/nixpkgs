@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "thermald-${version}";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "0k10sl262d9slrln1vkgsxlr1pnfxzd3ycs552bl7ynf0zxpl48h";
+    sha256 = "0yrlnm1blfxi97af4dbx6xm5w1p8r20raiim1ng08gbqbgnjg56g";
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig dbus_libs dbus_glib libxml2 ];
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     ];
 
   preInstall = "sysconfdir=$out/etc";
-
 
   meta = with stdenv.lib; {
     description = "Thermal Daemon";

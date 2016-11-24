@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-${version}";
-  version = "R33.1";
+  version = "R35";
 
   src = fetchFromGitHub {
     owner = "vapoursynth";
     repo  = "vapoursynth";
-    rev    = "0d69d29abb3c4ba9e806958bf9c539bd6eff6852";
-    sha256 = "1dbz81vgqfsb306d7891p8y25y7632y32ii3l64shr0jsq64vgsm";
+    rev    = "dcab1529d445776a5575859aea655e613c23c8bc";
+    sha256 = "0nhpqws91b19lql2alc5pxgzfgh1wjrws0kyvir41jhfxhhjaqpi";
   };
 
   buildInputs = [

@@ -24,7 +24,31 @@ stdenv.mkDerivation rec {
     ];
 
   configurePhase = ''
-    scons configure PREFIX="$out"
+    scons configure PREFIX="$out" BOOST_INCLUDES="${boost.dev}/include" \
+                                  BOOST_LIBS="${boost.out}/lib" \
+                                  CAIRO_INCLUDES="${cairo.dev}/include" \
+                                  CAIRO_LIBS="${cairo.out}/lib" \
+                                  FREETYPE_INCLUDES="${freetype.dev}/include" \
+                                  FREETYPE_LIBS="${freetype.out}/lib" \
+                                  GDAL_CONFIG="${gdal}/bin/gdal-config" \
+                                  HB_INCLUDES="${harfbuzz.dev}/include" \
+                                  HB_LIBS="${harfbuzz.out}/lib" \
+                                  ICU_INCLUDES="${icu.dev}/include" \
+                                  ICU_LIBS="${icu.out}/lib" \
+                                  JPEG_INCLUDES="${libjpeg.dev}/include" \
+                                  JPEG_LIBS="${libjpeg.out}/lib" \
+                                  PNG_INCLUDES="${libpng.dev}/include" \
+                                  PNG_LIBS="${libpng.out}/lib" \
+                                  PROJ_INCLUDES="${proj}/include" \
+                                  PROJ_LIBS="${proj}/lib" \
+                                  SQLITE_INCLUDES="${sqlite.dev}/include" \
+                                  SQLITE_LIBS="${sqlite.out}/lib" \
+                                  TIFF_INCLUDES="${libtiff.dev}/include" \
+                                  TIFF_LIBS="${libtiff.out}/lib" \
+                                  WEBP_INCLUDES="${libwebp}/include" \
+                                  WEBP_LIBS="${libwebp}/lib" \
+                                  XML2_INCLUDES="${libxml2.dev}/include" \
+                                  XML2_LIBS="${libxml2.out}/lib"
   '';
 
   buildPhase = false;

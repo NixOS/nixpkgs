@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pax-utils-${version}";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = fetchurl {
     url = "https://dev.gentoo.org/~vapier/dist/${name}.tar.xz";
-    sha256 = "04hvsizzspfzfq6hhfif7ya9nwsc0cs6z6n2bq1zfh7agd8nqhzm";
+    sha256 = "045dxgl4kkmq6205iw6fqyx3565gd607p3xpad5l9scdi3qdp6xv";
   };
 
   makeFlags = [
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://dev.gentoo.org/~vapier/dist/";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice joachifm ];
   };
 }

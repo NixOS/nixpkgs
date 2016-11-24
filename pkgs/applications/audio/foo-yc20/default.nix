@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   postInstallFixup = "rm -rf $out/lib/lv2";
 
   meta = {
+    broken = true; # see: https://github.com/sampov2/foo-yc20/issues/7
     description = "A Faust implementation of a 1969 designed Yamaha combo organ, the YC-20";
     homepage = https://github.com/sampov2/foo-yc20;
     license     = "BSD";

@@ -7,11 +7,11 @@
 let
   pdfjs = stdenv.mkDerivation rec {
     name = "pdfjs-${version}";
-    version = "1.4.20";
+    version = "1.5.188";
 
     src = fetchurl {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-      sha256 = "1ca1fzyc5qnan6gavcd8bnfqriqqvgdsf4m8ka4nayf50k64xxj9";
+      sha256 = "1y3yaqfgjj96qzvbm5200x68j5hy1qs7l2mqm3kbbj2b58z9f1qv";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -24,12 +24,12 @@ let
 
 in buildPythonApplication rec {
   name = "qutebrowser-${version}";
-  version = "0.8.2";
+  version = "0.8.4";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1kfxjdn1dqla8d8gcggp55zcgf4zb77knkfshd213my0iw2yzgcf";
+    sha256 = "0wc6iq7rw89625v595bs4y8spzhid6nnz2gq67f2kbjppk2rikpm";
   };
 
   # Needs tox
@@ -72,7 +72,6 @@ in buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonPrograms
     mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
     makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
 

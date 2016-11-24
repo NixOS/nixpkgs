@@ -4,7 +4,7 @@
 , which, alsaLib, curl, libvpx, gawk, nettools, dbus
 , xorriso, makeself, perl, pkgconfig
 , javaBindings ? false, jdk ? null
-, pythonBindings ? false, python ? null
+, pythonBindings ? false, python2 ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
@@ -15,6 +15,7 @@
 with stdenv.lib;
 
 let
+  python = python2;
   buildType = "release";
 
   inherit (importJSON ./upstream-info.json) version extpackRev extpack main;
@@ -48,10 +49,10 @@ in stdenv.mkDerivation {
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
-      libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
-      pkgconfig which libXmu libpng patchelfUnstable ]
+      libcap glib lvm2 alsaLib curl libvpx pam xorriso makeself perl
+      pkgconfig which libXmu libpng patchelfUnstable python ]
     ++ optional javaBindings jdk
-    ++ optional pythonBindings python
+    ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr ]
     ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];

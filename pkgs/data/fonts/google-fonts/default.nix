@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
       ofl/mrbedford \
       ofl/siamreap \
       ofl/terminaldosislight
+
+    if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
+      echo "error: duplicate font names"
+      exit 1
+    fi
   '';
 
   installPhase = ''
@@ -38,8 +43,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.google.com/fontsl;
-    description = "Font files available from Google Font";
+    homepage = https://fonts.google.com;
+    description = "Font files available from Google Fonts";
     license = with licenses; [ asl20 ofl ufl ];
     platforms = platforms.all;
     hydraPlatforms = [];

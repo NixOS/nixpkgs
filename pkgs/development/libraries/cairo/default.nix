@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, libiconv, libintlOrEmpty
-, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, libiconv
+, libintlOrEmpty, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
 , glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
@@ -25,6 +25,15 @@ stdenv.mkDerivation rec {
     rev = "730f5e77580677e86522c1f2119aa78803741759";
     sha256 = "1hbrdpm6xcczs2c2iid7by8h7dsd0jcf7an88s150njyqnjzxjg7";
   };
+
+  patches = [
+    # from https://bugs.freedesktop.org/show_bug.cgi?id=98165
+    (fetchpatch {
+      name = "cairo-CVE-2016-9082.patch";
+      url = "https://bugs.freedesktop.org/attachment.cgi?id=127421";
+      sha256 = "03sfyaclzlglip4pvfjb4zj4dmm8mlphhxl30mb6giinkc74bfri";
+    })
+  ];
 
   prePatch = ''
     patches="$patches $(echo $infinality/*_cairo-iu/*.patch)"

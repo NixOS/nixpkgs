@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, patchelf }:
+{ stdenv, fetchurl, dpkg }:
 
 stdenv.mkDerivation rec {
   name = "xidel-${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       }
     else throw "xidel is not supported on ${stdenv.system}";
 
-  buildInputs = [ dpkg patchelf ];
+  buildInputs = [ dpkg ];
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./
@@ -34,9 +34,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     cp -a usr/* "$out/"
-    interpreter="$(echo ${stdenv.glibc.out}/lib/ld-linux*)"
-    patchelf --set-interpreter "$interpreter" "$out/bin/xidel"
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [stdenv.glibc]}" "$out/bin/xidel"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/bin/xidel"
   '';
 
   meta = with stdenv.lib; {
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
     # source contains no license info (AFAICS), but sourceforge says GPLv2
     license = licenses.gpl2;
     # more platforms will be supported when we switch to source build
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
 }

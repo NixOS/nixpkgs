@@ -1,5 +1,5 @@
 {stdenv, fetchurl, SDL2, SDL2_image, mesa, cmake, physfs, boost, zip, zlib
-, pkgconfig}:
+, pkgconfig, unzip}:
 stdenv.mkDerivation rec {
   version = "1.0";
   name = "blobby-volley-${version}";
@@ -9,10 +9,20 @@ stdenv.mkDerivation rec {
     sha256 = "1qpmbdlyhfbrdsq4vkb6cb3b8mh27fpizb71q4a21ala56g08yms";
   };
 
-  buildInputs = [SDL2 SDL2_image mesa cmake physfs boost zip zlib pkgconfig];
+  buildInputs = [SDL2 SDL2_image mesa cmake physfs boost zip zlib pkgconfig
+    unzip];
 
   preConfigure=''
     sed -e '1i#include <iostream>' -i src/NetworkMessage.cpp
+  '';
+
+  inherit unzip;
+
+  postInstall = ''
+    cp ../data/Icon.bmp "$out/share/blobby/"
+    mv "$out/bin"/blobby{,.bin}
+    substituteAll "${./blobby.sh}" "$out/bin/blobby"
+    chmod a+x "$out/bin/blobby"
   '';
 
   meta = {

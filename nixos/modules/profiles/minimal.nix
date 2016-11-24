@@ -14,4 +14,6 @@ with lib;
 
   programs.man.enable = mkDefault false;
   programs.info.enable = mkDefault false;
+
+  sound.enable = mkDefault false;
 }

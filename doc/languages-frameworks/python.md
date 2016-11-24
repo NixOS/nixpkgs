@@ -655,9 +655,8 @@ when you try to install a second environment.
 Create a file, e.g. `build.nix`, with the following expression
 ```nix
 with import <nixpkgs> {};
-with python35Packages;
 
-python.withPackages (ps: with ps; [ numpy ipython ])
+pkgs.python35.withPackages (ps: with ps; [ numpy ipython ])
 ```
 and install it in your profile with
 ```
@@ -669,14 +668,15 @@ Now you can use the Python interpreter, as well as the extra packages that you a
 
 If you prefer to, you could also add the environment as a package override to the Nixpkgs set.
 ```
-  packageOverrides = pkgs: with pkgs; with python35Packages; {
-    myEnv = python.withPackages (ps: with ps; [ numpy ipython ]);
+  packageOverrides = pkgs: with pkgs; {
+    myEnv = python35.withPackages (ps: with ps; [ numpy ipython ]);
   };
 ```
 and install it in your profile with
 ```
-nix-env -iA nixos.blogEnv
+nix-env -iA nixpkgs.myEnv
 ```
+We're installing using the attribute path and assume the channels is named `nixpkgs`.
 Note that I'm using the attribute path here.
 
 #### Environment defined in `/etc/nixos/configuration.nix`
@@ -685,7 +685,7 @@ For the sake of completeness, here's another example how to install the environm
 
 ```nix
 environment.systemPackages = with pkgs; [
-  (python35Packages.python.withPackages (ps: callPackage ../packages/common-python-packages.nix { pythonPackages = ps; }))
+  (python35.withPackages(ps: with ps; [ numpy ipython ]))
 ];
 ```
 

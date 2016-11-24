@@ -139,7 +139,7 @@ let
             { nixpkgs.config.allow${up reason} = true; }
           in configuration.nix to override this.
 
-          b) For `nix-env`, `nix-build` or any other Nix command you can add
+          b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
             { allow${up reason} = true; }
           to ~/.nixpkgs/config.nix.
         ''));
@@ -234,6 +234,7 @@ let
           outputs = outputs';
         } else { })))) (
       {
+        overrideAttrs = f: mkDerivation (attrs // (f attrs));
         # The meta attribute is passed in the resulting attribute set,
         # but it's not part of the actual derivation, i.e., it's not
         # passed to the builder and is not a dependency.  But since we

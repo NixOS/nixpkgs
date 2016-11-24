@@ -17,11 +17,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libinput-${version}";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "0708259k2qpdyi8z8n74d2pprjdvivmqkskjkq7s7ypchn9mb5js";
+    sha256 = "d4f63933b0967bd691735af5e3919e2d29c2121d4e05867cc4e10ff3ae8e2dd8";
   };
 
   outputs = [ "out" "dev" ];

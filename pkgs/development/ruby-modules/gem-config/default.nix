@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy
+, libmsgpack, qt48, libsodium, snappy, libossp_uuid
 }@args:
 
 let
@@ -88,6 +88,10 @@ in
 
   msgpack = attrs: {
     buildInputs = [ libmsgpack ];
+  };
+  
+  mysql = attrs: {
+    buildInputs = [ mysql.lib zlib openssl ];
   };
 
   mysql2 = attrs: {
@@ -197,6 +201,10 @@ in
       substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
         --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
     '';
+  };
+  
+  uuid4r = attrs: {
+    buildInputs = [ which libossp_uuid ];
   };
 
   xapian-ruby = attrs: {

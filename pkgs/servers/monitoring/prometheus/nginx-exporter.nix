@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "nginx_exporter-${version}";
-  version = "20160524-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "2cf16441591f6b6e58a8c0439dcaf344057aea2b";
+  version = "20161104-${stdenv.lib.strings.substring 0 7 rev}";
+  rev = "1b2a3d124b6446a0159a68427b0dc3a8b9f32203";
 
   goPackagePath = "github.com/discordianfish/nginx_exporter";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/discordianfish/nginx_exporter";
-    sha256 = "0p9j0bbr2lr734980x2p8d67lcify21glwc5k3i3j4ri4vadpxvc";
+    sha256 = "19nmkn81m0nyq022bnmjr93wifig4mjcgvns7cbn31i197cydw28";
   };
 
   goDeps = ./nginx-exporter_deps.nix;

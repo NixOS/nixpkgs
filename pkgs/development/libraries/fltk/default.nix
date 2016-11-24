@@ -21,6 +21,8 @@ composableDerivation.composableDerivation {} {
       --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
   '';
 
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
+
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ inputproto ]
     ++ (if stdenv.isDarwin

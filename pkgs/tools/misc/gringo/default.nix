@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gringo-4.5.4-cmath.patch
+    ./gringo-4.5.4-to_string.patch
   ];
 
   buildPhase = ''
-    scons --build-dir=release
+    scons WITH_PYTHON= --build-dir=release
   '';
 
   installPhase = ''

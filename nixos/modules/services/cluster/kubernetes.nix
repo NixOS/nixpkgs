@@ -23,7 +23,7 @@ in {
 
     etcdServers = mkOption {
       description = "Kubernetes list of etcd servers to watch.";
-      default = [ "127.0.0.1:4001" ];
+      default = [ "127.0.0.1:2379" ];
       type = types.listOf types.str;
     };
 

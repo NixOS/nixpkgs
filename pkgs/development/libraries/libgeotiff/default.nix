@@ -1,14 +1,19 @@
-{ stdenv, fetchurl, libtiff }:
+{ stdenv, fetchurl, libtiff, libjpeg, proj, zlib}:
 
-stdenv.mkDerivation {
-  name = "libgeotiff-1.2.5";
+stdenv.mkDerivation rec {
+  version = "1.4.2";
+  name = "libgeotiff-${version}";
 
   src = fetchurl {
-    url = http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.2.5.tar.gz;
-    sha256 = "0z2yx77pm0zs81hc0b4lwzdd5s0rxcbylnscgq80b649src1fyzj";
+    url = "http://download.osgeo.org/geotiff/libgeotiff/${name}.tar.gz";
+    sha256 = "0vjy3bwfhljjx66p9w999i4mdhsf7vjshx29yc3pn5livf5091xd";
   };
 
-  buildInputs = [ libtiff ];
+  configureFlags = [
+    "--with-jpeg=${libjpeg.dev}"
+    "--with-zlib=${zlib.dev}"
+  ];
+  buildInputs = [ libtiff proj ];
 
   hardeningDisable = [ "format" ];
 
@@ -17,6 +22,6 @@ stdenv.mkDerivation {
     homepage = http://www.remotesensing.org/geotiff/geotiff.html;
     license = stdenv.lib.licenses.mit;
     maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

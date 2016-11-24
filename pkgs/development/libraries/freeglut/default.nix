@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, mesa, xlibsWrapper, cmake }:
+{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, mesa_noglu, mesa_glu, xlibsWrapper, cmake }:
 
 let version = "3.0.0";
 in stdenv.mkDerivation {
@@ -9,15 +9,19 @@ in stdenv.mkDerivation {
     sha256 = "18knkyczzwbmyg8hr4zh8a1i5ga01np2jzd1rwmsh7mh2n2vwhra";
   };
 
-  buildInputs = [ libXi libXrandr libXxf86vm mesa xlibsWrapper cmake ];
+  outputs = [ "out" "dev" ];
+
+  buildInputs = [ libXi libXrandr libXxf86vm mesa_noglu mesa_glu xlibsWrapper cmake ];
 
   cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
-                 "-DOPENGL_INCLUDE_DIR=${mesa}/include"
-                 "-DOPENGL_gl_LIBRARY:FILEPATH=${mesa}/lib/libGL.dylib"
-                 "-DOPENGL_glu_LIBRARY:FILEPATH=${mesa}/lib/libGLU.dylib"
+                 "-DOPENGL_INCLUDE_DIR=${mesa_noglu}/include"
+                 "-DOPENGL_gl_LIBRARY:FILEPATH=${mesa_noglu}/lib/libGL.dylib"
+                 "-DOPENGL_glu_LIBRARY:FILEPATH=${mesa_glu}/lib/libGLU.dylib"
                  "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
                ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Create and manage windows containing OpenGL contexts";

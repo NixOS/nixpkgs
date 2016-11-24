@@ -2,19 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "bear-${version}";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "Bear";
     rev = version;
-    sha256 = "08llfqg8y6d7vfwaw5plrk1rrqzs0ywi2ldnlwvy917603971rg0";
+    sha256 = "1rwar5nvvhfqws4nwyifaysqs3nxpphp48lx9mdg5n6l4z7drz0n";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ python ]; # just for shebang of bin/bear
 
   doCheck = false; # all fail
+
+  patches = [ ./ignore_wrapper.patch ];
 
   meta = with stdenv.lib; {
     description = "Tool that generates a compilation database for clang tooling";

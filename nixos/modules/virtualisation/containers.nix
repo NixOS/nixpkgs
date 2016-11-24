@@ -129,8 +129,11 @@ let
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv PATH="$PATH" \
-        ${if cfg.additionalCapabilities != null then
+        ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
           ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+        } \
+        ${if cfg.tmpfs != null && cfg.tmpfs != [] then
+          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}'' else ""
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
@@ -367,6 +370,7 @@ let
       hostAddress6 = null;
       localAddress = null;
       localAddress6 = null;
+      tmpfs = null;
     };
 
 in
@@ -507,6 +511,18 @@ in
               example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
+              '';
+            };
+
+            tmpfs = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "/var" ];
+              description = ''
+                Mounts a set of tmpfs file systems into the container.
+                Multiple paths can be specified.
+                Valid items must conform to the --tmpfs argument
+                of systemd-nspawn. See systemd-nspawn(1) for details.
               '';
             };
 
