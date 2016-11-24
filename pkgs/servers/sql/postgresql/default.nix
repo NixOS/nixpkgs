@@ -58,7 +58,7 @@ let
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
       '';
 
-    postFixup =
+    postFixup = lib.optionalString (!stdenv.isDarwin)
       ''
         # initdb needs access to "locale" command from glibc.
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
