@@ -3,7 +3,6 @@
 let
   callPackage = pkgs.newScope self;
   callPackage_i686 = pkgsi686Linux.newScope self;
-  oldAbiStdenv = pkgs.overrideInStdenv pkgs.stdenv [ pkgs.useOldCXXAbi ];
 
   self = rec {
     dwarf-fortress-original = callPackage ./game.nix { };
