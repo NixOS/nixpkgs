@@ -8,6 +8,14 @@ in {
   options.services.infinoted = {
     enable = mkEnableOption "infinoted";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.libinfinity.override { daemon = true; };
+      description = ''
+        Package providing infinoted
+      '';
+    };
+
     keyFile = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -101,9 +109,7 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable) (let
-    infinoted = pkgs.libinfinity.override { daemon = true; };
-  in {
+  config = mkIf (cfg.enable) {
     users.extraUsers = optional (cfg.user == "infinoted")
       { name = "infinoted";
         description = "Infinoted user";
@@ -118,12 +124,12 @@ in {
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        path = [ infinoted ];
+        path = [ cfg.package ];
 
         serviceConfig = {
           Type = "simple";
           Restart = "always";
-          ExecStart = "${infinoted}/bin/infinoted-0.6 --config-file=/var/lib/infinoted/infinoted.conf";
+          ExecStart = "${cfg.package}/bin/infinoted-0.6 --config-file=/var/lib/infinoted/infinoted.conf";
         };
 
         preStart = ''
@@ -146,5 +152,5 @@ in {
           install -o ${cfg.user} -g ${cfg.group} -m -0750 -d ${cfg.rootDirectory}
         '';
       };
-  });
+  };
 }
