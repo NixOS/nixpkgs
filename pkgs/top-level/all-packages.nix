@@ -15860,11 +15860,12 @@ in
 
   steamPackages = callPackage ../games/steam { };
 
-  steam = steamPackages.steam-chrootenv.override {
+  steam = if stdenv.isDarwin then callPackage ../games/steam/darwin.nix {}
+  else if stdenv.isLinux then steamPackages.steam-chrootenv.override {
     # DEPRECATED
     withJava = config.steam.java or false;
     withPrimus = config.steam.primus or false;
-  };
+  } else null;
 
   steam-run = steam.run;
 
