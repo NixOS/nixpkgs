@@ -48,9 +48,6 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/kube-proxy" --prefix PATH : "${iptables}/bin"
-    wrapProgram "$out/bin/kubelet" --prefix PATH : "${coreutils}/bin"
-
     # Remove references to go compiler
     while read file; do
       cat $file | sed "s,${go},$(echo "${go}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" > $file.tmp
