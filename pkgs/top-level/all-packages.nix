@@ -1284,6 +1284,8 @@ in
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
 
+  cowpatty = callPackage ../tools/security/cowpatty { };
+
   cpio = callPackage ../tools/archivers/cpio { };
 
   crackxls = callPackage ../tools/security/crackxls { };
