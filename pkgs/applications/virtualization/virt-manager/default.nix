@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl
-, wrapGAppsHook, virtinst, gnome_python, gtkvnc, vte
+{ stdenv, fetchurl, python2Packages, intltool, curl
+, wrapGAppsHook, virtinst, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
 , avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3, system-libvirt
 }:
 
 with stdenv.lib;
-with pythonPackages;
+with python2Packages;
 
 buildPythonApplication rec {
   name = "virt-manager-${version}";
@@ -22,7 +22,7 @@ buildPythonApplication rec {
       PasteDeploy m2crypto ipy twisted
       distutils_extra simplejson glanceclient cheetah lockfile httplib2
       urlgrabber virtinst pyGtkGlade dbus-python gnome_python pygobject3
-      libvirt libxml2Python ipaddr vte libosinfo gobjectIntrospection gtk3 mox
+      libvirt libxml2 ipaddr vte libosinfo gobjectIntrospection gtk3 mox
       gtkvnc libvirt-glib glib gsettings_desktop_schemas gnome3.defaultIconTheme
       wrapGAppsHook
     ] ++ optional spiceSupport spice_gtk;

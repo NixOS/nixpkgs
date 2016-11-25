@@ -15340,7 +15340,6 @@ in
   };
 
   virtmanager = callPackage ../applications/virtualization/virt-manager {
-    inherit (gnome2) gnome_python;
     vte = gnome3.vte;
     dconf = gnome3.dconf;
     spice_gtk = spice_gtk;
