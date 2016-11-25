@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2016.08.18";
+  version = "2016.11.25";
 
   srcs = [
     (fetchFromGitHub {
       owner = "cliffordwolf";
       repo = "yosys";
-      rev = "9b8e06bee177f53c34a9dd6dd907a822f21659be";
-      sha256 = "0x5c1bcayahn7pbgycxkxr6lkv9m0jpwfdlmyp2m9yzm2lpyw7dg";
+      rev = "5c2c78e2dd12a860f830dafd73fbed8edf1a3823";
+      sha256 = "1cvfkg0hllp7k2g52mxczd8d0ad7inlpkg27rrbyani2kg0066bk";
       name = "yosys";
     })
     (fetchFromBitbucket {
       owner = "alanmi";
       repo = "abc";
-      rev = "a2e5bc66a68a";
-      sha256 = "09yvhj53af91nc54gmy7cbp7yljfcyj68a87494r5xvdfnsj11gy";
+      rev = "238674cd44f2";
+      sha256 = "18xk7lqai05am11zymixilgam4jvz5f2jwy9cgillz035man2yzw";
       name = "yosys-abc";
     })
   ];
