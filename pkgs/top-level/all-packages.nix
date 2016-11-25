@@ -5713,7 +5713,7 @@ in
     ruby_2_0_0
     ruby_2_1_10
     ruby_2_2_5
-    ruby_2_3_1;
+    ruby_2_3_3;
 
   # Ruby aliases
   ruby = ruby_2_3;
@@ -5721,7 +5721,7 @@ in
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
   ruby_2_2 = ruby_2_2_5;
-  ruby_2_3 = ruby_2_3_1;
+  ruby_2_3 = ruby_2_3_3;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
