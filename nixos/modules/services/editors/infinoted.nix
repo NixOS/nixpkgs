@@ -11,6 +11,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.libinfinity.override { daemon = true; };
+      defaultText = "pkgs.libinfinity.override { daemon = true; }";
       description = ''
         Package providing infinoted
       '';
@@ -124,33 +125,34 @@ in {
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        path = [ cfg.package ];
 
         serviceConfig = {
           Type = "simple";
           Restart = "always";
           ExecStart = "${cfg.package}/bin/infinoted-0.6 --config-file=/var/lib/infinoted/infinoted.conf";
+          User = cfg.user;
+          Group = cfg.group;
+          ExecStartPre = "+" + pkgs.writeScript "infinoted-setup" ''
+            #!${pkgs.stdenv.shell}
+            mkdir -p /var/lib/infinoted
+            install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
+            cat >>/var/lib/infinoted/infinoted.conf <<EOF
+            [infinoted]
+            ${optionalString (cfg.keyFile != null) ''key-file=${cfg.keyFile}''}
+            ${optionalString (cfg.certificateFile != null) ''certificate-file=${cfg.certificateFile}''}
+            ${optionalString (cfg.certificateChain != null) ''certificate-chain=${cfg.certificateChain}''}
+            port=${toString cfg.port}
+            security-policy=${cfg.securityPolicy}
+            root-directory=${cfg.rootDirectory}
+            plugins=${concatStringsSep ";" cfg.plugins}
+            ${optionalString (cfg.passwordFile != null) ''password=$(head -n 1 ${cfg.passwordFile})''}
+
+            ${cfg.extraConfig}
+            EOF
+
+            install -o ${cfg.user} -g ${cfg.group} -m -0750 -d ${cfg.rootDirectory}
+          '';
         };
-
-        preStart = ''
-          mkdir -p /var/lib/infinoted
-          install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
-          cat >>/var/lib/infinoted/infinoted.conf <<EOF
-          [infinoted]
-          ${optionalString (cfg.keyFile != null) ''key-file=${cfg.keyFile}''}
-          ${optionalString (cfg.certificateFile != null) ''certificate-file=${cfg.certificateFile}''}
-          ${optionalString (cfg.certificateChain != null) ''certificate-chain=${cfg.certificateChain}''}
-          port=${toString cfg.port}
-          security-policy=${cfg.securityPolicy}
-          root-directory=${cfg.rootDirectory}
-          plugins=${concatStringsSep ";" cfg.plugins}
-          ${optionalString (cfg.passwordFile != null) ''password=$(head -n 1 ${cfg.passwordFile})''}
-
-          ${cfg.extraConfig}
-          EOF
-
-          install -o ${cfg.user} -g ${cfg.group} -m -0750 -d ${cfg.rootDirectory}
-        '';
       };
   };
 }
