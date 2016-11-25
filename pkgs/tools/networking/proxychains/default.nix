@@ -16,4 +16,10 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };
+
+  preConfigure = ''
+  # patch, add -ldl flag
+  sed -i Makefile -e '/-lpthread/a LDFLAGS+=-ldl'
+  '';
+
 }
