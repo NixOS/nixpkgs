@@ -264,12 +264,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2016.2.2";
+    version = "2016.3";
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0np0ypqga1xx9zq0qwpxiw9xdkr7k0jcdv1w790aafjar7a5qbyz";
+      sha256 = "0hzjhwij2x3b5fqwyd69h24ld13bpc2bf9wdcd1jy758waf0d91y";
     };
     wmClass = "jetbrains-phpstorm";
   };
