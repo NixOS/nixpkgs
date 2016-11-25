@@ -16504,6 +16504,7 @@ in
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
+  mathematica10 = callPackage ../applications/science/math/mathematica/10.nix { };
 
   metis = callPackage ../development/libraries/science/math/metis {};
 
