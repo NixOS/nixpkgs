@@ -150,7 +150,7 @@ in {
             ${cfg.extraConfig}
             EOF
 
-            install -o ${cfg.user} -g ${cfg.group} -m -0750 -d ${cfg.rootDirectory}
+            install -o ${cfg.user} -g ${cfg.group} -m 0750 -d ${cfg.rootDirectory}
           '';
         };
       };
