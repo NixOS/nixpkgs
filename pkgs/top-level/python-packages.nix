@@ -26273,7 +26273,9 @@ in {
     };
   });
 
-  magic-wormhole = callPackage ../development/python-modules/magic-wormhole {};
+  magic-wormhole = callPackage ../development/python-modules/magic-wormhole {
+    pythonPackages = self;
+  };
 
   wsgiproxy2 = buildPythonPackage rec {
     name = "WSGIProxy2-0.4.2";
