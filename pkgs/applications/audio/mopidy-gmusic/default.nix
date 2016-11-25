@@ -2,14 +2,19 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-gmusic-${version}";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/mopidy/mopidy-gmusic/archive/v${version}.tar.gz";
-    sha256 = "0yfilzfamy1bxnmgb1xk56jrk4sz0i7vcnc0a8klrm9sc7agnm9i";
+    sha256 = "1xryw2aixfza3brxlgjdlg0lghlb17g7kay9zy56mlzp0jr7m87j";
   };
 
-  propagatedBuildInputs = [ mopidy pythonPackages.requests2 pythonPackages.gmusicapi ];
+  propagatedBuildInputs = [
+    mopidy
+    pythonPackages.requests2
+    pythonPackages.gmusicapi
+    pythonPackages.cachetools
+  ];
 
   doCheck = false;
 
