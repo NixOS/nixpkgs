@@ -6214,9 +6214,9 @@ in {
       sha256 = "05f49f6hnl7npmi7kigg0ibqk8s3fhzx1ivvz1kqvlv4ay3paajc";
     };
 
-    buildInputs = [
-      pkgs.glibcLocales
-    ];
+    buildInputs = [ pkgs.glibcLocales ];
+
+    LC_ALL="en_US.UTF-8";
 
     propagatedBuildInputs = with self; [
       six
@@ -6227,10 +6227,8 @@ in {
       docker_pycreds
     ];
 
-    # Version conflict
+    # Flake8 version conflict
     doCheck = false;
-
-    LC_ALL="en_US.UTF-8";
 
     meta = {
       description = "An API client for docker written in Python";
