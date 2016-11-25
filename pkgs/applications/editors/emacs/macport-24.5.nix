@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "--enable-mac-app=$$out/Applications"
   ];
 
-  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1090";
+  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1090 -DMAC_OS_X_VERSION_MIN_REQUIRED=1090";
   LDFLAGS = "-O3 -L${ncurses.out}/lib";
 
   postInstall = ''
