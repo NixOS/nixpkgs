@@ -55,8 +55,15 @@ in let
   # whatever arguments it doesn't explicitly provide. This way,
   # `all-packages.nix` doesn't know more than it needs too.
   #
-  # It's OK that `args` doesn't include the defaults: they'll be
-  # deterministically inferred the same way.
+  # It's OK that `args` doesn't include default arguemtns from this file:
+  # they'll be deterministically inferred. In fact we must *not* include them,
+  # because it's important that if some parameter which affects the default is
+  # substituted with a different argument, the default is re-inferred.
+  #
+  # To put this in concrete terms, this function is basically just used today to
+  # use package for a different platform for the current platform (namely cross
+  # compiling toolchains and 32-bit packages on x86_64). In both those cases we
+  # want the provided non-native `system` argument to affect the stdenv chosen.
   nixpkgsFun = newArgs: import ./. (args // newArgs);
 
   # Partially apply some arguments for building bootstraping stage pkgs
