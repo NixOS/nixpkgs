@@ -8,6 +8,8 @@
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
 , openblas, arpack, suitesparse
+# Darwin frameworks
+, CoreServices, ApplicationServices
 }:
 
 with stdenv.lib;
@@ -80,7 +82,9 @@ stdenv.mkDerivation rec {
     arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
     pcre2.dev openblas openlibm openspecfun readline suitesparse utf8proc
     zlib llvm
-  ];
+  ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
+  ;
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
 
