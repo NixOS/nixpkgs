@@ -24,12 +24,11 @@
   config ? {}
 
 , crossSystem ? null
-, platform ? null
+, platform ? assert false; null
 } @ args:
 
 let # Rename the function arguments
   configExpr = config;
-  platform_ = platform;
 
 in let
   lib = import ../../lib;
@@ -42,21 +41,12 @@ in let
     then configExpr { inherit pkgs; }
     else configExpr;
 
-  # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
-
-  platformAuto = let
-      platforms = (import ./platforms.nix);
-    in
-      if system == "armv6l-linux" then platforms.raspberrypi
-      else if system == "armv7l-linux" then platforms.armv7l-hf-multiplatform
-      else if system == "armv5tel-linux" then platforms.sheevaplug
-      else if system == "mips64el-linux" then platforms.fuloong2f_n32
-      else if system == "x86_64-linux" then platforms.pc64
-      else if system == "i686-linux" then platforms.pc32
-      else platforms.pcBase;
-
-  platform = if platform_ != null then platform_
-    else config.platform or platformAuto;
+  # Allow setting the platform in the config file. Otherwise, let's use a
+  # reasonable default.
+  platform =
+    args.platform
+    or (config.platform
+    or (import ./platforms.nix).selectPlatformBySystem system);
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
