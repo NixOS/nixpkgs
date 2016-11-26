@@ -1,19 +1,21 @@
 { stdenv, fetchFromGitHub, ocaml, findlib }:
 
-let
-  version =
-  if stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.03" then "5.0+4.03.0" else "5.0+4.02.0";
+let param = {
+  "4.02.3" = {
+    version = "5.0+4.02.0";
+    sha256 = "16drjk0qafjls8blng69qiv35a84wlafpk16grrg2i3x19p8dlj8"; };
+  "4.03.0" = {
+    version = "5.0+4.03.0";
+    sha256 = "061v1fl5z7z3ywi4ppryrlcywnvnqbsw83ppq72qmkc7ma4603jg"; };
+}."${ocaml.version}";
 in
   stdenv.mkDerivation {
-    name = "ocaml-ppx_tools-${version}";
+    name = "ocaml${ocaml.version}-ppx_tools-${param.version}";
     src = fetchFromGitHub {
       owner = "alainfrisch";
       repo = "ppx_tools";
-      rev = version;
-      sha256 = if version == "5.0+4.03.0"
-      then "061v1fl5z7z3ywi4ppryrlcywnvnqbsw83ppq72qmkc7ma4603jg"
-      else "16drjk0qafjls8blng69qiv35a84wlafpk16grrg2i3x19p8dlj8"
-      ;
+      rev = param.version;
+      inherit (param) sha256;
     };
 
     buildInputs = [ ocaml findlib ];
