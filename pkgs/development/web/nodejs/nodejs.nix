@@ -45,9 +45,12 @@ in
 
     patches = optionals stdenv.isDarwin [ ./no-xcode.patch ];
 
-    preBuild = optionalString stdenv.isDarwin ''
+preBuild = optionalString stdenv.isDarwin ''
       sed -i -e "s|tr1/type_traits|type_traits|g" \
       -e "s|std::tr1|std|" src/util.h
+    '' + ''
+      make -j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES} -C $out mksnapshot
+      paxmark m $out/bin/mksnapshot
     '';
 
     prePatch = ''
