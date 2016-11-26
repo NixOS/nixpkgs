@@ -5052,6 +5052,7 @@ in
   julia-git = lowPrio (callPackage ../development/compilers/julia/git.nix {
     gmp = gmp6;
     openblas = openblasCompat;
+    llvm = llvm_39;
   });
 
   kotlin = callPackage ../development/compilers/kotlin { };

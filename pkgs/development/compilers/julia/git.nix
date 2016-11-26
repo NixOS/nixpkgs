@@ -3,6 +3,7 @@
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
+, llvm
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
@@ -22,12 +23,6 @@ let
 in
 
 let
-  llvmVersion = "3.7.1";
-  llvm = fetchurl {
-    url = "http://llvm.org/releases/${llvmVersion}/llvm-${llvmVersion}.src.tar.xz";
-    sha256 = "1masakdp9g2dan1yrazg7md5am2vacbkb3nahb3dchpc1knr8xxy";
-  };
-
   dsfmtVersion = "2.2.3";
   dsfmt = fetchurl {
     url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmtVersion}.tar.gz";
@@ -66,7 +61,6 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     mkdir deps/srccache
-    cp "${llvm}" "./deps/srccache/llvm-${llvmVersion}.src.tar.xz"
     cp "${dsfmt}" "./deps/srccache/dsfmt-${dsfmtVersion}.tar.gz"
     cp "${rmath-julia}" "./deps/srccache/Rmath-julia-${rmathVersion}.tar.gz"
     cp "${libuv}" "./deps/srccache/libuv-${libuvVersion}.tar.gz"
@@ -85,7 +79,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
     pcre2.dev openblas openlibm openspecfun readline suitesparse utf8proc
-    zlib
+    zlib llvm
   ];
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
@@ -125,7 +119,7 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_LIBGIT2=1"
       "USE_SYSTEM_LIBUNWIND=1"
       # 'replutil' test failure with LLVM 3.8.0, invalid libraries with 3.7.1
-      "USE_SYSTEM_LLVM=0"
+      "USE_SYSTEM_LLVM=1"
       "USE_SYSTEM_MPFR=1"
       "USE_SYSTEM_OPENLIBM=1"
       "USE_SYSTEM_OPENSPECFUN=1"
@@ -142,7 +136,7 @@ stdenv.mkDerivation rec {
 
   LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
-    openspecfun pcre2 suitesparse
+    openspecfun pcre2 suitesparse llvm
   ];
 
   dontStrip = true;
