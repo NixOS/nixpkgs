@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, gnupg1compat, bzip2, xz, graphviz }:
+{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg1compat, bzip2, xz, graphviz }:
 
 buildGoPackage rec {
   name = "aptly-${version}";
@@ -15,11 +15,13 @@ buildGoPackage rec {
   goPackagePath = "github.com/smira/aptly";
   goDeps = ./deps.nix;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postInstall = ''
     rm $bin/bin/man
+    wrapProgram "$bin/bin/aptly" \
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1compat bzip2 xz graphviz ]}"
   '';
-
-  propagatedUserEnvPkgs = [ gnupg1compat bzip2.bin xz.bin graphviz ];
 
   meta = with stdenv.lib; {
     homepage = https://www.aptly.info;

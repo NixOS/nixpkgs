@@ -79,13 +79,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "1v1qfppysi0qn40q9z7cx9gs7pcrz2hn1g44iynygvgj29h1gify";
+    sha256 = "0mv8fs2zxp6pvpi5xdrpvvqcaa5f0c83jdfi0pfqnwbpkz1kb9s6";
   };
 
   patchPhase = ''
@@ -160,6 +160,11 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
       --prefix PYTHONPATH : "$(toPythonPath ${vapoursynth}):$PYTHONPATH"
+  '' + ''
+
+    cp TOOLS/umpv $out/bin
+    wrapProgram $out/bin/umpv \
+      --set MPV "$out/bin/mpv"
   '';
 
   meta = with stdenv.lib; {

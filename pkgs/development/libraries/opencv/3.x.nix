@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
   ] ++ lib.optionals enableContrib [ "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules" ]
-  ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ];
+    ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ];
 
   enableParallelBuilding = true;
 

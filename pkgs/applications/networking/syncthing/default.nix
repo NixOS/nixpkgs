@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, go, pkgs }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.11";
+  version = "0.14.12";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "12b8284mya5z1q7ighbzk8rqxj0kcv5n0l39dygikfcbl1krr6sg";
+    sha256 = "09w0i9rmdi9fjsphib2x6gs6yn5d1a41nh1pm4k9ks31am9zdwsm";
   };
 
   buildInputs = [ go ];

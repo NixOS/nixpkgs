@@ -1,27 +1,26 @@
-{ stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush
+{ stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
+, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush, advancecomp
 , tileMode ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "crawl-${version}" + (if tileMode then "-tiles" else "");
-  version = "0.18.1";
+  name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "1cg5mxhx0lfhadls6n8avcpkjx08nqf1y085li97zqxl3gjaj64j";
+    sha256 = "02iklz5q5h7h27gw86ws8wk5gz1fg86jclkar05nd7zxxgiwsk96";
   };
 
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl pngcrush ];
+  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
-             ++ stdenv.lib.optionals tileMode
-                [ libpng SDL2 SDL2_image freetype mesa ];
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype mesa ];
 
   preBuild = ''
     cd crawl-ref/source
@@ -33,17 +32,19 @@ stdenv.mkDerivation rec {
     rm -rf contrib
   '';
 
-  makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
-                "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}" ]
-           ++ stdenv.lib.optionals tileMode [ "TILES=y" "dejavu_fonts=${dejavu_fonts}" ];
+  fontsPath = lib.optionalString tileMode dejavu_fonts;
 
-  postInstall = if tileMode then "mv $out/bin/crawl $out/bin/crawl-tiles" else "";
+  makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
+                "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
+              ] ++ lib.optional tileMode "TILES=y";
+
+  postInstall = lib.optionalString tileMode "mv $out/bin/crawl $out/bin/crawl-tiles";
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Open-source, single-player, role-playing roguelike game";
-    homepage = http://crawl.develz.org/;
+    homepage = "http://crawl.develz.org/";
     longDescription = ''
       Open-source, single-player, role-playing roguelike game of exploration and
       treasure-hunting in dungeons filled with dangerous and unfriendly monsters

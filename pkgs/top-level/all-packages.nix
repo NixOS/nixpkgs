@@ -790,6 +790,8 @@ in
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
+  dante = callPackage ../servers/dante { };
+
   datamash = callPackage ../tools/misc/datamash { };
 
   datefudge = callPackage ../tools/system/datefudge { };
@@ -1284,6 +1286,8 @@ in
   coreutils-prefixed = coreutils.override { withPrefix = true; };
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
+
+  cowpatty = callPackage ../tools/security/cowpatty { };
 
   cpio = callPackage ../tools/archivers/cpio { };
 
@@ -5228,6 +5232,7 @@ in
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
+  rust-bindgen = callPackage ../development/tools/rust/bindgen { };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
@@ -5538,7 +5543,7 @@ in
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
     inherit (pythonPackages) python boto setuptools wrapPython;
-    pythonProtobuf = pythonPackages.protobuf2_5;
+    pythonProtobuf = pythonPackages.protobuf2_6;
     perf = linuxPackages.perf;
   };
 
@@ -5716,12 +5721,12 @@ in
 
   spark = callPackage ../applications/networking/cluster/spark { };
 
-  spidermonkey = callPackage ../development/interpreters/spidermonkey { };
-  spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
-  spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
-  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.0.nix { };
-  spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.2.nix { };
-  spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.5.nix { };
+  spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
+  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
+  spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.nix { };
+  spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.nix { };
+  spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix { };
+  spidermonkey = spidermonkey_31;
 
   supercollider = callPackage ../development/interpreters/supercollider {
     fftw = fftwSinglePrec;
@@ -8867,9 +8872,7 @@ in
 
   polarssl = mbedtls;
 
-  polkit = callPackage ../development/libraries/polkit {
-    spidermonkey = spidermonkey_17;
-  };
+  polkit = callPackage ../development/libraries/polkit { };
 
   polkit_qt4 = callPackage ../development/libraries/polkit-qt-1/qt-4.nix { };
 
@@ -9795,10 +9798,6 @@ in
 
   saxonb = callPackage ../development/libraries/java/saxon/default8.nix { };
 
-  sharedobjects = callPackage ../development/libraries/java/shared-objects {
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
   smack = callPackage ../development/libraries/java/smack { };
 
   swt = callPackage ../development/libraries/java/swt {
@@ -10029,7 +10028,7 @@ in
   charybdis-darkfasel = callPackage ../servers/irc/charybdis/darkfasel.nix {};
 
   couchdb = callPackage ../servers/http/couchdb {
-    spidermonkey = spidermonkey_185;
+    spidermonkey = spidermonkey_1_8_5;
     python = python27;
     sphinx = python27Packages.sphinx;
     erlang = erlangR16;
@@ -10132,9 +10131,7 @@ in
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
 
-  mediatomb = callPackage ../servers/mediatomb {
-    spidermonkey = spidermonkey_185;
-  };
+  mediatomb = callPackage ../servers/mediatomb { };
 
   memcached = callPackage ../servers/memcached {};
 
@@ -10354,7 +10351,8 @@ in
     postgresql92
     postgresql93
     postgresql94
-    postgresql95;
+    postgresql95
+    postgresql96;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
@@ -11821,6 +11819,8 @@ in
 
   inherit (gnome3) gsettings_desktop_schemas;
 
+  go-font = callPackage ../data/fonts/go-font { };
+
   gyre-fonts = callPackage ../data/fonts/gyre {};
 
   hack-font = callPackage ../data/fonts/hack { };
@@ -12431,6 +12431,8 @@ in
     pulseaudioSupport = config.pulseaudio or false;
   };
 
+  cni = callPackage ../applications/networking/cluster/cni {};
+
   communi = qt5.callPackage ../applications/networking/irc/communi { };
 
   compiz = callPackage ../applications/window-managers/compiz {
@@ -12740,8 +12742,6 @@ in
     monky = callPackage ../applications/editors/emacs-modes/monky { };
 
     notmuch = lowPrio (pkgs.notmuch.override { inherit emacs; });
-
-    notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
     ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
 
@@ -13359,6 +13359,10 @@ in
 
   hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
   hyperterm = self.hyper;
+
+  jackline = callPackage ../applications/networking/instant-messengers/jackline {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_02;
+  };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
@@ -14078,15 +14082,11 @@ in
     qtbase = qt55;
   };
 
-  notmuch = callPackage ../applications/networking/mailreaders/notmuch {
-    # No need to build Emacs - notmuch.el works just fine without
-    # byte-compilation. Use emacsPackages.notmuch if you want to
-    # byte-compiled files
-    emacs = null;
-    sphinx = pythonPackages.sphinx;
-  };
+  notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
+
+  notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
   # Open Stack
   nova = callPackage ../applications/virtualization/openstack/nova.nix { };
@@ -14207,6 +14207,8 @@ in
   photoqt = qt5.callPackage ../applications/graphics/photoqt { };
 
   phototonic = qt5.callPackage ../applications/graphics/phototonic { };
+
+  phrasendrescher = callPackage ../tools/security/phrasendrescher { };
 
   phwmon = callPackage ../applications/misc/phwmon { };
 
@@ -14829,7 +14831,9 @@ in
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+    inherit (pythonPackages) gyp;
+  };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
 
@@ -16542,6 +16546,7 @@ in
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
+  mathematica10 = callPackage ../applications/science/math/mathematica/10.nix { };
 
   metis = callPackage ../development/libraries/science/math/metis {};
 
@@ -16870,7 +16875,8 @@ in
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
-  pari = callPackage ../applications/science/math/pari {};
+  pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
+  gp2c = callPackage ../applications/science/math/pari/gp2c.nix { };
   pari-unstable = callPackage ../applications/science/math/pari/unstable.nix {};
 
   ratpoints = callPackage ../applications/science/math/ratpoints {};
@@ -17199,7 +17205,7 @@ in
 
   nixops = callPackage ../tools/package-management/nixops { };
 
-  nixopsUnstable = nixops;# callPackage ../tools/package-management/nixops/unstable.nix { };
+  nixopsUnstable = callPackage ../tools/package-management/nixops/unstable.nix { };
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 

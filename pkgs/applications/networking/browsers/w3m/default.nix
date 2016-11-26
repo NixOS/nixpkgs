@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch
+{ stdenv, fetchFromGitHub, fetchpatch
 , ncurses, boehmgc, gettext, zlib
 , sslSupport ? true, openssl ? null
 , graphicsSupport ? true, imlib2 ? null
@@ -15,12 +15,13 @@ assert mouseSupport -> gpm-ncurses != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "w3m-0.5.3-2015-12-20";
+  name = "w3m-v0.5.3+git20161120";
 
-  src = fetchgit {
-    url = "git://anonscm.debian.org/collab-maint/w3m.git";
-    rev = "e0b6e022810271bd0efcd655006389ee3879e94d";
-    sha256 = "1vahm3719hb0m20nc8k88165z35f8b15qasa0whhk78r12bls1q6";
+  src = fetchFromGitHub {
+    owner = "tats";
+    repo = "w3m";
+    rev = "v0.5.3+git20161120";
+    sha256 = "06n5a9jdyihkd4xdjmyci32dpqp1k2l5awia5g9ng0bn256bacdc";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";

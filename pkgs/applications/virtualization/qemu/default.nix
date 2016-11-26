@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, libuuid, flex
-, bison, lzo, snappy, libaio, gnutls, nettle
+, bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, rez, setfile
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ python zlib pkgconfig glib ncurses perl pixman
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy
-      gnutls nettle
+      gnutls nettle curl
     ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa rez setfile ]
     ++ optionals seccompSupport [ libseccomp ]
