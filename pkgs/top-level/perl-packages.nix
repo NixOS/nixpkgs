@@ -647,10 +647,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   bignum = buildPerlPackage rec {
-    name = "bignum-0.43";
+    name = "bignum-0.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "0610cb569fe51ceaa98991549192b54a09b5ebd9bd03aee39e7234f7c222366d";
+      sha256 = "e32048bfc77788f1407e0b2bf54e0aba44d9e5e2743d2013b3afd6a630bed06f";
     };
     buildInputs = [ MathBigInt MathBigRat ];
     meta = {
