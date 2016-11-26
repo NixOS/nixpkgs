@@ -56,7 +56,7 @@ stdenv.mkDerivation (args // rec {
 
   meta = with stdenv.lib; {
     homepage = http://caml.inria.fr/ocaml;
-    branch = "4.03";
+    branch = versionNoPatch;
     license = with licenses; [
       qpl /* compiler */
       lgpl2 /* library */
