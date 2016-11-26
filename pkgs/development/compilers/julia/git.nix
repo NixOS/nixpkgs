@@ -34,10 +34,10 @@ let
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "a1d9166a440e4a0664c0e6de6ebe25350de56a42";
+  libuvVersion = "8d5131b6c1595920dd30644cd1435b4f344b46c8";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "1sjvly4ylfyj8kxnx0gsjj2f70cg17h302h1i08gfndrqam68za5";
+    sha256 = "1886r04igcs0k24sbb61wn10f8ki35c39jsnc5djv3rg4hvn9l49";
   };
 
   rmathVersion = "0.1";
@@ -55,13 +55,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.5.0-dev-2016-06-10";
+  version = "0.6.0-dev-2016-11-25";
   name = "${pname}-${version}";
 
   src = fetchgit {
     url = "https://github.com/JuliaLang/${pname}";
-    rev = "56d7d6672c7db717dacb5e34f485180c2eba83b2";
-    sha256 = "1wbrzdrxp94i7yxdgf3qgrjshmqxi0c4bqz7wy0c0c0kjlg6flmx";
+    rev = "03c24644815ba5320d038bb60c08565375fea1d9";
+    sha256 = "103mg9dz8yda2zxbd85jv8zhdzs29jj0dxrm2ppxpfhbbf6fxqav";
   };
 
   prePatch = ''
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
         wrapProgram "$prog" \
-            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
+            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:$out/lib/julia" \
             --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
     done
   '';
