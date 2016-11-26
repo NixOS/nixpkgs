@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Apps/Mines;
     description = "Clear hidden mines from a minefield";
     maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    license = licenses.gpl3;
     platforms = platforms.linux;
   };
 }

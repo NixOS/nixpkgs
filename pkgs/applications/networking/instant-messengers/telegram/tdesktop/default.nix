@@ -1,60 +1,59 @@
-{ stdenv, lib, fetchFromGitHub, fetchgit, qtbase, qtimageformats
+{ stdenv, lib, fetchFromGitHub, fetchgit, pkgconfig, gyp, cmake
+, qtbase, qtimageformats, qtwayland
 , breakpad, ffmpeg, openalSoft, openssl, zlib, libexif, lzma, libopus
 , gtk2, glib, cairo, pango, gdk_pixbuf, atk, libappindicator-gtk2
-, libwebp, libunity, dee, libdbusmenu-glib, libva
+, libwebp, libunity, dee, libdbusmenu-glib, libva-full, wayland
+, xcbutilrenderutil, icu, libSM, libICE, libproxy
 
-, pkgconfig, libxcb, xcbutilwm, xcbutilimage, xcbutilkeysyms
-, libxkbcommon, libpng, libjpeg, freetype, harfbuzz, pcre16
-, xproto, libX11, inputproto, sqlite, dbus
+, libxcb, xcbutilwm, xcbutilimage, xcbutilkeysyms, libxkbcommon
+, libpng, libjpeg, freetype, harfbuzz, pcre16, xproto, libX11
+, inputproto, sqlite, dbus
 }:
 
 let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
-  packagedQt = "5.6.0";
+  packagedQt = "5.6.2";
   # Hacky: split "1.2.3-4" into "1.2.3" and "4"
   systemQt = (builtins.parseDrvName qtbase.version).name;
+  qtLibs = [ qtbase qtimageformats qtwayland ];
 
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "0.10.1";
+  version = "0.10.19";
   qtVersion = lib.replaceStrings ["."] ["_"] packagedQt;
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "08isxwif6zllglkpd9i7ypxm2s4bibzqris48607bafr88ylksdk";
+    sha256 = "1p07kxfmcd90sx9bq046x03h1h807vs0pn64lfghr6m6ln8z44s3";
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop.git";
-    rev = "9ce7be9efed501f988bb099956fa63729f2c25ea";
-    sha256 = "1wp6lqscpm2byizchm0bj48dg9bga02r9r69ns10zxk0gk0qvvdn";
+    rev = "99bb0519f14e23fafb6884fe296d34b6f8bed5c3";
+    sha256 = "0z5m3binbl06kk34plmfblhqz6hlnkbnjb93sam0c6c995k3sz82";
   };
 
   buildInputs = [
     breakpad ffmpeg openalSoft openssl zlib libexif lzma libopus
     gtk2 glib libappindicator-gtk2 libunity cairo pango gdk_pixbuf atk
-    dee libdbusmenu-glib libva
+    dee libdbusmenu-glib libva-full xcbutilrenderutil icu libproxy
+    libSM libICE
     # Qt dependencies
     libxcb xcbutilwm xcbutilimage xcbutilkeysyms libxkbcommon
     libpng libjpeg freetype harfbuzz pcre16 xproto libX11
-    inputproto sqlite dbus libwebp
+    inputproto sqlite dbus libwebp wayland
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gyp cmake ];
+
+  patches = [ "${tgaur}/aur-fixes.diff" ];
 
   enableParallelBuilding = true;
 
-  qmakeFlags = [
-    "CONFIG+=release"
-    "DEFINES+=TDESKTOP_DISABLE_AUTOUPDATE"
-    "DEFINES+=TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
-    "INCLUDEPATH+=${breakpad}/include/breakpad"
-    "QT_TDESKTOP_VERSION=${systemQt}"
-  ];
-
-  qtSrcs = [ qtbase.src qtimageformats.src ];
+  qtSrcs = builtins.map (x: x.src) qtLibs;
+  qtNames = builtins.map (x: (builtins.parseDrvName x.name).name) (lib.tail qtLibs);
   qtPatches = qtbase.patches;
 
   buildCommand = ''
@@ -62,15 +61,23 @@ in stdenv.mkDerivation rec {
     cd "$sourceRoot"
 
     patchPhase
-    sed -i 'Telegram/Telegram.pro' \
-      -e 's,CUSTOM_API_ID,,g' \
-      -e 's,/usr,/does-not-exist,g' \
-      -e 's, -flto,,g' \
-      -e 's,LIBS += .*libbreakpad_client.a,LIBS += ${breakpad}/lib/libbreakpad_client.a,' \
-      -e 's, -static-libstdc++,,g' \
-      -e '/LIBS += .*libxkbcommon.a/d'
 
-    export qmakeFlags="$qmakeFlags QT_TDESKTOP_PATH=$PWD/../qt"
+    sed -i Telegram/gyp/Telegram.gyp \
+      -e 's,/usr/include/breakpad,${breakpad}/include/breakpad,g'
+
+    sed -i Telegram/gyp/telegram_linux.gypi \
+      -e 's,/usr,/does-not-exist,g' \
+      -e 's,-flto,,g'
+
+    sed -i Telegram/gyp/qt.gypi \
+      -e 's,${packagedQt},${systemQt},g'
+
+    gypFlagsArray=(
+      "-Dlinux_path_qt=$PWD/../qt"
+      "-Dlinux_lib_ssl=-lssl"
+      "-Dlinux_lib_crypto=-lcrypto"
+      "-Dlinux_lib_icu=-licuuc -licutu -licui18n"
+    )
 
     export QMAKE=$PWD/../qt/bin/qmake
     ( mkdir -p ../Libraries
@@ -79,7 +86,7 @@ in stdenv.mkDerivation rec {
         tar -xaf $i
       done
       cd qtbase-*
-      # This patch is outdated but the fixes doesn't feel very important
+      # This patch is often outdated but the fixes doesn't feel very important
       patch -p1 < ../../$sourceRoot/Telegram/Patches/qtbase_${qtVersion}.diff || true
       for i in $qtPatches; do
         patch -p1 < $i
@@ -89,8 +96,8 @@ in stdenv.mkDerivation rec {
 
       export configureFlags="-prefix "$PWD/../qt" -release -opensource -confirm-license -system-zlib \
         -system-libpng -system-libjpeg -system-freetype -system-harfbuzz -system-pcre -system-xcb \
-        -system-xkbcommon-x11 -no-opengl -static -nomake examples -nomake tests \
-        -openssl-linked -dbus-linked -system-sqlite -verbose -no-gtkstyle \
+        -system-xkbcommon-x11 -no-eglfs -no-gtkstyle -static -nomake examples -nomake tests \
+        -no-directfb -system-proxies -openssl-linked -dbus-linked -system-sqlite -verbose \
         ${lib.optionalString (!system-x86_64) "-no-sse2"} -no-sse3 -no-ssse3 \
         -no-sse4.1 -no-sse4.2 -no-avx -no-avx2 -no-mips_dsp -no-mips_dspr2"
       export dontAddPrefix=1
@@ -101,39 +108,29 @@ in stdenv.mkDerivation rec {
         buildPhase
         make install
       )
-
-      ( cd qtimageformats-*
-        $QMAKE
-        buildPhase
-        make install
-      )
+      for i in $qtNames; do
+        ( cd $i-*
+          $QMAKE
+          buildPhase
+          make install
+        )
+      done
     )
 
-    ( mkdir -p Linux/obj/codegen_style/Debug
-      cd Linux/obj/codegen_style/Debug
-      $QMAKE $qmakeFlags ../../../../Telegram/build/qmake/codegen_style/codegen_style.pro
-      buildPhase
-    )
-    ( mkdir -p Linux/obj/codegen_numbers/Debug
-      cd Linux/obj/codegen_numbers/Debug
-      $QMAKE $qmakeFlags ../../../../Telegram/build/qmake/codegen_numbers/codegen_numbers.pro
-      buildPhase
-    )
-    ( mkdir -p Linux/DebugIntermediateLang
-      cd Linux/DebugIntermediateLang
-      $QMAKE $qmakeFlags ../../Telegram/MetaLang.pro
-      buildPhase
+    ( cd Telegram/gyp
+      gyp "''${gypFlagsArray[@]}" --depth=. --generator-output=../.. -Goutput_dir=out Telegram.gyp --format=cmake
     )
 
-    ( mkdir -p Linux/ReleaseIntermediate
-      cd Linux/ReleaseIntermediate
-      $QMAKE $qmakeFlags ../../Telegram/Telegram.pro
-      pattern="^PRE_TARGETDEPS +="
-      grep "$pattern" "../../Telegram/Telegram.pro" | sed "s/$pattern//g" | xargs make
+    ( cd out/Release
+      export ASM=$(type -p gcc)
+      cmake .
+      # For some reason, it can't find stdafx.h -- we need to build dependencies till it fails and then retry.
+      buildPhase || true
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -include stdafx.h"
       buildPhase
     )
 
-    install -Dm755 Linux/Release/Telegram $out/bin/telegram-desktop
+    install -Dm755 out/Release/Telegram $out/bin/telegram-desktop
     mkdir -p $out/share/applications $out/share/kde4/services
     sed "s,/usr/bin,$out/bin,g" $tgaur/telegramdesktop.desktop > $out/share/applications/telegramdesktop.desktop
     sed "s,/usr/bin,$out/bin,g" $tgaur/tg.protocol > $out/share/kde4/services/tg.protocol

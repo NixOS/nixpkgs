@@ -2,7 +2,7 @@
 { fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, llvmPackages
 , xkb_switch, rustracerd, fzf
-, python3
+, python3, boost, icu
 , Cocoa ? null
 }:
 
@@ -304,16 +304,14 @@ rec {
   };
 
   ctrlp-cmatcher = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "ctrlp-cmatcher-2016-09-22";
+    name = "ctrlp-cmatcher-2015-10-15";
     src = fetchgit {
       url = "git://github.com/JazzCore/ctrlp-cmatcher";
       rev = "6c36334f106b6fd981d23e724e9a618734cab43a";
       sha256 = "1573kd6xf3n8sxlz2j4zadai4rnc7k3s9c54648yfzickwn57d8q";
     };
     dependencies = [];
-
     buildInputs = [ python ];
-
     buildPhase = ''
       patchShebangs .
       ./install.sh
@@ -2112,5 +2110,27 @@ rec {
     };
     dependencies = [];
 
+  };
+
+  cpsm = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "cpsm-2016-09-21";
+    src = fetchgit {
+      url = "git://github.com/nixprime/cpsm";
+      rev = "565ab53a66fa52c46d80adf6981b07f4bdffcb1d";
+      sha256 = "125gcnqrg2276sp715q924cxwjxwsv3j4m0n1zj17w9srnpn4r1k";
+    };
+    dependencies = [];
+    buildInputs = [
+      python3
+      stdenv
+      cmake
+      boost
+      icu
+    ];
+    buildPhase = ''
+      patchShebangs .
+      export PY3=ON
+      ./install.sh
+    '';
   };
 }

@@ -52,12 +52,12 @@ rec {
   };
 
   gradle_latest = gradleGen rec {
-    name = "gradle-3.2";
+    name = "gradle-3.2.1";
     nativeVersion = "0.11";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0d9911011hg0rsqs7r4fz1xjrx0h43qji8s7f0vw0v926xlb68ak";
+      sha256 = "1286wqycc7xnrkn6n37r5g19ajv6igqhavdh9pjxqmry9mjs6hwq";
     };
   };
 

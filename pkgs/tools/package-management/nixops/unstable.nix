@@ -1,9 +1,10 @@
 { callPackage, fetchurl }:
 
 callPackage ./generic.nix (rec {
-  version = "1.4";
+  version = "2016-11-23";
   src = fetchurl {
-    url = "http://nixos.org/releases/nixops/nixops-${version}/nixops-${version}.tar.bz2";
-    sha256 = "1a6vkn8rh5lgalxh6cwr4894n3yp7f2qxcbcjv42nnmy5g4fy5fd";
+    # Hydra doesn't serve production outputs anymore :(
+    url = "https://static.domenkozar.com/nixops-1.5pre0_abcdef.tar.bz2";
+    sha256 = "1a4cyd3zvkdjg9rf9ssr7p4i6r89zr483v5nlr5jzjdjjyi3j2bz";
   };
 })

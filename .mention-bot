@@ -1,7 +1,8 @@
 {
   "userBlacklist": [
     "civodul",
-    "jhasse"
+    "jhasse",
+    "shlevy"
   ],
   "alwaysNotifyForPaths": [
     { "name": "FRidh", "files": ["pkgs/top-level/python-packages.nix", "pkgs/development/interpreters/python/*", "pkgs/development/python-modules/*" ] },
