@@ -28,9 +28,30 @@ with lib;
     type = types.int;
     default = 0;
     description = ''
-      Port for the server.  0 means use the default port: 80 for http
-      and 443 for https (i.e. when enableSSL is set).
+      Port for the server. Option will be removed, use <option>listen</option> instead.
+  '';
+  };
+
+  listen = mkOption {
+     type = types.listOf (types.submodule (
+          {
+            options = {
+              port = mkOption {
+                type = types.int;
+                description = "port to listen on";
+              };
+              ip = mkOption {
+                type = types.string;
+                default = "*";
+                description = "Ip to listen on. 0.0.0.0 for ipv4 only, * for all.";
+              };
+            };
+          } ));
+    description = ''
+      List of { /* ip: "*"; */ port = 80;} to listen on
     '';
+
+    default = [];
   };
 
   enableSSL = mkOption {
