@@ -17602,4 +17602,6 @@ in
   fpm2 = callPackage ../tools/security/fpm2 { };
 
   simplenote = callPackage ../applications/misc/simplenote { };
+
+  terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 }
