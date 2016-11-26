@@ -1,0 +1,31 @@
+diff -ruN a/gradm_adm.c b/gradm_adm.c
+--- a/gradm_adm.c	2016-08-13 18:56:45.000000000 +0200
++++ b/gradm_adm.c	2016-11-26 02:47:05.829718770 +0100
+@@ -166,6 +166,8 @@
+ 	ADD_OBJ("/usr/libx32", "rx");
+ 	ADD_OBJ("/lib64", "rx");
+ 	ADD_OBJ("/usr/lib64", "rx");
++	ADD_OBJ("/nix/store", "h");
++	ADD_OBJ("/nix/store/*/lib", "rx");
+ 	ADD_OBJ(gradm_name, "x");
+ 	ADD_OBJ(grpam_path, "x");
+ 
+@@ -286,6 +288,8 @@
+ 	ADD_OBJ("/usr/lib32", "rx");
+ 	ADD_OBJ("/lib64", "rx");
+ 	ADD_OBJ("/usr/lib64", "rx");
++	ADD_OBJ("/nix/store", "h");
++	ADD_OBJ("/nix/store/*/lib", "rx");
+ 	ADD_OBJ("/tmp", "");
+ 	ADD_OBJ("/tmp/krb5cc_pam*", "rwcd");
+ 	ADD_OBJ(grpam_path, "x");
+@@ -369,6 +373,9 @@
+ 	ADD_OBJ("/lib", "rx");
+ 	ADD_OBJ("/lib32", "rx");
+ 	ADD_OBJ("/lib64", "rx");
++	ADD_OBJ("/nix/store", "h");
++	ADD_OBJ("/nix/store/*/bin", "rx");
++	ADD_OBJ("/nix/store/*/lib", "rx");
+ 	ADD_OBJ("/usr", "rx");
+ 	ADD_OBJ("/proc", "r");
+ 	ADD_OBJ("/boot", "h");

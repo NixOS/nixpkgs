@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0y5565rhil5ciprwz7nx4s4ah7dsxx7zrkg42dbq0mcg8m316xrb";
   };
 
+  patches = [ ./gradm_nix_store.patch ];
+
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ pam ];
 
