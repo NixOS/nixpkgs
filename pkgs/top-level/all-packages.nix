@@ -3756,6 +3756,8 @@ in
 
   sstp = callPackage ../tools/networking/sstp {};
 
+  su-exec = callPackage ../tools/security/su-exec {};
+
   subsurface =
     qt55.callPackage ../applications/misc/subsurface {
         libgit2 = pkgs.libgit2_0_23;
