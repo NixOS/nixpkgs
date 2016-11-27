@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index 2f7a36b..a6f7541 100644
+--- a/setup.py
++++ b/setup.py
+@@ -69,7 +69,6 @@ def post_install():
+ class install(_install):
+     def run(self):
+         _install.run(self)
+-        post_install()
+         
+ class BinaryDistribution(Distribution):
+     def is_pure(self):
