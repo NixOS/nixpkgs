@@ -14248,18 +14248,15 @@ in {
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "1.3.5";
+    version = "1.3.6";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/r/rainbowstream/${name}.tar.gz";
-      sha256 = "0a8bs9g81ns47d4vaj5pfgw9zwbcp0nivlm5rps4dlb6qwvzni1w";
+      sha256 = "04ki61mc2f5rw60zssr1rr6dmjmvhlws5rpnwd3zih6pi5b7cy4a";
     };
-
-    doCheck = false;
 
     patches = [
       ../development/python-modules/rainbowstream/image.patch
-      ../development/python-modules/rainbowstream/setup.patch
     ];
 
     postPatch = ''
