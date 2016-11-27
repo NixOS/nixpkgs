@@ -2,7 +2,7 @@
 , parted, udev
 }:
 let
-  version = "unstable-2016-11-26";
+  version = "6.0-2016.11.16-unstable";
 in
 stdenv.mkDerivation rec {
   name = "f3-${version}";
