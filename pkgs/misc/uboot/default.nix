@@ -10,11 +10,11 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2016.05";
+    version = "2016.11";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "0wdivib8kbm17qr6r7n7wyzg5vnwpagvwk5m0z80rbssc5sj5l47";
+      sha256 = "1j6dkd9fqiibsdv0smq6q4x5zgyd4i1n4lk7prm47h6wcmjkx0a5";
     };
 
     nativeBuildInputs = [ bc dtc ];
