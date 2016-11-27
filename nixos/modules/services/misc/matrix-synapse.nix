@@ -72,7 +72,7 @@ recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
 turn_user_lifetime: "${cfg.turn_user_lifetime}"
 user_creation_max_duration: ${cfg.user_creation_max_duration}
 bcrypt_rounds: ${cfg.bcrypt_rounds}
-allow_guest_access: {if cfg.allow_guest_access then "true" else "false"}
+allow_guest_access: ${if cfg.allow_guest_access then "true" else "false"}
 enable_metrics: ${if cfg.enable_metrics then "true" else "false"}
 report_stats: ${if cfg.report_stats then "true" else "false"}
 signing_key_path: "/var/lib/matrix-synapse/homeserver.signing.key"
