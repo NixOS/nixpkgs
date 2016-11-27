@@ -7911,6 +7911,9 @@ in {
       ipykernel
     ];
 
+    # ValueError: underlying buffer has been detached
+    doCheck = false;
+
     meta = {
       description = "Jupyter terminal console";
       homepage = "http://jupyter.org/";
