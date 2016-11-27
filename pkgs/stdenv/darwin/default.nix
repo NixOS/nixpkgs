@@ -22,7 +22,7 @@ let
     (import "${./standard-sandbox.sb}")
   '';
 in rec {
-  allPackages = import ../../..;
+  inherit allPackages;
 
   commonPreHook = ''
     export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -101,7 +101,8 @@ in rec {
 
       thisPkgs = allPackages {
         inherit system platform;
-        bootStdenv = thisStdenv;
+        allowCustomOverrides = false;
+        stdenv = thisStdenv;
       };
     in { stdenv = thisStdenv; pkgs = thisPkgs; };
 

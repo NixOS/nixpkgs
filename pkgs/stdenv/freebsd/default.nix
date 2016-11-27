@@ -5,7 +5,7 @@
 }:
 
 rec {
-  allPackages = import ../../..;
+  inherit allPackages;
 
   bootstrapTools = derivation {
     inherit system;

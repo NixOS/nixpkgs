@@ -107,7 +107,8 @@ rec {
 
       thisPkgs = allPackages {
         inherit system platform;
-        bootStdenv = thisStdenv;
+        allowCustomOverrides = false;
+        stdenv = thisStdenv;
       };
 
     in { stdenv = thisStdenv; pkgs = thisPkgs; };

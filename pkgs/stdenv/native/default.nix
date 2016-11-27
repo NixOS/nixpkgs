@@ -127,7 +127,8 @@ rec {
 
   stdenvBoot1Pkgs = allPackages {
     inherit system;
-    bootStdenv = stdenvBoot1;
+    allowCustomOverrides = false;
+    stdenv = stdenvBoot1;
   };
 
 

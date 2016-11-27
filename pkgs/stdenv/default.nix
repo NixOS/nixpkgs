@@ -5,7 +5,7 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-{ system, allPackages ? import ../.., platform, config, crossSystem, lib }:
+{ system, allPackages ? import ../top-level, platform, config, crossSystem, lib }:
 
 
 let
@@ -19,7 +19,8 @@ let
   inherit (import ./native { inherit system allPackages config; }) stdenvNative;
 
   stdenvNativePkgs = allPackages {
-    bootStdenv = stdenvNative;
+    allowCustomOverrides = false;
+    stdenv = stdenvNative;
     noSysDirs = false;
   };
 

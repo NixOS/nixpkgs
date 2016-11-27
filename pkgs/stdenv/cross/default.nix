@@ -20,7 +20,7 @@ rec {
     inherit system platform crossSystem config;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
-    bootStdenv = vanillaStdenv;
+    stdenv = vanillaStdenv;
   };
 
   stdenvCross = buildPackages.makeStdenvCross
