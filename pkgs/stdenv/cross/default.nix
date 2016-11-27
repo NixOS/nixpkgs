@@ -1,14 +1,14 @@
-{ system, allPackages, platform, crossSystem, config, ... } @ args:
+{ lib, allPackages
+, system, platform, crossSystem, config
+}:
 
 rec {
-  argClobber = {
+  vanillaStdenv = (import ../. {
+    inherit lib allPackages system platform;
     crossSystem = null;
     # Ignore custom stdenvs when cross compiling for compatability
     config = builtins.removeAttrs config [ "replaceStdenv" ];
-  };
-  vanillaStdenv = (import ../. (args // argClobber // {
-    allPackages = args: allPackages (argClobber // args);
-  })) // {
+  }) // {
     # Needed elsewhere as a hacky way to pass the target
     cross = crossSystem;
   };

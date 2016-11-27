@@ -106,7 +106,7 @@ rec {
       };
 
       thisPkgs = allPackages {
-        inherit system platform;
+        inherit system platform config;
         allowCustomOverrides = false;
         stdenv = thisStdenv;
       };

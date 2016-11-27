@@ -126,7 +126,7 @@ rec {
   } // {inherit fetchurl;};
 
   stdenvBoot1Pkgs = allPackages {
-    inherit system;
+    inherit system platform config;
     allowCustomOverrides = false;
     stdenv = stdenvBoot1;
   };

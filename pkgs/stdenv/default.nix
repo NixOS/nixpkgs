@@ -5,12 +5,13 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-{ system, allPackages ? import ../top-level, platform, config, crossSystem, lib }:
-
+{ # Args just for stdenvs' usage
+  lib, allPackages
+  # Args to pass on to `allPacakges` too
+, system, platform, crossSystem, config
+}:
 
 let
-
-
   # The native (i.e., impure) build environment.  This one uses the
   # tools installed on the system outside of the Nix environment,
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
@@ -19,6 +20,7 @@ let
   inherit (import ./native { inherit system allPackages config; }) stdenvNative;
 
   stdenvNativePkgs = allPackages {
+    inherit system platform crossSystem config;
     allowCustomOverrides = false;
     stdenv = stdenvNative;
     noSysDirs = false;

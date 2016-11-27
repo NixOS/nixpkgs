@@ -1,10 +1,13 @@
-{ system, allPackages, platform, crossSystem, config, ... } @ args:
+{ lib, allPackages
+, system, platform, crossSystem, config
+}:
 
 rec {
-  vanillaStdenv = import ../. (args // {
+  vanillaStdenv = import ../. {
+    inherit lib allPackages system platform crossSystem;
     # Remove config.replaceStdenv to ensure termination.
     config = builtins.removeAttrs config [ "replaceStdenv" ];
-  });
+  };
 
   buildPackages = allPackages {
     inherit system platform crossSystem config;
