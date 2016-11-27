@@ -231,6 +231,7 @@
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/bepasty.nix
+  ./services/misc/bitcoind.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
   ./services/misc/cfdyndns.nix
@@ -245,6 +246,7 @@
   ./services/misc/emby.nix
   ./services/misc/errbot.nix
   ./services/misc/etcd.nix
+  ./services/misc/electrum-server.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
   ./services/misc/gammu-smsd.nix
