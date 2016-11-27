@@ -11,11 +11,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "genymotion-${version}";
-  version = "2.7.2";
+  version = "2.8.0";
   src = requireFile {
-    url = https://www.genymotion.com/account/login/;
+    url = https://www.genymotion.com/download/;
     name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "0j1dzry6wf6cw3yr318z81rmj79r6w5l6vpilm7m9h786jrgywa1";
+    sha256 = "0lvfdlpmmsyq2i9gs4mf6a8fxkfimdr4rhyihqnfhjij3fzxz4lk";
   };
 
   buildInputs = [ makeWrapper which xdg_utils ];
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
      '';
     homepage = https://www.genymotion.com/;
     license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = ["x86_64-linux"];
     maintainers = [ stdenv.lib.maintainers.puffnfresh ];
   };
 }
