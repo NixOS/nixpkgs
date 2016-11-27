@@ -1,4 +1,5 @@
 { stdenv, requireFile, makeWrapper, which, zlib, mesa_noglu, glib, xorg, libxkbcommon
+, xdg_utils
 # For glewinfo
 , libXmu, libXi, libXext }:
 
@@ -17,17 +18,24 @@ stdenv.mkDerivation rec {
     sha256 = "0j1dzry6wf6cw3yr318z81rmj79r6w5l6vpilm7m9h786jrgywa1";
   };
 
-  buildInputs = [ makeWrapper which ];
+  buildInputs = [ makeWrapper which xdg_utils ];
 
   unpackPhase = ''
+    mkdir -p phony-home $out/share/applications
+    export HOME=$TMP/phony-home
+
     mkdir ${name}
     echo "y" | sh $src -d ${name}
     sourceRoot=${name}
+
+    substitute phony-home/.local/share/applications/genymobile-genymotion.desktop \
+      $out/share/applications/genymobile-genymotion.desktop --replace "$TMP/${name}" "$out/libexec"
   '';
 
   installPhase = ''
     mkdir -p $out/bin $out/libexec
     mv genymotion $out/libexec/
+    ln -s $out/libexec/genymotion/{genymotion,player} $out/bin
   '';
 
   fixupPhase = ''
@@ -38,7 +46,7 @@ stdenv.mkDerivation rec {
 
     patchExecutable() {
       patchInterpreter "$1"
-      makeWrapper "$out/libexec/genymotion/$1" "$out/bin/$1" \
+      wrapProgram "$out/libexec/genymotion/$1" \
         --set "LD_LIBRARY_PATH" "${libPath}"
     }
 
