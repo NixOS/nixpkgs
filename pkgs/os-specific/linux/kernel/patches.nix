@@ -99,14 +99,6 @@ rec {
       patch = ./grsecurity-nixos-kmod.patch;
     };
 
-  # A temporary work-around for execvp: arglist too long error during
-  # module_install.  Without this, no modules are installed into the
-  # resulting output.
-  grsecurity_modinst =
-    { name = "grsecurity-modinst";
-      patch = ./grsecurity-modinst.patch;
-    };
-
   crc_regression =
     { name = "crc-backport-regression";
       patch = ./crc-regression.patch;
