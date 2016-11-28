@@ -11323,6 +11323,8 @@ in
     inherit (gnome2) gtk gtkmm;
   };
 
+  delve = callPackage ../development/tools/delve { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
