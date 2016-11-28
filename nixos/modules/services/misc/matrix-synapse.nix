@@ -59,7 +59,12 @@ uploads_path: "/var/lib/matrix-synapse/uploads"
 max_upload_size: "${cfg.max_upload_size}"
 max_image_pixels: "${cfg.max_image_pixels}"
 dynamic_thumbnails: ${fromBool cfg.dynamic_thumbnails}
-url_preview_enabled: False
+url_preview_enabled: ${fromBool cfg.url_preview_enabled}
+${optionalString (cfg.url_preview_enabled == true) ''
+url_preview_ip_range_blacklist: ${builtins.toJSON cfg.url_preview_ip_range_blacklist}
+url_preview_ip_range_whitelist: ${builtins.toJSON cfg.url_preview_ip_range_whitelist}
+url_preview_url_blacklist: ${builtins.toJSON cfg.url_preview_url_blacklist}
+''}
 recaptcha_private_key: "${cfg.recaptcha_private_key}"
 recaptcha_public_key: "${cfg.recaptcha_public_key}"
 enable_registration_captcha: ${fromBool cfg.enable_registration_captcha}
@@ -354,6 +359,47 @@ in {
         type = types.str;
         default = "10K";
         description = "Number of events to cache in memory.";
+      };
+      url_preview_enabled = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Is the preview URL API enabled?  If enabled, you *must* specify an
+          explicit url_preview_ip_range_blacklist of IPs that the spider is
+          denied from accessing.
+        '';
+      };
+      url_preview_ip_range_blacklist = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          List of IP address CIDR ranges that the URL preview spider is denied
+          from accessing.
+        '';
+      };
+      url_preview_ip_range_whitelist = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          List of IP address CIDR ranges that the URL preview spider is allowed
+          to access even if they are specified in
+          url_preview_ip_range_blacklist.
+        '';
+      };
+      url_preview_url_blacklist = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "127.0.0.0/8"
+          "10.0.0.0/8"
+          "172.16.0.0/12"
+          "192.168.0.0/16"
+          "100.64.0.0/10"
+          "169.254.0.0/16"
+        ];
+        description = ''
+          Optional list of URL matches that the URL preview spider is
+          denied from accessing.
+        '';
       };
       recaptcha_private_key = mkOption {
         type = types.str;
