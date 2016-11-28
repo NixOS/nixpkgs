@@ -1,0 +1,187 @@
+{
+  "Cycler": {
+    "sha256": "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8",
+    "url": "https://files.pythonhosted.org/packages/c2/4b/137dea450d6e1e3d474e1d873cd1d4f7d3beed7e0dc973b06e8e10d32488/cycler-0.10.0.tar.gz",
+    "version": "0.10.0"
+  },
+  "Cython": {
+    "sha256": "e0941455769335ec5afb17dee36dc3833b7edc2ae20a8ed5806c58215e4b6669",
+    "url": "https://files.pythonhosted.org/packages/2f/ae/0bb6ca970b949d97ca622641532d4a26395322172adaf645149ebef664eb/Cython-0.25.1.tar.gz",
+    "version": "0.25.1"
+  },
+  "DataShape": {
+    "sha256": "2356ea690c3cf003c1468a243a9063144235de45b080b3652de4f3d44e57d783",
+    "url": "https://files.pythonhosted.org/packages/a6/5b/95b2ed56b61e649b69c9a5b1ecb32ff0a5cd68b9f69f5aa7774540e6b444/datashape-0.5.2.tar.gz",
+    "version": "0.5.2"
+  },
+  "PySoundFile": {
+    "sha256": "72c3e23b7c9998460ec78176084ea101e3439596ab29df476bc8508708df84df",
+    "url": "https://files.pythonhosted.org/packages/51/4d/2c36a6e79d1128b649ab0c32b79365f92f6146ffeb2d4ba0d0c4573826d5/PySoundFile-0.8.1.tar.gz",
+    "version": "0.8.1"
+  },
+  "blaze": {
+    "sha256": "50a60c8d52c679a6a21d6c689841f032b5dbd6eb5a2ecfaf308aff57f4b7a19a",
+    "url": "https://files.pythonhosted.org/packages/a1/99/ec4fc29409d68d83a2138b190722f74d15ca1ca303b5c055171b22baa4c0/blaze-0.10.1.tar.gz",
+    "version": "0.10.1"
+  },
+  "cytoolz": {
+    "sha256": "2239890c8fe2da3eba82947c6a68cfa406e5a5045911c9ab3de8113462372629",
+    "url": "https://files.pythonhosted.org/packages/a3/68/c7f07c9087ec7c0c18fc1a7c6e253f2d4fc7acdd01aac4138f3e68b1e132/cytoolz-0.8.0.tar.gz",
+    "version": "0.8.0"
+  },
+  "dask": {
+    "sha256": "24e9c50181370761f8a0c82e233fa823a7eb9ae01de50ee73378fd46724f669e",
+    "url": "https://files.pythonhosted.org/packages/46/3e/d55cfe683faebe1464f182d4bacd36a496e5a53aa857794778d2c7a012dd/dask-0.12.0.tar.gz",
+    "version": "0.12.0"
+  },
+  "ipykernel": {
+    "sha256": "520c855c6652651c6796a3dd8bc89d533023ac65c5ccf812908187d6f0e461da",
+    "url": "https://files.pythonhosted.org/packages/23/7a/a82c599760efe61862154120fece1d877a18657cf9d9b5baf75da4931c8f/ipykernel-4.5.1.tar.gz",
+    "version": "4.5.1"
+  },
+  "ipyparallel": {
+    "sha256": "d99e760f1a136b1c402755a4ab51a8d7cb87c892cccadf641948a5e886c8a455",
+    "url": "https://files.pythonhosted.org/packages/e7/2f/ca9d68d3d9cf3594e2c53cf11227e67491572acd6f22d2bc910ae26af953/ipyparallel-5.2.0.tar.gz",
+    "version": "5.2.0"
+  },
+  "ipython": {
+    "sha256": "7ef4694e1345913182126b219aaa4a0047e191af414256da6772cf249571b961",
+    "url": "https://files.pythonhosted.org/packages/89/63/a9292f7cd9d0090a0f995e1167f3f17d5889dcbc9a175261719c513b9848/ipython-5.1.0.tar.gz",
+    "version": "5.1.0"
+  },
+  "ipython_genutils": {
+    "sha256": "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6",
+    "url": "https://files.pythonhosted.org/packages/71/b7/a64c71578521606edbbce15151358598f3dfb72a3431763edc2baf19e71f/ipython_genutils-0.1.0.tar.gz",
+    "version": "0.1.0"
+  },
+  "ipywidgets": {
+    "sha256": "b50c722174f663043d4e45f58d1f3f29348b6e5a08aa1164e056b7101cd40413",
+    "url": "https://files.pythonhosted.org/packages/bf/94/ffe6166a50ea017cde0519bc822c860106acc73da84b4973dcec95800f4f/ipywidgets-6.0.0.beta2.tar.gz",
+    "version": "6.0.0.beta2"
+  },
+  "jupyter_client": {
+    "sha256": "c99a52fac2e5b7a3b714e9252ebf72cbf97536d556ae2b5082baccc3e5cd52ee",
+    "url": "https://files.pythonhosted.org/packages/88/03/d8e218721af0b084d4fda5e3bb89dc201505780f96ae060bf5e3e67c7707/jupyter_client-4.4.0.tar.gz",
+    "version": "4.4.0"
+  },
+  "jupyter_core": {
+    "sha256": "44ec837a53bebf4e937112d3f9ccf31fee4f8db3e406dd0dd4f0378a354bed9c",
+    "url": "https://files.pythonhosted.org/packages/56/41/6b29a0646af48ee7545b0b488b1b00aa3b01f6b4a8f19e3339640982a694/jupyter_core-4.2.0.tar.gz",
+    "version": "4.2.0"
+  },
+  "line_profiler": {
+    "sha256": "739f8ad0e4bcd0cb82e99afc09e00a0351234f6b3f0b1f7f0090a8a2fbbf8381",
+    "url": "https://files.pythonhosted.org/packages/65/48/61da8ca03e197bb57800c8839f403f2fb7bdf1cfe87fa62e0b35b683273c/line_profiler-2.0.tar.gz",
+    "version": "2.0"
+  },
+  "multipledispatch": {
+    "sha256": "bda6abb8188d9abb429bd17ed15bc7433f77f1b05a78cfff761711ed81daa7a2",
+    "url": "https://files.pythonhosted.org/packages/ec/70/4f8fd16e32033a7c78446659dc0bdbc71bec6db322cba0e2c1c8ba85d4ba/multipledispatch-0.4.9.tar.gz",
+    "version": "0.4.9"
+  },
+  "nbconvert": {
+    "sha256": "f7b5dd58164132851d6dbf66f25d804de6022c4fb40d8f4bab965014d6a22c2f",
+    "url": "https://files.pythonhosted.org/packages/48/ea/1fe38e9616c6b35e4f7c535c2fb62bed01b96df89fd07ec128518a0a46b1/nbconvert-5.0.0b1.tar.gz",
+    "version": "5.0.0b1"
+  },
+  "nbformat": {
+    "sha256": "dbf6c0ed0cb7c5a7184536368f1dd1ada2d48fd6f016e0f9e9b69236e28c0857",
+    "url": "https://files.pythonhosted.org/packages/c5/b5/f38ceeeac63e9b4d7d630151be8875beb3d4a86eba5b5ad9d3dbefadadea/nbformat-4.1.0.tar.gz",
+    "version": "4.1.0"
+  },
+  "nose-exclude": {
+    "sha256": "f78fa8b41eeb815f0486414f710f1eea0949e346cfb11d59ba6295ed69e84304",
+    "url": "https://files.pythonhosted.org/packages/63/cf/90c4be56bf11b7bc8801086d9445baf731aa36b8e8fc5791731e8e604dcd/nose-exclude-0.5.0.tar.gz",
+    "version": "0.5.0"
+  },
+  "notebook": {
+    "sha256": "39a9603d3fe88b60de2903680c965cf643acf2c16fb2c6bac1d905e1042b5851",
+    "url": "https://files.pythonhosted.org/packages/81/a1/20af1a3ea6090343b029d31f882c7e4c061133e0c25808835b1b59a187f8/notebook-4.2.3.tar.gz",
+    "version": "4.2.3"
+  },
+  "numpy": {
+    "sha256": "04db2fbd64e2e7c68e740b14402b25af51418fc43a59d9e54172b38b906b0f69",
+    "url": "https://files.pythonhosted.org/packages/16/f5/b432f028134dd30cfbf6f21b8264a9938e5e0f75204e72453af08d67eb0b/numpy-1.11.2.tar.gz",
+    "version": "1.11.2"
+  },
+  "numtraits": {
+    "sha256": "2fca9a6c9334f7358ef1a3e2e64ccaa6a479fc99fc096910e0d5fbe8edcdfd7e",
+    "url": "https://files.pythonhosted.org/packages/5b/5e/53a2bc57030f611ae48ab3df7410eb6bce2e666b566f4b8809f1468f4161/numtraits-0.2.tar.gz",
+    "version": "0.2"
+  },
+  "odo": {
+    "sha256": "e892ffe58e87d6b1c12838c4ab252bd0ae8c0ec43e5179409309ded4929905d6",
+    "url": "https://files.pythonhosted.org/packages/a0/b6/8cacdb1906fc293816c89879b17902729454d102799e5171c54439006f80/odo-0.5.0.tar.gz",
+    "version": "0.5.0"
+  },
+  "pandas": {
+    "sha256": "2509feaeda72fce03675e2eccd2284bb1cadb6a0737008a5e741fe2431d47421",
+    "url": "https://files.pythonhosted.org/packages/0b/9c/20a36af2016a9554378ebad2c69f63fd87bd0cc612eeed068fab656ec661/pandas-0.19.1.tar.gz",
+    "version": "0.19.1"
+  },
+  "pyFFTW": {
+    "sha256": "739b436b7c0aeddf99a48749380260364d2dc027cf1d5f63dafb5f50068ede1a",
+    "url": "https://files.pythonhosted.org/packages/c2/2e/b25edc6960fc837e915eb1b38e5f0e3013e32e90aff14a1d0f4556b3d145/pyFFTW-0.10.4.tar.gz",
+    "version": "0.10.4"
+  },
+  "qtconsole": {
+    "sha256": "25ec7d345528b3e8f3c91be349dd3c699755f206dc4b6ec668e2e5dd60ea18ef",
+    "url": "https://files.pythonhosted.org/packages/2b/94/ed3d11ab0ceac135f22fe418a9d5f99c4a071f74b5bd46c4f2ede65eafb1/qtconsole-4.2.1.tar.gz",
+    "version": "4.2.1"
+  },
+  "scikit-learn": {
+    "sha256": "1eddfc27bb37597a5d514de1299981758e660e0af56981c0bfdf462c9568a60c",
+    "url": "https://files.pythonhosted.org/packages/f1/dc/5fb2834511eef6f86e17b6ec41c0c7a60733f79633827e75aaa55029a9fa/scikit-learn-0.18.1.tar.gz",
+    "version": "0.18.1"
+  },
+  "scipy": {
+    "sha256": "8ab6e9c808bf2fb3e8576cd8cf07226d9cdc18b012c06d9708429a821ac6634e",
+    "url": "https://files.pythonhosted.org/packages/22/41/b1538a75309ae4913cdbbdc8d1cc54cae6d37981d2759532c1aa37a41121/scipy-0.18.1.tar.gz",
+    "version": "0.18.1"
+  },
+  "seaborn": {
+    "sha256": "fa274344b1ee72f723bab751c40a5c671801d47a29ee9b5e69fcf63a18ce5c5d",
+    "url": "https://files.pythonhosted.org/packages/ed/dc/f168ff9db34f8c03c568987b4f81603cd3df40dd8043722d526026381a91/seaborn-0.7.1.tar.gz",
+    "version": "0.7.1"
+  },
+  "sounddevice": {
+    "sha256": "bd0a24d59bcadb291c686bcf218bf597364f00073b9e47f74e0503bc0a8dd53f",
+    "url": "https://files.pythonhosted.org/packages/a6/26/1dc5fa096a1608b1c2c46684e8177ed8225cb8010523e25cac29fa2b9612/sounddevice-0.3.5.tar.gz",
+    "version": "0.3.5"
+  },
+  "statsmodels": {
+    "sha256": "7ae9a016beccd8f1c9d22bb0b5d9ffb23ff8013125da5b205684a5fc4e14c65c",
+    "url": "https://files.pythonhosted.org/packages/c8/0a/71ea3dbc6fd712e18123a9e513066c8f5e19dbcabc49b5ba7ab07c97ea29/statsmodels-0.8.0rc1.tar.gz",
+    "version": "0.8.0rc1"
+  },
+  "tabulate": {
+    "sha256": "83a0b8e17c09f012090a50e1e97ae897300a72b35e0c86c0b53d3bd2ae86d8c6",
+    "url": "https://files.pythonhosted.org/packages/1c/a1/3367581782ce79b727954f7aa5d29e6a439dc2490a9ac0e7ea0a7115435d/tabulate-0.7.7.tar.gz",
+    "version": "0.7.7"
+  },
+  "toolz": {
+    "sha256": "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479",
+    "url": "https://files.pythonhosted.org/packages/9e/b0/47e994b3b370087d388d2bb9dfc97c7e901b801265ccd1e8e9fd16eda1b8/toolz-0.8.0.tar.gz",
+    "version": "0.8.0"
+  },
+  "traitlets": {
+    "sha256": "ba8c94323ccbe8fd792e45d8efe8c95d3e0744cc8c085295b607552ab573724c",
+    "url": "https://files.pythonhosted.org/packages/b1/d6/5b5aa6d5c474691909b91493da1e8972e309c9f01ecfe4aeafd272eb3234/traitlets-4.3.1.tar.gz",
+    "version": "4.3.1"
+  },
+  "twine": {
+    "sha256": "68b663691a947b844f92853c992d42bb68b6333bffc9ab7f661346b001c1da82",
+    "url": "https://files.pythonhosted.org/packages/e4/fc/735c94592f63ac511bd694019910bf484bb38c7ae874b2726d3aca82f897/twine-1.8.1.tar.gz",
+    "version": "1.8.1"
+  },
+  "widgetsnbextension": {
+    "sha256": "04e9271522bb640f404229df7cd00387beedc090a26eaffbf1e47f4b04852485",
+    "url": "https://files.pythonhosted.org/packages/cb/e1/b2ae8636f12c049aebcc9798e824d5689cb8319b7f229ae1ef4ddf3032b4/widgetsnbextension-2.0.0b2.tar.gz",
+    "version": "2.0.0b2"
+  },
+  "xarray": {
+    "sha256": "4da06e38baea65c51347ba0770db416ebf003dbad5637215d2b25b191f2be1fb",
+    "url": "https://files.pythonhosted.org/packages/6a/be/484dacd98f21506961bf67fd5b0dc62a128869e6a1f9716266e846aa6a82/xarray-0.8.2.tar.gz",
+    "version": "0.8.2"
+  }
+}
