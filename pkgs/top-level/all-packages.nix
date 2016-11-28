@@ -1617,6 +1617,8 @@ in
 
   fakeroot = callPackage ../tools/system/fakeroot { };
 
+  fakeroute = callPackage ../tools/networking/fakeroute { };
+
   fakechroot = callPackage ../tools/system/fakechroot { };
 
   fast-neural-doodle = callPackage ../tools/graphics/fast-neural-doodle {
