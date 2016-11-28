@@ -3684,6 +3684,8 @@ in
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
+  sks = callPackage ../servers/sks { };
+
   skydns = callPackage ../servers/skydns { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
