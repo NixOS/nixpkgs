@@ -452,6 +452,14 @@ in
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
+  arm-frc-linux-gnueabi-eglibc = callPackage ../development/libraries/arm-frc-linux-gnueabi-eglibc {};
+
+  arm-frc-linux-gnueabi-linux-api-headers = callPackage ../development/libraries/arm-frc-linux-gnueabi-linux-api-headers {};
+
+  arm-frc-linux-gnueabi-binutils = callPackage ../development/tools/misc/arm-frc-linux-gnueabi-binutils {};
+
+  arm-frc-linux-gnueabi-gcc = callPackage ../development/compilers/arm-frc-linux-gnueabi-gcc {};
+
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
   artyFX = callPackage ../applications/audio/artyFX {};
@@ -10262,7 +10270,7 @@ in
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
   riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
-    erlang = erlang_basho_R16B03;  
+    erlang = erlang_basho_R16B03;
   };
 
   stanchion = callPackage ../servers/nosql/riak-cs/stanchion.nix {
