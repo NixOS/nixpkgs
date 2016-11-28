@@ -21,6 +21,6 @@ buildGoPackage rec {
     description = "A command line utility for various operations on container images and image repositories";
     homepage = "https://github.com/projectatomic/skopeo";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
-    license = stdenv.lib.licenses.asl2;
+    license = stdenv.lib.licenses.asl20;
   };
 }
