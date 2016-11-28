@@ -1,5 +1,4 @@
-{stdenv, fetchurl
-}:
+{stdenv, fetchurl, arm-frc-linux-gnueabi-binutils, arm-frc-linux-gnueabi-eglibc, elfutils, libmpc}:
 
 stdenv.mkDerivation rec {
   _target = "arm-frc-linux-gnueabi";
@@ -12,15 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "6c11d292cd01b294f9f84c9a59c230d80e9e4a47e5c6355f046bb36d4f358092";
   };
 
-  buildInputs = [${_target}-binutils ${_target}-eglibc elfutils libmpc];
+  buildInputs = [arm-frc-linux-gnueabi-binutils arm-frc-linux-gnueabi-eglibc elfutils libmpc];
 
   patches =
   [
     ./minorSOname.patch
     ./no-nested-deprecated-warnings.patch
-  ]
+  ];
 
-  configureFlags = "
+  configureFlagsArray = ''
   --prefix=/usr
   --program-prefix=${_target}-
   --target=${_target}
@@ -39,17 +38,21 @@ stdenv.mkDerivation rec {
   --with-cpu=cortex-a9
   --with-float=softfp
   --with-fpu=vfp
-  --with-specs='%{save-temps: -fverbose-asm} %{funwind-tables|fno-unwind-tables|mabi=*|ffreestanding|nostdlib:;:-funwind-tables}' //TODO: FIX THIS SHIT
+  --with-specs='%{save-temps: -fverbose-asm} %{funwind-tables|fno-unwind-tables|mabi=*|ffreestanding|nostdlib:;:-funwind-tables}'
   --enable-lto
-  --with-pkgversion='GCC for FRC'
+  --with-pkgversion='GCC-for-FRC'
   --with-cloog
   --enable-poison-system-directories
   --enable-plugin
   --with-system-zlib
   --disable-libmudflap
-  ";
+  '';
 
-  buildFlags = "all-gcc all-target-libgcc all-target-libstdc++-v3";
+  buildFlags = ''
+    all-gcc all-target-libgcc all-target-libstdc++-v3
+  '';
 
-  installTargets = "install-gcc install-target-libgcc install-target-libstdc++-v3";
+  installTargets = ''
+    install-gcc install-target-libgcc install-target-libstdc++-v3
+  '';
 }
