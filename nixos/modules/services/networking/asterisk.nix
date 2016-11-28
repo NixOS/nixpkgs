@@ -6,6 +6,7 @@ let
   cfg = config.services.asterisk;
 
   asteriskUser = "asterisk";
+  asteriskGroup = "asterisk";
 
   varlibdir = "/var/lib/asterisk";
   spooldir = "/var/spool/asterisk";
@@ -182,12 +183,18 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = singleton
-    { name = asteriskUser;
-      uid = config.ids.uids.asterisk;
-      description = "Asterisk daemon user";
-      home = varlibdir;
-    };
+    users.extraUsers.asterisk =
+      { name = asteriskUser;
+        group = asteriskGroup;
+        uid = config.ids.uids.asterisk;
+        description = "Asterisk daemon user";
+        home = varlibdir;
+      };
+
+    users.extraGroups.asterisk =
+      { name = asteriskGroup;
+        gid = config.ids.gids.asterisk;
+      };
 
     systemd.services.asterisk = {
       description = ''
@@ -203,7 +210,7 @@ in
           if [ ! -e "$d" ]; then
             mkdir -p "$d"
             cp --recursive ${pkgs.asterisk}/"$d" "$d"
-            chown --recursive ${asteriskUser} "$d"
+            chown --recursive ${asteriskUser}:${asteriskGroup} "$d"
             find "$d" -type d | xargs chmod 0755
           fi
         done
