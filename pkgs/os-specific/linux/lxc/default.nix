@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
     "sysconfdir=\${out}/etc"
     "sysconfigdir=\${out}/etc/default"
+    "bashcompdir=\${out}/share/bash-completion/completions"
     "READMEdir=\${TMPDIR}/var/lib/lxc/rootfs"
     "LXCPATH=\${TMPDIR}/var/lib/lxc"
   ];
