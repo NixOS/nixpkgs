@@ -331,11 +331,11 @@ in
         EOF
 
         # DHCP
-        ${pkgs.iptables}/bin/iptables -I INPUT  -i ${cfg.bridge.name} -p tcp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -I INPUT  -i ${cfg.bridge.name} -p udp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p tcp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p udp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
         # DNS
-        ${pkgs.iptables}/bin/iptables -I INPUT  -i ${cfg.bridge.name} -p tcp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -I INPUT  -i ${cfg.bridge.name} -p udp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p tcp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p udp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
 
         ${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge.name}
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} ${cfg.bridge.address}
@@ -347,11 +347,11 @@ in
         ${pkgs.bridge-utils}/bin/brctl delbr ${cfg.bridge.name}
 
         # DNS
-        ${pkgs.iptables}/bin/iptables -D INPUT  -i ${cfg.bridge.name} -p udp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -D INPUT  -i ${cfg.bridge.name} -p tcp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p udp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p tcp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
         # DHCP
-        ${pkgs.iptables}/bin/iptables -D INPUT  -i ${cfg.bridge.name} -p udp --sport 68 --dport 67 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -D INPUT  -i ${cfg.bridge.name} -p tcp --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p udp --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p tcp --sport 68 --dport 67 -j ACCEPT
       '';
     };
 
