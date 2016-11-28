@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, setJavaClassPath }:
+{ stdenv, fetchurl, unzip, setJavaClassPath, minimal ? false }:
 let
   jdk = stdenv.mkDerivation {
     name = "zulu1.8.0_66-8.11.0.1";
