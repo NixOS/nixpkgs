@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv, llvmPackages
 , toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
@@ -8,6 +8,7 @@
 , enableStatic ? !enableShared
 , enablePIC ? false
 , enableExceptions ? false
+, enableLibcxx ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? null
 , mpi ? null
@@ -40,12 +41,19 @@ let
   # To avoid library name collisions
   layout = if taggedLayout then "tagged" else "system";
 
+  libcxxflags = if enableLibcxx then
+                  "-nostdinc++ -I${llvmPackages.libcxx}/include/c++/v1"
+                else
+                  "";
+
   cflags = if enablePIC && enableExceptions then
-             "cflags=\"-fPIC -fexceptions\" cxxflags=-fPIC linkflags=-fPIC"
+             "cflags=\"-fPIC -fexceptions ${libcxxflags}\" cxxflags=-fPIC linkflags=-fPIC"
            else if enablePIC then
-             "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC"
+             "cflags=\"-fPIC ${libcxxflags}\" cxxflags=-fPIC linkflags=-fPIC"
            else if enableExceptions then
-             "cflags=-fexceptions"
+             "cflags=\"-fexceptions ${libcxxflags}\""
+           else if (libcxxflags!="") then
+             "cflags=\"${libcxxflags}\""
            else
              "";
 
@@ -148,7 +156,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ stdenv.lib.optionals (! stdenv ? cross) [ python icu ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
+    ++ stdenv.lib.optional (toolset == "clang") [ llvmPackages.clang ];
 
   configureScript = "./bootstrap.sh";
   configureFlags = commonConfigureFlags
