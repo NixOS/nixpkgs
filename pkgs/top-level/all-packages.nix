@@ -10016,6 +10016,8 @@ in
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
+  bge = callPackage ../servers/bge { };
+  
   bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
 
