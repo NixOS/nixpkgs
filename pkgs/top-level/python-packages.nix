@@ -33,6 +33,7 @@ let
     curses = null;
     curses_panel = null;
     crypt = null;
+    tkinter = null;
   };
 
 in modules // {

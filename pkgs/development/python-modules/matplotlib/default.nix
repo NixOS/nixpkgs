@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pycairo
+{ stdenv, fetchurl, python, buildPythonPackage, pycairo, isPy3k
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3
 , enableGhostscript ? false, ghostscript ? null, gtk3
@@ -12,7 +12,7 @@ assert enableGhostscript -> ghostscript != null;
 assert enableGtk2 -> pygtk != null;
 assert enableTk -> (tcl != null)
                 && (tk != null)
-                && (tkinter != null)
+                && ((!isPy3k) -> tkinter != null)
                 && (libX11 != null)
                 ;
 
