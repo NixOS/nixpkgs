@@ -47,6 +47,18 @@ in
         '';
       };
 
+      gatewayAddress = mkOption {
+        type = types.str;
+        default = "/ip4/127.0.0.1/tcp/8080";
+        description = "Where the IPFS Gateway can be reached";
+      };
+
+      apiAddress = mkOption {
+        type = types.str;
+        default = "/ip4/127.0.0.1/tcp/5001";
+        description = "Where IPFS exposes its API to";
+      };
+
       enableGC = mkOption {
         type = types.bool;
         default = false;
@@ -98,6 +110,8 @@ in
             cd ${cfg.dataDir}
             ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c "${ipfs}/bin/ipfs init"
           fi
+          ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c "${ipfs}/bin/ipfs config Addresses.API ${cfg.apiAddress}"
+          ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c "${ipfs}/bin/ipfs config Addresses.Gateway ${cfg.gatewayAddress}"
         '';
 
       serviceConfig = {
