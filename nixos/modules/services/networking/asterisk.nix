@@ -12,15 +12,23 @@ let
   spooldir = "/var/spool/asterisk";
   logdir = "/var/log/asterisk";
 
+  # Add filecontents from files of useTheseDefaultConfFiles to confFiles, do not override
+  defaultConfFiles = subtractLists (attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
+  allConfFiles =
+    cfg.confFiles //
+    builtins.listToAttrs (map (x: { name = x;
+                                    value = builtins.readFile (pkgs.asterisk + "/etc/asterisk/" + x); })
+                              defaultConfFiles);
+
   asteriskEtc = pkgs.stdenv.mkDerivation
   ((mapAttrs' (name: value: nameValuePair
         # Fudge the names to make bash happy
         ((replaceChars ["."] ["_"] name) + "_")
         (value)
-      ) cfg.confFiles) //
+      ) allConfFiles) //
   {
     confFilesString = concatStringsSep " " (
-      attrNames cfg.confFiles
+      attrNames allConfFiles
     );
 
     name = "asterisk.etc";
@@ -167,6 +175,16 @@ in
           See
           <link xlink:href="http://www.asterisk.org/community/documentation"/>
           for more examples of what is possible here.
+        '';
+      };
+
+      useTheseDefaultConfFiles = mkOption {
+        default = [ "ari.conf" "acl.conf" "agents.conf" "amd.conf" "calendar.conf" "cdr.conf" "cdr_syslog.conf" "cdr_custom.conf" "cel.conf" "cel_custom.conf" "cli_aliases.conf" "confbridge.conf" "dundi.conf" "features.conf" "hep.conf" "iax.conf" "pjsip.conf" "pjsip_wizard.conf" "phone.conf" "phoneprov.conf" "queues.conf" "res_config_sqlite3.conf" "res_parking.conf" "statsd.conf" "udptl.conf" "unistim.conf" ];
+        type = types.listOf types.str;
+        example = [ "sip.conf" "dundi.conf" ];
+        description = ''Sets these config files to the default content. The default value for
+          this option contains all necesscary files to avoid errors at startup.
+          This does not override settings via <option>services.asterisk.confFiles</option>.
         '';
       };
 
