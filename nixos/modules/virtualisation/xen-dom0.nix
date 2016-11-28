@@ -324,7 +324,7 @@ in
         domain-needed
         dhcp-hostsfile=/var/run/xen/dnsmasq.etherfile
         dhcp-authoritative
-        dhcp-range=$XEN_BRIDGE_IP_RANGE_START,$XEN_BRIDGE_IP_RANGE_END,$XEN_BRIDGE_NETWORK_ADDRESS
+        dhcp-range=$XEN_BRIDGE_IP_RANGE_START,$XEN_BRIDGE_IP_RANGE_END
         dhcp-no-override
         no-ping
         dhcp-leasefile=/var/run/xen/dnsmasq.leasefile
