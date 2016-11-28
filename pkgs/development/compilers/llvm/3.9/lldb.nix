@@ -43,6 +43,7 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_MAIN_INCLUDE_DIR=${llvm}/include"
+    "-DLLDB_DISABLE_LIBEDIT=1" # https://llvm.org/bugs/show_bug.cgi?id=28898
   ];
 
   enableParallelBuilding = true;
