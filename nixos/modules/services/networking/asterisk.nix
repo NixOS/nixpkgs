@@ -31,13 +31,13 @@ let
       attrNames allConfFiles
     );
 
-    name = "asterisk.etc";
+    name = "asterisk-etc";
 
     # Default asterisk.conf file
     # (Notice that astetcdir will be set to the path of this derivation)
     asteriskConf = ''
       [directories]
-      astetcdir => @out@
+      astetcdir => /etc/asterisk
       astmoddir => ${pkgs.asterisk}/lib/asterisk/modules
       astvarlibdir => /var/lib/asterisk
       astdbdir => /var/lib/asterisk
@@ -203,6 +203,8 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.asterisk ];
 
+    environment.etc.asterisk.source = asteriskEtc;
+
     users.extraUsers.asterisk =
       { name = asteriskUser;
         group = asteriskGroup;
@@ -242,7 +244,7 @@ in
             # FIXME: This doesn't account for arguments with spaces
             argString = concatStringsSep " " cfg.extraArguments;
           in
-          "${pkgs.asterisk}/bin/asterisk -U ${asteriskUser} -C ${asteriskEtc}/asterisk.conf ${argString} -F";
+          "${pkgs.asterisk}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
         Type = "forking";
         PIDFile = "/var/run/asterisk/asterisk.pid";
       };
