@@ -218,4 +218,12 @@ in {
       git = "0dv1rf5f9lj3icqs51bq7ljdcf17sdclmxm9hilwxps5l69v5q9r";
     };
   };
+
+  ruby_2_3_3 = generic {
+    version = rubyVersion "2" "3" "3" "";
+    sha256 = {
+      src = "1dqmh42p6siv9aqzdjldsnhljj3f2h30m0v8cf25icjmqp40h514";
+      git = "0cwjf0nrzaa5g81bw0qp65byyadhxvbnvprkshv3ckjl7yi46zf6";
+    };
+  };
 }
