@@ -201,6 +201,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.asterisk ];
+
     users.extraUsers.asterisk =
       { name = asteriskUser;
         group = asteriskGroup;
@@ -227,7 +229,7 @@ in
           # TODO: Make exceptions for /var directories that likely should be updated
           if [ ! -e "$d" ]; then
             mkdir -p "$d"
-            cp --recursive ${pkgs.asterisk}/"$d" "$d"
+            cp --recursive ${pkgs.asterisk}/"$d"/* "$d"/
             chown --recursive ${asteriskUser}:${asteriskGroup} "$d"
             find "$d" -type d | xargs chmod 0755
           fi
