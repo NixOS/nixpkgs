@@ -3330,6 +3330,8 @@ in
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
+  polysh = callPackage ../tools/networking/polysh { };
+
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
