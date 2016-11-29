@@ -16495,7 +16495,7 @@ in
   blas = callPackage ../development/libraries/science/math/blas { };
 
   clblas-cuda = callPackage ../development/libraries/science/math/clblas/cuda {
-    cudatoolkit = pkgs.cudatoolkit75;
+    cudatoolkit = pkgs.cudatoolkit8;
     inherit (linuxPackages) nvidia_x11;
   };
 
