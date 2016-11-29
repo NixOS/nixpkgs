@@ -13947,6 +13947,8 @@ in
       else null;
   };
 
+  mumudvb = callPackage ../applications/video/mumudvb { };
+
   musescore = qt55.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
