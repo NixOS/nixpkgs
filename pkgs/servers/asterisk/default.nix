@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
 
   # Use the following preConfigure section when building Asterisk from sources
   # other than the release tarball.
-#   preConfigure = ''
-#     ln -s ${coreSounds} sounds/asterisk-core-sounds-en-gsm-1.4.26.tar.gz
-#     ln -s ${mohSounds} sounds/asterisk-moh-opsound-wav-2.03.tar.gz
-#   '';
+  # preConfigure = ''
+  #   ln -s ${coreSounds} sounds/asterisk-core-sounds-en-gsm-1.5.tar.gz
+  #   ln -s ${mohSounds} sounds/asterisk-moh-opsound-wav-2.03.tar.gz
+  #'';
 
   # The default libdir is $PREFIX/usr/lib, which causes problems when paths
   # compiled into Asterisk expect ${out}/usr/lib rather than ${out}/lib.
