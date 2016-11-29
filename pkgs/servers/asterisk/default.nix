@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, fetchgit, jansson, libxml2, libxslt, ncurses, openssl, sqlite, utillinux }:
-
+{ stdenv, pkgs, fetchurl, fetchgit,
+  jansson, libxml2, libxslt, ncurses, openssl, sqlite,
+  utillinux, dmidecode, libuuid, binutils, newt,
+  lua,
+  srtp, wget, curl,
+  subversionClient
+}:
 stdenv.mkDerivation rec {
   name = "asterisk-${version}";
   version = "14.1.2";
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
   };
   # TODO: Sounds for other languages could be added here
 
-  buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux ];
+  buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua srtp wget curl subversionClient ];
 
   patches = [
     # Disable downloading of sound files (we will fetch them
@@ -45,7 +50,17 @@ stdenv.mkDerivation rec {
 
   # The default libdir is $PREFIX/usr/lib, which causes problems when paths
   # compiled into Asterisk expect ${out}/usr/lib rather than ${out}/lib.
-  configureFlags = "--libdir=\${out}/lib";
+  configureFlags = [
+    "--libdir=\${out}/lib"
+    "--with-lua=${lua}/lib"
+    "--with-pjproject-bundled"
+  ];
+
+  preBuild = ''
+    make menuselect.makeopts
+    substituteInPlace menuselect.makeopts --replace 'format_mp3 ' ""
+    ./contrib/scripts/get_mp3_source.sh
+  '';
 
   postInstall = ''
     # Install sample configuration files for this version of Asterisk
