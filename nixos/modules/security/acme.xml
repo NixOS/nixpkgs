@@ -75,7 +75,7 @@ options for the <literal>security.acme</literal> module.</para>
 
 <programlisting>
 security.acme.certs."foo.example.com" = {
-  webroot = "/var/www/challenges";
+  webroot = config.security.acme.directory + "/acme-challenge";
   email = "foo@example.com";
   user = "nginx";
   group = "nginx";
