@@ -225,6 +225,9 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
+      # Do not restart, to avoid disruption of running calls. Restart unit by yourself!
+      restartIfChanged = false;
+
       preStart = ''
         # Copy skeleton directory tree to /var
         for d in '${varlibdir}' '${spooldir}' '${logdir}'; do
@@ -245,6 +248,8 @@ in
             argString = concatStringsSep " " cfg.extraArguments;
           in
           "${pkgs.asterisk}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
+        ExecReload = ''${pkgs.asterisk}/bin/asterisk -x "core reload"
+          '';
         Type = "forking";
         PIDFile = "/var/run/asterisk/asterisk.pid";
       };
