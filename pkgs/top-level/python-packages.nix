@@ -18931,9 +18931,12 @@ in {
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
     inherit (protobuf) name src;
-    disabled = isPy3k || isPyPy;
+    isV2_6 = versionAtLeast protobuf.version "2.6.0";
+    isV3_0 = versionAtLeast protobuf.version "3.0";
+    pythonVersionSupported = isV2_6 || (isV3_0 && isPy3k);
+    disabled = !pythonVersionSupported || isPyPy;
 
-    propagatedBuildInputs = with self; [ protobuf google_apputils ];
+    propagatedBuildInputs = with self; [ protobuf six ];
 
     prePatch = ''
       while [ ! -d python ]; do
@@ -18942,18 +18945,18 @@ in {
       cd python
     '';
 
-    preConfigure = optionalString (versionAtLeast protobuf.version "2.6.0") ''
+    preConfigure = optionalString isV2_6 ''
       PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
       PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
     '';
 
-    checkPhase = if versionAtLeast protobuf.version "2.6.0" then ''
+    checkPhase = if isV2_6 then ''
       ${python.executable} setup.py google_test --cpp_implementation
     '' else ''
       ${python.executable} setup.py test
     '';
 
-    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--install-option='--cpp_implementation'";
+    installFlags = optional isV2_6 "--install-option='--cpp_implementation'";
 
     doCheck = true;
 
