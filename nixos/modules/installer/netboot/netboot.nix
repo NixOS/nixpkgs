@@ -26,11 +26,6 @@ with lib;
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    boot.initrd.postMountCommands = ''
-      mkdir -p /mnt-root/nix/store
-      mount -t squashfs /nix-store.squashfs /mnt-root/nix/store
-    '';
-
     # !!! Hack - attributes expected by other modules.
     system.boot.loader.kernelFile = "bzImage";
     environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi pkgs.syslinux ];
@@ -42,13 +37,34 @@ with lib;
         options = [ "mode=0755" ];
       };
 
+    # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
+    # image) to make this a live CD.
+    fileSystems."/nix/.ro-store" =
+      { fsType = "squashfs";
+        device = "../nix-store.squashfs";
+        options = [ "loop" ];
+        neededForBoot = true;
+      };
+
+    fileSystems."/nix/.rw-store" =
+      { fsType = "tmpfs";
+        options = [ "mode=0755" ];
+        neededForBoot = true;
+      };
+
+    fileSystems."/nix/store" =
+      { fsType = "unionfs-fuse";
+        device = "unionfs";
+        options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
+      };
+
     boot.initrd.availableKernelModules = [ "squashfs" ];
 
     boot.initrd.kernelModules = [ "loop" ];
 
     # Closures to be copied to the Nix store, namely the init
     # script and the top-level system configuration directory.
-   netboot.storeContents =
+    netboot.storeContents =
       [ config.system.build.toplevel ];
 
     # Create the squashfs image that contains the Nix store.
