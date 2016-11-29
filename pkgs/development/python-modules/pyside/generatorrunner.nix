@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, pysideApiextractor, python, sphinx, qt4 }:
 
 stdenv.mkDerivation {
-  name = "${python.libPrefix}-pyside-generatorrunner-0.6.16";
+  name = "pyside-generatorrunner-0.6.16";
 
   src = fetchurl {
     url = "https://github.com/PySide/Generatorrunner/archive/0.6.16.tar.gz";

@@ -8,7 +8,7 @@
 , libedit
 , llvm
 , clang
-, python
+, python2
 , version
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       scripts/Python/build-swig-Python.sh
   '';
 
-  buildInputs = [ cmake python which swig ncurses zlib libedit ];
+  buildInputs = [ cmake python2 which swig ncurses zlib libedit ];
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-std=c++11"

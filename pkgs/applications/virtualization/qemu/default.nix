@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
+{ stdenv, fetchurl, fetchpatch, python2, zlib, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, libuuid, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ python zlib pkgconfig glib ncurses perl pixman
+    [ python2 zlib pkgconfig glib ncurses perl pixman
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy
       gnutls nettle curl
     ]

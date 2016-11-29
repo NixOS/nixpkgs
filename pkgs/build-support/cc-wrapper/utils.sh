@@ -34,7 +34,7 @@ expandResponseParams() {
             @*)
                 if [ -e "${p:1}" ]; then
                     args=$(<"${p:1}")
-                    eval 'for arg in '$args'; do params+=("$arg"); done'
+                    eval 'for arg in '${args//$/\\$}'; do params+=("$arg"); done'
                 else
                     params+=("$p")
                 fi

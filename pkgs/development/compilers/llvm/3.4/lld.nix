@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, llvm, ncurses, zlib, python, version }:
+{ stdenv, fetch, cmake, llvm, ncurses, zlib, python2, version }:
 
 stdenv.mkDerivation {
   name = "lld-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     export cmakeFlags="$cmakeFlags -DLLD_PATH_TO_LLVM_SOURCE="`ls -d $PWD/llvm-*`
   '';
 
-  buildInputs = [ cmake ncurses zlib python ];
+  buildInputs = [ cmake ncurses zlib python2 ];
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-std=c++11"

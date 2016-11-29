@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   # pcre needed because https://github.com/NixOS/nixpkgs/pull/15046
   buildInputs = [ glib libxml2 telepathy_glib avahi libsoup libuuid openssl
-    sqlite pcre ];
+    sqlite pcre telepathy_glib.python ];
 
   nativeBuildInputs = [ libxslt pkgconfigUpstream ];
 
