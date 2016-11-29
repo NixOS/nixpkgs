@@ -1128,4 +1128,6 @@ self: super: {
   # https://github.com/rampion/ReadArgs/issues/8
   ReadArgs = doJailbreak super.ReadArgs;
 
+  # https://github.com/philopon/barrier/issues/3
+  barrier = doJailbreak super.barrier;
 }
