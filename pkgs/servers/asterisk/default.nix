@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "asterisk-${version}";
-  version = "13.6.0";
+  version = "14.1.2";
 
   src = fetchurl {
     url = "http://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
-    sha256 = "0nh0fnqx84as92kk9d73s0386cndd17l06y1c72jl2bdjhyba0ca";
+    sha256 = "0w9s4334rwvpyxm169grmnb4k9yq0l2al73dyh4cb8769qcs0ij8";
   };
 
   # Note that these sounds are included with the release tarball. They are
   # provided here verbatim for the convenience of anyone wanting to build
   # Asterisk from other sources.
   coreSounds = fetchurl {
-    url = http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.26.tar.gz;
-    sha256 = "2300e3ed1d2ded6808a30a6ba71191e7784710613a5431afebbd0162eb4d5d73";
+    url = http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.5.tar.gz;
+    sha256 = "01xzbg7xy0c5zg7sixjw5025pvr4z64kfzi9zvx19im0w331h4cd";
   };
   mohSounds = fetchurl {
     url = http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-moh-opsound-wav-2.03.tar.gz;
