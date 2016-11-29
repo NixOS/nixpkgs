@@ -1037,4 +1037,7 @@ self: super: {
   # Encountered missing dependencies: hspec >=1.3 && <2.1
   # https://github.com/rampion/ReadArgs/issues/8
   ReadArgs = doJailbreak super.ReadArgs;
+
+  # https://github.com/philopon/barrier/issues/3
+  barrier = doJailbreak super.barrier;
 }
