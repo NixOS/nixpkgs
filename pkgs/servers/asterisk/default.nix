@@ -71,9 +71,6 @@ stdenv.mkDerivation rec {
     description = "Software implementation of a telephone private branch exchange (PBX)";
     homepage = http://www.asterisk.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ auntie ];
-    # Marked as broken due to needing an update for security issues.
-    # See: https://github.com/NixOS/nixpkgs/issues/18856
-    broken = true;
+    maintainers = with maintainers; [ auntie DerTim1 ];
   };
 }
