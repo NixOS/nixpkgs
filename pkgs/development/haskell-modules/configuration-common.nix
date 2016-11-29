@@ -807,7 +807,7 @@ self: super: {
   };
 
   # # Make elisp files available at a location where people expect it.
-  hindent = overrideCabal super.hindent (drv: {
+  hindent = (overrideCabal super.hindent (drv: {
     # We cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
@@ -816,7 +816,9 @@ self: super: {
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
-  });
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_19_0;
+  };
 
   # https://github.com/yesodweb/Shelly.hs/issues/106
   # https://github.com/yesodweb/Shelly.hs/issues/108
@@ -986,7 +988,7 @@ self: super: {
   });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_0; };
 
   # To be in sync with Hoogle.
   lambdabot-haskell-plugins = (overrideCabal super.lambdabot-haskell-plugins (drv: {

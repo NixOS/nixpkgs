@@ -176,6 +176,8 @@ let
 
     fix = callPackage ../development/ocaml-modules/fix { };
 
+    fmt = callPackage ../development/ocaml-modules/fmt { };
+
     fontconfig = callPackage ../development/ocaml-modules/fontconfig {
       inherit (pkgs) fontconfig;
     };

@@ -181,6 +181,7 @@
   ./services/desktops/telepathy.nix
   ./services/development/hoogle.nix
   ./services/editors/emacs.nix
+  ./services/editors/infinoted.nix
   ./services/games/factorio.nix
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
@@ -359,6 +360,7 @@
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
   ./services/networking/fan.nix
+  ./services/networking/fakeroute.nix
   ./services/networking/ferm.nix
   ./services/networking/firefox/sync-server.nix
   ./services/networking/firewall.nix

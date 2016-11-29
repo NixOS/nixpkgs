@@ -281,6 +281,7 @@
       ipfs  = 261;
       stanchion = 262;
       riak-cs = 263;
+      infinoted = 264;
 
       phabricator = 999;
 
@@ -534,6 +535,7 @@
       ipfs = 261;
       stanchion = 262;
       riak-cs = 263;
+      infinoted = 264;
 
       phabricator = 999;
 

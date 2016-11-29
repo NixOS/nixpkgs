@@ -2,7 +2,7 @@
 , bash, wrapGAppsHook, gnome3, libwnck3, libxml2, libxslt, libtool
 , webkitgtk214x, libsoup, glib_networking, libsecret, gnome_desktop, libnotify, p11_kit
 , sqlite, gcr, avahi, nss, isocodes, itstool, file, which
-, gdk_pixbuf, librsvg, gnome_common }:
+, gdk_pixbuf, librsvg, gnome_common, gst_all_1 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
                   sqlite isocodes nss itstool p11_kit nspr icu gnome3.yelp_tools
                   gdk_pixbuf gnome3.defaultIconTheme librsvg which gnome_common
                   gcr avahi gnome3.gsettings_desktop_schemas gnome3.dconf
-                  gnome3.glib_networking ];
+                  gnome3.glib_networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
+                  gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
+                  gst_all_1.gst-libav];
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 

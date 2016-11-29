@@ -51,6 +51,13 @@
       # nixos-rebuild boot
       # reboot
     </programlisting>
+    <note><para>
+      Enabling the grsecurity module overrides
+      <option>boot.kernelPackages</option>, to reduce the risk of
+      misconfiguration.  <xref linkend="sec-grsec-custom-kernel" />
+      describes how to use a custom kernel package set.
+    </para></note>
+
     For most users, further configuration should be unnecessary.  All users
     are encouraged to look over <xref linkend="sec-grsec-security" /> before
     using the system, however.  If you experience problems, please refer to
@@ -205,21 +212,22 @@
   </para>
 
   <para>
-    To use a custom kernel with upstream's recommended settings for server
-    deployments:
+    To build a custom kernel using upstream's recommended settings for server
+    deployments, while still using the NixOS module:
     <programlisting>
-      boot.kernelPackages =
-        let
-          kernel = pkgs.linux_grsec_nixos.override {
-            extraConfig = ''
-              GRKERNSEC_CONFIG_AUTO y
-              GRKERNSEC_CONFIG_SERVER y
-              GRKERNSEC_CONFIG_SECURITY y
-            '';
+      nixpkgs.config.packageOverrides = super: {
+        linux_grsec_nixos = super.linux_grsec_nixos.override {
+          extraConfig = ''
+            GRKERNSEC_CONFIG_AUTO y
+            GRKERNSEC_CONFIG_SERVER y
+            GRKERNSEC_CONFIG_SECURITY y
+          '';
           };
-          self = pkgs.linuxPackagesFor kernel self;
-        in self;
+      }
     </programlisting>
+  </para>
+
+  <para>
     The wikibook provides an exhaustive listing of
     <link xlink:href="https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options">kernel configuration options</link>.
   </para>
@@ -228,6 +236,18 @@
     The NixOS module makes several assumptions about the kernel and so
     may be incompatible with your customised kernel. Currently, the only way
     to work around incompatibilities is to eschew the NixOS module.
+
+    If not using the NixOS module, a custom grsecurity package set can
+    be specified inline instead, as in
+    <programlisting>
+      boot.kernelPackages =
+        let
+          kernel = pkgs.linux_grsec_nixos.override {
+            extraConfig = /* as above */;
+          };
+          self = pkgs.linuxPackagesFor kernel self;
+        in self;
+    </programlisting>
   </para>
 
   </sect1>

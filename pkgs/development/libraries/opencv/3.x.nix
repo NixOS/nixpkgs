@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, unzip
+{ lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, cmake, pkgconfig, unzip
 , zlib
 , enableIpp ? false
 , enableContrib ? false
@@ -14,7 +14,7 @@
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? false, eigen
-, enableCuda ? false, cudatoolkit, gcc49
+, enableCuda ? false, cudatoolkit, gcc5
 }:
 
 let
@@ -41,6 +41,17 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1l0w12czavgs0wzw1c594g358ilvfg2fn32cn8z7pv84zxj4g429";
   };
+
+  patches = [
+    (fetchpatch { # Patch for CUDA 8 compatibility
+      url = "https://github.com/opencv/opencv/commit/10896129b39655e19e4e7c529153cb5c2191a1db.patch";
+      sha256 = "0jka3kxxywgs3prqqgym5kav6p73rrblwj50k1nf3fvfpk194ah1";
+    })
+    (fetchpatch { # Patch to add CUDA Compute Capability compilation targets up to 6.0
+      url = "https://github.com/opencv/opencv/commit/d76f258aebdf63f979a205cabe6d3e81700a7cd8.patch";
+      sha256 = "00b3msfgrcw7laij6qafn4b18c1dl96xxpzwx05wxzrjldqb6kqg";
+    })
+  ];
 
   preConfigure =
     let ippicvVersion = "20151201";
@@ -75,7 +86,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
-    ++ lib.optional enableCuda [ cudatoolkit gcc49 ]
+    ++ lib.optional enableCuda [ cudatoolkit gcc5 ]
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -107,7 +118,7 @@ stdenv.mkDerivation rec {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [viric flosse];
+    maintainers = with stdenv.lib.maintainers; [viric flosse mdaiter];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

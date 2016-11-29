@@ -844,7 +844,6 @@ default-package-overrides:
   - hidapi ==0.1.4
   - hierarchical-clustering ==0.4.6
   - highlighting-kate ==0.6.3
-  - hindent ==4.6.4
   - hinotify ==0.3.8.1
   - hint ==0.6.0
   - histogram-fill ==0.8.4.1

@@ -343,7 +343,7 @@ in
       { wantedBy = [ "multi-user.target" ];
         requires = [ "hydra-init.service" ];
         after = [ "hydra-init.service" "network.target" ];
-        path = [ pkgs.nettools ];
+        path = [ cfg.package pkgs.nettools ];
         environment = env;
         serviceConfig =
           { ExecStart = "@${cfg.package}/bin/hydra-evaluator hydra-evaluator";
