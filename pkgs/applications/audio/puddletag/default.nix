@@ -2,19 +2,20 @@
 
 let
   pypkgs = python2Packages;
+  pname = "puddletag";
 
 in pypkgs.buildPythonApplication rec {
-  name = "puddletag-${version}";
-  version = "1.1.1";
+  name = "${pname}-${version}";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "keithgg";
-    repo = "puddletag";
-    rev = version;
-    sha256 = "0zmhc01qg64fb825b3kj0mb0r0d9hms30nqvhdks0qnv7ahahqrx";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1g6wa91awy17z5b704yi9kfynnvfm9lkrvpfvwccscr1h8s3qmiz";
   };
 
-  sourceRoot = "${name}-src/source";
+  sourceRoot = "${pname}-v${version}-src/source";
 
   disabled = pypkgs.isPy3k; # work to support python 3 has not begun
 
