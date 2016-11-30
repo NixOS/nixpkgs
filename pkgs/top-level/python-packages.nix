@@ -4866,12 +4866,12 @@ in {
   };
 
   pytest_30 = self.pytest_27.override rec {
-    name = "pytest-3.0.3";
+    name = "pytest-3.0.4";
 
     propagatedBuildInputs = with self; [ hypothesis py ];
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "1rxydacrdb8s312l3bn0ybrqsjp13abzyim1x21s80386l5504zj";
+      sha256 = "03d49xc0l4sdncq47rn1p42ywjnxqrvpc160y8dwvanv3wnfx7w7";
     };
   };
 
