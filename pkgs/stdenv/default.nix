@@ -9,7 +9,7 @@
   lib, allPackages
   # Args to pass on to `allPacakges` too
 , system, platform, crossSystem, config
-}:
+} @ args:
 
 let
   # The native (i.e., impure) build environment.  This one uses the
@@ -17,7 +17,7 @@ let
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  inherit (import ./native { inherit system allPackages config; }) stdenvNative;
+  inherit (import ./native args) stdenvNative;
 
   stdenvNativePkgs = allPackages {
     inherit system platform crossSystem config;
@@ -28,22 +28,22 @@ let
 
 
   # The Nix build environment.
-  stdenvNix = import ./nix {
+  stdenvNix = assert crossSystem == null; import ./nix {
     inherit config lib;
     stdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
   };
 
-  inherit (import ./freebsd { inherit system allPackages platform config; }) stdenvFreeBSD;
+  inherit (import ./freebsd args) stdenvFreeBSD;
 
   # Linux standard environment.
-  inherit (import ./linux { inherit system allPackages platform config lib; }) stdenvLinux;
+  inherit (import ./linux args) stdenvLinux;
 
-  inherit (import ./darwin { inherit system allPackages platform config; }) stdenvDarwin;
+  inherit (import ./darwin args) stdenvDarwin;
 
-  inherit (import ./cross { inherit system allPackages platform crossSystem config lib; }) stdenvCross stdenvCrossiOS;
+  inherit (import ./cross args) stdenvCross stdenvCrossiOS;
 
-  inherit (import ./custom { inherit system allPackages platform crossSystem config lib; }) stdenvCustom;
+  inherit (import ./custom args) stdenvCustom;
 
   # Select the appropriate stdenv for the platform `system'.
 in

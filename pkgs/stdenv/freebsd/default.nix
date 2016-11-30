@@ -1,8 +1,8 @@
-{ system      ? builtins.currentSystem
-, allPackages ? import ../../..
-, platform    ? null
-, config      ? {}
+{ lib, allPackages
+, system, platform, crossSystem, config
 }:
+
+assert crossSystem == null;
 
 rec {
   inherit allPackages;

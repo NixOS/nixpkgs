@@ -30,7 +30,7 @@
 , # The configuration attribute set
   config
 
-, crossSystem ? null
+, crossSystem
 , platform
 , lib
 , nixpkgsFun

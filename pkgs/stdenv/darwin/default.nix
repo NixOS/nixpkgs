@@ -1,7 +1,5 @@
-{ system         ? builtins.currentSystem
-, allPackages    ? import ../../..
-, platform       ? null
-, config         ? {}
+{ lib, allPackages
+, system, platform, crossSystem, config
 
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
@@ -16,6 +14,8 @@
     tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "13ihbj002pis3fgy1d9c4fi7flca21z9brjsjkklm82h5b4nlwxl"; executable = false; };
   }
 }:
+
+assert crossSystem == null;
 
 let
   libSystemProfile = ''
@@ -100,7 +100,7 @@ in rec {
       };
 
       thisPkgs = allPackages {
-        inherit system platform config;
+        inherit system platform crossSystem config;
         allowCustomOverrides = false;
         stdenv = thisStdenv;
       };

@@ -2,6 +2,8 @@
 , system, platform, crossSystem, config
 }:
 
+assert crossSystem == null;
+
 rec {
   vanillaStdenv = import ../. {
     inherit lib allPackages system platform crossSystem;
