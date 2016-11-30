@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub }:
+{ lib, fetchFromGitHub, fetchpatch }:
 rec {
   version = "7.4.2367";
 
@@ -18,6 +18,14 @@ rec {
     ''
       substituteInPlace runtime/ftplugin/man.vim \
         --replace "/usr/bin/man " "man "
+
+      patch -p1 < '${
+        fetchpatch {
+          name = "cve-2016-1248.diff";
+          url = "https://github.com/vim/vim/commit/d0b5138b.diff";
+          sha256 = "057kg95ipjdirbkr082wbwrbz5l79mwxir8ymkxhma6l6wbxidif";
+        }
+      }'
     '';
 
   meta = with lib; {
