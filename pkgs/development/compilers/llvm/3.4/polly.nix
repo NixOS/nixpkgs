@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, isl, python, gmp, llvm, version }:
+{ stdenv, fetch, cmake, isl, python2, gmp, llvm, version }:
 
 stdenv.mkDerivation {
   name = "polly-${version}";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   patches = [ ./polly-separate-build.patch ];
 
-  buildInputs = [ cmake isl python gmp ];
+  buildInputs = [ cmake isl python2 gmp ];
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-std=c++11"

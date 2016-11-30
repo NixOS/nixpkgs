@@ -1,6 +1,5 @@
 { buildPythonPackage
 , fetchFromGitHub
-, blas
 , numpy
 , six
 , scipy
@@ -45,7 +44,7 @@ buildPythonPackage rec {
   dontStrip = true;
 
   propagatedBuildInputs = [
-    blas
+    numpy.blas
     numpy
     six
     scipy
@@ -59,4 +58,5 @@ buildPythonPackage rec {
     libgpuarray
   ] ++ (stdenv.lib.optional (cudnn != null) [ cudnn ]);
 
+  passthru.cudaSupport = true;
 }

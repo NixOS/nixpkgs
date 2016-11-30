@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "rawdog-${version}";
   version = "2.21";
 
@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0f5z7b70pyhjl6s28hgxninsr86s4dj5ycd50sv6bfz4hm1c2030";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ feedparser ];
+  propagatedBuildInputs = with python2Packages; [ feedparser ];
 
   namePrefix = "";
   

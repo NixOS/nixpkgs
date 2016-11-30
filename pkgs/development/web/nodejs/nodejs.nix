@@ -67,4 +67,6 @@ in
       maintainers = with maintainers; [ goibhniu havvy gilligan cko ];
       platforms = platforms.linux ++ platforms.darwin;
     };
+
+    passthru.python = python2; # to ensure nodeEnv uses the same version
 }

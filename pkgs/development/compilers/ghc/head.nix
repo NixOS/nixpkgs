@@ -27,10 +27,6 @@ in stdenv.mkDerivation (rec {
     sha256 = "1ryggmz961qd0fl50rkjjvi6g9azwla2vx9310a9nzjaj5x6ib4y";
   };
 
-  # This shouldn't be necessary since 1ad1edbb32ce01ba8b47d8e8dad357b0edd6a4dc, but
-  # see http://hydra.cryp.to/build/2061608/nixlog/1/raw
-  patches = [ ./ghc-HEAD-dont-pass-linker-flags-via-response-files.patch ];
-
   postPatch = ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID

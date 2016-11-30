@@ -15,7 +15,7 @@ rec {
     srcSha = "1w0alyyc29cy2lczrqvg1kfycjxy0xg8fpzdac80m88fxpv23glp";
 
     patches = [
-      ./patches/disable-lockfile-check.patch
+      ./patches/disable-lockfile-check-stable.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 
     inherit targets;

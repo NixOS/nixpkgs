@@ -61,7 +61,6 @@ stdenv.mkDerivation rec {
     "bashcompdir=\${out}/share/bash-completion/completions"
     "READMEdir=\${TMPDIR}/var/lib/lxc/rootfs"
     "LXCPATH=\${TMPDIR}/var/lib/lxc"
-    "bashcompdir=\${out}/etc/bash_completion.d"
   ];
 
   postInstall = ''

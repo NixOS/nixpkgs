@@ -2671,14 +2671,20 @@ in {
     };
   };
 
+  # Should be moved out of python-packages.nix
   bitbucket-cli = buildPythonPackage rec {
-    name = "bitbucket-cli-0.4.1";
+    name = "bitbucket-cli-0.5.1";
     src = pkgs.fetchurl {
        url = "mirror://pypi/b/bitbucket-cli/${name}.tar.gz";
-       sha256 = "d8909627ae7a46519379c6343698d49f9ffd5de839ff44796974828d843a9419";
+       sha256 = "d881e21ec7ebfa006cfca6d10a5b7229aa59990568f8c6b8e3364769fa38b6f6";
     };
 
-    pythonPath = [ self.requests ];
+    propagatedBuildInputs = [ self.requests2 ];
+
+    # No tests
+    doCheck = false;
+
+    disabled = isPy3k;
 
     meta = {
       description = "Bitbucket command line interface";
@@ -4859,12 +4865,12 @@ in {
   };
 
   pytest_30 = self.pytest_27.override rec {
-    name = "pytest-3.0.3";
+    name = "pytest-3.0.4";
 
     propagatedBuildInputs = with self; [ hypothesis py ];
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "1rxydacrdb8s312l3bn0ybrqsjp13abzyim1x21s80386l5504zj";
+      sha256 = "03d49xc0l4sdncq47rn1p42ywjnxqrvpc160y8dwvanv3wnfx7w7";
     };
   };
 
@@ -13510,6 +13516,9 @@ in {
     clblas = pkgs.clblas-cuda;
   };
 
+  libplist = if isPy3k then throw "libplist not supported for interpreter ${python.executable}" else
+    (pkgs.libplist.override{python2Packages=self; }).py;
+
   libxml2 = if isPy3k then throw "libxml2 not supported for interpreter ${python.executable}" else
     (pkgs.libxml2.override{pythonSupport=true; python2=python;}).py;
 
@@ -14162,6 +14171,7 @@ in {
       license = licenses.free;
       maintainers = with maintainers; [ prikhi ];
       platforms = platforms.linux;
+      broken = true; # broken dependency of django within filebrowser_safe
     };
   };
 
@@ -15211,7 +15221,7 @@ in {
 
   netaddr = buildPythonPackage rec {
     name = "netaddr-0.7.18";
-    disabled = isPy35;  # https://github.com/drkjam/netaddr/issues/117
+    doCheck = !isPy35;  # https://github.com/drkjam/netaddr/issues/117
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/netaddr/${name}.tar.gz";
@@ -23438,37 +23448,11 @@ in {
     };
   };
 
-  Theano = buildPythonPackage rec {
-    name = "Theano-0.8.2";
+  Theano = self.TheanoWithoutCuda;
 
-    disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
+  TheanoWithoutCuda = callPackage ../development/python-modules/Theano/theano-without-cuda { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Theano/${name}.tar.gz";
-      sha256 = "7463c8f7ed1a787bf881f36d38a38607150186697e7ce7e78bfb94b7c6af8930";
-    };
-
-    #preCheck = ''
-    #  mkdir -p check-phase
-    #  export HOME=$(pwd)/check-phase
-    #'';
-    doCheck = false;
-    # takes far too long, also throws "TypeError: sort() missing 1 required positional argument: 'a'"
-    # when run from the installer, and testing with Python 3.5 hits github.com/Theano/Theano/issues/4276,
-    # the fix for which hasn't been merged yet.
-
-    # keep Nose around since running the tests by hand is possible from Python or bash
-    propagatedBuildInputs = [ stdenv ] ++ (with self; [ nose numpy numpy.blas pydot_ng scipy six ]);
-
-    meta = {
-      homepage = http://deeplearning.net/software/theano/;
-      description = "A Python library for large-scale array computation";
-      license = stdenv.lib.licenses.bsd3;
-      maintainers = [ maintainers.bcdarwin ];
-    };
-  };
-
-  Theano-cuda = callPackage ../development/python-modules/theano/cuda (
+  TheanoWithCuda = callPackage ../development/python-modules/Theano/theano-with-cuda (
   let
     boost = pkgs.boost159.override {
       inherit (self) python numpy scipy;
@@ -31356,4 +31340,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
+    (pkgs.zeitgeist.override{python2Packages=self;}).py;
+
 }

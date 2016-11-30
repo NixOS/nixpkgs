@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, pyside, python, qt4, pysideShiboken }:
 
 stdenv.mkDerivation {
-  name = "${python.libPrefix}-pyside-tools-0.2.15";
+  name = "pyside-tools-0.2.15";
 
   src = fetchurl {
     url = "https://github.com/PySide/Tools/archive/0.2.15.tar.gz";

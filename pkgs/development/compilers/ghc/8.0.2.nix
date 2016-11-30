@@ -9,7 +9,7 @@ let
     downloadToTemp = true;
     postFetch = ''
       ${patchutils}/bin/filterdiff --clean --strip-match=1 -x 'testsuite/*' "$downloadedFile" > "$out"
-    '';
+    ''; # fix syntax highlighting: */
   });
 in
 stdenv.mkDerivation rec {
@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./ghc-HEAD-dont-pass-linker-flags-via-response-files.patch  # https://github.com/NixOS/nixpkgs/issues/10752
-
     # Already applied?
     # ./relocation.patch
     # Fix https://ghc.haskell.org/trac/ghc/ticket/12130
