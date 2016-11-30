@@ -1068,15 +1068,6 @@ self: super: {
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
-  # https://github.com/hdbc/hdbc-odbc/pull/29
-  HDBC-odbc = overrideCabal super.HDBC-odbc (old: {
-    postPatch = old.postPatch or "" + ''
-      sed -e '/data BoundValue =/ { s/$/{/ ; n; n ; s/{ bvVal/  bvVal/ }' \
-          -e 's/-- | This is rather/-- This is rather/' \
-          -i Database/HDBC/ODBC/Statement.hsc
-    '';
-  });
-
   # https://github.com/vshabanov/HsOpenSSL/issues/11
   HsOpenSSL = doJailbreak super.HsOpenSSL;
 
