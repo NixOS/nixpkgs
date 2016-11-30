@@ -12,12 +12,12 @@ python2Packages.buildPythonApplication rec {
 
   patchPhase = ''
     patchShebangs scripts
-    substituteInPlace setup.py --replace "data_files.append((dir" "data_files.append(('lib/${pythonPackages.python.libPrefix}/site-packages/' + dir"
+    substituteInPlace setup.py --replace "data_files.append((dir" "data_files.append(('lib/${python2Packages.python.libPrefix}/site-packages/' + dir"
   '';
 
-  buildInputs = with pythonPackages; [ nose mock ];
-  propagatedBuildInputs = with pythonPackages; [
-    makeWrapper pillow jinja2 spambayes pythonPackages.lxml
+  buildInputs = with python2Packages; [ nose mock ];
+  propagatedBuildInputs = with python2Packages; [
+    makeWrapper pillow jinja2 spambayes python2Packages.lxml
     pgpdump gnupg1orig
   ];
 
