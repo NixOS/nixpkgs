@@ -1,39 +1,30 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocpBuild, ocpIndent, opam, cmdliner, ncurses, re, lambdaTerm, libev }:
+{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ocpBuild, ocpIndent, opam, cmdliner, ncurses, re, lambdaTerm, libev }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast optional; in
 
 assert versionAtLeast (getVersion ocaml) "4";
-assert versionAtLeast (getVersion ocpBuild) "1.99.6-beta";
+assert versionAtLeast (getVersion ocpBuild) "1.99.13-beta";
 assert versionAtLeast (getVersion ocpIndent) "1.4.2";
 
 let
-  version = "1.1.4";
-  srcs = {
-    "4.03.0" = {
-      rev = "${version}-4.03";
-      sha256 = "0c6s5radwyvxf9hrq2y9lirk72z686k9yzd0vgzy98yrrp1w56mv";
-    };
-    "4.02.3" = {
-      rev = "${version}-4.02";
-      sha256 = "057ss3lz754b2pznkb3zda5h65kjgqnvabvfqwqcz4qqxxki2yc8";
-    };
-    "4.01.0" = {
-      rev = "${version}";
-      sha256 = "106bnc8jhmjnychcl8k3gl9n6b50bc66qc5hqf1wkbkk9kz4vc9d";
-    };
-  };
-
-  src = fetchFromGitHub ({
-    owner = "OCamlPro";
-    repo = "ocp-index";
-  } // srcs."${ocaml.version}");
+  version = "1.1.5";
 in
 
 stdenv.mkDerivation {
 
   name = "ocp-index-${version}";
 
-  inherit src;
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = "ocp-index";
+    rev = version;
+    sha256 = "0gir0fm8mq609371kmwpsqfvpfx2b26ax3f9rg5fjf5r0bjk9pqd";
+  };
+
+  patches = [ (fetchpatch {
+    url = https://github.com/OCamlPro/ocp-index/commit/618872a0980d077857a63d502eadbbf0d1b05c0f.diff;
+    sha256 = "07snnydczkzapradh1c22ggv9vaff67nc36pi3218azb87mb1p7z";
+  }) ];
 
   buildInputs = [ ocaml findlib ocpBuild opam cmdliner ncurses re libev ]
   ++ optional (versionAtLeast (getVersion lambdaTerm) "1.7") lambdaTerm;
