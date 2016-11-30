@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
              (disable (x)
                (setf features (remove x features))))
     ''
-    + stdenv.lib.optionalString threadSupport "(enable :sb-thread)"
+    + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
     + stdenv.lib.optionalString stdenv.isArm "(enable :arm)"
     + ''
       )) " > customize-target-features.lisp
