@@ -20512,7 +20512,8 @@ in {
       sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
     };
 
-    buildInputs = with self; [ six pytest hypothesis ];
+    propagatedBuildInputs = with self; [ six ];
+    buildInputs = with self; [ pytest hypothesis ];
 
     checkPhase = ''
       py.test
