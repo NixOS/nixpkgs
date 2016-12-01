@@ -20249,14 +20249,15 @@ in {
   };
 
   pyjwt = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.4.2";
     name = "pyjwt-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/progrium/pyjwt/archive/${version}.tar.gz";
-      sha256 = "118rzhpyvx1h4hslms4fdizyv6mnyd4g34fv089lvs116pj08k9c";
+      sha256 = "06vg84aicwkv0kli8i4jhg0kc6298cmh38ib058q01yxzk6q17gn";
     };
 
+    buildInputs = with self; [ pytestrunner pytestcov pytest_27 coverage ];
     propagatedBuildInputs = with self; [ pycrypto ecdsa ];
 
     meta = {
