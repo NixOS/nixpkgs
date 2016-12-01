@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool, wrapGAppsHook
+{ stdenv, fetchurl, python2Packages, intltool, wrapGAppsHook
 , gst_python, withGstPlugins ? false, gst_plugins_base ? null
 , gst_plugins_good ? null, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
 
