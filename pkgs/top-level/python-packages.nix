@@ -20284,8 +20284,13 @@ in {
       sha256 = "06vg84aicwkv0kli8i4jhg0kc6298cmh38ib058q01yxzk6q17gn";
     };
 
-    buildInputs = with self; [ pytestrunner pytestcov pytest_27 coverage ];
+    buildInputs = with self; [ pytestrunner pytestcov pytest coverage ];
     propagatedBuildInputs = with self; [ pycrypto ecdsa ];
+
+    # We don't need this specific version
+    postPatch = ''
+      substituteInPlace setup.py --replace "pytest==2.7.3" "pytest"
+    '';
 
     meta = {
       description = "JSON Web Token implementation in Python";
