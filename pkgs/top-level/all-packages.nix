@@ -1276,6 +1276,8 @@ in
 
   convmv = callPackage ../tools/misc/convmv { };
 
+  convoy = callPackage ../tools/filesystems/convoy { };
+
   cool-retro-term = qt55.callPackage ../applications/misc/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils {
