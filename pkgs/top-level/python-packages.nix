@@ -16049,7 +16049,7 @@ in {
 
     buildInputs = with self; [ mock nose unittest2 ];
 
-    propagatedBuildInputs = with self; [ pycrypto blinker pyjwt ];
+    propagatedBuildInputs = with self; [ pycrypto blinker pyjwt_1_4 ];
 
     meta = {
       homepage = https://github.com/idan/oauthlib;
@@ -20249,12 +20249,12 @@ in {
   };
 
   pyjwt = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.4.2";
     name = "pyjwt-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/progrium/pyjwt/archive/${version}.tar.gz";
-      sha256 = "118rzhpyvx1h4hslms4fdizyv6mnyd4g34fv089lvs116pj08k9c";
+      sha256 = "06vg84aicwkv0kli8i4jhg0kc6298cmh38ib058q01yxzk6q17gn";
     };
 
     propagatedBuildInputs = with self; [ pycrypto ecdsa ];
@@ -20268,6 +20268,21 @@ in {
       maintainers = with maintainers; [ prikhi ];
       platforms = platforms.unix;
     };
+  };
+
+  # oauthlib 0.7.2 works with PyJWT==1.4.0
+  pyjwt_1_4 = buildPythonPackage rec {
+    version = "1.4.0";
+    name = "pyjwt-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://github.com/progrium/pyjwt/archive/${version}.tar.gz";
+      sha256 = "118rzhpyvx1h4hslms4fdizyv6mnyd4g34fv089lvs116pj08k9c";
+    };
+
+    propagatedBuildInputs = with self; [ pycrypto ecdsa ];
+
+    inherit (self.pyjwt) meta;
   };
 
   pykickstart = buildPythonPackage rec {
