@@ -16039,17 +16039,17 @@ in {
   };
 
   oauthlib = buildPythonPackage rec {
-    version = "0.7.2";
+    version = "2.0.0";
     name = "oauthlib-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://github.com/idan/oauthlib/archive/${version}.tar.gz";
-      sha256 = "08b7swyswhxh90k9mp54rk1qks2l2s2pdcjap6x118y27p7dhp4h";
+      url = "https://github.com/idan/oauthlib/archive/v${version}.tar.gz";
+      sha256 = "02b645a8rqh4xfs1cmj8sss8wqppiadd1ndq3av1cdjz2frfqcjf";
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
 
-    propagatedBuildInputs = with self; [ pycrypto blinker pyjwt ];
+    propagatedBuildInputs = with self; [ cryptography blinker pyjwt ];
 
     meta = {
       homepage = https://github.com/idan/oauthlib;
