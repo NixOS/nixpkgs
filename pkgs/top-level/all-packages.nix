@@ -12023,6 +12023,8 @@ in
 
   terminus_font = callPackage ../data/fonts/terminus-font { };
 
+  terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
+
   tipa = callPackage ../data/fonts/tipa { };
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
@@ -17643,6 +17645,4 @@ in
   fpm2 = callPackage ../tools/security/fpm2 { };
 
   simplenote = callPackage ../applications/misc/simplenote { };
-
-  terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 }
