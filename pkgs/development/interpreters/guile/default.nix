@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, coverageAnalysis ? null, gnu ? null }:
+, libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null }:
 
 # Do either a coverage analysis build or a standard build.
 (if coverageAnalysis != null
@@ -31,7 +31,13 @@
   # libguile/vm-i-system.i is not created in time
   enableParallelBuilding = false;
 
-  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch ] ++
+  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch
+    (fetchpatch {
+      # Fixes stability issues with 00-repl-server.test
+      url = "http://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
+      sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
+    })
+  ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   # Explicitly link against libgcc_s, to work around the infamous
