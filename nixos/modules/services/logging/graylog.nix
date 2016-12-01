@@ -160,9 +160,9 @@ in
       preStart = ''
         mkdir -p /var/lib/graylog -m 755
         mkdir -p /var/lib/graylog/plugins -m 755
-        #ln -sfT ${glPlugins}/bin /var/lib/graylog/plugins
+
         for declarativeplugin in `ls ${glPlugins}/bin/`; do
-          ln -s ${glPlugins}/bin/$declarativeplugin /var/lib/graylog/plugins/$declarativeplugin
+          ln -sf ${glPlugins}/bin/$declarativeplugin /var/lib/graylog/plugins/$declarativeplugin
         done
         for includedplugin in `ls ${cfg.package}/plugin/`; do
           ln -s ${cfg.package}/plugin/$includedplugin /var/lib/graylog/plugins/$includedplugin || true
