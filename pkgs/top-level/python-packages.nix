@@ -13338,7 +13338,9 @@ in {
       homepage    = "https://github.com/twisted/klein";
       license     = licenses.mit;
     };
-   };
+  };
+
+  koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";

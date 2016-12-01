@@ -1,8 +1,6 @@
-{ stdenv, fetchurl, python2 }:
+{ stdenv, fetchurl, mkPythonDerivation, pycurl }:
 
-let
-  pythonEnv = python2.withPackages(ps : [ps.pycurl]);
-in stdenv.mkDerivation rec {
+mkPythonDerivation rec {
   name = "koji-1.8";
 
   src = fetchurl {
@@ -10,11 +8,12 @@ in stdenv.mkDerivation rec {
     sha256 = "10dph209h4jgajb5jmbjhqy4z4hd22i7s2d93vm3ikdf01i8iwf1";
   };
 
-  propagatedBuildInputs = [ pythonEnv ];
+  propagatedBuildInputs = [ pycurl ];
 
   makeFlags = "DESTDIR=$(out)";
 
   postInstall = ''
+    mv $out/usr/* $out/
     cp -R $out/nix/store/*/* $out/
     rm -rf $out/nix
   '';
