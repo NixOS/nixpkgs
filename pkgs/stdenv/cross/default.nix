@@ -17,10 +17,10 @@ rec {
   # be used to build compilers and other such tools targeting the cross
   # platform. Then, `forceNativeDrv` can be removed.
   buildPackages = allPackages {
+    inherit system platform crossSystem config;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
     bootStdenv = vanillaStdenv;
-    inherit system platform crossSystem config;
   };
 
   stdenvCross = buildPackages.makeStdenvCross

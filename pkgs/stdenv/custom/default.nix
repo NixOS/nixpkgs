@@ -7,10 +7,10 @@ rec {
   });
 
   buildPackages = allPackages {
+    inherit system platform crossSystem config;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
     bootStdenv = vanillaStdenv;
-    inherit system platform crossSystem config;
   };
 
   stdenvCustom = config.replaceStdenv { pkgs = buildPackages; };
