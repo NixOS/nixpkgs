@@ -11606,6 +11606,7 @@ with pkgs;
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
     inherit (gnome2) gtk gtkmm;
   };
+  open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
   delve = callPackage ../development/tools/delve { };
 
