@@ -22439,7 +22439,7 @@ in {
 
   rpkg = buildPythonPackage (rec {
     name = "rpkg-1.14";
-    disabled = !isPy27;
+    disabled = !isPy27; # error: invalid command 'bdist_wheel'
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
@@ -22449,8 +22449,8 @@ in {
 
     patches = [ ../development/python-modules/rpkg-buildfix.diff ];
 
-    propagatedBuildInputs = with self; [ pycurl pkgs.koji GitPython pkgs.git
-                              pkgs.rpm pyopenssl ];
+    propagatedBuildInputs = with self; [ pycurl koji GitPython pkgs.git
+      rpm pyopenssl ];
 
   });
 
