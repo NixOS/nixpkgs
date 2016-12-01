@@ -67,6 +67,7 @@ let
         harfbuzz = pkgs.harfbuzz-icu;
         cups = if stdenv.isLinux then pkgs.cups else null;
         bison = pkgs.bison2; # error: too few arguments to function 'int yylex(...
+        openssl = pkgs.openssl_1_1_0;
         inherit developerBuild decryptSslTraffic;
       };
 
