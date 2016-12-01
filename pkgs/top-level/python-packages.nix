@@ -15899,16 +15899,21 @@ in {
   };
 
   numtraits = buildPythonPackage rec {
-    name = "numtraits-${version}";
+    pname = "numtraits";
     version = "0.2";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numtraits/${name}.tar.gz";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
       sha256 = "2fca9a6c9334f7358ef1a3e2e64ccaa6a479fc99fc096910e0d5fbe8edcdfd7e";
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ numpy traitlets];
+    propagatedBuildInputs = with self; [ six numpy traitlets];
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       description = "Numerical traits for Python objects";
