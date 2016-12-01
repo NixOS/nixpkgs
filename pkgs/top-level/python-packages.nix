@@ -7950,7 +7950,8 @@ in {
   };
 
   lti = let
-    self' = (self.override {self = self';}) // {pytest = self.pytest_27;};
+    # hypothesis (dependency of oauthlib) can't be built with pytest_27
+    self' = (self.override {self = self';}) // {pytest = self.pytest_27; hypothesis = self.hypothesis; };
     mock_1_0_1 = self'.mock.overrideDerivation (_: rec {
       name = "mock-1.0.1";
       propagatedBuildInputs = null;
@@ -12380,7 +12381,8 @@ in {
       sha256 = "030rf4gn4b0hylr90wazilwa3bc038fcqng0wibcx67mqaq035n4";
     };
 
-    buildInputs = with self; [ flake8 pytest flaky ];
+    # need pytest_29: https://github.com/HypothesisWorks/hypothesis-python/issues/380
+    buildInputs = with self; [ flake8 pytest_29 flaky ];
     propagatedBuildInputs = with self; ([ uncompyle6 ] ++ optionals isPy27 [ enum34  ]);
 
     # Fails randomly in tests/cover/test_conjecture_engine.py::test_interleaving_engines.
