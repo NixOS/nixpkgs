@@ -16,6 +16,9 @@
   # symlink to `object' that will be added to the tarball.
   storeContents ? []
 
+  # Extra commands to be executed before archiving files
+, extraCommands ? ""
+
   # Extra tar arguments
 , extraArgs ? ""
 }:
@@ -25,7 +28,7 @@ stdenv.mkDerivation {
   builder = ./make-system-tarball.sh;
   buildInputs = [perl xz];
 
-  inherit fileName pathsFromGraph extraArgs;
+  inherit fileName pathsFromGraph extraArgs extraCommands;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;
