@@ -38,6 +38,11 @@
 , libpulseaudio
 , systemd
 , generated ? import ./sources.nix
+, writeScript
+, xidel
+, coreutils
+, gnused
+, gnugrep
 }:
 
 assert stdenv.isLinux;
@@ -62,10 +67,12 @@ let
 
   source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
+  name = "firefox-bin-unwrapped-${version}";
+
 in
 
 stdenv.mkDerivation {
-  name = "firefox-bin-unwrapped-${version}";
+  inherit name;
 
   src = fetchurl { inherit (source) url sha512; };
 
@@ -165,6 +172,46 @@ stdenv.mkDerivation {
     '';
 
   passthru.ffmpegSupport = true;
+  passthru.updateScript =
+    let
+      version = (builtins.parseDrvName name).version;
+      isBeta = builtins.stringLength version + 1 == builtins.stringLength (builtins.replaceStrings ["b"] ["bb"] version);
+    in
+      writeScript "update-firefox-bin" ''
+        PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin
+
+        pushd pkgs/applications/networking/browsers/firefox-bin
+
+        tmpfile=`mktemp`
+        url=http://archive.mozilla.org/pub/firefox/releases/
+        version=`xidel -q $url --extract "//a" | \
+                 sed s"/.$//" | \
+                 grep "^[0-9]" | \
+                 sort --version-sort | \
+                 grep -v "funnelcake" | \
+                 grep -e "${if isBeta then "b" else ""}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${if isBeta then "" else "grep -v \"b\" |"} \
+                 tail -1`
+        shasums=`curl --silent $url$version/SHA512SUMS`
+
+        echo "{" > $tmpfile
+        echo "  version = \"$version\";" >> $tmpfile
+        echo "  sources = [" >> $tmpfile
+        for arch in linux-x86_64 linux-i686; do
+            for line in `echo "$shasums" | grep $arch | grep "firefox-$version.tar.bz2$" | tr " " ":"`; do
+            echo "    { url = \"$url$version/$arch/`echo $line | cut -d\":\" -f3`\";" >> $tmpfile
+            echo "      locale = \"`echo $line | cut -d\":\" -f3 | sed \"s/$arch\///\" | sed \"s/\/.*//\"`\";" >> $tmpfile
+            echo "      arch = \"$arch\";" >> $tmpfile
+            echo "      sha512 = \"`echo $line | cut -d\":\" -f1`\";" >> $tmpfile
+            echo "    }" >> $tmpfile
+          done
+        done
+        echo "  ];" >> $tmpfile
+        echo "}" >> $tmpfile
+
+        cat $tmpfile > ${if isBeta then "beta_" else ""}sources.nix
+
+        popd
+      '';
 
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
