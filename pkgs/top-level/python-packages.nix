@@ -1541,6 +1541,7 @@ in {
         sha256 = "1pw9lrdjl24n6lrs6lnqpyiyic8bdxgvhyqvb2rx6kkbjrfhhgv5";
         url = "mirror://pypi/a/aws-shell/aws-shell-${version}.tar.gz";
       };
+    # Why does it propagate packages that are used for testing?
     propagatedBuildInputs = with self; [
       configobj prompt_toolkit awscli boto3 pygments mock pytest
       pytestcov unittest2 tox
@@ -4936,7 +4937,8 @@ in {
     # pytest's binaries
     pytest = self.pytest;
 
-    propagatedBuildInputs = with self; [ django pytest setuptools_scm_18 ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ django setuptools_scm_18 ];
 
     meta = {
       description = "py.test plugin for testing of Django applications";
@@ -4955,7 +4957,8 @@ in {
       sha256 = "7d7cc1cb25f88a707f083b1dc2e3c2fdfc6f37709567a2587dd0cd0bcd70edb6";
     };
 
-    propagatedBuildInputs = with self; [ pytest coverage virtualenv pytestcov six ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ coverage virtualenv pytestcov six ];
 
     checkPhase = ''
       py.test -k "not test_yield_requires_config_doesnt_skip and not test_yield_requires_config_skips"
@@ -4980,7 +4983,7 @@ in {
       sha256 = "1zzxlswbny8dp3c1sbhpyms1xkknxb6qfji3y3azc7gc95324xsv";
     };
 
-    propagatedBuildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest ];
 
     checkPhase = ''
       py.test
@@ -5004,7 +5007,12 @@ in {
       sha256 = "9c2271654294020e134624020a2144cb93b7334809d70fb3f470cd31ec788a3a";
     };
 
-    propagatedBuildInputs = with self ; [ pytest pyflakes pytestcache ];
+    buildInputs = with self; [ pytestpep8 pytest ];
+    propagatedBuildInputs = with self; [ pyflakes pytestcache ];
+
+    checkPhase = ''
+      py.test test_flakes.py
+    '';
 
     meta = {
       license = licenses.mit;
@@ -5018,7 +5026,8 @@ in {
     pname = "pytest-mock";
     version = "1.2";
 
-    propagatedBuildInputs = with self; [ mock pytest ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ mock ];
 
     meta = {
       description = "Thin-wrapper around the mock package for easier use with py.test.";
@@ -5041,7 +5050,8 @@ in {
       sha256 = "06032agzhw1i9d9qlhfblnl3dw5hcyxhagn7b120zhrszbjzfbh3";
     };
 
-    propagatedBuildInputs = with self ; [ pytest pytestcache pep8 ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ pytestcache pep8 ];
 
     meta = {
       license = licenses.mit;
@@ -5059,7 +5069,8 @@ in {
        sha256 = "003vdkxpx37n0kjqpwgj3314hwk2jfz3nz58db7xh68bf8xy75lk";
      };
 
-     propagatedBuildInputs = with self ; [ pytest pep257 ];
+     buildInputs = with self; [ pytest ];
+     propagatedBuildInputs = with self ; [ pep257 ];
 
      meta = {
        homepage = https://github.com/anderslime/pytest-pep257;
@@ -5121,7 +5132,8 @@ in {
       sha256 = "047w4zwdsnlzmsc5f3rapzbzd2frlvz9nnp8v4b48fjmqmxassh3";
     };
 
-    propagatedBuildInputs = with self ; [ pytest pytestflakes pytestpep8 tox ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ pytestflakes pytestpep8 tox ];
 
     meta = {
       license = licenses.asl20;
@@ -5135,6 +5147,7 @@ in {
     pname = "pytest-server-fixtures";
     version = "1.1.0";
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ setuptools-git pytest-shutil pytest-fixture-config psutil requests2 ];
 
     meta = {
@@ -5161,8 +5174,8 @@ in {
       url = "mirror://pypi/p/pytest-shutil/${name}.tar.gz";
       sha256 = "bb3c4fc2dddaf70b38bd9bb7a710d07728fa14f88fbc89c2a07979b383ade5d4";
     };
-    buildInputs = with self; [ cmdline ];
-    propagatedBuildInputs = with self; [ pytest pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
+    buildInputs = with self; [ cmdline pytest ];
+    propagatedBuildInputs = with self; [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
     meta = {
       description = "A goodie-bag of unix shell and environment tools for py.test";
       homepage = https://github.com/manahl/pytest-plugins;
@@ -5209,8 +5222,8 @@ in {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "093f5fa479ee6201e48db367c307531dc8b800609b0c3ddca9c01e0fd466a669";
     };
-    buildInputs = with self; [ pytestcov mock cmdline ];
-    propagatedBuildInputs = with self; [ pytest-fixture-config pytest-shutil pytest ];
+    buildInputs = with self; [ pytest pytestcov mock cmdline ];
+    propagatedBuildInputs = with self; [ pytest-fixture-config pytest-shutil ];
     checkPhase = '' py.test tests/unit '';
     meta = {
       description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
@@ -5270,7 +5283,7 @@ in {
       sha256 = "15kzcr5pchf3id4ikdvlv752rc0j4d912n589l4rifp8qsj19l1x";
     };
 
-    propagatedBuildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest ];
 
     # no upstream test
     doCheck = false;
@@ -7676,8 +7689,8 @@ in {
         sed 's/==/>=/' -i setup.py
     '';
 
-    propagatedBuildInputs = with self; [ six clint pyyaml docopt pytest
-      requests2 jsonpatch args ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ six clint pyyaml docopt requests2 jsonpatch args ];
 
     meta = with stdenv.lib; {
       description = "A python wrapper for the various Internet Archive APIs";
@@ -8002,7 +8015,7 @@ in {
 
     propagatedBuildInputs = with self; [ httplib2 oauth oauth2 semantic-version ];
     buildInputs = with self; [
-      flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
+      flask httpretty oauthlib pyflakes pytest_27 pytestcache pytestcov covCore
       pytestflakes pytestpep8 sphinx mock
     ];
 
@@ -10341,7 +10354,8 @@ in {
       sha256 = "10p9rb2m1zccszg7590fjd0in6rabzsh86f5m7qm369mapc3b6dc";
     };
 
-    propagatedBuildInputs = with self; [ django pytest ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ django ];
 
     meta = {
       description = "Efficient tree implementations for Django 1.6+";
@@ -10996,8 +11010,7 @@ in {
       sha256 = "1x9ixika7wqjj52x8wnsh1vk7jadkdqpx01plj7mlh8slwyq4s41";
     };
 
-    propagatedBuildInputs = with self; [ pytest ];
-    buildInputs = with self; [ mock ];
+    buildInputs = with self; [ mock pytest ];
 
     # waiting for feedback https://github.com/box/flaky/issues/97
     doCheck = false;
