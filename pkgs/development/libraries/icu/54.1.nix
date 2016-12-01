@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fixDarwinDylibNames }:
+{ stdenv, fetchurl, fetchpatch, fixDarwinDylibNames }:
 
 let
-  icu = import ./default.nix { inherit stdenv fetchurl fixDarwinDylibNames; };
+  icu = import ./default.nix { inherit stdenv fetchurl fetchpatch fixDarwinDylibNames; };
 in
   stdenv.lib.overrideDerivation icu (attrs: {
     src = fetchurl {
@@ -9,4 +9,3 @@ in
       md5 = "e844caed8f2ca24c088505b0d6271bc0";
     };
   })
-
