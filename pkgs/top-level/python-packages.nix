@@ -41,6 +41,30 @@ in {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+  acoustics = buildPythonPackage rec {
+    pname = "acoustics";
+    version = "0.1.2";
+    name = pname + "-" + version;
+
+    buildInputs = with self; [ cython pytest ];
+    propagatedBuildInputs = with self; [ numpy scipy matplotlib pandas tabulate ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "b75a47de700d01e704de95953a6e969922b2f510d7eefe59f7f8980ad44ad1b7";
+    };
+
+    # Tests not distributed
+    doCheck = false;
+
+    meta = {
+      description = "A package for acousticians";
+      maintainer = with maintainers; [ fridh ];
+      license = with licenses; [ bsd ];
+      homepage = https://github.com/python-acoustics/python-acoustics;
+    };
+  };
+
   agate = buildPythonPackage rec {
     name = "agate-1.2.2";
     disabled = isPy3k;
