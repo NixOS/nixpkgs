@@ -76,6 +76,14 @@ self: super: {
     '';
   });
 
+  # jni needs help finding libjvm.so because it's in a weird location.
+  jni = overrideCabal super.jni (drv: {
+    preConfigure = ''
+      local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
+      configureFlags+=" --extra-lib-dir=''${libdir[0]}"
+    '';
+  });
+
   # The package doesn't know about the AL include hierarchy.
   # https://github.com/phaazon/al/issues/1
   al = appendConfigureFlag super.al "--extra-include-dirs=${pkgs.openal}/include/AL";
