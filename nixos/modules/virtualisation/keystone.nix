@@ -31,7 +31,7 @@ in {
     enable = mkOption {
       default = false;
       type = types.bool;
-      description = "This option enables Keystone.";
+      description = "Enable Keystone, the OpenStack Identity Service";
     };
 
     extraConfig = mkOption {
@@ -47,6 +47,7 @@ in {
       type = types.str;
       default = "localhost";
       description = ''
+        The address of the public identity endpoint.
       '';
     };
 
@@ -76,7 +77,8 @@ in {
       default = "mySuperToken";
       description = ''
         This is the admin token used to boostrap keystone,
-        ie. to provision first resources.'';
+        ie. to provision first resources.
+      '';
     };
 
     dbHost = mkOption {
@@ -99,9 +101,7 @@ in {
       description = "The mysql password to the respective dbUser.";
       example = "keystone";
     };
-
   };
-
 
   config = mkIf cfg.enable {
     # Note: when changing the default, make it conditional on
@@ -116,23 +116,25 @@ in {
     users.extraUsers = [{
       name = "keystone";
       group = "keystone";
+      uid = config.ids.uids.keystone;
     }];
     users.extraGroups = [{
       name = "keystone";
+      gid = config.ids.gids.keystone;
     }];
 
     systemd.services.keystone-all = {
         description = "OpenStack Keystone Daemon";
         after = [ "mysql.service" "network.target"];
+        requires = [ "mysql.service" "network.target"];
         path = [ cfg.package pkgs.mysql pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
         wantedBy = [ "multi-user.target" ];
         preStart = ''
           mkdir -m 755 -p /var/lib/keystone
 
-          # TODO: move out of here
-          mysql -u root -N -e "create database ${cfg.dbName};" || true
-          mysql -u root -N -e "GRANT ALL PRIVILEGES ON ${cfg.dbName}.* TO '${cfg.dbUser}'@'${cfg.dbHost}' IDENTIFIED BY '${cfg.dbPassword}';"
-          mysql -u root -N -e "GRANT ALL PRIVILEGES ON ${cfg.dbName}.* TO '${cfg.dbUser}'@'%' IDENTIFIED BY '${cfg.dbPassword}';"
+          mysql -h ${cfg.dbHost} -u root -N -e "create database ${cfg.dbName};" || true
+          mysql -h ${cfg.dbHost} -u root -N -e "GRANT ALL PRIVILEGES ON ${cfg.dbName}.* TO '${cfg.dbUser}'@'${cfg.dbHost}' IDENTIFIED BY '${cfg.dbPassword}';"
+          mysql -h ${cfg.dbHost} -u root -N -e "GRANT ALL PRIVILEGES ON ${cfg.dbName}.* TO '${cfg.dbUser}'@'%' IDENTIFIED BY '${cfg.dbPassword}';"
 
           # Initialise the database
           ${cfg.package}/bin/keystone-manage --config-file=${keystoneConf} db_sync
@@ -165,7 +167,6 @@ in {
 	    then
                 keystone tenant-create --name service
                 keystone tenant-create --name ${cfg.keystoneAdminTenant}
-                # TODO: change password
                 keystone user-create --name ${cfg.keystoneAdminUsername} --tenant ${cfg.keystoneAdminTenant} --pass ${cfg.keystoneAdminPassword}
                 keystone role-create --name admin
                 keystone role-create --name Member

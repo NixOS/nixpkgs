@@ -51,10 +51,11 @@ in {
       default = false;
       type = types.bool;
       description = ''
-        This option enables Glance as a single-machine installation.
-        That is, all of Glance's components are enabled on this
-        machine. This is useful for evaluating and experimenting with
-        Glance.
+        This option enables Glance as a single-machine
+        installation. That is, all of Glance's components are
+        enabled on this machine. This is useful for evaluating and
+        experimenting with Glance. Note we are currently not
+        providing any configurations for a multi-node setup.
       '';
     };
 
@@ -119,14 +120,18 @@ in {
     users.extraUsers = [{
       name = "glance";
       group = "glance";
+      uid = config.ids.gids.glance;
+
     }];
     users.extraGroups = [{
       name = "glance";
+      gid = config.ids.gids.glance;
     }];
 
     systemd.services.glance-registry = {
       description = "OpenStack Glance Registry Daemon";
       after = [ "mysql.service" "network.target"];
+      requires = [ "mysql.service" "network.target"];
       path = [ cfg.package pkgs.mysql pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
@@ -185,6 +190,7 @@ in {
     systemd.services.glance-api = {
       description = "OpenStack Glance API Daemon";
       after = [ "glance-registry.service" "rabbitmq.service" "mysql.service" "network.target"];
+      requires = [ "glance-registry.service" "rabbitmq.service" "mysql.service" "network.target"]; 
       path = [ cfg.package pkgs.mysql ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

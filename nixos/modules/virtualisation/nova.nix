@@ -141,13 +141,11 @@ in {
         default = false;
         type = types.bool;
         description = ''
-            This option enables Nova, also known as OpenStack Compute,
-            a cloud computing system, as a single-machine
-            installation.  That is, all of Nova's components are
-            enabled on this machine. This is useful for evaluating and
-            experimenting with Nova. However, for a real cloud
-            computing environment, you'll want to enable some of
-            Nova's services on other machines.
+          This option enables Nova as a single-machine
+          installation. That is, all of Nova's components are
+          enabled on this machine. This is useful for evaluating and
+          experimenting with Nova. Note we are currently not
+          providing any configurations for a multi-node setup.
           '';
       };
 
@@ -240,9 +238,12 @@ in {
     users.extraUsers = [{
       name = "nova";
       group = "nova";
+      uid = config.ids.uids.nova;
+
     }];
     users.extraGroups = [{
       name = "nova";
+      gid = config.ids.gids.nova;
     }];
 
     # Nova requires libvirtd and RabbitMQ.
@@ -254,6 +255,7 @@ in {
     systemd.services.nova-api = {
       description = "OpenStack Nova API Daemon";
       after = [ "rabbitmq.service" "mysql.service" "network.target" ];
+      requires = [ "rabbitmq.service" "mysql.service" "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -m 755 -p /var/lib/nova/networks
@@ -312,22 +314,10 @@ in {
       };
     };
 
-    # TODO: it fails to generate CA (probably wrong path)
-    /*systemd.services.nova-cert = {
-      description = "OpenStack Nova Cert Daemon";
-      after = [ "nova-api.service" "rabbitmq.service" "mysql.service" "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ cfg.package mysql openssl ];
-      serviceConfig = {
-        User = "nova";
-        Group = "nova";
-        ExecStart = "${cfg.package}/bin/nova-cert --config-file=${novaConf}";
-      };
-    };*/
-
     systemd.services.nova-consoleauth = {
       description = "OpenStack Nova ConsoleAuth Daemon";
-      after = [ "nova-api.service" "rabbitmq.service" "mysql.service" "network.target" ];
+      after = [ "nova-api.service" "rabbitmq.service" "mysql.service" "network.target" ];    
+      requires = [ "nova-api.service" "rabbitmq.service" "mysql.service" "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.mysql pkgs.openssl ];
       serviceConfig = {
@@ -340,6 +330,7 @@ in {
     systemd.services.nova-conductor = {
       description = "OpenStack Nova Conductor Daemon";
       after = [ "nova-api.service" "rabbitmq.service" "mysql.service" "network.target" ];
+      requires = [ "nova-api.service" "rabbitmq.service" "mysql.service" "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.mysql pkgs.openssl ];
       serviceConfig = {
@@ -352,6 +343,7 @@ in {
     systemd.services.nova-scheduler = {
       description = "OpenStack Nova Scheduler Daemon";
       after = [ "nova-api.service" "rabbitmq.service" "mysql.service" "network.target" ];
+      requires = [ "nova-api.service" "rabbitmq.service" "mysql.service" "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.mysql pkgs.openssl ];
       serviceConfig = {
@@ -366,6 +358,7 @@ in {
     systemd.services.nova-compute = {
       description = "OpenStack Nova Scheduler Daemon";
       after = [ "rabbitmq.service" "mysql.service" "network.target" ];
+      requires = [ "rabbitmq.service" "mysql.service" "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ cfg.package qemu bridge-utils procps iproute dnsmasq ];
       environment.PYTHONPATH = "${pkgs.pythonPackages.libvirt}/${pkgs.python.sitePackages}";

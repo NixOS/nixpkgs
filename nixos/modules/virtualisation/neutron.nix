@@ -154,13 +154,11 @@ in {
       default = false;
       type = types.bool;
       description = ''
-          This option enables Neutron, also known as OpenStack Compute,
-          a cloud computing system, as a single-machine
-          installation.  That is, all of Neutron's components are
-          enabled on this machine. This is useful for evaluating and
-          experimenting with Neutron. However, for a real cloud
-          computing environment, you'll want to enable some of
-          Neutron's services on other machines.
+        This option enables Neutron as a single-machine
+        installation. That is, all of Neutron's components are
+        enabled on this machine. This is useful for evaluating and
+        experimenting with Neutron. Note we are currently not
+        providing any configurations for a multi-node setup.
       '';
     };
 
@@ -172,7 +170,12 @@ in {
 
     publicInterface = mkOption {
       default = "eth0";
-      description = "The pysical interface name used by the linuxbridge agent";
+      description = ''
+        The pysical interface name used by the linuxbridge agent. This
+        interface is used by the physical network named "public". See
+        help of neutron net-create option
+        "--provider:physical_network" for more information.
+      '';	
       example = "eth1";
     };
 
@@ -256,24 +259,26 @@ in {
     users.extraUsers = [{
       name = "neutron";
       group = "neutron";
+      uid = config.ids.uids.neutron;
     }];
     users.extraGroups = [{
       name = "neutron";
+      gid = config.ids.gids.neutron;
     }];
 
     systemd.services.neutron-server = {
       description = "OpenStack Neutron Daemon";
       after = [ "rabbitmq.service" "mysql.service" "network.target"];
+      requires = [ "rabbitmq.service" "mysql.service" "network.target"];
       path = [ package_set pkgs.mysql pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p /var/lock/neutron /var/lib/neutron
         chown neutron:neutron /var/lock/neutron/ /var/lib/neutron
 
-        # TODO: move out of here
-        mysql -u root -N -e "create database neutron;" || true
-        mysql -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'${cfg.dbHost}' IDENTIFIED BY '${cfg.dbPassword}';"
-        mysql -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY '${cfg.dbPassword}';"
+        mysql -h ${cfg.dbHost} -u root -N -e "create database neutron;" || true
+        mysql -h ${cfg.dbHost} -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'${cfg.dbHost}' IDENTIFIED BY '${cfg.dbPassword}';"
+        mysql -h ${cfg.dbHost} -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY '${cfg.dbPassword}';"
 
         # Initialise the database
         ${package_set}/bin/neutron-db-manage --config-file ${neutronConf} --config-file ${ml2PluginConf} upgrade head
@@ -320,6 +325,7 @@ in {
     systemd.services.neutron-dhcp-agent = {
       description = "OpenStack Neutron DHCP Agent";
       after = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
+      requires = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
       path = [ utils_env pkgs.coreutils  ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -332,6 +338,7 @@ in {
     systemd.services.neutron-metadata-agent = {
       description = "OpenStack Neutron Metadata Agent";
       after = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
+      requires = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
       path = [ package_set pkgs.mysql ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -344,6 +351,7 @@ in {
     systemd.services.neutron-linuxbridge-agent = {
       description = "OpenStack Neutron LinuxBridge Agent";
       after = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
+      requires = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
       path = [ utils_env ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -356,6 +364,7 @@ in {
     systemd.services.neutron-l3-agent = {
       description = "OpenStack Neutron L3 Agent";
       after = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
+      requires = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
       path = [ utils_env ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
