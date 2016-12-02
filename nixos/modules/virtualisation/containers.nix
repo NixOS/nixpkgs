@@ -131,6 +131,7 @@ let
         --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
+        --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
         ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
           ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
@@ -317,6 +318,16 @@ let
         Only one of hostAddress* or hostBridge can be given.
       '';
     };
+
+    hostPort = mkOption {
+      type = types.nullOr types.string;
+      default = null;
+      example = "8080";
+      description = ''
+        Allow port forwarding from the host to the container. 
+      '';
+    };
+
 
     hostAddress = mkOption {
       type = types.nullOr types.str;
@@ -653,6 +664,9 @@ in
               PRIVATE_NETWORK=1
               ${optionalString (cfg.hostBridge != null) ''
                 HOST_BRIDGE=${cfg.hostBridge}
+              ''}
+              ${optionalString (cfg.hostPort != null) ''
+                HOST_PORT=${cfg.hostPort}
               ''}
               ${optionalString (cfg.hostAddress != null) ''
                 HOST_ADDRESS=${cfg.hostAddress}
