@@ -91,7 +91,7 @@ _qtSetQmakePath() {
 
 if [ -z "$NIX_QT5_TMP" ]; then
     if [ -z "$NIX_QT_SUBMODULE" ]; then
-        NIX_QT5_TMP=$(mktemp -d)
+        NIX_QT5_TMP=$(pwd)/__nix_qt5__
     else
         NIX_QT5_TMP=$out
     fi
