@@ -89,6 +89,9 @@ let
         if [ -n "$HOST_BRIDGE" ]; then
           extraFlags+=" --network-bridge=$HOST_BRIDGE"
         fi
+        if [ -n "$HOST_PORT" ]; then
+          extraFlags+=" --port=$HOST_PORT"
+        fi
       fi
 
       extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)}"
