@@ -23,7 +23,7 @@ let
       else additionalArgs="-logfile /var/log/X.$display.log"
       fi
 
-      exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} $additionalArgs "$@"
+      exec ${dmcfg.xserverBin} $additionalArgs "$@"
     '';
 
   usersConf = writeText "users.conf"
@@ -44,7 +44,7 @@ let
       sessions-directory = ${dmcfg.session.desktops}
 
       [Seat:*]
-      xserver-command = ${xserverWrapper}
+      xserver-command = ${xserverWrapper} ${dmcfg.xserverArgs}
       session-wrapper = ${dmcfg.session.script}
       ${optionalString (elem defaultSessionName dmcfg.session.names) ''
         user-session = ${defaultSessionName}
