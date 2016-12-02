@@ -3683,6 +3683,8 @@ in
 
   sipsak = callPackage ../tools/networking/sipsak { };
 
+  sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
+
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   sks = callPackage ../servers/sks { };
