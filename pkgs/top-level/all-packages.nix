@@ -16423,7 +16423,6 @@ in
 
   rox-filer = callPackage ../desktops/rox/rox-filer {
     gtk = gtk2;
-    inherit (gnome2) libglade;
   };
 
   xfce = xfce4-12;

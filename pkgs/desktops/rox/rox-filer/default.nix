@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, libxml2, libglade, gtk, libSM,
-  shared_mime_info, intltool, gettext, gcc, vim, hicolor_icon_theme }:
+{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared_mime_info, hicolor_icon_theme }:
 
 let
   version = "2.11";
@@ -8,11 +7,11 @@ in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = http://downloads.sourceforge.net/rox/rox-filer-2.11.tar.bz2;
+    url = "mirror://sourceforge/rox/rox-filer-${version}.tar.bz2";
     sha256 = "a929bd32ee18ef7a2ed48b971574574592c42e34ae09f36604bf663d7c101ba8";
   };
 
-  buildInputs = [ pkgconfig perl libxml2 libglade gtk shared_mime_info intltool gettext gcc vim hicolor_icon_theme libSM ];
+  buildInputs = [ pkgconfig libxml2 gtk shared_mime_info hicolor_icon_theme libSM ];
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch
@@ -71,7 +70,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Fast, lightweight, gtk2 file manager";
     homepage = "http://rox.sourceforge.net/desktop";
-    license = "GPL-2 LGPL-2";
+    license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];
   };
