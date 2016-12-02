@@ -16,7 +16,7 @@ umask 0022;
 sub showHelp {
     print <<EOF;
 Usage: nixos-container list
-       nixos-container create <container-name> [--nixos-path <path>] [--system-path <path>] [--config-file <path>] [--config <string>] [--ensure-unique-name] [--auto-start] [--bridge <iface>]
+       nixos-container create <container-name> [--nixos-path <path>] [--system-path <path>] [--config-file <path>] [--config <string>] [--ensure-unique-name] [--auto-start] [--bridge <iface>] [--port <port>]
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
@@ -37,6 +37,7 @@ my $nixosPath;
 my $ensureUniqueName = 0;
 my $autoStart = 0;
 my $bridge;
+my $port;
 my $extraConfig;
 my $signal;
 my $configFile;
@@ -46,6 +47,7 @@ GetOptions(
     "ensure-unique-name" => \$ensureUniqueName,
     "auto-start" => \$autoStart,
     "bridge=s" => \$bridge,
+    "port=s" => \$port,
     "system-path=s" => \$systemPath,
     "signal=s" => \$signal,
     "nixos-path=s" => \$nixosPath,
@@ -156,6 +158,7 @@ if ($action eq "create") {
     push @conf, "HOST_ADDRESS=$hostAddress\n";
     push @conf, "LOCAL_ADDRESS=$localAddress\n";
     push @conf, "HOST_BRIDGE=$bridge\n";
+    push @conf, "HOST_PORT=$port\n";
     push @conf, "AUTO_START=$autoStart\n";
     write_file($confFile, \@conf);
 
