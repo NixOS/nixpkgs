@@ -60,7 +60,7 @@ in {
     meta = {
       description = "A package for acousticians";
       maintainer = with maintainers; [ fridh ];
-      license = with licenses; [ bsd ];
+      license = with licenses; [ bsd3 ];
       homepage = https://github.com/python-acoustics/python-acoustics;
     };
   };
