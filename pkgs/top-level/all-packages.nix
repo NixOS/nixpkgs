@@ -6339,8 +6339,6 @@ in
     inherit (ocamlPackages_4_02) ocaml;
   };
 
-  inherit (ocamlPackages) omake_rc1;
-
   omniorb = callPackage ../development/tools/omniorb { };
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
