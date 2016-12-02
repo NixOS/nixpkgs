@@ -620,6 +620,10 @@
   ./virtualisation/lxd.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/openvswitch.nix
+  ./virtualisation/keystone.nix
+  ./virtualisation/glance.nix
+  ./virtualisation/neutron.nix
+  ./virtualisation/nova.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix

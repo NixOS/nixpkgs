@@ -42,6 +42,7 @@ pkgs.vmTools.runInLinuxVM (
           mv closure xchg/
         '';
       buildInputs = [ pkgs.utillinux pkgs.perl pkgs.e2fsprogs pkgs.parted ];
+      preferLocalBuild = true;
       exportReferencesGraph =
         [ "closure" config.system.build.toplevel ];
       inherit postVM;
