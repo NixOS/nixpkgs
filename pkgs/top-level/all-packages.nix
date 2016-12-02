@@ -12950,6 +12950,10 @@ in
 
   goldendict = qt55.callPackage ../applications/misc/goldendict { };
 
+  gopenvpn = callPackage ../desktops/gnome-2/desktop/gopenvpn {
+    inherit (gnome2) libglade;
+  };
+
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
