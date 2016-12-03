@@ -7,7 +7,9 @@ stdenv.mkDerivation rec {
   name = "cairomm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cairomm/${ver_maj}/${name}.tar.xz";
+    url = "http://www.cairographics.org/releases/${name}.tar.gz";
+    # gnome doesn't have the latest version ATM
+    #url = "mirror://gnome/sources/cairomm/${ver_maj}/${name}.tar.xz";
     sha256 = "16fmigxsaz85c3lgcls7biwyz8zy8c8h3jndfm54cxxas3a7zi25";
   };
 
