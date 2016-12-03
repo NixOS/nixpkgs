@@ -113,7 +113,10 @@ let
       ];
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      qmakeHook = makeSetupHook { substitutions = { qt_dev = qtbase.dev; lndir = pkgs.xorg.lndir; }; } ./qmake-hook.sh;
+      qmakeHook =
+        makeSetupHook
+        { deps = [ self.qtbase.dev ]; }
+        ../qmake-hook.sh;
 
     };
 
