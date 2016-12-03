@@ -6866,6 +6866,29 @@ in {
     propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
   });
 
+  flit = buildPythonPackage rec {
+    pname = "flit";
+    version = "0.10";
+    name = "${pname}-${version}";
+
+    format = "wheel";
+
+    src = pkgs.fetchurl {
+      url = https://files.pythonhosted.org/packages/24/98/50a090112a04d9e29155c31a222637668b0a4dd778fefcd3132adc50e877/flit-0.10-py3-none-any.whl;
+      sha256 = "4566b2e1807abeb1fd7bfaa9b444447556f1720518edfb134b56a6a1272b0428";
+    };
+
+    disabled = !isPy3k;
+    propagatedBuildInputs = with self; [ docutils requests2 requests_download zipfile36];
+
+    meta = {
+      description = "A simple packaging tool for simple packages";
+      homepage = https://github.com/takluyver/flit;
+      license = licenses.bsd3;
+      maintainer = maintainers.fridh;
+    };
+  };
+
   Flootty = buildPythonPackage rec {
     name = "Flootty-3.2.0";
 
