@@ -1,0 +1,233 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python -p 'python3.withPackages(ps: with ps; [ aiohttp unidecode toolz iso8601 fuzzywuzzy ])'
+import asyncio
+import aiohttp
+import json
+import toolz
+from unidecode import unidecode
+from iso8601 import parse_date
+from pkg_resources import parse_version
+import subprocess
+import fuzzywuzzy.fuzz as fz
+import os
+
+DIR = os.path.dirname(__file__)
+
+INDEX = "https://pypi.io/pypi"
+"""url of PyPI"""
+
+FILENAME_PACKAGES = os.path.join(DIR, "packages.txt")
+FILENAME_HASHES = os.path.join(DIR, "hashes.json")
+
+NSEMAPHORE = 200
+"""Maximum amount of concurrent requests"""
+
+NTIMEOUT = 2
+"""Timeout in seconds"""
+
+EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip', 'whl']
+"""Permitted file extensions. These are evaluated from left to right and the first occurance is returned."""
+
+NVERSIONS = 1
+"""Keep at most this amount of versions. Keep all versions when 0."""
+
+INCLUDE_TIMESTAMP = False
+"""Include timestamp of release."""
+
+INCLUDE_ENUMERATE = False
+"""Enumerate releases."""
+
+MATCH_LICENSE = False
+"""Match the licenses."""
+
+LICENSE_FIELDS = ['fullName', 'shortName']
+
+def load_package_names(filename):
+    """Load names of packages we like to retrieve hashes for."""
+    with open(filename, 'r') as f:
+        names = f.read().splitlines()
+    return names
+
+def write_hashes(filename, data):
+    """Write hashes to json file."""
+
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=2, sort_keys=True)
+
+
+async def _fetch(session, url, sem):
+    async with sem:
+        with aiohttp.Timeout(NTIMEOUT):
+            async with session.get(url) as response:
+                return await response.json()
+
+
+async def _fetch_all(session, urls, loop, sem):
+    tasks = [loop.create_task(_fetch(session, url, sem)) for url in urls]
+    results = await asyncio.gather(*tasks, return_exceptions=False)
+    return results
+
+def _get_json_from_api(names, index=INDEX):
+#def _get_and_write_data(folder, packages, index=INDEX):
+    """Yield JSON information obtained from PyPI index given an iterable of package names.
+
+    :param packages: Iterable of package names.
+    :param index: url with packages index. By default `INDEX` is used.
+    """
+    loop = asyncio.get_event_loop()
+    urls = ("{}/{}/json".format(index, package) for package in names)
+    connector = aiohttp.TCPConnector(share_cookies=True, loop=loop)
+    with aiohttp.ClientSession(loop=loop, connector=connector) as session:
+        sem = asyncio.Semaphore(NSEMAPHORE)
+        data = loop.run_until_complete(_fetch_all(session, urls, loop, sem))
+        #logger.info("Finished retrieved JSON from PyPI")
+    loop.close()
+    return data
+
+def _clean_string(s):
+    """Clean string. Remove unicode characters.
+    """
+    return unidecode(s)
+
+def _extract_relevant_nix_data(json, licenses):
+    """Extract relevant Nix data from the JSON of a package obtained from PyPI.
+
+    :param json: JSON obtained from PyPI
+    :param version: Specific version of package or one of the following strings: ['release',]
+    """
+    def _extract_license(json):
+        """Extract license from JSON."""
+        return json['info']['license']
+
+    def _available_versions(json):
+        versions = json['releases'].keys()
+        # Remove pre and post releases
+        versions = filter(lambda x: (not x.is_prerelease) and (not x.is_postrelease), map(parse_version, versions))
+        return versions
+
+    def _extract_latest_version(json):
+        return json['info']['version']
+
+    def _get_release(json, version, extensions):
+        """Get a release for each version. Return None if no releases are available.
+
+        :param json: JSON
+        :param version: Version as string.
+        :param extensions: List of extensions.
+        :returns: JSON of a release, or None.
+        """
+        if not json['releases']:
+            msg = "Package {}: No releases available.".format(json['info']['name'])
+            #raise ValueError(msg)
+            return None
+        else:
+            # We use ['releases'] and not ['urls'] because we want to have the possibility for different version.
+            for extension in extensions:
+                for possible_file in json['releases'][version]:
+                    if possible_file['filename'].endswith(extension):
+                        return possible_file
+            else:
+                msg = "Package {}: No release for version {} with valid file extension available.".format(json['info']['name'], version)
+                #logger.info(msg)
+                return None
+                #raise ValueError(msg)
+
+    def _get_release_data(release_json):
+        """Given the JSON of a release, get the items we need.
+
+        :param release_json: JSON of a release.
+        """
+        data = {'url': str(release_json['url']),
+                'sha256': str(release_json['digests']['sha256']),
+                }
+        if INCLUDE_TIMESTAMP:
+            data['timestamp'] = int(parse_date(str(release_json['upload_time'])).timestamp())
+        return data
+
+    def _get_versions(json, extensions):
+        # Get available versions
+        versions = _available_versions(json)
+
+        # Keep only the last `NVERSIONS`.
+        if NVERSIONS > 0:
+            versions = toolz.take(NVERSIONS, sorted(versions, reverse=True))
+
+        # Get a release for each version that has a release.
+        releases = toolz.valfilter(lambda x: x is not None,  {version: _get_release(json, str(version), extensions) for version in versions})
+
+        # Get the data we need for each release, and add an integer indicating the order of the versions.
+        releases = {version: _get_release_data(releases[version]) for version in releases.keys() }
+
+        if INCLUDE_ENUMERATE:
+            releases = {version: toolz.assoc(releases[version], 'n', order) for order, version in enumerate(sorted(releases.keys())) }
+
+        return releases # releases has versions represented as objects, not strings
+
+    def _latest_versions(versions):
+        return max(map(parse_version, versions))
+        pass
+
+    name = _clean_string(str(json['info']['name']))
+
+    # Get version info.
+    versions = _get_versions(json, EXTENSIONS)
+    latest_version = str(_extract_latest_version(json))
+    versions = toolz.keymap(str, versions)
+
+    # Collect meta data
+    license = _clean_string(str(_extract_license(json)))
+    summary = _clean_string(str(json['info'].get('summary')).strip('.'))
+    homepage = _clean_string(str(json['info'].get('home_page')))
+
+    meta = dict()
+    if license != "UNKNOWN":
+        if MATCH_LICENSE:
+            meta['license'] = match_license(license, licenses)
+        elif len(license) < 20:
+            meta['license'] = license # We don't want to have a full license text
+
+    if summary != "UNKNOWN":
+        meta['description'] = summary
+
+    if homepage is not None and homepage != "UNKNOWN":
+        meta['homepage'] = homepage
+
+    data = dict()
+    data['latest_version'] = latest_version
+    data['versions'] = versions
+    data['meta'] = meta
+
+    return name, data
+
+def get_data(names, licenses):
+    """Retrieve hashes of packages."""
+    raw_data = _get_json_from_api(names)
+    extract = lambda x: _extract_relevant_nix_data(x, licenses)
+    return {name : x for name, x in map(extract, raw_data)}
+
+
+def match_license(x, licenses):
+    """Match the license with available licenses.
+    """
+    def _rate_match(x, license):
+        return max(map(lambda y: fz.partial_ratio(x, license[y]), LICENSE_FIELDS))
+
+    ratings = {name: _rate_match(x, license) for name, license in licenses.items()}
+    return max(ratings, key=ratings.get)
+
+
+def load_available_licenses():
+    cmd = "nix-instantiate --eval --strict --json ../../../../../lib/licenses.nix"
+    data = subprocess.check_output(cmd, shell=True)
+    return json.loads(data.decode())
+
+
+if __name__ == '__main__':
+
+    names = load_package_names(FILENAME_PACKAGES)
+    if MATCH_LICENSE:
+        available_licenses = load_available_licenses()
+    else:
+        available_licenses = {}
+    data = get_data(names, available_licenses)
+    write_hashes(FILENAME_HASHES, data)

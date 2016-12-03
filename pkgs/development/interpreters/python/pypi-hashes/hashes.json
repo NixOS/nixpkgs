@@ -1,0 +1,113 @@
+{
+  "Cycler": {
+    "latest_version": "0.10.0",
+    "meta": {
+      "description": "Composable style cycles",
+      "homepage": "http://github.com/matplotlib/cycler",
+      "license": "BSD"
+    },
+    "versions": {
+      "0.10.0": {
+        "sha256": "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8",
+        "url": "https://files.pythonhosted.org/packages/c2/4b/137dea450d6e1e3d474e1d873cd1d4f7d3beed7e0dc973b06e8e10d32488/cycler-0.10.0.tar.gz"
+      }
+    }
+  },
+  "Cython": {
+    "latest_version": "0.25.1",
+    "meta": {
+      "description": "The Cython compiler for writing C extensions for the Python language",
+      "homepage": "http://cython.org/",
+      "license": "Apache"
+    },
+    "versions": {
+      "0.25.1": {
+        "sha256": "e0941455769335ec5afb17dee36dc3833b7edc2ae20a8ed5806c58215e4b6669",
+        "url": "https://files.pythonhosted.org/packages/2f/ae/0bb6ca970b949d97ca622641532d4a26395322172adaf645149ebef664eb/Cython-0.25.1.tar.gz"
+      }
+    }
+  },
+  "DataShape": {
+    "latest_version": "0.5.2",
+    "meta": {
+      "description": "A data description language",
+      "homepage": "http://datashape.readthedocs.org/en/latest/",
+      "license": "BSD"
+    },
+    "versions": {
+      "0.5.2": {
+        "sha256": "2356ea690c3cf003c1468a243a9063144235de45b080b3652de4f3d44e57d783",
+        "url": "https://files.pythonhosted.org/packages/a6/5b/95b2ed56b61e649b69c9a5b1ecb32ff0a5cd68b9f69f5aa7774540e6b444/datashape-0.5.2.tar.gz"
+      }
+    }
+  },
+  "blaze": {
+    "latest_version": "0.10.1",
+    "meta": {
+      "description": "Blaze",
+      "homepage": "UNKNOWN",
+      "license": "BSD"
+    },
+    "versions": {
+      "0.10.1": {
+        "sha256": "50a60c8d52c679a6a21d6c689841f032b5dbd6eb5a2ecfaf308aff57f4b7a19a",
+        "url": "https://files.pythonhosted.org/packages/a1/99/ec4fc29409d68d83a2138b190722f74d15ca1ca303b5c055171b22baa4c0/blaze-0.10.1.tar.gz"
+      }
+    }
+  },
+  "cytoolz": {
+    "latest_version": "0.8.0",
+    "meta": {
+      "description": "Cython implementation of Toolz: High performance functional utilities",
+      "homepage": "https://github.com/pytoolz/cytoolz",
+      "license": "BSD"
+    },
+    "versions": {
+      "0.8.0": {
+        "sha256": "2239890c8fe2da3eba82947c6a68cfa406e5a5045911c9ab3de8113462372629",
+        "url": "https://files.pythonhosted.org/packages/a3/68/c7f07c9087ec7c0c18fc1a7c6e253f2d4fc7acdd01aac4138f3e68b1e132/cytoolz-0.8.0.tar.gz"
+      }
+    }
+  },
+  "dask": {
+    "latest_version": "0.12.0",
+    "meta": {
+      "description": "Minimal task scheduling abstraction",
+      "homepage": "http://github.com/dask/dask/",
+      "license": "BSD"
+    },
+    "versions": {
+      "0.12.0": {
+        "sha256": "24e9c50181370761f8a0c82e233fa823a7eb9ae01de50ee73378fd46724f669e",
+        "url": "https://files.pythonhosted.org/packages/46/3e/d55cfe683faebe1464f182d4bacd36a496e5a53aa857794778d2c7a012dd/dask-0.12.0.tar.gz"
+      }
+    }
+  },
+  "fuzzywuzzy": {
+    "latest_version": "0.14.0",
+    "meta": {
+      "description": "Fuzzy string matching in python",
+      "homepage": "https://github.com/seatgeek/fuzzywuzzy"
+    },
+    "versions": {
+      "0.14.0": {
+        "sha256": "8f2308ae51556a5195e19f2bd7f3d72daebd23d0d53fa6bcbaf4d31c2a39a5b9",
+        "url": "https://files.pythonhosted.org/packages/04/4d/1c9ae2b56fa1ad9a69999b9f82b05e44d3af97d042a5f8950745a44cd8f1/fuzzywuzzy-0.14.0.tar.gz"
+      }
+    }
+  },
+  "toolz": {
+    "latest_version": "0.8.0",
+    "meta": {
+      "description": "List processing tools and functional utilities",
+      "homepage": "http://github.com/pytoolz/toolz/",
+      "license": "BSD"
+    },
+    "versions": {
+      "0.8.0": {
+        "sha256": "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479",
+        "url": "https://files.pythonhosted.org/packages/9e/b0/47e994b3b370087d388d2bb9dfc97c7e901b801265ccd1e8e9fd16eda1b8/toolz-0.8.0.tar.gz"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+Cycler
+blaze
+Cython
+cytoolz
+dask
+DataShape
+fuzzywuzzy
+toolz
