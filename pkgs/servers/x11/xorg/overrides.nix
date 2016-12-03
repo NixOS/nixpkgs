@@ -459,8 +459,7 @@ in
           "--enable-glamor"
         ];
         postInstall = ''
-          rm -fr $out/share/X11/xkb/compiled
-          ln -s /var/tmp $out/share/X11/xkb/compiled
+          rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
           wrapProgram $out/bin/Xephyr \
             --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
           wrapProgram $out/bin/Xvfb \
@@ -510,7 +509,6 @@ in
         '';
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled
-          ln -s /var/tmp $out/share/X11/xkb/compiled
 
           cp -rT ${darwinOtherX}/bin $out/bin
           rm -f $out/bin/X

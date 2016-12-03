@@ -25,7 +25,6 @@ overrideDerivation xorgserver (oldAttrs: {
 
   postInstall = ''
     rm -fr $out/share/X11/xkb/compiled
-    ln -s /var/tmp $out/share/X11/xkb/compiled
   '';
 
 }) // {
