@@ -107,7 +107,7 @@ let
       makeQtWrapper =
         makeSetupHook
         { deps = [ makeWrapper ]; }
-        ./make-qt-wrapper.sh;
+        ../make-qt-wrapper.sh;
 
       qmakeHook =
         makeSetupHook

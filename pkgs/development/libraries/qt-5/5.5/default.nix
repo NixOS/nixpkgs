@@ -112,7 +112,11 @@ let
         qtxmlpatterns
       ];
 
-      makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
+      makeQtWrapper =
+        makeSetupHook
+        { deps = [ makeWrapper ]; }
+        ../make-qt-wrapper.sh;
+
       qmakeHook =
         makeSetupHook
         { deps = [ self.qtbase.dev ]; }
