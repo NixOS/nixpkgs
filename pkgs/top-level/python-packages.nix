@@ -41,6 +41,30 @@ in {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+  acoustics = buildPythonPackage rec {
+    pname = "acoustics";
+    version = "0.1.2";
+    name = pname + "-" + version;
+
+    buildInputs = with self; [ cython pytest ];
+    propagatedBuildInputs = with self; [ numpy scipy matplotlib pandas tabulate ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "b75a47de700d01e704de95953a6e969922b2f510d7eefe59f7f8980ad44ad1b7";
+    };
+
+    # Tests not distributed
+    doCheck = false;
+
+    meta = {
+      description = "A package for acousticians";
+      maintainer = with maintainers; [ fridh ];
+      license = with licenses; [ bsd3 ];
+      homepage = https://github.com/python-acoustics/python-acoustics;
+    };
+  };
+
   agate = buildPythonPackage rec {
     name = "agate-1.2.2";
     disabled = isPy3k;
@@ -1517,6 +1541,7 @@ in {
         sha256 = "1pw9lrdjl24n6lrs6lnqpyiyic8bdxgvhyqvb2rx6kkbjrfhhgv5";
         url = "mirror://pypi/a/aws-shell/aws-shell-${version}.tar.gz";
       };
+    # Why does it propagate packages that are used for testing?
     propagatedBuildInputs = with self; [
       configobj prompt_toolkit awscli boto3 pygments mock pytest
       pytestcov unittest2 tox
@@ -4866,12 +4891,12 @@ in {
   };
 
   pytest_30 = self.pytest_27.override rec {
-    name = "pytest-3.0.3";
+    name = "pytest-3.0.4";
 
     propagatedBuildInputs = with self; [ hypothesis py ];
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "1rxydacrdb8s312l3bn0ybrqsjp13abzyim1x21s80386l5504zj";
+      sha256 = "03d49xc0l4sdncq47rn1p42ywjnxqrvpc160y8dwvanv3wnfx7w7";
     };
   };
 
@@ -4882,7 +4907,15 @@ in {
       sha256 = "1a873fihw4rhshc722j4h6j7g3nj7xpgsna9hhg3zn6ksknnhx5y";
     };
 
-    propagatedBuildInputs = with self ; [ pytest execnet ];
+    buildInputs = with self; [ pytest];
+    propagatedBuildInputs = with self ; [ execnet ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # Too many failing tests. Are they maintained?
+    doCheck = false;
 
     meta = {
       license = licenses.mit;
@@ -4904,7 +4937,8 @@ in {
     # pytest's binaries
     pytest = self.pytest;
 
-    propagatedBuildInputs = with self; [ django pytest setuptools_scm_18 ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ django setuptools_scm_18 ];
 
     meta = {
       description = "py.test plugin for testing of Django applications";
@@ -4923,7 +4957,8 @@ in {
       sha256 = "7d7cc1cb25f88a707f083b1dc2e3c2fdfc6f37709567a2587dd0cd0bcd70edb6";
     };
 
-    propagatedBuildInputs = with self; [ pytest coverage virtualenv pytestcov six ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ coverage virtualenv pytestcov six ];
 
     checkPhase = ''
       py.test -k "not test_yield_requires_config_doesnt_skip and not test_yield_requires_config_skips"
@@ -4948,7 +4983,7 @@ in {
       sha256 = "1zzxlswbny8dp3c1sbhpyms1xkknxb6qfji3y3azc7gc95324xsv";
     };
 
-    propagatedBuildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest ];
 
     checkPhase = ''
       py.test
@@ -4972,7 +5007,12 @@ in {
       sha256 = "9c2271654294020e134624020a2144cb93b7334809d70fb3f470cd31ec788a3a";
     };
 
-    propagatedBuildInputs = with self ; [ pytest pyflakes pytestcache ];
+    buildInputs = with self; [ pytestpep8 pytest ];
+    propagatedBuildInputs = with self; [ pyflakes pytestcache ];
+
+    checkPhase = ''
+      py.test test_flakes.py
+    '';
 
     meta = {
       license = licenses.mit;
@@ -4986,7 +5026,8 @@ in {
     pname = "pytest-mock";
     version = "1.2";
 
-    propagatedBuildInputs = with self; [ mock pytest ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ mock ];
 
     meta = {
       description = "Thin-wrapper around the mock package for easier use with py.test.";
@@ -5009,7 +5050,8 @@ in {
       sha256 = "06032agzhw1i9d9qlhfblnl3dw5hcyxhagn7b120zhrszbjzfbh3";
     };
 
-    propagatedBuildInputs = with self ; [ pytest pytestcache pep8 ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ pytestcache pep8 ];
 
     meta = {
       license = licenses.mit;
@@ -5027,7 +5069,8 @@ in {
        sha256 = "003vdkxpx37n0kjqpwgj3314hwk2jfz3nz58db7xh68bf8xy75lk";
      };
 
-     propagatedBuildInputs = with self ; [ pytest pep257 ];
+     buildInputs = with self; [ pytest ];
+     propagatedBuildInputs = with self ; [ pep257 ];
 
      meta = {
        homepage = https://github.com/anderslime/pytest-pep257;
@@ -5089,7 +5132,8 @@ in {
       sha256 = "047w4zwdsnlzmsc5f3rapzbzd2frlvz9nnp8v4b48fjmqmxassh3";
     };
 
-    propagatedBuildInputs = with self ; [ pytest pytestflakes pytestpep8 tox ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ pytestflakes pytestpep8 tox ];
 
     meta = {
       license = licenses.asl20;
@@ -5103,6 +5147,7 @@ in {
     pname = "pytest-server-fixtures";
     version = "1.1.0";
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ setuptools-git pytest-shutil pytest-fixture-config psutil requests2 ];
 
     meta = {
@@ -5129,8 +5174,8 @@ in {
       url = "mirror://pypi/p/pytest-shutil/${name}.tar.gz";
       sha256 = "bb3c4fc2dddaf70b38bd9bb7a710d07728fa14f88fbc89c2a07979b383ade5d4";
     };
-    buildInputs = with self; [ cmdline ];
-    propagatedBuildInputs = with self; [ pytest pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
+    buildInputs = with self; [ cmdline pytest ];
+    propagatedBuildInputs = with self; [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
     meta = {
       description = "A goodie-bag of unix shell and environment tools for py.test";
       homepage = https://github.com/manahl/pytest-plugins;
@@ -5177,8 +5222,8 @@ in {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "093f5fa479ee6201e48db367c307531dc8b800609b0c3ddca9c01e0fd466a669";
     };
-    buildInputs = with self; [ pytestcov mock cmdline ];
-    propagatedBuildInputs = with self; [ pytest-fixture-config pytest-shutil pytest ];
+    buildInputs = with self; [ pytest pytestcov mock cmdline ];
+    propagatedBuildInputs = with self; [ pytest-fixture-config pytest-shutil ];
     checkPhase = '' py.test tests/unit '';
     meta = {
       description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
@@ -5238,7 +5283,7 @@ in {
       sha256 = "15kzcr5pchf3id4ikdvlv752rc0j4d912n589l4rifp8qsj19l1x";
     };
 
-    propagatedBuildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest ];
 
     # no upstream test
     doCheck = false;
@@ -6055,12 +6100,15 @@ in {
   docker = buildPythonPackage rec {
     name = "docker-py-${version}";
     version = "1.10.6";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-py/${name}.tar.gz";
       sha256 = "05f49f6hnl7npmi7kigg0ibqk8s3fhzx1ivvz1kqvlv4ay3paajc";
     };
+
+    buildInputs = [
+      pkgs.glibcLocales
+    ];
 
     propagatedBuildInputs = with self; [
       six
@@ -6074,10 +6122,15 @@ in {
     # Version conflict
     doCheck = false;
 
+    LC_ALL="en_US.UTF-8";
+
     meta = {
       description = "An API client for docker written in Python";
       homepage = https://github.com/docker/docker-py;
       license = licenses.asl20;
+      maintainers = with maintainers; [
+        jgeerds
+      ];
     };
   };
 
@@ -7636,8 +7689,8 @@ in {
         sed 's/==/>=/' -i setup.py
     '';
 
-    propagatedBuildInputs = with self; [ six clint pyyaml docopt pytest
-      requests2 jsonpatch args ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ six clint pyyaml docopt requests2 jsonpatch args ];
 
     meta = with stdenv.lib; {
       description = "A python wrapper for the various Internet Archive APIs";
@@ -7917,6 +7970,9 @@ in {
       ipykernel
     ];
 
+    # ValueError: underlying buffer has been detached
+    doCheck = false;
+
     meta = {
       description = "Jupyter terminal console";
       homepage = "http://jupyter.org/";
@@ -7946,26 +8002,21 @@ in {
     };
   };
 
-  lti = let
-    self' = (self.override {self = self';}) // {pytest = self.pytest_27;};
-    mock_1_0_1 = self'.mock.overrideDerivation (_: rec {
-      name = "mock-1.0.1";
-      propagatedBuildInputs = null;
-      src = pkgs.fetchurl {
-        url = "http://pypi.python.org/packages/source/m/mock/${name}.tar.gz";
-        sha256 = "0kzlsbki6q0awf89rc287f3aj8x431lrajf160a70z0ikhnxsfdq";
-      };
-    });
-  in buildPythonPackage rec {
+  PyLTI = buildPythonPackage rec {
     version = "0.4.1";
     name = "PyLTI-${version}";
 
     disabled = !isPy27;
 
+    # There is no need to fix mock. https://github.com/mitodl/pylti/pull/48
+    postPatch = ''
+      substituteInPlace setup.py --replace "mock==1.0.1" "mock"
+    '';
+
     propagatedBuildInputs = with self; [ httplib2 oauth oauth2 semantic-version ];
-    buildInputs = with self'; [
-      flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
-      pytestflakes pytestpep8 sphinx mock_1_0_1
+    buildInputs = with self; [
+      flask httpretty oauthlib pyflakes pytest_27 pytestcache pytestcov covCore
+      pytestflakes pytestpep8 sphinx mock
     ];
 
     src = pkgs.fetchurl {
@@ -10034,7 +10085,7 @@ in {
       sha256 = "1m7y3brk3697hr2cvkzl8dry4pp7wkmhvxmf8db1ardz1r9d8895";
     };
 
-    buildInputs = with self ; [ pytestrunner pytestdjango django_environ mock ];
+    buildInputs = with self ; [ pytest pytestrunner pytestdjango django_environ mock ];
     propagatedBuildInputs = with self ; [ django six ];
 
     checkPhase = ''
@@ -10303,7 +10354,8 @@ in {
       sha256 = "10p9rb2m1zccszg7590fjd0in6rabzsh86f5m7qm369mapc3b6dc";
     };
 
-    propagatedBuildInputs = with self; [ django pytest ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ django ];
 
     meta = {
       description = "Efficient tree implementations for Django 1.6+";
@@ -10958,8 +11010,7 @@ in {
       sha256 = "1x9ixika7wqjj52x8wnsh1vk7jadkdqpx01plj7mlh8slwyq4s41";
     };
 
-    propagatedBuildInputs = with self; [ pytest ];
-    buildInputs = with self; [ mock ];
+    buildInputs = with self; [ mock pytest ];
 
     # waiting for feedback https://github.com/box/flaky/issues/97
     doCheck = false;
@@ -12837,7 +12888,7 @@ in {
       sha256 = "baf6098f054dd5eacc2934b8ea3bef908b81ca8660d839f1f940255a72c660d2";
     };
 
-    buildInputs = with self; [ nose ];
+    buildInputs = with self; [ nose pytest ];
     propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook widgetsnbextension ];
 
     meta = {
@@ -13287,7 +13338,9 @@ in {
       homepage    = "https://github.com/twisted/klein";
       license     = licenses.mit;
     };
-   };
+  };
+
+  koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
@@ -14167,6 +14220,7 @@ in {
       license = licenses.free;
       maintainers = with maintainers; [ prikhi ];
       platforms = platforms.linux;
+      broken = true; # broken dependency of django within filebrowser_safe
     };
   };
 
@@ -14257,18 +14311,15 @@ in {
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "1.3.5";
+    version = "1.3.6";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/r/rainbowstream/${name}.tar.gz";
-      sha256 = "0a8bs9g81ns47d4vaj5pfgw9zwbcp0nivlm5rps4dlb6qwvzni1w";
+      sha256 = "04ki61mc2f5rw60zssr1rr6dmjmvhlws5rpnwd3zih6pi5b7cy4a";
     };
-
-    doCheck = false;
 
     patches = [
       ../development/python-modules/rainbowstream/image.patch
-      ../development/python-modules/rainbowstream/setup.patch
     ];
 
     postPatch = ''
@@ -15848,16 +15899,21 @@ in {
   };
 
   numtraits = buildPythonPackage rec {
-    name = "numtraits-${version}";
+    pname = "numtraits";
     version = "0.2";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numtraits/${name}.tar.gz";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
       sha256 = "2fca9a6c9334f7358ef1a3e2e64ccaa6a479fc99fc096910e0d5fbe8edcdfd7e";
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ numpy traitlets];
+    propagatedBuildInputs = with self; [ six numpy traitlets];
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       description = "Numerical traits for Python objects";
@@ -16038,17 +16094,17 @@ in {
   };
 
   oauthlib = buildPythonPackage rec {
-    version = "0.7.2";
+    version = "2.0.0";
     name = "oauthlib-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://github.com/idan/oauthlib/archive/${version}.tar.gz";
-      sha256 = "08b7swyswhxh90k9mp54rk1qks2l2s2pdcjap6x118y27p7dhp4h";
+      url = "https://github.com/idan/oauthlib/archive/v${version}.tar.gz";
+      sha256 = "02b645a8rqh4xfs1cmj8sss8wqppiadd1ndq3av1cdjz2frfqcjf";
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
 
-    propagatedBuildInputs = with self; [ pycrypto blinker pyjwt ];
+    propagatedBuildInputs = with self; [ cryptography blinker pyjwt ];
 
     meta = {
       homepage = https://github.com/idan/oauthlib;
@@ -20248,15 +20304,21 @@ in {
   };
 
   pyjwt = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.4.2";
     name = "pyjwt-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/progrium/pyjwt/archive/${version}.tar.gz";
-      sha256 = "118rzhpyvx1h4hslms4fdizyv6mnyd4g34fv089lvs116pj08k9c";
+      sha256 = "06vg84aicwkv0kli8i4jhg0kc6298cmh38ib058q01yxzk6q17gn";
     };
 
+    buildInputs = with self; [ pytestrunner pytestcov pytest coverage ];
     propagatedBuildInputs = with self; [ pycrypto ecdsa ];
+
+    # We don't need this specific version
+    postPatch = ''
+      substituteInPlace setup.py --replace "pytest==2.7.3" "pytest"
+    '';
 
     meta = {
       description = "JSON Web Token implementation in Python";
@@ -20510,7 +20572,8 @@ in {
       sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
     };
 
-    buildInputs = with self; [ six pytest hypothesis ];
+    propagatedBuildInputs = with self; [ six ];
+    buildInputs = with self; [ pytest hypothesis ];
 
     checkPhase = ''
       py.test
@@ -20687,6 +20750,12 @@ in {
       url = "mirror://pypi/p/pynzb/${name}.tar.gz";
       sha256 = "0735b3889a1174bbb65418ee503629d3f5e4a63f04b16f46ffba18253ec3ef17";
     };
+
+    # Can't get them working
+    doCheck = false;
+    checkPhase = ''
+      ${python.interpreter} -m unittest -s pynzb -t .
+    '';
 
     meta = {
       homepage = http://github.com/ericflo/pynzb;
@@ -22381,7 +22450,7 @@ in {
 
   rpkg = buildPythonPackage (rec {
     name = "rpkg-1.14";
-    disabled = !isPy27;
+    disabled = !isPy27; # error: invalid command 'bdist_wheel'
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
@@ -22391,10 +22460,12 @@ in {
 
     patches = [ ../development/python-modules/rpkg-buildfix.diff ];
 
-    propagatedBuildInputs = with self; [ pycurl pkgs.koji GitPython pkgs.git
-                              pkgs.rpm pyopenssl ];
+    propagatedBuildInputs = with self; [ pycurl koji GitPython pkgs.git
+      rpm pyopenssl ];
 
   });
+
+  rpm = (pkgs.rpm.override{inherit python;});
 
   rpy2 = buildPythonPackage rec {
     name = "rpy2-2.8.2";
@@ -23350,37 +23421,11 @@ in {
     };
   };
 
-  Theano = buildPythonPackage rec {
-    name = "Theano-0.8.2";
+  Theano = self.TheanoWithoutCuda;
 
-    disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
+  TheanoWithoutCuda = callPackage ../development/python-modules/Theano/theano-without-cuda { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Theano/${name}.tar.gz";
-      sha256 = "7463c8f7ed1a787bf881f36d38a38607150186697e7ce7e78bfb94b7c6af8930";
-    };
-
-    #preCheck = ''
-    #  mkdir -p check-phase
-    #  export HOME=$(pwd)/check-phase
-    #'';
-    doCheck = false;
-    # takes far too long, also throws "TypeError: sort() missing 1 required positional argument: 'a'"
-    # when run from the installer, and testing with Python 3.5 hits github.com/Theano/Theano/issues/4276,
-    # the fix for which hasn't been merged yet.
-
-    # keep Nose around since running the tests by hand is possible from Python or bash
-    propagatedBuildInputs = [ stdenv ] ++ (with self; [ nose numpy numpy.blas pydot_ng scipy six ]);
-
-    meta = {
-      homepage = http://deeplearning.net/software/theano/;
-      description = "A Python library for large-scale array computation";
-      license = stdenv.lib.licenses.bsd3;
-      maintainers = [ maintainers.bcdarwin ];
-    };
-  };
-
-  Theano-cuda = callPackage ../development/python-modules/theano/cuda (
+  TheanoWithCuda = callPackage ../development/python-modules/Theano/theano-with-cuda (
   let
     boost = pkgs.boost159.override {
       inherit (self) python numpy scipy;
@@ -26003,7 +26048,14 @@ in {
       sha256 = "14m13xa5sc7iqq2j1wsd2klcwaihqlhz2l9lmn92dks2yc8hplcr";
     };
 
+    buildInputs = with self; [ nose jinja2 mock pytest ];
     propagatedBuildInputs = with self; [ pyyaml ];
+
+    doCheck = false;
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       description = "Media asset management for Python, with glue code for various web frameworks";

@@ -57,7 +57,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelPackages = mkDefault pkgs.linuxPackages_grsec_nixos;
+    boot.kernelPackages = mkForce pkgs.linuxPackages_grsec_nixos;
 
     boot.kernelParams = optional cfg.disableEfiRuntimeServices "noefi";
 

@@ -23,8 +23,8 @@ let
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "libvterm";
-      rev = "e0a3d4dbd44a9534bf7437ee98ceb26dabebf3ad";
-      sha256 = "131mcnbdq4wvsf280v4az8vnakr78yrwlaihzgr5s1wmfjvf6knf";
+      rev = "11682793d84668057c5aedc3d7f8071bb54eaf2c";
+      sha256 = "0pd90yx6xsagrqjipi26sxri1l4wdnx23ziad1zbxnqx9njxa7g3";
     };
 
     buildInputs = [ perl ];
@@ -60,13 +60,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.1.6";
+    version = "0.1.7";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "0s8vqf4aym1d1h8yi0znpqw5rv9v3z64y5aha9dmynbwxa58q7pp";
+      sha256 = "0bk0raxlb1xsqyw9pmqmxvcq5szqhimidrasnvzrci84gld8cwz4";
     };
 
     enableParallelBuilding = true;

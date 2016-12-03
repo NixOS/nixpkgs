@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, enableLargeConfig ? false }:
 
 stdenv.mkDerivation rec {
-  name = "boehm-gc-7.2f";
+  name = "boehm-gc-7.2g";
 
   src = fetchurl {
-    url = http://www.hboehm.info/gc/gc_source/gc-7.2f.tar.gz;
-    sha256 = "119x7p1cqw40mpwj80xfq879l9m1dkc7vbc1f3bz3kvkf8bf6p16";
+    url = http://www.hboehm.info/gc/gc_source/gc-7.2g.tar.gz;
+    sha256 = "0bvw6cc555qg5b7dgcqy3ryiw0wir79dqy0glff3hjmyy7i2jkjq";
   };
   patches = if stdenv.isCygwin then [ ./cygwin.patch ] else null;
 

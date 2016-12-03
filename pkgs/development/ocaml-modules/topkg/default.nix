@@ -1,9 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, result, opam }:
 
-let ocaml-version = stdenv.lib.getVersion ocaml; in
-
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml-version}-topkg-${version}";
+  name = "ocaml${ocaml.version}-topkg-${version}";
   version = "0.7.8";
 
   src = fetchurl {
@@ -16,12 +14,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ result ];
 
   unpackCmd = "tar xjf ${src}";
-  buildPhase = "ocaml -I ${findlib}/lib/ocaml/${ocaml-version}/site-lib/ pkg/pkg.ml build";
+  buildPhase = "ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ pkg/pkg.ml build";
   createFindlibDestdir = true;
-  installPhase = ''
-    opam-installer --script --prefix=$out topkg.install | sh
-    mv $out/lib/topkg $out/lib/ocaml/${ocaml-version}/site-lib/
-  '';
+  installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
 
   meta = {
     homepage = http://erratique.ch/software/topkg;

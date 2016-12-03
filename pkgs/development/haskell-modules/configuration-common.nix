@@ -76,6 +76,14 @@ self: super: {
     '';
   });
 
+  # jni needs help finding libjvm.so because it's in a weird location.
+  jni = overrideCabal super.jni (drv: {
+    preConfigure = ''
+      local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
+      configureFlags+=" --extra-lib-dir=''${libdir[0]}"
+    '';
+  });
+
   # The package doesn't know about the AL include hierarchy.
   # https://github.com/phaazon/al/issues/1
   al = appendConfigureFlag super.al "--extra-include-dirs=${pkgs.openal}/include/AL";
@@ -494,6 +502,7 @@ self: super: {
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
+  vty_5_13 = dontCheck super.vty_5_13;
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -807,7 +816,7 @@ self: super: {
   };
 
   # # Make elisp files available at a location where people expect it.
-  hindent = overrideCabal super.hindent (drv: {
+  hindent = (overrideCabal super.hindent (drv: {
     # We cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
@@ -816,7 +825,9 @@ self: super: {
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
-  });
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_19_0;
+  };
 
   # https://github.com/yesodweb/Shelly.hs/issues/106
   # https://github.com/yesodweb/Shelly.hs/issues/108
@@ -986,7 +997,7 @@ self: super: {
   });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_0; };
 
   # To be in sync with Hoogle.
   lambdabot-haskell-plugins = (overrideCabal super.lambdabot-haskell-plugins (drv: {
@@ -1066,15 +1077,6 @@ self: super: {
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
-  # https://github.com/hdbc/hdbc-odbc/pull/29
-  HDBC-odbc = overrideCabal super.HDBC-odbc (old: {
-    postPatch = old.postPatch or "" + ''
-      sed -e '/data BoundValue =/ { s/$/{/ ; n; n ; s/{ bvVal/  bvVal/ }' \
-          -e 's/-- | This is rather/-- This is rather/' \
-          -i Database/HDBC/ODBC/Statement.hsc
-    '';
-  });
-
   # https://github.com/vshabanov/HsOpenSSL/issues/11
   HsOpenSSL = doJailbreak super.HsOpenSSL;
 
@@ -1111,19 +1113,14 @@ self: super: {
 
   socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
 
-  # 0.5.6 invokes $PAGER in a way that crashes if there are args such as $PAGER="less -R"
-  ghc-core = overrideCabal super.ghc-core (drv: {
-    src = pkgs.fetchFromGitHub {
-      owner  = "shachaf";
-      repo   = "ghc-core";
-      rev    = "630196adf0bebf073328325302453ef1c409fd9a";
-      sha256 = "05jzpjy5zkri2faw5jnq5vh12mx58lrb0zfzz4h598miq2vc8848";
-    };
-    version = "2012-12-15";
-  });
-
   # Encountered missing dependencies: hspec >=1.3 && <2.1
   # https://github.com/rampion/ReadArgs/issues/8
   ReadArgs = doJailbreak super.ReadArgs;
+
+  # https://github.com/philopon/barrier/issues/3
+  barrier = doJailbreak super.barrier;
+
+  # requires vty 5.13
+  brick = super.brick.overrideScope (self: super: { vty = self.vty_5_13; });
 
 }

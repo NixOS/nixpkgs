@@ -156,6 +156,14 @@ in
     buildInputs = [ cmake pkgconfig openssl libssh2 zlib ];
   };
 
+  scrypt = attrs:
+    if stdenv.isDarwin then {
+      dontBuild = false;
+      postPatch = ''
+        sed -i -e "s/-arch i386//" Rakefile ext/scrypt/Rakefile
+      '';
+    } else {};
+
   snappy = attrs: {
     buildInputs = [ args.snappy ];
   };
@@ -220,4 +228,3 @@ in
   };
 
 }
-
