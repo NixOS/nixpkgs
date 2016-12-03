@@ -523,7 +523,7 @@ All parameters from `mkDerivation` function are still supported.
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `makeWrapperArgs`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `installFlags`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"].
-* `format`: Format of the source. Options are `setup` for when the source has a `setup.py` and `setuptools` is used to build a wheel, and `wheel` in case the source is already a binary wheel. The default value is `setup`.
+* `format`: Format of the source. Valid options are `setuptools` (default), `flit`, `wheel`, and `other`. `setuptools` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. In case you need to provide your own `buildPhase` and `installPhase` you can use `other`.
 * `catchConflicts` If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
 * `checkInputs` Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
 
