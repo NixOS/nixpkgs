@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales
-, python2Packages, imagemagick
+, pythonPackages, imagemagick
 
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
@@ -22,17 +22,17 @@
 , bashInteractive, bash-completion
 }:
 
-assert enableAcoustid    -> python2Packages.pyacoustid     != null;
+assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
 assert enableConvert     -> ffmpeg != null;
-assert enableDiscogs     -> python2Packages.discogs_client != null;
-assert enableFetchart    -> python2Packages.responses      != null;
+assert enableDiscogs     -> pythonPackages.discogs_client != null;
+assert enableFetchart    -> pythonPackages.responses      != null;
 assert enableKeyfinder   -> keyfinder-cli != null;
-assert enableLastfm      -> python2Packages.pylast         != null;
-assert enableMpd         -> python2Packages.mpd            != null;
+assert enableLastfm      -> pythonPackages.pylast         != null;
+assert enableMpd         -> pythonPackages.mpd            != null;
 assert enableReplaygain  -> bs1770gain                    != null;
-assert enableThumbnails  -> python2Packages.pyxdg          != null;
-assert enableWeb         -> python2Packages.flask          != null;
+assert enableThumbnails  -> pythonPackages.pyxdg          != null;
+assert enableWeb         -> pythonPackages.flask          != null;
 
 with stdenv.lib;
 
@@ -72,7 +72,7 @@ let
   testShell = "${bashInteractive}/bin/bash --norc";
   completion = "${bash-completion}/share/bash-completion/bash_completion";
 
-in python2Packages.buildPythonApplication rec {
+in pythonPackages.buildPythonApplication rec {
   name = "beets-${version}";
   version = "1.4.1";
 
@@ -84,34 +84,34 @@ in python2Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    python2Packages.enum34
-    python2Packages.jellyfish
-    python2Packages.munkres
-    python2Packages.musicbrainzngs
-    python2Packages.mutagen
-    python2Packages.pathlib
-    python2Packages.pyyaml
-    python2Packages.unidecode
-  ] ++ optional enableAcoustid     python2Packages.pyacoustid
+    pythonPackages.enum34
+    pythonPackages.jellyfish
+    pythonPackages.munkres
+    pythonPackages.musicbrainzngs
+    pythonPackages.mutagen
+    pythonPackages.pathlib
+    pythonPackages.pyyaml
+    pythonPackages.unidecode
+  ] ++ optional enableAcoustid     pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableAcousticbrainz)
-                                   python2Packages.requests2
+                                   pythonPackages.requests2
     ++ optional enableConvert      ffmpeg
-    ++ optional enableDiscogs      python2Packages.discogs_client
+    ++ optional enableDiscogs      pythonPackages.discogs_client
     ++ optional enableKeyfinder    keyfinder-cli
-    ++ optional enableLastfm       python2Packages.pylast
-    ++ optional enableMpd          python2Packages.mpd
-    ++ optional enableThumbnails   python2Packages.pyxdg
-    ++ optional enableWeb          python2Packages.flask
+    ++ optional enableLastfm       pythonPackages.pylast
+    ++ optional enableMpd          pythonPackages.mpd
+    ++ optional enableThumbnails   pythonPackages.pyxdg
+    ++ optional enableWeb          pythonPackages.flask
     ++ optional enableAlternatives (import ./alternatives-plugin.nix {
-      inherit stdenv python2Packages fetchFromGitHub;
+      inherit stdenv pythonPackages fetchFromGitHub;
     })
     ++ optional enableCopyArtifacts (import ./copyartifacts-plugin.nix {
-      inherit stdenv python2Packages fetchFromGitHub;
+      inherit stdenv pythonPackages fetchFromGitHub;
     });
 
-  buildInputs = with python2Packages; [
+  buildInputs = with pythonPackages; [
     beautifulsoup4
     imagemagick
     mock
