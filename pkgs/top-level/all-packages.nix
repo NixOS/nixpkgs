@@ -3549,6 +3549,10 @@ in
 
   rng_tools = callPackage ../tools/security/rng-tools { };
 
+  rq = callPackage ../development/tools/rq {
+    v8 = v8_static;
+  };
+
   rsnapshot = callPackage ../tools/backup/rsnapshot {
     # For the `logger' command, we can use either `utillinux' or
     # GNU Inetutils.  The latter is more portable.
