@@ -18689,9 +18689,13 @@ in {
       sha256 = "0ee9975c05602e755ff5000232e0335ba30d507f6261922a658ee11b1cec36d1";
     };
 
-    # Check is disabled because of assertion errors, see
+    doCheck = !isPyPy;
+
+    # Disable imagefont tests, because they don't work well with infinality:
     # https://github.com/python-pillow/Pillow/issues/1259
-    doCheck = false;
+    postPatch = ''
+      rm Tests/test_imagefont.py
+    '';
 
     buildInputs = with self; [
       pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose pkgs.lcms2 ]
