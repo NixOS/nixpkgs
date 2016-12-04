@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
       src/bin/torsocks.in
   '';
 
+  doInstallCheck = true;
+  installCheckTarget = "check-recursive";
+
   meta = {
     description      = "Wrapper to safely torify applications";
     homepage         = http://code.google.com/p/torsocks/;
