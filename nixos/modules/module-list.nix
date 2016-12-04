@@ -483,6 +483,7 @@
   ./services/security/torify.nix
   ./services/security/tor.nix
   ./services/security/torsocks.nix
+  ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/kerberos.nix
@@ -617,6 +618,7 @@
   ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
+  ./virtualisation/lxcfs.nix
   ./virtualisation/lxd.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/openvswitch.nix
