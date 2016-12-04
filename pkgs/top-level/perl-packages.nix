@@ -11854,6 +11854,21 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ pkgs.subversionClient ];
   };
 
+  Swim = buildPerlPackage rec {
+    name = "Swim-0.1.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "06aac148d7b1778028ffae657fdf79b1093b52035661fd8b9bdad729dc8741aa";
+    };
+    buildInputs = [ FileShareDirInstall ];
+    propagatedBuildInputs = [ HTMLEscape HashMerge IPCRun Pegex TextAutoformat YAMLLibYAML ];
+    meta = {
+      homepage = https://github.com/ingydotnet/swim-pm;
+      description = "See What I Mean?!";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Switch = buildPerlPackage rec {
     name = "Switch-2.17";
     src = fetchurl {
