@@ -90,13 +90,13 @@ let
           extraFlags+=" --network-bridge=$HOST_BRIDGE"
         fi
         if [ -n "$HOST_PORT" ]; then
-	  OIFS=$IFS
-	  IFS=","
+          OIFS=$IFS
+          IFS=","
           for i in $HOST_PORT
-	  do
+          do
               extraFlags+=" --port=$i"
-	  done
-	  IFS=$OIFS
+          done
+          IFS=$OIFS
         fi
       fi
 
@@ -325,12 +325,29 @@ let
       '';
     };
 
-    hostPort = mkOption {
-      type = types.listOf types.str;
-      default = null;
-      example = [ "8080" ];
+    forwardPorts = mkOption {
+      type = types.listOf (types.submodule {
+        options = {
+          protocol = mkOption {
+            type = types.str;
+            default = "tcp";
+            description = "The protocol specifier for port forwarding between host and container";
+          };
+          hostPort = mkOption {
+            type = types.int;
+            description = "Source port of the external interface on host";
+          };
+          containerPort = mkOption {
+            type = types.nullOr types.int;
+            default = null;
+            description = "Target port of container";
+          };
+        };
+      });
+      default = [];
+      example = [ { protocol = "tcp"; hostPort = 8080; containerPort = 80; } ];
       description = ''
-        List of forwarded ports from the host to the container. 
+        List of forwarded ports from host to container. Each forwarded port is specified by protocol, hostPort and containerPort. By default, protocol is tcp and hostPort and containerPort are assumed to be the same if containerPort is not explicitly given. 
       '';
     };
 
@@ -662,7 +679,9 @@ in
     # Generate a configuration file in /etc/containers for each
     # container so that container@.target can get the container
     # configuration.
-    environment.etc = mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
+    environment.etc =
+      let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort); 
+      in mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
       { text =
           ''
             SYSTEM_PATH=${cfg.path}
@@ -671,8 +690,8 @@ in
               ${optionalString (cfg.hostBridge != null) ''
                 HOST_BRIDGE=${cfg.hostBridge}
               ''}
-              ${optionalString (length cfg.hostPort > 0) ''
-                HOST_PORT=${concatStringsSep "," cfg.hostPort}
+              ${optionalString (length cfg.forwardPorts > 0) ''
+                HOST_PORT=${concatStringsSep "," (map mkPortStr cfg.forwardPorts)}
               ''}
               ${optionalString (cfg.hostAddress != null) ''
                 HOST_ADDRESS=${cfg.hostAddress}
