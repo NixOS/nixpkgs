@@ -1,5 +1,11 @@
-{ lib, allPackages
-, system, platform, crossSystem, config
+{ _defaults    ? import ../debug.nix
+, argsResolved ? _defaults.extend (_: _: args)
+, lib          ? argsResolved.lib
+, allPackages  ? argsResolved.allPackages
+, system       ? argsResolved.system
+, platform     ? argsResolved.platform
+, crossSystem  ? argsResolved.crossSystem
+, config       ? argsResolved.config
 
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
@@ -13,7 +19,7 @@
     cpio    = fetch { file = "cpio";  sha256 = "0lw057bmcqls96j0gv1n3mgl66q31mba7i413cbkkaf0rfzz3dxj"; };
     tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "13ihbj002pis3fgy1d9c4fi7flca21z9brjsjkklm82h5b4nlwxl"; executable = false; };
   }
-}:
+} @ args:
 
 assert crossSystem == null;
 

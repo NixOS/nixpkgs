@@ -3,8 +3,16 @@
 # external (non-Nix) tools, such as /usr/bin/gcc, and it contains a C
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
-{ lib, allPackages
-, system, platform, crossSystem, config
+
+# The function defaults are for easy testing.
+{ _defaults    ? import ../debug.nix
+, argsResolved ? _defaults.extend (_: _: args)
+, lib          ? argsResolved.lib
+, allPackages  ? argsResolved.allPackages
+, system       ? argsResolved.system
+, platform     ? argsResolved.platform
+, crossSystem  ? argsResolved.crossSystem
+, config       ? argsResolved.config
 
 , bootstrapFiles ?
     if system == "i686-linux" then import ./bootstrap/i686.nix
@@ -14,7 +22,7 @@
     else if system == "armv7l-linux" then import ./bootstrap/armv7l.nix
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
     else abort "unsupported platform for the pure Linux stdenv"
-}:
+} @ args:
 
 assert crossSystem == null;
 
