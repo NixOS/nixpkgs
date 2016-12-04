@@ -11698,6 +11698,8 @@ in
 
   ### DATA
 
+  adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
+
   andagii = callPackage ../data/fonts/andagii { };
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
