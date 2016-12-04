@@ -81,6 +81,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
+    export OPENSSL_LIBS='-L${openssl.dev}/lib -lssl -lcrypto'
 
     configureFlags+="\
         -plugindir $out/lib/qt5/plugins \
@@ -179,7 +180,7 @@ stdenv.mkDerivation {
   ++ lib.optional mesaSupported mesa;
 
   buildInputs =
-    [ bison flex gperf ]
+    [ bison flex gperf openssl ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
