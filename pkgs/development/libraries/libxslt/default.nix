@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs
-, pythonSupport ? true, python2
+, python2, pythonSupport ? (! stdenv ? cross)
 }:
 
 assert pythonSupport -> python2 != null;
