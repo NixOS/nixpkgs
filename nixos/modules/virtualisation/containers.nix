@@ -90,7 +90,13 @@ let
           extraFlags+=" --network-bridge=$HOST_BRIDGE"
         fi
         if [ -n "$HOST_PORT" ]; then
-          extraFlags+=" --port=$HOST_PORT"
+	  OIFS=$IFS
+	  IFS=","
+          for i in $HOST_PORT
+	  do
+              extraFlags+=" --port=$i"
+	  done
+	  IFS=$OIFS
         fi
       fi
 
@@ -320,11 +326,11 @@ let
     };
 
     hostPort = mkOption {
-      type = types.nullOr types.string;
+      type = types.listOf types.str;
       default = null;
-      example = "8080";
+      example = [ "8080" ];
       description = ''
-        Allow port forwarding from the host to the container. 
+        List of forwarded ports from the host to the container. 
       '';
     };
 
@@ -665,8 +671,8 @@ in
               ${optionalString (cfg.hostBridge != null) ''
                 HOST_BRIDGE=${cfg.hostBridge}
               ''}
-              ${optionalString (cfg.hostPort != null) ''
-                HOST_PORT=${cfg.hostPort}
+              ${optionalString (length cfg.hostPort > 0) ''
+                HOST_PORT=${concatStringsSep "," cfg.hostPort}
               ''}
               ${optionalString (cfg.hostAddress != null) ''
                 HOST_ADDRESS=${cfg.hostAddress}
