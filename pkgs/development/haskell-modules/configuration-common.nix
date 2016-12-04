@@ -507,9 +507,6 @@ self: super: {
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
 
-  # https://github.com/Gabriel439/Haskell-Turtle-Library/issues/1
-  turtle = dontCheck super.turtle;
-
   # https://github.com/Philonous/xml-picklers/issues/5
   xml-picklers = dontCheck super.xml-picklers;
 

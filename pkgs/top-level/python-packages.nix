@@ -4233,20 +4233,18 @@ in {
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.24.1";
+    version = "0.25.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/Cython/${name}.tar.gz";
-      sha256 = "84808fda00508757928e1feadcf41c9f78e9a9b7167b6649ab0933b76f75e7b9";
+      sha256 = "e0941455769335ec5afb17dee36dc3833b7edc2ae20a8ed5806c58215e4b6669";
     };
 
-    buildInputs = with self; [ pkgs.pkgconfig pkgs.gdb ];
+    buildInputs = with self; [ pkgs.glibcLocales pkgs.pkgconfig pkgs.gdb ];
     # For testing
     nativeBuildInputs = with self; [ numpy pkgs.ncurses ];
 
-    # cython's testsuite requires npy_isinf to return sign of the infinity, but
-    # a C99 conformant is only required to return a non zero value
-    patches = [ ../development/python-modules/cython_test.patch ];
+    LC_ALL = "en_US.UTF-8";
 
     # cython's testsuite is not working very well with libc++
     # We are however optimistic about things outside of testsuite still working
@@ -18689,9 +18687,13 @@ in {
       sha256 = "0ee9975c05602e755ff5000232e0335ba30d507f6261922a658ee11b1cec36d1";
     };
 
-    # Check is disabled because of assertion errors, see
+    doCheck = !isPyPy;
+
+    # Disable imagefont tests, because they don't work well with infinality:
     # https://github.com/python-pillow/Pillow/issues/1259
-    doCheck = false;
+    postPatch = ''
+      rm Tests/test_imagefont.py
+    '';
 
     buildInputs = with self; [
       pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose pkgs.lcms2 ]
