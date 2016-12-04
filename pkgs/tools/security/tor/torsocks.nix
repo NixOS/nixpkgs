@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "torsocks-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchgit {
     url    = meta.repositories.git;
     rev    = "refs/tags/v${version}";
-    sha256 = "1l890pg0h2hqpkabsnwc6pq2qi8mfv58qzaaicc9y62rq5nmrrws";
+    sha256 = "1xwkmfaxhhnbmvp37agnby1n53hznwhvx0dg1hj35467qfx985zc";
   };
 
   buildInputs = [ autoreconfHook ];
