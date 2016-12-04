@@ -23151,15 +23151,15 @@ in {
   };
 
   slob = buildPythonPackage rec {
-    name = "slob-unstable-2016-03-04";
+    name = "slob-unstable-2016-11-03";
 
     disabled = !isPy3k;
 
     src = pkgs.fetchFromGitHub {
       owner = "itkach";
       repo = "slob";
-      rev = "31ad0e769360a5b10a4893f686587bb8e48c3895";
-      sha256 = "06yn510178awhjsvy88cpjz7rlmyviqd5g58gc8gf4ivyqdlqbsl";
+      rev = "d1ed71e4778729ecdfc2fe27ed783689a220a6cd";
+      sha256 = "1r510s4r124s121wwdm9qgap6zivlqqxrhxljz8nx0kv0cdyypi5";
     };
 
     propagatedBuildInputs = [ self.PyICU ];
