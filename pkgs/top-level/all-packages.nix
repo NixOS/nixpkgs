@@ -875,6 +875,8 @@ in
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
+  filebeat = callPackage ../misc/logging/filebeat { };
+
   filebench = callPackage ../tools/misc/filebench { };
 
   fop = callPackage ../tools/typesetting/fop { };
