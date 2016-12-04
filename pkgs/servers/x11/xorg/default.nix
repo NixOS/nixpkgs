@@ -790,11 +790,11 @@ let
   }) // {inherit fixesproto libX11 xextproto xproto ;};
 
   libXfont = (mkDerivation "libXfont" {
-    name = "libXfont-1.5.1";
+    name = "libXfont-1.5.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont-1.5.1.tar.bz2;
-      sha256 = "1630v3sfvwwlimb2ja10c84ql6v1mw9bdfhvan7pbybkgi99h25p";
+      url = mirror://xorg/individual/lib/libXfont-1.5.2.tar.bz2;
+      sha256 = "0w8d07bkmjiarkx09579bl8zsq903mn8javc7qpi0ix4ink5x502";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -2243,11 +2243,11 @@ let
   }) // {inherit inputproto libX11 libXaw xproto libXt ;};
 
   xkeyboardconfig = (mkDerivation "xkeyboardconfig" {
-    name = "xkeyboard-config-2.18";
+    name = "xkeyboard-config-2.19";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.18.tar.bz2;
-      sha256 = "1l6x2w357ja8vm94ns79s7yj9a5dlr01r9dxrjvzwncadiyr27f4";
+      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.19.tar.bz2;
+      sha256 = "09sqyi430bbg13pp8j0j60p9p9xn2lpqx38xw1lyv77bp63d3pw3";
     };
     buildInputs = [pkgconfig libX11 xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -2397,11 +2397,11 @@ let
   }) // {inherit libX11 xproto ;};
 
   xproto = (mkDerivation "xproto" {
-    name = "xproto-7.0.29";
+    name = "xproto-7.0.31";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/xproto-7.0.29.tar.bz2;
-      sha256 = "12lzpa9mrzkyrhrphzpi1014np3328qg7mdq08wj6wyaj9q4f6kc";
+      url = mirror://xorg/individual/proto/xproto-7.0.31.tar.bz2;
+      sha256 = "0ivpxz0rx2a7nahkpkhfgymz7j0pwzaqvyqpdgw9afmxl1yp9yf6";
     };
     buildInputs = [pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
