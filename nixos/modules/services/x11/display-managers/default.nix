@@ -187,7 +187,6 @@ in
         default = [];
         example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
-        apply = toString;
       };
 
       sessionCommands = mkOption {
