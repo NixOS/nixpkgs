@@ -5976,6 +5976,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTMLTree ];
   };
 
+  HTMLEscape = buildPerlModule rec {
+    name = "HTML-Escape-1.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "b1cbac4157ad8dedac6914e1628855e05b8dc885a4007d2e4df8177c6a9b70fb";
+    };
+    buildInputs = [ ModuleBuild ModuleBuildPluggablePPPort TestRequires ];
+    meta = {
+      homepage = https://github.com/tokuhirom/HTML-Escape;
+      description = "Extremely fast HTML escaping";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLFromANSI = buildPerlPackage {
     name = "HTML-FromANSI-2.03";
     src = fetchurl {
