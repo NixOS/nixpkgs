@@ -61,13 +61,11 @@ in buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/xpra \
-      --set FONTCONFIG_FILE "${fontsConf}" \
-      --set XPRA_LOG_DIR "\$HOME/.xpra" \
       --set XPRA_INSTALL_PREFIX "$out" \
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
       --set GST_PLUGIN_SYSTEM_PATH_1_0 "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudioLight ]} \
+      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib  \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudioLight ]}
   '';
 
   preCheck = "exit 0";
