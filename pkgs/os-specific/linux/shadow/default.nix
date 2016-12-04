@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       # Don't install ‘groups’, since coreutils already provides it.
-      rm $out/bin/groups $out/share/man/man1/groups.*
+      rm $out/bin/groups
+      rm $man/share/man/man1/groups.*
 
       # Move the su binary into the su package
       mkdir -p $su/bin

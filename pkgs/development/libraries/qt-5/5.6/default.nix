@@ -50,7 +50,7 @@ let
       outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
-      setupHook = ./setup-hook.sh;
+      setupHook = ../qtsubmodule-setup-hook.sh;
 
       enableParallelBuilding = args.enableParallelBuilding or true;
 
@@ -110,8 +110,15 @@ let
         qtwebchannel qtwebengine qtwebsockets qtx11extras qtxmlpatterns
       ];
 
-      makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      qmakeHook = makeSetupHook { deps = [ self.qtbase.dev ]; } ./qmake-hook.sh;
+      makeQtWrapper =
+        makeSetupHook
+        { deps = [ makeWrapper ]; }
+        ../make-qt-wrapper.sh;
+
+      qmakeHook =
+        makeSetupHook
+        { deps = [ self.qtbase.dev ]; }
+        ../qmake-hook.sh;
 
     };
 

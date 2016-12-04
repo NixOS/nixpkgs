@@ -7,6 +7,7 @@
 , enableRST ? true
 , enableSpelling ? true, gtkspell2 ? null
 , enableNotifications ? false
+, enableOmemoPluginDependencies ? false
 , extraPythonPackages ? pkgs: []
 }:
 
@@ -68,7 +69,9 @@ stdenv.mkDerivation rec {
   ] ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
     ++ optional enableNotifications pythonPackages.notify
-    ++ extraPythonPackages pythonPackages;
+    ++ optionals enableOmemoPluginDependencies (with pythonPackages; [
+      cryptography python-axolotl python-axolotl-curve25519 qrcode
+    ]) ++ extraPythonPackages pythonPackages;
 
   postFixup = ''
     install -m 644 -t "$out/share/gajim/icons/hicolor" \

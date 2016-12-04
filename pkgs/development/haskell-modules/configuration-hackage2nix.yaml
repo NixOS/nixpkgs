@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 7.10
+  # LTS Haskell 7.11
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -380,7 +380,7 @@ default-package-overrides:
   - cpu ==0.1.2
   - crackNum ==1.5
   - criterion ==1.1.1.0
-  - cron ==0.4.1.2
+  - cron ==0.4.2
   - crypto-api ==0.13.2
   - crypto-api-tests ==0.3
   - crypto-cipher-tests ==0.0.11
@@ -467,7 +467,7 @@ default-package-overrides:
   - djinn-lib ==0.0.1.2
   - dlist ==0.8.0.2
   - dlist-instances ==0.1.1.1
-  - dns ==2.0.9
+  - dns ==2.0.10
   - do-list ==1.0.1
   - dockerfile ==0.1.0.1
   - docopt ==0.7.0.5
@@ -480,7 +480,7 @@ default-package-overrides:
   - double-conversion ==2.0.1.0
   - download ==0.3.2.5
   - dpor ==0.2.0.0
-  - drawille ==0.1.0.6
+  - drawille ==0.1.2.0
   - DRBG ==0.5.5
   - drifter ==0.2.2
   - drifter-postgresql ==0.0.2
@@ -552,7 +552,7 @@ default-package-overrides:
   - fay-text ==0.3.2.2
   - fay-uri ==0.2.0.0
   - fb ==1.0.13
-  - fclabels ==2.0.3.1
+  - fclabels ==2.0.3.2
   - feature-flags ==0.1.0.1
   - feed ==0.3.11.1
   - FenwickTree ==0.1.2.1
@@ -578,20 +578,20 @@ default-package-overrides:
   - fmlist ==0.9
   - fn ==0.3.0.1
   - focus ==0.1.5
-  - fold-debounce ==0.2.0.3
+  - fold-debounce ==0.2.0.4
   - fold-debounce-conduit ==0.1.0.4
   - foldl ==1.2.1
   - FontyFruity ==0.5.3.2
   - force-layout ==0.4.0.6
   - forecast-io ==0.2.0.0
   - foreign-store ==0.2
-  - formatting ==6.2.3
+  - formatting ==6.2.4
   - fortran-src ==0.1.0.4
   - Frames ==0.1.6
   - free ==4.12.4
   - free-vl ==0.1.4
   - freenect ==1.2.1
-  - freer ==0.2.3.0
+  - freer ==0.2.4.1
   - friendly-time ==0.4
   - frisby ==0.2
   - frontmatter ==0.1.0.2
@@ -652,7 +652,7 @@ default-package-overrides:
   - glabrous ==0.1.3.0
   - GLFW-b ==1.4.8.1
   - glib ==0.13.4.1
-  - Glob ==0.7.12
+  - Glob ==0.7.13
   - gloss ==1.10.2.3
   - gloss-rendering ==1.10.3.5
   - GLURaw ==2.0.0.2
@@ -934,7 +934,7 @@ default-package-overrides:
   - htoml ==1.0.0.3
   - HTTP ==4000.3.3
   - http-api-data ==0.2.4
-  - http-client ==0.4.31.1
+  - http-client ==0.4.31.2
   - http-client-openssl ==0.2.0.4
   - http-client-tls ==0.2.4.1
   - http-common ==0.8.2.0
@@ -1249,7 +1249,7 @@ default-package-overrides:
   - ObjectName ==1.1.0.1
   - octane ==0.16.3
   - Octree ==0.5.4.3
-  - oeis ==0.3.7
+  - oeis ==0.3.8
   - ofx ==0.4.2.0
   - old-locale ==1.0.0.7
   - old-time ==1.1.0.3
@@ -1257,7 +1257,7 @@ default-package-overrides:
   - once ==0.2
   - OneTuple ==0.2.1
   - oo-prototypes ==0.1.0.0
-  - opaleye ==0.5.2.1
+  - opaleye ==0.5.2.2
   - opaleye-trans ==0.3.3
   - open-browser ==0.2.1.0
   - OpenGL ==3.0.1.0
@@ -1441,7 +1441,7 @@ default-package-overrides:
   - readable ==0.3.1
   - ReadArgs ==1.2.2
   - readline ==1.0.3.0
-  - rebase ==1.0.3
+  - rebase ==1.0.6
   - redis-io ==0.7.0
   - redis-resp ==0.4.0
   - reducers ==3.12.1
@@ -1488,7 +1488,7 @@ default-package-overrides:
   - result ==0.2.6.0
   - rethinkdb ==2.2.0.7
   - rethinkdb-client-driver ==0.0.23
-  - retry ==0.7.4.1
+  - retry ==0.7.4.2
   - rev-state ==0.1.2
   - rfc5051 ==0.1.0.3
   - rng-utils ==0.2.1
@@ -1590,7 +1590,7 @@ default-package-overrides:
   - snap-core ==1.0.1.0
   - snap-server ==1.0.1.1
   - snowflake ==0.1.1.1
-  - soap ==0.2.3.1
+  - soap ==0.2.3.2
   - soap-openssl ==0.1.0.2
   - soap-tls ==0.1.1.2
   - socket ==0.6.1.0
@@ -1771,12 +1771,12 @@ default-package-overrides:
   - transformers-compat ==0.5.1.4
   - transformers-lift ==0.1.0.1
   - transient ==0.4.4.1
-  - transient-universe ==0.3.5
+  - transient-universe ==0.3.5.1
   - traverse-with-class ==0.2.0.4
   - tree-fun ==0.8.1.0
   - tree-view ==0.4
   - tries ==0.0.4
-  - trifecta ==1.6
+  - trifecta ==1.6.1
   - true-name ==0.1.0.2
   - ttrie ==0.1.2.1
   - tttool ==1.6.1.2
@@ -1798,7 +1798,7 @@ default-package-overrides:
   - typelits-witnesses ==0.2.3.0
   - typography-geometry ==1.0.0.1
   - tzdata ==0.1.20160614.0
-  - ua-parser ==0.7.1
+  - ua-parser ==0.7.2
   - uglymemo ==0.1.0.1
   - unbound ==0.5.1
   - unbound-generics ==0.3.1
@@ -1828,7 +1828,7 @@ default-package-overrides:
   - unix-time ==0.3.7
   - Unixutils ==1.54.1
   - unordered-containers ==0.2.7.1
-  - uri-bytestring ==0.2.2.0
+  - uri-bytestring ==0.2.2.1
   - uri-encode ==1.5.0.5
   - url ==2.1.3
   - urlpath ==5.0.0.1
@@ -1846,7 +1846,7 @@ default-package-overrides:
   - uuid-types ==1.0.3
   - vado ==0.0.7
   - validate-input ==0.4.0.0
-  - validation ==0.5.3
+  - validation ==0.5.4
   - varying ==0.5.0.3
   - vault ==0.3.0.6
   - vcswrapper ==0.1.3
@@ -1910,7 +1910,7 @@ default-package-overrides:
   - weigh ==0.0.3
   - werewolf ==1.5.1.1
   - werewolf-slack ==1.0.2.0
-  - wikicfp-scraper ==0.1.0.5
+  - wikicfp-scraper ==0.1.0.6
   - Win32 ==2.3.1.1
   - Win32-extras ==0.2.0.1
   - Win32-notify ==0.3.0.1
@@ -1928,8 +1928,8 @@ default-package-overrides:
   - Workflow ==0.8.3
   - wrap ==0.0.0
   - wreq ==0.4.1.0
-  - writer-cps-mtl ==0.1.0.2
-  - writer-cps-transformers ==0.1.0.2
+  - writer-cps-mtl ==0.1.1.0
+  - writer-cps-transformers ==0.1.1.0
   - wuss ==1.1.1
   - X11 ==1.6.1.2
   - x509 ==1.6.4

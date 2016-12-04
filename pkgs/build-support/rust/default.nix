@@ -6,6 +6,7 @@
 , logLevel ? ""
 , buildInputs ? []
 , cargoUpdateHook ? ""
+, cargoDepsHook ? ""
 , ... } @ args:
 
 let
@@ -28,6 +29,8 @@ in stdenv.mkDerivation (args // {
   configurePhase = args.configurePhase or "true";
 
   postUnpack = ''
+    eval "$cargoDepsHook"
+
     echo "Using cargo deps from $cargoDeps"
 
     cp -r "$cargoDeps" deps
