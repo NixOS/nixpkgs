@@ -391,7 +391,7 @@ rec {
       );
     in f [] [rhs lhs];
 
-  /* A recursive variant of the update operator ‘//’.  The recusion
+  /* A recursive variant of the update operator ‘//’.  The recursion
      stops when one of the attribute values is not an attribute set,
      in which case the right hand side value takes precedence over the
      left hand side value.
