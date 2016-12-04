@@ -435,6 +435,14 @@ in
           by default.
         '';
       };
+
+      terminateOnReset = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to terminate X upon server reset.
+        '';
+      };
     };
 
   };
@@ -548,8 +556,7 @@ in
       };
 
     services.xserver.displayManager.xserverArgs =
-      [ "-terminate"
-        "-config ${configFile}"
+      [ "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
         # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
         "-verbose" "3" "-logfile" "/dev/null"
@@ -558,7 +565,8 @@ in
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
         ++ optional (!cfg.enableTCP) "-nolisten tcp"
         ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
-        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}";
+        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
+        ++ optional cfg.terminateOnReset "-terminate";
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++
