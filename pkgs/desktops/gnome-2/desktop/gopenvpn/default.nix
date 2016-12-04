@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, glib, gtk2, gnome2, dbus_glib, gmime, libnotify, libgnome_keyring,
-  openssl, cyrus_sasl, gnonlin, sylpheed, gob2, gettext, intltool, libglade, polkit, autoconf, automake, expect,
-  openvpn, makeWrapper, pkexecPath ? "/var/setuid-wrappers/pkexec" }:
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, automake111x, glib, gtk2, gnome2, dbus_glib, gmime,
+  libnotify, libgnome_keyring, libglade, polkit, openvpn, pkexecPath ? "/var/setuid-wrappers/pkexec" }:
 
 stdenv.mkDerivation rec {
   rev = "2b9285f1ea2d11434b8ee8e10d937b2ea5285b63";
@@ -14,9 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pkdravr5wm7phdr2rd1rx1ry4dpwkrf0hv7wi99n4ywsl5jqwq8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib gtk2 dbus_glib gmime libnotify libgnome_keyring openssl cyrus_sasl gnonlin sylpheed gob2
-                  gettext intltool libglade polkit pkgconfig autoconf automake expect openvpn makeWrapper ];
+  buildInputs = [ glib gtk2 dbus_glib gmime libnotify libgnome_keyring pkgconfig automake111x autoreconfHook
+                  libglade polkit openvpn ];
 
   # disable the format hardening flags in order for the program to compile even though a potential vulnerability
   # might be present in the form of a format string vulnerability. By failing to add this the program compilation
@@ -33,16 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   # configure with pkexec to be able to run openvpn as privileged user
-  configureFlags = ["--with-pkexec=${pkexecPath}/bin/pkexec"];
-
-  preConfigure = ''
-    # copy standard gettext infrastructure files into a source package
-    autopoint -f
-    expect -c "spawn gettextize -f; expect -re \"Press Return to acknowledge the previous\""
-
-    # updating configuration files not required anymore due to autoreconfHook
-    autoreconf -vif
-  '';
+  configureFlags = ["--with-pkexec=${pkexecPath}"];
 
   meta = with stdenv.lib; {
     description = "Graphical front-end for OpenVPN";
