@@ -434,6 +434,7 @@ Each interpreter has the following attributes:
 - `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, e.g. `python3.4`.
+- `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Building packages and applications
 
@@ -699,59 +700,55 @@ should also be done when packaging `A`.
 
 ### How to override a Python package?
 
-Recursively updating a package can be done with `pkgs.overridePackages` as explained in the Nixpkgs manual.
-Python attribute sets are created for each interpreter version. We will therefore override the attribute set for the interpreter version we're interested.
-In the following example we change the name of the package `pandas` to `foo`.
-```
-newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = (super.python35Packages.override { self = python35Packages;})
-    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
-  };
-});
-```
-This can be tested with
-```
+We can override the interpreter and pass `packageOverrides`.
+In the following example we rename the `pandas` package and build it.
+```nix
 with import <nixpkgs> {};
 
-(let
+let
+  python = let
+    packageOverrides = self: super: {
+      pandas = super.pandas.override {name="foo";};
+    };
+  in pkgs.python35.override {inherit packageOverrides;};
 
-newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = (super.python35Packages.override { self = python35Packages;})
-    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
-  };
-});
-in newpkgs.python35.withPackages (ps: [ps.blaze])
-).env
+in python.pkgs.pandas
 ```
-A typical use case is to switch to another version of a certain package. For example, in the Nixpkgs repository we have multiple versions of `django` and `scipy`.
-In the following example we use a different version of `scipy`. All packages in `newpkgs` will now use the updated `scipy` version.
-```
+Using `nix-build` on this expression will build the package `pandas`
+but with the new name `foo`.
+
+All packages in the package set will use the renamed package.
+A typical use case is to switch to another version of a certain package.
+For example, in the Nixpkgs repository we have multiple versions of `django` and `scipy`.
+In the following example we use a different version of `scipy` and create an environment that uses it.
+All packages in the Python package set will now use the updated `scipy` version.
+
+```nix
 with import <nixpkgs> {};
 
-(let
-
-newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { scipy = python35Packages.scipy_0_17;};
+(
+let
+  packageOverrides = self: super: {
+    scipy = super.scipy_0_17;
   };
-});
-in newpkgs.python35.withPackages (ps: [ps.blaze])
+in (pkgs.python35.override {inherit packageOverrides;}).withPackages (ps: [ps.blaze])
 ).env
 ```
-The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
+The requested package `blaze` depends on `pandas` which itself depends on `scipy`.
 
-A similar example but now using `django`
+If you want the whole of Nixpkgs to use your modifications, then you can use `pkgs.overridePackages`
+as explained in this manual. In the following example we build a `inkscape` using a different version of `numpy`.
 ```
-with import <nixpkgs> {};
-
-(let
-
-newpkgs = pkgs.overridePackages(self: super: rec {
-  python27Packages = (super.python27Packages.override {self = python27Packages;})
-    // { django = super.python27Packages.django_1_9; };
-});
-in newpkgs.python27.withPackages (ps: [ps.django_guardian ])
-).env
+let
+  pkgs = import <nixpkgs> {};
+  newpkgs = pkgs.overridePackages ( pkgsself: pkgssuper: {
+    python27 = let
+      packageOverrides = self: super: {
+        numpy = super.numpy_1_10;
+      };
+    in pkgssuper.python27.override {inherit packageOverrides;};
+  } );
+in newpkgs.inkscape
 ```
 
 ### `python setup.py bdist_wheel` cannot create .whl
@@ -772,9 +769,9 @@ or the current time:
 nix-shell --run "SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel"
 ```
 or unset:
-"""
+```
 nix-shell --run "unset SOURCE_DATE_EPOCH; python3 setup.py bdist_wheel"
-"""
+```
 
 ### `install_data` / `data_files` problems
 
