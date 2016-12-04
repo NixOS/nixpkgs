@@ -175,6 +175,13 @@ rec {
 
   bootstrapTools = (import ./default.nix {
     inherit system bootstrapFiles;
+
+    lib = assert false; null;
+    allPackages = assert false; null;
+
+    platform = assert false; null;
+    crossSystem = assert false; null;
+    config = assert false; null;
   }).bootstrapTools;
 
   test = derivation {
