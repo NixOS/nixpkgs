@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, which }:
+{ stdenv, fetchgit, autoreconfHook, libcap }:
 
 stdenv.mkDerivation rec {
   name = "torsocks-${version}";
@@ -12,9 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  patchPhase = ''
-    substituteInPlace src/bin/torsocks.in \
-      --replace which ${which}/bin/which
+  postPatch = ''
+    # Patch torify_app()
+    sed -i \
+      -e 's,\(local app_path\)=`which $1`,\1=`type -P $1`,' \
+      -e 's,\(local getcap\)=.*,\1=${libcap}/bin/getcap,' \
+      src/bin/torsocks.in
   '';
 
   meta = {
