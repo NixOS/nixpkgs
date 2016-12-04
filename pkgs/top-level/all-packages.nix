@@ -12582,6 +12582,7 @@ in
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
   docker-machine = callPackage ../applications/networking/cluster/docker-machine { };
+  docker-machine-kvm = callPackage ../applications/networking/cluster/docker-machine/kvm.nix { };
 
   docker-distribution = callPackage ../applications/virtualization/docker-distribution { };
 
