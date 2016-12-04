@@ -10,10 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xwkmfaxhhnbmvp37agnby1n53hznwhvx0dg1hj35467qfx985zc";
   };
 
-  buildInputs = [ autoreconfHook ];
-  preConfigure = ''
-      export configureFlags="$configureFlags --libdir=$out/lib"
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
 
   patchPhase = ''
     substituteInPlace src/bin/torsocks.in \
