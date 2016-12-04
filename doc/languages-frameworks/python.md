@@ -409,10 +409,10 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are as respectively
+Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are available as respectively
 `python26`, `python27`, `python33`, `python34` and `python35`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
-`python35`. The default interpreter, `python`, maps to `python3`.
+`python35`. The default interpreter, `python`, maps to `python2`.
 The Nix expressions for the interpreters can be found in
 `pkgs/development/interpreters/python`.
 
@@ -437,14 +437,16 @@ Each interpreter has the following attributes:
 
 ### Building packages and applications
 
-Python packages (libraries) and applications that use `setuptools` or
-`distutils` are typically built with respectively the `buildPythonPackage` and
-`buildPythonApplication` functions.
+Python libraries and applications that use `setuptools` or
+`distutils` are typically build with respectively the `buildPythonPackage` and
+`buildPythonApplication` functions. These two functions also support installing a `wheel`.
 
 All Python packages reside in `pkgs/top-level/python-packages.nix` and all
-applications elsewhere. Some packages are also defined in
+applications elsewhere. In case a package is used as both a library and an application,
+then the package should be in `pkgs/top-level/python-packages.nix` since only those packages are made
+available for all interpreter versions. The preferred location for library expressions is in
 `pkgs/development/python-modules`. It is important that these packages are
-called in `pkgs/top-level/python-packages.nix` and not elsewhere, to guarantee
+called from `pkgs/top-level/python-packages.nix` and not elsewhere, to guarantee
 the right version of the package is built.
 
 Based on the packages defined in `pkgs/top-level/python-packages.nix` an
@@ -462,14 +464,14 @@ and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
 * `pkgs.python3Packages` pointing to `pkgs.python35Packages`
-* `pkgs.pythonPackages` pointing to `pkgs.python3Packages`
+* `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function
 
 The `buildPythonPackage` function is implemented in
 `pkgs/development/interpreters/python/build-python-package.nix`
 
-and can be used as:
+The following is an example:
 
     twisted = buildPythonPackage {
       name = "twisted-8.1.0";
