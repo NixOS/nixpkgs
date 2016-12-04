@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.70.0";
+  version = "2.73.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "18iv1c2nx93gkfqa3k2m42dk4p59b9zp08fggb6imc1xqh2icfch";
+    sha256 = "17qs7dakzd25wbshsny2x82ppdqa6kwwfbp2vp1i8qmfc1nq61gc";
   };
 
   patches = [
@@ -46,15 +46,11 @@ stdenv.mkDerivation rec {
   '';
 
   dontUseQmakeConfigure = true;
-  # hack around a build problem
-  preBuild = ''
-    mkdir -p ../tmp.*/lib
-  '';
 
   nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];
 
   buildInputs = [
-     poppler_utils libpng imagemagick libjpeg
+    poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
   ] ++ (with python2Packages; [
     apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
