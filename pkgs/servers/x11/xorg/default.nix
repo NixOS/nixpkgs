@@ -1593,22 +1593,22 @@ let
   }) // {inherit inputproto udev xorgserver xproto ;};
 
   xf86inputjoystick = (mkDerivation "xf86inputjoystick" {
-    name = "xf86-input-joystick-1.6.2";
+    name = "xf86-input-joystick-1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-joystick-1.6.2.tar.bz2;
-      sha256 = "038mfqairyyqvz02rk7v3i070sab1wr0k6fkxvyvxdgkfbnqcfzf";
+      url = mirror://xorg/individual/driver/xf86-input-joystick-1.6.3.tar.bz2;
+      sha256 = "1awfq496d082brgjbr60lhm6jvr9537rflwxqdfqwfzjy3n6jxly";
     };
     buildInputs = [pkgconfig inputproto kbproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto kbproto xorgserver xproto ;};
 
   xf86inputkeyboard = (mkDerivation "xf86inputkeyboard" {
-    name = "xf86-input-keyboard-1.8.1";
+    name = "xf86-input-keyboard-1.9.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-keyboard-1.8.1.tar.bz2;
-      sha256 = "04d27kwqq03fc26an6051hs3i0bff8albhnngzyd59wxpwwzzj0s";
+      url = mirror://xorg/individual/driver/xf86-input-keyboard-1.9.0.tar.bz2;
+      sha256 = "12032yg412kyvnmc5fha1in7mpi651d8sa1bk4138s2j2zr01jgp";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -1626,11 +1626,11 @@ let
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputmouse = (mkDerivation "xf86inputmouse" {
-    name = "xf86-input-mouse-1.9.1";
+    name = "xf86-input-mouse-1.9.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-mouse-1.9.1.tar.bz2;
-      sha256 = "1kn5kx3qyn9qqvd6s24a2l1wfgck2pgfvzl90xpl024wfxsx719l";
+      url = mirror://xorg/individual/driver/xf86-input-mouse-1.9.2.tar.bz2;
+      sha256 = "0bsbgww9421792zan43j60mndqprhfxhc48agsi15d3abjqda9gl";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
