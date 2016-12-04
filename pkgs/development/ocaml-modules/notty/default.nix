@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchFromGitHub, findlib
+{ stdenv, buildOcaml, fetchpatch, fetchFromGitHub, findlib, topkg, opam, ocb-stubblr
 , result, uucp, uuseg, uutf
 , lwt     ? null }:
 
@@ -7,7 +7,7 @@ with stdenv.lib;
 let withLwt = lwt != null; in
 
 buildOcaml rec {
-  version = "0.1.1";
+  version = "0.1.1a";
   name = "notty";
 
   minimumSupportedOcamlVersion = "4.02";
@@ -15,18 +15,23 @@ buildOcaml rec {
   src = fetchFromGitHub {
     owner  = "pqwy";
     repo   = "notty";
-    rev    = "v${version}";
-    sha256 = "0bw3bq8z2y1rhc20zn13s78sazywyzpg8nmyjch33p7ypxfglf01";
+    rev    = "53f5946653490fce980dc5d8cadf8b122cff4f19";
+    sha256 = "0qmwb1hrp04py2i5spy0yd6c5jqxyss3wzvlkgxyl9r07kvsx6xf";
   };
 
-  buildInputs = [ findlib ];
+  patches = [ (fetchpatch {
+    url = https://github.com/dbuenzli/notty/commit/b0e12930acc26d030a74d6d63d622ae220b12c92.patch;
+    sha256 = "0pklplbnjbsjriqj73pc8fsadg404px534w7zknz2617zb44m6x6";
+  })];
+
+  buildInputs = [ findlib opam topkg ocb-stubblr ];
   propagatedBuildInputs = [ result uucp uuseg uutf ] ++
-                          optional withLwt [ lwt ];
+                          optional withLwt lwt;
 
-  configureFlags = [ "--enable-unix" ] ++
-                   (if withLwt then ["--enable-lwt"] else ["--disable-lwt"]);
+  buildPhase = topkg.buildPhase
+  + " --with-lwt ${if withLwt then "true" else "false"}";
 
-  configurePhase = "./configure --prefix $out $configureFlags";
+  inherit (topkg) installPhase;
 
   meta = {
     inherit (src.meta) homepage;
