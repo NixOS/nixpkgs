@@ -512,7 +512,7 @@ self: super: {
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
-  vty_5_13 = dontCheck super.vty_5_13;
+  vty_5_14 = dontCheck super.vty_5_14;
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -1128,6 +1128,6 @@ self: super: {
   barrier = doJailbreak super.barrier;
 
   # requires vty 5.13
-  brick = super.brick.overrideScope (self: super: { vty = self.vty_5_13; });
+  brick = super.brick.overrideScope (self: super: { vty = self.vty_5_14; });
 
 }
