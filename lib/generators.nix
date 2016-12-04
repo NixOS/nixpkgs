@@ -17,7 +17,29 @@ in
 
 rec {
 
-  /* Generates an INI-style config file from an
+  /* Generate a line of key k and value v, separated by
+   * character sep. If sep appears in k, it is escaped.
+   * Helper for synaxes with different separators.
+   *
+   * mkKeyValueLine ":" "f:oo" "bar"
+   * > "f\:oo:bar"
+   */
+  mkKeyValueLine = sep: k: v:
+    "${libStr.escape [sep] k}${sep}${toString v}";
+
+
+  /* Generate a key-value-style config file from an attrset.
+   *
+   * mkKeyValue is the same as in toINI.
+   */
+  toKeyValue = {
+    mkKeyValue ? mkKeyValueLine "="
+  }: attrs:
+    let mkLine = k: v: mkKeyValue k v + "\n";
+    in libStr.concatStrings (libAttr.mapAttrsToList mkLine attrs);
+
+
+  /* Generate an INI-style config file from an
    * attrset of sections to an attrset of key-value pairs.
    *
    * generators.toINI {} {
@@ -41,17 +63,16 @@ rec {
     # apply transformations (e.g. escapes) to section names
     mkSectionName ? (name: libStr.escape [ "[" "]" ] name),
     # format a setting line from key and value
-    mkKeyValue    ? (k: v: "${libStr.escape ["="] k}=${toString v}")
+    mkKeyValue    ? mkKeyValueLine "="
   }: attrsOfAttrs:
     let
         # map function to string for each key val
         mapAttrsToStringsSep = sep: mapFn: attrs:
           libStr.concatStringsSep sep
             (libAttr.mapAttrsToList mapFn attrs);
-        mkLine = k: v: mkKeyValue k v + "\n";
         mkSection = sectName: sectValues: ''
           [${mkSectionName sectName}]
-        '' + libStr.concatStrings (libAttr.mapAttrsToList mkLine sectValues);
+        '' + toKeyValue { inherit mkKeyValue; } sectValues;
     in
       # map input to ini sections
       mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
