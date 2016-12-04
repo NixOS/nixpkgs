@@ -414,6 +414,8 @@ let
       minimal = false;
     };
 
+    ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
+
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
     pa_ounit = callPackage ../development/ocaml-modules/pa_ounit { };
