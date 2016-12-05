@@ -347,7 +347,7 @@
 
       <listitem><para>
         <literal>pax_sanitize_slab={off|fast|full}</literal>: control kernel
-        slab object sanitization
+        slab object sanitization. Defaults to <literal>fast</literal>
       </para></listitem>
 
       <listitem><para>
