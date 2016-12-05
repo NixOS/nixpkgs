@@ -602,6 +602,25 @@ in {
     };
   };
 
+  aiosmtpd = buildPythonPackage rec {
+    name = "aiosmtpd-${version}";
+    version = "1.0a4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/aiosmtpd/${name}.tar.gz";
+      sha256 = "09wbnsrng5igb09s2pqlkvsgsfvrsy8z9lq5mpyw2kk1r8k1xwjz";
+    };
+
+    propagatedBuildInputs = [ self.atpublic ];
+
+    doCheck = false;
+
+    meta = {
+      license = with licenses; [ asl20 ];
+      homepage = https://pypi.python.org/pypi/aiosmtpd;
+    };
+  };
+
   alabaster = buildPythonPackage rec {
     name = "alabaster-0.7.7";
 
@@ -1259,6 +1278,23 @@ in {
       maintainers = with maintainers; [ matthiasbeyer ];
     };
 
+  };
+
+  atpublic = buildPythonPackage rec {
+    version = "0.4";
+    name = "atpublic-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/atpublic/${name}.tar.gz";
+      sha256 = "0ihmmcqaq7py4f8bh20crhaw36avdq9d5ams3ikr4hdlap7ilagk";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/atpublic;
+      license = licenses.asl20;
+    };
   };
 
   argparse = buildPythonPackage (rec {
@@ -6896,6 +6932,68 @@ in {
       homepage = "https://github.com/obsrvbl/flowlogs-reader";
       maintainers = with maintainers; [ cransom ];
       license = licenses.asl20;
+    };
+  };
+
+  flufl-bounce = buildPythonPackage rec {
+    name = "flufl.bounce-2.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flufl.bounce/${name}.tar.gz";
+      sha256 = "16czsa3cqf1z1a1ghyrhmzsw3wazwqp488hhrd0sq7i9mxjp4ava";
+    };
+
+    propagatedBuildInputs = [ self.zope_interface ];
+
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://pypi.python.org/pypi/flufl.bounce";
+      license = licenses.lgpl3;
+    };
+  };
+
+  flufl-i18n = buildPythonPackage rec {
+    name = "flufl.i18n-1.1.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flufl.i18n/${name}.tar.gz";
+      sha256 = "0c2i9jfba5px83s0iiiqbxmwlmzifygxvc7nyvnkhqck048kqx5v";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://pypi.python.org/pypi/flufl.i18n";
+      license = licenses.lgpl3;
+    };
+  };
+
+  flufl-lock = buildPythonPackage rec {
+    name = "flufl.lock-2.4.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flufl.lock/${name}.tar.gz";
+      sha256 = "0chhmkf2sg0vh00z6hr82m9387398aq4cwsw2bprldzh7v59lqvj";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://pypi.python.org/pypi/flufl.lock";
+      license = licenses.lgpl3;
+    };
+  };
+
+  flufl-testing = buildPythonPackage rec {
+    name = "flufl.testing-0.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flufl.testing/${name}.tar.gz";
+      sha256 = "0kri9d2y4w58k9b7zq94xisicqjag8zfkdfvjsjpz6dxcz17achp";
+    };
+
+    buildInputs = [ self.nose ];
+
+    doCheck = false;
+
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://pypi.python.org/pypi/flufl.testing";
+      license = licenses.lgpl3;
     };
   };
 
@@ -13437,6 +13535,61 @@ in {
       license = licenses.gpl2;
       platforms = platforms.all;
       maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
+  lazr-config = buildPythonPackage rec {
+    name = "lazr.config-${version}";
+    version = "2.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/lazr.config/${name}.tar.gz";
+      sha256 = "1286jwkq3pk7g0n8psiq3nxdqn74f98bbxc3fkdy1wnixxfhyf2z";
+    };
+
+    propagatedBuildInputs = [ self.lazr-delegates ];
+    buildInputs = [ self.nose ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/lazr.config;
+      license = with licenses; [ lgpl3 ];
+    };
+  };
+
+  lazr-delegates = buildPythonPackage rec {
+    name = "lazr.delegates-${version}";
+    version = "2.0.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/lazr.delegates/${name}.tar.gz";
+      sha256 = "1s9f166i6qpva2mqs20b78wsdj19cmj738jzqylg9y61q9d0vj2i";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ self.zope_interface ];
+    buildInputs = [ self.nose ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/lazr.delegates;
+      license = with licenses; [ lgpl3 ];
+    };
+  };
+
+  lazr-smtptest = buildPythonPackage rec {
+    name = "lazr.smtptest-${version}";
+    version = "2.0.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/lazr.smtptest/${name}.tar.gz";
+      sha256 = "05bfpy77n815jrdwpppjlg9qpsics8nsavp3n4id0zvscy81ijlx";
+    };
+
+    buildInputs = [ self.nose ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/lazr.smtptest;
+      license = with licenses; [ lgpl3 ];
     };
   };
 

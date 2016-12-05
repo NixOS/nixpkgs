@@ -1,26 +1,33 @@
-{ stdenv, fetchurl, python, pythonPackages }:
+{ stdenv, fetchFromGitLab, python3Packages }:
 
-stdenv.mkDerivation rec {
-  name = "mailman-2.1.23";
+python3Packages.buildPythonApplication rec {
+  name = "mailman-${version}";
+  version = "3.0.3";
 
-  src = fetchurl {
-    url = "mirror://gnu/mailman/${name}.tgz";
-    sha256 = "0s9ywix4m3n7qa0baws744ildg48hsa87jahpsfiqqilhmpwl8mh";
+  src = fetchFromGitLab {
+    owner = "mailman";
+    repo = "mailman";
+    rev = "cdd24f88bd36aa2bd87252618e98b80aa7cc1bf1";
+    sha256 = "0rkcv8wp52vbb8xxcf2166pjl175shv86cjii6kh32ysvplbi0qw";
   };
 
-  buildInputs = [ python pythonPackages.dns ];
+  postPatch = ''
+    substituteInPlace src/mailman/commands/cli_control.py \
+      --replace "config.BIN_DIR, 'master'" "config.BIN_DIR, '.master-wrapped'"
+    substituteInPlace src/mailman/bin/master.py \
+      --replace "config.BIN_DIR, 'runner'" "config.BIN_DIR, '.runner-wrapped'"
+  '';
 
-  patches = [ ./fix-var-prefix.patch ];
-
-  configureFlags = "--without-permcheck --with-cgi-ext=.cgi --with-var-prefix=/var/lib/mailman";
-
-  installTargets = "doinstall";         # Leave out the 'update' target that's implied by 'install'.
+  propagatedBuildInputs = with python3Packages; [
+    aiosmtpd alembic atpublic falcon flufl-bounce flufl-i18n flufl-lock flufl-testing
+    httplib2 lazr-config lazr-smtptest nose nose2 passlib psycopg2 requests2 zope_component
+  ];
 
   meta = {
     homepage = "http://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and e-newsletter lists";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    maintainers = [ stdenv.lib.maintainers.globin ];
   };
 }
