@@ -55,5 +55,6 @@ GRKERNSEC_MODHARDEN n
 
 GRKERNSEC_SYSCTL y
 GRKERNSEC_SYSCTL_DISTRO y
-GRKERNSEC_SYSCTL_ON y
+# Assume that appropriate sysctls are toggled once the system is up
+GRKERNSEC_SYSCTL_ON n
 ''
