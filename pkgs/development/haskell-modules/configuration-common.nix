@@ -186,6 +186,11 @@ self: super: {
     }))
     else super.hakyll;
 
+  # Heist's test suite requires system pandoc
+  heist = overrideCabal super.heist (drv: {
+    testToolDepends = [pkgs.pandoc];
+  });
+
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
   hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
