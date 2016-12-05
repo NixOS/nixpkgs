@@ -40,7 +40,19 @@ in
         configuration until the next reboot.
       '';
     };
-
+    
+    networking = {
+      forceReversePathFiltering = mkOption {
+        type = types.enum ["strict" "loose" "not-forced"];
+        example = "not-forced";
+        default = "strict";
+        description = ''
+          Whether to forcibly enable reverse packet filtering on all network interfaces.
+          Some services, such as cjdns, depend on receiving packets with altered sender addresses.
+        '';
+      };
+    };
+    
     disableEfiRuntimeServices = mkOption {
       type = types.bool;
       example = false;
@@ -106,23 +118,31 @@ in
     };
 
     # Configure system tunables
-    boot.kernel.sysctl = {
-      # Read-only under grsecurity
-      "kernel.kptr_restrict" = mkForce null;
-    } // optionalAttrs config.nix.useSandbox {
-      # chroot(2) restrictions that conflict with sandboxed Nix builds
-      "kernel.grsecurity.chroot_caps" = mkForce 0;
-      "kernel.grsecurity.chroot_deny_chroot" = mkForce 0;
-      "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
-      "kernel.grsecurity.chroot_deny_pivot" = mkForce 0;
-      "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
-    } // optionalAttrs containerSupportRequired {
-      # chroot(2) restrictions that conflict with NixOS lightweight containers
-      "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
-      "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
-      "kernel.grsecurity.chroot_restrict_nice" = mkForce 0;
-      "kernel.grsecurity.chroot_caps" = mkForce 0;
-    };
+    boot.kernel.sysctl =
+      let convertRPToInt = value: if value == "strict" then 1
+        else if value == "loose" then 2 
+        else if value == "not-forced" then 0 
+        else throw "Unknown global reverse path filter type ${value}!"; 
+      in
+      {
+        # Read-only under grsecurity
+        "kernel.kptr_restrict" = mkForce null;
+        "net.ipv4.conf.all.rp_filter" = mkForce (convertRPToInt cfg.networking.forceReversePathFiltering);
+      } // optionalAttrs config.nix.useSandbox {
+        # chroot(2) restrictions that conflict with sandboxed Nix builds
+        "kernel.grsecurity.chroot_caps" = mkForce 0;
+        "kernel.grsecurity.chroot_deny_chroot" = mkForce 0;
+        "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
+        "kernel.grsecurity.chroot_deny_pivot" = mkForce 0;
+        "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
+      } // optionalAttrs containerSupportRequired {
+        # chroot(2) restrictions that conflict with NixOS lightweight containers
+        "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
+        "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
+        "kernel.grsecurity.chroot_restrict_nice" = mkForce 0;
+        "kernel.grsecurity.chroot_caps" = mkForce 0;
+      };
+    
 
   };
 }
