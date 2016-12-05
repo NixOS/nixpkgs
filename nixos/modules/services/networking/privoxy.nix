@@ -100,6 +100,11 @@ in
       after = [ "network.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${privoxy}/sbin/privoxy --no-daemon --user ${privoxyUser} ${confFile}";
+
+      serviceConfig.PrivateDevices = true;
+      serviceConfig.PrivateTmp = true;
+      serviceConfig.ProtectHome = true;
+      serviceConfig.ProtectSystem = "full";
     };
 
   };
