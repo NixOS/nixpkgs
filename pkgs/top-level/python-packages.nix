@@ -1544,10 +1544,10 @@ in {
 
   awslogs = buildPythonPackage rec {
     name = "awslogs-${version}";
-    version = "0.5";
+    version = "0.7";
     src = pkgs.fetchurl {
-      url = "https://github.com/jorgebastida/awslogs/archive/0.5.tar.gz";
-      sha256 = "1hhvxsr8ishz645wv3r6px1652qqlaxrpxhcgf82q29h6w3ydsmk";
+      url = "https://github.com/jorgebastida/awslogs/archive/0.7.tar.gz";
+      sha256 = "0ywx6nb5p8x55fbmziqd79w1cnb3bidwrpyjfybbw755arl8yjv1";
     };
 
     doCheck = false;
