@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   postInstall = "wrapPythonPrograms";
 
+  postInstall = "rm $out/share/rubber/modules/etex.rub";
+
   meta = {
     description = "Wrapper for LaTeX and friends";
     longDescription = ''
