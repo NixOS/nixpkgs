@@ -1057,6 +1057,9 @@ self: super: {
     doCheck = false;
   });
 
+  # https://github.com/bos/math-functions/issues/25
+  math-functions = dontCheck super.math-functions;
+
   # http-api-data_0.3.x requires QuickCheck > 2.9, but overriding that version
   # is hard because of transitive dependencies, so we just disable tests.
   http-api-data_0_3_3 = dontCheck super.http-api-data_0_3_3;
