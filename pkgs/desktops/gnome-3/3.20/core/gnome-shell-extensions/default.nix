@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk3 glib libgtop intltool itstool
                   makeWrapper file ];
 
+  configureFlags = [ "--enable-extensions=all" ];
+
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeShell/Extensions;
     description = "Modify and extend GNOME Shell functionality and behavior";
