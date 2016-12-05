@@ -10167,6 +10167,7 @@ in
 
   mailman = callPackage ../servers/mail/mailman/2.nix { };
   mailman3 = callPackage ../servers/mail/mailman { };
+  mailman3client = callPackage ../servers/mail/mailman/client.nix { };
 
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
