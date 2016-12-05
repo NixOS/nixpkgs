@@ -6564,6 +6564,21 @@ in {
     propagatedBuildInputs = with self; [ configparser ];
   };
 
+  entrypoints_flit = buildPythonPackage rec {
+    pname = "entrypoints";
+    version = "0.2.2";
+    name = "${pname}-${version}";
+    format = "flit";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "takluyver";
+      repo = pname;
+      rev = version;
+      sha256 = "1asi3xfym1g9z24p9ivzyp4smnl600w8hghlv5dziabj6csj8s1h";
+    };
+    propagatedBuildInputs = with self; [ configparser ];
+  };
+
   etcd = buildPythonPackage rec {
     name = "etcd-${version}";
     version = "2.0.8";
