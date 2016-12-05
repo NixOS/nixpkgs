@@ -1542,30 +1542,6 @@ in {
     };
   };
 
-  awslogs = buildPythonPackage rec {
-    name = "awslogs-${version}";
-    version = "0.7";
-    src = pkgs.fetchFromGitHub {
-      owner = "jorgebastida";
-      repo = "awslogs";
-      rev = "${version}";
-      sha256 = "0dqf26h595l1fcnagxi8zsdarsxg3smsihxaqrvnki8fshhfdqsm";
-    };
-
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [
-      boto3 termcolor dateutil docutils
-    ];
-
-    meta = {
-      homepage = https://github.com/jorgebastida/awslogs;
-      description = "AWS CloudWatch logs for Humans";
-      maintainers = with maintainers; [ dbrock ];
-      license = licenses.bsd3;
-    };
-  };
-
   aws_shell = buildPythonPackage rec {
     name = "aws-shell-${version}";
     version = "0.1.1";

@@ -474,6 +474,7 @@ in
   avfs = callPackage ../tools/filesystems/avfs { };
 
   awscli = pythonPackages.awscli; # Should be moved out of python-packages.nix
+  awslogs = callPackage ../development/tools/awslogs { };
 
   aws_shell = python2Packages.aws_shell; # Should be moved out of python-packages.nix
 
