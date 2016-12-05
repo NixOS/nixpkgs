@@ -29,6 +29,7 @@ PAX_KERNEXEC_PLUGIN_METHOD_BTS y
 
 # Additional grsec hardening not implied by auto constraints
 GRKERNSEC_IO y
+GRKERNSEC_SYSFS_RESTRICT y
 
 # Disable protections rendered useless by redistribution
 GRKERNSEC_HIDESYM n

@@ -59,7 +59,8 @@ in
 
     boot.kernelPackages = mkForce pkgs.linuxPackages_grsec_nixos;
 
-    boot.kernelParams = optional cfg.disableEfiRuntimeServices "noefi";
+    boot.kernelParams = [ "grsec_sysfs_restrict=0" ]
+      ++ optional cfg.disableEfiRuntimeServices "noefi";
 
     nixpkgs.config.grsecurity = true;
 

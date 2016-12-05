@@ -151,9 +151,6 @@
         a TCP simultaneous OPEN on that port before the connection is actually
         established.</para></listitem>
 
-        <listitem><para><filename class="directory">/sys</filename> hardening:
-        breaks systemd.</para></listitem>
-
         <listitem><para>Trusted path execution: a desirable feature, but
         requires some more work to operate smoothly on NixOS.</para></listitem>
 
@@ -356,6 +353,12 @@
       <listitem><para>
         <literal>pax_size_overflow_report_only</literal>: log size overflow
         violations but leave the violating task running
+      </para></listitem>
+
+      <listitem><para>
+        <literal>grsec_sysfs_restrict=[0|1]</literal>: toggle sysfs
+        restrictions. The NixOS module sets this to <literal>0</literal>
+        for systemd compatibility
       </para></listitem>
     </itemizedlist>
   </para>
