@@ -12,6 +12,11 @@
 attrs // {
   buildInputs = buildInputs ++ [ bootstrapped-pip ];
 
+  configurePhase = ''
+    runHook preConfigure
+    runHook postConfigure
+  '';
+
   installPhase = attrs.installPhase or ''
     runHook preInstall
 
