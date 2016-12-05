@@ -1545,9 +1545,11 @@ in {
   awslogs = buildPythonPackage rec {
     name = "awslogs-${version}";
     version = "0.7";
-    src = pkgs.fetchurl {
-      url = "https://github.com/jorgebastida/awslogs/archive/0.7.tar.gz";
-      sha256 = "0ywx6nb5p8x55fbmziqd79w1cnb3bidwrpyjfybbw755arl8yjv1";
+    src = pkgs.fetchFromGitHub {
+      owner = "jorgebastida";
+      repo = "awslogs";
+      rev = "${version}";
+      sha256 = "0dqf26h595l1fcnagxi8zsdarsxg3smsihxaqrvnki8fshhfdqsm";
     };
 
     doCheck = false;
@@ -1559,6 +1561,7 @@ in {
     meta = {
       homepage = https://github.com/jorgebastida/awslogs;
       description = "AWS CloudWatch logs for Humans";
+      maintainers = with maintainers; [ dbrock ];
       license = licenses.bsd3;
     };
   };
