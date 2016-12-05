@@ -74,9 +74,9 @@ rec {
   # Same as `makeExtensible` but the name of the extending attribute is
   # customized.
   makeExtensibleWithCustomName = extenderName: rattrs:
-    fix' rattrs // {
+    fix' (extends (_: _: {
       ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
-   };
+    }) rattrs);
 
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
