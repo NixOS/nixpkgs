@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.minio.io/;
     description = "An S3-compatible object storage server";
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.x86_64;
     license = lib.licenses.asl20;
   };
 }
