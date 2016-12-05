@@ -153,10 +153,6 @@
 
         <listitem><para>Trusted path execution: a desirable feature, but
         requires some more work to operate smoothly on NixOS.</para></listitem>
-
-        <listitem><para>Module hardening: would break user initiated module
-        loading. Might enable this at some point, depending on the potential
-        breakage.</para></listitem>
       </itemizedlist>
     </para></listitem>
 
@@ -291,6 +287,10 @@
     this plugs a potential code injection attack vector; use
     <option>security.grsecurity.disableEfiRuntimeServices</option> to override
     this behavior.</para></listitem>
+
+    <listitem><para>User initiated autoloading of modules (e.g., when
+    using fuse or loop devices) is disallowed; either load requisite modules
+    as root or add them to<option>boot.kernelModules</option>.</para></listitem>
 
     <listitem><para>Virtualization: KVM is the preferred virtualization
     solution. Xen, Virtualbox, and VMWare are

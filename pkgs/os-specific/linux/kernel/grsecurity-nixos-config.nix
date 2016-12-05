@@ -31,6 +31,8 @@ PAX_KERNEXEC_PLUGIN_METHOD_BTS y
 GRKERNSEC_IO y
 GRKERNSEC_SYSFS_RESTRICT y
 
+GRKERNSEC_MODHARDEN y
+
 # Disable protections rendered useless by redistribution
 GRKERNSEC_HIDESYM n
 GRKERNSEC_RANDSTRUCT n
@@ -50,9 +52,6 @@ GRKERNSEC_FORKFAIL y
 
 # Wishlist: support trusted path execution
 GRKERNSEC_TPE n
-
-# Wishlist: enable this, but breaks user initiated module loading
-GRKERNSEC_MODHARDEN n
 
 GRKERNSEC_SYSCTL y
 GRKERNSEC_SYSCTL_DISTRO y
