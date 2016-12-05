@@ -9851,12 +9851,12 @@ in {
 
   django_1_10 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.10.3";
+    version = "1.10.4";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-      sha256 = "0c4c8zs7kzb0bdlpy4vlzv6va26dbazr32h91rldf6waxs6z14kg";
+      sha256 = "0asw60i4r5cdxb2jp6r09pdrwxxp8mvwbkz7vnx15n0hwmig1xzz";
     };
 
     patches = [
@@ -9883,12 +9883,12 @@ in {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.11";
+    version = "1.9.12";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "17bxmfp92bdwjachjqb5zdlay5fhv4125hc85ln4ggyz0f5zvp6s";
+      sha256 = "0daaz2rp1rwwpzm5l29wcgg1gbw9yqzcv9x2dsjfz29n806q685x";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -9907,12 +9907,12 @@ in {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.16";
+    version = "1.8.17";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "1pc1j3q64v65c573xwx64apjnf2v19nzxsidjiyp02c6l8bsyji2";
+      sha256 = "01zb2l0gcdb2wgxmvvrhjj9ccdj1mfhn6zhqcdq04m7lzi4dc6q2";
     };
 
     # too complicated to setup
