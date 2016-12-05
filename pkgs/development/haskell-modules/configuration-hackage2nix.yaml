@@ -2045,7 +2045,12 @@ package-maintainers:
     - funcmp
     - git-annex
     - hackage-db
+    - hledger
+    - hledger-diff
     - hledger-interest
+    - hledger-irr
+    - hledger-ui
+    - hledger-web
     - hopenssl
     - hsdns
     - hsemail
@@ -4444,7 +4449,6 @@ dont-distribute-packages:
   HLearn-distributions:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   hledger-api:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   hledger-chart:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
-  hledger-ui:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   hledger-vty:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   hlibBladeRF:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   hlibev:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
