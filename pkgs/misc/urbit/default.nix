@@ -2,15 +2,14 @@
   cmake, re2c, libtool, ncurses, perl, zlib, python2, curl }:
 
 stdenv.mkDerivation rec {
-
   name = "urbit-${version}";
-  version = "2016-11-01";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "urbit";
     repo = "urbit";
-    rev = "83a74d475772b623c81f06fa46af675d121b6263";
-    sha256 = "0hs87ilmdjwi0jjl38nga1kvc2kzfyvf999hcwx5qan8ds1qlp2a";
+    rev = "v${version}";
+    sha256 = "1ndy58ypilabf9pfkqzzl7wf6x1vr4gpvsbn30sygp2ip908q0xz";
   };
 
   buildInputs = with stdenv.lib; [
