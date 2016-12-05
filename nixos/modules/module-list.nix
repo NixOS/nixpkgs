@@ -206,6 +206,7 @@
   ./services/hardware/upower.nix
   ./services/hardware/thermald.nix
   ./services/logging/awstats.nix
+  ./services/logging/filebeat.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
   ./services/logging/klogd.nix
