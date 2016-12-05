@@ -9898,40 +9898,19 @@ in
   # Therefore we do not recurse into attributes here, in contrast to
   # python27Packages. `nix-env -iA python26Packages.nose` works
   # regardless.
-  python26Packages = callPackage ./python-packages.nix {
-    python = python26;
-    self = python26Packages;
-  };
+  python26Packages = python26.pkgs;
 
-  python27Packages = lib.hiPrioSet (recurseIntoAttrs (callPackage ./python-packages.nix {
-    python = python27;
-    self = python27Packages;
-  }));
+  python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
 
-  python33Packages = callPackage ./python-packages.nix {
-    python = python33;
-    self = python33Packages;
-  };
+  python33Packages = python33.pkgs;
 
-  python34Packages = callPackage ./python-packages.nix {
-    python = python34;
-    self = python34Packages;
-  };
+  python34Packages = python34.pkgs;
 
-  python35Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
-    python = python35;
-    self = python35Packages;
-  });
+  python35Packages = recurseIntoAttrs python35.pkgs;
 
-  python36Packages = (callPackage ./python-packages.nix {
-    python = python36;
-    self = python36Packages;
-  });
+  python36Packages = python36.pkgs;
 
-  pypyPackages = callPackage ./python-packages.nix {
-    python = pypy;
-    self = pypyPackages;
-  };
+  pypyPackages = pypy.pkgs;
 
   ### DEVELOPMENT / R MODULES
 
