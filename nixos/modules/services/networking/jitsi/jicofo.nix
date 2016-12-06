@@ -101,6 +101,7 @@ in {
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
     systemd.services.jicofo = {
       description = "JiCoFo";
       path  = [ pkgs.jre ];

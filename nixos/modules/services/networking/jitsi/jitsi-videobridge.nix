@@ -82,8 +82,9 @@ in {
       };
 
       apis = mkOption {
-        type = types.enum [ "xmpp" "rest" "xmpp,rest" ];
-        default = "xmpp";
+        type = types.listOf (types.enum [ "xmpp" "rest" ]);
+        apply = list: concatStringsSep "," list;
+        default = ["xmpp"];
         description = ''
           Where APIS is a comma separated list of APIs to enable.
         '';
@@ -100,8 +101,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then [ cfg.port 4443 ] else [];
     networking.firewall.allowedUDPPortRanges = if cfg.openFirewall then [{ from = cfg.minPort; to = cfg.maxPort; }] else [];
+
+    users.extraUsers."${cfg.user}" = {
+        home = "/home/${cfg.user}";
+        description = "jitsi-videobridge user";
+      };
 
     systemd.services.jitsi-videobridge = {
       description = "Jitsi Videobridge";
