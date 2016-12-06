@@ -12,7 +12,7 @@ let
 
   compiler-rt_src = fetch "compiler-rt" "16m5g0hf8yg9npnw25j2a86g34nsvk9rsm3c84gbch2prm7j5rg0";
   clang-tools-extra_src = fetch "clang-tools-extra" "052zg0h5vbmxnh2ikc743rw3649f112dfyn8hg39x6cfxi3fqyjv";
-
+  polly_src = fetch "polly" "0znrikgdaqq4g3b5bl3l4nngx11wah5ibkwp8pcam6q9218d43gg";
   self = {
     llvm = callPackage ./llvm.nix {
       inherit compiler-rt_src stdenv;
