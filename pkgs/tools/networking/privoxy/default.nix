@@ -10,6 +10,8 @@ stdenv.mkDerivation rec{
     sha256 = "1n4wpxmahl8m2y3d1azxa8lrdbpaad007k458skxrpz57ss1br2p";
   };
 
+  hardeningEnable = [ "pie" ];
+
   nativeBuildInputs = [ autoreconfHook w3m man ];
   buildInputs = [ zlib pcre ];
 
