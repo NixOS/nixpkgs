@@ -4,7 +4,7 @@
 , glib
 , gst_plugins_base
 , gstreamer
-, icu_54_1
+, icu
 , libpulseaudio
 , libuuid
 , libxml2
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       glib
       gst_plugins_base
       gstreamer
-      icu_54_1
+      icu
       libpulseaudio
       libuuid
       libxml2
