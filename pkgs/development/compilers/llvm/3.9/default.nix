@@ -19,7 +19,7 @@ let
     };
 
     clang-unwrapped = callPackage ./clang {
-      inherit clang-tools-extra_src stdenv;
+      inherit clang-tools-extra_src polly_src stdenv;
     };
 
     clang = wrapCC self.clang-unwrapped;
