@@ -4,6 +4,7 @@ stdenv.mkDerivation rec {
   version = "0.4.6";
   name = "solc-${version}";
 
+  # Cannot use `fetchFromGitHub' because of submodules
   src = fetchgit {
     url = "https://github.com/ethereum/solidity";
     rev = "2dabbdf06f414750ef0425c664f861aeb3e470b8";
