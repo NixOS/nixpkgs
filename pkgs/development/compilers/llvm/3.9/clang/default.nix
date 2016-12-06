@@ -18,8 +18,7 @@ let
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
       "-DWITH_POLLY:Bool=true"
-      "-DLINK_POLLY_INTO_TOOLS:Bool=true"     
-      "-DLLVM_LINK_LLVM_DYLIB:Bool=true"
+      "-DLINK_POLLY_INTO_TOOLS:Bool=true"            "-DLLVM_LINK_LLVM_DYLIB:Bool=true"
     ] ++
 #    (stdenv.lib.optional llvm.enableSharedLibraries "-DLLVM_LINK_LLVM_DYLIB:Bool=true") ++
     # Maybe with compiler-rt this won't be needed?
