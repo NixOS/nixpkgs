@@ -19,6 +19,7 @@ let
       "-DCMAKE_CXX_FLAGS=-std=c++11"
       "-DWITH_POLLY:Bool=true"
       "-DLINK_POLLY_INTO_TOOLS:Bool=true"
+      "-DLLVM_LINK_LLVM_DYLIB:Bool=true"
     ] ++
     # Maybe with compiler-rt this won't be needed?
     (stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}") ++
