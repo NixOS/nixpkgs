@@ -15,11 +15,11 @@ let
   polly_src = fetch "polly" "0znrikgdaqq4g3b5bl3l4nngx11wah5ibkwp8pcam6q9218d43gg";
   self = {
     llvm = callPackage ./llvm.nix {
-      inherit compiler-rt_src stdenv;
+      inherit compiler-rt_src polly_src stdenv;
     };
 
     clang-unwrapped = callPackage ./clang {
-      inherit clang-tools-extra_src polly_src stdenv;
+      inherit clang-tools-extra_src stdenv;
     };
 
     clang = wrapCC self.clang-unwrapped;
