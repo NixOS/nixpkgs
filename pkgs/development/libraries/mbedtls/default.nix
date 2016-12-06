@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "mbedtls-2.3.0";
@@ -9,6 +9,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin [ makeWrapper ];
+
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace library/Makefile --replace "-soname" "-install_name"
+    substituteInPlace tests/scripts/run-test-suites.pl --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+  '';
 
   postPatch = ''
     patchShebangs .
@@ -22,7 +28,13 @@ stdenv.mkDerivation rec {
     "DESTDIR=\${out}"
   ];
 
-  doCheck = true;
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      for prog in "$out"/bin/*; do
+          wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "$out/lib"
+      done
+  '';
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://tls.mbed.org/;
