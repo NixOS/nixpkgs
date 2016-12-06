@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       done
   '';
 
-  doCheck = false;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://tls.mbed.org/;
