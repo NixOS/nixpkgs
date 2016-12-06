@@ -8917,8 +8917,6 @@ in
 
   portaudio = callPackage ../development/libraries/portaudio { };
 
-  portaudioSVN = callPackage ../development/libraries/portaudio/svn-head.nix { };
-
   portmidi = callPackage ../development/libraries/portmidi {};
 
   prison = callPackage ../development/libraries/prison { };
