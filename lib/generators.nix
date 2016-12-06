@@ -21,10 +21,10 @@ rec {
    * character sep. If sep appears in k, it is escaped.
    * Helper for synaxes with different separators.
    *
-   * mkKeyValueLine ":" "f:oo" "bar"
+   * mkKeyValueDefault ":" "f:oo" "bar"
    * > "f\:oo:bar"
    */
-  mkKeyValueLine = sep: k: v:
+  mkKeyValueDefault = sep: k: v:
     "${libStr.escape [sep] k}${sep}${toString v}";
 
 
@@ -33,7 +33,7 @@ rec {
    * mkKeyValue is the same as in toINI.
    */
   toKeyValue = {
-    mkKeyValue ? mkKeyValueLine "="
+    mkKeyValue ? mkKeyValueDefault "="
   }: attrs:
     let mkLine = k: v: mkKeyValue k v + "\n";
     in libStr.concatStrings (libAttr.mapAttrsToList mkLine attrs);
@@ -63,7 +63,7 @@ rec {
     # apply transformations (e.g. escapes) to section names
     mkSectionName ? (name: libStr.escape [ "[" "]" ] name),
     # format a setting line from key and value
-    mkKeyValue    ? mkKeyValueLine "="
+    mkKeyValue    ? mkKeyValueDefault "="
   }: attrsOfAttrs:
     let
         # map function to string for each key val
