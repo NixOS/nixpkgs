@@ -17,6 +17,8 @@ let
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
+      "-DWITH_POLLY"
+      "-DLINK_POLLY_INTO_TOOLS"
     ] ++
     # Maybe with compiler-rt this won't be needed?
     (stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}") ++
@@ -26,8 +28,7 @@ let
 
     postPatch = ''
       sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp
-      sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
-      sed -i -e 's/WITH_POLLY AND //' tools/driver/CMakeLists.txt
+      sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp      
     '';
 
     # Clang expects to find LLVMgold in its own prefix
