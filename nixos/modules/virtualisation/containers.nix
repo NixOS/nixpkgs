@@ -676,7 +676,7 @@ in
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
       ''
-        ${cfg.localAddress} ${name}.containers
+        ${head (splitString "/" cfg.localAddress)} ${name}.containers
       '') config.containers);
 
     networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];
