@@ -20,7 +20,7 @@ stdenv.mkDerivation rec{
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.privoxy.org/;
+    homepage = https://www.privoxy.org/;
     description = "Non-caching web proxy with advanced filtering capabilities";
     license = licenses.gpl2;
     platforms = platforms.all;
