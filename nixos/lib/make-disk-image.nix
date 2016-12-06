@@ -61,9 +61,6 @@ pkgs.vmTools.runInLinuxVM (
 
       # Create an empty filesystem and mount it.
       mkfs.${fsType} -L nixos $rootDisk
-      ${optionalString (fsType == "ext4") ''
-        tune2fs -c 0 -i 0 $rootDisk
-      ''}
       mkdir /mnt
       mount $rootDisk /mnt
 
@@ -97,7 +94,9 @@ pkgs.vmTools.runInLinuxVM (
 
       umount /mnt
 
-      # Do a fsck to make sure resize2fs works.
-      fsck.${fsType} -f -y $rootDisk
+      # Make sure resize2fs works
+      ${optionalString (fsType == "ext4") ''
+        tune2fs -c 0 -i 0 $rootDisk
+      ''}
     ''
 )
