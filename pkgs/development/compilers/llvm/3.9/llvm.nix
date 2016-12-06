@@ -12,6 +12,7 @@
 , version
 , zlib
 , compiler-rt_src
+, polly_src
 , libcxxabi
 , debugVersion ? false
 , enableSharedLibraries ? true
@@ -34,6 +35,8 @@ in stdenv.mkDerivation rec {
     sourceRoot=$PWD/llvm
     unpackFile ${compiler-rt_src}
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
+    unpackFile ${polly_src}
+    mv polly-* $sourceRoot/tools/polly
   '';
 
   outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
