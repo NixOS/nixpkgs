@@ -84,6 +84,7 @@ in pythonPackages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
+    pythonPackages.six
     pythonPackages.enum34
     pythonPackages.jellyfish
     pythonPackages.munkres
