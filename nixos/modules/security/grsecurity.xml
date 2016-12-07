@@ -325,6 +325,19 @@
       </programlisting>
     </para></listitem>
 
+    <listitem><para>
+      The gitlab service (<xref linkend="module-services-gitlab" />)
+      requires a variant of the <literal>ruby</literal> interpreter
+      built without `mprotect()` hardening, as in
+      <programlisting>
+        services.gitlab.packages.gitlab = pkgs.gitlab.override {
+          ruby = pkgs.ruby.overrideAttrs (attrs: {
+            postFixup = "paxmark m $out/bin/ruby";
+          });
+        };
+      </programlisting>
+    </para></listitem>
+
   </itemizedlist>
 
   </sect1>
