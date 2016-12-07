@@ -33,7 +33,7 @@ _linkDLLs() {
         # That DLL might have its own (transitive) dependencies,
         # so add also all DLLs from its directory to be sure.
         local dllPath2
-        for dllPath2 in "$dllPath" "$(dirname "$dllPath")"/*.dll; do
+        for dllPath2 in "$dllPath" "$(dirname $(readlink "$dllPath" || echo "$dllPath"))"/*.dll; do
             if [ -e ./"$(basename "$dllPath2")" ]; then continue; fi
             ln -sr "$dllPath2" .
             linkCount=$(($linkCount+1))
