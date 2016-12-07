@@ -264,6 +264,13 @@ in
   } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; };
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
+
+  fetchdata = callPackage ../build-support/fetchdata {
+    fetchers = pkgs;
+  };
+
+  fetchOneOf = callPackage ../build-support/fetchdata/one-of.nix { };
+
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
 
   fetchgx = callPackage ../build-support/fetchgx { };
