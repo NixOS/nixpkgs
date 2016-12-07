@@ -35,7 +35,6 @@ in stdenv.mkDerivation rec {
   preCheck = ''
     paxmark m ./.libs/lt-pcre_jit_test
     paxmark m ./.libs/lt-pcretest
-    paxmark m ./.libs/
     '';
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
