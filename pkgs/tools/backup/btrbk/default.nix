@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, coreutils, bash, btrfs-progs, perl, perlPackages, makeWrapper }:
+{ stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "btrbk-${version}";
-  version = "0.22.2";
+  version = "0.24.0";
 
   src = fetchurl {
     url = "http://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "1gbgi0dp62wlw7y72pgxjs6byxkrk73g35kqxzw0gjf32r5i4sb8";
+    sha256 = "01jrlswly28h4q4r3qfrzadz0pf0ms6wynmqhwddj1ahj31729h3";
   };
 
   patches = [
     # https://github.com/digint/btrbk/pull/74
     ./btrbk-Prefix-PATH-instead-of-resetting-it.patch
-    # https://github.com/digint/btrbk/pull/73
-    ./btrbk-mail-Use-btrbk-instead-of-unbound-variable-btr.patch
   ];
 
   buildInputs = with perlPackages; [ makeWrapper perl DateCalc ];
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
-      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash ]}"
+      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash openssh ]}"
   '';
 
   meta = with stdenv.lib; {
