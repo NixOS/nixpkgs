@@ -19,7 +19,8 @@ in
     environment.variables =
       { LOCATE_PATH = "/var/cache/locatedb";
         NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
-        PAGER = mkDefault "less -R";
+        PAGER = mkDefault "less";
+        LESS = mkDefault "-R";
         EDITOR = mkDefault "nano";
       };
 
