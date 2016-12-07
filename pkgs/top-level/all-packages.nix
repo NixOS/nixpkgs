@@ -14592,6 +14592,8 @@ in
 
   styx = callPackage ../applications/misc/styx { };
 
+  styx-themes = callPackage ../applications/misc/styx/themes.nix { };
+
   tecoc = callPackage ../applications/editors/tecoc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
