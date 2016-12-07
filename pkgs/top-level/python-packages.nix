@@ -9771,17 +9771,14 @@ in {
 
 
   chameleon = buildPythonPackage rec {
-    name = "Chameleon-2.15";
+    name = "Chameleon-2.25";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/Chameleon/${name}.tar.gz";
-      sha256 = "bd1dfc96742c2a5b0b2adcab823bdd848e70c45a994dc4e51dd2cc31e2bae3be";
-    };
+      sha256 = "0va95cml7wfjpvgj3dc9xdn8psyjh3zbk6v51b0hcqv2fzh409vb";
+    } ;
 
     buildInputs = with self; [] ++ optionals isPy26 [ ordereddict unittest2 ];
-
-    # TODO: https://github.com/malthe/chameleon/issues/139
-    doCheck = false;
 
     meta = {
        maintainers = with maintainers; [ garbas domenkozar ];
