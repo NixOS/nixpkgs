@@ -17024,6 +17024,8 @@ in
 
   crashplan = callPackage ../applications/backup/crashplan { };
 
+  e17gtk = callPackage ../misc/themes/e17gtk { };
+
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
 
   epson_201207w = callPackage ../misc/drivers/epson_201207w { };
