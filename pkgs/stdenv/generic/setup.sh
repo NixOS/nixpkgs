@@ -403,6 +403,8 @@ substitute() {
     content="$(cat "$input"; printf "%s" X)"
     content="${content%X}"
 
+    #TODO: This is buggy. It thinks "A+=B" is a variable called "A+" being assigned to "B"
+    #and messes it up.
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p="${params[$n]}"
 

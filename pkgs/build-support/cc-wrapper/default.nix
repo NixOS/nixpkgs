@@ -123,20 +123,20 @@ stdenv.mkDerivation {
       # This confuses libtool.  So add it to the compiler tool search
       # path explicitly.
       if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
-        ccLDFlags+=" -L${cc_solib}/lib64"
-        ccCFlags+=" -B${cc_solib}/lib64"
+        ccLDFlags="$ccLDFlags -L${cc_solib}/lib64"
+        ccCFlags="$ccCFlags -B${cc_solib}/lib64"
       fi
-      ccLDFlags+=" -L${cc_solib}/lib"
-      ccCFlags+=" -B${cc_solib}/lib"
+      ccLDFlags="$ccLDFlags -L${cc_solib}/lib"
+      ccCFlags="$ccCFlags -B${cc_solib}/lib"
 
       ${optionalString cc.langVhdl or false ''
-        ccLDFlags+=" -L${zlib.out}/lib"
+        ccLDFlags="$ccLDFlags -L${zlib.out}/lib"
       ''}
 
       # Find the gcc libraries path (may work only without multilib).
       ${optionalString cc.langAda or false ''
         basePath=`echo ${cc_solib}/lib/*/*/*`
-        ccCFlags+=" -B$basePath -I$basePath/adainclude"
+        ccCFlags="$ccCFlags -B$basePath -I$basePath/adainclude"
         gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
         echo "$gnatCFlags" > $out/nix-support/gnat-cflags
       ''}
@@ -253,10 +253,10 @@ stdenv.mkDerivation {
       # some linkers on some platforms don't support specific -z flags
       hardening_unsupported_flags=""
       if [[ "$($ldPath/ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
-        hardening_unsupported_flags+=" bindnow"
+        hardening_unsupported_flags="$hardening_unsupported_flags bindnow"
       fi
       if [[ "$($ldPath/ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
-        hardening_unsupported_flags+=" relro"
+        hardening_unsupported_flags="$hardening_unsupported_flags relro"
       fi
 
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
