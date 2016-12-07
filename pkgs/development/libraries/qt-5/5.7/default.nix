@@ -90,7 +90,7 @@ let
       qttranslations = callPackage ./qttranslations.nix {};
       qtwayland = callPackage ./qtwayland.nix {};
       qtwebchannel = callPackage ./qtwebchannel.nix {};
-      qtwebengine = callPackage ./qtwebengine.nix {};
+      qtwebengine = callPackage ./qtwebengine {};
       qtwebkit = callPackage ./qtwebkit {};
       qtwebsockets = callPackage ./qtwebsockets.nix {};
       qtx11extras = callPackage ./qtx11extras.nix {};
