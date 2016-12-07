@@ -715,12 +715,6 @@ in
 
   caddy = callPackage ../servers/caddy { };
 
-  calamares = qt5.callPackage ../tools/misc/calamares rec {
-    python = python3;
-    boost = pkgs.boost.override { python=python3; };
-    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost=boost; };
-  };
-
   capstone = callPackage ../development/libraries/capstone { };
 
   catch = callPackage ../development/libraries/catch { };
