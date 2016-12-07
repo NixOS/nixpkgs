@@ -33,14 +33,14 @@ in stdenv.mkDerivation rec {
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
   preCheck = ''
-    paxmark m .libs/lt-pcre_jit_test
-    paxmark m .libs/lt-pcretest
-    paxmark m pcre_jit_test
+    #paxmark m $sourceDir/.libs/lt-pcre_jit_test
+    paxmark m $sourceDir/.libs/lt-pcretest
+    /*paxmark m pcre_jit_test
     paxmark m pcretest
     paxmark m RunTest
     paxmark m .libs/pcretest
     paxmark m .libs/pcre_jit_test
-    paxmark m .libs/libpcre.so
+    paxmark m .libs/libpcre.so*/
     '';
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
