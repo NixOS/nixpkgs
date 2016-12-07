@@ -2,6 +2,9 @@
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
+# TODO: Move into a packageset for generic driver backends and deprecate
+# unixODBCDrivers
+
 {
   psql = stdenv.mkDerivation rec {
     name = "psqlodbc-${version}";
@@ -96,16 +99,16 @@
   sqlite = stdenv.mkDerivation rec {
     name = "sqlite-connector-odbc-${version}";
     version = "0.9993";
- 
+
     src = fetchurl {
       url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
       sha256 = "0dgsj28sc7f7aprmdd0n5a1rmcx6pv7170c8dfjl0x1qsjxim6hs";
     };
- 
+
     buildInputs = [ unixODBC sqlite zlib libxml2 ];
- 
+
     configureFlags = [ "--with-odbc=${unixODBC}" ];
- 
+
     installTargets = [ "install-3" ];
 
     # move libraries to $out/lib where they're expected to be
@@ -113,7 +116,7 @@
       mkdir -p "$out/lib"
       mv "$out"/*.* "$out/lib"
     '';
- 
+
     passthru = {
       fancyName = "SQLite";
       driver = "lib/libsqlite3odbc.so";
@@ -127,4 +130,6 @@
       maintainers = with maintainers; [ vlstill ];
     };
   };
+
+  mssql = callPackage ./msodbcsql { odbcDriverManager = "unixODBC"; };
 }

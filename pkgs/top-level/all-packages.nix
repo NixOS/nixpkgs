@@ -7972,7 +7972,8 @@ in
   libindicator-gtk2 = callPackage ../development/libraries/libindicator { gtkVersion = "2"; };
   libindicator-gtk3 = callPackage ../development/libraries/libindicator { gtkVersion = "3"; };
 
-  libiodbc = callPackage ../development/libraries/libiodbc {
+  # for drivers, see `odbcDrivers`
+  libiodbc = callPackage ../development/libraries/odbc/libiodbc {
     useGTK = config.libiodbc.gtk or false;
   };
 
@@ -8724,6 +8725,9 @@ in
 
   ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
+  odbcDrivers = recurseIntoAttrs
+    (callPackage ../development/libraries/odbc/odbc-drivers.nix { });
+
   ode = callPackage ../development/libraries/ode { };
 
   ogre = callPackage ../development/libraries/ogre {};
@@ -9451,9 +9455,9 @@ in
 
   tsocks = callPackage ../development/libraries/tsocks { };
 
-  unixODBC = callPackage ../development/libraries/unixODBC { };
+  unixODBC = callPackage ../development/libraries/odbc/unixODBC { };
 
-  unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers {});
+  unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/odbc/unixODBC-drivers.nix {});
 
   urt = callPackage ../development/libraries/urt { };
 
