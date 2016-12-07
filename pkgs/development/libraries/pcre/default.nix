@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   doCheck = with stdenv; !(isCygwin || isFreeBSD);
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
-  postBuild = stdenv.lib.optional doCheck "paxmark m .libs/lt-pcre-jit-test";
+  postBuild = stdenv.lib.optional doCheck "paxmark m $sourceRoot/.libs/lt-pcre-jit-test";
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
   ''
