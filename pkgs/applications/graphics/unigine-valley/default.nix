@@ -70,7 +70,7 @@ in
     buildPhase = "";
 
     installPhase = ''
-      instdir=$out/opt/unigine/valley
+      instdir=$out/lib/unigine/valley
 
       # Install executables and libraries
       mkdir -p $instdir/bin
@@ -96,7 +96,7 @@ in
     meta = {
       description = "The Unigine Valley GPU benchmarking tool";
       homepage = "http://unigine.com/products/benchmarks/valley/";
-      license = stdenv.lib.licenses.unfree; # see also: /nix/store/*-unigine-valley-1.0/opt/unigine/valley/documentation/License.pdf
+      license = stdenv.lib.licenses.unfree; # see also: /nix/store/*-unigine-valley-1.0/lib/unigine/valley/documentation/License.pdf
       maintainers = [ stdenv.lib.maintainers.kierdavis ];
       platforms = ["x86_64-linux" "i686-linux"];
     };
