@@ -36,7 +36,7 @@ let
       done
     '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
       for i in Lib/plat-*/regen; do
-        substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc.dev}/include/
+        substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc.dev or stdenv.cc.libc}/include/
       done
     '' + optionalString stdenv.isCygwin ''
       # On Cygwin, `make install' tries to read this Makefile.
