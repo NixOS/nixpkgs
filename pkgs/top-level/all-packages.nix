@@ -13789,6 +13789,8 @@ in
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
+  minikube = callPackage ../applications/networking/cluster/minikube { };
+
   minitube = callPackage ../applications/video/minitube { };
 
   mimms = callPackage ../applications/audio/mimms {};
