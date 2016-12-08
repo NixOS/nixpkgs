@@ -1,11 +1,11 @@
 { fetchurl, stdenv, python, alsaLib, libX11, mesa, SDL, lua5, zlib, bam, freetype }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.6.1";
+  name = "teeworlds-0.6.4";
 
   src = fetchurl {
-    url = "http://www.teeworlds.com/files/${name}-source.tar.gz";
-    sha256 = "025rcz59mdqksja4akn888c8avj9j28rk86vw7w1licdp67x8a33";
+    url = "https://downloads.teeworlds.com/teeworlds-0.6.4-src.tar.gz";
+    sha256 = "1qlqzp4wqh1vnip081lbsjnx5jj5m5y4msrcm8glbd80pfgd2qf2";
   };
 
   # Note: Teeworlds requires Python 2.x to compile.  Python 3.0 will
@@ -64,5 +64,6 @@ EOF
     license = "BSD-style, see `license.txt'";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }
