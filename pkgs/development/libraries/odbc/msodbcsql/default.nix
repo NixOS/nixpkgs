@@ -41,6 +41,22 @@ stdenv.mkDerivation rec {
           else warn "Only unixODBC-MSSQL is supported by msodbcsql, proceed at your own peril"
             [ odbcDriverManagerDrv ]))}" \
       $out/lib/libmsodbcsql.so
+
+    # Okay, this is pretty crazy. there is one path that links to /opt.
+    # We can’t have that. So we overwrite the path in the binary.
+    # There’s another string afterwards, but we just hope or the best.
+    OBJ="$out/lib/libmsodbcsql.so"
+    # we write a file with the needed path in it, ending with \0
+    echo -ne "$out/share/resources/en_US/\0" > path
+    # we find out the offset address with strings
+    OFFSET=$(${getBin binutils}/bin/strings -td "$OBJ" \
+      | grep /opt/microsoft/msodbcsql/share/resources/en_US/ \
+      | cut -d' ' -f1)
+    echo OFFSET $OFFSET
+    # let’s overwrite the path
+    dd if=path of="$OBJ" bs=$OFFSET seek=1 conv=notrunc
+    ls -la $OBJ
+    # done
   '';
 
   passthru = {
