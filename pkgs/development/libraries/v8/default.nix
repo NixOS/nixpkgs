@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   
-  preBuild = stdenv.lib.optional (stdenv.lib.versionAtLeast version "4.3")
+  preBuild = stdenv.lib.optionalString (stdenv.lib.versionAtLeast version "4.3")
     ''
        make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES $makeFlags $buildFlags mksnapshot
        paxmark m out/Release/mksnapshot
