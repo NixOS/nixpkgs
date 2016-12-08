@@ -36,11 +36,11 @@ let lispPackages = rec {
     version = "darcs-2014-11-01";
     description = "Iteration package for Common Lisp";
     deps = [];
-    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
+    src = pkgs.fetchdarcs {
       url = "https://common-lisp.net/project/iterate/darcs/iterate";
       sha256 = "0gm05s3laiivsqgqjfj1rkz83c2c0jyn4msfgbv6sz42znjpam25";
       context = ./iterate.darcs-context;
-    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ssl/certs/ca-bundle.crt";}));
+    };
     overrides = x: {
       configurePhase="buildPhase(){ true; }";
     };
@@ -310,10 +310,10 @@ let lispPackages = rec {
     description = "A UTF-8 encoding library";
     deps = [];
     # Source type: darcs
-    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
+    src = pkgs.fetchdarcs {
       url = ''http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/'';
       sha256 = "1jz27gz8gvqdmvp3k9bxschs6d5b3qgk94qp2bj6nv1d0jc3m1l1";
-    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ssl/certs/ca-bundle.crt";}));
+    };
   };
 
   cl-fuse-meta-fs = buildLispPackage rec {
