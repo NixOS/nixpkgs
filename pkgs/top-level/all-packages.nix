@@ -9456,6 +9456,7 @@ in
   tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/odbc/unixODBC { };
+  unixODBC-MSSQL = callPackage ../development/libraries/odbc/unixODBC/microsoft.nix { };
 
   unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/odbc/unixODBC-drivers.nix {});
 

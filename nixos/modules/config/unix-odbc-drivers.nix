@@ -11,6 +11,7 @@ let
   driverManagers = {
     "libiodbc" = pkgs.libiodbc;
     "unixODBC" = pkgs.unixODBC;
+    "unixODBC-MSSQL" = pkgs.unixODBC-MSSQL;
   };
 
   iniDescription = pkg: {
@@ -69,33 +70,36 @@ in {
 
   ###### implementation
 
-  config = mkMerge [
-    (mkIf (config.environment.unixODBCDrivers != []) {
-      environment.etc."odbcinst.ini".text =
-        toOdbcinstIni config.environment.unixODBCDrivers;
-    })
+  config =
+    let driverManagerDrv = driverManagers."${cfg.driverManager}";
+    in mkMerge [
+      (mkIf (config.environment.unixODBCDrivers != []) {
+        environment.etc."odbcinst.ini".text =
+          toOdbcinstIni config.environment.unixODBCDrivers;
+      })
 
-    (mkIf (cfg.drivers != []) {
-      environment.etc."odbcinst.ini".text =
-        let drvs' = map (drv: drv.override
-                          # compile drivers with correct driverManager
-                          { odbcDriverManager = cfg.driverManager; }) cfg.drivers;
-        in toOdbcinstIni drvs';
-      # add driver manager tooling to systemPackages
-      environment.systemPackages = [ driverManagers."${cfg.driverManager}" ];
-    })
+      (mkIf (cfg.drivers != []) {
+        environment.etc."odbcinst.ini".text =
+          let drvs' = map (drv: drv.override
+                            # compile drivers with correct driverManager
+                            { odbcDriverManager = cfg.driverManager;
+                              odbcDriverManagerDrv = driverManagerDrv; }) cfg.drivers;
+          in toOdbcinstIni drvs';
+        # add driver manager tooling to systemPackages
+        environment.systemPackages = [ driverManagerDrv ];
+      })
 
-    # deprecate unixODBCDrivers
-    (mkIf (config.environment.unixODBCDrivers != []) {
-      # deprecated Nov '16
-      warnings = [ "`environment.unixODBCDrivers` is deprecated. Please use `environment.odbc.*` instead." ];
-      assertions = [
-        { assertion = (config.environment.unixODBCDrivers != [])
-            -> ! ((cfg.driverManager != "libiodbc") || (cfg.drivers != []));
-          message = "If you want to use something from `environment.odbc` you can’t use `environment.unixODBCDrivers`.";
-        }
-      ];
-    })
-  ];
+      # deprecate unixODBCDrivers
+      (mkIf (config.environment.unixODBCDrivers != []) {
+        # deprecated Nov '16
+        warnings = [ "`environment.unixODBCDrivers` is deprecated. Please use `environment.odbc.*` instead." ];
+        assertions = [
+          { assertion = (config.environment.unixODBCDrivers != [])
+              -> ! ((cfg.driverManager != "libiodbc") || (cfg.drivers != []));
+            message = "If you want to use something from `environment.odbc` you can’t use `environment.unixODBCDrivers`.";
+          }
+        ];
+      })
+    ];
 
 }

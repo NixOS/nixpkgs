@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, dpkg, runCommand
-, utillinux, glibc, curl, unixODBC, libiodbc, libkrb5, openssl
-, odbcDriverManager ? "libiodbc" # one of "libiodbc" | "unixODBC"
+{ stdenv, fetchurl, dpkg, runCommand, binutils
+, utillinux, glibc, curl, unixODBC-MSSQL, libkrb5, openssl
+, odbcDriverManager, odbcDriverManagerDrv ? unixODBC-MSSQL
 }:
 
 with stdenv.lib;
@@ -37,7 +37,9 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf --set-rpath "${makeLibraryPath
       ([ stdenv.cc.cc.lib utillinux glibc curl libkrb5 openssl ]
-      ++ (if odbcDriverManager == "unixODBC" then [ unixODBC ] else [ libiodbc ]))}" \
+      ++ (if odbcDriverManager == "unixODBC-MSSQL" then [ odbcDriverManagerDrv ]
+          else warn "Only unixODBC-MSSQL is supported by msodbcsql, proceed at your own peril"
+            [ odbcDriverManagerDrv ]))}" \
       $out/lib/libmsodbcsql.so
   '';
 
