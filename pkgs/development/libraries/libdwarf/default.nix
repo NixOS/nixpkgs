@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib $out/include
-    cp libdwarf.so $out/lib
+    cp libdwarf.so.1 $out/lib
+    ln -s libdwarf.so.1 $out/lib/libdwarf.so
     cp libdwarf.h dwarf.h $out/include
   '';
 
