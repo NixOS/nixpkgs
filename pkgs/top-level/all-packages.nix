@@ -1338,6 +1338,8 @@ in
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
+  dnsperf = callPackage ../tools/networking/dnsperf { };
+
   dnstop = callPackage ../tools/networking/dnstop { };
 
   dhcp = callPackage ../tools/networking/dhcp { };
