@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "p7zip-${version}";
@@ -8,6 +8,13 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/p7zip/p7zip_${version}_src_all.tar.bz2";
     sha256 = "5eb20ac0e2944f6cb9c2d51dd6c4518941c185347d4089ea89087ffdd6e2341f";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.net/data/main/p/p7zip/16.02+dfsg-2/debian/patches/12-CVE-2016-9296.patch";
+      sha256 = "0inblicg24gcbaq84n0mr6w4yc5ak65mh9wxml96wlhdf7ph2i3m";
+    })
+  ];
 
   preConfigure = ''
     makeFlagsArray=(DEST_HOME=$out)
