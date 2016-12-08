@@ -16747,7 +16747,7 @@ in
       else smlnj;
   };
 
-  lean = callPackage ../applications/science/logic/lean {};
+  lean2 = callPackage ../applications/science/logic/lean2 {};
 
   leo2 = callPackage ../applications/science/logic/leo2 {};
 
