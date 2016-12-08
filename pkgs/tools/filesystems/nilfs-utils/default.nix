@@ -1,9 +1,9 @@
 { stdenv, fetchurl, libuuid, libselinux }:
 let 
   sourceInfo = rec {
-    version = "2.2.5";
+    version = "2.2.6";
     url = "http://nilfs.sourceforge.net/download/nilfs-utils-${version}.tar.bz2";
-    sha256 = "0a5iavbjj8c255mfl968ljmj3cb217k7803cc1sdaskacwnykdq2";
+    sha256 = "1rjj6pv7yx5wm7b3w6hv88v6r53jqaam5nrnkw2and4ifhsprf3y";
     baseName = "nilfs-utils";
     name = "${baseName}-${version}";
   };
