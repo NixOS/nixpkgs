@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     description = "Command line tool that generates XDG menus for several window managers";
     homepage = https://github.com/gapan/xdgmenumaker;
     license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    # NOTE: exclude darwin from platforms because Travis reports hash mismatch
+    platforms = with platforms; filter (x: !(elem x darwin)) unix;
     maintainers = [ maintainers.romildo ];
   };
 }
