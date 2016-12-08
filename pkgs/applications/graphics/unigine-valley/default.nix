@@ -93,6 +93,8 @@ in
         --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$instdir/bin:$libPath
     '';
 
+    stripDebugList = ["lib/unigine/valley/bin"];
+
     meta = {
       description = "The Unigine Valley GPU benchmarking tool";
       homepage = "http://unigine.com/products/benchmarks/valley/";
