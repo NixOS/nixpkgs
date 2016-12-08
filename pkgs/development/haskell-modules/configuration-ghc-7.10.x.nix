@@ -37,10 +37,10 @@ self: super: {
   xhtml = null;
 
   # Enable latest version of cabal-install.
-  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_1_0; });
+  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
 
   # Build jailbreak-cabal with the latest version of Cabal.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_1_0; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_2_0; };
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
