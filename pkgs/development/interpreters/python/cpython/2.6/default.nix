@@ -36,7 +36,7 @@ let
       done
     '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
       for i in Lib/plat-*/regen; do
-        substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
+        substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc.dev}/include/
       done
     '' + optionalString stdenv.isCygwin ''
       # On Cygwin, `make install' tries to read this Makefile.
@@ -91,6 +91,8 @@ let
         paxmark E $out/bin/python${majorVersion}
 
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
+
+        rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
       '';
 
     passthru = rec {
