@@ -11,6 +11,7 @@
 , coreutils
 , pkgconfig, python2
 
+, stdenv # lib.optional, needsPax
 }:
 
 qtSubmodule {
@@ -53,10 +54,13 @@ qtSubmodule {
     libcap
     pciutils
   ];
+  patches = stdenv.lib.optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..
     EOF
+
+    paxmark m $out/libexec/QtWebEngineProcess
   '';
 }
