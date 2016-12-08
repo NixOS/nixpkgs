@@ -16,7 +16,6 @@
 
 let
   version = "1.0";
-  pkgversion = "1";
 
   arch = if stdenv.system == "x86_64-linux" then
     "x64"
@@ -27,7 +26,7 @@ let
 
 in
   stdenv.mkDerivation {
-    name = "unigine-valley-${version}-${pkgversion}";
+    name = "unigine-valley-${version}";
 
     src = fetchurl {
       url = "http://assets.unigine.com/d/Unigine_Valley-${version}.run";
