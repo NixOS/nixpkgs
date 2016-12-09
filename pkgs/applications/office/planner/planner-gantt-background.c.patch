@@ -1,0 +1,22 @@
+diff --git a/src/planner-gantt-background.c b/src/planner-gantt-background.c
+index ed21de9..1fde7d9 100644
+--- a/src/planner-gantt-background.c
++++ b/src/planner-gantt-background.c
+@@ -390,7 +390,7 @@ gantt_background_realize (GnomeCanvasItem *item)
+ 	gdk_gc_set_foreground (priv->timeline_gc, &color);
+ 	gdk_gc_set_line_attributes (priv->timeline_gc,
+ 				    0,
+-				    GDK_LINE_ON_OFF_DASH,
++				    GDK_LINE_SOLID /*GDK_LINE_ON_OFF_DASH*/,
+ 				    GDK_CAP_BUTT,
+ 				    GDK_JOIN_MITER);
+ 
+@@ -399,7 +399,7 @@ gantt_background_realize (GnomeCanvasItem *item)
+ 	gdk_gc_set_foreground (priv->start_gc, &color);
+ 	gdk_gc_set_line_attributes (priv->start_gc,
+ 				    0,
+-				    GDK_LINE_ON_OFF_DASH,
++				    GDK_LINE_SOLID /*GDK_LINE_ON_OFF_DASH*/,
+ 				    GDK_CAP_BUTT,
+ 				    GDK_JOIN_MITER);
+ 
