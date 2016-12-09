@@ -649,9 +649,6 @@ let
 
     trv = callPackage ../development/tools/misc/trv { };
 
-    omake = callPackage ../development/tools/ocaml/omake { };
-    omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
-
     verasco = callPackage ../development/tools/analysis/verasco (
       if system == "x86_64-linux"
       then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
