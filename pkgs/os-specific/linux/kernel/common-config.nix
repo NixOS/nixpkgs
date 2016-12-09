@@ -31,6 +31,7 @@ with stdenv.lib;
 
   # Debugging.
   DEBUG_KERNEL y
+  DYNAMIC_DEBUG y
   TIMER_STATS y
   BACKTRACE_SELF_TEST n
   CPU_NOTIFIER_ERROR_INJECT? n
@@ -260,6 +261,11 @@ with stdenv.lib;
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
+  CIFS_STATS y
+  CIFS_WEAK_PW_HASH y
+  CIFS_UPCALL y
+  CIFS_ACL y
+  CIFS_DFS_UPCALL y
   CIFS_SMB2 y
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y

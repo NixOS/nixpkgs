@@ -8411,7 +8411,24 @@ in {
     };
   };
 
+  pamela = buildPythonPackage rec {
+    name = "pamela-${version}";
+    version = "0.3.0";
 
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pamela/${name}.tar.gz";
+      sha256 = "0ssxbqsshrm8p642g3h6wsq20z1fsqhpdvqdm827gn6dlr38868y";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "PAM interface using ctypes";
+      homepage = "http://github.com/minrk/pamela";
+      license = licenses.mit;
+    };
+  };
+ 
   pathtools = buildPythonPackage rec {
     name = "pathtools-${version}";
     version = "0.1.2";
