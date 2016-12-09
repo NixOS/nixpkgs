@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, makeWrapper }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "mbedtls-2.3.0";
@@ -9,11 +9,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin [ makeWrapper ];
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace library/Makefile --replace "-soname" "-install_name"
     substituteInPlace tests/scripts/run-test-suites.pl --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+    # Necessary for install_name_tool below
+    echo "LOCAL_LDFLAGS += -headerpad_max_install_names" >> programs/Makefile
   '';
 
   postPatch = ''
@@ -29,8 +30,14 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      for prog in "$out"/bin/*; do
-          wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "$out/lib"
+      install_name_tool -change libmbedcrypto.so.0 $out/lib/libmbedcrypto.so.0 $out/lib/libmbedtls.so.10
+      install_name_tool -change libmbedcrypto.so.0 $out/lib/libmbedcrypto.so.0 $out/lib/libmbedx509.so.0
+      install_name_tool -change libmbedx509.so.0 $out/lib/libmbedx509.so.0 $out/lib/libmbedtls.so.10
+
+      for exe in $out/bin/*; do
+          install_name_tool -change libmbedtls.so.10 $out/lib/libmbedtls.so.10 $exe
+          install_name_tool -change libmbedx509.so.0 $out/lib/libmbedx509.so.0 $exe
+          install_name_tool -change libmbedcrypto.so.0 $out/lib/libmbedcrypto.so.0 $exe
       done
   '';
 
