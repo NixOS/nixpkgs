@@ -1,6 +1,13 @@
-{ pkgs, stdenv, python, self }:
+{ pkgs
+, stdenv
+, python
+, overrides ? (self: super: {})
+}:
 
 with pkgs.lib;
+
+let
+  packages = ( self:
 
 let
   pythonAtLeast = versionAtLeast python.pythonVersion;
@@ -23,6 +30,7 @@ let
   buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
     inherit mkPythonDerivation;
     inherit bootstrapped-pip;
+    flit = self.flit;
   });
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
@@ -4726,11 +4734,11 @@ in {
   };
 
   cffi = if isPyPy then null else buildPythonPackage rec {
-    name = "cffi-1.7.0";
+    name = "cffi-1.9.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cffi/${name}.tar.gz";
-      sha256 = "1pv0pf38h375r581zyckb1d2phcgkszsx2n6354g6qc3zmmdvmbf";
+      sha256 = "563e0bd53fda03c151573217b3a49b3abad8813de9dd0632e10090f6190fdaf8";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
@@ -5486,6 +5494,27 @@ in {
       description = "Distributed computation in Python.";
       homepage = "http://distributed.readthedocs.io/en/latest/";
       license = licenses.bsd3;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
+  digital-ocean = buildPythonPackage rec {
+    name = "python-digitalocean-1.10.1";
+
+    propagatedBuildInputs = with self; [ requests2 ];
+
+    # Package doesn't distribute tests.
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/python-digitalocean/${name}.tar.gz";
+      sha256 = "12qybflfnl08acspz7rpaprmlabgrzimacbd7gm9qs5537hl3qnp";
+    };
+
+    meta = {
+      description = "digitalocean.com API to manage Droplets and Images";
+      homepage = https://pypi.python.org/pypi/python-digitalocean;
+      license = licenses.lgpl3;
       maintainers = with maintainers; [ teh ];
     };
   };
@@ -6405,7 +6434,6 @@ in {
     };
   };
 
-
   ds4drv = buildPythonPackage rec {
     name = "ds4drv-${version}";
     version = "0.5.0";
@@ -6554,6 +6582,26 @@ in {
     };
 
     propagatedBuildInputs = with self; [ configparser ];
+  };
+
+  escapism = buildPythonPackage rec {
+    name = "escapism-${version}";
+    version = "0.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/e/escapism/${name}.tar.gz";
+      sha256 = "1yfyxwxb864xrmrrqgp85xgsh4yrrq5mmzvkdg19jwr7rm6sqx9p";
+    };
+
+    # No tests distributed
+    doCheck = false;
+
+    meta = {
+      description = "Simple, generic API for escaping strings";
+      homepage = "https://github.com/minrk/escapism";
+      license = licenses.mit;
+      maintainers = with maintainers; [ bzizou ];
+    };
   };
 
   etcd = buildPythonPackage rec {
@@ -6858,6 +6906,29 @@ in {
     patches = [ ../development/python-modules/fedpkg-buildfix.diff ];
     propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
   });
+
+  flit = buildPythonPackage rec {
+    pname = "flit";
+    version = "0.10";
+    name = "${pname}-${version}";
+
+    format = "wheel";
+
+    src = pkgs.fetchurl {
+      url = https://files.pythonhosted.org/packages/24/98/50a090112a04d9e29155c31a222637668b0a4dd778fefcd3132adc50e877/flit-0.10-py3-none-any.whl;
+      sha256 = "4566b2e1807abeb1fd7bfaa9b444447556f1720518edfb134b56a6a1272b0428";
+    };
+
+    disabled = !isPy3k;
+    propagatedBuildInputs = with self; [ docutils requests2 requests_download zipfile36];
+
+    meta = {
+      description = "A simple packaging tool for simple packages";
+      homepage = https://github.com/takluyver/flit;
+      license = licenses.bsd3;
+      maintainer = maintainers.fridh;
+    };
+  };
 
   Flootty = buildPythonPackage rec {
     name = "Flootty-3.2.0";
@@ -8098,7 +8169,7 @@ in {
     disabled = isPyPy;
     doCheck = false; # doesn't find needed test data files
     buildInputs = with pkgs;
-      [ boost harfbuzz icu libjpeg libpng libtiff libwebp mapnik proj zlib ];
+      [ boost cairo harfbuzz icu libjpeg libpng libtiff libwebp mapnik proj zlib ];
     propagatedBuildInputs = with self; [ pillow pycairo ];
 
     meta = with stdenv.lib; {
@@ -9700,17 +9771,14 @@ in {
 
 
   chameleon = buildPythonPackage rec {
-    name = "Chameleon-2.15";
+    name = "Chameleon-2.25";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/Chameleon/${name}.tar.gz";
-      sha256 = "bd1dfc96742c2a5b0b2adcab823bdd848e70c45a994dc4e51dd2cc31e2bae3be";
-    };
+      sha256 = "0va95cml7wfjpvgj3dc9xdn8psyjh3zbk6v51b0hcqv2fzh409vb";
+    } ;
 
     buildInputs = with self; [] ++ optionals isPy26 [ ordereddict unittest2 ];
-
-    # TODO: https://github.com/malthe/chameleon/issues/139
-    doCheck = false;
 
     meta = {
        maintainers = with maintainers; [ garbas domenkozar ];
@@ -9820,12 +9888,12 @@ in {
 
   django_1_10 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.10.3";
+    version = "1.10.4";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-      sha256 = "0c4c8zs7kzb0bdlpy4vlzv6va26dbazr32h91rldf6waxs6z14kg";
+      sha256 = "0asw60i4r5cdxb2jp6r09pdrwxxp8mvwbkz7vnx15n0hwmig1xzz";
     };
 
     patches = [
@@ -9852,12 +9920,12 @@ in {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.11";
+    version = "1.9.12";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "17bxmfp92bdwjachjqb5zdlay5fhv4125hc85ln4ggyz0f5zvp6s";
+      sha256 = "0daaz2rp1rwwpzm5l29wcgg1gbw9yqzcv9x2dsjfz29n806q685x";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -9876,12 +9944,12 @@ in {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.16";
+    version = "1.8.17";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "1pc1j3q64v65c573xwx64apjnf2v19nzxsidjiyp02c6l8bsyji2";
+      sha256 = "01zb2l0gcdb2wgxmvvrhjj9ccdj1mfhn6zhqcdq04m7lzi4dc6q2";
     };
 
     # too complicated to setup
@@ -9925,14 +9993,14 @@ in {
 
   django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.6.11";
+    version = "1.6.11.5";
 
     # Support to python-3.4 and higher was introduced in django_1_7
     disabled = !(isPy26 || isPy27 || isPy33);
 
     src = pkgs.fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.6/${name}.tar.gz";
-      sha256 = "0misvia78c14y07zs5xsb9lv54q0v217jpaindrmhhw4wiryal3y";
+      url = "https://downloads.reviewboard.org/releases/Django/1.6/Django-${version}.tar.gz";
+      sha256 = "0yj0fw3iql031z8l5ik1fb25sk3l5bw2vc63bbyg5rz2k3znl4il";
     };
 
     # too complicated to setup
@@ -10116,6 +10184,15 @@ in {
     };
   };
 
+  django_tagging_0_3 = self.django_tagging.override (attrs: rec {
+    name = "django-tagging-0.3.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
+      sha256 = "03zlbq13rydfh28wh0jk3x3cjk9x6jjmqnx1i3ngjmfwbxf8x6j1";
+    };
+    propagatedBuildInputs = with self; [ django_1_6 ];
+  });
 
   django_classytags = buildPythonPackage rec {
     name = "django-classy-tags-${version}";
@@ -21724,6 +21801,27 @@ in {
     };
   };
 
+  requests_download = buildPythonPackage rec {
+    pname = "requests_download";
+    version = "0.1.1";
+    name = "${pname}-${version}";
+
+    format = "wheel";
+
+    src = pkgs.fetchurl {
+      url = https://files.pythonhosted.org/packages/60/af/10f899f0574a81cbc511124c08d7c7dc46c20d4f956a6a3c793ad4330bb4/requests_download-0.1.1-py2.py3-none-any.whl;
+      sha256 = "07832a93314bcd619aaeb08611ae245728e66672efb930bc2a300a115a47dab7";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 ];
+
+    meta = {
+      description = "Download files using requests and save them to a target path";
+      homepage = https://www.github.com/takluyver/requests_download;
+      license = licenses.mit;
+      maintainer = maintainers.fridh;
+    };
+  };
 
   requests_oauthlib = buildPythonPackage rec {
     version = "0.4.1";
@@ -23151,15 +23249,15 @@ in {
   };
 
   slob = buildPythonPackage rec {
-    name = "slob-unstable-2016-03-04";
+    name = "slob-unstable-2016-11-03";
 
     disabled = !isPy3k;
 
     src = pkgs.fetchFromGitHub {
       owner = "itkach";
       repo = "slob";
-      rev = "31ad0e769360a5b10a4893f686587bb8e48c3895";
-      sha256 = "06yn510178awhjsvy88cpjz7rlmyviqd5g58gc8gf4ivyqdlqbsl";
+      rev = "d1ed71e4778729ecdfc2fe27ed783689a220a6cd";
+      sha256 = "1r510s4r124s121wwdm9qgap6zivlqqxrhxljz8nx0kv0cdyypi5";
     };
 
     propagatedBuildInputs = [ self.PyICU ];
@@ -27055,6 +27153,11 @@ in {
 
     propagatedBuildInputs = with self; [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
 
+    # ImportError: No module named 'zope.event'
+    # even though zope_event has been included.
+    # Package seems to work fine.
+    doCheck = false;
+
     meta = {
         maintainers = with maintainers; [ goibhniu ];
     };
@@ -27894,7 +27997,7 @@ in {
       sha256 = "1c0kclbv8shv9nvjx19wqm4asia58s3qmd9fapchc6y9fjpjax6q";
     };
 
-    propagatedBuildInputs = with self; [ django django_tagging whisper pycairo ldap memcached ];
+    propagatedBuildInputs = with self; [ django_1_6 django_tagging_0_3 whisper pycairo ldap memcached pytz ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
@@ -31320,7 +31423,43 @@ in {
     };
   };
 
+  wp_export_parser = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "wp_export_parser";
+    version = "1.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "RealGeeks";
+      repo = "wp_export_parser";
+      rev = "479211f6c5a7d034fd77762dfed381c3315cd773";
+      sha256 = "1ad0mkixc0s86djwsvhp1qlvcfs25086nh0qw7bys49gz8shczzi";
+    };
+  };
+
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
     (pkgs.zeitgeist.override{python2Packages=self;}).py;
 
-}
+  zipfile36 = buildPythonPackage rec {
+    pname = "zipfile36";
+    version = "0.1.3";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "a78a8dddf4fa114f7fe73df76ffcce7538e23433b7a6a96c1c904023f122aead";
+    };
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest test_zipfile.py
+    '';
+
+    meta = {
+      description = "Read and write ZIP files - backport of the zipfile module from Python 3.6";
+      homepage = https://gitlab.com/takluyver/zipfile36;
+      license = licenses.psfl;
+      maintainer = maintainers.fridh;
+    };
+  };
+
+});
+
+in fix' (extends overrides packages)

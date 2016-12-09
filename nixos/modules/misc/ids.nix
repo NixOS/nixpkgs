@@ -58,7 +58,6 @@
       #utmp = 29; # unused
       ddclient = 30;
       davfs2 = 31;
-      privoxy = 32;
       #disnix = 33; # unused
       osgi = 34;
       tor = 35;
@@ -322,7 +321,6 @@
       utmp = 29;
       #ddclient = 30; # unused
       davfs2 = 31;
-      privoxy = 32;
       disnix = 33;
       osgi = 34;
       tor = 35;

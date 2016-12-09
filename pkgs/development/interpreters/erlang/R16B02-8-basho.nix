@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, perl, gnum4, ncurses, openssl, autoconf264, gcc, erlang
+{ stdenv, fetchurl, fetchFromGitHub, perl, gnum4, ncurses, openssl, autoconf264, gcc, erlang
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
 , wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null
@@ -12,12 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "erlang-basho-" + version + "${optionalString odbcSupport "-odbc"}";
-  version = "16B03-1";
+  version = "16B02";
 
-  src = fetchgit {
-    url = "https://github.com/basho/otp";
-    rev = "cb3a485894e493ad172db2749129e613fe52713a";
-    sha256 = "0xn28cxlq0ya1aww9q14rg8jf3x2flwxrz6wdnpb0l2h2dasr655";
+  src = fetchFromGitHub {
+    owner = "basho";
+    repo = "otp";
+    rev = "OTP_R16B02_basho8";
+    sha256 = "1w0hbm0axxxa45v3kl6bywc9ayir5vwqxjpnjlzc616ldszb2m0x";
   };
 
   debugInfo = enableDebugInfo;
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   postInstall = let
     manpages = fetchurl {
       url = "http://www.erlang.org/download/otp_doc_man_R${version}.tar.gz";
-      sha256 = "17f3k5j17rdsah18gywjngip6cbfgp6nb9di6il4pahmf9yvqc8g";
+      sha256 = "12apxjmmd591y9g9bhr97z5jbd1jarqg7wj0y2sqhl21hc1yp75p";
     };
   in ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call

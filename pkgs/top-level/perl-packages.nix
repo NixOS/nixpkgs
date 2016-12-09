@@ -2760,10 +2760,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.041";
+    name = "CryptX-0.044";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "481f8c9285d6ce3cf330e1fa52c835a202debdac5d81e1acd20bd1d93b99790e";
+      sha256 = "15e5e6bd7b90af24c7e730751fec7b10d8e22ef4380d527bda242dee7dd20443";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -5976,6 +5976,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTMLTree ];
   };
 
+  HTMLEscape = buildPerlModule rec {
+    name = "HTML-Escape-1.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "b1cbac4157ad8dedac6914e1628855e05b8dc885a4007d2e4df8177c6a9b70fb";
+    };
+    buildInputs = [ ModuleBuild ModuleBuildPluggablePPPort TestRequires ];
+    meta = {
+      homepage = https://github.com/tokuhirom/HTML-Escape;
+      description = "Extremely fast HTML escaping";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLFromANSI = buildPerlPackage {
     name = "HTML-FromANSI-2.03";
     src = fetchurl {
@@ -7778,10 +7792,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999801";
+    name = "Math-BigInt-1.999802";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "41deb23d453f5a376759fff155e4947988a6b6713a4164f21aedac8238089e57";
+      sha256 = "a44ceb255a76b7f455ef41f4f12e8923fe3662255853c4d0f3ad1f77b9eaa491";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
@@ -8093,6 +8107,34 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
     meta = {
       description = "A collection of modules removed from Module-Build";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ModuleBuildPluggable = buildPerlModule rec {
+    name = "Module-Build-Pluggable-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "e5bb2acb117792c984628812acb0fec376cb970caee8ede57535e04d762b0e40";
+    };
+    propagatedBuildInputs = [ ClassAccessorLite ClassMethodModifiers DataOptList ModuleBuild TestSharedFork ];
+    meta = {
+      homepage = https://github.com/tokuhirom/Module-Build-Pluggable;
+      description = "Module::Build meets plugins";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ModuleBuildPluggablePPPort = buildPerlModule rec {
+    name = "Module-Build-Pluggable-PPPort-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "44084ba3d8815f343bd391585ac5d8339a4807ce5c0dd84c98db8f310b64c0ea";
+    };
+    buildInputs = [ ModuleBuild TestRequires ];
+    propagatedBuildInputs = [ ClassAccessorLite ModuleBuildPluggable ];
+    meta = {
+      description = "Generate ppport.h";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11812,6 +11854,21 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ pkgs.subversionClient ];
   };
 
+  Swim = buildPerlPackage rec {
+    name = "Swim-0.1.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "06aac148d7b1778028ffae657fdf79b1093b52035661fd8b9bdad729dc8741aa";
+    };
+    buildInputs = [ FileShareDirInstall ];
+    propagatedBuildInputs = [ HTMLEscape HashMerge IPCRun Pegex TextAutoformat YAMLLibYAML ];
+    meta = {
+      homepage = https://github.com/ingydotnet/swim-pm;
+      description = "See What I Mean?!";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Switch = buildPerlPackage rec {
     name = "Switch-2.17";
     src = fetchurl {
@@ -12256,10 +12313,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Test2Suite = buildPerlPackage rec {
-    name = "Test2-Suite-0.000052";
+    name = "Test2-Suite-0.000061";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "0f571c8d8939eb90d06dd1da0681ca6af3bd1012a6c03e7bfb924dab675a6fa4";
+      sha256 = "b2ef2a59c8864c79f6c6a64c65e12c93f881361e4d9eb54419fcb4785c08ea75";
     };
     propagatedBuildInputs = [ Importer TestSimple13 ];
     meta = {
@@ -13864,19 +13921,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   Tk = buildPerlPackage rec {
-    name = "Tk-804.032_501";
+    name = "Tk-804.033";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/S/SR/SREZIC/${name}.tar.gz";
-      sha256 = "10fsvyr56gm59chc8b70n6bvhd3lh9c05sp8m4arcahid0rpgbwa";
+      url = "mirror://cpan/authors/id/S/SR/SREZIC/${name}.tar.gz";
+      sha256 = "84756e9b07a2555c8eecf88e63d5cbbba9b1aa97b1e71a3d4aa524a7995a88ad";
     };
-    makeMakerFlags = "X11LIB=${pkgs.xorg.libX11.out}/lib";
+    makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
     buildInputs = with pkgs; [ xorg.libX11 libpng ];
-    configurePhase = ''
-      perl Makefile.PL PREFIX=$out $makeMakerFlags
-    '';
-    doCheck = false;
-    meta ={
-      homepage = "http://search.cpan.org/~srezic/Tk-804.032/Tk.pod";
+    doCheck = false;            # Expects working X11.
+    meta = {
+      homepage = https://metacpan.org/pod/distribution/Tk/Tk.pod;
       license = stdenv.lib.licenses.tcltk;
     };
   };

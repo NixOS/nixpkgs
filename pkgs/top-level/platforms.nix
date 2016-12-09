@@ -443,4 +443,12 @@ rec {
     };
   };
 
+  selectPlatformBySystem = system:
+    if system == "armv6l-linux" then raspberrypi
+    else if system == "armv7l-linux" then armv7l-hf-multiplatform
+    else if system == "armv5tel-linux" then sheevaplug
+    else if system == "mips64el-linux" then fuloong2f_n32
+    else if system == "x86_64-linux" then pc64
+    else if system == "i686-linux" then pc32
+    else pcBase;
 }

@@ -11,6 +11,7 @@
 , coreutils
 , pkgconfig, python2
 
+, stdenv # lib.optional, needsPax
 }:
 
 qtSubmodule {
@@ -60,11 +61,14 @@ qtSubmodule {
   ];
   patches = [
     ./chromium-clang-update-py.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..
     EOF
+
+    paxmark m $out/libexec/QtWebEngineProcess
   '';
 }

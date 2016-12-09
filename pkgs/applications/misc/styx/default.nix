@@ -1,21 +1,30 @@
-{ stdenv, fetchFromGitHub, caddy, asciidoctor }:
+{ stdenv, fetchFromGitHub, caddy, asciidoctor
+, file, lessc, sass, multimarkdown }:
 
 stdenv.mkDerivation rec {
   name    = "styx-${version}";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner  = "styx-static";
     repo   = "styx";
     rev    = "v${version}";
-    sha256 = "0wyibdyi4ld0kfhng5ldb2rlgjrci014fahxn7nnchlg7dvcc5ni";
+    sha256 = "1s4465absxqwlwhn5rf51h0s1rw25ls581yjg0fy9kbyhy979qvs";
   };
 
-  server = caddy.bin;
+  setSourceRoot = "cd styx-*/src; export sourceRoot=`pwd`";
+
+  server = "${caddy.bin}/bin/caddy";
 
   nativeBuildInputs = [ asciidoctor ];
 
-  setSourceRoot = "cd styx-*/src; export sourceRoot=`pwd`";
+  propagatedBuildInputs = [
+    file
+    lessc
+    sass
+    asciidoctor
+    multimarkdown
+  ];
 
   installPhase = ''
     mkdir $out
@@ -24,6 +33,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/styx
     cp -r lib $out/share/styx
     cp -r scaffold $out/share/styx
+    cp    builder.nix $out/share/styx
 
     mkdir -p $out/share/doc/styx
     asciidoctor doc/manual.adoc -o $out/share/doc/styx/index.html

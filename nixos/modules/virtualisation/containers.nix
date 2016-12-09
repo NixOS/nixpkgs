@@ -667,7 +667,7 @@ in
         ${cfg.localAddress} ${name}.containers
       '') config.containers);
 
-    networking.dhcpcd.denyInterfaces = [ "ve-*" ];
+    networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];
 
     environment.systemPackages = [ pkgs.nixos-container ];
   });
