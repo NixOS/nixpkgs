@@ -211,7 +211,6 @@
       lambdabot = 191;
       asterisk = 192;
       plex = 193;
-      bird = 195;
       grafana = 196;
       skydns = 197;
       ripple-rest = 198;
@@ -470,7 +469,6 @@
       #asterisk = 192; # unused
       plex = 193;
       sabnzbd = 194;
-      bird = 195;
       #grafana = 196; #unused
       #skydns = 197; #unused
       #ripple-rest = 198; #unused
