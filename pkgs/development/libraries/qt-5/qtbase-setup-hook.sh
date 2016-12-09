@@ -164,3 +164,7 @@ _qtFixCMakePaths() {
 if [ -n "$NIX_QT_SUBMODULE" ]; then
     postInstallHooks+=(_qtFixCMakePaths)
 fi
+
+if [ -d "@out@/lib/QtCore.framework" ]; then
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -F@out@/lib"
+fi
