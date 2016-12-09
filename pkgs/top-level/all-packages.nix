@@ -135,6 +135,8 @@ in
       else throw "You need an adc_pass attribute in your config to download files from Apple Developer Connection";
   };
 
+  fetchapt = callPackage ../build-support/fetchapt { };
+
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
@@ -13266,9 +13268,9 @@ in
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
-  google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
+  google-chrome-beta = google-chrome.override { channel = "beta"; };
 
-  google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
+  google-chrome-dev = google-chrome.override { channel = "unstable"; };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
