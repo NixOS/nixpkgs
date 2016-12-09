@@ -58,17 +58,17 @@ let
                    (fetchpatch {
                      url = "https://bugzilla.redhat.com/attachment.cgi?id=1218547";
                      name = "CVE-2016-9385.patch";
-                     sha256 = "0l5drg862708ngy49jl65vmv6iwxlm7h8b4vabnffc2496f2gbwk";
+                     sha256 = "0k9mykhrpm4rbjkhv067f6s05lqmgnldcyb3vi8cl0ndlyh66lvr";
                    })
                    (fetchpatch {
                      url = "https://bugzilla.redhat.com/attachment.cgi?id=1218536";
                      name = "CVE-2016-9377-CVE-2016-9378-part1.patch";
-                     sha256 = "1dy8xvnkdvc44ywzzlswmkljjva44c0ndw7538iicr3qyf0244n4";
+                     sha256 = "0z53nzrjvc745y26z1qc8jlg3blxp7brawvji1hx3s74n346ssl6";
                    })
                    (fetchpatch {
                      url = "https://bugzilla.redhat.com/attachment.cgi?id=1218537";
                      name = "CVE-2016-9377-CVE-2016-9378-part2.patch";
-                     sha256 = "0iz36s2w6bh5h9i1a9gj1c748fq1dj90kcg2yzld1m26qx21qrr5";
+                     sha256 = "11cqvr5jn2s92wsshpilx9qnfczrd9hnyb5aim6qwmz3fq3hrrkz";
                    })
                  ];
   };
