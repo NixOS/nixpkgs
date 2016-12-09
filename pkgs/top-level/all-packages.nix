@@ -1550,7 +1550,6 @@ in
 
   emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
 
-
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
   efivar = callPackage ../tools/system/efivar { };
@@ -15661,6 +15660,8 @@ in
   eduke32 = callPackage ../games/eduke32 { };
 
   egoboo = callPackage ../games/egoboo { };
+
+  endless-sky = callPackage ../games/endless-sky { };
 
   eternity = callPackage ../games/eternity-engine { };
 
