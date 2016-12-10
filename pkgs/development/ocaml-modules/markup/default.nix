@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "markup";
-  version = "0.7.3";
+  version = "0.7.4";
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchzip {
     url = "http://github.com/aantron/markup.ml/archive/${version}.tar.gz";
-    sha256 = "03vyv609a60azw8qs7v0kkmy4704hkzw7c3skpzax5krwgwcqfxj";
+    sha256 = "1hchlqzsy9pax91gcdmxzakfm22fbvhxzwyzpvz8fqkx4372zs37";
     };
 
   buildInputs = [ ocaml findlib ocamlbuild ];
