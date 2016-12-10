@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hcwx8ww3sxzdskkx3l7q70a7wd6569yrnjkw9pw013cf9smpddm";
   };
 
-  patches = [ ./remove-runtime-dep-on-openssl-headers.patch ];
+  patches = [ ./remove-runtime-dep-on-openssl-headers.patch
+              ./cve-2016-4971.patch ];
 
   preConfigure = ''
     patchShebangs doc
