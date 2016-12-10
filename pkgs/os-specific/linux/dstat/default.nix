@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pythonPath = with python2Packages; [ python-wifi ];
 
   patchPhase = ''
-    sed -i -e 's|/usr/bin/env python|${python2Packages.python.interpreter}|' \
+    sed -i -e 's|/usr/bin/env python2|${python2Packages.python.interpreter}|' \
            -e "s|/usr/share/dstat|$out/share/dstat|" dstat
   '';
 
