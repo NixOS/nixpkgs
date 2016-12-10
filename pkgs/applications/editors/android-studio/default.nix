@@ -93,6 +93,12 @@ let
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
       sha256 = "10fmffkvvbnmgjxb4rq7rjwnn16jp5phw6div4n7hh2ad6spf8wq";
     };
+    meta = {
+      description = "The Official IDE for Android";
+      homepage = https://developer.android.com/studio/index.html;
+      license = stdenv.lib.licenses.asl20;
+      platforms = [ "x86_64-linux" ];
+    };
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
