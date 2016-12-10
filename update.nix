@@ -48,12 +48,15 @@ let
                    pkgs;
 
   packageByName = name:
-      if ! builtins.hasAttr name pkgs then
+    let
+        package = pkgs.lib.attrByPath (pkgs.lib.splitString "." name) null pkgs;
+    in
+      if package == null then
         builtins.throw "Package with an attribute name `${name}` does not exists."
-      else if ! builtins.hasAttr "updateScript" (builtins.getAttr name pkgs) then
+      else if ! builtins.hasAttr "updateScript" package then
         builtins.throw "Package with an attribute name `${name}` does have an `passthru.updateScript` defined."
       else
-        builtins.getAttr name pkgs;
+        package;
 
   packages =
     if package != null then
