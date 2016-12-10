@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdk:sdk-addon xmlns:sdk="http://schemas.android.com/sdk/android/addon/7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<!--Generated on 2016-09-13 10:48:39.682447 with ADRT.-->
+	<!--Generated on 2016-11-23 16:51:44.011243 with ADRT.-->
 	<sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
 This is the Android Software Development Kit License Agreement
@@ -1262,18 +1262,18 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:libs/>
 	</sdk:add-on>
 	<sdk:extra>
-		<!--Generated from bid:3256427, branch:git_nyc-support-release-->
+		<!--Generated from bid:3453458, branch:git_nyc-support-release-->
 		<sdk:revision>
-			<sdk:major>37</sdk:major>
+			<sdk:major>40</sdk:major>
 			<sdk:minor>0</sdk:minor>
 			<sdk:micro>0</sdk:micro>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Mon Sep 12 10:14:44 2016.-->
-				<sdk:size>281268000</sdk:size>
-				<sdk:checksum type="sha1">2f862a5d66d5526cd5b7655c3e9678f493e485f7</sdk:checksum>
-				<sdk:url>android_m2repository_r37.zip</sdk:url>
+				<!--Built on: Wed Nov  9 14:52:17 2016.-->
+				<sdk:size>305545706</sdk:size>
+				<sdk:checksum type="sha1">782e7233f18c890463e8602571d304e680ce354c</sdk:checksum>
+				<sdk:url>android_m2repository_r40.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -1308,16 +1308,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:old-paths>compatibility</sdk:old-paths>
 	</sdk:extra>
 	<sdk:extra>
-		<!--Generated from bid:128809501, branch:perforce-->
+		<!--Generated from bid:140037564, branch:perforce-->
 		<sdk:revision>
-			<sdk:major>32</sdk:major>
+			<sdk:major>40</sdk:major>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Jul 29 09:01:13 2016.-->
-				<sdk:size>113922721</sdk:size>
-				<sdk:checksum type="sha1">ae24bde9c8f732f4d13b72e70802be8c97dcfddf</sdk:checksum>
-				<sdk:url>google_m2repository_r32.zip</sdk:url>
+				<!--Built on: Wed Nov 23 09:14:40 2016.-->
+				<sdk:size>152633821</sdk:size>
+				<sdk:checksum type="sha1">0f599f7f35fba49b9277ef9e1394c5c82d8bd369</sdk:checksum>
+				<sdk:url>google_m2repository_gms_v8_rc42_wear_2a3.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -1392,16 +1392,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:path>google_play_services_froyo</sdk:path>
 	</sdk:extra>
 	<sdk:extra>
-		<!--Generated from bid:128810771, branch:perforce-->
+		<!--Generated from bid:139489718, branch:perforce-->
 		<sdk:revision>
-			<sdk:major>32</sdk:major>
+			<sdk:major>38</sdk:major>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Jul 29 09:01:17 2016.-->
-				<sdk:size>11820632</sdk:size>
-				<sdk:checksum type="sha1">bf0e7c1848371c7e6dd7a01e237dbd916e5cb04f</sdk:checksum>
-				<sdk:url>google_play_services_945200_r32.zip</sdk:url>
+				<!--Built on: Fri Nov 18 10:26:20 2016.-->
+				<sdk:size>12351978</sdk:size>
+				<sdk:checksum type="sha1">7a50dec81ba9c9b51d7778c19ca05002498209e8</sdk:checksum>
+				<sdk:url>google_play_services_v8_rc41.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
