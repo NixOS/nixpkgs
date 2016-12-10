@@ -12143,7 +12143,9 @@ in
   #     };
   #   };
   # }
-  android-studio = callPackage ../applications/editors/android-studio { };
+  android-studio = callPackage ../applications/editors/android-studio {
+      inherit (xorg) libX11 libXext libXi libXrandr libXrender libXtst;
+  };
 
   antimony = qt5.callPackage ../applications/graphics/antimony {};
 
