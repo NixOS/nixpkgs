@@ -11,14 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "1w4b16cp2yv5rpijcqywlzrs3xjkvg8ppp2rfls1kvxq12rz4jkb";
   };
 
-  nativeBuildInputs = [ gnome3.gnome_shell libxml2 ];
+  nativeBuildInputs = [ gnome3.glib libxml2 ];
 
   buildInputs = [ gnome3.gnome_themes_standard gtk-engine-murrine ];
 
   dontBuild = true;
 
   installPhase = ''
-    substituteInPlace install.sh --replace /usr ""
+    sed -i install.sh \
+      -e "s|^gnomever=.*$|gnomever=${gnome3.version}|" \
+      -e "s|/usr||"
     destdir="$out" ./install.sh
     rm $out/share/themes/*/COPYING
   '';
