@@ -1,28 +1,20 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocaml_react, camlp4, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocaml_react, opam }:
 
-let
-  ocamlVersion = stdenv.lib.getVersion ocaml;
-in
-
-assert stdenv.lib.versionAtLeast ocamlVersion "3.11";
+assert stdenv.lib.versionAtLeast ocaml.version "3.11";
 
 stdenv.mkDerivation {
-  name = "ocaml-reactiveData-0.2";
+  name = "ocaml${ocaml.version}-reactiveData-0.2.1";
   src = fetchurl {
-    url = https://github.com/ocsigen/reactiveData/archive/0.2.tar.gz;
-    sha256 = "0rskcxnyjn8sxqnncdm6rh9wm99nha5m5sc83fywgzs64xfl43fq";
+    url = https://github.com/ocsigen/reactiveData/archive/0.2.1.tar.gz;
+    sha256 = "0wcs0z50nia1cpk8mh6i5qbc6sff9cc8x7s7q1q89d7m73bnv4vf";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam camlp4 ];
+  buildInputs = [ ocaml findlib ocamlbuild opam ];
   propagatedBuildInputs = [ocaml_react];
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 
-  installPhase = ''
-    opam-installer --script --prefix=$out reactiveData.install > install.sh
-    sed -i s!lib/reactiveData!lib/ocaml/${ocamlVersion}/site-lib/reactiveData! install.sh
-    sh install.sh
-  '';
+  installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
 
   meta = with stdenv.lib; {
     description = "An OCaml module for functional reactive programming (FRP) based on React";
