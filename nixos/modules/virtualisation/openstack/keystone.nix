@@ -1,22 +1,25 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with lib; with import ./common.nix {inherit lib;};
 
 let
   cfg = config.virtualisation.openstack.keystone;
-  keystoneConf = pkgs.writeText "keystone.conf" ''
+  keystoneConfTpl = pkgs.writeText "keystone.conf" ''
     [DEFAULT]
-    admin_token = ${cfg.adminToken}
+    admin_token = ${cfg.adminToken.pattern}
     policy_file=${cfg.package}/etc/policy.json
 
     [database]
-    connection = ${cfg.databaseConnection}
+
+    connection = "mysql://${cfg.database.user}:${cfg.database.password.pattern}@${cfg.database.host}/${cfg.database.name}"
 
     [paste_deploy]
     config_file = ${cfg.package}/etc/keystone-paste.ini
 
     ${cfg.extraConfig}
   '';
+  keystoneConf = "/var/lib/keystone/keystone.conf";
+
 in {
   options.virtualisation.openstack.keystone = {
     package = mkOption {
@@ -44,9 +47,8 @@ in {
       '';
     };
 
-    adminToken = mkOption {
-      type = types.str;
-      default = "mySuperToken";
+    adminToken = mkSecretOption {
+      name = "adminToken";
       description = ''
         This is the admin token used to boostrap keystone,
         ie. to provision first resources.
@@ -87,9 +89,8 @@ in {
         '';
       };
 
-      adminPassword = mkOption {
-        type = types.str;
-        default = "admin";
+      adminPassword = mkSecretOption {
+        name = "keystoneAdminPassword";
         description = ''
           The keystone admin user's password.
         '';
@@ -104,13 +105,34 @@ in {
       };
     };
 
-    databaseConnection = mkOption {
+    database = {
+      host = mkOption {
         type = types.str;
-        default = mysql://keystone:keystone@localhost/keystone;
+        default = "localhost";
         description = ''
-          The SQLAlchemy connection string to use to connect to the
-          Keystone database.
+          Host of the database.
         '';
+      };
+
+      name = mkOption {
+        type = types.str;
+        default = "keystone";
+        description = ''
+          Name of the existing database.
+        '';
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "keystone";
+        description = ''
+          The database user. The user must exist and has access to
+          the specified database.
+        '';
+      };
+      password = mkSecretOption {
+        name = "mysqlPassword";
+        description = "The database user's password";};
     };
   };
 
@@ -132,12 +154,19 @@ in {
 
     systemd.services.keystone-all = {
         description = "OpenStack Keystone Daemon";
-	packages = [ mysql ];
         after = [ "network.target"];
         path = [ cfg.package pkgs.mysql pkgs.curl pkgs.pythonPackages.keystoneclient pkgs.gawk ];
         wantedBy = [ "multi-user.target" ];
         preStart = ''
           mkdir -m 755 -p /var/lib/keystone
+
+          cp ${keystoneConfTpl} ${keystoneConf};
+          chown keystone:keystone ${keystoneConf};
+          chmod 640 ${keystoneConf}
+
+          ${replaceSecret cfg.database.password keystoneConf}
+          ${replaceSecret cfg.adminToken keystoneConf}
+
           # Initialise the database
           ${cfg.package}/bin/keystone-manage --config-file=${keystoneConf} db_sync
           # Set up the keystone's PKI infrastructure
@@ -162,7 +191,7 @@ in {
 
           # We use the service token to create a first admin user
           export OS_SERVICE_ENDPOINT=http://localhost:35357/v2.0
-          export OS_SERVICE_TOKEN=${cfg.adminToken}
+          export OS_SERVICE_TOKEN=${getSecret cfg.adminToken}
 
           # If the tenant service doesn't exist, we consider
           # keystone is not initialized
@@ -170,7 +199,7 @@ in {
           then
               keystone tenant-create --name service
               keystone tenant-create --name ${cfg.bootstrap.adminTenant}
-              keystone user-create --name ${cfg.bootstrap.adminUsername} --tenant ${cfg.bootstrap.adminTenant} --pass ${cfg.bootstrap.adminPassword}
+              keystone user-create --name ${cfg.bootstrap.adminUsername} --tenant ${cfg.bootstrap.adminTenant} --pass ${getSecret cfg.bootstrap.adminPassword}
               keystone role-create --name admin
               keystone role-create --name Member
               keystone user-role-add --tenant ${cfg.bootstrap.adminTenant} --user ${cfg.bootstrap.adminUsername} --role admin
