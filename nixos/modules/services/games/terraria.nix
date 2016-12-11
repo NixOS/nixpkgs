@@ -64,7 +64,7 @@ in
       };
 
       worldPath = mkOption {
-        type        = types.path;
+        type        = types.nullOr types.path;
         default     = null;
         description = ''
           The path to the world file (<literal>.wld</literal>) which should be loaded.
