@@ -5,9 +5,9 @@ let
   version = "1.7.2";
   rev = "7ba55c5860b152d999dda59393ca3ebeb1b5c85f";
 
-  sha256 = if stdenv.system == "i686-linux"    then "0cjjqs40f81h2j3n7sd2g0jj8gfji1kzhbdmdibk2dkr243bs87p"
+  sha256 = if stdenv.system == "i686-linux"    then "0n49c6m53vbmhvrb8q0lxqa77r7kivn4n542k8y62bii8hi19ixc"
       else if stdenv.system == "x86_64-linux"  then "0l3n20rvgrxk2j9962wqmprjz7lnvldkp0yw26yfxl99yvrph68f"
-      else if stdenv.system == "x86_64-darwin" then "1a1mxmvai2yz0gzmac6nrm5mqrxa2ypwrhf0k8qjim4cbv1cj5h2"
+      else if stdenv.system == "x86_64-darwin" then "1chl84scngpxdmcmzbciiz50j459xdcjbpcv4vpm5061gfp5qnh9"
       else throw "Unsupported system: ${stdenv.system}";
 
   urlBase = "https://az764295.vo.msecnd.net/stable/${rev}/";
