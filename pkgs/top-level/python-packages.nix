@@ -1210,6 +1210,8 @@ in {
     };
   };
 
+  async-timeout = callPackage ../development/python-modules/async_timeout { };
+
  asn1ate = buildPythonPackage rec {
   pname = "asn1ate";
   date = "20160810";
