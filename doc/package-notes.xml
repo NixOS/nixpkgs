@@ -418,7 +418,7 @@ it. Place the resulting <filename>package.nix</filename> file into
   chroot environment, as documented
   <link xlink:href="http://sandervanderburg.blogspot.nl/2013/09/composing-fhs-compatible-chroot.html">here</link>.
   This allows us to have binaries in the expected paths without disrupting the system,
-  and to avoid patching them.
+  and to avoid patching them to work in a non FHS environment.
 </para>
 
 </section>
@@ -458,30 +458,6 @@ it. Place the resulting <filename>package.nix</filename> file into
   </varlistentry>
 
   <varlistentry>
-    <term>Game X fails to start</term>
-    <listitem><para>Games may fail to start because they lack 
-    dependencies (this should be added to the script, for now), 
-    or because they cannot be patched.The steps to launch a game 
-    directly are: 
-    <orderedlist>
-    <listitem><para>Patch the script/binary if you can.</para></listitem>
-    <listitem><para>Add a file named <filename>steam_appid.txt</filename> in 
-    the binary folder, with the appid as contents (it can be found in the 
-    stdout from steam).</para></listitem>
-    <listitem><para>Using the LD_LIBRARY_PATH from the nix/store steam script, 
-    with some additions, launch the game binary:
-    <programlisting>LD_LIBRARY_PATH=~/.steam/bin32:$LD_LIBRARY_PATH:/nix/store/pfsa... blabla ...curl-7.29.0/lib:. ./Osmos.bin3
-    </programlisting> (if you could not patchelf the game, call ld.so directly 
-    with the binary as param). With this technique, I can play many games
-    directly from steam. Others, like Team Fortress, cannot be patched
-    so I only managed to run them from the cmd line.
-    </para></listitem>
-    </orderedlist>
-    </para>
-    </listitem>
-  </varlistentry>
-  
-  <varlistentry>
   <term>Using the FOSS Radeon drivers</term>
   <listitem><itemizedlist><listitem><para>
   The open source radeon drivers need a newer libc++ than is provided 
@@ -501,18 +477,39 @@ libGL error: failed to load driver: swrast</programlisting></para></listitem>
   <programlisting>steam.sh: line 713: 7842 Segmentation fault (core dumped)</programlisting>
   have a look at <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this pull request</link>.
   </para></listitem>
+
   </itemizedlist></listitem></varlistentry>
 
   <varlistentry>
-  <term>Known issues</term>
+  <term>Java</term>
   <listitem><orderedlist>
   <listitem><para>
-  No java in steam chrootenv. Games affected: Towns:
+  There is no java in steam chrootenv by default. If you get a message like
   <programlisting>/home/foo/.local/share/Steam/SteamApps/common/towns/towns.sh: line 1: java: command not found</programlisting>
+  You need to add  
+  <programlisting> steam.override { withJava = true; };</programlisting>
+  to your configuration.
   </para></listitem>
   </orderedlist></listitem></varlistentry>
 
 </variablelist>
+</para>
+
+</section>
+
+<section xml:id="sec-steam-run">
+
+<title>steam-run</title>
+<para>
+The FHS-compatible chroot used for steam can also be used to run 
+other linux games that expect a FHS environment.
+To do it, add 
+<programlisting>pkgs.(steam.override {
+          nativeOnly = true;
+          newStdcpp = true;
+        }).run</programlisting>
+to your configuration, rebuild, and run the game with 
+<programlisting>steam-run ./foo</programlisting>
 </para>
 
 </section>
