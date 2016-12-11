@@ -9062,6 +9062,8 @@ in
       withQt5 = true;
     };
 
+    qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
+
     quazip = callPackage ../development/libraries/quazip {
       qt = qtbase;
     };
