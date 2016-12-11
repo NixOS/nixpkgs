@@ -18,6 +18,7 @@ let local = config.openblas.preferLocalBuild or false;
     genericFlags =
       [ "DYNAMIC_ARCH=${if stdenv.system == "armv7l-linux" then "0" else "1"}"
         "NUM_THREADS=64"
+        "TARGET=NEHALEM" # To fix undetected CPU problem when compiling inside VM
       ];
     localFlags = config.openblas.flags or
       optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
