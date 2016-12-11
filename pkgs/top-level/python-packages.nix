@@ -10948,6 +10948,11 @@ in {
       sed -i "s/'requests >= 2.6.1, < 2.8'/'requests'/" setup.py
     '';
 
+    postInstall = ''
+      mkdir -p $out/share/bash-completion/completions/
+      cp contrib/completion/bash/docker-compose $out/share/bash-completion/completions/docker-compose
+    '';
+
     meta = {
       homepage = "https://docs.docker.com/compose/";
       description = "Multi-container orchestration for Docker";
