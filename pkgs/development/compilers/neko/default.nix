@@ -11,6 +11,21 @@ stdenv.mkDerivation rec {
     sha256 = "15ng9ad0jspnhj38csli1pvsv3nxm75f0nlps7i10194jvzdb4qc";
   };
 
+  # Patches backported with reference to https://github.com/HaxeFoundation/neko/issues/131
+  # They can probably be removed when bumping to next version
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/HaxeFoundation/neko/commit/"
+          + "a8c71ad97faaccff6c6e9e09eba2d5efd022f8dc.patch";
+      sha256 = "0mnx15cdjs8mnl01mhc9z2gpzh4d1q0ygqnjackrqxz6x235ydyp";
+    })
+    (fetchpatch {
+      url = "https://github.com/HaxeFoundation/neko/commit/"
+          + "fe87462d9c7a6ee27e28f5be5e4fc0ac87b34574.patch";
+      sha256 = "1jbmq6j32vg3qv20dbh82cp54886lgrh7gkcqins8a2y4l4dl3sc";
+    })
+  ];
+
   buildInputs =
     [ boehmgc zlib sqlite pcre cmake pkgconfig git apacheHttpd apr aprutil
       mariadb.client mbedtls openssl ]
