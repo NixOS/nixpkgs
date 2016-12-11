@@ -14377,6 +14377,8 @@ in {
     };
   };
 
+  multidict = callPackage ../development/python-modules/multidict { };
+
   munch = buildPythonPackage rec {
     name = "munch-${version}";
     version = "2.0.4";
