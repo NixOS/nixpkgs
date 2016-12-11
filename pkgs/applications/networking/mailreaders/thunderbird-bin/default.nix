@@ -33,6 +33,11 @@
 , nspr
 , nss
 , pango
+, writeScript
+, xidel
+, coreutils
+, gnused
+, gnugrep
 }:
 
 assert stdenv.isLinux;
@@ -140,6 +145,72 @@ stdenv.mkDerivation {
       Categories=Application;Network;
       EOF
     '';
+
+  passthru.updateScript =
+    let
+      version = (builtins.parseDrvName name).version;
+    in
+      writeScript "update-thunderbird-bin" ''
+        PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin
+
+        pushd pkgs/applications/networking/mailreaders/thunderbird-bin/
+
+        tmpfile=`mktemp`
+        url=http://archive.mozilla.org/pub/thunderbird/releases/
+
+        # retriving latest released version
+        #  - extracts all links from the $url
+        #  - removes . and ..
+        #  - this line remove everything not starting with a number
+        #  - this line sorts everything with semver in mind
+        #  - this line removes beta version if we are looking for final release
+        #    versions or removes release versions if we are looking for beta
+        #    versions
+        # - this line pick up latest release
+        version=`xidel -q $url --extract "//a" | \
+                 sed s"/.$//" | \
+                 grep "^[0-9]" | \
+                 sort --version-sort | \
+                 grep -e "\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | \
+                 grep -v "b" | \
+                 tail -1`
+
+        # this is a list of sha512 and tarballs for both arches
+        shasums=`curl --silent $url$version/SHA512SUMS`
+
+        cat > $tmpfile <<EOF
+        {
+          version = "$version";
+          sources = [
+        EOF
+        for arch in linux-x86_64 linux-i686; do
+          # retriving a list of all tarballs for each arch
+          #  - only select tarballs for current arch
+          #  - only select tarballs for current version
+          #  - rename space with colon so that for loop doesnt
+          #  - inteprets sha and path as 2 lines
+          for line in `echo "$shasums" | \
+                       grep $arch | \
+                       grep "thunderbird-$version.tar.bz2$" | \
+                       tr " " ":"`; do
+            # create an entry for every locale
+            cat >> $tmpfile <<EOF
+            { locale = "`echo $line | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
+              arch = "$arch";
+              sha512 = "`echo $line | cut -d":" -f1`";
+            }
+        EOF
+          done
+        done
+        cat >> $tmpfile <<EOF
+          ];
+        }
+        EOF
+
+        mv $tmpfile sources.nix
+
+        popd
+      '';
 
   meta = with stdenv.lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
