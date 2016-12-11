@@ -589,11 +589,11 @@ in {
 
   aiohttp = buildPythonPackage rec {
     name = "aiohttp-${version}";
-    version = "0.21.5";
+    version = "1.1.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/aiohttp/${name}.tar.gz";
-      sha256 = "0n8517wc8b6yc925f7zhgl4wqf4ay1w2fzar0pj1h20yfa1wiids";
+      sha256 = "0742feb9759a5832aa4a30abf64e53055e139ed41e26f79b9558d08e05c74d60";
     };
 
     disabled = pythonOlder "3.4";
@@ -601,7 +601,7 @@ in {
     doCheck = false; # Too many tests fail.
 
     buildInputs = with self; [ pytest gunicorn pytest-raisesregexp ];
-    propagatedBuildInputs = with self; [ chardet ];
+    propagatedBuildInputs = with self; [ async-timeout chardet multidict yarl ];
 
     meta = {
       description = "http client/server for asyncio";
