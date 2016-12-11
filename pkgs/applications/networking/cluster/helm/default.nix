@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "${checksum}";
   };
 
+  preferLocalBuild = true;
+
   buildInputs = [ ];
 
   propagatedBuildInputs = [ kubernetes ];
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/kubernetes/helm;
     description = "A package manager for kubernetes";
     license = licenses.asl20;
+    maintainers = [ maintainers.rlupton20 ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
