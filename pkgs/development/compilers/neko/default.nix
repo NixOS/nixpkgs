@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boehmgc zlib sqlite pcre cmake pkgconfig git apacheHttpd apr aprutil
       mariadb.client mbedtls openssl ]
+      ++ stdenv.lib.optional stdenv.isLinux gtk2
       ++ stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
-                                                pkgs.darwin.apple_sdk.frameworks.Carbon]
-      ++ stdenv.lib.optional stdenv.isLinux gtk2;
-
+                                                pkgs.darwin.apple_sdk.frameworks.Carbon];
+  cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
   prePatch = ''
     sed -i -e '/allocated = strdup/s|"[^"]*"|"'"$out/lib/neko:$out/bin"'"|' vm/load.c
   '';
