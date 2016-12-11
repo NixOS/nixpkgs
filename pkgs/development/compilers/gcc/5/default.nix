@@ -128,12 +128,12 @@ let version = "5.4.0";
     crossMingw = cross != null && cross.libc == "msvcrt";
     crossDarwin = cross != null && cross.libc == "libSystem";
     crossConfigureFlags = let
-        gccArch = stdenv.cross.gcc.arch or null;
-        gccCpu = stdenv.cross.gcc.cpu or null;
-        gccAbi = stdenv.cross.gcc.abi or null;
-        gccFpu = stdenv.cross.gcc.fpu or null;
-        gccFloat = stdenv.cross.gcc.float or null;
-        gccMode = stdenv.cross.gcc.mode or null;
+        gccArch = cross.gcc.arch or null;
+        gccCpu = cross.gcc.cpu or null;
+        gccAbi = cross.gcc.abi or null;
+        gccFpu = cross.gcc.fpu or null;
+        gccFloat = cross.gcc.float or null;
+        gccMode = cross.gcc.mode or null;
         withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
         withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
