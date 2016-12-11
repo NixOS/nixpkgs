@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "moc-${version}";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "http://ftp.daper.net/pub/soft/moc/stable/moc-${version}.tar.bz2";
-    sha256 = "1wn4za08z64bhsgfhr9c0crfyvy8c3b6a337wx7gz19am5srqh8v";
+    sha256 = "026v977kwb0wbmlmf6mnik328plxg8wykfx9ryvqhirac0aq39pk";
   };
 
   nativeBuildInputs = [ pkgconfig ];
