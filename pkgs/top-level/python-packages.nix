@@ -31438,6 +31438,8 @@ in {
     };
   };
 
+  yarl = callPackage ../development/python-modules/yarl { };
+
   stripe = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "stripe";
