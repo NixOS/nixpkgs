@@ -458,29 +458,6 @@ it. Place the resulting <filename>package.nix</filename> file into
   </varlistentry>
 
   <varlistentry>
-    <term>Game X fails to start</term>
-    <listitem><para>Games may fail to start because they lack 
-    dependencies (this should be added to the script, for now), 
-    or because they cannot be patched.The steps to launch a game 
-    directly are: 
-    <orderedlist>
-    <listitem><para>Add a file named <filename>steam_appid.txt</filename> in 
-    the binary folder, with the appid as contents (it can be found in the 
-    stdout from steam).</para></listitem>
-    <listitem><para>Using the LD_LIBRARY_PATH from the nix/store steam script, 
-    with some additions, launch the game binary:
-    <programlisting>LD_LIBRARY_PATH=~/.steam/bin32:$LD_LIBRARY_PATH:/nix/store/pfsa... blabla ...curl-7.29.0/lib:. ./Osmos.bin3
-    </programlisting> (if you could not patchelf the game, call ld.so directly 
-    with the binary as param). With this technique, I can play many games
-    directly from steam. Others, like Team Fortress, cannot be patched
-    so I only managed to run them from the cmd line.
-    </para></listitem>
-    </orderedlist>
-    </para>
-    </listitem>
-  </varlistentry>
-  
-  <varlistentry>
   <term>Using the FOSS Radeon drivers</term>
   <listitem><itemizedlist><listitem><para>
   The open source radeon drivers need a newer libc++ than is provided 
