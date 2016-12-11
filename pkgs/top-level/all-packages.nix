@@ -5818,6 +5818,7 @@ in
   };
   buildbot-full = self.buildbot.override {
     plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
+    enableLocalWorker = true;
   };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };

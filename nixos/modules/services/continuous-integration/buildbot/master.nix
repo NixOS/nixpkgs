@@ -6,72 +6,53 @@ with lib;
 
 let
   cfg = config.services.buildbot-master;
-  configFile = if cfg.masterCfg != "" then
-    pkgs.writeText "master.cfg" ''
-      ${cfg.masterCfg}
-    ''
-    else
-    pkgs.writeText "master.cfg" ''
-      from buildbot.plugins import *
-      c = BuildmasterConfig = {}
-      c['workers'] = [ worker.Worker('${cfg.workerUser}', '${cfg.workerPass}') ]
-      c['protocols'] = {'pb': {'port': ${cfg.workerPort}}}
-      c['title'] = "${cfg.title}"
-      c['titleURL'] = "${cfg.titleUrl}"
-      c['buildbotURL'] = "${cfg.buildbotUrl}"
-      c['db'] = { 'db_url' : "${cfg.dbUrl}" }
-      c['www'] = dict(port=${cfg.port})
+  escapeStr = s: escape ["'"] s;
+  masterCfg = pkgs.writeText "master.cfg" ''
+    from buildbot.plugins import *
+    factory = util.BuildFactory()
+    c = BuildmasterConfig = dict(
+     workers       = [${concatStringsSep "," cfg.workers}],
+     protocols     = { 'pb': {'port': ${cfg.bpPort} } },
+     title         = '${escapeStr cfg.title}',
+     titleURL      = '${escapeStr cfg.titleUrl}',
+     buildbotURL   = '${escapeStr cfg.buildbotUrl}',
+     db            = dict(db_url='${escapeStr cfg.dbUrl}'),
+     www           = dict(port=${toString cfg.port}),
+     change_source = [ ${concatStringsSep "," cfg.changeSource} ],
+     schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
+     builders      = [ ${concatStringsSep "," cfg.builders} ],
+     status        = [ ${concatStringsSep "," cfg.status} ],
+    )
+    for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
+      factory.addStep(step)
 
-      factory = util.BuildFactory()
-      for step in [ ${cfg.factorySteps} ]:
-        factory.addStep(step)
+    ${cfg.extraConfig}
+  '';
 
-      c['change_source'] = []
-      for source in [ ${cfg.changeSource} ]:
-        c['change_source'].append(source)
-
-      c['schedulers'] = []
-      for sched in [ ${cfg.schedulers} ]:
-        c['schedulers'].append(sched)
-
-      c['builders'] = []
-      for build in [ ${cfg.builders} ]:
-        c['builders'].append(build)
-
-      c['status'] = []
-      for stat in [ ${cfg.status} ]:
-        c['status'].append(stat)
-    '';
+  configFile = if cfg.masterCfg == null then masterCfg else cfg.masterCfg;
 
 in {
   options = {
     services.buildbot-master = {
 
-      ###  REQUIRED OPTIONS  ###
-
       factorySteps = mkOption {
-        type = types.str;
+        type = types.listOf types.str;
         description = "Factory Steps";
-        default = "";
-
-        #example = "\\
-        #  \"steps.Git(repourl='git://github.com/buildbot/pyflakes.git', mode='incremental')\", \\
-        #  \"steps.ShellCommand(command=['trial', 'pyflakes'])\" \\
-        #";
+        default = [];
+        example = [
+          "steps.Git(repourl='git://github.com/buildbot/pyflakes.git', mode='incremental')"
+          "steps.ShellCommand(command=['trial', 'pyflakes'])"
+        ];
       };
 
       changeSource = mkOption {
-        type = types.str;
+        type = types.listOf types.str;
         description = "List of Change Sources.";
-        default = "";
-
-        #example = " \\
-        #  \"changes.GitPoller('git://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)\" \\
-        #";
+        default = [];
+        example = [
+          "changes.GitPoller('git://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+        ];
       };
-
-
-      ###  DEFAULTED OPTIONS  ###
 
       enable = mkOption {
         type = types.bool;
@@ -79,32 +60,53 @@ in {
         description = "Whether to enable the Buildbot continuous integration server.";
       };
 
-      masterCfg = mkOption {
+      extraConfig = mkOption {
         type = types.str;
-        description = "Optionally pass entire raw master.cfg file.";
+        description = "Extra configuration to append to master.cfg";
         default = "";
+      };
+
+      masterCfg = mkOption {
+        type = with types; nullOr path;
+        description = ''
+          Optionally pass path to raw master.cfg file.
+          Other options in this configuration will be ignored.
+        '';
+        default = null;
+        example = literalExample ''
+          pkgs.writeText "master.cfg" "BuildmasterConfig = c = {}"
+        '';
       };
 
       schedulers = mkOption {
-        type = types.str;
+        type = types.listOf types.str;
         description = "List of Schedulers.";
-        default = " \\
-          \"schedulers.SingleBranchScheduler(name='all', change_filter=util.ChangeFilter(branch='master'), treeStableTimer=None, builderNames=['runtests'])\", \\
-          \"schedulers.ForceScheduler(name='force',builderNames=['runtests'])\" \\
-        ";
+        default = [
+          "schedulers.SingleBranchScheduler(name='all', change_filter=util.ChangeFilter(branch='master'), treeStableTimer=None, builderNames=['runtests'])"
+          "schedulers.ForceScheduler(name='force',builderNames=['runtests'])"
+        ];
       };
 
       builders = mkOption {
-        type = types.str;
+        type = types.listOf types.str;
         description = "List of Builders.";
-        default = " \\
-          \"util.BuilderConfig(name='runtests',workernames=['default-worker'],factory=factory)\" \\
-        ";
+        default = [
+          "util.BuilderConfig(name='runtests',workernames=['default-worker'],factory=factory)"
+        ];
+      };
+
+      workers = mkOption {
+        type = types.listOf types.str;
+        description = "List of Workers.";
+        default = [
+          "worker.Worker('default-worker', 'password')"
+        ];
+        example = [ "worker.LocalWorker('default-worker')" ];
       };
 
       status = mkOption {
-        default = "";
-        type = types.str;
+        default = [];
+        type = types.listOf types.str;
         description = "List of status notification endpoints.";
       };
 
@@ -138,22 +140,11 @@ in {
         description = "Specifies the Buildbot directory.";
       };
 
-      workerUser = mkOption {
-        default = "default-worker";
-        type = types.str;
-        description = "Buildbot Worker User.";
-      };
-
-      workerPass = mkOption {
-        default = "pass";
-        type = types.str;
-        description = "Buildbot Worker Password.";
-      };
-
-      workerPort = mkOption {
+      bpPort = mkOption {
         default = "9989";
-        type = types.str;
-        description = "Buildbot Worker Port.";
+        type = types.string;
+        example = "tcp:10000:interface=127.0.0.1";
+        description = "Port where the master will listen to Buildbot Worker.";
       };
 
       listenAddress = mkOption {
@@ -187,21 +178,26 @@ in {
       };
 
       port = mkOption {
-        default = "8010";
-        type = types.str;
+        default = 8010;
+        type = types.int;
         description = "Specifies port number on which the buildbot HTTP interface listens.";
       };
 
-      packages = mkOption {
-        default = [ pkgs.buildbot-ui ];
-        type = types.listOf types.package;
-        description = "Packages to add to PATH for the buildbot process.";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.buildbot-ui;
+        description = ''
+          Package to use for buildbot.
+          <literal>buildbot-full</literal> is required in order to use local workers.
+        '';
+        example = pkgs.buildbot-full;
       };
 
-      environment = mkOption {
-        default = {};
-        type = with types; attrsOf str;
-        description = "Additional environment variables to be passed.";
+      packages = mkOption {
+        default = [ ];
+        example = [ pkgs.git ];
+        type = types.listOf types.package;
+        description = "Packages to add to PATH for the buildbot process.";
       };
     };
   };
@@ -233,19 +229,18 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
+        ExecStart = "${cfg.package}/bin/buildbot start ${cfg.buildbotDir}";
       };
 
       preStart = ''
         mkdir -vp ${cfg.buildbotDir}
         chown -c ${cfg.user}:${cfg.group} ${cfg.buildbotDir}
-        cat ${configFile} | tee ${cfg.buildbotDir}/master.cfg
-        ${pkgs.buildbot-ui}/bin/buildbot create-master ${cfg.buildbotDir}
+        ln -sf ${configFile} ${cfg.buildbotDir}/master.cfg
+        ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
       '';
 
-      script = "${pkgs.buildbot-ui}/bin/buildbot start ${cfg.buildbotDir}";
-
       postStart = ''
-        until [[ $(${pkgs.curl}/bin/curl -s --head -w '\n%{http_code}' http://localhost:${cfg.port} | tail -n1) =~ ^(200|403)$ ]]; do
+        until [[ $(${pkgs.curl}/bin/curl -s --head -w '\n%{http_code}' http://localhost:${toString cfg.port} | tail -n1) =~ ^(200|403)$ ]]; do
           sleep 1
         done
       '';

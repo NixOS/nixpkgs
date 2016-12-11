@@ -1,4 +1,13 @@
-{ stdenv, pythonPackages, fetchurl, coreutils, plugins ? [] }:
+{ stdenv,
+  lib,
+  pythonPackages,
+  fetchurl,
+  coreutils,
+  openssh,
+  buildbot-worker,
+  plugins ? [],
+  enableLocalWorker ? false
+}:
 
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
@@ -22,7 +31,7 @@ pythonPackages.buildPythonApplication (rec {
     pylint
     astroid
     pyflakes
-  ];
+  ] ++ lib.optionals (enableLocalWorker) [openssh];
 
   propagatedBuildInputs = with pythonPackages; [
 
@@ -52,7 +61,8 @@ pythonPackages.buildPythonApplication (rec {
     ramlfications
     sphinx-jinja
 
-  ] ++ plugins;
+  ] ++ plugins ++
+  lib.optionals (withLocalWorker) [buildbot-worker];
 
   preInstall = ''
     # writes out a file that can't be read properly
