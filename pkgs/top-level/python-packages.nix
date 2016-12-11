@@ -9126,6 +9126,8 @@ in {
       sha256 = "1bxk0z0v8m0b01xg94f039j3bsclkshb7girvjqfzk5whbd2nryh";
     };
 
+    doCheck = false;
+
     meta = {
       homepage = https://github.com/montag451/pytun;
       description = "Linux TUN/TAP wrapper for Python";
