@@ -263,7 +263,6 @@ default-package-overrides:
   - cabal-dependency-licenses ==0.1.2.0
   - cabal-file-th ==0.2.4
   - cabal-helper ==0.7.2.0
-  - cabal-install ==1.24.0.1
   - cabal-rpm ==0.10.1
   - cabal-sort ==0.0.5.3
   - cabal-src ==0.3.0.2
