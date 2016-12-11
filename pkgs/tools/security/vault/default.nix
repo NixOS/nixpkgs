@@ -22,6 +22,6 @@ buildGoPackage rec {
     homepage = https://www.vaultproject.io;
     description = "A tool for managing secrets";
     license = licenses.mpl20;
-    maintainers = [ maintainers.rushmorem ];
+    maintainers = with maintainers; [ rushmorem offline ];
   };
 }
