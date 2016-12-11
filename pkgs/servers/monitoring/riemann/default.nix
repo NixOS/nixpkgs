@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
-    mkdir -p $out/share/java
+    sed -i 's#lib/riemann.jar#$out/share/java/riemann.jar#' bin/riemann
+
+    mkdir -p $out/share/java $out/bin $out/etc
     mv lib/riemann.jar $out/share/java/
+    mv bin/riemann $out/bin/
+    mv etc/riemann.config $out/etc/
   '';
 
   meta = with stdenv.lib; {
