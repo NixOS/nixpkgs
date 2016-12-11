@@ -126,8 +126,8 @@ in
         User    = "terraria";
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${pkgs.tmux.bin}/bin/tmux -S /var/lib/terraria/terraria.sock new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
-        ExecStop = "${pkgs.tmux.bin}/bin/tmux -S /var/lib/terraria/terraria.sock send-keys Enter \"exit\" Enter";
+        ExecStart = "${getBin pkgs.tmux}/bin/tmux -S /var/lib/terraria/terraria.sock new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
+        ExecStop = "${getBin pkgs.tmux}/bin/tmux -S /var/lib/terraria/terraria.sock send-keys Enter \"exit\" Enter";
       };
 
       postStart = ''
