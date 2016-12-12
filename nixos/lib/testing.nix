@@ -74,6 +74,7 @@ rec {
     , makeCoverageReport ? false
     , enableOCR ? false
     , name ? "unnamed"
+    , extraQemuOpts ? null # Extra options for QEMU passed to all VM's. String expected
     , ...
     } @ t:
 
@@ -114,15 +115,17 @@ rec {
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
             --set testScript '$testScript' \
-            --set VLANS '${toString vlans}'
+            --set VLANS '${toString vlans}' \
+            ${lib.optionalString (extraQemuOpts != null) ''--set QEMU_OPTS ${lib.escapeShellArg extraQemuOpts}''}
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
             --add-flags "$vms" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --set tests 'startAll; joinAll;' \
             --set VLANS '${toString vlans}' \
-            ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
-        ''; # "
+            ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"} \
+            ${lib.optionalString (extraQemuOpts != null) ''--set QEMU_OPTS ${lib.escapeShellArg extraQemuOpts}''}
+        '';
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
         meta = (drv.meta or {}) // t.meta;
