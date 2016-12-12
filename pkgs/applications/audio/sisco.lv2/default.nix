@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, lv2, pkgconfig, mesa, cairo, pango, libjack2 }:
 
 let
-  name = "sisco.lv2-${src.rev}";
+  name = "sisco.lv2-${version}";
   version = "0.7.0";
 
   robtkVersion = "80a2585253a861c81f0bfb7e4579c75f5c73af89";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   inherit name;
 
   srcs = [ src robtkSrc ];
-  sourceRoot = "${name}-src";
+  sourceRoot = "sisco.lv2-${src.rev}-src";
 
   buildInputs = [ pkgconfig lv2 pango cairo libjack2 mesa ];
 
