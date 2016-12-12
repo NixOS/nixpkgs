@@ -1658,6 +1658,8 @@ in
 
   fcppt = callPackage ../development/libraries/fcppt/default.nix { };
 
+  fcrackzip = callPackage ../tools/security/fcrackzip { };
+
   fcron = callPackage ../tools/system/fcron { };
 
   fdm = callPackage ../tools/networking/fdm {};
