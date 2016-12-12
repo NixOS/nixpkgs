@@ -16,7 +16,6 @@ let
         urlBase + "code-stable-code_${version}-1479767514_i386.tar.gz"
       else if stdenv.system == "x86_64-linux" then
         urlBase + "code-stable-code_${version}-1479766213_amd64.tar.gz"
-
       else if stdenv.system == "x86_64-darwin" then
         urlBase + "VSCode-darwin-stable.zip"
       else throw "Unsupported system: ${stdenv.system}";
