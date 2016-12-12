@@ -1,9 +1,8 @@
-{
-  fetchurl, stdenv, pkgconfig,
-  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
+{ fetchurl, stdenv, pkgconfig
+, acl, attr, bzip2, e2fsprogs, lzo, openssl, sharutils, xz, zlib
 
   # Optional but increases closure only negligibly.
-  xarSupport ? true,
+, xarSupport ? true, libxml2 ? null
 }:
 
 assert xarSupport -> libxml2 != null;
