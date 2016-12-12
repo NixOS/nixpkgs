@@ -236,7 +236,7 @@ stdenv.mkDerivation {
         }
         EOF
 
-        cat $tmpfile > ${if isBeta then "beta_" else ""}sources.nix
+        mv $tmpfile ${if isBeta then "beta_" else ""}sources.nix
 
         popd
       '';
