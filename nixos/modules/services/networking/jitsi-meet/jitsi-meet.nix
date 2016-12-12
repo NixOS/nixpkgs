@@ -4,10 +4,10 @@ with pkgs;
 with lib;
 
 let
-  cfg = config.services.jitsi.jitsi-meet;
+  cfg = config.services.jitsi-meet.jitsi-meet;
 in {
-  options = rec {
-    services.jitsi.jitsi-meet = {
+  options = {
+    services.jitsi-meet.jitsi-meet = {
       enable = mkEnableOption "jitsi-meet";
 
       user = mkOption {
@@ -26,7 +26,7 @@ in {
         '';
       };
 
-      configuration = mkOption {
+      configjs = mkOption {
         type = types.str;
         description = "config.js";
         default = ''
@@ -57,7 +57,7 @@ in {
         Type = "oneshot";
         RemainAfterExit = true;
         ExecStartPre = "+${pkgs.coreutils}/bin/mkdir -p /run/jitsi-meet";
-        ExecStart = "+${pkgs.coreutils}/bin/ln -sf ${pkgs.writeText "config.js" cfg.configuration} /run/jitsi-meet/config.js";
+        ExecStart = "+${pkgs.coreutils}/bin/ln -sf ${pkgs.writeText "config.js" cfg.configjs} /run/jitsi-meet/config.js";
         ExecStop = "+${pkgs.coreutils}/bin/rm -f /run/jitsi-meet/config.js";
         PrivateTmp = true;
         WorkingDirectory = "/tmp";

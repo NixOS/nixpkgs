@@ -4,10 +4,10 @@ with pkgs;
 with lib;
 
 let
-  cfg = config.services.jitsi.jitsi-videobridge;
+  cfg = config.services.jitsi-meet.jitsi-videobridge;
 in {
   options = {
-    services.jitsi.jitsi-videobridge = {
+    services.jitsi-meet.jitsi-videobridge = {
       enable = mkEnableOption "jitsi-videobridge";
 
       user = mkOption {
@@ -101,8 +101,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = if cfg.openFirewall then [ cfg.port 4443 ] else [];
-    networking.firewall.allowedUDPPortRanges = if cfg.openFirewall then [{ from = cfg.minPort; to = cfg.maxPort; }] else [];
+    networking.firewall.allowedTCPPorts = optionals cfg.openFirewall [ cfg.port 4443 ];
+    networking.firewall.allowedUDPPortRanges = optional cfg.openFirewall { from = cfg.minPort; to = cfg.maxPort; };
 
     users.extraUsers."${cfg.user}" = {
         home = "/home/${cfg.user}";

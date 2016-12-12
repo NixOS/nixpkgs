@@ -377,9 +377,10 @@
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
-  ./services/networking/jitsi/jicofo.nix
-  ./services/networking/jitsi/jitsi-meet.nix
-  ./services/networking/jitsi/jitsi-videobridge.nix
+  ./services/networking/jitsi-meet/default.nix
+  ./services/networking/jitsi-meet/jicofo.nix
+  ./services/networking/jitsi-meet/jitsi-meet.nix
+  ./services/networking/jitsi-meet/jitsi-videobridge.nix
   ./services/networking/kippo.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix

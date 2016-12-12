@@ -4,10 +4,10 @@ with pkgs;
 with lib;
 
 let
-  cfg = config.services.jitsi.jicofo;
+  cfg = config.services.jitsi-meet.jicofo;
 in {
   options = {
-    services.jitsi.jicofo = {
+    services.jitsi-meet.jicofo = {
       enable = mkEnableOption "JiCoFo";
 
       user = mkOption {
