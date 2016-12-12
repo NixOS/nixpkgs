@@ -2,7 +2,7 @@
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
-, libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite
+, libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus_libs, gtk, gdk_pixbuf, gcc
 
@@ -42,7 +42,7 @@ let
   deps = [
     stdenv.cc.cc
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
-    libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite
+    libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
     alsaLib libXdamage libXtst libXrandr expat cups
     dbus_libs gtk gdk_pixbuf gcc
     systemd
