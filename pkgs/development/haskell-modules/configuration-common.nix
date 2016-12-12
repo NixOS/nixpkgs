@@ -819,7 +819,7 @@ self: super: {
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
   })).override {
-    haskell-src-exts = self.haskell-src-exts_1_19_0;
+    haskell-src-exts = self.haskell-src-exts_1_19_1;
   };
 
   # # Make elisp files available at a location where people expect it.
@@ -833,7 +833,7 @@ self: super: {
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   })).override {
-    haskell-src-exts = self.haskell-src-exts_1_19_0;
+    haskell-src-exts = self.haskell-src-exts_1_19_1;
   };
 
   # https://github.com/yesodweb/Shelly.hs/issues/106
@@ -1005,7 +1005,7 @@ self: super: {
   });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_0; };
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
   # To be in sync with Hoogle.
   lambdabot-haskell-plugins = (overrideCabal super.lambdabot-haskell-plugins (drv: {
@@ -1024,7 +1024,7 @@ self: super: {
   };
 
   # Needs new version.
-  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_0; };
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
   # Test suite fails a QuickCheck property.
   optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
