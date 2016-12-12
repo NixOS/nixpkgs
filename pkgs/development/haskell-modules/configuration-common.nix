@@ -18,6 +18,11 @@ self: super: {
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
 
+  # enable using a local hoogle with extra packagages in the database
+  # nix-shell -p "haskellPackages.hoogleLocal (with haskellPackages; [ mtl lens ])"
+  # $ hoogle server
+  hoogleLocal = { packages ? [] }: self.callPackage ./hoogle.nix { inherit packages; };
+
   # Break infinite recursions.
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
