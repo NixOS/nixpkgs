@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs
-, python2, pythonSupport ? (! stdenv ? cross)
+{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
+, cryptoSupport ? false
+, pythonSupport ? (! stdenv ? cross)
 }:
 
 assert pythonSupport -> python2 != null;
 assert pythonSupport -> libxml2.pythonSupport;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libxslt-1.1.29";
@@ -21,18 +24,18 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 
-  configureFlags = [
-    "--without-crypto"
+  # TODO move cryptoSupport as last flag, when upgrading libxslt
+  configureFlags = optional (!cryptoSupport) "--without-crypto" ++ [
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ stdenv.lib.optional pythonSupport "--with-python=${python2}";
+  ] ++ optional pythonSupport "--with-python=${python2}";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
     moveToOutput share/man/man1 "$bin"
-  '' + stdenv.lib.optionalString pythonSupport ''
+  '' + optionalString pythonSupport ''
     mkdir -p $py/nix-support
     echo ${libxml2.py} >> $py/nix-support/propagated-native-build-inputs
     moveToOutput lib/python2.7 "$py"
