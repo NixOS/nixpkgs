@@ -11010,6 +11010,7 @@ in
   linux_4_8 = callPackage ../os-specific/linux/kernel/linux-4.8.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.multithreaded_rsapubkey
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
         # when adding a new linux version
         # !!! 4.7 patch doesn't apply, 4.8 patch not up yet, will keep checking
@@ -11233,6 +11234,7 @@ in
     inherit (lib) overrideDerivation;
     kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
       kernelPatches = with self.kernelPatches; [
+        kernelPatches.multithreaded_rsapubkey
         bridge_stp_helper
         modinst_arg_list_too_long
       ] ++ lib.optionals ((platform.kernelArch or null) == "mips")

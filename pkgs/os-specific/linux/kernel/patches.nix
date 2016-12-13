@@ -41,6 +41,12 @@ in
 
 rec {
 
+  multithreaded_rsapubkey =
+    {
+      name = "multithreaded-rsapubkey-asn1.patch";
+      patch = ./multithreaded-rsapubkey-asn1.patch;
+    };
+
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;
