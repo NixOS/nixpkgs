@@ -4533,6 +4533,8 @@ in
 
   ### DEVELOPMENT / COMPILERS
 
+  abcl = callPackage ../development/compilers/abcl {};
+
   aldor = callPackage ../development/compilers/aldor { };
 
   aliceml = callPackage ../development/compilers/aliceml { };
