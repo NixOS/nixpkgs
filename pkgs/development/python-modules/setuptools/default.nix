@@ -1,7 +1,8 @@
 { stdenv, lib, fetchurl, python, wrapPython }:
 
 stdenv.mkDerivation rec {
-  shortName = "setuptools-${version}";
+  pname = "setuptools";
+  shortName = "${pname}-${version}";
   name = "${python.libPrefix}-${shortName}";
 
   version = "30.2.0";
