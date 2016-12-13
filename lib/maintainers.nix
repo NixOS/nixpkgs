@@ -242,6 +242,7 @@
   leonardoce = "Leonardo Cecchi <leonardo.cecchi@gmail.com>";
   lethalman = "Luca Bruno <lucabru@src.gnome.org>";
   lewo = "Antoine Eiche <lewo@abesis.fr>";
+  lheckemann = "Linus Heckemann <git@sphalerite.org>";
   lhvwb = "Nathaniel Baxter <nathaniel.baxter@gmail.com>";
   lihop = "Leroy Hopson <nixos@leroy.geek.nz>";
   linquize = "Linquize <linquize@yahoo.com.hk>";
@@ -383,6 +384,7 @@
   retrry = "Tadas Barzdžius <retrry@gmail.com>";
   rick68 = "Wei-Ming Yang <rick68@gmail.com>";
   rickynils = "Rickard Nilsson <rickynils@gmail.com>";
+  rlupton20 = "Richard Lupton <richard.lupton@gmail.com>";
   rnhmjoj = "Michele Guerini Rocco <micheleguerinirocco@me.com>";
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
   robberer = "Longrin Wischnewski <robberer@freakmail.de>";

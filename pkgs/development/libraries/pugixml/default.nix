@@ -2,22 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "pugixml-${version}";
-  version = "1.7";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "https://github.com/zeux/pugixml/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1jpml475kbhs1aqwa48g2cbfxlrb9qp115m2j9yryxhxyr30vqgv";
+    sha256 = "0fcgggry5x5bn0zhb09ij9hb0p45nb0sv0d9fw3cm1cf62hp9n80";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  sourceRoot = "${name}/scripts";
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}" ];
 
   preConfigure = ''
     # Enable long long support (required for filezilla)
-    sed -ire '/PUGIXML_HAS_LONG_LONG/ s/^\/\///' ../src/pugiconfig.hpp
+    sed -ire '/PUGIXML_HAS_LONG_LONG/ s/^\/\///' src/pugiconfig.hpp
   '';
 
   patches = []

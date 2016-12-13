@@ -48,7 +48,7 @@ in
           only the hosts listed in <varname>dataDir</varname>/remote_hosts.cfg will be allowed to
           connect.
 
-          See also: <ulink url="http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access"/>
+          See also: <link xlink:href="http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access"/>
         '';
       };
     };
