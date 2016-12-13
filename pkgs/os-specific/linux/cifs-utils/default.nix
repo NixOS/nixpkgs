@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kerberos, keyutils, pam }:
+{ stdenv, fetchurl, kerberos, keyutils, pam, talloc }:
 
 stdenv.mkDerivation rec {
   name = "cifs-utils-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xs9rwqfpx8qj5mcmagw6y1hzwc71zhzb5r8hv06sz16p1w6axz2";
   };
 
-  buildInputs = [ kerberos keyutils pam ];
+  buildInputs = [ kerberos keyutils pam talloc ];
 
   makeFlags = "root_sbindir=$(out)/sbin";
 

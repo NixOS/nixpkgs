@@ -8,12 +8,12 @@ assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   product = "chromedriver_linux64";
-  name = "${product}-2.21";
-  version = "2.21";
+  name = "${product}-2.25";
+  version = "2.25";
 
   src = fetchurl {
     url = "http://chromedriver.storage.googleapis.com/${version}/${product}.zip";
-    sha256 = "1fhwvqjwqkfm18icacvk0312ii8hf1p03icd3isfcxp7j69qf2wg";
+    sha256 = "0z6c3q73pi83iidq3n85sxhc9yikkf9rf22hnn8manrhfsg784fh";
   };
 
   buildInputs = [ unzip makeWrapper ];

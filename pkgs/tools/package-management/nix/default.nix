@@ -1,20 +1,31 @@
-{ lib, stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium
+{ lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp
+, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
 
 let
 
-  common = { name, src }: stdenv.mkDerivation rec {
+  common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
     inherit name src;
+    version = lib.getVersion name;
+
+    VERSION_SUFFIX = lib.optionalString fromGit suffix;
 
     outputs = [ "out" "dev" "man" "doc" ];
 
-    nativeBuildInputs = [ perl pkgconfig ];
+    nativeBuildInputs =
+      [ perl pkgconfig ]
+      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
 
     buildInputs = [ curl openssl sqlite xz ]
-      ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium;
+      ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
+      ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "1.12pre")
+          (aws-sdk-cpp.override {
+            apis = ["s3"];
+            customMemoryManagement = false;
+          });
 
     propagatedBuildInputs = [ boehmgc ];
 
@@ -28,14 +39,17 @@ let
       '';
 
     configureFlags =
-      ''
-        --with-store-dir=${storeDir} --localstatedir=${stateDir} --sysconfdir=/etc
-        --with-dbi=${perlPackages.DBI}/${perl.libPrefix}
-        --with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}
-        --with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}
-        --disable-init-state
-        --enable-gc
-      '';
+      [ "--with-store-dir=${storeDir}"
+        "--localstatedir=${stateDir}"
+        "--sysconfdir=/etc"
+        "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
+        "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
+        "--disable-init-state"
+        "--enable-gc"
+      ]
+      ++ lib.optional (!lib.versionAtLeast version "1.12pre") [
+        "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
+      ];
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
@@ -97,11 +111,15 @@ in rec {
   };
 
   nixUnstable = lib.lowPrio (common rec {
-    name = "nix-2016-11-22";
-    src = fetchurl {
-      url = "https://static.domenkozar.com/nix-1.12pre4892_215b70f.tar.xz";
-      sha256 = "0vi43zl25xygcvcfpa5wjk8vj0ll52m43fmycpx158yi28ry0ax8";
+    name = "nix-1.12${suffix}";
+    suffix = "pre4911_b30d1e7";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "b30d1e7ada0a8fbaacc25e24e5e788d18bfe8d3c";
+      sha256 = "04j6aw2bi3k7m5jyqwn1vrf78br5kdfpjsj15b5r5lvxdqhlknvm";
     };
+    fromGit = true;
   });
 
 }

@@ -1,16 +1,18 @@
 { stdenv, fetchurl, pkgconfig, libdrm, libpciaccess, cairo, dri2proto, udev
-, libX11, libXext, libXv, libXrandr, glib, bison, libunwind, python3 }:
+, libX11, libXext, libXv, libXrandr, glib, bison, libunwind, python3, kmod
+, procps }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gpu-tools-1.16";
+  name = "intel-gpu-tools-1.17";
 
   src = fetchurl {
     url = "http://xorg.freedesktop.org/archive/individual/app/${name}.tar.bz2";
-    sha256 = "1q9sfb15081zm1rq4z67sfj13ryvbdha4fa6pdzdsfd9261nvgn6";
+    sha256 = "06pvmbsbff4bsi67n6x3jjngzy2llf8bplc75447ra1fwphc9jx6";
   };
 
-  buildInputs = [ pkgconfig libdrm libpciaccess cairo dri2proto udev libX11
-                  libXext libXv libXrandr glib bison libunwind python3 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libdrm libpciaccess cairo dri2proto udev libX11 kmod
+    libXext libXv libXrandr glib bison libunwind python3 procps ];
 
   preBuild = ''
     patchShebangs debugger/system_routine/pre_cpp.py

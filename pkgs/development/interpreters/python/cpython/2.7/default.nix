@@ -10,12 +10,13 @@
 , zlib
 , callPackage
 , self
-, python27Packages
 , gettext
 , db
 , expat
 , libffi
 , CF, configd, coreutils
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -180,11 +181,14 @@ in stdenv.mkDerivation {
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
       '';
 
-    passthru = rec {
+    passthru = let
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+    in rec {
       inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
       executable = libPrefix;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
+      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+      pkgs = pythonPackages;
       isPy2 = true;
       isPy27 = true;
       interpreter = "${self}/bin/${executable}";

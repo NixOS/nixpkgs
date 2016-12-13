@@ -59,7 +59,8 @@ in
 
     boot.kernelPackages = mkForce pkgs.linuxPackages_grsec_nixos;
 
-    boot.kernelParams = optional cfg.disableEfiRuntimeServices "noefi";
+    boot.kernelParams = [ "grsec_sysfs_restrict=0" ]
+      ++ optional cfg.disableEfiRuntimeServices "noefi";
 
     nixpkgs.config.grsecurity = true;
 
@@ -109,19 +110,62 @@ in
     boot.kernel.sysctl = {
       # Read-only under grsecurity
       "kernel.kptr_restrict" = mkForce null;
+
+      # All grsec tunables default to off, those not enabled below are
+      # *disabled*.  We use mkDefault to allow expert users to override
+      # our choices, but use mkForce where tunables would outright
+      # conflict with other settings.
+
+      # Enable all chroot restrictions by default (overwritten as
+      # necessary below)
+      "kernel.grsecurity.chroot_caps" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_bad_rename" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_chmod" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_chroot" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_fchdir" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_mknod" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_mount" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_pivot" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_shmat" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_sysctl" = mkDefault 1;
+      "kernel.grsecurity.chroot_deny_unix" = mkDefault 1;
+      "kernel.grsecurity.chroot_enforce_chdir" = mkDefault 1;
+      "kernel.grsecurity.chroot_findtask" = mkDefault 1;
+      "kernel.grsecurity.chroot_restrict_nice" = mkDefault 1;
+
+      # Enable various grsec protections
+      "kernel.grsecurity.consistent_setxid" = mkDefault 1;
+      "kernel.grsecurity.deter_bruteforce" = mkDefault 1;
+      "kernel.grsecurity.fifo_restrictions" = mkDefault 1;
+      "kernel.grsecurity.harden_ipc" = mkDefault 1;
+      "kernel.grsecurity.harden_ptrace" = mkDefault 1;
+      "kernel.grsecurity.harden_tty" = mkDefault 1;
+      "kernel.grsecurity.ip_blackhole" = mkDefault 1;
+      "kernel.grsecurity.linking_restrictions" = mkDefault 1;
+      "kernel.grsecurity.ptrace_readexec" = mkDefault 1;
+
+      # Enable auditing
+      "kernel.grsecurity.audit_ptrace" = mkDefault 1;
+      "kernel.grsecurity.forkfail_logging" = mkDefault 1;
+      "kernel.grsecurity.rwxmap_logging" = mkDefault 1;
+      "kernel.grsecurity.signal_logging" = mkDefault 1;
+      "kernel.grsecurity.timechange_logging" = mkDefault 1;
     } // optionalAttrs config.nix.useSandbox {
       # chroot(2) restrictions that conflict with sandboxed Nix builds
       "kernel.grsecurity.chroot_caps" = mkForce 0;
+      "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
       "kernel.grsecurity.chroot_deny_chroot" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_deny_pivot" = mkForce 0;
-      "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
     } // optionalAttrs containerSupportRequired {
       # chroot(2) restrictions that conflict with NixOS lightweight containers
+      "kernel.grsecurity.chroot_caps" = mkForce 0;
       "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_restrict_nice" = mkForce 0;
-      "kernel.grsecurity.chroot_caps" = mkForce 0;
+      # Disable privileged IO by default, unless X is enabled
+    } // optionalAttrs (!config.services.xserver.enable) {
+      "kernel.grsecurity.disable_priv_io" = mkDefault 1;
     };
 
   };

@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "09vag1ybfqvw37djmd9g740iqjvg8nwr4p0xb21rfj06vazrdg4b";
   };
 
+  # FIXME: might be nice to put different APIs in different outputs
+  # (e.g. libaws-cpp-sdk-s3.so in output "s3").
+  outputs = [ "out" "dev" ];
+
   buildInputs = [ cmake curl libuuid ];
 
   cmakeFlags =

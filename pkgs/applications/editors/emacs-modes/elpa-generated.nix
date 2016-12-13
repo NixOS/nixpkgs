@@ -967,6 +967,19 @@
           license = lib.licenses.free;
         };
       }) {};
+    json-mode = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "json-mode";
+        version = "0.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/json-mode-0.1.el";
+          sha256 = "025bwpx7nc1qhdyf2yaqjdr6x1qr6q45776yvy427xdh4nbk054l";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/json-mode.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     jumpc = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "jumpc";
         version = "3.0";
