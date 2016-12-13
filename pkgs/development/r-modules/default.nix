@@ -472,7 +472,6 @@ let
     "DeducerSurvival"
     "DeducerText"
     "Demerelate"
-    "DescTools"
     "detrendeR"
     "dgmb"
     "DivMelt"
