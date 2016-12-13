@@ -27220,6 +27220,8 @@ in {
       sha256 = "1x9dfqypgympnlm25p9m43xh4qv3p7d75vksv9pzqibrb4cggw5n";
     };
 
+    doCheck = !isPy3k;
+
     propagatedBuildInputs = with self; [ zope_i18nmessageid zope_schema ];
 
     meta = {
