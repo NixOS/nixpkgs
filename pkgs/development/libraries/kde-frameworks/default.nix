@@ -139,6 +139,7 @@ let
     plasma-framework = callPackage ./plasma-framework.nix {};
     solid = callPackage ./solid.nix {};
     sonnet = callPackage ./sonnet.nix {};
+    syntax-highlighting = callPackage ./syntax-highlighting.nix {};
     threadweaver = callPackage ./threadweaver.nix {};
   };
 
