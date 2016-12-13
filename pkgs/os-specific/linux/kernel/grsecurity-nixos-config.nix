@@ -23,8 +23,6 @@ PAX_XATTR_PAX_FLAGS y
 PAX_EI_PAX n
 
 PAX_INITIFY y
-# initify is a fairly recent feature, enable verbose mode to aid in debugging
-PAX_INITIFY_VERBOSE y
 
 # The bts instrumentation method is compatible with binary only modules.
 #

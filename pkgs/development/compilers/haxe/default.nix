@@ -37,6 +37,6 @@ stdenv.mkDerivation {
     homepage = http://haxe.org;
     license = with licenses; [ gpl2 bsd2 /*?*/ ];  # -> docs/license.txt
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

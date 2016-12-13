@@ -2,11 +2,20 @@
 # - The csdp program used for the Micromega tactic is statically referenced.
 #   However, coq can build without csdp by setting it to null.
 #   In this case some Micromega tactics will search the user's path for the csdp program and will fail if it is not found.
+# - The patch-level version can be specified through the `pl` argument to
+#   the derivation; it defaults to the greatest.
 
-{stdenv, fetchgit, writeText, pkgconfig, ocaml, findlib, camlp5, ncurses, lablgtk ? null, csdp ? null}:
+{ stdenv, fetchurl, writeText, pkgconfig
+, ocaml, findlib, camlp5, ncurses
+, lablgtk ? null, csdp ? null
+, pl ? "1"
+}:
 
 let
-  version = "8.6pre-0c999f02";
+  version = "8.6rc${pl}";
+  sha256 = {
+   "1" = "0wral36h39q7g2sa2z8jvjc8ggqmqsjrbs0k299n0nykmmrq1pr8";
+  }."${pl}";
   coq-version = "8.6";
   buildIde = lablgtk != null;
   ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
@@ -22,10 +31,9 @@ stdenv.mkDerivation {
   inherit coq-version;
   inherit ocaml camlp5;
 
-  src = fetchgit {
-    url = git://scm.gforge.inria.fr/coq/coq.git;
-    rev = "ad768e435a736ca51ac79a575967b388b34918c7";
-    sha256 = "05s7sk1l3mvdjag3idnhkpj707y4bv56da7kpffw862f2qgfr77j";
+  src = fetchurl {
+    url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
+    inherit sha256;
   };
 
   buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];
@@ -35,7 +43,7 @@ stdenv.mkDerivation {
     RM=$(type -tp rm)
     substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace configure.ml --replace "\"Darwin\"; \"FreeBSD\"; \"OpenBSD\"" "\"Darwinx\"; \"FreeBSD\"; \"OpenBSD\""
+    substituteInPlace configure.ml --replace '"md5 -q"' '"md5sum"'
     ${csdpPatch}
   '';
 
@@ -58,7 +66,11 @@ stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = "revision coq coqide";
+  buildFlags = "revision coq coqide bin/votour";
+
+  postInstall = ''
+    cp bin/votour $out/bin/
+  '';
 
   meta = with stdenv.lib; {
     description = "Coq proof assistant";

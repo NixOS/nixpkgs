@@ -2,11 +2,11 @@
 
 let
 
-  version = "5.2";
+  version = "5.3";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.gz";
-    sha256 = "1r9r91gmrrflzl0yq10bib9gxbqyhycb09hcx28m2g3vv9skmccj";
+    sha256 = "0cvkdw7x6i4m2brc9aakw8d3bmp6baziv72amlq9jd65r421bq88";
   };
 
 in
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
-    sha256 = "0dsr450v8nydvpk8ry276fvbznlrjgddgp7zvhcw4cv69i9lr4ps";
+    sha256 = "0vcsgc1ymqhq0acklhlq5skgj27z597x2a7nx5g3j6q4jvx778hx";
   };
 
   buildInputs = [ ncurses pcre ];

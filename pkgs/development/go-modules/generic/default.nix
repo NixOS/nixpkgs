@@ -69,7 +69,7 @@ in
 go.stdenv.mkDerivation (
   (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
 
-  name = "go${go.meta.branch}-${name}";
+  inherit name;
   nativeBuildInputs = [ go parallel ]
     ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
   buildInputs = [ go ] ++ buildInputs;
