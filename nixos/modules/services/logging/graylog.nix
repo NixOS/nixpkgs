@@ -159,6 +159,8 @@ in
       path = [ pkgs.openjdk8 pkgs.which pkgs.procps ];
       preStart = ''
         mkdir -p /var/lib/graylog -m 755
+
+        rm -rf /var/lib/graylog/plugins || true
         mkdir -p /var/lib/graylog/plugins -m 755
 
         for declarativeplugin in `ls ${glPlugins}/bin/`; do
