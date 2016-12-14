@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
       "0zvqf444h35ikv1f3nwkh2jx51zj5k9w4zdxx32zcrnxpk5nhn97";
   };
 
+  preferLocalBuild = true;
+
   desktopItem = makeDesktopItem {
     name = "torbrowser";
     exec = "tor-browser";
