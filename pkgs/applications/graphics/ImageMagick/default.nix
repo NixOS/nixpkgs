@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
       "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
       # the original source above removes tarballs quickly
       "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
+      "https://bintray.com/homebrew/mirror/download_file?file_path=imagemagick-${version}.tar.xz"
     ];
     inherit (cfg) sha256;
   };
