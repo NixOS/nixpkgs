@@ -3,11 +3,11 @@
 assert interactive -> readline != null && ncurses != null;
 
 stdenv.mkDerivation {
-  name = "sqlite-3.14.1";
+  name = "sqlite-3.14.2";
 
   src = fetchurl {
-    url = "http://sqlite.org/2016/sqlite-autoconf-3140100.tar.gz";
-    sha256 = "19j73j44akqgc6m82wm98yvnmm3mfzmfqr8mp3n7n080d53q4wdw";
+    url = "http://sqlite.org/2016/sqlite-autoconf-3140200.tar.gz";
+    sha256 = "1z5knpyl42nav3gqv97vklmjyslxs2gdzfxrcn3vw33xgw90qkv4";
   };
 
   outputs = [ "bin" "dev" "out" ];
