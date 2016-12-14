@@ -1136,4 +1136,6 @@ self: super: {
   # requires vty 5.13
   brick = super.brick.overrideScope (self: super: { vty = self.vty_5_14; });
 
+  # https://github.com/krisajenkins/elm-export/pull/22
+  elm-export = doJailbreak super.elm-export;
 }
