@@ -687,8 +687,5 @@ in
     };
 
     services.resolved.enable = mkDefault true;
-    services.timesyncd.enable = mkDefault config.services.ntp.enable;
-
   };
-
 }

@@ -18,5 +18,5 @@
   services.syslogd.tty = "hvc0";
 
   # Don't run ntpd, since we should get the correct time from Dom0.
-  services.ntp.enable = false;
+  services.timesyncd.enable = false;
 }
