@@ -1,13 +1,20 @@
 { stdenv, fetchurl, makeDesktopItem
 , libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk2
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
+, gstreamer, gst_plugins_base, gst_plugins_good, gst_ffmpeg, gmp, ffmpeg
 }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
+    gstreamer gst_plugins_base gmp ffmpeg
   ];
+
+  gstPlugins = [ gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg ];
+
+  gstPluginsPath = stdenv.lib.concatMapStringsSep ":" (x:
+    "${x}/lib/gstreamer-0.10") gstPlugins;
 in
 
 stdenv.mkDerivation rec {
@@ -66,6 +73,7 @@ stdenv.mkDerivation rec {
     fi
     export FONTCONFIG_PATH=\$HOME/Data/fontconfig
     export LD_LIBRARY_PATH=${libPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
+    export GST_PLUGIN_SYSTEM_PATH=${gstPluginsPath}
     exec $out/share/tor-browser/Browser/firefox --class "Tor Browser" -no-remote -profile ~/Data/Browser/profile.default "\$@"
     EOF
     chmod +x $out/bin/tor-browser
