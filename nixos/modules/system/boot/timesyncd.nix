@@ -6,14 +6,21 @@ with lib;
 
   options = {
 
-    services.timesyncd.enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Enables the systemd NTP client daemon.
-      '';
+    services.timesyncd = {
+      enable = mkOption {
+        default = !config.boot.isContainer;
+        type = types.bool;
+        description = ''
+          Enables the systemd NTP client daemon.
+        '';
+      };
+      servers = mkOption {
+        default = config.networking.timeServers;
+        description = ''
+          The set of NTP servers from which to synchronise.
+        '';
+      };
     };
-
   };
 
   config = mkIf config.services.timesyncd.enable {
@@ -29,8 +36,6 @@ with lib;
       [Time]
       NTP=${concatStringsSep " " config.services.ntp.servers}
     '';
-
-    systemd.services.ntpd.enable = false;
 
     users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;
     users.extraGroups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
