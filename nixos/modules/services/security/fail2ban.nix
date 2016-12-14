@@ -143,7 +143,7 @@ in
     services.fail2ban.jails.ssh-iptables =
       ''
         filter   = sshd
-        action   = iptables[name=SSH, port=ssh, protocol=tcp]
+        action   = iptables-multiport[name=SSH, port="${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}", protocol=tcp]
         maxretry = 5
       '';
 
