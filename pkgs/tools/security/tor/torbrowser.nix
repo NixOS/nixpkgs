@@ -2,6 +2,7 @@
 , libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk2
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
 , gstreamer, gst_plugins_base, gst_plugins_good, gst_ffmpeg, gmp, ffmpeg
+, libpulseaudio
 }:
 
 let
@@ -9,7 +10,8 @@ let
     stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
     gstreamer gst_plugins_base gmp ffmpeg
-  ];
+    libpulseaudio
+  ] ;
 
   gstPlugins = [ gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg ];
 
