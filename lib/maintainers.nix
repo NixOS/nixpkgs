@@ -188,6 +188,7 @@
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   guillaumekoenig = "Guillaume Koenig <guillaume.edward.koenig@gmail.com>";
+  guyonvarch = "Joris Guyonvarch <joris@guyonvarch.me>";
   hakuch = "Jesse Haber-Kucharsky <hakuch@gmail.com>";
   havvy = "Ryan Scheel <ryan.havvy@gmail.com>";
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
