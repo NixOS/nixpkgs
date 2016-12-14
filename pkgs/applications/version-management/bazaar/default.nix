@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python2Packages
+, withSFTP ? true
+ }:
 
 python2Packages.buildPythonApplication rec {
   version = "2.7";
@@ -11,6 +13,9 @@ python2Packages.buildPythonApplication rec {
   };
 
   doCheck = false;
+
+  propagatedBuildInputs = []
+  ++ stdenv.lib.optionals withSFTP [ python2Packages.paramiko ];
 
   # Bazaar can't find the certificates alone
   patches = [ ./add_certificates.patch ];

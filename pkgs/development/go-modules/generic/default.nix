@@ -211,7 +211,7 @@ go.stdenv.mkDerivation (
 
   meta = {
     # Add default meta information
-    platforms = lib.platforms.all;
+    platforms = go.meta.platforms or lib.platforms.all;
   } // meta // {
     # add an extra maintainer to every package
     maintainers = (meta.maintainers or []) ++
