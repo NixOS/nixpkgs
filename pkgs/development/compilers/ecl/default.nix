@@ -3,6 +3,7 @@
 , gmp, mpfr, libffi, makeWrapper
 , noUnicode ? false
 , gcc
+, threadSupport ? true
 }:
 let
   s = # Generated upstream information
@@ -30,7 +31,7 @@ stdenv.mkDerivation {
   };
 
   configureFlags = [
-    "--enable-threads"
+    (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-prefix=${gmp.dev}"
     "--with-libffi-prefix=${libffi.dev}"
     ]
