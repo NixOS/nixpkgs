@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-systemd"
-    "--enable-nix"
+# TODO: enable nix-backend again
+#   "--enable-nix"
     "--disable-dummy"
     "--disable-cron"
     "--disable-introspection"
