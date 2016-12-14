@@ -737,6 +737,8 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
+          RestartSec = "30s";
+          Restart = "on-failure";
           ExecStart = ''${cfg.package}/bin/kube-controller-manager \
             --address=${cfg.controllerManager.address} \
             --port=${toString cfg.controllerManager.port} \
