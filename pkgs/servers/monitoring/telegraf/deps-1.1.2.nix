@@ -446,8 +446,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/shirou/gopsutil";
-      rev = "1516eb9ddc5e61ba58874047a98f8b44b5e585e8";
-      sha256 = "1pnl1g2l1y5vmnraq97rbm0nirprqvfzxsp6h4xacn1429jdl5bv";
+      rev = "4d0c402af66c78735c5ccf820dc2ca7de5e4ff08";
+      sha256 = "1wkp7chzpz6brq2y0k2mvsf0iaknns279wfsjn5gm6gvih49lqni";
     };
   }
   {
