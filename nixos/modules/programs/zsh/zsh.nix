@@ -100,13 +100,11 @@ in
 
     programs.zsh = {
 
-      shellInit = ''
+      loginShellInit = ''
         . ${config.system.build.setEnvironment}
 
-        ${cfge.shellInit}
+        ${cfge.loginShellInit};
       '';
-
-      loginShellInit = cfge.loginShellInit;
 
       interactiveShellInit = ''
         # history defaults

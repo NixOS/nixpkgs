@@ -76,16 +76,6 @@ in
       type = types.lines;
     };
 
-    environment.shellInit = mkOption {
-      default = "";
-      description = ''
-        Shell script code called during shell initialisation.
-        This code is asumed to be shell-independent, which means you should
-        stick to pure sh without sh word split.
-      '';
-      type = types.lines;
-    };
-
     environment.loginShellInit = mkOption {
       default = "";
       description = ''

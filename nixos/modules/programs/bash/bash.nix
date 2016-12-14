@@ -64,14 +64,6 @@ in
         type = types.attrs; # types.attrsOf types.stringOrPath;
       };
 
-      shellInit = mkOption {
-        default = "";
-        description = ''
-          Shell script code called during bash shell initialisation.
-        '';
-        type = types.lines;
-      };
-
       loginShellInit = mkOption {
         default = "";
         description = ''
@@ -122,13 +114,11 @@ in
 
     programs.bash = {
 
-      shellInit = ''
+      loginShellInit = ''
         . ${config.system.build.setEnvironment}
 
-        ${cfge.shellInit}
+        ${cfge.loginShellInit}
       '';
-
-      loginShellInit = cfge.loginShellInit;
 
       interactiveShellInit = ''
         # Check the window size after every command.
@@ -158,7 +148,6 @@ in
         # Prevent this file from being sourced by interactive non-login child shells.
         export __ETC_PROFILE_DONE=1
 
-        ${cfg.shellInit}
         ${cfg.loginShellInit}
 
         # Read system-wide modifications.
