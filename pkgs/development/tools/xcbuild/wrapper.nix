@@ -64,6 +64,8 @@ stdenv.mkDerivation {
       --set DEVELOPER_DIR "$out"
   '';
 
+  inherit (xcbuild) meta;
+
   passthru = {
     raw = xcbuild;
   };
