@@ -180,7 +180,7 @@ rec {
     allPackages = assert false; null;
 
     platform = assert false; null;
-    crossSystem = assert false; null;
+    crossSystem = null;
     config = assert false; null;
   }).bootstrapTools;
 
