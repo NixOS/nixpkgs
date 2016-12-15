@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "terraform-${version}";
-  version = "0.7.13";
+  version = "0.8.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/terraform";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "hashicorp";
     repo = "terraform";
-    sha256 = "0s23gc9rlnsg6x8llxnnw30b9c5kndy73jimrfxpqb4mha7mjn5n";
+    sha256 = "1fgnivhn6hrxpwwajl80vj2w81lv6vypprlbgif8m0z0na7p8956";
   };
 
   postInstall = ''
