@@ -70,7 +70,7 @@ let
       '')}
 
       # Start QEMU.
-      exec ${cfg.qemu.program} \
+      exec ${pkgs.qemu_test}/bin/qemu-kvm \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
@@ -299,14 +299,6 @@ in
       };
 
     virtualisation.qemu = {
-      program = mkOption {
-        type = types.path;
-        default = "${pkgs.qemu_kvm}/bin/qemu-kvm";
-        defaultText = "\${pkgs.qemu_kvm}/bin/qemu-kvm";
-        example = literalExample "\${pkgs.qemu_test}/bin/qemu-kvm";
-        description = "The QEMU variant used to start the VM.";
-      };
-
       options =
         mkOption {
           type = types.listOf types.unspecified;
