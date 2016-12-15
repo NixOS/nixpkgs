@@ -1,0 +1,48 @@
+diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
+index 845675e..43fa036 100644
+--- a/hw/9pfs/9p-local.c
++++ b/hw/9pfs/9p-local.c
+@@ -128,6 +128,8 @@ static int local_lstat(FsContext *fs_ctx, V9fsPath *fs_path, struct stat *stbuf)
+     if (err) {
+         goto err_out;
+     }
++    stbuf->st_uid = 0;
++    stbuf->st_gid = 0;
+     if (fs_ctx->export_flags & V9FS_SM_MAPPED) {
+         /* Actual credentials are part of extended attrs */
+         uid_t tmp_uid;
+@@ -462,6 +464,16 @@ static ssize_t local_pwritev(FsContext *ctx, V9fsFidOpenState *fs,
+     return ret;
+ }
+ 
++static int maybe_chmod(const char *path, mode_t mode)
++{
++    static char *store_path = NULL;
++    if (store_path == NULL)
++        store_path = getenv("NIX_STORE");
++    if (strncmp(path, store_path, strlen(store_path)) != 0)
++        return chmod(path, mode);
++    return 0;
++}
++
+ static int local_chmod(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
+ {
+     char *buffer;
+@@ -477,7 +489,7 @@ static int local_chmod(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
+     } else if ((fs_ctx->export_flags & V9FS_SM_PASSTHROUGH) ||
+                (fs_ctx->export_flags & V9FS_SM_NONE)) {
+         buffer = rpath(fs_ctx, path);
+-        ret = chmod(buffer, credp->fc_mode);
++        ret = maybe_chmod(buffer, credp->fc_mode);
+         g_free(buffer);
+     }
+     return ret;
+@@ -621,6 +633,8 @@ static int local_fstat(FsContext *fs_ctx, int fid_type,
+     if (err) {
+         return err;
+     }
++    stbuf->st_uid = 0;
++    stbuf->st_gid = 0;
+     if (fs_ctx->export_flags & V9FS_SM_MAPPED) {
+         /* Actual credentials are part of extended attrs */
+         uid_t tmp_uid;
