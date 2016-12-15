@@ -25,7 +25,7 @@
 
 , # The standard environment for building packages, or rather a function
   # providing it. See below for the arguments given to that function.
-  stdenv ? assert false; null
+  stdenvFunc ? import ../stdenv
 
 , crossSystem ? null
 , platform ? assert false; null
@@ -76,7 +76,7 @@ in let
     inherit lib nixpkgsFun;
   } // newArgs);
 
-  stdenv = (args.stdenv or (import ../stdenv)) {
+  stdenv = stdenvFunc {
     inherit lib allPackages system platform crossSystem config;
   };
 
