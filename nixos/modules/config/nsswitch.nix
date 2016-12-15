@@ -56,7 +56,7 @@ in
     # configured IP addresses, or ::1 and 127.0.0.2 as
     # fallbacks. Systemd also provides nss-mymachines to return IP
     # addresses of local containers.
-    system.nssModules = [ config.systemd.package ];
+    system.nssModules = [ config.systemd.package.out ];
 
   };
 }
