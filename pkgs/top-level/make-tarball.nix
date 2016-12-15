@@ -35,6 +35,7 @@ releaseTools.sourceTarball rec {
     export NIX_DB_DIR=$TMPDIR
     export NIX_STATE_DIR=$TMPDIR
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
+    opts=(--option build-users-group "")
     nix-store --init
 
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
@@ -68,7 +69,8 @@ releaseTools.sourceTarball rec {
 
         NIXPKGS_ALLOW_BROKEN=1 nix-env -f . \
             --show-trace --argstr system "$platform" \
-            -qa --drv-path --system-filter \* --system 2>&1 >/dev/null | tee eval-warnings.log
+            -qa --drv-path --system-filter \* --system \
+            "''${opts[@]}" 2>&1 >/dev/null | tee eval-warnings.log
 
         if [ -s eval-warnings.log ]; then
             echo "Nixpkgs on $platform evaluated with warnings, aborting"
@@ -78,7 +80,8 @@ releaseTools.sourceTarball rec {
 
         NIXPKGS_ALLOW_BROKEN=1 nix-env -f . \
             --show-trace --argstr system "$platform" \
-            -qa --drv-path --system-filter \* --system --meta --xml > /dev/null
+            -qa --drv-path --system-filter \* --system --meta --xml \
+            "''${opts[@]}" > /dev/null
         stopNest
     done
 
