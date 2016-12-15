@@ -2,20 +2,20 @@
   makeWrapper, libXScrnSaver }:
 
 let
-  version = "1.7.2";
-  rev = "7ba55c5860b152d999dda59393ca3ebeb1b5c85f";
+  version = "1.8.0";
+  rev = "38746938a4ab94f2f57d9e1309c51fd6fb37553d";
 
-  sha256 = if stdenv.system == "i686-linux"    then "0n49c6m53vbmhvrb8q0lxqa77r7kivn4n542k8y62bii8hi19ixc"
-      else if stdenv.system == "x86_64-linux"  then "0l3n20rvgrxk2j9962wqmprjz7lnvldkp0yw26yfxl99yvrph68f"
-      else if stdenv.system == "x86_64-darwin" then "1chl84scngpxdmcmzbciiz50j459xdcjbpcv4vpm5061gfp5qnh9"
+  sha256 = if stdenv.system == "i686-linux"    then "0p7r1i71v2ab4dzlwh43hqih958a31cqskf64ds4vgc35x2mfjcq"
+      else if stdenv.system == "x86_64-linux"  then "1k15701jskk7w5kwzlzfri96vvw7fcinyfqqafls8nms8h5csv76"
+      else if stdenv.system == "x86_64-darwin" then "12fqz62gs2wcg2wwx1k6gv2gqil9c54yq254vk3rqdf82q9zyapk"
       else throw "Unsupported system: ${stdenv.system}";
 
   urlBase = "https://az764295.vo.msecnd.net/stable/${rev}/";
 
   urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-stable-code_${version}-1479767514_i386.tar.gz"
+        urlBase + "code-stable-code_${version}-1481650382_i386.tar.gz"
       else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-stable-code_${version}-1479766213_amd64.tar.gz"
+        urlBase + "code-stable-code_${version}-1481651903_amd64.tar.gz"
       else if stdenv.system == "x86_64-darwin" then
         urlBase + "VSCode-darwin-stable.zip"
       else throw "Unsupported system: ${stdenv.system}";
