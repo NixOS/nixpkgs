@@ -12,7 +12,7 @@ in {
 
       user = mkOption {
         type = types.str;
-        default = "jitsi";
+        default = "jitsi-videobridge";
         description = ''
           User name under which jitsi-videobridge shall be run.
         '';
@@ -104,10 +104,12 @@ in {
     networking.firewall.allowedTCPPorts = optionals cfg.openFirewall [ cfg.port 4443 ];
     networking.firewall.allowedUDPPortRanges = optional cfg.openFirewall { from = cfg.minPort; to = cfg.maxPort; };
 
-    users.extraUsers."${cfg.user}" = {
-        home = "/home/${cfg.user}";
-        description = "jitsi-videobridge user";
-      };
+    users.extraUsers = optional (cfg.user == "jitsi-videobridge") {
+      name = cfg.user;
+      home = "/home/${cfg.user}";
+      description = "jitsi-videobridge user";
+      createHome = true;
+    };
 
     systemd.services.jitsi-videobridge = {
       description = "Jitsi Videobridge";
@@ -116,8 +118,8 @@ in {
       after = [ "network.target" ];
 
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p /home/${cfg.user}/.sip-communicator
-        ${pkgs.coreutils}/bin/echo "org.jitsi.impl.neomedia.transform.srtp.SRTPCryptoContext.checkReplay=false" > /home/${cfg.user}/.sip-communicator/sip-communicator.properties
+        ${pkgs.coreutils}/bin/mkdir -p ${config.users.extraUsers."${cfg.user}".home}/.sip-communicator
+        ${pkgs.coreutils}/bin/echo "org.jitsi.impl.neomedia.transform.srtp.SRTPCryptoContext.checkReplay=false" > ${config.users.extraUsers."${cfg.user}".home}/.sip-communicator/sip-communicator.properties
       '';
 
       serviceConfig = {

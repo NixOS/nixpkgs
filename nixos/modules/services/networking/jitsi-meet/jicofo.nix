@@ -12,7 +12,7 @@ in {
 
       user = mkOption {
         type = types.str;
-        default = "jitsi";
+        default = "jicofo";
         description = ''
           User name under which JiCoFo shall be run.
         '';
@@ -101,6 +101,13 @@ in {
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
+    users.extraUsers = optional (cfg.user == "jicofo") {
+      name = cfg.user;
+      home = "/home/${cfg.user}";
+      description = "JiCoFo user";
+      createHome = true;
+    };
 
     systemd.services.jicofo = {
       description = "JiCoFo";

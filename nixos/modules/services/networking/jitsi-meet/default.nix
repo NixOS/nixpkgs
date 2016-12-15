@@ -90,32 +90,6 @@ in {
     networking.firewall.allowedTCPPorts = optionals cfg.openFirewall [ 80 443 ];
 
     services = {
-      jitsi-meet = {
-        jitsi-videobridge = {
-          enable = true;
-          domain = "${cfg.hostname}.${cfg.domain}";
-          port = 5347;
-          host = "localhost";
-          secret = cfg.secret1;
-          openFirewall = cfg.openFirewall;
-        };
-
-        jicofo = {
-          enable = true;
-          secret = cfg.secret2;
-          domain = "${cfg.hostname}.${cfg.domain}";
-          userDomain = "auth.${cfg.hostname}.${cfg.domain}";
-          userName = "focus";
-          userPassword = cfg.secret3;
-          openFirewall = cfg.openFirewall;
-        };
-
-        jitsi-meet = {
-          enable = true;
-          configjs = cfg.configjs;
-        };
-      };
-
       prosody = {
         enable = true;
         admins = [ "focus@auth.${cfg.hostname}.${cfg.domain}" ];
@@ -157,6 +131,32 @@ in {
           Component "focus.${cfg.hostname}.${cfg.domain}"
             component_secret = "${cfg.secret2}"
         '';
+      };
+
+      jitsi-meet = {
+        jitsi-videobridge = {
+          enable = true;
+          domain = "${cfg.hostname}.${cfg.domain}";
+          port = 5347;
+          host = "localhost";
+          secret = cfg.secret1;
+          openFirewall = cfg.openFirewall;
+        };
+
+        jicofo = {
+          enable = true;
+          secret = cfg.secret2;
+          domain = "${cfg.hostname}.${cfg.domain}";
+          userDomain = "auth.${cfg.hostname}.${cfg.domain}";
+          userName = "focus";
+          userPassword = cfg.secret3;
+          openFirewall = cfg.openFirewall;
+        };
+
+        jitsi-meet = {
+          enable = true;
+          configjs = cfg.configjs;
+        };
       };
 
       nginx = {
