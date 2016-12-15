@@ -19,6 +19,9 @@ let
   demoOpenstackCmd = "OS_TENANT_NAME=demo OS_USERNAME=demo OS_PASSWORD=demo OS_AUTH_URL=http://localhost:5000/v3 OS_IDENTITY_API_VERSION=3 openstack";
 
 in makeTest {
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ lewo ];
+  };
   machine =
     { config, pkgs, ... }:
     {
