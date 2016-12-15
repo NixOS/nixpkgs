@@ -37,22 +37,7 @@ rec {
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = derivation {
-    name = "bootstrap-tools";
-
-    builder = bootstrapFiles.busybox;
-
-    args = [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
-
-    tarball = bootstrapFiles.bootstrapTools;
-
-    inherit system;
-
-    # Needed by the GCC wrapper.
-    langC = true;
-    langCC = true;
-    isGNU = true;
-  };
+  bootstrapTools = import ./bootstrap-tools { inherit system bootstrapFiles; };
 
 
   # This function builds the various standard environments used during
