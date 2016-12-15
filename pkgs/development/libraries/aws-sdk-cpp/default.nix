@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "A C++ interface for Amazon Web Services";
     homepage = https://github.com/awslabs/aws-sdk-cpp;
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eelco ];
   };
 }
