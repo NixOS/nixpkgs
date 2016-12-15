@@ -7,12 +7,12 @@
 , system, platform, crossSystem, config
 
 , bootstrapFiles ?
-    if system == "i686-linux" then import ./bootstrap/i686.nix
-    else if system == "x86_64-linux" then import ./bootstrap/x86_64.nix
-    else if system == "armv5tel-linux" then import ./bootstrap/armv5tel.nix
-    else if system == "armv6l-linux" then import ./bootstrap/armv6l.nix
-    else if system == "armv7l-linux" then import ./bootstrap/armv7l.nix
-    else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
+    if system == "i686-linux" then import ./bootstrap-files/i686.nix
+    else if system == "x86_64-linux" then import ./bootstrap-files/x86_64.nix
+    else if system == "armv5tel-linux" then import ./bootstrap-files/armv5tel.nix
+    else if system == "armv6l-linux" then import ./bootstrap-files/armv6l.nix
+    else if system == "armv7l-linux" then import ./bootstrap-files/armv7l.nix
+    else if system == "mips64el-linux" then import ./bootstrap-files/loongson2f.nix
     else abort "unsupported platform for the pure Linux stdenv"
 }:
 
