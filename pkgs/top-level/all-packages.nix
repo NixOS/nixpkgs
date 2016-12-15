@@ -10748,7 +10748,7 @@ in
     })
     else if stdenv.isLinux
     then utillinuxMinimal
-    else null;
+    else libossp_uuid;
 
   light = callPackage ../os-specific/linux/light { };
 
