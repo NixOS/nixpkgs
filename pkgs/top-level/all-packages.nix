@@ -6717,6 +6717,7 @@ in
   boost155 = callPackage ../development/libraries/boost/1.55.nix { };
   boost159 = callPackage ../development/libraries/boost/1.59.nix { };
   boost160 = callPackage ../development/libraries/boost/1.60.nix { };
+  boost162 = callPackage ../development/libraries/boost/1.62.nix { };
   boost = boost160;
 
   boost_process = callPackage ../development/libraries/boost-process { };
@@ -6873,6 +6874,7 @@ in
   db53 = callPackage ../development/libraries/db/db-5.3.nix { };
   db6 = db60;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
+  db62 = callPackage ../development/libraries/db/db-6.2.nix { };
 
   dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
@@ -12262,8 +12264,10 @@ in
 
   altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins {
     callPackage = newScope { boost = boost155; };
-  } );
+  });
+
   bitcoin = altcoins.bitcoin;
+  zcash = altcoins.zcash;
   bitcoin-xt = altcoins.bitcoin-xt;
 
   go-ethereum = self.altcoins.go-ethereum;
