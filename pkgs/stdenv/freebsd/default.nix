@@ -1,6 +1,12 @@
-{ lib, allPackages
-, system, platform, crossSystem, config
-}:
+{ _defaults    ? import ../debug.nix
+, argsResolved ? _defaults.extend (_: _: args)
+, lib          ? argsResolved.lib
+, allPackages  ? argsResolved.allPackages
+, system       ? argsResolved.system
+, platform     ? argsResolved.platform
+, crossSystem  ? argsResolved.crossSystem
+, config       ? argsResolved.config
+} @ args:
 
 assert crossSystem == null;
 
