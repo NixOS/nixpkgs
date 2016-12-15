@@ -115,9 +115,6 @@ let
     "osx-10.5.8" = {
       adv_cmds = "119";
     };
-    "osx-10.5" = {
-      CoreOSMakeFiles = "40";
-    };
     "dev-tools-7.0" = {
       bootstrap_cmds = "93";
     };
@@ -195,7 +192,6 @@ let
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.11.6"     "0vllfpb8f4f97wj2vpdd7w5k9ibnsbr6ff1zslpp6q323h01n25y" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {};
     copyfile        = applePackage "copyfile"          "osx-10.11.6"     "1rkf3iaxmjz5ycgrmf0g971kh90jb2z1zqxg5vlqz001s4y457gs" {};
-    CoreOSMakefiles = applePackage "CoreOSMakefiles"   "osx-10.5"        "0kxp53spbn7109l7cvhi88pmfsi81lwmbws819b6wr3hm16v84f4" {};
     Csu             = applePackage "Csu"               "osx-10.11.6"     "0yh5mslyx28xzpv8qww14infkylvc1ssi57imhi471fs91sisagj" {};
     dtrace          = applePackage "dtrace"            "osx-10.11.6"     "0pp5x8dgvzmg9vvg32hpy2brm17dpmbwrcr4prsmdmfvd4767wc0" {};
     dyld            = applePackage "dyld"              "osx-10.11.6"     "0qkjmjazm2zpgvwqizhandybr9cm3gz9pckx8rmf0py03faafc08" {};
