@@ -164,6 +164,10 @@ in
       '';
     } else {};
 
+  sequel_pg = attrs: {
+    buildInputs = [ postgresql ];
+  };
+
   snappy = attrs: {
     buildInputs = [ args.snappy ];
   };
