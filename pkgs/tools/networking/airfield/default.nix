@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let 
-  nodePackages = callPackage (import ../../../top-level/node-packages.nix) {
+  nodePackages = callPackage (import ../../../indices/node-packages.nix) {
     neededNatives = [python] ++ optional (stdenv.isLinux) utillinux;
     self = nodePackages;
     generated = ./package.nix;

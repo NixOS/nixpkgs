@@ -10,7 +10,7 @@ standard <varname>Makefile.PL</varname>.  It’s implemented in <link
 xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/perl-modules/generic"><filename>pkgs/development/perl-modules/generic</filename></link>.</para>
 
 <para>Perl packages from CPAN are defined in <link
-xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/perl-packages.nix"><filename>pkgs/top-level/perl-packages.nix</filename></link>,
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/indices/perl-packages.nix"><filename>pkgs/indices/perl-packages.nix</filename></link>,
 rather than <filename>pkgs/all-packages.nix</filename>.  Most Perl
 packages are so straight-forward to build that they are defined here
 directly, rather than having a separate function for each package
@@ -172,7 +172,7 @@ $ nix-generate-from-cpan XML::Simple
 </screen>
 
 The output can be pasted into
-<filename>pkgs/top-level/perl-packages.nix</filename> or wherever else
+<filename>pkgs/indices/perl-packages.nix</filename> or wherever else
 you need it.</para>
 
 </section>

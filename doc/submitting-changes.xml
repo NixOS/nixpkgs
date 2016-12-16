@@ -125,7 +125,7 @@ Additional information.
 
 <itemizedlist>
 <listitem>
-<para>Make sure it's in <command>pkgs/top-level/all-packages.nix</command>
+<para>Make sure it's in <command>pkgs/indices/all-packages.nix</command>
 </para>
 </listitem>
 

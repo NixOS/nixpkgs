@@ -346,7 +346,7 @@ xlink:href='http://nixos.org/releases/nix/nix-0.10/'>Nix
 
   <listitem><para><filename>pkgs/system/all-packages-generic.nix</filename>
   is gone, we now just have
-  <filename>pkgs/top-level/all-packages.nix</filename> that contains
+  <filename>pkgs/indices/all-packages.nix</filename> that contains
   all available packages.  This should cause much less confusion with
   users.  <filename>all-packages.nix</filename> is a function that by
   default returns packages for the current platform, but you can

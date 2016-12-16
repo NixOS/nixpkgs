@@ -98,7 +98,7 @@ We will first have a look at how Python packages are packaged on Nix. Then, we w
 #### Python packaging on Nix
 
 On Nix all packages are built by functions. The main function in Nix for building Python packages is [`buildPythonPackage`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix).
-Let's see how we would build the `toolz` package. According to [`python-packages.nix`](https://raw.githubusercontent.com/NixOS/nixpkgs/master/pkgs/top-level/python-packages.nix) `toolz` is build using
+Let's see how we would build the `toolz` package. According to [`python-packages.nix`](https://raw.githubusercontent.com/NixOS/nixpkgs/master/pkgs/indices/python-packages.nix) `toolz` is build using
 
 ```nix
 toolz = buildPythonPackage rec{
@@ -132,7 +132,7 @@ The output of the function is a derivation, which is an attribute with the name
 so `python27Packages`, `python34Packages`, `python35Packages` and `pypyPackages`.
 
 The above example works when you're directly working on
-`pkgs/top-level/python-packages.nix` in the Nixpkgs repository. Often though,
+`pkgs/indices/python-packages.nix` in the Nixpkgs repository. Often though,
 you will want to test a Nix expression outside of the Nixpkgs tree. If you
 create a `shell.nix` file with the following contents
 
@@ -442,15 +442,15 @@ Python libraries and applications that use `setuptools` or
 `distutils` are typically build with respectively the `buildPythonPackage` and
 `buildPythonApplication` functions. These two functions also support installing a `wheel`.
 
-All Python packages reside in `pkgs/top-level/python-packages.nix` and all
+All Python packages reside in `pkgs/indices/python-packages.nix` and all
 applications elsewhere. In case a package is used as both a library and an application,
-then the package should be in `pkgs/top-level/python-packages.nix` since only those packages are made
+then the package should be in `pkgs/indices/python-packages.nix` since only those packages are made
 available for all interpreter versions. The preferred location for library expressions is in
 `pkgs/development/python-modules`. It is important that these packages are
-called from `pkgs/top-level/python-packages.nix` and not elsewhere, to guarantee
+called from `pkgs/indices/python-packages.nix` and not elsewhere, to guarantee
 the right version of the package is built.
 
-Based on the packages defined in `pkgs/top-level/python-packages.nix` an
+Based on the packages defined in `pkgs/indices/python-packages.nix` an
 attribute set is created for each available Python interpreter. The available
 sets are
 
@@ -516,7 +516,7 @@ as the interpreter unless overriden otherwise.
 All parameters from `mkDerivation` function are still supported.
 
 * `namePrefix`: Prepended text to `${name}` parameter. Defaults to `"python3.3-"` for Python 3.3, etc. Set it to `""` if you're packaging an application or a command line tool.
-* `disabled`: If `true`, package is not build for particular python interpreter version. Grep around `pkgs/top-level/python-packages.nix` for examples.
+* `disabled`: If `true`, package is not build for particular python interpreter version. Grep around `pkgs/indices/python-packages.nix` for examples.
 * `setupPyBuildFlags`: List of flags passed to `setup.py build_ext` command.
 * `pythonPath`: List of packages to be added into `$PYTHONPATH`. Packages in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
 * `preShellHook`: Hook to execute commands before `shellHook`.
@@ -812,5 +812,5 @@ Following rules are desired to be respected:
 
 * Make sure package builds for all python interpreters. Use `disabled` argument to `buildPythonPackage` to set unsupported interpreters.
 * If tests need to be disabled for a package, make sure you leave a comment about reasoning.
-* Packages in `pkgs/top-level/python-packages.nix` are sorted quasi-alphabetically to avoid merge conflicts.
+* Packages in `pkgs/indices/python-packages.nix` are sorted quasi-alphabetically to avoid merge conflicts.
 * Python libraries are supposed to be in `python-packages.nix` and packaged with `buildPythonPackage`. Python applications live outside of `python-packages.nix` and are packaged with `buildPythonApplication`.

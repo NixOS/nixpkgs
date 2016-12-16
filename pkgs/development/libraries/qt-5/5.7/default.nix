@@ -4,7 +4,7 @@
 
 Before a major version update, make a copy of this directory. (We like to
 keep the old version around for a short time after major updates.) Add a
-top-level attribute to `top-level/all-packages.nix`.
+top-level attribute to `indices/all-packages.nix`.
 
 1. Update the URL in `maintainers/scripts/generate-qt.sh`.
 2. From the top of the Nixpkgs tree, run

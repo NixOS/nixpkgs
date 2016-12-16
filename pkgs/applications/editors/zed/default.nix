@@ -9,7 +9,7 @@ let
   #   fetch package.json from Zed's repository
   #   run `npm2nix package.json node.nix`
   #   and replace node.nix with new one
-  nodePackages = import ../../../../pkgs/top-level/node-packages.nix {
+  nodePackages = import ../../../../pkgs/indices/node-packages.nix {
     inherit pkgs;
     inherit (pkgs) stdenv nodejs fetchurl fetchgit;
     neededNatives = [ pkgs.python ] ++ pkgs.lib.optional pkgs.stdenv.isLinux pkgs.utillinux;

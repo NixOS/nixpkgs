@@ -15,7 +15,7 @@
 
 <para>
   Lua packages are defined
-  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/lua-packages.nix"><filename>pkgs/top-level/lua-packages.nix</filename></link>.
+  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/indices/lua-packages.nix"><filename>pkgs/indices/lua-packages.nix</filename></link>.
   Most of them are simple. For example:
 
   <programlisting>

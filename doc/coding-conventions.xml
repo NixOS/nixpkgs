@@ -615,7 +615,7 @@ evaluate correctly.</para>
   </para>
   <para>You can find many source fetch helpers in <literal>pkgs/build-support/fetch*</literal>.
   </para>
-  <para>In the file <literal>pkgs/top-level/all-packages.nix</literal> you can
+  <para>In the file <literal>pkgs/indices/all-packages.nix</literal> you can
     find fetch helpers, these have names on the form
     <literal>fetchFrom*</literal>. The intention of these are to provide
     snapshot fetches but using the same api as some of the version controlled

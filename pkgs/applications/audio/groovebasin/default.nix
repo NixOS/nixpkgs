@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  nodePackages = callPackage (import ../../../top-level/node-packages.nix) {
+  nodePackages = callPackage (import ../../../indices/node-packages.nix) {
     inherit nodejs;
     neededNatives = [ libgroove python utillinux ];
     self = nodePackages;

@@ -103,7 +103,7 @@ let
       '';
 
     passthru = let
-      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+      pythonPackages = callPackage ../../../../../indices/python-packages.nix {python=self; overrides=packageOverrides;};
     in rec {
       inherit libPrefix;
       inherit zlibSupport;

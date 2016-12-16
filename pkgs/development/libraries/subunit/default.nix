@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, check, cppunit, perl, pythonPackages }:
 
-# NOTE: for subunit python library see pkgs/top-level/python-packages.nix
+# NOTE: for subunit python library see pkgs/indices/python-packages.nix
 
 stdenv.mkDerivation rec {
   name = "subunit-${version}";

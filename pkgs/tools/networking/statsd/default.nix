@@ -3,7 +3,7 @@
 
 let
   self = recurseIntoAttrs (
-    callPackage ../../../top-level/node-packages.nix {
+    callPackage ../../../indices/node-packages.nix {
       inherit nodejs self;
       generated = callPackage ./node-packages.nix { inherit self; };
       overrides = {

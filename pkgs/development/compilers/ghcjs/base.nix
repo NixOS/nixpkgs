@@ -161,7 +161,7 @@ in mkDerivation (rec {
         --with-gmp-libraries ${gmp.out}/lib
   '';
   passthru = let
-    ghcjsNodePkgs = callPackage ../../../top-level/node-packages.nix {
+    ghcjsNodePkgs = callPackage ../../../indices/node-packages.nix {
       generated = ./node-packages-generated.nix;
       self = ghcjsNodePkgs;
     };

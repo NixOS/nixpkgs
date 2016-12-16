@@ -1,5 +1,5 @@
 # Note: The Haskell package set used for building UHC is
-# determined in the file top-level/haskell-packages.nix.
+# determined in the file indices/haskell-packages.nix.
 { stdenv, coreutils, m4, libtool, clang, ghcWithPackages, fetchFromGitHub }:
 
 let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [fgl vector syb uulib network binary hashable uhc-util mtl transformers directory containers array process filepath shuffle uuagc] );

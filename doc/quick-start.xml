@@ -109,7 +109,7 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
 
         <listitem>
           <para>XML::Simple, a Perl module: <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/perl-packages.nix"><filename>pkgs/top-level/perl-packages.nix</filename></link>
+          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/indices/perl-packages.nix"><filename>pkgs/indices/perl-packages.nix</filename></link>
           (search for the <varname>XMLSimple</varname> attribute).
           Most Perl modules are so simple to build that they are
           defined directly in <filename>perl-packages.nix</filename>;
@@ -171,12 +171,12 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
   <listitem>
     <para>Add a call to the function defined in the previous step to
     <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/all-packages.nix"><filename>pkgs/top-level/all-packages.nix</filename></link>
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/indices/all-packages.nix"><filename>pkgs/indices/all-packages.nix</filename></link>
     with some descriptive name for the variable,
     e.g. <varname>libfoo</varname>.
 
     <screen>
-$ emacs pkgs/top-level/all-packages.nix</screen>
+$ emacs pkgs/indices/all-packages.nix</screen>
       
     </para>
 

@@ -5,9 +5,9 @@
     "shlevy"
   ],
   "alwaysNotifyForPaths": [
-    { "name": "FRidh", "files": ["pkgs/top-level/python-packages.nix", "pkgs/development/interpreters/python/*", "pkgs/development/python-modules/*" ] },
+    { "name": "FRidh", "files": ["pkgs/indices/python-packages.nix", "pkgs/development/interpreters/python/*", "pkgs/development/python-modules/*" ] },
     { "name": "LnL7", "files": ["pkgs/stdenv/darwin/*", "pkgs/os-specific/darwin/*"] },
     { "name": "copumpkin", "files": ["pkgs/stdenv/darwin/*", "pkgs/os-specific/darwin/apple-source-releases/*"] }
   ],
-  "fileBlacklist": ["pkgs/top-level/all-packages.nix"]
+  "fileBlacklist": ["pkgs/indices/all-packages.nix"]
 }
