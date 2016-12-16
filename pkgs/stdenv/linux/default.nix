@@ -3,7 +3,7 @@
 # external (non-Nix) tools, such as /usr/bin/gcc, and it contains a C
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
-{ lib, allPackages
+{ lib
 , system, platform, crossSystem, config
 
 , bootstrapFiles ?
@@ -90,14 +90,10 @@ rec {
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
-      thisPkgs = allPackages {
-        inherit system platform crossSystem config;
-        allowCustomOverrides = false;
-        stdenv = thisStdenv;
-      };
-
-    in { stdenv = thisStdenv; pkgs = thisPkgs; };
-
+    in {
+      inherit system platform crossSystem config;
+      stdenv = thisStdenv;
+    };
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
@@ -137,9 +133,9 @@ rec {
   # If we ever need to use a package from more than one stage back, we
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
-  stage1 = stageFun {
+  stage1 = prevStage: stageFun {
     gccPlain = bootstrapTools;
-    inherit (stage0.pkgs) glibc;
+    inherit (prevStage) glibc;
     binutils = bootstrapTools;
     coreutils = bootstrapTools;
     gnugrep = bootstrapTools;
@@ -148,7 +144,7 @@ rec {
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
       binutils = super.binutils.override { gold = false; };
-      inherit (stage0.pkgs) glibc;
+      inherit (prevStage) glibc;
 
       # A threaded perl build needs glibc/libpthread_nonshared.a,
       # which is not included in bootstrapTools, so disable threading.
@@ -162,16 +158,16 @@ rec {
 
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
-  stage2 = stageFun {
+  stage2 = prevStage: stageFun {
     gccPlain = bootstrapTools;
-    inherit (stage1.pkgs) glibc;
-    binutils = stage1.pkgs.binutils;
+    inherit (prevStage) glibc;
+    binutils = prevStage.binutils;
     coreutils = bootstrapTools;
     gnugrep = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
     overrides = self: super: {
-      inherit (stage1.pkgs) perl binutils paxctl gnum4 bison;
+      inherit (prevStage) perl binutils paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
     };
   };
@@ -180,15 +176,15 @@ rec {
   # Construct a third stdenv identical to the 2nd, except that this
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
-  stage3 = stageFun {
+  stage3 = prevStage: stageFun {
     gccPlain = bootstrapTools;
-    inherit (stage2.pkgs) glibc binutils;
+    inherit (prevStage) glibc binutils;
     coreutils = bootstrapTools;
     gnugrep = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
     overrides = self: super: rec {
-      inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders gnum4 bison;
+      inherit (prevStage) binutils glibc perl patchelf linuxHeaders gnum4 bison;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
@@ -200,14 +196,14 @@ rec {
         isl = isl_0_14;
       };
     };
-    extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
+    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
   };
 
 
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
-  stage4 = stageFun {
-    inherit (stage3.pkgs) gccPlain glibc binutils;
+  stage4 = prevStage: stageFun {
+    inherit (prevStage) gccPlain glibc binutils;
     gnugrep = bootstrapTools;
     coreutils = bootstrapTools;
     name = "";
@@ -217,7 +213,7 @@ rec {
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (stage3.pkgs) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
+      inherit (prevStage) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
 
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
@@ -230,7 +226,7 @@ rec {
         shell = self.bash + "/bin/bash";
       };
     };
-    extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
+    extraBuildInputs = [ prevStage.patchelf prevStage.xz ];
   };
 
 
@@ -241,7 +237,7 @@ rec {
   # When updating stdenvLinux, make sure that the result has no
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
-  stdenvLinux = import ../generic rec {
+  stdenvLinux = prevStage: import ../generic rec {
     inherit system config;
 
     preHook =
@@ -253,24 +249,24 @@ rec {
       '';
 
     initialPath =
-      ((import ../common-path.nix) {pkgs = stage4.pkgs;});
+      ((import ../common-path.nix) {pkgs = prevStage;});
 
-    extraBuildInputs = [ stage4.pkgs.patchelf stage4.pkgs.paxctl ];
+    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
 
-    cc = stage4.pkgs.gcc;
+    cc = prevStage.gcc;
 
     shell = cc.shell;
 
-    inherit (stage4.stdenv) fetchurlBoot;
+    inherit (prevStage.stdenv) fetchurlBoot;
 
     extraAttrs = {
-      inherit (stage4.pkgs) glibc;
+      inherit (prevStage) glibc;
       inherit platform bootstrapTools;
-      shellPackage = stage4.pkgs.bash;
+      shellPackage = prevStage.bash;
     };
 
     /* outputs TODO
-    allowedRequisites = with stage4.pkgs;
+    allowedRequisites = with prevStage;
       [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
         paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
@@ -280,11 +276,22 @@ rec {
     overrides = self: super: {
       gcc = cc;
 
-      inherit (stage4.pkgs)
+      inherit (prevStage)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl paxctl zlib pcre;
     };
   };
 
+  stagesLinux = [
+    ({}: stage0)
+    stage1
+    stage2
+    stage3
+    stage4
+    (prevStage: {
+      inherit system crossSystem platform config;
+      stdenv = stdenvLinux prevStage;
+    })
+  ];
 }

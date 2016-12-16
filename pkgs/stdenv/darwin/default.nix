@@ -1,4 +1,4 @@
-{ lib, allPackages
+{ lib
 , system, platform, crossSystem, config
 
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
@@ -22,8 +22,6 @@ let
     (import "${./standard-sandbox.sb}")
   '';
 in rec {
-  inherit allPackages;
-
   commonPreHook = ''
     export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
     export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
@@ -99,12 +97,10 @@ in rec {
         overrides  = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
-      thisPkgs = allPackages {
-        inherit system platform crossSystem config;
-        allowCustomOverrides = false;
-        stdenv = thisStdenv;
-      };
-    in { stdenv = thisStdenv; pkgs = thisPkgs; };
+    in {
+      inherit system platform crossSystem config;
+      stdenv = thisStdenv;
+    };
 
   stage0 = stageFun 0 null {
     overrides = self: super: with stage0; rec {
@@ -145,19 +141,19 @@ in rec {
     extraBuildInputs = [];
   };
 
-  persistent0 = _: _: {};
+  persistent0 = _: _: _: {};
 
-  stage1 = with stage0; stageFun 1 stage0 {
+  stage1 = prevStage: with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
     extraBuildInputs = [ pkgs.libcxx ];
 
     allowedRequisites =
       [ bootstrapTools ] ++ (with pkgs; [ libcxx libcxxabi ]) ++ [ pkgs.darwin.Libsystem ];
 
-    overrides = persistent0;
+    overrides = persistent0 prevStage;
   };
 
-  persistent1 = self: super: with stage1.pkgs; {
+  persistent1 = prevStage: self: super: with prevStage; {
     inherit
       zlib patchutils m4 scons flex perl bison unifdef unzip openssl icu python
       libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
@@ -170,7 +166,7 @@ in rec {
     };
   };
 
-  stage2 = with stage1; stageFun 2 stage1 {
+  stage2 = prevStage: with prevStage; stageFun 2 prevStage {
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
@@ -182,10 +178,10 @@ in rec {
       (with pkgs; [ xz.bin xz.out libcxx libcxxabi icu.out ]) ++
       (with pkgs.darwin; [ dyld Libsystem CF locale ]);
 
-    overrides = persistent1;
+    overrides = persistent1 prevStage;
   };
 
-  persistent2 = self: super: with stage2.pkgs; {
+  persistent2 = prevStage: self: super: with prevStage; {
     inherit
       patchutils m4 scons flex perl bison unifdef unzip openssl python
       gettext sharutils libarchive pkg-config groff bash subversion
@@ -199,7 +195,7 @@ in rec {
     };
   };
 
-  stage3 = with stage2; stageFun 3 stage2 {
+  stage3 = prevStage: with prevStage; stageFun 3 prevStage {
     shell = "${pkgs.bash}/bin/bash";
 
     # We have a valid shell here (this one has no bootstrap-tools runtime deps) so stageFun
@@ -218,10 +214,10 @@ in rec {
       (with pkgs; [ xz.bin xz.out icu.out bash libcxx libcxxabi ]) ++
       (with pkgs.darwin; [ dyld Libsystem locale ]);
 
-    overrides = persistent2;
+    overrides = persistent2 prevStage;
   };
 
-  persistent3 = self: super: with stage3.pkgs; {
+  persistent3 = prevStage: self: super: with prevStage; {
     inherit
       gnumake gzip gnused bzip2 gawk ed xz patch bash
       libcxxabi libcxx ncurses libffi zlib gmp pcre gnugrep
@@ -238,16 +234,16 @@ in rec {
     };
   };
 
-  stage4 = with stage3; stageFun 4 stage3 {
+  stage4 = prevStage: with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
     extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
-    overrides = persistent3;
+    overrides = persistent3 prevStage;
   };
 
-  persistent4 = self: super: with stage4.pkgs; {
+  persistent4 = prevStage: self: super: with prevStage; {
     inherit
       gnumake gzip gnused bzip2 gawk ed xz patch bash
       libcxxabi libcxx ncurses libffi zlib icu llvm gmp pcre gnugrep
@@ -262,9 +258,9 @@ in rec {
     };
   };
 
-  stage5 = with stage4; import ../generic rec {
+  stdenvDarwin = prevStage: let pkgs = prevStage; in import ../generic rec {
     inherit system config;
-    inherit (stdenv) fetchurlBoot;
+    inherit (pkgs.stdenv) fetchurlBoot;
 
     name = "stdenv-darwin";
 
@@ -279,7 +275,8 @@ in rec {
     shell       = "${pkgs.bash}/bin/bash";
 
     cc = import ../../build-support/cc-wrapper {
-      inherit stdenv shell;
+      inherit (pkgs) stdenv;
+      inherit shell;
       nativeTools = false;
       nativeLibc  = false;
       inherit (pkgs) coreutils binutils gnugrep;
@@ -294,7 +291,6 @@ in rec {
       inherit platform bootstrapTools;
       libc         = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
-      parent       = stage4;
     };
 
     allowedRequisites = (with pkgs; [
@@ -307,11 +303,21 @@ in rec {
       dyld Libsystem CF cctools libiconv locale
     ]);
 
-    overrides = self: super: persistent4 self super // {
+    overrides = self: super: persistent4 prevStage self super // {
       clang = cc;
       inherit cc;
     };
   };
 
-  stdenvDarwin = stage5;
+  stagesDarwin = [
+    ({}: stage0)
+    stage1
+    stage2
+    stage3
+    stage4
+    (prevStage: {
+      inherit system crossSystem platform config;
+      stdenv = stdenvDarwin prevStage;
+    })
+  ];
 }
