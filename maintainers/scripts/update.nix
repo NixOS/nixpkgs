@@ -6,7 +6,7 @@
 
 let
 
-  pkgs = import ./default.nix { };
+  pkgs = import ./../../default.nix { };
 
   packagesWith = cond: return: set:
     pkgs.lib.flatten
@@ -69,12 +69,12 @@ let
   helpText = ''
     Please run:
 
-        % nix-shell update.nix --argstr maintainer garbas
+        % nix-shell maintainers/scripts/update.nix --argstr maintainer garbas
 
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell update.nix --argstr package garbas
+        % nix-shell maintainers/scripts/update.nix --argstr package garbas
 
     to run update script for specific package.
   '';
