@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k75p9h29xx57l1c69ravm4pg9pmriqxmwja12hgrnvi251ayjw7";
   };
 
-  hardeningDisable = [ "format" "pic" ];
+  hardeningDisable = [ "format" "pic" "relro" ];
 
   buildInputs = [ zlib ];
 

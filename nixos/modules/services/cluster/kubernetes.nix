@@ -484,7 +484,7 @@ in {
 
       clusterDns = mkOption {
         description = "Use alternative dns.";
-        default = "10.10.1.1";
+        default = "10.10.0.1";
         type = types.str;
       };
 

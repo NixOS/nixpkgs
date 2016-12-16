@@ -7,11 +7,11 @@ with lib;
     gnu = mkOption {
       type = types.bool;
       default = false;
-      description =
-        '' When enabled, GNU software is chosen by default whenever a there is
-           a choice between GNU and non-GNU software (e.g., GNU lsh
-           vs. OpenSSH).
-        '';
+      description = ''
+        When enabled, GNU software is chosen by default whenever a there is
+        a choice between GNU and non-GNU software (e.g., GNU lsh
+        vs. OpenSSH).
+      '';
     };
   };
 

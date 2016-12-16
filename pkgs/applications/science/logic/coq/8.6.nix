@@ -12,10 +12,9 @@
 }:
 
 let
-  version = "8.6rc${pl}";
-  sha256 = {
-   "1" = "0wral36h39q7g2sa2z8jvjc8ggqmqsjrbs0k299n0nykmmrq1pr8";
-  }."${pl}";
+  # version = "8.6pl${pl}";
+  version = "8.6";
+  sha256 = "1pw1xvy1657l1k69wrb911iqqflzhhp8wwsjvihbgc72r3skqg3f";
   coq-version = "8.6";
   buildIde = lablgtk != null;
   ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";

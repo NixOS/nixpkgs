@@ -7407,10 +7407,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   locallib = buildPerlPackage rec {
-    name = "local-lib-2.000017";
+    name = "local-lib-2.000019";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "05607zxpb0jqvxn0cw064pnwsvbajw7k2pmzlisffadihg11m6ps";
+      sha256 = "008b9kgvcs9vjvj7ifg0f1s7i7446ff2441c575vhrwn15x35b9n";
     };
     meta = {
       description = "Create and use a local lib/ for perl modules with PERL5LIB";
