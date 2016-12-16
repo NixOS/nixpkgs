@@ -2043,6 +2043,7 @@ in
 
   gtest = callPackage ../development/libraries/gtest {};
   gmock = callPackage ../development/libraries/gmock {};
+  gbenchmark = callPackage ../development/libraries/gbenchmark {};
 
   gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
 
