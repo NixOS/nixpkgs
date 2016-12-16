@@ -361,7 +361,7 @@ in
         example = true;
         type = types.bool;
         description = ''
-          Whether to invoke <literal>grub-install</literal> with
+          <para>Whether to invoke <literal>grub-install</literal> with
           <literal>--removable</literal>.</para>
 
           <para>Unless you turn this on, GRUB will install itself somewhere in
@@ -391,6 +391,7 @@ in
             <listitem><para>You simply dislike the idea of depending on NVRAM
             state to make your drive bootable</para></listitem>
           </itemizedlist>
+          </para>
         '';
       };
 
