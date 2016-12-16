@@ -16,7 +16,7 @@ let
             result = builtins.tryEval (
               if pkgs.lib.isDerivation pkg && cond name pkg
                 then [(return name pkg)]
-              else if pkg.recurseForFerivations or false || pkg.recureseForRelease or false
+              else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
                 then packagesWith cond return pkg
               else []
             );
