@@ -37,10 +37,12 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     "shared_lib"
+    "static_lib"
   ];
 
   installFlags = [
     "install-shared"
+    "install-static"
     "INSTALL_PATH=\${out}"
   ];
 
