@@ -35,6 +35,14 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
+  buildPyPIPackage = makeOverridable (callPackage ../development/interpreters/python/buildpypi.nix {
+    buildPythonPackage = buildPythonPackage;
+  });
+
+  buildPyPIApplication = makeOverridable (callPackage ../development/interpreters/python/buildpypi.nix {
+    buildPythonPackage = buildPythonApplication;
+  });
+
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
@@ -25298,14 +25306,8 @@ in {
     };
   };
 
-  toolz = buildPythonPackage rec{
-    name = "toolz-${version}";
-    version = "0.8.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
-    };
+  toolz = buildPyPIPackage rec{
+    name = "toolz";
 
     buildInputs = with self; [ nose ];
 
