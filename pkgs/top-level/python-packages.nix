@@ -10631,11 +10631,12 @@ in {
 
 
   docutils = buildPythonPackage rec {
-    name = "docutils-0.12";
+    name = "docutils-${version}";
+    version = "0.13.1";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "c7db717810ab6965f66c8cf0398a98c9d8df982da39b4cd7f162911eb89596fa";
+      sha256 = "1gkma47i609jfs7dssxn4y9vsz06qi0l5q41nws0zgkpnrghz33i";
     };
 
     # error: invalid command 'test'
@@ -10644,7 +10645,7 @@ in {
     meta = {
       description = "An open-source text processing system for processing plaintext documentation into useful formats, such as HTML or LaTeX";
       homepage = http://docutils.sourceforge.net/;
-      maintainers = with maintainers; [ garbas ];
+      maintainers = with maintainers; [ garbas AndersonTorres ];
     };
   };
 
