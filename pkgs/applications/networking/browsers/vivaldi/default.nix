@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
+    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
       libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
       atk alsaLib dbus_libs cups gtk2 gdk_pixbuf libexif ffmpeg systemd
       freetype fontconfig libXrender libuuid expat glib nss nspr
