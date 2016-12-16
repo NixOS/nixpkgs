@@ -1,6 +1,7 @@
 { stdenv, fetchurl, gfortran, perl, which, config, coreutils
-# Most packages depending on openblas expect integer width to match pointer width,
-# but some expect to use 32-bit integers always (for compatibility with reference BLAS).
+# Most packages depending on openblas expect integer width to match
+# pointer width, but some expect to use 32-bit integers always
+# (for compatibility with reference BLAS).
 , blas64 ? null
 }:
 
@@ -8,21 +9,59 @@ with stdenv.lib;
 
 let blas64_ = blas64; in
 
-let local = config.openblas.preferLocalBuild or false;
-    binary =
-      { i686-linux = "32";
-        x86_64-linux = "64";
-        x86_64-darwin = "64";
-      }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
-    genericFlags =
-      [ "DYNAMIC_ARCH=1"
-        "NUM_THREADS=64"
-      ];
-    localFlags = config.openblas.flags or
-      optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
-    blas64 = if blas64_ != null then blas64_ else hasPrefix "x86_64" stdenv.system;
+let
+  # To add support for a new platform, add an element to this set.
+  configs = {
+    armv7l-linux = {
+      BINARY = "32";
+      TARGET = "ARMV7";
+      DYNAMIC_ARCH = "0";
+      CC = "gcc";
+      USE_OPENMP = "1";
+    };
 
-    version = "0.2.19";
+    i686-linux = {
+      BINARY = "32";
+      TARGET = "P2";
+      DYNAMIC_ARCH = "1";
+      CC = "gcc";
+      USE_OPENMP = "1";
+    };
+
+    x86_64-darwin = {
+      BINARY = "64";
+      TARGET = "ATHLON";
+      DYNAMIC_ARCH = "1";
+      # Note that clang is available through the stdenv on OSX and
+      # thus is not an explicit dependency.
+      CC = "clang";
+      USE_OPENMP = "0";
+      MACOSX_DEPLOYMENT_TARGET = "10.7";
+    };
+
+    x86_64-linux = {
+      BINARY = "64";
+      TARGET = "ATHLON";
+      DYNAMIC_ARCH = "1";
+      CC = "gcc";
+      USE_OPENMP = "1";
+    };
+  };
+in
+
+let
+  config =
+    configs.${stdenv.system}
+    or (throw "unsupported system: ${stdenv.system}");
+in
+
+let
+  blas64 =
+    if blas64_ != null
+      then blas64_
+      else hasPrefix "x86_64" stdenv.system;
+
+  version = "0.2.19";
 in
 stdenv.mkDerivation {
   name = "openblas-${version}";
@@ -45,27 +84,22 @@ stdenv.mkDerivation {
     "stackprotector" "pic"
     # don't alter index arithmetic
     "strictoverflow"
-    # don't interfere with dynamic target detection.
+    # don't interfere with dynamic target detection
     "relro" "bindnow"
   ];
 
-  nativeBuildInputs = optionals stdenv.isDarwin [coreutils] ++ [gfortran perl which];
+  nativeBuildInputs =
+    [gfortran perl which]
+    ++ optionals stdenv.isDarwin [coreutils];
 
   makeFlags =
-    (if local then localFlags else genericFlags)
-    ++
-    optionals stdenv.isDarwin ["MACOSX_DEPLOYMENT_TARGET=10.7"]
-    ++
     [
       "FC=gfortran"
-      # Note that clang is available through the stdenv on OSX and
-      # thus is not an explicit dependency.
-      "CC=${if stdenv.isDarwin then "clang" else "gcc"}"
       ''PREFIX="''$(out)"''
-      "BINARY=${binary}"
-      "USE_OPENMP=${if stdenv.isDarwin then "0" else "1"}"
+      "NUM_THREADS=64"
       "INTERFACE64=${if blas64 then "1" else "0"}"
-    ];
+    ]
+    ++ mapAttrsToList (var: val: var + "=" + val) config;
 
   doCheck = true;
   checkTarget = "tests";

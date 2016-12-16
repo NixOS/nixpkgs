@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
 , jailbreak-cabal, hscolour, cpphs, nodePackages
-}:
+}: let isCross = (ghc.cross or null) != null; in
 
 { pname
 , dontStrip ? (ghc.isGhcjs or false)
@@ -12,13 +12,14 @@
 , buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? []
 , configureFlags ? []
 , description ? ""
-, doCheck ? stdenv.lib.versionOlder "7.4" ghc.version
+, doCheck ? !isCross && (stdenv.lib.versionOlder "7.4" ghc.version)
 , doHoogle ? true
 , editedCabalFile ? null
 , enableLibraryProfiling ? false
 , enableExecutableProfiling ? false
-, enableSharedExecutables ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
-, enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
+# TODO enable shared libs for cross-compiling
+, enableSharedExecutables ? !isCross && (((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version))
+, enableSharedLibraries ? !isCross && (((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version))
 , enableSplitObjs ? !stdenv.isDarwin # http://hackage.haskell.org/trac/ghc/ticket/4013
 , enableStaticLibraries ? true
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
@@ -30,7 +31,8 @@
 , jailbreak ? false
 , license
 , maintainers ? []
-, doHaddock ? !stdenv.isDarwin || stdenv.lib.versionAtLeast ghc.version "7.8"
+# TODO Do we care about haddock when cross-compiling?
+, doHaddock ? !isCross && (!stdenv.isDarwin || stdenv.lib.versionAtLeast ghc.version "7.8")
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
@@ -57,14 +59,12 @@ let
   inherit (stdenv.lib) optional optionals optionalString versionOlder
                        concatStringsSep enableFeature optionalAttrs toUpper;
 
-  isCross = ghc.isCross or false;
   isGhcjs = ghc.isGhcjs or false;
   packageDbFlag = if isGhcjs || versionOlder "7.6" ghc.version
                   then "package-db"
                   else "package-conf";
 
-  nativeGhc = if isCross then ghc.bootPkgs.ghc else ghc;
-  nativeIsCross = nativeGhc.isCross or false;
+  nativeGhc = if isCross || isGhcjs then ghc.bootPkgs.ghc else ghc;
   nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
                         then "package-db"
                         else "package-conf";
@@ -88,6 +88,17 @@ let
   # details are at <https://github.com/peti/ghc-library-id-bug>.
   enableParallelBuilding = versionOlder "7.8" ghc.version && !hasActiveLibrary;
 
+  crossCabalFlags = [
+    "--with-ghc=${ghc.cross.config}-ghc"
+    "--with-ghc-pkg=${ghc.cross.config}-ghc-pkg"
+    "--with-gcc=${ghc.cc}"
+    "--with-ld=${ghc.ld}"
+    "--hsc2hs-options=--cross-compile"
+  ];
+
+  crossCabalFlagsString =
+    stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
+
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
     "--with-gcc=$CC"            # Clang won't work without that extra information.
@@ -106,7 +117,9 @@ let
   ] ++ optionals isGhcjs [
     "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
     "--ghcjs"
-  ];
+  ] ++ optionals isCross ([
+    "--configure-option=--host=${ghc.cross.config}"
+  ] ++ crossCabalFlags);
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
@@ -132,9 +145,9 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupBuilder = if isCross then "${nativeGhc}/bin/ghc" else ghcCommand;
+  setupBuilder = if isCross || isGhcjs then "${nativeGhc}/bin/ghc" else ghcCommand;
   setupCommand = "./Setup";
-  ghcCommand = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand = if isGhcjs then "ghcjs" else if isCross then "${ghc.cross.config}-ghc" else "ghc";
   ghcCommandCaps = toUpper ghcCommand;
 
 in
@@ -194,9 +207,6 @@ stdenv.mkDerivation ({
       fi
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
-        ${ stdenv.lib.optionalString stdenv.isDarwin
-            "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$p/lib"
-        }
       fi
     done
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
@@ -236,7 +246,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${setupCommand} build ${buildTarget}
+    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}
     runHook postBuild
   '';
 
@@ -294,7 +304,7 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"
         ${shellHook}
       '';
     };

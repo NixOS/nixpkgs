@@ -72,9 +72,9 @@ stdenv.mkDerivation {
       (when (fboundp 'get-coq-library-directory)
         (inherit-local-permanent coq-library-directory (get-coq-library-directory))
         (coq-prog-args))
-      ; Pass proof-general's coq flags to flycheck command (pretty ugly, should probably be part of PG)
-      (inherit-local-permanent flycheck-command-wrapper-function (lambda (cmd)
-        (append (funcall (default-value 'flycheck-command-wrapper-function) cmd) (coq-coqtop-prog-args coq-load-path))))
+      (mapc (lambda (arg)
+        (when (file-directory-p (concat arg "/lib/coq/${coq-version}/user-contrib"))
+          (setenv "COQPATH" (concat (getenv "COQPATH") ":" arg "/lib/coq/${coq-version}/user-contrib")))) '(${stdenv.lib.concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
   };
 

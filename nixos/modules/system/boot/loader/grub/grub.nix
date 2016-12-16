@@ -53,7 +53,7 @@ let
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
-        version extraConfig extraPerEntryConfig extraEntries
+        version extraConfig extraPerEntryConfig extraEntries forceInstall 
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
       path = (makeBinPath ([
@@ -400,6 +400,16 @@ in
         description = ''
           Enable support for encrypted partitions. GRUB should automatically
           unlock the correct encrypted partition and look for filesystems.
+        '';
+      };
+
+      forceInstall = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to try and forcibly install GRUB even if problems are
+          detected. It is not recommended to enable this unless you know what
+          you are doing.
         '';
       };
 

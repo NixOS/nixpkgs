@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "libxml++-${maj_ver}.${min_ver}";
   maj_ver = "3.0";
-  min_ver = "0";
+  min_ver = "1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml++/${maj_ver}/${name}.tar.xz";
-    sha256 = "0lkrajbdys5f6w6qwfijih3hnbk4c6809qx2mmxkb7bj2w269wrg";
+    sha256 = "19kik79fmg61nv0by0a5f9wchrcfjwzvih4v2waw01hqflhqvp0r";
   };
 
   nativeBuildInputs = [ pkgconfig perl ];

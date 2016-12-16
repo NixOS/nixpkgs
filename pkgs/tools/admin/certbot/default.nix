@@ -1,6 +1,8 @@
-{ stdenv, pythonPackages, fetchFromGitHub, dialog }:
+{ stdenv, python2Packages, fetchFromGitHub, dialog }:
 
-pythonPackages.buildPythonApplication rec {
+# Latest version of certbot supports python3 and python3 version of pythondialog
+
+python2Packages.buildPythonApplication rec {
   name = "certbot-${version}";
   version = "0.6.0";
 
@@ -11,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1x0prlldkgg0hxmya4m5h3k3c872wr0jylmzpr3m04mk339yiw0c";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     ConfigArgParse
     acme
     configobj
@@ -26,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
     zope_component
     zope_interface
   ];
-  buildInputs = [ dialog ] ++ (with pythonPackages; [ nose mock gnureadline ]);
+  buildInputs = [ dialog ] ++ (with python2Packages; [ nose mock gnureadline ]);
 
   patchPhase = ''
     substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/var/setuid-wrappers/sendmail"

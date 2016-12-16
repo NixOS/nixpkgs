@@ -9,15 +9,16 @@
 
 , bison, flex, git, which, gperf
 , coreutils
-, pkgconfig, python
+, pkgconfig, python2
 
+, stdenv # lib.optional, needsPax
 }:
 
 qtSubmodule {
   name = "qtwebengine";
   qtInputs = [ qtquickcontrols qtlocation qtwebchannel ];
   buildInputs = [ bison flex git which gperf ];
-  nativeBuildInputs = [ pkgconfig python coreutils ];
+  nativeBuildInputs = [ pkgconfig python2 coreutils ];
   doCheck = true;
 
   enableParallelBuilding = true;
@@ -30,7 +31,12 @@ qtSubmodule {
       --replace /bin/echo ${coreutils}/bin/echo
     substituteInPlace ./src/3rdparty/chromium/v8/build/standalone.gypi \
       --replace /bin/echo ${coreutils}/bin/echo
-      
+
+    # hardcode paths for which default path resolution does not work in nix
+    sed -i -e 's,\(static QString potentialResourcesPath =\).*,\1 QLatin1String("'$out'/resources");,' src/core/web_engine_library_info.cpp
+    sed -i -e 's,\(static QString processPath\),\1 = QLatin1String("'$out'/libexec/QtWebEngineProcess"),' src/core/web_engine_library_info.cpp
+    sed -i -e 's,\(static QString potentialLocalesPath =\).*,\1 QLatin1String("'$out'/translations/qtwebengine_locales");,' src/core/web_engine_library_info.cpp
+
     configureFlags+="\
         -plugindir $out/lib/qt5/plugins \
         -importdir $out/lib/qt5/imports \
@@ -55,11 +61,14 @@ qtSubmodule {
   ];
   patches = [
     ./chromium-clang-update-py.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..
     EOF
+
+    paxmark m $out/libexec/QtWebEngineProcess
   '';
 }

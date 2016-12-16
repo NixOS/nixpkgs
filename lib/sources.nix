@@ -12,19 +12,19 @@ rec {
 
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
-  cleanSource =
-    let filter = name: type: let baseName = baseNameOf (toString name); in ! (
-      # Filter out Subversion and CVS directories.
-      (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
-      # Filter out backup files.
-      lib.hasSuffix "~" baseName ||
-      # Filter out generates files.
-      lib.hasSuffix ".o" baseName ||
-      lib.hasSuffix ".so" baseName ||
-      # Filter out nix-build result symlinks
-      (type == "symlink" && lib.hasPrefix "result" baseName)
-    );
-    in src: builtins.filterSource filter src;
+  cleanSourceFilter = name: type: let baseName = baseNameOf (toString name); in ! (
+    # Filter out Subversion and CVS directories.
+    (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
+    # Filter out backup files.
+    lib.hasSuffix "~" baseName ||
+    # Filter out generates files.
+    lib.hasSuffix ".o" baseName ||
+    lib.hasSuffix ".so" baseName ||
+    # Filter out nix-build result symlinks
+    (type == "symlink" && lib.hasPrefix "result" baseName)
+  );
+
+  cleanSource = builtins.filterSource cleanSourceFilter;
 
 
   # Get all files ending with the specified suffices from the given

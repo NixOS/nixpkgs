@@ -1,21 +1,21 @@
-{ stdenv, fetchsvn, boost, ganv, glibmm, gtkmm2, libjack2, lilv-svn
-, lv2, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord-svn, sratom
+{ stdenv, fetchgit, boost, ganv, glibmm, gtk2, gtkmm2, libjack2, lilv
+, lv2Unstable, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord, sratom
 , suil
 }:
 
 stdenv.mkDerivation  rec {
-  name = "ingen-svn-${rev}";
-  rev = "5675";
+  name = "ingen-unstable-${rev}";
+  rev = "2016-10-29";
 
-  src = fetchsvn {
-    url = "http://svn.drobilla.net/lad/trunk/ingen";
-    rev = rev;
-    sha256 = "1dk56rzbc0rwlbzr90rv8bh5163xwld32nmkvcz7ajfchi4fnv86";
+  src = fetchgit {
+    url = "http://git.drobilla.net/cgit.cgi/ingen.git";
+    rev = "fd147d0b888090bfb897505852c1f25dbdf77e18";
+    sha256 = "1qmg79962my82c43vyrv5sxbqci9c7gc2s9bwaaqd0fcf08xcz1z";
   };
 
   buildInputs = [
-    boost ganv glibmm gtkmm2 libjack2 lilv-svn lv2 makeWrapper pkgconfig
-    python raul serd sord-svn sratom suil
+    boost ganv glibmm gtk2 gtkmm2 libjack2 lilv lv2Unstable makeWrapper pkgconfig
+    python raul serd sord sratom suil
   ];
 
   configurePhase = ''

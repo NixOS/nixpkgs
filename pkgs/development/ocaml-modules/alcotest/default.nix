@@ -1,15 +1,21 @@
-{ stdenv, buildOcaml, fetchzip, cmdliner, stringext }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, topkg, opam, cmdliner, astring, fmt, result }:
 
-buildOcaml rec {
-  name = "alcotest";
-  version = "0.4.5";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-alcotest-${version}";
+  version = "0.7.2";
 
   src = fetchzip {
     url = "https://github.com/mirage/alcotest/archive/${version}.tar.gz";
-    sha256 = "1wcn9hkjf4cbnrz99w940qfjpi0lvd8v63yxwpnafkff871dwk6k";
+    sha256 = "1qgsz2zz5ky6s5pf3j3shc4fjc36rqnjflk8x0wl1fcpvvkr52md";
   };
 
-  propagatedBuildInputs = [ cmdliner stringext ];
+  buildInputs = [ ocaml findlib ocamlbuild opam topkg ];
+
+  propagatedBuildInputs = [ cmdliner astring fmt result ];
+
+  inherit (topkg) buildPhase installPhase;
+
+  createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/alcotest;

@@ -1,17 +1,14 @@
-{ stdenv, lib, makeWrapper, kdeEnv }:
+{ stdenv, lib, makeWrapper }:
 
 drv:
 
 { targets, paths ? [] }:
 
-let
-  env = kdeEnv drv paths;
-in
 stdenv.mkDerivation {
-  inherit (drv) name;
+  inherit (drv) name meta;
 
-  drv = lib.getBin drv;
-  inherit env targets;
+  paths = builtins.map lib.getBin ([drv] ++ paths);
+  inherit drv targets;
   passthru = { unwrapped = drv; };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,23 +18,49 @@ stdenv.mkDerivation {
   buildPhase = "true";
 
   installPhase = ''
+    propagated=
+    for p in $drv $paths; do
+        findInputs $p propagated propagated-user-env-packages
+    done
+
+    wrap_PATH="$out/bin"
+    wrap_XDG_DATA_DIRS=
+    wrap_XDG_CONFIG_DIRS=
+    wrap_QML_IMPORT_PATH=
+    wrap_QML2_IMPORT_PATH=
+    wrap_QT_PLUGIN_PATH=
+    for p in $propagated; do
+        addToSearchPath wrap_PATH "$p/bin"
+        addToSearchPath wrap_XDG_DATA_DIRS "$p/share"
+        addToSearchPath wrap_XDG_CONFIG_DIRS "$p/etc/xdg"
+        addToSearchPath wrap_QML_IMPORT_PATH "$p/lib/qt5/imports"
+        addToSearchPath wrap_QML2_IMPORT_PATH "$p/lib/qt5/qml"
+        addToSearchPath wrap_QT_PLUGIN_PATH "$p/lib/qt5/plugins"
+    done
+
     for t in $targets; do
         if [ -a "$drv/$t" ]; then
             makeWrapper "$drv/$t" "$out/$t" \
                 --argv0 '"$0"' \
-                --suffix PATH : "$out/bin:$env/bin" \
-                --prefix XDG_CONFIG_DIRS : "$env/etc/xdg" \
-                --prefix XDG_DATA_DIRS : "$env/share" \
-                --set QML_IMPORT_PATH "$env/lib/qt5/imports" \
-                --set QML2_IMPORT_PATH "$env/lib/qt5/qml" \
-                --set QT_PLUGIN_PATH "$env/lib/qt5/plugins"
+                --suffix PATH : "$wrap_PATH" \
+                --prefix XDG_CONFIG_DIRS : "$wrap_XDG_CONFIG_DIRS" \
+                --prefix XDG_DATA_DIRS : "$wrap_XDG_DATA_DIRS" \
+                --set QML_IMPORT_PATH "$wrap_QML_IMPORT_PATH" \
+                --set QML2_IMPORT_PATH "$wrap_QML2_IMPORT_PATH" \
+                --set QT_PLUGIN_PATH "$wrap_QT_PLUGIN_PATH"
         else
             echo "no such file or directory: $drv/$t"
             exit 1
         fi
     done
 
-    mkdir -p "$out/nix-support"
-    ln -s "$env/nix-support/propagated-user-env-packages" "$out/nix-support/"
+    if [ -a "$drv/share" ]; then
+        ln -s "$drv/share" "$out"
+    fi
+
+    if [ -a "$drv/nix-support/propagated-user-env-packages" ]; then
+        mkdir -p "$out/nix-support"
+        ln -s "$drv/nix-support/propagated-user-env-packages" "$out/nix-support/"
+    fi
   '';
 }

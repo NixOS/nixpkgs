@@ -122,7 +122,7 @@ in
 
       mkdir -p /root/.ssh
       ${concatStrings (map (key: ''
-        echo -n ${escapeShellArg key} >> /root/.ssh/authorized_keys
+        echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
       '') cfg.authorizedKeys)}
 
       dropbear -s -j -k -E -m -p ${toString cfg.port}

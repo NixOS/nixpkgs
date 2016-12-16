@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  modDirVersion = "4.4.13";
-  tag = "1.20160620-1";
+  modDirVersion = "4.4.26";
+  tag = "1.20161020-1";
 in
 stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
   version = "${modDirVersion}-${tag}";
@@ -12,10 +12,13 @@ stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
     owner = "raspberrypi";
     repo = "linux";
     rev = "raspberrypi-kernel_${tag}";
-    sha256 = "0bydlzmd9mar07j6dihhzn1xm6vpn92y33vf1qsdkl3hjil6brfc";
+    sha256 = "0y76xrapq7710zzf6sif94xzly72gg505y65lslfirng500ncnv5";
   };
 
   features.iwlwifi = true;
+  features.needsCifsUtils = true;
+  features.canDisableNetfilterConntrackHelpers = true;
+  features.netfilterRPFilter = true;
 
   extraMeta.hydraPlatforms = [];
 })) (oldAttrs: {

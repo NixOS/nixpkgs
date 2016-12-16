@@ -24,12 +24,11 @@ stdenv.mkDerivation rec {
     install *.el* $out/share/emacs/site-lisp
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Precision colors for machines and people";
     homepage = http://ethanschoonover.com/solarized;
-    maintainers = "Samuel Rivas <samuelrivas@gmail.com>";
-    license = stdenv.lib.licenses.mit;
-
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ maintainers.samuelrivas ];
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }

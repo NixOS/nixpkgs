@@ -11,14 +11,14 @@ let
     owner = "publicsuffix";
   };
 
-  libVersion = "0.14.0";
+  libVersion = "0.15.0";
 
 in stdenv.mkDerivation rec {
   name = "libpsl-${version}";
   version = "${libVersion}-list-${listVersion}";
 
   src = fetchFromGitHub {
-    sha256 = "1nqawm41rxaxddrqnwhxw1cgcpf74q6jw756sh0x8zbsjc73mbfq";
+    sha256 = "1n8vg8pslpgin84ygb0s0nqfljml32l5bv5fyc8ysnpbdsj6gxkb";
     rev = "libpsl-${libVersion}";
     repo = "libpsl";
     owner = "rockdaboot";

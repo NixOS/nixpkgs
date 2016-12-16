@@ -45,6 +45,8 @@ rec {
 
   git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
 
+  git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
+
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
 

@@ -22,3 +22,27 @@ badPath() {
         "${p:0:4}" != "/tmp" -a \
         "${p:0:${#NIX_BUILD_TOP}}" != "$NIX_BUILD_TOP"
 }
+
+expandResponseParams() {
+    local inparams=("$@")
+    local n=0
+    local p
+    params=()
+    while [ $n -lt ${#inparams[*]} ]; do
+        p=${inparams[n]}
+        case $p in
+            @*)
+                if [ -e "${p:1}" ]; then
+                    args=$(<"${p:1}")
+                    eval 'for arg in '${args//$/\\$}'; do params+=("$arg"); done'
+                else
+                    params+=("$p")
+                fi
+                ;;
+            *)
+                params+=("$p")
+                ;;
+        esac
+        n=$((n + 1))
+    done
+}

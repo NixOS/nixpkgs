@@ -1,25 +1,36 @@
 { stdenv, fetchurl, makeDesktopItem
 , libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk2
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
+, gstreamer, gst_plugins_base, gst_plugins_good, gst_ffmpeg, gmp, ffmpeg
+, libpulseaudio
 }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
-  ];
+    gstreamer gst_plugins_base gmp ffmpeg
+    libpulseaudio
+  ] ;
+
+  gstPlugins = [ gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg ];
+
+  gstPluginsPath = stdenv.lib.concatMapStringsSep ":" (x:
+    "${x}/lib/gstreamer-0.10") gstPlugins;
 in
 
 stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "6.0.5";
+  version = "6.0.8";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
     sha256 = if stdenv.is64bit then
-      "fc917bd702b1275cae3f7fa8036c3c44af9b4f003f3d4a8fbb9f6c0974277ad4" else
-      "e0c3ce406b6de082692ce3db52b6e04053e205194b26fbf0eee9014be543d98d";
+      "1s2yv72kj4zxba0850fi1jv41c69vcw3inhj9kqhy1d45ql7iw0w" else
+      "0zvqf444h35ikv1f3nwkh2jx51zj5k9w4zdxx32zcrnxpk5nhn97";
   };
+
+  preferLocalBuild = true;
 
   desktopItem = makeDesktopItem {
     name = "torbrowser";
@@ -66,6 +77,7 @@ stdenv.mkDerivation rec {
     fi
     export FONTCONFIG_PATH=\$HOME/Data/fontconfig
     export LD_LIBRARY_PATH=${libPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
+    export GST_PLUGIN_SYSTEM_PATH=${gstPluginsPath}
     exec $out/share/tor-browser/Browser/firefox --class "Tor Browser" -no-remote -profile ~/Data/Browser/profile.default "\$@"
     EOF
     chmod +x $out/bin/tor-browser

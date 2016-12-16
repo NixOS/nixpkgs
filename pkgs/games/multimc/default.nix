@@ -44,14 +44,14 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH $RESULT --prefix PATH : ${jdk8}/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://multimc.org/;
     description = "A free, open source launcher for Minecraft";
     longDescription = ''
       Allows you to have multiple, separate instances of Minecraft (each with their own mods, texture packs, saves, etc) and helps you manage them and their associated options with a simple interface.
     '';
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.cleverca22 ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.cleverca22 ];
   };
 }

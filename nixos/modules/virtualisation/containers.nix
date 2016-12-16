@@ -129,8 +129,11 @@ let
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv PATH="$PATH" \
-        ${if cfg.additionalCapabilities != null then
+        ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
           ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+        } \
+        ${if cfg.tmpfs != null && cfg.tmpfs != [] then
+          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}'' else ""
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
@@ -367,6 +370,7 @@ let
       hostAddress6 = null;
       localAddress = null;
       localAddress6 = null;
+      tmpfs = null;
     };
 
 in
@@ -472,6 +476,17 @@ in
               '';
             };
 
+            macvlans = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "eth1" "eth2" ];
+              description = ''
+                The list of host interfaces from which macvlans will be
+                created. For each interface specified, a macvlan interface
+                will be created and moved to the container.
+              '';
+            };
+
             extraVeths = mkOption {
               type = with types; attrsOf (submodule { options = networkOptions; });
               default = {};
@@ -507,6 +522,18 @@ in
               example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
+              '';
+            };
+
+            tmpfs = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "/var" ];
+              description = ''
+                Mounts a set of tmpfs file systems into the container.
+                Multiple paths can be specified.
+                Valid items must conform to the --tmpfs argument
+                of systemd-nspawn. See systemd-nspawn(1) for details.
               '';
             };
 
@@ -638,6 +665,7 @@ in
               ''}
             ''}
             INTERFACES="${toString cfg.interfaces}"
+            MACVLANS="${toString cfg.macvlans}"
             ${optionalString cfg.autoStart ''
               AUTO_START=1
             ''}
@@ -648,10 +676,10 @@ in
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
       ''
-        ${cfg.localAddress} ${name}.containers
+        ${head (splitString "/" cfg.localAddress)} ${name}.containers
       '') config.containers);
 
-    networking.dhcpcd.denyInterfaces = [ "ve-*" ];
+    networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];
 
     environment.systemPackages = [ pkgs.nixos-container ];
   });

@@ -7,11 +7,13 @@
 with stdenv.lib;
 
 assert wantPS -> (ps != null);
+assert stdenv ? cc;
+assert stdenv.cc ? libc;
 
 let
   os = stdenv.lib.optionalString;
   majorVersion = "3.6";
-  minorVersion = "0";
+  minorVersion = "2";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -22,13 +24,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "0w3n2i02jpbgai4dxsigm1c1i1qb5v70wyxckzwrxvs0ri0fs1gx";
+    sha256 = "0imkz04ncz6cv5659qfd4scm99k3siq7zrrsa8pvp663d8mf76hq";
   };
 
-  patches =
-    # Don't search in non-Nix locations such as /usr, but do search in
-    # Nixpkgs' Glibc.
-    optional (stdenv ? glibc) ./search-path-3.2.patch
+  # Don't search in non-Nix locations such as /usr, but do search in our libc.
+  patches = [ ./search-path-3.2.patch ]
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
@@ -43,15 +43,15 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = optional wantPS ps;
 
-  preConfigure = with stdenv; optionalString (stdenv ? glibc)
-    ''
+  preConfigure = with stdenv; ''
       fixCmakeFiles .
       substituteInPlace Modules/Platform/UnixPaths.cmake \
-        --subst-var-by glibc_bin ${getBin glibc} \
-        --subst-var-by glibc_dev ${getDev glibc} \
-        --subst-var-by glibc_lib ${getLib glibc}
+        --subst-var-by libc_bin ${getBin cc.libc} \
+        --subst-var-by libc_dev ${getDev cc.libc} \
+        --subst-var-by libc_lib ${getLib cc.libc}
       substituteInPlace Modules/FindCxxTest.cmake \
         --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
+      configureFlags="--parallel=''${NIX_BUILD_CORES:-1} $configureFlags"
     '';
   configureFlags =
     [ "--docdir=share/doc/${name}"

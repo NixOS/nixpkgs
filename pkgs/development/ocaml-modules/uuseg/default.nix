@@ -1,18 +1,16 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, uucp, uutf, cmdliner }:
+{ stdenv, buildOcaml, fetchurl, ocaml, findlib, ocamlbuild, opam, uucp, uutf, cmdliner }:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast;
-
   pname = "uuseg";
-  version = "0.8.0";
   webpage = "http://erratique.ch/software/${pname}";
 in
 
-assert versionAtLeast (getVersion ocaml) "4.01";
+buildOcaml rec {
 
-stdenv.mkDerivation {
+  minimumSupportedOcamlVersion = "4.01";
 
-  name = "ocaml-${pname}-${version}";
+  name = pname;
+  version = "0.9.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
@@ -34,7 +32,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     opam-installer --script --prefix=$out ${pname}.install | sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${getVersion ocaml}/site-lib/${pname}
+    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/${pname}
   '';
 
   meta = with stdenv.lib; {

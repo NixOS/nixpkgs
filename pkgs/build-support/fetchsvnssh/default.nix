@@ -8,8 +8,7 @@ stdenv.mkDerivation {
 
   outputHashAlgo = if sha256 == "" then "md5" else "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then
-    (stdenv.lib.fetchMD5warn "fetchsvnssh" url md5) else sha256;
+  outputHash = if sha256 == "" then md5 else sha256;
   
   sshSubversion = ./sshsubversion.exp;
   

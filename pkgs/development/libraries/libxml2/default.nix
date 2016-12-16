@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, zlib, xz, python2, findXMLCatalogs, libiconv, fetchpatch
-, supportPython ? (! stdenv ? cross) }:
+, pythonSupport ? (! stdenv ? cross) }:
 
 let
   python = python2;
@@ -28,10 +28,10 @@ in stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "doc" ]
-    ++ lib.optional supportPython "py";
-  propagatedBuildOutputs = "out bin" + lib.optionalString supportPython " py";
+    ++ lib.optional pythonSupport "py";
+  propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 
-  buildInputs = lib.optional supportPython python
+  buildInputs = lib.optional pythonSupport python
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ];
 
-  configureFlags = lib.optional supportPython "--with-python=${python}"
+  configureFlags = lib.optional pythonSupport "--with-python=${python}"
     ++ [ "--exec_prefix=$dev" ];
 
   enableParallelBuilding = true;
@@ -55,9 +55,9 @@ in stdenv.mkDerivation rec {
     propagatedBuildInputs =  [ findXMLCatalogs libiconv ];
   };
 
-  preInstall = lib.optionalString supportPython
+  preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
-  installFlags = lib.optionalString supportPython
+  installFlags = lib.optionalString pythonSupport
     ''pythondir="$(py)/lib/${python.libPrefix}/site-packages"'';
 
   postFixup = ''
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
     moveToOutput share/man/man1 "$bin"
   '';
 
-  passthru = { inherit version; pythonSupport = supportPython; };
+  passthru = { inherit version; pythonSupport = pythonSupport; };
 
   meta = {
     homepage = http://xmlsoft.org/;

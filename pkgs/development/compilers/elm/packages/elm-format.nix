@@ -7,11 +7,11 @@
 }:
 mkDerivation {
   pname = "elm-format";
-  version = "0.4.0";
+  version = "0.5.2";
   src = fetchgit {
     url = "http://github.com/avh4/elm-format";
-    sha256 = "199xh2w5cwcf79a8fv6j8dpk9h8a4cygrf8cfr9p7bvp2wvczibm";
-    rev = "d9cbe65c5f01d21b5a02c2f963aa4c9d3f0539d0";
+    sha256 = "0lman7h6wr75y90javcc4y1scvwgv125gqqaqvfrd5xrfmm43gg8";
+    rev = "e452ed9342620e7bb0bc822983b96411d57143ef";
   };
   isLibrary = false;
   isExecutable = true;
@@ -32,14 +32,4 @@ mkDerivation {
   homepage = "http://elm-lang.org";
   description = "A source code formatter for Elm";
   license = stdenv.lib.licenses.bsd3;
-
-  # XXX: I've manually disabled tests, only the following test is failing
-  # ...
-  # ElmFormat.Cli
-  #   format a single file in place:                    OK
-  #   usage instructions:                               FAIL
-  # ...
-  # 1 out of 266 tests failed (0.50s)
-  # Test suite elm-format-tests: FAIL
-  doCheck = false;
 }

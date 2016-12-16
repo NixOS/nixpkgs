@@ -38,7 +38,7 @@ in pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     requests2
-    cgroup-utils docker_1_7_2 docutils lti mock pygments
+    cgroup-utils docker_1_7_2 docutils PyLTI mock pygments
     pymongo pyyaml rpyc sh simpleldap sphinx_rtd_theme tidylib
     websocket_client watchdog webpy-custom flup
   ];

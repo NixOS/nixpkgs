@@ -12,7 +12,7 @@ let
     ''
       xauth_path ${dmcfg.xauthBin}
       default_xserver ${dmcfg.xserverBin}
-      xserver_arguments ${dmcfg.xserverArgs}
+      xserver_arguments ${toString dmcfg.xserverArgs}
       sessiondir ${dmcfg.session.desktops}
       login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now

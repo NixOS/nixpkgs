@@ -23,15 +23,20 @@ let
       sha256 = "0sp5445rbvms6qvzhld0kwwvydw51vq5iaf4kdqsf2d9jvaz3yx5";
     };
     armv6l-linux = armv7l-linux;
-    x86_64-solaris = x86_64-linux;
     x86_64-freebsd = rec {
       version = "1.2.7";
       system = "x86-64-freebsd";
       sha256 = "14k42xiqd2rrim4pd5k5pjcrpkac09qnpynha8j1v4jngrvmw7y6";
     };
+    x86_64-solaris = rec {
+      version = "1.2.7";
+      system = "x86-64-solaris";
+      sha256 = "05c12fmac4ha72k1ckl6i780rckd7jh4g5s5hiic7fjxnf1kx8d0";
+    };
   };
   cfg = options.${stdenv.system};
 in
+assert builtins.hasAttr stdenv.system options;
 stdenv.mkDerivation rec {
   name    = "sbcl-bootstrap-${version}";
   version = cfg.version;

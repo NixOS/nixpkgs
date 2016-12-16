@@ -86,6 +86,12 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = cfg.users != [];
+        message = "services.psd.users must contain at least one user";
+      }
+    ];
+
     systemd = {
       services = {
         psd = {

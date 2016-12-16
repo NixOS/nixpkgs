@@ -35,10 +35,14 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  # Fix a segfault in llc
+  # See http://lists.llvm.org/pipermail/llvm-dev/2016-October/106500.html
+  patches = [ ./D17533-1.patch ];
+
   # hacky fix: New LLVM releases require a newer OS X SDK than
   # 10.9. This is a temporary measure until nixpkgs darwin support is
   # updated.
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
         sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
   '';
 

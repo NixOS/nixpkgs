@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "0ad-data-${version}";
-  version = "0.0.20";
+  version = "0.0.21";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-data.tar.xz";
-    sha256 = "1lzl8chfqbgs1n9vpn0xaqd70kpwiibfk196iblyq6qkms3v6pnv";
+    sha256 = "15xadyrpvq27lm9p1ny7bcmmv56m16h3xadbkdx69gfkzxc3razk";
   };
 
   installPhase = ''

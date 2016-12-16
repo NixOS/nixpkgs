@@ -70,11 +70,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "11.2.202.643";
+  version = "11.2.202.644";
 
   src = fetchurl {
     url = "https://fpdownload.macromedia.com/pub/flashplayer/installers/archive/fp_${version}_archive.zip";
-    sha256 = "02imhdzhali42m8d1rw3bqscvi70707mssss7c43dm2kf67z6y8s";
+    sha256 = "0hf0hwg4kvz99g9d2arg5dwm3nx0hjnpngz9ay1mihhgjksy585b";
   };
 
   nativeBuildInputs = [ unzip ];

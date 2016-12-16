@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, xlibsWrapper, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig }:
+{ stdenv, fetchurl, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig
+, freetype
+, x11Support ? true, xlibsWrapper ? null }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "imlib2-1.4.9";
@@ -8,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "08809xxk2555yj6glixzw9a0x3x8cx55imd89kj3r0h152bn8a3x";
   };
 
-  buildInputs = [ xlibsWrapper libjpeg libtiff giflib libpng bzip2 ];
+  buildInputs = [ libjpeg libtiff giflib libpng bzip2 freetype ]
+    ++ optional x11Support xlibsWrapper;
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -21,7 +26,14 @@ stdenv.mkDerivation rec {
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
-  configureFlags = if stdenv.isDarwin then [ "--enable-amd64=no" ] else null;
+  configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
+    ++ optional (!x11Support) "--without-x";
+
+  outputs = [ "out" "bin" "dev" ];
+
+  postInstall = ''
+    moveToOutput bin/imlib2-config "$dev"
+  '';
 
   meta = {
     description = "Image manipulation library";
@@ -34,8 +46,8 @@ stdenv.mkDerivation rec {
       easily, without sacrificing speed.
     '';
 
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ spwhitt ];
+    license = licenses.free;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ spwhitt ];
   };
 }

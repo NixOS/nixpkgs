@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ]
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ python.tkinter tcl tk tkinter libX11 ];
+    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ];
 
   patches =
     [ ./basedirlist.patch ] ++

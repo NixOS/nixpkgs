@@ -74,16 +74,17 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   name = "beets-${version}";
-  version = "1.3.19";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
-    owner = "sampsyo";
+    owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "0f2v1924ryx5xijpv1jycanl4471vcd7c5lld58lm0viyvh5k28x";
+    sha256 = "1yj2m7l157lldhxanwifp3yv1c6k649iwhn061mcf26q4n8qmspk";
   };
 
   propagatedBuildInputs = [
+    pythonPackages.six
     pythonPackages.enum34
     pythonPackages.jellyfish
     pythonPackages.munkres

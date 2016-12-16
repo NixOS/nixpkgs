@@ -2,19 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "dpkg-${version}";
-  version = "1.18.10";
+  version = "1.18.15";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1ibdidmc8nfiigadfpl3xrccrxw6hvmqiqqizy1v265s87d28m82";
+    sha256 = "0wd3rl1wi2d22jyavxg1ljzkymilg7p338y0c0ql0fcw7djkdsdf";
   };
-
-  postPatch = ''
-    # dpkg tries to force some dependents like debian-devscripts to use
-    # -fstack-protector-strong - not (yet?) a good idea. Disable for now:
-    substituteInPlace scripts/Dpkg/Vendor/Debian.pm \
-      --replace "stackprotectorstrong => 1" "stackprotectorstrong => 0"
-  '';
 
   configureFlags = [
     "--disable-dselect"

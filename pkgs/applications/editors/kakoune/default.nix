@@ -4,12 +4,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kakoune-nightly-${version}";
-  version = "2016-07-26";
+  version = "2016-12-10";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "0d2c5072b083a893843e4fa87f9f702979069e14";
-    sha256 = "01qqs5yr9xvvklg3gg45lgnyh6gji28m854mi1snzvjd7fksf50n";
+    rev = "e44129577a010ebb4dc609b806104d3175659074";
+    sha256 = "1jkpbk6wa9x5nlv002y1whv6ddhqawxzbp3jcbzcb51cg8bz0b1l";
   };
   buildInputs = [ ncurses boost asciidoc docbook_xsl libxslt ];
 

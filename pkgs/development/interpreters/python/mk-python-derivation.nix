@@ -57,6 +57,10 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
 
   inherit pythonPath;
 
+  # patch python interpreter to write null timestamps when compiling python files
+  # this way python doesn't try to update them when we freeze timestamps in nix store
+  DETERMINISTIC_BUILD=1;
+
   buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)

@@ -173,9 +173,7 @@ rec {
     bootstrapTools = "${build}/on-server/bootstrap-tools.tar.xz";
   };
 
-  bootstrapTools = (import ./default.nix {
-    inherit system bootstrapFiles;
-  }).bootstrapTools;
+  bootstrapTools = import ./bootstrap-tools { inherit system bootstrapFiles; };
 
   test = derivation {
     name = "test-bootstrap-tools";

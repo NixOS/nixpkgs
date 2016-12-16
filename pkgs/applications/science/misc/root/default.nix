@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
       sha256 = "186i7ni75yvjydy6lpmaplqxfb5z2019bgpbhff1n6zn2qlrff2r";
     })
     ./sw_vers.patch
+
+    # this prevents thisroot.sh from setting $p, which interferes with stdenv setup
+    ./thisroot.patch
   ];
 
   preConfigure = ''

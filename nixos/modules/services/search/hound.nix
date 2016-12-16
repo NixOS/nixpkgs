@@ -50,6 +50,8 @@ in {
 
       package = mkOption {
         default = pkgs.hound;
+        defaultText = "pkgs.hound";
+        type = types.package;
         description = ''
           Package for running hound.
         '';
@@ -116,7 +118,7 @@ in {
                     " -conf ${pkgs.writeText "hound.json" cfg.config}";
 
       };
-      path = [ pkgs.git ];
+      path = [ pkgs.git pkgs.mercurial pkgs.openssh ];
     };
   };
 

@@ -2,13 +2,13 @@
   libsamplerate, libpulseaudio, libXinerama, gettext, pkgconfig, alsaLib }:
 
 stdenv.mkDerivation rec {
-  version = "3.23.07";
+  version = "3.23.15";
   pname = "fldigi";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "0v78sk9bllxw640wxd4q2qy0h8z2j1d077nxhmpkjpf6mn6vwcda";
+    sha256 = "1nxafk99fr6yb09cq3vdpzjcd85mnjwwl8rzccx21kla1ysihl5m";
   };
 
   buildInputs = [ libXinerama gettext hamlib fltk13 libjpeg libpng portaudio

@@ -25,7 +25,7 @@ diff -ru3 cmake-3.4.3/Modules/Platform/UnixPaths.cmake cmake-3.4.3-new/Modules/P
 -  /usr/pkg/include
 -  /opt/csw/include /opt/include
 -  /usr/openwin/include
-+  @glibc_dev@/include
++  @libc_dev@/include
    )
 -
  list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
@@ -39,26 +39,26 @@ diff -ru3 cmake-3.4.3/Modules/Platform/UnixPaths.cmake cmake-3.4.3-new/Modules/P
 -  /usr/pkg/lib
 -  /opt/csw/lib /opt/lib
 -  /usr/openwin/lib
-+  @glibc_lib@/lib
++  @libc_lib@/lib
    )
  
  list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
 -  /usr/pkg/bin
-+  @glibc_bin@/bin
++  @libc_bin@/bin
    )
  
  list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
 -  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
-+  @glibc_lib@/lib
++  @libc_lib@/lib
    )
  
  list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
-+  @glibc_dev@/include
++  @libc_dev@/include
    )
  list(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
-+  @glibc_dev@/include
++  @libc_dev@/include
    )
  
  # Enable use of lib64 search path variants by default.

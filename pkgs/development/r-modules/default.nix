@@ -288,7 +288,7 @@ let
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
     PKI = [ pkgs.openssl ];
-    png = [ pkgs.libpng ];
+    png = [ pkgs.libpng.dev ];
     PopGenome = [ pkgs.zlib ];
     proj4 = [ pkgs.proj ];
     qtbase = [ pkgs.qt4 ];
@@ -472,7 +472,6 @@ let
     "DeducerSurvival"
     "DeducerText"
     "Demerelate"
-    "DescTools"
     "detrendeR"
     "dgmb"
     "DivMelt"

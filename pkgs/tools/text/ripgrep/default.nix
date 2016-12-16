@@ -16,7 +16,7 @@ buildRustPackage rec {
   depsSha256 = "10f7pkgaxwizl7kzhkry7wx1rgm9wsybwkk92myc29s7sqir2mx4";
 
   meta = with stdenv.lib; {
-    description = "An untility that combines the usability of The Silver Searcher with the raw speed of grep";
+    description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = https://github.com/BurntSushi/ripgrep;
     license = with licenses; [ unlicense ];
     maintainers = [ maintainers.tailhook ];

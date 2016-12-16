@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libconfig ];
   buildInputs = [
-    libtoxcore-dev libsodium ncurses libqrencode curl
+    libtoxcore-dev libsodium ncurses curl
   ] ++ stdenv.lib.optionals (!stdenv.isArm) [
-    openal libvpx freealut
+    openal libvpx freealut libqrencode
   ];
 
   meta = with stdenv.lib; {
