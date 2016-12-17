@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = http://p7zip.sourceforge.net/;
     description = "A port of the 7-zip archiver";
