@@ -1,7 +1,7 @@
 { kdeFramework, lib, fetchurl, ecm, kactivities, karchive
 , kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdoctools, kglobalaccel, kguiaddons, ki18n, kiconthemes, kio
-, knotifications, kpackage, kservice, kwindowsystem, kxmlgui
+, knotifications, kpackage, kservice, kwayland, kwindowsystem, kxmlgui
 , qtscript, qtx11extras
 }:
 
@@ -12,6 +12,6 @@ kdeFramework {
   propagatedBuildInputs = [
     kactivities karchive kconfig kconfigwidgets kcoreaddons kdbusaddons
     kdeclarative kglobalaccel kguiaddons ki18n kiconthemes kio knotifications
-    kpackage kservice kwindowsystem kxmlgui qtscript qtx11extras
+    kpackage kservice kwayland kwindowsystem kxmlgui qtscript qtx11extras
   ];
 }

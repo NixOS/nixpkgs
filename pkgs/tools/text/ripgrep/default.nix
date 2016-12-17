@@ -4,19 +4,19 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "ripgrep-${version}";
-  version = "0.2.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = "${version}";
-    sha256 = "0whw6hqjkf6sysrfv931jaia2hqhy8m9aa5rxax1kygm4snz4j85";
+    sha256 = "15j68bkkxpbh9c05f8l7j0y33da01y28kpg781lc0234h45535f3";
   };
 
-  depsSha256 = "10f7pkgaxwizl7kzhkry7wx1rgm9wsybwkk92myc29s7sqir2mx4";
+  depsSha256 = "142h6pcf2mr4i7dg7di4299c18aqn0yvk9nr1mxnkb7wjcmrvcfg";
 
   meta = with stdenv.lib; {
-    description = "An untility that combines the usability of The Silver Searcher with the raw speed of grep";
+    description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = https://github.com/BurntSushi/ripgrep;
     license = with licenses; [ unlicense ];
     maintainers = [ maintainers.tailhook ];

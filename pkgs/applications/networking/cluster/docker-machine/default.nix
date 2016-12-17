@@ -14,6 +14,11 @@ buildGoPackage rec {
     sha256 = "0l4a5bqfw8i8wrl5yzkqy848r7vdx6hw8p5m3z3vzabvsmsjjwy7";
   };
 
+  postInstall = ''
+    mkdir -p $bin/share/bash-completion/completions/
+    cp go/src/github.com/docker/machine/contrib/completion/bash/* $bin/share/bash-completion/completions/
+  '';
+
   postFixup =  ''
     mv $bin/bin/cmd $bin/bin/docker-machine
   '';

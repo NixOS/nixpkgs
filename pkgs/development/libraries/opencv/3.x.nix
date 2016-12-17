@@ -42,16 +42,17 @@ stdenv.mkDerivation rec {
     sha256 = "1l0w12czavgs0wzw1c594g358ilvfg2fn32cn8z7pv84zxj4g429";
   };
 
-  patches = [
-    (fetchpatch { # Patch for CUDA 8 compatibility
-      url = "https://github.com/opencv/opencv/commit/10896129b39655e19e4e7c529153cb5c2191a1db.patch";
-      sha256 = "0jka3kxxywgs3prqqgym5kav6p73rrblwj50k1nf3fvfpk194ah1";
-    })
-    (fetchpatch { # Patch to add CUDA Compute Capability compilation targets up to 6.0
-      url = "https://github.com/opencv/opencv/commit/d76f258aebdf63f979a205cabe6d3e81700a7cd8.patch";
-      sha256 = "00b3msfgrcw7laij6qafn4b18c1dl96xxpzwx05wxzrjldqb6kqg";
-    })
-  ];
+  patches =
+    lib.optionals enableCuda [
+      (fetchpatch { # Patch for CUDA 8 compatibility
+        url = "https://github.com/opencv/opencv/commit/10896129b39655e19e4e7c529153cb5c2191a1db.patch";
+        sha256 = "0jka3kxxywgs3prqqgym5kav6p73rrblwj50k1nf3fvfpk194ah1";
+      })
+      (fetchpatch { # Patch to add CUDA Compute Capability compilation targets up to 6.0
+        url = "https://github.com/opencv/opencv/commit/d76f258aebdf63f979a205cabe6d3e81700a7cd8.patch";
+        sha256 = "00b3msfgrcw7laij6qafn4b18c1dl96xxpzwx05wxzrjldqb6kqg";
+      })
+    ];
 
   preConfigure =
     let ippicvVersion = "20151201";

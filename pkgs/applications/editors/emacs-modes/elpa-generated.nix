@@ -619,10 +619,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.1.2";
+        version = "1.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.1.2.tar";
-          sha256 = "1cav55nx1045c3xasi5d76yyqi68ygp9dpqv9bazrqgcpsmw6y8b";
+          url = "https://elpa.gnu.org/packages/el-search-1.2.tar";
+          sha256 = "0sz78kn9nx390aq5wqz174p8ppw987rzsh892ly166qz4ikwys5a";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -964,6 +964,19 @@
         packageRequires = [ cl-lib emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/js2-mode.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    json-mode = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "json-mode";
+        version = "0.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/json-mode-0.1.el";
+          sha256 = "025bwpx7nc1qhdyf2yaqjdr6x1qr6q45776yvy427xdh4nbk054l";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/json-mode.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -1351,10 +1364,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20161118";
+        version = "20161214";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20161118.tar";
-          sha256 = "1w9g8r08kaiw9f4fjsj0hbffzq85rj734j5lxvbaafbnz7dbklk1";
+          url = "https://elpa.gnu.org/packages/org-20161214.tar";
+          sha256 = "0pa9d0l6axif5wlzi7lvxl0fpjwwvc79cy9d37z7md4hxyjdvwzm";
         };
         packageRequires = [];
         meta = {

@@ -19,10 +19,10 @@ let
   # is removed because NixPkgs only supports darwin-x86_64.
   Architectures = [
     {
-		  Identifier = "Standard";
-	    Type = "Architecture";
-		  Name = "Standard Architectures (64-bit Intel)";
-		  RealArchitectures = [ "x86_64" ];
+      Identifier = "Standard";
+      Type = "Architecture";
+      Name = "Standard Architectures (64-bit Intel)";
+      RealArchitectures = [ "x86_64" ];
       ArchitectureSetting = "ARCHS_STANDARD";
     }
     {

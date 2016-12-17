@@ -476,6 +476,17 @@ in
               '';
             };
 
+            macvlans = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "eth1" "eth2" ];
+              description = ''
+                The list of host interfaces from which macvlans will be
+                created. For each interface specified, a macvlan interface
+                will be created and moved to the container.
+              '';
+            };
+
             extraVeths = mkOption {
               type = with types; attrsOf (submodule { options = networkOptions; });
               default = {};
@@ -654,6 +665,7 @@ in
               ''}
             ''}
             INTERFACES="${toString cfg.interfaces}"
+            MACVLANS="${toString cfg.macvlans}"
             ${optionalString cfg.autoStart ''
               AUTO_START=1
             ''}
@@ -664,7 +676,7 @@ in
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
       ''
-        ${cfg.localAddress} ${name}.containers
+        ${head (splitString "/" cfg.localAddress)} ${name}.containers
       '') config.containers);
 
     networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];

@@ -9,17 +9,17 @@ let
 
   bootstrapHash =
     if stdenv.system == "x86_64-linux"
-    then "1hsvf1vj18fqxkqw8jhnwahhk2q5xcl5396czr034fphmp5n4haw"
+    then "1afsqaavhwiaxm38zr08cbq0985c7lrb1jzdcmq0jh6y8rb8ikff"
     else throw "missing boostrap hash for platform ${stdenv.system}";
 
   needsPatchelf = stdenv.isLinux;
 
   src = fetchurl {
-     url = "https://static.rust-lang.org/dist/${version}/rustc-nightly-${platform}.tar.gz";
+     url = "https://static.rust-lang.org/dist/${version}/rust-nightly-${platform}.tar.gz";
      sha256 = bootstrapHash;
   };
 
-  version = "2016-11-26";
+  version = "2016-12-05";
 in
 
 rec {
@@ -41,7 +41,7 @@ rec {
 
     installPhase = ''
       ./install.sh --prefix=$out \
-        --components=rustc
+        --components=rustc,rust-std-x86_64-unknown-linux-gnu
 
       ${optionalString needsPatchelf ''
         patchelf \

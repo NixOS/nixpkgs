@@ -68,7 +68,7 @@ desired operation.  It must be one of the following:
     <listitem>
       <para>Build and activate the new configuration, and make it the
       boot default.  That is, the configuration is added to the GRUB
-      boot menu as the default meny entry, so that subsequent reboots
+      boot menu as the default menu entry, so that subsequent reboots
       will boot the system into the new configuration.  Previous
       configurations activated with <command>nixos-rebuild
       switch</command> or <command>nixos-rebuild boot</command> remain

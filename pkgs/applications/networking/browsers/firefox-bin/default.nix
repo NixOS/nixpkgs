@@ -223,7 +223,7 @@ stdenv.mkDerivation {
                        tr " " ":"`; do
             # create an entry for every locale
             cat >> $tmpfile <<EOF
-            { url = "$url$version/$arch/`echo $line | cut -d":" -f3`";"
+            { url = "$url$version/`echo $line | cut -d":" -f3`";
               locale = "`echo $line | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
               arch = "$arch";
               sha512 = "`echo $line | cut -d":" -f1`";
@@ -236,7 +236,7 @@ stdenv.mkDerivation {
         }
         EOF
 
-        cat $tmpfile > ${if isBeta then "beta_" else ""}sources.nix
+        mv $tmpfile ${if isBeta then "beta_" else ""}sources.nix
 
         popd
       '';

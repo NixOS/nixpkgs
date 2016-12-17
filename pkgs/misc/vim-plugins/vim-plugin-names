@@ -79,6 +79,7 @@
 "github:neovimhaskell/haskell-vim"
 "github:osyo-manga/shabadou.vim"
 "github:osyo-manga/vim-watchdogs"
+"github:plasticboy/vim-markdown"
 "github:racer-rust/vim-racer"
 "github:raichoo/purescript-vim"
 "github:rhysd/vim-grammarous"

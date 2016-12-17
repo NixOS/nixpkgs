@@ -211,7 +211,6 @@
       lambdabot = 191;
       asterisk = 192;
       plex = 193;
-      bird = 195;
       grafana = 196;
       skydns = 197;
       ripple-rest = 198;
@@ -281,6 +280,7 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
+      keystone = 265;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -470,7 +470,6 @@
       #asterisk = 192; # unused
       plex = 193;
       sabnzbd = 194;
-      bird = 195;
       #grafana = 196; #unused
       #skydns = 197; #unused
       #ripple-rest = 198; #unused
@@ -532,6 +531,7 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
+      keystone = 265;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
