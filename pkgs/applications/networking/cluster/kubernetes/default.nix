@@ -28,16 +28,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper which go rsync go-bindata ];
 
-  outputs = ["out" "man""pause"];
+  outputs = ["out" "man" "pause"];
 
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
+    substituteInPlace "hack/generate-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
+    substituteInPlace "hack/update-munge-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
+    substituteInPlace "hack/update-munge-docs.sh" --replace "kube::util::git_upstream_remote_name" "echo origin"
+
     patchShebangs ./hack
   '';
 
   WHAT="--use_go_build ${concatStringsSep " " components}";
 
-  postBuild = "(cd build/pause && gcc pause.c -o pause)";
+  postBuild = ''
+    ./hack/generate-docs.sh
+    (cd build/pause && gcc pause.c -o pause)
+  '';
 
   installPhase = ''
     mkdir -p "$out/bin" "$man/share/man" "$pause/bin"
