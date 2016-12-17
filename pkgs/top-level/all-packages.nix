@@ -16894,6 +16894,8 @@ in
 
   fityk = callPackage ../applications/science/misc/fityk { };
 
+  gplates = callPackage ../applications/science/misc/gplates { };
+
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly { };
