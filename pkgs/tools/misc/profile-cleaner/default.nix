@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite }:
 
 stdenv.mkDerivation rec {
-  version = "2.35";
+  version = "2.36";
   name = "profile-cleaner-${version}";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-cleaner";
     rev = "v${version}";
-    sha256 = "0gashrzhpgcy98zsyc6b3awfp15j1x0nq82h60kvfjbs6xxzvszh";
+    sha256 = "0vm4ca99dyr6i0sfjsr0w06i0rbmqf40kp37h04bk4c8yassq1zq";
   };
 
   buildInputs = [ makeWrapper ];
