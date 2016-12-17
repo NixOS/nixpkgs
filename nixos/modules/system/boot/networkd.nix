@@ -165,6 +165,11 @@ let
       '';
     };
 
+    extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      description = "Extra configuration append to unit";
+    };
   };
 
   linkOptions = commonNetworkOptions // {
@@ -515,6 +520,8 @@ let
         ''
           [Link]
           ${attrsToSection def.linkConfig}
+
+          ${def.extraConfig}
         '';
     };
 
@@ -565,6 +572,7 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${def.extraConfig}
         '';
     };
 
@@ -603,6 +611,7 @@ let
             ${attrsToSection x.routeConfig}
 
           '')}
+          ${def.extraConfig}
         '';
     };
 
