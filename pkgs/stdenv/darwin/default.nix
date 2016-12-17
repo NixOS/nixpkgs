@@ -1,5 +1,5 @@
 { lib
-, system, platform, crossSystem, config
+, system, platform, crossSystem, config, overlays
 
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
@@ -98,7 +98,7 @@ in rec {
       };
 
     in {
-      inherit system platform crossSystem config;
+      inherit system platform crossSystem config overlays;
       stdenv = thisStdenv;
     };
 
@@ -316,7 +316,7 @@ in rec {
     stage3
     stage4
     (prevStage: {
-      inherit system crossSystem platform config;
+      inherit system crossSystem platform config overlays;
       stdenv = stdenvDarwin prevStage;
     })
   ];

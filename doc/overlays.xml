@@ -1,0 +1,99 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-overlays">
+
+<title>Overlays</title>
+
+<para>This chapter describes how to extend and change Nixpkgs content using
+overlays.  Overlays are used to add phases in the fix-point used by Nixpkgs
+to bind the dependencies of all packages.</para>
+
+<!--============================================================-->
+
+<section xml:id="sec-overlays-install">
+<title>Installing Overlays</title>
+
+<para>Overlays are looked for in the following order, the first valid one is
+considered, and all the rest are ignored:
+
+<orderedlist>
+
+  <listitem>
+
+    <para>As argument of the imported attribute set. When importing Nixpkgs,
+    the <varname>overlays</varname> attribute argument can be set to a list of
+    functions, which would be describe in <xref linkend="sec-overlays-layout"/>.</para>
+
+  </listitem>
+
+  <listitem>
+
+    <para>As a directory pointed by the environment variable named
+<varname>NIXPKGS_OVERLAYS</varname>. This directory can contain symbolic
+links to Nix expressions.
+
+  </listitem>
+
+  <listitem>
+
+    <para>As the directory located at
+<filename>~/.nixpkgs/overlays/</filename>. This directory can contain
+symbolic links to Nix expressions.
+
+  </listitem>
+
+</orderedlist>
+</para>
+
+<para>For the second and third option, the directory contains either
+directories providing a default.nix expression, or files, or symbolic links
+to the entry Nix expression of the overlay.  These Nix expressions are
+following the syntax described in <xref
+linkend="sec-overlays-layout"/>.</para>
+
+<para>To install an overlay, using the last option.  Clone the repository of
+the overlay, and add a symbolic link to it in the
+<filename>~/.nixpkgs/overlays/</filename> directory.</para>
+
+</section>
+
+<!--============================================================-->
+
+<section xml:id="sec-overlays-layout">
+<title>Overlays Layout</title>
+
+<para>An overlay is a Nix expression, which is a function which accepts 2
+arguments.</para>
+
+<programlisting>
+self: super:
+
+{
+  foo = super.foo.override { ... };
+  bar = import ./pkgs/bar {
+    inherit (self) stdenv fetchurl;
+    inherit (self) ninja crawl dwarf-fortress;
+  };
+}
+</programlisting>
+
+<para>The first argument, usualy named <varname>self</varname>, corresponds
+to the final package set. You should use this set to inherit all the
+dependencies needed by your package expression.</para>
+
+<para>The second argument, usualy named <varname>super</varname>,
+corresponds to the result of the evaluation of the previous stages of
+Nixpkgs, it does not contain any of the packages added by the current
+overlay nor any of the following overlays.  This set is used in to override
+existing packages, either by changing their dependencies or their
+recipes.</para>
+
+<para>The value returned by this function should be a set similar to
+<filename>pkgs/top-level/all-packages.nix</filename>, which contains either
+extra packages defined by the overlay, or which overwrite Nixpkgs packages
+with other custom defaults. This is similar to <xref
+linkend="sec-modify-via-packageOverrides"/>.</para>
+
+</section>
+
+</chapter>

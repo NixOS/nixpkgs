@@ -4,7 +4,7 @@
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
 { lib
-, system, platform, crossSystem, config
+, system, platform, crossSystem, config, overlays
 
 , bootstrapFiles ?
     if system == "i686-linux" then import ./bootstrap-files/i686.nix
@@ -91,7 +91,7 @@ let
       };
 
     in {
-      inherit system platform crossSystem config;
+      inherit system platform crossSystem config overlays;
       stdenv = thisStdenv;
     };
 

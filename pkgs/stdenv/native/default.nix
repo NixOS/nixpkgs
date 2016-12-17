@@ -1,5 +1,5 @@
 { lib
-, system, platform, crossSystem, config
+, system, platform, crossSystem, config, overlays
 }:
 
 assert crossSystem == null;
@@ -134,7 +134,7 @@ in
 
   # First build a stdenv based only on tools outside the store.
   (prevStage: {
-    inherit system crossSystem platform config;
+    inherit system crossSystem platform config overlays;
     stdenv = makeStdenv {
       inherit (prevStage) cc fetchurl;
     } // { inherit (prevStage) fetchurl; };
@@ -143,7 +143,7 @@ in
   # Using that, build a stdenv that adds the ‘xz’ command (which most systems
   # don't have, so we mustn't rely on the native environment providing it).
   (prevStage: {
-    inherit system crossSystem platform config;
+    inherit system crossSystem platform config overlays;
     stdenv = makeStdenv {
       inherit (prevStage.stdenv) cc fetchurl;
       extraPath = [ prevStage.xz ];
