@@ -3,7 +3,7 @@
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
 , guile, perl, postgresql92, aws-sdk-cpp, nukeReferences, git, boehmgc
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
-, rpm, dpkg, cdrkit, fetchpatch }:
+, rpm, dpkg, cdrkit, fetchpatch, pixz }:
 
 with stdenv;
 
@@ -61,15 +61,15 @@ let
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2016-10-09";
+  version = "2016-12-09";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "96dc9ccecb48754ed13624ec930a429f0177e643";
-    sha256 = "0skl26hhbcjm2bv7b2d6xdpaihrsffgwx7h5xzslps3ndan5adis";
+    rev = "de55303197d997c4fc5503b52b1321ae9528583d";
+    sha256 = "0nimqsbpjxfwha6d5gp6a7jh50i83z1llmx30da4bscsic8z1xly";
   };
 
   buildInputs =
@@ -92,7 +92,7 @@ in releaseTools.nixBuild rec {
     ];
 
   hydraPath = lib.makeBinPath (
-    [ libxslt sqlite subversion openssh nixUnstable coreutils findutils
+    [ sqlite subversion openssh nixUnstable coreutils findutils pixz
       gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
@@ -104,7 +104,7 @@ in releaseTools.nixBuild rec {
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
   preHook = ''
-    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$PATH
+    PATH=$(pwd)/src/hydra-evaluator:$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
 
