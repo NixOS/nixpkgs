@@ -4848,6 +4848,9 @@ in {
       sha256 = "1z4yi986f9n0p8qmzmn21m21m8j1x78hk3505f89baqm6pdw7afm";
     };
 
+    # Disabled temporarily because of Hydra issue with namespaces
+    doCheck = false;
+
     preCheck = ''
       # don't test bash builtins
       rm testing/test_argcomplete.py
@@ -4881,9 +4884,6 @@ in {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
       sha256 = "1n6igbc1b138wx1q5gca4pqw1j6nsyicfxds5n0b5989kaxqmh8j";
     };
-
-    # Disabled temporarily because of Hydra issue with namespaces
-    doCheck = false;
   };
 
   pytest_30 = self.pytest_27.override rec {
