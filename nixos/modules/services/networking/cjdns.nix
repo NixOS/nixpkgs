@@ -19,8 +19,27 @@ let
         type = types.str;
         description = "Public key at the opposite end of the tunnel.";
       };
+      hostname = mkOption {
+        default = "";
+        example = "foobar.hype";
+        type = types.str;
+        description = "Optional hostname to add to /etc/hosts; prevents reverse lookup failures.";
+      };
     };
   };
+
+  # Additional /etc/hosts entries for peers with an associated hostname
+  cjdnsExtraHosts = import (pkgs.runCommand "cjdns-hosts" {}
+    # Generate a builder that produces an output usable as a Nix string value
+    ''
+      exec >$out
+      echo \'\'
+      ${concatStringsSep "\n" (mapAttrsToList (k: v:
+          optionalString (v.hostname != "")
+            "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}")
+          (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
+      echo \'\'
+    '');
 
   # check for the required attributes, otherwise
   # permit attributes not undefined here
@@ -28,9 +47,7 @@ let
     x // {
       connectTo = mapAttrs
         (name: value:
-          if !hasAttr "publicKey" value then abort "cjdns peer ${name} missing a publicKey" else
-          if !hasAttr "password"  value then abort "cjdns peer ${name} missing a password"  else
-          value
+          { inherit (value) password publicKey; }
         )
       x.connectTo;
     };
@@ -125,11 +142,11 @@ in
           '';
          };
         connectTo = mkOption {
-          type = types.attrsOf (types.attrsOf types.str);
+          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
           example = {
             "192.168.1.1:27313" = {
-              user      = "foobar";
+              hostname  = "homer.hype";
               password  = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
               publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
             };
@@ -170,11 +187,11 @@ in
         };
 
         connectTo = mkOption {
-          type = types.attrsOf (types.attrsOf types.str);
+          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
           example = {
             "01:02:03:04:05:06" = {
-              user      = "foobar";
+              hostname  = "homer.hype";
               password  = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
               publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
             };
@@ -186,6 +203,13 @@ in
         };
       };
 
+      addExtraHosts = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to add cjdns hostnames to /etc/hosts automatically.
+        '';
+      };
     };
 
   };
@@ -247,6 +271,8 @@ in
         PrivateTmp = true;
       };
     };
+
+    networking.extraHosts = optionalString cfg.addExtraHosts cjdnsExtraHosts;
 
     assertions = [
       { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );
