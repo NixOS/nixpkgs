@@ -13,11 +13,11 @@ with lib;
 
 let
   self = stdenv.mkDerivation rec {
-    name = "coreutils-8.26";
+    name = "coreutils-8.25";
 
     src = fetchurl {
       url = "mirror://gnu/coreutils/${name}.tar.xz";
-      sha256 = "13lspazc7xkviy93qz7ks9jv4sldvgmwpq36ghrbrqpq93br8phm";
+      sha256 = "11yfrnb94xzmvi4lhclkcmkqsbhww64wf234ya1aacjvg82prrii";
     };
 
     # FIXME needs gcc 4.9 in bootstrap tools
