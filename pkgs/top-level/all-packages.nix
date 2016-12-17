@@ -9061,6 +9061,8 @@ in
 
   qwt = callPackage ../development/libraries/qwt {};
 
+  qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix { };
+
   qxt = callPackage ../development/libraries/qxt {};
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
