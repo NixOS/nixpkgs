@@ -8892,6 +8892,8 @@ in
 
   pg_repack = callPackage ../servers/sql/postgresql/pg_repack {};
 
+  pg_similarity = callPackage ../servers/sql/postgresql/pg_similarity {};
+
   phonon = callPackage ../development/libraries/phonon {};
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
