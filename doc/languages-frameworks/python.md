@@ -737,18 +737,18 @@ in (pkgs.python35.override {inherit packageOverrides;}).withPackages (ps: [ps.bl
 ```
 The requested package `blaze` depends on `pandas` which itself depends on `scipy`.
 
-If you want the whole of Nixpkgs to use your modifications, then you can use `pkgs.overridePackages`
+If you want the whole of Nixpkgs to use your modifications, then you can use `overlays`
 as explained in this manual. In the following example we build a `inkscape` using a different version of `numpy`.
 ```
 let
   pkgs = import <nixpkgs> {};
-  newpkgs = pkgs.overridePackages ( pkgsself: pkgssuper: {
+  newpkgs = import pkgs.path { overlays = [ (pkgsself: pkgssuper: {
     python27 = let
       packageOverrides = self: super: {
         numpy = super.numpy_1_10;
       };
     in pkgssuper.python27.override {inherit packageOverrides;};
-  } );
+  } ) ]; };
 in newpkgs.inkscape
 ```
 

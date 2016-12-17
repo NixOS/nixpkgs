@@ -23,6 +23,9 @@
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
 
+, # List of overlays layers used to extend Nixpkgs.
+  overlays ? []
+
 , # A function booting the final package set for a specific standard
   # environment. See below for the arguments given to that function,
   # the type of list it returns.
@@ -80,7 +83,7 @@ in let
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib system platform crossSystem config;
+    inherit lib system platform crossSystem config overlays;
   };
 
   pkgs = boot stages;

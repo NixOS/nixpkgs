@@ -30,6 +30,8 @@
 , # The configuration attribute set
   config
 
+, overlays # List of overlays to use in the fix-point.
+
 , crossSystem
 , platform
 , lib
@@ -79,7 +81,7 @@ let
       ((config.packageOverrides or (super: {})) super);
 
   # The complete chain of package set builders, applied from top to bottom
-  toFix = lib.foldl' (lib.flip lib.extends) (self: {}) [
+  toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
     stdenvBootstappingAndPlatforms
     stdenvAdapters
     trivialBuilders
@@ -87,20 +89,8 @@ let
     aliases
     stdenvOverrides
     configOverrides
-  ];
+  ] ++ overlays);
 
-  # Use `overridePackages` to easily override this package set.
-  # Warning: this function is very expensive and must not be used
-  # from within the nixpkgs repository.
-  #
-  # Example:
-  #  pkgs.overridePackages (self: super: {
-  #    foo = super.foo.override { ... };
-  #  }
-  #
-  # The result is `pkgs' where all the derivations depending on `foo'
-  # will use the new version.
-
-  # Return the complete set of packages. Warning: this function is very
-  # expensive!
-in lib.makeExtensibleWithCustomName "overridePackages" toFix
+in
+  # Return the complete set of packages.
+  lib.fix toFix

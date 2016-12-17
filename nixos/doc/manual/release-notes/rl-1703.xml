@@ -11,7 +11,9 @@ has the following highlights: </para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>Nixpkgs is now extensible through <link
+    xlink:href="https://github.com/NixOS/nixpkgs/pull/21243">overlays</link>.
+    See the Nixpkgs manual for more information.</para>
   </listitem>
 </itemizedlist>
 
@@ -95,6 +97,11 @@ following incompatible changes:</para>
      Upstream time servers for all NTP implementations are now configured using
      <literal>networking.timeServers</literal>.
    </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>pkgs.overridePackages</literal> function no longer exists.     Instead import Nixpkgs a second time using <literal>import pkgs.path {
+    overlays = [ <replaceable>...</replaceable> ]; }</literal>.</para>
   </listitem>
 </itemizedlist>
 
