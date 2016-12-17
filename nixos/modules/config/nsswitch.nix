@@ -10,6 +10,22 @@ let
   inherit (config.services.samba) nsswins;
   ldap = (config.users.ldap.enable && config.users.ldap.nsswitch);
 
+  hostArray = with lib; [
+    "files"
+    "mymachines"
+  ] ++ optionals nssmdns [ "mdns_minimal [!UNAVAIL=return] mdns" ]
+    ++ optionals nsswins [ "wins" ]
+    ++ [ "dns" "myhostname" ];
+
+  passwdArray = with lib; [
+    "files"
+  ] ++ optionals ldap [ "ldap" ]
+    ++ [ "mymachines" ];
+
+  shadowArray = with lib; [
+    "files"
+    ] ++ optionals ldap [ "ldap" ];
+
 in
 
 {
@@ -39,17 +55,19 @@ in
     # Name Service Switch configuration file.  Required by the C
     # library.  !!! Factor out the mdns stuff.  The avahi module
     # should define an option used by this module.
-    environment.etc."nsswitch.conf".text =
-      ''
-        passwd:    files ${optionalString ldap "ldap"}
-        group:     files ${optionalString ldap "ldap"}
-        shadow:    files ${optionalString ldap "ldap"}
-        hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"} myhostname mymachines
-        networks:  files dns
-        ethers:    files
-        services:  files
-        protocols: files
-      '';
+    environment.etc."nsswitch.conf".text = ''
+      passwd:    ${concatStringsSep " " passwdArray}
+      group:     ${concatStringsSep " " passwdArray}
+      shadow:    ${concatStringsSep " " shadowArray}
+
+      hosts:     ${concatStringsSep " " hostArray}
+      networks:  files
+
+      ethers:    files
+      services:  files
+      protocols: files
+      rpc:       files
+    '';
 
     # Systemd provides nss-myhostname to ensure that our hostname
     # always resolves to a valid IP address.  It returns all locally
