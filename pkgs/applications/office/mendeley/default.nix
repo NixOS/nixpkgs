@@ -1,5 +1,5 @@
 { fetchurl, stdenv, dpkg, makeWrapper, which
-,gcc, liborc, xorg, qt4, zlib
+, gcc, orc, xorg, qt4, zlib
 , ...}:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -23,7 +23,7 @@ let
 
   deps = [
     gcc.cc
-    liborc
+    orc
     qt4
     xorg.libX11
     zlib
