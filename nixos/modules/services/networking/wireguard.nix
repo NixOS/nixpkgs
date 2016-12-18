@@ -14,6 +14,13 @@ let
 
     options = {
 
+      package = mkOption {
+        type = types.path;
+        default = pkgs.wireguard;
+        defaultText = "pkgs.wireguard";
+        description = "Used wireguard package";
+      };
+
       ips = mkOption {
         example = [ "192.168.2.1/24" ];
         default = [];
@@ -150,7 +157,7 @@ let
   '';
 
   ipCommand = "${pkgs.iproute}/bin/ip";
-  wgCommand = "${pkgs.wireguard}/bin/wg";
+  wgCommand = "${cfg.package}/bin/wg";
 
   generateUnit = name: values:
     nameValuePair "wireguard-${name}"

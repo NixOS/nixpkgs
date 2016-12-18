@@ -11213,7 +11213,9 @@ in
       virtualbox = pkgs.virtualboxHardened;
     };
 
-    wireguard = callPackage ../os-specific/linux/wireguard { };
+    # kept for backwards compatibility with nixos 16.03
+    wireguard_0_0_20161209 = callPackage ../os-specific/linux/wireguard/0.0.20161209.nix { };
+    wireguard = callPackage ../os-specific/linux/wireguard/latest.nix { };
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
@@ -15261,7 +15263,9 @@ in
 
   wings = callPackage ../applications/graphics/wings { };
 
-  wireguard = callPackage ../os-specific/linux/wireguard { };
+  # kept for backwards compatibility with nixos 16.03
+  wireguard_0_0_20161209 = callPackage ../os-specific/linux/wireguard/0.0.20161209.nix { };
+  wireguard = callPackage ../os-specific/linux/wireguard/latest.nix { };
 
   wmname = callPackage ../applications/misc/wmname { };
 
