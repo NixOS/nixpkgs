@@ -12,6 +12,9 @@
 { # The system (e.g., `i686-linux') for which to build the packages.
   system
 
+, # the package set used at build-time
+  buildPackages
+
 , # The standard environment to use for building packages.
   stdenv
 
@@ -51,9 +54,12 @@ let
 
   stdenvBootstappingAndPlatforms = self: super: {
     stdenv = stdenv // { inherit platform; };
+    buildPackages = buildPackages // { recurseForDerivations = false; };
     inherit
       system platform crossSystem;
   };
+
+  splice = self: super: import ./splice.nix lib self;
 
   allPackages = self: super:
     let res = import ./all-packages.nix
@@ -85,6 +91,7 @@ let
     stdenvBootstappingAndPlatforms
     stdenvAdapters
     trivialBuilders
+    splice
     allPackages
     aliases
     stdenvOverrides

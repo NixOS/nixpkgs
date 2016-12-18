@@ -66,12 +66,10 @@ rec {
 
             # In nixpkgs, sometimes 'null' gets in as a buildInputs element,
             # and we handle that through isAttrs.
-            getNativeDrv = drv: drv.nativeDrv or drv;
-            getCrossDrv = drv: drv.crossDrv or drv;
-            nativeBuildInputsDrvs = map getNativeDrv nativeBuildInputs;
-            buildInputsDrvs = map getCrossDrv buildInputs;
-            propagatedBuildInputsDrvs = map getCrossDrv propagatedBuildInputs;
-            propagatedNativeBuildInputsDrvs = map getNativeDrv propagatedNativeBuildInputs;
+            nativeBuildInputsDrvs = nativeBuildInputs;
+            buildInputsDrvs = buildInputs;
+            propagatedBuildInputsDrvs = propagatedBuildInputs;
+            propagatedNativeBuildInputsDrvs = propagatedNativeBuildInputs;
 
             # The base stdenv already knows that nativeBuildInputs and
             # buildInputs should be built with the usual gcc-wrapper
@@ -88,10 +86,7 @@ rec {
                 (drv: builtins.isAttrs drv && drv ? nativeDrv) buildInputs;
             nativeInputsFromBuildInputs = stdenv.lib.filter hostAsNativeDrv buildInputsNotNull;
 
-            # We should overwrite the input attributes in crossDrv, to overwrite
-            # the defaults for only-native builds in the base stdenv
-            crossDrv = if cross == null then nativeDrv else
-                stdenv.mkDerivation (args // {
+        in      stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
                     nativeBuildInputs = nativeBuildInputsDrvs
                       ++ nativeInputsFromBuildInputs
@@ -112,9 +107,6 @@ rec {
 
                     crossConfig = cross.config;
                 } // args.crossAttrs or {});
-        in nativeDrv // {
-          inherit crossDrv nativeDrv;
-        };
     } // {
       inherit cross gccCross binutilsCross;
       ccCross = gccCross;

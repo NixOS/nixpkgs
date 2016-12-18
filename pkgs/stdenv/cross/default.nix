@@ -12,13 +12,11 @@ let
 
 in bootStages ++ [
 
-  # Build Packages.
-  #
-  # For now, this is just used to build the native stdenv. Eventually, it
-  # should be used to build compilers and other such tools targeting the cross
-  # platform. Then, `forceNativeDrv` can be removed.
+  # Build Packages
   (vanillaPackages: {
     inherit system platform crossSystem config overlays;
+    # Should be false, but we're trying to preserve hashes for now
+    selfBuild = true;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
     stdenv = vanillaPackages.stdenv // {
@@ -28,9 +26,10 @@ in bootStages ++ [
     };
   })
 
-  # Run packages
+  # Run Packages
   (buildPackages: {
     inherit system platform crossSystem config overlays;
+    selfBuild = false;
     stdenv = if crossSystem.useiOSCross or false
       then let
           inherit (buildPackages.darwin.ios-cross {
