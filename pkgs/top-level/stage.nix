@@ -47,12 +47,15 @@ let
       inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.xorg) lndir;
     };
 
-  stdenvDefault = self: super:
-    { stdenv = stdenv // { inherit platform; }; };
+  stdenvBootstappingAndPlatforms = self: super: {
+    stdenv = stdenv // { inherit platform; };
+    inherit
+      system platform crossSystem;
+  };
 
   allPackages = self: super:
     let res = import ./all-packages.nix
-      { inherit system noSysDirs config crossSystem platform lib nixpkgsFun; }
+      { inherit lib nixpkgsFun noSysDirs config; }
       res self;
     in res;
 
@@ -77,7 +80,7 @@ let
 
   # The complete chain of package set builders, applied from top to bottom
   toFix = lib.foldl' (lib.flip lib.extends) (self: {}) [
-    stdenvDefault
+    stdenvBootstappingAndPlatforms
     stdenvAdapters
     trivialBuilders
     allPackages

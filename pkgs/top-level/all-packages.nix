@@ -5,9 +5,7 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ system, noSysDirs, config, crossSystem, platform, lib
-, nixpkgsFun
-}:
+{ lib, nixpkgsFun, noSysDirs, config}:
 self: pkgs:
 
 with pkgs;
@@ -17,9 +15,6 @@ let
 in
 
 {
-
-  # Make some arguments passed to all-packages.nix available
-  inherit system platform;
 
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
