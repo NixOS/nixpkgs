@@ -1,12 +1,15 @@
-/* This file composes a single bootstrapping stage of the Nix Packages
-   collection. That is, it imports the functions that build the various
-   packages, and calls them with appropriate arguments. The result is a set of
-   all the packages in the Nix Packages collection for some particular platform
-   for some particular stage.
+/* This file composes all package indices into a single unified collection.
+   Each index, in turn, imports the functions that build the various packages,
+   and calls them with appropriate arguments. The result is a set of all the
+   packages in the Nix Packages collection given some arguments.
 
-   Default arguments are only provided for bootstrapping
-   arguments. Normal users should not import this directly but instead
-   import `pkgs/default.nix` or `default.nix`. */
+   In practice, the aggregated index is used as a single stage when
+   bootstrapping. To see how the stages themselves are composed, took at
+   `pkgs/top-level` and `pkgs/stdenv`.
+
+   Default arguments are only provided for bootstrapping arguments. Normal users
+   should not import this directly but instead import `pkgs/default.nix` or
+   `default.nix`. */
 
 
 { # The system (e.g., `i686-linux') for which to build the packages.
