@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     # Doom source license, MAME license
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
-    maintainers = with maintainer;s [ lassulus ];
+    maintainers = with maintainers; [ lassulus ];
   };
 }
 
