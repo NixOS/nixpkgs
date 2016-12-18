@@ -387,11 +387,11 @@
     };
   };
   kpackage = {
-    version = "5.29.0";
+    version = "5.29.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.29/kpackage-5.29.0.tar.xz";
-      sha256 = "1hgzwfb0yxd6n8dc8hrkdsrf21s2xzrka69mhzq0giskpbd2m8fs";
-      name = "kpackage-5.29.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.29/kpackage-5.29.1.tar.xz";
+      sha256 = "1vbwq5s1psii3qa6g260lpar37y19k8b2g5hn3pyx4llz5wnrali";
+      name = "kpackage-5.29.1.tar.xz";
     };
   };
   kparts = {
