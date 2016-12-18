@@ -2256,6 +2256,8 @@ in
   ioping = callPackage ../tools/system/ioping { };
 
   iops = callPackage ../tools/system/iops { };
+  
+  ior = callPackage ../tools/system/ior { };
 
   iodine = callPackage ../tools/networking/iodine { };
 
@@ -2607,6 +2609,8 @@ in
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
+  
+  libmesode = callPackage ../development/libraries/libmesode { };
 
   libnabo = callPackage ../development/libraries/libnabo { };
 
@@ -5338,7 +5342,9 @@ in
     lua = lua5_1;
   };
 
-  teyjus = callPackage ../development/compilers/teyjus { };
+  teyjus = callPackage ../development/compilers/teyjus {
+    omake = omake_rc1;
+  };
 
   thrust = callPackage ../development/tools/thrust {
     gconf = pkgs.gnome2.GConf;
@@ -5630,6 +5636,8 @@ in
   ocropus = callPackage ../applications/misc/ocropus { };
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
+
+  pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
   php = php70;
 
@@ -6388,6 +6396,8 @@ in
     inherit (ocamlPackages_4_02) ocaml;
   };
 
+  inherit (ocamlPackages) omake_rc1;
+
   omniorb = callPackage ../development/tools/omniorb { };
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
@@ -7052,10 +7062,6 @@ in
 
   fltk13 = callPackage ../development/libraries/fltk { };
   fltk = self.fltk13;
-
-  fmod = callPackage ../development/libraries/fmod { };
-
-  fmod42416 = callPackage ../development/libraries/fmod/4.24.16.nix { };
 
   fplll = callPackage ../development/libraries/fplll {};
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
@@ -10324,6 +10330,7 @@ in
   };
 
   stanchion = callPackage ../servers/nosql/riak-cs/stanchion.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     erlang = erlang_basho_R16B02;
   };
 
@@ -16220,7 +16227,6 @@ in
   xsokoban = callPackage ../games/xsokoban { };
 
   zandronum = callPackage ../games/zandronum {
-    fmod = fmod42416;
     cmake = cmake_2_8;
   };
 

@@ -4263,12 +4263,21 @@ in {
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.25.1";
+    version = "0.25.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/Cython/${name}.tar.gz";
-      sha256 = "e0941455769335ec5afb17dee36dc3833b7edc2ae20a8ed5806c58215e4b6669";
+      sha256 = "01h3lrf6d98j07iakifi81qjszh6faa37ibx7ylva1vsqbwx2hgi";
     };
+
+    # On i686-linux and Python 2.x this test fails because the result is "3L"
+    # instead of "3", so let's fix it in-place.
+    #
+    # Upstream issue: https://github.com/cython/cython/issues/1548
+    postPatch = optionalString (stdenv.isi686 && !isPy3k) ''
+      sed -i -e 's/\(>>> *\)\(verify_resolution_GH1533()\)/\1int(\2)/' \
+        tests/run/cpdef_enums.pyx
+    '';
 
     buildInputs = with self; [ pkgs.glibcLocales pkgs.pkgconfig pkgs.gdb ];
     # For testing
@@ -4883,6 +4892,9 @@ in {
       sha256 = "1z4yi986f9n0p8qmzmn21m21m8j1x78hk3505f89baqm6pdw7afm";
     };
 
+    # Disabled temporarily because of Hydra issue with namespaces
+    doCheck = false;
+
     preCheck = ''
       # don't test bash builtins
       rm testing/test_argcomplete.py
@@ -5080,6 +5092,13 @@ in {
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ pytestcache pep8 ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # Fails
+    doCheck = false;
 
     meta = {
       license = licenses.mit;
@@ -8378,6 +8397,7 @@ in {
         pytestcov
         pytestflakes
         pytestpep8
+        pytest
         mock
       ]
       # pathlib was made part of standard library in 3.5:
@@ -11083,6 +11103,11 @@ in {
       sed -i "s/'requests >= 2.6.1, < 2.8'/'requests'/" setup.py
     '';
 
+    postInstall = ''
+      mkdir -p $out/share/bash-completion/completions/
+      cp contrib/completion/bash/docker-compose $out/share/bash-completion/completions/docker-compose
+    '';
+
     meta = {
       homepage = "https://docs.docker.com/compose/";
       description = "Multi-container orchestration for Docker";
@@ -11181,50 +11206,23 @@ in {
 
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "2.6.2";
+    version = "3.2.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "0y57hzal0j84dh9i1g1g6dc4aywvrnhy2fjmmbglpv5ajihxh713";
+      sha256 = "c7c460b5aff3a2063c798a77af18ec70af3941d35a22e2e76965e3c0e0b36055";
     };
 
-    buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [ pyflakes pycodestyle mccabe ];
+    buildInputs = with self; [ pytest mock pytestrunner ];
+    propagatedBuildInputs = with self; [ pyflakes pycodestyle mccabe ]
+      ++ optionals (pythonOlder "3.4") [ enum34 ]
+      ++ optionals (pythonOlder "3.2") [ configparser ];
 
     meta = {
       description = "Code checking using pep8 and pyflakes";
       homepage = http://pypi.python.org/pypi/flake8;
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
-    };
-  };
-
-  flake8_3 = buildPythonPackage rec {
-    name = "flake8-${version}";
-    version = "3.0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "03cpdrjxh0fyi2qpdxbbrmxw7whiq3xr3p958gr6yzghk34i1hml";
-    };
-
-    buildInputs = with self; [ nose mock pytestrunner pytest ];
-    propagatedBuildInputs = with self; [ pyflakes mccabe_0_5 enum34 configparser pycodestyle ];
-
-    patches = [
-      ../development/python-modules/flake8/move-pytest-config-to-pytest-ini.patch
-    ];
-
-    # Tests fail due to missing ini file.
-    preCheck = ''
-      touch tox.ini
-    '';
-
-    meta = {
-      description = "Code checking using pep8 and pyflakes";
-      homepage = http://pypi.python.org/pypi/flake8;
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
     };
   };
 
@@ -14047,11 +14045,11 @@ in {
 
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-3.4.4";
+    name = "lxml-3.7.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lxml/${name}.tar.gz";
-      sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
+      sha256 = "9c62eb2a1862e1ae285d7e7e3b7dc8772d387b19258086afcec143c6b7b8a5c9";
     };
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
@@ -14335,21 +14333,12 @@ in {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.4.0";
+    name = "mccabe-0.5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
+      sha256 = "16293af41e7242031afd73896fef6458f4cad38201d21e28f344fff50ae1c25e";
     };
-
-    # See https://github.com/flintwork/mccabe/issues/31
-    postPatch = ''
-      cp "${pkgs.fetchurl {
-        url = "https://raw.githubusercontent.com/flintwork/mccabe/"
-            + "e8aea16d28e92bd3c62601275762fc9c16808f6c/test_mccabe.py";
-        sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
-      }}" test_mccabe.py
-    '';
 
     buildInputs = with self; [ pytestrunner pytest ];
 
@@ -20311,12 +20300,13 @@ in {
   };
 
   pyflakes = buildPythonPackage rec {
-    name = "pyflakes-${version}";
-    version = "1.0.0";
+    pname = "pyflakes";
+    version = "1.3.0";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyflakes/${name}.tar.gz";
-      sha256 = "f39e33a4c03beead8774f005bd3ecf0c3f2f264fa0201de965fce0aff1d34263";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "a4f93317c97a9d9ed71d6ecfe08b68e3de9fea3f4d94dcd1d9d83ccbf929bc31";
     };
 
     buildInputs = with self; [ unittest2 ];
@@ -23976,6 +23966,8 @@ in {
     };
 
     propagatedBuildInputs = with self; [ click configobj contexter jinja2 pytest ];
+
+    meta.broken = true;
   };
 
   pychef = buildPythonPackage rec {
@@ -24363,7 +24355,7 @@ in {
       # but that url does not work. This following web page points to the
       # download link and has some information about the package.
       homepage = http://pypi.python.org/pypi/Skype4Py/1.0.32.0;
-
+      broken = true;
       license = "BSD";
     };
   });
@@ -31322,11 +31314,11 @@ EOF
 
   more-itertools = buildPythonPackage rec {
     name = "more-itertools-${version}";
-    version = "2.2";
+    version = "2.4.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/more-itertools/${name}.tar.gz";
-      sha256 = "1q3wqsg44z01g7i5z6j1wc0nf5c5h8g77xny6fia2gddqw2jxrlk";
+      sha256 = "95a222d01df60c888d56d86f91219bfbd47106a534e89ca7f80fb555cfbe08c1";
     };
 
     buildInputs = with self; [ nose ];

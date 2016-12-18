@@ -280,6 +280,7 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
+      keystone = 265;
 
       phabricator = 999;
 
@@ -532,6 +533,7 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
+      keystone = 265;
 
       phabricator = 999;
 

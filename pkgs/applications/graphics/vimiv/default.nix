@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "vimiv";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "karlch";
     repo = "vimiv";
     rev = "v${version}";
-    sha256 = "1g97ms84xk4ci4crq9wdc3744jnrqkq2qz9sg69lhm9sr5f68bw4";
+    sha256 = "18dn81n8hcrqhrqfida34qz7a0ar9rz2rrmzsvyp54zc6nyvv1cn";
   };
 
   testimages = fetchFromGitHub {
@@ -22,8 +22,6 @@ python3Packages.buildPythonApplication rec {
     rev = "6f4d1372b27f2065c56eafdb521d230d9bb8f4e2";
     sha256 = "0a3aybzpms0381dz9japhm4c7j5klhmw91prcac6zaww6x34nmxb";
   };
-
-  patches = [ ./fixes.patch ];
 
   postPatch = ''
     patchShebangs scripts/install_icons.sh

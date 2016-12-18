@@ -16,13 +16,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "teamviewer-${version}";
-  version = "11.0.57095";
+  version = "12.0.71510";
 
   src = fetchurl {
     # There is a 64-bit package, but it has no differences apart from Debian dependencies.
     # Generic versioned packages (teamviewer_${version}_i386.tar.xz) are not available for some reason.
     url = "http://download.teamviewer.com/download/teamviewer_${version}_i386.deb";
-    sha256 = "0gdqy6b3np8ndlrq5cwgsys6ad529904133za51r20cj528n7rx3";
+    sha256 = "0f2qc2rpxk7zsyfxlsfr5gwbs9vhnzc3z7ib677pnr99bz06hbqp";
   };
 
   unpackPhase = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     ln -s $out/share/teamviewer/tv_bin/script/teamviewer $out/bin
     ln -s $out/share/teamviewer/tv_bin/teamviewerd $out/bin
-    ln -s $out/share/teamviewer/tv_bin/desktop/teamviewer-teamviewer*.desktop $out/share/applications
+    ln -s $out/share/teamviewer/tv_bin/desktop/com.teamviewer.*.desktop $out/share/applications
     ln -s /var/lib/teamviewer $out/share/teamviewer/config
     ln -s /var/log/teamviewer $out/share/teamviewer/logfiles
     ln -s ${xdg_utils}/bin $out/share/teamviewer/tv_bin/xdg-utils
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       sed -i "/TV_LD64_PATH=.*/d" script/tvw_config
     ''}
 
-    sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" desktop/teamviewer-*.desktop
+    sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" desktop/com.teamviewer.*.desktop
 
     for i in teamviewer-config teamviewerd TeamViewer_Desktop TVGuiDelegate TVGuiSlave.32 wine/bin/*; do
       echo "patching $i"

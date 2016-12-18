@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp $src $out/bin/${pname}
     chmod +x $out/bin/${pname}
+
+    mkdir -p $out/share/bash-completion/completions/
+    HOME=$(pwd) $out/bin/minikube completion bash > $out/share/bash-completion/completions/minikube
   '';
 
   meta = with stdenv.lib; {

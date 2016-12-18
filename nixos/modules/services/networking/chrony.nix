@@ -31,7 +31,7 @@ in
       };
 
       servers = mkOption {
-        default = config.services.ntp.servers;
+        default = config.networking.timeServers;
         description = ''
           The set of NTP servers from which to synchronise.
         '';
@@ -102,7 +102,7 @@ in
         home = stateDir;
       };
 
-    systemd.services.ntpd.enable = mkForce false;
+    systemd.services.timesyncd.enable = mkForce false;
 
     systemd.services.chronyd =
       { description = "chrony NTP daemon";

@@ -478,7 +478,7 @@ in
     boot.initrd.luks.devices = mkVMOverride {};
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
-    services.ntp.enable = false;
+    services.timesyncd.enable = false;
 
     system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
       ''

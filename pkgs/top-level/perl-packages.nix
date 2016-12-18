@@ -649,10 +649,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   bignum = buildPerlPackage rec {
-    name = "bignum-0.44";
+    name = "bignum-0.47";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "e32048bfc77788f1407e0b2bf54e0aba44d9e5e2743d2013b3afd6a630bed06f";
+      sha256 = "b084eac6d676d2acc4d60deed58e6e31b2f572b7b0be1aec9b93be92bad8261a";
     };
     buildInputs = [ MathBigInt MathBigRat ];
     meta = {
@@ -7792,15 +7792,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999802";
+    name = "Math-BigInt-1.999806";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "a44ceb255a76b7f455ef41f4f12e8923fe3662255853c4d0f3ad1f77b9eaa491";
+      sha256 = "9b62b2fcfeed5ef42d375778e4ec3b469cab0002b5dc247906dc99f5786fa1fc";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -7817,16 +7816,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigRat = buildPerlPackage rec {
-    name = "Math-BigRat-0.260805";
+    name = "Math-BigRat-0.2611";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "9e41be24272e262fadc1921c7f51ff218384c92e5628cb53bf62b3026710fd41";
+      sha256 = "a8a033d0ccac9ac641c73867d71f2455ecb2339984cd964b1e3cfb2859e9fd81";
     };
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
       description = "Arbitrary big rational numbers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
