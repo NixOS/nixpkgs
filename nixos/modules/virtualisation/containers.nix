@@ -347,7 +347,10 @@ let
       default = [];
       example = [ { protocol = "tcp"; hostPort = 8080; containerPort = 80; } ];
       description = ''
-        List of forwarded ports from host to container. Each forwarded port is specified by protocol, hostPort and containerPort. By default, protocol is tcp and hostPort and containerPort are assumed to be the same if containerPort is not explicitly given. 
+        List of forwarded ports from host to container. Each forwarded port
+        is specified by protocol, hostPort and containerPort. By default,
+        protocol is tcp and hostPort and containerPort are assumed to be
+        the same if containerPort is not explicitly given. 
       '';
     };
 
