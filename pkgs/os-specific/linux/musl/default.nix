@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl, fetchpatch, llvmPackages }:
 
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
