@@ -14,6 +14,7 @@ let
       homepage    = http://keefox.org;
       platforms   = with stdenv.lib.platforms; linux;
       license     = stdenv.lib.licenses.gpl2;
+      maintainers = [ stdenv.lib.maintainers.mjanczyk ];
     };
 
     buildInputs = [ unzip ];
