@@ -36,6 +36,8 @@ python2Packages.buildPythonApplication rec {
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+    # Recording the creation timestamps introduces indeterminism to the build
+    sed -i '/Created: .*/d' gui/qt/icons_rc.py
   '';
 
   doInstallCheck = true;
