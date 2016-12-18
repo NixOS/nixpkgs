@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "liborc-${version}";
-  version = "0.4.16";
+  version = "0.4.26";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/o/orc/orc_${version}.orig.tar.gz";
-    sha256 = "1asq58gm87ig60ib4cs69hyqhnsirqkdlidnchhx83halbdlw3kh";
+    url = "http://http.debian.net/debian/pool/main/o/orc/orc_${version}.orig.tar.xz";
+    sha256 = "0jd69ynvr3k70mlxxgbsk047l1rd63m1wkj3qdcq7644xy0gllkx";
   };
 
   meta = with stdenv.lib; {
