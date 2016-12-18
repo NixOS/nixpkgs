@@ -81,11 +81,11 @@ following incompatible changes:</para>
   <listitem>
     <para>
      <literal>Ntpd</literal> was replaced by
-     <literal>systemd-timesyncd</literal> as default service to synchronize
-     system time with a remote NTP server. The old behavior can be restored
+     <literal>systemd-timesyncd</literal> as the default service to synchronize
+     system time with a remote NTP server. The old behavior can be restored by
      setting <literal>services.ntp.enable</literal> to <literal>true</literal>.
      Upstream time servers for all NTP implementations are now configured using
-     <literal>networking.timeServers</literal>
+     <literal>networking.timeServers</literal>.
    </para>
   </listitem>
 </itemizedlist>
