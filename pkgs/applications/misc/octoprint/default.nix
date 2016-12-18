@@ -69,6 +69,7 @@ in pythonPackages.buildPythonApplication rec {
       -e 's,Flask-Assets>=[^"]*,Flask-Assets,g' \
       -e 's,rsa>=[^"]*,rsa,g' \
       -e 's,PyYAML>=[^"]*,PyYAML,g' \
+      -e 's,flask>=[^"]*,flask,g' \
       setup.py
   '';
 
