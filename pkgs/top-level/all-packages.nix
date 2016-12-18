@@ -10295,6 +10295,7 @@ in
   };
 
   stanchion = callPackage ../servers/nosql/riak-cs/stanchion.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     erlang = erlang_basho_R16B02;
   };
 
