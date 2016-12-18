@@ -1,7 +1,7 @@
 {stdenv, buildOcaml, fetchurl, pcre, ocaml, findlib}:
 
 buildOcaml {
-  name = "ocaml-pcre";
+  name = "pcre";
   version = "7.1.1";
 
   src = fetchurl {
