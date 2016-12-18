@@ -9086,6 +9086,8 @@ in
       withQt5 = true;
     };
 
+    qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
+
     quazip = callPackage ../development/libraries/quazip {
       qt = qtbase;
     };
@@ -13603,6 +13605,8 @@ in
   k9copy = qt5.callPackage ../applications/video/k9copy {};
 
   kdeconnect = qt5.callPackage ../applications/misc/kdeconnect { };
+
+  kdecoration-viewer = kde5.callPackage ../tools/misc/kdecoration-viewer {};
 
   kdevelop-pg-qt = kde5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
 
