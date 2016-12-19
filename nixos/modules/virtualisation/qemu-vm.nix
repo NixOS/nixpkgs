@@ -274,7 +274,7 @@ in
 
     virtualisation.writableStore =
       mkOption {
-        default = false;
+        default = true; # FIXME
         description =
           ''
             If enabled, the Nix store in the VM is made writable by
