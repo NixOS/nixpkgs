@@ -8926,6 +8926,10 @@ in
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
+  poppler_gi = lowPrio (poppler.override {
+    introspectionSupport = true;
+  });
+
   poppler_min = poppler.override { # TODO: maybe reduce even more
     minimal = true;
     suffix = "min";
