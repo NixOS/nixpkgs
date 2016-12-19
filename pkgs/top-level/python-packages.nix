@@ -20422,6 +20422,44 @@ in {
     };
   };
 
+  pyinsane2 = buildPythonPackage rec {
+    name = "pyinsane2-${version}";
+    version = "2.0.9";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyinsane2/${name}.tar.gz";
+      sha256 = "1g4a1zhrrs7smmnsm7x8j5lvsz0r6rr2jgjykc9c1jlscz3yr747";
+    };
+
+    postPatch = ''
+      # pyinsane2 forks itself, so we need to re-inject the PYTHONPATH.
+      sed -i -e '/os.putenv.*PYINSANE_DAEMON/ {
+        a \        os.putenv("PYTHONPATH", ":".join(sys.path))
+      }' src/pyinsane2/sane/abstract_proc.py
+
+      sed -i -e 's,"libsane.so.1","${pkgs.sane-backends}/lib/libsane.so",' \
+        src/pyinsane2/sane/rawapi.py
+    '';
+
+    # Tests require a scanner to be physically connected, so let's just do a
+    # quick check whether initialization works.
+    checkPhase = ''
+      python -c 'import pyinsane2; pyinsane2.init()'
+    '';
+
+    # This is needed by setup.py regardless of whether tests are enabled.
+    buildInputs = [ self.nose ];
+
+    propagatedBuildInputs = [ self.pillow ];
+
+    meta = {
+      homepage = "https://github.com/jflesch/pyinsane";
+      description = "Access and use image scanners";
+      license = licenses.gpl3Plus;
+      platforms = platforms.linux;
+    };
+  };
+
   pyjwt = buildPythonPackage rec {
     version = "1.4.2";
     name = "pyjwt-${version}";
