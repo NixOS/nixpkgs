@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "ipa-client-install is not available on NixOS. Please see services.ipa.client, instead."
+
+exit 1

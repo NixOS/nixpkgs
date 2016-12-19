@@ -1,0 +1,60 @@
+diff -ur libverto-0.2.6-exec-prefix/libverto-glib.pc.in libverto-0.2.6/libverto-glib.pc.in
+--- libverto-0.2.6-exec-prefix/libverto-glib.pc.in	2014-03-12 18:59:51.000000000 +0100
++++ libverto-0.2.6/libverto-glib.pc.in	2016-12-20 14:36:13.437952077 +0100
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=@libdir@
+ includedir=@includedir@
+-exec_prefix=@exec_prefix@
+  
+ Name: libverto-glib
+ Description: Event loop abstraction interface (glib module)
+diff -ur libverto-0.2.6-exec-prefix/libverto-libevent.pc.in libverto-0.2.6/libverto-libevent.pc.in
+--- libverto-0.2.6-exec-prefix/libverto-libevent.pc.in	2014-03-12 18:59:51.000000000 +0100
++++ libverto-0.2.6/libverto-libevent.pc.in	2016-12-20 14:36:03.746964233 +0100
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=@libdir@
+ includedir=@includedir@
+-exec_prefix=@exec_prefix@
+  
+ Name: libverto-libevent
+ Description: Event loop abstraction interface (libevent module)
+diff -ur libverto-0.2.6-exec-prefix/libverto-libev.pc.in libverto-0.2.6/libverto-libev.pc.in
+--- libverto-0.2.6-exec-prefix/libverto-libev.pc.in	2014-03-12 18:59:51.000000000 +0100
++++ libverto-0.2.6/libverto-libev.pc.in	2016-12-20 14:36:08.885957789 +0100
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=@libdir@
+ includedir=@includedir@
+-exec_prefix=@exec_prefix@
+  
+ Name: libverto-libev
+ Description: Event loop abstraction interface (libev module)
+diff -ur libverto-0.2.6-exec-prefix/libverto.pc.in libverto-0.2.6/libverto.pc.in
+--- libverto-0.2.6-exec-prefix/libverto.pc.in	2014-03-12 18:59:51.000000000 +0100
++++ libverto-0.2.6/libverto.pc.in	2016-12-20 14:35:50.180981220 +0100
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=@libdir@
+ includedir=@includedir@
+-exec_prefix=@exec_prefix@
+  
+ Name: libverto
+ Description: Event loop abstraction interface
+diff -ur libverto-0.2.6-exec-prefix/libverto-tevent.pc.in libverto-0.2.6/libverto-tevent.pc.in
+--- libverto-0.2.6-exec-prefix/libverto-tevent.pc.in	2014-03-12 18:59:51.000000000 +0100
++++ libverto-0.2.6/libverto-tevent.pc.in	2016-12-20 14:35:59.042970127 +0100
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=@libdir@
+ includedir=@includedir@
+-exec_prefix=@exec_prefix@
+  
+ Name: libverto-tevent
+ Description: Event loop abstraction interface (tevent module)

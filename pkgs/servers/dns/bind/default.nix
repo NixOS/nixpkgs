@@ -3,12 +3,16 @@
 , libcap, libtool, libxml2, openssl
 , enablePython ? config.bind.enablePython or false, python3 ? null
 , enableSeccomp ? false, libseccomp ? null, buildPackages
+, kerberos ? null
 }:
 
 assert enableSeccomp -> libseccomp != null;
 assert enablePython -> python3 != null;
 
-let version = "9.12.4-P1"; in
+let
+  version = "9.12.4-P1";
+  withGSSAPI = kerberos != null;
+in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
@@ -37,6 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtool libxml2 openssl ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
+    ++ stdenv.lib.optional withGSSAPI kerberos
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
@@ -52,7 +57,6 @@ stdenv.mkDerivation rec {
     "--without-atf"
     "--without-dlopen"
     "--without-docbook-xsl"
-    "--without-gssapi"
     "--without-idn"
     "--without-idnlib"
     "--without-lmdb"
@@ -65,7 +69,10 @@ stdenv.mkDerivation rec {
     "--without-eddsa"
     "--with-aes"
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
-    ++ lib.optional enableSeccomp "--enable-seccomp";
+    ++ lib.optional enableSeccomp "--enable-seccomp"
+    ++ (if withGSSAPI then ["--with-gssapi=${kerberos}"] else ["--without-gssapi"]);
+    "--without-python"
+  ]
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev

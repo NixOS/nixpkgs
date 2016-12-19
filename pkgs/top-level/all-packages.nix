@@ -3916,6 +3916,8 @@ in
 
   lf = callPackage ../tools/misc/lf {};
 
+  lesscpy = pythonPackages.lesscpy;
+
   lhasa = callPackage ../tools/compression/lhasa {};
 
   libcpuid = callPackage ../tools/misc/libcpuid { };
@@ -10164,6 +10166,33 @@ in
 
   freeimage = callPackage ../development/libraries/freeimage { };
 
+  freeipaKerberos = krb5Full.override { inherit libverto; };
+
+  freeipaKerberosLib = freeipaKerberos.override { type = "lib"; };
+
+  freeipaCurl = curl.override {
+    gssSupport = true;
+    gss = krb5Full;
+  };
+
+  freeipaBind = bind.override { kerberos = freeipaKerberosLib; };
+
+  freeipaSamba = samba4.override {
+    enableLDAP = true;
+    kerberos = freeipaKerberosLib;
+  };
+
+  freeipa = callPackage ../os-specific/linux/freeipa {
+    kerberos = freeipaKerberos;
+    sasl = cyrus_sasl;
+    # ipa-join requires curl with krb5 GSSAPI delegation
+    curl = freeipaCurl;
+    pyhbac = sssd;
+    dirsrv = pkgs."389-ds-base";
+    samba = freeipaSamba;
+    bind = freeipaBind;
+  };
+
   freetts = callPackage ../development/libraries/freetts { };
 
   frog = res.languageMachines.frog;
@@ -11834,6 +11863,8 @@ in
   libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
 
   libversion = callPackage ../development/libraries/libversion { };
+
+  libverto = callPackage ../development/libraries/libverto { };
 
   libvirt = callPackage ../development/libraries/libvirt { };
 

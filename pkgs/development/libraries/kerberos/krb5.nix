@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, perl, yacc, bootstrap_cmds
 , openssl, openldap, libedit, keyutils
+, libverto ? null
 
 # Extra Arguments
 , type ? ""
@@ -10,6 +11,7 @@
 
 let
   libOnly = type == "lib";
+  withSystemVerto = libverto != null;
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -28,6 +30,7 @@ stdenv.mkDerivation rec {
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
     ++ optional staticOnly [ "--enable-static" "--disable-shared" ]
+    ++ optional withSystemVerto "--with-system-verto"
     ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
     ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
@@ -42,6 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ]
     ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
+    ++ optional withSystemVerto libverto
     ++ optionals (!libOnly) [ openldap libedit ];
 
   preConfigure = "cd ./src";

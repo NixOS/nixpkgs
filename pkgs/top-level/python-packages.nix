@@ -5521,6 +5521,17 @@ in {
   flickrapi = callPackage ../development/python-modules/flickrapi { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
+
+  nss = callPackage ../development/python-modules/nss {
+    inherit (pkgs) nss nspr;
+  };
+
+  pki-core = callPackage ../development/python-modules/pki-core { };
+
+  lesscpy = callPackage ../development/python-modules/lesscpy { };
+
+  yubico = callPackage ../development/python-modules/yubico { };
+
 });
 
 in fix' (extends overrides packages)
