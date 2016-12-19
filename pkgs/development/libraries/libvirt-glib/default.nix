@@ -1,11 +1,9 @@
 { stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
-, nettle, libgcrypt, pythonPackages, gobjectIntrospection, libcap_ng, numactl
+, nettle, libgcrypt, python, pygobject, gobjectIntrospection, libcap_ng, numactl
 , xen
 }:
 
-let
-  inherit (pythonPackages) python pygobject2;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "libvirt-glib-0.2.3";
 
   src = fetchurl {
