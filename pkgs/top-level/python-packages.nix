@@ -8436,7 +8436,42 @@ in {
       license = licenses.mit;
     };
   };
- 
+
+  paperwork-backend = buildPythonPackage rec {
+    name = "paperwork-backend-${version}";
+    version = "1.0.6";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "jflesch";
+      repo = "paperwork-backend";
+      rev = version;
+      sha256 = "11jbhv9xcpimp9iq2b1hlpljzij73s86rb5lpgzhslqc7zmm5bxn";
+    };
+
+    # Python 2.x is not supported.
+    disabled = !isPy3k && !isPyPy;
+
+    # Make sure that chkdeps exits with status 1 if a dependency is not found.
+    postPatch = ''
+      sed -i -e '/print.*Missing dependencies/,/^ *$/ {
+        /^ *$/ a \    sys.exit(1)
+      }' scripts/paperwork-shell
+    '';
+
+    preCheck = "\"$out/bin/paperwork-shell\" chkdeps paperwork_backend";
+
+    propagatedBuildInputs = with self; [
+      pyenchant simplebayes pillow pycountry whoosh termcolor
+      python-Levenshtein pyinsane2 pygobject3 pyocr pkgs.poppler_gi
+    ];
+
+    meta = {
+      description = "Backend part of Paperwork (Python API, no UI)";
+      homepage = "https://github.com/jflesch/paperwork-backend";
+      license = licenses.gpl3Plus;
+    };
+  };
+
   pathtools = buildPythonPackage rec {
     name = "pathtools-${version}";
     version = "0.1.2";
