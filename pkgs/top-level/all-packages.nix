@@ -3168,6 +3168,8 @@ in
 
   paper-gtk-theme = callPackage ../misc/themes/paper { };
 
+  paperwork = callPackage ../applications/office/paperwork { };
+
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
   parallel = callPackage ../tools/misc/parallel { };
