@@ -20128,6 +20128,7 @@ in {
     buildInputs = with self; [ unittest2 ];
 
     doCheck = !isPyPy;
+    force-rebuild = 1;  # fix transient test suite error at http://hydra.nixos.org/build/45083762
 
     meta = {
       homepage = https://launchpad.net/pyflakes;
