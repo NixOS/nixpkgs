@@ -1,13 +1,12 @@
-{stdenv, fetchurl, kernel}:
+{ stdenv, fetchurl, kernel, writeScript, coreutils, gnugrep, jq, curl
+}:
 
-stdenv.mkDerivation rec {
-  version = "0.42";
-  name = "tp_smapi-${version}-${kernel.version}";
+let
+  data = stdenv.lib.importJSON ./update.json;
+in stdenv.mkDerivation rec {
+  name = "tp_smapi-${data.version}-${kernel.version}";
 
-  src = fetchurl {
-    url = "https://github.com/evgeni/tp_smapi/releases/download/tp-smapi%2F0.42/tp_smapi-${version}.tgz";
-    sha256 = "09rdg7fm423x6sbbw3lvnvmk4nyc33az8ar93xgq0n9qii49z3bv";
-  };
+  src = fetchurl  { inherit (data) url sha256; };
 
   hardeningDisable = [ "pic" ];
 
@@ -24,6 +23,10 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = import ./update.nix {
+    inherit writeScript coreutils gnugrep jq curl;
+  };
 
   meta = {
     description = "IBM ThinkPad hardware functions driver";

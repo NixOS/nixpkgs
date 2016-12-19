@@ -36,6 +36,15 @@ python2Packages.buildPythonApplication rec {
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+    # Recording the creation timestamps introduces indeterminism to the build
+    sed -i '/Created: .*/d' gui/qt/icons_rc.py
+  '';
+
+  postInstall = ''
+    # Despite setting usr_share above, these files are installed under
+    # $out/nix ...
+    mv $out/lib/python2.7/site-packages/nix/store/*/share $out
+    rm -rf $out/lib/python2.7/site-packages/nix
   '';
 
   doInstallCheck = true;

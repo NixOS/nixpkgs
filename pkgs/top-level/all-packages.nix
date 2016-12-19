@@ -8271,8 +8271,6 @@ in
 
   libopus = callPackage ../development/libraries/libopus { };
 
-  liborc = callPackage ../development/libraries/liborc { };
-
   libosinfo = callPackage ../development/libraries/libosinfo {
     inherit (gnome3) libsoup;
   };
@@ -9111,6 +9109,8 @@ in
     qtkeychain = callPackage ../development/libraries/qtkeychain {
       withQt5 = true;
     };
+
+    qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
     quazip = callPackage ../development/libraries/quazip {
       qt = qtbase;
@@ -10326,6 +10326,7 @@ in
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
   riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     erlang = erlang_basho_R16B02;
   };
 
@@ -12294,6 +12295,7 @@ in
   };
 
   audacious = callPackage ../applications/audio/audacious { };
+  audaciousQt5 = qt5.callPackage ../applications/audio/audacious/qt-5.nix { };
 
   audacity = callPackage ../applications/audio/audacity { };
 
@@ -13646,6 +13648,8 @@ in
   k9copy = qt5.callPackage ../applications/video/k9copy {};
 
   kdeconnect = qt5.callPackage ../applications/misc/kdeconnect { };
+
+  kdecoration-viewer = kde5.callPackage ../tools/misc/kdecoration-viewer {};
 
   kdevelop-pg-qt = kde5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
 
