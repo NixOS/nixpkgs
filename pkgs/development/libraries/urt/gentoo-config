@@ -1,0 +1,52 @@
+#define ABEKASA60
+#define ABEKASA62
+#define ALIAS
+##define CGM
+#define CUBICOMP
+##define DVIRLE
+#define GRAYFILES
+#define MACPAINT
+##define PBMPLUS
+##define SUNRASTER
+#define TARGA
+#define VICAR
+#define WASATCH
+#define WAVEFRONT
+
+#define GCC
+
+#define CONST_DECL
+#define NO_MAKE_MAKEFILE
+#define USE_TIME_H
+#define SYS_V_SETPGRP
+#define USE_PROTOTYPES
+#define USE_RANDOM
+#define USE_STDARG
+#define USE_STDLIB_H
+#define USE_UNISTD_H
+#define USE_STRING_H
+#define VOID_STAR
+#define USE_XLIBINT_H
+#define X_SHARED_MEMORY
+
+#defpath DEST bin
+#defpath RI include
+#defpath RL lib
+
+ROFF = nroff
+ROFFOPT = -man
+ROFFPIPE = | lpr
+
+INCTIFF = 
+LIBTIFF = -ltiff
+INCX11 =
+LIBX11 = -lX11
+
+# Most people have migrated X11 to /usr/lib, but just in case ...
+check_x11=$(shell \
+	echo 'int main(){}' > test.c ; \
+	if ! $(CC) test.c -lX11 -o .urt-x11-test 2>/dev/null ; then \
+		echo "-L/usr/X11R6/lib" ; \
+	fi ; \
+	rm -f .urt-x11-test test.c)
+LIBX11 += $(call check_x11)

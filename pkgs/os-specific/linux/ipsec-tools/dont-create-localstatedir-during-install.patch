@@ -1,0 +1,13 @@
+diff -ubr ipsec-tools-0.8.0-orig/src/racoon/Makefile.in ipsec-tools-0.8.0/src/racoon/Makefile.in
+--- ipsec-tools-0.8.0-orig/src/racoon/Makefile.in	2012-10-20 13:01:07.700903316 +0200
++++ ipsec-tools-0.8.0/src/racoon/Makefile.in	2012-10-20 13:01:13.177832616 +0200
+@@ -1085,9 +1085,6 @@
+ 	uninstall-sbinPROGRAMS
+ 
+ 
+-install-exec-local:
+-	${mkinstalldirs} $(DESTDIR)${adminsockdir}
+-
+ # special object rules
+ crypto_openssl_test.o: crypto_openssl.c
+ 	$(COMPILE) -DEAYDEBUG -o crypto_openssl_test.o -c $(srcdir)/crypto_openssl.c

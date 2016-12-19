@@ -1,0 +1,28 @@
+Upstream kexec-tools 2.0.13 does not pack arm phys_to_virt.h and iomem.h,
+include them here for a temporary fix
+
+diff -uprN kexec-tools/kexec/arch/arm/iomem.h kexec-tools.1/kexec/arch/arm/iomem.h
+--- kexec-tools/kexec/arch/arm/iomem.h	1970-01-01 08:00:00.000000000 +0800
++++ kexec-tools.1/kexec/arch/arm/iomem.h	2016-08-09 15:38:26.938594379 +0800
+@@ -0,0 +1,9 @@
++#ifndef IOMEM_H
++#define IOMEM_H
++
++#define SYSTEM_RAM		"System RAM\n"
++#define SYSTEM_RAM_BOOT		"System RAM (boot alias)\n"
++#define CRASH_KERNEL		"Crash kernel\n"
++#define CRASH_KERNEL_BOOT	"Crash kernel (boot alias)\n"
++
++#endif
+diff -uprN kexec-tools/kexec/arch/arm/phys_to_virt.h kexec-tools.1/kexec/arch/arm/phys_to_virt.h
+--- kexec-tools/kexec/arch/arm/phys_to_virt.h	1970-01-01 08:00:00.000000000 +0800
++++ kexec-tools.1/kexec/arch/arm/phys_to_virt.h	2016-08-09 14:50:30.104143361 +0800
+@@ -0,0 +1,8 @@
++#ifndef PHYS_TO_VIRT_H
++#define PHYS_TO_VIRT_H
++
++#include <stdint.h>
++
++extern uint64_t phys_offset;
++
++#endif

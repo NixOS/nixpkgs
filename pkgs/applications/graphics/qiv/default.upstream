@@ -1,0 +1,3 @@
+url http://spiegl.de/qiv/download/
+version_link '[.]tgz$'
+do_overwrite() { do_overwrite_just_version; }

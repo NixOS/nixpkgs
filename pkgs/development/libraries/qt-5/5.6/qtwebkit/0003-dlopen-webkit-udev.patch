@@ -1,0 +1,31 @@
+From 864020dd47c3b6d532d9f26b82185904cf9324f2 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sun, 23 Aug 2015 09:19:29 -0500
+Subject: [PATCH 3/3] dlopen webkit udev
+
+---
+ Source/WebCore/platform/qt/GamepadsQt.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Source/WebCore/platform/qt/GamepadsQt.cpp b/Source/WebCore/platform/qt/GamepadsQt.cpp
+index 60ff317..da8ac69 100644
+--- a/Source/WebCore/platform/qt/GamepadsQt.cpp
++++ b/Source/WebCore/platform/qt/GamepadsQt.cpp
+@@ -111,12 +111,12 @@ private:
+     bool load()
+     {
+         m_libUdev.setLoadHints(QLibrary::ResolveAllSymbolsHint);
+-        m_libUdev.setFileNameAndVersion(QStringLiteral("udev"), 1);
++        m_libUdev.setFileNameAndVersion(QStringLiteral("@libudev@/lib/libudev"), 1);
+         m_loaded = m_libUdev.load();
+         if (resolveMethods())
+             return true;
+ 
+-        m_libUdev.setFileNameAndVersion(QStringLiteral("udev"), 0);
++        m_libUdev.setFileNameAndVersion(QStringLiteral("@libudev@/lib/libudev"), 0);
+         m_loaded = m_libUdev.load();
+         return resolveMethods();
+     }
+-- 
+2.5.0
+

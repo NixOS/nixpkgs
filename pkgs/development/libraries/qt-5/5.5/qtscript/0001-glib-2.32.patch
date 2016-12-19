@@ -1,0 +1,25 @@
+From abd80356449bb36c8adcc5c9ca1df6b47715d265 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sun, 23 Aug 2015 09:13:34 -0500
+Subject: [PATCH] glib-2.32
+
+---
+ src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h b/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h
+index 1f6d25e..087c3fb 100644
+--- a/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h
++++ b/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h
+@@ -81,7 +81,7 @@
+ #include <pthread.h>
+ #elif PLATFORM(GTK)
+ #include <wtf/gtk/GOwnPtr.h>
+-typedef struct _GMutex GMutex;
++typedef union _GMutex GMutex;
+ typedef struct _GCond GCond;
+ #endif
+ 
+-- 
+2.5.0
+

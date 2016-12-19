@@ -1,0 +1,25 @@
+From 0aa652a7b257f98f9e8e7dc7b0ddc9bc62377d09 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gentoo.org>
+Date: Fri, 29 May 2015 21:09:39 -0400
+Subject: [PATCH] Bug 90778 - fix build with newer glibc versions
+
+https://bugs.freedesktop.org/show_bug.cgi?id=90778
+---
+ src/helpers/job-drive-detach.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/helpers/job-drive-detach.c b/src/helpers/job-drive-detach.c
+index eeafcab..d122a1f 100644
+--- a/src/helpers/job-drive-detach.c
++++ b/src/helpers/job-drive-detach.c
+@@ -18,6 +18,7 @@
+  *
+  */
+ 
++#include <sys/stat.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <errno.h>
+-- 
+2.4.2
+

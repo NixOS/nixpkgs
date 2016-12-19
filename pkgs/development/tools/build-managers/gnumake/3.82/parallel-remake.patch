@@ -1,0 +1,39 @@
+fix from upstream cvs
+
+----------------------------
+revision 1.247
+date: 2011-09-18 19:39:26 -0400;  author: psmith;  state: Exp;  lines: +5 -3;  commitid: 07NxO4T5PiWC82Av;
+When we re-exec the master makefile in a jobserver environment, ensure
+that MAKEFLAGS is set properly so the re-exec'd make runs in parallel.
+See Savannah bug #33873.
+
+Index: main.c
+===================================================================
+RCS file: /sources/make/make/main.c,v
+retrieving revision 1.246
+retrieving revision 1.247
+diff -u -p -r1.246 -r1.247
+--- main.c	29 Aug 2010 23:05:27 -0000	1.246
++++ main.c	18 Sep 2011 23:39:26 -0000	1.247
+@@ -2089,6 +2089,11 @@ main (int argc, char **argv, char **envp
+ 
+           ++restarts;
+ 
++          /* If we're re-exec'ing the first make, put back the number of
++             job slots so define_makefiles() will get it right.  */
++          if (master_job_slots)
++            job_slots = master_job_slots;
++
+           /* Reset makeflags in case they were changed.  */
+           {
+             const char *pv = define_makeflags (1, 1);
+@@ -2825,9 +2830,6 @@ define_makeflags (int all, int makefile)
+ 		       && (*(unsigned int *) cs->value_ptr ==
+ 			   *(unsigned int *) cs->noarg_value))
+ 		ADD_FLAG ("", 0); /* Optional value omitted; see below.  */
+-	      else if (cs->c == 'j')
+-		/* Special case for `-j'.  */
+-		ADD_FLAG ("1", 1);
+ 	      else
+ 		{
+ 		  char *buf = alloca (30);

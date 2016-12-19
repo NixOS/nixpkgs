@@ -1,0 +1,26 @@
+diff -urN chntpw-140201.orig/Makefile chntpw-140201/Makefile
+--- chntpw-140201.orig/Makefile	2014-08-03 20:26:56.497161881 +0400
++++ chntpw-140201/Makefile	2014-08-04 12:57:16.563818342 +0400
+@@ -10,6 +10,8 @@
+ OSSLPATH=/usr
+ OSSLINC=$(OSSLPATH)/include
+ 
++PREFIX ?= /usr
++
+ CC=gcc
+ 
+ ifeq      '$(shell gcc -dumpmachine)' 'x86_64-unknown-linux-gnu'
+@@ -24,8 +26,12 @@
+ #LIBS=-L$(OSSLLIB) $(OSSLLIB)/libcrypto.a
+ LIBS=-L$(OSSLLIB)
+ 
++BINARIES := chntpw chntpw.static cpnt reged reged.static samusrgrp samusrgrp.static sampasswd sampasswd.static
+ 
+-all: chntpw chntpw.static cpnt reged reged.static samusrgrp samusrgrp.static sampasswd sampasswd.static
++all: $(BINARIES)
++install: $(BINARIES)
++	mkdir -p $(PREFIX)/bin
++	cp $^ $(PREFIX)/bin
+ 
+ chntpw: chntpw.o ntreg.o edlib.o libsam.o
+ 	$(CC) $(CFLAGS) -o chntpw chntpw.o ntreg.o edlib.o libsam.o $(LIBS)

@@ -1,0 +1,11 @@
+--- a/bin/kazam       2014-02-03 23:11:38.465614061 +0100
++++ b/bin/kazam-1     2014-02-03 23:12:28.447058700 +0100
+@@ -68,7 +68,7 @@
+         # when base install path is not /usr
+         curpath = os.path.abspath(__file__)
+         curpath = os.path.realpath(curpath)
+-        datadir = curpath.split('bin/')[0] + "share/kazam/"
++        datadir = os.path.realpath(os.path.join(curpath, "./../../", "share/kazam/"))
+ 
+     try:
+         import platform

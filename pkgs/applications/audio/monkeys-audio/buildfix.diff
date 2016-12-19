@@ -1,0 +1,27 @@
+diff -ru monkeys-audio-3.99-u4-b5/src/MACLib/APELink.cpp monkeys-audio-3.99-u4-b5.patched/src/MACLib/APELink.cpp
+--- monkeys-audio-3.99-u4-b5/src/MACLib/APELink.cpp	2006-06-01 11:00:57.000000000 +0200
++++ monkeys-audio-3.99-u4-b5.patched/src/MACLib/APELink.cpp	2012-01-05 14:51:47.000000000 +0100
+@@ -63,10 +63,10 @@
+     if (pData != NULL)
+     {
+         // parse out the information
+-        char * pHeader = strstr(pData, APE_LINK_HEADER);
+-        char * pImageFile = strstr(pData, APE_LINK_IMAGE_FILE_TAG);
+-        char * pStartBlock = strstr(pData, APE_LINK_START_BLOCK_TAG);
+-        char * pFinishBlock = strstr(pData, APE_LINK_FINISH_BLOCK_TAG);
++        const char * pHeader = strstr(pData, APE_LINK_HEADER);
++        const char * pImageFile = strstr(pData, APE_LINK_IMAGE_FILE_TAG);
++        const char * pStartBlock = strstr(pData, APE_LINK_START_BLOCK_TAG);
++        const char * pFinishBlock = strstr(pData, APE_LINK_FINISH_BLOCK_TAG);
+ 
+         if (pHeader && pImageFile && pStartBlock && pFinishBlock)
+         {
+@@ -81,7 +81,7 @@
+                 
+                 // get the path
+                 char cImageFile[MAX_PATH + 1]; int nIndex = 0;
+-                char * pImageCharacter = &pImageFile[strlen(APE_LINK_IMAGE_FILE_TAG)];
++                const char * pImageCharacter = &pImageFile[strlen(APE_LINK_IMAGE_FILE_TAG)];
+                 while ((*pImageCharacter != 0) && (*pImageCharacter != '\r') && (*pImageCharacter != '\n'))
+                     cImageFile[nIndex++] = *pImageCharacter++;
+                 cImageFile[nIndex] = 0;

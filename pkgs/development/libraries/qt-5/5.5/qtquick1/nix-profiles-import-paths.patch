@@ -1,0 +1,20 @@
+Index: qtquick1-opensource-src-5.5.1/src/declarative/qml/qdeclarativeimport.cpp
+===================================================================
+--- qtquick1-opensource-src-5.5.1.orig/src/declarative/qml/qdeclarativeimport.cpp
++++ qtquick1-opensource-src-5.5.1/src/declarative/qml/qdeclarativeimport.cpp
+@@ -725,6 +725,15 @@ QDeclarativeImportDatabase::QDeclarative
+ 
+     addImportPath(installImportsPath);
+ 
++    // Add library paths derived from NIX_PROFILES.
++    const QByteArrayList profiles = qgetenv("NIX_PROFILES").split(' ');
++    const QString importdir = QString::fromLatin1("/lib/qt5/imports");
++    Q_FOREACH (const QByteArray &profile, profiles) {
++        if (!profile.isEmpty()) {
++            addImportPath(QFile::decodeName(profile) + importdir);
++        }
++    }
++
+     // env import paths
+     QByteArray envImportPath = qgetenv("QML_IMPORT_PATH");
+     if (!envImportPath.isEmpty()) {

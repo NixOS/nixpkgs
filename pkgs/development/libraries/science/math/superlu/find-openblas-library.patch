@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -75,6 +75,8 @@ set(CMAKE_C_FLAGS_RELEASE "-O3" CACHE STRING "")
+ ######################################################################
+ #
+ #--------------------- BLAS ---------------------
++find_package(OpenBLAS)
++set(TPL_BLAS_LIBRARIES ${OpenBLAS_LIBRARIES})
+ if(NOT enable_blaslib)
+   if (TPL_BLAS_LIBRARIES)
+     set(BLAS_FOUND TRUE)

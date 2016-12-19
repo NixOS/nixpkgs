@@ -1,0 +1,137 @@
+diff --git a/config/environments/production.rb b/config/environments/production.rb
+index a9d8ac4..85f13f5 100644
+--- a/config/environments/production.rb
++++ b/config/environments/production.rb
+@@ -70,14 +70,16 @@ Rails.application.configure do
+ 
+   config.action_mailer.delivery_method = :sendmail
+   # Defaults to:
+-  # # config.action_mailer.sendmail_settings = {
+-  # #   location: '/usr/sbin/sendmail',
+-  # #   arguments: '-i -t'
+-  # # }
++  config.action_mailer.sendmail_settings = {
++    location: '/var/setuid-wrappers/sendmail',
++    arguments: '-i -t'
++  }
+   config.action_mailer.perform_deliveries = true
+   config.action_mailer.raise_delivery_errors = true
+ 
+   config.eager_load = true
+ 
+   config.allow_concurrency = false
++
++  config.active_record.dump_schema_after_migration = false
+ end
+diff --git a/config/gitlab.yml.example b/config/gitlab.yml.example
+index 1470a6e..1b2660d 100644
+--- a/config/gitlab.yml.example
++++ b/config/gitlab.yml.example
+@@ -476,7 +476,7 @@ production: &base
+   # CAUTION!
+   # Use the default values unless you really know what you are doing
+   git:
+-    bin_path: /usr/bin/git
++    bin_path: git
+     # The next value is the maximum memory size grit can use
+     # Given in number of bytes per git object (e.g. a commit)
+     # This value can be increased if you have very large commits
+diff --git a/config/initializers/1_settings.rb b/config/initializers/1_settings.rb
+index 195108b..e55b11d 100644
+--- a/config/initializers/1_settings.rb
++++ b/config/initializers/1_settings.rb
+@@ -192,7 +192,7 @@ Settings.gitlab['user']       ||= 'git'
+ Settings.gitlab['user_home']  ||= begin
+   Etc.getpwnam(Settings.gitlab['user']).dir
+ rescue ArgumentError # no user configured
+-  '/home/' + Settings.gitlab['user']
++  '/homeless-shelter'
+ end
+ Settings.gitlab['time_zone'] ||= nil
+ Settings.gitlab['signup_enabled'] ||= true if Settings.gitlab['signup_enabled'].nil?
+@@ -362,7 +362,7 @@ Settings.backup['upload']['encryption'] ||= nil
+ #
+ Settings['git'] ||= Settingslogic.new({})
+ Settings.git['max_size']  ||= 20971520 # 20.megabytes
+-Settings.git['bin_path']  ||= '/usr/bin/git'
++Settings.git['bin_path']  ||= 'git'
+ Settings.git['timeout']   ||= 10
+ 
+ # Important: keep the satellites.path setting until GitLab 9.0 at
+diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
+index 59b2114..4f4a39a 100644
+--- a/lib/gitlab/logger.rb
++++ b/lib/gitlab/logger.rb
+@@ -13,20 +13,20 @@ module Gitlab
+     end
+ 
+     def self.read_latest
+-      path = Rails.root.join("log", file_name)
++      path = File.join(ENV["GITLAB_LOG_PATH"], file_name)
+       self.build unless File.exist?(path)
+       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
+       tail_output.split("\n")
+     end
+ 
+     def self.read_latest_for(filename)
+-      path = Rails.root.join("log", filename)
++      path = File.join(ENV["GITLAB_LOG_PATH"], filename)
+       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
+       tail_output.split("\n")
+     end
+ 
+     def self.build
+-      new(Rails.root.join("log", file_name))
++      new(File.join(ENV["GITLAB_LOG_PATH"], file_name))
+     end
+   end
+ end
+diff --git a/lib/gitlab/uploads_transfer.rb b/lib/gitlab/uploads_transfer.rb
+index be8fcc7..7642d74 100644
+--- a/lib/gitlab/uploads_transfer.rb
++++ b/lib/gitlab/uploads_transfer.rb
+@@ -29,7 +29,7 @@ module Gitlab
+     end
+ 
+     def root_dir
+-      File.join(Rails.root, "public", "uploads")
++      ENV['GITLAB_UPLOADS_PATH'] || File.join(Rails.root, "public", "uploads")
+     end
+   end
+ end
+diff --git a/lib/tasks/gitlab/check.rake b/lib/tasks/gitlab/check.rake
+index 5f4a6bb..01b4cfd 100644
+--- a/lib/tasks/gitlab/check.rake
++++ b/lib/tasks/gitlab/check.rake
+@@ -223,7 +223,7 @@ namespace :gitlab do
+     def check_log_writable
+       print "Log directory writable? ... "
+ 
+-      log_path = Rails.root.join("log")
++      log_path = ENV["GITLAB_LOG_PATH"]
+ 
+       if File.writable?(log_path)
+         puts "yes".color(:green)
+@@ -263,10 +263,11 @@ namespace :gitlab do
+     def check_uploads
+       print "Uploads directory setup correctly? ... "
+ 
+-      unless File.directory?(Rails.root.join('public/uploads'))
++      uploads_dir = ENV['GITLAB_UPLOADS_PATH'] || Rails.root.join('public/uploads')
++      unless File.directory?(uploads_dir)
+         puts "no".color(:red)
+         try_fixing_it(
+-          "sudo -u #{gitlab_user} mkdir #{Rails.root}/public/uploads"
++          "sudo -u #{gitlab_user} mkdir #{uploads_dir}"
+         )
+         for_more_information(
+           see_installation_guide_section "GitLab"
+@@ -275,7 +276,7 @@ namespace :gitlab do
+         return
+       end
+ 
+-      upload_path = File.realpath(Rails.root.join('public/uploads'))
++      upload_path = File.realpath(Rails.root.join(uploads_dir))
+       upload_path_tmp = File.join(upload_path, 'tmp')
+ 
+       if File.stat(upload_path).mode == 040700

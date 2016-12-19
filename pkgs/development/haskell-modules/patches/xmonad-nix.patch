@@ -1,0 +1,44 @@
+--- a/src/XMonad/Core.hs
++++ b/src/XMonad/Core.hs
+@@ -48,6 +48,7 @@ import System.Posix.Types (ProcessID)
+ import System.Process
+ import System.Directory
+ import System.Exit
++import System.Environment (lookupEnv)
+ import Graphics.X11.Xlib
+ import Graphics.X11.Xlib.Extras (Event)
+ import Data.Typeable
+@@ -463,6 +464,7 @@ recompile force = io $ do
+         err  = base ++ ".errors"
+         src  = base ++ ".hs"
+         lib  = dir </> "lib"
++    ghc <- fromMaybe "ghc" <$> liftIO (lookupEnv "NIX_GHC")
+     libTs <- mapM getModTime . Prelude.filter isSource =<< allFiles lib
+     srcT <- getModTime src
+     binT <- getModTime bin
+@@ -471,7 +473,7 @@ recompile force = io $ do
+         -- temporarily disable SIGCHLD ignoring:
+         uninstallSignalHandlers
+         status <- bracket (openFile err WriteMode) hClose $ \h ->
+-            waitForProcess =<< runProcess "ghc" ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-main-is", "main", "-v0", "-o",binn] (Just dir)
++            waitForProcess =<< runProcess ghc ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-main-is", "main", "-v0", "-o",binn] (Just dir)
+                                     Nothing Nothing Nothing (Just h)
+ 
+         -- re-enable SIGCHLD:
+@@ -480,6 +482,7 @@ recompile force = io $ do
+         -- now, if it fails, run xmessage to let the user know:
+         when (status /= ExitSuccess) $ do
+             ghcErr <- readFile err
++            xmessage <- fromMaybe "xmessage" <$> liftIO (lookupEnv "XMONAD_XMESSAGE")
+             let msg = unlines $
+                     ["Error detected while loading xmonad configuration file: " ++ src]
+                     ++ lines (if null ghcErr then show status else ghcErr)
+@@ -487,7 +490,7 @@ recompile force = io $ do
+             -- nb, the ordering of printing, then forking, is crucial due to
+             -- lazy evaluation
+             hPutStrLn stderr msg
+-            forkProcess $ executeFile "xmessage" True ["-default", "okay", msg] Nothing
++            forkProcess $ executeFile xmessage True ["-default", "okay", msg] Nothing
+             return ()
+         return (status == ExitSuccess)
+       else return True

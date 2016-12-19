@@ -1,0 +1,22 @@
+diff --git a/supportlib/SConstruct b/supportlib/SConstruct
+index 7f797b9..07907e9 100644
+--- a/supportlib/SConstruct
++++ b/supportlib/SConstruct
+@@ -5,7 +5,7 @@
+ # library.
+ ######################################################################
+ 
+-import sys, glob, os.path
++import sys, glob, os.path, os
+ 
+ # Read the options
+ vars = Variables("cpp_config.cfg")
+@@ -16,7 +16,7 @@ vars.Add("CPPPATH", "The include directories", [])
+ vars.Add("MSVS_VERSION", "The preferred version of MS Visual Studio")
+ 
+ # Create the construction environment
+-env = Environment(variables = vars)
++env = Environment(variables = vars, ENV = os.environ)
+ 
+ # Build the files in "obj"
+ env.VariantDir("obj", "src", duplicate=0)

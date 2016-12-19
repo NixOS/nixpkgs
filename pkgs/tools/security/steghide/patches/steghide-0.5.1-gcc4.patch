@@ -1,0 +1,46 @@
+diff -Naur steghide-0.5.1-orig/src/AuData.h steghide-0.5.1/src/AuData.h
+--- steghide-0.5.1-orig/src/AuData.h	2003-09-28 09:30:29.000000000 -0600
++++ steghide-0.5.1/src/AuData.h	2007-05-11 22:04:56.000000000 -0600
+@@ -26,22 +26,30 @@
+ 
+ // AuMuLawAudioData
+ typedef AudioDataImpl<AuMuLaw,BYTE> AuMuLawAudioData ;
++template<>
+ inline BYTE AuMuLawAudioData::readValue (BinaryIO* io) const { return (io->read8()) ; }
++template<>
+ inline void AuMuLawAudioData::writeValue (BinaryIO* io, BYTE v) const { io->write8(v) ; }
+ 
+ // AuPCM8AudioData
+ typedef AudioDataImpl<AuPCM8,SBYTE> AuPCM8AudioData ;
++template<>
+ inline SBYTE AuPCM8AudioData::readValue (BinaryIO* io) const { return ((SBYTE) io->read8()) ; }
++template<>
+ inline void AuPCM8AudioData::writeValue (BinaryIO* io, SBYTE v) const { io->write8((BYTE) v) ; }
+ 
+ // AuPCM16AudioData
+ typedef AudioDataImpl<AuPCM16,SWORD16> AuPCM16AudioData ;
++template<>
+ inline SWORD16 AuPCM16AudioData::readValue (BinaryIO* io) const { return ((SWORD16) io->read16_be()) ; }
++template<>
+ inline void AuPCM16AudioData::writeValue (BinaryIO* io, SWORD16 v) const { io->write16_be((UWORD16) v) ; }
+ 
+ // AuPCM32AudioData
+ typedef AudioDataImpl<AuPCM32,SWORD32> AuPCM32AudioData ;
++template<>
+ inline SWORD32 AuPCM32AudioData::readValue (BinaryIO* io) const { return ((SWORD32) io->read32_be()) ; }
++template<>
+ inline void AuPCM32AudioData::writeValue (BinaryIO* io, SWORD32 v) const { io->write32_be((UWORD32) v) ; }
+ 
+ #endif // ndef SH_AUDATA_H
+diff -Naur steghide-0.5.1-orig/src/MHashPP.cc steghide-0.5.1/src/MHashPP.cc
+--- steghide-0.5.1-orig/src/MHashPP.cc	2003-10-05 04:17:50.000000000 -0600
++++ steghide-0.5.1/src/MHashPP.cc	2007-05-11 22:07:01.000000000 -0600
+@@ -120,7 +120,7 @@
+ 
+ std::string MHashPP::getAlgorithmName (hashid id)
+ {
+-	char *name = mhash_get_hash_name (id) ;
++	char *name = (char *) mhash_get_hash_name (id) ;
+ 	std::string retval ;
+ 	if (name == NULL) {
+ 		retval = std::string ("<algorithm not found>") ;

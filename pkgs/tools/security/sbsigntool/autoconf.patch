@@ -1,0 +1,19 @@
+diff -uNr sbsigntool/configure.ac sbsigntool-new/configure.ac
+--- sbsigntool/configure.ac	2015-07-05 12:18:18.932717136 +0200
++++ sbsigntool-new/configure.ac	2015-07-05 14:51:39.659284938 +0200
+@@ -65,7 +65,7 @@
+ 
+ dnl gnu-efi headers require extra include dirs
+ EFI_ARCH=$(uname -m)
+-EFI_CPPFLAGS="-I/usr/include/efi -I/usr/include/efi/$EFI_ARCH \
++EFI_CPPFLAGS="-I@@NIX_GNUEFI@@/include/efi -I@@NIX_GNUEFI@@/include/efi/$EFI_ARCH \
+  -DEFI_FUNCTION_WRAPPER"
+ CPPFLAGS_save="$CPPFLAGS"
+ CPPFLAGS="$CPPFLAGS $EFI_CPPFLAGS"
+@@ -74,5 +74,5 @@
+ AC_SUBST(EFI_CPPFLAGS, $EFI_CPPFLAGS)
+ 
+ AC_CONFIG_FILES([Makefile src/Makefile lib/ccan/Makefile]
+-		[docs/Makefile tests/Makefile])
++		[docs/Makefile])
+ AC_OUTPUT

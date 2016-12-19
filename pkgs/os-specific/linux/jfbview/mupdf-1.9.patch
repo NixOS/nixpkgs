@@ -1,0 +1,28 @@
+--- JFBView-0.5.2-src/Makefile	2016-06-11 23:27:54.969894750 -0700
++++ JFBView-0.5.2-src/Makefile	2016-06-11 23:24:45.181142832 -0700
+@@ -134,13 +134,22 @@
+ 
+ .PHONY: detect_libopenjp2
+ detect_libopenjp2:
+-	$(eval OPENJP2 = $(shell ldconfig -p | grep -q libopenjp2 && echo 'openjp2' || echo 'openjpeg'))
++	$(eval OPENJP2 = $(shell echo libopenjp2 | grep -q libopenjp2 && echo 'openjp2'  || echo 'openjpeg'))
+ 	@echo "OPENJP2 = $(OPENJP2)" >> $(CONFIG_MK)
+ 
+ # mupdf_version only depends on -lmupdf.
+ mupdf_version: mupdf_version.cpp
+-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS) -lmupdf
+-
++	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS) -lmupdf \
++    -lpthread \
++    -lform \
++    -lncurses \
++    -lfreetype \
++    -lharfbuzz \
++    -lz \
++    -ljbig2dec \
++    -ljpeg \
++    -lmujs \
++    -lopenjp2
+ endif
+ 
+ 

@@ -1,0 +1,13 @@
+diff --git a/src/password-store.sh b/src/password-store.sh
+index 6313384..6607a98 100755
+--- a/src/password-store.sh
++++ b/src/password-store.sh
+@@ -573,7 +573,7 @@ cmd_git() {
+ # END subcommand functions
+ #
+ 
+-PROGRAM="${0##*/}"
++PROGRAM="pass"
+ COMMAND="$1"
+ 
+ case "$1" in

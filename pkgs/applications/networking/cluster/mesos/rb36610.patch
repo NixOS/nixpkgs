@@ -1,0 +1,11 @@
+diff --git a/src/linux/fs.cpp b/src/linux/fs.cpp
+index ea0891e320154b85a21ed2d138c192821efae9cd..7b24c377c9a28cad91738305c273fb53a4dc7365 100644
+--- a/src/linux/fs.cpp
++++ b/src/linux/fs.cpp
+@@ -19,6 +19,7 @@
+ #include <errno.h>
+ #include <stdio.h>
+ #include <string.h>
++#include <syscall.h>
+
+ #include <linux/limits.h>

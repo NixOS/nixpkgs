@@ -1,0 +1,11 @@
+--- gnustep-gui-0.24.0/TextConverters/RTF/GNUmakefile.preamble	2008-06-10 10:01:49.000000000 +0600
++++ gnustep-gui-0.24.0.patched/TextConverters/RTF/GNUmakefile.preamble	2014-12-01 13:02:11.000000000 +0600
+@@ -49,7 +49,7 @@
+ ADDITIONAL_INCLUDE_DIRS +=-I../../Headers/Additions -I../../Headers
+ 
+ # Additional LDFLAGS to pass to the linker
+-#ADDITIONAL_LDFLAGS += 
++ADDITIONAL_LDFLAGS += -lgnustep-gui
+ 
+ # Additional library directories the linker should search
+ ADDITIONAL_LIB_DIRS += -L../../Source/$(GNUSTEP_OBJ_DIR)

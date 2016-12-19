@@ -1,0 +1,40 @@
+#!/bin/sh
+
+export PATH=@PATH@:$PATH
+
+userresources=$HOME/.Xresources
+usermodmap=$HOME/.Xmodmap
+
+# Fix ridiculously slow key repeat.
+@XSET@ r rate
+
+# merge in defaults and keymaps
+
+if [ -f "$userresources" ]; then
+    if [ -x /usr/bin/cpp ] ; then
+        @XRDB@ -merge "$userresources"
+    else
+        @XRDB@ -nocpp -merge "$userresources"
+    fi
+fi
+
+if [ -f "$usermodmap" ]; then
+    @XMODMAP@ "$usermodmap"
+fi
+
+fontpath="@SYSTEM_FONTS@"
+[ -e "$HOME"/.fonts/fonts.dir ] && fontpath="$fontpath,$HOME/.fonts"
+[ -e "$HOME"/Library/Fonts/fonts.dir ] && fontpath="$fontpath,$HOME/Library/Fonts"
+[ -e /Library/Fonts/fonts.dir ] && fontpath="$fontpath,/Library/Fonts"
+[ -e /System/Library/Fonts/fonts.dir ] && fontpath="$fontpath,/System/Library/Fonts"
+@XSET@ fp= "$fontpath"
+unset fontpath
+
+if [ -d "${HOME}/.xinitrc.d" ] ; then
+    for f in "${HOME}"/.xinitrc.d/*.sh ; do
+        [ -x "$f" ] && . "$f"
+    done
+    unset f
+fi
+
+exec @QUARTZ_WM@

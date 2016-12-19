@@ -1,0 +1,12 @@
+diff -ru -x '*~' slim-1.3.6-orig/app.cpp slim-1.3.6/app.cpp
+--- slim-1.3.6-orig/app.cpp	2013-10-15 11:02:55.629263422 +0200
++++ slim-1.3.6/app.cpp	2013-10-15 13:00:10.141210784 +0200
+@@ -816,7 +822,7 @@
+ 	StopServer();
+ 	RemoveLock();
+ 	while (waitpid(-1, NULL, WNOHANG) > 0); /* Collects all dead childrens */
+-	Run();
++	exit(OK_EXIT);
+ }
+ 
+ void App::KillAllClients(Bool top) {

@@ -1,0 +1,4 @@
+url http://sourceforge.net/projects/quantumminigolf/files/quantumminigolf/
+SF_version_dir
+version_link '[.]tar[.][^.]+/download$'
+SF_redirect

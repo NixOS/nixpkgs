@@ -1,0 +1,37 @@
+commit ca6096bc29873d5a3c03d782b134253ac2e61beb
+Author: Yury G. Kudryashov <urkud.urkud@gmail.com>
+Date:   Fri Sep 24 17:16:40 2010 +0400
+
+    Install python bindings to libplist prefix, not to system directory.
+    
+    This allows one to install libplist to $HOME/prefix and adjust
+    PYTHONPATH.
+
+diff --git a/swig/CMakeLists.txt b/swig/CMakeLists.txt
+index 379cb95..fcacde0 100644
+--- a/swig/CMakeLists.txt
++++ b/swig/CMakeLists.txt
+@@ -9,16 +9,18 @@ SWIG_ADD_MODULE( plist python plist.i )
+ SWIG_LINK_LIBRARIES( plist plist plist++ ${PYTHON_LIBRARIES} )
+ 
+ EXEC_PROGRAM("${PYTHON_EXECUTABLE}"
+-    ARGS "-c 'try:\n import distutils.sysconfig; print distutils.sysconfig.get_python_lib(plat_specific=1)\nexcept: pass\n'"
+-    OUTPUT_VARIABLE DISTUTILS_PYTHON_ILIBRARY_PATH
++    ARGS "-c 'import sys; print sys.version[:3];'"
++    OUTPUT_VARIABLE PYTHON_SHORT_VERSION
+     )
+ 
++SET(PYTHON_SITE_PACKAGES_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_SHORT_VERSION}/site-packages CACHE PATH "The directory where python modules will be installed to.")
++
+ INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/_plist${CMAKE_SHARED_MODULE_SUFFIX}
+-   DESTINATION ${DISTUTILS_PYTHON_ILIBRARY_PATH}/plist/ )
++   DESTINATION ${PYTHON_SITE_PACKAGES_INSTALL_DIR}/plist/ )
+ INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/plist.py
+-   DESTINATION ${DISTUTILS_PYTHON_ILIBRARY_PATH}/plist/ )
++   DESTINATION ${PYTHON_SITE_PACKAGES_INSTALL_DIR}/plist/ )
+ INSTALL( FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py
+-   DESTINATION ${DISTUTILS_PYTHON_ILIBRARY_PATH}/plist/ )
++   DESTINATION ${PYTHON_SITE_PACKAGES_INSTALL_DIR}/plist/ )
+ INSTALL( FILES ${CMAKE_CURRENT_SOURCE_DIR}/plist.i
+    DESTINATION include/plist/swig COMPONENT dev)
+ 

@@ -1,0 +1,8 @@
+url http://www.monotone.ca/downloads.php
+
+do_overwrite(){
+  ensure_version
+  ensure_hash
+  set_var_value version $CURRENT_VERSION
+  set_var_value sha256 $CURRENT_HASH
+}

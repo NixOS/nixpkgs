@@ -1,0 +1,11 @@
+diff -ru libunicode-string-perl-2.09.pristine/lib/Unicode/CharName.pm libunicode-string-perl-2.09/lib/Unicode/CharName.pm
+--- libunicode-string-perl-2.09.pristine/lib/Unicode/CharName.pm	2005-10-25 19:11:00.000000000 +0100
++++ libunicode-string-perl-2.09/lib/Unicode/CharName.pm	2012-01-24 12:56:59.730653088 +0000
+@@ -77,7 +77,7 @@
+ 	    return join("", "HANGUL SYLLABLE ", @s)
+ 	}
+     }
+-    _init_names() unless defined %NAMES;
++    _init_names() unless %NAMES;
+     $NAMES{sprintf("%04X",$code)}
+ }

@@ -1,0 +1,11 @@
+--- a/src/backend/bacon-video-widget.c	2016-06-07 20:47:22.981213063 +0200
++++ b/src/backend/bacon-video-widget.c	2016-06-07 20:47:44.065781036 +0200
+@@ -2334,7 +2334,7 @@
+     if (!gst_toc_entry_get_start_stop_times (entry, &start, &stop)) {
+       GST_DEBUG ("Chapter #%d (couldn't get times)", i);
+     } else {
+-      GST_DEBUG ("Chapter #%d (start: %li stop: %li)", i, start, stop);
++      GST_DEBUG ("Chapter #%d (start: %" G_GINT64_FORMAT " stop: %" G_GINT64_FORMAT ")", i, start, stop);
+     }
+   }
+ 

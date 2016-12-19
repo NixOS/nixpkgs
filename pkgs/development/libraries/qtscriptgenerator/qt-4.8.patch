@@ -1,0 +1,23 @@
+Origin: http://pkgs.fedoraproject.org/gitweb/?p=qtscriptgenerator.git;a=blob_plain;f=qtscriptgenerator-src-0.1.0-no_QFileOpenEvent.patch;h=f397b5ab13bcfc268e6d7b7ba4c6bc66ae38b5c0;hb=HEAD
+diff -up qtscriptgenerator-src-0.1.0/generator/typesystem_gui-common.xml.no_QFileOpenEvent qtscriptgenerator-src-0.1.0/generator/typesystem_gui-common.xml
+--- qtscriptgenerator-src-0.1.0/generator/typesystem_gui-common.xml.no_QFileOpenEvent	2011-12-22 11:34:52.615149619 -0600
++++ qtscriptgenerator-src-0.1.0/generator/typesystem_gui-common.xml	2011-12-22 11:35:31.808659632 -0600
+@@ -2233,7 +2233,6 @@
+     
+                
+   </object-type>
+-  <object-type name="QFileOpenEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FileOpen"/>
+   <object-type name="QFocusEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FocusIn || %1-&gt;type() == QEvent::FocusOut">
+         <modify-function signature="reason()const">
+             <remove/>
+diff -up qtscriptgenerator-src-0.1.0/generator/typesystem_gui.xml.no_QFileOpenEvent qtscriptgenerator-src-0.1.0/generator/typesystem_gui.xml
+--- qtscriptgenerator-src-0.1.0/generator/typesystem_gui.xml.no_QFileOpenEvent	2009-02-20 05:42:24.000000000 -0600
++++ qtscriptgenerator-src-0.1.0/generator/typesystem_gui.xml	2011-12-22 11:33:43.058019203 -0600
+@@ -2555,7 +2555,6 @@
+     
+                
+   </object-type>
+-  <object-type name="QFileOpenEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FileOpen"/>
+   <object-type name="QFocusEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FocusIn || %1-&gt;type() == QEvent::FocusOut">
+         <modify-function signature="reason()const">
+             <remove/>

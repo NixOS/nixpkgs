@@ -1,0 +1,63 @@
+From 38c349bb000b427c376e756e3ecdb764a2b4d297 Mon Sep 17 00:00:00 2001
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sat, 15 Feb 2014 21:00:59 -0500
+Subject: [PATCH] link sublibs against liblzma as needed
+
+The coredump/elf32/elf64/elfxx libs use lzma funcs but don't link against
+it.  This produces sub-shared libs that don't link against lzma and can
+make the linker angry due to underlinking like so:
+
+libtool: link: x86_64-pc-linux-gnu-gcc -O2 -march=amdfam10 -pipe -g \
+	-frecord-gcc-switches -Wimplicit-function-declaration -fexceptions \
+	-Wall -Wsign-compare -Wl,-O1 -Wl,--hash-style=gnu \
+	-o .libs/test-coredump-unwind test-coredump-unwind.o  \
+	../src/.libs/libunwind-coredump.so ../src/.libs/libunwind-x86_64.so
+../src/.libs/libunwind-coredump.so: error: undefined reference to 'lzma_stream_footer_decode'
+../src/.libs/libunwind-coredump.so: error: undefined reference to 'lzma_index_buffer_decode'
+../src/.libs/libunwind-coredump.so: error: undefined reference to 'lzma_index_size'
+../src/.libs/libunwind-coredump.so: error: undefined reference to 'lzma_index_end'
+../src/.libs/libunwind-coredump.so: error: undefined reference to 'lzma_index_uncompressed_size'
+../src/.libs/libunwind-coredump.so: error: undefined reference to 'lzma_stream_buffer_decode'
+collect2: error: ld returned 1 exit status
+
+So add LIBLZMA to the right LIBADD for each of these libraries.
+
+URL: https://bugs.gentoo.org/444050
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ src/Makefile.am | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -169,7 +169,7 @@ libunwind_arm_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libunwind_arm_la_LDFLAGS) $(LDFLAGS) -o $@
+ @ARCH_ARM_TRUE@am_libunwind_arm_la_rpath = -rpath $(libdir)
+-libunwind_coredump_la_LIBADD =
++libunwind_coredump_la_LIBADD = $(LIBLZMA)
+ am__libunwind_coredump_la_SOURCES_DIST = coredump/_UCD_accessors.c \
+ 	coredump/_UCD_create.c coredump/_UCD_destroy.c \
+ 	coredump/_UCD_access_mem.c coredump/_UCD_elf_map_image.c \
+@@ -214,15 +214,15 @@ am_libunwind_dwarf_local_la_OBJECTS = dwarf/Lexpr.lo dwarf/Lfde.lo \
+ libunwind_dwarf_local_la_OBJECTS =  \
+ 	$(am_libunwind_dwarf_local_la_OBJECTS)
+ @REMOTE_ONLY_FALSE@@USE_DWARF_TRUE@am_libunwind_dwarf_local_la_rpath =
+-libunwind_elf32_la_LIBADD =
++libunwind_elf32_la_LIBADD = $(LIBLZMA)
+ am_libunwind_elf32_la_OBJECTS = elf32.lo
+ libunwind_elf32_la_OBJECTS = $(am_libunwind_elf32_la_OBJECTS)
+ @USE_ELF32_TRUE@am_libunwind_elf32_la_rpath =
+-libunwind_elf64_la_LIBADD =
++libunwind_elf64_la_LIBADD = $(LIBLZMA)
+ am_libunwind_elf64_la_OBJECTS = elf64.lo
+ libunwind_elf64_la_OBJECTS = $(am_libunwind_elf64_la_OBJECTS)
+ @USE_ELF64_TRUE@am_libunwind_elf64_la_rpath =
+-libunwind_elfxx_la_LIBADD =
++libunwind_elfxx_la_LIBADD = $(LIBLZMA)
+ am_libunwind_elfxx_la_OBJECTS = elfxx.lo
+ libunwind_elfxx_la_OBJECTS = $(am_libunwind_elfxx_la_OBJECTS)
+ @USE_ELFXX_TRUE@am_libunwind_elfxx_la_rpath =
+-- 
+1.8.5.5
+

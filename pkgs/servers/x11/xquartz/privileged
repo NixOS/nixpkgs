@@ -1,0 +1,43 @@
+#!/bin/sh
+
+export PATH=@PATH@:$PATH
+export FONTCONFIG_FILE="@FONTCONFIG_FILE@"
+
+# Our usage of mktemp fails with GNU, so prefer /usr/bin to hopefully
+# get BSD mktemp
+if [ -x /usr/bin/mktemp ] ; then
+    MKTEMP=/usr/bin/mktemp
+else
+    MKTEMP=mktemp
+fi
+
+STAT=/usr/bin/stat
+
+for dir in /tmp/.ICE-unix /tmp/.X11-unix /tmp/.font-unix ; do
+    success=0
+    for attempt in 1 2 3 4 5 ; do
+        check=`${STAT} -f '%#p %u %g' ${dir} 2> /dev/null`
+        if [ "${check}" = "041777 0 0" ] ; then
+            success=1
+            break
+        elif [ -n "${check}" ] ; then
+            saved=$(${MKTEMP} -d ${dir}-XXXXXXXX)
+            mv ${dir} ${saved}
+            echo "${dir} exists but is insecure.  It has been moved into ${saved}" >&2
+        fi
+
+        # if $dir exists and is a symlink (ie protect against a race)
+        if ${MKTEMP} -d ${dir} >& /dev/null ; then
+            chmod 1777 $dir
+            chown root:wheel $dir
+            success=1
+            break
+        fi
+    done
+
+    if [ "${success}" -eq 0 ] ; then
+        echo "Could not successfully create ${dir}" >&2
+    fi
+done
+
+@FONT_CACHE@ -s &

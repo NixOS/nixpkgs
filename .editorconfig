@@ -1,0 +1,24 @@
+# EditorConfig configuration for nixpkgs
+# http://EditorConfig.org
+
+# Top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file, utf-8 charset
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+
+# see https://nixos.org/nixpkgs/manual/#chap-conventions
+
+# Match nix/ruby files, set indent to spaces with width of two
+[*.{nix,rb}]
+indent_style = space
+indent_size = 2
+
+# Match shell/python/perl scripts, set indent to spaces with width of four
+[*.{sh,py,pl}]
+indent_style = space
+indent_size = 4

@@ -1,0 +1,19 @@
+diff -ru -x '*~' diffoscope-orig/diffoscope/comparators/directory.py diffoscope/diffoscope/comparators/directory.py
+--- diffoscope-orig/diffoscope/comparators/directory.py	1970-01-01 01:00:01.000000000 +0100
++++ diffoscope/diffoscope/comparators/directory.py	2016-12-08 17:37:55.000315157 +0100
+@@ -49,6 +49,7 @@
+     FILE_RE = re.compile(r'^\s*File:.*$')
+     DEVICE_RE = re.compile(r'Device: [0-9a-f]+h/[0-9]+d\s+')
+     INODE_RE = re.compile(r'Inode: [0-9]+\s+')
++    LINKS_RE = re.compile(r'Links: [0-9]+\s+')
+     ACCESS_TIME_RE = re.compile(r'^Access: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$')
+     CHANGE_TIME_RE = re.compile(r'^Change: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$')
+ 
+@@ -57,6 +58,7 @@
+         line = Stat.FILE_RE.sub('', line)
+         line = Stat.DEVICE_RE.sub('', line)
+         line = Stat.INODE_RE.sub('', line)
++        line = Stat.LINKS_RE.sub('', line)
+         line = Stat.ACCESS_TIME_RE.sub('', line)
+         line = Stat.CHANGE_TIME_RE.sub('', line)
+         return line.encode('utf-8')

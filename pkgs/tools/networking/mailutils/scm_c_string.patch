@@ -1,0 +1,15 @@
+See https://lists.gnu.org/archive/html/bug-mailutils/2010-10/msg00005.html
+
+diff -u mailutils-2.2/libmu_scm/mu_message.c mailutils-2.2.new/libmu_scm/mu_message.c
+--- mailutils-2.2/libmu_scm/mu_message.c	2010-04-18 10:29:07.000000000 -0700
++++ mailutils-2.2.new/libmu_scm/mu_message.c	2016-07-03 21:18:53.746185547 -0700
+@@ -510,8 +510,8 @@
+     {
+       SCM car = SCM_CAR (lst);
+       if (scm_is_string (car)
+ 	  && mu_c_strncasecmp (scm_i_string_chars (car), name,
+-			       scm_i_string_length (car)) == 0)
++			       scm_c_string_length (car)) == 0)
+ 	return 1;
+     }
+   return 0;

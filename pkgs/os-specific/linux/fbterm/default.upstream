@@ -1,0 +1,3 @@
+url http://code.google.com/p/fbterm/downloads/list
+version_link '[.]tar[.][a-z0-9]+$'
+process 'code[.]google[.]com//' ''

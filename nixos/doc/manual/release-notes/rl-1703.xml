@@ -1,0 +1,106 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.03">
+
+<title>Release 17.03 (“XXX”, 2017/03/??)</title>
+
+<para>In addition to numerous new and upgraded packages, this release
+has the following highlights: </para>
+
+<itemizedlist>
+  <listitem>
+    <para></para>
+  </listitem>
+</itemizedlist>
+
+<para>The following new services were added since the last release:</para>
+
+<itemizedlist>
+  <listitem>
+    <para></para>
+  </listitem>
+</itemizedlist>
+
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      <literal>gnome</literal> alias has been removed along with
+      <literal>gtk</literal>, <literal>gtkmm</literal> and several others.
+      Now you need to use versioned attributes, like <literal>gnome3</literal>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The attribute name of the Radicale daemon has been changed from
+      <literal>pythonPackages.radicale</literal> to
+      <literal>radicale</literal>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The Yama LSM is now enabled by default in the kernel,
+      which prevents ptracing non-child processes.
+      This means you will not be able to attach gdb to an existing process,
+      but will need to start that process from gdb (so it is a child).
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The <literal>stripHash</literal> bash function in <literal>stdenv</literal>
+      changed according to its documentation; it now outputs the stripped name to
+      <literal>stdout</literal> instead of putting it in the variable
+      <literal>strippedName</literal>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>PHP now scans for extra configuration .ini files in /etc/php.d
+    instead of /etc. This prevents accidentally loading non-PHP .ini files
+    that may be in /etc.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      Parsoid service now uses YAML configuration format.
+     <literal>service.parsoid.interwikis</literal> is now called
+     <literal>service.parsoid.wikis</literal> and is a list of either API URLs
+     or attribute sets as specified in parsoid's documentation.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+     <literal>Ntpd</literal> was replaced by
+     <literal>systemd-timesyncd</literal> as the default service to synchronize
+     system time with a remote NTP server. The old behavior can be restored by
+     setting <literal>services.ntp.enable</literal> to <literal>true</literal>.
+     Upstream time servers for all NTP implementations are now configured using
+     <literal>networking.timeServers</literal>.
+   </para>
+  </listitem>
+</itemizedlist>
+
+
+<para>Other notable improvements:</para>
+
+<itemizedlist>
+  <listitem>
+    <para>Module type system have a new extensible option types feature that
+      allow to extend certain types, such as enum, through multiple option
+      declarations of the same option across multiple modules.
+    </para>
+  </listitem>
+</itemizedlist>
+
+
+</section>

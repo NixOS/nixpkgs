@@ -1,0 +1,43 @@
+shopt -s extglob
+
+[ -z "$DF_DIR" ] && DF_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/df_linux"
+env_dir="@env@"
+
+update_path() {
+  local path="$1"
+
+  mkdir -p "$DF_DIR/$(dirname "$path")"
+  # If user has replaced these data directories, let them stay.
+  if [ ! -e "$DF_DIR/$path" ] || [ -L "$DF_DIR/$path" ]; then
+    rm -f "$DF_DIR/$path"
+    ln -s "$env_dir/$path" "$DF_DIR/$path"
+  fi
+}
+
+forcecopy_path() {
+  local path="$1"
+
+  mkdir -p "$DF_DIR/$(dirname "$path")"
+  rm -rf "$DF_DIR/$path"
+  cp -rL --no-preserve=all "$env_dir/$path" "$DF_DIR/$path"
+}
+
+mkdir -p "$DF_DIR"
+
+cat <<EOF >&2
+Using $DF_DIR as Dwarf Fortress overlay directory.
+If you do any changes in it, don't forget to clean it when updating the game version!
+We try to detect changes based on data directories being symbolic links -- keep this in mind.
+
+EOF
+
+cd "$env_dir"
+for i in data/init/* data/!(init|index|announcement) raw; do
+  update_path "$i"
+done
+
+forcecopy_path data/index
+# For some reason, it's needed to be writable...
+forcecopy_path data/announcement
+forcecopy_path data/help
+forcecopy_path data/dipscript

@@ -1,0 +1,13 @@
+Index: kpackage-5.18.0/src/kpackage/package.cpp
+===================================================================
+--- kpackage-5.18.0.orig/src/kpackage/package.cpp
++++ kpackage-5.18.0/src/kpackage/package.cpp
+@@ -808,7 +808,7 @@ PackagePrivate::PackagePrivate()
+     : QSharedData(),
+       fallbackPackage(0),
+       metadata(0),
+-      externalPaths(false),
++      externalPaths(true),
+       valid(false),
+       checkedValid(false)
+ {

@@ -1,0 +1,29 @@
+From cdafa01dc90da486d0114b423e3e467f7b083d1b Mon Sep 17 00:00:00 2001
+From: Jascha Geerds <jascha@jgeerds.name>
+Date: Sun, 2 Aug 2015 12:01:20 +0200
+Subject: [PATCH 3/3] Create config dir if it doesn't exist
+
+Otherwise gnome-tweak-tool can't enable the dark theme and fails
+without a clear error message.
+---
+ gtweak/gtksettings.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/gtweak/gtksettings.py b/gtweak/gtksettings.py
+index bcec9f1..f39991b 100644
+--- a/gtweak/gtksettings.py
++++ b/gtweak/gtksettings.py
+@@ -35,6 +35,10 @@ class GtkSettingsManager:
+     def _get_keyfile(self):
+         keyfile = None
+         try:
++            config_dir = os.path.dirname(self._path)
++            if not os.path.isdir(config_dir):
++                os.makedirs(config_dir)
++
+             keyfile = GLib.KeyFile()
+             keyfile.load_from_file(self._path, 0)
+         except MemoryError:
+-- 
+2.7.0
+

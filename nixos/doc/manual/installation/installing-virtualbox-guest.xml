@@ -1,0 +1,89 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-instaling-virtualbox-guest">
+
+<title>Installing in a Virtualbox guest</title>
+<para>
+  Installing NixOS into a Virtualbox guest is convenient for users who want to
+  try NixOS without installing it on bare metal. If you want to use a pre-made
+  Virtualbox appliance, it is available at <link
+  xlink:href="https://nixos.org/nixos/download.html">the downloads page</link>.
+  If you want to set up a Virtualbox guest manually, follow these instructions:
+</para>
+
+<orderedlist>
+
+  <listitem><para>Add a New Machine in Virtualbox with OS Type "Linux / Other
+  Linux"</para></listitem>
+
+  <listitem><para>Base Memory Size: 768 MB or higher.</para></listitem>
+
+  <listitem><para>New Hard Disk of 8 GB or higher.</para></listitem>
+
+  <listitem><para>Mount the CD-ROM with the NixOS ISO (by clicking on
+  CD/DVD-ROM)</para></listitem>
+
+  <listitem><para>Click on Settings / System / Processor and enable
+  PAE/NX</para></listitem>
+
+  <listitem><para>Click on Settings / System / Acceleration and enable
+  "VT-x/AMD-V" acceleration</para></listitem>
+
+  <listitem><para>Save the settings, start the virtual machine, and continue
+  installation like normal</para></listitem>
+
+</orderedlist>
+
+<para>
+  There are a few modifications you should make in configuration.nix. Enable
+  the virtualbox guest service in the main block:
+</para>
+
+<programlisting>
+virtualisation.virtualbox.guest.enable = true;
+</programlisting>
+
+<para>
+  Enable booting:
+</para>
+
+<programlisting>
+boot.loader.grub.device = "/dev/sda";
+</programlisting>
+
+<para>
+  Also remove the fsck that runs at startup. It will always fail to run,
+  stopping your boot until you press <literal>*</literal>.
+</para>
+
+<programlisting>
+boot.initrd.checkJournalingFS = false;
+</programlisting>
+
+<para>
+  Shared folders can be given a name and a path in the host system in the
+  VirtualBox settings (Machine / Settings / Shared Folders, then click on the
+  "Add" icon). Add the following to the
+  <literal>/etc/nixos/configuration.nix</literal> to auto-mount them:
+</para>
+
+<programlisting>
+{ config, pkgs, ...} :
+{
+  ...
+
+  fileSystems."/virtualboxshare" = {
+    fsType = "vboxsf";
+    device = "nameofthesharedfolder";
+    options = [ "rw" ];
+  };
+}
+</programlisting>
+
+<para>
+  The folder will be available directly under the root directory.
+</para>
+
+</section>

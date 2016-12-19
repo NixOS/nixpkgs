@@ -1,0 +1,7 @@
+xaralx/0.7r1785-5
+30_gtk_wxwidgets_symbol_clash
+40_algorithm_include
+50_update_imagemagick_version_parser
+remove-icon-suffix
+45_fix_gcc4
+55_fix_contstuctor_call

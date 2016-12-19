@@ -1,0 +1,15 @@
+Propagate the --force flag in the legacy drbdadm to drbdsetup.
+Otherwise "drbdadm primary --force" won't work as expected (the kernel
+will say "State change failed: Need access to UpToDate data").
+
+diff -ru -x '*~' drbd-8.4.0-orig/user/legacy/drbdadm_main.c drbd-8.4.0/user/legacy/drbdadm_main.c
+--- drbd-8.4.0-orig/user/legacy/drbdadm_main.c	2011-07-07 06:55:39.000000000 -0400
++++ drbd-8.4.0/user/legacy/drbdadm_main.c	2011-11-02 14:51:04.000000000 -0400
+@@ -1547,6 +1547,7 @@
+ 	for (i = 0; i < soi; i++) {
+ 		argv[NA(argc)] = setup_opts[i];
+ 	}
++	if (force) argv[NA(argc)] = "--force";
+ 	argv[NA(argc)] = 0;
+ 
+ 	setenv("DRBD_RESOURCE", res->name, 1);

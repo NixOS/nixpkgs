@@ -1,0 +1,43 @@
+diff -ruN open-vm-tools.orig/lib/include/guest_os.h open-vm-tools/lib/include/guest_os.h
+--- open-vm-tools.orig/lib/include/guest_os.h	2016-02-12 00:50:33.000000000 +0000
++++ open-vm-tools/lib/include/guest_os.h	2016-04-18 20:07:41.677251511 +0000
+@@ -222,6 +222,7 @@
+ #define STR_OS_MANDRAKE_FULL      "Mandrake Linux"
+ #define STR_OS_MANDRIVA           "mandriva"
+ #define STR_OS_MKLINUX            "MkLinux"
++#define STR_OS_NIXOS              "NixOS"
+ #define STR_OS_NOVELL             "nld9"
+ #define STR_OS_NOVELL_FULL        "Novell Linux Desktop 9"
+ #define STR_OS_ORACLE             "oraclelinux"
+diff -ruN open-vm-tools.orig/lib/include/vmblock.h open-vm-tools/lib/include/vmblock.h
+--- open-vm-tools.orig/lib/include/vmblock.h	2016-02-12 00:50:33.000000000 +0000
++++ open-vm-tools/lib/include/vmblock.h	2016-04-18 21:51:15.651235848 +0000
+@@ -145,7 +145,7 @@
+ # define VMBLOCK_DEVICE_MODE           VMBLOCK_FUSE_DEVICE_MODE
+ # define VMBLOCK_MOUNT_POINT           VMBLOCK_FUSE_MOUNT_POINT
+ 
+-#elif defined(linux)
++#elif defined(__linux__)
+ # define VMBLOCK_ADD_FILEBLOCK         98
+ # define VMBLOCK_DEL_FILEBLOCK         99
+ # ifdef VMX86_DEVEL
+diff -ruN open-vm-tools.orig/lib/misc/hostinfoPosix.c open-vm-tools/lib/misc/hostinfoPosix.c
+--- open-vm-tools.orig/lib/misc/hostinfoPosix.c	2016-02-12 00:50:33.000000000 +0000
++++ open-vm-tools/lib/misc/hostinfoPosix.c	2016-04-18 20:09:45.841668252 +0000
+@@ -195,6 +195,7 @@
+    {"Mandrake",           "/etc/mandrake-release"},
+    {"Mandriva",           "/etc/mandriva-release"},
+    {"MkLinux",            "/etc/mklinux-release"},
++   {"NixOS",              "/etc/os-release"},
+    {"Novell",             "/etc/nld-release"},
+    {"OracleLinux",        "/etc/oracle-release"},
+    {"Photon",             "/etc/lsb-release"},
+@@ -619,6 +620,8 @@
+       Str_Strcpy(distroShort, STR_OS_MANDRIVA, distroShortSize);
+    } else if (strstr(distroLower, "mklinux")) {
+       Str_Strcpy(distroShort, STR_OS_MKLINUX, distroShortSize);
++   } else if (strstr(distroLower, "nixos")) {
++      Str_Strcpy(distroShort, STR_OS_NIXOS, distroShortSize);
+    } else if (strstr(distroLower, "pld")) {
+       Str_Strcpy(distroShort, STR_OS_PLD, distroShortSize);
+    } else if (strstr(distroLower, "slackware")) {

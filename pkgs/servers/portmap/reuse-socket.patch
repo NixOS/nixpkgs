@@ -1,0 +1,38 @@
+Set SO_REUSEADDR to ensure that portmap can restart properly.
+
+https://bugs.launchpad.net/ubuntu/+source/portmap/+bug/688550
+
+===================================================================
+--- portmap-6.0.0.orig/portmap.c	2011-03-16 20:43:26.000000000 +0100
++++ portmap-6.0.0/portmap.c	2011-03-17 07:30:17.000000000 +0100
+@@ -142,9 +142,9 @@
+   * loopback interface address.
+   */
+ 
++static int on = 1;
+ #ifdef LOOPBACK_SETUNSET
+ static SVCXPRT *ludpxprt, *ltcpxprt;
+-static int on = 1;
+ #ifndef INADDR_LOOPBACK
+ #define INADDR_LOOPBACK ntohl(inet_addr("127.0.0.1"))
+ #endif
+@@ -399,9 +399,7 @@
+ 		syslog(LOG_ERR, "cannot create udp socket: %m");
+ 		exit(1);
+ 	}
+-#ifdef LOOPBACK_SETUNSET
+ 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &on, sizeof on);
+-#endif
+ 
+ 	memset((char *) &addr, 0, sizeof(addr));
+ 	addr.sin_addr.s_addr = 0;
+@@ -434,9 +432,7 @@
+ 		syslog(LOG_ERR, "cannot create tcp socket: %m");
+ 		exit(1);
+ 	}
+-#ifdef LOOPBACK_SETUNSET
+ 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &on, sizeof on);
+-#endif
+ 	if (bind(sock, (struct sockaddr *)&addr, len) != 0) {
+ 		syslog(LOG_ERR, "cannot bind tcp: %m");
+ 		exit(1);

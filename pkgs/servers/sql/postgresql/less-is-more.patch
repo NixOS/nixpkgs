@@ -1,0 +1,12 @@
+diff -Naur postgresql-9.2.7-orig/src/bin/psql/print.h postgresql-9.2.7/src/bin/psql/print.h
+--- postgresql-9.2.7-orig/src/bin/psql/print.h	2014-02-17 14:38:15.000000000 -0500
++++ postgresql-9.2.7/src/bin/psql/print.h	2014-03-04 14:42:28.874014415 -0500
+@@ -178,7 +178,7 @@
+ extern const printTextFormat *get_line_style(const printTableOpt *opt);
+ 
+ #ifndef __CYGWIN__
+-#define DEFAULT_PAGER "more"
++#define DEFAULT_PAGER "less"
+ #else
+ #define DEFAULT_PAGER "less"
+ #endif
