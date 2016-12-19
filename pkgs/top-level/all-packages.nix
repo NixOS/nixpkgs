@@ -6729,6 +6729,8 @@ in
 
   cdk = callPackage ../development/libraries/cdk {};
 
+  cdo = callPackage ../development/libraries/cdo { };
+
   cimg = callPackage  ../development/libraries/cimg { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
