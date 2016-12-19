@@ -57,8 +57,7 @@ in {
 
   tomcatUnstable = common {
     versionMajor = "9";
-    versionMinor = "0.0.M13";
-    sha256 = "0im3w4iqpar7x50vg7c9zkxyqf9x53xs5jvcq79xqgrmcqb9lk91";
+    versionMinor = "0.0.M15";
+    sha256 = "1spbq5vh2dplp83ki3fbbwl0klxq36s4rwkpcjdnwjxjymg9k432";
   };
-
 }
