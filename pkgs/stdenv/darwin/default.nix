@@ -54,7 +54,7 @@ in rec {
   };
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/sh",
-                          overrides         ? (pkgs: {}),
+                          overrides         ? (self: super: {}),
                           extraPreHook      ? "",
                           extraBuildInputs,
                           allowedRequisites ? null}:
@@ -96,7 +96,7 @@ in rec {
         extraSandboxProfile  = binShClosure + libSystemProfile;
 
         extraAttrs = { inherit platform; parent = last; };
-        overrides  = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
+        overrides  = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
       thisPkgs = allPackages {
@@ -107,8 +107,8 @@ in rec {
     in { stdenv = thisStdenv; pkgs = thisPkgs; };
 
   stage0 = stageFun 0 null {
-    overrides = orig: with stage0; rec {
-      darwin = orig.darwin // {
+    overrides = self: super: with stage0; rec {
+      darwin = super.darwin // {
         Libsystem = stdenv.mkDerivation {
           name = "bootstrap-Libsystem";
           buildCommand = ''
@@ -145,7 +145,7 @@ in rec {
     extraBuildInputs = [];
   };
 
-  persistent0 = _: {};
+  persistent0 = _: _: {};
 
   stage1 = with stage0; stageFun 1 stage0 {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
@@ -157,14 +157,14 @@ in rec {
     overrides = persistent0;
   };
 
-  persistent1 = orig: with stage1.pkgs; {
+  persistent1 = self: super: with stage1.pkgs; {
     inherit
       zlib patchutils m4 scons flex perl bison unifdef unzip openssl icu python
       libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
       openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
       findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils;
 
-    darwin = orig.darwin // {
+    darwin = super.darwin // {
       inherit (darwin)
         dyld Libsystem xnu configd libdispatch libclosure launchd;
     };
@@ -185,7 +185,7 @@ in rec {
     overrides = persistent1;
   };
 
-  persistent2 = orig: with stage2.pkgs; {
+  persistent2 = self: super: with stage2.pkgs; {
     inherit
       patchutils m4 scons flex perl bison unifdef unzip openssl python
       gettext sharutils libarchive pkg-config groff bash subversion
@@ -193,7 +193,7 @@ in rec {
       findfreetype libssh curl cmake autoconf automake libtool cpio
       libcxx libcxxabi;
 
-    darwin = orig.darwin // {
+    darwin = super.darwin // {
       inherit (darwin)
         dyld Libsystem xnu configd libdispatch libclosure launchd libiconv locale;
     };
@@ -221,19 +221,19 @@ in rec {
     overrides = persistent2;
   };
 
-  persistent3 = orig: with stage3.pkgs; {
+  persistent3 = self: super: with stage3.pkgs; {
     inherit
       gnumake gzip gnused bzip2 gawk ed xz patch bash
       libcxxabi libcxx ncurses libffi zlib gmp pcre gnugrep
       coreutils findutils diffutils patchutils;
 
     llvmPackages = let llvmOverride = llvmPackages.llvm.override { inherit libcxxabi; };
-    in orig.llvmPackages // {
+    in super.llvmPackages // {
       llvm = llvmOverride;
       clang-unwrapped = llvmPackages.clang-unwrapped.override { llvm = llvmOverride; };
     };
 
-    darwin = orig.darwin // {
+    darwin = super.darwin // {
       inherit (darwin) dyld Libsystem libiconv locale;
     };
   };
@@ -247,17 +247,17 @@ in rec {
     overrides = persistent3;
   };
 
-  persistent4 = orig: with stage4.pkgs; {
+  persistent4 = self: super: with stage4.pkgs; {
     inherit
       gnumake gzip gnused bzip2 gawk ed xz patch bash
       libcxxabi libcxx ncurses libffi zlib icu llvm gmp pcre gnugrep
       coreutils findutils diffutils patchutils binutils binutils-raw;
 
-    llvmPackages = orig.llvmPackages // {
+    llvmPackages = super.llvmPackages // {
       inherit (llvmPackages) llvm clang-unwrapped;
     };
 
-    darwin = orig.darwin // {
+    darwin = super.darwin // {
       inherit (darwin) dyld Libsystem cctools libiconv;
     };
   };
@@ -307,7 +307,7 @@ in rec {
       dyld Libsystem CF cctools libiconv locale
     ]);
 
-    overrides = orig: persistent4 orig // {
+    overrides = self: super: persistent4 self super // {
       clang = cc;
       inherit cc;
     };

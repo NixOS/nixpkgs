@@ -67,7 +67,7 @@ let
   # crossStdenv adapter.
   stdenvOverrides = self: super:
     lib.optionalAttrs (crossSystem == null && super.stdenv ? overrides)
-      (super.stdenv.overrides super);
+      (super.stdenv.overrides self super);
 
   # Allow packages to be overridden globally via the `packageOverrides'
   # configuration option, which must be a function that takes `pkgs'

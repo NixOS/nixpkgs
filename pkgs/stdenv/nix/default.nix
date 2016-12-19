@@ -29,7 +29,7 @@ import ../generic rec {
 
   fetchurlBoot = stdenv.fetchurlBoot;
 
-  overrides = pkgs_: {
+  overrides = self: super: {
     inherit cc;
     inherit (cc) binutils;
     inherit (pkgs)

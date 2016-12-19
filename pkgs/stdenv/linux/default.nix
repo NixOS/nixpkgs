@@ -44,7 +44,7 @@ rec {
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun =
-    {gccPlain, glibc, binutils, coreutils, gnugrep, name, overrides ? (pkgs: {}), extraBuildInputs ? []}:
+    {gccPlain, glibc, binutils, coreutils, gnugrep, name, overrides ? (self: super: {}), extraBuildInputs ? []}:
 
     let
 
@@ -87,7 +87,7 @@ rec {
           # /usr/include directory.
           inherit glibc;
         };
-        overrides = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
+        overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
       thisPkgs = allPackages {
@@ -109,13 +109,13 @@ rec {
     gnugrep = null;
     name = null;
 
-    overrides = pkgs: {
+    overrides = self: super: {
       # The Glibc include directory cannot have the same prefix as the
       # GCC include directory, since GCC gets confused otherwise (it
       # will search the Glibc headers before the GCC headers).  So
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
-      glibc = stage0.stdenv.mkDerivation {
+      glibc = self.stdenv.mkDerivation {
         name = "bootstrap-glibc";
         buildCommand = ''
           mkdir -p $out
@@ -146,8 +146,8 @@ rec {
     name = "bootstrap-gcc-wrapper";
 
     # Rebuild binutils to use from stage2 onwards.
-    overrides = pkgs: {
-      binutils = pkgs.binutils.override { gold = false; };
+    overrides = self: super: {
+      binutils = super.binutils.override { gold = false; };
       inherit (stage0.pkgs) glibc;
 
       # A threaded perl build needs glibc/libpthread_nonshared.a,
@@ -155,7 +155,7 @@ rec {
       # This is not an issue for the final stdenv, because this perl
       # won't be included in the final stdenv and won't be exported to
       # top-level pkgs as an override either.
-      perl = pkgs.perl.override { enableThreading = false; };
+      perl = super.perl.override { enableThreading = false; };
     };
   };
 
@@ -170,7 +170,7 @@ rec {
     gnugrep = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
-    overrides = pkgs: {
+    overrides = self: super: {
       inherit (stage1.pkgs) perl binutils paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
     };
@@ -187,16 +187,16 @@ rec {
     gnugrep = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
-    overrides = pkgs: rec {
+    overrides = self: super: rec {
       inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders gnum4 bison;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
-      gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      libmpc = pkgs.libmpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      isl_0_14 = pkgs.isl_0_14.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      gccPlain = pkgs.gcc.cc.override {
+      gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      isl_0_14 = super.isl_0_14.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      gccPlain = super.gcc.cc.override {
         isl = isl_0_14;
       };
     };
@@ -212,7 +212,7 @@ rec {
     coreutils = bootstrapTools;
     name = "";
 
-    overrides = pkgs: {
+    overrides = self: super: {
       # Zlib has to be inherited and not rebuilt in this stage,
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
@@ -223,12 +223,11 @@ rec {
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
-        cc = stage4.stdenv.cc.cc;
-        libc = stage4.pkgs.glibc;
-        inherit (stage4.pkgs) binutils coreutils gnugrep;
+        cc = self.stdenv.cc.cc;
+        libc = self.glibc;
+        inherit (self) stdenv binutils coreutils gnugrep;
         name = "";
-        stdenv = stage4.stdenv;
-        shell = stage4.pkgs.bash + "/bin/bash";
+        shell = self.bash + "/bin/bash";
       };
     };
     extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
@@ -278,7 +277,7 @@ rec {
       ];
       */
 
-    overrides = pkgs: {
+    overrides = self: super: {
       gcc = cc;
 
       inherit (stage4.pkgs)

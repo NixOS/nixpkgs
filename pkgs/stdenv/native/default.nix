@@ -77,7 +77,7 @@ rec {
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { cc, fetchurl, extraPath ? [], overrides ? (pkgs: { }) }:
+    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }) }:
 
     import ../generic {
       preHook =
@@ -142,7 +142,7 @@ rec {
   stdenvBoot2 = makeStdenv {
     inherit cc fetchurl;
     extraPath = [ stdenvBoot1Pkgs.xz ];
-    overrides = pkgs: { inherit (stdenvBoot1Pkgs) xz; };
+    overrides = self: super: { inherit (stdenvBoot1Pkgs) xz; };
   };
 
 
