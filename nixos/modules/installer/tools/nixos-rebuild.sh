@@ -126,9 +126,9 @@ targetHostCmd() {
 copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
-            NIX_SSHOPTS=$SSH_OPTS nix-copy-closure --from "$buildHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
-            NIX_SSHOPTS=$SSH_OPTS nix-copy-closure --to "$targetHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$targetHost" "$1"
         else
             buildHostCmd nix-copy-closure --to "$targetHost" "$1"
         fi
@@ -169,7 +169,7 @@ nixBuild() {
 
         local drv="$(nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
-            NIX_SSHOPTS=$SSH_OPTS nix-copy-closure --to "$buildHost" "$drv"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             echo "nix-instantiate failed"
