@@ -34,20 +34,24 @@ if [ -z "$container" ]; then
 fi
 
 
-# Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
+# Likewise, stage 1 mounts /proc, /dev, /sys and /run, so if we don't have a
 # stage 1, we need to do that here.
-if [ ! -e /proc/1 ]; then
-    specialMount() {
-        local device="$1"
-        local mountPoint="$2"
-        local options="$3"
-        local fsType="$4"
+# We check for each mountpoint separately to avoid esoteric failure modes
+# if only a subset was mounted by whatever called us.
+specialMount() {
+    local device="$1"
+    local mountPoint="$2"
+    local options="$3"
+    local fsType="$4"
 
-        mkdir -m 0755 -p "$mountPoint"
-        mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
-    }
-    source @earlyMountScript@
-fi
+    if mountpoint -q "$mountpoint"; then
+        return 0
+    fi
+
+    mkdir -m 0755 -p "$mountPoint"
+    mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
+}
+source @earlyMountScript@
 
 
 echo "booting system configuration $systemConfig" > /dev/kmsg
