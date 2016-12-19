@@ -13168,6 +13168,8 @@ in
     boost = boost155;
   };
 
+  fte = callPackage ../applications/editors/fte { };
+
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
 
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
