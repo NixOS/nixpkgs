@@ -27,7 +27,7 @@ in pythonPackages.buildPythonApplication rec {
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
     service-identity signedjson systemd twisted ujson unpaddedbase64 pyyaml
     matrix-angular-sdk bleach netaddr jinja2 psycopg2
-    ldap3 psutil msgpack
+    ldap3 psutil msgpack lxml
   ];
 
   # Checks fail because of Tox.

@@ -115,6 +115,22 @@ let
       propagatedUserEnvPkgs = [ python ];
     };
 
+  buildDataGrip = { name, version, src, license, description, wmClass }:
+    (mkIdeaProduct {
+      inherit name version src wmClass jdk;
+      product = "DataGrip";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/datagrip/";
+        inherit description license;
+        longDescription = ''
+          DataGrip is a new IDE from JetBrains built for database admins.
+          It allows you to quickly migrate and refactor relational databases,
+          construct efficient, statically checked SQL queries and much more.
+        '';
+        maintainers = with maintainers; [ loskutov ];
+        platforms = platforms.linux;
+      };
+    });
 in
 
 {
@@ -192,12 +208,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2016.3";
+    version = "2016.3.1";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1sax3sjhsyvb9qfnn0gc74p3ym6j5f30mmapd4irq9fk4bsl8c31";
+      sha256 = "1696gfmqi76ybgi5r84kisjx9mv0hd70hsn16banw61zy4rfllhw";
     };
     wmClass = "jetbrains-idea";
   };
@@ -320,5 +336,17 @@ in
       sha256 = "17agyqdyz6naxyx6p0y240ar93gja0ypw01nm2qmfzvh7ch03r24";
     };
     wmClass = "jetbrains-webstorm";
+  };
+
+  datagrip = buildDataGrip rec {
+    name = "datagrip-${version}";
+    version = "2016.3";
+    description = "Your Swiss Army Knife for Databases and SQL";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
+      sha256 = "10nah7v330qrrczzz5jldnr0k7w2xzljiny32gm9pqmjbl0i70il";
+    };
+    wmClass = "jetbrains-datagrip";
   };
 }

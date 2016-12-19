@@ -25,10 +25,13 @@ let
     inherit grver kver grrev;
 
     patch = fetchurl {
-      # When updating versions/hashes, ALWAYS use the official version; we use
-      # this mirror only because upstream removes sources files immediately upon
-      # releasing a new version ...
-      url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch";
+      urls = [
+        "https://grsecurity.net/${grbranch}/${name}.patch"
+        # When updating versions/hashes, ALWAYS use the official
+        # version; we use this mirror only because upstream removes
+        # source files immediately upon releasing a new version ...
+        "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch"
+      ];
       inherit sha256;
     };
 
@@ -37,6 +40,12 @@ let
 in
 
 rec {
+
+  multithreaded_rsapubkey =
+    {
+      name = "multithreaded-rsapubkey-asn1.patch";
+      patch = ./multithreaded-rsapubkey-asn1.patch;
+    };
 
   bridge_stp_helper =
     { name = "bridge-stp-helper";
@@ -86,9 +95,9 @@ rec {
   };
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.8.10";
-      grrev  = "201611232213";
-      sha256 = "13v3h6cjd5qz57rf242kpxhz5rk094lg5kyf86a852fk58apk6b6";
+    { kver   = "4.8.15";
+      grrev  = "201612151923";
+      sha256 = "1di4v0b0sn7ibg9vrn8w7d5vjxd2mdlxdmqsnyd6xyn8g00fra89";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -97,14 +106,6 @@ rec {
     {
       name  = "grsecurity-nixos-kmod";
       patch = ./grsecurity-nixos-kmod.patch;
-    };
-
-  # A temporary work-around for execvp: arglist too long error during
-  # module_install.  Without this, no modules are installed into the
-  # resulting output.
-  grsecurity_modinst =
-    { name = "grsecurity-modinst";
-      patch = ./grsecurity-modinst.patch;
     };
 
   crc_regression =
@@ -154,6 +155,14 @@ rec {
         url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git"
             + "/patch/drivers/lguest/x86/core.c?id=cdd77e87eae52";
         sha256 = "04xlx6al10cw039av6jkby7gx64zayj8m1k9iza40sw0fydcfqhc";
+      };
     };
-  };
+
+  packet_fix_race_condition_CVE_2016_8655 =
+    { name = "packet_fix_race_condition_CVE_2016_8655.patch";
+      patch = fetchpatch {
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=84ac7260236a49c79eede91617700174c2c19b0c";
+        sha256 = "19viqjjgq8j8jiz5yhgmzwhqvhwv175q645qdazd1k69d25nv2ki";
+      };
+    };
 }

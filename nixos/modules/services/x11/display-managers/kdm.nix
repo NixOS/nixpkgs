@@ -25,7 +25,7 @@ let
       FailsafeClient=${pkgs.xterm}/bin/xterm
 
       [X-:*-Core]
-      ServerCmd=${dmcfg.xserverBin} ${dmcfg.xserverArgs}
+      ServerCmd=${dmcfg.xserverBin} ${toString dmcfg.xserverArgs}
       # KDM calls `rm' somewhere to clean up some temporary directory.
       SystemPath=${pkgs.coreutils}/bin
       # The default timeout (15) is too short in a heavily loaded boot process.

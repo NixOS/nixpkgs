@@ -595,11 +595,11 @@
     md5name = "c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2";
   }
   {
-    name = "libpng-1.6.19.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/libpng-1.6.19.tar.gz";
-    sha256 = "9f977ac8e4e3d4d5b001b32243f111eeec21bb6b59e583f2fb41fd2e48840352";
-    md5 = "3121bdc77c365a87e054b9f859f421fe";
-    md5name = "3121bdc77c365a87e054b9f859f421fe-libpng-1.6.19.tar.gz";
+    name = "libpng-1.6.24.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/libpng-1.6.24.tar.gz";
+    sha256 = "be46e0d14ccac3800f816ae860d191a1187a40164b7552c44afeee97a9caa0a3";
+    md5 = "65213080dd30a9b16193d9b83adc1ee9";
+    md5name = "65213080dd30a9b16193d9b83adc1ee9-libpng-1.6.24.tar.gz";
   }
   {
     name = "poppler-0.26.4.tar.gz";

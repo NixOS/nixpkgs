@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool
+{ stdenv, fetchurl, python2Packages, intltool
 , gst_python, withGstPlugins ? false, gst_plugins_base ? null
 , gst_plugins_good ? null, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
 
@@ -9,7 +9,7 @@ assert withGstPlugins -> gst_plugins_base != null
 
 let
   version = "2.6.3";
-  inherit (pythonPackages) buildPythonApplication python mutagen pygtk pygobject2 dbus-python;
+  inherit (python2Packages) buildPythonApplication python mutagen pygtk pygobject2 dbus-python;
 in buildPythonApplication {
   # call the package quodlibet and just quodlibet
   name = "quodlibet${stdenv.lib.optionalString withGstPlugins "-with-gst-plugins"}-${version}";

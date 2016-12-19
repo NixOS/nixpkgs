@@ -129,7 +129,7 @@ default; run <literal>nix-env -i nix-repl</literal> to get it.  A
 typical use:
 
 <screen>
-$ nix-repl '&lt;nixos>'
+$ nix-repl '&lt;nixpkgs/nixos>'
 
 nix-repl> config.networking.hostName
 "mandark"

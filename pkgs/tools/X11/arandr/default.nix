@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, python, xrandr, pythonPackages }:
+{ stdenv, fetchurl, xrandr, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+let
+  inherit (python2Packages) buildPythonApplication docutils pygtk;
+in buildPythonApplication rec {
   name = "arandr-0.1.9";
 
   src = fetchurl {
@@ -15,8 +17,8 @@ pythonPackages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  buildInputs = [ pythonPackages.docutils ];
-  propagatedBuildInputs = [ xrandr pythonPackages.pygtk ];
+  buildInputs = [ docutils ];
+  propagatedBuildInputs = [ xrandr pygtk ];
 
   meta = {
     homepage = http://christian.amsuess.com/tools/arandr/;

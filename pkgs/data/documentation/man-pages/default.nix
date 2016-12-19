@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "MANDIR=$(out)/share/man" ];
+  postInstall = ''
+    # conflict with shadow-utils
+    rm $out/share/man/man5/passwd.5 \
+       $out/share/man/man3/getspnam.3
+  '';
   outputDocdev = "out";
 
   meta = with stdenv.lib; {

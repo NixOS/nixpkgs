@@ -1,7 +1,8 @@
 { stdenv, fetchurl, libibverbs }:
 
 stdenv.mkDerivation rec {
-  name = "librdmacm-1.0.21";
+  name = "librdmacm-${version}";
+  version = "1.0.21";
 
   src = fetchurl {
     url = "https://www.openfabrics.org/downloads/rdmacm/${name}.tar.gz";
@@ -9,6 +10,22 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libibverbs ];
+
+  postInstall = ''
+    mkdir -p $out/lib/pkgconfig
+    cat >$out/lib/pkgconfig/rdmacm.pc <<EOF
+    prefix=$out
+    exec_prefix=\''${prefix}
+    libdir=\''${exec_prefix}/lib
+    includedir=\''${prefix}/include
+
+    Name: RDMA library
+    Version: ${version}
+    Description: Library for managing RDMA connections
+    Libs: -L\''${libdir} -lrdmacm
+    Cflags: -I\''${includedir}
+    EOF
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://www.openfabrics.org/;

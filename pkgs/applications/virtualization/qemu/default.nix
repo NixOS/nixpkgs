@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
+{ stdenv, fetchurl, fetchpatch, python2, zlib, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, libuuid, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
@@ -11,6 +11,7 @@
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? !stdenv.isDarwin, spice, spice_protocol, usbredir
 , x86Only ? false
+, nixosTestRunner ? false
 }:
 
 with stdenv.lib;
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ python zlib pkgconfig glib ncurses perl pixman
+    [ python2 zlib pkgconfig glib ncurses perl pixman
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy
       gnutls nettle curl
     ]
@@ -133,7 +134,7 @@ stdenv.mkDerivation rec {
 
     # from http://git.qemu.org/?p=qemu.git;a=patch;h=ff55e94d23ae94c8628b0115320157c763eb3e06
     ./CVE-2016-9102.patch
-  ];
+  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch;
   hardeningDisable = [ "stackprotector" ];
 
   configureFlags =

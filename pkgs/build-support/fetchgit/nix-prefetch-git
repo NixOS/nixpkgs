@@ -291,8 +291,8 @@ _clone_user_rev() {
     pushd "$dir" >/dev/null
     fullRev=$( (git rev-parse "$rev" 2>/dev/null || git rev-parse "refs/heads/$branchName") | tail -n1)
     humanReadableRev=$(git describe "$fullRev" 2> /dev/null || git describe --tags "$fullRev" 2> /dev/null || echo -- none --)
-    commitDate=$(git show --no-patch --pretty=%ci "$fullRev")
-    commitDateStrict8601=$(git show --no-patch --pretty=%cI "$fullRev")
+    commitDate=$(git show -1 --no-patch --pretty=%ci "$fullRev")
+    commitDateStrict8601=$(git show -1 --no-patch --pretty=%cI "$fullRev")
     popd >/dev/null
 
     # Allow doing additional processing before .git removal
@@ -322,6 +322,18 @@ clone_user_rev() {
     fi
 }
 
+json_escape() {
+    local s="$1"
+    s="${s//\\/\\\\}" # \
+    s="${s//\"/\\\"}" # "
+    s="${s//^H/\\\b}" # \b (backspace)
+    s="${s//^L/\\\f}" # \f (form feed)
+    s="${s//
+/\\\n}" # \n (newline)
+    s="${s//^M/\\\r}" # \r (carriage return)
+    s="${s//   /\\t}" # \t (tab)
+    echo "$s"
+}
 
 print_results() {
     hash="$1"
@@ -338,17 +350,15 @@ print_results() {
         fi
     fi
     if test -n "$hash"; then
-        echo "{"
-        echo "  \"url\": \"$url\","
-        echo "  \"rev\": \"$fullRev\","
-        echo "  \"date\": \"$commitDateStrict8601\","
-        echo -n "  \"$hashType\": \"$hash\""
-        if test -n "$fetchSubmodules"; then
-            echo ","
-            echo -n "  \"fetchSubmodules\": true"
-        fi
-        echo ""
-        echo "}"
+        cat <<EOF
+{
+  "url": "$(json_escape "$url")",
+  "rev": "$(json_escape "$fullRev")",
+  "date": "$(json_escape "$commitDateStrict8601")",
+  "$(json_escape "$hashType")": "$(json_escape "$hash")",
+  "fetchSubmodules": $([[ -n "fetchSubmodules" ]] && echo true || echo false)
+}
+EOF
     fi
 }
 

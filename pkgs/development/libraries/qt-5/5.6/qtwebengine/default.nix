@@ -9,15 +9,16 @@
 
 , bison, flex, git, which, gperf
 , coreutils
-, pkgconfig, python
+, pkgconfig, python2
 
+, stdenv # lib.optional, needsPax
 }:
 
 qtSubmodule {
   name = "qtwebengine";
   qtInputs = [ qtquickcontrols qtlocation qtwebchannel ];
   buildInputs = [ bison flex git which gperf ];
-  nativeBuildInputs = [ pkgconfig python coreutils ];
+  nativeBuildInputs = [ pkgconfig python2 coreutils ];
   doCheck = true;
 
   enableParallelBuilding = true;
@@ -60,11 +61,14 @@ qtSubmodule {
   ];
   patches = [
     ./chromium-clang-update-py.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..
     EOF
+
+    paxmark m $out/libexec/QtWebEngineProcess
   '';
 }

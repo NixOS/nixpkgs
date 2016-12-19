@@ -1,19 +1,33 @@
-{ stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, bash }:
+{ stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, beamPackages }:
 
-stdenv.mkDerivation rec {
-  name    = "lfe-${version}";
-  version = "1.1.1";
+let
+  inherit (beamPackages) buildRebar3 buildHex;
+  proper = buildHex rec {
+    name    = "proper";
+    version = "1.1.1-beta";
+    sha256  = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
+
+    configurePhase = ''
+      ${erlang}/bin/escript write_compile_flags include/compile_flags.hrl
+    '';
+  };
+in
+buildRebar3 rec {
+  name    = "lfe";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner  = "rvirding";
-    repo   = "lfe";
+    repo   = name;
     rev    = version;
-    sha256 = "0w1vpjqj8ni43gi84i0mcml4gfaqhmmd9s46di37cngpdw86i3bz";
+    sha256 = "0j5gjlsk92y14kxgvd80q9vwyhmjkphpzadcswyjxikgahwg1avz";
   };
 
-  buildInputs = [ erlang makeWrapper ];
-
-  setupHook   = ./setup-hook.sh;
+  buildInputs = [ makeWrapper ];
+  beamDeps    = [ proper ];
+  patches     = [ ./no-test-deps.patch ];
+  doCheck     = true;
+  checkTarget = "travis";
 
   # These installPhase tricks are based on Elixir's Makefile.
   # TODO: Make, upload, and apply a patch.
@@ -24,7 +38,7 @@ stdenv.mkDerivation rec {
 
     rm -Rf $ebindir
     install -m755 -d $ebindir
-    install -m644 ebin/* $ebindir
+    install -m644 _build/default/lib/lfe/ebin/* $ebindir
 
     install -m755 -d $bindir
     for bin in bin/lfe{,c,doc,script}; do install -m755 $bin $bindir; done

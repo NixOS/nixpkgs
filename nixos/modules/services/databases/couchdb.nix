@@ -162,7 +162,7 @@ in {
 
         if [ "$(id -u)" = 0 ]; then
           chown ${cfg.user}:${cfg.group} `dirname ${cfg.uriFile}`;
-          (-f ${cfg.uriFile} && chown ${cfg.user}:${cfg.group} ${cfg.uriFile}) || true
+          (test -f ${cfg.uriFile} && chown ${cfg.user}:${cfg.group} ${cfg.uriFile}) || true
           chown ${cfg.user}:${cfg.group} ${cfg.databaseDir}
           chown ${cfg.user}:${cfg.group} ${cfg.viewIndexDir}
           chown ${cfg.user}:${cfg.group} ${cfg.configFile}

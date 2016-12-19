@@ -7,18 +7,18 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "134.0.0";
+  version = "138.0.0";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "0pv2whqqcjvz3x02rn08vyssvbqxsncqvx9916v2ycdpiymffdz0";
+        sha256 = "1z2v4bg743qkdlmyyy0z2j5s0g10vbc1643gxrhyz491sk6sp616";
       }
     else
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "1kji861ii4ig73scg64lijcqdg2p0d2i2af1fdbkils0imwa3m5l";
+        sha256 = "1y64bx9vj6rrapffr7zwxbxxbqlddx91n82kr99mwv19n11hydyw";
       };
 
   buildInputs = [python27 makeWrapper];

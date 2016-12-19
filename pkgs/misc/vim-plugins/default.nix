@@ -1039,6 +1039,17 @@ rec {
 
   };
 
+  vim-markdown = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-markdown-2016-05-19";
+    src = fetchgit {
+      url = "git://github.com/plasticboy/vim-markdown";
+      rev = "a3169545f330ec8080244c3ad755bb2211eca8a0";
+      sha256 = "1ycqx280xpc5gvfx8rrnmkqlv8q8g51hgiryx6yvd9a8ci805cx1";
+    };
+    dependencies = [];
+
+  };
+
   vim-racer = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-racer-2016-10-18";
     src = fetchgit {
