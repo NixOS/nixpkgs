@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $man/share/man/man8
     for cmd in zerotier-one.8 zerotier-cli.1 zerotier-idtool.1; do
-      cat doc/$cmd | gzip -9 > $man/share/man/man8/$cmd.gz
+      cat doc/$cmd | gzip -9n > $man/share/man/man8/$cmd.gz
     done
   '';
 
