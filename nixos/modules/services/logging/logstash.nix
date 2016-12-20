@@ -63,7 +63,7 @@ in
         description = "Enable the logstash web interface.";
       };
 
-      address = mkOption {
+      listenAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
         description = "Address on which to start webserver.";
@@ -147,7 +147,7 @@ in
               ${cfg.outputConfig}
             }
           ''} " +
-          ops cfg.enableWeb "-- web -a ${cfg.address} -p ${cfg.port}";
+          ops cfg.enableWeb "-- web -a ${cfg.listenAddress} -p ${cfg.port}";
       };
     };
   };
