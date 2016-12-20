@@ -1025,6 +1025,26 @@ in modules // {
     };
   };
 
+  funcsigs1 = buildPythonPackage rec {
+    name = "funcsigs-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/funcsigs/${name}.tar.gz";
+      sha256 = "0qvmlyv9a7c9pf6zy5nj11xi0sin4ljxqwn51s94wa3wlzagj413";
+    };
+
+    buildInputs = with self; [
+      unittest2 ordereddict
+    ];
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
+      homepage = "https://github.com/aliles/funcsigs";
+      maintainers = with maintainers; [ garbas ];
+      license = licenses.asl20;
+    };
+  };
+
   apscheduler = buildPythonPackage rec {
     name = "APScheduler-3.0.4";
     disabled = !isPy27;
@@ -11513,7 +11533,7 @@ in modules // {
 
   google_apputils = buildPythonPackage rec {
     name = "google-apputils-0.4.1";
-    disabled = isPy3k;
+    # disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/google-apputils/${name}.tar.gz";
@@ -13721,6 +13741,28 @@ in modules // {
 
     buildInputs = with self; [ unittest2 ];
     propagatedBuildInputs = with self; [ funcsigs six pbr ];
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
+    meta = {
+      description = "Mock objects for Python";
+      homepage = http://python-mock.sourceforge.net/;
+      license = stdenv.lib.licenses.bsd2;
+    };
+  });
+
+  mock20 = buildPythonPackage (rec {
+    name = "mock-2.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mock/${name}.tar.gz";
+      sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";
+    };
+
+    buildInputs = with self; [ unittest2 ];
+    propagatedBuildInputs = with self; [ funcsigs1 six pbr ];
 
     checkPhase = ''
       ${python.interpreter} -m unittest discover
@@ -18275,12 +18317,14 @@ in modules // {
 
   protobuf = self.protobuf2_6;
   protobuf3_0 = (self.protobufBuild pkgs.protobuf3_0).override { doCheck = false; };
+  protobuf3_1 = (self.protobufBuild pkgs.protobuf3_1).override { doCheck = false; };
   protobuf3_0_0b2 = (self.protobufBuild pkgs.protobuf3_0_0b2).override { doCheck = false; };
   protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
     inherit (protobuf) name src;
-    disabled = isPy3k || isPyPy;
+
+    disabled = /* isPy3K || */ isPyPy;
 
     propagatedBuildInputs = with self; [ protobuf google_apputils ];
 
@@ -29586,19 +29630,46 @@ in modules // {
   # bazel. Untangling it and building the wheel from source is an open
   # problem.
 
-  tensorflow = self.tensorflowNoGpuSupport;
+  tensorflow = self.tensorflow_nogpu;
+  tensorflow012 = self.tensorflow_nogpu_012;
 
-  tensorflowNoGpuSupport = buildPythonPackage rec {
+  tensorflow_nogpu = buildPythonPackage rec {
     name = "tensorflow";
     version = "0.9.0";
     format = "wheel";
 
     src = pkgs.fetchurl {
       url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
-      sha256 = "15v7iyry8bmp5wcc1rr4bkp80f3887rl99zqf8pys5bad4gldbkh";
+      sha256 = "0wfy4kingprr5vk7xv4wzx9jmx0wxmh80x633r0ls5pzzw16s21l";
     };
 
-    propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig ];
+    propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig mock ];
+
+    preFixup = ''
+      RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
+      find $out -name '*.so' -exec patchelf --set-rpath "$RPATH" {} \;
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "TensorFlow helps the tensors flow (no gpu support)";
+      homepage = http://tensorflow.org;
+      license = licenses.asl20;
+    };
+  };
+
+  tensorflow_nogpu_012 = buildPythonPackage rec {
+    name = "tensorflow";
+    version = "0.12.0";
+    format = "wheel";
+
+    src = pkgs.fetchurl {
+      url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp35-cp35m-linux_x86_64.whl";
+      sha256 = "1038axqac5bprg407ibx5bsmlbkkil69kprspjgwc1rkpwnbg72b";
+    };
+
+    propagatedBuildInputs = with self; [ numpy six protobuf3_1 pkgs.swig mock20 ];
 
     preFixup = ''
       RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
