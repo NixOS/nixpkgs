@@ -29,10 +29,9 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 
-  # Tests are currently failing because Hydra runs builds as uid 0.
-  # It'd be better to try to fix these tests, but this is blocking
-  # all NixOS Hydra builds right now.
-  doCheck = false;
+  # Tests were previously failing due to Hydra running builds as uid 0.
+  # That should hopefully be fixed now.
+  doCheck = true;
 
   preCheck =
     stdenv.lib.optionalString doCheck
