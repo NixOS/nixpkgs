@@ -18,11 +18,12 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "samba-4.3.11";
+  name = "samba-${version}";
+  version = "4.3.13";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "1v2grwivm6rasz1ganbybs0ikz1lydaniy65kxf1v8rl1qqngach";
+    sha256 = "15va32db7qqb35nqg6csmkb4mcwfwymkml5sp06k9kff885s0vc7";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./4.x-no-persistent-install.patch
       ./4.x-fix-ctdb-deps.patch
+      ./4.x-fix-libkrb5.patch
     ];
 
   buildInputs =

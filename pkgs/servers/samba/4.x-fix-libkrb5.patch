@@ -1,0 +1,41 @@
+From bb64c550ae19b08ad4e6d8d26f68c2474cb251e6 Mon Sep 17 00:00:00 2001
+From: Stefan Metzmacher <metze@samba.org>
+Date: Tue, 19 Jul 2016 16:31:01 +0200
+Subject: [PATCH] krb5_wrap: provide CKSUMTYPE_HMAC_SHA1_96_AES_*
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+MIT only defined this as CKSUMTYPE_HMAC_SHA1_96_AES128,
+while Heimdal has CKSUMTYPE_HMAC_SHA1_96_AES_128.
+
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Reviewed-by: Günther Deschner <gd@samba.org>
+---
+ lib/krb5_wrap/krb5_samba.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/lib/krb5_wrap/krb5_samba.h b/lib/krb5_wrap/krb5_samba.h
+index 41664f1..2b5e2bb 100644
+--- a/lib/krb5_wrap/krb5_samba.h
++++ b/lib/krb5_wrap/krb5_samba.h
+@@ -74,6 +74,17 @@
+ #define CKSUMTYPE_HMAC_MD5 CKSUMTYPE_HMAC_MD5_ARCFOUR
+ #endif
+ 
++/*
++ * CKSUMTYPE_HMAC_SHA1_96_AES_* in Heimdal
++ * CKSUMTYPE_HMAC_SHA1_96_AES* in MIT
++ */
++#if defined(CKSUMTYPE_HMAC_SHA1_96_AES128) && !defined(CKSUMTYPE_HMAC_SHA1_96_AES_128)
++#define CKSUMTYPE_HMAC_SHA1_96_AES_128 CKSUMTYPE_HMAC_SHA1_96_AES128
++#endif
++#if defined(CKSUMTYPE_HMAC_SHA1_96_AES256) && !defined(CKSUMTYPE_HMAC_SHA1_96_AES_256)
++#define CKSUMTYPE_HMAC_SHA1_96_AES_256 CKSUMTYPE_HMAC_SHA1_96_AES256
++#endif
++
+ typedef struct {
+ #if defined(HAVE_MAGIC_IN_KRB5_ADDRESS) && defined(HAVE_ADDRTYPE_IN_KRB5_ADDRESS) /* MIT */
+ 	krb5_address **addrs;
+-- 
+2.9.3
