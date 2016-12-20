@@ -3,6 +3,7 @@
 , withData ? false, poppler_data
 , qt4Support ? false, qt4 ? null
 , qt5Support ? false, qtbase ? null
+, introspectionSupport ? false, gobjectIntrospection ? null
 , utils ? false
 , minimal ? false, suffix ? "glib"
 }:
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
     [ zlib freetype fontconfig libjpeg openjpeg ]
     ++ optionals (!minimal) [ cairo lcms curl ]
     ++ optional qt4Support qt4
-    ++ optional qt5Support qtbase;
+    ++ optional qt5Support qtbase
+    ++ optional introspectionSupport gobjectIntrospection;
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -47,7 +49,8 @@ stdenv.mkDerivation rec {
       "--disable-poppler-glib" "--disable-poppler-cpp"
       "--disable-libcurl"
     ]
-    ++ optional (!utils) "--disable-utils" ;
+    ++ optional (!utils) "--disable-utils"
+    ++ optional introspectionSupport "--enable-introspection";
 
   enableParallelBuilding = true;
 

@@ -52,6 +52,7 @@ with frameworks; with libs; {
   GSS                     = [];
   GameController          = [];
   GameKit                 = [ Foundation ];
+  Hypervisor              = [];
   ICADevices              = [ Carbon CF IOBluetooth ];
   IMServicePlugIn         = [];
   IOBluetoothUI           = [ IOBluetooth ];
@@ -116,4 +117,6 @@ with frameworks; with libs; {
   OpenDirectory       = [];
   Quartz              = [ QuickLook QTKit ];
   QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL ];
+
+  vmnet = [];
 }

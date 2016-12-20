@@ -3168,6 +3168,8 @@ in
 
   paper-gtk-theme = callPackage ../misc/themes/paper { };
 
+  paperwork = callPackage ../applications/office/paperwork { };
+
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
   parallel = callPackage ../tools/misc/parallel { };
@@ -8925,6 +8927,10 @@ in
   polkit_qt4 = callPackage ../development/libraries/polkit-qt-1/qt-4.nix { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
+
+  poppler_gi = lowPrio (poppler.override {
+    introspectionSupport = true;
+  });
 
   poppler_min = poppler.override { # TODO: maybe reduce even more
     minimal = true;
@@ -17651,7 +17657,11 @@ in
 
   xcftools = callPackage ../tools/graphics/xcftools { };
 
-  xhyve = callPackage ../applications/virtualization/xhyve { };
+  xhyve = callPackage ../applications/virtualization/xhyve {
+    inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
+    inherit (darwin.apple_sdk.libs) xpc;
+    inherit (darwin) libobjc;
+  };
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 
