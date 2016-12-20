@@ -729,6 +729,27 @@ in {
     };
   };
 
+  python-uinput = buildPythonPackage rec {
+    name = "python-uinput-${version}";
+    version = "0.11.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/python-uinput/${name}.tar.gz";
+      sha256 = "033zqiypjz0nigav6vz0s57pbzikvds55mxphrdpkdbpdikjnfcr";
+    };
+
+    buildInputs = [ pkgs.udev ];
+
+    NIX_CFLAGS_LINK = [ "-ludev" ];
+
+    meta = with stdenv.lib; {
+      description = "Pythonic API to Linux uinput kernel module";
+      homepage = "http://tjjr.fi/sw/python-uinput/";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
