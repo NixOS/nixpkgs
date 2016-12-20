@@ -1882,6 +1882,10 @@ in
     stdenv = overrideCC stdenv gcc49;
   };
 
+  gnome15 = callPackage ../applications/misc/gnome15 {
+    inherit (gnome2) gnome_python gnome_python_desktop;
+  };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
