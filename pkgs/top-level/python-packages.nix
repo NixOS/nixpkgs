@@ -1610,6 +1610,23 @@ in {
     };
   };
 
+  noise = buildPythonPackage rec {
+    name = "noise-${version}";
+    version = "1.2.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/noise/${name}.tar.gz";
+      sha256 = "0rcv40dcshqpchwkdlhsv3n68h9swm9fh4d1cgzr2hsp6rs7k8jp";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/caseman/noise";
+      description = "Native-code and shader implementations of Perlin noise";
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
+
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
     version = "1.11.45";
