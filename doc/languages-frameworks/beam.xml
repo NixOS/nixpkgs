@@ -248,7 +248,7 @@ $ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA beamPackages.ibrowse
       development. Many times we need to create a
       <literal>shell.nix</literal> file and do our development inside
       of the environment specified by that file. This file looks a lot
-      like the packageing described above. The main difference is that
+      like the packaging described above. The main difference is that
       <literal>src</literal> points to project root and we call the
       package directly.
     </para>

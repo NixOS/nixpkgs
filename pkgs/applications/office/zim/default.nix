@@ -31,7 +31,6 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonPrograms
     substituteInPlace $out/bin/.zim-wrapped \
     --replace "sys.argv[0] = 'zim'" "sys.argv[0] = '$out/bin/zim'"
   '';
