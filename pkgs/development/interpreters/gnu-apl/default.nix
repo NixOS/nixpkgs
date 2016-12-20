@@ -11,6 +11,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline gettext ncurses ];
 
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
+  '';
+
+  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
+    "--disable-dependency-tracking"
+    "--disable-silent-rules"
+  ];
+
   postInstall = ''
     cp -r support-files/ $out/share/doc/
     find $out/share/doc/support-files -name 'Makefile*' -delete
@@ -21,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www.gnu.org/software/apl/;
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = with stdenv.lib.platforms; linux ++ darwin;
     inherit version;
 
     longDescription = ''

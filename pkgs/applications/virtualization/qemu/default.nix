@@ -23,7 +23,10 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "qemu-" + stdenv.lib.optionalString x86Only "x86-only-" + version;
+  name = "qemu-"  
+    + stdenv.lib.optionalString x86Only "x86-only-"
+    + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
+    + version;
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";

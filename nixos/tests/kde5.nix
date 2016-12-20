@@ -20,8 +20,6 @@ import ./make-test.nix ({ pkgs, ...} :
     services.xserver.desktopManager.kde5.enable = true;
   };
 
-  enableOCR = true;
-
   testScript = { nodes, ... }:
   let xdo = "${pkgs.xdotool}/bin/xdotool"; in
    ''

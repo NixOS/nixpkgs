@@ -6,7 +6,7 @@
 
 let
 
-  pkgs = import ./default.nix { };
+  pkgs = import ./../../default.nix { };
 
   packagesWith = cond: return: set:
     pkgs.lib.flatten
@@ -16,7 +16,7 @@ let
             result = builtins.tryEval (
               if pkgs.lib.isDerivation pkg && cond name pkg
                 then [(return name pkg)]
-              else if pkg.recurseForFerivations or false || pkg.recureseForRelease or false
+              else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
                 then packagesWith cond return pkg
               else []
             );
@@ -48,12 +48,15 @@ let
                    pkgs;
 
   packageByName = name:
-      if ! builtins.hasAttr name pkgs then
+    let
+        package = pkgs.lib.attrByPath (pkgs.lib.splitString "." name) null pkgs;
+    in
+      if package == null then
         builtins.throw "Package with an attribute name `${name}` does not exists."
-      else if ! builtins.hasAttr "updateScript" (builtins.getAttr name pkgs) then
+      else if ! builtins.hasAttr "updateScript" package then
         builtins.throw "Package with an attribute name `${name}` does have an `passthru.updateScript` defined."
       else
-        builtins.getAttr name pkgs;
+        package;
 
   packages =
     if package != null then
@@ -66,12 +69,12 @@ let
   helpText = ''
     Please run:
 
-        % nix-shell update.nix --argstr maintainer garbas
+        % nix-shell maintainers/scripts/update.nix --argstr maintainer garbas
 
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell update.nix --argstr package garbas
+        % nix-shell maintainers/scripts/update.nix --argstr package garbas
 
     to run update script for specific package.
   '';

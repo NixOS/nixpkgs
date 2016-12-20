@@ -1,23 +1,23 @@
---- a/source/OMakefile	1970-01-01 00:00:01.000000000 +0000
-+++ b/source/OMakefile	2016-12-02 08:48:42.000000000 +0000
-@@ -183,18 +183,18 @@
+diff --git a/source/OMakefile b/source/OMakefile
+index 6b19d84..095b8b6 100644
+--- a/source/OMakefile
++++ b/source/OMakefile
+@@ -164,12 +164,17 @@ LNK_MAIN = $(FNT)/linkerfront
  DEP_MAIN = $(FNT)/dependfront
- PAR_MAIN = $(FNT)/parsefront
  
+ ############################################################
++# Nixpkgs specific changes
++#
++
 +LEX = flex
 +
- ############################################################
++############################################################
  # Platform specific changes
  #
- 
- if $(mem $(SYSNAME), Linux)
-     YACC = bison -by
--    LEX = flex
-     export
  
  if $(mem $(OSTYPE), Cygwin Win32)
      YACC = bison -by
 -    LEX = flex
-     CC = i686-pc-mingw32-gcc
+     CFLAGS += -mno-cygwin
      INC_C[] += $(INC)/byteswap $(INC)/search
      export

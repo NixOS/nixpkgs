@@ -1,11 +1,13 @@
-{ stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam, coreutils, riak }:
+{ stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam, coreutils, riak
+, Carbon ? null, Cocoa ? null }:
 
 stdenv.mkDerivation rec {
   name = "riak_cs-2.1.1";
 
   buildInputs = [
-    which unzip erlang pam git wget
-  ];
+    which unzip erlang git wget
+  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ]
+    ++ lib.optional stdenv.isLinux [ pam ];
 
   src = fetchurl {
     url = "http://s3.amazonaws.com/downloads.basho.com/riak-cs/2.1/2.1.1/riak-cs-2.1.1.tar.gz";
@@ -60,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Dynamo inspired NoSQL DB by Basho with S3 compatibility";
-    platforms   = [ "x86_64-linux" ];
+    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
     license     = licenses.asl20;
     maintainer  = with maintainers; [ mdaiter ];
   };

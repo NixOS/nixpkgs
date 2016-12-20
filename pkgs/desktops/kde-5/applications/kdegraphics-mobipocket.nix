@@ -1,15 +1,15 @@
 {
   kdeApp, lib,
   ecm,
-  boost, gpgme
+  kio
 }:
 
 kdeApp {
-  name = "gpgmepp";
+  name = "kdegraphics-mobipocket";
   meta = {
-    license = with lib.licenses; [ lgpl21 bsd3 ];
+    license = [ lib.licenses.gpl2Plus ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [ boost gpgme ];
+  buildInputs = [ kio ];
 }

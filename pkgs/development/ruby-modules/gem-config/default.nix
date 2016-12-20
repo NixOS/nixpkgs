@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid
+, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc
 }@args:
 
 let
@@ -143,6 +143,10 @@ in
 
   rmagick = attrs: {
     buildInputs = [ imagemagick pkgconfig which ];
+  };
+
+  ruby-lxc = attrs: {
+    buildInputs = [ lxc ];
   };
 
   ruby-terminfo = attrs: {
