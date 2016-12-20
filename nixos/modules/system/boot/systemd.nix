@@ -375,6 +375,15 @@ let
         '';
     };
 
+  sliceToUnit = name: def:
+    { inherit (def) wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Slice]
+          ${attrsToSection def.sliceConfig}
+        '';
+    };
+
 in
 
 {
@@ -456,6 +465,12 @@ in
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
       '';
+    };
+
+    systemd.slices = mkOption {
+      default = {};
+      type = with types; attrsOf (submodule [ { options = sliceOptions; } unitConfig] );
+      description = "Definition of slice configurations.";
     };
 
     systemd.generators = mkOption {
@@ -748,6 +763,7 @@ in
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets
       // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit n v)) cfg.timers
       // mapAttrs' (n: v: nameValuePair "${n}.path" (pathToUnit n v)) cfg.paths
+      // mapAttrs' (n: v: nameValuePair "${n}.slice" (sliceToUnit n v)) cfg.slices
       // listToAttrs (map
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
