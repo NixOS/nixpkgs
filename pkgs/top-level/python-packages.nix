@@ -12441,13 +12441,13 @@ in {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.7.4";
+    version = "0.7.5";
 
     src = pkgs.fetchFromGitHub {
       repo = "hetzner";
       owner = "RedMoonStudios";
       rev = "v${version}";
-      sha256 = "04dlixczzvpimk48p87ix7j9q54jy46cwn4f05n2dlzsyc5vvxin";
+      sha256 = "1fw7i1z4a39i1ljd9qd4f5p1p3a4257jfglkdpw90xjwl7fdpq42";
     };
 
     # not there yet, but coming soon.
