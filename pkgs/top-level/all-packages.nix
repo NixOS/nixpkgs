@@ -696,6 +696,9 @@ with pkgs;
 
   capstone = callPackage ../development/libraries/capstone { };
 
+  cataract          = callPackage ../applications/misc/cataract { };
+  cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
+
   catch = callPackage ../development/libraries/catch { };
 
   catdoc = callPackage ../tools/text/catdoc { };
