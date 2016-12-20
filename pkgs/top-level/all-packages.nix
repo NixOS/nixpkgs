@@ -10289,7 +10289,6 @@ in
   mariadb = callPackage ../servers/sql/mariadb {
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
-    boost = boost159;
   };
 
   mongodb = callPackage ../servers/nosql/mongodb {
