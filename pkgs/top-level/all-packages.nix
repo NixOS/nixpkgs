@@ -17657,11 +17657,7 @@ in
 
   xcftools = callPackage ../tools/graphics/xcftools { };
 
-  xhyve = callPackage ../applications/virtualization/xhyve {
-    inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
-    inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin) libobjc;
-  };
+  xhyve = callPackage ../applications/virtualization/xhyve { };
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 
