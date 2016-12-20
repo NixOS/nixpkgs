@@ -31,7 +31,7 @@ in
     socketActivation =
       mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description =
           ''
             This option enables docker with socket activation. I.e. docker will
