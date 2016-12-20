@@ -8870,12 +8870,9 @@ in {
       sha256 = "1rwmajsy9qhl3qhhy5mw0xmr3n8abxcq8baidpn0sxv6yjg2369z";
     };
 
-    # Disable certain tests. Reported upstream at:
-    # https://github.com/jflesch/libpillowfight/issues/2
-    postPatch = ''
-      sed -i -e '/test_\(all_2\|ace\)/i \    @unittest.expectedFailure' \
-        tests/tests_ace.py tests/tests_all.py
-    '';
+    # Disable tests because they're designed to only work on Debian:
+    # https://github.com/jflesch/libpillowfight/issues/2#issuecomment-268259174
+    doCheck = false;
 
     # Python 2.x is not supported, see:
     # https://github.com/jflesch/libpillowfight/issues/1
