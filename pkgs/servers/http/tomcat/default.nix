@@ -51,14 +51,13 @@ in {
 
   tomcat85 = common {
     versionMajor = "8";
-    versionMinor = "5.8";
-    sha256 = "1rfws897m09pbnb1jc4684didpklfhqp86szv2jcqzdx0hlfxxs0";
+    versionMinor = "5.9";
+    sha256 = "1dy8bf18jwyi6p7ayb96gbhd4iyfq4d37s3qxnlll8vklfx388np";
   };
 
   tomcatUnstable = common {
     versionMajor = "9";
-    versionMinor = "0.0.M13";
-    sha256 = "0im3w4iqpar7x50vg7c9zkxyqf9x53xs5jvcq79xqgrmcqb9lk91";
+    versionMinor = "0.0.M15";
+    sha256 = "1spbq5vh2dplp83ki3fbbwl0klxq36s4rwkpcjdnwjxjymg9k432";
   };
-
 }

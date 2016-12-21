@@ -97,7 +97,7 @@ We will first have a look at how Python packages are packaged on Nix. Then, we w
 
 #### Python packaging on Nix
 
-On Nix all packages are built by functions. The main function in Nix for building Python packages is [`buildPythonPackage`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix).
+On Nix all packages are built by functions. The main function in Nix for building Python packages is [`buildPythonPackage`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/interpreters/python/build-python-package.nix).
 Let's see how we would build the `toolz` package. According to [`python-packages.nix`](https://raw.githubusercontent.com/NixOS/nixpkgs/master/pkgs/top-level/python-packages.nix) `toolz` is build using
 
 ```nix
@@ -141,12 +141,14 @@ with import <nixpkgs> {};
 
 pkgs.python35Packages.buildPythonPackage rec {
   name = "toolz-${version}";
-  version = "0.7.4";
+  version = "0.8.0";
 
   src = pkgs.fetchurl{
     url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-    sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+    sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
   };
+
+  doCheck = false;
 
   meta = {
     homepage = "http://github.com/pytoolz/toolz/";
@@ -170,18 +172,18 @@ with import <nixpkgs> {};
 ( let
     toolz = pkgs.python35Packages.buildPythonPackage rec {
       name = "toolz-${version}";
-      version = "0.7.4";
+      version = "0.8.0";
 
       src = pkgs.fetchurl{
         url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-        sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+        sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
       };
+
+      doCheck = false;
 
       meta = {
         homepage = "http://github.com/pytoolz/toolz/";
         description = "List processing tools and functional utilities";
-        license = licenses.bsd3;
-        maintainers = with maintainers; [ fridh ];
       };
     };
 
@@ -308,11 +310,10 @@ Note also the line `doCheck = false;`, we explicitly disabled running the test-s
 
 #### Develop local package
 
-As a Python developer you're likely aware of [development mode](http://pythonhosted.org/setuptools/setuptools.html#development-mode) (`python setup.py develop`);
+As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode) (`python setup.py develop`);
 instead of installing the package this command creates a special link to the project code.
 That way, you can run updated code without having to reinstall after each and every change you make.
-Development mode is also available on Nix as [explained](http://nixos.org/nixpkgs/manual/#ssec-python-development) in the Nixpkgs manual.
-Let's see how you can use it.
+Development mode is also available. Let's see how you can use it.
 
 In the previous Nix expression the source was fetched from an url. We can also refer to a local source instead using
 
