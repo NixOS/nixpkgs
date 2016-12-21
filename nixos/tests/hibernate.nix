@@ -14,6 +14,8 @@ import ./make-test.nix (pkgs: {
       networking.firewall.allowedTCPPorts = [ 4444 ];
 
       systemd.services.listener.serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l -p 4444";
+
+      virtualisation.writableStore = false; # FIXME
     };
 
     probe = { config, lib, pkgs, ...}: {
