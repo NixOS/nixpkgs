@@ -1,11 +1,12 @@
-{ fetchurl, stdenv }:
+{ fetchzip, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libupnp-1.6.20";
+  name = "libupnp-1.6.21";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pupnp/${name}.tar.bz2";
-    sha256 = "0qrsdsb1qm85hc4jy04qph895613d148f0x1mmk6z99y3q43fdgf";
+  # TODO: use proper source, but it's not available for now.
+  src = fetchzip {
+    url = "https://sourceforge.net/code-snapshots/git/p/pu/pupnp/code.git/pupnp-code-07c03def31d7d8fc6c04646a28432a580a3b2d85.zip";
+    sha256 = "07ksfhadinaa20542gblrxi9pqz0v6y70a836hp3qr4037id4nm9";
   };
 
   hardeningDisable = [ "fortify" ];
