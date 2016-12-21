@@ -25,9 +25,16 @@ let
     scrape_configs = cfg.scrapeConfigs;
   };
 
+  generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
+
+  prometheusYml =
+    if cfg.configText != null then
+      pkgs.writeText "prometheus.yml" cfg.configText
+    else generatedPrometheusYml;
+
   cmdlineArgs = cfg.extraFlags ++ [
     "-storage.local.path=${cfg.dataDir}/metrics"
-    "-config.file=${writePrettyJSON "prometheus.yml" promConfig}"
+    "-config.file=${prometheusYml}"
     "-web.listen-address=${cfg.listenAddress}"
     "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
@@ -356,6 +363,16 @@ in {
         default = [];
         description = ''
           Extra commandline options when launching Prometheus.
+        '';
+      };
+
+      configText = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          If non-null, this option defines the text that is written to
+          prometheus.yml. If null, the contents of prometheus.yml is generated
+          from the structured config options.
         '';
       };
 
