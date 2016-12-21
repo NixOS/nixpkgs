@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchurl, enableLargeConfig ? false }:
+{ lib, stdenv, fetchurl, pkgconfig, libatomic_ops, enableLargeConfig ? false }:
 
 stdenv.mkDerivation rec {
-  name = "boehm-gc-7.2g";
+  name = "boehm-gc-7.6.0";
 
   src = fetchurl {
-    url = http://www.hboehm.info/gc/gc_source/gc-7.2g.tar.gz;
-    sha256 = "0bvw6cc555qg5b7dgcqy3ryiw0wir79dqy0glff3hjmyy7i2jkjq";
+    url = http://www.hboehm.info/gc/gc_source/gc-7.6.0.tar.gz;
+    sha256 = "143x7g0d0k6250ai6m2x3l4y352mzizi4wbgrmahxscv2aqjhjm1";
   };
-  patches = if stdenv.isCygwin then [ ./cygwin.patch ] else null;
+
+  buildInputs = [ libatomic_ops ];
+  nativeBuildInputs = [ pkgconfig ];
 
   outputs = [ "out" "dev" "doc" ];
 
