@@ -1,16 +1,21 @@
-{ system, allPackages, platform, crossSystem, config, ... } @ args:
+{ lib, allPackages
+, system, platform, crossSystem, config
+}:
+
+assert crossSystem == null;
 
 rec {
-  vanillaStdenv = (import ../. (args // {
+  vanillaStdenv = import ../. {
+    inherit lib allPackages system platform crossSystem;
     # Remove config.replaceStdenv to ensure termination.
     config = builtins.removeAttrs config [ "replaceStdenv" ];
-  })).stdenv;
+  };
 
   buildPackages = allPackages {
+    inherit system platform crossSystem config;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
-    bootStdenv = vanillaStdenv;
-    inherit system platform crossSystem config;
+    stdenv = vanillaStdenv;
   };
 
   stdenvCustom = config.replaceStdenv { pkgs = buildPackages; };

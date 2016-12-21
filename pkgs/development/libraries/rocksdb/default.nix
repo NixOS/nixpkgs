@@ -13,16 +13,16 @@ let
 in
 stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
-  version = "4.1";
+  version = "4.13";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     rev = "v${version}";
-    sha256 = "1q1h2n3v02zg711vk56rc9v54f5i31w684wqag4xcr2dv1glw0r0";
+    sha256 = "1bxyykj13mw48yk108bkmxlfrp6bd95f27bysayax4lqxkgx0zzw";
   };
 
-  buildInputs = [ snappy google-gflags zlib bzip2 lz4 numactl malloc ];
+  buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc ];
 
   postPatch = ''
     # Hack to fix typos
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     "static_lib"
-    "shared_lib"
   ];
 
   installFlags = [

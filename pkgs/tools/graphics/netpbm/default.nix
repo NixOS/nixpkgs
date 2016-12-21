@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     substituteInPlace "config.mk" \
         --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff.out}/lib/libtiff.so" \
         --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff.dev}/include"
+   '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
+    echo "NETPBMLIBTYPE = dylib" >> config.mk
+    echo "NETPBMLIBSUFFIX = dylib" >> config.mk
   '';
 
   preBuild = ''
@@ -56,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = http://netpbm.sourceforge.net/;
     description = "Toolkit for manipulation of graphic images";
     license = "GPL,free";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

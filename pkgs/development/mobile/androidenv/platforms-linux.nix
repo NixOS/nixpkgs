@@ -292,4 +292,16 @@ in
     };
   };
 
+  platform_25 = buildPlatform {
+    name = "android-platform-7.1.1";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/platform-25_r02.zip;
+      sha1 = "6057e54a04f1d141f36a2c8d20f2962b41a3183f";
+    };
+    meta = {
+      description = "Android SDK Platform 25";
+      url = http://developer.android.com/sdk/;
+    };
+  };
+
 }

@@ -5,14 +5,15 @@
 , libstartup_notification, libpthreadstubs, libxcb, intltool
 , ORBit2, libXau, libICE, libSM
 , dbus, dbus_glib, librsvg, mesa
-, libXdmcp, libnotify, pythonPackages
+, libXdmcp, libnotify, python2Packages
 , hicolor_icon_theme, libjpeg_turbo, libsigcxx, protobuf
 , xdg_utils
 , gettext, boost, pyrex
 , makeWrapper
 }:
 let
-  inherit (pythonPackages) python dbus-python pygtk;
+  # FIXME: Use python.withPackages so we can get rid of PYTHONPATH wrapper
+  inherit (python2Packages) python dbus-python pygtk;
 
   s = # Generated upstream information
   rec {

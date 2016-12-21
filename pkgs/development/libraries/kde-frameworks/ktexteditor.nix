@@ -3,7 +3,7 @@
 , karchive, kconfig, kguiaddons, kiconthemes, kparts
 , libgit2
 , qtscript, qtxmlpatterns
-, ki18n, kio, sonnet
+, ki18n, kio, sonnet, syntax-highlighting
 }:
 
 kdeFramework {
@@ -12,6 +12,6 @@ kdeFramework {
   nativeBuildInputs = [ ecm perl ];
   propagatedBuildInputs = [
     karchive kconfig kguiaddons ki18n kiconthemes kio kparts libgit2 qtscript
-    qtxmlpatterns sonnet
+    qtxmlpatterns sonnet syntax-highlighting
   ];
 }

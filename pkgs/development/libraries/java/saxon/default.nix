@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./unzip-builder.sh;
   src = fetchurl {
     url = mirror://sourceforge/saxon/saxon6_5_3.zip;
-    md5 = "7b8c7c187473c04d2abdb40d8ddab5c6";
+    sha256 = "0l5y3y2z4wqgh80f26dwwxwncs8v3nkz3nidv14z024lmk730vs3";
   };
 
   nativeBuildInputs = [ unzip ];

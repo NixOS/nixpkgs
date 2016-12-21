@@ -39,7 +39,8 @@ let
     configureFlags =
       optional (singleBinary != false)
         ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
-      ++ optional stdenv.isSunOS "ac_cv_func_inotify_init=no";
+      ++ optional stdenv.isSunOS "ac_cv_func_inotify_init=no"
+      ++ optional withPrefix "--program-prefix=g";
 
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
@@ -89,14 +90,7 @@ let
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
 
-    # e.g. ls -> gls; grep -> ggrep
-    postFixup = optionalString withPrefix
-      ''
-        (
-          cd "$out/bin"
-          find * -type f -executable -exec mv {} g{} \;
-        )
-      '';
+    postFixup = ""; # FIXME: remove on next mass rebuild
 
     meta = {
       homepage = http://www.gnu.org/software/coreutils/;

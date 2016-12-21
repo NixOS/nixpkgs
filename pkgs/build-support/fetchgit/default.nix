@@ -26,7 +26,7 @@ in
    Cloning branches will make the hash check fail when there is an update.
    But not all patches we want can be accessed by tags.
 
-   The workaround is getting the last n commits so that it's likly that they
+   The workaround is getting the last n commits so that it's likely that they
    still contain the hash we want.
 
    for now : increase depth iteratively (TODO)
@@ -50,8 +50,7 @@ stdenv.mkDerivation {
 
   outputHashAlgo = if sha256 == "" then "md5" else "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then
-    (stdenv.lib.fetchMD5warn "fetchgit" url md5) else sha256;
+  outputHash = if sha256 == "" then md5 else sha256;
 
   inherit url rev leaveDotGit fetchSubmodules deepClone branchName;
 

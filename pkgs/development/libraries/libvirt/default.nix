@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, makeWrapper
-, libxml2, gnutls, devicemapper, perl, python
+, libxml2, gnutls, devicemapper, perl, python2
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
@@ -9,18 +9,18 @@
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "168ng4k5sik2jiylrlpmqdj3g8hnmsmvh84y8nvfgc7fdbbah5g3";
+    sha256 = "07nbh6zhaxx5i1s1acnppf8rzkzb2ppgv35jw7grbbnnpzpzz7c1";
   };
 
   patches = [ ./build-on-bsd.patch ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
-    libxml2 gnutls perl python readline
+    libxml2 gnutls perl python2 readline
     gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [

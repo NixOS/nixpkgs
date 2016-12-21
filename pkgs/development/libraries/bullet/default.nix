@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, mesa, freeglut }:
+{ stdenv, fetchFromGitHub, cmake, mesa, freeglut, darwin }:
 
 stdenv.mkDerivation rec {
   name = "bullet-${version}";
@@ -11,9 +11,24 @@ stdenv.mkDerivation rec {
     sha256 = "1zz3vs6i5975y9mgb1k1vxrjbf1028v0nc11p646dsvv2vplxx5r";
   };
 
-  buildInputs = [ cmake mesa freeglut ];
+  buildInputs = [ cmake ] ++
+    (if stdenv.isDarwin
+     then with darwin.apple_sdk.frameworks; [ Cocoa OpenGL ]
+     else [mesa freeglut]);
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DBUILD_CPU_DEMOS=OFF" ];
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
+    sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
+  '';
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DBUILD_CPU_DEMOS=OFF" ] ++
+    stdenv.lib.optionals stdenv.isDarwin [
+      "-DMACOSX_DEPLOYMENT_TARGET=\"10.9\""
+      "-DOPENGL_FOUND=true"
+      "-DOPENGL_LIBRARIES=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
+      "-DOPENGL_INCLUDE_DIR=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
+      "-DOPENGL_gl_LIBRARY=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
+      "-DCOCOA_LIBRARY=${darwin.apple_sdk.frameworks.Cocoa}/Library/Frameworks/Cocoa.framework"];
 
   enableParallelBuilding = true;
 
@@ -21,11 +36,11 @@ stdenv.mkDerivation rec {
     description = "A professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
-      detection, soft body and rigid body dynamics. 
+      detection, soft body and rigid body dynamics.
     '';
     homepage = http://code.google.com/p/bullet/;
     license = stdenv.lib.licenses.zlib;
     maintainers = with stdenv.lib.maintainers; [ aforemny ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

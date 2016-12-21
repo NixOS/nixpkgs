@@ -56,7 +56,13 @@ in
     '';
 
     postInstall = ''
+      paxmark m $out/bin/node
       PATH=$out/bin:$PATH patchShebangs $out
+
+      ${optionalString enableNpm '' 
+        mkdir -p $out/share/bash-completion/completions/
+        $out/bin/npm completion > $out/share/bash-completion/completions/npm
+      ''}
     '';
 
     meta = {
@@ -66,4 +72,6 @@ in
       maintainers = with maintainers; [ goibhniu havvy gilligan cko ];
       platforms = platforms.linux ++ platforms.darwin;
     };
+
+    passthru.python = python2; # to ensure nodeEnv uses the same version
 }

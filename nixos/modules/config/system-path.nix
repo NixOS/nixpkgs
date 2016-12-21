@@ -118,6 +118,7 @@ in
         "/share/terminfo"
         "/share/themes"
         "/share/vim-plugins"
+        "/share/vulkan"
       ];
 
     system.path = pkgs.buildEnv {

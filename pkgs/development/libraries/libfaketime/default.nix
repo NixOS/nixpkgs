@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1dw2lqsv2iqwxg51mdn25b4fjj3v357s0mc6ahxawqp210krg29s";
   };
 
+  patches = [
+    ./no-date-in-gzip-man-page.patch
+  ];
+
   preBuild = ''
     makeFlagsArray+=(PREFIX="$out" LIBDIRNAME=/lib)
   '';

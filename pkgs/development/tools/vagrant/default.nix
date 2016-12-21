@@ -2,7 +2,7 @@
 , libxml2, libxslt, makeWrapper, p7zip, xar, gzip, cpio }:
 
 let
-  version = "1.8.6";
+  version = "1.9.1";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -17,9 +17,9 @@ let
       else "system ${stdenv.system} not supported";
 
   sha256 = {
-    "x86_64-linux"  = "1nkhf160hcl02yvafj6hq53j204qqxyvxjngnmf4f5md8dmkpn76";
-    "i686-linux"    = "0mr4pn7nggjdsqyxh1z2mflvvmpzhbxh5gax501d2hi8xr0y68df";
-    "x86_64-darwin" = "1nd2adxwhs2vwmi5vw2z720ny4q9rpj8i4dlcdxzbyli7h8cs5mr";
+    "x86_64-linux"  = "0l1if9c4s4wkbi8k00pl7x00lil21izrd8wb9nv2b5q4gqidc1nh";
+    "i686-linux"    = "1789wjwcpgw3mljl49c8v5kycisay684gyalkkvd06928423y9zb";
+    "x86_64-darwin" = "1xrfq1a0xyifkhhjnpm6wsnms9w8c9q5rd2qqn4sm5npl7viy68p";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch = builtins.replaceStrings ["-linux"] [""] stdenv.system;
@@ -122,12 +122,10 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     # 'hide' the template file from shebang-patching
-    chmod -x "$out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable"
     chmod -x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
   '';
 
   postFixup = ''
-    chmod +x "$out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable"
     chmod +x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
   '' +
   (stdenv.lib.optionalString stdenv.isDarwin ''

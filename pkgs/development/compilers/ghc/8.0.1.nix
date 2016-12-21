@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./ghc-8.x-dont-pass-linker-flags-via-response-files.patch  # https://github.com/NixOS/nixpkgs/issues/10752
     ./relocation.patch
 
     # Fix https://ghc.haskell.org/trac/ghc/ticket/12130
@@ -58,6 +57,8 @@ stdenv.mkDerivation rec {
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
   postInstall = ''
+    paxmark m $out/lib/${name}/bin/{ghc,haddock}
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
 

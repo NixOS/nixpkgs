@@ -4,16 +4,17 @@
 
 stdenv.mkDerivation rec {
   name = "windowmaker-${version}";
-  version = "0.95.6";
+  version = "0.95.7";
   srcName = "WindowMaker-${version}";
 
   src = fetchurl {
     url = "http://windowmaker.org/pub/source/release/${srcName}.tar.gz";
-    sha256 = "1i3dw1yagsa3rs9x2na2ynqlgmbahayws0kz4vl00fla6550nns3";
+    sha256 = "1acph0nq6fsb452sl7j7a7kcc87zqqaw7qms1p8ijar19dn4hbc4";
   };
 
-  buildInputs = [ pkgconfig
-                  libX11 libXext libXft libXmu libXinerama libXrandr libXpm
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ libX11 libXext libXft libXmu libXinerama libXrandr libXpm
                   imagemagick libpng libjpeg libexif libtiff libungif libwebp ];
 
   configureFlags = [

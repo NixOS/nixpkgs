@@ -178,6 +178,7 @@ in
                   path = [ pkgs.simp_le ];
                   preStart = ''
                     mkdir -p '${cfg.directory}'
+                    chown '${data.user}:${data.group}' '${cfg.directory}'
                     if [ ! -d '${cpath}' ]; then
                       mkdir '${cpath}'
                     fi

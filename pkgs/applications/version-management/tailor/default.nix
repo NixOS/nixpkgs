@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "tailor-${version}";
   version = "0.9.35";
 

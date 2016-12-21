@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     rm $out/bin/dwarftherapist
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tool to manage dwarves in in a running game of Dwarf Fortress";
-    maintainers = with stdenv.lib.maintainers; [ the-kenny abbradar ];
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ the-kenny abbradar ];
+    license = licenses.mit;
+    platforms = platforms.linux;
     homepage = "https://github.com/splintermind/Dwarf-Therapist";
   };
 }

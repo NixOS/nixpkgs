@@ -1,15 +1,15 @@
 {stdenv, fetchurl, cmake, flex, bison, openssl, libpcap, perl, zlib, file, curl
-, geoip, gperftools }:
+, geoip, gperftools, python }:
 
 stdenv.mkDerivation rec {
-  name = "bro-2.4.1";
+  name = "bro-2.5";
 
   src = fetchurl {
-    url = "http://www.bro.org/downloads/release/${name}.tar.gz";
-    sha256 = "1xn8qwgnxihlr4lmg7kz2vqjk46aqgwc8878pbv30ih2lmrrdffq";
+    url = "http://www.bro.org/downloads/${name}.tar.gz";
+    sha256 = "10603lwhwsmh08m5rgknbspbhd4lis71qv7z8ixacgv6sf8a40hm";
   };
 
-  buildInputs = [ cmake flex bison openssl libpcap perl zlib file curl geoip gperftools ];
+  buildInputs = [ cmake flex bison openssl libpcap perl zlib file curl geoip gperftools python ];
 
   enableParallelBuilding = true;
 

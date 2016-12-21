@@ -1,4 +1,4 @@
-{stdenv, fetchurl, omake, ocaml, omake_rc1, libtiff, libjpeg, libpng, giflib, findlib, libXpm, freetype, graphicsmagick, ghostscript }:
+{ stdenv, fetchurl, omake, ocaml, libtiff, libjpeg, libpng, giflib, findlib, libXpm, freetype, graphicsmagick, ghostscript }:
 
 let
   pname = "camlimages";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "b40237c1505487049799a7af296eb3996b3fa08eab94415546f46d61355747c4";
   };
 
-  buildInputs = [ocaml omake_rc1 findlib graphicsmagick ghostscript ];
+  buildInputs = [ ocaml omake findlib graphicsmagick ghostscript ];
 
   propagatedBuildInputs = [libtiff libjpeg libpng giflib freetype libXpm ];
 

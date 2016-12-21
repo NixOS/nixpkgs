@@ -1,31 +1,35 @@
-{ system, allPackages, platform, crossSystem, config, ... } @ args:
+{ lib, allPackages
+, system, platform, crossSystem, config
+}:
 
 rec {
-  argClobber = {
+  vanillaStdenv = (import ../. {
+    inherit lib allPackages system platform;
     crossSystem = null;
     # Ignore custom stdenvs when cross compiling for compatability
     config = builtins.removeAttrs config [ "replaceStdenv" ];
+  }) // {
+    # Needed elsewhere as a hacky way to pass the target
+    cross = crossSystem;
   };
-  vanillaStdenv = (import ../. (args // argClobber // {
-    allPackages = args: allPackages (argClobber // args);
-  })).stdenv;
 
-  # Yeah this isn't so cleanly just build-time packages yet. Notice the
-  # buildPackages <-> stdenvCross cycle. Yup, it's very weird.
-  #
-  # This works because the derivation used to build `stdenvCross` are in
-  # fact using `forceNativeDrv` to use the `nativeDrv` attribute of the resulting
-  # derivation built with `vanillaStdenv` (second argument of `makeStdenvCross`).
-  #
-  # Eventually, `forceNativeDrv` should be removed and the cycle broken.
+  # For now, this is just used to build the native stdenv. Eventually, it should
+  # be used to build compilers and other such tools targeting the cross
+  # platform. Then, `forceNativeDrv` can be removed.
   buildPackages = allPackages {
+    inherit system platform crossSystem config;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
-    bootStdenv = stdenvCross;
-    inherit system platform crossSystem config;
+    stdenv = vanillaStdenv;
   };
 
   stdenvCross = buildPackages.makeStdenvCross
-    vanillaStdenv crossSystem
+    buildPackages.stdenv crossSystem
     buildPackages.binutilsCross buildPackages.gccCrossStageFinal;
+
+  stdenvCrossiOS = let
+    inherit (buildPackages.darwin.ios-cross { prefix = crossSystem.config; inherit (crossSystem) arch; simulator = crossSystem.isiPhoneSimulator or false; }) cc binutils;
+  in buildPackages.makeStdenvCross
+    buildPackages.stdenv crossSystem
+    binutils cc;
 }

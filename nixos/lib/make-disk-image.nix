@@ -27,6 +27,10 @@
 
 , name ? "nixos-disk-image"
 
+  # This prevents errors while checking nix-store validity, see
+  # https://github.com/NixOS/nix/issues/1134
+, fixValidity ? true
+
 , format ? "raw"
 }:
 
@@ -61,9 +65,6 @@ pkgs.vmTools.runInLinuxVM (
 
       # Create an empty filesystem and mount it.
       mkfs.${fsType} -L nixos $rootDisk
-      ${optionalString (fsType == "ext4") ''
-        tune2fs -c 0 -i 0 $rootDisk
-      ''}
       mkdir /mnt
       mount $rootDisk /mnt
 
@@ -71,9 +72,11 @@ pkgs.vmTools.runInLinuxVM (
       printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
           ${config.nix.package.out}/bin/nix-store --load-db --option build-users-group ""
 
-      # Add missing size/hash fields to the database. FIXME:
-      # exportReferencesGraph should provide these directly.
-      ${config.nix.package.out}/bin/nix-store --verify --check-contents --option build-users-group ""
+      ${if fixValidity then ''
+        # Add missing size/hash fields to the database. FIXME:
+        # exportReferencesGraph should provide these directly.
+        ${config.nix.package.out}/bin/nix-store --verify --check-contents --option build-users-group ""
+      '' else ""}
 
       # In case the bootloader tries to write to /dev/sda…
       ln -s vda /dev/xvda
@@ -97,7 +100,9 @@ pkgs.vmTools.runInLinuxVM (
 
       umount /mnt
 
-      # Do a fsck to make sure resize2fs works.
-      fsck.${fsType} -f -y $rootDisk
+      # Make sure resize2fs works
+      ${optionalString (fsType == "ext4") ''
+        tune2fs -c 0 -i 0 $rootDisk
+      ''}
     ''
 )

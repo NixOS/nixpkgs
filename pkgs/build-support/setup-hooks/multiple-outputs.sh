@@ -98,7 +98,8 @@ moveToOutput() {
         if [ "${!output}" = "$dstOut" ]; then continue; fi
         local srcPath
         for srcPath in "${!output}"/$patt; do
-            if [ ! -e "$srcPath" ]; then continue; fi
+            # apply to existing files/dirs, *including* broken symlinks
+            if [ ! -e "$srcPath" ] && [ ! -L "$srcPath" ]; then continue; fi
 
             if [ "$dstOut" = REMOVE ]; then
                 echo "Removing $srcPath"

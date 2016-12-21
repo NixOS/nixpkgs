@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, gstreamer, gst-plugins-base
-, python, gobjectIntrospection
+, python, gobjectIntrospection, json_glib
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-validate-1.8.2";
+  name = "gst-validate-1.10.2";
 
   meta = {
     description = "Integration testing infrastructure for the GStreamer framework";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-validate/${name}.tar.xz";
-    sha256 = "33c5b585c5ca1659fe6c09fdf02e45d8132c0d386b405bf527b14ab481a0bafe";
+    sha256 = "1mwyk3b19aq78mjhmrpc7qqs9flrykrn1j763g5wx546swc489xy";
   };
 
   outputs = [ "out" "dev" ];
@@ -24,11 +24,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
+    python json_glib
   ];
 
   propagatedBuildInputs = [ gstreamer gst-plugins-base ];
 
   enableParallelBuilding = true;
 }
-

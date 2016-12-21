@@ -2,15 +2,26 @@
 
 buildGoPackage rec {
   name = "doctl-${version}";
-  version = "1.3.1";
-  rev = "a57555c195d06bc7aa5037af77fde0665ad1231f";
+  version = "${major}.${minor}.${patch}";
+  major = "1";
+  minor = "5";
+  patch = "0";
   goPackagePath = "github.com/digitalocean/doctl";
+
+  excludedPackages = ''\(doctl-gen-doc\|install-doctl\|release-doctl\)'';
+  buildFlagsArray = let t = "${goPackagePath}"; in ''
+     -ldflags=
+        -X ${t}.Major=${major}
+        -X ${t}.Minor=${minor}
+        -X ${t}.Patch=${patch}
+        -X ${t}.Label=release
+   '';
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "doctl";
-    rev = "${rev}";
-    sha256 = "03z652fw0a628gv666w8vpi05a4sdilvs1j5scjhcbi82zsbkvma";
+    rev = "v${version}";
+    sha256 = "0dk7l4b0ngqkwdlx8qgr99jzipyzazvkv7dybi75dnp725lwxkl2";
   };
 
   meta = {

@@ -138,6 +138,45 @@ in
               '';
             };
             helper.enable = mkEnableOption "helper service";
+            sftpd.enable = mkEnableOption "SFTP service";
+            sftpd.port = mkOption {
+              default = null;
+              type = types.nullOr types.int;
+              description = ''
+                The port on which the SFTP server will listen.
+
+                This is the correct setting to tweak if you want Tahoe's SFTP
+                daemon to listen on a different port.
+              '';
+            };
+            sftpd.hostPublicKeyFile = mkOption {
+              default = null;
+              type = types.nullOr types.path;
+              description = ''
+                Path to the SSH host public key.
+              '';
+            };
+            sftpd.hostPrivateKeyFile = mkOption {
+              default = null;
+              type = types.nullOr types.path;
+              description = ''
+                Path to the SSH host private key.
+              '';
+            };
+            sftpd.accounts.file = mkOption {
+              default = null;
+              type = types.nullOr types.path;
+              description = ''
+                Path to the accounts file.
+              '';
+            };
+            sftpd.accounts.url = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                URL of the accounts server.
+              '';
+            };
             package = mkOption {
               default = pkgs.tahoelafs;
               defaultText = "pkgs.tahoelafs";
@@ -194,6 +233,12 @@ in
             serviceConfig = {
               Type = "simple";
               PIDFile = pidfile;
+              # Believe it or not, Tahoe is very brittle about the order of
+              # arguments to $(tahoe start). The node directory must come first,
+              # and arguments which alter Twisted's behavior come afterwards.
+              ExecStart = ''
+                ${settings.package}/bin/tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
+              '';
             };
             preStart = ''
               if [ \! -d ${nodedir} ]; then
@@ -208,12 +253,6 @@ in
               # rm ${nodedir}/tahoe.cfg
               # ln -s /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
               cp /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
-            '';
-            # Believe it or not, Tahoe is very brittle about the order of
-            # arguments to $(tahoe start). The node directory must come first,
-            # and arguments which alter Twisted's behavior come afterwards.
-            script = ''
-              tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
             '';
           });
         users.extraUsers = flip mapAttrs' cfg.introducers (node: _:
@@ -256,6 +295,19 @@ in
 
                 [helper]
                 enabled = ${if settings.helper.enable then "true" else "false"}
+
+                [sftpd]
+                enabled = ${if settings.sftpd.enable then "true" else "false"}
+                ${optionalString (settings.sftpd.port != null)
+                  "port = ${toString settings.sftpd.port}"}
+                ${optionalString (settings.sftpd.hostPublicKeyFile != null)
+                  "host_pubkey_file = ${settings.sftpd.hostPublicKeyFile}"}
+                ${optionalString (settings.sftpd.hostPrivateKeyFile != null)
+                  "host_privkey_file = ${settings.sftpd.hostPrivateKeyFile}"}
+                ${optionalString (settings.sftpd.accounts.file != null)
+                  "accounts.file = ${settings.sftpd.accounts.file}"}
+                ${optionalString (settings.sftpd.accounts.url != null)
+                  "accounts.url = ${settings.sftpd.accounts.url}"}
               '';
             });
           # Actually require Tahoe, so that we will have it installed.
@@ -281,6 +333,12 @@ in
             serviceConfig = {
               Type = "simple";
               PIDFile = pidfile;
+              # Believe it or not, Tahoe is very brittle about the order of
+              # arguments to $(tahoe start). The node directory must come first,
+              # and arguments which alter Twisted's behavior come afterwards.
+              ExecStart = ''
+                ${settings.package}/bin/tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
+              '';
             };
             preStart = ''
               if [ \! -d ${nodedir} ]; then
@@ -295,12 +353,6 @@ in
               # rm ${nodedir}/tahoe.cfg
               # ln -s /etc/tahoe-lafs/${node}.cfg ${nodedir}/tahoe.cfg
               cp /etc/tahoe-lafs/${node}.cfg ${nodedir}/tahoe.cfg
-            '';
-            # Believe it or not, Tahoe is very brittle about the order of
-            # arguments to $(tahoe start). The node directory must come first,
-            # and arguments which alter Twisted's behavior come afterwards.
-            script = ''
-              tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
             '';
           });
         users.extraUsers = flip mapAttrs' cfg.nodes (node: _:

@@ -203,7 +203,7 @@ milter_default_action = accept
         PermissionsStartOnly = true;
         Restart = "always";
         RuntimeDirectory = "rmilter";
-        RuntimeDirectoryPermissions="0755";
+        RuntimeDirectoryMode = "0755";
       };
 
     };

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper }:
 
 let
-  version = "3.0.12.4";
+  version = "3.0.13.5";
   arch = if stdenv.is64bit then "amd64" else "x86";
   libDir = if stdenv.is64bit then "lib64" else "lib";
 in
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
       "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2"
     ];
     sha256 = if stdenv.is64bit 
-      then "1n8vgbgnfbllfvsl82ai6smv6hl32a3nd071j2dp79agjz4fic3b"
-      else "19vkcgb0h71amixry8r72qqwaxwplzyz9nrxg5bdjjg8r2mkh4bc";
+      then "bd5933dd17d17f93d56f69332927cd1ce6f34439ec464a0ce2ca73102d85080c"
+      else "848e1a44af3c2b00840a280ba558a13407f4844432ddfd262ee8a7800365386b";
   };
 
   buildInputs = [ makeWrapper ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "TeamSpeak voice communication server";
-    homepage = http://teamspeak.com/;
+    homepage = https://teamspeak.com/;
     license = stdenv.lib.licenses.unfreeRedistributable;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.arobyn ];

@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.vmwareGuest;
   open-vm-tools = pkgs.open-vm-tools;
+  xf86inputvmmouse = pkgs.xorg.xf86inputvmmouse;
 in
 {
   options = {
@@ -29,16 +30,15 @@ in
 
     services.xserver = {
       videoDrivers = mkOverride 50 [ "vmware" ];
+      modules = [ xf86inputvmmouse ];
 
       config = ''
-          Section "InputDevice"
+          Section "InputClass"
             Identifier "VMMouse"
+            MatchDevicePath "/dev/input/event*"
+            MatchProduct "ImPS/2 Generic Wheel Mouse"
             Driver "vmmouse"
           EndSection
-        '';
-
-      serverLayoutSection = ''
-          InputDevice "VMMouse"
         '';
 
       displayManager.sessionCommands = ''

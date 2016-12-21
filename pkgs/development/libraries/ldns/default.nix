@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kf8pkwhcssvgzhh6ha1pjjiziwvwmfaali7kaafh6118mcy124b";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [ ./perl-5.22-compat.patch ];
 
   postPatch = ''
@@ -18,6 +20,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   configureFlags = [ "--with-ssl=${openssl.dev}" "--with-drill" ];
+
+  postInstall = ''
+    moveToOutput "bin/ldns-config" "$dev"
+  '';
 
   meta = with stdenv.lib; {
     description = "Library with the aim of simplifying DNS programming in C";

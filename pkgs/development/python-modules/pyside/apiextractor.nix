@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, libxml2, libxslt, python, sphinx, qt4 }:
 
 stdenv.mkDerivation {
-  name = "${python.libPrefix}-pyside-apiextractor-0.10.10";
+  name = "pyside-apiextractor-0.10.10";
 
   src = fetchurl {
     url = "https://github.com/PySide/Apiextractor/archive/0.10.10.tar.gz";

@@ -1,19 +1,40 @@
 # This module defines a NixOS installation CD that contains X11 and
-# KDE 4.
+# KDE 5.
 
 { config, lib, pkgs, ... }:
 
 with lib;
 
 {
-  imports = [ ./installation-cd-base.nix ../../profiles/graphical.nix ];
+  imports = [ ./installation-cd-base.nix ];
 
-  # Provide wicd for easy wireless configuration.
-  #networking.wicd.enable = true;
+  services.xserver = {
+    enable = true;
+
+    # Automatically login as root.
+    displayManager.slim = {
+      enable = true;
+      defaultUser = "root";
+      autoLogin = true;
+    };
+
+    desktopManager.kde5 = {
+      enable = true;
+      enableQt4Support = false;
+    };
+
+    # Enable touchpad support for many laptops.
+    synaptics.enable = true;
+  };
 
   environment.systemPackages =
-    [ # Include gparted for partitioning disks.
+    [ pkgs.glxinfo
+
+      # Include gparted for partitioning disks.
       pkgs.gparted
+
+      # Firefox for reading the manual.
+      pkgs.firefox
 
       # Include some editors.
       pkgs.vim
@@ -32,80 +53,21 @@ with lib;
   # Don't start the X server by default.
   services.xserver.autorun = mkForce false;
 
-  # Auto-login as root.
-  services.xserver.displayManager.kdm.extraConfig =
-    ''
-      [X-*-Core]
-      AllowRootLogin=true
-      AutoLoginEnable=true
-      AutoLoginUser=root
-      AutoLoginPass=""
-    '';
-
-  # Custom kde-workspace adding some icons on the desktop
-
   system.activationScripts.installerDesktop = let
-    openManual = pkgs.writeScript "nixos-manual.sh" ''
-      #!${pkgs.stdenv.shell}
-      cd ${config.system.build.manual.manual}/share/doc/nixos/
-      konqueror ./index.html
-    '';
-
     desktopFile = pkgs.writeText "nixos-manual.desktop" ''
       [Desktop Entry]
       Version=1.0
       Type=Application
       Name=NixOS Manual
-      Exec=${openManual}
-      Icon=konqueror
+      Exec=firefox ${config.system.build.manual.manual}/share/doc/nixos/index.html
+      Icon=text-html
     '';
 
   in ''
     mkdir -p /root/Desktop
     ln -sfT ${desktopFile} /root/Desktop/nixos-manual.desktop
-    ln -sfT ${pkgs.kde4.konsole}/share/applications/kde4/konsole.desktop /root/Desktop/konsole.desktop
+    ln -sfT ${pkgs.kde5.konsole}/share/applications/org.kde.konsole.desktop /root/Desktop/org.kde.konsole.desktop
     ln -sfT ${pkgs.gparted}/share/applications/gparted.desktop /root/Desktop/gparted.desktop
   '';
-
-  services.xserver.desktopManager.kde4.kdeWorkspacePackage = let
-    pkg = pkgs.kde4.kde_workspace;
-
-    plasmaInit = pkgs.writeText "00-defaultLayout.js" ''
-      loadTemplate("org.kde.plasma-desktop.defaultPanel")
-
-      for (var i = 0; i < screenCount; ++i) {
-        var desktop = new Activity
-        desktop.name = i18n("Desktop")
-        desktop.screen = i
-        desktop.wallpaperPlugin = 'image'
-        desktop.wallpaperMode = 'SingleImage'
-
-        var folderview = desktop.addWidget("folderview");
-        folderview.writeConfig("url", "desktop:/");
-
-        //Create more panels for other screens
-        if (i > 0){
-          var panel = new Panel
-          panel.screen = i
-          panel.location = 'bottom'
-          panel.height = screenGeometry(i).height > 1024 ? 35 : 27
-          var tasks = panel.addWidget("tasks")
-          tasks.writeConfig("showOnlyCurrentScreen", true);
-        }
-      }
-    '';
-
-  in
-    pkgs.runCommand pkg.name
-      { inherit (pkg) meta; }
-      ''
-        mkdir -p $out
-        cp -prf ${pkg}/* $out/
-        chmod a+w $out/share/apps/plasma-desktop/init
-        cp -f ${plasmaInit} $out/share/apps/plasma-desktop/init/00-defaultLayout.js
-      '';
-
-  # Disable large stuff that's not very useful on the installation CD.
-  services.xserver.desktopManager.kde4.enablePIM = false;
 
 }

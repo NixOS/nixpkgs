@@ -28,7 +28,6 @@ buildPythonApplication rec {
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
     sed -i -r -e 's|"(u?mount)"|"${utillinux.bin}/bin/\1"|' blivet/util.py
-    sed -i '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
   '' + stdenv.lib.optionalString useNixUdev ''
     sed -i -e '/find_library/,/find_library/ {
       c libudev = "${systemd.lib}/lib/libudev.so.1"

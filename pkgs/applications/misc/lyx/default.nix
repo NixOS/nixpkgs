@@ -1,27 +1,33 @@
 { fetchurl, stdenv, pkgconfig, python, file, bc
-, qt4, hunspell, makeWrapper #, mythes, boost
+, qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.5";
+  version = "2.2.2";
   name = "lyx-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.1.x/${name}.tar.xz";
-    sha256 = "1wrcxsvr5kx8cfdabshzmcjrb3rmy5bh74njnzpq9m5xms8parrf";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.2.x/${name}.tar.xz";
+    sha256 = "0s2mma8fkj5mi8qzc0j67589mbj854bypx2s3y59y1n429s3sp58";
   };
 
+  # LaTeX is used from $PATH, as people often want to have it with extra pkgs
+  buildInputs = [
+    pkgconfig qtbase qtsvg python file/*for libmagic*/ bc
+    hunspell makeWrapper # enchant
+  ];
+
+  # bogus configure script tests
+  preConfigure = ''
+    NIX_CFLAGS_COMPILE+=" $(pkg-config --cflags Qt5Core)"
+  '';
+
   configureFlags = [
+    "--enable-qt5"
     #"--without-included-boost"
     /*  Boost is a huge dependency from which 1.4 MB of libs would be used.
         Using internal boost stuff only increases executable by around 0.2 MB. */
     #"--without-included-mythes" # such a small library isn't worth a separate package
-  ];
-
-  # LaTeX is used from $PATH, as people often want to have it with extra pkgs
-  buildInputs = [
-    pkgconfig qt4 python file/*for libmagic*/ bc
-    hunspell makeWrapper # enchant
   ];
 
   enableParallelBuilding = true;

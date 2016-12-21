@@ -19,30 +19,21 @@ let
         type = types.str;
         description = "Public key at the opposite end of the tunnel.";
       };
-      hostname = mkOption {
-        default = "";
-        example = "foobar.hype";
-        type = types.str;
-        description = "Optional hostname to add to /etc/hosts; prevents reverse lookup failures.";
-      };
     };
   };
 
-  # Additional /etc/hosts entries for peers with an associated hostname
-  cjdnsExtraHosts = import (pkgs.runCommand "cjdns-hosts" {}
-    # Generate a builder that produces an output usable as a Nix string value
-    ''
-      exec >$out
-      echo \'\'
-      ${concatStringsSep "\n" (mapAttrsToList (k: v:
-          optionalString (v.hostname != "")
-            "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}")
-          (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
-      echo \'\'
-    '');
-
-  parseModules = x:
-    x // { connectTo = mapAttrs (name: value: { inherit (value) password publicKey; }) x.connectTo; };
+  # check for the required attributes, otherwise
+  # permit attributes not undefined here
+  checkPeers = x:
+    x // {
+      connectTo = mapAttrs
+        (name: value:
+          if !hasAttr "publicKey" value then abort "cjdns peer ${name} missing a publicKey" else
+          if !hasAttr "password"  value then abort "cjdns peer ${name} missing a password"  else
+          value
+        )
+      x.connectTo;
+    };
 
   # would be nice to  merge 'cfg' with a //,
   # but the json nesting is wacky.
@@ -53,8 +44,8 @@ let
     };
     authorizedPasswords = map (p: { password = p; }) cfg.authorizedPasswords;
     interfaces = {
-      ETHInterface = if (cfg.ETHInterface.bind != "") then [ (parseModules cfg.ETHInterface) ] else [ ];
-      UDPInterface = if (cfg.UDPInterface.bind != "") then [ (parseModules cfg.UDPInterface) ] else [ ];
+      ETHInterface = if (cfg.ETHInterface.bind != "") then [ (checkPeers cfg.ETHInterface) ] else [ ];
+      UDPInterface = if (cfg.UDPInterface.bind != "") then [ (checkPeers cfg.UDPInterface) ] else [ ];
     };
 
     privateKey = "@CJDNS_PRIVATE_KEY@";
@@ -134,12 +125,12 @@ in
           '';
          };
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+          type = types.attrsOf (types.attrsOf types.str);
           default = { };
           example = {
             "192.168.1.1:27313" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+              user      = "foobar";
+              password  = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
               publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
             };
           };
@@ -179,12 +170,12 @@ in
         };
 
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+          type = types.attrsOf (types.attrsOf types.str);
           default = { };
           example = {
             "01:02:03:04:05:06" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+              user      = "foobar";
+              password  = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
               publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
             };
           };
@@ -207,8 +198,9 @@ in
 
     systemd.services.cjdns = {
       description = "cjdns: routing engine designed for security, scalability, speed and ease of use";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" "sleep.target"];
+      after = [ "network-online.target" ];
+      bindsTo = [ "network-online.target" ];
 
       preStart = if cfg.confFile != null then "" else ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
@@ -244,7 +236,9 @@ in
 
       serviceConfig = {
         Type = "forking";
-        Restart = "on-failure";
+        Restart = "always";
+        StartLimitInterval = 0;
+        RestartSec = 1;
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
         AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_RAW";
         ProtectSystem = "full";
@@ -253,8 +247,6 @@ in
         PrivateTmp = true;
       };
     };
-
-    networking.extraHosts = cjdnsExtraHosts;
 
     assertions = [
       { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );

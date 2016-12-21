@@ -22,6 +22,15 @@ in
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
+      enableQt4Support = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable support for Qt 4-based applications. Particularly, install the
+          Qt 4 version of the Breeze theme and a default backend for Phonon.
+        '';
+      };
+
     };
 
   };
@@ -105,7 +114,7 @@ in
         kde5.sonnet
         kde5.threadweaver
 
-        kde5.breeze
+        kde5.breeze-qt5
         kde5.kactivitymanagerd
         kde5.kde-cli-tools
         kde5.kdecoration
@@ -141,13 +150,12 @@ in
         kde5.konsole
         kde5.print-manager
 
-        # Oxygen icons moved to KDE Frameworks 5.16 and later.
-        (kde5.oxygen-icons or kde5.oxygen-icons5)
+        # Install Breeze icons if available
+        (kde5.breeze-icons or kde5.oxygen-icons5 or kde5.oxygen-icons)
         pkgs.hicolor_icon_theme
 
-        kde5.kde-gtk-config
+        kde5.kde-gtk-config kde5.breeze-gtk
 
-        pkgs.phonon-backend-gstreamer
         pkgs.qt5.phonon-backend-gstreamer
       ]
 
@@ -155,14 +163,13 @@ in
       # If it is not available, Orion is very similar to Breeze.
       ++ lib.optional (!(lib.hasAttr "breeze-gtk" kde5)) pkgs.orion
 
-      # Install Breeze icons if available
-      ++ lib.optional (lib.hasAttr "breeze-icons" kde5) kde5.breeze-icons
-
       # Install activity manager if available
       ++ lib.optional (lib.hasAttr "kactivitymanagerd" kde5) kde5.kactivitymanagerd
 
       # frameworkintegration was split with plasma-integration in Plasma 5.6
       ++ lib.optional (lib.hasAttr "plasma-integration" kde5) kde5.plasma-integration
+
+      ++ lib.optionals cfg.enableQt4Support [ kde5.breeze-qt4 pkgs.phonon-backend-gstreamer ]
 
       # Optional hardware support features
       ++ lib.optional config.hardware.bluetooth.enable kde5.bluedevil
@@ -217,7 +224,6 @@ in
         kde5.ecm # for the setup-hook
         kde5.plasma-workspace
         kde5.breeze-icons
-        (kde5.oxygen-icons or kde5.oxygen-icons5)
       ];
     };
 

@@ -1,31 +1,42 @@
-{stdenv, fetchurl, fetchgit, libX11, xproto, libXtst, xextproto, pkgconfig
-, inputproto, libXi}:
+{ stdenv, fetchFromGitHub, pkgconfig, libX11, libXtst, xextproto,
+libXi }:
+
 let
-  s = rec {
-    baseName = "xcape";
-    version = "git-2015-03-01";
-    name = "${baseName}-${version}";
-  };
-  buildInputs = [
-    libX11 libXtst xproto xextproto pkgconfig inputproto libXi
-  ];
+  baseName = "xcape";
+  version = "1.2";
 in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchgit {
-    url = https://github.com/alols/xcape;
-    rev = "f3802fc086ce9d961d644a5d29ad5b650db56215";
-    sha256 = "0d79riwzmjr621ss3yhxqn2q8chn3f9rvk2nnjckz5yxbifvfg9s";
+
+stdenv.mkDerivation rec {
+  name = "${baseName}-${version}";
+
+  src = fetchFromGitHub {
+    owner = "alols";
+    repo = baseName;
+    rev = "v${version}";
+    sha256 = "09a05cxgrip6nqy1qmwblamp2bhknqnqmxn7i2a1rgxa0nba95dm";
   };
-  preConfigure = ''
-    makeFlags="$makeFlags PREFIX=$out"
-  '';
+
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ libX11 libXtst xextproto libXi ];
+
+  makeFlags = [ "PREFIX=$(out)" "MANDIR=/share/man/man1" ];
+
+  postInstall = "install -D --target-directory $out/share/doc README.md";
+
   meta = {
-    inherit (s) version;
-    description = ''A tool to have Escape and Control on a single key'';
+    description = "Utility to configure modifier keys to act as other keys";
+    longDescription = ''
+      xcape allows you to use a modifier key as another key when
+      pressed and released on its own.  Note that it is slightly
+      slower than pressing the original key, because the pressed event
+      does not occur until the key is released.  The default behaviour
+      is to generate the Escape key when Left Control is pressed and
+      released on its own.
+    '';
+    homepage = "https://github.com/alols/xcape";
     license = stdenv.lib.licenses.gpl3 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
   };
 }

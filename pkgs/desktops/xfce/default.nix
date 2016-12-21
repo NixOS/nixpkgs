@@ -100,7 +100,3 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
 }; # xfce_self
 
 in xfce_self
-
-
-
-

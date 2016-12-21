@@ -1,21 +1,20 @@
 { stdenv, fetchFromGitHub, gcc, gmp, libsigsegv, openssl, automake, autoconf, ragel,
-  cmake, re2c, libtool, ncurses, perl, zlib, python }:
+  cmake, re2c, libtool, ncurses, perl, zlib, python2, curl }:
 
 stdenv.mkDerivation rec {
-
   name = "urbit-${version}";
-  version = "2016-06-02";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "urbit";
     repo = "urbit";
-    rev = "8c113559872e4a97bce3f3ee5b370ad9545c7459";
-    sha256 = "055qdpp4gm0v04pddq4380pdsi0gp2ybgv1d2lchkhwsnjyl46jl";
+    rev = "v${version}";
+    sha256 = "1ndy58ypilabf9pfkqzzl7wf6x1vr4gpvsbn30sygp2ip908q0xz";
   };
 
   buildInputs = with stdenv.lib; [
     gcc gmp libsigsegv openssl automake autoconf ragel cmake re2c libtool
-    ncurses perl zlib python
+    ncurses perl zlib python2 curl
   ];
 
   # uses 'readdir_r' deprecated by glibc 2.24

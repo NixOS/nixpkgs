@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, setJavaClassPath }:
+{ stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
 let
   jdk = stdenv.mkDerivation {
     name = "openjdk-7u60b30";
@@ -9,7 +9,7 @@ let
       sha256 = "af510a4d566712d82c17054bb39f91d98c69a85586e244c6123669a0bd4b7401";
     };
 
-    buildInputs = [ unzip ];
+    buildInputs = [ unzip freetype ];
 
     installPhase = ''
       mv */Contents/Home $out
@@ -24,6 +24,8 @@ let
       # properly.
       mkdir -p $out/nix-support
       echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
+
+      install_name_tool -change /usr/X11/lib/libfreetype.6.dylib ${freetype}/lib/libfreetype.6.dylib $out/jre/lib/libfontmanager.dylib
 
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook

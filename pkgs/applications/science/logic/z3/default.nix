@@ -4,33 +4,21 @@ let
   python = python2;
 in stdenv.mkDerivation rec {
   name = "z3-${version}";
-  version = "4.4.1";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner  = "Z3Prover";
     repo   = "z3";
     rev    = "z3-${version}";
-    sha256 = "1ix100r1h00iph1bk5qx5963gpqaxmmx42r2vb5zglynchjif07c";
+    sha256 = "0ssp190ksak93hiz61z90x6hy9hcw1ywp8b2dzmbhn6fbd4bnxzp";
   };
 
   buildInputs = [ python ];
   enableParallelBuilding = true;
 
-  configurePhase = "${python.interpreter} scripts/mk_make.py --prefix=$out && cd build";
-
-  # z3's install phase is stupid because it tries to calculate the
-  # python package store location itself, meaning it'll attempt to
-  # write files into the nix store, and fail.
-  soext = if stdenv.system == "x86_64-darwin" then ".dylib" else ".so";
-  installPhase = ''
-    mkdir -p $out/bin $out/${python.sitePackages} $out/include
-    cp ../src/api/z3*.h       $out/include
-    cp ../src/api/c++/z3*.h   $out/include
-    cp z3                     $out/bin
-    cp libz3${soext}          $out/lib
-    cp libz3${soext}          $out/${python.sitePackages}
-    cp z3*.pyc                $out/${python.sitePackages}
-    cp ../src/api/python/*.py $out/${python.sitePackages}
+  configurePhase = ''
+    ${python.interpreter} scripts/mk_make.py --prefix=$out --python --pypkgdir=$out/${python.sitePackages}
+    cd build
   '';
 
   meta = {

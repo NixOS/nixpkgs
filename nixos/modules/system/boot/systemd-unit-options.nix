@@ -465,4 +465,20 @@ in rec {
 
   targetOptions = commonUnitOptions;
 
+  sliceOptions = commonUnitOptions // {
+
+    sliceConfig = mkOption {
+      default = {};
+      example = { MemoryMax = "2G"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Slice]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.slice</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
 }

@@ -4,13 +4,13 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "tokei-${version}";
-  version = "3.0.0";
+  version = "4.0.0";
   src = fetchurl {
     url = "https://github.com/Aaronepower/tokei/archive/${version}.tar.gz";
-    sha256 = "0xymz52gpasihzhxglzx4wh0312zkraxy4yrpxz694zalf2s5vj5";
+    sha256 = "1c7z3dgxr76dq6cvan3hgqlkcv61gmg6fkv6b98viymh4fy9if68";
   };
 
-  depsSha256 = "1syx8qzjn357dk2bf4ndmgc4zvrglmw88qiw117h6s511qyz8z0z";
+  depsSha256 = "0v4gplk7mkkik9vr1lqsr0yl1kqkqh14ncw95yb9iv7hcxvmcqn3";
 
   installPhase = ''
     mkdir -p $out/bin

@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig
+{ stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig, makeWrapper
 , enableDecLocator ? true
 }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-325";
+  name = "xterm-327";
 
   src = fetchurl {
     url = "ftp://invisible-island.net/xterm/${name}.tgz";
-    sha256 = "06sz66z4hvjjkvm3r5a5z442iis8lz8yjfzc629pwhj01ixb0c9v";
+    sha256 = "02qmfr1y24y5vq6kddksw84b8gxalc96n9wwaj7i8hmk6mn2zyv6";
   };
 
   buildInputs =
     [ xorg.libXaw xorg.xproto xorg.libXt xorg.libXext xorg.libX11 xorg.libSM xorg.libICE
-      ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit
+      ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit makeWrapper
     ];
 
   patches = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     "--enable-luit"
     "--enable-mini-luit"
     "--with-tty-group=tty"
+    "--with-app-defaults=$(out)/lib/X11/app-defaults"
   ] ++ stdenv.lib.optional enableDecLocator "--enable-dec-locator";
 
   # Work around broken "plink.sh".
@@ -42,6 +43,12 @@ stdenv.mkDerivation rec {
   # groups, and the builder will end up removing any setgid.
   postConfigure = ''
     echo '#define USE_UTMP_SETGID 1'
+  '';
+
+  postInstall = ''
+    for bin in $out/bin/*; do
+      wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
+    done
   '';
 
   meta = {

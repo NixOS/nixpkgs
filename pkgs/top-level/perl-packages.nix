@@ -649,10 +649,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   bignum = buildPerlPackage rec {
-    name = "bignum-0.43";
+    name = "bignum-0.47";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "0610cb569fe51ceaa98991549192b54a09b5ebd9bd03aee39e7234f7c222366d";
+      sha256 = "b084eac6d676d2acc4d60deed58e6e31b2f572b7b0be1aec9b93be92bad8261a";
     };
     buildInputs = [ MathBigInt MathBigRat ];
     meta = {
@@ -2760,10 +2760,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.041";
+    name = "CryptX-0.044";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "481f8c9285d6ce3cf330e1fa52c835a202debdac5d81e1acd20bd1d93b99790e";
+      sha256 = "15e5e6bd7b90af24c7e730751fec7b10d8e22ef4380d527bda242dee7dd20443";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -3072,10 +3072,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataValidateIP = buildPerlPackage rec {
-    name = "Data-Validate-IP-0.26";
+    name = "Data-Validate-IP-0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "d03190483f3ecec728c8e1b2e24989b7aed78ce3c989bea7dc6be0285d374690";
+      sha256 = "e1aa92235dcb9c6fd9b6c8cda184d1af73537cc77f4f83a0f88207a8bfbfb7d6";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ NetAddrIP ];
@@ -3945,10 +3945,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DigestJHash = buildPerlPackage rec {
-    name = "Digest-JHash-0.09";
+    name = "Digest-JHash-0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "ba77919b7b7a1b6f222f1bb5a7a34d88b1a92093e40a2aec37352cb38926ada3";
+      sha256 = "c746cf0a861a004090263cd54d7728d0c7595a0cf90cbbfd8409b396ee3b0063";
     };
     meta = {
       description = "Perl extension for 32 bit Jenkins Hashing Algorithm";
@@ -5976,6 +5976,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTMLTree ];
   };
 
+  HTMLEscape = buildPerlModule rec {
+    name = "HTML-Escape-1.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "b1cbac4157ad8dedac6914e1628855e05b8dc885a4007d2e4df8177c6a9b70fb";
+    };
+    buildInputs = [ ModuleBuild ModuleBuildPluggablePPPort TestRequires ];
+    meta = {
+      homepage = https://github.com/tokuhirom/HTML-Escape;
+      description = "Extremely fast HTML escaping";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLFromANSI = buildPerlPackage {
     name = "HTML-FromANSI-2.03";
     src = fetchurl {
@@ -6664,10 +6678,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-2.037";
+    name = "IO-Socket-SSL-2.039";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SULLR/${name}.tar.gz";
-      sha256 = "6747226937d652a30a2c9c21d171412737f41f27ea7d82cd74845b3052909469";
+      sha256 = "c6379a76860c724a22b79ebe9e91d26bd8a04e3ce035bacfd15de3d9beaf83ac";
     };
     propagatedBuildInputs = [ NetSSLeay URI ];
     # Fix path to default certificate store.
@@ -7393,10 +7407,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   locallib = buildPerlPackage rec {
-    name = "local-lib-2.000017";
+    name = "local-lib-2.000019";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "05607zxpb0jqvxn0cw064pnwsvbajw7k2pmzlisffadihg11m6ps";
+      sha256 = "008b9kgvcs9vjvj7ifg0f1s7i7446ff2441c575vhrwn15x35b9n";
     };
     meta = {
       description = "Create and use a local lib/ for perl modules with PERL5LIB";
@@ -7413,10 +7427,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogAny = buildPerlPackage rec {
-    name = "Log-Any-1.042";
+    name = "Log-Any-1.045";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PR/PREACTION/${name}.tar.gz";
-      sha256 = "b2cadb25a147bd49afdab1092a4a37268f307fcb6524a679623647a22501de84";
+      sha256 = "d95180c0c2d50d7d3a541e0c79d83ee6b4ad5787e1785b361fed450c2dec8400";
     };
     meta = {
       homepage = https://github.com/preaction/Log-Any;
@@ -7494,10 +7508,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogLog4perl = buildPerlPackage rec {
-    name = "Log-Log4perl-1.47";
+    name = "Log-Log4perl-1.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHILLI/${name}.tar.gz";
-      sha256 = "9001dded011226538b9a50c7856815bb0dba72a1e6218fdcaba56f651356b96f";
+      sha256 = "cf6e9fc1f9183fabbe540d84f603c6541458034092b7c53e41008093db62dc98";
     };
     meta = {
       homepage = https://mschilli.github.io/log4perl/;
@@ -7778,15 +7792,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999726";
+    name = "Math-BigInt-1.999806";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "dc3d9502c8633939000d04e7fbabcfc10fb8febb31c8e874a7bd60201c2228c4";
+      sha256 = "9b62b2fcfeed5ef42d375778e4ec3b469cab0002b5dc247906dc99f5786fa1fc";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -7803,16 +7816,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigRat = buildPerlPackage rec {
-    name = "Math-BigRat-0.260804";
+    name = "Math-BigRat-0.2611";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "f9bf5c007c0f141df7c7887d3482d47033cf7deab094a01e2863f31bacd7ef8a";
+      sha256 = "a8a033d0ccac9ac641c73867d71f2455ecb2339984cd964b1e3cfb2859e9fd81";
     };
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
       description = "Arbitrary big rational numbers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -8093,6 +8105,34 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
     meta = {
       description = "A collection of modules removed from Module-Build";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ModuleBuildPluggable = buildPerlModule rec {
+    name = "Module-Build-Pluggable-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "e5bb2acb117792c984628812acb0fec376cb970caee8ede57535e04d762b0e40";
+    };
+    propagatedBuildInputs = [ ClassAccessorLite ClassMethodModifiers DataOptList ModuleBuild TestSharedFork ];
+    meta = {
+      homepage = https://github.com/tokuhirom/Module-Build-Pluggable;
+      description = "Module::Build meets plugins";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ModuleBuildPluggablePPPort = buildPerlModule rec {
+    name = "Module-Build-Pluggable-PPPort-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "44084ba3d8815f343bd391585ac5d8339a4807ce5c0dd84c98db8f310b64c0ea";
+    };
+    buildInputs = [ ModuleBuild TestRequires ];
+    propagatedBuildInputs = [ ClassAccessorLite ModuleBuildPluggable ];
+    meta = {
+      description = "Generate ppport.h";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8473,17 +8513,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   Moo = buildPerlPackage rec {
-    name = "Moo-2.002005";
+    name = "Moo-2.003000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "8147f98a43f7beb808773202b05d3fba25d5fca018ad939d7e529f4d36d6dc68";
+      sha256 = "ccab84b1377e52922026b24b2ed51d83c439757f2b0783fffa73ac22b4fb3dd2";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny ];
+    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny SubQuote ];
     meta = {
       description = "Minimalist Object Orientation (with Moose compatibility)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -10066,10 +10105,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   pcscperl = buildPerlPackage {
-    name = "pcsc-perl-1.4.13";
+    name = "pcsc-perl-1.4.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/W/WH/WHOM/pcsc-perl-1.4.13.tar.bz2;
-      sha256 = "a5f7dfb30be0346cfe80d47749994dab861592929d80786104693987b36e3684";
+      url = "mirror://cpan/authors/id/W/WH/WHOM/pcsc-perl-1.4.14.tar.bz2";
+      sha256 = "17f6i16jv6ci6459vh6y3sz94vgcvykjjszcl4xsykryakjvf8i7";
     };
     buildInputs = [ pkgs.pcsclite ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
@@ -10077,7 +10116,7 @@ let self = _self // overrides; _self = with self; {
     # tests fail; look unfinished
     doCheck = false;
     meta = {
-      homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-perl/;
+      homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-perl/";
       description = "Communicate with a smart card using PC/SC";
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with maintainers; [ abbradar ];
@@ -11790,6 +11829,19 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [SubUplevel TestException];
   };
 
+  SubQuote = buildPerlPackage rec {
+    name = "Sub-Quote-2.003001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "9d471d8e13e7ce4793d5a5ec04a60fface14dd53be78dd94d228871915cfd1f9";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "Efficient generation of subroutines via string eval";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SubUplevel = buildPerlPackage {
     name = "Sub-Uplevel-0.24";
     src = fetchurl {
@@ -11810,6 +11862,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1ysgi38zx236cxz539k6d6rw5z0vc70rrglsaf5fk6rnwilw2g6n";
     };
     propagatedBuildInputs = [ pkgs.subversionClient ];
+  };
+
+  Swim = buildPerlPackage rec {
+    name = "Swim-0.1.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "06aac148d7b1778028ffae657fdf79b1093b52035661fd8b9bdad729dc8741aa";
+    };
+    buildInputs = [ FileShareDirInstall ];
+    propagatedBuildInputs = [ HTMLEscape HashMerge IPCRun Pegex TextAutoformat YAMLLibYAML ];
+    meta = {
+      homepage = https://github.com/ingydotnet/swim-pm;
+      description = "See What I Mean?!";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   Switch = buildPerlPackage rec {
@@ -12256,10 +12323,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Test2Suite = buildPerlPackage rec {
-    name = "Test2-Suite-0.000052";
+    name = "Test2-Suite-0.000061";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "0f571c8d8939eb90d06dd1da0681ca6af3bd1012a6c03e7bfb924dab675a6fa4";
+      sha256 = "b2ef2a59c8864c79f6c6a64c65e12c93f881361e4d9eb54419fcb4785c08ea75";
     };
     propagatedBuildInputs = [ Importer TestSimple13 ];
     meta = {
@@ -12901,10 +12968,10 @@ let self = _self // overrides; _self = with self; {
   TestSimple = null;
 
   TestSimple13 = buildPerlPackage rec {
-    name = "Test-Simple-1.302062";
+    name = "Test-Simple-1.302067";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "6729060d4ab12e2db3a3c6d6376ee6a9fb77c0ba0308b66919365a1e8bf156ea";
+      sha256 = "4d43a1ed9cd43a5ad0e6cb206c0cd86d59f118ad6895220688d7bd918016b2a3";
     };
     meta = {
       description = "Basic utilities for writing tests";
@@ -13864,19 +13931,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   Tk = buildPerlPackage rec {
-    name = "Tk-804.032_501";
+    name = "Tk-804.033";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/S/SR/SREZIC/${name}.tar.gz";
-      sha256 = "10fsvyr56gm59chc8b70n6bvhd3lh9c05sp8m4arcahid0rpgbwa";
+      url = "mirror://cpan/authors/id/S/SR/SREZIC/${name}.tar.gz";
+      sha256 = "84756e9b07a2555c8eecf88e63d5cbbba9b1aa97b1e71a3d4aa524a7995a88ad";
     };
-    makeMakerFlags = "X11LIB=${pkgs.xorg.libX11.out}/lib";
+    makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
     buildInputs = with pkgs; [ xorg.libX11 libpng ];
-    configurePhase = ''
-      perl Makefile.PL PREFIX=$out $makeMakerFlags
-    '';
-    doCheck = false;
-    meta ={
-      homepage = "http://search.cpan.org/~srezic/Tk-804.032/Tk.pod";
+    doCheck = false;            # Expects working X11.
+    meta = {
+      homepage = https://metacpan.org/pod/distribution/Tk/Tk.pod;
       license = stdenv.lib.licenses.tcltk;
     };
   };

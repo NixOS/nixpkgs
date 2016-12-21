@@ -49,7 +49,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.ntp.enable = mkForce false;
+    services.timesyncd.enable = mkForce false;
 
     # Add ntpctl to the environment for status checking
     environment.systemPackages = [ package ];

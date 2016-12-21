@@ -44,14 +44,6 @@ let
       inherit (srcs.breeze) src version;
     };
     breeze-qt5 = callPackage ./breeze-qt5.nix {};
-    breeze =
-      let
-        version = (builtins.parseDrvName breeze-qt5.name).version;
-      in
-        symlinkJoin {
-          name = "breeze-${version}";
-          paths = map (pkg: pkg.out or pkg) [ breeze-gtk breeze-qt4 breeze-qt5 ];
-        };
     breeze-grub = callPackage ./breeze-grub.nix {};
     breeze-plymouth = callPackage ./breeze-plymouth {};
     kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};

@@ -47,6 +47,6 @@ stdenv.mkDerivation {
     description = ''A package manager for Lua'';
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

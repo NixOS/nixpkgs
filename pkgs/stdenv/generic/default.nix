@@ -139,7 +139,7 @@ let
             { nixpkgs.config.allow${up reason} = true; }
           in configuration.nix to override this.
 
-          b) For `nix-env`, `nix-build` or any other Nix command you can add
+          b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
             { allow${up reason} = true; }
           to ~/.nixpkgs/config.nix.
         ''));

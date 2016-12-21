@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
     ln -sf $dnsutils/bin/{dig,nslookup,nsupdate} $bin/bin
     ln -sf $host/bin/host $dnsutils/bin
 
-    for f in "$out/lib/"*.la; do
-      sed -i $f -e 's|-L${openssl.dev}|-L${openssl.out}|g'
+    for f in "$lib/lib/"*.la "$dev/bin/"{isc-config.sh,bind*-config}; do
+      sed -i "$f" -e 's|-L${openssl.dev}|-L${openssl.out}|g'
     done
   '';
 

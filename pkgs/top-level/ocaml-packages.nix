@@ -158,6 +158,8 @@ let
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
+    erm_xmpp_0_3 = callPackage ../development/ocaml-modules/erm_xmpp/0.3.nix { };
+
     estring = callPackage ../development/ocaml-modules/estring { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
@@ -173,6 +175,8 @@ let
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     fix = callPackage ../development/ocaml-modules/fix { };
+
+    fmt = callPackage ../development/ocaml-modules/fmt { };
 
     fontconfig = callPackage ../development/ocaml-modules/fontconfig {
       inherit (pkgs) fontconfig;
@@ -259,7 +263,13 @@ let
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
-    nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
+    nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
+      lwt = ocaml_lwt;
+    };
+
+    notty = callPackage ../development/ocaml-modules/notty {
+      lwt = ocaml_lwt;
+    };
 
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
@@ -331,11 +341,15 @@ let
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
+    ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
+
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
+
+    otr = callPackage ../development/ocaml-modules/otr { };
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
@@ -363,6 +377,10 @@ let
     };
 
     textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
+
+    tls = callPackage ../development/ocaml-modules/tls {
+      lwt = ocaml_lwt;
+    };
 
     type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
     type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
@@ -631,7 +649,6 @@ let
 
     trv = callPackage ../development/tools/misc/trv { };
 
-    omake = callPackage ../development/tools/ocaml/omake { };
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
     verasco = callPackage ../development/tools/analysis/verasco (
@@ -639,7 +656,7 @@ let
       then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
       else {}
     );
-    
+
     glsurf = callPackage ../applications/science/math/glsurf {
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;
