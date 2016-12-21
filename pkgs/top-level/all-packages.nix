@@ -1099,6 +1099,8 @@ in
 
   mdf2iso = callPackage ../tools/cd-dvd/mdf2iso { };
 
+  nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
+
   libceph = ceph.lib;
   ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
   ceph-dev = ceph;
