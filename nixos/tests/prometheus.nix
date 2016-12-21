@@ -10,7 +10,7 @@ import ./make-test.nix {
         };
         scrapeConfigs = [{
           job_name = "prometheus";
-          target_groups = [{
+          static_configs = [{
             targets = [ "127.0.0.1:9090" ];
             labels = { instance = "localhost"; };
           }];

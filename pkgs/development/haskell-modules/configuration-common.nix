@@ -57,6 +57,8 @@ self: super: {
       rev = drv.version;
     };
   })).overrideScope (self: super: {
+    # https://github.com/yesodweb/yesod/issues/1324
+    yesod-persistent = self.yesod-persistent_1_4_1_1;
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
     persistent-template = self.persistent-template_2_1_8_1;

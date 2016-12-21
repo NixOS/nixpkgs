@@ -52,9 +52,10 @@ $extraCommands
 
 mkdir -p $out/tarball
 
-tar cvJf $out/tarball/$fileName.tar.xz * $extraArgs
+rm env-vars
+
+tar --sort=name --mtime='1970-01-01' -cvJf $out/tarball/$fileName.tar.xz * $extraArgs
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system
 echo "file system-tarball $out/tarball/$fileName.tar.xz" > $out/nix-support/hydra-build-products
-

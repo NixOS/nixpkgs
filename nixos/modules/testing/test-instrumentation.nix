@@ -119,9 +119,6 @@ let kernel = config.boot.kernelPackages.kernel; in
 
     networking.usePredictableInterfaceNames = false;
 
-    # Make sure we use a patched QEMU that ignores file ownership.
-    virtualisation.qemu.program = "${pkgs.qemu_test}/bin/qemu-kvm";
-
     # Make it easy to log in as root when running the test interactively.
     users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
 
