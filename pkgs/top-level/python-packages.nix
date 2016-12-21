@@ -20489,12 +20489,30 @@ in {
     };
   };
 
+  pyinputevent = buildPythonPackage rec {
+    name = "pyinputevent-2016-10-18";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "ntzrmtthihu777";
+      repo = "pyinputevent";
+      rev = "d2075fa5db5d8a402735fe788bb33cf9fe272a5b";
+      sha256 = "0rkis0xp8f9jc00x7jb9kbvhdla24z1vl30djqa6wy6fx0cr6sib";
+    };
+
+    meta = {
+      homepage = "https://github.com/ntzrmtthihu777/pyinputevent";
+      description = "Python interface to the Input Subsystem's input_event and uinput";
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+    };
+  };
+
   pyinotify = buildPythonPackage rec {
-    name = "pyinotify";
+    name = "pyinotify-${version}";
     version = "0.9.6";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${name}/${name}-${version}.tar.gz";
+      url = "mirror://pypi/p/${name}/${name}.tar.gz";
       sha256 = "1x3i9wmzw33fpkis203alygfnrkcmq9w1aydcm887jh6frfqm6cw";
     };
 
