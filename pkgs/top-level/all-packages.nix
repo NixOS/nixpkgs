@@ -4643,6 +4643,8 @@ in
     '';
   });
 
+  crystal = callPackage ../development/compilers/crystal { };
+
   devpi-client = callPackage ../development/tools/devpi-client {};
 
   drumstick = callPackage ../development/libraries/drumstick { };
