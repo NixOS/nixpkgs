@@ -13131,13 +13131,16 @@ in
 
   flac = callPackage ../applications/audio/flac { };
 
-  flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
+  flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer {
+  };
+
+  flashplayer_11 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
     debug = config.flashplayer.debug or false;
   };
 
-  flashplayer-standalone = pkgsi686Linux.flashplayer.sa;
+  flashplayer-standalone = pkgsi686Linux.flashplayer_11.sa;
 
-  flashplayer-standalone-debugger = (pkgsi686Linux.flashplayer.override { debug = true; }).sa;
+  flashplayer-standalone-debugger = (pkgsi686Linux.flashplayer_11.override { debug = true; }).sa;
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
