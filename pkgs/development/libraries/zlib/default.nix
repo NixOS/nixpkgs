@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "039agw5rqvqny92cpkrfn243x2gd4xn13hs3xi6isk55d2vqqr9n";
   };
 
+  patches = [
+    ./CVE-2016-9840.patch
+    ./CVE-2016-9841.patch
+    ./CVE-2016-9842.patch
+    ./CVE-2016-9843.patch
+  ];
+
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure \
       --replace '/usr/bin/libtool' 'ar' \
@@ -81,4 +88,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-
