@@ -10,6 +10,7 @@ let
       sslCertificateKey = "/var/lib/acme/${vhostName}/key.pem";
     })
   ) cfg.virtualHosts;
+  enableIPv6 = config.networking.enableIPv6;
 
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
@@ -84,7 +85,7 @@ let
       ${optionalString cfg.statusPage ''
         server {
           listen 80;
-          listen [::]:80;
+          ${optionalString enableIPv6 "listen [::]:80;" }
 
           server_name localhost;
 
@@ -92,7 +93,7 @@ let
             stub_status on;
             access_log off;
             allow 127.0.0.1;
-            allow ::1;
+            ${optionalString enableIPv6 "allow ::1;"}
             deny all;
           }
         }
@@ -133,7 +134,9 @@ let
         ${optionalString vhost.forceSSL ''
           server {
             listen 80 ${optionalString vhost.default "default"};
-            listen [::]:80 ${optionalString vhost.default "default"};
+            ${optionalString enableIPv6
+              ''listen [::]:80 ${optionalString vhost.default "default"};''
+            }
 
             server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
             ${acmeLocation}
@@ -145,7 +148,7 @@ let
 
         server {
           listen ${listenString};
-          listen [::]:${listenString};
+          ${optionalString enableIPv6 "listen [::]:${listenString};"}
 
           server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
           ${acmeLocation}
