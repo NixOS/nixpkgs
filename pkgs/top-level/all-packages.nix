@@ -6751,6 +6751,8 @@ in
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  bugzilla = callPackage ../servers/bugzilla { };
+
   bwidget = callPackage ../development/libraries/bwidget { };
 
   c-ares = callPackage ../development/libraries/c-ares {
