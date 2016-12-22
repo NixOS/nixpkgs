@@ -1099,6 +1099,8 @@ in
 
   mdf2iso = callPackage ../tools/cd-dvd/mdf2iso { };
 
+  nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
+
   libceph = ceph.lib;
   ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
   ceph-dev = ceph;
@@ -1878,6 +1880,10 @@ in
 
   gnaural = callPackage ../applications/audio/gnaural {
     stdenv = overrideCC stdenv gcc49;
+  };
+
+  gnome15 = callPackage ../applications/misc/gnome15 {
+    inherit (gnome2) gnome_python gnome_python_desktop;
   };
 
   gnokii = callPackage ../tools/misc/gnokii { };
@@ -14809,6 +14815,8 @@ in
 
   ssr = callPackage ../applications/audio/soundscape-renderer {};
 
+  ssrc = callPackage ../applications/audio/ssrc { };
+
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stp = callPackage ../applications/science/logic/stp {};
@@ -17656,11 +17664,7 @@ in
 
   xcftools = callPackage ../tools/graphics/xcftools { };
 
-  xhyve = callPackage ../applications/virtualization/xhyve {
-    inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
-    inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin) libobjc;
-  };
+  xhyve = callPackage ../applications/virtualization/xhyve { };
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 

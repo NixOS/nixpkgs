@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 7.13
+  # LTS Haskell 7.14
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -51,7 +51,7 @@ default-package-overrides:
   - adjunctions ==4.3
   - adler32 ==0.1.1.0
   - aeson ==0.11.2.1
-  - aeson-better-errors ==0.9.0.1
+  - aeson-better-errors ==0.9.1.0
   - aeson-casing ==0.1.0.5
   - aeson-compat ==0.3.6
   - aeson-generic-compat ==0.0.1.0
@@ -324,7 +324,7 @@ default-package-overrides:
   - clckwrks-theme-bootstrap ==0.4.2
   - cli ==0.1.2
   - clientsession ==0.9.1.2
-  - Clipboard ==2.3.0.1
+  - Clipboard ==2.3.0.2
   - clock ==0.7.2
   - clumpiness ==0.17.0.0
   - ClustalParser ==1.1.4
@@ -393,6 +393,8 @@ default-package-overrides:
   - cryptohash ==0.11.9
   - cryptohash-conduit ==0.1.1
   - cryptohash-cryptoapi ==0.1.4
+  - cryptohash-md5 ==0.11.100.1
+  - cryptohash-sha1 ==0.11.100.1
   - cryptohash-sha256 ==0.11.100.1
   - cryptol ==2.4.0
   - cryptonite ==0.19
@@ -433,7 +435,7 @@ default-package-overrides:
   - dependent-sum ==0.3.2.2
   - dependent-sum-template ==0.0.0.5
   - derive ==2.5.26
-  - deriving-compat ==0.3.4
+  - deriving-compat ==0.3.5
   - descriptive ==0.9.4
   - diagrams ==1.3.0.1
   - diagrams-cairo ==1.3.1.1
@@ -476,7 +478,7 @@ default-package-overrides:
   - docvim ==0.3.2.1
   - dotenv ==0.3.1.0
   - dotnet-timespan ==0.0.1.0
-  - double-conversion ==2.0.1.0
+  - double-conversion ==2.0.2.0
   - download ==0.3.2.5
   - dpor ==0.2.0.0
   - drawille ==0.1.2.0
@@ -586,7 +588,7 @@ default-package-overrides:
   - foreign-store ==0.2
   - formatting ==6.2.4
   - fortran-src ==0.1.0.4
-  - Frames ==0.1.8
+  - Frames ==0.1.9
   - free ==4.12.4
   - free-vl ==0.1.4
   - freenect ==1.2.1
@@ -847,6 +849,7 @@ default-package-overrides:
   - highlighting-kate ==0.6.3
   - hinotify ==0.3.9
   - hint ==0.6.0
+  - hip ==1.2.0.0
   - histogram-fill ==0.8.4.1
   - hit ==0.6.3
   - hjsmin ==0.2.0.2
@@ -1320,7 +1323,7 @@ default-package-overrides:
   - persistent-refs ==0.4
   - persistent-sqlite ==2.6
   - persistent-template ==2.5.1.6
-  - pgp-wordlist ==0.1.0.1
+  - pgp-wordlist ==0.1.0.2
   - phantom-state ==0.2.1.2
   - picoparsec ==0.1.2.3
   - pinboard ==0.9.6
@@ -1591,7 +1594,7 @@ default-package-overrides:
   - snap-core ==1.0.1.0
   - snap-server ==1.0.1.1
   - snowflake ==0.1.1.1
-  - soap ==0.2.3.2
+  - soap ==0.2.3.3
   - soap-openssl ==0.1.0.2
   - soap-tls ==0.1.1.2
   - socket ==0.6.1.0
@@ -1638,7 +1641,7 @@ default-package-overrides:
   - STMonadTrans ==0.3.4
   - stopwatch ==0.1.0.3
   - storable-complex ==0.2.2
-  - storable-endian ==0.2.5
+  - storable-endian ==0.2.6
   - storable-record ==0.0.3.1
   - store ==0.2.1.2
   - store-core ==0.2.0.2
@@ -1689,7 +1692,7 @@ default-package-overrides:
   - tar ==0.5.0.3
   - tardis ==0.4.1.0
   - tasty ==0.11.0.4
-  - tasty-ant-xml ==1.0.2
+  - tasty-ant-xml ==1.0.3
   - tasty-dejafu ==0.3.0.2
   - tasty-expected-failure ==0.11.0.4
   - tasty-golden ==2.3.1.1
@@ -1746,7 +1749,7 @@ default-package-overrides:
   - th-reify-many ==0.1.6
   - th-to-exp ==0.0.1.0
   - th-utilities ==0.2.0.1
-  - these ==0.7.2
+  - these ==0.7.3
   - threads ==0.5.1.4
   - through-text ==0.1.0.0
   - thumbnail-plus ==1.0.5
@@ -1755,7 +1758,7 @@ default-package-overrides:
   - time-compat ==0.1.0.3
   - time-lens ==0.4.0.1
   - time-locale-compat ==0.1.1.3
-  - time-parsers ==0.1.1.0
+  - time-parsers ==0.1.2.0
   - timeit ==1.0.0.0
   - timelens ==0.2.0.2
   - timemap ==0.0.4
@@ -1842,7 +1845,7 @@ default-package-overrides:
   - utility-ht ==0.0.12
   - uu-interleaved ==0.2.0.0
   - uu-parsinglib ==2.9.1.1
-  - uuid ==1.3.12
+  - uuid ==1.3.13
   - uuid-orphans ==1.4.1
   - uuid-types ==1.0.3
   - vado ==0.0.7
@@ -1864,7 +1867,7 @@ default-package-overrides:
   - versions ==3.0.0
   - vhd ==0.2.2
   - ViennaRNAParser ==1.2.9
-  - vinyl ==0.5.2
+  - vinyl ==0.5.3
   - vinyl-utils ==0.3.0.0
   - void ==0.7.1
   - vty ==5.11.3
@@ -1930,7 +1933,7 @@ default-package-overrides:
   - Workflow ==0.8.3
   - wrap ==0.0.0
   - wreq ==0.4.1.0
-  - writer-cps-mtl ==0.1.1.0
+  - writer-cps-mtl ==0.1.1.1
   - writer-cps-transformers ==0.1.1.0
   - wuss ==1.1.3
   - X11 ==1.6.1.2
@@ -1982,7 +1985,7 @@ default-package-overrides:
   - yesod-gitrev ==0.1.0.0
   - yesod-job-queue ==0.3.0.1
   - yesod-newsfeed ==1.6
-  - yesod-persistent ==1.4.0.6
+  - yesod-persistent ==1.4.1.0
   - yesod-sitemap ==1.4.0.1
   - yesod-static ==1.5.1.1
   - yesod-static-angular ==0.1.8
@@ -1996,7 +1999,7 @@ default-package-overrides:
   - yjtools ==0.9.18
   - zero ==0.1.4
   - zeromq4-haskell ==0.6.5
-  - zip ==0.1.3
+  - zip ==0.1.4
   - zip-archive ==0.3.0.5
   - zippers ==0.2.2
   - zlib ==0.6.1.2
@@ -2676,6 +2679,7 @@ dont-distribute-packages:
   cabalvchk:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   cabocha:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   cached-io:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  cacophony:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   caffegraph:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   cake3:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   cakyrespa:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3066,6 +3070,7 @@ dont-distribute-packages:
   cubicbezier:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   cuboid:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   cudd:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
+  cue-sheet:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   currency-convert:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   curry-base:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   curry-frontend:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3268,6 +3273,7 @@ dont-distribute-packages:
   direct-http:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   direct-plugins:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   directed-cubical:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
+  directory-tree:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   dirfiles:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   discogs-haskell:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   discordian-calendar:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4270,6 +4276,7 @@ dont-distribute-packages:
   haste-gapi:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   haste-perch:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   haste:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
+  hastily:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   hat:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   Hate:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   hatex-guide:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4575,6 +4582,7 @@ dont-distribute-packages:
   hpasteit:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   HPath:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   hpath:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
+  hpc-coveralls:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   hpc-tracer:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   hpdft:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   HPi:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4710,6 +4718,7 @@ dont-distribute-packages:
   hspec-shouldbe:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspec-snap:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspec-test-sandbox:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
+  hspec-webdriver:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   HsPerl5:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspread:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspresent:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -5721,6 +5730,7 @@ dont-distribute-packages:
   mysnapsession-example:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   mysnapsession:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   mysql-effect:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
+  mysql-haskell-nem:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   mysql-haskell-openssl:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   mysql-haskell:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   mysql-simple-quasi:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6085,6 +6095,7 @@ dont-distribute-packages:
   pipes-async:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-attoparsec-streaming:                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-binary:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
+  pipes-cacophony:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-cereal-plus:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-cereal:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-conduit:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6844,9 +6855,11 @@ dont-distribute-packages:
   snap-cors:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   snap-error-collector:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   snap-extras:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
+  snap-loader-dynamic:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   snap-predicates:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   snap-routes:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   snap-server:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
+  snap-templates:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   snap-testing:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   snap-utils:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   snap-web-routes:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6884,6 +6897,7 @@ dont-distribute-packages:
   snaplet-scoped-session:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   snaplet-sedna:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   snaplet-ses-html:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
+  snaplet-sqlite-simple-jwt-auth:               [ i686-linux, x86_64-linux, x86_64-darwin ]
   snaplet-sqlite-simple:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   snaplet-stripe:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   snaplet-tasks:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6956,6 +6970,7 @@ dont-distribute-packages:
   spoty:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   Sprig:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   spritz:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  sproxy-web:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   sproxy2:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   spsa:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   sql-simple-mysql:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7580,6 +7595,7 @@ dont-distribute-packages:
   wai-middleware-preprocessor:                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-middleware-route:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-middleware-static-caching:                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  wai-middleware-static:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-responsible:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-router:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-routes:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7597,6 +7613,7 @@ dont-distribute-packages:
   watchdog:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   watcher:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   watchit:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  wave:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   WaveFront:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   wavesurfer:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   wavy:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7620,7 +7637,9 @@ dont-distribute-packages:
   webcrank-dispatch:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   webcrank-wai:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   webcrank:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
+  webdriver-angular:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   webdriver-snoy:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
+  webdriver:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   WeberLogic:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   webify:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   webkit-javascriptcore:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
