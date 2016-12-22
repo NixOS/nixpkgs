@@ -101,7 +101,11 @@ stdenv.mkDerivation rec {
     sed -i '1 a\exit 0' misc/cgo/errors/test.bash
   '';
 
-  patches = [ ./remove-tools-1.7.patch ./cacert-1.7.patch ];
+  patches =
+    [ ./remove-tools-1.7.patch
+      ./cacert-1.7.patch
+      ./creds-test.patch
+    ];
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 

@@ -1,26 +1,34 @@
-{ stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx, makeWrapper }:
+{ stdenv, fetchurl, unzip, makeWrapper
+, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx,
+}:
 
-stdenv.mkDerivation rec {
-  name = "maude-2.6";
+let
 
-  src = fetchurl {
-    url = "http://maude.cs.uiuc.edu/download/current/Maude-2.6.tar.gz";
-    sha256 = "182abzhvjvlaa21aqv7802v3bs57a4dm7cw09s3mqmih7nzpkfm5";
-  };
+  version = "2.7";
 
   fullMaude = fetchurl {
-    url = "https://full-maude.googlecode.com/git/full-maude261h.maude";
-    sha256 = "0xx8bfn6arsa75m5vhp5lmpazgfw230ssq33h9vifswlvzzc81ha";
+    url = "https://raw.githubusercontent.com/maude-team/full-maude/master/full-maude27c.maude";
+    sha256 = "08bg3gn1vyjy5k69hnynpzc9s1hnrbkyv6z08y1h2j37rlc4c18y";
   };
 
-  buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
+in
+
+stdenv.mkDerivation rec {
+  name = "maude-${version}";
+
+  src = fetchurl {
+    url = "https://github.com/maude-team/maude/archive/v${version}-ext-hooks.tar.gz";
+    sha256 = "02p0snxm69rs8pvm93r91p881dw6p3bxmazr3cfw5pnxpgz0vjl0";
+  };
+
+  buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper unzip];
 
   hardeningDisable = [ "stackprotector" ] ++
     stdenv.lib.optionals stdenv.isi686 [ "pic" "fortify" ];
 
   preConfigure = ''
     configureFlagsArray=(
-      --datadir=$out/share/maude
+      --datadir="$out/share/maude"
       TECLA_LIBS="-ltecla -lncursesw"
       CFLAGS="-O3" CXXFLAGS="-O3"
     )
@@ -30,8 +38,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
-    mkdir -p $out/share/maude
-    cp ${fullMaude} -d $out/share/maude/full-maude.maude
+    install -D -m 444 ${fullMaude} $out/share/maude/full-maude.maude
   '';
 
   meta = {
