@@ -24,6 +24,7 @@ in bootStages ++ [
     stdenv = vanillaPackages.stdenv // {
       # Needed elsewhere as a hacky way to pass the target
       cross = crossSystem;
+      overrides = _: _: {};
     };
   })
 
