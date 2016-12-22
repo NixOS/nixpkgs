@@ -49,8 +49,8 @@ in let
   # reasonable default.
   platform =
     args.platform
-    or (config.platform
-    or (import ./platforms.nix).selectPlatformBySystem system);
+    or ( config.platform
+      or ((import ./platforms.nix).selectPlatformBySystem system) );
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than

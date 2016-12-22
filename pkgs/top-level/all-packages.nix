@@ -1099,6 +1099,8 @@ in
 
   mdf2iso = callPackage ../tools/cd-dvd/mdf2iso { };
 
+  nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
+
   libceph = ceph.lib;
   ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
   ceph-dev = ceph;
@@ -1878,6 +1880,10 @@ in
 
   gnaural = callPackage ../applications/audio/gnaural {
     stdenv = overrideCC stdenv gcc49;
+  };
+
+  gnome15 = callPackage ../applications/misc/gnome15 {
+    inherit (gnome2) gnome_python gnome_python_desktop;
   };
 
   gnokii = callPackage ../tools/misc/gnokii { };
@@ -9999,6 +10005,8 @@ in
 
     mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
 
+    mod_perl = callPackage ../servers/http/apache-modules/mod_perl { };
+
     mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
 
     mod_python = callPackage ../servers/http/apache-modules/mod_python { };
@@ -12986,6 +12994,8 @@ in
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  freebayes = callPackage ../applications/science/biology/freebayes { };
+
   freewheeling = callPackage ../applications/audio/freewheeling { };
 
   fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid { };
@@ -14809,6 +14819,8 @@ in
   };
 
   ssr = callPackage ../applications/audio/soundscape-renderer {};
+
+  ssrc = callPackage ../applications/audio/ssrc { };
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
