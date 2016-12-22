@@ -102,6 +102,9 @@ stdenv.mkDerivation rec {
       done
     done
 
+    # create libtinfo symlink
+    ln -svf $out/lib/libncurses.$dylibtype $out/libtinfo.$dylibtype
+        
     # move some utilities to $bin
     # these programs are used at runtime and don't really belong in $dev
     moveToOutput "bin/clear" "$out"
