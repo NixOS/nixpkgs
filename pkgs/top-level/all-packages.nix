@@ -2253,7 +2253,7 @@ in
   ioping = callPackage ../tools/system/ioping { };
 
   iops = callPackage ../tools/system/iops { };
-  
+
   ior = callPackage ../tools/system/ior { };
 
   iodine = callPackage ../tools/networking/iodine { };
@@ -2604,7 +2604,7 @@ in
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
-  
+
   libmesode = callPackage ../development/libraries/libmesode { };
 
   libnabo = callPackage ../development/libraries/libnabo { };
