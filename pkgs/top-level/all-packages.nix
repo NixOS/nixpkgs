@@ -13132,6 +13132,7 @@ in
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer {
+      debug = config.flashplayer.debug or false;
   };
 
   flashplayer_11 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {

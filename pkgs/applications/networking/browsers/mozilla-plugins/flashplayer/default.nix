@@ -44,6 +44,7 @@
 , pixman
 , zlib
 , unzip
+, debug ? false
 
 /* you have to add ~/mm.cfg :
 
@@ -75,12 +76,22 @@ stdenv.mkDerivation rec {
   version = "24.0.0.186";
 
   src = fetchurl {
-    url = "  https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-    sha256 =
-      if arch == "x86_64" then
-        "0qs6hx31p1q2zqsr8jcf7niwsp6nncpqs3igb6l9f9fi0a8va8f7"
+    url =
+      if debug then
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/24/flash_player_npapi_linux_debug.${arch}.tar.gz"
       else
-        "1zcinq7629bgbashx25krby8r91sag2v8382q620951iiww06n1v";
+        "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
+    sha256 =
+      if debug then
+        if arch == "x86_64" then
+          "0i7c861n42vb2zd9hnp26lxjakkv0fxp53smcwzc9xhdbjr14ail"
+        else
+          "0gj59iinh8gbjm5bn24qi3niyvi8x6byyc1sa6qvqkvjwh1ckdi3"
+      else
+        if arch == "x86_64" then
+          "0qs6hx31p1q2zqsr8jcf7niwsp6nncpqs3igb6l9f9fi0a8va8f7"
+        else
+          "1zcinq7629bgbashx25krby8r91sag2v8382q620951iiww06n1v";
   };
 
   nativeBuildInputs = [ unzip ];
