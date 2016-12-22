@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.5.patch
+    ./creds-test.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
