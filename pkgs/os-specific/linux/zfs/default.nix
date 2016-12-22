@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+, attr, fetchpatch
 , configFile ? "all"
 
 # Userspace dependencies
@@ -20,20 +21,27 @@ assert buildKernel -> kernel != null && spl != null;
 stdenv.mkDerivation rec {
   name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
-  version = "0.6.5.8";
+  version = "0.7.0-rc2";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "zfs";
     rev = "zfs-${version}";
-    sha256 = "0qccz1832p3i80qlrrrypypspb9sy9hmpgcfx9vmhnqmkf0yri4a";
+    sha256 = "197y2jyav9h1ksri9kzqvrwmzpb58mlgw27vfvgd4bvxpwfxq53s";
   };
 
-  patches = [ ./nix-build.patch ];
+  patches = [
+    ./nix-build.patch
+    (fetchpatch {
+        name = "Kernel_4.9_zfs_aio_fsync_removal.patch";
+        url = "https://github.com/zfsonlinux/zfs/commit/99ca173929cb693012dabe98bcee4f12ec7e6e92.patch";
+        sha256 = "10npvpj52rpq88vdsn7zkdhx2lphzvqypsd9abdadjbqkwxld9la";
+    })
+  ];
 
   buildInputs = [ autoreconfHook nukeReferences ]
     ++ optionals buildKernel [ spl ]
-    ++ optionals buildUser [ zlib libuuid python ];
+    ++ optionals buildUser [ attr zlib libuuid python ];
 
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
