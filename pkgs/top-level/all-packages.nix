@@ -16733,8 +16733,8 @@ in
     camlp5 = ocamlPackages.camlp5_transitional;
   };
   coq_8_6 = callPackage ../applications/science/logic/coq/8.6.nix {
-    inherit (ocamlPackages) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages.camlp5_transitional;
+    inherit (ocamlPackages_4_03) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages_4_03.camlp5_transitional;
   };
   coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {
     inherit (ocamlPackages) ocaml findlib lablgtk;
