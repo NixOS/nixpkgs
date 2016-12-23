@@ -91,6 +91,9 @@ stdenv.mkDerivation rec {
           if [ -e "$out/lib/lib''${library}$suffix.$dylibtype" ]; then
             ln -svf lib''${library}$suffix.$dylibtype $out/lib/lib$library$newsuffix.$dylibtype
             ln -svf lib''${library}$suffix.$dylibtype.${abiVersion} $out/lib/lib$library$newsuffix.$dylibtype.${abiVersion}
+            # make libtinfo symlinks
+            ln -svf lib''${library}$suffix.$dylibtype $out/lib/libtinfo$newsuffix.$dylibtype
+            ln -svf lib''${library}$suffix.$dylibtype.${abiVersion} $out/lib/libtinfo$newsuffix.$dylibtype.${abiVersion}
           fi
         done
         for statictype in a dll.a la; do
@@ -102,10 +105,6 @@ stdenv.mkDerivation rec {
       done
     done
 
-    # create libtinfo symlink
-    ln -svf $out/lib/libncurses.$dylibtype $out/libtinfo.$dylibtype
-    ln -svf $out/lib/libncurses.$dylibtype.${abiVersion} $out/libtinfo.$dylibtype.${abiVersion}
-        
     # move some utilities to $bin
     # these programs are used at runtime and don't really belong in $dev
     moveToOutput "bin/clear" "$out"
