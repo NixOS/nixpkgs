@@ -1,3 +1,40 @@
+#!bash
+# Usage: makeWrapper <original> <wrapper> [OPTIONS]
+#
+# Builds a wrapper script that executes a number of commands before executing
+# the <original> program.
+#
+# Options:
+#
+#   --set <name> <value>
+#     Adds the given environment variable
+#
+#   --unset <name>
+#     Removes the given environment variable
+#
+#   --run <command>
+#     Adds a pre-command to be executed. It can also be used to append flags
+#     to the $extraFlagsArray.
+#
+#   --suffix, --prefix <name> <separator> <value>
+#     Appends / prepends the <value> to the <name> environment variable,
+#     separated by the <separator>.
+#
+#   --suffix-each <name> <separator> "<value1> ..."
+#     Appends all the space-separated values to the <name> environment
+#     variable, separated by the <separator>.
+#
+#   --suffix-contents, --prefix-contents <name> <separator> <filename>
+#     Appens / prepents the content of <filename> to the <name> environment
+#     variable, seprated by the <separator>.
+#
+#   --add-flags "<flag1> ..."
+#     Prepends the space-separated flags to the execution of the program.
+#
+#   --argv0 <executable>
+#     Sets $0 value to <executable> during execution. Useful to hide the
+#     .wrapper postfix.
+#
 makeWrapper() {
     local original=$1
     local wrapper=$2
