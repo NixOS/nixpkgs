@@ -31577,10 +31577,7 @@ EOF
       sha256 = "95a222d01df60c888d56d86f91219bfbd47106a534e89ca7f80fb555cfbe08c1";
     };
 
-    buildInputs = with self; [ nose ];
-
-    # fails due to synatax error on python 3.5
-    doCheck = false;
+    buildInputs = with self; [ nose six ];
 
     meta = {
       homepage = https://more-itertools.readthedocs.org;
