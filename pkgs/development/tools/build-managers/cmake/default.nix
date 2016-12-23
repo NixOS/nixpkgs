@@ -1,14 +1,17 @@
 { stdenv, fetchurl, pkgconfig
-, bzip2, curl, expat, libarchive, xz, zlib
-, useNcurses ? false, ncurses, useQt4 ? false, qt4
+, bzip2, expat, libarchive, xz, zlib
+
+, useCurl ? true, curl ? null
+, useNcurses ? false, ncurses ? null
+, useQt4 ? false, qt4 ? null
 , wantPS ? false, ps ? null
 }:
 
 with stdenv.lib;
 
-assert wantPS -> (ps != null);
-assert stdenv ? cc;
-assert stdenv.cc ? libc;
+assert useNcurses -> ncurses != null;
+assert useQt4 -> qt4 != null;
+assert wantPS -> ps != null;
 
 let
   os = stdenv.lib.optionalString;
@@ -36,8 +39,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs =
-    [ setupHook pkgconfig bzip2 curl expat libarchive xz zlib ]
+  buildInputs = [ setupHook pkgconfig bzip2 expat libarchive xz zlib ]
+    ++ optional useCurl curl
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -58,6 +61,7 @@ stdenv.mkDerivation rec {
       "--no-system-jsoncpp"
     ]
     ++ optional (!stdenv.isCygwin) "--system-libs"
+    ++ optional (!useCurl) "--no-system-curl"
     ++ optional useQt4 "--qt-gui"
     ++ ["--"]
     ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
@@ -70,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else platforms.all;
-    maintainers = with maintainers; [ urkud mornfall ttuegel ];
+    maintainers = with maintainers; [ urkud mornfall ttuegel lnl7 ];
   };
 }
