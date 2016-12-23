@@ -24436,20 +24436,25 @@ in {
   sphinx = buildPythonPackage (rec {
     name = "${pname}-${version}";
     pname = "Sphinx";
-    version = "1.4.6";
+    version = "1.5.1";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/S/${pname}/${name}.tar.gz";
-      sha256 = "1lvr39ab5sjp894jshk39xidlxw9vc735882cgcfr4dlm4546hwy";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "8e6a77a20b2df950de322fc32f3b508697d9d654fe984e3cc88f446a5b4c17c5";
     };
     LC_ALL = "en_US.UTF-8";
-    buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales ];
-    patchPhase = '' sed -i '$ d' tests/test_setup_command.py '';
-    checkPhase = '' PYTHON=${python.executable} make test '';
+    buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales html5lib ] ++ optional (pythonOlder "3.4") self.enum34;
+    # Disable two tests that require network access.
+    postPatch = ''
+      substituteInPlace tests/test_build_linkcheck.py --replace test_defaults dont_test_defaults
+      substituteInPlace tests/test_build_linkcheck.py --replace test_anchors_ignored dont_test_anchors_ignored
+    '';
+    checkPhase = ''
+      make test
+    '';
     propagatedBuildInputs = with self; [
       docutils
       jinja2
       pygments
-      sphinx_rtd_theme
       alabaster
       Babel
       snowballstemmer
@@ -24457,6 +24462,7 @@ in {
       sqlalchemy
       whoosh
       imagesize
+      requests2
     ];
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
@@ -24473,7 +24479,7 @@ in {
       url = "mirror://pypi/s/sphinx/sphinx-1.2.3.tar.gz";
       sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
     };
-    patches = [];
+    postPatch = '''';
     # Tests requires Pygments >=2.0.2 which isn't worth keeping around for this:
     doCheck = false;
   };
