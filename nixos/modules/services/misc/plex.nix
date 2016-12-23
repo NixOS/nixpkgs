@@ -127,7 +127,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = "true";
-        ExecStart = "/bin/sh -c '${cfg.package}/usr/lib/plexmediaserver/Plex\\ Media\\ Server'";
+        ExecStart = "/bin/sh -c ${cfg.package}/usr/lib/plexmediaserver/Plex\\ Media\\ Server";
         Restart = "on-failure";
       };
       environment = {

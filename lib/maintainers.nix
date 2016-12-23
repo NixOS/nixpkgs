@@ -206,6 +206,7 @@
   jb55 = "William Casarin <bill@casarin.me>";
   jbedo = "Justin Bedő <cu@cua0.org>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
+  jdagilliland = "Jason Gilliland <jdagilliland@gmail.com>";
   jefdaj = "Jeffrey David Johnson <jefdaj@gmail.com>";
   jerith666 = "Matt McHenry <github@matt.mchenryfamily.org>";
   jfb = "James Felix Black <james@yamtime.com>";

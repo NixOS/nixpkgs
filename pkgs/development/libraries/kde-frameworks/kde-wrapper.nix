@@ -1,53 +1,40 @@
-{ stdenv, lib, makeWrapper }:
+{ stdenv, lib, makeWrapper, buildEnv }:
 
 drv:
 
 { targets, paths ? [] }:
 
+let
+  env = buildEnv {
+    inherit (drv) name meta;
+    paths = builtins.map lib.getBin ([drv] ++ paths);
+    pathsToLink = [ "/bin" "/share" "/lib/qt5" "/etc/xdg" ];
+  };
+in
+
 stdenv.mkDerivation {
   inherit (drv) name meta;
+  preferLocalBuild = true;
 
   paths = builtins.map lib.getBin ([drv] ++ paths);
-  inherit drv targets;
+  inherit drv env targets;
   passthru = { unwrapped = drv; };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
-  configurePhase = "runHook preConfigure; runHook postConfigure";
-  buildPhase = "true";
-
-  installPhase = ''
-    propagated=
-    for p in $drv $paths; do
-        findInputs $p propagated propagated-user-env-packages
-    done
-
-    wrap_PATH="$out/bin"
-    wrap_XDG_DATA_DIRS=
-    wrap_XDG_CONFIG_DIRS=
-    wrap_QML_IMPORT_PATH=
-    wrap_QML2_IMPORT_PATH=
-    wrap_QT_PLUGIN_PATH=
-    for p in $propagated; do
-        addToSearchPath wrap_PATH "$p/bin"
-        addToSearchPath wrap_XDG_DATA_DIRS "$p/share"
-        addToSearchPath wrap_XDG_CONFIG_DIRS "$p/etc/xdg"
-        addToSearchPath wrap_QML_IMPORT_PATH "$p/lib/qt5/imports"
-        addToSearchPath wrap_QML2_IMPORT_PATH "$p/lib/qt5/qml"
-        addToSearchPath wrap_QT_PLUGIN_PATH "$p/lib/qt5/plugins"
-    done
+  builder = builtins.toFile "builder.sh" ''
+    . $stdenv/setup
 
     for t in $targets; do
         if [ -a "$drv/$t" ]; then
             makeWrapper "$drv/$t" "$out/$t" \
                 --argv0 '"$0"' \
-                --suffix PATH : "$wrap_PATH" \
-                --prefix XDG_CONFIG_DIRS : "$wrap_XDG_CONFIG_DIRS" \
-                --prefix XDG_DATA_DIRS : "$wrap_XDG_DATA_DIRS" \
-                --set QML_IMPORT_PATH "$wrap_QML_IMPORT_PATH" \
-                --set QML2_IMPORT_PATH "$wrap_QML2_IMPORT_PATH" \
-                --set QT_PLUGIN_PATH "$wrap_QT_PLUGIN_PATH"
+                --suffix PATH : "$env/bin" \
+                --prefix XDG_CONFIG_DIRS : "$env/share" \
+                --prefix XDG_DATA_DIRS : "$env/etc/xdg" \
+                --set QML_IMPORT_PATH "$env/lib/qt5/imports" \
+                --set QML2_IMPORT_PATH "$env/lib/qt5/qml" \
+                --set QT_PLUGIN_PATH "$env/lib/qt5/plugins"
         else
             echo "no such file or directory: $drv/$t"
             exit 1

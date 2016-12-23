@@ -2262,7 +2262,7 @@ in
   ioping = callPackage ../tools/system/ioping { };
 
   iops = callPackage ../tools/system/iops { };
-  
+
   ior = callPackage ../tools/system/ior { };
 
   iodine = callPackage ../tools/networking/iodine { };
@@ -2615,7 +2615,7 @@ in
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
-  
+
   libmesode = callPackage ../development/libraries/libmesode { };
 
   libnabo = callPackage ../development/libraries/libnabo { };
@@ -6623,7 +6623,9 @@ in
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
-  inherit (ocaml-ng.ocamlPackages_4_02) verasco;
+  verasco = ocaml-ng.ocamlPackages_4_02.verasco.override {
+    coq = coq_8_4;
+  };
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
@@ -11040,8 +11042,6 @@ in
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
     kernelPatches = with kernelPatches;
       [ bridge_stp_helper
-        crc_regression
-        packet_fix_race_condition_CVE_2016_8655
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -13031,6 +13031,8 @@ in
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
   fossil = callPackage ../applications/version-management/fossil { };
+
+  freebayes = callPackage ../applications/science/biology/freebayes { };
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
 
@@ -16762,38 +16764,34 @@ in
 
   aspino = callPackage ../applications/science/logic/aspino {};
 
-  coq = callPackage ../applications/science/logic/coq {
-    inherit (ocamlPackages_4_01_0) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages_4_01_0.camlp5_transitional;
-  };
-
-  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {
-    inherit (ocamlPackages) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages.camlp5_transitional;
-  };
-
-  coq_8_6 = callPackage ../applications/science/logic/coq/8.6.nix {
-    inherit (ocamlPackages) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages.camlp5_transitional;
-  };
-
-  coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
-    inherit (ocamlPackages) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages.camlp5_transitional;
-  };
-
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
     make = pkgs.gnumake3;
     inherit (ocamlPackages_3_12_1) ocaml findlib;
     camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
     lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
   };
+  coq_8_4 = callPackage ../applications/science/logic/coq/8.4.nix {
+    inherit (ocamlPackages_4_01_0) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages_4_01_0.camlp5_transitional;
+  };
+  coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
+    inherit (ocamlPackages) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+  coq_8_6 = callPackage ../applications/science/logic/coq/8.6.nix {
+    inherit (ocamlPackages) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {
+    inherit (ocamlPackages) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+  coq = coq_8_4;
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
-
     inherit callPackage;
-
-    bedrock = callPackage ../development/coq-modules/bedrock {};
+    coq = coq_8_4;
+    coqPackages = coqPackages_8_4;
 
     contribs =
       let contribs =
@@ -16803,86 +16801,59 @@ in
       in
         recurseIntoAttrs contribs;
 
+    bedrock = callPackage ../development/coq-modules/bedrock {};
     coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
-
     coqeal = callPackage ../development/coq-modules/coqeal {};
-
     coquelicot = callPackage ../development/coq-modules/coquelicot {};
-
     domains = callPackage ../development/coq-modules/domains {};
-
     fiat = callPackage ../development/coq-modules/fiat {};
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
-
     flocq = callPackage ../development/coq-modules/flocq {};
-
     heq = callPackage ../development/coq-modules/heq {};
-
     interval = callPackage ../development/coq-modules/interval {};
-
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
-
     paco = callPackage ../development/coq-modules/paco {};
-
     QuickChick = callPackage ../development/coq-modules/QuickChick {};
-
     ssreflect = callPackage ../development/coq-modules/ssreflect {};
-
     tlc = callPackage ../development/coq-modules/tlc {};
-
     unimath = callPackage ../development/coq-modules/unimath {};
-
     ynot = callPackage ../development/coq-modules/ynot {};
-
   };
 
   mkCoqPackages_8_5 = self: let callPackage = newScope self; in rec {
-
     inherit callPackage;
-
     coq = coq_8_5;
+    coqPackages = coqPackages_8_5;
 
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
-
     coquelicot = callPackage ../development/coq-modules/coquelicot {};
-
     dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
-
     flocq = callPackage ../development/coq-modules/flocq {};
-
     interval = callPackage ../development/coq-modules/interval {};
-
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
-
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
-
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
-
   };
 
   mkCoqPackages_8_6 = self: let callPackage = newScope self; in rec {
-
     inherit callPackage;
-
     coq = coq_8_6;
+    coqPackages = coqPackages_8_6;
 
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
-
     coquelicot = callPackage ../development/coq-modules/coquelicot {};
-
     dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
-
     flocq = callPackage ../development/coq-modules/flocq {};
-
     interval = callPackage ../development/coq-modules/interval {};
-
+    mathcomp = callPackage ../development/coq-modules/mathcomp { };
+    ssreflect = callPackage ../development/coq-modules/ssreflect { };
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
-
   };
 
-  coqPackages = mkCoqPackages_8_4 coqPackages;
+  coqPackages_8_4 = mkCoqPackages_8_4 coqPackages_8_4;
   coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
   coqPackages_8_6 = mkCoqPackages_8_6 coqPackages_8_6;
+  coqPackages = coqPackages_8_4;
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
