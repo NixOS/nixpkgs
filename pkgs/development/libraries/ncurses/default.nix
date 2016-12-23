@@ -104,6 +104,7 @@ stdenv.mkDerivation rec {
 
     # create libtinfo symlink
     ln -svf $out/lib/libncurses.$dylibtype $out/libtinfo.$dylibtype
+    ln -svf $out/lib/libncurses.$dylibtype.${abiVersion} $out/libtinfo.$dylibtype.${abiVersion}
         
     # move some utilities to $bin
     # these programs are used at runtime and don't really belong in $dev
