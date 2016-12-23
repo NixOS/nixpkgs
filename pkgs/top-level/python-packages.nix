@@ -14139,12 +14139,12 @@ in {
   };
 
   markdown = buildPythonPackage rec {
-    version = "2.6.4";
+    version = "2.6.7";
     name = "markdown-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/Markdown/Markdown-${version}.tar.gz";
-      sha256 = "1kll5b35wqkhvniwm2kh6rqc43wakv9ls0qm6g5318pjmbkywdp4";
+      sha256 = "1h055llfd0ps0ig7qb3v1j9068xv90dc9s7xkhkgz9zg8r4g5sys";
     };
 
     # error: invalid command 'test'
