@@ -13898,16 +13898,16 @@ in {
   llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_38;};
 
   lockfile = buildPythonPackage rec {
-    name = "lockfile-${version}";
-    version = "0.10.2";
+    pname = "lockfile";
+    version = "0.12.2";
+    name = "${pname}-${version}";
     src = pkgs.fetchurl {
-      sha256 = "0zi7amj3y55lp6339w217zksn1a0ssfvscmv059g2wvnyjqi6f95";
-      url = "https://github.com/openstack/pylockfile/archive/${version}.tar.gz";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "6aed02de03cba24efabcd600b30540140634fc06cfa603822d508d5361e9f799";
     };
 
-    OSLO_PACKAGE_VERSION = "${version}";
     buildInputs = with self; [
-      pbr nose sphinx_1_2
+      pbr nose
     ];
 
     checkPhase = ''
