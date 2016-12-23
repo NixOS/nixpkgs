@@ -31577,7 +31577,9 @@ EOF
       sha256 = "95a222d01df60c888d56d86f91219bfbd47106a534e89ca7f80fb555cfbe08c1";
     };
 
-    buildInputs = with self; [ nose six ];
+    propagatedBuildInputs = with self; [ six ];
+
+    buildInputs = with self; [ nose ];
 
     meta = {
       homepage = https://more-itertools.readthedocs.org;
