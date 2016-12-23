@@ -7488,6 +7488,8 @@ in
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
+    gdktarget = if stdenv.isDarwin then "quartz" else "x11";
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
