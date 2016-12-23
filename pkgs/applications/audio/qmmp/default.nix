@@ -29,11 +29,11 @@
 # handle that.
 
 stdenv.mkDerivation rec {
-  name = "qmmp-1.1.2";
+  name = "qmmp-1.1.5";
 
   src = fetchurl {
     url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "023gvgchk6ybkz3miy0z08j9n5awz5cjvav7fqjdmpix4sivhn5q";
+    sha256 = "1gfx6nm9v6qrx58gxib6grfhb45mnib1n4wdsnjq16br6bs8h4lv";
   };
 
   buildInputs =
