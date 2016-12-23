@@ -116,7 +116,7 @@ let
         ssl = vhost.enableSSL || vhost.forceSSL;
         port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
         listenString = toString port + optionalString ssl " ssl http2"
-          + optionalString vhost.default " default";
+          + optionalString vhost.default " default_server";
         acmeLocation = optionalString vhost.enableACME (''
           location /.well-known/acme-challenge {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
@@ -132,8 +132,8 @@ let
       in ''
         ${optionalString vhost.forceSSL ''
           server {
-            listen 80 ${optionalString vhost.default "default"};
-            listen [::]:80 ${optionalString vhost.default "default"};
+            listen 80 ${optionalString vhost.default "default_server"};
+            listen [::]:80 ${optionalString vhost.default "default_server"};
 
             server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
             ${acmeLocation}
