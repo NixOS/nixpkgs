@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.65";
   name = "os-prober-${version}";
   src = fetchurl {
-    url = "mirror://debian/debian/pool/main/o/os-prober_${version}.tar.xz";
+    url = "mirror://debian/pool/main/o/os-prober/os-prober_${version}.tar.xz";
     md5 = "a7e833555f54387a4798ffea8c2bf0d4";
   };
 
