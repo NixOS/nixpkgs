@@ -26,7 +26,7 @@ let
   # On Linux systems, the standard build environment consists of Nix-built
   # instances glibc and the `standard' Unix tools, i.e., the Posix utilities,
   # the GNU C compiler, and so on.
-  inherit (import ./linux args) stagesLinux;
+  stagesLinux = import ./linux args;
 
   inherit (import ./darwin args) stagesDarwin;
 

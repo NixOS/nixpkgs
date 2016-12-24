@@ -18,7 +18,7 @@
 
 assert crossSystem == null;
 
-rec {
+let
 
   commonPreHook =
     ''
@@ -95,7 +95,11 @@ rec {
       stdenv = thisStdenv;
     };
 
-  baseCase = {}: {
+in
+
+[
+
+  ({}: {
     __raw = true;
 
     gcc-unwrapped = null;
@@ -103,11 +107,11 @@ rec {
     binutils = null;
     coreutils = null;
     gnugrep = null;
-  };
+  })
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
-  stage0 = prevStage: stageFun prevStage {
+  (prevStage: stageFun prevStage {
     name = null;
 
     overrides = self: super: {
@@ -134,7 +138,7 @@ rec {
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
     };
-  };
+  })
 
 
   # Create the first "real" standard environment.  This one consists
@@ -147,7 +151,7 @@ rec {
   # If we ever need to use a package from more than one stage back, we
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
-  stage1 = prevStage: stageFun prevStage {
+  (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
     # Rebuild binutils to use from stage2 onwards.
@@ -164,12 +168,12 @@ rec {
       # top-level pkgs as an override either.
       perl = super.perl.override { enableThreading = false; };
     };
-  };
+  })
 
 
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
-  stage2 = prevStage: stageFun prevStage {
+  (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
     overrides = self: super: {
@@ -179,13 +183,13 @@ rec {
         perl paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
     };
-  };
+  })
 
 
   # Construct a third stdenv identical to the 2nd, except that this
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
-  stage3 = prevStage: stageFun prevStage {
+  (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
     overrides = self: super: rec {
@@ -205,12 +209,12 @@ rec {
       };
     };
     extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
-  };
+  })
 
 
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
-  stage4 = prevStage: stageFun prevStage {
+  (prevStage: stageFun prevStage {
     name = "";
 
     overrides = self: super: {
@@ -232,8 +236,7 @@ rec {
       };
     };
     extraBuildInputs = [ prevStage.patchelf prevStage.xz ];
-  };
-
+  })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
   # in a new binutils that doesn't depend on bootstrap-tools, as well
@@ -242,62 +245,52 @@ rec {
   # When updating stdenvLinux, make sure that the result has no
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
-  stdenvLinux = prevStage: import ../generic rec {
-    inherit system config;
+  (prevStage: {
+    inherit system crossSystem platform config;
+    stdenv = import ../generic rec {
+      inherit system config;
 
-    preHook =
-      ''
+      preHook = ''
         # Make "strip" produce deterministic output, by setting
         # timestamps etc. to a fixed value.
         commonStripFlags="--enable-deterministic-archives"
         ${commonPreHook}
       '';
 
-    initialPath =
-      ((import ../common-path.nix) {pkgs = prevStage;});
+      initialPath =
+        ((import ../common-path.nix) {pkgs = prevStage;});
 
-    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
+      extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
 
-    cc = prevStage.gcc;
+      cc = prevStage.gcc;
 
-    shell = cc.shell;
+      shell = cc.shell;
 
-    inherit (prevStage.stdenv) fetchurlBoot;
+      inherit (prevStage.stdenv) fetchurlBoot;
 
-    extraAttrs = {
-      inherit (prevStage) glibc;
-      inherit platform bootstrapTools;
-      shellPackage = prevStage.bash;
+      extraAttrs = {
+        inherit (prevStage) glibc;
+        inherit platform bootstrapTools;
+        shellPackage = prevStage.bash;
+      };
+
+      /* outputs TODO
+      allowedRequisites = with prevStage;
+        [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+          glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
+          paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
+        ];
+        */
+
+      overrides = self: super: {
+        gcc = cc;
+
+        inherit (prevStage)
+          gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+          glibc gnumake gnused gnutar gnugrep gnupatch patchelf
+          attr acl paxctl zlib pcre;
+      };
     };
+  })
 
-    /* outputs TODO
-    allowedRequisites = with prevStage;
-      [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
-        paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
-      ];
-      */
-
-    overrides = self: super: {
-      gcc = cc;
-
-      inherit (prevStage)
-        gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl zlib pcre;
-    };
-  };
-
-  stagesLinux = [
-    baseCase
-    stage0
-    stage1
-    stage2
-    stage3
-    stage4
-    (prevStage: {
-      inherit system crossSystem platform config;
-      stdenv = stdenvLinux prevStage;
-    })
-  ];
-}
+]
