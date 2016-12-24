@@ -11383,6 +11383,8 @@ in
       inherit modules;
     };
 
+  mpathconf = callPackage ../os-specific/linux/mpathconf { };
+
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
