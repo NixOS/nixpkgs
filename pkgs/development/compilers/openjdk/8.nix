@@ -14,7 +14,7 @@
 , jdksha ? "1kw4h3j93cvnlzh0vhj4xxdm90bk7hfg6kpqk09x0a12whh2ww3h"
 , jaxwssha ? "0wrj3jyv3922m3pxfg0i9c3ap71b0rass7swvhi996c029rd12r7"
 , jaxpsha ? "0b743mygzdavdd59l98b3l6a03dihs4ipd1xlpkacy778wzpr59d"
-, nashhornsha ? "10wkshhzj15wvx7i53dbkwi85f4fbbxi26zphr5b6daf3ib0hind"
+, nashornsha ? "10wkshhzj15wvx7i53dbkwi85f4fbbxi26zphr5b6daf3ib0hind"
 }:
 
 let
