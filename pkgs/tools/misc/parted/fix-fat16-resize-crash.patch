@@ -1,0 +1,193 @@
+From 3a4c152d38ce34481b0f4fda8aea4e71a8280d8f Mon Sep 17 00:00:00 2001
+From: Mike Fleetwood <mike.fleetwood@googlemail.com>
+Date: Sat, 27 Sep 2014 10:23:17 +0100
+Subject: [PATCH 1/3] lib-fs-resize: Prevent crash resizing FAT16 file systems
+
+Resizing FAT16 file system crashes in libparted/fs/r/fat/resize.c
+create_resize_context() because it was dereferencing NULL pointer
+fs_info->info_sector to copy the info_sector.
+
+Only FAT32 file systems have info_sector populated by fat_open() ->
+fat_info_sector_read().  FAT12 and FAT16 file systems don't have an
+info_sector so pointer fs_info->info_sector remains assigned NULL from
+fat_alloc().  When resizing a FAT file system create_resize_context()
+was always dereferencing fs_info->info_sector to memory copy the
+info_sector, hence it crashed for FAT12 and FAT16.
+
+Make create_resize_context() only copy the info_sector for FAT32 file
+systems.
+
+Reported by Christian Hesse in
+https://bugzilla.gnome.org/show_bug.cgi?id=735669
+---
+ NEWS                        |    4 ++++
+ libparted/fs/r/fat/resize.c |   12 +++++++++---
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/NEWS b/NEWS
+index 297b0a5..da7db50 100644
+--- a/NEWS
++++ b/NEWS
+@@ -2,6 +2,10 @@ GNU parted NEWS                                    -*- outline -*-
+ 
+ * Noteworthy changes in release ?.? (????-??-??) [?]
+ 
++** Bug Fixes
++
++  libparted-fs-resize: Prevent crash resizing FAT16 file systems.
++
+ 
+ * Noteworthy changes in release 3.2 (2014-07-28) [stable]
+ 
+diff --git a/libparted/fs/r/fat/resize.c b/libparted/fs/r/fat/resize.c
+index 919acf0..bfe60a0 100644
+--- a/libparted/fs/r/fat/resize.c
++++ b/libparted/fs/r/fat/resize.c
+@@ -668,11 +668,17 @@ create_resize_context (PedFileSystem* fs, const PedGeometry* new_geom)
+ 
+ /* preserve boot code, etc. */
+ 	new_fs_info->boot_sector = ped_malloc (new_geom->dev->sector_size);
+-	new_fs_info->info_sector = ped_malloc (new_geom->dev->sector_size);
+ 	memcpy (new_fs_info->boot_sector, fs_info->boot_sector,
+ 		new_geom->dev->sector_size);
+-	memcpy (new_fs_info->info_sector, fs_info->info_sector,
+-		new_geom->dev->sector_size);
++	new_fs_info->info_sector = NULL;
++	if (fs_info->fat_type == FAT_TYPE_FAT32)
++	{
++		PED_ASSERT (fs_info->info_sector != NULL);
++		new_fs_info->info_sector =
++			ped_malloc (new_geom->dev->sector_size);
++		memcpy (new_fs_info->info_sector, fs_info->info_sector,
++			new_geom->dev->sector_size);
++	}
+ 
+ 	new_fs_info->logical_sector_size = fs_info->logical_sector_size;
+ 	new_fs_info->sector_count = new_geom->length;
+-- 
+1.7.1
+
+
+From 2b5a4805533557b1bcdb5f70537569383f1fe7e8 Mon Sep 17 00:00:00 2001
+From: Mike Fleetwood <mike.fleetwood@googlemail.com>
+Date: Sat, 27 Sep 2014 11:31:46 +0100
+Subject: [PATCH 2/3] tests: t3000-resize-fs.sh: Add FAT16 resizing test
+
+Add FAT16 resizing test so that we don't regress again.
+---
+ tests/t3000-resize-fs.sh |   16 +++++++++++++---
+ 1 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/tests/t3000-resize-fs.sh b/tests/t3000-resize-fs.sh
+index 8cab476..9084eb4 100755
+--- a/tests/t3000-resize-fs.sh
++++ b/tests/t3000-resize-fs.sh
+@@ -46,7 +46,7 @@ device_sectors_required=$(echo $default_end | sed 's/s$//')
+ # Ensure that $dev is large enough for this test
+ test $device_sectors_required -le $dev_n_sectors || fail=1
+ 
+-for fs_type in hfs+ fat32; do
++for fs_type in hfs+ fat32 fat16; do
+ 
+   # create an empty $fs_type partition, cylinder aligned, size > 256 MB
+   parted -a min -s $dev mkpart p1 $start $default_end > out 2>&1 || fail=1
+@@ -59,6 +59,7 @@ for fs_type in hfs+ fat32; do
+   wait_for_dev_to_appear_ ${dev}1
+ 
+   case $fs_type in
++    fat16) mkfs_cmd='mkfs.vfat -F 16'; fsck='fsck.vfat -v';;
+     fat32) mkfs_cmd='mkfs.vfat -F 32'; fsck='fsck.vfat -v';;
+     hfs*) mkfs_cmd='mkfs.hfs';         fsck=fsck.hfs;;
+     *) error "internal error: unhandled fs type: $fs_type";;
+@@ -70,8 +71,17 @@ for fs_type in hfs+ fat32; do
+   # NOTE: shrinking is the only type of resizing that works.
+   # resize that file system to be one cylinder (8MiB) smaller
+   fs-resize ${dev}1 0 $new_end > out 2>&1 || fail=1
+-  # expect no output
+-  compare /dev/null out || fail=1
++
++  # check for expected output
++  case $fs_type in
++    fat16) cat << EOF > exp || framework_failure
++Information: Would you like to use FAT32?  If you leave your file system as FAT16, then you will have no problems.  If you convert to FAT32, and MS Windows is installed on this partition, then you must re-install the MS Windows boot loader.  If you want to do this, you should consult the Parted manual (or your distribution's manual).  Also, converting to FAT32 will make the file system unreadable by MS DOS, MS Windows 95a, and MS Windows NT.
++EOF
++      ;;
++    fat32) cat /dev/null > exp || framework_failure;;     # expect no output
++    hfs*)  cat /dev/null > exp || framework_failure;;     # expect no output
++  esac
++  compare exp out || fail=1
+ 
+   # This is known to segfault with fsck.hfs from
+   # Fedora 16's hfsplus-tools-332.14-12.fc15.x86_64.
+-- 
+1.7.1
+
+
+From ca37fcb204f97964ff2c92ea0221367e798810bb Mon Sep 17 00:00:00 2001
+From: Mike Fleetwood <mike.fleetwood@googlemail.com>
+Date: Sun, 28 Sep 2014 11:54:45 +0100
+Subject: [PATCH 3/3] tests: t3000-resize-fs.sh: Add requirement on mkfs.vfat
+
+Add test skipping requirement on mkfs.vfat for the FAT32 and FAT16 file
+system resizing tests.  This matches existing test skipping requirement
+on mkfs.hfs for the hfs+ file system.
+
+* tests/t3000-resize-fs.sh: Also correct skip_test_ to skip_.
+* tests/t-lib-helpers.sh: Also update message for requirement of hfs.
+---
+ tests/t-lib-helpers.sh   |    8 +++++++-
+ tests/t3000-resize-fs.sh |    5 +++--
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/tests/t-lib-helpers.sh b/tests/t-lib-helpers.sh
+index 4e83a05..c8684bb 100644
+--- a/tests/t-lib-helpers.sh
++++ b/tests/t-lib-helpers.sh
+@@ -20,7 +20,13 @@ require_acl_()
+ require_hfs_()
+ {
+   mkfs.hfs 2>&1 | grep '^usage:' \
+-    || skip_ "This test requires HFS support."
++    || skip_ "mkfs.hfs: command not found"
++}
++
++require_fat_()
++{
++  mkfs.vfat 2>&1 | grep '^Usage:' \
++    || skip_ "mkfs.vfat: command not found"
+ }
+ 
+ # Skip this test if we're not in SELinux "enforcing" mode.
+diff --git a/tests/t3000-resize-fs.sh b/tests/t3000-resize-fs.sh
+index 9084eb4..a79a307 100755
+--- a/tests/t3000-resize-fs.sh
++++ b/tests/t3000-resize-fs.sh
+@@ -18,7 +18,7 @@
+ 
+ . "${srcdir=.}/init.sh"; path_prepend_ ../parted .
+ require_hfs_
+-
++require_fat_
+ require_root_
+ require_scsi_debug_module_
+ require_512_byte_sector_size_
+@@ -31,7 +31,7 @@ default_end=546147s
+ 
+ # create memory-backed device
+ scsi_debug_setup_ dev_size_mb=550 > dev-name ||
+-  skip_test_ 'failed to create scsi_debug device'
++  skip_ 'failed to create scsi_debug device'
+ dev=$(cat dev-name)
+ 
+ fail=0
+@@ -47,6 +47,7 @@ device_sectors_required=$(echo $default_end | sed 's/s$//')
+ test $device_sectors_required -le $dev_n_sectors || fail=1
+ 
+ for fs_type in hfs+ fat32 fat16; do
++  echo "fs_type=$fs_type"
+ 
+   # create an empty $fs_type partition, cylinder aligned, size > 256 MB
+   parted -a min -s $dev mkpart p1 $start $default_end > out 2>&1 || fail=1
+-- 
+1.7.1
+

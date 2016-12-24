@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1r3qpg3bhz37mgvp9chsaa3k0csby3vayfvz8ggsqz194af5i2w5";
   };
 
-  patches = [ ./add-libparted-fs-resize.pc.patch ]
-         ++ stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch;
+  patches = [
+    ./add-libparted-fs-resize.pc.patch
+    ./fix-fat16-resize-crash.patch
+  ] ++ stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch;
 
   postPatch = stdenv.lib.optionalString doCheck ''
     patchShebangs tests
