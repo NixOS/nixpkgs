@@ -6,6 +6,7 @@
 , minimal ? false
 , enableInfinality ? true # font rendering patch
 , enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
+, update ? "122", build ? "04"
 }:
 
 let
@@ -21,8 +22,6 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "122";
-  build = "04";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
