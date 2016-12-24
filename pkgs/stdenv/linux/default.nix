@@ -75,7 +75,7 @@ rec {
           libc = prevStage.glibc;
           inherit (prevStage) binutils coreutils gnugrep;
           name = name;
-          stdenv = stage0.stdenv;
+          stdenv = prevStage.ccWrapperStdenv;
         };
 
         extraAttrs = {
@@ -95,7 +95,9 @@ rec {
       stdenv = thisStdenv;
     };
 
-  baseCase = {
+  baseCase = {}: {
+    __raw = true;
+
     gcc-unwrapped = null;
     glibc = null;
     binutils = null;
@@ -105,10 +107,15 @@ rec {
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
-  stage0 = stageFun baseCase {
+  stage0 = prevStage: stageFun prevStage {
     name = null;
 
     overrides = self: super: {
+      # We thread stage0's stdenv through under this name so downstream stages
+      # can use it for wrapping gcc too. This way, downstream stages don't need
+      # to refer to this stage directly, which violates the principle that each
+      # stage should only access the stage that came before it.
+      ccWrapperStdenv = self.stdenv;
       # The Glibc include directory cannot have the same prefix as the
       # GCC include directory, since GCC gets confused otherwise (it
       # will search the Glibc headers before the GCC headers).  So
@@ -146,7 +153,9 @@ rec {
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
       binutils = super.binutils.override { gold = false; };
-      inherit (prevStage) glibc gcc-unwrapped coreutils gnugrep;
+      inherit (prevStage)
+        ccWrapperStdenv
+        glibc gcc-unwrapped coreutils gnugrep;
 
       # A threaded perl build needs glibc/libpthread_nonshared.a,
       # which is not included in bootstrapTools, so disable threading.
@@ -165,6 +174,7 @@ rec {
 
     overrides = self: super: {
       inherit (prevStage)
+        ccWrapperStdenv
         binutils gcc-unwrapped coreutils gnugrep
         perl paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
@@ -180,6 +190,7 @@ rec {
 
     overrides = self: super: rec {
       inherit (prevStage)
+        ccWrapperStdenv
         binutils glibc coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison;
       # Link GCC statically against GMP etc.  This makes sense because
@@ -278,7 +289,8 @@ rec {
   };
 
   stagesLinux = [
-    ({}: stage0)
+    baseCase
+    stage0
     stage1
     stage2
     stage3
