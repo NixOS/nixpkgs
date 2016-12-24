@@ -43,8 +43,8 @@ rec {
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
-  stageFun =
-    {gccPlain, glibc, binutils, coreutils, gnugrep, name, overrides ? (self: super: {}), extraBuildInputs ? []}:
+  stageFun = prevStage:
+    { name, overrides ? (self: super: {}), extraBuildInputs ? [] }:
 
     let
 
@@ -65,15 +65,15 @@ rec {
           inherit system;
         };
 
-        cc = if isNull gccPlain
+        cc = if isNull prevStage.gcc-unwrapped
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
-          cc = gccPlain;
+          cc = prevStage.gcc-unwrapped;
           isGNU = true;
-          libc = glibc;
-          inherit binutils coreutils gnugrep;
+          libc = prevStage.glibc;
+          inherit (prevStage) binutils coreutils gnugrep;
           name = name;
           stdenv = stage0.stdenv;
         };
@@ -85,7 +85,7 @@ rec {
 
           # stdenv.glibc is used by GCC build to figure out the system-level
           # /usr/include directory.
-          inherit glibc;
+          inherit (prevStage) glibc;
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -95,14 +95,17 @@ rec {
       stdenv = thisStdenv;
     };
 
-  # Build a dummy stdenv with no GCC or working fetchurl.  This is
-  # because we need a stdenv to build the GCC wrapper and fetchurl.
-  stage0 = stageFun {
-    gccPlain = null;
+  baseCase = {
+    gcc-unwrapped = null;
     glibc = null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
+  };
+
+  # Build a dummy stdenv with no GCC or working fetchurl.  This is
+  # because we need a stdenv to build the GCC wrapper and fetchurl.
+  stage0 = stageFun baseCase {
     name = null;
 
     overrides = self: super: {
@@ -119,6 +122,10 @@ rec {
           ln -s ${bootstrapTools}/include-glibc $out/include
         '';
       };
+      gcc-unwrapped = bootstrapTools;
+      binutils = bootstrapTools;
+      coreutils = bootstrapTools;
+      gnugrep = bootstrapTools;
     };
   };
 
@@ -133,18 +140,13 @@ rec {
   # If we ever need to use a package from more than one stage back, we
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
-  stage1 = prevStage: stageFun {
-    gccPlain = bootstrapTools;
-    inherit (prevStage) glibc;
-    binutils = bootstrapTools;
-    coreutils = bootstrapTools;
-    gnugrep = bootstrapTools;
+  stage1 = prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
       binutils = super.binutils.override { gold = false; };
-      inherit (prevStage) glibc;
+      inherit (prevStage) glibc gcc-unwrapped coreutils gnugrep;
 
       # A threaded perl build needs glibc/libpthread_nonshared.a,
       # which is not included in bootstrapTools, so disable threading.
@@ -158,16 +160,13 @@ rec {
 
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
-  stage2 = prevStage: stageFun {
-    gccPlain = bootstrapTools;
-    inherit (prevStage) glibc;
-    binutils = prevStage.binutils;
-    coreutils = bootstrapTools;
-    gnugrep = bootstrapTools;
+  stage2 = prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
     overrides = self: super: {
-      inherit (prevStage) perl binutils paxctl gnum4 bison;
+      inherit (prevStage)
+        binutils gcc-unwrapped coreutils gnugrep
+        perl paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
     };
   };
@@ -176,15 +175,13 @@ rec {
   # Construct a third stdenv identical to the 2nd, except that this
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
-  stage3 = prevStage: stageFun {
-    gccPlain = bootstrapTools;
-    inherit (prevStage) glibc binutils;
-    coreutils = bootstrapTools;
-    gnugrep = bootstrapTools;
+  stage3 = prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
     overrides = self: super: rec {
-      inherit (prevStage) binutils glibc perl patchelf linuxHeaders gnum4 bison;
+      inherit (prevStage)
+        binutils glibc coreutils gnugrep
+        perl patchelf linuxHeaders gnum4 bison;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
@@ -192,7 +189,7 @@ rec {
       mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
       libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
       isl_0_14 = super.isl_0_14.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      gccPlain = super.gcc.cc.override {
+      gcc-unwrapped = super.gcc-unwrapped.override {
         isl = isl_0_14;
       };
     };
@@ -202,10 +199,7 @@ rec {
 
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
-  stage4 = prevStage: stageFun {
-    inherit (prevStage) gccPlain glibc binutils;
-    gnugrep = bootstrapTools;
-    coreutils = bootstrapTools;
+  stage4 = prevStage: stageFun prevStage {
     name = "";
 
     overrides = self: super: {
@@ -219,7 +213,7 @@ rec {
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
-        cc = self.stdenv.cc.cc;
+        cc = prevStage.gcc-unwrapped;
         libc = self.glibc;
         inherit (self) stdenv binutils coreutils gnugrep;
         name = "";

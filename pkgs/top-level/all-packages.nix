@@ -4721,6 +4721,7 @@ in
   gambit = callPackage ../development/compilers/gambit { };
 
   gcc = gcc5;
+  gcc-unwrapped = gcc.cc;
 
   wrapCCMulti = cc:
     if system == "x86_64-linux" then lowPrio (
