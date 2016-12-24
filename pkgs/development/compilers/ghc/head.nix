@@ -1,11 +1,11 @@
 { stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex, crossSystem, selfPkgs, cross ? null
+, autoconf, automake, happy, alex, python3, crossSystem, selfPkgs, cross ? null
 }:
 
 let
   inherit (bootPkgs) ghc;
 
-  commonBuildInputs = [ ghc perl autoconf automake happy alex ];
+  commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
   version = "8.1.20161115";
 
@@ -51,6 +51,8 @@ in stdenv.mkDerivation (rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
+
+  checkTarget = "test";
 
   postInstall = ''
     paxmark m $out/lib/${name}/bin/{ghc,haddock}
