@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintlOrEmpty, darwin
+, bzip2, libcroco, libintlOrEmpty
 , withGTK ? false, gtk3 ? null
 , gobjectIntrospection ? null, enableIntrospection ? false }:
 
@@ -22,10 +22,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
 
-  nativeBuildInputs = [ pkgconfig ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      ApplicationServices
-    ]);
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [ "--enable-introspection=auto" ]
     ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
