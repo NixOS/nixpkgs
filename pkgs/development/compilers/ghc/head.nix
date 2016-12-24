@@ -27,18 +27,17 @@ in stdenv.mkDerivation (rec {
     sha256 = "0rk6xy7kgxx849nprq1ji459p88nyy93236g841m5p6mdh7mmrcr";
   };
 
-  postPatch = ''
+  postPatch = "patchShebangs .";
+
+  preConfigure = ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
-    patchShebangs .
     ./boot
-  '';
+  '' + commonPreConfigure ;
 
   buildInputs = commonBuildInputs;
 
   enableParallelBuilding = true;
-
-  preConfigure = commonPreConfigure;
 
   configureFlags = [
     "CC=${stdenv.cc}/bin/cc"
