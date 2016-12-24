@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   name = "os-prober-${version}";
   src = fetchurl {
     url = "mirror://debian/pool/main/o/os-prober/os-prober_${version}.tar.xz";
-    md5 = "a7e833555f54387a4798ffea8c2bf0d4";
+    sha256 = "c4a7661a52edae722f7e6bacb3f107cf7086cbe768275fadf5398d04360bfc84";
   };
 
   buildInputs = [ makeWrapper ];
