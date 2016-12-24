@@ -39,15 +39,18 @@ in buildPythonPackage (args // rec {
     runHook postCheck
   '';
 
+  postInstall = ''
+    ln -s $out/bin/f2py* $out/bin/f2py
+  '';
+
   passthru = {
     blas = blas;
   };
 
-  # The large file support test is disabled because it takes forever
-  # and can cause the machine to run out of disk space when run.
-  prePatch = ''
-    sed -i 's/test_large_file_support/donttest/' numpy/lib/tests/test_format.py
-  '';
+  # Disable two tests
+  # - test_f2py: f2py isn't yet on path.
+  # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
+  NOSE_EXCLUDE="test_f2py,test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";

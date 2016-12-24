@@ -16073,10 +16073,10 @@ in {
   };
 
   numpy_1_11 = self.buildNumpyPackage rec {
-    version = "1.11.2";
+    version = "1.11.3";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
-      sha256 = "04db2fbd64e2e7c68e740b14402b25af51418fc43a59d9e54172b38b906b0f69";
+      url = "mirror://pypi/n/numpy/numpy-${version}.zip";
+      sha256 = "2e0fc5248246a64628656fe14fcab0a959741a2820e003bd15538226501b82f7";
     };
   };
 
