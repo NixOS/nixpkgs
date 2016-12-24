@@ -99,7 +99,12 @@ stdenv.mkDerivation rec {
     moveToOutput "share/glib-2.0" "$dev"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
-  '';
+  ''
+    # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
+    + ''
+      sed '1i#line 1 "${name}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
+        -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
+    '';
 
   inherit doCheck;
   preCheck = optionalString doCheck

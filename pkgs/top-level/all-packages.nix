@@ -2559,7 +2559,9 @@ in
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
-  leatherman = callPackage ../development/libraries/leatherman {};
+  leatherman = callPackage ../development/libraries/leatherman {
+    boost = boost160;
+  };
 
   leela = callPackage ../tools/graphics/leela { };
 
@@ -6740,7 +6742,7 @@ in
   boost159 = callPackage ../development/libraries/boost/1.59.nix { };
   boost160 = callPackage ../development/libraries/boost/1.60.nix { };
   boost162 = callPackage ../development/libraries/boost/1.62.nix { };
-  boost = boost160;
+  boost = boost162;
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
@@ -9659,7 +9661,7 @@ in
   };
 
   wxmac = callPackage ../development/libraries/wxmac {
-    inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel QuickTime;
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel;
     inherit (darwin.stubs) setfile rez derez;
   };
 
@@ -10299,11 +10301,11 @@ in
   mariadb = callPackage ../servers/sql/mariadb {
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
-    boost = boost159;
   };
 
   mongodb = callPackage ../servers/nosql/mongodb {
     sasl = cyrus_sasl;
+    boost = boost160;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -15043,7 +15045,9 @@ in
 
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
-  twister = callPackage ../applications/networking/p2p/twister { };
+  twister = callPackage ../applications/networking/p2p/twister {
+    boost = boost160;
+  };
 
   twmn = qt5.callPackage ../applications/misc/twmn { };
 
@@ -15718,7 +15722,9 @@ in
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam5 = kde5.callPackage ../applications/graphics/digikam/5.nix {};
+  digikam5 = kde5.callPackage ../applications/graphics/digikam/5.nix {
+    boost = boost160;
+  };
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
@@ -15777,7 +15783,9 @@ in
 
   freedink = callPackage ../games/freedink { };
 
-  freeorion = callPackage ../games/freeorion { };
+  freeorion = callPackage ../games/freeorion {
+    boost = boost160;
+  };
 
   frotz = callPackage ../games/frotz { };
 

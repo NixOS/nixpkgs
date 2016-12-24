@@ -10748,11 +10748,12 @@ in {
 
 
   docutils = buildPythonPackage rec {
-    name = "docutils-0.12";
+    name = "docutils-${version}";
+    version = "0.13.1";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "c7db717810ab6965f66c8cf0398a98c9d8df982da39b4cd7f162911eb89596fa";
+      sha256 = "1gkma47i609jfs7dssxn4y9vsz06qi0l5q41nws0zgkpnrghz33i";
     };
 
     # error: invalid command 'test'
@@ -10761,7 +10762,7 @@ in {
     meta = {
       description = "An open-source text processing system for processing plaintext documentation into useful formats, such as HTML or LaTeX";
       homepage = http://docutils.sourceforge.net/;
-      maintainers = with maintainers; [ garbas ];
+      maintainers = with maintainers; [ garbas AndersonTorres ];
     };
   };
 
@@ -13897,16 +13898,16 @@ in {
   llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_38;};
 
   lockfile = buildPythonPackage rec {
-    name = "lockfile-${version}";
-    version = "0.10.2";
+    pname = "lockfile";
+    version = "0.12.2";
+    name = "${pname}-${version}";
     src = pkgs.fetchurl {
-      sha256 = "0zi7amj3y55lp6339w217zksn1a0ssfvscmv059g2wvnyjqi6f95";
-      url = "https://github.com/openstack/pylockfile/archive/${version}.tar.gz";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "6aed02de03cba24efabcd600b30540140634fc06cfa603822d508d5361e9f799";
     };
 
-    OSLO_PACKAGE_VERSION = "${version}";
     buildInputs = with self; [
-      pbr nose sphinx_1_2
+      pbr nose
     ];
 
     checkPhase = ''
@@ -24435,20 +24436,25 @@ in {
   sphinx = buildPythonPackage (rec {
     name = "${pname}-${version}";
     pname = "Sphinx";
-    version = "1.4.6";
+    version = "1.5.1";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/S/${pname}/${name}.tar.gz";
-      sha256 = "1lvr39ab5sjp894jshk39xidlxw9vc735882cgcfr4dlm4546hwy";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "8e6a77a20b2df950de322fc32f3b508697d9d654fe984e3cc88f446a5b4c17c5";
     };
     LC_ALL = "en_US.UTF-8";
-    buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales ];
-    patchPhase = '' sed -i '$ d' tests/test_setup_command.py '';
-    checkPhase = '' PYTHON=${python.executable} make test '';
+    buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales html5lib ] ++ optional (pythonOlder "3.4") self.enum34;
+    # Disable two tests that require network access.
+    postPatch = ''
+      substituteInPlace tests/test_build_linkcheck.py --replace test_defaults dont_test_defaults
+      substituteInPlace tests/test_build_linkcheck.py --replace test_anchors_ignored dont_test_anchors_ignored
+    '';
+    checkPhase = ''
+      make test
+    '';
     propagatedBuildInputs = with self; [
       docutils
       jinja2
       pygments
-      sphinx_rtd_theme
       alabaster
       Babel
       snowballstemmer
@@ -24456,6 +24462,7 @@ in {
       sqlalchemy
       whoosh
       imagesize
+      requests2
     ];
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
@@ -24472,7 +24479,7 @@ in {
       url = "mirror://pypi/s/sphinx/sphinx-1.2.3.tar.gz";
       sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
     };
-    patches = [];
+    postPatch = '''';
     # Tests requires Pygments >=2.0.2 which isn't worth keeping around for this:
     doCheck = false;
   };
