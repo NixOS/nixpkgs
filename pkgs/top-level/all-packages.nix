@@ -9570,6 +9570,8 @@ in
 
   vmime = callPackage ../development/libraries/vmime { };
 
+  volume_key = callPackage ../development/libraries/volume-key { };
+
   vrpn = callPackage ../development/libraries/vrpn { };
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
