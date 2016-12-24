@@ -65,7 +65,7 @@ let
   splicedPackages =
     if actuallySplice
     then splicer defaultBuildScope defaultRunScope
-    else pkgs // pkgs.xorg;
+    else import ./build-wrappers.nix pkgs // pkgs.xorg;
 
 in
 

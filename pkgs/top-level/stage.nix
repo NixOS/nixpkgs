@@ -122,6 +122,18 @@ let
       res self;
     in res;
 
+  # Build wrappers are added in anticipation of there being a successor stage
+  # using this stage as its `buildPackages` (or this stage being built against
+  # itself. As such, it is the only semi-acceptable use of `__targetPackages`.
+  #
+  # Note that if `__targetPackages` is `{}`, then we know there is no successor
+  # stage, so we don't need to apply this. This is a small half-measure to help
+  # catch improperly *using* wrappers from `pkgs` instead of `buildPackages`.
+  buildWrappers = self: super:
+    if targetPackages == {}
+    then {};
+    else import ./splice.nix self
+
   aliases = self: super: import ./aliases.nix super;
 
   # stdenvOverrides is used to avoid having multiple of versions
@@ -149,6 +161,7 @@ let
     trivialBuilders
     splice
     allPackages
+    buildWrappers
     aliases
     stdenvOverrides
     configOverrides

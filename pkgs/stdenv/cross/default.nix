@@ -21,9 +21,7 @@ in bootStages ++ [
     selfBuild = false;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
-    stdenv = vanillaPackages.stdenv // {
-      overrides = _: _: {};
-    };
+    inherit (vanillaPackages) stdenv;
   })
 
   # Run Packages

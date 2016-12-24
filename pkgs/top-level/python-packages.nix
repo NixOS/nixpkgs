@@ -1945,7 +1945,7 @@ in {
       sha256 = "1ajmflvvlkflrcmqmkrx0zaira84z8kv4ssb2jprfwvjh8vfkysb";
     };
 
-    buildInputs = [ pkgs.gcc ];
+    buildInputs = [ pkgs.buildPackages.gcc ];
     propagatedBuildInputs = [ pkgs.wirelesstools ];
 
     meta = {
@@ -7201,7 +7201,7 @@ in {
     };
 
     buildInputs = [
-      pkgs.gcc
+      pkgs.buildPackages.gcc
       pkgs.gmp
     ];
 
@@ -7221,7 +7221,7 @@ in {
     };
 
     buildInputs = [
-      pkgs.gcc
+      pkgs.buildPackages.gcc
       pkgs.gmp
       pkgs.mpfr
       pkgs.libmpc
@@ -22174,7 +22174,7 @@ in {
     propagatedBuildInputs = with self; [ numpy scipy matplotlib pyqt4
       cython ];
 
-    buildInputs = [ pkgs.gcc pkgs.qt4 pkgs.blas self.nose ];
+    buildInputs = [ pkgs.buildPackages.gcc pkgs.qt4 pkgs.blas self.nose ];
 
     meta = {
       description = "QuTiP - Quantum Toolbox in Python";
@@ -31035,7 +31035,7 @@ EOF
     propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig mock];
 
     preFixup = ''
-      RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
+      RPATH="${stdenv.lib.makeLibraryPath [ pkgs.buildPackages.gcc.cc.lib pkgs.zlib ]}"
       find $out -name '*.so' -exec patchelf --set-rpath "$RPATH" {} \;
     '';
 
@@ -31060,13 +31060,13 @@ EOF
     };
 
     buildInputs = with self; [ pkgs.swig ];
-    propagatedBuildInputs = with self; [ numpy six protobuf3_0 pkgs.cudatoolkit75 pkgs.cudnn5_cudatoolkit75 pkgs.gcc49 self.mock ];
+    propagatedBuildInputs = with self; [ numpy six protobuf3_0 pkgs.cudatoolkit75 pkgs.cudnn5_cudatoolkit75 pkgs.buildPackages.gcc49 self.mock ];
 
     # Note that we need to run *after* the fixup phase because the
     # libraries are loaded at runtime. If we run in preFixup then
     # patchelf --shrink-rpath will remove the cuda libraries.
     postFixup = let rpath = stdenv.lib.makeLibraryPath [
-      pkgs.gcc49.cc.lib
+      pkgs.buildPackages.gcc49.cc.lib
       pkgs.zlib pkgs.cudatoolkit75
       pkgs.cudnn5_cudatoolkit75
       pkgs.linuxPackages.nvidia_x11

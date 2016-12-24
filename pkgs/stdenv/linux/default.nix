@@ -232,7 +232,8 @@ in
       # other purposes (binutils and top-level pkgs) too.
       inherit (prevStage) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
 
-      gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+      # Can't be called plain `gcc` or will be clobbered by build wrappers
+      gcc' = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
@@ -277,7 +278,7 @@ in
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
         lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
 
-      cc = prevStage.gcc;
+      cc = prevStage.gcc';
 
       shell = cc.shell;
 
@@ -298,9 +299,8 @@ in
         */
 
       overrides = self: super: {
-        gcc = cc;
-
         inherit (prevStage)
+          gcc-unwrapped
           gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
           glibc gnumake gnused gnutar gnugrep gnupatch patchelf
           attr acl paxctl zlib pcre;

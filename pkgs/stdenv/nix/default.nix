@@ -43,10 +43,12 @@ bootStages ++ [
 
       overrides = self: super: {
         inherit cc;
-        inherit (cc) binutils;
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch perl;
+      } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+        # Need to get rid of these when cross-compiling.
+        inherit (prevStage) binutils;
       };
     };
   })

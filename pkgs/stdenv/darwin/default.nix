@@ -253,7 +253,7 @@ in rec {
     inherit
       gnumake gzip gnused bzip2 gawk ed xz patch bash
       libcxxabi libcxx ncurses libffi zlib icu llvm gmp pcre gnugrep
-      coreutils findutils diffutils patchutils binutils binutils-raw;
+      coreutils findutils diffutils patchutils;
 
     llvmPackages = super.llvmPackages // {
       inherit (llvmPackages) llvm clang-unwrapped;
@@ -262,6 +262,9 @@ in rec {
     darwin = super.darwin // {
       inherit (darwin) dyld Libsystem cctools libiconv;
     };
+  } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+    # Need to get rid of these when cross-compiling.
+    inherit binutils binutils-raw;
   };
 
   stdenvDarwin = prevStage: let pkgs = prevStage; in import ../generic rec {

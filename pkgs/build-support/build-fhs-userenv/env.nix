@@ -37,13 +37,13 @@ let
   # base packages of the chroot
   # these match the host's architecture, glibc_multi is used for multilib
   # builds.
-  basePkgs = with pkgs;
+  basePkgs = with (pkgs.buildPackages // pkgs);
     [ (if isMultiBuild then glibc_multi else glibc)
       (toString gcc.cc.lib) bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz glibcLocales
     ];
-  baseMultiPkgs = with pkgsi686Linux;
+  baseMultiPkgs = with (pkgsi686Linux.buildPackages // pkgsi686Linux);
     [ (toString gcc.cc.lib)
     ];
 

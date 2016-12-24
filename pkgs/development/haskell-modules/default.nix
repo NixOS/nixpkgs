@@ -78,7 +78,8 @@ let
       };
 
     in
-      import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
+      # TODO(@Ericson2314) think harder about build-time dependencies
+      import ./hackage-packages.nix { inherit stdenv callPackage; pkgs = pkgs.buildPackages // pkgs;  } self // {
 
         inherit mkDerivation callPackage;
 

@@ -1,11 +1,7 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, libcCross
+{ stdenv, lib, fetchurl, tzdata, iana_etc, libc
 , pkgconfig
 , pcre
 , Security }:
-
-let
-  libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
-in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
