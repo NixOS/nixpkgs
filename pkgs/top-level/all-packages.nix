@@ -7697,6 +7697,10 @@ in
 
   libburn = callPackage ../development/libraries/libburn { };
 
+  libbytesize = callPackage ../development/libraries/libbytesize {
+    inherit (gnome2) gtkdoc;
+  };
+
   libcaca = callPackage ../development/libraries/libcaca {
     inherit (xlibs) libX11 libXext;
   };
