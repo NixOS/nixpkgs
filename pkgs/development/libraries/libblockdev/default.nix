@@ -83,11 +83,13 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     (volume_key.override { inherit (python3Packages) python; })
-    parted libbytesize python3Packages.python glib gobjectIntrospection
-    cryptsetup nss nspr devicemapper udev kmod dmraid libuuid
+    parted libbytesize python3Packages.python glib cryptsetup nss nspr
+    devicemapper udev kmod dmraid libuuid
   ];
 
-  propagatedBuildInputs = [ python3Packages.pygobject3 ];
+  propagatedBuildInputs = [
+    python3Packages.pygobject3 python3Packages.six gobjectIntrospection
+  ];
 
   NIX_CFLAGS_COMPILE = let
     mkDefine = prog: path: "-D${prog}_BIN_PATH=\"${path}\"";
