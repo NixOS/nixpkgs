@@ -24444,12 +24444,8 @@ in {
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales html5lib ] ++ optional (pythonOlder "3.4") self.enum34;
     # Disable two tests that require network access.
-    postPatch = ''
-      substituteInPlace tests/test_build_linkcheck.py --replace test_defaults dont_test_defaults
-      substituteInPlace tests/test_build_linkcheck.py --replace test_anchors_ignored dont_test_anchors_ignored
-    '';
     checkPhase = ''
-      make test
+      NOSE_EXCLUDE=test_defaults,test_anchors_ignored make test
     '';
     propagatedBuildInputs = with self; [
       docutils
