@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   version = "${major}.${minor}";
-  major = "0.23";
-  minor = "5";
+  major = "0.25";
+  minor = "2";
   name = "shotwell-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${major}/${name}.tar.xz";
-    sha256 = "0fgs1rgvkmy79bmpxrsvm5w8rvqml4l1vnwma0xqx5zzm02p8a07";
+    sha256 = "1bih5hr3pvpkx3fck55bnhngn4fl92ryjizc34wb8pwigbkxnaj1";
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
                   pkgconfig gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
                   which udev libgudev gnome3.gexiv2 hicolor_icon_theme
                   libraw json_glib gettext desktop_file_utils glib lcms2 gdk_pixbuf librsvg
-                  wrapGAppsHook gnome_doc_utils gnome3.rest
+                  wrapGAppsHook gnome_doc_utils gnome3.rest gnome3.gcr
                   gnome3.defaultIconTheme itstool ];
 
   meta = with stdenv.lib; {
