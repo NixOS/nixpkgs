@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline, perl, python2
-, utillinux, check, enableStatic ? false, hurd ? null }:
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, devicemapper, libuuid, gettext
+, readline, perl, python2, utillinux, check
+, hurd ? null
+
+, enableStatic ? false
+}:
 
 stdenv.mkDerivation rec {
   name = "parted-3.2";
@@ -9,11 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "1r3qpg3bhz37mgvp9chsaa3k0csby3vayfvz8ggsqz194af5i2w5";
   };
 
-  patches = stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch;
+  patches = [ ./add-libparted-fs-resize.pc.patch ]
+         ++ stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch;
 
   postPatch = stdenv.lib.optionalString doCheck ''
     patchShebangs tests
   '';
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ libuuid ]
     ++ stdenv.lib.optional (readline != null) readline

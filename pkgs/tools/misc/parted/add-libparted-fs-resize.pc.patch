@@ -1,0 +1,67 @@
+From 151dd81cd1e86c1329488a892fa5df38aae132f5 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Mon, 29 Feb 2016 11:34:31 -0800
+Subject: [PATCH 25/28] Add libparted-fs-resize.pc
+
+Add a pkgconfig file for the filesystem resize library.
+
+(cherry picked from commit 56ede67e254132eba72b0c3e74b7b3677c22782d)
+---
+ Makefile.am               |  3 ++-
+ configure.ac              |  1 +
+ libparted-fs-resize.pc.in | 10 ++++++++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
+ create mode 100644 libparted-fs-resize.pc.in
+
+diff --git a/Makefile.am b/Makefile.am
+index 686b61c..c426b8c 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,6 +6,7 @@ EXTRA_DIST =				\
+   .prev-version				\
+   BUGS					\
+   libparted.pc.in			\
++  libparted-fs-resize.pc.in		\
+   parted.spec.in			\
+   parted.spec				\
+   scripts/data/abi/baseline_symbols.txt \
+@@ -18,7 +19,7 @@ EXTRA_DIST =				\
+ aclocaldir=$(datadir)/aclocal
+ 
+ pcdir = $(libdir)/pkgconfig
+-pc_DATA = libparted.pc
++pc_DATA = libparted.pc libparted-fs-resize.pc
+ 
+ # This is best not done via configure.ac, because automake's
+ # make distcheck target does not like auto-generated files
+diff --git a/configure.ac b/configure.ac
+index 436d0e2..3d57157 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -613,6 +613,7 @@ libparted/labels/Makefile
+ libparted/fs/Makefile
+ libparted/tests/Makefile
+ libparted.pc
++libparted-fs-resize.pc
+ parted/Makefile
+ partprobe/Makefile
+ doc/Makefile
+diff --git a/libparted-fs-resize.pc.in b/libparted-fs-resize.pc.in
+new file mode 100644
+index 0000000..ed9b3d6
+--- /dev/null
++++ b/libparted-fs-resize.pc.in
+@@ -0,0 +1,10 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: libparted-fs-resize
++Description: The GNU Parted filesystem resize shared library
++Version: @VERSION@
++Libs: -L${libdir} -lparted-fs-resize
++Cflags: -I${includedir}
+-- 
+2.5.0
+
