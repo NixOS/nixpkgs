@@ -1804,16 +1804,16 @@ in
 
   gawp = callPackage ../tools/misc/gawp { };
 
-  gazeboSimulator = recurseIntoAttrs {
+  gazeboSimulator = recurseIntoAttrs rec {
     sdformat = gazeboSimulator.sdformat4;
 
     sdformat3 = callPackage ../development/libraries/sdformat/3.nix { };
 
     sdformat4 = callPackage ../development/libraries/sdformat { };
 
-    gazebo6 = callPackage ../applications/science/robotics/gazebo/6.nix { };
+    gazebo6 = callPackage ../applications/science/robotics/gazebo/6.nix { boost = boost160; };
 
-    gazebo6-headless = callPackage ../applications/science/robotics/gazebo/6.nix { withHeadless = true;  };
+    gazebo6-headless = gazebo6.override { withHeadless = true;  };
 
     gazebo7 = callPackage ../applications/science/robotics/gazebo { };
 
@@ -4959,7 +4959,9 @@ in
 
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
-  hhvm = callPackage ../development/compilers/hhvm { };
+  hhvm = callPackage ../development/compilers/hhvm {
+    boost = boost160;
+  };
 
   hop = callPackage ../development/compilers/hop { };
 
@@ -16938,6 +16940,7 @@ in
 
   kicad = callPackage ../applications/science/electronics/kicad {
     wxGTK = wxGTK30;
+    boost = boost160;
   };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
