@@ -1,22 +1,36 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, makeWrapper
 , freeglut, freealut, mesa, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
 , makeDesktopItem, qtbase
 }:
 
+let
+  version = "2016.4.3";
+  shortVersion = "2016.4";
+  data = stdenv.mkDerivation rec {
+    name = "flightgear-base-${version}";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
+      sha256 = "1wy4fg6r79a635rrjy2a2a6jkz2p5zzahxs0hz7scgxg4ikb5xp4";
+    };
+
+    phases = [ "installPhase" ];
+
+    installPhase = ''
+      mkdir -p "$out/share/FlightGear"
+      tar xf "${src}" -C "$out/share/FlightGear/" --strip-components=1
+    '';
+  };
+in
 stdenv.mkDerivation rec {
-  version = "3.4.0";
   name = "flightgear-${version}";
+  inherit version;
 
   src = fetchurl {
-    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Source/${name}.tar.bz2";
-    sha256 = "102pg7mahgxzypvyp76x363qy3a4gxavr4hj16gsha07nl2msr5m";
-  };
-
-  datasrc = fetchurl {
-    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Shared/FlightGear-data-${version}.tar.bz2";
-    sha256 = "12qjvycizg693g5jj5qyp1jiwwywg6p9fg6j3zjxhx6r4g1sgvwc";
+    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
+    sha256 = "08i8dlia3aral2wwf72n5q5ji4vxj51bnn24g6prqjjy4qww9a9m";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -37,21 +51,22 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+    makeWrapper
     freeglut freealut mesa libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xproto libXext xextproto libXi inputproto
     libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr qtbase
   ];
 
-  preConfigure = ''
-    export cmakeFlagsArray=(-DFG_DATA_DIR="$out/share/FlightGear/")
-  '';
-
   postInstall = ''
     mkdir -p "$out/share/applications/"
-    cp "${desktopItem}"/share/applications/* "$out/share/applications/"
+    cp "${desktopItem}"/share/applications/* "$out/share/applications/" #*/
 
-    mkdir -p "$out/share/FlightGear"
-    tar xvf "${datasrc}" -C "$out/share/FlightGear/" --strip-components=1
+    for f in $out/bin/* #*/
+    do
+      wrapProgram $f --set FG_ROOT "${data}/share/FlightGear"
+    done
+
+
   '';
 
   meta = with stdenv.lib; {
