@@ -2559,7 +2559,9 @@ in
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
-  leatherman = callPackage ../development/libraries/leatherman {};
+  leatherman = callPackage ../development/libraries/leatherman {
+    boost = boost160;
+  };
 
   leela = callPackage ../tools/graphics/leela { };
 
@@ -10299,6 +10301,7 @@ in
 
   mongodb = callPackage ../servers/nosql/mongodb {
     sasl = cyrus_sasl;
+    boost = boost160;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -15038,7 +15041,9 @@ in
 
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
-  twister = callPackage ../applications/networking/p2p/twister { };
+  twister = callPackage ../applications/networking/p2p/twister {
+    boost = boost160;
+  };
 
   twmn = qt5.callPackage ../applications/misc/twmn { };
 
@@ -15713,7 +15718,9 @@ in
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam5 = kde5.callPackage ../applications/graphics/digikam/5.nix {};
+  digikam5 = kde5.callPackage ../applications/graphics/digikam/5.nix {
+    boost = boost160;
+  };
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
@@ -15772,7 +15779,9 @@ in
 
   freedink = callPackage ../games/freedink { };
 
-  freeorion = callPackage ../games/freeorion { };
+  freeorion = callPackage ../games/freeorion {
+    boost = boost160;
+  };
 
   frotz = callPackage ../games/frotz { };
 
