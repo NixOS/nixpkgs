@@ -141,6 +141,11 @@ in
       };
     };
 
+    networking.firewall = {
+      allowedTCPPorts = [ 32400 3005 8324 32469 ];
+      allowedUDPPorts = [ 1900 5353 32410 32412 32413 32414 ];
+    };
+
     users.extraUsers = mkIf (cfg.user == "plex") {
       plex = {
         group = cfg.group;
