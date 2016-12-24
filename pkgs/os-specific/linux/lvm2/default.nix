@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid, enable_dmeventd ? false }:
 
 let
-  version = "2.02.140";
+  version = "2.02.168";
 in
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "1jd46diyv7074fw8kxwq7imn4pl76g01d8y7z4scq0lkxf8jmpai";
+    sha256 = "03b62hcsj9z37ckd8c21wwpm07s9zblq7grfh58yzcs1vp6x38r3";
   };
 
   configureFlags = [
@@ -26,10 +26,7 @@ stdenv.mkDerivation {
 
   preConfigure =
     ''
-      substituteInPlace scripts/lvmdump.sh \
-        --replace /usr/bin/tr ${coreutils}/bin/tr
       substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/sbin/lvm $out/sbin/lvm \
         --replace /usr/bin/udevadm ${systemd.udev.bin}/bin/udevadm
 
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
