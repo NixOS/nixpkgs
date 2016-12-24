@@ -108,7 +108,7 @@ rec {
                     crossConfig = cross.config;
                 } // args.crossAttrs or {});
     } // {
-      inherit cross gccCross binutilsCross;
+      inherit gccCross binutilsCross;
       ccCross = gccCross;
     };
 

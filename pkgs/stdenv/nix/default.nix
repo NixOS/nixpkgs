@@ -9,9 +9,9 @@ assert crossSystem == null;
 bootStages ++ [
   (prevStage: let
     inherit (prevStage) stdenv;
-    inherit (stdenv) system platform;
   in {
-    inherit system platform crossSystem config;
+    inherit (prevStage) buildPlatform hostPlatform targetPlatform;
+    inherit config overlays;
 
     stdenv = import ../generic rec {
       inherit config;
