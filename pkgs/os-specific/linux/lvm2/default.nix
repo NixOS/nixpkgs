@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid, enable_dmeventd ? false }:
+{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
+, enable_dmeventd ? false
+}:
 
-let
-  version = "2.02.168";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "lvm2-${version}";
+  version = "2.02.168";
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
@@ -24,42 +23,34 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libudev libuuid ];
 
-  preConfigure =
-    ''
-      substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/bin/udevadm ${systemd.udev.bin}/bin/udevadm
-
-      sed -i /DEFAULT_SYS_DIR/d Makefile.in
-      sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
-    '';
+  preConfigure = ''
+    substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
+      --replace /usr/bin/udevadm ${systemd.udev.bin}/bin/udevadm
+  '';
 
   enableParallelBuilding = true;
 
-  #patches = [ ./purity.patch ];
+  makeFlags = [
+    "systemd_dir=$(out)/lib/systemd"
+    "systemd_unit_dir=$(systemd_dir)/system"
+    "systemd_generator_dir=$(systemd_dir)/system-generators"
+  ];
 
-  # To prevent make install from failing.
-  preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
+  installFlags = [ "confdir=$(out)/etc/lvm" "DEFAULT_SYS_DIR=$(confdir)" ];
+  installTargets = [
+    "install" "install_systemd_generators" "install_systemd_units"
+  ];
 
-  # Install systemd stuff.
-  #installTargets = "install install_systemd_generators install_systemd_units install_tmpfiles_configuration";
-
-  postInstall =
-    ''
-      substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
-        --replace $out/sbin/blkid ${utillinux}/sbin/blkid
-
-      # Systemd stuff
-      mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
-      cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system
-      cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
-    '';
+  postInstall = ''
+    substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
+      --replace $out/sbin/blkid ${utillinux}/sbin/blkid
+  '';
 
   meta = {
     homepage = http://sourceware.org/lvm2/;
     descriptions = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    inherit version;
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
     downloadPage = "ftp://sources.redhat.com/pub/lvm2/";
   };
 }
