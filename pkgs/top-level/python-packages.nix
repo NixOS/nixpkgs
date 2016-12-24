@@ -18979,6 +18979,39 @@ in {
     };
   };
 
+  pocketlint = buildPythonPackage rec {
+    name = "pocketlint-${version}";
+    version = "0.13";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "rhinstaller";
+      repo = "pocketlint";
+      rev = version;
+      sha256 = "1jymkd62n7dn533wczyw8xpxfmhj79ss340hgk1ny90xj2jaxs2f";
+    };
+
+    # Python 2.x and PyPy are not supported.
+    disabled = !isPy3k;
+
+    propagatedBuildInputs = [ self.polib self.six ];
+
+    postPatch = ''
+      sed -i -r \
+        -e 's,"(/usr/bin/)?python3-pylint","${self.pylint}/bin/pylint",' \
+        pocketlint/__init__.py
+    '';
+
+    checkPhase = ''
+      rm nix_run_setup.py
+      ${python.interpreter} tests/pylint/runpylint.py
+    '';
+
+    meta = {
+      description = "Shared code for running pylint against RedHat projects";
+      homepage = "https://github.com/rhinstaller/pocketlint";
+      license = licenses.gpl2Plus;
+    };
+  };
 
   polib = buildPythonPackage rec {
     name = "polib-${version}";
