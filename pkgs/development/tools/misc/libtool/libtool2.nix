@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   # leads to the failure of a number of tests.
   doCheck = false;
 
+  # This is just here because it was present in previous commits and
+  # we want to avoid a meaningless mass-rebuild.
+  dontStrip = false;
+
   # Don't run the native `strip' when cross-compiling.  This breaks at least
   # with `.a' files for MinGW.
-  dontStrip = stdenv ? cross;
+  crossAttrs.dontStrip = true;
 
   meta = {
     description = "GNU Libtool, a generic library support script";

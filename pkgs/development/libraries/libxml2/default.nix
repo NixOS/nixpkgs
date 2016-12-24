@@ -1,9 +1,12 @@
 { stdenv, lib, fetchurl, zlib, xz, python2, findXMLCatalogs, libiconv, fetchpatch
-, pythonSupport ? (! stdenv ? cross) }:
+, pythonSupport ? null }:
 
-let
-  python = python2;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivationWithCrossArg(cross:
+  let
+    pythonSupportReally = if pythonSupport != null then pythonSupport
+                          else cross == null;
+    python = assert pythonSupportReally; python2;
+  in rec {
   name = "libxml2-${version}";
   version = "2.9.4";
 
@@ -28,10 +31,10 @@ in stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "doc" ]
-    ++ lib.optional pythonSupport "py";
-  propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
+    ++ lib.optional pythonSupportReally "py";
+  propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupportReally " py";
 
-  buildInputs = lib.optional pythonSupport python
+  buildInputs = lib.optional pythonSupportReally python
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
@@ -39,7 +42,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ];
 
-  configureFlags = lib.optional pythonSupport "--with-python=${python}"
+  configureFlags = lib.optional pythonSupportReally "--with-python=${python}"
     ++ [ "--exec_prefix=$dev" ];
 
   enableParallelBuilding = true;
@@ -55,9 +58,9 @@ in stdenv.mkDerivation rec {
     propagatedBuildInputs =  [ findXMLCatalogs libiconv ];
   };
 
-  preInstall = lib.optionalString pythonSupport
+  preInstall = lib.optionalString pythonSupportReally
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
-  installFlags = lib.optionalString pythonSupport
+  installFlags = lib.optionalString pythonSupportReally
     ''pythondir="$(py)/lib/${python.libPrefix}/site-packages"'';
 
   postFixup = ''
@@ -75,4 +78,4 @@ in stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.eelco ];
   };
-}
+})
