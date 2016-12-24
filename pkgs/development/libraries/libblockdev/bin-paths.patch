@@ -1,0 +1,871 @@
+diff --git a/src/plugins/btrfs.c b/src/plugins/btrfs.c
+index 21a6236..8f68002 100644
+--- a/src/plugins/btrfs.c
++++ b/src/plugins/btrfs.c
+@@ -100,7 +100,7 @@ void bd_btrfs_filesystem_info_free (BDBtrfsFilesystemInfo *info) {
+  */
+ gboolean bd_btrfs_check_deps () {
+     GError *error = NULL;
+-    gboolean ret = bd_utils_check_util_version ("btrfs", BTRFS_MIN_VERSION, NULL, "[Bb]trfs.* v([\\d\\.]+)", &error);
++    gboolean ret = bd_utils_check_util_version ("btrfs", BTRFS_BIN_PATH, BTRFS_MIN_VERSION, NULL, "[Bb]trfs.* v([\\d\\.]+)", &error);
+ 
+     if (!ret && error) {
+         g_warning("Cannot load the BTRFS plugin: %s" , error->message);
+@@ -255,7 +255,7 @@ gboolean bd_btrfs_create_volume (const gchar **devices, const gchar *label, cons
+         num_args += 2;
+ 
+     argv = g_new0 (const gchar*, num_args + 2);
+-    argv[0] = "mkfs.btrfs";
++    argv[0] = MKFS_BTRFS_BIN_PATH;
+     if (label) {
+         argv[next_arg] = "--label";
+         next_arg++;
+@@ -295,7 +295,7 @@ gboolean bd_btrfs_create_volume (const gchar **devices, const gchar *label, cons
+  * Returns: whether the @device was successfully added to the @mountpoint btrfs volume or not
+  */
+ gboolean bd_btrfs_add_device (const gchar *mountpoint, const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[6] = {"btrfs", "device", "add", device, mountpoint, NULL};
++    const gchar *argv[6] = {BTRFS_BIN_PATH, "device", "add", device, mountpoint, NULL};
+     return bd_utils_exec_and_report_error (argv, extra, error);
+ }
+ 
+@@ -310,7 +310,7 @@ gboolean bd_btrfs_add_device (const gchar *mountpoint, const gchar *device, cons
+  * Returns: whether the @device was successfully removed from the @mountpoint btrfs volume or not
+  */
+ gboolean bd_btrfs_remove_device (const gchar *mountpoint, const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[6] = {"btrfs", "device", "delete", device, mountpoint, NULL};
++    const gchar *argv[6] = {BTRFS_BIN_PATH, "device", "delete", device, mountpoint, NULL};
+     return bd_utils_exec_and_report_error (argv, extra, error);
+ }
+ 
+@@ -327,7 +327,7 @@ gboolean bd_btrfs_remove_device (const gchar *mountpoint, const gchar *device, c
+ gboolean bd_btrfs_create_subvolume (const gchar *mountpoint, const gchar *name, const BDExtraArg **extra, GError **error) {
+     gchar *path = NULL;
+     gboolean success = FALSE;
+-    const gchar *argv[5] = {"btrfs", "subvol", "create", NULL, NULL};
++    const gchar *argv[5] = {BTRFS_BIN_PATH, "subvol", "create", NULL, NULL};
+ 
+     if (g_str_has_suffix (mountpoint, "/"))
+         path = g_strdup_printf ("%s%s", mountpoint, name);
+@@ -354,7 +354,7 @@ gboolean bd_btrfs_create_subvolume (const gchar *mountpoint, const gchar *name,
+ gboolean bd_btrfs_delete_subvolume (const gchar *mountpoint, const gchar *name, const BDExtraArg **extra, GError **error) {
+     gchar *path = NULL;
+     gboolean success = FALSE;
+-    const gchar *argv[5] = {"btrfs", "subvol", "delete", NULL, NULL};
++    const gchar *argv[5] = {BTRFS_BIN_PATH, "subvol", "delete", NULL, NULL};
+ 
+     if (g_str_has_suffix (mountpoint, "/"))
+         path = g_strdup_printf ("%s%s", mountpoint, name);
+@@ -383,7 +383,7 @@ guint64 bd_btrfs_get_default_subvolume_id (const gchar *mountpoint, GError **err
+     gchar *output = NULL;
+     gchar *match = NULL;
+     guint64 ret = 0;
+-    const gchar *argv[5] = {"btrfs", "subvol", "get-default", mountpoint, NULL};
++    const gchar *argv[5] = {BTRFS_BIN_PATH, "subvol", "get-default", mountpoint, NULL};
+ 
+     regex = g_regex_new ("ID (\\d+) .*", 0, 0, error);
+     if (!regex) {
+@@ -430,7 +430,7 @@ guint64 bd_btrfs_get_default_subvolume_id (const gchar *mountpoint, GError **err
+  * to @subvol_id or not
+  */
+ gboolean bd_btrfs_set_default_subvolume (const gchar *mountpoint, guint64 subvol_id, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[6] = {"btrfs", "subvol", "set-default", NULL, mountpoint, NULL};
++    const gchar *argv[6] = {BTRFS_BIN_PATH, "subvol", "set-default", NULL, mountpoint, NULL};
+     gboolean ret = FALSE;
+ 
+     argv[3] = g_strdup_printf ("%"G_GUINT64_FORMAT, subvol_id);
+@@ -452,7 +452,7 @@ gboolean bd_btrfs_set_default_subvolume (const gchar *mountpoint, guint64 subvol
+  * Returns: whether the @dest snapshot of @source was successfully created or not
+  */
+ gboolean bd_btrfs_create_snapshot (const gchar *source, const gchar *dest, gboolean ro, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[7] = {"btrfs", "subvol", "snapshot", NULL, NULL, NULL, NULL};
++    const gchar *argv[7] = {BTRFS_BIN_PATH, "subvol", "snapshot", NULL, NULL, NULL, NULL};
+     guint next_arg = 3;
+ 
+     if (ro) {
+@@ -475,7 +475,7 @@ gboolean bd_btrfs_create_snapshot (const gchar *source, const gchar *dest, gbool
+  * containing @device or %NULL in case of error
+  */
+ BDBtrfsDeviceInfo** bd_btrfs_list_devices (const gchar *device, GError **error) {
+-    const gchar *argv[5] = {"btrfs", "filesystem", "show", device, NULL};
++    const gchar *argv[5] = {BTRFS_BIN_PATH, "filesystem", "show", device, NULL};
+     gchar *output = NULL;
+     gboolean success = FALSE;
+     gchar **lines = NULL;
+@@ -547,7 +547,7 @@ BDBtrfsDeviceInfo** bd_btrfs_list_devices (const gchar *device, GError **error)
+  * list before its parent (sub)volume.
+  */
+ BDBtrfsSubvolumeInfo** bd_btrfs_list_subvolumes (const gchar *mountpoint, gboolean snapshots_only, GError **error) {
+-    const gchar *argv[7] = {"btrfs", "subvol", "list", "-p", NULL, NULL, NULL};
++    const gchar *argv[7] = {BTRFS_BIN_PATH, "subvol", "list", "-p", NULL, NULL, NULL};
+     gchar *output = NULL;
+     gboolean success = FALSE;
+     gchar **lines = NULL;
+@@ -660,7 +660,7 @@ BDBtrfsSubvolumeInfo** bd_btrfs_list_subvolumes (const gchar *mountpoint, gboole
+  * Returns: information about the @device's volume's filesystem or %NULL in case of error
+  */
+ BDBtrfsFilesystemInfo* bd_btrfs_filesystem_info (const gchar *device, GError **error) {
+-    const gchar *argv[5] = {"btrfs", "filesystem", "show", device, NULL};
++    const gchar *argv[5] = {BTRFS_BIN_PATH, "filesystem", "show", device, NULL};
+     gchar *output = NULL;
+     gboolean success = FALSE;
+     gchar const * const pattern = "Label:\\s+(none|'(?P<label>.+)')\\s+" \
+@@ -728,7 +728,7 @@ gboolean bd_btrfs_mkfs (const gchar **devices, const gchar *label, const gchar *
+  * or not
+  */
+ gboolean bd_btrfs_resize (const gchar *mountpoint, guint64 size, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[6] = {"btrfs", "filesystem", "resize", NULL, mountpoint, NULL};
++    const gchar *argv[6] = {BTRFS_BIN_PATH, "filesystem", "resize", NULL, mountpoint, NULL};
+     gboolean ret = FALSE;
+ 
+     argv[3] = g_strdup_printf ("%"G_GUINT64_FORMAT, size);
+@@ -748,7 +748,7 @@ gboolean bd_btrfs_resize (const gchar *mountpoint, guint64 size, const BDExtraAr
+  * Returns: whether the filesystem was successfully checked or not
+  */
+ gboolean bd_btrfs_check (const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[4] = {"btrfs", "check", device, NULL};
++    const gchar *argv[4] = {BTRFS_BIN_PATH, "check", device, NULL};
+ 
+     return bd_utils_exec_and_report_error (argv, extra, error);
+ }
+@@ -763,7 +763,7 @@ gboolean bd_btrfs_check (const gchar *device, const BDExtraArg **extra, GError *
+  * Returns: whether the filesystem was successfully checked and repaired or not
+  */
+ gboolean bd_btrfs_repair (const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[5] = {"btrfs", "check", "--repair", device, NULL};
++    const gchar *argv[5] = {BTRFS_BIN_PATH, "check", "--repair", device, NULL};
+ 
+     return bd_utils_exec_and_report_error (argv, extra, error);
+ }
+@@ -778,7 +778,7 @@ gboolean bd_btrfs_repair (const gchar *device, const BDExtraArg **extra, GError
+  * to @label or not
+  */
+ gboolean bd_btrfs_change_label (const gchar *mountpoint, const gchar *label, GError **error) {
+-    const gchar *argv[6] = {"btrfs", "filesystem", "label", mountpoint, label, NULL};
++    const gchar *argv[6] = {BTRFS_BIN_PATH, "filesystem", "label", mountpoint, label, NULL};
+ 
+     return bd_utils_exec_and_report_error (argv, NULL, error);
+ }
+diff --git a/src/plugins/dm.c b/src/plugins/dm.c
+index 8151681..10ff0c5 100644
+--- a/src/plugins/dm.c
++++ b/src/plugins/dm.c
+@@ -68,7 +68,7 @@ static void discard_dm_log (int level __attribute__((unused)), const char *file
+  */
+ gboolean bd_dm_check_deps () {
+     GError *error = NULL;
+-    gboolean ret = bd_utils_check_util_version ("dmsetup", DM_MIN_VERSION, NULL, "Library version:\\s+([\\d\\.]+)", &error);
++    gboolean ret = bd_utils_check_util_version ("dmsetup", DMSETUP_BIN_PATH, DM_MIN_VERSION, NULL, "Library version:\\s+([\\d\\.]+)", &error);
+ 
+     if (!ret && error) {
+         g_warning("Cannot load the DM plugin: %s" , error->message);
+@@ -116,7 +116,7 @@ void bd_dm_close () {
+  */
+ gboolean bd_dm_create_linear (const gchar *map_name, const gchar *device, guint64 length, const gchar *uuid, GError **error) {
+     gboolean success = FALSE;
+-    const gchar *argv[9] = {"dmsetup", "create", map_name, "--table", NULL, NULL, NULL, NULL, NULL};
++    const gchar *argv[9] = {DMSETUP_BIN_PATH, "create", map_name, "--table", NULL, NULL, NULL, NULL, NULL};
+ 
+     gchar *table = g_strdup_printf ("0 %"G_GUINT64_FORMAT" linear %s 0", length, device);
+     argv[4] = table;
+@@ -142,7 +142,7 @@ gboolean bd_dm_create_linear (const gchar *map_name, const gchar *device, guint6
+  * Returns: whether the @map_name map was successfully removed or not
+  */
+ gboolean bd_dm_remove (const gchar *map_name, GError **error) {
+-    const gchar *argv[4] = {"dmsetup", "remove", map_name, NULL};
++    const gchar *argv[4] = {DMSETUP_BIN_PATH, "remove", map_name, NULL};
+ 
+     return bd_utils_exec_and_report_error (argv, NULL, error);
+ }
+diff --git a/src/plugins/fs.c b/src/plugins/fs.c
+index a10642e..cd51876 100644
+--- a/src/plugins/fs.c
++++ b/src/plugins/fs.c
+@@ -141,7 +141,7 @@ void bd_fs_vfat_info_free (BDFSVfatInfo *data) {
+ gboolean bd_fs_check_deps () {
+     GError *error = NULL;
+     gboolean check_ret = TRUE;
+-    gboolean ret = bd_utils_check_util_version ("mkfs.ext4", NULL, "", NULL, &error);
++    gboolean ret = bd_utils_check_util_version ("mkfs.ext4", MKFS_EXT4_BIN_PATH, NULL, "", NULL, &error);
+ 
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+@@ -149,84 +149,84 @@ gboolean bd_fs_check_deps () {
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("e2fsck", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("e2fsck", E2FSCK_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("tune2fs", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("tune2fs", TUNE2FS_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("dumpe2fs", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("dumpe2fs", DUMPE2FS_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("resize2fs", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("resize2fs", RESIZE2FS_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("mkfs.xfs", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("mkfs.xfs", MKFS_XFS_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("xfs_db", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("xfs_db", XFS_DB_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("xfs_repair", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("xfs_repair", XFS_REPAIR_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("xfs_admin", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("xfs_admin", XFS_ADMIN_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("xfs_growfs", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("xfs_growfs", XFS_GROWFS_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("mkfs.vfat", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("mkfs.vfat", MKFS_VFAT_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("fatlabel", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("fatlabel", FATLABEL_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("fsck.vfat", NULL, "", NULL, &error);
++    ret = bd_utils_check_util_version ("fsck.vfat", FSCK_VFAT_BIN_PATH, NULL, "", NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the FS plugin: %s" , error->message);
+         g_clear_error (&error);
+@@ -568,7 +568,7 @@ static gboolean wipe_fs (const gchar *device, const gchar *fs_type, gboolean wip
+  * Returns: whether a new ext4 fs was successfully created on @device or not
+  */
+ gboolean bd_fs_ext4_mkfs (const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *args[3] = {"mkfs.ext4", device, NULL};
++    const gchar *args[3] = {MKFS_EXT4_BIN_PATH, device, NULL};
+ 
+     return bd_utils_exec_and_report_error (args, extra, error);
+ }
+@@ -598,7 +598,7 @@ gboolean bd_fs_ext4_check (const gchar *device, const BDExtraArg **extra, GError
+     /* Force checking even if the file system seems clean. AND
+      * Open the filesystem read-only, and assume an answer of no to all
+      * questions. */
+-    const gchar *args[5] = {"e2fsck", "-f", "-n", device, NULL};
++    const gchar *args[5] = {E2FSCK_BIN_PATH, "-f", "-n", device, NULL};
+     gint status = 0;
+     gboolean ret = FALSE;
+ 
+@@ -625,7 +625,7 @@ gboolean bd_fs_ext4_repair (const gchar *device, gboolean unsafe, const BDExtraA
+     /* Force checking even if the file system seems clean. AND
+      *     Automatically repair what can be safely repaired. OR
+      *     Assume an answer of `yes' to all questions. */
+-    const gchar *args[5] = {"e2fsck", "-f", unsafe ? "-y" : "-p", device, NULL};
++    const gchar *args[5] = {E2FSCK_BIN_PATH, "-f", unsafe ? "-y" : "-p", device, NULL};
+ 
+     return bd_utils_exec_and_report_error (args, extra, error);
+ }
+@@ -640,7 +640,7 @@ gboolean bd_fs_ext4_repair (const gchar *device, gboolean unsafe, const BDExtraA
+  *          successfully set or not
+  */
+ gboolean bd_fs_ext4_set_label (const gchar *device, const gchar *label, GError **error) {
+-    const gchar *args[5] = {"tune2fs", "-L", label, device, NULL};
++    const gchar *args[5] = {TUNE2FS_BIN_PATH, "-L", label, device, NULL};
+ 
+     return bd_utils_exec_and_report_error (args, NULL, error);
+ }
+@@ -721,7 +721,7 @@ static BDFSExt4Info* get_ext4_info_from_table (GHashTable *table, gboolean free_
+  *                           %NULL in case of error
+  */
+ BDFSExt4Info* bd_fs_ext4_get_info (const gchar *device, GError **error) {
+-    const gchar *args[4] = {"dumpe2fs", "-h", device, NULL};
++    const gchar *args[4] = {DUMPE2FS_BIN_PATH, "-h", device, NULL};
+     gboolean success = FALSE;
+     gchar *output = NULL;
+     GHashTable *table = NULL;
+@@ -765,7 +765,7 @@ BDFSExt4Info* bd_fs_ext4_get_info (const gchar *device, GError **error) {
+  * Returns: whether the file system on @device was successfully resized or not
+  */
+ gboolean bd_fs_ext4_resize (const gchar *device, guint64 new_size, const BDExtraArg **extra, GError **error) {
+-    const gchar *args[4] = {"resize2fs", device, NULL, NULL};
++    const gchar *args[4] = {RESIZE2FS_BIN_PATH, device, NULL, NULL};
+     gboolean ret = FALSE;
+ 
+     if (new_size != 0)
+@@ -787,7 +787,7 @@ gboolean bd_fs_ext4_resize (const gchar *device, guint64 new_size, const BDExtra
+  * Returns: whether a new xfs fs was successfully created on @device or not
+  */
+ gboolean bd_fs_xfs_mkfs (const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *args[3] = {"mkfs.xfs", device, NULL};
++    const gchar *args[3] = {MKFS_XFS_BIN_PATH, device, NULL};
+ 
+     return bd_utils_exec_and_report_error (args, extra, error);
+ }
+@@ -815,7 +815,7 @@ gboolean bd_fs_xfs_wipe (const gchar *device, GError **error) {
+  *       everything is okay and there are just some pending/in-progress writes
+  */
+ gboolean bd_fs_xfs_check (const gchar *device, GError **error) {
+-    const gchar *args[6] = {"xfs_db", "-r", "-c", "check", device, NULL};
++    const gchar *args[6] = {XFS_DB_BIN_PATH, "-r", "-c", "check", device, NULL};
+     gboolean ret = FALSE;
+ 
+     ret = bd_utils_exec_and_report_error (args, NULL, error);
+@@ -837,7 +837,7 @@ gboolean bd_fs_xfs_check (const gchar *device, GError **error) {
+  *          (if needed) or not (error is set in that case)
+  */
+ gboolean bd_fs_xfs_repair (const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *args[3] = {"xfs_repair", device, NULL};
++    const gchar *args[3] = {XFS_REPAIR_BIN_PATH, device, NULL};
+ 
+     return bd_utils_exec_and_report_error (args, extra, error);
+ }
+@@ -852,7 +852,7 @@ gboolean bd_fs_xfs_repair (const gchar *device, const BDExtraArg **extra, GError
+  *          successfully set or not
+  */
+ gboolean bd_fs_xfs_set_label (const gchar *device, const gchar *label, GError **error) {
+-    const gchar *args[5] = {"xfs_admin", "-L", label, device, NULL};
++    const gchar *args[5] = {XFS_ADMIN_BIN_PATH, "-L", label, device, NULL};
+     if (!label || (strncmp (label, "", 1) == 0))
+         args[2] = "--";
+ 
+@@ -868,7 +868,7 @@ gboolean bd_fs_xfs_set_label (const gchar *device, const gchar *label, GError **
+  *                           %NULL in case of error
+  */
+ BDFSXfsInfo* bd_fs_xfs_get_info (const gchar *device, GError **error) {
+-    const gchar *args[4] = {"xfs_admin", "-lu", device, NULL};
++    const gchar *args[4] = {XFS_ADMIN_BIN_PATH, "-lu", device, NULL};
+     gboolean success = FALSE;
+     gchar *output = NULL;
+     BDFSXfsInfo *ret = NULL;
+@@ -906,7 +906,7 @@ BDFSXfsInfo* bd_fs_xfs_get_info (const gchar *device, GError **error) {
+     }
+     g_strfreev (lines);
+ 
+-    args[0] = "xfs_info";
++    args[0] = XFS_INFO_BIN_PATH;
+     args[1] = device;
+     args[2] = NULL;
+     success = bd_utils_exec_and_capture_output (args, NULL, &output, error);
+@@ -976,7 +976,7 @@ BDFSXfsInfo* bd_fs_xfs_get_info (const gchar *device, GError **error) {
+  * Returns: whether the file system mounted on @mpoint was successfully resized or not
+  */
+ gboolean bd_fs_xfs_resize (const gchar *mpoint, guint64 new_size, const BDExtraArg **extra, GError **error) {
+-    const gchar *args[5] = {"xfs_growfs", NULL, NULL, NULL, NULL};
++    const gchar *args[5] = {XFS_GROWFS_BIN_PATH, NULL, NULL, NULL, NULL};
+     gchar *size_str = NULL;
+     gboolean ret = FALSE;
+ 
+@@ -1005,7 +1005,7 @@ gboolean bd_fs_xfs_resize (const gchar *mpoint, guint64 new_size, const BDExtraA
+  * Returns: whether a new vfat fs was successfully created on @device or not
+  */
+ gboolean bd_fs_vfat_mkfs (const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *args[3] = {"mkfs.vfat", device, NULL};
++    const gchar *args[3] = {MKFS_VFAT_BIN_PATH, device, NULL};
+ 
+     return bd_utils_exec_and_report_error (args, extra, error);
+ }
+@@ -1032,7 +1032,7 @@ gboolean bd_fs_vfat_wipe (const gchar *device, GError **error) {
+  * Returns: whether an vfat file system on the @device is clean or not
+  */
+ gboolean bd_fs_vfat_check (const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *args[4] = {"fsck.vfat", "-n", device, NULL};
++    const gchar *args[4] = {FSCK_VFAT_BIN_PATH, "-n", device, NULL};
+     gint status = 0;
+     gboolean ret = FALSE;
+ 
+@@ -1055,7 +1055,7 @@ gboolean bd_fs_vfat_check (const gchar *device, const BDExtraArg **extra, GError
+  *          (if needed) or not (error is set in that case)
+  */
+ gboolean bd_fs_vfat_repair (const gchar *device, const BDExtraArg **extra, GError **error) {
+-    const gchar *args[4] = {"fsck.vfat", "-a", device, NULL};
++    const gchar *args[4] = {FSCK_VFAT_BIN_PATH, "-a", device, NULL};
+ 
+     return bd_utils_exec_and_report_error (args, extra, error);
+ }
+@@ -1070,7 +1070,7 @@ gboolean bd_fs_vfat_repair (const gchar *device, const BDExtraArg **extra, GErro
+  *          successfully set or not
+  */
+ gboolean bd_fs_vfat_set_label (const gchar *device, const gchar *label, GError **error) {
+-    const gchar *args[4] = {"fatlabel", device, label, NULL};
++    const gchar *args[4] = {FATLABEL_BIN_PATH, device, label, NULL};
+ 
+     return bd_utils_exec_and_report_error (args, NULL, error);
+ }
+@@ -1084,7 +1084,7 @@ gboolean bd_fs_vfat_set_label (const gchar *device, const gchar *label, GError *
+  *                           %NULL in case of error
+  */
+ BDFSVfatInfo* bd_fs_vfat_get_info (const gchar *device, GError **error) {
+-    const gchar *args[4] = {"fsck.vfat", "-nv", device, NULL};
++    const gchar *args[4] = {FSCK_VFAT_BIN_PATH, "-nv", device, NULL};
+     blkid_probe probe = NULL;
+     gint fd = 0;
+     gint status = 0;
+diff --git a/src/plugins/kbd.c b/src/plugins/kbd.c
+index 612160b..165c9a8 100644
+--- a/src/plugins/kbd.c
++++ b/src/plugins/kbd.c
+@@ -69,7 +69,7 @@ gboolean bd_kbd_check_deps () {
+     if (!ret)
+         return FALSE;
+ 
+-    ret = bd_utils_check_util_version ("make-bcache", NULL, NULL, NULL, &error);
++    ret = bd_utils_check_util_version ("make-bcache", MAKE_BCACHE_BIN_PATH, NULL, NULL, NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the kbd plugin: %s" , error->message);
+         g_clear_error (&error);
+@@ -687,7 +687,7 @@ BDKBDZramStats* bd_kbd_zram_get_stats (const gchar *device, GError **error) {
+  * Returns: whether the bcache device was successfully created or not
+  */
+ gboolean bd_kbd_bcache_create (const gchar *backing_device, const gchar *cache_device, const BDExtraArg **extra, const gchar **bcache_device, GError **error) {
+-    const gchar *argv[6] = {"make-bcache", "-B", backing_device, "-C", cache_device, NULL};
++    const gchar *argv[6] = {MAKE_BCACHE_BIN_PATH, "-B", backing_device, "-C", cache_device, NULL};
+     gboolean success = FALSE;
+     gchar *output = NULL;
+     gchar **lines = NULL;
+diff --git a/src/plugins/loop.c b/src/plugins/loop.c
+index 3509657..eb36c92 100644
+--- a/src/plugins/loop.c
++++ b/src/plugins/loop.c
+@@ -51,7 +51,7 @@ GQuark bd_loop_error_quark (void)
+  */
+ gboolean bd_loop_check_deps () {
+     GError *error = NULL;
+-    gboolean ret = bd_utils_check_util_version ("losetup", LOSETUP_MIN_VERSION, NULL, "losetup from util-linux\\s+([\\d\\.]+)", &error);
++    gboolean ret = bd_utils_check_util_version ("losetup", LOSETUP_BIN_PATH, LOSETUP_MIN_VERSION, NULL, "losetup from util-linux\\s+([\\d\\.]+)", &error);
+ 
+     if (!ret && error) {
+         g_warning("Cannot load the loop plugin: %s" , error->message);
+@@ -173,7 +173,7 @@ gchar* bd_loop_get_loop_name (const gchar *file, GError **error __attribute__((u
+  */
+ gboolean bd_loop_setup (const gchar *file, guint64 offset, guint64 size, gboolean read_only, gboolean part_scan, const gchar **loop_name, GError **error) {
+     /* losetup -f -o offset --sizelimit size -P -r file NULL */
+-    const gchar *args[10] = {"losetup", "-f", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
++    const gchar *args[10] = {LOSETUP_BIN_PATH, "-f", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+     gint args_top = 2;
+     gboolean success = FALSE;
+     gchar *offset_str = NULL;
+@@ -222,7 +222,7 @@ gboolean bd_loop_teardown (const gchar *loop, GError **error) {
+     gboolean success = FALSE;
+     gchar *dev_loop = NULL;
+ 
+-    const gchar *args[4] = {"losetup", "-d", NULL, NULL};
++    const gchar *args[4] = {LOSETUP_BIN_PATH, "-d", NULL, NULL};
+ 
+     if (g_str_has_prefix (loop, "/dev/"))
+         args[2] = loop;
+diff --git a/src/plugins/lvm.c b/src/plugins/lvm.c
+index 23002b1..a02e1ef 100644
+--- a/src/plugins/lvm.c
++++ b/src/plugins/lvm.c
+@@ -164,7 +164,7 @@ void bd_lvm_cache_stats_free (BDLVMCacheStats *data) {
+  */
+ gboolean bd_lvm_check_deps () {
+     GError *error = NULL;
+-    gboolean ret = bd_utils_check_util_version ("lvm", LVM_MIN_VERSION, "version", "LVM version:\\s+([\\d\\.]+)", &error);
++    gboolean ret = bd_utils_check_util_version ("lvm", LVM_BIN_PATH, LVM_MIN_VERSION, "version", "LVM version:\\s+([\\d\\.]+)", &error);
+ 
+     if (!ret && error) {
+         g_warning("Cannot load the LVM plugin: %s" , error->message);
+@@ -208,7 +208,7 @@ static gboolean call_lvm_and_report_error (const gchar **args, const BDExtraArg
+     const gchar **argv = g_new0 (const gchar*, args_length + 3);
+ 
+     /* construct argv from args with "lvm" prepended */
+-    argv[0] = "lvm";
++    argv[0] = LVM_BIN_PATH;
+     for (i=0; i < args_length; i++)
+         argv[i+1] = args[i];
+     argv[args_length + 1] = global_config_str ? g_strdup_printf("--config=%s", global_config_str) : NULL;
+@@ -234,7 +234,7 @@ static gboolean call_lvm_and_capture_output (const gchar **args, const BDExtraAr
+     const gchar **argv = g_new0 (const gchar*, args_length + 3);
+ 
+     /* construct argv from args with "lvm" prepended */
+-    argv[0] = "lvm";
++    argv[0] = LVM_BIN_PATH;
+     for (i=0; i < args_length; i++)
+         argv[i+1] = args[i];
+     argv[args_length + 1] = global_config_str ? g_strdup_printf("--config=%s", global_config_str) : NULL;
+diff --git a/src/plugins/mdraid.c b/src/plugins/mdraid.c
+index 74930f2..c4a13e8 100644
+--- a/src/plugins/mdraid.c
++++ b/src/plugins/mdraid.c
+@@ -136,7 +136,7 @@ void bd_md_detail_data_free (BDMDDetailData *data) {
+  */
+ gboolean bd_md_check_deps () {
+     GError *error = NULL;
+-    gboolean ret = bd_utils_check_util_version ("mdadm", MDADM_MIN_VERSION, NULL, "mdadm - v([\\d\\.]+)", &error);
++    gboolean ret = bd_utils_check_util_version ("mdadm", MDADM_BIN_PATH, MDADM_MIN_VERSION, NULL, "mdadm - v([\\d\\.]+)", &error);
+ 
+     if (!ret && error) {
+         g_warning("Cannot load the MDRAID plugin: %s" , error->message);
+@@ -473,7 +473,7 @@ gboolean bd_md_create (const gchar *device_name, const gchar *level, const gchar
+     level_str = g_strdup_printf ("--level=%s", level);
+     rdevices_str = g_strdup_printf ("--raid-devices=%"G_GUINT64_FORMAT, (num_disks - spares));
+ 
+-    argv[argv_top++] = "mdadm";
++    argv[argv_top++] = MDADM_BIN_PATH;
+     argv[argv_top++] = "--create";
+     argv[argv_top++] = device_name;
+     argv[argv_top++] = "--run";
+@@ -519,7 +519,7 @@ gboolean bd_md_create (const gchar *device_name, const gchar *level, const gchar
+  * Returns: whether the MD RAID metadata was successfully destroyed on @device or not
+  */
+ gboolean bd_md_destroy (const gchar *device, GError **error) {
+-    const gchar *argv[] = {"mdadm", "--zero-superblock", device, NULL};
++    const gchar *argv[] = {MDADM_BIN_PATH, "--zero-superblock", device, NULL};
+ 
+     return bd_utils_exec_and_report_error (argv, NULL, error);
+ }
+@@ -532,7 +532,7 @@ gboolean bd_md_destroy (const gchar *device, GError **error) {
+  * Returns: whether the RAID device @device_name was successfully deactivated or not
+  */
+ gboolean bd_md_deactivate (const gchar *device_name, GError **error) {
+-    const gchar *argv[] = {"mdadm", "--stop", device_name, NULL};
++    const gchar *argv[] = {MDADM_BIN_PATH, "--stop", device_name, NULL};
+     gchar *dev_md_path = NULL;
+     gboolean ret = FALSE;
+ 
+@@ -573,7 +573,7 @@ gboolean bd_md_activate (const gchar *device_name, const gchar **members, const
+     /* mdadm, --assemble, device_name/--scan, --run, --uuid=uuid, member1, member2,..., NULL*/
+     argv = g_new0 (const gchar*, num_members + 6);
+ 
+-    argv[argv_top++] = "mdadm";
++    argv[argv_top++] = MDADM_BIN_PATH;
+     argv[argv_top++] = "--assemble";
+     if (device_name)
+         argv[argv_top++] = device_name;
+@@ -608,7 +608,7 @@ gboolean bd_md_activate (const gchar *device_name, const gchar **members, const
+  * Returns: whether the @raid_name was successfully started or not
+  */
+ gboolean bd_md_run (const gchar *raid_name, GError **error) {
+-    const gchar *argv[] = {"mdadm", "--run", NULL, NULL};
++    const gchar *argv[] = {MDADM_BIN_PATH, "--run", NULL, NULL};
+     gchar *raid_name_str = NULL;
+     gboolean ret = FALSE;
+ 
+@@ -634,7 +634,7 @@ gboolean bd_md_run (const gchar *raid_name, GError **error) {
+  * Note: may start the MD RAID if it becomes ready by adding @device.
+  */
+ gboolean bd_md_nominate (const gchar *device, GError **error) {
+-    const gchar *argv[] = {"mdadm", "--incremental", "--quiet", "--run", device, NULL};
++    const gchar *argv[] = {MDADM_BIN_PATH, "--incremental", "--quiet", "--run", device, NULL};
+ 
+     return bd_utils_exec_and_report_error (argv, NULL, error);
+ }
+@@ -650,7 +650,7 @@ gboolean bd_md_nominate (const gchar *device, GError **error) {
+  * Note: may start the MD RAID if it becomes ready by adding @device.
+  */
+ gboolean bd_md_denominate (const gchar *device, GError **error) {
+-    const gchar *argv[] = {"mdadm", "--incremental", "--fail", device, NULL};
++    const gchar *argv[] = {MDADM_BIN_PATH, "--incremental", "--fail", device, NULL};
+ 
+     /* XXX: stupid mdadm! --incremental --fail requires "sda1" instead of "/dev/sda1" */
+     if (g_str_has_prefix (device, "/dev/"))
+@@ -680,7 +680,7 @@ gboolean bd_md_denominate (const gchar *device, GError **error) {
+  * decided by mdadm.
+  */
+ gboolean bd_md_add (const gchar *raid_name, const gchar *device, guint64 raid_devs, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[7] = {"mdadm", NULL, NULL, NULL, NULL, NULL, NULL};
++    const gchar *argv[7] = {MDADM_BIN_PATH, NULL, NULL, NULL, NULL, NULL, NULL};
+     guint argv_top = 1;
+     gchar *raid_name_str = NULL;
+     gchar *raid_devs_str = NULL;
+@@ -721,7 +721,7 @@ gboolean bd_md_add (const gchar *raid_name, const gchar *device, guint64 raid_de
+  * RAID or not.
+  */
+ gboolean bd_md_remove (const gchar *raid_name, const gchar *device, gboolean fail, const BDExtraArg **extra, GError **error) {
+-    const gchar *argv[] = {"mdadm", raid_name, NULL, NULL, NULL, NULL};
++    const gchar *argv[] = {MDADM_BIN_PATH, raid_name, NULL, NULL, NULL, NULL};
+     guint argv_top = 2;
+     gchar *raid_name_str = NULL;
+     gboolean ret = FALSE;
+@@ -754,7 +754,7 @@ gboolean bd_md_remove (const gchar *raid_name, const gchar *device, gboolean fai
+  * Returns: information about the MD RAID extracted from the @device
+  */
+ BDMDExamineData* bd_md_examine (const gchar *device, GError **error) {
+-    const gchar *argv[] = {"mdadm", "--examine", "-E", device, NULL};
++    const gchar *argv[] = {MDADM_BIN_PATH, "--examine", "-E", device, NULL};
+     gchar *output = NULL;
+     gboolean success = FALSE;
+     GHashTable *table = NULL;
+@@ -869,7 +869,7 @@ BDMDExamineData* bd_md_examine (const gchar *device, GError **error) {
+  * Returns: information about the MD RAID @raid_name
+  */
+ BDMDDetailData* bd_md_detail (const gchar *raid_name, GError **error) {
+-    const gchar *argv[] = {"mdadm", "--detail", raid_name, NULL};
++    const gchar *argv[] = {MDADM_BIN_PATH, "--detail", raid_name, NULL};
+     gchar *output = NULL;
+     gboolean success = FALSE;
+     GHashTable *table = NULL;
+diff --git a/src/plugins/mpath.c b/src/plugins/mpath.c
+index 547bfc5..b71188b 100644
+--- a/src/plugins/mpath.c
++++ b/src/plugins/mpath.c
+@@ -52,7 +52,7 @@ GQuark bd_mpath_error_quark (void)
+  */
+ gboolean bd_mpath_check_deps () {
+     GError *error = NULL;
+-    gboolean ret = bd_utils_check_util_version ("multipath", MULTIPATH_MIN_VERSION, NULL, "multipath-tools v([\\d\\.]+)", &error);
++    gboolean ret = bd_utils_check_util_version ("multipath", MULTIPATH_BIN_PATH, MULTIPATH_MIN_VERSION, NULL, "multipath-tools v([\\d\\.]+)", &error);
+ 
+     if (!ret && error) {
+         g_warning("Cannot load the mpath plugin: %s" , error->message);
+@@ -63,7 +63,7 @@ gboolean bd_mpath_check_deps () {
+         return FALSE;
+ 
+     /* mpathconf doesn't report its version */
+-    ret = bd_utils_check_util_version ("mpathconf", NULL, NULL, NULL, &error);
++    ret = bd_utils_check_util_version ("mpathconf", MPATHCONF_BIN_PATH, NULL, NULL, NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the mpath plugin: %s" , error->message);
+         g_clear_error (&error);
+@@ -103,7 +103,7 @@ void bd_mpath_close () {
+  * Flushes all unused multipath device maps.
+  */
+ gboolean bd_mpath_flush_mpaths (GError **error) {
+-    const gchar *argv[3] = {"multipath", "-F", NULL};
++    const gchar *argv[3] = {MULTIPATH_BIN_PATH, "-F", NULL};
+     gboolean success = FALSE;
+     gchar *output = NULL;
+ 
+@@ -463,7 +463,7 @@ gchar** bd_mpath_get_mpath_members (GError **error) {
+  * Returns: if successfully set or not
+  */
+ gboolean bd_mpath_set_friendly_names (gboolean enabled, GError **error) {
+-    const gchar *argv[8] = {"mpathconf", "--find_multipaths", "y", "--user_friendly_names", NULL, "--with_multipathd", "y", NULL};
++    const gchar *argv[8] = {MPATHCONF_BIN_PATH, "--find_multipaths", "y", "--user_friendly_names", NULL, "--with_multipathd", "y", NULL};
+     argv[4] = enabled ? "y" : "n";
+ 
+     return bd_utils_exec_and_report_error (argv, NULL, error);
+diff --git a/src/plugins/part.c b/src/plugins/part.c
+index ba93684..38f2ae9 100644
+--- a/src/plugins/part.c
++++ b/src/plugins/part.c
+@@ -132,14 +132,14 @@ gboolean bd_part_check_deps () {
+     GError *error = NULL;
+     gboolean check_ret = TRUE;
+ 
+-    gboolean ret = bd_utils_check_util_version ("sgdisk", "1.0.1", NULL, "GPT fdisk \\(sgdisk\\) version ([\\d\\.]+)", &error);
++    gboolean ret = bd_utils_check_util_version ("sgdisk", SGDISK_BIN_PATH, "1.0.1", NULL, "GPT fdisk \\(sgdisk\\) version ([\\d\\.]+)", &error);
+     if (!ret && error) {
+         g_warning("Cannot load the part plugin: %s" , error->message);
+         g_clear_error (&error);
+         check_ret = FALSE;
+     }
+ 
+-    ret = bd_utils_check_util_version ("sfdisk", NULL, NULL, NULL, &error);
++    ret = bd_utils_check_util_version ("sfdisk", SFDISK_BIN_PATH, NULL, NULL, NULL, &error);
+     if (!ret && error) {
+         g_warning("Cannot load the part plugin: %s" , error->message);
+         g_clear_error (&error);
+@@ -283,7 +283,7 @@ gboolean bd_part_create_table (const gchar *disk, BDPartTableType type, gboolean
+ }
+ 
+ static gchar* get_part_type_guid_and_gpt_flags (const gchar *device, int part_num, guint64 *flags, GError **error) {
+-    const gchar *args[4] = {"sgdisk", NULL, device, NULL};
++    const gchar *args[4] = {SGDISK_BIN_PATH, NULL, device, NULL};
+     gchar *output = NULL;
+     gchar **lines = NULL;
+     gchar **line_p = NULL;
+@@ -982,7 +982,7 @@ gboolean bd_part_delete_part (const gchar *disk, const gchar *part, GError **err
+ }
+ 
+ static gboolean set_gpt_flag (const gchar *device, int part_num, BDPartFlag flag, gboolean state, GError **error) {
+-    const gchar *args[5] = {"sgdisk", "--attributes", NULL, device, NULL};
++    const gchar *args[5] = {SGDISK_BIN_PATH, "--attributes", NULL, device, NULL};
+     int bit_num = 0;
+     gboolean success = FALSE;
+ 
+@@ -1003,7 +1003,7 @@ static gboolean set_gpt_flag (const gchar *device, int part_num, BDPartFlag flag
+ }
+ 
+ static gboolean set_gpt_flags (const gchar *device, int part_num, guint64 flags, GError **error) {
+-    const gchar *args[5] = {"sgdisk", "--attributes", NULL, device, NULL};
++    const gchar *args[5] = {SGDISK_BIN_PATH, "--attributes", NULL, device, NULL};
+     guint64 real_flags = 0;
+     gchar *mask_str = NULL;
+     gboolean success = FALSE;
+@@ -1425,7 +1425,7 @@ gboolean bd_part_set_part_name (const gchar *disk, const gchar *part, const gcha
+  * Returns: whether the @type_guid type was successfully set for @part or not
+  */
+ gboolean bd_part_set_part_type (const gchar *disk, const gchar *part, const gchar *type_guid, GError **error) {
+-    const gchar *args[5] = {"sgdisk", "--typecode", NULL, disk, NULL};
++    const gchar *args[5] = {SGDISK_BIN_PATH, "--typecode", NULL, disk, NULL};
+     const gchar *part_num_str = NULL;
+     gboolean success = FALSE;
+     guint64 progress_id = 0;
+@@ -1475,7 +1475,7 @@ gboolean bd_part_set_part_type (const gchar *disk, const gchar *part, const gcha
+  * Returns: whether the @part_id type was successfully set for @part or not
+  */
+ gboolean bd_part_set_part_id (const gchar *disk, const gchar *part, const gchar *part_id, GError **error) {
+-    const gchar *args[6] = {"sfdisk", "--part-type", disk, NULL, part_id, NULL};
++    const gchar *args[6] = {SFDISK_BIN_PATH, "--part-type", disk, NULL, part_id, NULL};
+     const gchar *part_num_str = NULL;
+     gboolean success = FALSE;
+     guint64 progress_id = 0;
+@@ -1541,7 +1541,7 @@ gboolean bd_part_set_part_id (const gchar *disk, const gchar *part, const gchar
+  * Returns (transfer full): partition id type or %NULL in case of error
+  */
+ gchar* bd_part_get_part_id (const gchar *disk, const gchar *part, GError **error) {
+-    const gchar *args[5] = {"sfdisk", "--part-type", disk, NULL, NULL};
++    const gchar *args[5] = {SFDISK_BIN_PATH, "--part-type", disk, NULL, NULL};
+     const gchar *part_num_str = NULL;
+     gchar *output = NULL;
+     gchar *ret = NULL;
+diff --git a/src/plugins/swap.c b/src/plugins/swap.c
+index c4ce972..84ce66e 100644
+--- a/src/plugins/swap.c
++++ b/src/plugins/swap.c
+@@ -50,7 +50,7 @@ GQuark bd_swap_error_quark (void)
+  */
+ gboolean bd_swap_check_deps () {
+     GError *error = NULL;
+-    gboolean ret = bd_utils_check_util_version ("mkswap", MKSWAP_MIN_VERSION, NULL, "mkswap from util-linux ([\\d\\.]+)", &error);
++    gboolean ret = bd_utils_check_util_version ("mkswap", MKSWAP_BIN_PATH, MKSWAP_MIN_VERSION, NULL, "mkswap from util-linux ([\\d\\.]+)", &error);
+ 
+     if (!ret && error) {
+         g_warning("Cannot load the swap plugin: %s" , error->message);
+@@ -60,7 +60,7 @@ gboolean bd_swap_check_deps () {
+     if (!ret)
+         return FALSE;
+ 
+-    ret = bd_utils_check_util_version ("swapon", SWAPON_MIN_VERSION, NULL, "swapon from util-linux ([\\d\\.]+)", &error);
++    ret = bd_utils_check_util_version ("swapon", SWAPON_BIN_PATH, SWAPON_MIN_VERSION, NULL, "swapon from util-linux ([\\d\\.]+)", &error);
+     if (!ret && error) {
+         g_warning("Cannot load the swap plugin: %s" , error->message);
+         g_clear_error (&error);
+@@ -69,7 +69,7 @@ gboolean bd_swap_check_deps () {
+     if (!ret)
+         return FALSE;
+ 
+-    ret = bd_utils_check_util_version ("swapoff", SWAPOFF_MIN_VERSION, NULL, "swapoff from util-linux ([\\d\\.]+)", &error);
++    ret = bd_utils_check_util_version ("swapoff", SWAPOFF_BIN_PATH, SWAPOFF_MIN_VERSION, NULL, "swapoff from util-linux ([\\d\\.]+)", &error);
+     if (!ret && error) {
+         g_warning("Cannot load the swap plugin: %s" , error->message);
+         g_clear_error (&error);
+@@ -116,7 +116,7 @@ gboolean bd_swap_mkswap (const gchar *device, const gchar *label, const BDExtraA
+ 
+     /* We use -f to force since mkswap tends to refuse creation on lvs with
+        a message about erasing bootbits sectors on whole disks. Bah. */
+-    const gchar *argv[6] = {"mkswap", "-f", NULL, NULL, NULL, NULL};
++    const gchar *argv[6] = {MKSWAP_BIN_PATH, "-f", NULL, NULL, NULL, NULL};
+ 
+     if (label) {
+         argv[next_arg] = "-L";
+@@ -152,7 +152,7 @@ gboolean bd_swap_swapon (const gchar *device, gint priority, GError **error) {
+     guint64 progress_id = 0;
+     gchar *msg = NULL;
+ 
+-    const gchar *argv[5] = {"swapon", NULL, NULL, NULL, NULL};
++    const gchar *argv[5] = {SWAPON_BIN_PATH, NULL, NULL, NULL, NULL};
+     msg = g_strdup_printf ("Started 'swapon %s'", device);
+     progress_id = bd_utils_report_started (msg);
+     g_free (msg);
+@@ -238,7 +238,7 @@ gboolean bd_swap_swapon (const gchar *device, gint priority, GError **error) {
+  * Returns: whether the swap device was successfully deactivated or not
+  */
+ gboolean bd_swap_swapoff (const gchar *device, GError **error) {
+-    const gchar *argv[3] = {"swapoff", NULL, NULL};
++    const gchar *argv[3] = {SWAPOFF_BIN_PATH, NULL, NULL};
+     argv[1] = device;
+ 
+     return bd_utils_exec_and_report_error (argv, NULL, error);
+diff --git a/src/utils/exec.c b/src/utils/exec.c
+index c31aa80..26d559f 100644
+--- a/src/utils/exec.c
++++ b/src/utils/exec.c
+@@ -605,6 +605,7 @@ gint bd_utils_version_cmp (const gchar *ver_string1, const gchar *ver_string2, G
+ /**
+  * bd_utils_check_util_version:
+  * @util: name of the utility to check
++ * @util_path: full path to the executable of the utility
+  * @version: (allow-none): minimum required version of the utility or %NULL
+  *           if no version is required
+  * @version_arg: (allow-none): argument to use with the @util to get version
+@@ -616,23 +617,14 @@ gint bd_utils_version_cmp (const gchar *ver_string1, const gchar *ver_string2, G
+  * Returns: whether the @util is available in a version >= @version or not
+  *          (@error is set in such case).
+  */
+-gboolean bd_utils_check_util_version (const gchar *util, const gchar *version, const gchar *version_arg, const gchar *version_regexp, GError **error) {
+-    gchar *util_path = NULL;
+-    const gchar *argv[] = {util, version_arg ? version_arg : "--version", NULL};
++gboolean bd_utils_check_util_version (const gchar *util, const gchar *util_path, const gchar *version, const gchar *version_arg, const gchar *version_regexp, GError **error) {
++    const gchar *argv[] = {util_path, version_arg ? version_arg : "--version", NULL};
+     gchar *output = NULL;
+     gboolean succ = FALSE;
+     GRegex *regex = NULL;
+     GMatchInfo *match_info = NULL;
+     gchar *version_str = NULL;
+ 
+-    util_path = g_find_program_in_path (util);
+-    if (!util_path) {
+-        g_set_error (error, BD_UTILS_EXEC_ERROR, BD_UTILS_EXEC_ERROR_UTIL_UNAVAILABLE,
+-                     "The '%s' utility is not available", util);
+-        return FALSE;
+-    }
+-    g_free (util_path);
+-
+     if (!version)
+         /* nothing more to do here */
+         return TRUE;
+diff --git a/src/utils/exec.h b/src/utils/exec.h
+index cccd463..f1ff16d 100644
+--- a/src/utils/exec.h
++++ b/src/utils/exec.h
+@@ -56,7 +56,7 @@ gboolean bd_utils_exec_and_capture_output (const gchar **argv, const BDExtraArg
+ gboolean bd_utils_exec_and_report_progress (const gchar **argv, const BDExtraArg **extra, BDUtilsProgExtract prog_extract, gint *proc_status, GError **error);
+ gboolean bd_utils_init_logging (BDUtilsLogFunc new_log_func, GError **error);
+ gint bd_utils_version_cmp (const gchar *ver_string1, const gchar *ver_string2, GError **error);
+-gboolean bd_utils_check_util_version (const gchar *util, const gchar *version, const gchar *version_arg, const gchar *version_regexp, GError **error);
++gboolean bd_utils_check_util_version (const gchar *util, const gchar *util_path, const gchar *version, const gchar *version_arg, const gchar *version_regexp, GError **error);
+ 
+ gboolean bd_utils_init_prog_reporting (BDUtilsProgFunc new_prog_func, GError **error);
+ guint64 bd_utils_report_started (gchar *msg);
