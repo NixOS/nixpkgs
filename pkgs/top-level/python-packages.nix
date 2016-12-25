@@ -31769,6 +31769,8 @@ EOF
 
   blessed = callPackage ../development/python-modules/blessed { };
 
+  Flask-RESTful = callPackage ../development/python-modules/Flask-RESTful { };
+
 });
 
 in fix' (extends overrides packages)
