@@ -1,5 +1,7 @@
 with import ./release-lib.nix { supportedSystems = [ builtins.currentSystem ]; };
 let
+  lib = import ../../lib;
+
   nativePlatforms = linux;
 
   /* Basic list of packages to cross-build */
@@ -22,6 +24,40 @@ let
 in
 
 {
+  # These `nativeDrv`s should be identical to their vanilla ones --- cross
+  # compiling should not affect the native derivation.
+  ensureUnaffected = let
+    # Absurd values are fine here, as we are not building anything. In fact,
+    # there probably a good idea to try to be "more parametric" --- i.e. avoid
+    # any special casing.
+    crossSystem = {
+      config = "foosys";
+      libc = "foolibc";
+    };
+
+    # Converting to a string (drv path) before checking equality is probably a
+    # good idea lest there be some irrelevant pass-through debug attrs that
+    # cause false negatives.
+    testEqualOne = path: system: let
+      f = attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
+    in assert f { inherit system; } == f { inherit system crossSystem; }; true;
+
+    testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
+
+    mapTestEqual = lib.mapAttrsRecursive testEqual;
+
+  in mapTestEqual {
+    boehmgc = nativePlatforms;
+    libffi = nativePlatforms;
+    libiconv = nativePlatforms;
+    libtool = nativePlatforms;
+    zlib = nativePlatforms;
+    readline = nativePlatforms;
+    libxml2 = nativePlatforms;
+    guile = nativePlatforms;
+  };
+
+
   /* Test some cross builds to the Sheevaplug */
   crossSheevaplugLinux = let
     crossSystem = {
