@@ -15084,18 +15084,20 @@ in {
   };
 
   mwclient = buildPythonPackage rec {
-    version = "0.8.1";
-    basename = "mwclient";
-    name = "${basename}-${version}";
+    version = "0.8.3";
+    pname = "mwclient";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/${basename}/${name}.tar.gz";
-      sha256 = "1r322v6i6xps9xh861rbr4ggshydcgp8cycbdlmgy8qbrh8jg2az";
+    src = pkgs.fetchFromGitHub {
+      owner = "mwclient";
+      repo = "mwclient";
+      rev = "v${version}";
+      sha256 = "0kl1yp9z5f1wl6lkm0vix87zkrbl9wcmkrrj1x5c35xvf95laf53";
     };
 
     buildInputs = with self; [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
 
-    propagatedBuildInputs = with self; [ six requests2 ];
+    propagatedBuildInputs = with self; [ six requests2 requests_oauthlib ];
 
     checkPhase = ''
       py.test
@@ -15105,6 +15107,7 @@ in {
       description = "Python client library to the MediaWiki API";
       maintainers = with maintainers; [ DamienCassou ];
       license = licenses.mit;
+      homepage = https://github.com/mwclient/mwclient;
     };
   };
 
