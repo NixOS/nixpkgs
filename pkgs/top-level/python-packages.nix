@@ -31763,6 +31763,8 @@ EOF
     };
   };
 
+  requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
+
 });
 
 in fix' (extends overrides packages)
