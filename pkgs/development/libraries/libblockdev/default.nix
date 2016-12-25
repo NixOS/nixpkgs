@@ -17,7 +17,7 @@ let
     FATLABEL = "${dosfstools}/bin/fatlabel";
     FSCK_VFAT = "${dosfstools}/bin/fsck.vfat";
     LOSETUP = "${utillinux}/bin/losetup";
-    LVM = "${lvm2}/bin/lvm";
+    LVM = "${lvm2.override { enableThinProvisioning = true; }}/bin/lvm";
     MAKE_BCACHE = "${bcache-tools}/bin/make-bcache";
     MDADM = "${mdadm}/bin/mdadm";
     MKFS_BTRFS = "${btrfs-progs}/bin/mkfs.btrfs";
