@@ -1,0 +1,126 @@
+diff --git a/tests/library_test.py b/tests/library_test.py
+index 100889b..df94c07 100644
+--- a/tests/library_test.py
++++ b/tests/library_test.py
+@@ -15,15 +15,11 @@ class LibraryOpsTestCase(unittest.TestCase):
+         self.addCleanup(self._clean_up)
+ 
+     def _clean_up(self):
+-        # change the sources back and recompile
+-        os.system("sed -ri 's?1024;//test-change?BD_LVM_MAX_LV_SIZE;?' src/plugins/lvm.c > /dev/null")
+-        os.system("make -C src/plugins/ libbd_lvm.la &> /dev/null")
+-
+         # try to get everything back to normal by (re)loading all plugins
+         BlockDev.reinit(None, True, None)
+ 
+     # recompiles the LVM plugin
+-    @unittest.skipIf("SKIP_SLOW" in os.environ, "skipping slow tests")
++    @unittest.skip("Do not assume that the source code is available")
+     def test_reload(self):
+         """Verify that reloading plugins works as expected"""
+ 
+@@ -55,7 +51,7 @@ class LibraryOpsTestCase(unittest.TestCase):
+         self.assertTrue(BlockDev.reinit(None, True, None))
+ 
+     # recompiles the LVM plugin
+-    @unittest.skipIf("SKIP_SLOW" in os.environ, "skipping slow tests")
++    @unittest.skip("Do not assume that the source code is available")
+     def test_force_plugin(self):
+         """Verify that forcing plugin to be used works as expected"""
+ 
+@@ -101,7 +97,7 @@ class LibraryOpsTestCase(unittest.TestCase):
+         self.assertEqual(BlockDev.lvm_get_max_lv_size(), orig_max_size)
+ 
+     # recompiles the LVM plugin
+-    @unittest.skipIf("SKIP_SLOW" in os.environ, "skipping slow tests")
++    @unittest.skip("Do not assume that the source code is available")
+     def test_plugin_priority(self):
+         """Verify that preferring plugin to be used works as expected"""
+ 
+@@ -164,7 +160,7 @@ class LibraryOpsTestCase(unittest.TestCase):
+         os.system ("rm -f src/plugins/.libs/libbd_lvm2.so")
+ 
+     # recompiles the LVM plugin
+-    @unittest.skipIf("SKIP_SLOW" in os.environ, "skipping slow tests")
++    @unittest.skip("Do not assume that the source code is available")
+     def test_plugin_fallback(self):
+         """Verify that fallback when loading plugins works as expected"""
+ 
+diff --git a/tests/overrides_hack.py b/tests/overrides_hack.py
+index 0f10ee5..50a4dea 100644
+--- a/tests/overrides_hack.py
++++ b/tests/overrides_hack.py
+@@ -6,5 +6,6 @@ if not gi.overrides.__path__[0].endswith("src/python/gi/overrides"):
+         if path.endswith("src/python/gi/overrides"):
+             local_overrides = path
+ 
+-    gi.overrides.__path__.remove(local_overrides)
+-    gi.overrides.__path__.insert(0, local_overrides)
++    if local_overrides is not None:
++        gi.overrides.__path__.remove(local_overrides)
++        gi.overrides.__path__.insert(0, local_overrides)
+diff --git a/tests/utils.py b/tests/utils.py
+index d523fb9..644b39b 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -2,6 +2,7 @@ import os
+ import tempfile
+ from contextlib import contextmanager
+ from itertools import chain
++import unittest
+ 
+ from gi.repository import GLib
+ 
+@@ -41,34 +42,12 @@ def udev_settle():
+ 
+ @contextmanager
+ def fake_utils(path="."):
+-    old_path = os.environ.get("PATH", "")
+-    if old_path:
+-        new_path = path + ":" + old_path
+-    else:
+-        new_path = path
+-    os.environ["PATH"] = new_path
+-
+-    try:
+-        yield
+-    finally:
+-        os.environ["PATH"] = old_path
++    msg = "Nix package has executable files built-in,"
++    msg += " so the tests can't fake utilities!"
++    raise unittest.SkipTest(msg)
+ 
+ @contextmanager
+ def fake_path(path=None, keep_utils=None):
+-    keep_utils = keep_utils or []
+-    created_utils = set()
+-    if path:
+-        for util in keep_utils:
+-            util_path = GLib.find_program_in_path(util)
+-            if util_path:
+-                os.symlink(util_path, os.path.join(path, util))
+-                created_utils.add(util)
+-    old_path = os.environ.get("PATH", "")
+-    os.environ["PATH"] = path or ""
+-
+-    try:
+-        yield
+-    finally:
+-        os.environ["PATH"] = old_path
+-        for util in created_utils:
+-            os.unlink(os.path.join(path, util))
++    msg = "Nix package has executable files built-in,"
++    msg += " so the tests can't fake utilities!"
++    raise unittest.SkipTest(msg)
+diff --git a/tests/utils_test.py b/tests/utils_test.py
+index 71ff94e..a25b9f3 100644
+--- a/tests/utils_test.py
++++ b/tests/utils_test.py
+@@ -87,6 +87,7 @@ class UtilsExecLoggingTest(unittest.TestCase):
+         self.assertEqual(BlockDev.utils_version_cmp("1.1.1", "1.1.1-1"), -1)
+         self.assertEqual(BlockDev.utils_version_cmp("1.1.2", "1.2"), -1)
+ 
++    @unittest.skip("Nix package has executables built-in!")
+     def test_util_version(self):
+         """Verify that checking utility availability works as expected"""
+ 

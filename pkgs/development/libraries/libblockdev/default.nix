@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     sha256 = "17q07bvh61l0d9iq9y30fgsa4yigsxkp4b93c6dyb7p1nzmb2085";
   };
 
-  patches = [ ./bin-paths.patch ];
+  patches = [ ./bin-paths.patch ./tests.patch ];
 
   outputs = [ "out" "tests" ];
 
