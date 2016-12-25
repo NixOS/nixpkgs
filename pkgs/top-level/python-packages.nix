@@ -26423,6 +26423,8 @@ EOF
     };
   };
 
+  webencodings = callPackage ../development/python-modules/webencodings { };
+
   websockets = callPackage ../development/python-modules/websockets { };
 
   wand = buildPythonPackage rec {
