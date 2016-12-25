@@ -24886,9 +24886,6 @@ in modules // {
     };
   };
 
-  webencodings = callPackage ../development/python-modules/webencodings { };
-
-  websockets = callPackage ../development/python-modules/websockets { };
 
   wand = buildPythonPackage rec {
     name = "Wand-0.3.5";
