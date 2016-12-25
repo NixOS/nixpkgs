@@ -11060,13 +11060,13 @@ in {
   };
 
   docker_compose = buildPythonPackage rec {
-    version = "1.8.0";
+    version = "1.9.0";
     name = "docker-compose-${version}";
     namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-compose/${name}.tar.gz";
-      sha256 = "1ad28x3marfmyrbibbkzy46bpbgc29k20ik661l8r49nr0m6px35";
+      sha256 = "0zz2jqpxz69q34bp97pbwxda1ik3m8zbhh15mxvhfsn0g566dywq";
     };
 
     # lots of networking and other fails
