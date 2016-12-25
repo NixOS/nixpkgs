@@ -31765,6 +31765,8 @@ EOF
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
 
+  pysigset = callPackage ../development/python-modules/pysigset { };
+
 });
 
 in fix' (extends overrides packages)
