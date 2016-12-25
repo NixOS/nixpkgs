@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
 , enable_dmeventd ? false
+, enableThinProvisioning ? false, thin-provisioning-tools ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libudev libuuid ];
+
+  buildInputs = [
+    libudev libuuid
+  ] ++ stdenv.lib.optional enableThinProvisioning thin-provisioning-tools;
 
   preConfigure = ''
     substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
