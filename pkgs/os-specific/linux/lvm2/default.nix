@@ -20,6 +20,14 @@ stdenv.mkDerivation rec {
     "--enable-cmdlib"
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd";
 
+  # Make sure we use the default profile dir within the package if we don't
+  # have a valid /etc/lvm/lvm.conf.
+  postPatch = ''
+    sed -i -e '/get_default_\(unconfigured_\)\?config_profile_dir_CFG/,/^}/ {
+      /^{/,/^}/c { return "'"$out/etc/lvm/profile"'"; }
+    }' lib/config/config.c
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libudev libuuid ];
 
@@ -34,6 +42,7 @@ stdenv.mkDerivation rec {
     "systemd_dir=$(out)/lib/systemd"
     "systemd_unit_dir=$(systemd_dir)/system"
     "systemd_generator_dir=$(systemd_dir)/system-generators"
+    "DEFAULT_PROFILE_DIR=$(out)/etc/lvm/profile"
   ];
 
   installFlags = [ "confdir=$(out)/etc/lvm" "DEFAULT_SYS_DIR=$(confdir)" ];
