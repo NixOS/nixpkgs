@@ -2229,6 +2229,9 @@ in {
       url = "mirror://pypi/b/buttersink/${name}.tar.gz";
     };
 
+    # Python 2 syntax
+    disabled = isPy3k;
+
     meta = {
       description = "Synchronise btrfs snapshots";
       longDescription = ''
