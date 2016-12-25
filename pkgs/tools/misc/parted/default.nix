@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./fix-determining-sector-size.patch
     ./add-libparted-fs-resize.pc.patch
     ./fix-fat16-resize-crash.patch
   ] ++ stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch;
