@@ -31379,7 +31379,7 @@ EOF
   txaio = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "txaio";
-    version = "2.5.1";
+    version = "2.5.2";
 
     meta = {
       description = "Utilities to support code that runs unmodified on Twisted and asyncio.";
@@ -31398,7 +31398,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-      sha256 = "1pni1m66mlmbybmaf3py4h7cpkmkssqb5l3rigkxvql2f53pcl32";
+      sha256 = "321d441b336447b72dbe81a4d73470414454baf0543ec701fcfecbf4dcbda0fe";
     };
   };
 
