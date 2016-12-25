@@ -9655,6 +9655,7 @@ in
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
     inherit (gnome2) GConf;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa CoreServices;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
