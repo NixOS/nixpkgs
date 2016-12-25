@@ -4,7 +4,10 @@
 , pcre, webkitgtk, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, spice_protocol, spice_gtk, epoxy, at_spi2_core
-, openssl }:
+, openssl
+# The themes here are soft dependencies; only icons are missing without them.
+, hicolor_icon_theme, adwaita-icon-theme
+}:
 
 let
   version = "1.2.0-rcgit.15";
@@ -51,7 +54,7 @@ stdenv.mkDerivation {
                   pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3
                   libvncserver libpthreadstubs libXdmcp libxkbcommon
                   libsecret spice_protocol spice_gtk epoxy at_spi2_core
-                  openssl ];
+                  openssl hicolor_icon_theme adwaita-icon-theme ];
 
   cmakeFlags = "-DWITH_VTE=OFF -DWITH_TELEPATHY=OFF -DWITH_AVAHI=OFF -DWINPR_INCLUDE_DIR=${freerdp_git}/include/winpr2";
 
