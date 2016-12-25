@@ -216,7 +216,7 @@ in rec {
   # ‘nix-build tests/login.nix -A result’.
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
-  tests.blivet = callTest tests/blivet.nix {};
+  tests.blivet = callSubTests tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
