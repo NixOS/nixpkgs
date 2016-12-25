@@ -25867,6 +25867,8 @@ in {
     };
   };
 
+  u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
+
   umalqurra = buildPythonPackage rec {
     name = "umalqurra-${version}";
     version = "0.2";
