@@ -31767,6 +31767,8 @@ EOF
 
   pysigset = callPackage ../development/python-modules/pysigset { };
 
+  blessed = callPackage ../development/python-modules/blessed { };
+
 });
 
 in fix' (extends overrides packages)
