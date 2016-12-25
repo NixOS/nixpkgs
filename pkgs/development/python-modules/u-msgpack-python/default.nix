@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , glibcLocales
+, python
 }:
 
 let
@@ -20,7 +21,7 @@ in buildPythonPackage rec {
   buildInputs = [ glibcLocales ];
 
   checkPhase = ''
-    python -m unittest discover
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = {
