@@ -443,12 +443,12 @@ rec {
     };
   };
 
-  selectPlatformBySystem = system:
-    if system == "armv6l-linux" then raspberrypi
-    else if system == "armv7l-linux" then armv7l-hf-multiplatform
-    else if system == "armv5tel-linux" then sheevaplug
-    else if system == "mips64el-linux" then fuloong2f_n32
-    else if system == "x86_64-linux" then pc64
-    else if system == "i686-linux" then pc32
-    else pcBase;
+  selectPlatformBySystem = system: {
+      "i686-linux" = pc32;
+      "x86_64-linux" = pc64;
+      "armv5tel-linux" = sheevaplug;
+      "armv6l-linux" = raspberrypi;
+      "armv7l-linux" = armv7l-hf-multiplatform;
+      "mips64el-linux" = fuloong2f_n32;
+    }.${system} or pcBase;
 }
