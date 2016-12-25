@@ -31690,6 +31690,10 @@ EOF
       ${python.interpreter} -m unittest test_zipfile.py
     '';
 
+    # Only works with Python 3.x.
+    # Not supposed to be used with 3.6 and up.
+    disabled = !(isPy3k && (pythonOlder "3.6"));
+
     meta = {
       description = "Read and write ZIP files - backport of the zipfile module from Python 3.6";
       homepage = https://gitlab.com/takluyver/zipfile36;
