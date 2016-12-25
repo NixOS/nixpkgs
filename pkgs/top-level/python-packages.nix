@@ -12514,12 +12514,14 @@ in {
       sha256 = "09j6194f5mlnd5xwbavwvnndwl1x91jw74shxl6hcxjp4fxg3h05";
     };
 
-    buildInputs = with self; [ nose flake8 ];
+    buildInputs = with self; [ flake8 pytest pytest-expect mock ];
     propagatedBuildInputs = with self; [
-      six
+      six webencodings
     ] ++ optionals isPy26 [ ordereddict ];
 
-    checkPhase = "nosetests";
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       homepage = https://github.com/html5lib/html5lib-python;
