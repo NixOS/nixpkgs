@@ -99,55 +99,34 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [
-    { environment.systemPackages = [ pkgs.docker ];
+  config = mkIf cfg.enable (mkMerge [{
+      environment.systemPackages = [ pkgs.docker ];
       users.extraGroups.docker.gid = config.ids.gids.docker;
-      # this unit follows the one provided by upstream see: https://github.com/docker/docker/blob/master/contrib/init/systemd/docker.service
-      # comments below reflect experience from upstream.
+      systemd.packages = [ pkgs.docker ];
+
       systemd.services.docker = {
-        description = "Docker Application Container Engine";
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
-        after = [ "network.target" "docker.socket" ];
-        requires = ["docker.socket"];
         serviceConfig = {
-          # the default is not to use systemd for cgroups because the delegate issues still
-          # exists and systemd currently does not support the cgroup feature set required
-          # for containers run by docker
-          ExecStart = ''${pkgs.docker}/bin/dockerd \
-            --group=docker \
-            --host=fd:// \
-            --log-driver=${cfg.logDriver} \
-            ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
-            ${optionalString cfg.liveRestore "--live-restore" } \
-            ${cfg.extraOptions}
-          '';
-          Type="notify";
-          ExecReload="${pkgs.procps}/bin/kill -s HUP $MAINPID";
-          LimitNOFILE = 1048576;
-          # Having non-zero Limit*s causes performance problems due to accounting overhead
-          # in the kernel. We recommend using cgroups to do container-local accounting.
-          LimitNPROC="infinity";
-          LimitCORE="infinity";
-          TasksMax="infinity";
-          TimeoutStartSec=0;
-          # set delegate yes so that systemd does not reset the cgroups of docker containers
-          Delegate="yes";
-          # kill only the docker process, not all processes in the cgroup
-          KillMode="process";
+          ExecStart = [
+            ""
+            ''
+              ${pkgs.docker}/bin/dockerd \
+                --group=docker \
+                --host=fd:// \
+                --log-driver=${cfg.logDriver} \
+                ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
+                ${optionalString cfg.liveRestore "--live-restore" } \
+                ${cfg.extraOptions}
+            ''];
+          ExecReload=[
+            ""
+            "${pkgs.procps}/bin/kill -s HUP $MAINPID"
+          ];
         } // proxy_env;
 
         path = [ pkgs.kmod ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
       };
-      systemd.sockets.docker = {
-        description = "Docker Socket for the API";
-        wantedBy = [ "sockets.target" ];
-        socketConfig = {
-          ListenStream = cfg.listenOptions;
-          SocketMode = "0660";
-          SocketUser = "root";
-          SocketGroup = "docker";
-        };
-      };
+      systemd.sockets.docker.socketConfig.ListenStream = cfg.listenOptions;
     }
   ]);
 

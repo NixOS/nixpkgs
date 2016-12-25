@@ -13,11 +13,11 @@ with lib;
 
 let
   self = stdenv.mkDerivation rec {
-    name = "coreutils-8.25";
+    name = "coreutils-8.26";
 
     src = fetchurl {
       url = "mirror://gnu/coreutils/${name}.tar.xz";
-      sha256 = "11yfrnb94xzmvi4lhclkcmkqsbhww64wf234ya1aacjvg82prrii";
+      sha256 = "13lspazc7xkviy93qz7ks9jv4sldvgmwpq36ghrbrqpq93br8phm";
     };
 
     # FIXME needs gcc 4.9 in bootstrap tools
@@ -54,13 +54,13 @@ let
         ++ optional (stdenv.ccCross.libc ? libiconv)
           stdenv.ccCross.libc.libiconv.crossDrv;
 
-      buildPhase = ''
-        make || (
-          pushd man
-          for a in *.x; do
-            touch `basename $a .x`.1
-          done
-          popd; make )
+      # Prevents attempts of running 'help2man' on cross-built binaries.
+      PERL = "missing";
+
+      # Works around a bug with 8.26:
+      # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
+      preInstall = ''
+        sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${self}/bin/install -c|'
       '';
 
       postInstall = ''

@@ -1,20 +1,22 @@
 { stdenv, fetchurl, plib, freeglut, xproto, libX11, libXext, xextproto, libXi
 , inputproto, libICE, libSM, libXt, libXmu, mesa, boost, zlib, libjpeg, freealut
 , openscenegraph, openal, expat, cmake, apr
+, curl
 }:
 
 stdenv.mkDerivation rec {
   name = "simgear-${version}";
-  version = "3.4.0";
+  version = "2016.4.3";
+  shortVersion = "2016.4";
 
   src = fetchurl {
-    url = "http://mirrors.ibiblio.org/pub/mirrors/simgear/ftp/Source/${name}.tar.bz2";
-    sha256 = "152q3aqlrg3631ppvl6kr1mp5iszplq68l6lrsn9vjxafbz6czcj";
+    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
+    sha256 = "1gfj0d03jbi0p08baj46ihhyzbgpymmipw2dp11j13412l15acv9";
   };
 
   buildInputs = [ plib freeglut xproto libX11 libXext xextproto libXi inputproto
                   libICE libSM libXt libXmu mesa boost zlib libjpeg freealut
-                  openscenegraph openal expat cmake apr ];
+                  openscenegraph openal expat cmake apr curl ];
 
   meta = with stdenv.lib; {
     description = "Simulation construction toolkit";
