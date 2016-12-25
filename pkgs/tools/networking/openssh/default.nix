@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   # Please ensure that openssh_with_kerberos still builds when
   # bumping the version here!
   name = "openssh-${version}";
-  version = "7.3p1";
+  version = "7.4p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1k5y1wi29d47cgizbryxrhc1fbjsba2x8l5mqfa9b9nadnd9iyrz";
+    sha256 = "1l8r3x4fr2kb6xm95s7kjdif1wp6f94d4kljh4qjj9109shw87qv";
   };
 
   prePatch = optionalString hpnSupport
@@ -44,13 +44,11 @@ stdenv.mkDerivation rec {
 
   patches =
     [
-      ./RH-1380296-NEWKEYS-null-pointer-deref.patch
       ./locale_archive.patch
       ./fix-host-key-algorithms-plus.patch
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
-      ./fix-CVE-2016-8858.patch
     ]
     ++ optional withGssapiPatches gssapiSrc;
 
