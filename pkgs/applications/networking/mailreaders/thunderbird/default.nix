@@ -4,6 +4,7 @@
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu
+, writeScript, xidel, coreutils, gnused, gnugrep, curl, ed
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Earlybird", enable this option.  However, those
@@ -127,5 +128,13 @@ stdenv.mkDerivation rec {
       if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
     maintainers = [ maintainers.pierron maintainers.eelco ];
     platforms = platforms.linux;
+  };
+
+  passthru.updateScript = import ./../../browsers/firefox/update.nix {
+    name = "thunderbird";
+    sourceSectionRegex = ".";
+    basePath = "pkgs/applications/networking/mailreaders/thunderbird";
+    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    inherit writeScript xidel coreutils gnused gnugrep curl ed;
   };
 }
