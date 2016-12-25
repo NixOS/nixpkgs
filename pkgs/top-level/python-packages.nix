@@ -5457,6 +5457,8 @@ in {
       url = "mirror://pypi/d/datrie/datrie-${version}.tar.gz";
       sha256 = "08r0if7dry2q7p34gf7ffyrlnf4bdvnprxgydlfxgfnvq8f3f4bs";
     };
+
+    buildInputs = with self; [ pytest pytestrunner hypothesis ];
     meta = {
       description = "Super-fast, efficiently stored Trie for Python";
       homepage = "https://github.com/kmike/datrie";
