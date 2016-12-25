@@ -12504,12 +12504,12 @@ in {
 
 
   html5lib = buildPythonPackage (rec {
-    version = "0.999";
+    version = "0.999999999";
     name = "html5lib-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/html5lib/html5lib-python/archive/${version}.tar.gz";
-      sha256 = "1kxl36p0csssaf37zbbc9p4h8l1s7yb1qnfv3d4nixplvrxqkybp";
+      sha256 = "09j6194f5mlnd5xwbavwvnndwl1x91jw74shxl6hcxjp4fxg3h05";
     };
 
     buildInputs = with self; [ nose flake8 ];
