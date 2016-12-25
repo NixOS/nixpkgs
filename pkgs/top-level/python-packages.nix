@@ -31771,6 +31771,8 @@ EOF
 
   Flask-RESTful = callPackage ../development/python-modules/Flask-RESTful { };
 
+  aniso8601 = callPackage ../development/python-modules/aniso8601 { };
+
 });
 
 in fix' (extends overrides packages)
