@@ -31773,6 +31773,8 @@ EOF
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
 
+  scruffington = callPackage ../development/python-modules/scruffington { };
+
 });
 
 in fix' (extends overrides packages)
