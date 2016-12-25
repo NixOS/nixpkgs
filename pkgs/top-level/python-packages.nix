@@ -21072,20 +21072,29 @@ in {
 
   pyudev = buildPythonPackage rec {
     name = "pyudev-${version}";
-    version = "0.16.1";
+    version = "0.21.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyudev/${name}.tar.gz";
-      sha256 = "765d1c14bd9bd031f64e2612225621984cb2bbb8cbc0c03538bcc4c735ff1c95";
+      sha256 = "0arz0dqp75sszsmgm6vhg92n1lsx91ihddx3m944f4ah0487ljq9";
     };
 
+    disabled = isPy33;
+
     postPatch = ''
-      sed -i -e '/udev_library_name/,/^ *libudev/ {
-        s|CDLL([^,]*|CDLL("${pkgs.systemd.lib}/lib/libudev.so.1"|p; d
-      }' pyudev/_libudev.py
+      sed -i -e '/library_name *= */d' -e 's/library_name/name/g' \
+        src/pyudev/_ctypeslib/utils.py
+
+      sed -i -e '/load_ctypes_library/ {
+        s,"libc","${stdenv.glibc.out}/lib/libc.so.6",g
+        s,'\'''udev'\''',"${pkgs.systemd.lib}/lib/libudev.so",g
+      }' src/pyudev/_os/pipe.py src/pyudev/core.py
     '';
 
-    propagatedBuildInputs = with self; [ pkgs.systemd ];
+    # Note that tests aren't actually run, because there is no setup.py hook.
+    # This is fine because the tests would fail in the builder sandbox anyway.
+    checkInputs = with self; [ pytest mock docutils hypothesis ];
+    propagatedBuildInputs = [ self.six pkgs.systemd ];
 
     meta = {
       homepage = "http://pyudev.readthedocs.org/";
