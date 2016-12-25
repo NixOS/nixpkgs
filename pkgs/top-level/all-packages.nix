@@ -11374,8 +11374,6 @@ in
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
 
-  thin_provisioning_tools = callPackage ../os-specific/linux/thin-provisioning-tools { };
-
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
   mdadm = callPackage ../os-specific/linux/mdadm { };
