@@ -31775,6 +31775,8 @@ EOF
 
   scruffington = callPackage ../development/python-modules/scruffington { };
 
+  voltron = callPackage ../development/python-modules/voltron { };
+
 });
 
 in fix' (extends overrides packages)
