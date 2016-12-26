@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, hscolour, patchutils
+, hscolour, patchutils, sphinx
 }:
 
 let
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   patches = [] ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch;
 
-  buildInputs = [ ghc perl hscolour ];
+  buildInputs = [ ghc perl hscolour sphinx ];
 
   enableParallelBuilding = true;
 
