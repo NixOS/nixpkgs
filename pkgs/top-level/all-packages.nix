@@ -12328,15 +12328,15 @@ in
     ffmpeg = ffmpeg_2;
   };
 
-  awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
-    cairo = cairo.override { xcbSupport = true; };
-    lua = lua5_1;
-  };
-  awesome-3-5 = callPackage ../applications/window-managers/awesome {
+  awesome-3-5 = callPackage ../applications/window-managers/awesome/3.5.nix {
     cairo = cairo.override { xcbSupport = true; };
     luaPackages = luaPackages.override { inherit lua; };
   };
-  awesome = awesome-3-5;
+  awesome-4-0 = callPackage ../applications/window-managers/awesome {
+    cairo = cairo.override { xcbSupport = true; };
+    luaPackages = luaPackages.override { inherit lua; };
+  };
+  awesome = awesome-4-0;
 
   awesomebump = qt5.callPackage ../applications/graphics/awesomebump { };
 
