@@ -451,7 +451,32 @@ rec {
     kernelArch = "arm64";
     kernelDTB = true;
     kernelAutoModules = false;
-    kernelExtraConfig = "";
+    kernelExtraConfig = ''
+      # Raspberry Pi 3 stuff. Not needed for kernels >= 4.10.
+      ARCH_BCM2835 y
+      BCM2835_MBOX y
+      BCM2835_WDT y
+      BRCMFMAC m
+      DMA_BCM2835 m
+      DRM_VC4 m
+      I2C_BCM2835 m
+      PWM_BCM2835 m
+      RASPBERRYPI_FIRMWARE y
+      RASPBERRYPI_POWER y
+      SERIAL_8250_BCM2835AUX y
+      SERIAL_8250_EXTENDED y
+      SERIAL_8250_SHARE_IRQ y
+      SND_BCM2835_SOC_I2S m
+      SPI_BCM2835AUX m
+      SPI_BCM2835 m
+
+      # Cavium ThunderX stuff.
+      PCI_HOST_THUNDER_ECAM y
+      THUNDER_NIC_RGX y
+      THUNDER_NIC_BGX y
+      THUNDER_NIC_PF y
+      THUNDER_NIC_VF y
+    '';
     uboot = null;
     kernelTarget = "Image";
     gcc = {
