@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    # patch the script which launches the prebuilt compiler
+    substituteInPlace $(pwd)/crystal-${version}-1/bin/crystal --replace \
+      "/usr/bin/env bash" "${stdenv.shell}"
     ${fixPrebuiltBinary}
 
     cd crystal-${version}
