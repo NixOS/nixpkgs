@@ -3,11 +3,11 @@
 , withContrib ? true }:
 
 let
-  versionPkg = "0.2.12" ;
+  versionPkg = "0.2.13" ;
 
   contrib = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-contrib-${versionPkg}.tgz" ;
-    sha256 = "16jzabmwq5yz72dzlkc2hmvf2lan83gayn21gbl65jgpwdsbh170" ;
+    sha256 = "1hsqvdwiydks46sfjmm04rmjcx5v25xpjgnq0b96psrdbd0ky2kf" ;
   };
 
   postInstallContrib = stdenv.lib.optionalString withContrib
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
-    sha256 = "0m8gmm1pnklixxw76yjjqqqixm2cyp91rnq4sj1k29qp4k9zxpl4";
+    sha256 = "01rkybkwgbpx6blv72n46ml9ii3p6kpxbpczsrpbjkqmf22b4vii";
   };
 
   buildInputs = [ gmp ];
@@ -44,8 +44,6 @@ stdenv.mkDerivation rec {
     in
       builtins.toFile "setupHook.sh"
       (concatMapStringsSep "\n" builtins.readFile hookFiles);
-
-  patches = [ ./installed-lib-directory-version.patch ];
 
   postInstall = postInstallContrib + postInstallEmacs;
 
