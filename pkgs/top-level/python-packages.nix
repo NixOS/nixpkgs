@@ -3759,15 +3759,23 @@ in {
   };
 
   click-threading = buildPythonPackage rec {
-    version = "0.4.0";
+    version = "0.4.2";
     name = "click-threading-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click-threading/${name}.tar.gz";
-      sha256 = "1lrn2inlzz5lr8ay36dz9gmlnqqvdnh14rcm2nmhaxvbbz0gl8qq";
+      sha256 = "400b0bb63d9096b6bf2806efaf742a1cc8b6c88e0484f0afe7d7a7f0e9870609";
     };
 
-    propagatedBuildInputs = with self; [ click ];
+    checkInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ click ] ++ optional (!isPy3k) futures;
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # Tests are broken on 3.x
+    doCheck = !isPy3k;
 
     meta = {
       homepage = https://github.com/click-contrib/click-threading/;
