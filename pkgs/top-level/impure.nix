@@ -31,7 +31,9 @@
         let content = readDir dir; in
         map (n: import "${dir}/${n}") (sort lessThan (attrNames content));
     in
-      if dirCheck dirEnv then overlays dirEnv
+      if dirEnv != "" then
+        if dirCheck dirEnv then overlays dirEnv
+        else throw "The environment variable NIXPKGS_OVERLAYS does not name a valid directory."
       else if dirCheck dirHome then overlays dirHome
       else []
 
