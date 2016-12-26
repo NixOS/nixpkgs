@@ -18,8 +18,7 @@ in bootStages ++ [
     hostPlatform = localSystem;
     targetPlatform = crossSystem;
     inherit config overlays;
-    # Should be false, but we're trying to preserve hashes for now
-    selfBuild = true;
+    selfBuild = false;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
     stdenv = vanillaPackages.stdenv // {
