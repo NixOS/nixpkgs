@@ -100,7 +100,8 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
-    <para><literal>pkgs.overridePackages</literal> function no longer exists.     Instead import Nixpkgs a second time using <literal>import pkgs.path {
+    <para><literal>pkgs.overridePackages</literal> function no longer exists.
+     Instead import Nixpkgs a second time using <literal>import pkgs.path {
     overlays = [ <replaceable>...</replaceable> ]; }</literal>.</para>
   </listitem>
 </itemizedlist>
