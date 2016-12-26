@@ -35,6 +35,11 @@ in buildPythonPackage rec {
     six
   ];
 
+  postInstall = ''
+    mkdir "$tests"
+    cp -Rd tests "$tests/"
+  '';
+
   # Tests are in nixos/tests/blivet.nix.
   doCheck = false;
 

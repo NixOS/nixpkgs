@@ -105,7 +105,9 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     sed -i -e 's,^ *sonames *= *,&'"$out/lib/"',' \
       "$out/etc/libblockdev/conf.d/"*
-    cp -Rd tests "$tests"
+
+    mkdir "$tests"
+    cp -Rd tests "$tests/"
   '';
 
   meta = {
