@@ -69,8 +69,8 @@ in
 
   config = mkIf cfg.enable {
 
-    # FIXME: Implement powersave governor for sandy bridge or later Intel CPUs
-    powerManagement.cpuFreqGovernor = mkDefault "ondemand";
+    # ondemand governor is not available on sandy bridge or later Intel CPUs
+    powerManagement.cpuFreqGovernor = mkDefault [ "ondemand" "powersave" ];
 
     systemd.targets.post-resume = {
       description = "Post-Resume Actions";

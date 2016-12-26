@@ -13,9 +13,9 @@ in
   options = {
 
     powerManagement.cpuFreqGovernor = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "ondemand";
+      type = types.listOf types.str;
+      default = [];
+      example = [ "ondemand" ];
       description = ''
         Configure the governor used to regulate the frequence of the
         available CPUs. By default, the kernel configures the
@@ -28,9 +28,9 @@ in
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer && config.powerManagement.cpuFreqGovernor != null) {
+  config = mkIf (!config.boot.isContainer && config.powerManagement.cpuFreqGovernor != []) {
 
-    boot.kernelModules = [ "cpufreq_${cfg.cpuFreqGovernor}" ];
+    boot.kernelModules = map (x: "cpufreq_" + x) cfg.cpuFreqGovernor;
 
     environment.systemPackages = [ cpupower ];
 
@@ -43,7 +43,12 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = "yes";
-        ExecStart = "${cpupower}/bin/cpupower frequency-set -g ${cfg.cpuFreqGovernor}";
+        ExecStart = ''
+          ${pkgs.bash}/bin/sh -c \
+          "for i in ${toString cfg.cpuFreqGovernor}; do \
+            ${cpupower}/bin/cpupower frequency-set -g $i && break; \
+          done"
+        '';
         SuccessExitStatus = "0 237";
       };
     };
