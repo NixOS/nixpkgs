@@ -14365,12 +14365,15 @@ in {
 
   memory_profiler = buildPythonPackage rec {
     name = "memory_profiler-${version}";
-    version = "0.39";
+    version = "0.41";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/memory_profiler/${name}.tar.gz";
-      sha256 = "61021f2dade7edd6cc09d7924bfdccc453bd1949608412a3e021d44a410d3a23";
+      sha256 = "dce6e931c281662a500b142595517d095267216472c2926e5ec8edab89898d10";
     };
+
+    # Tests don't import profile
+    doCheck = false;
 
     meta = {
       description = "A module for monitoring memory usage of a python program";
