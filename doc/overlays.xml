@@ -13,8 +13,8 @@ to bind the dependencies of all packages.</para>
 <section xml:id="sec-overlays-install">
 <title>Installing Overlays</title>
 
-<para>Overlays are looked for in the following order, the first valid one is
-considered, and all the rest are ignored:
+<para>The set of overlays are looked for in the following order, only the
+first one present is considered, and all the rest are ignored:
 
 <orderedlist>
 
