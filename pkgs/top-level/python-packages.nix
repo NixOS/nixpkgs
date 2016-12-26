@@ -2265,6 +2265,9 @@ in {
       url = "mirror://pypi/b/buttersink/${name}.tar.gz";
     };
 
+    # Python 2 syntax
+    disabled = isPy3k;
+
     meta = {
       description = "Synchronise btrfs snapshots";
       longDescription = ''
@@ -3792,15 +3795,23 @@ in {
   };
 
   click-threading = buildPythonPackage rec {
-    version = "0.4.0";
+    version = "0.4.2";
     name = "click-threading-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click-threading/${name}.tar.gz";
-      sha256 = "1lrn2inlzz5lr8ay36dz9gmlnqqvdnh14rcm2nmhaxvbbz0gl8qq";
+      sha256 = "400b0bb63d9096b6bf2806efaf742a1cc8b6c88e0484f0afe7d7a7f0e9870609";
     };
 
-    propagatedBuildInputs = with self; [ click ];
+    checkInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ click ] ++ optional (!isPy3k) futures;
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # Tests are broken on 3.x
+    doCheck = !isPy3k;
 
     meta = {
       homepage = https://github.com/click-contrib/click-threading/;
@@ -5489,6 +5500,8 @@ in {
       url = "mirror://pypi/d/datrie/datrie-${version}.tar.gz";
       sha256 = "08r0if7dry2q7p34gf7ffyrlnf4bdvnprxgydlfxgfnvq8f3f4bs";
     };
+
+    buildInputs = with self; [ pytest pytestrunner hypothesis ];
     meta = {
       description = "Super-fast, efficiently stored Trie for Python";
       homepage = "https://github.com/kmike/datrie";
@@ -14238,6 +14251,7 @@ in {
     meta = {
       description = "A Python wrapper around libmagic";
       homepage = http://www.darwinsys.com/file/;
+      broken = true;
     };
   };
 
@@ -14538,12 +14552,15 @@ in {
 
   memory_profiler = buildPythonPackage rec {
     name = "memory_profiler-${version}";
-    version = "0.39";
+    version = "0.41";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/memory_profiler/${name}.tar.gz";
-      sha256 = "61021f2dade7edd6cc09d7924bfdccc453bd1949608412a3e021d44a410d3a23";
+      sha256 = "dce6e931c281662a500b142595517d095267216472c2926e5ec8edab89898d10";
     };
+
+    # Tests don't import profile
+    doCheck = false;
 
     meta = {
       description = "A module for monitoring memory usage of a python program";
@@ -15257,18 +15274,20 @@ in {
   };
 
   mwclient = buildPythonPackage rec {
-    version = "0.8.1";
-    basename = "mwclient";
-    name = "${basename}-${version}";
+    version = "0.8.3";
+    pname = "mwclient";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/${basename}/${name}.tar.gz";
-      sha256 = "1r322v6i6xps9xh861rbr4ggshydcgp8cycbdlmgy8qbrh8jg2az";
+    src = pkgs.fetchFromGitHub {
+      owner = "mwclient";
+      repo = "mwclient";
+      rev = "v${version}";
+      sha256 = "0kl1yp9z5f1wl6lkm0vix87zkrbl9wcmkrrj1x5c35xvf95laf53";
     };
 
     buildInputs = with self; [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
 
-    propagatedBuildInputs = with self; [ six requests2 ];
+    propagatedBuildInputs = with self; [ six requests2 requests_oauthlib ];
 
     checkPhase = ''
       py.test
@@ -15278,6 +15297,7 @@ in {
       description = "Python client library to the MediaWiki API";
       maintainers = with maintainers; [ DamienCassou ];
       license = licenses.mit;
+      homepage = https://github.com/mwclient/mwclient;
     };
   };
 
@@ -26706,16 +26726,20 @@ EOF
 
   websockets = callPackage ../development/python-modules/websockets { };
 
-  wand = buildPythonPackage rec {
-    name = "Wand-0.3.5";
+  Wand = buildPythonPackage rec {
+    pname = "Wand";
+    version = "0.4.4";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/W/Wand/${name}.tar.gz";
-      sha256 = "31e2186ce8d1da0d2ea84d1428fc4d441c2e9d0e25156cc746b35b781026bcff";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "28e0454c9d16d69c5d5034918d96320d8f9f1377b4fdaf4944eec2f938c74704";
     };
 
     buildInputs = with self; [ pkgs.imagemagick pytest psutil memory_profiler pytest_xdist ];
 
+    # No tests
+    doCheck = false;
     meta = {
       description = "Ctypes-based simple MagickWand API binding for Python";
       homepage = http://wand-py.org/;
@@ -30414,6 +30438,9 @@ EOF
     propagatedBuildInputs = with self; [ scipy ];
     buildInputs = with self; [ nose ];
 
+    # Cannot be installed with Python 2.x, most likely due to the patch below.
+    disabled = !isPy3k;
+
     postPatch = ''
       cd python-package
 
@@ -31657,7 +31684,7 @@ EOF
   txaio = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "txaio";
-    version = "2.5.1";
+    version = "2.5.2";
 
     meta = {
       description = "Utilities to support code that runs unmodified on Twisted and asyncio.";
@@ -31676,7 +31703,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-      sha256 = "1pni1m66mlmbybmaf3py4h7cpkmkssqb5l3rigkxvql2f53pcl32";
+      sha256 = "321d441b336447b72dbe81a4d73470414454baf0543ec701fcfecbf4dcbda0fe";
     };
   };
 
@@ -31958,6 +31985,10 @@ EOF
     checkPhase = ''
       ${python.interpreter} -m unittest test_zipfile.py
     '';
+
+    # Only works with Python 3.x.
+    # Not supposed to be used with 3.6 and up.
+    disabled = !(isPy3k && (pythonOlder "3.6"));
 
     meta = {
       description = "Read and write ZIP files - backport of the zipfile module from Python 3.6";

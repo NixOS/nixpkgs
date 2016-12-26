@@ -19,7 +19,7 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/python-excel/xlwt/commit/86564ef26341020316cd8a27c704ef1dc5a6129b.patch";
-      sha256 = "01abxfkmckcxpi6n5wi8ia58fmkzqrxjfjq1mjljygylm8nb3m8i";
+      sha256 = "0ifavfld3rrqjb0iyriy4c0drw31gszvlg3nmnn9dmfsh91vxhs6";
     })
   ];
 
