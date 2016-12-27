@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication, blivet }:
+{ stdenv, fetchurl, python3Packages }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "nixpart-${version}";
   version = "1.0.0";
 
@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "0avwd8p47xy9cydlbjxk8pj8q75zyl68gw2w6fnkk78dcb1a3swp";
   };
 
-  propagatedBuildInputs = [ blivet ];
+  propagatedBuildInputs = [ python3Packages.blivet ];
 
   meta = {
     description = "NixOS storage manager/partitioner";

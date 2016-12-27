@@ -236,8 +236,6 @@ in {
     inherit python;
   };
 
-  nixpart = callPackage ../tools/filesystems/nixpart { };
-
   # This is used for NixOps to make sure we won't break it with the next major
   # version of nixpart.
   nixpart0 = callPackage ../tools/filesystems/nixpart/0.4 { };

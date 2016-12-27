@@ -2981,6 +2981,8 @@ in
 
   nixbot = callPackage ../tools/misc/nixbot {};
 
+  nixpart = callPackage ../tools/filesystems/nixpart {};
+
   nkf = callPackage ../tools/text/nkf {};
 
   nlopt = callPackage ../development/libraries/nlopt {};
