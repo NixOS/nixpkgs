@@ -2150,6 +2150,8 @@ in
 
   hevea = callPackage ../tools/typesetting/hevea { };
 
+  hhpc = callPackage ../tools/misc/hhpc { };
+
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
 
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
