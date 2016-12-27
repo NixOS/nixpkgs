@@ -51,7 +51,7 @@ let
       }
 
       sub nixpart {
-        $machine->succeed("nixpart -v --from-xml /etc/storage.xml");
+        $machine->succeed("nixpart -v --xml /etc/storage.xml");
         ensureSanity;
       }
 
@@ -94,7 +94,7 @@ let
             die;
           }
           # Try to remount with nixpart
-          $machine->succeed("nixpart -vm --from-xml /etc/storage.xml");
+          $machine->succeed("nixpart -vm --xml /etc/storage.xml");
           ensureMountPoint("/mnt");
           # Check if our beloved canaries are dead
           chomp $canaries;
