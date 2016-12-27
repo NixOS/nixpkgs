@@ -11,6 +11,13 @@ let
         pkgs.nixpart pkgs.file pkgs.btrfs-progs pkgs.xfsprogs pkgs.lvm2
       ];
       virtualisation.emptyDiskImages = [ 4096 4096 ];
+      environment.etc."storage.xml".text = let
+        config = (import ../lib/eval-config.nix {
+          modules = pkgs.lib.singleton attrs.config;
+        }).config;
+      in builtins.toXML {
+        inherit (config) storage fileSystems swapDevices;
+      };
     };
 
     testScript = ''
@@ -44,14 +51,7 @@ let
       }
 
       sub nixpart {
-        $machine->copyFileFromHost('${let
-          config = (import ../lib/eval-config.nix {
-            modules = pkgs.lib.singleton attrs.config;
-          }).config;
-        in pkgs.writeText "storage.xml" (builtins.toXML {
-          inherit (config) storage fileSystems swapDevices;
-        })}', "/storage.xml");
-        $machine->succeed("nixpart -v --from-xml /storage.xml");
+        $machine->succeed("nixpart -v --from-xml /etc/storage.xml");
         ensureSanity;
       }
 
@@ -94,7 +94,7 @@ let
             die;
           }
           # Try to remount with nixpart
-          $machine->succeed("nixpart -vm --from-xml /storage.xml");
+          $machine->succeed("nixpart -vm --from-xml /etc/storage.xml");
           ensureMountPoint("/mnt");
           # Check if our beloved canaries are dead
           chomp $canaries;
