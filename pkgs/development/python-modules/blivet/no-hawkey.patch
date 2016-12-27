@@ -1,0 +1,67 @@
+diff --git a/blivet/tasks/availability.py b/blivet/tasks/availability.py
+index 61426c6..bfa466b 100644
+--- a/blivet/tasks/availability.py
++++ b/blivet/tasks/availability.py
+@@ -19,9 +19,11 @@
+ #
+ # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
+ 
++import re
++import os
++import subprocess
+ import abc
+ from distutils.version import LooseVersion
+-import hawkey
+ 
+ from six import add_metaclass
+ 
+@@ -37,6 +39,8 @@ import logging
+ log = logging.getLogger("blivet")
+ 
+ CACHE_AVAILABILITY = True
++NIX_STOREPATH_RE = re.compile('^/nix/store/[a-z0-9]+-([^-]+)-(.*)$',
++                              re.IGNORECASE)
+ 
+ 
+ class ExternalResource(object):
+@@ -153,22 +157,24 @@ class PackageMethod(Method):
+             :rtype: LooseVersion
+             :raises AvailabilityError: on failure to obtain package version
+         """
+-        sack = hawkey.Sack()
+-
+-        try:
+-            sack.load_system_repo()
+-        except IOError as e:
+-            # hawkey has been observed allowing an IOError to propagate to
+-            # caller with message "Failed calculating RPMDB checksum."
+-            # See: https://bugzilla.redhat.com/show_bug.cgi?id=1223914
+-            raise AvailabilityError("Could not determine package version for %s: %s" % (self.package.package_name, e))
+-
+-        query = hawkey.Query(sack).filter(name=self.package.package_name, latest=True)
+-        packages = query.run()
+-        if len(packages) != 1:
+-            raise AvailabilityError("Could not determine package version for %s: unable to obtain package information from repo" % self.package.package_name)
+-
+-        return LooseVersion(packages[0].version)
++        bin_searchpath = os.getenv('PATH')
++        if bin_searchpath is None:
++            raise AvailabilityError("Could not determine package version for %s" % self.package.package_name)
++
++        for store_path in set(filter(
++            lambda p: p.startswith('/nix/store/'),
++            [os.path.realpath(p) for p in bin_searchpath.split(':')]
++        )):
++            graph = subprocess.check_output(['nix-store', '-qR', store_path])
++            for sp in graph.splitlines():
++                match = NIX_STOREPATH_RE.match(sp.decode('utf-8'))
++                if match is None:
++                    continue
++                if match.group(1) != self.package.package_name:
++                    continue
++                return LooseVersion(match.group(2))
++
++        raise AvailabilityError("Could not determine package version for %s" % self.package.package_name)
+ 
+     def availability_errors(self, resource):
+         if self._availability_errors is not None and CACHE_AVAILABILITY:
