@@ -103,8 +103,8 @@ in {
     extraSystemDeps = [
       # For generating test escrow certificates
       pkgs.nssTools
-      # While libblockdev is linked against volume_key,
-      # the tests require the 'volume_key' to be in PATH.
+      # While libblockdev is linked against volume_key, the
+      # tests require the 'volume_key' binary to be in PATH.
       pkgs.volume_key
     ];
   };
