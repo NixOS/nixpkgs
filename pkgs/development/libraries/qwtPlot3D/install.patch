@@ -1,0 +1,16 @@
+--- a/qwtplot3d.pro
++++ b/qwtplot3d.pro
+@@ -92,4 +92,11 @@
+   DEFINES += GL2PS_HAVE_ZLIB
+   win32:LIBS += zlib.lib
+ 	unix:LIBS  += -lz
+-}
+\ No newline at end of file
++}
++
++headers.files = $$HEADERS
++headers.path = /$(out)/include/qwtplot3d
++
++target.path = /$(out)/lib
++
++INSTALLS += headers target

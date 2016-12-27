@@ -1,0 +1,10 @@
+--- a/include/qwt3d_openglhelper.h
++++ b/include/qwt3d_openglhelper.h
+@@ -5,6 +5,7 @@
+ #if QT_VERSION < 0x040000
+ #include <qgl.h>
+ #else
++#include <GL/glu.h>
+ #include <QtOpenGL/qgl.h>
+ #endif
+ 
