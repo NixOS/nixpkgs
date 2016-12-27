@@ -865,6 +865,7 @@ in
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
+    boost = boost160;
     ruby = ruby_2_1;
   };
 
