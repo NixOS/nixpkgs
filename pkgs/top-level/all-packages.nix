@@ -905,6 +905,8 @@ in
 
   goa = callPackage ../development/tools/goa { };
 
+  gorilla-bin = callPackage ../tools/security/gorilla-bin { };
+
   gringo = callPackage ../tools/misc/gringo { };
 
   gti = callPackage ../tools/misc/gti { };
@@ -2798,6 +2800,8 @@ in
   miniball = callPackage ../development/libraries/miniball { };
 
   minixml = callPackage ../development/libraries/minixml { };
+
+  miredo = callPackage ../tools/networking/miredo { };
 
   mjpegtoolsFull = callPackage ../tools/video/mjpegtools { };
 
