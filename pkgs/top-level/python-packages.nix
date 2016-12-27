@@ -16105,12 +16105,13 @@ in {
   };
 
   numpydoc = buildPythonPackage rec {
-    name = "numpydoc-${version}";
-    version = "0.5";
+    pname = "numpydoc";
+    name = "${pname}-${version}";
+    version = "0.6.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpydoc/${name}.tar.gz";
-      sha256 = "0d4dnifaxkll50jx6czj05y8cb4ny60njd2wz299sj2jxfy51w4k";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "1ec573e91f6d868a9940d90a6599f3e834a2d6c064030fbe078d922ee21dcfa1";
     };
 
     buildInputs = [ self.nose ];
