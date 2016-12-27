@@ -22493,6 +22493,28 @@ in {
     };
   };
 
+  resampy = buildPythonPackage rec {
+    pname = "resampy";
+    version = "0.1.4";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "cf4f149d8699af70a1b4b0769fa16fab21835d936ea7ff25e98446aa49e743d4";
+    };
+
+    checkInputs = with self; [ pytest pytestcov ];
+    # No tests included
+    doCheck = false;
+    propagatedBuildInputs = with self; [ numpy scipy cython six ];
+
+    meta = {
+      homepage = https://github.com/bmcfee/resampy;
+      description = "Efficient signal resampling";
+      license = licenses.isc;
+    };
+  };
+
   robomachine = buildPythonPackage rec {
     name = "robomachine-0.6";
 
