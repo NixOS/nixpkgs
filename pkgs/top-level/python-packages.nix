@@ -9304,15 +9304,25 @@ in {
 
 
   librosa = buildPythonPackage rec {
-    name = "librosa-${version}";
-    version = "0.4.0";
+    pname = "librosa";
+    name = "${pname}-${version}";
+    version = "0.4.3";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/l/librosa/librosa-0.4.0.tar.gz";
-      sha256 = "cc11dcc41f51c08e442292e8a2fc7d7ee77e0d47ff771259eb63f57fcee6f6e7";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "209626c53556ca3922e52d2fae767bf5b398948c867fcc8898f948695dacb247";
     };
 
-    propagatedBuildInputs = with self;
-      [ joblib matplotlib six scikitlearn decorator audioread samplerate ];
+    propagatedBuildInputs = with self; [ joblib matplotlib six scikitlearn
+      decorator audioread resampy ];
+
+    # No tests
+    doCheck = false;
+
+    meta = {
+      description = "Python module for audio and music processing";
+      homepage = http://librosa.github.io/;
+      license = licenses.isc;
+    };
   };
 
   joblib = buildPythonPackage rec {
