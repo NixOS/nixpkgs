@@ -6,29 +6,38 @@ let
   cfg = config.services.asterisk;
 
   asteriskUser = "asterisk";
+  asteriskGroup = "asterisk";
 
   varlibdir = "/var/lib/asterisk";
   spooldir = "/var/spool/asterisk";
   logdir = "/var/log/asterisk";
+
+  # Add filecontents from files of useTheseDefaultConfFiles to confFiles, do not override
+  defaultConfFiles = subtractLists (attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
+  allConfFiles =
+    cfg.confFiles //
+    builtins.listToAttrs (map (x: { name = x;
+                                    value = builtins.readFile (pkgs.asterisk + "/etc/asterisk/" + x); })
+                              defaultConfFiles);
 
   asteriskEtc = pkgs.stdenv.mkDerivation
   ((mapAttrs' (name: value: nameValuePair
         # Fudge the names to make bash happy
         ((replaceChars ["."] ["_"] name) + "_")
         (value)
-      ) cfg.confFiles) //
+      ) allConfFiles) //
   {
     confFilesString = concatStringsSep " " (
-      attrNames cfg.confFiles
+      attrNames allConfFiles
     );
 
-    name = "asterisk.etc";
+    name = "asterisk-etc";
 
     # Default asterisk.conf file
     # (Notice that astetcdir will be set to the path of this derivation)
     asteriskConf = ''
       [directories]
-      astetcdir => @out@
+      astetcdir => /etc/asterisk
       astmoddir => ${pkgs.asterisk}/lib/asterisk/modules
       astvarlibdir => /var/lib/asterisk
       astdbdir => /var/lib/asterisk
@@ -169,6 +178,16 @@ in
         '';
       };
 
+      useTheseDefaultConfFiles = mkOption {
+        default = [ "ari.conf" "acl.conf" "agents.conf" "amd.conf" "calendar.conf" "cdr.conf" "cdr_syslog.conf" "cdr_custom.conf" "cel.conf" "cel_custom.conf" "cli_aliases.conf" "confbridge.conf" "dundi.conf" "features.conf" "hep.conf" "iax.conf" "pjsip.conf" "pjsip_wizard.conf" "phone.conf" "phoneprov.conf" "queues.conf" "res_config_sqlite3.conf" "res_parking.conf" "statsd.conf" "udptl.conf" "unistim.conf" ];
+        type = types.listOf types.str;
+        example = [ "sip.conf" "dundi.conf" ];
+        description = ''Sets these config files to the default content. The default value for
+          this option contains all necesscary files to avoid errors at startup.
+          This does not override settings via <option>services.asterisk.confFiles</option>.
+        '';
+      };
+
       extraArguments = mkOption {
         default = [];
         type = types.listOf types.str;
@@ -182,12 +201,22 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = singleton
-    { name = asteriskUser;
-      uid = config.ids.uids.asterisk;
-      description = "Asterisk daemon user";
-      home = varlibdir;
-    };
+    environment.systemPackages = [ pkgs.asterisk ];
+
+    environment.etc.asterisk.source = asteriskEtc;
+
+    users.extraUsers.asterisk =
+      { name = asteriskUser;
+        group = asteriskGroup;
+        uid = config.ids.uids.asterisk;
+        description = "Asterisk daemon user";
+        home = varlibdir;
+      };
+
+    users.extraGroups.asterisk =
+      { name = asteriskGroup;
+        gid = config.ids.gids.asterisk;
+      };
 
     systemd.services.asterisk = {
       description = ''
@@ -196,14 +225,17 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
+      # Do not restart, to avoid disruption of running calls. Restart unit by yourself!
+      restartIfChanged = false;
+
       preStart = ''
         # Copy skeleton directory tree to /var
         for d in '${varlibdir}' '${spooldir}' '${logdir}'; do
           # TODO: Make exceptions for /var directories that likely should be updated
           if [ ! -e "$d" ]; then
             mkdir -p "$d"
-            cp --recursive ${pkgs.asterisk}/"$d" "$d"
-            chown --recursive ${asteriskUser} "$d"
+            cp --recursive ${pkgs.asterisk}/"$d"/* "$d"/
+            chown --recursive ${asteriskUser}:${asteriskGroup} "$d"
             find "$d" -type d | xargs chmod 0755
           fi
         done
@@ -215,7 +247,9 @@ in
             # FIXME: This doesn't account for arguments with spaces
             argString = concatStringsSep " " cfg.extraArguments;
           in
-          "${pkgs.asterisk}/bin/asterisk -U ${asteriskUser} -C ${asteriskEtc}/asterisk.conf ${argString} -F";
+          "${pkgs.asterisk}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
+        ExecReload = ''${pkgs.asterisk}/bin/asterisk -x "core reload"
+          '';
         Type = "forking";
         PIDFile = "/var/run/asterisk/asterisk.pid";
       };
