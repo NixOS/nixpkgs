@@ -164,7 +164,7 @@ in pkgs.lib.mapAttrs mkStorageTest {
       ensurePartition("swap", "swap");
       ensurePartition("nix", "ext3");
       ensurePartition("root", "ext4");
-      ensurePartition("/dev/vdb4", "boot sector");
+      ensurePartition("/dev/vdb", "boot sector");
       ensureNoPartition("vdb6");
       ensureNoPartition("vdc1");
       remountAndCheck;
