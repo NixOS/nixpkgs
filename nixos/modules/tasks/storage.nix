@@ -134,7 +134,7 @@ let
     };
   };
 
-  btrfsOptions.options = commonOptions // {
+  btrfsOptions.options = {
     devices = mkOption {
       type = types.listOf deviceType;
       description = ''
