@@ -14171,6 +14171,8 @@ in
 
   diffpdf = callPackage ../applications/misc/diffpdf { };
 
+  mlocate = callPackage ../tools/misc/mlocate { };
+
   mypaint = callPackage ../applications/graphics/mypaint { };
 
   mythtv = callPackage ../applications/video/mythtv { };
