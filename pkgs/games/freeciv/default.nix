@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zlib, bzip2, pkgconfig, curl, lzma, gettext
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
 , gtkClient ? false, gtk2
-, server ? true, readline }:
+, server ? true, enable_sqlite ? true, readline, sqlite }:
 
 let
   inherit (stdenv.lib) optional optionals;
@@ -25,10 +25,12 @@ stdenv.mkDerivation {
   buildInputs = [ zlib bzip2 curl lzma gettext ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
     ++ optionals gtkClient [ gtk2 ]
-    ++ optional server readline;
+    ++ optional server readline
+    ++ optional enable_sqlite sqlite;
 
   configureFlags = []
     ++ optional sdlClient "--enable-client=sdl"
+    ++ optional enable_sqlite "--enable-fcdb=sqlite3"
     ++ optional (!gtkClient) "--enable-fcmp=cli"
     ++ optional (!server) "--disable-server";
 
