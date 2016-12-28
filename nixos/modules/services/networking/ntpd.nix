@@ -34,7 +34,7 @@ in
     services.ntp = {
 
       enable = mkOption {
-        default = !config.boot.isContainer;
+        default = false;
         description = ''
           Whether to synchronise your machine's time using the NTP
           protocol.
@@ -42,12 +42,7 @@ in
       };
 
       servers = mkOption {
-        default = [
-          "0.nixos.pool.ntp.org"
-          "1.nixos.pool.ntp.org"
-          "2.nixos.pool.ntp.org"
-          "3.nixos.pool.ntp.org"
-        ];
+        default = config.networking.timeServers;
         description = ''
           The set of NTP servers from which to synchronise.
         '';
@@ -70,6 +65,7 @@ in
 
     # Make tools such as ntpq available in the system path.
     environment.systemPackages = [ pkgs.ntp ];
+    services.timesyncd.enable = mkForce false;
 
     users.extraUsers = singleton
       { name = ntpUser;

@@ -86,6 +86,8 @@
     "transformers"
     "unix"
   ]
+
+, stage2 ? import ./stage2.nix
 }:
 let
   inherit (bootPkgs) ghc;
@@ -171,7 +173,7 @@ in mkDerivation (rec {
     inherit (ghcjsNodePkgs) "socket.io";
 
     inherit stage1Packages;
-    mkStage2 = import ./stage2.nix {
+    mkStage2 = stage2 {
       inherit ghcjsBoot;
     };
   };
@@ -181,4 +183,5 @@ in mkDerivation (rec {
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
+  broken = true;  # http://hydra.nixos.org/build/45110274
 })

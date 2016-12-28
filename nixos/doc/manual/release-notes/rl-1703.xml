@@ -68,6 +68,26 @@ following incompatible changes:</para>
     that may be in /etc.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      Parsoid service now uses YAML configuration format.
+     <literal>service.parsoid.interwikis</literal> is now called
+     <literal>service.parsoid.wikis</literal> and is a list of either API URLs
+     or attribute sets as specified in parsoid's documentation.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+     <literal>Ntpd</literal> was replaced by
+     <literal>systemd-timesyncd</literal> as the default service to synchronize
+     system time with a remote NTP server. The old behavior can be restored by
+     setting <literal>services.ntp.enable</literal> to <literal>true</literal>.
+     Upstream time servers for all NTP implementations are now configured using
+     <literal>networking.timeServers</literal>.
+   </para>
+  </listitem>
 </itemizedlist>
 
 

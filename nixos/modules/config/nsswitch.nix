@@ -10,9 +10,21 @@ let
   inherit (config.services.samba) nsswins;
   ldap = (config.users.ldap.enable && config.users.ldap.nsswitch);
 
-in
+  hostArray = [ "files" "mymachines" ]
+    ++ optionals nssmdns [ "mdns_minimal [!UNAVAIL=return]" ]
+    ++ optionals nsswins [ "wins" ]
+    ++ [ "dns" ]
+    ++ optionals nssmdns [ "mdns" ]
+    ++ ["myhostname" ];
 
-{
+  passwdArray = [ "files" ]
+    ++ optionals ldap [ "ldap" ]
+    ++ [ "mymachines" ];
+
+  shadowArray = [ "files" ]
+    ++ optionals ldap [ "ldap" ];
+
+in {
   options = {
 
     # NSS modules.  Hacky!
@@ -39,24 +51,26 @@ in
     # Name Service Switch configuration file.  Required by the C
     # library.  !!! Factor out the mdns stuff.  The avahi module
     # should define an option used by this module.
-    environment.etc."nsswitch.conf".text =
-      ''
-        passwd:    files ${optionalString ldap "ldap"}
-        group:     files ${optionalString ldap "ldap"}
-        shadow:    files ${optionalString ldap "ldap"}
-        hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"} myhostname mymachines
-        networks:  files dns
-        ethers:    files
-        services:  files
-        protocols: files
-      '';
+    environment.etc."nsswitch.conf".text = ''
+      passwd:    ${concatStringsSep " " passwdArray}
+      group:     ${concatStringsSep " " passwdArray}
+      shadow:    ${concatStringsSep " " shadowArray}
+
+      hosts:     ${concatStringsSep " " hostArray}
+      networks:  files
+
+      ethers:    files
+      services:  files
+      protocols: files
+      rpc:       files
+    '';
 
     # Systemd provides nss-myhostname to ensure that our hostname
     # always resolves to a valid IP address.  It returns all locally
     # configured IP addresses, or ::1 and 127.0.0.2 as
     # fallbacks. Systemd also provides nss-mymachines to return IP
     # addresses of local containers.
-    system.nssModules = [ config.systemd.package ];
+    system.nssModules = [ config.systemd.package.out ];
 
   };
 }

@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    msgpack (1.0.2)
+    neovim (0.3.1)
+      msgpack (~> 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  neovim
+
+BUNDLED WITH
+   1.12.5

@@ -375,10 +375,13 @@ rec {
     if def._type or "" == "merge" then
       concatMap dischargeProperties def.contents
     else if def._type or "" == "if" then
-      if def.condition then
-        dischargeProperties def.content
+      if isBool def.condition then
+        if def.condition then
+          dischargeProperties def.content
+        else
+          [ ]
       else
-        [ ]
+        throw "‘mkIf’ called with a non-Boolean condition"
     else
       [ def ];
 

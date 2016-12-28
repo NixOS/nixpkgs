@@ -2,7 +2,7 @@
 , ncurses, libX11, libXt, libXpm, libXaw, libXext
 , libusb1, docbook_xml_dtd_412, docbook_xsl, bc
 , libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
-, pythonPackages
+, python2Packages
 }:
 
 # TODO: put the X11 deps behind a guiSupport parameter for headless support
@@ -17,18 +17,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     scons pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
-    pythonPackages.python
-    pythonPackages.wrapPython
+    python2Packages.python
+    python2Packages.wrapPython
   ];
 
   buildInputs = [
-    pythonPackages.python dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
+    python2Packages.python dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
     libxslt libusb1
   ];
 
   pythonPath = [
-    pythonPackages.pygobject2
-    pythonPackages.pygtk
+    python2Packages.pygobject2
+    python2Packages.pygtk
   ];
 
   patches = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConstruct
     scons prefix="$out" leapfetch=no gpsd_user=${gpsdUser} gpsd_group=${gpsdGroup} \
         systemd=yes udevdir="$out/lib/udev" \
-        python_libdir="$out/lib/${pythonPackages.python.libPrefix}/site-packages"
+        python_libdir="$out/lib/${python2Packages.python.libPrefix}/site-packages"
   '';
 
   checkPhase = ''

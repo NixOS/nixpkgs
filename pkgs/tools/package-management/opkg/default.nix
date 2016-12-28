@@ -2,15 +2,15 @@
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.1";
+  version = "0.3.3";
   name = "opkg-${version}";
   src = fetchurl {
     url = "http://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
-    sha256 = "1pw7igmb4miyxl11sj9g8p8pgxg9nmn1h2hzi8b23v44hcmc1inj";
+    sha256 = "03nhz0ralc3cqsrwyc310n8kbk2m9im0m2r2za8lqphs29rrxnqr";
   };
 
-  buildInputs = [ pkgconfig curl gpgme libarchive bzip2 lzma attr acl libxml2
-    autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ curl gpgme libarchive bzip2 lzma attr acl libxml2 ];
 
   meta = with stdenv.lib; {
     description = "A lightweight package management system based upon ipkg";

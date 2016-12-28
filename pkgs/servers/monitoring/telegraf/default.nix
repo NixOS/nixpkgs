@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "telegraf-${version}";
-  version = "1.1.1";
+  version = "1.1.2";
 
   goPackagePath = "github.com/influxdata/telegraf";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "${version}";
-    sha256 = "02sldgbsxifd7s3awjj0a4wf7rrcz2xin02b6ygyqxyhj1kqj8i6";
+    sha256 = "0dgrbdyz261j28wcq636125ha4xmfgh4y9shlg8m1y6jqdqd2zf2";
   };
 
   goDeps = ./. + builtins.toPath "/deps-${version}.nix";

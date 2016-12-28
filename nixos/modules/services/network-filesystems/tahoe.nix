@@ -233,6 +233,12 @@ in
             serviceConfig = {
               Type = "simple";
               PIDFile = pidfile;
+              # Believe it or not, Tahoe is very brittle about the order of
+              # arguments to $(tahoe start). The node directory must come first,
+              # and arguments which alter Twisted's behavior come afterwards.
+              ExecStart = ''
+                ${settings.package}/bin/tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
+              '';
             };
             preStart = ''
               if [ \! -d ${nodedir} ]; then
@@ -247,12 +253,6 @@ in
               # rm ${nodedir}/tahoe.cfg
               # ln -s /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
               cp /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
-            '';
-            # Believe it or not, Tahoe is very brittle about the order of
-            # arguments to $(tahoe start). The node directory must come first,
-            # and arguments which alter Twisted's behavior come afterwards.
-            script = ''
-              tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
             '';
           });
         users.extraUsers = flip mapAttrs' cfg.introducers (node: _:
@@ -333,6 +333,12 @@ in
             serviceConfig = {
               Type = "simple";
               PIDFile = pidfile;
+              # Believe it or not, Tahoe is very brittle about the order of
+              # arguments to $(tahoe start). The node directory must come first,
+              # and arguments which alter Twisted's behavior come afterwards.
+              ExecStart = ''
+                ${settings.package}/bin/tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
+              '';
             };
             preStart = ''
               if [ \! -d ${nodedir} ]; then
@@ -347,12 +353,6 @@ in
               # rm ${nodedir}/tahoe.cfg
               # ln -s /etc/tahoe-lafs/${node}.cfg ${nodedir}/tahoe.cfg
               cp /etc/tahoe-lafs/${node}.cfg ${nodedir}/tahoe.cfg
-            '';
-            # Believe it or not, Tahoe is very brittle about the order of
-            # arguments to $(tahoe start). The node directory must come first,
-            # and arguments which alter Twisted's behavior come afterwards.
-            script = ''
-              tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
             '';
           });
         users.extraUsers = flip mapAttrs' cfg.nodes (node: _:

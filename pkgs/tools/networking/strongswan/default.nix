@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.5.0";
+  version = "5.5.1";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "0m449i5s51ikqh36s1sp4rvw60wqyv0j12kyd31yl9b7mjc3jijq";
+    sha256 = "1drahhmwz1jg14rfh67cl231dlg2a9pra6jmipfxwyzpj4ck02vj";
   };
 
   dontPatchELF = true;

@@ -7,7 +7,7 @@
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib, libvpx
 
-, python, pythonPackages, perl, pkgconfig
+, python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
@@ -86,7 +86,7 @@ let
 
     src = upstream-info.main;
 
-    nativeBuildInputs = [ gn which python perl pkgconfig ];
+    nativeBuildInputs = [ gn which python2Packages.python perl pkgconfig ];
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
@@ -95,7 +95,7 @@ let
       glib gtk2 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-      pythonPackages.ply pythonPackages.jinja2
+      python2Packages.ply python2Packages.jinja2
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux

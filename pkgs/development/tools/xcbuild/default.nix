@@ -41,4 +41,11 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ cmake zlib libxml2 libpng ninja ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
+
+  meta = with stdenv.lib; {
+    description = "Xcode-compatible build tool";
+    homepage = https://github.com/facebook/xcbuild;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ copumpkin matthewbauer ];
+  };
 }

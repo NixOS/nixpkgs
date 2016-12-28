@@ -46,5 +46,5 @@ bootPkgs.callPackage ./base.nix {
     "transformers"
     "unix"
   ];
+  stage2 = import ./head_stage2.nix;
 }
-

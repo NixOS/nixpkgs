@@ -9,6 +9,15 @@ let kernel = config.boot.kernelPackages.kernel; in
 
 {
 
+  # This option is a dummy that if used in conjunction with
+  # modules/virtualisation/qemu-vm.nix gets merged with the same option defined
+  # there and only is declared here because some modules use
+  # test-instrumentation.nix but not qemu-vm.nix.
+  #
+  # One particular example are the boot tests where we want instrumentation
+  # within the images but not other stuff like setting up 9p filesystems.
+  options.virtualisation.qemu.program = mkOption { type = types.path; };
+
   config = {
 
     systemd.services.backdoor =

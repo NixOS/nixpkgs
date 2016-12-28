@@ -18,9 +18,8 @@ import ./make-test.nix ({ pkgs, ...} :
       };
     };
     services.xserver.desktopManager.kde5.enable = true;
+    virtualisation.writableStore = false; # FIXME
   };
-
-  enableOCR = true;
 
   testScript = { nodes, ... }:
   let xdo = "${pkgs.xdotool}/bin/xdotool"; in

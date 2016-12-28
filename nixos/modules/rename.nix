@@ -144,6 +144,12 @@ with lib;
     # murmur
     (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
 
+    # parsoid
+    (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] [ "services" "parsoid" "wikis" ])
+
+    # tarsnap
+    (mkRemovedOptionModule [ "services" "tarsnap" "cachedir" ] "Use services.tarsnap.archives.<name>.cachedir")
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
     (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")

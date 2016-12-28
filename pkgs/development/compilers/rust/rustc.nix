@@ -46,6 +46,12 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
+  # Enable nightly features in stable compiles (used for
+  # bootstrapping, see https://github.com/rust-lang/rust/pull/37265).
+  # This loosens the hard restrictions on bootstrapping-compiler
+  # versions.
+  RUSTC_BOOTSTRAP = "1";
+
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
     rev = srcRev;
@@ -88,10 +94,14 @@ stdenv.mkDerivation {
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
     # Disable fragile linker-output-non-utf8 test
-    rm -vr src/test/run-make/linker-output-non-utf8/
+    rm -vr src/test/run-make/linker-output-non-utf8 || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
-    rm -vr src/test/run-pass/issue-36023.rs
+    rm -vr src/test/run-pass/issue-36023.rs || true
+
+    # Disable test getting stuck on hydra - possible fix:
+    # https://reviews.llvm.org/rL281650
+    rm -vr src/test/run-pass/issue-36474.rs || true
 
     # Useful debugging parameter
     # export VERBOSE=1

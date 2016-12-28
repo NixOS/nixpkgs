@@ -25,7 +25,8 @@ in
       DBs = mkOption {
         type = types.listOf types.package;
         default = with pkgs.dictdDBs; [ wiktionary wordnet ];
-        example = [ pkgs.dictdDBs.nld2eng ];
+        defaultText = "with pkgs.dictdDBs; [ wiktionary wordnet ]";
+        example = literalExample "[ pkgs.dictdDBs.nld2eng ]";
         description = ''List of databases to make available.'';
       };
 

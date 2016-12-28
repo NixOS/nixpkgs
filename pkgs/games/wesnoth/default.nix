@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf
 , pango, gettext, boost, freetype, libvorbis, fribidi, dbus, libpng, pcre
-, enableTools ? false
+, makeWrapper, enableTools ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kifp6g1dsr16m6ngjq2hx19h851fqg326ps3krnhpyix963h3x5";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre ];
@@ -22,6 +22,13 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
 
   enableParallelBuilding = true;
+
+  # Wesnoth doesn't support input frameworks and Unicode input breaks when they are enabled.
+  postInstall = ''
+    for i in $out/bin/*; do
+      wrapProgram "$i" --unset XMODIFIERS
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
       adventures.
     '';
 
-    homepage = http://www.wesnoth.org/;
+    homepage = "http://www.wesnoth.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ kkallio abbradar ];
     platforms = platforms.linux;

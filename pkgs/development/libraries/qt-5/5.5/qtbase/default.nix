@@ -272,7 +272,7 @@ stdenv.mkDerivation {
     '';
 
   inherit lndir;
-  setupHook = ./setup-hook.sh;
+  setupHook = ../../qtbase-setup-hook.sh;
 
   enableParallelBuilding = true;
 

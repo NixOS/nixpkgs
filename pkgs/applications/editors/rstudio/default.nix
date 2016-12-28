@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, cmake, boost155, zlib, openssl, R, qt4, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper }:
+{ stdenv, fetchurl, makeDesktopItem, cmake, boost155, zlib, openssl, R, qt4, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper }:
 
 let
   version = "0.98.110";
   ginVer = "1.5";
   gwtVer = "2.5.1";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "RStudio-${version}";
 
   buildInputs = [ cmake boost155 zlib openssl R qt4 libuuid unzip ant jdk makeWrapper ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     sha256 = "0fjr2rcr8lnywj54mzhg9i4xz1b6fh8yv12p5i2q5mgfld2xymy4";
   };
 
-  hunspellDicts = builtins.attrValues hunspellDicts;
+  hunspellDictionaries = builtins.attrValues hunspellDicts;
 
   mathJaxSrc = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-20.zip;
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       mv gwt-$gwtVer $GWT_LIB_DIR/gwt/$gwtVer
 
       mkdir dependencies/common/dictionaries
-      for dict in $hunspellDicts; do
+      for dict in $hunspellDictionaries; do
           for i in "$dict/share/hunspell/"*
 	  do ln -sv $i dependencies/common/dictionaries/
 	  done
@@ -61,8 +61,23 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" ];
 
+  desktopItem = makeDesktopItem {
+    name = name;
+    exec = "rstudio %F";
+    icon = "rstudio";
+    desktopName = "RStudio";
+    genericName = "IDE";
+    comment = meta.description;
+    categories = "Development;";
+    mimeType = "text/x-r-source;text/x-r;text/x-R;text/x-r-doc;text/x-r-sweave;text/x-r-markdown;text/x-r-html;text/x-r-presentation;application/x-r-data;application/x-r-project;text/x-r-history;text/x-r-profile;text/x-tex;text/x-markdown;text/html;text/css;text/javascript;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;";
+  };
+
   postInstall = ''
       wrapProgram $out/bin/rstudio --suffix PATH : ${gnumake}/bin
+      mkdir $out/share
+      cp -r ${desktopItem}/share/applications $out/share
+      mkdir $out/share/icons
+      ln $out/rstudio.png $out/share/icons
   '';
 
   meta = with stdenv.lib;

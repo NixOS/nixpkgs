@@ -21,13 +21,13 @@ import ./make-test.nix ({ pkgs, ... }:
     $machine->log("ecryptfs-migrate-home said: $out");
 
     # Log alice in (ecryptfs passwhrase is wrapped during first login)
-    $machine->sleep(2); # urgh: wait for username prompt
+    $machine->waitUntilTTYMatches(1, "login: ");
     $machine->sendChars("alice\n");
-    $machine->sleep(1);
+    $machine->waitUntilTTYMatches(1, "Password: ");
     $machine->sendChars("foobar\n");
-    $machine->sleep(2);
+    $machine->waitUntilTTYMatches(1, "alice\@machine");
     $machine->sendChars("logout\n");
-    $machine->sleep(2);
+    $machine->waitUntilTTYMatches(1, "login: ");
 
     # Why do I need to do this??
     $machine->succeed("su alice -c ecryptfs-umount-private || true");
@@ -39,10 +39,11 @@ import ./make-test.nix ({ pkgs, ... }:
     $machine->log("keyctl unlink said: " . $out);
 
     # Log alice again
+    $machine->waitUntilTTYMatches(1, "login: ");
     $machine->sendChars("alice\n");
-    $machine->sleep(1);
+    $machine->waitUntilTTYMatches(1, "Password: ");
     $machine->sendChars("foobar\n");
-    $machine->sleep(2);
+    $machine->waitUntilTTYMatches(1, "alice\@machine");
 
     # Create some files in encrypted home
     $machine->succeed("su alice -c 'touch ~alice/a'");
@@ -50,7 +51,7 @@ import ./make-test.nix ({ pkgs, ... }:
 
     # Logout
     $machine->sendChars("logout\n");
-    $machine->sleep(2);
+    $machine->waitUntilTTYMatches(1, "login: ");
 
     # Why do I need to do this??
     $machine->succeed("su alice -c ecryptfs-umount-private || true");
@@ -62,10 +63,11 @@ import ./make-test.nix ({ pkgs, ... }:
     $machine->succeed("su alice -c 'test \! -f ~alice/b'");
 
     # Log alice once more
+    $machine->waitUntilTTYMatches(1, "login: ");
     $machine->sendChars("alice\n");
-    $machine->sleep(1);
+    $machine->waitUntilTTYMatches(1, "Password: ");
     $machine->sendChars("foobar\n");
-    $machine->sleep(2);
+    $machine->waitUntilTTYMatches(1, "alice\@machine");
 
     # Check that the files are there
     $machine->sleep(1);
@@ -77,5 +79,6 @@ import ./make-test.nix ({ pkgs, ... }:
     $machine->succeed("su alice -c 'ls -lh ~alice/'");
 
     $machine->sendChars("logout\n");
+    $machine->waitUntilTTYMatches(1, "login: ");
   '';
 })

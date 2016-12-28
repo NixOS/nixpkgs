@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, cmake, python, llvmPackages, boost, pythonPackages
+{ stdenv, fetchgit, cmake, llvmPackages, boost, python2Packages
 }:
 
 let
-  inherit (pythonPackages) python;
-in pythonPackages.mkPythonDerivation rec {
+  inherit (python2Packages) python mkPythonDerivation waitress frozendict bottle;
+in mkPythonDerivation rec {
   name = "ycmd-2016-01-12";
   namePrefix = "";
 
@@ -15,7 +15,7 @@ in pythonPackages.mkPythonDerivation rec {
 
   buildInputs = [ cmake boost ];
 
-  propagatedBuildInputs = with pythonPackages; [ waitress frozendict bottle ];
+  propagatedBuildInputs = [ waitress frozendict bottle ];
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
@@ -24,7 +24,7 @@ in pythonPackages.mkPythonDerivation rec {
 
   configurePhase = ":";
 
-  installPhase = with pythonPackages; ''
+  installPhase = ''
     mkdir -p $out/lib/ycmd/third_party $out/bin
     cp -r ycmd/ CORE_VERSION libclang.so.* ycm_client_support.so ycm_core.so $out/lib/ycmd/
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd

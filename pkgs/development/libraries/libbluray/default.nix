@@ -18,12 +18,11 @@ assert withFonts -> freetype != null;
 # https://wiki.archlinux.org/index.php/BluRay
 
 stdenv.mkDerivation rec {
-  baseName = "libbluray";
+  name = "libbluray-${version}";
   version  = "0.9.2";
-  name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "http://get.videolan.org/${baseName}/${version}/${name}.tar.bz2";
+    url = "http://get.videolan.org/libbluray/${version}/${name}.tar.bz2";
     sha256 = "1sp71j4agcsg17g6b85cqz78pn5vknl5pl39rvr6mkib5ps99jgg";
   };
 
@@ -55,7 +54,7 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional withJava ./BDJ-JARFILE-path.patch;
 
   meta = with stdenv.lib; {
-    homepage = http://www.videolan.org/developers/libbluray.html;
+    homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
     license = licenses.lgpl21;
     maintainers = [ maintainers.abbradar ];

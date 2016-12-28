@@ -27,8 +27,11 @@ with stdenv.lib;
     MODULE_COMPRESS_XZ y
   ''}
 
+  KERNEL_XZ y
+
   # Debugging.
   DEBUG_KERNEL y
+  DYNAMIC_DEBUG y
   TIMER_STATS y
   BACKTRACE_SELF_TEST n
   CPU_NOTIFIER_ERROR_INJECT? n
@@ -263,6 +266,11 @@ with stdenv.lib;
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
+  CIFS_STATS y
+  CIFS_WEAK_PW_HASH y
+  CIFS_UPCALL y
+  CIFS_ACL y
+  CIFS_DFS_UPCALL y
   CIFS_SMB2 y
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
@@ -370,7 +378,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.15" && versionOlder version "4.8") ''
     MLX4_EN_VXLAN y
   ''}
-  MODVERSIONS y
+  ${optionalString (versionOlder version "4.9") ''
+    MODVERSIONS y
+  ''}
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
   NET_FC y # Fibre Channel driver support

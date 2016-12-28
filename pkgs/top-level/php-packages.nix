@@ -79,10 +79,10 @@ let
     sha256 = "1ywrsp90w6rlgq3v2vmvp2zvvykkgqqasab7h9bf3vgvgv3qasbg";
 
     configureFlags = [
-      "--with-spidermonkey=${pkgs.spidermonkey_185}"
+      "--with-spidermonkey=${pkgs.spidermonkey_1_8_5}"
     ];
 
-    buildInputs = [ pkgs.spidermonkey_185 ];
+    buildInputs = [ pkgs.spidermonkey_1_8_5 ];
   };
 
   xdebug = if isPhp7 then xdebug24 else xdebug23;

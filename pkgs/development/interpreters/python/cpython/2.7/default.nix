@@ -10,12 +10,13 @@
 , zlib
 , callPackage
 , self
-, python27Packages
 , gettext
 , db
 , expat
 , libffi
 , CF, configd, coreutils
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -27,7 +28,7 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  minorVersion = "12";
+  minorVersion = "13";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -36,7 +37,7 @@ let
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0y7rl603vmwlxm6ilkhc51rx2mfj14ckcz40xxgs0ljnvlhp30yp";
+    sha256 = "0cgpk3zk0fgpji59pb4zy9nzljr70qzgv1vpz5hq5xw2d2c47m9m";
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -56,13 +57,6 @@ let
 
       ./properly-detect-curses.patch
 
-      # FIXME: get rid of this after the next release, when the commit referenced here makes
-      # it in. We need it until then because it breaks compilation of programs that use
-      # locale with clang 3.8 and higher.
-      (fetchpatch {
-        url    = "https://hg.python.org/cpython/raw-rev/e0ec3471cb09";
-        sha256 = "1jdgb70jw942r4kmr01qll7mk1di8jx0qiabmp20jhnmha246ivq";
-      })
     ] ++ optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -180,11 +174,14 @@ in stdenv.mkDerivation {
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
       '';
 
-    passthru = rec {
+    passthru = let
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+    in rec {
       inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
       executable = libPrefix;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
+      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+      pkgs = pythonPackages;
       isPy2 = true;
       isPy27 = true;
       interpreter = "${self}/bin/${executable}";

@@ -30,7 +30,7 @@ in
 
       supportedLocales = mkOption {
         type = types.listOf types.str;
-        default = ["en_US.UTF-8/UTF-8"];
+        default = ["en_US.UTF-8/UTF-8" "en_GB.UTF-8/UTF-8"];
         example = ["en_US.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "nl_NL/ISO-8859-1"];
         description = ''
           List of locales that the system should support.  The value
@@ -44,8 +44,9 @@ in
       consolePackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs.kbdKeymaps; [ dvp neo ];
+        defaultText = ''with pkgs.kbdKeymaps; [ dvp neo ]'';
         description = ''
-	  List of additional packages that provide console fonts, keymaps and
+          List of additional packages that provide console fonts, keymaps and
           other resources.
         '';
       };

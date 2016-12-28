@@ -1,17 +1,26 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
-
 , ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.1";
+  version = "1.10.1";
   name = "libuv-${version}";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${version}";
-    sha256 = "1kc386gkkkymgz9diz1z4r8impcsmki5k88dsiasd6v9bfvq04cc";
+    sha256 = "0gna53fgsjjs38kv1g20xfaalv0fk3xncb6abga3saswrv283hx0";
   };
+
+  postPatch = let
+    toDisable = [
+      "getnameinfo_basic" # probably network-dependent
+      "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
+    ];
+    tdRegexp = lib.concatStringsSep "\\|" toDisable;
+    in lib.optionalString doCheck ''
+      sed '/${tdRegexp}/d' -i test/test-list.h
+    '';
 
   buildInputs = [ automake autoconf libtool pkgconfig ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
@@ -19,6 +28,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh
   '';
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";

@@ -1,3 +1,4 @@
+### DUMMY FOR MASS-REBUILD, REMOVE SOON ###
 hardeningFlags=(fortify stackprotector pic strictoverflow format relro bindnow)
 hardeningFlags+=("${hardeningEnable[@]}")
 hardeningCFlags=()

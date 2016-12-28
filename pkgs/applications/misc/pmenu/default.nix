@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pythonPackages, gnome2 }:
+{ stdenv, fetchFromGitLab, python2Packages, gnome2 }:
 
 stdenv.mkDerivation rec {
   name = "pmenu-${version}";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "15bkvadr7ab44mc8gkdqs3w14cm498mwf72w5rjm2rdh55357jjh";
   };
 
-  nativeBuildInputs = [ pythonPackages.wrapPython ];
+  nativeBuildInputs = [ python2Packages.wrapPython ];
 
-  buildInputs = [ pythonPackages.pygtk gnome2.gnome_menus ];
+  buildInputs = [ python2Packages.pygtk gnome2.gnome_menus ];
 
-  pythonPath = [ pythonPackages.pygtk ];
+  pythonPath = [ python2Packages.pygtk ];
   
   patchPhase = ''
     substituteInPlace install.sh --replace "/usr/local" "$out"

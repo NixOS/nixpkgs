@@ -50,6 +50,8 @@ in {
 
       package = mkOption {
         default = pkgs.hound;
+        defaultText = "pkgs.hound";
+        type = types.package;
         description = ''
           Package for running hound.
         '';

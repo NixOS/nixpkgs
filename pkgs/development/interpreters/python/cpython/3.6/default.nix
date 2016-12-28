@@ -11,8 +11,9 @@
 , zlib
 , callPackage
 , self
-, python36Packages
 , CF, configd
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -24,7 +25,7 @@ with stdenv.lib;
 let
   majorVersion = "3.6";
   minorVersion = "0";
-  minorVersionSuffix = "b2";
+  minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
@@ -44,7 +45,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "1sk990n2xm5vhn3ys2cp427dx0z14cx3sz1za5f2fcwrp524bz9s";
+    sha256 = "08inlbb2vb8lahw6wfq654lqk6l1x7ncpggp6a92vqw5yq2gkidh";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -99,11 +100,14 @@ in stdenv.mkDerivation {
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
   '';
 
-  passthru = rec {
+  passthru = let
+    pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+  in rec {
     inherit libPrefix sitePackages x11Support;
     executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; };
-    withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python36Packages; };
+    withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+    pkgs = pythonPackages;
     isPy3 = true;
     isPy35 = true;
     is_py3k = true;  # deprecated

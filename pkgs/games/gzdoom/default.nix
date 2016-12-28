@@ -1,34 +1,51 @@
-{stdenv, fetchFromGitHub, cmake, fmod, mesa, SDL2}:
+{ stdenv, fetchFromGitHub, cmake, zdoom
+, openal, fluidsynth, soundfont-fluid, mesa_noglu, SDL2
+, bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
-stdenv.mkDerivation {
-  name = "gzdoom-2015-05-07";
-  src = fetchFromGitHub{
+stdenv.mkDerivation rec {
+  name = "gzdoom-${version}";
+  version = "2.2.0";
+
+  src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
-    rev = "a59824cd8897dea5dd452c31be1328415478f990";
-    sha256 = "1lg9dk5prn2bjmyznq941a862alljvfgbb42whbpg0vw9vhpikak";
+    rev = "g${version}";
+    sha256 = "0xxgd8fa29pcdir1xah5cvx41bfy76p4dydpp13mf44p9pr29hrb";
   };
 
-  buildInputs = [ cmake fmod mesa SDL2 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    SDL2 mesa_noglu openal fluidsynth bzip2 zlib libjpeg libsndfile mpg123
+    game-music-emu
+  ];
 
-  cmakeFlags = [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ];
+  enableParallelBuilding = true;
 
-  preConfigure=''
-    sed s@gzdoom.pk3@$out/share/gzdoom.pk3@ -i src/version.h
+  NIX_CFLAGS_LINK = [ "-lopenal" "-lfluidsynth" ];
+
+  preConfigure = ''
+    sed -i \
+      -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
+      -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
+      src/sound/music_fluidsynth_mididevice.cpp
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp gzdoom $out/bin
-    mkdir -p $out/share
-    cp gzdoom.pk3 $out/share
+    install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
+    for i in *.pk3; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    mkdir $out/bin
+    ln -s $out/lib/gzdoom/gzdoom $out/bin/gzdoom
   '';
 
-  meta = {
-    homepage = https://github.com/coelckers/gzdoom;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/coelckers/gzdoom";
     description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.lassulus ];
+    # Doom source license, MAME license
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lassulus ];
   };
 }
 

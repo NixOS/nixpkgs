@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/action/show/Apps/Calculator;
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
     maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    license = licenses.gpl3;
     platforms = platforms.linux;
   };
 }

@@ -18,6 +18,6 @@ buildGoPackage rec {
     description = "Print where symbols are defined in Go source code";
     homepage = "https://github.com/rogpeppe/godef/";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
-    licence = stdenv.lib.licenses.bsd3;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

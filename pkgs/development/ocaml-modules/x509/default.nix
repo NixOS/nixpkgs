@@ -4,6 +4,8 @@ buildOcaml rec {
   name = "x509";
   version = "0.5.3";
 
+  mininimumSupportedOcamlVersion = "4.02";
+
   src = fetchFromGitHub {
     owner  = "mirleft";
     repo   = "ocaml-x509";

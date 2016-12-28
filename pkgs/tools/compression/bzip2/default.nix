@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , linkStatic ? (stdenv.system == "i686-cygwin")
 }:
 
@@ -20,9 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "0b5b5p8c7bslc6fslcr1nj9136412v3qcvbg6yxi9argq9g72v8c";
   };
 
+  patches = [
+    ./CVE-2016-3189.patch
+  ];
+
+
   postPatch = ''
     sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
   '';
+
 
   outputs = [ "bin" "dev" "out" "man" ];
 

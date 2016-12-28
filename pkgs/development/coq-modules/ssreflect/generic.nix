@@ -1,12 +1,11 @@
 { stdenv, fetchurl, coq, ncurses, which
 , graphviz, withDoc ? false
-, src, patches ? []
+, src, name, patches ? []
 }:
 
 stdenv.mkDerivation {
 
-  name = "coq-ssreflect-1.6-${coq.coq-version}";
-
+  inherit name;
   inherit src;
 
   nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];

@@ -114,6 +114,7 @@ let
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (optionalString (versionOlder "8.0.1" ghc.version) "--ghc-option=-j$NIX_BUILD_CORES")
   ] ++ optionals isGhcjs [
     "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
     "--ghcjs"
@@ -244,9 +245,41 @@ stdenv.mkDerivation ({
     runHook postConfigure
   '';
 
+  # The darwin pre/post build sections are a workaround https://github.com/haskell/cabal/issues/4183
+  # It seems like --extra-lib-dirs from the previous steps is not detected properly,
+  # to work around this we build using a DYLD_LIBRARY_PATH and fixup the build afterwards.
   buildPhase = ''
     runHook preBuild
+    ${optionalString stdenv.isDarwin ''
+      local inputClosure=""
+      for i in $propagatedNativeBuildInputs $nativeBuildInputs; do
+        findInputs $i inputClosure propagated-native-build-inputs
+      done
+      local -a inputLibs=()
+      for p in $inputClosure; do
+        if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
+          continue
+        fi
+        if [ -d "$p/lib" ]; then
+          inputLibs+="$p/lib"
+        fi
+      done
+
+      for lib in $inputLibs; do
+        export DYLD_LIBRARY_PATH="$lib:''${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+      done
+    ''}
     ${setupCommand} build ${buildTarget}${crossCabalFlagsString}
+    ${optionalString stdenv.isDarwin ''
+      unset DYLD_LIBRARY_PATH
+
+      local outputLib=dist/build/*-ghc${ghc.version}.dylib
+      for lib in $inputLib/*.dylib; do
+        for name in $(otool -L $outputLib | awk '$1 ~ /^'$(basename lib)'/ {print $1}' | cat); do
+          install_name_tool -change $name $lib $outputLib
+        done
+      done
+    ''}
     runHook postBuild
   '';
 
@@ -304,7 +337,7 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"
         ${shellHook}
       '';
     };

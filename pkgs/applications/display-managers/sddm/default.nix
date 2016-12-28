@@ -57,7 +57,7 @@ let
 
     meta = with stdenv.lib; {
       description = "QML based X11 display manager";
-      homepage = https://github.com/sddm/sddm;
+      homepage = "https://github.com/sddm/sddm";
       platforms = platforms.linux;
       maintainers = with maintainers; [ abbradar ttuegel ];
     };

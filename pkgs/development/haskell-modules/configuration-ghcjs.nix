@@ -76,6 +76,7 @@ self: super:
     '';
   });
 
+  # experimental
   ghcjs-ffiqq = self.callPackage
     ({ mkDerivation, base, template-haskell, ghcjs-base, split, containers, text, ghc-prim
      }:
@@ -85,21 +86,48 @@ self: super:
        src = pkgs.fetchFromGitHub {
          owner = "ghcjs";
          repo = "ghcjs-ffiqq";
-         rev = "da31b18582542fcfceade5ef6b2aca66662b9e20";
-         sha256 = "1mkp8p9hispyzvkb5v607ihjp912jfip61id8d42i19k554ssp8y";
+         rev = "b52338c2dcd3b0707bc8aff2e171411614d4aedb";
+         sha256 = "08zxfm1i6zb7n8vbz3dywdy67vkixfyw48580rwfp48rl1s2z1c7";
        };
        libraryHaskellDepends = [
          base template-haskell ghcjs-base split containers text ghc-prim
        ];
        description = "FFI QuasiQuoter for GHCJS";
-       license = stdenv.lib.licenses.mit;
+       license = pkgs.stdenv.lib.licenses.mit;
      }) {};
+  # experimental
+  ghcjs-vdom = self.callPackage
+    ({ mkDerivation, base, ghc-prim, ghcjs-ffiqq, ghcjs-base, ghcjs-prim
+      , containers, split, template-haskell
+    }:
+    mkDerivation rec {
+      pname = "ghcjs-vdom";
+      version = "0.2.0.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "ghcjs";
+        repo = pname;
+        rev = "1c1175ba22eca6d7efa96f42a72290ade193c148";
+        sha256 = "0c6l1dk2anvz94yy5qblrfh2iv495rjq4qmhlycc24dvd02f7n9m";
+      };
+      libraryHaskellDepends = [
+        base ghc-prim ghcjs-ffiqq ghcjs-base ghcjs-prim containers split
+        template-haskell
+      ];
+      license = pkgs.stdenv.lib.licenses.mit;
+      description = "bindings for https://github.com/Matt-Esch/virtual-dom";
+      inherit (src) homepage;
+    }) {};
 
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
-    libraryHaskellDepends = [ self.ghcjs-base ] ++
-      removeLibraryHaskellDepends [
-        "glib" "gtk" "gtk3" "webkitgtk" "webkitgtk3"
-      ] drv.libraryHaskellDepends;
+    libraryHaskellDepends = with self; [
+      ghcjs-base ghcjs-dom-jsffi text transformers
+    ];
+    configureFlags = [ "-fjsffi" "-f-webkit" ];
+  });
+
+  ghcjs-dom-jsffi = overrideCabal super.ghcjs-dom-jsffi (drv: {
+    libraryHaskellDepends = [ self.ghcjs-base self.text ];
+    isLibrary = true;
   });
 
   ghc-paths = overrideCabal super.ghc-paths (drv: {
@@ -153,13 +181,12 @@ self: super:
   });
 
   semigroups = addBuildDepends super.semigroups [ self.hashable self.unordered-containers self.text self.tagged ];
-  # triggers an internal pattern match failure in haddock
-  # https://github.com/haskell/haddock/issues/553
-  wai = dontHaddock super.wai;
 
   transformers-compat = overrideCabal super.transformers-compat (drv: {
     configureFlags = [];
   });
 
-
+  # triggers an internal pattern match failure in haddock
+  # https://github.com/haskell/haddock/issues/553
+  wai = dontHaddock super.wai;
 }

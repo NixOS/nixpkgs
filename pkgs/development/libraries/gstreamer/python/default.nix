@@ -6,14 +6,14 @@
 let
   inherit (pythonPackages) python pygobject3;
 in stdenv.mkDerivation rec {
-  name = "gst-python-1.8.2";
+  name = "gst-python-1.10.2";
 
   src = fetchurl {
     urls = [
       "${meta.homepage}/src/gst-python/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "15sdfa6lq5pswvi09vk51cs30yf8wr2rlm9myhb4q0c2jhiial2g";
+    sha256 = "1sljnqkxf2ix6yzghrapw5irl0rbp8aa8w2hggk7i6d9js10ls71";
   };
 
   patches = [ ./different-path-with-pygobject.patch ];

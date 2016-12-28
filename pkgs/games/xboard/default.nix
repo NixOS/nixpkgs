@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     inherit (s) version;
     description = ''GUI for chess engines'';
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl3Plus;
   };
 }

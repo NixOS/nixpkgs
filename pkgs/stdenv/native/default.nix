@@ -1,4 +1,8 @@
-{ system, allPackages ? import ../../.., config }:
+{ lib, allPackages
+, system, platform, crossSystem, config
+}:
+
+assert crossSystem == null;
 
 rec {
 
@@ -126,8 +130,9 @@ rec {
   } // {inherit fetchurl;};
 
   stdenvBoot1Pkgs = allPackages {
-    inherit system;
-    bootStdenv = stdenvBoot1;
+    inherit system platform crossSystem config;
+    allowCustomOverrides = false;
+    stdenv = stdenvBoot1;
   };
 
 

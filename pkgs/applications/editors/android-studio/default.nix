@@ -10,9 +10,15 @@
 , gnutar
 , gzip
 , jdk
+, fontconfig
+, freetype
 , libpulseaudio
 , libX11
+, libXext
+, libXi
 , libXrandr
+, libXrender
+, libXtst
 , makeWrapper
 , pciutils
 , pkgsi686Linux
@@ -27,8 +33,8 @@
 
 let
 
-  version = "2.1.3.0";
-  build = "143.3101438";
+  version = "2.2.3.0";
+  build = "145.3537739";
 
   androidStudio = stdenv.mkDerivation {
     name = "android-studio";
@@ -75,11 +81,23 @@ let
         # For Android emulator
         libpulseaudio
         libX11
+        libXext
+        libXrender
+        libXtst
+        libXi
+        freetype
+        fontconfig
       ]}" --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb"
     '';
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
-      sha256 = "1xlz3ibqrm4ckw4lgbkzbxvpgg0y8hips9b54p4d15f34i0r8bvj";
+      sha256 = "10fmffkvvbnmgjxb4rq7rjwnn16jp5phw6div4n7hh2ad6spf8wq";
+    };
+    meta = {
+      description = "The Official IDE for Android";
+      homepage = https://developer.android.com/studio/index.html;
+      license = stdenv.lib.licenses.asl20;
+      platforms = [ "x86_64-linux" ];
     };
   };
 

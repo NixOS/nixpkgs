@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     tar Jxvf ${srcManpages} debian/manpages
-    gzip -9 debian/manpages/stun.1
-    gzip -9 debian/manpages/stund.8
+    gzip -9n debian/manpages/stun.1
+    gzip -9n debian/manpages/stund.8
   '';
 
   installPhase = ''

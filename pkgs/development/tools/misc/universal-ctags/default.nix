@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
-  version = "2016-07-06";
+  version = "2016-12-17";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "44a325a9db23063b231f6f041af9aaf19320d9b9";
-    sha256 = "11vq901h121ckqgw52k9x7way3q38b7jd08vr1n2sjz7kxh0zdd0";
+    rev = "3093f73e81cddbea5d122dccd4fd9a6323ebbbd3";
+    sha256 = "091359v3p865d39gchpc1x5qplf1s1y4nsph344ng5x1nkx44qsi";
   };
 
   buildInputs = [ autoreconfHook pkgconfig ];
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     sed -i 's|/usr/bin/env perl|${perl}/bin/perl|' misc/optlib2c
   '';
+
+  doCheck = true;
+
+  checkFlags = "units";
 
   meta = with stdenv.lib; {
     description = "A maintained ctags implementation";

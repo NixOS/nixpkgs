@@ -20,6 +20,8 @@ in
 
       package = mkOption {
         type = types.package;
+        default = pkgs.riak;
+        defaultText = "pkgs.riak";
         example = literalExample "pkgs.riak";
         description = ''
           Riak package to use.
@@ -68,6 +70,14 @@ in
         '';
       };
 
+      extraAdvancedConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Additional text to be appended to <filename>advanced.config</filename>.
+        '';
+      };
+
     };
 
   };
@@ -86,6 +96,10 @@ in
       platform_data_dir = ${cfg.dataDir}
 
       ${cfg.extraConfig}
+    '';
+
+    environment.etc."riak/advanced.config".text = ''
+      ${cfg.extraAdvancedConfig}
     '';
 
     users.extraUsers.riak = {

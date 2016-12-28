@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
       substituteInPlace src/dmd/posix.mak \
           --replace g++ clang++ \
           --replace MACOSX_DEPLOYMENT_TARGET MACOSX_DEPLOYMENT_TARGET_
-
-      # Was not able to compile on darwin due to "__inline_isnanl"
-      # being undefined.
-      substituteInPlace src/dmd/root/port.c --replace __inline_isnanl __inline_isnan
   '';
 
   # Buid and install are based on http://wiki.dlang.org/Building_DMD

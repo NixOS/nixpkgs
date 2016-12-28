@@ -7,7 +7,7 @@
   # Include some utilities that are useful for installing or repairing
   # the system.
   environment.systemPackages = [
-    pkgs.w3m # needed for the manual anyway
+    pkgs.w3m-nox # needed for the manual anyway
     pkgs.testdisk # useful for repairing boot problems
     pkgs.mssys # for writing Microsoft boot sectors / MBRs
     pkgs.efibootmgr
@@ -42,8 +42,6 @@
     # Some compression/archiver tools.
     pkgs.unzip
     pkgs.zip
-    pkgs.dar # disk archiver
-    pkgs.cabextract
   ];
 
   # Include support for various filesystems.

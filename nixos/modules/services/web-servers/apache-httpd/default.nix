@@ -16,7 +16,19 @@ let
 
   phpMajorVersion = head (splitString "." php.version);
 
-  getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
+  mod_perl = pkgs.mod_perl.override { apacheHttpd = httpd; };
+
+  defaultListen = cfg: if cfg.enableSSL
+    then [{ip = "*"; port = 443;}]
+    else [{ip = "*"; port = 80;}];
+
+  getListen = cfg:
+    let list = (lib.optional (cfg.port != 0) {ip = "*"; port = cfg.port;}) ++ cfg.listen;
+    in if list == []
+        then defaultListen cfg
+        else list;
+
+  listenToString = l: "${l.ip}:${toString l.port}";
 
   extraModules = attrByPath ["extraModules"] [] mainCfg;
   extraForeignModules = filter isAttrs extraModules;
@@ -25,10 +37,13 @@ let
 
   makeServerInfo = cfg: {
     # Canonical name must not include a trailing slash.
-    canonicalName =
-      (if cfg.enableSSL then "https" else "http") + "://" +
-      cfg.hostName +
-      (if getPort cfg != (if cfg.enableSSL then 443 else 80) then ":${toString (getPort cfg)}" else "");
+    canonicalNames =
+      let defaultPort = (head (defaultListen cfg)).port; in
+      map (port:
+        (if cfg.enableSSL then "https" else "http") + "://" +
+        cfg.hostName +
+        (if port != defaultPort then ":${toString port}" else "")
+        ) (map (x: x.port) (getListen cfg));
 
     # Admin address: inherit from the main server if not specified for
     # a virtual host.
@@ -63,6 +78,7 @@ let
           robotsEntries = "";
           startupScript = "";
           enablePHP = false;
+          enablePerl = false;
           phpOptions = "";
           options = {};
           documentRoot = null;
@@ -224,7 +240,7 @@ let
         ++ (map (svc: svc.robotsEntries) subservices)));
 
   in ''
-    ServerName ${serverInfo.canonicalName}
+    ${concatStringsSep "\n" (map (n: "ServerName ${n}") serverInfo.canonicalNames)}
 
     ${concatMapStrings (alias: "ServerAlias ${alias}\n") cfg.serverAliases}
 
@@ -326,9 +342,10 @@ let
     </IfModule>
 
     ${let
-        ports = map getPort allHosts;
-        uniquePorts = uniqList {inputList = ports;};
-      in concatMapStrings (port: "Listen ${toString port}\n") uniquePorts
+        listen = concatMap getListen allHosts;
+        toStr = listen: "Listen ${listenToString listen}\n";
+        uniqueListen = uniqList {inputList = map toStr listen;};
+      in concatStrings uniqueListen
     }
 
     User ${mainCfg.user}
@@ -341,6 +358,7 @@ let
           ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
           ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
           ++ optional enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
+          ++ optional enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
       in concatMapStrings load allModules
@@ -382,15 +400,15 @@ let
 
     # Always enable virtual hosts; it doesn't seem to hurt.
     ${let
-        ports = map getPort allHosts;
-        uniquePorts = uniqList {inputList = ports;};
-        directives = concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts;
+        listen = concatMap getListen allHosts;
+        uniqueListen = uniqList {inputList = listen;};
+        directives = concatMapStrings (listen: "NameVirtualHost ${listenToString listen}\n") uniqueListen;
       in optionalString (!version24) directives
     }
 
     ${let
         makeVirtualHost = vhost: ''
-          <VirtualHost *:${toString (getPort vhost)}>
+          <VirtualHost ${concatStringsSep " " (map listenToString (getListen vhost))}>
               ${perServerConf false vhost}
           </VirtualHost>
         '';
@@ -400,6 +418,8 @@ let
 
 
   enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
+
+  enablePerl = mainCfg.enablePerl || any (svc: svc.enablePerl) allSubservices;
 
 
   # Generate the PHP configuration file.  Should probably be factored
@@ -565,6 +585,12 @@ in
         '';
       };
 
+      enablePerl = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the Perl module (mod_perl).";
+      };
+
       phpOptions = mkOption {
         type = types.lines;
         default = "";
@@ -627,6 +653,8 @@ in
                                     && mainCfg.sslServerKey != null;
                      message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
+
+    warnings = map (cfg: ''apache-httpd's port option is deprecated. Use listen = [{/*ip = "*"; */ port = ${toString cfg.port}";}]; instead'' ) (lib.filter (cfg: cfg.port != 0) allHosts);
 
     users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
@@ -712,5 +740,4 @@ in
       };
 
   };
-
 }
