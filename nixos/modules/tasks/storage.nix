@@ -1,27 +1,73 @@
 { lib, ... }:
 
-with lib;
-
 let
-  sizeType = types.either types.int types.str;
+  inherit (lib) mkOption types;
+
+  sizeUnits = {
+    b = "byte";
+    kib = "kibibyte";
+    mib = "mebibyte";
+    gib = "gibibyte";
+    tib = "tebibyte";
+    pib = "pebibyte";
+    eib = "exbibyte";
+    zib = "zebibyte";
+    yib = "yobibyte";
+    kb = "kilobyte";
+    mb = "megabyte";
+    gb = "gigabyte";
+    tb = "terabyte";
+    pb = "petabyte";
+    eb = "exabyte";
+    zb = "zettabyte";
+    yb = "yottabyte";
+  };
+
+  assertUnits = attrs: let
+    quoteUnit = unit: "`${unit}'";
+    unitList = lib.attrNames sizeUnits;
+    validStr = lib.concatMapStringsSep ", " quoteUnit (lib.init unitList)
+             + " or ${quoteUnit (lib.last unitList)}";
+    errSize = unit: "Size for ${quoteUnit unit} has to be an integer.";
+    errUnit = unit: "Unit ${quoteUnit unit} is not valid, "
+                  + "it has to be one of ${validStr}.";
+    errEmpty = "Size units attribute set cannot be empty.";
+    assertSize = unit: size: lib.optional (!lib.isInt size) (errSize unit);
+    assertUnit = unit: size: if sizeUnits ? ${unit} then assertSize unit size
+                             else lib.singleton (errUnit unit);
+    assertions = if attrs == {} then lib.singleton errEmpty
+                 else lib.flatten (lib.mapAttrsToList assertUnit attrs);
+    strAssertions = lib.concatStringsSep "\n" (assertions);
+  in if assertions == [] then true else builtins.trace strAssertions false;
+
+  sizeType = lib.mkOptionType {
+    name = "size";
+    description = "\"fill\", integer in megabytes or attrset of unit -> size";
+    check = s: s == "fill" || lib.isInt s || (lib.isAttrs s && assertUnits s);
+    merge = lib.mergeEqualOption;
+  };
+
   deviceType = types.str;
   volgroupType = types.str;
 
   commonOptions = {
-    grow = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Grow the partition to the remaining size of the target device.
-      '';
-    };
-
     size = mkOption {
-      type = types.nullOr sizeType;
-      default = null;
+      type = sizeType;
+      example = { gib = 1; mb = 234; };
       description = ''
-        Size of the partition either as an integer in megabytes or
-        as a string with a size multiplier suffix (M, G, T, ...).
+        Size of the partition either as an integer in megabytes, an attribute
+        set of size units or the special string <literal>fill</iiteral> which
+        uses the remaining size of the target device.
+
+        Allowed size units are:
+        <variablelist>
+          ${lib.concatStrings (lib.mapAttrsToList (size: desc: ''
+          <varlistentry>
+            <term><option>${size}</option></term>
+            <listitem><para>${desc}</para></listitem>
+          </varlistentry>
+          '') sizeUnits)}
+        </variablelist>
       '';
     };
 
