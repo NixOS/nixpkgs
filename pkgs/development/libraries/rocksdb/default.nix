@@ -36,10 +36,13 @@ stdenv.mkDerivation rec {
   JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
 
   buildFlags = [
+    "shared_lib"
     "static_lib"
   ];
 
   installFlags = [
+    "install-shared"
+    "install-static"
     "INSTALL_PATH=\${out}"
   ];
 
