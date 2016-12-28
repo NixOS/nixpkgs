@@ -125,13 +125,13 @@ in pkgs.lib.mapAttrs mkStorageTest {
         disk.vdb.clear = true;
         disk.vdb.initlabel = true;
 
-        partition.boot.size = "100M";
+        partition.boot.size.mb = 100;
         partition.boot.targetDevice = "disk.vdb";
-        partition.swap.size = "500M";
+        partition.swap.size.mb = 500;
         partition.swap.targetDevice = "disk.vdb";
-        partition.nix.size = "500M";
+        partition.nix.size.mb = 500;
         partition.nix.targetDevice = "disk.vdb";
-        partition.root.grow = true;
+        partition.root.size = "fill";
         partition.root.targetDevice = "disk.vdb";
       };
 
@@ -179,17 +179,17 @@ in pkgs.lib.mapAttrs mkStorageTest {
         disk.vdb.clear = true;
         disk.vdb.initlabel = true;
 
-        partition.swap1.size = "500M";
+        partition.swap1.size.mb = 500;
         partition.swap1.targetDevice = "disk.vdb";
-        partition.btrfs1.grow = true;
+        partition.btrfs1.size = "fill";
         partition.btrfs1.targetDevice = "disk.vdb";
 
         disk.vdc.clear = true;
         disk.vdc.initlabel = true;
 
-        partition.swap2.size = "500M";
+        partition.swap2.size.mb = 500;
         partition.swap2.targetDevice = "disk.vdc";
-        partition.btrfs2.grow = true;
+        partition.btrfs2.size = "fill";
         partition.btrfs2.targetDevice = "disk.vdc";
 
         btrfs.root.data = 0;
@@ -227,11 +227,11 @@ in pkgs.lib.mapAttrs mkStorageTest {
         disk.vdb.clear = true;
         disk.vdb.initlabel = true;
 
-        partition.swap.size = "500M";
+        partition.swap.size.mb = 500;
         partition.swap.targetDevice = "disk.vdb";
-        partition.boot.size = "100M";
+        partition.boot.size.mb = 100;
         partition.boot.targetDevice = "disk.vdb";
-        partition.root.grow = true;
+        partition.root.size = "fill";
         partition.root.targetDevice = "disk.vdb";
       };
 
@@ -269,21 +269,21 @@ in pkgs.lib.mapAttrs mkStorageTest {
         disk.vdb.clear = true;
         disk.vdb.initlabel = true;
 
-        partition.raid01.size = "200M";
+        partition.raid01.size.mb = 200;
         partition.raid01.targetDevice = "disk.vdb";
-        partition.swap1.size = "500M";
+        partition.swap1.size.mb = 500;
         partition.swap1.targetDevice = "disk.vdb";
-        partition.raid11.grow = true;
+        partition.raid11.size = "fill";
         partition.raid11.targetDevice = "disk.vdb";
 
         disk.vdc.clear = true;
         disk.vdc.initlabel = true;
 
-        partition.raid02.size = "200M";
+        partition.raid02.size.mb = 200;
         partition.raid02.targetDevice = "disk.vdc";
-        partition.swap2.size = "500M";
+        partition.swap2.size.mb = 500;
         partition.swap2.targetDevice = "disk.vdc";
-        partition.raid12.grow = true;
+        partition.raid12.size = "fill";
         partition.raid12.targetDevice = "disk.vdc";
 
         mdraid.boot.level = 1;
@@ -331,13 +331,13 @@ in pkgs.lib.mapAttrs mkStorageTest {
         disk.vdb.clear = true;
         disk.vdb.initlabel = true;
 
-        partition.raid1.grow = true;
+        partition.raid1.size = "fill";
         partition.raid1.targetDevice = "disk.vdb";
 
         disk.vdc.clear = true;
         disk.vdc.initlabel = true;
 
-        partition.raid2.grow = true;
+        partition.raid2.size = "fill";
         partition.raid2.targetDevice = "disk.vdc";
 
         mdraid.raid.level = 1;
@@ -350,13 +350,13 @@ in pkgs.lib.mapAttrs mkStorageTest {
 
         volgroup.nixos.devices = [ "luks.volroot" ];
 
-        logvol.boot.size = "200M";
+        logvol.boot.size.mb = 200;
         logvol.boot.group = "volgroup.nixos";
 
-        logvol.swap.size = "500M";
+        logvol.swap.size.mb = 500;
         logvol.swap.group = "volgroup.nixos";
 
-        logvol.root.grow = true;
+        logvol.root.size = "fill";
         logvol.root.group = "volgroup.nixos";
       };
 
