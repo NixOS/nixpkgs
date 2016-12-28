@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy35, fetchFromGitHub, urwid }:
+{ stdenv, buildPythonPackage, isPy35, fetchFromGitHub, urwid, pythonOlder }:
 
 buildPythonPackage rec {
   name = "urlscan-${version}";
