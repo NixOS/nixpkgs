@@ -217,8 +217,8 @@
   ./services/logging/logstash.nix
   ./services/logging/packetbeat.nix
   ./services/logging/rsyslogd.nix
-  ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
+  ./services/logging/syslog-ng.nix
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
   ./services/mail/exim.nix
