@@ -778,6 +778,8 @@ in
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
+  codesearch = callPackage ../tools/text/codesearch { };
+
   contacts = callPackage ../tools/misc/contacts {
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
   };
@@ -864,6 +866,7 @@ in
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
+    boost = boost160;
     ruby = ruby_2_1;
   };
 
@@ -2158,6 +2161,8 @@ in
   heimdall = callPackage ../tools/misc/heimdall { };
 
   hevea = callPackage ../tools/typesetting/hevea { };
+
+  hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
 
@@ -5790,7 +5795,8 @@ in
     ruby_2_0_0
     ruby_2_1_10
     ruby_2_2_5
-    ruby_2_3_3;
+    ruby_2_3_3
+    ruby_2_4_0;
 
   # Ruby aliases
   ruby = ruby_2_3;
@@ -5799,6 +5805,7 @@ in
   ruby_2_1 = ruby_2_1_10;
   ruby_2_2 = ruby_2_2_5;
   ruby_2_3 = ruby_2_3_3;
+  ruby_2_4 = ruby_2_4_0;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
@@ -8942,6 +8949,8 @@ in
 
   pg_repack = callPackage ../servers/sql/postgresql/pg_repack {};
 
+  pg_similarity = callPackage ../servers/sql/postgresql/pg_similarity {};
+
   phonon = callPackage ../development/libraries/phonon {};
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
@@ -9173,6 +9182,8 @@ in
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
 
   qwt = callPackage ../development/libraries/qwt {};
+
+  qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix { };
 
   qxt = callPackage ../development/libraries/qxt {};
 
@@ -12570,6 +12581,8 @@ in
     inherit (gnome2) GConf ORBit2 metacity;
   };
 
+  confclerk = callPackage ../applications/misc/confclerk { };
+
   copyq = callPackage ../applications/misc/copyq { };
 
   coriander = callPackage ../applications/video/coriander {
@@ -13594,6 +13607,32 @@ in
 
   imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
 
+  imagemagick7_light = lowPrio (imagemagick.override {
+    bzip2 = null;
+    zlib = null;
+    libX11 = null;
+    libXext = null;
+    libXt = null;
+    fontconfig = null;
+    freetype = null;
+    ghostscript = null;
+    libjpeg = null;
+    lcms2 = null;
+    openexr = null;
+    libpng = null;
+    librsvg = null;
+    libtiff = null;
+    libxml2 = null;
+    openjpeg = null;
+    libwebp = null;
+  });
+
+  imagemagick7 = lowPrio (imagemagickBig.override {
+    ghostscript = null;
+  });
+
+  imagemagick7Big = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix { });
+
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
@@ -14052,6 +14091,8 @@ in
 
   normalize = callPackage ../applications/audio/normalize { };
 
+  mm = callPackage ../applications/networking/instant-messengers/mm { };
+
   mplayer = callPackage ../applications/video/mplayer ({
     pulseSupport = config.pulseaudio or false;
     libdvdnav = libdvdnav_4_2_1;
@@ -14201,6 +14242,8 @@ in
   mupdf = callPackage ../applications/misc/mupdf { };
 
   diffpdf = callPackage ../applications/misc/diffpdf { };
+
+  mlocate = callPackage ../tools/misc/mlocate { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
 
@@ -14482,6 +14525,11 @@ in
     inherit (darwin.stubs) rez setfile;
   };
 
+  qemu_28 = callPackage ../applications/virtualization/qemu/2.8.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
+    inherit (darwin.stubs) rez setfile;
+  };
+
   qgis = callPackage ../applications/gis/qgis {};
 
   qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
@@ -14503,6 +14551,8 @@ in
   qscreenshot = callPackage ../applications/graphics/qscreenshot {
     qt = qt4;
   };
+  
+  qsyncthingtray = qt5.callPackage ../applications/misc/qsyncthingtray { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
@@ -17094,6 +17144,8 @@ in
   cytoscape = callPackage ../applications/science/misc/cytoscape { };
 
   fityk = callPackage ../applications/science/misc/fityk { };
+
+  gplates = callPackage ../applications/science/misc/gplates { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 

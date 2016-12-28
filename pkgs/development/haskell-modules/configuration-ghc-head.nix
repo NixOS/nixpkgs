@@ -19,6 +19,7 @@ self: super: {
   directory = null;
   filepath = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hoopl = null;
   hpc = null;
