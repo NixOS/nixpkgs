@@ -51,7 +51,7 @@ let
       }
 
       sub nixpart {
-        $machine->succeed("nixpart -v --xml /etc/storage.xml");
+        $machine->succeed('nixpart -v --xml /etc/storage.xml >&2');
         ensureSanity;
       }
 
