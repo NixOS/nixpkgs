@@ -16,10 +16,28 @@ in {
         type = types.bool;
       };
 
+      ip = mkOption {
+        description = "IP address to listen on.";
+        default = "0.0.0.0";
+        type = types.str;
+      };
+
       port = mkOption {
         description = "Mesos Master port";
         default = 5050;
         type = types.int;
+      };
+
+      advertiseIp = mkOption {
+        description = "IP address advertised to reach this master.";
+        default = null;
+        type = types.nullOr types.str;
+      };
+
+      advertisePort = mkOption {
+        description = "Port advertised to reach this Mesos master.";
+        default = null;
+        type = types.nullOr types.int;
       };
 
       zk = mkOption {
@@ -84,7 +102,10 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${pkgs.mesos}/bin/mesos-master \
+            --ip=${cfg.ip} \
             --port=${toString cfg.port} \
+            ${optionalString (cfg.advertiseIp != null) "--advertise_ip=${cfg.advertiseIp}"} \
+            ${optionalString (cfg.advertisePort  != null) "--advertise_port=${toString cfg.advertisePort}"} \
             ${if cfg.quorum == 0
               then "--registry=in_memory"
               else "--zk=${cfg.zk} --registry=replicated_log --quorum=${toString cfg.quorum}"} \
