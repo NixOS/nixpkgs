@@ -42,7 +42,7 @@ let
 
   sizeType = lib.mkOptionType {
     name = "size";
-    description = "\"fill\", integer in megabytes or attrset of unit -> size";
+    description = "\"fill\", integer in bytes or attrset of unit -> size";
     check = s: s == "fill" || lib.isInt s || (lib.isAttrs s && assertUnits s);
     merge = lib.mergeEqualOption;
   };
@@ -54,10 +54,11 @@ let
     size = mkOption {
       type = sizeType;
       example = { gib = 1; mb = 234; };
+      apply = s: if lib.isInt s then { b = s; } else s;
       description = ''
-        Size of the partition either as an integer in megabytes, an attribute
-        set of size units or the special string <literal>fill</iiteral> which
-        uses the remaining size of the target device.
+        Size of the partition either as an integer in bytes, an attribute set of
+        size units or the special string <literal>fill</iiteral> which uses the
+        remaining size of the target device.
 
         Allowed size units are:
         <variablelist>
