@@ -34,6 +34,7 @@ let
 
       ###### implementation
       config = mkIf cfg.enable {
+        environment.systemPackages = [ pkg ];
         systemd.services.${variant} = {
           description = "BIRD Internet Routing Daemon";
           wantedBy = [ "multi-user.target" ];

@@ -44,16 +44,6 @@ let
     inherit (data) version;
     name = "enpass-${version}";
 
-    desktopItem = makeDesktopItem {
-      name = "Enpass";
-      exec = "$out/bin/Enpass";
-      #icon = "Enpass";
-      desktopName = "Enpass";
-      genericName = "Password manager";
-      categories = "Application;Security;";
-    };
-
-
     src = fetchurl {
       inherit (data) sha256;
       url = "${baseUrl}/${data.path}";
@@ -74,11 +64,12 @@ let
     installPhase=''
       mkdir $out
       cp -r opt/Enpass/*  $out
+      cp -r usr/* $out
+      rm $out/bin/runenpass.sh
 
-      # Make desktop item
-      mkdir -p "$out"/share/applications
-      cp "$desktopItem"/share/applications/* "$out"/share/applications/
-      mkdir -p "$out"/share/icons
+      sed \
+      	-i s@/opt/Enpass/bin/runenpass.sh@$out/bin/Enpass@ \
+      	$out/share/applications/enpass.desktop 
 
       patchelf  \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
@@ -88,7 +79,8 @@ let
         --set LD_LIBRARY_PATH "${libPath}:$out/lib:$out/plugins/sqldrivers" \
         --set QT_PLUGIN_PATH "$out/plugins" \
         --set QT_QPA_PLATFORM_PLUGIN_PATH "$out/plugins/platforms" \
-        --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
+        --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb" \
+        --set HIDE_TOOLBAR_LINE 0
     '';
   };
   updater = {

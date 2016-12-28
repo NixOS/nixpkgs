@@ -113,6 +113,7 @@ let
 
         configureFlags = ["--enable-shared" "--enable-pthread"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
             # that tk is installed
@@ -154,7 +155,7 @@ let
           license = stdenv.lib.licenses.ruby;
           homepage = http://www.ruby-lang.org/en/;
           description = "The Ruby language";
-          maintainers = [ stdenv.lib.maintainers.vrthra ];
+          maintainers = with stdenv.lib.maintainers; [ vrthra manveru ];
           platforms = stdenv.lib.platforms.all;
         };
 
@@ -216,6 +217,14 @@ in {
     sha256 = {
       src = "1dqmh42p6siv9aqzdjldsnhljj3f2h30m0v8cf25icjmqp40h514";
       git = "0cwjf0nrzaa5g81bw0qp65byyadhxvbnvprkshv3ckjl7yi46zf6";
+    };
+  };
+
+  ruby_2_4_0 = generic {
+    version = rubyVersion "2" "4" "0" "";
+    sha256 = {
+      src = "0gcyn9328w2vma882l71c9v9ygmmsj2z8j1l44c4l2x92nyx0bqm";
+      git = "1w9zyx8xmka8jdiha57snnbfls2r6dc9g03d8cjx0nxkmwf3r2l3";
     };
   };
 }

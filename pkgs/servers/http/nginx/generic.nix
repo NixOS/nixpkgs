@@ -27,7 +27,6 @@ stdenv.mkDerivation {
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
-    "--with-http_image_filter_module"
     "--with-http_geoip_module"
     "--with-http_sub_module"
     "--with-http_dav_module"
@@ -44,6 +43,7 @@ stdenv.mkDerivation {
     # Install destination problems
     # "--with-http_perl_module"
   ] ++ optional withStream "--with-stream"
+    ++ optional (gd != null) "--with-http_image_filter_module"
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 

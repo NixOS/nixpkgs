@@ -1,12 +1,9 @@
 { stdenv, fetchFromGitHub, utillinux
-  ,autoconf, automake, libtool, gettext }:
+, autoconf, automake, libtool, gettext }:
 
 stdenv.mkDerivation rec {
   name = "fuse-${version}";
-
   version = "2.9.7";
-
-  #builder = ./builder.sh;
 
   src = fetchFromGitHub {
     owner = "libfuse";
@@ -16,8 +13,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ utillinux autoconf automake libtool gettext ];
-
-  inherit utillinux;
 
   preConfigure =
     ''
@@ -32,7 +27,7 @@ stdenv.mkDerivation rec {
 
       sed -e 's@/bin/@${utillinux}/bin/@g' -i lib/mount_util.c
       sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
-      
+
       ./makeconf.sh
     '';
 

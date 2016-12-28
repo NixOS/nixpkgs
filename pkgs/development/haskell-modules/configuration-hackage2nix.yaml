@@ -2068,10 +2068,13 @@ package-maintainers:
     - ghc-srcspan-plugin
     - located-base
   jb55:
-    - skeletons
+    - bson-lens
     - cased
+    - elm-export-persistent
     - pipes-csv
     - pipes-mongodb
+    - skeletons
+    - streaming-wai
   khumba:
     - hoppy-docs
     - hoppy-generator
