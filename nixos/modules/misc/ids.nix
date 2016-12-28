@@ -469,7 +469,7 @@
       ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
-      #asterisk = 192; # unused
+      asterisk = 192;
       plex = 193;
       sabnzbd = 194;
       #grafana = 196; #unused

@@ -5158,6 +5158,8 @@ in
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
+  lldb = llvmPackages.lldb;
+
   llvm = llvmPackages.llvm;
 
   llvm_39 = llvmPackages_39.llvm;
@@ -11703,8 +11705,7 @@ in
 
   eudev = callPackage ../os-specific/linux/eudev {};
 
-  # libudev.so.0
-  udev182 = callPackage ../os-specific/linux/udev/182.nix { };
+  libudev0-shim = callPackage ../os-specific/linux/libudev0-shim/default.nix { };
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
