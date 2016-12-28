@@ -28,6 +28,7 @@
 , writeTextFile
 , xkeyboard_config
 , zlib
+, fontsConf
 }:
 
 let
@@ -92,7 +93,8 @@ let
           libX11
 
         ]}" \
-        --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb"
+        --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+        --set FONTCONFIG_FILE ${fontsConf}
     '';
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";

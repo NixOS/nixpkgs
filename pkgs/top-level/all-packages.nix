@@ -12323,6 +12323,9 @@ in
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   android-studio = callPackage ../applications/editors/android-studio {
+    fontsConf = makeFontsConf {
+      fontDirectories = [];
+    };
   };
 
   antimony = qt5.callPackage ../applications/graphics/antimony {};
