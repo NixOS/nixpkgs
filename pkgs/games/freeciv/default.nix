@@ -16,6 +16,7 @@ let
 in
 stdenv.mkDerivation {
   name = "${name}${sdlName}${gtkName}-${version}";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/freeciv/${name}-${version}.tar.bz2";
@@ -30,7 +31,7 @@ stdenv.mkDerivation {
     ++ optional server readline
     ++ optional enableSqlite sqlite;
 
-  configureFlags = []
+  configureFlags = [ "--enable-shared" ]
     ++ optional sdlClient "--enable-client=sdl"
     ++ optional enableSqlite "--enable-fcdb=sqlite3"
     ++ optional (!gtkClient) "--enable-fcmp=cli"
