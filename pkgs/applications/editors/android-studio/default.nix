@@ -9,7 +9,6 @@
 , gnugrep
 , gnutar
 , gzip
-, jdk
 , fontconfig
 , freetype
 , libpulseaudio
@@ -50,7 +49,6 @@ let
         coreutils
         findutils
         gnugrep
-        jdk
         which
 
         # For Android emulator
