@@ -65,6 +65,15 @@ let
         git
 
       ]}" --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
+
+        # Crash at startup without these
+        fontconfig
+        freetype
+        libXext
+        libXi
+        libXrender
+        libXtst
+
         # Gradle wants libstdc++.so.6
         stdenv.cc.cc.lib
         # mksdcard wants 32 bit libstdc++.so.6
@@ -79,12 +88,6 @@ let
         # For Android emulator
         libpulseaudio
         libX11
-        libXext
-        libXrender
-        libXtst
-        libXi
-        freetype
-        fontconfig
       ]}" --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb"
     '';
     src = fetchurl {
