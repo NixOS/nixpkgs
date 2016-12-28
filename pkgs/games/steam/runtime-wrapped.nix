@@ -44,7 +44,7 @@ let
     libav
     atk
     # Only libraries are needed from those two
-    udev182
+    libudev0-shim
     networkmanager098
 
     # Verified games requirements
