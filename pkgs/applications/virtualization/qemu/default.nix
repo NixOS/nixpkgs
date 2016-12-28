@@ -137,6 +137,12 @@ stdenv.mkDerivation rec {
 
     # from http://git.qemu.org/?p=qemu.git;a=patch;h=ff55e94d23ae94c8628b0115320157c763eb3e06
     ./CVE-2016-9102.patch
+
+    (fetchpatch {
+      name = "qemu-CVE-2016-9911.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=791f97758e223de3290592d169f8e6339c281714";
+      sha256 = "0952mpc81h42k5kqsw42prnw5vw86r3j88wk5z4sr1xd1sg428d6";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch;
   hardeningDisable = [ "stackprotector" ];
 
