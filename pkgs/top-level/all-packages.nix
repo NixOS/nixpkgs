@@ -10764,7 +10764,9 @@ in
 
   criu = callPackage ../os-specific/linux/criu { };
 
-  cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
+  cryptsetup = callPackage ../os-specific/linux/cryptsetup {
+    openssl = openssl_1_1_0;
+  };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
