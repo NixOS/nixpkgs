@@ -273,8 +273,7 @@ in
                 StandardInput = "socket";
               } else {
                 Restart = "always";
-                Type = "forking";
-                PIDFile = "/run/sshd.pid";
+                Type = "simple";
               });
           };
       in
@@ -309,8 +308,6 @@ in
 
     services.openssh.extraConfig = mkOrder 0
       ''
-        PidFile /run/sshd.pid
-
         Protocol 2
 
         UsePAM yes
