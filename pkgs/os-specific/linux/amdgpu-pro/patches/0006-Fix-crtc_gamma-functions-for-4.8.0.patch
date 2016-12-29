@@ -1,7 +1,7 @@
-From b41eafa282a003cde9729e2ff486f55dc54f12c6 Mon Sep 17 00:00:00 2001
+From 12660ae02838f99c0784194908f7a189bc2ab0ae Mon Sep 17 00:00:00 2001
 From: "Luke A. Guest" <laguest@archeia.com>
 Date: Sun, 25 Sep 2016 16:56:47 +0100
-Subject: [PATCH 10/14] Fix crtc_gamma functions for 4.8.0
+Subject: [PATCH 06/11] Fix crtc_gamma functions for 4.8.0
 
 ---
  amd/amdgpu/dce_v10_0.c              | 19 +++++++++++++++++++
@@ -11,10 +11,10 @@ Subject: [PATCH 10/14] Fix crtc_gamma functions for 4.8.0
  4 files changed, 69 insertions(+)
 
 diff --git a/amd/amdgpu/dce_v10_0.c b/amd/amdgpu/dce_v10_0.c
-index 5f0044c..85378aa 100644
+index b1880ac..53746fa 100644
 --- a/amd/amdgpu/dce_v10_0.c
 +++ b/amd/amdgpu/dce_v10_0.c
-@@ -2671,6 +2671,24 @@ static void dce_v10_0_cursor_reset(struct drm_crtc *crtc)
+@@ -2627,6 +2627,24 @@ static void dce_v10_0_cursor_reset(struct drm_crtc *crtc)
  	}
  }
  
@@ -39,7 +39,7 @@ index 5f0044c..85378aa 100644
  static void dce_v10_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green,
  				    u16 *blue, uint32_t start, uint32_t size)
  {
-@@ -2685,6 +2703,7 @@ static void dce_v10_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green
+@@ -2641,6 +2659,7 @@ static void dce_v10_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green
  	}
  	dce_v10_0_crtc_load_lut(crtc);
  }
@@ -48,10 +48,10 @@ index 5f0044c..85378aa 100644
  static void dce_v10_0_crtc_destroy(struct drm_crtc *crtc)
  {
 diff --git a/amd/amdgpu/dce_v11_0.c b/amd/amdgpu/dce_v11_0.c
-index 8edc670..0129543 100644
+index b654b64..3edd66d 100644
 --- a/amd/amdgpu/dce_v11_0.c
 +++ b/amd/amdgpu/dce_v11_0.c
-@@ -2681,6 +2681,24 @@ static void dce_v11_0_cursor_reset(struct drm_crtc *crtc)
+@@ -2643,6 +2643,24 @@ static void dce_v11_0_cursor_reset(struct drm_crtc *crtc)
  	}
  }
  
@@ -76,7 +76,7 @@ index 8edc670..0129543 100644
  static void dce_v11_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green,
  				    u16 *blue, uint32_t start, uint32_t size)
  {
-@@ -2695,6 +2713,7 @@ static void dce_v11_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green
+@@ -2657,6 +2675,7 @@ static void dce_v11_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green
  	}
  	dce_v11_0_crtc_load_lut(crtc);
  }
@@ -85,10 +85,10 @@ index 8edc670..0129543 100644
  static void dce_v11_0_crtc_destroy(struct drm_crtc *crtc)
  {
 diff --git a/amd/amdgpu/dce_v8_0.c b/amd/amdgpu/dce_v8_0.c
-index 57e8014..d0d9267 100644
+index b598caa..d203894 100644
 --- a/amd/amdgpu/dce_v8_0.c
 +++ b/amd/amdgpu/dce_v8_0.c
-@@ -2525,6 +2525,24 @@ static void dce_v8_0_cursor_reset(struct drm_crtc *crtc)
+@@ -2478,6 +2478,24 @@ static void dce_v8_0_cursor_reset(struct drm_crtc *crtc)
  	}
  }
  
@@ -113,7 +113,7 @@ index 57e8014..d0d9267 100644
  static void dce_v8_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green,
  				    u16 *blue, uint32_t start, uint32_t size)
  {
-@@ -2539,6 +2557,7 @@ static void dce_v8_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green,
+@@ -2492,6 +2510,7 @@ static void dce_v8_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green,
  	}
  	dce_v8_0_crtc_load_lut(crtc);
  }
@@ -122,10 +122,10 @@ index 57e8014..d0d9267 100644
  static void dce_v8_0_crtc_destroy(struct drm_crtc *crtc)
  {
 diff --git a/amd/dal/amdgpu_dm/amdgpu_dm_types.c b/amd/dal/amdgpu_dm/amdgpu_dm_types.c
-index fedf490..c1f3c27 100644
+index edc8e86..32755a9 100644
 --- a/amd/dal/amdgpu_dm/amdgpu_dm_types.c
 +++ b/amd/dal/amdgpu_dm/amdgpu_dm_types.c
-@@ -995,6 +995,13 @@ void amdgpu_dm_crtc_destroy(struct drm_crtc *crtc)
+@@ -998,6 +998,13 @@ void amdgpu_dm_crtc_destroy(struct drm_crtc *crtc)
  	kfree(crtc);
  }
  
@@ -139,7 +139,7 @@ index fedf490..c1f3c27 100644
  static void amdgpu_dm_atomic_crtc_gamma_set(
  		struct drm_crtc *crtc,
  		u16 *red,
-@@ -1002,6 +1009,7 @@ static void amdgpu_dm_atomic_crtc_gamma_set(
+@@ -1005,6 +1012,7 @@ static void amdgpu_dm_atomic_crtc_gamma_set(
  		u16 *blue,
  		uint32_t start,
  		uint32_t size)
@@ -147,7 +147,7 @@ index fedf490..c1f3c27 100644
  {
  	struct drm_device *dev = crtc->dev;
  	struct drm_property *prop = dev->mode_config.prop_crtc_id;
-@@ -1009,6 +1017,10 @@ static void amdgpu_dm_atomic_crtc_gamma_set(
+@@ -1012,6 +1020,10 @@ static void amdgpu_dm_atomic_crtc_gamma_set(
  	crtc->state->mode.private_flags |= AMDGPU_CRTC_MODE_PRIVATE_FLAGS_GAMMASET;
  
  	drm_atomic_helper_crtc_set_property(crtc, prop, 0);
@@ -159,5 +159,5 @@ index fedf490..c1f3c27 100644
  
  static int dm_crtc_funcs_atomic_set_property(
 -- 
-2.10.1
+2.11.0
 

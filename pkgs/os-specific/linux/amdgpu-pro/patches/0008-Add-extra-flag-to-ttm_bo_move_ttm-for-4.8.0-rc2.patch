@@ -1,17 +1,17 @@
-From 69207f061e13e6f02418d5706d230135abcc1a72 Mon Sep 17 00:00:00 2001
+From 7c536e8b9f73926014c0622eb101f2cf174b507b Mon Sep 17 00:00:00 2001
 From: "Luke A. Guest" <laguest@archeia.com>
 Date: Sun, 25 Sep 2016 19:19:45 +0100
-Subject: [PATCH 12/14] Add extra flag to ttm_bo_move_ttm for >=4.8.0-rc2
+Subject: [PATCH 08/11] Add extra flag to ttm_bo_move_ttm for >=4.8.0-rc2
 
 ---
  amd/amdgpu/amdgpu_ttm.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
 diff --git a/amd/amdgpu/amdgpu_ttm.c b/amd/amdgpu/amdgpu_ttm.c
-index 145732a..dd691fa 100644
+index 89760f8..d102224 100644
 --- a/amd/amdgpu/amdgpu_ttm.c
 +++ b/amd/amdgpu/amdgpu_ttm.c
-@@ -344,7 +344,11 @@ static int amdgpu_move_vram_ram(struct ttm_buffer_object *bo,
+@@ -428,7 +428,11 @@ static int amdgpu_move_vram_ram(struct ttm_buffer_object *bo,
  	if (unlikely(r)) {
  		goto out_cleanup;
  	}
@@ -23,7 +23,7 @@ index 145732a..dd691fa 100644
  out_cleanup:
  	ttm_bo_mem_put(bo, &tmp_mem);
  	return r;
-@@ -377,7 +381,11 @@ static int amdgpu_move_ram_vram(struct ttm_buffer_object *bo,
+@@ -461,7 +465,11 @@ static int amdgpu_move_ram_vram(struct ttm_buffer_object *bo,
  	if (unlikely(r)) {
  		return r;
  	}
@@ -36,5 +36,5 @@ index 145732a..dd691fa 100644
  		goto out_cleanup;
  	}
 -- 
-2.10.1
+2.11.0
 
