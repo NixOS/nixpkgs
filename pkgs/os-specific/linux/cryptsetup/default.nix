@@ -5,11 +5,11 @@
 assert enablePython -> python2 != null;
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-1.7.1";
+  name = "cryptsetup-1.7.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v1.7/${name}.tar.xz";
-    sha256 = "1v0zj4181ahckn5hn95kg3zbqw944raz769wdam5cjwqriiqmp3k";
+    sha256 = "00nwd96m9yq4k3cayc04i5y7iakkzana35zxky6hpx2w8zl08axg";
   };
 
   configureFlags = [ "--enable-cryptsetup-reencrypt" "--with-crypto_backend=openssl" ]
