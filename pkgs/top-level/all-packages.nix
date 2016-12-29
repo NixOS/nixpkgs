@@ -8199,6 +8199,8 @@ in
 
   libmcs = callPackage ../development/libraries/libmcs { };
 
+  libmd = callPackage ../development/libraries/libmd { };
+
   libmemcached = callPackage ../development/libraries/libmemcached { };
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
