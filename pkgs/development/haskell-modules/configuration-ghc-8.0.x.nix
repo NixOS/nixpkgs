@@ -63,4 +63,7 @@ self: super: {
   # https://github.com/christian-marie/xxhash/issues/3
   xxhash = doJailbreak super.xxhash;
 
+  # https://github.com/Deewiant/glob/issues/8
+  Glob = doJailbreak super.Glob;
+
 }
