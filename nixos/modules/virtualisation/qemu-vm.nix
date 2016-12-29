@@ -432,13 +432,13 @@ in
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
             neededForBoot = true;
           };
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
             neededForBoot = true;
           };
         "/tmp/shared" =

@@ -129,7 +129,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,cache=loose
+    mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,veryloose
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -138,7 +138,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,cache=loose
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,veryloose
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
