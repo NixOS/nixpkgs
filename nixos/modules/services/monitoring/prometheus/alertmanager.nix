@@ -62,8 +62,8 @@ in {
       };
 
       listenAddress = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+        type = types.str;
+        default = "";
         description = ''
           Address to listen on for the web interface and API.
         '';

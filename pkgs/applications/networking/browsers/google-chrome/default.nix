@@ -51,10 +51,13 @@ let
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap
   ] ++ optional pulseSupport libpulseaudio;
+
+  suffix = if channel != "stable" then "-" + channel else "";
+
 in stdenv.mkDerivation rec {
   inherit version;
 
-  name = "google-chrome-${version}";
+  name = "google-chrome${suffix}-${version}";
 
   src = binary;
 

@@ -238,6 +238,22 @@ let
     };
   };
 
+  haskell-unicode-input-method = melpaBuild rec {
+    pname = "emacs-haskell-unicode-input-method";
+    version = "20110905.2307";
+    src = fetchFromGitHub {
+      owner = "roelvandijk";
+      repo = "emacs-haskell-unicode-input-method";
+      rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+      sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
+    };
+    packageRequires = [];
+    meta = {
+      homepage = "https://melpa.org/#haskell-unicode-input-method/";
+      license = lib.licenses.free;
+    };
+  };
+
   hindent = melpaBuild rec {
     pname = "hindent";
     version = external.hindent.version;

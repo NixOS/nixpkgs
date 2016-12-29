@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ghostscript atk gtk2 glib fontconfig freetype
-    libgnomecanvas libgnomeprint libgnomeprintui
+    libgnomecanvas
     pango libX11 xproto zlib poppler
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    libgnomeprint libgnomeprintui
   ];
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
@@ -47,11 +49,11 @@ stdenv.mkDerivation rec {
       cp $out/share/xournal/pixmaps/xournal.png $out/share/icons
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://xournal.sourceforge.net/;
     description = "Note-taking application (supposes stylus)";
-    maintainers = [ stdenv.lib.maintainers.guibert ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.guibert ];
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ darwin;
   };
 }
