@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, unzip, makeWrapper
-, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx,
+{ stdenv, fetchurl, unzip, makeWrapper , flex, bison, ncurses, buddy, tecla
+, libsigsegv, gmpxx, cvc4, cln
 }:
 
 let
 
-  version = "2.7";
+  version = "2.7.1";
 
   fullMaude = fetchurl {
-    url = "https://raw.githubusercontent.com/maude-team/full-maude/master/full-maude27c.maude";
-    sha256 = "08bg3gn1vyjy5k69hnynpzc9s1hnrbkyv6z08y1h2j37rlc4c18y";
+    url = "http://maude.cs.illinois.edu/w/images/c/ca/Full-Maude-${version}.zip";
+    sha256 = "0y4gn7n8vh24r24vckhpkd46hb5hqsbrm4w9zr6dz4paafq12fjc";
   };
 
 in
@@ -17,11 +17,13 @@ stdenv.mkDerivation rec {
   name = "maude-${version}";
 
   src = fetchurl {
-    url = "https://github.com/maude-team/maude/archive/v${version}-ext-hooks.tar.gz";
-    sha256 = "02p0snxm69rs8pvm93r91p881dw6p3bxmazr3cfw5pnxpgz0vjl0";
+    url = "http://maude.cs.illinois.edu/w/images/d/d8/Maude-${version}.tar.gz";
+    sha256 = "0jskn5dm8vvbd3mlryjxdb6wfpkvyx174wk7ci9a31aylxzpr25i";
   };
 
-  buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper unzip];
+  buildInputs = [
+    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper unzip cvc4 cln
+  ];
 
   hardeningDisable = [ "stackprotector" ] ++
     stdenv.lib.optionals stdenv.isi686 [ "pic" "fortify" ];
@@ -30,6 +32,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(
       --datadir="$out/share/maude"
       TECLA_LIBS="-ltecla -lncursesw"
+      LIBS="-lcln"
       CFLAGS="-O3" CXXFLAGS="-O3"
     )
   '';
@@ -38,11 +41,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
-    install -D -m 444 ${fullMaude} $out/share/maude/full-maude.maude
+    unzip ${fullMaude}
+    install -D -m 444 full-maude.maude $out/share/maude/full-maude.maude
   '';
 
   meta = {
-    homepage = "http://maude.cs.uiuc.edu/";
+    homepage = "http://maude.cs.illinois.edu/";
     description = "High-level specification language";
     license = stdenv.lib.licenses.gpl2;
 

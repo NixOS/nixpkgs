@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";
-  version = "4.8.0";
+  version = "4.9.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "12dk5hn1zlraqk2p0z8dv2xgsz0x9v8l3vcvf51fzj0v8b45j2d3";
+    sha256 = "1i0n071hiqxw1gisngw2jln3kcp9sh47n6fj5hdwqrvp7w20zwy0";
   };
 
   patches = lib.optionals enableFan [
