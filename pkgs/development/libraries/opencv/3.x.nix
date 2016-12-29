@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, unzip
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, unzip, fetchpatch
 , zlib
 , enableIpp ? false
 , enableContrib ? false
@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1l0w12czavgs0wzw1c594g358ilvfg2fn32cn8z7pv84zxj4g429";
   };
+
+  patches = lib.optional enablePython (fetchpatch { # Patch to fix FlannBasedMatcher under python
+      url = "https://github.com/opencv/opencv/commit/05cfe28612fd8dc8fb0ccb876df945c7b435dd26.patch";
+      sha256 = "0niza5lybr1ljzdkyiapr16laa468168qinpy5qn00yimnaygpm6";
+    });
 
   postPatch =
     let ippicvVersion = "20151201";
