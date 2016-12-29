@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   LIBGIT2_SYS_USE_PKG_CONFIG=1;
 
   configurePhase = ''
-    ./configure --enable-optimize --prefix=$out --local-cargo=${rustPlatform.rust.cargo}/bin/cargo
+    ./configure --enable-optimize --prefix=$out
   '';
 
   buildPhase = "make";
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
     cargo test
   '';
 
-  # Disable check phase as there are failures (author_prefers_cargo test fails)
+  # Disable check phase as there are failures (4 tests fail)
   doCheck = false;
 
   meta = with stdenv.lib; {
