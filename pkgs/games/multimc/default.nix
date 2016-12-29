@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt5Full, jdk7, zlib, file, makeWrapper, xorg, libpulseaudio, qt5 }:
+{ stdenv, fetchFromGitHub, cmake, qt5Full, jdk8, zlib, file, makeWrapper, xorg, libpulseaudio, qt5 }:
 
 let
   libnbt = fetchFromGitHub {
@@ -13,21 +13,20 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
-    rev = "895d8ab4699f1b50bf03532c967a91f5ecb62a50";
-    sha256 = "179vc1iv57fx4g4h1wy8yvyvdm671jnvp6zi8pcr1n6azqhwklds";
+    rev = "4ca6878743119647213ae02d9a9bb1a410768110";
+    sha256 = "1cp2j0nnlp1x0g3rygpfrvmmg4am3qv6aqz5nn964ljm7xpnza8k";
   };
-  buildInputs = [ cmake qt5Full jdk7 zlib file makeWrapper ];
+  buildInputs = [ cmake qt5Full jdk8 zlib file makeWrapper ];
 
   libpath = with xorg; [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
   postUnpack = ''
-    rmdir $sourceRoot/depends/libnbtplusplus
-    cp -r ${libnbt} $sourceRoot/depends/libnbtplusplus
-    chmod 755 -R $sourceRoot/depends/libnbtplusplus
+    rmdir $sourceRoot/libraries/libnbtplusplus
+    cp -r ${libnbt} $sourceRoot/libraries/libnbtplusplus
+    chmod 755 -R $sourceRoot/libraries/libnbtplusplus
     mkdir -pv $sourceRoot/build/
     cp -v ${qt5.quazip.src} $sourceRoot/build/quazip-0.7.1.tar.gz
   '';
 
-  patches = [ ./multimc.patch ];
 
   enableParallelBuilding = true;
 
@@ -40,9 +39,9 @@ stdenv.mkDerivation {
 
     mkdir -pv $out/bin/jars $out/lib
     cp -v MultiMC $out/bin/
-    cp -v jars/*.jar $out/bin/jars/ #*/
-    cp -v librainbow.so libnbt++.so libMultiMC_logic.so $out/lib
-    wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH $RESULT --prefix PATH : ${jdk7}/bin/
+    cp -v jars/*.jar $out/bin/jars/
+    cp -v librainbow.so libnbt++.so libMultiMC_logic.so libMultiMC_gui.so $out/lib
+    wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH $RESULT --prefix PATH : ${jdk8}/bin/
   '';
 
   meta = with stdenv.lib; {
