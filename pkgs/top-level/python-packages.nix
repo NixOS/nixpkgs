@@ -2808,17 +2808,27 @@ in {
     };
   };
 
+  #needed for bleach v1.5
+  html5lib_0_9999999 = self.html5lib.override rec {
+    name = "html5lib-${version}";
+    version = "0.9999999";
+    src = pkgs.fetchurl {
+      url = "https://github.com/html5lib/html5lib-python/archive/0.9999999.tar.gz";
+      sha256 = "1s6wdbrjzw5jhyfbskf4nj1i5bjpjqq9f89a7r1rl59rhpwmfhhq";
+    };
+  };
+
   bleach = buildPythonPackage rec {
-    version = "v1.4.3";
+    version = "v1.5";
     name = "bleach-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/jsocol/bleach/archive/${version}.tar.gz";
-      sha256 = "0mk8780ilip0m890rapbckngw8k42gca3551kri297pyylr06l5m";
+      sha256 = "1n0si30bwirr4g802i5355lxjcwkh7fkf5mb2z24hhds08yp2s0d";
     };
 
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ six html5lib ];
+    propagatedBuildInputs = with self; [ six html5lib_0_9999999 pytestrunner pytest_303];
 
     meta = {
       description = "An easy, HTML5, whitelisting HTML sanitizer";
@@ -4924,6 +4934,16 @@ in {
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
       sha256 = "1n6igbc1b138wx1q5gca4pqw1j6nsyicfxds5n0b5989kaxqmh8j";
+    };
+  };
+
+  pytest_303 = self.pytest_27.override rec {
+    name = "pytest-3.0.3";
+
+    propagatedBuildInputs = with self; [ hypothesis py ];
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest/${name}.tar.gz";
+      sha256 = "1rxydacrdb8s312l3bn0ybrqsjp13abzyim1x21s80386l5504zj";
     };
   };
 
