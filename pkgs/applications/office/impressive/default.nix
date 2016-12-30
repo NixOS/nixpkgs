@@ -1,9 +1,9 @@
 { fetchurl, stdenv, pythonPackages, makeWrapper, lib
-, xpdf, mesa, freeglut }:
+, xpdf, mesa, SDL, freeglut }:
 
 let
   inherit (pythonPackages) python pyopengl pygame setuptools pillow;
-  version = "0.10.5";
+  version = "0.11.1";
 in stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
     # See http://keyj.s2000.ws/?p=77 for details.
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
 
     src = fetchurl {
       url = "mirror://sourceforge/impressive/Impressive-${version}.tar.gz";
-      sha256 = "0fz1zahxlfjang53wn06svy4s4aw28c79v24gwadvjvv3h1g5wam";
+      sha256 = "0b3rmy6acp2vmf5nill3aknxvr9a5aawk1vnphkah61anxp62gsr";
     };
 
     # Note: We need to have `setuptools' in the path to be able to use
@@ -39,13 +39,13 @@ in stdenv.mkDerivation {
       # honors $LIBRARY_PATH.  See
       # http://python.net/crew/theller/ctypes/reference.html#id1 .
       wrapProgram "$out/bin/impressive" \
-         --prefix PATH ":" "${xpdf}" \
+         --prefix PATH ":" "${xpdf}/bin" \
          --prefix PYTHONPATH ":" \
                   ${lib.concatStringsSep ":"
                      (map (path:
                             path + "/lib/${python.libPrefix}/site-packages")
                           [ pillow pyopengl pygame setuptools ])} \
-         --prefix LIBRARY_PATH ":" "${lib.makeLibraryPath [ mesa freeglut ]}"
+         --prefix LIBRARY_PATH ":" "${lib.makeLibraryPath [ mesa freeglut SDL ]}"
     '';
 
     meta = {
