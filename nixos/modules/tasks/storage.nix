@@ -160,22 +160,28 @@ let
     };
   };
 
-  diskOptions.options = {
-    clear = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Clear the partition table of this device.
-      '';
+  diskOptions = { config, ... }: {
+    options = {
+      clear = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Clear the partition table of this device.
+        '';
+      };
+
+      initlabel = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Create a new disk label for this device (implies
+          <option>clear</option>).
+        '';
+      };
     };
 
-    initlabel = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Create a new disk label for this device (implies
-        <option>clear</option>).
-      '';
+    config = lib.mkIf config.initlabel {
+      clear = true;
     };
   };
 
