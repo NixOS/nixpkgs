@@ -16,14 +16,17 @@ with stdenv.lib;
 vmTools.runInLinuxImage (stdenv.mkDerivation (
 
   {
-    name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
-
     doCheck = true;
 
     prefix = "/usr";
 
-    prePhases = [ "installExtraDebsPhase" "sysInfoPhase" ];
-    postPhases = [ "debInstallPhase" ];
+    prePhases = "installExtraDebsPhase sysInfoPhase";
+  }
+
+  // removeAttrs args ["vmTools"] //
+
+  {
+    name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
 
     # !!! cut&paste from rpm-build.nix
     postHook = ''
@@ -69,12 +72,6 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       mkdir -p $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;
 
-      eval "$postInstall"
-    '';
-
-    debInstallPhase = ''
-      eval "$preDebInstall"
-
       [ "$(echo $out/debs/*.deb)" != "" ]
 
       for i in $out/debs/*.deb; do
@@ -90,12 +87,12 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
         echo "file deb-extra $(ls $i/debs/*.deb | sort | head -1)" >> $out/nix-support/hydra-build-products
       done
 
-      eval "$postDebInstall"
+      eval "$postInstall"
     ''; # */
 
     meta = (if args ? meta then args.meta else {}) // {
       description = "Deb package for ${diskImage.fullName}";
     };
-  } // removeAttrs args ["name" "meta" "vmTools"]
+  }
 
 ))
