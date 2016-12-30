@@ -1,19 +1,18 @@
 { stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, encfs
-, glib , gnome3, gtk3, libgnome_keyring, vala_0_23, wrapGAppsHook, xorg
-, libgee_0_6
+, glib , gnome3, gtk3, libgnome_keyring, vala, wrapGAppsHook, xorg
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.16";
+  version = "1.8.18";
   name = "gnome-encfs-manager-${version}";
 
   src = fetchurl {
-    url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.gz";
-    sha256 = "06sz6zcmvxkqww5gx4brcqs4hlpy9d8sal9nmw0pdsvh8k5vmpgn";
+    url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.xz";
+    sha256 = "1rpf683lxa78fmxxb0hnq7vdh3yn7qid2gqq67q9mk65sp9vdhdj";
   };
 
-  buildInputs = [ autoconf automake intltool libtool pkgconfig vala_0_23 glib encfs
-    gtk3 libgnome_keyring libgee_0_6 xorg.libSM xorg.libICE
+  buildInputs = [ autoconf automake intltool libtool pkgconfig vala glib encfs
+    gtk3 libgnome_keyring gnome3.libgee xorg.libSM xorg.libICE
     wrapGAppsHook ];
 
   patches = [ ./makefile-mkdir.patch ];
@@ -28,10 +27,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.libertyzero.com/GEncfsM/;
+    downloadPage = https://launchpad.net/gencfsm/;
     description = "EncFS manager and mounter with GNOME3 integration";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.spacefrogg ];
-    broken = true;
   };
 }
