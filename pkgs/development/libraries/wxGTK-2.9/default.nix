@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst_plugins_base, GConf, setfile
-, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
+, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true
+, Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
 }:
 
 assert withMesa -> mesa != null;
@@ -22,9 +23,11 @@ stdenv.mkDerivation {
     [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst_plugins_base GConf ]
     ++ optional withMesa mesa
-    ++ optional stdenv.isDarwin setfile;
+    ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
 
   nativeBuildInputs = [ pkgconfig ];
+
+  propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
   configureFlags =
     [ "--enable-gtk2" "--disable-precomp-headers" "--enable-mediactrl"
@@ -34,7 +37,7 @@ stdenv.mkDerivation {
     ++ optional withMesa "--with-opengl"
     ++ optionals stdenv.isDarwin
       # allow building on 64-bit
-      [ "--with-cocoa" "--enable-universal-binaries" ];
+      [ "--with-cocoa" "--enable-universal-binaries" "--with-macosx-version-min=10.7" ];
 
   SEARCH_LIB = optionalString withMesa "${mesa}/lib";
 
@@ -46,6 +49,9 @@ stdenv.mkDerivation {
     substituteInPlace configure --replace \
       'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
       'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
+    substituteInPlace configure --replace \
+      "-framework System" \
+      -lSystem
   '';
 
   postInstall = "
@@ -60,6 +66,6 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; darwin ++ linux;
   };
 }
