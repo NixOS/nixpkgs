@@ -14446,6 +14446,8 @@ in
 
   posterazor = callPackage ../applications/misc/posterazor { };
 
+  ppl-address-book = callPackage ../applications/office/ppl-address-book { };
+
   pqiv = callPackage ../applications/graphics/pqiv { };
 
   qiv = callPackage ../applications/graphics/qiv { };
