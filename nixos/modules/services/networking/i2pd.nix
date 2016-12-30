@@ -147,7 +147,7 @@ let
   host = ${tun.address}
   port = ${tun.port}
   inport = ${tun.inPort}
-  accesslist = ${concatStringSep "," tun.accessList}
+  accesslist = ${builtins.concatStringsSep "," tun.accessList}
   '')
   }
   '';
