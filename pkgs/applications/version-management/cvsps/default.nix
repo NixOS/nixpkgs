@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cvs zlib ];
 
-  installPhase = "make install prefix=$out";
+  installFlags = [ "prefix=$(out)" ];
 
   meta = {
     description = ''A tool to generate CVS patch set information'';
