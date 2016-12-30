@@ -31653,6 +31653,28 @@ EOF
     };
   };
 
+  pytoml = buildPythonPackage rec {
+    name = "pytoml-${version}";
+    version = "0.1.11";
+
+    checkPhase = "${python.interpreter} test/test.py";
+
+    # fetchgit used to ensure test submodule is available
+    src = pkgs.fetchgit {
+      url = "${meta.homepage}.git";
+      rev = "refs/tags/v${version}";
+      sha256 = "1jiw04zk9ccynr8kb1vqh9r1p2kh0al7g7b1f94911iazg7dgs9j";
+    };
+
+    meta = {
+      description = "A TOML parser/writer for Python";
+      homepage    = https://github.com/avakar/pytoml;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+
+  };
+
   ROPGadget = buildPythonPackage rec {
     name = "ROPGadget-5.4";
     src = pkgs.fetchurl {
