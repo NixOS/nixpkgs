@@ -2577,6 +2577,8 @@ with pkgs;
 
   knockknock = callPackage ../tools/security/knockknock { };
 
+  partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
+
   kpcli = callPackage ../tools/security/kpcli { };
 
   krename = libsForQt5.callPackage ../applications/misc/krename { };
@@ -9695,6 +9697,8 @@ with pkgs;
     libqtav = callPackage ../development/libraries/libqtav {
       libva = libva-full; # also wants libva-x11
     };
+
+    kpmcore = callPackage ../development/libraries/kpmcore { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
