@@ -1,9 +1,10 @@
 { fetchurl, stdenv, cvs, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "cvsps-2.1";
+  name = "cvsps-${version}";
+  version = "2.1";
   src = fetchurl {
-    url = "http://www.cobite.com/cvsps/${name}.tar.gz";
+    url = "mirror://debian/pool/main/c/cvsps/cvsps_${version}.orig.tar.gz";
     sha256 = "0nh7q7zcmagx0i63h6fqqkkq9i55k77myvb8h6jn2f266f5iklwi";
   };
 
@@ -17,6 +18,7 @@ stdenv.mkDerivation rec {
   installPhase = "make install prefix=$out";
 
   meta = {
+    description = ''A tool to generate CVS patch set information'';
     longDescription = ''
       CVSps is a program for generating `patchset' information from a
       CVS repository.  A patchset in this case is defined as a set of
@@ -25,5 +27,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.cobite.com/cvsps/;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
