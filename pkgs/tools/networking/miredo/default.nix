@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Teredo IPv6 Tunneling Daemon";
     homepage = http://www.remlab.net/miredo/;
-    license = licenses.gpl;
+    license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = platforms.unix;
   };
