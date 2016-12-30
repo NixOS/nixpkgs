@@ -17129,6 +17129,8 @@ in
 
   fastjet = callPackage ../development/libraries/physics/fastjet { };
 
+  fastnlo = callPackage ../development/libraries/physics/fastnlo { };
+
   geant4 = callPackage ../development/libraries/physics/geant4 {
     enableMultiThreading = true;
     enableG3toG4         = false;
