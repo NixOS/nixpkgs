@@ -16142,10 +16142,10 @@ in {
   };
 
   numpy_1_11 = self.buildNumpyPackage rec {
-    version = "1.11.2";
+    version = "1.11.3";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
-      sha256 = "04db2fbd64e2e7c68e740b14402b25af51418fc43a59d9e54172b38b906b0f69";
+      url = "mirror://pypi/n/numpy/numpy-${version}.zip";
+      sha256 = "2e0fc5248246a64628656fe14fcab0a959741a2820e003bd15538226501b82f7";
     };
   };
 
@@ -24466,12 +24466,8 @@ in {
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales html5lib ] ++ optional (pythonOlder "3.4") self.enum34;
     # Disable two tests that require network access.
-    postPatch = ''
-      substituteInPlace tests/test_build_linkcheck.py --replace test_defaults dont_test_defaults
-      substituteInPlace tests/test_build_linkcheck.py --replace test_anchors_ignored dont_test_anchors_ignored
-    '';
     checkPhase = ''
-      make test
+      NOSE_EXCLUDE=test_defaults,test_anchors_ignored make test
     '';
     propagatedBuildInputs = with self; [
       docutils
