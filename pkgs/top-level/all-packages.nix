@@ -905,6 +905,8 @@ in
 
   goa = callPackage ../development/tools/goa { };
 
+  gorilla-bin = callPackage ../tools/security/gorilla-bin { };
+
   gringo = callPackage ../tools/misc/gringo { };
 
   gti = callPackage ../tools/misc/gti { };
