@@ -2801,6 +2801,8 @@ in
 
   minixml = callPackage ../development/libraries/minixml { };
 
+  miredo = callPackage ../tools/networking/miredo { };
+
   mjpegtoolsFull = callPackage ../tools/video/mjpegtools { };
 
   mjpegtools = self.mjpegtoolsFull.override {
