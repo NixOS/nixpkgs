@@ -17165,6 +17165,8 @@ in
 
   lhapdf = callPackage ../development/libraries/physics/lhapdf { };
 
+  mcgrid = callPackage ../development/libraries/physics/mcgrid { };
+
   nlojet = callPackage ../development/libraries/physics/nlojet { };
 
   pythia = callPackage ../development/libraries/physics/pythia { };
