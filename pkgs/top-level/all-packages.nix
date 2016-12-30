@@ -15218,6 +15218,8 @@ in
     spice_gtk = spice_gtk;
   };
 
+  virt-top = callPackage ../applications/virtualization/virt-top { };
+
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     inherit (gnome2) gnome_python;
     vte = gnome3.vte;
