@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1r0x575ivvm68nnh9qlfvdra5298i047qcbxcg37ki2aaqq07qcr";
   };
 
-  pythonPath = []; # python wrapper support
+  postPatch = "patchShebangs ./src/Analyses/cat_with_lines";
 
+  pythonPath = []; # python wrapper support
 
   latex = texlive.combine { inherit (texlive)
     scheme-basic
