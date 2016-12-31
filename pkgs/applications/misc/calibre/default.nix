@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.73.0";
+  version = "2.76.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "17qs7dakzd25wbshsny2x82ppdqa6kwwfbp2vp1i8qmfc1nq61gc";
+    sha256 = "1xfm586n6gm44mkyn25mbiyhj6w9ji9yl6fvmnr4zk1q6qcga3v8";
   };
 
   patches = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
     python pyqt5 sip
     # the following are distributed with calibre, but we use upstream instead
-    chardet cherrypy html5lib odfpy routes
+    chardet cherrypy html5lib_0_9999999 odfpy routes
   ]);
 
   installPhase = ''

@@ -2808,7 +2808,7 @@ in {
     };
   };
 
-  # Needed for bleach 1.5.0
+  # Needed for bleach 1.5.0 and calibre 2.76.0
   html5lib_0_9999999 = self.html5lib.override rec {
     name = "html5lib-${version}";
     buildInputs = with self; [ nose flake8 ];
