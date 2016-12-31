@@ -297,6 +297,9 @@ let
     };
   };
 
+  # Return true if an option is referencing a btrfs storage specification.
+  isBtrfs = storage: lib.isString storage && lib.hasPrefix "btrfs." storage;
+
 in
 
 {
@@ -315,17 +318,23 @@ in
   }) deviceTypes;
 
   options.fileSystems = mkOption {
-    type = types.loaOf (types.submodule {
+    type = types.loaOf (types.submodule ({ config, ... }: {
       options.storage = mkOption {
         default = null;
         example = "partition.root";
-        type = types.nullOr (deviceSpecType containerTypes);
+        type = types.nullOr (deviceSpecType (containerTypes ++ [ "btrfs" ]));
         description = ''
           Storage device from <option>storage.*</option> to use for
           this file system.
         '';
       };
-    });
+
+      # If a fileSystems submodule references "btrfs." via the storage option,
+      # set the default value for fsType to "btrfs".
+      config = lib.mkIf (isBtrfs config.storage) {
+        fsType = lib.mkDefault "btrfs";
+      };
+    }));
   };
 
   options.swapDevices = mkOption {
@@ -341,4 +350,13 @@ in
       };
     });
   };
+
+  # Make sure that whenever a fsType is set to something different than "btrfs"
+  # while using a "btrfs" device spec type we throw an assertion error.
+  config.assertions = lib.mapAttrsToList (fs: cfg: {
+    assertion = if isBtrfs cfg.storage then cfg.fsType == "btrfs" else true;
+    message = "The option `fileSystems.${fs}.fsType' is `${cfg.fsType}' but"
+            + " \"btrfs\" is expected because `fileSystems.${fs}.storage'"
+            + " is set to `${cfg.storage}'.";
+  }) config.fileSystems;
 }
