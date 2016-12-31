@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libxkbcommon, pango
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
 , cairo, glib, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.0";
+  version = "1.3.0";
   name = "rofi-${version}";
 
   src = fetchurl {
     url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/${name}.tar.xz";
-    sha256 = "0xxx0xpxhrhlhi2axq9867zqrhwqavc1qrr833k1xr0pvm5m0aqc";
+    sha256 = "1a65ai93ygras5bi7wc0s5i3zqslzqlnw3klq3sdnp2p0d6hjjqn";
   };
 
   preConfigure = ''
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  buildInputs = [ autoreconfHook pkgconfig libxkbcommon pango cairo
-    libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm
+  buildInputs = [ autoreconfHook pkgconfig libxkbcommon pango cairo git
+    libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
   ];
   doCheck = true;
 
