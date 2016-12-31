@@ -11488,38 +11488,6 @@ in {
     };
   };
 
-  flexget = buildPythonPackage rec {
-    version = "1.2.337";
-    name = "FlexGet-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/FlexGet/${name}.tar.gz";
-      sha256 = "0f7aaf0bf37860f0c5adfb0ba59ca228aa3f5c582131445623a4c3bc82d45346";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [
-      paver feedparser sqlalchemy pyyaml rpyc
-      beautifulsoup_4_1_3 html5lib_0_9999999 pyrss2gen pynzb progressbar jinja2 flask
-      cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
-      guessit pathpy apscheduler ]
-    # enable deluge and transmission plugin support, if they're installed
-    ++ stdenv.lib.optional (pkgs.config.pythonPackages.deluge or false)
-      pythonpackages.deluge
-    ++ stdenv.lib.optional (pkgs.transmission != null)
-      self.transmissionrpc;
-
-    meta = {
-      homepage = http://flexget.com/;
-      description = "Multipurpose automation tool for content like torrents";
-      license = licenses.mit;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
   # py3k disabled, see https://travis-ci.org/NixOS/nixpkgs/builds/48759067
   graph-tool = if isPy3k then throw "graph-tool in Nix doesn't support py3k yet"
     else callPackage ../development/python-modules/graph-tool/2.x.x.nix { boost = pkgs.boost159; };

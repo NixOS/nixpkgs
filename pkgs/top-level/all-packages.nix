@@ -13009,6 +13009,8 @@ in
 
   flacon = callPackage ../applications/audio/flacon { };
 
+  flexget = callPackage ../applications/networking/flexget { };
+
   fldigi = callPackage ../applications/audio/fldigi { };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
