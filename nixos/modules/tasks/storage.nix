@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 let
   inherit (lib) mkOption types;
@@ -91,7 +91,7 @@ let
    * it's not.
    *
    * As with assertUnits, builtins.trace is used to print an additional error
-   * message. TODO: Check device name!
+   * message.
    */
   assertSpec = validTypes: spec: let
     syntaxErrorMsg =
@@ -99,11 +99,16 @@ let
       "`<type>.<name>', where `name' may only contain letters (lower and " +
       "upper case), numbers, underscores (_) and dashes (-)";
     invalidTypeMsg =
-      "Device type `${lib.head typeAndName}' is invalid and needs to be " +
-      "${oneOf validTypes}.";
+      "Device type `${type}' is invalid and needs to be ${oneOf validTypes}.";
+    invalidNameMsg =
+      "Device `${type}.${name}' does not exist in `config.storage.*'.";
     syntaxError = builtins.trace syntaxErrorMsg false;
     typeAndName = builtins.match "([a-z]+)\\.([a-zA-Z0-9_-]+)" spec;
-    assertType = if lib.elem (lib.head typeAndName) validTypes then true
+    type = lib.head typeAndName;
+    name = lib.last typeAndName;
+    assertName = if (config.storage.${type} or {}) ? ${name} then true
+                 else builtins.trace invalidNameMsg false;
+    assertType = if lib.elem type validTypes then assertName
                  else builtins.trace invalidTypeMsg false;
   in if typeAndName == null then syntaxError else assertType;
 
@@ -314,7 +319,7 @@ in
       options.storage = mkOption {
         default = null;
         example = "partition.root";
-        type = types.nullOr types.str;
+        type = types.nullOr (deviceSpecType containerTypes);
         description = ''
           Storage device from <option>storage.*</option> to use for
           this file system.
@@ -328,7 +333,7 @@ in
       options.storage = mkOption {
         default = null;
         example = "partition.swap";
-        type = types.nullOr types.str;
+        type = types.nullOr (deviceSpecType containerTypes);
         description = ''
           Storage device from <option>storage.*</option> to use for
           this swap device.
