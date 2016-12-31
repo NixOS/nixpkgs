@@ -5,22 +5,22 @@ let
 
   sizeUnits = {
     b = "byte";
-    kib = "kibibyte";
-    mib = "mebibyte";
-    gib = "gibibyte";
-    tib = "tebibyte";
-    pib = "pebibyte";
-    eib = "exbibyte";
-    zib = "zebibyte";
-    yib = "yobibyte";
-    kb = "kilobyte";
-    mb = "megabyte";
-    gb = "gigabyte";
-    tb = "terabyte";
-    pb = "petabyte";
-    eb = "exabyte";
-    zb = "zettabyte";
-    yb = "yottabyte";
+    kib = "kibibyte (1024 bytes)";
+    mib = "mebibyte (1024 kibibytes)";
+    gib = "gibibyte (1024 mebibytes)";
+    tib = "tebibyte (1024 gibibytes)";
+    pib = "pebibyte (1024 tebibytes)";
+    eib = "exbibyte (1024 pebibytes)";
+    zib = "zebibyte (1024 exbibytes)";
+    yib = "yobibyte (1024 zebibytes)";
+    kb = "kilobyte (1000 bytes)";
+    mb = "megabyte (1000 kilobytes)";
+    gb = "gigabyte (1000 megabytes)";
+    tb = "terabyte (1000 gigabytes)";
+    pb = "petabyte (1000 terabytes)";
+    eb = "exabyte (1000 petabytes)";
+    zb = "zettabyte (1000 exabytes)";
+    yb = "yottabyte (1000 zettabytes)";
   };
 
   /* Return a string enumerating the list of `valids' in a way to be more
