@@ -76,7 +76,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.sound.enable {
+  config = mkIf config.sound.mediaKeys.enable {
 
     environment.systemPackages = [ alsaUtils ];
 
