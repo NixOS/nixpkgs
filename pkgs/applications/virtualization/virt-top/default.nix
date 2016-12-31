@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, ocamlPackages }:
+{ stdenv, fetchurl, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   name = "virt-top-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "04i1sf2d3ghilmzvr2vh74qcy009iifyc2ymj9kxnbkp97lrz13w";
   };
 
-  buildInputs = [ ocaml ] ++ (with ocamlPackages; [ findlib ocaml_extlib ocaml_libvirt ocaml_gettext curses csv xml-light ]);
+  buildInputs = with ocamlPackages; [ ocaml findlib ocaml_extlib ocaml_libvirt ocaml_gettext curses csv xml-light ];
 
   buildPhase = "make opt";
 

@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib camlp4 ounit ];
 
+  postPatch = stdenv.lib.optionalString (camlp4 != null) ''
+    substituteInPlace test/test.ml                  --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
+    substituteInPlace ocaml-gettext/OCamlGettext.ml --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
+    substituteInPlace ocaml-gettext/Makefile        --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
+    substituteInPlace ocaml-gettext/Makefile        --replace "unix.cma" ""
+    substituteInPlace libgettext-ocaml/Makefile     --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
+    substituteInPlace libgettext-ocaml/Makefile     --replace "\$(shell ocamlc -where)" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib"
+  '';
+
   configureFlags = [ "--disable-doc" ];
 
   createFindlibDestdir = true;
