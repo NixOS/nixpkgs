@@ -37,8 +37,9 @@ stdenv.mkDerivation rec {
       "--enable-eap-mschapv2" "--enable-xauth-eap" "--enable-ext-auth"
       "--enable-forecast" "--enable-connmark" "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
-      "--enable-aesni" "--enable-af-alg" "--enable-rdrand" ]
-    ++ stdenv.lib.optional (stdenv.system == "i686-linux") "--enable-padlock" 
+      "--enable-af-alg" ]
+    ++ stdenv.lib.optional stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
+    ++ stdenv.lib.optional (stdenv.system == "i686-linux") "--enable-padlock"
     ++ stdenv.lib.optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
          "--enable-curl" "--enable-openssl"
