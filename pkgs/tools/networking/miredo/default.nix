@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace misc/client-hook.bsd --replace '/sbin/route' '${nettools}/bin/route' --replace '/sbin/ifconfig' '${nettools}/bin/ifconfig'
+    substituteInPlace misc/client-hook.bsd \
+      --replace '/sbin/route' '${nettools}/bin/route' \
+      --replace '/sbin/ifconfig' '${nettools}/bin/ifconfig'
     substituteInPlace misc/client-hook.iproute --replace '/sbin/ip' '${iproute}/bin/ip'
   '';
 

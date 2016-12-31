@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.miredo;
-  pidFile = "/run/miredo.pid";
   miredoConf = pkgs.writeText "miredo.conf" ''
     InterfaceName ${cfg.interfaceName}
     ServerAddress ${cfg.serverAddress}
@@ -63,8 +62,8 @@ in
         default = null;
         type = types.nullOr types.str;
         description = ''
-          The hostname or primary IPv4 address of the Teredo server.
-          This setting is required if Miredo runs as a Teredo client.
+          Depending on the local firewall/NAT rules, you might need to force
+          Miredo to use a fixed UDP port and or IPv4 address.
         '';
       };
     };
@@ -80,11 +79,11 @@ in
       after = [ "network.target" ];
       description = "Teredo IPv6 Tunneling Daemon";
       serviceConfig = {
-        PIDFile = pidFile;
-        Type = "forking";
         Restart = "always";
         RestartSec = "5s";
-        ExecStart = "${cfg.package}/bin/miredo -c ${miredoConf} -p ${pidFile}";
+        ExecStartpre = "${cfg.package}/bin/miredo-checkconf -f ${miredoConf}";
+        ExecStart = "${cfg.package}/bin/miredo -c ${miredoConf} -f";
+        ExecReload = "/bin/kill -HUP $MAINPID";
       };
     };
 
