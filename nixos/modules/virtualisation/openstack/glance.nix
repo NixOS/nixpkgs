@@ -42,6 +42,7 @@ in {
   options.virtualisation.openstack.glance = {
     package = mkOption {
       type = types.package;
+      default = pkgs.glance;
       example = literalExample "pkgs.glance";
       description = ''
         Glance package to use.
@@ -149,11 +150,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # Note: when changing the default, make it conditional on
-    # ‘system.stateVersion’ to maintain compatibility with existing
-    # systems!
-    virtualisation.openstack.glance.package = mkDefault pkgs.glance;
-
     users.extraUsers = [{
       name = "glance";
       group = "glance";
