@@ -124,6 +124,7 @@ in {
     services.packagekit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
+    services.udev.packages = [ pkgs.gnome3.gnome_settings_daemon ];
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
