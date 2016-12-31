@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     ln -s $out/${appdir}/{em++,em-config,emar,embuilder.py,emcc,emcmake,emconfigure,emlink.py,emmake,emranlib,emrun,emscons} $out/bin
 
     echo "EMSCRIPTEN_ROOT = '$out/${appdir}'" > $out/${appdir}/config
-    echo "LLVM_ROOT = '${emscriptenfastcomp}'" >> $out/${appdir}/config
+    echo "LLVM_ROOT = '${emscriptenfastcomp}/bin'" >> $out/${appdir}/config
     echo "PYTHON = '${python}/bin/python'" >> $out/${appdir}/config
     echo "NODE_JS = '${nodejs}/bin/node'" >> $out/${appdir}/config
     echo "JS_ENGINES = [NODE_JS]" >> $out/${appdir}/config
