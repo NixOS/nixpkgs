@@ -140,6 +140,8 @@ let
 
     csv = callPackage ../development/ocaml-modules/csv { };
 
+    curses = callPackage ../development/ocaml-modules/curses { };
+
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
