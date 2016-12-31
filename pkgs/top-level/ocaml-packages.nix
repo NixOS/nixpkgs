@@ -301,6 +301,8 @@ let
 
     ocaml_http = callPackage ../development/ocaml-modules/http { };
 
+    ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
+
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
