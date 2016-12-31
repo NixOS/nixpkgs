@@ -16784,6 +16784,8 @@ in
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
 
+  sherpa = callPackage ../applications/science/physics/sherpa {};
+
   ### SCIENCE/PROGRAMMING
 
   plm = callPackage ../applications/science/programming/plm { };
@@ -17136,6 +17138,8 @@ in
 
   fastjet = callPackage ../development/libraries/physics/fastjet { };
 
+  fastnlo = callPackage ../development/libraries/physics/fastnlo { };
+
   geant4 = callPackage ../development/libraries/physics/geant4 {
     enableMultiThreading = true;
     enableG3toG4         = false;
@@ -17167,6 +17171,8 @@ in
   herwig = callPackage ../development/libraries/physics/herwig { };
 
   lhapdf = callPackage ../development/libraries/physics/lhapdf { };
+
+  mcgrid = callPackage ../development/libraries/physics/mcgrid { };
 
   nlojet = callPackage ../development/libraries/physics/nlojet { };
 
