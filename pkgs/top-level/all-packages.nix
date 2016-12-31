@@ -3259,6 +3259,8 @@ with pkgs;
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
+  ndppd = callPackage ../applications/networking/ndppd { };
+
   neofetch = callPackage ../tools/misc/neofetch { };
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
