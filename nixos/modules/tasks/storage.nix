@@ -308,4 +308,32 @@ in
     default = {};
     description = "Storage configuration for a ${attrs.description}.";
   }) deviceTypes;
+
+  options.fileSystems = mkOption {
+    type = types.loaOf (types.submodule {
+      options.storage = mkOption {
+        default = null;
+        example = "partition.root";
+        type = types.nullOr types.str;
+        description = ''
+          Storage device from <option>storage.*</option> to use for
+          this file system.
+        '';
+      };
+    });
+  };
+
+  options.swapDevices = mkOption {
+    type = types.listOf (types.submodule {
+      options.storage = mkOption {
+        default = null;
+        example = "partition.swap";
+        type = types.nullOr types.str;
+        description = ''
+          Storage device from <option>storage.*</option> to use for
+          this swap device.
+        '';
+      };
+    });
+  };
 }

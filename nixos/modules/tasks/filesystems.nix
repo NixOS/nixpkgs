@@ -64,16 +64,6 @@ let
 
     options = {
 
-      storage = mkOption {
-        default = null;
-        example = "partition.root";
-        type = types.nullOr types.str;
-        description = ''
-          Storage device from <option>storage.*</option> to use for
-          this file system.
-        '';
-      };
-
       label = mkOption {
         default = null;
         example = "root-partition";

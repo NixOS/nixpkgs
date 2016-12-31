@@ -15,16 +15,6 @@ let
         description = "Path of the device.";
       };
 
-      storage = mkOption {
-        default = null;
-        example = "partition.swap";
-        type = types.nullOr types.str;
-        description = ''
-          Storage device from <option>storage.*</option> to use for
-          this swap device.
-        '';
-      };
-
       label = mkOption {
         example = "swap";
         type = types.str;
