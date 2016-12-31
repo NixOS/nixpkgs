@@ -3709,7 +3709,7 @@ in
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
-  tiled = qt5.callPackage ../applications/editors/tiled { };
+  tiled = qt55.callPackage ../applications/editors/tiled { };
 
   timemachine = callPackage ../applications/audio/timemachine { };
 
