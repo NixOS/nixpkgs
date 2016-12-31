@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     homepage = http://flexget.com/;
     description = "Multipurpose automation tool for content like torrents";
-    license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }
