@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
    qmakeHook
   ];
 
-  enableParallelBuilding = true;
+  # RCC: Error in 'resources.qrc': Cannot find file 'i18n/chessx_da.qm'
+  #enableParallelBuilding = true;
+
   installPhase = ''
       runHook preInstall
       mkdir -p "$out/bin"

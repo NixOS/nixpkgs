@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  postInstall = ''
+    mkdir -p $out/lib/udev/rules.d
+    $out/lib/libgphoto2/print-camera-list udev-rules version 175 group camera >$out/lib/udev/rules.d/40-gphoto2.rules
+  '';
+
   meta = {
     homepage = http://www.gphoto.org/proj/libgphoto2/;
     description = "A library for accessing digital cameras";
@@ -41,4 +46,3 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }
-

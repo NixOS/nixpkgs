@@ -60,6 +60,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/grass70 \
     --set PYTHONPATH $PYTHONPATH \
     --set GRASS_PYTHON ${python2Packages.python}/bin/${python2Packages.python.executable}
+    --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass-*/lib $out/lib
   '';
 
