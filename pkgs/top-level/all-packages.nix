@@ -5231,6 +5231,7 @@ in
 
   nim = callPackage ../development/compilers/nim { };
   nimble = callPackage ../development/tools/nimble { };
+  nrpl = callPackage ../development/tools/nrpl { };
 
   neko = callPackage ../development/compilers/neko { };
 
