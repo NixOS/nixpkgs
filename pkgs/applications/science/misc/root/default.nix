@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.04.18";
+  version = "6.08.02";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "00f3v3l8nimfkcxpn9qpyh3h23na0mi4wkds2y5gwqh8wh3jryq9";
+    sha256 = "0530v1r4rvds52hgb13f00l3phhn76z6vii550mwv8bj3sl5070k";
   };
 
   buildInputs = [ cmake pcre pkgconfig python2 zlib lzma gsl ]
@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
     ;
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/root-mirror/root/commit/ee9964210c56e7c1868618a4434c5340fef38fe4.patch";
-      sha256 = "186i7ni75yvjydy6lpmaplqxfb5z2019bgpbhff1n6zn2qlrff2r";
-    })
     ./sw_vers.patch
 
     # this prevents thisroot.sh from setting $p, which interferes with stdenv setup
