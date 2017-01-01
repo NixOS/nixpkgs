@@ -921,6 +921,13 @@ in
         '';
       };
 
+    # static hostname configuration needed for hostnamectl and the
+    # org.freedesktop.hostname1 dbus service (both provided by systemd)
+    environment.etc."hostname" = mkIf (cfg.hostName != "")
+      {
+        text = cfg.hostName + "\n";
+      };
+
     environment.systemPackages =
       [ pkgs.host
         pkgs.iproute
