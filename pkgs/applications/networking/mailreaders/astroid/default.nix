@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, scons, pkgconfig, gnome3, gmime, webkitgtk24x, libsass
-  , notmuch, boost, makeWrapper }:
+{ stdenv, fetchFromGitHub, scons, pkgconfig, gnome3, gmime, webkitgtk24x
+  , libsass, notmuch, boost, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "astroid-${version}";
   version = "0.6";
 
-  src = fetchurl {
-    url = "https://github.com/astroidmail/astroid/archive/v${version}.tar.gz";
-    sha256 = "1d1ivn3vaddlz6bxcgifw4n5jaf7d8y35kk1a457gdq9n1mq87mr";
+  src = fetchFromGitHub {
+    owner = "astroidmail";
+    repo = "astroid";
+    rev = "v${version}";
+    sha256 = "0zashjmqv8ips9q8ckyhgm9hfyf01wpgs6g21cwl05q5iklc5x7r";
   };
 
   patches = [ ./propagate-environment.patch ];
