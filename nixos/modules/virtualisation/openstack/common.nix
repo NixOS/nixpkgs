@@ -51,4 +51,34 @@ rec {
 	      };
             };});
   };
+  
+  databaseOption = name: {
+    host = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = ''
+        Host of the database.
+      '';
+    };
+
+    name = mkOption {
+      type = types.str;
+      default = name;
+      description = ''
+        Name of the existing database.
+      '';
+    };
+
+    user = mkOption {
+      type = types.str;
+      default = name;
+      description = ''
+        The database user. The user must exist and has access to
+        the specified database.
+      '';
+    };
+    password = mkSecretOption {
+      name = name + "MysqlPassword";
+      description = "The database user's password";};
+  };
 }
