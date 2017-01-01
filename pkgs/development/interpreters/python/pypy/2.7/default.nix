@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, python, expat, tcl, tk, xlibsWrapper, libX11
+, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , makeWrapper, callPackage, self, gdbm, db
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
@@ -35,6 +35,7 @@ let
       };
       in ''
       patch lib-python/2.7/test/test_pyexpat.py < '${expatch}'
+      substituteInPlace "lib-python/2.7/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
     buildInputs = [ bzip2 openssl pkgconfig python libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
