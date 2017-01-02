@@ -4359,6 +4359,10 @@ in
 
   which = callPackage ../tools/system/which { };
 
+  chase = callPackage ../tools/system/chase {
+    inherit boehmgc;
+  };
+
   wicd = callPackage ../tools/networking/wicd { };
 
   wipe = callPackage ../tools/security/wipe { };
