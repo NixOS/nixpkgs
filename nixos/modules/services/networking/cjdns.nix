@@ -195,6 +195,16 @@ in
         };
       };
 
+      addExtraHosts = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to add cjdns peers with an associated hostname to
+          <filename>/etc/hosts</filename>.  Beware that enabling this
+          incurs heavy eval-time costs.
+        '';
+      };
+
     };
 
   };
@@ -257,7 +267,7 @@ in
       };
     };
 
-    networking.extraHosts = cjdnsExtraHosts;
+    networking.extraHosts = mkIf cfg.addExtraHosts cjdnsExtraHosts;
 
     assertions = [
       { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );
