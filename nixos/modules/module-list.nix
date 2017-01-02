@@ -612,7 +612,7 @@
   ./tasks/network-interfaces-systemd.nix
   ./tasks/network-interfaces-scripted.nix
   ./tasks/scsi-link-power-management.nix
-  ./tasks/storage.nix
+  ./tasks/storage
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
   ./testing/service-runner.nix
