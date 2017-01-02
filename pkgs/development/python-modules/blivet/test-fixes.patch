@@ -1,0 +1,82 @@
+From 5ce95c061a340d14addb88914b08e3be64b62248 Mon Sep 17 00:00:00 2001
+From: Vojtech Trefny <vtrefny@redhat.com>
+Date: Mon, 2 Jan 2017 15:20:07 +0100
+Subject: [PATCH 1/3] Fix task availability test
+
+---
+ tests/devices_test/dependencies_test.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/devices_test/dependencies_test.py b/tests/devices_test/dependencies_test.py
+index 9f2d82e..bf264fe 100644
+--- a/tests/devices_test/dependencies_test.py
++++ b/tests/devices_test/dependencies_test.py
+@@ -63,6 +63,7 @@ def test_availability_mdraidplugin(self):
+ 
+         # dev is not among its unavailable dependencies
+         availability.BLOCKDEV_MDRAID_PLUGIN._method = availability.AvailableMethod
++        availability.MKFS_HFSPLUS_APP._method = availability.AvailableMethod  # macefi
+         self.assertNotIn(availability.BLOCKDEV_MDRAID_PLUGIN, self.luks.unavailable_dependencies)
+         self.assertIsNotNone(ActionCreateDevice(self.luks))
+         self.assertIsNotNone(ActionDestroyDevice(self.luks))
+
+From 1101460899ba08f65bedff22e7d08a6df1f1015b Mon Sep 17 00:00:00 2001
+From: Vojtech Trefny <vtrefny@redhat.com>
+Date: Mon, 2 Jan 2017 15:20:43 +0100
+Subject: [PATCH 2/3] Fix resize test in fstesting
+
+Resizing raises DeviceFormatError, not FSError (changed in
+298984306e6e56f43444f73eed075db54dd0a057).
+---
+ tests/formats_test/fstesting.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tests/formats_test/fstesting.py b/tests/formats_test/fstesting.py
+index 0f7ddc4..7b7bbc6 100644
+--- a/tests/formats_test/fstesting.py
++++ b/tests/formats_test/fstesting.py
+@@ -6,7 +6,7 @@
+ import tempfile
+ 
+ from tests import loopbackedtestcase
+-from blivet.errors import FSError, FSResizeError
++from blivet.errors import FSError, FSResizeError, DeviceFormatError
+ from blivet.size import Size, ROUND_DOWN
+ from blivet.formats import fs
+ 
+@@ -199,9 +199,9 @@ def test_resize(self):
+         if not can_resize(an_fs):
+             self.assertFalse(an_fs.resizable)
+             # Not resizable, so can not do resizing actions.
+-            with self.assertRaises(FSError):
++            with self.assertRaises(DeviceFormatError):
+                 an_fs.target_size = Size("64 MiB")
+-            with self.assertRaises(FSError):
++            with self.assertRaises(DeviceFormatError):
+                 an_fs.do_resize()
+         else:
+             self.assertTrue(an_fs.resizable)
+
+From df69e6ce760df62b56a2d46d1891aff638a21440 Mon Sep 17 00:00:00 2001
+From: Vojtech Trefny <vtrefny@redhat.com>
+Date: Mon, 2 Jan 2017 15:23:15 +0100
+Subject: [PATCH 3/3] Do not try to search for 'tmpfs' devices in udev database
+
+There is no "real" tmpfs device, so we can't find it using udev.
+---
+ blivet/mounts.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/blivet/mounts.py b/blivet/mounts.py
+index c787fde..26df6f0 100644
+--- a/blivet/mounts.py
++++ b/blivet/mounts.py
+@@ -112,7 +112,7 @@ def get_mountpoints(self, devspec, subvolspec=None):
+             subvolspec = str(subvolspec)
+ 
+         # devspec == None means "get 'nodev' mount points"
+-        if devspec is not None:
++        if devspec not in (None, "tmpfs"):
+             # use the canonical device path (if available)
+             canon_devspec = resolve_devspec(devspec, sysname=True)
+             if canon_devspec is not None:
