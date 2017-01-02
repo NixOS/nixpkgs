@@ -141,7 +141,7 @@ in {
       bind-flag = if cfg.socket ? "path" then
         ''--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}''
       else
-        ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${cfg.socket.port}'';
+        ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';
     in {
       description = "Postfix Greylisting Service";
       wantedBy = [ "multi-user.target" ];
@@ -153,7 +153,7 @@ in {
       '';
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.postgrey}/bin/postgrey ${bind-flag} --group=postgrey --user=postgrey --dbdir=/var/postgrey --delay=${cfg.delay} --max-age=${cfg.maxAge} --retry-window=${cfg.retryWindow} ${if cfg.lookupBySubnet then "--lookup-by-subnet" else "--lookup-by-host"} --ipv4cidr=${cfg.IPv4CIDR} --ipv6cidr=${cfg.IPv6CIDR} ${optionalString cfg.privacy "--privacy"} --auto-whitelist-clients=${if cfg.autoWhitelist == null then "0" else cfg.autoWhitelist} --greylist-text="${cfg.greylistText}" --x-greylist-header="${cfg.greylistHeader}" --greylist-action=${cfg.greylistAction}'';
+        ExecStart = ''${pkgs.postgrey}/bin/postgrey ${bind-flag} --group=postgrey --user=postgrey --dbdir=/var/postgrey --delay=${toString cfg.delay} --max-age=${toString cfg.maxAge} --retry-window=${toString cfg.retryWindow} ${if cfg.lookupBySubnet then "--lookup-by-subnet" else "--lookup-by-host"} --ipv4cidr=${toString cfg.IPv4CIDR} --ipv6cidr=${toString cfg.IPv6CIDR} ${optionalString cfg.privacy "--privacy"} --auto-whitelist-clients=${toString (if cfg.autoWhitelist == null then 0 else cfg.autoWhitelist)} --greylist-text="${cfg.greylistText}" --x-greylist-header="${cfg.greylistHeader}" --greylist-action=${cfg.greylistAction}'';
         Restart = "always";
         RestartSec = 5;
         TimeoutSec = 10;
