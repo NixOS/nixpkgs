@@ -15499,7 +15499,7 @@ in
   };
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
 
-  xca = callPackage ../applications/misc/xca { };
+  xca = qt5.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
 
