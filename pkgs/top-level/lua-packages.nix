@@ -382,18 +382,20 @@ let
 
   lgi = stdenv.mkDerivation rec {
     name = "lgi-${version}";
-    version = "0.7.2";
+    version = "0.9.1";
 
-    src = fetchzip {
-      url    = "https://github.com/pavouk/lgi/archive/${version}.tar.gz";
-      sha256 = "10i2ssfs01d49fdmmriqzxc8pshys4rixhx30wzd9p1m1q47a5pn";
+    src = fetchFromGitHub {
+      owner = "pavouk";
+      repo = "lgi";
+      rev = version;
+      sha256 = "09pbapjhyc3sn0jgx747shqr9286wqfzw02h43p4pk8fv2b766b9";
     };
 
     meta = with stdenv.lib; {
       description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
       homepage    = https://github.com/pavouk/lgi;
       license     = "custom";
-      maintainers = with maintainers; [ lovek323 ];
+      maintainers = with maintainers; [ lovek323 rasendubi ];
       platforms   = platforms.unix;
     };
 
