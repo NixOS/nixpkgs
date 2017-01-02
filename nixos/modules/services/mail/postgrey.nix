@@ -52,7 +52,10 @@ in {
       };
       socket = mkOption {
         type = socket;
-        default = { path = "/var/run/postgrey.sock"; };
+        default = {
+          path = "/var/run/postgrey.sock";
+          mode = "0777";
+        };
         example = {
           addr = "127.0.0.1";
           port = 10030;
