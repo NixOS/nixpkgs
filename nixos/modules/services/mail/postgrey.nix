@@ -10,30 +10,34 @@ with lib; let
   socket = with types; addCheck (either (submodule unixSocket) (submodule inetSocket)) (x: x ? "path" || x ? "port");
 
   inetSocket = with types; {
-    addr = mkOption {
-      type = nullOr string;
-      default = null;
-      example = "127.0.0.1";
-      description = "The address to bind to. Localhost if null";
-    };
-    port = mkOption {
-      type = natural';
-      default = 10030;
-      description = "Tcp port to bind to";
+    options = {
+      addr = mkOption {
+        type = nullOr string;
+        default = null;
+        example = "127.0.0.1";
+        description = "The address to bind to. Localhost if null";
+      };
+      port = mkOption {
+        type = natural';
+        default = 10030;
+        description = "Tcp port to bind to";
+      };
     };
   };
 
   unixSocket = with types; {
-    path = mkOption {
-      type = path;
-      default = "/var/run/postgrey.sock";
-      description = "Path of the unix socket";
-    };
+    options = {
+      path = mkOption {
+        type = path;
+        default = "/var/run/postgrey.sock";
+        description = "Path of the unix socket";
+      };
 
-    mode = mkOption {
-      type = string;
-      default = "0777";
-      description = "Mode of the unix socket";
+      mode = mkOption {
+        type = string;
+        default = "0777";
+        description = "Mode of the unix socket";
+      };
     };
   };
 
