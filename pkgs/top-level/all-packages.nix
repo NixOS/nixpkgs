@@ -13595,7 +13595,7 @@ in
 
   imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
 
-  imagemagick7_light = lowPrio (imagemagick.override {
+  imagemagick7_light = lowPrio (imagemagick7.override {
     bzip2 = null;
     zlib = null;
     libX11 = null;
@@ -13615,7 +13615,7 @@ in
     libwebp = null;
   });
 
-  imagemagick7 = lowPrio (imagemagickBig.override {
+  imagemagick7 = lowPrio (imagemagick7Big.override {
     ghostscript = null;
   });
 
