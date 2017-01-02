@@ -118,6 +118,16 @@ in {
         default = 5;
         description = "Whitelist clients after successful delivery of N messages";
       };
+      whitelistClients = mkOption {
+        type = listOf path;
+        default = [];
+        description = "Client address whitelist files (see postgrey(8))";
+      };
+      whitelistRecipients = mkOption {
+        type = listOf path;
+        default = [];
+        description = "Recipient address whitelist files (see postgrey(8))";
+      };
     };
   };
 
@@ -156,7 +166,7 @@ in {
       '';
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.postgrey}/bin/postgrey ${bind-flag} --group=postgrey --user=postgrey --dbdir=/var/postgrey --delay=${toString cfg.delay} --max-age=${toString cfg.maxAge} --retry-window=${toString cfg.retryWindow} ${if cfg.lookupBySubnet then "--lookup-by-subnet" else "--lookup-by-host"} --ipv4cidr=${toString cfg.IPv4CIDR} --ipv6cidr=${toString cfg.IPv6CIDR} ${optionalString cfg.privacy "--privacy"} --auto-whitelist-clients=${toString (if cfg.autoWhitelist == null then 0 else cfg.autoWhitelist)} --greylist-text="${cfg.greylistText}" --x-greylist-header="${cfg.greylistHeader}" --greylist-action=${cfg.greylistAction}'';
+        ExecStart = ''${pkgs.postgrey}/bin/postgrey ${bind-flag} --group=postgrey --user=postgrey --dbdir=/var/postgrey --delay=${toString cfg.delay} --max-age=${toString cfg.maxAge} --retry-window=${toString cfg.retryWindow} ${if cfg.lookupBySubnet then "--lookup-by-subnet" else "--lookup-by-host"} --ipv4cidr=${toString cfg.IPv4CIDR} --ipv6cidr=${toString cfg.IPv6CIDR} ${optionalString cfg.privacy "--privacy"} --auto-whitelist-clients=${toString (if cfg.autoWhitelist == null then 0 else cfg.autoWhitelist)} --greylist-text="${cfg.greylistText}" --x-greylist-header="${cfg.greylistHeader}" --greylist-action=${cfg.greylistAction} ${concatMapStringsSep " " (x: "--whitelist-clients=" + x) cfg.whitelistClients} ${concatMapStringsSep " " (x: "--whitelist-recipients=" + x) cfg.whitelistRecipients}'';
         Restart = "always";
         RestartSec = 5;
         TimeoutSec = 10;
