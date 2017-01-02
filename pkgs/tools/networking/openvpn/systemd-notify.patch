@@ -10,13 +10,13 @@ diff -ru -x '*~' openvpn-2.3.1-orig/src/openvpn/init.c openvpn-2.3.1/src/openvpn
  static struct context *static_context; /* GLOBAL */
  
  /*
-@@ -1241,6 +1243,9 @@
- {
-   static const char message[] = "Initialization Sequence Completed";
+@@ -1375,6 +1375,9 @@
+     /* Reset the unsuccessful connection counter on complete initialisation */
+     c->options.unsuccessful_attempts = 0;
  
-+  /* Tell systemd we're ready. */
-+  sd_notify(0, "READY=1");
++    /* Tell systemd we're ready. */
++    sd_notify(0, "READY=1");
 +
-   /* If we delayed UID/GID downgrade or chroot, do it now */
-   do_uid_gid_chroot (c, true);
+     /* If we delayed UID/GID downgrade or chroot, do it now */
+     do_uid_gid_chroot (c, true);
  
