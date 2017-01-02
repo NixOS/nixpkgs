@@ -12325,6 +12325,8 @@ in
     secp256k1 = secp256k1.override { enableECDH = true; };
   };
 
+  libbitcoin-client = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
+
   go-ethereum = self.altcoins.go-ethereum;
   ethabi = self.altcoins.ethabi;
 
