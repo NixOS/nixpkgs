@@ -1,0 +1,12 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="ch-storage">
+
+<title>Storage configuration</title>
+
+<warning><para>The <option>storage.*</option> options are experimental
+and are subject to change without a deprecation phase.</para></warning>
+
+</chapter>
