@@ -4378,6 +4378,8 @@ in
 
   which = callPackage ../tools/system/which { };
 
+  chase = callPackage ../tools/system/chase { };
+
   wicd = callPackage ../tools/networking/wicd { };
 
   wipe = callPackage ../tools/security/wipe { };
