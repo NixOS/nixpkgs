@@ -1,10 +1,9 @@
 { stdenv, fetchFromGitHub, python2Packages, makeWrapper, chromaprint }:
 
 let
-  pypkgs = python2Packages;
   pname = "puddletag";
 
-in pypkgs.buildPythonApplication rec {
+in python2Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
   version = "1.2.0";
 
@@ -17,11 +16,9 @@ in pypkgs.buildPythonApplication rec {
 
   sourceRoot = "${pname}-v${version}-src/source";
 
-  disabled = pypkgs.isPy3k; # work to support python 3 has not begun
+  disabled = python2Packages.isPy3k; # work to support python 3 has not begun
 
-  outputs = [ "out" ];
-
-  propagatedBuildInputs = [ chromaprint ] ++ (with pypkgs; [
+  propagatedBuildInputs = [ chromaprint ] ++ (with python2Packages; [
     configobj
     mutagen
     pyparsing
@@ -35,7 +32,7 @@ in pypkgs.buildPythonApplication rec {
     siteDir=$(toPythonPath $out)
     mkdir -p $siteDir
     PYTHONPATH=$PYTHONPATH:$siteDir
-    ${pypkgs.python.interpreter} setup.py install --prefix $out
+    ${python2Packages.python.interpreter} setup.py install --prefix $out
   '';
 
   meta = with stdenv.lib; {
