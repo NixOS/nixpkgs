@@ -24,4 +24,7 @@ let
       ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/konsole" ]; }
+kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/konsole" ];
+}

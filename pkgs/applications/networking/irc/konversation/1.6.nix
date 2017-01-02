@@ -75,7 +75,8 @@ let
       homepage = https://konversation.kde.org;
     };
   };
-in kdeWrapper unwrapped {
+in kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/konversation" ];
 }
 
