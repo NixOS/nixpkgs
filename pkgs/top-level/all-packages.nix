@@ -2973,6 +2973,8 @@ in
 
   netselect = callPackage ../tools/networking/netselect { };
 
+  networkd-notify = callPackage ../applications/misc/networdk-notify { };
+
   # stripped down, needed by steam
   networkmanager098 = callPackage ../tools/networking/network-manager/0.9.8 { };
 
