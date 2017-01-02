@@ -94,10 +94,12 @@ in {
       IPv4CIDR = mkOption {
         type = natural;
         default = 24;
+        description = "Strip N bits from IPv4 addresses if lookupBySubnet is true";
       };
       IPv6CIDR = mkOption {
         type = natural;
         default = 64;
+        description = "Strip N bits from IPv6 addresses if lookupBySubnet is true";
       };
       privacy = mkOption {
         type = bool;
