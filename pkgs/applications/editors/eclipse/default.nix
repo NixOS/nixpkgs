@@ -85,7 +85,22 @@ rec {
 
   ### Eclipse Platform
 
-  eclipse-platform = eclipse-sdk-46;
+  eclipse-platform = eclipse-platform-46;
+
+  eclipse-platform-46 = buildEclipse {
+    name = "eclipse-platform-4.6.2";
+    description = "Eclipse Platform Neon 2";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-platform-4.6.2-linux-gtk-x86_64.tar.gz;
+          sha256 = "1fmpirjkp210angyfz3nr5jp58snjy6784zkkbmdxkiyg9kg2wqq";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-platform-4.6.2-linux-gtk.tar.gz;
+          sha256 = "0274g6ypiqsqkch10868ygbm6avc5pa57saz9wd196kdivl1bdpm";
+        };
+    };
+  };
 
   ### Eclipse Scala SDK
 
