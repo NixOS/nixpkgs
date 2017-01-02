@@ -62,12 +62,14 @@ let
         "dm-raid"
         "dm-snapshot"
         "dm-thin-pool"
+        "hfsplus"
         "zram"
       ];
       boot.supportedFilesystems = [ "btrfs" "jfs" "reiserfs" "xfs" ];
       virtualisation.memorySize = 768;
       virtualisation.emptyDiskImages = [ 10240 ];
-      environment.systemPackages = attrs.extraSystemDeps or [];
+      environment.systemPackages = [ pkgs.hfsprogs ]
+                                ++ (attrs.extraSystemDeps or []);
       fileSystems."/scratch" = {
         device = "/dev/vdb";
         fsType = "ext4";
