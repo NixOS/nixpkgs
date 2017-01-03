@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, fixDarwinDylibNames
 
 # Optional Arguments
 , snappy ? null, google-gflags ? null, zlib ? null, bzip2 ? null, lz4 ? null
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bxyykj13mw48yk108bkmxlfrp6bd95f27bysayax4lqxkgx0zzw";
   };
 
-  buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc ];
+  buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc fixDarwinDylibNames ];
 
   postPatch = ''
     # Hack to fix typos
