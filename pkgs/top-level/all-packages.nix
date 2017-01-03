@@ -1920,7 +1920,7 @@ in
   };
   gnupg = gnupg21;
   # suitable to verify signatures non-interactively
-  gnupg-minimal = callPackage ../tools/security/gnupg/21.nix {
+  gnupg-minimal = gnupg.override {
     guiSupport = false;
     pinentry = null;
     adns = null;
