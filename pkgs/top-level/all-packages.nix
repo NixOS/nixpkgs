@@ -5488,32 +5488,40 @@ in
   };
   erlangR18 = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
   };
   erlangR18_odbc = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     odbcSupport = true;
   };
   erlangR18_javac = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     javacSupport = true;
   };
   erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     javacSupport = true; odbcSupport = true;
   };
   erlangR19 = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
   };
   erlangR19_odbc = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     odbcSupport = true;
   };
   erlangR19_javac = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      javacSupport = true;
+    wxGTK = wxGTK30;
+    javacSupport = true;
   };
   erlangR19_odbc_javac = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     javacSupport = true; odbcSupport = true;
   };
   erlang = erlangR18;
