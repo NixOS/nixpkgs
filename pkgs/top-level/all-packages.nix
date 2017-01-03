@@ -4683,6 +4683,7 @@ in
   drumstick = callPackage ../development/libraries/drumstick { };
 
   ecl = callPackage ../development/compilers/ecl { };
+  ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
 
   eql = callPackage ../development/compilers/eql {};
 
