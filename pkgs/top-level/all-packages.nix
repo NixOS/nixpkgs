@@ -12337,6 +12337,14 @@ in
   bitcoin = altcoins.bitcoin;
   bitcoin-xt = altcoins.bitcoin-xt;
 
+  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
+    secp256k1 = secp256k1.override { enableECDH = true; };
+  };
+
+  libbitcoin-client = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
+
+  libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
+
   go-ethereum = self.altcoins.go-ethereum;
   ethabi = self.altcoins.ethabi;
 
