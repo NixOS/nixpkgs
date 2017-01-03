@@ -9,7 +9,7 @@ let
 
   bootstrapHash =
     if stdenv.system == "x86_64-linux"
-    then "1afsqaavhwiaxm38zr08cbq0985c7lrb1jzdcmq0jh6y8rb8ikff"
+    then "05bppmc6hqgv2g4x76rj95xf40x2aikqmcnql5li27rqwliyxznj"
     else throw "missing boostrap hash for platform ${stdenv.system}";
 
   needsPatchelf = stdenv.isLinux;
