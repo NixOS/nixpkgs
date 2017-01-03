@@ -16,11 +16,11 @@ let
           ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
           ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
           imgcache = ${smokepingHome}/cache
-          imgurl   = http://${cfg.hostName}:${builtins.toString cfg.port}/cache
+          imgurl   = ${cfg.imgUrl}
           datadir  = ${smokepingHome}/data
           pagedir = ${smokepingHome}/cache
           piddir  = ${smokepingPidDir}
-          cgiurl   = http://${cfg.hostName}:${builtins.toString cfg.port}/smokeping.cgi
+          cgiurl   = ${cfg.cgiUrl}
           linkstyle = ${cfg.linkStyle}
           smokemail = ${cfg.smokeMailTemplate}
           *** Presentation ***
@@ -100,6 +100,18 @@ in
         default = config.networking.hostName;
         example = "somewhere.example.com";
         description = "DNS name for the urls generated in the cgi.";
+      };
+      cgiUrl = mkOption {
+        type = types.string;
+        default = "http://${cfg.hostName}:${builtins.toString cfg.port}/smokeping.cgi";
+        example = "https://somewhere.example.com/smokeping.cgi";
+        description = "URL to the smokeping cgi.";
+      };
+      imgUrl = mkOption {
+        type = types.string;
+        default = "http://${cfg.hostName}:${builtins.toString cfg.port}/cache";
+        example = "https://somewhere.example.com/cache";
+        description = "Base url for images generated in the cgi.";
       };
       linkStyle = mkOption {
         type = types.enum ["original" "absolute" "relative"];
