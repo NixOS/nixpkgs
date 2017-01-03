@@ -1545,7 +1545,8 @@ in {
         description = "Unified tool to manage your AWS services";
         license = stdenv.lib.licenses.asl20;
         maintainers = with maintainers; [ muflax ];
-    };                                                                                                                                     };          
+    };           
+  };          
 
   aws_shell = buildPythonPackage rec {
     name = "aws-shell-${version}";
@@ -3071,35 +3072,34 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-      version = "1.4.92"; # This version is required by awscli
-      name = "botocore-${version}";
-      src = pkgs.fetchurl {
-        url = "mirror://pypi/b/botocore/${name}.tar.gz";
-        sha256 = "08rpsfqd2g4iqvi1id8yhmyz2mc299dnr4aikkwjm24rih75p9aj";
-      };
-
-      propagatedBuildInputs =
-        [ self.dateutil
-          self.requests2
-          self.jmespath
-        ];
-
-      buildInputs = with self; [ docutils mock nose ];
-
-      checkPhase = ''
-        nosetests -v
-      '';
-
-      # Network access
-      doCheck = false;
-
-      meta = {
-        homepage = https://github.com/boto/botocore;
-        license = "bsd";
-        description = "A low-level interface to a growing number of Amazon Web Services";
-      };
+    version = "1.4.92"; # This version is required by awscli
+    name = "botocore-${version}";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/botocore/${name}.tar.gz";
+      sha256 = "08rpsfqd2g4iqvi1id8yhmyz2mc299dnr4aikkwjm24rih75p9aj";
     };
-  
+
+    propagatedBuildInputs =
+      [ self.dateutil
+        self.requests2
+        self.jmespath
+      ];
+
+    buildInputs = with self; [ docutils mock nose ];
+
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    # Network access
+    doCheck = false;
+
+    meta = {
+      homepage = https://github.com/boto/botocore;
+      license = "bsd";
+      description = "A low-level interface to a growing number of Amazon Web Services";
+    };
+  };
 
   bottle = buildPythonPackage rec {
     version = "0.12.11";
