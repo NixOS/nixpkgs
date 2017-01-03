@@ -40,8 +40,6 @@ mkChromiumDerivation (base: rec {
     done
   '';
 
-  requiredSystemFeatures = [ "big-parallel" ];
-
   passthru = { inherit sandboxExecutableName; };
 
   requiredSystemFeatures = [ "big-parallel" ];
