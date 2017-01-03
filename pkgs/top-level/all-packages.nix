@@ -6661,6 +6661,8 @@ in
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
+  vultr = callPackage ../development/tools/vultr { };
+
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
