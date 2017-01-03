@@ -7844,6 +7844,8 @@ in
 
   libdivecomputer = callPackage ../development/libraries/libdivecomputer { };
 
+  libdivecomputer_ssrf = callPackage ../development/libraries/libdivecomputer/subsurface.nix { };
+
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
 
   libdmtx = callPackage ../development/libraries/libdmtx { };
