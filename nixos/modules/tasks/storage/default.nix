@@ -126,6 +126,11 @@ let
       description = "disk";
       isContainer = true;
       options = import ./disk.nix;
+      doc = ''
+        If no <option>match.*</option> options are set,
+        <option>match.name</option> is used with the attribute name set in
+        <option>storage.disk.$name</option>.
+      '';
     };
     partition = {
       description = "disk partition";
@@ -174,7 +179,8 @@ in
              ++ lib.optional resizable (resizableOptions deviceSpec);
     });
     default = {};
-    description = "Storage configuration for a ${attrs.description}.";
+    description = "Storage configuration for a ${attrs.description}."
+                + lib.optionalString (attrs ? doc) "\n\n${attrs.doc}";
   }) deviceTypes;
 
   options.fileSystems = mkOption {
