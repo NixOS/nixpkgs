@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
   name = "fava-${version}";
 
   src = fetchFromGitHub {
-    owner = "aumayr";
+    owner = "beancount";
     repo = "fava";
     rev = "v${version}";
     sha256 = "0dm4x6z80m04r9qa55psvz7f41qnh13hnj2qhvxkrk22yqmkqrka";
