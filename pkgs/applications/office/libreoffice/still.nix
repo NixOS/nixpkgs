@@ -265,12 +265,13 @@ in stdenv.mkDerivation rec {
     inherit srcs;
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite (Still/stable release)";
     homepage = http://libreoffice.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 }
