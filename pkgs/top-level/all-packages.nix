@@ -3832,10 +3832,9 @@ in
 
   su-exec = callPackage ../tools/security/su-exec {};
 
-  subsurface =
-    qt55.callPackage ../applications/misc/subsurface {
-        libgit2 = pkgs.libgit2_0_23;
-    };
+  subsurface = qt55.callPackage ../applications/misc/subsurface {
+    libdivecomputer = libdivecomputer_ssrf;
+  };
 
   sudo = callPackage ../tools/security/sudo { };
 
@@ -7219,7 +7218,6 @@ in
   );
 
   libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
-  libgit2_0_23 = callPackage ../development/libraries/git2/0.23.nix { };
 
   gle = callPackage ../development/libraries/gle { };
 
@@ -7859,6 +7857,8 @@ in
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdivecomputer = callPackage ../development/libraries/libdivecomputer { };
+
+  libdivecomputer_ssrf = callPackage ../development/libraries/libdivecomputer/subsurface.nix { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
 
