@@ -15,7 +15,7 @@ let
       sha256 = "0bzyabzr5dvbxglr74d0kbrk2ij5x7s5qcamqi1v546q1had1wz1";
     };
 
-    buildInputs = [ autoconf automake libtool_2 openssl libuuid ] ++
+    buildInputs = [ autoconf automake libtool_2 libuuid ] ++
       # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
       stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
       stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
@@ -73,12 +73,14 @@ let
       popd
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = "http://www.opensource.apple.com/source/cctools/";
       description = "Mac OS X Compiler Tools (cross-platform port)";
-      license = stdenv.lib.licenses.apsl20;
+      license = licenses.apsl20;
+      maintainers = with maintainers; [ copumpkin lnl7 ];
     };
   };
+
 in {
   native = stdenv.mkDerivation (baseParams // {
     # A hack for now...

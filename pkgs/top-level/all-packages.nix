@@ -5187,9 +5187,39 @@ in
     inherit (stdenvAdapters) overrideCC;
   };
 
-  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 {
-    inherit (stdenvAdapters) overrideCC;
-  };
+  llvmPackages_37 =
+    let
+
+      libxml2Boot = callPackage ../development/libraries/libxml2 { pythonSupport = false; };
+
+      libarchiveBoot = callPackage ../development/libraries/libarchive {
+        withLzo = false;
+        withOpenssl = false;
+        xarSupport = false;
+      };
+
+      cmakeBoot = callPackage ../development/tools/build-managers/cmake {
+        libarchive = libarchiveBoot;
+        useCurl = false;
+        wantPS = stdenv.isDarwin;
+        inherit (darwin) ps;
+      };
+
+      # This is used to bootstrap clang, don't use this as a runtime dependency.
+      python27Boot = callPackage ../development/interpreters/python/cpython/2.7/boot.nix {
+        self = python27Boot;
+        inherit (darwin) CF configd;
+      };
+
+      llvmPackages = callPackage ../development/compilers/llvm/3.7 {
+        cmake = cmakeBoot;
+        libxml2 = libxml2Boot;
+        python2 = python27Boot;
+        inherit (stdenvAdapters) overrideCC;
+      };
+
+    in
+      llvmPackages;
 
   llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 {
     inherit (stdenvAdapters) overrideCC;
