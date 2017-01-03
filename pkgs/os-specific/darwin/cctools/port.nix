@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool_2
-, llvm, libcxx, libcxxabi, clang, openssl, libuuid
+, llvm, libcxx, libcxxabi, clang, libuuid
 , libobjc ? null
 }:
 
@@ -15,7 +15,7 @@ let
       sha256 = "0bzyabzr5dvbxglr74d0kbrk2ij5x7s5qcamqi1v546q1had1wz1";
     };
 
-    buildInputs = [ autoconf automake libtool_2 openssl libuuid ] ++
+    buildInputs = [ autoconf automake libtool_2 libuuid ] ++
       # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
       stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
       stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];

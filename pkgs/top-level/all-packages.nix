@@ -5186,9 +5186,13 @@ in
     inherit (stdenvAdapters) overrideCC;
   };
 
-  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 {
+  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
     inherit (stdenvAdapters) overrideCC;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    cmake = cmake.override { isBootstrap = true; useSharedLibraries = false; };
+    libxml2 = libxml2.override { pythonSupport = false; };
+    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
+  });
 
   llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 {
     inherit (stdenvAdapters) overrideCC;
@@ -6110,7 +6114,6 @@ in
   };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
-    wantPS = stdenv.isDarwin;
     inherit (darwin) ps;
   };
 
