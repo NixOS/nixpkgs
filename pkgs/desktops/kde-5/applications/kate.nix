@@ -24,8 +24,9 @@ let
       ];
     };
 in
-kdeWrapper unwrapped
+kdeWrapper
 {
+  inherit unwrapped;
   targets = [ "bin/kate" "bin/kwrite" ];
   paths = [ konsole.unwrapped ];
 }

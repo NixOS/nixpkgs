@@ -37,6 +37,7 @@ let
 
   };
 
-in kdeWrapper unwrapped {
+in kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/peruse" ];
 }

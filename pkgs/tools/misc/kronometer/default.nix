@@ -23,6 +23,7 @@ let
     propagatedBuildInputs = [ kconfig kinit ];
   };
 in
-kdeWrapper unwrapped {
+kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/kronometer" ];
 }
