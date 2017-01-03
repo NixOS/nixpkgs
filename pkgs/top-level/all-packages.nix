@@ -1555,7 +1555,18 @@ in
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
-  emscriptenfastcomp = callPackage ../development/compilers/emscripten-fastcomp { };
+  emscriptenfastcomp-unwrapped = callPackage ../development/compilers/emscripten-fastcomp { };
+  emscriptenfastcomp-wrapped = wrapCC emscriptenfastcomp-unwrapped;
+  emscriptenfastcomp = symlinkJoin {
+    name = "emscriptenfastcomp";
+    paths = [ emscriptenfastcomp-wrapped emscriptenfastcomp-unwrapped ];
+    preferLocalBuild = false;
+    allowSubstitutes = true;
+    postBuild = ''
+      # replace unwrapped clang-3.9 binary by wrapper
+      ln -sf $out/bin/clang $out/bin/clang-[0-9]*
+    '';
+  };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
