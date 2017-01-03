@@ -11197,6 +11197,8 @@ in
 
     odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
+    ofp = callPackage ../os-specific/linux/ofp { };
+
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
