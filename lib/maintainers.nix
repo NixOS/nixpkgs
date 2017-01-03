@@ -109,6 +109,7 @@
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien@cassou.me>";
   danbst = "Danylo Hlynskyi <abcz2.uprola@gmail.com>";
+  danielfullmer = "Daniel Fullmer <danielrf12@gmail.com>";
   dasuxullebt = "Christoph-Simon Senjak <christoph.senjak@googlemail.com>";
   davidak = "David Kleuker <post@davidak.de>";
   davidrusu = "David Rusu <davidrusu.me@gmail.com>";
