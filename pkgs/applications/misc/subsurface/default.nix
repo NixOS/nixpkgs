@@ -20,15 +20,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.5.6";
+  version = "4.5.97";
   name = "subsurface-${version}";
 
-  # use fetchgit instead of the official tgz is not complete
   src = fetchgit {
-    sha256 = "156rqcszy0c4plk2mv7wdd4h7s7mygpq5sdc64pjfs4qvvsdj10f";
+    sha256 = "0mbf8m5sbimbyvlh65sjlydrycr4ssfyfzdlqyl0wcpzw7h0qfp8";
     url = "git://git.subsurface-divelog.org/subsurface";
-    rev = "4d8d7c2a0fa1b4b0e6953d92287c75b6f97472d0";
-    branchName = "v4.5-branch";
+    rev = "5f15ad5a86ada3c5e574041a5f9d85235322dabb";
+    branchName = "master";
   };
 
   buildInputs = [ qtbase libdivecomputer libmarble-ssrf libxslt
@@ -43,8 +42,7 @@ stdenv.mkDerivation rec {
     marble_libs=$(echo $(echo $CMAKE_LIBRARY_PATH | grep -o "/nix/store/[[:alnum:]]*-libmarble-ssrf-[a-zA-Z0-9\-]*/lib")/libssrfmarblewidget.so)
     cmakeFlags="$cmakeFlags -DCMAKE_BUILD_TYPE=Debug \
                             -DMARBLE_LIBRARIES=$marble_libs \
-                            -DNO_PRINTING=OFF \
-                            -DUSE_LIBGIT23_API=1"
+                            -DNO_PRINTING=OFF"
   '';
 
   meta = with stdenv.lib; {

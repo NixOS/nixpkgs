@@ -4,7 +4,7 @@ tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
 
 let
   name    = "maxima";
-  version = "5.38.1";
+  version = "5.39.0";
 
   searchPath =
     stdenv.lib.makeBinPath
@@ -15,7 +15,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "1p6646rvq43hk09msyp0dk50cqpkh07mf4x0bc2fqisqmcv6b1hf";
+    sha256 = "1cvignn5y6qzrby6qb885yc8zdcdqdr1d50vcvc3gapw2f0gk3zm";
   };
 
   buildInputs = stdenv.lib.filter (x: x != null)

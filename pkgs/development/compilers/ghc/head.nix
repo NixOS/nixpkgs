@@ -1,13 +1,13 @@
 { stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex, crossSystem, selfPkgs, cross ? null
+, autoconf, automake, happy, alex, python3, crossSystem, selfPkgs, cross ? null
 }:
 
 let
   inherit (bootPkgs) ghc;
 
-  commonBuildInputs = [ ghc perl autoconf automake happy alex ];
+  commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
-  version = "8.1.20161115";
+  version = "8.1.20161224";
 
   commonPreConfigure =  ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -19,26 +19,25 @@ let
 in stdenv.mkDerivation (rec {
   inherit version;
   name = "ghc-${version}";
-  rev = "017d11e0a36866b05ace32ece1af11adf652a619";
+  rev = "2689a1692636521777f007861a484e7064b2d696";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "1ryggmz961qd0fl50rkjjvi6g9azwla2vx9310a9nzjaj5x6ib4y";
+    sha256 = "0rk6xy7kgxx849nprq1ji459p88nyy93236g841m5p6mdh7mmrcr";
   };
 
-  postPatch = ''
+  postPatch = "patchShebangs .";
+
+  preConfigure = ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
-    patchShebangs .
     ./boot
-  '';
+  '' + commonPreConfigure ;
 
   buildInputs = commonBuildInputs;
 
   enableParallelBuilding = true;
-
-  preConfigure = commonPreConfigure;
 
   configureFlags = [
     "CC=${stdenv.cc}/bin/cc"
@@ -51,6 +50,8 @@ in stdenv.mkDerivation (rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
+
+  checkTarget = "test";
 
   postInstall = ''
     paxmark m $out/lib/${name}/bin/{ghc,haddock}

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "odp-dpdk-${version}";
-  version = "2016-08-16";
+  version = "1.12.0.0";
 
   src = fetchgit {
     url = "https://git.linaro.org/lng/odp-dpdk.git";
-    rev = "7068593f600e2b5a23ee1780d5c722c54e966df1";
-    sha256 = "0pz0zkxqaac193x21wmj3x88gfza6bvhmv5yf8fzkpm9zxnl2sy4";
+    rev = "5e370e1113973feafb43a8e57d4c59be40e9aeab";
+    sha256 = "0rrakbxnbsqaj148xaz2hwxjvg3cmzlynfkvcp8w56sqyly75d0n";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -15,12 +15,6 @@ stdenv.mkDerivation rec {
 
   RTE_SDK = "${dpdk}";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
-
-  patchPhase = ''
-    substituteInPlace scripts/git_hash.sh --replace /bin/bash /bin/sh
-    substituteInPlace scripts/get_impl_str.sh --replace /bin/bash /bin/sh
-    echo -n ${version} > .scmversion
-  '';
 
   dontDisableStatic = true;
 

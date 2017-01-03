@@ -281,6 +281,7 @@
       riak-cs = 263;
       infinoted = 264;
       keystone = 265;
+      glance = 266;
 
       phabricator = 999;
 
@@ -534,6 +535,7 @@
       riak-cs = 263;
       infinoted = 264;
       keystone = 265;
+      glance = 266;
 
       phabricator = 999;
 

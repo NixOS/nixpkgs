@@ -60,8 +60,9 @@ let
       };
     };
 in
-kdeWrapper unwrapped
+kdeWrapper
 {
+  inherit unwrapped;
   targets = [ "bin/kile" ];
   paths = [ konsole.unwrapped ];
 }

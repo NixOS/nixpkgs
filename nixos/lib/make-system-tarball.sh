@@ -54,7 +54,7 @@ mkdir -p $out/tarball
 
 rm env-vars
 
-tar --sort=name --mtime='1970-01-01' -cvJf $out/tarball/$fileName.tar.xz * $extraArgs
+tar --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner -cvJf $out/tarball/$fileName.tar.xz * $extraArgs
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system

@@ -8,8 +8,8 @@
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "5.4";
-  minorVersion = "1";
+  majorVersion = "5.6";
+  minorVersion = "0";
   minorVersionSuffix = "";
   pythonVersion = "2.7";
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -23,7 +23,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-      sha256 = "1x8sa5x1nkrb8wrmicri94ji8kvyxihyryi8br5fk7gak0agcai0";
+      sha256 = "145a0kd5c0s1v2rpavw9ihncfb05s2x7chc70v8fssvyxq601911";
     };
 
    # http://bugs.python.org/issue27369

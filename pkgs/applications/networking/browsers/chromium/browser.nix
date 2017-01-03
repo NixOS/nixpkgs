@@ -44,6 +44,8 @@ mkChromiumDerivation (base: rec {
 
   passthru = { inherit sandboxExecutableName; };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
