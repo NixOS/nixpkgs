@@ -17660,8 +17660,6 @@ in
 
   terraform = callPackage ../applications/networking/cluster/terraform {};
 
-  tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
-
   tewi-font = callPackage ../data/fonts/tewi  {};
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
