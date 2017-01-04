@@ -12395,6 +12395,8 @@ in
   go-ethereum = self.altcoins.go-ethereum;
   ethabi = self.altcoins.ethabi;
 
+  stellar-core = self.altcoins.stellar-core;
+
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
