@@ -2,13 +2,11 @@
 , autoreconfHook } :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-osd-0.1.0";
+  name = "pidgin-osd-0.2.0";
   src = fetchurl {
-    url = https://github.com/mbroemme/pidgin-osd/archive/pidgin-osd-0.1.0.tar.gz;
-    sha256 = "11hqfifhxa9gijbnp9kq85k37hvr36spdd79cj9bkkvw4kyrdp3j";
+    url = https://github.com/edanaher/pidgin-osd/archive/pidgin-osd-0.2.0.tar.gz;
+    sha256 = "1dfb0957wwm5zly4w4g815svhkhvjbj3dgik1lbyac8adh9ks784";
   };
-
-  makeFlags = "PIDGIN_LIBDIR=$(out)";
 
   # autoreconf is run such that it *really* wants all the files, and there's no
   # default ChangeLog.  So make it happy.
@@ -16,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/lib/pidgin
-    ln -s $out/pidgin $out/lib/pidgin
+    mv $out/lib/pidgin-osd.{la,so} $out/lib/pidgin
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
