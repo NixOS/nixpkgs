@@ -11,17 +11,17 @@ let
       then
         ''
           *** General ***
-          owner = ${cfg.owner}
+          cgiurl   = ${cfg.cgiUrl}
           contact = ${cfg.ownerEmail}
-          ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
-          ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
-          imgcache = ${smokepingHome}/cache
-          imgurl   = http://${cfg.hostName}:${builtins.toString cfg.port}/cache
           datadir  = ${smokepingHome}/data
+          imgcache = ${smokepingHome}/cache
+          imgurl   = ${cfg.imgUrl}
+          linkstyle = ${cfg.linkStyle}
+          ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
+          owner = ${cfg.owner}
           pagedir = ${smokepingHome}/cache
           piddir  = ${smokepingPidDir}
-          cgiurl   = http://${cfg.hostName}:${builtins.toString cfg.port}/smokeping.cgi
-          linkstyle = ${cfg.linkStyle}
+          ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
           smokemail = ${cfg.smokeMailTemplate}
           *** Presentation ***
           template = ${cfg.presentationTemplate}
@@ -54,72 +54,36 @@ in
         default = false;
         description = "Enable the smokeping service";
       };
-      webService = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable a smokeping web interface";
-      };
+      alertConfig = mkOption {
+        type = types.string;
+        default = ''
+          to = root@localhost
+          from = smokeping@localhost
+        '';
+        example = literalExample ''
+          to = alertee@address.somewhere
+          from = smokealert@company.xy
 
-      user = mkOption {
-        type = types.string;
-        default = "smokeping";
-        description = "User that runs smokeping and (optionally) thttpd";
+          +someloss
+          type = loss
+          # in percent
+          pattern = >0%,*12*,>0%,*12*,>0%
+          comment = loss 3 times  in a row;
+        '';
+        description = "Configuration for alerts.";
       };
-      mailHost = mkOption {
+      cgiUrl = mkOption {
         type = types.string;
-        default = "";
-        example = "localhost";
-        description = "Use this SMTP server to send alerts";
+        default = "http://${cfg.hostName}:${builtins.toString cfg.port}/smokeping.cgi";
+        example = "https://somewhere.example.com/smokeping.cgi";
+        description = "URL to the smokeping cgi.";
       };
-      sendmail = mkOption {
-        type = types.nullOr types.path;
+      config = mkOption {
+        type = types.nullOr types.string;
         default = null;
-        example = "/var/setuid-wrappers/sendmail";
-        description = "Use this sendmail compatible script to deliver alerts";
+        description = "Full smokeping config supplied by the user. Overrides " +
+          "and replaces any other configuration supplied.";
       };
-      smokeMailTemplate = mkOption {
-        type = types.string;
-        default = "${cfg.package}/etc/smokemail.dist";
-        description = "Specify the smokemail template for alerts.";
-      };
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.smokeping;
-        defaultText = "pkgs.smokeping";
-        description = "Specify a custom smokeping package";
-      };
-      owner = mkOption {
-        type = types.string;
-        default = "nobody";
-        example = "Joe Admin";
-        description = "Real name of the owner of the instance";
-      };
-      hostName = mkOption {
-        type = types.string;
-        default = config.networking.hostName;
-        example = "somewhere.example.com";
-        description = "DNS name for the urls generated in the cgi.";
-      };
-      linkStyle = mkOption {
-        type = types.enum ["original" "absolute" "relative"];
-        default = "relative";
-        example = "absolute";
-        description = "DNS name for the urls generated in the cgi.";
-      };
-      port = mkOption {
-        type = types.int;
-        default = 8081;
-        example = 8081;
-        description = "TCP port to use for the web server.";
-      };
-      ownerEmail = mkOption {
-        type = types.string;
-        default = "no-reply@${cfg.hostName}";
-        example = "no-reply@yourdomain.com";
-        description = "Email contact for owner";
-      };
-
       databaseConfig = mkOption {
         type = types.string;
         default = ''
@@ -152,30 +116,59 @@ in
           Once set, changing the interval will require deletion or migration of all
           the collected data.'';
       };
-      alertConfig = mkOption {
-        type = types.string;
-        default = ''
-          to = root@localhost
-          from = smokeping@localhost
-        '';
-        example = literalExample ''
-          to = alertee@address.somewhere
-          from = smokealert@company.xy
-
-          +someloss
-          type = loss
-          # in percent
-          pattern = >0%,*12*,>0%,*12*,>0%
-          comment = loss 3 times  in a row;
-        '';
-        description = "Configuration for alerts.";
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Any additional customization not already included.";
       };
-      presentationTemplate = mkOption {
+      hostName = mkOption {
         type = types.string;
-        default = "${pkgs.smokeping}/etc/basepage.html.dist";
-        description = "Default page layout for the web UI.";
+        default = config.networking.hostName;
+        example = "somewhere.example.com";
+        description = "DNS name for the urls generated in the cgi.";
       };
-
+      imgUrl = mkOption {
+        type = types.string;
+        default = "http://${cfg.hostName}:${builtins.toString cfg.port}/cache";
+        example = "https://somewhere.example.com/cache";
+        description = "Base url for images generated in the cgi.";
+      };
+      linkStyle = mkOption {
+        type = types.enum ["original" "absolute" "relative"];
+        default = "relative";
+        example = "absolute";
+        description = "DNS name for the urls generated in the cgi.";
+      };
+      mailHost = mkOption {
+        type = types.string;
+        default = "";
+        example = "localhost";
+        description = "Use this SMTP server to send alerts";
+      };
+      owner = mkOption {
+        type = types.string;
+        default = "nobody";
+        example = "Joe Admin";
+        description = "Real name of the owner of the instance";
+      };
+      ownerEmail = mkOption {
+        type = types.string;
+        default = "no-reply@${cfg.hostName}";
+        example = "no-reply@yourdomain.com";
+        description = "Email contact for owner";
+      };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.smokeping;
+        defaultText = "pkgs.smokeping";
+        description = "Specify a custom smokeping package";
+      };
+      port = mkOption {
+        type = types.int;
+        default = 8081;
+        example = 8081;
+        description = "TCP port to use for the web server.";
+      };
       presentationConfig = mkOption {
         type = types.string;
         default = ''
@@ -217,6 +210,11 @@ in
         '';
         description = "presentation graph style";
       };
+      presentationTemplate = mkOption {
+        type = types.string;
+        default = "${pkgs.smokeping}/etc/basepage.html.dist";
+        description = "Default page layout for the web UI.";
+      };
       probeConfig = mkOption {
         type = types.string;
         default = ''
@@ -224,6 +222,17 @@ in
           binary = ${config.security.wrapperDir}/fping
         '';
         description = "Probe configuration";
+      };
+      sendmail = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/setuid-wrappers/sendmail";
+        description = "Use this sendmail compatible script to deliver alerts";
+      };
+      smokeMailTemplate = mkOption {
+        type = types.string;
+        default = "${cfg.package}/etc/smokemail.dist";
+        description = "Specify the smokemail template for alerts.";
       };
       targetConfig = mkOption {
         type = types.string;
@@ -243,18 +252,16 @@ in
         '';
         description = "Target configuration";
       };
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Any additional customization not already included.";
+      user = mkOption {
+        type = types.string;
+        default = "smokeping";
+        description = "User that runs smokeping and (optionally) thttpd";
       };
-      config = mkOption {
-        type = types.nullOr types.string;
-        default = null;
-        description = "Full smokeping config supplied by the user. Overrides " +
-          "and replaces any other configuration supplied.";
+      webService = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable a smokeping web interface";
       };
-
     };
 
   };
