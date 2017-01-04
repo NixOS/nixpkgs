@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ name, lib, config, ... }:
 
 let
   inherit (lib) types mkOption;
@@ -12,7 +12,7 @@ let
     label.devPath = "/dev/disk/by-label";
     label.example = "nixos";
 
-    name.desc = "name";
+    name.desc = "device name";
     name.devPath = "/dev";
     name.example = "sda";
 
@@ -35,8 +35,62 @@ let
     type = types.nullOr types.str;
     default = null;
     inherit example;
-    description = "Match based on the ${desc}${maybeDevPath}.";
+    description = "Match based on a ${desc}${maybeDevPath}.";
   };
+
+  matcherOptions.options = {
+    physicalPos = mkOption {
+      type = types.nullOr (types.addCheck types.int (p: p > 0));
+      default = null;
+      example = 1;
+      description = ''
+        Match physical devices based on the position of the kernel's device
+        enumeration. Virtual devices such as <literal>/dev/loop0</literal> are
+        excluded from this.
+
+        The position is 1-indexed, thus the first device found is position
+        <literal>1</literal>.
+      '';
+    };
+
+    script = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      example = ''
+        # Match on the first path that includes the disk specification name.
+        ls -1 /dev/*''${disk}*
+        # Match on Nth device found in /dev/sd*, where N is the integer within
+        # the disk's specification name.
+        ls -1 /dev/sd* | tail -n+''${disk//[^0-9]}
+      '';
+      description = ''
+        Match based on the shell script lines set here.
+
+        The script is expected to echo the full path of the matching device to
+        stdout. Only the first line is accepted and consecutive lines are
+        ignored.
+
+        Within the scripts scope there is a <varname>$disk</varname> variable
+        which is the name of the disk specification. For example if the disk to
+        be matched is defined as <option>storage.disk.foo.*</option> the
+        <varname>$disk</varname> variable would be set to
+        <literal>foo</literal>.
+
+        In addition the script is run within bash and has coreutils, sed and
+        util-linux in <envar>PATH</envar>, everything else needs to be
+        explicitly referenced using absolute paths.
+      '';
+    };
+
+    allowIncomplete = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Allow to match an incomplete device, like for example a degraded RAID
+        array.
+      '';
+    };
+  } // lib.mapAttrs (lib.const mkMatcherOption) matchers;
 
 in {
   options = {
@@ -57,59 +111,20 @@ in {
       '';
     };
 
-    match = {
-      physicalPos = mkOption {
-        type = types.nullOr (types.addCheck types.int (p: p > 0));
-        default = null;
-        example = 1;
-        description = ''
-          Match physical devices based on the position of the kernel's device
-          enumeration. Virtual devices such as <literal>/dev/loop0</literal>
-          are excluded from this.
+    match = mkOption {
+      type = types.submodule matcherOptions;
+      default.name = name;
+      description = ''
+        Define a way how to match the given device.
 
-          The position is 1-indexed, thus the first device found is position
-          <literal>1</literal>.
-        '';
-      };
+        If no <option>match.*</option> options are set,
+        <option>match.name</option> is used with the attribute name set as the
+        matching value in <option>storage.disk.$name</option>.
 
-      script = mkOption {
-        type = types.nullOr types.lines;
-        default = null;
-        example = ''
-          # Match on the first path that includes the disk specification name.
-          ls -1 /dev/*''${disk}*
-          # Match on Nth device found in /dev/sd*, where N is the integer
-          # within the disk's specification name.
-          ls -1 /dev/sd* | tail -n+''${disk//[^0-9]}
-        '';
-        description = ''
-          Match based on the shell script lines set here.
-
-          The script is expected to echo the full path of the matching device
-          to stdout. Only the first line is accepted and consecutive lines are
-          ignored.
-
-          Within the scripts scope there is a <varname>$disk</varname> variable
-          which is the name of the disk specification. For example if the disk
-          to be matched is defined as <option>storage.disk.foo.*</option> the
-          <varname>$disk</varname> variable would be set to
-          <literal>foo</literal>.
-
-          In addition the script is run within bash and has coreutils, sed and
-          util-linux in <envar>PATH</envar>, everything else needs to be
-          explicitly referenced using absolute paths.
-        '';
-      };
-
-      allowIncomplete = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Allow to match an incomplete device, like for example a degraded RAID
-          array.
-        '';
-      };
-    } // lib.mapAttrs (lib.const mkMatcherOption) matchers;
+        So a definition like <literal>storage.disk.sda = {}</literal> matches
+        <literal>/dev/sda</literal>.
+      '';
+    };
   };
 
   config = lib.mkIf config.initlabel {

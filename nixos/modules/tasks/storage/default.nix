@@ -126,11 +126,6 @@ let
       description = "disk";
       isContainer = true;
       options = import ./disk.nix;
-      doc = ''
-        If no <option>match.*</option> options are set,
-        <option>match.name</option> is used with the attribute name set in
-        <option>storage.disk.$name</option>.
-      '';
     };
     partition = {
       description = "disk partition";
