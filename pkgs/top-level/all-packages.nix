@@ -1895,7 +1895,9 @@ in
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
-  glusterfs = callPackage ../tools/filesystems/glusterfs { };
+  glusterfs = callPackage ../tools/filesystems/glusterfs {
+    openssl = openssl_1_1_0;
+  };
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };
 
