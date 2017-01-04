@@ -160,6 +160,15 @@ let
   # Return true if an option is referencing a btrfs storage specification.
   isBtrfs = storage: lib.isString storage && lib.hasPrefix "btrfs." storage;
 
+  # Make sure that whenever a fsType is set to something different than "btrfs"
+  # while using a "btrfs" device spec type we throw an assertion error.
+  assertions = lib.mapAttrsToList (fs: cfg: {
+    assertion = if isBtrfs cfg.storage then cfg.fsType == "btrfs" else true;
+    message = "The option `fileSystems.${fs}.fsType' is `${cfg.fsType}' but"
+            + " \"btrfs\" is expected because `fileSystems.${fs}.storage'"
+            + " is set to `${cfg.storage}'.";
+  }) config.fileSystems;
+
 in
 
 {
@@ -214,18 +223,14 @@ in
     });
   };
 
-  # Make sure that whenever a fsType is set to something different than "btrfs"
-  # while using a "btrfs" device spec type we throw an assertion error.
-  config.assertions = lib.mapAttrsToList (fs: cfg: {
-    assertion = if isBtrfs cfg.storage then cfg.fsType == "btrfs" else true;
-    message = "The option `fileSystems.${fs}.fsType' is `${cfg.fsType}' but"
-            + " \"btrfs\" is expected because `fileSystems.${fs}.storage'"
-            + " is set to `${cfg.storage}'.";
-  }) config.fileSystems;
-
-  config.system.build.nixpart-spec = let
-    json = builtins.toJSON {
+  config = {
+    inherit assertions;
+    system.build.nixpart-spec = let
+      # Only check assertions for this module.
+      failed = map (x: x.message) (lib.filter (x: !x.assertion) assertions);
+      failedStr = lib.concatMapStringsSep "\n" (x: "- ${x}") failed;
+    in pkgs.writeText "nixpart.json" (if failed == [] then builtins.toJSON {
       inherit (config) fileSystems swapDevices storage;
-    };
-  in pkgs.writeText "nixpart.json" json;
+    } else throw "\nFailed assertions:\n${failedStr}");
+  };
 }
