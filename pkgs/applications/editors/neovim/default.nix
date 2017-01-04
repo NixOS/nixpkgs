@@ -167,7 +167,7 @@ let
 
 in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation {
   name = "neovim-${neovim.version}-configured";
-  inherit (neovim) version;
+  inherit (neovim) version meta;
 
   nativeBuildInputs = [ makeWrapper ];
 

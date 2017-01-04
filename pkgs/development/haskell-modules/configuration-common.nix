@@ -42,7 +42,8 @@ self: super: {
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
   # Use the default version of mysql to build this package (which is actually mariadb).
-  mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
+  # test phase requires networking
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.lib; });
 
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };

@@ -63,7 +63,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";
-    homepage    = http://www.lunarg.com;
+    homepage    = "http://www.lunarg.com";
     platforms   = platforms.linux;
+    license     = licenses.asl20;
   };
 }

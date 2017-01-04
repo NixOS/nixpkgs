@@ -4113,6 +4113,9 @@ in {
       urwid
     ];
 
+    # Fails on python 3 due to a None value where a string is expected
+    doCheck = !isPy3k;
+
     meta = {
       description = "A Python library for building configuration shells";
       homepage = "https://github.com/agrover/configshell-fb";
@@ -8796,14 +8799,17 @@ in {
   };
 
   pudb = buildPythonPackage rec {
-    name = "pudb-2013.3.6";
+    name = "pudb-2016.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pudb/${name}.tar.gz";
-      sha256 = "81b20a995803c4be513e6d36c8ec9a531d3ccb24670b2416abc20f3933ddb8be";
+      sha256 = "0njhi49d9fxbwh5p8yjx8m3jlfyzfm00b5aff6bz473pn7vxfn79";
     };
 
-    propagatedBuildInputs = with self; [ self.pygments self.urwid ];
+    propagatedBuildInputs = with self; [ pygments urwid ];
+
+    # Tests fail on python 3 due to writes to the read-only home directory
+    doCheck = !isPy3k;
 
     meta = {
       description = "A full-screen, console-based Python debugger";
@@ -15857,12 +15863,12 @@ in {
   };
 
   nose-cprof = buildPythonPackage rec {
-    name = "nose-cprof-0.1-0";
-    disabled = isPy3k;
+    name = "nose-cprof-${version}";
+    version = "0.1.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nose-cprof/${name}.tar.gz";
-      sha256 = "d1edd5cb3139e897752294d2968bfb066abdd754743fa416e024e5c688893344";
+      sha256 = "0ayy5mbjly9aa9dkgpz0l06flspnxmnj6wxdl6zr59byrrr8fqhw";
     };
 
     meta = {
@@ -24753,7 +24759,7 @@ in {
     };
 
     buildInputs = with self; [ pytest webob pkgs.imagemagick nose ];
-    propagatedBuildInputs = with self; [ sqlalchemy8 wand ];
+    propagatedBuildInputs = with self; [ sqlalchemy8 Wand ];
 
     checkPhase = ''
       cd tests
@@ -25512,9 +25518,13 @@ in {
     disabled = isPy26 || isPyPy;
 
     installPhase = ''
+      # Move the tkinter module
       mkdir -p $out/${py.sitePackages}
-      ls -Al lib/${py.libPrefix}/lib-dynload/ | grep tkinter
       mv lib/${py.libPrefix}/lib-dynload/_tkinter* $out/${py.sitePackages}/
+      # Update the rpath to point to python without x11Support
+      old_rpath=$(patchelf --print-rpath $out/${py.sitePackages}/_tkinter*)
+      new_rpath=$(sed "s#${py}#${python}#g" <<< "$old_rpath" )
+      patchelf --set-rpath $new_rpath $out/${py.sitePackages}/_tkinter*
     '';
 
     inherit (py) meta;

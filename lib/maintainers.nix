@@ -368,6 +368,7 @@
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
+  polyrod = "Maurizio Di Pietro <dc1mdp@gmail.com>";
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
   primeos = "Michael Weiss <dev.primeos@gmail.com>";
   profpatsch = "Profpatsch <mail@profpatsch.de>";
