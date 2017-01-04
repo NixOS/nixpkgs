@@ -1,6 +1,4 @@
-{ fetchurl, stdenv, lib, flex, bison, db, iptables, pkgconfig
-, enableFan ? false
-}:
+{ fetchurl, stdenv, lib, flex, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";
@@ -10,14 +8,6 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
     sha256 = "1i0n071hiqxw1gisngw2jln3kcp9sh47n6fj5hdwqrvp7w20zwy0";
   };
-
-  patches = lib.optionals enableFan [
-    # These patches were pulled from:
-    # https://launchpad.net/ubuntu/xenial/+source/iproute2
-    ./1000-ubuntu-poc-fan-driver.patch
-    ./1001-ubuntu-poc-fan-driver-v3.patch
-    ./1002-ubuntu-poc-fan-driver-vxlan.patch
-  ];
 
   preConfigure = ''
     patchShebangs ./configure
