@@ -24,12 +24,12 @@ let
 
 in buildPythonApplication rec {
   name = "qutebrowser-${version}";
-  version = "0.8.4";
+  version = "0.9.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0wc6iq7rw89625v595bs4y8spzhid6nnz2gq67f2kbjppk2rikpm";
+    sha256 = "1fp7yddx8xmy6hx01gg4z3vnw8b9qa5ixam7150i3xaalx0gjzfq";
   };
 
   # Needs tox
@@ -79,7 +79,7 @@ in buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = https://github.com/The-Compiler/qutebrowser;
+    homepage = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.jagajaga ];

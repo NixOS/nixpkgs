@@ -69,7 +69,7 @@ in
 
   config = mkIf cfg.enable {
 
-    # FIXME: Implement powersave governor for sandy bridge or later Intel CPUs
+    # Leftover for old setups, should be set by nixos-generate-config now
     powerManagement.cpuFreqGovernor = mkDefault "ondemand";
 
     systemd.targets.post-resume = {

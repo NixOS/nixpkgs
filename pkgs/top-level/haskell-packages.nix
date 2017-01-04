@@ -58,11 +58,6 @@ rec {
       inherit crossSystem;
       selfPkgs = packages.ghcHEAD;
     };
-    ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix rec {
-      bootPkgs = packages.ghc784;
-      inherit (bootPkgs) alex happy;
-    };
-
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
     };
@@ -137,10 +132,6 @@ rec {
     ghcCross = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD.crossCompiler;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
-    };
-    ghcNokinds = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcNokinds;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-nokinds.nix { };
     };
     ghcjs = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjs;

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, flex, bison, linuxHeaders, libtirpc, utillinux, nfs-utils, e2fsprogs
-, libxml2 }:
+, libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
 
 let
   version = "5.1.2";
@@ -13,7 +13,9 @@ in stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    configureFlags="--enable-force-shutdown --enable-ignore-busy --with-path=$PATH"
+    configureFlags="--enable-force-shutdown --enable-ignore-busy --with-path=$PATH --with-openldap=${openldap} --with-sasl=${cyrus_sasl}"
+    export sssldir="${sssd}/lib/sssd/modules"
+    export HAVE_SSS_AUTOFS=1
 
     export MOUNT=${lib.getBin utillinux}/bin/mount
     export MOUNT_NFS=${lib.getBin nfs-utils}/bin/mount.nfs
@@ -29,7 +31,8 @@ in stdenv.mkDerivation {
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [ linuxHeaders libtirpc libxml2 ];
+  buildInputs = [ linuxHeaders libtirpc libxml2 kerberos kmod openldap sssd
+                  openssl cyrus_sasl ];
 
   nativeBuildInputs = [ flex bison ];
 

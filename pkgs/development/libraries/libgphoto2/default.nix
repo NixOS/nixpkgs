@@ -7,15 +7,10 @@ stdenv.mkDerivation rec {
     owner = "gphoto";
     repo = "libgphoto2";
     rev = "${meta.tag}";
-    sha256 = "17k3jxib2jcr2wk83p34h3lvvjbs2gqhqfcngm8zmlrwb385yalh";
+    sha256 = "01nirw0xb8fjjv0jz88bmddv26bgg82w1wg65q51iblmy9z8azfh";
   };
 
-  patches = [(fetchpatch {
-    name = "libjpeg_turbo_1.5.0_fix.patch";
-    url = "https://anonscm.debian.org/cgit/pkg-phototools/libgphoto2.git/plain"
-      + "/debian/patches/libjpeg_turbo_1.5.0_fix.patch?id=8ce79a2a02d";
-    sha256 = "1zclgg20nv4krj8gigq3ylirxqiv1v8p59cfji041m156hy80gy2";
-  })];
+  patches = [];
 
   nativeBuildInputs = [ pkgconfig gettext autoreconfHook ];
   buildInputs = [ libtool libjpeg libusb1  ];
@@ -38,8 +33,8 @@ stdenv.mkDerivation rec {
       MTP, and other vendor specific protocols for controlling and transferring data
       from digital cameras.
     '';
-    version = "2.5.10";
-    tag = "libgphoto2-2_5_10-release";
+    version = "2.5.11";
+    tag = "libgphoto2-2_5_11-release";
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = with stdenv.lib.platforms; unix;

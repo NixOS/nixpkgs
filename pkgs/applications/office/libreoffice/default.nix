@@ -251,6 +251,8 @@ in stdenv.mkDerivation rec {
     inherit srcs;
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;
@@ -258,6 +260,5 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
     hydraPlatforms = [];
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 }

@@ -109,6 +109,7 @@
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien@cassou.me>";
   danbst = "Danylo Hlynskyi <abcz2.uprola@gmail.com>";
+  danielfullmer = "Daniel Fullmer <danielrf12@gmail.com>";
   dasuxullebt = "Christoph-Simon Senjak <christoph.senjak@googlemail.com>";
   davidak = "David Kleuker <post@davidak.de>";
   davidrusu = "David Rusu <davidrusu.me@gmail.com>";
@@ -507,6 +508,7 @@
   yurrriq = "Eric Bailey <eric@ericb.me>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zagy = "Christian Zagrodnick <cz@flyingcircus.io>";
+  zauberpony = "Elmar Athmer <elmar@athmer.org>";
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
   zohl = "Al Zohali <zohl@fmap.me>";

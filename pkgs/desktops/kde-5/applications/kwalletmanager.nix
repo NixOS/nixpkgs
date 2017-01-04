@@ -30,6 +30,7 @@ let
       kxmlgui
     ];
   };
-in kdeWrapper unwrapped {
+in kdeWrapper {
+  inherit unwrapped;
   targets = ["bin/kwalletmanager5"];
 }

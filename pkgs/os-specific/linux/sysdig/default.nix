@@ -2,14 +2,14 @@
 let
   inherit (stdenv.lib) optional optionalString;
   baseName = "sysdig";
-  version = "0.12.0";
+  version = "0.13.0";
 in
 stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "17nf2h5ajy333rwh91hzaw8zq2mnkb3lxy8fmbbs8qazgsvwz6c3";
+    sha256 = "0ghxj473v471nnry8h9accxpwwjp8nbzkgw8dniqld0ixx678pia";
   };
 
   buildInputs = [

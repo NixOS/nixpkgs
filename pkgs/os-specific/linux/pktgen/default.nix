@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
 
+  postPatch = ''
+    substituteInPlace lib/lua/src/luaconf.h --replace /usr/local $out
+    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu
+  '';
+
   installPhase = ''
     install -d $out/bin
     install -m 0755 app/app/${RTE_TARGET}/app/pktgen $out/bin
