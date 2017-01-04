@@ -9,6 +9,7 @@ let
   inherit (config.services.avahi) nssmdns;
   inherit (config.services.samba) nsswins;
   ldap = (config.users.ldap.enable && config.users.ldap.nsswitch);
+  sssd = config.services.sssd.enable;
 
   hostArray = [ "files" "mymachines" ]
     ++ optionals nssmdns [ "mdns_minimal [!UNAVAIL=return]" ]
@@ -18,11 +19,16 @@ let
     ++ ["myhostname" ];
 
   passwdArray = [ "files" ]
+    ++ optional sssd "sss"
     ++ optionals ldap [ "ldap" ]
     ++ [ "mymachines" ];
 
   shadowArray = [ "files" ]
+    ++ optional sssd "sss"
     ++ optionals ldap [ "ldap" ];
+
+  servicesArray = [ "files" ]
+    ++ optional sssd "sss";
 
 in {
   options = {
@@ -60,7 +66,7 @@ in {
       networks:  files
 
       ethers:    files
-      services:  files
+      services:  ${concatStringsSep " " servicesArray}
       protocols: files
       rpc:       files
     '';
