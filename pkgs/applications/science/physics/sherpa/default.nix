@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  configureFlags = "--with-sqlite3=${sqlite.dev}";
+
   meta = {
     description = "Simulation of High-Energy Reactions of PArticles in lepton-lepton, lepton-photon, photon-photon, lepton-hadron and hadron-hadron collisions";
     license     = stdenv.lib.licenses.gpl2;
