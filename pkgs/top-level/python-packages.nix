@@ -12689,21 +12689,21 @@ in {
   };
 
   guessit = buildPythonPackage rec {
-    version = "0.9.4";
+    version = "2.0.4";
     name = "guessit-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/guessit/${name}.tar.gz";
-      sha256 = "068d3dmyk4v04p2zna0340lsdnpkm10gyza62apd9akgjh9rfs48";
+      sha256 = "4f72e21fca9c294651abee26554e2ad778220d90a84f6e1195299a7ec17accb1";
     };
 
-    propagatedBuildInputs = with self; [
-      dateutil_2_1 requests stevedore babelfish pyyaml
-    ];
-
-    # A unicode test fails
+    # Tests require more packages.
     doCheck = false;
+    buildInputs = with self; [ pytestrunner ];
+    propagatedBuildInputs = with self; [
+      dateutil babelfish rebulk
+    ];
 
     meta = {
       homepage = http://pypi.python.org/pypi/guessit;
