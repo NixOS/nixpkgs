@@ -5413,11 +5413,11 @@ in {
   };
 
   cssutils = buildPythonPackage (rec {
-    name = "cssutils-0.9.9";
+    name = "cssutils-1.0.1";
 
     src = pkgs.fetchurl {
-      url = mirror://pypi/c/cssutils/cssutils-0.9.9.zip;
-      sha256 = "139yfm9yz9k33kgqw4khsljs10rkhhxyywbq9i82bh2r31cil1pp";
+      url = mirror://pypi/c/cssutils/cssutils-1.0.1.tar.gz;
+      sha256 = "0qwha9x1wml2qmipbcz03gndnlwhzrjdvw9i09si247a90l8p8fq";
     };
 
     buildInputs = with self; [ self.mock ];
