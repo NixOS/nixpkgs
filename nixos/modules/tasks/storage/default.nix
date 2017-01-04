@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   inherit (lib) mkOption types;
@@ -125,7 +125,7 @@ let
     disk = {
       description = "disk";
       isContainer = true;
-      options = import ./disk.nix;
+      options = import ./disk.nix { inherit pkgs; };
     };
     partition = {
       description = "disk partition";

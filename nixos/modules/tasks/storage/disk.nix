@@ -1,3 +1,5 @@
+{ pkgs }:
+
 { name, lib, config, ... }:
 
 let
@@ -58,11 +60,22 @@ let
       default = null;
       example = ''
         # Match on the first path that includes the disk specification name.
-        ls -1 /dev/*''${disk}*
+        for i in /dev/*''${disk}*; do echo "$i"; done
         # Match on Nth device found in /dev/sd*, where N is the integer within
         # the disk's specification name.
         ls -1 /dev/sd* | tail -n+''${disk//[^0-9]}
       '';
+      apply = script: let
+        scriptFile = pkgs.writeScript "match-${name}.sh" ''
+          #!${pkgs.bash}/bin/bash -e
+          set -o pipefail
+          shopt -s nullglob
+          export disk="$1" PATH=${lib.escapeShellArg (lib.makeBinPath [
+            pkgs.coreutils pkgs.gnused pkgs.utillinux pkgs.bash
+          ])}
+          ${script}
+        '';
+      in if script == null then null else scriptFile;
       description = ''
         Match based on the shell script lines set here.
 
@@ -76,9 +89,15 @@ let
         <varname>$disk</varname> variable would be set to
         <literal>foo</literal>.
 
-        In addition the script is run within bash and has coreutils, sed and
-        util-linux in <envar>PATH</envar>, everything else needs to be
-        explicitly referenced using absolute paths.
+        In addition the script is run within bash and has
+        <application>coreutils</application>, <application>GNU
+        sed</application> and <application>util-linux</application> in
+        <envar>PATH</envar>, everything else needs to be explicitly referenced
+        using absolute paths.
+
+        Within that shell the <literal>pipefail</literal> and
+        <literal>nullglob</literal> options are set in addition to
+        <literal>set -e</literal>, so any errors will cause the match to fail.
       '';
     };
 
