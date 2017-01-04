@@ -1,30 +1,29 @@
 diff --git a/blivet/tasks/availability.py b/blivet/tasks/availability.py
-index 61426c6..bfa466b 100644
+index 7811be1..9e94cb2 100644
 --- a/blivet/tasks/availability.py
 +++ b/blivet/tasks/availability.py
-@@ -19,9 +19,11 @@
+@@ -19,9 +19,10 @@
  #
  # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
  
 +import re
 +import os
-+import subprocess
  import abc
  from distutils.version import LooseVersion
 -import hawkey
  
  from six import add_metaclass
  
-@@ -37,6 +39,8 @@ import logging
+@@ -37,6 +38,8 @@ import logging
  log = logging.getLogger("blivet")
  
  CACHE_AVAILABILITY = True
-+NIX_STOREPATH_RE = re.compile('^/nix/store/[a-z0-9]+-([^-]+)-(.*)$',
++NIX_STOREPATH_RE = re.compile('^/nix/store/[a-z0-9]+-([^/]+?)-([^/]*)/.*$',
 +                              re.IGNORECASE)
  
  
  class ExternalResource(object):
-@@ -153,22 +157,24 @@ class PackageMethod(Method):
+@@ -153,22 +156,22 @@ class PackageMethod(Method):
              :rtype: LooseVersion
              :raises AvailabilityError: on failure to obtain package version
          """
@@ -52,14 +51,12 @@ index 61426c6..bfa466b 100644
 +            lambda p: p.startswith('/nix/store/'),
 +            [os.path.realpath(p) for p in bin_searchpath.split(':')]
 +        )):
-+            graph = subprocess.check_output(['nix-store', '-qR', store_path])
-+            for sp in graph.splitlines():
-+                match = NIX_STOREPATH_RE.match(sp.decode('utf-8'))
-+                if match is None:
-+                    continue
-+                if match.group(1) != self.package.package_name:
-+                    continue
-+                return LooseVersion(match.group(2))
++            match = NIX_STOREPATH_RE.match(store_path)
++            if match is None:
++                continue
++            if match.group(1) != self.package.package_name:
++                continue
++            return LooseVersion(match.group(2))
 +
 +        raise AvailabilityError("Could not determine package version for %s" % self.package.package_name)
  
