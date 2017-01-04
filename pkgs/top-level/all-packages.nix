@@ -14892,6 +14892,8 @@ in
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
+  insync = callPackage ../applications/networking/insync { };
+
   lightdm = qt5.callPackage ../applications/display-managers/lightdm {
     qt4 = null;
     withQt5 = false;
