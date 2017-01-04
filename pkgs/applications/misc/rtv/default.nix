@@ -1,17 +1,19 @@
 { stdenv, fetchFromGitHub, pkgs, lib, python, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.10.0";
+  version = "1.13.0";
   name = "rtv-${version}";
 
   src = fetchFromGitHub {
     owner = "michael-lazar";
     repo = "rtv";
     rev = "v${version}";
-    sha256 = "1gm5jyqqssf69lfx0svhzsb9m0dffm6zsf9jqnwh6gjihfz25a45";
+    sha256 = "0rxncbzb4a7zlfxmnn5jm6yvwviaaj0v220vwv82hkjiwcdjj8jf";
   };
 
   propagatedBuildInputs = with pythonPackages; [
+    beautifulsoup4
+    mailcap-fix
     tornado
     requests2
     six
