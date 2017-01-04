@@ -1,25 +1,26 @@
 {stdenv, fetchurl, openssl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "ldns-1.6.17";
+  pname = "ldns";
+  version = "1.7.0";
+
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://www.nlnetlabs.nl/downloads/ldns/${name}.tar.gz";
-    sha256 = "1kf8pkwhcssvgzhh6ha1pjjiziwvwmfaali7kaafh6118mcy124b";
+    url = "https://www.nlnetlabs.nl/downloads/ldns/${name}.tar.gz";
+    sha1 = "ceeeccf8a27e61a854762737f6ee02f44662c1b8";
   };
 
-  outputs = [ "out" "dev" ];
-
-  patches = [ ./perl-5.22-compat.patch ];
-
-  postPatch = ''
+  patchPhase = ''
     patchShebangs doc/doxyparse.pl
   '';
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ openssl ];
 
-  configureFlags = [ "--with-ssl=${openssl.dev}" "--with-drill" ];
+  configureFlags = [ "--with-ssl=${openssl.dev}" "--with-drill"];
 
   postInstall = ''
     moveToOutput "bin/ldns-config" "$dev"
