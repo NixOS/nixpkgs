@@ -12,26 +12,28 @@ makeWrapper() {
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
 
-        if test "$p" = "--set"; then
+        case "$p" in
+          "--set")
             varName=${params[$((n + 1))]}
             value=${params[$((n + 2))]}
             n=$((n + 2))
             echo "export $varName=\"$value\"" >> $wrapper
-        fi
+            ;;
 
-        if test "$p" = "--unset"; then
+          "--unset")
             varName=${params[$((n + 1))]}
             n=$((n + 1))
             echo "unset $varName" >> "$wrapper"
-        fi
+            ;;
 
-        if test "$p" = "--run"; then
+          "--run")
             command=${params[$((n + 1))]}
             n=$((n + 1))
             echo "$command" >> $wrapper
-        fi
+            ;;
 
-        if test "$p" = "--suffix" -o "$p" = "--prefix"; then
+          "--suffix") ;& # case fallthrough. requires bash >= 4.0
+          "--prefix")
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             value=${params[$((n + 3))]}
@@ -43,9 +45,9 @@ makeWrapper() {
                     echo "export $varName=$value\${$varName:+$separator}\$$varName" >> $wrapper
                 fi
             fi
-        fi
+            ;;
 
-        if test "$p" = "--suffix-each"; then
+          "--suffix-each")
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             values=${params[$((n + 3))]}
@@ -53,9 +55,10 @@ makeWrapper() {
             for value in $values; do
                 echo "export $varName=\$$varName\${$varName:+$separator}$value" >> $wrapper
             done
-        fi
+            ;;
 
-        if test "$p" = "--suffix-contents" -o "$p" = "--prefix-contents"; then
+          "--suffix-contents") ;& # fallthrough
+          "--prefix-contents")
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             fileNames=${params[$((n + 3))]}
@@ -67,18 +70,24 @@ makeWrapper() {
                     echo "export $varName=$(cat $fileName)\${$varName:+$separator}\$$varName" >> $wrapper
                 fi
             done
-        fi
+            ;;
 
-        if test "$p" = "--add-flags"; then
+          "--add-flags")
             flags=${params[$((n + 1))]}
             n=$((n + 1))
             flagsBefore="$flagsBefore $flags"
-        fi
+            ;;
 
-        if test "$p" = "--argv0"; then
+          "--argv0")
             argv0=${params[$((n + 1))]}
             n=$((n + 1))
-        fi
+            ;;
+
+          "--*")
+            printf "Unknown flag passed to makeWrapper: %s\n" "$p"
+            exit 1
+            ;;
+        esac
     done
 
     # Note: extraFlagsArray is an array containing additional flags
