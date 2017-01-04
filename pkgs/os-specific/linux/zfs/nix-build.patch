@@ -1,5 +1,5 @@
 diff --git a/Makefile.am b/Makefile.am
-index f8abb5f..82e8fb6 100644
+index e009212f4..27ff7c6e0 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -11,10 +11,10 @@ endif
@@ -16,7 +16,7 @@ index f8abb5f..82e8fb6 100644
  endif
  
 diff --git a/include/Makefile.am b/include/Makefile.am
-index a94cad5..a160fe2 100644
+index a94cad50d..a160fe23e 100644
 --- a/include/Makefile.am
 +++ b/include/Makefile.am
 @@ -29,6 +29,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
@@ -28,10 +28,10 @@ index a94cad5..a160fe2 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/include/linux/Makefile.am b/include/linux/Makefile.am
-index 595d1db..d41375d 100644
+index 9bb0b3493..885d1b0ca 100644
 --- a/include/linux/Makefile.am
 +++ b/include/linux/Makefile.am
-@@ -18,6 +18,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+@@ -21,6 +21,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
  endif
  
  if CONFIG_KERNEL
@@ -40,10 +40,10 @@ index 595d1db..d41375d 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/include/sys/Makefile.am b/include/sys/Makefile.am
-index 77ecfb2..52b3612 100644
+index 956643801..2cb8eb169 100644
 --- a/include/sys/Makefile.am
 +++ b/include/sys/Makefile.am
-@@ -114,6 +114,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+@@ -129,6 +129,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
  endif
  
  if CONFIG_KERNEL
@@ -52,7 +52,7 @@ index 77ecfb2..52b3612 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/include/sys/fm/Makefile.am b/include/sys/fm/Makefile.am
-index 8bca5d8..a5eafcd 100644
+index 8bca5d846..a5eafcd5e 100644
 --- a/include/sys/fm/Makefile.am
 +++ b/include/sys/fm/Makefile.am
 @@ -16,6 +16,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
@@ -64,7 +64,7 @@ index 8bca5d8..a5eafcd 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/include/sys/fm/fs/Makefile.am b/include/sys/fm/fs/Makefile.am
-index fdc9eb5..807c47c 100644
+index fdc9eb545..807c47cd2 100644
 --- a/include/sys/fm/fs/Makefile.am
 +++ b/include/sys/fm/fs/Makefile.am
 @@ -13,6 +13,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
@@ -76,7 +76,7 @@ index fdc9eb5..807c47c 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/include/sys/fs/Makefile.am b/include/sys/fs/Makefile.am
-index 0859b9f..b0c6eec 100644
+index 0859b9f67..b0c6eec8b 100644
 --- a/include/sys/fs/Makefile.am
 +++ b/include/sys/fs/Makefile.am
 @@ -13,6 +13,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
@@ -88,10 +88,10 @@ index 0859b9f..b0c6eec 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/module/Makefile.in b/module/Makefile.in
-index d4ddee2..876c811 100644
+index e4f06a6e8..8d02f57dd 100644
 --- a/module/Makefile.in
 +++ b/module/Makefile.in
-@@ -18,9 +18,9 @@ modules:
+@@ -21,9 +21,9 @@ modules:
  	@# installed devel headers, or they may be in the module
  	@# subdirectory when building against the spl source tree.
  	@if [ -f @SPL_OBJ@/@SPL_SYMBOLS@ ]; then \
@@ -103,16 +103,16 @@ index d4ddee2..876c811 100644
  	else \
  		echo -e "\n" \
  		"*** Missing spl symbols ensure you have built the spl:\n" \
-@@ -28,6 +28,8 @@ modules:
+@@ -31,6 +31,8 @@ modules:
  		"*** - @SPL_OBJ@/module/@SPL_SYMBOLS@\n"; \
  		exit 1; \
  	fi
 +	@# when copying a file out of the nix store, we need to make it writable again.
 +	chmod +w @SPL_SYMBOLS@
- 	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` @KERNELMAKE_PARAMS@ CONFIG_ZFS=m $@
- 
- clean:
-@@ -42,15 +44,15 @@ clean:
+ 	list='$(SUBDIR_TARGETS)'; for targetdir in $$list; do \
+ 		$(MAKE) -C $$targetdir; \
+ 	done
+@@ -48,15 +50,15 @@ clean:
  modules_install:
  	@# Install the kernel modules
  	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` $@ \
