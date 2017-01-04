@@ -160,14 +160,35 @@ let
   # Return true if an option is referencing a btrfs storage specification.
   isBtrfs = storage: lib.isString storage && lib.hasPrefix "btrfs." storage;
 
-  # Make sure that whenever a fsType is set to something different than "btrfs"
-  # while using a "btrfs" device spec type we throw an assertion error.
-  assertions = lib.mapAttrsToList (fs: cfg: {
-    assertion = if isBtrfs cfg.storage then cfg.fsType == "btrfs" else true;
-    message = "The option `fileSystems.${fs}.fsType' is `${cfg.fsType}' but"
-            + " \"btrfs\" is expected because `fileSystems.${fs}.storage'"
-            + " is set to `${cfg.storage}'.";
-  }) config.fileSystems;
+  assertions = let
+    # Make sure that whenever a fsType is set to something different than
+    # "btrfs" while using a "btrfs" device spec type we throw an assertion
+    # error.
+    btrfsAssertions = lib.mapAttrsToList (fs: cfg: {
+      assertion = if isBtrfs cfg.storage then cfg.fsType == "btrfs" else true;
+      message = "The option `fileSystems.${fs}.fsType' is `${cfg.fsType}' but"
+              + " \"btrfs\" is expected because `fileSystems.${fs}.storage'"
+              + " is set to `${cfg.storage}'.";
+    }) config.fileSystems;
+
+    # Only allow one match method to be set for a disk and throw an assertion
+    # if either no match methods or too many (more than one) are defined.
+    matcherAssertions = lib.mapAttrsToList (disk: cfg: let
+      inherit (lib) attrNames filterAttrs;
+      isMatcher = name: name != "_module" && name != "allowIncomplete";
+      filterMatcher = name: val: isMatcher name && val != null;
+      defined = attrNames (filterAttrs filterMatcher cfg.match);
+      amount = lib.length defined;
+      optStr = "`storage.disk.${disk}'";
+      noneMsg = "No match methods have been defined for ${optStr}.";
+      manyMsg = "The disk ${optStr} has more than one match methods"
+              + " defined: ${lib.concatStringsSep ", " defined}";
+    in {
+      assertion = amount == 1;
+      message = if amount < 1 then noneMsg else manyMsg;
+    }) config.storage.disk;
+
+  in btrfsAssertions ++ matcherAssertions;
 
 in
 
