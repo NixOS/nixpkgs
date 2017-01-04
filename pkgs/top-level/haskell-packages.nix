@@ -74,6 +74,11 @@ rec {
       inherit (pkgs.haskellPackages) ghcWithPackages;
     });
 
+    ghcAndroid801 = callPackage ../development/compilers/ghc/android/8.0.1.nix rec {
+      bootPkgs = packages.ghc801;
+      inherit (bootPkgs) hscolour;
+    };
+
   };
 
   packages = {
@@ -140,6 +145,11 @@ rec {
     ghcjsHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjsHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+    };
+
+    ghcAndroid801 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghcAndroid801;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x-android.nix { };
     };
 
     # These attributes exist only for backwards-compatibility so that we don't break
