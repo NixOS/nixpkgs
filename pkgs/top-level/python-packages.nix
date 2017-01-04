@@ -14658,6 +14658,26 @@ in {
     };
   };
 
+  sortedcontainers = buildPythonPackage rec {
+    name = "sortedcontainers-${version}";
+    version = "1.5.7";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sortedcontainers/${name}.tar.gz";
+      sha256 = "1sjh8lccbmvwna91mlhl5m3z4320p07h063b8x8br4p4cll49w0g";
+    };
+
+    # tries to run tests for all python versions and uses virtualenv weirdly
+    doCheck = false;
+    #buildInputs = with self; [ tox nose ];
+
+    meta = {
+      description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
+      homepage = "http://www.grantjenks.com/docs/sortedcontainers/";
+      license = licenses.asl20;
+    };
+  };
+
   mitmproxy = buildPythonPackage rec {
     baseName = "mitmproxy";
     name = "${baseName}-${version}";
