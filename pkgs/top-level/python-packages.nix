@@ -1545,8 +1545,8 @@ in {
         description = "Unified tool to manage your AWS services";
         license = stdenv.lib.licenses.asl20;
         maintainers = with maintainers; [ muflax ];
-    };           
-  };          
+    };
+  };
 
   aws_shell = buildPythonPackage rec {
     name = "aws-shell-${version}";
