@@ -7,7 +7,7 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? false
+, tcl ? null, tk ? null, tix ? null, libX11 ? null, xproto ? null, x11Support ? false
 , zlib
 , callPackage
 , self
@@ -53,6 +53,10 @@ in stdenv.mkDerivation {
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
+  '';
+
+  postPatch = optionalString (x11Support && (tix != null)) ''
+    substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   preConfigure = ''

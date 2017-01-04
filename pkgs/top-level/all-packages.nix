@@ -9537,6 +9537,8 @@ in
 
   tivodecode = callPackage ../applications/video/tivodecode { };
 
+  tix = callPackage ../development/libraries/tix { };
+
   tk = tk-8_6;
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
