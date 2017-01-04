@@ -24753,7 +24753,7 @@ in {
     };
 
     buildInputs = with self; [ pytest webob pkgs.imagemagick nose ];
-    propagatedBuildInputs = with self; [ sqlalchemy8 wand ];
+    propagatedBuildInputs = with self; [ sqlalchemy8 Wand ];
 
     checkPhase = ''
       cd tests
