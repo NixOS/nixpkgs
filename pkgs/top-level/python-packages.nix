@@ -8799,14 +8799,17 @@ in {
   };
 
   pudb = buildPythonPackage rec {
-    name = "pudb-2013.3.6";
+    name = "pudb-2016.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pudb/${name}.tar.gz";
-      sha256 = "81b20a995803c4be513e6d36c8ec9a531d3ccb24670b2416abc20f3933ddb8be";
+      sha256 = "0njhi49d9fxbwh5p8yjx8m3jlfyzfm00b5aff6bz473pn7vxfn79";
     };
 
-    propagatedBuildInputs = with self; [ self.pygments self.urwid ];
+    propagatedBuildInputs = with self; [ pygments urwid ];
+
+    # Tests fail on python 3 due to writes to the read-only home directory
+    doCheck = !isPy3k;
 
     meta = {
       description = "A full-screen, console-based Python debugger";
