@@ -21508,12 +21508,12 @@ in {
   };
 
   pyperclip = buildPythonPackage rec {
-    version = "1.5.11";
+    version = "1.5.27";
     name = "pyperclip-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyperclip/${name}.zip";
-      sha256 = "07q8krmi7phizzp192x3j7xbk1gzhc1kc3jp4mxrm32dn84sp1vh";
+      sha256 = "1i9zxm7qc49n9yxfb41c0jbmmp2hpzx98kaizjl7qmgiv3snvjx3";
     };
 
     doCheck = false;
