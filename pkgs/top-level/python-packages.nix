@@ -25512,9 +25512,13 @@ in {
     disabled = isPy26 || isPyPy;
 
     installPhase = ''
+      # Move the tkinter module
       mkdir -p $out/${py.sitePackages}
-      ls -Al lib/${py.libPrefix}/lib-dynload/ | grep tkinter
       mv lib/${py.libPrefix}/lib-dynload/_tkinter* $out/${py.sitePackages}/
+      # Update the rpath to point to python without x11Support
+      old_rpath=$(patchelf --print-rpath $out/${py.sitePackages}/_tkinter*)
+      new_rpath=$(sed "s#${py}#${python}#g" <<< "$old_rpath" )
+      patchelf --set-rpath $new_rpath $out/${py.sitePackages}/_tkinter*
     '';
 
     inherit (py) meta;
