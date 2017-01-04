@@ -11605,6 +11605,29 @@ in {
     };
   };
 
+  flask-restplus = buildPythonPackage rec {
+    name = "flask-restplus-${version}";
+    # Exactly 0.8.6 is required by flexget
+    version = "0.8.6";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flask-restplus/${name}.tar.gz";
+      sha256 = "3bb76cc156b9a09da62396d82b29fa31e4f27cccf79528538fe7155cf2785593";
+    };
+
+    # Requires additional packages.
+    doCheck = false;
+    buildInputs = with self; [ nose blinker tzlocal ];
+    propagatedBuildInputs = with self; [ flask six jsonschema pytz aniso8601 flask-restful ];
+
+    meta = {
+      homepage = "https://github.com/noirbizarre/flask-restplus";
+      description = "Fast, easy and documented API development with Flask";
+      license = licenses.mit;
+    };
+  };
+
   flask_script = buildPythonPackage rec {
     name = "Flask-Script-${version}";
     version = "2.0.5";
