@@ -12652,6 +12652,27 @@ in {
     };
   };
 
+  rebulk = buildPythonPackage rec {
+    version = "0.8.2";
+    name = "rebulk-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rebulk/${name}.tar.gz";
+      sha256 = "8c09901bda7b79a21d46faf489d67d017aa54d38bdabdb53f824068a6640401a";
+    };
+
+    # Some kind of trickery with imports that doesn't work.
+    doCheck = false;
+    buildInputs = with self; [ pytest pytestrunner ];
+    propagatedBuildInputs = with self; [ six regex ];
+
+    meta = {
+      homepage = "https://github.com/Toilal/rebulk/";
+      license = licenses.mit;
+      description = "Advanced string matching from simple patterns";
+    };
+  };
+
   gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
 
   hawkauthlib = buildPythonPackage rec {
