@@ -14728,33 +14728,6 @@ in {
     };
   };
 
-  mitmproxy = buildPythonPackage rec {
-    baseName = "mitmproxy";
-    name = "${baseName}-${version}";
-    version = "0.17.1";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mitmproxy";
-      repo = "mitmproxy";
-      rev = "v${version}";
-      sha256 = "0a50mkvm3zf9cbs0pf6bwy00bhmy4d1l9as8c9m0bgrk6hq7h53p";
-    };
-
-    propagatedBuildInputs = with self; [
-      pyopenssl pyasn1 urwid pillow lxml flask protobuf click
-      ConfigArgParse pyperclip blinker construct pyparsing html2text tornado
-    ];
-
-    doCheck = false;
-
-    meta = {
-      description = ''Man-in-the-middle proxy'';
-      homepage = "http://mitmproxy.org/";
-      license = licenses.mit;
-      broken = true;
-    };
-  };
-
   mock = buildPythonPackage (rec {
     name = "mock-2.0.0";
 
