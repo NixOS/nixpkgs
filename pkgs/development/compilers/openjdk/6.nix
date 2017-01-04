@@ -1,5 +1,6 @@
 { stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype
 , which, bootjdk, nettools, xorg, file, cups
+, motif
 , fontconfig, cpio, cacert, perl, setJavaClassPath
 , minimal ? false
 }:
@@ -54,12 +55,30 @@ let
       [ unzip procps ant which zip cpio nettools alsaLib
         xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
         xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-        fontconfig perl file bootjdk
+        fontconfig perl file bootjdk motif
       ];
 
     NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
     NIX_LDFLAGS = if minimal then null else "-lfontconfig -lXcursor -lXinerama";
+
+    postUnpack = ''
+      ls | grep jdk | grep -v '^jdk6' | awk -F- '{print $1}' | while read p; do
+        mv $p-* $(ls | grep '^jdk6')/$p
+      done
+      cd jdk6-*
+
+      sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
+        -e "s@/bin/ls@${coreutils}/bin/ls@" \
+        hotspot/make/linux/makefiles/sa.make
+
+      sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
+        {jdk,corba}/make/common/shared/Defs-utils.gmk
+
+      tar xf ${cups.src}
+      cupsDir=$(echo $(pwd)/cups-*)
+      makeFlagsArray+=(CUPS_HEADERS_PATH=$cupsDir)
+    '';
 
     NIX_NO_SELF_RPATH = true;
 
@@ -85,7 +104,7 @@ let
       # We also need to PaX-mark in the middle of the build
       substituteInPlace hotspot*/make/linux/makefiles/launcher.make \
          --replace XXX_PAXFLAGS_XXX ${paxflags}
-      substituteInPlace jdk-${repover}/make/common/Program.gmk  \
+      substituteInPlace jdk/make/common/Program.gmk  \
          --replace XXX_PAXFLAGS_XXX ${paxflags}
     '';
 
