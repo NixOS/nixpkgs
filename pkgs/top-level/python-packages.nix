@@ -2510,6 +2510,22 @@ in {
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
   };
 
+  colorclass = buildPythonPackage rec {
+    version = "2.2.0";
+    name = "colorclass-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/colorclass/${name}.tar.gz";
+      sha256 = "b05c2a348dfc1aff2d502527d78a5b7b7e2f85da94a96c5081210d8e9ee8e18b";
+    };
+
+    meta = {
+      homepage = "https://github.com/Robpol86/colorclass";
+      license = licenses.mit;
+      description = "Automatic support for console colors";
+    };
+  };
+
   colorlog = buildPythonPackage rec {
     name = "colorlog-${version}";
     version = "2.6.1";
