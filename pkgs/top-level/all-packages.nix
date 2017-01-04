@@ -1287,6 +1287,7 @@ in
 
   coreutils = callPackage ../tools/misc/coreutils {
     aclSupport = stdenv.isLinux;
+    attrSupport = stdenv.isLinux;
   };
 
   coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
