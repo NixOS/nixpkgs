@@ -222,4 +222,10 @@ in
             + " \"btrfs\" is expected because `fileSystems.${fs}.storage'"
             + " is set to `${cfg.storage}'.";
   }) config.fileSystems;
+
+  config.system.build.nixpart-spec = let
+    json = builtins.toJSON {
+      inherit (config) fileSystems swapDevices storage;
+    };
+  in pkgs.writeText "nixpart.json" json;
 }
