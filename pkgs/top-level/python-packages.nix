@@ -2865,11 +2865,11 @@ in {
 
   blinker = buildPythonPackage rec {
     name = "blinker-${version}";
-    version = "1.3";
+    version = "1.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/blinker/${name}.tar.gz";
-      sha256 = "6811010809262261e41ab7b92f3f6d23f35cf816fbec2bc05077992eebec6e2f";
+      sha256 = "1dpq0vb01p36jjwbhhd08ylvrnyvcc82yxx3mwjx6awrycjyw6j7";
     };
 
     meta = {
