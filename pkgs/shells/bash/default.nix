@@ -10,11 +10,21 @@ let
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
   sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
 
+  upstreamPatches =
+    let
+      patch = nr: sha256:
+        fetchurl {
+          url = "mirror://gnu/bash/${realName}-patches/${shortName}-${nr}";
+          inherit sha256;
+        };
+    in
+      import ./bash-4.3-patches.nix patch;
+
   inherit (stdenv.lib) optional optionalString;
 in
 
 stdenv.mkDerivation rec {
-  name = "${realName}-p${toString (builtins.length patches)}";
+  name = "${realName}-p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
@@ -39,15 +49,14 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
-  patches =
-    (let
-      patch = nr: sha256:
-        fetchurl {
-          url = "mirror://gnu/bash/${realName}-patches/${shortName}-${nr}";
-          inherit sha256;
-        };
-    in
-      import ./bash-4.3-patches.nix patch) 
+  patches = upstreamPatches
+      ++ [ (fetchurl {
+              # https://security.gentoo.org/glsa/201701-02
+              url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-shells"
+                  + "/bash/files/bash-4.4-popd-offset-overflow.patch"
+                  + "?id=1bf1ceeb04a2f57e1e5e1636a8c288c4d0db6682";
+              sha256 = "02n08lw5spvsc2b1bll0gr6mg4qxcg7pzfjkw7ji5w7bjcikccbm";
+          }) ]
       ++ optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {
