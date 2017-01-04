@@ -7,8 +7,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aszlig";
     repo = "nixpart";
-    rev = "fb8163fc8831a8f931d03771ed2173aa66288312";
-    sha256 = "1z50afx6fqni3brinazabw0aa8i49hdg0a7p6calc8yaq1ccq9dm";
+    rev = "1c52c26bcd9b8f939b0be04face8f704cda80067";
+    sha256 = "1zzgffsrap767rjs9m37havgmclibvh1z67cljkiz4cqk12ivciq";
   };
 
   checkInputs = [ nix ];
