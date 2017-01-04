@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://qa.debian.org/developer.php?login=rotty%40debian.org";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.mdipietro ];
+    maintainers = [ stdenv.lib.maintainers.polyrod ];
     platforms = stdenv.lib.platforms.all;
   };
 }
