@@ -1938,6 +1938,8 @@ in
 
   gocryptfs = callPackage ../tools/filesystems/gocrypfs { };
 
+  godot = callPackage ../development/tools/godot {};
+
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
   go-pup = callPackage ../development/tools/pup { };
