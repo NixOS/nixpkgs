@@ -11,8 +11,6 @@ stdenv.mkDerivation {
     owner = "bohoomil";
   };
 
-  phases = "$prePhases unpackPhase installPhase $postPhases";
-
   installPhase = ''
     mkdir -p $out/etc/fonts/conf.d
     cp conf.d.infinality/*.conf $out/etc/fonts/conf.d
