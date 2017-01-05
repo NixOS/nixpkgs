@@ -450,14 +450,18 @@ in pkgs.lib.mapAttrs mkStorageTest {
         disk.match8.match.physicalPos = 9;    # vdi
       };
 
-      fileSystems."/match1" = { storage = "disk.match1"; fsType = "ext4"; };
-      fileSystems."/match2" = { storage = "disk.match2"; fsType = "ext4"; };
-      fileSystems."/match3" = { storage = "disk.match3"; fsType = "ext4"; };
-      fileSystems."/match4" = { storage = "disk.match4"; fsType = "ext4"; };
-      fileSystems."/match5" = { storage = "disk.match5"; fsType = "ext4"; };
-      fileSystems."/match6" = { storage = "disk.match6"; fsType = "ext4"; };
-      fileSystems."/match7" = { storage = "disk.match7"; fsType = "ext4"; };
-      fileSystems."/match8" = { storage = "disk.match8"; fsType = "ext4"; };
+      # This basically creates a bunch of filesystem option definitions for
+      # match1 to match8.
+      fileSystems = builtins.listToAttrs (builtins.genList (idx: let
+        name = "match${toString (idx + 1)}";
+      in {
+        name = "/${name}";
+        value.storage = "disk.${name}";
+        value.fsType = "ext4";
+        # We need to add a label here, because things like UUIDs and labels
+        # that were created before the partitioning step are no longer present.
+        value.label = name;
+      }) 8);
     };
 
     testScript = ''
