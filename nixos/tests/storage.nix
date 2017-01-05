@@ -93,7 +93,6 @@ let
           }
           # Try to remount with nixpart
           $machine->succeed('nixpart -vm --json /etc/nixpart.json >&2');
-          ensureMountPoint("/mnt");
           # Check if our beloved canaries are dead
           chomp $canaries;
           $machine->nest("Checking canaries:", sub {
@@ -172,6 +171,7 @@ in pkgs.lib.mapAttrs mkStorageTest {
       ensureNoPartition("vdb6");
       ensureNoPartition("vdc1");
       remountAndCheck;
+      ensureMountPoint("/mnt");
       ensureMountPoint("/mnt/boot");
       ensureMountPoint("/mnt/nix");
     '';
@@ -222,6 +222,7 @@ in pkgs.lib.mapAttrs mkStorageTest {
       ensureNoPartition("vdb3");
       ensureNoPartition("vdc3");
       remountAndCheck;
+      ensureMountPoint("/mnt");
     '';
   };
 
@@ -263,6 +264,7 @@ in pkgs.lib.mapAttrs mkStorageTest {
       ensurePartition("boot", "f2fs");
       ensurePartition("root", "f2fs");
       remountAndCheck;
+      ensureMountPoint("/mnt");
       ensureMountPoint("/mnt/boot", "f2fs");
     '';
   };
@@ -325,6 +327,7 @@ in pkgs.lib.mapAttrs mkStorageTest {
       ensureNoPartition("vdc4");
       ensureNoPartition("md2");
       remountAndCheck;
+      ensureMountPoint("/mnt");
       ensureMountPoint("/mnt/boot");
     '';
   };
@@ -396,6 +399,7 @@ in pkgs.lib.mapAttrs mkStorageTest {
       ensurePartition("/dev/nixos/root", "ext4");
 
       remountAndCheck;
+      ensureMountPoint("/mnt");
       ensureMountPoint("/mnt/boot");
     '';
   };
