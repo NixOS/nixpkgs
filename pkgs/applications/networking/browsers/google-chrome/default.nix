@@ -6,6 +6,9 @@
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus_libs, gtk2, gdk_pixbuf, gcc
 
+# command line arguments which are always set e.g "--disable-gpu"
+, commandLineArgs ? ""
+
 # Will crash without.
 , systemd
 
@@ -106,7 +109,7 @@ in stdenv.mkDerivation rec {
     #!${bash}/bin/sh
     export LD_LIBRARY_PATH=$rpath\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
     export PATH=$binpath\''${PATH:+:\$PATH}
-    $out/share/google/$appname/google-$appname "\$@"
+    $out/share/google/$appname/google-$appname ${commandLineArgs} "\$@"
     EOF
     chmod +x $exe
 
