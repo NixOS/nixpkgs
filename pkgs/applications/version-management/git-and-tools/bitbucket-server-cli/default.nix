@@ -9,6 +9,8 @@ bundlerEnv rec {
   lockfile = ./Gemfile.lock;
   gemset = ./gemset.nix;
 
+  pname = "atlassian-stash";
+
   meta = with lib; {
     description = "A command line interface to interact with BitBucket Server (formerly Atlassian Stash)";
     homepage    = https://bitbucket.org/atlassian/bitbucket-server-cli;
