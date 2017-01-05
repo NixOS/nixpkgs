@@ -1,34 +1,30 @@
-{ stdenv, fetchurl, fetchpatch, python, buildPythonPackage, gmp }:
+{ stdenv, fetchurl, buildPythonPackage, pycryptodome }:
 
-buildPythonPackage rec {
-  name = "pycrypto-2.6.1";
-  namePrefix = "";
+# This is a dummy package providing the drop-in replacement pycryptodome.
+# https://github.com/NixOS/nixpkgs/issues/21671
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pycrypto/${name}.tar.gz";
-    sha256 = "0g0ayql5b9mkjam8hym6zyg6bv77lbh66rv1fyvgqb17kfc1xkpj";
-  };
+let
+  version = pycryptodome.version;
+  pname = "pycrypto";
+in buildPythonPackage rec {
+  name = "${pname}-${version}";
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2013-7459.patch";
-      url = "https://anonscm.debian.org/cgit/collab-maint/python-crypto.git/plain/debian/patches/CVE-2013-7459.patch?h=debian/2.6.1-7";
-      sha256 = "01r7aghnchc1bpxgdv58qyi2085gh34bxini973xhy3ks7fq3ir9";
-    })
-  ];
+  # Cannot build wheel otherwise (zip 1980 issue)
+  SOURCE_DATE_EPOCH=315532800;
 
-  preConfigure = ''
-    sed -i 's,/usr/include,/no-such-dir,' configure
-    sed -i "s!,'/usr/include/'!!" setup.py
+  # We need to have a dist-info folder, so let's create one with setuptools
+  unpackPhase = ''
+    echo "from setuptools import setup; setup(name='${pname}', version='${version}', install_requires=['pycryptodome'])" > setup.py
   '';
 
-  buildInputs = stdenv.lib.optional (!python.isPypy or false) gmp; # optional for pypy
+  propagatedBuildInputs = [ pycryptodome ];
 
-  doCheck = !(python.isPypy or stdenv.isDarwin); # error: AF_UNIX path too long
+  # Our dummy has no tests
+  doCheck = false;
 
   meta = {
     homepage = "http://www.pycrypto.org/";
     description = "Python Cryptography Toolkit";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = pycryptodome.meta.platforms;
   };
 }
