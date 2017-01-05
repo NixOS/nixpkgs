@@ -20067,18 +20067,15 @@ in {
 
     buildInputs = [ pkgs.libev ];
 
-    postPatch =
-      if !stdenv.isDarwin 
-      then ''
-        libev_so=${pkgs.libev}/lib/libev.so.4
-        test -f "$libev_so" || { echo "ERROR: File $libev_so does not exist, please fix nix expression for pyev"; exit 1; }
-        sed -i -e "s|libev_dll_name = find_library(\"ev\")|libev_dll_name = \"$libev_so\"|" setup.py
-      ''
-      else ''
-        libev_so=${pkgs.libev}/lib/libev.4.dylib
-        test -f "$libev_so" || { echo "ERROR: File $libev_so does not exist, please fix nix expression for pyev"; exit 1; }
-        sed -i -e "s|libev_dll_name = find_library(\"ev\")|libev_dll_name = \"$libev_so\"|" setup.py
-      '';
+    libEvSharedLibrary = 
+      if !stdenv.isDarwin  
+      then "${pkgs.libev}/lib/libev.so.4"
+      else "${pkgs.libev}/lib/libev.4.dylib";
+
+    postPatch = ''
+      test -f "${libEvSharedLibrary}" || { echo "ERROR: File ${libEvSharedLibrary} does not exist, please fix nix expression for pyev"; exit 1; }
+      sed -i -e "s|libev_dll_name = find_library(\"ev\")|libev_dll_name = \"${libEvSharedLibrary}\"|" setup.py
+    '';
 
     meta = {
       description = "Python bindings for libev";
