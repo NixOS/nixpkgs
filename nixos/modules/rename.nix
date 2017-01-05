@@ -153,6 +153,17 @@ with lib;
     # alsa
     (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
 
+    # postgrey
+    (mkMergedOptionModule [ [ "services" "postgrey" "inetAddr" ] [ "services" "postgrey" "inetPort" ] ] [ "services" "postgrey" "socket" ] (config: let
+        value = p: getAttrFromPath p config;
+        inetAddr = [ "services" "postgrey" "inetAddr" ];
+        inetPort = [ "services" "postgrey" "inetPort" ];
+      in
+        if value inetAddr == null
+        then { path = "/var/run/postgrey.sock"; }
+        else { addr = value inetAddr; port = value inetPort; }
+    ))
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
     (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
