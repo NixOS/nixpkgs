@@ -27529,11 +27529,11 @@ EOF
 
   zope_testing = buildPythonPackage rec {
     name = "zope.testing-${version}";
-    version = "4.5.0";
+    version = "4.6.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.testing/${name}.tar.gz";
-      sha256 = "1yvglxhzvhl45mndvn9gskx2ph30zz1bz7rrlyfs62fv2pvih90s";
+      sha256 = "1vvxhjmzl7vw2i1akfj1xbggwn36270ym7f2ic9xwbaswfw1ap56";
     };
 
     doCheck = !isPyPy;
