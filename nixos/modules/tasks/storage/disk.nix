@@ -105,8 +105,7 @@ let
       type = types.bool;
       default = false;
       description = ''
-        Allow to match an incomplete device, like for example a degraded RAID
-        array.
+        Allow to match an incomplete device, like for example a degraded RAID.
       '';
     };
   } // lib.mapAttrs (lib.const mkMatcherOption) matchers;
