@@ -113,7 +113,13 @@ in {
         }
       ];
 
+    nixpkgs.config = { locate.dbfile = cfg.output; };
+
     environment.systemPackages = [ cfg.locate ];
+
+    environment.variables = mkIf (!isMLocate)
+      { LOCATE_PATH = cfg.output;
+      };
 
     warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support searching as user other than root"
             ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
