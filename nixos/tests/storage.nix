@@ -92,7 +92,7 @@ let
             die;
           }
           # Try to remount with nixpart
-          $machine->succeed("nixpart -vm --json /etc/nixpart.json");
+          $machine->succeed('nixpart -vm --json /etc/nixpart.json >&2');
           ensureMountPoint("/mnt");
           # Check if our beloved canaries are dead
           chomp $canaries;
