@@ -6,11 +6,13 @@ let
   mkStorageTest = name: attrs: makeTest {
     name = "storage-${name}";
 
-    machine = { config, pkgs, ... }: {
+    machine = { lib, config, pkgs, ... }: {
+      imports = lib.singleton (attrs.extraMachineConfig or {});
       environment.systemPackages = [
         pkgs.nixpart pkgs.file pkgs.btrfs-progs pkgs.xfsprogs pkgs.lvm2
       ];
-      virtualisation.emptyDiskImages = [ 4096 4096 ];
+      virtualisation.emptyDiskImages =
+        lib.genList (lib.const 4096) (attrs.diskImages or 2);
       environment.etc."nixpart.json".source = (import ../lib/eval-config.nix {
         modules = pkgs.lib.singleton attrs.config;
       }).config.system.build.nixpart-spec;
@@ -109,6 +111,12 @@ let
       $diskStart = $machine->succeed("dd if=/dev/vda bs=512 count=1");
 
       $machine->execute("mkdir /mnt");
+
+      ${pkgs.lib.optionalString (attrs ? prepare) ''
+        $machine->nest("Preparing disks:", sub {
+          $machine->succeed("${pkgs.writeScript "prepare.sh" attrs.prepare}");
+        });
+      ''}
 
       ${attrs.testScript}
     '';
@@ -389,6 +397,86 @@ in pkgs.lib.mapAttrs mkStorageTest {
 
       remountAndCheck;
       ensureMountPoint("/mnt/boot");
+    '';
+  };
+
+  matchers = let
+    # Match by sysfs path:
+    match5 = "/sys/devices/pci0000:00/0000:00:0e.0/virtio11/block/vdf";
+
+    # Match by UUID:
+    match6 = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+
+    # Do a bit of a more complicated matching based of the number that's
+    # occuring within the disk name ("match7") and walk the available
+    # devices from /dev/vda to /dev/vdN until we get to the number from the
+    # disk name, whilst skipping /dev/vda.
+    match7 = ''
+      num="''${disk//[^0-9]}"
+      for i in /dev/vd?; do
+        num=$((num - 1))
+        if [ $num -lt 0 ]; then echo "$i"; break; fi
+      done
+    '';
+
+  in {
+    diskImages = 8;
+
+    prepare = ''
+      mkfs.xfs -L match2 /dev/vdc
+      mkfs.xfs -m uuid=${match6} /dev/vdg
+    '';
+
+    extraMachineConfig = {
+      # This is in order to fake a disk ID for match1 (/dev/vdb).
+      services.udev.extraRules = ''
+        KERNEL=="vdb", SUBSYSTEM=="block", SYMLINK+="disk/by-id/match1"
+      '';
+    };
+
+    config = {
+      storage = {
+        disk.match1.match.id = "match1";      # vdb
+        disk.match2.match.label = "match2";   # vdc
+        disk.match3.match.name = "vdd";       # vdd
+        disk.match4.match.path = "/dev/vde";  # vde
+        disk.match5.match.sysfsPath = match5; # vdf
+        disk.match6.match.uuid = match6;      # vdg
+        disk.match7.match.script = match7;    # vdh
+        disk.match8.match.physicalPos = 9;    # vdi
+      };
+
+      fileSystems."/match1" = { storage = "disk.match1"; fsType = "ext4"; };
+      fileSystems."/match2" = { storage = "disk.match2"; fsType = "ext4"; };
+      fileSystems."/match3" = { storage = "disk.match3"; fsType = "ext4"; };
+      fileSystems."/match4" = { storage = "disk.match4"; fsType = "ext4"; };
+      fileSystems."/match5" = { storage = "disk.match5"; fsType = "ext4"; };
+      fileSystems."/match6" = { storage = "disk.match6"; fsType = "ext4"; };
+      fileSystems."/match7" = { storage = "disk.match7"; fsType = "ext4"; };
+      fileSystems."/match8" = { storage = "disk.match8"; fsType = "ext4"; };
+    };
+
+    testScript = ''
+      nixpart;
+      ensurePartition("/dev/vdb", "ext4");
+      ensurePartition("/dev/vdc", "ext4");
+      ensurePartition("/dev/vdd", "ext4");
+      ensurePartition("/dev/vde", "ext4");
+      ensurePartition("/dev/vdf", "ext4");
+      ensurePartition("/dev/vdg", "ext4");
+      ensurePartition("/dev/vdh", "ext4");
+      ensurePartition("/dev/vdi", "ext4");
+
+      remountAndCheck;
+
+      ensureMountPoint("/mnt/match1");
+      ensureMountPoint("/mnt/match2");
+      ensureMountPoint("/mnt/match3");
+      ensureMountPoint("/mnt/match4");
+      ensureMountPoint("/mnt/match5");
+      ensureMountPoint("/mnt/match6");
+      ensureMountPoint("/mnt/match7");
+      ensureMountPoint("/mnt/match8");
     '';
   };
 }
