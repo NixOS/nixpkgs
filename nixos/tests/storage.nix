@@ -15,6 +15,7 @@ let
         lib.genList (lib.const 4096) (attrs.diskImages or 2);
       environment.etc."nixpart.json".source = (import ../lib/eval-config.nix {
         modules = pkgs.lib.singleton attrs.config;
+        inherit system;
       }).config.system.build.nixpart-spec;
     };
 
