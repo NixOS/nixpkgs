@@ -855,9 +855,6 @@ default-package-overrides:
   - hjsmin ==0.2.0.2
   - hjsonpointer ==1.0.0.2
   - hjsonschema ==1.1.0.1
-  - hledger ==1.0.1
-  - hledger-interest ==1.5.1
-  - hledger-lib ==1.0.1
   - hlibgit2 ==0.18.0.15
   - hlibsass ==0.1.5.0
   - hlint ==1.9.35
