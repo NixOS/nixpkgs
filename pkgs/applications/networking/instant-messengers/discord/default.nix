@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
                  --set-rpath "$out:$libPath"                                   \
                  $out/DiscordCanary
 
+        paxmark m $out/DiscordCanary
+
         ln -s $out/DiscordCanary $out/bin/
         ln -s $out/discord.png $out/share/pixmaps
 
