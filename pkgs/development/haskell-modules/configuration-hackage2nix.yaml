@@ -4075,7 +4075,6 @@ dont-distribute-packages:
   hakyll-sass:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   hakyll-series:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   hakyll-shakespeare:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
-  hakyll:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   halberd:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   halfs:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   halipeto:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]

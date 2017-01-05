@@ -192,7 +192,8 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    # https://github.com/jaspervdj/hakyll/issues/491
+    else dontCheck super.hakyll;
 
   # Heist's test suite requires system pandoc
   heist = overrideCabal super.heist (drv: {
