@@ -12677,12 +12677,13 @@ in {
 
   xdis = buildPythonPackage rec {
     name = "xdis-${version}";
-    version = "2.3.1";
+    version = "3.2.4";
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xdis/${name}.tar.gz";
-      sha256 = "1bi53n9fifjz2ja5inm546vzhjpgwx6n0qrhp106fss7bdm44a4v";
+      sha256 = "0g2lh70837vigcbc1i58349wp2xzrhlsg2ahc92sn8d3jwxja4dk";
     };
-    propagatedBuildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ nose six ];
+
     meta = {
       description = "Python cross-version byte-code disassembler and marshal routines";
       homepage = https://github.com/rocky/python-xdis/;
