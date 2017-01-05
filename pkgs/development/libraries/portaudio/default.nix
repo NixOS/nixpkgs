@@ -16,16 +16,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i '50 i\
       #include <CoreAudio/AudioHardware.h>\
       #include <CoreAudio/AudioHardwareBase.h>\
       #include <CoreAudio/AudioHardwareDeprecated.h>' \
       include/pa_mac_core.h
-
-    # disable two tests that don't compile
-    sed -i -e 105d Makefile
-    sed -i -e 107d Makefile
   '';
 
   # not sure why, but all the headers seem to be installed by the make install
