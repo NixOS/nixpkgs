@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, file, makeWrapper
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
+, enableSystemd ? stdenv.isLinux
 }:
 
 let
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig intltool file openssl curl libevent inotify-tools zlib ]
     ++ optionals enableGTK3 [ gtk3 makeWrapper ]
-    ++ optional stdenv.isLinux systemd;
+    ++ optionals enableSystemd [ systemd ]
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -27,8 +28,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/file"     "${file}/bin/file"
   '';
 
-  configureFlags = [ "--with-systemd-daemon" ]
-    ++ [ "--enable-cli" ]
+  configureFlags = [
+      "--enable-cli"
+    ]
+    ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
 
   preFixup = optionalString enableGTK3 /* gsettings schemas for file dialogues */ ''
