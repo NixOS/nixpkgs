@@ -2818,6 +2818,8 @@ in
 
   miredo = callPackage ../tools/networking/miredo { };
 
+  mitmproxy = callPackage ../tools/networking/mitmproxy { };
+
   mjpegtoolsFull = callPackage ../tools/video/mjpegtools { };
 
   mjpegtools = self.mjpegtoolsFull.override {
