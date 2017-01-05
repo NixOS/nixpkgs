@@ -2,6 +2,7 @@
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
+, enableCli ? true
 }:
 
 let
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      "--enable-cli"
+      ("--enable-cli=" + (if enableCli then "yes" else "no"))
     ]
     ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
