@@ -14,6 +14,8 @@ buildGoPackage rec {
     sha256 = "0r099mk9r6f52qqhx0ifb1xa8f2isqvyza80z9mcpi5zkd96174l";
   };
 
+  outputs = [ "bin" "out" "man" ];
+
   buildInputs = [ ncurses ];
 
   goDeps = ./deps.nix;
@@ -25,6 +27,8 @@ buildGoPackage rec {
 
   postInstall = ''
     cp $src/bin/fzf-tmux $bin/bin
+    mkdir -p $man/share/man
+    cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
   '';
