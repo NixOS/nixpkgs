@@ -318,7 +318,7 @@ let
     rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk pkgs.libzip ];
     Rlibeemd = [ pkgs.gsl_1 ];
     rmatio = [ pkgs.zlib.dev ];
-    Rmpfr = [ pkgs.gmp pkgs.mpfr ];
+    Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
     Rmpi = [ pkgs.openmpi ];
     RMySQL = [ pkgs.zlib pkgs.mysql.lib ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
