@@ -257,7 +257,7 @@ let
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
     fftw = [ pkgs.fftw.dev ];
-    fftwtools = [ pkgs.fftw ];
+    fftwtools = [ pkgs.fftw.dev ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
     git2r = [ pkgs.zlib.dev pkgs.openssl.dev ];
