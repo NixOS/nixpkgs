@@ -362,7 +362,7 @@ let
     V8 = [ pkgs.v8 ];
     VBLPCM = [ pkgs.gsl_1 ];
     VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
-    WhopGenome = [ pkgs.zlib ];
+    WhopGenome = [ pkgs.zlib.dev ];
     XBRL = [ pkgs.zlib pkgs.libxml2 ];
     xml2 = [ pkgs.libxml2 ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
