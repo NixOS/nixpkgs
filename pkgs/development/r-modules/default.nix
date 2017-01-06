@@ -272,7 +272,7 @@ let
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp ];
     JavaGD = [ pkgs.jdk ];
-    jpeg = [ pkgs.libjpeg ];
+    jpeg = [ pkgs.libjpeg.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw ];
     libamtrack = [ pkgs.gsl_1 ];
