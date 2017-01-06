@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   makeFlags = [ "-e" ];
   makeFlagsArray="LIBS=-lgc";
 
-  meta = {
+  meta = with stdenv.lib ; {
     description = "Follow a symlink and print out its target file";
     longDescription = ''
     A commandline program that chases symbolic filesystems links to the original file
     '';
     homepage = "https://qa.debian.org/developer.php?login=rotty%40debian.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.polyrod ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.polyrod ];
+    platforms = platforms.all;
   };
 }
