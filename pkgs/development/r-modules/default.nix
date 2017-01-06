@@ -299,7 +299,7 @@ let
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
     rbamtools = [ pkgs.zlib.dev ];
-    rcdd = [ pkgs.gmp ];
+    rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib ];
     RcppGSL = [ pkgs.gsl_1 ];
     RcppOctave = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.octave ];
