@@ -343,7 +343,7 @@ let
     seewave = [ pkgs.fftw.dev pkgs.libsndfile.dev ];
     seqinr = [ pkgs.zlib.dev ];
     seqminer = [ pkgs.zlib.dev pkgs.bzip2 ];
-    showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype ];
+    showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
     SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
     spate = [ pkgs.fftw ];
