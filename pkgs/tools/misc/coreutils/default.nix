@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, perl, xz, gmp ? null
 , aclSupport ? false, acl ? null
+, attrSupport ? false, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 , autoconf, automake114x, texinfo
 , withPrefix ? false
@@ -44,12 +45,14 @@ let
 
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
+      ++ optional attrSupport attr
       ++ optionals stdenv.isCygwin [ autoconf automake114x texinfo ]   # due to patch
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {
       buildInputs = [ gmp.crossDrv ]
         ++ optional aclSupport acl.crossDrv
+        ++ optional attrSupport attr.crossDrv
         ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
         ++ optional (stdenv.ccCross.libc ? libiconv)
           stdenv.ccCross.libc.libiconv.crossDrv;
@@ -89,8 +92,6 @@ let
     FORCE_UNSAFE_CONFIGURE = optionalString stdenv.isSunOS "1";
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
-
-    postFixup = ""; # FIXME: remove on next mass rebuild
 
     meta = {
       homepage = http://www.gnu.org/software/coreutils/;
