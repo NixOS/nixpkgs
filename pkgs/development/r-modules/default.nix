@@ -313,7 +313,7 @@ let
     rhdf5 = [ pkgs.zlib ];
     Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
     Rhtslib = [ pkgs.zlib.dev ];
-    RJaCGH = [ pkgs.zlib ];
+    RJaCGH = [ pkgs.zlib.dev ];
     rjags = [ pkgs.jags ];
     rJava = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.jdk pkgs.libzip ];
     Rlibeemd = [ pkgs.gsl_1 ];
