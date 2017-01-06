@@ -352,7 +352,7 @@ let
     stsm = [ pkgs.gsl_1 ];
     stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
-    sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
+    sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     TAQMNGR = [ pkgs.zlib ];
     tiff = [ pkgs.libtiff ];
     TKF = [ pkgs.gsl_1 ];
