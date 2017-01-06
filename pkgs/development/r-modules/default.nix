@@ -256,7 +256,7 @@ let
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
-    fftw = [ pkgs.fftw ];
+    fftw = [ pkgs.fftw.dev ];
     fftwtools = [ pkgs.fftw ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
