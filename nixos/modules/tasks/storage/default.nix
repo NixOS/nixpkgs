@@ -272,16 +272,23 @@ in
         '';
       };
 
-      # If a fileSystems submodule references "btrfs." via the storage option,
-      # set the default value for fsType to "btrfs".
-      config = lib.mkIf (isBtrfs config.storage) {
-        fsType = lib.mkDefault "btrfs";
-      };
+      config = lib.mkMerge [
+        # If a fileSystems submodule references "btrfs." via the storage option,
+        # set the default value for fsType to "btrfs".
+        (lib.mkIf (isBtrfs config.storage) {
+          fsType = lib.mkDefault "btrfs";
+        })
+        # If no label is set, reference the device via the generated UUID in
+        # genericOptions.uuid.
+        (lib.mkIf (config.storage != null && config.label == null) {
+          device = "/dev/disk/by-uuid/${config.storage.config.uuid}";
+        })
+      ];
     }));
   };
 
   options.swapDevices = mkOption {
-    type = types.listOf (types.submodule {
+    type = types.listOf (types.submodule ({ config, options, ... }: {
       options.storage = storageLib.mkDeviceSpecOption {
         validDeviceTypes = containerTypes;
         typeContainer = types.nullOr;
@@ -293,7 +300,13 @@ in
           this swap device.
         '';
       };
-    });
+
+      # If no label is set, reference the device via the generated UUID in
+      # genericOptions.uuid.
+      config = lib.mkIf (config.storage != null && !options.label.isDefined) {
+        device = "/dev/disk/by-uuid/${config.storage.config.uuid}";
+      };
+    }));
   };
 
   config = {
