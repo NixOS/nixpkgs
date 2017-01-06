@@ -246,7 +246,7 @@ let
     Biostrings = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl_1 ];
     BNSP = [ pkgs.gsl_1 ];
-    cairoDevice = [ pkgs.gtk2 ];
+    cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo.dev pkgs.x11 pkgs.fontconfig.lib ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw ];
