@@ -354,7 +354,7 @@ let
     survSNP = [ pkgs.gsl_1 ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     TAQMNGR = [ pkgs.zlib.dev ];
-    tiff = [ pkgs.libtiff ];
+    tiff = [ pkgs.libtiff.dev ];
     TKF = [ pkgs.gsl_1 ];
     tkrplot = [ pkgs.xorg.libX11 ];
     topicmodels = [ pkgs.gsl_1 ];
