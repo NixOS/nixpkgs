@@ -73,8 +73,9 @@ let
   };
 
   orderableOptions = deviceSpec: {
-    options.before = mkOption {
-      type = types.listOf (storageLib.types.deviceSpec [ deviceSpec.name ]);
+    options.before = storageLib.mkDeviceSpecOption {
+      typeContainer = types.listOf;
+      validDeviceTypes = [ deviceSpec.name ];
       default = [];
       description = ''
         List of ${deviceSpec.description}s that will be created after this
@@ -82,8 +83,9 @@ let
       '';
     };
 
-    options.after = mkOption {
-      type = types.listOf (storageLib.types.deviceSpec [ deviceSpec.name ]);
+    options.after = storageLib.mkDeviceSpecOption {
+      typeContainer = types.listOf;
+      validDeviceTypes = [ deviceSpec.name ];
       default = [];
       description = ''
         List of ${deviceSpec.description}s that will be created prior to this
@@ -93,8 +95,8 @@ let
   };
 
   partitionOptions.options = {
-    targetDevice = mkOption {
-      type = storageLib.types.deviceSpec containerTypes;
+    targetDevice = storageLib.mkDeviceSpecOption {
+      validDeviceTypes = containerTypes;
       description = ''
         The target device of this partition.
       '';
@@ -110,8 +112,9 @@ let
       '';
     };
 
-    devices = mkOption {
-      type = types.listOf (storageLib.types.deviceSpec containerTypes);
+    devices = storageLib.mkDeviceSpecOption {
+      typeContainer = types.listOf;
+      validDeviceTypes = containerTypes;
       description = ''
         List of devices that will be part of this array.
       '';
@@ -119,8 +122,9 @@ let
   };
 
   volgroupOptions.options = {
-    devices = mkOption {
-      type = types.listOf (storageLib.types.deviceSpec containerTypes);
+    devices = storageLib.mkDeviceSpecOption {
+      typeContainer = types.listOf;
+      validDeviceTypes = containerTypes;
       description = ''
         List of devices that will be part of this volume group.
       '';
@@ -128,8 +132,8 @@ let
   };
 
   logvolOptions.options = {
-    group = mkOption {
-      type = storageLib.types.deviceSpec [ "volgroup" ];
+    group = storageLib.mkDeviceSpecOption {
+      validDeviceTypes = [ "volgroup" ];
       description = ''
         The volume group this volume should be part of.
       '';
@@ -137,8 +141,9 @@ let
   };
 
   btrfsOptions.options = {
-    devices = mkOption {
-      type = types.listOf (storageLib.types.deviceSpec containerTypes);
+    devices = storageLib.mkDeviceSpecOption {
+      typeContainer = types.listOf;
+      validDeviceTypes = containerTypes;
       description = ''
         List of devices that will be part of this BTRFS volume.
       '';
@@ -250,12 +255,11 @@ in
 
   options.fileSystems = mkOption {
     type = types.loaOf (types.submodule ({ config, ... }: {
-      options.storage = mkOption {
+      options.storage = storageLib.mkDeviceSpecOption {
+        validDeviceTypes = containerTypes ++ [ "btrfs" ];
+        typeContainer = types.nullOr;
         default = null;
         example = "partition.root";
-        type = types.nullOr (storageLib.types.deviceSpec (containerTypes ++ [
-          "btrfs"
-        ]));
         description = ''
           Storage device from <option>storage.*</option> to use for
           this file system.
@@ -272,10 +276,11 @@ in
 
   options.swapDevices = mkOption {
     type = types.listOf (types.submodule {
-      options.storage = mkOption {
+      options.storage = storageLib.mkDeviceSpecOption {
+        validDeviceTypes = containerTypes;
+        typeContainer = types.nullOr;
         default = null;
         example = "partition.swap";
-        type = types.nullOr (storageLib.types.deviceSpec containerTypes);
         description = ''
           Storage device from <option>storage.*</option> to use for
           this swap device.

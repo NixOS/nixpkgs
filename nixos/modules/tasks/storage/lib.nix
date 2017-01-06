@@ -108,21 +108,38 @@ let
                  else builtins.trace invalidTypeMsg false;
   in if typeAndName == null then syntaxError else assertType;
 
+  deviceSpecType = validTypes: lib.mkOptionType {
+    name = "deviceSpec";
+    description = "device specification";
+    check = spec: lib.isString spec && assertSpec validTypes spec;
+    merge = lib.mergeEqualOption;
+  };
+
 in {
   inherit sizeUnits;
+
+  mkDeviceSpecOption = attrs: lib.mkOption ({
+    type = let
+      # This is a list of valid device types in a device specification, such as
+      # "partition", "disk" and so on.
+      validDeviceTypes = attrs.validDeviceTypes or [];
+      # The outer type wrapping the internal deviceSpecType, so it's possible to
+      # wrap the deviceSpecType in any other container type in lib.types.
+      typeContainer = attrs.typeContainer or lib.id;
+    in typeContainer (deviceSpecType validDeviceTypes);
+    description = attrs.description + ''
+      The device specification has to be in the form
+      <literal>&lt;type&gt;.&lt;name&gt;</literal> where <literal>type</literal>
+      is ${oneOf (attrs.validDeviceTypes or [])} and <literal>name</literal> is
+      the name in <option>storage.sometype.name</option>.
+    '';
+  } // removeAttrs attrs [ "validDeviceTypes" "typeContainer" "description" ]);
 
   types = {
     size = lib.mkOptionType {
       name = "size";
       description = "\"fill\", integer in bytes or attrset of unit -> size";
       check = s: s == "fill" || lib.isInt s || (lib.isAttrs s && assertUnits s);
-      merge = lib.mergeEqualOption;
-    };
-
-    deviceSpec = validTypes: lib.mkOptionType {
-      name = "deviceSpec";
-      description = "device specification of <type>.<name>";
-      check = spec: lib.isString spec && assertSpec validTypes spec;
       merge = lib.mergeEqualOption;
     };
   };
