@@ -379,7 +379,7 @@ let
     rtracklayer = [ pkgs.zlib.dev ];
     affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = [ pkgs.zlib.dev ];
-    snpStats = [ pkgs.zlib ];
+    snpStats = [ pkgs.zlib.dev ];
   };
 
   packagesWithBuildInputs = {
