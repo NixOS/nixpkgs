@@ -372,7 +372,7 @@ let
     DiffBind = [ pkgs.zlib ];
     ShortRead = [ pkgs.zlib.dev ];
     oligo = [ pkgs.zlib.dev ];
-    gmapR = [ pkgs.zlib ];
+    gmapR = [ pkgs.zlib.dev ];
     Rsubread = [ pkgs.zlib ];
     XVector = [ pkgs.zlib.dev ];
     Rsamtools = [ pkgs.zlib.dev ];
