@@ -371,7 +371,7 @@ let
     BitSeq = [ pkgs.zlib.dev ];
     DiffBind = [ pkgs.zlib ];
     ShortRead = [ pkgs.zlib.dev ];
-    oligo = [ pkgs.zlib ];
+    oligo = [ pkgs.zlib.dev ];
     gmapR = [ pkgs.zlib ];
     Rsubread = [ pkgs.zlib ];
     XVector = [ pkgs.zlib.dev ];
