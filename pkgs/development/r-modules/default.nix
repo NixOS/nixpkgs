@@ -336,7 +336,7 @@ let
     rtfbs = [ pkgs.zlib pkgs.pcre.dev pkgs.bzip2 pkgs.gzip pkgs.readline ];
     rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
-    RVowpalWabbit = [ pkgs.zlib pkgs.boost ];
+    RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq3 ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
