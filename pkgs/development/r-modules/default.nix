@@ -367,7 +367,7 @@ let
     xml2 = [ pkgs.libxml2.dev ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
-    bamsignals = [ pkgs.zlib ];
+    bamsignals = [ pkgs.zlib.dev ];
     BitSeq = [ pkgs.zlib ];
     DiffBind = [ pkgs.zlib ];
     ShortRead = [ pkgs.zlib.dev ];
