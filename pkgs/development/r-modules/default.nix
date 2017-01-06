@@ -274,7 +274,7 @@ let
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
-    kza = [ pkgs.fftw ];
+    kza = [ pkgs.fftw.dev ];
     libamtrack = [ pkgs.gsl_1 ];
     mixcat = [ pkgs.gsl_1 ];
     mvabund = [ pkgs.gsl_1 ];
