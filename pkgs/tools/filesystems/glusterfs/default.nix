@@ -1,6 +1,6 @@
 {stdenv, fetchurl, fuse, bison, flex_2_5_35, openssl, python2, ncurses, readline,
  autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite
- , liburcu, attr
+ , liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which
 }:
 let 
   s = # Generated upstream information 
@@ -15,7 +15,7 @@ let
   buildInputs = [
     fuse bison flex_2_5_35 openssl python2 ncurses readline
     autoconf automake libtool pkgconfig zlib libaio libxml2
-    acl sqlite liburcu attr
+    acl sqlite liburcu attr makeWrapper
   ];
   # Some of the headers reference acl
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ rec {
     '';
 
   configureFlags = [
-    ''--with-mountutildir="$out/sbin" --localstatedir=/var''
+    ''--localstatedir=/var''
     ];
 
   makeFlags = "DESTDIR=$(out)";
@@ -48,6 +48,7 @@ rec {
   postInstall = ''
     cp -r $out/$out/* $out
     rm -r $out/nix
+    wrapProgram $out/sbin/mount.glusterfs --set PATH "${stdenv.lib.makeBinPath [ coreutils gnused attr gnugrep which]}"
     '';
 
   src = fetchurl {

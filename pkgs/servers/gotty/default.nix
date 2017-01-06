@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "gotty-${version}";
-  version = "0.0.10";
+  version = "0.0.13";
   rev = "v${version}";
 
   goPackagePath = "github.com/yudai/gotty";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "yudai";
     repo = "gotty";
-    sha256 = "0gvnbr61d5si06ik2j075jg00r9b94ryfgg06nqxkf10dp8lgi09";
+    sha256 = "1hsfjyjjzr1zc9m8bnhid1ag6ipcbx59111y9p7k8az8jiyr112g";
   };
 
   goDeps = ./deps.nix;

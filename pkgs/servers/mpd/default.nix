@@ -29,14 +29,14 @@
 let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
-  major = "0.19";
-  minor = "19";
+  major = "0.20";
+  minor = "";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-${major}.${minor}";
+  name = "mpd-${major}${if minor == "" then "" else "." + minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "07af1m2lgblyiq0gcs26zv8n22wrhrpmf49xsm338h1n87d6r1dw";
+    sha256 = "068nxsfkp2ppcjh3fmcbapkiwnjpvkii73bfydpw4bf2yphdvsa8";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin ./darwin-enable-cxx-exceptions.patch;
