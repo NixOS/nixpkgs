@@ -325,7 +325,7 @@ let
     RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
     rpg = [ pkgs.postgresql ];
-    rphast = [ pkgs.pcre pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    rphast = [ pkgs.pcre.dev pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
