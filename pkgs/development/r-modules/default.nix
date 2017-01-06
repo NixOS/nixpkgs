@@ -315,7 +315,7 @@ let
     Rhtslib = [ pkgs.zlib.dev ];
     RJaCGH = [ pkgs.zlib.dev ];
     rjags = [ pkgs.jags ];
-    rJava = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.jdk pkgs.libzip ];
+    rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk pkgs.libzip ];
     Rlibeemd = [ pkgs.gsl_1 ];
     rmatio = [ pkgs.zlib ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr ];
