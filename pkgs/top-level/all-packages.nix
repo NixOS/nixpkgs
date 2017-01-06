@@ -13216,6 +13216,7 @@ in
     libpng = libpng_apng;
     enableGTK3 = false;
     python = python2;
+    gnused = gnused_422;
   }) firefox-unwrapped firefox-esr-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
