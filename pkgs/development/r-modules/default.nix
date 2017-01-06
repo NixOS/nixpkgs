@@ -260,7 +260,7 @@ let
     fftwtools = [ pkgs.fftw ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
-    git2r = [ pkgs.zlib pkgs.openssl ];
+    git2r = [ pkgs.zlib.dev pkgs.openssl.dev ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     gmp = [ pkgs.gmp ];
