@@ -253,7 +253,7 @@ let
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
-    devEMF = [ pkgs.xorg.libXft ];
+    devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
     fftw = [ pkgs.fftw ];
@@ -1863,6 +1863,7 @@ let
 
     devEMF = old.devEMF.overrideDerivation (attrs: {
       NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
+      NIX_LDFLAGS = "-lX11";
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {
