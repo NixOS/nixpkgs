@@ -341,7 +341,7 @@ let
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
     seewave = [ pkgs.fftw.dev pkgs.libsndfile.dev ];
-    seqinr = [ pkgs.zlib ];
+    seqinr = [ pkgs.zlib.dev ];
     seqminer = [ pkgs.zlib pkgs.bzip2 ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype ];
     simplexreg = [ pkgs.gsl_1 ];
