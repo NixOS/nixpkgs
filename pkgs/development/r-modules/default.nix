@@ -298,7 +298,7 @@ let
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
-    rbamtools = [ pkgs.zlib ];
+    rbamtools = [ pkgs.zlib.dev ];
     rcdd = [ pkgs.gmp ];
     RcppCNPy = [ pkgs.zlib ];
     RcppGSL = [ pkgs.gsl_1 ];
