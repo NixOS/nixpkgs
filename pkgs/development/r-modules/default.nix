@@ -289,7 +289,7 @@ let
     pbdPROF = [ pkgs.openmpi ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
-    PopGenome = [ pkgs.zlib ];
+    PopGenome = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj ];
     qtbase = [ pkgs.qt4 ];
     qtpaint = [ pkgs.qt4 ];
