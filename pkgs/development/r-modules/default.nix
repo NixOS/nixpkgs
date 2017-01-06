@@ -300,7 +300,7 @@ let
     rapport = [ pkgs.which ];
     rbamtools = [ pkgs.zlib.dev ];
     rcdd = [ pkgs.gmp.dev ];
-    RcppCNPy = [ pkgs.zlib ];
+    RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];
     RcppOctave = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.octave ];
     RcppZiggurat = [ pkgs.gsl_1 ];
