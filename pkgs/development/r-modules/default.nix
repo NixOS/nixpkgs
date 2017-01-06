@@ -340,7 +340,7 @@ let
     rzmq = [ pkgs.zeromq3 ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
-    seewave = [ pkgs.fftw pkgs.libsndfile ];
+    seewave = [ pkgs.fftw.dev pkgs.libsndfile.dev ];
     seqinr = [ pkgs.zlib ];
     seqminer = [ pkgs.zlib pkgs.bzip2 ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype ];
