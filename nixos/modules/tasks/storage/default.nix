@@ -32,6 +32,46 @@ let
     };
   };
 
+  genericOptions = deviceSpec: { name, ... }: {
+    options.uuid = mkOption {
+      internal = true;
+      description = ''
+        The UUID of this device specification used for device formats, such as
+        file systems and other containers.
+
+        This is a generated value and shouldn't be set outside of this module.
+        It identifies the same device from within nixpart and from within a
+        NixOS system for mounting.
+
+        By default, every file system gets a random UUID, but we need to have
+        this deterministic so that we always get the same UUID for the same
+        device specification. So we hash the full device specification (eg.
+        <literal>partition.foo</literal>) along with a
+        <literal>nixpart</literal> namespace with sha1 and truncate it to 128
+        bits, similar to version 5 of the UUID specification:
+
+        <link xlink:href="https://tools.ietf.org/html/rfc4122#section-4.1.3"/>
+
+        Note that instead of a binary namespace ID, we simply use string
+        concatenation in the form of
+        <literal>[namespace]:[spectype].[specname]</literal>, so for example the
+        device specification of <literal>partition.foo</literal> gets a hash
+        from <literal>nixpart:partition.foo</literal>.
+      '';
+    };
+    config.uuid = let
+      inherit (builtins) hashString substring;
+      baseHash = hashString "sha1" "nixpart:${deviceSpec.name}.${name}";
+      splitted = [
+        (substring 0 8 baseHash)
+        (substring 8 4 baseHash)
+        (substring 12 4 baseHash)
+        (substring 16 4 baseHash)
+        (substring 20 12 baseHash)
+      ];
+    in lib.concatStringsSep "-" splitted;
+  };
+
   orderableOptions = deviceSpec: {
     options.before = mkOption {
       type = types.listOf (storageLib.types.deviceSpec [ deviceSpec.name ]);
@@ -199,7 +239,7 @@ in
       orderable = attrs.orderable or false;
       resizable = attrs.resizable or false;
     in types.attrsOf (types.submodule {
-      imports = lib.singleton attrs.options
+      imports = [ attrs.options (genericOptions deviceSpec) ]
              ++ lib.optional orderable (orderableOptions deviceSpec)
              ++ lib.optional resizable (resizableOptions deviceSpec);
     });
