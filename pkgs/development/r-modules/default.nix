@@ -346,7 +346,7 @@ let
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
     SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
-    spate = [ pkgs.fftw ];
+    spate = [ pkgs.fftw.dev ];
     sprint = [ pkgs.openmpi ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl_1 ];
