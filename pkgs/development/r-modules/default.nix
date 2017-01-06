@@ -263,7 +263,7 @@ let
     git2r = [ pkgs.zlib.dev pkgs.openssl.dev ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
-    gmp = [ pkgs.gmp ];
+    gmp = [ pkgs.gmp.dev ];
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
     h5 = [ pkgs.hdf5-cpp pkgs.which ];
