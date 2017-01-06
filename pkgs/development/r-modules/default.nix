@@ -373,7 +373,7 @@ let
     ShortRead = [ pkgs.zlib.dev ];
     oligo = [ pkgs.zlib.dev ];
     gmapR = [ pkgs.zlib.dev ];
-    Rsubread = [ pkgs.zlib ];
+    Rsubread = [ pkgs.zlib.dev ];
     XVector = [ pkgs.zlib.dev ];
     Rsamtools = [ pkgs.zlib.dev ];
     rtracklayer = [ pkgs.zlib ];
