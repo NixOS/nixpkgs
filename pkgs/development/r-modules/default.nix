@@ -366,7 +366,7 @@ let
     XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
     xml2 = [ pkgs.libxml2.dev ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
-    affyPLM = [ pkgs.zlib ];
+    affyPLM = [ pkgs.zlib.dev ];
     bamsignals = [ pkgs.zlib ];
     BitSeq = [ pkgs.zlib ];
     DiffBind = [ pkgs.zlib ];
