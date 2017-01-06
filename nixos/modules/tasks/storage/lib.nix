@@ -83,6 +83,17 @@ let
     strAssertions = lib.concatStringsSep "\n" (assertions);
   in if assertions == [] then true else builtins.trace strAssertions false;
 
+  /* Decode a device specification string like "partition.foo" into an attribute
+   * set consisting of the attributes `type' ("partition" here) and `name'
+   * ("foo" here).
+   */
+  decodeSpec = spec: let
+    typeAndName = builtins.match "([a-z]+)\\.([a-zA-Z0-9_-]+)" spec;
+  in if typeAndName == null then null else {
+    type = lib.head typeAndName;
+    name = lib.last typeAndName;
+  };
+
   /* Validate the device specification and return true if it's valid or false if
    * it's not.
    *
@@ -99,14 +110,13 @@ let
     invalidNameMsg =
       "Device `${type}.${name}' does not exist in `config.storage.*'.";
     syntaxError = builtins.trace syntaxErrorMsg false;
-    typeAndName = builtins.match "([a-z]+)\\.([a-zA-Z0-9_-]+)" spec;
-    type = lib.head typeAndName;
-    name = lib.last typeAndName;
+    decoded = decodeSpec spec;
+    inherit (decoded) type name;
     assertName = if (cfg.${type} or {}) ? ${name} then true
                  else builtins.trace invalidNameMsg false;
     assertType = if lib.elem type validTypes then assertName
                  else builtins.trace invalidTypeMsg false;
-  in if typeAndName == null then syntaxError else assertType;
+  in if decoded == null then syntaxError else assertType;
 
   deviceSpecType = validTypes: lib.mkOptionType {
     name = "deviceSpec";
@@ -127,13 +137,19 @@ in {
       # wrap the deviceSpecType in any other container type in lib.types.
       typeContainer = attrs.typeContainer or lib.id;
     in typeContainer (deviceSpecType validDeviceTypes);
+    # `applyTypeContainer' is a function that's used to unpack the individual
+    # deviceSpecType from the typeContainer. So for example if typeContainer is
+    # `listOf', the applyTypeContainer function is "map".
+    apply = (attrs.applyTypeContainer or lib.id) decodeSpec;
     description = attrs.description + ''
       The device specification has to be in the form
       <literal>&lt;type&gt;.&lt;name&gt;</literal> where <literal>type</literal>
       is ${oneOf (attrs.validDeviceTypes or [])} and <literal>name</literal> is
       the name in <option>storage.sometype.name</option>.
     '';
-  } // removeAttrs attrs [ "validDeviceTypes" "typeContainer" "description" ]);
+  } // removeAttrs attrs [
+    "validDeviceTypes" "typeContainer" "applyTypeContainer" "description"
+  ]);
 
   types = {
     size = lib.mkOptionType {

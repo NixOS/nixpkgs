@@ -75,6 +75,7 @@ let
   orderableOptions = deviceSpec: {
     options.before = storageLib.mkDeviceSpecOption {
       typeContainer = types.listOf;
+      applyTypeContainer = map;
       validDeviceTypes = [ deviceSpec.name ];
       default = [];
       description = ''
@@ -85,6 +86,7 @@ let
 
     options.after = storageLib.mkDeviceSpecOption {
       typeContainer = types.listOf;
+      applyTypeContainer = map;
       validDeviceTypes = [ deviceSpec.name ];
       default = [];
       description = ''
@@ -114,6 +116,7 @@ let
 
     devices = storageLib.mkDeviceSpecOption {
       typeContainer = types.listOf;
+      applyTypeContainer = map;
       validDeviceTypes = containerTypes;
       description = ''
         List of devices that will be part of this array.
@@ -124,6 +127,7 @@ let
   volgroupOptions.options = {
     devices = storageLib.mkDeviceSpecOption {
       typeContainer = types.listOf;
+      applyTypeContainer = map;
       validDeviceTypes = containerTypes;
       description = ''
         List of devices that will be part of this volume group.
@@ -143,6 +147,7 @@ let
   btrfsOptions.options = {
     devices = storageLib.mkDeviceSpecOption {
       typeContainer = types.listOf;
+      applyTypeContainer = map;
       validDeviceTypes = containerTypes;
       description = ''
         List of devices that will be part of this BTRFS volume.
@@ -258,6 +263,7 @@ in
       options.storage = storageLib.mkDeviceSpecOption {
         validDeviceTypes = containerTypes ++ [ "btrfs" ];
         typeContainer = types.nullOr;
+        applyTypeContainer = fun: val: if val == null then null else fun val;
         default = null;
         example = "partition.root";
         description = ''
@@ -279,6 +285,7 @@ in
       options.storage = storageLib.mkDeviceSpecOption {
         validDeviceTypes = containerTypes;
         typeContainer = types.nullOr;
+        applyTypeContainer = fun: val: if val == null then null else fun val;
         default = null;
         example = "partition.swap";
         description = ''
