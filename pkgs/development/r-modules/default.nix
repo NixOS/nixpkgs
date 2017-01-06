@@ -309,7 +309,7 @@ let
     rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
     rgl = [ pkgs.mesa pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
-    RGtk2 = [ pkgs.gtk2 ];
+    RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
     Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
     Rhtslib = [ pkgs.zlib ];
