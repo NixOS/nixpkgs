@@ -89,9 +89,13 @@ let
    */
   decodeSpec = spec: let
     typeAndName = builtins.match "([a-z]+)\\.([a-zA-Z0-9_-]+)" spec;
-  in if typeAndName == null then null else {
+  in if typeAndName == null then null else rec {
     type = lib.head typeAndName;
     name = lib.last typeAndName;
+    # The configuration entry for the storage spec. Note that we don't need to
+    # check whether ${type} and ${name} exist, because they're already checked
+    # in assertSpec.
+    config = cfg.${type}.${name};
   };
 
   /* Validate the device specification and return true if it's valid or false if
