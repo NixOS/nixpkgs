@@ -294,7 +294,7 @@ let
     qtbase = [ pkgs.qt4 ];
     qtpaint = [ pkgs.qt4 ];
     R2GUESS = [ pkgs.gsl_1 ];
-    R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
+    R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
