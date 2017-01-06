@@ -306,7 +306,7 @@ let
     RcppZiggurat = [ pkgs.gsl_1 ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
-    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
+    rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
     rgl = [ pkgs.mesa pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
