@@ -1546,7 +1546,10 @@ in
   emscripten = callPackage ../development/compilers/emscripten { };
 
   emscriptenfastcomp-unwrapped = callPackage ../development/compilers/emscripten-fastcomp { };
-  emscriptenfastcomp-wrapped = wrapCC emscriptenfastcomp-unwrapped;
+  emscriptenfastcomp-wrapped = wrapCCWith ccWrapperFun stdenv.cc.libc ''
+    # hardening flags break WASM support
+    cat > $out/nix-support/add-hardening.sh
+  '' emscriptenfastcomp-unwrapped;
   emscriptenfastcomp = symlinkJoin {
     name = "emscriptenfastcomp";
     paths = [ emscriptenfastcomp-wrapped emscriptenfastcomp-unwrapped ];
