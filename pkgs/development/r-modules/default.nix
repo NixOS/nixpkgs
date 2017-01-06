@@ -334,7 +334,7 @@ let
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
     rtfbs = [ pkgs.zlib pkgs.pcre.dev pkgs.bzip2 pkgs.gzip pkgs.readline ];
-    rtiff = [ pkgs.libtiff ];
+    rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib pkgs.boost ];
     rzmq = [ pkgs.zeromq3 ];
