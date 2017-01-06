@@ -240,7 +240,7 @@ let
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl_1 ];
     BayesVarSel = [ pkgs.gsl_1 ];
-    BayesXsrc = [ pkgs.readline pkgs.ncurses ];
+    BayesXsrc = [ pkgs.readline.dev pkgs.ncurses ];
     bigGP = [ pkgs.openmpi ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
