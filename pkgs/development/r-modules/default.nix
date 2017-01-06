@@ -378,7 +378,7 @@ let
     Rsamtools = [ pkgs.zlib.dev ];
     rtracklayer = [ pkgs.zlib.dev ];
     affyio = [ pkgs.zlib.dev ];
-    VariantAnnotation = [ pkgs.zlib ];
+    VariantAnnotation = [ pkgs.zlib.dev ];
     snpStats = [ pkgs.zlib ];
   };
 
