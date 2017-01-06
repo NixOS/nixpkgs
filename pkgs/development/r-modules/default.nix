@@ -377,7 +377,7 @@ let
     XVector = [ pkgs.zlib.dev ];
     Rsamtools = [ pkgs.zlib.dev ];
     rtracklayer = [ pkgs.zlib ];
-    affyio = [ pkgs.zlib ];
+    affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = [ pkgs.zlib ];
     snpStats = [ pkgs.zlib ];
   };
