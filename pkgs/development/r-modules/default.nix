@@ -278,7 +278,7 @@ let
     libamtrack = [ pkgs.gsl_1 ];
     mixcat = [ pkgs.gsl_1 ];
     mvabund = [ pkgs.gsl_1 ];
-    mwaved = [ pkgs.fftw ];
+    mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
     openssl = [ pkgs.openssl.dev ];
