@@ -247,7 +247,7 @@ let
     bnpmr = [ pkgs.gsl_1 ];
     BNSP = [ pkgs.gsl_1 ];
     cairoDevice = [ pkgs.gtk2 ];
-    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo ];
+    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo.dev pkgs.x11 pkgs.fontconfig.lib ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
@@ -1789,6 +1789,10 @@ let
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
         patchShebangs configure
         '';
+    });
+
+    Cairo = old.Cairo.overrideDerivation (attrs: {
+      NIX_LDFLAGS = "-lfontconfig";
     });
 
     curl = old.curl.overrideDerivation (attrs: {
