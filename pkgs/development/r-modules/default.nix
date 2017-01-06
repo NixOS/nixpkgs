@@ -356,7 +356,7 @@ let
     TAQMNGR = [ pkgs.zlib.dev ];
     tiff = [ pkgs.libtiff.dev ];
     TKF = [ pkgs.gsl_1 ];
-    tkrplot = [ pkgs.xorg.libX11 ];
+    tkrplot = [ pkgs.xorg.libX11 pkgs.tk.dev ];
     topicmodels = [ pkgs.gsl_1 ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
     V8 = [ pkgs.v8 ];
