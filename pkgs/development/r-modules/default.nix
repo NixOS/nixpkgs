@@ -353,7 +353,7 @@ let
     stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
-    TAQMNGR = [ pkgs.zlib ];
+    TAQMNGR = [ pkgs.zlib.dev ];
     tiff = [ pkgs.libtiff ];
     TKF = [ pkgs.gsl_1 ];
     tkrplot = [ pkgs.xorg.libX11 ];
