@@ -363,7 +363,7 @@ let
     VBLPCM = [ pkgs.gsl_1 ];
     VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
     WhopGenome = [ pkgs.zlib.dev ];
-    XBRL = [ pkgs.zlib pkgs.libxml2 ];
+    XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
     xml2 = [ pkgs.libxml2 ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
     affyPLM = [ pkgs.zlib ];
