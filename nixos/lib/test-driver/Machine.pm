@@ -611,16 +611,6 @@ sub copyFileFromHost {
 }
 
 
-sub sendKeys {
-    my ($self, @keys) = @_;
-    foreach my $key (@keys) {
-        $key = "spc" if $key eq " ";
-        $key = "ret" if $key eq "\n";
-        $self->sendMonitorCommand("sendkey $key");
-    }
-}
-
-
 my %charToKey = (
     '!' => "shift-0x02",
     '@' => "shift-0x03",
@@ -643,13 +633,24 @@ my %charToKey = (
     ',' => "0x33", '<' => "shift-0x33",
     '.' => "0x34", '>' => "shift-0x34",
     '/' => "0x35", '?' => "shift-0x35",
+    ' ' => "spc",
+   "\n" => "ret",
 );
+
+
+sub sendKeys {
+    my ($self, @keys) = @_;
+    foreach my $key (@keys) {
+        $key = $charToKey{$key} if exists $charToKey{$key};
+        $self->sendMonitorCommand("sendkey $key");
+    }
+}
 
 
 sub sendChars {
     my ($self, $chars) = @_;
     $self->nest("sending keys ‘$chars’", sub {
-        $self->sendKeys(map { exists $charToKey{$_} ? $charToKey{$_} : $_ } split //, $chars);
+        $self->sendKeys(split //, $chars);
     });
 }
 
