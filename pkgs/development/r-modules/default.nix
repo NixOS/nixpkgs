@@ -332,7 +332,7 @@ let
     rPython = [ pkgs.python ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
-    Rssa = [ pkgs.fftw ];
+    Rssa = [ pkgs.fftw.dev ];
     rtfbs = [ pkgs.zlib pkgs.pcre pkgs.bzip2 pkgs.gzip pkgs.readline ];
     rtiff = [ pkgs.libtiff ];
     runjags = [ pkgs.jags ];
