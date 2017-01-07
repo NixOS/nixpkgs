@@ -1844,6 +1844,11 @@ in
     gtk = gtk2;
   };
 
+  google-cloud-sdk = callPackage ../tools/virtualization/google-cloud-sdk {
+    python = python27;
+    jdk = jdk;
+  };
+
   gdmap = callPackage ../tools/system/gdmap { };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
