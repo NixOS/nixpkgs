@@ -2818,6 +2818,10 @@ in
 
   minixml = callPackage ../development/libraries/minixml { };
 
+  mir-qualia = callPackage ../tools/text/mir-qualia {
+    pythonPackages = python3Packages;
+  };
+
   miredo = callPackage ../tools/networking/miredo { };
 
   mitmproxy = callPackage ../tools/networking/mitmproxy { };
