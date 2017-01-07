@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     substituteInPlace System.Data.SQLite.dll.config --replace libsqlite3.so ${sqlite.out}/lib/libsqlite3.so
+    cp System.Data.SQLite.dll.config SQLitePCLRaw.provider.sqlite3.dll.config
     substituteInPlace MediaBrowser.Server.Mono.exe.config --replace ProgramData-Server "/var/lib/emby/ProgramData-Server"
   '';
 
