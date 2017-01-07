@@ -2,10 +2,14 @@
 , gdk_pixbuf, libintlOrEmpty, xlibsWrapper
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
+, gdktarget ? "x11"
+, AppKit, Cocoa
 }:
 
 assert xineramaSupport -> xorg.libXinerama != null;
 assert cupsSupport -> cups != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gtk+-2.24.31";
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (libintlOrEmpty != []) "-lintl";
+  NIX_CFLAGS_COMPILE = optionalString (libintlOrEmpty != []) "-lintl";
 
   setupHook = ./setup-hook.sh;
 
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./2.0-immodules.cache.patch ];
 
-  propagatedBuildInputs = with xorg; with stdenv.lib;
+  propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk_pixbuf atk ]
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
          libXrandr libXrender libXcomposite libXi libXcursor
@@ -36,11 +40,13 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ xlibsWrapper libXdamage ]
     ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
-    ++ optionals cupsSupport [ cups ];
+    ++ optionals cupsSupport [ cups ]
+    ++ optionals (gdktarget == "quartz") [ AppKit Cocoa ];
 
   configureFlags = [
+    "--with-gdktarget=${gdktarget}"
     "--with-xinput=yes"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     "--disable-glibtest"
     "--disable-introspection"
     "--disable-visibility"
@@ -57,9 +63,10 @@ stdenv.mkDerivation rec {
       rm $out/lib/gtk-2.0/2.10.0/immodules.cache
       $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
     ''; # workaround for bug of nix-mode for Emacs */ '';
+    inherit gdktarget;
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
     homepage    = http://www.gtk.org/;
     license     = licenses.lgpl2Plus;
