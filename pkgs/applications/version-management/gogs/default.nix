@@ -5,13 +5,13 @@
 
 buildGoPackage rec {
   name = "gogs-${version}";
-  version = "0.9.97";
+  version = "0.9.113";
 
   src = fetchFromGitHub {
     owner = "gogits";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "151mmd8h5zd4bvafd42nsky0m9gblf5fcpd6jacqcrry1796hxk9";
+    sha256 = "1zk83c9jiazfw3221yi2sidp7917q3dxb2xb7wrjg4an18gj46j7";
   };
 
   patchPhase = ''
