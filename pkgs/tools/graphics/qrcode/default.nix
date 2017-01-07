@@ -1,24 +1,14 @@
-{ stdenv, fetchgit }:
-let
-  s =
-  rec {
-    baseName = "qrcode";
-    date = "2014-01-01";
-    version = "git-${date}";
-    name = "${baseName}-${version}";
-    url = "https://github.com/qsantos/qrcode";
-    rev = "2843cbada3b768f60ee1ae13c65160083558cc03";
-    sha256 = "1qli0b62yngqj66v6vdqqgcysy3q3fr5vwpf7yf0d9a0dg862x8a";
-  };
-  buildInputs = [
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+{ stdenv, fetchFromGitHub }:
 
-  src = fetchgit {
-    inherit (s) rev url sha256;
+stdenv.mkDerivation rec {
+  name = "qrcode-git-${version}";
+  version = "20160804";
+
+  src = fetchFromGitHub {
+    owner  = "qsantos";
+    repo   = "qrcode";
+    rev    = "ad0fdb4aafd0d56b903f110f697abaeb27deee73";
+    sha256 = "0v81745nx5gny2g05946k8j553j18a29ikmlyh6c3syq6c15k8cf";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
@@ -29,11 +19,10 @@ stdenv.mkDerivation {
     cp DOCUMENTATION LICENCE "$out/share/doc/qrcode"
   '';
 
-  meta = {
-    inherit (s) version;
+  meta = with stdenv.lib; {
     description = ''A small QR-code tool'';
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = with platforms; linux;
   };
 }
