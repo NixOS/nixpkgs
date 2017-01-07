@@ -72,7 +72,7 @@ in
         exim_group = ${cfg.group}
         exim_path = /var/setuid-wrappers/exim
         spool_directory = ${cfg.spoolDir}
-        ${cfg.config}
+        .include ${cfg.config}
       '';
       systemPackages = [ exim ];
     };
