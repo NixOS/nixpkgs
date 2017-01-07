@@ -2015,6 +2015,7 @@ extra-packages:
   - containers < 0.5                    # required to build alex with GHC 6.12.3
   - control-monad-free < 0.6            # newer versions don't compile with anything but GHC 7.8.x
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
+  - esqueleto < 2.5                     # needed for git-annex: https://github.com/bitemyapp/esqueleto/issues/8
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock < 2.17                      # required on GHC 7.10.x
