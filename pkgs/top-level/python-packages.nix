@@ -11125,6 +11125,9 @@ in {
       homepage = "https://docs.docker.com/compose/";
       description = "Multi-container orchestration for Docker";
       license = licenses.asl20;
+      maintainers = with maintainers; [
+        jgeerds
+      ];
     };
   };
 
