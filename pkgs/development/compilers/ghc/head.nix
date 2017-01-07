@@ -8,8 +8,12 @@ let
   commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
   version = "8.1.20170106";
+  rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
   commonPreConfigure =  ''
+    echo ${version} >VERSION
+    echo ${rev} >GIT_COMMIT_ID
+    ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
@@ -17,9 +21,8 @@ let
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
 in stdenv.mkDerivation (rec {
-  inherit version;
+  inherit version rev;
   name = "ghc-${version}";
-  rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
@@ -29,11 +32,7 @@ in stdenv.mkDerivation (rec {
 
   postPatch = "patchShebangs .";
 
-  preConfigure = ''
-    echo ${version} >VERSION
-    echo ${rev} >GIT_COMMIT_ID
-    ./boot
-  '' + commonPreConfigure ;
+  preConfigure = commonPreConfigure;
 
   buildInputs = commonBuildInputs;
 
