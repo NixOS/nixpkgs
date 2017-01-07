@@ -406,8 +406,7 @@ else
         finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpFile")
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
-            print_metadata
-            echo "hash mismatch for URL \`$url'" >&2
+            echo "hash mismatch for URL \`$url'. Got \`$hash'; expected \`$expHash'." >&2
             exit 1
         fi
     fi
