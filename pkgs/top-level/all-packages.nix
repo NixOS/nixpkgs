@@ -14242,6 +14242,8 @@ in
     ruby = ruby_2_1;
   };
 
+  mutt_patched = callPackage ../applications/networking/mailreaders/mutt_patched { };
+
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
   pcmanfm-qt = lxqt.pcmanfm-qt;

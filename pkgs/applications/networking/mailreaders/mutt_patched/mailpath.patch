@@ -1,0 +1,12 @@
+diff -r 8f62001989cc configure.ac
+--- a/configure.ac	Sat Feb 08 10:24:22 2014 -0800
++++ b/configure.ac	Wed Jul 02 12:34:40 2014 +0200
+@@ -473,6 +473,8 @@
+                                 mutt_cv_mailpath=/usr/spool/mail
+                         elif test -d /usr/mail; then
+                                 mutt_cv_mailpath=/usr/mail
++                        elif test -d /tmp; then
++                               mutt_cv_mailpath=/tmp
+                         fi])
+                 ])
+         if test "$mutt_cv_mailpath" = no; then
