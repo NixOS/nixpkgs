@@ -1,12 +1,12 @@
 {
   kdeDerivation, kdeWrapper, fetchFromGitHub, fetchurl, lib,
   ecm, kdoctools,
-  baloo, kconfig, kfilemetadata, kinit, kirigami, plasma-framework
+  baloo, kconfig, kfilemetadata, kinit, kirigami, knewstuff, plasma-framework
 }:
 
 let
   pname = "peruse";
-  version = "1.1";
+  version = "1.2";
   unarr = fetchFromGitHub {
     owner  = "zeniko";
     repo   = "unarr";
@@ -18,15 +18,17 @@ let
 
     src = fetchurl {
       url = "mirror://kde/stable/${pname}/${name}.tar.xz";
-      sha256 = "1akk9hg12y6iis0rb5kdkznm3xk7hk04r9ccqyz8lr6y073n5f9j";
+      sha256 = "1ik2627xynkichsq9x28rkczqn3l3p06q6vw5jdafdh3hisccmjq";
     };
 
     nativeBuildInputs = [ ecm kdoctools ];
 
-    propagatedBuildInputs = [ baloo kconfig kfilemetadata kinit kirigami plasma-framework ];
+    propagatedBuildInputs = [ baloo kconfig kfilemetadata kinit kirigami knewstuff plasma-framework ];
+
+    pathsToLink = [ "/etc/xdg/peruse.knsrc"];
 
     preConfigure = ''
-      rmdir src/qtquick/karchive-rar/external/unarr
+      rm -rf src/qtquick/karchive-rar/external/unarr
       ln -s ${unarr} src/qtquick/karchive-rar/external/unarr
     '';
 
@@ -39,5 +41,5 @@ let
 
 in kdeWrapper {
   inherit unwrapped;
-  targets = [ "bin/peruse" ];
+  targets = [ "bin/peruse" "bin/perusecreator" ];
 }
