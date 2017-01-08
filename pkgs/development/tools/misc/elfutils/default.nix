@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.168";
 
   src = fetchurl {
-    url = "http://fedorahosted.org/releases/e/l/elfutils/${version}/${name}.tar.bz2";
+    url = "https://sourceware.org/elfutils/ftp/${version}/${name}.tar.bz2";
     sha256 = "0xn2fbgda1i703csfs35frvm7l068ybmay4ssrykqdx17f4hg3dq";
   };
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = https://fedorahosted.org/elfutils/;
+    homepage = https://sourceware.org/elfutils/;
     description = "A set of utilities to handle ELF objects";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
