@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
       dconf
     ];
 
-  preConfigure = ''
-    substituteInPlace mousepad/mousepad-settings-store.c --replace '#ifdef MOUSEPAD_SETTINGS_KEYFILE_BACKEND' '#if 1'
-  '';
+  configureFlags = [ "--enable-keyfile-settings" ];
 
   preFixup = ''
     wrapProgram "$out/bin/mousepad" \
