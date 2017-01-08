@@ -47,7 +47,10 @@ let
 in
 if paths == [] && !withLLVM then ghc else
 buildEnv {
-  inherit (ghc) name;
+  # this makes computing paths from the name attribute impossible;
+  # if such a feature is needed, the real compiler name should be saved
+  # as a dedicated drv attribute, like `compiler-name`
+  name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
   inherit ignoreCollisions;
   postBuild = ''

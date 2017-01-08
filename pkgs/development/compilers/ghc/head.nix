@@ -1,48 +1,45 @@
 { stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex
+, autoconf, automake, happy, alex, python3, crossSystem, selfPkgs, cross ? null
 }:
 
 let
   inherit (bootPkgs) ghc;
 
-in stdenv.mkDerivation rec {
-  version = "8.1.20160930";
-  name = "ghc-${version}";
-  rev = "9e862765ffe161da8a4fd9cd67b0a600874feaa9";
+  commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
-  src = fetchgit {
-    url = "git://git.haskell.org/ghc.git";
-    inherit rev;
-    sha256 = "01fmp5yrh3is8vzv2vabkzlvm1ry1zcq99m078plx9wgy20giq59";
-  };
+  version = "8.1.20170106";
+  rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
-  patches = [
-    ./ghc-8.x-dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
-  ];
-
-  postUnpack = ''
-    pushd ghc-${builtins.substring 0 7 rev}
+  commonPreConfigure =  ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
-    patchShebangs .
     ./boot
-    popd
-  '';
-
-  buildInputs = [ ghc perl autoconf automake happy alex ];
-
-  enableParallelBuilding = true;
-
-  preConfigure = ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
+in stdenv.mkDerivation (rec {
+  inherit version rev;
+  name = "ghc-${version}";
+
+  src = fetchgit {
+    url = "git://git.haskell.org/ghc.git";
+    inherit rev;
+    sha256 = "1h064nikx5srsd7qvz19f6dxvnpfjp0b3b94xs1f4nar18hzf4j0";
+  };
+
+  postPatch = "patchShebangs .";
+
+  preConfigure = commonPreConfigure;
+
+  buildInputs = commonBuildInputs;
+
+  enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-cc=${stdenv.cc}/bin/cc"
+    "CC=${stdenv.cc}/bin/cc"
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
@@ -53,7 +50,11 @@ in stdenv.mkDerivation rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
+  checkTarget = "test";
+
   postInstall = ''
+    paxmark m $out/lib/${name}/bin/{ghc,haddock}
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
 
@@ -67,6 +68,11 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     inherit bootPkgs;
+  } // stdenv.lib.optionalAttrs (crossSystem != null) {
+    crossCompiler = selfPkgs.ghc.override {
+      cross = crossSystem;
+      bootPkgs = selfPkgs;
+    };
   };
 
   meta = {
@@ -76,4 +82,32 @@ in stdenv.mkDerivation rec {
     inherit (ghc.meta) license platforms;
   };
 
-}
+} // stdenv.lib.optionalAttrs (cross != null) {
+  name = "${cross.config}-ghc-${version}";
+
+  preConfigure = commonPreConfigure + ''
+    sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
+  '';
+
+  configureFlags = [
+    "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
+    "LD=${stdenv.binutilsCross}/bin/${cross.config}-ld"
+    "AR=${stdenv.binutilsCross}/bin/${cross.config}-ar"
+    "NM=${stdenv.binutilsCross}/bin/${cross.config}-nm"
+    "RANLIB=${stdenv.binutilsCross}/bin/${cross.config}-ranlib"
+    "--target=${cross.config}"
+    "--enable-bootstrap-with-devel-snapshot"
+  ];
+
+  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
+
+  dontSetConfigureCross = true;
+
+  passthru = {
+    inherit bootPkgs cross;
+
+    cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
+
+    ld = "${stdenv.binutilsCross}/bin/${cross.config}-ld";
+  };
+})

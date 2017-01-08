@@ -80,7 +80,6 @@ let
             packages = selectFrom self;
             hoogle = callPackage ./hoogle.nix {
               inherit packages;
-              hoogle = self.hoogle_5_0_4;
             };
           in withPackages (packages ++ [ hoogle ]);
 
