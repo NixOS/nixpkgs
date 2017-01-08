@@ -3,14 +3,12 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   name = "elfutils-${version}";
-  version = "0.165";
+  version = "0.168";
 
   src = fetchurl {
     url = "http://fedorahosted.org/releases/e/l/elfutils/${version}/${name}.tar.bz2";
-    sha256 = "0wp91hlh9n0ismikljf63558rzdwim8w1s271grsbaic35vr5z57";
+    sha256 = "0xn2fbgda1i703csfs35frvm7l068ybmay4ssrykqdx17f4hg3dq";
   };
-
-  patches = [ ./glibc-2.21.patch ];
 
   hardeningDisable = [ "format" ];
 
