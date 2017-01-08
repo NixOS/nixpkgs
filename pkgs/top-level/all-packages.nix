@@ -2579,7 +2579,9 @@ in
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
-  ldns = callPackage ../development/libraries/ldns { };
+  ldns = callPackage ../development/libraries/ldns {
+    openssl = openssl_1_1_0;
+  };
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
@@ -2815,6 +2817,10 @@ in
   miniball = callPackage ../development/libraries/miniball { };
 
   minixml = callPackage ../development/libraries/minixml { };
+
+  mir-qualia = callPackage ../tools/text/mir-qualia {
+    pythonPackages = python3Packages;
+  };
 
   miredo = callPackage ../tools/networking/miredo { };
 
@@ -7486,6 +7492,8 @@ in
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
+    gdktarget = if stdenv.isDarwin then "quartz" else "x11";
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
@@ -7510,6 +7518,10 @@ in
   };
 
   gtk-sharp-beans = callPackage ../development/libraries/gtk-sharp-beans { };
+
+  gtk-mac-integration = callPackage ../development/libraries/gtk-mac-integration {
+    gtk = gtk2;
+  };
 
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
@@ -8373,7 +8385,9 @@ in
 
   libpfm = callPackage ../development/libraries/libpfm { };
 
-  libpqxx = callPackage ../development/libraries/libpqxx { };
+  libpqxx = callPackage ../development/libraries/libpqxx { 
+    gnused = gnused_422;
+  };
 
   libproxy = callPackage ../development/libraries/libproxy {
     stdenv = if stdenv.isDarwin
@@ -16336,7 +16350,7 @@ in
     libjpeg = libjpeg62;
   };
 
-  warzone2100 = callPackage ../games/warzone2100 { };
+  warzone2100 = qt5.callPackage ../games/warzone2100 { };
 
   wesnoth = callPackage ../games/wesnoth { };
 

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libiconv
   ] ++ libintlOrEmpty ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreGraphics
-    ApplicationServices
+    CoreText
     Carbon
   ]);
 
@@ -56,6 +56,9 @@ stdenv.mkDerivation rec {
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
     ++ optional glSupport mesa_noglu
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      ApplicationServices
+    ])
     ; # TODO: maybe liblzo but what would it be for here?
 
   configureFlags = if stdenv.isDarwin then [

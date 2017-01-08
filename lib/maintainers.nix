@@ -444,6 +444,7 @@
   spinus = "Tomasz Czyż <tomasz.czyz@gmail.com>";
   sprock = "Roger Mason <rmason@mun.ca>";
   spwhitt = "Spencer Whitt <sw@swhitt.me>";
+  srhb = "Sarah Brofeldt <sbrofeldt@gmail.com>";
   SShrike = "Severen Redwood <severen@shrike.me>";
   stephenmw = "Stephen Weinberg <stephen@q5comm.com>";
   sternenseemann = "Lukas Epple <post@lukasepple.de>";

@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     toDisable = [
       "getnameinfo_basic" # probably network-dependent
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
+      "getaddrinfo_fail" "getaddrinfo_fail_sync"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString doCheck ''
@@ -32,8 +33,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-
-  crossAttrs.doCheck = false;
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
