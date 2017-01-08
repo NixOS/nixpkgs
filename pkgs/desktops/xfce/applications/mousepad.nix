@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
       dconf
     ];
 
+  preConfigure = ''
+    substituteInPlace mousepad/mousepad-settings-store.c --replace '#ifdef MOUSEPAD_SETTINGS_KEYFILE_BACKEND' '#if 1'
+  '';
+
   preFixup = ''
     wrapProgram "$out/bin/mousepad" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:${gtksourceview}/share" \
