@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig djvulibre poppler fontconfig libjpeg ];
 
+  preConfigure = ''
+    sed -i 's#\$djvulibre_bin_path#${djvulibre.bin}/bin#g' configure
+  '';
+
   meta = with stdenv.lib; {
     description = "Creates djvu files from PDF files";
     homepage = http://code.google.com/p/pdf2djvu/;
