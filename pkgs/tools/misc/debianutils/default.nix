@@ -4,11 +4,6 @@ let
   checksums = {
     "4.8.1" = "09phylg8ih1crgxjadkdb8idbpj9ap62a7cbh8qdx2gyvh5mqf9c";
   };
-  smail = {
-    shortName = "smail";
-    fullName = "SMAIL General Public License";
-    url = http://metadata.ftp-master.debian.org/changelogs/main/d/debianutils/debianutils_4.8.1_copyright;
-  };
 in stdenv.mkDerivation rec {
   version = "4.8.1";
   name = "debianutils-${version}";
