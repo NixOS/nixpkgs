@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, automake, perl, libX11 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, perl, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "ffcast-${version}";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "047y32bixhc8ksr98vwpgd0k1xxgsv2vs0n3kc2xdac4krc9454h";
   };
 
-  buildInputs = [ autoreconfHook automake perl libX11 ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ perl libX11 ];
 
   configureFlags = [ "--disable-xrectsel" ];
 

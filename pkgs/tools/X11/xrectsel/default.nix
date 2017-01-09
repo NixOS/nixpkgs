@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, automake, libX11 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "xrectsel-${version}";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0prl4ky3xzch6xcb673mcixk998d40ngim5dqc5374b1ls2r6n7l";
   };
 
-  buildInputs = [ autoreconfHook automake libX11 ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libX11 ];
 
   postBuild = ''
     make DESTDIR="$out" install
