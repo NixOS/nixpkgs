@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     rm -rf gtest
-    cp -r ${gtest.source} gtest
+    cp -r ${gtest.src}/googletest gtest
     chmod -R a+w gtest
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
