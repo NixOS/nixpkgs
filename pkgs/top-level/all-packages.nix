@@ -1369,6 +1369,8 @@ in
 
   dcfldd = callPackage ../tools/system/dcfldd { };
 
+  debianutils = callPackage ../tools/misc/debianutils { };
+
   debian-devscripts = callPackage ../tools/misc/debian-devscripts {
     inherit (perlPackages) CryptSSLeay LWP TimeDate DBFile FileDesktopEntry;
   };
