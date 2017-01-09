@@ -8443,7 +8443,7 @@ let self = _self // overrides; _self = with self; {
   mod_perl2 = buildPerlPackage {
     name = "mod_perl-2.0.9";
     src = fetchurl {
-      url = http://apache.mirror.iphh.net/perl/mod_perl-2.0.9.tar.gz;
+      url = mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.9.tar.gz;
       sha256 = "0azmir4hbb825mfmcxwa1frhnhhf82rl8xf6mmgwkhbinxmg4q02";
     };
     makeMakerFlags = "MP_AP_DESTDIR=$out";
@@ -8451,6 +8451,7 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # would try to start Apache HTTP server
     meta = {
       description = "Embed a Perl interpreter in the Apache HTTP server";
+      license = stdenv.lib.licenses.asl20;
     };
   };
   Mojolicious = buildPerlPackage rec {
