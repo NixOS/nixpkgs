@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nim-${version}";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "http://nim-lang.org/download/${name}.tar.xz";
-    sha256 = "12pyzjx7x4hclzrf3zf6r1qjlp60bzsaqrz0rax2rak2c8qz4pch";
+    sha256 = "0rsibhkc5n548bn9yyb9ycrdgaph5kq84sfxc9gabjs7pqirh6cy";
   };
 
   buildInputs  = [ makeWrapper ];

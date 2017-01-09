@@ -58,6 +58,8 @@ self: super: {
       rev = drv.version;
     };
   })).overrideScope (self: super: {
+    # https://github.com/bitemyapp/esqueleto/issues/8
+    esqueleto = self.esqueleto_2_4_3;
     # https://github.com/yesodweb/yesod/issues/1324
     yesod-persistent = self.yesod-persistent_1_4_1_1;
     # https://github.com/prowdsponsor/esqueleto/issues/137
@@ -1140,4 +1142,8 @@ self: super: {
 
   # https://github.com/krisajenkins/elm-export/pull/22
   elm-export = doJailbreak super.elm-export;
+
+  turtle_1_3_0 = super.turtle_1_3_0.overrideScope (self: super: {
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
 }

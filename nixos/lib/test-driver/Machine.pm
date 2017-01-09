@@ -611,11 +611,37 @@ sub copyFileFromHost {
 }
 
 
+my %charToKey = (
+    '!' => "shift-0x02",
+    '@' => "shift-0x03",
+    '#' => "shift-0x04",
+    '$' => "shift-0x05",
+    '%' => "shift-0x06",
+    '^' => "shift-0x07",
+    '&' => "shift-0x08",
+    '*' => "shift-0x09",
+    '(' => "shift-0x0A",
+    ')' => "shift-0x0B",
+    '-' => "0x0C", '_' => "shift-0x0C",
+    '=' => "0x0D", '+' => "shift-0x0D",
+    '[' => "0x1A", '{' => "shift-0x1A",
+    ']' => "0x1B", '}' => "shift-0x1B",
+    ';' => "0x27", ':' => "shift-0x27",
+   '\'' => "0x28", '"' => "shift-0x28",
+    '`' => "0x29", '~' => "shift-0x29",
+   '\\' => "0x2B", '|' => "shift-0x2B",
+    ',' => "0x33", '<' => "shift-0x33",
+    '.' => "0x34", '>' => "shift-0x34",
+    '/' => "0x35", '?' => "shift-0x35",
+    ' ' => "spc",
+   "\n" => "ret",
+);
+
+
 sub sendKeys {
     my ($self, @keys) = @_;
     foreach my $key (@keys) {
-        $key = "spc" if $key eq " ";
-        $key = "ret" if $key eq "\n";
+        $key = $charToKey{$key} if exists $charToKey{$key};
         $self->sendMonitorCommand("sendkey $key");
     }
 }

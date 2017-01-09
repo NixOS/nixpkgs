@@ -120,7 +120,7 @@ in
     };
 
     environment.etc."ddclient.conf" = {
-      enable = config.services.ddclient.configFile == /etc/ddclient.conf;
+      enable = config.services.ddclient.configFile == "/etc/ddclient.conf";
       uid = config.ids.uids.ddclient;
       mode = "0600";
       text = ''

@@ -4,7 +4,6 @@
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
 in
-
 rec {
   rustc = callPackage ./rustc.nix {
     shortVersion = "1.14";
@@ -16,6 +15,7 @@ rec {
 
     patches = [
       ./patches/disable-lockfile-check-stable.patch
+      ./patches/darwin-disable-fragile-tcp-tests.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 
     inherit targets;

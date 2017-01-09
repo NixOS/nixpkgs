@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls =
-      [ "http://www.zlib.net/${name}.tar.gz"  # old versions vanish from here
+      [ "http://www.zlib.net/fossils/${name}.tar.gz"  # stable archive path
         "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
       ];
     sha256 = "05w0jwsqib44jz5jazh7cqz311z4g7znnzn6w6v8g1z4iilryzld";

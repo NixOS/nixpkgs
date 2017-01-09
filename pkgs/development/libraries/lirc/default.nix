@@ -1,7 +1,7 @@
 { stdenv, fetchurl, alsaLib, bash, help2man, pkgconfig, xlibsWrapper, python3, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "lirc-0.9.3";
+  name = "lirc-0.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/lirc/${name}.tar.bz2";
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
 
   preBuild = "patchShebangs .";
 
-  buildInputs = [ alsaLib help2man pkgconfig xlibsWrapper python3 libxslt ];
+  nativeBuildInputs = [ pkgconfig help2man ];
+
+  buildInputs = [ alsaLib xlibsWrapper python3 libxslt ];
 
   configureFlags = [
     "--with-driver=devinput"

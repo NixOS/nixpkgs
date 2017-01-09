@@ -3,7 +3,7 @@
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
 , guile, perl, postgresql92, aws-sdk-cpp, nukeReferences, git, boehmgc
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
-, rpm, dpkg, cdrkit, fetchpatch }:
+, rpm, dpkg, cdrkit, fetchpatch, pixz }:
 
 with stdenv;
 
@@ -61,20 +61,16 @@ let
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2016-04-15";
+  version = "2016-12-09";
+
+  inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "177bf25d648092826a75369191503a3f2bb763a4";
-    sha256 = "0ngipzm2i2vz5ygfd70hh82d027snpl85r8ncn1rxlkak0g8fxsl";
+    rev = "de55303197d997c4fc5503b52b1321ae9528583d";
+    sha256 = "0nimqsbpjxfwha6d5gp6a7jh50i83z1llmx30da4bscsic8z1xly";
   };
-
-  patches = [(fetchpatch {
-    name = "cmath.diff";
-    url = https://github.com/vcunat/hydra/commit/3c6fca1ba299.diff; # https://github.com/NixOS/hydra/pull/337
-    sha256 = "02m9q304ay45s7xfkm2y7lppakrkx3hrq39mm6348isnbqmbarc0";
-  })];
 
   buildInputs =
     [ makeWrapper autoconf automake libtool unzip nukeReferences pkgconfig sqlite libpqxx
@@ -96,7 +92,7 @@ in releaseTools.nixBuild rec {
     ];
 
   hydraPath = lib.makeBinPath (
-    [ libxslt sqlite subversion openssh nixUnstable coreutils findutils
+    [ sqlite subversion openssh nixUnstable coreutils findutils pixz
       gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
@@ -108,7 +104,7 @@ in releaseTools.nixBuild rec {
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
   preHook = ''
-    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$PATH
+    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
 
