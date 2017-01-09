@@ -4,14 +4,14 @@
 , pcre, webkitgtk, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, spice_protocol, spice_gtk, epoxy, at_spi2_core
-, openssl
+, openssl, gsettings_desktop_schemas
 # The themes here are soft dependencies; only icons are missing without them.
 , hicolor_icon_theme, adwaita-icon-theme
 }:
 
 let
   version = "1.2.0-rcgit.15";
-  
+
   desktopItem = makeDesktopItem {
     name = "remmina";
     desktopName = "Remmina";
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     sha256 = "07lj6a7x9cqcff18pwfkx8c8iml015zp6sq29dfcxpfg4ai578h0";
   };
 
-  buildInputs = [ cmake pkgconfig wrapGAppsHook
+  buildInputs = [ cmake pkgconfig wrapGAppsHook gsettings_desktop_schemas
                   glib gtk3 gettext libxkbfile libgnome_keyring libX11
                   freerdp_git libssh libgcrypt gnutls
                   pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3
