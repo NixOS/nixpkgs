@@ -31,10 +31,20 @@ in {
           Extra commandline options when launching the blackbox exporter.
         '';
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open port in firewall for incoming connections.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
     systemd.services.prometheus-blackbox-exporter = {
       description = "Prometheus exporter for blackbox probes";
       unitConfig.Documentation = "https://github.com/prometheus/blackbox_exporter";
