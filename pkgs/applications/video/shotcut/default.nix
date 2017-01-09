@@ -5,11 +5,11 @@ qmakeHook, makeQtWrapper }:
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "16.11";
+  version = "17.01";
 
   src = fetchurl {
     url = "https://github.com/mltframework/shotcut/archive/v${version}.tar.gz";
-    sha256 = "1w02wbk5q7kvqgyip2w94zg4bhdxlh82b4mxarhv0b6v0imy60dq";
+    sha256 = "1f3276q58rvw1brxfnm9z3v99fx63wml6j02sgmpzazw3172lnpg";
   };
 
   buildInputs = [ SDL frei0r gettext mlt pkgconfig qtbase qtmultimedia qtwebkit
@@ -17,10 +17,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  prePatch = ''
+    sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
+    sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
+    NICE=$(type -P nice)
+    sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
+  '';
+
   postInstall = ''
     mkdir -p $out/share/shotcut
     cp -r src/qml $out/share/shotcut/
-    wrapQtProgram $out/bin/shotcut --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL ]}
+    wrapQtProgram $out/bin/shotcut --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL ]} --prefix PATH : ${mlt}/bin
   '';
 
   meta = with stdenv.lib; {

@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/melt --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1
   '';
 
+  passthru = {
+    inherit ffmpeg;
+  };
+
   meta = with stdenv.lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = http://www.mltframework.org/;
