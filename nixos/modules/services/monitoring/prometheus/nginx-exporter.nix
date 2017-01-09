@@ -41,11 +41,19 @@ in {
           Extra commandline options when launching the nginx exporter.
         '';
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open port in firewall for incoming connections.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
 
     systemd.services.prometheus-nginx-exporter = {
       after = [ "network.target" "nginx.service" ];

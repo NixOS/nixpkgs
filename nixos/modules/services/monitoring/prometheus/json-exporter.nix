@@ -38,10 +38,20 @@ in {
           Extra commandline options when launching the JSON exporter.
         '';
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open port in firewall for incoming connections.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
     systemd.services.prometheus-json-exporter = {
       description = "Prometheus exporter for JSON over HTTP";
       unitConfig.Documentation = "https://github.com/kawamuray/prometheus-json-exporter";

@@ -25,10 +25,20 @@ in {
           Extra commandline options when launching the Varnish exporter.
         '';
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open port in firewall for incoming connections.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
     systemd.services.prometheus-varnish-exporter = {
       description = "Prometheus exporter for Varnish metrics";
       unitConfig.Documentation = "https://github.com/jonnenauha/prometheus_varnish_exporter";
