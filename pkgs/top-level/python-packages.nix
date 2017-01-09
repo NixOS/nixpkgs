@@ -7719,6 +7719,27 @@ in {
     };
   };
 
+  ipfsapi = buildPythonPackage rec {
+    name = "ipfsapi-${version}";
+    version = "0.4.0";
+    disabled = isPy26 || isPy27;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/i/ipfsapi/${name}.tar.gz";
+      sha256 = "0mqqsihannxzaqi8zcj9nca7fxwg1c85bp7xxic3xqa5zslcdcc3";
+    };
+
+    buildInputs = with self; [ pkgs.pandoc ];
+    propagatedBuildInputs = with self; [ six requests2 ];
+
+    meta = {
+      description = "A python client library for the IPFS API";
+      license = licenses.mit;
+      maintainers = with maintainers; [ mguentner ];
+      homepage = "https://pypi.python.org/pypi/ipfsapi";
+    };
+  };
+
   itsdangerous = buildPythonPackage rec {
     name = "itsdangerous-0.24";
 
