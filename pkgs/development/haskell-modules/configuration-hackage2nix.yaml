@@ -855,9 +855,6 @@ default-package-overrides:
   - hjsmin ==0.2.0.2
   - hjsonpointer ==1.0.0.2
   - hjsonschema ==1.1.0.1
-  - hledger ==1.0.1
-  - hledger-interest ==1.5.1
-  - hledger-lib ==1.0.1
   - hlibgit2 ==0.18.0.15
   - hlibsass ==0.1.5.0
   - hlint ==1.9.35
@@ -2010,6 +2007,7 @@ default-package-overrides:
 
 extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 6.12.3
+  - aeson < 1.1                         # required by stack
   - aeson-pretty < 0.8                  # required by elm compiler
   - binary > 0.7 && < 0.8               # binary 0.8.x is the latest, but it's largely unsupported so far
   - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
@@ -2017,6 +2015,7 @@ extra-packages:
   - containers < 0.5                    # required to build alex with GHC 6.12.3
   - control-monad-free < 0.6            # newer versions don't compile with anything but GHC 7.8.x
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
+  - esqueleto < 2.5                     # needed for git-annex: https://github.com/bitemyapp/esqueleto/issues/8
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock < 2.17                      # required on GHC 7.10.x
@@ -3416,8 +3415,6 @@ dont-distribute-packages:
   electrum-mnemonic:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   elevator:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   elision:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
-  elm-export-persistent:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
-  elm-export:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   elocrypt:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   emacs-keys:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   email-postmark:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4075,7 +4072,6 @@ dont-distribute-packages:
   hakyll-sass:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   hakyll-series:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   hakyll-shakespeare:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
-  hakyll:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   halberd:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   halfs:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   halipeto:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]

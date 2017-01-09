@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost lhapdf root yoda ];
 
+  CXXFLAGS="-std=c++11"; # for yoda
+
+  configureFlags = [
+    "--with-yoda=${yoda}"
+  ];
+
   enableParallelBuilding = true;
 
   meta = {

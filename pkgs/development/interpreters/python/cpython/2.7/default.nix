@@ -6,7 +6,7 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
+, tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
 , callPackage
 , self
@@ -149,6 +149,10 @@ in stdenv.mkDerivation {
     DETERMINISTIC_BUILD = 1;
 
     setupHook = ./setup-hook.sh;
+
+    postPatch = optionalString (x11Support && (tix != null)) ''
+          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    '';
 
     postInstall =
       ''

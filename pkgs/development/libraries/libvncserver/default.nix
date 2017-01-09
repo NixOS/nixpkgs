@@ -1,7 +1,7 @@
 {stdenv, fetchurl,
   libtool, libjpeg, openssl, libX11, libXdamage, xproto, damageproto, 
   xextproto, libXext, fixesproto, libXfixes, xineramaproto, libXinerama, 
-  libXrandr, randrproto, libXtst, zlib
+  libXrandr, randrproto, libXtst, zlib, libgcrypt
 }:
 
 assert stdenv.isLinux;
@@ -19,7 +19,7 @@ let
   buildInputs = [
     libtool libjpeg openssl libX11 libXdamage xproto damageproto
     xextproto libXext fixesproto libXfixes xineramaproto libXinerama
-    libXrandr randrproto libXtst zlib
+    libXrandr randrproto libXtst zlib libgcrypt
   ];
 in
 stdenv.mkDerivation {

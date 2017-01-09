@@ -54,10 +54,12 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1a87kllzxmjwkz5arq4c3bp7qfkabn0arbli6s6i68fkgm19s4gr";
+      sha256 = "1vy6bj7f8zyj4n1r0gpi0r7mxapsrjvhwmsi5sbnradfng5j3jya";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
+    # https://github.com/bitemyapp/esqueleto/issues/8
+    esqueleto = self.esqueleto_2_4_3;
     # https://github.com/yesodweb/yesod/issues/1324
     yesod-persistent = self.yesod-persistent_1_4_1_1;
     # https://github.com/prowdsponsor/esqueleto/issues/137
@@ -192,7 +194,8 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    # https://github.com/jaspervdj/hakyll/issues/491
+    else dontCheck super.hakyll;
 
   # Heist's test suite requires system pandoc
   heist = overrideCabal super.heist (drv: {

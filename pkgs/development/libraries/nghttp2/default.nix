@@ -2,8 +2,18 @@
 
 # Optional Dependencies
 , openssl ? null, libev ? null, zlib ? null
-#, jansson ? null, boost ? null, libxml2 ? null, jemalloc ? null
+, enableHpack ? false, jansson ? null
+, enableAsioLib ? false, boost ? null
+, enableGetAssets ? false, libxml2 ? null
+, enableJemalloc ? false, jemalloc ? null
 }:
+
+assert enableHpack -> jansson != null;
+assert enableAsioLib -> boost != null;
+assert enableGetAssets -> libxml2 != null;
+assert enableJemalloc -> jemalloc != null;
+
+with { inherit (stdenv.lib) optional; };
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
@@ -18,7 +28,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libev zlib ];
+  buildInputs = [ openssl libev zlib ]
+    ++ optional enableHpack jansson
+    ++ optional enableAsioLib boost
+    ++ optional enableGetAssets libxml2
+    ++ optional enableJemalloc jemalloc;
 
   enableParallelBuilding = true;
 

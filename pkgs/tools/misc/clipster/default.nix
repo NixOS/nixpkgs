@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation  rec {
   name = "clipster-unstable-${version}";
-  version = "2016-09-12";
+  version = "2016-12-08";
 
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
-    rev = "6526a849a0af4c392f4e8e5b18aacdda9c1a8e80";
-    sha256 = "0illdajp5z50h7lvglv0p72cpv4c592xmpamrg8kkjpg693bp873";
+    rev = "7a3511d89dbbb4157118eec15f1e9e6fd0ad1a6b";
+    sha256 = "005akgk1wn3z5vxfjii202zzwz85zydimfgm69ml68imj5vbhkg1";
   };
 
   pythonEnv = python.withPackages(ps: with ps; [ dbus-python pygtk pygobject3 ]);

@@ -449,6 +449,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Sleepycat License";
   };
 
+  smail = {
+    shortName = "smail";
+    fullName = "SMAIL General Public License";
+    url = http://metadata.ftp-master.debian.org/changelogs/main/d/debianutils/debianutils_4.8.1_copyright;
+  };
+
   tcltk = spdx {
     spdxId = "TCL";
     fullName = "TCL/TK License";

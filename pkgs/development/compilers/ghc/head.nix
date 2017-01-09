@@ -7,9 +7,13 @@ let
 
   commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
-  version = "8.1.20161224";
+  version = "8.1.20170106";
+  rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
   commonPreConfigure =  ''
+    echo ${version} >VERSION
+    echo ${rev} >GIT_COMMIT_ID
+    ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
@@ -17,23 +21,18 @@ let
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
 in stdenv.mkDerivation (rec {
-  inherit version;
+  inherit version rev;
   name = "ghc-${version}";
-  rev = "2689a1692636521777f007861a484e7064b2d696";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "0rk6xy7kgxx849nprq1ji459p88nyy93236g841m5p6mdh7mmrcr";
+    sha256 = "1h064nikx5srsd7qvz19f6dxvnpfjp0b3b94xs1f4nar18hzf4j0";
   };
 
   postPatch = "patchShebangs .";
 
-  preConfigure = ''
-    echo ${version} >VERSION
-    echo ${rev} >GIT_COMMIT_ID
-    ./boot
-  '' + commonPreConfigure ;
+  preConfigure = commonPreConfigure;
 
   buildInputs = commonBuildInputs;
 
@@ -85,9 +84,6 @@ in stdenv.mkDerivation (rec {
 
 } // stdenv.lib.optionalAttrs (cross != null) {
   name = "${cross.config}-ghc-${version}";
-
-  # Some fixes for cross-compilation to iOS. See https://phabricator.haskell.org/D2710 (D2711,D2712,D2713)
-  patches = [ ./D2710.patch ./D2711.patch ./D2712.patch ./D2713.patch ];
 
   preConfigure = commonPreConfigure + ''
     sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk

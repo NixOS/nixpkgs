@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
     sha512 = "1f4579ac37b8ab98c91fe2e3e6742ba1b005ca9346d23f467d19e6af45eb457cab749bf91ed2a79f2058bd66f54da661da3ea5d5786f8c4b472d8a2a6c34db4b";
   };
 
+  # New sed no longer tolerates this mistake.
+  postPatch = ''
+    for f in mozilla/{js/src,}/configure; do
+      substituteInPlace "$f" --replace '[:space:]*' '[[:space:]]*'
+    done
+  '';
+
   buildInputs = # from firefox30Pkgs.xulrunner, without gstreamer and libvpx
     [ pkgconfig which libpng gtk2 perl zip libIDL libjpeg zlib bzip2
       python2 dbus dbus_glib pango freetype fontconfig xorg.libXi

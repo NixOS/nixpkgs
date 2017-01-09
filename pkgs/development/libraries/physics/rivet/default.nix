@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   pythonPath = []; # python wrapper support
 
+  patches = [
+    ./darwin.patch # configure relies on impure sw_vers to -Dunix
+  ];
+
   latex = texlive.combine { inherit (texlive)
     scheme-basic
     collection-pstricks
