@@ -5084,6 +5084,41 @@ in {
     };
   };
 
+  pyhepmc = buildPythonPackage rec {
+    name = "pyhepmc-${version}";
+    version = "0.5.0";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyhepmc/${name}.tar.gz";
+      sha256 = "1rbi8gqgclfvaibv9kzhfis11gw101x8amc93qf9y08ny4jfyr1d";
+    };
+
+    patches = [
+      # merge PR https://bitbucket.org/andybuckley/pyhepmc/pull-requests/1/add-incoming-outgoing-generators-for/diff
+      ../development/python-modules/pyhepmc_export_edges.patch
+      # add bindings to Flow class
+      ../development/python-modules/pyhepmc_export_flow.patch
+    ];
+
+    # regenerate python wrapper
+    preConfigure = ''
+      rm hepmc/hepmcwrap.py
+      swig -c++ -I${pkgs.hepmc}/include -python hepmc/hepmcwrap.i
+    '';
+
+    buildInputs = with pkgs; [ swig hepmc ];
+
+    HEPMCPATH = pkgs.hepmc;
+
+    meta = {
+      description = "A simple wrapper on the main classes of the HepMC event simulation representation, making it possible to create, read and manipulate HepMC events from Python code";
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ veprbl ];
+      platforms   = platforms.all;
+    };
+  };
+
   pytest = self.pytest_30;
 
   pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};
