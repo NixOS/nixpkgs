@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, pidgin, xosd
+{ stdenv, fetchFromGitHub, pidgin, xosd
 , autoreconfHook } :
 
 stdenv.mkDerivation rec {
   name = "pidgin-osd-0.2.0";
-  src = fetchurl {
-    url = https://github.com/edanaher/pidgin-osd/archive/pidgin-osd-0.2.0.tar.gz;
-    sha256 = "1dfb0957wwm5zly4w4g815svhkhvjbj3dgik1lbyac8adh9ks784";
+  src = fetchFromGitHub {
+    owner = "edanaher";
+    repo = "pidgin-osd";
+    rev = "pidgin-osd-0.2.0";
+    sha256 = "07wa9anz99hnv6kffpcph3fbq8mjbyq17ij977ggwgw37zb9fzb5";
   };
 
   # autoreconf is run such that it *really* wants all the files, and there's no
