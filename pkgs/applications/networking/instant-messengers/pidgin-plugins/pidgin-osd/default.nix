@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "edanaher";
     repo = "pidgin-osd";
-    rev = "pidgin-osd-0.2.0";
+    rev = name;
     sha256 = "07wa9anz99hnv6kffpcph3fbq8mjbyq17ij977ggwgw37zb9fzb5";
   };
 
