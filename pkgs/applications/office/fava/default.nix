@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages }:
+{ stdenv, pkgs, fetchurl, python3Packages, fetchFromGitHub, fetchzip, python3, beancount }:
 
 python3Packages.buildPythonApplication rec {
   version = "1.2";
