@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fastnlo, rivet, pkgconfig, sherpa }:
+{ stdenv, fetchurl, applgrid, fastnlo, rivet, pkgconfig, sherpa }:
 
 stdenv.mkDerivation rec {
   name = "mcgrid-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mw82x7zqbdchnd6shj3dirsav5i2cndp2hjwb8a8xdh4xh9zvfy";
   };
 
-  buildInputs = [ fastnlo rivet ];
+  buildInputs = [ applgrid fastnlo rivet ];
   propagatedNativeBuildInputs = [ pkgconfig ];
 
   preConfigure = ''
