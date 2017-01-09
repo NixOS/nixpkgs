@@ -16977,11 +16977,12 @@ with pkgs;
     inherit (ocamlPackages_4_01_0) ocaml findlib lablgtk;
     camlp5 = ocamlPackages_4_01_0.camlp5_transitional;
   };
-  coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
+  coq_8_5 = callPackage ../applications/science/logic/coq {
+    version = "8.5pl3";
     inherit (ocamlPackages) ocaml findlib lablgtk;
     camlp5 = ocamlPackages.camlp5_transitional;
   };
-  coq_8_6 = callPackage ../applications/science/logic/coq/8.6.nix {
+  coq_8_6 = callPackage ../applications/science/logic/coq {
     inherit (ocamlPackages) ocaml findlib lablgtk;
     camlp5 = ocamlPackages.camlp5_transitional;
   };
