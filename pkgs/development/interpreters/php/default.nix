@@ -9,7 +9,9 @@ let
   generic =
     { version, sha256 }:
 
-    let php7 = lib.versionAtLeast version "7.0"; in
+    let
+      php54 = lib.versionOlder version "5.5";
+      php7 = lib.versionAtLeast version "7.0"; in
 
     composableDerivation.composableDerivation {} (fixed: {
 
@@ -233,7 +235,7 @@ let
         bcmathSupport = config.php.bcmath or true;
         socketsSupport = config.php.sockets or true;
         curlSupport = config.php.curl or true;
-        curlWrappersSupport = (!php7) && (config.php.curlWrappers or true);
+        curlWrappersSupport = (php54) && (config.php.curlWrappers or true);
         gettextSupport = config.php.gettext or true;
         pcntlSupport = config.php.pcntl or true;
         postgresqlSupport = config.php.postgresql or true;
