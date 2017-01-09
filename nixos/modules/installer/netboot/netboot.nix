@@ -30,8 +30,6 @@ with lib;
     system.boot.loader.kernelFile = "bzImage";
     environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi pkgs.syslinux ];
 
-    boot.consoleLogLevel = mkDefault 7;
-
     fileSystems."/" =
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
