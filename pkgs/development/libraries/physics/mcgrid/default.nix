@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fastnlo, rivet, sherpa }:
+{ stdenv, fetchurl, fastnlo, rivet, pkgconfig, sherpa }:
 
 stdenv.mkDerivation rec {
   name = "mcgrid-${version}";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ fastnlo rivet ];
+  propagatedNativeBuildInputs = [ pkgconfig ];
 
   preConfigure = ''
     substituteInPlace mcgrid.pc.in \
