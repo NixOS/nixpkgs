@@ -212,6 +212,7 @@ in {
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 
+      systemd.packages = [ cfg.package ];
     })
 
     (mkIf hasZeroconf {
@@ -227,30 +228,13 @@ in {
         target = "pulse/default.pa";
         source = myConfigFile;
       };
-
       systemd.user = {
         services.pulseaudio = {
-          description = "PulseAudio Server";
-          # NixOS doesn't support "Also" so we bring it in manually
-          wantedBy = [ "default.target" ];
           serviceConfig = {
-            Type = "notify";
-            ExecStart = binaryNoDaemon;
-            Restart = "on-failure";
             RestartSec = "500ms";
           };
           environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
           restartIfChanged = true;
-        };
-
-        sockets.pulseaudio = {
-          description = "PulseAudio Socket";
-          wantedBy = [ "sockets.target" ];
-          socketConfig = {
-            Priority = 6;
-            Backlog = 5;
-            ListenStream = "%t/pulse/native";
-          };
         };
       };
     })
