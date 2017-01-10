@@ -1988,9 +1988,11 @@ in
     pythonPackages = pypyPackages;
   };
 
-  graphviz = callPackage ../tools/graphics/graphviz { };
+  graphviz = callPackage ../tools/graphics/graphviz {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
-  graphviz-nox = callPackage ../tools/graphics/graphviz {
+  graphviz-nox = graphviz.override {
     xorg = null;
     libdevil = libdevil-nox;
   };
@@ -2005,7 +2007,9 @@ in
    * that do want 2.32 but not 2.0 or 2.36. Please give a day's notice for
    * objections before removal. The feature is libgraph.
    */
-  graphviz_2_32 = callPackage ../tools/graphics/graphviz/2.32.nix { };
+  graphviz_2_32 = callPackage ../tools/graphics/graphviz/2.32.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   grin = callPackage ../tools/text/grin { };
   ripgrep = callPackage ../tools/text/ripgrep { };
@@ -7385,7 +7389,9 @@ in
     bison = bison2;
   };
 
-  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {};
+  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   gst_plugins_good = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-good {};
 
@@ -13696,7 +13702,9 @@ in
     ghostscript = null;
   };
 
-  imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
+  imagemagickBig = callPackage ../applications/graphics/ImageMagick {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   imagemagick7_light = lowPrio (imagemagick7.override {
     bzip2 = null;
@@ -13722,7 +13730,9 @@ in
     ghostscript = null;
   });
 
-  imagemagick7Big = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix { });
+  imagemagick7Big = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  });
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
