@@ -2529,7 +2529,7 @@ in
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs = nodejs-6_x;
+  nodejs = hiPrio nodejs-6_x;
 
   nodejs-slim = nodejs-slim-6_x;
 
