@@ -4653,6 +4653,7 @@ in
 
   clang = llvmPackages.clang;
 
+  clang-svn = llvmPackages-svn.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
@@ -5189,6 +5190,7 @@ in
 
   llvm = llvmPackages.llvm;
 
+  llvm-svn = llvmPackages-svn.llvm;
   llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
@@ -5228,6 +5230,10 @@ in
   };
 
   llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 {
+    inherit (stdenvAdapters) overrideCC;
+  };
+
+  llvmPackages-svn = callPackage ../development/compilers/llvm/svn {
     inherit (stdenvAdapters) overrideCC;
   };
 
@@ -8695,6 +8701,17 @@ in
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
+  inherit (callPackage ../development/libraries/mesa {
+    # makes it slower, but during runtime we link against just mesa_drivers
+    # through /run/opengl-driver*, which is overriden according to config.grsecurity
+    grsecEnabled = true;
+    llvmPackages = llvmPackages_39;
+  })
+    mesa_13_0_2
+    mesa_13_1_0-git;
+
+  mesa_current = mesa_13_0_2;
+
   mesaDarwinOr = alternative: if stdenv.isDarwin
     then callPackage ../development/libraries/mesa-darwin {
       inherit (darwin.apple_sdk.frameworks) OpenGL;
@@ -8702,12 +8719,7 @@ in
       inherit (darwin) apple_sdk;
     }
     else alternative;
-  mesa_noglu = mesaDarwinOr (callPackage ../development/libraries/mesa {
-    # makes it slower, but during runtime we link against just mesa_drivers
-    # through /run/opengl-driver*, which is overriden according to config.grsecurity
-    grsecEnabled = true;
-    llvmPackages = llvmPackages_39;
-  });
+  mesa_noglu = mesaDarwinOr mesa_current;
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
