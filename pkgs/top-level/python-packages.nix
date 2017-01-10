@@ -14529,6 +14529,25 @@ in {
     };
   };
 
+  modulegraph = buildPythonPackage rec {
+    name = "modulegraph-0.13";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/modulegraph/${name}.tar.gz";
+      sha256 = "1fp58318n7rabxakis5cw4z2lcyimsp167hlfl6y0mvf7zx8dxai";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ altgraph ];
+
+    meta = {
+      description = "Python module dependency analysis tool";
+      homepage = https://bitbucket.org/ronaldoussoren/modulegraph;
+      license = licenses.mit;
+    };
+  };
+
   moviepy = buildPythonPackage rec {
     name = "moviepy-${version}";
     version = "0.2.2.11";
