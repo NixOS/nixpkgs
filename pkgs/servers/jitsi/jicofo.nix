@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0b6wwav860x78n82knmhmf08jk36ygg65rdwfha7hdgkpjkdy6wr";
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontBuild = true;
+  doCheck = false;
 
   unpackCmd = "ar x $curSrc && tar -xvf data.tar.xz";
   sourceRoot = "./";
@@ -25,8 +26,6 @@ stdenv.mkDerivation rec {
     cd $out/bin
     ln -s ../share/jicofo/jicofo.sh jicofo
   '';
-
-  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "JItsi COnference FOcus is a server side focus component used in Jitsi Meet conferences.";
