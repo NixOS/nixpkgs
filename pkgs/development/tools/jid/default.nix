@@ -3,8 +3,8 @@
 
 buildGoPackage rec {
   name = "jid-${version}";
-  version = "0.6.1";
-  rev = "0.6.1";
+  version = "0.7.1";
+  rev = "${version}";
 
   goPackagePath = "github.com/simeji/jid";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "simeji";
     repo = "jid";
     inherit rev;
-    sha256 = "0hnda2nqgirwbqbzq38kbl83cr0kn7hxsh4wim4fwwla0hs2nwjg";
+    sha256 = "08snlqqch91w88zysfcavmqsafq93zzpkdjqkq1y7hx516fdaz1w";
   };
 
   goDeps = ./deps.nix;

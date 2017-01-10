@@ -232,8 +232,6 @@ in
     system.boot.loader.kernelFile = "bzImage";
     environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi pkgs.syslinux ];
 
-    boot.consoleLogLevel = mkDefault 7;
-
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the
     # root filesystem on the kernel command line, rather than in
