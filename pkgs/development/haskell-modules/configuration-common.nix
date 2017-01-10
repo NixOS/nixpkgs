@@ -615,6 +615,7 @@ self: super: {
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
+  purescript_0_10_1 = dontCheck super.purescript_0_10_1;
 
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
