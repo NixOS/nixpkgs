@@ -39,8 +39,6 @@ in stdenv.mkDerivation rec {
     sha256 = "068nxsfkp2ppcjh3fmcbapkiwnjpvkii73bfydpw4bf2yphdvsa8";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin ./darwin-enable-cxx-exceptions.patch;
-
   buildInputs = [ pkgconfig glib boost ]
     ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ opt stdenv.isLinux systemd

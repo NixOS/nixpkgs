@@ -62,8 +62,6 @@ stdenv.mkDerivation {
     done
 
     mkdir -p "$out/nix-support"
-    for drv in $unwrapped; do
-        echo "$drv" >> "$out/nix-support/propagated-user-env-packages"
-    done
+    echo "$unwrapped" > "$out/nix-support/propagated-user-env-packages"
   '';
 }

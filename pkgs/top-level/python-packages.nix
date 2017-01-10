@@ -7818,6 +7818,27 @@ in {
     };
   };
 
+  ipfsapi = buildPythonPackage rec {
+    name = "ipfsapi-${version}";
+    version = "0.4.0";
+    disabled = isPy26 || isPy27;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/i/ipfsapi/${name}.tar.gz";
+      sha256 = "0mqqsihannxzaqi8zcj9nca7fxwg1c85bp7xxic3xqa5zslcdcc3";
+    };
+
+    buildInputs = with self; [ pkgs.pandoc ];
+    propagatedBuildInputs = with self; [ six requests2 ];
+
+    meta = {
+      description = "A python client library for the IPFS API";
+      license = licenses.mit;
+      maintainers = with maintainers; [ mguentner ];
+      homepage = "https://pypi.python.org/pypi/ipfsapi";
+    };
+  };
+
   itsdangerous = buildPythonPackage rec {
     name = "itsdangerous-0.24";
 
@@ -24096,11 +24117,11 @@ in {
 
   sounddevice = buildPythonPackage rec {
     name = "sounddevice-${version}";
-    version = "0.3.4";
+    version = "0.3.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sounddevice/${name}.tar.gz";
-      sha256 = "f6c4120357c1458b23bd0d466c66808efdefad397bf97b1162600d079d4665ae";
+      sha256 = "4ef39be2d13069fbad8c69ac259e018d96ce55c23b529a7e0be9bd9a76e2e8da";
     };
 
     propagatedBuildInputs = with self; [ cffi numpy pkgs.portaudio ];
