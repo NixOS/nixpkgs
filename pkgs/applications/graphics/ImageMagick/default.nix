@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
+, ApplicationServices
 }:
 
 let
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
       [ openexr librsvg openjpeg ]
-    ;
+    ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
