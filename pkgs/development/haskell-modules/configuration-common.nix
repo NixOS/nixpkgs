@@ -60,8 +60,6 @@ self: super: {
   })).overrideScope (self: super: {
     # https://github.com/bitemyapp/esqueleto/issues/8
     esqueleto = self.esqueleto_2_4_3;
-    # https://github.com/yesodweb/yesod/issues/1324
-    yesod-persistent = self.yesod-persistent_1_4_1_1;
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
     persistent-template = self.persistent-template_2_1_8_1;
