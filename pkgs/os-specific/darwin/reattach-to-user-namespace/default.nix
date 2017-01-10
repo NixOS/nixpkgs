@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "reattach-to-user-namespace-2.4";
+  name = "reattach-to-user-namespace-2.5";
 
   src = fetchgit {
     url = "https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard.git";
