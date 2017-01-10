@@ -1,0 +1,55 @@
+From 73e77e056427e2042b8d84933c02db92e17cf233 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Thu, 29 Dec 2016 14:49:18 -0400
+Subject: [PATCH] use kernel fence_array in 4.8+
+
+---
+ amd/backport/include/kcl/kcl_fence_array.h | 10 ++++++++--
+ amd/backport/kcl_fence_array.c             |  2 +-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/amd/backport/include/kcl/kcl_fence_array.h b/amd/backport/include/kcl/kcl_fence_array.h
+index bb4401e..0d9f344 100644
+--- a/amd/backport/include/kcl/kcl_fence_array.h
++++ b/amd/backport/include/kcl/kcl_fence_array.h
+@@ -19,11 +19,15 @@
+  * more details.
+  */
+ 
+-#ifndef __LINUX_FENCE_ARRAY_H
+-#define __LINUX_FENCE_ARRAY_H
++#ifndef __KCL_FENCE_ARRAY_H
++#define __KCL_FENCE_ARRAY_H
+ 
+ #include <linux/fence.h>
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,8,0)
++#include <linux/fence-array.h>
++#else
++
+ /**
+  * struct fence_array_cb - callback helper for fence array
+  * @cb: fence callback structure for signaling
+@@ -72,4 +76,6 @@ struct fence_array *fence_array_create(int num_fences, struct fence **fences,
+ 				       u64 context, unsigned seqno,
+ 				       bool signal_on_any);
+ 
++#endif
++
+ #endif /* __LINUX_FENCE_ARRAY_H */
+diff --git a/amd/backport/kcl_fence_array.c b/amd/backport/kcl_fence_array.c
+index d7ee15c..1865444 100644
+--- a/amd/backport/kcl_fence_array.c
++++ b/amd/backport/kcl_fence_array.c
+@@ -21,7 +21,7 @@
+ #include <linux/export.h>
+ #include <linux/slab.h>
+ 
+-#if defined(BUILD_AS_DKMS)
++#if defined(BUILD_AS_DKMS) && LINUX_VERSION_CODE < KERNEL_VERSION(4,8,0)
+ static void fence_array_cb_func(struct fence *f, struct fence_cb *cb);
+ 
+ static const char *fence_array_get_driver_name(struct fence *fence)
+-- 
+2.11.0
+

@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
      computer.  It has more advanced features than Google's official client
      such as multiple account support, Google Doc conversion, symlink support,
      and built in sharing.
+
+     There is a 15-day free trial, and it is a paid application after that.
     '';
   };
 }

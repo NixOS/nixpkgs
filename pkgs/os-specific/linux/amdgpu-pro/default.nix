@@ -30,9 +30,9 @@ let
 
 in stdenv.mkDerivation rec {
 
-  version = "16.40";
+  version = "16.50";
   pname = "amdgpu-pro";
-  build = "16.40-348864";
+  build = "${version}-362463";
 
   libCompatDir = "/run/lib/${libArch}";
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
     "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
-    sha256 = "1c06lx07irmlpmbmgb3qcgpzj6q6rimszrbbdrgz8kqnfpcv3mjr";
+    sha256 = "1wl8mabk9g7s43bdarzl2i5crp8rl1advnb5mw3p3821sqzh2nd9";
     curlOpts = "--referer http://support.amd.com/en-us/kb-articles/Pages/AMD-Radeon-GPU-PRO-Linux-Beta-Driver%e2%80%93Release-Notes.aspx";
   };
 
@@ -58,20 +58,18 @@ in stdenv.mkDerivation rec {
   '';
 
   modulePatches = [
-    ./patches/0001-Find-correct-System.map.patch
-    ./patches/0002-Fix-kernel-module-install-location.patch
-    ./patches/0003-Add-Gentoo-as-build-option.patch
-    ./patches/0004-Remove-extra-parameter-from-ttm_bo_reserve-for-4.7.0.patch
-    ./patches/0005-Remove-first-param-from-drm_gem_object_lookup.patch
-    ./patches/0006-Remove-vblank_disable_allowed-assignment.patch
-    ./patches/0007-Fix-__drm_atomic_helper_connector_destroy_state-call.patch
-    ./patches/0008-Change-seq_printf-format-for-64-bit-context.patch
-    ./patches/0009-Fix-vblank-calls.patch
-    ./patches/0010-Fix-crtc_gamma-functions-for-4.8.0.patch
-    ./patches/0011-Fix-drm_atomic_helper_swap_state-for-4.8.0.patch
-    ./patches/0012-Add-extra-flag-to-ttm_bo_move_ttm-for-4.8.0-rc2.patch
-    ./patches/0013-Remove-dependency-on-System.map.patch
-    ./patches/0014-disable-dal-by-default.patch
+    ./patches/0001-Fix-kernel-module-install-location.patch
+    ./patches/0002-Add-Gentoo-as-build-option.patch
+    ./patches/0003-Remove-extra-parameter-from-ttm_bo_reserve-for-4.7.0.patch
+    ./patches/0004-Change-seq_printf-format-for-64-bit-context.patch
+    ./patches/0005-Fix-vblank-calls.patch
+    ./patches/0006-Fix-crtc_gamma-functions-for-4.8.0.patch
+    ./patches/0007-Fix-drm_atomic_helper_swap_state-for-4.8.0.patch
+    ./patches/0008-Add-extra-flag-to-ttm_bo_move_ttm-for-4.8.0-rc2.patch
+    ./patches/0009-Remove-dependency-on-System.map.patch
+    ./patches/0010-disable-dal-by-default.patch
+    ./patches/0011-kcl-fixes-for-16.50-linux-4.8.patch
+    ./patches/0012-use-kernel-fence_array-in-4.8.patch
   ];
 
   patchPhase = optionalString (!libsOnly) ''
@@ -137,7 +135,6 @@ in stdenv.mkDerivation rec {
       patchelf --interpreter "$interpreter" --set-rpath "$libPath" "$out/bin/$prog"
     done
   '' + ''
-    ln -s libgbm.so.1.0.0 $out/lib/libgbm.so.1
     ln -s ${makeLibraryPath [ncurses5]}/libncursesw.so.5 $out/lib/libtinfo.so.5
   '';
 

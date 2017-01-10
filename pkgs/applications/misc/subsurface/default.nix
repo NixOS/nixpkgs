@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   name = "subsurface-${version}";
 
   src = fetchgit {
-    sha256 = "0mbf8m5sbimbyvlh65sjlydrycr4ssfyfzdlqyl0wcpzw7h0qfp8";
+    sha256 = "035ywhicadmr9sh7zhfxsvpchwa9sywccacbspfam39n2hpyqnmm";
     url = "git://git.subsurface-divelog.org/subsurface";
-    rev = "5f15ad5a86ada3c5e574041a5f9d85235322dabb";
+    rev = "72bcb6481f3b935444d7868a74599dda133f9b43";
     branchName = "master";
   };
 
