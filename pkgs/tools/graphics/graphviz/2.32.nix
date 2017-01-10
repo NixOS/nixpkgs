@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
       "--with-jpeglibdir=${libjpeg.out}/lib"
       "--with-expatincludedir=${expat.dev}/include"
       "--with-expatlibdir=${expat.out}/lib"
+      "--with-ltdl-include=${libtool}/include"
+      "--with-ltdl-lib=${libtool.lib}/lib"
       "--with-cgraph=no"
       "--with-sparse=no"
     ]

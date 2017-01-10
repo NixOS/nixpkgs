@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, python, cvs, makeWrapper}:
+{stdenv, lib, fetchurl, python2, cvs, makeWrapper}:
 
 stdenv.mkDerivation rec {
   name = "cvs2svn-2.4.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "05piyrcp81a1jgjm66xhq7h1sscx42ccjqaw30h40dxlwz1pyrx6";
   };
 
-  buildInputs = [python makeWrapper];
+  buildInputs = [python2 makeWrapper];
 
   dontBuild = true;
   installPhase = ''

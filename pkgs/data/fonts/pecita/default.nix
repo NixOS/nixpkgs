@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pecita-${version}";
-  version = "5.3";
+  version = "5.4";
 
   src = fetchurl {
     url = "http://archive.rycee.net/pecita/${name}.tar.xz";
-    sha256 = "1glr21gi1b9db17ln8qn4zk9gwpxs0frm76i4hp3anlpivbwiis8";
+    sha256 = "1cqzj558ldzzsbfbvlwp5fjh2gxa03l16dki0n8z5lmrdq8hrkws";
   };
 
   phases = ["unpackPhase" "installPhase"];

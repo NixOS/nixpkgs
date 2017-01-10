@@ -31,6 +31,9 @@ let
       inherit (pkgs) attica phonon;
     };
 
+    akonadi = callPackage ./akonadi.nix {};
+    akonadi-contacts = callPackage ./akonadi-contacts.nix {};
+    akonadi-mime = callPackage ./akonadi-mime.nix {};
     ark = callPackage ./ark/default.nix {};
     baloo-widgets = callPackage ./baloo-widgets.nix {};
     dolphin = callPackage ./dolphin.nix {};
@@ -39,18 +42,20 @@ let
       ffmpeg = pkgs.ffmpeg_2;
     };
     filelight = callPackage ./filelight.nix {};
-    gpgmepp = callPackage ./gpgmepp.nix {};
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
     kdenlive = callPackage ./kdenlive.nix {};
     kcalc = callPackage ./kcalc.nix {};
     kcolorchooser = callPackage ./kcolorchooser.nix {};
+    kcontacts = callPackage ./kcontacts.nix {};
+    kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
     kdf = callPackage ./kdf.nix {};
-    kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
+    kgpg = callPackage ./kgpg.nix {};
     khelpcenter = callPackage ./khelpcenter.nix {};
     kio-extras = callPackage ./kio-extras.nix {};
+    kmime = callPackage ./kmime.nix {};
     kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
     kwalletmanager = callPackage ./kwalletmanager.nix {};
@@ -67,6 +72,8 @@ let
 
     # External packages
     kipi-plugins = callPackage ../../../applications/graphics/kipi-plugins/5.x.nix {};
+    ktorrent = callPackage ../../../applications/networking/p2p/ktorrent/5.nix { };
+    libktorrent = callPackage ../../../development/libraries/libktorrent/5.nix { };
   };
 
 in packages

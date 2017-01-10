@@ -2,18 +2,19 @@
 , libxslt, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.5";
+  version = "0.4.6";
   name = "freeorion-${version}";
 
   src = fetchurl {
-    url = "https://github.com/freeorion/freeorion/releases/download/v0.4.5/FreeOrion_v0.4.5_2015-09-01.f203162_Source.tar.gz";
-    sha256 = "3b99b92eeac72bd059566dbabfab54368989ba83f72e769bc94eb8dd4fe414c0";
+    url = "https://github.com/freeorion/freeorion/releases/download/v0.4.6/FreeOrion_v0.4.6_2016-09-16.49f9123_Source.tar.gz";
+    sha256 = "04g3x1cymf7mnmc2f5mm3c2r5izjmy7z3pvk2ykzz8f8b2kz6gry";
   };
 
   buildInputs = [ cmake boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg mesa glew doxygen makeWrapper ];
 
-  # cherry pick for acceptable performance https://github.com/freeorion/freeorion/commit/92455f97c28055e296718230d2e3744eccd738ec
-  patches = [ ./92455f9.patch ];
+  patches = [
+    ./fix_rpaths.patch
+  ];
 
   enableParallelBuilding = true;
 

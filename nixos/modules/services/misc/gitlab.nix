@@ -164,18 +164,21 @@ in {
       packages.gitlab = mkOption {
         type = types.package;
         default = pkgs.gitlab;
+        defaultText = "pkgs.gitlab";
         description = "Reference to the gitlab package";
       };
 
       packages.gitlab-shell = mkOption {
         type = types.package;
         default = pkgs.gitlab-shell;
+        defaultText = "pkgs.gitlab-shell";
         description = "Reference to the gitlab-shell package";
       };
 
       packages.gitlab-workhorse = mkOption {
         type = types.package;
         default = pkgs.gitlab-workhorse;
+        defaultText = "pkgs.gitlab-workhorse";
         description = "Reference to the gitlab-workhorse package";
       };
 
@@ -425,7 +428,7 @@ in {
         TimeoutSec = "300";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.env}/bin/bundle exec \"sidekiq -q post_receive -q mailers -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
+        ExecStart="${cfg.packages.gitlab.env}/bin/bundle exec \"sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
       };
     };
 

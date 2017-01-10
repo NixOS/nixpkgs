@@ -1,8 +1,7 @@
-diff --git a/nss/cmd/shlibsign/shlibsign.c b/nss/cmd/shlibsign/shlibsign.c
-index 63a4836..a128c1d 100644
---- a/nss/cmd/shlibsign/shlibsign.c
-+++ b/nss/cmd/shlibsign/shlibsign.c
-@@ -862,6 +862,8 @@ int main(int argc, char **argv)
+diff -ru -x '*~' nss-3.27.1-orig/nss/cmd/shlibsign/shlibsign.c nss-3.27.1/nss/cmd/shlibsign/shlibsign.c
+--- nss-3.27.1-orig/nss/cmd/shlibsign/shlibsign.c	2016-10-03 16:55:58.000000000 +0200
++++ nss-3.27.1/nss/cmd/shlibsign/shlibsign.c	2016-11-15 16:28:07.308117900 +0100
+@@ -871,6 +871,8 @@
      libname = PR_GetLibraryName(NULL, "softokn3");
      assert(libname != NULL);
      lib = PR_LoadLibrary(libname);
@@ -11,22 +10,20 @@ index 63a4836..a128c1d 100644
      assert(lib != NULL);
      PR_FreeLibraryName(libname);
  
-diff --git a/nss/coreconf/config.mk b/nss/coreconf/config.mk
-index 61d757b..b58a98b 100644
---- a/nss/coreconf/config.mk
-+++ b/nss/coreconf/config.mk
-@@ -205,3 +205,6 @@ $(error Setting NSS_ENABLE_TLS_1_3 and NSS_DISABLE_ECC isn't a good idea.)
- endif
- DEFINES += -DNSS_ENABLE_TLS_1_3
+diff -ru -x '*~' nss-3.27.1-orig/nss/coreconf/config.mk nss-3.27.1/nss/coreconf/config.mk
+--- nss-3.27.1-orig/nss/coreconf/config.mk	2016-10-03 16:55:58.000000000 +0200
++++ nss-3.27.1/nss/coreconf/config.mk	2016-11-15 16:28:07.308117900 +0100
+@@ -217,3 +217,6 @@
+ ifdef NSS_NO_PKCS11_BYPASS
+ DEFINES += -DNO_PKCS11_BYPASS
  endif
 +
 +# Nix specific stuff.
 +DEFINES += -DNIX_NSS_LIBDIR=\"$(out)/lib/\"
-diff --git a/nss/lib/pk11wrap/pk11load.c b/nss/lib/pk11wrap/pk11load.c
-index 5c5d2ca..026e528 100644
---- a/nss/lib/pk11wrap/pk11load.c
-+++ b/nss/lib/pk11wrap/pk11load.c
-@@ -429,6 +429,13 @@ secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule) {
+diff -ru -x '*~' nss-3.27.1-orig/nss/lib/pk11wrap/pk11load.c nss-3.27.1/nss/lib/pk11wrap/pk11load.c
+--- nss-3.27.1-orig/nss/lib/pk11wrap/pk11load.c	2016-10-03 16:55:58.000000000 +0200
++++ nss-3.27.1/nss/lib/pk11wrap/pk11load.c	2016-11-15 16:28:07.308117900 +0100
+@@ -429,6 +429,13 @@
  	 * unload the library if anything goes wrong from here on out...
  	 */
  	library = PR_LoadLibrary(mod->dllName);
@@ -40,11 +37,10 @@ index 5c5d2ca..026e528 100644
  	mod->library = (void *)library;
  
  	if (library == NULL) {
-diff --git a/nss/lib/util/secload.c b/nss/lib/util/secload.c
-index eb8a9ec..f94f67d 100644
---- a/nss/lib/util/secload.c
-+++ b/nss/lib/util/secload.c
-@@ -69,9 +69,14 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
+diff -ru -x '*~' nss-3.27.1-orig/nss/lib/util/secload.c nss-3.27.1/nss/lib/util/secload.c
+--- nss-3.27.1-orig/nss/lib/util/secload.c	2016-10-03 16:55:58.000000000 +0200
++++ nss-3.27.1/nss/lib/util/secload.c	2016-11-15 16:29:50.482259746 +0100
+@@ -70,9 +70,14 @@
  
      /* Remove the trailing filename from referencePath and add the new one */
      c = strrchr(referencePath, PR_GetDirectorySeparator());
@@ -55,12 +51,12 @@ index eb8a9ec..f94f67d 100644
 +    }
      if (c) {
          size_t referencePathSize = 1 + c - referencePath;
--        fullName = (char*) PORT_Alloc(strlen(name) + referencePathSize + 1);
+-        fullName = (char*)PORT_Alloc(strlen(name) + referencePathSize + 1);
 +        fullName = (char*) PORT_Alloc(strlen(name) + referencePathSize + 5);
          if (fullName) {
              memcpy(fullName, referencePath, referencePathSize);
-             strcpy(fullName + referencePathSize, name); 
-@@ -81,6 +86,11 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
+             strcpy(fullName + referencePathSize, name);
+@@ -82,6 +87,11 @@
  #endif
              libSpec.type = PR_LibSpec_Pathname;
              libSpec.value.pathname = fullName;
@@ -71,9 +67,9 @@ index eb8a9ec..f94f67d 100644
 +            strcpy(fullName + referencePathSize, name);
              dlh = PR_LoadLibraryWithFlags(libSpec, PR_LD_NOW | PR_LD_LOCAL
  #ifdef PR_LD_ALT_SEARCH_PATH
-             /* allow library's dependencies to be found in the same directory
-@@ -88,6 +98,10 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
-                                           | PR_LD_ALT_SEARCH_PATH 
+                                                        /* allow library's dependencies to be found in the same directory
+@@ -89,6 +99,10 @@
+                                                        | PR_LD_ALT_SEARCH_PATH
  #endif
                                            );
 +            if (! dlh) {

@@ -8,9 +8,12 @@ stdenv.mkDerivation {
     sha256 = "1bncxp5yxh9r1yrp04vvhfiva8livi1pwic7v8xj99q09zrwahvw";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
   meta = {
     description = "Tool for AVR microcontrollers which can interface to many hardware in-system programmers";
     license = stdenv.lib.licenses.gpl2;
     homepage = http://savannah.nongnu.org/projects/uisp;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

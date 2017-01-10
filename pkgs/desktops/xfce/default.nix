@@ -95,12 +95,9 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4_xkb_plugin              = callPackage ./panel-plugins/xfce4-xkb-plugin.nix              { };
   xfce4_weather_plugin          = callPackage ./panel-plugins/xfce4-weather-plugin.nix          { };
   xfce4_whiskermenu_plugin      = callPackage ./panel-plugins/xfce4-whiskermenu-plugin.nix      { };
+  xfce4_windowck_plugin         = callPackage ./panel-plugins/xfce4-windowck-plugin.nix         { };
   xfce4_pulseaudio_plugin       = callPackage ./panel-plugins/xfce4-pulseaudio-plugin.nix       { };
 
 }; # xfce_self
 
 in xfce_self
-
-
-
-

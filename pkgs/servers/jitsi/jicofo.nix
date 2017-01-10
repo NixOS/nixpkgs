@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     ln -s ../share/jicofo/jicofo.sh jicofo
   '';
 
-
   meta = with stdenv.lib; {
     description = "JItsi COnference FOcus is a server side focus component used in Jitsi Meet conferences.";
     longDescription = ''

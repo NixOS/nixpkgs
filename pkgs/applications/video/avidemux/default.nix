@@ -14,11 +14,11 @@
 }:
 
 let
-  version = "2.6.12";
+  version = "2.6.16";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "0nz52yih8sff53inndkh2dba759xjzsh4b8xjww419lcpk0qp6kn";
+    sha256 = "0jipvpvw871qhhkyykrrrqc9vfbw24v243vzmm8lqifj73h6qvgc";
   };
 
   common = {
@@ -43,7 +43,7 @@ let
                   ;
 
     meta = {
-      homepage = http://fixounet.free.fr/avidemux/;
+      homepage = "http://fixounet.free.fr/avidemux/";
       description = "Free video editor designed for simple video editing tasks";
       maintainers = with stdenv.lib.maintainers; [ viric abbradar ];
       platforms = with stdenv.lib.platforms; linux;

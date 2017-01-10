@@ -1,0 +1,12 @@
++++ build/platform/x11/detect.py
+@@ -132,6 +132,10 @@
+     env.ParseConfig('pkg-config xinerama --cflags --libs')
+     env.ParseConfig('pkg-config xcursor --cflags --libs')
+     env.ParseConfig('pkg-config xrandr --cflags --libs')
++    env.ParseConfig('pkg-config xrender --cflags --libs')
++    env.ParseConfig('pkg-config osmesa --cflags')
++    env.ParseConfig('pkg-config glu --cflags --libs')
++    env.ParseConfig('pkg-config zlib --cflags --libs')
+
+     if (env['builtin_openssl'] == 'no'):
+         env.ParseConfig('pkg-config openssl --cflags --libs')

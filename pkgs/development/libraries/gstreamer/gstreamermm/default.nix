@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, file, glibmm, gst_all_1 }:
 
 let
-  ver_maj = "1.4";
-  ver_min = "3";
+  ver_maj = "1.8";
+  ver_min = "0";
 in
 stdenv.mkDerivation rec {
   name = "gstreamermm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/gstreamermm/${ver_maj}/${name}.tar.xz";
-    sha256 = "0bj6and9b26d32bq90l8nx5wqh2ikkh8dm7qwxyxfdvmrzhixhgi";
+    sha256 = "0i4sk6ns4dyi4szk45bkm4kvl57l52lgm15p2wg2rhx2gr2w3qry";
   };
 
   outputs = [ "out" "dev" ];

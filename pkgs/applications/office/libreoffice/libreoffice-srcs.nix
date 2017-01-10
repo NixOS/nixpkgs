@@ -112,11 +112,11 @@
     md5name = "1f467e5bb703f12cbbb09d5cf67ecf4a-converttexttonumber-1-5-0.oxt";
   }
   {
-    name = "curl-7.43.0.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/curl-7.43.0.tar.bz2";
-    sha256 = "baa654a1122530483ccc1c58cc112fec3724a82c11c6a389f1e6a37dc8858df9";
-    md5 = "11bddbb452a8b766b932f859aaeeed39";
-    md5name = "11bddbb452a8b766b932f859aaeeed39-curl-7.43.0.tar.bz2";
+    name = "curl-7.51.0.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/curl-7.51.0.tar.gz";
+    sha256 = "65b5216a6fbfa72f547eb7706ca5902d7400db9868269017a8888aa91d87977c";
+    md5 = "490e19a8ccd1f4a244b50338a0eb9456";
+    md5name = "490e19a8ccd1f4a244b50338a0eb9456-curl-7.51.0.tar.gz";
   }
   {
     name = "libe-book-0.1.2.tar.bz2";
@@ -224,11 +224,11 @@
     md5name = "c3c1a8ba7452950636e871d25020ce0d-pt-serif-font-1.0000W.tar.gz";
   }
   {
-    name = "source-code-font-1.009.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/0279a21fab6f245e85a6f85fea54f511-source-code-font-1.009.tar.gz";
-    sha256 = "9b295127164c81bcf28c7ebb687f1555b71796108b443a04d40202b7364e4cce";
-    md5 = "0279a21fab6f245e85a6f85fea54f511";
-    md5name = "0279a21fab6f245e85a6f85fea54f511-source-code-font-1.009.tar.gz";
+    name = "source-code-pro-2.030R-ro-1.050R-it.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/907d6e99f241876695c19ff3db0b8923-source-code-pro-2.030R-ro-1.050R-it.tar.gz";
+    sha256 = "09466dce87653333f189acd8358c60c6736dcd95f042dee0b644bdcf65b6ae2f";
+    md5 = "907d6e99f241876695c19ff3db0b8923";
+    md5name = "907d6e99f241876695c19ff3db0b8923-source-code-pro-2.030R-ro-1.050R-it.tar.gz";
   }
   {
     name = "source-sans-pro-2.010R-ro-1.065R-it.tar.gz";
@@ -497,11 +497,11 @@
     md5name = "a233181e03d3c307668b4c722d881661-mariadb_client-2.0.0-src.tar.gz";
   }
   {
-    name = "mdds-1.2.0.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/mdds-1.2.0.tar.bz2";
-    sha256 = "f44fd0635de94c7d490f9a65f74b5e55860d7bdd507951428294f9690fda45b6";
-    md5 = "9f3383fb7bae825eab69f3a6ec1d74b2";
-    md5name = "9f3383fb7bae825eab69f3a6ec1d74b2-mdds-1.2.0.tar.bz2";
+    name = "mdds-1.2.2.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/mdds-1.2.2.tar.bz2";
+    sha256 = "141e730b39110434b02cd844c5ad3442103f7c35f7e9a4d6a9f8af813594cc9d";
+    md5 = "8855cf852a6088cfdc792c6f7ceb0243";
+    md5name = "8855cf852a6088cfdc792c6f7ceb0243-mdds-1.2.2.tar.bz2";
   }
   {
     name = "mDNSResponder-576.30.4.tar.gz";
@@ -546,11 +546,11 @@
     md5name = "231adebe5c2f78fded3e3df6e958878e-neon-0.30.1.tar.gz";
   }
   {
-    name = "nss-3.22.2-with-nspr-4.12.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/6b254cf2f8cb4b27a3f0b8b7b9966ea7-nss-3.22.2-with-nspr-4.12.tar.gz";
-    sha256 = "7bc7e5483fc90071be5facd3043f94c69b153055a369c8f0b751ad374c5ae09e";
-    md5 = "6b254cf2f8cb4b27a3f0b8b7b9966ea7";
-    md5name = "6b254cf2f8cb4b27a3f0b8b7b9966ea7-nss-3.22.2-with-nspr-4.12.tar.gz";
+    name = "nss-3.27-with-nspr-4.13.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/0e3eee39402386cf16fd7aaa7399ebef-nss-3.27-with-nspr-4.13.tar.gz";
+    sha256 = "c74ad468ed5da0304b58ec56fa627fa388b256451b1a44fd184145c6d8203820";
+    md5 = "0e3eee39402386cf16fd7aaa7399ebef";
+    md5name = "0e3eee39402386cf16fd7aaa7399ebef-nss-3.27-with-nspr-4.13.tar.gz";
   }
   {
     name = "libodfgen-0.1.6.tar.bz2";

@@ -4,25 +4,26 @@
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
 , which, dbus, nettools, git, asciidoc, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
+, libxkbcommon, xcbutilxrm
 }:
 
 let
-  version = "3.5.9";
+  version = "4.0";
 in with luaPackages;
 
 stdenv.mkDerivation rec {
   name = "awesome-${version}";
 
   src = fetchurl {
-    url    = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
-    sha256 = "0kynair1ykr74b39a4gcm2y24viial64337cf26nhlc7azjbby67";
+    url    = "http://github.com/awesomeWM/awesome-releases/raw/master/${name}.tar.xz";
+    sha256 = "0czkcz67sab63gf5m2p2pgg05yinjx60hfb9rfyzdkkg28q9f02w";
   };
 
   meta = with stdenv.lib; {
     description = "Highly configurable, dynamic window manager for X";
-    homepage    = http://awesome.naquadah.org/;
+    homepage    = https://awesomewm.org/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 rasendubi ];
     platforms   = platforms.linux;
   };
 
@@ -59,6 +60,8 @@ stdenv.mkDerivation rec {
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm
+    libxkbcommon
+    xcbutilxrm
   ];
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";

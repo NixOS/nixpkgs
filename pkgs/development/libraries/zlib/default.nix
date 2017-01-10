@@ -7,11 +7,18 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls =
-      [ "http://www.zlib.net/${name}.tar.gz"  # old versions vanish from here
+      [ "http://www.zlib.net/fossils/${name}.tar.gz"  # stable archive path
         "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
       ];
     sha256 = "039agw5rqvqny92cpkrfn243x2gd4xn13hs3xi6isk55d2vqqr9n";
   };
+
+  patches = [
+    ./CVE-2016-9840.patch
+    ./CVE-2016-9841.patch
+    ./CVE-2016-9842.patch
+    ./CVE-2016-9843.patch
+  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure \
@@ -81,4 +88,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

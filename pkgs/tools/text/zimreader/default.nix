@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   buildInputs = [ automake autoconf libtool zimlib cxxtools tntnet ];
   setSourceRoot = "cd openzim-*/zimreader; export sourceRoot=`pwd`";
-  preConfigurePhases = [ "./autogen.sh" ];
+  preConfigure = "./autogen.sh";
 
   meta = {
     description = "A tool to serve ZIM files using HTTP";

@@ -37,3 +37,16 @@ index 07c7ad7..b04d978 100644
 -- 
 2.6.2
 
+diff --git a/src/cursorthemesmodel.cpp b/src/cursorthemesmodel.cpp
+index 926a666..85b10f8 100644
+--- a/src/cursorthemesmodel.cpp
++++ b/src/cursorthemesmodel.cpp
+@@ -47,7 +47,7 @@ QList<QDir> CursorThemesModel::installedThemesPaths()
+ 
+     foreach(const QString& dir, dirs) {
+         QDir userIconsDir(dir);
+-        QDirIterator it(userIconsDir.path(), QDir::NoDotAndDotDot|QDir::AllDirs|QDir::NoSymLinks);
++        QDirIterator it(userIconsDir.path(), QDir::NoDotAndDotDot|QDir::AllDirs);
+         while(it.hasNext()) {
+             QString currentPath = it.next();
+             QDir dir(currentPath);

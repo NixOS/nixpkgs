@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file }:
 
 let
-  version = "1.28";
+  version = "1.29";
 in
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.geany.org/${name}.tar.bz2";
-    sha256 = "0nha21rbdhl10vdpaq8d5v5fszvggl1xar555pvrnvm2y443ffpp";
+    sha256 = "394307596bc908419617e4c33e93eae8b5b733dfc8d01161677b8cbd3a4fb20f";
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;

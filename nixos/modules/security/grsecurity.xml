@@ -51,6 +51,13 @@
       # nixos-rebuild boot
       # reboot
     </programlisting>
+    <note><para>
+      Enabling the grsecurity module overrides
+      <option>boot.kernelPackages</option>, to reduce the risk of
+      misconfiguration.  <xref linkend="sec-grsec-custom-kernel" />
+      describes how to use a custom kernel package set.
+    </para></note>
+
     For most users, further configuration should be unnecessary.  All users
     are encouraged to look over <xref linkend="sec-grsec-security" /> before
     using the system, however.  If you experience problems, please refer to
@@ -144,15 +151,8 @@
         a TCP simultaneous OPEN on that port before the connection is actually
         established.</para></listitem>
 
-        <listitem><para><filename class="directory">/sys</filename> hardening:
-        breaks systemd.</para></listitem>
-
         <listitem><para>Trusted path execution: a desirable feature, but
         requires some more work to operate smoothly on NixOS.</para></listitem>
-
-        <listitem><para>Module hardening: would break user initiated module
-        loading. Might enable this at some point, depending on the potential
-        breakage.</para></listitem>
       </itemizedlist>
     </para></listitem>
 
@@ -205,31 +205,42 @@
   </para>
 
   <para>
-    To use a custom kernel with upstream's recommended settings for server
-    deployments:
+    To build a custom kernel using upstream's recommended settings for server
+    deployments, while still using the NixOS module:
     <programlisting>
-      boot.kernelPackages =
-        let
-          kernel = pkgs.linux_grsec_nixos.override {
-            extraConfig = ''
-              GRKERNSEC_CONFIG_AUTO y
-              GRKERNSEC_CONFIG_SERVER y
-              GRKERNSEC_CONFIG_SECURITY y
-            '';
+      nixpkgs.config.packageOverrides = super: {
+        linux_grsec_nixos = super.linux_grsec_nixos.override {
+          extraConfig = ''
+            GRKERNSEC_CONFIG_AUTO y
+            GRKERNSEC_CONFIG_SERVER y
+            GRKERNSEC_CONFIG_SECURITY y
+          '';
           };
-          self = pkgs.linuxPackagesFor kernel self;
-        in self;
+      }
     </programlisting>
+  </para>
+
+  <para>
     The wikibook provides an exhaustive listing of
     <link xlink:href="https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options">kernel configuration options</link>.
   </para>
 
   <para>
-    The NixOS module makes several assumptions about the kernel and so may be
-    incompatible with your customised kernel.  Most of these assumptions are
-    encoded as assertions &#x2014; mismatches should ideally result in a build
-    failure.  Currently, the only way to work around incompatibilities is to
-    eschew the NixOS module and do all configuration yourself.
+    The NixOS module makes several assumptions about the kernel and so
+    may be incompatible with your customised kernel. Currently, the only way
+    to work around incompatibilities is to eschew the NixOS module.
+
+    If not using the NixOS module, a custom grsecurity package set can
+    be specified inline instead, as in
+    <programlisting>
+      boot.kernelPackages =
+        let
+          kernel = pkgs.linux_grsec_nixos.override {
+            extraConfig = /* as above */;
+          };
+          self = pkgs.linuxPackagesFor kernel self;
+        in self;
+    </programlisting>
   </para>
 
   </sect1>
@@ -277,6 +288,10 @@
     <option>security.grsecurity.disableEfiRuntimeServices</option> to override
     this behavior.</para></listitem>
 
+    <listitem><para>User initiated autoloading of modules (e.g., when
+    using fuse or loop devices) is disallowed; either load requisite modules
+    as root or add them to<option>boot.kernelModules</option>.</para></listitem>
+
     <listitem><para>Virtualization: KVM is the preferred virtualization
     solution. Xen, Virtualbox, and VMWare are
     <emphasis>unsupported</emphasis> and most likely require a custom kernel.
@@ -310,6 +325,19 @@
       </programlisting>
     </para></listitem>
 
+    <listitem><para>
+      The gitlab service (<xref linkend="module-services-gitlab" />)
+      requires a variant of the <literal>ruby</literal> interpreter
+      built without `mprotect()` hardening, as in
+      <programlisting>
+        services.gitlab.packages.gitlab = pkgs.gitlab.override {
+          ruby = pkgs.ruby.overrideAttrs (attrs: {
+            postFixup = "paxmark m $out/bin/ruby";
+          });
+        };
+      </programlisting>
+    </para></listitem>
+
   </itemizedlist>
 
   </sect1>
@@ -332,12 +360,18 @@
 
       <listitem><para>
         <literal>pax_sanitize_slab={off|fast|full}</literal>: control kernel
-        slab object sanitization
+        slab object sanitization. Defaults to <literal>fast</literal>
       </para></listitem>
 
       <listitem><para>
         <literal>pax_size_overflow_report_only</literal>: log size overflow
         violations but leave the violating task running
+      </para></listitem>
+
+      <listitem><para>
+        <literal>grsec_sysfs_restrict=[0|1]</literal>: toggle sysfs
+        restrictions. The NixOS module sets this to <literal>0</literal>
+        for systemd compatibility
       </para></listitem>
     </itemizedlist>
   </para>

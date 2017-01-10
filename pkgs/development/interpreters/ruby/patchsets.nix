@@ -60,4 +60,14 @@ rec {
     "${patchSet}/patches/ruby/2.3/head/railsexpress/02-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/2.3/head/railsexpress/03-display-more-detailed-stack-trace.patch"
   ];
+  "2.3.3" = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.3/head/railsexpress/01-skip-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.3/head/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.3/head/railsexpress/03-display-more-detailed-stack-trace.patch"
+  ];
+  "2.4.0" = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.4.0/railsexpress/01-skip-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.4.0/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.4.0/railsexpress/03-display-more-detailed-stack-trace.patch"
+  ];
 }

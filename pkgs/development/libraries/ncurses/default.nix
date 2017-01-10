@@ -91,6 +91,12 @@ stdenv.mkDerivation rec {
           if [ -e "$out/lib/lib''${library}$suffix.$dylibtype" ]; then
             ln -svf lib''${library}$suffix.$dylibtype $out/lib/lib$library$newsuffix.$dylibtype
             ln -svf lib''${library}$suffix.$dylibtype.${abiVersion} $out/lib/lib$library$newsuffix.$dylibtype.${abiVersion}
+            if [ "ncurses" = "$library" ]
+            then
+              # make libtinfo symlinks
+              ln -svf lib''${library}$suffix.$dylibtype $out/lib/libtinfo$newsuffix.$dylibtype
+              ln -svf lib''${library}$suffix.$dylibtype.${abiVersion} $out/lib/libtinfo$newsuffix.$dylibtype.${abiVersion}
+            fi
           fi
         done
         for statictype in a dll.a la; do

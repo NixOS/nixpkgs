@@ -56,20 +56,15 @@ let
         } // (args.meta or {});
       });
 
-    kdeEnv = import ./kde-env.nix {
-      inherit (pkgs) stdenv lib;
-      inherit (pkgs.xorg) lndir;
-    };
-
     kdeWrapper = import ./kde-wrapper.nix {
-      inherit (pkgs) stdenv lib makeWrapper;
-      inherit kdeEnv;
+      inherit (pkgs) stdenv lib makeWrapper buildEnv;
     };
 
     attica = callPackage ./attica.nix {};
     baloo = callPackage ./baloo.nix {};
     bluez-qt = callPackage ./bluez-qt.nix {};
     breeze-icons = callPackage ./breeze-icons.nix {};
+    # FIXME: this collides with the "ecm" package.
     ecm =
       let drv = { cmake, ecmNoHooks, pkgconfig, qtbase, qttools }:
             makeSetupHook
@@ -144,6 +139,7 @@ let
     plasma-framework = callPackage ./plasma-framework.nix {};
     solid = callPackage ./solid.nix {};
     sonnet = callPackage ./sonnet.nix {};
+    syntax-highlighting = callPackage ./syntax-highlighting.nix {};
     threadweaver = callPackage ./threadweaver.nix {};
   };
 

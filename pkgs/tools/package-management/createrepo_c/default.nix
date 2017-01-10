@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python2, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
 
 stdenv.mkDerivation rec {
   rev  = "0.10.0";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
                 "set (BASHCOMP_DIR "$out/share/bash-completion/completions")"
 
     substituteInPlace src/python/CMakeLists.txt \
-      --replace 'EXECUTE_PROCESS(COMMAND ''${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)' \
-                "set (PYTHON_INSTALL_DIR "$out/${python.sitePackages}")"
+      --replace 'EXECUTE_PROCESS(COMMAND ''${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python2_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)' \
+                "set (PYTHON_INSTALL_DIR "$out/${python2.sitePackages}")"
   '';
 
-  buildInputs = [ cmake pkgconfig bzip2 expat glib curl libxml2 python rpm openssl sqlite file xz pcre bash-completion ];
+  buildInputs = [ cmake pkgconfig bzip2 expat glib curl libxml2 python2 rpm openssl sqlite file xz pcre bash-completion ];
 
   meta = with stdenv.lib; {
     description = "C implementation of createrepo";

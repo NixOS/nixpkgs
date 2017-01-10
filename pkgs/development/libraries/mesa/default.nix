@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, systemd, openssl
+, file, expat, libdrm, xorg, wayland, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
 , libelf, libvdpau, python2
 , grsecEnabled ? false
@@ -26,7 +26,7 @@ if ! lists.elem stdenv.system platforms.mesaPlatforms then
 else
 
 let
-  version = "12.0.3";
+  version = "13.0.2";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "1dc86dd9b51272eee1fad3df65e18cda2e556ef1bc0b6e07cd750b9757f493b1";
+    sha256 = "a6ed622645f4ed61da418bf65adde5bcc4bb79023c36ba7d6b45b389da4416d5";
   };
 
   prePatch = "patchShebangs .";
@@ -51,11 +51,7 @@ stdenv.mkDerivation {
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-  ] ++ optional stdenv.isLinux
-      (substituteAll {
-        src = ./dlopen-absolute-paths.diff;
-        libudev = systemd.lib;
-      });
+  ];
 
   postPatch = ''
     substituteInPlace src/egl/main/egldriver.c \
@@ -116,7 +112,7 @@ stdenv.mkDerivation {
     libffi wayland libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
     (python2.withPackages (ps: [ ps.Mako ]))
-  ] ++ optional stdenv.isLinux systemd;
+  ];
 
 
   enableParallelBuilding = true;
@@ -136,12 +132,17 @@ stdenv.mkDerivation {
       $out/lib/vdpau         \
       $out/lib/bellagio      \
       $out/lib/libxatracker* \
-      $out/lib/libvulkan_* \
+      $out/lib/libvulkan_*
 
     # move share/vulkan/icd.d/
     mv $out/share/ $drivers/
+    # Update search path used by Vulkan (it's pointing to $out but
+    # drivers are in $drivers)
+    for js in $drivers/share/vulkan/icd.d/*.json; do
+      substituteInPlace "$js" --replace "$out" "$drivers"
+    done
 
-    mv $out/lib/dri/* $drivers/lib/dri
+    mv $out/lib/dri/* $drivers/lib/dri # */
     rmdir "$out/lib/dri"
 
     # move libOSMesa to $osmesa, as it's relatively big

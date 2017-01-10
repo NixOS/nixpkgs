@@ -1,0 +1,463 @@
+diff --git a/3rdparty/stout/include/stout/os/posix/fork.hpp b/3rdparty/stout/include/stout/os/posix/fork.hpp
+index a29967d..290b98b 100644
+--- a/3rdparty/stout/include/stout/os/posix/fork.hpp
++++ b/3rdparty/stout/include/stout/os/posix/fork.hpp
+@@ -369,7 +369,7 @@ private:
+     if (exec.isSome()) {
+       // Execute the command (via '/bin/sh -c command').
+       const char* command = exec.get().command.c_str();
+-      execlp("sh", "sh", "-c", command, (char*) nullptr);
++      execlp("@sh@", "sh", "-c", command, (char*) nullptr);
+       EXIT(EXIT_FAILURE)
+         << "Failed to execute '" << command << "': " << os::strerror(errno);
+     } else if (wait.isSome()) {
+diff --git a/3rdparty/stout/include/stout/os/posix/shell.hpp b/3rdparty/stout/include/stout/os/posix/shell.hpp
+index 1d73ae5..9bf89b5 100644
+--- a/3rdparty/stout/include/stout/os/posix/shell.hpp
++++ b/3rdparty/stout/include/stout/os/posix/shell.hpp
+@@ -37,7 +37,7 @@ namespace Shell {
+ // received by the callee, usually the command name and `arg1` is the
+ // second command argument received by the callee.
+ 
+-constexpr const char* name = "sh";
++constexpr const char* name = "@sh@";
+ constexpr const char* arg0 = "sh";
+ constexpr const char* arg1 = "-c";
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 28dd151..36fc6ec 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1528,7 +1528,8 @@ if HAS_JAVA
+ 
+ $(MESOS_JAR): $(MESOS_JAR_SOURCE) $(MESOS_JAR_GENERATED) java/mesos.pom
+ 	@echo "Building mesos-$(PACKAGE_VERSION).jar ..."
+-	@cd $(abs_top_builddir)/src/java && $(MVN) -B -f mesos.pom clean package
++	@cd $(abs_top_builddir)/src/java && $(MVN) -B -f mesos.pom -Dmaven.repo.local=@mavenRepo@ clean package
++
+ 
+ # Convenience library for JNI bindings.
+ # TODO(Charles Reiss): We really should be building the Java library
+diff --git a/src/cli/mesos-scp b/src/cli/mesos-scp
+index a71ab07..feed8c4 100755
+--- a/src/cli/mesos-scp
++++ b/src/cli/mesos-scp
+@@ -19,7 +19,7 @@ if sys.version_info < (2,6,0):
+ 
+ 
+ def scp(host, src, dst):
+-    cmd = 'scp -pr %s %s' % (src, host + ':' + dst)
++    cmd = '@scp@ -pr %s %s' % (src, host + ':' + dst)
+     try:
+         process = subprocess.Popen(
+             cmd,
+diff --git a/src/launcher/fetcher.cpp b/src/launcher/fetcher.cpp
+index 4456c28..e22c8fc 100644
+--- a/src/launcher/fetcher.cpp
++++ b/src/launcher/fetcher.cpp
+@@ -68,13 +68,13 @@ static Try<bool> extract(
+       strings::endsWith(sourcePath, ".tar.bz2") ||
+       strings::endsWith(sourcePath, ".txz") ||
+       strings::endsWith(sourcePath, ".tar.xz")) {
+-    command = "tar -C '" + destinationDirectory + "' -xf";
++    command = "@tar@ -C '" + destinationDirectory + "' -xf";
+   } else if (strings::endsWith(sourcePath, ".gz")) {
+     string pathWithoutExtension = sourcePath.substr(0, sourcePath.length() - 3);
+     string filename = Path(pathWithoutExtension).basename();
+-    command = "gzip -dc > '" + destinationDirectory + "/" + filename + "' <";
++    command = "@gzip@ -dc > '" + destinationDirectory + "/" + filename + "' <";
+   } else if (strings::endsWith(sourcePath, ".zip")) {
+-    command = "unzip -o -d '" + destinationDirectory + "'";
++    command = "@unzip@ -o -d '" + destinationDirectory + "'";
+   } else {
+     return false;
+   }
+@@ -162,7 +162,7 @@ static Try<string> copyFile(
+     const string& sourcePath,
+     const string& destinationPath)
+ {
+-  const string command = "cp '" + sourcePath + "' '" + destinationPath + "'";
++  const string command = "@cp@ '" + sourcePath + "' '" + destinationPath + "'";
+ 
+   LOG(INFO) << "Copying resource with command:" << command;
+ 
+diff --git a/src/linux/perf.cpp b/src/linux/perf.cpp
+index ea823b3..170f54d 100644
+--- a/src/linux/perf.cpp
++++ b/src/linux/perf.cpp
+@@ -125,7 +125,7 @@ private:
+     // NOTE: The watchdog process places perf in its own process group
+     // and will kill the perf process when the parent dies.
+     Try<Subprocess> _perf = subprocess(
+-        "perf",
++        "@perf@",
+         argv,
+         Subprocess::PIPE(),
+         Subprocess::PIPE(),
+@@ -319,7 +319,7 @@ bool valid(const set<string>& events)
+   ostringstream command;
+ 
+   // Log everything to stderr which is then redirected to /dev/null.
+-  command << "perf stat --log-fd 2";
++  command << "@perf@ stat --log-fd 2";
+   foreach (const string& event, events) {
+     command << " --event " << event;
+   }
+diff --git a/src/linux/systemd.cpp b/src/linux/systemd.cpp
+index 619aa27..c1cbfe4 100644
+--- a/src/linux/systemd.cpp
++++ b/src/linux/systemd.cpp
+@@ -196,12 +196,19 @@ bool exists()
+   // This is static as the init system should not change while we are running.
+   static const bool exists = []() -> bool {
+     // (1) Test whether `/sbin/init` links to systemd.
+-    const Result<string> realpath = os::realpath("/sbin/init");
+-    if (realpath.isError() || realpath.isNone()) {
+-      LOG(WARNING) << "Failed to test /sbin/init for systemd environment: "
+-                   << realpath.error();
+-
+-      return false;
++    // cstrahan: first assume we're on NixOS, then try non-NixOS
++    Result<string> realpath = os::realpath("/run/current-system/systemd/lib/systemd/systemd");
++    Result<string> realpathNixOS = realpath;
++    if (realpathNixOS.isError() || realpathNixOS.isNone()) {
++      Result<string> realpathNonNixOS = realpath = os::realpath("/sbin/init");
++      if (realpathNonNixOS.isError() || realpathNonNixOS.isNone()) {
++        LOG(WARNING) << "Failed to test /run/current-system/systemd/lib/systemd/systemd for systemd environment: "
++                     << realpathNixOS.error();
++        LOG(WARNING) << "Failed to test /sbin/init for systemd environment: "
++                     << realpathNonNixOS.error();
++
++        return false;
++      }
+     }
+ 
+     CHECK_SOME(realpath);
+diff --git a/src/python/cli/src/mesos/cli.py b/src/python/cli/src/mesos/cli.py
+index f342992..354abf4 100644
+--- a/src/python/cli/src/mesos/cli.py
++++ b/src/python/cli/src/mesos/cli.py
+@@ -40,7 +40,7 @@ def resolve(master):
+     import subprocess
+ 
+     process = subprocess.Popen(
+-        ['mesos-resolve', master],
++        ['@mesos-resolve@', master],
+         stdin=None,
+         stdout=subprocess.PIPE,
+         stderr=subprocess.PIPE,
+diff --git a/src/slave/containerizer/mesos/isolators/filesystem/shared.cpp b/src/slave/containerizer/mesos/isolators/filesystem/shared.cpp
+index 51d1518..783adb5 100644
+--- a/src/slave/containerizer/mesos/isolators/filesystem/shared.cpp
++++ b/src/slave/containerizer/mesos/isolators/filesystem/shared.cpp
+@@ -204,7 +204,7 @@ Future<Option<ContainerLaunchInfo>> SharedFilesystemIsolatorProcess::prepare(
+     }
+ 
+     launchInfo.add_pre_exec_commands()->set_value(
+-        "mount -n --bind " + hostPath + " " + volume.container_path());
++        "@mount@ -n --bind " + hostPath + " " + volume.container_path());
+   }
+ 
+   return launchInfo;
+diff --git a/src/slave/containerizer/mesos/isolators/namespaces/pid.cpp b/src/slave/containerizer/mesos/isolators/namespaces/pid.cpp
+index b41e266..e07c163 100644
+--- a/src/slave/containerizer/mesos/isolators/namespaces/pid.cpp
++++ b/src/slave/containerizer/mesos/isolators/namespaces/pid.cpp
+@@ -163,7 +163,7 @@ Future<Option<ContainerLaunchInfo>> NamespacesPidIsolatorProcess::prepare(
+   // containers cannot see the namespace bind mount of other
+   // containers.
+   launchInfo.add_pre_exec_commands()->set_value(
+-      "mount -n --bind " + string(PID_NS_BIND_MOUNT_MASK_DIR) +
++      "@mount@ -n --bind " + string(PID_NS_BIND_MOUNT_MASK_DIR) +
+       " " + string(PID_NS_BIND_MOUNT_ROOT));
+ 
+   // Mount /proc for the container's pid namespace to show the
+@@ -176,9 +176,9 @@ Future<Option<ContainerLaunchInfo>> NamespacesPidIsolatorProcess::prepare(
+   // -n flag so the mount is not added to the mtab where it will not
+   // be correctly removed with the namespace terminates.
+   launchInfo.add_pre_exec_commands()->set_value(
+-      "mount none /proc --make-private -o rec");
++      "@mount@ none /proc --make-private -o rec");
+   launchInfo.add_pre_exec_commands()->set_value(
+-      "mount -n -t proc proc /proc -o nosuid,noexec,nodev");
++      "@mount@ -n -t proc proc /proc -o nosuid,noexec,nodev");
+ 
+   return launchInfo;
+ }
+diff --git a/src/slave/containerizer/mesos/isolators/network/port_mapping.cpp b/src/slave/containerizer/mesos/isolators/network/port_mapping.cpp
+index 79ee960..d55a353 100644
+--- a/src/slave/containerizer/mesos/isolators/network/port_mapping.cpp
++++ b/src/slave/containerizer/mesos/isolators/network/port_mapping.cpp
+@@ -1392,19 +1392,19 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
+   // Check the availability of a few Linux commands that we will use.
+   // We use the blocking os::shell here because 'create' will only be
+   // invoked during initialization.
+-  Try<string> checkCommandTc = os::shell("tc filter show");
++  Try<string> checkCommandTc = os::shell("@tc@ filter show");
+   if (checkCommandTc.isError()) {
+     return Error("Check command 'tc' failed: " + checkCommandTc.error());
+   }
+ 
+   // NOTE: loopback device always exists.
+-  Try<string> checkCommandEthtool = os::shell("ethtool -k lo");
++  Try<string> checkCommandEthtool = os::shell("@ethtool@ -k lo");
+   if (checkCommandEthtool.isError()) {
+     return Error("Check command 'ethtool' failed: "
+                  + checkCommandEthtool.error());
+   }
+ 
+-  Try<string> checkCommandIp = os::shell("ip link show");
++  Try<string> checkCommandIp = os::shell("@ip@ link show");
+   if (checkCommandIp.isError()) {
+     return Error("Check command 'ip' failed: " + checkCommandIp.error());
+   }
+@@ -1924,9 +1924,9 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
+     // visible. It's OK to use the blocking os::shell here because
+     // 'create' will only be invoked during initialization.
+     Try<string> mount = os::shell(
+-        "mount --bind %s %s && "
+-        "mount --make-slave %s && "
+-        "mount --make-shared %s",
++        "@mount@ --bind %s %s && "
++        "@mount@ --make-slave %s && "
++        "@mount@ --make-shared %s",
+         bindMountRoot->c_str(),
+         bindMountRoot->c_str(),
+         bindMountRoot->c_str(),
+@@ -1943,8 +1943,8 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
+       // shared mount yet (possibly due to slave crash while preparing
+       // the work directory mount). It's safe to re-do the following.
+       Try<string> mount = os::shell(
+-          "mount --make-slave %s && "
+-          "mount --make-shared %s",
++          "@mount@ --make-slave %s && "
++          "@mount@ --make-shared %s",
+           bindMountRoot->c_str(),
+           bindMountRoot->c_str());
+ 
+@@ -1963,8 +1963,8 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
+           // so that they are in different peer groups.
+           if (entry.shared() == bindMountEntry->shared()) {
+             Try<string> mount = os::shell(
+-                "mount --make-slave %s && "
+-                "mount --make-shared %s",
++                "@mount@ --make-slave %s && "
++                "@mount@ --make-shared %s",
+                 bindMountRoot->c_str(),
+                 bindMountRoot->c_str());
+ 
+@@ -3916,13 +3916,13 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+ {
+   ostringstream script;
+ 
+-  script << "#!/bin/sh\n";
++  script << "#!@sh@\n";
+   script << "set -xe\n";
+ 
+   // Mark the mount point PORT_MAPPING_BIND_MOUNT_ROOT() as slave
+   // mount so that changes in the container will not be propagated to
+   // the host.
+-  script << "mount --make-rslave " << bindMountRoot << "\n";
++  script << "@mount@ --make-rslave " << bindMountRoot << "\n";
+ 
+   // Disable IPv6 when IPv6 module is loaded as IPv6 packets won't be
+   // forwarded anyway.
+@@ -3930,7 +3930,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+          << " echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6\n";
+ 
+   // Configure lo and eth0.
+-  script << "ip link set " << lo << " address " << hostMAC
++  script << "@ip@ link set " << lo << " address " << hostMAC
+          << " mtu " << hostEth0MTU << " up\n";
+ 
+   // NOTE: This is mostly a kernel issue: in veth_xmit() the kernel
+@@ -3939,12 +3939,12 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+   // when we receive a packet with a bad checksum. Disabling rx
+   // checksum offloading ensures the TCP layer will checksum and drop
+   // it.
+-  script << "ethtool -K " << eth0 << " rx off\n";
+-  script << "ip link set " << eth0 << " address " << hostMAC << " up\n";
+-  script << "ip addr add " << hostIPNetwork  << " dev " << eth0 << "\n";
++  script << "@ethtool@ -K " << eth0 << " rx off\n";
++  script << "@ip@ link set " << eth0 << " address " << hostMAC << " up\n";
++  script << "@ip@ addr add " << hostIPNetwork  << " dev " << eth0 << "\n";
+ 
+   // Set up the default gateway to match that of eth0.
+-  script << "ip route add default via " << hostDefaultGateway << "\n";
++  script << "@ip@ route add default via " << hostDefaultGateway << "\n";
+ 
+   // Restrict the ephemeral ports that can be used by the container.
+   script << "echo " << info->ephemeralPorts.lower() << " "
+@@ -3973,19 +3973,19 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+   }
+ 
+   // Set up filters on lo and eth0.
+-  script << "tc qdisc add dev " << lo << " ingress\n";
+-  script << "tc qdisc add dev " << eth0 << " ingress\n";
++  script << "@tc@ qdisc add dev " << lo << " ingress\n";
++  script << "@tc@ qdisc add dev " << eth0 << " ingress\n";
+ 
+   // Allow talking between containers and from container to host.
+   // TODO(chzhcn): Consider merging the following two filters.
+-  script << "tc filter add dev " << lo << " parent " << ingress::HANDLE
++  script << "@tc@ filter add dev " << lo << " parent " << ingress::HANDLE
+          << " protocol ip"
+          << " prio " << Priority(IP_FILTER_PRIORITY, NORMAL).get() << " u32"
+          << " flowid ffff:0"
+          << " match ip dst " << hostIPNetwork.address()
+          << " action mirred egress redirect dev " << eth0 << "\n";
+ 
+-  script << "tc filter add dev " << lo << " parent " << ingress::HANDLE
++  script << "@tc@ filter add dev " << lo << " parent " << ingress::HANDLE
+          << " protocol ip"
+          << " prio " << Priority(IP_FILTER_PRIORITY, NORMAL).get() << " u32"
+          << " flowid ffff:0"
+@@ -3996,7 +3996,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+   foreach (const PortRange& range,
+            getPortRanges(info->nonEphemeralPorts + info->ephemeralPorts)) {
+     // Local traffic inside a container will not be redirected to eth0.
+-    script << "tc filter add dev " << lo << " parent " << ingress::HANDLE
++    script << "@tc@ filter add dev " << lo << " parent " << ingress::HANDLE
+            << " protocol ip"
+            << " prio " << Priority(IP_FILTER_PRIORITY, HIGH).get() << " u32"
+            << " flowid ffff:0"
+@@ -4005,7 +4005,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+ 
+     // Traffic going to host loopback IP and ports assigned to this
+     // container will be redirected to lo.
+-    script << "tc filter add dev " << eth0 << " parent " << ingress::HANDLE
++    script << "@tc@ filter add dev " << eth0 << " parent " << ingress::HANDLE
+            << " protocol ip"
+            << " prio " << Priority(IP_FILTER_PRIORITY, NORMAL).get() << " u32"
+            << " flowid ffff:0"
+@@ -4017,14 +4017,14 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+   }
+ 
+   // Do not forward the ICMP packet if the destination IP is self.
+-  script << "tc filter add dev " << lo << " parent " << ingress::HANDLE
++  script << "@tc@ filter add dev " << lo << " parent " << ingress::HANDLE
+          << " protocol ip"
+          << " prio " << Priority(ICMP_FILTER_PRIORITY, NORMAL).get() << " u32"
+          << " flowid ffff:0"
+          << " match ip protocol 1 0xff"
+          << " match ip dst " << hostIPNetwork.address() << "\n";
+ 
+-  script << "tc filter add dev " << lo << " parent " << ingress::HANDLE
++  script << "@tc@ filter add dev " << lo << " parent " << ingress::HANDLE
+          << " protocol ip"
+          << " prio " << Priority(ICMP_FILTER_PRIORITY, NORMAL).get() << " u32"
+          << " flowid ffff:0"
+@@ -4033,9 +4033,9 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+          << net::IPNetwork::LOOPBACK_V4().address() << "\n";
+ 
+   // Display the filters created on eth0 and lo.
+-  script << "tc filter show dev " << eth0
++  script << "@tc@ filter show dev " << eth0
+          << " parent " << ingress::HANDLE << "\n";
+-  script << "tc filter show dev " << lo
++  script << "@tc@ filter show dev " << lo
+          << " parent " << ingress::HANDLE << "\n";
+ 
+   // If throughput limit for container egress traffic exists, use HTB
+@@ -4047,9 +4047,9 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+   // throughput. TBF requires other parameters such as 'burst' that
+   // HTB already has default values for.
+   if (egressRateLimitPerContainer.isSome()) {
+-    script << "tc qdisc add dev " << eth0 << " root handle "
++    script << "@tc@ qdisc add dev " << eth0 << " root handle "
+            << CONTAINER_TX_HTB_HANDLE << " htb default 1\n";
+-    script << "tc class add dev " << eth0 << " parent "
++    script << "@tc@ class add dev " << eth0 << " parent "
+            << CONTAINER_TX_HTB_HANDLE << " classid "
+            << CONTAINER_TX_HTB_CLASS_ID << " htb rate "
+            << egressRateLimitPerContainer.get().bytes() * 8 << "bit\n";
+@@ -4060,12 +4060,12 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+     // fq_codel, which has a larger buffer and better control on
+     // buffer bloat.
+     // TODO(cwang): Verity that fq_codel qdisc is available.
+-    script << "tc qdisc add dev " << eth0
++    script << "@tC@ qdisc add dev " << eth0
+            << " parent " << CONTAINER_TX_HTB_CLASS_ID << " fq_codel\n";
+ 
+     // Display the htb qdisc and class created on eth0.
+-    script << "tc qdisc show dev " << eth0 << "\n";
+-    script << "tc class show dev " << eth0 << "\n";
++    script << "@tc@ qdisc show dev " << eth0 << "\n";
++    script << "@tc@ class show dev " << eth0 << "\n";
+   }
+ 
+   return script.str();
+diff --git a/src/slave/containerizer/mesos/isolators/posix/disk.cpp b/src/slave/containerizer/mesos/isolators/posix/disk.cpp
+index 3dfe7ad..4288666 100644
+--- a/src/slave/containerizer/mesos/isolators/posix/disk.cpp
++++ b/src/slave/containerizer/mesos/isolators/posix/disk.cpp
+@@ -492,7 +492,7 @@ private:
+     // NOTE: The monitor watchdog will watch the parent process and kill
+     // the 'du' process in case that the parent die.
+     Try<Subprocess> s = subprocess(
+-        "du",
++        "@du@",
+         command,
+         Subprocess::PATH("/dev/null"),
+         Subprocess::PIPE(),
+diff --git a/src/slave/containerizer/mesos/provisioner/backends/copy.cpp b/src/slave/containerizer/mesos/provisioner/backends/copy.cpp
+index b9f6d7a..0fcf455 100644
+--- a/src/slave/containerizer/mesos/provisioner/backends/copy.cpp
++++ b/src/slave/containerizer/mesos/provisioner/backends/copy.cpp
+@@ -141,7 +141,7 @@ Future<Nothing> CopyBackendProcess::_provision(
+ #endif // __APPLE__ || __FreeBSD__
+ 
+   Try<Subprocess> s = subprocess(
+-      "cp",
++      "@cp@",
+       args,
+       Subprocess::PATH("/dev/null"),
+       Subprocess::PATH("/dev/null"),
+diff --git a/src/uri/fetchers/copy.cpp b/src/uri/fetchers/copy.cpp
+index f095ad6..ee0c2a7 100644
+--- a/src/uri/fetchers/copy.cpp
++++ b/src/uri/fetchers/copy.cpp
+@@ -88,7 +88,7 @@ Future<Nothing> CopyFetcherPlugin::fetch(
+   const vector<string> argv = {"cp", "-a", uri.path(), directory};
+ 
+   Try<Subprocess> s = subprocess(
+-      "cp",
++      "@cp@",
+       argv,
+       Subprocess::PATH("/dev/null"),
+       Subprocess::PIPE(),
+diff --git a/src/uri/fetchers/curl.cpp b/src/uri/fetchers/curl.cpp
+index cc3f9ee..691d2d9 100644
+--- a/src/uri/fetchers/curl.cpp
++++ b/src/uri/fetchers/curl.cpp
+@@ -98,7 +98,7 @@ Future<Nothing> CurlFetcherPlugin::fetch(
+   };
+ 
+   Try<Subprocess> s = subprocess(
+-      "curl",
++      "@curl@",
+       argv,
+       Subprocess::PATH("/dev/null"),
+       Subprocess::PIPE(),
+diff --git a/src/uri/fetchers/docker.cpp b/src/uri/fetchers/docker.cpp
+index 211be6f..d7e3771 100644
+--- a/src/uri/fetchers/docker.cpp
++++ b/src/uri/fetchers/docker.cpp
+@@ -113,7 +113,7 @@ static Future<http::Response> curl(
+ 
+   // TODO(jieyu): Kill the process if discard is called.
+   Try<Subprocess> s = subprocess(
+-      "curl",
++      "@curl@",
+       argv,
+       Subprocess::PATH("/dev/null"),
+       Subprocess::PIPE(),
+@@ -212,7 +212,7 @@ static Future<int> download(
+ 
+   // TODO(jieyu): Kill the process if discard is called.
+   Try<Subprocess> s = subprocess(
+-      "curl",
++      "@curl@",
+       argv,
+       Subprocess::PATH("/dev/null"),
+       Subprocess::PIPE(),

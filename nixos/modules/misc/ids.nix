@@ -58,7 +58,6 @@
       #utmp = 29; # unused
       ddclient = 30;
       davfs2 = 31;
-      privoxy = 32;
       #disnix = 33; # unused
       osgi = 34;
       tor = 35;
@@ -84,7 +83,7 @@
       spamd = 56;
       #networkmanager = 57; # unused
       nslcd = 58;
-      #scanner = 59; # unused
+      scanner = 59;
       nginx = 60;
       chrony = 61;
       #systemd-journal = 62; # unused
@@ -212,7 +211,6 @@
       lambdabot = 191;
       asterisk = 192;
       plex = 193;
-      bird = 195;
       grafana = 196;
       skydns = 197;
       ripple-rest = 198;
@@ -279,6 +277,11 @@
       hound = 259;
       leaps = 260;
       ipfs  = 261;
+      stanchion = 262;
+      riak-cs = 263;
+      infinoted = 264;
+      keystone = 265;
+      glance = 266;
 
       phabricator = 999;
 
@@ -321,7 +324,6 @@
       utmp = 29;
       #ddclient = 30; # unused
       davfs2 = 31;
-      privoxy = 32;
       disnix = 33;
       osgi = 34;
       tor = 35;
@@ -468,10 +470,9 @@
       ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
-      #asterisk = 192; # unused
+      asterisk = 192;
       plex = 193;
       sabnzbd = 194;
-      bird = 195;
       #grafana = 196; #unused
       #skydns = 197; #unused
       #ripple-rest = 198; #unused
@@ -530,6 +531,11 @@
       hound = 259;
       leaps = 260;
       ipfs = 261;
+      stanchion = 262;
+      riak-cs = 263;
+      infinoted = 264;
+      keystone = 265;
+      glance = 266;
 
       phabricator = 999;
 

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation {
-  name = "urxvt-tabbedex-2016-08-09";
+  name = "urxvt-tabbedex-2016-08-17";
 
   src = fetchFromGitHub {
     owner = "mina86";
     repo = "urxvt-tabbedex";
-    rev = "ac220eb3984e151ba14dce08f446bc7bc8ca29a2";
-    sha256 = "1b5mff5137jb5ysklsmfp5ql3m4g1z3bdhk0nwhz2hgwz40ap6k8";
+    rev = "089d0cb724eeb62fa8a5dfcb00ced7761e794149";
+    sha256 = "0a5jrb7ryafj55fgi8fhpy3gmb1xh5j7pbn8p5j5k6s2fnh0g0hq";
   };
 
   nativeBuildInputs = [ perl ];

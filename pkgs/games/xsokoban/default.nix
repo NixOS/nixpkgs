@@ -11,16 +11,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 xproto libXpm libXt ];
 
+  NIX_CFLAGS_COMPILE = "-I${libXpm.dev}/include/X11";
+
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     sed -e 's/getline/my_getline/' -i score.c
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libXpm.dev}/include/X11"
-    for i in  $NIX_CFLAGS_COMPILE; do echo $i; ls ''${i#-I}; done
+
     chmod a+rw config.h
     cat >>config.h <<EOF
     #define HERE "@nixos-packaged"
     #define WWW 0
     #define OWNER "'$(whoami)'"
-    #define ROOTDIR "'$out/lib/xsokoban'"
+    #define ROOTDIR "$out/lib/xsokoban"
     #define ANYLEVEL 1
     #define SCOREFILE ".xsokoban-score"
     #define LOCKFILE ".xsokoban-score-lock"
@@ -42,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "X sokoban";
     license = licenses.publicDomain;
     maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

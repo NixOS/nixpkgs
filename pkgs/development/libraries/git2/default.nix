@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, cmake, zlib, python, libssh2, openssl, curl, http-parser, libiconv }:
 
 stdenv.mkDerivation (rec {
-  version = "0.24.2";
+  version = "0.24.3";
   name = "libgit2-${version}";
 
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/libgit2/libgit2/tarball/v${version}";
-    sha256 = "0avijw83vfx64cn23vx2j1h14zmkx8silgjnq6q2qw2z3sh73hs1";
+    sha256 = "01jdp0i0nxhx8w2gjd75mwfy1d4z2c5xzz7q5jfypa6pkdi86dmh";
   };
 
   # TODO: `cargo` (rust's package manager) surfaced a serious bug in

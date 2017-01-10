@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cppzmq-${version}";
-  version = "2016-07-18";
+  version = "2016-11-16";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "cppzmq";
-    rev = "92d2af6def80a01b76d5e73f073c439ad00ab757";
-    sha256 = "0lnwh314hh5ifad2sa2nz1g1ld1jc4vplm7clyvx304sjjvbvl27";
+    rev = "8b52a6ffacce27bac9b81c852b81539a77b0a6e5";
+    sha256 = "12accjyjzfw1wqzbj1qn6q99bj5ba05flsvbanyzflr3b4971s4p";
   };
 
   installPhase = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/zeromq/cppzmq;
+    homepage = "https://github.com/zeromq/cppzmq";
     license = licenses.bsd2;
     description = "C++ binding for 0MQ";
     maintainers = with maintainers; [ abbradar ];

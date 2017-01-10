@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "electrum-dash-${version}";
   version = "2.4.1";
 
@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "02k7m7fyn0cvlgmwxr2gag7rf2knllkch1ma58shysp7zx9jb000";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     dns
     ecdsa
     pbkdf2

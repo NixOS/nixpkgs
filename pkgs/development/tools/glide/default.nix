@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "glide-${version}";
-  version = "0.12.2";
-  
+  version = "0.12.3";
+
   goPackagePath = "github.com/Masterminds/glide";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "Masterminds";
     repo = "glide";
-    sha256 = "15cdrcslkiggd6sg5j40amflydpqz1s63f13mvlg309adfhsk4qz";
+    sha256 = "0hvfikvxfk94aqms1bdxqxqpamzy0v8binv5jwglzw2sf2437ww0";
   };
 
   meta = with stdenv.lib; {

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
+{ stdenv, fetchurl, fetchpatch, python2, zlib, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, libuuid, flex
-, bison, lzo, snappy, libaio, gnutls, nettle
+, bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, rez, setfile
@@ -11,6 +11,7 @@
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? !stdenv.isDarwin, spice, spice_protocol, usbredir
 , x86Only ? false
+, nixosTestRunner ? false
 }:
 
 with stdenv.lib;
@@ -22,7 +23,10 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "qemu-" + stdenv.lib.optionalString x86Only "x86-only-" + version;
+  name = "qemu-"  
+    + stdenv.lib.optionalString x86Only "x86-only-"
+    + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
+    + version;
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
@@ -30,9 +34,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ python zlib pkgconfig glib ncurses perl pixman
+    [ python2 zlib pkgconfig glib ncurses perl pixman
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy
-      gnutls nettle
+      gnutls nettle curl
     ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa rez setfile ]
     ++ optionals seccompSupport [ libseccomp ]
@@ -113,12 +117,38 @@ stdenv.mkDerivation rec {
       url = "http://git.qemu.org/?p=qemu.git;a=patch;h=fdfcc9aeea1492f4b819a24c94dfb678145b1bf9";
       sha256 = "0npi3fag52icq7xr799h5zi11xscbakdhqmdab0kyl6q331cc32z";
     })
+    (fetchpatch {
+      name = "qemu-CVE-2016-7994.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=cb3a0522b694cc5bb6424497b3f828ccd28fd1dd";
+      sha256 = "1zhmbqlj0hc69ia4s6h59pi1z3nmijkryxwmf4bzp9gahx8x4xm3";
+    })
+    (fetchpatch {
+      name = "qemu-CVE-2016-8668.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=8caed3d564672e8bc6d2e4c6a35228afd01f4723";
+      sha256 = "19sq6fh7nh8wrk52skky4vwm80029lhm093g11f539krmzjgipik";
+    })
+    (fetchpatch {
+      name = "qemu-CVE-2016-7907.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=070c4b92b8cd5390889716677a0b92444d6e087a";
+      sha256 = "0in89697r6kwkf302v3cg16390q7qs33n2b4kba26m4x65632dxm";
+    })
 
     # FIXME: Fix for CVE-2016-9101 not yet ready: https://lists.gnu.org/archive/html/qemu-devel/2016-10/msg03024.html
 
     # from http://git.qemu.org/?p=qemu.git;a=patch;h=ff55e94d23ae94c8628b0115320157c763eb3e06
     ./CVE-2016-9102.patch
-  ];
+
+    (fetchpatch {
+      name = "qemu-CVE-2016-9911.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=791f97758e223de3290592d169f8e6339c281714";
+      sha256 = "0952mpc81h42k5kqsw42prnw5vw86r3j88wk5z4sr1xd1sg428d6";
+    })
+    (fetchpatch {
+      name = "qemu-CVE-2016-9921_9922.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=commit;h=4299b90e9ba9ce5ca9024572804ba751aa1a7e70";
+      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+    })
+  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch;
   hardeningDisable = [ "stackprotector" ];
 
   configureFlags =

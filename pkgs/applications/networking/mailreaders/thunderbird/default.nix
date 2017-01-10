@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python, zip, libIDL
+{ stdenv, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
 , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
+, yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu
+, writeScript, xidel, coreutils, gnused, gnugrep, curl, ed
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Earlybird", enable this option.  However, those
@@ -13,7 +14,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "45.4.0"; in
+let version = "45.6.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -21,15 +22,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
-    sha512 = "9c601d9625b43103b64e111da3a88fccdc30d4a52aa8a66ee02120bc13f3c5600d24fa1cfd3817975a0e58be9078d192334dd3099aa462468d8ab0cd05a3bcd5";
+    sha512 = "1f4579ac37b8ab98c91fe2e3e6742ba1b005ca9346d23f467d19e6af45eb457cab749bf91ed2a79f2058bd66f54da661da3ea5d5786f8c4b472d8a2a6c34db4b";
   };
+
+  # New sed no longer tolerates this mistake.
+  postPatch = ''
+    for f in mozilla/{js/src,}/configure; do
+      substituteInPlace "$f" --replace '[:space:]*' '[[:space:]]*'
+    done
+  '';
 
   buildInputs = # from firefox30Pkgs.xulrunner, without gstreamer and libvpx
     [ pkgconfig which libpng gtk2 perl zip libIDL libjpeg zlib bzip2
-      python dbus dbus_glib pango freetype fontconfig xorg.libXi
+      python2 dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
-      xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
+      xorg.libXScrnSaver xorg.scrnsaverproto
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification cairo icu
     ] ++ [ m4 ];
@@ -127,5 +135,13 @@ stdenv.mkDerivation rec {
       if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
     maintainers = [ maintainers.pierron maintainers.eelco ];
     platforms = platforms.linux;
+  };
+
+  passthru.updateScript = import ./../../browsers/firefox/update.nix {
+    name = "thunderbird";
+    sourceSectionRegex = ".";
+    basePath = "pkgs/applications/networking/mailreaders/thunderbird";
+    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    inherit writeScript xidel coreutils gnused gnugrep curl ed;
   };
 }

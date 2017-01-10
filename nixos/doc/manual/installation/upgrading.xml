@@ -101,6 +101,11 @@ channel by running
 which is equivalent to the more verbose <literal>nix-channel --update
 nixos; nixos-rebuild switch</literal>.</para>
 
+<note><para>Channels are set per user. This means that running <literal>
+nix-channel --add</literal> as a non root user (or without sudo) will not
+affect configuration in <literal>/etc/nixos/configuration.nix</literal>
+</para></note>
+
 <warning><para>It is generally safe to switch back and forth between
 channels.  The only exception is that a newer NixOS may also have a
 newer Nix version, which may involve an upgrade of Nix’s database

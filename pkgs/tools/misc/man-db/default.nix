@@ -29,8 +29,11 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    for i in "$out/bin/"*; do
-      wrapProgram "$i" --prefix PATH : "${groff}/bin"
+    # apropos/whatis uses program name to decide whether to act like apropos or whatis
+    # (multi-call binary). `apropos` is actually just a symlink to whatis. So we need to
+    # make sure that we don't wrap symlinks (since that changes argv[0] to the -wrapped name)
+    find "$out/bin" -type f | while read file; do
+      wrapProgram "$file" --prefix PATH : "${groff}/bin"
     done
   '';
 

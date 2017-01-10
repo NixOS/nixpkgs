@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, bison, flex, openssl, pcre, libmilter, opendkim
-, libmemcached, glib, pkgconfig }:
+{ stdenv, fetchFromGitHub, cmake, bison, flex, pkgconfig, openssl, pcre
+, libmilter, opendkim, libmemcached, glib }:
 
 let patchedLibmilter = stdenv.lib.overrideDerivation  libmilter (_ : {
     patches = libmilter.patches ++ [ ./fd-passing-libmilter.patch ];
@@ -8,13 +8,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "rmilter-${version}";
-  version = "1.9.2";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "rmilter";
     rev = version;
-    sha256 = "0pnk9a20phnvfddwvmak962mmgqsmdipsp2sm7aajh3340cwb3am";
+    sha256 = "1gbp6jah88l6xqgflim01ycyp63l733bgir65fxnnrmifj1qzymh";
   };
 
   nativeBuildInputs = [ bison cmake flex pkgconfig ];

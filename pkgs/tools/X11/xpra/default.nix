@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pythonPackages, pkgconfig
+{ stdenv, lib, fetchurl, python2Packages, pkgconfig
 , xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
 , ffmpeg, x264, libvpx, libwebp
@@ -8,7 +8,7 @@
 with lib;
 
 let
-  inherit (pythonPackages) python cython buildPythonApplication;
+  inherit (python2Packages) python cython buildPythonApplication;
 in buildPythonApplication rec {
   name = "xpra-0.17.6";
   namePrefix = "";
@@ -39,7 +39,7 @@ in buildPythonApplication rec {
     makeWrapper
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pillow pygtk pygobject2 rencode pycrypto cryptography pycups lz4 dbus-python
     netifaces numpy websockify pygobject3 gst-python
   ];

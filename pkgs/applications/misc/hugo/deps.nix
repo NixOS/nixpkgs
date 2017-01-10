@@ -229,8 +229,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/fsync";
-      rev = "eefee59ad7de621617d4ff085cf768aab4b919b1";
-      sha256 = "0d56xdczawikyczc12i661qc79dbv4q8ihlj4p20zsjkyxxym59p";
+      rev = "cb2da332d00cbc04e4f3f677520dc3e7cc11874b";
+      sha256 = "03ib2xj80cbz77hx2baanyi50qr40akrybg49fzdvdm3lv9x100z";
     };
   }
   {
@@ -339,6 +339,15 @@
       url = "https://github.com/pelletier/go-buffruneio";
       rev = "df1e16fde7fc330a0ca68167c23bf7ed6ac31d6d";
       sha256 = "0jwn2g4jfdb3wvpqisd8h055099pwx6c5i3bb4zxk5l9vybg1c5f";
+    };
+  }
+  {
+    goPackagePath = "github.com/bep/gitmap";
+    fetch = {
+      type = "git";
+      url = "https://github.com/bep/gitmap";
+      rev = "a1a71abe12823e27ae7507189fe2e914ba9626ac";
+      sha256 = "0qfhb72y6wbypaqv6dkl42syifnhps3qcy1karpd6ziw4pxak18g";
     };
   }
 ]

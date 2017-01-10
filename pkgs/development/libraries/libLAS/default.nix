@@ -1,15 +1,15 @@
 { stdenv, fetchurl, boost, cmake, gdal, libgeotiff, libtiff, LASzip }:
 
 stdenv.mkDerivation rec {
-  name = "libLAS-1.8.0";
+  name = "libLAS-1.8.1";
 
   src = fetchurl {
 
     url = "http://download.osgeo.org/liblas/${name}.tar.bz2";
-    md5 = "599881281d45db4ce9adb2d75458391e";
+    sha256 = "0xjfxb3ydvr2258ji3spzyf81g9caap19ql2pk91wiivqsc4mnws";
   };
 
-  buildInputs = [ boost cmake gdal libgeotiff libtiff LASzip];
+  buildInputs = [ boost cmake gdal libgeotiff libtiff LASzip ];
 
 
   meta = {

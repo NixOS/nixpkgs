@@ -43,7 +43,7 @@ let
   '';
 
   ver_maj = "2.50";
-  ver_min = "1";
+  ver_min = "2";
 in
 
 stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "2ef87a78f37c1eb5b95f4cc95efd5b66f69afad9c9c0899918d04659cf6df7dd";
+    sha256 = "be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
@@ -99,7 +99,12 @@ stdenv.mkDerivation rec {
     moveToOutput "share/glib-2.0" "$dev"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
-  '';
+  ''
+    # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
+    + ''
+      sed '1i#line 1 "${name}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
+        -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
+    '';
 
   inherit doCheck;
   preCheck = optionalString doCheck

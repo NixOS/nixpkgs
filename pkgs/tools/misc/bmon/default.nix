@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, ncurses, confuse
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, ncurses, confuse
 , libnl }:
 
 stdenv.mkDerivation rec {
   name = "bmon-${version}";
-  version = "3.8";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "tgraf";
     repo = "bmon";
     rev = "v${version}";
-    sha256 = "19jv14r9j9n54bqhidw3z11z3wys1v2cagqpsxn0kjga1gkg87xs";
+    sha256 = "1ilba872c09mnlvylslv4hqv6c9cz36l76q74rr99jvis1dg69gf";
   };
 
-  buildInputs = [ autoconf automake pkgconfig ncurses confuse libnl ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  preConfigure = "sh ./autogen.sh";
+  buildInputs = [ ncurses confuse libnl ];
 
   meta = with stdenv.lib; {
     description = "Network bandwidth monitor";

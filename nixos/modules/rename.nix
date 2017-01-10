@@ -30,6 +30,8 @@ with lib;
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
     (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
 
+    (mkRenamedOptionModule [ "services" "clamav" "updater" "config" ] [ "services" "clamav" "updater" "extraConfig" ])
+
     # Old Grub-related options.
     (mkRenamedOptionModule [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ])
     (mkRenamedOptionModule [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ])
@@ -141,6 +143,26 @@ with lib;
 
     # murmur
     (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
+
+    # parsoid
+    (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] [ "services" "parsoid" "wikis" ])
+
+    # tarsnap
+    (mkRemovedOptionModule [ "services" "tarsnap" "cachedir" ] "Use services.tarsnap.archives.<name>.cachedir")
+
+    # alsa
+    (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
+
+    # postgrey
+    (mkMergedOptionModule [ [ "services" "postgrey" "inetAddr" ] [ "services" "postgrey" "inetPort" ] ] [ "services" "postgrey" "socket" ] (config: let
+        value = p: getAttrFromPath p config;
+        inetAddr = [ "services" "postgrey" "inetAddr" ];
+        inetPort = [ "services" "postgrey" "inetPort" ];
+      in
+        if value inetAddr == null
+        then { path = "/var/run/postgrey.sock"; }
+        else { addr = value inetAddr; port = value inetPort; }
+    ))
 
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")

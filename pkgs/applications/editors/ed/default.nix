@@ -9,7 +9,12 @@ stdenv.mkDerivation rec {
     # When updating, please make sure the sources pulled match those upstream by
     # Unpacking both tarballs and running `find . -type f -exec sha256sum \{\} \; | sha256sum`
     # in the resulting directory
-    url = "http://fossies.org/linux/privat/${name}.tar.bz2";
+    urls = let file_md5 = "fb8ffc8d8072e13dd5799131e889bfa5"; # for fedora mirror
+      in [
+        ("http://pkgs.fedoraproject.org/repo/extras/ed"
+          + "/${name}.tar.bz2/${file_md5}/${name}.tar.bz2")
+        "http://fossies.org/linux/privat/${name}.tar.bz2"
+      ];
     sha256 = "1iym2fsamxr886l3sz8lqzgf00bip5cr0aly8jp04f89kf5mvl0j";
   };
 

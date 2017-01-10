@@ -226,8 +226,6 @@ in
 
   config = mkIf cfg.enable {
 
-    programs.ssh.setXAuthLocation = mkForce cfg.forwardX11;
-
     users.extraUsers.sshd =
       { isSystemUser = true;
         description = "SSH privilege separation user";
@@ -264,8 +262,7 @@ in
                 StandardInput = "socket";
               } else {
                 Restart = "always";
-                Type = "forking";
-                PIDFile = "/run/sshd.pid";
+                Type = "simple";
               });
           };
 
@@ -322,8 +319,6 @@ in
 
     services.openssh.extraConfig = mkOrder 0
       ''
-        PidFile /run/sshd.pid
-
         Protocol 2
 
         UsePAM yes

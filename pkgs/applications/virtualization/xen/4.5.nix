@@ -1,9 +1,20 @@
-{ callPackage, fetchurl, fetchgit, ... } @ args:
+{ callPackage, fetchurl, fetchpatch, fetchgit, ... } @ args:
 
 let
   # Xen 4.5.5
+  #
+  # Patching XEN? Check the XSAs and try applying all the ones we
+  # don't have yet.
+  #
+  # XSAs at: https://xenbits.xen.org/xsa/
   xenConfig = rec {
     version = "4.5.5";
+
+    xsaPatch = { name , sha256 }: (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa${name}.patch";
+      inherit sha256;
+    });
+
     name = "xen-${version}";
 
     src = fetchurl {
@@ -52,9 +63,60 @@ let
         }
       ];
 
-    xenPatches = [ ./0001-libxl-Spice-image-compression-setting-support-for-up.patch
-                   ./0002-libxl-Spice-streaming-video-setting-support-for-upst.patch
-                   ./0003-Add-qxl-vga-interface-support-for-upstream-qem.patch ];
+      # Note this lacks patches for:
+      # XSA-201
+      # XSA-199
+      # XSA-197
+      # they didn't apply, and there are plenty of other patches here
+      # to get this deployed as-is.
+      xenPatches = [ ./0001-libxl-Spice-image-compression-setting-support-for-up.patch
+                     ./0002-libxl-Spice-streaming-video-setting-support-for-upst.patch
+                     ./0003-Add-qxl-vga-interface-support-for-upstream-qem.patch
+                     (xsaPatch {
+                       name = "190-4.5";
+                       sha256 = "0f8pw38kkxky89ny3ic5h26v9zsjj9id89lygx896zc3w1klafqm";
+                     })
+                     (xsaPatch {
+                       name = "191-4.6";
+                       sha256 = "1wl1ndli8rflmc44pkp8cw4642gi8z7j7gipac8mmlavmn3wdqhg";
+                     })
+                     (xsaPatch {
+                       name = "192-4.5";
+                       sha256 = "0m8cv0xqvx5pdk7fcmaw2vv43xhl62plyx33xqj48y66x5z9lxpm";
+                     })
+                     (xsaPatch {
+                       name = "193-4.5";
+                       sha256 = "0k9mykhrpm4rbjkhv067f6s05lqmgnldcyb3vi8cl0ndlyh66lvr";
+                     })
+                     (xsaPatch {
+                       name = "195";
+                       sha256 = "0m0g953qnjy2knd9qnkdagpvkkgjbk3ydgajia6kzs499dyqpdl7";
+                     })
+                     (xsaPatch {
+                       name = "196-0001-x86-emul-Correct-the-IDT-entry-calculation-in-inject";
+                       sha256 = "0z53nzrjvc745y26z1qc8jlg3blxp7brawvji1hx3s74n346ssl6";
+                     })
+                     (xsaPatch {
+                       name = "196-0002-x86-svm-Fix-injection-of-software-interrupts";
+                       sha256 = "11cqvr5jn2s92wsshpilx9qnfczrd9hnyb5aim6qwmz3fq3hrrkz";
+                     })
+                     (xsaPatch {
+                       name = "198";
+                       sha256 = "0d1nndn4p520c9xa87ixnyks3mrvzcri7c702d6mm22m8ansx6d9";
+                     })
+                     (xsaPatch {
+                       name = "200-4.6";
+                       sha256 = "0k918ja83470iz5k4vqi15293zjvz2dipdhgc9sy9rrhg4mqncl7";
+                     })
+                     (xsaPatch {
+                       name = "202-4.6";
+                       sha256 = "0nnznkrvfbbc8z64dr9wvbdijd4qbpc0wz2j5vpmx6b32sm7932f";
+                     })
+                     (xsaPatch {
+                       name = "204-4.5";
+                       sha256 = "083z9pbdz3f532fnzg7n2d5wzv6rmqc0f4mvc3mnmkd0rzqw8vcp";
+                     })
+                   ];
   };
 
 in callPackage ./generic.nix (args // { xenConfig=xenConfig; })

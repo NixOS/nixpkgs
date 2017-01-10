@@ -33,25 +33,45 @@ in {
           Can be enabled with services.nginx.statusPage = true.
         '';
       };
+
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Extra commandline options when launching the nginx exporter.
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open port in firewall for incoming connections.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
 
     systemd.services.prometheus-nginx-exporter = {
-      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "nginx.service" ];
-      script = ''
-        ${pkgs.prometheus-nginx-exporter.bin}/bin/nginx_exporter \
-          -telemetry.address ${cfg.listenAddress}:${toString cfg.port} \
-          -nginx.scrape_uri ${cfg.scrapeUri}
-      '';
+      description = "Prometheus exporter for nginx metrics";
+      unitConfig.Documentation = "https://github.com/discordianfish/nginx_exporter";
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "nobody";
         Restart  = "always";
         PrivateTmp = true;
         WorkingDirectory = /tmp;
+        ExecStart = ''
+          ${pkgs.prometheus-nginx-exporter}/bin/nginx_exporter \
+            -nginx.scrape_uri '${cfg.scrapeUri}' \
+            -telemetry.address ${cfg.listenAddress}:${toString cfg.port} \
+            ${concatStringsSep " \\\n  " cfg.extraFlags}
+        '';
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
   };

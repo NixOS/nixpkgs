@@ -221,13 +221,16 @@ in rec {
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
-  #tests.cjdns = callTest tests/cjdns.nix {};
+  tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
   tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
   tests.containers-bridge = callTest tests/containers-bridge.nix {};
   tests.containers-imperative = callTest tests/containers-imperative.nix {};
   tests.containers-extra_veth = callTest tests/containers-extra_veth.nix {};
   tests.containers-physical_interfaces = callTest tests/containers-physical_interfaces.nix {};
+  tests.containers-tmpfs = callTest tests/containers-tmpfs.nix {};
+  tests.containers-hosts = callTest tests/containers-hosts.nix {};
+  tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
@@ -239,6 +242,7 @@ in rec {
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
   #tests.gitlab = callTest tests/gitlab.nix {};
+  tests.glance = callTest tests/glance.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
@@ -255,6 +259,7 @@ in rec {
   tests.kde5 = callTest tests/kde5.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
+  tests.keystone = callTest tests/keystone.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   #tests.lightdm = callTest tests/lightdm.nix {};

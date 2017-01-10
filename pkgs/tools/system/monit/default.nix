@@ -1,15 +1,15 @@
-{stdenv, fetchurl, openssl, bison, flex, pam, usePAM ? stdenv.isLinux }:
+{stdenv, fetchurl, openssl, bison, flex, pam, zlib, usePAM ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
-  name = "monit-5.19.0";
+  name = "monit-5.20.0";
 
   src = fetchurl {
     url = "${meta.homepage}dist/${name}.tar.gz";
-    sha256 = "1f32dz7zzp575d35m8xkgjgrqs2vbls0q6vdzm7wwashcm1xbz5y";
+    sha256 = "13drg4k9r9drn7bpj3n04kkf1l29q05jdccdar6yc6hcqmg3kb7b";
   };
 
   nativeBuildInputs = [ bison flex ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optionals usePAM [ pam ];
+  buildInputs = [ openssl zlib.dev ] ++ stdenv.lib.optionals usePAM [ pam ];
 
   configureFlags = [
     "--with-ssl-incl-dir=${openssl.dev}/include"

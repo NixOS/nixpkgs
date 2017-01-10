@@ -165,7 +165,7 @@ in
   config = {
 
     programs.ssh.setXAuthLocation =
-      mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11);
+      mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11 || config.services.openssh.forwardX11);
 
     assertions =
       [ { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;

@@ -7,16 +7,12 @@
 # http://vlc-bluray.whoknowsmy.name/
 # https://wiki.archlinux.org/index.php/BluRay
 
-
-let baseName = "libbdplus";
-    version  = "0.1.2";
-in
-
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
+stdenv.mkDerivation rec {
+  name = "libbdplus-${version}";
+  version  = "0.1.2";
 
   src = fetchurl {
-    url = "http://get.videolan.org/${baseName}/${version}/${baseName}-${version}.tar.bz2";
+    url = "http://get.videolan.org/libbdplus/${version}/${name}.tar.bz2";
     sha256 = "02n87lysqn4kg2qk7d1ffrp96c44zkdlxdj0n16hbgrlrpiwlcd6";
   };
 
@@ -25,7 +21,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.videolan.org/developers/libbdplus.html;
+    homepage = "http://www.videolan.org/developers/libbdplus.html";
     description = "Library to access BD+ protected Blu-Ray disks";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

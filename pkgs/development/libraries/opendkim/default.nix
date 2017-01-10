@@ -2,7 +2,9 @@
 , perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "opendkim-2.10.3";
+  name = "opendkim-${version}";
+  version = "2.10.3";
+
   src = fetchurl {
     url = "mirror://sourceforge/opendkim/files/${name}.tar.gz";
     sha256 = "06v8bqhh604sz9rh5bvw278issrwjgc4h1wx2pz9a84lpxbvm823";
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C library for producing DKIM-aware applications and an open source milter for providing DKIM service";
-    homepage = http://www.opendkim.org/;
+    homepage = "http://www.opendkim.org/";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.bsd3;
     platforms = platforms.unix;

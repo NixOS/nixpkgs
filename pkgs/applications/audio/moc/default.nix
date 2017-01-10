@@ -5,16 +5,18 @@
 
 stdenv.mkDerivation rec {
   name = "moc-${version}";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "http://ftp.daper.net/pub/soft/moc/stable/moc-${version}.tar.bz2";
-    sha256 = "14b0g9jn12jzxsf292g64dc6frlxv99kaagsasmc8xmg80iab7nj";
+    sha256 = "026v977kwb0wbmlmf6mnik328plxg8wykfx9ryvqhirac0aq39pk";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
-    ncurses pkgconfig alsaLib flac libmad speex ffmpeg libvorbis
-    libmpc libsndfile libjack2 db libmodplug timidity libid3tag libtool
+    ncurses alsaLib flac libmad speex ffmpeg libvorbis libmpc libsndfile libjack2
+    db libmodplug timidity libid3tag libtool
   ];
 
   meta = with stdenv.lib; {

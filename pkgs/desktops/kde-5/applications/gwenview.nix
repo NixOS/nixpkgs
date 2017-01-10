@@ -20,7 +20,8 @@ let
       ];
     };
 in
-kdeWrapper unwrapped {
+kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/gwenview" ];
   paths = [ kipi-plugins ];
 }

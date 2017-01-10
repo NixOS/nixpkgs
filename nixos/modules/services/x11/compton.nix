@@ -188,6 +188,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.compton;
+      defaultText = "pkgs.compton";
       example = literalExample "pkgs.compton";
       description = ''
         Compton derivation to use.

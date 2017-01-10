@@ -1,3 +1,7 @@
+# GHCJS package fixes
+#
+# Please insert new packages *alphabetically*
+# in the OTHER PACKAGES section.
 { pkgs }:
 
 let
@@ -8,6 +12,8 @@ in
 with import ./lib.nix { inherit pkgs; };
 
 self: super:
+
+## GENERAL SETUP BASE PACKAGES
 
   let # The stage 1 packages
       stage1 = pkgs.lib.genAttrs super.ghc.stage1Packages (pkg: null);
@@ -47,6 +53,90 @@ self: super:
   terminfo = self.terminfo_0_4_0_1;
   xhtml = self.xhtml_3000_2_1;
 
+
+## OTHER PACKAGES
+
+  cereal = addBuildDepend super.cereal [ self.fail ];
+
+  entropy = overrideCabal super.entropy (old: {
+    postPatch = old.postPatch or "" + ''
+      # cabal doesn’t find ghc in this script, since it’s in the bootPkgs
+      sed -e '/Simple.Program/a import Distribution.Simple.Program.Types' \
+          -e 's|mConf.*=.*$|mConf = Just $ simpleConfiguredProgram "ghc" (FoundOnSystem "${self.ghc.bootPkgs.ghc}/bin/ghc")|g' -i Setup.hs
+    '';
+  });
+
+  # https://github.com/kazu-yamamoto/logger/issues/97
+  fast-logger = overrideCabal super.fast-logger (old: {
+    postPatch = old.postPatch or "" + ''
+      # remove the Safe extensions, since ghcjs-boot directory
+      # doesn’t provide Trustworthy
+      sed -ie '/LANGUAGE Safe/d' System/Log/FastLogger/*.hs
+      cat System/Log/FastLogger/Date.hs
+    '';
+  });
+
+  # experimental
+  ghcjs-ffiqq = self.callPackage
+    ({ mkDerivation, base, template-haskell, ghcjs-base, split, containers, text, ghc-prim
+     }:
+     mkDerivation {
+       pname = "ghcjs-ffiqq";
+       version = "0.1.0.0";
+       src = pkgs.fetchFromGitHub {
+         owner = "ghcjs";
+         repo = "ghcjs-ffiqq";
+         rev = "b52338c2dcd3b0707bc8aff2e171411614d4aedb";
+         sha256 = "08zxfm1i6zb7n8vbz3dywdy67vkixfyw48580rwfp48rl1s2z1c7";
+       };
+       libraryHaskellDepends = [
+         base template-haskell ghcjs-base split containers text ghc-prim
+       ];
+       description = "FFI QuasiQuoter for GHCJS";
+       license = pkgs.stdenv.lib.licenses.mit;
+     }) {};
+  # experimental
+  ghcjs-vdom = self.callPackage
+    ({ mkDerivation, base, ghc-prim, ghcjs-ffiqq, ghcjs-base, ghcjs-prim
+      , containers, split, template-haskell
+    }:
+    mkDerivation rec {
+      pname = "ghcjs-vdom";
+      version = "0.2.0.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "ghcjs";
+        repo = pname;
+        rev = "1c1175ba22eca6d7efa96f42a72290ade193c148";
+        sha256 = "0c6l1dk2anvz94yy5qblrfh2iv495rjq4qmhlycc24dvd02f7n9m";
+      };
+      libraryHaskellDepends = [
+        base ghc-prim ghcjs-ffiqq ghcjs-base ghcjs-prim containers split
+        template-haskell
+      ];
+      license = pkgs.stdenv.lib.licenses.mit;
+      description = "bindings for https://github.com/Matt-Esch/virtual-dom";
+      inherit (src) homepage;
+    }) {};
+
+  ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
+    libraryHaskellDepends = with self; [
+      ghcjs-base ghcjs-dom-jsffi text transformers
+    ];
+    configureFlags = [ "-fjsffi" "-f-webkit" ];
+  });
+
+  ghcjs-dom-jsffi = overrideCabal super.ghcjs-dom-jsffi (drv: {
+    libraryHaskellDepends = [ self.ghcjs-base self.text ];
+    isLibrary = true;
+  });
+
+  ghc-paths = overrideCabal super.ghc-paths (drv: {
+    patches = [ ./patches/ghc-paths-nix-ghcjs.patch ];
+  });
+
+  http2 = addBuildDepends super.http2 [ self.aeson self.aeson-pretty self.hex self.unordered-containers self.vector self.word8 ];
+  # ghcjsBoot uses async 2.0.1.6, protolude wants 2.1.*
+
   pqueue = overrideCabal super.pqueue (drv: {
     postPatch = ''
       sed -i -e '12s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
@@ -58,45 +148,13 @@ self: super:
     '';
   });
 
-  transformers-compat = overrideCabal super.transformers-compat (drv: {
-    configureFlags = [];
-  });
-
   profunctors = overrideCabal super.profunctors (drv: {
     preConfigure = ''
       sed -i 's/^{-# ANN .* #-}//' src/Data/Profunctor/Unsafe.hs
     '';
   });
 
-  ghcjs-ffiqq = self.callPackage
-    ({ mkDerivation, base, template-haskell, ghcjs-base, split, containers, text, ghc-prim
-     }:
-     mkDerivation {
-       pname = "ghcjs-ffiqq";
-       version = "0.1.0.0";
-       src = pkgs.fetchFromGitHub {
-         owner = "ghcjs";
-         repo = "ghcjs-ffiqq";
-         rev = "da31b18582542fcfceade5ef6b2aca66662b9e20";
-         sha256 = "1mkp8p9hispyzvkb5v607ihjp912jfip61id8d42i19k554ssp8y";
-       };
-       libraryHaskellDepends = [
-         base template-haskell ghcjs-base split containers text ghc-prim
-       ];
-       description = "FFI QuasiQuoter for GHCJS";
-       license = stdenv.lib.licenses.mit;
-     }) {};
-
-  ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
-    libraryHaskellDepends = [ self.ghcjs-base ] ++
-      removeLibraryHaskellDepends [
-        "glib" "gtk" "gtk3" "webkitgtk" "webkitgtk3"
-      ] drv.libraryHaskellDepends;
-  });
-
-  ghc-paths = overrideCabal super.ghc-paths (drv: {
-    patches = [ ./patches/ghc-paths-nix-ghcjs.patch ];
-  });
+  protolude = doJailbreak super.protolude;
 
   # reflex 0.3, made compatible with the newest GHCJS.
   reflex = overrideCabal super.reflex (drv: {
@@ -122,12 +180,13 @@ self: super:
       ] drv.libraryHaskellDepends;
   });
 
-  http2 = addBuildDepends super.http2 [ self.aeson self.aeson-pretty self.hex self.unordered-containers self.vector self.word8 ];
-  # ghcjsBoot uses async 2.0.1.6, protolude wants 2.1.*
-  protolude = doJailbreak super.protolude;
   semigroups = addBuildDepends super.semigroups [ self.hashable self.unordered-containers self.text self.tagged ];
+
+  transformers-compat = overrideCabal super.transformers-compat (drv: {
+    configureFlags = [];
+  });
+
   # triggers an internal pattern match failure in haddock
   # https://github.com/haskell/haddock/issues/553
   wai = dontHaddock super.wai;
-  cereal = addBuildDepend super.cereal [ self.fail ];
 }

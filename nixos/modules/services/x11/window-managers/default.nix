@@ -10,7 +10,6 @@ in
   imports = [
     ./afterstep.nix
     ./bspwm.nix
-    ./bspwm-unstable.nix
     ./compiz.nix
     ./dwm.nix
     ./exwm.nix

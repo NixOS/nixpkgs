@@ -27,6 +27,7 @@ let
 
   # misc
   debug = import ./debug.nix;
+  generators = import ./generators.nix;
   misc = import ./deprecated.nix;
 
   # domain-specific
@@ -39,7 +40,7 @@ in
             customisation maintainers meta sources
             modules options types
             licenses platforms systems
-            debug misc
+            debug generators misc
             sandbox fetchers;
   }
   # !!! don't include everything at top-level; perhaps only the most

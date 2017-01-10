@@ -13,6 +13,7 @@ in {
         opentracker package to use
       '';
       default = pkgs.opentracker;
+      defaultText = "pkgs.opentracker";
     };
 
     extraOptions = mkOption {

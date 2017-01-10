@@ -97,7 +97,7 @@ We will first have a look at how Python packages are packaged on Nix. Then, we w
 
 #### Python packaging on Nix
 
-On Nix all packages are built by functions. The main function in Nix for building Python packages is [`buildPythonPackage`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix).
+On Nix all packages are built by functions. The main function in Nix for building Python packages is [`buildPythonPackage`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/interpreters/python/build-python-package.nix).
 Let's see how we would build the `toolz` package. According to [`python-packages.nix`](https://raw.githubusercontent.com/NixOS/nixpkgs/master/pkgs/top-level/python-packages.nix) `toolz` is build using
 
 ```nix
@@ -141,12 +141,14 @@ with import <nixpkgs> {};
 
 pkgs.python35Packages.buildPythonPackage rec {
   name = "toolz-${version}";
-  version = "0.7.4";
+  version = "0.8.0";
 
   src = pkgs.fetchurl{
     url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-    sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+    sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
   };
+
+  doCheck = false;
 
   meta = {
     homepage = "http://github.com/pytoolz/toolz/";
@@ -170,18 +172,18 @@ with import <nixpkgs> {};
 ( let
     toolz = pkgs.python35Packages.buildPythonPackage rec {
       name = "toolz-${version}";
-      version = "0.7.4";
+      version = "0.8.0";
 
       src = pkgs.fetchurl{
         url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-        sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+        sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
       };
+
+      doCheck = false;
 
       meta = {
         homepage = "http://github.com/pytoolz/toolz/";
         description = "List processing tools and functional utilities";
-        license = licenses.bsd3;
-        maintainers = with maintainers; [ fridh ];
       };
     };
 
@@ -308,11 +310,10 @@ Note also the line `doCheck = false;`, we explicitly disabled running the test-s
 
 #### Develop local package
 
-As a Python developer you're likely aware of [development mode](http://pythonhosted.org/setuptools/setuptools.html#development-mode) (`python setup.py develop`);
+As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode) (`python setup.py develop`);
 instead of installing the package this command creates a special link to the project code.
 That way, you can run updated code without having to reinstall after each and every change you make.
-Development mode is also available on Nix as [explained](http://nixos.org/nixpkgs/manual/#ssec-python-development) in the Nixpkgs manual.
-Let's see how you can use it.
+Development mode is also available. Let's see how you can use it.
 
 In the previous Nix expression the source was fetched from an url. We can also refer to a local source instead using
 
@@ -409,10 +410,10 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are as respectively
+Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are available as respectively
 `python26`, `python27`, `python33`, `python34` and `python35`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
-`python35`. The default interpreter, `python`, maps to `python3`.
+`python35`. The default interpreter, `python`, maps to `python2`.
 The Nix expressions for the interpreters can be found in
 `pkgs/development/interpreters/python`.
 
@@ -434,17 +435,20 @@ Each interpreter has the following attributes:
 - `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, e.g. `python3.4`.
+- `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Building packages and applications
 
-Python packages (libraries) and applications that use `setuptools` or
-`distutils` are typically built with respectively the `buildPythonPackage` and
-`buildPythonApplication` functions.
+Python libraries and applications that use `setuptools` or
+`distutils` are typically build with respectively the `buildPythonPackage` and
+`buildPythonApplication` functions. These two functions also support installing a `wheel`.
 
 All Python packages reside in `pkgs/top-level/python-packages.nix` and all
-applications elsewhere. Some packages are also defined in
+applications elsewhere. In case a package is used as both a library and an application,
+then the package should be in `pkgs/top-level/python-packages.nix` since only those packages are made
+available for all interpreter versions. The preferred location for library expressions is in
 `pkgs/development/python-modules`. It is important that these packages are
-called in `pkgs/top-level/python-packages.nix` and not elsewhere, to guarantee
+called from `pkgs/top-level/python-packages.nix` and not elsewhere, to guarantee
 the right version of the package is built.
 
 Based on the packages defined in `pkgs/top-level/python-packages.nix` an
@@ -462,14 +466,14 @@ and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
 * `pkgs.python3Packages` pointing to `pkgs.python35Packages`
-* `pkgs.pythonPackages` pointing to `pkgs.python3Packages`
+* `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function
 
 The `buildPythonPackage` function is implemented in
 `pkgs/development/interpreters/python/build-python-package.nix`
 
-and can be used as:
+The following is an example:
 
     twisted = buildPythonPackage {
       name = "twisted-8.1.0";
@@ -520,7 +524,7 @@ All parameters from `mkDerivation` function are still supported.
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `makeWrapperArgs`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `installFlags`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"].
-* `format`: Format of the source. Options are `setup` for when the source has a `setup.py` and `setuptools` is used to build a wheel, and `wheel` in case the source is already a binary wheel. The default value is `setup`.
+* `format`: Format of the source. Valid options are `setuptools` (default), `flit`, `wheel`, and `other`. `setuptools` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. In case you need to provide your own `buildPhase` and `installPhase` you can use `other`.
 * `catchConflicts` If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
 * `checkInputs` Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
 
@@ -697,59 +701,55 @@ should also be done when packaging `A`.
 
 ### How to override a Python package?
 
-Recursively updating a package can be done with `pkgs.overridePackages` as explained in the Nixpkgs manual.
-Python attribute sets are created for each interpreter version. We will therefore override the attribute set for the interpreter version we're interested.
-In the following example we change the name of the package `pandas` to `foo`.
-```
-newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = (super.python35Packages.override { self = python35Packages;})
-    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
-  };
-});
-```
-This can be tested with
-```
+We can override the interpreter and pass `packageOverrides`.
+In the following example we rename the `pandas` package and build it.
+```nix
 with import <nixpkgs> {};
 
-(let
+let
+  python = let
+    packageOverrides = self: super: {
+      pandas = super.pandas.override {name="foo";};
+    };
+  in pkgs.python35.override {inherit packageOverrides;};
 
-newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = (super.python35Packages.override { self = python35Packages;})
-    // { pandas = super.python35Packages.pandas.override  {name = "foo";};
-  };
-});
-in newpkgs.python35.withPackages (ps: [ps.blaze])
-).env
+in python.pkgs.pandas
 ```
-A typical use case is to switch to another version of a certain package. For example, in the Nixpkgs repository we have multiple versions of `django` and `scipy`.
-In the following example we use a different version of `scipy`. All packages in `newpkgs` will now use the updated `scipy` version.
-```
+Using `nix-build` on this expression will build the package `pandas`
+but with the new name `foo`.
+
+All packages in the package set will use the renamed package.
+A typical use case is to switch to another version of a certain package.
+For example, in the Nixpkgs repository we have multiple versions of `django` and `scipy`.
+In the following example we use a different version of `scipy` and create an environment that uses it.
+All packages in the Python package set will now use the updated `scipy` version.
+
+```nix
 with import <nixpkgs> {};
 
-(let
-
-newpkgs = pkgs.overridePackages(self: super: rec {
-  python35Packages = super.python35Packages.override {
-    self = python35Packages // { scipy = python35Packages.scipy_0_17;};
+(
+let
+  packageOverrides = self: super: {
+    scipy = super.scipy_0_17;
   };
-});
-in newpkgs.python35.withPackages (ps: [ps.blaze])
+in (pkgs.python35.override {inherit packageOverrides;}).withPackages (ps: [ps.blaze])
 ).env
 ```
-The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
+The requested package `blaze` depends on `pandas` which itself depends on `scipy`.
 
-A similar example but now using `django`
+If you want the whole of Nixpkgs to use your modifications, then you can use `pkgs.overridePackages`
+as explained in this manual. In the following example we build a `inkscape` using a different version of `numpy`.
 ```
-with import <nixpkgs> {};
-
-(let
-
-newpkgs = pkgs.overridePackages(self: super: rec {
-  python27Packages = (super.python27Packages.override {self = python27Packages;})
-    // { django = super.python27Packages.django_1_9; };
-});
-in newpkgs.python27.withPackages (ps: [ps.django_guardian ])
-).env
+let
+  pkgs = import <nixpkgs> {};
+  newpkgs = pkgs.overridePackages ( pkgsself: pkgssuper: {
+    python27 = let
+      packageOverrides = self: super: {
+        numpy = super.numpy_1_10;
+      };
+    in pkgssuper.python27.override {inherit packageOverrides;};
+  } );
+in newpkgs.inkscape
 ```
 
 ### `python setup.py bdist_wheel` cannot create .whl
@@ -770,9 +770,9 @@ or the current time:
 nix-shell --run "SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel"
 ```
 or unset:
-"""
+```
 nix-shell --run "unset SOURCE_DATE_EPOCH; python3 setup.py bdist_wheel"
-"""
+```
 
 ### `install_data` / `data_files` problems
 

@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py
   '';
 
-  pythonPath = with pythonPackages; [ dbus-python pygobject3 ];
+  pythonPath = with pythonPackages; [ dbus-python pygobject3 pycairo ];
 
   propagatedUserEnvPkgs = [ obex_data_server dconf ];
 

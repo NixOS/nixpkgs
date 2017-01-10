@@ -4,11 +4,11 @@ with lib;
 
 let
   cfg = config.services.prometheus.snmpExporter;
-  mkConfigFile = pkgs.writeText "snmp.yml" (builtins.toJSON cfg.configuration);
+  mkConfigFile = pkgs.writeText "snmp.yml" (if cfg.configurationPath == null then builtins.toJSON cfg.configuration else builtins.readFile cfg.configurationPath);
 in {
   options = {
     services.prometheus.snmpExporter = {
-      enable = mkEnableOption "prometheus snmp exporter";
+      enable = mkEnableOption "Prometheus snmp exporter";
 
       user = mkOption {
         type = types.str;
@@ -42,11 +42,30 @@ in {
         '';
       };
 
+      configurationPath = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Path to a snmp exporter configuration file. Mutually exclusive with 'configuration' option.
+        '';
+        example = "./snmp.yml";
+      };
+
       configuration = mkOption {
-        type = types.attrs;
+        type = types.nullOr types.attrs;
         default = {};
         description = ''
-          Snmp exporter configuration as nix attribute set.
+          Snmp exporter configuration as nix attribute set. Mutually exclusive with 'configurationPath' option.
+        '';
+        example = ''
+          {
+            "default" = {
+              "version" = 2;
+              "auth" = {
+                "community" = "public";
+              };
+            };
+          };
         '';
       };
 
@@ -78,6 +97,12 @@ in {
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
+    assertions = singleton
+      {
+        assertion = (cfg.configurationPath == null) != (cfg.configuration == null);
+        message = "Please ensure you have either 'configuration' or 'configurationPath' set!";
+      };
 
     systemd.services.prometheus-snmp-exporter = {
       wantedBy = [ "multi-user.target" ];

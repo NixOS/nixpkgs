@@ -1,6 +1,8 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
 , sqlite, tcl, tk, xlibsWrapper, openssl, readline, db, ncurses, gdbm, self, callPackage
-, python26Packages }:
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
+}:
 
 assert zlibSupport -> zlib != null;
 
@@ -100,13 +102,16 @@ let
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
       '';
 
-    passthru = rec {
+    passthru = let
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+    in rec {
       inherit libPrefix;
       inherit zlibSupport;
       isPy2 = true;
       isPy26 = true;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python26Packages; };
+      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+      pkgs = pythonPackages;
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       interpreter = "${self}/bin/${executable}";

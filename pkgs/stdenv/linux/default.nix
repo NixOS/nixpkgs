@@ -3,20 +3,20 @@
 # external (non-Nix) tools, such as /usr/bin/gcc, and it contains a C
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
+{ lib, allPackages
+, system, platform, crossSystem, config
 
-# The function defaults are for easy testing.
-{ system ? builtins.currentSystem
-, allPackages ? import ../../..
-, platform ? null, config ? {}, lib ? (import ../../../lib)
 , bootstrapFiles ?
-    if system == "i686-linux" then import ./bootstrap/i686.nix
-    else if system == "x86_64-linux" then import ./bootstrap/x86_64.nix
-    else if system == "armv5tel-linux" then import ./bootstrap/armv5tel.nix
-    else if system == "armv6l-linux" then import ./bootstrap/armv6l.nix
-    else if system == "armv7l-linux" then import ./bootstrap/armv7l.nix
-    else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
+    if system == "i686-linux" then import ./bootstrap-files/i686.nix
+    else if system == "x86_64-linux" then import ./bootstrap-files/x86_64.nix
+    else if system == "armv5tel-linux" then import ./bootstrap-files/armv5tel.nix
+    else if system == "armv6l-linux" then import ./bootstrap-files/armv6l.nix
+    else if system == "armv7l-linux" then import ./bootstrap-files/armv7l.nix
+    else if system == "mips64el-linux" then import ./bootstrap-files/loongson2f.nix
     else abort "unsupported platform for the pure Linux stdenv"
 }:
+
+assert crossSystem == null;
 
 rec {
 
@@ -37,22 +37,7 @@ rec {
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = derivation {
-    name = "bootstrap-tools";
-
-    builder = bootstrapFiles.busybox;
-
-    args = [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
-
-    tarball = bootstrapFiles.bootstrapTools;
-
-    inherit system;
-
-    # Needed by the GCC wrapper.
-    langC = true;
-    langCC = true;
-    isGNU = true;
-  };
+  bootstrapTools = import ./bootstrap-tools { inherit system bootstrapFiles; };
 
 
   # This function builds the various standard environments used during
@@ -106,8 +91,9 @@ rec {
       };
 
       thisPkgs = allPackages {
-        inherit system platform;
-        bootStdenv = thisStdenv;
+        inherit system platform crossSystem config;
+        allowCustomOverrides = false;
+        stdenv = thisStdenv;
       };
 
     in { stdenv = thisStdenv; pkgs = thisPkgs; };

@@ -1,7 +1,7 @@
-diff -ruN asterisk-13.2.0/sounds/Makefile asterisk-13.2.0-patched/sounds/Makefile
---- asterisk-13.2.0/sounds/Makefile	2014-09-09 14:01:11.000000000 -0600
-+++ asterisk-13.2.0-patched/sounds/Makefile	2015-03-31 16:12:00.549133670 -0600
-@@ -89,7 +89,7 @@
+diff -ruN asterisk-14.1.2/sounds/Makefile asterisk-14.1.2-patched/sounds/Makefile 
+--- asterisk-14.1.2/sounds/Makefile	2016-11-10 20:43:02.000000000 +0100
++++ asterisk-14.1.2-patched/sounds/Makefile	2016-11-16 10:08:46.591615147 +0100
+@@ -90,7 +90,7 @@
  	  ) && touch "$(1)$(if $(3),/$(3),)/$$@"; \
  	fi
  

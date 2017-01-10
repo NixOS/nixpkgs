@@ -1,4 +1,4 @@
-{ pkgs, callPackage, stdenv }:
+{ pkgs, callPackage, stdenv, crossSystem }:
 
 rec {
 
@@ -45,16 +45,19 @@ rec {
     ghc801 = callPackage ../development/compilers/ghc/8.0.1.nix rec {
       bootPkgs = packages.ghc7103;
       inherit (bootPkgs) hscolour;
+      sphinx = pkgs.python27Packages.sphinx;
+    };
+    ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix rec {
+      bootPkgs = packages.ghc7103;
+      inherit (bootPkgs) hscolour;
+      sphinx = pkgs.python27Packages.sphinx;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
       bootPkgs = packages.ghc7103;
       inherit (bootPkgs) alex happy;
+      inherit crossSystem;
+      selfPkgs = packages.ghcHEAD;
     };
-    ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix rec {
-      bootPkgs = packages.ghc784;
-      inherit (bootPkgs) alex happy;
-    };
-
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
     };
@@ -117,13 +120,18 @@ rec {
       ghc = compiler.ghc801;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
+    ghc802 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc802;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
+    };
     ghcHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    ghcNokinds = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcNokinds;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-nokinds.nix { };
+    # TODO Support for multiple variants here
+    ghcCross = callPackage ../development/haskell-modules {
+      ghc = compiler.ghcHEAD.crossCompiler;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
     ghcjs = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjs;

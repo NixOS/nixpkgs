@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pidgin-skypeweb-${version}";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "skype4pidgin";
     rev = "${version}";
-    sha256 = "0qmqf1r9kc7r6rgzz0byyq7yf5spsl2iima0cvxafs43gn4hnc2z";
+    sha256 = "1lxpz316jmns6i143v4j6sd6k0a4a54alw08rvwjckf2rig57lj2";
   };
 
   sourceRoot = "skype4pidgin-${version}-src/skypeweb";

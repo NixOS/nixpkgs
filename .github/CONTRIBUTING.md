@@ -32,4 +32,4 @@ See the nixpkgs manual for more details on how to [Submit changes to nixpkgs](ht
 
 ## Reviewing contributions
 
-See the nixpkgs manual for more details on how to [Review contributions](http://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download-by-type/doc/manual#chap-reviewing-contributions).
+See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#sec-reviewing-contributions).

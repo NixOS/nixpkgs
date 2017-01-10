@@ -5,6 +5,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
 , autoconf213, which
+, writeScript, xidel, coreutils, gnused, gnugrep, curl, ed
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -19,7 +20,7 @@ assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
 let
 
-common = { pname, version, sha512 }: stdenv.mkDerivation rec {
+common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
   name = "${pname}-unwrapped-${version}";
 
   src = fetchurl {
@@ -43,7 +44,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
     ++ lib.optional enableGTK3 gtk3
     ++ lib.optionals (!passthru.ffmpegSupport) [ gstreamer gst_plugins_base ];
 
-  nativeBuildInputs = [autoconf213 which];
+  nativeBuildInputs = [ autoconf213 which gnused ];
 
   configureFlags =
     [ "--enable-application=browser"
@@ -70,6 +71,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--enable-jemalloc"
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk2"
+      "--with-google-api-keyfile=ga"
     ]
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
@@ -88,6 +90,11 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
+
+      # Google API key used by Chromium and Firefox.
+      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+      # please get your own set of keys.
+      echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" >ga
     '';
 
   preInstall =
@@ -132,7 +139,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   };
 
   passthru = {
-    inherit nspr version;
+    inherit nspr version updateScript;
     gtk = gtk2;
     isFirefox3Like = true;
     browserName = "firefox";
@@ -144,14 +151,23 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "49.0.2";
-    sha512 = "e9daa62c8e645ec034f1435afb579ddb5c503db313ea0cc3e48b7508f8368028979de07ca1426cc4c0f3ae82756f39dcb3b349712d520b8503a34afbd443fb1e";
+    version = "50.1.0";
+    sha512 = "370d2e9b8c4b1b59c3394659c3a7f0f79e6a911ccd9f32095b50b3a22d087132b1f7cb87b734f7497c4381b1df6df80d120b4b87c13eecc425cc66f56acccba5";
+    updateScript = import ./update.nix {
+        name = "firefox";
+        inherit writeScript xidel coreutils gnused gnugrep curl ed;
+    };
   };
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.4.0esr";
-    sha512 = "2955e02f829a10186a8b22320fb97d4b0fc2b45721fcffa6295653fd760d516ae72b5656547685ba1e0699b381e28044996d9ee12a8738842b4e6b8acd296715";
+    version = "45.6.0esr";
+    sha512 = "b96c71aeed8a1185a085512f33d454a1735237cd9ddf37c8caa9cc91892eafab0615fc0ca6035f282ca8101489fa84c0de1087d1963c05b64df32b0c86446610";
+    updateScript = import ./update.nix {
+        name = "firefox-esr";
+        versionSuffix = "esr";
+        inherit writeScript xidel coreutils gnused gnugrep curl ed;
+    };
   };
 
 }

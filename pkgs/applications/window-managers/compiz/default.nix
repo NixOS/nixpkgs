@@ -5,23 +5,24 @@
 , libstartup_notification, libpthreadstubs, libxcb, intltool
 , ORBit2, libXau, libICE, libSM
 , dbus, dbus_glib, librsvg, mesa
-, libXdmcp, libnotify, pythonPackages
+, libXdmcp, libnotify, python2Packages
 , hicolor_icon_theme, libjpeg_turbo, libsigcxx, protobuf
 , xdg_utils
 , gettext, boost, pyrex
 , makeWrapper
 }:
 let
-  inherit (pythonPackages) python dbus-python pygtk;
+  # FIXME: Use python.withPackages so we can get rid of PYTHONPATH wrapper
+  inherit (python2Packages) python dbus-python pygtk;
 
   s = # Generated upstream information
   rec {
     baseName="compiz";
-    version="0.9.13.0";
+    version="0.9.13.1";
     name="${baseName}-${version}";
-    hash="00m73im5kdpbfjg9ryzxnab5qvx5j51gxwr3wzimkrcbax6vb3ph";
-    url="https://launchpad.net/compiz/0.9.13/0.9.13.0/+download/compiz-0.9.13.0.tar.bz2";
-    sha256="00m73im5kdpbfjg9ryzxnab5qvx5j51gxwr3wzimkrcbax6vb3ph";
+    hash="1grc4a4gc662hjs5adzdd3zlgsg1rh1wqm9aanbs8wm0l8mq0m4q";
+    url="https://launchpad.net/compiz/0.9.13/0.9.13.1/+download/compiz-0.9.13.1.tar.bz2";
+    sha256="1grc4a4gc662hjs5adzdd3zlgsg1rh1wqm9aanbs8wm0l8mq0m4q";
   };
   buildInputs = [cmake pkgconfig
     libXrender renderproto gtk2 libwnck pango cairo

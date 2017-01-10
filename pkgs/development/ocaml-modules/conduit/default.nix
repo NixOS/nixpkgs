@@ -1,5 +1,7 @@
-{stdenv, buildOcaml, fetchurl, sexplib_p4, stringext, uri, cstruct, ipaddr,
- async ? null, async_ssl ? null, lwt ? null}:
+{ stdenv, buildOcaml, fetchurl, ocaml, sexplib_p4, stringext, uri, cstruct, ipaddr
+, asyncSupport ? stdenv.lib.versionAtLeast ocaml.version "4.02"
+, async_p4 ? null, async_ssl_p4 ? null, lwt ? null
+}:
 
 buildOcaml rec {
   name = "conduit";
@@ -10,10 +12,10 @@ buildOcaml rec {
     sha256 = "5cf1a46aa0254345e5143feebe6b54bdef96314e9987f44e69f24618d620faa1";
   };
 
-  propagatedBuildInputs = ([ sexplib_p4 stringext uri cstruct ipaddr ]
-                            ++ stdenv.lib.optional (lwt != null) lwt
-                            ++ stdenv.lib.optional (async != null) async
-                            ++ stdenv.lib.optional (async_ssl != null) async_ssl);
+  propagatedBuildInputs = [ sexplib_p4 stringext uri cstruct ipaddr ];
+  buildInputs = stdenv.lib.optional (lwt != null) lwt
+             ++ stdenv.lib.optional (asyncSupport && async_p4 != null) async_p4
+             ++ stdenv.lib.optional (asyncSupport && async_ssl_p4 != null) async_ssl_p4;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-conduit;

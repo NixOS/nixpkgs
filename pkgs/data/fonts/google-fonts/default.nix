@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
       ofl/mrbedford \
       ofl/siamreap \
       ofl/terminaldosislight
+
+    if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
+      echo "error: duplicate font names"
+      exit 1
+    fi
   '';
 
   installPhase = ''

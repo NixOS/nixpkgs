@@ -18,7 +18,7 @@ let
   luaPath     = concatStringsSep ";" (map getLuaPath  libs);
   luaCPath    = concatStringsSep ";" (map getLuaCPath libs);
 
-  buildNumber = "302";
+  buildNumber = "331";
 in
 
 stdenv.mkDerivation rec {
@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://prosody.im/nightly/0.10/build${buildNumber}/${name}.tar.gz";
-    sha256 = "04g93g0qbmhd02si7lfmd77rs4snq6f9y3kicwkbjjy6caq6phr3";
+    sha256 = "01j5qlx6c65pvjxjxx1cml9ykylxdpa4hy8wr41ncvpvsr3cw5j5";
   };
 
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules/";
-    rev = "c728b2f77c7c";
-    sha256 = "0sizxan2r91f7bciifwif3w6jvhiaby8h22k824c2jz0c1yhh7gf";
+    rev = "05248d5a7166";
+    sha256 = "1jpkplv1ifp5ikhp8y6nb11j827wgk9qc1wwg0nghkspkrpln9dg";
   };
 
   buildInputs = [ lua5 luasocket luasec luaexpat luabitop lualdap luadbi libidn openssl makeWrapper ]

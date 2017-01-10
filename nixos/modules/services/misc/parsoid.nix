@@ -6,20 +6,21 @@ let
 
   cfg = config.services.parsoid;
 
-  conf = ''
-    exports.setup = function( parsoidConfig ) {
-      ${toString (mapAttrsToList (name: str: "parsoidConfig.setInterwiki('${name}', '${str}');") cfg.interwikis)}
+  confTree = {
+    worker_heartbeat_timeout = 300000;
+    logging = { level = "info"; };
+    services = [{
+      module = "lib/index.js";
+      entrypoint = "apiServiceWorker";
+      conf = {
+        mwApis = map (x: if isAttrs x then x else { uri = x; }) cfg.wikis;
+        serverInterface = cfg.interface;
+        serverPort = cfg.port;
+      };
+    }];
+  };
 
-      parsoidConfig.serverInterface = "${cfg.interface}";
-      parsoidConfig.serverPort = ${toString cfg.port};
-
-      parsoidConfig.useSelser = true;
-
-      ${cfg.extraConfig}
-    };
-  '';
-
-  confFile = builtins.toFile "localsettings.js" conf;
+  confFile = pkgs.writeText "config.yml" (builtins.toJSON (recursiveUpdate confTree cfg.extraConfig));
 
 in
 {
@@ -38,9 +39,9 @@ in
         '';
       };
 
-      interwikis = mkOption {
-        type = types.attrsOf types.str;
-        example = { localhost = "http://localhost/api.php"; };
+      wikis = mkOption {
+        type = types.listOf (types.either types.str types.attrs);
+        example = [ "http://localhost/api.php" ];
         description = ''
           Used MediaWiki API endpoints.
         '';
@@ -71,8 +72,8 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.lines;
-        default = "";
+        type = types.attrs;
+        default = {};
         description = ''
           Extra configuration to add to parsoid configuration.
         '';

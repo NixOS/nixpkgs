@@ -8,7 +8,9 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine = { config, pkgs, ... }:
     { security.grsecurity.enable = true;
+      boot.kernel.sysctl."kernel.grsecurity.audit_mount" = 0;
       boot.kernel.sysctl."kernel.grsecurity.deter_bruteforce" = 0;
+      networking.useDHCP = false;
     };
 
   testScript = ''
@@ -20,16 +22,14 @@ import ./make-test.nix ({ pkgs, ...} : {
 
     subtest "paxtest", sub {
       # TODO: running paxtest blackhat hangs the vm
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/anonmap") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/execbss") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/execdata") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/execheap") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/execstack") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/mprotanon") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/mprotbss") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/mprotdata") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/mprotheap") =~ /Killed/ or die;
-      $machine->succeed("${pkgs.paxtest}/lib/paxtest/mprotstack") =~ /Killed/ or die;
+      my @pax_mustkill = (
+        "anonmap", "execbss", "execdata", "execheap", "execstack",
+        "mprotanon", "mprotbss", "mprotdata", "mprotheap", "mprotstack",
+      );
+      foreach my $name (@pax_mustkill) {
+        my $paxtest = "${pkgs.paxtest}/lib/paxtest/" . $name;
+        $machine->succeed($paxtest) =~ /Killed/ or die
+      }
     };
 
     # tcc -run executes run-time generated code and so allows us to test whether

@@ -12,6 +12,7 @@
 , enableWideVine ? false
 , cupsSupport ? true
 , pulseSupport ? false
+, commandLineArgs ? ""
 }:
 
 let
@@ -76,6 +77,7 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      ${commandLineArgs} \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ed -v -s "$out/bin/chromium" << EOF

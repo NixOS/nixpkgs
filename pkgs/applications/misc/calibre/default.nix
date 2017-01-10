@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, python, pyqt5, sip, poppler_utils, pkgconfig, libpng
+{ stdenv, fetchurl, fetchpatch, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmakeHook, icu, sqlite
-, makeWrapper, unrarSupport ? false, chmlib, pythonPackages, xz, libusb1, libmtp
+, makeWrapper, unrarSupport ? false, chmlib, python2Packages, xz, libusb1, libmtp
 , xdg_utils, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.70.0";
+  version = "2.76.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "18iv1c2nx93gkfqa3k2m42dk4p59b9zp08fggb6imc1xqh2icfch";
+    sha256 = "1xfm586n6gm44mkyn25mbiyhj6w9ji9yl6fvmnr4zk1q6qcga3v8";
   };
-
-  inherit python;
 
   patches = [
     # Patches from Debian that:
@@ -39,7 +37,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip/PyQt5':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${python2Packages.pyqt5}/share/sip/PyQt5':"  \
       setup/build_environment.py
 
     # Remove unneeded files and libs
@@ -48,20 +46,17 @@ stdenv.mkDerivation rec {
   '';
 
   dontUseQmakeConfigure = true;
-  # hack around a build problem
-  preBuild = ''
-    mkdir -p ../tmp.*/lib
-  '';
 
   nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];
 
   buildInputs = [
-    python pyqt5 sip poppler_utils libpng imagemagick libjpeg
+    poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
-  ] ++ (with pythonPackages; [
+  ] ++ (with python2Packages; [
     apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
+    python pyqt5 sip
     # the following are distributed with calibre, but we use upstream instead
-    chardet cherrypy html5lib odfpy routes
+    chardet cherrypy html5lib_0_9999999 odfpy routes
   ]);
 
   installPhase = ''
@@ -74,8 +69,8 @@ stdenv.mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo}/include/podofo
     export PODOFO_LIB_DIR=${podofo}/lib
-    export SIP_BIN=${sip}/bin/sip
-    python setup.py install --prefix=$out
+    export SIP_BIN=${python2Packages.sip}/bin/sip
+    ${python2Packages.python.interpreter} setup.py install --prefix=$out
 
     PYFILES="$out/bin/* $out/lib/calibre/calibre/web/feeds/*.py
       $out/lib/calibre/calibre/ebooks/metadata/*.py

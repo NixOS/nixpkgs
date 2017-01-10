@@ -136,4 +136,14 @@
       sha256 = "0h98a8kiw2qkqfavysm1v16kf4cs4h39j583wapif4p0qx3bbm89";
     };
   };
+
+  # For an example usage, see https://easyengine.io/wordpress-nginx/tutorials/single-site/fastcgi-cache-with-purging/
+  fastcgi-cache-purge = {
+    src = fetchFromGitHub {
+      owner  = "FRiCKLE";
+      repo   = "ngx_cache_purge";
+      rev    = "2.3";
+      sha256 = "0ib2jrbjwrhvmihhnzkp4w87fxssbbmmmj6lfdwpm6ni8p9g60dw";
+    };
+  };
 }

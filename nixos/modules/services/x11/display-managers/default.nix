@@ -82,12 +82,12 @@ let
 
       # Speed up application start by 50-150ms according to
       # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
-      rm -rf $HOME/.compose-cache
-      mkdir $HOME/.compose-cache
+      rm -rf "$HOME/.compose-cache"
+      mkdir "$HOME/.compose-cache"
 
       # Work around KDE errors when a user first logs in and
       # .local/share doesn't exist yet.
-      mkdir -p $HOME/.local/share
+      mkdir -p "$HOME/.local/share"
 
       unset _DID_SYSTEMD_CAT
 
@@ -148,7 +148,7 @@ let
       allowSubstitutes = false;
     }
     ''
-      mkdir -p $out
+      mkdir -p "$out"
       ${concatMapStrings (n: ''
         cat - > "$out/${n}.desktop" << EODESKTOP
         [Desktop Entry]
@@ -187,7 +187,6 @@ in
         default = [];
         example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
-        apply = toString;
       };
 
       sessionCommands = mkOption {

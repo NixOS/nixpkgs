@@ -6,12 +6,13 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? false
+, tcl ? null, tk ? null, tix ? null, libX11 ? null, xproto ? null, x11Support ? false
 , zlib
 , callPackage
 , self
-, python34Packages
 , CF, configd
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -52,6 +53,10 @@ in stdenv.mkDerivation {
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
+  '';
+
+  postPatch = optionalString (x11Support && (tix != null)) ''
+    substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   preConfigure = ''
@@ -111,11 +116,14 @@ in stdenv.mkDerivation {
 
   '';
 
-  passthru = rec {
+  passthru = let
+    pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+  in rec {
     inherit libPrefix sitePackages x11Support;
     executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; };
-    withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python34Packages; };
+    withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+    pkgs = pythonPackages;
     isPy3 = true;
     isPy34 = true;
     is_py3k = true;  # deprecated

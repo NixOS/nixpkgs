@@ -285,6 +285,9 @@ stdenv.mkDerivation {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ ak wkennington ];
     platforms = platforms.unix;
+    # Broken because of https://lwn.net/Vulnerabilities/709844/
+    # and our version is quite out of date.
+    broken = true;
   };
 
   passthru.version = version;

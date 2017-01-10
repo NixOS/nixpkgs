@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2 }:
+{ stdenv, fetchFromGitHub, python2, fixDarwinDylibNames }:
 
 let
   python = python2;
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0ssp190ksak93hiz61z90x6hy9hcw1ywp8b2dzmbhn6fbd4bnxzp";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python fixDarwinDylibNames ];
   enableParallelBuilding = true;
 
   configurePhase = ''

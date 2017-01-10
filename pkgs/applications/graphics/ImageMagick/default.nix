@@ -11,8 +11,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.6-2";
-    sha256 = "139h9lycxw3lszn052m34xm0rqyanin4nb529vxjcrkkzqilh91r";
+    version = "6.9.7-0";
+    sha256 = "0c6ff1am2mhc0dc26h50l78yx6acwqymwpwgkxgx69cb6jfpwrdx";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
       "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
       # the original source above removes tarballs quickly
       "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
+      "https://bintray.com/homebrew/mirror/download_file?file_path=imagemagick-${version}.tar.xz"
     ];
     inherit (cfg) sha256;
   };

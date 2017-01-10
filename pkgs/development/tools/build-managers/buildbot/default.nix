@@ -1,12 +1,21 @@
-{ stdenv, pythonPackages, fetchurl, coreutils, plugins ? [] }:
+{ stdenv,
+  lib,
+  pythonPackages,
+  fetchurl,
+  coreutils,
+  openssh,
+  buildbot-worker,
+  plugins ? [],
+  enableLocalWorker ? false
+}:
 
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot";
-  version = "0.9.0rc4";
+  version = "0.9.0.post1";
   src = fetchurl {
     url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-    sha256 = "16bnrr5qkfpnby9sw9azcagnw0ybi7d8bpdlga2a4c61jg2d5dnc";
+    sha256 = "18rnsp691cnmbymlch6czx3mrcmifmf6dk97h9nslgfkkyf25n5g";
   };
 
   buildInputs = with pythonPackages; [
@@ -22,7 +31,7 @@ pythonPackages.buildPythonApplication (rec {
     pylint
     astroid
     pyflakes
-  ];
+  ] ++ lib.optionals (enableLocalWorker) [openssh];
 
   propagatedBuildInputs = with pythonPackages; [
 
@@ -52,14 +61,17 @@ pythonPackages.buildPythonApplication (rec {
     ramlfications
     sphinx-jinja
 
-  ] ++ plugins;
+  ] ++ plugins ++
+  lib.optionals (enableLocalWorker) [buildbot-worker];
 
   preInstall = ''
     # writes out a file that can't be read properly
     sed -i.bak -e '69,84d' buildbot/test/unit/test_www_config.py
+  '';
 
+  postPatch = ''
     # re-hardcode path to tail
-    sed -i.bak 's|/usr/bin/tail|${coreutils}/bin/tail|' buildbot/scripts/logwatcher.py
+    sed -i 's|/usr/bin/tail|${coreutils}/bin/tail|' buildbot/scripts/logwatcher.py
   '';
 
   postFixup = ''

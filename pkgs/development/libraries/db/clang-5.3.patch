@@ -16,7 +16,7 @@ index 6a858f7..9f338dc 100644
  #define	atomic_dec(env, p)	__atomic_dec(p)
  #define	atomic_compare_exchange(env, p, o, n)	\
 -	__atomic_compare_exchange((p), (o), (n))
-+	__atomic_compare_exchange_db((p), (o), (n))
++	__atomic_compare_exchange_int((p), (o), (n))
  static inline int __atomic_inc(db_atomic_t *p)
  {
  	int	temp;
@@ -25,7 +25,7 @@ index 6a858f7..9f338dc 100644
   * which configure could be changed to use.
   */
 -static inline int __atomic_compare_exchange(
-+static inline int __atomic_compare_exchange_db(
++static inline int __atomic_compare_exchange_int(
  	db_atomic_t *p, atomic_value_t oldval, atomic_value_t newval)
  {
  	atomic_value_t was;

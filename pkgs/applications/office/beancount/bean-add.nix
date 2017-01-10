@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
-  name = "bean-add-2016-10-03";
+  name = "bean-add-2016-12-02";
 
   src = fetchFromGitHub {
     owner = "simon-v";
     repo = "bean-add";
-    rev = "41deacc09b992db5eede34fefbfb2c0faeba1652";
-    sha256 = "09xdsskk5rc3xsf1v1vq7nkdxrxy8w2fixx2vdv8c97ak6a4hrca";
+    rev = "8038dabf5838c880c8e750c0e65cf0da4faf40b9";
+    sha256 = "016ybq570xicj90x4kxrbxhzdvkjh0d6v3r6s3k3qfzz2c5vwh09";
   };
 
   propagatedBuildInputs = with python3Packages; [ python ];

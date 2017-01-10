@@ -6,8 +6,6 @@ let
 
   inherit (pkgs) privoxy;
 
-  privoxyUser = "privoxy";
-
   cfg = config.services.privoxy;
 
   confFile = pkgs.writeText "privoxy.conf" ''
@@ -88,18 +86,25 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-  
-    users.extraUsers = singleton
-      { name = privoxyUser;
-        uid = config.ids.uids.privoxy;
-        description = "Privoxy daemon user";
-      };
+
+    users.users.privoxy = {
+      isSystemUser = true;
+      home = "/var/empty";
+      group = "privoxy";
+    };
+
+    users.groups.privoxy = {};
 
     systemd.services.privoxy = {
       description = "Filtering web proxy";
       after = [ "network.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${privoxy}/sbin/privoxy --no-daemon --user ${privoxyUser} ${confFile}";
+      serviceConfig.ExecStart = "${privoxy}/bin/privoxy --no-daemon --user privoxy ${confFile}";
+
+      serviceConfig.PrivateDevices = true;
+      serviceConfig.PrivateTmp = true;
+      serviceConfig.ProtectHome = true;
+      serviceConfig.ProtectSystem = "full";
     };
 
   };
