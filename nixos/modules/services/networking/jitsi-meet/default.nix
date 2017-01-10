@@ -161,9 +161,6 @@ in {
 
       nginx = {
         enable = true;
-        appendHttpConfig = ''
-          server_names_hash_bucket_size  64;
-        '';
         virtualHosts = {
           "${cfg.hostname}.${cfg.domain}" = {
             root = "${pkgs.jitsi-meet}/var/www";
