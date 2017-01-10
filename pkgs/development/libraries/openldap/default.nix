@@ -16,9 +16,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl cyrus_sasl db groff libtool ];
 
   configureFlags =
-    [ "--enable-overlays"
+    [
       "--disable-dependency-tracking"   # speeds up one-time build
+      "--disable-ndb"
+      "--disable-perl"
+      "--disable-sql"
+      "--enable-backends=mod"
       "--enable-modules"
+      "--enable-overlays=mod"
     ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
