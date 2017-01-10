@@ -7386,7 +7386,9 @@ in
     bison = bison2;
   };
 
-  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {};
+  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   gst_plugins_good = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-good {};
 
