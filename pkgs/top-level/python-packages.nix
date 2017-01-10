@@ -750,6 +750,21 @@ in {
     };
   };
 
+  altgraph = buildPythonPackage rec {
+    name = "altgraph-0.13";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/altgraph/${name}.tar.gz";
+      sha256 = "0s5yfy9k6r3g7mh7578krg1xcrb5d5j7myjaz78iimwqapcfj445";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Python graph (network) package";
+      homepage = "http://pythonhosted.org/altgraph/";
+      license = licenses.mit;
+    };
+  };
+
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
