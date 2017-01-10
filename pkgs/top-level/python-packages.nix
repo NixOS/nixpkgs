@@ -10072,12 +10072,12 @@ in {
 
   django_1_10 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.10.4";
+    version = "1.10.5";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-      sha256 = "0asw60i4r5cdxb2jp6r09pdrwxxp8mvwbkz7vnx15n0hwmig1xzz";
+      sha256 = "12szjsmnfhh2yr54sfynyjr8vl0q9gb6qak3ayqcifcinrs97f0d";
     };
 
     patches = [
