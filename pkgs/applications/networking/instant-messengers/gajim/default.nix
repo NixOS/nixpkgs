@@ -7,7 +7,7 @@
 , enableRST ? true
 , enableSpelling ? true, gtkspell2 ? null
 , enableNotifications ? false
-, enableOmemoPluginDependencies ? false
+, enableOmemoPluginDependencies ? true
 , extraPythonPackages ? pkgs: []
 }:
 
