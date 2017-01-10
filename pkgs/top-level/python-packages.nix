@@ -32004,6 +32004,8 @@ EOF
     };
   };
 
+  pyobjc = callPackage ../development/python-modules/pyobjc {};
+
 });
 
 in fix' (extends overrides packages)
