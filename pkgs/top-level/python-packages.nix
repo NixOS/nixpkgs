@@ -19427,6 +19427,27 @@ in {
   };
 
 
+  py2app = buildPythonPackage rec {
+    name = "py2app-0.10";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/py2app/${name}.tar.gz";
+      sha256 = "0pmaxrvx2vnlgsdlbzqr32v2j0n81n07x4xrc2nigfdnrxsxvcc2";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ altgraph macholib modulegraph ];
+
+    meta = {
+      description = "Create standalone Mac OS X applications with Python";
+      homepage = "https://pythonhosted.org/py2app/";
+      license = licenses.mit;
+      platforms = platforms.darwin;
+    };
+  };
+
+
   pyacoustid = buildPythonPackage rec {
     name = "pyacoustid-1.1.0";
 
