@@ -61,13 +61,9 @@ stdenv.mkDerivation {
         fi
     done
 
-    ln -s "$env/share" "$out"
-
+    mkdir -p "$out/nix-support"
     for drv in $unwrapped; do
-        if [ -a "$drv/nix-support/propagated-user-env-packages" ]; then
-            mkdir -p "$out/nix-support"
-            cat "$drv/nix-support/propagated-user-env-packages" >> "$out/nix-support/propagated-user-env-packages"
-        fi
+        echo "$drv" >> "$out/nix-support/propagated-user-env-packages"
     done
   '';
 }
