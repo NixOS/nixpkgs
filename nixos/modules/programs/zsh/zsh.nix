@@ -91,6 +91,13 @@ in
         '';
         type = types.bool;
       };
+      
+      enableAutosuggestions = mkOption {
+        default = false;
+        description = ''
+          Enable zsh-autosuggestions
+        '';
+      };
 
     };
 
@@ -130,6 +137,10 @@ in
 
         ${optionalString (cfg.enableSyntaxHighlighting)
           "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+        }
+
+        ${optionalString (cfg.enableAutosuggestions)
+          "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
         }
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"

@@ -4534,6 +4534,8 @@ in
 
   zsh-syntax-highlighting = callPackage ../shells/zsh-syntax-highlighting { };
 
+  zsh-autosuggestions = callPackage ../shells/zsh-autosuggestions { };
+
   zstd = callPackage ../tools/compression/zstd { };
 
   zsync = callPackage ../tools/compression/zsync { };
