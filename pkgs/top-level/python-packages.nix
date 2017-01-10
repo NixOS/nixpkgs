@@ -14148,6 +14148,24 @@ in {
   };
 
 
+  macholib = buildPythonPackage rec {
+    name = "macholib-1.8";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/macholib/${name}.tar.gz";
+      sha256 = "0ng58bs0b2fw0hp15cbfma1wg4v3xl40h11w9dal90knhn5rqg1j";
+    };
+
+    propagatedBuildInputs = with self; [ altgraph ];
+
+    meta = {
+      description = "Mach-O header analysis and editing";
+      homepage = https://bitbucket.org/ronaldoussoren/macholib;
+      license = licenses.mit;
+    };
+  };
+
+
   Mako = buildPythonPackage rec {
     name = "Mako-1.0.4";
 
