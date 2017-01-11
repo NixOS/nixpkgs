@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, boost, ganv, glibmm, gtkmm2, libjack2, lilv
+{ stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
 , lv2, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord, sratom
 , suil
 }:
