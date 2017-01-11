@@ -14,7 +14,10 @@ let
       mkDerivation = pkgs.callPackage ./generic-builder.nix {
         inherit stdenv;
         inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
-        inherit (self) ghc jailbreak-cabal;
+        jailbreak-cabal = if (self.ghc.cross or null) != null
+          then self.ghc.bootPkgs.jailbreak-cabal
+          else self.jailbreak-cabal;
+        inherit (self) ghc;
         hscolour = overrideCabal self.hscolour (drv: {
           isLibrary = false;
           doHaddock = false;
