@@ -8401,7 +8401,7 @@ in
 
   libpfm = callPackage ../development/libraries/libpfm { };
 
-  libpqxx = callPackage ../development/libraries/libpqxx { 
+  libpqxx = callPackage ../development/libraries/libpqxx {
     gnused = gnused_422;
   };
 
@@ -14587,6 +14587,8 @@ in
     notifySupport   = config.profanity.notifySupport   or true;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
   };
+
+  psol = callPackage ../development/libraries/psol/default.nix { };
 
   pstree = callPackage ../applications/misc/pstree { };
 
