@@ -12,7 +12,7 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "340.96";
+  versionNumber = "340.101";
   /* This branch is needed for G8x, G9x, and GT2xx GPUs, and motherboard chipsets based on them.
     Ongoing support for new Linux kernels and X servers, as well as fixes for critical bugs,
     will be included in 340.* legacy releases through the end of 2019.
@@ -29,12 +29,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "13j739gg1igll88xpfsx46m7pan4fwpzx5hqdskkdc0srmw2f3n4";
+        sha256 = "0qmhkvxj6h63sayys9gldpafw5skpv8nsm2gxxb3pxcv7nfdlpjz";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "1i0lri76ghhr4c6fdlv5gwzd99n70hv3kw21w51anb55msr9s3r8";
+        sha256 = "0ln7fxm78zrzrjk3j5ychi5xxlgkzg2m7anw8nklr3d17c3jxxjy";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
