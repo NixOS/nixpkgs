@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, pango, libinput
 , makeWrapper, cmake, pkgconfig, asciidoc, libxslt, docbook_xsl, cairo
-, wayland, wlc, libxkbcommon, pixman, fontconfig, pcre, json_c, dbus_libs
+, wayland, wlc, libxkbcommon, pixman, fontconfig, pcre, json_c, dbus_libs, libcap
 }:
 
 let
-  version = "0.9";
+  version = "0.11";
 in
   stdenv.mkDerivation rec {
     name = "sway-${version}";
@@ -13,12 +13,12 @@ in
       owner = "Sircmpwn";
       repo = "sway";
       rev = "${version}";
-      sha256 = "0qqqg23rknxnjcgvkfrx3pijqc3dvi74qmmavq07vy2qfs1xlwg0";
+      sha256 = "01k01f72kh90fwgqh2hgg6dv9931x4v18bzz11b47mn7p9z68ddv";
     };
 
     nativeBuildInputs = [ makeWrapper cmake pkgconfig asciidoc libxslt docbook_xsl ];
 
-    buildInputs = [ wayland wlc libxkbcommon pixman fontconfig pcre json_c dbus_libs pango cairo libinput ];
+    buildInputs = [ wayland wlc libxkbcommon pixman fontconfig pcre json_c dbus_libs pango cairo libinput libcap ];
 
     patchPhase = ''
       sed -i s@/etc/sway@$out/etc/sway@g CMakeLists.txt;
