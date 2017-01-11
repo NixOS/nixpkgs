@@ -280,6 +280,8 @@ in
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
+  sbot = callPackage ../applications/networking/sbot { };
+
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
   srcOnly = args: callPackage ../build-support/src-only args;
