@@ -15651,6 +15651,8 @@ in
 
   xfig = callPackage ../applications/graphics/xfig { };
 
+  xfractint = callPackage ../applications/graphics/xfractint {};
+
   xineUI = callPackage ../applications/video/xine-ui { };
 
   xmind = callPackage ../applications/misc/xmind { };
