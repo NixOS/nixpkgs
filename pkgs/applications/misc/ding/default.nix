@@ -10,11 +10,11 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "ding-1.8";
+  name = "ding-1.8.1";
 
   src = fetchurl {
     url = "http://ftp.tu-chemnitz.de/pub/Local/urz/ding/${name}.tar.gz";
-    sha256 = "00z97ndwmzsgig9q6y98y8nbxy76pyi9qyj5qfpbbck24gakpz5l";
+    sha256 = "0chjqs3z9zs1w3l7b5lsaj682rgnkf9kibcbzhggqqcn1pbvl5sq";
   };
 
   buildInputs = [ aspellEnv fortune gnugrep makeWrapper tk tre ];
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
     sed -i "s@/usr/bin/ding@$out/bin/ding@g" ding.desktop
 
-    cp ding $out/bin/
-    cp de-en.txt $out/share/dict/
-    cp ding.1 $out/share/man/man1/
-    cp ding.png $out/share/pixmaps/
-    cp ding.desktop $out/share/applications/
+    cp -v ding $out/bin/
+    cp -v de-en.txt $out/share/dict/
+    cp -v ding.1 $out/share/man/man1/
+    cp -v ding.png $out/share/pixmaps/
+    cp -v ding.desktop $out/share/applications/
 
     wrapProgram $out/bin/ding --prefix PATH : ${stdenv.lib.makeBinPath [ gnugrep aspellEnv tk fortune ]} --prefix ASPELL_CONF : "\"prefix ${aspellEnv};\""
   '';
