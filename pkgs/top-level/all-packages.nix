@@ -12361,19 +12361,10 @@ in
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
-  # Oracle JDK is recommended upstream, but unfree and requires a manual
-  # download. OpenJDK is straightforward, but may suffer from compatibility
-  # problems e.g. https://code.google.com/p/android/issues/detail?id=174496.
-  # To use Oracle JDK add an override to ~/.nixpkgs/config.nix:
-  # {
-  #   packageOverrides = pkgs: {
-  #     android-studio = pkgs.android-studio.override {
-  #       jdk = pkgs.oraclejdk8;
-  #     };
-  #   };
-  # }
   android-studio = callPackage ../applications/editors/android-studio {
-      inherit (xorg) libX11 libXext libXi libXrandr libXrender libXtst;
+    fontsConf = makeFontsConf {
+      fontDirectories = [];
+    };
   };
 
   antimony = qt5.callPackage ../applications/graphics/antimony {};
