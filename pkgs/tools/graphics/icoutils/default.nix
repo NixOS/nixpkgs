@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpng, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "icoutils-0.31.0";
+  name = "icoutils-0.31.1";
 
   src = fetchurl {
     url = "mirror://savannah/icoutils/${name}.tar.bz2";
-    sha256 = "0wdgyfb1clrn3maq84vi4vkwjydy72p5hzk6kb9nb3a19bbxk5d8";
+    sha256 = "14rhd7p7v0rvxsfnrgxf5l4rl6n52h2aq09583glqpgjg0y9vqi6";
   };
 
   buildInputs = [ makeWrapper libpng perl ];
