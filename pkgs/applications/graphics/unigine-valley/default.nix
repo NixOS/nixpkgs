@@ -16,7 +16,6 @@
 
 let
   version = "1.0";
-  pkgversion = "1";
 
   arch = if stdenv.system == "x86_64-linux" then
     "x64"
@@ -26,8 +25,8 @@ let
     abort "Unsupported platform";
 
 in
-  stdenv.mkDerivation {
-    name = "unigine-valley-${version}-${pkgversion}";
+  stdenv.mkDerivation rec {
+    name = "unigine-valley-${version}";
 
     src = fetchurl {
       url = "http://assets.unigine.com/d/Unigine_Valley-${version}.run";
@@ -35,6 +34,7 @@ in
     };
 
     sourceRoot = "Unigine_Valley-${version}";
+    instPath = "lib/unigine/valley";
 
     buildInputs = [file makeWrapper];
 
@@ -56,22 +56,16 @@ in
       ./extractor.run --target $sourceRoot
     '';
 
-    # The executable loads libGPUMonitor_${arch}.so "manually" (i.e. not through the ELF interpreter).
-    # However, it still uses the RPATH to look for it.
     patchPhase = ''
       # Patch ELF files.
       elfs=$(find bin -type f | xargs file | grep ELF | cut -d ':' -f 1)
       for elf in $elfs; do
-        echo "Patching $elf"
         patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $elf || true
       done
     '';
 
-    configurePhase = "";
-    buildPhase = "";
-
     installPhase = ''
-      instdir=$out/opt/unigine/valley
+      instdir=$out/${instPath}
 
       # Install executables and libraries
       mkdir -p $instdir/bin
@@ -94,10 +88,12 @@ in
         --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$instdir/bin:$libPath
     '';
 
+    stripDebugList = ["${instPath}/bin"];
+
     meta = {
       description = "The Unigine Valley GPU benchmarking tool";
       homepage = "http://unigine.com/products/benchmarks/valley/";
-      license = stdenv.lib.licenses.unfree; # see also: /nix/store/*-unigine-valley-1.0/opt/unigine/valley/documentation/License.pdf
+      license = stdenv.lib.licenses.unfree; # see also: $out/$instPath/documentation/License.pdf
       maintainers = [ stdenv.lib.maintainers.kierdavis ];
       platforms = ["x86_64-linux" "i686-linux"];
     };
