@@ -592,4 +592,9 @@ in
     preBuild = "sed -i 's|gcc -E|gcc -E -P|' man/Makefile";
   };
 
+  xrandr = attrs: attrs // {
+    postInstall = ''
+      rm $out/bin/xkeystone
+    '';
+  };
 }
