@@ -2,7 +2,7 @@
   libtool, libjpeg, openssl, libX11, libXdamage, xproto, damageproto, 
   xextproto, libXext, fixesproto, libXfixes, xineramaproto, libXinerama, 
   libXrandr, randrproto, libXtst, zlib, libgcrypt, autoreconfHook
-  , systemd, pkgconfig
+  , systemd, pkgconfig, libpng
 }:
 
 assert stdenv.isLinux;
@@ -20,7 +20,7 @@ let
     libtool libjpeg openssl libX11 libXdamage xproto damageproto
     xextproto libXext fixesproto libXfixes xineramaproto libXinerama
     libXrandr randrproto libXtst zlib libgcrypt autoreconfHook systemd
-    pkgconfig
+    pkgconfig libpng
   ];
 in
 stdenv.mkDerivation {
