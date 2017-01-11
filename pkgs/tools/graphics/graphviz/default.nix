@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libpng, libjpeg, expat
 , yacc, libtool, fontconfig, pango, gd, xorg, gts, libdevil, gettext, cairo
 , flex
+, ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +21,9 @@ stdenv.mkDerivation rec {
     [ pkgconfig libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango
     ] ++ stdenv.lib.optionals (xorg != null)
       (with xorg; [ xlibsWrapper libXrender libXaw libXpm ])
-    ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
+    ++ stdenv.lib.optionals (stdenv.isDarwin) [ ApplicationServices gettext ];
 
-  CPPFLAGS = stdenv.lib.optionalString (xorg != null && stdenv.system == "x86_64-darwin")
+  CPPFLAGS = stdenv.lib.optionalString (xorg != null && stdenv.isDarwin)
     "-I${cairo.dev}/include/cairo";
 
   configureFlags = stdenv.lib.optional (xorg == null) "--without-x";

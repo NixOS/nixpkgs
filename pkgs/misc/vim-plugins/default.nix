@@ -329,6 +329,17 @@ rec {
 
   };
 
+  delimitMate = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "delimitMate-2016-07-19";
+    src = fetchgit {
+      url = "git://github.com/Raimondi/delimitMate";
+      rev = "b5719054beebe0135c94f4711a06dc7588041f09";
+      sha256 = "03nmkiq138w6kq4s3mh4yyr6bjvqwj8hg6qlji1ng4vnzb0638q3";
+    };
+    dependencies = [];
+
+  };
+
   extradite = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "extradite-2015-09-22";
     src = fetchgit {

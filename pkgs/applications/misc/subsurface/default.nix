@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
                   qtconnectivity libgit2 libssh2 curl ];
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # fatal error: ui_mainwindow.h: No such file or directory
 
   # hack incoming...
   preConfigure = ''

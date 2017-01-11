@@ -1999,9 +1999,11 @@ in
     pythonPackages = pypyPackages;
   };
 
-  graphviz = callPackage ../tools/graphics/graphviz { };
+  graphviz = callPackage ../tools/graphics/graphviz {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
-  graphviz-nox = callPackage ../tools/graphics/graphviz {
+  graphviz-nox = graphviz.override {
     xorg = null;
     libdevil = libdevil-nox;
   };
@@ -2016,7 +2018,9 @@ in
    * that do want 2.32 but not 2.0 or 2.36. Please give a day's notice for
    * objections before removal. The feature is libgraph.
    */
-  graphviz_2_32 = callPackage ../tools/graphics/graphviz/2.32.nix { };
+  graphviz_2_32 = callPackage ../tools/graphics/graphviz/2.32.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   grin = callPackage ../tools/text/grin { };
   ripgrep = callPackage ../tools/text/ripgrep { };
@@ -2540,7 +2544,7 @@ in
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs = nodejs-6_x;
+  nodejs = hiPrio nodejs-6_x;
 
   nodejs-slim = nodejs-slim-6_x;
 
@@ -4570,6 +4574,8 @@ in
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
 
   zsh-syntax-highlighting = callPackage ../shells/zsh-syntax-highlighting { };
+
+  zsh-autosuggestions = callPackage ../shells/zsh-autosuggestions { };
 
   zstd = callPackage ../tools/compression/zstd { };
 
@@ -7116,6 +7122,9 @@ in
   ffmpeg_3_1 = callPackage ../development/libraries/ffmpeg/3.1.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
+  ffmpeg_3_2 = callPackage ../development/libraries/ffmpeg/3.2.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
+  };
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
@@ -7287,8 +7296,6 @@ in
     }
   );
 
-  libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
-
   gle = callPackage ../development/libraries/gle { };
 
   glew = callPackage ../development/libraries/glew { };
@@ -7407,7 +7414,9 @@ in
     bison = bison2;
   };
 
-  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {};
+  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   gst_plugins_good = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-good {};
 
@@ -9322,7 +9331,6 @@ in
   libsmf = callPackage ../development/libraries/audio/libsmf { };
 
   lilv = callPackage ../development/libraries/audio/lilv { };
-  lilv-svn = callPackage ../development/libraries/audio/lilv/lilv-svn.nix { };
 
   lv2 = callPackage ../development/libraries/audio/lv2 { };
   lv2Unstable = callPackage ../development/libraries/audio/lv2/unstable.nix { };
@@ -9452,7 +9460,6 @@ in
   soqt = callPackage ../development/libraries/soqt { };
 
   sord = callPackage ../development/libraries/sord {};
-  sord-svn = callPackage ../development/libraries/sord/sord-svn.nix {};
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
@@ -12393,19 +12400,10 @@ in
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
-  # Oracle JDK is recommended upstream, but unfree and requires a manual
-  # download. OpenJDK is straightforward, but may suffer from compatibility
-  # problems e.g. https://code.google.com/p/android/issues/detail?id=174496.
-  # To use Oracle JDK add an override to ~/.nixpkgs/config.nix:
-  # {
-  #   packageOverrides = pkgs: {
-  #     android-studio = pkgs.android-studio.override {
-  #       jdk = pkgs.oraclejdk8;
-  #     };
-  #   };
-  # }
   android-studio = callPackage ../applications/editors/android-studio {
-      inherit (xorg) libX11 libXext libXi libXrandr libXrender libXtst;
+    fontsConf = makeFontsConf {
+      fontDirectories = [];
+    };
   };
 
   antimony = qt5.callPackage ../applications/graphics/antimony {};
@@ -13736,7 +13734,9 @@ in
     ghostscript = null;
   };
 
-  imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
+  imagemagickBig = callPackage ../applications/graphics/ImageMagick {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   imagemagick7_light = lowPrio (imagemagick7.override {
     bzip2 = null;
@@ -13762,7 +13762,9 @@ in
     ghostscript = null;
   });
 
-  imagemagick7Big = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix { });
+  imagemagick7Big = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  });
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
@@ -15700,6 +15702,8 @@ in
 
   xfig = callPackage ../applications/graphics/xfig { };
 
+  xfractint = callPackage ../applications/graphics/xfractint {};
+
   xineUI = callPackage ../applications/video/xine-ui { };
 
   xmind = callPackage ../applications/misc/xmind { };
@@ -16462,6 +16466,8 @@ in
   xskat = callPackage ../games/xskat { };
 
   xsnow = callPackage ../games/xsnow { };
+
+  xsok = callPackage ../games/xsok { };
 
   xsokoban = callPackage ../games/xsokoban { };
 
