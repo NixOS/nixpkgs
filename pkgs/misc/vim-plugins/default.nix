@@ -1322,6 +1322,17 @@ rec {
 
   };
 
+  vim-speeddating = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-speeddating-2015-01-24";
+    src = fetchgit {
+      url = "git://github.com/tpope/vim-speeddating";
+      rev = "426c792e479f6e1650a6996c683943a09344c21e";
+      sha256 = "1i8pndds1lk5afxl6nwsnl4vzszh0qxgqx7x11fp3vqw27c5bwn8";
+    };
+    dependencies = [];
+
+  };
+
   hasksyn = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "hasksyn-2014-09-03";
     src = fetchgit {
