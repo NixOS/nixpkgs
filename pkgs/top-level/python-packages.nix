@@ -5382,11 +5382,11 @@ in {
 
   tinycss = buildPythonPackage rec {
     name = "tinycss-${version}";
-    version = "0.3";
+    version = "0.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tinycss/${name}.tar.gz";
-      sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
+      sha256 = "12306fb50e5e9e7eaeef84b802ed877488ba80e35c672867f548c0924a76716e";
     };
 
     buildInputs = with self; [ pytest ];
