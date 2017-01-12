@@ -1081,6 +1081,13 @@ self: super: {
     servant = self.servant_0_9_1_1;
   });
 
+  # https://github.com/plow-technologies/servant-auth/issues/20
+  servant-auth = dontCheck super.servant-auth;
+
+  servant-auth-server = super.servant-auth-server.overrideScope (self: super: {
+    jose = super.jose_0_5_0_2;
+  });
+
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
