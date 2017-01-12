@@ -41,7 +41,7 @@ with lib;
       { description = "Terminal Server";
 
         path =
-          [ pkgs.xorgserver.out pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth
+          [ pkgs.xorg.xorgserver.out pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth
             pkgs.nettools pkgs.shadow pkgs.procps pkgs.utillinux pkgs.bash
           ];
 
