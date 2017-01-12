@@ -812,35 +812,47 @@ and install python modules through `pip` the traditional way.
 Create this `default.nix` file, together with a `requirements.txt` and simply execute `nix-shell`.
 
 ```
-
-th import <nixpkgs> {};
+with import <nixpkgs> {};
 with pkgs.python27Packages;
 
-buildPythonPackage { 
+stdenv.mkDerivation { 
   name = "impurePythonEnv";
   buildInputs = [
+    # these packages are required for virtualenv and pip to work:
+    #
+    python27Full
+    python27Packages.virtualenv
+    python27Packages.pip
+    # the following packages are related to the dependencies of your python 
+    # project. 
+    # In this particular example the python modules listed in the 
+    # requirements.tx require the following packages to be installed locally 
+    # in order to compile any binary extensions they may require.
+    #
     taglib
     openssl
     git
     libxml2
     libxslt
     libzip
-    python27Full
-    python27Packages.virtualenv
-    python27Packages.pip
     stdenv
     zlib ];
   src = null;
-  # When used as `nix-shell --pure`
   shellHook = ''
-  unset http_proxy
-  export GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt
-  virtualenv --no-wheel --no-setuptools venv 
+  # set SOURCE_DATE_EPOCH so that we can use python wheels
+  SOURCE_DATE_EPOCH=$(date +%s)
+  virtualenv --no-setuptools venv 
   export PATH=$PWD/venv/bin:$PATH
-  pip install -r requirements.txt --no-use-wheel
+  pip install -r requirements.txt
   '';
 }
 ```
+
+Note that the `pip install` is an imperative action. So every time `nix-shell`
+is executed it will attempt to download the python modules listed in 
+requirements.txt. However these will be cached locally within the `virtualenv`
+folder and not downloaded again.
+
 
 ## Contributing
 
