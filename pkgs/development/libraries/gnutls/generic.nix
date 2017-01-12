@@ -4,6 +4,7 @@
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
+, buildInputs ? []
 , ...}:
 
 assert guileBindings -> guile != null;
@@ -41,7 +42,8 @@ stdenv.mkDerivation {
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
-    ++ lib.optional guileBindings guile;
+    ++ lib.optional guileBindings guile
+    ++ buildInputs;
 
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
 
@@ -75,7 +77,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/gnutls/;
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ eelco wkennington ];
+    maintainers = with maintainers; [ eelco wkennington fpletz ];
     platforms = platforms.all;
   };
 }

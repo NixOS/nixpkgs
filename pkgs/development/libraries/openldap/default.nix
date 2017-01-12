@@ -19,26 +19,12 @@ stdenv.mkDerivation rec {
     [ "--enable-overlays"
       "--disable-dependency-tracking"   # speeds up one-time build
       "--enable-modules"
+      "--sysconfdir=/etc"
     ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
-
-  preBuild = ''
-    make ''$makeFlags "''${makeFlagsArray[@]}" ''$buildFlags "''${buildFlagsArray[@]}" depend;
-  '';
-
-  # long run
-  doCheck = false;
-
-  preCheck = ''
-    grep -ril /bin/rm tests/ | xargs -n1 -I@ -- sed -i 's:/bin/rm:rm:g' @
-    substituteInPlace tests/scripts/test064-constraint \
-      --replace /bin/bash ${stdenv.shell}
-  '';
-
-  # openldap binaries depend on openldap libs, patchelf removes the rpath to its own libraries
-  dontPatchELF = 1; # !!!
+  installFlags = [ "sysconfdir=$(out)/etc" ];
 
   # 1. Fixup broken libtool
   # 2. Libraries left in the build location confuse `patchelf --shrink-rpath`

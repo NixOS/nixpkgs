@@ -7566,6 +7566,8 @@ in
     gtk = gtk2;
   };
 
+  gtk-mac-bundler = callPackage ../development/tools/gtk-mac-bundler {};
+
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
@@ -8428,7 +8430,7 @@ in
 
   libpfm = callPackage ../development/libraries/libpfm { };
 
-  libpqxx = callPackage ../development/libraries/libpqxx { 
+  libpqxx = callPackage ../development/libraries/libpqxx {
     gnused = gnused_422;
   };
 
@@ -13395,6 +13397,7 @@ in
     inherit (gnome2) libart_lgpl;
     webkit = null;
     lcms = lcms2;
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
   gimp = gimp_2_8;
@@ -14640,6 +14643,8 @@ in
     notifySupport   = config.profanity.notifySupport   or true;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
   };
+
+  psol = callPackage ../development/libraries/psol/default.nix { };
 
   pstree = callPackage ../applications/misc/pstree { };
 

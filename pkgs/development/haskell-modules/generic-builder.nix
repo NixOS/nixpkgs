@@ -94,6 +94,7 @@ let
     "--with-gcc=${ghc.cc}"
     "--with-ld=${ghc.ld}"
     "--hsc2hs-options=--cross-compile"
+    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
   ];
 
   crossCabalFlagsString =
