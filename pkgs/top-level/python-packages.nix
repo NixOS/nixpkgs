@@ -2321,11 +2321,11 @@ in {
 
   channels = buildPythonPackage rec {
     name = "channels-${version}";
-    version = "0.17.3";
+    version = "1.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/channels/${name}.tar.gz";
-      sha256 = "03nalz0mqjxqlgqwkmranair2c1amry2aw52dd78ihf07dfinnc9";
+      sha256 = "0m55qzifg47s0zndnh3w7fnpd3skcbkq3lv8m87xgmcrczl7x5mf";
     };
 
     # Files are missing in the distribution
