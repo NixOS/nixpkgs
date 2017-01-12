@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, apacheHttpd, nautilus
+{ stdenv, intltool, fetchurl, apacheHttpd_2_2, nautilus
 , pkgconfig, gtk3, glib, libxml2, gnused, systemd
 , bash, makeWrapper, itstool, libnotify, libtool, mod_dnssd
 , gnome3, librsvg, gdk_pixbuf, file, libcanberra_gtk3 }:
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sed -e 's,^LoadModule dnssd_module.\+,LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so,' -i data/dav_user_2.2.conf
   '';
 
-  configureFlags = [ "--with-httpd=${apacheHttpd.out}/bin/httpd"
-                     "--with-modules-path=${apacheHttpd.dev}/modules"
+  configureFlags = [ "--with-httpd=${apacheHttpd_2_2.out}/bin/httpd"
+                     "--with-modules-path=${apacheHttpd_2_2.dev}/modules"
                      "--with-systemduserunitdir=$(out)/etc/systemd/user"
                      "--disable-bluetooth"
                      "--with-nautilusdir=$(out)/lib/nautilus/extensions-3.0" ];
