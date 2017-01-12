@@ -10255,6 +10255,9 @@ in
   #dnschain = callPackage ../servers/dnschain { };
 
   dovecot = callPackage ../servers/mail/dovecot { };
+  dovecotWithPgSQL = callPackage ../servers/mail/dovecot {
+    withPgSQL = true;
+  };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
   dovecot_antispam = callPackage ../servers/mail/dovecot/plugins/antispam { };
 
@@ -10425,6 +10428,11 @@ in
 
   postfix = callPackage ../servers/mail/postfix {
     openssl = openssl_1_1_0;
+  };
+  postfixWithPgsql = callPackage ../servers/mail/postfix {
+    withPgSQL = true;
+    openssl = openssl_1_0_2;
+    postgresql = opkgs.postgresql.override { openssl = opkgs.openssl_1_0_2; };
   };
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
