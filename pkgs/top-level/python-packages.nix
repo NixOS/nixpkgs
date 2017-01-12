@@ -3415,15 +3415,18 @@ in {
 
 
   cairosvg = buildPythonPackage rec {
-    version = "1.0.18";
+    version = "2.0.1";
     name = "cairosvg-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/CairoSVG/CairoSVG-${version}.tar.gz";
-      sha256 = "01lpm38qp7xlnv8jv7qg48j44p5088dwfsrcllgs5fz355lrfds1";
+      sha256 = "99dc87de582f644f1f99f84d8f013ba79cc3c76e46cb74fd2b36ec7d6bc5c59d";
     };
 
-    propagatedBuildInputs = with self; [ cairocffi ];
+    # No tests.
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ cairocffi cssselect lxml pillow tinycss ];
 
     meta = {
       homepage = https://cairosvg.org;
