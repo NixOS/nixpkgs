@@ -13419,6 +13419,8 @@ in
 
   manuskript = callPackage ../applications/editors/manuskript { };
 
+  manul = callPackage ../development/tools/manul { };
+
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   praat = callPackage ../applications/audio/praat { };
