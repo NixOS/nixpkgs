@@ -1,9 +1,14 @@
-{ stdenv, fetchgit, file, curl, pkgconfig, python, openssl, cmake, zlib
+{ stdenv, buildEnv, fetchgit, file, curl, pkgconfig, python, openssl_1_0_2, cmake, zlib
 , makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
 , version, srcRev, srcSha, depsSha256
 , patches ? []}:
 
-rustPlatform.buildRustPackage rec {
+let
+  openssl = buildEnv {
+    name = "openssl-env";
+    paths = [ openssl_1_0_2.out openssl_1_0_2.dev ];
+  };
+in rustPlatform.buildRustPackage rec {
   name = "cargo-${version}";
   inherit version;
 
@@ -21,7 +26,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper libgit2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
-  LIBGIT2_SYS_USE_PKG_CONFIG=1;
+  LIBGIT2_SYS_USE_PKG_CONFIG = 1;
+  OPENSSL_DIR = openssl;
 
   postInstall = ''
     rm "$out/lib/rustlib/components" \
