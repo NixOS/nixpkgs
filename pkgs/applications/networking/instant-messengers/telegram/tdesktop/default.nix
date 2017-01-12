@@ -19,14 +19,14 @@ let
 
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "0.10.19";
+  version = "1.0.0";
   qtVersion = lib.replaceStrings ["."] ["_"] packagedQt;
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "1p07kxfmcd90sx9bq046x03h1h807vs0pn64lfghr6m6ln8z44s3";
+    sha256 = "1qxzi82cgd8klk6rn83rzrmik0s76alarfaknknww5iw5px7gi8b";
   };
 
   tgaur = fetchgit {
