@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qmakeHook, qtscript }:
+{ stdenv, fetchurl, qmakeHook, qtscript, mplayer, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "smplayer-16.1.0";
@@ -10,12 +10,16 @@ stdenv.mkDerivation rec {
 
   patches = [ ./basegui.cpp.patch ];
 
-  buildInputs = [ qmakeHook qtscript ];
+  buildInputs = [ qmakeHook qtscript makeWrapper ];
 
   dontUseQmakeConfigure = true;
 
   preConfigure = ''
     makeFlags="PREFIX=$out"
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/smplayer --suffix PATH : ${mplayer}/bin
   '';
 
   meta = {
