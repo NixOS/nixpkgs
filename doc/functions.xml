@@ -35,7 +35,7 @@
     pkgs = import &lt;nixpkgs&gt; {};
     newpkgs = pkgs.overridePackages (self: super: {
       foo = super.foo.override { ... };
-    };
+    });
   in ...</programlisting>
     </para>
 
@@ -96,7 +96,7 @@
   })</programlisting>
       <programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
     mydep = pkgs.mydep.override { ... };
-  })</programlisting>
+  }</programlisting>
     </para>
 
     <para>
