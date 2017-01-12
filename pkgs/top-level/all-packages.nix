@@ -876,6 +876,8 @@ in
 
   gdrivefs = python27Packages.gdrivefs;
 
+  go-dependency-manager = callPackage ../development/tools/gdm { };
+
   gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
