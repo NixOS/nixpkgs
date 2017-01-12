@@ -82,7 +82,6 @@ in
       serviceConfig = {
         Restart = "always";
         RestartSec = "5s";
-        ExecStartPre = "${cfg.package}/bin/miredo-checkconf -f ${miredoConf}";
         ExecStart = "${cfg.package}/bin/miredo -c ${miredoConf} -p ${pidFile} -f";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
