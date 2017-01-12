@@ -14,11 +14,11 @@
 }:
 
 let
-  version = "2.6.16";
+  version = "2.6.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "0jipvpvw871qhhkyykrrrqc9vfbw24v243vzmm8lqifj73h6qvgc";
+    sha256 = "1zmacx8wdhbjc8hpf8hmdmbh2pbkdkcyb23cl3j1mx7vkw06c31l";
   };
 
   common = {
