@@ -18838,6 +18838,8 @@ in {
     };
   };
 
+  Pyphen = callPackage ../development/python-modules/pyphen {};
+
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";
     version = "0.2.9";
