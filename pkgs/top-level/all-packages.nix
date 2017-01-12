@@ -1267,6 +1267,8 @@ in
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
+  ckb = qt5.callPackage ../tools/misc/ckb { };
+
   compass = callPackage ../development/tools/compass { };
 
   convmv = callPackage ../tools/misc/convmv { };
