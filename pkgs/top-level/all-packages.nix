@@ -7510,6 +7510,10 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
+  gtk2-x11 = gtk2.override {
+    gdktarget = "x11";
+  };
+
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
 
   gtkmm2 = callPackage ../development/libraries/gtkmm/2.x.nix { };
