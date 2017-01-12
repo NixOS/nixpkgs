@@ -8,5 +8,5 @@ callPackage ./generic.nix (args // rec {
     sha256 = "1zyl2z63s68hx1dpxqx0lykmlf3rwrzlrf44sq3h7dvjmr1z55qf";
   };
 
-  buildInputs = [ libunistring ];
+  propagatedBuildInputs = [ libunistring ];
 })
