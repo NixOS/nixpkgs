@@ -7293,6 +7293,8 @@ in
   libgit2 = callPackage ../development/libraries/git2 (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
+    } // {
+      openssl = openssl_1_1_0;
     }
   );
 
