@@ -10429,7 +10429,7 @@ in
   postfix = callPackage ../servers/mail/postfix {
     openssl = openssl_1_1_0;
   };
-  postfixWithPgsql = callPackage ../servers/mail/postfix {
+  postfixWithPgSQL = callPackage ../servers/mail/postfix {
     withPgSQL = true;
     openssl = openssl_1_0_2;
     postgresql = opkgs.postgresql.override { openssl = opkgs.openssl_1_0_2; };
