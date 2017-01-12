@@ -3,7 +3,7 @@
 , breakpad, ffmpeg, openalSoft, openssl, zlib, libexif, lzma, libopus
 , gtk2, glib, cairo, pango, gdk_pixbuf, atk, libappindicator-gtk2
 , libwebp, libunity, dee, libdbusmenu-glib, libva-full, wayland
-, xcbutilrenderutil, icu, libSM, libICE, libproxy
+, xcbutilrenderutil, icu, libSM, libICE, libproxy, libvdpau
 
 , libxcb, xcbutilwm, xcbutilimage, xcbutilkeysyms, libxkbcommon
 , libpng, libjpeg, freetype, harfbuzz, pcre16, xproto, libX11
@@ -19,20 +19,20 @@ let
 
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "0.10.19";
+  version = "1.0.0";
   qtVersion = lib.replaceStrings ["."] ["_"] packagedQt;
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "1p07kxfmcd90sx9bq046x03h1h807vs0pn64lfghr6m6ln8z44s3";
+    sha256 = "1qxzi82cgd8klk6rn83rzrmik0s76alarfaknknww5iw5px7gi8b";
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop.git";
-    rev = "99bb0519f14e23fafb6884fe296d34b6f8bed5c3";
-    sha256 = "0z5m3binbl06kk34plmfblhqz6hlnkbnjb93sam0c6c995k3sz82";
+    rev = "957a76f9fb691486341bcf4781ad0ef3d16f6b69";
+    sha256 = "01nrvvq0mrdyvamjgqr4z5aahyd1wrf28jyddpfsnixp2w5kxqj8";
   };
 
   buildInputs = [
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     # Qt dependencies
     libxcb xcbutilwm xcbutilimage xcbutilkeysyms libxkbcommon
     libpng libjpeg freetype harfbuzz pcre16 xproto libX11
-    inputproto sqlite dbus libwebp wayland
+    inputproto sqlite dbus libwebp wayland libvdpau
   ];
 
   nativeBuildInputs = [ pkgconfig gyp cmake ];
