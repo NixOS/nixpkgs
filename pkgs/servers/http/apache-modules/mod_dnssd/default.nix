@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, apacheHttpd_2_2, apr, avahi }:
+{ stdenv, fetchurl, pkgconfig, apacheHttpd, apr, avahi }:
 
 stdenv.mkDerivation rec {
   name = "mod_dnssd-0.6";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-lynx" ];
 
-  buildInputs = [ pkgconfig apacheHttpd_2_2 avahi apr ];
+  buildInputs = [ pkgconfig apacheHttpd avahi apr ];
 
   installPhase = ''
     mkdir -p $out/modules
