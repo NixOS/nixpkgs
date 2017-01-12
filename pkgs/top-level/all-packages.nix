@@ -11798,6 +11798,8 @@ in
     qt5 = null;
   };
 
+  vndr = callPackage ../development/tools/vndr { };
+
   windows = rec {
     cygwinSetup = callPackage ../os-specific/windows/cygwin-setup { };
 
