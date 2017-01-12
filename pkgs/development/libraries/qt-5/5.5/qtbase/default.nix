@@ -33,7 +33,7 @@ let
   dontInvalidateBacking = fetchurl {
     url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=0f68f8920573cdce1729a285a92ac8582df32841;hp=24c50f8dcf7fa61ac3c3d4d6295c259a104a2b8c";
     name = "qtbug-48321-dont-invalidate-backing-store.patch";
-    sha256 = "07vnndmvri73psz0nrs2hg0zw2i4b1k1igy2al6kwjbp7d5xpglr";
+    sha256 = "0m8p9g0vi1ywmgwb99rllqki4ljrxi07w93a87aza9cgnmcrav4q";
   };
 in
 
