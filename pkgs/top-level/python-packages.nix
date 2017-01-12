@@ -5833,11 +5833,11 @@ in {
 
   daphne = buildPythonPackage rec {
     name = "daphne-${version}";
-    version = "0.15.0";
+    version = "1.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/daphne/${name}.tar.gz";
-      sha256 = "095xdh10v8sqwyas02q72ij3ivd5qjg5ki5cvha0fpzd361izdnp";
+      sha256 = "0l62bd9swv0k9qcpl2s8kj4mgl6qayi0krwkkg1x73a9y48xpi9z";
     };
 
     propagatedBuildInputs = with self; [ asgiref autobahn ];
