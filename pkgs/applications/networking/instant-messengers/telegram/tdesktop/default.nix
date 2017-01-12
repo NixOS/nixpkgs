@@ -31,8 +31,8 @@ in stdenv.mkDerivation rec {
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop.git";
-    rev = "99bb0519f14e23fafb6884fe296d34b6f8bed5c3";
-    sha256 = "0z5m3binbl06kk34plmfblhqz6hlnkbnjb93sam0c6c995k3sz82";
+    rev = "957a76f9fb691486341bcf4781ad0ef3d16f6b69";
+    sha256 = "01nrvvq0mrdyvamjgqr4z5aahyd1wrf28jyddpfsnixp2w5kxqj8";
   };
 
   buildInputs = [
