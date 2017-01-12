@@ -804,6 +804,43 @@ If you want to create a Python environment for development, then the recommended
 method is to use `nix-shell`, either with or without the `python.buildEnv`
 function.
 
+### How to consume python modules using pip in a virtualenv like I am used to on other Operating Systems ?
+
+This is an example of a `default.nix` for a `nix-shell`, which allows to consume a `virtualenv` environment,
+and install python modules through `pip` the traditional way.
+
+Create this `default.nix` file, together with a `requirements.txt` and simply execute `nix-shell`.
+
+```
+
+th import <nixpkgs> {};
+with pkgs.python27Packages;
+
+buildPythonPackage { 
+  name = "impurePythonEnv";
+  buildInputs = [
+    taglib
+    openssl
+    git
+    libxml2
+    libxslt
+    libzip
+    python27Full
+    python27Packages.virtualenv
+    python27Packages.pip
+    stdenv
+    zlib ];
+  src = null;
+  # When used as `nix-shell --pure`
+  shellHook = ''
+  unset http_proxy
+  export GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt
+  virtualenv --no-wheel --no-setuptools venv 
+  export PATH=$PWD/venv/bin:$PATH
+  pip install -r requirements.txt --no-use-wheel
+  '';
+}
+```
 
 ## Contributing
 
