@@ -56,12 +56,12 @@ let
   };
 
   pluginsWithoutDeps = [
-    "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
-    "export" "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy" "hook" "ihate"
-    "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
-    "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "permissions" "play"
-    "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
-    "types" "zero"
+    "absubmit" "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates"
+    "edit" "embedart" "export" "filefilter" "freedesktop" "fromfilename"
+    "ftintitle" "fuzzy" "hook" "ihate" "importadded" "importfeeds" "info"
+    "inline" "ipfs" "lyrics" "mbcollection" "mbsubmit" "mbsync" "metasync"
+    "missing" "permissions" "play" "plexupdate" "random" "rewrite" "scrub"
+    "smartplaylist" "spotify" "the" "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -74,13 +74,13 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   name = "beets-${version}";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "1yj2m7l157lldhxanwifp3yv1c6k649iwhn061mcf26q4n8qmspk";
+    sha256 = "0sh2ap7jbqh7p8h63kgrx1ja9lyqlxjpfnh6axxw9p1mh78cgc1v";
   };
 
   propagatedBuildInputs = [

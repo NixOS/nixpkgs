@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, python2Packages, pango, keybinder, vte, gettext, intltool, file
+{ stdenv, fetchurl, pythonPackages, pango, keybinder, vte, gettext, intltool, file
 }:
 
-python2Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "terminator-${version}";
-  version = "0.98";
+  version = "1.0";
 
   src = fetchurl {
     url = "https://launchpad.net/terminator/trunk/${version}/+download/${name}.tar.gz";
-    sha256 = "1h965z06dsfk38byyhnsrscd9r91qm92ggwgjrh7xminzsgqqv8a";
+    sha256 = "1pfspcxsbax8a835kcld32fax6vcxsn1fmkny9zzvi4icplhkal8";
   };
 
   nativeBuildInputs = [ file intltool ];
 
-  pythonPath = with python2Packages; [
-    pygtk pygobject2 vte keybinder notify gettext pango
+  pythonPath = with pythonPackages; [
+    pygtk pygobject2 vte keybinder notify gettext pango psutil
   ];
 
   postPatch = ''

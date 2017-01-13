@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoconf }:
 
 stdenv.mkDerivation rec {
-  version = "1.99";
+  version = "1.99.5";
   name = "dd_rescue-${version}";
 
   src = fetchurl {
-    sha256 = "0gkbwssn134fjyyvjvylyvassw4fwv5mbis9gcb969xdc64dfhg1";
+    sha256 = "0db94piwcdyqhnlhgfs0bfp0gp2mqyrcr2l5nljapgni31qk4p8j";
     url="http://www.garloff.de/kurt/linux/ddrescue/${name}.tar.bz2";
   };
 

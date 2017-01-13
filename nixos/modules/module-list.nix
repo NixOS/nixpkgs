@@ -71,6 +71,7 @@
   ./programs/environment.nix
   ./programs/fish.nix
   ./programs/freetds.nix
+  ./programs/gphoto2.nix
   ./programs/info.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
@@ -217,8 +218,8 @@
   ./services/logging/logstash.nix
   ./services/logging/packetbeat.nix
   ./services/logging/rsyslogd.nix
-  ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
+  ./services/logging/syslog-ng.nix
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
   ./services/mail/exim.nix
@@ -286,6 +287,7 @@
   ./services/misc/siproxd.nix
   ./services/misc/sonarr.nix
   ./services/misc/spice-vdagentd.nix
+  ./services/misc/sssd.nix
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
@@ -294,6 +296,7 @@
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
+  ./services/monitoring/arbtt.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
@@ -309,9 +312,13 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/default.nix
+  ./services/monitoring/prometheus/alertmanager.nix
+  ./services/monitoring/prometheus/blackbox-exporter.nix
+  ./services/monitoring/prometheus/json-exporter.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
   ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/snmp-exporter.nix
+  ./services/monitoring/prometheus/varnish-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -386,9 +393,10 @@
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
-  ./services/networking/jitsi/jicofo.nix
-  ./services/networking/jitsi/jitsi-meet.nix
-  ./services/networking/jitsi/jitsi-videobridge.nix
+  ./services/networking/jitsi-meet/default.nix
+  ./services/networking/jitsi-meet/jicofo.nix
+  ./services/networking/jitsi-meet/jitsi-meet.nix
+  ./services/networking/jitsi-meet/jitsi-videobridge.nix
   ./services/networking/kippo.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
@@ -399,6 +407,7 @@
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
   ./services/networking/mosquitto.nix
+  ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
@@ -642,4 +651,5 @@
   ./virtualisation/xen-dom0.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/openstack/keystone.nix
+  ./virtualisation/openstack/glance.nix
 ]

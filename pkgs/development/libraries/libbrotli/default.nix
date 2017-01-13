@@ -1,17 +1,18 @@
-{stdenv, fetchFromGitHub, autoconf, automake, libtool, brotliUnstable}:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, brotliUnstable }:
 
 stdenv.mkDerivation rec {
-  name = "libbrotli-20160120";
-  version = "53d53e8";
+  name = "libbrotli-${version}";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "bagder";
     repo = "libbrotli";
-    rev = "53d53e8d9c0d37398d37bac2e7a7aa20b0025e9e";
-    sha256 = "10r4nx6n1r54f5cjck5mmmsj7bkasnmmz7m84imhil45q73kzd4m";
+    rev = name;
+    sha256 = "0apd3hpy3vaa7brkv8v0xwz05zbd5xv86rcbkwns4x39klba3m3y";
   };
 
-  buildInputs = [autoconf automake libtool];
+  nativeBuildInputs = [ autoconf automake libtool ];
+
   preConfigure = ''
     cp -r ${brotliUnstable.src}/* brotli/
     chmod -R +700 brotli

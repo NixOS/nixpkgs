@@ -42,7 +42,8 @@ self: super: {
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
   # Use the default version of mysql to build this package (which is actually mariadb).
-  mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
+  # test phase requires networking
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.lib; });
 
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
@@ -53,10 +54,12 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1a87kllzxmjwkz5arq4c3bp7qfkabn0arbli6s6i68fkgm19s4gr";
+      sha256 = "1vy6bj7f8zyj4n1r0gpi0r7mxapsrjvhwmsi5sbnradfng5j3jya";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
+    # https://github.com/bitemyapp/esqueleto/issues/8
+    esqueleto = self.esqueleto_2_4_3;
     # https://github.com/yesodweb/yesod/issues/1324
     yesod-persistent = self.yesod-persistent_1_4_1_1;
     # https://github.com/prowdsponsor/esqueleto/issues/137
@@ -191,7 +194,8 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    # https://github.com/jaspervdj/hakyll/issues/491
+    else dontCheck super.hakyll;
 
   # Heist's test suite requires system pandoc
   heist = overrideCabal super.heist (drv: {
@@ -998,7 +1002,7 @@ self: super: {
 
   # The most current version needs some packages to build that are not in LTS 7.x.
   stack = super.stack.overrideScope (self: super: {
-    http-client = self.http-client_0_5_4;
+    http-client = self.http-client_0_5_5;
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
@@ -1077,6 +1081,13 @@ self: super: {
     servant = self.servant_0_9_1_1;
   });
 
+  # https://github.com/plow-technologies/servant-auth/issues/20
+  servant-auth = dontCheck super.servant-auth;
+
+  servant-auth-server = super.servant-auth-server.overrideScope (self: super: {
+    jose = super.jose_0_5_0_2;
+  });
+
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
@@ -1095,7 +1106,7 @@ self: super: {
 
   # https://github.com/NixOS/nixpkgs/issues/19612
   wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
-    http-client = self.http-client_0_5_3_2;
+    http-client = self.http-client_0_5_5;
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
   });
@@ -1136,4 +1147,10 @@ self: super: {
   # requires vty 5.13
   brick = super.brick.overrideScope (self: super: { vty = self.vty_5_14; });
 
+  # https://github.com/krisajenkins/elm-export/pull/22
+  elm-export = doJailbreak super.elm-export;
+
+  turtle_1_3_0 = super.turtle_1_3_0.overrideScope (self: super: {
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
 }

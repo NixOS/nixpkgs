@@ -20,15 +20,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.5.6";
+  version = "4.5.97";
   name = "subsurface-${version}";
 
-  # use fetchgit instead of the official tgz is not complete
   src = fetchgit {
-    sha256 = "156rqcszy0c4plk2mv7wdd4h7s7mygpq5sdc64pjfs4qvvsdj10f";
+    sha256 = "035ywhicadmr9sh7zhfxsvpchwa9sywccacbspfam39n2hpyqnmm";
     url = "git://git.subsurface-divelog.org/subsurface";
-    rev = "4d8d7c2a0fa1b4b0e6953d92287c75b6f97472d0";
-    branchName = "v4.5-branch";
+    rev = "72bcb6481f3b935444d7868a74599dda133f9b43";
+    branchName = "master";
   };
 
   buildInputs = [ qtbase libdivecomputer libmarble-ssrf libxslt
@@ -36,15 +35,14 @@ stdenv.mkDerivation rec {
                   qtconnectivity libgit2 libssh2 curl ];
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # fatal error: ui_mainwindow.h: No such file or directory
 
   # hack incoming...
   preConfigure = ''
     marble_libs=$(echo $(echo $CMAKE_LIBRARY_PATH | grep -o "/nix/store/[[:alnum:]]*-libmarble-ssrf-[a-zA-Z0-9\-]*/lib")/libssrfmarblewidget.so)
     cmakeFlags="$cmakeFlags -DCMAKE_BUILD_TYPE=Debug \
                             -DMARBLE_LIBRARIES=$marble_libs \
-                            -DNO_PRINTING=OFF \
-                            -DUSE_LIBGIT23_API=1"
+                            -DNO_PRINTING=OFF"
   '';
 
   meta = with stdenv.lib; {

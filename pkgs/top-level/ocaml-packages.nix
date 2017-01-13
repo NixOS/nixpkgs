@@ -351,6 +351,8 @@ let
 
     otr = callPackage ../development/ocaml-modules/otr { };
 
+    owee = callPackage ../development/ocaml-modules/owee { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     piqi = callPackage ../development/ocaml-modules/piqi { };

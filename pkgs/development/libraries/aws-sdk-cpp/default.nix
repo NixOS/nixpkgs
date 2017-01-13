@@ -7,16 +7,14 @@
 
 stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
-  version = "1.0.43";
+  version = "1.0.48";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "0sa0pkkbxxfn3h7b19yf296r5g5nqm4aqpwrkij0rq7jix9lxqj6";
+    sha256 = "1k73ir1w6457y9mdv2xnk8cr1y1xxhzzd4095rzvn2y7fr3zgz01";
   };
-
-  patches = [ ./s3-encryption-headers.patch ];
 
   # FIXME: might be nice to put different APIs in different outputs
   # (e.g. libaws-cpp-sdk-s3.so in output "s3").

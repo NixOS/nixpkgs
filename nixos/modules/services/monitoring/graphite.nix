@@ -594,7 +594,7 @@ in {
         serviceConfig = {
           ExecStart = ''
             ${pkgs.pythonPackages.graphite_beacon}/bin/graphite-beacon \
-              --config ${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
+              --config=${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
           '';
           User = "graphite";
           Group = "graphite";

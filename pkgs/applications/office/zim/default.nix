@@ -30,12 +30,13 @@ pythonPackages.buildPythonApplication rec {
     export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
   '';
 
-  postFixup = ''
-    substituteInPlace $out/bin/.zim-wrapped \
-    --replace "sys.argv[0] = 'zim'" "sys.argv[0] = '$out/bin/zim'"
+  # RuntimeError: could not create GtkClipboard object
+  doCheck = false;
+
+  checkPhase = ''
+    python test.py
   '';
 
-  doCheck = true;
 
   meta = {
       description = "A desktop wiki";

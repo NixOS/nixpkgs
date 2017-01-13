@@ -2,16 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
-  version = "2016-12-17";
+  version = "2017-01-08";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "3093f73e81cddbea5d122dccd4fd9a6323ebbbd3";
-    sha256 = "091359v3p865d39gchpc1x5qplf1s1y4nsph344ng5x1nkx44qsi";
+    rev = "9668032d8715265ca5b4ff16eb2efa8f1c450883";
+    sha256 = "0nwcf5mh3ba0g23zw7ym73pgpfdass412k2fy67ryr9vnc709jkj";
   };
 
   buildInputs = [ autoreconfHook pkgconfig ];
+
+  # remove when https://github.com/universal-ctags/ctags/pull/1267 is merged
+  patches = [ ./sed-test.patch ];
 
   autoreconfPhase = ''
     ./autogen.sh --tmpdir

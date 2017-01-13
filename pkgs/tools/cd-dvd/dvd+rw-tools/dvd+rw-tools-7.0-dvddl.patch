@@ -1,0 +1,13 @@
+--- ./growisofs_mmc.cpp.joe	2006-04-27 20:45:00.788446635 +0200
++++ ./growisofs_mmc.cpp	2006-04-27 20:46:01.666824300 +0200
+@@ -1412,9 +1412,7 @@
+     blocks += 15, blocks &= ~15;
+ 
+     if (blocks <= split)
+-	fprintf (stderr,":-( more than 50%% of space will be *wasted*!\n"
+-			"    use single layer media for this recording\n"),
+-	exit (FATAL_START(EMEDIUMTYPE));
++	fprintf (stderr,":-? more than 50%% of space will be *wasted*!\n");
+ 
+     blocks /= 16;
+     blocks += 1;

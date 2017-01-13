@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
       dconf
     ];
 
+  configureFlags = [ "--enable-keyfile-settings" ];
+
   preFixup = ''
     wrapProgram "$out/bin/mousepad" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:${gtksourceview}/share" \

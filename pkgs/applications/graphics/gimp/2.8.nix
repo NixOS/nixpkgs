@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, libtiff
 , webkit, libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, jasper
-, python2Packages, libart_lgpl, libexif, gettext, xorg }:
+, python2Packages, libart_lgpl, libexif, gettext, xorg
+, AppKit, Cocoa, gtk-mac-integration }:
 
 let
   inherit (python2Packages) pygtk wrapPython python;
@@ -26,7 +27,8 @@ in stdenv.mkDerivation rec {
       libmng librsvg libwmf zlib libzip ghostscript aalib jasper
       python pygtk libart_lgpl libexif gettext xorg.libXpm
       wrapPython
-    ];
+    ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ];
 
   pythonPath = [ pygtk ];
 
@@ -51,6 +53,6 @@ in stdenv.mkDerivation rec {
     description = "The GNU Image Manipulation Program";
     homepage = http://www.gimp.org/;
     license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

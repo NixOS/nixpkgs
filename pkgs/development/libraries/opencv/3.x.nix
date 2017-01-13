@@ -52,7 +52,11 @@ stdenv.mkDerivation rec {
         url = "https://github.com/opencv/opencv/commit/d76f258aebdf63f979a205cabe6d3e81700a7cd8.patch";
         sha256 = "00b3msfgrcw7laij6qafn4b18c1dl96xxpzwx05wxzrjldqb6kqg";
       })
-    ];
+    ]
+    ++ lib.optional enablePython (fetchpatch { # Patch to fix FlannBasedMatcher under python
+      url = "https://github.com/opencv/opencv/commit/05cfe28612fd8dc8fb0ccb876df945c7b435dd26.patch";
+      sha256 = "0niza5lybr1ljzdkyiapr16laa468168qinpy5qn00yimnaygpm6";
+    });
 
   preConfigure =
     let ippicvVersion = "20151201";

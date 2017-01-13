@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xy42xfpxmxhc2fmzz7k0k8l46xhjaz3yazn2pr4nksr91w6pkgz";
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontBuild = true;
+  doCheck = false;
 
   unpackCmd = "ar x $curSrc && tar -xvf data.tar.xz";
   sourceRoot = "./";
@@ -25,8 +26,6 @@ stdenv.mkDerivation rec {
     cd $out/bin
     ln -s ../share/jitsi-videobridge/jvb.sh jitsi-videobridge
   '';
-
-  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Jitsi Videobridge is an XMPP server component that allows for multiuser video communication.";

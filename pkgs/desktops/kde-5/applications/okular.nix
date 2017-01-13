@@ -25,6 +25,7 @@ let
     };
   };
 in
-kdeWrapper unwrapped {
+kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/okular" ];
 }

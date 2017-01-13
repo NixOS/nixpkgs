@@ -40,9 +40,9 @@ mkChromiumDerivation (base: rec {
     done
   '';
 
-  requiredSystemFeatures = [ "big-parallel" ];
-
   passthru = { inherit sandboxExecutableName; };
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "An open source web browser from Google";

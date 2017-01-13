@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     gnome3.gucharmap
     gnome3.libgee
     gnome3.file-roller
+    gnome3.defaultIconTheme
   ];
 
   enableParallelBuilding = true;

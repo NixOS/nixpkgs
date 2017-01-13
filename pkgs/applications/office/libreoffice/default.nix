@@ -247,11 +247,11 @@ in stdenv.mkDerivation rec {
     ]
     ++ lib.optional kdeIntegration kde4.kdelibs;
 
-  requiredSystemFeatures = [ "big-parallel" ];
-
   passthru = {
     inherit srcs;
   };
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
@@ -260,6 +260,5 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
     hydraPlatforms = [];
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 }

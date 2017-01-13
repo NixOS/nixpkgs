@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
-, libtool, libuv, luajit, luaPackages, man, ncurses, perl, pkgconfig
+, libtool, libuv, luajit, luaPackages, ncurses, perl, pkgconfig
 , unibilium, makeWrapper, vimUtils, xsel, gperf
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
@@ -118,10 +118,7 @@ let
     # triggers on buffer overflow bug while running tests
     hardeningDisable = [ "fortify" ];
 
-    preConfigure = ''
-      substituteInPlace runtime/autoload/man.vim \
-        --replace /usr/bin/man ${man}/bin/man
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
       export DYLD_LIBRARY_PATH=${jemalloc}/lib
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
@@ -167,7 +164,7 @@ let
 
 in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation {
   name = "neovim-${neovim.version}-configured";
-  inherit (neovim) version;
+  inherit (neovim) version meta;
 
   nativeBuildInputs = [ makeWrapper ];
 

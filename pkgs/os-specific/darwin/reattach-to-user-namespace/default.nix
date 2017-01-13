@@ -1,12 +1,12 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "reattach-to-user-namespace-2.4";
+  name = "reattach-to-user-namespace-2.5";
 
   src = fetchgit {
     url = "https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard.git";
-    sha256 = "0hrh95di5dvpynq2yfcrgn93l077h28i6msham00byw68cx0dd3z";
-    rev = "2765aeab8f337c29e260a912bf4267a2732d8640";
+    sha256 = "0kv11vi54g6waf9941hy1pwmwyab0y7hbmbkcgwhzb5ja21ysc2a";
+    rev = "3689998acce9990726c8a68a85298ab693a62458";
   };
 
   buildFlags = "ARCHES=x86_64";

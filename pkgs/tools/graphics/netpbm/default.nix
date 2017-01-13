@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
     echo "STATICLIB_TOO = n" >> config.mk
     substituteInPlace "config.mk" \
         --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff.out}/lib/libtiff.so" \
-        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff.dev}/include"
+        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff.dev}/include" \
+        --replace "JPEGLIB = NONE" "JPEGLIB = ${libjpeg.out}/lib/libjpeg.so" \
+        --replace "JPEGHDR_DIR =" "JPEGHDR_DIR = ${libjpeg.dev}/include"
    '' + stdenv.lib.optionalString stdenv.isDarwin ''
     echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
     echo "NETPBMLIBTYPE = dylib" >> config.mk

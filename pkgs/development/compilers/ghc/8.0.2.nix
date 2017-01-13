@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, hscolour, patchutils
+, hscolour, patchutils, sphinx
 }:
 
 let
@@ -13,17 +13,17 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  version = "8.0.1.20161213";
+  version = "8.0.2";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.0.2-rc2/${name}-src.tar.xz";
-    sha256 = "0l1arhbh3rbs011f0y4pgc35yn07x3hz6lfqlvqbwn96f8ff5529";
+    url = "https://downloads.haskell.org/~ghc/8.0.2/${name}-src.tar.xz";
+    sha256 = "1c8qc4fhkycynk4g1f9hvk53dj6a1vvqi6bklqznns6hw59m8qhi";
   };
 
   patches = [] ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch;
 
-  buildInputs = [ ghc perl hscolour ];
+  buildInputs = [ ghc perl hscolour sphinx ];
 
   enableParallelBuilding = true;
 

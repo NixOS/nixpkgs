@@ -15,6 +15,15 @@ in {
       '';
     };
 
+    locate = mkOption {
+      type = types.package;
+      default = pkgs.findutils;
+      example = "pkgs.mlocate";
+      description = ''
+        The locate implementation to use
+      '';
+    };
+
     interval = mkOption {
       type = types.str;
       default = "02:15";
@@ -77,7 +86,7 @@ in {
         script =
           ''
             mkdir -m 0755 -p $(dirname ${toString cfg.output})
-            exec updatedb \
+            exec ${cfg.locate}/bin/updatedb \
               --localuser=${cfg.localuser} \
               ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}

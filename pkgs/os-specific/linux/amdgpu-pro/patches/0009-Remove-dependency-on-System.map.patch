@@ -1,0 +1,61 @@
+From 4d645984264e449d6a4507af033b26daed952eac Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 26 Oct 2016 22:26:39 -0300
+Subject: [PATCH 09/11] Remove dependency on System.map
+
+---
+ amd/backport/Makefile    |  1 -
+ amd/backport/kcl_fence.c | 10 ++++++++--
+ amd/backport/symbols     |  7 -------
+ 3 files changed, 8 insertions(+), 10 deletions(-)
+ delete mode 100644 amd/backport/symbols
+
+diff --git a/amd/backport/Makefile b/amd/backport/Makefile
+index ff9339d..3f2d9ea 100644
+--- a/amd/backport/Makefile
++++ b/amd/backport/Makefile
+@@ -64,7 +64,6 @@ ccflags-y += -DOS_NAME_RHEL_7_3
+ endif
+ endif
+ 
+-BACKPORT_OBJS = symbols.o
+ endif
+ 
+ BACKPORT_OBJS += kcl_drm.o kcl_ttm.o kcl_amdgpu.o kcl_fence.o kcl_mn.o amdgpu_kcl.o kcl_fence_array.o kcl_kthread.o
+diff --git a/amd/backport/kcl_fence.c b/amd/backport/kcl_fence.c
+index 54ad819..39f6d61 100644
+--- a/amd/backport/kcl_fence.c
++++ b/amd/backport/kcl_fence.c
+@@ -52,8 +52,14 @@ struct default_wait_cb {
+ 	struct task_struct *task;
+ };
+ 
+-extern void
+-(*fence_default_wait_cb)(struct fence *fence, struct fence_cb *cb);
++static void
++fence_default_wait_cb(struct fence *fence, struct fence_cb *cb)
++{
++	struct default_wait_cb *wait =
++		container_of(cb, struct default_wait_cb, base);
++
++	wake_up_process(wait->task);
++}
+ 
+ signed long
+ _kcl_fence_wait_any_timeout(struct fence **fences, uint32_t count,
+diff --git a/amd/backport/symbols b/amd/backport/symbols
+deleted file mode 100644
+index 68cae63..0000000
+--- a/amd/backport/symbols
++++ /dev/null
+@@ -1,7 +0,0 @@
+-SYMS=""
+-
+-SYMS+="fence_default_wait_cb"
+-
+-if version_lt 2.6.33; then
+-    SYMS+=" kallsyms_lookup_name"
+-fi
+-- 
+2.11.0
+

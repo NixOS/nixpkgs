@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i build/configure \
       -e s@vi_cv_path_preserve=no@vi_cv_path_preserve=/tmp/vi.recover@ \
-      -e s@/var/tmp@@
+      -e s@/var/tmp@@ \
+      -e s@-lcurses@-lncurses@
   '';
 
   configurePhase = ''

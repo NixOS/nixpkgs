@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lean-${version}";
-  version = "2016-12-08";
+  version = "2017-01-06";
 
   src = fetchFromGitHub {
     owner  = "leanprover";
     repo   = "lean";
-    rev    = "7b63d6566faaf1dc0f2c8e873c61f51dce9ab618";
-    sha256 = "0xxr7dnh7pmdbpxhl3cq9clwamxjk54zcxplsrz6xirk0qy7ga4l";
+    rev    = "6f8ccb5873b6f72d735e700e25044e99c6ebb7b6";
+    sha256 = "1nxbqdc6faxivbrifb7b9j5zl5kml9w5pa63afh93z2ng7mn0jyg";
   };
 
   buildInputs = [ gmp mpfr cmake gperftools ];

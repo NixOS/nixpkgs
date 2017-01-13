@@ -1,6 +1,9 @@
 { stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3, hicolor_icon_theme
+, enableSystemd ? stdenv.isLinux
+, enableDaemon ? true
+, enableCli ? true
 }:
 
 let
@@ -17,23 +20,31 @@ stdenv.mkDerivation rec {
     sha256 = "0pykmhi7pdmzq47glbj8i2im6iarp4wnj4l1pyvsrnba61f0939s";
   };
 
-  buildInputs = [ pkgconfig intltool file openssl curl libevent inotify-tools zlib ]
+  buildInputs = [ pkgconfig intltool file openssl curl libevent zlib ]
     ++ optionals enableGTK3 [ gtk3 wrapGAppsHook hicolor_icon_theme ]
-    ++ optional stdenv.isLinux systemd;
+    ++ optionals enableSystemd [ systemd ]
+    ++ optionals stdenv.isLinux [ inotify-tools ];
 
   postPatch = ''
     substituteInPlace ./configure \
       --replace "libsystemd-daemon" "libsystemd" \
-      --replace "/usr/bin/file"     "${file}/bin/file"
+      --replace "/usr/bin/file"     "${file}/bin/file" \
+      --replace "test ! -d /Developer/SDKs/MacOSX10.5.sdk" "false"
   '';
 
-  configureFlags = [ "--with-systemd-daemon" ]
-    ++ [ "--enable-cli" ]
+  configureFlags = [
+      ("--enable-cli=" + (if enableCli then "yes" else "no"))
+      ("--enable-daemon=" + (if enableDaemon then "yes" else "no"))
+      "--disable-mac" # requires xcodebuild
+    ]
+    ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
 
 #  preFixup = optionalString enableGTK3 /* gsettings schemas for file dialogues */ ''
 #    rm "$out/share/icons/hicolor/icon-theme.cache"
 #  '';
+
+  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   meta = with stdenv.lib; {
     description = "A fast, easy and free BitTorrent client";
@@ -51,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.transmissionbt.com/;
     license = licenses.gpl2; # parts are under MIT
     maintainers = with maintainers; [ astsmtl vcunat wizeman ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 

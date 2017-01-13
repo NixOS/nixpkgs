@@ -55,9 +55,9 @@ let
 
 
 in
-kdeWrapper unwrapped
+kdeWrapper
 {
+  inherit unwrapped;
   targets = [ "bin/yakuake" ];
   paths = [ konsole.unwrapped ];
 }
-

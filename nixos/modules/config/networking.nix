@@ -57,7 +57,7 @@ in
 
     networking.dnsExtensionMechanism = lib.mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
         that option set, <code>glibc</code> supports use of the extension mechanisms for

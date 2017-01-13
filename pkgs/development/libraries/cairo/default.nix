@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     libiconv
   ] ++ libintlOrEmpty ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreGraphics
+    CoreText
     ApplicationServices
     Carbon
   ]);

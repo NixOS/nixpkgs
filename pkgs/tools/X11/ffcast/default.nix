@@ -1,22 +1,20 @@
-{ stdenv, fetchgit, autoconf, automake, perl, libX11 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, perl, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "ffcast-${version}";
   version = "2.5.0";
-  rev = "7c3bf681e7ca9b242e55dbf0c07856ed994d94e9";
 
-  src = fetchgit {
-    url = https://github.com/lolilolicon/FFcast;
-    sha256 = "1s1y6rqjq126jvdzc75wz20szisbz8h8fkphlwxcxzl9xll17akj";
+  src = fetchFromGitHub {
+    owner = "lolilolicon";
+    repo = "FFcast";
+    rev = "${version}";
+    sha256 = "047y32bixhc8ksr98vwpgd0k1xxgsv2vs0n3kc2xdac4krc9454h";
   };
 
-  buildInputs = [ autoconf automake perl libX11 ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ perl libX11 ];
 
-  preConfigure = ''
-    ./bootstrap
-  '';
-
-  configureFlags = [ "--enable-xrectsel" ];
+  configureFlags = [ "--disable-xrectsel" ];
 
   postBuild = ''
     make DESTDIR="$out" install

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       '';
       homepage = https://launchpad.net/synapse-project;
       license = stdenv.lib.licenses.gpl3;
-      maintainers = with stdenv.lib.maintainers; mahe;
+      maintainers = with stdenv.lib.maintainers; [ mahe ];
       platforms = with stdenv.lib.platforms; all;
   };
 }

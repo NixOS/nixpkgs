@@ -98,15 +98,15 @@ diff --git a/src/lib-ssl-iostream/iostream-ssl.c b/src/lib-ssl-iostream/iostream
 index a0659ab..dba3729 100644
 --- a/src/lib-ssl-iostream/iostream-ssl.c
 +++ b/src/lib-ssl-iostream/iostream-ssl.c
-@@ -29,7 +29,7 @@ static int ssl_module_load(const char **error_r)
- 	memset(&mod_set, 0, sizeof(mod_set));
+@@ -34,7 +34,7 @@ static int ssl_module_load(const char **error_r)
  	mod_set.abi_version = DOVECOT_ABI_VERSION;
  	mod_set.setting_name = "<built-in lib-ssl-iostream lookup>";
+ 	mod_set.require_init_funcs = TRUE;
 -	ssl_module = module_dir_load(MODULE_DIR, plugin_name, &mod_set);
 +	ssl_module = module_dir_load("/etc/dovecot/modules", plugin_name, &mod_set);
- 
- 	ssl_vfuncs = module_get_symbol(ssl_module, "ssl_vfuncs");
- 	if (ssl_vfuncs == NULL) {
+ 	if (module_dir_try_load_missing(&ssl_module, MODULE_DIR, plugin_name,
+ 					&mod_set, error_r) < 0)
+ 		return -1;
 diff --git a/src/lib-storage/mail-storage-settings.c b/src/lib-storage/mail-storage-settings.c
 index e2233bf..bbf981e 100644
 --- a/src/lib-storage/mail-storage-settings.c

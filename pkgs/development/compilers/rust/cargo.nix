@@ -1,9 +1,14 @@
-{ stdenv, fetchgit, file, curl, pkgconfig, python, openssl, cmake, zlib
+{ stdenv, buildEnv, fetchgit, file, curl, pkgconfig, python, openssl_1_1_0, cmake, zlib
 , makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
 , version, srcRev, srcSha, depsSha256
 , patches ? []}:
 
-rustPlatform.buildRustPackage rec {
+let
+  openssl = buildEnv {
+    name = "openssl-env";
+    paths = [ openssl_1_1_0.out openssl_1_1_0.dev ];
+  };
+in rustPlatform.buildRustPackage rec {
   name = "cargo-${version}";
   inherit version;
 
@@ -21,18 +26,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper libgit2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
-  LIBGIT2_SYS_USE_PKG_CONFIG=1;
-
-  configurePhase = ''
-    ./configure --enable-optimize --prefix=$out --local-cargo=${rustPlatform.rust.cargo}/bin/cargo
-  '';
-
-  buildPhase = "make";
-
-  installPhase = ''
-    make install
-    ${postInstall}
-  '';
+  LIBGIT2_SYS_USE_PKG_CONFIG = 1;
+  OPENSSL_DIR = openssl;
 
   postInstall = ''
     rm "$out/lib/rustlib/components" \
@@ -60,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     cargo test
   '';
 
-  # Disable check phase as there are failures (author_prefers_cargo test fails)
+  # Disable check phase as there are failures (4 tests fail)
   doCheck = false;
 
   meta = with stdenv.lib; {
