@@ -26571,6 +26571,8 @@ EOF
     };
   };
 
+  WeasyPrint = callPackage ../development/python-modules/weasyprint {};
+
   webassets = buildPythonPackage rec {
     name = "webassets-${version}";
     version = "0.12.0";
