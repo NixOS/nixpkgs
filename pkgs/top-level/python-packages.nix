@@ -11320,28 +11320,7 @@ in {
     };
   };
 
-  flask_login = buildPythonPackage rec {
-    name = "Flask-Login-${version}";
-    version = "0.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Login/${name}.tar.gz";
-      sha256 = "19w2f33lglkyvxqnj3qghhxa4pr8mp13235k1bd557x52imkapnj";
-    };
-
-    propagatedBuildInputs = with self; [ flask ];
-
-    # FIXME
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/maxcountryman/flask-login";
-      description = "User session management for Flask";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  flask_login = callPackage ../development/python-modules/flask-login.nix { };
 
   flask_migrate = buildPythonPackage rec {
     name = "Flask-Migrate-${version}";
