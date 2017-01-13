@@ -30,6 +30,14 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      <literal>stdenv.overrides</literal> is now expected to take <literal>self</literal>
+      and <literal>super</literal> arguments. See <literal>lib.trivial.extends</literal>
+      for what those parameters represent.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
       <literal>gnome</literal> alias has been removed along with
       <literal>gtk</literal>, <literal>gtkmm</literal> and several others.
       Now you need to use versioned attributes, like <literal>gnome3</literal>.
