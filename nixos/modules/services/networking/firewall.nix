@@ -4,13 +4,13 @@
    ‘networking.firewall.extraCommands’.  For modularity, the firewall
    uses several chains:
 
-   - ‘nixos-fw-input’ is the main chain for input packet processing.
+   - ‘nixos-fw’ is the main chain for input packet processing.
 
    - ‘nixos-fw-log-refuse’ and ‘nixos-fw-refuse’ are called for
      refused packets.  (The former jumps to the latter after logging
      the packet.)  If you want additional logging, or want to accept
      certain packets anyway, you can insert rules at the start of
-     these chain.
+     this chain.
 
    - ‘nixos-fw-accept’ is called for accepted packets.  If you want
      additional logging, or want to reject certain packets anyway, you
@@ -49,7 +49,7 @@ let
     # firewall would be atomic.  Apparently that's possible
     # with iptables-restore.
     ip46tables -D INPUT -j nixos-fw 2> /dev/null || true
-    for chain in nixos-fw nixos-fw-accept nixos-fw-log-refuse nixos-fw-refuse FW_REFUSE; do
+    for chain in nixos-fw nixos-fw-accept nixos-fw-log-refuse nixos-fw-refuse; do
       ip46tables -F "$chain" 2> /dev/null || true
       ip46tables -X "$chain" 2> /dev/null || true
     done
@@ -461,7 +461,7 @@ in
         ''
           Additional shell commands executed as part of the firewall
           shutdown script.  These are executed just after the removal
-          of the nixos input rule, or if the service enters a failed state.
+          of the NixOS input rule, or if the service enters a failed state.
         '';
     };
 
