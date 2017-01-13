@@ -5406,8 +5406,9 @@ in
 
   scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
-  scala_2_11 = callPackage ../development/compilers/scala { };
-  scala = scala_2_11;
+  scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
+  scala_2_12 = callPackage ../development/compilers/scala { };
+  scala = scala_2_12;
 
   scalafmt = callPackage ../development/tools/scalafmt { };
 
@@ -11853,6 +11854,8 @@ in
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {
     qt5 = null;
   };
+
+  vndr = callPackage ../development/tools/vndr { };
 
   windows = rec {
     cygwinSetup = callPackage ../os-specific/windows/cygwin-setup { };
