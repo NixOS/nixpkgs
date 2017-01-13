@@ -11430,6 +11430,8 @@ in {
     };
   };
 
+  flask_testing = callPackage ../development/python-modules/flask-testing.nix { };
+
   wtforms = buildPythonPackage rec {
     version = "2.1";
     name = "wtforms-${version}";
