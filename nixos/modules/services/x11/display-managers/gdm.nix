@@ -208,76 +208,25 @@ in
         session  optional       pam_permit.so
       '';
 
-      gdm.text = ''
-        auth     requisite      pam_nologin.so
-        auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
-
-        auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so
-        auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
-        ${optionalString config.security.pam.enableEcryptfs
-          "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
-
-        ${optionalString (! config.security.pam.enableEcryptfs)
-          "auth     required       pam_deny.so"}
-
-        account  sufficient     pam_unix.so
-
-        password requisite      pam_unix.so nullok sha512
-        ${optionalString config.security.pam.enableEcryptfs
-          "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
-        session  required       pam_unix.so
-        ${optionalString config.security.pam.enableEcryptfs
-          "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-        session  required       pam_loginuid.so
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
-      '';
-
       gdm-password.text = ''
-        auth     requisite      pam_nologin.so
-        auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
-
-        auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so
-        auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
-        ${optionalString config.security.pam.enableEcryptfs
-          "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
-        ${optionalString (! config.security.pam.enableEcryptfs)
-          "auth     required       pam_deny.so"}
-
-        account  sufficient     pam_unix.so
-
-        password requisite      pam_unix.so nullok sha512
-        ${optionalString config.security.pam.enableEcryptfs
-          "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
-        session  required       pam_unix.so
-        ${optionalString config.security.pam.enableEcryptfs
-          "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-        session  required       pam_loginuid.so
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
+        auth      substack      login
+        account   include       login
+        password  substack      login
+        session   include       login
       '';
 
       gdm-autologin.text = ''
-        auth     requisite      pam_nologin.so
+        auth      requisite     pam_nologin.so
 
-        auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     required       pam_permit.so
+        auth      required      pam_succeed_if.so uid >= 1000 quiet
+        auth      required      pam_permit.so
 
-        account  sufficient     pam_unix.so
+        account   sufficient    pam_unix.so
 
-        password requisite      pam_unix.so nullok sha512
+        password  requisite     pam_unix.so nullok sha512
 
-        session  optional       pam_keyinit.so revoke
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
-        session  required       pam_unix.so
-        session  required       pam_loginuid.so
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session   optional      pam_keyinit.so revoke
+        session   include       login
       '';
 
     };
