@@ -7,32 +7,31 @@ let
   rspamdCfg = config.services.rspamd;
   cfg = config.services.rmilter;
 
-  inetSockets = map (sock: let s = stringSplit ":" sock; in "inet:${last s}:${head s}") cfg.bindInetSockets;
+  inetSockets = map (sock: let s = splitString ":" sock; in "inet:${last s}@${head s}") cfg.bindInetSockets;
   unixSockets = map (sock: "unix:${sock}") cfg.bindUnixSockets;
 
   allSockets = unixSockets ++ inetSockets;
 
   rmilterConf = ''
-pidfile = /run/rmilter/rmilter.pid;
-bind_socket = ${if cfg.socketActivation then "fd:3" else concatStringsSep ", " allSockets};
-tempdir = /tmp;
-
+    pidfile = /run/rmilter/rmilter.pid;
+    bind_socket = ${if cfg.socketActivation then "fd:3" else last inetSockets};
+    tempdir = /tmp;
   '' + (with cfg.rspamd; if enable then ''
-spamd {
-        servers = ${concatStringsSep ", " servers};
-        connect_timeout = 1s;
-        results_timeout = 20s;
-        error_time = 10;
-        dead_time = 300;
-        maxerrors = 10;
-        reject_message = "${rejectMessage}";
-        ${optionalString (length whitelist != 0)  "whitelist = ${concatStringsSep ", " whitelist};"}
+    spamd {
+      servers = ${concatStringsSep ", " servers};
+      connect_timeout = 1s;
+      results_timeout = 20s;
+      error_time = 10;
+      dead_time = 300;
+      maxerrors = 10;
+      reject_message = "${rejectMessage}";
+      ${optionalString (length whitelist != 0)  "whitelist = ${concatStringsSep ", " whitelist};"}
 
-        # rspamd_metric - metric for using with rspamd
-        # Default: "default"
-        rspamd_metric = "default";
-        ${extraConfig}
-};
+      # rspamd_metric - metric for using with rspamd
+      # Default: "default"
+      rspamd_metric = "default";
+      ${extraConfig}
+    };
     '' else "") + cfg.extraConfig;
 
   rmilterConfigFile = pkgs.writeText "rmilter.conf" rmilterConf;
@@ -100,9 +99,11 @@ in
         default = true;
         description = ''
           Enable systemd socket activation for rmilter.
-          (disabling socket activation not recommended
-          when unix socket used, and follow to wrong
-          permissions on unix domain socket.)
+
+          Disabling socket activation is not recommended when a Unix
+          domain socket is used and could lead to incorrect
+          permissions.  Therefore, setting this to false will
+          configure rmilter to use an inet socket only.
         '';
       };
 
