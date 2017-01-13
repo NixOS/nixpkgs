@@ -11324,6 +11324,8 @@ in {
 
   flask_login = callPackage ../development/python-modules/flask-login.nix { };
 
+  flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
+
   flask_migrate = buildPythonPackage rec {
     name = "Flask-Migrate-${version}";
     version = "1.7.0";
