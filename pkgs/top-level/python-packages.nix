@@ -12082,6 +12082,8 @@ in {
     };
   };
 
+  ghdiff = callPackage ../development/python-modules/ghdiff.nix { };
+
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
     disabled = !isPy26 && !isPy27;
