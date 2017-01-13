@@ -1001,7 +1001,7 @@ self: super: {
   # The most current version needs some packages to build that are not in LTS 7.x.
   stack = super.stack.overrideScope (self: super: {
     http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3;
+    http-client-tls = self.http-client-tls_0_3_3_1;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
@@ -1108,7 +1108,7 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/issues/19612
   wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
     http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3;
+    http-client-tls = self.http-client-tls_0_3_3_1;
     http-conduit = self.http-conduit_2_2_3;
   });
 
