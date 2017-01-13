@@ -11432,6 +11432,8 @@ in {
 
   flask_testing = callPackage ../development/python-modules/flask-testing.nix { };
 
+  flask_wtf = callPackage ../development/python-modules/flask-wtf.nix { };
+
   wtforms = buildPythonPackage rec {
     version = "2.1";
     name = "wtforms-${version}";
