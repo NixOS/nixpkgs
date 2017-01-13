@@ -25879,6 +25879,8 @@ in {
     };
   };
 
+  twill = callPackage ../development/python-modules/twill { };
+
   twitter = buildPythonPackage rec {
     name = "twitter-${version}";
     version = "1.15.0";
