@@ -4781,24 +4781,7 @@ in {
     };
   };
 
-  bcrypt = buildPythonPackage rec {
-    name = "bcrypt-${version}";
-    version = "3.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bcrypt/${name}.tar.gz";
-      sha256 = "e54820d8b9eff357d1003f5b8d4b949a632b76b89610d8a933783fd476033ebe";
-    };
-    buildInputs = with self; [ pycparser mock pytest py ];
-    propagatedBuildInputs = with self; optional (!isPyPy) cffi;
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      description = "Modern password hashing for your software and your servers";
-      license = licenses.asl20;
-      homepage = https://github.com/pyca/bcrypt/;
-    };
-  };
+  bcrypt = callPackage ../development/python-modules/bcrypt.nix { };
 
   cffi = if isPyPy then null else buildPythonPackage rec {
     name = "cffi-1.9.1";
