@@ -29530,24 +29530,7 @@ EOF
     };
   };
 
-
-  markdown2 = buildPythonPackage rec {
-    name = "markdown2-${version}";
-    version = "2.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/markdown2/${name}.zip";
-      sha256 = "073zyx3caqa9zlzxa82k9k2nhhn8c5imqpgp5nwqnh0fgaj9pqn8";
-    };
-    propagatedBuildInputs = with self; [];
-    meta = {
-      description = "A fast and complete Python implementation of Markdown";
-      homepage =  https://github.com/trentm/python-markdown2;
-      license = licenses.mit;
-      maintainers = with maintainers; [ hbunke ];
-    };
-  };
-
+  markdown2 = callPackage ../development/python-modules/markdown2.nix { };
 
   evernote = buildPythonPackage rec {
     name = "evernote-${version}";
