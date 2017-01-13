@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/vivien/i3blocks;
     license = licenses.gpl3;
     maintainers = [ "MindTooth" ];
-    platforms = freebsd ++ linux ++ netbsd;
+    platforms = with platforms; freebsd ++ linux;
   };
 }
