@@ -12418,21 +12418,7 @@ in {
     };
   };
 
-  gunicorn = buildPythonPackage rec {
-    name = "gunicorn-19.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gunicorn/${name}.tar.gz";
-      sha256 = "ae1dd6452f62b3470bc9acaf62cb5301545fbb9c697d863a5bfe35097ed7a0b3";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/gunicorn;
-      description = "WSGI HTTP Server for UNIX";
-    };
-  };
+  gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
 
   hawkauthlib = buildPythonPackage rec {
     name = "hawkauthlib-${version}";
