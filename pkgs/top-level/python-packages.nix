@@ -21164,17 +21164,8 @@ in {
     };
   });
 
-  ldap = buildPythonPackage rec {
-    name = "ldap-2.4.19";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-ldap/python-${name}.tar.gz";
-      sha256 = "0j5hzaar4d0vhnrlpmkczgwm7ci2wibr99a7zx04xddzrhxdpz82";
-    };
-
-    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl.dev}/include/sasl";
-    propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
+  ldap = callPackage ../development/python-modules/ldap.nix {
+    inherit (pkgs) openldap cyrus_sasl openssl;
   };
 
   ldap3 = buildPythonPackage rec {
