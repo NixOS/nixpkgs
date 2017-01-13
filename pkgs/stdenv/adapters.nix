@@ -57,7 +57,7 @@ rec {
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
-    { mkDerivation = {name ? "", buildInputs ? [], nativeBuildInputs ? [],
+    rec { mkDerivation = {name ? "", buildInputs ? [], nativeBuildInputs ? [],
             propagatedBuildInputs ? [], propagatedNativeBuildInputs ? [],
             selfNativeBuildInput ? false, ...}@args: let
 
@@ -115,6 +115,21 @@ rec {
         in nativeDrv // {
           inherit crossDrv nativeDrv;
         };
+
+        # mkDerivationWithCrossArg allows us to make arbitary changes to
+        # derivation depending on what system we are cross-compiling for, without
+        # affecting the native derivation.  The argument to
+        # mkDerivationWithCrossArg, attrFunc, should be a function that takes a
+        # single argument named cross.  When cross is null, attrFunc should return
+        # the attributes for making a native version of the derivation (one that
+        # runs on the system on which it was built).  When cross is not null, it
+        # will be equal to the top-level crossSystem argument (and equal to
+        # stdenv.cross), and attrFunc should return the attributes for
+        # cross-compiling a derivation to be run on the specified system.
+        mkDerivationWithCrossArg = attrFunc:
+          let nativeDrv = (mkDerivation (attrFunc null)).nativeDrv;
+              crossDrv = (mkDerivation (attrFunc cross)).crossDrv;
+          in nativeDrv // { inherit crossDrv nativeDrv; };
     } // {
       inherit cross gccCross binutilsCross;
       ccCross = gccCross;

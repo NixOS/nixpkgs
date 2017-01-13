@@ -62,6 +62,10 @@ with builtins;
 let version = "5.4.0";
     sha256 = "0fihlcy5hnksdxk0sn6bvgnyq8gfrgs8m794b1jxwd1dxinzg3b0";
 
+    # Rename the libcCross argument so we can redefine libcCross to
+    # null for the native compiler.
+    libcCrossArg = libcCross;
+
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
@@ -210,7 +214,12 @@ in
 # We need all these X libraries when building AWT with GTK+.
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
-stdenv.mkDerivation ({
+stdenv.mkDerivationWithCrossArg ( hostCrossSystem:
+  let
+    targetCrossSystem = if cross != null then cross else hostCrossSystem;
+    libcCross = if targetCrossSystem != null then libcCrossArg else null;
+  in {
+
   name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
 
   builder = ../builder.sh;

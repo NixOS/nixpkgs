@@ -185,4 +185,33 @@ rec {
         };
     in self;
 
+  # Use this if you want to override the native derivation of a
+  # package without affecting the cross-compiled derivation.
+  overrideNativeDrv = newNativeDrv: old:
+    if old ? crossDrv
+    then
+      let
+        nativeDrv = newNativeDrv;
+        crossDrv = old.crossDrv;
+        override = newArgs: overrideNativeDrv
+          (newNativeDrv.override newArgs) (old.override newArgs);
+      in nativeDrv // { inherit crossDrv nativeDrv override; }
+    else
+      newNativeDrv;
+
+  # Given a set of new packages and a set of old packages, produces a
+  # set with the same attribute names as the set of new packages, where
+  # each attribute value is a derivation that has the native derivation
+  # from the new set but the cross derivation (crossDrv) from the old
+  # set.
+  overrideNativeDrvs = newPkgs: oldPkgs:
+    let
+      overrider = attr: {
+        name = attr;
+        value = if oldPkgs ? "${attr}" then
+                (overrideNativeDrv newPkgs.${attr} oldPkgs.${attr})
+                else (throw "wtf ${attr}");
+      };
+      names = builtins.attrNames newPkgs;
+    in builtins.listToAttrs (map overrider names);
 }

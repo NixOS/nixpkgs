@@ -19,8 +19,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv ? cross;
+  # This is just here because it was present in previous commits and
+  # we want to avoid a meaningless mass rebuild.
+  dontStrip = false;
+
+  crossAttrs.dontStrip = true; # Don't run the native `strip' when cross-compiling.
 
   postInstall =
     ''
