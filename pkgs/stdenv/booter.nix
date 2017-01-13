@@ -46,7 +46,10 @@ stageFuns: let
   # isn't already set.
   withAllowCustomOverrides = lib.lists.imap
     (index: stageFun: prevStage:
-      { allowCustomOverrides = index == 1; } # first element, 1-indexed
+      # So true by default for only the first element because one
+      # 1-indexing. Since we reverse the list, this means this is true
+      # for the final stage.
+      { allowCustomOverrides = index == 1; }
       // (stageFun prevStage))
     (lib.lists.reverseList stageFuns);
 
