@@ -11351,6 +11351,8 @@ in {
     };
   };
 
+  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
+
   flask_principal = buildPythonPackage rec {
     name = "Flask-Principal-${version}";
     version = "0.4.0";
