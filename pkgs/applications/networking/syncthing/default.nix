@@ -1,4 +1,10 @@
 { stdenv, lib, fetchFromGitHub, go, pkgs }:
+let
+  removeExpr = ref: ''
+    sed -i "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
+  '';
+
+in
 
 stdenv.mkDerivation rec {
   version = "0.14.18";
@@ -40,6 +46,10 @@ stdenv.mkDerivation rec {
     substitute etc/linux-systemd/user/syncthing.service \
                $out/etc/systemd/user/syncthing.service \
                --replace /usr/bin/syncthing $out/bin/syncthing
+  '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeExpr go} '{}' '+'
   '';
 
   meta = with stdenv.lib; {
