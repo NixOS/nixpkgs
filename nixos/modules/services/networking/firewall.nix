@@ -6,15 +6,27 @@
 
    - ‘nixos-fw’ is the main chain for input packet processing.
 
+   - ‘nixos-fw-accept’ is called for accepted packets.  If you want
+     additional logging, or want to reject certain packets anyway, you
+     can insert rules at the start of this chain.
+
    - ‘nixos-fw-log-refuse’ and ‘nixos-fw-refuse’ are called for
      refused packets.  (The former jumps to the latter after logging
      the packet.)  If you want additional logging, or want to accept
      certain packets anyway, you can insert rules at the start of
      this chain.
 
-   - ‘nixos-fw-accept’ is called for accepted packets.  If you want
-     additional logging, or want to reject certain packets anyway, you
-     can insert rules at the start of this chain.
+   - ‘nixos-fw-rpfilter’ is used as the main chain in the raw table,
+     called from the built-in ‘PREROUTING’ chain.  If the kernel supports it
+     and `cfg.checkReversePath` is set this chain will perform a reverse path
+     filter test.
+
+   - ‘nixos-drop’ is used while reloading the firewall in order to drop
+     all traffic.  Since reloading isn't implemented in an atomic way
+     this'll prevent any traffic from leaking through while reloading
+     the firewall.  However, if the reloading fails, the ‘firewall-stop’
+     script will be called which in return will effectively disable the
+     complete firewall (in the default configuration).
 
 */
 
