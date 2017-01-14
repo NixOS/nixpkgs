@@ -9,7 +9,7 @@ composableDerivation.composableDerivation {} {
   inherit name;
 
   src = fetchurl {
-    url = "http://gavare.se/gxemul/src/${name}.tar.gz";
+    url = "http://gxemul.sourceforge.net/src/${name}.tar.gz";
     sha256 = "1afd9l0igyv7qgc0pn3rkdgrl5d0ywlyib0qhg4li23zilyq5407";
   };
 
