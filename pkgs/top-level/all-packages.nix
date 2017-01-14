@@ -4508,6 +4508,8 @@ in
 
   xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
 
+  yarn = callPackage ../development/tools/yarn  { };
+
   yank = callPackage ../tools/misc/yank { };
 
   yaml-merge = callPackage ../tools/text/yaml-merge { };
