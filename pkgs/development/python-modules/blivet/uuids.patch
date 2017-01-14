@@ -1,0 +1,1015 @@
+Submitted upstream at:
+
+  https://github.com/rhinstaller/blivet/pull/537
+
+diff --git a/blivet/errors.py b/blivet/errors.py
+index a39a5fb..8d4c646 100644
+--- a/blivet/errors.py
++++ b/blivet/errors.py
+@@ -109,6 +109,10 @@ class FSWriteLabelError(FSError):
+     pass
+ 
+ 
++class FSWriteUUIDError(FSError):
++    pass
++
++
+ class FSReadLabelError(FSError):
+     pass
+ 
+diff --git a/blivet/formats/fs.py b/blivet/formats/fs.py
+index 67517d6..77362cc 100644
+--- a/blivet/formats/fs.py
++++ b/blivet/formats/fs.py
+@@ -38,9 +38,11 @@ from ..tasks import fsreadlabel
+ from ..tasks import fsresize
+ from ..tasks import fssize
+ from ..tasks import fssync
++from ..tasks import fsuuid
+ from ..tasks import fswritelabel
++from ..tasks import fswriteuuid
+ from ..errors import FormatCreateError, FSError, FSReadLabelError
+-from ..errors import FSWriteLabelError
++from ..errors import FSWriteLabelError, FSWriteUUIDError
+ from . import DeviceFormat, register_device_format
+ from .. import util
+ from .. import platform
+@@ -65,12 +67,14 @@ class FS(DeviceFormat):
+     _name = None
+     _modules = []                        # kernel modules required for support
+     _labelfs = None                      # labeling functionality
++    _uuidfs = None                       # functionality for UUIDs
+     _fsck_class = fsck.UnimplementedFSCK
+     _mkfs_class = fsmkfs.UnimplementedFSMkfs
+     _mount_class = fsmount.FSMount
+     _readlabel_class = fsreadlabel.UnimplementedFSReadLabel
+     _sync_class = fssync.UnimplementedFSSync
+     _writelabel_class = fswritelabel.UnimplementedFSWriteLabel
++    _writeuuid_class = fswriteuuid.UnimplementedFSWriteUUID
+     # This constant is aquired by testing some filesystems
+     # and it's giving us percentage of space left after the format.
+     # This number is more guess than precise number because this
+@@ -84,6 +88,7 @@ class FS(DeviceFormat):
+             :keyword mountpoint: the filesystem's planned mountpoint
+             :keyword label: the filesystem label
+             :keyword uuid: the filesystem UUID
++            :keyword new_uuid: new UUID to set for this filesystem
+             :keyword mountopts: mount options for the filesystem
+             :type mountopts: str
+             :keyword size: the filesystem's size in MiB
+@@ -111,12 +116,14 @@ class FS(DeviceFormat):
+         self._readlabel = self._readlabel_class(self)
+         self._sync = self._sync_class(self)
+         self._writelabel = self._writelabel_class(self)
++        self._writeuuid = self._writeuuid_class(self)
+ 
+         self._current_info = None  # info obtained by _info task
+ 
+         self.mountpoint = kwargs.get("mountpoint")
+         self.mountopts = kwargs.get("mountopts")
+         self.label = kwargs.get("label")
++        self.new_uuid = kwargs.get("new_uuid")
+         self.fsprofile = kwargs.get("fsprofile")
+ 
+         if flags.installer_mode and self._resize.available:
+@@ -249,6 +256,31 @@ class FS(DeviceFormat):
+     label = property(lambda s: s._get_label(), lambda s, l: s._set_label(l),
+                      doc="this filesystem's label")
+ 
++    def can_assign_uuid(self):
++        """Returns True if this filesystem supports setting an UUID during
++           creation, otherwise False.
++
++           :rtype: bool
++        """
++        return self._mkfs.can_set_uuid and self._mkfs.available
++
++    def can_reassign_uuid(self):
++        """Returns True if it's possible to set the UUID of this filesystem
++           after it has been created, otherwise False.
++
++           :rtype: bool
++        """
++        return self._writeuuid.available
++
++    def uuid_format_ok(self, uuid):
++        """Return True if the UUID has an acceptable format for this
++           filesystem.
++
++           :param uuid: An UUID
++           :type uuid: str
++        """
++        return self._uuidfs is not None and self._uuidfs.uuid_format_ok(uuid)
++
+     def update_size_info(self):
+         """ Update this filesystem's current and minimum size (for resize). """
+ 
+@@ -358,11 +390,23 @@ class FS(DeviceFormat):
+ 
+         super(FS, self)._create()
+         try:
+-            self._mkfs.do_task(options=kwargs.get("options"), label=not self.relabels())
++            self._mkfs.do_task(options=kwargs.get("options"),
++                               label=not self.relabels(),
++                               set_uuid=self.can_assign_uuid())
+         except FSWriteLabelError as e:
+             log.warning("Choosing not to apply label (%s) during creation of filesystem %s. Label format is unacceptable for this filesystem.", self.label, self.type)
++        except FSWriteUUIDError as e:
++            log.warning("Choosing not to apply UUID (%s) during"
++                        " creation of filesystem %s. UUID format"
++                        " is unacceptable for this filesystem."
++                        % (self.new_uuid, self.type))
+         except FSError as e:
+             raise FormatCreateError(e, self.device)
++        else:
++            self.uuid = self.new_uuid
++            # Make sure to set new_uuid to None so that _post_create() doesn't
++            # try to set the UUID again.
++            self.new_uuid = None
+ 
+     def _post_create(self, **kwargs):
+         super(FS, self)._post_create(**kwargs)
+@@ -371,6 +415,12 @@ class FS(DeviceFormat):
+                 self.write_label()
+             except FSError as e:
+                 log.warning("Failed to write label (%s) for filesystem %s: %s", self.label, self.type, e)
++        if self.new_uuid is not None and self.can_reassign_uuid():
++            try:
++                self.write_uuid()
++            except FSError as e:
++                log.warning("Failed to write UUID (%s) for filesystem %s: %s",
++                            self.new_uuid, self.type, e)
+ 
+     def _post_resize(self):
+         self.do_check()
+@@ -607,6 +657,39 @@ class FS(DeviceFormat):
+ 
+         self._writelabel.do_task()
+ 
++    def write_uuid(self):
++        """Set an UUID for this filesystem.
++
++           :raises: FSError
++
++           Raises an FSError if the UUID can not be set.
++        """
++        err = None
++
++        if self.new_uuid is None:
++            err = "makes no sense to write an UUID when not requested"
++
++        if not self.exists:
++            err = "filesystem has not been created"
++
++        if not self._writeuuid.available:
++            err = "no application to set UUID for filesystem %s" % self.type
++
++        if not self.uuid_format_ok(self.new_uuid):
++            err = "bad UUID format for application %s" % self._writeuuid
++
++        if not os.path.exists(self.device):
++            err = "device does not exist"
++
++        if err is not None:
++            raise FSError(err)
++
++        self._writeuuid.do_task()
++
++        # Set the current UUID to the one we have just written.
++        self.uuid = self.new_uuid
++        self.new_uuid = None
++
+     @property
+     def utils_available(self):
+         # we aren't checking for fsck because we shouldn't need it
+@@ -720,6 +803,7 @@ class Ext2FS(FS):
+     _type = "ext2"
+     _modules = ["ext2"]
+     _labelfs = fslabeling.Ext2FSLabeling()
++    _uuidfs = fsuuid.Ext2FSUUID()
+     _packages = ["e2fsprogs"]
+     _formattable = True
+     _supported = True
+@@ -736,6 +820,7 @@ class Ext2FS(FS):
+     _resize_class = fsresize.Ext2FSResize
+     _size_info_class = fssize.Ext2FSSize
+     _writelabel_class = fswritelabel.Ext2FSWriteLabel
++    _writeuuid_class = fswriteuuid.Ext2FSWriteUUID
+     parted_system = fileSystemType["ext2"]
+     _metadata_size_factor = 0.93  # ext2 metadata may take 7% of space
+ 
+@@ -779,6 +864,7 @@ class FATFS(FS):
+     _type = "vfat"
+     _modules = ["vfat"]
+     _labelfs = fslabeling.FATFSLabeling()
++    _uuidfs = fsuuid.FATFSUUID()
+     _supported = True
+     _formattable = True
+     _max_size = Size("1 TiB")
+@@ -788,6 +874,7 @@ class FATFS(FS):
+     _mount_class = fsmount.FATFSMount
+     _readlabel_class = fsreadlabel.DosFSReadLabel
+     _writelabel_class = fswritelabel.DosFSWriteLabel
++    _writeuuid_class = fswriteuuid.DosFSWriteUUID
+     _metadata_size_factor = 0.99  # fat metadata may take 1% of space
+     # FIXME this should be fat32 in some cases
+     parted_system = fileSystemType["fat16"]
+@@ -886,6 +973,7 @@ class JFS(FS):
+     _type = "jfs"
+     _modules = ["jfs"]
+     _labelfs = fslabeling.JFSLabeling()
++    _uuidfs = fsuuid.JFSUUID()
+     _max_size = Size("8 TiB")
+     _formattable = True
+     _linux_native = True
+@@ -895,6 +983,7 @@ class JFS(FS):
+     _mkfs_class = fsmkfs.JFSMkfs
+     _size_info_class = fssize.JFSSize
+     _writelabel_class = fswritelabel.JFSWriteLabel
++    _writeuuid_class = fswriteuuid.JFSWriteUUID
+     _metadata_size_factor = 0.99  # jfs metadata may take 1% of space
+     parted_system = fileSystemType["jfs"]
+ 
+@@ -911,6 +1000,7 @@ class ReiserFS(FS):
+     """ reiserfs filesystem """
+     _type = "reiserfs"
+     _labelfs = fslabeling.ReiserFSLabeling()
++    _uuidfs = fsuuid.ReiserFSUUID()
+     _modules = ["reiserfs"]
+     _max_size = Size("16 TiB")
+     _formattable = True
+@@ -922,6 +1012,7 @@ class ReiserFS(FS):
+     _mkfs_class = fsmkfs.ReiserFSMkfs
+     _size_info_class = fssize.ReiserFSSize
+     _writelabel_class = fswritelabel.ReiserFSWriteLabel
++    _writeuuid_class = fswriteuuid.ReiserFSWriteUUID
+     _metadata_size_factor = 0.98  # reiserfs metadata may take 2% of space
+     parted_system = fileSystemType["reiserfs"]
+ 
+@@ -939,6 +1030,7 @@ class XFS(FS):
+     _type = "xfs"
+     _modules = ["xfs"]
+     _labelfs = fslabeling.XFSLabeling()
++    _uuidfs = fsuuid.XFSUUID()
+     _max_size = Size("16 EiB")
+     _formattable = True
+     _linux_native = True
+@@ -950,6 +1042,7 @@ class XFS(FS):
+     _size_info_class = fssize.XFSSize
+     _sync_class = fssync.XFSSync
+     _writelabel_class = fswritelabel.XFSWriteLabel
++    _writeuuid_class = fswriteuuid.XFSWriteUUID
+     _metadata_size_factor = 0.97  # xfs metadata may take 3% of space
+     parted_system = fileSystemType["xfs"]
+ 
+@@ -989,6 +1082,7 @@ class HFSPlus(FS):
+     _udev_types = ["hfsplus"]
+     _packages = ["hfsplus-tools"]
+     _labelfs = fslabeling.HFSPlusLabeling()
++    _uuidfs = fsuuid.HFSPlusUUID()
+     _formattable = True
+     _min_size = Size("1 MiB")
+     _max_size = Size("2 TiB")
+@@ -1025,6 +1119,7 @@ class NTFS(FS):
+     """ ntfs filesystem. """
+     _type = "ntfs"
+     _labelfs = fslabeling.NTFSLabeling()
++    _uuidfs = fsuuid.NTFSUUID()
+     _resizable = True
+     _min_size = Size("1 MiB")
+     _max_size = Size("16 TiB")
+@@ -1038,6 +1133,7 @@ class NTFS(FS):
+     _resize_class = fsresize.NTFSResize
+     _size_info_class = fssize.NTFSSize
+     _writelabel_class = fswritelabel.NTFSWriteLabel
++    _writeuuid_class = fswriteuuid.NTFSWriteUUID
+     parted_system = fileSystemType["ntfs"]
+ 
+ register_device_format(NTFS)
+diff --git a/blivet/formats/swap.py b/blivet/formats/swap.py
+index 0818f58..4dc13d4 100644
+--- a/blivet/formats/swap.py
++++ b/blivet/formats/swap.py
+@@ -21,8 +21,10 @@
+ #
+ 
+ from parted import PARTITION_SWAP, fileSystemType
++from ..errors import FSWriteUUIDError
+ from ..storage_log import log_method_call
+ from ..tasks import availability
++from ..tasks import fsuuid
+ from . import DeviceFormat, register_device_format
+ from ..size import Size
+ 
+@@ -74,6 +76,7 @@ class SwapSpace(DeviceFormat):
+ 
+         self.priority = kwargs.get("priority", -1)
+         self.label = kwargs.get("label")
++        self.new_uuid = kwargs.get("new_uuid")
+ 
+     def __repr__(self):
+         s = DeviceFormat.__repr__(self)
+@@ -110,6 +113,10 @@ class SwapSpace(DeviceFormat):
+     label = property(lambda s: s._get_label(), lambda s, l: s._set_label(l),
+                      doc="the label for this swap space")
+ 
++    def uuid_format_ok(self, uuid):
++        """Check whether the given UUID is correct according to RFC 4122."""
++        return fsuuid.FSUUID._check_rfc4122_uuid(uuid)
++
+     def _set_priority(self, priority):
+         # pylint: disable=attribute-defined-outside-init
+         if priority is None:
+@@ -167,6 +174,14 @@ class SwapSpace(DeviceFormat):
+     def _create(self, **kwargs):
+         log_method_call(self, device=self.device,
+                         type=self.type, status=self.status)
+-        blockdev.swap.mkswap(self.device, label=self.label)
++        if self.new_uuid is None:
++            blockdev.swap.mkswap(self.device, label=self.label)
++        else:
++            if not self.uuid_format_ok(self.new_uuid):
++                raise FSWriteUUIDError("bad UUID format for swap filesystem")
++            extra = [blockdev.ExtraArg("-U", self.new_uuid)]
++            blockdev.swap.mkswap(self.device, label=self.label, extra=extra)
++            self.uuid = self.new_uuid
++            self.new_uuid = None
+ 
+ register_device_format(SwapSpace)
+diff --git a/blivet/tasks/availability.py b/blivet/tasks/availability.py
+index 7811be1..4a134d7 100644
+--- a/blivet/tasks/availability.py
++++ b/blivet/tasks/availability.py
+@@ -298,12 +298,14 @@ MKFS_JFS_APP = application("mkfs.jfs")
+ MKFS_XFS_APP = application("mkfs.xfs")
+ MKNTFS_APP = application("mkntfs")
+ MKREISERFS_APP = application("mkreiserfs")
++MLABEL_APP = application("mlabel")
+ MULTIPATH_APP = application("multipath")
+ NTFSINFO_APP = application("ntfsinfo")
+ NTFSLABEL_APP = application("ntfslabel")
+ NTFSRESIZE_APP = application("ntfsresize")
+ REISERFSTUNE_APP = application("reiserfstune")
+ RESIZE2FS_APP = application_by_package("resize2fs", E2FSPROGS_PACKAGE)
++TUNE2FS_APP = application_by_package("tune2fs", E2FSPROGS_PACKAGE)
+ XFSADMIN_APP = application("xfs_admin")
+ XFSDB_APP = application("xfs_db")
+ XFSFREEZE_APP = application("xfs_freeze")
+diff --git a/blivet/tasks/fsmkfs.py b/blivet/tasks/fsmkfs.py
+index d0da5b2..4cda126 100644
+--- a/blivet/tasks/fsmkfs.py
++++ b/blivet/tasks/fsmkfs.py
+@@ -24,7 +24,7 @@ import shlex
+ 
+ from six import add_metaclass
+ 
+-from ..errors import FSError, FSWriteLabelError
++from ..errors import FSError, FSWriteLabelError, FSWriteUUIDError
+ from .. import util
+ 
+ from . import availability
+@@ -36,6 +36,7 @@ from . import task
+ class FSMkfsTask(fstask.FSTask):
+ 
+     can_label = abc.abstractproperty(doc="whether this task labels")
++    can_set_uuid = abc.abstractproperty(doc="whether this task can set UUID")
+ 
+ 
+ @add_metaclass(abc.ABCMeta)
+@@ -47,8 +48,21 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+     label_option = abc.abstractproperty(
+         doc="Option for setting a filesystem label.")
+ 
++    get_uuid_args = abc.abstractproperty(
++        doc="Method to return arguments for setting a filesystem UUID.")
++
+     args = abc.abstractproperty(doc="options for creating filesystem")
+ 
++    @abc.abstractmethod
++    def get_uuid_args(self, uuid):
++        """Return a list of arguments for setting a filesystem UUID.
++
++           :param uuid: the UUID to set
++           :type uuid: str
++           :rtype: list of str
++        """
++        raise NotImplementedError
++
+     # IMPLEMENTATION methods
+ 
+     @property
+@@ -61,6 +75,15 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+         return self.label_option is not None
+ 
+     @property
++    def can_set_uuid(self):
++        """Whether this task can set the UUID of a filesystem.
++
++           :returns: True if UUID can be set
++           :rtype: bool
++        """
++        return self.get_uuid_args is not None
++
++    @property
+     def _label_options(self):
+         """ Any labeling options that a particular filesystem may use.
+ 
+@@ -80,13 +103,33 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+         else:
+             raise FSWriteLabelError("Choosing not to apply label (%s) during creation of filesystem %s. Label format is unacceptable for this filesystem." % (self.fs.label, self.fs.type))
+ 
+-    def _format_options(self, options=None, label=False):
++    @property
++    def _uuid_options(self):
++        """Any UUID options that a particular filesystem may use.
++
++           :returns: UUID options
++           :rtype: list of str
++           :raises: FSWriteUUIDError
++        """
++        if self.get_uuid_args is None or self.fs.new_uuid is None:
++            return []
++
++        if self.fs.uuid_format_ok(self.fs.new_uuid):
++            return self.get_uuid_args(self.fs.new_uuid)
++        else:
++            raise FSWriteUUIDError("Choosing not to apply UUID (%s) during"
++                                   " creation of filesystem %s. UUID format"
++                                   " is unacceptable for this filesystem."
++                                   % (self.fs.new_uuid, self.fs.type))
++
++    def _format_options(self, options=None, label=False, set_uuid=False):
+         """Get a list of format options to be used when creating the
+            filesystem.
+ 
+            :param options: any special options
+            :type options: list of str or None
+            :param bool label: if True, label if possible, default is False
++           :param bool set_uuid: whether set UUID if possible, default is False
+         """
+         options = options or []
+ 
+@@ -94,25 +137,33 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+             raise FSError("options parameter must be a list.")
+ 
+         label_options = self._label_options if label else []
++        uuid_options = self._uuid_options if set_uuid else []
+         create_options = shlex.split(self.fs.create_options or "")
+-        return options + self.args + label_options + create_options + [self.fs.device]
++        return (options + self.args + label_options + uuid_options +
++                create_options + [self.fs.device])
+ 
+-    def _mkfs_command(self, options, label):
++    def _mkfs_command(self, options, label, set_uuid):
+         """Return the command to make the filesystem.
+ 
+            :param options: any special options
+            :type options: list of str or None
++           :param label: whether to set a label
++           :type label: bool
++           :param set_uuid: whether to set an UUID
++           :type set_uuid: bool
+            :returns: the mkfs command
+            :rtype: list of str
+         """
+-        return [str(self.ext)] + self._format_options(options, label)
++        return [str(self.ext)] + self._format_options(options, label, set_uuid)
+ 
+-    def do_task(self, options=None, label=False):
++    def do_task(self, options=None, label=False, set_uuid=False):
+         """Create the format on the device and label if possible and desired.
+ 
+            :param options: any special options, may be None
+            :type options: list of str or NoneType
+            :param bool label: whether to label while creating, default is False
++           :param bool set_uuid: whether to set an UUID while creating, default
++                                 is False
+         """
+         # pylint: disable=arguments-differ
+         error_msgs = self.availability_errors
+@@ -120,8 +171,9 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+             raise FSError("\n".join(error_msgs))
+ 
+         options = options or []
++        cmd = self._mkfs_command(options, label, set_uuid)
+         try:
+-            ret = util.run_program(self._mkfs_command(options, label))
++            ret = util.run_program(cmd)
+         except OSError as e:
+             raise FSError(e)
+ 
+@@ -133,6 +185,9 @@ class BTRFSMkfs(FSMkfs):
+     ext = availability.MKFS_BTRFS_APP
+     label_option = None
+ 
++    def get_uuid_args(self, uuid):
++        return ["-U", uuid]
++
+     @property
+     def args(self):
+         return []
+@@ -144,6 +199,9 @@ class Ext2FSMkfs(FSMkfs):
+ 
+     _opts = []
+ 
++    def get_uuid_args(self, uuid):
++        return ["-U", uuid]
++
+     @property
+     def args(self):
+         return self._opts + (["-T", self.fs.fsprofile] if self.fs.fsprofile else [])
+@@ -161,6 +219,9 @@ class FATFSMkfs(FSMkfs):
+     ext = availability.MKDOSFS_APP
+     label_option = "-n"
+ 
++    def get_uuid_args(self, uuid):
++        return ["-i", uuid.replace('-', '')]
++
+     @property
+     def args(self):
+         return []
+@@ -169,6 +230,7 @@ class FATFSMkfs(FSMkfs):
+ class GFS2Mkfs(FSMkfs):
+     ext = availability.MKFS_GFS2_APP
+     label_option = None
++    get_uuid_args = None
+ 
+     @property
+     def args(self):
+@@ -178,6 +240,7 @@ class GFS2Mkfs(FSMkfs):
+ class HFSMkfs(FSMkfs):
+     ext = availability.HFORMAT_APP
+     label_option = "-l"
++    get_uuid_args = None
+ 
+     @property
+     def args(self):
+@@ -187,6 +250,7 @@ class HFSMkfs(FSMkfs):
+ class HFSPlusMkfs(FSMkfs):
+     ext = availability.MKFS_HFSPLUS_APP
+     label_option = "-v"
++    get_uuid_args = None
+ 
+     @property
+     def args(self):
+@@ -196,6 +260,7 @@ class HFSPlusMkfs(FSMkfs):
+ class JFSMkfs(FSMkfs):
+     ext = availability.MKFS_JFS_APP
+     label_option = "-L"
++    get_uuid_args = None
+ 
+     @property
+     def args(self):
+@@ -205,6 +270,7 @@ class JFSMkfs(FSMkfs):
+ class NTFSMkfs(FSMkfs):
+     ext = availability.MKNTFS_APP
+     label_option = "-L"
++    get_uuid_args = None
+ 
+     @property
+     def args(self):
+@@ -215,6 +281,9 @@ class ReiserFSMkfs(FSMkfs):
+     ext = availability.MKREISERFS_APP
+     label_option = "-l"
+ 
++    def get_uuid_args(self, uuid):
++        return ["-u", uuid]
++
+     @property
+     def args(self):
+         return ["-f", "-f"]
+@@ -224,6 +293,9 @@ class XFSMkfs(FSMkfs):
+     ext = availability.MKFS_XFS_APP
+     label_option = "-L"
+ 
++    def get_uuid_args(self, uuid):
++        return ["-m", "uuid=" + uuid]
++
+     @property
+     def args(self):
+         return ["-f"]
+@@ -234,3 +306,7 @@ class UnimplementedFSMkfs(task.UnimplementedTask, FSMkfsTask):
+     @property
+     def can_label(self):
+         return False
++
++    @property
++    def can_set_uuid(self):
++        return False
+diff --git a/blivet/tasks/fsuuid.py b/blivet/tasks/fsuuid.py
+new file mode 100644
+index 0000000..b18e404
+--- /dev/null
++++ b/blivet/tasks/fsuuid.py
+@@ -0,0 +1,85 @@
++import abc
++
++from string import hexdigits
++from six import add_metaclass
++
++
++@add_metaclass(abc.ABCMeta)
++class FSUUID(object):
++
++    """An abstract class that represents filesystem actions for setting the
++       UUID.
++    """
++
++    @abc.abstractmethod
++    def uuid_format_ok(self, uuid):
++        """Returns True if the given UUID is correctly formatted for
++           this filesystem, otherwise False.
++
++           :param str uuid: the UUID for this filesystem
++           :rtype: bool
++        """
++        raise NotImplementedError
++
++    # IMPLEMENTATION methods
++
++    @classmethod
++    def _check_rfc4122_uuid(cls, uuid):
++        """Check whether the given UUID is correct according to RFC 4122 and
++           return True if it's correct or False otherwise.
++
++           :param str uuid: the UUID to check
++           :rtype: bool
++        """
++        chunks = uuid.split('-')
++        if len(chunks) != 5:
++            return False
++        chunklens = [len(chunk) for chunk in chunks
++                     if all(char in hexdigits for char in chunk)]
++        return chunklens == [8, 4, 4, 4, 12]
++
++
++class Ext2FSUUID(FSUUID):
++    @classmethod
++    def uuid_format_ok(cls, uuid):
++        return cls._check_rfc4122_uuid(uuid)
++
++
++class FATFSUUID(FSUUID):
++    @classmethod
++    def uuid_format_ok(cls, uuid):
++        if len(uuid) != 9 or uuid[4] != '-':
++            return False
++        return all(char in hexdigits.upper() for char in (uuid[:4] + uuid[5:]))
++
++
++class JFSUUID(FSUUID):
++    @classmethod
++    def uuid_format_ok(cls, uuid):
++        return cls._check_rfc4122_uuid(uuid)
++
++
++class ReiserFSUUID(FSUUID):
++    @classmethod
++    def uuid_format_ok(cls, uuid):
++        return cls._check_rfc4122_uuid(uuid)
++
++
++class XFSUUID(FSUUID):
++    @classmethod
++    def uuid_format_ok(cls, uuid):
++        return cls._check_rfc4122_uuid(uuid)
++
++
++class HFSPlusUUID(FSUUID):
++    @classmethod
++    def uuid_format_ok(cls, uuid):
++        return cls._check_rfc4122_uuid(uuid)
++
++
++class NTFSUUID(FSUUID):
++    @classmethod
++    def uuid_format_ok(cls, uuid):
++        if len(uuid) != 16:
++            return False
++        return all(char in hexdigits.upper() for char in uuid)
+diff --git a/blivet/tasks/fswriteuuid.py b/blivet/tasks/fswriteuuid.py
+new file mode 100644
+index 0000000..c780839
+--- /dev/null
++++ b/blivet/tasks/fswriteuuid.py
+@@ -0,0 +1,93 @@
++import abc
++
++from six import add_metaclass
++
++from .. import util
++from ..errors import FSWriteUUIDError
++
++from . import availability
++from . import fstask
++from . import task
++
++
++@add_metaclass(abc.ABCMeta)
++class FSWriteUUID(task.BasicApplication, fstask.FSTask):
++
++    """ An abstract class that represents writing an UUID for a filesystem. """
++
++    description = "write filesystem UUID"
++
++    args = abc.abstractproperty(doc="arguments for writing a UUID")
++
++    # IMPLEMENTATION methods
++
++    @property
++    def _set_command(self):
++        """Get the command to set UUID of the filesystem.
++
++           :return: the command
++           :rtype: list of str
++        """
++        return [str(self.ext)] + self.args
++
++    def do_task(self):
++        error_msgs = self.availability_errors
++        if error_msgs:
++            raise FSWriteUUIDError("\n".join(error_msgs))
++
++        rc = util.run_program(self._set_command)
++        if rc:
++            msg = "setting UUID via {} failed".format(self._set_command)
++            raise FSWriteUUIDError(msg)
++
++
++class DosFSWriteUUID(FSWriteUUID):
++    ext = availability.MLABEL_APP
++
++    @property
++    def args(self):
++        return ["-N", self.fs.new_uuid, "-i", self.fs.device, "::"]
++
++
++class Ext2FSWriteUUID(FSWriteUUID):
++    ext = availability.TUNE2FS_APP
++
++    @property
++    def args(self):
++        return ["-U", self.fs.new_uuid, self.fs.device]
++
++
++class JFSWriteUUID(FSWriteUUID):
++    ext = availability.JFSTUNE_APP
++
++    @property
++    def args(self):
++        return ["-U", self.fs.new_uuid, self.fs.device]
++
++
++class NTFSWriteUUID(FSWriteUUID):
++    ext = availability.NTFSLABEL_APP
++
++    @property
++    def args(self):
++        return ["--new-serial=" + self.fs.new_uuid, self.fs.device]
++
++
++class ReiserFSWriteUUID(FSWriteUUID):
++    ext = availability.REISERFSTUNE_APP
++
++    @property
++    def args(self):
++        return ["-u", self.fs.new_uuid, self.fs.device]
++
++
++class XFSWriteUUID(FSWriteUUID):
++    ext = availability.XFSADMIN_APP
++
++    @property
++    def args(self):
++        return ["-U", self.fs.new_uuid, self.fs.device]
++
++
++class UnimplementedFSWriteUUID(fstask.UnimplementedFSTask):
++    pass
+diff --git a/tests/formats_test/fsuuid.py b/tests/formats_test/fsuuid.py
+new file mode 100644
+index 0000000..aae3b1c
+--- /dev/null
++++ b/tests/formats_test/fsuuid.py
+@@ -0,0 +1,111 @@
++import sys
++import abc
++from six import add_metaclass
++from unittest import skipIf
++
++from tests import loopbackedtestcase
++from blivet.devicetree import DeviceTree
++from blivet.errors import FSError, FSWriteUUIDError
++from blivet.size import Size
++
++
++@add_metaclass(abc.ABCMeta)
++class SetUUID(loopbackedtestcase.LoopBackedTestCase):
++
++    """Base class for UUID tests without any test methods."""
++
++    _fs_class = abc.abstractproperty(
++        doc="The class of the filesystem being tested on.")
++
++    _valid_uuid = abc.abstractproperty(
++        doc="A valid UUID for this filesystem.")
++
++    _invalid_uuid = abc.abstractproperty(
++        doc="An invalid UUID for this filesystem.")
++
++    def __init__(self, methodName='run_test'):
++        super(SetUUID, self).__init__(methodName=methodName,
++                                      device_spec=[Size("100 MiB")])
++
++    def setUp(self):
++        an_fs = self._fs_class()
++        if not an_fs.formattable:
++            self.skipTest("can not create filesystem %s" % an_fs.name)
++        super(SetUUID, self).setUp()
++
++
++class SetUUIDWithMkFs(SetUUID):
++
++    """Tests various aspects of setting an UUID for a filesystem where the
++       native mkfs tool can set the UUID.
++    """
++
++    @skipIf(sys.version_info < (3, 4), "assertLogs is not supported")
++    def test_set_invalid_uuid(self):
++        """Create the filesystem with an invalid UUID."""
++        an_fs = self._fs_class(device=self.loop_devices[0],
++                               new_uuid=self._invalid_uuid)
++        if self._fs_class._type == "swap":
++            with self.assertRaisesRegex(FSWriteUUIDError, "bad UUID format"):
++                an_fs.create()
++        else:
++            with self.assertLogs('blivet', 'WARNING') as logs:
++                an_fs.create()
++            self.assertTrue(len(logs.output) >= 1)
++            self.assertRegex(logs.output[0], "UUID format.*unacceptable")
++
++    def test_set_uuid(self):
++        """Create the filesystem with a valid UUID."""
++        an_fs = self._fs_class(device=self.loop_devices[0],
++                               new_uuid=self._valid_uuid)
++        self.assertIsNone(an_fs.create())
++
++        # Use DeviceTree for detecting the loop device and check whether the
++        # UUID is correct.
++        dt = DeviceTree()
++        dt.reset()
++        dt.populate()
++        device = dt.get_device_by_path(self.loop_devices[0])
++        self.assertEqual(device.format.uuid, self._valid_uuid)
++
++
++class SetUUIDAfterMkFs(SetUUID):
++
++    """Tests various aspects of setting an UUID for a filesystem where the
++       native mkfs tool can't set the UUID.
++    """
++
++    def setUp(self):
++        an_fs = self._fs_class()
++        if an_fs._writeuuid.availability_errors:
++            self.skipTest("can not write UUID for filesystem %s" % an_fs.name)
++        super(SetUUIDAfterMkFs, self).setUp()
++
++    def test_set_uuid_later(self):
++        """Create the filesystem with random UUID and reassign later."""
++        an_fs = self._fs_class(device=self.loop_devices[0])
++        if an_fs._writeuuid.availability_errors:
++            self.skipTest("can not write UUID for filesystem %s" % an_fs.name)
++        self.assertIsNone(an_fs.create())
++
++        an_fs.new_uuid = self._valid_uuid
++        self.assertIsNone(an_fs.write_uuid())
++
++        # Use DeviceTree for detecting the loop device and check whether the
++        # UUID is correct.
++        dt = DeviceTree()
++        dt.reset()
++        dt.populate()
++        device = dt.get_device_by_path(self.loop_devices[0])
++        self.assertEqual(device.format.uuid, self._valid_uuid)
++
++    def test_set_invalid_uuid_later(self):
++        """Create the filesystem and try to reassign an invalid UUID later."""
++        an_fs = self._fs_class(device=self.loop_devices[0])
++        if an_fs._writeuuid.availability_errors:
++            self.skipTest("can not write UUID for filesystem %s" % an_fs.name)
++        self.assertIsNone(an_fs.create())
++
++        an_fs.new_uuid = self._invalid_uuid
++        with self.assertRaisesRegex(FSError, "bad UUID format"):
++            an_fs.write_uuid()
+diff --git a/tests/formats_test/methods_test.py b/tests/formats_test/methods_test.py
+index 9df7415..ec86baf 100644
+--- a/tests/formats_test/methods_test.py
++++ b/tests/formats_test/methods_test.py
+@@ -300,7 +300,11 @@ class FSMethodsTestCase(FormatMethodsTestCase):
+         with patch.object(self.format, "_mkfs"):
+             self.format.exists = False
+             self.format.create()
+-            self.format._mkfs.do_task.assert_called_with(options=None, label=not self.format.relabels())  # pylint: disable=no-member
++            self.format._mkfs.do_task.assert_called_with(
++                options=None,
++                label=not self.format.relabels(),
++                set_uuid=self.format.can_assign_uuid()
++            )  # pylint: disable=no-member
+ 
+     def _test_setup_backend(self):
+         with patch.object(self.format, "_mount"):
+diff --git a/tests/formats_test/uuid_test.py b/tests/formats_test/uuid_test.py
+new file mode 100644
+index 0000000..1ed4038
+--- /dev/null
++++ b/tests/formats_test/uuid_test.py
+@@ -0,0 +1,87 @@
++import unittest
++
++import blivet.formats.fs as fs
++import blivet.formats.swap as swap
++
++from . import fsuuid
++
++
++class InitializationTestCase(unittest.TestCase):
++
++    """Test FS object initialization."""
++
++    def test_uuids(self):
++        """Initialize some filesystems with valid and invalid UUIDs."""
++
++        # File systems that accept real UUIDs (RFC 4122)
++        for fscls in [fs.Ext2FS, fs.JFS, fs.ReiserFS, fs.XFS, fs.HFSPlus]:
++            uuid = "0invalid-uuid-with-righ-tlength00000"
++            self.assertFalse(fscls().uuid_format_ok(uuid))
++            uuid = "01234567-12341234123401234567891a"
++            self.assertFalse(fscls().uuid_format_ok(uuid))
++            uuid = "0123456-123-123-123-01234567891"
++            self.assertFalse(fscls().uuid_format_ok(uuid))
++            uuid = "01234567-xyz-1234-1234-1234-012345678911"
++            self.assertFalse(fscls().uuid_format_ok(uuid))
++            uuid = "01234567-1234-1234-1234-012345678911"
++            self.assertTrue(fscls().uuid_format_ok(uuid))
++
++        self.assertFalse(fs.FATFS().uuid_format_ok("1234-56789"))
++        self.assertFalse(fs.FATFS().uuid_format_ok("abcd-ef00"))
++        self.assertFalse(fs.FATFS().uuid_format_ok("12345678"))
++        self.assertTrue(fs.FATFS().uuid_format_ok("1234-5678"))
++        self.assertTrue(fs.FATFS().uuid_format_ok("ABCD-EF01"))
++
++        self.assertFalse(fs.NTFS().uuid_format_ok("12345678901234567"))
++        self.assertFalse(fs.NTFS().uuid_format_ok("abcdefgh"))
++        self.assertFalse(fs.NTFS().uuid_format_ok("abcdefabcdefabcd"))
++        self.assertTrue(fs.NTFS().uuid_format_ok("1234567890123456"))
++        self.assertTrue(fs.NTFS().uuid_format_ok("ABCDEFABCDEFABCD"))
++
++
++class XFSTestCase(fsuuid.SetUUIDWithMkFs):
++    _fs_class = fs.XFS
++    _invalid_uuid = "abcdefgh-ijkl-mnop-qrst-uvwxyz123456"
++    _valid_uuid = "97e3d40f-dca8-497d-8b86-92f257402465"
++
++
++class FATFSTestCase(fsuuid.SetUUIDWithMkFs):
++    _fs_class = fs.FATFS
++    _invalid_uuid = "c87ab0e1"
++    _valid_uuid = "DEAD-BEEF"
++
++
++class Ext2FSTestCase(fsuuid.SetUUIDWithMkFs):
++    _fs_class = fs.Ext2FS
++    _invalid_uuid = "abcdefgh-ijkl-mnop-qrst-uvwxyz123456"
++    _valid_uuid = "bad19a10-075a-4e99-8922-e4638722a567"
++
++
++class JFSTestCase(fsuuid.SetUUIDAfterMkFs):
++    _fs_class = fs.JFS
++    _invalid_uuid = "abcdefgh-ijkl-mnop-qrst-uvwxyz123456"
++    _valid_uuid = "ac54f987-b371-45d9-8846-7d6204081e5c"
++
++
++class ReiserFSTestCase(fsuuid.SetUUIDWithMkFs):
++    _fs_class = fs.ReiserFS
++    _invalid_uuid = "abcdefgh-ijkl-mnop-qrst-uvwxyz123456"
++    _valid_uuid = "1761023e-bab8-4919-a2cb-f26c89fe1cfe"
++
++
++class HFSPlusTestCase(fsuuid.SetUUIDAfterMkFs):
++    _fs_class = fs.HFSPlus
++    _invalid_uuid = "abcdefgh-ijkl-mnop-qrst-uvwxyz123456"
++    _valid_uuid = "3e6d84ce-cca9-4f55-9950-59e5b31f0e36"
++
++
++class NTFSTestCase(fsuuid.SetUUIDAfterMkFs):
++    _fs_class = fs.NTFS
++    _invalid_uuid = "b22193477ac947fb"
++    _valid_uuid = "BC3B34461B8344A6"
++
++
++class SwapSpaceTestCase(fsuuid.SetUUIDWithMkFs):
++    _fs_class = swap.SwapSpace
++    _invalid_uuid = "abcdefgh-ijkl-mnop-qrst-uvwxyz123456"
++    _valid_uuid = "01234567-1234-1234-1234-012345678912"
