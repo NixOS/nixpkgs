@@ -22,5 +22,25 @@ boot.kernel.sysctl."net.ipv6.conf.eth0.disable_ipv6" = true;
 </programlisting>
 </para>
 
+<para>As with IPv4 networking interfaces are automatically configured via
+DHCPv6. You can configure an interface manually:
+
+<programlisting>
+networking.interfaces.eth0.ip6 = [ { address = "fe00:aa:bb:cc::2"; prefixLength = 64; } ];
+</programlisting>
+</para>
+
+<para>For configuring a gateway, optionally with explicitly specified interface:
+
+<programlisting>
+networking.defaultGateway6 = {
+  address = "fe00::1";
+  interface = "enp0s3";
+}
+</programlisting>
+</para>
+
+<para>See <xref linkend='sec-ipv4' /> for similar examples and additional information.
+</para>
 
 </section>
