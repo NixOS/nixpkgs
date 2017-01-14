@@ -24,7 +24,7 @@ let
   /* Basic list of packages to be natively built,
      but need a crossSystem defined to get meaning */
   basicNativeDrv = {
-    gdbCross = nativePlatforms;
+    gdbCross.nativeDrv = nativePlatforms;
   };
 
   basic = basicCrossDrv // basicNativeDrv;
