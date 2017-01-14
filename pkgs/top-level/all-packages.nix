@@ -1736,6 +1736,7 @@ in
   });
   fontforge-gtk = callPackage ../tools/misc/fontforge {
     withGTK = true;
+    gtk2 = gtk2-x11;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
