@@ -6356,6 +6356,8 @@ in
 
   heroku = callPackage ../development/tools/heroku { };
 
+  htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
+
   hyenae = callPackage ../tools/networking/hyenae { };
 
   icestorm = callPackage ../development/tools/icestorm { };
