@@ -2125,6 +2125,8 @@ in
 
   hans = callPackage ../tools/networking/hans { };
 
+  h2 = callPackage ../servers/h2 { };
+
   haproxy = callPackage ../tools/networking/haproxy { };
 
   haveged = callPackage ../tools/security/haveged { };
