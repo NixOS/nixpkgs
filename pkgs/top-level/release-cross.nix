@@ -1,4 +1,12 @@
-with import ./release-lib.nix { supportedSystems = [ builtins.currentSystem ]; };
+
+{ # The platforms for which we build Nixpkgs.
+  supportedSystems ? [ builtins.currentSystem ]
+, # Strip most of attributes when evaluating to spare memory usage
+  scrubJobs ? true
+}:
+
+with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
+
 let
   lib = import ../../lib;
 
