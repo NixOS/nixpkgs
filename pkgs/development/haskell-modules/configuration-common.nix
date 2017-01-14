@@ -1042,7 +1042,10 @@ self: super: {
   # Note: Simply patching the dynamic library (.so) of the GLUT build will *not* work, since the
   # RPATH also needs to be propagated when using static linking. GHC automatically handles this for
   # us when we patch the cabal file (Link options will be recored in the ghc package registry).
-  GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
+  #
+  # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
+  # so disable this on Darwin only
+  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
