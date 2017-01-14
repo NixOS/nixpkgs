@@ -11320,6 +11320,8 @@ in {
     };
   };
 
+  flask_elastic = callPackage ../development/python-modules/flask-elastic.nix { };
+
   flask_login = callPackage ../development/python-modules/flask-login.nix { };
 
   flask_migrate = buildPythonPackage rec {
