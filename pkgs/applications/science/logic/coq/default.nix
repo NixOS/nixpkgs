@@ -1,4 +1,4 @@
-# - coqide compilation can be disabled by setting lablgtk to null;
+# - coqide compilation can be disabled by setting buildIde to false
 # - The csdp program used for the Micromega tactic is statically referenced.
 #   However, coq can build without csdp by setting it to null.
 #   In this case some Micromega tactics will search the user's path for the csdp program and will fail if it is not found.
@@ -6,8 +6,9 @@
 #   the derivation; it defaults to the greatest.
 
 { stdenv, fetchurl, writeText, pkgconfig
-, ocaml, findlib, camlp5, ncurses
-, lablgtk ? null, csdp ? null
+, ocamlPackages, ncurses
+, buildIde ? true
+, csdp ? null
 , version ? "8.6"
 }:
 
@@ -19,8 +20,8 @@ let
    "8.6"	= "1pw1xvy1657l1k69wrb911iqqflzhhp8wwsjvihbgc72r3skqg3f";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
-  buildIde = lablgtk != null;
-  ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
+  camlp5 = ocamlPackages.camlp5_transitional;
+  ideFlags = if buildIde then "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
@@ -31,14 +32,15 @@ stdenv.mkDerivation {
   name = "coq-${version}";
 
   inherit coq-version;
-  inherit ocaml camlp5;
+  inherit camlp5;
+  inherit (ocamlPackages) ocaml;
 
   src = fetchurl {
     url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
     inherit sha256;
   };
 
-  buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];
+  buildInputs = [ pkgconfig ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ocamlPackages.lablgtk ];
 
   postPatch = ''
     UNAME=$(type -tp uname)
