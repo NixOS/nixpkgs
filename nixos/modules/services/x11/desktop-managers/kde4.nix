@@ -183,10 +183,7 @@ in
       GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
     };
 
-    environment.etc = singleton
-      { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-        target = "X11/xkb";
-      };
+    services.xserver.exportConfiguration = true;
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
