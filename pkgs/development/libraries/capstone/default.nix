@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildPhase = '' ./make.sh '';
   installPhase = '' env PREFIX=$out ./make.sh install '';
   
-  buildInputs = [
+  nativeBuildInputs = [
     pkgconfig
   ];
 
