@@ -92,10 +92,10 @@ let
   in if typeAndName == null then null else rec {
     type = lib.head typeAndName;
     name = lib.last typeAndName;
-    # The configuration entry for the storage spec. Note that we don't need to
-    # check whether ${type} and ${name} exist, because they're already checked
-    # in assertSpec.
-    config = cfg.${type}.${name};
+    # The generated UUID for the storage spec. Note that we don't need to check
+    # whether ${type} and ${name} exist, because they're already checked in
+    # assertSpec.
+    inherit (cfg.${type}.${name}) uuid;
   };
 
   /* Validate the device specification and return true if it's valid or false if

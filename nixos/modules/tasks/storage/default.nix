@@ -281,7 +281,7 @@ in
         # If no label is set, reference the device via the generated UUID in
         # genericOptions.uuid.
         (lib.mkIf (config.storage != null && config.label == null) {
-          device = "/dev/disk/by-uuid/${config.storage.config.uuid}";
+          device = "/dev/disk/by-uuid/${config.storage.uuid}";
         })
       ];
     }));
@@ -304,7 +304,7 @@ in
       # If no label is set, reference the device via the generated UUID in
       # genericOptions.uuid.
       config = lib.mkIf (config.storage != null && !options.label.isDefined) {
-        device = "/dev/disk/by-uuid/${config.storage.config.uuid}";
+        device = "/dev/disk/by-uuid/${config.storage.uuid}";
       };
     }));
   };
