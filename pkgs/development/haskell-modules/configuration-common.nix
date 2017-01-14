@@ -1153,4 +1153,11 @@ self: super: {
   turtle_1_3_0 = super.turtle_1_3_0.overrideScope (self: super: {
     optparse-applicative = self.optparse-applicative_0_13_0_0;
   });
+
+  lentil = super.lentil.overrideScope (self: super: {
+    pipes = self.pipes_4_3_2;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+    # https://github.com/roelvandijk/terminal-progress-bar/issues/14
+    terminal-progress-bar = doJailbreak self.terminal-progress-bar_0_1_1;
+  });
 }
