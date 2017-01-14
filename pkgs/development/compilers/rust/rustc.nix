@@ -142,7 +142,9 @@ stdenv.mkDerivation {
   doCheck = true;
   dontSetConfigureCross = true;
 
-  enableParallelBuilding = true;
+  # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
+  # https://github.com/rust-lang/rust/issues/30181
+  # enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://www.rust-lang.org/;
