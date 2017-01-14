@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ xz.bin ];
+  nativeBuildInputs = [ xz.bin ];
 
   preConfigure = if stdenv.isCygwin then ''
     sed -i lib/fpending.h -e 's,include <stdio_ext.h>,,'
