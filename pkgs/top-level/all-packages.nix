@@ -1487,7 +1487,7 @@ in
 
   dtach = callPackage ../tools/misc/dtach { };
 
-  dtc = callPackage ../development/compilers/dtc { };
+  dtc = callPackage ../development/compilers/dtc { flex = flex_2_6_1; };
 
   dub = callPackage ../development/tools/build-managers/dub { };
 
