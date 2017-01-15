@@ -17221,10 +17221,7 @@ with pkgs;
     version = "8.5pl3";
   };
   coq_8_6 = callPackage ../applications/science/logic/coq {};
-  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {
-    inherit (ocamlPackages_4_02) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages_4_02.camlp5_transitional;
-  };
+  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
   coq = coq_8_6;
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
