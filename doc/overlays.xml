@@ -40,17 +40,17 @@ first one present is considered, and all the rest are ignored:
 </orderedlist>
 </para>
 
-<para>For the second and third option, the directory should contain Nix expressions defining the
+<para>For the second and third options, the directory should contain Nix expressions defining the
 overlays. Each overlay can be a file, a directory containing a
 <filename>default.nix</filename>, or a symlink to one of those. The expressions should follow
 the syntax described in <xref linkend="sec-overlays-layout"/>.</para>
 
 <para>The order of the overlay layers can influence the recipe of packages if multiple layers override
-the same recipe. In the case where overlays are loaded from a directory, these are loaded in
+the same recipe. In the case where overlays are loaded from a directory, they are loaded in
 alphabetical order.</para>
 
 <para>To install an overlay using the last option, you can clone the overlay's repository and add
-a symbolic link to in the <filename>~/.nixpkgs/overlays/</filename> directory.</para>
+a symbolic link to it in <filename>~/.nixpkgs/overlays/</filename> directory.</para>
 
 </section>
 
@@ -60,7 +60,7 @@ a symbolic link to in the <filename>~/.nixpkgs/overlays/</filename> directory.</
 <title>Overlays Layout</title>
 
 <para>Overlays are expressed as Nix functions which accept 2 arguments and return a set of
-packages</para>
+packages.</para>
 
 <programlisting>
 self: super:
