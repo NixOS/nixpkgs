@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, xz, gmp ? null
+{ lib, stdenv, buildPackages, fetchurl, perl, xz, gmp ? null
 , aclSupport ? false, acl ? null
 , attrSupport ? false, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
@@ -12,8 +12,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 
 with lib;
 
-let
-  self = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
     name = "coreutils-8.26";
 
     src = fetchurl {
@@ -63,12 +62,12 @@ let
       # Works around a bug with 8.26:
       # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
       preInstall = ''
-        sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${self}/bin/install -c|'
+        sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
       '';
 
       postInstall = ''
         rm $out/share/man/man1/*
-        cp ${self}/share/man/man1/* $out/share/man/man1
+        cp ${buildPackages.coreutils}/share/man/man1/* $out/share/man/man1
       '';
 
       # Needed for fstatfs()
@@ -110,6 +109,4 @@ let
 
       maintainers = [ maintainers.eelco ];
     };
-  };
-in
-  self
+  }
