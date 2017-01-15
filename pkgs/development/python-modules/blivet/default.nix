@@ -19,7 +19,9 @@ buildPythonPackage rec {
   # Only works with Python 3!
   disabled = !isPy3k;
 
-  patches = [ ./no-hawkey.patch ./test-fixes.patch ./uuids.patch ];
+  patches = [
+    ./no-hawkey.patch ./test-fixes.patch ./uuids.patch ./ntfs-formattable.patch
+  ];
 
   postPatch = ''
     cat > blivet/kickstart_stubs.py <<EOF

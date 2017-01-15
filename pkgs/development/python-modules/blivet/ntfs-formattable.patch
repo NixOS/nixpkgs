@@ -1,0 +1,16 @@
+Submitted upstream at:
+
+  https://github.com/rhinstaller/blivet/pull/536
+
+diff --git a/blivet/formats/fs.py b/blivet/formats/fs.py
+index 67517d6..9693840 100644
+--- a/blivet/formats/fs.py
++++ b/blivet/formats/fs.py
+@@ -1026,6 +1026,7 @@ class NTFS(FS):
+     _type = "ntfs"
+     _labelfs = fslabeling.NTFSLabeling()
+     _resizable = True
++    _formattable = True
+     _min_size = Size("1 MiB")
+     _max_size = Size("16 TiB")
+     _packages = ["ntfsprogs"]
