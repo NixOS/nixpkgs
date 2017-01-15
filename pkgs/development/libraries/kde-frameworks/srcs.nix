@@ -363,11 +363,11 @@
     };
   };
   knewstuff = {
-    version = "5.30.0";
+    version = "5.30.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.30/knewstuff-5.30.0.tar.xz";
-      sha256 = "1srh98dqd54nibzcaxpvn8vw0amprx4986hd17j32633hs93a69g";
-      name = "knewstuff-5.30.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.30/knewstuff-5.30.1.tar.xz";
+      sha256 = "1vsaprynq6dazg64zmj6j1wd8g4aw6pzz3208nqgjjwk5kw8zh0h";
+      name = "knewstuff-5.30.1.tar.xz";
     };
   };
   knotifications = {
