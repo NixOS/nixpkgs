@@ -177,9 +177,7 @@ in
 
   etBook = callPackage ../data/fonts/et-book { };
 
-  fetchbower = callPackage ../build-support/fetchbower {
-    inherit (nodePackages) bower2nix;
-  };
+  fetchbower = callPackage ../build-support/fetchbower { };
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
