@@ -82,7 +82,7 @@ rec {
     export PATH=${shadow}/bin:$PATH
     mkdir -p /etc/pam.d
     if [[ ! -f /etc/passwd ]]; then
-      echo "root:x:0:0::/root:/bin/sh" > /etc/passwd
+      echo "root:x:0:0::/root:${stdenv.shell}" > /etc/passwd
       echo "root:!x:::::::" > /etc/shadow
     fi
     if [[ ! -f /etc/group ]]; then
