@@ -186,6 +186,10 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.5" && (versionOlder version "4.9")) ''
     DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
   ''}
+  ${optionalString (versionAtLeast version "4.9") ''
+    DRM_AMDGPU_SI y # (experimental) amdgpu support for verde and newer chipsets
+    DRM_AMDGPU_CIK y # (stable) amdgpu support for bonaire and newer chipsets
+  ''}
 
   # Sound.
   SND_DYNAMIC_MINORS y
