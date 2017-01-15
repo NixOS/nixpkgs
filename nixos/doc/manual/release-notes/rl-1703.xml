@@ -108,7 +108,7 @@ following incompatible changes:</para>
 
 <programlisting>
   let
-    pkgs = import &lt;nixpkgs&gt {};
+    pkgs = import &lt;nixpkgs&gt; {};
   in
     pkgs.overridePackages (self: super: ...)
 </programlisting>
@@ -117,7 +117,7 @@ following incompatible changes:</para>
 
 <programlisting>
   let
-    pkgs = import &lt;nixpkgs&gt {}; in
+    pkgs = import &lt;nixpkgs&gt; {}; in
   in
     import pkgs.path { overlays = [(self: super: ...)] }
 </programlisting>
