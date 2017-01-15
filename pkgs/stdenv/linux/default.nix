@@ -246,7 +246,7 @@ in
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
   (prevStage: {
-    inherit system crossSystem platform config;
+    inherit system crossSystem platform config overlays;
     stdenv = import ../generic rec {
       inherit system config;
 
