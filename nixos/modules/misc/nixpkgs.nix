@@ -74,7 +74,7 @@ in
             };
           ) ]
         '';
-      type = lib.listOf overlayType;
+      type = types.listOf overlayType;
       description = ''
         List of overlays to use with the Nix Packages collection.
         (For details, see the Nixpkgs documentation.)  It allows
