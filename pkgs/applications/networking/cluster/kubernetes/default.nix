@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     ./hack/generate-docs.sh
-    (cd build-tools/pause && gcc pause.c -o pause)
+    (cd build/pause && gcc pause.c -o pause)
   '';
 
   installPhase = ''
     mkdir -p "$out/bin" "$out/share/bash-completion/completions" "$man/share/man" "$pause/bin"
 
     cp _output/local/go/bin/* "$out/bin/"
-    cp build-tools/pause/pause "$pause/bin/pause"
+    cp build/pause/pause "$pause/bin/pause"
     cp -R docs/man/man1 "$man/share/man"
 
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
