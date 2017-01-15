@@ -68,7 +68,7 @@ let
       boot.supportedFilesystems = [ "btrfs" "jfs" "reiserfs" "xfs" ];
       virtualisation.memorySize = 768;
       virtualisation.emptyDiskImages = [ 10240 ];
-      environment.systemPackages = [ pkgs.hfsprogs ]
+      environment.systemPackages = [ pkgs.hfsprogs pkgs.mtools pkgs.ntfs3g ]
                                 ++ (attrs.extraSystemDeps or []);
       fileSystems."/scratch" = {
         device = "/dev/vdb";
