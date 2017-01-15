@@ -282,7 +282,6 @@
       infinoted = 264;
       keystone = 265;
       glance = 266;
-      couchpotato = 267;
 
       phabricator = 999;
 
@@ -537,7 +536,6 @@
       infinoted = 264;
       keystone = 265;
       glance = 266;
-      couchpotato = 267;
 
       phabricator = 999;
 
