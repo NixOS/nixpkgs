@@ -63,12 +63,11 @@ stageFuns: let
         __bootPackages = finalSoFar;
       };
     };
-    self =
-      if args.__raw or false
-      then args'
-      else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
-        buildPackages = if args.selfBuild or true then self else finalSoFar;
-      });
-  in self;
+  in
+    if args.__raw or false
+    then args'
+    else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
+      buildPackages = if args.selfBuild or true then null else finalSoFar;
+    });
 
 in lib.lists.fold folder {} withAllowCustomOverrides

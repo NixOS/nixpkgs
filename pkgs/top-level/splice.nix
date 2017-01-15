@@ -17,7 +17,11 @@
 # `mkDerivation` knows how to pull out the right ones for `buildDepends` and
 # friends, but a few packages use them directly, so it seemed efficient (to
 # @Ericson2314) to reuse those names, at least initially, to minimize breakage.
-lib: pkgs:
+#
+# For performance reasons, rather than uniformally splice in all cases, we only
+# do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
+# parameter there the boolean value of that equality check.
+lib: pkgs: actuallySplice:
 
 let
   defaultBuildScope = pkgs.buildPackages // pkgs.buildPackages.xorg;
@@ -58,7 +62,10 @@ let
     };
   in lib.listToAttrs (map merge (lib.attrNames mash));
 
-  splicedPackages = splicer defaultBuildScope defaultRunScope;
+  splicedPackages =
+    if actuallySplice
+    then splicer defaultBuildScope defaultRunScope
+    else pkgs // pkgs.xorg;
 
 in
 

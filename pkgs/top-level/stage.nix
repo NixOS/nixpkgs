@@ -45,7 +45,8 @@
   ## Other parameters
   ##
 
-, # The package set used at build-time
+, # The package set used at build-time. If null, `buildPackages` will
+  # be defined internally as the produced package set as itself.
   buildPackages
 
 , # The standard environment to use for building packages.
@@ -84,7 +85,8 @@ let
     };
 
   stdenvBootstappingAndPlatforms = self: super: {
-    buildPackages = buildPackages // { recurseForDerivations = false; };
+    buildPackages = (if buildPackages == null then self else buildPackages)
+      // { recurseForDerivations = false; };
     inherit stdenv
       buildPlatform hostPlatform targetPlatform;
   };
@@ -103,7 +105,7 @@ let
     inherit (buildPlatform) system platform;
   };
 
-  splice = self: super: import ./splice.nix lib self;
+  splice = self: super: import ./splice.nix lib self (buildPackages != null);
 
   allPackages = self: super:
     let res = import ./all-packages.nix
