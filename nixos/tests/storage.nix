@@ -459,9 +459,6 @@ in pkgs.lib.mapAttrs mkStorageTest {
         name = "/${name}";
         value.storage = "disk.${name}";
         value.fsType = "ext4";
-        # We need to add a label here, because things like UUIDs and labels
-        # that were created before the partitioning step are no longer present.
-        value.label = name;
       }) 8);
     };
 
