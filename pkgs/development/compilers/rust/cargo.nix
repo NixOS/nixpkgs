@@ -11,6 +11,7 @@ rustPlatform.buildRustPackage rec {
     url = "https://github.com/rust-lang/cargo";
     rev = srcRev;
     sha256 = srcSha;
+    fetchSubmodules = true;
   };
 
   inherit depsSha256;

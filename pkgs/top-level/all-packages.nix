@@ -5335,23 +5335,19 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  rust = rustStable;
-  rustStable = callPackage ../development/compilers/rust {};
-  rustBeta = lowPrio (recurseIntoAttrs (callPackage ../development/compilers/rust/beta.nix {}));
-  rustNightly = lowPrio (recurseIntoAttrs (callPackage ../development/compilers/rust/nightly.nix {
-    rustPlatform = recurseIntoAttrs (makeRustPlatform rustBeta);
-  }));
-  rustNightlyBin = lowPrio (callPackage ../development/compilers/rust/nightlyBin.nix {
-     buildRustPackage = callPackage ../build-support/rust {
-       rust = rustNightlyBin;
-       rustRegistry = callPackage ./rust-packages.nix { };
-     };
-  });
+  inherit (callPackage ../development/compilers/rust {})
+    rustStable rustStableBin rustBeta rustBetaBin rustNightly rustNightlyBin;
 
+  rust = rustStable;
   cargo = rust.cargo;
   rustc = rust.rustc;
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
+  rustBinPlatform = recurseIntoAttrs (makeRustPlatform rustStableBin);
+  rustBetaPlatform = recurseIntoAttrs (makeRustPlatform rustBeta);
+  rustBetaBinPlatform = recurseIntoAttrs (makeRustPlatform rustBetaBin);
+  rustNightlyPlatform = recurseIntoAttrs (makeRustPlatform rustNightly);
+  rustNightlyBinPlatform = recurseIntoAttrs (makeRustPlatform rustNightlyBin);
 
   makeRustPlatform = rust: lib.fix (self:
     let

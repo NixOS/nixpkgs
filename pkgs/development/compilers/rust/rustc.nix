@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git, cmake, curl
+{ stdenv, fetchurl, file, python2, tzdata, procps, cacert
+, llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git, cmake, curl, which
 
 , isRelease ? false
-, shortVersion
+, version
 , forceBundledLLVM ? false
-, srcSha, srcRev
+, supportsVendoring ? true # since rust 1.16
+, srcSha, srcUrl
 , configureFlags ? []
 , patches
 , targets
@@ -14,11 +15,6 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
-
-  version = if isRelease then
-      "${shortVersion}"
-    else
-      "${shortVersion}-g${builtins.substring 0 7 srcRev}";
 
   procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
@@ -36,23 +32,20 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
-  # Enable nightly features in stable compiles (used for
-  # bootstrapping, see https://github.com/rust-lang/rust/pull/37265).
-  # This loosens the hard restrictions on bootstrapping-compiler
-  # versions.
-  RUSTC_BOOTSTRAP = "1";
-
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
 
-  src = fetchgit {
-    url = https://github.com/rust-lang/rust;
-    rev = srcRev;
+  src = fetchurl {
+    url = srcUrl;
     sha256 = srcSha;
   };
 
-  # We need rust to build rust. If we don't provide it, configure will try to download it.
+  prePatch = "cd rust-src/lib/rustlib/src/rust";
+
+  # We need rust to build rust.
+  # Enabling vendor flag will prevent rust from downloading anything
   configureFlags = configureFlags
+                ++ optional (supportsVendoring) "--enable-vendor"
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
@@ -111,6 +104,8 @@ stdenv.mkDerivation {
     # Needed flags as the upstream configure script has a broken prefix substitution
     configureFlagsArray+=("--datadir=$out/share")
     configureFlagsArray+=("--infodir=$out/share/info")
+
+    export CARGO_HOME="$(realpath deps)"
   '';
 
   # rustc unfortunately need cmake for compiling llvm-rt but doesn't
@@ -120,7 +115,7 @@ stdenv.mkDerivation {
   # ps is needed for one of the test cases
   nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git cmake ];
 
-  buildInputs = [ ncurses ] ++ targetToolchains
+  buildInputs = [ ncurses which ] ++ targetToolchains
     ++ optional (!forceBundledLLVM) llvmShared;
 
   outputs = [ "out" "doc" ];

@@ -1,0 +1,236 @@
+{
+    "beta": {
+        "cargo": {
+            "i686-linux": {
+                "revision": "bfee18f",
+                "sha256": "b3b4dd51ae747ceafa91e56133c078d0362257f365c49fb82f5236507b1e6c79",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/bfee18f73287687c543bda8c35e4e33808792715/cargo-nightly-i686-unknown-linux-gnu.tar.gz",
+                "version": "beta-2017-01-08"
+            },
+            "x86_64-darwin": {
+                "revision": "bfee18f",
+                "sha256": "d8c9b9bf15f41411fa29cbaa061770bce3ad1500ed0c3f8ae0309bc342a9d6da",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/bfee18f73287687c543bda8c35e4e33808792715/cargo-nightly-x86_64-apple-darwin.tar.gz",
+                "version": "beta-2017-01-08"
+            },
+            "x86_64-linux": {
+                "revision": "bfee18f",
+                "sha256": "0a1064a5fc5fff404e1521241ce96643a2c5a581db870c99c7f30278504432b7",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/bfee18f73287687c543bda8c35e4e33808792715/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "beta-2017-01-08"
+            }
+        },
+        "cargo-src": {
+            "all": {
+                "revision": "bfee18f",
+                "sha256": "0q282fj8blr7l93sy9h2h5ynanmwy2vzwx8nix8yahxd1jwpa2cr",
+                "url": "https://github.com/rust-lang/cargo",
+                "version": "beta-2017-01-08"
+            }
+        },
+        "rust": {
+            "i686-linux": {
+                "revision": "a035041ba",
+                "sha256": "88d5c12dfaae353aebdf859eeb821a27f6244ebd7c82286cc9760b6d84fd5f5a",
+                "url": "https://static.rust-lang.org/dist/2017-01-08/rust-beta-i686-unknown-linux-gnu.tar.gz",
+                "version": "beta-2017-01-08"
+            },
+            "x86_64-darwin": {
+                "revision": "a035041ba",
+                "sha256": "7d465fdbfc24be7f7b724664796bf0dff60235cd0e8d48fe1537b048f61861ab",
+                "url": "https://static.rust-lang.org/dist/2017-01-08/rust-beta-x86_64-apple-darwin.tar.gz",
+                "version": "beta-2017-01-08"
+            },
+            "x86_64-linux": {
+                "revision": "a035041ba",
+                "sha256": "a4180f094e982d72f374e116ca3aa3323d0843b652dd0b2dacf5c4cb68043f59",
+                "url": "https://static.rust-lang.org/dist/2017-01-08/rust-beta-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "beta-2017-01-08"
+            }
+        },
+        "rust-docs": {
+            "i686-linux": {
+                "revision": "a035041ba",
+                "sha256": "079fb62e03381014858ea1c1ecf21667b4b45005c2da585dfcd6b8110f1aaaf2",
+                "url": "https://static.rust-lang.org/dist/2017-01-08/rust-docs-beta-i686-unknown-linux-gnu.tar.gz",
+                "version": "beta-2017-01-08"
+            },
+            "x86_64-darwin": {
+                "revision": "a035041ba",
+                "sha256": "80dc63f60857a535ce1f448f3d6ef296d5984079d3a84c37e6ed8de2e2c8fd01",
+                "url": "https://static.rust-lang.org/dist/2017-01-08/rust-docs-beta-x86_64-apple-darwin.tar.gz",
+                "version": "beta-2017-01-08"
+            },
+            "x86_64-linux": {
+                "revision": "a035041ba",
+                "sha256": "2f977781c791de17c6a830174e466b799c577dc907dc0fbe34e79f1d722f46a5",
+                "url": "https://static.rust-lang.org/dist/2017-01-08/rust-docs-beta-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "beta-2017-01-08"
+            }
+        },
+        "rust-src": {
+            "all": {
+                "revision": "a035041ba",
+                "sha256": "75034a982bf3f6a29516076cdff80bfa1bd7f6794856a0250553ae1cd30f1ed6",
+                "url": "https://static.rust-lang.org/dist/2017-01-08/rust-src-beta.tar.gz",
+                "version": "beta-2017-01-08"
+            }
+        }
+    },
+    "nightly": {
+        "cargo": {
+            "i686-linux": {
+                "revision": "6c79cf9",
+                "sha256": "d78b31d0a5e065297c6d6cffdaab8f760cbd7040c3ae54c4ffc3b306a16bc251",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/6c79cf9cd24756844bda852de6bd3df29b798991/cargo-nightly-i686-unknown-linux-gnu.tar.gz",
+                "version": "nightly-2017-01-16"
+            },
+            "x86_64-darwin": {
+                "revision": "6c79cf9",
+                "sha256": "5a3beafafcf30e98d1ca1e5f426cb480e8f4f8b80dcd4f87ebae23203968f066",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/6c79cf9cd24756844bda852de6bd3df29b798991/cargo-nightly-x86_64-apple-darwin.tar.gz",
+                "version": "nightly-2017-01-16"
+            },
+            "x86_64-linux": {
+                "revision": "6c79cf9",
+                "sha256": "f88fa74f1b18b2d1ddbbe6d9a30de8721de2465589ecd9fc680430e72a1f0aed",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/6c79cf9cd24756844bda852de6bd3df29b798991/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "nightly-2017-01-16"
+            }
+        },
+        "cargo-src": {
+            "all": {
+                "revision": "6c79cf9",
+                "sha256": "12swxg09rk5d2gqwgkmab6s6q14a7ahyl94w5hjw3jmfxs9zw10a",
+                "url": "https://github.com/rust-lang/cargo",
+                "version": "nightly-2017-01-16"
+            }
+        },
+        "rust": {
+            "i686-linux": {
+                "revision": "ff591b6dc",
+                "sha256": "8ad94a20a3572b5c71e003eebafad28701702d9704785e3215e8808c6dcc9350",
+                "url": "https://static.rust-lang.org/dist/2017-01-16/rust-nightly-i686-unknown-linux-gnu.tar.gz",
+                "version": "nightly-2017-01-16"
+            },
+            "x86_64-darwin": {
+                "revision": "ff591b6dc",
+                "sha256": "326f29b0f763d5ccb424ad14abc7c9fd36b2f38cb5d77eb0f56d23b286fd83ca",
+                "url": "https://static.rust-lang.org/dist/2017-01-16/rust-nightly-x86_64-apple-darwin.tar.gz",
+                "version": "nightly-2017-01-16"
+            },
+            "x86_64-linux": {
+                "revision": "ff591b6dc",
+                "sha256": "bca7d5673c162b2ab84c96e2b9261a024a3175dd41ed784709c9c6ff160f2131",
+                "url": "https://static.rust-lang.org/dist/2017-01-16/rust-nightly-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "nightly-2017-01-16"
+            }
+        },
+        "rust-docs": {
+            "i686-linux": {
+                "revision": "ff591b6dc",
+                "sha256": "ecb3818ab55f7ebceeafa1ccf1ac35a1692f0b38dd0c00f5922c7c914d4aaf4f",
+                "url": "https://static.rust-lang.org/dist/2017-01-16/rust-docs-nightly-i686-unknown-linux-gnu.tar.gz",
+                "version": "nightly-2017-01-16"
+            },
+            "x86_64-darwin": {
+                "revision": "ff591b6dc",
+                "sha256": "f923ef6a9f8b8d4493c67de2c7b0468ff12c85257d779214290bfff5b8f6b2d8",
+                "url": "https://static.rust-lang.org/dist/2017-01-16/rust-docs-nightly-x86_64-apple-darwin.tar.gz",
+                "version": "nightly-2017-01-16"
+            },
+            "x86_64-linux": {
+                "revision": "ff591b6dc",
+                "sha256": "90876aa96db5f9a04503347e88fc6d01ec74a2e81bd6983648651ee50e9b4143",
+                "url": "https://static.rust-lang.org/dist/2017-01-16/rust-docs-nightly-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "nightly-2017-01-16"
+            }
+        },
+        "rust-src": {
+            "all": {
+                "revision": "ff591b6dc",
+                "sha256": "0888182ee5102c58a330eef0471bc3f089b1566ffdf9b54652da695e10ba175c",
+                "url": "https://static.rust-lang.org/dist/2017-01-16/rust-src-nightly.tar.gz",
+                "version": "nightly-2017-01-16"
+            }
+        }
+    },
+    "stable": {
+        "cargo": {
+            "i686-linux": {
+                "revision": "298a012",
+                "sha256": "03861ffd057032f201b723fa9018fbe18c5c8a76f0e9ad7fa52ee9bc2305d0d5",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/298a0127f703d4c2500bb06d309488b92ef84ae1/cargo-nightly-i686-unknown-linux-gnu.tar.gz",
+                "version": "0.15.0-nightly"
+            },
+            "x86_64-darwin": {
+                "revision": "298a012",
+                "sha256": "759c565b7b2ccf8d74c80e9755c1e0aaae1e8b59f71149a73ad1cc98e31d7431",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/298a0127f703d4c2500bb06d309488b92ef84ae1/cargo-nightly-x86_64-apple-darwin.tar.gz",
+                "version": "0.15.0-nightly"
+            },
+            "x86_64-linux": {
+                "revision": "298a012",
+                "sha256": "349a01c2c87f6b5c5cd39ddc6a86a2f6b009a05a48c95a633beea27ac22fed6b",
+                "url": "https://s3.amazonaws.com/rust-lang-ci/cargo-builds/298a0127f703d4c2500bb06d309488b92ef84ae1/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "0.15.0-nightly"
+            }
+        },
+        "cargo-src": {
+            "all": {
+                "revision": "298a012",
+                "sha256": "05qz87vkynslmw5kcgn0lxyjygvp63m626xiz6b8066y82mwbx32",
+                "url": "https://github.com/rust-lang/cargo",
+                "version": "0.15.0"
+            }
+        },
+        "rust": {
+            "i686-linux": {
+                "revision": "e8a012324",
+                "sha256": "8d5c75728b44468216f99651dfae9d60ae0696a77105dd2b02942d75f3256840",
+                "url": "https://static.rust-lang.org/dist/2016-12-21/rust-1.14.0-i686-unknown-linux-gnu.tar.gz",
+                "version": "1.14.0"
+            },
+            "x86_64-darwin": {
+                "revision": "e8a012324",
+                "sha256": "3381341524b0184da5ed2cdcddc2a25e2e335e87f1cf676f64d98ee5e6479f20",
+                "url": "https://static.rust-lang.org/dist/2016-12-21/rust-1.14.0-x86_64-apple-darwin.tar.gz",
+                "version": "1.14.0"
+            },
+            "x86_64-linux": {
+                "revision": "e8a012324",
+                "sha256": "c71325cfea1b6f0bdc5189fa4c50ff96f828096ff3f7b5056367f9685d6a4d04",
+                "url": "https://static.rust-lang.org/dist/2016-12-21/rust-1.14.0-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "1.14.0"
+            }
+        },
+        "rust-docs": {
+            "i686-linux": {
+                "revision": "e8a012324",
+                "sha256": "4cf1f39bbdea2fa6eca44e2174d91af540e811ed6dc32ecbd6e9078b6d6bf0e3",
+                "url": "https://static.rust-lang.org/dist/2016-12-21/rust-docs-1.14.0-i686-unknown-linux-gnu.tar.gz",
+                "version": "1.14.0"
+            },
+            "x86_64-darwin": {
+                "revision": "e8a012324",
+                "sha256": "0b4d8032dff684feb809672b8afe81701f0cbff353f85e921fda6fa5d6fcbd1e",
+                "url": "https://static.rust-lang.org/dist/2016-12-21/rust-docs-1.14.0-x86_64-apple-darwin.tar.gz",
+                "version": "1.14.0"
+            },
+            "x86_64-linux": {
+                "revision": "e8a012324",
+                "sha256": "2775cfaf6925cea69c84f0e34542b317cf8f8b3920736ddbfbfd5e5d3a1679ed",
+                "url": "https://static.rust-lang.org/dist/2016-12-21/rust-docs-1.14.0-x86_64-unknown-linux-gnu.tar.gz",
+                "version": "1.14.0"
+            }
+        },
+        "rust-src": {
+            "all": {
+                "revision": "e8a012324",
+                "sha256": "d932d9c5a729aa025dc2cf41e777d9bd8195182af1f634fd810b3766753e1b71",
+                "url": "https://static.rust-lang.org/dist/2016-12-21/rust-src-1.14.0.tar.gz",
+                "version": "1.14.0"
+            }
+        }
+    }
+}
