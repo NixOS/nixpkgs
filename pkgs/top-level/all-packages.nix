@@ -10241,6 +10241,8 @@ in
     erlang = erlangR16;
   };
 
+  couchpotato = callPackage ../servers/couchpotato {};
+
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict {
