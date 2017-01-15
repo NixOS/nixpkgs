@@ -29,12 +29,12 @@ first one present is considered, and all the rest are ignored:
   <listitem>
 
     <para>In the directory pointed by the environment variable
-<varname>NIXPKGS_OVERLAYS</varname>.
+    <varname>NIXPKGS_OVERLAYS</varname>.</para>
   </listitem>
 
   <listitem>
 
-    <para>In the directory <filename>~/.nixpkgs/overlays/</filename>.
+    <para>In the directory <filename>~/.nixpkgs/overlays/</filename>.</para>
   </listitem>
 
 </orderedlist>
