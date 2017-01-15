@@ -7,9 +7,10 @@ buildGoPackage rec {
   goPackagePath = "github.com/sparrc/gdm";
 
   src = fetchFromGitHub {
-    url = "https://github.com/sparrc/gdm";
-    sha256 = "0kpqmbg144qcvd8k88j9yx9lrld85ray2viw161xajafk16plvld";
+    owner = "sparrc";
+    repo = "gdm";
     rev = version;
+    sha256 = "0kpqmbg144qcvd8k88j9yx9lrld85ray2viw161xajafk16plvld";
   };
 
   goDeps = ./deps.nix;
