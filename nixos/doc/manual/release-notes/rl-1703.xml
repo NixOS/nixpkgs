@@ -113,7 +113,7 @@ following incompatible changes:</para>
     pkgs.overridePackages (self: super: ...)
 </programlisting>
 
-    Should be replaced by:
+    should be replaced by:
 
 <programlisting>
   let
