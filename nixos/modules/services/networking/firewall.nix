@@ -172,13 +172,16 @@ let
       }-j nixos-fw-accept
     ''}
 
-    # Accept all ICMPv6 messages except redirects and node
-    # information queries (type 139).  See RFC 4890, section
-    # 4.4.
     ${optionalString config.networking.enableIPv6 ''
+      # Accept all ICMPv6 messages except redirects and node
+      # information queries (type 139).  See RFC 4890, section
+      # 4.4.
       ip6tables -A nixos-fw -p icmpv6 --icmpv6-type redirect -j DROP
       ip6tables -A nixos-fw -p icmpv6 --icmpv6-type 139 -j DROP
       ip6tables -A nixos-fw -p icmpv6 -j nixos-fw-accept
+
+      # Allow this host to act as a DHCPv6 client
+      ip6tables -A nixos-fw -d fe80::/64 -p udp --dport 546 -j nixos-fw-accept
     ''}
 
     ${cfg.extraCommands}

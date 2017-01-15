@@ -164,6 +164,9 @@ with lib;
         else { addr = value inetAddr; port = value inetPort; }
     ))
 
+    # dhcpd
+    (mkRenamedOptionModule [ "services" "dhcpd" ] [ "services" "dhcpd4" ])
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
     (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
