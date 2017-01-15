@@ -69,7 +69,7 @@ in
               openssh = super.openssh.override {
                 hpnSupport = true;
                 withKerberos = true;
-                kerberos = self.libkrb5
+                kerberos = self.libkrb5;
               };
             };
           ) ]
