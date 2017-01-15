@@ -30,7 +30,7 @@ let
 
   configType = mkOptionType {
     name = "nixpkgs-config";
-    description = "nixpkgs config"
+    description = "nixpkgs config";
     check = traceValIfNot isConfig;
     merge = args: fold (def: mergeConfig def.value) {};
   };
