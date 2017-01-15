@@ -27,7 +27,7 @@ with pkgs;
 
   callPackage_i686 = pkgsi686Linux.callPackage;
 
-  forcedNativePackages = if crossSystem == null then pkgs else buildPackages;
+  forcedNativePackages = if hostPlatform == buildPlatform then pkgs else buildPackages;
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
@@ -3246,7 +3246,7 @@ with pkgs;
   pngout = callPackage ../tools/graphics/pngout { };
 
   hurdPartedCross =
-    if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
     then (makeOverridable
             ({ hurd }:
               (parted.override {
@@ -4751,14 +4751,14 @@ with pkgs;
 
   gccApple = throw "gccApple is no longer supported";
 
-  gccCrossStageStatic = assert crossSystem != null; let
+  gccCrossStageStatic = assert targetPlatform != buildPlatform; let
     libcCross1 =
       if stdenv.cross.libc == "msvcrt" then windows.mingw_w64_headers
       else if stdenv.cross.libc == "libSystem" then darwin.xcode
       else null;
     in wrapGCCCross {
       gcc = forcedNativePackages.gcc.cc.override {
-        cross = crossSystem;
+        cross = targetPlatform;
         crossStageStatic = true;
         langCC = false;
         libcCross = libcCross1;
@@ -4768,31 +4768,31 @@ with pkgs;
       };
       libc = libcCross1;
       binutils = binutilsCross;
-      cross = crossSystem;
+      cross = targetPlatform;
   };
 
   # Only needed for mingw builds
-  gccCrossMingw2 = assert crossSystem != null; wrapGCCCross {
+  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapGCCCross {
     gcc = gccCrossStageStatic.gcc;
     libc = windows.mingw_headers2;
     binutils = binutilsCross;
-    cross = assert crossSystem != null; crossSystem;
+    cross = targetPlatform;
   };
 
-  gccCrossStageFinal = assert crossSystem != null; wrapGCCCross {
+  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapGCCCross {
     gcc = forcedNativePackages.gcc.cc.override {
-      cross = crossSystem;
+      cross = targetPlatform;
       crossStageStatic = false;
 
       # XXX: We have troubles cross-compiling libstdc++ on MinGW (see
       # <http://hydra.nixos.org/build/4268232>), so don't even try.
-      langCC = crossSystem.config != "i686-pc-mingw32";
+      langCC = targetPlatform.config != "i686-pc-mingw32";
       # Why is this needed?
       inherit (forcedNativePackages) binutilsCross;
     };
     libc = libcCross;
     binutils = binutilsCross;
-    cross = crossSystem;
+    cross = targetPlatform;
   };
 
   gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
@@ -4810,7 +4810,7 @@ with pkgs;
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
   }));
 
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
@@ -4823,7 +4823,7 @@ with pkgs;
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
     cloog = if !stdenv.isDarwin then cloog else null;
@@ -4840,7 +4840,7 @@ with pkgs;
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_11 else null;
 
@@ -4857,7 +4857,7 @@ with pkgs;
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
@@ -4872,7 +4872,7 @@ with pkgs;
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
@@ -5005,7 +5005,7 @@ with pkgs;
 
   # Haskell and GHC
 
-  haskell = callPackage ./haskell-packages.nix { inherit crossSystem; };
+  haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages = haskell.packages.ghc801.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
@@ -6068,11 +6068,11 @@ with pkgs;
     gold = false;
   });
 
-  binutilsCross = assert crossSystem != null; lowPrio (
-    if crossSystem.libc == "libSystem" then darwin.cctools_cross
+  binutilsCross = assert targetPlatform != buildPlatform; lowPrio (
+    if targetPlatform.libc == "libSystem" then darwin.cctools_cross
     else forcedNativePackages.binutils.override {
       noSysDirs = true;
-      cross = crossSystem;
+      cross = targetPlatform;
     });
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
@@ -6718,7 +6718,7 @@ with pkgs;
   gdbGuile = lowPrio (gdb.override { inherit guile; });
 
   gdbCross = lowPrio (callPackage ../development/tools/misc/gdb {
-    target = crossSystem;
+    target = if targetPlatform != buildPlatform then targetPlatform else null;
   });
 
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
@@ -7332,7 +7332,7 @@ with pkgs;
     else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
-  libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
+  libcCross = assert targetPlatform != buildPlatform; libcCrossChooser targetPlatform.libc;
 
   # Only supported on Linux
   glibcLocales = if stdenv.isLinux then callPackage ../development/libraries/glibc/locales.nix { } else null;
@@ -10895,7 +10895,7 @@ with pkgs;
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
   in apple-source-releases // rec {
     cctools_cross = callPackage (forcedNativePackages.callPackage ../os-specific/darwin/cctools/port.nix {}).cross {
-      cross = assert crossSystem != null; crossSystem;
+      cross = assert targetPlatform != buildPlatform; targetPlatform;
       inherit maloader;
       xctoolchain = xcode.toolchain;
     };
@@ -10968,7 +10968,7 @@ with pkgs;
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid =
-    if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
     then (utillinuxMinimal // {
       crossDrv = lib.overrideDerivation utillinuxMinimal.crossDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
@@ -11053,7 +11053,7 @@ with pkgs;
 
   # GNU/Hurd core packages.
   gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
-    inherit platform crossSystem;
+    inherit platform;
   });
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
@@ -11133,11 +11133,11 @@ with pkgs;
   linuxHeaders = linuxHeaders_4_4;
 
   linuxHeaders24Cross = forcedNativePackages.callPackage ../os-specific/linux/kernel-headers/2.4.nix {
-    cross = assert crossSystem != null; crossSystem;
+    cross = assert targetPlatform != buildPlatform; targetPlatform;
   };
 
   linuxHeaders26Cross = forcedNativePackages.callPackage ../os-specific/linux/kernel-headers/4.4.nix {
-    cross = assert crossSystem != null; crossSystem;
+    cross = assert targetPlatform != buildPlatform; targetPlatform;
   };
 
   linuxHeaders_3_18 = callPackage ../os-specific/linux/kernel-headers/3.18.nix { };
@@ -11149,8 +11149,8 @@ with pkgs;
     else if ver == "2.6" then linuxHeaders26Cross
     else throw "Unknown linux kernel version";
 
-  linuxHeadersCross = assert crossSystem != null;
-    linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
+  linuxHeadersCross = assert targetPlatform != buildPlatform;
+    linuxHeadersCrossChooser targetPlatform.platform.kernelMajor;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
@@ -11812,7 +11812,7 @@ with pkgs;
   uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {
     linuxHeaders = linuxHeadersCross;
     gccCross = gccCrossStageStatic;
-    cross = assert crossSystem != null; crossSystem;
+    cross = assert targetPlatform != buildPlatform; targetPlatform;
   });
 
   udev = systemd;

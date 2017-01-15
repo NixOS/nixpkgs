@@ -3,7 +3,8 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba
 , gccCrossStageStatic, gccCrossStageFinal
-, forcedNativePackages, forceSystem, newScope, platform, config, crossSystem
+, forcedNativePackages, forceSystem, newScope, platform, config
+, targetPlatform, buildPlatform
 , overrides ? {} }:
 
 with args;
@@ -19,7 +20,7 @@ let
       libuuid = libuuid.crossDrv;
       automake = automake111x;
       headersOnly = false;
-      cross = assert crossSystem != null; crossSystem;
+      cross = assert targetPlatform != buildPlatform; targetPlatform;
       gccCross = gccCrossStageFinal;
     };
 
@@ -30,7 +31,7 @@ let
       libuuid = null;
       automake = automake111x;
       headersOnly = false;
-      cross = assert crossSystem != null; crossSystem;
+      cross = assert targetPlatform != buildPlatform; targetPlatform;
 
       # The "final" GCC needs glibc and the Hurd libraries (libpthread in
       # particular) so we first need an intermediate Hurd built with the
@@ -63,7 +64,7 @@ let
       inherit (gnu) machHeaders hurdHeaders;
       hurd = gnu.hurdCrossIntermediate;
       gccCross = gccCrossStageStatic;
-      cross = assert crossSystem != null; crossSystem;
+      cross = assert targetPlatform != buildPlatform; targetPlatform;
     };
 
     # In theory GNU Mach doesn't have to be cross-compiled.  However, since it

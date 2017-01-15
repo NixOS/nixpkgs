@@ -101,7 +101,6 @@ let
       cross = targetPlatform;
     };
     inherit (buildPlatform) system platform;
-    crossSystem = if targetPlatform != buildPlatform then targetPlatform else null;
   };
 
   splice = self: super: import ./splice.nix lib self;

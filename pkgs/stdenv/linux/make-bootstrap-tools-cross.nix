@@ -116,7 +116,7 @@ rec {
 
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools-cross";
-      crossConfig = pkgsUnspliced.crossSystem.config;
+      crossConfig = pkgsUnspliced.hostPlatform.config;
 
       buildInputs = [nukeReferences cpio binutilsCross];
 
