@@ -1,4 +1,4 @@
-{ stdenv, lib, bower2nix }:
+{ stdenv, lib, bower2nix, git }:
 let
   bowerVersion = version:
     let
@@ -20,7 +20,7 @@ let
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     inherit outputHash;
-    buildInputs = [ bower2nix ];
+    buildInputs = [ bower2nix git ];
   };
 
 in fetchbower
