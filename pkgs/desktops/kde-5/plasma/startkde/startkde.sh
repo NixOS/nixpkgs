@@ -6,6 +6,8 @@ export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}@QT_PLUGIN_PATH@"
 export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}@QML_IMPORT_PATH@"
 export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}@QML2_IMPORT_PATH@"
 
+kbuildsycoca5
+
 # Set the default GTK 2 theme
 if ! [ -e $HOME/.gtkrc-2.0 ] \
      && [ -e /run/current-system/sw/share/themes/Breeze/gtk-2.0/gtkrc ]; then

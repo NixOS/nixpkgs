@@ -139,11 +139,11 @@
     };
   };
   kcoreaddons = {
-    version = "5.30.0";
+    version = "5.30.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.30/kcoreaddons-5.30.0.tar.xz";
-      sha256 = "0h505lcfnngv3wj9h4klygarz6wxmlsk3c3yg7l644rrmbqcwazn";
-      name = "kcoreaddons-5.30.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.30/kcoreaddons-5.30.1.tar.xz";
+      sha256 = "0w1yqcvd97jhm3w2x7mmayrifb1swda8lmzzmlz41crsq909ilnd";
+      name = "kcoreaddons-5.30.1.tar.xz";
     };
   };
   kcrash = {
