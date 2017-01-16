@@ -2,15 +2,16 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-3.4.2";
+  name = "bitlbee-3.5";
 
   src = fetchurl {
     url = "mirror://bitlbee/src/${name}.tar.gz";
-    sha256 = "0mza8lnfwibmklz8hdzg4f7p83hblf4h6fbf7d732kzpvra5bj39";
+    sha256 = "06c371bjly38yrkvfwdh5rjfx9xfl7bszyhrlbldy0xk38c057al";
   };
 
-  buildInputs = [ gnutls glib pkgconfig libotr python ]
-    ++ optional doCheck check;
+  nativeBuildInputs = [ pkgconfig ] ++ optional doCheck check;
+
+  buildInputs = [ gnutls glib libotr python ];
 
   configureFlags = [
     "--gcov=1"
