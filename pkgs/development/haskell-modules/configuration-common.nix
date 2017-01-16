@@ -614,6 +614,11 @@ self: super: {
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
 
+  # Requires bower-json >= 1.0.0.1 && < 1.1
+  purescript_0_10_5 = super.purescript_0_10_5.overrideScope (self: super: {
+    bower-json = self.bower-json_1_0_0_1;
+  });
+
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
 
