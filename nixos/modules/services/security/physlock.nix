@@ -114,7 +114,7 @@ in
         };
       };
 
-      security.pam.services.physlock = {};
+      security.pam.services.physlock = { isExposed = false; };
 
     }
 

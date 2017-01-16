@@ -907,6 +907,7 @@ in
       { # Ensure that pam_systemd gets included. This is special-cased
         # in systemd to provide XDG_RUNTIME_DIR.
         startSession = true;
+        isExposed = false;
       };
 
     # Some overrides to upstream units.

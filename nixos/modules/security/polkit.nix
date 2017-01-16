@@ -81,7 +81,7 @@ in
 
     services.dbus.packages = [ pkgs.polkit.out ];
 
-    security.pam.services.polkit-1 = {};
+    security.pam.services.polkit-1 = { isExposed = false; };
 
     security.wrappers = {
       pkexec.source = "${pkgs.polkit.bin}/bin/pkexec";

@@ -55,7 +55,7 @@ in
 
     environment.systemPackages = [ at ];
 
-    security.pam.services.atd = {};
+    security.pam.services.atd = { isExposed = false; };
 
     users.users = singleton
       { name = "atd";

@@ -230,10 +230,12 @@ in
     security.pam.services.lightdm = {
       allowNullPassword = true;
       startSession = true;
+      isExposed = false;
     };
     security.pam.services.lightdm-greeter = {
       allowNullPassword = true;
       startSession = true;
+      isExposed = false;
       text = ''
         auth     required pam_env.so envfile=${config.system.build.pamEnvironment}
         auth     required pam_permit.so

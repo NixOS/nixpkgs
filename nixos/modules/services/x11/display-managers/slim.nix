@@ -144,10 +144,10 @@ in
 
     # Allow null passwords so that the user can login as root on the
     # installation CD.
-    security.pam.services.slim = { allowNullPassword = true; startSession = true; };
+    security.pam.services.slim = { allowNullPassword = true; startSession = true; isExposed = false; };
 
     # Allow slimlock to work.
-    security.pam.services.slimlock = {};
+    security.pam.services.slimlock = { isExposed = false; };
 
     environment.systemPackages = [ pkgs.slim ];
 

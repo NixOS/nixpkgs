@@ -84,9 +84,9 @@ in
       ];
 
     security.pam.services =
-      { chsh = { rootOK = true; };
-        chfn = { rootOK = true; };
-        su = { rootOK = true; forwardXAuth = true; logFailures = true; };
+      { chsh = { rootOK = true; isExposed = false; };
+        chfn = { rootOK = true; isExposed = false; };
+        su = { rootOK = true; forwardXAuth = true; logFailures = true; isExposed = false; };
         passwd = {};
         # Note: useradd, groupadd etc. aren't setuid root, so it
         # doesn't really matter what the PAM config says as long as it
@@ -98,8 +98,14 @@ in
         groupmod = { rootOK = true; };
         groupmems = { rootOK = true; };
         groupdel = { rootOK = true; };
-        login = { startSession = true; allowNullPassword = true; showMotd = true; updateWtmp = true; };
-        chpasswd = { rootOK = true; };
+        login = {
+          allowNullPassword = true;
+          isExposed = false;
+          showMotd = true;
+          startSession = true;
+          updateWtmp = true;
+        };
+        chpasswd = { rootOK = true; isExposed = false; };
       };
 
     security.wrappers = {

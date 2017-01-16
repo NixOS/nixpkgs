@@ -210,7 +210,10 @@ in
 
     environment.systemPackages = [ sudo ];
 
-    security.pam.services.sudo = { sshAgentAuth = true; };
+    security.pam.services.sudo = {
+      sshAgentAuth = true;
+      isExposed = false;
+    };
 
     environment.etc = singleton
       { source =
