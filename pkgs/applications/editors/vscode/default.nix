@@ -34,10 +34,7 @@ in
       name = "code";
       exec = "code";
       icon = "code";
-      comment = ''
-        Code editor redefined and optimized for building and debugging modern
-        web and cloud applications
-      '';
+      comment = "Code editor redefined and optimized for building and debugging modern web and cloud applications";
       desktopName = "Visual Studio Code";
       genericName = "Text Editor";
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
