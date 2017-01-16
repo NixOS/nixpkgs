@@ -11097,6 +11097,8 @@ in
 
   # -- Linux kernel expressions ------------------------------------------------
 
+  lkl = callPackage ../applications/virtualization/lkl { };
+
   linuxHeaders = linuxHeaders_4_4;
 
   linuxHeaders24Cross = forceNativeDrv (callPackage ../os-specific/linux/kernel-headers/2.4.nix {
