@@ -26,8 +26,9 @@ with { inherit (stdenv.lib) optional optionals hasPrefix; };
 
 let
   result = {
-    libav_0_8 = libavFun "0.8.17" "31ace2daeb8c105deed9cd3476df47318d417714";
+    libav_0_8 = libavFun "0.8.19" "c79350d6fa071fcd66448ffc713fe3b9754876a8";
     libav_11  = libavFun  "11.8"  "y18hmrzy7jqq7h9ys54nrr4s49mkzsfh";
+    libav_12  = libavFun "12"     "4ecde7274621c82a6882b7614d907b28de25cc4e";
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {

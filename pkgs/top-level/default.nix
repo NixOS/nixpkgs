@@ -7,11 +7,11 @@
 
      3. Defaults to no non-standard config and no cross-compilation target
 
-     4. Uses the above to infer the default standard environment (stdenv) if
-        none is provided
+     4. Uses the above to infer the default standard environment's (stdenv's)
+        stages if no stdenv's are provided
 
-     5. Builds the final stage --- a fully booted package set with the chosen
-        stdenv
+     5. Folds the stages to yield the final fully booted package set for the
+        chosen stdenv
 
    Use `impure.nix` to also infer the `system` based on the one on which
    evaluation is taking place, and the configuration from environment variables
@@ -23,9 +23,13 @@
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
 
-, # The standard environment for building packages, or rather a function
-  # providing it. See below for the arguments given to that function.
-  stdenvFunc ? import ../stdenv
+, # List of overlays layers used to extend Nixpkgs.
+  overlays ? []
+
+, # A function booting the final package set for a specific standard
+  # environment. See below for the arguments given to that function,
+  # the type of list it returns.
+  stdenvStages ? import ../stdenv
 
 , crossSystem ? null
 , platform ? assert false; null
@@ -76,10 +80,12 @@ in let
     inherit lib nixpkgsFun;
   } // newArgs);
 
-  stdenv = stdenvFunc {
-    inherit lib allPackages system platform crossSystem config;
+  boot = import ../stdenv/booter.nix { inherit lib allPackages; };
+
+  stages = stdenvStages {
+    inherit lib system platform crossSystem config overlays;
   };
 
-  pkgs = allPackages { inherit system stdenv config crossSystem platform; };
+  pkgs = boot stages;
 
 in pkgs

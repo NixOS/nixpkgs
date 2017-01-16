@@ -1,10 +1,10 @@
-{ lib, allPackages
-, system, platform, crossSystem, config
+{ lib
+, system, platform, crossSystem, config, overlays
 }:
 
 assert crossSystem == null;
 
-rec {
+let
 
   shell =
     if system == "i686-freebsd" || system == "x86_64-freebsd" then "/usr/local/bin/bash"
@@ -77,7 +77,7 @@ rec {
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { cc, fetchurl, extraPath ? [], overrides ? (pkgs: { }) }:
+    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }) }:
 
     import ../generic {
       preHook =
@@ -101,50 +101,54 @@ rec {
       inherit system shell cc overrides config;
     };
 
+in
 
-  stdenvBoot0 = makeStdenv {
-    cc = null;
-    fetchurl = null;
-  };
+[
 
+  ({}: rec {
+    __raw = true;
 
-  cc = import ../../build-support/cc-wrapper {
-    name = "cc-native";
-    nativeTools = true;
-    nativeLibc = true;
-    nativePrefix = if system == "i686-solaris" then "/usr/gnu" else if system == "x86_64-solaris" then "/opt/local/gcc47" else "/usr";
-    stdenv = stdenvBoot0;
-  };
+    stdenv = makeStdenv {
+      cc = null;
+      fetchurl = null;
+    };
 
+    cc = import ../../build-support/cc-wrapper {
+      name = "cc-native";
+      nativeTools = true;
+      nativeLibc = true;
+      nativePrefix = { # switch
+        "i686-solaris" = "/usr/gnu";
+        "x86_64-solaris" = "/opt/local/gcc47";
+      }.${system} or "/usr";
+      inherit stdenv;
+    };
 
-  fetchurl = import ../../build-support/fetchurl {
-    stdenv = stdenvBoot0;
-    # Curl should be in /usr/bin or so.
-    curl = null;
-  };
+    fetchurl = import ../../build-support/fetchurl {
+      inherit stdenv;
+      # Curl should be in /usr/bin or so.
+      curl = null;
+    };
 
+  })
 
   # First build a stdenv based only on tools outside the store.
-  stdenvBoot1 = makeStdenv {
-    inherit cc fetchurl;
-  } // {inherit fetchurl;};
+  (prevStage: {
+    inherit system crossSystem platform config overlays;
+    stdenv = makeStdenv {
+      inherit (prevStage) cc fetchurl;
+    } // { inherit (prevStage) fetchurl; };
+  })
 
-  stdenvBoot1Pkgs = allPackages {
-    inherit system platform crossSystem config;
-    allowCustomOverrides = false;
-    stdenv = stdenvBoot1;
-  };
+  # Using that, build a stdenv that adds the ‘xz’ command (which most systems
+  # don't have, so we mustn't rely on the native environment providing it).
+  (prevStage: {
+    inherit system crossSystem platform config overlays;
+    stdenv = makeStdenv {
+      inherit (prevStage.stdenv) cc fetchurl;
+      extraPath = [ prevStage.xz ];
+      overrides = self: super: { inherit (prevStage) xz; };
+    };
+  })
 
-
-  # Using that, build a stdenv that adds the ‘xz’ command (which most
-  # systems don't have, so we mustn't rely on the native environment
-  # providing it).
-  stdenvBoot2 = makeStdenv {
-    inherit cc fetchurl;
-    extraPath = [ stdenvBoot1Pkgs.xz ];
-    overrides = pkgs: { inherit (stdenvBoot1Pkgs) xz; };
-  };
-
-
-  stdenvNative = stdenvBoot2;
-}
+]

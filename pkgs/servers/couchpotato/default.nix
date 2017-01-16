@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pythonPackages, pkgs, lib, ... }:
+{ fetchurl, pythonPackages, lib }:
 
 with pythonPackages;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "couchpotato-${version}";
   version = "3.0.1";
   disabled = isPy3k;
 
-  src = pkgs.fetchurl {
+  src = fetchurl {
     url = "https://github.com/CouchPotato/CouchPotatoServer/archive/build/${version}.tar.gz";
     sha256 = "1xwjis3ijh1rff32mpdsphmsclf0lkpd3phpgxkccrigq1m9r3zh";
   };
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   '';
 
   fixupPhase = ''
-    wrapProgram "$out/bin/couchpotato" --prefix PYTHONPATH : "$PYTHONPATH:$out/${python.sitePackages}" \
-                                          --prefix PATH : ${python}/bin
+    wrapProgram "$out/bin/couchpotato" --set PYTHONPATH "$PYTHONPATH:$out/${python.sitePackages}" \
+                                       --set PATH ${python}/bin
   '';
 
   meta = {

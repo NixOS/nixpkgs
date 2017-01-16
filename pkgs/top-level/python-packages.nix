@@ -9331,6 +9331,8 @@ in {
     propagatedBuildInputs = with self; [ pyramid hawkauthlib tokenlib webtest ];
   };
 
+  pyroute2 = callPackage ../development/python-modules/pyroute2 { };
+
   pyspf = buildPythonPackage rec {
     name = "pyspf-${version}";
     version = "2.0.12";
@@ -20313,8 +20315,8 @@ in {
 
     buildInputs = [ pkgs.libev ];
 
-    libEvSharedLibrary = 
-      if !stdenv.isDarwin  
+    libEvSharedLibrary =
+      if !stdenv.isDarwin
       then "${pkgs.libev}/lib/libev.so.4"
       else "${pkgs.libev}/lib/libev.4.dylib";
 

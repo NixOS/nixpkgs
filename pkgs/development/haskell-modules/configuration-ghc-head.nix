@@ -35,7 +35,7 @@ self: super: {
   xhtml = null;
 
   # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal_1_3_2.override { Cabal = null; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;

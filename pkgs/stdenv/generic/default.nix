@@ -1,7 +1,7 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
 { system, name ? "stdenv", preHook ? "", initialPath, cc, shell
-, allowedRequisites ? null, extraAttrs ? {}, overrides ? (pkgs: {}), config
+, allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).

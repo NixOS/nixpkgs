@@ -5,9 +5,7 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ system, noSysDirs, config, crossSystem, platform, lib
-, nixpkgsFun
-}:
+{ lib, nixpkgsFun, noSysDirs, config}:
 self: pkgs:
 
 with pkgs;
@@ -17,9 +15,6 @@ let
 in
 
 {
-
-  # Make some arguments passed to all-packages.nix available
-  inherit system platform;
 
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
@@ -887,6 +882,8 @@ in
 
   gdrivefs = python27Packages.gdrivefs;
 
+  go-dependency-manager = callPackage ../development/tools/gdm { };
+
   gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
@@ -1277,6 +1274,8 @@ in
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
+  ckb = qt5.callPackage ../tools/misc/ckb { };
+
   compass = callPackage ../development/tools/compass { };
 
   convmv = callPackage ../tools/misc/convmv { };
@@ -1498,7 +1497,7 @@ in
 
   dtach = callPackage ../tools/misc/dtach { };
 
-  dtc = callPackage ../development/compilers/dtc { };
+  dtc = callPackage ../development/compilers/dtc { flex = flex_2_6_1; };
 
   dub = callPackage ../development/tools/build-managers/dub { };
 
@@ -1749,6 +1748,7 @@ in
   });
   fontforge-gtk = callPackage ../tools/misc/fontforge {
     withGTK = true;
+    gtk2 = gtk2-x11;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
@@ -1853,7 +1853,7 @@ in
   gazebo-headless = gazeboSimulator.gazebo6-headless;
 
   gbdfed = callPackage ../tools/misc/gbdfed {
-    gtk = gtk2;
+    gtk = gtk2-x11;
   };
 
   gdmap = callPackage ../tools/system/gdmap { };
@@ -1877,6 +1877,8 @@ in
   gibo = callPackage ../tools/misc/gibo { };
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
+
+  git-crecord = callPackage ../applications/version-management/git-crecord { };
 
   git-lfs = callPackage ../applications/version-management/git-lfs { };
 
@@ -2140,6 +2142,8 @@ in
   pxz = callPackage ../tools/compression/pxz { };
 
   hans = callPackage ../tools/networking/hans { };
+
+  h2 = callPackage ../servers/h2 { };
 
   haproxy = callPackage ../tools/networking/haproxy { };
 
@@ -4096,6 +4100,8 @@ in
 
   trousers = callPackage ../tools/security/trousers { };
 
+  tryton = callPackage ../applications/office/tryton { };
+
   omapd = callPackage ../tools/security/omapd { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
@@ -4535,6 +4541,8 @@ in
 
   xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
 
+  yarn = callPackage ../development/tools/yarn  { };
+
   yank = callPackage ../tools/misc/yank { };
 
   yaml-merge = callPackage ../tools/text/yaml-merge { };
@@ -4755,6 +4763,7 @@ in
   gambit = callPackage ../development/compilers/gambit { };
 
   gcc = gcc5;
+  gcc-unwrapped = gcc.cc;
 
   wrapCCMulti = cc:
     if system == "x86_64-linux" then lowPrio (
@@ -5306,7 +5315,6 @@ in
   mozart = mozart-binary;
 
   nim = callPackage ../development/compilers/nim { };
-  nimble = callPackage ../development/tools/nimble { };
   nrpl = callPackage ../development/tools/nrpl { };
 
   neko = callPackage ../development/compilers/neko { };
@@ -5651,7 +5659,9 @@ in
 
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
-  lxappearance = callPackage ../desktops/lxde/core/lxappearance {};
+  lxappearance = callPackage ../desktops/lxde/core/lxappearance {
+    gtk2 = gtk2-x11;
+  };
 
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
 
@@ -6383,6 +6393,8 @@ in
   };
 
   heroku = callPackage ../development/tools/heroku { };
+
+  htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
 
@@ -7527,7 +7539,9 @@ in
   cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
-  pangomm = callPackage ../development/libraries/pangomm { };
+  pangomm = callPackage ../development/libraries/pangomm {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
@@ -7543,6 +7557,10 @@ in
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
     gdktarget = if stdenv.isDarwin then "quartz" else "x11";
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+  };
+
+  gtk2-x11 = gtk2.override {
+    gdktarget = "x11";
   };
 
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
@@ -7818,7 +7836,7 @@ in
 
   libav = libav_11; # branch 11 is API-compatible with branch 10
   libav_all = callPackage ../development/libraries/libav { };
-  inherit (libav_all) libav_0_8 libav_11;
+  inherit (libav_all) libav_0_8 libav_11 libav_12;
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
@@ -10950,6 +10968,8 @@ in
     stubs = callPackages ../os-specific/darwin/stubs {};
 
     usr-include = callPackage ../os-specific/darwin/usr-include {};
+
+    DarwinTools = callPackage ../os-specific/darwin/DarwinTools {};
   };
 
   devicemapper = lvm2;
@@ -13234,7 +13254,9 @@ in
 
   gpa = callPackage ../applications/misc/gpa { };
 
-  gpicview = callPackage ../applications/graphics/gpicview { };
+  gpicview = callPackage ../applications/graphics/gpicview {
+    gtk2 = gtk2-x11;
+  };
 
   gqrx = callPackage ../applications/misc/gqrx { };
 
@@ -13477,6 +13499,8 @@ in
   linssid = qt5.callPackage ../applications/networking/linssid { };
 
   manuskript = callPackage ../applications/editors/manuskript { };
+
+  manul = callPackage ../development/tools/manul { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
@@ -15735,7 +15759,9 @@ in
     inherit (gnome2) libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
-  apvlv = callPackage ../applications/misc/apvlv { };
+  apvlv = callPackage ../applications/misc/apvlv {
+    gtk2 = gtk2-x11;
+  };
 
   xpdf = callPackage ../applications/misc/xpdf {
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
