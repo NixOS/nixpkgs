@@ -11,6 +11,12 @@ let
   });
   versionSpec = {
     "latest" = {
+      name = "1.0.0";
+      rev = "refs/tags/1.0.0";
+      sha256 = "16r0lwhxl8g71masmfbjr7s7m7fah4ii4smi1g8zpbpiqjz48ryb";
+      patches = [];
+    };
+    "0.9.9" = {
       name = "0.9.9";
       rev = "refs/tags/0.9.9";
       sha256 = "0hmvbdk2yr5wrkiwn9dfzf65s4xc2qifj0sn6w2mghzp96cph79k";
@@ -19,8 +25,8 @@ let
     "git" = {
         name = "git-20160617";
         rev = "7d5b5eb76aa656baf5a8713f514937765f66b10a";
-	sha256 = "1jpj978r54086hypjxqxi0r3zacqpkr61dp6dbi0lykgx7m5bjfb";
-	patches = [];
+        sha256 = "1jpj978r54086hypjxqxi0r3zacqpkr61dp6dbi0lykgx7m5bjfb";
+        patches = [];
     };
   }.${version};
 in
