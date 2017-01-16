@@ -54,16 +54,20 @@ buildEnv {
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
+  extraOutputsToInstall = [ "out" "doc" ];
   inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
+    # Work around buildEnv sometimes deciding to make bin a symlink
     if test -L "$out/bin"; then
       binTarget="$(readlink -f "$out/bin")"
       rm "$out/bin"
       cp -r "$binTarget" "$out/bin"
       chmod u+w "$out/bin"
     fi
+
+    # wrap compiler executables with correct env variables
 
     for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
       if [[ -x "${ghc}/bin/$prg" ]]; then
