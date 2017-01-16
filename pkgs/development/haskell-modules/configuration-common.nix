@@ -1082,6 +1082,31 @@ self: super: {
     servant = self.servant_0_9_1_1;
   });
 
+  # build servant docs from the repository
+  servant =
+    let
+      ver = super.servant.version;
+      docs = pkgs.stdenv.mkDerivation {
+        name = "servant-sphinx-documentation-${ver}";
+        src = "${pkgs.fetchFromGitHub {
+          owner = "haskell-servant";
+          repo = "servant";
+          rev = "v${ver}";
+          sha256 = "0fynv77m7rk79pdp535c2a2bd44csgr32zb4wqavbalr7grpxg4q";
+        }}/doc";
+        buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
+        makeFlags = "html";
+        installPhase = ''
+          mv _build/html $out
+        '';
+      };
+    in overrideCabal super.servant (old: {
+      postInstall = old.postInstall or "" + ''
+        ln -s ${docs} $out/share/doc/servant
+      '';
+    });
+
+
   # https://github.com/plow-technologies/servant-auth/issues/20
   servant-auth = dontCheck super.servant-auth;
 
