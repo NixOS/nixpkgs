@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1adgj0p4c8aq9rpkv33k8ra69922vfkjw63b666i66v6zr0s8znp";
   };
 
+  environment.pathsToLink = [ "/share/oh-my-zsh" ];
+
   phases = "installPhase";
 
   installPhase = ''
