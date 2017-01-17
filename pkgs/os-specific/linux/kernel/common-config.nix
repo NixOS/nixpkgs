@@ -142,6 +142,7 @@ with stdenv.lib;
   L2TP_IP m
   L2TP_ETH m
   BRIDGE_VLAN_FILTERING y
+  BONDING m
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -217,6 +218,7 @@ with stdenv.lib;
   # ACLs for all filesystems that support them.
   FANOTIFY y
   TMPFS y
+  TMPFS_POSIX_ACL y
   FS_ENCRYPTION? m
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
