@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "072jhm9wpz1bvwnwgvz24ijw0xwwnn3z3zan4mgr5s5y6ml8z54n";
   };
 
+  configureFlags = [ "--enable-ipv6" "--enable-ipv4" ];
+
   meta = {
     homepage = "http://fping.org/";
     description = "Send ICMP echo probes to network hosts";
