@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "lkl-${stdenv.lib.substring 0 7 rev}";
-  rev  = "8a0fc49c2d13d5ae5e591d859d78035c368469b0";
+  rev  = "d74707304d4e4614081ae2a612a833aeb46622b5";
 
   buildInputs = [ bc python fuse libarchive ];
 
   src = fetchFromGitHub {
     inherit rev;
-    owner  = "copumpkin"; # TODO: use 'lkl' here once https://github.com/lkl/linux/pull/294 is merged
+    owner  = "lkl";
     repo   = "linux";
-    sha256 = "07k1mq25a907l1ivlgwxycx2vc0fmir3da4xrjkj2v87c7siqvwf";
+    sha256 = "0x1hdjsrj6hfk1sgfw11ihm00fmp6g158sr2q3cgjy2b6jnsr4hp";
   };
 
   installPhase = ''
