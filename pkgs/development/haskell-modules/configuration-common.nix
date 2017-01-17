@@ -1011,6 +1011,7 @@ self: super: {
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
     aeson = self.aeson_1_0_2_1;
+    hpack = self.hpack_0_15_0;
   });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
