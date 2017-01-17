@@ -217,7 +217,7 @@ EOF
     done
 fi
 
-eval @XINIT@ \"$client\" $clientargs -- \"$server\" $display $serverargs "-xkbdir" "@XKEYBOARD_CONFIG@"
+eval @XINIT@ \"$client\" $clientargs -- \"$server\" $display $serverargs
 retval=$?
 
 if [ x"$enable_xauth" = x1 ] ; then
