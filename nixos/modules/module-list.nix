@@ -409,6 +409,7 @@
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
+  ./services/networking/babeld.nix
   ./services/networking/bind.nix
   ./services/networking/autossh.nix
   ./services/networking/bird.nix
