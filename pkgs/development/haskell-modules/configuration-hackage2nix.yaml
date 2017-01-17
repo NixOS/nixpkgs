@@ -2018,6 +2018,7 @@ extra-packages:
   - esqueleto < 2.5                     # needed for git-annex: https://github.com/bitemyapp/esqueleto/issues/8
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
+  - hpack == 0.15.*                     # needed for stack-1.3.2
   - haddock < 2.17                      # required on GHC 7.10.x
   - haddock-api == 2.15.*               # required on GHC 7.8.x
   - haddock-api == 2.16.*               # required on GHC 7.10.x
