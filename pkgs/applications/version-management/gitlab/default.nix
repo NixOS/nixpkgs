@@ -9,9 +9,7 @@ let
   env = bundlerEnv {
     name = "gitlab";
     inherit ruby;
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
     meta = with lib; {
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
