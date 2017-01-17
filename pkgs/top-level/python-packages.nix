@@ -281,6 +281,8 @@ in {
     pythonPackages = self;
   };
 
+  pyscard = callPackage ../development/python-modules/pyscard { };
+
   pyside = callPackage ../development/python-modules/pyside { };
 
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
