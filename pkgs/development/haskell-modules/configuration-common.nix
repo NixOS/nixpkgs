@@ -1181,7 +1181,7 @@ self: super: {
   # https://github.com/krisajenkins/elm-export/pull/22
   elm-export = doJailbreak super.elm-export;
 
-  turtle_1_3_0 = super.turtle_1_3_0.overrideScope (self: super: {
+  turtle_1_3_1 = super.turtle_1_3_1.overrideScope (self: super: {
     optparse-applicative = self.optparse-applicative_0_13_0_0;
   });
 
