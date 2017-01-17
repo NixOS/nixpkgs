@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=misleading-indentation";
+
   meta = {
     description = "Google's data interchange format";
     longDescription =
