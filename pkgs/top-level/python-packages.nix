@@ -3476,6 +3476,25 @@ in {
     meta.maintainers = with maintainers; [ garbas ];
   };
 
+  case = buildPythonPackage rec {
+    name = "case-${version}";
+    version = "1.5.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/case/${name}.tar.gz";
+      sha256 = "1zbhbw87izcxj9rvqg432a7r69ps2ks20mqq3g3hgd42sckcy3ca";
+    };
+
+    propagatedBuildInputs = with self; [ six nose unittest2 mock ];
+
+    meta = {
+      homepage = https://github.com/celery/case;
+      description = "unittests utilities";
+      license = licenses.bsd3;
+    };
+
+  };
+
   cassandra-driver = buildPythonPackage rec {
     name = "cassandra-driver-3.6.0";
 
