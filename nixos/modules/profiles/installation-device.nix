@@ -76,5 +76,6 @@ with lib;
     boot.consoleLogLevel = mkDefault 7;
     networking.firewall.logRefusedConnections = mkDefault false;
 
+    environment.systemPackages = [ pkgs.vim ];
   };
 }
