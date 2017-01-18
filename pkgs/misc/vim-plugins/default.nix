@@ -1621,6 +1621,17 @@ rec {
 
   };
 
+  gruvbox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "gruvbox-2016-09-28";
+    src = fetchgit {
+      url = "git://github.com/morhetz/gruvbox";
+      rev = "127c9d14d4bac1bac31e328b835a8919a255789c";
+      sha256 = "19wg9143wvlynblpxm0cnk3ars2hgss3y745hligqgvfy308f7sm";
+    };
+    dependencies = [];
+
+  };
+
   matchit-zip = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "matchit-zip";
     src = fetchurl {
