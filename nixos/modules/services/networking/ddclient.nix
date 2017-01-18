@@ -132,7 +132,8 @@ in
         login=${config.services.ddclient.username}
         password=${config.services.ddclient.password}
         protocol=${config.services.ddclient.protocol}
-        server=${config.services.ddclient.server}
+        ${let server = config.services.ddclient.server; in
+          lib.optionalString (server != "") "server=${server}"}
         ssl=${if config.services.ddclient.ssl then "yes" else "no"}
         wildcard=YES
         ${config.services.ddclient.domain}

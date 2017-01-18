@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchFromGitHub
 , ncurses
 , texinfo
 , gettext ? null
@@ -10,7 +10,14 @@ assert enableNls -> (gettext != null);
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+let
+  nixSyntaxHighlight = fetchFromGitHub {
+    owner = "seitz";
+    repo = "nanonix";
+    rev = "17e0de65e1cbba3d6baa82deaefa853b41f5c161";
+    sha256 = "1g51h65i31andfs2fbp1v3vih9405iknqn11fzywjxji00kjqv5s";
+  };
+in stdenv.mkDerivation rec {
   name = "nano-${version}";
   version = "2.7.3";
   src = fetchurl {
@@ -28,6 +35,10 @@ stdenv.mkDerivation rec {
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/text.c --replace "__time_t" "time_t"
+  '';
+
+  postInstall = ''
+    cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
   '';
 
   meta = {

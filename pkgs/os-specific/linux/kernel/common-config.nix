@@ -145,6 +145,7 @@ with stdenv.lib;
   L2TP_IP m
   L2TP_ETH m
   BRIDGE_VLAN_FILTERING y
+  BONDING m
   NET_L3_MASTER_DEV y
   NET_FOU_IP_TUNNELS y
 
@@ -222,6 +223,7 @@ with stdenv.lib;
   # ACLs for all filesystems that support them.
   FANOTIFY y
   TMPFS y
+  TMPFS_POSIX_ACL y
   FS_ENCRYPTION? m
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y

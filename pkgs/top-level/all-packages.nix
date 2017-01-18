@@ -868,6 +868,8 @@ in
 
   filebench = callPackage ../tools/misc/filebench { };
 
+  fsmon = callPackage ../tools/misc/fsmon { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fondu = callPackage ../tools/misc/fondu { };
@@ -3687,6 +3689,8 @@ in
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
+  
+  rubocop = callPackage ../development/tools/rubocop { };
 
   runningx = callPackage ../tools/X11/runningx { };
 
@@ -11153,6 +11157,8 @@ in
   tgt = callPackage ../tools/networking/tgt { };
 
   # -- Linux kernel expressions ------------------------------------------------
+
+  lkl = callPackage ../applications/virtualization/lkl { };
 
   linuxHeaders = linuxHeaders_4_4;
 
