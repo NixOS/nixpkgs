@@ -864,8 +864,7 @@ in {
     };
   };
 
-
-  amqp = buildPythonPackage rec {
+  amqp_1 = buildPythonPackage rec {
     name = "amqp-${version}";
     version = "1.4.9";
     disabled = pythonOlder "2.6";
@@ -876,6 +875,26 @@ in {
     };
 
     buildInputs = with self; [ mock coverage nose-cover3 unittest2 ];
+
+    meta = {
+      homepage = http://github.com/celery/py-amqp;
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
+      license = licenses.lgpl21;
+    };
+  };
+
+  amqp = buildPythonPackage rec {
+    name = "amqp-${version}";
+    version = "2.1.4";
+    disabled = pythonOlder "2.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/amqp/${name}.tar.gz";
+      sha256 = "1ybywzkd840v1qvb1p2bs08js260vq1jscjg8182hv7bmwacqy0k";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
+    propagatedBuildInputs = with self; [ vine ];
 
     meta = {
       homepage = http://github.com/celery/py-amqp;
@@ -3556,7 +3575,7 @@ in {
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
-    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp ];
+    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp_1 ];
 
     checkPhase = ''
       nosetests $out/${python.sitePackages}/celery/tests/
@@ -13614,7 +13633,7 @@ in {
     # most of these are simply to allow the test suite to do its job
     buildInputs = with self; optionals isPy27 [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
 
-    propagatedBuildInputs = with self; [ amqp anyjson ] ++
+    propagatedBuildInputs = with self; [ amqp_1 anyjson ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
