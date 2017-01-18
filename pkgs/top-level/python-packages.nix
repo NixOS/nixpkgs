@@ -2668,8 +2668,7 @@ in {
     };
   };
 
-
-  billiard = buildPythonPackage rec {
+  billiard_33 = buildPythonPackage rec {
     name = "billiard-${version}";
     version = "3.3.0.23";
 
@@ -2681,6 +2680,26 @@ in {
     };
 
     buildInputs = with self; [ nose unittest2 mock ];
+
+    meta = {
+      homepage = https://github.com/celery/billiard;
+      description = "Python multiprocessing fork with improvements and bugfixes";
+      license = licenses.bsd3;
+    };
+  };
+
+  billiard = buildPythonPackage rec {
+    name = "billiard-${version}";
+    version = "3.5.0.2";
+
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/billiard/${name}.tar.gz";
+      sha256 = "1anw68rkja1dbgvndxz5mq6f89hmxwaha0fjcdnsl5j1wj7imc1y";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
 
     meta = {
       homepage = https://github.com/celery/billiard;
@@ -3575,7 +3594,7 @@ in {
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
-    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp_1 ];
+    propagatedBuildInputs = with self; [ kombu billiard_33 pytz anyjson amqp_1 ];
 
     checkPhase = ''
       nosetests $out/${python.sitePackages}/celery/tests/
