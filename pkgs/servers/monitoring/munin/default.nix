@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.25";
+  version = "2.0.29";
   name = "munin-${version}";
 
   src = fetchurl {
     url = "https://github.com/munin-monitoring/munin/archive/${version}.tar.gz";
-    sha256 = "1ig67l3p5fnx44fcvbbinajxlin9i7g9cbac93h2hcvb2qhzzzra";
+    sha256 = "1zpv0p10iyx49z1hsqvlkk6hh46hp9dhbrdyx103hgx7p3xnxfnv";
   };
 
   buildInputs = [ 
