@@ -500,6 +500,11 @@ in {
         default = "kubenet";
       };
 
+      cri = {
+        frakti = {
+          enable = mkEnableOption "Enable frakti to run pods in KVM";
+        };
+      };
       cni = {
         packages = mkOption {
           description = "List of network plugin packages to install";
@@ -634,6 +639,12 @@ in {
             --reconcile-cidr \
             --hairpin-mode=hairpin-veth \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.kubelet.cri.frakti.enable
+            ''
+            --experimental-cri=true \
+            --container-runtime=remote
+            --container-runtime-endpoint=/var/run/frakti.sock
+            '' } \
             ${cfg.kubelet.extraOpts}
           '';
           WorkingDirectory = cfg.dataDir;
