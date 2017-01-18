@@ -3594,7 +3594,7 @@ in {
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
-    propagatedBuildInputs = with self; [ kombu billiard_33 pytz anyjson amqp_1 ];
+    propagatedBuildInputs = with self; [ kombu_3 billiard_33 pytz anyjson amqp_1 ];
 
     checkPhase = ''
       nosetests $out/${python.sitePackages}/celery/tests/
@@ -13638,7 +13638,7 @@ in {
 
   koji = callPackage ../development/python-modules/koji { };
 
-  kombu = buildPythonPackage rec {
+  kombu_3 = buildPythonPackage rec {
     name = "kombu-${version}";
     version = "3.0.35";
 
@@ -13657,6 +13657,26 @@ in {
 
     # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
     doCheck = isPy27;
+
+    meta = {
+      description = "Messaging library for Python";
+      homepage    = "http://github.com/celery/kombu";
+      license     = licenses.bsd3;
+    };
+  };
+
+  kombu = buildPythonPackage rec {
+    name = "kombu-${version}";
+    version = "4.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/kombu/${name}.tar.gz";
+      sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
+    };
+
+    buildInputs = with self; [ pytest_30 case pytz ];
+
+    propagatedBuildInputs = with self; [ amqp ];
 
     meta = {
       description = "Messaging library for Python";
@@ -17015,7 +17035,7 @@ in {
 
     propagatedBuildInputs = with self; [
       pbr oslo-config oslo-context oslo-log oslo-utils oslo-serialization
-      oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu trollius
+      oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu_3 trollius
       aioeventlet cachetools oslo-middleware futurist redis oslo-service
       eventlet pyzmq
     ];
