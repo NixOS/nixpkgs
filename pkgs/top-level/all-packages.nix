@@ -862,6 +862,8 @@ in
 
   filebench = callPackage ../tools/misc/filebench { };
 
+  fsmon = callPackage ../tools/misc/fsmon { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fondu = callPackage ../tools/misc/fondu { };
