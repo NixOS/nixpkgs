@@ -31911,6 +31911,26 @@ EOF
 
   urlscan = callPackage ../applications/misc/urlscan { };
 
+  vine = buildPythonPackage rec {
+    name = "vine-${version}";
+    version = "1.1.3";
+
+    disable = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vine/${name}.tar.gz";
+      sha256 = "0h94x9mc9bspg23lb1f73h7smdzc39ps7z7sm0q38ds9jahmvfc7";
+    };
+
+    buildInputs = with self; [ case pytest_30 ];
+
+    meta = {
+      homepage = https://github.com/celery/vine;
+      description = "python promises";
+      license = licenses.bsd3;
+    };
+  };
+
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "wp_export_parser";
