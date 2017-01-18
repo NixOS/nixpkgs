@@ -49,7 +49,7 @@ let
       Group = "backup";
       PermissionsStartOnly = true;
       TimeoutStartSec = "2h";
-      TimeoutSec = "2h";
+      TimeoutSec = "6h";
     };
   };
 
