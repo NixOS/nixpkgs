@@ -1,5 +1,5 @@
 { stdenv, lib, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, substituteAll, xterm, makeWrapper, ruby
-, openssl, quartz-wm, fontconfig, xkeyboard_config, xlsfonts, xfontsel
+, openssl, quartz-wm, fontconfig, xlsfonts, xfontsel
 , ttf_bitstream_vera, freefont_ttf, liberation_ttf_binary
 , shell ? "${bashInteractive}/bin/bash"
 }:
@@ -126,7 +126,6 @@ in stdenv.mkDerivation {
       --replace "@DEFAULT_CLIENT@"    "${xterm}/bin/xterm" \
       --replace "@XINIT@"             "$out/bin/xinit" \
       --replace "@XINITRC@"           "$out/etc/X11/xinit/xinitrc" \
-      --replace "@XKEYBOARD_CONFIG@"  "${xkeyboard_config}/etc/X11/xkb" \
       --replace "@FONTCONFIG_FILE@"   "$fontsConfPath"
 
     wrapProgram $out/bin/Xquartz \

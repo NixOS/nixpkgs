@@ -91,6 +91,13 @@ in
         '';
         type = types.bool;
       };
+      
+      enableAutosuggestions = mkOption {
+        default = false;
+        description = ''
+          Enable zsh-autosuggestions
+        '';
+      };
 
     };
 
@@ -116,11 +123,6 @@ in
 
         setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
 
-        ${cfge.interactiveShellInit}
-
-        ${cfg.promptInit}
-        ${zshAliases}
-
         # Tell zsh how to find installed completions
         for p in ''${(z)NIX_PROFILES}; do
           fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions)
@@ -131,6 +133,16 @@ in
         ${optionalString (cfg.enableSyntaxHighlighting)
           "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
         }
+
+        ${optionalString (cfg.enableAutosuggestions)
+          "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+        }
+
+        ${zshAliases}
+        ${cfg.promptInit}
+
+        ${cfge.interactiveShellInit}
+
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
       '';

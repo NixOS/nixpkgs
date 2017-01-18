@@ -347,9 +347,13 @@ let
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
+    omd = callPackage ../development/ocaml-modules/omd { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otr = callPackage ../development/ocaml-modules/otr { };
+
+    owee = callPackage ../development/ocaml-modules/owee { };
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 

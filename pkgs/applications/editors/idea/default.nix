@@ -172,12 +172,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2016.3";
+    version = "2016.3.2";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1bp2a1x8nl5flklf160n7ka5clnb0xx9gwv5zd9li2bsf04zlzf3";
+      sha256 = "0ngign34gq7i121ss2s9wfziy3vkv1jb79pw8nf1qp7rb15xn4vc";
     };
     wmClass = "jetbrains-idea-ce";
   };
@@ -340,12 +340,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2016.3";
+    version = "2016.3.2";
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "10nah7v330qrrczzz5jldnr0k7w2xzljiny32gm9pqmjbl0i70il";
+      sha256 = "19njb6i7nl6szql7cy99jmig59b304c6im3988p1dd8dj2j6csv3";
     };
     wmClass = "jetbrains-datagrip";
   };

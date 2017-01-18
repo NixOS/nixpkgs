@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "c64720057e22cc7cac5e8fcd58fd37e75be3a7d5a3cb8995841a7f18d30c0536";
   };
 
-  makeFlags = "all";
+  buildFlags = "SYSCONFDIR=/etc all";
   installFlags = "PREFIX=\${out} VERSION=${version}";
 
   meta = with stdenv.lib; {
@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/vivien/i3blocks;
     license = licenses.gpl3;
     maintainers = [ "MindTooth" ];
-    platforms = platforms.all;
+    platforms = with platforms; freebsd ++ linux;
   };
 }

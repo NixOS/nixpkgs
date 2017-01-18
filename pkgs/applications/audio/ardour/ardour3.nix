@@ -2,8 +2,8 @@
 , fftwSinglePrec, flac, glibc, glibmm, graphviz, gtkmm2, libjack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper, pango
-, perl, pkgconfig, python2, rubberband, serd, sord-svn, sratom, suil, taglib, vampSDK }:
+, libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
+, perl, pkgconfig, python2, rubberband, serd, sord, sratom, suil, taglib, vampSDK }:
 
 let
 
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     sha256 = "0pnnx22asizin5rvf352nfv6003zarw3jd64magp10310wrfiwbq";
   };
 
-  buildInputs = 
+  buildInputs =
     [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
-      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv-svn lv2
-      makeWrapper pango perl pkgconfig python2 rubberband serd sord-svn sratom suil taglib vampSDK
+      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
+      makeWrapper pango perl pkgconfig python2 rubberband serd sord sratom suil taglib vampSDK
     ];
 
   patchPhase = ''

@@ -1,6 +1,14 @@
-with import ./release-lib.nix { supportedSystems = [ builtins.currentSystem ]; };
+
+{ # The platforms for which we build Nixpkgs.
+  supportedSystems ? [ builtins.currentSystem ]
+, # Strip most of attributes when evaluating to spare memory usage
+  scrubJobs ? true
+}:
+
+with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
+
 let
-  lib = import ../../lib;
+  inherit (pkgs) lib;
 
   nativePlatforms = linux;
 
@@ -16,7 +24,7 @@ let
   /* Basic list of packages to be natively built,
      but need a crossSystem defined to get meaning */
   basicNativeDrv = {
-    gdbCross = nativePlatforms;
+    gdbCross.nativeDrv = nativePlatforms;
   };
 
   basic = basicCrossDrv // basicNativeDrv;
@@ -184,7 +192,7 @@ in
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
-    maintainers = [ pkgs.lib.maintainers.dezgeg ];
-    mkBootstrapToolsJob = bt: hydraJob' (pkgs.lib.addMetaAttrs { inherit maintainers; } bt.dist);
-  in pkgs.lib.mapAttrs (name: mkBootstrapToolsJob) tools;
+    maintainers = [ lib.maintainers.dezgeg ];
+    mkBootstrapToolsJob = drv: hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
+  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }

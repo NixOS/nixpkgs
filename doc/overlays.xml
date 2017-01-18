@@ -1,0 +1,99 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-overlays">
+
+<title>Overlays</title>
+
+<para>This chapter describes how to extend and change Nixpkgs packages using
+overlays. Overlays are used to add layers in the fix-point used by Nixpkgs
+to compose the set of all packages.</para>
+
+<!--============================================================-->
+
+<section xml:id="sec-overlays-install">
+<title>Installing Overlays</title>
+
+<para>The set of overlays is looked for in the following places. The
+first one present is considered, and all the rest are ignored:
+
+<orderedlist>
+
+  <listitem>
+
+    <para>As an argument of the imported attribute set. When importing Nixpkgs,
+    the <varname>overlays</varname> attribute argument can be set to a list of
+    functions, which is described in <xref linkend="sec-overlays-layout"/>.</para>
+
+  </listitem>
+
+  <listitem>
+
+    <para>In the directory pointed by the environment variable
+    <varname>NIXPKGS_OVERLAYS</varname>.</para>
+  </listitem>
+
+  <listitem>
+
+    <para>In the directory <filename>~/.nixpkgs/overlays/</filename>.</para>
+  </listitem>
+
+</orderedlist>
+</para>
+
+<para>For the second and third options, the directory should contain Nix expressions defining the
+overlays. Each overlay can be a file, a directory containing a
+<filename>default.nix</filename>, or a symlink to one of those. The expressions should follow
+the syntax described in <xref linkend="sec-overlays-layout"/>.</para>
+
+<para>The order of the overlay layers can influence the recipe of packages if multiple layers override
+the same recipe. In the case where overlays are loaded from a directory, they are loaded in
+alphabetical order.</para>
+
+<para>To install an overlay using the last option, you can clone the overlay's repository and add
+a symbolic link to it in <filename>~/.nixpkgs/overlays/</filename> directory.</para>
+
+</section>
+
+<!--============================================================-->
+
+<section xml:id="sec-overlays-layout">
+<title>Overlays Layout</title>
+
+<para>Overlays are expressed as Nix functions which accept 2 arguments and return a set of
+packages.</para>
+
+<programlisting>
+self: super:
+
+{
+  boost = super.boost.override {
+    python = self.python3;
+  };
+  rr = super.callPackage ./pkgs/rr {
+    stdenv = self.stdenv_32bit;
+  };
+}
+</programlisting>
+
+<para>The first argument, usually named <varname>self</varname>, corresponds to the final package
+set. You should use this set for the dependencies of all packages specified in your
+overlay. For example, all the dependencies of <varname>rr</varname> in the example above come
+from <varname>self</varname>, as well as the overriden dependencies used in the
+<varname>boost</varname> override.</para>
+
+<para>The second argument, usually named <varname>super</varname>,
+corresponds to the result of the evaluation of the previous stages of
+Nixpkgs. It does not contain any of the packages added by the current
+overlay nor any of the following overlays. This set should be used either
+to refer to packages you wish to override, or to access functions defined
+in Nixpkgs. For example, the original recipe of <varname>boost</varname>
+in the above example, comes from <varname>super</varname>, as well as the
+<varname>callPackage</varname> function.</para>
+
+<para>The value returned by this function should be a set similar to
+<filename>pkgs/top-level/all-packages.nix</filename>, which contains
+overridden and/or new packages.</para>
+
+</section>
+
+</chapter>

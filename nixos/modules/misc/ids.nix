@@ -282,6 +282,7 @@
       infinoted = 264;
       keystone = 265;
       glance = 266;
+      couchpotato = 267;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -534,6 +535,7 @@
       infinoted = 264;
       keystone = 265;
       glance = 266;
+      couchpotato = 267;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

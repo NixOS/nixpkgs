@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cychxc3ff8fp857iikw0n2s13s2mhw2dn1mr632f7w3sn6vvrww";
   };
 
+  outputs = [ "out" "dev" ];
+
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   propagatedBuildInputs = [ glib ];

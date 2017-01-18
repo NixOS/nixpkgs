@@ -11,7 +11,9 @@ has the following highlights: </para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>Nixpkgs is now extensible through overlays. See the <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">Nixpkgs
+    manual</link> for more information.</para>
   </listitem>
 </itemizedlist>
 
@@ -28,6 +30,14 @@ has the following highlights: </para>
 following incompatible changes:</para>
 
 <itemizedlist>
+  <listitem>
+    <para>
+      <literal>stdenv.overrides</literal> is now expected to take <literal>self</literal>
+      and <literal>super</literal> arguments. See <literal>lib.trivial.extends</literal>
+      for what those parameters represent.
+    </para>
+  </listitem>
+
   <listitem>
     <para>
       <literal>gnome</literal> alias has been removed along with
@@ -87,6 +97,32 @@ following incompatible changes:</para>
      Upstream time servers for all NTP implementations are now configured using
      <literal>networking.timeServers</literal>.
    </para>
+  </listitem>
+
+  <listitem>
+
+    <para><literal>overridePackages</literal> function no longer exists.
+    It is replaced by <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
+    overlays</link>.  For example, the following code:
+
+<programlisting>
+  let
+    pkgs = import &lt;nixpkgs&gt; {};
+  in
+    pkgs.overridePackages (self: super: ...)
+</programlisting>
+
+    should be replaced by:
+
+<programlisting>
+  let
+    pkgs = import &lt;nixpkgs&gt; {};
+  in
+    import pkgs.path { overlays = [(self: super: ...)] }
+</programlisting>
+
+    </para>
   </listitem>
 </itemizedlist>
 

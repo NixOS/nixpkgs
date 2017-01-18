@@ -1,14 +1,20 @@
 { stdenv, lib, fetchFromGitHub, go, pkgs }:
+let
+  removeExpr = ref: ''
+    sed -i "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
+  '';
+
+in
 
 stdenv.mkDerivation rec {
-  version = "0.14.18";
+  version = "0.14.19";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "099r1n9awznv17ac1fm4ff6az40bvk6xxwaw8x8fx7ikqi1wv8vp";
+    sha256 = "16wpw9ndx3x37mfnymp2fx9n2az9ibyr61zgq3mh2mszzzl7bkcg";
   };
 
   buildInputs = [ go ];
@@ -40,6 +46,10 @@ stdenv.mkDerivation rec {
     substitute etc/linux-systemd/user/syncthing.service \
                $out/etc/systemd/user/syncthing.service \
                --replace /usr/bin/syncthing $out/bin/syncthing
+  '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeExpr go} '{}' '+'
   '';
 
   meta = with stdenv.lib; {

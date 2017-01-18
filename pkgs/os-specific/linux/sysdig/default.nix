@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc}:
+{stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
 let
   inherit (stdenv.lib) optional optionalString;
   baseName = "sysdig";
@@ -17,6 +17,15 @@ stdenv.mkDerivation {
   ];
 
   hardeningDisable = [ "pic" ];
+
+  patches = [
+    # patch for linux >= 4.9.1
+    # is included in the next release
+    (fetchpatch {
+      url = "https://github.com/draios/sysdig/commit/68823ffd3a76f88ad34c3d0d9f6fdf1ada0eae43.patch";
+      sha256 = "02vgyd70mwrk6mcdkacaahk49irm6vxzqb7dfickk6k32lh3m44k";
+    })
+  ];
 
   postPatch = ''
     sed '1i#include <cmath>' -i userspace/libsinsp/{cursesspectro,filterchecks}.cpp

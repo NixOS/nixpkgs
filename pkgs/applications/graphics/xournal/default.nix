@@ -3,6 +3,11 @@
 , libgnomecanvas, libgnomeprint, libgnomeprintui
 , pango, libX11, xproto, zlib, poppler
 , autoconf, automake, libtool, pkgconfig}:
+
+let
+  isGdkQuartzBackend = (gtk2.gdktarget == "quartz");
+in
+
 stdenv.mkDerivation rec {
   version = "0.4.8";
   name = "xournal-" + version;
@@ -21,7 +26,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  NIX_LDFLAGS = [ "-lX11" "-lz" ];
+  patches = stdenv.lib.optionals isGdkQuartzBackend [
+    ./gdk-quartz-backend.patch
+  ];
+
+  NIX_LDFLAGS = [ "-lz" ]
+    ++ stdenv.lib.optionals (!isGdkQuartzBackend) [ "-lX11" ];
 
   desktopItem = makeDesktopItem {
     name = name;

@@ -32,8 +32,10 @@ let
   isGhcjs       = ghc.isGhcjs or false;
   ghc761OrLater = isGhcjs || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand    = if isGhcjs then "ghcjs" else "ghc";
-  ghcCommandCaps= lib.toUpper ghcCommand;
+  ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
+  crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
+  ghcCommand = "${crossPrefix}${ghcCommand'}";
+  ghcCommandCaps= lib.toUpper ghcCommand';
   libDir        = "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
@@ -52,16 +54,20 @@ buildEnv {
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
+  extraOutputsToInstall = [ "out" "doc" ];
   inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
+    # Work around buildEnv sometimes deciding to make bin a symlink
     if test -L "$out/bin"; then
       binTarget="$(readlink -f "$out/bin")"
       rm "$out/bin"
       cp -r "$binTarget" "$out/bin"
       chmod u+w "$out/bin"
     fi
+
+    # wrap compiler executables with correct env variables
 
     for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
       if [[ -x "${ghc}/bin/$prg" ]]; then

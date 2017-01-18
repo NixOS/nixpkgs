@@ -26,6 +26,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/ksm.nix
@@ -66,6 +67,7 @@
   ./programs/bash/bash.nix
   ./programs/blcr.nix
   ./programs/cdemu.nix
+  ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
@@ -241,6 +243,7 @@
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
+  ./services/misc/couchpotato.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/dysnomia.nix
@@ -294,6 +297,7 @@
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
+  ./services/monitoring/arbtt.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
