@@ -6354,6 +6354,7 @@ in
   gradle_2_5 = self.gradleGen.gradle_2_5;
 
   gperf = callPackage ../development/tools/misc/gperf { };
+  gperf_3_0 = callPackage ../development/tools/misc/gperf/3.0.x.nix { };
 
   grail = callPackage ../development/libraries/grail { };
 
@@ -11723,6 +11724,7 @@ in
 
   systemd = callPackage ../os-specific/linux/systemd {
     utillinux = utillinuxMinimal; # break the cyclic dependency
+    gperf = gperf_3_0; # fix build until v233
   }
     // {
       udev.bin = systemd;     # ${systemd.udev.bin}/bin/udevadm
