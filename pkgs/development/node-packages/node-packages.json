@@ -49,6 +49,7 @@
 , "phantomjs"
 , "react-tools"
 , "s3http"
+, "sbot"
 , "semver"
 , "sinopia"
 , "sloc"
