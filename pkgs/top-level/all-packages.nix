@@ -13879,6 +13879,9 @@ in
     go = go_1_6;
   };
 
+  kubernetes-frakti = callPackage ../applications/networking/cluster/kubernetes/frakti {
+  };
+
   lame = callPackage ../development/libraries/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
