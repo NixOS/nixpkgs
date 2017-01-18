@@ -7764,8 +7764,9 @@ in
 
   krb5Full = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (darwin) bootstrap_cmds;
+    openssl = openssl_1_1_0;
   };
-  libkrb5 = krb5Full.override { type = "lib"; };
+  libkrb5 = krb5Full.override { type = "lib"; inherit openssl; };
 
   lasso = callPackage ../development/libraries/lasso { };
 
