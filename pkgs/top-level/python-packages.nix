@@ -29781,12 +29781,12 @@ EOF
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.1.12";
+    version = "0.1.13";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "1pll4jjqdq54d867hgqnnpiiz4pz4bbjrnh6binbp7djcbgrb8zq";
+      sha256 = "0pzk5639jjjx46a6arkwy31falmk5w1061icbml8njm3rbrwwhgx";
     };
 
     buildInputs = with self; [ nose ];
