@@ -6,14 +6,14 @@
 }:
 
 let
-  version = "2016.4.3";
+  version = "2016.4.4";
   shortVersion = "2016.4";
   data = stdenv.mkDerivation rec {
     name = "flightgear-base-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "1wy4fg6r79a635rrjy2a2a6jkz2p5zzahxs0hz7scgxg4ikb5xp4";
+      sha256 = "0s4nlkwi9jfc408agsl0w5xl3vajrvplc66k3nwg92wsr614pz9x";
     };
 
     phases = [ "installPhase" ];
@@ -26,11 +26,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "flightgear-${version}";
-  inherit version;
+   # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
+  inherit version data;
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
-    sha256 = "08i8dlia3aral2wwf72n5q5ji4vxj51bnn24g6prqjjy4qww9a9m";
+    sha256 = "1z7s9m2g85g8q9zxawhpal84rq2jin1ppchshbwi460gwk5r46fm";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
