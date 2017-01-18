@@ -3581,8 +3581,7 @@ in {
     };
   };
 
-
-  celery = buildPythonPackage rec {
+  celery_3 = buildPythonPackage rec {
     name = "celery-${version}";
     version = "3.1.23";
 
@@ -3599,6 +3598,25 @@ in {
     checkPhase = ''
       nosetests $out/${python.sitePackages}/celery/tests/
     '';
+
+    meta = {
+      homepage = https://github.com/celery/celery/;
+      description = "Distributed task queue";
+      license = licenses.bsd3;
+    };
+  };
+
+  celery = buildPythonPackage rec {
+    name = "celery-${version}";
+    version = "4.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/celery/${name}.tar.gz";
+      sha256 = "0kgmbs3fl9879n48p4m79nxy9by2yhvxq1jdvlnqzzvkdb2sdmg3";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
+    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp eventlet ];
 
     meta = {
       homepage = https://github.com/celery/celery/;
@@ -10577,7 +10595,7 @@ in {
     };
 
     propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2
-                                          pyparsing django celery ];
+                                          pyparsing django celery_3 ];
 
     meta = {
       description = "Basic raster data integration for Django";
