@@ -1064,6 +1064,23 @@ in {
     };
   };
 
+  astor = buildPythonPackage rec {
+    name = "astor-${version}";
+    version = "0.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/astor/${name}.tar.gz";
+      sha256 = "1fdafq5hkis1fxqlmhw0sn44zp2ar46nxhbc22cvwg7hsd8z5gsa";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      descriptions = "Library for reading, writing and rewriting python AST";
+      homepage = https://github.com/berkerpeksag/astor;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ nixy ];
+    };
+  };
+
   asyncio = if (pythonAtLeast "3.3") then buildPythonPackage rec {
     name = "asyncio-${version}";
     version = "3.4.3";
@@ -22796,6 +22813,25 @@ in {
       rpm pyopenssl ];
 
   });
+
+  rply = buildPythonPackage rec {
+    name = "rply-${version}";
+    version = "0.7.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rply/${name}.tar.gz";
+      sha256 = "12rp1d9ba7nvd5rhaxi6xzx1rm67r1k1ylsrkzhpwnphqpb06cvj";
+    };
+
+    buildInputs = with self; [ appdirs ];
+
+    meta = with pkgs.stdenv.lib; {
+      descriptions = "A python Lex/Yacc that works with RPython";
+      homepage = https://github.com/alex/rply;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ nixy ];
+    };
+  };
 
   rpm = (pkgs.rpm.override{inherit python;});
 
