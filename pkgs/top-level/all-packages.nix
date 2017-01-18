@@ -13438,6 +13438,8 @@ in
     libart = pkgs.gnome2.libart_lgpl;
   };
 
+  hyperd = callPackage ../applications/virtualization/hyperd { };
+
   idea = recurseIntoAttrs (callPackages ../applications/editors/idea { androidsdk = androidsdk_extras; });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
