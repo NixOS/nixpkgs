@@ -4875,24 +4875,7 @@ in {
     };
   };
 
-  bcrypt = buildPythonPackage rec {
-    name = "bcrypt-${version}";
-    version = "3.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bcrypt/${name}.tar.gz";
-      sha256 = "e54820d8b9eff357d1003f5b8d4b949a632b76b89610d8a933783fd476033ebe";
-    };
-    buildInputs = with self; [ pycparser mock pytest py ];
-    propagatedBuildInputs = with self; optional (!isPyPy) cffi;
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      description = "Modern password hashing for your software and your servers";
-      license = licenses.asl20;
-      homepage = https://github.com/pyca/bcrypt/;
-    };
-  };
+  bcrypt = callPackage ../development/python-modules/bcrypt.nix { };
 
   cffi = if isPyPy then null else buildPythonPackage rec {
     name = "cffi-1.9.1";
@@ -10869,31 +10852,9 @@ in {
     };
   };
 
-
-  dulwich = buildPythonPackage rec {
-    name = "dulwich-${version}";
-    version = "0.12.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dulwich/${name}.tar.gz";
-      sha256 = "1ihc1bdgxj7i068mhhmkzar56r2vdcj68w0dnsm7aqgcgvrp144g";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    # Only test dependencies
-    buildInputs = with self; [ pkgs.git gevent geventhttpclient pkgs.glibcLocales mock fastimport ];
-
-    doCheck = !stdenv.isDarwin;
-
-    meta = {
-      description = "Simple Python implementation of the Git file formats and protocols";
-      homepage = http://samba.org/~jelmer/dulwich/;
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ koral ];
-    };
+  dulwich = callPackage ../development/python-modules/dulwich.nix {
+    inherit (pkgs) git glibcLocales;
   };
-
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
@@ -11453,28 +11414,11 @@ in {
     };
   };
 
-  flask_login = buildPythonPackage rec {
-    name = "Flask-Login-${version}";
-    version = "0.4.0";
+  flask_elastic = callPackage ../development/python-modules/flask-elastic.nix { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Login/${name}.tar.gz";
-      sha256 = "19w2f33lglkyvxqnj3qghhxa4pr8mp13235k1bd557x52imkapnj";
-    };
+  flask_login = callPackage ../development/python-modules/flask-login.nix { };
 
-    propagatedBuildInputs = with self; [ flask ];
-
-    # FIXME
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/maxcountryman/flask-login";
-      description = "User session management for Flask";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
 
   flask_migrate = buildPythonPackage rec {
     name = "Flask-Migrate-${version}";
@@ -11500,6 +11444,8 @@ in {
       homepage = https://github.com/miguelgrinberg/Flask-Migrate;
     };
   };
+
+  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
 
   flask_principal = buildPythonPackage rec {
     name = "Flask-Principal-${version}";
@@ -11577,6 +11523,10 @@ in {
       license = licenses.bsd3;
     };
   };
+
+  flask_testing = callPackage ../development/python-modules/flask-testing.nix { };
+
+  flask_wtf = callPackage ../development/python-modules/flask-wtf.nix { };
 
   wtforms = buildPythonPackage rec {
     version = "2.1";
@@ -12230,6 +12180,8 @@ in {
     };
   };
 
+  ghdiff = callPackage ../development/python-modules/ghdiff.nix { };
+
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
     disabled = !isPy26 && !isPy27;
@@ -12551,21 +12503,7 @@ in {
     };
   };
 
-  gunicorn = buildPythonPackage rec {
-    name = "gunicorn-19.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gunicorn/${name}.tar.gz";
-      sha256 = "ae1dd6452f62b3470bc9acaf62cb5301545fbb9c697d863a5bfe35097ed7a0b3";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/gunicorn;
-      description = "WSGI HTTP Server for UNIX";
-    };
-  };
+  gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
 
   hawkauthlib = buildPythonPackage rec {
     name = "hawkauthlib-${version}";
@@ -21295,17 +21233,8 @@ in {
     };
   });
 
-  ldap = buildPythonPackage rec {
-    name = "ldap-2.4.19";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-ldap/python-${name}.tar.gz";
-      sha256 = "0j5hzaar4d0vhnrlpmkczgwm7ci2wibr99a7zx04xddzrhxdpz82";
-    };
-
-    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl.dev}/include/sasl";
-    propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
+  ldap = callPackage ../development/python-modules/ldap.nix {
+    inherit (pkgs) openldap cyrus_sasl openssl;
   };
 
   ldap3 = buildPythonPackage rec {
@@ -22235,24 +22164,7 @@ in {
     };
   };
 
-  requests_oauthlib = buildPythonPackage rec {
-    version = "0.4.1";
-    name = "requests-oauthlib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "http://github.com/requests/requests-oauthlib/archive/v${version}.tar.gz";
-      sha256 = "0vx252nzq5h9m9brwnw2ph8aj526y26jr2dqcafzzcdx6z4l8vj4";
-    };
-
-    doCheck = false;        # Internet tests fail when building in chroot
-    propagatedBuildInputs = with self; [ oauthlib requests2 ];
-
-    meta = {
-      description = "OAuthlib authentication support for Requests";
-      homepage = https://github.com/requests/requests-oauthlib;
-      maintainers = with maintainers; [ prikhi ];
-    };
-  };
+  requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
 
   requests_toolbelt = buildPythonPackage rec {
     version = "0.6.2";
@@ -26100,6 +26012,8 @@ in {
     };
   };
 
+  twill = callPackage ../development/python-modules/twill { };
+
   twitter = buildPythonPackage rec {
     name = "twitter-${version}";
     version = "1.15.0";
@@ -29742,24 +29656,7 @@ EOF
     };
   };
 
-
-  markdown2 = buildPythonPackage rec {
-    name = "markdown2-${version}";
-    version = "2.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/markdown2/${name}.zip";
-      sha256 = "073zyx3caqa9zlzxa82k9k2nhhn8c5imqpgp5nwqnh0fgaj9pqn8";
-    };
-    propagatedBuildInputs = with self; [];
-    meta = {
-      description = "A fast and complete Python implementation of Markdown";
-      homepage =  https://github.com/trentm/python-markdown2;
-      license = licenses.mit;
-      maintainers = with maintainers; [ hbunke ];
-    };
-  };
-
+  markdown2 = callPackage ../development/python-modules/markdown2.nix { };
 
   evernote = buildPythonPackage rec {
     name = "evernote-${version}";
