@@ -79,6 +79,7 @@ doNotDisplayTwice rec {
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
   ncat = nmap;  # added 2016-01-26
+  nmap_graphical = nmap-graphical;  # added 2017-01-19
   nfsUtils = nfs-utils;  # added 2014-12-06
   owncloudclient = owncloud-client;  # added 2016-08
   pidgin-with-plugins = pidgin; # added 2016-06
