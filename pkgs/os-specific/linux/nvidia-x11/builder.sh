@@ -28,13 +28,15 @@ buildPhase() {
 
 installPhase() {
     # Install libGL and friends.
-    mkdir -p "$out/lib/vendors"
-    cp -p nvidia.icd $out/lib/vendors/
+    mkdir -p "$out/etc/OpenCL/vendors"
+    cp -p nvidia.icd $out/etc/OpenCL/vendors/
 
+    mkdir -p "$out/lib"
     cp -prd *.so.* tls "$out/lib/"
     rm "$out"/lib/lib{glx,nvidia-wfb}.so.* # handled separately
 
     rm $out/lib/libGL.so.1.* # GLVND
+    rm $out/lib/libOpenCL.so* # ocl-icd is used instead
 
     if test -z "$libsOnly"; then
         # Install the X drivers.
