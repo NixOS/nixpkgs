@@ -1080,10 +1080,10 @@ self: super: {
 
   # Fix build for latest versions of servant and servant-client.
   servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_3;
+    http-api-data = self.http-api-data_0_3_4;
   });
   servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_3;
+    http-api-data = self.http-api-data_0_3_4;
     servant-server = self.servant-server_0_9_1_1;
     servant = self.servant_0_9_1_1;
   });
