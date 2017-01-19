@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, fetchpatch
+{ lib, stdenv, fetchurl, pkgconfig, zlib, fetchpatch, shadow
 , ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +17,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
-  #FIXME: make it also work on non-nixos?
   postPatch = ''
-    # Substituting store paths would create a circular dependency on systemd
     substituteInPlace include/pathnames.h \
-      --replace "/bin/login" "/run/current-system/sw/bin/login" \
-      --replace "/sbin/shutdown" "/run/current-system/sw/bin/shutdown"
+      --replace "/bin/login" "${shadow}/bin/login"
   '';
 
   crossAttrs = {
