@@ -28,7 +28,7 @@ in
 {
   agency = mkThemeDrv {
     themeName = "agency";
-    version   = "20167-01-17";
+    version   = "2017-01-17";
     src = {
       rev    = "3201f65841c9e7f97cc0ab0264cafb01b1620ed7";
       sha256 = "1b3547lzmhs1lmr9gln1yvh5xrsg92m8ngrjwf0ny91y81x04da6";
