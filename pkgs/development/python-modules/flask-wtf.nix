@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple integration of Flask and WTForms.";
-    license = licenses.bsd;
+    license = licenses.bsd3;
     maintainers = [ maintainers.mic92 ];
     homepage = https://github.com/lepture/flask-wtf/;
   };

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     homepage =  https://github.com/kilink/ghdiff;
-    license = license.mit;
+    license = licenses.mit;
     description = "Generate Github-style HTML for unified diffs.";
     maintainers = [ maintainers.mic92 ];
   };

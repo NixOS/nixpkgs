@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "a simple scripting language for Web browsing";
     license     = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ Mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }
