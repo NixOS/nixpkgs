@@ -864,8 +864,7 @@ in {
     };
   };
 
-
-  amqp = buildPythonPackage rec {
+  amqp_1 = buildPythonPackage rec {
     name = "amqp-${version}";
     version = "1.4.9";
     disabled = pythonOlder "2.6";
@@ -876,6 +875,26 @@ in {
     };
 
     buildInputs = with self; [ mock coverage nose-cover3 unittest2 ];
+
+    meta = {
+      homepage = http://github.com/celery/py-amqp;
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
+      license = licenses.lgpl21;
+    };
+  };
+
+  amqp = buildPythonPackage rec {
+    name = "amqp-${version}";
+    version = "2.1.4";
+    disabled = pythonOlder "2.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/amqp/${name}.tar.gz";
+      sha256 = "1ybywzkd840v1qvb1p2bs08js260vq1jscjg8182hv7bmwacqy0k";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
+    propagatedBuildInputs = with self; [ vine ];
 
     meta = {
       homepage = http://github.com/celery/py-amqp;
@@ -2666,8 +2685,7 @@ in {
     };
   };
 
-
-  billiard = buildPythonPackage rec {
+  billiard_33 = buildPythonPackage rec {
     name = "billiard-${version}";
     version = "3.3.0.23";
 
@@ -2679,6 +2697,26 @@ in {
     };
 
     buildInputs = with self; [ nose unittest2 mock ];
+
+    meta = {
+      homepage = https://github.com/celery/billiard;
+      description = "Python multiprocessing fork with improvements and bugfixes";
+      license = licenses.bsd3;
+    };
+  };
+
+  billiard = buildPythonPackage rec {
+    name = "billiard-${version}";
+    version = "3.5.0.2";
+
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/billiard/${name}.tar.gz";
+      sha256 = "1anw68rkja1dbgvndxz5mq6f89hmxwaha0fjcdnsl5j1wj7imc1y";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
 
     meta = {
       homepage = https://github.com/celery/billiard;
@@ -3493,6 +3531,25 @@ in {
     meta.maintainers = with maintainers; [ garbas ];
   };
 
+  case = buildPythonPackage rec {
+    name = "case-${version}";
+    version = "1.5.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/case/${name}.tar.gz";
+      sha256 = "1zbhbw87izcxj9rvqg432a7r69ps2ks20mqq3g3hgd42sckcy3ca";
+    };
+
+    propagatedBuildInputs = with self; [ six nose unittest2 mock ];
+
+    meta = {
+      homepage = https://github.com/celery/case;
+      description = "unittests utilities";
+      license = licenses.bsd3;
+    };
+
+  };
+
   cassandra-driver = buildPythonPackage rec {
     name = "cassandra-driver-3.6.0";
 
@@ -3541,8 +3598,7 @@ in {
     };
   };
 
-
-  celery = buildPythonPackage rec {
+  celery_3 = buildPythonPackage rec {
     name = "celery-${version}";
     version = "3.1.23";
 
@@ -3554,11 +3610,30 @@ in {
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
-    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp ];
+    propagatedBuildInputs = with self; [ kombu_3 billiard_33 pytz anyjson amqp_1 ];
 
     checkPhase = ''
       nosetests $out/${python.sitePackages}/celery/tests/
     '';
+
+    meta = {
+      homepage = https://github.com/celery/celery/;
+      description = "Distributed task queue";
+      license = licenses.bsd3;
+    };
+  };
+
+  celery = buildPythonPackage rec {
+    name = "celery-${version}";
+    version = "4.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/celery/${name}.tar.gz";
+      sha256 = "0kgmbs3fl9879n48p4m79nxy9by2yhvxq1jdvlnqzzvkdb2sdmg3";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
+    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp eventlet ];
 
     meta = {
       homepage = https://github.com/celery/celery/;
@@ -4984,12 +5059,12 @@ in {
   };
 
   pytest_30 = self.pytest_27.override rec {
-    name = "pytest-3.0.4";
+    name = "pytest-3.0.5";
 
     propagatedBuildInputs = with self; [ hypothesis py ];
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "03d49xc0l4sdncq47rn1p42ywjnxqrvpc160y8dwvanv3wnfx7w7";
+      sha256 = "1z9pj39w0r2gw5hsqndlmsqa80kgbrann5kfma8ww8zhaslkl02a";
     };
   };
 
@@ -10537,7 +10612,7 @@ in {
     };
 
     propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2
-                                          pyparsing django celery ];
+                                          pyparsing django celery_3 ];
 
     meta = {
       description = "Basic raster data integration for Django";
@@ -13598,7 +13673,7 @@ in {
 
   koji = callPackage ../development/python-modules/koji { };
 
-  kombu = buildPythonPackage rec {
+  kombu_3 = buildPythonPackage rec {
     name = "kombu-${version}";
     version = "3.0.35";
 
@@ -13612,11 +13687,31 @@ in {
     # most of these are simply to allow the test suite to do its job
     buildInputs = with self; optionals isPy27 [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
 
-    propagatedBuildInputs = with self; [ amqp anyjson ] ++
+    propagatedBuildInputs = with self; [ amqp_1 anyjson ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
     doCheck = isPy27;
+
+    meta = {
+      description = "Messaging library for Python";
+      homepage    = "http://github.com/celery/kombu";
+      license     = licenses.bsd3;
+    };
+  };
+
+  kombu = buildPythonPackage rec {
+    name = "kombu-${version}";
+    version = "4.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/kombu/${name}.tar.gz";
+      sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
+    };
+
+    buildInputs = with self; [ pytest_30 case pytz ];
+
+    propagatedBuildInputs = with self; [ amqp ];
 
     meta = {
       description = "Messaging library for Python";
@@ -16975,7 +17070,7 @@ in {
 
     propagatedBuildInputs = with self; [
       pbr oslo-config oslo-context oslo-log oslo-utils oslo-serialization
-      oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu trollius
+      oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu_3 trollius
       aioeventlet cachetools oslo-middleware futurist redis oslo-service
       eventlet pyzmq
     ];
@@ -31927,6 +32022,26 @@ EOF
   };
 
   urlscan = callPackage ../applications/misc/urlscan { };
+
+  vine = buildPythonPackage rec {
+    name = "vine-${version}";
+    version = "1.1.3";
+
+    disable = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vine/${name}.tar.gz";
+      sha256 = "0h94x9mc9bspg23lb1f73h7smdzc39ps7z7sm0q38ds9jahmvfc7";
+    };
+
+    buildInputs = with self; [ case pytest_30 ];
+
+    meta = {
+      homepage = https://github.com/celery/vine;
+      description = "python promises";
+      license = licenses.bsd3;
+    };
+  };
 
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";
