@@ -13293,6 +13293,8 @@ in {
     };
   };
 
+  jabberbot = callPackage ../development/python-modules/jabberbot.nix {};
+
   jedi = buildPythonPackage (rec {
     name = "jedi-0.9.0";
 
