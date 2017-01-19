@@ -6354,6 +6354,7 @@ in
   gradle_2_5 = self.gradleGen.gradle_2_5;
 
   gperf = callPackage ../development/tools/misc/gperf { };
+  # 3.1 changed some parameters from int to size_t, leading to mismatches.
   gperf_3_0 = callPackage ../development/tools/misc/gperf/3.0.x.nix { };
 
   grail = callPackage ../development/libraries/grail { };
@@ -6412,7 +6413,9 @@ in
 
   jenkins-job-builder = pythonPackages.jenkins-job-builder;
 
-  kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends { };
+  kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends {
+    gperf = gperf_3_0;
+  };
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
@@ -8254,7 +8257,9 @@ in
   # On non-GNU systems we need GNU Gettext for libintl.
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux) gettext;
 
-  libid3tag = callPackage ../development/libraries/libid3tag { };
+  libid3tag = callPackage ../development/libraries/libid3tag {
+    gperf = gperf_3_0;
+  };
 
   libidn = callPackage ../development/libraries/libidn { };
 
@@ -10419,7 +10424,9 @@ in
 
   rspamd = callPackage ../servers/mail/rspamd { };
 
-  pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
+  pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix {
+    gperf = gperf_3_0;
+  };
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
   postgrey = callPackage ../servers/mail/postgrey { };
@@ -12526,7 +12533,9 @@ in
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
-  bitkeeper = callPackage ../applications/version-management/bitkeeper { };
+  bitkeeper = callPackage ../applications/version-management/bitkeeper {
+    gperf = gperf_3_0;
+  };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
