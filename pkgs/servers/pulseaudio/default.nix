@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, intltool, autoreconfHook
 , json_c, libsndfile, libtool
 , xorg, libcap, alsaLib, glib
 , avahi, libjack2, libasyncns, lirc, dbus
@@ -30,6 +30,8 @@
 
 , # Whether to build only the library.
   libOnly ? false
+
+, CoreServices, AudioUnit, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +43,11 @@ stdenv.mkDerivation rec {
     sha256 = "11j682g2mn723sz3bh4i44ggq29z053zcggy0glzn63zh9mxdly3";
   };
 
-  patches = [ ./caps-fix.patch ];
+  patches = [ ./caps-fix.patch ]
+            ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {
+              url = "https://bugs.freedesktop.org/attachment.cgi?id=127889";
+              sha256 = "063h5vmh4ykgxjbxyxjlj6qhyyxhazbh3p18p1ik69kq24nkny9m";
+            });
 
   outputs = [ "out" "dev" ];
 
@@ -53,6 +59,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ json_c libsndfile speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2

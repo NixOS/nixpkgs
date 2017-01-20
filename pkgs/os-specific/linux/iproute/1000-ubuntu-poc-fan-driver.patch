@@ -6,10 +6,10 @@ Index: iproute2-4.1.1/include/linux/if_tunnel.h
 ===================================================================
 --- iproute2-4.1.1.orig/include/linux/if_tunnel.h
 +++ iproute2-4.1.1/include/linux/if_tunnel.h
-@@ -57,6 +57,9 @@ enum {
- 	IFLA_IPTUN_ENCAP_FLAGS,
+@@ -75,6 +75,9 @@ enum {
  	IFLA_IPTUN_ENCAP_SPORT,
  	IFLA_IPTUN_ENCAP_DPORT,
+	IFLA_IPTUN_COLLECT_METADATA,
 +
 +	IFLA_IPTUN_FAN_UNDERLAY = 32,
 +

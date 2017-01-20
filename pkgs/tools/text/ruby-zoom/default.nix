@@ -4,9 +4,7 @@ bundlerEnv {
   pname = "ruby-zoom";
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   meta = with lib; {
     description = "Quickly open CLI search results in your favorite editor!";

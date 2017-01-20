@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 stdenv.mkDerivation rec {
   name = "hbase-${version}";
-  version = "0.98.19";
+  version = "0.98.24";
 
   src = fetchurl {
     url = "mirror://apache/hbase/${version}/hbase-${version}-hadoop2-bin.tar.gz";
-    sha256 = "0g7y38cw09fydbf4fbs1anyilhfgxpbfs41f0aignli5i3hd1pgx";
+    sha256 = "0kz72wqsii09v9hxkw10mzyvjhji5sx3l6aijjalgbybavpcxglb";
   };
 
   buildInputs = [ makeWrapper ];

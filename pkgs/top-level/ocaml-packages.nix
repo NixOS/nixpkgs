@@ -182,6 +182,8 @@ let
       inherit (pkgs) fontconfig;
     };
 
+    fpath = callPackage ../development/ocaml-modules/fpath { };
+
     functory = callPackage ../development/ocaml-modules/functory { };
 
     gen = callPackage ../development/ocaml-modules/gen { };

@@ -4,9 +4,7 @@ let
   # `sass` et al
   gems = bundlerEnv {
     name = "consul-ui-deps";
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
   };
 in
 

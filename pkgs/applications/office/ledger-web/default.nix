@@ -6,11 +6,9 @@
 bundlerEnv rec {
   name = "ledger-web-${version}";
 
-  version = (import gemset).ledger_web.version;
+  version = (import ./gemset.nix).ledger_web.version;
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   buildInputs =    lib.optional withPostgresql postgresql
                 ++ lib.optional withSqlite sqlite;

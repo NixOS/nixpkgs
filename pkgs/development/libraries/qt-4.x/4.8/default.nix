@@ -4,7 +4,7 @@
 , libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
-, buildWebkit ? stdenv.isLinux
+, buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , flashplayerFix ? false, gdk_pixbuf
 , gtkStyle ? false, libgnomeui, gtk2, GConf, gnome_vfs
 , developerBuild ? false

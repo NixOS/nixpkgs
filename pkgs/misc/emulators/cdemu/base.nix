@@ -32,6 +32,5 @@ in stdenv.mkDerivation ({
     homepage = http://cdemu.sourceforge.net/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ "Rok Mandeljc <mrok AT users DOT sourceforge DOT net>" ];
   };
 } // drvParams)

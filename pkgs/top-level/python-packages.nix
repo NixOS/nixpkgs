@@ -281,6 +281,8 @@ in {
     pythonPackages = self;
   };
 
+  pyscard = callPackage ../development/python-modules/pyscard { };
+
   pyside = callPackage ../development/python-modules/pyside { };
 
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
@@ -883,8 +885,7 @@ in {
     };
   };
 
-
-  amqp = buildPythonPackage rec {
+  amqp_1 = buildPythonPackage rec {
     name = "amqp-${version}";
     version = "1.4.9";
     disabled = pythonOlder "2.6";
@@ -895,6 +896,26 @@ in {
     };
 
     buildInputs = with self; [ mock coverage nose-cover3 unittest2 ];
+
+    meta = {
+      homepage = http://github.com/celery/py-amqp;
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
+      license = licenses.lgpl21;
+    };
+  };
+
+  amqp = buildPythonPackage rec {
+    name = "amqp-${version}";
+    version = "2.1.4";
+    disabled = pythonOlder "2.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/amqp/${name}.tar.gz";
+      sha256 = "1ybywzkd840v1qvb1p2bs08js260vq1jscjg8182hv7bmwacqy0k";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
+    propagatedBuildInputs = with self; [ vine ];
 
     meta = {
       homepage = http://github.com/celery/py-amqp;
@@ -1080,6 +1101,23 @@ in {
     meta = {
       description = "A Python wrapper for the SQLite embedded relational database engine";
       homepage = http://code.google.com/p/apsw/;
+    };
+  };
+
+  astor = buildPythonPackage rec {
+    name = "astor-${version}";
+    version = "0.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/astor/${name}.tar.gz";
+      sha256 = "1fdafq5hkis1fxqlmhw0sn44zp2ar46nxhbc22cvwg7hsd8z5gsa";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      descriptions = "Library for reading, writing and rewriting python AST";
+      homepage = https://github.com/berkerpeksag/astor;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ nixy ];
     };
   };
 
@@ -2685,8 +2723,7 @@ in {
     };
   };
 
-
-  billiard = buildPythonPackage rec {
+  billiard_33 = buildPythonPackage rec {
     name = "billiard-${version}";
     version = "3.3.0.23";
 
@@ -2698,6 +2735,26 @@ in {
     };
 
     buildInputs = with self; [ nose unittest2 mock ];
+
+    meta = {
+      homepage = https://github.com/celery/billiard;
+      description = "Python multiprocessing fork with improvements and bugfixes";
+      license = licenses.bsd3;
+    };
+  };
+
+  billiard = buildPythonPackage rec {
+    name = "billiard-${version}";
+    version = "3.5.0.2";
+
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/billiard/${name}.tar.gz";
+      sha256 = "1anw68rkja1dbgvndxz5mq6f89hmxwaha0fjcdnsl5j1wj7imc1y";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
 
     meta = {
       homepage = https://github.com/celery/billiard;
@@ -2916,7 +2973,7 @@ in {
 
 
   blockdiag = buildPythonPackage rec {
-    name = "blockdiag";
+    name = "blockdiag-${version}";
     version = "1.5.3";
 
     src = pkgs.fetchurl {
@@ -3512,6 +3569,25 @@ in {
     meta.maintainers = with maintainers; [ garbas ];
   };
 
+  case = buildPythonPackage rec {
+    name = "case-${version}";
+    version = "1.5.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/case/${name}.tar.gz";
+      sha256 = "1zbhbw87izcxj9rvqg432a7r69ps2ks20mqq3g3hgd42sckcy3ca";
+    };
+
+    propagatedBuildInputs = with self; [ six nose unittest2 mock ];
+
+    meta = {
+      homepage = https://github.com/celery/case;
+      description = "unittests utilities";
+      license = licenses.bsd3;
+    };
+
+  };
+
   cassandra-driver = buildPythonPackage rec {
     name = "cassandra-driver-3.6.0";
 
@@ -3560,8 +3636,7 @@ in {
     };
   };
 
-
-  celery = buildPythonPackage rec {
+  celery_3 = buildPythonPackage rec {
     name = "celery-${version}";
     version = "3.1.23";
 
@@ -3573,11 +3648,30 @@ in {
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
-    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp ];
+    propagatedBuildInputs = with self; [ kombu_3 billiard_33 pytz anyjson amqp_1 ];
 
     checkPhase = ''
       nosetests $out/${python.sitePackages}/celery/tests/
     '';
+
+    meta = {
+      homepage = https://github.com/celery/celery/;
+      description = "Distributed task queue";
+      license = licenses.bsd3;
+    };
+  };
+
+  celery = buildPythonPackage rec {
+    name = "celery-${version}";
+    version = "4.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/celery/${name}.tar.gz";
+      sha256 = "0kgmbs3fl9879n48p4m79nxy9by2yhvxq1jdvlnqzzvkdb2sdmg3";
+    };
+
+    buildInputs = with self; [ pytest_30 case ];
+    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp eventlet ];
 
     meta = {
       homepage = https://github.com/celery/celery/;
@@ -4816,24 +4910,7 @@ in {
     };
   };
 
-  bcrypt = buildPythonPackage rec {
-    name = "bcrypt-${version}";
-    version = "3.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bcrypt/${name}.tar.gz";
-      sha256 = "e54820d8b9eff357d1003f5b8d4b949a632b76b89610d8a933783fd476033ebe";
-    };
-    buildInputs = with self; [ pycparser mock pytest py ];
-    propagatedBuildInputs = with self; optional (!isPyPy) cffi;
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      description = "Modern password hashing for your software and your servers";
-      license = licenses.asl20;
-      homepage = https://github.com/pyca/bcrypt/;
-    };
-  };
+  bcrypt = callPackage ../development/python-modules/bcrypt.nix { };
 
   cffi = if isPyPy then null else buildPythonPackage rec {
     name = "cffi-1.9.1";
@@ -5002,12 +5079,12 @@ in {
   };
 
   pytest_30 = self.pytest_27.override rec {
-    name = "pytest-3.0.4";
+    name = "pytest-3.0.5";
 
     propagatedBuildInputs = with self; [ hypothesis py ];
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "03d49xc0l4sdncq47rn1p42ywjnxqrvpc160y8dwvanv3wnfx7w7";
+      sha256 = "1z9pj39w0r2gw5hsqndlmsqa80kgbrann5kfma8ww8zhaslkl02a";
     };
   };
 
@@ -7873,7 +7950,7 @@ in {
     meta = with stdenv.lib; {
       description = "Accessing and Modifying INI files";
       license = licenses.mit;
-      maintainers = [ "abcz2.uprola@gmail.com" ];
+      maintainers = with maintainers; [ danbst ];
     };
   };
 
@@ -10644,7 +10721,7 @@ in {
     };
 
     propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2
-                                          pyparsing django celery ];
+                                          pyparsing django celery_3 ];
 
     meta = {
       description = "Basic raster data integration for Django";
@@ -10899,31 +10976,9 @@ in {
     };
   };
 
-
-  dulwich = buildPythonPackage rec {
-    name = "dulwich-${version}";
-    version = "0.12.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dulwich/${name}.tar.gz";
-      sha256 = "1ihc1bdgxj7i068mhhmkzar56r2vdcj68w0dnsm7aqgcgvrp144g";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    # Only test dependencies
-    buildInputs = with self; [ pkgs.git gevent geventhttpclient pkgs.glibcLocales mock fastimport ];
-
-    doCheck = !stdenv.isDarwin;
-
-    meta = {
-      description = "Simple Python implementation of the Git file formats and protocols";
-      homepage = http://samba.org/~jelmer/dulwich/;
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ koral ];
-    };
+  dulwich = callPackage ../development/python-modules/dulwich.nix {
+    inherit (pkgs) git glibcLocales;
   };
-
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
@@ -11483,28 +11538,11 @@ in {
     };
   };
 
-  flask_login = buildPythonPackage rec {
-    name = "Flask-Login-${version}";
-    version = "0.4.0";
+  flask_elastic = callPackage ../development/python-modules/flask-elastic.nix { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Login/${name}.tar.gz";
-      sha256 = "19w2f33lglkyvxqnj3qghhxa4pr8mp13235k1bd557x52imkapnj";
-    };
+  flask_login = callPackage ../development/python-modules/flask-login.nix { };
 
-    propagatedBuildInputs = with self; [ flask ];
-
-    # FIXME
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/maxcountryman/flask-login";
-      description = "User session management for Flask";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
 
   flask_migrate = buildPythonPackage rec {
     name = "Flask-Migrate-${version}";
@@ -11530,6 +11568,8 @@ in {
       homepage = https://github.com/miguelgrinberg/Flask-Migrate;
     };
   };
+
+  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
 
   flask_principal = buildPythonPackage rec {
     name = "Flask-Principal-${version}";
@@ -11607,6 +11647,10 @@ in {
       license = licenses.bsd3;
     };
   };
+
+  flask_testing = callPackage ../development/python-modules/flask-testing.nix { };
+
+  flask_wtf = callPackage ../development/python-modules/flask-wtf.nix { };
 
   wtforms = buildPythonPackage rec {
     version = "2.1";
@@ -12260,6 +12304,8 @@ in {
     };
   };
 
+  ghdiff = callPackage ../development/python-modules/ghdiff.nix { };
+
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
     disabled = !isPy26 && !isPy27;
@@ -12581,21 +12627,7 @@ in {
     };
   };
 
-  gunicorn = buildPythonPackage rec {
-    name = "gunicorn-19.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gunicorn/${name}.tar.gz";
-      sha256 = "ae1dd6452f62b3470bc9acaf62cb5301545fbb9c697d863a5bfe35097ed7a0b3";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/gunicorn;
-      description = "WSGI HTTP Server for UNIX";
-    };
-  };
+  gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
 
   hawkauthlib = buildPythonPackage rec {
     name = "hawkauthlib-${version}";
@@ -13012,16 +13044,16 @@ in {
   };
 
   influxdb = buildPythonPackage rec {
-    name = "influxdb-0.1.12";
+    name = "influxdb-4.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/influxdb/${name}.tar.gz";
-      sha256 = "6b5ea154454b86d14f2a3960d180e666ba9863da964032dacf2b50628e774a33";
+      sha256 = "0injsml6zmb3hkgc03117fdlg573kbfgjbijpd5npf0vsy0xnpvz";
     };
 
     # ImportError: No module named tests
     doCheck = false;
-    propagatedBuildInputs = with self; [ requests ];
+    propagatedBuildInputs = with self; [ requests2 dateutil pytz six ];
 
     meta = {
       description = "Python client for InfluxDB";
@@ -13385,6 +13417,8 @@ in {
     };
   };
 
+  jabberbot = callPackage ../development/python-modules/jabberbot.nix {};
+
   jedi = buildPythonPackage (rec {
     name = "jedi-0.9.0";
 
@@ -13705,7 +13739,7 @@ in {
 
   koji = callPackage ../development/python-modules/koji { };
 
-  kombu = buildPythonPackage rec {
+  kombu_3 = buildPythonPackage rec {
     name = "kombu-${version}";
     version = "3.0.35";
 
@@ -13719,11 +13753,31 @@ in {
     # most of these are simply to allow the test suite to do its job
     buildInputs = with self; optionals isPy27 [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
 
-    propagatedBuildInputs = with self; [ amqp anyjson ] ++
+    propagatedBuildInputs = with self; [ amqp_1 anyjson ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
     doCheck = isPy27;
+
+    meta = {
+      description = "Messaging library for Python";
+      homepage    = "http://github.com/celery/kombu";
+      license     = licenses.bsd3;
+    };
+  };
+
+  kombu = buildPythonPackage rec {
+    name = "kombu-${version}";
+    version = "4.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/kombu/${name}.tar.gz";
+      sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
+    };
+
+    buildInputs = with self; [ pytest_30 case pytz ];
+
+    propagatedBuildInputs = with self; [ amqp ];
 
     meta = {
       description = "Messaging library for Python";
@@ -17188,7 +17242,7 @@ in {
 
     propagatedBuildInputs = with self; [
       pbr oslo-config oslo-context oslo-log oslo-utils oslo-serialization
-      oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu trollius
+      oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu_3 trollius
       aioeventlet cachetools oslo-middleware futurist redis oslo-service
       eventlet pyzmq
     ];
@@ -19735,9 +19789,18 @@ in {
       sha256 = "0y2iw1dddcvi13xjh3l52z1mvnrbc41ik9k4nn7lwj8x5kimnk9n";
     };
 
+    patches = [
+      (pkgs.fetchpatch {
+        name = "CVE-2016-10127.patch";
+        url = "https://sources.debian.net/data/main/p/python-pysaml2/3.0.0-5/debian/patches/fix-xxe-in-xml-parsing.patch";
+        sha256 = "184lkwdayjqiahzsn4yp15parqpmphjsb1z7zwd636jvarxqgs2q";
+      })
+    ];
+
     propagatedBuildInputs = with self; [
       repoze_who paste cryptography pycrypto pyopenssl ipaddress six cffi idna
       enum34 pytz setuptools zope_interface dateutil requests2 pyasn1 webob decorator pycparser
+      defusedxml
     ];
     buildInputs = with self; [
       Mako pytest memcached pymongo mongodict pkgs.xmlsec
@@ -21465,17 +21528,8 @@ in {
     };
   });
 
-  ldap = buildPythonPackage rec {
-    name = "ldap-2.4.19";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-ldap/python-${name}.tar.gz";
-      sha256 = "0j5hzaar4d0vhnrlpmkczgwm7ci2wibr99a7zx04xddzrhxdpz82";
-    };
-
-    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl.dev}/include/sasl";
-    propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
+  ldap = callPackage ../development/python-modules/ldap.nix {
+    inherit (pkgs) openldap cyrus_sasl openssl;
   };
 
   ldap3 = buildPythonPackage rec {
@@ -22396,24 +22450,7 @@ in {
     };
   };
 
-  requests_oauthlib = buildPythonPackage rec {
-    version = "0.4.1";
-    name = "requests-oauthlib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "http://github.com/requests/requests-oauthlib/archive/v${version}.tar.gz";
-      sha256 = "0vx252nzq5h9m9brwnw2ph8aj526y26jr2dqcafzzcdx6z4l8vj4";
-    };
-
-    doCheck = false;        # Internet tests fail when building in chroot
-    propagatedBuildInputs = with self; [ oauthlib requests2 ];
-
-    meta = {
-      description = "OAuthlib authentication support for Requests";
-      homepage = https://github.com/requests/requests-oauthlib;
-      maintainers = with maintainers; [ prikhi ];
-    };
-  };
+  requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
 
   requests_toolbelt = buildPythonPackage rec {
     version = "0.6.2";
@@ -22475,7 +22512,7 @@ in {
       meta = with stdenv.lib; {
         description = "A Python binding to QScintilla, Qt based text editing control";
         license = licenses.lgpl21Plus;
-        maintainers = [ "abcz2.uprola@gmail.com" ];
+        maintainers = with maintainers; [ danbst ];
         platforms = platforms.linux;
       };
     };
@@ -23159,6 +23196,25 @@ in {
       rpm pyopenssl ];
 
   });
+
+  rply = buildPythonPackage rec {
+    name = "rply-${version}";
+    version = "0.7.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rply/${name}.tar.gz";
+      sha256 = "12rp1d9ba7nvd5rhaxi6xzx1rm67r1k1ylsrkzhpwnphqpb06cvj";
+    };
+
+    buildInputs = with self; [ appdirs ];
+
+    meta = with pkgs.stdenv.lib; {
+      descriptions = "A python Lex/Yacc that works with RPython";
+      homepage = https://github.com/alex/rply;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ nixy ];
+    };
+  };
 
   rpm = (pkgs.rpm.override{inherit python;});
 
@@ -25057,6 +25113,9 @@ in {
       matplotlib
     ];
 
+    # fails due to trying to run CSS as test
+    doCheck = false;
+
     meta = {
       description = "Scientific reports with embedded python computations with reST, LaTeX or markdown";
       homepage = http://mpastell.com/pweave/ ;
@@ -26241,6 +26300,8 @@ in {
       maintainers = with maintainers; [ pierron ];
     };
   };
+
+  twill = callPackage ../development/python-modules/twill { };
 
   twitter = buildPythonPackage rec {
     name = "twitter-${version}";
@@ -29321,7 +29382,7 @@ EOF
     meta = {
       homepage = https://developers.google.com/storage/docs/gsutil;
       description = "Google Cloud Storage Tool";
-      maintainers = [ "Russell O'Connor <oconnorr@google.com>" ];
+      maintainers = with maintainers; [ roconnor ];
       license = licenses.asl20;
     };
     doCheck = false;
@@ -29886,24 +29947,7 @@ EOF
     };
   };
 
-
-  markdown2 = buildPythonPackage rec {
-    name = "markdown2-${version}";
-    version = "2.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/markdown2/${name}.zip";
-      sha256 = "073zyx3caqa9zlzxa82k9k2nhhn8c5imqpgp5nwqnh0fgaj9pqn8";
-    };
-    propagatedBuildInputs = with self; [];
-    meta = {
-      description = "A fast and complete Python implementation of Markdown";
-      homepage =  https://github.com/trentm/python-markdown2;
-      license = licenses.mit;
-      maintainers = with maintainers; [ hbunke ];
-    };
-  };
-
+  markdown2 = callPackage ../development/python-modules/markdown2.nix { };
 
   evernote = buildPythonPackage rec {
     name = "evernote-${version}";
@@ -30694,26 +30738,7 @@ EOF
     };
   };
 
-  xmpppy = buildPythonPackage rec {
-    name = "xmpp.py-${version}";
-    version = "0.5.0rc1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/xmpppy/xmpppy-${version}.tar.gz";
-      sha256 = "16hbh8kwc5n4qw2rz1mrs8q17rh1zq9cdl05b1nc404n7idh56si";
-    };
-
-    preInstall = ''
-      mkdir -p $out/bin $out/lib $out/share $(toPythonPath $out)
-      export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out)
-    '';
-
-    disabled = isPy3k;
-
-    meta = {
-      description = "XMPP python library";
-    };
-  };
+  xmpppy = callPackage ../development/python-modules/xmpppy {};
 
   xstatic-bootbox = buildPythonPackage rec {
     name = "XStatic-Bootbox-${version}";
@@ -32169,6 +32194,26 @@ EOF
   };
 
   urlscan = callPackage ../applications/misc/urlscan { };
+
+  vine = buildPythonPackage rec {
+    name = "vine-${version}";
+    version = "1.1.3";
+
+    disable = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vine/${name}.tar.gz";
+      sha256 = "0h94x9mc9bspg23lb1f73h7smdzc39ps7z7sm0q38ds9jahmvfc7";
+    };
+
+    buildInputs = with self; [ case pytest_30 ];
+
+    meta = {
+      homepage = https://github.com/celery/vine;
+      description = "python promises";
+      license = licenses.bsd3;
+    };
+  };
 
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";

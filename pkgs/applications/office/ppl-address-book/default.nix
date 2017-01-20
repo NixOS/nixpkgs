@@ -8,9 +8,7 @@ let
   env = bundlerEnv rec {
     name = "${pname}-env-${version}";
     inherit ruby;
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
 
     gemConfig.rugged = attrs: { buildInputs = [ which ]; };
   };

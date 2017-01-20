@@ -5,9 +5,7 @@ bundlerEnv rec {
   version = "3.1.6";
 
   ruby = ruby_2_2;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   meta = with lib; {
     description = "Simple, blog aware, static site generator";
