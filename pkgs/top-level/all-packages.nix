@@ -3108,6 +3108,8 @@ in
 
   opencc = callPackage ../tools/text/opencc { };
 
+  opencl-info = callPackage ../tools/system/opencl-info { };
+
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
