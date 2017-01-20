@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "OpenDungeons";
     repo = "OpenDungeons";
     rev = version;
-    sha256 = "0nipb2h0gn628yxlahjgnfhmpfqa19mjdbj3aqabimdfqds9pryh";
+    sha256 = "1ilvi09mwl2zfk5nxnjiv4r5lsvwdzdhk47pfs0szxp3svkq0k71";
   };
 
   patches = [ ./cmakepaths.patch ];
