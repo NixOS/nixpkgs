@@ -1,7 +1,8 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.13";
+  name = "ed-${version}";
+  version = "1.14.1";
 
   src = fetchurl {
     # gnu only provides *.lz tarball, which is unfriendly for stdenv bootstrapping
@@ -9,13 +10,13 @@ stdenv.mkDerivation rec {
     # When updating, please make sure the sources pulled match those upstream by
     # Unpacking both tarballs and running `find . -type f -exec sha256sum \{\} \; | sha256sum`
     # in the resulting directory
-    urls = let file_md5 = "fb8ffc8d8072e13dd5799131e889bfa5"; # for fedora mirror
+    urls = let file_sha512 = "84396fe4e4f0bf0b591037277ff8679a08b2883207628aaa387644ad83ca5fbdaa74a581f33310e28222d2fea32a0b8ba37e579597cc7d6145df6eb956ea75db";
       in [
         ("http://pkgs.fedoraproject.org/repo/extras/ed"
-          + "/${name}.tar.bz2/${file_md5}/${name}.tar.bz2")
+          + "/${name}.tar.bz2/sha512/${file_sha512}/${name}.tar.bz2")
         "http://fossies.org/linux/privat/${name}.tar.bz2"
       ];
-    sha256 = "1iym2fsamxr886l3sz8lqzgf00bip5cr0aly8jp04f89kf5mvl0j";
+    sha256 = "1pk6qa4sr7qc6vgm34hjx44hsh8x2bwaxhdi78jhsacnn4zwi7bw";
   };
 
   /* FIXME: Tests currently fail on Darwin:
