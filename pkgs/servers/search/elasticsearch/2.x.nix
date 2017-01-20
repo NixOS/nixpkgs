@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     # don't want to have binary with name plugin
     mv $out/bin/plugin $out/bin/elasticsearch-plugin
-       wrapProgram $out/bin/elasticsearch ${if (!stdenv.isDarwin)
+    wrapProgram $out/bin/elasticsearch ${if (!stdenv.isDarwin)
         then ''--prefix PATH : "${utillinux}/bin/"''
         else ''--prefix PATH : "${getopt}/bin"''} \
       --set JAVA_HOME "${jre}"
