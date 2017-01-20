@@ -17,7 +17,7 @@ let
   maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds DamienCassou ];
 
   corePackages = with gnome3; [
-    pkgs.desktop_file_utils pkgs.ibus
+    pkgs.desktop_file_utils
     pkgs.shared_mime_info # for update-mime-database
     glib # for gsettings
     gtk3 # for gtk-update-icon-cache
