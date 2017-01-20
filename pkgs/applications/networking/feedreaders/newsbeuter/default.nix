@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/akrennmair/newsbeuter/commit/cdacfbde9fe3ae2489fc96d35dfb7d263ab03f50.patch";
       sha256 = "1lhvn63cqjpikwsr6zzndb1p5y140vvphlg85fazwx4xpzd856d9";
     })
+    (fetchpatch {
+      url = "https://github.com/akrennmair/newsbeuter/commit/33577f842d9b74c119f3cebda95ef8652304db81.patch";
+      sha256 = "1kwhp6k14gk1hclgsr9w47qg7hs60p23zsl6f6vw13mczp2naqlb";
+    })
   ];
 
   installFlags = [ "DESTDIR=$(out)" "prefix=" ];
