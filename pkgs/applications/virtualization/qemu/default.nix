@@ -145,8 +145,28 @@ stdenv.mkDerivation rec {
     })
     (fetchpatch {
       name = "qemu-CVE-2016-9921_9922.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=commit;h=4299b90e9ba9ce5ca9024572804ba751aa1a7e70";
-      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=4299b90e9ba9ce5ca9024572804ba751aa1a7e70";
+      sha256 = "125xlysdgpp59m4rp1mb59i3ipmf3yjk8x01gzvxcg1hnpgm4j4c";
+    })
+    (fetchpatch {
+      name = "qemu-CVE-2016-9845.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=42a8dadc74f8982fc269e54e3c5627b54d9f83d8";
+      sha256 = "0qivj585pp1g6xfzknzgi5d2p6can3ihfgpxz3wi12h5jl5q6677";
+    })
+    (fetchpatch {
+      name = "qemu-CVE-2016-9846.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=2d1cd6c7a91a4beb99a0c3a21be529222a708545";
+      sha256 = "1pa8wwxaz4k4sw1zfa4w0zlxkw6qpsrny1z8c8i8di91aswspq3i";
+    })
+    (fetchpatch {
+      name = "qemu-CVE-2016-9907.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=07b026fd82d6cf11baf7d7c603c4f5f6070b35bf";
+      sha256 = "0phsk2x6mfsd6gabmfk4pr5nc4aymcqsfd88zihlm9d20gg9pbv3";
+    })
+    (fetchpatch {
+      name = "qemu-CVE-2016-9912.patch";
+      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=b8e23926c568f2e963af39028b71c472e3023793";
+      sha256 = "1b711s63pg6rzqkqyx0mrlb4x6jv3dscc90qg8w6lflwlhwa73iv";
     })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch;
   hardeningDisable = [ "stackprotector" ];
