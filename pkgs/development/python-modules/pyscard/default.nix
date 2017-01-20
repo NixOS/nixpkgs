@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, fetchpatch, python, buildPythonPackage, swig, pcsclite }:
+{ stdenv, fetchurl, buildPythonPackage, swig, pcsclite }:
 
 buildPythonPackage rec {
-  name = "pyscard-1.9.4";
-  namePrefix = "";
+  name = "pyscard-${version}";
+  version = "1.9.4";
 
   src = fetchurl {
     url = "mirror://pypi/p/pyscard/${name}.tar.gz";
     sha256 = "0gn0p4p8dhk99g8vald0dcnh45jbf82bj72n4djyr8b4hawkck4v";
   };
 
-  configurePhase = "";
+  patchPhase = ''
+    sed -e 's!"libpcsclite\.so\.1"!"${pcsclite}/lib/libpcsclite.so.1"!' \
+        -i smartcard/scard/winscarddll.c
+  '';
 
+  NIX_CFLAGS_COMPILE = "-isystem ${pcsclite}/include/PCSC/";
 
-  LDFLAGS="-L${pcsclite}/lib";
-  CFLAGS="-I${pcsclite}/include/PCSC";
-
-  propagatedBuildInputs = [ swig pcsclite ];
-
-  #doCheck = !(python.isPypy or stdenv.isDarwin); # error: AF_UNIX path too long
+  propagatedBuildInputs = [ pcsclite ];
+  buildInputs = [ swig ];
 
   meta = {
     homepage = "https://pyscard.sourceforge.io/";
     description = "Smartcard library for python";
     license = stdenv.lib.licenses.lgpl21;
+    maintainers = with stdenv.lib.maintainers; [ layus ];
   };
 }
