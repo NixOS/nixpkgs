@@ -10,7 +10,7 @@
 , appdirs
 , six
 , opencl-headers
-, opencl-icd
+, ocl-icd
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "2016.2";
   name = "${pname}-${version}";
 
-  buildInputs = [ pytest opencl-headers opencl-icd ];
+  buildInputs = [ pytest opencl-headers ocl-icd ];
 
   propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
 

@@ -69,6 +69,7 @@ doNotDisplayTwice rec {
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
+  m3d-linux = m33-linux; # added 2016-08-13
   manpages = man-pages; # added 2015-12-06
   man_db = man-db; # added 2016-05
   midoriWrapper = midori; # added 2015-01
@@ -81,6 +82,7 @@ doNotDisplayTwice rec {
   ncat = nmap;  # added 2016-01-26
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nfsUtils = nfs-utils;  # added 2014-12-06
+  opencl-icd = ocl-icd; # added 2017-01-20
   owncloudclient = owncloud-client;  # added 2016-08
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
@@ -117,7 +119,6 @@ doNotDisplayTwice rec {
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
-  m3d-linux = m33-linux; # added 2016-08-13
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
