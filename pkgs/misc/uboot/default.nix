@@ -100,9 +100,15 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
-  ubootRaspberryPi3 = buildUBoot rec {
+  ubootRaspberryPi3_32bit = buildUBoot rec {
     defconfig = "rpi_3_32b_defconfig";
     targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi3_64bit = buildUBoot rec {
+    defconfig = "rpi_3_defconfig";
+    targetPlatforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
