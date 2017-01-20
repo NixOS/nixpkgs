@@ -1,16 +1,7 @@
-From d0056fa6c1158408db169a7f5e6eb75691083094 Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Sun, 22 Nov 2015 09:34:43 -0600
-Subject: [PATCH 2/3] hwclock
-
----
- kcms/dateandtime/helper.cpp | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/kcms/dateandtime/helper.cpp b/kcms/dateandtime/helper.cpp
-index e955f0c..5171753 100644
---- a/kcms/dateandtime/helper.cpp
-+++ b/kcms/dateandtime/helper.cpp
+Index: plasma-desktop-5.8.5/kcms/dateandtime/helper.cpp
+===================================================================
+--- plasma-desktop-5.8.5.orig/kcms/dateandtime/helper.cpp
++++ plasma-desktop-5.8.5/kcms/dateandtime/helper.cpp
 @@ -48,10 +48,6 @@
  #include <sys/stat.h>
  #endif
@@ -31,6 +22,3 @@ index e955f0c..5171753 100644
      if (!hwclock.isEmpty()) {
          KProcess::execute(hwclock, QStringList() << QStringLiteral("--systohc"));
      }
--- 
-2.6.3
-
