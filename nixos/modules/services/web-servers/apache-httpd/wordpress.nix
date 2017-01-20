@@ -6,7 +6,7 @@ with lib;
 let
 
   # Upgrading? We have a test! nix-build ./nixos/tests/wordpress.nix
-  version = "4.6.1";
+  version = "4.7.1";
   fullversion = "${version}";
 
   # Our bare-bones wp-config.php file using the above settings
@@ -75,7 +75,7 @@ let
       owner = "WordPress";
       repo = "WordPress";
       rev = "${fullversion}";
-      sha256 = "0n82xgjg1ry2p73hhgpslnkdzrma5n6hxxq76s7qskkzj0qjfvpn";
+      sha256 = "1wb4f4zn55d23qi0whsfpbpcd4sjvzswgmni6f5rzrmlawq9ssgr";
     };
     installPhase = ''
       mkdir -p $out
