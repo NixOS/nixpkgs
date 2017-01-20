@@ -1401,8 +1401,15 @@ These can be toggled using the <varname>stdenv.mkDerivation</varname> parameters
 <varname>hardeningDisable</varname> and <varname>hardeningEnable</varname>.
 </para>
 
-<para>The following flags are enabled by default and might require disabling
-if the program to package is incompatible.
+<para>
+Both parameters take a list of flags as strings. The special
+<varname>"all"</varname> flag can be passed to <varname>hardeningDisable</varname>
+to turn off all hardening. These flags can also be used as environment variables
+for testing or development purposes.
+</para>
+
+<para>The following flags are enabled by default and might require disabling with
+<varname>hardeningDisable</varname> if the program to package is incompatible.
 </para>
 
 <variablelist>
@@ -1563,7 +1570,8 @@ intel_drv.so: undefined symbol: vgaHWFreeHWRec
 </variablelist>
 
 <para>The following flags are disabled by default and should be enabled
-for packages that take untrusted input, like network services.
+with <varname>hardeningEnable</varname> for packages that take untrusted
+input like network services.
 </para>
 
 <variablelist>
