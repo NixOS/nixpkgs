@@ -17939,8 +17939,6 @@ in
 
   yadm = callPackage ../applications/version-management/yadm { };
 
-  yafc = callPackage ../applications/networking/yafc { };
-
   yamdi = callPackage ../tools/video/yamdi { };
 
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
