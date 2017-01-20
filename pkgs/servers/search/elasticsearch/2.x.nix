@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.4.0";
+  version = "2.4.4";
   name = "elasticsearch-${version}";
 
   src = fetchurl {
     url = "https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${version}/${name}.tar.gz";
-    sha256 = "1jglmj1dnh1n2niyds6iyrpf6x6ppqgkivzy6qabkjvvmr013q1s";
+    sha256 = "1qjq04sfqb35pf2xpvr8j5p27chfxpjp8ymrp1h5bfk5rbk9444q";
   };
 
   patches = [ ./es-home-2.x.patch ];
