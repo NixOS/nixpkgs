@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     description = "A flexible scheduler for your i3bar blocks";
     homepage = https://github.com/vivien/i3blocks;
     license = licenses.gpl3;
-    maintainers = [ "MindTooth" ];
     platforms = with platforms; freebsd ++ linux;
   };
 }
