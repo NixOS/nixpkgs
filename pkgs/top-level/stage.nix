@@ -18,7 +18,7 @@
 , # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
   # bootstrapping stdenvs.
-  allowCustomOverrides ? true
+  allowCustomOverrides
 
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for
@@ -29,6 +29,8 @@
 
 , # The configuration attribute set
   config
+
+, overlays # List of overlays to use in the fix-point.
 
 , crossSystem
 , platform
@@ -47,27 +49,25 @@ let
       inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.xorg) lndir;
     };
 
-  stdenvDefault = self: super:
-    { stdenv = stdenv // { inherit platform; }; };
+  stdenvBootstappingAndPlatforms = self: super: {
+    stdenv = stdenv // { inherit platform; };
+    inherit
+      system platform crossSystem;
+  };
 
   allPackages = self: super:
     let res = import ./all-packages.nix
-      { inherit system noSysDirs config crossSystem platform lib nixpkgsFun; }
+      { inherit lib nixpkgsFun noSysDirs config; }
       res self;
     in res;
 
   aliases = self: super: import ./aliases.nix super;
 
-  # stdenvOverrides is used to avoid circular dependencies for building
-  # the standard build environment. This mechanism uses the override
-  # mechanism to implement some staged compilation of the stdenv.
-  #
-  # We don't want stdenv overrides in the case of cross-building, or
-  # otherwise the basic overridden packages will not be built with the
-  # crossStdenv adapter.
+  # stdenvOverrides is used to avoid having multiple of versions
+  # of certain dependencies that were used in bootstrapping the
+  # standard environment.
   stdenvOverrides = self: super:
-    lib.optionalAttrs (crossSystem == null && super.stdenv ? overrides)
-      (super.stdenv.overrides super);
+    (super.stdenv.overrides or (_: _: {})) self super;
 
   # Allow packages to be overridden globally via the `packageOverrides'
   # configuration option, which must be a function that takes `pkgs'
@@ -81,28 +81,16 @@ let
       ((config.packageOverrides or (super: {})) super);
 
   # The complete chain of package set builders, applied from top to bottom
-  toFix = lib.foldl' (lib.flip lib.extends) (self: {}) [
-    stdenvDefault
+  toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
+    stdenvBootstappingAndPlatforms
     stdenvAdapters
     trivialBuilders
     allPackages
     aliases
     stdenvOverrides
     configOverrides
-  ];
+  ] ++ overlays);
 
-  # Use `overridePackages` to easily override this package set.
-  # Warning: this function is very expensive and must not be used
-  # from within the nixpkgs repository.
-  #
-  # Example:
-  #  pkgs.overridePackages (self: super: {
-  #    foo = super.foo.override { ... };
-  #  }
-  #
-  # The result is `pkgs' where all the derivations depending on `foo'
-  # will use the new version.
-
-  # Return the complete set of packages. Warning: this function is very
-  # expensive!
-in lib.makeExtensibleWithCustomName "overridePackages" toFix
+in
+  # Return the complete set of packages.
+  lib.fix toFix

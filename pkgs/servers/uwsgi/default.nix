@@ -4,7 +4,7 @@
 , pam, withPAM ? false
 , systemd, withSystemd ? false
 , python2, python3, ncurses
-, ruby
+, ruby, php-embed
 }:
 
 let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
@@ -26,8 +26,15 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else
                     inputs = [ ruby ];
                   })
                   (lib.nameValuePair "cgi" {
+                    # usage: https://uwsgi-docs.readthedocs.io/en/latest/CGI.html?highlight=cgi
                     path = "plugins/cgi";
                     inputs = [ ];
+                  })
+                  (lib.nameValuePair "php" {
+                    # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
+                    path = "plugins/php";
+                    preBuild = "touch unix.h";
+                    inputs = [ php-embed php-embed.nativeBuildInputs ];
                   })
                 ];
 
@@ -74,7 +81,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mkdir -p $pluginDir
     python3 uwsgiconfig.py --build nixos
-    ${lib.concatMapStringsSep ";" (x: "${x.interpreter or "python3"} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
+    ${lib.concatMapStringsSep ";" (x: "${x.preBuild or ""}\n ${x.interpreter or "python3"} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
   '';
 
   installPhase = ''
@@ -88,7 +95,7 @@ stdenv.mkDerivation rec {
     homepage = "http://uwsgi-docs.readthedocs.org/en/latest/";
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar schneefux ];
     platforms = platforms.linux;
   };
 }

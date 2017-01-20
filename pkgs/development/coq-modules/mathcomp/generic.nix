@@ -1,12 +1,11 @@
 { stdenv, fetchurl, coq, ssreflect, ncurses, which
 , graphviz, ocamlPackages, withDoc ? false
-, src
+, src, name
 }:
 
 stdenv.mkDerivation {
 
-  name = "coq-mathcomp-1.6-${coq.coq-version}";
-
+  inherit name;
   inherit src;
 
   nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];

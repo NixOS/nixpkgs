@@ -70,5 +70,12 @@ with lib;
     # the initrd builder.
     system.extraDependencies = [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio ];
 
+    # Show all debug messages from the kernel but don't log refused packets
+    # because we have the firewall enabled. This makes installs from the
+    # console less cumbersome if the machine has a public IP.
+    boot.consoleLogLevel = mkDefault 7;
+    networking.firewall.logRefusedConnections = mkDefault false;
+
+    environment.systemPackages = [ pkgs.vim ];
   };
 }

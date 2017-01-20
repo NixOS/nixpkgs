@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, libuuid, openssl, zlib
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -7,20 +7,20 @@
 
 stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
-  version = "1.0.34";
+  version = "1.0.48";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "09vag1ybfqvw37djmd9g740iqjvg8nwr4p0xb21rfj06vazrdg4b";
+    sha256 = "1k73ir1w6457y9mdv2xnk8cr1y1xxhzzd4095rzvn2y7fr3zgz01";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
   # (e.g. libaws-cpp-sdk-s3.so in output "s3").
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ cmake curl libuuid ];
+  buildInputs = [ cmake curl ];
 
   cmakeFlags =
     lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.concatStringsSep " " (
     (map (pkg: "-rpath ${lib.getOutput "lib" pkg}/lib"))
-      [ libuuid curl openssl zlib stdenv.cc.cc ]);
+      [ curl openssl zlib stdenv.cc.cc ]);
 
   meta = {
     description = "A C++ interface for Amazon Web Services";
     homepage = https://github.com/awslabs/aws-sdk-cpp;
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.eelco ];
   };
 }

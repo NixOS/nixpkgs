@@ -1,8 +1,18 @@
+From 6b0f329a9f37110020ca02b35c8125391ef282b7 Mon Sep 17 00:00:00 2001
+From: Frederik Rietdijk <fridh@fridh.nl>
+Date: Sat, 24 Dec 2016 15:56:10 +0100
+Subject: [PATCH] no ldconfig
+
+---
+ Lib/ctypes/util.py | 35 +----------------------------------
+ Lib/uuid.py        | 47 -----------------------------------------------
+ 2 files changed, 1 insertion(+), 81 deletions(-)
+
 diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
-index b2c514d..a6eca81 100644
+index ab10ec5..f253e34 100644
 --- a/Lib/ctypes/util.py
 +++ b/Lib/ctypes/util.py
-@@ -207,31 +207,7 @@ elif os.name == "posix":
+@@ -235,40 +235,7 @@ elif os.name == "posix":
      else:
  
          def _findSoname_ldconfig(name):
@@ -22,11 +32,20 @@ index b2c514d..a6eca81 100644
 -
 -            # XXX assuming GLIBC's ldconfig (with option -p)
 -            expr = r'\s+(lib%s\.[^\s]+)\s+\(%s' % (re.escape(name), abi_type)
--            f = os.popen('LC_ALL=C LANG=C /sbin/ldconfig -p 2>/dev/null')
+-
+-            env = dict(os.environ)
+-            env['LC_ALL'] = 'C'
+-            env['LANG'] = 'C'
+-            null = open(os.devnull, 'wb')
 -            try:
--                data = f.read()
--            finally:
--                f.close()
+-                with null:
+-                    p = subprocess.Popen(['/sbin/ldconfig', '-p'],
+-                                          stderr=null,
+-                                          stdout=subprocess.PIPE,
+-                                          env=env)
+-            except OSError:  # E.g. command not found
+-                return None
+-            [data, _] = p.communicate()
 -            res = re.search(expr, data)
 -            if not res:
 -                return None
@@ -36,16 +55,12 @@ index b2c514d..a6eca81 100644
          def find_library(name):
              return _findSoname_ldconfig(name) or _get_soname(_findLib_gcc(name))
 diff --git a/Lib/uuid.py b/Lib/uuid.py
-index 7432032..9829d18 100644
+index 7432032..05eeee5 100644
 --- a/Lib/uuid.py
 +++ b/Lib/uuid.py
-@@ -437,57 +437,7 @@ def _netbios_getnode():
-         return ((bytes[0]<<40L) + (bytes[1]<<32L) + (bytes[2]<<24L) +
-                 (bytes[3]<<16L) + (bytes[4]<<8L) + bytes[5])
+@@ -441,53 +441,6 @@ def _netbios_getnode():
  
--# Thanks to Thomas Heller for ctypes and for his help with its use here.
--
--# If ctypes is available, use it to find system routines for UUID generation.
+ # If ctypes is available, use it to find system routines for UUID generation.
  _uuid_generate_time = _UuidCreate = None
 -try:
 -    import ctypes, ctypes.util
@@ -97,3 +112,6 @@ index 7432032..9829d18 100644
  
  def _unixdll_getnode():
      """Get the hardware address on Unix using ctypes."""
+-- 
+2.11.0
+

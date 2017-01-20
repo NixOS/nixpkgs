@@ -10,6 +10,33 @@
     };
   }
   {
+    goPackagePath = "github.com/fatih/color";
+    fetch = {
+      type = "git";
+      url = "https://github.com/fatih/color";
+      rev = "e8e01ee22a7d4a91b49646e39245fe08e69c7878";
+      sha256 = "1660g29qhshk6zxhpnc0f52m69jdqqdw2ccbkqw9y4kilnripfvl";
+    };
+  }
+  {
+    goPackagePath = "github.com/mattn/go-colorable";
+    fetch = {
+      type = "git";
+      url = "https://github.com/mattn/go-colorable";
+      rev = "d228849504861217f796da67fae4f6e347643f15";
+      sha256 = "0ch5sfcpmqczsh8kjbwpzdw31lacbkfyzvpzh4disnhhydbxjq0d";
+    };
+  }
+  {
+    goPackagePath = "github.com/mattn/go-isatty";
+    fetch = {
+      type = "git";
+      url = "https://github.com/mattn/go-isatty";
+      rev = "30a891c33c7cde7b02a981314b4228ec99380cca";
+      sha256 = "03gsxn89pgkj4jkxm9avnj4f0ckvcskc6fj2lcd98l3akrz50ndg";
+    };
+  }
+  {
     goPackagePath = "github.com/mattn/go-runewidth";
     fetch = {
       type = "git";
@@ -23,8 +50,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/nsf/termbox-go";
-      rev = "0b413bfa31e8c6843db20dce4454566b1951709e";
-      sha256 = "1n45cq3p7z5533bmsqj3a0xvp7c8ncb52k3l8zqvd37f34zpsyxb";
+      rev = "abe82ce5fb7a42fbd6784a5ceb71aff977e09ed8";
+      sha256 = "156i8apkga8b3272kjhapyqwspgcfkrr9kpqwc5lii43k4swghpv";
+    };
+  }
+  {
+    goPackagePath = "github.com/nwidger/jsoncolor";
+    fetch = {
+      type = "git";
+      url = "https://github.com/nwidger/jsoncolor";
+      rev = "0192e84d44af834c3a90c8a17bf670483b91ad5a";
+      sha256 = "17mndgd1d233c22bd19xv4v2l2i5k8kz7y6n4n54a9i7fi9d10al";
     };
   }
   {

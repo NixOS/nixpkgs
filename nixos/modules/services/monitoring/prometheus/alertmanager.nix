@@ -5,6 +5,10 @@ with lib;
 let
   cfg = config.services.prometheus.alertmanager;
   mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
+  alertmanagerYml =
+    if cfg.configText != null then
+      pkgs.writeText "alertmanager.yml" cfg.configText
+    else mkConfigFile;
 in {
   options = {
     services.prometheus.alertmanager = {
@@ -31,6 +35,17 @@ in {
         default = {};
         description = ''
           Alertmanager configuration as nix attribute set.
+        '';
+      };
+
+      configText = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Alertmanager configuration as YAML text. If non-null, this option
+          defines the text that is written to alertmanager.yml. If null, the
+          contents of alertmanager.yml is generated from the structured config
+          options.
         '';
       };
 
@@ -62,8 +77,8 @@ in {
       };
 
       listenAddress = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+        type = types.str;
+        default = "";
         description = ''
           Address to listen on for the web interface and API.
         '';
@@ -96,7 +111,7 @@ in {
       after    = [ "network.target" ];
       script = ''
         ${pkgs.prometheus-alertmanager.bin}/bin/alertmanager \
-        -config.file ${mkConfigFile} \
+        -config.file ${alertmanagerYml} \
         -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
         -log.level ${cfg.logLevel} \
         ${optionalString (cfg.webExternalUrl != null) ''-web.external-url ${cfg.webExternalUrl} \''}

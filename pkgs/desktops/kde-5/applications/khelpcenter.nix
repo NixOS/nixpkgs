@@ -16,4 +16,7 @@ let
       ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/khelpcenter" ]; }
+kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/khelpcenter" ];
+}

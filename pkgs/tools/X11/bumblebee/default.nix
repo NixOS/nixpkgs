@@ -18,7 +18,7 @@
 
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, help2man, makeWrapper
 , glib, libbsd
-, libX11, libXext, xorgserver, xkbcomp, kmod, xkeyboard_config, xf86videonouveau
+, libX11, libXext, xorgserver, xkbcomp, kmod, xf86videonouveau
 , nvidia_x11, virtualgl, primusLib
 , automake111x, autoconf
 # The below should only be non-null in a x86_64 system. On a i686
@@ -125,7 +125,6 @@ in stdenv.mkDerivation rec {
 
   CFLAGS = [
     "-DX_MODULE_APPENDS=\\\"${xmodules}\\\""
-    "-DX_XKB_DIR=\\\"${xkeyboard_config}/etc/X11/xkb\\\""
   ];
 
   postInstall = ''

@@ -83,11 +83,11 @@ in {
 
         listenAddress = mkOption {
           type = types.str;
-          default = "any";
+          default = "127.0.0.1";
+          example = "any";
           description = ''
-            This setting sets the address for the daemon to listen on. Careful attention
-            should be paid if this is assigned to anything other then the default, any.
-            This setting can deny access to control of the daemon.
+            The address for the daemon to listen on.
+            Use <literal>any</literal> to listen on all addresses.
           '';
         };
 

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "pktgen-${version}";
-  version = "3.0.13";
+  version = "3.1.0";
 
   src = fetchurl {
-    url = "http://dpdk.org/browse/apps/pktgen-dpdk/snapshot/pktgen-${version}.tar.gz";
-    sha256 = "64629b454ed8dc036d5e9bb30b3ae84a0bab0142b651c72da85ab1454e9ae0d6";
+    url = "http://dpdk.org/browse/apps/pktgen-dpdk/snapshot/pktgen-v${version}.tar.gz";
+    sha256 = "1a1dl8h8p76wlcjlvn736mz4nc2nc5c3764rlydiz86wl45mb0nb";
   };
 
   nativeBuildInputs = stdenv.lib.optionals withGtk [ pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace lib/lua/src/luaconf.h --replace /usr/local $out
-    substituteInPlace lib/common/wr_lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu
+    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu
   '';
 
   installPhase = ''

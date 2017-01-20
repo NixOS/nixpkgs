@@ -22,6 +22,8 @@ in
 rec {
   # Try to keep this generally alphabetized
 
+  bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
+
   darcsToGit = callPackage ./darcs-to-git { };
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
@@ -79,8 +81,6 @@ rec {
   };
 
   qgit = callPackage ./qgit { };
-
-  qgitGit = callPackage ./qgit/qgit-git.nix { };
 
   stgit = callPackage ./stgit {
   };

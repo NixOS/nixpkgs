@@ -142,6 +142,7 @@ with stdenv.lib;
   L2TP_IP m
   L2TP_ETH m
   BRIDGE_VLAN_FILTERING y
+  BONDING m
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -186,6 +187,10 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.5" && (versionOlder version "4.9")) ''
     DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
   ''}
+  ${optionalString (versionAtLeast version "4.9") ''
+    DRM_AMDGPU_SI y # (experimental) amdgpu support for verde and newer chipsets
+    DRM_AMDGPU_CIK y # (stable) amdgpu support for bonaire and newer chipsets
+  ''}
 
   # Sound.
   SND_DYNAMIC_MINORS y
@@ -213,6 +218,7 @@ with stdenv.lib;
   # ACLs for all filesystems that support them.
   FANOTIFY y
   TMPFS y
+  TMPFS_POSIX_ACL y
   FS_ENCRYPTION? m
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y

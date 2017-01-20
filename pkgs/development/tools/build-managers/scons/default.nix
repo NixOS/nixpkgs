@@ -2,13 +2,13 @@
 
 let
   name = "scons";
-  version = "2.5.0";
+  version = "2.5.1";
 in python2Packages.buildPythonApplication {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/scons/${name}-${version}.tar.gz";
-    sha256 = "1sdcj8iapfzmlq7098yas40qwl6khsiwydbxv33sw81wy93nnagb";
+    sha256 = "1wji1z9jdkhnmm99apx6fhld9cs52rr56aigniyrcsmlwy52298b";
   };
   # No tests
   doCheck = false;

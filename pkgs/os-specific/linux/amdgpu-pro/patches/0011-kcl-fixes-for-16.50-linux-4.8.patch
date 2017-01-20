@@ -1,0 +1,114 @@
+From 156445f6eda047ee5a5d6e4bde36c3e9ccbbd7d9 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Thu, 29 Dec 2016 14:20:06 -0400
+Subject: [PATCH 11/11] kcl fixes for 16.50 + linux-4.8
+
+---
+ amd/amdgpu/dce_v6_0.c              |  5 +++--
+ amd/amdgpu/dce_virtual.c           |  5 +++--
+ amd/backport/include/kcl/kcl_drm.h | 12 ++++++++++++
+ amd/backport/include/kcl/kcl_ttm.h |  2 +-
+ amd/backport/kcl_drm.c             |  4 ++++
+ 5 files changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/amd/amdgpu/dce_v6_0.c b/amd/amdgpu/dce_v6_0.c
+index fd3eeb0..1f1874c 100644
+--- a/amd/amdgpu/dce_v6_0.c
++++ b/amd/amdgpu/dce_v6_0.c
+@@ -1946,9 +1946,9 @@ static void dce_v6_0_cursor_reset(struct drm_crtc *crtc)
+ 	}
+ }
+ 
+-static void dce_v6_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green,
+-				    u16 *blue, uint32_t start, uint32_t size)
++static kcl_crtc_gamma_set_callback(dce_v6_0_crtc_gamma_set)
+ {
++  kcl_crtc_gamma_set_pre
+ 	struct amdgpu_crtc *amdgpu_crtc = to_amdgpu_crtc(crtc);
+ 	int end = (start + size > 256) ? 256 : start + size, i;
+ 
+@@ -1959,6 +1959,7 @@ static void dce_v6_0_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green,
+ 		amdgpu_crtc->lut_b[i] = blue[i] >> 6;
+ 	}
+ 	dce_v6_0_crtc_load_lut(crtc);
++  kcl_crtc_gamma_set_suf
+ }
+ 
+ static void dce_v6_0_crtc_destroy(struct drm_crtc *crtc)
+diff --git a/amd/amdgpu/dce_virtual.c b/amd/amdgpu/dce_virtual.c
+index 36e2094..11b98e2 100644
+--- a/amd/amdgpu/dce_virtual.c
++++ b/amd/amdgpu/dce_virtual.c
+@@ -152,9 +152,9 @@ static void dce_virtual_bandwidth_update(struct amdgpu_device *adev)
+ 	return;
+ }
+ 
+-static void dce_virtual_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *green,
+-				    u16 *blue, uint32_t start, uint32_t size)
++static kcl_crtc_gamma_set_callback(dce_virtual_crtc_gamma_set)
+ {
++  kcl_crtc_gamma_set_pre
+ 	struct amdgpu_crtc *amdgpu_crtc = to_amdgpu_crtc(crtc);
+ 	int end = (start + size > 256) ? 256 : start + size, i;
+ 
+@@ -164,6 +164,7 @@ static void dce_virtual_crtc_gamma_set(struct drm_crtc *crtc, u16 *red, u16 *gre
+ 		amdgpu_crtc->lut_g[i] = green[i] >> 6;
+ 		amdgpu_crtc->lut_b[i] = blue[i] >> 6;
+ 	}
++  kcl_crtc_gamma_set_suf
+ }
+ 
+ static void dce_virtual_crtc_destroy(struct drm_crtc *crtc)
+diff --git a/amd/backport/include/kcl/kcl_drm.h b/amd/backport/include/kcl/kcl_drm.h
+index 95bf640..61c38b1 100644
+--- a/amd/backport/include/kcl/kcl_drm.h
++++ b/amd/backport/include/kcl/kcl_drm.h
+@@ -206,4 +206,16 @@ int drm_atomic_helper_resume(struct drm_device *dev,
+ 
+ #endif
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++#define kcl_crtc_gamma_set_callback(n) int n(struct drm_crtc *crtc, \
++    u16 *red, u16 *green, u16 *blue, uint32_t size)
++#define kcl_crtc_gamma_set_pre uint32_t start = 0;
++#define kcl_crtc_gamma_set_suf return 0;
++#else
++#define kcl_crtc_gamma_set_callback(n) void n(struct drm_crtc *crtc, \
++    u16 *red, u16 *green, u16 *blue, uint32_t start, uint32_t size)
++#define kcl_crtc_gamma_set_pre
++#define kcl_crtc_gamma_set_suf
++#endif
++
+ #endif /* AMDGPU_BACKPORT_KCL_DRM_H */
+diff --git a/amd/backport/include/kcl/kcl_ttm.h b/amd/backport/include/kcl/kcl_ttm.h
+index 52cdbc8..cdda0b5 100644
+--- a/amd/backport/include/kcl/kcl_ttm.h
++++ b/amd/backport/include/kcl/kcl_ttm.h
+@@ -152,7 +152,7 @@ static inline int kcl_ttm_bo_move_accel_cleanup(struct ttm_buffer_object *bo,
+ 		bool evict, bool no_wait_gpu,
+ 		struct ttm_mem_reg *new_mem)
+ {
+-#if defined(BUILD_AS_DKMS)
++#if defined(BUILD_AS_DKMS) && (LINUX_VERSION_CODE < KERNEL_VERSION(4, 8, 0))
+ 	return ttm_bo_move_accel_cleanup(bo, fence,
+ 			evict, no_wait_gpu, new_mem);
+ #else
+diff --git a/amd/backport/kcl_drm.c b/amd/backport/kcl_drm.c
+index 27d4aaa..a083c87 100644
+--- a/amd/backport/kcl_drm.c
++++ b/amd/backport/kcl_drm.c
+@@ -178,7 +178,11 @@ static inline struct drm_plane_state *
+ _kcl_drm_atomic_get_existing_plane_state(struct drm_atomic_state *state,
+                     struct drm_plane *plane)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++    return drm_atomic_get_existing_plane_state(state, plane);
++#else
+     return state->plane_states[drm_plane_index(plane)];
++#endif
+ }
+ 
+ void
+-- 
+2.11.0
+

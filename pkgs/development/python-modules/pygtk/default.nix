@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   name = "pygtk-2.24.0";
-  
+
   disabled = isPy3k;
 
   src = fetchurl {
@@ -19,6 +19,8 @@ buildPythonPackage rec {
   configurePhase = "configurePhase";
 
   buildPhase = "buildPhase";
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-ObjC";
 
   installPhase = "installPhase";
 

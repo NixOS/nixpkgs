@@ -1,66 +1,67 @@
-{ stdenv, lib, makeWrapper }:
+{ stdenv, lib, makeWrapper, buildEnv }:
 
-drv:
+packages:
 
-{ targets, paths ? [] }:
+let
+  packages_ = if builtins.isList packages then packages else [packages];
+
+  unwrapped = lib.concatMap (p: if builtins.isList p.unwrapped then p.unwrapped else [p.unwrapped]) packages_;
+  targets = lib.concatMap (p: p.targets) packages_;
+  paths = lib.concatMap (p: p.paths or []) packages_;
+
+  name =
+    if builtins.length unwrapped == 1
+    then (lib.head unwrapped).name
+    else "kde-application";
+  meta =
+    if builtins.length unwrapped == 1
+    then (lib.head unwrapped).meta
+    else {};
+
+  env = buildEnv {
+    inherit name meta;
+    paths = builtins.map lib.getBin (unwrapped ++ paths);
+    pathsToLink = [ "/bin" "/share" "/lib/qt5" "/etc/xdg" ];
+  };
+in
 
 stdenv.mkDerivation {
-  inherit (drv) name meta;
+  inherit name meta;
+  preferLocalBuild = true;
 
-  paths = builtins.map lib.getBin ([drv] ++ paths);
-  inherit drv targets;
-  passthru = { unwrapped = drv; };
+  inherit unwrapped env targets;
+
+  passthru = {
+    inherit targets paths;
+    unwrapped = if builtins.length unwrapped == 1 then lib.head unwrapped else unwrapped;
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
-  configurePhase = "runHook preConfigure; runHook postConfigure";
-  buildPhase = "true";
-
-  installPhase = ''
-    propagated=
-    for p in $drv $paths; do
-        findInputs $p propagated propagated-user-env-packages
-    done
-
-    wrap_PATH="$out/bin"
-    wrap_XDG_DATA_DIRS=
-    wrap_XDG_CONFIG_DIRS=
-    wrap_QML_IMPORT_PATH=
-    wrap_QML2_IMPORT_PATH=
-    wrap_QT_PLUGIN_PATH=
-    for p in $propagated; do
-        addToSearchPath wrap_PATH "$p/bin"
-        addToSearchPath wrap_XDG_DATA_DIRS "$p/share"
-        addToSearchPath wrap_XDG_CONFIG_DIRS "$p/etc/xdg"
-        addToSearchPath wrap_QML_IMPORT_PATH "$p/lib/qt5/imports"
-        addToSearchPath wrap_QML2_IMPORT_PATH "$p/lib/qt5/qml"
-        addToSearchPath wrap_QT_PLUGIN_PATH "$p/lib/qt5/plugins"
-    done
-
+  buildCommand = ''
     for t in $targets; do
-        if [ -a "$drv/$t" ]; then
-            makeWrapper "$drv/$t" "$out/$t" \
-                --argv0 '"$0"' \
-                --suffix PATH : "$wrap_PATH" \
-                --prefix XDG_CONFIG_DIRS : "$wrap_XDG_CONFIG_DIRS" \
-                --prefix XDG_DATA_DIRS : "$wrap_XDG_DATA_DIRS" \
-                --set QML_IMPORT_PATH "$wrap_QML_IMPORT_PATH" \
-                --set QML2_IMPORT_PATH "$wrap_QML2_IMPORT_PATH" \
-                --set QT_PLUGIN_PATH "$wrap_QT_PLUGIN_PATH"
-        else
-            echo "no such file or directory: $drv/$t"
+        good=""
+        for drv in $unwrapped; do
+            if [ -a "$drv/$t" ]; then
+                makeWrapper "$drv/$t" "$out/$t" \
+                    --argv0 '"$0"' \
+                    --suffix PATH : "$env/bin" \
+                    --prefix XDG_CONFIG_DIRS : "$env/etc/xdg" \
+                    --prefix XDG_DATA_DIRS : "$env/share" \
+                    --set QML_IMPORT_PATH "$env/lib/qt5/imports" \
+                    --set QML2_IMPORT_PATH "$env/lib/qt5/qml" \
+                    --set QT_PLUGIN_PATH "$env/lib/qt5/plugins"
+                good="1"
+                break
+            fi
+        done
+        if [ -z "$good" ]; then
+            echo "file or directory not found in derivations: $t"
             exit 1
         fi
     done
 
-    if [ -a "$drv/share" ]; then
-        ln -s "$drv/share" "$out"
-    fi
-
-    if [ -a "$drv/nix-support/propagated-user-env-packages" ]; then
-        mkdir -p "$out/nix-support"
-        ln -s "$drv/nix-support/propagated-user-env-packages" "$out/nix-support/"
-    fi
+    mkdir -p "$out/nix-support"
+    echo "$unwrapped" > "$out/nix-support/propagated-user-env-packages"
   '';
 }

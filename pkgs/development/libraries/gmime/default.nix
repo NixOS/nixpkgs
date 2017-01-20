@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, zlib, libgpgerror }:
+{ stdenv, fetchurl, pkgconfig, glib, zlib, libgpgerror, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "gmime-2.6.20";
@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
   propagatedBuildInputs = [ glib zlib libgpgerror ];
+  configureFlags = [ "--enable-introspection=yes" ];
 
   enableParallelBuilding = true;
 

@@ -19,8 +19,10 @@ let
 
   # **please** update this patch when you update to a new openssh release.
   gssapiSrc = fetchpatch {
-    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?id=477bb7636238c106f8cd7c868a8c0c5eabcfb3db";
-    sha256 = "1kcx2rw6z7y591vr60ww2m2civ0cx6f6awdpi66p1sric9b65si3";
+    name = "openssh-gssapi.patch";
+    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian"
+        + "/patches/gssapi.patch?id=255b8554a50b5c75fca63f76b1ac837c0d4fb7aa";
+    sha256 = "0yg9iq7vb2fkvy36ar0jxk29pkw0h3dhv5vn8qncc3pgwx3617n2";
   };
 
 in
@@ -29,11 +31,11 @@ stdenv.mkDerivation rec {
   # Please ensure that openssh_with_kerberos still builds when
   # bumping the version here!
   name = "openssh-${version}";
-  version = "7.3p1";
+  version = "7.4p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1k5y1wi29d47cgizbryxrhc1fbjsba2x8l5mqfa9b9nadnd9iyrz";
+    sha256 = "1l8r3x4fr2kb6xm95s7kjdif1wp6f94d4kljh4qjj9109shw87qv";
   };
 
   prePatch = optionalString hpnSupport
@@ -44,13 +46,11 @@ stdenv.mkDerivation rec {
 
   patches =
     [
-      ./RH-1380296-NEWKEYS-null-pointer-deref.patch
       ./locale_archive.patch
       ./fix-host-key-algorithms-plus.patch
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
-      ./fix-CVE-2016-8858.patch
     ]
     ++ optional withGssapiPatches gssapiSrc;
 

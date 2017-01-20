@@ -9,11 +9,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.4.3";
+  version = "1.4-bootstrap-20161024";
+  revision = "79d85a4965ea7c46db483314c3981751909d7883";
 
   src = fetchurl {
-    url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "0rcrhb3r997dw3d02r37zp26ln4q9n77fqxbnvw04zs413md5s35";
+    url = "https://github.com/golang/go/archive/${revision}.tar.gz";
+    sha256 = "1ljbllwjysya323xxm9s792z8y9jdw19n8sj3mlc8picjclrx5xf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.4.patch
-    ./new-binutils.patch
+    ./creds-test-1.4.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

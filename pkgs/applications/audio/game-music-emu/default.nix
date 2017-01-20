@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.0";
+  version = "0.6.1";
   name = "game-music-emu-${version}";
 
   src = fetchurl {
-    url = "https://game-music-emu.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "11s9l938nxbrk7qb2k1ppfgizcz00cakbxgv0gajc6hyqv882vjh";
+    url = "https://bitbucket.org/mpyne/game-music-emu/downloads/${name}.tar.bz2";
+    sha256 = "08fk7zddpn7v93d0fa7fcypx7hvgwx9b5psj9l6m8b87k2hbw4fw";
   };
 
   buildInputs = [ cmake ];

@@ -42,7 +42,8 @@ self: super: {
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
   # Use the default version of mysql to build this package (which is actually mariadb).
-  mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
+  # test phase requires networking
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.lib; });
 
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
@@ -53,12 +54,12 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1a87kllzxmjwkz5arq4c3bp7qfkabn0arbli6s6i68fkgm19s4gr";
+      sha256 = "1vy6bj7f8zyj4n1r0gpi0r7mxapsrjvhwmsi5sbnradfng5j3jya";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
-    # https://github.com/yesodweb/yesod/issues/1324
-    yesod-persistent = self.yesod-persistent_1_4_1_1;
+    # https://github.com/bitemyapp/esqueleto/issues/8
+    esqueleto = self.esqueleto_2_4_3;
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
     persistent-template = self.persistent-template_2_1_8_1;
@@ -191,7 +192,8 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    # https://github.com/jaspervdj/hakyll/issues/491
+    else dontCheck super.hakyll;
 
   # Heist's test suite requires system pandoc
   heist = overrideCabal super.heist (drv: {
@@ -612,6 +614,11 @@ self: super: {
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
 
+  # Requires bower-json >= 1.0.0.1 && < 1.1
+  purescript_0_10_5 = super.purescript_0_10_5.overrideScope (self: super: {
+    bower-json = self.bower-json_1_0_0_1;
+  });
+
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
 
@@ -998,12 +1005,13 @@ self: super: {
 
   # The most current version needs some packages to build that are not in LTS 7.x.
   stack = super.stack.overrideScope (self: super: {
-    http-client = self.http-client_0_5_4;
-    http-client-tls = self.http-client-tls_0_3_3;
+    http-client = self.http-client_0_5_5;
+    http-client-tls = self.http-client-tls_0_3_3_1;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
     aeson = self.aeson_1_0_2_1;
+    hpack = self.hpack_0_15_0;
   });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
@@ -1038,7 +1046,10 @@ self: super: {
   # Note: Simply patching the dynamic library (.so) of the GLUT build will *not* work, since the
   # RPATH also needs to be propagated when using static linking. GHC automatically handles this for
   # us when we patch the cabal file (Link options will be recored in the ghc package registry).
-  GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
+  #
+  # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
+  # so disable this on Darwin only
+  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
@@ -1065,16 +1076,48 @@ self: super: {
 
   # http-api-data_0.3.x requires QuickCheck > 2.9, but overriding that version
   # is hard because of transitive dependencies, so we just disable tests.
-  http-api-data_0_3_3 = dontCheck super.http-api-data_0_3_3;
+  http-api-data_0_3_4 = dontCheck super.http-api-data_0_3_4;
 
   # Fix build for latest versions of servant and servant-client.
   servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_3;
+    http-api-data = self.http-api-data_0_3_4;
   });
   servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_3;
+    http-api-data = self.http-api-data_0_3_4;
     servant-server = self.servant-server_0_9_1_1;
     servant = self.servant_0_9_1_1;
+  });
+
+  # build servant docs from the repository
+  servant =
+    let
+      ver = super.servant.version;
+      docs = pkgs.stdenv.mkDerivation {
+        name = "servant-sphinx-documentation-${ver}";
+        src = "${pkgs.fetchFromGitHub {
+          owner = "haskell-servant";
+          repo = "servant";
+          rev = "v${ver}";
+          sha256 = "0fynv77m7rk79pdp535c2a2bd44csgr32zb4wqavbalr7grpxg4q";
+        }}/doc";
+        buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
+        makeFlags = "html";
+        installPhase = ''
+          mv _build/html $out
+        '';
+      };
+    in overrideCabal super.servant (old: {
+      postInstall = old.postInstall or "" + ''
+        ln -s ${docs} $out/share/doc/servant
+      '';
+    });
+
+
+  # https://github.com/plow-technologies/servant-auth/issues/20
+  servant-auth = dontCheck super.servant-auth;
+
+  servant-auth-server = super.servant-auth-server.overrideScope (self: super: {
+    jose = super.jose_0_5_0_2;
   });
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
@@ -1095,8 +1138,8 @@ self: super: {
 
   # https://github.com/NixOS/nixpkgs/issues/19612
   wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
-    http-client = self.http-client_0_5_3_2;
-    http-client-tls = self.http-client-tls_0_3_3;
+    http-client = self.http-client_0_5_5;
+    http-client-tls = self.http-client-tls_0_3_3_1;
     http-conduit = self.http-conduit_2_2_3;
   });
 
@@ -1136,4 +1179,17 @@ self: super: {
   # requires vty 5.13
   brick = super.brick.overrideScope (self: super: { vty = self.vty_5_14; });
 
+  # https://github.com/krisajenkins/elm-export/pull/22
+  elm-export = doJailbreak super.elm-export;
+
+  turtle_1_3_1 = super.turtle_1_3_1.overrideScope (self: super: {
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+
+  lentil = super.lentil.overrideScope (self: super: {
+    pipes = self.pipes_4_3_2;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+    # https://github.com/roelvandijk/terminal-progress-bar/issues/14
+    terminal-progress-bar = doJailbreak self.terminal-progress-bar_0_1_1;
+  });
 }

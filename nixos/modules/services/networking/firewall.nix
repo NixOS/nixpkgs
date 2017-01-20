@@ -4,17 +4,29 @@
    ‘networking.firewall.extraCommands’.  For modularity, the firewall
    uses several chains:
 
-   - ‘nixos-fw-input’ is the main chain for input packet processing.
+   - ‘nixos-fw’ is the main chain for input packet processing.
+
+   - ‘nixos-fw-accept’ is called for accepted packets.  If you want
+     additional logging, or want to reject certain packets anyway, you
+     can insert rules at the start of this chain.
 
    - ‘nixos-fw-log-refuse’ and ‘nixos-fw-refuse’ are called for
      refused packets.  (The former jumps to the latter after logging
      the packet.)  If you want additional logging, or want to accept
      certain packets anyway, you can insert rules at the start of
-     these chain.
+     this chain.
 
-   - ‘nixos-fw-accept’ is called for accepted packets.  If you want
-     additional logging, or want to reject certain packets anyway, you
-     can insert rules at the start of this chain.
+   - ‘nixos-fw-rpfilter’ is used as the main chain in the raw table,
+     called from the built-in ‘PREROUTING’ chain.  If the kernel
+     supports it and `cfg.checkReversePath` is set this chain will
+     perform a reverse path filter test.
+
+   - ‘nixos-drop’ is used while reloading the firewall in order to drop
+     all traffic.  Since reloading isn't implemented in an atomic way
+     this'll prevent any traffic from leaking through while reloading
+     the firewall.  However, if the reloading fails, the ‘firewall-stop’
+     script will be called which in return will effectively disable the
+     complete firewall (in the default configuration).
 
 */
 
@@ -25,6 +37,11 @@ with lib;
 let
 
   cfg = config.networking.firewall;
+
+  kernelPackages = config.boot.kernelPackages;
+
+  kernelHasRPFilter = kernelPackages.kernel.features.netfilterRPFilter or false;
+  kernelCanDisableHelpers = kernelPackages.kernel.features.canDisableNetfilterConntrackHelpers or false;
 
   helpers =
     ''
@@ -49,7 +66,7 @@ let
     # firewall would be atomic.  Apparently that's possible
     # with iptables-restore.
     ip46tables -D INPUT -j nixos-fw 2> /dev/null || true
-    for chain in nixos-fw nixos-fw-accept nixos-fw-log-refuse nixos-fw-refuse FW_REFUSE; do
+    for chain in nixos-fw nixos-fw-accept nixos-fw-log-refuse nixos-fw-refuse; do
       ip46tables -F "$chain" 2> /dev/null || true
       ip46tables -X "$chain" 2> /dev/null || true
     done
@@ -172,13 +189,16 @@ let
       }-j nixos-fw-accept
     ''}
 
-    # Accept all ICMPv6 messages except redirects and node
-    # information queries (type 139).  See RFC 4890, section
-    # 4.4.
     ${optionalString config.networking.enableIPv6 ''
+      # Accept all ICMPv6 messages except redirects and node
+      # information queries (type 139).  See RFC 4890, section
+      # 4.4.
       ip6tables -A nixos-fw -p icmpv6 --icmpv6-type redirect -j DROP
       ip6tables -A nixos-fw -p icmpv6 --icmpv6-type 139 -j DROP
       ip6tables -A nixos-fw -p icmpv6 -j nixos-fw-accept
+
+      # Allow this host to act as a DHCPv6 client
+      ip6tables -A nixos-fw -d fe80::/64 -p udp --dport 546 -j nixos-fw-accept
     ''}
 
     ${cfg.extraCommands}
@@ -227,11 +247,6 @@ let
       exit 1
     fi
   '';
-
-  kernelPackages = config.boot.kernelPackages;
-
-  kernelHasRPFilter = kernelPackages.kernel.features.netfilterRPFilter or false;
-  kernelCanDisableHelpers = kernelPackages.kernel.features.canDisableNetfilterConntrackHelpers or false;
 
 in
 
@@ -290,26 +305,30 @@ in
       default = false;
       description =
         ''
-          If set, forbidden packets are rejected rather than dropped
+          If set, refused packets are rejected rather than dropped
           (ignored).  This means that an ICMP "port unreachable" error
-          message is sent back to the client.  Rejecting packets makes
+          message is sent back to the client (or a TCP RST packet in
+          case of an existing connection).  Rejecting packets makes
           port scanning somewhat easier.
         '';
     };
 
     networking.firewall.trustedInterfaces = mkOption {
       type = types.listOf types.str;
+      default = [ ];
+      example = [ "enp0s2" ];
       description =
         ''
           Traffic coming in from these interfaces will be accepted
-          unconditionally.
+          unconditionally.  Traffic from the loopback (lo) interface
+          will always be accepted.
         '';
     };
 
     networking.firewall.allowedTCPPorts = mkOption {
-      default = [];
-      example = [ 22 80 ];
       type = types.listOf types.int;
+      default = [ ];
+      example = [ 22 80 ];
       description =
         ''
           List of TCP ports on which incoming connections are
@@ -318,9 +337,9 @@ in
     };
 
     networking.firewall.allowedTCPPortRanges = mkOption {
-      default = [];
-      example = [ { from = 8999; to = 9003; } ];
       type = types.listOf (types.attrsOf types.int);
+      default = [ ];
+      example = [ { from = 8999; to = 9003; } ];
       description =
         ''
           A range of TCP ports on which incoming connections are
@@ -329,9 +348,9 @@ in
     };
 
     networking.firewall.allowedUDPPorts = mkOption {
-      default = [];
-      example = [ 53 ];
       type = types.listOf types.int;
+      default = [ ];
+      example = [ 53 ];
       description =
         ''
           List of open UDP ports.
@@ -339,9 +358,9 @@ in
     };
 
     networking.firewall.allowedUDPPortRanges = mkOption {
-      default = [];
-      example = [ { from = 60000; to = 61000; } ];
       type = types.listOf (types.attrsOf types.int);
+      default = [ ];
+      example = [ { from = 60000; to = 61000; } ];
       description =
         ''
           Range of open UDP ports.
@@ -349,8 +368,8 @@ in
     };
 
     networking.firewall.allowPing = mkOption {
-      default = true;
       type = types.bool;
+      default = true;
       description =
         ''
           Whether to respond to incoming ICMPv4 echo requests
@@ -361,36 +380,43 @@ in
     };
 
     networking.firewall.pingLimit = mkOption {
-      default = null;
       type = types.nullOr (types.separatedString " ");
+      default = null;
+      example = "--limit 1/minute --limit-burst 5";
       description =
         ''
           If pings are allowed, this allows setting rate limits
-          on them. If non-null, this option should be in the form
-          of flags like "--limit 1/minute --limit-burst 5"
+          on them.  If non-null, this option should be in the form of
+          flags like "--limit 1/minute --limit-burst 5"
         '';
     };
 
     networking.firewall.checkReversePath = mkOption {
-      default = kernelHasRPFilter;
       type = types.either types.bool (types.enum ["strict" "loose"]);
+      default = kernelHasRPFilter;
+      example = "loose";
       description =
         ''
-          Performs a reverse path filter test on a packet.
-          If a reply to the packet would not be sent via the same interface
-          that the packet arrived on, it is refused.
+          Performs a reverse path filter test on a packet.  If a reply
+          to the packet would not be sent via the same interface that
+          the packet arrived on, it is refused.
 
-          If using asymmetric routing or other complicated routing,
-          set this option to loose mode or disable it and setup your
-          own counter-measures.
+          If using asymmetric routing or other complicated routing, set
+          this option to loose mode or disable it and setup your own
+          counter-measures.
+
+          This option can be either true (or "strict"), "loose" (only
+          drop the packet if the source address is not reachable via any
+          interface) or false.  Defaults to the value of
+          kernelHasRPFilter.
 
           (needs kernel 3.3+)
         '';
     };
 
     networking.firewall.logReversePathDrops = mkOption {
-      default = false;
       type = types.bool;
+      default = false;
       description =
         ''
           Logs dropped packets failing the reverse path filter test if
@@ -399,9 +425,9 @@ in
     };
 
     networking.firewall.connectionTrackingModules = mkOption {
+      type = types.listOf types.str;
       default = [ "ftp" ];
       example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
-      type = types.listOf types.str;
       description =
         ''
           List of connection-tracking helpers that are auto-loaded.
@@ -412,14 +438,14 @@ in
           networking.firewall.autoLoadConntrackHelpers
 
           Loading of helpers is recommended to be done through the new
-          CT target. More info:
+          CT target.  More info:
           https://home.regit.org/netfilter-en/secure-use-of-helpers/
         '';
     };
 
     networking.firewall.autoLoadConntrackHelpers = mkOption {
-      default = true;
       type = types.bool;
+      default = true;
       description =
         ''
           Whether to auto-load connection-tracking helpers.
@@ -461,7 +487,8 @@ in
         ''
           Additional shell commands executed as part of the firewall
           shutdown script.  These are executed just after the removal
-          of the nixos input rule, or if the service enters a failed state.
+          of the NixOS input rule, or if the service enters a failed
+          state.
         '';
     };
 
@@ -499,7 +526,7 @@ in
       path = [ pkgs.iptables ] ++ cfg.extraPackages;
 
       # FIXME: this module may also try to load kernel modules, but
-      # containers don't have CAP_SYS_MODULE. So the host system had
+      # containers don't have CAP_SYS_MODULE.  So the host system had
       # better have all necessary modules already loaded.
       unitConfig.ConditionCapability = "CAP_NET_ADMIN";
       unitConfig.DefaultDependencies = false;

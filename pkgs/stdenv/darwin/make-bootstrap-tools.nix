@@ -334,8 +334,8 @@ in rec {
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   test-pkgs = import test-pkgspath {
     inherit system;
-    stdenvFunc = args: let
+    stdenvStages = args: let
         args' = args // { inherit bootstrapFiles; };
-      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stdenvDarwin;
+      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
   };
 }

@@ -2094,11 +2094,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CompressRawBzip2 = buildPerlPackage {
-    name = "Compress-Raw-Bzip2-2.064";
+  CompressRawBzip2 = buildPerlPackage rec {
+    name = "Compress-Raw-Bzip2-2.070";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.064.tar.gz;
-      sha256 = "0aqbggr9yf4hn21a9fra111rlmva3w8f3mqvbchl5l86knkbkwy3";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
+      sha256 = "0rmwpqhnhw5n11gm9mbxrxnardm0jfy7568ln9zw21bq3d7dsmn8";
     };
 
     # Don't build a private copy of bzip2.
@@ -6568,11 +6568,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  IOCompress = buildPerlPackage {
-    name = "IO-Compress-2.063";
+  IOCompress = buildPerlPackage rec {
+    name = "IO-Compress-2.070";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.063.tar.gz;
-      sha256 = "1198jqsfyshc8pc74dvn04gmqa0x6nwngkbf731zgd4chrjlylhd";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
+      sha256 = "3e761b833c8e55eb811a5eeab07831bb380dcdce256cc45cfe8816602a3574ff";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     meta = {
@@ -6581,7 +6581,8 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux;
     };
-    doCheck = !stdenv.isDarwin;
+    # Same as CompressRawZlib
+    doCheck = false && !stdenv.isDarwin;
   };
 
   IODigest = buildPerlPackage {
@@ -8443,7 +8444,7 @@ let self = _self // overrides; _self = with self; {
   mod_perl2 = buildPerlPackage {
     name = "mod_perl-2.0.9";
     src = fetchurl {
-      url = http://apache.mirror.iphh.net/perl/mod_perl-2.0.9.tar.gz;
+      url = mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.9.tar.gz;
       sha256 = "0azmir4hbb825mfmcxwa1frhnhhf82rl8xf6mmgwkhbinxmg4q02";
     };
     makeMakerFlags = "MP_AP_DESTDIR=$out";
@@ -8451,6 +8452,7 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # would try to start Apache HTTP server
     meta = {
       description = "Embed a Perl interpreter in the Apache HTTP server";
+      license = stdenv.lib.licenses.asl20;
     };
   };
   Mojolicious = buildPerlPackage rec {
@@ -9555,17 +9557,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetHTTP = buildPerlPackage {
-    name = "Net-HTTP-6.09";
+  NetHTTP = buildPerlPackage rec {
+    name = "Net-HTTP-6.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Net-HTTP-6.09.tar.gz;
-      sha256 = "52762b939d84806908ba544581c5708375f7938c3c0e496c128ca3fbc425e58d";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/${name}.tar.gz";
+      sha256 = "8565aff76b3d09084642f3a83c654fb4ced8220e8e19d35c78b661519b4c1be6";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
+      homepage = https://github.com/libwww-perl/Net-HTTP;
       description = "Low-level HTTP connection (client)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -10391,6 +10393,34 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/perl-catalyst/Plack-Test-ExternalServer;
       description = "Run HTTP tests on external live servers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Po4a = buildPerlPackage rec {
+    name = "po4a-0.47";
+    src = fetchurl {
+      url = "https://alioth.debian.org/frs/download.php/file/4142/po4a-0.47.tar.gz";
+      sha256 = "5010e1b7df1115cbd475f46587fc05fefc97301f9bba0c2f15106005ca017507";
+    };
+    propagatedBuildInputs = [ pkgs.docbook_xml_xslt TextWrapI18N LocaleGettext TermReadKey SGMLSpm ModuleBuild UnicodeLineBreak ModuleBuild ];
+    buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.jade ];
+    LC_ALL="en_US.UTF-8";
+    SGML_CATALOG_FILES = "${pkgs.docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
+    preConfigure = ''
+      touch Makefile.PL
+      export PERL_MB_OPT="--install_base=$out --prefix=$out"
+      substituteInPlace Po4aBuilder.pm --replace "\$self->install_sets(\$self->installdirs)->{'bindoc'}" "'$out/share/man/man1'"
+    '';
+    buildPhase = "perl Build.PL --install_base=$out; ./Build build";
+    installPhase = "./Build install";
+    checkPhase = ''
+      export SGML_CATALOG_FILES=${pkgs.docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat
+      ./Build test
+    '';
+    meta = {
+      homepage = https://po4a.alioth.debian.org/;
+      description = "tools for helping translation of documentation";
+      license = with stdenv.lib.licenses; [ gpl2 ];
     };
   };
 
@@ -13719,6 +13749,22 @@ let self = _self // overrides; _self = with self; {
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  TextWrapI18N = buildPerlPackage {
+    name = "Text-WrapI18N-0.06";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz;
+      sha256 = "4bd29a17f0c2c792d12c1005b3c276f2ab0fae39c00859ae1741d7941846a488";
+    };
+    propagatedBuildInputs = [ pkgs.glibc TextCharWidth ];
+    preConfigure = ''
+      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.glibc}/bin/locale'
+    '';
+    meta = {
+      description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
+      license = with stdenv.lib.licenses; [ artistic1 gpl2 ];
     };
   };
 

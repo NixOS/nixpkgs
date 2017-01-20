@@ -178,7 +178,7 @@ in
         image. It significantly increases image size. Use that when
         you want to be able to keep all the sources needed to build your
         system or when you are going to install the system on a computer
-        with slow on non-existent network connection.
+        with slow or non-existent network connection.
       '';
     };
 
@@ -231,8 +231,6 @@ in
     # !!! Hack - attributes expected by other modules.
     system.boot.loader.kernelFile = "bzImage";
     environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi pkgs.syslinux ];
-
-    boot.consoleLogLevel = mkDefault 7;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the

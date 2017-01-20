@@ -23,5 +23,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "XMPP server in Java";
     platforms = stdenv.lib.platforms.unix;
+    # Some security advisories seem to apply, and each next version wants to
+    # write into larger parts of installation directory; installation is just
+    # unpacking, though
+    broken = true;
   };
 }

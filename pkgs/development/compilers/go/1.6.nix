@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
     sed -i '/src\/cmd\/api\/run.go/ireturn nil' src/cmd/dist/test.go
     # Remove the coverage test as we have removed this utility
     sed -i '/TestCoverageWithCgo/areturn' src/cmd/go/go_test.go
+    # Remove the timezone naming test
+    sed -i '/TestLoadFixed/areturn' src/time/time_test.go
 
     sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
     sed -i 's,/etc/services,${iana_etc}/etc/services,' src/net/port_unix.go
@@ -110,6 +112,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.5.patch
+    ./creds-test.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

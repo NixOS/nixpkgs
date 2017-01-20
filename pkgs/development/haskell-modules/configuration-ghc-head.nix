@@ -19,6 +19,7 @@ self: super: {
   directory = null;
   filepath = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hoopl = null;
   hpc = null;
@@ -85,4 +86,11 @@ self: super: {
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
+  # A bunch of jailbreaks due to 'base' bump
+  old-locale = doJailbreak super.old-locale;
+  primitive = doJailbreak super.primitive;
+  test-framework = doJailbreak super.test-framework;
+  atomic-primops = doJailbreak (appendPatch super.atomic-primops ./patches/atomic-primops-Cabal-1.25.patch);
+  hashable = doJailbreak super.hashable;
+  stm = doJailbreak super.stm;
 }

@@ -28,16 +28,42 @@ in
             <command>docker</command> command line tool.
           '';
       };
-    socketActivation =
+
+    listenOptions =
+      mkOption {
+        type = types.listOf types.str;
+        default = ["/var/run/docker.sock"];
+        description =
+          ''
+            A list of unix and tcp docker should listen to. The format follows
+            ListenStream as described in systemd.socket(5).
+          '';
+      };
+
+    enableOnBoot =
       mkOption {
         type = types.bool;
         default = true;
         description =
           ''
-            This option enables docker with socket activation. I.e. docker will
-            start when first called by client.
+            When enabled dockerd is started on boot. This is required for
+            container, which are created with the
+            <literal>--restart=always</literal> flag, to work. If this option is
+            disabled, docker might be started on demand by socket activation.
           '';
       };
+
+    liveRestore =
+      mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            Allow dockerd to be restarted without affecting running container.
+            This option is incompatible with docker swarm.
+          '';
+      };
+
     storageDriver =
       mkOption {
         type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs"]);
@@ -69,69 +95,43 @@ in
             <command>docker</command> daemon.
           '';
       };
-
-    postStart =
-      mkOption {
-        type = types.lines;
-        default = ''
-          while ! [ -e /var/run/docker.sock ]; do
-            sleep 0.1
-          done
-        '';
-        description = ''
-          The postStart phase of the systemd service. You may need to
-          override this if you are passing in flags to docker which
-          don't cause the socket file to be created. This option is ignored
-          if socket activation is used.
-        '';
-      };
-
-
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [
-    { environment.systemPackages = [ pkgs.docker ];
+  config = mkIf cfg.enable (mkMerge [{
+      environment.systemPackages = [ pkgs.docker ];
       users.extraGroups.docker.gid = config.ids.gids.docker;
+      systemd.packages = [ pkgs.docker ];
+
       systemd.services.docker = {
-        description = "Docker Application Container Engine";
-        wantedBy = optional (!cfg.socketActivation) "multi-user.target";
-        after = [ "network.target" ] ++ (optional cfg.socketActivation "docker.socket") ;
-        requires = optional cfg.socketActivation "docker.socket";
+        wantedBy = optional cfg.enableOnBoot "multi-user.target";
         serviceConfig = {
-          ExecStart = ''${pkgs.docker}/bin/dockerd \
-            --group=docker --log-driver=${cfg.logDriver} \
-            ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
-            ${optionalString cfg.socketActivation "--host=fd://"} \
-            ${cfg.extraOptions}
-          '';
-          #  I'm not sure if that limits aren't too high, but it's what
-          #  goes in config bundled with docker itself
-          LimitNOFILE = 1048576;
-          LimitNPROC = 1048576;
+          ExecStart = [
+            ""
+            ''
+              ${pkgs.docker}/bin/dockerd \
+                --group=docker \
+                --host=fd:// \
+                --log-driver=${cfg.logDriver} \
+                ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
+                ${optionalString cfg.liveRestore "--live-restore" } \
+                ${cfg.extraOptions}
+            ''];
+          ExecReload=[
+            ""
+            "${pkgs.procps}/bin/kill -s HUP $MAINPID"
+          ];
         } // proxy_env;
 
         path = [ pkgs.kmod ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
-
-        postStart = if cfg.socketActivation then "" else cfg.postStart;
-
-        # Presumably some containers are running we don't want to interrupt
-        restartIfChanged = false;
       };
+      systemd.sockets.docker.socketConfig.ListenStream = cfg.listenOptions;
     }
-    (mkIf cfg.socketActivation {
-      systemd.sockets.docker = {
-        description = "Docker Socket for the API";
-        wantedBy = [ "sockets.target" ];
-        socketConfig = {
-          ListenStream = "/var/run/docker.sock";
-          SocketMode = "0660";
-          SocketUser = "root";
-          SocketGroup = "docker";
-        };
-      };
-    })
   ]);
+
+  imports = [
+    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed in favor of starting docker at boot")
+  ];
 
 }

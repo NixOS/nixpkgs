@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.flexget;
-  pkg = pkgs.python27Packages.flexget;
+  pkg = pkgs.flexget;
   ymlFile = pkgs.writeText "flexget.yml" ''
     ${cfg.config}
 
@@ -54,12 +54,12 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.python27Packages.flexget ];
+    environment.systemPackages = [ pkg ];
 
     systemd.services = {
       flexget = {
         description = "FlexGet Daemon";
-        path = [ pkgs.pythonPackages.flexget ];
+        path = [ pkg ];
         serviceConfig = {
           User = cfg.user;
           Environment = "TZ=${config.time.timeZone}";

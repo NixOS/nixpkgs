@@ -4,12 +4,12 @@ let
          then "linux-amd64"
          else "darwin-amd64";
   checksum = if stdenv.isLinux
-             then "17r8w4lvj7fhh7qppi9z5i2fpqqry4s61zjr9zmsbybc5flnsw2j"
-             else "0jf0kd1mm35qcf0ydr5yyzfq6qi8ifxchvpjsydb1gm1kikp5g3p";
+             then "1g6k3va84nm2h9z2ywbbkc8jabgkarqlf8wv1sp2p6s6hw7hi5h3"
+             else "0jpwyvgpl34n07chcyd7ldvk3jq3rx72cp8yf0bh7gnzr5lcnxnc";
 in
 stdenv.mkDerivation rec {
   pname = "minikube";
-  version = "0.13.1";
+  version = "0.15.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -30,9 +30,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp $src $out/bin/${pname}
     chmod +x $out/bin/${pname}
-
-    mkdir -p $out/share/bash-completion/completions/
-    HOME=$(pwd) $out/bin/minikube completion bash > $out/share/bash-completion/completions/minikube
   '';
 
   meta = with stdenv.lib; {

@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, which, autoconf, automake, ncurses, perl
-, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl }:
+, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
 
 stdenv.mkDerivation rec {
-  version = "20161104";
+  version = "20161126";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     rev = "neomutt-${version}";
-    sha256 = "070p18khvxsrcn30jhyrnagka5mgza9mi5vmrrr6xl8mpgkyrlaw";
+    sha256 = "10ycfya11pvwv0rdyyak56r6f8ia8yf0h8qyi904bbpvm8lqvqfd";
   };
 
   buildInputs =
     [ autoconf automake cyrus_sasl gdbm gpgme kerberos libidn ncurses
-      notmuch which openssl perl ];
+      notmuch which openssl perl lmdb ];
 
   configureFlags = [
     "--enable-debug"
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     "--with-curses"
     "--with-regex"
     "--with-idn"
+    "--with-lmdb"
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"

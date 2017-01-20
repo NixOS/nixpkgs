@@ -6,8 +6,9 @@ rec {
 
 
   coreutilsMinimal = coreutils.override (args: {
-    # We want coreutils without ACL support.
+    # We want coreutils without ACL/attr support.
     aclSupport = false;
+    attrSupport = false;
     # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
     singleBinary = "symlinks";
   });

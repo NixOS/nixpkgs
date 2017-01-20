@@ -1,26 +1,60 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, lib, fetchurl, makeWrapper, nodejs, openssl, pcre, readline, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "nim-0.15.2";
+  name = "nim-${version}";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "http://nim-lang.org/download/${name}.tar.xz";
-    sha256 = "12pyzjx7x4hclzrf3zf6r1qjlp60bzsaqrz0rax2rak2c8qz4pch";
+    sha256 = "0rsibhkc5n548bn9yyb9ycrdgaph5kq84sfxc9gabjs7pqirh6cy";
   };
 
-  buildPhase   = "sh build.sh";
-  installPhase =
-    ''
-      install -Dt "$out/bin" bin/nim
-      substituteInPlace install.sh --replace '$1/nim' "$out"
-      sh install.sh $out
-    '';
+  doCheck = true;
 
-  meta = with stdenv.lib;
-    { description = "Statically typed, imperative programming language";
-      homepage = http://nim-lang.org/;
-      license = licenses.mit;
-      maintainers = with maintainers; [ ehmry ];
-      platforms = platforms.linux ++ platforms.darwin; # arbitrary
-    };
+  enableParallelBuilding = true;
+
+  NIX_LDFLAGS = [
+    "-lcrypto"
+    "-lpcre"
+    "-lreadline"
+    "-lsqlite3"
+  ];
+
+  # 1. nodejs is only needed for tests
+  # 2. we could create a separate derivation for the "written in c" version of nim
+  #    used for bootstrapping, but koch insists on moving the nim compiler around
+  #    as part of building it, so it cannot be read-only
+
+  buildInputs  = [
+    makeWrapper nodejs
+    openssl pcre readline sqlite
+  ];
+
+  buildPhase   = ''
+    sh build.sh
+    ./bin/nim c koch
+    ./koch boot  -d:release \
+                 -d:useGnuReadline \
+                 ${lib.optionals (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace"}
+    ./koch tools -d:release
+  '';
+
+  installPhase = ''
+    install -Dt $out/bin bin/* koch
+    ./koch install $out
+    mv $out/nim/bin/* $out/bin/ && rmdir $out/nim/bin
+    mv $out/nim/*     $out/     && rmdir $out/nim
+    wrapProgram $out/bin/nim \
+      --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+  '';
+
+  checkPhase = "./koch tests";
+
+  meta = with stdenv.lib; {
+    description = "Statically typed, imperative programming language";
+    homepage = http://nim-lang.org/;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ehmry peterhoeg ];
+    platforms = with platforms; linux ++ darwin; # arbitrary
+  };
 }

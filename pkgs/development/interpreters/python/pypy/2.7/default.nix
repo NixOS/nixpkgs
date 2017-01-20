@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, python, expat, tcl, tk, xlibsWrapper, libX11
+, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , makeWrapper, callPackage, self, gdbm, db
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
@@ -8,8 +8,8 @@
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "5.4";
-  minorVersion = "1";
+  majorVersion = "5.6";
+  minorVersion = "0";
   minorVersionSuffix = "";
   pythonVersion = "2.7";
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -23,7 +23,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-      sha256 = "1x8sa5x1nkrb8wrmicri94ji8kvyxihyryi8br5fk7gak0agcai0";
+      sha256 = "145a0kd5c0s1v2rpavw9ihncfb05s2x7chc70v8fssvyxq601911";
     };
 
    # http://bugs.python.org/issue27369
@@ -35,6 +35,7 @@ let
       };
       in ''
       patch lib-python/2.7/test/test_pyexpat.py < '${expatch}'
+      substituteInPlace "lib-python/2.7/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
     buildInputs = [ bzip2 openssl pkgconfig python libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]

@@ -1,0 +1,25 @@
+From e787277fd4f43399de2da355b08e478c2a58d589 Mon Sep 17 00:00:00 2001
+From: "Luke A. Guest" <laguest@archeia.com>
+Date: Sun, 25 Sep 2016 15:31:13 +0100
+Subject: [PATCH 01/11] Fix kernel module install location
+
+---
+ dkms.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dkms.conf b/dkms.conf
+index 7f11158..2f080e2 100644
+--- a/dkms.conf
++++ b/dkms.conf
+@@ -2,7 +2,7 @@ PACKAGE_NAME="amdgpu-pro"
+ PACKAGE_VERSION="16.50-362463"
+ BUILT_MODULE_NAME[0]="amdgpu"
+ BUILT_MODULE_LOCATION[0]="amd/amdgpu"
+-DEST_MODULE_LOCATION[0]="/updates"
++DEST_MODULE_LOCATION[0]="/kernel/drivers/gpu/drm/amd/amdgpu"
+ AUTOINSTALL="yes"
+ PRE_BUILD="pre-build.sh $kernelver"
+ 
+-- 
+2.11.0
+

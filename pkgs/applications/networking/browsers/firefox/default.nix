@@ -5,6 +5,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
 , autoconf213, which
+, writeScript, xidel, coreutils, gnused, gnugrep, curl, ed
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -19,7 +20,7 @@ assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
 let
 
-common = { pname, version, sha512 }: stdenv.mkDerivation rec {
+common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
   name = "${pname}-unwrapped-${version}";
 
   src = fetchurl {
@@ -43,7 +44,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
     ++ lib.optional enableGTK3 gtk3
     ++ lib.optionals (!passthru.ffmpegSupport) [ gstreamer gst_plugins_base ];
 
-  nativeBuildInputs = [autoconf213 which];
+  nativeBuildInputs = [ autoconf213 which gnused ];
 
   configureFlags =
     [ "--enable-application=browser"
@@ -135,7 +136,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   };
 
   passthru = {
-    inherit nspr version;
+    inherit nspr version updateScript;
     gtk = gtk2;
     isFirefox3Like = true;
     browserName = "firefox";
@@ -148,13 +149,22 @@ in {
   firefox-unwrapped = common {
     pname = "firefox";
     version = "50.1.0";
-    sha512 = "2jwpk3aymkcq9f4xhzc31sb1c90vy3dvyqq2hvw97vk9dw7rgvv2cki10ns5cshbc4k57yd3j8nm7ppy2kw6na6771mj6sbijdjw39p";
+    sha512 = "370d2e9b8c4b1b59c3394659c3a7f0f79e6a911ccd9f32095b50b3a22d087132b1f7cb87b734f7497c4381b1df6df80d120b4b87c13eecc425cc66f56acccba5";
+    updateScript = import ./update.nix {
+        name = "firefox";
+        inherit writeScript xidel coreutils gnused gnugrep curl ed;
+    };
   };
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
     version = "45.6.0esr";
-    sha512 = "086ci461hmz6kdn0ly9dlc723gc117si4a11a1c51gh79hczhahdaxg5s4r3k59rb43gpwxrlvm4wx1aka36bsihnh8a4caxnp72v5r";
+    sha512 = "b96c71aeed8a1185a085512f33d454a1735237cd9ddf37c8caa9cc91892eafab0615fc0ca6035f282ca8101489fa84c0de1087d1963c05b64df32b0c86446610";
+    updateScript = import ./update.nix {
+        name = "firefox-esr";
+        versionSuffix = "esr";
+        inherit writeScript xidel coreutils gnused gnugrep curl ed;
+    };
   };
 
 }

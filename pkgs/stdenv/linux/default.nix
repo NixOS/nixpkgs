@@ -3,8 +3,8 @@
 # external (non-Nix) tools, such as /usr/bin/gcc, and it contains a C
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
-{ lib, allPackages
-, system, platform, crossSystem, config
+{ lib
+, system, platform, crossSystem, config, overlays
 
 , bootstrapFiles ?
     if system == "i686-linux" then import ./bootstrap-files/i686.nix
@@ -18,7 +18,7 @@
 
 assert crossSystem == null;
 
-rec {
+let
 
   commonPreHook =
     ''
@@ -43,8 +43,8 @@ rec {
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
-  stageFun =
-    {gccPlain, glibc, binutils, coreutils, gnugrep, name, overrides ? (pkgs: {}), extraBuildInputs ? []}:
+  stageFun = prevStage:
+    { name, overrides ? (self: super: {}), extraBuildInputs ? [] }:
 
     let
 
@@ -65,17 +65,17 @@ rec {
           inherit system;
         };
 
-        cc = if isNull gccPlain
+        cc = if isNull prevStage.gcc-unwrapped
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
-          cc = gccPlain;
+          cc = prevStage.gcc-unwrapped;
           isGNU = true;
-          libc = glibc;
-          inherit binutils coreutils gnugrep;
+          libc = prevStage.glibc;
+          inherit (prevStage) binutils coreutils gnugrep;
           name = name;
-          stdenv = stage0.stdenv;
+          stdenv = prevStage.ccWrapperStdenv;
         };
 
         extraAttrs = {
@@ -85,37 +85,47 @@ rec {
 
           # stdenv.glibc is used by GCC build to figure out the system-level
           # /usr/include directory.
-          inherit glibc;
+          inherit (prevStage) glibc;
         };
-        overrides = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
+        overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
-      thisPkgs = allPackages {
-        inherit system platform crossSystem config;
-        allowCustomOverrides = false;
-        stdenv = thisStdenv;
-      };
+    in {
+      inherit system platform crossSystem config overlays;
+      stdenv = thisStdenv;
+    };
 
-    in { stdenv = thisStdenv; pkgs = thisPkgs; };
+in
 
+[
 
-  # Build a dummy stdenv with no GCC or working fetchurl.  This is
-  # because we need a stdenv to build the GCC wrapper and fetchurl.
-  stage0 = stageFun {
-    gccPlain = null;
+  ({}: {
+    __raw = true;
+
+    gcc-unwrapped = null;
     glibc = null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
+  })
+
+  # Build a dummy stdenv with no GCC or working fetchurl.  This is
+  # because we need a stdenv to build the GCC wrapper and fetchurl.
+  (prevStage: stageFun prevStage {
     name = null;
 
-    overrides = pkgs: {
+    overrides = self: super: {
+      # We thread stage0's stdenv through under this name so downstream stages
+      # can use it for wrapping gcc too. This way, downstream stages don't need
+      # to refer to this stage directly, which violates the principle that each
+      # stage should only access the stage that came before it.
+      ccWrapperStdenv = self.stdenv;
       # The Glibc include directory cannot have the same prefix as the
       # GCC include directory, since GCC gets confused otherwise (it
       # will search the Glibc headers before the GCC headers).  So
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
-      glibc = stage0.stdenv.mkDerivation {
+      glibc = self.stdenv.mkDerivation {
         name = "bootstrap-glibc";
         buildCommand = ''
           mkdir -p $out
@@ -123,8 +133,12 @@ rec {
           ln -s ${bootstrapTools}/include-glibc $out/include
         '';
       };
+      gcc-unwrapped = bootstrapTools;
+      binutils = bootstrapTools;
+      coreutils = bootstrapTools;
+      gnugrep = bootstrapTools;
     };
-  };
+  })
 
 
   # Create the first "real" standard environment.  This one consists
@@ -137,103 +151,92 @@ rec {
   # If we ever need to use a package from more than one stage back, we
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
-  stage1 = stageFun {
-    gccPlain = bootstrapTools;
-    inherit (stage0.pkgs) glibc;
-    binutils = bootstrapTools;
-    coreutils = bootstrapTools;
-    gnugrep = bootstrapTools;
+  (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
     # Rebuild binutils to use from stage2 onwards.
-    overrides = pkgs: {
-      binutils = pkgs.binutils.override { gold = false; };
-      inherit (stage0.pkgs) glibc;
+    overrides = self: super: {
+      binutils = super.binutils.override { gold = false; };
+      inherit (prevStage)
+        ccWrapperStdenv
+        glibc gcc-unwrapped coreutils gnugrep;
 
       # A threaded perl build needs glibc/libpthread_nonshared.a,
       # which is not included in bootstrapTools, so disable threading.
       # This is not an issue for the final stdenv, because this perl
       # won't be included in the final stdenv and won't be exported to
       # top-level pkgs as an override either.
-      perl = pkgs.perl.override { enableThreading = false; };
+      perl = super.perl.override { enableThreading = false; };
     };
-  };
+  })
 
 
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
-  stage2 = stageFun {
-    gccPlain = bootstrapTools;
-    inherit (stage1.pkgs) glibc;
-    binutils = stage1.pkgs.binutils;
-    coreutils = bootstrapTools;
-    gnugrep = bootstrapTools;
+  (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
-    overrides = pkgs: {
-      inherit (stage1.pkgs) perl binutils paxctl gnum4 bison;
+    overrides = self: super: {
+      inherit (prevStage)
+        ccWrapperStdenv
+        binutils gcc-unwrapped coreutils gnugrep
+        perl paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
     };
-  };
+  })
 
 
   # Construct a third stdenv identical to the 2nd, except that this
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
-  stage3 = stageFun {
-    gccPlain = bootstrapTools;
-    inherit (stage2.pkgs) glibc binutils;
-    coreutils = bootstrapTools;
-    gnugrep = bootstrapTools;
+  (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
 
-    overrides = pkgs: rec {
-      inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders gnum4 bison;
+    overrides = self: super: rec {
+      inherit (prevStage)
+        ccWrapperStdenv
+        binutils glibc coreutils gnugrep
+        perl patchelf linuxHeaders gnum4 bison;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
-      gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      libmpc = pkgs.libmpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      isl_0_14 = pkgs.isl_0_14.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      gccPlain = pkgs.gcc.cc.override {
+      gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      isl_0_14 = super.isl_0_14.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      gcc-unwrapped = super.gcc-unwrapped.override {
         isl = isl_0_14;
       };
     };
-    extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
-  };
+    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
+  })
 
 
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
-  stage4 = stageFun {
-    inherit (stage3.pkgs) gccPlain glibc binutils;
-    gnugrep = bootstrapTools;
-    coreutils = bootstrapTools;
+  (prevStage: stageFun prevStage {
     name = "";
 
-    overrides = pkgs: {
+    overrides = self: super: {
       # Zlib has to be inherited and not rebuilt in this stage,
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (stage3.pkgs) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
+      inherit (prevStage) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
 
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
-        cc = stage4.stdenv.cc.cc;
-        libc = stage4.pkgs.glibc;
-        inherit (stage4.pkgs) binutils coreutils gnugrep;
+        cc = prevStage.gcc-unwrapped;
+        libc = self.glibc;
+        inherit (self) stdenv binutils coreutils gnugrep;
         name = "";
-        stdenv = stage4.stdenv;
-        shell = stage4.pkgs.bash + "/bin/bash";
+        shell = self.bash + "/bin/bash";
       };
     };
-    extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
-  };
-
+    extraBuildInputs = [ prevStage.patchelf prevStage.xz ];
+  })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
   # in a new binutils that doesn't depend on bootstrap-tools, as well
@@ -242,50 +245,52 @@ rec {
   # When updating stdenvLinux, make sure that the result has no
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
-  stdenvLinux = import ../generic rec {
-    inherit system config;
+  (prevStage: {
+    inherit system crossSystem platform config overlays;
+    stdenv = import ../generic rec {
+      inherit system config;
 
-    preHook =
-      ''
+      preHook = ''
         # Make "strip" produce deterministic output, by setting
         # timestamps etc. to a fixed value.
         commonStripFlags="--enable-deterministic-archives"
         ${commonPreHook}
       '';
 
-    initialPath =
-      ((import ../common-path.nix) {pkgs = stage4.pkgs;});
+      initialPath =
+        ((import ../common-path.nix) {pkgs = prevStage;});
 
-    extraBuildInputs = [ stage4.pkgs.patchelf stage4.pkgs.paxctl ];
+      extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
 
-    cc = stage4.pkgs.gcc;
+      cc = prevStage.gcc;
 
-    shell = cc.shell;
+      shell = cc.shell;
 
-    inherit (stage4.stdenv) fetchurlBoot;
+      inherit (prevStage.stdenv) fetchurlBoot;
 
-    extraAttrs = {
-      inherit (stage4.pkgs) glibc;
-      inherit platform bootstrapTools;
-      shellPackage = stage4.pkgs.bash;
+      extraAttrs = {
+        inherit (prevStage) glibc;
+        inherit platform bootstrapTools;
+        shellPackage = prevStage.bash;
+      };
+
+      /* outputs TODO
+      allowedRequisites = with prevStage;
+        [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+          glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
+          paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
+        ];
+        */
+
+      overrides = self: super: {
+        gcc = cc;
+
+        inherit (prevStage)
+          gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+          glibc gnumake gnused gnutar gnugrep gnupatch patchelf
+          attr acl paxctl zlib pcre;
+      };
     };
+  })
 
-    /* outputs TODO
-    allowedRequisites = with stage4.pkgs;
-      [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
-        paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
-      ];
-      */
-
-    overrides = pkgs: {
-      gcc = cc;
-
-      inherit (stage4.pkgs)
-        gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl zlib pcre;
-    };
-  };
-
-}
+]

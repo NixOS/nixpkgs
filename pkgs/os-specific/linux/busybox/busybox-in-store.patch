@@ -1,14 +1,14 @@
 Allow BusyBox to be invoked as "<something>-busybox". This is
 necessary when it's run from the Nix store as <hash>-busybox during
 stdenv bootstrap.
---- busybox-1.25.1-orig/libbb/appletlib.orig	2016-10-26 19:54:20.510957575 -0400
-+++ busybox-1.25.1/libbb/appletlib.c	2016-10-26 19:48:31.590862853 -0400
-@@ -884,7 +884,7 @@
- 	int applet;
- 
- # if ENABLE_BUSYBOX
+--- busybox-1.26.1-orig/libbb/appletlib.orig	2016-10-26 19:54:20.510957575 -0400
++++ busybox-1.26.1/libbb/appletlib.c	2016-10-26 19:48:31.590862853 -0400
+@@ -887,7 +887,7 @@
+ static NORETURN void run_applet_and_exit(const char *name, char **argv)
+ {
+ #  if ENABLE_BUSYBOX
 -	if (is_prefixed_with(name, "busybox"))
 +	if (strstr(name, "busybox") != 0)
  		exit(busybox_main(argv));
- # endif
- 	/* find_applet_by_name() search is more expensive, so goes second */
+ #  endif
+ #  if NUM_APPLETS > 0

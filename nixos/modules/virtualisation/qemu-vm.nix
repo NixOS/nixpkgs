@@ -278,7 +278,7 @@ in
         description =
           ''
             If enabled, the Nix store in the VM is made writable by
-            layering a unionfs-fuse/tmpfs filesystem on top of the host's Nix
+            layering an overlay filesystem on top of the host's Nix
             store.
           '';
       };
@@ -395,6 +395,13 @@ in
         chmod 1777 $targetRoot/tmp
 
         mkdir -p $targetRoot/boot
+
+        ${optionalString cfg.writableStore ''
+          echo "mounting overlay filesystem on /nix/store..."
+          mkdir -p 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
+          mount -t overlay overlay $targetRoot/nix/store \
+            -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
+        ''}
       '';
 
     # After booting, register the closure of the paths in
@@ -412,7 +419,8 @@ in
       '';
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
+      optional cfg.writableStore "overlay"
+      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
 
     virtualisation.bootDevice =
       mkDefault (if cfg.qemu.diskInterface == "scsi" then "/dev/sda" else "/dev/vda");
@@ -432,13 +440,13 @@ in
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
             neededForBoot = true;
           };
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
             neededForBoot = true;
           };
         "/tmp/shared" =
@@ -446,12 +454,6 @@ in
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" ];
             neededForBoot = true;
-          };
-      } // optionalAttrs cfg.writableStore
-      { "/nix/store" =
-          { fsType = "unionfs-fuse";
-            device = "unionfs";
-            options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
           };
       } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)
       { "/nix/.rw-store" =

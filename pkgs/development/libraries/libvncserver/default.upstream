@@ -1,4 +1,0 @@
-url http://sourceforge.net/projects/libvncserver/files/libvncserver/
-SF_version_dir
-version_link '[.]tar[.][bgx]z[0-9]*/download$'
-SF_redirect

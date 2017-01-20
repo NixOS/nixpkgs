@@ -1,0 +1,30 @@
+From da51551f671be3282b6f69ef76e495b169a5dc3f Mon Sep 17 00:00:00 2001
+From: "Luke A. Guest" <laguest@archeia.com>
+Date: Sun, 25 Sep 2016 15:31:49 +0100
+Subject: [PATCH 02/11] Add Gentoo as build option
+
+---
+ amd/backport/Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/amd/backport/Makefile b/amd/backport/Makefile
+index a6ab7fe..ff9339d 100644
+--- a/amd/backport/Makefile
++++ b/amd/backport/Makefile
+@@ -22,8 +22,13 @@ else ifeq ("sled",$(OS_NAME))
+ ccflags-y += -DOS_NAME_SLE
+ else ifeq ("sles",$(OS_NAME))
+ ccflags-y += -DOS_NAME_SLE
++else ifeq ("gentoo",$(OS_NAME))
++ccflags-y += -DOS_NAME_GENTOO
++# We don't have a version inside /etc/os-release.
++OS_VERSION = "0.0"
+ else
+ ccflags-y += -DOS_NAME_UNKNOWN
++OS_VERSION = "0.0"
+ endif
+ 
+ ccflags-y += \
+-- 
+2.11.0
+

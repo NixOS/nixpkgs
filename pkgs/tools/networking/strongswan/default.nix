@@ -1,21 +1,21 @@
 { stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook
 , curl, trousers, sqlite, iptables, libxml2, openresolv
-, ldns, unbound, pcsclite, openssl
+, ldns, unbound, pcsclite, openssl, systemd
 , enableTNC ? false }:
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.5.0";
+  version = "5.5.1";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "0m449i5s51ikqh36s1sp4rvw60wqyv0j12kyd31yl9b7mjc3jijq";
+    sha256 = "1drahhmwz1jg14rfh67cl231dlg2a9pra6jmipfxwyzpj4ck02vj";
   };
 
   dontPatchELF = true;
 
   buildInputs =
-    [ gmp pkgconfig python autoreconfHook iptables ldns unbound openssl pcsclite ]
+    [ gmp pkgconfig python autoreconfHook iptables ldns unbound openssl pcsclite systemd.dev ]
     ++ stdenv.lib.optionals enableTNC [ curl trousers sqlite libxml2 ];
 
   patches = [
@@ -26,10 +26,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
+
+    # swanctl can be configured by files in SWANCTLDIR which defaults to
+    # $out/etc/swanctl. Since that directory is in the nix store users can't
+    # modify it. Ideally swanctl accepts a command line option for specifying
+    # the configuration files. In the absence of that we patch swanctl to look
+    # for configuration files in /etc/swanctl.
+    substituteInPlace src/swanctl/swanctl.h --replace "SWANCTLDIR" "\"/etc/swanctl\""
     '';
 
+  preConfigure = ''
+    configureFlagsArray+=("--with-systemdsystemunitdir=$out/etc/systemd/system")
+  '';
+
   configureFlags =
-    [ "--enable-swanctl" "--enable-cmd"
+    [ "--enable-swanctl" "--enable-cmd" "--enable-systemd"
       "--enable-farp" "--enable-dhcp"
       "--enable-eap-sim" "--enable-eap-sim-file" "--enable-eap-simaka-pseudonym"
       "--enable-eap-simaka-reauth" "--enable-eap-identity" "--enable-eap-md5"
@@ -37,8 +48,9 @@ stdenv.mkDerivation rec {
       "--enable-eap-mschapv2" "--enable-xauth-eap" "--enable-ext-auth"
       "--enable-forecast" "--enable-connmark" "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
-      "--enable-aesni" "--enable-af-alg" "--enable-rdrand" ]
-    ++ stdenv.lib.optional (stdenv.system == "i686-linux") "--enable-padlock" 
+      "--enable-af-alg" ]
+    ++ stdenv.lib.optional stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
+    ++ stdenv.lib.optional (stdenv.system == "i686-linux") "--enable-padlock"
     ++ stdenv.lib.optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
          "--enable-curl" "--enable-openssl"

@@ -1,14 +1,13 @@
-# This file defines the various standard build environments.
+# This file chooses a sane default stdenv given the system, platform, etc.
 #
-# On Linux systems, the standard build environment consists of
-# Nix-built instances glibc and the `standard' Unix tools, i.e., the
-# Posix utilities, the GNU C compiler, and so on.  On other systems,
-# we use the native C library.
+# Rather than returning a stdenv, this returns a list of functions---one per
+# each bootstrapping stage. See `./booter.nix` for exactly what this list should
+# contain.
 
 { # Args just for stdenvs' usage
-  lib, allPackages
-  # Args to pass on to `allPacakges` too
-, system, platform, crossSystem, config
+  lib
+  # Args to pass on to the pkgset builder, too
+, system, platform, crossSystem, config, overlays
 } @ args:
 
 let
@@ -17,50 +16,39 @@ let
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  inherit (import ./native args) stdenvNative;
-
-  stdenvNativePkgs = allPackages {
-    inherit system platform crossSystem config;
-    allowCustomOverrides = false;
-    stdenv = stdenvNative;
-    noSysDirs = false;
-  };
-
+  stagesNative = import ./native args;
 
   # The Nix build environment.
-  stdenvNix = assert crossSystem == null; import ./nix {
-    inherit config lib;
-    stdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
-  };
+  stagesNix = import ./nix (args // { bootStages = stagesNative; });
 
-  inherit (import ./freebsd args) stdenvFreeBSD;
+  stagesFreeBSD = import ./freebsd args;
 
-  # Linux standard environment.
-  inherit (import ./linux args) stdenvLinux;
+  # On Linux systems, the standard build environment consists of Nix-built
+  # instances glibc and the `standard' Unix tools, i.e., the Posix utilities,
+  # the GNU C compiler, and so on.
+  stagesLinux = import ./linux args;
 
-  inherit (import ./darwin args) stdenvDarwin;
+  inherit (import ./darwin args) stagesDarwin;
 
-  inherit (import ./cross args) stdenvCross stdenvCrossiOS;
+  stagesCross = import ./cross args;
 
-  inherit (import ./custom args) stdenvCustom;
+  stagesCustom = import ./custom args;
 
-  # Select the appropriate stdenv for the platform `system'.
+  # Select the appropriate stages for the platform `system'.
 in
-    if crossSystem != null then
-      if crossSystem.useiOSCross or false then stdenvCrossiOS
-      else stdenvCross else
-    if config ? replaceStdenv then stdenvCustom else
-    if system == "i686-linux" then stdenvLinux else
-    if system == "x86_64-linux" then stdenvLinux else
-    if system == "armv5tel-linux" then stdenvLinux else
-    if system == "armv6l-linux" then stdenvLinux else
-    if system == "armv7l-linux" then stdenvLinux else
-    if system == "mips64el-linux" then stdenvLinux else
-    if system == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
-    if system == "x86_64-darwin" then stdenvDarwin else
-    if system == "x86_64-solaris" then stdenvNix else
-    if system == "i686-cygwin" then stdenvNative else
-    if system == "x86_64-cygwin" then stdenvNative else
-    if system == "x86_64-freebsd" then stdenvFreeBSD else
-    stdenvNative
+  if crossSystem != null then stagesCross
+  else if config ? replaceStdenv then stagesCustom
+  else { # switch
+    "i686-linux" = stagesLinux;
+    "x86_64-linux" = stagesLinux;
+    "armv5tel-linux" = stagesLinux;
+    "armv6l-linux" = stagesLinux;
+    "armv7l-linux" = stagesLinux;
+    "mips64el-linux" = stagesLinux;
+    "powerpc-linux" = /* stagesLinux */ stagesNative;
+    "x86_64-darwin" = stagesDarwin;
+    "x86_64-solaris" = stagesNix;
+    "i686-cygwin" = stagesNative;
+    "x86_64-cygwin" = stagesNative;
+    "x86_64-freebsd" = stagesFreeBSD;
+  }.${system} or stagesNative

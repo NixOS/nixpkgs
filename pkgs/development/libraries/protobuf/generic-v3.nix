@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     rm -rf gmock
-    cp -r ${gmock.source} gmock
+    cp -r ${gmock.src}/googlemock gmock
+    cp -r ${gmock.src}/googletest googletest
     chmod -R a+w gmock
+    chmod -R a+w googletest
+    ln -s ../googletest gmock/gtest
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'

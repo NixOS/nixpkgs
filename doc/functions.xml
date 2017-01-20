@@ -17,66 +17,6 @@
     derivations or even the whole package set.
   </para>
 
-  <section xml:id="sec-pkgs-overridePackages">
-    <title>pkgs.overridePackages</title>
-
-    <para>
-      This function inside the nixpkgs expression (<varname>pkgs</varname>)
-      can be used to override the set of packages itself.
-    </para>
-    <para>
-      Warning: this function is expensive and must not be used from within
-      the nixpkgs repository.
-    </para>
-    <para>
-      Example usage:
-
-      <programlisting>let
-    pkgs = import &lt;nixpkgs&gt; {};
-    newpkgs = pkgs.overridePackages (self: super: {
-      foo = super.foo.override { ... };
-    };
-  in ...</programlisting>
-    </para>
-
-    <para>
-      The resulting <varname>newpkgs</varname> will have the new <varname>foo</varname>
-      expression, and all other expressions depending on <varname>foo</varname> will also
-      use the new <varname>foo</varname> expression.
-    </para>
-
-    <para>
-      The behavior of this function is similar to <link 
-      linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>.
-    </para>
-
-    <para>
-      The <varname>self</varname> parameter refers to the final package set with the
-      applied overrides. Using this parameter may lead to infinite recursion if not
-      used consciously.
-    </para>
-
-    <para>
-      The <varname>super</varname> parameter refers to the old package set.
-      It's equivalent to <varname>pkgs</varname> in the above example.
-    </para>
-
-    <para>
-      Note that in previous versions of nixpkgs, this method replaced any changes from <link 
-      linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>,
-      along with that from previous calls if this function was called repeatedly.
-      Now those previous changes will be preserved so this function can be "chained" meaningfully.
-      To recover the old behavior, make sure <varname>config.packageOverrides</varname> is unset,
-      and call this only once off a "freshly" imported nixpkgs:
-
-      <programlisting>let
-    pkgs = import &lt;nixpkgs&gt; { config: {}; };
-    newpkgs = pkgs.overridePackages ...;
-  in ...</programlisting>
-    </para>
-
-  </section>
-
   <section xml:id="sec-pkg-override">
     <title>&lt;pkg&gt;.override</title>
 
@@ -91,12 +31,12 @@
       Example usages:
 
       <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
-      <programlisting>pkgs.overridePackages (self: super: {
+      <programlisting>import pkgs.path { overlays = [ (self: super: {
     foo = super.foo.override { barSupport = true ; };
-  })</programlisting>
+  })]};</programlisting>
       <programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
     mydep = pkgs.mydep.override { ... };
-  })</programlisting>
+  }</programlisting>
     </para>
 
     <para>

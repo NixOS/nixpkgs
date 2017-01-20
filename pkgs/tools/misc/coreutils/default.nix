@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, perl, xz, gmp ? null
 , aclSupport ? false, acl ? null
+, attrSupport ? false, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 , autoconf, automake114x, texinfo
 , withPrefix ? false
@@ -13,11 +14,11 @@ with lib;
 
 let
   self = stdenv.mkDerivation rec {
-    name = "coreutils-8.25";
+    name = "coreutils-8.26";
 
     src = fetchurl {
       url = "mirror://gnu/coreutils/${name}.tar.xz";
-      sha256 = "11yfrnb94xzmvi4lhclkcmkqsbhww64wf234ya1aacjvg82prrii";
+      sha256 = "13lspazc7xkviy93qz7ks9jv4sldvgmwpq36ghrbrqpq93br8phm";
     };
 
     # FIXME needs gcc 4.9 in bootstrap tools
@@ -44,23 +45,25 @@ let
 
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
+      ++ optional attrSupport attr
       ++ optionals stdenv.isCygwin [ autoconf automake114x texinfo ]   # due to patch
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {
       buildInputs = [ gmp.crossDrv ]
         ++ optional aclSupport acl.crossDrv
+        ++ optional attrSupport attr.crossDrv
         ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
         ++ optional (stdenv.ccCross.libc ? libiconv)
           stdenv.ccCross.libc.libiconv.crossDrv;
 
-      buildPhase = ''
-        make || (
-          pushd man
-          for a in *.x; do
-            touch `basename $a .x`.1
-          done
-          popd; make )
+      # Prevents attempts of running 'help2man' on cross-built binaries.
+      PERL = "missing";
+
+      # Works around a bug with 8.26:
+      # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
+      preInstall = ''
+        sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${self}/bin/install -c|'
       '';
 
       postInstall = ''
@@ -89,8 +92,6 @@ let
     FORCE_UNSAFE_CONFIGURE = optionalString stdenv.isSunOS "1";
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
-
-    postFixup = ""; # FIXME: remove on next mass rebuild
 
     meta = {
       homepage = http://www.gnu.org/software/coreutils/;

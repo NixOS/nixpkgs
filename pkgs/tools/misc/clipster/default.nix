@@ -1,21 +1,22 @@
-{fetchFromGitHub , stdenv, makeWrapper, python, gtk3,  libwnck3 }:
+{fetchFromGitHub , stdenv, makeWrapper, python3, gtk3, libwnck3 }:
 
 stdenv.mkDerivation  rec {
   name = "clipster-unstable-${version}";
-  version = "2016-09-12";
+  version = "2017-01-12";
 
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
-    rev = "6526a849a0af4c392f4e8e5b18aacdda9c1a8e80";
-    sha256 = "0illdajp5z50h7lvglv0p72cpv4c592xmpamrg8kkjpg693bp873";
+    rev = "d66fbb098149bef687f062bfa111a21c9121851f";
+    sha256 = "0yncjfl0822v2b7f9g7a6ihb99g5hd1s8bfpr2r9nqga6m11k90q";
   };
 
-  pythonEnv = python.withPackages(ps: with ps; [ dbus-python pygtk pygobject3 ]);
+  pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
   buildInputs =  [ pythonEnv gtk3 libwnck3 makeWrapper ];
 
   installPhase = ''
+    sed -i 's/python/python3/g' clipster
     mkdir -p $out/bin/
     cp clipster $out/bin/
     wrapProgram "$out/bin/clipster" \

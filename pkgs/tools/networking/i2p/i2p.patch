@@ -1,6 +1,21 @@
+diff --git a/installer/resources/i2prouter b/installer/resources/i2prouter
+index 365737d89..2ea14db3e 100644
+--- a/installer/resources/i2prouter
++++ b/installer/resources/i2prouter
+@@ -49,7 +49,7 @@ APP_LONG_NAME="I2P Service"
+ 
+ # gettext - we look for it in the path
+ # fallback to echo is below, we can't set it to echo here.
+-GETTEXT=$(which gettext > /dev/null 2>&1)
++GETTEXT=%gettext%
+ 
+ # Where to install the systemd service
+ SYSTEMD_SERVICE="/etc/systemd/system/${APP_NAME}.service"
+diff --git a/installer/resources/runplain.sh b/installer/resources/runplain.sh
+index eb4995dfe..0186cede3 100644
 --- a/installer/resources/runplain.sh
 +++ b/installer/resources/runplain.sh
-@@ -21,7 +21,7 @@
+@@ -25,7 +25,7 @@ CP=
  
  # Try using the Java binary that I2P was installed with.
  # If it's not found, try looking in the system PATH.
@@ -9,10 +24,10 @@
  
  if [ -z $JAVA ] || [ ! -x $JAVA ]; then
      echo "Error: Cannot find java." >&2
-@@ -40,15 +40,4 @@
+@@ -44,15 +44,4 @@ if [ $(uname -s) = "Darwin" ]; then
      export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
  fi
- JAVAOPTS="-Djava.net.preferIPv4Stack=${PREFERv4} -Djava.library.path=${I2P}:${I2P}/lib -Di2p.dir.base=${I2P} -DloggerFilenameOverride=logs/log-router-@.txt"
+ JAVAOPTS="${MAXMEMOPT} -Djava.net.preferIPv4Stack=${PREFERv4} -Djava.library.path=${I2P}:${I2P}/lib -Di2p.dir.base=${I2P} -DloggerFilenameOverride=logs/log-router-@.txt"
 -(
 -    nohup ${JAVA} -cp \"${CP}\" ${JAVAOPTS} net.i2p.router.RouterLaunch > /dev/null 2>&1
 -) &
@@ -25,15 +40,4 @@
 -    echo "I2P failed to start." >&2
 -    exit 1
 -fi
-+${JAVA} -cp \"${CP}\" ${JAVAOPTS} net.i2p.router.RouterLaunch
---- a/installer/resources/i2prouter
-+++ b/installer/resources/i2prouter
-@@ -49,7 +49,7 @@
- 
- # gettext - we look for it in the path
- # fallback to echo is below, we can't set it to echo here.
--GETTEXT=$(which gettext > /dev/null 2>&1)
-+GETTEXT=%gettext%
- 
- # Where to install the systemd service
- SYSTEMD_SERVICE="/etc/systemd/system/${APP_NAME}.service"
++exec ${JAVA} -cp \"${CP}\" ${JAVAOPTS} net.i2p.router.RouterLaunch

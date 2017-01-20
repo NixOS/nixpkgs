@@ -11,7 +11,7 @@ let
   unwrapped = kdeApp {
     name = "okular";
     nativeBuildInputs = [ ecm kdoctools ];
-    buildInputs = [
+    propagatedBuildInputs = [
       djvulibre ebook_tools kactivities karchive kbookmarks kcompletion kconfig
       kconfigwidgets kcoreaddons kdbusaddons kdegraphics-mobipocket kiconthemes
       kjs khtml kio kparts kpty kwallet kwindowsystem libkexiv2 libspectre poppler
@@ -25,6 +25,7 @@ let
     };
   };
 in
-kdeWrapper unwrapped {
+kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/okular" ];
 }

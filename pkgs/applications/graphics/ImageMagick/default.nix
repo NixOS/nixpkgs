@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
+, ApplicationServices
 }:
 
 let
@@ -11,8 +12,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.6-7";
-    sha256 = "1ls3g4gpdh094n03szr9arpr0rfwd1krv2s9gnck8j0ab10ccgs5";
+    version = "6.9.7-0";
+    sha256 = "0c6ff1am2mhc0dc26h50l78yx6acwqymwpwgkxgx69cb6jfpwrdx";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
       [ openexr librsvg openjpeg ]
-    ;
+    ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]

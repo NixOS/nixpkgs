@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cpp-ipfs-api-${version}";
-  version = "2016-11-09";
+  version = "2017-01-04";
 
   src = fetchFromGitHub {
     owner = "vasild";
     repo = "cpp-ipfs-api";
-    rev = "46e473e49ede4fd829235f1d4930754d5356a747";
-    sha256 = "10c5hmg9857zb0fp262ca4a42gq9iqdyqz7f975cp3qs70x12q08";
+    rev = "96a890f4518665a56581a2a52311eaa65928eac8";
+    sha256 = "1z6gbd7npg4pd9wmdyzcp9h12sg84d7a43c69pp4lzqkyqg8pz1g";
   };
 
   buildInputs = [ cmake curl ];

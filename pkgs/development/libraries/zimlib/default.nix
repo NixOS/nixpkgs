@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
   buildInputs = [ automake autoconf libtool lzma ];
   setSourceRoot = "cd openzim-*/zimlib; export sourceRoot=`pwd`";
-  preConfigurePhases = [ "./autogen.sh" ];
+  preConfigure = "./autogen.sh";
 
   meta = {
     description = "Library for reading and writing ZIM files (file format for storing Web content offline)";

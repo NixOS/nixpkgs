@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0j0ajli1cbfwbgzrcqkx3db174jv1fgm22ds0gqlgkci9cffa0c4";
+      sha256 = "075f7jpp8qi6piwrw4n8inynvsgp0270pdd9jmc2fqv6j5gsn332";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0fndi6cv8rw426c3l071z130ks9sqf6ca5yas7am9d666mmy4fs4";
+      sha256 = "10p1xd077278gm3syd3lc54fzjsvrvzm0zr6csn9iq90kmlsgwzy";
     };
 
   };
@@ -251,6 +251,8 @@ in stdenv.mkDerivation rec {
     inherit srcs;
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;
@@ -258,6 +260,5 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
     hydraPlatforms = [];
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 }

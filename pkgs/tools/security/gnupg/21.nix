@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libiconv, npth
-, gettext, texinfo, pcsclite
+, gettext, texinfo, pcsclite, sqlite
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
@@ -15,16 +15,16 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.1.16";
+  version = "2.1.17";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0i483m9q032a0s50f1izb213g4h5i7pcgn395m6hvl3sg2kadfa9";
+    sha256 = "1js308b46ifx1gim0c9nivr5yxhans7iq1yvkf7zl2928gdm9p65";
   };
 
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba libiconv npth gettext texinfo
-    readline libusb gnutls adns openldap zlib bzip2
+    readline libusb gnutls adns openldap zlib bzip2 sqlite
   ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";

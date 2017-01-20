@@ -1,13 +1,13 @@
 { stdenv, binutils, fetchgit }:
 
 stdenv.mkDerivation rec {
-  version = "2016.11.16";
+  version = "2016.12.28";
   name = "bloaty-${version}";
 
   src = fetchgit {
     url = "https://github.com/google/bloaty.git";
-    rev = "d040e4821ace478f9b43360acd6801aefdd323f7";
-    sha256 = "1qk2wgd7vzr5zy0332y9h69cwkqmy8x7qz97xpgwwnk54amm8i3k";
+    rev = "2234386bcee7297dfa1b6d8a5d20f95ea4ed9bb0";
+    sha256 = "0cfsjgbp9r16d6qi8v4k609bbhjff4vhdiapfkhr34z1cik1md4l";
     fetchSubmodules = true;
   };
 

@@ -1,0 +1,136 @@
+From 1884ef3a813f3dac0029c7539654ba978635d5d3 Mon Sep 17 00:00:00 2001
+From: "Luke A. Guest" <laguest@archeia.com>
+Date: Sun, 25 Sep 2016 16:49:09 +0100
+Subject: [PATCH 05/11] Fix vblank calls
+
+---
+ amd/amdgpu/amdgpu_display.c   | 8 ++++++++
+ amd/amdgpu/dce_v10_0.c        | 4 ++++
+ amd/amdgpu/dce_v11_0.c        | 4 ++++
+ amd/amdgpu/dce_v8_0.c         | 4 ++++
+ amd/amdgpu/dce_virtual.c      | 8 ++++++++
+ amd/dal/amdgpu_dm/amdgpu_dm.c | 4 ++++
+ 6 files changed, 32 insertions(+)
+
+diff --git a/amd/amdgpu/amdgpu_display.c b/amd/amdgpu/amdgpu_display.c
+index 8425b1d..d6cd383 100644
+--- a/amd/amdgpu/amdgpu_display.c
++++ b/amd/amdgpu/amdgpu_display.c
+@@ -268,7 +268,11 @@ int amdgpu_crtc_page_flip(struct drm_crtc *crtc,
+ 
+ 	work->base = base;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++	r = drm_crtc_vblank_get(crtc);
++#else
+ 	r = drm_vblank_get(crtc->dev, amdgpu_crtc->crtc_id);
++#endif
+ 	if (r) {
+ 		DRM_ERROR("failed to get vblank before flip\n");
+ 		goto pflip_cleanup;
+@@ -296,7 +300,11 @@ int amdgpu_crtc_page_flip(struct drm_crtc *crtc,
+ 	return 0;
+ 
+ vblank_cleanup:
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++	drm_crtc_vblank_put(&amdgpu_crtc->base);
++#else
+ 	drm_vblank_put(crtc->dev, amdgpu_crtc->crtc_id);
++#endif
+ 
+ pflip_cleanup:
+ 	if (unlikely(amdgpu_bo_reserve(new_abo, false) != 0)) {
+diff --git a/amd/amdgpu/dce_v10_0.c b/amd/amdgpu/dce_v10_0.c
+index 650d193..b1880ac 100644
+--- a/amd/amdgpu/dce_v10_0.c
++++ b/amd/amdgpu/dce_v10_0.c
+@@ -3342,7 +3342,11 @@ static int dce_v10_0_pageflip_irq(struct amdgpu_device *adev,
+ 
+ 	spin_unlock_irqrestore(&adev->ddev->event_lock, flags);
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++	drm_crtc_vblank_put(&amdgpu_crtc->base);
++#else
+ 	drm_vblank_put(adev->ddev, amdgpu_crtc->crtc_id);
++#endif
+ 	schedule_work(&works->unpin_work);
+ 
+ 	return 0;
+diff --git a/amd/amdgpu/dce_v11_0.c b/amd/amdgpu/dce_v11_0.c
+index ca03d8e..b654b64 100644
+--- a/amd/amdgpu/dce_v11_0.c
++++ b/amd/amdgpu/dce_v11_0.c
+@@ -3391,7 +3391,11 @@ static int dce_v11_0_pageflip_irq(struct amdgpu_device *adev,
+ 
+ 	spin_unlock_irqrestore(&adev->ddev->event_lock, flags);
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++	drm_crtc_vblank_put(&amdgpu_crtc->base);
++#else
+ 	drm_vblank_put(adev->ddev, amdgpu_crtc->crtc_id);
++#endif
+ 	schedule_work(&works->unpin_work);
+ 
+ 	return 0;
+diff --git a/amd/amdgpu/dce_v8_0.c b/amd/amdgpu/dce_v8_0.c
+index 8e4dff7..b598caa 100644
+--- a/amd/amdgpu/dce_v8_0.c
++++ b/amd/amdgpu/dce_v8_0.c
+@@ -3252,7 +3252,11 @@ static int dce_v8_0_pageflip_irq(struct amdgpu_device *adev,
+ 
+ 	spin_unlock_irqrestore(&adev->ddev->event_lock, flags);
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++	drm_crtc_vblank_put(&amdgpu_crtc->base);
++#else
+ 	drm_vblank_put(adev->ddev, amdgpu_crtc->crtc_id);
++#endif
+ 	schedule_work(&works->unpin_work);
+ 
+ 	return 0;
+diff --git a/amd/amdgpu/dce_virtual.c b/amd/amdgpu/dce_virtual.c
+index 0c6e873..36e2094 100644
+--- a/amd/amdgpu/dce_virtual.c
++++ b/amd/amdgpu/dce_virtual.c
+@@ -746,11 +746,19 @@ static int dce_virtual_pageflip_irq(struct amdgpu_device *adev,
+ 
+ 	/* wakeup usersapce */
+ 	if (works->event)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++    drm_crtc_send_vblank_event(&amdgpu_crtc->base, works->event);
++#else
+ 		drm_send_vblank_event(adev->ddev, crtc_id, works->event);
++#endif
+ 
+ 	spin_unlock_irqrestore(&adev->ddev->event_lock, flags);
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++	drm_crtc_vblank_put(&amdgpu_crtc->base);
++#else
+ 	drm_vblank_put(adev->ddev, amdgpu_crtc->crtc_id);
++#endif
+ 	schedule_work(&works->unpin_work);
+ 
+ 	return 0;
+diff --git a/amd/dal/amdgpu_dm/amdgpu_dm.c b/amd/dal/amdgpu_dm/amdgpu_dm.c
+index c5fcf5a..e9892d8 100644
+--- a/amd/dal/amdgpu_dm/amdgpu_dm.c
++++ b/amd/dal/amdgpu_dm/amdgpu_dm.c
+@@ -213,10 +213,14 @@ static void dm_pflip_high_irq(void *interrupt_params)
+ 
+ 	/* wakeup usersapce */
+ 	if(works->event)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0)
++		drm_crtc_send_vblank_event(&amdgpu_crtc->base, works->event);
++#else
+ 		drm_send_vblank_event(
+ 			adev->ddev,
+ 			amdgpu_crtc->crtc_id,
+ 			works->event);
++#endif
+ 
+ 	spin_unlock_irqrestore(&adev->ddev->event_lock, flags);
+ 
+-- 
+2.11.0
+

@@ -1,14 +1,20 @@
 { stdenv, lib, fetchFromGitHub, go, pkgs }:
+let
+  removeExpr = ref: ''
+    sed -i "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
+  '';
+
+in
 
 stdenv.mkDerivation rec {
-  version = "0.14.15";
+  version = "0.14.19";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "0iq7pzb9f0vgikxxxwvrhi5rlgw9frcwy0lgvc61l6lbw3vl0rd7";
+    sha256 = "16wpw9ndx3x37mfnymp2fx9n2az9ibyr61zgq3mh2mszzzl7bkcg";
   };
 
   buildInputs = [ go ];
@@ -42,11 +48,15 @@ stdenv.mkDerivation rec {
                --replace /usr/bin/syncthing $out/bin/syncthing
   '';
 
+  preFixup = ''
+    find $out/bin -type f -exec ${removeExpr go} '{}' '+'
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://www.syncthing.net/;
     description = "Open Source Continuous File Synchronization";
-    license = stdenv.lib.licenses.mpl20;
-    maintainers = with stdenv.lib.maintainers; [ pshendry joko peterhoeg ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ pshendry joko peterhoeg ];
+    platforms = platforms.unix;
   };
 }

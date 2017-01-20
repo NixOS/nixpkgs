@@ -1,30 +1,38 @@
 { stdenv, fetchurl, pkgconfig
 
 # Optional Dependencies
-, openssl ? null, libev ? null, zlib ? null, jansson ? null, boost ? null
-, libxml2 ? null, jemalloc ? null
+, openssl ? null, libev ? null, zlib ? null
+, enableHpack ? false, jansson ? null
+, enableAsioLib ? false, boost ? null
+, enableGetAssets ? false, libxml2 ? null
+, enableJemalloc ? false, jemalloc ? null
 }:
+
+assert enableHpack -> jansson != null;
+assert enableAsioLib -> boost != null;
+assert enableGetAssets -> libxml2 != null;
+assert enableJemalloc -> jemalloc != null;
+
+with { inherit (stdenv.lib) optional; };
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
-  version = "1.16.1";
+  version = "1.17.0";
 
   # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "069pw84f8gg21npapn7y1sizwn6w35692zaq5g45gy8hdbmcl8yc";
+    sha256 = "7685b6717d205d3a251b7dd5e73a7ca5e643bc5c01f928b82bfeed30c243f28a";
   };
-
-  # Configure script searches for a symbol which does not exist in jemalloc on Darwin
-  # Reported upstream in https://github.com/tatsuhiro-t/nghttp2/issues/233
-  postPatch = if stdenv.isDarwin && jemalloc != null then ''
-    substituteInPlace configure --replace "malloc_stats_print" "je_malloc_stats_print"
-  '' else null;
 
   outputs = [ "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libev zlib ];
+  buildInputs = [ openssl libev zlib ]
+    ++ optional enableHpack jansson
+    ++ optional enableAsioLib boost
+    ++ optional enableGetAssets libxml2
+    ++ optional enableJemalloc jemalloc;
 
   enableParallelBuilding = true;
 

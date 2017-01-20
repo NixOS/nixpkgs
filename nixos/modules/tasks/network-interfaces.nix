@@ -910,20 +910,23 @@ in
         domainname "${cfg.domain}"
       '';
 
-    environment.etc = mkIf (cfg.hostId != null)
-      [
-        {
-          target = "hostid";
-          source = pkgs.runCommand "gen-hostid" {} ''
-            hi="${cfg.hostId}"
-            ${if pkgs.stdenv.isBigEndian then ''
-              echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
-            '' else ''
-              echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out
-            ''}
-          '';
-        }
-      ];
+    environment.etc."hostid" = mkIf (cfg.hostId != null)
+      { source = pkgs.runCommand "gen-hostid" {} ''
+          hi="${cfg.hostId}"
+          ${if pkgs.stdenv.isBigEndian then ''
+            echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
+          '' else ''
+            echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out
+          ''}
+        '';
+      };
+
+    # static hostname configuration needed for hostnamectl and the
+    # org.freedesktop.hostname1 dbus service (both provided by systemd)
+    environment.etc."hostname" = mkIf (cfg.hostName != "")
+      {
+        text = cfg.hostName + "\n";
+      };
 
     environment.systemPackages =
       [ pkgs.host
