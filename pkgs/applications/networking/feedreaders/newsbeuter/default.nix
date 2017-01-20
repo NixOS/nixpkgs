@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
-  installPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
     done
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     description = "An open-source RSS/Atom feed reader for text terminals";
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
     license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
   };
 }
