@@ -8896,6 +8896,8 @@ in
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
+  opencl-clhpp = callPackage ../development/libraries/opencl-clhpp { };
+
   opencollada = callPackage ../development/libraries/opencollada { };
 
   opencsg = callPackage ../development/libraries/opencsg { };
