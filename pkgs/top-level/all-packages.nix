@@ -12832,6 +12832,7 @@ in
   };
 
   docker = callPackage ../applications/virtualization/docker { };
+  docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
