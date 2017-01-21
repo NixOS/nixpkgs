@@ -25264,9 +25264,11 @@ in {
     '';
 
     patchPhase = ''
-      substituteInPlace "scripts/syncthing-gtk" \
-              --replace "/usr/share" "$out/share"
-      substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
+        substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
+        substituteInPlace scripts/syncthing-gtk --replace "/usr/share" "$out/share"
+        substituteInPlace syncthing_gtk/app.py --replace "/usr/share" "$out/share"
+        substituteInPlace syncthing_gtk/wizard.py --replace "/usr/share" "$out/share"
+        substituteInPlace syncthing-gtk.desktop --replace "/usr/bin/syncthing-gtk" "$out/bin/syncthing-gtk"
     '';
 
     meta = {
