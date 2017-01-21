@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "shaarli-material-${version}";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "kalvn";
     repo = "Shaarli-Material";
     rev = "v${version}";
-    sha256 = "1gam080iwr8vd6k6liv0zmpb3zyw37a53nj1s4ywb4d2i68hjncd";
+    sha256 = "0ivq35183r5vyzvf47sgxwdxllmvhd5w9w75xgyp3kbw2na4yrmr";
   };
 
   patchPhase = ''
@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
         --replace '.min.js"'  '.min.js#"' \
         --replace '.png"'     '.png#"'
     done
-
-    substituteInPlace material/loginform.html \
-        --replace '"ban_canLogin()"' '"ban_canLogin($conf)"' # PHP 7.1 fix (https://github.com/shaarli/Shaarli/issues/711)
   '';
 
   installPhase = ''
