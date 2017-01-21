@@ -10405,27 +10405,8 @@ in {
     };
   };
 
-  django_guardian = buildPythonPackage rec {
-    name = "django-guardian-${version}";
-    version = "1.4.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-guardian/${name}.tar.gz";
-      sha256 = "1m7y3brk3697hr2cvkzl8dry4pp7wkmhvxmf8db1ardz1r9d8895";
-    };
-
-    buildInputs = with self ; [ pytest pytestrunner pytestdjango django_environ mock ];
-    propagatedBuildInputs = with self ; [ django six ];
-
-    checkPhase = ''
-      ${python.interpreter} nix_run_setup.py test --addopts="--ignore build"
-    '';
-
-    meta = {
-      description = "Per object permissions for Django";
-      homepage = https://github.com/django-guardian/django-guardian;
-      licenses = [ licenses.mit licenses.bsd2 ];
-    };
+  django_guardian = callPackage ../development/python-modules/django_guardian.nix {
+    pytest = self.pytest_30;
   };
 
   django_tagging = buildPythonPackage rec {
