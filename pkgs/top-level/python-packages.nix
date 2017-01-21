@@ -5077,27 +5077,8 @@ in {
     };
   };
 
-  pytestdjango = buildPythonPackage rec {
-    name = "pytest-django-${version}";
-    version = "2.9.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-django/${name}.tar.gz";
-      sha256 = "1mmc7zsz3dlhs6sx4sppkj1vgshabi362r1a8b8wpj1qfximpqcb";
-    };
-
-    # doing this to allow depending packages to find
-    # pytest's binaries
-    pytest = self.pytest;
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ django setuptools_scm_18 ];
-
-    meta = {
-      description = "py.test plugin for testing of Django applications";
-      homepage = http://pytest-django.readthedocs.org/en/latest/;
-      license = licenses.bsd3;
-    };
+  pytestdjango = callPackage ../development/python-modules/pytestdjango.nix {
+    pytest = self.pytest_30;
   };
 
   pytest-fixture-config = buildPythonPackage rec {
