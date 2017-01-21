@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, boost, cmake, cpp-hocon, curl, leatherman, libyamlcpp, openssl, ruby, utillinux }:
+{ stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libyamlcpp, openssl, ruby, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "facter-${version}";
-  version = "3.4.1";
-  src = fetchurl {
-    url = "https://downloads.puppetlabs.com/facter/${name}.tar.gz";
-    sha256 = "1vvvqni68l3hmnxi8jp0n2rwzxyh1vmgv6xa2954h94dfax6dmcj";
+  version = "3.5.1";
+  src = fetchFromGitHub {
+    sha256 = "1rhfww0knjh6bj3b0ykxgfgw6rg2bzibkdrisq3nhl3djfq7r1a8";
+    rev = version;
+    repo = "facter";
+    owner = "puppetlabs";
   };
 
   cmakeFlags = [ "-DFACTER_RUBY=${ruby}/lib/libruby.so" ];
