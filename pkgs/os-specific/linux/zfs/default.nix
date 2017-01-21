@@ -139,21 +139,16 @@ in
     };
     zfsUnstable = common {
       # comment/uncomment if breaking kernel versions are known
-      inkompatibleKernelVersion = "4.10";
+      inkompatibleKernelVersion = null;
 
-      version = "0.7.0-rc2";
+      version = "0.7.0-rc3";
 
       # this package should point to a version / git revision compatible with the latest kernel release
-      sha256 = "197y2jyav9h1ksri9kzqvrwmzpb58mlgw27vfvgd4bvxpwfxq53s";
+      sha256 = "0js3lazqq8wb4nklqxd6sgbvwqgwnjgz3xi3mm33xf4284gia6pc";
       extraPatches = [
         (fetchpatch {
-          url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc2...nixos-zfs-0.7.0-rc2.patch";
-          sha256 = "1p33bwd6p5r5phbqb657x8h9x3bd012k2mdmbzgnb09drh9v0r82";
-        })
-        (fetchpatch {
-          name = "Kernel_4.9_zfs_aio_fsync_removal.patch";
-          url = "https://github.com/zfsonlinux/zfs/commit/99ca173929cb693012dabe98bcee4f12ec7e6e92.patch";
-          sha256 = "10npvpj52rpq88vdsn7zkdhx2lphzvqypsd9abdadjbqkwxld9la";
+          url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";
+          sha256 = "1vlw98v8xvi8qapzl1jwm69qmfslwnbg3ry1lmacndaxnyckkvhh";
         })
       ];
       spl = splUnstable;
