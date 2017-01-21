@@ -50,7 +50,7 @@ in {
         gaining root access by passing init=/bin/sh as a kernel
         parameter. However, it is enabled by default for backwards
         compatibility.
-      ''
+      '';
     };
   };
 
