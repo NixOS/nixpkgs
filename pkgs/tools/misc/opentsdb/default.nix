@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];
 
   preConfigure = ''
+    patchShebangs ./build-aux/
     ./bootstrap
   '';
 
