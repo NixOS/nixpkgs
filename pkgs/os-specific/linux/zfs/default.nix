@@ -13,11 +13,11 @@ let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
-  common = { version, sha256, extraPatches, spl, inkompatibleKernelVersion ? null } @ args:
+  common = { version, sha256, extraPatches, spl, incompatibleKernelVersion ? null } @ args:
     if buildKernel &&
-       (inkompatibleKernelVersion != null) &&
-       versionAtLeast kernel.version inkompatibleKernelVersion then
-      throw "linux v${kernel.version} is not yet supported by zfsonlinux v${version}"
+       (incompatibleKernelVersion != null) &&
+       versionAtLeast kernel.version incompatibleKernelVersion then
+      throw "Linux v${kernel.version} is not yet supported by zfsonlinux v${version}. Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."
     else stdenv.mkDerivation rec {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
@@ -123,7 +123,7 @@ in
     # to be adapted
     zfsStable = common {
       # comment/uncomment if breaking kernel versions are known
-      inkompatibleKernelVersion = "4.9";
+      incompatibleKernelVersion = "4.9";
 
       version = "0.6.5.8";
 
@@ -139,7 +139,7 @@ in
     };
     zfsUnstable = common {
       # comment/uncomment if breaking kernel versions are known
-      inkompatibleKernelVersion = null;
+      incompatibleKernelVersion = null;
 
       version = "0.7.0-rc3";
 
