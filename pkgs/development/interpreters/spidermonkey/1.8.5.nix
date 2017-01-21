@@ -1,4 +1,4 @@
-{ stdenv, lib, autoconf213, fetchurl, pkgconfig, nspr, perl, python2, zip }:
+{ stdenv, lib, autoconf213, fetchurl, fetchpatch, pkgconfig, nspr, perl, python2, zip }:
 
 stdenv.mkDerivation rec {
   name = "spidermonkey-${version}";
@@ -22,7 +22,13 @@ stdenv.mkDerivation rec {
     ${lib.optionalString stdenv.isArm "autoreconf --verbose --force"}
   '';
 
-  patches = stdenv.lib.optionals stdenv.isArm [
+  patches = [
+    (fetchpatch {
+      name = "gcc6.patch";
+      url = "https://anonscm.debian.org/cgit/collab-maint/mozjs.git/plain/debian/patches/fix-811665.patch?id=00b15c7841968ab4f7fec409a6b93fa5e1e1d32e";
+      sha256 = "1q8477xqxiy5d8376k5902l45gd0qkd4nxmhl8vr6rr1pxfcny99";
+    })
+  ] ++ stdenv.lib.optionals stdenv.isArm [
     # Explained below in configureFlags for ARM
     ./1.8.5-findvanilla.patch
     # Fix for hard float flags.
