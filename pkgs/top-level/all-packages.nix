@@ -15199,7 +15199,7 @@ in
     vte = gnome2.vte.override { pythonSupport = true; };
   };
 
-  termite = callPackage ../applications/misc/termite { };
+  termite = callPackage ../applications/misc/termite { vte = null; };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 
