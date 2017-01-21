@@ -15199,9 +15199,7 @@ in
     vte = gnome2.vte.override { pythonSupport = true; };
   };
 
-  termite = callPackage ../applications/misc/termite {
-    vte = gnome3_20.vte-select-text;
-  };
+  termite = callPackage ../applications/misc/termite { };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 
@@ -16516,8 +16514,6 @@ in
     gtkmm = self.gtkmm2;
     libcanberra = self.libcanberra_gtk2;
   });
-
-  gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
   gnome3_22 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.22 { });
 
