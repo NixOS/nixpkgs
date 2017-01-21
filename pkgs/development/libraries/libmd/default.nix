@@ -10,15 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "121s73pgbqsnmy6xblbrkj9y44c5zzzpf2hcmh6zvcvg4dk26gzx";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   # Writing the version to a .dist-version file is required for the get-version
   # shell script because fetchgit removes the .git directory.
   prePatch = ''
     echo '${version}' > .dist-version;
   '';
-
-  autoreconfPhase = "./autogen";
 
   meta = with stdenv.lib; {
     homepage = "https://www.hadrons.org/software/${pname}/";
