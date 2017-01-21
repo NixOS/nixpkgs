@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
-, bash, libsamplerate, libsndfile, readline, gcc
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, python2Packages, makeWrapper
+, bash, libsamplerate, libsndfile, readline
 
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
@@ -34,11 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
-  buildInputs = [ gcc
-    python
-
-    libsamplerate libsndfile readline
-
+  buildInputs = [ python libsamplerate libsndfile readline
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ];
 
@@ -46,7 +42,13 @@ stdenv.mkDerivation rec {
     substituteInPlace svnversion_regenerate.sh --replace /bin/bash ${bash}/bin/bash
   '';
 
-  patches = [ ./jack-gcc5.patch ];
+  patches = [
+    ./jack-gcc5.patch
+    (fetchpatch {
+      url = "https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645.patch";
+      sha256 = "0vywakbmlskvs9ginij9ilk39wjyzg7w6cf1qxp11hb0hj69fir5";
+    })
+  ];
 
   configurePhase = ''
     python waf configure --prefix=$out \
