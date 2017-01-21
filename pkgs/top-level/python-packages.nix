@@ -19289,15 +19289,18 @@ in {
   });
 
   protobuf = self.protobuf2_6;
+  protobuf3_1 = (self.protobufBuild pkgs.protobuf3_1).override { doCheck = false; };
   protobuf3_0 = (self.protobufBuild pkgs.protobuf3_0).override { doCheck = false; };
-  protobuf3_0_0b2 = (self.protobufBuild pkgs.protobuf3_0_0b2).override { doCheck = false; };
   protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
     inherit (protobuf) name src;
-    disabled = isPy3k || isPyPy;
+    geV2_6 = versionAtLeast protobuf.version "2.6.0";
+    geV3_0 = versionAtLeast protobuf.version "3.0";
+    pythonVersionSupported = (geV3_0 && isPy3k) || geV2_6;
+    disabled = !pythonVersionSupported || isPyPy;
 
-    propagatedBuildInputs = with self; [ protobuf google_apputils ];
+    propagatedBuildInputs = with self; [ protobuf six ];
 
     prePatch = ''
       while [ ! -d python ]; do
@@ -19306,18 +19309,18 @@ in {
       cd python
     '';
 
-    preConfigure = optionalString (versionAtLeast protobuf.version "2.6.0") ''
+    preConfigure = optionalString geV2_6 ''
       PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
       PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
     '';
 
-    checkPhase = if versionAtLeast protobuf.version "2.6.0" then ''
+    checkPhase = if geV2_6 then ''
       ${python.executable} setup.py google_test --cpp_implementation
     '' else ''
       ${python.executable} setup.py test
     '';
 
-    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--install-option='--cpp_implementation'";
+    installFlags = optional geV2_6 "--install-option='--cpp_implementation'";
 
     doCheck = true;
 
@@ -31091,28 +31094,46 @@ EOF
     };
   };
 
-  # tensorflow is built from a downloaded wheel, because the upstream
-  # project's build system is an arcane beast based on
-  # bazel. Untangling it and building the wheel from source is an open
-  # problem.
+  # TensorFlow is built from a downloaded wheel, because the upstream
+  # project's build system is an arcane beast based on bazel. Untangling
+  # it and building the wheel from source is an open problem.
 
-  tensorflow = self.tensorflowNoGpuSupport;
+  tensorflow = self.tensorflowWithoutCuda;
 
-  tensorflowNoGpuSupport = buildPythonPackage rec {
+  tensorflowWithoutCuda = buildPythonPackage rec {
     name = "tensorflow";
-    version = "0.10.0";
+    version = "0.12.0rc0";
     format = "wheel";
+    disabled = !(isPy35 || isPy27);
+    pythonVersion =
+      if isPy35 then (
+        if stdenv.isDarwin then "py3-none"
+        else                    "cp35-cp35m"
+      )
+      else (
+        if stdenv.isDarwin then "py2-none"
+        else                    "cp27-none"
+      );
 
     src = pkgs.fetchurl {
-      url = if stdenv.isDarwin then
-        "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-py2-none-any.whl" else
-        "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
-      sha256 = if stdenv.isDarwin then
-        "1gjybh3j3rn34bzhsxsfdbqgsr4jh50qyx2wqywvcb24fkvy40j9" else
-        "0g05pa4z6kdy0giz7hjgjgwf4zzr5l8cf1zh247ymixlikn3fnpx";
+      url =
+        if stdenv.isDarwin then
+          "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-${pythonVersion}-any.whl"
+        else
+          "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-${pythonVersion}-linux_x86_64.whl";
+
+      sha256 =
+        if isPy35 then (
+          if stdenv.isDarwin then "1qs7ghc62vjffv41349a164ch97kgipfcs6a2ynnjag0f4cn7n4w"
+          else                    "1c09s9pj9w9z7qqi2b55smj71nmlmszcrrqsqc0xm20x16fahpkv"
+        )
+        else (
+          if stdenv.isDarwin then "04wvpp9gjcsh56gpsajh2mrrr01v9pfkh7xzah34h2jwvz3hdbzy"
+          else                    "15r5s6wncz6a8vgz8f005nbfzdvkwbc0rg8j7lk31g6xcn8a3q1h"
+        );
     };
 
-    propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig mock];
+    propagatedBuildInputs = with self; [ numpy six protobuf3_1 pkgs.swig mock ];
 
     preFixup = ''
       RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
@@ -31122,33 +31143,39 @@ EOF
     doCheck = false;
 
     meta = {
-      description = "TensorFlow helps the tensors flow (no gpu support)";
+      description = "Library for numerical computation using data flow graph (without CUDA support)";
       homepage = http://tensorflow.org;
       license = licenses.asl20;
       platforms = with platforms; linux ++ darwin;
     };
   };
 
-  tensorflowCuDNN = buildPythonPackage rec {
+  tensorflowWithCuda = buildPythonPackage rec {
     name = "tensorflow";
-    version = "0.11.0rc0";
+    version = "0.12.0rc0";
     format = "wheel";
+    disabled = !(isPy35 || isPy27);
+    pythonVersion =
+      if isPy35 then "cp35-cp35m"
+      else           "cp27-none";
 
     src = pkgs.fetchurl {
-      url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
-      sha256 = "1r8zlz95sw7bnjzg5zdbpa9dj8wmp8cvvgyl9sv3amsscagnnfj5";
+      url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${version}-${pythonVersion}-linux_x86_64.whl";
+      sha256 =
+        if isPy35 then "1ssjvgnwy4z6nqb3mcazw3lx6vffvdrmibm49fvnh5di7i88adms"
+        else           "0fw5bkfs3k94z7pf1h6zbf9g8nz7pqfa7ynq95qqdw7dqxpr2zy9";
     };
 
     buildInputs = with self; [ pkgs.swig ];
-    propagatedBuildInputs = with self; [ numpy six protobuf3_0 pkgs.cudatoolkit75 pkgs.cudnn5_cudatoolkit75 pkgs.gcc49 self.mock ];
+    propagatedBuildInputs = with self; [ numpy six protobuf3_1 pkgs.cudatoolkit8 pkgs.cudnn51_cudatoolkit80 pkgs.gcc49 self.mock ];
 
     # Note that we need to run *after* the fixup phase because the
     # libraries are loaded at runtime. If we run in preFixup then
-    # patchelf --shrink-rpath will remove the cuda libraries.
+    # patchelf --shrink-rpath will remove the CUDA libraries.
     postFixup = let rpath = stdenv.lib.makeLibraryPath [
       pkgs.gcc49.cc.lib
-      pkgs.zlib pkgs.cudatoolkit75
-      pkgs.cudnn5_cudatoolkit75
+      pkgs.zlib pkgs.cudatoolkit8
+      pkgs.cudnn51_cudatoolkit80
       pkgs.linuxPackages.nvidia_x11
     ]; in ''
       find $out -name '*.so' -exec patchelf --set-rpath "${rpath}" {} \;
@@ -31157,10 +31184,10 @@ EOF
     doCheck = false;
 
     meta = {
-      description = "TensorFlow helps the tensors flow (no gpu support)";
+      description = "Library for numerical computation using data flow graph (with CUDA support)";
       homepage = http://tensorflow.org;
       license = licenses.asl20;
-      platforms   = platforms.linux;
+      platforms = platforms.linux;
     };
   };
 
