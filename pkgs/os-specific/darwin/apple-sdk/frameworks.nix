@@ -104,6 +104,7 @@ with frameworks; with libs; {
   VideoDecodeAcceleration = [ CF CoreVideo ];
   VideoToolbox            = [ CF CoreMedia CoreVideo ];
   WebKit                  = [ ApplicationServices Carbon JavaScriptCore OpenGL ];
+  X11                     = []; # used by Tk, should this exist?
 
   # Umbrellas
   Accelerate          = [ CoreWLAN IOBluetooth ];
