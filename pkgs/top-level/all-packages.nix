@@ -2933,6 +2933,8 @@ in
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
+  neofetch = callPackage ../tools/misc/neofetch { };
+
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
   nestopia = callPackage ../misc/emulators/nestopia { };
