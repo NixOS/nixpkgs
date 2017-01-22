@@ -65,9 +65,6 @@ import ./make-test.nix ({ pkgs, withFirewall, ... }:
         $server->succeed("echo Hello World > /home/ftp/foo.txt");
         $client->succeed("curl -v ftp://server/foo.txt >&2");
 
-        # Test whether active FTP works.
-        $client->succeed("curl -v -P - ftp://server/foo.txt >&2");
-
         # Test ICMP.
         $client->succeed("ping -c 1 router >&2");
         $router->succeed("ping -c 1 client >&2");
