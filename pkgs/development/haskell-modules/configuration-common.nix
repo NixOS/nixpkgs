@@ -1202,9 +1202,6 @@ self: super: {
 
   socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
 
-  # https://github.com/philopon/barrier/issues/3
-  barrier = doJailbreak super.barrier;
-
   # requires vty 5.13
   brick = super.brick.overrideScope (self: super: { vty = self.vty_5_14; });
 
