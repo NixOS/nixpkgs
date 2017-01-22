@@ -41,7 +41,6 @@ let
   kernelPackages = config.boot.kernelPackages;
 
   kernelHasRPFilter = kernelPackages.kernel.features.netfilterRPFilter or false;
-  kernelCanDisableHelpers = kernelPackages.kernel.features.canDisableNetfilterConntrackHelpers or false;
 
   helpers =
     ''
@@ -512,8 +511,6 @@ in
 
     assertions = [ { assertion = (cfg.checkReversePath != false) || kernelHasRPFilter;
                      message = "This kernel does not support rpfilter"; }
-                   { assertion = cfg.autoLoadConntrackHelpers || kernelCanDisableHelpers;
-                     message = "This kernel does not support disabling conntrack helpers"; }
                  ];
 
     systemd.services.firewall = {
