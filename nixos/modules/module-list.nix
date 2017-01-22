@@ -258,6 +258,7 @@
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
+  ./services/misc/gogs.nix
   ./services/misc/gpsd.nix
   ./services/misc/ihaskell.nix
   ./services/misc/leaps.nix
@@ -311,6 +312,7 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/netdata.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/blackbox-exporter.nix

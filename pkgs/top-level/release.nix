@@ -67,13 +67,13 @@ let
               jobs.vim.x86_64-darwin
             ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
         };
-
+    } // (lib.optionalAttrs (builtins.elem "i686-linux" supportedSystems) {
       stdenvBootstrapTools.i686-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "i686-linux"; }) dist test; };
-
+    }) // (lib.optionalAttrs (builtins.elem "x86_64-linux" supportedSystems) {
       stdenvBootstrapTools.x86_64-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
-
+    }) // (lib.optionalAttrs (builtins.elem "x86_64-darwin" supportedSystems) {
       stdenvBootstrapTools.x86_64-darwin =
         let
           bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
@@ -83,8 +83,7 @@ let
           # Test a full stdenv bootstrap from the bootstrap tools definition
           inherit (bootstrap.test-pkgs) stdenv;
         };
-
-    } // (mapTestOn ((packagePlatforms pkgs) // rec {
+    }) // (mapTestOn ((packagePlatforms pkgs) // rec {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 

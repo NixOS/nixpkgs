@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "why3-${version}";
-  version = "0.87.1";
+  version = "0.87.3";
 
   src = fetchurl {
-    url    = https://gforge.inria.fr/frs/download.php/file/35893/why3-0.87.1.tar.gz;
-    sha256 = "1ssik2f6fkpvwpdmxz8hrm3p62qas3sjlqya0r57s60ilpkgiwwb";
+    url    = https://gforge.inria.fr/frs/download.php/file/36398/why3-0.87.3.tar.gz;
+    sha256 = "1fn9v6w1ilkrm2n4rz31w8qvjnchyvwxiqs67z3f59b5k99wb2ka";
   };
 
   buildInputs = (with ocamlPackages; [

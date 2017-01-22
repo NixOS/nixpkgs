@@ -19307,17 +19307,34 @@ in {
     '';
 
     preConfigure = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+      export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+      export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
     '';
 
-    checkPhase = if versionAtLeast protobuf.version "2.6.0" then ''
+    preBuild = optionalString (versionAtLeast protobuf.version "2.6.0") ''
+      ${python}/bin/${python.executable} setup.py build_ext --cpp_implementation
+    '';
+
+    checkPhase = ''
+      runHook preCheck
+    '' + (if versionAtLeast protobuf.version "2.6.0" then ''
       ${python.executable} setup.py google_test --cpp_implementation
+      echo "sanity checking the C extension . . ."
+      echo "import google.protobuf.descriptor" | ${python.executable}
     '' else ''
       ${python.executable} setup.py test
+    '') + ''
+      runHook postCheck
     '';
 
     installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--install-option='--cpp_implementation'";
+
+    # the _message.so isn't installed, so we'll do that manually.
+    # if someone can figure out a less hacky way to get the _message.so to
+    # install, please do replace this.
+    postInstall = optionalString (versionAtLeast protobuf.version "2.6.0") ''
+      cp -v $(find build -name "_message*") $out/${python.sitePackages}/google/protobuf/pyext
+    '';
 
     doCheck = true;
 

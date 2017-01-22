@@ -18,7 +18,9 @@
 { prefix, arch, simulator ? false }: let
   sdkType = if simulator then "Simulator" else "OS";
 
-  sdk = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}10.0.sdk";
+  sdkVer = "10.2";
+
+  sdk = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}${sdkVer}.sdk";
 
   /* TODO: Properly integrate with gcc-cross-wrapper */
   wrapper = import ../../../build-support/cc-wrapper {
@@ -29,6 +31,10 @@
     libc = runCommand "empty-libc" {} "mkdir -p $out/{lib,include}";
     cc = clang;
     extraBuildCommands = ''
+      if ! [ -d ${sdk} ]; then
+          echo "You must have ${sdkVer} of the iPhone${sdkType} sdk installed at ${sdk}" >&2
+          exit 1
+      fi
       # ugh
       tr '\n' ' ' < $out/nix-support/cc-cflags > cc-cflags.tmp
       mv cc-cflags.tmp $out/nix-support/cc-cflags
