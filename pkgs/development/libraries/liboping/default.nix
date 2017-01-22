@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses ? null, perl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "liboping-1.8.0";
+  name = "liboping-1.9.0";
 
   src = fetchurl {
     url = "http://verplant.org/liboping/files/${name}.tar.bz2";
-    sha256 = "1nsvlsvapc64h0anip2hz5ydbgk3an94xqiaa9kivcw1r6193jqx";
+    sha256 = "0c1mdx9ixqypayhm617jjv9kr6y60nh3mnryafjzv23bnn41vfs4";
   };
 
   buildInputs = [ ncurses perl ];
