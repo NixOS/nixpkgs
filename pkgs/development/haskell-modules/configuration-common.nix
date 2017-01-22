@@ -57,14 +57,7 @@ self: super: {
       sha256 = "1vy6bj7f8zyj4n1r0gpi0r7mxapsrjvhwmsi5sbnradfng5j3jya";
       rev = drv.version;
     };
-  })).overrideScope (self: super: {
-    # https://github.com/bitemyapp/esqueleto/issues/8
-    esqueleto = self.esqueleto_2_4_3;
-    # https://github.com/prowdsponsor/esqueleto/issues/137
-    persistent = self.persistent_2_2_4_1;
-    persistent-template = self.persistent-template_2_1_8_1;
-    persistent-sqlite = self.persistent-sqlite_2_2_1;
-  })).override {
+  }))).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
