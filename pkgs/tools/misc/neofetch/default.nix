@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A fast, highly customizable system info script";
     homepage = https://github.com/dylanaraps/neofetch;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
     maintainers = with maintainers; [ alibabzo ];
   };
 }
