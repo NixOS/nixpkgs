@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "FUSE-based filesystem to access hubic cloud storage";
     platforms = platforms.linux;
     license = licenses.mit;
+    maintainers = [ maintainers.jpierre03 ];
   };
 }
