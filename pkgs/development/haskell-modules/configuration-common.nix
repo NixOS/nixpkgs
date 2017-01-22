@@ -1158,9 +1158,6 @@ self: super: {
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
-  # https://github.com/vshabanov/HsOpenSSL/issues/11
-  HsOpenSSL = doJailbreak super.HsOpenSSL;
-
   # https://github.com/NixOS/nixpkgs/issues/19612
   wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
     http-client = self.http-client_0_5_5;
