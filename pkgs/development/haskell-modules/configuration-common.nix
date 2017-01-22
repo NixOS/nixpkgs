@@ -1149,8 +1149,7 @@ self: super: {
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
-  # https://github.com/fpco/store/issues/77
-  store = dontCheck super.store;
+  # Use proper store-core version.
   store_0_3 = super.store_0_3.overrideScope (self: super: { store-core = self.store-core_0_3; });
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
