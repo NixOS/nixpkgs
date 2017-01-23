@@ -524,6 +524,8 @@ in
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  kwm = callPackage ../os-specific/darwin/kwm { };
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
