@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "1zwxh7zsvwcg221mpjh0dhpdas3j9mc5q92pprf8yljl7clqvg62";
   };
 
+  hiresSrc = fetchurl {
+    url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-hires-icons-2.0.tar.gz";
+    sha256 = "1ari8n3y1d4hdl9npg3c3hk27x7cfkwfgyhgzn1vlqkrdah4z434";
+  };
+
   enableParallelBuilding = true;
 
   buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext autoconf automake];
@@ -32,12 +37,18 @@ stdenv.mkDerivation rec {
     mv $sourceRoot $name
     tar xzf $macportSrc
     mv $name $sourceRoot
+
+    # extract retina image resources
+    tar xzfv $hiresSrc --strip 1 -C $sourceRoot
   '';
 
   postPatch = ''
     patch -p1 < patch-mac
     substituteInPlace lisp/international/mule-cmds.el \
       --replace /usr/share/locale ${gettext}/share/locale
+
+    # use newer emacs icon
+    cp nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns mac/Emacs.app/Contents/Resources/Emacs.icns
   '';
 
   configureFlags = [
