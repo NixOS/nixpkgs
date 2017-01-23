@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qttools seafile-shared ]
     ++ optional withShibboleth qtwebengine;
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
+  cmakeFlags = []
     ++ optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
   postInstall = ''

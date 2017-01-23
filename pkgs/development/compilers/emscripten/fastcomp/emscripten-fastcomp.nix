@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     chmod +w -R tools/clang
   '';
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_TARGETS_TO_BUILD='X86;JSBackend'"
     "-DLLVM_INCLUDE_EXAMPLES=OFF"
     "-DLLVM_INCLUDE_TESTS=ON"
