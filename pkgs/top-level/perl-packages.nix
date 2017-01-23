@@ -8599,17 +8599,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooXTypesMooseLikeNumeric = buildPerlPackage rec {
-    name = "MooX-Types-MooseLike-Numeric-1.02";
+    name = "MooX-Types-MooseLike-Numeric-1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATEU/${name}.tar.gz";
-      sha256 = "6186f75ab2747723fd979249ec6ee0c4550f5b47aa50c0d222cc7d3590182bb6";
+      sha256 = "16adeb617b963d010179922c2e4e8762df77c75232e17320b459868c4970c44b";
     };
-    buildInputs = [ TestFatal ];
+    buildInputs = [ Moo TestFatal ];
     propagatedBuildInputs = [ MooXTypesMooseLike ];
     meta = {
       description = "Moo types for numbers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
