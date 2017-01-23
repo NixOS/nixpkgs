@@ -4086,6 +4086,8 @@ with pkgs;
 
   tpm-luks = callPackage ../tools/security/tpm-luks { };
 
+  trezord = callPackage ../servers/trezord { };
+
   tthsum = callPackage ../applications/misc/tthsum { };
 
   chaps = callPackage ../tools/security/chaps { };
