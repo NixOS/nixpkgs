@@ -151,7 +151,7 @@ let
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
   ghcCommand = "${crossPrefix}${ghcCommand'}";
-  ghcCommandCaps= lib.toUpper ghcCommand';
+  ghcCommandCaps= toUpper ghcCommand';
 
 in
 
