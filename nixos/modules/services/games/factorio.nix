@@ -203,7 +203,6 @@ in
           "--start-server=${mkSavePath cfg.saveName}"
           "--server-settings=${serverSettingsFile}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
-          (optionalString (cfg.autosave-interval != null) "--autosave-interval ${toString cfg.autosave-interval}")
         ];
       };
     };
