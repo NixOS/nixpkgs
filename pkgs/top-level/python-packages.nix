@@ -37,7 +37,43 @@ let
 
   graphiteVersion = "0.9.15";
 
-in {
+  buildAnsible = { version, sha256 }:
+  self.buildPythonPackage rec {
+    name = "ansible-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://releases.ansible.com/ansible/${name}.tar.gz";
+      inherit sha256;
+    };
+
+    prePatch = ''
+      sed -i "s,/usr/,$out," lib/ansible/constants.py
+    '';
+
+    doCheck = false;
+    dontStrip = true;
+    dontPatchELF = true;
+    dontPatchShebangs = false;
+    windowsSupport = true;
+
+    propagatedBuildInputs = with self; [
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six
+      netaddr dns
+    ] ++ pkgs.lib.optional windowsSupport pywinrm;
+
+    meta = with stdenv.lib; {
+      homepage = "http://www.ansible.com";
+      description = "A simple automation tool";
+      license = with licenses; [ gpl3] ;
+      maintainers = with maintainers; [
+        jgeerds
+        joamaki
+      ];
+      platforms = with platforms; linux ++ darwin;
+    };
+  };
+
+in rec {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
 
@@ -902,79 +938,18 @@ in {
     };
   };
 
-  ansible = buildPythonPackage rec {
-    version = "1.9.6";
-    name = "ansible-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "https://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "0pgfh5z4w44sjgd77q6k769a5ipigjlm28zbpf2jhvz7n60kfxsh";
-    };
-
-    prePatch = ''
-      sed -i "s,/usr/,$out," lib/ansible/constants.py
-    '';
-
-    doCheck = false;
-    dontStrip = true;
-    dontPatchELF = true;
-    dontPatchShebangs = true;
-    windowsSupport = true;
-
-    propagatedBuildInputs = with self; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six
-      netaddr dns
-    ] ++ optional windowsSupport pywinrm;
-
-    meta = {
-      homepage = "http://www.ansible.com";
-      description = "A simple automation tool";
-      license = with licenses; [ gpl3] ;
-      maintainers = with maintainers; [
-        jgeerds
-        joamaki
-      ];
-      platforms = with platforms; linux ++ darwin;
-    };
+  ansible2_1 = buildAnsible {
+    version = "2.1.4.0";
+    sha256  = "05nc68900qrzqp88970j2lmyvclgrjki66xavcpzyzamaqrh7wg9";
   };
 
-  ansible2 = buildPythonPackage rec {
-    version = "2.2.0.0";
-    name = "ansible-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "11l5814inr44ammp0sh304rqx2382fr629c0pbwf0k1rjg99iwfr";
-    };
-
-    prePatch = ''
-      sed -i "s,/usr/,$out," lib/ansible/constants.py
-    '';
-
-    doCheck = false;
-    dontStrip = true;
-    dontPatchELF = true;
-    dontPatchShebangs = true;
-    windowsSupport = true;
-
-    propagatedBuildInputs = with self; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six
-      netaddr dns
-    ] ++ optional windowsSupport pywinrm;
-
-    meta = with stdenv.lib; {
-      homepage = "http://www.ansible.com";
-      description = "A simple automation tool";
-      license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [
-        copumpkin
-        jgeerds
-      ];
-      platforms = with platforms; linux ++ darwin;
-    };
+  ansible2_2 = buildAnsible {
+    version = "2.2.1.0";
+    sha256  = "0gz9i30pdmkchi936ijy873k8di6fmf3v5rv551hxyf0hjkjx8b3";
   };
+
+  ansible2 = ansible2_2;
+  ansible  = ansible2;
 
   apipkg = buildPythonPackage rec {
     name = "apipkg-1.4";
@@ -20060,8 +20035,8 @@ in {
 
     buildInputs = [ pkgs.libev ];
 
-    libEvSharedLibrary = 
-      if !stdenv.isDarwin  
+    libEvSharedLibrary =
+      if !stdenv.isDarwin
       then "${pkgs.libev}/lib/libev.so.4"
       else "${pkgs.libev}/lib/libev.4.dylib";
 

@@ -5966,8 +5966,7 @@ in
 
   augeas = callPackage ../tools/system/augeas { };
 
-  ansible = python2Packages.ansible;
-
+  ansible  = python2Packages.ansible2;
   ansible2 = python2Packages.ansible2;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
@@ -8401,7 +8400,7 @@ in
 
   libpfm = callPackage ../development/libraries/libpfm { };
 
-  libpqxx = callPackage ../development/libraries/libpqxx { 
+  libpqxx = callPackage ../development/libraries/libpqxx {
     gnused = gnused_422;
   };
 
