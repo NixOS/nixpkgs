@@ -85,17 +85,8 @@ in stdenv.mkDerivation (rec {
 } // stdenv.lib.optionalAttrs (cross != null) {
   name = "${cross.config}-ghc-${version}";
 
-  patches = [ ./ios-linker.patch ];
-
   preConfigure = commonPreConfigure + ''
-    sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = quick-cross|' mk/build.mk.sample > mk/build.mk
-    echo "GhcRtsCcOpts = -glldb -Og" >> mk/build.mk
-  '';
-
-  postUnpack = ''
-    mkdir -p $out/nix-support
-    mv $sourceRoot $out/nix-support/source
-    sourceRoot=$out/nix-support/source
+    sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
   '';
 
   configureFlags = [
@@ -111,8 +102,6 @@ in stdenv.mkDerivation (rec {
   buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
 
   dontSetConfigureCross = true;
-
-  dontStrip = true;
 
   passthru = {
     inherit bootPkgs cross;
