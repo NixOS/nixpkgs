@@ -17597,6 +17597,8 @@ in
     nix-prefetch-zip
     nix-prefetch-scripts;
 
+  nix-update-source = callPackage ../tools/package-management/nix-update-source {};
+
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { };
