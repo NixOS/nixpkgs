@@ -11091,7 +11091,9 @@ in
     inherit (perlPackages) SGMLSpm;
   };
 
-  iptables = callPackage ../os-specific/linux/iptables { };
+  iptables = callPackage ../os-specific/linux/iptables {
+    flex = flex_2_5_35;
+  };
 
   ipset = callPackage ../os-specific/linux/ipset { };
 
