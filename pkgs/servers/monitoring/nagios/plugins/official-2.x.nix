@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssh }:
+{ stdenv, fetchurl, openssh, openssl }:
 
 stdenv.mkDerivation rec {
   name = "nagios-plugins-${version}";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   postInstall = "ln -s libexec $out/bin";
 
   # !!! make openssh a runtime dependency only
-  buildInputs = [ openssh ];
+  buildInputs = [ openssh openssl ];
 
   meta = {
     description = "Official plugins for Nagios";
