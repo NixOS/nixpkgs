@@ -46,7 +46,12 @@ with lib;
       '';
 
     # Allow sshd to be started manually through "start sshd".
-    services.openssh.enable = true;
+    services.openssh = {
+      enable = true;
+      # Allow password login to the installation, if the user sets a password via "passwd"
+      # It is safe as root doesn't have a password by default and SSH is disabled by default
+      permitRootLogin = "yes";
+    };
     systemd.services.sshd.wantedBy = mkOverride 50 [];
 
     # Enable wpa_supplicant, but don't start it by default.
