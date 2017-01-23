@@ -45,7 +45,7 @@
     '';
   };
 in {
-  cc = runCommand "${prefix}-cc" {} ''
+  cc = runCommand "${prefix}-cc" { passthru = { inherit sdkType sdkVer sdk; }; } ''
     mkdir -p $out/bin
     ln -sv ${wrapper}/bin/clang $out/bin/${prefix}-cc
     mkdir -p $out/nix-support
