@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, libseccomp, fetchpatch, autoreconfHook, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
+{ lib, stdenv, fetchurl, pkgconfig, zlib, fetchpatch, shadow
+, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
 
 stdenv.mkDerivation rec {
   name = "util-linux-${version}";
@@ -12,22 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "1rzrmdrz51p9sy7vlw5qmj8pmqazm7hgcch5yq242mkvrikyln9c";
   };
 
-  patches = [
-    ./rtcwake-search-PATH-for-shutdown.patch
-    (fetchpatch {
-      name = "CVE-2016-2779.diff";
-      url = https://github.com/karelzak/util-linux/commit/8e4925016875c6a4f2ab4f833ba66f0fc57396a2.patch;
-      sha256 = "0kmigkq4s1b1ijrq8vcg2a5cw4qnm065m7cb1jn1q1f4x99ycy60";
-  })];
+  patches = [ ./rtcwake-search-PATH-for-shutdown.patch ];
 
   outputs = [ "bin" "dev" "out" "man" ];
 
-  #FIXME: make it also work on non-nixos?
   postPatch = ''
-    # Substituting store paths would create a circular dependency on systemd
     substituteInPlace include/pathnames.h \
-      --replace "/bin/login" "/run/current-system/sw/bin/login" \
-      --replace "/sbin/shutdown" "/run/current-system/sw/bin/shutdown"
+      --replace "/bin/login" "${shadow}/bin/login"
   '';
 
   crossAttrs = {
@@ -54,11 +46,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
-  # autoreconfHook is required for CVE-2016-2779
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  # libseccomp is required for CVE-2016-2779
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs =
-    [ zlib pam libseccomp ]
+    [ zlib pam ]
     ++ lib.optional (ncurses != null) ncurses
     ++ lib.optional (systemd != null) systemd
     ++ lib.optional (perl != null) perl;

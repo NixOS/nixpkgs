@@ -2953,6 +2953,8 @@ in
 
   ndppd = callPackage ../applications/networking/ndppd { };
 
+  neofetch = callPackage ../tools/misc/neofetch { };
+
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
   nestopia = callPackage ../misc/emulators/nestopia { };
@@ -6504,6 +6506,8 @@ in
   minizinc = callPackage ../development/tools/minizinc { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
+
+  msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
   msitools = callPackage ../development/tools/misc/msitools { };
 

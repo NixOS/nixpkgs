@@ -3,10 +3,10 @@
 }:
 
 stdenv.mkDerivation rec {
-    name = "udunits-2.2.21";
+    name = "udunits-2.2.23";
     src = fetchurl {
         url = "ftp://ftp.unidata.ucar.edu/pub/udunits/${name}.tar.gz";
-        sha256 = "0z8sglqc3d409cylqln53jrv97rw7npyh929y2xdvbc40kzzaxcv";
+        sha256 = "0ya93jrv8qzfkdj77grl4dpyb0ap4jccmqx3rkkgaggnklhjfwkr";
     };
 
     nativeBuildInputs = [ bison flex file ];
