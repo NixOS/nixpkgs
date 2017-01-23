@@ -59,14 +59,20 @@ stdenv.mkDerivation rec {
     });
 
   preConfigure =
+    # By default ippicv gets downloaded by cmake each time opencv is build. See:
+    # https://github.com/opencv/opencv/blob/3.1.0/3rdparty/ippicv/downloader.cmake
+    # Fortunately cmake doesn't download ippicv if it's already there.
+    # So to prevent repeated downloads we store it in the nix store
+    # and create a symbolic link to it.
     let version  = "20151201";
         md5      = "808b791a6eac9ed78d32a7666804320e";
         sha256   = "1nph0w0pdcxwhdb5lxkb8whpwd9ylvwl97hn0k425amg80z86cs3";
+        rev      = "81a676001ca8075ada498583e4166079e5744668";
         platform = if stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux" then "linux"
                    else throw "ICV is not available for this platform (or not yet supported by this package)";
         name = "ippicv_${platform}_${version}.tgz";
         ippicv = fetchurl {
-          url = "https://github.com/Itseez/opencv_3rdparty/raw/ippicv/master_${version}/ippicv/${name}";
+          url = "https://raw.githubusercontent.com/opencv/opencv_3rdparty/${rev}/ippicv/${name}";
           inherit sha256;
         };
         dir = "3rdparty/ippicv/downloads/${platform}-${md5}";
