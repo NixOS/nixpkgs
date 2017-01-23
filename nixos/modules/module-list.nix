@@ -427,6 +427,7 @@
   ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
   ./services/networking/powerdns.nix
+  ./services/networking/pdns-recursor.nix
   ./services/networking/pptpd.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix

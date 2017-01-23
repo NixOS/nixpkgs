@@ -10273,7 +10273,7 @@ in
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
-  #dnschain = callPackage ../servers/dnschain { };
+  dnschain = callPackage ../servers/dnschain { };
 
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
@@ -11671,6 +11671,8 @@ in
   policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
 
   powerdns = callPackage ../servers/dns/powerdns { };
+
+  pdns-recursor = callPackage ../servers/dns/pdns-recursor { };
 
   powertop = callPackage ../os-specific/linux/powertop { };
 
