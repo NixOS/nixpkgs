@@ -59,22 +59,21 @@ stdenv.mkDerivation rec {
     });
 
   preConfigure =
-    let ippicvVersion = "20151201";
-        ippicvPlatform = if stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux" then "linux"
-                         else throw "ICV is not available for this platform (or not yet supported by this package)";
-        ippicvHash = if ippicvPlatform == "linux" then "1nph0w0pdcxwhdb5lxkb8whpwd9ylvwl97hn0k425amg80z86cs3"
-                     else throw "ippicvHash: impossible";
-
-        ippicvName = "ippicv_${ippicvPlatform}_${ippicvVersion}.tgz";
-        ippicvArchive = "3rdparty/ippicv/downloads/linux-${ippicvHash}/${ippicvName}";
+    let version  = "20151201";
+        md5      = "808b791a6eac9ed78d32a7666804320e";
+        sha256   = "1nph0w0pdcxwhdb5lxkb8whpwd9ylvwl97hn0k425amg80z86cs3";
+        platform = if stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux" then "linux"
+                   else throw "ICV is not available for this platform (or not yet supported by this package)";
+        name = "ippicv_${platform}_${version}.tgz";
         ippicv = fetchurl {
-          url = "https://github.com/Itseez/opencv_3rdparty/raw/ippicv/master_${ippicvVersion}/ippicv/${ippicvName}";
-          sha256 = ippicvHash;
+          url = "https://github.com/Itseez/opencv_3rdparty/raw/ippicv/master_${version}/ippicv/${name}";
+          inherit sha256;
         };
+        dir = "3rdparty/ippicv/downloads/${platform}-${md5}";
     in lib.optionalString enableIpp
       ''
-        mkdir -p $(dirname ${ippicvArchive})
-        ln -s ${ippicv}    ${ippicvArchive}
+        mkdir -p "${dir}"
+        ln -s "${ippicv}" "${dir}/${name}"
       '';
 
   buildInputs =
