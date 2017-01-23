@@ -45,7 +45,7 @@ with lib;
             "Type `systemctl start display-manager' to\nstart the graphical user interface."}
       '';
 
-    # Allow sshd to be started manually through "start sshd".
+    # Allow sshd to be started manually through "systemctl start sshd".
     services.openssh = {
       enable = true;
       # Allow password login to the installation, if the user sets a password via "passwd"
