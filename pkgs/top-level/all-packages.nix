@@ -16426,9 +16426,7 @@ in
 
   warmux = callPackage ../games/warmux { };
 
-  warsow = callPackage ../games/warsow {
-    libjpeg = libjpeg62;
-  };
+  warsow = callPackage ../games/warsow { };
 
   warzone2100 = qt5.callPackage ../games/warzone2100 { };
 
