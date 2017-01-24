@@ -86,6 +86,10 @@ in
 
   config = {
 
+    warnings = [
+      "NixOS deprecated"
+    ];
+
     system = {
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
