@@ -675,8 +675,38 @@ self: super: {
     '';
   }));
 
-  # Requires optparse-applicative 0.13.0.0
+  # Packages of the diagrams ecosystem that require:
+  #   diagrams-core ==1.4.*
+  #   diagrams-lib ==1.4.*
+  #   optparse-applicative ==0.13.*
+  diagrams_1_4 = super.diagrams_1_4.overrideScope (self: super: {
+    diagrams-contrib = self.diagrams-contrib_1_4_0_1;
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
+    diagrams-svg = self.diagrams-svg_1_4_1;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+  diagrams-contrib_1_4_0_1 = super.diagrams-contrib_1_4_0_1.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
+  });
+  diagrams-lib_1_4_0_1 = super.diagrams-lib_1_4_0_1.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
   diagrams-pgf = super.diagrams-pgf.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+  diagrams-rasterific_1_4 = super.diagrams-rasterific_1_4.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+  diagrams-svg_1_4_1 = super.diagrams-svg_1_4_1.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
     optparse-applicative = self.optparse-applicative_0_13_0_0;
   });
 
