@@ -14728,9 +14728,9 @@ with pkgs;
 
   quiterss = qt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
-  quodlibet = callPackage ../applications/audio/quodlibet { };
+  quodlibet-without-gst-plugins = callPackage ../applications/audio/quodlibet { };
 
-  quodlibet-with-gst-plugins = callPackage ../applications/audio/quodlibet {
+  quodlibet = callPackage ../applications/audio/quodlibet {
     withGstPlugins = true;
     gst_plugins_bad = null;
   };
