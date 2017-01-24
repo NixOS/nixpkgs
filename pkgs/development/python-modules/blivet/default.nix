@@ -1,6 +1,8 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, python, isPy3k
 , libselinux, libblockdev, libbytesize, pyparted, pyudev
 , coreutils, utillinux, multipath-tools, lsof
+# Test dependencies
+, pocketlint, mock, writeScript
 }:
 
 buildPythonPackage rec {
@@ -70,6 +72,8 @@ buildPythonPackage rec {
       blivet/formats/__init__.py tests/formats_test/methods_test.py
   '';
 
+  checkInputs = [ pocketlint mock ];
+
   propagatedBuildInputs = [
     (libselinux.override { enablePython = true; inherit python; })
     libblockdev libbytesize pyparted pyudev
@@ -80,8 +84,38 @@ buildPythonPackage rec {
     cp -Rd tests "$tests/"
   '';
 
-  # Tests are in nixos/tests/blivet.nix.
-  doCheck = false;
+  # Real tests are in nixos/tests/blivet.nix, just run pylint here.
+  checkPhase = let
+    inherit (stdenv.lib)
+      intersperse concatLists concatMapStringsSep escapeShellArg;
+
+    # Create find arguments that ignore a certain path.
+    mkIgnorePath = path: [ "-path" "./${path}" "-prune" ];
+
+    # Match files that have "python" in their shebangs
+    matchPythonScripts = writeScript "match-python-scripts.sh" ''
+      #!${stdenv.shell}
+      head -n1 "$1" | grep -q '^#!.*python'
+    '';
+
+    # A list of arguments we're going to find in order to accumulate all the
+    # files we want to test. This replicates the default behaviour of
+    # pocketlint but with a few additional paths we want to have ignored.
+    findArgs = concatLists (intersperse ["-o"] (map mkIgnorePath [
+      # A set of paths we don't want to be tested.
+      "translation-canary" "build" "dist" "scripts" "nix_run_setup.py"
+    ])) ++ [
+      "-o" "-name" "*.py" "-exec" "grep" "-qFx" "# pylint: skip-file" "{}" ";"
+      "-o" "-type" "f" "("
+        # These searches for files we actually *want* to match:
+        "-name" "*.py" "-o" "-exec" matchPythonScripts "{}" ";"
+      ")"
+      # The actual test runner:
+      "-exec" python.interpreter "tests/pylint/runpylint.py"
+                                 # Pylint doesn't seem to pick up C modules:
+                                 "--extension-pkg-whitelist=_ped" "{}" "+"
+    ];
+  in "find ${concatMapStringsSep " " escapeShellArg findArgs}";
 
   meta = with stdenv.lib; {
     homepage = "https://fedoraproject.org/wiki/Blivet";
