@@ -524,6 +524,8 @@ in
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  kwm = callPackage ../os-specific/darwin/kwm { };
+
   khd = callPackage ../os-specific/darwin/khd {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
