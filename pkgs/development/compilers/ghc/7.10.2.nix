@@ -1,20 +1,27 @@
-{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
+{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, hscolour
+
+  # If enabled GHC will be build with the GPL-free but slower integer-simple
+  # library instead of the faster but GPLed integer-gmp library.
+, enableIntegerSimple ? false, gmp
 }:
 
 let
   inherit (bootPkgs) ghc;
 
   buildMK = ''
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp.out}/lib"
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp.dev}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses.dev}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses.out}/lib"
     ${stdenv.lib.optionalString stdenv.isDarwin ''
       libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-includes="${libiconv}/include"
       libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-libraries="${libiconv}/lib"
     ''}
-  '';
+  '' + (if enableIntegerSimple then ''
+    INTEGER_LIBRARY=integer-simple
+  '' else ''
+    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp.out}/lib"
+    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp.dev}/include"
+  '');
 
 in
 
@@ -46,8 +53,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--datadir=$doc/share/doc/ghc"
+  ] ++ stdenv.lib.optional (! enableIntegerSimple) [
+    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ];
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
