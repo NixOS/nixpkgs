@@ -18,7 +18,7 @@ index a39a5fb..8d4c646 100644
      pass
  
 diff --git a/blivet/formats/fs.py b/blivet/formats/fs.py
-index 67517d6..77362cc 100644
+index 67517d6..b429a61 100644
 --- a/blivet/formats/fs.py
 +++ b/blivet/formats/fs.py
 @@ -38,9 +38,11 @@ from ..tasks import fsreadlabel
@@ -117,8 +117,8 @@ index 67517d6..77362cc 100644
 +        except FSWriteUUIDError as e:
 +            log.warning("Choosing not to apply UUID (%s) during"
 +                        " creation of filesystem %s. UUID format"
-+                        " is unacceptable for this filesystem."
-+                        % (self.new_uuid, self.type))
++                        " is unacceptable for this filesystem.",
++                        self.new_uuid, self.type)
          except FSError as e:
              raise FormatCreateError(e, self.device)
 +        else:
@@ -356,7 +356,7 @@ index 7811be1..4a134d7 100644
  XFSDB_APP = application("xfs_db")
  XFSFREEZE_APP = application("xfs_freeze")
 diff --git a/blivet/tasks/fsmkfs.py b/blivet/tasks/fsmkfs.py
-index d0da5b2..4cda126 100644
+index d0da5b2..c5ceff8 100644
 --- a/blivet/tasks/fsmkfs.py
 +++ b/blivet/tasks/fsmkfs.py
 @@ -24,7 +24,7 @@ import shlex
@@ -376,13 +376,8 @@ index d0da5b2..4cda126 100644
  
  
  @add_metaclass(abc.ABCMeta)
-@@ -47,8 +48,21 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
-     label_option = abc.abstractproperty(
-         doc="Option for setting a filesystem label.")
+@@ -49,6 +50,16 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
  
-+    get_uuid_args = abc.abstractproperty(
-+        doc="Method to return arguments for setting a filesystem UUID.")
-+
      args = abc.abstractproperty(doc="options for creating filesystem")
  
 +    @abc.abstractmethod
@@ -398,7 +393,7 @@ index d0da5b2..4cda126 100644
      # IMPLEMENTATION methods
  
      @property
-@@ -61,6 +75,15 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+@@ -61,6 +72,15 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
          return self.label_option is not None
  
      @property
@@ -414,7 +409,7 @@ index d0da5b2..4cda126 100644
      def _label_options(self):
          """ Any labeling options that a particular filesystem may use.
  
-@@ -80,13 +103,33 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+@@ -80,13 +100,33 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
          else:
              raise FSWriteLabelError("Choosing not to apply label (%s) during creation of filesystem %s. Label format is unacceptable for this filesystem." % (self.fs.label, self.fs.type))
  
@@ -449,7 +444,7 @@ index d0da5b2..4cda126 100644
          """
          options = options or []
  
-@@ -94,25 +137,33 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+@@ -94,25 +134,33 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
              raise FSError("options parameter must be a list.")
  
          label_options = self._label_options if label else []
@@ -487,7 +482,7 @@ index d0da5b2..4cda126 100644
          """
          # pylint: disable=arguments-differ
          error_msgs = self.availability_errors
-@@ -120,8 +171,9 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
+@@ -120,8 +168,9 @@ class FSMkfs(task.BasicApplication, FSMkfsTask):
              raise FSError("\n".join(error_msgs))
  
          options = options or []
@@ -498,7 +493,7 @@ index d0da5b2..4cda126 100644
          except OSError as e:
              raise FSError(e)
  
-@@ -133,6 +185,9 @@ class BTRFSMkfs(FSMkfs):
+@@ -133,6 +182,9 @@ class BTRFSMkfs(FSMkfs):
      ext = availability.MKFS_BTRFS_APP
      label_option = None
  
@@ -508,7 +503,7 @@ index d0da5b2..4cda126 100644
      @property
      def args(self):
          return []
-@@ -144,6 +199,9 @@ class Ext2FSMkfs(FSMkfs):
+@@ -144,6 +196,9 @@ class Ext2FSMkfs(FSMkfs):
  
      _opts = []
  
@@ -518,7 +513,7 @@ index d0da5b2..4cda126 100644
      @property
      def args(self):
          return self._opts + (["-T", self.fs.fsprofile] if self.fs.fsprofile else [])
-@@ -161,6 +219,9 @@ class FATFSMkfs(FSMkfs):
+@@ -161,6 +216,9 @@ class FATFSMkfs(FSMkfs):
      ext = availability.MKDOSFS_APP
      label_option = "-n"
  
@@ -528,7 +523,7 @@ index d0da5b2..4cda126 100644
      @property
      def args(self):
          return []
-@@ -169,6 +230,7 @@ class FATFSMkfs(FSMkfs):
+@@ -169,6 +227,7 @@ class FATFSMkfs(FSMkfs):
  class GFS2Mkfs(FSMkfs):
      ext = availability.MKFS_GFS2_APP
      label_option = None
@@ -536,7 +531,7 @@ index d0da5b2..4cda126 100644
  
      @property
      def args(self):
-@@ -178,6 +240,7 @@ class GFS2Mkfs(FSMkfs):
+@@ -178,6 +237,7 @@ class GFS2Mkfs(FSMkfs):
  class HFSMkfs(FSMkfs):
      ext = availability.HFORMAT_APP
      label_option = "-l"
@@ -544,7 +539,7 @@ index d0da5b2..4cda126 100644
  
      @property
      def args(self):
-@@ -187,6 +250,7 @@ class HFSMkfs(FSMkfs):
+@@ -187,6 +247,7 @@ class HFSMkfs(FSMkfs):
  class HFSPlusMkfs(FSMkfs):
      ext = availability.MKFS_HFSPLUS_APP
      label_option = "-v"
@@ -552,7 +547,7 @@ index d0da5b2..4cda126 100644
  
      @property
      def args(self):
-@@ -196,6 +260,7 @@ class HFSPlusMkfs(FSMkfs):
+@@ -196,6 +257,7 @@ class HFSPlusMkfs(FSMkfs):
  class JFSMkfs(FSMkfs):
      ext = availability.MKFS_JFS_APP
      label_option = "-L"
@@ -560,7 +555,7 @@ index d0da5b2..4cda126 100644
  
      @property
      def args(self):
-@@ -205,6 +270,7 @@ class JFSMkfs(FSMkfs):
+@@ -205,6 +267,7 @@ class JFSMkfs(FSMkfs):
  class NTFSMkfs(FSMkfs):
      ext = availability.MKNTFS_APP
      label_option = "-L"
@@ -568,7 +563,7 @@ index d0da5b2..4cda126 100644
  
      @property
      def args(self):
-@@ -215,6 +281,9 @@ class ReiserFSMkfs(FSMkfs):
+@@ -215,6 +278,9 @@ class ReiserFSMkfs(FSMkfs):
      ext = availability.MKREISERFS_APP
      label_option = "-l"
  
@@ -578,7 +573,7 @@ index d0da5b2..4cda126 100644
      @property
      def args(self):
          return ["-f", "-f"]
-@@ -224,6 +293,9 @@ class XFSMkfs(FSMkfs):
+@@ -224,6 +290,9 @@ class XFSMkfs(FSMkfs):
      ext = availability.MKFS_XFS_APP
      label_option = "-L"
  
@@ -588,7 +583,7 @@ index d0da5b2..4cda126 100644
      @property
      def args(self):
          return ["-f"]
-@@ -234,3 +306,7 @@ class UnimplementedFSMkfs(task.UnimplementedTask, FSMkfsTask):
+@@ -234,3 +303,7 @@ class UnimplementedFSMkfs(task.UnimplementedTask, FSMkfsTask):
      @property
      def can_label(self):
          return False
@@ -598,13 +593,12 @@ index d0da5b2..4cda126 100644
 +        return False
 diff --git a/blivet/tasks/fsuuid.py b/blivet/tasks/fsuuid.py
 new file mode 100644
-index 0000000..b18e404
+index 0000000..5beb43a
 --- /dev/null
 +++ b/blivet/tasks/fsuuid.py
 @@ -0,0 +1,85 @@
 +import abc
 +
-+from string import hexdigits
 +from six import add_metaclass
 +
 +
@@ -639,7 +633,7 @@ index 0000000..b18e404
 +        if len(chunks) != 5:
 +            return False
 +        chunklens = [len(chunk) for chunk in chunks
-+                     if all(char in hexdigits for char in chunk)]
++                     if all(char in "0123456789abcdef" for char in chunk)]
 +        return chunklens == [8, 4, 4, 4, 12]
 +
 +
@@ -654,7 +648,8 @@ index 0000000..b18e404
 +    def uuid_format_ok(cls, uuid):
 +        if len(uuid) != 9 or uuid[4] != '-':
 +            return False
-+        return all(char in hexdigits.upper() for char in (uuid[:4] + uuid[5:]))
++        return all(char in "0123456789ABCDEF"
++                   for char in (uuid[:4] + uuid[5:]))
 +
 +
 +class JFSUUID(FSUUID):
@@ -686,7 +681,7 @@ index 0000000..b18e404
 +    def uuid_format_ok(cls, uuid):
 +        if len(uuid) != 16:
 +            return False
-+        return all(char in hexdigits.upper() for char in uuid)
++        return all(char in "0123456789ABCDEF" for char in uuid)
 diff --git a/blivet/tasks/fswriteuuid.py b/blivet/tasks/fswriteuuid.py
 new file mode 100644
 index 0000000..c780839
@@ -904,19 +899,20 @@ index 0000000..aae3b1c
 +        with self.assertRaisesRegex(FSError, "bad UUID format"):
 +            an_fs.write_uuid()
 diff --git a/tests/formats_test/methods_test.py b/tests/formats_test/methods_test.py
-index 9df7415..ec86baf 100644
+index 9df7415..5659216 100644
 --- a/tests/formats_test/methods_test.py
 +++ b/tests/formats_test/methods_test.py
-@@ -300,7 +300,11 @@ class FSMethodsTestCase(FormatMethodsTestCase):
+@@ -300,7 +300,12 @@ class FSMethodsTestCase(FormatMethodsTestCase):
          with patch.object(self.format, "_mkfs"):
              self.format.exists = False
              self.format.create()
 -            self.format._mkfs.do_task.assert_called_with(options=None, label=not self.format.relabels())  # pylint: disable=no-member
++            # pylint: disable=no-member
 +            self.format._mkfs.do_task.assert_called_with(
 +                options=None,
 +                label=not self.format.relabels(),
 +                set_uuid=self.format.can_assign_uuid()
-+            )  # pylint: disable=no-member
++            )
  
      def _test_setup_backend(self):
          with patch.object(self.format, "_mount"):
