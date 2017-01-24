@@ -32,8 +32,10 @@ let
 in
 
 {
-  # These `nativeDrv`s should be identical to their vanilla ones --- cross
-  # compiling should not affect the native derivation.
+  # These derivations from a cross package set's `buildPackages` should be
+  # identical to their vanilla equivalents --- none of these package should
+  # observe the target platform which is the only difference between those
+  # package sets.
   ensureUnaffected = let
     # Absurd values are fine here, as we are not building anything. In fact,
     # there probably a good idea to try to be "more parametric" --- i.e. avoid
@@ -47,8 +49,12 @@ in
     # good idea lest there be some irrelevant pass-through debug attrs that
     # cause false negatives.
     testEqualOne = path: system: let
-      f = attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
-    in assert f { inherit system; } == f { inherit system crossSystem; }; true;
+      f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
+    in assert
+        f path { inherit system; }
+        ==
+        f (["buildPackages"] ++ path) { inherit system crossSystem; };
+      true;
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
 

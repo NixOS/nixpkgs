@@ -1,10 +1,11 @@
 { lib
-, system, platform, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays
 }:
 
 assert crossSystem == null;
 
 let
+  inherit (localSystem) system platform;
 
   shell =
     if system == "i686-freebsd" || system == "x86_64-freebsd" then "/usr/local/bin/bash"
@@ -134,7 +135,10 @@ in
 
   # First build a stdenv based only on tools outside the store.
   (prevStage: {
-    inherit system crossSystem platform config overlays;
+    buildPlatform = localSystem;
+    hostPlatform = localSystem;
+    targetPlatform = localSystem;
+    inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage) cc fetchurl;
     } // { inherit (prevStage) fetchurl; };
@@ -143,7 +147,10 @@ in
   # Using that, build a stdenv that adds the ‘xz’ command (which most systems
   # don't have, so we mustn't rely on the native environment providing it).
   (prevStage: {
-    inherit system crossSystem platform config overlays;
+    buildPlatform = localSystem;
+    hostPlatform = localSystem;
+    targetPlatform = localSystem;
+    inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage.stdenv) cc fetchurl;
       extraPath = [ prevStage.xz ];

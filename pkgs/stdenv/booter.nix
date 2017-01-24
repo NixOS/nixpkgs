@@ -57,12 +57,17 @@ stageFuns: let
   # debugging purposes.
   folder = stageFun: finalSoFar: let
     args = stageFun finalSoFar;
-    stdenv = args.stdenv // {
-      # For debugging
-      __bootPackages = finalSoFar;
+    args' = args // {
+      stdenv = args.stdenv // {
+        # For debugging
+        __bootPackages = finalSoFar;
+      };
     };
-    args' = args // { inherit stdenv; };
   in
-    (if args.__raw or false then lib.id else allPackages) args';
+    if args.__raw or false
+    then args'
+    else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
+      buildPackages = if args.selfBuild or true then null else finalSoFar;
+    });
 
 in lib.lists.fold folder {} withAllowCustomOverrides

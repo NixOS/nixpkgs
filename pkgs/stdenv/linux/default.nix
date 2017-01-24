@@ -4,21 +4,23 @@
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
 { lib
-, system, platform, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays
 
-, bootstrapFiles ?
-    if system == "i686-linux" then import ./bootstrap-files/i686.nix
-    else if system == "x86_64-linux" then import ./bootstrap-files/x86_64.nix
-    else if system == "armv5tel-linux" then import ./bootstrap-files/armv5tel.nix
-    else if system == "armv6l-linux" then import ./bootstrap-files/armv6l.nix
-    else if system == "armv7l-linux" then import ./bootstrap-files/armv7l.nix
-    else if system == "mips64el-linux" then import ./bootstrap-files/loongson2f.nix
-    else abort "unsupported platform for the pure Linux stdenv"
+, bootstrapFiles ? { # switch
+    "i686-linux" = import ./bootstrap-files/i686.nix;
+    "x86_64-linux" = import ./bootstrap-files/x86_64.nix;
+    "armv5tel-linux" = import ./bootstrap-files/armv5tel.nix;
+    "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
+    "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
+    "mips64el-linux" = import ./bootstrap-files/loongson2f.nix;
+  }.${localSystem.system}
+    or (abort "unsupported platform for the pure Linux stdenv")
 }:
 
 assert crossSystem == null;
 
 let
+  inherit (localSystem) system platform;
 
   commonPreHook =
     ''
@@ -91,7 +93,10 @@ let
       };
 
     in {
-      inherit system platform crossSystem config overlays;
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      inherit config overlays;
       stdenv = thisStdenv;
     };
 
@@ -246,7 +251,10 @@ in
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
   (prevStage: {
-    inherit system crossSystem platform config overlays;
+    buildPlatform = localSystem;
+    hostPlatform = localSystem;
+    targetPlatform = localSystem;
+    inherit config overlays;
     stdenv = import ../generic rec {
       inherit system config;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl
+{ stdenv, fetchurl, buildPackages, perl
 , withCryptodev ? false, cryptodevHeaders
 , enableSSL2 ? false }:
 
@@ -76,7 +76,7 @@ let
 
     postFixup = ''
       # Check to make sure the main output doesn't depend on perl
-      if grep -r '${perl}' $out; then
+      if grep -r '${buildPackages.perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1
       fi

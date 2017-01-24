@@ -3,7 +3,8 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba
 , gccCrossStageStatic, gccCrossStageFinal
-, forceNativeDrv, forceSystem, newScope, platform, config, crossSystem
+, forcedNativePackages, forceSystem, newScope, platform, config
+, targetPlatform, buildPlatform
 , overrides ? {} }:
 
 with args;
@@ -12,25 +13,25 @@ let
   callPackage = newScope gnu;
 
   gnu = {
-    hurdCross = forceNativeDrv (callPackage ./hurd {
+    hurdCross = forcedNativePackages.callPackage ./hurd {
       inherit fetchgit stdenv autoconf libtool texinfo
         glibcCross hurdPartedCross;
       inherit (gnu) machHeaders mig;
       libuuid = libuuid.crossDrv;
       automake = automake111x;
       headersOnly = false;
-      cross = assert crossSystem != null; crossSystem;
+      cross = assert targetPlatform != buildPlatform; targetPlatform;
       gccCross = gccCrossStageFinal;
-    });
+    };
 
-    hurdCrossIntermediate = forceNativeDrv (callPackage ./hurd {
+    hurdCrossIntermediate = forcedNativePackages.callPackage ./hurd {
       inherit fetchgit stdenv autoconf libtool texinfo glibcCross;
       inherit (gnu) machHeaders mig;
       hurdPartedCross = null;
       libuuid = null;
       automake = automake111x;
       headersOnly = false;
-      cross = assert crossSystem != null; crossSystem;
+      cross = assert targetPlatform != buildPlatform; targetPlatform;
 
       # The "final" GCC needs glibc and the Hurd libraries (libpthread in
       # particular) so we first need an intermediate Hurd built with the
@@ -42,7 +43,7 @@ let
       # libshouldbeinlibc.
       buildTarget = "libihash libstore libshouldbeinlibc";
       installTarget = "libihash-install libstore-install libshouldbeinlibc-install";
-    });
+    };
 
     hurdHeaders = callPackage ./hurd {
       automake = automake111x;
@@ -58,13 +59,13 @@ let
       hurd = null;
     };
 
-    libpthreadCross = forceNativeDrv (callPackage ./libpthread {
+    libpthreadCross = forcedNativePackages.callPackage ./libpthread {
       inherit fetchgit stdenv autoconf automake libtool glibcCross;
       inherit (gnu) machHeaders hurdHeaders;
       hurd = gnu.hurdCrossIntermediate;
       gccCross = gccCrossStageStatic;
-      cross = assert crossSystem != null; crossSystem;
-    });
+      cross = assert targetPlatform != buildPlatform; targetPlatform;
+    };
 
     # In theory GNU Mach doesn't have to be cross-compiled.  However, since it
     # has to be built for i586 (it doesn't work on x86_64), one needs a cross
