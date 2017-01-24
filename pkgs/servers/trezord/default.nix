@@ -9,8 +9,9 @@ in
 stdenv.mkDerivation rec {
   name = "trezord-${version}";
 
-  src = fetchgit {
-    url    = "https://github.com/trezor/trezord";
+  src = fetchFromGitHub {
+    owner  = "trezor";
+    repo   = "trezord";
     rev    = "refs/tags/v${version}";
     sha256 = "1606j5cfngryk4q21yiga1zvc3zpx4q8vqn6ljrvr679hpvlwni4";
   };
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "TREZOR Bridge daemon for TREZOR bitcoin hardware wallet";
     homepage = https://mytrezor.com;
     license = licenses.gpl3;
-    maintainers = [];
+    maintainers = with stdenv.lib.maintainers; [ canndrew jb55 ];
     platforms = platforms.linux;
   };
 
