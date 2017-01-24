@@ -7,6 +7,9 @@ let param = {
   "4.03.0" = {
      version = "4.03+1";
      sha256 = "1f2ndch6f1m4fgnxsjb94qbpwjnjgdlya6pard44y6n0dqxi1wsq"; };
+  "4.04.0" = {
+     version = "4.04+1";
+     sha256 = "1ad7rygqjxrc1im95gw9lp8q83nhdaf383f2808f1p63yl42xm7k"; };
   }."${ocaml.version}";
 in
 

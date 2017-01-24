@@ -374,6 +374,8 @@ let
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
+    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
+
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
@@ -727,7 +729,9 @@ in rec
 
   ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.03.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_03;
+  ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { }) (self: super: { });
+
+  ocamlPackages_latest = ocamlPackages_4_04;
 
   ocamlPackages = ocamlPackages_4_01_0;
 }
