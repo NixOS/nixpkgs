@@ -24,7 +24,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
-  version = "8.15.4";
+  version = "8.16.1";
 
   buildInputs = [ env ruby bundler tzdata git nodejs procps ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "1cd6dl8niy1xxifxdrm1kwm8qhy4x4zyvwdsb722kr136rwnxm84";
+    sha256 = "0c6cf8p1xx21xxmlpldhxs0i01myd4ddpjl7vfv932qmw9bw4in7";
   };
 
   patches = [
