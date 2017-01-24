@@ -8,8 +8,8 @@ assert rename -> (stdenv != null && newBundleId != null && iosMobileProvisioning
 let
   src = fetchgit {
     url = https://github.com/appcelerator/KitchenSink.git;
-    rev = "6e9f509069fafdebfa78e15b2d14f20a27a485cc";
-    sha256 = "049cf0d9y0ivhsi35slx621z0wry4lqf76hw0ksb315i2713v347";
+    rev = "ec9edebf35030f61368000a8a9071dd7a0773884";
+    sha256 = "1j41w4nhcbl40x550pjgabqrach80f9dybv7ya32771wnw2000iy";
   };
   
   # Rename the bundle id to something else
