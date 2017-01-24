@@ -30,7 +30,7 @@ let
         # When updating versions/hashes, ALWAYS use the official
         # version; we use this mirror only because upstream removes
         # source files immediately upon releasing a new version ...
-        "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch"
+        "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${kver}/${name}.patch"
       ];
       inherit sha256;
     };
