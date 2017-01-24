@@ -2,7 +2,7 @@
 , libselinux, libblockdev, libbytesize, pyparted, pyudev
 , coreutils, utillinux, multipath-tools, lsof
 # Test dependencies
-, pocketlint, mock, writeScript
+, pocketlint, pep8, mock, writeScript
 }:
 
 buildPythonPackage rec {
@@ -72,7 +72,7 @@ buildPythonPackage rec {
       blivet/formats/__init__.py tests/formats_test/methods_test.py
   '';
 
-  checkInputs = [ pocketlint mock ];
+  checkInputs = [ pocketlint pep8 mock ];
 
   propagatedBuildInputs = [
     (libselinux.override { enablePython = true; inherit python; })
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     cp -Rd tests "$tests/"
   '';
 
-  # Real tests are in nixos/tests/blivet.nix, just run pylint here.
+  # Real tests are in nixos/tests/blivet.nix, just run pylint and pep8 here.
   checkPhase = let
     inherit (stdenv.lib)
       intersperse concatLists concatMapStringsSep escapeShellArg;
@@ -115,7 +115,10 @@ buildPythonPackage rec {
                                  # Pylint doesn't seem to pick up C modules:
                                  "--extension-pkg-whitelist=_ped" "{}" "+"
     ];
-  in "find ${concatMapStringsSep " " escapeShellArg findArgs}";
+  in ''
+    find ${concatMapStringsSep " " escapeShellArg findArgs}
+    pep8 --ignore=E501,E402,E731 blivet/ tests/ examples/
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://fedoraproject.org/wiki/Blivet";
