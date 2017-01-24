@@ -8309,10 +8309,6 @@ in
   libjpeg_drop = callPackage ../development/libraries/libjpeg-drop { };
   libjpeg = if stdenv.isLinux then libjpeg_turbo else libjpeg_original; # some problems, both on FreeBSD and Darwin
 
-  libjpeg62 = callPackage ../development/libraries/libjpeg/62.nix {
-    libtool = libtool_1_5;
-  };
-
   libjreen = callPackage ../development/libraries/libjreen { };
 
   libjson_rpc_cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
