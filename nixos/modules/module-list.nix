@@ -212,6 +212,7 @@
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
+  ./services/logging/journalbeat.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
@@ -332,6 +333,7 @@
   ./services/monitoring/telegraf.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
+  ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/cachefilesd.nix
@@ -427,6 +429,7 @@
   ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
   ./services/networking/powerdns.nix
+  ./services/networking/pdns-recursor.nix
   ./services/networking/pptpd.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix

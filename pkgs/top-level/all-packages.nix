@@ -526,6 +526,10 @@ in
 
   kwm = callPackage ../os-specific/darwin/kwm { };
 
+  khd = callPackage ../os-specific/darwin/khd {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
@@ -2362,6 +2366,8 @@ in
   john = callPackage ../tools/security/john {
     gcc = gcc49; # doesn't build with gcc5
   };
+
+  journalbeat = callPackage ../tools/system/journalbeat { };
 
   jp = callPackage ../development/tools/jp { };
 
@@ -11245,7 +11251,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.4"
-        kernelPatches.p9_caching_4_4
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11262,6 +11267,7 @@ in
         # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
         # kernelPatches.cpu-cgroup-v2."4.7"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.p9_caching_4_9
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11274,6 +11280,7 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
+      kernelPatches.p9_caching_4_9
     ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
       kernelPatches.mips_fpureg_emu
       kernelPatches.mips_fpu_sigill
@@ -11673,6 +11680,8 @@ in
   policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
 
   powerdns = callPackage ../servers/dns/powerdns { };
+
+  pdns-recursor = callPackage ../servers/dns/pdns-recursor { };
 
   powertop = callPackage ../os-specific/linux/powertop { };
 
@@ -18044,4 +18053,6 @@ in
   simplenote = callPackage ../applications/misc/simplenote { };
 
   hy = callPackage ../development/interpreters/hy {};
+
+  ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 }

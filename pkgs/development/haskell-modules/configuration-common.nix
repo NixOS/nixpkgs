@@ -693,6 +693,9 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
+  # Depends on itself for testing
+  doctest-discover = addBuildTool super.doctest-discover (dontCheck super.doctest-discover);
+
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
 

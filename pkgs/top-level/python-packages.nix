@@ -11778,14 +11778,21 @@ in {
   });
 
   foolscap = buildPythonPackage (rec {
-    name = "foolscap-0.10.1";
+    name = "foolscap-${version}";
+    version = "0.12.6";
 
     src = pkgs.fetchurl {
-      url = "http://foolscap.lothar.com/releases/${name}.tar.gz";
-      sha256 = "1wrnbdq3y3lfxnhx30yj9xbr3iy9512jb60k8qi1da1phalnwz5x";
+      url = "mirror://pypi/f/foolscap/${name}.tar.gz";
+      sha256 = "1bpmqq6485mmr5jza9q2c55l9m1bfsvsbd9drsip7p5qcsi22jrz";
     };
 
-    propagatedBuildInputs = [ self.twisted self.pyopenssl self.service-identity ];
+    propagatedBuildInputs = with self; [ mock twisted pyopenssl service-identity ];
+
+    checkPhase = ''
+      # Either uncomment this, or remove this custom check phase entirely, if
+      # you wish to do battle with the foolscap tests. ~ C.
+      # trial foolscap
+    '';
 
     meta = {
       homepage = http://foolscap.lothar.com/;
@@ -25264,9 +25271,11 @@ in {
     '';
 
     patchPhase = ''
-      substituteInPlace "scripts/syncthing-gtk" \
-              --replace "/usr/share" "$out/share"
-      substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
+        substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
+        substituteInPlace scripts/syncthing-gtk --replace "/usr/share" "$out/share"
+        substituteInPlace syncthing_gtk/app.py --replace "/usr/share" "$out/share"
+        substituteInPlace syncthing_gtk/wizard.py --replace "/usr/share" "$out/share"
+        substituteInPlace syncthing-gtk.desktop --replace "/usr/bin/syncthing-gtk" "$out/bin/syncthing-gtk"
     '';
 
     meta = {
@@ -26093,6 +26102,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];
+
+    # Patch t.p._inotify to point to libc. Without this,
+    # twisted.python.runtime.platform.supportsINotify() == False
+    patchPhase = optionalString stdenv.isLinux ''
+      substituteInPlace twisted/python/_inotify.py --replace \
+        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
+    '';
 
     # Generate Twisted's plug-in cache.  Twisted users must do it as well.  See
     # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
