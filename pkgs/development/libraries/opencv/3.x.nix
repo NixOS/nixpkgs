@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, cmake, pkgconfig, unzip
 , zlib
 , enableIpp ? false
-, enableContrib ? false
+, enableContrib ? false, protobuf3_1
 , enablePython ? false, pythonPackages
 , enableGtk2 ? false, gtk2
 , enableGtk3 ? false, gtk3
@@ -18,13 +18,13 @@
 }:
 
 let
-  version = "3.1.0";
+  version = "3.2.0";
 
   contribSrc = fetchFromGitHub {
     owner = "Itseez";
     repo = "opencv_contrib";
     rev = version;
-    sha256 = "153yx62f34gl3zd6vgxv0fj3wccwmq78lnawlda1f6xhrclg9bax";
+    sha256 = "1lynpbxz1jay3ya5y45zac5v8c6ifgk4ssn8d1chfdk3spi691jj";
   };
 
   opencvFlag = name: enabled: "-DWITH_${name}=${if enabled then "ON" else "OFF"}";
@@ -39,24 +39,8 @@ stdenv.mkDerivation rec {
     owner = "Itseez";
     repo = "opencv";
     rev = version;
-    sha256 = "1l0w12czavgs0wzw1c594g358ilvfg2fn32cn8z7pv84zxj4g429";
+    sha256 = "0f59g0dvhp5xg1xa3r4lp351a7x0k03i77ylgcf69ns3y47qd16p";
   };
-
-  patches =
-    lib.optionals enableCuda [
-      (fetchpatch { # Patch for CUDA 8 compatibility
-        url = "https://github.com/opencv/opencv/commit/10896129b39655e19e4e7c529153cb5c2191a1db.patch";
-        sha256 = "0jka3kxxywgs3prqqgym5kav6p73rrblwj50k1nf3fvfpk194ah1";
-      })
-      (fetchpatch { # Patch to add CUDA Compute Capability compilation targets up to 6.0
-        url = "https://github.com/opencv/opencv/commit/d76f258aebdf63f979a205cabe6d3e81700a7cd8.patch";
-        sha256 = "00b3msfgrcw7laij6qafn4b18c1dl96xxpzwx05wxzrjldqb6kqg";
-      })
-    ]
-    ++ lib.optional enablePython (fetchpatch { # Patch to fix FlannBasedMatcher under python
-      url = "https://github.com/opencv/opencv/commit/05cfe28612fd8dc8fb0ccb876df945c7b435dd26.patch";
-      sha256 = "0niza5lybr1ljzdkyiapr16laa468168qinpy5qn00yimnaygpm6";
-    });
 
   preConfigure =
     # By default ippicv gets downloaded by cmake each time opencv is build. See:
@@ -97,6 +81,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optional enableCuda [ cudatoolkit gcc5 ]
+    ++ lib.optional enableContrib protobuf3_1
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -115,8 +100,12 @@ stdenv.mkDerivation rec {
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
-  ] ++ lib.optionals enableContrib [ "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules" ]
-    ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ];
+  ] ++ lib.optionals enableContrib [
+    "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules"
+    # some contrib modules are badly behaved and attempt to download 3rd party libs as part of the build process:
+    "-DBUILD_PROTOBUF=OFF"            # the dnn module would otherwise attempt to download protobuf src
+    "-DBUILD_opencv_xfeatures2d=OFF"  # attempts to download VGG and boostdesc image descriptor trained models
+  ] ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ];
 
   enableParallelBuilding = true;
 
