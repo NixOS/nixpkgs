@@ -374,6 +374,8 @@ let
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
+    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
+
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
