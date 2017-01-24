@@ -6938,10 +6938,6 @@ in
 
   chromaprint = callPackage ../development/libraries/chromaprint { };
 
-  cilaterm = callPackage ../development/libraries/cil-aterm {
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
   cl = callPackage ../development/libraries/cl { };
 
   classads = callPackage ../development/libraries/classads { };
