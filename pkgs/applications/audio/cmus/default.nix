@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, ncurses, pkgconfig, gcc
+{ stdenv, fetchFromGitHub, ncurses, pkgconfig
+, gcc, libiconv, CoreAudio
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
 # simple fallback for everyone else
@@ -18,7 +19,7 @@
 , cddbSupport ? true, libcddb ? null
 , cdioSupport ? true, libcdio ? null
 , cueSupport ? true, libcue ? null
-, discidSupport ? true, libdiscid ? null
+, discidSupport ? (!stdenv.isDarwin), libdiscid ? null
 , ffmpegSupport ? true, ffmpeg ? null
 , flacSupport ? true, flac ? null
 , madSupport ? true, libmad ? null
@@ -109,13 +110,16 @@ stdenv.mkDerivation rec {
     "CONFIG_WAV=y"
   ] ++ concatMap (a: a.flags) opts);
 
-  buildInputs = [ ncurses pkgconfig gcc ] ++ concatMap (a: a.deps) opts;
+  buildInputs = [ ncurses pkgconfig ]
+    ++ stdenv.lib.optional stdenv.cc.isClang gcc
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
+    ++ concatMap (a: a.deps) opts;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Small, fast and powerful console music player for Linux and *BSD";
     homepage = https://cmus.github.io/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.oxij ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.oxij ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
