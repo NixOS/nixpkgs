@@ -36,6 +36,14 @@ buildPythonPackage rec {
     CLEARPART_TYPE_LIST = 3
     EOF
 
+    # enable_installer_mode() imports lots of pyanaconda modules
+    sed -i -e '/^def enable_installer_mode(/,/^[^ ]/ {
+      /^\( \|$\|def enable_installer_mode(\)/d
+    }' blivet/__init__.py
+
+    # Remove another import of pyanaconda
+    sed -i -e '/anaconda_flags/d' blivet/osinstall.py
+
     # Remove test involving pykickstart
     rm tests/blivet_test.py
     # Remove EDD tests, because they don't work within VM tests
