@@ -269,6 +269,8 @@ let
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
+    mtime =  callPackage ../development/ocaml-modules/mtime { };
+
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
       lwt = ocaml_lwt;
     };
