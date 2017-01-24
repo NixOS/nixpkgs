@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, ncurses, ocamlPackages, graphviz
+{ stdenv, fetchurl, makeWrapper, ncurses, ocamlPackages, graphviz
 , ltl2ba, coq, alt-ergo, why3 }:
+
+let
+  mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
+  ocamlpath = "${mkocamlpath ocamlPackages.apron}:${mkocamlpath ocamlPackages.mlgmpidl}";
+in
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
@@ -16,9 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "1335bhq9v3h46m8aba2c5myi9ghm87q41in0m15xvdrwq5big1jg";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = with ocamlPackages; [
     ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph
-    lablgtk coq graphviz zarith why3 zarith
+    lablgtk coq graphviz zarith why3 apron
   ];
 
 
@@ -38,11 +45,15 @@ stdenv.mkDerivation rec {
     FRAMAC=$out/bin/frama-c ./configure --prefix=$out
     make
     make install
+    for p in $out/bin/frama-c{,-gui};
+    do
+      wrapProgram $p --prefix OCAMLPATH ':' ${ocamlpath}
+    done
   '';
-
 
   # Enter frama-c directory before patching
   prePatch = ''cd frama*'';
+  patches = [ ./dynamic.diff ];
   postPatch = ''
     # strip absolute paths to /usr/bin
     for file in ./configure ./share/Makefile.common ./src/*/configure; do
