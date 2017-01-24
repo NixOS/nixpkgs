@@ -793,6 +793,41 @@ It's important to realize, however, that most system libraries in Nix are built
 as shared libraries only, i.e. there is just no static library available that
 Cabal could link!
 
+### Building GHC with integer-simple
+
+By default GHC implements the Integer type using the
+[GNU Multiple Precision Arithmetic (GMP) library](https://gmplib.org/).
+The implementation can be found in the
+[integer-gmp](http://hackage.haskell.org/package/integer-gmp) package.
+
+A potential problem with this is that GMP is licensed under the
+[​GNU Lesser General Public License (LGPL)](http://www.gnu.org/copyleft/lesser.html),
+a kind of "copyleft" license. According to the terms of the LGPL, paragraph 5,
+you may distribute a program that is designed to be compiled and dynamically
+linked with the library under the terms of your choice (i.e., commercially) but
+if your program incorporates portions of the library, if it is linked
+statically, then your program is a "derivative"--a "work based on the
+library"--and according to paragraph 2, section c, you "must cause the whole of
+the work to be licensed" under the terms of the LGPL (including for free).
+
+The LGPL licensing for GMP is a problem for the overall licensing of binary
+programs compiled with GHC because most distributions (and builds) of GHC use
+static libraries. (Dynamic libraries are currently distributed only for OS X.)
+The LGPL licensing situation may be worse: even though
+​[The Glasgow Haskell Compiler License](https://www.haskell.org/ghc/license)
+is essentially a "free software" license (BSD3), according to
+paragraph 2 of the LGPL, GHC must be distributed under the terms of the LGPL!
+
+To work around these problems GHC can be build with a slower but LGPL-free
+alternative implemention for Integer called
+[integer-simple](http://hackage.haskell.org/package/integer-simple).
+
+To get a compiler build with `integer-simple` instead of `integer-gmp` override an
+existing compiler and set `enableIntegerSimple = true`. For example:
+
+    $ nix-build -E '(import <nixpkgs> {}).pkgs.haskell.compiler.ghc802.override {enableIntegerSimple = true;}'
+    $ result/bin/ghc-pkg list | grep integer
+        integer-simple-0.1.1.1
 
 ## Other resources
 

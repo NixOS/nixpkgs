@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
+{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
 , hscolour, patchutils, sphinx
+
+  # If enabled GHC will be build with the GPL-free but slower integer-simple
+  # library instead of the faster but GPLed integer-gmp library.
+, enableIntegerSimple ? false, gmp
 }:
 
 let
@@ -41,13 +45,16 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+  '' + stdenv.lib.optionalString enableIntegerSimple ''
+    echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
   '';
 
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
     "--datadir=$doc/share/doc/ghc"
+  ] ++ stdenv.lib.optional (! enableIntegerSimple) [
+    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];

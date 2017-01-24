@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, ghc, perl, gmp, ncurses, binutils, libiconv }:
+{ stdenv, fetchurl, ghc, perl, ncurses, binutils, libiconv
+
+  # If enabled GHC will be build with the GPL-free but slower integer-simple
+  # library instead of the faster but GPLed integer-gmp library.
+, enableIntegerSimple ? false, gmp
+}:
 
 let
   # The "-Wa,--noexecstack" options might be needed only with GNU ld (as opposed
@@ -19,11 +24,10 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./fix-7.6.3-clang.patch ./relocation.patch ];
 
-  buildInputs = [ ghc perl gmp ncurses ];
+  buildInputs = [ ghc perl ncurses ]
+                ++ stdenv.lib.optional (!enableIntegerSimple) gmp;
 
   buildMK = ''
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp.out}/lib"
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp.dev}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses.dev}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses.out}/lib"
     ${stdenv.lib.optionalString stdenv.isDarwin ''
@@ -34,7 +38,12 @@ in stdenv.mkDerivation rec {
     # Set ghcFlags for building ghc itself
     SRC_HC_OPTS += ${ghcFlags}
     SRC_CC_OPTS += ${cFlags}
-  '';
+  '' + (if enableIntegerSimple then ''
+    INTEGER_LIBRARY=integer-simple
+  '' else ''
+    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp.out}/lib"
+    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp.dev}/include"
+  '');
 
   preConfigure = ''
     echo "${buildMK}" > mk/build.mk
