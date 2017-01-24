@@ -188,7 +188,7 @@ in {
     shortDescription = "Hunspell dictionary for 'Italian (Italy)' from Linguistico";
     src = fetchurl {
       url = mirror://sourceforge/linguistico/italiano_2_4_2007_09_01.zip;
-      md5 = "e7fbd9e2dfb25ea3288cdb918e1e1260";
+      sha256 = "0m9frz75fx456bczknay5i446gdcp1smm48lc0qfwzhz0j3zcdrd";
     };
   };
 }
