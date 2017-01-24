@@ -135,6 +135,7 @@ in {
           Group = cfg.group;
           PermissionsStartOnly = true;
           ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+          PreStart = "mkdir -m 0755 -p ${cfg.dataDir}";
         };
       };
 
