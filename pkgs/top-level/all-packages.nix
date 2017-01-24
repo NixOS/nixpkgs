@@ -2361,6 +2361,8 @@ in
     gcc = gcc49; # doesn't build with gcc5
   };
 
+  journalbeat = callPackage ../tools/system/journalbeat { };
+
   jp = callPackage ../development/tools/jp { };
 
   jp2a = callPackage ../applications/misc/jp2a { };
