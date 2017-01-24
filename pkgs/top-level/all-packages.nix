@@ -6293,6 +6293,8 @@ in
 
   doxygen_gui = lowPrio (doxygen.override { inherit qt4; });
 
+  drake = callPackage ../development/tools/build-managers/drake { };
+
   drush = callPackage ../development/tools/misc/drush { };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
