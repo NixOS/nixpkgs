@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, which, go, go-bindata, makeWrapper, rsync
 , iptables, coreutils
 , components ? [
+    "cmd/kubeadm"
     "cmd/kubectl"
     "cmd/kubelet"
     "cmd/kube-apiserver"
