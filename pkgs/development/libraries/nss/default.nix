@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, nspr, perl, zlib, sqlite }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite }:
 
 let
 
