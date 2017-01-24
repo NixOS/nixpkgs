@@ -524,6 +524,10 @@ in
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  khd = callPackage ../os-specific/darwin/khd {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
