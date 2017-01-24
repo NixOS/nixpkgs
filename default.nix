@@ -6,4 +6,4 @@ if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.
 
 else
 
-  (import ./lib/lifecycle.nix).checked (import ./pkgs/top-level/impure.nix)
+  import ./pkgs/top-level/impure.nix
