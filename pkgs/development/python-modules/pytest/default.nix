@@ -1,7 +1,7 @@
-{ stdenv, buildPythonPackage, fetchurl, hypothesis, py }:
+{ stdenv, buildPythonPackage, fetchurl, isPy26, argparse, hypothesis, py }:
 buildPythonPackage rec {
   name = "pytest-${version}";
-  version = "3.0.5";
+  version = "3.0.6";
 
   preCheck = ''
     # don't test bash builtins
@@ -10,13 +10,15 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/p/pytest/${name}.tar.gz";
-    sha256 = "1z9pj39w0r2gw5hsqndlmsqa80kgbrann5kfma8ww8zhaslkl02a";
+    sha256 = "0h6rfp7y7c5mqwfm9fy5fq4l9idnp160c82ylcfjg251y6lk8d34";
   };
 
-  propagatedBuildInputs = [ hypothesis py ];
+  buildInputs = [ hypothesis ];
+  propagatedBuildInputs = [ py ]
+    ++ (stdenv.lib.optional isPy26 argparse);
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ domenkozar lovek323 madjar ];
+    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
     platforms = platforms.unix;
   };
 }
