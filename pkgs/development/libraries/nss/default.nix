@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   patches =
     [ # FIXME: what is this patch for? Do we still need it?
-      (fetchpatch {
+      (fetchurl {
         url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/nss/files/nss-3.28-gentoo-fixups.patch";
         sha256 = "0z58axd1n7vq4kdp5mrb3dsg6di39a1g40s3shl6n2dzs14c1y2q";
       })
