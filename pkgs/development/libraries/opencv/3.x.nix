@@ -2,6 +2,7 @@
 , zlib
 , enableIpp ? false
 , enableContrib ? false
+, enableRelease ? true
 , enablePython ? false, pythonPackages
 , enableGtk2 ? false, gtk2
 , enableGtk3 ? false, gtk3
@@ -107,6 +108,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWITH_IPP=${if enableIpp then "ON" else "OFF"}"
+    "-DCMAKE_BUILD_TYPE=${if enableRelease then "RELEASE" else "DEBUG"}"
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "WEBP" enableWebP)
