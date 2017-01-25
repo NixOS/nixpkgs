@@ -5505,6 +5505,8 @@ with pkgs;
 
   yosys = callPackage ../development/compilers/yosys { };
 
+  zulu = callPackage ../development/compilers/zulu { };
+
 
   ### DEVELOPMENT / INTERPRETERS
 
