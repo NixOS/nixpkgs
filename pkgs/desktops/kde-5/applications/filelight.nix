@@ -18,4 +18,7 @@ let
       ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/filelight" ]; }
+kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/filelight" ];
+}

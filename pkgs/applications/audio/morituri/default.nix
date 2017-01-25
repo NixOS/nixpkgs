@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   };
 
   pythonPath = with pythonPackages; [
-    pygobject gst_python musicbrainzngs
+    pygobject2 gst_python musicbrainzngs
     pycdio pyxdg setuptools
     CDDB
   ];

@@ -2,42 +2,40 @@
 
 stdenv.mkDerivation rec {
   name = "cipherscan-${version}";
-  version = "2015-12-17";
-  src = fetchFromGitHub {
-    owner = "jvehent";
-    repo = "cipherscan";
-    rev = "18b0d1b952d027d20e38f07329817873ec077d26";
-    sha256 = "0b6fkfm2y8w04am4krspmapcc5ngn603n5rlwyjly92z2dawc7h8";
-  };
-  buildInputs = [ makeWrapper python ];
-  patches = [ ./path.patch ];
-  buildPhase = ''
-    substituteInPlace cipherscan \
-      --replace "@OPENSSLBIN@" \
-                "${openssl.bin}/bin/openssl" \
-      --replace "@TIMEOUTBIN@" \
-                "${coreutils}/bin/timeout" \
-      --replace "@READLINKBIN@" \
-                "${coreutils}/bin/readlink"
+  version = "2016-08-16";
 
-    substituteInPlace analyze.py \
-      --replace "@OPENSSLBIN@" \
-                "${openssl.bin}/bin/openssl"
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "cipherscan";
+    rev = "74dd82e8ad994a140daf79489d3bd1c5ad928d38";
+    sha256 = "16azhlmairnvdz7xmwgvfpn2pzw1p8z7c9b27m07fngqjkpx0mhh";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python ];
+
+  buildPhase = ''
+    substituteInPlace cipherscan --replace '$0' 'cipherscan'
   '';
+
   installPhase = ''
     mkdir -p $out/bin
 
     cp cipherscan $out/bin
     cp openssl.cnf $out/bin
-    cp analyze.py $out/bin
+    cp analyze.py $out/bin/cipherscan-analyze
 
-    wrapProgram $out/bin/analyze.py --set PYTHONPATH "$PYTHONPATH"
+    wrapProgram $out/bin/cipherscan \
+      --set NOAUTODETECT 1 \
+      --set TIMEOUTBIN "${coreutils}/bin/timeout" \
+      --set OPENSSLBIN "${openssl}/bin/openssl"
   '';
+
   meta = with lib; {
+    inherit (src.meta) homepage;
     description = "Very simple way to find out which SSL ciphersuites are supported by a target";
-    homepage = "https://github.com/jvehent/cipherscan";
     license = licenses.mpl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cstrahan fpletz ];
   };
 }

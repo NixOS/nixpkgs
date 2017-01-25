@@ -1,12 +1,12 @@
 { stdenv, fetchgit, clang }:
 
 stdenv.mkDerivation rec {
-  name = "mujs-2016-02-22";
+  name = "mujs-2016-11-30";
 
   src = fetchgit {
     url = git://git.ghostscript.com/mujs.git;
-    rev  = "624f975aae6b451e35406d8cdde808626052ce2c";
-    sha256 = "0cab7x73v380wklpkbrc1k4iyh4q2jyx3zxbymlfi1spmrpn6skl";
+    rev  = "a0ceaf5050faf419401fe1b83acfa950ec8a8a89";
+    sha256 = "13abghhqrivaip4h0fav80i8hid220dj0ddc1xnhn6w9rbnrriyg";
   };
 
   buildInputs = [ clang ];

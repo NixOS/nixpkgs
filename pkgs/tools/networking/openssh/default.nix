@@ -17,9 +17,12 @@ let
     sha256 = "682b4a6880d224ee0b7447241b684330b731018585f1ba519f46660c10d63950";
   };
 
+  # **please** update this patch when you update to a new openssh release.
   gssapiSrc = fetchpatch {
-    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?id=46961f5704f8e86cea3e99253faad55aef4d8f35";
-    sha256 = "01mf2vx1gavypbdx06mcbmcrkm2smff0h3jfmr61k6h6j3xk88y5";
+    name = "openssh-gssapi.patch";
+    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian"
+        + "/patches/gssapi.patch?id=255b8554a50b5c75fca63f76b1ac837c0d4fb7aa";
+    sha256 = "0yg9iq7vb2fkvy36ar0jxk29pkw0h3dhv5vn8qncc3pgwx3617n2";
   };
 
 in
@@ -28,11 +31,11 @@ stdenv.mkDerivation rec {
   # Please ensure that openssh_with_kerberos still builds when
   # bumping the version here!
   name = "openssh-${version}";
-  version = "7.3p1";
+  version = "7.4p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1k5y1wi29d47cgizbryxrhc1fbjsba2x8l5mqfa9b9nadnd9iyrz";
+    sha256 = "1l8r3x4fr2kb6xm95s7kjdif1wp6f94d4kljh4qjj9109shw87qv";
   };
 
   prePatch = optionalString hpnSupport
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
     ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
-    ++ optional withKerberos [ kerberos ];
+    ++ optional withKerberos kerberos;
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -90,7 +93,7 @@ stdenv.mkDerivation rec {
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = with maintainers; [ eelco aneeshusa ];
     broken = hpnSupport; # probably after 6.7 update
   };
 }

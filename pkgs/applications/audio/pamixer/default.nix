@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/cdemoulins/pamixer;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hiberno ];
     platforms = platforms.linux;
   };
 }

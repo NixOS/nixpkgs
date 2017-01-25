@@ -2,25 +2,29 @@
 , gdk_pixbuf, libintlOrEmpty, xlibsWrapper
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
+, gdktarget ? "x11"
+, AppKit, Cocoa
 }:
 
 assert xineramaSupport -> xorg.libXinerama != null;
 assert cupsSupport -> cups != null;
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.30";
+  name = "gtk+-2.24.31";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "0d15cec3b6d55c60eac205b1f3ba81a1ed4eadd9d0f8e7c508bc7065d0c4ca50";
+    sha256 = "68c1922732c7efc08df4656a5366dcc3afdc8791513400dac276009b40954658";
   };
 
-  outputs = [ "out" "dev" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (libintlOrEmpty != []) "-lintl";
+  NIX_CFLAGS_COMPILE = optionalString (libintlOrEmpty != []) "-lintl";
 
   setupHook = ./setup-hook.sh;
 
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./2.0-immodules.cache.patch ];
 
-  propagatedBuildInputs = with xorg; with stdenv.lib;
+  propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk_pixbuf atk ]
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
          libXrandr libXrender libXcomposite libXi libXcursor
@@ -36,14 +40,22 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ xlibsWrapper libXdamage ]
     ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
-    ++ optionals cupsSupport [ cups ];
+    ++ optionals cupsSupport [ cups ]
+    ++ optionals (gdktarget == "quartz") [ AppKit Cocoa ];
 
-  configureFlags = if stdenv.isDarwin
-    then "--disable-glibtest --disable-introspection --disable-visibility"
-    else "--with-xinput=yes";
+  configureFlags = [
+    "--with-gdktarget=${gdktarget}"
+    "--with-xinput=yes"
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-glibtest"
+    "--disable-introspection"
+    "--disable-visibility"
+  ];
 
   postInstall = ''
-    moveToOutput share/gtk-2.0/demo "$docdev"
+    moveToOutput share/gtk-2.0/demo "$devdoc"
+    # The updater is needed for nixos env and it's tiny.
+    moveToOutput bin/gtk-update-icon-cache "$out"
   '';
 
   passthru = {
@@ -51,9 +63,10 @@ stdenv.mkDerivation rec {
       rm $out/lib/gtk-2.0/2.10.0/immodules.cache
       $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
     ''; # workaround for bug of nix-mode for Emacs */ '';
+    inherit gdktarget;
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
     homepage    = http://www.gtk.org/;
     license     = licenses.lgpl2Plus;

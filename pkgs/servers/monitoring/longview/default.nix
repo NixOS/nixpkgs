@@ -1,14 +1,14 @@
 {stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, glibc }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.5pre";
+  version = "1.1.5";
   name = "longview-${version}";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = "longview";
-    rev = "5bcc9b60896b72de2d14f046f911477c26eb70ba";
-    sha256 = "1i6va44bx2zfgbld7znf1slph0iqidlahq2xh3kd8q4lhvbrjn02";
+    rev = "v${version}";
+    sha256 = "1i9lli8iw8sb1bd633i82fzhx5gz85ma9d1hra41pkv2p3h823pa";
   };
 
   patches = [

@@ -1,0 +1,28 @@
+From 999a30883f34c4603c3b747a58a89d4924583769 Mon Sep 17 00:00:00 2001
+From: "Luke A. Guest" <laguest@archeia.com>
+Date: Sun, 25 Sep 2016 15:46:58 +0100
+Subject: [PATCH 03/11] Remove extra parameter from ttm_bo_reserve for 4.7.0
+
+---
+ amd/backport/include/kcl/kcl_ttm.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/amd/backport/include/kcl/kcl_ttm.h b/amd/backport/include/kcl/kcl_ttm.h
+index 6e5a170..52cdbc8 100644
+--- a/amd/backport/include/kcl/kcl_ttm.h
++++ b/amd/backport/include/kcl/kcl_ttm.h
+@@ -113,7 +113,11 @@ static inline int kcl_ttm_bo_reserve(struct ttm_buffer_object *bo,
+ 				 struct ww_acquire_ctx *ticket)
+ {
+ #if defined(BUILD_AS_DKMS)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 7, 0)
++	return ttm_bo_reserve(bo, interruptible, no_wait, ticket);
++#else
+ 	return ttm_bo_reserve(bo, interruptible, no_wait, false, ticket);
++#endif
+ #else
+ 	return ttm_bo_reserve(bo, interruptible, no_wait, ticket);
+ #endif
+-- 
+2.11.0
+

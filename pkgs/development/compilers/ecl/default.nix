@@ -1,23 +1,25 @@
 {stdenv, fetchurl
 , libtool, autoconf, automake
 , gmp, mpfr, libffi, makeWrapper
-, noUnicode ? false, 
+, noUnicode ? false
+, gcc
+, threadSupport ? true
 }:
 let
   s = # Generated upstream information
   rec {
     baseName="ecl";
-    version="16.1.2";
+    version="16.1.3";
     name="${baseName}-${version}";
-    hash="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
-    url="https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.2.tgz";
-    sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
+    hash="0m0j24w5d5a9dwwqyrg0d35c0nys16ijb4r0nyk87yp82v38b9bn";
+    url="https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.3.tgz";
+    sha256="0m0j24w5d5a9dwwqyrg0d35c0nys16ijb4r0nyk87yp82v38b9bn";
   };
   buildInputs = [
     libtool autoconf automake makeWrapper
   ];
   propagatedBuildInputs = [
-    libffi gmp mpfr
+    libffi gmp mpfr gcc
   ];
 in
 stdenv.mkDerivation {
@@ -29,7 +31,7 @@ stdenv.mkDerivation {
   };
 
   configureFlags = [
-    "--enable-threads"
+    (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-prefix=${gmp.dev}"
     "--with-libffi-prefix=${libffi.dev}"
     ]
@@ -43,6 +45,7 @@ stdenv.mkDerivation {
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" \
+      --prefix PATH ':' "${gcc}/bin" \
       --prefix NIX_LDFLAGS ' ' "-L${gmp.lib or gmp.out or gmp}/lib" \
       --prefix NIX_LDFLAGS ' ' "-L${libffi.lib or libffi.out or libffi}/lib"
   '';

@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "mate-icon-theme-faenza-${version}";
   version = "${major-ver}.${minor-ver}";
-  major-ver = "1.15";
-  minor-ver = "1";
+  major-ver = "1.16";
+  minor-ver = "0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1x2jn86gcv6spnkvhjg0mzp5qhlb5dw4h8m8qp1hdgzzrzinfr3p";
+    sha256 = "0p3z3qarbvrhzj2sdw3f8dp0c7wwjkk9a749bq8rh5gm9m66hibg";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

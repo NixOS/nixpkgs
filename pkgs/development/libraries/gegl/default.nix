@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg
-, librsvg, pango, gtk, bzip2, intltool
+, librsvg, pango, gtk2, bzip2, intltool
 , OpenGL ? null }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
-  buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk bzip2 intltool ]
+  buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk2 bzip2 intltool ]
     ++ stdenv.lib.optional stdenv.isDarwin OpenGL;
 
   nativeBuildInputs = [ pkgconfig ];

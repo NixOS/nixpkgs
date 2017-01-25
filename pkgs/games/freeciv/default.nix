@@ -1,7 +1,9 @@
 { stdenv, fetchurl, zlib, bzip2, pkgconfig, curl, lzma, gettext
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? false, gtk
-, server ? true, readline }:
+, gtkClient ? false, gtk2
+, server ? true, readline
+, enableSqlite ? true, sqlite
+}:
 
 let
   inherit (stdenv.lib) optional optionals;
@@ -10,25 +12,28 @@ let
   gtkName = if gtkClient then "-gtk" else "";
 
   name = "freeciv";
-  version = "2.5.3";
+  version = "2.5.6";
 in
 stdenv.mkDerivation {
   name = "${name}${sdlName}${gtkName}-${version}";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/freeciv/${name}-${version}.tar.bz2";
-    sha256 = "0p40bpkhbldsnlqdvfn3qd2vzadxfrfsf1r57x1akwabqs0h62s8";
+    sha256 = "16wrnsx5rmbz6rjs03bhy0vn20i6n6g73lx7fjpai98ixhzc5bfg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ zlib bzip2 curl lzma gettext ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
-    ++ optionals gtkClient [ gtk ]
-    ++ optional server readline;
+    ++ optionals gtkClient [ gtk2 ]
+    ++ optional server readline
+    ++ optional enableSqlite sqlite;
 
-  configureFlags = []
+  configureFlags = [ "--enable-shared" ]
     ++ optional sdlClient "--enable-client=sdl"
+    ++ optional enableSqlite "--enable-fcdb=sqlite3"
     ++ optional (!gtkClient) "--enable-fcmp=cli"
     ++ optional (!server) "--disable-server";
 

@@ -6,7 +6,7 @@
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
 , buildWebkit ? stdenv.isLinux
 , flashplayerFix ? false, gdk_pixbuf
-, gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
+, gtkStyle ? false, libgnomeui, gtk2, GConf, gnome_vfs
 , developerBuild ? false
 , docs ? false
 , examples ? false
@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
       + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
     sha256 = "183fca7n7439nlhxyg1z7aky0izgbyll3iwakw4gwivy16aj5272";
   };
+
+  outputs = [ "out" "dev" ];
+
+  outputInclude = "out";
+
+  setOutputFlags = false;
 
   # The version property must be kept because it will be included into the QtSDK package name
   version = vers;
@@ -65,13 +71,13 @@ stdenv.mkDerivation rec {
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
         gconf = GConf.out;
-        gtk = gtk.out;
+        gtk = gtk2.out;
         libgnomeui = libgnomeui.out;
         gnome_vfs = gnome_vfs.out;
       })
     ++ stdenv.lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
-        gtk = gtk.out;
+        gtk = gtk2.out;
         gdk_pixbuf = gdk_pixbuf.out;
       })
     ++ [(fetchpatch {
@@ -87,8 +93,8 @@ stdenv.mkDerivation rec {
       -docdir $out/share/doc/${name}
       -plugindir $out/lib/qt4/plugins
       -importdir $out/lib/qt4/imports
-      -examplesdir $out/share/doc/${name}/examples
-      -demosdir $out/share/doc/${name}/demos
+      -examplesdir $TMPDIR/share/doc/${name}/examples
+      -demosdir $TMPDIR/share/doc/${name}/demos
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
     "
@@ -98,6 +104,7 @@ stdenv.mkDerivation rec {
   '';
 
   prefixKey = "-prefix ";
+
   configureFlags =
     ''
       -v -no-separate-debug-info -release -no-fast -confirm-license -opensource
@@ -131,7 +138,7 @@ stdenv.mkDerivation rec {
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
     ++ optionals (mysql != null) [ mysql.lib ]
-    ++ optionals gtkStyle [ gtk gdk_pixbuf ]
+    ++ optionals gtkStyle [ gtk2 gdk_pixbuf ]
     ++ optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
@@ -152,6 +159,11 @@ stdenv.mkDerivation rec {
     find . -name "Makefile*" | xargs sed -i 's/^\(LINK[[:space:]]* = clang++\)/\1 ${NIX_LDFLAGS}/'
     sed -i 's/^\(LIBS[[:space:]]*=.*$\)/\1 -lobjc/' ./src/corelib/Makefile.Release
   '';
+
+  postInstall =
+    ''
+      rm -rf $out/tests
+    '';
 
   crossAttrs = let
     isMingw = stdenv.cross.libc == "msvcrt";

@@ -38,15 +38,17 @@ in
         default = null;
         example = 4000;
         description = ''
-          Use fixed port for rpc.statd, useful if NFS server is behind firewall.
+          Use a fixed port for <command>rpc.statd</command>. This is
+          useful if the NFS server is behind a firewall.
         '';
       };
       lockdPort = mkOption {
         default = null;
         example = 4001;
         description = ''
-          Use fixed port for NFS lock manager kernel module (lockd/nlockmgr),
-          useful if NFS server is behind firewall.
+          Use a fixed port for the NFS lock manager kernel module
+          (<literal>lockd/nlockmgr</literal>).  This is useful if the
+          NFS server is behind a firewall.
         '';
       };
     };
@@ -68,13 +70,16 @@ in
 
     boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
 
+    # FIXME: should use upstream units from nfs-utils.
+
     systemd.services.statd =
       { description = "NFSv3 Network Status Monitor";
 
         path = [ pkgs.nfs-utils pkgs.sysvtools pkgs.utillinux ];
 
-        wantedBy = [ "remote-fs-pre.target" ];
+        wants = [ "remote-fs-pre.target" ];
         before = [ "remote-fs-pre.target" ];
+        wantedBy = [ "remote-fs.target" ];
         requires = [ "basic.target" "rpcbind.service" ];
         after = [ "basic.target" "rpcbind.service" ];
 
@@ -100,8 +105,9 @@ in
 
         path = [ pkgs.sysvtools pkgs.utillinux ];
 
-        wantedBy = [ "remote-fs-pre.target" ];
+        wants = [ "remote-fs-pre.target" ];
         before = [ "remote-fs-pre.target" ];
+        wantedBy = [ "remote-fs.target" ];
         requires = [ "rpcbind.service" ];
         after = [ "rpcbind.service" ];
 

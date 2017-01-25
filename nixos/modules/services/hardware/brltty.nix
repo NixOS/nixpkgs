@@ -28,7 +28,7 @@ in {
       };
       serviceConfig = {
         ExecStart = "${pkgs.brltty}/bin/brltty --no-daemon";
-        Type = "simple";        # Change to notidy after next releae
+        Type = "notify";
         TimeoutStartSec = 5;
         TimeoutStopSec = 10;
         Restart = "always";
@@ -39,6 +39,8 @@ in {
         ProtectSystem = "full";
         SystemCallArchitectures = "native";
       };
+      wants = [ "systemd-udev-settle.service" ];
+      after = [ "local-fs.target" "systemd-udev-settle.service" ];
       before = [ "sysinit.target" ];
       wantedBy = [ "sysinit.target" ];
     };

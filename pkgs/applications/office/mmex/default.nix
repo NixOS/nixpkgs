@@ -1,36 +1,25 @@
-# To use this program, copy all that is in $out/opt/mmax into a writable directory,
-# and run it from there. This is the intended usage, as far as I understand.
+{ stdenv, fetchgit, sqlite, wxGTK30, gettext }:
 
-{ fetchsvn, stdenv, wxGTK }:
 
-let version = "0.9.5.1";
+let
+  version = "1.3.1";
 in
   stdenv.mkDerivation {
     name = "money-manager-ex-${version}";
 
-    src = fetchsvn {
-      url = "https://moneymanagerex.svn.sourceforge.net/svnroot/moneymanagerex/tags/releases/${version}";
-      sha256 = "0mby1p01fyxk5pgd7h3919q91r10zbfk16rfz1kbchqxqz87x4jq";
+    src = fetchgit {
+      url = "https://github.com/moneymanagerex/moneymanagerex.git";
+      rev = "refs/tags/v${version}";
+      sha256 = "1cmwmvlzg7r85qq23lbbmq2y91vhf9f5pblpja5ph98bsd218pc0";
     };
 
-    preConfigure = ''
-      export CFLAGS="-I`pwd`/include"
-      export CXXFLAGS="$CFLAGS"
-    '';
-
-    installPhase = ''
-      mkdir -p $out/opt/mmex
-      cp -r mmex runtime/{*.txt,*.png,*.db3,en,help,*.wav,*.ico} $out/opt/mmex
-    '';
-
-    buildInputs = [ wxGTK ];
+    buildInputs = [ sqlite wxGTK30 gettext ];
 
     meta = {
       description = "Easy-to-use personal finance software";
-      homepage = http://www.codelathe.com/mmex;
+      homepage = http://www.moneymanagerex.org/;
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with stdenv.lib.maintainers; [viric];
       platforms = with stdenv.lib.platforms; linux;
-      broken = true;
     };
   }

@@ -1,4 +1,5 @@
 { buildPythonPackage 
+, fetchurl
 , fetchFromGitHub
 , boost
 , numpy
@@ -12,6 +13,7 @@
 , mkDerivation
 , stdenv
 , pythonOlder
+, isPy35
 }:
 let
   compyte = import ./compyte.nix {
@@ -19,22 +21,21 @@ let
   };
 in
 buildPythonPackage rec {
-  name = "pycuda-${version}"; 
-  version = "2016.1"; 
+  pname = "pycuda";
+  version = "2016.1.2";
+  name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "inducer"; 
-    repo = "pycuda";
-    rev = "609817e22c038249f5e9ddd720b3ca5a9d58ca11"; 
-    sha256 = "0kg6ayxsw2gja9rqspy6z8ihacf9jnxr8hzywjwmj1izkv24cff7"; 
-  }; 
+  src = fetchurl {
+    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+    sha256 = "0dvf1cnrlvmrc7i100n2ndrnd7fjm7aq3wpmk2nx5h7hwb3xmnx7";
+  };
 
   preConfigure = ''
     findInputs ${boost.dev} boost_dirs propagated-native-build-inputs
 
     export BOOST_INCLUDEDIR=$(echo $boost_dirs | sed -e s/\ /\\n/g - | grep '\-dev')/include
     export BOOST_LIBRARYDIR=$(echo $boost_dirs | sed -e s/\ /\\n/g - | grep -v '\-dev')/lib
-    
+
     ${python.interpreter} configure.py --boost-inc-dir=$BOOST_INCLUDEDIR \
                             --boost-lib-dir=$BOOST_LIBRARYDIR \
                             --no-use-shipped-boost \
@@ -45,7 +46,12 @@ buildPythonPackage rec {
     ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte 
   '';
 
-  doCheck = pythonOlder "3.5";
+  # Requires access to libcuda.so.1 which is provided by the driver
+  doCheck = false;
+
+  checkPhase = ''
+    py.test
+  '';
 
   propagatedBuildInputs = [
     numpy

@@ -165,6 +165,11 @@ let
       '';
     };
 
+    extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      description = "Extra configuration append to unit";
+    };
   };
 
   linkOptions = commonNetworkOptions // {
@@ -296,35 +301,35 @@ let
   };
 
   addressOptions = {
-
-    addressConfig = mkOption {
-      default = {};
-      example = { Address = "192.168.0.100/24"; };
-      type = types.addCheck (types.attrsOf unitOption) checkAddress;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Address]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+    options = {
+      addressConfig = mkOption {
+        default = {};
+        example = { Address = "192.168.0.100/24"; };
+        type = types.addCheck (types.attrsOf unitOption) checkAddress;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Address]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
-
   };
 
   routeOptions = {
-
-    routeConfig = mkOption {
-      default = {};
-      example = { Gateway = "192.168.0.1"; };
-      type = types.addCheck (types.attrsOf unitOption) checkRoute;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Route]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+    options = {
+      routeConfig = mkOption {
+        default = {};
+        example = { Gateway = "192.168.0.1"; };
+        type = types.addCheck (types.attrsOf unitOption) checkRoute;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Route]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
-
   };
 
   networkOptions = commonNetworkOptions // {
@@ -471,8 +476,7 @@ let
 
     addresses = mkOption {
       default = [ ];
-      type = types.listOf types.optionSet;
-      options = [ addressOptions ];
+      type = with types; listOf (submodule addressOptions);
       description = ''
         A list of address sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
@@ -482,8 +486,7 @@ let
 
     routes = mkOption {
       default = [ ];
-      type = types.listOf types.optionSet;
-      options = [ routeOptions ];
+      type = with types; listOf (submodule routeOptions);
       description = ''
         A list of route sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
@@ -517,6 +520,8 @@ let
         ''
           [Link]
           ${attrsToSection def.linkConfig}
+
+          ${def.extraConfig}
         '';
     };
 
@@ -567,6 +572,7 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${def.extraConfig}
         '';
     };
 
@@ -605,9 +611,14 @@ let
             ${attrsToSection x.routeConfig}
 
           '')}
+          ${def.extraConfig}
         '';
     };
 
+  unitFiles = map (name: {
+    target = "systemd/network/${name}";
+    source = "${cfg.units.${name}.unit}/${name}";
+  }) (attrNames cfg.units);
 in
 
 {
@@ -624,35 +635,32 @@ in
 
     systemd.network.links = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ linkOptions ];
+      type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
       description = "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ netdevOptions ];
+      type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
       description = "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ networkOptions networkConfig ];
+      type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
       description = "Definition of systemd networks.";
     };
 
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
+      type = with types; attrsOf (submodule (
+        { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        };
+        }));
     };
 
   };
@@ -662,23 +670,19 @@ in
     systemd.additionalUpstreamSystemUnits =
       [ "systemd-networkd.service" "systemd-networkd-wait-online.service" ];
 
-    systemd.network.units =
-      mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
+    systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
       // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
       // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
 
-    environment.etc."systemd/network".source =
-      generateUnits "network" cfg.units [] [];
+    environment.etc = unitFiles;
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
-      before = [ "network-interfaces.target" ];
-      restartTriggers = [ config.environment.etc."systemd/network".source ];
+      restartTriggers = map (f: f.source) (unitFiles);
     };
 
     systemd.services.systemd-networkd-wait-online = {
-      before = [ "network-online.target" "ip-up.target" ];
-      wantedBy = [ "network-online.target" "ip-up.target" ];
+      wantedBy = [ "network-online.target" ];
     };
 
     systemd.services."systemd-network-wait-online@" = {
@@ -694,8 +698,5 @@ in
     };
 
     services.resolved.enable = mkDefault true;
-    services.timesyncd.enable = mkDefault config.services.ntp.enable;
-
   };
-
 }

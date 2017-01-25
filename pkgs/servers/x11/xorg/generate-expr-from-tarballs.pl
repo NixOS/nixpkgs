@@ -239,7 +239,9 @@ let
   mkDerivation = name: attrs:
     let newAttrs = (overrides."\${name}" or (x: x)) attrs;
         stdenv = newAttrs.stdenv or args.stdenv;
-    in stdenv.mkDerivation (removeAttrs newAttrs [ "stdenv" ]);
+      in stdenv.mkDerivation ((removeAttrs newAttrs [ "stdenv" ]) // {
+        hardeningDisable = [ "bindnow" "relro" ];
+      });
 
   overrides = import ./overrides.nix {inherit args xorg;};
 

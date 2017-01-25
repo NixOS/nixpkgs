@@ -1,26 +1,27 @@
 { stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsaLib, dbus_libs, cups, libexif, ffmpeg, libudev
+, alsaLib, dbus_libs, cups, libexif, ffmpeg, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
 , libuuid, xz
 , gstreamer, gst_plugins_base, libxml2
-, glib, gtk, pango, gdk_pixbuf, cairo, atk, gnome3
+, glib, gtk2, pango, gdk_pixbuf, cairo, atk, gnome3
 , nss, nspr
 , patchelf
 }:
 
 let
-  version = "1.3";
-  build = "551.30-1";
+  version = "1.6";
+  build = "689.34-1";
   fullVersion = "stable_${version}.${build}";
 
   info = if stdenv.is64bit then {
       arch = "amd64";
-      sha256 = "89d0630c9df56cfb12a87f23430179f6d14a8c57fb029d1c8d28ab06c98b7640";
+      sha256 = "0wn98nzlhppmm3g797kiqr9bxxff8l7l110f1w1fnfl93d325hrm";
     } else {
       arch = "i386";
-      sha256 = "0a7e07833f5359e38516222767da63edeca92177cbb6d4ef4946a6ef7c7b2946";
+      sha256 = "0agybibfwk5n1gxi8g4rbvvmlq5963df5arz4fyi4a1hcayllaz0";
     };
+
 in stdenv.mkDerivation rec {
   product    = "vivaldi";
   name       = "${product}-${version}";
@@ -36,9 +37,9 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
+    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
       libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-      atk alsaLib dbus_libs cups gtk gdk_pixbuf libexif ffmpeg libudev
+      atk alsaLib dbus_libs cups gtk2 gdk_pixbuf libexif ffmpeg systemd
       freetype fontconfig libXrender libuuid expat glib nss nspr
       gstreamer libxml2 gst_plugins_base pango cairo gnome3.gconf
       patchelf
@@ -53,7 +54,7 @@ in stdenv.mkDerivation rec {
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
-    opt/vivaldi/vivaldi-bin
+      opt/vivaldi/vivaldi-bin
     echo "Finished patching Vivaldi binaries"
   '';
 
@@ -65,6 +66,17 @@ in stdenv.mkDerivation rec {
     cp -r opt "$out"
     mkdir "$out/bin"
     ln -s "$out/opt/vivaldi/vivaldi" "$out/bin/vivaldi"
+    mkdir -p "$out/share"
+    cp -r usr/share/{applications,xfce4} "$out"/share
+    substituteInPlace "$out"/share/applications/*.desktop \
+      --replace /usr/bin/vivaldi-stable "$out"/bin/vivaldi
+    local d
+    for d in 16 22 24 32 48 64 128 256; do
+      mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
+      ln -s \
+        "$out"/opt/vivaldi/product_logo_''${d}.png \
+        "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
+    done
   '';
 
   meta = with stdenv.lib; {

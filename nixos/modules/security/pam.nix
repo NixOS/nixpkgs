@@ -105,6 +105,16 @@ let
         '';
       };
 
+      setEnvironment = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the service should set the environment variables
+          listed in <option>environment.sessionVariables</option>
+          using <literal>pam_env.so</literal>.
+        '';
+      };
+
       setLoginUid = mkOption {
         type = types.bool;
         description = ''
@@ -223,6 +233,8 @@ let
           account sufficient pam_unix.so
           ${optionalString use_ldap
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
+          ${optionalString config.services.sssd.enable
+              "account sufficient ${pkgs.sssd}/lib/security/pam_sss.so"}
           ${optionalString config.krb5.enable
               "account sufficient ${pam_krb5}/lib/security/pam_krb5.so"}
 
@@ -263,6 +275,8 @@ let
               "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
           ${optionalString use_ldap
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
+          ${optionalString config.services.sssd.enable
+              "auth sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass"}
           ${optionalString config.krb5.enable ''
             auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
             auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
@@ -278,26 +292,32 @@ let
               "password optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString use_ldap
               "password sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
+          ${optionalString config.services.sssd.enable
+              "password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok"}
           ${optionalString config.krb5.enable
               "password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass"}
           ${optionalString config.services.samba.syncPasswordsByPam
               "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
 
           # Session management.
-          session required pam_env.so envfile=${config.system.build.pamEnvironment}
+          ${optionalString cfg.setEnvironment ''
+            session required pam_env.so envfile=${config.system.build.pamEnvironment}
+          ''}
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
               "session ${
                 if config.boot.isContainer then "optional" else "required"
               } pam_loginuid.so"}
           ${optionalString cfg.makeHomeDir
-              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=/etc/skel umask=0022"}
+              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0022"}
           ${optionalString cfg.updateWtmp
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.security.pam.enableEcryptfs
               "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           ${optionalString use_ldap
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
+          ${optionalString config.services.sssd.enable
+              "session optional ${pkgs.sssd}/lib/security/pam_sss.so"}
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
           ${optionalString cfg.otpwAuth
@@ -374,8 +394,7 @@ in
 
     security.pam.services = mkOption {
       default = [];
-      type = types.loaOf types.optionSet;
-      options = [ pamOpts ];
+      type = with types; loaOf (submodule pamOpts);
       description =
         ''
           This option defines the PAM services.  A service typically
@@ -384,6 +403,16 @@ in
           Each attribute of this set defines a PAM service, with the attribute name
           defining the name of the service.
         '';
+    };
+
+    security.pam.makeHomeDir.skelDirectory = mkOption {
+      type = types.str;
+      default = "/var/empty";
+      example =  "/etc/skel";
+      description = ''
+        Path to skeleton directory whose contents are copied to home
+        directories newly created by <literal>pam_mkhomedir</literal>.
+      '';
     };
 
     security.pam.enableSSHAgentAuth = mkOption {
@@ -436,6 +465,7 @@ in
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
+      ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
@@ -495,6 +525,13 @@ in
         vlock = {};
         xlock = {};
         xscreensaver = {};
+
+        runuser = { rootOK = true; unixAuth = false; setEnvironment = false; };
+
+        /* FIXME: should runuser -l start a systemd session? Currently
+           it complains "Cannot create session: Already running in a
+           session". */
+        runuser-l = { rootOK = true; unixAuth = false; };
       };
 
   };

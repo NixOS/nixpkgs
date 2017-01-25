@@ -510,7 +510,7 @@ in
       description = "OAuth2 Proxy";
       path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         User = "oauth2_proxy";

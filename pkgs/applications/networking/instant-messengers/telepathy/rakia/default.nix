@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfigUpstream, libxslt, telepathy_glib, libxml2, dbus_glib
-, python, sofia_sip }:
+, sofia_sip }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-rakia";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "18dxffa8hhjyvqkhhac05rrkx81vnncjrakg5ygikfp0j79vrbhv";
   };
 
-  nativeBuildInputs = [pkgconfigUpstream libxslt python];
-  buildInputs = [ libxml2 dbus_glib telepathy_glib sofia_sip];
+  nativeBuildInputs = [pkgconfigUpstream libxslt ];
+  buildInputs = [ libxml2 dbus_glib telepathy_glib sofia_sip telepathy_glib.python ];
 
   meta = {
     homepage = http://telepathy.freedesktop.org;

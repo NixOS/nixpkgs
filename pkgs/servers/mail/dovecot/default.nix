@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.2.25";
+  name = "dovecot-2.2.27";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs = [ openssl bzip2 zlib clucene_core_2 icu openldap ]
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.2/${name}.tar.gz";
-    sha256 = "0rwn5wc5b8j9fzqcjggdgpzmb77myrf4ra294z1gg5v3hhng7nfq";
+    sha256 = "1s8qvr6fa9d0n179kdwgpsi72zkvpbh9q57q8fr2fjysgjl94zw9";
   };
 
   preConfigure = ''
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     "--with-lucene"
     "--with-icu"
   ] ++ lib.optional (stdenv.isLinux) "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    ++ lib.optional (stdenv.isDarwin) "--enable-static"
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite";
@@ -70,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "http://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [viric peti rickynils];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

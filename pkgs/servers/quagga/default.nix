@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "quagga-${version}";
-  version = "1.0.20160315";
+  version = "1.0.20161017";
 
   src = fetchurl {
     url = "mirror://savannah/quagga/${name}.tar.gz";
-    sha256 = "0qrjhp6l1hw35jrvcwyl0df4zjx1kqhrsafx307i6pzgs2xbgzr1";
+    sha256 = "0629f7bkyh0a3n90kkr202g2i44id09qzkl05y8z66blvd6p49lg";
   };
 
   buildInputs =

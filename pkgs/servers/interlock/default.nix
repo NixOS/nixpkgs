@@ -17,7 +17,7 @@ buildGoPackage rec {
     sha256 = "06aqx3jy744yx29xyg8ips0dw16186hfqbxdv3hfrmwxmaxhl4lz";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   nativeBuildInputs = [ sudo ];
   buildFlags = [ "-tags textsecure" ];

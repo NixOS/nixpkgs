@@ -1,31 +1,30 @@
-{ stdenv, fetchurl, makeWrapper, jre, which, gnused }:
+{ stdenv, fetchurl, makeWrapper, jre8, which, gawk }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "neo4j-${version}";
-  version = "2.1.3";
+  version = "3.0.6";
 
   src = fetchurl {
     url = "http://dist.neo4j.org/neo4j-community-${version}-unix.tar.gz";
-    sha256 = "0gcyy6ayn8qvxj6za5463lgy320mn4rq7q5qysc26fxjd73drrrk";
+    sha256 = "efeab41183e9e5fa94a2d396c65ea93a24e9f105cb3b5f0d0a8e42fb709f4660";
   };
 
-  buildInputs = [ makeWrapper jre which gnused ];
-
-  patchPhase = ''
-    substituteInPlace "bin/neo4j" --replace "NEO4J_INSTANCE=\$NEO4J_HOME" ""
-  '';
+  buildInputs = [ makeWrapper jre8 which gawk ];
 
   installPhase = ''
     mkdir -p "$out/share/neo4j"
     cp -R * "$out/share/neo4j"
 
     mkdir -p "$out/bin"
-    makeWrapper "$out/share/neo4j/bin/neo4j" "$out/bin/neo4j" \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gnused ]}"
-    makeWrapper "$out/share/neo4j/bin/neo4j-shell" "$out/bin/neo4j-shell" \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gnused ]}"
+    for NEO4J_SCRIPT in neo4j neo4j-admin neo4j-import neo4j-shell
+    do
+        makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
+            "$out/bin/$NEO4J_SCRIPT" \
+            --prefix PATH : "${stdenv.lib.makeBinPath [ jre8 which gawk ]}" \
+            --set JAVA_HOME "$jre8"
+    done
   '';
 
   meta = with stdenv.lib; {

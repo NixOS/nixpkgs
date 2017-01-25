@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -7,25 +7,25 @@
 
 stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
-  version = "0.10.6";
+  version = "1.0.48";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "1x3xam7vprlld6iqhqgdhgmqyclfy8dvzgy3375cijy9akhvv67i";
+    sha256 = "1k73ir1w6457y9mdv2xnk8cr1y1xxhzzd4095rzvn2y7fr3zgz01";
   };
+
+  # FIXME: might be nice to put different APIs in different outputs
+  # (e.g. libaws-cpp-sdk-s3.so in output "s3").
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ cmake curl ];
 
   cmakeFlags =
     lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
     ++ lib.optional (apis != ["*"])
-      "-DBUILD_ONLY=${lib.concatMapStringsSep ";" (api: "aws-cpp-sdk-" + api) apis}";
-
-  # curl upgrade to 7.50.0 (#17152) changes the libcurl headers slightly and
-  # therefore requires the followin flag until this package gets updated
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+      "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
   enableParallelBuilding = true;
 
@@ -37,18 +37,15 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  postInstall =
-    ''
-      # Move the .so files to a more reasonable location.
-      mv $out/lib/linux/*/Release/*.so $out/lib
-      rm -rf $out/lib/linux
-    '';
+  NIX_LDFLAGS = lib.concatStringsSep " " (
+    (map (pkg: "-rpath ${lib.getOutput "lib" pkg}/lib"))
+      [ curl openssl zlib stdenv.cc.cc ]);
 
   meta = {
     description = "A C++ interface for Amazon Web Services";
     homepage = https://github.com/awslabs/aws-sdk-cpp;
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.eelco ];
   };
 }

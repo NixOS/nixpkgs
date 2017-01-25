@@ -1,5 +1,5 @@
 { stdenv, fetchsvn, autoconf, automake, docbook_xml_dtd_45
-, docbook_xsl, gtkmm, intltool, libgig, libsndfile, libtool, libxslt
+, docbook_xsl, gtkmm2, intltool, libgig, libsndfile, libtool, libxslt
 , pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   preConfigure = "make -f Makefile.cvs";
 
   buildInputs = [ 
-    autoconf automake docbook_xml_dtd_45 docbook_xsl gtkmm intltool
+    autoconf automake docbook_xml_dtd_45 docbook_xsl gtkmm2 intltool
     libgig libsndfile libtool libxslt pkgconfig 
   ];
 

@@ -1,5 +1,5 @@
-{stdenv, buildOcaml, fetchurl, ocaml, core, pa_ounit, pa_test,
- bin_prot, comparelib, sexplib, rsync}:
+{stdenv, buildOcaml, fetchurl, ocaml, core_p4, pa_ounit, pa_test,
+ bin_prot_p4, comparelib, sexplib_p4, rsync}:
 
 buildOcaml rec {
   name = "re2";
@@ -16,7 +16,7 @@ buildOcaml rec {
             else null;
 
   buildInputs = [ pa_ounit pa_test rsync ];
-  propagatedBuildInputs = [ core bin_prot comparelib sexplib ];
+  propagatedBuildInputs = [ core_p4 bin_prot_p4 comparelib sexplib_p4 ];
 
   hasSharedObjects = true;
 

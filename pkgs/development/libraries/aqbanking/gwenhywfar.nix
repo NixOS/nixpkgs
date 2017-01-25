@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnutls, gtk, libgcrypt, pkgconfig, gettext, qt4
+{ stdenv, fetchurl, gnutls, gtk2, libgcrypt, pkgconfig, gettext, qt4
 
 , pluginSearchPaths ? [
     "/run/current-system/sw/lib/gwenhywfar/plugins"
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext ];
 
-  buildInputs = [ gtk qt4 gnutls libgcrypt ];
+  buildInputs = [ gtk2 qt4 gnutls libgcrypt ];
 
   QTDIR = qt4;
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, curl, python, munge, perl, pam, openssl
-, ncurses, mysql, gtk, lua, hwloc, numactl
+, ncurses, mysql, gtk2, lua, hwloc, numactl
 }:
 
 stdenv.mkDerivation rec {
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    curl python munge perl pam openssl mysql.lib ncurses gtk lua hwloc numactl
+    curl python munge perl pam openssl mysql.lib ncurses gtk2 lua hwloc numactl
   ];
 
   configureFlags =
     [ "--with-munge=${munge}"
       "--with-ssl=${openssl.dev}"
       "--sysconfdir=/etc/slurm"
-    ] ++ stdenv.lib.optional (gtk == null)  "--disable-gtktest";
+    ] ++ stdenv.lib.optional (gtk2 == null)  "--disable-gtktest";
 
   preConfigure = ''
     substituteInPlace ./doc/html/shtml2html.py --replace "/usr/bin/env python" "${python.interpreter}"

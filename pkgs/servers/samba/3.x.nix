@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     sha256 = "0l9pz2m67vf398q3c2dwn8jwdxsjb20igncf4byhv6yq5dzqlb4g";
   };
 
+  patches = [(fetchurl {
+    url = "https://download.samba.org/pub/samba/patches/security/"
+        + "samba-3.6.25-security-2015-12-16.patch";
+    sha256 = "00dcjcn577825mfdwdp76jfy5kcrqw3s4d5c41gqdq5gfcdbmqdb";
+  })];
+
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
     ++ stdenv.lib.optional useKerberos kerberos;
 

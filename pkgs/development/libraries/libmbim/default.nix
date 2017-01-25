@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, python, udev, libgudev }:
 
 stdenv.mkDerivation rec {
-  name = "libmbim-1.12.2";
+  name = "libmbim-1.14.0";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/libmbim/${name}.tar.xz";
-    sha256 = "0abv0h9c3kbw4bq1b9270sg189jcjj3x3wa91bj836ynwg9m34wl";
+    url = "https://www.freedesktop.org/software/libmbim/${name}.tar.xz";
+    sha256 = "0nxb4x8l092xckk4dy84cn5qhviif8akzy0miypapjqqbalm53fa";
   };
 
   outputs = [ "out" "dev" "doc" ];

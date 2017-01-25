@@ -74,7 +74,7 @@ in
 
     services.zope2.instances = mkOption {
       default = {};
-      type = types.loaOf types.optionSet;
+      type = with types; loaOf (submodule zope2Opts);
       example = literalExample ''
         {
           plone01 = {
@@ -96,7 +96,6 @@ in
         }
       '';
       description = "zope2 instances to be created automaticaly by the system.";
-      options = [ zope2Opts ];
     };
   };
 

@@ -1,24 +1,30 @@
 { fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
-, xcbutil, xcbutilwm, libstartup_notification, libX11, pcre, libev, yajl
-, xcb-util-cursor, coreutils, perl, pango, perlPackages, libxkbcommon
+, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
+, yajl, xcb-util-cursor, coreutils, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb_run, dmenu, i3status }:
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.12";
+  version = "4.13";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "1d3q3lgpjbkmcwzjhp0dfr0jq847silcfg087slcnj95ikh1r7p1";
+    sha256 = "12ngz32swh9n85xy0cz1lq16aqi9ys5hq19v589q9a97wn1k3hcl";
   };
 
+  nativeBuildInputs = [ which pkgconfig makeWrapper ];
+
   buildInputs = [
-    which pkgconfig makeWrapper libxcb xcbutilkeysyms xcbutil xcbutilwm libxkbcommon
+    libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
     libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.TestMore perlPackages.InlineC
     xorgserver xvfb_run
   ];
+
+  configureFlags = [ "--disable-builddir" ];
+
+  enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs .
@@ -45,12 +51,8 @@ stdenv.mkDerivation rec {
     ! grep -q '^not ok' testcases/latest/complete-run.log
   '';
 
-  configurePhase = "makeFlags=PREFIX=$out";
-
   postInstall = ''
     wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
-    mkdir -p $out/man/man1
-    cp man/*.1 $out/man/man1
     for program in $out/bin/i3-sensible-*; do
       sed -i 's/which/command -v/' $program
     done
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A tiling window manager";
     homepage    = "http://i3wm.org";
-    maintainers = with maintainers; [ garbas modulistic ];
+    maintainers = with maintainers; [ garbas modulistic fpletz ];
     license     = licenses.bsd3;
     platforms   = platforms.all;
 

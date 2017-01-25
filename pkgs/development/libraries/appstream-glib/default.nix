@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, pkgconfig, gettext, gtk3, intltool, glib
 , gtk_doc, autoconf, automake, libtool, libarchive, libyaml
 , gobjectIntrospection, sqlite, libsoup, gcab, attr, acl, docbook_xsl
-, libuuid, json_glib
+, libuuid, json_glib, autoconf-archive
 }:
 
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.5.12";
+  name = "appstream-glib-0.6.3";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "00b0441f409vzgy0znn42k093w7hwv3495qvsakxnhvk1h1ws23s";
+    sha256 = "12l0vzhi9vpyrnf7vrpq21rb26mb6yskp5zgngdjyjanwhzmc617";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool autoconf-archive ];
   buildInputs = [ glib gtk_doc gettext sqlite libsoup
                   gcab attr acl docbook_xsl libuuid json_glib
                   libarchive libyaml gtk3 gobjectIntrospection ];

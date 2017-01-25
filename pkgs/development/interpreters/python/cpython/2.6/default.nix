@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, less, includeModules ? false
+{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
 , sqlite, tcl, tk, xlibsWrapper, openssl, readline, db, ncurses, gdbm, self, callPackage
-, python26Packages }:
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
+}:
 
 assert zlibSupport -> zlib != null;
 
@@ -8,10 +10,14 @@ with stdenv.lib;
 
 let
   majorVersion = "2.6";
-  version = "${majorVersion}.9";
+  minorVersion = "9";
+  minorVersionSuffix = "";
+  pythonVersion = majorVersion;
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
+  libPrefix = "python${majorVersion}";
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
     sha256 = "0hbfs2691b60c7arbysbzr0w9528d5pl8a4x7mq5psh6a2cvprya";
   };
 
@@ -53,8 +59,6 @@ let
     [ bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline xlibsWrapper tcl tk sqlite ]
     ++ optional zlibSupport zlib;
 
-  propagatedBuildInputs = [ less ];
-
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
     LIBRARY_PATH = makeLibraryPath paths;
@@ -66,8 +70,8 @@ let
     name = "python${if includeModules then "" else "-minimal"}-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs propagatedBuildInputs
-            preConfigure configureFlags;
+    inherit majorVersion version src patches buildInputs preConfigure
+            configureFlags;
 
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
@@ -92,16 +96,22 @@ let
 
         paxmark E $out/bin/python${majorVersion}
 
+        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
+        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
       '';
 
-    passthru = rec {
+    passthru = let
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+    in rec {
+      inherit libPrefix;
       inherit zlibSupport;
       isPy2 = true;
       isPy26 = true;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python26Packages; };
-      libPrefix = "python${majorVersion}";
+      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+      pkgs = pythonPackages;
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       interpreter = "${self}/bin/${executable}";

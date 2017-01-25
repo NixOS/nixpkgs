@@ -1,8 +1,8 @@
 { fetchFromGitHub }:
 
 fetchFromGitHub {
-  owner  = "skaes";
+  owner  = "manveru";
   repo   = "rvm-patchsets";
-  rev    = "84d0634ce5639781c4d8e9396ec20341d6524901";
-  sha256 = "06x2r43i8kpcmk6s5idrc3z49p8vy18b2lsh1jdqla69i5z2vqlf";
+  rev    = "46e04f230ce91a786f5e583389443efec0ecd594";
+  sha256 = "0ayh8zj8knyz3344an942qdf33pi42jmksqk34frb346zi1ag693";
 }

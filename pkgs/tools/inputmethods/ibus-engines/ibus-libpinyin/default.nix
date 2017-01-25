@@ -1,29 +1,31 @@
-{ stdenv, fetchurl, intltool, pkgconfig, sqlite, libpinyin, db
+{ stdenv, fetchFromGitHub, autoreconfHook
+, intltool, pkgconfig, sqlite, libpinyin, db
 , ibus, glib, gtk3, python3, pygobject3
 }:
 
 stdenv.mkDerivation rec {
   name = "ibus-libpinyin-${version}";
-  version = "1.7.4";
+  version = "1.8.0";
+
+  src = fetchFromGitHub {
+    owner  = "libpinyin";
+    repo   = "ibus-libpinyin";
+    rev    = version;
+    sha256 = "1d85kzlhav0ay798i88yqyrjbkv3y7w2aiadpmcjgscyd5ccsnnz";
+  };
+
+  buildInputs = [ ibus glib sqlite libpinyin python3 gtk3 db ];
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+
+  postAutoreconf = ''
+    intltoolize
+  '';
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
     description  = "IBus interface to the libpinyin input method";
-    homepage     = https://github.com/libpinyin/ibus-libpinyin;
     license      = licenses.gpl2;
+    maintainers  = with maintainers; [ ericsagnes ];
     platforms    = platforms.linux;
-  };
-
-  #configureFlags = "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t";
-
-  buildInputs = [
-  ibus glib sqlite libpinyin python3 gtk3 db
-  ];
-
-  nativeBuildInputs = [ intltool pkgconfig ];
-
-  src = fetchurl {
-    url = "mirror://sourceforge/project/libpinyin/ibus-libpinyin/ibus-libpinyin-${version}.tar.gz";
-    sha256 = "c2085992f76ca669ebe4b7e7c0170433bbfb61f764f8336b3b17490b9fb1c334";
   };
 }

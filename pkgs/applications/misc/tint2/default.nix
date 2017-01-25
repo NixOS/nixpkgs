@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, pkgconfig, cmake, gettext, cairo, pango, pcre
-, glib , imlib2, gtk, libXinerama , libXrender, libXcomposite, libXdamage
+, glib , imlib2, gtk2, libXinerama , libXrender, libXcomposite, libXdamage
 , libX11 , libXrandr, librsvg, libpthreadstubs , libXdmcp
 , libstartup_notification , hicolor_icon_theme, wrapGAppsHook
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake gettext wrapGAppsHook ];
 
-  buildInputs = [ cairo pango pcre glib imlib2 gtk libXinerama libXrender
+  buildInputs = [ cairo pango pcre glib imlib2 gtk2 libXinerama libXrender
     libXcomposite libXdamage libX11 libXrandr librsvg libpthreadstubs
     libXdmcp libstartup_notification hicolor_icon_theme ];
 

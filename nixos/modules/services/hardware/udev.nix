@@ -32,13 +32,11 @@ let
   '';
 
   # Perform substitutions in all udev rules files.
-  udevRules = stdenv.mkDerivation {
-    name = "udev-rules";
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    buildCommand = ''
+  udevRules = pkgs.runCommand "udev-rules"
+    { preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
       mkdir -p $out
       shopt -s nullglob
       set +o pipefail
@@ -130,15 +128,12 @@ let
         ln -s /dev/null $out/80-drivers.rules
       ''}
     ''; # */
-  };
 
-  hwdbBin = stdenv.mkDerivation {
-    name = "hwdb.bin";
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    buildCommand = ''
+  hwdbBin = pkgs.runCommand "hwdb.bin"
+    { preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
       mkdir -p etc/udev/hwdb.d
       for i in ${toString ([udev] ++ cfg.packages)}; do
         echo "Adding hwdb files for package $i"
@@ -151,7 +146,6 @@ let
       ${udev}/bin/udevadm hwdb --update --root=$(pwd)
       mv etc/udev/hwdb.bin $out
     '';
-  };
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.

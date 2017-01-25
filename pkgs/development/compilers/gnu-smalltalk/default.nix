@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libtool, zip, libffi, libsigsegv, readline, gmp,
-gnutls, gnome, cairo, SDL, sqlite, emacsSupport ? false, emacs ? null }:
+gnutls, gnome2, cairo, SDL, sqlite, emacsSupport ? false, emacs ? null }:
 
 assert emacsSupport -> (emacs != null);
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
   buildInputs = [
-    pkgconfig libtool zip libffi libsigsegv-shared readline gmp gnutls gnome.gtk
+    pkgconfig libtool zip libffi libsigsegv-shared readline gmp gnutls gnome2.gtk
     cairo SDL sqlite
   ]
   ++ stdenv.lib.optional emacsSupport emacs;

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, buildPythonPackage, libsexy, pkgconfig, libxml2, pygtk, pango, gtk, glib, }:
+{ stdenv, fetchurl, mkPythonDerivation, libsexy, pkgconfig, libxml2, pygtk, pango, gtk2, glib }:
 
-stdenv.mkDerivation rec {
-  name = "python-libsexy-${version}";
+mkPythonDerivation rec {
+  name = "libsexy-${version}";
   version = "0.1.9";
 
   src = fetchurl {
@@ -9,12 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "05bgcsxwkp63rlr8wg6znd46cfbhrzc5wh70jabsi654pxxjb39d";
   };
 
-  buildInputs = [
-    pkgconfig pygtk
-  ];
+  buildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [
-    libsexy gtk glib pango libxml2
+    pygtk libsexy gtk2 glib pango libxml2
   ];
 
   postInstall = ''

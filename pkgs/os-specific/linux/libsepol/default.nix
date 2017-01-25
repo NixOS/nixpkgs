@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all";
-
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")
     makeFlagsArray+=("DESTDIR=$out")

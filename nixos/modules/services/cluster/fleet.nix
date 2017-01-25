@@ -28,7 +28,7 @@ in {
 
     etcdServers = mkOption {
       type = types.listOf types.str;
-      default = [ "http://127.0.0.1:4001" ];
+      default = [ "http://127.0.0.1:2379" ];
       description = ''
         Fleet list of etcd endpoints to use.
       '';

@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
+
   # Skip byte-compiling of emacs-lisp files because this is currently
   # broken in ledger...
   postInstall = ''

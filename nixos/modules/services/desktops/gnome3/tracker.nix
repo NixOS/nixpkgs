@@ -37,6 +37,8 @@ in
 
     services.dbus.packages = [ gnome3.tracker ];
 
+    systemd.packages = [ gnome3.tracker ];
+
   };
 
 }

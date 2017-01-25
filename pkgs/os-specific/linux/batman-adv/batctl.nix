@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, libnl }:
 
 let
-  ver = "2016.2";
+  ver = "2016.5";
 in
 stdenv.mkDerivation rec {
   name = "batctl-${ver}";
 
   src = fetchurl {
     url = "http://downloads.open-mesh.org/batman/releases/batman-adv-${ver}/${name}.tar.gz";
-    sha256 = "0bf5zlpwxvq4blcgpwjgh8ms4lfapwjpjl4sczwf3i1rv7f4p05q";
+    sha256 = "1saa088ggsr7bwlvnzpgjj6zqn51j0km96f4x1djhj55hwfypv87";
   };
 
   nativeBuildInputs = [ pkgconfig ];

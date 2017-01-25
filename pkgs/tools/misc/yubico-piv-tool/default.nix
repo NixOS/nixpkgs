@@ -14,7 +14,17 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/yubico-piv-tool/;
-    description = "";
+    description = ''
+      Used for interacting with the Privilege and Identification Card (PIV)
+      application on a YubiKey
+    '';
+    longDescription = ''
+      The Yubico PIV tool is used for interacting with the Privilege and
+      Identification Card (PIV) application on a YubiKey.
+      With it you may generate keys on the device, importing keys and
+      certificates, and create certificate requests, and other operations.
+      A shared library and a command-line tool is included.
+    '';
     maintainers = with maintainers; [ wkennington ];
     license = licenses.bsd2;
     platforms = platforms.all;

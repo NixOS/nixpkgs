@@ -1,14 +1,15 @@
-{stdenv, fetchurl, m4}:
+{ stdenv, fetchurl, m4 }:
 
 stdenv.mkDerivation rec {
-  name = "libmilter-8.14.8";
-  
+  name = "libmilter-${version}";
+  version = "8.15.2";
+
   src = fetchurl {
-    url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.8.14.8.tar.gz";
-    sha256 = "1zmhzkj3gzx8022hsrysr3nzlcmv1qisb5i4jbx91661bw96ksq2";
+    url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${version}.tar.gz";
+    sha256 = "0fdl9ndmspqspdlmghzxlaqk56j3yajk52d7jxcg21b7sxglpy94";
   };
 
-  buildPhase = '' 
+  buildPhase = ''
     mkdir -p $out/lib
     cd libmilter
     cat > a.m4 <<EOF
@@ -29,10 +30,12 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [ ./install.patch ./sharedlib.patch];
-  
-  buildInputs = [m4];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  buildInputs = [ m4 ];
+
+  meta = with stdenv.lib; {
+    description = "Sendmail Milter mail filtering API library";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

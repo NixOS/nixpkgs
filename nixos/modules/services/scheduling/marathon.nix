@@ -83,7 +83,7 @@ in {
       description = "Marathon Service";
       environment = cfg.environment;
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" "zookeeper.service" "mesos-master.service" "mesos-slave.service" ];
+      after = [ "network.target" "zookeeper.service" "mesos-master.service" "mesos-slave.service" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.marathon}/bin/marathon --master ${cfg.master} --zk zk://${concatStringsSep "," cfg.zookeeperHosts}/marathon --http_port ${toString cfg.httpPort} ${concatStringsSep " " cfg.extraCmdLineOptions}";

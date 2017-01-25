@@ -5,14 +5,14 @@
 , enableSELinux ? false
 , enableNaCl ? false
 , enableHotwording ? false
-, gnomeSupport ? false
+, gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
 , cupsSupport ? true
 , pulseSupport ? false
-, hiDPISupport ? false
+, commandLineArgs ? ""
 }:
 
 let
@@ -22,9 +22,9 @@ let
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit enableSELinux enableNaCl enableHotwording gnomeSupport
+      inherit enableSELinux enableNaCl enableHotwording gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              hiDPISupport;
+              enableWideVine;
     };
 
     browser = callPackage ./browser.nix { inherit channel; };
@@ -77,6 +77,7 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      ${commandLineArgs} \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ed -v -s "$out/bin/chromium" << EOF

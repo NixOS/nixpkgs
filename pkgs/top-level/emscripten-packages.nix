@@ -10,7 +10,7 @@ with pkgs; rec {
   
   libxml2 = (pkgs.libxml2.override {
     stdenv = emscriptenStdenv;
-    supportPython = false;
+    pythonSupport = false;
   }).overrideDerivation
     (old: { 
       buildInputs = old.buildInputs ++ [ autoreconfHook pkgconfig zlib nodejs ];
@@ -61,7 +61,7 @@ with pkgs; rec {
     
     installPhase = ''
       mkdir -p $out/share
-      mkdir -p $doc
+      mkdir -p $doc/share/${name}
       
       cp Demo* $out/share
       cp -R codemirror-5.12 $out/share
@@ -72,7 +72,7 @@ with pkgs; rec {
       cp *.html $out/share
       cp *.json $out/share
       cp *.rng $out/share
-      cp README.md $doc/
+      cp README.md $doc/share/${name}
     '';
     
     postInstall = ''

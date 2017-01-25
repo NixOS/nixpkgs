@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, freetype, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
-, alsaSupport ? true, alsaLib ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
 , screenSaverSupport ? true, libXScrnSaver ? null
 , vdpauSupport ? false, libvdpau ? null
-, cddaSupport ? true, cdparanoia ? null
-, dvdnavSupport ? true, libdvdnav ? null
+, cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
+, dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
 , bluraySupport ? true, libbluray ? null
 , amrSupport ? false, amrnb ? null, amrwb ? null
 , cacaSupport ? true, libcaca ? null
@@ -24,6 +24,7 @@
 , libpngSupport ? true, libpng ? null
 , libjpegSupport ? true, libjpeg ? null
 , useUnfreeCodecs ? false
+, darwin ? null
 }:
 
 assert fontconfigSupport -> (fontconfig != null);
@@ -83,19 +84,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-1.1.1";
+  name = "mplayer-1.3.0";
 
   src = fetchurl {
-    # Old kind of URL:
-    # url = http://tarballs.nixos.org/mplayer-snapshot-20101227.tar.bz2;
-    # Snapshot I took on 20110423
-
-    #Transient
-    #url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
-    #sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
-
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.1.tar.xz";
-    sha256 = "ce8fc7c3179e6a57eb3a58cb7d1604388756b8a61764cc93e095e7aff3798c76";
+    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.3.0.tar.xz";
+    sha256 = "0hwqn04bdknb2ic88xd75smffxx63scvz0zvwvjb56nqj9n89l1s";
   };
 
   prePatch = ''
@@ -103,7 +96,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with stdenv.lib;
-    [ pkgconfig freetype ]
+    [ pkgconfig freetype ffmpeg ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
@@ -127,6 +120,7 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
+    ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
     ;
 
   nativeBuildInputs = [ yasm ];
@@ -162,8 +156,8 @@ stdenv.mkDerivation rec {
       --disable-xanim
       --disable-ivtv
       --disable-xvid --disable-xvid-lavc
-      --enable-vidix
-      --enable-fbdev
+      ${optionalString stdenv.isLinux "--enable-vidix"}
+      ${optionalString stdenv.isLinux "--enable-fbdev"}
       --disable-ossaudio
     '';
 

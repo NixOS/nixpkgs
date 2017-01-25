@@ -23,7 +23,7 @@ let
       else additionalArgs="-logfile /var/log/X.$display.log"
       fi
 
-      exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} $additionalArgs "$@"
+      exec ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} $additionalArgs "$@"
     '';
 
   usersConf = writeText "users.conf"
@@ -46,13 +46,15 @@ let
       [Seat:*]
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.session.script}
+      ${optionalString (elem defaultSessionName dmcfg.session.names) ''
+        user-session = ${defaultSessionName}
+      ''}
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
       ${optionalString cfg.autoLogin.enable ''
         autologin-user = ${cfg.autoLogin.user}
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
-        autologin-session = ${defaultSessionName}
       ''}
       ${cfg.extraSeatDefaults}
     '';
@@ -204,6 +206,9 @@ in
 
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
+
+    # lightdm uses the accounts daemon to rember language/window-manager per user
+    services.accounts-daemon.enable = true;
 
     security.pam.services.lightdm = {
       allowNullPassword = true;

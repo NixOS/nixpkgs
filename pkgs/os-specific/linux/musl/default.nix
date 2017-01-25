@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
-  version = "1.1.11";
+  version = "1.1.15";
 
   src = fetchurl {
     url    = "http://www.musl-libc.org/releases/${name}.tar.gz";
-    sha256 = "0grmmah3d9wajii26010plpinv3cbiq3kfqsblgn84kv3fjnv7mv";
+    sha256 = "1ymhxkskivzph0q34zadwfglc5gyahqajm7chqqn2zraxv3lgr4p";
   };
 
   enableParallelBuilding = true;
@@ -22,6 +22,15 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-shared"
     "--enable-static"
+    "--disable-gcc-wrapper"
+  ];
+
+  patches = [
+    # CVE-2016-8859: http://www.openwall.com/lists/oss-security/2016/10/19/1
+    (fetchpatch {
+      url = "https://git.musl-libc.org/cgit/musl/patch/?id=c3edc06d1e1360f3570db9155d6b318ae0d0f0f7";
+      sha256 = "15ih0aj27lz4sgq8r5jndc3qy5gz3ciraavrqpp0vw8h5wjcsb9v";
+    })
   ];
 
   dontDisableStatic = true;

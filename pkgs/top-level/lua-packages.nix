@@ -7,7 +7,7 @@
 
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
 , fetchFromGitHub, libmpack
 }:
 
@@ -189,14 +189,26 @@ let
       sha256 = "0j8jx8bjicvp9khs26xjya8c495wrpb7parxfnabdqa5nnsxjrwb";
     };
 
-    patchPhase = ''
-      sed -e "s,^LUAPREFIX_linux.*,LUAPREFIX_linux=$out," \
-          -i src/makefile
+    patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/makefile --replace gcc cc \
+        --replace 10.3 10.5
     '';
 
-    meta = {
+    preBuild = ''
+      makeFlagsArray=(
+        LUAV=${lua.luaversion}
+        PLAT=${if stdenv.isDarwin then "macosx"
+               else if stdenv.isFreeBSD then "freebsd"
+               else if stdenv.isLinux then "linux"
+               else if stdenv.isSunOS then "solaris"
+               else throw "unsupported platform"}
+        prefix=$out
+      );
+    '';
+
+    meta = with stdenv.lib; {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = with platforms; [darwin linux freebsd illumos];
       maintainers = with maintainers; [ mornfall ];
     };
   };
@@ -370,18 +382,20 @@ let
 
   lgi = stdenv.mkDerivation rec {
     name = "lgi-${version}";
-    version = "0.7.2";
+    version = "0.9.1";
 
-    src = fetchzip {
-      url    = "https://github.com/pavouk/lgi/archive/${version}.tar.gz";
-      sha256 = "10i2ssfs01d49fdmmriqzxc8pshys4rixhx30wzd9p1m1q47a5pn";
+    src = fetchFromGitHub {
+      owner = "pavouk";
+      repo = "lgi";
+      rev = version;
+      sha256 = "09pbapjhyc3sn0jgx747shqr9286wqfzw02h43p4pk8fv2b766b9";
     };
 
     meta = with stdenv.lib; {
       description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
       homepage    = https://github.com/pavouk/lgi;
       license     = "custom";
-      maintainers = with maintainers; [ lovek323 ];
+      maintainers = with maintainers; [ lovek323 rasendubi ];
       platforms   = platforms.unix;
     };
 

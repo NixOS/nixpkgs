@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1qxqrcbd0d4mrjrgqz882jh7069nn5gz1b84rq7d7z1f1dqhczxn";
   };
 
-  goDeps = ./cli_deps.json;
+  goDeps = ./cli_deps.nix;
 
   meta = with stdenv.lib; {
     description = "Command line tool for querying the Prometheus HTTP API";

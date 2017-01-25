@@ -5,13 +5,12 @@
 # TODO: compilazione di moduli dipendenti da zip, ssl, tcl, gtk, gtk2
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "ocaml-mysql";
-  version = "1.1.1";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://forge.ocamlcore.org/frs/download.php/870/${pname}-${version}.tar.gz";
@@ -20,7 +19,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ 
      "--prefix=$out" 
-     "--libdir=$out/lib/ocaml/${ocaml_version}/site-lib/mysql"
+     "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 
   buildInputs = [ocaml findlib camlp4 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocurl, cryptokit, ocaml_extlib, yojson, ocamlnet, xmlm }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocurl, cryptokit, ocaml_extlib, yojson, ocamlnet, xmlm }:
 
 stdenv.mkDerivation rec {
   name = "gapi-ocaml-0.2.10";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "https://forge.ocamlcore.org/frs/download.php/1601/${name}.tar.gz";
     sha256 = "0kg4j7dhr7jynpy8x53bflqjf78jyl14j414l6px34xz7c9qx5fl";
   };
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ocurl cryptokit ocaml_extlib yojson ocamlnet xmlm ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out";

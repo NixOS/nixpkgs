@@ -1,10 +1,6 @@
 {stdenv, fetchurl, ocaml, findlib, type_conv, camlp4}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
-assert stdenv.lib.versionOlder "4.00" ocaml_version;
+assert stdenv.lib.versionOlder "4.00" ocaml.version;
 
 stdenv.mkDerivation {
   name = "ocaml-sexplib-111.25.00";

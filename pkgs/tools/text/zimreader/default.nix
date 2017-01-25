@@ -1,44 +1,35 @@
-{ stdenv, fetchgit, fetchurl, automake, autoconf, libtool
-, zlib, openssl, zip, zimlib
+{ stdenv, fetchFromGitHub, fetchpatch, automake, autoconf, libtool
+, zlib, openssl, zip, zimlib, cxxtools, tntnet
 }:
 
-let
-  cxxtools = stdenv.mkDerivation rec {
-    name = "cxxtools-${version}";
-    version = "2.1.1";
-    src = fetchurl {
-      url = "http://www.tntnet.org/download/cxxtools-${version}.tar.gz";
-      sha256 = "0jh5wrk9mviz4xrp1wv617gwgl4b5mc21h21wr2688kjmc0i1q4d";
-    };
-  };
-  tntnet = stdenv.mkDerivation rec {
-    name = "tntnet-${version}";
-    version = "2.1";
-    src = fetchurl {
-      url = "http://www.tntnet.org/download/tntnet-${version}.tar.gz";
-      sha256 = "1dhs10yhpmdqyykyh8jc67m5xgsgm1wrpd58fdps2cp5g1gjf8w6";
-    };
-    buildInputs = [ zlib cxxtools openssl zip ];
+stdenv.mkDerivation rec {
+  name = "zimreader-0.92";
+
+  src = fetchFromGitHub {
+    owner = "wikimedia";
+    repo = "openzim";
+    rev = "r1.3"; # there multiple tools with different version in the repo
+    sha256 = "0x529137rxy6ld64xqa6xmn93121ripxvkf3sc7hv3wg6km182sw";
   };
 
-in stdenv.mkDerivation rec {
-  name = "zimreader-${version}";
-  version = "20150710";
+  patchFlags = "-p2";
+  patches = [
+    (fetchpatch {
+      name = "zimreader_tntnet221.patch";
+      url = "https://github.com/wikimedia/openzim/compare/r1.3...juliendehos:3ee5f11eaa811284d340451e6f466529c00f6ef2.patch";
+      sha256 = "0rc5n20svyyndqh7hsynjyblfraphgi0f6khw6f5jq89w9i1j1hd";
+    })
+  ];
 
-  src = fetchgit {
-    url = https://gerrit.wikimedia.org/r/p/openzim.git;
-    rev = "165eab3e154c60b5b6436d653dc7c90f56cf7456";
-    sha256 = "076ixsq4lis0rkk7p049g02bidc7bggl9kf2wzmgmsnx396mqymf";
-  };
-
+  enableParallelBuilding = true;
   buildInputs = [ automake autoconf libtool zimlib cxxtools tntnet ];
   setSourceRoot = "cd openzim-*/zimreader; export sourceRoot=`pwd`";
-  preConfigurePhases = [ "./autogen.sh" ];
+  preConfigure = "./autogen.sh";
 
   meta = {
     description = "A tool to serve ZIM files using HTTP";
     homepage = http://git.wikimedia.org/log/openzim;
-    maintainers = with stdenv.lib.maintainers; [ robbinch ];
+    maintainers = with stdenv.lib.maintainers; [ robbinch juliendehos ];
     platforms = [ "x86_64-linux" ];
   };
 }

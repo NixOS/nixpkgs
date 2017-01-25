@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
     sha256 = "1k29rxlvrhgc5hadg2nc50wa3d2ls9ndp373257p756a0aividxh";
   };
 
+  patches =
+    [ # Don't include a copy of the CMake status output in the
+      # build. This causes a runtime dependency on GCC.
+      ./no-build-info.patch
+    ];
+
+  outputs = [ "out" "dev" ];
+
   buildInputs =
        [ zlib ]
     ++ lib.optional enablePython pythonPackages.python
@@ -59,6 +67,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   hardeningDisable = [ "bindnow" "relro" ];
+
+  # Fix pkgconfig file that gets broken with multiple outputs
+  postFixup = ''
+    sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_old=.*|includedir_old=$dev/include/opencv|"
+    sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
+  '';
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 

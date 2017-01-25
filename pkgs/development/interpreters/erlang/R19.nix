@@ -6,6 +6,7 @@
 , javacSupport ? false, openjdk ? null
 , enableHipe ? true
 , enableDebugInfo ? false
+, enableDirtySchedulers ? false
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
@@ -20,7 +21,7 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}"
   + "${optionalString javacSupport "-javac"}";
-  version = "19.0.2";
+  version = "19.1.6";
 
   # Minor OTP releases are not always released as tarbals at
   # http://erlang.org/download/ So we have to download from
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "erlang";
     repo = "otp";
     rev = "OTP-${version}";
-    sha256 = "1vsykghhzpgmc42jwj48crl11zzzpvrqvh2lk8lxfqbflzflxm6j";
+    sha256 = "120dqi8h2fwqfmh9g2nmkf153zlglzw9kkddz57xqvqq5arcs72y";
   };
 
   buildInputs =
@@ -42,15 +43,6 @@ stdenv.mkDerivation rec {
 
   debugInfo = enableDebugInfo;
 
-  envAndCpPatch = fetchurl {
-     url = "https://github.com/binarin/otp/commit/9f9841eb7327c9fe73e84e197fd2965a97b639cf.patch";
-     sha256 = "10h5348p6g279b4q01i5jdqlljww5chcvrx5b4b0dv79pk0p0m9f";
-  };
-
-  patches = [
-    envAndCpPatch
-  ];
-
   preConfigure = ''
     ./otp_build autoconf
   '';
@@ -58,6 +50,7 @@ stdenv.mkDerivation rec {
   configureFlags= [
     "--with-ssl=${openssl.dev}"
   ] ++ optional enableHipe "--enable-hipe"
+    ++ optional enableDirtySchedulers "--enable-dirty-schedulers"
     ++ optional wxSupport "--enable-wx"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional javacSupport "--with-javac"

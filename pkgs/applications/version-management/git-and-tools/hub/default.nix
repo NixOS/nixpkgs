@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
-  version = "2.2.3";
+  version = "2.2.9";
 
   src = fetchgit {
     url = https://github.com/github/hub.git;
     rev = "refs/tags/v${version}";
-    sha256 = "1vswkx4lm6x4s04453qkmv970gjn79ma39fmdg8mnzy7lh2swws6";
+    sha256 = "195ckp1idz2azv0mm1q258yjz2n51sia9xdcjnqlprmq9aig5ldh";
   };
 
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/bin"
-    cp hub "$out/bin/"
+    cp bin/hub "$out/bin/"
 
     mkdir -p "$out/share/man/man1"
     cp "man/hub.1" "$out/share/man/man1/"
@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/zsh/site-functions"
     cp "etc/hub.zsh_completion" "$out/share/zsh/site-functions/_hub"
 
-# Broken: https://github.com/github/hub/issues/592
-#    mkdir -p "$out/etc/bash_completion.d"
-#    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
+    mkdir -p "$out/etc/bash_completion.d"
+    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
 
 # Should we also install provided git-hooks?
 # ?

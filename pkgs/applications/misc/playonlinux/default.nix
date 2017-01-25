@@ -7,7 +7,7 @@
 , gnupg1compat
 , icoutils
 , imagemagick
-, netcat
+, netcat-gnu
 , p7zip
 , python2Packages
 , unzip
@@ -34,7 +34,7 @@ let
       gnupg1compat
       icoutils
       imagemagick
-      netcat
+      netcat-gnu
       p7zip
       unzip
       wget

@@ -1,29 +1,32 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.2";
+  version = "4.0.1.1";
 
   package-name = "elementary-icon-theme";
 
   name = "${package-name}-${version}";
 
-  src = fetchzip {
-    url = "https://launchpad.net/elementaryicons/3.x/${version}/+download/elementary-icon-theme-${version}.tar.xz";
-    sha256 = "0b6sgvkzc5h9zm3la6f0ngs9pfjrsj318qcynxd3yydb50cd3hnf";
+  src = fetchurl {
+    url = "https://launchpad.net/elementaryicons/4.x/${version}/+download/${name}.tar.xz";
+    sha256 = "1p20569lxgkif4gzvgpisd8vg93zxd6447y634lv7ay85nq4lx76";
   };
 
   dontBuild = true;
 
   installPhase = ''
-    install -dm 755 $out/share/icons
+    install -dm 755 $out/share/{icons,doc/$name}
     cp -dr --no-preserve='ownership' . $out/share/icons/Elementary/
+    mv $out/share/icons/Elementary/{AUTHORS,CONTRIBUTORS,README.md} \
+      $out/share/doc/$name/
+    rm $out/share/icons/Elementary/{COPYING,pre-commit}
   '';
 
   meta = with stdenv.lib; {
-  description = "Elementary icon theme";
-  homepage = "https://launchpad.net/elementaryicons";
-  license = licenses.gpl3;
-  platforms = platforms.all;
-  maintainers = with maintainers; [ simonvandel ];
+    description = "Elementary icon theme";
+    homepage = "https://launchpad.net/elementaryicons";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ simonvandel ];
   };
 }

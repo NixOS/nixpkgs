@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, ocaml, findlib, pkgconfig, cairo, lablgtk, gtk,
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, pkgconfig, cairo, lablgtk, gtk2,
   enableGtkSupport ? true # Whether to compile with support for Gtk
                           # integration (library file cairo2_gtk). Depends
-                          # on lablgtk and gtk.
+                          # on lablgtk and gtk2.
 }:
 
 let
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
     sha256 = "1lc1iv5yz49avbc0wbrw9nrx8dn0c35r7cykivjln1zc2fwscf7w";
   };
 
-  buildInputs = [ ocaml findlib pkgconfig cairo ]
-                ++ optionals enableGtkSupport [ gtk ];
+  buildInputs = [ ocaml findlib ocamlbuild pkgconfig cairo ]
+                ++ optionals enableGtkSupport [ gtk2 ];
 
   # lablgtk2 is marked as a propagated build input since loading the
   # cairo.lablgtk2 package from the toplevel tries to load lablgtk2 as

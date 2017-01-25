@@ -1,5 +1,5 @@
-{ stdenv, alsaLib, boost, dbus_glib, fetchsvn, ganv, glibmm, gtk2
-, gtkmm, libjack2, pkgconfig, python2
+{ stdenv, alsaLib, boost, dbus_glib, fetchsvn, ganv, glibmm
+, gtkmm2, libjack2, pkgconfig, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib boost dbus_glib ganv glibmm gtk2 gtkmm libjack2
+    alsaLib boost dbus_glib ganv glibmm gtkmm2 libjack2
     pkgconfig python2
   ];
 

@@ -82,12 +82,12 @@ let
 
       # Speed up application start by 50-150ms according to
       # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
-      rm -rf $HOME/.compose-cache
-      mkdir $HOME/.compose-cache
+      rm -rf "$HOME/.compose-cache"
+      mkdir "$HOME/.compose-cache"
 
       # Work around KDE errors when a user first logs in and
       # .local/share doesn't exist yet.
-      mkdir -p $HOME/.local/share
+      mkdir -p "$HOME/.local/share"
 
       unset _DID_SYSTEMD_CAT
 
@@ -134,13 +134,8 @@ let
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 
-      # FIXME: gdbus should not be in glib.dev!
-      ${optionalString (cfg.startDbusSession && cfg.updateDbusEnvironment) ''
-        ${pkgs.glib.dev}/bin/gdbus call --session \
-          --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
-          --method org.freedesktop.DBus.UpdateActivationEnvironment \
-          "{$(env | ${pkgs.gnused}/bin/sed "s/'/\\\\'/g; s/\([^=]*\)=\(.*\)/'\1':'\2'/" \
-                  | ${pkgs.coreutils}/bin/paste -sd,)}"
+      ${optionalString cfg.updateDbusEnvironment ''
+        ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
       ''}
 
       test -n "$waitPID" && wait "$waitPID"
@@ -153,7 +148,7 @@ let
       allowSubstitutes = false;
     }
     ''
-      mkdir -p $out
+      mkdir -p "$out"
       ${concatMapStrings (n: ''
         cat - > "$out/${n}.desktop" << EODESKTOP
         [Desktop Entry]
@@ -192,7 +187,6 @@ in
         default = [];
         example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
-        apply = toString;
       };
 
       sessionCommands = mkOption {

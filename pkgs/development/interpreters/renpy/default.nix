@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   pythonPath = [ pygame ];
 
   RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: "${path}") [
-    SDL libpng ffmpeg freetype glew mesa fribidi zlib
+    SDL SDL.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out mesa fribidi zlib
   ]);
 
   buildPhase = ''

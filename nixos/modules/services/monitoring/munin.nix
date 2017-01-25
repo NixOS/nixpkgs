@@ -100,6 +100,7 @@ in
 
       extraConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           <filename>munin-node.conf</filename> extra configuration. See
           <link xlink:href='http://munin-monitoring.org/wiki/munin-node.conf' />

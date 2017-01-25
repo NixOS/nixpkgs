@@ -1,5 +1,5 @@
 {stdenv, fetchurl, libedit, ncurses, automake, autoconf, libtool
-, 
+,
   # icu = null: use icu which comes with firebird
 
   # icu = pkgs.icu => you may have trouble sharing database files with windows
@@ -38,7 +38,7 @@
 */
 
 stdenv.mkDerivation rec {
-  version = "2.5.2.26540-0";
+  version = "2.5.6.27020-0";
   name = "firebird-${version}";
 
   # enableParallelBuilding = false; build fails

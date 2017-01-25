@@ -22,6 +22,7 @@ let
       url = "http://download2-developer.amd.com/amd/APPSDK/AMD-APP-SDK-v2.7-lnx${bits}.tgz";
       x86 = "1v26n7g1xvlg5ralbfk3qiy34gj8fascpnjzm3120b6sgykfp16b";
       x86_64 = "08bi43bgnsxb47vbirh09qy02w7zxymqlqr8iikk9aavfxjlmch1";
+      patches = [ ./gcc-5.patch];
     };
 
     "2.8" = {
@@ -30,7 +31,7 @@ let
       x86_64 = "d9c120367225bb1cd21abbcf77cb0a69cfb4bb6932d0572990104c566aab9681";
 
       # TODO: Add support for aparapi, java parallel api
-      patches = [ ./01-remove-aparapi-samples.patch ];
+      patches = [ ./01-remove-aparapi-samples.patch ./gcc-5.patch];
     };
   };
 

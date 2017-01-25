@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "mk-2006-01-31";
   src = fetchurl {
     url = http://tarballs.nixos.org/mk-20060131.tar.gz;
-    md5 = "167fd4e0eea4f49def01984ec203289b";
+    sha256 = "0za8dp1211bdp4584xb59liqpww7w1ql0cmlv34p9y928nibcxsr";
   };
   builder = ./builder.sh;
 

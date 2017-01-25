@@ -1,8 +1,8 @@
 { stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
-, libsndfile, libX11, graphicsmagick, pcre, pkgconfig, mesa, fltk
+, libsndfile, portaudio, libX11, graphicsmagick, pcre, pkgconfig, mesa, fltk
 , fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
-, suitesparse ? null, gnuplot ? null, jdk ? null, python ? null
+, suitesparse ? null, gnuplot ? null, jdk ? null, python ? null, overridePlatforms ? null
 }:
 
 let
@@ -18,16 +18,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.0.1";
+  version = "4.2.0";
   name = "octave-${version}";
   src = fetchurl {
-    url = "mirror://gnu/octave/${name}.tar.xz";
-    sha256 = "11y2w6jgngj4rxiy136mkcs02l52rxk60kapyfc4rgrxz5hli3ym";
+    url = "mirror://gnu/octave/${name}.tar.gz";
+    sha256 = "0rsmg5i3b5yfvkvrl9mqvn3f2n1a6vqg45phpja1qlzkh8vsffs4";
   };
 
-  buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick pcre pkgconfig mesa fltk zlib curl openblas libsndfile
-    fftw fftwSinglePrec qrupdate arpack libwebp ]
+  buildInputs = [ gfortran readline ncurses perl flex texinfo qhull
+    graphicsmagick pcre pkgconfig fltk zlib curl openblas libsndfile fftw
+    fftwSinglePrec portaudio qrupdate arpack libwebp ]
     ++ (stdenv.lib.optional (qt != null) qt)
     ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
     ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (jdk != null) jdk)
     ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
     ++ (stdenv.lib.optional (python != null) python)
-    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [mesa libX11])
+    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ mesa libX11 ])
     ;
 
   doCheck = !stdenv.isDarwin;
@@ -70,6 +70,8 @@ stdenv.mkDerivation rec {
     homepage = http://octave.org/;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric raskin];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = if overridePlatforms == null then
+      (with stdenv.lib.platforms; linux ++ darwin)
+    else overridePlatforms;
   };
 }

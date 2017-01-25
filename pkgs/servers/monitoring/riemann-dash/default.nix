@@ -1,21 +1,9 @@
-{ bundlerEnv, lib, stdenv }:
+{ bundlerEnv, lib, ruby }:
 
-let
-  name = "riemann-dash-${env.gems.riemann-dash.version}";
-
-  env = bundlerEnv {
-    inherit name;
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
-  };
-
-in stdenv.mkDerivation {
-  inherit name;
-  buildCommand = ''
-    mkdir -p $out/bin
-    ln -s ${env}/bin/riemann-dash $out/bin/riemann-dash
-  '';
+bundlerEnv {
+  inherit ruby;
+  pname = "riemann-dash";
+  gemdir = ./.;
 
   meta = with lib; {
     description = "A javascript, websockets-powered dashboard for Riemann";

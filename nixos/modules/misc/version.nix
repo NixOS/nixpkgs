@@ -95,11 +95,11 @@ in
       nixosVersionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
 
       # Note: code names must only increase in alphabetical order.
-      nixosCodeName = "Flounder";
+      nixosCodeName = "Gorilla";
     };
 
     # Generate /etc/os-release.  See
-    # http://0pointer.de/public/systemd-man/os-release.html for the
+    # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
     environment.etc."os-release".text =
       ''

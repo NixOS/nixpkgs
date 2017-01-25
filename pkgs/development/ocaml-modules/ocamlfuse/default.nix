@@ -1,15 +1,12 @@
-{ stdenv, fetchgit, ocaml, camlidl, fuse, findlib }:
-
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
+{ stdenv, fetchFromGitHub, ocaml, camlidl, fuse, findlib }:
 
 stdenv.mkDerivation rec {
-  name = "ocamlfuse-2.7-1";
-  src = fetchgit {
-    url = "https://github.com/astrada/ocamlfuse";
-    rev = "c436c16dbf458bc69b1166b08baf9ec0d6f9042d";
-    sha256 = "0br9x3vsbg87sar5g6yi3xfszn5icy4fv71waarccc2dr79pvakz";
+  name = "ocamlfuse-2.7-3";
+  src = fetchFromGitHub {
+    owner = "astrada";
+    repo = "ocamlfuse";
+    rev = "a085349685758668854499ce6c1fc00c83a5c23b";
+    sha256 = "1pyml2ay5wab1blwpzrv1r6lnycm000jk6aar8i9fkdnh15sa6c3";
   };
 
   buildInputs = [ocaml findlib];

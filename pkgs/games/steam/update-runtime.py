@@ -36,13 +36,13 @@ def parse_args():
 
 def download_file(file_base, file_name, file_url):
 	file_shortname = file_base + ".deb"
-	md5 = subprocess.check_output(["nix-prefetch-url", "--type", "md5", "--name", file_shortname, file_url])
+	sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--name", file_shortname, file_url])
 	out.write("    rec {\n")
 	out.write("      name = \"%s\";\n" % file_name)
-	out.write("      md5 = \"%s\";\n" % md5.strip())
+	out.write("      sha256 = \"%s\";\n" % sha256.strip())
 	out.write("      url = \"%s\";\n" % file_url.replace(REPO, "mirror://steamrt", 1))
 	out.write("      source = fetchurl {\n")
-	out.write("        inherit url md5;\n")
+	out.write("        inherit url sha256;\n")
 	out.write("        name = \"%s\";\n" % file_shortname)
 	out.write("      };\n")
 	out.write("    }\n")

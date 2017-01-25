@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 let
   pname = "cppo";
   version = "1.3.2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "06j0zr78f04ahxi2459vjn61z25hkvs4dfj76200ydg3g6ifb3k1";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   createFindlibDestdir = true;
 

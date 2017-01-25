@@ -4,7 +4,7 @@ perl:
 
 perl.stdenv.mkDerivation (
   {
-    outputs = [ "out" "docdev" ];
+    outputs = [ "out" "devdoc" ];
 
     doCheck = true;
 

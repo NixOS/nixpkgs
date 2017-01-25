@@ -9,5 +9,5 @@ stdenv.mkDerivation {
   buildCommand = ''
     makeWrapper ${hunspell.bin}/bin/hunspell $out/bin/hunspell --prefix DICPATH : ${searchPath}
   '';
-  inherit (hunspell) meta;
+  meta = removeAttrs hunspell.meta ["outputsToInstall"];
 }

@@ -2,11 +2,11 @@
 , enableIPv6 ? false }:
 
 stdenv.mkDerivation rec {
-  name = "bird-1.6.0";
+  name = "bird-1.6.3";
 
   src = fetchurl {
     url = "ftp://bird.network.cz/pub/bird/${name}.tar.gz";
-    sha256 = "04qf07cb04xdjnq0qxj6y8iqwyszk1vyark9gn5v6wxcvqvzwgfv";
+    sha256 = "0z3yrxqb0p7f8b7r2gk4mvrwfzk45zx7yr9aifbvba1vgksiri9r";
   };
 
   buildInputs = [ flex bison readline ];

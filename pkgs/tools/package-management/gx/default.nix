@@ -19,7 +19,7 @@ buildGoPackage rec {
       --replace "github.com/ipfs/go-ipfs/Godeps/_workspace/src/github.com/jbenet/go-random" "github.com/jbenet/go-random"
   '';
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "A packaging tool built around IPFS";

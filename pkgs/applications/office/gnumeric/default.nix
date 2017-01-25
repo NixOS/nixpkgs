@@ -1,9 +1,10 @@
 { stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
-, goffice, gnome3, makeWrapper, gtk3, bison
-, python, pygobject3
+, goffice, gnome3, makeWrapper, gtk3, bison, pythonPackages
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python pygobject3;
+in stdenv.mkDerivation rec {
   name = "gnumeric-1.12.32";
 
   src = fetchurl {

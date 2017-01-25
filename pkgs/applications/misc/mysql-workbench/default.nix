@@ -1,31 +1,71 @@
-{ stdenv, fetchurl, makeWrapper, autoreconfHook, boost, file
-, glib, glibc, libgnome_keyring, gnome_keyring, gtk, gtkmm, intltool
-, libctemplate, libglade
-, libiodbc
-, libgnome, libsigcxx, libuuid, libxml2, libzip, lua, mesa, mysql
-, pango, pcre, pkgconfig, sqlite, sudo
-, pythonPackages
+{ stdenv, fetchurl, makeWrapper, cmake, pkgconfig
+, glibc, gnome_keyring, gtk, gtkmm, pcre, swig, sudo
+, mysql, libxml2, libctemplate, libmysqlconnectorcpp
+, vsqlite, tinyxml, gdal, libiodbc, libpthreadstubs
+, libXdmcp, libuuid, libzip, libgnome_keyring, file
+, pythonPackages, jre, autoconf, automake, libtool
+, boost, glibmm, libsigcxx, pangomm, libX11, openssl
+, proj, cairo, libglade
 }:
 
 let
   inherit (pythonPackages) pexpect pycrypto python paramiko;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "5.2.47";
+  version = "6.3.7";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://mirror.cogentco.com/pub/mysql/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
-    sha256 = "1343fn3msdxqfpxw0kgm0mdx5r7g9ra1cpc8p2xhl7kz2pmqp4p6";
+    url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
+    sha256 = "1v4k04facdn2qzflf0clf3ir5hghqlabq89ssm2s4x1nqdniz544";
   };
 
-  buildInputs = [ autoreconfHook boost file glib glibc libgnome_keyring gtk gtkmm intltool
-    libctemplate libglade libgnome libiodbc libsigcxx libuuid libxml2 libzip lua makeWrapper mesa
-    mysql.lib paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
+  buildInputs = [ cmake pkgconfig glibc gnome_keyring gtk gtk.dev gtkmm pcre swig python sudo
+    paramiko mysql libxml2 libctemplate libmysqlconnectorcpp vsqlite tinyxml gdal libiodbc file
+    libpthreadstubs libXdmcp libuuid libzip libgnome_keyring libgnome_keyring.dev jre autoconf
+    automake libtool boost glibmm glibmm.dev libsigcxx pangomm libX11 pexpect pycrypto openssl
+    proj cairo cairo.dev makeWrapper libglade ] ;
 
-  preConfigure = ''
+  prePatch = ''
+    for f in backend/wbpublic/{grt/spatial_handler.h,grtui/geom_draw_box.h,objimpl/db.query/db_query_Resultset.cpp} ;
+    do
+      sed -i 's@#include <gdal/@#include <@' $f ;
+    done
+
+    sed -i '32s@mysqlparser@mysqlparser sqlparser@' library/mysql.parser/CMakeLists.txt
+
+    cat <<EOF > ext/antlr-runtime/fix-configure
+    #!${stdenv.shell}
+    echo "fixing bundled antlr3c configure" ;
+    sed -i 's@/usr/bin/file@${file}/bin/file@' configure
+    sed -i '12121d' configure
+    EOF
+    chmod +x ext/antlr-runtime/fix-configure
+    sed -i '236s@&&@& ''${PROJECT_SOURCE_DIR}/ext/antlr-runtime/fix-configure &@' CMakeLists.txt
+
     substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc.bin}/bin/catchsegv"
+    substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "/usr/lib/x86_64-linux-gnu" "${proj}/lib"
+    patchShebangs $(pwd)/library/mysql.parser/grammar/build-parser
+    patchShebangs $(pwd)/tools/get_wb_version.sh
   '';
+
+  NIX_CFLAGS_COMPILE = [
+    "-I${libsigcxx}/lib/sigc++-2.0/include"
+    "-I${pangomm}/lib/pangomm-1.4/include"
+    "-I${glibmm}/lib/giomm-2.4/include"
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-std=c++11"
+    "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
+    "-DCTemplate_INCLUDE_DIR=${libctemplate}/include"
+    "-DCAIRO_INCLUDE_DIRS=${cairo.dev}/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk}/lib/gtk-2.0/include"
+    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${gtk.dev}/include"
+    "-DGTK2_GTKMMCONFIG_INCLUDE_DIR=${gtkmm}/lib/gtkmm-2.4/include"
+    "-DGTK2_GDKMMCONFIG_INCLUDE_DIR=${gtkmm}/lib/gdkmm-2.4/include"
+    "-DGTK2_GLIBMMCONFIG_INCLUDE_DIR=${glibmm}/lib/glibmm-2.4/include"
+  ];
 
   postInstall = ''
     patchShebangs $out/share/mysql-workbench/extras/build_freetds.sh
@@ -52,7 +92,7 @@ in stdenv.mkDerivation rec {
 # used because we cannot clean up after ourselves due to the exec call.
 
 # Start gnome-keyring-daemon, export the environment variables it asks us to set.
-for expr in $( gnome-keyring-daemon --components=ssh,pkcs11 --start ) ; do eval "export "$expr ; done
+for expr in $( gnome-keyring-daemon --start ) ; do eval "export "$expr ; done
 
 # Prepare fifo pipe.
 FIFOCTL="/tmp/gnome-keyring-daemon-ctl.$$.fifo"

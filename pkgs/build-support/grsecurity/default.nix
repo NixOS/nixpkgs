@@ -21,8 +21,12 @@ assert (kernel.version == grsecPatch.kver);
 
 overrideDerivation (kernel.override {
   inherit modDirVersion;
-  kernelPatches = [ grsecPatch ] ++ kernelPatches ++ (kernel.kernelPatches or []);
-  inherit extraConfig;
+  kernelPatches = lib.unique ([ grsecPatch ] ++ kernelPatches ++ (kernel.kernelPatches or []));
+  extraConfig = ''
+    GRKERNSEC y
+    PAX y
+    ${extraConfig}
+  '';
   ignoreConfigErrors = true;
 }) (attrs: {
   nativeBuildInputs = (lib.chooseDevOutputs [ gmp libmpc mpfr ]) ++ (attrs.nativeBuildInputs or []);

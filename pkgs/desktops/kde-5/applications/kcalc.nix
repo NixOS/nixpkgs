@@ -18,4 +18,7 @@ let
       ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/kcalc" ]; }
+kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/kcalc" ];
+}

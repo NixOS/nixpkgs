@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, qtest, ounit }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, ounit }:
 
-let version = "0.6"; in
+let version = "0.8"; in
 
 stdenv.mkDerivation {
   name = "ocaml-sequence-${version}";
@@ -9,10 +9,10 @@ stdenv.mkDerivation {
     owner = "c-cube";
     repo = "sequence";
     rev = "${version}";
-    sha256 = "0mky5qas3br2x4y14dzcky212z624ydqnx8mw8w00x0c1xjpafkb";
+    sha256 = "1y9nkz6g4plnbk1pcdbvs7f719r48zxrp3gsaxyq1vg98i9h8qr3";
   };
 
-  buildInputs = [ ocaml findlib qtest ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild qtest ounit ];
 
   configureFlags = [
     "--enable-tests"

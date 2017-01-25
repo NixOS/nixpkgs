@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, gtk, gnome, gnome3,
+{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, gtk2, gnome2, gnome3,
   libstartup_notification, libgtop, perl, perlXMLParser,
   autoreconfHook, intltool, gtk_doc, docbook_xsl, xauth, sudo
 }:
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk gnome.GConf libstartup_notification
-    gnome3.libgnome_keyring libgtop gnome.libglade perl perlXMLParser
+    gtk2 gnome2.GConf libstartup_notification
+    gnome3.libgnome_keyring libgtop gnome2.libglade perl perlXMLParser
   ];
 
   enableParallelBuilding = true;

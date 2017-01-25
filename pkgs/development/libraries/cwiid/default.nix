@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, fetchgit, bison, flex, bluez, pkgconfig, gtk }:
+{ stdenv, autoreconfHook, fetchgit, bison, flex, bluez, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "cwiid-2010-02-21-git";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/$(LDCONFIG)/d' common/include/lib.mak.in
   '';
 
-  buildInputs = [ autoreconfHook bison flex bluez pkgconfig gtk ];
+  buildInputs = [ autoreconfHook bison flex bluez pkgconfig gtk2 ];
 
   postInstall = ''
     # Some programs (for example, cabal-install) have problems with the double 0

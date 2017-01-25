@@ -22,6 +22,8 @@ in
 rec {
   # Try to keep this generally alphabetized
 
+  bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
+
   darcsToGit = callPackage ./darcs-to-git { };
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
@@ -40,10 +42,12 @@ rec {
     svnSupport = true;
   }));
 
-  git-annex = pkgs.haskell.packages.lts.git-annex;
+  git-annex = pkgs.haskellPackages.git-annex;
   gitAnnex = git-annex;
 
   git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
+
+  git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
@@ -77,8 +81,6 @@ rec {
   };
 
   qgit = callPackage ./qgit { };
-
-  qgitGit = callPackage ./qgit/qgit-git.nix { };
 
   stgit = callPackage ./stgit {
   };

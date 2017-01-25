@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, opam, uutf }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, uutf }:
 
 let
   inherit (stdenv.lib) getVersion versionAtLeast;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wgi9plf98gd7x3b7fzjxds089sivsap97bl1bw2lj73nxwnyb9c";
   };
 
-  buildInputs = [ ocaml findlib opam ];
+  buildInputs = [ ocaml findlib ocamlbuild opam ];
 
   propagatedBuildInputs = [ uutf ];
 

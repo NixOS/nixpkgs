@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.14.5";
+  version = "3.15.0";
 
   # use git version since we need submodules
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "f516f1bb9046218f89885a220354c19dda6d8f4d";
-    sha256 = "0sv856ran15rvnrj4dk0a5jirip5w4336a0aycv9wh77wm4s8xdb";
+    rev    = "92a682ebaa3c85b84857852d8621f528607fe27d";
+    sha256 = "0mn3bfvhdf6b4lflyjfjyr7nppkq505xkaaagk111fqy91rdzd3b";
     fetchSubmodules = true;
   };
 
@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
       hphp/runtime/ext_zend_compat/php-src/main/*.h
     patchShebangs .
   '';
-
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   meta = {
     description = "High-performance JIT compiler for PHP/Hack";

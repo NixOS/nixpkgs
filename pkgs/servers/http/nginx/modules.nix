@@ -15,8 +15,8 @@
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-rtmp-module";
-      rev = "v1.1.7";
-      sha256 = "0i0fa1znkj7cipy5nlkw4k40klhp9jzk28wxy2vrvd2jvh91x3ma";
+      rev = "v1.1.9";
+      sha256 = "19vqw1ba01m2wlncpycw9vj5n8741pv36hd3dy9jjdxwlzdjzyi5";
     };
   };
 
@@ -72,8 +72,8 @@
     src = fetchFromGitHub {
       owner = "simpl";
       repo = "ngx_devel_kit";
-      rev = "v0.2.19";
-      sha256 = "1cqcasp4lc6yq5pihfcdw4vp4wicngvdc3nqg3bg52r63c1qrz76";
+      rev = "v0.3.0";
+      sha256 = "1br1997zqsjcb1aqm6h6xmi5yx7akxk0qvk8wxc0fnvmyhgzxgx0";
     };
   };
 
@@ -121,10 +121,58 @@
 
   statsd = {
     src = fetchFromGitHub {
-      owner = "zebrafishlabs";
+      owner = "apcera";
       repo = "nginx-statsd";
-      rev = "b756a12abf110b9e36399ab7ede346d4bb86d691";
-      sha256 = "1psrb5v071idlplvbnaq904nlhqw1zrbw4aawfs278zcdmq67zn8";
+      rev = "2147d61dc31dd4865604be92349e6192a905d21a";
+      sha256 = "19s3kwjgf51jkwknh7cfi82p6kifl8rl146wxc3ijds12776ilsv";
     };
   };
+
+  upstream-check = {
+    src = fetchFromGitHub {
+      owner = "yaoweibin";
+      repo = "nginx_upstream_check_module";
+      rev = "10782eaff51872a8f44e65eed89bbe286004bcb1";
+      sha256 = "0h98a8kiw2qkqfavysm1v16kf4cs4h39j583wapif4p0qx3bbm89";
+    };
+  };
+
+  # For an example usage, see https://easyengine.io/wordpress-nginx/tutorials/single-site/fastcgi-cache-with-purging/
+  fastcgi-cache-purge = {
+    src = fetchFromGitHub {
+      owner  = "FRiCKLE";
+      repo   = "ngx_cache_purge";
+      rev    = "2.3";
+      sha256 = "0ib2jrbjwrhvmihhnzkp4w87fxssbbmmmj6lfdwpm6ni8p9g60dw";
+    };
+  };
+
+  pagespeed =
+    let
+      version = pkgs.psol.version;
+
+      moduleSrc = fetchFromGitHub {
+        owner  = "pagespeed";
+        repo   = "ngx_pagespeed";
+        rev    = "v${version}-beta";
+        sha256 = "03dvzf1lgsjxcs1jjxq95n2rhgq0wy0f9ahvgascy0fak7qx4xj9";
+      };
+
+      ngx_pagespeed = pkgs.runCommand
+        "ngx_pagespeed"
+        {
+          meta = {
+            description = "PageSpeed module for Nginx";
+            homepage    = "https://developers.google.com/speed/pagespeed/module/";
+            license     = pkgs.stdenv.lib.licenses.asl20;
+          };
+        }
+        ''
+          cp -r "${moduleSrc}" "$out"
+          chmod -R +w "$out"
+          ln -s "${pkgs.psol}" "$out/psol"
+        '';
+    in {
+      src = ngx_pagespeed;
+    };
 }

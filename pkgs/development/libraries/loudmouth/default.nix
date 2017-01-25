@@ -1,21 +1,15 @@
 { stdenv, fetchurl, openssl, libidn, glib, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "loudmouth-1.4.3";
+  version = "1.5.3";
+  name = "loudmouth-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/loudmouth/1.4/${name}.tar.bz2";
-    sha256 = "1qr9z73i33y49pbpq6zy7q537g0iyc8sm56rjf0ylwcv01fkzacm";
+    url = "http://mcabber.com/files/loudmouth/${name}.tar.bz2";
+    sha256 = "0b6kd5gpndl9nzis3n6hcl0ldz74bnbiypqgqa1vgb0vrcar8cjl";
   };
 
   patches = [
-    ./glib-2.32.patch
-    (fetchurl rec {
-      name = "01-fix-sasl-md5-digest-uri.patch";
-      url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/"
-          + "${name}?h=packages/loudmouth";
-      sha256 = "0y79vbklscgp8248iirllwmgk4q0wwyl3gmxz7l9frc2384xvanm";
-    })
   ];
 
   configureFlags = "--with-ssl=openssl";
@@ -27,5 +21,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A lightweight C library for the Jabber protocol";
     platforms = stdenv.lib.platforms.linux;
+    downloadPage = "http://mcabber.com/files/loudmouth/";
+    downloadURLRegexp = "loudmouth-[0-9.]+[.]tar[.]bz2$";
+    updateWalker = true;
   };
 }

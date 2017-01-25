@@ -1,4 +1,4 @@
-{stdenv, fetchurl, omake, ocaml, omake_rc1, libtiff, libjpeg, libpng, giflib, findlib, libXpm, freetype, graphicsmagick, ghostscript }:
+{stdenv, fetchurl, omake, ocaml, libtiff, libjpeg, libpng, giflib, findlib, libXpm, freetype, graphicsmagick, ghostscript }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1ppddhfknpirj1vilm5dxgyp82kf7ahpvjmh7z75a1fnaqv3kpki";
   };
 
-  buildInputs = [ocaml omake_rc1 findlib graphicsmagick ghostscript ];
+  buildInputs = [ ocaml omake findlib graphicsmagick ghostscript ];
 
   propagatedBuildInputs = [libtiff libjpeg libpng giflib freetype libXpm ];
 

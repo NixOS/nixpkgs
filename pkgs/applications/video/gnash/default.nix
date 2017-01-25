@@ -3,7 +3,7 @@
 , gst_ffmpeg, speex
 , libogg, libxml2, libjpeg, mesa, libpng, libungif, libtool
 , boost, freetype, agg, dbus, curl, pkgconfig, gettext
-, glib, gtk, gtkglext, pangox_compat, xlibsWrapper, ming, dejagnu, python, perl
+, glib, gtk2, gtkglext, pangox_compat, xlibsWrapper, ming, dejagnu, python, perl
 , freefont_ttf, haxe, swftools
 , lib, makeWrapper
 , xulrunner }:
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     gettext xlibsWrapper SDL SDL_mixer gstreamer gst_plugins_base gst_plugins_good
     gst_ffmpeg speex libtool
     libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
-    dbus curl pkgconfig glib gtk gtkglext pangox_compat
+    dbus curl pkgconfig glib gtk2 gtkglext pangox_compat
     xulrunner
     makeWrapper
   ]

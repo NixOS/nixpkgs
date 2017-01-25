@@ -1,20 +1,22 @@
 { stdenv, fetchurl, cmake, freetype, libpng, mesa, gettext, openssl, perl, libiconv
 , qtscript, qtserialport, qttools, makeQtWrapper
+, qtmultimedia
 }:
 
 stdenv.mkDerivation rec {
-  name = "stellarium-0.14.3";
+  name = "stellarium-${version}";
+  version = "0.15.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/stellarium/${name}.tar.gz";
-    sha256 = "1919wzlvhfxdxficbwhp31xlhm0571grgcmsfdp5y36z9yqwahfy";
+    sha256 = "0il751lgnfkx35h1m8fzwwnrygpxjx2a80gng1i1rbybkykf7l3l";
   };
 
   nativeBuildInputs = [ makeQtWrapper ];
 
   buildInputs = [
     cmake freetype libpng mesa gettext openssl perl libiconv qtscript
-    qtserialport qttools
+    qtserialport qttools qtmultimedia
   ];
 
   enableParallelBuilding = true;

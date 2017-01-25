@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, python2, bazaar }:
+{ stdenv, fetchurl, makeWrapper, python2Packages, bazaar }:
 
-stdenv.mkDerivation rec {
+python2Packages.buildPythonApplication rec {
   name = "bzr-tools-${version}";
   version = "2.6.0";
   
@@ -9,12 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0n3zzc6jf5866kfhmrnya1vdr2ja137a45qrzsz8vz6sc6xgn5wb";
   };
 
-  buildInputs = [ makeWrapper python2 ];
+  doCheck = false;
 
-  installPhase = ''
-    ${python2}/bin/python ./setup.py install --prefix=$out
-  '';
-      
   meta = {
     description = "Bazaar plugins";
     homepage = http://wiki.bazaar.canonical.com/BzrTools;

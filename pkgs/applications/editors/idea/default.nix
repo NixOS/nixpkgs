@@ -115,10 +115,38 @@ let
       propagatedUserEnvPkgs = [ python ];
     };
 
+  buildDataGrip = { name, version, src, license, description, wmClass }:
+    (mkIdeaProduct {
+      inherit name version src wmClass jdk;
+      product = "DataGrip";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/datagrip/";
+        inherit description license;
+        longDescription = ''
+          DataGrip is a new IDE from JetBrains built for database admins.
+          It allows you to quickly migrate and refactor relational databases,
+          construct efficient, statically checked SQL queries and much more.
+        '';
+        maintainers = with maintainers; [ loskutov ];
+        platforms = platforms.linux;
+      };
+    });
 in
 
 {
   clion = buildClion rec {
+    name = "clion-${version}";
+    version = "2016.3";
+    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
+      sha256 = "16nszamr0bxg8aghyrg4wzxbp9158kjzhr957ljpbipz0rlixf31";
+    };
+    wmClass = "jetbrains-clion";
+  };
+
+  clion1 = buildClion rec {
     name = "clion-${version}";
     version = "1.2.5";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
@@ -144,12 +172,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2016.2";
+    version = "2016.3.2";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "164x4l0q31zpc1jh3js1xx9y6afrzsshmnkx1mwhmq8qmvzc4w32";
+      sha256 = "0ngign34gq7i121ss2s9wfziy3vkv1jb79pw8nf1qp7rb15xn4vc";
     };
     wmClass = "jetbrains-idea-ce";
   };
@@ -161,7 +189,7 @@ in
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "a2259249f6e7bf14ba17b0af90a18d24d9b4670af60d24f0bb51af2f62500fc2";
+      sha256 = "1hhga1i2zbsipgq283gn19kv9n94inhr1bxh2yx19gz7yr4r49d2";
     };
     wmClass = "jetbrains-idea";
   };
@@ -180,17 +208,29 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2016.2.2";
+    version = "2016.3.2";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1z5kr47n3hhx0ck163193lwlh76sykgchnq9hw1ihi25n6655j1z";
+      sha256 = "13pd95zad29c3i9qpwhjii601ixb4dgcld0kxk3liq4zmnv6wqxa";
     };
     wmClass = "jetbrains-idea";
   };
 
   ruby-mine = buildRubyMine rec {
+    name = "ruby-mine-${version}";
+    version = "2016.2.5";
+    description = "The Most Intelligent Ruby and Rails IDE";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
+      sha256 = "1rncnm5dvhpfb7l5p2k0hs4yqzp8n1c4rvz9vldlf5k7mvwggp7p";
+    };
+    wmClass = "jetbrains-rubymine";
+  };
+
+  ruby-mine7 = buildRubyMine rec {
     name = "ruby-mine-${version}";
     version = "7.1.5";
     description = "The Most Intelligent Ruby and Rails IDE";
@@ -202,31 +242,55 @@ in
     wmClass = "jetbrains-rubymine";
   };
 
+  ruby-mine8 = buildRubyMine rec {
+    name = "ruby-mine-${version}";
+    version = "8.0.4";
+    description = "The Most Intelligent Ruby and Rails IDE";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
+      sha256 = "0hipxib7377232w1jbf8h98bmh0djkllsrq3lq0w3fdxqglma43a";
+    };
+    wmClass = "jetbrains-rubymine";
+  };
+
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2016.1.3";
+    version = "2016.3";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1ks7crrfnhzkdxban2hh2pnr986vqwmac5zybmb1ighcyamhdi4q";
+      sha256 = "1pi822ihzy58jszdy7y2pyni6pki9ih8s9xdbwlbwg9vck1iqprs";
     };
     wmClass = "jetbrains-pycharm-ce";
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2016.1.3";
+    version = "2016.3";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1rn0i5qbvfjbl4v571ngmyslispibcq5ab0fb7xjl38vr1y417f2";
+      sha256 = "1b4ib77wzg0y12si8zqrfwbhv4kvmy9nm5dsrdr3k7f89dqg3279";
     };
     wmClass = "jetbrains-pycharm";
   };
 
   phpstorm = buildPhpStorm rec {
+    name = "phpstorm-${version}";
+    version = "2016.3";
+    description = "Professional IDE for Web and PHP developers";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
+      sha256 = "0hzjhwij2x3b5fqwyd69h24ld13bpc2bf9wdcd1jy758waf0d91y";
+    };
+    wmClass = "jetbrains-phpstorm";
+  };
+
+  phpstorm10 = buildPhpStorm rec {
     name = "phpstorm-${version}";
     version = "10.0.4";
     description = "Professional IDE for Web and PHP developers";
@@ -240,6 +304,18 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
+    version = "2016.3.1";
+    description = "Professional IDE for Web and JavaScript development";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
+      sha256 = "10za4d6w9yns7kclbviizslq2y7zas9rkmvs3xwrfw1rdw2b69af";
+    };
+    wmClass = "jetbrains-webstorm";
+  };
+
+  webstorm10 = buildWebStorm rec {
+    name = "webstorm-${version}";
     version = "10.0.5";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
@@ -250,4 +326,27 @@ in
     wmClass = "jetbrains-webstorm";
   };
 
+  webstorm11 = buildWebStorm rec {
+    name = "webstorm-${version}";
+    version = "11.0.4";
+    description = "Professional IDE for Web and JavaScript development";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
+      sha256 = "17agyqdyz6naxyx6p0y240ar93gja0ypw01nm2qmfzvh7ch03r24";
+    };
+    wmClass = "jetbrains-webstorm";
+  };
+
+  datagrip = buildDataGrip rec {
+    name = "datagrip-${version}";
+    version = "2016.3";
+    description = "Your Swiss Army Knife for Databases and SQL";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
+      sha256 = "10nah7v330qrrczzz5jldnr0k7w2xzljiny32gm9pqmjbl0i70il";
+    };
+    wmClass = "jetbrains-datagrip";
+  };
 }

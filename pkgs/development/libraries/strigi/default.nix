@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     url = "http://www.vandenoever.info/software/strigi/${name}.tar.bz2";
     sha256 = "12grxzqwnvbyqw7q1gnz42lypadxmq89vk2qpxczmpmc4nk63r23";
   };
-  
+
   includeAllQtDirs = true;
 
   CLUCENE_HOME = clucene_core;
@@ -23,6 +23,15 @@ stdenv.mkDerivation rec {
   patches = [ ./export_bufferedstream.patch ];
 
   enableParallelBuilding = true;
+
+  # Strigi installs some libraries in an incorrect place
+  # ($out/$out/lib instead of $out/lib), so move them to the right
+  # place.
+  postInstall =
+    ''
+      mv $out/$out/lib/* $out/lib
+      rm -rf $out/nix
+    '';
 
   meta = {
     homepage = http://strigi.sourceforge.net;

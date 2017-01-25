@@ -80,8 +80,7 @@ in
       };
 
     systemd.services."container-getty@" =
-      { unitConfig.ConditionPathExists = "/dev/pts/%I"; # Work around being respawned when "machinectl login" exits.
-        serviceConfig.ExecStart = gettyCmd "--noclear --keep-baud pts/%I 115200,38400,9600 $TERM";
+      { serviceConfig.ExecStart = gettyCmd "--noclear --keep-baud pts/%I 115200,38400,9600 $TERM";
         restartIfChanged = false;
       };
 

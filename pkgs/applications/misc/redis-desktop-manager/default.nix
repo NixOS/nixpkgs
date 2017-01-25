@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     qtquick1 qtquickcontrols qtsvg qttools
   ];
 
-  configurePhase = "true";
+  dontUseQmakeConfigure = true;
 
   buildPhase = ''
     srcdir=$PWD

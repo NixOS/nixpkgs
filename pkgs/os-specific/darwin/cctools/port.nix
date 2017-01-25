@@ -1,27 +1,31 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool_2
-, llvm, libcxx, libcxxabi, clang, openssl, libuuid
+, llvm, libcxx, libcxxabi, clang, libuuid
 , libobjc ? null
 }:
 
 let
   baseParams = rec {
     name = "cctools-port-${version}";
-    version = "877.5";
+    version = "886";
 
     src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      rev    = "7d405492b09fa27546caaa989b8493829365deab";
-      sha256 = "0nj1q5bqdx5jm68dispybxc7wnkb6p8p2igpnap9q6qyv2r9p07w";
+      rev    = "02f0b8ecd87a3951653d838a321ae744815e21a5";
+      sha256 = "0bzyabzr5dvbxglr74d0kbrk2ij5x7s5qcamqi1v546q1had1wz1";
     };
 
-    buildInputs = [ autoconf automake libtool_2 openssl libuuid ] ++
+    buildInputs = [ autoconf automake libtool_2 libuuid ] ++
       # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
       stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
       stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
 
     patches = [
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+      # See https://github.com/tpoechtrager/cctools-port/issues/24. Remove when that's fixed.
+      ./undo-unknown-triple.patch
+      ./ld-tbd-v2.patch
     ];
 
     enableParallelBuilding = true;

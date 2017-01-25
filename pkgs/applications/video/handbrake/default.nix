@@ -12,7 +12,7 @@
 # TODO: package and use libappindicator
 
 { stdenv, config, fetchurl,
-  python, pkgconfig, yasm,
+  python2, pkgconfig, yasm,
   autoconf, automake, libtool, m4,
   libass, libsamplerate, fribidi, libxml2, bzip2,
   libogg, libtheora, libvorbis, libdvdcss, a52dec, fdk_aac,
@@ -36,14 +36,13 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  nativeBuildInputs = [ python pkgconfig yasm autoconf automake libtool m4 ];
+  nativeBuildInputs = [ python2 pkgconfig yasm autoconf automake libtool m4 ];
   buildInputs = [
     fribidi fontconfig freetype hicolor_icon_theme
     libass libsamplerate libxml2 bzip2
     libogg libtheora libvorbis libdvdcss a52dec libmkv fdk_aac
     lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
   ] ++ buildInputsX;
-
 
   src = fetchurl {
     url = "http://download.handbrake.fr/releases/${version}/HandBrake-${version}.tar.bz2";
@@ -73,6 +72,11 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd build
+  '';
+
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ x265 ];
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}")
   '';
 
   meta = {

@@ -89,6 +89,7 @@ let
 
       # symlink other core stuff
       ln -s /host/etc/localtime localtime
+      ln -s /host/etc/zoneinfo zoneinfo
       ln -s /host/etc/machine-id machine-id
       ln -s /host/etc/os-release os-release
 

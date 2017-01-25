@@ -2,12 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "libqalculate-${version}";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchurl {
     url = "https://github.com/Qalculate/libqalculate/archive/v${version}.tar.gz";
-    sha256 = "0avri5c3sr31ax0vjvzla1a11xb4irnrc6571lm6w4zxigqakkqk";
+    sha256 = "0whzc15nwsrib6bpw4lqsm59yr0pfk44hny9sivfbwhidk0177zi";
   };
+
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook doxygen ];
   buildInputs = [ readline ];

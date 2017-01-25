@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gettext, intltool, pkgconfig, python
 , avahi, bluez, boost, eigen, fftw, glib, glib_networking
-, glibmm, gsettings_desktop_schemas, gtk, gtkmm, libjack2
+, glibmm, gsettings_desktop_schemas, gtkmm2, libjack2
 , ladspaH, librdf, libsndfile, lilv, lv2, serd, sord, sratom
 , webkitgtk2, wrapGAppsHook, zita-convolver, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
@@ -12,18 +12,18 @@ in
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
-  version = "0.35.1";
+  version = "0.35.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "066qva1zk63qw60s0vbi9g9jh22ljw67p91pk82kv11gw24h3vg6";
+    sha256 = "1qj3adjhg511jygbjkl9k5v0gcjmg6ifc479rspfyf45m383pp3p";
   };
 
   nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python ];
 
   buildInputs = [
     avahi bluez boost eigen fftw glib glibmm glib_networking.out
-    gsettings_desktop_schemas gtk gtkmm libjack2 ladspaH librdf
+    gsettings_desktop_schemas gtkmm2 libjack2 ladspaH librdf
     libsndfile lilv lv2 serd sord sratom webkitgtk2 zita-convolver
     zita-resampler
   ];

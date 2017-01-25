@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, mono, gtk, curl }:
+{ stdenv, fetchFromGitHub, makeWrapper, perl, mono, gtk2, curl }:
 
 stdenv.mkDerivation rec {
   name = "ckan-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   checkTarget = "test";
 
-  libraries = stdenv.lib.makeLibraryPath [ gtk curl ];
+  libraries = stdenv.lib.makeLibraryPath [ gtk2 curl ];
 
   installPhase = ''
     mkdir -p $out/bin

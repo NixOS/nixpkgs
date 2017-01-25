@@ -8,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openshot-qt-${version}";
-  version = "2.0.7";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "1s4b61fd8cyjy8kvc25mqd97dkxx6gqmz02i42rrcriz51pw8wgh";
+    sha256 = "1cyr5m1n6qcb9bzkhh3v6ka91a6x9c50dl5j0ilrc8vj0mb43g8c";
   };
 
   buildInputs = [doxygen python3Packages.python makeWrapper ffmpeg];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     echo "exec ${python3Packages.python.interpreter} $(toPythonPath $out)/launch.py" >>$out/bin/openshot-qt
     chmod +x $out/bin/openshot-qt
     wrapProgram $out/bin/openshot-qt \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${libopenshot}):$(toPythonPath ${python3Packages.pyqt5}):$(toPythonPath ${python3Packages.sip}):$(toPythonPath ${python3Packages.httplib2}):$PYTHONPATH"
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${libopenshot}):$(toPythonPath ${python3Packages.pyqt5}):$(toPythonPath ${python3Packages.sip}):$(toPythonPath ${python3Packages.httplib2}):$(toPythonPath ${python3Packages.pyzmq}):$PYTHONPATH"
   '';
 
   doCheck = false;

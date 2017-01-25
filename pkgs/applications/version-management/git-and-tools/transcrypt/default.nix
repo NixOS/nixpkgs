@@ -1,20 +1,26 @@
-{ stdenv, fetchurl, git, openssl }:
+{ stdenv, fetchFromGitHub, git, makeWrapper, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "transcrypt-0.9.7";
+  name = "transcrypt-${version}";
+  version = "1.0.1";
 
-  src = fetchurl {
-    url = https://github.com/elasticdog/transcrypt/archive/v0.9.7.tar.gz;
-    sha256 = "0pgrf74wdc7whvwz7lkkq6qfk38n37dc5668baq7czgckibvjqdh";
+  src = fetchFromGitHub {
+    owner = "elasticdog";
+    repo = "transcrypt";
+    rev = "v${version}";
+    sha256 = "12n8714my9i93lysqa3dj1z5xgi10iv5y1mnsqki9zn5av3lgqkq";
   };
 
-  buildInputs = [ git openssl ];
+  buildInputs = [ git makeWrapper openssl ];
 
   installPhase = ''
     install -m 755 -D transcrypt $out/bin/transcrypt
     install -m 644 -D man/transcrypt.1 $out/share/man/man1/transcrypt.1
     install -m 644 -D contrib/bash/transcrypt $out/share/bash-completion/completions/transcrypt
     install -m 644 -D contrib/zsh/_transcrypt $out/share/zsh/site-functions/_transcrypt
+
+    wrapProgram $out/bin/transcrypt \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ git openssl ]}"
   '';
 
   meta = with stdenv.lib; {

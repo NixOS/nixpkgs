@@ -49,7 +49,7 @@ let
       outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
-      setupHook = ./setup-hook.sh;
+      setupHook = ../qtsubmodule-setup-hook.sh;
 
       enableParallelBuilding = args.enableParallelBuilding or true;
 
@@ -66,7 +66,7 @@ let
         harfbuzz = pkgs.harfbuzz-icu;
         cups = if stdenv.isLinux then pkgs.cups else null;
         # GNOME dependencies are not used unless gtkStyle == true
-        inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+        inherit (pkgs.gnome2) libgnomeui GConf gnome_vfs;
         bison = pkgs.bison2; # error: too few arguments to function 'int yylex(...
         inherit developerBuild decryptSslTraffic;
       };
@@ -112,8 +112,15 @@ let
         qtxmlpatterns
       ];
 
-      makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      qmakeHook = makeSetupHook { substitutions = { qt_dev = qtbase.dev; lndir = pkgs.xorg.lndir; }; } ./qmake-hook.sh;
+      makeQtWrapper =
+        makeSetupHook
+        { deps = [ makeWrapper ]; }
+        ../make-qt-wrapper.sh;
+
+      qmakeHook =
+        makeSetupHook
+        { deps = [ self.qtbase.dev ]; }
+        ../qmake-hook.sh;
 
     };
 

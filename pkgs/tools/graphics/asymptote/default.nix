@@ -4,8 +4,6 @@
   , python, zlib, perl, texLive, texinfo, xz
 }:
 
-assert stdenv.isLinux;
-
 let
   s = # Generated upstream information
   rec {
@@ -17,10 +15,12 @@ let
     sha256="1dxwvq0xighqckkjkjva8s0igxfgy1j25z81pbwvlz6jzsrxpip9";
   };
   buildInputs = [
-   freeglut ghostscriptX imagemagick fftw 
-   boehmgc mesa_glu mesa_noglu mesa_noglu.osmesa ncurses readline gsl libsigsegv
-   python zlib perl texLive texinfo xz
-  ];
+   ghostscriptX imagemagick fftw
+   boehmgc ncurses readline gsl libsigsegv
+   python zlib perl texLive texinfo xz ]
+   ++ stdenv.lib.optionals stdenv.isLinux
+     [ freeglut mesa_glu mesa_noglu mesa_noglu.osmesa ]
+   ;
 in
 stdenv.mkDerivation {
   inherit (s) name version;
@@ -51,11 +51,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (s) version;
     description =  "A tool for programming graphics intended to replace Metapost";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.peti];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.raskin maintainers.peti ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

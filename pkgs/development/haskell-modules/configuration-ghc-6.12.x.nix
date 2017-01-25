@@ -49,12 +49,6 @@ self: super: {
   transformers = self.transformers_0_4_3_0;
   xhtml = self.xhtml_3000_2_1;
 
-  # The jailbreak is unnecessary in this package set.
-  deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
-
-  # Newer versions don't compile.
-  Cabal_1_18_1_7 = dontJailbreak super.Cabal_1_18_1_7;
-
   # We have no working cabal-install at the moment.
   cabal-install = markBroken super.cabal-install;
 

@@ -55,7 +55,7 @@ in
       pkgs.cryptsetup # needed for dm-crypt volumes
 
       # Some networking tools.
-      pkgs.sshfsFuse
+      pkgs.sshfs-fuse
       pkgs.socat
       pkgs.screen
       pkgs.wpa_supplicant # !!! should use the wpa module

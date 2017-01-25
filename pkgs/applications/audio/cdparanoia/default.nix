@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin [
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [
     Carbon
     IOKit
   ];

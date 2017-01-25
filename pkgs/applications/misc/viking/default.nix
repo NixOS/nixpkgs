@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, pkgconfig, intltool, gettext, gtk, expat, curl
+{ fetchurl, stdenv, makeWrapper, pkgconfig, intltool, gettext, gtk2, expat, curl
 , gpsd, bc, file, gnome_doc_utils, libexif, libxml2, libxslt, scrollkeeper
 , docbook_xml_dtd_412, gexiv2, sqlite, gpsbabel, expect }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "09kq0sxs2czps0d6xzgkkp41746v44ip63m72qvfs7rsrnqj7qnz";
   };
 
-  buildInputs = [ makeWrapper pkgconfig intltool gettext gtk expat curl gpsd bc file gnome_doc_utils
+  buildInputs = [ makeWrapper pkgconfig intltool gettext gtk2 expat curl gpsd bc file gnome_doc_utils
     libexif libxml2 libxslt scrollkeeper docbook_xml_dtd_412 gexiv2 sqlite
   ];
 

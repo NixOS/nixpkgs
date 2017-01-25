@@ -92,7 +92,7 @@ rec {
           internal = opt.internal or false;
           visible = opt.visible or true;
           readOnly = opt.readOnly or false;
-          type = opt.type.name or null;
+          type = opt.type.description or null;
         }
         // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
         // (if opt ? default then { default = scrubOptionValue opt.default; } else {})

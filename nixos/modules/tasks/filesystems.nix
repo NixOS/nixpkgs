@@ -18,7 +18,7 @@ let
 
   prioOption = prio: optionalString (prio != null) " pri=${toString prio}";
 
-  specialFSTypes = [ "proc" "sysfs" "tmpfs" "devtmpfs" "devpts" ];
+  specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
   coreFileSystemOpts = { name, config, ... }: {
 
@@ -258,7 +258,7 @@ in
           let
             mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
             device'  = escapeSystemdPath fs.device;
-            device'' = "${device}.device";
+            device'' = "${device'}.device";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
             wantedBy = [ mountPoint' ];
@@ -286,11 +286,18 @@ in
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
     boot.specialFileSystems = {
       "/proc" = { fsType = "proc"; options = [ "nosuid" "noexec" "nodev" ]; };
-      "/sys" = { fsType = "sysfs"; options = [ "nosuid" "noexec" "nodev" ]; };
-      "/run" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
+      "/run" = { fsType = "tmpfs"; options = [ "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
       "/dev" = { fsType = "devtmpfs"; options = [ "nosuid" "strictatime" "mode=755" "size=${config.boot.devSize}" ]; };
       "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
       "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "gid=${toString config.ids.gids.tty}" ]; };
+
+      # To hold secrets that shouldn't be written to disk (generally used for NixOps, harmless elsewhere)
+      "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" "gid=${toString config.ids.gids.keys}" ]; };
+    } // optionalAttrs (!config.boot.isContainer) {
+      # systemd-nspawn populates /sys by itself, and remounting it causes all
+      # kinds of weird issues (most noticeably, waiting for host disk device
+      # nodes).
+      "/sys" = { fsType = "sysfs"; options = [ "nosuid" "noexec" "nodev" ]; };
     };
 
   };

@@ -1,36 +1,40 @@
-{stdenv, fetchzip, which, ocaml}:
-let
-  ocaml_version = (stdenv.lib.getVersion ocaml);
-  version = "4.02+6";
+{ stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
+let param = {
+  "4.02.3" = {
+     version = "4.02+6";
+     sha256 = "06yl4q0qazl7g25b0axd1gdkfd4qpqzs1gr5fkvmkrcbz113h1hj"; };
+  "4.03.0" = {
+     version = "4.03+1";
+     sha256 = "1f2ndch6f1m4fgnxsjb94qbpwjnjgdlya6pard44y6n0dqxi1wsq"; };
+  }."${ocaml.version}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml_version "4.02";
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "camlp4-${version}";
+  inherit (param) version;
+
   src = fetchzip {
     url = "https://github.com/ocaml/camlp4/archive/${version}.tar.gz";
-    sha256 = "06yl4q0qazl7g25b0axd1gdkfd4qpqzs1gr5fkvmkrcbz113h1hj";
+    inherit (param) sha256;
   };
 
-  buildInputs = [ which ocaml ];
+  buildInputs = [ which ocaml ocamlbuild ];
 
   dontAddPrefix = true;
 
   preConfigure = ''
     configureFlagsArray=(
       --bindir=$out/bin
-      --libdir=$out/lib/ocaml/${ocaml_version}/site-lib
-      --pkgdir=$out/lib/ocaml/${ocaml_version}/site-lib
+      --libdir=$out/lib/ocaml/${ocaml.version}/site-lib
+      --pkgdir=$out/lib/ocaml/${ocaml.version}/site-lib
     )
   '';
 
   postConfigure = ''
     substituteInPlace camlp4/META.in \
-    --replace +camlp4 $out/lib/ocaml/${ocaml_version}/site-lib/camlp4
+    --replace +camlp4 $out/lib/ocaml/${ocaml.version}/site-lib/camlp4
   '';
-
 
   makeFlags = "all";
 

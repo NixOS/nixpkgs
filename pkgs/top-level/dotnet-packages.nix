@@ -181,6 +181,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "bin/*" ];
   };
 
+  OpenNAT = fetchNuGet {
+    baseName = "Open.NAT";
+    version = "2.1.0";
+    sha256 = "1jyd30fwycdwx5ck96zhp2xf20yz0sp7g3pjbqhmay4kd322mfwk";
+    outputFiles = [ "lib/*" ];
+  };
+
   MonoNat = fetchNuGet {
     baseName = "Mono.Nat";
     version = "1.2.24";
@@ -580,7 +587,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
     };
 
-    buildInputs = [ pkgs.gtk-sharp ];
+    buildInputs = [ pkgs.gtk-sharp-2_0 ];
 
     meta = {
       description = "A generic framework for creating extensible applications";

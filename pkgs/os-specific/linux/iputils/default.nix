@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
 
       mkdir -p $out/share/man/man8
       cp -p doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 \
-        doc/tracepath.8 doc/ninfod.8 $out/share/man/man8
+        doc/tracepath.8 doc/ninfod.8 doc/traceroute6.8 \
+        $out/share/man/man8
       ln -s $out/share/man/man8/{ping,ping6}.8
       ln -s $out/share/man/man8/{tracepath,tracepath6}.8
     '';

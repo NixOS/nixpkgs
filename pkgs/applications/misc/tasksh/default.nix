@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "tasksh-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "http://taskwarrior.org/download/tasksh-latest.tar.gz";
-    sha256 = "0ll6pwhw4wsdffacsmpq46fqh084p9mdaa777giqbag3b8gwik4s";
+    url = "http://taskwarrior.org/download/${name}.tar.gz";
+    sha256 = "0900nzfgvhcc106pl68d0v0qszvdc34yi59mw70b34b2gmkwdxzf";
   };
 
   nativeBuildInputs = [ cmake ];

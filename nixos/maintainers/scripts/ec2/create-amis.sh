@@ -1,4 +1,8 @@
-#! /bin/sh -e
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p qemu ec2_ami_tools jq ec2_api_tools awscli
+
+# To start with do: nix-shell -p awscli --run "aws configure"
+
 
 set -o pipefail
 #set -x
@@ -15,7 +19,7 @@ rm -f ec2-amis.nix
 
 types="hvm pv"
 stores="ebs s3"
-regions="eu-west-1 eu-central-1 us-east-1 us-west-1 us-west-2 ap-southeast-1 ap-southeast-2 ap-northeast-1 ap-northeast-2 sa-east-1 ap-south-1"
+regions="eu-west-1 eu-central-1 us-east-1 us-east-2 us-west-1 us-west-2 ap-southeast-1 ap-southeast-2 ap-northeast-1 ap-northeast-2 sa-east-1 ap-south-1"
 
 for type in $types; do
     link=$stateDir/$type
@@ -57,7 +61,7 @@ for type in $types; do
                     ami=$(aws ec2 copy-image \
                         --region "$region" \
                         --source-region "$prevRegion" --source-image-id "$prevAmi" \
-                        --name "$name" --description "$description" | json -q .ImageId)
+                        --name "$name" --description "$description" | jq -r '.ImageId')
                     if [ "$ami" = null ]; then break; fi
                 else
 

@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, gtk, glibmm, cairomm, pangomm, atkmm }:
+{ stdenv, fetchurl, pkgconfig, gtk2, glibmm, cairomm, pangomm, atkmm }:
 
 stdenv.mkDerivation rec {
-  name = "gtkmm-${minVer}.4";
+  name = "gtkmm-${minVer}.5";
   minVer = "2.24";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${minVer}/${name}.tar.xz";
-    sha256 = "1vpmjqv0aqb1ds0xi6nigxnhlr0c74090xzi15b92amlzkrjyfj4";
+    sha256 = "0680a53b7bf90b4e4bf444d1d89e6df41c777e0bacc96e9c09fc4dd2f5fe6b72";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [pkgconfig];
 
-  propagatedBuildInputs = [ glibmm gtk atkmm cairomm pangomm ];
+  propagatedBuildInputs = [ glibmm gtk2 atkmm cairomm pangomm ];
 
   doCheck = true;
 

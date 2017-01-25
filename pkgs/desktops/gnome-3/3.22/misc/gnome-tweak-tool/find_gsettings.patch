@@ -1,0 +1,22 @@
+diff --git a/gtweak/gsettings.py b/gtweak/gsettings.py
+index a00fe19..dce74b2 100644
+--- a/gtweak/gsettings.py
++++ b/gtweak/gsettings.py
+@@ -33,10 +33,15 @@ class GSettingsMissingError(Exception):
+ 
+ class _GSettingsSchema:
+     def __init__(self, schema_name, schema_dir=None, schema_filename=None, **options):
+-        if not schema_dir:
+-            schema_dir = gtweak.GSETTINGS_SCHEMA_DIR
+         if not schema_filename:
+             schema_filename = schema_name + ".gschema.xml"
++        if not schema_dir:
++            schema_dir = gtweak.GSETTINGS_SCHEMA_DIR
++            for xdg_dir in GLib.get_system_data_dirs():
++                dir = os.path.join(xdg_dir, "glib-2.0", "schemas")
++                if os.path.exists(os.path.join(dir, schema_filename)):
++                    schema_dir = dir
++                    break
+ 
+         schema_path = os.path.join(schema_dir, schema_filename)
+         if not os.path.exists(schema_path):

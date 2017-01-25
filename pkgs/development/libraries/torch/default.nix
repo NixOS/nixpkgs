@@ -15,18 +15,6 @@ stdenv.mkDerivation rec{
     cd ..
     export PREFIX=$out
 
-    include=
-    for i in $NIX_CFLAGS_COMPILE; do
-      if test -n "$include" && test -d "$i"; then
-        export CMAKE_INCLUDE_PATH="$CMAKE_INCLUDE_PATH''${CMAKE_INCLUDE_PATH:+:}$i"
-      fi;
-      if test "x$i" = "x-isystem"; then
-        include=1
-      else
-        include=
-      fi
-    done
-
     mkdir "$out"
     sh install.sh -s
   '';

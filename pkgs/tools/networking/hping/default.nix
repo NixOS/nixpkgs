@@ -40,10 +40,11 @@ stdenv.mkDerivation rec {
     ln -vs hping3.8.gz "$out/share/man/man8/hping2.8.gz"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A command-line oriented TCP/IP packet assembler/analyzer";
     homepage = "http://www.hping.org/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

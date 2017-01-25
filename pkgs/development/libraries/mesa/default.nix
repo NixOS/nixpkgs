@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, libudev
+, file, expat, libdrm, xorg, wayland, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
-, libelf, libvdpau, python
+, libelf, libvdpau, python2
 , grsecEnabled ? false
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 }:
@@ -26,7 +26,7 @@ if ! lists.elem stdenv.system platforms.mesaPlatforms then
 else
 
 let
-  version = "12.0.1";
+  version = "13.0.3";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "12b3i59xdn2in2hchrkgh4fwij8zhznibx976l3pdj3qkyvlzcms";
+    sha256 = "d9aa8be5c176d00d0cd503cb2f64a5a403ea471ec819c022581414860d7ba40e";
   };
 
   prePatch = "patchShebangs .";
@@ -51,11 +51,7 @@ stdenv.mkDerivation {
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-  ] ++ optional stdenv.isLinux
-      (substituteAll {
-        src = ./dlopen-absolute-paths.diff;
-        libudev = libudev.out;
-      });
+  ];
 
   postPatch = ''
     substituteInPlace src/egl/main/egldriver.c \
@@ -71,11 +67,13 @@ stdenv.mkDerivation {
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
     "--with-egl-platforms=x11,wayland,drm"
-    (optionalString (stdenv.system != "armv7l-linux")
-      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast")
-    (optionalString (stdenv.system != "armv7l-linux")
-      "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast")
-
+  ]
+    ++ optionals (stdenv.system != "armv7l-linux") [
+      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
+      "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
+      "--with-vulkan-drivers=intel"
+  ]
+    ++ [
     (enableFeature enableTextureFloats "texture-float")
     (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
@@ -112,9 +110,9 @@ stdenv.mkDerivation {
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC
-    libomxil-bellagio libva libpthreadstubs
-    (python.withPackages (ps: [ ps.Mako ]))
-  ] ++ optional stdenv.isLinux libudev;
+    libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
+    (python2.withPackages (ps: [ ps.Mako ]))
+  ];
 
 
   enableParallelBuilding = true;
@@ -134,8 +132,18 @@ stdenv.mkDerivation {
       $out/lib/vdpau         \
       $out/lib/bellagio      \
       $out/lib/libxatracker* \
+      $out/lib/libvulkan_*
 
-    mv $out/lib/dri/* $drivers/lib/dri
+    # move share/vulkan/icd.d/
+    mv $out/share/ $drivers/
+    # Update search path used by Vulkan (it's pointing to $out but
+    # drivers are in $drivers)
+    for js in $drivers/share/vulkan/icd.d/*.json; do
+      substituteInPlace "$js" --replace "$out" "$drivers"
+    done
+
+    mv $out/lib/dri/* $drivers/lib/dri # */
+    rmdir "$out/lib/dri"
 
     # move libOSMesa to $osmesa, as it's relatively big
     mkdir -p {$osmesa,$drivers}/lib/

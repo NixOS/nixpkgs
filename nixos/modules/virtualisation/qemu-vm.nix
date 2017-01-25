@@ -13,6 +13,8 @@ with lib;
 
 let
 
+  qemu = config.system.build.qemu or pkgs.qemu_test;
+
   vmName =
     if config.networking.hostName == ""
     then "noname"
@@ -32,7 +34,7 @@ let
       NIX_DISK_IMAGE=$(readlink -f ''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}})
 
       if ! test -e "$NIX_DISK_IMAGE"; then
-          ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
+          ${qemu}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
             ${toString config.virtualisation.diskSize}M || exit 1
       fi
 
@@ -47,7 +49,7 @@ let
       ${if cfg.useBootLoader then ''
         # Create a writable copy/snapshot of the boot disk.
         # A writable boot disk can be booted from automatically.
-        ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
+        ${qemu}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
 
         ${if cfg.useEFIBoot then ''
           # VM needs a writable flash BIOS.
@@ -63,14 +65,14 @@ let
       extraDisks=""
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
         if ! test -e "empty$idx.qcow2"; then
-            ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
+            ${qemu}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
         fi
         extraDisks="$extraDisks -drive index=$idx,file=$(pwd)/empty$idx.qcow2,if=${cfg.qemu.diskInterface},werror=report"
         idx=$((idx + 1))
       '')}
 
       # Start QEMU.
-      exec ${pkgs.qemu_kvm}/bin/qemu-kvm \
+      exec ${qemu}/bin/qemu-kvm \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
@@ -121,7 +123,7 @@ let
               mkdir $out
               diskImage=$out/disk.img
               bootFlash=$out/bios.bin
-              ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 $diskImage "40M"
+              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
               ${if cfg.useEFIBoot then ''
                 cp ${pkgs.OVMF-CSM}/FV/OVMF.fd $bootFlash
                 chmod 0644 $bootFlash
@@ -272,11 +274,11 @@ in
 
     virtualisation.writableStore =
       mkOption {
-        default = false;
+        default = true; # FIXME
         description =
           ''
             If enabled, the Nix store in the VM is made writable by
-            layering a unionfs-fuse/tmpfs filesystem on top of the host's Nix
+            layering an overlay filesystem on top of the host's Nix
             store.
           '';
       };
@@ -393,6 +395,13 @@ in
         chmod 1777 $targetRoot/tmp
 
         mkdir -p $targetRoot/boot
+
+        ${optionalString cfg.writableStore ''
+          echo "mounting overlay filesystem on /nix/store..."
+          mkdir -p 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
+          mount -t overlay overlay $targetRoot/nix/store \
+            -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
+        ''}
       '';
 
     # After booting, register the closure of the paths in
@@ -410,7 +419,8 @@ in
       '';
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
+      optional cfg.writableStore "overlay"
+      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
 
     virtualisation.bootDevice =
       mkDefault (if cfg.qemu.diskInterface == "scsi" then "/dev/sda" else "/dev/vda");
@@ -430,13 +440,13 @@ in
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
             neededForBoot = true;
           };
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
             neededForBoot = true;
           };
         "/tmp/shared" =
@@ -444,12 +454,6 @@ in
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" ];
             neededForBoot = true;
-          };
-      } // optionalAttrs cfg.writableStore
-      { "/nix/store" =
-          { fsType = "unionfs-fuse";
-            device = "unionfs";
-            options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
           };
       } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)
       { "/nix/.rw-store" =
@@ -470,7 +474,7 @@ in
     boot.initrd.luks.devices = mkVMOverride {};
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
-    services.ntp.enable = false;
+    services.timesyncd.enable = false;
 
     system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
       ''

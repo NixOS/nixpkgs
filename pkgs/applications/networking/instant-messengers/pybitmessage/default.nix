@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f4h0yc1mfjnxzvxiv9hxgak59mgr3a5ykv50vlyiay82za20jax";
   };
 
-  buildInputs = with pythonPackages; [ python pyqt4 wrapPython sqlite3 ] ++ [ openssl ];
+  buildInputs = with pythonPackages; [ python pyqt4 wrapPython ] ++ [ openssl ];
 
   preConfigure = ''
     substituteInPlace Makefile \

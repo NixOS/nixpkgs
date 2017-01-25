@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, ocamlPackages, zlib }:
+{ stdenv, fetchurl, zlib
+, ocaml, ocamlfuse, findlib, gapi_ocaml, ocaml_sqlite3, camlidl }:
 
 stdenv.mkDerivation rec {
   name = "google-drive-ocamlfuse-${version}";
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hjm6hyva9sl6lddb0372wsy7f76105iaxh976yyzfn3b4ran6ab";
   };
 
-  buildInputs = [ zlib ] ++ (with ocamlPackages; [ocaml ocamlfuse findlib gapi_ocaml ocaml_sqlite3 camlidl]);
+  buildInputs = [ zlib ocaml ocamlfuse findlib gapi_ocaml ocaml_sqlite3 camlidl];
 
   configurePhase = "ocaml setup.ml -configure --prefix \"$out\"";
   buildPhase = "ocaml setup.ml -build";

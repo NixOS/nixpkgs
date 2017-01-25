@@ -12,8 +12,15 @@ can disable IPv6 support globally by setting:
 
 <programlisting>
 networking.enableIPv6 = false;
-</programlisting>
+</programlisting></para>
 
+<para>You can disable IPv6 on a single interface using a normal sysctl (in this
+example, we use interface <varname>eth0</varname>):
+
+<programlisting>
+boot.kernel.sysctl."net.ipv6.conf.eth0.disable_ipv6" = true;
+</programlisting>
 </para>
+
 
 </section>

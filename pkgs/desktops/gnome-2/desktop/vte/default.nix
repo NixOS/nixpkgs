@@ -1,7 +1,9 @@
 { stdenv, fetchurl, intltool, pkgconfig, glib, gtk, ncurses
-, pythonSupport ? false, python, pygtk}:
+, pythonSupport ? false, python27Packages}:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python27Packages) python pygtk;
+in stdenv.mkDerivation rec {
   name = "vte-0.28.2";
 
   src = fetchurl {

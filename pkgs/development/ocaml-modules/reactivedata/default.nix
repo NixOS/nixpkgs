@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_react, camlp4, opam}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocaml_react, camlp4, opam }:
 
 let
   ocamlVersion = stdenv.lib.getVersion ocaml;
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0rskcxnyjn8sxqnncdm6rh9wm99nha5m5sc83fywgzs64xfl43fq";
   };
 
-  buildInputs = [ocaml findlib opam camlp4 ];
+  buildInputs = [ ocaml findlib ocamlbuild opam camlp4 ];
   propagatedBuildInputs = [ocaml_react];
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";

@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "20150201";
-  slang   = "Sodium";
+  version = "20160501";
+  slang   = "Aluminium";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "0zask160vj8bxgc07dzxj5hqbdp6gz5g00j6za5397961imxhxaq";
+    sha256 = "02z4d1lg2cs4hgbjx74crfrabv39dyhdrq5lvhv0q3hx5c8w7p90";
   };
 
   why2 = fetchurl {
@@ -49,22 +49,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $file  --replace '/usr/bin/' ""
     done
 
-    # find library paths
-    OCAMLGRAPH_HOME=`ocamlfind query ocamlgraph`
-    LABLGTK_HOME=`ocamlfind query lablgtk2`
-
-    # patch search paths
-    # ensure that the tests against the ocamlgraph version succeeds
-    # filter out the additional search paths from ocamldep
-    substituteInPlace ./configure \
-      --replace '$OCAMLLIB/ocamlgraph' "$OCAMLGRAPH_HOME" \
-      --replace '$OCAMLLIB/lablgtk2' "$LABLGTK_HOME" \
-      --replace '+ocamlgraph' "$OCAMLGRAPH_HOME" \
-    substituteInPlace ./Makefile --replace '+lablgtk2' "$LABLGTK_HOME" \
-      --replace '$(patsubst +%,.,$(INCLUDES) $(GUI_INCLUDES))' \
-                '$(patsubst /%,.,$(patsubst +%,.,$(INCLUDES) $(GUI_INCLUDES)))'
-
-    substituteInPlace ./src/aorai/aorai_register.ml --replace '"ltl2ba' '"${ltl2ba}/bin/ltl2ba'
+    substituteInPlace ./src/plugins/aorai/aorai_register.ml --replace '"ltl2ba' '"${ltl2ba}/bin/ltl2ba'
 
     cd ../why*
     substituteInPlace ./frama-c-plugin/Makefile --replace 'shell frama-c' "shell $out/bin/frama-c"
@@ -82,10 +67,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Frama-C is an extensible tool for source-code analysis of C software";
+    description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage    = http://frama-c.com/;
     license     = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
   };
 }

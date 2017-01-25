@@ -1,17 +1,16 @@
 { config, lib, pkgs, ... }:
 
-with pkgs;
 with lib;
 
 let
 
   cfg = config.services.opensmtpd;
-  conf = writeText "smtpd.conf" cfg.serverConfiguration;
+  conf = pkgs.writeText "smtpd.conf" cfg.serverConfiguration;
   args = concatStringsSep " " cfg.extraServerArgs;
 
   sendmail = pkgs.runCommand "opensmtpd-sendmail" {} ''
     mkdir -p $out/bin
-    ln -s ${opensmtpd}/sbin/smtpctl $out/bin/sendmail
+    ln -s ${pkgs.opensmtpd}/sbin/smtpctl $out/bin/sendmail
   '';
 
 in {
@@ -48,21 +47,19 @@ in {
       };
 
       serverConfiguration = mkOption {
-        type = types.string;
-        default = "";
+        type = types.lines;
         example = ''
           listen on lo
           accept for any deliver to lmtp localhost:24
-        ''; 
+        '';
         description = ''
           The contents of the smtpd.conf configuration file. See the
-          OpenSMTPD documentation for syntax information. If this option
-          is left empty, the OpenSMTPD server will not start.
+          OpenSMTPD documentation for syntax information.
         '';
       };
 
       procPackages = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.package;
         default = [];
         description = ''
           Packages to search for filters, tables, queues, and schedulers.
@@ -100,12 +97,11 @@ in {
     systemd.services.opensmtpd = let
       procEnv = pkgs.buildEnv {
         name = "opensmtpd-procs";
-        paths = [ opensmtpd ] ++ cfg.procPackages;
+        paths = [ pkgs.opensmtpd ] ++ cfg.procPackages;
         pathsToLink = [ "/libexec/opensmtpd" ];
       };
     in {
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" ];
       after = [ "network.target" ];
       preStart = ''
         mkdir -p /var/spool/smtpd
@@ -119,7 +115,7 @@ in {
         chown smtpq.root /var/spool/smtpd/purge
         chmod 700 /var/spool/smtpd/purge
       '';
-      serviceConfig.ExecStart = "${opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
+      serviceConfig.ExecStart = "${pkgs.opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
     };
 

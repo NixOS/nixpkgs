@@ -101,15 +101,15 @@ cleaner_script="$(echo "$name_list_canonical" | denormalize_name |
 
 # Add github usernames
 if [ -n "$NIXPKGS_GITHUB_NAME_CACHE" ]; then
-    github_adder_script="$(echo "$github_name_list" |
+    github_adder_script="$(mktemp)"
+    echo "$github_name_list" |
         grep -E "$(echo "$name_list_canonical" | cut -f 2 |
 	    tr '\n' '|' )" |
 	sort | uniq |
         sed -re 's/(.*)\t(.*)/s| \1$| \1\t\2|g;/' |
-	denormalize_name
-	)"
+	denormalize_name > "$github_adder_script"
 else
-    github_adder_script=''
+    github_adder_script='/dev/null'
 fi
 
 echo "$name_list" | denormalize_name
@@ -118,5 +118,5 @@ echo
 
 echo "$git_data" | cut -f 1 |
     sed -e "$cleaner_script" |
-    sort | uniq -c | sort -k1n | sed -re "$github_adder_script" |
+    sort | uniq -c | sort -k1n | sed -rf "$github_adder_script" |
     sed -re 's/^ *([0-9]+) /\1\t/'

@@ -3,7 +3,7 @@
 , perl
 , groff
 , cmake
-, python
+, python2
 , libffi
 , binutils
 , libxml2
@@ -30,10 +30,22 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
+  buildInputs = [ perl groff cmake libxml2 python2 libffi ]
     ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  # The goal here is to disable LLVM bindings (currently go and ocaml) regardless
+  # of whether the impure CMake search sheananigans find the compilers in global
+  # paths. This mostly exists because sandbox builds don't work very well on Darwin
+  # and sometimes you get weird behavior if CMake finds go in your system path.
+  # This would be far prettier if there were a CMake option to just disable bindings
+  # but from what I can tell, there isn't such a thing. The file in question only
+  # contains `if(WIN32)` conditions to check whether to disable bindings, so making
+  # those always succeed has the net effect of disabling all bindings.
+  prePatch = ''
+    substituteInPlace cmake/config-ix.cmake --replace "if(WIN32)" "if(1)"
+  '';
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''

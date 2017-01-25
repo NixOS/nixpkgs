@@ -77,6 +77,12 @@ in rec {
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
+    documentation = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = "A list of URIs referencing documentation for this unit or its configuration.";
+    };
+
     requires = mkOption {
       default = [];
       type = types.listOf types.str;
@@ -310,7 +316,7 @@ in rec {
 
     startAt = mkOption {
       type = with types; either str (listOf str);
-      default = "";
+      default = [];
       example = "Sun 14:00:00";
       description = ''
         Automatically start this unit at the given date/time, which
@@ -320,6 +326,7 @@ in rec {
         to adding a corresponding timer unit with
         <option>OnCalendar</option> set to the value given here.
       '';
+      apply = v: if isList v then v else [ v ];
     };
 
   };
@@ -457,5 +464,21 @@ in rec {
   };
 
   targetOptions = commonUnitOptions;
+
+  sliceOptions = commonUnitOptions // {
+
+    sliceConfig = mkOption {
+      default = {};
+      example = { MemoryMax = "2G"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Slice]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.slice</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPythonApplication, pythonPackages, pygtk, pygobject, python }:
+{ stdenv, lib, fetchurl, pythonPackages }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -7,7 +7,7 @@
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 #
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "zim-${version}";
   version = "0.65";
   namePrefix = "";
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "15pdq4fxag85qjsrdmmssiq85qsk5vnbp8mrqnpvx8lm8crz6hjl";
   };
 
-  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk pythonPackages.pyxdg pygobject ];
+  propagatedBuildInputs = with pythonPackages; [ pyGtkGlade pyxdg pygobject2 ];
 
   preBuild = ''
     export HOME=$TMP
@@ -30,13 +30,13 @@ buildPythonApplication rec {
     export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
   '';
 
-  postFixup = ''
-    wrapPythonPrograms
-    substituteInPlace $out/bin/.zim-wrapped \
-    --replace "sys.argv[0] = 'zim'" "sys.argv[0] = '$out/bin/zim'"
+  # RuntimeError: could not create GtkClipboard object
+  doCheck = false;
+
+  checkPhase = ''
+    python test.py
   '';
 
-  doCheck = true;
 
   meta = {
       description = "A desktop wiki";

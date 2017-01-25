@@ -29,7 +29,7 @@ setPath "@path@"
 # Normally, stage 1 mounts the root filesystem read/writable.
 # However, in some environments, stage 2 is executed directly, and the
 # root is read-only.  So make it writable here.
-if [ "$container" != systemd-nspawn ]; then
+if [ -z "$container" ]; then
     mount -n -o remount,rw none /
 fi
 
@@ -110,16 +110,6 @@ rm -f /etc/{group,passwd,shadow}.lock
 # Also get rid of temporary GC roots.
 rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 
-
-# Create a ramfs on /run/keys to hold secrets that shouldn't be
-# written to disk (generally used for NixOps, harmless elsewhere).
-if ! mountpoint -q /run/keys; then
-    rm -rf /run/keys
-    mkdir /run/keys
-    mount -t ramfs ramfs /run/keys
-    chown 0:96 /run/keys
-    chmod 0750 /run/keys
-fi
 
 mkdir -m 0755 -p /run/lock
 

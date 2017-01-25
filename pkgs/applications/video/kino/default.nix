@@ -50,7 +50,7 @@
 #AMR-WB float support      no
 #AMR-WB IF2 support        no
 
-{ stdenv, fetchurl, gtk, libglade, libxml2, libraw1394, libsamplerate, libdv
+{ stdenv, fetchurl, gtk2, libglade, libxml2, libraw1394, libsamplerate, libdv
 , pkgconfig, perl, perlXMLParser, libavc1394, libiec61883, libXv, gettext
 , libX11, glib, cairo, intltool, ffmpeg, libv4l
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     sha256 = "020s05k0ma83rq2kfs8x474pqicaqp9spar81qc816ddfrnh8k8i";
   };
 
-  buildInputs = [ gtk libglade libxml2 libraw1394 libsamplerate libdv 
+  buildInputs = [ gtk2 libglade libxml2 libraw1394 libsamplerate libdv
       pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ffmpeg libv4l ]; # TODOoptional packages 
 
   configureFlags = "--enable-local-ffmpeg=no";

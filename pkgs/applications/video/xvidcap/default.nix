@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, perlXMLParser, pkgconfig, gtk
+{ stdenv, fetchurl, perl, perlXMLParser, pkgconfig, gtk2
 , scrollkeeper, libglade, libXmu, libX11, libXext, gettext
 , lame, libXfixes, libXdamage }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   patches = [ ./xlib.patch ];
   buildInputs = [
-    perl perlXMLParser pkgconfig gtk scrollkeeper
+    perl perlXMLParser pkgconfig gtk2 scrollkeeper
     libglade libXmu gettext lame libXdamage libXfixes libXext libX11
   ];
 

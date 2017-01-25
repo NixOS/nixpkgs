@@ -1,22 +1,22 @@
-{ stdenv, fetchsvn, graphviz, gtk, gtkmm, pkgconfig, python }:
+{ stdenv, fetchgit, graphviz, gtk2, gtkmm2, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name = "ganv-svn-${rev}";
-  rev = "5675";
+  name = "ganv-unstable-${rev}";
+  rev = "2016-10-15";
 
-  src = fetchsvn {
-    url = "http://svn.drobilla.net/lad/trunk/ganv";
-    rev = rev;
-    sha256 = "0klzng3jvc09lj4hxnzlb8z5s5qp8rj16b1x1j6hcbqdja54fccj";
+  src = fetchgit {
+    url = "http://git.drobilla.net/cgit.cgi/ganv.git";
+    rev = "31685d283e9b811b61014f820c42807f4effa071";
+    sha256 = "0xmbykdl42jn9cgzrqrys5lng67d26nk5xq10wkkvjqldiwdck56";
   };
 
-  buildInputs = [ graphviz gtk gtkmm pkgconfig python ];
+  buildInputs = [ graphviz gtk2 gtkmm2 pkgconfig python ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = "${python.interpreter} waf configure --prefix=$out";
 
-  buildPhase = "python waf";
+  buildPhase = "${python.interpreter} waf";
 
-  installPhase = "python waf install";
+  installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
     description = "An interactive Gtk canvas widget for graph-based interfaces";

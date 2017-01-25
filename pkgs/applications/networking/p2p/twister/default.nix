@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, python
+{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, python2
 , boost, db, openssl, geoip, libiconv, miniupnpc
 , srcOnly, fetchgit
 }:
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    autoconf automake libtool pkgconfig python
+    autoconf automake libtool pkgconfig python2
     boost db openssl geoip miniupnpc libiconv
   ];
 

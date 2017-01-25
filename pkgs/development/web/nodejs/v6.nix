@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool
+{ stdenv, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
+, pkgconfig, runCommand, which, libtool, fetchpatch
 , callPackage
 , darwin ? null
+, enableNpm ? true
 }@args:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  nodejs = import ./nodejs.nix args;
+  baseName = if enableNpm then "nodejs" else "nodejs-slim";
+in
+  stdenv.mkDerivation (nodejs // rec {
+    version = "6.9.1";
+    name = "${baseName}-${version}";
+    src = fetchurl {
+      url = "https://nodejs.org/download/release/v${version}/node-v${version}.tar.xz";
+      sha256 = "0a87vzb33xdg8w0xi3c605hfav3c9m4ylab1436whz3p0l9qvp8b";
+    };
 
-in import ./nodejs.nix (args // rec {
-  version = "6.4.0";
-  sha256 = "1b3xpp38fd2y8zdkpvkyyvsddh5y4vly81hxkf9hi6wap0nqidj9";
-  extraBuildInputs = stdenv.lib.optionals stdenv.isDarwin
-    [ CoreServices ApplicationServices ];
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i -e "s|tr1/type_traits|type_traits|g" \
-      -e "s|std::tr1|std|" src/util.h
-  '';
-})
+  })
+

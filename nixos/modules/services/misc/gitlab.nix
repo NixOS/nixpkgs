@@ -164,18 +164,21 @@ in {
       packages.gitlab = mkOption {
         type = types.package;
         default = pkgs.gitlab;
+        defaultText = "pkgs.gitlab";
         description = "Reference to the gitlab package";
       };
 
       packages.gitlab-shell = mkOption {
         type = types.package;
         default = pkgs.gitlab-shell;
+        defaultText = "pkgs.gitlab-shell";
         description = "Reference to the gitlab-shell package";
       };
 
       packages.gitlab-workhorse = mkOption {
         type = types.package;
         default = pkgs.gitlab-workhorse;
+        defaultText = "pkgs.gitlab-workhorse";
         description = "Reference to the gitlab-workhorse package";
       };
 
@@ -425,7 +428,7 @@ in {
         TimeoutSec = "300";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.env}/bin/bundle exec \"sidekiq -q post_receive -q mailers -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
+        ExecStart="${cfg.packages.gitlab.env}/bin/bundle exec \"sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
       };
     };
 
@@ -449,18 +452,21 @@ in {
         Group = cfg.group;
         TimeoutSec = "300";
         Restart = "on-failure";
+        WorkingDirectory = gitlabEnv.HOME;
         ExecStart =
           "${cfg.packages.gitlab-workhorse}/bin/gitlab-workhorse "
           + "-listenUmask 0 "
           + "-listenNetwork unix "
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
           + "-authSocket ${gitlabSocket} "
-          + "-documentRoot ${cfg.packages.gitlab}/share/gitlab/public";
+          + "-documentRoot ${cfg.packages.gitlab}/share/gitlab/public "
+          + "-secretPath ${cfg.packages.gitlab}/share/gitlab/.gitlab_workhorse_secret";
       };
     };
 
     systemd.services.gitlab = {
       after = [ "network.target" "postgresql.service" "redis.service" ];
+      requires = [ "gitlab-sidekiq.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
@@ -525,16 +531,22 @@ in {
             psql postgres -c "CREATE ROLE gitlab WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
             ${config.services.postgresql.package}/bin/createdb --owner gitlab gitlab || true
             touch "${cfg.statePath}/db-created"
-
-            # The gitlab:setup task is horribly broken somehow, these two tasks will do the same for setting up the initial database
-            ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
-            ${gitlab-rake}/bin/gitlab-rake db:seed_fu RAILS_ENV=production \
-              GITLAB_ROOT_PASSWORD="${cfg.initialRootPassword}" GITLAB_ROOT_EMAIL="${cfg.initialRootEmail}";
           fi
         fi
 
+        # enable required pg_trgm extension for gitlab
+        psql gitlab -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         # Always do the db migrations just to be sure the database is up-to-date
         ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
+
+        # The gitlab:setup task is horribly broken somehow, the db:migrate
+        # task above and the db:seed_fu below will do the same for setting
+        # up the initial database
+        if ! test -e "${cfg.statePath}/db-seeded"; then
+          ${gitlab-rake}/bin/gitlab-rake db:seed_fu RAILS_ENV=production \
+            GITLAB_ROOT_PASSWORD="${cfg.initialRootPassword}" GITLAB_ROOT_EMAIL="${cfg.initialRootEmail}"
+          touch "${cfg.statePath}/db-seeded"
+        fi
 
         # Change permissions in the last step because some of the
         # intermediary scripts like to create directories as root.

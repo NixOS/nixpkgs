@@ -16,11 +16,9 @@ let
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
   # fonts/icons.
-  wrappedGtkGreeter = stdenv.mkDerivation {
-    name = "lightdm-gtk-greeter";
-    buildInputs = [ pkgs.makeWrapper ];
-
-    buildCommand = ''
+  wrappedGtkGreeter = pkgs.runCommand "lightdm-gtk-greeter"
+    { buildInputs = [ pkgs.makeWrapper ]; }
+    ''
       # This wrapper ensures that we actually get themes
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \
@@ -40,7 +38,6 @@ let
       Type=Application
       EOF
     '';
-  };
 
   gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
     ''

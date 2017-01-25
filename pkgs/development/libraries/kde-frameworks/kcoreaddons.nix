@@ -1,4 +1,4 @@
-{ kdeFramework, lib, ecm, shared_mime_info }:
+{ kdeFramework, lib, fetchurl, ecm, shared_mime_info }:
 
 kdeFramework {
   name = "kcoreaddons";

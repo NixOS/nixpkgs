@@ -37,14 +37,15 @@ in
 
     environment.sessionVariables.TZDIR = "/etc/zoneinfo";
 
+    # This way services are restarted when tzdata changes.
     systemd.globalEnvironment.TZDIR = tzdir;
 
     environment.etc.localtime =
-      { source = "${tzdir}/${config.time.timeZone}";
+      { source = "/etc/zoneinfo/${config.time.timeZone}";
         mode = "direct-symlink";
       };
 
-    environment.etc.zoneinfo.source = "${pkgs.tzdata}/share/zoneinfo";
+    environment.etc.zoneinfo.source = tzdir;
 
   };
 

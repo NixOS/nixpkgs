@@ -100,6 +100,10 @@ let
         seccomp_sandbox=NO
       ''}
       anon_umask=${cfg.anonymousUmask}
+      ${optionalString cfg.anonymousUser ''
+        anon_root=${cfg.anonymousUserHome}
+      ''}
+      ${cfg.extraConfig}
     '';
 
 in
@@ -161,6 +165,13 @@ in
         default = "077";
         example = "002";
         description = "Anonymous write umask.";
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = "ftpd_banner=Hello";
+        description = "Extra configuration to add at the bottom of the generated configuration file.";
       };
 
     } // (listToAttrs (catAttrs "nixosOption" optionDescription));

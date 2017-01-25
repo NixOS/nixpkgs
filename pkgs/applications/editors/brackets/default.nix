@@ -1,25 +1,25 @@
-{ stdenv, fetchurl, buildEnv, gtk, glib, gdk_pixbuf, alsaLib, nss, nspr, gconf
-, cups, libgcrypt_1_5, libudev, makeWrapper, dbus }:
+{ stdenv, fetchurl, buildEnv, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, gconf
+, cups, libgcrypt_1_5, systemd, makeWrapper, dbus }:
 let
   bracketsEnv = buildEnv {
     name = "env-brackets";
     paths = [
-      gtk glib gdk_pixbuf stdenv.cc.cc alsaLib nss nspr gconf cups libgcrypt_1_5
-      dbus libudev.out
+      gtk2 glib gdk_pixbuf stdenv.cc.cc.lib alsaLib nss nspr gconf cups libgcrypt_1_5
+      dbus.lib systemd.lib
     ];
   };
 in
 stdenv.mkDerivation rec {
   name = "brackets-${version}";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchurl {
     url = "https://github.com/adobe/brackets/releases/download/release-${version}/Brackets.Release.${version}.64-bit.deb";
-    sha256 = "1fc8wvh9wbcydd1sw20yfnwlfv7nllb6vrssr6hgn80m7i0zl3db";
+    sha256 = "0nsiy3gvp8rd71a0misf6v1kz067kxnszr5mpch9fj4jqmg6nj8m";
     name = "${name}.deb";
   };
 
-  phases = [ "installPhase" ];
+  phases = [ "installPhase" "fixupPhase" ];
 
   buildInputs = [ makeWrapper ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
     ln -sf $out/opt/brackets/brackets $out/bin/brackets
 
-    ln -s ${libudev.out}/lib/libudev.so.1 $out/opt/brackets/lib/libudev.so.0
+    ln -s ${systemd.lib}/lib/libudev.so.1 $out/opt/brackets/lib/libudev.so.0
 
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${bracketsEnv}/lib:${bracketsEnv}/lib64" \

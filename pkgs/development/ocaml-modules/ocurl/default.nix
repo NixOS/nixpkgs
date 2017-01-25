@@ -1,7 +1,7 @@
 { stdenv, ocaml, findlib, fetchurl, curl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ocurl-0.7.5";
+  name = "ocurl-0.7.8";
   src = fetchurl {
     url = "https://forge.ocamlcore.org/frs/download.php/1463/${name}.tar.bz2";
     sha256 = "0yn7f3g5wva8nqxh76adpq9rihggc405jkqysfghzwnf3yymyqrr";

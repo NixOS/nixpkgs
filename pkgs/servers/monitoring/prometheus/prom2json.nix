@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "0wwh3mz7z81fwh8n78sshvj46akcgjhxapjgfic5afc4nv926zdl";
   };
 
-  goDeps = ./prom2json_deps.json;
+  goDeps = ./prom2json_deps.nix;
 
   meta = with stdenv.lib; {
     description = "Tool to scrape a Prometheus client and dump the result as JSON";

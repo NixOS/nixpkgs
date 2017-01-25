@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://ecm.gforge.inria.fr/;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

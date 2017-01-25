@@ -14,7 +14,7 @@ let
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-    exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} "$@"
+    exec systemd-cat ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
   '';
 
   Xsetup = pkgs.writeScript "Xsetup" ''
@@ -26,7 +26,6 @@ let
     #!/bin/sh
     ${cfg.stopScript}
   '';
-
 
   cfgFile = pkgs.writeText "sddm.conf" ''
     [General]
@@ -46,8 +45,8 @@ let
     HideUsers=${concatStringsSep "," dmcfg.hiddenUsers}
     HideShells=/run/current-system/sw/bin/nologin
 
-    [XDisplay]
-    MinimumVT=${toString xcfg.tty}
+    [X11]
+    MinimumVT=${toString (if xcfg.tty != null then xcfg.tty else 7)}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
     SessionCommand=${dmcfg.session.script}
@@ -86,7 +85,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example = ''
           [Autologin]
@@ -100,7 +99,7 @@ in
 
       theme = mkOption {
         type = types.str;
-        default = "maui";
+        default = "";
         description = ''
           Greeter theme to use.
         '';
@@ -254,5 +253,10 @@ in
 
     users.extraGroups.sddm.gid = config.ids.gids.sddm;
 
+    services.dbus.packages = [ sddm.unwrapped ];
+
+    # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
+    services.xserver.tty = null;
+    services.xserver.display = null;
   };
 }

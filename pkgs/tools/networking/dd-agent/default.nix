@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
     python
     unzip
     makeWrapper
+    pythonPackages.requests2
     pythonPackages.psycopg2
     pythonPackages.psutil
     pythonPackages.ntplib
     pythonPackages.simplejson
     pythonPackages.pyyaml
-    pythonPackages.requests
     pythonPackages.pymongo
     pythonPackages.docker
   ];

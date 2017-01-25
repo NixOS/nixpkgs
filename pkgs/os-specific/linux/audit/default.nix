@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jwrww1vn7yqxmb84n6y4p58z34gga0ic4rs2msvpzc2x1hxrn31";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "man" "plugins" ];
 
   buildInputs = [ openldap ]
             ++ stdenv.lib.optional enablePython python;
@@ -20,6 +20,16 @@ stdenv.mkDerivation rec {
   configureFlags = ''
     ${if enablePython then "--with-python" else "--without-python"}
   '';
+
+  enableParallelBuilding = true;
+
+  postInstall =
+    ''
+      # Move the z/OS plugin to a separate output to prevent an
+      # openldap runtime dependency in audit.bin.
+      mkdir -p $plugins/bin
+      mv $bin/sbin/audispd-zos-remote $plugins/bin/
+    '';
 
   meta = {
     description = "Audit Library";

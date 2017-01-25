@@ -2,6 +2,7 @@
 , alsaLib
 , atk
 , cairo
+, curl
 , cups
 , dbus_glib
 , dbus_libs
@@ -25,7 +26,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra
+, libcanberra_gtk2
 , libgnome
 , libgnomeui
 , defaultIconTheme
@@ -37,6 +38,11 @@
 , libpulseaudio
 , systemd
 , generated ? import ./sources.nix
+, writeScript
+, xidel
+, coreutils
+, gnused
+, gnugrep
 }:
 
 assert stdenv.isLinux;
@@ -61,10 +67,12 @@ let
 
   source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
+  name = "firefox-bin-unwrapped-${version}";
+
 in
 
 stdenv.mkDerivation {
-  name = "firefox-bin-unwrapped-${version}";
+  inherit name;
 
   src = fetchurl { inherit (source) url sha512; };
 
@@ -75,6 +83,7 @@ stdenv.mkDerivation {
       alsaLib
       atk
       cairo
+      curl
       cups
       dbus_glib
       dbus_libs
@@ -98,7 +107,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra
+      libcanberra_gtk2
       libgnome
       libgnomeui
       mesa
@@ -163,7 +172,9 @@ stdenv.mkDerivation {
     '';
 
   passthru.ffmpegSupport = true;
-
+  passthru.updateScript = import ./update.nix {
+    inherit name writeScript xidel coreutils gnused gnugrep curl;
+  };
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = http://www.mozilla.org/firefox/;

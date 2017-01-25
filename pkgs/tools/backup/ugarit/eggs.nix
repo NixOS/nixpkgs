@@ -1,12 +1,12 @@
 { pkgs, stdenv, eggDerivation, fetchegg }:
 rec {
   aes = eggDerivation {
-    name = "aes-1.3";
+    name = "aes-1.5";
 
     src = fetchegg {
       name = "aes";
-      version = "1.3";
-      sha256 = "0zhkqdms2f9if1j5v8myay2mfiislvpj3bcqawb4s4dw0qcp20kb";
+      version = "1.5";
+      sha256 = "0gjlvz5nk0fnaclljpyfk21rkf0nidjj6wcv3jbnpmfafgjny5fi";
     };
 
     buildInputs = [

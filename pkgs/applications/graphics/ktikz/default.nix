@@ -61,7 +61,7 @@ let
     inherit version;
     src = fetchurl {
       url = "http://www.hackenberger.at/ktikz/ktikz_${version}.tar.gz";
-      md5 = "e8f0826cba2447250bcdcd389a71a2ac";
+      sha256 = "19jl49r7dw3vb3hg52man8p2lszh71pvnx7d0xawyyi0x6r8ml9i";
     };
 
     enableParallelBuilding = true;

@@ -198,8 +198,7 @@ in {
         description = ''
           This option defines director resources in Bacula File Daemon.
         '';
-        type = types.attrsOf types.optionSet;
-        options = [ directorOptions ];
+        type = with types; attrsOf (submodule directorOptions);
       };
 
       extraClientConfig = mkOption {
@@ -253,8 +252,7 @@ in {
         description = ''
           This option defines Director resources in Bacula Storage Daemon.
         '';
-        type = types.attrsOf types.optionSet;
-        options = [ directorOptions ];
+        type = with types; attrsOf (submodule directorOptions);
       };
 
       device = mkOption {
@@ -262,8 +260,7 @@ in {
         description = ''
           This option defines Device resources in Bacula Storage Daemon.
         '';
-        type = types.attrsOf types.optionSet;
-        options = [ deviceOptions ];
+        type = with types; attrsOf (submodule deviceOptions);
       };
  
       extraStorageConfig = mkOption {
@@ -343,6 +340,7 @@ in {
 
       extraConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra configuration for Bacula Director Daemon.
         '';

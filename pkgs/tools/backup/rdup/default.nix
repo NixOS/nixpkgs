@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/miekg/rdup";
     license    = stdenv.lib.licenses.gpl3;
     platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ lukasepple ];
+    maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
   };
 }

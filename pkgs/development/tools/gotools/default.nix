@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1j51aaskfqc953p5s9naqimr04hzfijm4yczdsiway1xnnvvpfr1";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   preConfigure = ''
     # Make the builtin tools available here

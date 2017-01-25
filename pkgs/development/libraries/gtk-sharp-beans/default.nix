@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, mono, gtk-sharp, gio-sharp }:
+{ stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, mono, gtk-sharp-2_0, gio-sharp }:
 
 stdenv.mkDerivation rec {
   name = "gtk-sharp-beans-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook which ];
-  buildInputs = [ mono gtk-sharp gio-sharp ];
+  buildInputs = [ mono gtk-sharp-2_0 gio-sharp ];
 
   dontStrip = true;
 

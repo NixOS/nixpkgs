@@ -7,9 +7,13 @@
 , "castnow"
 , "coffee-script"
 , "cordova"
+, "csslint"
 , "dnschain"
 , "docker-registry-server"
+, "elasticdump"
+, "emoj"
 , "eslint"
+, "emojione"
 , "fetch-bower"
 , "forever"
 , "git-run"
@@ -17,6 +21,7 @@
 , { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }
 , "gulp"
 , "hipache"
+, "htmlhint"
 , "istanbul"
 , "jayschema"
 , "jshint"
@@ -38,6 +43,7 @@
 , "npm"
 , { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0" }
 , "npm-check-updates"
+, "parsoid"
 , "peerflix"
 , "peerflix-server"
 , "phantomjs"
@@ -48,6 +54,7 @@
 , "sloc"
 , "smartdc"
 , "stylus"
+, "svgo"
 , "titanium"
 , "typescript"
 , "uglify-js"
@@ -55,4 +62,5 @@
 , "webdrvr"
 , "webpack"
 , "wring"
+, "yarn"
 ]

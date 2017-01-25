@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, which, autoconf, automake, ncurses, perl
-, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl }:
+, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
 
 stdenv.mkDerivation rec {
-  version = "20160827";
+  version = "20161126";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     rev = "neomutt-${version}";
-    sha256 = "1gam2iyy75drlp9ap1hlfb38i0p6zwgw09m08m5x50dbp3lxf7xp";
+    sha256 = "10ycfya11pvwv0rdyyak56r6f8ia8yf0h8qyi904bbpvm8lqvqfd";
   };
 
   buildInputs =
     [ autoconf automake cyrus_sasl gdbm gpgme kerberos libidn ncurses
-      notmuch which openssl perl ];
+      notmuch which openssl perl lmdb ];
 
   configureFlags = [
     "--enable-debug"
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     "--with-curses"
     "--with-regex"
     "--with-idn"
+    "--with-lmdb"
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"
@@ -48,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.neomutt.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ hiberno cstrahan vrthra ];
+    maintainers = with maintainers; [ cstrahan vrthra erikryb ];
   };
 }

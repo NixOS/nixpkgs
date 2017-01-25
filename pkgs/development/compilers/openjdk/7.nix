@@ -17,7 +17,7 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "91";
+  update = "111";
 
   build = "01";
 
@@ -28,31 +28,31 @@ let
   repover = "jdk7u${update}-b${build}";
   jdk7 = fetchurl {
     url = "${baseurl}/archive/${repover}.tar.gz";
-    sha256 = "08f7cbayyrryim3xbrs12cr12i1mczcikyc9rdlsyih0r4xvll28";
+    sha256 = "0wgb7hr2gipx1jg28fnsjh7xa744sh1mgr6z3xivmnsfy3dm91gi";
   };
   langtools = fetchurl {
     url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-    sha256 = "0rmlzrgsacn60blpg1sp30k6p0sgzsml8wb41yc998km1bsnjxnh";
+    sha256 = "0x1xs923h6sma02cbp1whg735x8vcndh5k01b7rkf714g6rxwa0y";
   };
   hotspot = fetchurl {
     url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-    sha256 = "1w1n81y9jcvjzssl4049yzfc0gdfnh73ki6wg1d8pg22zlyhrrwv";
+    sha256 = "187apnsvnd4cfa7ss5g59dbh7x5ah8f1lwa2wvjfv055h2cmphpn";
   };
   corba = fetchurl {
     url = "${baseurl}/corba/archive/${repover}.tar.gz";
-    sha256 = "086yr927bxnlgljx7mw2cg6f6aip57hi4qpn1h35n6fsyvb4n67h";
+    sha256 = "0vmxf5sgjcmkm7i1scanaa2x75a1byj8b36vcajlr6j7qmdx6r8c";
   };
   jdk = fetchurl {
     url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-    sha256 = "14r39ylj3qa63arpqxl0h84baah1kjgnyp3v9d7d4vd0yagpn66b";
+    sha256 = "1f8f2dgrjhx8aw1gzawrf8qggf5j0dygsla08bbsxhx5mc5a6cka";
   };
   jaxws = fetchurl {
     url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-    sha256 = "1p1739gb5gx9m4sm3i4javfk9lk41wnz92k6gis6sq99dd1bj1l5";
+    sha256 = "03982ajxm0hzany1jg009ym84vryx7a8qfi6wcgjxyxvk8vnz37c";
   };
   jaxp = fetchurl {
     url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-    sha256 = "1nl3kmbwqhhymcp25rnmf5mr3dn87lgdxvz9wgng7if6yqxlyakq";
+    sha256 = "0578h04y1ha60yjplsa8lqdjds9s2lxzgs9ybm9rs1rqzxmm0xmy";
   };
   openjdk = stdenv.mkDerivation rec {
     name = "openjdk-7u${update}b${build}";

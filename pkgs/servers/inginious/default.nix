@@ -1,7 +1,9 @@
-{ pkgs, lib, pythonPackages }:
+{ pkgs, lib, python2Packages }:
 with lib;
 
 let
+  pythonPackages = python2Packages;
+
   docker_1_7_2 = pythonPackages.docker.override rec {
     name = "docker-py-1.7.2";
 
@@ -36,7 +38,7 @@ in pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     requests2
-    cgroup-utils docker_1_7_2 docutils lti mock pygments
+    cgroup-utils docker_1_7_2 docutils PyLTI mock pygments
     pymongo pyyaml rpyc sh simpleldap sphinx_rtd_theme tidylib
     websocket_client watchdog webpy-custom flup
   ];

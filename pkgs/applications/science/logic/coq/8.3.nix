@@ -3,7 +3,10 @@
 #   However, coq can build without csdp by setting it to null.
 #   In this case some Micromega tactics will search the user's path for the csdp program and will fail if it is not found.
 
-{ stdenv, make, fetchurl, ocaml, findlib, camlp5, ncurses, lablgtk ? null, csdp ? null }:
+{ stdenv, lib, make, fetchurl
+, ocaml, findlib, camlp5, ncurses, lablgtk ? null, csdp ? null }:
+
+assert lib.versionOlder ocaml.version "4";
 
 let 
   version = "8.3pl4";

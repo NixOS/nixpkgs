@@ -23,9 +23,8 @@ import ./make-test.nix ({ pkgs, ...} : {
     startAll;
 
     $server->waitForUnit("tomcat");
-    $server->sleep(30); # Dirty, but it takes a while before Tomcat handles to requests properly
     $client->waitForUnit("network.target");
-    $client->succeed("curl --fail http://server/examples/servlets/servlet/HelloWorldExample");
-    $client->succeed("curl --fail http://server/examples/jsp/jsp2/simpletag/hello.jsp");
+    $client->waitUntilSucceeds("curl --fail http://server/examples/servlets/servlet/HelloWorldExample");
+    $client->waitUntilSucceeds("curl --fail http://server/examples/jsp/jsp2/simpletag/hello.jsp");
   '';
 })

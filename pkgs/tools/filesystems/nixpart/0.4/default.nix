@@ -12,7 +12,7 @@ let
     inherit stdenv fetchurl buildPythonApplication;
     inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
     inherit useNixUdev;
-    inherit (pkgs) lsof utillinux libudev;
+    inherit (pkgs) lsof utillinux systemd;
     libselinux = pkgs.libselinux.override { enablePython = true; };
   };
 
@@ -29,7 +29,7 @@ let
 
   lvm2 = import ./lvm2.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) pkgconfig utillinux libudev systemd coreutils;
+    inherit (pkgs) pkgconfig utillinux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {

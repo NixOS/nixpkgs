@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "14d3a93ha5k4al4ib43nyn1ppx7kgb12xw6mkflhx8nxmx8827nc";
   };
 
-  buildInputs = [ pkgconfig openssl ] ++
+  buildInputs = [ pkgconfig openssl stdenv.cc.libc.static ] ++
                 (if libuuid == null
                  then []
                  else [ (stdenv.lib.overrideDerivation libuuid

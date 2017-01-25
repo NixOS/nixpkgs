@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , makeWrapper
-, python
+, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/libexec
     cp $src $out/libexec/ecryptfs-helper.py
-    makeWrapper "${python.interpreter} $out/libexec/ecryptfs-helper.py" $out/bin/ecryptfs-helper
+    makeWrapper "${python2.interpreter} $out/libexec/ecryptfs-helper.py" $out/bin/ecryptfs-helper
   '';
 
   meta = with stdenv.lib; {

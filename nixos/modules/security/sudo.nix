@@ -74,7 +74,7 @@ in
         Defaults env_keep+=SSH_AUTH_SOCK
 
         # "root" is allowed to do anything.
-        root        ALL=(ALL) SETENV: ALL
+        root        ALL=(ALL:ALL) SETENV: ALL
 
         # Users in the "wheel" group can do anything.
         %wheel      ALL=(ALL:ALL) ${if cfg.wheelNeedsPassword then "" else "NOPASSWD: ALL, "}SETENV: ALL

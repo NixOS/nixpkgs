@@ -19,6 +19,14 @@ in
         description = "The directory where Plex stores its data files.";
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for the media server
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "plex";
@@ -127,7 +135,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = "true";
-        ExecStart = "/bin/sh -c '${cfg.package}/usr/lib/plexmediaserver/Plex\\ Media\\ Server'";
+        ExecStart = "/bin/sh -c ${cfg.package}/usr/lib/plexmediaserver/Plex\\ Media\\ Server";
         Restart = "on-failure";
       };
       environment = {
@@ -139,6 +147,11 @@ in
         LC_ALL="en_US.UTF-8";
         LANG="en_US.UTF-8";
       };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 32400 3005 8324 32469 ];
+      allowedUDPPorts = [ 1900 5353 32410 32412 32413 32414 ];
     };
 
     users.extraUsers = mkIf (cfg.user == "plex") {

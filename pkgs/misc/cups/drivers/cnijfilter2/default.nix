@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb
+{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb, libtool
 , withDebug ? false }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cups automake autoconf glib libxml2 libusb
+    cups automake autoconf glib libxml2 libusb libtool
   ];
 
   # lgmon3's --enable-libdir flag is used soley for specifying in which

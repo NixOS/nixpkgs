@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, cups, libusb, libxml2 }:
+{ stdenv, fetchurl, glibc, cups, libusb, ghostscript }:
 
 let
 
@@ -15,45 +15,33 @@ in stdenv.mkDerivation rec {
     url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
   };
 
-  nativeBuildInputs = [ patchelf ];
+  buildInputs = [
+    cups
+    libusb
+  ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   installPhase = ''
-    my_patchelf() {
-      opts=(); while [[ "$1" != - ]]; do opts+=( "$1" ); shift; done; shift
-      for binary in "$@"; do
-        echo "Patching ELF file: $binary"
-	patchelf "''${opts[@]}" $binary
-        ldd $binary | grep "not found" && exit 1
-      done; true
-    }
 
-    my_patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath ${cups.out}/lib:$(cat $NIX_CC/nix-support/orig-cc)/lib:${stdenv.glibc}/lib \
-      - ${arch}/{pstosecps,rastertospl,smfpnetdiscovery}
+    mkdir -p $out/bin
+    cp -R ${arch}/{gettext,pstosecps,rastertospl,smfpnetdiscovery,usbresetter} $out/bin
 
     mkdir -p $out/etc/sane.d/dll.d/
     install -m644 noarch/etc/smfp.conf $out/etc/sane.d
-    echo smfp >> $out/etc/sane.d/dll.d/smfp-scanner
+    echo smfp >> $out/etc/sane.d/dll.d/smfp-scanner.conf
 
     mkdir -p $out/lib
-    my_patchelf \
-      --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/lib:${stdenv.glibc}/lib \
-      - ${arch}/libscmssc.so*
     install -m755 ${arch}/libscmssc.so* $out/lib
 
     mkdir -p $out/lib/cups/backend
-    install -m755 ${arch}/smfpnetdiscovery $out/lib/cups/backend
+    ln -s $out/bin/smfpnetdiscovery $out/lib/cups/backend
 
     mkdir -p $out/lib/cups/filter
-    install -m755 ${arch}/{pstosecps,rastertospl} $out/lib/cups/filter
+    ln -s $out/bin/{pstosecps,rastertospl} $out/lib/cups/filter
+    ln -s $ghostscript/bin/gs $out/lib/cups/filter
 
     mkdir -p $out/lib/sane
-    my_patchelf \
-      --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/lib:${stdenv.lib.makeLibraryPath [ stdenv.glibc libusb libxml2 ] } \
-      - ${arch}/libsane-smfp.so*
     install -m755 ${arch}/libsane-smfp.so* $out/lib/sane
     ln -s libsane-smfp.so.1.0.1 $out/lib/sane/libsane-smfp.so.1
     ln -s libsane-smfp.so.1     $out/lib/sane/libsane-smfp.so
@@ -66,15 +54,38 @@ in stdenv.mkDerivation rec {
       . noarch/package_utils
       . noarch/scanner-script.pkg
       fill_full_template noarch/etc/smfp.rules.in $out/lib/udev/rules.d/60_smfp_samsung.rules
+      chmod -x $out/lib/udev/rules.d/60_smfp_samsung.rules
     )
 
-    mkdir -p $out/share/ppd
-    gzip -9 noarch/share/ppd/*.ppd
-    cp -R noarch/share/ppd $out/share/ppd/suld
-
-    cp -R noarch/share/locale $out/share
+    mkdir -p $out/share
+    cp -R noarch/share/* $out/share
+    gzip -9 $out/share/ppd/*.ppd
     rm -r $out/share/locale/*/*/install.mo
+
+    mkdir -p $out/share/cups
+    cd $out/share/cups
+    ln -s ../ppd .
+    ln -s ppd model
   '';
+
+  preFixup = ''
+
+  for bin in $out/bin/*; do
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$bin"
+    patchelf --set-rpath "$out/lib:${cups.out}/lib" "$bin"
+  done
+
+  patchelf --set-rpath "$out/lib:${cups.out}/lib" "$out/lib/libscmssc.so"
+
+  ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
+
+  '';
+
+  # all binaries are already stripped
+  dontStrip = true;
+
+  # we did this in prefixup already
+  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     description = "Unified Linux Driver for Samsung printers and scanners";

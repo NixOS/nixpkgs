@@ -4,7 +4,7 @@
 # python wrappers
 , python, swig2, numpy, scipy, matplotlib
 # grc - the gnu radio companion
-, cheetahTemplate, pygtk
+, cheetah, pygtk
 # gr-wavelet: collection of wavelet blocks
 , gsl
 # gr-qtgui: the Qt-based GUI
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.9.2";
+  version = "3.7.10.1";
 
   src = fetchurl {
     url = "http://gnuradio.org/releases/gnuradio/${name}.tar.gz";
-    sha256 = "0qdmakvgq3jxnnqpcn3k4q07vj8ycrbyzv32h76k71cv13w2yrki";
+    sha256 = "0ds9mcw8hgm03f82jvp3j4mm02ha6zvsl77lp13jzqmbqifbdmv3";
   };
 
   buildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    cheetahTemplate numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
+    cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
   ];
 
   enableParallelBuilding = true;

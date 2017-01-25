@@ -98,7 +98,7 @@ let
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
   baseSystem = showWarnings (
-    if [] == failed then pkgs.stdenv.mkDerivation {
+    if [] == failed then pkgs.stdenvNoCC.mkDerivation {
       name = let hn = config.networking.hostName;
                  nn = if (hn != "") then hn else "unnamed";
           in "nixos-system-${nn}-${config.system.nixosLabel}";

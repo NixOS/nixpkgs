@@ -6,13 +6,9 @@ stdenv.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "12c6z5yvp60v57f6nijifp14i56bb5614hac1qg528s9liaf8vml";
+  outputHash = "066ikswavq3l37x1s3pfdncyj77pvpa0kj14ax5dqb9njmsg0s11";
 
   buildInputs = [ curl ];
 
-  # We borrow these environment variables from the caller to allow
-  # easy proxy configuration.  This is impure, but a fixed-output
-  # derivation like fetchurl is allowed to do so since its result is
-  # by definition pure.
-  impureEnvVars = ["http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"];
+  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
 }

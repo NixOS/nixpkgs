@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "sshpass-${version}";
-  version = "1.05";
-  
+  version = "1.06";
+
   src = fetchurl {
     url = "mirror://sourceforge/sshpass/sshpass-${version}.tar.gz";
-    sha256 = "0gj8r05h1hy01vh4csygyw21z2hcxb72qcxkxxi3y34alr98gxy3";
+    sha256 = "0q7fblaczb7kwbsz0gdy9267z0sllzgmf0c7z5c9mf88wv74ycn6";
   };
-  
+
   meta = {
     homepage = http://sourceforge.net/projects/sshpass/;
     description = "Non-interactive ssh password auth";

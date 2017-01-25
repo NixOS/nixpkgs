@@ -1,5 +1,5 @@
 {stdenv, fetchurl, automake, gettext, freetype, libxml2, pango, pkgconfig
-, wxGTK, gtk, perl, zip}:
+, wxGTK, gtk2, perl, zip}:
 
 stdenv.mkDerivation {
   name = "xaralx-0.7r1785";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ automake pkgconfig gettext perl zip ];
-  buildInputs = [ wxGTK gtk libxml2 freetype pango ];
+  buildInputs = [ wxGTK gtk2 libxml2 freetype pango ];
 
   configureFlags = "--disable-svnversion";
 

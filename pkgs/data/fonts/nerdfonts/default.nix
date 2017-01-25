@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, bash, which, withFont ? "" }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0";
+  version = "1.0.0";
   name = "nerdfonts-${version}";
   src = fetchFromGitHub {
     owner = "ryanoasis";
     repo = "nerd-fonts";
     rev = version;
-    sha256 = "0n7idfk4460j8g0rw73hzz195pdh4c916hpc5r6dxpvgcmvryzc5";
+    sha256 = "1kz4hhshi3lsaja20kg258jc220q1b6nhwiyv0w433m0kvsgzdqd";
   };
   dontPatchShebangs = true;
   buildInputs = [ which ];

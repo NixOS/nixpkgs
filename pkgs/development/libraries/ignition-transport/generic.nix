@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ cppzmq ];
 
+  postPatch = ''
+    substituteInPlace cmake/ignition-config.cmake.in --replace "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_" "@CMAKE_INSTALL_"
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://ignitionrobotics.org/libraries/math;
     description = "Math library by Ingition Robotics, created for the Gazebo project";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
-, libpng, libX11, gettext, bash, gawk, boost, libnotify, gtk, doxygen, spring
+, libpng, libX11, gettext, bash, gawk, boost, libnotify, gtk2, doxygen, spring
 , makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake wxGTK30 openal pkgconfig curl gettext libtorrentRasterbar pcre jsoncpp
-    boost libpng libX11 libnotify gtk doxygen makeWrapper glib minizip alure
+    boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
   ];
 
   patches = [ ./revert_58b423e.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed

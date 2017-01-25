@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "openresolv-3.7.0";
+  name = "openresolv-3.8.1";
 
   src = fetchurl {
-    url = "mirror://roy/openresolv/${name}.tar.bz2";
-    sha256 = "1pimiipic4m90f832rgw3ayqrh457qfymcpfpj9iidb5c4phnz4b";
+    url = "mirror://roy/openresolv/${name}.tar.xz";
+    sha256 = "0hqxvrhc4r310hr59bwi1vbl16my27pdlnbrnbqqihiav67xfnfj";
   };
 
   buildInputs = [ makeWrapper ];
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
       SYSCONFDIR=/etc
       SBINDIR=$out/sbin
       LIBEXECDIR=$out/libexec/resolvconf
-      VARDIR=/var/run/resolvconf
+      VARDIR=/run/resolvconf
       MANDIR=$out/share/man
-      RESTARTCMD="false \1"
+      RESTARTCMD=false
       EOF
     '';
 

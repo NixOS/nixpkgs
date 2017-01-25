@@ -1,3 +1,5 @@
+# FIXME: unify with pkgs/os-specific/linux/multipath-tools/default.nix.
+
 { stdenv, fetchurl, lvm2, libaio, gzip, readline, systemd }:
 
 stdenv.mkDerivation rec {
@@ -15,15 +17,15 @@ stdenv.mkDerivation rec {
   preBuild =
     ''
       makeFlagsArray=(GZIP="-9" prefix=$out mandir=$out/share/man/man8 man5dir=$out/share/man/man5 LIB=lib)
-      
+
       substituteInPlace multipath/Makefile --replace /etc $out/etc
       substituteInPlace kpartx/Makefile --replace /etc $out/etc
-      
+
       substituteInPlace kpartx/kpartx.rules --replace /sbin/kpartx $out/sbin/kpartx
       substituteInPlace kpartx/kpartx_id --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup
 
-      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${systemd.udev.lib}/lib/udev/scsi_id
-      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${systemd.udev.lib}/lib/udev/scsi_id
+      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${systemd.lib}/lib/udev/scsi_id
+      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${systemd.lib}/lib/udev/scsi_id
     '';
 
   meta = {

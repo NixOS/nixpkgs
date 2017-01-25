@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, popt, avahi, pkgconfig, python, gtk, runCommand
+{ stdenv, fetchFromGitHub, popt, avahi, pkgconfig, python, gtk2, runCommand
 , gcc, autoconf, automake, which, procps, libiberty_static
 , sysconfDir ? ""   # set this parameter to override the default value $out/etc
 , static ? false
@@ -16,7 +16,7 @@ let
       sha256 = "1vj31wcdas8wy52hy6749mlrca9v6ynycdiigx5ay8pnya9z73c6";
     };
 
-    buildInputs = [popt avahi pkgconfig python gtk autoconf automake pkgconfig which procps libiberty_static];
+    buildInputs = [popt avahi pkgconfig python gtk2 autoconf automake pkgconfig which procps libiberty_static];
     preConfigure =
     ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
@@ -28,7 +28,7 @@ let
                             ${if static then "LDFLAGS=-static" else ""}
                             --with${if static == true || popt == null then "" else "out"}-included-popt
                             --with${if avahi != null then "" else "out"}-avahi
-                            --with${if gtk != null then "" else "out"}-gtk
+                            --with${if gtk2 != null then "" else "out"}-gtk
                             --without-gnome
                             --enable-rfc2553
                             --disable-Werror   # a must on gcc 4.6

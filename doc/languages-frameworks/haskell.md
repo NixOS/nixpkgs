@@ -383,7 +383,7 @@ You can select a particular GHC version to compile with by setting the
 Stack choose what GHC version it wants based on the snapshot specified
 in `stack.yaml` (only works with Stack >= 1.1.3):
 
-    {nixpkgs ? import <nixpkgs> { }, ghc ? nixpkgs.ghc}
+    {nixpkgs ? import <nixpkgs> { }, ghc ? nixpkgs.ghc}:
 
     with nixpkgs;
 
@@ -633,7 +633,7 @@ Now the builds succeeds.
 Of course, in the concrete example of `ghc-events` this whole exercise is not
 an ideal solution, because `ghc-events` can analyze the output emitted by any
 version of GHC later than 6.12 regardless of the compiler version that was used
-to build the `ghc-events' executable, so strictly speaking there's no reason to
+to build the `ghc-events` executable, so strictly speaking there's no reason to
 prefer one built with GHC 7.8.x in the first place. However, for users who
 cannot use GHC 7.10.x at all for some reason, the approach of downgrading to an
 older version might be useful.

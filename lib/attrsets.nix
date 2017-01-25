@@ -296,12 +296,17 @@ rec {
 
   /* Converts a store path to a fake derivation. */
   toDerivation = path:
-    let path' = builtins.storePath path; in
-    { type = "derivation";
-      name = builtins.unsafeDiscardStringContext (builtins.substring 33 (-1) (baseNameOf path'));
-      outPath = path';
-      outputs = [ "out" ];
-    };
+    let
+      path' = builtins.storePath path;
+      res =
+        { type = "derivation";
+          name = builtins.unsafeDiscardStringContext (builtins.substring 33 (-1) (baseNameOf path'));
+          outPath = path';
+          outputs = [ "out" ];
+          out = res;
+          outputName = "out";
+        };
+    in res;
 
 
   /* If `cond' is true, return the attribute set `as',
@@ -386,7 +391,7 @@ rec {
       );
     in f [] [rhs lhs];
 
-  /* A recursive variant of the update operator ‘//’.  The recusion
+  /* A recursive variant of the update operator ‘//’.  The recursion
      stops when one of the attribute values is not an attribute set,
      in which case the right hand side value takes precedence over the
      left hand side value.
@@ -455,7 +460,7 @@ rec {
   getDev = getOutput "dev";
 
   /* Pick the outputs of packages to place in buildInputs */
-  chooseDevOutputs = drvs: builtins.map (drv: if drv.outputUnspecified or false then drv.dev or drv else drv) drvs;
+  chooseDevOutputs = drvs: builtins.map getDev drvs;
 
   /*** deprecated stuff ***/
 

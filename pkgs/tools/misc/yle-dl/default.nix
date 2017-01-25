@@ -2,20 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "yle-dl-${version}";
-  version = "2.9.1";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     rev = version;
-    sha256 = "1irpcp9iw2cw85sj1kzndmrw8350p9q7cfghjx2xkh2czk9k7whq";
+    sha256 = "1fa2a25j3wwk3m6q1alilklwhqf337ch8rj6bwricc5zqb58qivc";
   };
 
   patchPhase = ''
     substituteInPlace yle-dl --replace '/usr/local/share/' "$out/share/"
-
-    # HACK: work around https://github.com/NixOS/nixpkgs/issues/9593
-    substituteInPlace yle-dl --replace '/usr/bin/env python2' '/usr/bin/env python'
   '';
 
   buildInputs = [ pythonPackages.wrapPython ];

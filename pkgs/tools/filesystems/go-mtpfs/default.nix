@@ -16,5 +16,5 @@ buildGoPackage rec {
     sha256 = "1jcqp9n8fd9psfsnhfj6w97yp0zmyxplsig8pyp2gqzh4lnb5fqm";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 }

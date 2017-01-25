@@ -14,16 +14,16 @@ let
     then "x86_64-apple-darwin"
     else abort "missing boostrap url for platform ${stdenv.system}";
 
-  # fetch hashes by running `print-hashes.sh 1.9.0`
+  # fetch hashes by running `print-hashes.sh 1.13.0`
   bootstrapHash =
     if stdenv.system == "i686-linux"
-    then "be93dd2b80a97f2877679950d56990628c6547b953294f16bf6d69c18a39edc0"
+    then "239734113f6750d31085c7a08c260d492991cc1ef10817b6d44154515f3f9439"
     else if stdenv.system == "x86_64-linux"
-    then "f189303d52b37c8bb694b9d9739ae73ffa926cbdeffde1d5d6a5c6e811940293"
+    then "95f4c372b1b81ac1038161e87e932dd7ab875d25c167a861c3949b0f6a65516d"
     else if stdenv.system == "i686-darwin"
-    then "40d4782a58dd5bef22dbbaa7a363f3b42f844628db07205f6435ac934f350061"
+    then "f6e01cab3bf8d0a6fe9cc2447aa10ce894569daaa72d44063c229da918b96023"
     else if stdenv.system == "x86_64-darwin"
-    then "4bb71249f4afd7cee07f63d681f9fcb1b525ee3dfd49722adab7a40024e45af7"
+    then "f538ca5732b844cf7f00fc4aaaf200a49a845b58b4ec8aef38da0b00e2cf6efe"
     else throw "missing boostrap hash for platform ${stdenv.system}";
 
   needsPatchelf = stdenv.isLinux;
@@ -33,7 +33,7 @@ let
      sha256 = bootstrapHash;
   };
 
-  version = "1.10.0";
+  version = "1.13.0";
 in
 
 rec {

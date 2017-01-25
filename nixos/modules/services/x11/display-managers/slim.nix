@@ -12,7 +12,7 @@ let
     ''
       xauth_path ${dmcfg.xauthBin}
       default_xserver ${dmcfg.xserverBin}
-      xserver_arguments ${dmcfg.xserverArgs}
+      xserver_arguments ${toString dmcfg.xserverArgs}
       sessiondir ${dmcfg.session.desktops}
       login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now
@@ -26,15 +26,13 @@ let
   # Unpack the SLiM theme, or use the default.
   slimThemesDir =
     let
-      unpackedTheme = pkgs.stdenv.mkDerivation {
-        name = "slim-theme";
-        buildCommand = ''
+      unpackedTheme = pkgs.runCommand "slim-theme" {}
+        ''
           mkdir -p $out
           cd $out
           unpackFile ${cfg.theme}
           ln -s * default
         '';
-      };
     in if cfg.theme == null then "${pkgs.slim}/share/slim/themes" else unpackedTheme;
 
 in

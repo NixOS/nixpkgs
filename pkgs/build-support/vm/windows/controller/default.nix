@@ -1,5 +1,5 @@
 { stdenv, writeScript, vmTools, makeInitrd
-, samba, vde2, openssh, socat, netcat, coreutils, gnugrep, gzip
+, samba, vde2, openssh, socat, netcat-gnu, coreutils, gnugrep, gzip
 }:
 
 { sshKey
@@ -79,7 +79,7 @@ let
     ${coreutils}/bin/chmod 600 /ssh.key
   '' + (if installMode then ''
     echo -n "Waiting for Windows installation to finish..."
-    while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
+    while ! ${netcat-gnu}/bin/netcat -z 192.168.0.1 22; do
       echo -n .
       # Print a dot every 10 seconds only to shorten line length.
       ${coreutils}/bin/sleep 10
@@ -118,7 +118,7 @@ let
     ${samba}/sbin/smbd -D
 
     echo -n "Waiting for Windows VM to become available..."
-    while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
+    while ! ${netcat-gnu}/bin/netcat -z 192.168.0.1 22; do
       echo -n .
       ${coreutils}/bin/sleep 1
     done

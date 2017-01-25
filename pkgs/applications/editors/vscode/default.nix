@@ -1,17 +1,23 @@
-{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem }:
+{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
+  makeWrapper, libXScrnSaver }:
 
 let
-  version = "1.4.0";
-  rev = "6276dcb0ae497766056b4c09ea75be1d76a8b679";
+  version = "1.8.0";
+  rev = "38746938a4ab94f2f57d9e1309c51fd6fb37553d";
 
-  sha256 = if stdenv.system == "i686-linux"    then "1k228kv1v2765qnz6zw41h79fddwx5pcy9v9jyhsrwyla83fx4ar"
-      else if stdenv.system == "x86_64-linux"  then "1v0am0xpgnlwb3k35v7wxlv22035444ii3v5gv6hf1xbnybsa7lm"
-      else if stdenv.system == "x86_64-darwin" then "0395wnq8wi9x382l51wf8wiaclx7bjf5p0j39gq8y6j2ww8y2z7n"
+  sha256 = if stdenv.system == "i686-linux"    then "0p7r1i71v2ab4dzlwh43hqih958a31cqskf64ds4vgc35x2mfjcq"
+      else if stdenv.system == "x86_64-linux"  then "1k15701jskk7w5kwzlzfri96vvw7fcinyfqqafls8nms8h5csv76"
+      else if stdenv.system == "x86_64-darwin" then "12fqz62gs2wcg2wwx1k6gv2gqil9c54yq254vk3rqdf82q9zyapk"
       else throw "Unsupported system: ${stdenv.system}";
 
-  urlMod = if stdenv.system == "i686-linux" then "linux-ia32"
-      else if stdenv.system == "x86_64-linux" then "linux-x64"
-      else if stdenv.system == "x86_64-darwin" then "darwin"
+  urlBase = "https://az764295.vo.msecnd.net/stable/${rev}/";
+
+  urlStr = if stdenv.system == "i686-linux" then
+        urlBase + "code-stable-code_${version}-1481650382_i386.tar.gz"
+      else if stdenv.system == "x86_64-linux" then
+        urlBase + "code-stable-code_${version}-1481651903_amd64.tar.gz"
+      else if stdenv.system == "x86_64-darwin" then
+        urlBase + "VSCode-darwin-stable.zip"
       else throw "Unsupported system: ${stdenv.system}";
 in
   stdenv.mkDerivation rec {
@@ -19,7 +25,7 @@ in
     inherit version;
 
     src = fetchurl {
-      url = "https://az764295.vo.msecnd.net/stable/${rev}/VSCode-${urlMod}-stable.zip";
+      url = urlStr;
       inherit sha256;
     };
 
@@ -27,13 +33,18 @@ in
       name = "code";
       exec = "code";
       icon = "code";
-      comment = "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications";
+      comment = ''
+        Code editor redefined and optimized for building and debugging modern
+        web and cloud applications
+      '';
       desktopName = "Visual Studio Code";
       genericName = "Text Editor";
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
     };
 
-    buildInputs = [ unzip ];
+    buildInputs = if stdenv.system == "x86_64-darwin"
+      then [ unzip makeWrapper libXScrnSaver ]
+      else [ makeWrapper libXScrnSaver ];
 
     installPhase = ''
       mkdir -p $out/lib/vscode $out/bin
@@ -52,14 +63,22 @@ in
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${atomEnv.libPath}:$out/lib/vscode" \
         $out/lib/vscode/code
+
+      wrapProgram $out/bin/code \
+        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
     '';
 
     meta = with stdenv.lib; {
-      description = "Visual Studio Code is an open source source code editor developed by Microsoft for Windows, Linux and OS X.";
+      description = ''
+        Open source source code editor developed by Microsoft for Windows,
+        Linux and OS X
+      '';
       longDescription = ''
-        Visual Studio Code is an open source source code editor developed by Microsoft for Windows, Linux and OS X.
-        It includes support for debugging, embedded Git control, syntax highlighting, intelligent code completion, snippets, and code refactoring.
-        It is also customizable, so users can change the editor's theme, keyboard shortcuts, and preferences.
+        Open source source code editor developed by Microsoft for Windows,
+        Linux and OS X. It includes support for debugging, embedded Git
+        control, syntax highlighting, intelligent code completion, snippets,
+        and code refactoring. It is also customizable, so users can change the
+        editor's theme, keyboard shortcuts, and preferences
       '';
       homepage = http://code.visualstudio.com/;
       downloadPage = https://code.visualstudio.com/Updates;

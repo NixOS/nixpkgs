@@ -1,11 +1,8 @@
 {stdenv, fetchurl, ocaml, findlib, camlp4}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
-stdenv.mkDerivation {
-  name = "camomile-0.8.5";
+stdenv.mkDerivation rec {
+  name = "camomile-${version}";
+  version = "0.8.5";
 
   src = fetchurl {
     url = https://github.com/yoriyuki/Camomile/releases/download/rel-0.8.5/camomile-0.8.5.tar.bz2;

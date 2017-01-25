@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cmst-${version}";
-  version = "2016.04.03";
+  version = "2016.10.03";
 
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
     rev = name;
-    sha256 = "1334ynhq1lxcfqln3bq17hy1awyfnn3zhzpsnymlyp0z3h4ydpp9";
+    sha256 = "1pvk1jg0fiw0j4f1wrnhgirgziliwa44sxfdmcq9ans4zbig4izh";
   };
 
   nativeBuildInputs = [ makeWrapper qmakeHook ];
@@ -19,16 +19,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace ./cmst.pro \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/usr/share" "$out/usr/share"
+      --replace "/usr/share" "$out/share"
 
     substituteInPlace ./cmst.pri \
       --replace "/usr/lib" "$out/lib" \
       --replace "/usr/share" "$out/share"
 
     substituteInPlace ./apps/cmstapp/cmstapp.pro \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/usr/share" "$out/share"
+      --replace "/usr/bin" "$out/bin"
 
     substituteInPlace ./apps/rootapp/rootapp.pro \
       --replace "/etc" "$out/etc" \

@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/madmalik/mononoki;
     description = "A font for programming and code review";
     license = licenses.ofl;
-    maintainers = [ maintainers.hiberno ];
     platforms = platforms.all;
   };
 }

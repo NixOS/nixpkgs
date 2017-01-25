@@ -20,10 +20,9 @@ in
         example = literalExample "with pkgs.fcitx-engines; [ mozc hangul ]";
         description =
           let
-            engines =
-              lib.concatStringsSep ", "
-              (map (name: "<literal>${name}</literal>")
-               (lib.attrNames pkgs.fcitx-engines));
+            enginesDrv = filterAttrs (const isDerivation) pkgs.fcitx-engines;
+            engines = concatStringsSep ", "
+              (map (name: "<literal>${name}</literal>") (attrNames enginesDrv));
           in
             "Enabled Fcitx engines. Available engines are: ${engines}.";
       };

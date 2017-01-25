@@ -68,6 +68,14 @@ let
 
         # Change the #error on GCC > 4.9 to a #warning.
         sed -i $out/include/host_config.h -e 's/#error\(.*unsupported GNU version\)/#warning\1/'
+
+        # Ensure that cmake can find CUDA.
+        mkdir -p $out/nix-support
+        echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
+
+      '' + lib.optionalString (lib.versionOlder version "8.0") ''
+        # Hack to fix building against recent Glibc/GCC.
+        echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
       '';
 
       meta = {
@@ -106,6 +114,12 @@ in {
     version = "7.5.18";
     url = http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run;
     sha256 = "1v2ylzp34ijyhcxyh5p6i0cwawwbbdhni2l5l4qm21s1cx9ish88";
+  };
+
+  cudatoolkit8 = common {
+    version = "8.0.44";
+    url = https://developer.nvidia.com/compute/cuda/8.0/prod/local_installers/cuda_8.0.44_linux-run;
+    sha256 = "1w5xmjf40kkis42dqs8dva4xjq7wr5y6vi1m0xlhs6i6cyw4mp34";
   };
 
 }

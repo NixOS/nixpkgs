@@ -2,7 +2,7 @@
   stdenv, lib, copyPathsToStore,
   src, version,
 
-  coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python,
+  coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
   ruby,
 
   dbus, fontconfig, freetype, glib, gtk3, harfbuzz, icu, libX11, libXcomposite,
@@ -114,7 +114,6 @@ stdenv.mkDerivation {
     -widgets
     -opengl desktop
     -qml-debug
-    -nis
     -iconv
     -icu
     -pch
@@ -189,7 +188,7 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir patchelf perl pkgconfig python ruby ];
+    [ bison flex gperf lndir patchelf perl pkgconfig python2 ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
@@ -216,7 +215,7 @@ stdenv.mkDerivation {
 
   postFixup =
     ''
-      # Don't retain build-time dependencies like gdb and ruby.
+      # Don't retain build-time dependencies like gdb.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
 
       # Move libtool archives and qmake projects
@@ -232,7 +231,7 @@ stdenv.mkDerivation {
     '';
 
   inherit lndir;
-  setupHook = ./setup-hook.sh;
+  setupHook = ../../qtbase-setup-hook.sh;
 
   enableParallelBuilding = true;
 

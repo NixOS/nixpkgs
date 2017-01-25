@@ -1,22 +1,29 @@
-{ stdenv, fetchurl, fftw, ladspaH, pkgconfig }:
+{ stdenv, fetchurl, autoreconfHook, automake, fftw, ladspaH, libxml2, pkgconfig
+, perlPackages }:
 
-stdenv.mkDerivation {
-  name = "swh-plugins-0.4.15";
+stdenv.mkDerivation rec {
+  name = "swh-plugins-${version}";
+  version = "0.4.17";
+
 
   src = fetchurl {
-    url = http://plugin.org.uk/releases/0.4.15/swh-plugins-0.4.15.tar.gz;
-    sha256 = "0h462s4mmqg4iw7zdsihnrmz2vjg0fd49qxw2a284bnryjjfhpnh";
+    url = "https://github.com/swh/ladspa/archive/v${version}.tar.gz";
+    sha256 = "1rqwh8xrw6hnp69dg4gy336bfbfpmbx4fjrk0nb8ypjcxkz91c6i";
   };
-  
-  buildInputs = [fftw ladspaH pkgconfig];
 
-  postInstall =
-    ''
-      mkdir -p $out/share/ladspa/
-      ln -sv $out/lib/ladspa $out/share/ladspa/lib
-    '';
+  buildInputs = [ autoreconfHook fftw ladspaH libxml2 pkgconfig perlPackages.perl  perlPackages.XMLParser ];
 
-  meta = {
+  patchPhase = ''
+    patchShebangs .
+    patchShebangs ./metadata/
+    cp ${automake}/share/automake-*/mkinstalldirs .
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = http://plugin.org.uk/;
     description = "LADSPA format audio plugins";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

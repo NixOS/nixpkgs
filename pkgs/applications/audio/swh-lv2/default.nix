@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, fftwSinglePrec, libxslt, lv2, pkgconfig }:
+{ stdenv, fetchurl, fftwSinglePrec, libxslt, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "swh-lv2-git-2013-05-17";
+  name = "swh-lv2-v${version}";
+  version = "1.0.16";
 
-  src = fetchgit {
-    url = "https://github.com/swh/lv2.git";
-    rev = "978d5d8f549fd22048157a6d044af0faeaacbd7f";
-    sha256 = "10jj8sp67caxvmzjxwyzapc34jpry5nrkkp49kyyvyk5dgkpbsjw";
+  src = fetchurl {
+    url = "https://github.com/swh/lv2/archive/v${version}.tar.gz";
+    sha256 = "0j1mih0lp4fds07knp5i32in515sh0df1qi6694pmyz2wqnm295w";
   };
 
   patchPhase = ''

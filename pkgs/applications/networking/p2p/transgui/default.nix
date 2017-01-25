@@ -1,5 +1,5 @@
 { stdenv, fetchsvn, pkgconfig, makeDesktopItem, unzip, fpc, lazarus,
-libX11, glib, gtk, gdk_pixbuf, pango, atk, cairo, openssl }:
+libX11, glib, gtk2, gdk_pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
   name = "transgui-5.0.1-svn-r${revision}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig unzip fpc lazarus stdenv.cc
-    libX11 glib gtk gdk_pixbuf pango atk cairo openssl
+    libX11 glib gtk2 gdk_pixbuf pango atk cairo openssl
   ];
 
   NIX_LDFLAGS = "

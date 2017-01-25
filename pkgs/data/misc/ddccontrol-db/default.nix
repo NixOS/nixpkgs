@@ -5,7 +5,7 @@
 , libxml2
 , pciutils
 , pkgconfig
-, gtk
+, gtk2
 }:
 
 let version = "20061014"; in
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       libxml2
       pciutils
       pkgconfig
-      gtk
+      gtk2
     ];
 
   meta = with stdenv.lib; {

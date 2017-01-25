@@ -1,4 +1,6 @@
-{ stdenv, fetchzip, ncurses, ocamlPackages, opam }:
+{ stdenv, fetchzip, ncurses
+, ocaml, ocpBuild, findlib, lablgtk, ocp-index
+, opam }:
 
 stdenv.mkDerivation {
   name = "ocaml-top-1.1.2";
@@ -7,8 +9,7 @@ stdenv.mkDerivation {
     sha256 = "10wfz8d6c1lbh31kayvlb5fj7qmgh5c6xhs3q595dnf9skrf091j";
   };
 
-  buildInputs = [ ncurses opam ]
-    ++ (with ocamlPackages; [ ocaml ocpBuild findlib lablgtk ocp-index ]);
+  buildInputs = [ ncurses opam ocaml ocpBuild findlib lablgtk ocp-index ];
 
   configurePhase = ''
     export TERM=xterm
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
     homepage = http://www.typerex.org/ocaml-top.html;
     license = stdenv.lib.licenses.gpl3;
     description = "A simple cross-platform OCaml code editor built for top-level evaluation";
-    platforms = ocamlPackages.ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

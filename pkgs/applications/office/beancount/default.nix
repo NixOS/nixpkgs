@@ -1,14 +1,13 @@
 { stdenv, fetchhg, pkgs, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "2016-04-10-b5721f1c6f01bd168a5781652e5e3167f7f8ceb3";
+  version = "2.0b13";
   name = "beancount-${version}";
   namePrefix = "";
 
-  src = fetchhg {
-    url = "https://bitbucket.org/blais/beancount";
-    rev = "b5721f1c6f01bd168a5781652e5e3167f7f8ceb3";
-    sha256 = "10nv3p9cix7yp23a9hnq5163rpl8cfs3hv75h90ld57dc24nxzn2";
+  src = pkgs.fetchurl {
+    url = "mirror://pypi/b/beancount/${name}.tar.gz";
+    sha256 = "16gkcq28bwd015b1qhdr5d7vhxid8xfn6ia4n9n8dnl5n448yqkm";
   };
 
   buildInputs = with pythonPackages; [ nose ];

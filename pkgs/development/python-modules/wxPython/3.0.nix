@@ -1,15 +1,17 @@
 { fetchurl
 , lib
-, pythonPackages
 , openglSupport ? true
 , libX11
 , wxGTK
 , pkgconfig
+, buildPythonPackage
+, pyopengl
+, isPy3k
+, isPyPy
+, python
 }:
 
 assert wxGTK.unicode;
-
-with pythonPackages;
 
 buildPythonPackage rec {
   name = "wxPython-${version}";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
-, qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, glib_networking
+, qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, cssutils, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
 , qtwebkit-plugins }:
@@ -7,11 +7,11 @@
 let
   pdfjs = stdenv.mkDerivation rec {
     name = "pdfjs-${version}";
-    version = "1.4.20";
+    version = "1.5.188";
 
     src = fetchurl {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-      sha256 = "1ca1fzyc5qnan6gavcd8bnfqriqqvgdsf4m8ka4nayf50k64xxj9";
+      sha256 = "1y3yaqfgjj96qzvbm5200x68j5hy1qs7l2mqm3kbbj2b58z9f1qv";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -24,12 +24,12 @@ let
 
 in buildPythonApplication rec {
   name = "qutebrowser-${version}";
-  version = "0.8.2";
+  version = "0.9.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1kfxjdn1dqla8d8gcggp55zcgf4zb77knkfshd213my0iw2yzgcf";
+    sha256 = "1fp7yddx8xmy6hx01gg4z3vnw8b9qa5ixam7150i3xaalx0gjzfq";
   };
 
   # Needs tox
@@ -46,7 +46,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    pyyaml pyqt5 jinja2 pygments pypeg2
+    pyyaml pyqt5 jinja2 pygments pypeg2 cssutils
   ];
 
   postPatch = ''
@@ -72,7 +72,6 @@ in buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonPrograms
     mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
     makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
 
@@ -80,7 +79,7 @@ in buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = https://github.com/The-Compiler/qutebrowser;
+    homepage = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.jagajaga ];

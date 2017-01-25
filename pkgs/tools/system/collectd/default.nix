@@ -30,21 +30,28 @@
 , varnish ? null
 , yajl ? null
 , net_snmp ? null
+, hiredis ? null
+, libmnl ? null
 }:
 stdenv.mkDerivation rec {
-  version = "5.5.2";
+  version = "5.6.0";
   name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";
-    sha256 = "03w2pawbshl2wrl4cmyw8alsi0pvamb6ibxni96mjzhqc903lzq1";
+    sha256 = "08w6fjzczi2psk7va0xkjh9pigpar6sbjx2a6ayq4dmc3zcvpzzh";
   };
 
   buildInputs = [
     pkgconfig curl iptables libatasmart libcredis libdbi libgcrypt libmemcached
     cyrus_sasl libmodbus libnotify gdk_pixbuf liboping libpcap libsigrok libvirt
     lm_sensors libxml2 lvm2 libmysql postgresql protobufc rabbitmq-c rrdtool
-    varnish yajl jdk libtool python udev net_snmp
+    varnish yajl jdk libtool python udev net_snmp hiredis libmnl
+  ];
+
+  patches = [
+    # Replace deprecated readdir_r() with readdir() to avoid a fatal warning.
+    ./readdir-fix.patch
   ];
 
   # for some reason libsigrok isn't auto-detected
@@ -52,14 +59,11 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (libsigrok != null) "--with-libsigrok" ++
     stdenv.lib.optional (python != null) "--with-python=${python}/bin/python";
 
-  # Fix build on Glibc 2.24.
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp -Wno-error=deprecated-declarations";
-
   meta = with stdenv.lib; {
     description = "Daemon which collects system performance statistics periodically";
     homepage = http://collectd.org;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }

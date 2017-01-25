@@ -18,6 +18,11 @@ mkChromiumDerivation (base: rec {
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
+    if [ -e "$buildPath/libwidevinecdmadapter.so" ]; then
+      cp -v "$buildPath/libwidevinecdmadapter.so" \
+            "$libExecPath/libwidevinecdmadapter.so"
+    fi
+
     mkdir -p "$sandbox/bin"
     cp -v "$buildPath/chrome_sandbox" "$sandbox/bin/${sandboxExecutableName}"
 
@@ -37,6 +42,8 @@ mkChromiumDerivation (base: rec {
 
   passthru = { inherit sandboxExecutableName; };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
@@ -44,6 +51,5 @@ mkChromiumDerivation (base: rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["x86_64-linux"] else [];
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 })

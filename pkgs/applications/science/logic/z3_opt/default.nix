@@ -1,8 +1,10 @@
-{ stdenv, fetchFromGitHub, python }:
+{ stdenv, fetchFromGitHub, python2 }:
 
 # Copied shamelessly from the normal z3 .nix
 
-stdenv.mkDerivation rec {
+let
+  python = python2;
+in stdenv.mkDerivation rec {
   name = "z3_opt-${version}";
   version = "4.3.2";
 
@@ -16,21 +18,21 @@ stdenv.mkDerivation rec {
   buildInputs = [ python ];
   enableParallelBuilding = true;
 
-  configurePhase = "python scripts/mk_make.py --prefix=$out && cd build";
+  configurePhase = "${python.interpreter} scripts/mk_make.py --prefix=$out && cd build";
 
   # z3's install phase is stupid because it tries to calculate the
   # python package store location itself, meaning it'll attempt to
   # write files into the nix store, and fail.
   soext = if stdenv.system == "x86_64-darwin" then ".dylib" else ".so";
   installPhase = ''
-    mkdir -p $out/bin $out/lib/${python.libPrefix}/site-packages $out/include
+    mkdir -p $out/bin $out/${python.sitePackages} $out/include
     cp ../src/api/z3*.h       $out/include
     cp ../src/api/c++/z3*.h   $out/include
     cp z3                     $out/bin
     cp libz3${soext}          $out/lib
-    cp libz3${soext}          $out/lib/${python.libPrefix}/site-packages
-    cp z3*.pyc                $out/lib/${python.libPrefix}/site-packages
-    cp ../src/api/python/*.py $out/lib/${python.libPrefix}/site-packages
+    cp libz3${soext}          $out/${python.sitePackages}
+    cp z3*.pyc                $out/${python.sitePackages}
+    cp ../src/api/python/*.py $out/${python.sitePackages}
   '';
 
   meta = {

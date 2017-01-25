@@ -1,8 +1,8 @@
 diff --git a/src/go/build/build.go b/src/go/build/build.go
-index 496fe11..8c81dbd 100644
+index 9706b8b..f250751 100644
 --- a/src/go/build/build.go
 +++ b/src/go/build/build.go
-@@ -1388,7 +1388,7 @@ func init() {
+@@ -1513,7 +1513,7 @@ func init() {
  }
  
  // ToolDir is the directory containing build tools.
@@ -12,11 +12,11 @@ index 496fe11..8c81dbd 100644
  // IsLocalImport reports whether the import path is
  // a local import path, like ".", "..", "./foo", or "../foo".
 diff --git a/src/runtime/extern.go b/src/runtime/extern.go
-index d346362..fb22b6e 100644
+index 441dcd9..a50277e 100644
 --- a/src/runtime/extern.go
 +++ b/src/runtime/extern.go
-@@ -194,6 +194,17 @@ func GOROOT() string {
- 	return defaultGoroot
+@@ -230,6 +230,17 @@ func GOROOT() string {
+ 	return sys.DefaultGoroot
  }
  
 +// GOTOOLDIR returns the root of the Go tree.

@@ -139,7 +139,7 @@ in {
     systemd.services.apache-kafka = {
       description = "Apache Kafka Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.jre}/bin/java \

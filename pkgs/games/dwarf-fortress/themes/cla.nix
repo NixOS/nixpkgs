@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "cla-theme-${version}";
-  version = "43.04-v23";
+  version = "43.05-v23";
 
   src = fetchFromGitHub {
     owner = "DFgraphics";
     repo = "CLA";
     rev = version;
-    sha256 = "0a88jkcli9iq0prg5w0xh1cyms0b7dnc9rdahn7wy7fyakyp7s27";
+    sha256 = "1i74lyz7mpfrvh5g7rajxldhw7zddc2kp8f6bgfr3hl5l8ym5ci9";
   };
 
   installPhase = ''

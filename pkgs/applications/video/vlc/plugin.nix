@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://code.videolan.org/videolan/npapi-vlc.git";
     rev = "5fa6fbc11cf5bad983f57656c0085e47e18fbf20";
-    sha256 = "18fbiy4r8rlw4fsgcxgzhi6qi9r48d0rmnp8hs994w2p94fa8kwd";
+    sha256 = "0k4s0657kv1mx1md8vj87scs0hz59xy7syqdsxb48w3w8gnfljs0";
   };
 
   preConfigure = "sh autogen.sh";

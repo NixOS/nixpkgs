@@ -184,6 +184,7 @@ stdenv.mkDerivation (attrs // {
       --install-dir "$GEM_HOME" \
       --build-root '/' \
       --backtrace \
+      --no-env-shebang \
       ${documentFlag} \
       $gempkg $gemFlags -- $buildFlags
 

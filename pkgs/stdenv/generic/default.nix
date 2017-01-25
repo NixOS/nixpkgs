@@ -44,7 +44,7 @@ let
       throw "whitelistedLicenses and blacklistedLicenses are not mutually exclusive.";
 
   hasLicense = attrs:
-    builtins.hasAttr "meta" attrs && builtins.hasAttr "license" attrs.meta;
+    attrs ? meta.license;
 
   hasWhitelistedLicense = assert areLicenseListsValid; attrs:
     hasLicense attrs && builtins.elem attrs.meta.license whitelist;
@@ -89,8 +89,16 @@ let
       cc
     ];
 
-  # Add a utility function to produce derivations that use this
-  # stdenv and its shell.
+  # `mkDerivation` wraps the builtin `derivation` function to
+  # produce derivations that use this stdenv and its shell.
+  #
+  # See also:
+  #
+  # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
+  #   Details on how to use this mkDerivation function
+  #
+  # * https://nixos.org/nix/manual/#ssec-derivation
+  #   Explanation about derivations in general
   mkDerivation =
     { buildInputs ? []
     , nativeBuildInputs ? []
@@ -120,8 +128,7 @@ let
       throwEvalHelp = { reason, errormsg }:
         # uppercase the first character of string s
         let up = s: with lib;
-          let cs = lib.stringToCharacters s;
-          in concatStrings (singleton (toUpper (head cs)) ++ tail cs);
+          (toUpper (substring 0 1 s)) + (substring 1 (stringLength s) s);
         in
         assert builtins.elem reason ["unfree" "broken" "blacklisted"];
 
@@ -132,7 +139,7 @@ let
             { nixpkgs.config.allow${up reason} = true; }
           in configuration.nix to override this.
 
-          b) For `nix-env`, `nix-build` or any other Nix command you can add
+          b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
             { allow${up reason} = true; }
           to ~/.nixpkgs/config.nix.
         ''));
@@ -227,6 +234,7 @@ let
           outputs = outputs';
         } else { })))) (
       {
+        overrideAttrs = f: mkDerivation (attrs // (f attrs));
         # The meta attribute is passed in the resulting attribute set,
         # but it's not part of the actual derivation, i.e., it's not
         # passed to the builder and is not a dependency.  But since we

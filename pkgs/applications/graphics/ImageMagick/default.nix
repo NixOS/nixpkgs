@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
+, ApplicationServices
 }:
 
 let
@@ -11,11 +12,12 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.5-2";
-    sha256 = "09h3rpr1jnzd7ipy5d16r2gi0bwg4hk5khwzv4cyhv1xzs8pk7pj";
+    version = "6.9.7-0";
+    sha256 = "0c6ff1am2mhc0dc26h50l78yx6acwqymwpwgkxgx69cb6jfpwrdx";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
+    # FIXME: This version has multiple security vulnerabilities
     // lib.optionalAttrs (stdenv.cross.libc or null == "msvcrt") {
         version = "6.9.2-0";
         sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
       "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
       # the original source above removes tarballs quickly
       "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
+      "https://bintray.com/homebrew/mirror/download_file?file_path=imagemagick-${version}.tar.xz"
     ];
     inherit (cfg) sha256;
   };
@@ -68,7 +71,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
       [ openexr librsvg openjpeg ]
-    ;
+    ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]

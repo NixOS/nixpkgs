@@ -4,7 +4,13 @@
 
 let
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
-  binPath = stdenv.lib.makeBinPath [ bash getopt gawk procps which jre ];
+  binPath = with stdenv.lib; makeBinPath ([
+    bash
+    getopt
+    gawk
+    which
+    jre
+  ] ++ stdenv.lib.optional stdenv.isLinux procps);
 in
 
 stdenv.mkDerivation rec {
@@ -42,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://cassandra.apache.org/;
     description = "A massively scalable open source NoSQL database";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with maintainers; [ nckx rushmorem cransom ];
   };

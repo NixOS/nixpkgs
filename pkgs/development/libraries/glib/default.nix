@@ -1,5 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl, python
 , libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
+# use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
+, utillinuxMinimal ? null
 
 # this is just for tests (not in closure of any regular package)
 , coreutils, dbus_daemon, libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
@@ -8,6 +10,7 @@
 with stdenv.lib;
 
 assert stdenv.isFreeBSD || stdenv.isDarwin || stdenv.cc.isGNU;
+assert stdenv.isLinux -> utillinuxMinimal != null;
 
 # TODO:
 # * Add gio-module-fam
@@ -39,7 +42,7 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.48";
+  ver_maj = "2.50";
   ver_min = "2";
 in
 
@@ -48,17 +51,18 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "f25e751589cb1a58826eac24fbd4186cda4518af772806b666a3f91f66e6d3f4";
+    sha256 = "be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
 
-  outputs = [ "out" "dev" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   setupHook = ./setup-hook.sh;
 
   buildInputs = [ libelf setupHook pcre ]
+    ++ optionals stdenv.isLinux [ utillinuxMinimal ] # for libmount
     ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
@@ -95,7 +99,12 @@ stdenv.mkDerivation rec {
     moveToOutput "share/glib-2.0" "$dev"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
-  '';
+  ''
+    # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
+    + ''
+      sed '1i#line 1 "${name}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
+        -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
+    '';
 
   inherit doCheck;
   preCheck = optionalString doCheck

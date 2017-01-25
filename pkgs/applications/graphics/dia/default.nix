@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk, pkgconfig, perl, perlXMLParser, libxml2, gettext
+{stdenv, fetchurl, gtk2, pkgconfig, perl, perlXMLParser, libxml2, gettext
 , python, libxml2Python, docbook5, docbook_xsl, libxslt, intltool, libart_lgpl
 , withGNOME ? false, libgnomeui }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ gtk perlXMLParser libxml2 gettext python libxml2Python docbook5
+    [ gtk2 perlXMLParser libxml2 gettext python libxml2Python docbook5
       libxslt docbook_xsl libart_lgpl
     ] ++ stdenv.lib.optional withGNOME libgnomeui;
 

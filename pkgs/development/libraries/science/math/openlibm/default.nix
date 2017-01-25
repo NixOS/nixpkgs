@@ -1,9 +1,10 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "openlibm-0.4.1";
+stdenv.mkDerivation rec {
+  name = "openlibm-${version}";
+  version = "0.5.4";
   src = fetchurl {
-    url = "https://github.com/JuliaLang/openlibm/archive/v0.4.1.tar.gz";
+    url = "https://github.com/JuliaLang/openlibm/archive/v${version}.tar.gz";
     sha256 = "0cwqqqlblj3kzp9aq1wnpfs1fl0qd1wp1xzm5shb09w06i4rh9nn";
   };
 

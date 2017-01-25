@@ -9,4 +9,5 @@ stdenv.mkDerivation {
   patches = [./cil-aterm-1.3.6.patch];
   buildInputs = [ ocaml perl ];
   inherit ocaml perl;
+  meta.broken = true;
 }  

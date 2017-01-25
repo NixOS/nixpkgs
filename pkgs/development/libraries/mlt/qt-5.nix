@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     "--enable-opengl"
   ];
 
+  CXXFLAGS = "-std=c++11";
+
   enableParallelBuilding = true;
 
   postInstall = ''

@@ -1,12 +1,16 @@
-diff -upr chromium-42.0.2311.90.orig/third_party/widevine/cdm/widevine_cdm_version.h chromium-42.0.2311.90/third_party/widevine/cdm/widevine_cdm_version.h
---- chromium-42.0.2311.90.orig/third_party/widevine/cdm/widevine_cdm_version.h	2015-04-15 01:18:59.000000000 +0300
-+++ chromium-42.0.2311.90/third_party/widevine/cdm/widevine_cdm_version.h	2015-04-15 09:09:49.157260050 +0300
-@@ -14,4 +14,8 @@
- //  - WIDEVINE_CDM_VERSION_STRING (with the version of the CDM that's available
- //    as a string, e.g., "1.0.123.456").
+Minimal WideVine patch from Gentoo:
+
+https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-widevine-r1.patch
+
+BTS: https://bugs.gentoo.org/show_bug.cgi?id=547630
+
+--- a/third_party/widevine/cdm/stub/widevine_cdm_version.h
++++ b/third_party/widevine/cdm/stub/widevine_cdm_version.h
+@@ -10,6 +10,7 @@
  
-+#include "third_party/widevine/cdm/widevine_cdm_common.h"
-+#define WIDEVINE_CDM_AVAILABLE
-+#define WIDEVINE_CDM_VERSION_STRING "@WIDEVINE_VERSION@"
-+
+ #include "third_party/widevine/cdm/widevine_cdm_common.h"
+ 
++#define WIDEVINE_CDM_VERSION_STRING "unknown"
+ #define WIDEVINE_CDM_AVAILABLE
+ 
  #endif  // WIDEVINE_CDM_VERSION_H_

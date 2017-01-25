@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gdk_pixbuf, gtk, libXmu }:
+{ stdenv, fetchFromGitHub, pkgconfig, gdk_pixbuf, gtk2, libXmu }:
 
 stdenv.mkDerivation rec {
   name = "trayer-1.1.6";
 
-  buildInputs = [ pkgconfig gdk_pixbuf gtk libXmu ];
+  buildInputs = [ pkgconfig gdk_pixbuf gtk2 libXmu ];
 
   src = fetchFromGitHub {
     owner = "sargon";

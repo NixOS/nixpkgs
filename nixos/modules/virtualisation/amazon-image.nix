@@ -94,7 +94,6 @@ let cfg = config.ec2; in
             elif [ "$fsType" = ext3 ]; then
                 mp="/disk$diskNr"
                 diskNr=$((diskNr + 1))
-                echo "mounting $device on $mp..."
                 if mountFS "$device" "$mp" "" ext3; then
                     if [ -z "$diskForUnionfs" ]; then diskForUnionfs="$mp"; fi
                 fi
@@ -138,7 +137,7 @@ let cfg = config.ec2; in
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
     services.openssh.enable = true;
-    services.openssh.permitRootLogin = "without-password";
+    services.openssh.permitRootLogin = "prohibit-password";
 
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";

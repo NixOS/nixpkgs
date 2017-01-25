@@ -1,0 +1,13 @@
+diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
+index 89a7add..ae99eb4 100644
+--- a/src/ppp-manager/nm-ppp-manager.c
++++ b/src/ppp-manager/nm-ppp-manager.c
+@@ -843,7 +843,7 @@ create_pppd_cmd_line (NMPPPManager *self,
+ 
+ 	g_return_val_if_fail (setting != NULL, NULL);
+ 
+-	pppd_binary = nm_utils_find_helper ("pppd", NULL, err);
++	pppd_binary = nm_utils_find_helper ("pppd", PPPD_PATH, err);
+ 	if (!pppd_binary)
+ 		return NULL;
+ 

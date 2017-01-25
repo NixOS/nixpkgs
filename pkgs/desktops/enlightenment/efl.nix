@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.18.0";
+  version = "1.18.4";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "17mzbjmz8d2vs8p63r1sk3mppl3l2fhxy2jv24dp75lgqbsvp806";
+    sha256 = "09c0ajszjarcs6d62zlgnf1aha2f921mfr0gxg6nwza36xzc1srr";
   };
 
   nativeBuildInputs = [ pkgconfig ];

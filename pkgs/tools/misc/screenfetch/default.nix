@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, makeWrapper
-, coreutils, gawk, procps, gnused, findutils, xdpyinfo, xprop, gnugrep
+{ stdenv, fetchFromGitHub, makeWrapper, coreutils, gawk, procps, gnused
+, bc, findutils, xdpyinfo, xprop, gnugrep, ncurses
 }:
 
 stdenv.mkDerivation {
-  name = "screenFetch-2016-01-13";
+  name = "screenFetch-2016-10-11";
 
-  src = fetchgit {
-    url = git://github.com/KittyKatt/screenFetch.git;
-    rev = "22e5bee7647453d45ec82f543f37b8a6a062835d";
-    sha256 = "0xdiz02bqg7ajj547j496qq9adysm1f6zymcy3yyfgw3prnzvdir";
+  src = fetchFromGitHub {
+    owner = "KittyKatt";
+    repo = "screenFetch";
+    rev = "89e51f24018c89b3647deb24406a9af3a78bbe99";
+    sha256 = "0i2k261jj2s4sfhav7vbsd362pa0gghw6qhwafhmicmf8hq2a18v";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +29,9 @@ stdenv.mkDerivation {
       --prefix PATH : "${findutils}/bin" \
       --prefix PATH : "${xdpyinfo}/bin" \
       --prefix PATH : "${xprop}/bin" \
-      --prefix PATH : "${gnugrep}/bin"
+      --prefix PATH : "${gnugrep}/bin" \
+      --prefix PATH : "${ncurses}/bin" \
+      --prefix PATH : "${bc}/bin"
   '';
 
   meta = {

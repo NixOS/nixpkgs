@@ -2,6 +2,7 @@
 , automake115x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
 , setuptools, boto, pythonProtobuf, apr, subversion, gzip, systemd
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
+, ethtool, coreutils
 , bash
 }:
 
@@ -10,7 +11,7 @@ let
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
 
 in stdenv.mkDerivation rec {
-  version = "0.28.0";
+  version = "1.0.1";
   name = "mesos-${version}";
 
   enableParallelBuilding = true;
@@ -18,13 +19,19 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${name}.tar.gz";
-    sha256 = "05dnj6r5pspizna0fk7yayn38a4w9hlcswgg8l9qmb35m6nq6hby";
+    sha256 = "1hdh2wh11ck98ycfrxfzgivgk2pjl3638vkyw14xj7faj9qxjlz0";
   };
 
   patches = [
     # https://reviews.apache.org/r/36610/
     ./rb36610.patch
-    ./maven_repo.patch
+
+    # https://issues.apache.org/jira/browse/MESOS-6013
+    ./rb51324.patch
+    ./rb51325.patch
+
+    # see https://github.com/cstrahan/mesos/tree/nixos-${version}
+    ./nixos.patch
   ];
 
   buildInputs = [
@@ -40,59 +47,59 @@ in stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace src/Makefile.am --subst-var-by mavenRepo ${mavenRepo}
-    
-    substituteInPlace 3rdparty/libprocess/include/process/subprocess.hpp \
-      --replace '"sh"' '"${bash}/bin/bash"'
+    substituteInPlace 3rdparty/stout/include/stout/os/posix/fork.hpp \
+      --subst-var-by sh ${bash}/bin/bash
 
-    substituteInPlace 3rdparty/libprocess/3rdparty/stout/include/stout/posix/os.hpp \
-      --replace '"sh"' '"${bash}/bin/bash"'
+    substituteInPlace 3rdparty/stout/include/stout/os/posix/shell.hpp \
+      --subst-var-by sh ${bash}/bin/bash
 
-    substituteInPlace 3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/shell.hpp \
-      --replace '"sh"' '"${bash}/bin/bash"'
+    substituteInPlace src/Makefile.am \
+      --subst-var-by mavenRepo ${mavenRepo}
 
-    substituteInPlace 3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/fork.hpp \
-      --replace '"sh"' '"${bash}/bin/bash"'
+    substituteInPlace src/cli/mesos-scp \
+      --subst-var-by scp ${openssh}/bin/scp
 
-    substituteInPlace src/cli/mesos-scp        \
-      --replace "'scp " "'${openssh}/bin/scp "
-
-    substituteInPlace src/launcher/executor.cpp \
-      --replace '"sh"' '"${bash}/bin/bash"'
-    
     substituteInPlace src/launcher/fetcher.cpp \
-      --replace '"gzip' '"${gzip}/bin/gzip'    \
-      --replace '"tar' '"${gnutar}/bin/tar'    \
-      --replace '"unzip' '"${unzip}/bin/unzip'
+      --subst-var-by gzip  ${gzip}/bin/gzip \
+      --subst-var-by tar   ${gnutar}/bin/tar \
+      --subst-var-by unzip ${unzip}/bin/unzip
 
     substituteInPlace src/python/cli/src/mesos/cli.py \
-     --replace "['mesos-resolve'" "['$out/bin/mesos-resolve'"
-    
-    substituteInPlace src/slave/containerizer/mesos/launch.cpp \
-      --replace '"sh"' '"${bash}/bin/bash"'
+      --subst-var-by mesos-resolve $out/bin/mesos-resolve
+
+    substituteInPlace src/slave/containerizer/mesos/isolators/posix/disk.cpp \
+      --subst-var-by du ${coreutils}/bin/du \
+      --subst-var-by cp ${coreutils}/bin/cp
+
+    substituteInPlace src/slave/containerizer/mesos/provisioner/backends/copy.cpp \
+      --subst-var-by cp ${coreutils}/bin/cp
+
+    substituteInPlace src/uri/fetchers/copy.cpp \
+      --subst-var-by cp ${coreutils}/bin/cp
+
+    substituteInPlace src/uri/fetchers/curl.cpp \
+      --subst-var-by curl ${curl}/bin/curl
+
+    substituteInPlace src/uri/fetchers/docker.cpp \
+      --subst-var-by curl ${curl}/bin/curl
 
   '' + lib.optionalString stdenv.isLinux ''
 
-    substituteInPlace configure.ac             \
-      --replace /usr/include/libnl3 ${libnl.dev}/include/libnl3
-
-    substituteInPlace src/linux/perf.cpp       \
-      --replace '"perf ' '"${perf}/bin/perf '
-    
-    substituteInPlace src/linux/systemd.cpp \
-      --replace 'os::realpath("/sbin/init")' '"${systemd}/lib/systemd/systemd"'
+    substituteInPlace src/linux/perf.cpp \
+      --subst-var-by perf ${perf}/bin/perf
 
     substituteInPlace src/slave/containerizer/mesos/isolators/filesystem/shared.cpp \
-      --replace '"mount ' '"${utillinux}/bin/mount ' \
+      --subst-var-by mount ${utillinux}/bin/mount
 
     substituteInPlace src/slave/containerizer/mesos/isolators/namespaces/pid.cpp \
-      --replace '"mount ' '"${utillinux}/bin/mount ' \
+      --subst-var-by mount ${utillinux}/bin/mount
 
     substituteInPlace src/slave/containerizer/mesos/isolators/network/port_mapping.cpp \
-      --replace '"tc ' '"${iproute}/bin/tc '   \
-      --replace '"ip ' '"${iproute}/bin/ip '   \
-      --replace '"mount ' '"${utillinux}/bin/mount ' \
-      --replace '/bin/sh' "${stdenv.shell}"
+      --subst-var-by tc      ${iproute}/bin/tc \
+      --subst-var-by ip      ${iproute}/bin/ip \
+      --subst-var-by mount   ${utillinux}/bin/mount \
+      --subst-var-by sh      ${stdenv.shell} \
+      --subst-var-by ethtool ${ethtool}/sbin/ethtool
   '';
 
   configureFlags = [
@@ -108,8 +115,11 @@ in stdenv.mkDerivation rec {
     "--with-ssl=${openssl.dev}"
     "--enable-libevent"
     "--with-libevent=${libevent.dev}"
+    "--with-protobuf=${pythonProtobuf.protobuf}"
+    "PROTOBUF_JAR=${mavenRepo}/com/google/protobuf/protobuf-java/2.6.1/protobuf-java-2.6.1.jar"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-network-isolator"
+    "--with-nl=${libnl.dev}"
   ];
 
   postInstall = ''

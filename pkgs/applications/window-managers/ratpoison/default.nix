@@ -12,10 +12,18 @@ stdenv.mkDerivation rec {
     sha256 = "1w502z55vv7zs45l80nsllqh9fvfwjfdfi11xy1qikhzdmirains";
   };
 
+  outputs = [ "out" "contrib" "doc" "info" ];
+
   buildInputs =
     [ pkgconfig perl autoconf automake
       libX11 inputproto libXt libXpm libXft libXtst xextproto libXi
       fontconfig freetype readline ];
+
+  postInstall = ''
+    mkdir -p $contrib/{bin,share}
+    mv $out/bin/rpws $contrib/bin
+    mv $out/share/ratpoison $contrib/share
+  '';
 
   meta = with stdenv.lib; {
     homepage = "http://www.nongnu.org/ratpoison/";

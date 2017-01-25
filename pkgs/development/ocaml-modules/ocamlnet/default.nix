@@ -1,16 +1,12 @@
 { stdenv, fetchurl, pkgconfig, ncurses, ocaml, findlib, ocaml_pcre, camlzip
 , gnutls, nettle }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
 stdenv.mkDerivation {
-  name = "ocamlnet-4.1.1";
+  name = "ocamlnet-4.1.2";
 
   src = fetchurl {
-    url = http://download.camlcity.org/download/ocamlnet-4.1.1.tar.gz;
-    sha256 = "1z0j542dfzfimsn4asw1ycb4ww561pv92cz6s6kxazvgx60c5rb1";
+    url = http://download.camlcity.org/download/ocamlnet-4.1.2.tar.gz;
+    sha256 = "1n0l9zlq7dc5yr43bpa4a0b6bxj3iyjkadbb41g59zlwa8hkk34i";
   };
 
   buildInputs = [ ncurses ocaml findlib ocaml_pcre camlzip gnutls pkgconfig nettle ];
@@ -27,7 +23,7 @@ stdenv.mkDerivation {
       -enable-pcre
       -disable-gtk2
       -with-nethttpd
-      -datadir $out/lib/ocaml/${ocaml_version}/ocamlnet
+      -datadir $out/lib/ocaml/${ocaml.version}/ocamlnet
     )
   '';
 

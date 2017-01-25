@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, which, camlp4 }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, which, camlp4 }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast; in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c807wrpxra9sbb34lajhimwra28ldxv04m570567lh2b04n38zy";
   };
 
-  buildInputs = [ ocaml findlib which camlp4 ];
+  buildInputs = [ ocaml findlib ocamlbuild which camlp4 ];
 
   patchPhase = ''
     patch myocamlbuild.ml <<EOF

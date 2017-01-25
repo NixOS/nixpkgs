@@ -1,29 +1,26 @@
-{ stdenv, fetchurl, pythonPackages, makeWrapper, docutils, unzip
+{ stdenv, fetchurl, python2Packages, makeWrapper, docutils, unzip
 , guiSupport ? false, tk ? null
 , ApplicationServices, cf-private }:
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "3.8.2";
+  version = "3.9.2";
   name = "mercurial-${version}";
-  inherit (pythonPackages) curses docutils hg-git dulwich python;
-in
-
-stdenv.mkDerivation {
+  inherit (python2Packages) docutils hg-git dulwich python;
+in python2Packages.mkPythonDerivation {
   inherit name;
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/${name}.tar.gz";
-    sha256 = "1zdz42znd6i7c3nf31j0k6frcs68qyniyvcad8k2a1hlarlv2y6b";
+    sha256 = "1kw3cpcjygfapvi5c123limhpbkmg7is2i81pybk1s05gi16l139";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
-  pythonPackages = [ curses ];
 
-  buildInputs = [ python makeWrapper docutils unzip ];
+  buildInputs = [ makeWrapper docutils unzip ];
 
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin
-    [ ApplicationServices cf-private ];
+  propagatedBuildInputs = [ hg-git dulwich ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices cf-private ];
 
   makeFlags = "PREFIX=$(out)";
 
@@ -43,7 +40,6 @@ stdenv.mkDerivation {
     ''
       for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
-          --prefix PYTHONPATH : "$(toPythonPath "$out ${curses}"):$(toPythonPath "$out ${hg-git}"):$(toPythonPath "$out ${dulwich}")" \
           $WRAP_TK
       done
 

@@ -1,34 +1,19 @@
-{ stdenv, fetchFromGitHub, makeWrapper, callPackage, nodejs, python, utillinux, graphicsmagick }:
+{ pkgs, system, stdenv, fetchurl, makeWrapper, nodejs, graphicsmagick }:
 
 with stdenv.lib;
 
 let
-  nodePackages = callPackage (import ../../../top-level/node-packages.nix) {
-    inherit stdenv nodejs fetchurl fetchgit;
-    neededNatives = [ python ] ++ optional stdenv.isLinux utillinux;
-    self = nodePackages;
-    generated = ./node-packages.nix;
+  # To regenerate composition.nix, run generate.sh.
+  nodePackages = import ./composition.nix {
+    inherit pkgs system nodejs;
   };
-
-in nodePackages.buildNodePackage rec {
-  version = "git-2015-11-09";
-  name = "pump.io-${version}";
-
-  src = fetchFromGitHub {
-    owner = "e14n";
-    repo = "pump.io";
-    rev = "2f8d6b3518607ed02b594aee0db6ccacbe631b2d";
-    sha256 = "1xym3jzpxlni1n2i0ixwrnpkx5fbnd1p6sm1hf9n3w5m2lx6gdw5";
-  };
-
-  deps = (filter (v: nixType v == "derivation") (attrValues nodePackages));
-
-  buildInputs = [ makeWrapper ];
+in
+nodePackages.package.override (oldAttrs: {
+  buildInputs = oldAttrs.buildInputs ++ [ makeWrapper ];
 
   postInstall = ''
     for prog in pump pump-authorize pump-follow pump-post-note pump-register-app pump-register-user pump-stop-following; do
       wrapProgram "$out/bin/$prog" \
-        --set NODE_PATH "$out/lib/node_modules/pump.io/node_modules/" \
         --prefix PATH : ${graphicsmagick}/bin:$out/bin
     done
   '';
@@ -65,4 +50,4 @@ in nodePackages.buildNodePackage rec {
       * Experimenting with social software
     '';
   };
-}
+})

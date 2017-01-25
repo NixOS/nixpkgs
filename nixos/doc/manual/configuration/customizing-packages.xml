@@ -42,29 +42,30 @@ construction, so without them,
 elements.)</para>
 
 <para>Even greater customisation is possible using the function
-<varname>overrideDerivation</varname>.  While the
+<varname>overrideAttrs</varname>.  While the
 <varname>override</varname> mechanism above overrides the arguments of
-a package function, <varname>overrideDerivation</varname> allows
-changing the <emphasis>result</emphasis> of the function.  This
-permits changing any aspect of the package, such as the source code.
+a package function, <varname>overrideAttrs</varname> allows
+changing the <emphasis>attributes</emphasis> passed to <literal>mkDerivation</literal>.
+This permits changing any aspect of the package, such as the source code.
 For instance, if you want to override the source code of Emacs, you
 can say:
 
 <programlisting>
-environment.systemPackages =
-  [ (pkgs.lib.overrideDerivation pkgs.emacs (attrs: {
-      name = "emacs-25.0-pre";
-      src = /path/to/my/emacs/tree;
-    }))
-  ];
+environment.systemPackages = [
+  (pkgs.emacs.overrideAttrs (oldAttrs: {
+    name = "emacs-25.0-pre";
+    src = /path/to/my/emacs/tree;
+  }))
+];
 </programlisting>
 
-Here, <varname>overrideDerivation</varname> takes the Nix derivation
+Here, <varname>overrideAttrs</varname> takes the Nix derivation
 specified by <varname>pkgs.emacs</varname> and produces a new
 derivation in which the original’s <literal>name</literal> and
 <literal>src</literal> attribute have been replaced by the given
-values.  The original attributes are accessible via
-<varname>attrs</varname>.</para>
+values by re-calling <literal>stdenv.mkDerivation</literal>.
+The original attributes are accessible via the function argument,
+which is conventionally named <varname>oldAttrs</varname>.</para>
 
 <para>The overrides shown above are not global.  They do not affect
 the original package; other packages in Nixpkgs continue to depend on

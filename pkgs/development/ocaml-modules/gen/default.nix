@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, qtest, ounit }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, ounit }:
 
-let version = "0.3"; in
+let version = "0.4"; in
 
 stdenv.mkDerivation {
   name = "ocaml-gen-${version}";
@@ -9,10 +9,10 @@ stdenv.mkDerivation {
     owner = "c-cube";
     repo = "gen";
     rev = "${version}";
-    sha256 = "0xrnkcfa5q86ammf49j5hynw5563x5sa2mk7vqf7g097j1szif72";
+    sha256 = "041dga300fh1y6fi8y0fkri2qda406lf2dmbrgllazw3rp07zkzj";
   };
 
-  buildInputs = [ ocaml findlib qtest ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild qtest ounit ];
 
   createFindlibDestdir = true;
 

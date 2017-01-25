@@ -24,12 +24,11 @@ doNotDisplayTwice rec {
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bar = lemonbar;  # added 2015-01-16
   bar-xft = lemonbar-xft;  # added 2015-01-16
+  bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
-  buildbotSlave = buildbot-slave;  # added 2014-12-09
   bundler_HEAD = bundler; # added 2015-11-15
   checkbashism = checkbashisms; # added 2016-08-16
-  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
   cifs_utils = cifs-utils; # added 2016-08
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
@@ -48,9 +47,9 @@ doNotDisplayTwice rec {
   firefoxWrapper = firefox;           # 2015-09
   foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11
-  fuse_zip = fuse-zip; # added 2016-04-27
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
+  googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6
@@ -59,6 +58,7 @@ doNotDisplayTwice rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
+  keepassx2-http = keepassx-reboot; # added 2016-10-17
   keybase-go = keybase;  # added 2016-08-24
   letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
@@ -91,6 +91,7 @@ doNotDisplayTwice rec {
   rekonqWrapper = rekonq; # added 2015-01
   rssglx = rss-glx; #added 2015-03-25
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
+  rustUnstable = rustNightly; # added 2016-11-29
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
@@ -100,6 +101,7 @@ doNotDisplayTwice rec {
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  sshfsFuse = sshfs-fuse; # added 2016-09
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
@@ -114,4 +116,20 @@ doNotDisplayTwice rec {
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
   m3d-linux = m33-linux; # added 2016-08-13
-}
+
+  inherit (ocaml-ng) # added 2016-09-14
+    ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
+    ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
+    ocamlPackages_4_03
+    ocamlPackages_latest;
+} // (with ocaml-ng; { # added 2016-09-14
+  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
+  ocaml_3_10_0 = ocamlPackages_3_10_0.ocaml;
+  ocaml_3_11_2 = ocamlPackages_3_11_2.ocaml;
+  ocaml_3_12_1 = ocamlPackages_3_12_1.ocaml;
+  ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
+  ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
+  ocaml_4_02   = ocamlPackages_4_02.ocaml;
+  ocaml_4_03   = ocamlPackages_4_03.ocaml;
+  ocaml        = ocamlPackages.ocaml;
+})

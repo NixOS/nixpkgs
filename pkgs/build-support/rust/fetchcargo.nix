@@ -20,6 +20,6 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  impureEnvVars = [ "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" ];
+  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
   preferLocalBuild = true;
 }

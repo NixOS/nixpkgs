@@ -120,7 +120,7 @@ in
     systemd.services.lshd = {
       description = "GNU lshd SSH2 daemon";
 
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
 
       wantedBy = [ "multi-user.target" ];
 

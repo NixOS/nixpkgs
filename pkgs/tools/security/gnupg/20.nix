@@ -3,13 +3,13 @@
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, x11Support ? true
+, pinentry ? null, guiSupport ? true
 , openldap ? null, bzip2 ? null, libusb ? null, curl ? null
 }:
 
 with stdenv.lib;
 
-assert x11Support -> pinentry != null;
+assert guiSupport -> pinentry != null;
 
 stdenv.mkDerivation rec {
   name = "gnupg-2.0.30";
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     patch gl/stdint_.h < ${./clang.patch}
   '';
 
-  configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
+  pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
+  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
   postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
 

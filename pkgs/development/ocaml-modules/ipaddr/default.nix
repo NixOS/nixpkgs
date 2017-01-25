@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, sexplib}:
+{stdenv, buildOcaml, fetchurl, sexplib_p4}:
 
 buildOcaml rec {
   name = "ipaddr";
@@ -9,7 +9,7 @@ buildOcaml rec {
     sha256 = "7051013d8f58abff433187d70cd7ddd7a6b49a6fbe6cad1893f571f65b8ed3d0";
   };
 
-  propagatedBuildInputs = [ sexplib ];
+  propagatedBuildInputs = [ sexplib_p4 ];
 
   configurePhase = ''
    ocaml setup.ml -configure --prefix $out

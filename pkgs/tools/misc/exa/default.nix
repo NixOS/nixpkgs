@@ -6,6 +6,8 @@ buildRustPackage rec {
   name = "exa-${version}";
   version = "2016-04-20";
 
+  # NOTE: There is an impurity caused by `exa` depending on
+  # https://github.com/rust-datetime/zoneinfo-compiled.git
   depsSha256 = "0qsqkgc1wxigvskhaamgfp5pyc2kprsikhcfccysgs07w44nxkd0";
 
   src = fetchFromGitHub {
@@ -34,5 +36,6 @@ buildRustPackage rec {
     homepage = http://bsago.me/exa;
     license = licenses.mit;
     maintainer = [ maintainers.ehegnes ];
+    broken = true;
   };
 }

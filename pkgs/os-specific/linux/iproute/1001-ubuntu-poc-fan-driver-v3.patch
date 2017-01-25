@@ -111,9 +111,9 @@ Index: iproute2-4.1.1/ip/link_iptnl.c
 +		p = RTA_PAYLOAD(i);
 +		m = RTA_DATA(i);
 +		fprintf(f, "%s/%d:%s/%d ",
-+			rt_addr_n2a(AF_INET, p, &m->overlay, b1, INET_ADDRSTRLEN),
++			rt_addr_n2a_r(AF_INET, p, &m->overlay, b1, INET_ADDRSTRLEN),
 +			m->overlay_prefix,
-+			rt_addr_n2a(AF_INET, p, &m->underlay, b2, INET_ADDRSTRLEN),
++			rt_addr_n2a_r(AF_INET, p, &m->underlay, b2, INET_ADDRSTRLEN),
 +			m->underlay_prefix);
 +	}
 +}

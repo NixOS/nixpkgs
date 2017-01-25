@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, udev, valgrind }:
+{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.70";
+  name = "libdrm-2.4.74";
 
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "b17d4b39ed97ca0e4cffa0db06ff609e617bac94646ec38e8e0579d530540e7b";
+    sha256 = "d80dd5a76c401f4c8756dcccd999c63d7e0a3bad258d96a829055cfd86ef840b";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpthreadstubs libpciaccess ]
-    ++ stdenv.lib.optional stdenv.isLinux udev;
+  buildInputs = [ libpthreadstubs libpciaccess ];
+    # libdrm as of 2.4.70 does not actually do anything with udev.
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
 
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
   configureFlags = [ "--enable-freedreno" "--disable-valgrind" ]
-    ++ stdenv.lib.optional stdenv.isLinux "--enable-udev"
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://dri.freedesktop.org/libdrm/;
     description = "Library for accessing the kernel's Direct Rendering Manager";
     license = "bsd";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, exiv2, libxml2, gtk
+{ fetchurl, stdenv, pkgconfig, exiv2, libxml2, gtk2
 , libxslt, docbook_xsl, docbook_xml_dtd_42 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig exiv2 libxml2 gtk
+    pkgconfig exiv2 libxml2 gtk2
     libxslt docbook_xsl docbook_xml_dtd_42
   ];
 

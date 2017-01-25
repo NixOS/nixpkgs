@@ -105,7 +105,7 @@ in {
     systemd.services.mesos-slave = {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       environment.MESOS_CONTAINERIZERS = concatStringsSep "," containerizers;
       serviceConfig = {
         ExecStart = ''

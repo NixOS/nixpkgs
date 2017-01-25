@@ -1,24 +1,9 @@
-{ stdenv, lib, ruby, bundlerEnv, makeWrapper }:
+{ bundlerEnv, lib, ruby }:
 
-stdenv.mkDerivation rec {
-  name = "foreman-${env.gems.foreman.version}";
-
-  env = bundlerEnv {
-    inherit ruby;
-    name = "${name}-gems";
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
-  };
-
-  phases = ["installPhase"];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/foreman $out/bin/foreman
-  '';
+bundlerEnv {
+  inherit ruby;
+  pname = "foreman";
+  gemdir = ./.;
 
   meta = with lib; {
     description = "Process manager for applications with multiple components";

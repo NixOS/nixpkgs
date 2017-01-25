@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   baseName = "ipmiutil";
-  version = "2.9.9";
+  version = "3.0.1";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${baseName}/${name}.tar.gz";
-    sha256 = "1xi5d49zmcczya4iq662wkx39slrk3d4p2dzpfjcc0m0hs1y1b5y";
+    sha256 = "179hvarw0mk3j1z4102q4692q4mx06y259llr891by0pri0bsb3n";
   };
 
   buildInputs = [ openssl ];

@@ -84,7 +84,7 @@ let cfg = config.system.autoUpgrade; in
         ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
       '';
 
-      startAt = optionalString cfg.enable cfg.dates;
+      startAt = optional cfg.enable cfg.dates;
     };
 
   };

@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, ruby, zfs }:
 
-let version = "0.3.3"; in
+let version = "0.3.6"; in
 stdenv.mkDerivation rec {
   name = "zfstools-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1gj6jksc9crmjvhsx8yp3l06b5vcm415l0bmdjcil7jjbfhwwp2k";
+    sha256 = "16lvw3xbmxp2pr8nixqn7lf4504zaaxvbbdnjkv4dggwd4lsdjyg";
     rev = "v${version}";
     repo = "zfstools";
     owner = "bdrewery";

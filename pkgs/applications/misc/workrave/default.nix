@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , autoconf, automake, gettext, intltool, libtool, pkgconfig
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
-, glib, glibmm, gtk, gtkmm, atk, pango, pangomm, cairo, cairomm
+, glib, glibmm, gtkmm2, atk, pango, pangomm, cairo, cairomm
 , dbus, dbus_glib, GConf, gconfmm, gdome2, gstreamer, libsigcxx }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libICE libSM libXScrnSaver libXtst cheetah
-    glib glibmm gtk gtkmm atk pango pangomm cairo cairomm
+    glib glibmm gtkmm2 atk pango pangomm cairo cairomm
     dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx
   ];
 

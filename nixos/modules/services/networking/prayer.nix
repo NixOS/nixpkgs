@@ -56,6 +56,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "" ;
         description = ''
           Extra configuration. Contents will be added verbatim to the configuration file.

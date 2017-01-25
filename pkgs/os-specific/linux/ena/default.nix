@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
+    broken = kernel.features.chromiumos or false;
   };
 }

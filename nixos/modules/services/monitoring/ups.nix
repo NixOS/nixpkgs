@@ -169,8 +169,7 @@ in
           monitoring directly.  These are usually attached to serial ports,
           but USB devices are also supported.
         '';
-        type = types.attrsOf types.optionSet;
-        options = [ upsOptions ];
+        type = with types; attrsOf (submodule upsOptions);
       };
 
     };
@@ -182,7 +181,8 @@ in
 
     systemd.services.upsmon = {
       description = "Uninterruptible Power Supplies (Monitor)";
-      wantedBy = [ "ip-up.target" ];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig.Type = "forking";
       script = "${pkgs.nut}/sbin/upsmon";
       environment.NUT_CONFPATH = "/etc/nut/";
@@ -191,8 +191,8 @@ in
 
     systemd.services.upsd = {
       description = "Uninterruptible Power Supplies (Daemon)";
+      after = [ "network.target" "upsmon.service" ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" "upsmon.service" ];
       serviceConfig.Type = "forking";
       # TODO: replace 'root' by another username.
       script = "${pkgs.nut}/sbin/upsd -u root";
@@ -202,8 +202,8 @@ in
 
     systemd.services.upsdrv = {
       description = "Uninterruptible Power Supplies (Register all UPS)";
-      wantedBy = [ "multi-user.target" ];
       after = [ "upsd.service" ];
+      wantedBy = [ "multi-user.target" ];
       # TODO: replace 'root' by another username.
       script = ''${pkgs.nut}/bin/upsdrvctl -u root start'';
       serviceConfig = {

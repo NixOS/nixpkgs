@@ -25,8 +25,8 @@ with lib;
     systemd.services.toxvpn = {
       description = "toxvpn daemon";
 
-      requires = [ "network-online.target" ]; # consider replacing by NetworkManager-wait-online.service
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       preStart = ''
         mkdir -p /run/toxvpn || true

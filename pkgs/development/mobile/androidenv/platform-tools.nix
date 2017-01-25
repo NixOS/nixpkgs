@@ -1,16 +1,16 @@
 {stdenv, zlib, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  version = "24";
+  version = "25.0.1";
   name = "android-platform-tools-r${version}";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "https://dl.google.com/android/repository/platform-tools_r${version}-linux.zip";
-      sha1 = "qabpsfhm7shvyjy6amdl7b3d41n64zsr";
+      sha256 = "0r8ix3jjqpk6wyxm8f6az9r4z5a1lnb3b9hzh8ay4ayidwhn8isx";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "https://dl.google.com/android/repository/platform-tools_r${version}-macosx.zip";
-      sha1 = "5s808wby36xxkfmrj4va9dnc0rwsz2gh";
+      sha256 = "18pzwpr6fbxlw782j65clwz9kvdgvb04jpr2z12bbwyd8wqc4yln";
     }
     else throw "System ${stdenv.system} not supported!";
 

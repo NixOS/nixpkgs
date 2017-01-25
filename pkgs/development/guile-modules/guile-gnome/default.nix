@@ -1,5 +1,5 @@
 { fetchurl, stdenv, guile, guile_lib, gwrap
-, pkgconfig, gconf, glib, gnome_vfs, gtk
+, pkgconfig, gconf, glib, gnome_vfs, gtk2
 , libglade, libgnome, libgnomecanvas, libgnomeui
 , pango, guileCairo, autoconf, automake, texinfo }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     gconf
     glib
     gnome_vfs
-    gtk
+    gtk2
     libglade
     libgnome
     libgnomecanvas

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk, gsl
+{ stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk2, gsl
 , pkgconfig, gtksourceview, pango, gettext, libglade
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vri2pzvmm38qaihfvwlry30f40lcnps4blg59ixic4q20ldxf5d";
   };
 
-  buildInputs = [ libxml2 readline zlib perl cairo gtk gsl pkgconfig
+  buildInputs = [ libxml2 readline zlib perl cairo gtk2 gsl pkgconfig
     gtksourceview pango gettext libglade ];
 
   doCheck = false;

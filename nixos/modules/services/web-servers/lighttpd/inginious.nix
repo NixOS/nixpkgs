@@ -191,9 +191,8 @@ in
         virtualisation.docker = {
           enable = true;
           # We need docker to listen on port 2375.
-          extraOptions = "-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock";
+          listenOptions = ["127.0.0.1:2375" "/var/run/docker.sock"];
           storageDriver = mkDefault "overlay";
-          socketActivation = false;
         };
 
         users.extraUsers."lighttpd".extraGroups = [ "docker" ];

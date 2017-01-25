@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline, perl, python
+{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline, perl, python2
 , utillinux, check, enableStatic ? false, hurd ? null }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (gettext != null) gettext
     ++ stdenv.lib.optional (devicemapper != null) devicemapper
     ++ stdenv.lib.optional (hurd != null) hurd
-    ++ stdenv.lib.optionals doCheck [ check perl python ];
+    ++ stdenv.lib.optionals doCheck [ check perl python2 ];
 
   configureFlags =
        (if (readline != null)
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 
+  # Tests were previously failing due to Hydra running builds as uid 0.
+  # That should hopefully be fixed now.
   doCheck = true;
 
   preCheck =

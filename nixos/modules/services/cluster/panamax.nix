@@ -46,7 +46,7 @@ in {
 
     fleetctlEndpoint = mkOption {
       type = types.str;
-      default = "http://127.0.0.1:4001";
+      default = "http://127.0.0.1:2379";
       description = ''
         Panamax fleetctl endpoint.
       '';

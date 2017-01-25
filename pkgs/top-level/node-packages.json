@@ -183,6 +183,7 @@
 , "wscat"
 , "wu"
 , "x509"
+, "yarn"
 , { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }
 , { "mongoose": "3.6.x" }
 , { "node-uptime": "https://github.com/fzaninotto/uptime/tarball/1c65756575f90f563a752e2a22892ba2981c79b7" }

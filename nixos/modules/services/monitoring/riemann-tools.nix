@@ -50,6 +50,7 @@ in {
 
     systemd.services.riemann-health = {
       wantedBy = [ "multi-user.target" ];
+      path = [ procps ];
       serviceConfig = {
         User = "riemanntools";
         ExecStart = "${healthLauncher}/bin/riemann-health";

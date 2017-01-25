@@ -94,6 +94,21 @@ sub hasCPUFeature {
 my $cpus = scalar (grep {/^processor\s*:/} (split '\n', $cpuinfo));
 
 
+# Determine CPU governor to use
+if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
+    my $governors = read_file("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors");
+    # ondemand governor is not available on sandy bridge or later Intel CPUs
+    my @desired_governors = ("ondemand", "powersave");
+    my $e;
+
+    foreach $e (@desired_governors) {
+        if (index($governors, $e) != -1) {
+            last if (push @attrs, "powerManagement.cpuFreqGovernor = \"$e\";");
+        }
+    }
+}
+
+
 # Virtualization support?
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
@@ -527,8 +542,11 @@ EOF
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
+  # boot.loader.grub.efiSupport = true;
+  # boot.loader.grub.efiInstallAsRemovable = true;
+  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
-  # boot.loader.grub.device = "/dev/sda";
+  # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 EOF
         }
 

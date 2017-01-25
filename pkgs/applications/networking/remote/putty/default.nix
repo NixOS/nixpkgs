@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut, libtool }:
+{ stdenv, fetchurl, ncurses, gtk2, pkgconfig, autoconf, automake, perl, halibut, libtool }:
 
 stdenv.mkDerivation rec {
   version = "0.67";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cd unix
   '';
 
-  buildInputs = [ gtk ncurses pkgconfig autoconf automake perl halibut libtool ];
+  buildInputs = [ gtk2 ncurses pkgconfig autoconf automake perl halibut libtool ];
 
   meta = with stdenv.lib; {
     description = "A Free Telnet/SSH Client";

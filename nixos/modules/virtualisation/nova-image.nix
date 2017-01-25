@@ -31,7 +31,7 @@ with lib;
 
   # Allow root logins
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "without-password";
+  services.openssh.permitRootLogin = "prohibit-password";
 
   # Put /tmp and /var on /ephemeral0, which has a lot more space.
   # Unfortunately we can't do this with the `fileSystems' option

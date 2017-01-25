@@ -23,20 +23,11 @@ let
     sha256 = "0r5pfbjbmdj46h20jm3iqmy969qd27ajyf0phjhgykv6j0cqjlgd";
   };
 
-  imagick = if isPhp7 then imagick34 else imagick31;
-
-  imagick31 = assert !isPhp7; buildPecl {
-    name = "imagick-3.1.2";
-    sha256 = "14vclf2pqcgf3w8nzqbdw0b9v30q898344c84jdbw2sa62n6k1sj";
+  imagick = buildPecl {
+    name = "imagick-3.4.3RC1";
+    sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
     configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
-    buildInputs = [ pkgs.pkgconfig ];
-  };
-
-  imagick34 = buildPecl {
-    name = "imagick-3.4.0RC4";
-    sha256 = "0fdkzdv3r8sm6y1x11kp3rxsimq6zf15xvi0mhn57svmnan4zh0i";
-    configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
-    buildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
   # No support for PHP 7 yet
@@ -81,6 +72,19 @@ let
     buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
   };
 
+  # No support for PHP 7 yet (and probably never will be)
+  spidermonkey = assert !isPhp7; buildPecl rec {
+    name = "spidermonkey-1.0.0";
+
+    sha256 = "1ywrsp90w6rlgq3v2vmvp2zvvykkgqqasab7h9bf3vgvgv3qasbg";
+
+    configureFlags = [
+      "--with-spidermonkey=${pkgs.spidermonkey_1_8_5}"
+    ];
+
+    buildInputs = [ pkgs.spidermonkey_1_8_5 ];
+  };
+
   xdebug = if isPhp7 then xdebug24 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
@@ -108,32 +112,13 @@ let
     sha256 = "0qpfbkfy4wlnsfq4vc4q5wvaia83l89ky33s08gqrcfp3p1adn88";
   };
 
-  zmq = if isPhp7 then zmqPhp7 else zmq11;
+  zmq = buildPecl {
+    name = "zmq-1.1.3";
 
-  zmq11 = assert !isPhp7; buildPecl {
-    name = "zmq-1.1.2";
-
-    sha256 = "0ccz73p8pkda3y9p9qbr3m19m0yrf7k2bvqgbaly3ibgh9bazc69";
+    sha256 = "1kj487vllqj9720vlhfsmv32hs2dy2agp6176mav6ldx31c3g4n4";
 
     configureFlags = [
-      "--with-zmq=${pkgs.zeromq2}"
-    ];
-
-    buildInputs = [ pkgs.pkgconfig ];
-  };
-
-  # Not released yet
-  zmqPhp7 = assert isPhp7; buildPecl rec {
-    name = "zmq-php7";
-
-    src = fetchgit {
-      url = "https://github.com/mkoppanen/php-zmq";
-      rev = "94d2b87d195f870775b153b42c29f30da049f4db";
-      sha256 = "51a25b1029800d8abe03c5c08c50d6aee941c95c741dc22d2f853052511f4296";
-    };
-
-    configureFlags = [
-      "--with-zmq=${pkgs.zeromq2}"
+      "--with-zmq=${pkgs.zeromq}"
     ];
 
     buildInputs = [ pkgs.pkgconfig ];
@@ -205,6 +190,47 @@ let
       rev = "4a37e47d0256581ce2f7a3b15b5bb932add09f36";
       sha256 = "1qm2ifa0zf95l1g967iiabmja17srpwz73lfci7z13ffdw1ayhfd";
     };
+  };
+
+  v8 = assert isPhp7; buildPecl rec {
+    version = "0.1.0";
+    name = "v8-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/pinepain/php-v8/archive/v${version}.tar.gz";
+      sha256 = "18smnxd34b486f5n8j0wk9z7r5x1w84v89mgf76z0bn7gxdxl0xj";
+    };
+
+    buildInputs = [ pkgs.v8 ];
+    configureFlags = [ "--with-v8=${pkgs.v8}" ];
+
+    patches = [
+      (builtins.toFile "link-libv8_libbase.patch" ''
+        Index: php-v8/config.m4
+        ===================================================================
+        --- php-v8.orig/config.m4
+        +++ php-v8/config.m4
+        @@ -69,7 +69,7 @@ if test "$PHP_V8" != "no"; then
+               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
+               ;;
+             * )
+        -      static_link_extra="libv8_libplatform.a"
+        +      static_link_extra="libv8_libplatform.a libv8_libbase.a"
+               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
+               ;;
+           esac
+	''
+      )];
+  };
+
+  v8js = assert isPhp7; buildPecl rec {
+    version = "1.3.2";
+    name = "v8js-${version}";
+
+    sha256 = "1x7gxi70zgj3vaxs89nfbnwlqcxrps1inlyfzz66pbzdbfwvc8z8";
+
+    buildInputs = [ pkgs.v8 ];
+    configureFlags = [ "--with-v8js=${pkgs.v8}" ];
   };
 
   composer = pkgs.stdenv.mkDerivation rec {

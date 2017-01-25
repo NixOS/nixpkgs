@@ -3,10 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="zpaqd";
-    version="7.08";
+    version="715";
     name="${baseName}-${version}";
-    url="http://mattmahoney.net/dc/zpaqd708.zip";
-    sha256="18mkfz7v73rp5l712107m3x5a3v6y0vjf47a6s3di8x416kbcp2a";
+    hash="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
+    url="http://mattmahoney.net/dc/zpaqd715.zip";
+    sha256="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
   };
   isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
   isx86 = stdenv.isi686 || stdenv.isx86_64;

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, python, libxslt, texlive
+{ stdenv, fetchurl, python2, libxslt, texlive
 , enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
 
 , tex ? texlive.combine { # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar
       fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
-      multirow overpic pdfpages rotating stmaryrd subfigure titlesec wasysym
+      multirow overpic pdfpages graphics stmaryrd subfigure titlesec wasysym
       # pkgs below don't seem requested by dblatex, but our manual fails without them
       ec zapfding symbol eepic times rsfs cs tex4ht courier helvetic ly1;
   }
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bkjgrn03dy5c7438s429wnv6z5ynxkr4pbhp2z49kynskgkzkjr";
   };
 
-  buildInputs = [ python libxslt tex ]
+  buildInputs = [ python2 libxslt tex ]
     ++ stdenv.lib.optionals enableAllFeatures [ imagemagick transfig ];
 
   # TODO: dblatex tries to execute texindy command, but nixpkgs doesn't have
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    python ./setup.py install --prefix="$out" --use-python-path --verbose
+    ${python2.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
   '';
 
   passthru = { inherit tex; };

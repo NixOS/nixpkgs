@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
 
 let version = "0.3"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "19znk5w0qiw3wij4n6w3h5bcr221yy57jf815fr8k9m8kin710g3";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   createFindlibDestdir = true;
 

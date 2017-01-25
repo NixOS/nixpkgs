@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, libxml2, libxslt, perl, perlPackages, gconf, guile
-, intltool, glib, gtk, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
+, intltool, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
 , webkit, glibcLocales, gsettings_desktop_schemas, makeWrapper, dconf, file
 , gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
 , pango, gdk_pixbuf
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     intltool pkgconfig libxml2 libxslt glibcLocales file gettext swig enchant
     bzip2 isocodes
     # glib, gtk...
-    glib gtk goffice webkit
+    glib gtk2 goffice webkit
     # gnome...
     dconf gconf libgnomecanvas gsettings_desktop_schemas
     # financial
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   # The following settings fix failures in the test suite. It's not required otherwise.
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ guile glib gtk pango gdk_pixbuf ];
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ guile glib gtk2 pango gdk_pixbuf ];
   preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
   doCheck = true;
 

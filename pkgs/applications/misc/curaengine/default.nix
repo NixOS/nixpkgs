@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 let
-  version = "15.04";
+  version = "15.04.6";
 in
 stdenv.mkDerivation {
   name = "curaengine-${version}";
 
   src = fetchurl {
     url = "https://github.com/Ultimaker/CuraEngine/archive/${version}.tar.gz";
-    sha256 = "0rgrsyi7951fsv3lzprlzrg55jf6pbdjfql85dylwmg9nc4y8xym";
+    sha256 = "1cd4dikzvqyj5g80rqwymvh4nwm76vsf78clb37kj6q0fig3qbjg";
   };
 
   postPatch = ''

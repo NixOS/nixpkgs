@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   patches = [ ./blitz-gcc47.patch ./blitz-testsuite-stencil-et.patch ];
 
   buildInputs = [ pkgconfig gfortran texinfo ]
-    ++ optional (boost != null) [ boost.out ];
+    ++ optional (boost != null) boost;
 
   configureFlags =
     [ "--enable-shared"

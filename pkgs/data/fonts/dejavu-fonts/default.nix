@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     # See http://dejavu-fonts.org/wiki/License for details
     license = stdenv.lib.licenses.free;
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

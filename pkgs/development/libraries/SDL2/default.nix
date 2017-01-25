@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jqp46mxxbh9lhpx1ih6sp93k752j2smhpc0ad0q4cb3px0famfs";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [ ./find-headers.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -61,6 +63,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm $out/lib/*.a
+    moveToOutput bin/sdl2-config "$dev"
   '';
 
   setupHook = ./setup-hook.sh;

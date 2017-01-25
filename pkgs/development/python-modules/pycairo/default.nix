@@ -1,9 +1,9 @@
-{ lib, fetchurl, fetchpatch, python, mkPythonDerivation, pkgconfig, cairo, xlibsWrapper, isPyPy, isPy35 }:
+{ lib, fetchurl, fetchpatch, python, mkPythonDerivation, pkgconfig, cairo, xlibsWrapper, isPyPy, isPy35, isPy3k }:
 
 if (isPyPy) then throw "pycairo not supported for interpreter ${python.executable}" else mkPythonDerivation rec {
   version = "1.10.0";
-  name = "${python.libPrefix}-pycairo-${version}";
-  src = if python.is_py3k or false
+  name = "pycairo-${version}";
+  src = if isPy3k
     then fetchurl {
       url = "http://cairographics.org/releases/pycairo-${version}.tar.bz2";
       sha256 = "1gjkf8x6hyx1skq3hhwcbvwifxvrf9qxis5vx8x5igmmgs70g94s";

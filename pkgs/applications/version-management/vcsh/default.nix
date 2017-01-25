@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "1.20141026-1";
+  version = "1.20151229-1";
   name = "vcsh-${version}";
 
   src = fetchurl {
     url = "https://github.com/RichiH/vcsh/archive/v${version}.tar.gz";
-    sha256 = "1wgrmkygsbmk8zj88kjx9aim2fc44hh2d1a83h4mn2j714pffh33";
+    sha256 = "0wgg5zz11ql2v37vby5gbqvnbs80g1q83b9qbvm8d2pqx8bsb0kn";
   };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];

@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication {
     sha256 = "1m8gqj35kwrn30rqwd488sgakaisz22xa5v9llvz6gwf4f7ps0a9";
   };
 
-  propagatedBuildInputs = [ python.modules.sqlite3 gamin ]
+  propagatedBuildInputs = [ gamin ]
     ++ (stdenv.lib.optional stdenv.isLinux pythonPackages.systemd);
 
   preConfigure = ''

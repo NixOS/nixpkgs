@@ -33,7 +33,7 @@ in
 
     boot.loader.raspberryPi.version = mkOption {
       default = 2;
-      type = types.int;
+      type = types.enum [ 1 2 ];
       description = ''
       '';
     };
@@ -44,10 +44,5 @@ in
     system.build.installBootLoader = builder;
     system.boot.loader.id = "raspberrypi";
     system.boot.loader.kernelFile = platform.kernelTarget;
-    assertions = [
-      { assertion = (cfg.version == 1 || cfg.version == 2);
-        message = "loader.raspberryPi.version should be 1 or 2";
-      }
-    ];
   };
 }

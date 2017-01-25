@@ -4,6 +4,7 @@
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
+, buildInputs ? []
 , ...}:
 
 assert guileBindings -> guile != null;
@@ -17,8 +18,8 @@ stdenv.mkDerivation {
 
   inherit src patches;
 
-  outputs = [ "bin" "dev" "out" "man" "docdev" ];
-  outputInfo = "docdev";
+  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputInfo = "devdoc";
 
   postPatch = lib.optionalString (lib.versionAtLeast version "3.4") ''
     sed '2iecho "name constraints tests skipped due to datefudge problems"\nexit 0' \
@@ -34,18 +35,15 @@ stdenv.mkDerivation {
   ] ++ lib.optional guileBindings
     [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
 
-  # Build of the Guile bindings is not parallel-safe.  See
-  # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
-  # for the actual fix.  Also an apparent race in the generation of
-  # systemkey-args.h.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
     ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
-    ++ lib.optional guileBindings guile;
+    ++ lib.optional guileBindings guile
+    ++ buildInputs;
 
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
 
@@ -79,7 +77,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/gnutls/;
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ eelco wkennington ];
+    maintainers = with maintainers; [ eelco wkennington fpletz ];
     platforms = platforms.all;
   };
 }

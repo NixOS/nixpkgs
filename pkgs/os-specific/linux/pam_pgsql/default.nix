@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, postgresql, libgcrypt, pam }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.3.2";
   name = "pam_pgsql-${version}";
+  version = "0.7.3.2";
 
   src = fetchFromGitHub {
     owner = "pam-pgsql";

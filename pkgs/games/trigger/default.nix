@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     sed s,/usr/local,$out, -i bin/*defs
 
     cd src
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL.dev}/include/SDL"
     export makeFlags="$makeFlags prefix=$out"
   '';
 

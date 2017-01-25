@@ -42,7 +42,7 @@ in {
     systemd.services.peerflix = {
       description = "Peerflix Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       environment.HOME = cfg.stateDir;
 
       preStart = ''

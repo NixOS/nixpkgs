@@ -2,14 +2,15 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cyrus-sasl-2.1.26${optionalString (kerberos == null) "-without-kerberos"}";
+  name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
+  version = "2.5.10";
 
   src = fetchurl {
     url = "ftp://ftp.cyrusimap.org/cyrus-sasl/${name}.tar.gz";
     sha256 = "1hvvbcsg21nlncbgs0cgn3iwlnb3vannzwsp6rwvnn9ba4v53g4g";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "docdev" ];
+  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   buildInputs =
     [ openssl db gettext kerberos ]

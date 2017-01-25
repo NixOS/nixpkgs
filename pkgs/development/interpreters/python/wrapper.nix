@@ -8,7 +8,7 @@ let
   recursivePthLoader = import ../../python-modules/recursive-pth-loader/default.nix { stdenv = stdenv; python = python; };
   env = (
   let
-    paths = stdenv.lib.filter (x : x ? pythonPath) (stdenv.lib.closePropagation extraLibs) ++ [ python recursivePthLoader ];
+    paths = stdenv.lib.closePropagation (extraLibs ++ [ python recursivePthLoader ] ) ;
   in buildEnv {
     name = "${python.name}-env";
 

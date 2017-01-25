@@ -86,7 +86,7 @@ in
 
       hwMode = mkOption {
         default = "g";
-        type = types.string;
+        type = types.enum [ "a" "b" "g" ];
         description = ''
           Operation mode.
           (a = IEEE 802.11a, b = IEEE 802.11b, g = IEEE 802.11g).
@@ -140,7 +140,7 @@ in
           ieee80211n=1
           ht_capab=[HT40-][SHORT-GI-40][DSSS_CCK-40]
           '';
-        type = types.string;
+        type = types.lines;
         description = "Extra configuration options to put in hostapd.conf.";
       };
     };
@@ -152,9 +152,6 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = (cfg.hwMode == "a" || cfg.hwMode == "b" || cfg.hwMode == "g");
-        message = "hwMode must be a/b/g";
-      }
       { assertion = (cfg.channel >= 1 && cfg.channel <= 13);
         message = "channel must be between 1 and 13";
       }];

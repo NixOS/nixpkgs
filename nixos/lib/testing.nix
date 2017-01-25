@@ -29,7 +29,7 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu_kvm vde2 netpbm coreutils ]}" \
+          --prefix PATH : "${lib.makeBinPath [ qemu vde2 netpbm coreutils ]}" \
           --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
       '';
   };
@@ -93,7 +93,7 @@ rec {
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      ocrProg = tesseract.override { enableLanguages = [ "eng" ]; };
+      ocrProg = tesseract;
 
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
@@ -157,9 +157,7 @@ rec {
         ${coreutils}/bin/mkdir -p $TMPDIR
         cd $TMPDIR
 
-        $origBuilder $origArgs
-
-        exit $?
+        exec $origBuilder $origArgs
       '';
 
       testScript = ''
@@ -172,9 +170,22 @@ rec {
       '';
 
       vmRunCommand = writeText "vm-run" ''
+        xchg=vm-state-client/xchg
         ${coreutils}/bin/mkdir $out
-        ${coreutils}/bin/mkdir -p vm-state-client/xchg
-        export > vm-state-client/xchg/saved-env
+        ${coreutils}/bin/mkdir -p $xchg
+
+        for i in $passAsFile; do
+          i2=''${i}Path
+          _basename=$(${coreutils}/bin/basename ''${!i2})
+          ${coreutils}/bin/cp ''${!i2} $xchg/$_basename
+          eval $i2=/tmp/xchg/$_basename
+          ${coreutils}/bin/ls -la $xchg
+        done
+
+        unset i i2 _basename
+        export | ${gnugrep}/bin/grep -v '^xchg=' > $xchg/saved-env
+        unset xchg
+
         export tests='${testScript}'
         ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */

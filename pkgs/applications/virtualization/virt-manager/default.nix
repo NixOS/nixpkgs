@@ -20,7 +20,7 @@ buildPythonApplication rec {
   propagatedBuildInputs =
     [ eventlet greenlet gflags netaddr carrot routes
       PasteDeploy m2crypto ipy twisted
-      distutils_extra simplejson readline glanceclient cheetah lockfile httplib2
+      distutils_extra simplejson glanceclient cheetah lockfile httplib2
       urlgrabber virtinst pyGtkGlade dbus-python gnome_python pygobject3
       libvirt libxml2Python ipaddr vte libosinfo gobjectIntrospection gtk3 mox
       gtkvnc libvirt-glib glib gsettings_desktop_schemas gnome3.defaultIconTheme

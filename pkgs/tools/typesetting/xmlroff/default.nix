@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libxml2, libxslt, popt, perl
-, glib, pango, pangoxsl, gtk, libtool, autoconf, automake }:
+, glib, pango, pangoxsl, gtk2, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   name = "xmlroff-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     glib
     pango
     pangoxsl
-    gtk
+    gtk2
     popt
   ];
 

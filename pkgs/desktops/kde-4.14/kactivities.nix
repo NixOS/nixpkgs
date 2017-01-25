@@ -7,6 +7,12 @@ kde {
     sha256 = "12l9brpq8mr9hqqmnlz9xfsfr8ry6283b32nfqfx0p3f7w19vjy7";
   };
 
+  outputs = [ "out" "dev" ];
+
+  outputInclude = "out";
+
+  setOutputFlags = false;
+
   propagatedBuildInputs = [ kdelibs nepomuk_core ];
 
   meta = {

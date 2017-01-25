@@ -1,8 +1,8 @@
 { stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl
 , libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2
-, lvm2, utillinux, procps, texinfo, perl, pythonPackages
+, lvm2, utillinux, procps, texinfo, perl, python2Packages
 , glib, bridge-utils, xorg, pixman, iproute, udev, bison
-, flex, cmake, ocaml, ocamlPackages, figlet, libaio, yajl
+, flex, cmake, ocamlPackages, figlet, libaio, yajl
 , checkpolicy, transfig, glusterfs, acl, fetchgit, xz, spice
 , spice_protocol, usbredir, alsaLib, quilt
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
@@ -38,15 +38,13 @@ stdenv.mkDerivation {
   buildInputs =
     [ which zlib pkgconfig SDL openssl libuuid gettext ncurses
       dev86 iasl pciutils bzip2 xz texinfo perl yajl
-      pythonPackages.python pythonPackages.wrapPython
+      python2Packages.python python2Packages.wrapPython
       glib bridge-utils pixman iproute udev bison xorg.libX11
-      flex ocaml ocamlPackages.findlib figlet libaio
-      checkpolicy pythonPackages.markdown transfig
+      flex ocamlPackages.ocaml ocamlPackages.findlib figlet libaio
+      checkpolicy python2Packages.markdown transfig
       glusterfs acl cmake spice spice_protocol usbredir
       alsaLib quilt
     ];
-
-  pythonPath = [ pythonPackages.curses ];
 
   hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 

@@ -92,12 +92,16 @@ in
 
     users.extraGroups.gdm.gid = config.ids.gids.gdm;
 
+    # GDM needs different xserverArgs, presumable because using wayland by default.
+    services.xserver.tty = null;
+    services.xserver.display = null;
+
     services.xserver.displayManager.job =
       {
         environment = {
-          GDM_X_SERVER = "${cfg.xserverBin} ${cfg.xserverArgs}";
+          GDM_X_SERVER_EXTRA_ARGS = toString
+            (filter (arg: arg != "-terminate") cfg.xserverArgs);
           GDM_SESSIONS_DIR = "${cfg.session.desktops}";
-          XDG_CONFIG_DIRS = "${gnome3.gnome_settings_daemon}/etc/xdg";
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${config.system.path}/share/icons";
         };
@@ -108,9 +112,11 @@ in
     systemd.services.display-manager.wants = [ "systemd-machined.service" ];
     systemd.services.display-manager.after = [ "systemd-machined.service" ];
 
-    systemd.services.display-manager.path = [ gnome3.gnome_shell gnome3.caribou pkgs.xorg.xhost pkgs.dbus_tools ];
+    systemd.services.display-manager.path = [ gnome3.gnome_session ];
 
     services.dbus.packages = [ gdm ];
+
+    systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
     programs.dconf.profiles.gdm = "${gdm}/share/dconf/profile/gdm";
 

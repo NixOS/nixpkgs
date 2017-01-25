@@ -9,11 +9,19 @@
 
 let
   commonTargetPkgs = pkgs: with pkgs;
-    let primus2 =
-      if newStdcpp then primus else primus.override {
+    let
+      primus2 = if newStdcpp then primus else primus.override {
         stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
         stdenv_i686 = overrideInStdenv pkgsi686Linux.stdenv [ useOldCXXAbi ];
       };
+      tzdir = "${pkgs.tzdata}/share/zoneinfo";
+      # I'm not sure if this is the best way to add things like this
+      # to an FHSUserEnv
+      etc-zoneinfo = pkgs.runCommand "zoneinfo" {} ''
+        mkdir -p $out/etc
+        ln -s ${tzdir} $out/etc/zoneinfo
+        ln -s ${tzdir}/UTC $out/etc/localtime
+      '';
     in [
       steamPackages.steam-fonts
       # Errors in output without those
@@ -26,6 +34,8 @@ let
       perl
       # Open URLs
       xdg_utils
+      # Zoneinfo
+      etc-zoneinfo
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus2;
 
@@ -51,6 +61,8 @@ in buildFHSUserEnv rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm
+    mono
+    xorg.xkeyboardconfig
 
     (steamPackages.steam-runtime-wrapped.override {
       inherit nativeOnly runtimeOnly newStdcpp;
@@ -74,6 +86,7 @@ in buildFHSUserEnv rec {
 
   profile = ''
     export STEAM_RUNTIME=/steamrt
+    export TZDIR=/etc/zoneinfo
   '';
 
   runScript = "steam";

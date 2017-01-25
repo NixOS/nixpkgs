@@ -59,8 +59,12 @@ in {
       description = "mjpg-streamer webcam streamer";
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig.User = cfg.user;
-      serviceConfig.Group = cfg.group;
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        Restart = "on-failure";
+        RestartSec = 1;
+      };
 
       script = ''
         IPLUGIN="${cfg.inputPlugin}"

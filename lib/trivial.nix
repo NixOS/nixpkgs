@@ -53,6 +53,31 @@ rec {
   # argument, but it's nice this way if several uses of `extends` are cascaded.
   extends = f: rattrs: self: let super = rattrs self; in super // f self super;
 
+  # Create an overridable, recursive attribute set. For example:
+  #
+  #     nix-repl> obj = makeExtensible (self: { })
+  #
+  #     nix-repl> obj
+  #     { __unfix__ = «lambda»; extend = «lambda»; }
+  #
+  #     nix-repl> obj = obj.extend (self: super: { foo = "foo"; })
+  #
+  #     nix-repl> obj
+  #     { __unfix__ = «lambda»; extend = «lambda»; foo = "foo"; }
+  #
+  #     nix-repl> obj = obj.extend (self: super: { foo = super.foo + " + "; bar = "bar"; foobar = self.foo + self.bar; })
+  #
+  #     nix-repl> obj
+  #     { __unfix__ = «lambda»; bar = "bar"; extend = «lambda»; foo = "foo + "; foobar = "foo + bar"; }
+  makeExtensible = makeExtensibleWithCustomName "extend";
+
+  # Same as `makeExtensible` but the name of the extending attribute is
+  # customized.
+  makeExtensibleWithCustomName = extenderName: rattrs:
+    fix' rattrs // {
+      ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
+   };
+
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
 

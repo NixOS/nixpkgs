@@ -21,7 +21,7 @@ plasmaPackage {
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui libinput libICE libSM
     plasma-framework qtdeclarative qtmultimedia qtscript qtx11extras udev
-    wayland xcb-util-cursor
+    wayland xcb-util-cursor xwayland
   ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   postPatch = ''

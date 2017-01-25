@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = stdenv.lib.optionalString stdenv.isDarwin ''
     ln -s /usr/bin/xcodebuild $TMPDIR
+    ln -s /usr/bin/libtool $TMPDIR
     export PATH=$TMPDIR:$PATH
   '' + ''
     PYTHONPATH="tools/generate_shim_headers:$PYTHONPATH" \
@@ -57,8 +58,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -vD out/Release/d8 "$out/bin/d8"
-    ${if stdenv.system == "x86_64-darwin" then ''
-    install -vD out/Release/lib.target/libv8.dylib "$out/lib/libv8.dylib"
+    ${if stdenv.isDarwin then ''
+    install -vD out/Release/libv8.dylib "$out/lib/libv8.dylib"
     '' else ''
     install -vD out/Release/lib.target/libv8.so "$out/lib/libv8.so"
     ''}

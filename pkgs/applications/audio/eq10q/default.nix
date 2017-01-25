@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, cmake, fftw, gtkmm, libxcb, lv2, pkgconfig, xorg }:
+{ stdenv, fetchurl, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig, xorg }:
 stdenv.mkDerivation rec {
   name = "eq10q-${version}";
-  version = "2.0";
+  version = "2.1";
   src = fetchurl {
     url = "mirror://sourceforge/project/eq10q/${name}.tar.gz";
-    sha256 = "08vlfly0qqrfqiwpn5g5php680icpk97pwnwjadmj5syhgvi0i3h";
+    sha256 = "0brrr6ydsppi4zzn3vcgl0zgq5r8jmlcap1hpr3k43yvlwggb880";
   };
 
-  buildInputs = [ cmake fftw gtkmm libxcb lv2 pkgconfig xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
+  buildInputs = [ cmake fftw gtkmm2 libxcb lv2 pkgconfig xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
 
   installFlags = ''
     DESTDIR=$(out)

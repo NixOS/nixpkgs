@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sqlite, ocaml, findlib, pkgconfig }:
+{ stdenv, fetchurl, sqlite, ocaml, findlib, ocamlbuild, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "ocaml-sqlite3-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rwsx1nfa3xqmbygim2qx45jqm1gwf08m70wmcwkx50f1qk3l551";
   };
 
-  buildInputs = [ ocaml findlib pkgconfig sqlite ];
+  buildInputs = [ ocaml findlib ocamlbuild pkgconfig sqlite ];
 
   createFindlibDestdir = true;
 

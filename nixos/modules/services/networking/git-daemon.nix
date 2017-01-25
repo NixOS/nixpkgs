@@ -116,7 +116,8 @@ in
       };
 
     systemd.services."git-daemon" = {
-      wantedBy = [ "ip-up.target" ];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       script = "${pkgs.git}/bin/git daemon --reuseaddr "
         + (optionalString (cfg.basePath != "") "--base-path=${cfg.basePath} ")
         + (optionalString (cfg.listenAddress != "") "--listen=${cfg.listenAddress} ")

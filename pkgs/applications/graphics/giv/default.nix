@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gdk_pixbuf, scons, pkgconfig, gtk, glib,
+{ stdenv, fetchFromGitHub, gdk_pixbuf, scons, pkgconfig, gtk2, glib,
   pcre, cfitsio, perl, gob2, vala_0_23, libtiff, json_glib }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "scons install";
 
-  buildInputs = [ gdk_pixbuf pkgconfig gtk glib scons pcre cfitsio perl gob2 vala_0_23 libtiff
+  buildInputs = [ gdk_pixbuf pkgconfig gtk2 glib scons pcre cfitsio perl gob2 vala_0_23 libtiff
     json_glib ];
 
   meta = {

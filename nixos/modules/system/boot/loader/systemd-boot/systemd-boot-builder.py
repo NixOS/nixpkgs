@@ -1,4 +1,4 @@
-#! @python@/bin/python
+#! @python3@/bin/python3
 import argparse
 import shutil
 import os
@@ -13,29 +13,21 @@ def copy_if_not_exists(source, dest):
     if not os.path.exists(dest):
         shutil.copyfile(source, dest)
 
-system_dir = lambda generation: "/nix/var/nix/profiles/system-%d-link" % (generation)
+def system_dir(generation):
+    return "/nix/var/nix/profiles/system-%d-link" % (generation)
 
-def write_entry(generation, kernel, initrd):
-    entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
-    generation_dir = os.readlink(system_dir(generation))
-    tmp_path = "%s.tmp" % (entry_file)
-    kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
-    with open("%s/kernel-params" % (generation_dir)) as params_file:
-        kernel_params = kernel_params + params_file.read()
-    with open(tmp_path, 'w') as f:
-        print >> f, "title NixOS"
-        print >> f, "version Generation %d" % (generation)
-        if machine_id is not None: print >> f, "machine-id %s" % (machine_id)
-        print >> f, "linux %s" % (kernel)
-        print >> f, "initrd %s" % (initrd)
-        print >> f, "options %s" % (kernel_params)
-    os.rename(tmp_path, entry_file)
+BOOT_ENTRY = """title NixOS
+version Generation {generation}
+linux {kernel}
+initrd {initrd}
+options {kernel_params}
+"""
 
 def write_loader_conf(generation):
     with open("@efiSysMountPoint@/loader/loader.conf.tmp", 'w') as f:
         if "@timeout@" != "":
-            print >> f, "timeout @timeout@"
-        print >> f, "default nixos-generation-%d" % (generation)
+            f.write("timeout @timeout@\n")
+        f.write("default nixos-generation-%d\n" % generation)
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 def copy_from_profile(generation, name, dry_run=False):
@@ -47,10 +39,23 @@ def copy_from_profile(generation, name, dry_run=False):
         copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
     return efi_file_path
 
-def add_entry(generation):
-    efi_kernel_path = copy_from_profile(generation, "kernel")
-    efi_initrd_path = copy_from_profile(generation, "initrd")
-    write_entry(generation, efi_kernel_path, efi_initrd_path)
+def write_entry(generation, machine_id):
+    kernel = copy_from_profile(generation, "kernel")
+    initrd = copy_from_profile(generation, "initrd")
+    entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
+    generation_dir = os.readlink(system_dir(generation))
+    tmp_path = "%s.tmp" % (entry_file)
+    kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+    with open("%s/kernel-params" % (generation_dir)) as params_file:
+        kernel_params = kernel_params + params_file.read()
+    with open(tmp_path, 'w') as f:
+        f.write(BOOT_ENTRY.format(generation=generation,
+                    kernel=kernel,
+                    initrd=initrd,
+                    kernel_params=kernel_params))
+        if machine_id is not None:
+            f.write("machine-id %s\n" % machine_id)
+    os.rename(tmp_path, entry_file)
 
 def mkdir_p(path):
     try:
@@ -65,8 +70,8 @@ def get_generations(profile):
         "--list-generations",
         "-p",
         "/nix/var/nix/profiles/%s" % (profile),
-        "--option", "build-users-group", ""
-        ])
+        "--option", "build-users-group", ""],
+        universal_newlines=True)
     gen_lines = gen_list.split('\n')
     gen_lines.pop()
     return [ int(line.split()[0]) for line in gen_lines ]
@@ -89,33 +94,37 @@ def remove_old_entries(gens):
         if not path in known_paths:
             os.unlink(path)
 
-parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
-parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
-args = parser.parse_args()
+def main():
+    parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
+    parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
+    args = parser.parse_args()
 
-if os.getenv("NIXOS_INSTALL_GRUB") == "1":
-    warnings.warn("NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER", DeprecationWarning)
-    os.environ["NIXOS_INSTALL_BOOTLOADER"] = "1"
+    if os.getenv("NIXOS_INSTALL_GRUB") == "1":
+        warnings.warn("NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER", DeprecationWarning)
+        os.environ["NIXOS_INSTALL_BOOTLOADER"] = "1"
 
-if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
-    if "@canTouchEfiVariables@" == "1":
-        subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "install"])
-    else:
-        subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "--no-variables", "install"])
+    if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
+        if "@canTouchEfiVariables@" == "1":
+            subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "install"])
+        else:
+            subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "--no-variables", "install"])
 
-mkdir_p("@efiSysMountPoint@/efi/nixos")
-mkdir_p("@efiSysMountPoint@/loader/entries")
-try:
-    with open("/etc/machine-id") as machine_file:
-        machine_id = machine_file.readlines()[0]
-except IOError as e:
-    if e.errno != errno.ENOENT:
-        raise
-    machine_id = None
+    mkdir_p("@efiSysMountPoint@/efi/nixos")
+    mkdir_p("@efiSysMountPoint@/loader/entries")
+    try:
+        with open("/etc/machine-id") as machine_file:
+            machine_id = machine_file.readlines()[0]
+    except IOError as e:
+        if e.errno != errno.ENOENT:
+            raise
+        machine_id = None
 
-gens = get_generations("system")
-remove_old_entries(gens)
-for gen in gens:
-    add_entry(gen)
-    if os.readlink(system_dir(gen)) == args.default_config:
-        write_loader_conf(gen)
+    gens = get_generations("system")
+    remove_old_entries(gens)
+    for gen in gens:
+        write_entry(gen, machine_id)
+        if os.readlink(system_dir(gen)) == args.default_config:
+            write_loader_conf(gen)
+
+if __name__ == '__main__':
+    main()

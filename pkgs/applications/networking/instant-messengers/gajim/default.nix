@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, python, intltool, pkgconfig, libX11, gtk
+{ stdenv, fetchurl, python, intltool, pkgconfig, libX11
 , ldns, pythonPackages
 
 , enableJingle ? true, farstream ? null, gst_plugins_bad ? null
 ,                      libnice ? null
 , enableE2E ? true
 , enableRST ? true
-, enableSpelling ? true, gtkspell ? null
+, enableSpelling ? true, gtkspell2 ? null
 , enableNotifications ? false
+, enableOmemoPluginDependencies ? true
 , extraPythonPackages ? pkgs: []
 }:
 
@@ -14,18 +15,18 @@ assert enableJingle -> farstream != null && gst_plugins_bad != null
                     && libnice != null;
 assert enableE2E -> pythonPackages.pycrypto != null;
 assert enableRST -> pythonPackages.docutils != null;
-assert enableSpelling -> gtkspell != null;
+assert enableSpelling -> gtkspell2 != null;
 assert enableNotifications -> pythonPackages.notify != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gajim-${version}";
-  version = "0.16.5";
+  version = "0.16.6";
 
   src = fetchurl {
     url = "http://www.gajim.org/downloads/0.16/gajim-${version}.tar.bz2";
-    sha256 = "14fhcqnkqygh91132dnf1idayj4r3iqbwb44sd3mxv20n6ribh55";
+    sha256 = "1p3qwzy07f0wkika9yigyiq167l2k6wn12flqa7x55z4ihbysmqk";
   };
 
   patches = [
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
       src/features_window.py
     sed -i -e "s|'drill'|'${ldns}/bin/drill'|" src/common/resolver.py
   '' + optionalString enableSpelling ''
-    sed -i -e 's|=.*find_lib.*|= "${gtkspell}/lib/libgtkspell.so"|'   \
+    sed -i -e 's|=.*find_lib.*|= "${gtkspell2}/lib/libgtkspell.so"|'   \
       src/gtkspell.py
   '';
 
@@ -60,15 +61,17 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    pythonPackages.pygobject pythonPackages.pyGtkGlade
-    pythonPackages.sqlite3 pythonPackages.pyasn1
+    pythonPackages.pygobject2 pythonPackages.pyGtkGlade
+    pythonPackages.pyasn1
     pythonPackages.pyxdg
     pythonPackages.nbxmpp
     pythonPackages.pyopenssl pythonPackages.dbus-python
   ] ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
     ++ optional enableNotifications pythonPackages.notify
-    ++ extraPythonPackages pythonPackages;
+    ++ optionals enableOmemoPluginDependencies (with pythonPackages; [
+      cryptography python-axolotl python-axolotl-curve25519 qrcode
+    ]) ++ extraPythonPackages pythonPackages;
 
   postFixup = ''
     install -m 644 -t "$out/share/gajim/icons/hicolor" \

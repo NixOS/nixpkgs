@@ -240,143 +240,146 @@ let
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl_1 ];
     BayesVarSel = [ pkgs.gsl_1 ];
-    BayesXsrc = [ pkgs.readline pkgs.ncurses ];
+    BayesXsrc = [ pkgs.readline.dev pkgs.ncurses ];
     bigGP = [ pkgs.openmpi ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl_1 ];
     BNSP = [ pkgs.gsl_1 ];
-    cairoDevice = [ pkgs.gtk2 ];
-    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo ];
+    cairoDevice = [ pkgs.gtk2.dev ];
+    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo.dev pkgs.x11 pkgs.fontconfig.lib ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
-    curl = [ pkgs.curl ];
-    devEMF = [ pkgs.xorg.libXft ];
+    curl = [ pkgs.curl.dev ];
+    devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
-    fftw = [ pkgs.fftw ];
-    fftwtools = [ pkgs.fftw ];
+    fftw = [ pkgs.fftw.dev ];
+    fftwtools = [ pkgs.fftw.dev ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
-    git2r = [ pkgs.zlib pkgs.openssl ];
+    git2r = [ pkgs.zlib.dev pkgs.openssl.dev ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
-    gmp = [ pkgs.gmp ];
+    gmp = [ pkgs.gmp.dev ];
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
+    h5 = [ pkgs.hdf5-cpp pkgs.which ];
+    h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp ];
     JavaGD = [ pkgs.jdk ];
-    jpeg = [ pkgs.libjpeg ];
+    jpeg = [ pkgs.libjpeg.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
-    kza = [ pkgs.fftw ];
+    kza = [ pkgs.fftw.dev ];
     libamtrack = [ pkgs.gsl_1 ];
     mixcat = [ pkgs.gsl_1 ];
     mvabund = [ pkgs.gsl_1 ];
-    mwaved = [ pkgs.fftw ];
+    mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
-    openssl = [ pkgs.openssl ];
+    openssl = [ pkgs.openssl.dev ];
     outbreaker = [ pkgs.gsl_1 ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
-    PKI = [ pkgs.openssl ];
-    png = [ pkgs.libpng ];
-    PopGenome = [ pkgs.zlib ];
+    PKI = [ pkgs.openssl.dev ];
+    png = [ pkgs.libpng.dev ];
+    PopGenome = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj ];
     qtbase = [ pkgs.qt4 ];
     qtpaint = [ pkgs.qt4 ];
     R2GUESS = [ pkgs.gsl_1 ];
-    R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
+    R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
-    rbamtools = [ pkgs.zlib ];
-    rcdd = [ pkgs.gmp ];
-    RcppCNPy = [ pkgs.zlib ];
+    rbamtools = [ pkgs.zlib.dev ];
+    rcdd = [ pkgs.gmp.dev ];
+    RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];
-    RcppOctave = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.octave ];
+    RcppOctave = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.octave ];
     RcppZiggurat = [ pkgs.gsl_1 ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
-    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
+    rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
     rgl = [ pkgs.mesa pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
-    RGtk2 = [ pkgs.gtk2 ];
-    Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
-    Rhtslib = [ pkgs.zlib ];
-    RJaCGH = [ pkgs.zlib ];
+    RGtk2 = [ pkgs.gtk2.dev ];
+    rhdf5 = [ pkgs.zlib ];
+    Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
+    Rhtslib = [ pkgs.zlib.dev ];
+    RJaCGH = [ pkgs.zlib.dev ];
     rjags = [ pkgs.jags ];
-    rJava = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.jdk pkgs.libzip ];
+    rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk pkgs.libzip ];
     Rlibeemd = [ pkgs.gsl_1 ];
-    rmatio = [ pkgs.zlib ];
-    Rmpfr = [ pkgs.gmp pkgs.mpfr ];
+    rmatio = [ pkgs.zlib.dev ];
+    Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
     Rmpi = [ pkgs.openmpi ];
     RMySQL = [ pkgs.zlib pkgs.mysql.lib ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
     rpg = [ pkgs.postgresql ];
-    rphast = [ pkgs.pcre pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    rphast = [ pkgs.pcre.dev pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
     rPython = [ pkgs.python ];
-    RSclient = [ pkgs.openssl ];
+    RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
-    Rssa = [ pkgs.fftw ];
-    rtfbs = [ pkgs.zlib pkgs.pcre pkgs.bzip2 pkgs.gzip pkgs.readline ];
-    rtiff = [ pkgs.libtiff ];
+    Rssa = [ pkgs.fftw.dev ];
+    rtfbs = [ pkgs.zlib pkgs.pcre.dev pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
-    RVowpalWabbit = [ pkgs.zlib pkgs.boost ];
+    RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq3 ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
-    seewave = [ pkgs.fftw pkgs.libsndfile ];
-    seqinr = [ pkgs.zlib ];
-    seqminer = [ pkgs.zlib pkgs.bzip2 ];
-    showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype ];
+    seewave = [ pkgs.fftw.dev pkgs.libsndfile.dev ];
+    seqinr = [ pkgs.zlib.dev ];
+    seqminer = [ pkgs.zlib.dev pkgs.bzip2 ];
+    showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
     SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
-    spate = [ pkgs.fftw ];
+    spate = [ pkgs.fftw.dev ];
     sprint = [ pkgs.openmpi ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl_1 ];
-    stringi = [ pkgs.icu ];
+    stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
-    sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
-    TAQMNGR = [ pkgs.zlib ];
-    tiff = [ pkgs.libtiff ];
+    sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
+    TAQMNGR = [ pkgs.zlib.dev ];
+    tiff = [ pkgs.libtiff.dev ];
     TKF = [ pkgs.gsl_1 ];
-    tkrplot = [ pkgs.xorg.libX11 ];
+    tkrplot = [ pkgs.xorg.libX11 pkgs.tk.dev ];
     topicmodels = [ pkgs.gsl_1 ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
     V8 = [ pkgs.v8 ];
     VBLPCM = [ pkgs.gsl_1 ];
     VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
-    WhopGenome = [ pkgs.zlib ];
-    XBRL = [ pkgs.zlib pkgs.libxml2 ];
-    xml2 = [ pkgs.libxml2 ];
-    XML = [ pkgs.libtool pkgs.libxml2 pkgs.xmlsec pkgs.libxslt ];
-    affyPLM = [ pkgs.zlib ];
-    bamsignals = [ pkgs.zlib ];
-    BitSeq = [ pkgs.zlib ];
+    WhopGenome = [ pkgs.zlib.dev ];
+    XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
+    xml2 = [ pkgs.libxml2.dev ];
+    XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
+    affyPLM = [ pkgs.zlib.dev ];
+    bamsignals = [ pkgs.zlib.dev ];
+    BitSeq = [ pkgs.zlib.dev ];
     DiffBind = [ pkgs.zlib ];
-    ShortRead = [ pkgs.zlib ];
-    oligo = [ pkgs.zlib ];
-    gmapR = [ pkgs.zlib ];
-    Rsubread = [ pkgs.zlib ];
-    XVector = [ pkgs.zlib ];
-    Rsamtools = [ pkgs.zlib ];
-    rtracklayer = [ pkgs.zlib ];
-    affyio = [ pkgs.zlib ];
-    VariantAnnotation = [ pkgs.zlib ];
-    snpStats = [ pkgs.zlib ];
+    ShortRead = [ pkgs.zlib.dev ];
+    oligo = [ pkgs.zlib.dev ];
+    gmapR = [ pkgs.zlib.dev ];
+    Rsubread = [ pkgs.zlib.dev ];
+    XVector = [ pkgs.zlib.dev ];
+    Rsamtools = [ pkgs.zlib.dev ];
+    rtracklayer = [ pkgs.zlib.dev ];
+    affyio = [ pkgs.zlib.dev ];
+    VariantAnnotation = [ pkgs.zlib.dev ];
+    snpStats = [ pkgs.zlib.dev ];
   };
 
   packagesWithBuildInputs = {
@@ -390,7 +393,7 @@ let
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
     gmatrix = [ pkgs.cudatoolkit ];
-    RCurl = [ pkgs.curl ];
+    RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
     RGtk2 = [ pkgs.pkgconfig ];
@@ -469,7 +472,6 @@ let
     "DeducerSurvival"
     "DeducerText"
     "Demerelate"
-    "DescTools"
     "detrendeR"
     "dgmb"
     "DivMelt"
@@ -1142,7 +1144,6 @@ let
     "proteoQC" # depends on broken package rTANDEM
     "PGA" # depends on broken package rTANDEM
     "MBESS" # depends on broken package OpenMx
-    "IONiseR" # depends on broken package rhdf5
     "DOQTL" # depends on broken package rhdf5
     "DmelSGI" # depends on broken package rhdf5
     "flowDiv" # depends on broken package ncdfFlow
@@ -1292,7 +1293,7 @@ let
     "DEGraph" # depends on broken package RCytoscape
     "destiny" # depends on broken package VIM
     "DiagTest3Grp" # depends on broken package nlopt
-    "diffHic" # depends on broken package rhdf5
+    "diffHic" # depends on broken package edgeR
     "difR" # depends on broken package nlopt
     "DirichletMultinomial" # Build Is Broken
     "DistatisR" # depends on broken package nlopt
@@ -1307,6 +1308,7 @@ let
     "easyanova" # depends on broken package nlopt
     "ecd" # depends on broken package polynom
     "edge" # depends on broken package nlopt
+    "edgeR" # broken url
     "eeptools" # depends on broken package nlopt
     "EffectLiteR" # depends on broken package nlopt
     "effects" # depends on broken package nlopt
@@ -1356,7 +1358,6 @@ let
     "gcmr" # depends on broken package nlopt
     "GDAtools" # depends on broken package nlopt
     "gdtools" # broken build
-    "GENE_E" # depends on broken package rhdf5
     "GENESIS" # broken build
     "genridge" # depends on broken package nlopt
     "geojsonio" # depends on broken package V8
@@ -1379,8 +1380,6 @@ let
     "GUIDE" # depends on broken package rpanel
     "GWAF" # depends on broken package nlopt
     "GWASTools" # broken build
-    "h5" # build is broken
-    "h5vc" # depends on broken package rhdf5
     "hbsae" # depends on broken package nlopt
     "heplots" # depends on broken package nlopt
     "HiDimMaxStable" # broken build
@@ -1407,7 +1406,6 @@ let
     "inSilicoMerging" # build is broken
     "INSPEcT" # depends on broken GenomicFeatures
     "interplot" # depends on broken arm
-    "IONiseR" # depends on broken rhdf5
     "IsingFit" # depends on broken package nlopt
     "ITEMAN" # depends on broken package car
     "iteRates" # broken build
@@ -1645,7 +1643,6 @@ let
     "REST" # depends on broken package nlopt
     "rgbif" # depends on broken package V8
     "Rgnuplot" # broken build
-    "rhdf5" # build is broken
     "rjade" # depends on broken package V8
     "rJPSGCS" # build is broken
     "rLindo" # build is broken
@@ -1794,6 +1791,10 @@ let
         '';
     });
 
+    Cairo = old.Cairo.overrideDerivation (attrs: {
+      NIX_LDFLAGS = "-lfontconfig";
+    });
+
     curl = old.curl.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
     });
@@ -1862,6 +1863,7 @@ let
 
     devEMF = old.devEMF.overrideDerivation (attrs: {
       NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
+      NIX_LDFLAGS = "-lX11";
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {

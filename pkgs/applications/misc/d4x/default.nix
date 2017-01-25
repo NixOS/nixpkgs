@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk, glib, pkgconfig, openssl, boost }:
+{ stdenv, fetchurl, gtk2, glib, pkgconfig, openssl, boost }:
 
 stdenv.mkDerivation {
   name = "d4x-2.5.7.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1i1jj02bxynisqapv31481sz9jpfp3f023ky47spz1v1wlwbs13m";
   };
 
-  buildInputs = [ gtk glib pkgconfig openssl boost ];
+  buildInputs = [ gtk2 glib pkgconfig openssl boost ];
 
   meta = {
     description = "Graphical download manager";

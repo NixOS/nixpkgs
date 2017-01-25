@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   name = "kdesvn-1.6.0";
 
   src = fetchurl rec {
-    url = "http://pkgs.fedoraproject.org/repo/pkgs/kdesvn/${name}.tar.bz2/${md5}/${name}.tar.bz2";
-    md5 = "7e6adc98ff4777a06d5752d3f2b58fa3";
+    url = "http://pkgs.fedoraproject.org/repo/pkgs/kdesvn/${name}.tar.bz2/7e6adc98ff4777a06d5752d3f2b58fa3/${name}.tar.bz2";
+    sha256 = "15hg6xyx5rqldfhi1yhq5ss15y6crm2is3zqm680z0bndcj6ys05";
   };
 
   prePatch = ''

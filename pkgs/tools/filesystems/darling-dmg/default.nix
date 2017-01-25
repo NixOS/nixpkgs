@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake fuse openssl zlib bzip2 libxml2 icu ];
 
-  cmakeConfigureFlagFlags = ["-DCMAKE_BUILD_TYPE=RELEASE"];
-
   meta = {
     homepage = http://www.darlinghq.org/;
     description = "Darling lets you open OS X dmgs on Linux";

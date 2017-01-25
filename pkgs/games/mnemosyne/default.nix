@@ -14,7 +14,6 @@ in pythonPackages.buildPythonApplication rec {
     pyqt4
     matplotlib
     cherrypy
-    sqlite3
     webob
   ];
   preConfigure = ''

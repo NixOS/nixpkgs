@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "4.2a";
+  version = "4.9c";
   name = "paml-${version}";
   src = fetchurl {
-    url = "http://abacus.gene.ucl.ac.uk/software/paml${version}.tar.gz";
-    sha256 = "0yywyrjgxrpavp50n00l01pl90b7pykgb2k53yrlykz9dnf583pb";
+    url = "http://abacus.gene.ucl.ac.uk/software/paml${version}.tgz";
+    sha256 = "18a1l47223l7jyjavm8a8la84q9k9kbxwmj7kz4z3pdx70qrl04j";
   };
 
   preBuild = ''
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     mkdir -pv $out/bin
-    cp -v codeml $out/bin 
+    cp -v codeml $out/bin
     cp -v baseml $out/bin
     cp -v basemlg $out/bin
     cp -v chi2 $out/bin
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description     = "Phylogenetic Analysis by Maximum Likelihood (PAML)";
     longDescription = ''PAML is a package of programs for phylogenetic analyses of DNA or protein sequences using maximum likelihood. It is maintained and distributed for academic use free of charge by Ziheng Yang. ANSI C source codes are distributed for UNIX/Linux/Mac OSX, and executables are provided for MS Windows. PAML is not good for tree making. It may be used to estimate parameters and test hypotheses to study the evolutionary process, when you have reconstructed trees using other programs such as PAUP*, PHYLIP, MOLPHY, PhyML, RaxML, etc.'';
     license     = "non-commercial";
-    homepage    = http://abacus.gene.ucl.ac.uk/software/paml.html; 
+    homepage    = http://abacus.gene.ucl.ac.uk/software/paml.html;
   };
 }

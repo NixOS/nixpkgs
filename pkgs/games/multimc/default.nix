@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt5Full, jdk7, zlib, file, makeWrapper, xorg, libpulseaudio, qt5 }:
+{ stdenv, fetchFromGitHub, cmake, qt5Full, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qt5 }:
 
 let
   libnbt = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     rev = "895d8ab4699f1b50bf03532c967a91f5ecb62a50";
     sha256 = "179vc1iv57fx4g4h1wy8yvyvdm671jnvp6zi8pcr1n6azqhwklds";
   };
-  buildInputs = [ cmake qt5Full jdk7 zlib file makeWrapper ];
+  buildInputs = [ cmake qt5Full jdk zlib file makeWrapper ];
 
   libpath = with xorg; [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
   postUnpack = ''
@@ -40,19 +40,19 @@ stdenv.mkDerivation {
 
     mkdir -pv $out/bin/jars $out/lib
     cp -v MultiMC $out/bin/
-    cp -v jars/*.jar $out/bin/jars/
+    cp -v jars/*.jar $out/bin/jars/ #*/
     cp -v librainbow.so libnbt++.so libMultiMC_logic.so $out/lib
-    wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH $RESULT --prefix PATH : ${jdk7}/bin/
+    wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH $RESULT --prefix PATH : ${jdk}/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://multimc.org/;
     description = "A free, open source launcher for Minecraft";
     longDescription = ''
       Allows you to have multiple, separate instances of Minecraft (each with their own mods, texture packs, saves, etc) and helps you manage them and their associated options with a simple interface.
     '';
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = stdenv.lib.maintainers.cleverca22;
+    platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.cleverca22 ];
   };
 }

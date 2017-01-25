@@ -53,9 +53,9 @@ let cfg = config.services.drbd; in
       };
 
     systemd.services.drbd = {
-      after = [ "systemd-udev.settle.service" ];
+      after = [ "systemd-udev.settle.service" "network.target" ];
       wants = [ "systemd-udev.settle.service" ];
-      wantedBy = [ "ip-up.target" ];
+      wantedBy = [ "multi-user.target" ];
       script = ''
         ${pkgs.drbd}/sbin/drbdadm up all
       '';

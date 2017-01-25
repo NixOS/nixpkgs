@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libxcb, xcbutil, xcbutilwm, git }:
 
 stdenv.mkDerivation rec {
-   name = "xtitle-0.2";
+   name = "xtitle-0.3";
 
    src = fetchurl {
-     url = "https://github.com/baskerville/xtitle/archive/0.2.tar.gz";
-     sha256 = "1wyhfwbwqnq4rn6i789gydxlg25ylc37xjrkq758bp55sdgb8fk2";
+     url = "https://github.com/baskerville/xtitle/archive/0.3.tar.gz";
+     sha256 = "07r36f4ad1q0dpkx3ykd49xlmi24d8mjqwh40j228k81wsvzayl1";
    };
 
 

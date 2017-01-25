@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, SDL , alsaLib, gtk, libjack2, ladspaH
+{ stdenv, fetchurl, makeWrapper, SDL , alsaLib, gtk2, libjack2, ladspaH
 , ladspaPlugins, libsamplerate, libsndfile, pkgconfig, libpulseaudio, lame
 , vorbis-tools }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation  rec {
     sha256 = "010rk4mr631s440q9cfgdxx2avgzysr9aq52diwdlbq9cddifli3";
   };
 
-  buildInputs = [ SDL alsaLib gtk libjack2 ladspaH libsamplerate libsndfile
+  buildInputs = [ SDL alsaLib gtk2 libjack2 ladspaH libsamplerate libsndfile
      pkgconfig libpulseaudio makeWrapper ];
 
   configureFlags = "--with-default-ladspa-path=${ladspaPlugins}/lib/ladspa";

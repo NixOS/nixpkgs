@@ -68,6 +68,7 @@ in {
 
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
+        defaultText = "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD server's process.
@@ -90,7 +91,7 @@ in {
         '';
       };
 
-      extraOptions = mkOption {
+      startupOptions = mkOption {
         default = [
           "-Xms${cfg.initialJavaHeapSize}"
           "-Xmx${cfg.maxJavaHeapMemory}"
@@ -103,6 +104,15 @@ in {
           "-Dcruise.server.port=${toString cfg.port}"
           "-Dcruise.server.ssl.port=${toString cfg.sslPort}"
         ];
+
+        description = ''
+          Specifies startup command line arguments to pass to Go.CD server
+          java process.
+        '';
+      };
+
+      extraOptions = mkOption {
+        default = [ ];
         example = [ 
           "-X debug" 
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
@@ -169,7 +179,8 @@ in {
 
       script = ''
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
-        ${pkgs.jre}/bin/java -server ${concatStringsSep " " cfg.extraOptions} \
+        ${pkgs.jre}/bin/java -server ${concatStringsSep " " cfg.startupOptions} \
+                               ${concatStringsSep " " cfg.extraOptions}  \
                               -jar ${pkgs.gocd-server}/go-server/go.jar
       '';
 

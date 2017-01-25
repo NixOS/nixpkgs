@@ -256,7 +256,7 @@ if isOption opt then
   // optionalAttrs (opt ? default) { inherit (opt) default; }
   // optionalAttrs (opt ? example) { inherit (opt) example; }
   // optionalAttrs (opt ? description) { inherit (opt) description; }
-  // optionalAttrs (opt ? type) { typename = opt.type.name; }
+  // optionalAttrs (opt ? type) { typename = opt.type.description; }
   // optionalAttrs (opt ? options) { inherit (opt) options; }
   // {
     # to disambiguate the xml output.

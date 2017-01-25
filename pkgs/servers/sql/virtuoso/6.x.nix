@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dx0lp7cngdchi0772hp93zzn6sdap7z8s3vay3mzb9xgf0sdgy6";
   };
 
+  outputs = [ "out" "dev" "doc" ];
+
   buildInputs = [ libxml2 openssl readline gawk ];
 
   CPP = "${stdenv.cc}/bin/gcc -E";
@@ -18,14 +20,22 @@ stdenv.mkDerivation rec {
     --enable-openssl=${openssl.dev}
     ";
 
-  postInstall=''
+  postInstall = ''
     echo Moving documentation
     mkdir -pv $out/share/doc
     mv -v $out/share/virtuoso/doc $out/share/doc/${name}
+
     echo Removing jars and empty directories
     find $out -name "*.a" -delete -o -name "*.jar" -delete -o -type d -empty -delete
-    '';
-  
+
+    for f in $out/lib/*.la; do
+      echo "Fixing $f"
+      substituteInPlace $f \
+        --replace "${readline.dev}" "${readline.out}/lib" \
+        --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+    done
+  '';
+
   meta = with stdenv.lib; {
     description = "SQL/RDF database used by, e.g., KDE-nepomuk";
     homepage = http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/;

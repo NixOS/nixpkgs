@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python, perl, yacc, flex
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r60i4v6y5lpll0l2qpn0ycp6q6f1xjg7k1csi547zls8k96yk9s";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python perl yacc flex ]
+  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex ]
     ++ (with perlPackages; [ JSON ])
     ++ optional (!libOnly) texinfo;
   buildInputs = optionals (!stdenv.isFreeBSD) [ libcap_ng db ]

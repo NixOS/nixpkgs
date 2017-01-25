@@ -22,6 +22,7 @@ let
     xlibs.libXcursor
     xlibs.libXrender
     xlibs.libXScrnSaver
+    xlibs.libXxf86vm
     xlibs.libXi
     xlibs.libSM
     xlibs.libICE
@@ -43,7 +44,7 @@ let
     libav
     atk
     # Only libraries are needed from those two
-    udev182
+    libudev0-shim
     networkmanager098
 
     # Verified games requirements
@@ -57,7 +58,6 @@ let
     SDL
     SDL2_image
     glew110
-    openssl
     libidn
 
     # Other things from runtime
@@ -87,6 +87,7 @@ let
     alsaLib
     openalSoft
     libva
+    openssl-steam
   ] ++ lib.optional newStdcpp gcc.cc;
 
   ourRuntime = if runtimeOnly then []

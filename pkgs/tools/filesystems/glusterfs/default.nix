@@ -1,21 +1,21 @@
-{stdenv, fetchurl, fuse, bison, flex_2_5_35, openssl, python, ncurses, readline,
+{stdenv, fetchurl, fuse, bison, flex_2_5_35, openssl, python2, ncurses, readline,
  autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite
- , liburcu, attr
+ , liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which
 }:
 let 
   s = # Generated upstream information 
   rec {
     baseName="glusterfs";
-    version="3.8.1";
+    version="3.9.0";
     name="${baseName}-${version}";
-    hash="1j3r2wnk1pwwwn02pfnrrgh1if92b5cl51dqg7284qxrkjiafb2k";
-    url="http://download.gluster.org/pub/gluster/glusterfs/3.8/3.8.1/glusterfs-3.8.1.tar.gz";
-    sha256="1j3r2wnk1pwwwn02pfnrrgh1if92b5cl51dqg7284qxrkjiafb2k";
+    hash="057vq4f93f1g9sh1sfbqhccsprxrbhwwm898322x25sb8mscc5xl";
+    url="http://download.gluster.org/pub/gluster/glusterfs/3.9/3.9.0/glusterfs-3.9.0.tar.gz";
+    sha256="057vq4f93f1g9sh1sfbqhccsprxrbhwwm898322x25sb8mscc5xl";
   };
   buildInputs = [
-    fuse bison flex_2_5_35 openssl python ncurses readline
+    fuse bison flex_2_5_35 openssl python2 ncurses readline
     autoconf automake libtool pkgconfig zlib libaio libxml2
-    acl sqlite liburcu attr
+    acl sqlite liburcu attr makeWrapper
   ];
   # Some of the headers reference acl
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ rec {
     '';
 
   configureFlags = [
-    ''--with-mountutildir="$out/sbin" --localstatedir=/var''
+    ''--localstatedir=/var''
     ];
 
   makeFlags = "DESTDIR=$(out)";
@@ -48,6 +48,7 @@ rec {
   postInstall = ''
     cp -r $out/$out/* $out
     rm -r $out/nix
+    wrapProgram $out/sbin/mount.glusterfs --set PATH "${stdenv.lib.makeBinPath [ coreutils gnused attr gnugrep which]}"
     '';
 
   src = fetchurl {

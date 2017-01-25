@@ -57,7 +57,7 @@ Index: iproute2-4.1.1/ip/link_iptnl.c
 +
 +		if (addr)
 +			fprintf(f, "underlay %s ",
-+				format_host(AF_INET, 4, &addr, s1, sizeof(s1)));
++				format_host_r(AF_INET, 4, &addr, s1, sizeof(s1)));
 +	}
 +
  	if (tb[IFLA_IPTUN_LINK] && rta_getattr_u32(tb[IFLA_IPTUN_LINK])) {

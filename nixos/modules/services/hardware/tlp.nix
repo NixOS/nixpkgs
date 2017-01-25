@@ -40,7 +40,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         description = "Additional configuration variables for TLP";
       };

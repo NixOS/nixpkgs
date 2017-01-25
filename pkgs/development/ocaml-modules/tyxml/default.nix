@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocaml_oasis, camlp4, uutf, markup, ppx_tools, re }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocaml_oasis, camlp4, uutf, markup, ppx_tools, re }:
 
 stdenv.mkDerivation rec {
   pname = "tyxml";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rz0f48x8p1m30723rn5v85pp7rd0spr04sd7gzryy99vn3ianga";
     };
 
-  buildInputs = [ocaml findlib camlp4];
+  buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
 
   propagatedBuildInputs = [uutf re ppx_tools markup];
 

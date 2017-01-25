@@ -18,7 +18,7 @@ buildGoPackage rec {
     sha256 = "1dmgbg4ak3jkbgmxh0lr4hga1nl623mh7pvsgby1rxl4ivbzwkh4";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   buildInputs = [ trousers pkgconfig gtk3 gtkspell3 ]
     ++ stdenv.lib.optional isx86_64 dclxvi

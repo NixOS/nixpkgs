@@ -1,30 +1,70 @@
-{ stdenv, fetchFromGitHub, jdk, zip, zlib, protobuf2_5, pkgconfig, libarchive, unzip, which, makeWrapper }:
+{ stdenv, fetchFromGitHub, buildFHSUserEnv, writeScript, jdk, zip, unzip,
+  which, makeWrapper, binutils }:
 
-stdenv.mkDerivation rec {
-  name = "bazel-20150326.981b7bc1";
+let
 
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = "bazel";
-    rev = "981b7bc1";
-    sha256 = "0i9gxgqhfmix7hmkb15s7h9f8ssln08pixqm26pd1d20g0kfyxj7";
-  };
+  version = "0.3.2";
 
-  buildInputs = [ pkgconfig protobuf2_5 zlib zip jdk libarchive unzip which makeWrapper ];
-
-  installPhase = ''
-    PROTOC=protoc bash compile.sh
-    mkdir -p $out/bin $out/share
-    cp -R output $out/share/bazel
-    ln -s $out/share/bazel/bazel $out/bin/bazel
-    wrapProgram $out/bin/bazel --set JAVA_HOME "${jdk.home}"
-  '';
-
-  meta = {
-    homepage = http://github.com/google/bazel/;
+  meta = with stdenv.lib; {
+    homepage = http://github.com/bazelbuild/bazel/;
     description = "Build tool that builds code quickly and reliably";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.philandstuff ];
-    platforms = [ "x86_64-linux" ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.philandstuff ];
+    platforms = platforms.linux;
   };
-}
+
+  bootstrapEnv = buildFHSUserEnv {
+    name = "bazel-bootstrap-env";
+
+    targetPkgs = pkgs: [ ];
+
+    inherit meta;
+  };
+
+  bazelBinary = stdenv.mkDerivation rec {
+    name = "bazel-${version}";
+
+    src = fetchFromGitHub {
+      owner = "bazelbuild";
+      repo = "bazel";
+      rev = version;
+      sha256 = "085cjz0qhm4a12jmhkjd9w3ic4a67035j01q111h387iklvgn6xg";
+    };
+    patches = [ ./java_stub_template.patch ];
+
+    packagesNotFromEnv = [
+        stdenv.cc stdenv.cc.cc.lib jdk which zip unzip binutils ];
+    buildInputs = packagesNotFromEnv ++ [ bootstrapEnv makeWrapper ];
+
+    buildTimeBinPath = stdenv.lib.makeBinPath packagesNotFromEnv;
+    buildTimeLibPath = stdenv.lib.makeLibraryPath packagesNotFromEnv;
+
+    runTimeBinPath = stdenv.lib.makeBinPath [ jdk stdenv.cc.cc ];
+    runTimeLibPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+
+    buildWrapper = writeScript "build-wrapper.sh" ''
+      #! ${stdenv.shell} -e
+      export PATH="${buildTimeBinPath}:$PATH"
+      export LD_LIBRARY_PATH="${buildTimeLibPath}:$LD_LIBRARY_PATH"
+      ./compile.sh
+    '';
+
+    buildPhase = ''
+      bazel-bootstrap-env ${buildWrapper}
+    '';
+
+    installPhase = ''
+      mkdir -p $out/bin
+      cp output/bazel $out/bin/
+      wrapProgram $out/bin/bazel \
+          --suffix PATH ":" "${runTimeBinPath}" \
+          --suffix LD_LIBRARY_PATH ":" "${runTimeLibPath}"
+    '';
+
+    dontStrip = true;
+    dontPatchELF = true;
+
+    inherit meta;
+  };
+
+in bazelBinary

@@ -65,6 +65,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Boost Software License 1.0";
   };
 
+  beerware = spdx {
+    spdxId = "Beerware";
+    fullName = ''Beerware License'';
+  };
+
   bsd2 = spdx {
     spdxId = "BSD-2-Clause";
     fullName = ''BSD 2-clause "Simplified" License'';
@@ -103,6 +108,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   cc-by-nc-sa-40 = spdx {
     spdxId = "CC-BY-NC-SA-4.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 4.0";
+  };
+
+  cc-by-nd-30 = spdx {
+    spdxId = "CC-BY-ND-3.0";
+    fullName = "Creative Commons Attribution-No Derivative Works v3.00";
   };
 
   cc-by-sa-25 = spdx {
@@ -439,6 +449,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Sleepycat License";
   };
 
+  smail = {
+    shortName = "smail";
+    fullName = "SMAIL General Public License";
+    url = http://metadata.ftp-master.debian.org/changelogs/main/d/debianutils/debianutils_4.8.1_copyright;
+  };
+
   tcltk = spdx {
     spdxId = "TCL";
     fullName = "TCL/TK License";
@@ -468,6 +484,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   unlicense = spdx {
     spdxId = "Unlicense";
     fullName = "The Unlicense";
+  };
+
+  upl = {
+    fullName = "Universal Permissive License";
+    url = "https://oss.oracle.com/licenses/upl/";
   };
 
   vim = spdx {

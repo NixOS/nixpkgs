@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, gtk, atk, gdk_pixbuf, pango, makeWrapper }:
+{ stdenv, fetchurl, gtk2, atk, gdk_pixbuf, pango, makeWrapper }:
 
 let
   dynlibPath = stdenv.lib.makeLibraryPath
-    [ gtk atk gdk_pixbuf pango ];
+    [ gtk2 atk gdk_pixbuf pango ];
 in
 stdenv.mkDerivation rec {
   name    = "jd-gui-${version}";

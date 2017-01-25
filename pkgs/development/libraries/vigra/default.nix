@@ -1,7 +1,10 @@
 { stdenv, fetchurl, boost, cmake, doxygen, fftw, fftwSinglePrec, hdf5, ilmbase
-, libjpeg, libpng, libtiff, numpy, openexr, python }:
+, libjpeg, libpng, libtiff, openexr, python2Packages }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2Packages) python numpy;
+  # Might want to use `python2.withPackages(ps: [ps.numpy]);` here...
+in stdenv.mkDerivation rec {
   name = "vigra-${version}";
   version = "1.10.0";
 

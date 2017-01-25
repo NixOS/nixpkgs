@@ -41,7 +41,6 @@ let
       machine.networking.useNetworkd = networkd;
       testScript = ''
         startAll;
-        $machine->waitForUnit("network-interfaces.target");
         $machine->waitForUnit("network.target");
         $machine->succeed("ip addr show lo | grep -q 'inet 127.0.0.1/8 '");
         $machine->succeed("ip addr show lo | grep -q 'inet6 ::1/128 '");
@@ -71,9 +70,7 @@ let
         ''
           startAll;
 
-          $client->waitForUnit("network-interfaces.target");
           $client->waitForUnit("network.target");
-          $router->waitForUnit("network-interfaces.target");
           $router->waitForUnit("network.target");
 
           # Make sure dhcpcd is not started
@@ -119,9 +116,7 @@ let
         ''
           startAll;
 
-          $client->waitForUnit("network-interfaces.target");
           $client->waitForUnit("network.target");
-          $router->waitForUnit("network-interfaces.target");
           $router->waitForUnit("network.target");
 
           # Wait until we have an ip address on each interface
@@ -164,9 +159,7 @@ let
           startAll;
 
           # Wait for networking to come up
-          $client->waitForUnit("network-interfaces.target");
           $client->waitForUnit("network.target");
-          $router->waitForUnit("network-interfaces.target");
           $router->waitForUnit("network.target");
 
           # Wait until we have an ip address on each interface
@@ -213,9 +206,7 @@ let
           startAll;
 
           # Wait for networking to come up
-          $client1->waitForUnit("network-interfaces.target");
           $client1->waitForUnit("network.target");
-          $client2->waitForUnit("network-interfaces.target");
           $client2->waitForUnit("network.target");
 
           # Test bonding
@@ -259,11 +250,8 @@ let
           startAll;
 
           # Wait for networking to come up
-          $client1->waitForUnit("network-interfaces.target");
           $client1->waitForUnit("network.target");
-          $client2->waitForUnit("network-interfaces.target");
           $client2->waitForUnit("network.target");
-          $router->waitForUnit("network-interfaces.target");
           $router->waitForUnit("network.target");
 
           # Test bridging
@@ -298,9 +286,7 @@ let
           startAll;
 
           # Wait for networking to come up
-          $client->waitForUnit("network-interfaces.target");
           $client->waitForUnit("network.target");
-          $router->waitForUnit("network-interfaces.target");
           $router->waitForUnit("network.target");
 
           # Wait until we have an ip address on each interface
@@ -348,9 +334,7 @@ let
           startAll;
 
           # Wait for networking to be configured
-          $client1->waitForUnit("network-interfaces.target");
           $client1->waitForUnit("network.target");
-          $client2->waitForUnit("network-interfaces.target");
           $client2->waitForUnit("network.target");
 
           # Print diagnostic information
@@ -391,9 +375,7 @@ let
           startAll;
 
           # Wait for networking to be configured
-          $client1->waitForUnit("network-interfaces.target");
           $client1->waitForUnit("network.target");
-          $client2->waitForUnit("network-interfaces.target");
           $client2->waitForUnit("network.target");
 
           # Test vlan is setup

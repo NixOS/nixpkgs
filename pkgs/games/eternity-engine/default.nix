@@ -7,10 +7,6 @@ stdenv.mkDerivation rec {
     sha256 = "0jq8q0agw7lgab9q2h8wcaakvg913l9j3a6ss0hn9661plkw2yb4";
   };
 
-  cmakeFlags = ''
-    -DCMAKE_BUILD_TYPE=Release
-  '';
-
   buildInputs = [ stdenv cmake mesa SDL SDL_mixer SDL_net ];
 
   enableParallelBuilding = true;

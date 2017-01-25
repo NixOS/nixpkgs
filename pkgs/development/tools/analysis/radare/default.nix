@@ -1,10 +1,10 @@
 {stdenv, fetchurl, pkgconfig, libusb, readline, lua, libewf, perl,
-gtk ? null, vte ? null, gtkdialog ? null,
+gtk2 ? null, vte ? null, gtkdialog ? null,
 python ? null,
 ruby ? null,
 useX11, rubyBindings, pythonBindings, luaBindings}:
 
-assert useX11 -> (gtk != null && vte != null && gtkdialog != null);
+assert useX11 -> (gtk2 != null && vte != null && gtkdialog != null);
 assert rubyBindings -> ruby != null;
 assert pythonBindings -> python != null;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [pkgconfig readline libusb perl]
-    ++ optional useX11 [gtkdialog vte gtk]
+    ++ optional useX11 [gtkdialog vte gtk2]
     ++ optional rubyBindings [ruby]
     ++ optional pythonBindings [python]
     ++ optional luaBindings [lua];

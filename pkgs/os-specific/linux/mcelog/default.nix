@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "mcelog-${version}";
-  version = "138";
+  version = "144";
 
   src = fetchFromGitHub {
-    sha256 = "039ycn5m3gx4n0kppxl35wcrkyva6lv64qhlqhh7034qkbqbhqiy";
+    sha256 = "05b1x9z6x9yz3xmb93qvwwssjbvp28bawy8as9bfm29pyhzdxx6k";
     rev = "v${version}";
     repo = "mcelog";
     owner = "andikleen";
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     touch mcelog.conf.5 # avoid regeneration requiring Python
 
     substituteInPlace Makefile --replace '"unknown"' '"${version}"'
+
+    for i in triggers/*; do
+      substituteInPlace $i --replace 'logger' '${utillinux}/bin/logger'
+    done
   '';
 
   enableParallelBuilding = true;

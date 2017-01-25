@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
-    ++ optional mesosSupport [ mesos ];
+    ++ optional mesosSupport mesos;
 
   untarDir = "${name}-bin-cdh4";
   installPhase = ''

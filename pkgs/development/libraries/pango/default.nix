@@ -1,30 +1,35 @@
 { stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
-, libintlOrEmpty, gobjectIntrospection
+, libintlOrEmpty, gobjectIntrospection, darwin
 }:
 
 with stdenv.lib;
 
 let
   ver_maj = "1.40";
-  ver_min = "1";
+  ver_min = "3";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
-    sha256 = "e27af54172c72b3ac6be53c9a4c67053e16c905e02addcf3a603ceb2005c1a40";
+    sha256 = "abba8b5ce728520c3a0f1535eab19eac3c14aeef7faa5aded90017ceac2711d3";
   };
 
-  outputs = [ "bin" "dev" "out" "docdev" ];
+  outputs = [ "bin" "dev" "out" "devdoc" ];
 
   buildInputs = [ gobjectIntrospection ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+       Carbon
+       CoreGraphics
+       CoreText
+    ]);
   propagatedBuildInputs = [ cairo harfbuzz libXft ] ++ libintlOrEmpty;
 
   enableParallelBuilding = true;
 
-  doCheck = false; # test-layout fails on 1.38.0
+  doCheck = false; # test-layout fails on 1.40.3 (fails to find font config)
   # jww (2014-05-05): The tests currently fail on Darwin:
   #
   # ERROR:testiter.c:139:iter_char_test: assertion failed: (extents.width == x1 - x0)
@@ -48,6 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin urkud ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ocaml, findlib, menhir, which }:
+{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, menhir, which }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast; in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "0cqqrpvfw0nrk5d28mkzfvc8yzqxcss0k46bkmqhqjkqq886n2mm";
   };
 
-  buildInputs = [ ocaml findlib menhir which ];
+  buildInputs = [ ocaml findlib ocamlbuild menhir which ];
 
   doCheck = true;
   checkTarget = "test";

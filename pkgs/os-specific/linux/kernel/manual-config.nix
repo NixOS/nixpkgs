@@ -129,9 +129,7 @@ let
       '' + (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
-        make $makeFlags "''${makeFlagsArray[@]}" dtbs
-        mkdir -p $out/dtbs
-        cp $buildRoot/arch/$karch/boot/dts/*.dtb $out/dtbs
+        make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
       '' else "") + (if isModular then ''
         if [ -z "$dontStrip" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")

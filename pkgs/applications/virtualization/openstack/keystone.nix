@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages, xmlsec, which, openssl }:
+{ stdenv, fetchurl, python2Packages, xmlsec, which, openssl }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "keystone-${version}";
   version = "8.0.0";
   namePrefix = "";
@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
   patches = [ ./remove-oslo-policy-tests.patch ];
 
   # https://github.com/openstack/keystone/blob/stable/liberty/requirements.txt
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pbr webob eventlet greenlet PasteDeploy paste routes cryptography six
     sqlalchemy sqlalchemy_migrate stevedore passlib keystoneclient memcached
     keystonemiddleware oauthlib pysaml2 dogpile_cache jsonschema pycadf msgpack
@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
     oslo-utils
   ];
 
-  buildInputs = with pythonPackages; [
+  buildInputs = with python2Packages; [
     coverage fixtures mock subunit tempest-lib testtools testrepository
     ldap ldappool webtest requests2 oslotest pep8 pymongo which
   ];

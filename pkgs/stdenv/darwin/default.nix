@@ -1,35 +1,35 @@
-{ system         ? builtins.currentSystem
-, allPackages    ? import ../../..
-, platform       ? null
-, config         ? {}
+{ lib, allPackages
+, system, platform, crossSystem, config
 
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/4f07c88d467216d9692fefc951deb5cd3c4cc722/${file}";
+    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/33f59c9d11b8d5014dfd18cc11a425f6393c884a/${file}";
     inherit sha256 system executable;
   }; in {
-    sh      = fetch { file = "sh";    sha256 = "1siix3wakzil31r2cydmh3v8a1nyq4605dwiabqc5lx73j4xzrzi"; };
-    bzip2   = fetch { file = "bzip2"; sha256 = "0zvqm977k11b5cl4ixxb5h0ds24g6z0f8m28z4pqxzpa353lqbla"; };
-    mkdir   = fetch { file = "mkdir"; sha256 = "13frk8lsfgzlb65p9l26cvxf06aag43yjk7vg9msn7ix3v8cmrg1"; };
-    cpio    = fetch { file = "cpio";  sha256 = "0ms5i9m1vdksj575sf1djwgm7zhnvfrrb44dxnfh9avr793rc2w4"; };
-    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "1lz1b0grl4642h6n635xvi6imf0yyy1zyzdr9ing5aphzz0z5iic"; executable = false; };
+    sh      = fetch { file = "sh";    sha256 = "1rx4kg6358xdj05z0m139a0zn4f4zfmq4n4vimlmnwyfiyn4x7wk"; };
+    bzip2   = fetch { file = "bzip2"; sha256 = "104qnhzk79vkbp2yi0kci6lszgfppvrwk3rgxhry842ly1xz2r7l"; };
+    mkdir   = fetch { file = "mkdir"; sha256 = "0d91c19xjzmqisncvldv79d7ddzai9l7vcmajhwlwwv74g6da5yl"; };
+    cpio    = fetch { file = "cpio";  sha256 = "0lw057bmcqls96j0gv1n3mgl66q31mba7i413cbkkaf0rfzz3dxj"; };
+    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "13ihbj002pis3fgy1d9c4fi7flca21z9brjsjkklm82h5b4nlwxl"; executable = false; };
   }
 }:
+
+assert crossSystem == null;
 
 let
   libSystemProfile = ''
     (import "${./standard-sandbox.sb}")
   '';
 in rec {
-  allPackages = import ../../..;
+  inherit allPackages;
 
   commonPreHook = ''
     export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
     export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
     export NIX_IGNORE_LD_THROUGH_GCC=1
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
-    export MACOSX_DEPLOYMENT_TARGET=10.7
+    export MACOSX_DEPLOYMENT_TARGET=10.10
     export SDKROOT=
     export CMAKE_OSX_ARCHITECTURES=x86_64
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
@@ -100,8 +100,9 @@ in rec {
       };
 
       thisPkgs = allPackages {
-        inherit system platform;
-        bootStdenv = thisStdenv;
+        inherit system platform crossSystem config;
+        allowCustomOverrides = false;
+        stdenv = thisStdenv;
       };
     in { stdenv = thisStdenv; pkgs = thisPkgs; };
 
@@ -128,7 +129,7 @@ in rec {
           ln -s ${bootstrapTools}/include/c++      $out/include/c++
         '';
         linkCxxAbi = false;
-        setupHook = ../../development/compilers/llvm/3.6/libc++/setup-hook.sh;
+        setupHook = ../../development/compilers/llvm/3.9/libc++/setup-hook.sh;
       };
 
       libcxxabi = stdenv.mkDerivation {

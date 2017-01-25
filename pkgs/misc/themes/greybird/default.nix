@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, autoreconfHook, sass, glib, libxml2, gdk_pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  pname = "Greybird";
-  version = "2016-08-16";
   name = "${pname}-${version}";
+  pname = "Greybird";
+  version = "2016-11-15";
 
   src = fetchFromGitHub {
-    repo = "${pname}";
     owner = "shimmerproject";
-    rev = "fcaa400df68b1a29bb9dc8eb9c772a241f17c9ea";
-    sha256 = "02f2zlkhi2als39ajq3v91iik708g5a9iyl3cvd65n80gr4jifmr";
+    repo = "${pname}";
+    rev = "0a0853fa1de7545392f32aff33d95a8a1f6dca9e";
+    sha256 = "0i9yvd265783pqij6rjh7pllw0l28v975mrahykcwvn9chq8rrqf";
   };
 
   nativeBuildInputs = [ autoreconfHook sass glib libxml2 gdk_pixbuf librsvg ];
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   
   meta = {
     description = "Grey and blue theme (Gtk, Xfce, Emerald, Metacity, Mutter, Unity)";
-    homepage = http://shimmerproject.org/our-projects/greybird/;
+    homepage = https://github.com/shimmerproject/Greybird;
     license = with stdenv.lib.licenses; [ gpl2Plus cc-by-nc-sa-30 ];
-    maintainers = [ stdenv.lib.maintainers.romildo ];
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

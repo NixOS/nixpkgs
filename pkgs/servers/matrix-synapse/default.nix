@@ -1,6 +1,6 @@
-{ lib, pkgs, stdenv, buildPythonApplication, pythonPackages, fetchurl, fetchFromGitHub }:
+{ lib, pkgs, stdenv, pythonPackages, fetchurl, fetchFromGitHub }:
 let
-  matrix-angular-sdk = buildPythonApplication rec {
+  matrix-angular-sdk = pythonPackages.buildPythonApplication rec {
     name = "matrix-angular-sdk-${version}";
     version = "0.6.8";
 
@@ -9,16 +9,28 @@ let
       sha256 = "0gmx4y5kqqphnq3m7xk2vpzb0w2a4palicw7wfdr1q2schl9fhz2";
     };
   };
-in
-buildPythonApplication rec {
+  matrix-synapse-ldap3 = pythonPackages.buildPythonApplication rec {
+    name = "matrix-synapse-ldap3-${version}";
+    version = "0.1.1";
+
+    src = fetchFromGitHub {
+      owner = "matrix-org";
+      repo = "matrix-synapse-ldap3";
+      rev = "564eb3f109ce7f1082c47d5f8efaa792d90467f1";
+      sha256 = "1mkjlvy7a3rq405m59ihkh1wq7pa4l03fp8hgwwyjnbmz25bqmbk";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ service-identity ldap3 twisted ];
+  };
+in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.17.1";
+  version = "0.18.7-rc2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "04wl6lznffxhvfq52cmbg2amkl03454wyaqc17i0zlc6b0p14dli";
+    sha256 = "13rx77xfcci7q8xpxxgnh84h6md53akjcy9glwn20vm9vpka3vvj";
   };
 
   patches = [ ./matrix-synapse.patch ];
@@ -26,9 +38,9 @@ buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
-    service-identity signedjson systemd twisted ujson unpaddedbase64 pyyaml
-    matrix-angular-sdk bleach netaddr jinja2 psycopg2 python.modules.curses
-    ldap3 psutil
+    signedjson systemd twisted ujson unpaddedbase64 pyyaml
+    matrix-angular-sdk bleach netaddr jinja2 psycopg2
+    psutil msgpack lxml matrix-synapse-ldap3
   ];
 
   # Checks fail because of Tox.

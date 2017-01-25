@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     description = "Ndis driver wrapper for the Linux kernel";
     homepage = http://sourceforge.net/projects/ndiswrapper;
     license = "GPL";
+    broken = true;
   };
 }

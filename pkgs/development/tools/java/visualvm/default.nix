@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, lib, makeWrapper, jdk, gtk }:
+{ stdenv, fetchzip, lib, makeWrapper, jdk, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "visualvm-1.3.8";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     # To get the native LAF, JVM needs to see GTK’s .so-s.
     wrapProgram $out/bin/visualvm \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk2 ]}"
   '';
 
   meta = with stdenv.lib; {

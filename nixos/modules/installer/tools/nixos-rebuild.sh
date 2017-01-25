@@ -126,9 +126,9 @@ targetHostCmd() {
 copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
-            NIX_SSHOPTS=$SSH_OPTS nix-copy-closure --from "$buildHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
-            NIX_SSHOPTS=$SSH_OPTS nix-copy-closure --to "$targetHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$targetHost" "$1"
         else
             buildHostCmd nix-copy-closure --to "$targetHost" "$1"
         fi
@@ -169,7 +169,7 @@ nixBuild() {
 
         local drv="$(nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
-            NIX_SSHOPTS=$SSH_OPTS nix-copy-closure --to "$buildHost" "$drv"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             echo "nix-instantiate failed"
@@ -261,9 +261,9 @@ fi
 prebuiltNix() {
     machine="$1"
     if [ "$machine" = x86_64 ]; then
-        echo /nix/store/xryr9g56h8yjddp89d6dw12anyb4ch7c-nix-1.10
+        echo @nix_x86_64_linux@
     elif [[ "$machine" =~ i.86 ]]; then
-        echo /nix/store/2w92k5wlpspf0q2k9mnf2z42prx3bwmv-nix-1.10
+        echo @nix_i686_linux@
     else
         echo "$0: unsupported platform"
         exit 1

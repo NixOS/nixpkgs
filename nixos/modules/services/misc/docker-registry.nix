@@ -6,14 +6,8 @@ let
   cfg = config.services.dockerRegistry;
 
 in {
-  ###### interface
-
   options.services.dockerRegistry = {
-    enable = mkOption {
-      description = "Whether to enable docker registry server.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "Docker Registry";
 
     listenAddress = mkOption {
       description = "Docker registry host or ip to bind to.";
@@ -35,8 +29,7 @@ in {
 
     extraConfig = mkOption {
       description = ''
-        Docker extra registry configuration. See
-        <link xlink:href="https://github.com/docker/docker-registry/blob/master/config/config_sample.yml"/>
+        Docker extra registry configuration via environment variables.
       '';
       default = {};
       type = types.attrsOf types.str;
@@ -50,32 +43,24 @@ in {
       after = [ "network.target" ];
 
       environment = {
-        REGISTRY_HOST = cfg.listenAddress;
-        REGISTRY_PORT = toString cfg.port;
-        GUNICORN_OPTS = "[--preload]"; # see https://github.com/docker/docker-registry#sqlalchemy
-        STORAGE_PATH = cfg.storagePath;
+        REGISTRY_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.port}";
+        REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY = cfg.storagePath;
       } // cfg.extraConfig;
 
+      script = ''
+        ${pkgs.docker-distribution}/bin/registry serve \
+          ${pkgs.docker-distribution.out}/share/go/src/github.com/docker/distribution/cmd/registry/config-example.yml
+      '';
+
       serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.docker_registry}/bin/docker-registry";
         User = "docker-registry";
-        Group = "docker";
-        PermissionsStartOnly = true;
         WorkingDirectory = cfg.storagePath;
       };
-
-      postStart = ''
-        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/'; do
-          sleep 1;
-        done
-      '';
     };
 
-    users.extraGroups.docker.gid = mkDefault config.ids.gids.docker;
     users.extraUsers.docker-registry = {
       createHome = true;
       home = cfg.storagePath;
-      uid = config.ids.uids.docker-registry;
     };
   };
 }

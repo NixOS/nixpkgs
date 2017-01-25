@@ -1,7 +1,7 @@
-{stdenv, fetchurl, python, pkgconfig, libxml2Python, libxslt, intltool
-, makeWrapper, pythonPackages }:
+{stdenv, fetchurl, pkgconfig, libxml2Python, libxslt, intltool
+, makeWrapper, python2Packages }:
 
-stdenv.mkDerivation {
+python2Packages.mkPythonDerivation {
   name = "gnome-doc-utils-0.20.10";
 
   src = fetchurl {
@@ -10,9 +10,6 @@ stdenv.mkDerivation {
   };
 
   configureFlags = "--disable-scrollkeeper";
-  buildInputs = [ python libxml2Python libxslt ];
-  pythonPath = [ libxml2Python ];
-  postInstall = "wrapPythonPrograms";
-
-  nativeBuildInputs = [ pkgconfig intltool pythonPackages.wrapPython ];
+  buildInputs = [ libxslt pkgconfig intltool ];
+  propagatedBuildInputs = [ libxml2Python ];
 }

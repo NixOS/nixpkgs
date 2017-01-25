@@ -15,6 +15,7 @@
 , withRedis ? false
 , libmysql
 , withMysql ? false
+, json_c
 , withJson ? false
 , libyubikey
 , withYubikey ? false
@@ -42,16 +43,16 @@ stdenv.mkDerivation rec {
   version = "3.0.11";
 
   buildInputs = [ autoreconfHook openssl talloc finger_bsd perl ]
-    ++ optional withLdap [ openldap ]
-    ++ optional withSqlite [ sqlite ]
-    ++ optional withPcap [ libpcap ]
-    ++ optional withCap [ libcap ]
-    ++ optional withMemcached [ libmemcached ]
-    ++ optional withRedis [ hiredis ]
-    ++ optional withMysql [ libmysql ]
-    ++ optional withJson [ pkgs."json-c" ]
-    ++ optional withYubikey [ libyubikey ]
-    ++ optional withCollectd [ collectd ];
+    ++ optional withLdap openldap
+    ++ optional withSqlite sqlite
+    ++ optional withPcap libpcap
+    ++ optional withCap libcap
+    ++ optional withMemcached libmemcached
+    ++ optional withRedis hiredis
+    ++ optional withMysql libmysql
+    ++ optional withJson json_c
+    ++ optional withYubikey libyubikey
+    ++ optional withCollectd collectd;
 
   # NOTE: are the --with-{lib}-lib-dir and --with-{lib}-include-dir necessary with buildInputs ?
 

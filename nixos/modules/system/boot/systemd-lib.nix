@@ -182,7 +182,7 @@ rec {
         mkdir -p $out/getty.target.wants/
         ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-        ln -s ../local-fs.target ../remote-fs.target ../network.target \
+        ln -s ../local-fs.target ../remote-fs.target \
         ../nss-lookup.target ../nss-user-lookup.target ../swap.target \
         $out/multi-user.target.wants/
       ''}

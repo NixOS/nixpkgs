@@ -2,11 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "remake-${version}";
-  version = "3.82+dbg-0.6";
+  remakeVersion = "4.1";
+  dbgVersion = "1.1";
+  version = "${remakeVersion}+dbg-${dbgVersion}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bashdb/remake/${version}/${name}.tar.bz2";
-    sha256 = "0i2g6vi9zya78d9zpigfnmzg2qcl93myjfibh3kfmjk7b9lajfyz";
+    url = "mirror://sourceforge/project/bashdb/remake/${version}/remake-${remakeVersion}+dbg${dbgVersion}.tar.bz2";
+    sha256 = "1zi16pl7sqn1aa8b7zqm9qnd9vjqyfywqm8s6iap4clf86l7kss2";
   };
 
   buildInputs = [ readline ];

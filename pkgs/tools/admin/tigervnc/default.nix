@@ -7,20 +7,19 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.6.0";
+  version = "1.7.0";
   name = "tigervnc-${version}";
 
   src = fetchgit {
     url = "https://github.com/TigerVNC/tigervnc/";
-    sha256 = "1plljv1cxsax88kv52g02n8c1hzwgp6j1p8z1aqhskw36shg4pij";
-    rev = "5a727f25990d05c9a1f85457b45d6aed66409cb3";
+    sha256 = "1b6n2gq6078x8dwz471a68jrkgpcxmbiivmlsakr42vrndm7niz3";
+    rev = "e25272fc74ef09987ccaa33b9bf1736397c76fdf";
   };
 
   inherit fontDirectories;
 
   patchPhase = ''
     sed -i -e 's,$(includedir)/pixman-1,${if stdenv ? cross then pixman.crossDrv else pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
-    sed -i -e '/^$pidFile/a$ENV{XKB_BINDIR}="${if stdenv ? cross then xorg.xkbcomp.crossDrv else xorg.xkbcomp}/bin";' unix/vncserver
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${if stdenv ? cross then xkeyboard_config.crossDrv else xkeyboard_config}/etc/X11/xkb";' unix/vncserver
     fontPath=
     for i in $fontDirectories; do
@@ -40,9 +39,20 @@ stdenv.mkDerivation rec {
     tar xf ${xorg.xorgserver.src}
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
+    version=$(echo ${xorg.xorgserver.name} | sed 's/.*-\([0-9]\+\).\([0-9]\+\).*/\1\2/g')
+    patch -p1 < ${src}/unix/xserver$version.patch
     autoreconf -vfi
-    ./configure $configureFlags --disable-devel-docs --disable-docs --disable-xinerama --disable-xvfb --disable-xnest \
-        --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx \
+    ./configure $configureFlags  --disable-devel-docs --disable-docs \
+        --disable-xorg --disable-xnest --disable-xvfb --disable-dmx \
+        --disable-xwin --disable-xephyr --disable-kdrive --with-pic \
+        --disable-xorgcfg --disable-xprint --disable-static \
+        --disable-composite --disable-xtrap --enable-xcsecurity \
+        --disable-{a,c,m}fb \
+        --disable-xwayland \
+        --disable-config-dbus --disable-config-udev --disable-config-hal \
+        --disable-xevie \
+        --disable-dri --disable-dri2 --disable-dri3 --enable-glx \
+        --enable-install-libxf86config \
         --prefix="$out" --disable-unit-tests \
         --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
         --with-xkb-bin-directory=${xorg.xkbcomp}/bin \
@@ -50,9 +60,9 @@ stdenv.mkDerivation rec {
     make TIGERVNC_SRCDIR=`pwd`/../..
     popd
   '';
-  
+
   postInstall = ''
-    pushd unix/xserver
+    pushd unix/xserver/hw/vnc
     make TIGERVNC_SRCDIR=`pwd`/../.. install
     popd
     rm -f $out/lib/xorg/protocol.txt

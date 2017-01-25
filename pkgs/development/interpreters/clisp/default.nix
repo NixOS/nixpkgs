@@ -5,18 +5,18 @@
 # - full: contains base plus modules in withModules
 { stdenv, fetchurl, libsigsegv, gettext, ncurses, readline, libX11
 , libXau, libXt, pcre, zlib, libXpm, xproto, libXext, xextproto
-, libffi, libffcall, coreutils
+, libffi
+, libffcall
+, coreutils
 # build options
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
 , x11Support ? (stdenv.isi686 || stdenv.isx86_64)
 , dllSupport ? true
 , withModules ? [
-    "bindings/glibc"
     "pcre"
     "rawsock"
-    "wildcard"
-    "zlib"
   ]
+  ++ stdenv.lib.optionals stdenv.isLinux [ "bindings/glibc" "zlib" "wildcard" ]
   ++ stdenv.lib.optional x11Support "clx/new-clx"
 }:
 
@@ -26,22 +26,24 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
 stdenv.mkDerivation rec {
   v = "2.49";
   name = "clisp-${v}";
-  
+
   src = fetchurl {
     url = "mirror://gnu/clisp/release/${v}/${name}.tar.bz2";
     sha256 = "8132ff353afaa70e6b19367a25ae3d5a43627279c25647c220641fed00f8e890";
   };
 
   inherit libsigsegv gettext coreutils;
-  
+
+  ffcallAvailable = stdenv.isLinux && (libffcall != null);
+
   buildInputs = [libsigsegv]
   ++ stdenv.lib.optional (gettext != null) gettext
   ++ stdenv.lib.optional (ncurses != null) ncurses
   ++ stdenv.lib.optional (pcre != null) pcre
   ++ stdenv.lib.optional (zlib != null) zlib
   ++ stdenv.lib.optional (readline != null) readline
-  ++ stdenv.lib.optional (libffi != null) libffi
-  ++ stdenv.lib.optional (libffcall != null) libffcall
+  ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) libffi
+  ++ stdenv.lib.optional ffcallAvailable libffcall
   ++ stdenv.lib.optionals x11Support [
     libX11 libXau libXt libXpm xproto libXext xextproto
   ];
@@ -64,8 +66,10 @@ stdenv.mkDerivation rec {
   configureFlags = "builddir"
   + stdenv.lib.optionalString (!dllSupport) " --without-dynamic-modules"
   + stdenv.lib.optionalString (readline != null) " --with-readline"
-  + stdenv.lib.optionalString (libffi != null) " --with-dynamic-ffi"
-  + stdenv.lib.optionalString (libffcall != null) " --with-ffcall"
+  # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
+  + stdenv.lib.optionalString (ffcallAvailable && (libffi != null)) " --with-dynamic-ffi"
+  + stdenv.lib.optionalString ffcallAvailable " --with-ffcall"
+  + stdenv.lib.optionalString (!ffcallAvailable) " --without-ffcall"
   + stdenv.lib.concatMapStrings (x: " --with-module=" + x) withModules
   + stdenv.lib.optionalString threadSupport " --with-threads=POSIX_THREADS";
 
@@ -88,6 +92,7 @@ stdenv.mkDerivation rec {
     description = "ANSI Common Lisp Implementation";
     homepage = http://clisp.cons.org;
     maintainers = with stdenv.lib.maintainers; [raskin tohl];
+    # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     platforms = stdenv.lib.platforms.linux;
   };
 }

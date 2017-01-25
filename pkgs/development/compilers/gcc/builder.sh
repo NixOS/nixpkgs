@@ -218,6 +218,15 @@ postInstall() {
         substituteInPlace "$i" --replace "$out" "$lib"
     done
 
+    if [ -n "$enableMultilib" ]; then
+        moveToOutput "lib64/lib*.so*" "$lib"
+        moveToOutput "lib64/lib*.la"  "$lib"
+
+        for i in "$lib"/lib64/*.{la,py}; do
+            substituteInPlace "$i" --replace "$out" "$lib"
+        done
+    fi
+
     # Remove `fixincl' to prevent a retained dependency on the
     # previous gcc.
     rm -rf $out/libexec/gcc/*/*/install-tools
@@ -227,19 +236,19 @@ postInstall() {
     rm -rf $out/bin/gccbug
 
     if type "patchelf"; then
-	# Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
-	for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
+        # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
+        for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
             PREV_RPATH=`patchelf --print-rpath "$i"`
             NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
             patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-	done
+        done
 
-	# For some reason the libs retain RPATH to $out
-	for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
+        # For some reason the libs retain RPATH to $out
+        for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
             PREV_RPATH=`patchelf --print-rpath "$i"`
             NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
             patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-	done
+        done
     fi
 
     # Get rid of some "fixed" header files

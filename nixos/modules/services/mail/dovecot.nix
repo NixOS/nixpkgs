@@ -111,7 +111,7 @@ in
     };
 
     extraConfig = mkOption {
-      type = types.str;
+      type = types.lines;
       default = "";
       example = "mail_debug = yes";
       description = "Additional entries to put verbatim into Dovecot's config file.";
@@ -270,6 +270,9 @@ in
       }
       { assertion = cfg.showPAMFailure -> cfg.enablePAM;
         message = "dovecot is configured with showPAMFailure while enablePAM is disabled";
+      }
+      { assertion = (cfg.sieveScripts != {}) -> ((cfg.mailUser != null) && (cfg.mailGroup != null));
+        message = "dovecot requires mailUser and mailGroup to be set when sieveScripts is set";
       }
     ];
 

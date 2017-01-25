@@ -1,10 +1,8 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
-, libxml2, libxslt, makeWrapper }:
-
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+{ stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
+, libxml2, libxslt, makeWrapper, p7zip, xar, gzip, cpio }:
 
 let
-  version = "1.8.4";
+  version = "1.9.1";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -12,36 +10,56 @@ let
     sha256 = "1rn03rqlf1iv6n87a78hkda2yqparhhaivfjpizblmxvlw2hk5r8";
   };
 
-in
-stdenv.mkDerivation rec {
+  url = if stdenv.isLinux
+    then "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_${arch}.deb"
+    else if stdenv.isDarwin
+      then "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}.dmg"
+      else "system ${stdenv.system} not supported";
+
+  sha256 = {
+    "x86_64-linux"  = "0l1if9c4s4wkbi8k00pl7x00lil21izrd8wb9nv2b5q4gqidc1nh";
+    "i686-linux"    = "1789wjwcpgw3mljl49c8v5kycisay684gyalkkvd06928423y9zb";
+    "x86_64-darwin" = "1xrfq1a0xyifkhhjnpm6wsnms9w8c9q5rd2qqn4sm5npl7viy68p";
+  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+
+  arch = builtins.replaceStrings ["-linux"] [""] stdenv.system;
+
+in stdenv.mkDerivation rec {
   name = "vagrant-${version}";
   inherit version;
 
-  src =
-    if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_x86_64.deb";
-        sha256 = "fd38d8e00e494a617201facb42fc2cac627e5021db15e91c2a041eac6a2d8208";
-      }
-    else
-      fetchurl {
-        url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_i686.deb";
-        sha256 = "555351717cacaa8660821df8988cc40a39923b06b698fca6bb90621008aab06f";
-      };
+  src = fetchurl {
+    inherit url sha256;
+  };
 
   meta = with stdenv.lib; {
     description = "A tool for building complete development environments";
     homepage    = http://vagrantup.com;
     license     = licenses.mit;
-    maintainers = with maintainers; [ lovek323 globin jgeerds ];
-    platforms   = platforms.linux;
+    maintainers = with maintainers; [ lovek323 globin jgeerds kamilchm ];
+    platforms   = with platforms; linux ++ darwin;
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ]
+    ++ stdenv.lib.optional stdenv.isDarwin [ p7zip xar gzip cpio ];
 
-  unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb -x "$src" .
-  '';
+  unpackPhase = if stdenv.isLinux
+    then ''
+      ${dpkg}/bin/dpkg-deb -x "$src" .
+    ''
+    else ''
+      7z x $src
+      cd Vagrant/
+      xar -xf Vagrant.pkg
+      cd core.pkg/
+      cat Payload | gzip -d - | cpio -id
+
+      # move unpacked directories to match unpacked .deb from linux,
+      # so installPhase can be shared
+      mkdir -p opt/vagrant/ usr/
+      mv embedded opt/vagrant/embedded
+      mv bin usr/bin
+    '';
 
   buildPhase = "";
 
@@ -104,12 +122,15 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     # 'hide' the template file from shebang-patching
-    chmod -x "$out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable"
     chmod -x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
   '';
 
   postFixup = ''
-    chmod +x "$out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable"
     chmod +x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
-  '';
+  '' +
+  (stdenv.lib.optionalString stdenv.isDarwin ''
+    # undo the directory movement done in unpackPhase
+    mv $out/opt/vagrant/embedded $out/
+    rm -r $out/opt
+  '');
 }

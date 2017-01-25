@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, coq, ocamlPackages
+{ stdenv, lib, fetchurl
+, coq, ocaml, findlib, menhir, zarith
 , tools ? stdenv.cc
 }:
+
+assert lib.versionAtLeast ocaml.version "4.02";
 
 stdenv.mkDerivation rec {
   name = "verasco-1.3";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zvljrpwnv443k939zlw1f7ijwx18nhnpr8jl3f01jc5v66hr2k8";
   };
 
-  buildInputs = [ coq ] ++ (with ocamlPackages; [ ocaml findlib menhir zarith ]);
+  buildInputs = [ coq ocaml findlib menhir zarith ];
 
   preConfigure = ''
     substituteInPlace ./configure --replace '{toolprefix}gcc' '{toolprefix}cc'

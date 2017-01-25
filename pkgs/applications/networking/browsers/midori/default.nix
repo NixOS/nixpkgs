@@ -41,8 +41,7 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  cmakeFlags = [ 
-    "-DCMAKE_BUILD_TYPE=Release"
+  cmakeFlags = [
     "-DUSE_ZEITGEIST=${if zeitgeistSupport then "ON" else "OFF"}"
     "-DHALF_BRO_INCOM_WEBKIT2=ON"
     "-DUSE_GTK3=1"

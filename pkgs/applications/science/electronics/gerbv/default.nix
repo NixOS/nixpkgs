@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, gettext, libtool, automake, autoconf, cairo, gtk, autoreconfHook }:
+{ stdenv, fetchgit, pkgconfig, gettext, libtool, automake, autoconf, cairo, gtk2, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "gerbv-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "00jn1xhf6kblxc5gac1wvk8zm12fy6sk81nj3jwdag0z6wk3z446";
   };
 
-  buildInputs = [ pkgconfig gettext libtool automake autoconf cairo gtk autoreconfHook ];
+  buildInputs = [ pkgconfig gettext libtool automake autoconf cairo gtk2 autoreconfHook ];
 
   configureFlags = ["--disable-update-desktop-database"];
 

@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp AstroMenace $out
     cp gamedata.vfs $out
-    cat > $out/bin/AstroMenace << EOF 
-    #!/bin/bash
+    cat > $out/bin/AstroMenace << EOF
+    #!${stdenv.shell}
     $out/AstroMenace --dir=$out
     EOF
     chmod 755 $out/bin/AstroMenace

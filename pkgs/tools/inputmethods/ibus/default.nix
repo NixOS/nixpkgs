@@ -1,17 +1,18 @@
 { stdenv, fetchurl, makeWrapper
 , intltool, isocodes, pkgconfig
 , python3, pygobject3
-, gtk2, gtk3, atk, dconf, glib
+, gtk2, gtk3, atk, dconf, glib, json_glib
 , dbus, libnotify, gobjectIntrospection, wayland
+, nodePackages
 }:
 
 stdenv.mkDerivation rec {
   name = "ibus-${version}";
-  version = "1.5.13";
+  version = "1.5.14";
 
   src = fetchurl {
     url = "https://github.com/ibus/ibus/releases/download/${version}/${name}.tar.gz";
-    sha256 = "1wd5azlsgdih8qw6gi15rv130s6d90846n3r1ccwmp6z882xhwzd";
+    sha256 = "0g4x02d7j5w1lfn4zvmzsq93h17lajgn9d7hlvr6pws28vz40ax4";
   };
 
   postPatch = ''
@@ -29,12 +30,14 @@ stdenv.mkDerivation rec {
     "--disable-memconf"
     "--enable-ui"
     "--enable-python-library"
+    "--with-emoji-json-file=${nodePackages.emojione}/lib/node_modules/emojione/emoji.json"
   ];
 
   buildInputs = [
     python3 pygobject3
     intltool isocodes pkgconfig
     gtk2 gtk3 dconf
+    json_glib
     dbus libnotify gobjectIntrospection wayland
   ];
 
@@ -63,6 +66,9 @@ stdenv.mkDerivation rec {
         --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
     done
   '';
+
+  doInstallCheck = true;
+  installCheckPhase = "$out/bin/ibus version";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/ibus/ibus;

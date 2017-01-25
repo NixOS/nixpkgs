@@ -3,52 +3,58 @@
 with lib;
 
 let
-  wmCfg = config.services.xserver.windowManager;
+  cfg = config.services.xserver.windowManager.i3;
+in
 
-  i3option = name: {
-    enable = mkEnableOption name;
+{
+  options.services.xserver.windowManager.i3 = {
+    enable = mkEnableOption "i3 window manager";
+
     configFile = mkOption {
-      default = null;
-      type = types.nullOr types.path;
+      default     = null;
+      type        = with types; nullOr path;
       description = ''
         Path to the i3 configuration file.
         If left at the default value, $HOME/.i3/config will be used.
       '';
     };
+
     extraSessionCommands = mkOption {
-      default = "";
-      type = types.lines;
+      default     = "";
+      type        = types.lines;
       description = ''
         Shell commands executed just before i3 is started.
       '';
     };
+
+    package = mkOption {
+      type        = types.package;
+      default     = pkgs.i3;
+      defaultText = "pkgs.i3";
+      example     = "pkgs.i3-gaps";
+      description = ''
+        i3 package to use.
+      '';
+    };
   };
 
-  i3config = name: pkg: cfg: {
+  config = mkIf cfg.enable {
     services.xserver.windowManager.session = [{
-      inherit name;
+      name  = "i3";
       start = ''
         ${cfg.extraSessionCommands}
 
-        ${pkg}/bin/i3 ${optionalString (cfg.configFile != null)
+        ${cfg.package}/bin/i3 ${optionalString (cfg.configFile != null)
           "-c \"${cfg.configFile}\""
         } &
         waitPID=$!
       '';
     }];
-    environment.systemPackages = [ pkg ];
+    environment.systemPackages = [ cfg.package ];
   };
 
-in
-
-{
-  options.services.xserver.windowManager = {
-    i3 = i3option "i3";
-    i3-gaps = i3option "i3-gaps";
-  };
-
-  config = mkMerge [
-    (mkIf wmCfg.i3.enable (i3config "i3" pkgs.i3 wmCfg.i3))
-    (mkIf wmCfg.i3-gaps.enable (i3config "i3-gaps" pkgs.i3-gaps wmCfg.i3-gaps))
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "i3-gaps" "enable" ]
+      "Use services.xserver.windowManager.i3.enable and set services.xserver.windowManager.i3.package to pkgs.i3-gaps to use i3-gaps.")
   ];
 }

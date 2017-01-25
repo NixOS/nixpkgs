@@ -1,13 +1,18 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, xlibsWrapper, libX11
-, makeWrapper, callPackage, self, pypyPackages, gdbm, db }:
+, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
+, makeWrapper, callPackage, self, gdbm, db
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
+}:
 
 assert zlibSupport -> zlib != null;
 
 let
-
-  majorVersion = "5.3.1";
-  version = "${majorVersion}";
+  majorVersion = "5.6";
+  minorVersion = "0";
+  minorVersionSuffix = "";
+  pythonVersion = "2.7";
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "pypy${majorVersion}";
 
   pypy = stdenv.mkDerivation rec {
@@ -18,7 +23,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-      sha256 = "19cq2ngkh5q5jxwhw81rd6p0qna73z85jfik88w0856k5aj86yha";
+      sha256 = "145a0kd5c0s1v2rpavw9ihncfb05s2x7chc70v8fssvyxq601911";
     };
 
    # http://bugs.python.org/issue27369
@@ -30,9 +35,10 @@ let
       };
       in ''
       patch lib-python/2.7/test/test_pyexpat.py < '${expatch}'
+      substituteInPlace "lib-python/2.7/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
-    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
+    buildInputs = [ bzip2 openssl pkgconfig python libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
@@ -60,7 +66,7 @@ let
     '';
 
     buildPhase = ''
-      ${pythonFull.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
+      ${python.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
     '';
 
     setupHook = ./setup-hook.sh;
@@ -113,16 +119,22 @@ let
 
        # verify cffi modules
        $out/bin/pypy -c "import Tkinter;import sqlite3;import curses"
+
+        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
+        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
     '';
 
-    passthru = rec {
+    passthru = let
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+    in rec {
       inherit zlibSupport libPrefix;
       executable = "pypy";
       isPypy = true;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
       sitePackages = "site-packages";
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = pypyPackages; };
+      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+      pkgs = pythonPackages;
     };
 
     enableParallelBuilding = true;  # almost no parallelization without STM

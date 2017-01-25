@@ -1,12 +1,12 @@
 { stdenv, fetchurl, jre, graphviz }:
 
 stdenv.mkDerivation rec {
-  version = "8037";
+  version = "8047";
   name = "plantuml-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/plantuml/plantuml.${version}.jar";
-    sha256 = "1mlwcaph6n2akl639x64vpyjjipv6x0mwqxv6lvy3ml58pbgl58y";
+    sha256 = "11a1qchalymvc7qn9kqxamp8qm8fljpnxmfi4zs8sg75nzddjnlm";
   };
 
   # It's only a .jar file and a shell wrapper

@@ -1,6 +1,8 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils findutils gnused nix wget
 
+set -efuo pipefail
+
 SRCS=
 if [ -d "$1" ]; then
     SRCS="$(pwd)/$1/srcs.nix"

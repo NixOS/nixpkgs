@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preConfigure = ''
+    sed -re 's%@GUILE@%&/guile%' -i */Makefile.* Makefile.*
+  '';
+
   meta = {
     description = "Tools & library for data backup and distributed storage";
 

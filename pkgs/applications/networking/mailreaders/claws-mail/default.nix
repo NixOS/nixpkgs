@@ -1,6 +1,6 @@
 { fetchurl, stdenv, wrapGAppsHook
-, curl, dbus, dbus_glib, enchant, gtk, gnutls, gnupg, gpgme, hicolor_icon_theme
-, libarchive, libcanberra, libetpan, libnotify, libsoup, libxml2, networkmanager
+, curl, dbus, dbus_glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor_icon_theme
+, libarchive, libcanberra_gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
 , glib_networking, gsettings_desktop_schemas
 
@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-    [ curl dbus dbus_glib gtk gnutls gsettings_desktop_schemas hicolor_icon_theme
+    [ curl dbus dbus_glib gtk2 gnutls gsettings_desktop_schemas hicolor_icon_theme
       libetpan perl pkgconfig python wrapGAppsHook glib_networking
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
     ++ optional enablePluginArchive libarchive
-    ++ optional enablePluginNotificationSounds libcanberra
+    ++ optional enablePluginNotificationSounds libcanberra_gtk2
     ++ optional enablePluginNotificationDialogs libnotify
     ++ optional enablePluginFancy libsoup
     ++ optional enablePluginRssyl libxml2

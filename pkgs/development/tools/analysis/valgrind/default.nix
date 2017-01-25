@@ -1,30 +1,20 @@
 { stdenv, fetchurl, fetchpatch, perl, gdb }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.11.0";
+  name = "valgrind-3.12.0";
 
   src = fetchurl {
     url = "http://valgrind.org/downloads/${name}.tar.bz2";
-    sha256 = "0hiv871b9bk689mv42mkhp76za78l5773glszfkdbpf1m1qn4fbc";
+    sha256 = "18bnrw9b1d55wi1wnl68n25achsp9w48n51n1xw4fwjjnaal7jk7";
   };
 
-  patches =
-    [ (fetchpatch {
-        name = "glibc-2.21.patch";
-        url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
-          + "/valgrind-3.9.0-glibc-2.21.patch?h=packages/valgrind&id=41e87313b69";
-        sha256 = "14sgsvjjalbcqpcayyv5cndc9hfm5bigkp684b6cr6virksmlk19";
-      })
-    ];
-
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "stackprotector" ];
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  nativeBuildInputs = [ perl ];
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  buildInputs = [ perl ] ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   enableParallelBuilding = true;
 

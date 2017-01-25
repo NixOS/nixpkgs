@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, autoreconfHook, boost, python, libgsf,
+{ stdenv, fetchurl, autoreconfHook, boost, python2, libgsf,
   pkgconfig, bzip2, xmlto, gettext, imagemagick, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "libpst-0-6-63";
+  name = "libpst-0.6.68";
 
   src = fetchurl {
-      url = http://www.five-ten-sg.com/libpst/packages/libpst-0.6.63.tar.gz;
-      sha256 = "0qih919zk40japs4mpiaw5vyr2bvwz60sjf23gixd5vvzc32cljz";
+      url = "http://www.five-ten-sg.com/libpst/packages/${name}.tar.gz";
+      sha256 = "06mcaga36i65n1ifr5pw6ghcb1cjfqwrmm1xmaw1sckqf2iqx2by";
     };
 
-  buildInputs = [ autoreconfHook boost python libgsf pkgconfig bzip2
-		  xmlto gettext imagemagick doxygen ];
+  buildInputs = [ autoreconfHook boost python2 libgsf pkgconfig bzip2
+    xmlto gettext imagemagick doxygen
+  ];
 
   doCheck = true;
 

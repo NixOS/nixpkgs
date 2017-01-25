@@ -4,15 +4,12 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "cherrytree-${version}";
-  version = "0.37.1";
+  version = "0.37.6";
 
   src = fetchurl {
     url = "http://www.giuspen.com/software/${name}.tar.xz";
-    sha256 = "45f1cee4067598cf2ca8ae6f89d03789b86f9e3bf196236119868653420d7cdd";
+    sha256 = "0x4cgsimpwh7wfbzbzw2f5ipxxjizpi4wa99s1cwizynfjr38y5s";
   };
-
-  propagatedBuildInputs = with pythonPackages;
-  [ sqlite3 ];
 
   buildInputs = with pythonPackages;
   [ python gettext wrapPython pygtk dbus-python pygtksourceview ];

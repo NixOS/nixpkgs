@@ -1,9 +1,9 @@
-{ lib, pythonPackages, fetchurl, libxslt, docbook5_xsl, openssh
+{ lib, python2Packages, fetchurl, libxslt, docbook5_xsl, openssh
 # version args
 , src, version
 }:
 
-pythonPackages.buildPythonApplication {
+python2Packages.buildPythonApplication {
   name = "nixops-${version}";
   namePrefix = "";
 
@@ -11,18 +11,20 @@ pythonPackages.buildPythonApplication {
 
   buildInputs = [ libxslt ];
 
-  pythonPath =
-    [ pythonPackages.prettytable
-      pythonPackages.boto
-      pythonPackages.sqlite3
-      pythonPackages.hetzner
-      pythonPackages.libcloud
-      pythonPackages.azure-storage
-      pythonPackages.azure-mgmt-compute
-      pythonPackages.azure-mgmt-network
-      pythonPackages.azure-mgmt-resource
-      pythonPackages.azure-mgmt-storage
-      pythonPackages.adal
+  pythonPath = with python2Packages;
+    [ prettytable
+      boto
+      boto3
+      hetzner
+      libcloud
+      azure-storage
+      azure-mgmt-compute
+      azure-mgmt-network
+      azure-mgmt-resource
+      azure-mgmt-storage
+      adal
+      pysqlite  # Go back to builtin sqlite once Python 2.7.13 is released
+      datadog
     ];
 
   doCheck = false;

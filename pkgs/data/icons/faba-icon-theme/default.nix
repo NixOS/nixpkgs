@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${package-name}-${version}";
   package-name = "faba-icon-theme";
-  version = "2016-06-02";
+  version = "2016-09-13";
 
   src = fetchFromGitHub {
     owner = "moka-project";
     repo = package-name;
-    rev = "e50649d0171fd8cce42404c7c5002d77710ffcfc";
-    sha256 = "1fn969a6l58asnl9181c2z1fsj4dybl2mgbcpwig20bri6q7yz20";
+    rev = "00431894bce5fb1b8caccaee064788996be228a7";
+    sha256 = "0hif030pd4w3s851k0s65w0mf2pik10ha25ycpsv91gpbgarqcns";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

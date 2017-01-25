@@ -1,0 +1,11 @@
+--- gringo/libgringo/src/term.cc~	2016-07-12 23:56:10.593577749 -0400
++++ gringo/libgringo/src/term.cc	2016-07-12 23:52:35.169968338 -0400
+@@ -22,6 +22,8 @@
+ #include "gringo/logger.hh"
+ #include "gringo/graph.hh"
+ 
++#include <cmath>
++
+ namespace Gringo {
+ 
+ // {{{ definition of Defines

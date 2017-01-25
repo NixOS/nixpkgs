@@ -1,6 +1,7 @@
-{ stdenv, fetchgit, libuuid, pythonFull, iasl }:
+{ stdenv, fetchgit, libuuid, python2, iasl }:
 
 let
+  pythonEnv = python2.withPackages(ps: [ps.tkinter]);
 
 targetArch = if stdenv.isi686 then
   "IA32"
@@ -18,7 +19,7 @@ edk2 = stdenv.mkDerivation {
     sha256 = "0s9ywb8w7xzlnmm4kwzykxkrdaw53b7pky121cc9wjkllzqwyxrb";
   };
 
-  buildInputs = [ libuuid pythonFull ];
+  buildInputs = [ libuuid pythonEnv];
 
   makeFlags = "-C BaseTools";
 
@@ -40,7 +41,7 @@ edk2 = stdenv.mkDerivation {
 
   passthru = {
     setup = projectDscPath: attrs: {
-      buildInputs = [ pythonFull ] ++
+      buildInputs = [ pythonEnv ] ++
         stdenv.lib.optionals (attrs ? buildInputs) attrs.buildInputs;
 
       configurePhase = ''

@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "spwhitt";
     repo = "nix-zsh-completions";
-    rev = "0.2";
-    sha256 = "0wimjdxnkw1lzhjn28zm4pgbij86ym0z17ayivpzz27g0sacimga";
+    rev = "0.3";
+    sha256 = "1vwkd4nppjrvy6xb0vx4z73awrhaah1433dp6h4ghi3cdrrjn7ri";
   };
 
   installPhase = ''
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "ZSH completions for Nix, NixOS, and NixOps";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.spwhitt ];
+    maintainers = [ stdenv.lib.maintainers.spwhitt stdenv.lib.maintainers.olejorgenb ];
   };
 }

@@ -1,9 +1,8 @@
-{ stdenv, pythonPackages, fetchurl, gettext
-, pkgconfig, libofa, ffmpeg, chromaprint
-}:
+{ stdenv, python2Packages, fetchurl, gettext, chromaprint }:
 
 let
   version = "1.3.2";
+  pythonPackages = python2Packages;
 in pythonPackages.buildPythonApplication {
   name = "picard-${version}";
   namePrefix = "";
@@ -13,12 +12,7 @@ in pythonPackages.buildPythonApplication {
     sha256 = "0821xb7gyg0rhch8s3qkzmak90wjpcxkv9a364yv6bmqc12j6a77";
   };
 
-  buildInputs = [
-    pkgconfig
-    ffmpeg
-    libofa
-    gettext
-  ];
+  buildInputs = [ gettext ];
 
   propagatedBuildInputs = with pythonPackages; [
     pyqt4

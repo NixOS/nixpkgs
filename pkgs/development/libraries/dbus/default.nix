@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, expat, systemd, glib, dbus_glib, python
+{ stdenv, lib, fetchurl, pkgconfig, expat, systemd
 , libX11 ? null, libICE ? null, libSM ? null, x11Support ? (stdenv.isLinux || stdenv.isDarwin) }:
 
 assert x11Support -> libX11 != null
@@ -6,8 +6,8 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.10.8";
-  sha256 = "0560y3hxpgh346w6avcrcz79c8ansmn771y5xpcvvlr6m8mx5wxs";
+  version = "1.10.14";
+  sha256 = "10x0wvv2ly4lyyfd42k4xw0ar5qdbi9cksw3l5fcwf1y6mq8y8r3";
 
 self =  stdenv.mkDerivation {
     name = "dbus-${version}";
@@ -44,7 +44,11 @@ self =  stdenv.mkDerivation {
       "--localstatedir=/var"
       "--sysconfdir=/etc"
       "--with-session-socket-dir=/tmp"
+      "--with-system-pid-file=/run/dbus/pid"
+      "--with-system-socket=/run/dbus/system_bus_socket"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-systemduserunitdir=$(out)/etc/systemd/user"
+      "--enable-user-session"
       # this package installs nothing into those dirs and they create a dependency
       "--datadir=/run/current-system/sw/share"
       "--libexecdir=$(out)/libexec" # we don't need dbus-daemon-launch-helper
@@ -81,4 +85,3 @@ self =  stdenv.mkDerivation {
     };
   };
 in self
-

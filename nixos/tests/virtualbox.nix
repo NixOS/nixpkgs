@@ -11,10 +11,10 @@ let
       #!${pkgs.stdenv.shell} -xe
       export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
-      mkdir -p /var/run/dbus
+      mkdir -p /run/dbus
       cat > /etc/passwd <<EOF
       root:x:0:0::/root:/bin/false
-      messagebus:x:1:1::/var/run/dbus:/bin/false
+      messagebus:x:1:1::/run/dbus:/bin/false
       EOF
       cat > /etc/group <<EOF
       root:x:0:
@@ -144,6 +144,7 @@ let
       "--uart1 0x3F8 4"
       "--uartmode1 client /run/virtualbox-log-${name}.sock"
       "--memory 768"
+      "--audio none"
     ] ++ (attrs.vmFlags or []));
 
     controllerFlags = mkFlags [
@@ -273,9 +274,12 @@ let
 
       sub shutdownVM_${name} {
         $machine->succeed(ru "touch ${sharePath}/shutdown");
-        $machine->waitUntilSucceeds(
-          "test ! -e ${sharePath}/shutdown ".
-          "  -a ! -e ${sharePath}/boot-done"
+        $machine->execute(
+          'set -e; i=0; '.
+          'while test -e ${sharePath}/shutdown '.
+          '        -o -e ${sharePath}/boot-done; do '.
+          'sleep 1; i=$(($i + 1)); [ $i -le 3600 ]; '.
+          'done'
         );
         waitForShutdown_${name};
       }
@@ -295,9 +299,9 @@ let
       -pf /run/dhclient.pid \
       -v eth0 eth1
 
-    otherIP="$(${pkgs.netcat}/bin/netcat -clp 1234 || :)"
+    otherIP="$(${pkgs.netcat}/bin/nc -l 1234 || :)"
     ${pkgs.iputils}/bin/ping -I eth1 -c1 "$otherIP"
-    echo "$otherIP reachable" | ${pkgs.netcat}/bin/netcat -clp 5678 || :
+    echo "$otherIP reachable" | ${pkgs.netcat}/bin/nc -l 5678 || :
   '';
 
   sysdDetectVirt = pkgs: ''
@@ -386,6 +390,7 @@ in mapAttrs mkVBoxTest {
     $machine->sendKeys("ctrl-q");
     $machine->sleep(5);
     $machine->screenshot("gui_manager_stopped");
+    destroyVM_simple;
   '';
 
   simple-cli = ''
@@ -403,6 +408,7 @@ in mapAttrs mkVBoxTest {
     });
 
     shutdownVM_simple;
+    destroyVM_simple;
   '';
 
   headless = ''
@@ -411,6 +417,7 @@ in mapAttrs mkVBoxTest {
     waitForStartup_headless;
     waitForVMBoot_headless;
     shutdownVM_headless;
+    destroyVM_headless;
   '';
 
   host-usb-permissions = ''
@@ -454,11 +461,11 @@ in mapAttrs mkVBoxTest {
     my $test1IP = waitForIP_test1 1;
     my $test2IP = waitForIP_test2 1;
 
-    $machine->succeed("echo '$test2IP' | netcat -c '$test1IP' 1234");
-    $machine->succeed("echo '$test1IP' | netcat -c '$test2IP' 1234");
+    $machine->succeed("echo '$test2IP' | nc '$test1IP' 1234");
+    $machine->succeed("echo '$test1IP' | nc '$test2IP' 1234");
 
-    $machine->waitUntilSucceeds("netcat -c '$test1IP' 5678 >&2");
-    $machine->waitUntilSucceeds("netcat -c '$test2IP' 5678 >&2");
+    $machine->waitUntilSucceeds("nc '$test1IP' 5678 >&2");
+    $machine->waitUntilSucceeds("nc '$test2IP' 5678 >&2");
 
     shutdownVM_test1;
     shutdownVM_test2;

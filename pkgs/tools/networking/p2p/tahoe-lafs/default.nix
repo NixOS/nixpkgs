@@ -34,7 +34,7 @@ pythonPackages.buildPythonApplication rec {
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with pythonPackages; [
-    twisted foolscap nevow simplejson zfec pycryptopp sqlite3 darcsver
+    twisted foolscap nevow simplejson zfec pycryptopp darcsver
     setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
     service-identity
   ];

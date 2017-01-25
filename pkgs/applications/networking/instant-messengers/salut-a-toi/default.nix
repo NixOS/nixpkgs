@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = with pythonPackages; 
     [
-      python twisted urwid beautifulsoup wxPython pygobject
+      python twisted urwid beautifulsoup wxPython pygobject2
       wokkel dbus-python pyfeed wrapPython setuptools
     ];
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    ${python.interpreter}setup.py build
+    ${python.interpreter} setup.py build
   '';
 
   installPhase = ''

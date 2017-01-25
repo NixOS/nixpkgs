@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "skrooge-${version}";
-  version = "2.4.0";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/skrooge/${name}.tar.xz";
-    sha256 = "132d022337140f841f51420536c31dfe07c90fa3a38878279026825f5d2526fe";
+    sha256 = "13sd669rx66fpk9pm72nr2y69k2h4mcs4b904i9xm41i0fiy6szp";
   };
 
   nativeBuildInputs = [ cmake ecm makeQtWrapper ];

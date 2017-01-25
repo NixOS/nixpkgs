@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, python, pygtk, makeWrapper }:
+{ stdenv, fetchurl, python27Packages, makeWrapper }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python27Packages) pygtk python;
+in stdenv.mkDerivation rec {
   version = "0.4.8";
   name = "diffuse-${version}";
 

@@ -27,6 +27,14 @@ in {
         '';
       };
 
+      enableVPN = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable ConnMan VPN service.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = ''
@@ -78,7 +86,7 @@ in {
       };
     };
 
-    systemd.services."connman-vpn" = {
+    systemd.services."connman-vpn" = mkIf cfg.enableVPN {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
       after = [ "syslog.target" ];
@@ -91,7 +99,7 @@ in {
       };
     };
 
-    systemd.services."net-connman-vpn" = {
+    systemd.services."net-connman-vpn" = mkIf cfg.enableVPN {
       description = "D-BUS Service";
       serviceConfig = {
         Name = "net.connman.vpn";

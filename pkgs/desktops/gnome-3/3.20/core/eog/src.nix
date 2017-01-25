@@ -4,7 +4,7 @@ fetchurl: {
   name = "eog-3.20.4";
 
   src = fetchurl {
-    url = mirror://gnome/sources/eog/3.20/eog-3.20.3.tar.xz;
-    sha256 = "09ic1ndvl31jnlsmigd5dgdv262ybq61ik0xh35kmvgcklw8qc0n";
+    url = mirror://gnome/sources/eog/3.20/eog-3.20.4.tar.xz;
+    sha256 = "1qsv3brhi8l8fr22nd3d0fwq5xhwspqw0bammhkkq3ga0z6791wn";
   };
 }

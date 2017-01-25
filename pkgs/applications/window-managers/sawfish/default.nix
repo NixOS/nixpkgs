@@ -1,5 +1,8 @@
-{ stdenv, fetchgit, pkgconfig, which, autoreconfHook, rep-gtk, pango
-, gdk_pixbuf, libXinerama, libXrandr, libXtst, imlib, gettext, texinfo
+{ stdenv, fetchurl
+, pkgconfig, which, autoreconfHook
+, rep-gtk, pango, gdk_pixbuf
+, imlib, gettext, texinfo
+, libXinerama, libXrandr, libXtst, libICE, libSM
 , makeWrapper
 }:
 
@@ -8,18 +11,18 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "sawfish-${version}";
-  version = "1.11.90";
+  version = "1.12.0";
+  sourceName = "sawfish_${version}";
 
-  src = fetchgit {
-    url = "https://github.com/SawfishWM/sawfish.git";
-    rev = "b121f832571c9aebd228691c32604146e49f5e55";
-    sha256 = "0y7rmjzp7ha5qj9q1dasw50gd6jiaxc0qsjbvyfzxvwssl3i9hsc";
+  src = fetchurl {
+    url = "http://download.tuxfamily.org/sawfish/${sourceName}.tar.xz";
+    sha256 = "1z7awzgw8d15aw17kpbj460pcxq8l2rhkaxk47w7yg9qrmg0xja4";
   };
 
-  buildInputs =
-    [ pkgconfig which autoreconfHook rep-gtk pango gdk_pixbuf libXinerama
-      libXrandr libXtst imlib gettext texinfo makeWrapper
-    ];
+  buildInputs = [  pkgconfig which autoreconfHook
+    rep-gtk pango gdk_pixbuf imlib gettext texinfo
+    libXinerama libXrandr libXtst libICE libSM
+    makeWrapper ];
 
   patchPhase = ''
     sed -e 's|REP_DL_LOAD_PATH=|REP_DL_LOAD_PATH=$(REP_DL_LOAD_PATH):|g' -i Makedefs.in

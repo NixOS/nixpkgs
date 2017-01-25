@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, uutf }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, uutf }:
 
 let version = "0.9.1"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0wszqrmx8iqlwzvs76fjf4sqh15mv20yjrbyhkd348yq8nhdrm1z";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ uutf ];
 
   unpackCmd = "tar xjf $src";

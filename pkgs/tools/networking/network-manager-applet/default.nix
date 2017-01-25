@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
-, libnotify, libsecret, polkit, isocodes
+, libnotify, libsecret, polkit, isocodes, modemmanager
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, udev, libgudev, hicolor_icon_theme }:
+, makeWrapper, udev, libgudev, hicolor_icon_theme, jansson }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${networkmanager.major}/${name}.tar.xz";
-    sha256 = "02b42e7c17c9cd6c840563750da92ce58da1ec621df7f0c2402016026e727756";
+    sha256 = "431b7b4876638c6a537c8bf9c91a9250532b3d960b22b056df554695a81e4499";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ];
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret gsettings_desktop_schemas
     polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
+    modemmanager jansson
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];

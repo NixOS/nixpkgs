@@ -7,8 +7,8 @@
 , openssl, dbus, glib, udev, libxml2, libxslt, pcre16
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
-, coreutils, bison, flex, gdb, gperf, lndir, ruby
-, patchelf, perl, pkgconfig, python
+, coreutils, bison, flex, gdb, gperf, lndir
+, patchelf, perl, pkgconfig, python2
 
 # optional dependencies
 , cups ? null
@@ -19,7 +19,7 @@
 , buildExamples ? false
 , buildTests ? false
 , developerBuild ? false
-, libgnomeui, GConf, gnome_vfs, gtk
+, libgnomeui, GConf, gnome_vfs, gtk2
 , decryptSslTraffic ? false
 }:
 
@@ -28,7 +28,7 @@ let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
 
   # Search path for Gtk plugin
-  gtkLibPath = lib.makeLibraryPath [ gtk gnome_vfs libgnomeui GConf ];
+  gtkLibPath = lib.makeLibraryPath [ gtk2 gnome_vfs libgnomeui GConf ];
 
   dontInvalidateBacking = fetchurl {
     url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=0f68f8920573cdce1729a285a92ac8582df32841;hp=24c50f8dcf7fa61ac3c3d4d6295c259a104a2b8c";
@@ -205,15 +205,15 @@ stdenv.mkDerivation {
   ++ lib.optional mesaSupported mesa;
 
   buildInputs =
-    [ bison flex gperf ruby ]
+    [ bison flex gperf ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
     ++ lib.optional (postgresql != null) postgresql
     # FIXME: move to the main list on rebuild.
-    ++ [gnome_vfs.out libgnomeui.out gtk GConf];
+    ++ [gnome_vfs.out libgnomeui.out gtk2 GConf];
 
-  nativeBuildInputs = [ lndir patchelf perl pkgconfig python ];
+  nativeBuildInputs = [ lndir patchelf perl pkgconfig python2 ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
@@ -256,7 +256,7 @@ stdenv.mkDerivation {
 
   postFixup =
     ''
-      # Don't retain build-time dependencies like gdb and ruby.
+      # Don't retain build-time dependencies like gdb.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
 
       # Move libtool archives and qmake projects
@@ -272,7 +272,7 @@ stdenv.mkDerivation {
     '';
 
   inherit lndir;
-  setupHook = ./setup-hook.sh;
+  setupHook = ../../qtbase-setup-hook.sh;
 
   enableParallelBuilding = true;
 

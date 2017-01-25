@@ -1,6 +1,8 @@
-{ pkgs, fetchurl, tk, buildPythonApplication, pythonPackages }:
+{ pkgs, fetchurl, tk, python2Packages }:
 
-buildPythonApplication rec {
+let
+  pythonPackages = python2Packages;
+in pythonPackages.buildPythonApplication rec {
   version = "0.9.7";
   name = "nvpy-${version}";
 
@@ -9,13 +11,14 @@ buildPythonApplication rec {
     sha256 = "1rd3vlaqkg16iz6qcw6rkbq0jmyvc0843wa3brnvn1nz0kla243f";
   };
 
-  buildInputs = [tk];
-
-  propagatedBuildInputs = [
-    pythonPackages.markdown
-    pythonPackages.tkinter
-    pythonPackages.docutils
+  propagatedBuildInputs = with pythonPackages; [
+    markdown
+    tkinter
+    docutils
   ];
+
+  # No tests
+  doCheck = false;
 
   postInstall = ''
     install -dm755 "$out/share/licenses/nvpy/"
@@ -23,8 +26,6 @@ buildPythonApplication rec {
 
     install -dm755 "$out/share/doc/nvpy/"
     install -m644 README.rst "$out/share/doc/nvpy/README"
-
-    wrapProgram $out/bin/nvpy --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
   '';
 
   meta = with pkgs.lib; {

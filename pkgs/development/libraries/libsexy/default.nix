@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, glib, gtk, libxml2, pango
+, glib, gtk2, libxml2, pango
 }:
  
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ glib gtk libxml2 pango ];
+  buildInputs = [ glib gtk2 libxml2 pango ];
 
   meta = with stdenv.lib; {
     description = "A collection of GTK+ widgets";

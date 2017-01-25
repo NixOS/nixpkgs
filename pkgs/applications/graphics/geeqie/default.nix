@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, gtk, libpng, exiv2
+{ stdenv, fetchurl, pkgconfig, autoconf, automake, gtk2, libpng, exiv2
 , lcms, intltool, gettext, fbida
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-gps" ];
 
   buildInputs = [
-    pkgconfig autoconf automake gtk libpng exiv2 lcms intltool gettext
+    pkgconfig autoconf automake gtk2 libpng exiv2 lcms intltool gettext
   ];
 
   postInstall = ''

@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     description = "A tiling window manager for X11";
     homepage    = https://github.com/stumpwm/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hiberno the-kenny ];
+    maintainers = with maintainers; [ the-kenny ];
     platforms   = platforms.linux;
   };
 }

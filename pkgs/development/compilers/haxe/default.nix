@@ -1,17 +1,17 @@
 { stdenv, fetchgit, ocaml, zlib, neko, camlp4 }:
 
 stdenv.mkDerivation {
-  name = "haxe-3.1.3";
+  name = "haxe-3.2.1";
 
   buildInputs = [ocaml zlib neko camlp4];
 
   src = fetchgit {
     url = "https://github.com/HaxeFoundation/haxe.git";
-    sha256 = "0d8s9yqsqcbr2lfw4xnmg7vzgb6k1jq6hlwwaf1kmn9wxpvcc6x9";
+    sha256 = "1x9ay5a2llq46fww3k07jxx8h1vfpyxb522snc6702a050ki5vz3";
     fetchSubmodules = true;
 
-    # Tag 3.1.3
-    rev = "7be30670b2f1f9b6082499c8fb9e23c0a6df6c28";
+    # Tag 3.2.1
+    rev = "deab4424399b520750671e51e5f5c2684e942c17";
   };
 
   prePatch = ''
@@ -37,6 +37,6 @@ stdenv.mkDerivation {
     homepage = http://haxe.org;
     license = with licenses; [ gpl2 bsd2 /*?*/ ];  # -> docs/license.txt
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

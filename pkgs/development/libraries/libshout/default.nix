@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kgjpf8jkgyclw11nilxi8vyjk4s8878x23qyxnvybbgqbgbib7k";
   };
 
+  outputs = [ "out" "dev" "doc" ];
+
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libvorbis libtheora speex ];
 

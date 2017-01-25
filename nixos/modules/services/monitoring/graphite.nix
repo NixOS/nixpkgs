@@ -167,7 +167,7 @@ in {
             CACHE_TYPE: 'filesystem'
             CACHE_DIR: '/tmp/graphite-api-cache'
         '';
-        type = types.str;
+        type = types.lines;
       };
     };
 
@@ -387,7 +387,7 @@ in {
       systemd.services.carbonCache = let name = "carbon-cache"; in {
         description = "Graphite Data Storage Backend";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
@@ -410,7 +410,7 @@ in {
         enable = cfg.carbon.enableAggregator;
         description = "Carbon Data Aggregator";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
@@ -426,7 +426,7 @@ in {
       systemd.services.carbonRelay = let name = "carbon-relay"; in {
         description = "Carbon Data Relay";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
@@ -448,7 +448,7 @@ in {
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        after = [ "network.target" ];
         path = [ pkgs.perl ];
         environment = {
           PYTHONPATH = let
@@ -501,7 +501,7 @@ in {
       systemd.services.graphiteApi = {
         description = "Graphite Api Interface";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        after = [ "network.target" ];
         environment = {
           PYTHONPATH = let
               aenv = pkgs.python.buildEnv.override {
@@ -538,7 +538,7 @@ in {
       systemd.services.seyren = {
         description = "Graphite Alerting Dashboard";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "mongodb.service" ];
+        after = [ "network.target" "mongodb.service" ];
         environment = seyrenConfig;
         serviceConfig = {
           ExecStart = "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
@@ -561,7 +561,7 @@ in {
       systemd.services.graphitePager = {
         description = "Graphite Pager Alerting Daemon";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "redis.service" ];
+        after = [ "network.target" "redis.service" ];
         environment = {
           REDIS_URL = cfg.pager.redisUrl;
           GRAPHITE_URL = cfg.pager.graphiteUrl;
@@ -585,7 +585,7 @@ in {
         serviceConfig = {
           ExecStart = ''
             ${pkgs.pythonPackages.graphite_beacon}/bin/graphite-beacon \
-              --config ${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
+              --config=${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
           '';
           User = "graphite";
           Group = "graphite";

@@ -39,7 +39,7 @@ in
       description = "tcpcrypt";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
 
       path = [ pkgs.iptables pkgs.tcpcrypt pkgs.procps ];
 

@@ -29,6 +29,19 @@ in
       '';
     };
 
+    networking.hostConf = lib.mkOption {
+      type = types.lines;
+      default = "multi on";
+      example = ''
+        multi on
+        reorder on
+        trim lan
+      '';
+      description = ''
+        The contents of <filename>/etc/host.conf</filename>. See also <citerefentry><refentrytitle>host.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      '';
+    };
+
     networking.dnsSingleRequest = lib.mkOption {
       type = types.bool;
       default = false;
@@ -44,7 +57,7 @@ in
 
     networking.dnsExtensionMechanism = lib.mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
         that option set, <code>glibc</code> supports use of the extension mechanisms for
@@ -68,6 +81,18 @@ in
       example = [ "ndots:1" "rotate" ];
       description = ''
         Set the options in <filename>/etc/resolv.conf</filename>.
+      '';
+    };
+
+    networking.timeServers = mkOption {
+      default = [
+        "0.nixos.pool.ntp.org"
+        "1.nixos.pool.ntp.org"
+        "2.nixos.pool.ntp.org"
+        "3.nixos.pool.ntp.org"
+      ];
+      description = ''
+        The set of NTP servers from which to synchronise.
       '';
     };
 
@@ -171,6 +196,9 @@ in
             ${cfg.extraHosts}
           '';
 
+        # /etc/host.conf: resolver configuration file
+        "host.conf".text = cfg.hostConf;
+
         # /etc/resolvconf.conf: Configuration for openresolv.
         "resolvconf.conf".text =
             ''
@@ -223,16 +251,16 @@ in
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
 
-    # The ‘ip-up’ target is started when we have IP connectivity.  So
-    # services that depend on IP connectivity (like ntpd) should be
-    # pulled in by this target.
-    systemd.targets.ip-up.description = "Services Requiring IP Connectivity";
+    # The ‘ip-up’ target is kept for backwards compatibility.
+    # New services should use systemd upstream targets:
+    # See https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
+    systemd.targets.ip-up.description = "Services Requiring IP Connectivity (deprecated)";
 
     # This is needed when /etc/resolv.conf is being overriden by networkd
     # and other configurations. If the file is destroyed by an environment
     # activation then it must be rebuilt so that applications which interface
     # with /etc/resolv.conf directly don't break.
-    system.activationScripts.resolvconf = stringAfter [ "etc" "tmpfs" "var" ]
+    system.activationScripts.resolvconf = stringAfter [ "etc" "specialfs" "var" ]
       ''
         # Systemd resolved controls its own resolv.conf
         rm -f /run/resolvconf/interfaces/systemd

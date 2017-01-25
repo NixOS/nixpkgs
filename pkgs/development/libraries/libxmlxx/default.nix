@@ -1,11 +1,13 @@
 { stdenv, fetchurl, pkgconfig, libxml2, glibmm, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libxml++-2.38.1";
+  name = "libxml++-${maj_ver}.${min_ver}";
+  maj_ver = "2.40";
+  min_ver = "1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml++/2.38/${name}.tar.xz";
-    sha256 = "0px0ljcf9rsfa092dzmm097yn7wln6d5fgsvj9lnrnq3kcc2j9c8";
+    url = "mirror://gnome/sources/libxml++/${maj_ver}/${name}.tar.xz";
+    sha256 = "1sb3akryklvh2v6m6dihdnbpf1lkx441v972q9hlz1sq6bfspm2a";
   };
 
   nativeBuildInputs = [ pkgconfig perl ];
@@ -13,8 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ glibmm ];
 
   propagatedBuildInputs = [ libxml2 ];
-
-  configureFlags = "--disable-documentation"; #doesn't build without this for some reason
 
   meta = with stdenv.lib; {
     homepage = http://libxmlplusplus.sourceforge.net/;

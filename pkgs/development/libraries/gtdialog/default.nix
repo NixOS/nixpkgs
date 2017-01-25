@@ -1,16 +1,16 @@
-{stdenv, fetchurl, cdk, unzip, gtk, glib, ncurses, pkgconfig}:
+{stdenv, fetchurl, cdk, unzip, gtk2, glib, ncurses, pkgconfig}:
 let
   s = # Generated upstream information
   rec {
     baseName="gtdialog";
-    version="1.2";
+    version="1.3";
     name="${baseName}-${version}";
-    hash="0nvcldyhj8abr8jny9pbyfjwg8qfp9f2h508vjmrvr5c5fqdbbm0";
-    url="http://foicica.com/gtdialog/download/gtdialog_1.2.zip";
-    sha256="0nvcldyhj8abr8jny9pbyfjwg8qfp9f2h508vjmrvr5c5fqdbbm0";
+    hash="0y7sln877940bpj0s38cs5s97xg8csnaihh18lmnchf7c2kkbxpq";
+    url="http://foicica.com/gtdialog/download/gtdialog_1.3.zip";
+    sha256="0y7sln877940bpj0s38cs5s97xg8csnaihh18lmnchf7c2kkbxpq";
   };
   buildInputs = [
-    cdk unzip gtk glib ncurses pkgconfig
+    cdk unzip gtk2 glib ncurses pkgconfig
   ];
 in
 stdenv.mkDerivation {

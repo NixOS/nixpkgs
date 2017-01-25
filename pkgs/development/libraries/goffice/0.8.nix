@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, glib, gtk, libglade, bzip2
+{ fetchurl, stdenv, pkgconfig, glib, gtk2, libglade, bzip2
 , pango, libgsf, libxml2, libart, intltool, gettext
 , cairo, gconf, libgnomeui, pcre, goffice/*just meta*/ }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     # All these are in the "Requires:" field of `libgoffice-0.6.pc'.
-    glib libgsf libxml2 gtk libglade libart cairo pango
+    glib libgsf libxml2 gtk2 libglade libart cairo pango
   ];
 
   postInstall =

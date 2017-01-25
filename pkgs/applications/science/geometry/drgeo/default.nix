@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libglade, gtk, guile, libxml2, perl
+{ stdenv, fetchurl, libglade, gtk2, guile, libxml2, perl
 , intltool, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
   patches = [ ./struct.patch ];
 
-  buildInputs = [libglade gtk guile libxml2
+  buildInputs = [libglade gtk2 guile libxml2
     perl intltool libtool pkgconfig];
 
   prebuild = ''

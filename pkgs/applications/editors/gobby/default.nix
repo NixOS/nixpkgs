@@ -1,7 +1,7 @@
 { avahiSupport ? false # build support for Avahi in libinfinity
 , gnomeSupport ? false # build support for Gnome(gnome-vfs)
 , stdenv, fetchurl, pkgconfig
-, gtkmm, gsasl, gtksourceview, libxmlxx, libinfinity, intltool
+, gtkmm2, gsasl, gtksourceview, libxmlxx, libinfinity, intltool
 , gnome_vfs ? null}:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     sha256 = "165x0r668ma5blziisvbr8qig3jw9hf7i6w8r7wwvz3wsac3bswc";
   };
 
-  buildInputs = [ pkgconfig gtkmm gsasl gtksourceview libxmlxx libinf intltool ]
+  buildInputs = [ pkgconfig gtkmm2 gsasl gtksourceview libxmlxx libinf intltool ]
     ++ stdenv.lib.optional gnomeSupport gnome_vfs;
   
   configureFlags = ''

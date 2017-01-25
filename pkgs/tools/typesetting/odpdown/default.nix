@@ -1,8 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication, libreoffice, lpod, lxml, mistune, pillow
-, pygments
-}:
+{ stdenv, fetchurl, pythonPackages, libreoffice }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
 
   name = "odpdown-${version}";
   version = "0.4.1";
@@ -12,7 +10,7 @@ buildPythonApplication rec {
     sha256 = "005eecc73c65b9d4c09532547940718a7b308cd565f62a213dfa040827d4d565";
   };
 
-  propagatedBuildInputs = [ libreoffice lpod lxml mistune pillow pygments ];
+  propagatedBuildInputs = with pythonPackages; [ libreoffice lpod lxml mistune pillow pygments ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/thorstenb/odpdown;

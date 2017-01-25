@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy }:
 
 let
-  ver_maj = "3.20";
+  ver_maj = "3.22";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${ver_maj}/${name}.tar.xz";
-    sha256 = "12h2kd22iayvjfhmgjccm33igrbvqdj7hym31fsa1y0dhwzmf8gh";
+    sha256 = "05da4d4b628fb20c8384630ddf478a3b5562952b2d6181fe28d58f6cbc0514f5";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ epoxy ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python27Full }:
+{ stdenv, fetchFromGitHub, python27 }:
 
 stdenv.mkDerivation rec {
   name = "fpp-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace fpp --replace 'PYTHONCMD="python"' 'PYTHONCMD="${python27Full.interpreter}"'
+    substituteInPlace fpp --replace 'PYTHONCMD="python"' 'PYTHONCMD="${python27.interpreter}"'
   '';
 
   installPhase = ''

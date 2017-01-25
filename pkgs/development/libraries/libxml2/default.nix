@@ -1,7 +1,9 @@
-{ stdenv, lib, fetchurl, zlib, xz, python, findXMLCatalogs, libiconv, fetchpatch
-, supportPython ? (! stdenv ? cross) }:
+{ stdenv, lib, fetchurl, zlib, xz, python2, findXMLCatalogs, libiconv, fetchpatch
+, pythonSupport ? (! stdenv ? cross) }:
 
-stdenv.mkDerivation rec {
+let
+  python = python2;
+in stdenv.mkDerivation rec {
   name = "libxml2-${version}";
   version = "2.9.4";
 
@@ -9,6 +11,14 @@ stdenv.mkDerivation rec {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
     sha256 = "0g336cr0bw6dax1q48bblphmchgihx9p1pjmxdnrd6sh3qci3fgz";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2016-4658.patch";
+      url = "https://git.gnome.org/browse/libxml2/patch/?id=c1d1f7121194036608bf555f08d3062a36fd344b";
+      sha256 = "0q7i5qgwgzp2x4r820mqq3nx69bgkd7n0v00j28wa6hndbfaaxmb";
+    })
+  ];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=766834#c5
   postPatch = "patch -R < " + fetchpatch {
@@ -18,10 +28,10 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "doc" ]
-    ++ lib.optional supportPython "py";
-  propagatedBuildOutputs = "out bin" + lib.optionalString supportPython " py";
+    ++ lib.optional pythonSupport "py";
+  propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 
-  buildInputs = lib.optional supportPython python
+  buildInputs = lib.optional pythonSupport python
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
@@ -29,7 +39,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ];
 
-  configureFlags = lib.optional supportPython "--with-python=${python}"
+  configureFlags = lib.optional pythonSupport "--with-python=${python}"
     ++ [ "--exec_prefix=$dev" ];
 
   enableParallelBuilding = true;
@@ -45,9 +55,9 @@ stdenv.mkDerivation rec {
     propagatedBuildInputs =  [ findXMLCatalogs libiconv ];
   };
 
-  preInstall = lib.optionalString supportPython
+  preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
-  installFlags = lib.optionalString supportPython
+  installFlags = lib.optionalString pythonSupport
     ''pythondir="$(py)/lib/${python.libPrefix}/site-packages"'';
 
   postFixup = ''
@@ -56,7 +66,7 @@ stdenv.mkDerivation rec {
     moveToOutput share/man/man1 "$bin"
   '';
 
-  passthru = { inherit version; pythonSupport = supportPython; };
+  passthru = { inherit version; pythonSupport = pythonSupport; };
 
   meta = {
     homepage = http://xmlsoft.org/;

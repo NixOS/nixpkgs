@@ -22,7 +22,7 @@ in
         default = false;
         description = "
           Mount filesystems on demand. Unmount them automatically.
-          You may also be interested in afuese.
+          You may also be interested in afuse.
         ";
       };
 

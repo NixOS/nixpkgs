@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk, mono, gtk-sharp, gnome}:
+{stdenv, fetchurl, pkgconfig, gtk2, mono, gtk-sharp-2_0, gnome2}:
 
 stdenv.mkDerivation {
   name = "gnome-sharp-2.24.1";
@@ -7,8 +7,8 @@ stdenv.mkDerivation {
     sha256 = "0cfvs7hw67fp0wimskqd0gdfx323gv6hi0c5pf59krnmhdrl6z8p";
   };
 
-  buildInputs = [ pkgconfig gtk mono gtk-sharp ]
-  ++ (with gnome; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui]);
+  buildInputs = [ pkgconfig gtk2 mono gtk-sharp-2_0 ]
+  ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui]);
 
   patches = [ ./Makefile.in.patch ];
 

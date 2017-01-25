@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cairo, fftw, gtk, gtkmm, lv2, lvtk, pkgconfig, python }:
+{ stdenv, fetchurl, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig, python }:
 
 stdenv.mkDerivation  rec {
   name = "ams-lv2-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation  rec {
     sha256 = "1kqbl7rc3zrs27c5ga0frw3mlpx15sbxzhf04sfbrd9l60535fd5";
   };
 
-  buildInputs = [ cairo fftw gtk gtkmm lv2 lvtk pkgconfig python ];
+  buildInputs = [ cairo fftw gtkmm2 lv2 lvtk pkgconfig python ];
 
   configurePhase = "python waf configure --prefix=$out";
 

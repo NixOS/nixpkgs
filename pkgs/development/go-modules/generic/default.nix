@@ -1,4 +1,4 @@
-{ go, govers, parallel, lib, fetchgit, fetchhg }:
+{ go, govers, parallel, lib, fetchgit, fetchhg, rsync }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -16,6 +16,10 @@
 
 # Extra sources to include in the gopath
 , extraSrcs ? [ ]
+
+# Extra gopaths containing src subfolder
+# with sources to include in the gopath
+, extraSrcPaths ? [ ]
 
 # go2nix dependency file
 , goDeps ? null
@@ -56,7 +60,7 @@ let
     };
 
   importGodeps = { depsFile }:
-    map dep2src (lib.importJSON depsFile);
+    map dep2src (import depsFile);
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
@@ -65,7 +69,7 @@ in
 go.stdenv.mkDerivation (
   (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
 
-  name = "go${go.meta.branch}-${name}";
+  inherit name;
   nativeBuildInputs = [ go parallel ]
     ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
   buildInputs = [ go ] ++ buildInputs;
@@ -85,6 +89,9 @@ go.stdenv.mkDerivation (
     chmod -R u+w goPath/*
     mv goPath/* "go/src/${goPackagePath}"
     rmdir goPath
+
+  '') + (lib.optionalString (extraSrcPaths != []) ''
+    ${rsync}/bin/rsync -a ${lib.concatMapStrings (p: "${p}/src") extraSrcPaths} go
 
   '') + ''
     export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
@@ -180,6 +187,16 @@ go.stdenv.mkDerivation (
     done < <(find $bin/bin -type f 2>/dev/null)
   '';
 
+  shellHook = ''
+    d=$(mktemp -d "--suffix=-$name")
+  '' + toString (map (dep: ''
+     mkdir -p "$d/src/$(dirname "${dep.goPackagePath}")"
+     ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
+  ''
+  ) goPath) + ''
+    export GOPATH="$d:$GOPATH"
+  '';
+
   disallowedReferences = lib.optional (!allowGoReference) go
     ++ lib.optional (!dontRenameImports) govers;
 
@@ -194,7 +211,7 @@ go.stdenv.mkDerivation (
 
   meta = {
     # Add default meta information
-    platforms = lib.platforms.all;
+    platforms = go.meta.platforms or lib.platforms.all;
   } // meta // {
     # add an extra maintainer to every package
     maintainers = (meta.maintainers or []) ++

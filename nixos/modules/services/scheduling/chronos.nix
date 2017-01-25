@@ -41,7 +41,7 @@ in {
     systemd.services.chronos = {
       description = "Chronos Service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" "zookeeper.service" ];
+      after = [ "network.target" "zookeeper.service" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.chronos}/bin/chronos --master ${cfg.master} --zk_hosts ${concatStringsSep "," cfg.zookeeperHosts} --http_port ${toString cfg.httpPort}";

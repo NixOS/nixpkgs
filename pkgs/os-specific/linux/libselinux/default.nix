@@ -19,7 +19,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libsepol pcre ]
              ++ optionals enablePython [ swig python ];
 
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all -std=gnu89";
+  # Avoid this false warning:
+  # avc_internal.c: In function 'avc_netlink_receive':
+  # avc_internal.c:105:25: error: cast increases required alignment of target type [-Werror=cast-align]
+  #  struct nlmsghdr *nlh = (struct nlmsghdr *)buf;
+  #                         ^
+
+  NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-error=cast-align";
 
   # Unreleased upstream patch that fixes Python package issue arising
   # from recent SWIG changes.

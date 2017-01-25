@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libuuid, cmake }:
+{ stdenv, fetchurl, openssl, libuuid, cmake, libwebsockets }:
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1imw5ps0cqda41b574k8hgz9gdr8yy58f76fg8gw14pdnvf3l7sr";
   };
 
-  buildInputs = [ openssl libuuid ]
+  buildInputs = [ openssl libuuid libwebsockets ]
     ++ stdenv.lib.optional stdenv.isDarwin cmake;
 
   makeFlags = [
@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace config.mk \
       --replace "/usr/local" ""
+    substituteInPlace config.mk \
+      --replace "WITH_WEBSOCKETS:=no" "WITH_WEBSOCKETS:=yes"
+
   '';
 
   meta = {

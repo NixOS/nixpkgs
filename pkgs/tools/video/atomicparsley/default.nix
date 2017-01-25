@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with pkgs; [ unzip ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
   patches = [ ./casts.patch ];
   setSourceRoot = "sourceRoot=${product}-source-${version}";
   buildPhase = "bash build";

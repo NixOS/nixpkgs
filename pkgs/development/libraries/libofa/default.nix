@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "1rfkyz13cm8izm90c1xflp4rvsa24aqs6qpbbbqqcbmvzsj6j9yn";
   };
 
+  outputs = [ "out" "dev" ];
+
+  setOutputFlags = false;
+
+  preConfigure = ''
+    configureFlagsArray=(--includedir=$dev/include --libdir=$out/lib)
+  '';
+
   propagatedBuildInputs = [ expat curl fftw ];
 
   meta = {

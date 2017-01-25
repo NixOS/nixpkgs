@@ -44,14 +44,6 @@ let
       inherit (srcs.breeze) src version;
     };
     breeze-qt5 = callPackage ./breeze-qt5.nix {};
-    breeze =
-      let
-        version = (builtins.parseDrvName breeze-qt5.name).version;
-      in
-        symlinkJoin {
-          name = "breeze-${version}";
-          paths = map (pkg: pkg.out or pkg) [ breeze-gtk breeze-qt4 breeze-qt5 ];
-        };
     breeze-grub = callPackage ./breeze-grub.nix {};
     breeze-plymouth = callPackage ./breeze-plymouth {};
     kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
@@ -78,7 +70,9 @@ let
     plasma-desktop = callPackage ./plasma-desktop {};
     plasma-integration = callPackage ./plasma-integration.nix {};
     plasma-nm = callPackage ./plasma-nm {};
-    plasma-pa = callPackage ./plasma-pa.nix {};
+    plasma-pa = callPackage ./plasma-pa.nix {
+      inherit (pkgs.gnome3) gconf;
+    };
     plasma-workspace = callPackage ./plasma-workspace {};
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
     polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};

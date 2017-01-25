@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl3;
     homepage = http://www.linux-mtd.infradead.org/;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.x86_64;
   };
 }

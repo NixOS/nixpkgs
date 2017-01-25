@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, intltool, perl, perlPackages, libxml2
-, pciutils, pkgconfig, gtk, ddccontrol-db
+, pciutils, pkgconfig, gtk2, ddccontrol-db
 }:
 
 let version = "0.4.2"; in
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
 
   buildInputs = [
-    perl perlPackages.libxml_perl libxml2 pciutils gtk ddccontrol-db
+    perl perlPackages.libxml_perl libxml2 pciutils gtk2 ddccontrol-db
   ];
 
   patches = [ ./automake.patch ];

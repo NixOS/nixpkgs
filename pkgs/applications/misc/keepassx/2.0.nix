@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "keepassx2-${version}";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "https://www.keepassx.org/releases/${version}/keepassx-${version}.tar.gz";
-    sha256 = "1f1nlbd669rmpzr52d9dgfgclg4jcaq2jkrby3b8q1vjkksdqjr0";
+    sha256 = "1ia7cqx9ias38mnffsl7da7g1f66bcbjsi23k49sln0c6spb9zr3";
   };
 
   buildInputs = [ cmake libgcrypt qt4 xorg.libXtst ];

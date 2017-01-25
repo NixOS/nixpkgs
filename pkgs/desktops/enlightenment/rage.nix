@@ -1,18 +1,27 @@
-{ stdenv, fetchurl, efl, automake, autoconf, libtool, pkgconfig, gst_all_1
-, makeWrapper, lib }:
+{ stdenv, fetchurl, pkgconfig, efl, gst_all_1, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "rage-${version}";
-  version = "0.2.0";
+  version = "0.2.1";
   
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/rage/${name}.tar.gz";
-    sha256 = "06fxhznwbd5x341r8ml3cpwmvwn0aq9i1akcgclk4vjdqiyff1d9";
+    sha256 = "0xlxb1hmbnqcy088cqpj2i87hsd5h3da7d2f9afiavz0ssw4ll94";
   };
 
   nativeBuildInputs = [
-    automake autoconf libtool pkgconfig makeWrapper
+    pkgconfig
+    wrapGAppsHook
   ];
+
+  buildInputs = [
+    efl
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-libav
+ ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${efl}/include/ecore-con-1"
@@ -29,28 +38,10 @@ stdenv.mkDerivation rec {
     "-I${efl}/include/ethumb-client-1"
   ];
 
-  buildInputs = [
-    efl
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
- ];
-
-  configurePhase = ''
-    ./autogen.sh --prefix=$out
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/rage \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
-  '';
-
   meta = {
     description = "Video + Audio player along the lines of mplayer";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc ftrvxmtrx ];
+    maintainers = with stdenv.lib.maintainers; [ matejc ftrvxmtrx romildo ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
   };

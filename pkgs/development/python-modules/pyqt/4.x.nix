@@ -1,4 +1,4 @@
-{ lib, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
+{ stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
 
 let
   version = "4.11.3";
@@ -14,17 +14,24 @@ in mkPythonDerivation {
   configurePhase = ''
     mkdir -p $out
     lndir ${dbus-python} $out
+    rm -rf "$out/nix-support"
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      export QMAKESPEC="unsupported/macx-clang-libc++" # OS X target after bootstrapping phase \
+    ''}
 
     substituteInPlace configure.py \
-      --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'"
+      --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'" \
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      --replace "qt_macx_spec = 'macx-g++'" "qt_macx_spec = 'unsupported/macx-clang-libc++'" # for bootstrapping phase \
+    ''}
 
     configureFlagsArray=( \
       --confirm-license --bindir $out/bin \
       --destdir $out/${python.sitePackages} \
       --plugin-destdir $out/lib/qt4/plugins --sipdir $out/share/sip/PyQt4 \
-      --dbus=${dbus_libs.dev}/include/dbus-1.0 --verbose)
+      --dbus=${dbus-python}/include/dbus-1.0 --verbose)
 
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
@@ -49,7 +56,7 @@ in mkPythonDerivation {
     description = "Python bindings for Qt";
     license = "GPL";
     homepage = http://www.riverbankcomputing.co.uk;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.mesaPlatforms;
+    maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

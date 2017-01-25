@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, gettext, makeWrapper
-, parted, gtk, glib, libuuid, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
+, parted, glib, libuuid, pkgconfig, gtkmm2, libxml2, hicolor_icon_theme
 , gpart, hdparm, procps, utillinux
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-doc" ];
 
-  buildInputs = [ parted gtk glib libuuid gtkmm libxml2 hicolor_icon_theme ];
+  buildInputs = [ parted glib libuuid gtkmm2 libxml2 hicolor_icon_theme ];
   nativeBuildInputs = [ intltool gettext makeWrapper pkgconfig ];
 
   postInstall = ''

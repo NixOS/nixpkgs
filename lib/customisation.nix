@@ -56,16 +56,18 @@ rec {
       ff = f origArgs;
       overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
     in
-      if builtins.isAttrs ff then (ff //
-        { override = newArgs: makeOverridable f (overrideWith newArgs);
-          overrideDerivation = fdrv:
-            makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
-        })
-      else if builtins.isFunction ff then
-        { override = newArgs: makeOverridable f (overrideWith newArgs);
-          __functor = self: ff;
-          overrideDerivation = throw "overrideDerivation not yet supported for functors";
-        }
+      if builtins.isAttrs ff then (ff // {
+        override = newArgs: makeOverridable f (overrideWith newArgs);
+        overrideDerivation = fdrv:
+          makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
+        ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
+          makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
+      })
+      else if builtins.isFunction ff then {
+        override = newArgs: makeOverridable f (overrideWith newArgs);
+        __functor = self: ff;
+        overrideDerivation = throw "overrideDerivation not yet supported for functors";
+      }
       else ff;
 
 

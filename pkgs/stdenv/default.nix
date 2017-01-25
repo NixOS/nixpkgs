@@ -5,43 +5,52 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-{ system, allPackages ? import ../.., platform, config, lib }:
+{ # Args just for stdenvs' usage
+  lib, allPackages
+  # Args to pass on to `allPacakges` too
+, system, platform, crossSystem, config
+} @ args:
 
-
-rec {
-
-
+let
   # The native (i.e., impure) build environment.  This one uses the
   # tools installed on the system outside of the Nix environment,
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stdenvNative = (import ./native {
-    inherit system allPackages config;
-  }).stdenv;
+  inherit (import ./native args) stdenvNative;
 
   stdenvNativePkgs = allPackages {
-    bootStdenv = stdenvNative;
+    inherit system platform crossSystem config;
+    allowCustomOverrides = false;
+    stdenv = stdenvNative;
     noSysDirs = false;
   };
 
 
   # The Nix build environment.
-  stdenvNix = import ./nix {
+  stdenvNix = assert crossSystem == null; import ./nix {
     inherit config lib;
     stdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
   };
 
-  stdenvFreeBSD = (import ./freebsd { inherit system allPackages platform config; }).stdenvFreeBSD;
+  inherit (import ./freebsd args) stdenvFreeBSD;
 
   # Linux standard environment.
-  stdenvLinux = (import ./linux { inherit system allPackages platform config lib; }).stdenvLinux;
+  inherit (import ./linux args) stdenvLinux;
 
-  stdenvDarwin = (import ./darwin { inherit system allPackages platform config;}).stdenvDarwin;
+  inherit (import ./darwin args) stdenvDarwin;
+
+  inherit (import ./cross args) stdenvCross stdenvCrossiOS;
+
+  inherit (import ./custom args) stdenvCustom;
 
   # Select the appropriate stdenv for the platform `system'.
-  stdenv =
+in
+    if crossSystem != null then
+      if crossSystem.useiOSCross or false then stdenvCrossiOS
+      else stdenvCross else
+    if config ? replaceStdenv then stdenvCustom else
     if system == "i686-linux" then stdenvLinux else
     if system == "x86_64-linux" then stdenvLinux else
     if system == "armv5tel-linux" then stdenvLinux else
@@ -54,5 +63,4 @@ rec {
     if system == "i686-cygwin" then stdenvNative else
     if system == "x86_64-cygwin" then stdenvNative else
     if system == "x86_64-freebsd" then stdenvFreeBSD else
-    stdenvNative;
-}
+    stdenvNative

@@ -33,7 +33,7 @@ in {
 
     nodes = mkOption {
       description = "Confd list of nodes to connect to.";
-      default = [ "http://127.0.0.1:4001" ];
+      default = [ "http://127.0.0.1:2379" ];
       type = types.listOf types.str;
     };
 

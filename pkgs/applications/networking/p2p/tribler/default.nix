@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   pythonPath = [
     libtorrentRasterbar
     pythonPackages.wxPython
-    pythonPackages.curses
     pythonPackages.apsw
     pythonPackages.twisted
     pythonPackages.gmpy
@@ -32,7 +31,6 @@ stdenv.mkDerivation rec {
     pythonPackages.requests
     pythonPackages.setuptools
     pythonPackages.m2crypto
-    pythonPackages.sqlite3
   ];
 
   installPhase =

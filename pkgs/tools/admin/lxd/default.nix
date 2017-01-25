@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1rs9g1snjymg6pjz5bj77zk5wbs0w8xmrfxzqs32w6zr1dxhf9hs";
   };
 
-  goDeps = ./deps.json;
+  goDeps = ./deps.nix;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ lxc ];

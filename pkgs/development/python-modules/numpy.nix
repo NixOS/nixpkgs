@@ -1,4 +1,4 @@
-{lib, python, buildPythonPackage, isPyPy, gfortran, nose, blas}:
+{lib, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
 
 args:
 
@@ -11,6 +11,12 @@ in buildPythonPackage (args // rec {
   disabled = isPyPy;
   buildInputs = args.buildInputs or [ gfortran nose ];
   propagatedBuildInputs = args.propagatedBuildInputs or [ passthru.blas ];
+
+  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
+    # See cpython 2.7 patches.
+    # numpy.distutils is used by cython during it's check phase
+    ./numpy-distutils-C++.patch
+  ];
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -33,15 +39,18 @@ in buildPythonPackage (args // rec {
     runHook postCheck
   '';
 
+  postInstall = ''
+    ln -s $out/bin/f2py* $out/bin/f2py
+  '';
+
   passthru = {
     blas = blas;
   };
 
-  # The large file support test is disabled because it takes forever
-  # and can cause the machine to run out of disk space when run.
-  prePatch = ''
-    sed -i 's/test_large_file_support/donttest/' numpy/lib/tests/test_format.py
-  '';
+  # Disable two tests
+  # - test_f2py: f2py isn't yet on path.
+  # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
+  NOSE_EXCLUDE="test_f2py,test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";

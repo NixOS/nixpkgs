@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ SDL libpng xz zlib freetype fontconfig ]
-    ++ stdenv.lib.optional withFluidSynth [ fluidsynth soundfont-fluid ];
+    ++ stdenv.lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";
 

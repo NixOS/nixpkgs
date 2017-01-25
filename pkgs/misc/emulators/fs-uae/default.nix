@@ -1,24 +1,18 @@
 { stdenv, fetchurl, pkgconfig
-, gettext, gtk, SDL, zlib, glib, openal, mesa, lua, freetype }:
+, gettext, gtk2, SDL2, zlib, glib, openal, mesa, lua, freetype, libmpeg2, zip }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
 
   name = "fs-uae-${version}";
-  version = "2.4.3";
+  version = "2.8.0";
 
   src = fetchurl {
-    urls = [ "http://fs-uae.net/fs-uae/stable/${version}/${name}.tar.gz" ];
-    sha256 = "05wngvpqj8kj4wzi5jzzhvs19iljb3m6ba1l2hk4rz68b400ndv6";
+    url = "http://fs-uae.net/fs-uae/stable/${version}/${name}.tar.gz";
+    sha256 = "1cvvlkzhh4rrpax7505bngw990rx86l1nhad174zpqc9ah93il25";
   };
 
-  buildInputs = [ pkgconfig gettext gtk SDL zlib glib openal mesa lua freetype ];
-
-  phases = "unpackPhase buildPhase installPhase";
-
-  # Strange: the docs recommend SDL2, but it does compile only with SDL1
-  buildPhase = "make sdl=1";
-  installPhase = "make install prefix=$out";
+  buildInputs = [ pkgconfig gettext gtk2 SDL2 zlib glib openal mesa lua freetype libmpeg2 zip ];
 
   meta = {
     description = "An accurate, customizable Amiga Emulator";
@@ -30,9 +24,8 @@ stdenv.mkDerivation rec{
     '';
     license = licenses.gpl2Plus;
     homepage = http://fs-uae.net;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with stdenv.lib; [ maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
 # TODO: testing and Python GUI support
-# TODO: SDL2 support

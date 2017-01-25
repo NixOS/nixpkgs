@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
-, pango, cogl, clutter, libstartup_notification, libcanberra, zenity, libcanberra_gtk3
+, pango, cogl, clutter, libstartup_notification, libcanberra_gtk2, zenity, libcanberra_gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ pkgconfig intltool glib gobjectIntrospection gtk gsettings_desktop_schemas upower
-      gnome_desktop cairo pango cogl clutter zenity libstartup_notification libcanberra
+      gnome_desktop cairo pango cogl clutter zenity libstartup_notification libcanberra_gtk2
       gnome3.geocode_glib
       libcanberra_gtk3 zenity libtool makeWrapper xkeyboard_config libxkbfile libxkbcommon ];
 
