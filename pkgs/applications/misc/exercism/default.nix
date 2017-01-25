@@ -18,6 +18,6 @@ buildGoPackage rec {
    homepage    = http://exercism.io/cli;
    license     = licenses.mit;
    maintainers = [ maintainers.rbasso ];
-   platforms   = platforms.linux;
+   platforms   = platforms.unix;
   };
 }

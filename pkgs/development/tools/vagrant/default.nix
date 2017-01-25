@@ -113,12 +113,8 @@ in stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r opt "$out"
     cp -r usr/bin "$out"
-    wrapProgram "$out/bin/vagrant" --prefix LD_LIBRARY_PATH : "$out/opt/vagrant/embedded/lib"
-
-    substituteInPlace $out/opt/vagrant/embedded/lib/ruby/2.2.0/x86_64-linux/rbconfig.rb \
-      --replace '"/bin/mkdir' '"${coreutils}/bin/mkdir'
-    substituteInPlace $out/opt/vagrant/embedded/lib/ruby/2.2.0/x86_64-linux/rbconfig.rb \
-      --replace "'/usr/bin/install" "'${coreutils}/bin/install"
+    wrapProgram "$out/bin/vagrant" --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libxml2 libxslt ]}" \
+                                   --prefix LD_LIBRARY_PATH : "$out/opt/vagrant/embedded/lib"
   '';
 
   preFixup = ''

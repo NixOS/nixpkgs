@@ -294,6 +294,8 @@ in
             OnCalendar = cfg.renewInterval;
             Unit = "acme-${cert}.service";
             Persistent = "yes";
+            AccuracySec = "5m";
+            RandomizedDelaySec = "1h";
           };
         })
       );

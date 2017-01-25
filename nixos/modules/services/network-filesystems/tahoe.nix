@@ -343,7 +343,7 @@ in
             preStart = ''
               if [ \! -d ${nodedir} ]; then
                 mkdir -p /var/db/tahoe-lafs
-                tahoe create-node ${nodedir}
+                tahoe create-node --hostname=localhost ${nodedir}
               fi
 
               # Tahoe has created a predefined tahoe.cfg which we must now

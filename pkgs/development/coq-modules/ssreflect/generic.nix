@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   inherit src;
 
   nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
-  buildInputs = [ coq.ocaml coq.camlp5 ncurses which ];
+  buildInputs = [ coq.ocaml coq.findlib coq.camlp5 ncurses which ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;

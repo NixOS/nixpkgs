@@ -227,6 +227,7 @@
   joko = "Ioannis Koutras <ioannis.koutras@gmail.com>";
   jonafato = "Jon Banafato <jon@jonafato.com>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
+  jpierre03 = "Jean-Pierre PRUNARET <nix@prunetwork.fr>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
   juliendehos = "Julien Dehos <dehos@lisic.univ-littoral.fr>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
@@ -290,6 +291,7 @@
   mbbx6spp = "Susan Potter <me@susanpotter.net>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
   mboes = "Mathieu Boespflug <mboes@tweag.net>";
+  mbrgm = "Marius Bergmann <marius@yeai.de>";
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
   mdaiter = "Matthew S. Daiter <mdaiter8121@gmail.com>";
   meditans = "Carlo Nucera <meditans@gmail.com>";

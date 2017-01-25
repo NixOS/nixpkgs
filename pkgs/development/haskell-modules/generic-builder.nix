@@ -148,8 +148,10 @@ let
 
   setupBuilder = if isCross || isGhcjs then "${nativeGhc}/bin/ghc" else ghcCommand;
   setupCommand = "./Setup";
-  ghcCommand = if isGhcjs then "ghcjs" else if isCross then "${ghc.cross.config}-ghc" else "ghc";
-  ghcCommandCaps = toUpper ghcCommand;
+  ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
+  crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
+  ghcCommand = "${crossPrefix}${ghcCommand'}";
+  ghcCommandCaps= toUpper ghcCommand';
 
 in
 

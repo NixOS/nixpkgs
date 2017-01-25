@@ -57,14 +57,7 @@ self: super: {
       sha256 = "1vy6bj7f8zyj4n1r0gpi0r7mxapsrjvhwmsi5sbnradfng5j3jya";
       rev = drv.version;
     };
-  })).overrideScope (self: super: {
-    # https://github.com/bitemyapp/esqueleto/issues/8
-    esqueleto = self.esqueleto_2_4_3;
-    # https://github.com/prowdsponsor/esqueleto/issues/137
-    persistent = self.persistent_2_2_4_1;
-    persistent-template = self.persistent-template_2_1_8_1;
-    persistent-sqlite = self.persistent-sqlite_2_2_1;
-  })).override {
+  }))).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
@@ -516,7 +509,7 @@ self: super: {
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
-  vty_5_14 = dontCheck super.vty_5_14;
+  vty_5_15 = dontCheck super.vty_5_15;
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -675,8 +668,38 @@ self: super: {
     '';
   }));
 
-  # Requires optparse-applicative 0.13.0.0
+  # Packages of the diagrams ecosystem that require:
+  #   diagrams-core ==1.4.*
+  #   diagrams-lib ==1.4.*
+  #   optparse-applicative ==0.13.*
+  diagrams_1_4 = super.diagrams_1_4.overrideScope (self: super: {
+    diagrams-contrib = self.diagrams-contrib_1_4_0_1;
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
+    diagrams-svg = self.diagrams-svg_1_4_1;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+  diagrams-contrib_1_4_0_1 = super.diagrams-contrib_1_4_0_1.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
+  });
+  diagrams-lib_1_4_0_1 = super.diagrams-lib_1_4_0_1.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
   diagrams-pgf = super.diagrams-pgf.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+  diagrams-rasterific_1_4 = super.diagrams-rasterific_1_4.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
+    optparse-applicative = self.optparse-applicative_0_13_0_0;
+  });
+  diagrams-svg_1_4_1 = super.diagrams-svg_1_4_1.overrideScope (self: super: {
+    diagrams-core = self.diagrams-core_1_4;
+    diagrams-lib = self.diagrams-lib_1_4_0_1;
     optparse-applicative = self.optparse-applicative_0_13_0_0;
   });
 
@@ -692,6 +715,9 @@ self: super: {
 
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
+
+  # Depends on itself for testing
+  doctest-discover = addBuildTool super.doctest-discover (dontCheck super.doctest-discover);
 
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
@@ -808,14 +834,6 @@ self: super: {
 
   # Fine-tune the build.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
-    # Bump version to latest git-version to get support for Emacs 25.x.
-    version = "1.0.20-28-g1ffb4db";
-    src = pkgs.fetchFromGitHub {
-      owner = "chrisdone";
-      repo = "structured-haskell-mode";
-      rev = "dde5104ee28e1c63ca9fbc37c969f8e319b4b903";
-      sha256 = "0g5qpnxzr9qmgzvsld5mg94rb28xb8kd1a02q045r6zlmv1zx7lp";
-    };
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
@@ -1123,8 +1141,7 @@ self: super: {
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
-  # https://github.com/fpco/store/issues/77
-  store = dontCheck super.store;
+  # Use proper store-core version.
   store_0_3 = super.store_0_3.overrideScope (self: super: { store-core = self.store-core_0_3; });
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
@@ -1132,9 +1149,6 @@ self: super: {
 
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
-
-  # https://github.com/vshabanov/HsOpenSSL/issues/11
-  HsOpenSSL = doJailbreak super.HsOpenSSL;
 
   # https://github.com/NixOS/nixpkgs/issues/19612
   wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
@@ -1169,18 +1183,8 @@ self: super: {
 
   socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
 
-  # Encountered missing dependencies: hspec >=1.3 && <2.1
-  # https://github.com/rampion/ReadArgs/issues/8
-  ReadArgs = doJailbreak super.ReadArgs;
-
-  # https://github.com/philopon/barrier/issues/3
-  barrier = doJailbreak super.barrier;
-
-  # requires vty 5.13
-  brick = super.brick.overrideScope (self: super: { vty = self.vty_5_14; });
-
-  # https://github.com/krisajenkins/elm-export/pull/22
-  elm-export = doJailbreak super.elm-export;
+  # requires most recent vty
+  brick = super.brick.overrideScope (self: super: { vty = self.vty_5_15; });
 
   turtle_1_3_1 = super.turtle_1_3_1.overrideScope (self: super: {
     optparse-applicative = self.optparse-applicative_0_13_0_0;
