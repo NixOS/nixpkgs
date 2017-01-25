@@ -14651,6 +14651,36 @@ in {
     };
   };
 
+  nikola = buildPythonPackage rec {
+    pname = "Nikola";
+    name = "${pname}-${version}";
+
+    version = "7.8.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/N/${pname}/${name}.tar.gz";
+      sha256 = "12kcnvwy9dr194riji6iird1zpdcv252d19lfvabr39rsi9658jl";
+    };
+
+    meta = {
+      description = "A static content management system";
+      homepage    = "https://www.getnikola.com/";
+      license     = "MIT";
+      maintainers = with maintainers; [ ];
+    };
+
+    # No tests included in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [
+      markdown jinja2 husl pyphen micawber pygal typogrify phpserialize
+      webassets notebook ipykernel ghp-import2 ws4py watchdog pillow
+      Yapsy pyrss2gen piexif doit natsort blinker Mako unidecode
+      dateutil Logbook
+    ];
+  };
+
+
   nototools = buildPythonPackage rec {
     version = "git-2016-03-25";
     name = "nototools-${version}";
