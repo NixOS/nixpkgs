@@ -133,6 +133,19 @@ following incompatible changes:</para>
 
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      Autoloading connection tracking helpers is now disabled by default.
+      This default was also changed in the Linux kernel and is considered
+      insecure if not configured properly in your firewall. If you need
+      connection tracking helpers (i.e. for active FTP) please enable
+      <literal>networking.firewall.autoLoadConntrackHelpers</literal> and
+      tune <literal>networking.firewall.connectionTrackingModules</literal>
+      to suit your needs.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 

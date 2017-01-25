@@ -41,7 +41,6 @@ let
   kernelPackages = config.boot.kernelPackages;
 
   kernelHasRPFilter = kernelPackages.kernel.features.netfilterRPFilter or false;
-  kernelCanDisableHelpers = kernelPackages.kernel.features.canDisableNetfilterConntrackHelpers or false;
 
   helpers =
     ''
@@ -426,7 +425,7 @@ in
 
     networking.firewall.connectionTrackingModules = mkOption {
       type = types.listOf types.str;
-      default = [ "ftp" ];
+      default = [ ];
       example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
       description =
         ''
@@ -435,9 +434,11 @@ in
 
           As helpers can pose as a security risk, it is advised to
           set this to an empty list and disable the setting
-          networking.firewall.autoLoadConntrackHelpers
+          networking.firewall.autoLoadConntrackHelpers unless you
+          know what you are doing. Connection tracking is disabled
+          by default.
 
-          Loading of helpers is recommended to be done through the new
+          Loading of helpers is recommended to be done through the
           CT target.  More info:
           https://home.regit.org/netfilter-en/secure-use-of-helpers/
         '';
@@ -445,7 +446,7 @@ in
 
     networking.firewall.autoLoadConntrackHelpers = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description =
         ''
           Whether to auto-load connection-tracking helpers.
@@ -505,15 +506,14 @@ in
 
     environment.systemPackages = [ pkgs.iptables ] ++ cfg.extraPackages;
 
-    boot.kernelModules = map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
-    boot.extraModprobeConfig = optionalString (!cfg.autoLoadConntrackHelpers) ''
-      options nf_conntrack nf_conntrack_helper=0
+    boot.kernelModules = (optional cfg.autoLoadConntrackHelpers "nf_conntrack")
+      ++ map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
+    boot.extraModprobeConfig = optionalString cfg.autoLoadConntrackHelpers ''
+      options nf_conntrack nf_conntrack_helper=1
     '';
 
     assertions = [ { assertion = (cfg.checkReversePath != false) || kernelHasRPFilter;
                      message = "This kernel does not support rpfilter"; }
-                   { assertion = cfg.autoLoadConntrackHelpers || kernelCanDisableHelpers;
-                     message = "This kernel does not support disabling conntrack helpers"; }
                  ];
 
     systemd.services.firewall = {
