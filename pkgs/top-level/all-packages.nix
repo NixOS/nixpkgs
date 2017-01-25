@@ -17035,6 +17035,7 @@ with pkgs;
     flocq = callPackage ../development/coq-modules/flocq {};
     interval = callPackage ../development/coq-modules/interval {};
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
+    math_classes = callPackage ../development/coq-modules/math-classes { };
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
   };
