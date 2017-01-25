@@ -14681,6 +14681,25 @@ in {
     };
   };
 
+  phpserialize = self.buildPythonPackage rec {
+    pname = "phpserialize";
+    version = "1.3";
+    name = "${pname}-${version}";
+
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "19qgkb9z4zjbjxlpwh2w6pxkz2j3iymnydi69jl0jg905lqjsrxz";
+    };
+
+    meta = {
+      description = "Port of serialize and unserialize functions of php to python";
+      homepage = "http://github.com/mitsuhiko/phpserialize";
+      license = licenses.bsd3;
+    };
+  };
+
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
     version = "1.3.6";
