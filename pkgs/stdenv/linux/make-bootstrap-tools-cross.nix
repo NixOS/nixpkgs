@@ -55,33 +55,32 @@ let
     if toolsArch == "armv6l" then raspberrypiCrossSystem else
     if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else null;
 
-  pkgsUnspliced = pkgsFun ({inherit system;} // selectedCrossSystem);
-  pkgs = pkgsUnspliced.splicedPackages;
+  pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
 
-  inherit (pkgsUnspliced.buildPackages) stdenv nukeReferences cpio binutilsCross;
+  inherit (pkgs.buildPackages) stdenv nukeReferences cpio binutilsCross;
 
-  glibc = pkgs.libcCross.nativeDrv;
-  bash = pkgs.bash.crossDrv;
-  findutils = pkgs.findutils.crossDrv;
-  diffutils = pkgs.diffutils.crossDrv;
-  gnused = pkgs.gnused.crossDrv;
-  gnugrep = pkgs.gnugrep.crossDrv;
-  gawk = pkgs.gawk.crossDrv;
-  gzip = pkgs.gzip.crossDrv;
-  bzip2 = pkgs.bzip2.crossDrv;
-  gnumake = pkgs.gnumake.crossDrv;
-  patch = pkgs.patch.crossDrv;
-  patchelf = pkgs.patchelf.crossDrv;
-  gcc = pkgs.gcc.crossDrv.cc;
-  gmpxx = pkgs.gmpxx.crossDrv;
-  mpfr = pkgs.mpfr.crossDrv;
-  zlib = pkgs.zlib.crossDrv;
-  libmpc = pkgs.libmpc.crossDrv;
-  binutils = pkgs.binutils.crossDrv;
-  libelf = pkgs.libelf.crossDrv;
+  glibc = pkgs.buildPackages.libcCross;
+  bash = pkgs.bash;
+  findutils = pkgs.findutils;
+  diffutils = pkgs.diffutils;
+  gnused = pkgs.gnused;
+  gnugrep = pkgs.gnugrep;
+  gawk = pkgs.gawk;
+  gzip = pkgs.gzip;
+  bzip2 = pkgs.bzip2;
+  gnumake = pkgs.gnumake;
+  patch = pkgs.patch;
+  patchelf = pkgs.patchelf;
+  gcc = pkgs.gcc.cc;
+  gmpxx = pkgs.gmpxx;
+  mpfr = pkgs.mpfr;
+  zlib = pkgs.zlib;
+  libmpc = pkgs.libmpc;
+  binutils = pkgs.binutils;
+  libelf = pkgs.libelf;
 
   # Keep these versions in sync with the versions used in the current GCC!
-  isl = pkgs.isl_0_14.crossDrv;
+  isl = pkgs.isl_0_14;
 in
 
 rec {
@@ -116,7 +115,7 @@ rec {
 
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools-cross";
-      crossConfig = pkgsUnspliced.hostPlatform.config;
+      crossConfig = pkgs.hostPlatform.config;
 
       buildInputs = [nukeReferences cpio binutilsCross];
 
@@ -174,7 +173,7 @@ rec {
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
 
-        cp -d ${gnugrep.pcre.crossDrv.out}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
         cp -d ${gcc.out}/bin/gcc $out/bin
