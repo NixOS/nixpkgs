@@ -23,9 +23,13 @@ in stdenv.mkDerivation rec {
   '';
 
   patches =
-    [ # FIXME: what is this patch for? Do we still need it?
+    [ # Install a nss.pc (pkgconfig) file and nss-config script
+      # Upstream issue: https://bugzilla.mozilla.org/show_bug.cgi?id=530672
       (fetchurl {
-        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/nss/files/nss-3.28-gentoo-fixups.patch";
+        name = "nss-3.28-gentoo-fixups.patch";
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/"
+            + "dev-libs/nss/files/nss-3.28-gentoo-fixups.patch"
+            + "?id=05c31f8cca591b3ce8219e4def7c26c7b1b130d6";
         sha256 = "0z58axd1n7vq4kdp5mrb3dsg6di39a1g40s3shl6n2dzs14c1y2q";
       })
       # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
