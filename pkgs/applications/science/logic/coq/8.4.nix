@@ -63,6 +63,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
+    inherit findlib;
     emacsBufferSetup = pkgs: ''
       ; Propagate coq paths to children
       (inherit-local-permanent coq-prog-name "${self}/bin/coqtop")
