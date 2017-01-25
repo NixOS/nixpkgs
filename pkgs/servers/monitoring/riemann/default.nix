@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   name = "riemann-${version}";
@@ -9,15 +9,19 @@ stdenv.mkDerivation rec {
     sha256 = "1x57gi301rg6faxm4q5scq9dpp0v9nqiwjpsgigdb8whmjr1zwkr";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
-    sed -i 's#lib/riemann.jar#$out/share/java/riemann.jar#' bin/riemann
+    substituteInPlace bin/riemann --replace '$top/lib/riemann.jar' "$out/share/java/riemann.jar"
 
     mkdir -p $out/share/java $out/bin $out/etc
     mv lib/riemann.jar $out/share/java/
     mv bin/riemann $out/bin/
     mv etc/riemann.config $out/etc/
+
+    wrapProgram "$out/bin/riemann" --prefix PATH : "${jre}/bin"
   '';
 
   meta = with stdenv.lib; {
