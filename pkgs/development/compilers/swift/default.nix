@@ -232,7 +232,7 @@ stdenv.mkDerivation rec {
     paxmark pmr $out/bin/*
 
     # TODO: Use wrappers to get these on the PATH for swift tools, instead
-    ln -s ${clang}/bin/ld* $out/bin/
+    ln -s ${clang}/bin/* $out/bin/
     ln -s ${binutils}/bin/ar $out/bin/ar
   '';
 
