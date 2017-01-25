@@ -5014,61 +5014,13 @@ in {
 
   pytest = self.pytest_29;
 
-  pytest_27 = buildPythonPackage rec {
-    name = "pytest-2.7.3";
+  pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "1z4yi986f9n0p8qmzmn21m21m8j1x78hk3505f89baqm6pdw7afm";
-    };
+  pytest_28 = callPackage ../development/python-modules/pytest/2_8.nix {};
 
-    # Disabled temporarily because of Hydra issue with namespaces
-    doCheck = false;
+  pytest_29 = callPackage ../development/python-modules/pytest/2_9.nix {};
 
-    preCheck = ''
-      # don't test bash builtins
-      rm testing/test_argcomplete.py
-    '';
-
-    propagatedBuildInputs = with self; [ py ]
-      ++ (optional isPy26 argparse)
-      ++ stdenv.lib.optional
-        pkgs.config.pythonPackages.pytest.selenium or false
-        self.selenium;
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar lovek323 madjar ];
-      platforms = platforms.unix;
-    };
-  };
-
-  pytest_28 = self.pytest_27.override rec {
-    name = "pytest-2.8.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "1bwb06g64x2gky8x5hcrfpg6r351xwvafimnhm5qxq7wajz8ck7w";
-    };
-  };
-
-  pytest_29 = self.pytest_27.override rec {
-    name = "pytest-2.9.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "1n6igbc1b138wx1q5gca4pqw1j6nsyicfxds5n0b5989kaxqmh8j";
-    };
-  };
-
-  pytest_30 = self.pytest_27.override rec {
-    name = "pytest-3.0.5";
-
-    propagatedBuildInputs = with self; [ hypothesis py ];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "1z9pj39w0r2gw5hsqndlmsqa80kgbrann5kfma8ww8zhaslkl02a";
-    };
-  };
+  pytest_30 = callPackage ../development/python-modules/pytest {};
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
@@ -5094,27 +5046,8 @@ in {
     };
   };
 
-  pytestdjango = buildPythonPackage rec {
-    name = "pytest-django-${version}";
-    version = "2.9.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-django/${name}.tar.gz";
-      sha256 = "1mmc7zsz3dlhs6sx4sppkj1vgshabi362r1a8b8wpj1qfximpqcb";
-    };
-
-    # doing this to allow depending packages to find
-    # pytest's binaries
-    pytest = self.pytest;
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ django setuptools_scm_18 ];
-
-    meta = {
-      description = "py.test plugin for testing of Django applications";
-      homepage = http://pytest-django.readthedocs.org/en/latest/;
-      license = licenses.bsd3;
-    };
+  pytestdjango = callPackage ../development/python-modules/pytestdjango.nix {
+    pytest = self.pytest_30;
   };
 
   pytest-fixture-config = buildPythonPackage rec {
@@ -10441,27 +10374,8 @@ in {
     };
   };
 
-  django_guardian = buildPythonPackage rec {
-    name = "django-guardian-${version}";
-    version = "1.4.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-guardian/${name}.tar.gz";
-      sha256 = "1m7y3brk3697hr2cvkzl8dry4pp7wkmhvxmf8db1ardz1r9d8895";
-    };
-
-    buildInputs = with self ; [ pytest pytestrunner pytestdjango django_environ mock ];
-    propagatedBuildInputs = with self ; [ django six ];
-
-    checkPhase = ''
-      ${python.interpreter} nix_run_setup.py test --addopts="--ignore build"
-    '';
-
-    meta = {
-      description = "Per object permissions for Django";
-      homepage = https://github.com/django-guardian/django-guardian;
-      licenses = [ licenses.mit licenses.bsd2 ];
-    };
+  django_guardian = callPackage ../development/python-modules/django_guardian.nix {
+    pytest = self.pytest_30;
   };
 
   django_tagging = buildPythonPackage rec {
