@@ -14655,11 +14655,6 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
   };
 
-  qemu_28 = callPackage ../applications/virtualization/qemu/2.8.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
-    inherit (darwin.stubs) rez setfile;
-  };
-
   qgis = callPackage ../applications/gis/qgis {};
 
   qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
