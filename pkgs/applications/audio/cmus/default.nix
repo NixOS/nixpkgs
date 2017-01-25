@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, ncurses, pkgconfig
-, gcc, libiconv, CoreAudio
+{ stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
+, libiconv, CoreAudio
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
 # simple fallback for everyone else
@@ -90,6 +90,13 @@ let
     #(mkFlag vtxSupport    "CONFIG_VTX=y"     libayemu)
   ];
 
+  clangGCC = runCommand "clang-gcc" {} ''
+    #! ${stdenv.shell}
+    mkdir -p $out/bin
+    ln -s ${stdenv.cc}/bin/clang $out/bin/gcc
+    ln -s ${stdenv.cc}/bin/clang++ $out/bin/g++
+  '';
+
 in
 
 stdenv.mkDerivation rec {
@@ -111,7 +118,7 @@ stdenv.mkDerivation rec {
   ] ++ concatMap (a: a.flags) opts);
 
   buildInputs = [ ncurses pkgconfig ]
-    ++ stdenv.lib.optional stdenv.cc.isClang gcc
+    ++ stdenv.lib.optional stdenv.cc.isClang clangGCC
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
     ++ concatMap (a: a.deps) opts;
 
