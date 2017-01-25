@@ -12694,6 +12694,21 @@ in {
     };
   };
 
+  husl = buildPythonPackage rec {
+    pname    = "husl";
+    name    = "${pname}-${version}";
+    version = "4.0.3";
+
+    # ImportError: No module named tests
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/husl/${name}.tar.gz";
+      sha256 = "1fahd35yrpvdqzdd1r6r416d0csg4jbxwlkzm19sa750cljn47ca";
+    };
+
+  };
+
   hvac = buildPythonPackage rec {
     name    = "hvac-${version}";
     version = "0.2.15";
