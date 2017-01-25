@@ -1,8 +1,7 @@
 { stdenv, fetchurl, pkgconfig, utillinux, which, knot-dns, luajit, libuv, lmdb
 , cmocka, systemd, hiredis, libmemcached
 , gnutls, nettle
-, luajitPackages, makeWrapper # TODO: on master there's luajitPackages
-, fetchzip
+, luajitPackages, makeWrapper
 }:
 
 let
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Caching DNS resolver, from .cz domain registry";
+    description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = https://knot-resolver.cz;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
