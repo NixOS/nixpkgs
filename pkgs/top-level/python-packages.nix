@@ -1579,10 +1579,10 @@ in {
     '';
 
     meta = {
-      homepage = https://aws.amazon.com/cli/;
-      description = "Unified tool to manage your AWS services";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ muflax ];
+        homepage = https://aws.amazon.com/cli/;
+        description = "Unified tool to manage your AWS services";
+        license = stdenv.lib.licenses.asl20;
+        maintainers = with maintainers; [ muflax ];
     };
   };
 
