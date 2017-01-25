@@ -191,6 +191,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free = false;
   };
 
+  eupl11 = {
+    fullName = "EUPL v1.1";
+    url = https://joinup.ec.europa.eu/community/eupl/og_page/european-union-public-licence-eupl-v11;
+  };
+
   fdl12 = spdx {
     spdxId = "GFDL-1.2";
     fullName = "GNU Free Documentation License v1.2";
