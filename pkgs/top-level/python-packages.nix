@@ -175,6 +175,10 @@ in {
 
   # packages defined elsewhere
 
+  bap = callPackage ../development/python-modules/bap {
+    bap = pkgs.ocamlPackages_4_02.bap;
+  };
+
   blivet = callPackage ../development/python-modules/blivet { };
 
   breathe = callPackage ../development/python-modules/breathe { };
