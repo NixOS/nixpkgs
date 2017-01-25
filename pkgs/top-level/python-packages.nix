@@ -15373,6 +15373,25 @@ in {
     };
   };
 
+  piexif = self.buildPythonPackage rec {
+    pname = "piexif";
+    version = "1.0.10";
+    name = "${pname}-${version}";
+
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.zip";
+      sha256 = "1j20kl3655k4qx0ydc38fmr242qjvwpk5dyfm2f1chgjg26y23s6";
+    };
+
+    meta = {
+      description = "Simplify exif manipulations with python";
+      homepage = "https://github.com/hMatoba/Piexif";
+      license = licenses.mit;
+    };
+  };
+
   pint = buildPythonPackage rec {
     name = "pint-${version}";
     version = "0.7.2";
