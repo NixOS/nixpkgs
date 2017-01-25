@@ -34,6 +34,9 @@ stdenv.mkDerivation {
   inherit coq-version;
   inherit camlp5;
   inherit (ocamlPackages) ocaml;
+  passthru = {
+    inherit (ocamlPackages) findlib;
+  };
 
   src = fetchurl {
     url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
