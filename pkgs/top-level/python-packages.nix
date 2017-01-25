@@ -13713,6 +13713,24 @@ in {
     };
   };
 
+  legitfs = buildPythonPackage rec {
+    name = "legitfs-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/legitfs/${name}.tar.gz";
+      sha256 = "02772h17icgnd8sdi4minpwv1wgr2zzy6pns34083z90k78b28im";
+    };
+
+    propagatedBuildInputs = with self; [ dulwich fusepy click Logbook ];
+
+    meta = {
+      homepage = "http://github.com/mbr/legitfs";
+      description = "A read-only FUSE-based filesystem allowing you to browse git repositories";
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   lektor = buildPythonPackage rec {
     name = "lektor-${version}";
 
