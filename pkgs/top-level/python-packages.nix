@@ -15513,6 +15513,23 @@ in {
     };
   };
 
+  pyphen = self.buildPythonPackage rec {
+    pname = "Pyphen";
+    version = "0.9.4";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/P/${pname}/${name}.tar.gz";
+      sha256 = "1mqb5jrigxipxzp1d8nbwkq0cfjw77pnn6hc4mp1yd2mn059mymb";
+    };
+
+    meta = {
+      description = "Hyphenate text using existing Hunspell hyphenation dictionaries";
+      homepage = https://github.com/Kozea/Pyphen;
+      license = licenses.gpl2Plus;
+    };
+  };
+
   monotonic = buildPythonPackage rec {
     name = "monotonic-0.4";
 
