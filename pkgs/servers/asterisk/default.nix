@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "Software implementation of a telephone private branch exchange (PBX)";
     homepage = http://www.asterisk.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ auntie ];
+    maintainers = with maintainers; [ auntie yorickvP ];
   };
 }
