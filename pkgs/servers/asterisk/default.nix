@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "asterisk-${version}";
-  version = "13.6.0";
+  version = "13.13.1";
 
   src = fetchurl {
     url = "http://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
-    sha256 = "0nh0fnqx84as92kk9d73s0386cndd17l06y1c72jl2bdjhyba0ca";
+    sha256 = "0yh097rrp1i681qclvwyh7l1gg2i5wx5pjrcvwpbj6g949mc98vd";
   };
 
   # Note that these sounds are included with the release tarball. They are
@@ -57,8 +57,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.asterisk.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ auntie ];
-    # Marked as broken due to needing an update for security issues.
-    # See: https://github.com/NixOS/nixpkgs/issues/18856
-    broken = true;
   };
 }
