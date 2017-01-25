@@ -191,9 +191,9 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free = false;
   };
 
-  eupl11 = {
-    fullName = "EUPL v1.1";
-    url = https://joinup.ec.europa.eu/community/eupl/og_page/european-union-public-licence-eupl-v11;
+  eupl11 = spdx {
+    spdxId = "EUPL-1.1";
+    fullname = "European Union Public License 1.1";
   };
 
   fdl12 = spdx {
