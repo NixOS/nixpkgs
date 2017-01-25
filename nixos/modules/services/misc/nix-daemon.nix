@@ -151,11 +151,13 @@ in
       };
 
       daemonIONiceLevel = mkOption {
-        type = types.int;
+        type = types.either types.int (types.enum ["idle"]);
         default = 0;
         description = ''
-          Nix daemon process I/O priority. This priority propagates to build processes.
+          Nix daemon process I/O priority. "idle" only gets time when noone
+          else needs the disk. a numeric value uses the best-effort class:
           0 is the default Unix process I/O priority, 7 is the lowest.
+          This priority propagates to build processes.
         '';
       };
 
@@ -371,7 +373,8 @@ in
 
         serviceConfig =
           { Nice = cfg.daemonNiceLevel;
-            IOSchedulingPriority = cfg.daemonIONiceLevel;
+            IOSchedulingClass = if (cfg.daemonIONiceLevel == "idle") then "idle" else "best-effort";
+            IOSchedulingPriority = mkIf (cfg.daemonIONiceLevel != "idle") cfg.daemonIONiceLevel;
             LimitNOFILE = 4096;
           };
 
