@@ -6481,6 +6481,28 @@ in {
     };
   };
 
+  doit  = buildPythonPackage (rec {
+    pname = "doit";
+    version= "0.30.0";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/${pname}/${name}.tar.gz";
+      sha256 = "0ghj3bsrc5bm30w97bn8nvf5jlabg06xs16g7284mimyr7q9z0j0";
+    };
+
+    propagatedBuildInputs = with self; [ cloudpickle pyinotify pytest ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://pydoit.org";
+      description = "Build make task automation pipeline";
+      license = licenses.mit;
+      maintainers = with maintainers; [ ];
+    };
+  });
+
   dotfiles = buildPythonPackage rec {
     name = "dotfiles-0.6.3";
 
