@@ -6005,9 +6005,9 @@ with pkgs;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
-  antlr3 = callPackage ../development/tools/parsing/antlr { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
   antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix { };
+  antlr3 = antlr3_5;
 
   ant = apacheAnt;
 
@@ -6932,10 +6932,6 @@ with pkgs;
 
   chromaprint = callPackage ../development/libraries/chromaprint { };
 
-  cilaterm = callPackage ../development/libraries/cil-aterm {
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
   cl = callPackage ../development/libraries/cl { };
 
   classads = callPackage ../development/libraries/classads { };
@@ -7560,10 +7556,6 @@ with pkgs;
 
   gtkmm2 = callPackage ../development/libraries/gtkmm/2.x.nix { };
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
-
-  gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
-    gtksharp = gtk-sharp-2_0;
-  };
 
   gtk-sharp-2_0 = callPackage ../development/libraries/gtk-sharp/2.0.nix {
     inherit (gnome2) libglade libgtkhtml gtkhtml
@@ -8302,10 +8294,6 @@ with pkgs;
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
   libjpeg_drop = callPackage ../development/libraries/libjpeg-drop { };
   libjpeg = if stdenv.isLinux then libjpeg_turbo else libjpeg_original; # some problems, both on FreeBSD and Darwin
-
-  libjpeg62 = callPackage ../development/libraries/libjpeg/62.nix {
-    libtool = libtool_1_5;
-  };
 
   libjreen = callPackage ../development/libraries/libjreen { };
 
@@ -10011,10 +9999,6 @@ with pkgs;
   jdom = callPackage ../development/libraries/java/jdom { };
 
   jflex = callPackage ../development/libraries/java/jflex { };
-
-  jjtraveler = callPackage ../development/libraries/java/jjtraveler {
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
 
   junit = callPackage ../development/libraries/java/junit { antBuild = releaseTools.antBuild; };
 
@@ -16422,9 +16406,7 @@ with pkgs;
 
   warmux = callPackage ../games/warmux { };
 
-  warsow = callPackage ../games/warsow {
-    libjpeg = libjpeg62;
-  };
+  warsow = callPackage ../games/warsow { };
 
   warzone2100 = qt5.callPackage ../games/warzone2100 { };
 
