@@ -19883,9 +19883,8 @@ in {
       patchShebangs .
     '';
 
-    buildInputs = [
-      self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio
-    ];
+    buildInputs = [ self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio ]
+      ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
 
     patches = [ ../development/python-modules/pycdio/add-cdtext-toc.patch ];
 
