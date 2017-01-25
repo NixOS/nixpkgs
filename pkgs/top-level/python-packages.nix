@@ -30054,6 +30054,31 @@ EOF
     };
   };
 
+  ghp-import2 = buildPythonPackage rec {
+    pname = "ghp-import2";
+    version = "1.0.1";
+    name = "${pname}-${version}";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/ghp-import2/${name}.tar.gz";
+      sha256 = "0zvdr67f1gr21ygnahmagfxbn1r1yb2gyiii9fb44nvcn935iygx";
+    };
+
+    disabled = isPyPy;
+    buildInputs = [ pkgs.glibcLocales ];
+
+    LC_ALL="en_US.UTF-8";
+
+    # No tests available
+    doCheck = false;
+
+    meta = {
+      description = "A GitHub Pages import tool";
+      homepage = "https://github.com/ionelmc/python-ghp-import";
+      license = "Tumbolia Public License";
+      maintainers = with maintainers; [ ];
+    };
+  };
+
   typogrify = buildPythonPackage rec {
     name = "typogrify-2.0.7";
     src = pkgs.fetchurl {
