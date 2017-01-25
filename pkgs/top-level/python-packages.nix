@@ -14574,6 +14574,26 @@ in {
     };
   };
 
+  micawber= self.buildPythonPackage rec {
+    pname = "micawber";
+    version = "0.3.3";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/${pname}/${name}.tar.gz";
+      sha256 = "18lna1bgzw4l3kqdi3nr1l557rj3wddrcj81x0rf8f4p87xsg9fq";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Small library for extracting rich content from urls";
+      homepage = "http://github.com/coleifer/micawber/";
+      license = licenses.mit;
+    };
+  };
+
+
   minimock = buildPythonPackage rec {
     version = "1.2.8";
     name = "minimock-${version}";
