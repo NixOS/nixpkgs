@@ -28816,14 +28816,13 @@ EOF
   };
 
   ws4py = buildPythonPackage rec {
+    pname = "ws4py";
+    version = "0.3.5";
     name = "ws4py-${version}";
 
-    version = "git-20130303";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/Lawouach/WebSocket-for-Python.git";
-      rev = "ace276500ca7e4c357595e3773be151d37bcd6e2";
-      sha256 = "1g7nmhjjxjf6vx75dyzns8bpid3b5i02kakk2lh1i297b5rw2rjq";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/w/${pname}/${name}.tar.gz";
+      sha256 = "1af79v1lh2njip4zmkm45772wp6nns7a6hk1d80adxi7423lmk64";
     };
 
     # python zip complains about old timestamps
