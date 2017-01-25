@@ -21160,12 +21160,16 @@ in {
   });
 
   pyrss2gen = buildPythonPackage (rec {
-    name = "PyRSS2Gen-1.0.0";
+    pname = "PyRSS2Gen";
+    version= "1.1";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyRSS2Gen/${name}.tar.gz";
-      sha256 = "4929d022713129401160fd47550d5158931e4ea6a7136b5d8dfe3b13ac16f2f0";
+      sha256 = "1rvf5jw9hknqz02rp1vg8abgb1lpa0bc65l7ylmlillqx7bswq3r";
     };
+
+    propagatedBuildInputs = with self; [ feedparser six ];
 
     meta = {
       homepage = http://www.dalkescientific.om/Python/PyRSS2Gen.html;
