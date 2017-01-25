@@ -9,9 +9,10 @@ let
   generic =
     { version, sha256 }:
 
-    let php7 = lib.versionAtLeast version "7.0"; in
+    let php7 = lib.versionAtLeast version "7.0";
+        mysqlHeaders = mysql.lib.dev or mysql;
 
-    composableDerivation.composableDerivation {} (fixed: {
+    in composableDerivation.composableDerivation {} (fixed: {
 
       inherit version;
 
@@ -114,12 +115,12 @@ let
 
         mysql = {
           configureFlags = ["--with-mysql"];
-          buildInputs = [ mysql.lib.dev ];
+          buildInputs = [ mysqlHeaders ];
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${mysql.lib.dev}/bin/mysql_config"];
-          buildInputs = [ mysql.lib.dev ];
+          configureFlags = ["--with-mysqli=${mysqlHeaders}/bin/mysql_config"];
+          buildInputs = [ mysqlHeaders ];
         };
 
         mysqli_embedded = {
@@ -129,8 +130,8 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${mysql.lib.dev}"];
-          buildInputs = [ mysql.lib.dev ];
+          configureFlags = ["--with-pdo-mysql=${mysqlHeaders}"];
+          buildInputs = [ mysqlHeaders ];
         };
 
         bcmath = {
