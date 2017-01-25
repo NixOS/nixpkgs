@@ -36,7 +36,7 @@
 }:
 
 let
-  version = "DEVELOPMENT-SNAPSHOT-2017-01-23-a";
+  version = "3.1-DEVELOPMENT-SNAPSHOT-2017-01-22-a";
   tag = "refs/tags/swift-${version}";
   fetch = repo: sha256:
     fetchgit {
@@ -49,37 +49,37 @@ let
 sources = {
     clang = fetch
       "swift-clang"
-      "0gj0z12qdrahanfxb0ava05zab4117alhb3rm91z42y11bnxanhp";
+      "15zyn33rx1i7vvxsxsd5n884pb34cjg3hg16bmws35zrdzp3xz4v";
     llvm = fetch
       "swift-llvm"
-      "1dv9nm2kkx175nh69jrcs46l6gh6nlmvjb2g1blvaaia3m2bc5f3";
+      "1gpia3dg1xaqi79an2apji7yrxvr9qyhfbl6w1yy4za28ff1981s";
     compilerrt = fetch
       "swift-compiler-rt"
-      "1d9r85sfvh2vhr4s6yh6mix1qcl0pl847zkvzclpl90mlpkbcv22";
+      "1gjcr6g3ffs3nhf4a84iwg4flbd7rqcf9rvvclwyq96msa3mj950";
     cmark = fetch
       "swift-cmark"
       "0qf2f3zd8lndkfbxbz6vkznzz8rvq5gigijh7pgmfx9fi4zcssqx";
     lldb = fetch
       "swift-lldb"
-      "1zwbvnbfjv7bj88mqyrpspa2rclzxafzl00llp89a4wyn6zsnbdq";
+      "0zlfvgkmbaan6hk0b0y1msaggwzq8gscb388zrdag4w13rszz09v";
     llbuild = fetch
       "swift-llbuild"
-      "18w73zh95y9ggd6z3x2jibhyqfvkmqczvgpllg5zaicfc11abqh5";
+      "0bcyv4hsbkc7xm06s5d236g8rq63kdxw7h4r7apn6vzs0y333qg8";
     pm = fetch
       "swift-package-manager"
       "1zbpp9y1v8vmr72xgichv12mbbcdyhyj3b9vkgbwrbwyrpzrgc3i";
     xctest = fetch
       "swift-corelibs-xctest"
-      "0cj5y7wanllfldag08ci567x12aw793c79afckpbsiaxmwy4xhnm";
+      "0ra0d8a8nx8acbj426c2bd0zgdn3nvmmxfvsdpranidn2ijj4n6v";
     foundation = fetch
       "swift-corelibs-foundation"
-      "05gjlp4mhp2iydhash84bzqfgayf9rzhdxvcqz8dfp8igz1vpqwy";
+      "114pgrq7yrqrp6pgzz3yvlldx83h6506818vlvb05zz9yh5fa8h4";
     libdispatch = fetch
       "swift-corelibs-libdispatch"
-      "0gqs7ggkfjy15f2zxk6r15p9h8mp5027mxa6gjy7h5c10k5y3l22";
+      "0z11qb01k3qxk3h0af4a0000xdb2838lpvkl8i82lix07bdd27bb";
     swift = fetch
       "swift"
-      "1n74lb0349l0b7z3wvffi4bz13ss737xj880nxkc9f3qrb2cs833";
+      "0v6l44mf8z17i6fiq9bmwbdgk4dy9m8msfl841q9d4a3frd223yc";
   };
 
   devInputs = [
