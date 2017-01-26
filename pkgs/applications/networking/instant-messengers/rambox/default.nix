@@ -6,7 +6,7 @@ let
   bits = if stdenv.system == "x86_64-linux" then "x64"
          else "ia32";
 
-  version = "0.4.5";
+  version = "0.5.2";
 
   myIcon = fetchurl {
     url = "https://raw.githubusercontent.com/saenzramiro/rambox/9e4444e6297dd35743b79fe23f8d451a104028d5/resources/Icon.png";
@@ -15,7 +15,7 @@ let
 
   desktopItem = makeDesktopItem rec {
     name = "Rambox";
-    exec = name;
+    exec = "rambox";
     icon = myIcon;
     desktopName = name;
     genericName = "Rambox messenger";
@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/saenzramiro/rambox/releases/download/${version}/Rambox-${version}-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "0z2rmfiwhb6v2hkzgrbkd4nhdvm1rssh0mbfbdmdwxq91qzp6558" else
-      "0gq0ywk1jr0apl39dnm0vwdwg1inr7fari3cmfz3fvaym7gc8fki";
+      "8ef520ac0887a44537af5771e6fdc9c4dab826c190d0f1e291c890932faac093" else
+      "2770398445825b14f4f0e417dc91df7a19cb8ec4eba00820e6251fe8788aabba";
   };
 
   phases = [ "unpackPhase" "installPhase" "postFixup" ];
@@ -42,19 +42,19 @@ in stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" Rambox
-    patchelf --set-rpath "$out/share/rambox:${stdenv.lib.makeLibraryPath deps}" Rambox
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" rambox
+    patchelf --set-rpath "$out/share/rambox:${stdenv.lib.makeLibraryPath deps}" rambox
 
     mkdir -p $out/bin $out/share/rambox
     cp -r * $out/share/rambox
-    ln -s $out/share/rambox/Rambox $out/bin
+    ln -s $out/share/rambox/rambox $out/bin
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   postFixup = ''
-    paxmark m $out/share/rambox/Rambox
+    paxmark m $out/share/rambox/rambox
   '';
 
   meta = with stdenv.lib; {
