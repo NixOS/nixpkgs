@@ -33,7 +33,7 @@ static char * wrapperType = "setcap";
 #elif defined WRAPPER_SETUID
 static char * wrapperType = "setuid";
 #else
-#error Program must be compiled with either the WRAPPER_SETCAP or WRAPPER_SETUID macro
+#error "Program must be compiled with either the WRAPPER_SETCAP or WRAPPER_SETUID macro"
 #endif
 
 // Update the capabilities of the running process to include the given
