@@ -7779,15 +7779,16 @@ in {
 
   ipfsapi = buildPythonPackage rec {
     name = "ipfsapi-${version}";
-    version = "0.4.0";
+    version = "0.4.5-pre";
     disabled = isPy26 || isPy27;
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipfsapi/${name}.tar.gz";
-      sha256 = "0mqqsihannxzaqi8zcj9nca7fxwg1c85bp7xxic3xqa5zslcdcc3";
+    src = pkgs.fetchFromGitHub {
+      owner = "ipfs";
+      repo = "py-ipfs-api";
+      rev = "bcce00e4a9b674d062729d82bd49a9ffbf76486f";
+      sha256 = "0cdmzpk5wvi6fyfmmn96vynqkb1p59wjqjdijhm1ixf7bfl9r126";
     };
 
-    buildInputs = with self; [ pkgs.pandoc ];
     propagatedBuildInputs = with self; [ six requests2 ];
 
     meta = {
