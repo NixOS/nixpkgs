@@ -26,7 +26,7 @@ if ! lists.elem stdenv.system platforms.mesaPlatforms then
 else
 
 let
-  version = "12.0.5";
+  version = "12.0.6";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "2b0a972d8282860a11291c09c3ef01ac45171405951eb21a83c45ed2b4321924";
+    sha256 = "7d6da9744c1022a4c2ab6ad01a206984d00443fb691568011d01b3dd97e36448";
   };
 
   prePatch = "patchShebangs .";
