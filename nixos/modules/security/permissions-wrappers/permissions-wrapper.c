@@ -211,9 +211,9 @@ int main(int argc, char * * argv)
     // Read the capabilities set on the file and raise them in to the
     // Ambient set so the program we're wrapping receives the
     // capabilities too!
-
-
+    #ifdef WRAPPER_SETCAP
     assert(!make_caps_ambient(selfPath));
+    #endif
 
     execve(sourceProg, argv, environ);
     
