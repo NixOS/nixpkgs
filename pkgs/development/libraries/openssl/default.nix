@@ -109,7 +109,7 @@ let
 
 in {
 
-  openssl_1_0_1 = common {
+  openssl_1_0_1-vulnerable = common {
     version = "1.0.1u";
     sha256 = "0fb7y9pwbd76pgzd7xzqfrzibmc0vf03sl07f34z5dhm2b5b84j3";
   };
