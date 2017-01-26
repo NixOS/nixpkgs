@@ -66,6 +66,39 @@ let
 
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${permissionsWrapperDir}/${program}
     '';
+
+    mkActivationScript = programsToWrap:
+      lib.stringAfter [ "users" ]
+        ''
+          # Look in the system path and in the default profile for
+          # programs to be wrapped.
+          PERMISSIONS_WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
+
+          mkdir -p /run/permissions-wrapper-dirs
+          permissionsWrapperDir=$(mktemp --directory --tmpdir=/run/permissions-wrapper-dirs permissions-wrappers.XXXXXXXXXX)
+          chmod a+rx $permissionsWrapperDir
+
+          ${programsToWrap}
+
+          if [ -L ${permissionsWrapperDir} ]; then
+            # Atomically replace the symlink
+            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+            old=$(readlink ${permissionsWrapperDir})
+            ln --symbolic --force --no-dereference $permissionsWrapperDir ${permissionsWrapperDir}-tmp
+            mv --no-target-directory ${permissionsWrapperDir}-tmp ${permissionsWrapperDir}
+            rm --force --recursive $old
+          elif [ -d ${permissionsWrapperDir} ]; then
+            # Compatibility with old state, just remove the folder and symlink
+            rm -f ${permissionsWrapperDir}/*
+            # if it happens to be a tmpfs
+            ${pkgs.utillinux}/bin/umount ${permissionsWrapperDir} || true
+            rm -d ${permissionsWrapperDir}
+            ln -d --symbolic $permissionsWrapperDir ${permissionsWrapperDir}
+          else
+            # For initial setup
+            ln --symbolic $permissionsWrapperDir ${permissionsWrapperDir}
+          fi
+        '';
 in
 {
 
@@ -160,45 +193,10 @@ in
 
     ###### setcap activation script
     system.activationScripts.setcap =
-      lib.stringAfter [ "users" ]
-        ''
-          # Look in the system path and in the default profile for
-          # programs to be wrapped.
-          PERMISSIONS_WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
-
-          # When a program is removed from the security.permissionsWrappers.setcap
-          # list we have to remove all of the previous program wrappers
-          # and re-build them minus the wrapper for the program removed,
-          # hence the rm here in the activation script.
-
-          rm -f ${permissionsWrapperDir}/*
-
-          # Concatenate the generated shell slices to configure
-          # wrappers for each program needing specialized capabilities.
-
-          ${lib.concatMapStrings configureSetcapWrapper (builtins.filter isNotNull cfg.setcap)}
-        '';
+      mkActivationScript (lib.concatMapStrings configureSetcapWrapper (builtins.filter isNotNull cfg.setcap));
 
     ###### setuid activation script
     system.activationScripts.setuid =
-      lib.stringAfter [ "users" ]
-        ''
-          # Look in the system path and in the default profile for
-          # programs to be wrapped.
-          PERMISSIONS_WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
-
-          # When a program is removed from the security.permissionsWrappers.setcap
-          # list we have to remove all of the previous program wrappers
-          # and re-build them minus the wrapper for the program removed,
-          # hence the rm here in the activation script.
-
-          rm -f ${permissionsWrapperDir}/*
-
-          # Concatenate the generated shell slices to configure
-          # wrappers for each program needing specialized capabilities.
-
-          ${lib.concatMapStrings configureSetuidWrapper (builtins.filter isNotNull cfg.setuid)}
-        '';
-
+      mkActivationScript (lib.concatMapStrings configureSetuidWrapper (builtins.filter isNotNull cfg.setuid));
   };
 }
