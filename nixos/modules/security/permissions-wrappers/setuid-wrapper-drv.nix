@@ -21,7 +21,6 @@ in
 # This is only useful for Linux platforms and a kernel version of
 # 4.3 or greater
 assert pkgs.stdenv.isLinux;
-assert lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3";
 
 pkgs.stdenv.mkDerivation {
   name         = "setuid-wrapper";

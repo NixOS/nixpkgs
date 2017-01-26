@@ -92,13 +92,6 @@ in
         capabilities!! This may be too restrictive for cases in which
         the real program needs cap_setpcap but it at least leans on
         the side security paranoid vs. too relaxed.
-
-        The attribute `setcap` defaults to false and it will create a
-        wrapper program but never set the capability set on it. This
-        is done so that you can remove a capability sent entirely from
-        a wrapper program without also needing to go change any
-        absolute paths that may be directly referencing the wrapper
-        program.
       '';
     };
 
