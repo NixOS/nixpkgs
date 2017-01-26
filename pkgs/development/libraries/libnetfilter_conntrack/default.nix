@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libnetfilter_conntrack-${version}";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "http://netfilter.org/projects/libnetfilter_conntrack/files/${name}.tar.bz2";
-    sha256 = "0fnpja3g8s38cp7ipija5pvhfgna1gybn0z2bl276nk08fppv7gw";
+    sha256 = "1svzyf3rq9nbrcw1jsricgyhh7x1am8iqn6kjr6mzrw42810ik7g";
   };
 
   buildInputs = [ libmnl ];

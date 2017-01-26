@@ -9,6 +9,7 @@
 , libdbi ? null
 , libgcrypt ? null
 , libmemcached ? null, cyrus_sasl ? null
+, libmicrohttpd ? null
 , libmodbus ? null
 , libnotify ? null, gdk_pixbuf ? null
 , liboping ? null
@@ -34,24 +35,19 @@
 , libmnl ? null
 }:
 stdenv.mkDerivation rec {
-  version = "5.6.0";
+  version = "5.7.0";
   name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";
-    sha256 = "08w6fjzczi2psk7va0xkjh9pigpar6sbjx2a6ayq4dmc3zcvpzzh";
+    sha256 = "1cpjkv4d0iifngihxikzljavya0r2k3blarlahamgbdsqsymz815";
   };
 
   buildInputs = [
     pkgconfig curl iptables libatasmart libcredis libdbi libgcrypt libmemcached
     cyrus_sasl libmodbus libnotify gdk_pixbuf liboping libpcap libsigrok libvirt
     lm_sensors libxml2 lvm2 libmysql postgresql protobufc rabbitmq-c rrdtool
-    varnish yajl jdk libtool python udev net_snmp hiredis libmnl
-  ];
-
-  patches = [
-    # Replace deprecated readdir_r() with readdir() to avoid a fatal warning.
-    ./readdir-fix.patch
+    varnish yajl jdk libtool python udev net_snmp hiredis libmnl libmicrohttpd
   ];
 
   # for some reason libsigrok isn't auto-detected

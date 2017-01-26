@@ -26,6 +26,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/ksm.nix
@@ -66,6 +67,7 @@
   ./programs/bash/bash.nix
   ./programs/blcr.nix
   ./programs/cdemu.nix
+  ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
@@ -210,6 +212,7 @@
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
+  ./services/logging/journalbeat.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
@@ -241,6 +244,7 @@
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
+  ./services/misc/couchpotato.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/dysnomia.nix
@@ -255,6 +259,7 @@
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
+  ./services/misc/gogs.nix
   ./services/misc/gpsd.nix
   ./services/misc/ihaskell.nix
   ./services/misc/leaps.nix
@@ -294,6 +299,7 @@
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
+  ./services/monitoring/arbtt.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
@@ -307,6 +313,7 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/netdata.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/blackbox-exporter.nix
@@ -326,6 +333,7 @@
   ./services/monitoring/telegraf.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
+  ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/cachefilesd.nix
@@ -364,6 +372,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/dnschain.nix
   ./services/networking/dnscrypt-proxy.nix
+  ./services/networking/dnscrypt-wrapper.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
   ./services/networking/fan.nix
@@ -390,6 +399,7 @@
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
+  ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
   ./services/networking/logmein-hamachi.nix
@@ -420,6 +430,7 @@
   ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
   ./services/networking/powerdns.nix
+  ./services/networking/pdns-recursor.nix
   ./services/networking/pptpd.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix

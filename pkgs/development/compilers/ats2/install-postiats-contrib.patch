@@ -1,0 +1,19 @@
+Install the parts of the contrib that have been moved to Postiats.
+diff -Naur ATS2-Postiats-0.3.0-upstream/Makefile_dist ATS2-Postiats-0.3.0/Makefile_dist
+--- ATS2-Postiats-0.3.0-upstream/Makefile_dist	2017-01-20 10:23:54.000000000 -0400
++++ ATS2-Postiats-0.3.0/Makefile_dist	2017-01-21 13:14:27.614723335 -0400
+@@ -124,12 +124,12 @@
+   cd "$(abs_top_srcdir)" && \
+   $(MKDIR_P) $(PATSLIBHOME2)/bin && \
+   if [ ! -d $(bindir2) ] ; then $(MKDIR_P) $(bindir2) ; fi && \
+-  for x in share ccomp prelude libc libats ; do \
++  for x in share ccomp prelude libc libats contrib atscntrb ; do \
+     find "$$x" -type d -exec $(MKDIR_P) $(PATSLIBHOME2)/\{} \; -print; \
+   done
+ 
+ install_files_0: install_dirs ; \
+-  for x in share ccomp/runtime prelude libc libats ; do \
++  for x in share ccomp/runtime prelude libc libats contrib atscntrb ; do \
+     cd "$(abs_top_srcdir)" && \
+     $(INSTALL) -d $(PATSLIBHOME2)/"$$x" && \
+     find "$$x" -type l -exec cp -d \{} $(PATSLIBHOME2)/\{} \; -print && \

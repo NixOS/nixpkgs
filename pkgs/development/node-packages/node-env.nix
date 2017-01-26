@@ -1,9 +1,9 @@
 # This file originates from node2nix
 
-{stdenv, nodejs, utillinux, runCommand, writeTextFile}:
+{stdenv, nodejs, python2, utillinux, runCommand, writeTextFile}:
 
 let
-  inherit (nodejs) python;
+  python = if nodejs ? python then nodejs.python else python2;
 
   # Create a tar wrapper that filters all the 'Ignoring unknown extended header keyword' noise
   tarWrapper = runCommand "tarWrapper" {} ''

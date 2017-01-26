@@ -1,14 +1,14 @@
 { stdenv, pythonPackages, fetchFromGitHub, rtmpdump }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.0.2";
+  version = "0.3.0";
   name = "streamlink-${version}";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
     rev = "${version}";
-    sha256 = "156b3smivs8lja7a98g3qa74bawqhc4mi8w8f3dscampbxx4dr9y";
+    sha256 = "1bjih6y21vmjmsk3xvhgc1innymryklgylyvjrskqw610niai59j";
   };
 
   propagatedBuildInputs = (with pythonPackages; [ pycrypto requests2 ]) ++ [ rtmpdump ];

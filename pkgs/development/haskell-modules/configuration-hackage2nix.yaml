@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 7.14
+  # LTS Haskell 7.16
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -135,7 +135,7 @@ default-package-overrides:
   - amazonka-test ==1.4.3
   - amazonka-waf ==1.4.3
   - amazonka-workspaces ==1.4.3
-  - amqp ==0.14.0
+  - amqp ==0.14.1
   - angel ==0.6.2
   - annotated-wl-pprint ==0.7.0
   - anonymous-sums ==0.4.0.0
@@ -143,10 +143,10 @@ default-package-overrides:
   - ansi-wl-pprint ==0.6.7.3
   - ansigraph ==0.2.0.0
   - api-field-json-th ==0.1.0.1
-  - app-settings ==0.2.0.9
+  - app-settings ==0.2.0.10
   - appar ==0.1.4
   - apply-refact ==0.3.0.0
-  - arbtt ==0.9.0.11
+  - arbtt ==0.9.0.12
   - arithmoi ==0.4.3.0
   - array-memoize ==0.6.0
   - arrow-list ==0.7
@@ -166,9 +166,9 @@ default-package-overrides:
   - attoparsec-expr ==0.1.1.2
   - authenticate ==1.3.3.2
   - authenticate-oauth ==1.5.1.2
-  - auto ==0.4.3.0
+  - auto ==0.4.3.1
   - auto-update ==0.1.4
-  - autoexporter ==0.2.2
+  - autoexporter ==0.2.3
   - aws ==0.14.1
   - b9 ==0.5.30
   - bake ==0.4
@@ -194,7 +194,7 @@ default-package-overrides:
   - binary-bits ==0.5
   - binary-conduit ==1.2.4.1
   - binary-list ==1.1.1.2
-  - binary-orphans ==0.1.5.1
+  - binary-orphans ==0.1.5.2
   - binary-parser ==0.5.2
   - binary-search ==1.0.0.3
   - binary-tagged ==0.1.4.2
@@ -288,7 +288,7 @@ default-package-overrides:
   - cgi ==3001.3.0.2
   - ChannelT ==0.0.0.2
   - charset ==0.3.7.1
-  - charsetdetect-ae ==1.1.0.1
+  - charsetdetect-ae ==1.1.0.2
   - Chart ==1.8.1
   - Chart-cairo ==1.8.1
   - Chart-diagrams ==1.8.1
@@ -318,13 +318,13 @@ default-package-overrides:
   - classy-prelude-yesod ==1.0.2
   - clay ==0.11
   - clckwrks ==0.23.19.2
-  - clckwrks-cli ==0.2.16
-  - clckwrks-plugin-media ==0.6.16
+  - clckwrks-cli ==0.2.17.1
+  - clckwrks-plugin-media ==0.6.16.1
   - clckwrks-plugin-page ==0.4.3.5
-  - clckwrks-theme-bootstrap ==0.4.2
+  - clckwrks-theme-bootstrap ==0.4.2.1
   - cli ==0.1.2
   - clientsession ==0.9.1.2
-  - Clipboard ==2.3.0.2
+  - Clipboard ==2.3.1.0
   - clock ==0.7.2
   - clumpiness ==0.17.0.0
   - ClustalParser ==1.1.4
@@ -340,14 +340,14 @@ default-package-overrides:
   - comonad ==5
   - comonad-transformers ==4.0
   - comonads-fd ==4.0
-  - compactmap ==0.1.4.1
+  - compactmap ==0.1.4.2
   - compdata ==0.10.1
   - composition ==1.0.2.1
   - composition-extra ==2.0.0
   - concatenative ==1.0.1
   - concurrency ==1.0.0.0
   - concurrent-extra ==0.7.0.10
-  - concurrent-output ==1.7.7
+  - concurrent-output ==1.7.8
   - concurrent-supply ==0.1.8
   - conduit ==1.2.8
   - conduit-combinators ==1.0.8.3
@@ -397,7 +397,7 @@ default-package-overrides:
   - cryptohash-sha1 ==0.11.100.1
   - cryptohash-sha256 ==0.11.100.1
   - cryptol ==2.4.0
-  - cryptonite ==0.19
+  - cryptonite ==0.21
   - cryptonite-conduit ==0.1
   - css-syntax ==0.0.5
   - css-text ==0.1.2.2
@@ -405,7 +405,7 @@ default-package-overrides:
   - ctrie ==0.1.1.0
   - cubicspline ==0.1.2
   - curl ==1.3.8
-  - darcs ==2.12.4
+  - darcs ==2.12.5
   - data-accessor ==0.2.2.7
   - data-accessor-mtl ==0.2.0.4
   - data-binary-ieee754 ==0.4.4
@@ -424,14 +424,14 @@ default-package-overrides:
   - data-reify ==0.6.1
   - dataurl ==0.1.0.0
   - DAV ==1.3.1
-  - dawg-ord ==0.5.0.2
+  - dawg-ord ==0.5.1.0
   - dbus ==0.10.12
   - debian-build ==0.10.1.0
   - Decimal ==0.4.2
   - declarative ==0.2.3
   - deepseq-generics ==0.2.0.0
   - dejafu ==0.4.0.0
-  - dependent-map ==0.2.3.0
+  - dependent-map ==0.2.4.0
   - dependent-sum ==0.3.2.2
   - dependent-sum-template ==0.0.0.5
   - derive ==2.5.26
@@ -462,7 +462,7 @@ default-package-overrides:
   - distributed-closure ==0.3.3.0
   - distributed-static ==0.3.5.0
   - distribution-nixpkgs ==1.0.0.1
-  - distributive ==0.5.0.2
+  - distributive ==0.5.1
   - diversity ==0.8.0.1
   - djinn-ghc ==0.0.2.3
   - djinn-lib ==0.0.1.2
@@ -500,9 +500,9 @@ default-package-overrides:
   - effect-handlers ==0.1.0.8
   - either ==4.4.1.1
   - either-unwrap ==1.1
-  - ekg ==0.4.0.11
+  - ekg ==0.4.0.12
   - ekg-core ==0.1.1.1
-  - ekg-json ==0.1.0.3
+  - ekg-json ==0.1.0.4
   - elerea ==2.9.0
   - elm-bridge ==0.3.0.2
   - elm-core-sources ==1.0.0
@@ -529,7 +529,7 @@ default-package-overrides:
   - exception-transformers ==0.4.0.5
   - exceptional ==0.3.0.0
   - exceptions ==0.8.3
-  - executable-hash ==0.2.0.2
+  - executable-hash ==0.2.0.4
   - executable-path ==0.0.3
   - exp-pairs ==0.1.5.1
   - expiring-cache-map ==0.0.6.1
@@ -555,7 +555,7 @@ default-package-overrides:
   - fb ==1.0.13
   - fclabels ==2.0.3.2
   - feature-flags ==0.1.0.1
-  - feed ==0.3.11.1
+  - feed ==0.3.12.0
   - FenwickTree ==0.1.2.1
   - fft ==0.1.8.4
   - fgl ==5.5.3.0
@@ -581,7 +581,7 @@ default-package-overrides:
   - focus ==0.1.5
   - fold-debounce ==0.2.0.4
   - fold-debounce-conduit ==0.1.0.4
-  - foldl ==1.2.1
+  - foldl ==1.2.3
   - FontyFruity ==0.5.3.2
   - force-layout ==0.4.0.6
   - forecast-io ==0.2.0.0
@@ -621,9 +621,9 @@ default-package-overrides:
   - ghc-paths ==0.1.0.9
   - ghc-syb-utils ==0.2.3
   - ghc-tcplugins-extra ==0.2
-  - ghc-typelits-extra ==0.2.1
-  - ghc-typelits-knownnat ==0.2.2
-  - ghc-typelits-natnormalise ==0.5.1
+  - ghc-typelits-extra ==0.2.2
+  - ghc-typelits-knownnat ==0.2.3
+  - ghc-typelits-natnormalise ==0.5.2
   - ghcid ==0.6.6
   - ghcjs-codemirror ==0.0.0.1
   - ghcjs-hplay ==0.3.4.2
@@ -641,7 +641,7 @@ default-package-overrides:
   - gi-soup ==2.4.3
   - gi-webkit ==3.0.3
   - gio ==0.13.3.1
-  - gipeda ==0.3.2.2
+  - gipeda ==0.3.3.1
   - giphy-api ==0.4.0.0
   - git-fmt ==0.4.1.0
   - github-types ==0.2.1
@@ -655,10 +655,10 @@ default-package-overrides:
   - glabrous ==0.1.3.0
   - GLFW-b ==1.4.8.1
   - glib ==0.13.4.1
-  - Glob ==0.7.13
-  - gloss ==1.10.2.3
+  - Glob ==0.7.14
+  - gloss ==1.10.2.5
   - gloss-rendering ==1.10.3.5
-  - GLURaw ==2.0.0.2
+  - GLURaw ==2.0.0.3
   - GLUT ==2.7.0.10
   - gogol ==0.1.0
   - gogol-adexchange-buyer ==0.1.0
@@ -758,7 +758,7 @@ default-package-overrides:
   - gogol-youtube-analytics ==0.1.0
   - gogol-youtube-reporting ==0.1.0
   - google-cloud ==0.0.4
-  - google-oauth2-jwt ==0.1.2.1
+  - google-oauth2-jwt ==0.1.3
   - gpolyline ==0.1.0.1
   - graph-core ==0.3.0.0
   - graph-wrapper ==0.2.5.1
@@ -772,7 +772,7 @@ default-package-overrides:
   - groupoids ==4.0
   - groups ==0.4.0.0
   - gtk ==0.14.6
-  - gtk2hs-buildtools ==0.13.2.1
+  - gtk2hs-buildtools ==0.13.2.2
   - gtk3 ==0.14.6
   - gtksourceview3 ==0.13.3.1
   - H ==0.9.0.1
@@ -789,7 +789,7 @@ default-package-overrides:
   - HandsomeSoup ==0.4.2
   - handwriting ==0.1.0.3
   - hapistrano ==0.2.1.2
-  - happstack-authenticate ==2.3.4.6
+  - happstack-authenticate ==2.3.4.7
   - happstack-clientsession ==7.3.1
   - happstack-hsp ==7.3.7.1
   - happstack-jmacro ==7.0.11
@@ -803,7 +803,7 @@ default-package-overrides:
   - hashable-time ==0.2
   - hashmap ==1.3.2
   - hashtables ==1.2.1.0
-  - haskeline ==0.7.2.3
+  - haskeline ==0.7.3.0
   - haskell-gi ==0.18
   - haskell-gi-base ==0.18.4
   - haskell-lexer ==1.0.1
@@ -821,8 +821,8 @@ default-package-overrides:
   - hasql ==0.19.15.2
   - hastache ==0.6.1
   - hasty-hamiltonian ==1.1.5
-  - HaTeX ==3.17.0.2
-  - hatex-guide ==1.3.1.5
+  - HaTeX ==3.17.1.0
+  - hatex-guide ==1.3.1.6
   - hbayes ==0.5.2
   - hbeanstalk ==0.2.4
   - Hclip ==3.0.0.4
@@ -830,7 +830,7 @@ default-package-overrides:
   - hdaemonize ==0.5.2
   - HDBC ==2.4.0.1
   - HDBC-session ==0.1.1.0
-  - hdevtools ==0.1.4.1
+  - hdevtools ==0.1.5.0
   - heap ==1.0.3
   - heaps ==0.3.3
   - hebrew-time ==0.1.1
@@ -862,7 +862,7 @@ default-package-overrides:
   - hmatrix-gsl ==0.17.0.0
   - hmatrix-gsl-stats ==0.4.1.4
   - hmatrix-special ==0.4.0.1
-  - hmpfr ==0.4.2
+  - hmpfr ==0.4.2.1
   - hmt ==0.15
   - hoauth2 ==0.5.4.0
   - hocilib ==0.1.0
@@ -876,11 +876,11 @@ default-package-overrides:
   - hostname-validate ==1.0.0
   - hourglass ==0.2.10
   - hpack-convert ==0.14.6
-  - hpc-coveralls ==1.0.6
+  - hpc-coveralls ==1.0.8
   - hPDB ==1.2.0.9
   - hPDB-examples ==1.2.0.7
   - HPDF ==1.4.10
-  - hpio ==0.8.0.4
+  - hpio ==0.8.0.5
   - hprotoc ==2.4.0
   - hquantlib ==0.0.3.3
   - hreader ==1.0.2
@@ -932,7 +932,7 @@ default-package-overrides:
   - html ==1.0.1.2
   - html-conduit ==1.2.1.1
   - htoml ==1.0.0.3
-  - HTTP ==4000.3.3
+  - HTTP ==4000.3.4
   - http-api-data ==0.2.4
   - http-client ==0.4.31.2
   - http-client-openssl ==0.2.0.4
@@ -991,7 +991,7 @@ default-package-overrides:
   - ini ==0.3.5
   - inline-c ==0.5.5.9
   - inline-c-cpp ==0.1.0.0
-  - inline-r ==0.9.0.0
+  - inline-r ==0.9.0.1
   - insert-ordered-containers ==0.1.0.1
   - integration ==0.2.1
   - intero ==0.1.20
@@ -1006,14 +1006,14 @@ default-package-overrides:
   - io-memoize ==1.1.1.0
   - io-region ==0.1.1
   - io-storage ==0.3
-  - io-streams ==1.3.5.0
+  - io-streams ==1.3.6.0
   - io-streams-haproxy ==1.0.0.1
-  - ip6addr ==0.5.1.4
+  - ip6addr ==0.5.2
   - iproute ==1.7.1
-  - IPv6Addr ==0.6.2.0
+  - IPv6Addr ==0.6.3
   - irc ==0.6.1.0
   - irc-client ==0.4.4.1
-  - irc-conduit ==0.2.1.1
+  - irc-conduit ==0.2.2.0
   - irc-ctcp ==0.1.3.0
   - irc-dcc ==2.0.0
   - islink ==0.1.0.0
@@ -1024,12 +1024,12 @@ default-package-overrides:
   - ix-shapable ==0.1.0
   - ixset ==1.0.7
   - ixset-typed ==0.3.1
-  - jailbreak-cabal ==1.3.1
+  - jailbreak-cabal ==1.3.2
   - jmacro ==0.6.14
   - jmacro-rpc ==0.3.2
   - jmacro-rpc-happstack ==0.3.2
   - jose ==0.4.0.3
-  - jose-jwt ==0.7.3
+  - jose-jwt ==0.7.4
   - js-flot ==0.8.3
   - js-jquery ==3.1.1
   - json ==0.9.1
@@ -1089,7 +1089,7 @@ default-package-overrides:
   - libxml-sax ==0.7.5
   - LibZip ==1.0.1
   - lift-generics ==0.1.1
-  - lifted-async ==0.9.0
+  - lifted-async ==0.9.1
   - lifted-base ==0.2.3.8
   - line ==1.0.1.0
   - linear ==1.20.5
@@ -1108,7 +1108,7 @@ default-package-overrides:
   - logict ==0.6.0.2
   - loop ==0.3.0
   - lrucache ==1.2.0.0
-  - lrucaching ==0.3.0
+  - lrucaching ==0.3.1
   - ltext ==0.1.2.1
   - lucid ==2.9.7
   - lucid-svg ==0.7.0.0
@@ -1117,7 +1117,7 @@ default-package-overrides:
   - mainland-pretty ==0.4.1.4
   - makefile ==0.1.0.5
   - managed ==1.0.5
-  - mandrill ==0.5.2.3
+  - mandrill ==0.5.3.1
   - markdown ==0.1.16
   - markdown-unlit ==0.4.0
   - markup ==3.1.0
@@ -1138,12 +1138,12 @@ default-package-overrides:
   - MFlow ==0.4.6.0
   - microformats2-parser ==1.0.1.6
   - microlens ==0.4.7.0
-  - microlens-aeson ==2.1.1.1
+  - microlens-aeson ==2.1.1.3
   - microlens-contra ==0.1.0.1
   - microlens-ghc ==0.4.7.0
   - microlens-mtl ==0.1.10.0
-  - microlens-platform ==0.3.7.0
-  - microlens-th ==0.4.1.0
+  - microlens-platform ==0.3.7.1
+  - microlens-th ==0.4.1.1
   - mighty-metropolis ==1.0.4
   - mime-mail ==0.4.12
   - mime-mail-ses ==0.3.2.3
@@ -1230,7 +1230,7 @@ default-package-overrides:
   - network-simple ==0.4.0.5
   - network-transport ==0.4.4.0
   - network-transport-composed ==0.2.0.1
-  - network-transport-inmemory ==0.5.1
+  - network-transport-inmemory ==0.5.2
   - network-transport-tcp ==0.5.1
   - network-transport-tests ==0.2.3.0
   - network-uri ==2.6.1.0
@@ -1296,7 +1296,7 @@ default-package-overrides:
   - partial-handler ==1.0.2
   - path ==0.5.11
   - path-extra ==0.0.3
-  - path-io ==1.2.0
+  - path-io ==1.2.2
   - path-pieces ==0.2.1
   - pathwalk ==0.3.1.2
   - patience ==0.1.1
@@ -1324,7 +1324,7 @@ default-package-overrides:
   - phantom-state ==0.2.1.2
   - picoparsec ==0.1.2.3
   - pinboard ==0.9.6
-  - pinch ==0.3.0.1
+  - pinch ==0.3.0.2
   - pinchot ==0.22.0.0
   - pipes ==4.1.9
   - pipes-aeson ==0.4.1.7
@@ -1338,12 +1338,12 @@ default-package-overrides:
   - pipes-extras ==1.0.8
   - pipes-fastx ==0.3.0.0
   - pipes-group ==1.0.6
-  - pipes-http ==1.0.4
+  - pipes-http ==1.0.5
   - pipes-illumina ==0.1.0.0
   - pipes-mongodb ==0.1.0.0
   - pipes-network ==0.6.4.1
   - pipes-parse ==3.0.8
-  - pipes-random ==1.0.0.2
+  - pipes-random ==1.0.0.3
   - pipes-safe ==2.2.4
   - pipes-text ==0.0.2.5
   - pipes-wai ==3.2.0
@@ -1361,7 +1361,7 @@ default-package-overrides:
   - posix-realtime ==0.0.0.4
   - post-mess-age ==0.2.1.0
   - postgresql-binary ==0.9.1.1
-  - postgresql-libpq ==0.9.2.0
+  - postgresql-libpq ==0.9.3.0
   - postgresql-query ==3.0.1
   - postgresql-schema ==0.1.10
   - postgresql-simple ==0.5.2.1
@@ -1405,10 +1405,10 @@ default-package-overrides:
   - pure-io ==0.2.1
   - pureMD5 ==2.1.3
   - purescript ==0.9.3
-  - purescript-bridge ==0.8.0.0
+  - purescript-bridge ==0.8.0.1
   - pwstore-fast ==2.4.4
   - pwstore-purehaskell ==2.1.4
-  - quantum-random ==0.6.3
+  - quantum-random ==0.6.4
   - QuasiText ==0.1.2.6
   - questioner ==0.1.1.0
   - quickbench ==1.0
@@ -1434,7 +1434,7 @@ default-package-overrides:
   - rank1dynamic ==0.3.3.0
   - Rasterific ==0.6.1.1
   - rasterific-svg ==0.3.1.2
-  - ratel ==0.3.1
+  - ratel ==0.3.2
   - ratel-wai ==0.2.0
   - raw-strings-qq ==1.1
   - read-editor ==0.1.0.2
@@ -1476,9 +1476,9 @@ default-package-overrides:
   - repa-io ==3.4.1.1
   - RepLib ==0.5.4
   - reroute ==0.4.0.1
-  - resolve-trivial-conflicts ==0.3.2.3
+  - resolve-trivial-conflicts ==0.3.2.4
   - resource-pool ==0.2.3.2
-  - resourcet ==1.1.8.1
+  - resourcet ==1.1.9
   - rest-client ==0.5.1.1
   - rest-core ==0.39
   - rest-gen ==0.19.0.3
@@ -1531,7 +1531,6 @@ default-package-overrides:
   - serf ==0.1.1.0
   - servant ==0.8.1
   - servant-aeson-specs ==0.5.2.0
-  - servant-auth-cookie ==0.3.2
   - servant-blaze ==0.7.1
   - servant-cassava ==0.8
   - servant-client ==0.8.1
@@ -1545,7 +1544,7 @@ default-package-overrides:
   - servant-server ==0.8.1
   - servant-subscriber ==0.5.0.3
   - servant-swagger ==1.1.2
-  - servant-swagger-ui ==0.2.0.2.1.5
+  - servant-swagger-ui ==0.2.1.2.2.8
   - servant-yaml ==0.1.0.0
   - serversession ==1.0.1
   - serversession-backend-acid-state ==1.0.3
@@ -1559,7 +1558,7 @@ default-package-overrides:
   - SHA ==1.6.4.2
   - shake ==0.15.10
   - shake-language-c ==0.10.0
-  - shakespeare ==2.0.11.2
+  - shakespeare ==2.0.12.1
   - shell-conduit ==4.5.2
   - shelly ==1.6.8.1
   - shortcut-links ==0.4.2.0
@@ -1581,10 +1580,10 @@ default-package-overrides:
   - skein ==1.0.9.4
   - skeletons ==0.4.0
   - slave-thread ==1.0.2
-  - slug ==0.1.5
-  - smallcaps ==0.6.0.3
+  - slug ==0.1.6
+  - smallcaps ==0.6.0.4
   - smallcheck ==1.1.1
-  - smoothie ==0.4.2.3
+  - smoothie ==0.4.2.6
   - smsaero ==0.6.2
   - smtLib ==1.0.8
   - smtp-mail ==0.1.4.6
@@ -1616,7 +1615,7 @@ default-package-overrides:
   - spool ==0.1
   - spoon ==0.3.1
   - sql-words ==0.1.4.1
-  - sqlite-simple ==0.4.12.0
+  - sqlite-simple ==0.4.12.1
   - srcloc ==0.5.1.0
   - stache ==0.1.8
   - stack-run-auto ==0.1.1.4
@@ -1642,10 +1641,10 @@ default-package-overrides:
   - storable-record ==0.0.3.1
   - store ==0.2.1.2
   - store-core ==0.2.0.2
-  - Strafunski-StrategyLib ==5.0.0.9
+  - Strafunski-StrategyLib ==5.0.0.10
   - stratosphere ==0.1.6
   - streaming ==0.1.4.3
-  - streaming-bytestring ==0.1.4.4
+  - streaming-bytestring ==0.1.4.5
   - streaming-commons ==0.1.16
   - streamproc ==1.6.2
   - streams ==3.3
@@ -1654,13 +1653,13 @@ default-package-overrides:
   - string-class ==0.1.6.5
   - string-combinators ==0.6.0.5
   - string-conv ==0.1.2
-  - string-conversions ==0.4
+  - string-conversions ==0.4.0.1
   - string-qq ==0.0.2
   - stringable ==0.1.3
   - stringbuilder ==0.5.0
   - stringsearch ==0.3.6.6
   - stripe-core ==2.1.0
-  - strive ==3.0.1
+  - strive ==3.0.2
   - stylish-haskell ==0.6.1.0
   - success ==0.2.6
   - sundown ==0.6
@@ -1689,7 +1688,7 @@ default-package-overrides:
   - tar ==0.5.0.3
   - tardis ==0.4.1.0
   - tasty ==0.11.0.4
-  - tasty-ant-xml ==1.0.3
+  - tasty-ant-xml ==1.0.4
   - tasty-dejafu ==0.3.0.2
   - tasty-expected-failure ==0.11.0.4
   - tasty-golden ==2.3.1.1
@@ -1729,14 +1728,14 @@ default-package-overrides:
   - text-ldap ==0.1.1.8
   - text-manipulate ==0.2.0.1
   - text-metrics ==0.1.0
-  - text-postgresql ==0.0.2.1
+  - text-postgresql ==0.0.2.2
   - text-region ==0.1.0.1
   - text-show ==3.4
   - text-show-instances ==3.4
   - tf-random ==0.5
   - th-data-compat ==0.0.2.2
   - th-desugar ==1.6
-  - th-expand-syns ==0.4.1.0
+  - th-expand-syns ==0.4.2.0
   - th-extras ==0.0.0.4
   - th-lift ==0.7.6
   - th-lift-instances ==0.1.11
@@ -1764,7 +1763,7 @@ default-package-overrides:
   - timezone-series ==0.1.6.1
   - tinylog ==0.14.0
   - tinytemplate ==0.1.2.0
-  - tls ==1.3.8
+  - tls ==1.3.9
   - tls-debug ==0.4.4
   - token-bucket ==0.1.0.1
   - tostring ==0.2.1.1
@@ -1799,7 +1798,7 @@ default-package-overrides:
   - typelits-witnesses ==0.2.3.0
   - typography-geometry ==1.0.0.1
   - tzdata ==0.1.20160614.0
-  - ua-parser ==0.7.2
+  - ua-parser ==0.7.3
   - uglymemo ==0.1.0.1
   - unbound ==0.5.1
   - unbound-generics ==0.3.1
@@ -1828,12 +1827,12 @@ default-package-overrides:
   - unix-compat ==0.4.3.1
   - unix-time ==0.3.7
   - Unixutils ==1.54.1
-  - unordered-containers ==0.2.7.1
+  - unordered-containers ==0.2.7.2
   - uri-bytestring ==0.2.2.1
   - uri-encode ==1.5.0.5
   - url ==2.1.3
   - urlpath ==5.0.0.1
-  - userid ==0.1.2.7
+  - userid ==0.1.2.8
   - users ==0.5.0.0
   - users-postgresql-simple ==0.5.0.2
   - users-test ==0.5.0.1
@@ -1845,22 +1844,22 @@ default-package-overrides:
   - uuid ==1.3.13
   - uuid-orphans ==1.4.1
   - uuid-types ==1.0.3
-  - vado ==0.0.7
+  - vado ==0.0.8
   - validate-input ==0.4.0.0
   - validation ==0.5.4
   - validity ==0.3.0.4
   - varying ==0.5.0.3
   - vault ==0.3.0.6
-  - vcswrapper ==0.1.3
+  - vcswrapper ==0.1.5
   - vector ==0.11.0.0
   - vector-algorithms ==0.7.0.1
-  - vector-binary-instances ==0.2.3.3
+  - vector-binary-instances ==0.2.3.4
   - vector-buffer ==0.4.1
   - vector-fftw ==0.1.3.7
   - vector-instances ==3.3.1
   - vector-space ==0.10.4
   - vector-th-unbox ==0.2.1.6
-  - vectortiles ==1.2.0
+  - vectortiles ==1.2.0.2
   - versions ==3.0.0
   - vhd ==0.2.2
   - ViennaRNAParser ==1.2.9
@@ -1887,7 +1886,7 @@ default-package-overrides:
   - wai-middleware-throttle ==0.2.1.0
   - wai-middleware-verbs ==0.3.2
   - wai-predicates ==0.9.0
-  - wai-request-spec ==0.10.2.1
+  - wai-request-spec ==0.10.2.4
   - wai-session ==0.3.2
   - wai-session-postgresql ==0.2.1.0
   - wai-transformers ==0.0.7
@@ -1965,7 +1964,7 @@ default-package-overrides:
   - YampaSynth ==0.2
   - yarr ==1.4.0.2
   - yes-precure5-command ==5.5.3
-  - yesod ==1.4.3.1
+  - yesod ==1.4.4
   - yesod-auth ==1.4.15
   - yesod-auth-account ==1.4.3
   - yesod-auth-basic ==0.1.0.2
@@ -1982,7 +1981,7 @@ default-package-overrides:
   - yesod-gitrev ==0.1.0.0
   - yesod-job-queue ==0.3.0.1
   - yesod-newsfeed ==1.6
-  - yesod-persistent ==1.4.1.0
+  - yesod-persistent ==1.4.1.1
   - yesod-sitemap ==1.4.0.1
   - yesod-static ==1.5.1.1
   - yesod-static-angular ==0.1.8
@@ -1996,7 +1995,7 @@ default-package-overrides:
   - yjtools ==0.9.18
   - zero ==0.1.4
   - zeromq4-haskell ==0.6.5
-  - zip ==0.1.4
+  - zip ==0.1.5
   - zip-archive ==0.3.0.5
   - zippers ==0.2.2
   - zlib ==0.6.1.2
@@ -2018,6 +2017,7 @@ extra-packages:
   - esqueleto < 2.5                     # needed for git-annex: https://github.com/bitemyapp/esqueleto/issues/8
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
+  - hpack == 0.15.*                     # needed for stack-1.3.2
   - haddock < 2.17                      # required on GHC 7.10.x
   - haddock-api == 2.15.*               # required on GHC 7.8.x
   - haddock-api == 2.16.*               # required on GHC 7.10.x
@@ -2219,6 +2219,7 @@ dont-distribute-packages:
   aeson-t:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   aeson-yak:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   AesonBson:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  affection:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   affine-invariant-ensemble-mcmc:               [ i686-linux, x86_64-linux, x86_64-darwin ]
   afv:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   Agata:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -2425,11 +2426,13 @@ dont-distribute-packages:
   aws-sdk-xml-unordered:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   aws-sdk:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   aws-sign4:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  aws-simple:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   aws-sns:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   azure-service-api:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   azure-servicebus:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   azurify:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   b-tree:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  babl:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   babylon:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   backdropper:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   backtracking-exceptions:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -2548,6 +2551,7 @@ dont-distribute-packages:
   BiobaseVienna:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   BiobaseXNA:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   biohazard:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  BioHMM:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   bioinformatics-toolkit:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   biophd:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   biosff:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -2624,6 +2628,7 @@ dont-distribute-packages:
   bson-generics:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   bson-mapping:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   btree-concurrent:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
+  buchhaltung:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   buffer-builder-aeson:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   buffer-builder:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   buffon:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -2812,6 +2817,7 @@ dont-distribute-packages:
   CLASE:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   clash-ghc:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   clash-lib:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  clash-multisignal:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   clash-prelude-quickcheck:                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   clash-prelude:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   clash-systemverilog:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -2987,6 +2993,9 @@ dont-distribute-packages:
   convertible-ascii:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   convertible-text:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   copilot-cbmc:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
+  copilot-language:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
+  copilot-libraries:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
+  copilot-theorem:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   copilot:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   copr:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   COrdering:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3433,6 +3442,7 @@ dont-distribute-packages:
   engine-io-wai:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   engine-io-yesod:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   engine-io:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  entangle:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   EntrezHTTP:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   EnumContainers:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   enumerate:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3482,6 +3492,7 @@ dont-distribute-packages:
   event-driven:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   event-monad:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   EventSocket:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
+  eventsource-geteventstore-store:              [ i686-linux, x86_64-linux, x86_64-darwin ]
   eventstore:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   every-bit-counts:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   ewe:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3600,6 +3611,8 @@ dont-distribute-packages:
   fixed-width:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   fixfile:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   fizz-buzz:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  flac-picture:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
+  flac:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   flamethrower:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   flat-maybe:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   flexible-time:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3732,6 +3745,7 @@ dont-distribute-packages:
   GeBoP:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   geek-server:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   geek:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
+  gegl:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   gelatin:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   gemstone:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   gencheck:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3775,6 +3789,7 @@ dont-distribute-packages:
   getflag:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   GGg:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   ggtsTC:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  ghc-dump-tree:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghc-dup:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghc-events-analyze:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghc-events-parallel:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3798,6 +3813,7 @@ dont-distribute-packages:
   ghcjs-dom:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghcjs-hplay:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghcjs-promise:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  ghcjs-xhr:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghclive:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   ght:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   gi-gdk:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3887,6 +3903,7 @@ dont-distribute-packages:
   goal-geometry:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   goal-probability:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   goal-simulation:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
+  goat:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   gofer-prelude:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   gogol-containerbuilder:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   gogol-firebase-dynamiclinks:                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3953,6 +3970,7 @@ dont-distribute-packages:
   graphicsFormats:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   graphicstools:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   graphtype:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  graql:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   grasp:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   gray-extended:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   graylog:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4075,6 +4093,7 @@ dont-distribute-packages:
   halberd:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   halfs:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   halipeto:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
+  halive:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   halma:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   hamilton:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   HaMinitel:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4201,6 +4220,7 @@ dont-distribute-packages:
   haskell-tools-backend-ghc:                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   haskell-tools-cli:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   haskell-tools-daemon:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
+  haskell-tools-debug:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   haskell-tools-demo:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   haskell-tools-prettyprint:                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   haskell-tools-refactor:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4268,6 +4288,7 @@ dont-distribute-packages:
   hasql-cursor-query:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   hasql-cursor-transaction:                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   hasql-generic:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  hasql-migration:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   hasql-postgres-options:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   hasql-postgres:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   hasql-transaction:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4720,6 +4741,7 @@ dont-distribute-packages:
   hspec-test-sandbox:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspec-webdriver:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   HsPerl5:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  hspkcs11:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspread:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspresent:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   hsprocess:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4939,6 +4961,7 @@ dont-distribute-packages:
   instant-hashable:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   instant-zipper:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   int-cast:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
+  integer-logarithms:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   integer-pure:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   intel-aes:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   interleavableGen:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -4948,6 +4971,8 @@ dont-distribute-packages:
   interpolatedstring-qq:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   interpolation:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   interruptible:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  intro-prelude:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  intro:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   intset:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   invertible-syntax:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   invertible:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -5081,6 +5106,7 @@ dont-distribute-packages:
   JunkDB-driver-hashtables:                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   JunkDB:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   jupyter:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  jvm-streaming:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   jvm:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   JYU-Utils:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   kafka-client:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -5236,6 +5262,8 @@ dont-distribute-packages:
   lazysplines:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   LazyVault:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   lcs:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
+  LDAP:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
+  ldapply:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   ldif:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   leaf:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   leaky:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -5515,6 +5543,7 @@ dont-distribute-packages:
   mcpi:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   mdapi:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   mdcat:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
+  mDNSResponder-client:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   mdp:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   mealstrom:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   MeanShift:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -5778,6 +5807,7 @@ dont-distribute-packages:
   NestedFunctor:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   nestedmap:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   netcore:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  netease-fm:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   netlines:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   NetSNMP:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   netspec:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -5818,6 +5848,8 @@ dont-distribute-packages:
   network-wai-router:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-websocket:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   networked-game:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
+  neural-network-blashs:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
+  neural-network-hmatrix:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   neural:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   newports:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   newsynth:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -5874,6 +5906,7 @@ dont-distribute-packages:
   Nussinov78:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   Nutri:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   nvim-hs-contrib:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
+  nvim-hs-ghcid:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   nvim-hs:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   NXT:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   NXTDSL:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6196,6 +6229,7 @@ dont-distribute-packages:
   pqc:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   pqueue-mtl:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   practice-room:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  preamble:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   precis:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   pred-trie:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   prednote-test:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6299,6 +6333,7 @@ dont-distribute-packages:
   qhull-simple:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   QIO:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   QLearn:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  qr-imager:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   qr-repa:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   qt:                                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   qtah-cpp-qt5:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6326,6 +6361,7 @@ dont-distribute-packages:
   quickcheck-relaxng:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   quickcheck-rematch:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   quickcheck-webdriver:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
+  quickcheck-with-counterexamples:              [ i686-linux, x86_64-linux, x86_64-darwin ]
   QuickPlot:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   quickpull:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   quickset:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6333,6 +6369,7 @@ dont-distribute-packages:
   quickterm:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   quicktest:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   quickwebapp:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
+  quipper-rendering:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   quipper:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   quiver-instances:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   quiver-interleave:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6366,6 +6403,12 @@ dont-distribute-packages:
   Range:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   rangemin:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   Ranka:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
+  rasa-example-config:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
+  rasa-ext-bufs:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  rasa-ext-files:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
+  rasa-ext-slate:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
+  rasa-ext-views:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
+  rasa-ext-vim:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   rascal:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   Rasenschach:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   rattletrap:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6432,6 +6475,7 @@ dont-distribute-packages:
   reflex-orphans:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-transformers:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  refty:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   regex-deriv:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   regex-dfa:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   regex-genex:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6467,6 +6511,8 @@ dont-distribute-packages:
   relation:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   relative-date:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   reload:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  remark:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  remarks:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   remote-debugger:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   remote-json-client:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   remote-json-server:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6622,6 +6668,7 @@ dont-distribute-packages:
   SBench:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   sbp2udp:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   sbp:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
+  sbvPlugin:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   scalable-server:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   scaleimage:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   SCalendar:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6687,12 +6734,14 @@ dont-distribute-packages:
   sensenet:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   sentence-jp:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   sentry:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  separated:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   seqaid:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   SeqAlign:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   seqalign:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   seqloc-datafiles:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   sequent-core:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   sequor:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  serokell-util:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   serpentine:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   serv-wai:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   serv:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6759,6 +6808,7 @@ dont-distribute-packages:
   shake-pack:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   shake-persist:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   shaker:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  shakers:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   shakespeare-babel:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   shapely-data:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   shared-buffer:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6825,6 +6875,7 @@ dont-distribute-packages:
   skeleton:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   skell:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   skemmtun:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
+  skylighting:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   skype4hs:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   slack-api:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   slack:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6845,6 +6896,8 @@ dont-distribute-packages:
   Smooth:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   smsaero:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   smt-lib:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  smtlib2-debug:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  smtlib2-pipe:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   SmtLib:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   smtp-mail-ng:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   smtp2mta:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6915,6 +6968,7 @@ dont-distribute-packages:
   snmp:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   snorkels:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   snow-white:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
+  snowflake-core:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   snowflake-server:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   Snusmumrik:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   soap-openssl:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6982,6 +7036,7 @@ dont-distribute-packages:
   sql-simple:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   sqlite-simple-typed:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   sqlvalue-list:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  sqsd-local:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   squeeze:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   srcinst:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   sscgi:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7025,6 +7080,7 @@ dont-distribute-packages:
   stm-lifted:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   stmcontrol:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   stochastic:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
+  StockholmAlignment:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   Stomp:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   storable-static-array:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   storablevector-streamfusion:                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7147,6 +7203,7 @@ dont-distribute-packages:
   tagsoup-ht:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   tagsoup-parsec:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   tagsoup-selection:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
+  tailfile-hinotify:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   takusen-oracle:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   Takusen:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   tamarin-prover-term:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7219,6 +7276,7 @@ dont-distribute-packages:
   texrunner:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   text-all:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   text-and-plots:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
+  text-generic-pretty:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   text-icu-normalized:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   text-json-qq:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   text-normal:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7262,6 +7320,7 @@ dont-distribute-packages:
   thrift:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   throttled-io-loop:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   tianbar:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  tibetan-utils:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   tic-tac-toe:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   tickle:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   tictactoe3d:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7390,6 +7449,7 @@ dont-distribute-packages:
   twentefp-trees:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   twentefp-websockets:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   twentyseven:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
+  twfy-api-client:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   twhs:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   twidge:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   twilight-stm:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7627,6 +7687,7 @@ dont-distribute-packages:
   web-fpco:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   web-inv-route:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   web-mongrel2:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
+  web-push:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   web-routes-quasi:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   web-routes-regular:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   web-routes-transformers:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7669,6 +7730,7 @@ dont-distribute-packages:
   winio:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   wire-streams:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   wiring:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  wiringPi:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   wkt:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   wl-pprint-ansiterm:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   WL500gPControl:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7690,6 +7752,7 @@ dont-distribute-packages:
   wraxml:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   wrecker:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   wright:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  writer-cps-monads-tf:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   wsedit:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   wtk-gtk:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   wtk:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7805,6 +7868,7 @@ dont-distribute-packages:
   yesod-auth-fb:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-auth-hashdb:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-auth-kerberos:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
+  yesod-auth-ldap-mediocre:                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-auth-ldap:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-auth-pam:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-auth-smbclient:                         [ i686-linux, x86_64-linux, x86_64-darwin ]

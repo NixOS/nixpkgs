@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
   env = bundlerEnv {
     name = "panamax-api-gems-${version}";
     inherit ruby;
-    gemset = ./gemset.nix;
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
+    gemdir = ./.;
   };
 
   bundler = args.bundler.override { inherit ruby; };

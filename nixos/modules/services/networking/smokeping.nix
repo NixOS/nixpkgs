@@ -275,7 +275,14 @@ in
     ];
     security.permissionsWrappers.setuid = [
       { program = "fping";
-        source  = "${e.enlightenment.out}/bin/fping";
+        source  = "${pkgs.fping}/bin/fping";
+        owner   = "root";
+        group   = "root";
+        setuid  = true;
+      }
+
+      { program = "fping";
+        source  = "${pkgs.fping}/bin/fping6";
         owner   = "root";
         group   = "root";
         setuid  = true;

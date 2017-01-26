@@ -26,6 +26,6 @@ python2Packages.buildPythonApplication rec {
       homepage = http://tortoisehg.bitbucket.org/;
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
-      maintainers = [ "abcz2.uprola@gmail.com" ];
+      maintainers = with lib.maintainers; [ danbst ];
     };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     description = "Userspace RCU (read-copy-update) library";
     homepage = http://lttng.org/urcu;
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 

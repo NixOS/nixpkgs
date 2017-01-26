@@ -59,6 +59,7 @@ in {
             virtualisation.diskSize = 2048;
 
             programs.bash.enableCompletion = true;
+            environment.systemPackages = with pkgs; [ netcat bind ];
 
             services.kubernetes.roles = ["master" "node"];
             virtualisation.docker.extraOptions = "--iptables=false --ip-masq=false -b cbr0";

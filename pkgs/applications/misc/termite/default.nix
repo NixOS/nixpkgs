@@ -35,6 +35,7 @@ let
       homepage = https://github.com/thestinger/termite/;
       maintainers = with maintainers; [ koral garbas ];
       platforms = platforms.all;
+      broken = true;
     };
   };
 in if configFile == null then termite else symlinkJoin {

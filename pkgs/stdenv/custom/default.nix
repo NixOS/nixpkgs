@@ -1,22 +1,25 @@
-{ lib, allPackages
-, system, platform, crossSystem, config
+{ lib
+, localSystem, crossSystem, config, overlays
 }:
 
 assert crossSystem == null;
 
-rec {
-  vanillaStdenv = import ../. {
-    inherit lib allPackages system platform crossSystem;
+let
+  bootStages = import ../. {
+    inherit lib localSystem crossSystem overlays;
     # Remove config.replaceStdenv to ensure termination.
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
-  buildPackages = allPackages {
-    inherit system platform crossSystem config;
-    # It's OK to change the built-time dependencies
-    allowCustomOverrides = true;
-    stdenv = vanillaStdenv;
-  };
+in bootStages ++ [
 
-  stdenvCustom = config.replaceStdenv { pkgs = buildPackages; };
-}
+  # Additional stage, built using custom stdenv
+  (vanillaPackages: {
+    buildPlatform = localSystem;
+    hostPlatform = localSystem;
+    targetPlatform = localSystem;
+    inherit config overlays;
+    stdenv = config.replaceStdenv { pkgs = vanillaPackages; };
+  })
+
+]

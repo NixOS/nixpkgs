@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "paratype-pt-sane";
+  name = "paratype-pt-sans";
 
   src = fetchurl rec {
     url = "http://www.paratype.ru/uni/public/PTSans.zip";

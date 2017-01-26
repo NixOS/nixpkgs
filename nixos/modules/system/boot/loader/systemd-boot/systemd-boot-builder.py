@@ -28,6 +28,8 @@ def write_loader_conf(generation):
         if "@timeout@" != "":
             f.write("timeout @timeout@\n")
         f.write("default nixos-generation-%d\n" % generation)
+        if not @editor@:
+            f.write("editor 0");
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 def copy_from_profile(generation, name, dry_run=False):

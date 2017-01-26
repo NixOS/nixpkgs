@@ -1,6 +1,8 @@
-{ kdeFramework, lib, ecm, kbookmarks, kcompletion
-, kconfig, kconfigwidgets, ki18n, kiconthemes, kio, knotifications, kpackage
-, kwidgetsaddons, libXcursor, qtx11extras
+{
+  kdeFramework, lib,
+  ecm,
+  kbookmarks, kcompletion, kconfig, kconfigwidgets, ki18n, kiconthemes, kio,
+  knewstuff, knotifications, kpackage, kwidgetsaddons, libXcursor, qtx11extras
 }:
 
 kdeFramework {
@@ -9,6 +11,6 @@ kdeFramework {
   nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [
     kbookmarks kcompletion kconfig kconfigwidgets ki18n kio kiconthemes
-    knotifications kpackage kwidgetsaddons libXcursor qtx11extras
+    knewstuff knotifications kpackage kwidgetsaddons libXcursor qtx11extras
   ];
 }

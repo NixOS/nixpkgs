@@ -1,12 +1,13 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "smemstat-${version}";
-  version = "0.01.14";
+  version = "0.01.16";
   src = fetchurl {
     url = "http://kernel.ubuntu.com/~cking/tarballs/smemstat/smemstat-${version}.tar.gz";
-    sha256 = "0qkpbg0n40d8m9jzf3ylpdp65zzs344zbjn8khha4plbwg00ijrw";
+    sha256 = "14n3s6ibm9bq58drvpiasqn11ci6mrwswfpcbpbsimx6fh2j4bi3";
   };
+  buildInputs = [ ncurses ];
   installFlags = [ "DESTDIR=$(out)" ];
   postInstall = ''
     mv $out/usr/* $out

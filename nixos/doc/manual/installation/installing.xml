@@ -37,6 +37,11 @@
   first disable network-manager with
   <command>systemctl stop network-manager</command>.</para></listitem>
 
+  <listitem><para>If you would like to continue the installation from a different
+  machine you need to activate the SSH daemon via <literal>systemctl start sshd</literal>.
+  In order to be able to login you also need to set a password for
+  <literal>root</literal> using <literal>passwd</literal>.</para></listitem>
+
   <listitem><para>The NixOS installer doesn’t do any partitioning or
   formatting yet, so you need to do that yourself.  Use the following
   commands:

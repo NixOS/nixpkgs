@@ -29,9 +29,17 @@ let
     };
 
   configType = mkOptionType {
-    name = "nixpkgs config";
+    name = "nixpkgs-config";
+    description = "nixpkgs config";
     check = traceValIfNot isConfig;
     merge = args: fold (def: mergeConfig def.value) {};
+  };
+
+  overlayType = mkOptionType {
+    name = "nixpkgs-overlay";
+    description = "nixpkgs overlay";
+    check = builtins.isFunction;
+    merge = lib.mergeOneOption;
   };
 
 in
@@ -43,23 +51,37 @@ in
       default = {};
       example = literalExample
         ''
-          { firefox.enableGeckoMediaPlayer = true;
-            packageOverrides = pkgs: {
-              firefox60Pkgs = pkgs.firefox60Pkgs.override {
-                enableOfficialBranding = true;
-              };
-            };
-          }
+          { firefox.enableGeckoMediaPlayer = true; }
         '';
       type = configType;
       description = ''
         The configuration of the Nix Packages collection.  (For
         details, see the Nixpkgs documentation.)  It allows you to set
-        package configuration options, and to override packages
-        globally through the <varname>packageOverrides</varname>
-        option.  The latter is a function that takes as an argument
-        the <emphasis>original</emphasis> Nixpkgs, and must evaluate
-        to a set of new or overridden packages.
+        package configuration options.
+      '';
+    };
+
+    nixpkgs.overlays = mkOption {
+      default = [];
+      example = literalExample
+        ''
+          [ (self: super: {
+              openssh = super.openssh.override {
+                hpnSupport = true;
+                withKerberos = true;
+                kerberos = self.libkrb5;
+              };
+            };
+          ) ]
+        '';
+      type = types.listOf overlayType;
+      description = ''
+        List of overlays to use with the Nix Packages collection.
+        (For details, see the Nixpkgs documentation.)  It allows
+        you to override packages globally. This is a function that
+        takes as an argument the <emphasis>original</emphasis> Nixpkgs.
+        The first argument should be used for finding dependencies, and
+        the second should be used for overriding recipes.
       '';
     };
 

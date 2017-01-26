@@ -2,9 +2,7 @@
 bundlerEnv {
   name = "homesick-1.1.3";
 
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   # Cannot use `wrapProgram` because the the help is aware of the file name.
   postInstall = ''

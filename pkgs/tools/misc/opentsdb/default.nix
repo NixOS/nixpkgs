@@ -1,27 +1,26 @@
-{ stdenv, autoconf, automake, curl, fetchurl, jdk, jre, makeWrapper, nettools, python }:
+{ stdenv, autoconf, automake, curl, fetchurl, jdk, jre, makeWrapper, nettools
+, python, git
+}:
+
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "opentsdb-${version}";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1dfzfsagpviqbifz81pik7pzvadz71kls1idi7jiq7z27vcd92an";
+    sha256 = "0nip40rh3vl5azfc27yha4ngnm9sw47hf110c90hg0warzz85sch";
   };
 
-  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python ];
+  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];
 
-  configurePhase = ''
-    echo > build-aux/fetchdep.sh.in
+  preConfigure = ''
+    patchShebangs ./build-aux/
     ./bootstrap
-    mkdir build
-    cd build
-    ../configure --prefix=$out
-    patchShebangs ../build-aux/
   '';
 
-  installPhase = ''
-    make install
+  postInstall = ''
     wrapProgram $out/bin/tsdb \
       --set JAVA_HOME "${jre}" \
       --set JAVA "${jre}/bin/java"

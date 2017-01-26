@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0z0jxm6ppbxi9anv2h12nrb5lpwl95f96kw6dx7sn268fhkpad7x";
   };
 
-  configureFlags = optional stdenv.isFreeBSD ''WARN_CFLAGS=""'';
+  configureFlags = [ "--with-tcl=no" ] ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""'';
 
   nativeBuildInputs = [ pkgconfig perl yacc ]
     # Provides the mig command used by the build scripts

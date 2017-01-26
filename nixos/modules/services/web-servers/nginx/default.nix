@@ -5,7 +5,11 @@ with lib;
 let
   cfg = config.services.nginx;
   virtualHosts = mapAttrs (vhostName: vhostConfig:
-    vhostConfig // (optionalAttrs vhostConfig.enableACME {
+    vhostConfig // {
+      serverName = if vhostConfig.serverName != null
+        then vhostConfig.serverName
+        else vhostName;
+    } // (optionalAttrs vhostConfig.enableACME {
       sslCertificate = "/var/lib/acme/${vhostName}/fullchain.pem";
       sslCertificateKey = "/var/lib/acme/${vhostName}/key.pem";
     })
@@ -112,8 +116,9 @@ let
     ${cfg.appendConfig}
   '';
 
-  vhosts = concatStringsSep "\n" (mapAttrsToList (serverName: vhost:
+  vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
       let
+        serverName = vhost.serverName;
         ssl = vhost.enableSSL || vhost.forceSSL;
         port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
         listenString = toString port + optionalString ssl " ssl http2"
@@ -161,7 +166,7 @@ let
             ssl_certificate_key ${vhost.sslCertificateKey};
           ''}
 
-          ${optionalString (vhost.basicAuth != {}) (mkBasicAuth serverName vhost.basicAuth)}
+          ${optionalString (vhost.basicAuth != {}) (mkBasicAuth vhostName vhost.basicAuth)}
 
           ${mkLocations vhost.locations}
 
@@ -178,8 +183,8 @@ let
       ${config.extraConfig}
     }
   '') locations);
-  mkBasicAuth = serverName: authDef: let
-    htpasswdFile = pkgs.writeText "${serverName}.htpasswd" (
+  mkBasicAuth = vhostName: authDef: let
+    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
       concatStringsSep "\n" (mapAttrsToList (user: password: ''
         ${user}:{PLAIN}${password}
       '') authDef)
@@ -393,17 +398,20 @@ in
     };
 
     security.acme.certs = filterAttrs (n: v: v != {}) (
-      mapAttrs (vhostName: vhostConfig:
-        optionalAttrs vhostConfig.enableACME {
-          user = cfg.user;
-          group = cfg.group;
-          webroot = vhostConfig.acmeRoot;
-          extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
-          postRun = ''
-            systemctl reload nginx
-          '';
-        }
-      ) virtualHosts
+      let
+        vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
+        acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME) vhostsConfigs;
+        acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
+            user = cfg.user;
+            group = cfg.group;
+            webroot = vhostConfig.acmeRoot;
+            extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
+            postRun = ''
+              systemctl reload nginx
+            '';
+          }; }) acmeEnabledVhosts;
+      in
+        listToAttrs acmePairs
     );
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton

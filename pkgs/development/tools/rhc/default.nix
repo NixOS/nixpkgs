@@ -4,9 +4,7 @@ bundlerEnv {
   name = "rhc-1.36.4";
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   meta = with lib; {
     homepage = https://github.com/openshift/rhc;

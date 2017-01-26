@@ -175,10 +175,10 @@
       }) {};
     auctex = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auctex";
-        version = "11.89.8";
+        version = "11.90.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-11.89.8.tar";
-          sha256 = "0rilldzb7sm7k22vfifdsnxz1an94jnn1bn8gfmqkac4g9cskl46";
+          url = "https://elpa.gnu.org/packages/auctex-11.90.0.tar";
+          sha256 = "04nsndwcf0dimgc2p1yzzrymc36amzdnjg0158nxplmjkzdp28gy";
         };
         packageRequires = [];
         meta = {
@@ -295,14 +295,27 @@
       }) {};
     cl-lib = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "cl-lib";
-        version = "0.5";
+        version = "0.6.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/cl-lib-0.5.el";
-          sha256 = "1z4ffcx7b95bxz52586lhvdrdm5vp473g3afky9h5my3jp5cd994";
+          url = "https://elpa.gnu.org/packages/cl-lib-0.6.1.el";
+          sha256 = "00w7bw6wkig13pngijh7ns45s1jn5kkbbjaqznsdh6jk5x089j9y";
         };
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/cl-lib.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    cobol-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+        pname = "cobol-mode";
+        version = "1.0.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/cobol-mode-1.0.0.el";
+          sha256 = "1zmcfpl7v787yacc7gxm8mkp53fmrznp5mnad628phf3vj4kwnxi";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/cobol-mode.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -809,10 +822,10 @@
     gnugo = callPackage ({ ascii-art-to-unicode, cl-lib ? null, elpaBuild, fetchurl, lib, xpm }:
     elpaBuild {
         pname = "gnugo";
-        version = "3.0.0";
+        version = "3.0.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnugo-3.0.0.tar";
-          sha256 = "0b94kbqxir023wkmqn9kpjjj2v0gcz856mqipz30gxjbjj42w27x";
+          url = "https://elpa.gnu.org/packages/gnugo-3.0.1.tar";
+          sha256 = "08z2hg9mvsxdznq027cmwhkb5i7n7s9r2kvd4jha9xskrcnzj3pp";
         };
         packageRequires = [ ascii-art-to-unicode cl-lib xpm ];
         meta = {
@@ -956,10 +969,10 @@
     js2-mode = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "js2-mode";
-        version = "20160623";
+        version = "20170116";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/js2-mode-20160623.tar";
-          sha256 = "057djy6amda8kyprkb3v733d21nlmq5fgfazi65fywlfwyq1adxs";
+          url = "https://elpa.gnu.org/packages/js2-mode-20170116.tar";
+          sha256 = "1z4k7710yz1fbm2w8m17q81yyp8sxllld0zmgfnc336iqrc07hmk";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -2103,10 +2116,10 @@
     ztree = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "ztree";
-        version = "1.0.4";
+        version = "1.0.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ztree-1.0.4.tar";
-          sha256 = "0xiiaa660s8z7901siwvmqkqz30agfzsy3zcyry2r017m3ghqjph";
+          url = "https://elpa.gnu.org/packages/ztree-1.0.5.tar";
+          sha256 = "14pbbsyav1dzz8m8waqdcmcx9bhw5g8m2kh1ahpxc3i2lfhdan1x";
         };
         packageRequires = [ cl-lib ];
         meta = {

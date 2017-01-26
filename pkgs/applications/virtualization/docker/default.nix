@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, pkgconfig, go-md2man
-, go, containerd, runc
+, go, containerd, runc, docker-proxy, tini
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
 , procps
@@ -11,14 +11,53 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.12.6";
+  version = "1.13.0";
+  rev = "49bf474"; # should match the version commit
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "10jhjas07xxlxjsxby8865rr0d0zsc5azy16rsz1idmy7f7lk6jh";
+    sha256 = "03b181xiqgnwanc567w9p6rbdgdvrfv0lk4r7b604ksm0fr4cz23";
   };
+
+  docker-runc = runc.overrideAttrs (oldAttrs: rec {
+    name = "docker-runc";
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "runc";
+      rev = "2f7393a47307a16f8cee44a37b262e8b81021e3e";
+      sha256 = "1s5nfnbinzmcnm8avhvsniz0ihxyva4w5qz1hzzyqdyr0w2scnbj";
+    };
+    # docker/runc already include these patches / are not applicable
+    patches = [];
+  });
+  docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
+    name = "docker-containerd";
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "containerd";
+      rev = "03e5862ec0d8d3b3f750e19fca3ee367e13c090e";
+      sha256 = "184sd9dwkcba3zhxnz9grw8p81x05977p36cif2dgkhjdhv12map";
+    };
+  });
+  docker-tini = tini.overrideAttrs  (oldAttrs: rec {
+    name = "docker-init";
+    src = fetchFromGitHub {
+      owner = "krallin";
+      repo = "tini";
+      rev = "949e6facb77383876aeff8a6944dde66b3089574";
+      sha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+    };
+
+    # Do not remove static from make files as we want a static binary
+    patchPhase = ''
+    '';
+
+    NIX_CFLAGS_COMPILE = [
+      "-DMINIMAL=ON"
+    ];
+  });
 
   buildInputs = [
     makeWrapper pkgconfig go-md2man go
@@ -41,7 +80,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="23cf638"
+    export DOCKER_GITCOMMIT="${rev}"
     ./hack/make.sh dynbinary
   '';
 
@@ -52,16 +91,17 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 ./bundles/${version}/dynbinary-client/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
-    install -Dm755 ./bundles/${version}/dynbinary-daemon/docker-proxy-${version} $out/libexec/docker/docker-proxy
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
       --prefix PATH : "$out/libexec/docker:$extraPath"
     makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
       --prefix PATH : "$out/libexec/docker:$extraPath"
 
     # docker uses containerd now
-    ln -s ${containerd}/bin/containerd $out/libexec/docker/docker-containerd
-    ln -s ${containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
-    ln -s ${runc}/bin/runc $out/libexec/docker/docker-runc
+    ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/docker-containerd
+    ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
+    ln -s ${docker-runc}/bin/runc $out/libexec/docker/docker-runc
+    ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
+    ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service

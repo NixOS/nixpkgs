@@ -77,6 +77,29 @@ stdenv.mkDerivation rec {
     # fails when running inside tmux
     sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
 
+    # unix socket tests fail on darwin
+    sed -i '/TestConnAndListener/areturn' src/net/conn_test.go
+    sed -i '/TestPacketConn/areturn' src/net/conn_test.go
+    sed -i '/TestPacketConn/areturn' src/net/packetconn_test.go
+    sed -i '/TestConnAndPacketConn/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixListenerSpecificMethods/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixConnSpecificMethods/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixListenerSpecificMethods/areturn' src/net/protoconn_test.go
+    sed -i '/TestUnixConnSpecificMethods/areturn' src/net/protoconn_test.go
+    sed -i '/TestStreamConnServer/areturn' src/net/server_test.go
+    sed -i '/TestReadUnixgramWithUnnamedSocket/areturn' src/net/unix_test.go
+    sed -i '/TestReadUnixgramWithZeroBytesBuffer/areturn' src/net/unix_test.go
+    sed -i '/TestUnixgramWrite/areturn' src/net/unix_test.go
+    sed -i '/TestUnixConnLocalAndRemoteNames/areturn' src/net/unix_test.go
+    sed -i '/TestUnixgramConnLocalAndRemoteNames/areturn' src/net/unix_test.go
+    sed -i '/TestWithSimulated/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestFlap/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestNew/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestNewLogger/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestDial/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestWrite/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestConcurrentWrite/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestConcurrentReconnect/areturn' src/log/syslog/syslog_test.go
 
     # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
     sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go

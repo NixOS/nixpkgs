@@ -26,9 +26,8 @@ bundlerEnv rec {
 
   version = (import gemset).sensu.version;
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  # expects Gemfile, Gemfile.lock and gemset.nix in the same directory
+  gemdir = ./.;
 
   meta = with lib; {
     description = "A monitoring framework that aims to be simple, malleable, and scalable";
