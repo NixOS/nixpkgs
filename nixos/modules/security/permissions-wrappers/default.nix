@@ -23,11 +23,11 @@ let
     , owner  ? "nobody"
     , group  ? "nogroup"
     }: ''
-      cp ${setcapWrappers}/bin/${program}.wrapper ${permissionsWrapperDir}/${program}
+      cp ${setcapWrappers}/bin/${program}.wrapper $permissionsWrapperDir/${program}
 
       # Prevent races
-      chmod 0000 ${permissionsWrapperDir}/${program}
-      chown ${owner}.${group} ${permissionsWrapperDir}/${program}
+      chmod 0000 $permissionsWrapperDir/${program}
+      chown ${owner}.${group} $permissionsWrapperDir/${program}
 
       # Set desired capabilities on the file plus cap_setpcap so
       # the wrapper program can elevate the capabilities set on
@@ -35,10 +35,10 @@ let
       #
       # Only set the capabilities though if we're being told to
       # do so.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" ${permissionsWrapperDir}/${program}
+      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" $permissionsWrapperDir/${program}
 
       # Set the executable bit
-      chmod u+rx,g+x,o+x ${permissionsWrapperDir}/${program}
+      chmod u+rx,g+x,o+x $permissionsWrapperDir/${program}
     '';
 
   ###### Activation script for the setuid wrappers
@@ -51,13 +51,13 @@ let
     , setgid ? false
     , permissions ? "u+rx,g+x,o+x"
     }: ''
-      cp ${setuidWrappers}/bin/${program}.wrapper ${permissionsWrapperDir}/${program}
+      cp ${setuidWrappers}/bin/${program}.wrapper $permissionsWrapperDir/${program}
 
       # Prevent races
-      chmod 0000 ${permissionsWrapperDir}/${program}
-      chown ${owner}.${group} ${permissionsWrapperDir}/${program}
+      chmod 0000 $permissionsWrapperDir/${program}
+      chown ${owner}.${group} $permissionsWrapperDir/${program}
 
-      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${permissionsWrapperDir}/${program}
+      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" $permissionsWrapperDir/${program}
     '';
 in
 {
@@ -143,11 +143,11 @@ in
     # variable when initializing the shell
     environment.extraInit = ''
     # The permissions wrappers override other bin directories.
-    export PATH="${config.security.permissionsWrapperDir}:$PATH"
+    export PATH="${permissionsWrapperDir}:$PATH"
     '';
 
     system.activationScripts.wrapper-dir = ''
-      mkdir -p "${config.security.permissionsWrapperDir}"
+      mkdir -p "${permissionsWrapperDir}"
     '';
 
     ###### setcap activation script
