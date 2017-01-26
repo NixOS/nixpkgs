@@ -17,7 +17,6 @@ stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
 
   features.iwlwifi = true;
   features.needsCifsUtils = true;
-  features.canDisableNetfilterConntrackHelpers = true;
   features.netfilterRPFilter = true;
 
   extraMeta.hydraPlatforms = [];

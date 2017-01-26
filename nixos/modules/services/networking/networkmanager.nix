@@ -174,7 +174,7 @@ in {
 
     assertions = [{
       assertion = config.networking.wireless.enable == false;
-      message = "You can not use networking.networkmanager with services.networking.wireless";
+      message = "You can not use networking.networkmanager with networking.wireless";
     }];
 
     boot.kernelModules = [ "ppp_mppe" ]; # Needed for most (all?) PPTP VPN connections.
@@ -239,7 +239,8 @@ in {
     # Turn off NixOS' network management
     networking = {
       useDHCP = false;
-      wireless.enable = false;
+      # use mkDefault to trigger the assertion about the conflict above
+      wireless.enable = lib.mkDefault false;
     };
 
     powerManagement.resumeCommands = ''

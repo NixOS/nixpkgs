@@ -1,5 +1,6 @@
 { stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex, python3, crossSystem, selfPkgs, cross ? null
+, autoconf, automake, happy, alex, python3, buildPlatform, targetPlatform
+, selfPkgs, cross ? null
 }:
 
 let
@@ -68,9 +69,9 @@ in stdenv.mkDerivation (rec {
 
   passthru = {
     inherit bootPkgs;
-  } // stdenv.lib.optionalAttrs (crossSystem != null) {
+  } // stdenv.lib.optionalAttrs (targetPlatform != buildPlatform) {
     crossCompiler = selfPkgs.ghc.override {
-      cross = crossSystem;
+      cross = targetPlatform;
       bootPkgs = selfPkgs;
     };
   };

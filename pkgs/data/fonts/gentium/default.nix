@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "5.000";
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/gentium/GentiumPlus-${version}.zip";
+    url = "http://software.sil.org/downloads/d/gentium/GentiumPlus-${version}.zip";
     sha256 = "0g9sx38wh7f0m16gr64g2xggjwak2q6jw9y4zhrvhmp4aq4xfqm6";
   };
 

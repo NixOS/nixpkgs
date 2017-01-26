@@ -2,11 +2,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.7.12";
+  version = "2.7.18";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0vxdfl208if7mdsnva1jg37bnay2dsz3ww157aqwcv1j6512fi1n";
+    sha256 = "1l9krc7hqhqrm5bwp999bpykkcq4958qwvx8v0l5mxcxw8k7fkab";
   };
 
   propagatedBuildInputs = with python2Packages; [

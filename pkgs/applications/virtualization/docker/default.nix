@@ -12,6 +12,7 @@ with lib;
 stdenv.mkDerivation rec {
   name = "docker-${version}";
   version = "1.13.0";
+  rev = "49bf474"; # should match the version commit
 
   src = fetchFromGitHub {
     owner = "docker";
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="23cf638"
+    export DOCKER_GITCOMMIT="${rev}"
     ./hack/make.sh dynbinary
   '';
 

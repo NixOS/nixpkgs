@@ -1,20 +1,17 @@
 {fetchurl, stdenv, dpkg, makeWrapper,
  alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1, harfbuzz, libcap,
- libpulseaudio, mesa, nspr, nss, systemd, wayland, xorg, zlib, ...
+ libpulseaudio, libxml2, libxslt, mesa, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
 assert stdenv.system == "x86_64-linux";
 
-# BUG: Viber requires running tray application, segfaulting if it's missing
-# FIX: Start something like `stalonetray` if you DE doesn't provide tray
-
 stdenv.mkDerivation rec {
   name = "viber-${version}";
-  version = "6.0.1.5";
+  version = "6.5.5.1481";
 
   src = fetchurl {
     url = "http://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "026vp2pv66b2dlwi5w5wk4yjnnmnsqapdww98p7xdnz8n0hnsbbi";
+    sha256 = "0gvpaprfki04x66ga2ljksspdxd4cz455h92a7i2dnd69w1kik5s";
   };
 
   buildInputs = [ dpkg makeWrapper ];
@@ -35,9 +32,12 @@ stdenv.mkDerivation rec {
       harfbuzz
       libcap
       libpulseaudio
+      libxml2
+      libxslt
       mesa
       nspr
       nss
+      openssl
       stdenv.cc.cc
       systemd
       wayland

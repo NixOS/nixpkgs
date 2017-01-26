@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving, ppx_deriving, camlp4
+{ stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving, ppx_deriving, camlp4, ocamlbuild
 , cmdliner, tyxml, reactivedata, cppo, which, base64, uchar
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     }."${version}";
   };
 
-  buildInputs = [ ocaml findlib menhir ocsigen_deriving
+  buildInputs = [ ocaml findlib menhir ocsigen_deriving ocamlbuild
                  cmdliner reactivedata cppo which base64 ]
   ++ stdenv.lib.optional (stdenv.lib.versionAtLeast ocaml.version "4.02") tyxml;
   propagatedBuildInputs = [ ocaml_lwt camlp4 ppx_deriving ]

@@ -14,17 +14,17 @@ let
 
   /* Basic list of packages to cross-build */
   basicCrossDrv = {
-    gccCrossStageFinal = nativePlatforms;
-    bison.crossDrv = nativePlatforms;
-    busybox.crossDrv = nativePlatforms;
-    coreutils.crossDrv = nativePlatforms;
-    dropbear.crossDrv = nativePlatforms;
+    bison = nativePlatforms;
+    busybox = nativePlatforms;
+    coreutils = nativePlatforms;
+    dropbear = nativePlatforms;
   };
 
   /* Basic list of packages to be natively built,
      but need a crossSystem defined to get meaning */
   basicNativeDrv = {
-    gdbCross.nativeDrv = nativePlatforms;
+    buildPackages.gccCrossStageFinal = nativePlatforms;
+    buildPackages.gdbCross = nativePlatforms;
   };
 
   basic = basicCrossDrv // basicNativeDrv;
@@ -32,8 +32,10 @@ let
 in
 
 {
-  # These `nativeDrv`s should be identical to their vanilla ones --- cross
-  # compiling should not affect the native derivation.
+  # These derivations from a cross package set's `buildPackages` should be
+  # identical to their vanilla equivalents --- none of these package should
+  # observe the target platform which is the only difference between those
+  # package sets.
   ensureUnaffected = let
     # Absurd values are fine here, as we are not building anything. In fact,
     # there probably a good idea to try to be "more parametric" --- i.e. avoid
@@ -47,8 +49,12 @@ in
     # good idea lest there be some irrelevant pass-through debug attrs that
     # cause false negatives.
     testEqualOne = path: system: let
-      f = attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
-    in assert f { inherit system; } == f { inherit system crossSystem; }; true;
+      f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
+    in assert
+        f path { inherit system; }
+        ==
+        f (["buildPackages"] ++ path) { inherit system crossSystem; };
+      true;
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
 
@@ -79,7 +85,7 @@ in
       openssl.system = "linux-generic32";
     };
   in mapTestOnCross crossSystem (basic // {
-    ubootSheevaplug.crossDrv = nativePlatforms;
+    ubootSheevaplug = nativePlatforms;
   });
 
 
@@ -92,14 +98,14 @@ in
       platform = {};
     };
   in mapTestOnCross crossSystem {
-    coreutils.crossDrv = nativePlatforms;
-    boehmgc.crossDrv = nativePlatforms;
-    gmp.crossDrv = nativePlatforms;
-    guile_1_8.crossDrv = nativePlatforms;
-    libffi.crossDrv = nativePlatforms;
-    libtool.crossDrv = nativePlatforms;
-    libunistring.crossDrv = nativePlatforms;
-    windows.wxMSW.crossDrv = nativePlatforms;
+    coreutils = nativePlatforms;
+    boehmgc = nativePlatforms;
+    gmp = nativePlatforms;
+    guile_1_8 = nativePlatforms;
+    libffi = nativePlatforms;
+    libtool = nativePlatforms;
+    libunistring = nativePlatforms;
+    windows.wxMSW = nativePlatforms;
   };
 
 
@@ -113,14 +119,14 @@ in
       platform = {};
     };
   in mapTestOnCross crossSystem {
-    coreutils.crossDrv = nativePlatforms;
-    boehmgc.crossDrv = nativePlatforms;
-    gmp.crossDrv = nativePlatforms;
-    guile_1_8.crossDrv = nativePlatforms;
-    libffi.crossDrv = nativePlatforms;
-    libtool.crossDrv = nativePlatforms;
-    libunistring.crossDrv = nativePlatforms;
-    windows.wxMSW.crossDrv = nativePlatforms;
+    coreutils = nativePlatforms;
+    boehmgc = nativePlatforms;
+    gmp = nativePlatforms;
+    guile_1_8 = nativePlatforms;
+    libffi = nativePlatforms;
+    libtool = nativePlatforms;
+    libunistring = nativePlatforms;
+    windows.wxMSW = nativePlatforms;
   };
 
 
@@ -150,9 +156,9 @@ in
       };
     };
   in mapTestOnCross crossSystem {
-    coreutils.crossDrv = nativePlatforms;
-    ed.crossDrv = nativePlatforms;
-    patch.crossDrv = nativePlatforms;
+    coreutils = nativePlatforms;
+    ed = nativePlatforms;
+    patch = nativePlatforms;
   };
 
 
@@ -176,16 +182,16 @@ in
       };
     };
   in mapTestOnCross crossSystem {
-    coreutils.crossDrv = nativePlatforms;
-    ed.crossDrv = nativePlatforms;
-    patch.crossDrv = nativePlatforms;
-    vim.crossDrv = nativePlatforms;
-    unzip.crossDrv = nativePlatforms;
-    ddrescue.crossDrv = nativePlatforms;
-    lynx.crossDrv = nativePlatforms;
-    patchelf.crossDrv = nativePlatforms;
-    binutils.crossDrv = nativePlatforms;
-    mpg123.crossDrv = nativePlatforms;
+    coreutils = nativePlatforms;
+    ed = nativePlatforms;
+    patch = nativePlatforms;
+    vim = nativePlatforms;
+    unzip = nativePlatforms;
+    ddrescue = nativePlatforms;
+    lynx = nativePlatforms;
+    patchelf = nativePlatforms;
+    buildPackages.binutils = nativePlatforms;
+    mpg123 = nativePlatforms;
   };
 
 

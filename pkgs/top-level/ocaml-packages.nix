@@ -20,6 +20,8 @@ let
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
+    apron = callPackage ../development/ocaml-modules/apron { };
+
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
     astring = callPackage ../development/ocaml-modules/astring { };
@@ -265,6 +267,10 @@ let
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
+    mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
+
+    mtime =  callPackage ../development/ocaml-modules/mtime { };
+
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
       lwt = ocaml_lwt;
     };
@@ -369,6 +375,8 @@ let
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
+
+    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
@@ -723,7 +731,9 @@ in rec
 
   ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.03.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_03;
+  ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { }) (self: super: { });
+
+  ocamlPackages_latest = ocamlPackages_4_04;
 
   ocamlPackages = ocamlPackages_4_01_0;
 }

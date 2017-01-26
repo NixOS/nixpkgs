@@ -4,13 +4,6 @@
 
 let
   inherit (bootPkgs) ghc;
-
-  fetchFilteredPatch = args: fetchurl (args // {
-    downloadToTemp = true;
-    postFetch = ''
-      ${patchutils}/bin/filterdiff --clean --strip-match=1 -x 'testsuite/*' "$downloadedFile" > "$out"
-    ''; # fix syntax highlighting: */
-  });
 in
 stdenv.mkDerivation rec {
   version = "8.0.2";

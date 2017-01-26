@@ -41,7 +41,7 @@ stdenv.mkDerivation (args // rec {
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
   buildInputs = [ncurses] ++ optionals useX11 [ libX11 xproto ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
-  preConfigure = ''
+  preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
   '';
@@ -56,7 +56,7 @@ stdenv.mkDerivation (args // rec {
 
   meta = with stdenv.lib; {
     homepage = http://caml.inria.fr/ocaml;
-    branch = "4.03";
+    branch = versionNoPatch;
     license = with licenses; [
       qpl /* compiler */
       lgpl2 /* library */

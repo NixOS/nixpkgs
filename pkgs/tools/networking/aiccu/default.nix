@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   version = "20070115";
 
   src = fetchurl {
-    url = "https://www.sixxs.net/archive/sixxs/aiccu/unix/aiccu_20070115.tar.gz";
-    sha256 = "2260f426c13471169ccff8cb4a3908dc5f79fda18ddb6a55363e7824e6c4c760";
+    url = "http://http.debian.net/debian/pool/main/a/aiccu/aiccu_20070115.orig.tar.gz";
+    sha256 = "1k73vw7i25qzmnbvmsp3ci4pm6h8q70w70vnr512517s2q5gag6j";
   };
 
   buildInputs = [ gnutls iproute makeWrapper ];
