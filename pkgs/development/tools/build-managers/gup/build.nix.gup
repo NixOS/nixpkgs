@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eu
+if [ -n "${GUP_TARGET:-}" ]; then
+	gup --always
+fi
+curl -LSs -o "$1" https://raw.githubusercontent.com/timbertson/gup/master/nix/gup-python.nix
