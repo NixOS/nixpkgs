@@ -22,7 +22,6 @@ let
     , source ? null
     , owner  ? "nobody"
     , group  ? "nogroup"
-    , setcap ? false
     }: ''
       cp ${setcapWrappers}/bin/${program}.wrapper ${permissionsWrapperDir}/${program}
 
@@ -36,13 +35,7 @@ let
       #
       # Only set the capabilities though if we're being told to
       # do so.
-      ${
-      if setcap then
-        ''
-        ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" ${permissionsWrapperDir}/${program}
-        ''
-      else ""
-      }
+      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" ${permissionsWrapperDir}/${program}
 
       # Set the executable bit
       chmod u+rx,g+x,o+x ${permissionsWrapperDir}/${program}
