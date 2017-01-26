@@ -59,9 +59,6 @@ let
 
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${permissionsWrapperDir}/${program}
     '';
-
-    mkActivationScript = programsToWrap:
-;
 in
 {
 
