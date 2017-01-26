@@ -523,6 +523,17 @@
   It is possible to inspect the arguments with which an image was built
   using its <varname>buildArgs</varname> attribute.
   </para>
+	
+	
+  <para>
+  If you see errors similar to <literal>getProtocolByName: does not exist (no such protocol name: tcp)</literal>
+  you may need to add <literal>pkgs.iana_etc</literal> to <varname>contents</varname>.
+  </para>
+	
+  <para>
+  If you see errors similar to <literal>Error_Protocol ("certificate has unknown CA",True,UnknownCa)</literal>
+  you may need to add <literal>pkgs.cacert</literal> to <varname>contents</varname>.
+  </para>
 
 </section>
 
