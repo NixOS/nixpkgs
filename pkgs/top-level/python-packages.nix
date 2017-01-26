@@ -11022,14 +11022,11 @@ in {
 
   fastimport = buildPythonPackage rec {
     name = "fastimport-${version}";
-    version = "0.9.4";
-
-    # Judging from SyntaxError
-    disabled = isPy3k;
+    version = "0.9.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fastimport/${name}.tar.gz";
-      sha256 = "0k8x7552ypx9rc14vbsvg2lc6z0r8pv9laah28pdwyynbq10825d";
+      sha256 = "1aqjsin4rmqm7ln4j0p73fzxifws6c6ikgyhav7r137m2ixsxl43";
     };
 
     checkPhase = ''
