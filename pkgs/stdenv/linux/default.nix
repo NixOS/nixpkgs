@@ -12,6 +12,7 @@
     "armv5tel-linux" = import ./bootstrap-files/armv5tel.nix;
     "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
     "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
+    "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
     "mips64el-linux" = import ./bootstrap-files/loongson2f.nix;
   }.${localSystem.system}
     or (abort "unsupported platform for the pure Linux stdenv")
@@ -213,7 +214,9 @@ in
         isl = isl_0_14;
       };
     };
-    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
+    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+      # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
+      lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
@@ -240,7 +243,9 @@ in
         shell = self.bash + "/bin/bash";
       };
     };
-    extraBuildInputs = [ prevStage.patchelf prevStage.xz ];
+    extraBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
+      # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
+      lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
@@ -268,7 +273,9 @@ in
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});
 
-      extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ];
+      extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+        # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
+        lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
 
       cc = prevStage.gcc;
 
@@ -287,7 +294,7 @@ in
         [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
           glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
           paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
-        ];
+        ] ++ lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
         */
 
       overrides = self: super: {

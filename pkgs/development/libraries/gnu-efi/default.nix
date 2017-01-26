@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pciutils }:
+{ stdenv, fetchurl, pciutils }: with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gnu-efi-${version}";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/gnu-efi/${name}.tar.bz2";
     sha256 = "1bzq5czw5dxlvpgs9ij2iz7q6krwhja87vc982r6vffcqcl0982i";
   };
+
+  patches = optional stdenv.isAarch64 ./aarch64-fix-discarded-qualifier.patch;
 
   buildInputs = [ pciutils ];
 

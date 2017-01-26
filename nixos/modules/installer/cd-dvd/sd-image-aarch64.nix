@@ -1,5 +1,5 @@
 # To build, use:
-# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix -A config.system.build.sdImage
+# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-aarch64.nix -A config.system.build.sdImage
 { config, lib, pkgs, ... }:
 
 let
@@ -16,8 +16,8 @@ in
   ];
 
   assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "armv7l-linux";
-    message = "sd-image-armv7l-multiplatform.nix can be only built natively on ARMv7; " +
+    assertion = pkgs.stdenv.system == "aarch64-linux";
+    message = "sd-image-aarch64.nix can be only built natively on Aarch64 / ARM64; " +
       "it cannot be cross compiled";
   };
 
@@ -28,27 +28,34 @@ in
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = ["console=ttyS0,115200n8" "console=ttymxc0,115200n8" "console=ttyAMA0,115200n8" "console=ttyO0,115200n8" "console=tty0"];
+  boot.kernelParams = ["console=ttyS0,115200n8" "console=tty0"];
+  boot.consoleLogLevel = 7;
 
   # FIXME: this probably should be in installation-device.nix
   users.extraUsers.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let
-      configTxt = pkgs.writeText "config.txt" ''
-        [pi2]
-        kernel=u-boot-rpi2.bin
+      # Contains a couple of fixes for booting a Linux kernel, will hopefully appear upstream soon.
+      patchedUboot = pkgs.ubootRaspberryPi3_64bit.overrideAttrs (oldAttrs: {
+        src = pkgs.fetchFromGitHub {
+          owner = "dezgeg";
+          repo = "u-boot";
+          rev = "baab53ec244fe44def01948a0f10e67342d401e6";
+          sha256 = "0r5j2pc42ws3w3im0a9c6bh01czz5kapqrqp0ik9ra823cw73lxr";
+        };
+      });
 
-        [pi3]
+      configTxt = pkgs.writeText "config.txt" ''
         kernel=u-boot-rpi3.bin
+        arm_control=0x200
         enable_uart=1
       '';
       in ''
         for f in bootcode.bin fixup.dat start.elf; do
           cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/$f boot/
         done
-        cp ${pkgs.ubootRaspberryPi2}/u-boot.bin boot/u-boot-rpi2.bin
-        cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin boot/u-boot-rpi3.bin
+        cp ${patchedUboot}/u-boot.bin boot/u-boot-rpi3.bin
         cp ${configTxt} boot/config.txt
         ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./boot
       '';
