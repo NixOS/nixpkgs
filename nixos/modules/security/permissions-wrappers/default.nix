@@ -106,7 +106,6 @@ in
             source  = "${pkgs.iputils.out}/bin/ping";
             owner   = "nobody";
             group   = "nogroup";
-            setcap  = true;
             capabilities = "cap_net_raw+ep";
           }
         ];
