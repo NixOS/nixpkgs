@@ -4,9 +4,13 @@
 }@args:
 
 import ./nodejs.nix (args // rec {
-  version = "4.6.0";
+  version = "4.6.2";
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
-    sha256 = "1566q1kkv8j30fgqx8sm2h8323f38wwpa1hfb10gr6z46jyhv4a2";
+    sha256 = "17ick2r2biyxs5zf83i8q8844fbcphm0d5g1z70mcrb86yrmi545";
   };
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i -e "s|tr1/type_traits|type_traits|g" \
+    -e "s|std::tr1|std|" src/util.h
+  '';
 })
