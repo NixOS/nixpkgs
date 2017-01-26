@@ -937,10 +937,14 @@ in {
       sed -i "s,/usr/,$out," lib/ansible/constants.py
     '';
 
+    postInstall = ''
+      find $out/${python.sitePackages}/ansible -type f -name '*.py' -print0 \
+        | xargs -0 sed -i "s|/usr/bin/python|/usr/bin/env python|"
+    '';
+
     doCheck = false;
     dontStrip = true;
     dontPatchELF = true;
-    dontPatchShebangs = true;
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
@@ -972,6 +976,11 @@ in {
 
     prePatch = ''
       sed -i "s,/usr/,$out," lib/ansible/constants.py
+    '';
+
+    postInstall = ''
+      find $out/${python.sitePackages}/ansible -type f -name '*.py' -print0 \
+        | xargs -0 sed -i "s|/usr/bin/python|/usr/bin/env python|"
     '';
 
     doCheck = false;
