@@ -525,15 +525,20 @@
   </para>
 	
 	
+	
+  <note>
   <para>
   If you see errors similar to <literal>getProtocolByName: does not exist (no such protocol name: tcp)</literal>
   you may need to add <literal>pkgs.iana_etc</literal> to <varname>contents</varname>.
   </para>
+  </note>
 	
+  <note>
   <para>
   If you see errors similar to <literal>Error_Protocol ("certificate has unknown CA",True,UnknownCa)</literal>
   you may need to add <literal>pkgs.cacert</literal> to <varname>contents</varname>.
   </para>
+  </note>
 
 </section>
 
