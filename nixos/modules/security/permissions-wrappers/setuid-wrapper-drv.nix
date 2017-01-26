@@ -12,7 +12,7 @@ let
          source=/nix/var/nix/profiles/default/bin/${program}
        fi
 
-       gcc -Wall -O2 -DWRAPPER_SETUID=1 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${cfg.run-permissionsWrapperDir}\" \
+       gcc -Wall -O2 -DWRAPPER_SETUID=1 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.run-permissionsWrapperDir}\" \
            -lcap-ng -lcap ${./permissions-wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
            -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
      '';
