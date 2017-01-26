@@ -377,6 +377,7 @@
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
   polyrod = "Maurizio Di Pietro <dc1mdp@gmail.com>";
+  pradeepchhetri = "Pradeep Chhetri <pradeep.chhetri89@gmail.com>";
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
   primeos = "Michael Weiss <dev.primeos@gmail.com>";
   profpatsch = "Profpatsch <mail@profpatsch.de>";
