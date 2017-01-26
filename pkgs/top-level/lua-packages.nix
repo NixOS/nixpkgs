@@ -167,7 +167,7 @@ let
 
     preBuild = ''
       makeFlagsArray=(
-        linux
+        ${stdenv.lib.optionalString stdenv.isLinux "linux"}
         LUAPATH="$out/lib/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INC_PATH="-I${lua}/include"
