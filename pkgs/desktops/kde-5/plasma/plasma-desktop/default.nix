@@ -1,13 +1,14 @@
 {
-  plasmaPackage, substituteAll,
+  plasmaPackage, lib, copyPathsToStore,
   ecm, kdoctools,
   attica, baloo, boost, fontconfig, ibus, kactivities, kactivities-stats, kauth,
   kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons,
   kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications, knotifyconfig,
   kpeople, krunner, ksysguard, kwallet, kwin, libXcursor, libXft,
   libcanberra_kde, libpulseaudio, libxkbfile, phonon, plasma-framework,
-  plasma-workspace, qtdeclarative, qtquickcontrols, qtsvg, qtx11extras, xf86inputevdev,
-  xf86inputsynaptics, xinput, xkeyboard_config, xorgserver, utillinux
+  plasma-workspace, qtdeclarative, qtquickcontrols, qtsvg, qtx11extras,
+  xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config, xorgserver,
+  utillinux
 }:
 
 plasmaPackage rec {
@@ -22,15 +23,12 @@ plasmaPackage rec {
     ki18n kpeople krunner kwin plasma-framework plasma-workspace qtdeclarative
     qtquickcontrols qtx11extras ksysguard
   ];
-  patches = [
-    ./0001-qt-5.5-QML-import-paths.patch
-    (substituteAll {
-      src = ./0002-hwclock.patch;
-      hwclock = "${utillinux}/sbin/hwclock";
-    })
-    ./0003-tzdir.patch
-  ];
+
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   postPatch = ''
+    substituteInPlace kcms/dateandtime/helper.cpp \
+        --subst-var hwclock "${utillinux}/sbin/hwclock"
+
     sed '1i#include <cmath>' -i kcms/touchpad/src/backends/x11/synapticstouchpad.cpp
   '';
   NIX_CFLAGS_COMPILE = [ "-I${xorgserver.dev}/include/xorg" ];

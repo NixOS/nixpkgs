@@ -1,5 +1,18 @@
+diff --git a/3rdparty/stout/include/stout/os/posix/chown.hpp b/3rdparty/stout/include/stout/os/posix/chown.hpp
+index c82e2e574..15d332107 100644
+--- a/3rdparty/stout/include/stout/os/posix/chown.hpp
++++ b/3rdparty/stout/include/stout/os/posix/chown.hpp
+@@ -34,7 +34,7 @@ inline Try<Nothing> chown(
+     // TODO(bmahler): Consider walking the file tree instead. We would need
+     // to be careful to not miss dotfiles.
+     std::string command =
+-      "chown -R " + stringify(uid) + ':' + stringify(gid) + " '" + path + "'";
++      "@chown@ -R " + stringify(uid) + ':' + stringify(gid) + " '" + path + "'";
+ 
+     int status = os::system(command);
+     if (status != 0) {
 diff --git a/3rdparty/stout/include/stout/os/posix/fork.hpp b/3rdparty/stout/include/stout/os/posix/fork.hpp
-index a29967d..290b98b 100644
+index a29967dcb..290b98b50 100644
 --- a/3rdparty/stout/include/stout/os/posix/fork.hpp
 +++ b/3rdparty/stout/include/stout/os/posix/fork.hpp
 @@ -369,7 +369,7 @@ private:
@@ -11,48 +24,97 @@ index a29967d..290b98b 100644
        EXIT(EXIT_FAILURE)
          << "Failed to execute '" << command << "': " << os::strerror(errno);
      } else if (wait.isSome()) {
-diff --git a/3rdparty/stout/include/stout/os/posix/shell.hpp b/3rdparty/stout/include/stout/os/posix/shell.hpp
-index 1d73ae5..9bf89b5 100644
---- a/3rdparty/stout/include/stout/os/posix/shell.hpp
-+++ b/3rdparty/stout/include/stout/os/posix/shell.hpp
-@@ -37,7 +37,7 @@ namespace Shell {
- // received by the callee, usually the command name and `arg1` is the
- // second command argument received by the callee.
+diff --git a/3rdparty/stout/include/stout/posix/os.hpp b/3rdparty/stout/include/stout/posix/os.hpp
+index c37e64db6..d3d87b7f0 100644
+--- a/3rdparty/stout/include/stout/posix/os.hpp
++++ b/3rdparty/stout/include/stout/posix/os.hpp
+@@ -375,7 +375,7 @@ inline Option<std::string> getenv(const std::string& key)
+ inline Try<Nothing> tar(const std::string& path, const std::string& archive)
+ {
+   Try<std::string> tarOut =
+-    os::shell("tar %s %s %s", "-czf", archive.c_str(), path.c_str());
++    os::shell("@tar@ %s %s %s", "-czf", archive.c_str(), path.c_str());
  
--constexpr const char* name = "sh";
-+constexpr const char* name = "@sh@";
- constexpr const char* arg0 = "sh";
- constexpr const char* arg1 = "-c";
- 
+   if (tarOut.isError()) {
+     return Error("Failed to archive " + path + ": " + tarOut.error());
 diff --git a/src/Makefile.am b/src/Makefile.am
-index 28dd151..36fc6ec 100644
+index 3bcc0f2df..e5cbc57e8 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -1528,7 +1528,8 @@ if HAS_JAVA
+@@ -1545,7 +1545,7 @@ if HAS_JAVA
  
  $(MESOS_JAR): $(MESOS_JAR_SOURCE) $(MESOS_JAR_GENERATED) java/mesos.pom
  	@echo "Building mesos-$(PACKAGE_VERSION).jar ..."
 -	@cd $(abs_top_builddir)/src/java && $(MVN) -B -f mesos.pom clean package
 +	@cd $(abs_top_builddir)/src/java && $(MVN) -B -f mesos.pom -Dmaven.repo.local=@mavenRepo@ clean package
-+
  
  # Convenience library for JNI bindings.
  # TODO(Charles Reiss): We really should be building the Java library
 diff --git a/src/cli/mesos-scp b/src/cli/mesos-scp
-index a71ab07..feed8c4 100755
+index a71ab0708..1043d1b3c 100755
 --- a/src/cli/mesos-scp
 +++ b/src/cli/mesos-scp
-@@ -19,7 +19,7 @@ if sys.version_info < (2,6,0):
+@@ -19,7 +19,8 @@ if sys.version_info < (2,6,0):
  
  
  def scp(host, src, dst):
 -    cmd = 'scp -pr %s %s' % (src, host + ':' + dst)
 +    cmd = '@scp@ -pr %s %s' % (src, host + ':' + dst)
++
      try:
          process = subprocess.Popen(
              cmd,
+diff --git a/src/common/command_utils.cpp b/src/common/command_utils.cpp
+index 09e805140..90bf65896 100644
+--- a/src/common/command_utils.cpp
++++ b/src/common/command_utils.cpp
+@@ -140,7 +140,7 @@ Future<Nothing> tar(
+ 
+   argv.emplace_back(input);
+ 
+-  return launch("tar", argv)
++  return launch("@tar@", argv)
+     .then([]() { return Nothing(); });
+ }
+ 
+@@ -162,7 +162,7 @@ Future<Nothing> untar(
+     argv.emplace_back(directory.get());
+   }
+ 
+-  return launch("tar", argv)
++  return launch("@tar@", argv)
+     .then([]() { return Nothing(); });
+ }
+ 
+@@ -170,7 +170,7 @@ Future<Nothing> untar(
+ Future<string> sha512(const Path& input)
+ {
+ #ifdef __linux__
+-  const string cmd = "sha512sum";
++  const string cmd = "@sha512sum@";
+   vector<string> argv = {
+     cmd,
+     input             // Input file to compute shasum.
+@@ -206,7 +206,7 @@ Future<Nothing> gzip(const Path& input)
+     input
+   };
+ 
+-  return launch("gzip", argv)
++  return launch("@gzip@", argv)
+     .then([]() { return Nothing(); });
+ }
+ 
+@@ -219,7 +219,7 @@ Future<Nothing> decompress(const Path& input)
+     input
+   };
+ 
+-  return launch("gzip", argv)
++  return launch("@gzip@", argv)
+     .then([]() { return Nothing(); });
+ }
+ 
 diff --git a/src/launcher/fetcher.cpp b/src/launcher/fetcher.cpp
-index 4456c28..e22c8fc 100644
+index 4456c2813..e22c8fc03 100644
 --- a/src/launcher/fetcher.cpp
 +++ b/src/launcher/fetcher.cpp
 @@ -68,13 +68,13 @@ static Try<bool> extract(
@@ -82,11 +144,11 @@ index 4456c28..e22c8fc 100644
    LOG(INFO) << "Copying resource with command:" << command;
  
 diff --git a/src/linux/perf.cpp b/src/linux/perf.cpp
-index ea823b3..170f54d 100644
+index aa31982eb..8b5331b17 100644
 --- a/src/linux/perf.cpp
 +++ b/src/linux/perf.cpp
-@@ -125,7 +125,7 @@ private:
-     // NOTE: The watchdog process places perf in its own process group
+@@ -127,7 +127,7 @@ private:
+     // NOTE: The supervisor childhook places perf in its own process group
      // and will kill the perf process when the parent dies.
      Try<Subprocess> _perf = subprocess(
 -        "perf",
@@ -104,37 +166,51 @@ index ea823b3..170f54d 100644
      command << " --event " << event;
    }
 diff --git a/src/linux/systemd.cpp b/src/linux/systemd.cpp
-index 619aa27..c1cbfe4 100644
+index 6318f48fc..394d88d47 100644
 --- a/src/linux/systemd.cpp
 +++ b/src/linux/systemd.cpp
-@@ -196,12 +196,19 @@ bool exists()
+@@ -196,13 +196,21 @@ bool exists()
    // This is static as the init system should not change while we are running.
    static const bool exists = []() -> bool {
      // (1) Test whether `/sbin/init` links to systemd.
 -    const Result<string> realpath = os::realpath("/sbin/init");
 -    if (realpath.isError() || realpath.isNone()) {
 -      LOG(WARNING) << "Failed to test /sbin/init for systemd environment: "
--                   << realpath.error();
+-                   << (realpath.isError() ? realpath.error()
+-                                          : "does not exist");
 -
 -      return false;
-+    // cstrahan: first assume we're on NixOS, then try non-NixOS
++    // cstrahan(nixos): first assume we're on NixOS, then try non-NixOS
 +    Result<string> realpath = os::realpath("/run/current-system/systemd/lib/systemd/systemd");
 +    Result<string> realpathNixOS = realpath;
 +    if (realpathNixOS.isError() || realpathNixOS.isNone()) {
 +      Result<string> realpathNonNixOS = realpath = os::realpath("/sbin/init");
 +      if (realpathNonNixOS.isError() || realpathNonNixOS.isNone()) {
 +        LOG(WARNING) << "Failed to test /run/current-system/systemd/lib/systemd/systemd for systemd environment: "
-+                     << realpathNixOS.error();
++                     << (realpathNixOS.isError() ? realpathNixOS.error()
++                                                 : "does not exist");
 +        LOG(WARNING) << "Failed to test /sbin/init for systemd environment: "
-+                     << realpathNonNixOS.error();
++                     << (realpathNonNixOS.isError() ? realpathNonNixOS.error()
++                                                    : "does not exist");
 +
 +        return false;
 +      }
      }
  
      CHECK_SOME(realpath);
+@@ -278,6 +286,10 @@ Path hierarchy()
+ 
+ Try<Nothing> daemonReload()
+ {
++  // cstrahan(nixos): should we patch these `systemctl`s?
++  // probably don't want to hard-code a particular systemd store path here,
++  // but if we use /run/current-system/sw/bin/systemctl,
++  // we won't be able to support non-NixOS distros.
+   Try<string> daemonReload = os::shell("systemctl daemon-reload");
+   if (daemonReload.isError()) {
+     return Error("Failed to reload systemd daemon: " + daemonReload.error());
 diff --git a/src/python/cli/src/mesos/cli.py b/src/python/cli/src/mesos/cli.py
-index f342992..354abf4 100644
+index f342992e0..354abf443 100644
 --- a/src/python/cli/src/mesos/cli.py
 +++ b/src/python/cli/src/mesos/cli.py
 @@ -40,7 +40,7 @@ def resolve(master):
@@ -146,11 +222,70 @@ index f342992..354abf4 100644
          stdin=None,
          stdout=subprocess.PIPE,
          stderr=subprocess.PIPE,
+diff --git a/src/slave/containerizer/mesos/isolators/docker/volume/isolator.cpp b/src/slave/containerizer/mesos/isolators/docker/volume/isolator.cpp
+index af9f3736b..f8554d414 100644
+--- a/src/slave/containerizer/mesos/isolators/docker/volume/isolator.cpp
++++ b/src/slave/containerizer/mesos/isolators/docker/volume/isolator.cpp
+@@ -499,7 +499,7 @@ Future<Option<ContainerLaunchInfo>> DockerVolumeIsolatorProcess::_prepare(
+     // unsafe arbitrary commands).
+     CommandInfo* command = launchInfo.add_pre_exec_commands();
+     command->set_shell(false);
+-    command->set_value("mount");
++    command->set_value("@mount@");
+     command->add_arguments("mount");
+     command->add_arguments("-n");
+     command->add_arguments("--rbind");
+diff --git a/src/slave/containerizer/mesos/isolators/filesystem/linux.cpp b/src/slave/containerizer/mesos/isolators/filesystem/linux.cpp
+index df16b8fee..4a17475bd 100644
+--- a/src/slave/containerizer/mesos/isolators/filesystem/linux.cpp
++++ b/src/slave/containerizer/mesos/isolators/filesystem/linux.cpp
+@@ -159,9 +159,9 @@ Try<Isolator*> LinuxFilesystemIsolatorProcess::create(const Flags& flags)
+       // here because 'create' will only be invoked during
+       // initialization.
+       Try<string> mount = os::shell(
+-          "mount --bind %s %s && "
+-          "mount --make-private %s && "
+-          "mount --make-shared %s",
++          "@mount@ --bind %s %s && "
++          "@mount@ --make-private %s && "
++          "@mount@ --make-shared %s",
+           workDir->c_str(),
+           workDir->c_str(),
+           workDir->c_str(),
+@@ -180,8 +180,8 @@ Try<Isolator*> LinuxFilesystemIsolatorProcess::create(const Flags& flags)
+       LOG(INFO) << "Making '" << workDir.get() << "' a shared mount";
+ 
+       Try<string> mount = os::shell(
+-          "mount --make-private %s && "
+-          "mount --make-shared %s",
++          "@mount@ --make-private %s && "
++          "@mount@ --make-shared %s",
+           workDir->c_str(),
+           workDir->c_str());
+ 
+@@ -404,7 +404,7 @@ Try<vector<CommandInfo>> LinuxFilesystemIsolatorProcess::getPreExecCommands(
+ 
+     CommandInfo command;
+     command.set_shell(false);
+-    command.set_value("mount");
++    command.set_value("@mount@");
+     command.add_arguments("mount");
+     command.add_arguments("-n");
+     command.add_arguments("--rbind");
+@@ -569,7 +569,7 @@ Try<vector<CommandInfo>> LinuxFilesystemIsolatorProcess::getPreExecCommands(
+     // TODO(jieyu): Consider the mode in the volume.
+     CommandInfo command;
+     command.set_shell(false);
+-    command.set_value("mount");
++    command.set_value("@mount@");
+     command.add_arguments("mount");
+     command.add_arguments("-n");
+     command.add_arguments("--rbind");
 diff --git a/src/slave/containerizer/mesos/isolators/filesystem/shared.cpp b/src/slave/containerizer/mesos/isolators/filesystem/shared.cpp
-index 51d1518..783adb5 100644
+index a1283e5ee..a918427bf 100644
 --- a/src/slave/containerizer/mesos/isolators/filesystem/shared.cpp
 +++ b/src/slave/containerizer/mesos/isolators/filesystem/shared.cpp
-@@ -204,7 +204,7 @@ Future<Option<ContainerLaunchInfo>> SharedFilesystemIsolatorProcess::prepare(
+@@ -207,7 +207,7 @@ Future<Option<ContainerLaunchInfo>> SharedFilesystemIsolatorProcess::prepare(
      }
  
      launchInfo.add_pre_exec_commands()->set_value(
@@ -159,36 +294,148 @@ index 51d1518..783adb5 100644
    }
  
    return launchInfo;
+diff --git a/src/slave/containerizer/mesos/isolators/gpu/isolator.cpp b/src/slave/containerizer/mesos/isolators/gpu/isolator.cpp
+index e3756c920..cfe458b59 100644
+--- a/src/slave/containerizer/mesos/isolators/gpu/isolator.cpp
++++ b/src/slave/containerizer/mesos/isolators/gpu/isolator.cpp
+@@ -355,7 +355,7 @@ Future<Option<ContainerLaunchInfo>> NvidiaGpuIsolatorProcess::_prepare(
+     }
+ 
+     launchInfo.add_pre_exec_commands()->set_value(
+-      "mount --no-mtab --rbind --read-only " +
++      "@mount@ --no-mtab --rbind --read-only " +
+       volume.HOST_PATH() + " " + target);
+   }
+ 
+diff --git a/src/slave/containerizer/mesos/isolators/gpu/volume.cpp b/src/slave/containerizer/mesos/isolators/gpu/volume.cpp
+index 478752f37..ab527f0cd 100644
+--- a/src/slave/containerizer/mesos/isolators/gpu/volume.cpp
++++ b/src/slave/containerizer/mesos/isolators/gpu/volume.cpp
+@@ -281,7 +281,7 @@ Try<NvidiaVolume> NvidiaVolume::create()
+     string path = path::join(hostPath, "bin", binary);
+ 
+     if (!os::exists(path)) {
+-      string command = "which " + binary;
++      string command = "@which@ " + binary;
+       Try<string> which = os::shell(command);
+ 
+       if (which.isSome()) {
+@@ -295,7 +295,7 @@ Try<NvidiaVolume> NvidiaVolume::create()
+                               : "No such file or directory"));
+         }
+ 
+-        command = "cp " + realpath.get() + " " + path;
++        command = "@cp@ " + realpath.get() + " " + path;
+         Try<string> cp = os::shell(command);
+         if (cp.isError()) {
+           return Error("Failed to os::shell '" + command + "': " + cp.error());
+@@ -367,7 +367,7 @@ Try<NvidiaVolume> NvidiaVolume::create()
+             Path(realpath.get()).basename());
+ 
+         if (!os::exists(libraryPath)) {
+-          string command = "cp " + realpath.get() + " " + libraryPath;
++          string command = "@cp@ " + realpath.get() + " " + libraryPath;
+           Try<string> cp = os::shell(command);
+           if (cp.isError()) {
+             return Error("Failed to os::shell '" + command + "':"
 diff --git a/src/slave/containerizer/mesos/isolators/namespaces/pid.cpp b/src/slave/containerizer/mesos/isolators/namespaces/pid.cpp
-index b41e266..e07c163 100644
+index 0d9ec57d9..a177e4476 100644
 --- a/src/slave/containerizer/mesos/isolators/namespaces/pid.cpp
 +++ b/src/slave/containerizer/mesos/isolators/namespaces/pid.cpp
-@@ -163,7 +163,7 @@ Future<Option<ContainerLaunchInfo>> NamespacesPidIsolatorProcess::prepare(
-   // containers cannot see the namespace bind mount of other
-   // containers.
-   launchInfo.add_pre_exec_commands()->set_value(
--      "mount -n --bind " + string(PID_NS_BIND_MOUNT_MASK_DIR) +
-+      "@mount@ -n --bind " + string(PID_NS_BIND_MOUNT_MASK_DIR) +
-       " " + string(PID_NS_BIND_MOUNT_ROOT));
- 
-   // Mount /proc for the container's pid namespace to show the
-@@ -176,9 +176,9 @@ Future<Option<ContainerLaunchInfo>> NamespacesPidIsolatorProcess::prepare(
-   // -n flag so the mount is not added to the mtab where it will not
-   // be correctly removed with the namespace terminates.
-   launchInfo.add_pre_exec_commands()->set_value(
--      "mount none /proc --make-private -o rec");
-+      "@mount@ none /proc --make-private -o rec");
+@@ -94,7 +94,7 @@ Future<Option<ContainerLaunchInfo>> NamespacesPidIsolatorProcess::prepare(
+   //
+   // TOOD(jieyu): Consider unmount the existing /proc.
    launchInfo.add_pre_exec_commands()->set_value(
 -      "mount -n -t proc proc /proc -o nosuid,noexec,nodev");
 +      "@mount@ -n -t proc proc /proc -o nosuid,noexec,nodev");
  
    return launchInfo;
  }
+diff --git a/src/slave/containerizer/mesos/isolators/network/cni/cni.cpp b/src/slave/containerizer/mesos/isolators/network/cni/cni.cpp
+index c87e6715a..6601cd1b3 100644
+--- a/src/slave/containerizer/mesos/isolators/network/cni/cni.cpp
++++ b/src/slave/containerizer/mesos/isolators/network/cni/cni.cpp
+@@ -262,9 +262,9 @@ Try<Isolator*> NetworkCniIsolatorProcess::create(const Flags& flags)
+       // here because 'create' will only be invoked during
+       // initialization.
+       Try<string> mount = os::shell(
+-          "mount --bind %s %s && "
+-          "mount --make-private %s && "
+-          "mount --make-shared %s",
++          "@mount@ --bind %s %s && "
++          "@mount@ --make-private %s && "
++          "@mount@ --make-shared %s",
+           rootDir->c_str(),
+           rootDir->c_str(),
+           rootDir->c_str(),
+@@ -284,8 +284,8 @@ Try<Isolator*> NetworkCniIsolatorProcess::create(const Flags& flags)
+       LOG(INFO) << "Making '" << rootDir.get() << "' a shared mount";
+ 
+       Try<string> mount = os::shell(
+-          "mount --make-private %s && "
+-          "mount --make-shared %s",
++          "@mount@ --make-private %s && "
++          "@mount@ --make-shared %s",
+           rootDir->c_str(),
+           rootDir->c_str());
+ 
+diff --git a/src/slave/containerizer/mesos/isolators/network/cni/plugins/port_mapper/port_mapper.cpp b/src/slave/containerizer/mesos/isolators/network/cni/plugins/port_mapper/port_mapper.cpp
+index b470f0c82..6110a43ee 100644
+--- a/src/slave/containerizer/mesos/isolators/network/cni/plugins/port_mapper/port_mapper.cpp
++++ b/src/slave/containerizer/mesos/isolators/network/cni/plugins/port_mapper/port_mapper.cpp
+@@ -303,7 +303,7 @@ Try<Nothing> PortMapper::addPortMapping(
+       # Check if the `chain` exists in the iptable. If it does not
+       # exist go ahead and install the chain in the iptables NAT
+       # table.
+-      iptables -w -t nat --list %s
++      @iptables@ -w -t nat --list %s
+       if [ $? -ne 0 ]; then
+         # NOTE: When we create the chain, there is a possibility of a
+         # race due to which a container launch can fail. This can
+@@ -317,25 +317,25 @@ Try<Nothing> PortMapper::addPortMapping(
+         # since it can happen only when the chain is created the first
+         # time and two commands for creation of the chain are executed
+         # simultaneously.
+-        (iptables -w -t nat -N %s || exit 1)
++        (@iptables@ -w -t nat -N %s || exit 1)
+ 
+         # Once the chain has been installed add a rule in the PREROUTING
+         # chain to jump to this chain for any packets that are
+         # destined to a local address.
+-        (iptables -w -t nat -A PREROUTING \
++        (@iptables@ -w -t nat -A PREROUTING \
+         -m addrtype --dst-type LOCAL -j %s || exit 1)
+ 
+         # For locally generated packets we need a rule in the OUTPUT
+         # chain as well, since locally generated packets directly hit
+         # the output CHAIN, bypassing PREROUTING.
+-        (iptables -w -t nat -A OUTPUT \
++        (@iptables@ -w -t nat -A OUTPUT \
+         ! -d 127.0.0.0/8 -m addrtype \
+         --dst-type LOCAL -j %s || exit 1)
+       fi
+ 
+       # Within the `chain` go ahead and install the DNAT rule, if it
+       # does not exist.
+-      (iptables -w -t nat -C %s || iptables -t nat -A %s))~",
++      (@iptables@ -w -t nat -C %s || @iptables@ -t nat -A %s))~",
+       chain,
+       chain,
+       chain,
+@@ -362,7 +362,7 @@ Try<Nothing> PortMapper::delPortMapping()
+       # The iptables command searches for the DNAT rules with tag
+       # "container_id: <CNI_CONTAINERID>", and if it exists goes ahead
+       # and deletes it.
+-      iptables -w -t nat -S %s | sed "/%s/ s/-A/iptables -w -t nat -D/e")~",
++      @iptables@ -w -t nat -S %s | sed "/%s/ s/-A/@iptables@ -w -t nat -D/e")~",
+       chain,
+       getIptablesRuleTag()).get();
+ 
 diff --git a/src/slave/containerizer/mesos/isolators/network/port_mapping.cpp b/src/slave/containerizer/mesos/isolators/network/port_mapping.cpp
-index 79ee960..d55a353 100644
+index 20fb6ab35..46c160977 100644
 --- a/src/slave/containerizer/mesos/isolators/network/port_mapping.cpp
 +++ b/src/slave/containerizer/mesos/isolators/network/port_mapping.cpp
-@@ -1392,19 +1392,19 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
+@@ -1393,19 +1393,19 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
    // Check the availability of a few Linux commands that we will use.
    // We use the blocking os::shell here because 'create' will only be
    // invoked during initialization.
@@ -211,7 +458,7 @@ index 79ee960..d55a353 100644
    if (checkCommandIp.isError()) {
      return Error("Check command 'ip' failed: " + checkCommandIp.error());
    }
-@@ -1924,9 +1924,9 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
+@@ -1925,9 +1925,9 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
      // visible. It's OK to use the blocking os::shell here because
      // 'create' will only be invoked during initialization.
      Try<string> mount = os::shell(
@@ -224,7 +471,7 @@ index 79ee960..d55a353 100644
          bindMountRoot->c_str(),
          bindMountRoot->c_str(),
          bindMountRoot->c_str(),
-@@ -1943,8 +1943,8 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
+@@ -1944,8 +1944,8 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
        // shared mount yet (possibly due to slave crash while preparing
        // the work directory mount). It's safe to re-do the following.
        Try<string> mount = os::shell(
@@ -235,7 +482,7 @@ index 79ee960..d55a353 100644
            bindMountRoot->c_str(),
            bindMountRoot->c_str());
  
-@@ -1963,8 +1963,8 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
+@@ -1964,8 +1964,8 @@ Try<Isolator*> PortMappingIsolatorProcess::create(const Flags& flags)
            // so that they are in different peer groups.
            if (entry.shared() == bindMountEntry->shared()) {
              Try<string> mount = os::shell(
@@ -246,14 +493,16 @@ index 79ee960..d55a353 100644
                  bindMountRoot->c_str(),
                  bindMountRoot->c_str());
  
-@@ -3916,13 +3916,13 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -3911,6 +3911,8 @@ Try<Nothing> PortMappingIsolatorProcess::removeHostIPFilters(
+ // TODO(jieyu): Use the Subcommand abstraction to remove most of the
+ // logic here. Completely remove this function once we can assume a
+ // newer kernel where 'setns' works for mount namespaces.
++// cstrahan(nixos): this is executed in the container,
++// so we don't want to substitute paths here.
+ string PortMappingIsolatorProcess::scripts(Info* info)
  {
    ostringstream script;
- 
--  script << "#!/bin/sh\n";
-+  script << "#!@sh@\n";
-   script << "set -xe\n";
- 
+@@ -3921,7 +3923,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
    // Mark the mount point PORT_MAPPING_BIND_MOUNT_ROOT() as slave
    // mount so that changes in the container will not be propagated to
    // the host.
@@ -262,7 +511,7 @@ index 79ee960..d55a353 100644
  
    // Disable IPv6 when IPv6 module is loaded as IPv6 packets won't be
    // forwarded anyway.
-@@ -3930,7 +3930,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -3929,7 +3931,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
           << " echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6\n";
  
    // Configure lo and eth0.
@@ -271,7 +520,7 @@ index 79ee960..d55a353 100644
           << " mtu " << hostEth0MTU << " up\n";
  
    // NOTE: This is mostly a kernel issue: in veth_xmit() the kernel
-@@ -3939,12 +3939,12 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -3938,12 +3940,12 @@ string PortMappingIsolatorProcess::scripts(Info* info)
    // when we receive a packet with a bad checksum. Disabling rx
    // checksum offloading ensures the TCP layer will checksum and drop
    // it.
@@ -288,7 +537,7 @@ index 79ee960..d55a353 100644
  
    // Restrict the ephemeral ports that can be used by the container.
    script << "echo " << info->ephemeralPorts.lower() << " "
-@@ -3973,19 +3973,19 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -3972,19 +3974,19 @@ string PortMappingIsolatorProcess::scripts(Info* info)
    }
  
    // Set up filters on lo and eth0.
@@ -312,7 +561,7 @@ index 79ee960..d55a353 100644
           << " protocol ip"
           << " prio " << Priority(IP_FILTER_PRIORITY, NORMAL).get() << " u32"
           << " flowid ffff:0"
-@@ -3996,7 +3996,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -3995,7 +3997,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
    foreach (const PortRange& range,
             getPortRanges(info->nonEphemeralPorts + info->ephemeralPorts)) {
      // Local traffic inside a container will not be redirected to eth0.
@@ -321,7 +570,7 @@ index 79ee960..d55a353 100644
             << " protocol ip"
             << " prio " << Priority(IP_FILTER_PRIORITY, HIGH).get() << " u32"
             << " flowid ffff:0"
-@@ -4005,7 +4005,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -4004,7 +4006,7 @@ string PortMappingIsolatorProcess::scripts(Info* info)
  
      // Traffic going to host loopback IP and ports assigned to this
      // container will be redirected to lo.
@@ -330,7 +579,7 @@ index 79ee960..d55a353 100644
             << " protocol ip"
             << " prio " << Priority(IP_FILTER_PRIORITY, NORMAL).get() << " u32"
             << " flowid ffff:0"
-@@ -4017,14 +4017,14 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -4016,14 +4018,14 @@ string PortMappingIsolatorProcess::scripts(Info* info)
    }
  
    // Do not forward the ICMP packet if the destination IP is self.
@@ -347,7 +596,7 @@ index 79ee960..d55a353 100644
           << " protocol ip"
           << " prio " << Priority(ICMP_FILTER_PRIORITY, NORMAL).get() << " u32"
           << " flowid ffff:0"
-@@ -4033,9 +4033,9 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -4032,9 +4034,9 @@ string PortMappingIsolatorProcess::scripts(Info* info)
           << net::IPNetwork::LOOPBACK_V4().address() << "\n";
  
    // Display the filters created on eth0 and lo.
@@ -359,7 +608,7 @@ index 79ee960..d55a353 100644
           << " parent " << ingress::HANDLE << "\n";
  
    // If throughput limit for container egress traffic exists, use HTB
-@@ -4047,9 +4047,9 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -4046,9 +4048,9 @@ string PortMappingIsolatorProcess::scripts(Info* info)
    // throughput. TBF requires other parameters such as 'burst' that
    // HTB already has default values for.
    if (egressRateLimitPerContainer.isSome()) {
@@ -371,12 +620,12 @@ index 79ee960..d55a353 100644
             << CONTAINER_TX_HTB_HANDLE << " classid "
             << CONTAINER_TX_HTB_CLASS_ID << " htb rate "
             << egressRateLimitPerContainer.get().bytes() * 8 << "bit\n";
-@@ -4060,12 +4060,12 @@ string PortMappingIsolatorProcess::scripts(Info* info)
+@@ -4059,12 +4061,12 @@ string PortMappingIsolatorProcess::scripts(Info* info)
      // fq_codel, which has a larger buffer and better control on
      // buffer bloat.
      // TODO(cwang): Verity that fq_codel qdisc is available.
 -    script << "tc qdisc add dev " << eth0
-+    script << "@tC@ qdisc add dev " << eth0
++    script << "@tc@ qdisc add dev " << eth0
             << " parent " << CONTAINER_TX_HTB_CLASS_ID << " fq_codel\n";
  
      // Display the htb qdisc and class created on eth0.
@@ -388,11 +637,11 @@ index 79ee960..d55a353 100644
  
    return script.str();
 diff --git a/src/slave/containerizer/mesos/isolators/posix/disk.cpp b/src/slave/containerizer/mesos/isolators/posix/disk.cpp
-index 3dfe7ad..4288666 100644
+index db0583386..542586370 100644
 --- a/src/slave/containerizer/mesos/isolators/posix/disk.cpp
 +++ b/src/slave/containerizer/mesos/isolators/posix/disk.cpp
-@@ -492,7 +492,7 @@ private:
-     // NOTE: The monitor watchdog will watch the parent process and kill
+@@ -540,7 +540,7 @@ private:
+     // NOTE: The supervisor childhook will watch the parent process and kill
      // the 'du' process in case that the parent die.
      Try<Subprocess> s = subprocess(
 -        "du",
@@ -400,11 +649,37 @@ index 3dfe7ad..4288666 100644
          command,
          Subprocess::PATH("/dev/null"),
          Subprocess::PIPE(),
+diff --git a/src/slave/containerizer/mesos/isolators/volume/image.cpp b/src/slave/containerizer/mesos/isolators/volume/image.cpp
+index 210e67ad0..60b3a15e4 100644
+--- a/src/slave/containerizer/mesos/isolators/volume/image.cpp
++++ b/src/slave/containerizer/mesos/isolators/volume/image.cpp
+@@ -214,7 +214,7 @@ Future<Option<ContainerLaunchInfo>> VolumeImageIsolatorProcess::_prepare(
+ 
+     CommandInfo* command = launchInfo.add_pre_exec_commands();
+     command->set_shell(false);
+-    command->set_value("mount");
++    command->set_value("@mount@");
+     command->add_arguments("mount");
+     command->add_arguments("-n");
+     command->add_arguments("--rbind");
+diff --git a/src/slave/containerizer/mesos/isolators/volume/sandbox_path.cpp b/src/slave/containerizer/mesos/isolators/volume/sandbox_path.cpp
+index 7b976d292..474dcd486 100644
+--- a/src/slave/containerizer/mesos/isolators/volume/sandbox_path.cpp
++++ b/src/slave/containerizer/mesos/isolators/volume/sandbox_path.cpp
+@@ -240,7 +240,7 @@ Future<Option<ContainerLaunchInfo>> VolumeSandboxPathIsolatorProcess::prepare(
+ 
+       CommandInfo* command = launchInfo.add_pre_exec_commands();
+       command->set_shell(false);
+-      command->set_value("mount");
++      command->set_value("@mount@");
+       command->add_arguments("mount");
+       command->add_arguments("-n");
+       command->add_arguments("--rbind");
 diff --git a/src/slave/containerizer/mesos/provisioner/backends/copy.cpp b/src/slave/containerizer/mesos/provisioner/backends/copy.cpp
-index b9f6d7a..0fcf455 100644
+index 9c5354e5f..a73a9692e 100644
 --- a/src/slave/containerizer/mesos/provisioner/backends/copy.cpp
 +++ b/src/slave/containerizer/mesos/provisioner/backends/copy.cpp
-@@ -141,7 +141,7 @@ Future<Nothing> CopyBackendProcess::_provision(
+@@ -147,7 +147,7 @@ Future<Nothing> CopyBackendProcess::_provision(
  #endif // __APPLE__ || __FreeBSD__
  
    Try<Subprocess> s = subprocess(
@@ -413,11 +688,20 @@ index b9f6d7a..0fcf455 100644
        args,
        Subprocess::PATH("/dev/null"),
        Subprocess::PATH("/dev/null"),
+@@ -180,7 +180,7 @@ Future<bool> CopyBackendProcess::destroy(const string& rootfs)
+   vector<string> argv{"rm", "-rf", rootfs};
+ 
+   Try<Subprocess> s = subprocess(
+-      "rm",
++      "@rm@",
+       argv,
+       Subprocess::PATH("/dev/null"),
+       Subprocess::FD(STDOUT_FILENO),
 diff --git a/src/uri/fetchers/copy.cpp b/src/uri/fetchers/copy.cpp
-index f095ad6..ee0c2a7 100644
+index 2cfef5ab0..8a62f7699 100644
 --- a/src/uri/fetchers/copy.cpp
 +++ b/src/uri/fetchers/copy.cpp
-@@ -88,7 +88,7 @@ Future<Nothing> CopyFetcherPlugin::fetch(
+@@ -97,7 +97,7 @@ Future<Nothing> CopyFetcherPlugin::fetch(
    const vector<string> argv = {"cp", "-a", uri.path(), directory};
  
    Try<Subprocess> s = subprocess(
@@ -427,10 +711,10 @@ index f095ad6..ee0c2a7 100644
        Subprocess::PATH("/dev/null"),
        Subprocess::PIPE(),
 diff --git a/src/uri/fetchers/curl.cpp b/src/uri/fetchers/curl.cpp
-index cc3f9ee..691d2d9 100644
+index 7b746d619..12bbb04df 100644
 --- a/src/uri/fetchers/curl.cpp
 +++ b/src/uri/fetchers/curl.cpp
-@@ -98,7 +98,7 @@ Future<Nothing> CurlFetcherPlugin::fetch(
+@@ -107,7 +107,7 @@ Future<Nothing> CurlFetcherPlugin::fetch(
    };
  
    Try<Subprocess> s = subprocess(
@@ -440,10 +724,10 @@ index cc3f9ee..691d2d9 100644
        Subprocess::PATH("/dev/null"),
        Subprocess::PIPE(),
 diff --git a/src/uri/fetchers/docker.cpp b/src/uri/fetchers/docker.cpp
-index 211be6f..d7e3771 100644
+index 3f38dddfb..fd991ee74 100644
 --- a/src/uri/fetchers/docker.cpp
 +++ b/src/uri/fetchers/docker.cpp
-@@ -113,7 +113,7 @@ static Future<http::Response> curl(
+@@ -114,7 +114,7 @@ static Future<http::Response> curl(
  
    // TODO(jieyu): Kill the process if discard is called.
    Try<Subprocess> s = subprocess(
@@ -452,7 +736,7 @@ index 211be6f..d7e3771 100644
        argv,
        Subprocess::PATH("/dev/null"),
        Subprocess::PIPE(),
-@@ -212,7 +212,7 @@ static Future<int> download(
+@@ -213,7 +213,7 @@ static Future<int> download(
  
    // TODO(jieyu): Kill the process if discard is called.
    Try<Subprocess> s = subprocess(

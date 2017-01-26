@@ -23,17 +23,6 @@ rustPlatform.buildRustPackage rec {
 
   LIBGIT2_SYS_USE_PKG_CONFIG=1;
 
-  configurePhase = ''
-    ./configure --enable-optimize --prefix=$out
-  '';
-
-  buildPhase = "make";
-
-  installPhase = ''
-    make install
-    ${postInstall}
-  '';
-
   postInstall = ''
     rm "$out/lib/rustlib/components" \
        "$out/lib/rustlib/install.log" \

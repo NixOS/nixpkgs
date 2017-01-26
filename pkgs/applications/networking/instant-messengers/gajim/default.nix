@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       name = "gajim-icon-index.patch";
-      url = "http://hg.gajim.org/gajim/raw-rev/b9ec78663dfb";
+      url = "https://dev.gajim.org/gajim/gajim/commit/7d20ed2b98a3070add188efab7308a5a06d9f4a2.diff";
       sha256 = "0w54hr5dq9y36val55kmh8d6cid7h4fs2nghx09714jylz2nyxxv";
     })
   ];

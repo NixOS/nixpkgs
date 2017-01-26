@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
+{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
 , python, ruby, jre, nettools
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.25";
+  version = "2.0.30";
   name = "munin-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/munin-monitoring/munin/archive/${version}.tar.gz";
-    sha256 = "1ig67l3p5fnx44fcvbbinajxlin9i7g9cbac93h2hcvb2qhzzzra";
+  src = fetchFromGitHub {
+    owner = "munin-monitoring";
+    repo = "munin";
+    rev = version;
+    sha256 = "1sxsdfq9a5d8b13jigr06gs7n4m3c95645sfyyl49bkfy0n5cxrg";
   };
 
   buildInputs = [ 

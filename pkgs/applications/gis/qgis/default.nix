@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.16.2";
+  name = "qgis-2.18.3";
 
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags ] ++
@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  # fatal error: ui_qgsdelimitedtextsourceselectbase.h: No such file or directory
-  #enableParallelBuilding = true;
+  enableParallelBuilding = true;
 
   # To handle the lack of 'local' RPATH; required, as they call one of
   # their built binaries requiring their libs, in the build process.
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "0dll8klz0qfba4c1y7mp9k4y4azlay0sypvryicggllk1hna4w0n";
+    sha256 = "155kz7fizhkmgc4lsmk1cph1zar03pdd8pjpmv81yyx1z0i4ygvl";
   };
 
   cmakeFlags = stdenv.lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";

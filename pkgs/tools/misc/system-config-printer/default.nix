@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     ];
 
   pythonPath = with pythonPackages;
-    [ pycups pycurl dbus-python pygobject3 requests2 ];
+    [ pycups pycurl dbus-python pygobject3 requests2 pycairo ];
 
   configureFlags =
     [ "--with-udev-rules"

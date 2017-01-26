@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python2 }:
 stdenv.mkDerivation rec {
 
   name = "omniorb-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g58xcw4641wyisp9wscrkzaqrz0vf123dgy52qq2a3wk7y77hkl";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   hardeningDisable = [ "format" ];
 

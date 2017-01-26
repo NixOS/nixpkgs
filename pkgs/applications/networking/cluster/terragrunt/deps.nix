@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "8649d278323ebf6bd20c9cd56ecb152b1c617375";
-      sha256 = "0m2nxdlvi90vw68ds9qby291skc5d0dgqi3pkalr8ma3kd9r9khv";
+      rev = "5e1afe1c0a077fb2da9b5f74232b790d99397ce8";
+      sha256 = "073yx5acqybw0h2zshg209wmldm0g5h5x9bhbn6h08ak0r4i80al";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-zglob";
-      rev = "0b24567ec079616e9897f635f542e3bf56abb3d0";
-      sha256 = "0380dqsy0qdjranl5qfmmcr6a4g7sw4z26g1bld9y1s66madl03l";
+      rev = "1783ae1a9f7ff3a79240e8c249d8b575d70a6528";
+      sha256 = "0g4ih6swqpq0bqwsv5mv8ymicgr92xh9i6sm1793lqwb63x8ga1x";
     };
   }
   {

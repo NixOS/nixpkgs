@@ -7,9 +7,4 @@
   imports =
     [ ./installation-cd-base.nix
     ];
-
-  environment.systemPackages =
-    [
-      pkgs.vim
-    ];
 }

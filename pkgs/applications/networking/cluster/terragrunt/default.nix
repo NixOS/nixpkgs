@@ -2,16 +2,15 @@
 
 buildGoPackage rec {
   name = "terragrunt-${version}";
-  version = "0.8.0";
-  rev = "v${version}";
+  version = "0.9.3";
 
   goPackagePath = "github.com/gruntwork-io/terragrunt";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev    = "v${version}";
     owner  = "gruntwork-io";
     repo   = "terragrunt";
-    sha256 = "1d035p2r6d8c1crxvpi5ayb9jx6f2pdgzw2197zhllavyi8n8dw1";
+    sha256 = "0i6sqgyxhi6icp7nps9prc40m9wsbr71v967kgl2865sgb214rdx";
   };
 
   goDeps = ./deps.nix;
@@ -20,7 +19,7 @@ buildGoPackage rec {
 
   postInstall = ''
     wrapProgram $bin/bin/terragrunt \
-      --suffix PATH : ${lib.makeBinPath [ terraform ]}
+      --set TERRAGRUNT_TFPATH ${lib.getBin terraform}/bin/terraform
   '';
 
   meta = with stdenv.lib; {

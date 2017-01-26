@@ -1,7 +1,8 @@
 {stdenv, fetchurl,
   libtool, libjpeg, openssl, libX11, libXdamage, xproto, damageproto, 
   xextproto, libXext, fixesproto, libXfixes, xineramaproto, libXinerama, 
-  libXrandr, randrproto, libXtst, zlib, libgcrypt
+  libXrandr, randrproto, libXtst, zlib, libgcrypt, autoreconfHook
+  , systemd, pkgconfig, libpng
 }:
 
 assert stdenv.isLinux;
@@ -10,16 +11,16 @@ let
   s = # Generated upstream information
   rec {
     baseName="libvncserver";
-    version="0.9.9";
+    version="0.9.11";
     name="${baseName}-${version}";
-    hash="1y83z31wbjivbxs60kj8a8mmjmdkgxlvr2x15yz95yy24lshs1ng";
-    url="mirror://sourceforge/project/libvncserver/libvncserver/0.9.9/LibVNCServer-0.9.9.tar.gz";
-    sha256="1y83z31wbjivbxs60kj8a8mmjmdkgxlvr2x15yz95yy24lshs1ng";
+    url="https://github.com/LibVNC/libvncserver/archive/LibVNCServer-${version}.tar.gz";
+    sha256="15189n09r1pg2nqrpgxqrcvad89cdcrca9gx6qhm6akjf81n6g8r";
   };
   buildInputs = [
     libtool libjpeg openssl libX11 libXdamage xproto damageproto
     xextproto libXext fixesproto libXfixes xineramaproto libXinerama
-    libXrandr randrproto libXtst zlib libgcrypt
+    libXrandr randrproto libXtst zlib libgcrypt autoreconfHook systemd
+    pkgconfig libpng
   ];
 in
 stdenv.mkDerivation {

@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "dnscrypt-proxy-${version}";
-  version = "1.9.1";
+  version = "1.9.4";
 
   src = fetchurl {
     url = "https://download.dnscrypt.org/dnscrypt-proxy/${name}.tar.bz2";
-    sha256 = "0aa1qw59b72wl922lfhg24xq2gkv95v1s0daiiqv9b4zpap3ynag";
+    sha256 = "07piwsjczamwvdpv1585kg4awqakip51bwsm8nqi6bljww4agx7x";
   };
 
   configureFlags = optional stdenv.isLinux "--with-systemd";
@@ -21,14 +21,6 @@ stdenv.mkDerivation rec {
     # Previous versions required libtool files to load plugins; they are
     # now strictly optional.
     rm $out/lib/dnscrypt-proxy/*.la
-
-    # The installation ends up copying the same sample configuration
-    # into $out/etc twice, with the expectation that one of them will be
-    # edited by the user.  Since we can't modify the file, it makes more
-    # sense to move only a single copy to the doc directory.
-    mkdir -p $out/share/doc/dnscrypt-proxy
-    mv $out/etc/dnscrypt-proxy.conf.example $out/share/doc/dnscrypt-proxy/
-    rm -rf $out/etc
   '';
 
   meta = {

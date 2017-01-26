@@ -750,6 +750,17 @@ rec {
 
   };
 
+  typescript-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "typescript-vim-2016-08-10";
+    src = fetchgit {
+      url = "git://github.com/leafgarland/typescript-vim";
+      rev = "7e25a901af7cd993498cc9ecfc833ca2ac21db7a";
+      sha256 = "0n5lrn741ar6wkvsi86kf7hgdjdwq34sn3ppzcddhvic5hayrkyk";
+    };
+    dependencies = [];
+
+  };
+
   vim-ipython = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-ipython-2015-06-23";
     src = fetchgit {
@@ -1322,6 +1333,17 @@ rec {
 
   };
 
+  vim-speeddating = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-speeddating-2015-01-24";
+    src = fetchgit {
+      url = "git://github.com/tpope/vim-speeddating";
+      rev = "426c792e479f6e1650a6996c683943a09344c21e";
+      sha256 = "1i8pndds1lk5afxl6nwsnl4vzszh0qxgqx7x11fp3vqw27c5bwn8";
+    };
+    dependencies = [];
+
+  };
+
   hasksyn = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "hasksyn-2014-09-03";
     src = fetchgit {
@@ -1599,6 +1621,17 @@ rec {
 
   };
 
+  gruvbox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "gruvbox-2016-09-28";
+    src = fetchgit {
+      url = "git://github.com/morhetz/gruvbox";
+      rev = "127c9d14d4bac1bac31e328b835a8919a255789c";
+      sha256 = "19wg9143wvlynblpxm0cnk3ars2hgss3y745hligqgvfy308f7sm";
+    };
+    dependencies = [];
+
+  };
+
   matchit-zip = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "matchit-zip";
     src = fetchurl {
@@ -1747,6 +1780,17 @@ rec {
       url = "git://github.com/tomtom/tlib_vim";
       rev = "8c74564396e368788a5cb901b0e8017a3166cee9";
       sha256 = "15bh6q8g7p1giz2lybqhdf7a7xisqwpr751gprqx3vmh97drry5z";
+    };
+    dependencies = [];
+
+  };
+
+  tsuquyomi = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "tsuquyomi-2017-01-02";
+    src = fetchgit {
+      url = "git://github.com/Quramy/tsuquyomi";
+      rev = "473aa2703950816748329acca56c069df7339c96";
+      sha256 = "0h5gbhs4gsvyjsin2wvdlbrr6ykpcmipmpwpf39595j1dlqnab59";
     };
     dependencies = [];
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pythonPackages }:
+{ stdenv, lib, fetchurl, python2Packages }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -7,17 +7,16 @@
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 #
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "zim-${version}";
   version = "0.65";
-  namePrefix = "";
 
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
     sha256 = "15pdq4fxag85qjsrdmmssiq85qsk5vnbp8mrqnpvx8lm8crz6hjl";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pyGtkGlade pyxdg pygobject2 ];
+  propagatedBuildInputs = with python2Packages; [ pyGtkGlade pyxdg pygobject2 ];
 
   preBuild = ''
     export HOME=$TMP

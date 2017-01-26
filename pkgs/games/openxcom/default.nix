@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     description = "Open source clone of UFO: Enemy Unknown";
     homepage = http://openxcom.org;
     repositories.git = https://github.com/SupSuper/OpenXcom.git;
-    maintainers = [ stdenv.lib.maintainers.page ];
+    maintainers = [ stdenv.lib.maintainers.cpages ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3;
   };

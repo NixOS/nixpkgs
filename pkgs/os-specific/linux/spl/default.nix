@@ -66,7 +66,7 @@ in
       sha256 = "000yvaccqlkrq15sdz0734fp3lkmx58182cdcfpm4869i0q7rf0s";
     };
     splUnstable = common {
-      version = "0.7.0-rc2";
-      sha256 = "1y7jlyj8jwgrgnd6hiabms5h9430b6wjbnr3pwb16mv40wns1i65";
+      version = "0.7.0-rc3";
+      sha256 = "09v5gh7mqdl3bfq5an9iiw9fw3l1skprclxdz7r19bw3ids3lfja";
     };
   }

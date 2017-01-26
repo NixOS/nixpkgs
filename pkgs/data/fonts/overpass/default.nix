@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchFromGitHub, unzip }:
 
 stdenv.mkDerivation rec {
   name = "overpass-${version}";
-  version = "2.1";
+  version = "3.0.2";
 
-  src = fetchurl {
-    url = "https://github.com/RedHatBrand/overpass/releases/download/2.1/overpass-fonts-ttf-2.1.zip";
-    sha256 = "1kd7vbqffp5988j3p4zxkxajdmfviyv4y6rzk7jazg81xcsxicwf";
+  src = fetchFromGitHub {
+    owner = "RedHatBrand";
+    repo = "Overpass";
+    rev = version;
+    sha256 = "1bgmnhdfmp4rycyadcnzw62vkvn63nn29pq9vbjf4c9picvl8ah6";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -15,8 +17,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/doc/${name}
-    mkdir -p $out/share/fonts/truetype
-    cp -v *.ttf $out/share/fonts/truetype
+    mkdir -p $out/share/fonts/opentype
+    cp -v "desktop-fonts/"*"/"*.otf $out/share/fonts/opentype
     cp -v LICENSE.md README.md $out/share/doc/${name}
   '';
 

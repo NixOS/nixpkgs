@@ -4,21 +4,22 @@
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
-  version = "2.3.3";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "a929bce3b957a81776b1db7b43b0e4473339bf16be8dbba5abb4b0593bf43c94";
+    sha256 = "0y9nhp9lfmxv4iy1xg7l4lfxv4168qhag26wwg0dbi0zjpkd790b";
   };
 
   outputs = [ "bin" "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls jansson liburcu lmdb libcap_ng libidn
-    systemd nettle libedit
+    gnutls jansson liburcu lmdb libidn
+    nettle libedit
     # without sphinx &al. for developer documentation
-  ];
+  ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd ];
 
   enableParallelBuilding = true;
 

@@ -241,6 +241,9 @@ in
         RuntimeDirectory = [ "dovecot2" ];
       };
 
+      # When copying sieve scripts preserve the original time stamp
+      # (should be 0) so that the compiled sieve script is newer than
+      # the source file and Dovecot won't try to compile it.
       preStart = ''
         rm -rf ${stateDir}/sieve
       '' + optionalString (cfg.sieveScripts != {}) ''
@@ -248,11 +251,11 @@ in
         ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
           if [ -d '${from}' ]; then
             mkdir '${stateDir}/sieve/${to}'
-            cp "${from}/"*.sieve '${stateDir}/sieve/${to}'
+            cp -p "${from}/"*.sieve '${stateDir}/sieve/${to}'
           else
-            cp '${from}' '${stateDir}/sieve/${to}'
+            cp -p '${from}' '${stateDir}/sieve/${to}'
           fi
-           ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
+          ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
         '') cfg.sieveScripts)}
         chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
       '';

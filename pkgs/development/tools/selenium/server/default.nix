@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, jre, jdk, gcc, xorg
-, chromedriver, chromeSupport ? true }:
+, htmlunit-driver, chromedriver, chromeSupport ? true }:
 
 with stdenv.lib;
 
@@ -25,8 +25,9 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/lib/${name}
     cp $src $out/share/lib/${name}/${name}.jar
     makeWrapper ${jre}/bin/java $out/bin/selenium-server \
-      --add-flags "-jar $out/share/lib/${name}/${name}.jar" \
-      --add-flags ${optionalString chromeSupport "-Dwebdriver.chrome.driver=${chromedriver}/bin/chromedriver"}
+      --add-flags "-cp ${htmlunit-driver}/share/lib/${htmlunit-driver.name}/${htmlunit-driver.name}.jar:$out/share/lib/${name}/${name}.jar" \
+      --add-flags ${optionalString chromeSupport "-Dwebdriver.chrome.driver=${chromedriver}/bin/chromedriver"} \
+      --add-flags "org.openqa.grid.selenium.GridLauncher"
   '';
 
   meta = {

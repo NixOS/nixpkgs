@@ -6,11 +6,11 @@
 let
   inherit (pythonPackages) python pygobject2;
 in stdenv.mkDerivation rec {
-  name = "libvirt-glib-0.2.3";
+  name = "libvirt-glib-1.0.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/glib/${name}.tar.gz";
-    sha256 = "1pahj8qa7k2307sd57rwqwq1hijya02v0sxk91hl3cw48niimcf3";
+    sha256 = "0iwa5sdbii52pjpdm5j37f67sdmf0kpcky4liwhy1nf43k85i4fa";
   };
 
   buildInputs = [

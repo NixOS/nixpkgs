@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
       gnome_online_accounts libsoup colord libpulseaudio fontconfig colord-gtk libpwquality
       accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify libxkbfile
-      shared_mime_info icu libtool docbook_xsl docbook_xsl_ns
+      shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
       gdk_pixbuf gnome3.defaultIconTheme librsvg clutter clutter_gtk
       gnome3.vino udev libcanberra_gtk3 libgudev
       networkmanager modemmanager makeWrapper gnome3.gnome-bluetooth grilo tracker ];

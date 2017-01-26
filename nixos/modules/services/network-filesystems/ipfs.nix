@@ -67,6 +67,14 @@ in
         '';
       };
 
+      emptyRepo = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set to true, the repo won't be initialized with help files
+        '';
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the IPFS daemon";
@@ -103,16 +111,17 @@ in
       after = [ "network.target" "local-fs.target" ];
       path  = [ pkgs.ipfs pkgs.su pkgs.bash ];
 
-      preStart =
-        ''
-          install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
-          if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
-            cd ${cfg.dataDir}
-            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c "${ipfs}/bin/ipfs init"
-          fi
-          ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c "${ipfs}/bin/ipfs config Addresses.API ${cfg.apiAddress}"
-          ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c "${ipfs}/bin/ipfs config Addresses.Gateway ${cfg.gatewayAddress}"
-        '';
+      preStart = ''
+        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
+        if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
+          cd ${cfg.dataDir}
+          ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c \
+             "${ipfs}/bin/ipfs init ${if cfg.emptyRepo then "-e" else ""}"
+        fi
+        ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c \
+           "${ipfs}/bin/ipfs --local config Addresses.API ${cfg.apiAddress} && \
+            ${ipfs}/bin/ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}"
+      '';
 
       serviceConfig = {
         ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags}";

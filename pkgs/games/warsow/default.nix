@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
+    broken = true; # Depends on a specific old libjpeg version
   };
 }

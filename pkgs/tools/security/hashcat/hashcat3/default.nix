@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, opencl-headers, opencl-icd }:
+{ stdenv, fetchurl, makeWrapper, opencl-headers, ocl-icd }:
 
 assert stdenv.isLinux;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${opencl-icd}/lib
+    wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
   '';
 
   meta = {

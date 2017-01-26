@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchFromGitHub, cmake, glibc }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.3";
+  version = "0.13.1";
   name = "tini-${version}";
-  src = fetchurl {
-    url = "https://github.com/krallin/tini/archive/v0.8.3.tar.gz";
-    sha256 ="1w7rj4crrcyv25idmh4asbp2sxzwyihy5mbpw384bzxjzaxn9xpa";
+  src = fetchFromGitHub {
+    owner = "krallin";
+    repo = "tini";
+    rev = "v${version}";
+    sha256 ="1g4n8v5d197zcb41fcpbhip2x342383zw1d2zkv57w73vkqgv6z6";
   };
   patchPhase = "sed -i /tini-static/d CMakeLists.txt";
   NIX_CFLAGS_COMPILE = [
     "-DPR_SET_CHILD_SUBREAPER=36"
     "-DPR_GET_CHILD_SUBREAPER=37"
   ];
-  buildInputs = [ cmake ];
+  buildInputs = [ cmake glibc glibc.static ];
   meta = with stdenv.lib; {
     description = "A tiny but valid init for containers";
     homepage = https://github.com/krallin/tini;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre, gnugrep, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "scala-2.12.1";
@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
     mv * $out
 
     for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --prefix PATH ":" ${jre}/bin ;
+      wrapProgram $out/bin/$p \
+        --prefix PATH ":" ${coreutils}/bin \
+        --prefix PATH ":" ${gnugrep}/bin \
+        --prefix PATH ":" ${jre}/bin \
+        --set JAVA_HOME ${jre}
     done
   '';
 

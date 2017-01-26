@@ -4,9 +4,7 @@ bundlerEnv {
   name = "redis-dump-0.3.5";
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   buildInputs = [ perl autoconf ];
 

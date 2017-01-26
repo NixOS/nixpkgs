@@ -6,13 +6,13 @@
 # some loss of functionality because of it.
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.11.0";
+  version = "1.12.1";
   name = "tahoe-lafs-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://tahoe-lafs.org/downloads/tahoe-lafs-${version}.tar.bz2";
-    sha256 = "0hrp87rarbmmpnrxk91s83h6irkykds3pl263dagcddbdl5inqdi";
+    sha256 = "0x9f1kjym1188fp6l5sqy0zz8mdb4xw861bni2ccv26q482ynbks";
   };
 
   patchPhase = ''
@@ -36,7 +36,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     twisted foolscap nevow simplejson zfec pycryptopp darcsver
     setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
-    service-identity
+    service-identity pyyaml
   ];
 
   postInstall = ''

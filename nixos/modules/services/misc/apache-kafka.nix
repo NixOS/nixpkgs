@@ -38,7 +38,7 @@ in {
 
     brokerId = mkOption {
       description = "Broker ID.";
-      default = 0;
+      default = -1;
       type = types.int;
     };
 

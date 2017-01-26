@@ -232,7 +232,7 @@ in
       homepage = https://github.com/kodi-pvr/pvr.hts;
       description = "Kodi's Tvheadend HTSP client addon";
       platforms = platforms.all;
-      maintainers = with maintainers; [ page ];
+      maintainers = with maintainers; [ cpages ];
     };
   }).override {
     buildInputs = [ cmake kodi libcec_platform kodi-platform ];
