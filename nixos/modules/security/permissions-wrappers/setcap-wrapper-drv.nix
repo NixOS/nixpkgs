@@ -5,17 +5,17 @@ let
 
      # Produce a shell-code splice intended to be stitched into one of
      # the build or install phases within the derivation.
-     mkSetcapWrapper = { program, source ? null, ...}:
-       ''
-         if ! source=${if source != null then source else "$(readlink -f $(PATH=$PERMISSIONS_WRAPPER_PATH type -tP ${program}))"}; then
-             # If we can't find the program, fall back to the
-             # system profile.
-             source=/nix/var/nix/profiles/default/bin/${program}
-         fi
+     mkSetcapWrapper = { program, source ? null, ...}: ''
+       if ! source=${if source != null then source else "$(readlink -f $(PATH=$PERMISSIONS_WRAPPER_PATH type -tP ${program}))"}; then
+         # If we can't find the program, fall back to the
+         # system profile.
+         source=/nix/var/nix/profiles/default/bin/${program}
+       fi
 
-         gcc -Wall -O2 -DWRAPPER_SETCAP=1 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.permissionsWrapperDir}\" \
-             -lcap-ng -lcap ${./permissions-wrapper.c} -o $out/bin/${program}.wrapper
-       '';
+       gcc -Wall -O2 -DWRAPPER_SETCAP=1 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.permissionsWrapperDir}\" \
+           -lcap-ng -lcap ${./permissions-wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
+           -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
+     '';
 in
 
 # This is only useful for Linux platforms and a kernel version of
@@ -26,7 +26,7 @@ assert lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.
 pkgs.stdenv.mkDerivation {
   name         = "setcap-wrapper";
   unpackPhase  = "true";
-  buildInputs  = [ pkgs.linuxHeaders pkgs.libcap pkgs.libcap_ng ];
+  buildInputs  = [ pkgs.linuxHeaders ];
   installPhase = ''
     mkdir -p $out/bin
 

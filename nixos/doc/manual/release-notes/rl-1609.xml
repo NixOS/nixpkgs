@@ -202,7 +202,7 @@ following incompatible changes:</para>
 
   <listitem>
     <para>The directory container setuid wrapper programs,
-    <filename>/var/setuid-wrappers</filename>, <link
+    <filename>/var/permissions-wrappers</filename>, <link
     xlink:href="https://github.com/NixOS/nixpkgs/pull/18124">is now
     updated atomically to prevent failures if the switch to a new
     configuration is interrupted.</link></para>

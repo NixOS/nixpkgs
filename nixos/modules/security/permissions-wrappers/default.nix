@@ -154,6 +154,10 @@ in
     export PATH="${config.security.permissionsWrapperDir}:$PATH"
     '';
 
+    system.activationScripts.wrapper-dir = ''
+      mkdir -p "${config.security.permissionsWrapperDir}"
+    '';
+
     ###### setcap activation script
     system.activationScripts.setcap =
       lib.stringAfter [ "users" ]

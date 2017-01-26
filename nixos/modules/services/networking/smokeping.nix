@@ -219,14 +219,14 @@ in
         type = types.string;
         default = ''
           + FPing
-          binary = ${config.security.wrapperDir}/fping
+          binary = ${config.security.permissionsWrapperDir}/fping
         '';
         description = "Probe configuration";
       };
       sendmail = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/var/setuid-wrappers/sendmail";
+        example = "/var/permissions-wrappers/sendmail";
         description = "Use this sendmail compatible script to deliver alerts";
       };
       smokeMailTemplate = mkOption {
@@ -273,7 +273,14 @@ in
         message = "services.smokeping: sendmail and Mailhost cannot both be enabled.";
       }
     ];
-    security.setuidPrograms = [ "fping" ];
+    security.permissionsWrappers.setuid = [
+      { program = "fping";
+        source  = "${e.enlightenment.out}/bin/fping";
+        owner   = "root";
+        group   = "root";
+        setuid  = true;
+      }
+    ];
     environment.systemPackages = [ pkgs.fping ];
     users.extraUsers = singleton {
       name = cfg.user;
