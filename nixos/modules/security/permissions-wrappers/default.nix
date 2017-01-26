@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
 
-  inherit (config.security) permissionsWrapperDir;
+  inherit (config.security) run-permissionsWrapperDir permissionsWrapperDir;
 
   isNotNull = v: if v != null then true else false;
 
@@ -132,6 +132,16 @@ in
       '';
     };
 
+    security.run-permissionsWrapperDir = lib.mkOption {
+      type        = lib.types.path;
+      default     = "/run/permissions-wrapper-dirs";
+      internal    = true;
+      description = ''
+        This option defines the run path to the permissions
+        wrappers. It should not be overriden.
+      '';
+    };
+
   };
 
 
@@ -158,8 +168,8 @@ in
           # programs to be wrapped.
           PERMISSIONS_WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          mkdir -p /run/permissions-wrapper-dirs
-          permissionsWrapperDir=$(mktemp --directory --tmpdir=/run/permissions-wrapper-dirs permissions-wrappers.XXXXXXXXXX)
+          mkdir -p ${run-permissionsWrapperDir}
+          permissionsWrapperDir=$(mktemp --directory --tmpdir=${run-permissionsWrapperDir} permissions-wrappers.XXXXXXXXXX)
           chmod a+rx $permissionsWrapperDir
 
           ${lib.concatMapStrings configureSetcapWrapper (builtins.filter isNotNull cfg.setcap)}
