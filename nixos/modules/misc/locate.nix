@@ -18,6 +18,7 @@ in {
     locate = mkOption {
       type = types.package;
       default = pkgs.findutils;
+      defaultText = "pkgs.findutils";
       example = "pkgs.mlocate";
       description = ''
         The locate implementation to use
@@ -38,9 +39,6 @@ in {
       '';
     };
 
-    # This is no longer supported, but we keep it to give a better warning below
-    period = mkOption { visible = false; };
-
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -58,7 +56,7 @@ in {
     };
 
     localuser = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       default = "nobody";
       description = ''
         The user to search non-network directories as, using
@@ -76,10 +74,6 @@ in {
   };
 
   config = {
-    warnings =
-      let opt = options.services.locate.period; in
-      optional opt.isDefined "The ‘services.locate.period’ option in ${showFiles opt.files} has been removed; please replace it with ‘services.locate.interval’, using the systemd.time(7) calendar event format.";
-
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
         path  = [ pkgs.su ];
@@ -87,7 +81,7 @@ in {
           ''
             mkdir -m 0755 -p $(dirname ${toString cfg.output})
             exec ${cfg.locate}/bin/updatedb \
-              --localuser=${cfg.localuser} \
+              ${optionalString (cfg.localuser != null) ''--localuser=${cfg.localuser}''} \
               ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
