@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
-    owner = "mayflower";
+    owner = "nixos";
     repo = "systemd";
     rev = "42a48d16c0ec48330286f8332a4628e1d71c759b";
     sha256 = "18bcxbba1wk44xhlsna18x3c4b07sq6670wnsy2xy1x2kzfnmhdl";
