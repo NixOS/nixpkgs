@@ -34,3 +34,18 @@ Author: Felix Geyer <debfx-pkg@fobos.de>
  #include <WARMUX_types.h>
  #include <WARMUX_network.h>
  #include <WARMUX_index_server.h>
+
+Description: Fix conversion error in gcc 6.
+Author: Robin Gloster <mail@glob.in>
+
+--- warmux-11.04.1.orig/src/interface/weapon_menu.cpp	2017-01-19 23:06:32.401035923 +0100
++++ warmux-11.04.1/src/interface/weapon_menu.cpp	2017-01-19 23:07:14.245866593 +0100
+@@ -391,7 +391,7 @@
+ Weapon * WeaponsMenu::UpdateCurrentOverflyItem(const Polygon * poly)
+ {
+   if (!show)
+-    return false;
++    return nullptr;
+   const std::vector<PolygonItem *>& items = poly->GetItem();
+   WeaponMenuItem * tmp;
+   Interface::GetInstance()->SetCurrentOverflyWeapon(NULL);

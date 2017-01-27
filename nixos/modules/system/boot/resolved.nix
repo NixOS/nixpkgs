@@ -71,7 +71,9 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.additionalUpstreamSystemUnits = [ "systemd-resolved.service" ];
+    systemd.additionalUpstreamSystemUnits = [
+      "systemd-resolved.service" "org.freedesktop.resolve1.busname"
+    ];
 
     systemd.services.systemd-resolved = {
       wantedBy = [ "multi-user.target" ];

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
-, gstreamer, gst_plugins_base, GConf, setfile
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm
+, xf86vidmodeproto , gstreamer, gst_plugins_base, GConf, setfile
 , withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true
 , withWebKit ? false, webkitgtk2 ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
@@ -32,6 +32,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
+
+  patches = [ (fetchpatch {
+    url = "https://raw.githubusercontent.com/jessehager/MINGW-packages/af6ece963d8157dd3fbc710bcc190647c4924c63/mingw-w64-wxwidgets/wxWidgets-3.0.2-gcc6-abs.patch";
+    sha256 = "0100pg0z7i6cjyysf2k3330pmqmdaxgc9hz6kxnfvc31dynjcq3h";
+  }) ];
 
   configureFlags =
     [ "--enable-gtk2" "--disable-precomp-headers" "--enable-mediactrl"

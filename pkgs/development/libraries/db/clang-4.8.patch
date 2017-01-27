@@ -38,19 +38,6 @@ index 0034dcc..160c8ea 100644
  #else
  #define atomic_inc(env, p)	__atomic_inc(env, p)
  #define atomic_dec(env, p)	__atomic_dec(env, p)
-diff --git a/dbinc/db.in b/dbinc/db.in
-index 9fc6712..7428e0a 100644
---- a/dbinc/db.in
-+++ b/dbinc/db.in
-@@ -2413,7 +2413,7 @@ typedef struct {
- #define	fetch(a)	__db_dbm_fetch@DB_VERSION_UNIQUE_NAME@(a)
- #define	firstkey	__db_dbm_firstkey@DB_VERSION_UNIQUE_NAME@
- #define	nextkey(a)	__db_dbm_nextkey@DB_VERSION_UNIQUE_NAME@(a)
--#define	store(a, b)	__db_dbm_store@DB_VERSION_UNIQUE_NAME@(a, b)
-+#define	store_db(a, b)	__db_dbm_store@DB_VERSION_UNIQUE_NAME@(a, b)
- 
- /*******************************************************
-  * Hsearch historic interface.
 diff --git a/mp/mp_fget.c b/mp/mp_fget.c
 index 5fdee5a..0b75f57 100644
 --- a/mp/mp_fget.c

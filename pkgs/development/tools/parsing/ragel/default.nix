@@ -20,6 +20,8 @@ let
 
       configureFlags = [ "--with-colm=${colm}" ];
 
+      NIX_CFLAGS_COMPILE = "-std=gnu++98";
+
       doCheck = true;
 
       meta = with stdenv.lib; {
