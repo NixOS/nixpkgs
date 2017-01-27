@@ -91,6 +91,10 @@ with pkgs;
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
+    inherit (haskellPackages) dhall-nix;
+  };
+
   dockerTools = callPackage ../build-support/docker { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {
