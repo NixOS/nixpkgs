@@ -3894,7 +3894,7 @@ with pkgs;
   sshpass = callPackage ../tools/networking/sshpass { };
 
   sslscan = callPackage ../tools/security/sslscan {
-    openssl = openssl_1_0_1-vulnerable.override { enableSSL2 = true; };
+    openssl = openssl_1_0_2.override { enableSSL2 = true; };
   };
 
   sslmate = callPackage ../development/tools/sslmate { };
@@ -9002,7 +9002,6 @@ with pkgs;
         onlyHeaders = true;
       };
     })
-    openssl_1_0_1-vulnerable
     openssl_1_0_2
     openssl_1_1_0
     openssl_1_0_2-steam;
