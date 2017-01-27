@@ -3,12 +3,14 @@
 { lib
 , python
 , bootstrapped-pip
+, setuptools
+, wheel
 }:
 
-{
+{ buildInputs ? []
 # passed to "python setup.py build_ext"
 # https://github.com/pypa/pip/issues/881
-  setupPyBuildFlags ? []
+,  setupPyBuildFlags ? []
 # Execute before shell hook
 , preShellHook ? ""
 # Execute after shell hook
@@ -35,6 +37,8 @@ in attrs // {
     ${python.interpreter} nix_run_setup.py test
     runHook postCheck
   '';
+
+  buildInputs = buildInputs ++ [ setuptools wheel ];
 
   # Python packages that are installed with setuptools
   # are typically distributed with tests.

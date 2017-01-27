@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   unpackPhase = ''
     mkdir -p $out/${python.sitePackages}
     unzip -d $out/${python.sitePackages} $src
-    unzip -d $out/${python.sitePackages} ${setuptools_source}
+#     unzip -d $out/${python.sitePackages} ${setuptools_source}
     unzip -d $out/${python.sitePackages} ${wheel_source}
   '' + stdenv.lib.optionalString (python.isPy26 or false) ''
     unzip -d $out/${python.sitePackages} ${argparse_source}

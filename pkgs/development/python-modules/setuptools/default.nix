@@ -1,31 +1,27 @@
-{ stdenv, lib, fetchurl, python, wrapPython }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, appdirs
+, six
+, packaging
+}:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "setuptools";
-  shortName = "${pname}-${version}";
-  name = "${python.libPrefix}-${shortName}";
+  version = "34.3.2";
+  name = "${pname}-${version}";
 
-  version = "30.2.0";
-
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${shortName}.tar.gz";
-    sha256 = "f865709919903e3399343c0b3c42f95e9aeddc41e38cfb334fb2bb5dfa384857";
+  format = "wheel";       # Wheel required for bootstrapping setuptools.
+  catchConflicts = false; # For bootstrapping
+  src = fetchPypi {
+    inherit pname version format;
+    sha256 = "6483f8412313ec787fa71379147a4605d3b1cc303c3648d02542a9160d3db72b";
   };
 
-  buildInputs = [ wrapPython ];
-  propagatedBuildInputs = [ python ];
-  doCheck = false;  # requires pytest
-  installPhase = ''
-      dst=$out/${python.sitePackages}
-      mkdir -p $dst
-      export PYTHONPATH="$dst:$PYTHONPATH"
-      ${python.interpreter} setup.py install --prefix=$out
-      wrapPythonPrograms
-  '';
+  propagatedBuildInputs = [ appdirs six packaging ];
+  installFlags = [ "--ignore-installed" ];
 
-  pythonPath = [];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = http://pypi.python.org/pypi/setuptools;
     license = with lib.licenses; [ psfl zpt20 ];
