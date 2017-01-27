@@ -353,6 +353,7 @@
   ./services/network-filesystems/xtreemfs.nix
   ./services/networking/aiccu.nix
   ./services/networking/amuled.nix
+  ./services/networking/arpwatch.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
