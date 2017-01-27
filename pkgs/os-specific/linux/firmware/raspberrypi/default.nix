@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Firmware for the Raspberry Pi board";
     homepage = https://github.com/raspberrypi;
     license = licenses.unfree;
-    platforms = [ "armv6l-linux" "armv7l-linux" ];
+    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ viric tavyc ];
   };
 }

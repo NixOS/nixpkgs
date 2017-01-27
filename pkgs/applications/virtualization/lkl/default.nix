@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0x1hdjsrj6hfk1sgfw11ihm00fmp6g158sr2q3cgjy2b6jnsr4hp";
   };
 
+  # Fix a /usr/bin/env reference in here that breaks sandboxed builds
+  prePatch = "patchShebangs arch/lkl/scripts";
+
   installPhase = ''
     mkdir -p $out/{bin,lib}
 

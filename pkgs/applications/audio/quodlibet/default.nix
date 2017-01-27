@@ -12,7 +12,7 @@ let
   inherit (python2Packages) buildPythonApplication python mutagen pygtk pygobject2 dbus-python;
 in buildPythonApplication {
   # call the package quodlibet and just quodlibet
-  name = "quodlibet${stdenv.lib.optionalString withGstPlugins "-with-gst-plugins"}-${version}";
+  name = "quodlibet${stdenv.lib.optionalString (!withGstPlugins) "-without-gst-plugins"}-${version}";
 
   # XXX, tests fail
   doCheck = false;

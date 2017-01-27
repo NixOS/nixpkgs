@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
       # Without nonpriv.patch, pppd --version doesn't work when not run as
       # root.
       ./nonpriv.patch
+      (fetchurl {
+        name = "CVE-2015-3310.patch";
+        url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/rc_mksid-no-buffer-overflow?h=debian/2.4.7-1%2b4";
+        sha256 = "1dk00j7bg9nfgskw39fagnwv1xgsmyv0xnkd6n1v5gy0psw0lvqh";
+      })
     ];
 
   buildInputs = [ libpcap ];

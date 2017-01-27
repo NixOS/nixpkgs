@@ -21,13 +21,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "6.0.8";
+  version = "6.5";
 
   src = fetchurl {
-    url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
+    url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
     sha256 = if stdenv.is64bit then
-      "1s2yv72kj4zxba0850fi1jv41c69vcw3inhj9kqhy1d45ql7iw0w" else
-      "0zvqf444h35ikv1f3nwkh2jx51zj5k9w4zdxx32zcrnxpk5nhn97";
+      "0q0rdwjiqjjh9awiyp0a55nkhyri5y6zhkyq3n3x6w4afihl0wf4" else
+      "1y1sx2gp7c66l7a4smfibl8mv54byvawhhkikpa5l2vic75vyhk9";
   };
 
   preferLocalBuild = true;

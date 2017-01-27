@@ -79,6 +79,10 @@ with pkgs;
       }
     '');
 
+  updateAutotoolsGnuConfigScriptsHook = makeSetupHook
+    { substitutions = { gnu_config = gnu-config;}; }
+    ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
@@ -86,6 +90,10 @@ with pkgs;
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
   cmark = callPackage ../development/libraries/cmark { };
+
+  dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
+    inherit (haskellPackages) dhall-nix;
+  };
 
   dockerTools = callPackage ../build-support/docker { };
 
@@ -1672,6 +1680,8 @@ with pkgs;
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
   fcppt = callPackage ../development/libraries/fcppt/default.nix { };
+
+  fcrackzip = callPackage ../tools/security/fcrackzip { };
 
   fcron = callPackage ../tools/system/fcron { };
 
@@ -3905,7 +3915,7 @@ with pkgs;
   sshpass = callPackage ../tools/networking/sshpass { };
 
   sslscan = callPackage ../tools/security/sslscan {
-    openssl = openssl_1_0_1.override { enableSSL2 = true; };
+    openssl = openssl_1_0_1-vulnerable.override { enableSSL2 = true; };
   };
 
   sslmate = callPackage ../development/tools/sslmate { };
@@ -6028,8 +6038,7 @@ with pkgs;
 
   augeas = callPackage ../tools/system/augeas { };
 
-  ansible = python2Packages.ansible;
-
+  ansible  = python2Packages.ansible2;
   ansible2 = python2Packages.ansible2;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
@@ -7488,6 +7497,8 @@ with pkgs;
   qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
 
   gnet = callPackage ../development/libraries/gnet { };
+
+  gnu-config = callPackage ../development/libraries/gnu-config { };
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
@@ -9037,7 +9048,7 @@ with pkgs;
         onlyHeaders = true;
       };
     })
-    openssl_1_0_1
+    openssl_1_0_1-vulnerable
     openssl_1_0_2
     openssl_1_1_0
     openssl_1_0_2-steam;
@@ -10755,6 +10766,7 @@ with pkgs;
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   squid = callPackage ../servers/squid { };
+  squid4 = callPackage ../servers/squid/4.nix { };
 
   sslh = callPackage ../servers/sslh { };
 
@@ -11855,7 +11867,8 @@ with pkgs;
     ubootPcduino3Nano
     ubootRaspberryPi
     ubootRaspberryPi2
-    ubootRaspberryPi3
+    ubootRaspberryPi3_32bit
+    ubootRaspberryPi3_64bit
     ubootWandboard
     ;
 
@@ -13588,11 +13601,6 @@ with pkgs;
 
   qrencode = callPackage ../tools/graphics/qrencode { };
 
-  gecko_mediaplayer = callPackage ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
-    inherit (gnome2) GConf;
-    browser = firefox-unwrapped;
-  };
-
   geeqie = callPackage ../applications/graphics/geeqie { };
 
   gigedit = callPackage ../applications/audio/gigedit { };
@@ -13600,10 +13608,6 @@ with pkgs;
   gqview = callPackage ../applications/graphics/gqview { };
 
   gmpc = callPackage ../applications/audio/gmpc {};
-
-  gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
-    inherit (gnome2) GConf;
-  };
 
   gnome-mpv = callPackage ../applications/video/gnome-mpv { };
 
@@ -14724,11 +14728,6 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
   };
 
-  qemu_28 = callPackage ../applications/virtualization/qemu/2.8.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
-    inherit (darwin.stubs) rez setfile;
-  };
-
   qgis = callPackage ../applications/gis/qgis {};
 
   qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
@@ -14795,9 +14794,9 @@ with pkgs;
 
   quiterss = qt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
-  quodlibet = callPackage ../applications/audio/quodlibet { };
+  quodlibet-without-gst-plugins = callPackage ../applications/audio/quodlibet { };
 
-  quodlibet-with-gst-plugins = callPackage ../applications/audio/quodlibet {
+  quodlibet = callPackage ../applications/audio/quodlibet {
     withGstPlugins = true;
     gst_plugins_bad = null;
   };
@@ -17106,6 +17105,7 @@ with pkgs;
     flocq = callPackage ../development/coq-modules/flocq {};
     interval = callPackage ../development/coq-modules/interval {};
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
+    math-classes = callPackage ../development/coq-modules/math-classes { };
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
   };

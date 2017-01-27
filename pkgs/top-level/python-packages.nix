@@ -942,79 +942,11 @@ in {
     };
   };
 
-  ansible = buildPythonPackage rec {
-    version = "1.9.6";
-    name = "ansible-${version}";
-    disabled = isPy3k;
+  ansible  = self.ansible2;
+  ansible2 = self.ansible_2_2;
 
-    src = pkgs.fetchurl {
-      url = "https://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "0pgfh5z4w44sjgd77q6k769a5ipigjlm28zbpf2jhvz7n60kfxsh";
-    };
-
-    prePatch = ''
-      sed -i "s,/usr/,$out," lib/ansible/constants.py
-    '';
-
-    doCheck = false;
-    dontStrip = true;
-    dontPatchELF = true;
-    dontPatchShebangs = true;
-    windowsSupport = true;
-
-    propagatedBuildInputs = with self; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six
-      netaddr dns
-    ] ++ optional windowsSupport pywinrm;
-
-    meta = {
-      homepage = "http://www.ansible.com";
-      description = "A simple automation tool";
-      license = with licenses; [ gpl3] ;
-      maintainers = with maintainers; [
-        jgeerds
-        joamaki
-      ];
-      platforms = with platforms; linux ++ darwin;
-    };
-  };
-
-  ansible2 = buildPythonPackage rec {
-    version = "2.2.0.0";
-    name = "ansible-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "11l5814inr44ammp0sh304rqx2382fr629c0pbwf0k1rjg99iwfr";
-    };
-
-    prePatch = ''
-      sed -i "s,/usr/,$out," lib/ansible/constants.py
-    '';
-
-    doCheck = false;
-    dontStrip = true;
-    dontPatchELF = true;
-    dontPatchShebangs = true;
-    windowsSupport = true;
-
-    propagatedBuildInputs = with self; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six
-      netaddr dns
-    ] ++ optional windowsSupport pywinrm;
-
-    meta = with stdenv.lib; {
-      homepage = "http://www.ansible.com";
-      description = "A simple automation tool";
-      license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [
-        copumpkin
-        jgeerds
-      ];
-      platforms = with platforms; linux ++ darwin;
-    };
-  };
+  ansible_2_1 = callPackage ../development/python-modules/ansible/2.1.nix {};
+  ansible_2_2 = callPackage ../development/python-modules/ansible/2.2.nix {};
 
   apipkg = buildPythonPackage rec {
     name = "apipkg-1.4";
@@ -18448,17 +18380,21 @@ in {
   };
 
   paste = buildPythonPackage rec {
-    name = "paste-1.7.5.1";
-    disabled = isPy3k;
+    name = "paste-${version}";
+    version = "2.0.3";
 
     src = pkgs.fetchurl {
-      url = mirror://pypi/P/Paste/Paste-1.7.5.1.tar.gz;
-      sha256 = "11645842ba8ec986ae8cfbe4c6cacff5c35f0f4527abf4f5581ae8b4ad49c0b6";
+      url = "mirror://pypi/P/Paste/Paste-${version}.tar.gz";
+      sha256 = "062jk0nlxf6lb2wwj6zc20rlvrwsnikpkh90y0dn8cjch93s6ii3";
     };
 
-    buildInputs = with self; [ nose ];
+    checkInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ six ];
 
-    doCheck = false; # some files required by the test seem to be missing
+    # Certain tests require network
+    checkPhase = ''
+      NOSE_EXCLUDE=test_ok,test_form,test_error,test_stderr,test_paste_website nosetests
+    '';
 
     meta = {
       description = "Tools for using a Web Server Gateway Interface stack";
@@ -18496,7 +18432,7 @@ in {
 
     doCheck = false;
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ paste PasteDeploy cheetah argparse ];
+    propagatedBuildInputs = with self; [ six paste PasteDeploy cheetah argparse ];
 
     meta = {
       description = "A pluggable command-line frontend, including commands to setup package file layouts";

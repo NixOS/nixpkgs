@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "stunnel-${version}";
-  version = "5.39b8";
+  version = "5.39";
 
   src = fetchurl {
-    url    = "http://www.stunnel.org/downloads/beta/${name}.tar.gz";
-    sha256 = "16zg5d8851fv8hgphvxfl5gmh11x2qb563y64p0c4ami2j76ynkv";
+    url    = "http://www.stunnel.org/downloads/${name}.tar.gz";
+    sha256 = "1vjdn32iw11zqsygwxbjmqgs4644dk3ql1h8ap890ls6a1x0i318";
   };
 
   buildInputs = [ openssl ];

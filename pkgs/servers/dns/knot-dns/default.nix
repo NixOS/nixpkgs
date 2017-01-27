@@ -15,10 +15,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls jansson liburcu lmdb libcap_ng libidn
-    systemd nettle libedit
+    gnutls jansson liburcu lmdb libidn
+    nettle libedit
     # without sphinx &al. for developer documentation
-  ];
+  ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd ];
 
   enableParallelBuilding = true;
 

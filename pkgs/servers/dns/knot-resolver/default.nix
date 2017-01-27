@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, utillinux, which, knot-dns, luajit, libuv, lmdb
+{ stdenv, fetchurl, pkgconfig, utillinux, vimNox, which
+, knot-dns, luajit, libuv, lmdb
 , cmocka, systemd, hiredis, libmemcached
 , gnutls, nettle
 , luajitPackages, makeWrapper
@@ -20,15 +21,16 @@ stdenv.mkDerivation rec {
 
   configurePhase = ":";
 
-  nativeBuildInputs = [ pkgconfig utillinux.bin/*hexdump*/ which ];
+  nativeBuildInputs = [ pkgconfig which makeWrapper ]
+    ++ [(if stdenv.isLinux then utillinux.bin/*hexdump*/ else vimNox/*xxd*/)];
+
   buildInputs = [ knot-dns luajit libuv gnutls ]
     # TODO: lmdb needs lmdb.pc; embedded for now
     ## optional dependencies
     ++ optional doInstallCheck cmocka
+    ++ optional stdenv.isLinux systemd # socket activation
     ++ [
       nettle # DNS cookies
-      systemd # socket activation
-      makeWrapper
       hiredis libmemcached # additional cache backends
       # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
     ];
