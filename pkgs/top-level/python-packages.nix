@@ -18218,17 +18218,17 @@ in {
   };
 
   paste = buildPythonPackage rec {
-    name = "paste-1.7.5.1";
-    disabled = isPy3k;
+    name = "paste-${version}";
+    version = "2.0.3";
 
     src = pkgs.fetchurl {
-      url = mirror://pypi/P/Paste/Paste-1.7.5.1.tar.gz;
-      sha256 = "11645842ba8ec986ae8cfbe4c6cacff5c35f0f4527abf4f5581ae8b4ad49c0b6";
+      url = "mirror://pypi/P/Paste/Paste-${version}.tar.gz";
+      sha256 = "062jk0nlxf6lb2wwj6zc20rlvrwsnikpkh90y0dn8cjch93s6ii3";
     };
 
-    buildInputs = with self; [ nose ];
+    buildInputs = with self; [ six ];
 
-    doCheck = false; # some files required by the test seem to be missing
+    doCheck = false; # Some files required by the test are excluded in setup.py
 
     meta = {
       description = "Tools for using a Web Server Gateway Interface stack";
