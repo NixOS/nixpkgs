@@ -62,7 +62,7 @@ in
     boot.zfs = {
       enableUnstable = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           Use the unstable zfs package. This might be an option, if the latest
           kernel is not yet supported by a published release of ZFS. Enabling
