@@ -62,13 +62,12 @@ in rec {
       imagemagick
       jdk
       linux
-      mysql55
+      mysql
       nginx
       nodejs
       openssh
       php
-      postgresql92
-      postgresql93
+      postgresql
       python
       rsyslog
       stdenv
