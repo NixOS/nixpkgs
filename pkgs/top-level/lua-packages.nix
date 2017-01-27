@@ -155,12 +155,12 @@ let
   };
 
   luasec = buildLuaPackage rec {
-    name = "sec-0.6pre-2015-04-17";
+    name = "sec-0.6";
     src = fetchFromGitHub {
       owner = "brunoos";
       repo = "luasec";
-      rev = "12e1b1f1d9724974ecc6ca273a0661496d96b3e7";
-      sha256 = "0m917qgi54p6n2ak33m67q8sxcw3cdni99bm216phjjka9rg7qwd";
+      rev = "lua${name}";
+      sha256 = "0wv8l7f7na7kw5xn8mjik2wpxbizl7zvvp5s7fcwvz9kl5jdpk5b";
     };
 
     buildInputs = [ openssl ];
