@@ -11616,9 +11616,7 @@ with pkgs;
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
-  miraclecast = callPackage ../os-specific/linux/miraclecast {
-    systemd = systemd.override { enableKDbus = true; };
-  };
+  miraclecast = callPackage ../os-specific/linux/miraclecast { };
 
   mkinitcpio-nfs-utils = callPackage ../os-specific/linux/mkinitcpio-nfs-utils { };
 
