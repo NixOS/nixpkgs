@@ -431,6 +431,8 @@ with pkgs;
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
+  arpwatch = callPackage ../tools/networking/arpwatch { };
+
   artyFX = callPackage ../applications/audio/artyFX {};
 
   as31 = callPackage ../development/compilers/as31 {};
