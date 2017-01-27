@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "nginx config file formatter";
-    maintainers = with maintainers; [ baughn ];
+    maintainers = with maintainers; [ Baughn ];
     license = licenses.asl20;
     homepage = https://github.com/1connect/nginx-config-formatter;
   };
