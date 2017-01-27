@@ -10,8 +10,8 @@ bootPkgs.callPackage ./base.nix {
   ghcjsSrc = fetchFromGitHub {
     owner = "ghcjs";
     repo = "ghcjs";
-    rev = "899c834a36692bbbde9b9d16fe5b92ce55a623c4";
-    sha256 = "024yj4k0dxy7nvyq19n3xbhh4b4csdrgj19a3l4bmm1zn84gmpl6";
+    rev = "2dc14802e78d7d9dfa35395d5dbfc9c708fb83e6";
+    sha256 = "0cvmapbrwg0h1pbz648isc2l84z694ylnfm8ncd1g4as28lmj0pz";
   };
   ghcjsBootSrc = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
