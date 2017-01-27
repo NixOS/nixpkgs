@@ -2537,6 +2537,8 @@ with pkgs;
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
+  nginx-config-formatter = callPackage ../tools/misc/nginx-config-formatter { };
+
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs = hiPrio nodejs-6_x;
