@@ -56,6 +56,10 @@ in stdenv.mkDerivation rec {
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
+  passthru = {
+    home = "${zulu}";
+  };
+
   meta = with stdenv.lib; {
     homepage = https://www.azul.com/products/zulu/;
     license = licenses.gpl2;
