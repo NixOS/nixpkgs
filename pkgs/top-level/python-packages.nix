@@ -926,6 +926,7 @@ in {
   ansible  = self.ansible2;
   ansible2 = self.ansible_2_2;
 
+  ansible_2_1 = callPackage ../development/python-modules/ansible/2.1.nix {};
   ansible_2_2 = callPackage ../development/python-modules/ansible/2.2.nix {};
 
   apipkg = buildPythonPackage rec {
