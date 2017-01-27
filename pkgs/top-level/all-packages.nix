@@ -79,6 +79,10 @@ with pkgs;
       }
     '');
 
+  updateAutotoolsGnuConfigScriptsHook = makeSetupHook
+    { substitutions = { gnu_config = gnu-config;}; }
+    ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
@@ -7460,6 +7464,8 @@ with pkgs;
 
   gnet = callPackage ../development/libraries/gnet { };
 
+  gnu-config = callPackage ../development/libraries/gnu-config { };
+
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
   gnutls = gnutls34;
@@ -11800,7 +11806,8 @@ with pkgs;
     ubootPcduino3Nano
     ubootRaspberryPi
     ubootRaspberryPi2
-    ubootRaspberryPi3
+    ubootRaspberryPi3_32bit
+    ubootRaspberryPi3_64bit
     ubootWandboard
     ;
 
