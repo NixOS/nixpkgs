@@ -923,43 +923,6 @@ in {
     };
   };
 
-  ansible = buildPythonPackage rec {
-    version = "1.9.6";
-    name = "ansible-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "https://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "0pgfh5z4w44sjgd77q6k769a5ipigjlm28zbpf2jhvz7n60kfxsh";
-    };
-
-    prePatch = ''
-      sed -i "s,/usr/,$out," lib/ansible/constants.py
-    '';
-
-    doCheck = false;
-    dontStrip = true;
-    dontPatchELF = true;
-    dontPatchShebangs = true;
-    windowsSupport = true;
-
-    propagatedBuildInputs = with self; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six
-      netaddr dns
-    ] ++ optional windowsSupport pywinrm;
-
-    meta = {
-      homepage = "http://www.ansible.com";
-      description = "A simple automation tool";
-      license = with licenses; [ gpl3] ;
-      maintainers = with maintainers; [
-        jgeerds
-        joamaki
-      ];
-      platforms = with platforms; linux ++ darwin;
-    };
-  };
-
   ansible2 = buildPythonPackage rec {
     version = "2.2.0.0";
     name = "ansible-${version}";
