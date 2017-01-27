@@ -53,8 +53,7 @@ in rec {
 
   nixpkgs = {
     inherit (nixpkgs')
-      apacheHttpd_2_2
-      apacheHttpd_2_4
+      apacheHttpd
       cmake
       cryptsetup
       emacs

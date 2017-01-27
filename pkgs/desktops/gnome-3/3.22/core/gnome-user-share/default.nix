@@ -1,6 +1,6 @@
-{ stdenv, intltool, fetchurl, apacheHttpd_2_2, nautilus
+{ stdenv, intltool, fetchurl, apacheHttpd, nautilus
 , pkgconfig, gtk3, glib, libxml2, gnused, systemd
-, bash, makeWrapper, itstool, libnotify, libtool, mod_dnssd
+, bash, wrapGAppsHook, itstool, libnotify, libtool, mod_dnssd
 , gnome3, librsvg, gdk_pixbuf, file, libcanberra_gtk3 }:
 
 stdenv.mkDerivation rec {
@@ -11,29 +11,24 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   preConfigure = ''
-    sed -e 's,^LoadModule dnssd_module.\+,LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so,' -i data/dav_user_2.2.conf
+    sed -e 's,^LoadModule dnssd_module.\+,LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so,' \
+      -e 's,''${HTTP_MODULES_PATH},${apacheHttpd}/modules,' \
+      -i data/dav_user_2.4.conf
   '';
 
-  configureFlags = [ "--with-httpd=${apacheHttpd_2_2.out}/bin/httpd"
-                     "--with-modules-path=${apacheHttpd_2_2.dev}/modules"
+  configureFlags = [ "--with-httpd=${apacheHttpd.out}/bin/httpd"
+                     "--with-modules-path=${apacheHttpd.dev}/modules"
                      "--with-systemduserunitdir=$(out)/etc/systemd/user"
-                     "--disable-bluetooth"
                      "--with-nautilusdir=$(out)/lib/nautilus/extensions-3.0" ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 libtool
-                  makeWrapper file gdk_pixbuf gnome3.defaultIconTheme librsvg
+                  wrapGAppsHook file gdk_pixbuf gnome3.defaultIconTheme librsvg
                   nautilus libnotify libcanberra_gtk3 systemd ];
 
   postInstall = ''
     mkdir -p $out/share/gsettings-schemas/$name
     mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name
     ${glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas
-  '';
-
-  preFixup = ''
-    wrapProgram "$out/libexec/gnome-user-share-webdav" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
