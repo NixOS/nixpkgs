@@ -16,7 +16,7 @@ let
 in
 buildEnv {
   name = "ihaskell-with-packages";
-  paths = [ ihaskellEnv ipython ];
+  paths = [ ihaskellEnv ipython (abort "ihaskell is currently broken. See https://github.com/NixOS/nixpkgs/issues/22047.")];
   postBuild = ''
     . "${makeWrapper}/nix-support/setup-hook"
     ln -s ${ihaskellSh}/bin/ihaskell-notebook $out/bin/.
