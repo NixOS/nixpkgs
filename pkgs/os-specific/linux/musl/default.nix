@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, llvmPackages }:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
@@ -34,9 +34,6 @@ stdenv.mkDerivation rec {
   ];
 
   dontDisableStatic = true;
-
-  # needed for rustc musl build
-  postInstall = "cp ${llvmPackages.libunwind}/lib/libunwind.a $out/lib/";
 
   meta = {
     description = "An efficient, small, quality libc implementation";
