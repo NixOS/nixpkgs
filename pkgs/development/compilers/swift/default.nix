@@ -36,7 +36,11 @@
 }:
 
 let
-  version = "3.1-DEVELOPMENT-SNAPSHOT-2017-01-22-a";
+  v_major = "3.1";
+  v_date = "2017-01-22";
+  version = "${v_major}-DEVELOPMENT-SNAPSHOT-${v_date}-a";
+  version_friendly = "${v_major}-${v_date}";
+
   tag = "refs/tags/swift-${version}";
   fetch = repo: sha256:
     fetchgit {
@@ -114,7 +118,7 @@ sources = {
 
 in
 stdenv.mkDerivation rec {
-  name = "swift-${version}";
+  name = "swift-${version_friendly}";
 
   buildInputs = devInputs ++ [
     autoconf
