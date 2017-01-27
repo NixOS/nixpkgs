@@ -167,7 +167,9 @@ let
 
     preBuild = ''
       makeFlagsArray=(
-        ${stdenv.lib.optionalString stdenv.isLinux "linux"}
+        ${if stdenv.isLinux then "linux"
+          else if stdenv.isDarwin then "macosx"
+          else "bsd"}
         LUAPATH="$out/lib/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INC_PATH="-I${lua}/include"
@@ -176,7 +178,7 @@ let
 
     meta = {
       homepage = "https://github.com/brunoos/luasec";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
