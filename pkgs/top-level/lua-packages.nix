@@ -14,6 +14,14 @@
 let
   isLua51 = lua.luaversion == "5.1";
   isLua52 = lua.luaversion == "5.2";
+
+  platformString =
+    if stdenv.isDarwin then "macosx"
+    else if stdenv.isFreeBSD then "freebsd"
+    else if stdenv.isLinux then "linux"
+    else if stdenv.isSunOS then "solaris"
+    else throw "unsupported platform";
+
   self = _self;
   _self = with self; {
   inherit lua;
@@ -167,9 +175,7 @@ let
 
     preBuild = ''
       makeFlagsArray=(
-        ${if stdenv.isLinux then "linux"
-          else if stdenv.isDarwin then "macosx"
-          else "bsd"}
+        ${platformString}
         LUAPATH="$out/lib/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INC_PATH="-I${lua}/include"
@@ -199,11 +205,7 @@ let
     preBuild = ''
       makeFlagsArray=(
         LUAV=${lua.luaversion}
-        PLAT=${if stdenv.isDarwin then "macosx"
-               else if stdenv.isFreeBSD then "freebsd"
-               else if stdenv.isLinux then "linux"
-               else if stdenv.isSunOS then "solaris"
-               else throw "unsupported platform"}
+        PLAT=${platformString}
         prefix=$out
       );
     '';
@@ -246,7 +248,7 @@ let
 
     preBuild = ''
       makeFlagsArray=(
-        linux
+        ${platformString}
         LUAPATH="$out/share/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INCDIR="-I${lua}/include"
@@ -346,7 +348,7 @@ let
       makeFlagsArray=(CC=$CC);
     '';
 
-    buildFlags = if stdenv.isDarwin then "macosx" else "";
+    buildFlags = platformString;
 
     installPhase = ''
       mkdir -p $out/lib/lua/${lua.luaversion}
