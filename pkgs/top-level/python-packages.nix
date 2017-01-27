@@ -923,42 +923,10 @@ in {
     };
   };
 
-  ansible2 = buildPythonPackage rec {
-    version = "2.2.0.0";
-    name = "ansible-${version}";
-    disabled = isPy3k;
+  ansible  = self.ansible2;
+  ansible2 = self.ansible_2_2;
 
-    src = pkgs.fetchurl {
-      url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "11l5814inr44ammp0sh304rqx2382fr629c0pbwf0k1rjg99iwfr";
-    };
-
-    prePatch = ''
-      sed -i "s,/usr/,$out," lib/ansible/constants.py
-    '';
-
-    doCheck = false;
-    dontStrip = true;
-    dontPatchELF = true;
-    dontPatchShebangs = true;
-    windowsSupport = true;
-
-    propagatedBuildInputs = with self; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six
-      netaddr dns
-    ] ++ optional windowsSupport pywinrm;
-
-    meta = with stdenv.lib; {
-      homepage = "http://www.ansible.com";
-      description = "A simple automation tool";
-      license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [
-        copumpkin
-        jgeerds
-      ];
-      platforms = with platforms; linux ++ darwin;
-    };
-  };
+  ansible_2_2 = callPackage ../development/python-modules/ansible/2.2.nix {};
 
   apipkg = buildPythonPackage rec {
     name = "apipkg-1.4";
