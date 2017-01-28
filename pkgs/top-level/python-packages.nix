@@ -5493,13 +5493,14 @@ in {
   zict = buildPythonPackage rec {
 
     name = "zict-${version}";
-    version = "0.0.3";
+    version = "0.1.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zict/${name}.tar.gz";
-      sha256 = "1xsrlzrih0qmxvxqhk2c5vhzxirf509fppzdfyardl50jpsllni6";
+      sha256 = "12h95vbkbar1hc6cr1kpr6zr486grj3mpx4lznvmnai0iy6pbqp4";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ heapdict ];
 
     meta = {
