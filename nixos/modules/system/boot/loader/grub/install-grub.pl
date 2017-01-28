@@ -7,6 +7,7 @@ use File::Path;
 use File::stat;
 use File::Copy;
 use File::Slurp;
+use File::Spec;
 use File::Temp;
 require List::Compare;
 use POSIX;
@@ -237,7 +238,7 @@ if ($grubVersion == 1) {
     ";
     if ($splashImage) {
         copy $splashImage, "$bootPath/background.xpm.gz" or die "cannot copy $splashImage to $bootPath\n";
-        $conf .= "splashimage " . $grubBoot->path . "/background.xpm.gz\n";
+        $conf .= "splashimage " . File::Spec->canonpath($grubBoot->path . "/background.xpm.gz") . "\n";
     }
 }
 
@@ -336,9 +337,9 @@ sub addEntry {
     my ($name, $path) = @_;
     return unless -e "$path/kernel" && -e "$path/initrd";
 
-    my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
-    my $initrd = copyToKernelsDir(Cwd::abs_path("$path/initrd"));
-    my $xen = -e "$path/xen.gz" ? copyToKernelsDir(Cwd::abs_path("$path/xen.gz")) : undef;
+    my $kernel = File::Spec->canonpath(copyToKernelsDir(Cwd::abs_path("$path/kernel")));
+    my $initrd = File::Spec->canonpath(copyToKernelsDir(Cwd::abs_path("$path/initrd")));
+    my $xen = -e "$path/xen.gz" ? File::Spec->canonpath(copyToKernelsDir(Cwd::abs_path("$path/xen.gz"))) : undef;
 
     # FIXME: $confName
 
