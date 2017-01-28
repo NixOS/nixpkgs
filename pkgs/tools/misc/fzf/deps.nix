@@ -23,8 +23,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/junegunn/go-shellwords";
-      rev = "35d512af75e283aae4ca1fc3d44b159ed66189a4";
-      sha256 = "08la0axabk9hiba9mm4ypp6a116qhvdlxa1jvkxhv3d4zpjsp4n7";
+      rev = "33bd8f1ebe16d6e5eb688cc885749a63059e9167";
+      sha256 = "0xcymw0fm0ir8d9swh1bkpknnqgx5ijjsj433z4d9riy8h8ywpw8";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/crypto";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/crypto";
+      rev = "854ae91cdcbf914b499b1d7641d07859f3653481";
+      sha256 = "19hj2nv2awc6zhpiapv8xv2yjdwfpxhvx5wnr99if6kg0y1ybsa7";
     };
   }
 ]
