@@ -386,11 +386,17 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestNoWarnings Moo TypeTiny ];
   };
 
-  ListCompare = buildPerlPackage {
-    name = "List-Compare-1.18";
+  ListCompare = buildPerlPackage rec {
+    name = "List-Compare-0.53";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JK/JKEENAN/List-Compare-0.39.tar.gz;
-      sha256 = "1v4gn176faanzf1kr9axdp1220da7nkvz0d66mnk34nd0skjjxcl";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/${name}.tar.gz";
+      sha256 = "fdbf4ff67b3135d44475fef7fcac0cd4706407d5720d26dca914860eb10f8550";
+    };
+    buildInputs = [ IOCaptureOutput ];
+    meta = {
+      homepage = http://thenceforward.net/perl/modules/List-Compare/;
+      description = "Compare elements of two or more lists";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
