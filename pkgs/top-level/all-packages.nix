@@ -5143,7 +5143,9 @@ with pkgs;
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
-  intercal = callPackage ../development/compilers/intercal { };
+  intercal = callPackage ../development/compilers/intercal {
+    flex = flex_2_6_1; # Works with 2.5.35 too, but not 2.6.3
+  };
 
   irony-server = callPackage ../development/tools/irony-server/default.nix {
     # The repository of irony to use -- must match the version of the employed emacs
