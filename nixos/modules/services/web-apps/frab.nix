@@ -75,7 +75,6 @@ in
         '';
       };
 
-
       listenAddress = mkOption {
         type = types.str;
         default = "localhost";
@@ -203,7 +202,7 @@ in
         else
           ${frab-rake}/bin/frab-rake db:migrate
         fi
-        '';
+      '';
 
       serviceConfig = {
         PermissionsStartOnly = true;

@@ -25,8 +25,8 @@ let
            (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
            ./darwin-arch.patch;
 
-  outputs = [ "bin" "dev" "out" "man" ];
-  setOutputFlags = false;
+    outputs = [ "bin" "dev" "out" "man" ];
+    setOutputFlags = false;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
@@ -50,7 +50,7 @@ let
 
     postConfigure = if makeDepend then "make depend" else null;
 
-  makeFlags = [ "MANDIR=$(man)/share/man" ];
+    makeFlags = [ "MANDIR=$(man)/share/man" ];
 
     # Parallel building is broken in OpenSSL.
     enableParallelBuilding = false;
@@ -108,11 +108,6 @@ let
   };
 
 in {
-
-  openssl_1_0_1-vulnerable = common {
-    version = "1.0.1u";
-    sha256 = "0fb7y9pwbd76pgzd7xzqfrzibmc0vf03sl07f34z5dhm2b5b84j3";
-  };
 
   openssl_1_0_2 = common {
     version = "1.0.2k";

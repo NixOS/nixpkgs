@@ -21,6 +21,12 @@ in {
         default = "";
         description = "Fluentd config.";
       };
+
+      package = mkOption {
+        type = types.path;
+        default = pkgs.fluentd;
+        description = "The fluentd package to use.";
+      };
     };
   };
 
@@ -32,7 +38,7 @@ in {
       description = "Fluentd Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.fluentd}/bin/fluentd -c ${pkgs.writeText "fluentd.conf" cfg.config}";
+        ExecStart = "${cfg.package}/bin/fluentd -c ${pkgs.writeText "fluentd.conf" cfg.config}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
