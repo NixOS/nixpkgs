@@ -5430,11 +5430,11 @@ in {
 
   dask = buildPythonPackage rec {
     name = "dask-${version}";
-    version = "0.11.0";
+    version = "0.13.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dask/${name}.tar.gz";
-      sha256 = "ef32490c0b156584a71576dccec4dfe550a0cd81a9c131a4ee2e43c241b601c3";
+      sha256 = "1f8r6jj9666cnvx3f8bilcx0017smmlw4i4v2p1nwxshs0k514hs";
     };
 
     buildInputs = with self; [ pytest ];
