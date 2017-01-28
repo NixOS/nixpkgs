@@ -4731,7 +4731,6 @@ dont-distribute-packages:
   hsparql:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspear:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspec-expectations-lifted:                    [ i686-linux, x86_64-linux, x86_64-darwin ]
-  hspec-expectations-pretty-diff:               [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspec-expectations-pretty:                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspec-experimental:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   hspec-golden-aeson:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
