@@ -1142,4 +1142,7 @@ self: super: {
 
   # https://github.com/krisajenkins/elm-export/pull/22
   elm-export = doJailbreak super.elm-export;
+
+  # No upstream issue tracker
+  hspec-expectations-pretty-diff = dontCheck super.hspec-expectations-pretty-diff;
 }
