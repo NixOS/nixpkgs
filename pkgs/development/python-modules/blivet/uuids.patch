@@ -3,7 +3,7 @@ Submitted upstream at:
   https://github.com/rhinstaller/blivet/pull/537
 
 diff --git a/blivet/errors.py b/blivet/errors.py
-index a39a5fb..8d4c646 100644
+index a39a5fbe..8d4c6463 100644
 --- a/blivet/errors.py
 +++ b/blivet/errors.py
 @@ -109,6 +109,10 @@ class FSWriteLabelError(FSError):
@@ -18,7 +18,7 @@ index a39a5fb..8d4c646 100644
      pass
  
 diff --git a/blivet/formats/fs.py b/blivet/formats/fs.py
-index 67517d6..b429a61 100644
+index 30e65536..631706ed 100644
 --- a/blivet/formats/fs.py
 +++ b/blivet/formats/fs.py
 @@ -38,9 +38,11 @@ from ..tasks import fsreadlabel
@@ -49,15 +49,7 @@ index 67517d6..b429a61 100644
      # This constant is aquired by testing some filesystems
      # and it's giving us percentage of space left after the format.
      # This number is more guess than precise number because this
-@@ -84,6 +88,7 @@ class FS(DeviceFormat):
-             :keyword mountpoint: the filesystem's planned mountpoint
-             :keyword label: the filesystem label
-             :keyword uuid: the filesystem UUID
-+            :keyword new_uuid: new UUID to set for this filesystem
-             :keyword mountopts: mount options for the filesystem
-             :type mountopts: str
-             :keyword size: the filesystem's size in MiB
-@@ -111,12 +116,14 @@ class FS(DeviceFormat):
+@@ -111,6 +115,7 @@ class FS(DeviceFormat):
          self._readlabel = self._readlabel_class(self)
          self._sync = self._sync_class(self)
          self._writelabel = self._writelabel_class(self)
@@ -65,14 +57,7 @@ index 67517d6..b429a61 100644
  
          self._current_info = None  # info obtained by _info task
  
-         self.mountpoint = kwargs.get("mountpoint")
-         self.mountopts = kwargs.get("mountopts")
-         self.label = kwargs.get("label")
-+        self.new_uuid = kwargs.get("new_uuid")
-         self.fsprofile = kwargs.get("fsprofile")
- 
-         if flags.installer_mode and self._resize.available:
-@@ -249,6 +256,31 @@ class FS(DeviceFormat):
+@@ -249,6 +254,31 @@ class FS(DeviceFormat):
      label = property(lambda s: s._get_label(), lambda s, l: s._set_label(l),
                       doc="this filesystem's label")
  
@@ -104,7 +89,7 @@ index 67517d6..b429a61 100644
      def update_size_info(self):
          """ Update this filesystem's current and minimum size (for resize). """
  
-@@ -358,11 +390,23 @@ class FS(DeviceFormat):
+@@ -358,9 +388,16 @@ class FS(DeviceFormat):
  
          super(FS, self)._create()
          try:
@@ -118,31 +103,21 @@ index 67517d6..b429a61 100644
 +            log.warning("Choosing not to apply UUID (%s) during"
 +                        " creation of filesystem %s. UUID format"
 +                        " is unacceptable for this filesystem.",
-+                        self.new_uuid, self.type)
++                        self.uuid, self.type)
          except FSError as e:
              raise FormatCreateError(e, self.device)
-+        else:
-+            self.uuid = self.new_uuid
-+            # Make sure to set new_uuid to None so that _post_create() doesn't
-+            # try to set the UUID again.
-+            self.new_uuid = None
  
-     def _post_create(self, **kwargs):
-         super(FS, self)._post_create(**kwargs)
-@@ -371,6 +415,12 @@ class FS(DeviceFormat):
+@@ -371,6 +408,9 @@ class FS(DeviceFormat):
                  self.write_label()
              except FSError as e:
                  log.warning("Failed to write label (%s) for filesystem %s: %s", self.label, self.type, e)
-+        if self.new_uuid is not None and self.can_reassign_uuid():
-+            try:
-+                self.write_uuid()
-+            except FSError as e:
-+                log.warning("Failed to write UUID (%s) for filesystem %s: %s",
-+                            self.new_uuid, self.type, e)
++        if self.uuid is not None and not self.can_assign_uuid() and \
++           self.can_reassign_uuid():
++            self.write_uuid()
  
      def _post_resize(self):
          self.do_check()
-@@ -607,6 +657,39 @@ class FS(DeviceFormat):
+@@ -607,6 +647,35 @@ class FS(DeviceFormat):
  
          self._writelabel.do_task()
  
@@ -155,7 +130,7 @@ index 67517d6..b429a61 100644
 +        """
 +        err = None
 +
-+        if self.new_uuid is None:
++        if self.uuid is None:
 +            err = "makes no sense to write an UUID when not requested"
 +
 +        if not self.exists:
@@ -164,7 +139,7 @@ index 67517d6..b429a61 100644
 +        if not self._writeuuid.available:
 +            err = "no application to set UUID for filesystem %s" % self.type
 +
-+        if not self.uuid_format_ok(self.new_uuid):
++        if not self.uuid_format_ok(self.uuid):
 +            err = "bad UUID format for application %s" % self._writeuuid
 +
 +        if not os.path.exists(self.device):
@@ -175,14 +150,10 @@ index 67517d6..b429a61 100644
 +
 +        self._writeuuid.do_task()
 +
-+        # Set the current UUID to the one we have just written.
-+        self.uuid = self.new_uuid
-+        self.new_uuid = None
-+
      @property
      def utils_available(self):
          # we aren't checking for fsck because we shouldn't need it
-@@ -720,6 +803,7 @@ class Ext2FS(FS):
+@@ -720,6 +789,7 @@ class Ext2FS(FS):
      _type = "ext2"
      _modules = ["ext2"]
      _labelfs = fslabeling.Ext2FSLabeling()
@@ -190,7 +161,7 @@ index 67517d6..b429a61 100644
      _packages = ["e2fsprogs"]
      _formattable = True
      _supported = True
-@@ -736,6 +820,7 @@ class Ext2FS(FS):
+@@ -736,6 +806,7 @@ class Ext2FS(FS):
      _resize_class = fsresize.Ext2FSResize
      _size_info_class = fssize.Ext2FSSize
      _writelabel_class = fswritelabel.Ext2FSWriteLabel
@@ -198,7 +169,7 @@ index 67517d6..b429a61 100644
      parted_system = fileSystemType["ext2"]
      _metadata_size_factor = 0.93  # ext2 metadata may take 7% of space
  
-@@ -779,6 +864,7 @@ class FATFS(FS):
+@@ -779,6 +850,7 @@ class FATFS(FS):
      _type = "vfat"
      _modules = ["vfat"]
      _labelfs = fslabeling.FATFSLabeling()
@@ -206,7 +177,7 @@ index 67517d6..b429a61 100644
      _supported = True
      _formattable = True
      _max_size = Size("1 TiB")
-@@ -788,6 +874,7 @@ class FATFS(FS):
+@@ -788,6 +860,7 @@ class FATFS(FS):
      _mount_class = fsmount.FATFSMount
      _readlabel_class = fsreadlabel.DosFSReadLabel
      _writelabel_class = fswritelabel.DosFSWriteLabel
@@ -214,7 +185,7 @@ index 67517d6..b429a61 100644
      _metadata_size_factor = 0.99  # fat metadata may take 1% of space
      # FIXME this should be fat32 in some cases
      parted_system = fileSystemType["fat16"]
-@@ -886,6 +973,7 @@ class JFS(FS):
+@@ -887,6 +960,7 @@ class JFS(FS):
      _type = "jfs"
      _modules = ["jfs"]
      _labelfs = fslabeling.JFSLabeling()
@@ -222,7 +193,7 @@ index 67517d6..b429a61 100644
      _max_size = Size("8 TiB")
      _formattable = True
      _linux_native = True
-@@ -895,6 +983,7 @@ class JFS(FS):
+@@ -896,6 +970,7 @@ class JFS(FS):
      _mkfs_class = fsmkfs.JFSMkfs
      _size_info_class = fssize.JFSSize
      _writelabel_class = fswritelabel.JFSWriteLabel
@@ -230,7 +201,7 @@ index 67517d6..b429a61 100644
      _metadata_size_factor = 0.99  # jfs metadata may take 1% of space
      parted_system = fileSystemType["jfs"]
  
-@@ -911,6 +1000,7 @@ class ReiserFS(FS):
+@@ -912,6 +987,7 @@ class ReiserFS(FS):
      """ reiserfs filesystem """
      _type = "reiserfs"
      _labelfs = fslabeling.ReiserFSLabeling()
@@ -238,7 +209,7 @@ index 67517d6..b429a61 100644
      _modules = ["reiserfs"]
      _max_size = Size("16 TiB")
      _formattable = True
-@@ -922,6 +1012,7 @@ class ReiserFS(FS):
+@@ -923,6 +999,7 @@ class ReiserFS(FS):
      _mkfs_class = fsmkfs.ReiserFSMkfs
      _size_info_class = fssize.ReiserFSSize
      _writelabel_class = fswritelabel.ReiserFSWriteLabel
@@ -246,7 +217,7 @@ index 67517d6..b429a61 100644
      _metadata_size_factor = 0.98  # reiserfs metadata may take 2% of space
      parted_system = fileSystemType["reiserfs"]
  
-@@ -939,6 +1030,7 @@ class XFS(FS):
+@@ -940,6 +1017,7 @@ class XFS(FS):
      _type = "xfs"
      _modules = ["xfs"]
      _labelfs = fslabeling.XFSLabeling()
@@ -254,7 +225,7 @@ index 67517d6..b429a61 100644
      _max_size = Size("16 EiB")
      _formattable = True
      _linux_native = True
-@@ -950,6 +1042,7 @@ class XFS(FS):
+@@ -951,6 +1029,7 @@ class XFS(FS):
      _size_info_class = fssize.XFSSize
      _sync_class = fssync.XFSSync
      _writelabel_class = fswritelabel.XFSWriteLabel
@@ -262,7 +233,7 @@ index 67517d6..b429a61 100644
      _metadata_size_factor = 0.97  # xfs metadata may take 3% of space
      parted_system = fileSystemType["xfs"]
  
-@@ -989,6 +1082,7 @@ class HFSPlus(FS):
+@@ -990,6 +1069,7 @@ class HFSPlus(FS):
      _udev_types = ["hfsplus"]
      _packages = ["hfsplus-tools"]
      _labelfs = fslabeling.HFSPlusLabeling()
@@ -270,15 +241,15 @@ index 67517d6..b429a61 100644
      _formattable = True
      _min_size = Size("1 MiB")
      _max_size = Size("2 TiB")
-@@ -1025,6 +1119,7 @@ class NTFS(FS):
+@@ -1026,6 +1106,7 @@ class NTFS(FS):
      """ ntfs filesystem. """
      _type = "ntfs"
      _labelfs = fslabeling.NTFSLabeling()
 +    _uuidfs = fsuuid.NTFSUUID()
      _resizable = True
+     _formattable = True
      _min_size = Size("1 MiB")
-     _max_size = Size("16 TiB")
-@@ -1038,6 +1133,7 @@ class NTFS(FS):
+@@ -1040,6 +1121,7 @@ class NTFS(FS):
      _resize_class = fsresize.NTFSResize
      _size_info_class = fssize.NTFSSize
      _writelabel_class = fswritelabel.NTFSWriteLabel
@@ -287,7 +258,7 @@ index 67517d6..b429a61 100644
  
  register_device_format(NTFS)
 diff --git a/blivet/formats/swap.py b/blivet/formats/swap.py
-index 0818f58..4dc13d4 100644
+index 0818f586..66a311a9 100644
 --- a/blivet/formats/swap.py
 +++ b/blivet/formats/swap.py
 @@ -21,8 +21,10 @@
@@ -301,15 +272,7 @@ index 0818f58..4dc13d4 100644
  from . import DeviceFormat, register_device_format
  from ..size import Size
  
-@@ -74,6 +76,7 @@ class SwapSpace(DeviceFormat):
- 
-         self.priority = kwargs.get("priority", -1)
-         self.label = kwargs.get("label")
-+        self.new_uuid = kwargs.get("new_uuid")
- 
-     def __repr__(self):
-         s = DeviceFormat.__repr__(self)
-@@ -110,6 +113,10 @@ class SwapSpace(DeviceFormat):
+@@ -110,6 +112,10 @@ class SwapSpace(DeviceFormat):
      label = property(lambda s: s._get_label(), lambda s, l: s._set_label(l),
                       doc="the label for this swap space")
  
@@ -320,24 +283,22 @@ index 0818f58..4dc13d4 100644
      def _set_priority(self, priority):
          # pylint: disable=attribute-defined-outside-init
          if priority is None:
-@@ -167,6 +174,14 @@ class SwapSpace(DeviceFormat):
+@@ -167,6 +173,12 @@ class SwapSpace(DeviceFormat):
      def _create(self, **kwargs):
          log_method_call(self, device=self.device,
                          type=self.type, status=self.status)
 -        blockdev.swap.mkswap(self.device, label=self.label)
-+        if self.new_uuid is None:
++        if self.uuid is None:
 +            blockdev.swap.mkswap(self.device, label=self.label)
 +        else:
-+            if not self.uuid_format_ok(self.new_uuid):
++            if not self.uuid_format_ok(self.uuid):
 +                raise FSWriteUUIDError("bad UUID format for swap filesystem")
-+            extra = [blockdev.ExtraArg("-U", self.new_uuid)]
-+            blockdev.swap.mkswap(self.device, label=self.label, extra=extra)
-+            self.uuid = self.new_uuid
-+            self.new_uuid = None
++            blockdev.swap.mkswap(self.device, label=self.label,
++                                 extra={"-U": self.uuid})
  
  register_device_format(SwapSpace)
 diff --git a/blivet/tasks/availability.py b/blivet/tasks/availability.py
-index 7811be1..4a134d7 100644
+index 7811be17..4a134d79 100644
 --- a/blivet/tasks/availability.py
 +++ b/blivet/tasks/availability.py
 @@ -298,12 +298,14 @@ MKFS_JFS_APP = application("mkfs.jfs")
@@ -356,7 +317,7 @@ index 7811be1..4a134d7 100644
  XFSDB_APP = application("xfs_db")
  XFSFREEZE_APP = application("xfs_freeze")
 diff --git a/blivet/tasks/fsmkfs.py b/blivet/tasks/fsmkfs.py
-index d0da5b2..c5ceff8 100644
+index d0da5b21..ad166aa0 100644
 --- a/blivet/tasks/fsmkfs.py
 +++ b/blivet/tasks/fsmkfs.py
 @@ -24,7 +24,7 @@ import shlex
@@ -422,16 +383,16 @@ index d0da5b2..c5ceff8 100644
 +           :rtype: list of str
 +           :raises: FSWriteUUIDError
 +        """
-+        if self.get_uuid_args is None or self.fs.new_uuid is None:
++        if self.get_uuid_args is None or self.fs.uuid is None:
 +            return []
 +
-+        if self.fs.uuid_format_ok(self.fs.new_uuid):
-+            return self.get_uuid_args(self.fs.new_uuid)
++        if self.fs.uuid_format_ok(self.fs.uuid):
++            return self.get_uuid_args(self.fs.uuid)
 +        else:
 +            raise FSWriteUUIDError("Choosing not to apply UUID (%s) during"
 +                                   " creation of filesystem %s. UUID format"
 +                                   " is unacceptable for this filesystem."
-+                                   % (self.fs.new_uuid, self.fs.type))
++                                   % (self.fs.uuid, self.fs.type))
 +
 +    def _format_options(self, options=None, label=False, set_uuid=False):
          """Get a list of format options to be used when creating the
@@ -593,7 +554,7 @@ index d0da5b2..c5ceff8 100644
 +        return False
 diff --git a/blivet/tasks/fsuuid.py b/blivet/tasks/fsuuid.py
 new file mode 100644
-index 0000000..5beb43a
+index 00000000..5beb43ac
 --- /dev/null
 +++ b/blivet/tasks/fsuuid.py
 @@ -0,0 +1,85 @@
@@ -684,7 +645,7 @@ index 0000000..5beb43a
 +        return all(char in "0123456789ABCDEF" for char in uuid)
 diff --git a/blivet/tasks/fswriteuuid.py b/blivet/tasks/fswriteuuid.py
 new file mode 100644
-index 0000000..c780839
+index 00000000..5bc54ba1
 --- /dev/null
 +++ b/blivet/tasks/fswriteuuid.py
 @@ -0,0 +1,93 @@
@@ -736,7 +697,7 @@ index 0000000..c780839
 +
 +    @property
 +    def args(self):
-+        return ["-N", self.fs.new_uuid, "-i", self.fs.device, "::"]
++        return ["-N", self.fs.uuid, "-i", self.fs.device, "::"]
 +
 +
 +class Ext2FSWriteUUID(FSWriteUUID):
@@ -744,7 +705,7 @@ index 0000000..c780839
 +
 +    @property
 +    def args(self):
-+        return ["-U", self.fs.new_uuid, self.fs.device]
++        return ["-U", self.fs.uuid, self.fs.device]
 +
 +
 +class JFSWriteUUID(FSWriteUUID):
@@ -752,7 +713,7 @@ index 0000000..c780839
 +
 +    @property
 +    def args(self):
-+        return ["-U", self.fs.new_uuid, self.fs.device]
++        return ["-U", self.fs.uuid, self.fs.device]
 +
 +
 +class NTFSWriteUUID(FSWriteUUID):
@@ -760,7 +721,7 @@ index 0000000..c780839
 +
 +    @property
 +    def args(self):
-+        return ["--new-serial=" + self.fs.new_uuid, self.fs.device]
++        return ["--new-serial=" + self.fs.uuid, self.fs.device]
 +
 +
 +class ReiserFSWriteUUID(FSWriteUUID):
@@ -768,7 +729,7 @@ index 0000000..c780839
 +
 +    @property
 +    def args(self):
-+        return ["-u", self.fs.new_uuid, self.fs.device]
++        return ["-u", self.fs.uuid, self.fs.device]
 +
 +
 +class XFSWriteUUID(FSWriteUUID):
@@ -776,14 +737,14 @@ index 0000000..c780839
 +
 +    @property
 +    def args(self):
-+        return ["-U", self.fs.new_uuid, self.fs.device]
++        return ["-U", self.fs.uuid, self.fs.device]
 +
 +
 +class UnimplementedFSWriteUUID(fstask.UnimplementedFSTask):
 +    pass
 diff --git a/tests/formats_test/fsuuid.py b/tests/formats_test/fsuuid.py
 new file mode 100644
-index 0000000..aae3b1c
+index 00000000..0b550cbc
 --- /dev/null
 +++ b/tests/formats_test/fsuuid.py
 @@ -0,0 +1,111 @@
@@ -833,7 +794,7 @@ index 0000000..aae3b1c
 +    def test_set_invalid_uuid(self):
 +        """Create the filesystem with an invalid UUID."""
 +        an_fs = self._fs_class(device=self.loop_devices[0],
-+                               new_uuid=self._invalid_uuid)
++                               uuid=self._invalid_uuid)
 +        if self._fs_class._type == "swap":
 +            with self.assertRaisesRegex(FSWriteUUIDError, "bad UUID format"):
 +                an_fs.create()
@@ -846,7 +807,7 @@ index 0000000..aae3b1c
 +    def test_set_uuid(self):
 +        """Create the filesystem with a valid UUID."""
 +        an_fs = self._fs_class(device=self.loop_devices[0],
-+                               new_uuid=self._valid_uuid)
++                               uuid=self._valid_uuid)
 +        self.assertIsNone(an_fs.create())
 +
 +        # Use DeviceTree for detecting the loop device and check whether the
@@ -877,7 +838,7 @@ index 0000000..aae3b1c
 +            self.skipTest("can not write UUID for filesystem %s" % an_fs.name)
 +        self.assertIsNone(an_fs.create())
 +
-+        an_fs.new_uuid = self._valid_uuid
++        an_fs.uuid = self._valid_uuid
 +        self.assertIsNone(an_fs.write_uuid())
 +
 +        # Use DeviceTree for detecting the loop device and check whether the
@@ -895,11 +856,11 @@ index 0000000..aae3b1c
 +            self.skipTest("can not write UUID for filesystem %s" % an_fs.name)
 +        self.assertIsNone(an_fs.create())
 +
-+        an_fs.new_uuid = self._invalid_uuid
++        an_fs.uuid = self._invalid_uuid
 +        with self.assertRaisesRegex(FSError, "bad UUID format"):
 +            an_fs.write_uuid()
 diff --git a/tests/formats_test/methods_test.py b/tests/formats_test/methods_test.py
-index 9df7415..5659216 100644
+index 9df74158..5659216c 100644
 --- a/tests/formats_test/methods_test.py
 +++ b/tests/formats_test/methods_test.py
 @@ -300,7 +300,12 @@ class FSMethodsTestCase(FormatMethodsTestCase):
@@ -918,7 +879,7 @@ index 9df7415..5659216 100644
          with patch.object(self.format, "_mount"):
 diff --git a/tests/formats_test/uuid_test.py b/tests/formats_test/uuid_test.py
 new file mode 100644
-index 0000000..1ed4038
+index 00000000..1ed40386
 --- /dev/null
 +++ b/tests/formats_test/uuid_test.py
 @@ -0,0 +1,87 @@

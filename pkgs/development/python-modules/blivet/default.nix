@@ -22,7 +22,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   patches = [
-    ./no-hawkey.patch ./test-fixes.patch ./uuids.patch ./ntfs-formattable.patch
+    ./no-hawkey.patch ./test-fixes.patch ./ntfs-formattable.patch ./uuids.patch
   ];
 
   postPatch = ''
