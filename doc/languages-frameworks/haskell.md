@@ -822,12 +822,35 @@ To work around these problems GHC can be build with a slower but LGPL-free
 alternative implemention for Integer called
 [integer-simple](http://hackage.haskell.org/package/integer-simple).
 
-To get a compiler build with `integer-simple` instead of `integer-gmp` override an
-existing compiler and set `enableIntegerSimple = true`. For example:
+To get a GHC compiler build with `integer-simple` instead of `integer-gmp` use
+the attribute: `pkgs.haskell.compiler.integer-simple."${ghcVersion}"`.
+For example:
 
-    $ nix-build -E '(import <nixpkgs> {}).pkgs.haskell.compiler.ghc802.override {enableIntegerSimple = true;}'
+    $ nix-build -E '(import <nixpkgs> {}).pkgs.haskell.compiler.integer-simple.ghc802'
+    ...
     $ result/bin/ghc-pkg list | grep integer
         integer-simple-0.1.1.1
+
+The following command displays the complete list of GHC compilers build with `integer-simple`:
+
+    $ nix-env -f "<nixpkgs>" -qaP -A haskell.compiler.integer-simple
+    haskell.compiler.integer-simple.ghc7102  ghc-7.10.2
+    haskell.compiler.integer-simple.ghc7103  ghc-7.10.3
+    haskell.compiler.integer-simple.ghc722   ghc-7.2.2
+    haskell.compiler.integer-simple.ghc742   ghc-7.4.2
+    haskell.compiler.integer-simple.ghc763   ghc-7.6.3
+    haskell.compiler.integer-simple.ghc783   ghc-7.8.3
+    haskell.compiler.integer-simple.ghc784   ghc-7.8.4
+    haskell.compiler.integer-simple.ghc801   ghc-8.0.1
+    haskell.compiler.integer-simple.ghc802   ghc-8.0.2
+    haskell.compiler.integer-simple.ghcHEAD  ghc-8.1.20170106
+
+To get a package set supporting `integer-simple` use the attribute:
+`pkgs.haskell.packages.integer-simple."${ghcVersion}"`. For example
+use the following to get the `scientific` package build with `integer-simple`:
+
+    $ nix-build -A pkgs.haskell.packages.integer-simple.ghc802.scientific
+
 
 ## Other resources
 
