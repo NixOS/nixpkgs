@@ -20,6 +20,5 @@ gnome3.vte.overrideAttrs (oldAttrs: rec {
 
   preConfigure = oldAttrs.preConfigure + "; ./autogen.sh";
 
-  nativeBuildInputs = [ gtk_doc autoconf automake gettext libtool ];
-  buildInputs = oldAttrs.buildInputs ++ [ gperf ];
+  nativeBuildInputs = [ gtk_doc autoconf automake gettext libtool gperf ];
 })
