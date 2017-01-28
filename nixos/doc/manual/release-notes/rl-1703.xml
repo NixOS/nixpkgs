@@ -237,6 +237,18 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
+  <listitem>
+    <para>
+      The socket handling of the <literal>services.rmilter</literal> module
+      has been fixed and refactored. As rmilter doesn't support binding to
+      more than one socket, the options <literal>bindUnixSockets</literal>
+      and <literal>bindInetSockets</literal> have been replaced by
+      <literal>services.rmilter.bindSocket.*</literal>. The default is still
+      a unix socket in <literal>/run/rmilter/rmilter.sock</literal>. Refer to
+      the options documentation for more information.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
