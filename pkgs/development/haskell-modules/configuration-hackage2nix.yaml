@@ -3060,7 +3060,6 @@ dont-distribute-packages:
   crypto-enigma:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   crypto-multihash:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   crypto-random-effect:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
-  cryptonite-openssl:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   cryptsy-api:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   crystalfontz:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   cse-ghc-plugin:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
