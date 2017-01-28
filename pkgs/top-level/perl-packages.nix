@@ -6263,7 +6263,11 @@ let self = _self // overrides; _self = with self; {
     name = "HTML-Tiny-1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/${name}.tar.gz";
-      sha256 = "18zxg7z51f5daidnwl9vxsrs3lz0y6n5ddqhpb748bjyk3awkkfp";
+      sha256 = "d7cdc9d5985e2e44ceba10b756acf1e0d3a1b3ee3b516e5b54adb850fe79fda3";
+    };
+    meta = {
+      description = "Lightweight, dependency free HTML/XML generation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
