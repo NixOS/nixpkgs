@@ -4,13 +4,13 @@
 
 python2Packages.buildPythonApplication rec {
   name = "certbot-${version}";
-  version = "0.9.3";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "v${version}";
-    sha256 = "03yfr8vlq62l0h14qk03flrkbvbv9mc5cf6rmh37naj8jwpl8cic";
+    sha256 = "0j3i6381nb7x6vysi12swvry31bpzj8lg7ikkb5c50bciwbyvwxp";
   };
 
   propagatedBuildInputs = with python2Packages; [
@@ -46,7 +46,7 @@ python2Packages.buildPythonApplication rec {
     homepage = src.meta.homepage;
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = with maintainers; [ domenkozar pradeepchhetri ];
     license = licenses.asl20;
   };
 }
