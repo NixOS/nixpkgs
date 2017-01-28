@@ -45,5 +45,6 @@ buildGoPackage rec {
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
     platforms = platforms.unix;
+    maintainers = [ maintainers.mimadrid ];
   };
 }

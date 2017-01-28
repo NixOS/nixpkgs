@@ -27,4 +27,13 @@
       sha256 = "08la0axabk9hiba9mm4ypp6a116qhvdlxa1jvkxhv3d4zpjsp4n7";
     };
   }
+  {
+    goPackagePath = "github.com/junegunn/go-isatty";
+    fetch = {
+      type = "git";
+      url = "https://github.com/junegunn/go-isatty";
+      rev = "66b8e73f3f5cda9f96b69efd03dd3d7fc4a5cdb8";
+      sha256 = "17lf13ndnai9a6dlmykqkdyzf1z04q7kffs0l7kvd78wpv3l6rm5";
+    };
+  }
 ]
