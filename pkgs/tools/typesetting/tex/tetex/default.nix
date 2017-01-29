@@ -51,6 +51,7 @@ stdenv.mkDerivation {
     matintainers = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;
     hydraPlatforms = [];
+    broken = true; # see issue #21770
   };
 }
 
