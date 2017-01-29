@@ -9651,6 +9651,23 @@ in {
     };
   };
 
+  scandir = self.buildPythonPackage rec {
+    name = "scandir-${version}";
+    version = "1.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/scandir/${name}.tar.gz";
+      sha256 = "0yjrgp0mxp3d8bjkq2m1ac2ys8n76wykksvgyjrnil9gr3fx7a5d";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A better directory iterator and faster os.walk()";
+      homepage = "https://github.com/benhoyt/scandir";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   scfbuild = self.buildPythonPackage rec {
     name = "scfbuild-${version}";
     version = "1.0.3";
