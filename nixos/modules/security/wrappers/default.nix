@@ -79,7 +79,13 @@ let
              (s ? "setguid" && s.setguid == true) ||
              (s ? "permissions")
           then mkSetuidProgram s
-          else ""
+          else mkSetuidProgram
+                 ({ owner  = "root";
+                    group  = "root";
+                    setuid = true;
+                    setgid = false;
+                    permissions = "u+rx,g+x,o+x";
+                  } // s)
       ) programs;
 in
 {
