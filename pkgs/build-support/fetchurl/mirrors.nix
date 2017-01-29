@@ -386,6 +386,10 @@ rec {
   ];
 
   # Python PyPI mirrors
+  
+  pypiio = [
+    https://pypi.io/packages/
+  ];
   pypi = [
     https://pypi.io/packages/source/
   ];
