@@ -68,9 +68,8 @@ in
     boot.extraModulePackages = [ kernelModules ];
     environment.systemPackages = [ virtualbox ];
 
-    security.wrappers.setuid = let
-      mkSuid = program: {
-        inherit program;
+    security.wrappers = let
+      mkSuid = program: "${program}" = {
         source = "${virtualbox}/libexec/virtualbox/${program}";
         owner = "root";
         group = "vboxusers";

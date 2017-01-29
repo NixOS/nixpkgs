@@ -42,9 +42,7 @@ in
 
   config = mkIf cfg.enable {
 
-    security.wrappers.setuid = map (program: {
-      inherit program;
-
+    security.wrappers.setuid = map (program: "${program}" = {
       source = "${pkgs.atd}/bin/${program}";
       owner = "atd";
       group = "atd";

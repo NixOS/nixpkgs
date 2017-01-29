@@ -114,15 +114,14 @@ in
 
     systemd.packages = [ pkgs.dbus.daemon ];
 
-    security.wrappers.setuid = singleton
-      { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
-        owner = "root";
-        group = "messagebus";
-        setuid = true;
-        setgid = false;
-        permissions = "u+rx,g+rx,o-rx";
-      };
+    security.wrappers.dbus-daemon-launch-helper = {
+      source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
+      owner = "root";
+      group = "messagebus";
+      setuid = true;
+      setgid = false;
+      permissions = "u+rx,g+rx,o-rx";
+    };
 
     services.dbus.packages = [
       pkgs.dbus.out

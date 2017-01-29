@@ -68,20 +68,10 @@ in
         '';
       };
 
-      security.wrappers.setuid = [
-        {
-          program = "kcheckpass";
-          source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
-          owner = "root";
-          setuid = true;
-        }
-        {
-          program = "start_kdeinit";
-          source = "${kde5.kinit.out}/lib/libexec/kf5/start_kdeinit";
-          owner = "root";
-          setuid = true;
-        }
-      ];
+      security.wrappers = {
+        kcheckpass.source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
+        "start_kdeinit".source = "${kde5.kinit.out}/lib/libexec/kf5/start_kdeinit";
+      };
 
       environment.systemPackages =
         [

@@ -131,13 +131,7 @@ in
           '';
       };
 
-    security.wrappers.setuid = singleton
-      { program = "kcheckpass";
-        source = "${kde_workspace}/lib/kde4/libexec/kcheckpass";
-        owner = "root";
-        group = "root";
-        setuid = true;
-      };
+    security.wrappers.kcheckpass.source = "${kde_workspace}/lib/kde4/libexec/kcheckpass";
 
     environment.systemPackages =
         [ pkgs.kde4.kdelibs
