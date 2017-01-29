@@ -182,8 +182,8 @@ in
           # TDOO: this is only necessary for ugprades 16.09 => 17.x;
           # this conditional removal block needs to be removed after
           # the release.
-          if [ -d /run/setuid-wrappers-dir ]; then
-            rm -rf /run/setuid-wrappers-dir
+          if [ -d /run/setuid-wrapper-dirs ]; then
+            rm -rf /run/setuid-wrapper-dirs
           fi
 
           # Get the "/run/wrappers" path, we want to place the tmpdirs
