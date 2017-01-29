@@ -9,9 +9,8 @@ in
 stdenv.mkDerivation rec {
   name = "trezord-${version}";
 
-  src = fetchFromGitHub {
-    owner  = "trezor";
-    repo   = "trezord";
+  src = fetchgit {
+    url    = "https://github.com/trezor/trezord";
     rev    = "refs/tags/v${version}";
     sha256 = "1606j5cfngryk4q21yiga1zvc3zpx4q8vqn6ljrvr679hpvlwni4";
   };

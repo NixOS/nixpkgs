@@ -16,18 +16,6 @@ in {
           Enable Trezor bridge daemon, for use with Trezor hardware bitcoin wallets.
         '';
       };
-
-      user = mkOption {
-        type = types.str;
-        default = "trezord";
-        description = "User under which Trezor bridge daemon would be running";
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "trezord";
-        description = "Group under which Trezor bridge daemon would be running";
-      };
     };
   };
   
@@ -51,20 +39,18 @@ in {
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.trezord}/bin/trezord -f";
-        User = "${cfg.user}";
+        User = "trezord";
       };
     };
 
-    users.extraUsers = if cfg.user != "trezord" then {} else singleton {
+    users.extraUsers = singleton {
       name = "trezord";
       group = "trezord";
-      uid = config.ids.uids.trezord;
       description = "Trezor bridge daemon user";
     };
 
-    users.extraGroups = if cfg.group != "trezord" then {} else singleton {
+    users.extraGroups = singleton {
       name = "trezord";
-      gid = config.ids.gids.trezord;
     };
   };
 }
