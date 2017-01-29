@@ -135,7 +135,10 @@ let
     , crossConfig ? null
     , meta ? {}
     , passthru ? {}
-    , pos ? null # position used in error messages and for meta.position
+    , pos ? # position used in error messages and for meta.position
+        (if attrs.meta.description or null != null
+          then builtins.unsafeGetAttrPos "description" attrs.meta
+          else builtins.unsafeGetAttrPos "name" attrs)
     , separateDebugInfo ? false
     , outputs ? [ "out" ]
     , __impureHostDeps ? []
@@ -153,15 +156,7 @@ let
         (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
       ];
     in let
-      pos' =
-        if pos != null then
-          pos
-        else if attrs.meta.description or null != null then
-          builtins.unsafeGetAttrPos "description" attrs.meta
-        else
-          builtins.unsafeGetAttrPos "name" attrs;
-      pos'' = if pos' != null then "‘" + pos'.file + ":" + toString pos'.line + "’" else "«unknown-file»";
-
+      pos_str = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
 
       remediation = {
         unfree = remediate_whitelist "Unfree";
@@ -216,7 +211,7 @@ let
 
       throwEvalHelp = { reason , errormsg ? "" }:
         throw (''
-          Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${errormsg}, refusing to evaluate.
+          Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
 
           '' + ((builtins.getAttr reason remediation) attrs));
 
@@ -293,7 +288,7 @@ let
 
       # Throw an error if trying to evaluate an non-valid derivation
       validityCondition =
-			 let v = checkValidity attrs;
+             let v = checkValidity attrs;
              in if !v.valid
                then throwEvalHelp (removeAttrs v ["valid"])
                else true;
@@ -364,8 +359,8 @@ let
         }
         // attrs.meta or {}
           # Fill `meta.position` to identify the source location of the package.
-        // lib.optionalAttrs (pos' != null)
-          { position = pos'.file + ":" + toString pos'.line; }
+        // lib.optionalAttrs (pos != null)
+          { position = pos.file + ":" + toString pos.line; }
         ;
 
     in
