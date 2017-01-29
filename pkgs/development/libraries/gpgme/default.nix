@@ -9,11 +9,11 @@ let
   gpgProgram = if useGnupg1 then "gpg" else "gpg2";
 in
 stdenv.mkDerivation rec {
-  name = "gpgme-1.7.0";
+  name = "gpgme-1.8.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "0j6capvv6lcr6p763lr2ygzkzkj5lqm7fnbfc1xaygib1znmzxbi";
+    sha256 = "0csx3qnycwm0n90ql6gs65if5xi4gqyzzy21fxs2xqicghjrfq2r";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig gnupg ];
 
   configureFlags = [
-    "--with-gpg=${gpgStorePath}/bin/${gpgProgram}"
     "--enable-fixed-path=${gpgStorePath}/bin"
   ];
 
