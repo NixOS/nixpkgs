@@ -23,7 +23,7 @@ let
       mkdir -p $out/bin
       ${lib.concatMapStrings mkWrapper wrappers}
     '';
-  }
+  };
 
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
