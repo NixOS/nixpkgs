@@ -1,9 +1,15 @@
 { config, lib, pkgs, ... }:
 let
 
-  inherit (config.security) wrapperDir;
+  inherit (config.security) wrapperDir wrappers setuidPrograms;
 
-  wrappers  = config.security.wrappers;
+  programs =
+    (map (x: { program = x; owner = "root"; group = "root"; setuid = true; })
+      setuidPrograms)
+      ++ lib.mapAttrsToList
+           (n: v: (if v ? "program" then v else v // {program=n;}))
+           wrappers;
+
   mkWrapper = { program, source ? null, ...}: ''
     if ! source=${if source != null then source else "$(readlink -f $(PATH=$WRAPPER_PATH type -tP ${program}))"}; then
         # If we can't find the program, fall back to the
@@ -21,7 +27,7 @@ let
     unpackPhase  = "true";
     installPhase = ''
       mkdir -p $out/bin
-      ${lib.concatMapStrings mkWrapper wrappers}
+      ${lib.concatMapStrings (builtins.map mkWrapper programs)}
     '';
   };
 
@@ -70,6 +76,18 @@ let
 
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" $wrapperDir/${program}
     '';
+
+  mkWrappedPrograms =
+    builtins.map
+      (s: if (s ? "capabilities")
+          then mkSetcapProgram s
+          else if 
+             (s ? "setuid"  && s.setuid  == true) ||
+             (s ? "setguid" && s.setguid == true) ||
+             (s ? "permissions")
+          then mkSetuidProgram s
+          else ""
+      ) programs;
 in
 {
 
@@ -157,27 +175,7 @@ in
 
     ###### setcap activation script
     system.activationScripts.wrappers =
-      let
-        programs =
-          (map (x: { program = x; owner = "root"; group = "root"; setuid = true; })
-            config.security.setuidPrograms)
-            ++ lib.mapAttrsToList
-                 (n: v: (if v ? "program" then v else v // {program=n;}))
-                 wrappers;
-
-        mkWrappedPrograms =
-          builtins.map
-            (s: if (s ? "capabilities")
-                then mkSetcapProgram s
-                else if 
-                   (s ? "setuid"  && s.setuid  == true) ||
-                   (s ? "setguid" && s.setguid == true) ||
-                   (s ? "permissions")
-                then mkSetuidProgram s
-                else ""
-            ) programs;
-
-      in lib.stringAfter [ "users" ]
+      lib.stringAfter [ "users" ]
         ''
           # Look in the system path and in the default profile for
           # programs to be wrapped.
