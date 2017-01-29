@@ -32,7 +32,7 @@ let
     , source ? null
     , owner  ? "nobody"
     , group  ? "nogroup"
-    ...
+    , ...
     }: 
     assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
     ''
@@ -60,7 +60,7 @@ let
     , setuid ? false
     , setgid ? false
     , permissions ? "u+rx,g+x,o+x"
-    ...
+    , ...
     }: ''
       cp ${wrappedPrograms}/bin/${program}.wrapper $wrapperDir/${program}
 
