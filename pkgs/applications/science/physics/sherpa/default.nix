@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sherpa-${version}";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchurl {
     url = "http://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
-    sha256 = "13vkz6w8kqyv8sgy3mxnlps5ykml5rnlj50vjj0pp9rgbl5y8ali";
+    sha256 = "1v5y12a9d07ckvwq2xpanbbwzczay9pyl8q1n3f53xafb8bkdk9f";
   };
 
   buildInputs = [ gfortran sqlite lhapdf rivet ];
