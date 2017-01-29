@@ -484,7 +484,7 @@ in
     } // (mkIf config.security.pam.enableEcryptfs {
       "mount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/mount.ecryptfs_private";
        "umount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/umount.ecryptfs_private";
-    };
+    });
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
