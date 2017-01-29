@@ -13370,6 +13370,8 @@ with pkgs;
 
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
 
+  gcalcli = callPackage ../applications/misc/gcalcli { };
+
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
 
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
