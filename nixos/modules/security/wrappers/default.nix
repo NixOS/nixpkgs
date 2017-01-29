@@ -76,7 +76,7 @@ in
   ###### interface
 
   options = {
-    security.setuidPrograms = mkOption {
+    security.setuidPrograms = lib.mkOption {
       type = types.listOf types.str;
       default = [];
       example = ["passwd"];
