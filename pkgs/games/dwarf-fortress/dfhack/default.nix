@@ -7,12 +7,12 @@ let
   dfVersion = "0.43.05";
   # version = "${dfVersion}-r1";
   # rev = "refs/tags/${version}";
-  version = "${dfVersion}-alpha2";
-  rev = "13eb5e702beb6d8e40c0e17be64cda9a8d9d1efb";
-  sha256 = "18i8qfhhfnfrpa519akwagn73q2zns1pry2sdfag63vffxh60zr5";
+  version = "${dfVersion}-alpha4";
+  rev = "refs/tags/${version}";
+  sha256 = "0wnwdapw955k69ds5xh5qsh7h0l547wjxgcy8hkvly6wp5c16sls";
 
   # revision of library/xml submodule
-  xmlRev = "84f6e968a9ec5515f9dbef96b445e3fc83f83e8b";
+  xmlRev = "bb4228f58b1601c4868c95be6763f5ff2e5d0a08";
 
   arch =
     if stdenv.system == "x86_64-linux" then "64"
