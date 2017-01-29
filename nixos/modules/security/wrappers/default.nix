@@ -12,7 +12,7 @@ let
     fi
 
     gcc -Wall -O2 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.wrapperDir}\" \
-        -lcap-ng -lcap ${./permissions-wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
+        -lcap-ng -lcap ${./wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
         -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
   '';
 
