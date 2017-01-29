@@ -168,8 +168,22 @@ in
           WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
           # Remove the old /var/setuid-wrappers path from the system...
+          #
+          # TDOO: this is only necessary for ugprades 16.09 => 17.x;
+          # this conditional removal block needs to be removed after
+          # the release.
           if [ -d ${config.security.old-wrapperDir} ]; then
             rm -rf ${config.security.old-wrapperDir}
+          fi
+
+          # Remove the old /run/setuid-wrappers-dir path from the
+          # system as well...
+          #
+          # TDOO: this is only necessary for ugprades 16.09 => 17.x;
+          # this conditional removal block needs to be removed after
+          # the release.
+          if [ -d /run/setuid-wrappers-dir ]; then
+            rm -rf /run/setuid-wrappers-dir
           fi
 
           # Get the "/run/wrappers" path, we want to place the tmpdirs
