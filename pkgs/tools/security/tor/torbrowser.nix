@@ -3,16 +3,19 @@
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
 , gstreamer, gst_plugins_base, gst_plugins_good, gst_ffmpeg, gmp, ffmpeg
 , libpulseaudio
+, mediaSupport ? false
 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = stdenv.lib.makeLibraryPath ([
     stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
+  ] ++ stdenv.lib.optionals mediaSupport [
     gstreamer gst_plugins_base gmp ffmpeg
     libpulseaudio
-  ] ;
+  ]);
 
+  # Ignored if !mediaSupport
   gstPlugins = [ gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg ];
 
   gstPluginsPath = stdenv.lib.concatMapStringsSep ":" (x:
@@ -21,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "6.0.8";
+  version = "6.5";
 
   src = fetchurl {
-    url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
+    url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
     sha256 = if stdenv.is64bit then
-      "1s2yv72kj4zxba0850fi1jv41c69vcw3inhj9kqhy1d45ql7iw0w" else
-      "0zvqf444h35ikv1f3nwkh2jx51zj5k9w4zdxx32zcrnxpk5nhn97";
+      "0q0rdwjiqjjh9awiyp0a55nkhyri5y6zhkyq3n3x6w4afihl0wf4" else
+      "1y1sx2gp7c66l7a4smfibl8mv54byvawhhkikpa5l2vic75vyhk9";
   };
 
   preferLocalBuild = true;
@@ -77,7 +80,9 @@ stdenv.mkDerivation rec {
     fi
     export FONTCONFIG_PATH=\$HOME/Data/fontconfig
     export LD_LIBRARY_PATH=${libPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
-    export GST_PLUGIN_SYSTEM_PATH=${gstPluginsPath}
+    ${stdenv.lib.optionalString mediaSupport ''
+      export GST_PLUGIN_SYSTEM_PATH=${gstPluginsPath}
+    ''}
     exec $out/share/tor-browser/Browser/firefox --class "Tor Browser" -no-remote -profile ~/Data/Browser/profile.default "\$@"
     EOF
     chmod +x $out/bin/tor-browser

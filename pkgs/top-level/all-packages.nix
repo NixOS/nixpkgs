@@ -79,6 +79,10 @@ with pkgs;
       }
     '');
 
+  updateAutotoolsGnuConfigScriptsHook = makeSetupHook
+    { substitutions = { gnu_config = gnu-config;}; }
+    ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
@@ -86,6 +90,10 @@ with pkgs;
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
   cmark = callPackage ../development/libraries/cmark { };
+
+  dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
+    inherit (haskellPackages) dhall-nix;
+  };
 
   dockerTools = callPackage ../build-support/docker { };
 
@@ -2529,6 +2537,8 @@ with pkgs;
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
+  nginx-config-formatter = callPackage ../tools/misc/nginx-config-formatter { };
+
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs = hiPrio nodejs-6_x;
@@ -3069,6 +3079,8 @@ with pkgs;
   numdiff = callPackage ../tools/text/numdiff { };
 
   numlockx = callPackage ../tools/X11/numlockx { };
+
+  nuttcp = callPackage ../tools/networking/nuttcp { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
@@ -3884,7 +3896,7 @@ with pkgs;
   sshpass = callPackage ../tools/networking/sshpass { };
 
   sslscan = callPackage ../tools/security/sslscan {
-    openssl = openssl_1_0_1.override { enableSSL2 = true; };
+    openssl = openssl_1_0_2.override { enableSSL2 = true; };
   };
 
   sslmate = callPackage ../development/tools/sslmate { };
@@ -4192,11 +4204,11 @@ with pkgs;
 
   openconnect = openconnect_gnutls;
 
-  openconnect_openssl = callPackage ../tools/networking/openconnect.nix {
+  openconnect_openssl = callPackage ../tools/networking/openconnect {
     gnutls = null;
   };
 
-  openconnect_gnutls = callPackage ../tools/networking/openconnect.nix {
+  openconnect_gnutls = callPackage ../tools/networking/openconnect {
     openssl = null;
   };
 
@@ -4672,7 +4684,6 @@ with pkgs;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
-  clang_36 = llvmPackages_36.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
 
@@ -5221,7 +5232,6 @@ with pkgs;
   llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
-  llvm_36 = llvmPackages_36.llvm;
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
 
@@ -5238,10 +5248,6 @@ with pkgs;
 
   llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 {
     isl = isl_0_14;
-  };
-
-  llvmPackages_36 = callPackage ../development/compilers/llvm/3.6 {
-    inherit (stdenvAdapters) overrideCC;
   };
 
   llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
@@ -6003,8 +6009,7 @@ with pkgs;
 
   augeas = callPackage ../tools/system/augeas { };
 
-  ansible = python2Packages.ansible;
-
+  ansible  = python2Packages.ansible2;
   ansible2 = python2Packages.ansible2;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
@@ -7459,13 +7464,11 @@ with pkgs;
 
   gnet = callPackage ../development/libraries/gnet { };
 
+  gnu-config = callPackage ../development/libraries/gnu-config { };
+
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
   gnutls = gnutls34;
-
-  gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
-    guileBindings = config.gnutls.guile or false;
-  };
 
   gnutls34 = callPackage ../development/libraries/gnutls/3.4.nix {
     guileBindings = config.gnutls.guile or false;
@@ -8190,7 +8193,6 @@ with pkgs;
   libmtp = callPackage ../development/libraries/libmtp { };
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
-  libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
   libmsgpack_1_4 = callPackage ../development/libraries/libmsgpack/1.4.nix { };
 
   libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
@@ -8979,9 +8981,6 @@ with pkgs;
   openslp = callPackage ../development/libraries/openslp {};
 
   libressl = libressl_2_5;
-  libressl_2_3 = callPackage ../development/libraries/libressl/2.3.nix {
-    fetchurl = fetchurlBoot;
-  };
   libressl_2_4 = callPackage ../development/libraries/libressl/2.4.nix {
     fetchurl = fetchurlBoot;
   };
@@ -9004,7 +9003,6 @@ with pkgs;
         onlyHeaders = true;
       };
     })
-    openssl_1_0_1
     openssl_1_0_2
     openssl_1_1_0
     openssl_1_0_2-steam;
@@ -10155,15 +10153,7 @@ with pkgs;
   rdf4store = callPackage ../servers/http/4store { };
 
   apacheHttpd = pkgs.apacheHttpd_2_4;
-
-  apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
-    sslSupport = true;
-  };
-
-  apacheHttpd_2_4 = lowPrio (callPackage ../servers/http/apache-httpd/2.4.nix {
-    # 1.0.2+ for ALPN support
-    openssl = openssl_1_0_2;
-  });
+  apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
 
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
     inherit apacheHttpd;
@@ -10188,7 +10178,6 @@ with pkgs;
   };
 
   apacheHttpdPackages = apacheHttpdPackagesFor pkgs.apacheHttpd pkgs.apacheHttpdPackages;
-  apacheHttpdPackages_2_2 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_2 pkgs.apacheHttpdPackages_2_2;
   apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
 
   archiveopteryx = callPackage ../servers/mail/archiveopteryx/default.nix { };
@@ -10298,6 +10287,8 @@ with pkgs;
   fleet = callPackage ../servers/fleet { };
 
   foswiki = callPackage ../servers/foswiki { };
+
+  frab = callPackage ../servers/web-apps/frab { };
 
   freepops = callPackage ../servers/mail/freepops { };
 
@@ -11102,6 +11093,8 @@ with pkgs;
 
   kmscon = callPackage ../os-specific/linux/kmscon { };
 
+  kmscube = callPackage ../os-specific/linux/kmscube { };
+
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
   ldm = callPackage ../os-specific/linux/ldm { };
@@ -11799,7 +11792,8 @@ with pkgs;
     ubootPcduino3Nano
     ubootRaspberryPi
     ubootRaspberryPi2
-    ubootRaspberryPi3
+    ubootRaspberryPi3_32bit
+    ubootRaspberryPi3_64bit
     ubootWandboard
     ;
 
@@ -13530,11 +13524,6 @@ with pkgs;
 
   qrencode = callPackage ../tools/graphics/qrencode { };
 
-  gecko_mediaplayer = callPackage ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
-    inherit (gnome2) GConf;
-    browser = firefox-unwrapped;
-  };
-
   geeqie = callPackage ../applications/graphics/geeqie { };
 
   gigedit = callPackage ../applications/audio/gigedit { };
@@ -14654,11 +14643,6 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
   };
 
-  qemu_28 = callPackage ../applications/virtualization/qemu/2.8.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
-    inherit (darwin.stubs) rez setfile;
-  };
-
   qgis = callPackage ../applications/gis/qgis {};
 
   qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
@@ -15188,7 +15172,9 @@ with pkgs;
     vte = gnome2.vte.override { pythonSupport = true; };
   };
 
-  termite = callPackage ../applications/misc/termite { vte = null; };
+  termite = callPackage ../applications/misc/termite {
+    vte = gnome3.vte-ng;
+  };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 
@@ -17032,6 +17018,7 @@ with pkgs;
     flocq = callPackage ../development/coq-modules/flocq {};
     interval = callPackage ../development/coq-modules/interval {};
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
+    math-classes = callPackage ../development/coq-modules/math-classes { };
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
   };

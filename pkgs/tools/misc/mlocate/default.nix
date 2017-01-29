@@ -1,6 +1,8 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, config }:
 
-stdenv.mkDerivation rec {
+let
+  dbfile = stdenv.lib.attrByPath [ "locate" "dbfile" ] "/var/cache/locatedb" config;
+in stdenv.mkDerivation rec {
   name = "mlocate-${version}";
   version = "0.26";
 
@@ -10,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ];
+  makeFlags = [ "dbfile=${dbfile}" ];
 
   meta = with stdenv.lib; {
     description = "Merging locate is an utility to index and quickly search for files";

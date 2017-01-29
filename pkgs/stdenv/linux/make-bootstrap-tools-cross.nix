@@ -50,10 +50,23 @@ let
     };
   };
 
+  aarch64-multiplatform-crossSystem = {
+    crossSystem = rec {
+      config = "aarch64-linux-gnu";
+      bigEndian = false;
+      arch = "aarch64";
+      withTLS = true;
+      libc = "glibc";
+      platform = pkgsNoParams.platforms.aarch64-multiplatform;
+      inherit (platform) gcc;
+    };
+  };
+
   selectedCrossSystem =
     if toolsArch == "armv5tel" then sheevaplugCrossSystem else
     if toolsArch == "armv6l" then raspberrypiCrossSystem else
-    if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else null;
+    if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else
+    if toolsArch == "aarch64" then aarch64-multiplatform-crossSystem else null;
 
   pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
 
@@ -264,4 +277,5 @@ rec {
     armv5tel = buildFor "armv5tel";
     armv6l = buildFor "armv6l";
     armv7l = buildFor "armv7l";
+    aarch64 = buildFor "aarch64";
 }

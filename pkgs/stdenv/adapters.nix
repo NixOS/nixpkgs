@@ -92,6 +92,7 @@ rec {
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs
             ++ stdenv.lib.optional (cross.config  == "x86_64-w64-mingw32") pkgs.file
+            ++ stdenv.lib.optional (cross.config  == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
 
           # Cross-linking dynamic libraries, every buildInput should

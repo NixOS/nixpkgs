@@ -1,3 +1,5 @@
+# To build, use:
+# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix -A config.system.build.sdImage
 { config, lib, pkgs, ... }:
 
 let
@@ -46,7 +48,7 @@ in
           cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/$f boot/
         done
         cp ${pkgs.ubootRaspberryPi2}/u-boot.bin boot/u-boot-rpi2.bin
-        cp ${pkgs.ubootRaspberryPi3}/u-boot.bin boot/u-boot-rpi3.bin
+        cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin boot/u-boot-rpi3.bin
         cp ${configTxt} boot/config.txt
         ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./boot
       '';

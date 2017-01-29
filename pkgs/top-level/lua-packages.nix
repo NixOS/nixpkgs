@@ -14,6 +14,14 @@
 let
   isLua51 = lua.luaversion == "5.1";
   isLua52 = lua.luaversion == "5.2";
+
+  platformString =
+    if stdenv.isDarwin then "macosx"
+    else if stdenv.isFreeBSD then "freebsd"
+    else if stdenv.isLinux then "linux"
+    else if stdenv.isSunOS then "solaris"
+    else throw "unsupported platform";
+
   self = _self;
   _self = with self; {
   inherit lua;
@@ -155,19 +163,19 @@ let
   };
 
   luasec = buildLuaPackage rec {
-    name = "sec-0.6pre-2015-04-17";
+    name = "sec-0.6";
     src = fetchFromGitHub {
       owner = "brunoos";
       repo = "luasec";
-      rev = "12e1b1f1d9724974ecc6ca273a0661496d96b3e7";
-      sha256 = "0m917qgi54p6n2ak33m67q8sxcw3cdni99bm216phjjka9rg7qwd";
+      rev = "lua${name}";
+      sha256 = "0wv8l7f7na7kw5xn8mjik2wpxbizl7zvvp5s7fcwvz9kl5jdpk5b";
     };
 
     buildInputs = [ openssl ];
 
     preBuild = ''
       makeFlagsArray=(
-        linux
+        ${platformString}
         LUAPATH="$out/lib/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INC_PATH="-I${lua}/include"
@@ -176,7 +184,7 @@ let
 
     meta = {
       homepage = "https://github.com/brunoos/luasec";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
@@ -197,11 +205,7 @@ let
     preBuild = ''
       makeFlagsArray=(
         LUAV=${lua.luaversion}
-        PLAT=${if stdenv.isDarwin then "macosx"
-               else if stdenv.isFreeBSD then "freebsd"
-               else if stdenv.isLinux then "linux"
-               else if stdenv.isSunOS then "solaris"
-               else throw "unsupported platform"}
+        PLAT=${platformString}
         prefix=$out
       );
     '';
@@ -244,7 +248,7 @@ let
 
     preBuild = ''
       makeFlagsArray=(
-        linux
+        ${platformString}
         LUAPATH="$out/share/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INCDIR="-I${lua}/include"
@@ -344,7 +348,7 @@ let
       makeFlagsArray=(CC=$CC);
     '';
 
-    buildFlags = if stdenv.isDarwin then "macosx" else "";
+    buildFlags = platformString;
 
     installPhase = ''
       mkdir -p $out/lib/lua/${lua.luaversion}

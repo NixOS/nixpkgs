@@ -9,7 +9,7 @@ let
 
   bootstrapHash =
     if stdenv.system == "x86_64-linux"
-    then "05bppmc6hqgv2g4x76rj95xf40x2aikqmcnql5li27rqwliyxznj"
+    then "1v7jvwigb29m15wilzcrk5jmlpaccpzbkhlzf7z5qw08320gvc91"
     else throw "missing boostrap hash for platform ${stdenv.system}";
 
   needsPatchelf = stdenv.isLinux;
@@ -19,7 +19,7 @@ let
      sha256 = bootstrapHash;
   };
 
-  version = "2016-12-29";
+  version = "2017-01-26";
 in
 
 rec {

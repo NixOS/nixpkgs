@@ -443,12 +443,54 @@ rec {
     };
   };
 
-  selectPlatformBySystem = system:
-    if system == "armv6l-linux" then raspberrypi
-    else if system == "armv7l-linux" then armv7l-hf-multiplatform
-    else if system == "armv5tel-linux" then sheevaplug
-    else if system == "mips64el-linux" then fuloong2f_n32
-    else if system == "x86_64-linux" then pc64
-    else if system == "i686-linux" then pc32
-    else pcBase;
+  aarch64-multiplatform = {
+    name = "aarch64-multiplatform";
+    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
+    kernelHeadersBaseConfig = "defconfig";
+    kernelBaseConfig = "defconfig";
+    kernelArch = "arm64";
+    kernelDTB = true;
+    kernelAutoModules = false;
+    kernelExtraConfig = ''
+      # Raspberry Pi 3 stuff. Not needed for kernels >= 4.10.
+      ARCH_BCM2835 y
+      BCM2835_MBOX y
+      BCM2835_WDT y
+      BRCMFMAC m
+      DMA_BCM2835 m
+      DRM_VC4 m
+      I2C_BCM2835 m
+      PWM_BCM2835 m
+      RASPBERRYPI_FIRMWARE y
+      RASPBERRYPI_POWER y
+      SERIAL_8250_BCM2835AUX y
+      SERIAL_8250_EXTENDED y
+      SERIAL_8250_SHARE_IRQ y
+      SND_BCM2835_SOC_I2S m
+      SPI_BCM2835AUX m
+      SPI_BCM2835 m
+
+      # Cavium ThunderX stuff.
+      PCI_HOST_THUNDER_ECAM y
+      THUNDER_NIC_RGX y
+      THUNDER_NIC_BGX y
+      THUNDER_NIC_PF y
+      THUNDER_NIC_VF y
+    '';
+    uboot = null;
+    kernelTarget = "Image";
+    gcc = {
+      arch = "armv8-a";
+    };
+  };
+
+  selectPlatformBySystem = system: {
+      "i686-linux" = pc32;
+      "x86_64-linux" = pc64;
+      "armv5tel-linux" = sheevaplug;
+      "armv6l-linux" = raspberrypi;
+      "armv7l-linux" = armv7l-hf-multiplatform;
+      "aarch64-linux" = aarch64-multiplatform;
+      "mips64el-linux" = fuloong2f_n32;
+    }.${system} or pcBase;
 }

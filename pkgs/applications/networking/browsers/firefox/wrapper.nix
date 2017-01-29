@@ -2,7 +2,7 @@
 
 ## various stuff that can be plugged in
 , gnash, flashplayer, hal-flash
-, MPlayerPlugin, gecko_mediaplayer, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra_gtk2
+, MPlayerPlugin, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra_gtk2
 , supportsJDK, jrePlugin, icedtea_web
 , trezor-bridge, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome_shell*/
@@ -36,7 +36,6 @@ let
       ++ lib.optional enableAdobeFlash flashplayer
       ++ lib.optional (cfg.enableDjvu or false) (djview4)
       ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
-      ++ lib.optional (cfg.enableGeckoMediaPlayer or false) gecko_mediaplayer
       ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
       ++ lib.optional icedtea icedtea_web
       ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin

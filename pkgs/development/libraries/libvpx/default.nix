@@ -44,8 +44,6 @@ let
   inherit (stdenv.lib) enableFeature optional optionals;
 in
 
-assert isi686 || isx86_64 || isArm || isMips; # Requires ARM with floating point support
-
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
 assert internalStatsSupport && (vp9DecoderSupport || vp9EncoderSupport) -> postprocSupport;
 /* If spatialResamplingSupport not enabled, build will fail with undeclared variable errors.

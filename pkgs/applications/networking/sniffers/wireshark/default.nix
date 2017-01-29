@@ -12,7 +12,7 @@ assert withQt -> !withGtk && qt4 != null;
 with stdenv.lib;
 
 let
-  version = "2.2.3";
+  version = "2.2.4";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 in
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.bz2";
-    sha256 = "0fsrvl6sp772g2q2j24h10h9lfda6q67x7wahjjm8849i2gciflp";
+    sha256 = "049r5962yrajhhz9r4dsnx403dab50d6091y2mw298ymxqszp9s2";
   };
 
   buildInputs = [

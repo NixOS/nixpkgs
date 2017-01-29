@@ -1,0 +1,13 @@
+diff -ru gnu-efi-3.0.4-orig/lib/aarch64/initplat.c gnu-efi-3.0.4/lib/aarch64/initplat.c
+--- gnu-efi-3.0.4-orig/lib/aarch64/initplat.c	2016-03-17 09:53:14.000000000 -0400
++++ gnu-efi-3.0.4/lib/aarch64/initplat.c	2016-12-03 17:53:57.166575974 -0500
+@@ -41,7 +41,8 @@
+ 
+ void *memcpy(void *dest, const void *src, __SIZE_TYPE__ n)
+ {
+-    unsigned char *p = dest, *q = src;
++    unsigned char *p = dest;
++    const unsigned char *q = src;
+ 
+     while (n--)
+         *p++ = *q++;
