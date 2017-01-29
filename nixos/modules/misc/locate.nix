@@ -103,15 +103,16 @@ in {
   config = mkIf cfg.enable {
     users.extraGroups = mkIf isMLocate { mlocate = {}; };
 
-    security.setuidOwners = mkIf isMLocate
-      [ { group = "mlocate";
-          owner = "root";
-          permissions = "u+rx,g+x,o+x";
-          setgid = true;
-          setuid = false;
-          program = "locate";
-        }
-      ];
+    security.wrappers = mkIf isMLocate {
+      mlocate = {
+        group = "mlocate";
+        owner = "root";
+        permissions = "u+rx,g+x,o+x";
+        setgid = true;
+        setuid = false;
+        program = "locate";
+      };
+    };
 
     nixpkgs.config = { locate.dbfile = cfg.output; };
 
