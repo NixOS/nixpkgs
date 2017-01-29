@@ -4531,6 +4531,8 @@ with pkgs;
 
   xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
 
+  yaft = callPackage ../applications/misc/yaft { };
+
   yarn = callPackage ../development/tools/yarn  { };
 
   yank = callPackage ../tools/misc/yank { };
