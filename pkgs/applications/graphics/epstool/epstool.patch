@@ -1,0 +1,76 @@
+diff --git a/../epstool-3.08/makefile b/./makefile
+index 63b2997..0941c11 100644
+--- a/../epstool-3.08/makefile
++++ b/./makefile
+@@ -45,8 +45,7 @@ TARGET=epstool
+ 
+ include $(SRCDIR)/common.mak
+ 
+-EPSTOOL_ROOT=/usr/local
+-EPSTOOL_BASE=$(prefix)$(EPSTOOL_ROOT)
++EPSTOOL_BASE=$(out)
+ EPSTOOL_DOCDIR=$(EPSTOOL_BASE)/share/doc/epstool-$(EPSTOOL_VERSION)
+ EPSTOOL_MANDIR=$(EPSTOOL_BASE)/man
+ EPSTOOL_BINDIR=$(EPSTOOL_BASE)/bin
+diff --git a/../epstool-3.08/src/epstool.mak b/./src/epstool.mak
+index 63b2997..0941c11 100644
+--- a/../epstool-3.08/src/epstool.mak
++++ b/./src/epstool.mak
+@@ -45,8 +45,7 @@ TARGET=epstool
+ 
+ include $(SRCDIR)/common.mak
+ 
+-EPSTOOL_ROOT=/usr/local
+-EPSTOOL_BASE=$(prefix)$(EPSTOOL_ROOT)
++EPSTOOL_BASE=$(out)
+ EPSTOOL_DOCDIR=$(EPSTOOL_BASE)/share/doc/epstool-$(EPSTOOL_VERSION)
+ EPSTOOL_MANDIR=$(EPSTOOL_BASE)/man
+ EPSTOOL_BINDIR=$(EPSTOOL_BASE)/bin
+diff --git a/../epstool-3.08/src/os2.mak b/./src/os2.mak
+index c01c993..cf64421 100644
+--- a/../epstool-3.08/src/os2.mak
++++ b/./src/os2.mak
+@@ -43,11 +43,10 @@ EMXOMF=-Zomf -Zmts
+ CDEFS=-DOS2 -DNONAG $(LONGFILEDEF)
+ GSCDEBUG= -g
+ GSCFLAGS= $(CDEFS) $(EMXOMF) -Wall -Wstrict-prototypes -Wmissing-declarations -Wmissing-prototypes -fno-builtin -fno-common -Wcast-qual -Wwrite-strings $(CDEBUG) $(GSCDEBUG) $(RPM_OPT_FLAGS) $(XINCLUDE) $(PFLAGS) $(LIBPNGCFLAGS) $(GTKCFLAGS)
+-CCAUX=gcc
+-CC=gcc
++CCAUX=$(CC)
+ LFLAGS=$(PLINK) $(LIBPNGLIBS) $(GTKLIBS)
+-CLINK=gcc $(LDFLAGS) $(EMXOMF)
+-LINK=gcc $(LDFLAGS) $(EMXOMF)
++CLINK=$(CC) $(LDFLAGS) $(EMXOMF)
++LINK=$(CC) $(LDFLAGS) $(EMXOMF)
+ 
+ COMP=$(CC) -I$(SRCDIR) -I$(OBJDIR) $(CFLAGS) $(GSCFLAGS)
+ 
+@@ -79,8 +78,7 @@ TARGET=epstool
+ 
+ !include $(SRCDIR)/common.mak
+ 
+-EPSTOOL_ROOT=/usr/local
+-EPSTOOL_BASE=$(prefix)$(EPSTOOL_ROOT)
++EPSTOOL_BASE=$(out)
+ EPSTOOL_DOCDIR=$(EPSTOOL_BASE)/share/doc/epstool-$(EPSTOOL_VERSION)
+ EPSTOOL_MANDIR=$(EPSTOOL_BASE)/man
+ EPSTOOL_BINDIR=$(EPSTOOL_BASE)/bin
+diff --git a/../epstool-3.08/src/unixcom.mak b/./src/unixcom.mak
+index d578976..cc2bb55 100644
+--- a/../epstool-3.08/src/unixcom.mak
++++ b/./src/unixcom.mak
+@@ -24,11 +24,10 @@ MAKE=make
+ CDEFS=-DX11 -DUNIX -DNONAG $(LONGFILEDEF)
+ GSCDEBUG= -g
+ GSCFLAGS= $(CDEFS) -Wall -Wstrict-prototypes -Wmissing-declarations -Wmissing-prototypes -fno-builtin -fno-common -Wcast-qual -Wwrite-strings $(CDEBUG) $(GSCDEBUG) $(RPM_OPT_FLAGS) $(XINCLUDE) $(PFLAGS) $(LIBPNGCFLAGS) $(GTKCFLAGS)
+-CCAUX=gcc
+-CC=gcc
++CCAUX=$(CC)
+ LFLAGS=$(PLINK) $(LIBPNGLIBS) $(GTKLIBS)
+-CLINK=gcc $(LDFLAGS)
+-LINK=gcc $(LDFLAGS)
++CLINK=$(CC) $(LDFLAGS)
++LINK=$(CC) $(LDFLAGS)
+ 
+ 
+ COMP=$(CC) -I$(SRCDIR) -I$(OBJDIR) $(CFLAGS) $(GSCFLAGS)
