@@ -76,37 +76,6 @@ in
   ###### interface
 
   options = {
-    security.wrappers.setcap = lib.mkOption {
-      type    = lib.types.listOf lib.types.attrs;
-      default = [];
-      example =
-        [ { program = "ping";
-            source  = "${pkgs.iputils.out}/bin/ping";
-            owner   = "nobody";
-            group   = "nogroup";
-            capabilities = "cap_net_raw+ep";
-          }
-        ];
-      description = ''
-        This option sets capabilities on a wrapper program that
-        propagates those capabilities down to the wrapped, real
-        program.
-
-        The <literal>program</literal> attribute is the name of the
-        program to be wrapped. If no <literal>source</literal>
-        attribute is provided, specifying the absolute path to the
-        program, then the program will be searched for in the path
-        environment variable.
-
-        NOTE: cap_setpcap, which is required for the wrapper program
-        to be able to raise caps into the Ambient set is NOT raised to
-        the Ambient set so that the real program cannot modify its own
-        capabilities!! This may be too restrictive for cases in which
-        the real program needs cap_setpcap but it at least leans on
-        the side security paranoid vs. too relaxed.
-      '';
-    };
-
     security.setuidPrograms = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -125,11 +94,34 @@ in
       default = {};
       example = {
         sendmail.source = "/nix/store/.../bin/sendmail";
+        ping = {
+          source  = "${pkgs.iputils.out}/bin/ping";
+          owner   = "nobody";
+          group   = "nogroup";
+          capabilities = "cap_net_raw+ep";
+        };
       };
       description = ''
         This option allows the ownership and permissions on the setuid
         wrappers for specific programs to be overridden from the
         default (setuid root, but not setgid root).
+
+        Additionally, this option can set capabilities on a wrapper
+        program that propagates those capabilities down to the
+        wrapped, real program.
+
+        The <literal>program</literal> attribute is the name of the
+        program to be wrapped. If no <literal>source</literal>
+        attribute is provided, specifying the absolute path to the
+        program, then the program will be searched for in the path
+        environment variable.
+
+        NOTE: cap_setpcap, which is required for the wrapper program
+        to be able to raise caps into the Ambient set is NOT raised to
+        the Ambient set so that the real program cannot modify its own
+        capabilities!! This may be too restrictive for cases in which
+        the real program needs cap_setpcap but it at least leans on
+        the side security paranoid vs. too relaxed.
       '';
     };
 
