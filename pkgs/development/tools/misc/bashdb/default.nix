@@ -1,15 +1,10 @@
 { stdenv, fetchurl }:
 
-let
-  basename = "bashdb-4.4-0.92";
-
-in
-
-stdenv.mkDerivation {
-  name = basename;
+stdenv.mkDerivation rec {
+  name = "bashdb-4.4-0.92";
 
   src = fetchurl {
-    url =  "mirror://sourceforge/bashdb/${basename}.tar.bz2";
+    url =  "mirror://sourceforge/bashdb/${name}.tar.bz2";
     sha256 = "6a8c2655e04339b954731a0cb0d9910e2878e45b2fc08fe469b93e4f2dbaaf92";
   };
 
