@@ -2,19 +2,20 @@
 , cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
 
 stdenv.mkDerivation rec {
-  version = "20161126";
+  version = "20170128";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     rev = "neomutt-${version}";
-    sha256 = "10ycfya11pvwv0rdyyak56r6f8ia8yf0h8qyi904bbpvm8lqvqfd";
+    sha256 = "082ksn4fsj48nkz61ia0hcxz3396p6a4p9q8738w15qkycq23c20";
   };
 
+  nativeBuildInputs = [ which autoconf automake ];
   buildInputs =
-    [ autoconf automake cyrus_sasl gdbm gpgme kerberos libidn ncurses
-      notmuch which openssl perl lmdb ];
+    [ cyrus_sasl gdbm gpgme kerberos libidn ncurses
+      notmuch openssl perl lmdb ];
 
   configureFlags = [
     "--enable-debug"
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     "--enable-keywords"
     "--enable-smtp"
     "--enable-nntp"
+    "--enable-compressed"
     "--with-homespool=mailbox"
     "--with-gss"
     "--with-mailpath="
