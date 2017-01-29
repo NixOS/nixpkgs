@@ -1,10 +1,16 @@
 { stdenv, fetchFromGitHub
-, xlibsWrapper, mesa
+, libX11, mesa_noglu
 , nvidia_x11 ? null
-, libX11
+, libglvnd
 }:
 
-stdenv.mkDerivation {
+let
+  aPackage =
+    if nvidia_x11 == null then mesa_noglu
+    else if nvidia_x11.useGLVND then libglvnd
+    else nvidia_x11;
+
+in stdenv.mkDerivation {
   name = "primus-lib-2015-04-28";
 
   src = fetchFromGitHub {
@@ -14,17 +20,19 @@ stdenv.mkDerivation {
     sha256 = "118jm57ccawskb8vjq3a9dpa2gh72nxzvx2zk7zknpy0arrdznj1";
   };
 
-  buildInputs = [ libX11 mesa ];
+  buildInputs = [ libX11 mesa_noglu ];
 
   makeFlags = [ "LIBDIR=$(out)/lib"
-                "PRIMUS_libGLa=${if nvidia_x11 == null then mesa else nvidia_x11}/lib/libGL.so"
-                "PRIMUS_libGLd=${mesa}/lib/libGL.so"
-                "PRIMUS_LOAD_GLOBAL=${mesa}/lib/libglapi.so"
+                "PRIMUS_libGLa=${aPackage}/lib/libGL.so"
+                "PRIMUS_libGLd=${mesa_noglu}/lib/libGL.so"
+                "PRIMUS_LOAD_GLOBAL=${mesa_noglu}/lib/libglapi.so"
               ];
 
   installPhase = ''
     ln -s $out/lib/libGL.so.1 $out/lib/libGL.so
   '';
+
+  passthru.glvnd = if nvidia_x11 != null && nvidia_x11.useGLVND then nvidia_x11 else null;
 
   meta = with stdenv.lib; {
     description = "Low-overhead client-side GPU offloading";
