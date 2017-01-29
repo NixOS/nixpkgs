@@ -4,11 +4,11 @@ let
   inherit (config.security) wrapperDir wrappers setuidPrograms;
 
   programs =
-    (map (x: { program = x; owner = "root"; group = "root"; setuid = true; })
-      setuidPrograms)
-      ++ lib.mapAttrsToList
-           (n: v: (if v ? "program" then v else v // {program=n;}))
-           wrappers;
+    (map (x: { program = x; owner = "root"; group = "root"; setuid = true; }) setuidPrograms)
+    ++
+    (lib.mapAttrsToList
+      (n: v: (if v ? "program" then v else v // {program=n;}))
+      wrappers);
 
   mkWrapper = { program, source ? null, ...}: ''
     if ! source=${if source != null then source else "$(readlink -f $(PATH=$WRAPPER_PATH type -tP ${program}))"}; then
