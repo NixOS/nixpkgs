@@ -27,7 +27,7 @@ let
     unpackPhase  = "true";
     installPhase = ''
       mkdir -p $out/bin
-      ${lib.concatMapStrings (builtins.map mkWrapper programs)}
+      ${lib.concatMapStrings mkWrapper programs}
     '';
   };
 
