@@ -1149,6 +1149,25 @@ in {
     };
   };
 
+  chainmap = buildPythonPackage rec {
+    name = "chainmap-1.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/chainmap/${name}.tar.gz";
+      sha256 = "09h5gq43w516fqswlca0nhmd2q3v8hxq15z4wqrznfwix6ya6pa0";
+    };
+
+    # Requires tox
+    doCheck = false;
+
+    meta = {
+      description = "Backport/clone of ChainMap";
+      homepage = "https://bitbucket.org/jeunice/chainmap";
+      license = licenses.psfl;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   arrow = buildPythonPackage rec {
     name = "arrow-${version}";
     version = "0.7.0";
