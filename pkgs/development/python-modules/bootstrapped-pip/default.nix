@@ -1,4 +1,4 @@
-{ stdenv, python, fetchurl, makeWrapper, unzip, fetchUniversalWheel, writeText }:
+{ stdenv, python, fetchurl, makeWrapper, unzip, fetchUniversalWheel, writeScriptBin }:
 
 let
   wheel_whl = fetchUniversalWheel {
@@ -25,27 +25,14 @@ let
     pip_whl
   ] ++ stdenv.lib.optional (python.isPy26 or false) argparse_whl;
 
-  
-in stdenv.mkDerivation rec {
-  name = "${python.libPrefix}-bootstrapped-pip-${version}";
-  version = "9.0.1";
+  path_fixup = stdenv.lib.concatMapStrings (p: "sys.path.insert(0, '${p}')\n") inputs;
 
-  PYTHONPATH = stdenv.lib.concatStringsSep ":" inputs;
-  patchPhase = ''
-    mkdir -p $out/bin
-  '';
-  srcs = inputs;
-  unpackPhase = "true";
-  buildInputs = [ python makeWrapper];
 
-  installPhase = ''
+in (writeScriptBin "pip" ''
+    #!${python.interpreter}
+    import sys
+    ${path_fixup}
+    from pip import main
+    sys.exit(main())
+  '')
 
-    # install pip binary
-    echo '#!${python.interpreter}' > $out/bin/pip
-    echo 'import sys;from pip import main' >> $out/bin/pip
-    echo 'sys.exit(main())' >> $out/bin/pip
-    chmod +x $out/bin/pip
-
-    wrapProgram $out/bin/pip --prefix PYTHONPATH ":" $PYTHONPATH/
-  '';
-}
