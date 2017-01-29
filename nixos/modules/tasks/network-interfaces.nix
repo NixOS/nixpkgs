@@ -898,27 +898,19 @@ in
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
     # kernel because we need the ambient capability
-    security = mkIf (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") {
-      wrappers = {
-        ping = {
-          source  = "${pkgs.iputils.out}/bin/ping";
-          capabilities = "cap_net_raw+p";
-        };
-
-        ping6 = {
-          source  = "${pkgs.iputils.out}/bin/ping6";
-          capabilities = "cap_net_raw+p";
-        };
+    security.wrappers = if (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") then {
+      ping = {
+        source  = "${pkgs.iputils.out}/bin/ping";
+        capabilities = "cap_net_raw+p";
       };
-    };
 
-    # If the linux kernel IS older than 4.3, create setuid wrappers
-    # for ping and ping6
-    security = mkIf (versionOlder (getVersion config.boot.kernelPackages.kernel) "4.3") {
-      wrappers = {
-        ping.source = "${pkgs.iputils.out}/bin/ping";
-        "ping6".source = "${pkgs.iputils.out}/bin/ping6";
+      ping6 = {
+        source  = "${pkgs.iputils.out}/bin/ping6";
+        capabilities = "cap_net_raw+p";
       };
+    } else {
+      ping.source = "${pkgs.iputils.out}/bin/ping";
+      "ping6".source = "${pkgs.iputils.out}/bin/ping6";
     };
 
     # Set the host and domain names in the activation script.  Don't
