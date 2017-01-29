@@ -4,22 +4,13 @@ let
   inherit (config.security) wrapperDir wrappers setuidPrograms;
 
   programs =
-    (map (x: { program = x; owner = "root"; group = "root"; setuid = true; }) setuidPrograms)
-    ++
     (lib.mapAttrsToList
       (n: v: (if v ? "program" then v else v // {program=n;}))
       wrappers);
 
   mkWrapper = { program, source ? null, ...}: ''
-    if ! source=${if source != null || source != "" then source else "$(readlink -f $(PATH=$WRAPPER_PATH type -tP ${program}))"}; then
-        # If we can't find the program, fall back to the
-        # system profile.
-        source=/nix/var/nix/profiles/default/bin/${program}
-    fi
-
     parentWrapperDir=$(dirname ${wrapperDir})
-
-    gcc -Wall -O2 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"$parentWrapperDir\" \
+    gcc -Wall -O2 -DSOURCE_PROG=\"${source}\" -DWRAPPER_DIR=\"$parentWrapperDir\" \
         -lcap-ng -lcap ${./wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
         -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
   '';
@@ -96,19 +87,6 @@ in
   ###### interface
 
   options = {
-    security.setuidPrograms = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [];
-      example = ["passwd"];
-      description = ''
-        The Nix store cannot contain setuid/setgid programs directly.
-        For this reason, NixOS can automatically generate wrapper
-        programs that have the necessary privileges.  This option
-        lists the names of programs in the system environment for
-        which setuid root wrappers should be created.
-      '';
-    };
-
     security.wrappers = lib.mkOption {
       type = lib.types.attrs;
       default = {};

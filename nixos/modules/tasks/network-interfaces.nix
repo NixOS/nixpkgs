@@ -912,9 +912,10 @@ in
 
     # If the linux kernel IS older than 4.3, create setuid wrappers
     # for ping and ping6
-    security.setuidPrograms = mkIf (versionOlder (getVersion config.boot.kernelPackages.kernel) "4.3") [
-      "ping" "ping6"
-    ];
+    security.wrappers = mkIf (versionOlder (getVersion config.boot.kernelPackages.kernel) "4.3") {
+      ping.source = "${pkgs.iputils.out}/bin/ping";
+      "ping6".source = "${pkgs.iputils.out}/bin/ping6";
+    };
 
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,

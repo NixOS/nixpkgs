@@ -62,7 +62,8 @@ in
       '';
     }];
 
-    security.setuidPrograms = [ "e_freqset" ];
+    security.wrappers.e_freqset.source = "${e.enlightenment.out}/bin/e_freqset";
+    
     environment.etc = singleton
       { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         target = "X11/xkb";

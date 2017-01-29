@@ -93,7 +93,7 @@ in
 
     { services.cron.enable = mkDefault (allFiles != []); }
     (mkIf (config.services.cron.enable) {
-      security.setuidPrograms = [ "crontab" ];
+      security.wrappers.crontab.source = "${pkgs.cronNixosPkg.out}/bin/crontab";
       environment.systemPackages = [ cronNixosPkg ];
       environment.etc.crontab =
         { source = pkgs.runCommand "crontabs" { inherit allFiles; preferLocalBuild = true; }

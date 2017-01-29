@@ -89,7 +89,7 @@ in
       gid = config.ids.gids.exim;
     };
 
-    security.setuidPrograms = [ "exim" ];
+    security.wrappers.exim.source = "${exim}/bin/exim";
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";

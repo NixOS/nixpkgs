@@ -273,7 +273,10 @@ in
         message = "services.smokeping: sendmail and Mailhost cannot both be enabled.";
       }
     ];
-    security.setuidPrograms = [ "fping" "fping6" ];
+    security.wrappers = {
+      fping.source = "${pkgs.fping}/bin/fping";
+      "fping6".source = "${pkgs.fping}/bin/fping6";
+    };
     environment.systemPackages = [ pkgs.fping ];
     users.extraUsers = singleton {
       name = cfg.user;

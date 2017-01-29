@@ -106,7 +106,7 @@ in
 
     environment.systemPackages = [ pkgs.fcron ];
 
-    security.setuidPrograms = [ "fcrontab" ];
+    security.wrappers.fcrontab.source = "${pkgs.fcron.out}/bin/fcrontab";
     systemd.services.fcron = {
       description = "fcron daemon";
       after = [ "local-fs.target" ];

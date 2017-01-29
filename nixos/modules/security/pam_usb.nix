@@ -33,7 +33,10 @@ in
   config = mkIf (cfg.enable || anyUsbAuth) {
 
     # Make sure pmount and pumount are setuid wrapped.
-    security.setuidPrograms = [ "pmount" "pumount" ];
+    security.wrappers = {
+      pmount.source = "${pkgs.pmount.out}/bin/pmount";
+      pumount.source = "${pkgs.pmount.out}/bin/pumount";
+    };
 
     environment.systemPackages = [ pkgs.pmount ];
 
