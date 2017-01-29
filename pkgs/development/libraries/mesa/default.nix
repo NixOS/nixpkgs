@@ -67,13 +67,14 @@ stdenv.mkDerivation {
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
     "--with-egl-platforms=x11,wayland,drm"
-  ]
-    ++ optionals (stdenv.system != "armv7l-linux") [
-      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
+  ] ++ (if stdenv.isArm || stdenv.isAarch64 then [
+      "--with-gallium-drivers=nouveau,freedreno,vc4,swrast"
+      "--with-dri-drivers=nouveau,swrast"
+  ] else [
+      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,swrast"
       "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
       "--with-vulkan-drivers=intel"
-  ]
-    ++ [
+  ]) ++ [
     (enableFeature enableTextureFloats "texture-float")
     (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
@@ -134,14 +135,6 @@ stdenv.mkDerivation {
       $out/lib/libxatracker* \
       $out/lib/libvulkan_*
 
-    # move share/vulkan/icd.d/
-    mv $out/share/ $drivers/
-    # Update search path used by Vulkan (it's pointing to $out but
-    # drivers are in $drivers)
-    for js in $drivers/share/vulkan/icd.d/*.json; do
-      substituteInPlace "$js" --replace "$out" "$drivers"
-    done
-
     mv $out/lib/dri/* $drivers/lib/dri # */
     rmdir "$out/lib/dri"
 
@@ -154,6 +147,14 @@ stdenv.mkDerivation {
 
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
+  '' + optionalString (!(stdenv.isArm || stdenv.isAarch64)) ''
+    # move share/vulkan/icd.d/
+    mv $out/share/ $drivers/
+    # Update search path used by Vulkan (it's pointing to $out but
+    # drivers are in $drivers)
+    for js in $drivers/share/vulkan/icd.d/*.json; do
+      substituteInPlace "$js" --replace "$out" "$drivers"
+    done
   '';
 
   # TODO:

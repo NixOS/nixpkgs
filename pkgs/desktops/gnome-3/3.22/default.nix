@@ -234,6 +234,8 @@ let
 
   vte_290 = callPackage ./core/vte/2.90.nix { };
 
+  vte-ng = callPackage ./core/vte/ng.nix { };
+
   vino = callPackage ./core/vino { };
 
   yelp = callPackage ./core/yelp { };

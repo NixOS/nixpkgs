@@ -46,7 +46,14 @@ following incompatible changes:</para>
       for what those parameters represent.
     </para>
   </listitem>
-
+  <listitem>
+    <para>
+      <literal>ansible</literal> now defaults to ansible version 2 as version 1
+      has been removed due to a serious <link
+      xlink:href="https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt">
+      vulnerability</link> unpatched by upstream.
+    </para>
+  </listitem>
   <listitem>
     <para>
       <literal>gnome</literal> alias has been removed along with

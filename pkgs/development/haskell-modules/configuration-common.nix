@@ -1190,6 +1190,9 @@ self: super: {
     optparse-applicative = self.optparse-applicative_0_13_0_0;
   });
 
+  # No upstream issue tracker
+  hspec-expectations-pretty-diff = dontCheck super.hspec-expectations-pretty-diff;
+
   lentil = super.lentil.overrideScope (self: super: {
     pipes = self.pipes_4_3_2;
     optparse-applicative = self.optparse-applicative_0_13_0_0;
