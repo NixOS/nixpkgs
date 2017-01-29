@@ -37,6 +37,17 @@ let
 
   graphiteVersion = "0.9.15";
 
+  fetchSource = ({ name ? null , pname ? null, version ? null, type ? "tar.gz", sha256}:
+    let
+      _name = if name == null then "${pname}-${version}" else name;
+      _pdrv = builtins.parseDrvName _name;
+    in
+      pkgs.fetchurl {
+  
+        url = "mirror://pypiio/source/${builtins.substring 0 1 _name}/${_pdrv.name}/${_pdrv.name}-${_pdrv.version}.${type}";
+        sha256 = sha256;
+   });
+
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
@@ -59,8 +70,8 @@ in {
     buildInputs = with self; [ cython pytest ];
     propagatedBuildInputs = with self; [ numpy scipy matplotlib pandas tabulate ];
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+    src = fetchSource {
+      inherit pname version;
       sha256 = "b75a47de700d01e704de95953a6e969922b2f510d7eefe59f7f8980ad44ad1b7";
     };
 
