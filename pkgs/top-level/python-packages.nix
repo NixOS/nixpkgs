@@ -37,17 +37,20 @@ let
 
   graphiteVersion = "0.9.15";
 
-  fetchSource = ({ name ? null , pname ? null, version ? null, type ? "tar.gz", sha256}:
+  fetchPypiMirror = ({ name ? null , pname ? null, version ? null, kind, ext, sha256}:
     let
       _name = if name == null then "${pname}-${version}" else name;
       _pdrv = builtins.parseDrvName _name;
     in
       pkgs.fetchurl {
-  
-        url = "mirror://pypiio/source/${builtins.substring 0 1 _name}/${_pdrv.name}/${_pdrv.name}-${_pdrv.version}.${type}";
-        sha256 = sha256;
+        inherit sha256;
+        url = "mirror://pypiio/${kind}/${builtins.substring 0 1 _name}/${_pdrv.name}/${_name}${ext}";
    });
 
+  fetchSource = args: fetchPypiMirror (args // { kind = "source"; ext=".tar.gz"; });
+  fetchSourceZip = args: fetchPypiMirror (args // { kind = "source"; ext = ".zip";});
+  fetchWheel = args: fetchPypiMirror (args // rec { kind = if  "source" then "py3" else "py2"; ext = "-${kind}-none-any.whl";});
+  fetchUniversalWheel = args: fetchPypiMirror (args // rec { kind = "py2.py3"; ext = "-${kind}-none-any.whl";});
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
@@ -64,14 +67,14 @@ in {
 
   acoustics = buildPythonPackage rec {
     pname = "acoustics";
+    name = "acoustics-${version}";
     version = "0.1.2";
-    name = pname + "-" + version;
 
     buildInputs = with self; [ cython pytest ];
     propagatedBuildInputs = with self; [ numpy scipy matplotlib pandas tabulate ];
 
     src = fetchSource {
-      inherit pname version;
+      inherit name;
       sha256 = "b75a47de700d01e704de95953a6e969922b2f510d7eefe59f7f8980ad44ad1b7";
     };
 
@@ -99,8 +102,8 @@ in {
 
     propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse ];
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/agate/${name}.tar.gz";
+    src = fetchSource {
+      inherit name;
       sha256 = "0h2w30a0zhylivz86d823a05hvg8w8p61lmm855z1wwkgml9l9d4";
     };
   };
@@ -766,8 +769,8 @@ in {
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/almir/${name}.zip";
+    src = fetchSourceZip {
+      inherit name;
       sha256 = "5dc0b8a5071f3ff46cd2d92608f567ba446e4c733c063b17d89703caeb9868fe";
     };
 
