@@ -23,7 +23,7 @@ let
 
   callPackage = pkgs.newScope self;
 
-  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { inherit fetchUniversalWheel; };
 
   mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
   });
@@ -41,11 +41,15 @@ let
     let
       _name = if name == null then "${pname}-${version}" else name;
       _pdrv = builtins.parseDrvName _name;
-    in
-      pkgs.fetchurl {
+      data = rec {
         inherit sha256;
+        name = _name;
+        pname = _pdrv.name;
+        version = pdrv.version;
         url = "mirror://pypiio/${kind}/${builtins.substring 0 1 _name}/${_pdrv.name}/${_name}${ext}";
-   });
+      };
+    in
+      pkgs.fetchurl { inherit (data) sha256 url; } // data );
 
   fetchSource = args: fetchPypiMirror (args // { kind = "source"; ext=".tar.gz"; });
   fetchSourceZip = args: fetchPypiMirror (args // { kind = "source"; ext = ".zip";});
