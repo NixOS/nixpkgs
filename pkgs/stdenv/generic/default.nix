@@ -343,6 +343,7 @@ let
              || system == "x86_64-openbsd"
              || system == "x86_64-cygwin"
              || system == "x86_64-solaris"
+             || system == "aarch64-linux"
              || system == "mips64el-linux";
       isMips = system == "mips-linux"
             || system == "mips64el-linux";
