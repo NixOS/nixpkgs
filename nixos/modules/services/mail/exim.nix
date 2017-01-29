@@ -70,7 +70,7 @@ in
       etc."exim.conf".text = ''
         exim_user = ${cfg.user}
         exim_group = ${cfg.group}
-        exim_path = /var/permissions-wrappers/exim
+        exim_path = /run/wrappers/exim
         spool_directory = ${cfg.spoolDir}
         ${cfg.config}
       '';
@@ -89,15 +89,7 @@ in
       gid = config.ids.gids.exim;
     };
 
-    security.permissionsWrappers.setuid =
-    [
-      { program = "exim";
-        source  = "${pkgs.exim.out}/bin/exim";
-        owner   = "root";
-        group   = "root";
-        setuid  = true;
-      }
-    ];
+    security.setuidPrograms = [ "exim" ];
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";

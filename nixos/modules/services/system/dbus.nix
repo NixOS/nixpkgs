@@ -38,7 +38,7 @@ let
       sed -ri "s@/etc/dbus-1/(system|session)-@$out/\1-@" $out/{system,session}.conf
 
       sed '${./dbus-system-local.conf.in}' \
-        -e 's,@servicehelper@,${config.security.permissionsWrapperDir}/dbus-daemon-launch-helper,g' \
+        -e 's,@servicehelper@,${config.security.wrapperDir}/dbus-daemon-launch-helper,g' \
         -e 's,@extra@,${systemExtraxml},' \
         > "$out/system-local.conf"
 
@@ -114,7 +114,7 @@ in
 
     systemd.packages = [ pkgs.dbus.daemon ];
 
-    security.permissionsWrappers.setuid = singleton
+    security.wrappers.setuid = singleton
       { program = "dbus-daemon-launch-helper";
         source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
         owner = "root";

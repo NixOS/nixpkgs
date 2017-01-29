@@ -14,7 +14,7 @@ import ./make-test.nix ({ pkgs, ...} : {
           mailHost = "127.0.0.2";
           probeConfig = ''
             + FPing
-            binary = /var/permissions-wrappers/fping
+            binary = /run/wrappers/fping
             offset = 0%
           '';
         };

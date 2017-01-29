@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
   # this is a hack and without this cpufreq module is not working. does the following:
   #   1. moves the "freqset" binary to "e_freqset",
   #   2. linkes "e_freqset" to enlightenment/bin so that,
-  #   3. permissionsWrappers.setuid detects it and places wrappers in /var/permissions-wrappers/e_freqset,
-  #   4. and finally, links /var/permissions-wrappers/e_freqset to original destination where enlightenment wants it
+  #   3. wrappers.setuid detects it and places wrappers in /run/wrappers/e_freqset,
+  #   4. and finally, links /run/wrappers/e_freqset to original destination where enlightenment wants it
   postInstall = ''
     export CPUFREQ_DIRPATH=`readlink -f $out/lib/enlightenment/modules/cpufreq/linux-gnu-*`;
     mv $CPUFREQ_DIRPATH/freqset $CPUFREQ_DIRPATH/e_freqset
     ln -sv $CPUFREQ_DIRPATH/e_freqset $out/bin/e_freqset
-    ln -sv /var/permissions-wrappers/e_freqset $CPUFREQ_DIRPATH/freqset
+    ln -sv /run/wrappers/e_freqset $CPUFREQ_DIRPATH/freqset
   '';
 
   meta = with stdenv.lib; {

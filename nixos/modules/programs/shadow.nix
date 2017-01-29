@@ -101,49 +101,9 @@ in
         chpasswd = { rootOK = true; };
       };
 
-
-    security.permissionsWrappers.setuid = 
-    [
-      { program = "su";
-        source  = "${pkgs.shadow.su}/bin/su";
-        owner   = "root";
-        group   = "root";
-        setuid  = true;        
-      }
-
-      { program = "chfn";
-        source  = "${pkgs.shadow.out}/bin/chfn";
-        owner   = "root";
-        group   = "root";
-        setuid  = true;
-      }
-    ] ++
-    (lib.optionals config.users.mutableUsers
-     map (x: x // { owner   = "root";
-                    group   = "root";
-                    setuid  = true;
-                  })
-         [
-           { program = "passwd";
-             source  = "${pkgs.shadow.out}/bin/passwd";
-           }
-
-           { program = "sg";
-             source  = "${pkgs.shadow.out}/bin/sg";
-           }
-
-           { program = "newgrp";
-             source  = "${pkgs.shadow.out}/bin/newgrp";
-           }
-
-           { program = "newuidmap";
-             source  = "${pkgs.shadow.out}/bin/newuidmap";
-           }
-
-           { program = "newgidmap";
-             source  = "${pkgs.shadow.out}/bin/newgidmap";
-           }
-         ]
-    );
+    security.setuidPrograms = [
+      "su" "chfn" "newuidmap" "newgidmap"
+      ] ++ lib.optionals config.users.mutableUsers
+      [ "passwd" "sg" "newgrp" ];
   };
 }

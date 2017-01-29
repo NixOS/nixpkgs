@@ -898,38 +898,23 @@ in
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
     # kernel because we need the ambient capability
-    security.permissionsWrappers.setcap = mkIf (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") (
-      [
-        { program = "ping";
-          source  = "${pkgs.iputils.out}/bin/ping";
-          capabilities = "cap_net_raw+p";
-        }
+    security.wrappers = mkIf (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") {
+      ping = {
+        source  = "${pkgs.iputils.out}/bin/ping";
+        capabilities = "cap_net_raw+p";
+      };
 
-        { program = "ping6";
-          source  = "${pkgs.iputils.out}/bin/ping6";
-          capabilities = "cap_net_raw+p";
-        }
-      ]
-    );
+      ping6 = {
+        source  = "${pkgs.iputils.out}/bin/ping6";
+        capabilities = "cap_net_raw+p";
+      };
+    };
 
-    # If our linux kernel IS older than 4.3, let's setuid ping and ping6
-    security.permissionsWrappers.setuid = mkIf (versionOlder (getVersion config.boot.kernelPackages.kernel) "4.3") (
-      [
-        { program = "ping";
-          source  = "${pkgs.iputils.out}/bin/ping";
-          owner   = "root";
-          group   = "root";
-          setuid  = true;
-        }
-        
-        { program = "ping6";
-          source  = "${pkgs.iputils.out}/bin/ping6";
-          owner   = "root";
-          group   = "root";
-          setuid  = true;
-        }
-      ]
-    );
+    # If the linux kernel IS older than 4.3, create setuid wrappers
+    # for ping and ping6
+    security.setuidPrograms = mkIf (versionOlder (getVersion config.boot.kernelPackages.kernel) "4.3") [
+      "ping" "ping6"
+    ];
 
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,

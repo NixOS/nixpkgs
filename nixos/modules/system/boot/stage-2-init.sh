@@ -131,10 +131,10 @@ if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
     cat /etc/resolv.conf | resolvconf -m 1000 -a host
 fi
 
-# Create /var/permissions-wrappers as a tmpfs.
-rm -rf /var/permissions-wrappers
-mkdir -m 0755 -p /var/permissions-wrappers
-mount -t tmpfs -o "mode=0755" tmpfs /var/permissions-wrappers
+# Create /run/wrappers as a tmpfs.
+rm -rf /run/wrappers
+mkdir -m 0755 -p /run/wrappers
+mount -t tmpfs -o "mode=0755" tmpfs /run/wrappers
 
 # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
 # Only at this point are all the necessary prerequisites ready for these commands.

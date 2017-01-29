@@ -81,22 +81,7 @@ in
         ${cfg.extraConfig}
       '';
 
-    security.permissionsWrappers.setuid =
-     [
-       { program = "sudo";
-         source  = "${pkgs.sudo.out}/bin/sudo";
-         owner   = "root";
-         group   = "root";
-         setuid  = true;
-       }
-
-       { program = "sudoedit";
-         source  = "${pkgs.sudo.out}/bin/sudoedit";
-         owner   = "root";
-         group   = "root";
-         setuid  = true;
-       }
-    ];
+    security.setuidPrograms = [ "sudo" "sudoedit" ];
 
     environment.systemPackages = [ sudo ];
 

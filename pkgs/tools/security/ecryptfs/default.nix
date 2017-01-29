@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: replace wrapperDir below with from <nixos> config.security.wrapperDir;
-  wrapperDir = "/var/permissions-wrappers";
+  wrapperDir = "/run/wrappers";
 
   postPatch = ''
     FILES="$(grep -r '/bin/sh' src/utils -l; find src -name \*.c)"

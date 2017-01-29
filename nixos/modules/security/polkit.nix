@@ -83,22 +83,8 @@ in
 
     security.pam.services.polkit-1 = {};
 
-    security.permissionsWrappers.setuid = 
-      [
-        { program = "pkexec";
-          source  = "${pkgs.polkit.out}/bin/pkexec";
-          owner   = "root";
-          group   = "root";
-          setuid  = true;
-        }
-
-        { program = "polkit-agent-helper-1";
-          owner = "root";
-          group = "root";
-          setuid = true;
-          source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
-        }
-      ];
+    security.setuidPrograms = [ "pkexec" ];
+    security.wrappers."polkit-agent-helper-1".source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
 
     system.activationScripts.polkit =
       ''

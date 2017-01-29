@@ -113,7 +113,7 @@
   ./security/prey.nix
   ./security/rngd.nix
   ./security/rtkit.nix
-  ./security/permissions-wrappers
+  ./security/wrappers
   ./security/sudo.nix
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix

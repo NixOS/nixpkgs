@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/var/permissions-wrappers/sendmail" }:
+{ fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/run/wrappers/sendmail" }:
 
 stdenv.mkDerivation {
   name = "at-3.1.16";

@@ -21,13 +21,6 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.light ];
-
-    security.permissionsWrappers.setuid =
-    [ { program = "light";
-        source  = "${pkgs.light.out}/bin/light";
-        owner   = "root";
-        group   = "root";
-        setuid  = true;        
-    }];
+    security.setuidPrograms = [ "light" ];
   };
 }

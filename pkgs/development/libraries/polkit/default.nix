@@ -5,7 +5,7 @@
 let
 
   system = "/var/run/current-system/sw";
-  setuid = "/var/permissions-wrappers"; #TODO: from <nixos> config.security.wrapperDir;
+  setuid = "/run/wrappers"; #TODO: from <nixos> config.security.wrapperDir;
 
   foolVars = {
     SYSCONF = "/etc";

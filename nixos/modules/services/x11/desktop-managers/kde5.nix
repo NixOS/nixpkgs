@@ -68,7 +68,7 @@ in
         '';
       };
 
-      security.permissionsWrappers.setuid = [
+      security.wrappers.setuid = [
         {
           program = "kcheckpass";
           source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";

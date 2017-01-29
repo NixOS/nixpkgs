@@ -33,22 +33,7 @@ in
   config = mkIf (cfg.enable || anyUsbAuth) {
 
     # Make sure pmount and pumount are setuid wrapped.
-    security.permissionsWrappers.setuid =
-      [
-        { program = "pmount";
-          source  = "${pkgs.pmount.out}/bin/pmount";
-          owner   = "root";
-          group   = "root";
-          setuid  = true;
-        }
-
-        { program = "pumount";
-          source  = "${pkgs.pmount.out}/bin/pumount";
-          owner   = "root";
-          group   = "root";
-          setuid  = true;
-        }
-      ];
+    security.setuidPrograms = [ "pmount" "pumount" ];
 
     environment.systemPackages = [ pkgs.pmount ];
 

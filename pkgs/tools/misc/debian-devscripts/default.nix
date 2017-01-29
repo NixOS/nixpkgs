@@ -2,7 +2,7 @@
 , FileDesktopEntry, libxslt, docbook_xsl, makeWrapper
 , python3Packages
 , perlPackages, curl, gnupg, diffutils
-, sendmailPath ? "/var/permissions-wrappers/sendmail"
+, sendmailPath ? "/run/wrappers/sendmail"
 }:
 
 let

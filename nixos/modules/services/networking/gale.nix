@@ -141,7 +141,7 @@ in
          setgid = false;
        };
 
-       security.permissionsWrappers.setuid = [ cfg.setuidWrapper ];
+       security.wrappers.setuid = [ cfg.setuidWrapper ];
 
        systemd.services.gale-galed = {
          description = "Gale messaging daemon";

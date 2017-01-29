@@ -68,7 +68,7 @@ in
     boot.extraModulePackages = [ kernelModules ];
     environment.systemPackages = [ virtualbox ];
 
-    security.permissionsWrappers.setuid = let
+    security.wrappers.setuid = let
       mkSuid = program: {
         inherit program;
         source = "${virtualbox}/libexec/virtualbox/${program}";
@@ -99,7 +99,7 @@ in
         SUBSYSTEM=="usb", ACTION=="remove", ENV{DEVTYPE}=="usb_device", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh --remove $major $minor"
       '';
 
-    # Since we lack the right setuid binaries, set up a host-only network by default.
+    # Since we lack the right setuid/setcap binaries, set up a host-only network by default.
   } (mkIf cfg.addNetworkInterface {
     systemd.services."vboxnet0" =
       { description = "VirtualBox vboxnet0 Interface";

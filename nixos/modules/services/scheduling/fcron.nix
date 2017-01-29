@@ -96,7 +96,7 @@ in
             fcronallow  =       /etc/fcron.allow
             fcrondeny   =       /etc/fcron.deny
             shell       =       /bin/sh
-            sendmail    =       /var/permissions-wrappers/sendmail
+            sendmail    =       /run/wrappers/sendmail
             editor      =       /run/current-system/sw/bin/vi
           '';
           target = "fcron.conf";
@@ -106,16 +106,7 @@ in
 
     environment.systemPackages = [ pkgs.fcron ];
 
-    security.permissionsWrappers.setuid =
-    [
-      { program = "fcrontab";
-        source  = "${pkgs.fcron.out}/bin/fcrontab";
-        owner   = "root";
-        group   = "root";
-        setuid  = true;        
-      }
-    ];
-
+    security.setuidPrograms = [ "fcrontab" ];
     systemd.services.fcron = {
       description = "fcron daemon";
       after = [ "local-fs.target" ];

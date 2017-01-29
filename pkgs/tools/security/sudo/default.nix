@@ -1,5 +1,5 @@
 { stdenv, fetchurl, coreutils, pam, groff
-, sendmailPath ? "/var/permissions-wrappers/sendmail"
+, sendmailPath ? "/run/wrappers/sendmail"
 , withInsults ? false
 }:
 

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let  
-     cfg = config.security.permissionsWrappers;
+     cfg = config.security.wrappers;
 
      # Produce a shell-code splice intended to be stitched into one of
      # the build or install phases within the derivation.
@@ -12,7 +12,7 @@ let
          source=/nix/var/nix/profiles/default/bin/${program}
        fi
 
-       gcc -Wall -O2 -DWRAPPER_SETCAP=1 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.run-permissionsWrapperDir}\" \
+       gcc -Wall -O2 -DWRAPPER_SETCAP=1 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.run-wrapperDir}\" \
            -lcap-ng -lcap ${./permissions-wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
            -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
      '';
