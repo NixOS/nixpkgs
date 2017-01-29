@@ -43,6 +43,7 @@
 , coreutils
 , gnused
 , gnugrep
+, gnupg
 }:
 
 assert stdenv.isLinux;
@@ -173,7 +174,7 @@ stdenv.mkDerivation {
 
   passthru.ffmpegSupport = true;
   passthru.updateScript = import ./update.nix {
-    inherit name writeScript xidel coreutils gnused gnugrep curl;
+    inherit name writeScript xidel coreutils gnused gnugrep gnupg curl;
   };
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
