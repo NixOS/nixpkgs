@@ -11,7 +11,7 @@ let
       wrappers);
 
   mkWrapper = { program, source ? null, ...}: ''
-    if ! source=${if source != null then source else "$(readlink -f $(PATH=$WRAPPER_PATH type -tP ${program}))"}; then
+    if ! source=${if source != null || source != "" then source else "$(readlink -f $(PATH=$WRAPPER_PATH type -tP ${program}))"}; then
         # If we can't find the program, fall back to the
         # system profile.
         source=/nix/var/nix/profiles/default/bin/${program}
@@ -183,13 +183,16 @@ in
           # programs to be wrapped.
           WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
+          # Remove the old /var/setuid-wrappers path from the system...
           if [ -d ${config.security.old-wrapperDir} ]; then
             rm -rf ${config.security.old-wrapperDir}
           fi
 
+          # Get the "/run/wrappers" path, we want to place the tmpdirs
+          # for the wrappers there
           parentWrapperDir="$(dirname ${wrapperDir})"
 
-          mkdir -p ${wrapperDir}
+          mkdir -p "$parentWrapperDir"
           wrapperDir=$(mktemp --directory --tmpdir="$parentWrapperDir" wrappers.XXXXXXXXXX)
           chmod a+rx $wrapperDir
 
@@ -198,7 +201,7 @@ in
           if [ -L ${wrapperDir} ]; then
             # Atomically replace the symlink
             # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-            old=$(readlink ${wrapperDir})
+            old=$(readlink -f ${wrapperDir})
             ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
             mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
             rm --force --recursive $old
