@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib, protobuf, ncurses, pkgconfig, IOTty
-, makeWrapper, perl, openssl, autoreconfHook, fetchpatch }:
+, makeWrapper, perl, openssl, autoreconfHook, openssh }:
 
 stdenv.mkDerivation rec {
   name = "mosh-1.2.6";
@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ autoreconfHook protobuf ncurses zlib pkgconfig IOTty makeWrapper perl openssl ];
+
+  patches = [ ./ssh_path.patch ];
+  postPatch = ''
+    substituteInPlace scripts/mosh.pl \
+        --subst-var-by ssh "${openssh}/bin/ssh"
+  '';
 
   postInstall = ''
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
