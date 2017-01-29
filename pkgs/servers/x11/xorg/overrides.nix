@@ -393,10 +393,11 @@ in
   };
 
   xorgserver = with xorg; attrs_passed:
-    # exchange attrs if fglrxCompat is set
+    # exchange attrs if abiCompat is set
     let
-      attrs = if !args.fglrxCompat then attrs_passed else
-        with args; {
+      attrs = with args;
+        if (args.abiCompat == null) then attrs_passed
+        else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
           src = fetchurl {
@@ -405,7 +406,16 @@ in
           };
           buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
           meta.platforms = stdenv.lib.platforms.unix;
-        };
+        } else if (args.abiCompat == "1.18") then {
+            name = "xorg-server-1.18.4";
+            builder = ./builder.sh;
+            src = fetchurl {
+              url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
+              sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
+            };
+            buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+            meta.platforms = stdenv.lib.platforms.unix;
+        } else throw "unsupported xorg abiCompat: ${args.abiCompat}";
 
     in attrs //
     (let

@@ -21,6 +21,8 @@ in
 
   config = mkIf enabled {
 
+    nixpkgs.config.xorg.abiCompat = "1.18";
+
     services.xserver.drivers = singleton
       { name = "amdgpu"; modules = [ package ]; libPath = [ package ]; };
 
