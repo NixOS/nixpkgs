@@ -146,6 +146,8 @@ in stdenv.mkDerivation {
             fi
         fi
     done
+
+    paxmark m $out/${appdir}/dropbox
   '';
 
   meta = {
