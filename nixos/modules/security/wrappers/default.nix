@@ -3,17 +3,27 @@ let
 
   inherit (config.security) wrapperDir;
 
-  isNotNull = v: if v != null || v != "" then true else false;
+  wrappers  = config.security.wrappers;
+  mkWrapper = { program, source ? null, ...}: ''
+    if ! source=${if source != null then source else "$(readlink -f $(PATH=$WRAPPER_PATH type -tP ${program}))"}; then
+        # If we can't find the program, fall back to the
+        # system profile.
+        source=/nix/var/nix/profiles/default/bin/${program}
+    fi
 
-  cfg = config.security.wrappers;
+    gcc -Wall -O2 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.wrapperDir}\" \
+        -lcap-ng -lcap ${./permissions-wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
+        -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
+  '';
 
-  setcapWrappers = import ./setcap-wrapper-drv.nix {
-    inherit config lib pkgs;
-  };
-
-  setuidWrappers = import ./setuid-wrapper-drv.nix {
-    inherit config lib pkgs;
-  };
+  wrappedPrograms = pkgs.stdenv.mkDerivation {
+    name         = "permissions-wrapper";
+    unpackPhase  = "true";
+    installPhase = ''
+      mkdir -p $out/bin
+      ${lib.concatMapStrings mkWrapper wrappers}
+    '';
+  }
 
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
@@ -23,8 +33,10 @@ let
     , owner  ? "nobody"
     , group  ? "nogroup"
     ...
-    }: ''
-      cp ${setcapWrappers}/bin/${program}.wrapper $wrapperDir/${program}
+    }: 
+    assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
+    ''
+      cp ${wrappedPrograms}/bin/${program}.wrapper $wrapperDir/${program}
 
       # Prevent races
       chmod 0000 $wrapperDir/${program}
@@ -33,9 +45,6 @@ let
       # Set desired capabilities on the file plus cap_setpcap so
       # the wrapper program can elevate the capabilities set on
       # its file into the Ambient set.
-      #
-      # Only set the capabilities though if we're being told to
-      # do so.
       ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" $wrapperDir/${program}
 
       # Set the executable bit
@@ -53,7 +62,7 @@ let
     , permissions ? "u+rx,g+x,o+x"
     ...
     }: ''
-      cp ${setuidWrappers}/bin/${program}.wrapper $wrapperDir/${program}
+      cp ${wrappedPrograms}/bin/${program}.wrapper $wrapperDir/${program}
 
       # Prevent races
       chmod 0000 $wrapperDir/${program}
@@ -147,10 +156,10 @@ in
 
   ###### implementation
   config = {
-    # Make sure our setcap-wrapper dir exports to the PATH env
-    # variable when initializing the shell
+    # Make sure our wrapperDir exports to the PATH env variable when
+    # initializing the shell
     environment.extraInit = ''
-      # The permissions wrappers override other bin directories.
+      # Wrappers override other bin directories.
       export PATH="${wrapperDir}:$PATH"
     '';
 
@@ -162,16 +171,17 @@ in
             config.security.setuidPrograms)
             ++ lib.mapAttrsToList
                  (n: v: (if v ? "program" then v else v // {program=n;}))
-                 cfg.wrappers;
+                 wrappers;
 
-        wrapperPrograms =
+        mkWrappedPrograms =
           builtins.map
-            (s: if (s ? "setuid"  && s.setuid  == true) ||
+            (s: if (s ? "capabilities")
+                then mkSetcapProgram s
+                else if 
+                   (s ? "setuid"  && s.setuid  == true) ||
                    (s ? "setguid" && s.setguid == true) ||
                    (s ? "permissions")
                 then mkSetuidProgram s
-                else if (s ? "capabilities")
-                then mkSetcapProgram s
                 else ""
             ) programs;
 
@@ -185,7 +195,7 @@ in
           wrapperDir=$(mktemp --directory --tmpdir=${wrapperDir} wrappers.XXXXXXXXXX)
           chmod a+rx $wrapperDir
 
-          ${lib.concatStringsSep "\n" (builtins.filter isNotNull cfg.wrappers)}
+          ${lib.concatStringsSep "\n" mkWrappedPrograms}
         '';
   };
 }

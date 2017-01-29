@@ -26,16 +26,6 @@ extern char **environ;
 static char * sourceProg = SOURCE_PROG;
 static char * wrapperDir = WRAPPER_DIR;
 
-// Make sure we have the WRAPPER_TYPE macro specified at compile
-// time...
-#ifdef WRAPPER_SETCAP
-static char * wrapperType = "setcap";
-#elif defined WRAPPER_SETUID
-static char * wrapperType = "setuid";
-#else
-#error "Program must be compiled with either the WRAPPER_SETCAP or WRAPPER_SETUID macro"
-#endif
-
 // Update the capabilities of the running process to include the given
 // capability in the Ambient set.
 static void set_ambient_cap(cap_value_t cap)
@@ -66,7 +56,7 @@ static int make_caps_ambient(const char *selfPath)
 
     if(!caps)
     {
-        fprintf(stderr, "could not retreive the capability set for this file\n");
+        fprintf(stderr, "no caps set or could not retrieve the caps for this file, not doing anything...\n");
         return 1;
     }
 
@@ -171,6 +161,16 @@ int main(int argc, char * * argv)
 
     assert(selfPathSize > 0);
 
+    // Assert we have room for the zero byte, this ensures the path
+    // isn't being truncated because it's too big for the buffer.
+    //
+    // A better way to handle this might be to use something like the
+    // whereami library (https://github.com/gpakosz/whereami) or a
+    // loop that resizes the buffer and re-reads the link if the
+    // contents are being truncated.
+    assert(selfPathSize < sizeof(selfPath));
+
+    // Set the zero byte since readlink doesn't do that for us.
     selfPath[selfPathSize] = '\0';
 
     // Make sure that we are being executed from the right location,
@@ -207,8 +207,7 @@ int main(int argc, char * * argv)
     // Read the capabilities set on the file and raise them in to the
     // Ambient set so the program we're wrapping receives the
     // capabilities too!
-    if (strcmp(wrapperType, "setcap") == 0)
-        assert(!make_caps_ambient(selfPath));
+    make_caps_ambient(selfPath);
 
     execve(sourceProg, argv, environ);
     
