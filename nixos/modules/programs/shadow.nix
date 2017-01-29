@@ -106,10 +106,10 @@ in
       chfn.source      = "${pkgs.shadow.out}/bin/chfn";
       newuidmap.source = "${pkgs.shadow.out}/bin/newuidmap";
       newgidmap.source = "${pkgs.shadow.out}/bin/newgidmap";
-    } // (lib.mkIf config.users.mutableUsers {
+    } // (if config.users.mutableUsers then {
       passwd.source    = "${pkgs.shadow.out}/bin/passwd";
       sg.source        = "${pkgs.shadow.out}/bin/sg";
       newgrp.source    = "${pkgs.shadow.out}/bin/newgrp";
-    });
+    } else {});
   };
 }

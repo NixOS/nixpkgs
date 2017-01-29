@@ -152,6 +152,9 @@ in
 
   ###### implementation
   config = {
+
+    security.wrappers.fusermount.source = "${pkgs.fuse}/bin/fusermount";
+
     # Make sure our wrapperDir exports to the PATH env variable when
     # initializing the shell
     environment.extraInit = ''
