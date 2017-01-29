@@ -77,7 +77,7 @@ in
 
   options = {
     security.setuidPrograms = lib.mkOption {
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = ["passwd"];
       description = ''
