@@ -70,7 +70,7 @@ in
       etc."exim.conf".text = ''
         exim_user = ${cfg.user}
         exim_group = ${cfg.group}
-        exim_path = /run/wrappers/exim
+        exim_path = /run/wrappers/bin/exim
         spool_directory = ${cfg.spoolDir}
         ${cfg.config}
       '';

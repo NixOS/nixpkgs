@@ -69,12 +69,12 @@ in
     environment.systemPackages = [ virtualbox ];
 
     security.wrappers = let
-      mkSuid = program: "${program}" = {
+      mkSuid = program: {"${program}" = {
         source = "${virtualbox}/libexec/virtualbox/${program}";
         owner = "root";
         group = "vboxusers";
         setuid = true;
-      };
+      };};
     in mkIf cfg.enableHardening (map mkSuid [
       "VBoxHeadless"
       "VBoxNetAdpCtl"

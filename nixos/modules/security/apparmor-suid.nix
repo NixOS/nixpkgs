@@ -19,7 +19,7 @@ with lib;
   config = mkIf (cfg.confineSUIDApplications) {
     security.apparmor.profiles = [ (pkgs.writeText "ping" ''
       #include <tunables/global>
-      /run/wrappers/ping {
+      /run/wrappers/bin/ping {
         #include <abstractions/base>
         #include <abstractions/consoles>
         #include <abstractions/nameservice>
@@ -33,7 +33,6 @@ with lib;
         ${pkgs.attr.out}/lib/libattr.so* mr,
 
         ${pkgs.iputils}/bin/ping mixr,
-        /run/wrappers/ping.real r,
 
         #/etc/modules.conf r,
 

@@ -17,7 +17,9 @@ let
         source=/nix/var/nix/profiles/default/bin/${program}
     fi
 
-    gcc -Wall -O2 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"${config.security.wrapperDir}\" \
+    parentWrapperDir=$(dirname ${wrapperDir})
+
+    gcc -Wall -O2 -DSOURCE_PROG=\"$source\" -DWRAPPER_DIR=\"$parentWrapperDir\" \
         -lcap-ng -lcap ${./wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
         -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
   '';
@@ -155,7 +157,7 @@ in
 
     security.wrapperDir = lib.mkOption {
       type        = lib.types.path;
-      default     = "/run/wrappers";
+      default     = "/run/wrappers/bin";
       internal    = true;
       description = ''
         This option defines the path to the wrapper programs. It
@@ -181,11 +183,36 @@ in
           # programs to be wrapped.
           WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
+          if [ -d ${config.security.old-wrapperDir} ]; then
+            rm -rf ${config.security.old-wrapperDir}
+          fi
+
+          parentWrapperDir="$(dirname ${wrapperDir})"
+
           mkdir -p ${wrapperDir}
-          wrapperDir=$(mktemp --directory --tmpdir=${wrapperDir} wrappers.XXXXXXXXXX)
+          wrapperDir=$(mktemp --directory --tmpdir="$parentWrapperDir" wrappers.XXXXXXXXXX)
           chmod a+rx $wrapperDir
 
           ${lib.concatStringsSep "\n" mkWrappedPrograms}
+
+          if [ -L ${wrapperDir} ]; then
+            # Atomically replace the symlink
+            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+            old=$(readlink ${wrapperDir})
+            ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
+            mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
+            rm --force --recursive $old
+          elif [ -d ${wrapperDir} ]; then
+            # Compatibility with old state, just remove the folder and symlink
+            rm -f ${wrapperDir}/*
+            # if it happens to be a tmpfs
+            ${pkgs.utillinux}/bin/umount ${wrapperDir} || true
+            rm -d ${wrapperDir}
+            ln -d --symbolic $wrapperDir ${wrapperDir}
+          else
+            # For initial setup
+            ln --symbolic $wrapperDir ${wrapperDir}
+          fi
         '';
   };
 }

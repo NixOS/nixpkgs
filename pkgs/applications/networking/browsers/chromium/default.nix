@@ -83,9 +83,9 @@ in stdenv.mkDerivation {
     ed -v -s "$out/bin/chromium" << EOF
     2i
 
-    if [ -x "/run/wrappers/${sandboxExecutableName}" ]
+    if [ -x "/run/wrappers/bin/${sandboxExecutableName}" ]
     then
-      export CHROME_DEVEL_SANDBOX="/run/wrappers/${sandboxExecutableName}"
+      export CHROME_DEVEL_SANDBOX="/run/wrappers/bin/${sandboxExecutableName}"
     else
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi

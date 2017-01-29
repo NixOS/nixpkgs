@@ -124,7 +124,7 @@ in
           };
 
           mailer = mkOption {
-            default = "/run/wrappers/sendmail";
+            default = "/run/wrappers/bin/sendmail";
             type = types.path;
             description = ''
               Sendmail-compatible binary to be used to send the messages.
