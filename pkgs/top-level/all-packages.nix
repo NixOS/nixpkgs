@@ -17428,6 +17428,10 @@ with pkgs;
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
+  flam3 = callPackage ../tools/graphics/flam3 { };
+
+  glee = callPackage ../tools/graphics/glee { };
+
   fakenes = callPackage ../misc/emulators/fakenes { };
 
   faust = self.faust2;
