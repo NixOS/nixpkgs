@@ -12250,6 +12250,8 @@ with pkgs;
 
   hasklig = callPackage ../data/fonts/hasklig {};
 
+  siji = callPackage ../data/fonts/siji { };
+
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
 
   source-code-pro = callPackage ../data/fonts/source-code-pro {};
