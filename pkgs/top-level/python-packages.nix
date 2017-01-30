@@ -14212,8 +14212,6 @@ in {
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
-    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa Foundation CoreData;
-    inherit (pkgs.darwin) cf-private libobjc;
   };
 
 
