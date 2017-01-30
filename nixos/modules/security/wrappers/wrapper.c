@@ -26,6 +26,9 @@ extern char **environ;
 static char * sourceProg = SOURCE_PROG;
 static char * wrapperDir = WRAPPER_DIR;
 
+// Wrapper debug variable name
+static char * wrapperDebug = "WRAPPER_DEBUG";
+
 // Update the capabilities of the running process to include the given
 // capability in the Ambient set.
 static void set_ambient_cap(cap_value_t cap)
@@ -34,7 +37,7 @@ static void set_ambient_cap(cap_value_t cap)
 
     if (capng_update(CAPNG_ADD, CAPNG_INHERITABLE, (unsigned long) cap))
     {
-        printf("cannot raise the capability into the Inheritable set\n");
+        perror("cannot raise the capability into the Inheritable set\n");
         exit(1);
     }
 
@@ -56,7 +59,9 @@ static int make_caps_ambient(const char *selfPath)
 
     if(!caps)
     {
-        fprintf(stderr, "no caps set or could not retrieve the caps for this file, not doing anything...\n");
+        if(getenv(wrapperDebug))
+            fprintf(stderr, "no caps set or could not retrieve the caps for this file, not doing anything...");
+
         return 1;
     }
 
@@ -127,23 +132,27 @@ static int make_caps_ambient(const char *selfPath)
       cap_value_t capnum;
       if (cap_from_name(tok, &capnum))
       {
-          fprintf(stderr, "cap_from_name failed, skipping: %s\n", tok);
+          if(getenv(wrapperDebug))
+              fprintf(stderr, "cap_from_name failed, skipping: %s", tok);
       }
       else if (capnum == CAP_SETPCAP)
       {
-        // Check for the cap_setpcap capability, we set this on the
-        // wrapper so it can elevate the capabilities to the Ambient
-        // set but we do not want to propagate it down into the
-        // wrapped program.
-        //
-        // TODO: what happens if that's the behavior you want
-        // though???? I'm preferring a strict vs. loose policy here.
-        fprintf(stderr, "cap_setpcap in set, skipping it\n");
+          // Check for the cap_setpcap capability, we set this on the
+          // wrapper so it can elevate the capabilities to the Ambient
+          // set but we do not want to propagate it down into the
+          // wrapped program.
+          //
+          // TODO: what happens if that's the behavior you want
+          // though???? I'm preferring a strict vs. loose policy here.
+          if(getenv(wrapperDebug))
+              fprintf(stderr, "cap_setpcap in set, skipping it\n");
       }
       else
       {
-        set_ambient_cap(capnum);
-        printf("raised %s into the Ambient capability set\n", tok);
+          set_ambient_cap(capnum);
+
+          if(getenv(wrapperDebug))
+              fprintf(stderr, "raised %s into the Ambient capability set\n", tok);
       }
     }
     cap_free(capstr);
