@@ -49,7 +49,7 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.arbtt = {
       description = "arbtt statistics capture service";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "default.target" ];
 
       serviceConfig = {
         Type = "simple";

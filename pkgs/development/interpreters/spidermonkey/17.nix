@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     sed -i 's/(defined\((@TEMPLATE_FILE)\))/\1/' config/milestone.pl
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
     patch -p1 -d ../.. < ${./aarch64-double-conversion.patch}
+    patch -p1 -d ../.. < ${./aarch64-48bit-va-fix.patch}
   '';
 
   preConfigure = ''

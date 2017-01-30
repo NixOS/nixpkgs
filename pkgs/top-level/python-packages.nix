@@ -3928,11 +3928,11 @@ in {
 
   cloudpickle = buildPythonPackage rec {
     name = "cloudpickle-${version}";
-    version = "0.2.1";
+    version = "0.2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cloudpickle/${name}.tar.gz";
-      sha256 = "0fsw28nmzrpk0g02y84d7pigkqr64a3x2jhhkfixplxfwravd97f";
+      sha256 = "0x4fbycipkhfax7lydaxcnc14g42g274qba17j51shr5gbq6m8lx";
     };
 
     buildInputs = with self; [ pytest mock ];
@@ -5466,11 +5466,11 @@ in {
 
   dask = buildPythonPackage rec {
     name = "dask-${version}";
-    version = "0.11.0";
+    version = "0.13.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dask/${name}.tar.gz";
-      sha256 = "ef32490c0b156584a71576dccec4dfe550a0cd81a9c131a4ee2e43c241b601c3";
+      sha256 = "1f8r6jj9666cnvx3f8bilcx0017smmlw4i4v2p1nwxshs0k514hs";
     };
 
     buildInputs = with self; [ pytest ];
@@ -5529,13 +5529,14 @@ in {
   zict = buildPythonPackage rec {
 
     name = "zict-${version}";
-    version = "0.0.3";
+    version = "0.1.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zict/${name}.tar.gz";
-      sha256 = "1xsrlzrih0qmxvxqhk2c5vhzxirf509fppzdfyardl50jpsllni6";
+      sha256 = "12h95vbkbar1hc6cr1kpr6zr486grj3mpx4lznvmnai0iy6pbqp4";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ heapdict ];
 
     meta = {
@@ -5549,17 +5550,17 @@ in {
   distributed = buildPythonPackage rec {
 
     name = "distributed-${version}";
-    version = "1.13.3";
+    version = "1.15.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/distributed/${name}.tar.gz";
-      sha256 = "0nka6hqz986j1fhvfmxffgvmnxh66giq9a3ml58jsaf0riq9mjrc";
+      sha256 = "037a07sdf2ch1d360nqwqz3b4ld8msydng7mw4i5s902v7xr05l6";
     };
 
     buildInputs = with self; [ pytest docutils ];
     propagatedBuildInputs = with self; [
       dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
-      psutil botocore zict lz4
+      psutil botocore zict lz4 sortedcollections sortedcontainers
     ] ++ (if !isPy3k then [ singledispatch ] else []);
 
     # py.test not picking up local config file, even when running
@@ -5660,11 +5661,11 @@ in {
 
   s3fs = buildPythonPackage rec {
     name = "s3fs-${version}";
-    version = "0.0.4";
+    version = "0.0.8";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/s3fs/${name}.tar.gz";
-      sha256 = "0gxs9zf0j97liby038i89k5njfrpvdgw0jw34ghzvlp1nzbwxwzl";
+      sha256 = "0zbdzqrim0zig94fk1hswg4vfdjplw6jpx3pdi42qc830h0nscn8";
     };
 
     buildInputs = with self; [ docutils ];
@@ -14790,6 +14791,26 @@ in {
     };
   };
 
+  sortedcollections = buildPythonPackage rec {
+    name = "sortedcollections-${version}";
+    version = "0.4.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sortedcollections/${name}.tar.gz";
+      sha256 = "12dlzln9gyv8smsy2k6d6dmr0ywrpwyrr1cjy649ia5h1g7xdvwa";
+    };
+    buildInputs = [ self.sortedcontainers ];
+
+    # wants to test all python versions with tox:
+    doCheck = false;
+
+    meta = {
+      description = "Python Sorted Collections";
+      homepage = http://www.grantjenks.com/docs/sortedcollections/;
+      license = licenses.asl20;
+    };
+  };
+
   hyperframe = buildPythonPackage rec {
     name = "hyperframe-${version}";
     version = "4.0.1";
@@ -18294,11 +18315,11 @@ in {
 
   partd = buildPythonPackage rec {
     name = "partd-${version}";
-    version = "0.3.6";
+    version = "0.3.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/partd/${name}.tar.gz";
-      sha256 = "1wl8kifdljnpbz0ls7mbbc9j23fc5xzm639im7h88spyg02w68hm";
+      sha256 = "066d254d2dh9xcanffgkjgwxpz5v0059b063bij10fvzl2y49hzx";
     };
 
     buildInputs = with self; [ pytest ];
@@ -25912,16 +25933,18 @@ in {
 
   toolz = buildPythonPackage rec{
     name = "toolz-${version}";
-    version = "0.8.0";
+    version = "0.8.2";
 
     src = pkgs.fetchurl{
       url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
+      sha256 = "0l3czks4xy37i8099waxk2fdz5g0k1dwys2mkhlxc0b0886cj4sa";
     };
 
     buildInputs = with self; [ nose ];
 
     checkPhase = ''
+      # https://github.com/pytoolz/toolz/issues/357
+      rm toolz/tests/test_serialization.py
       nosetests toolz/tests
     '';
 

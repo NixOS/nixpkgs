@@ -7,13 +7,13 @@ in
 assert xor (openssl != null) (gnutls != null);
 
 stdenv.mkDerivation rec {
-  name = "openconnect-7.06";
+  name = "openconnect-7.08";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.infradead.org/pub/openconnect/${name}.tar.gz"
     ];
-    sha256 = "1wkhmgfxkdkhy2p9w9idrgipxmxij2z4f88flfk3fifwd19nkkzs";
+    sha256 = "00wacb79l2c45f94gxs63b9z25wlciarasvjrb8jb8566wgyqi0w";
   };
 
   preConfigure = ''
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ vpnc openssl gnutls libxml2 zlib ];
 
   meta = {
+    description = "VPN Client for Cisco's AnyConnect SSL VPN";
+    homepage = http://www.infradead.org/openconnect/;
+    license = stdenv.lib.licenses.lgpl21;
+    maintainers = with stdenv.lib.maintainers; [ pradeepchhetri ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

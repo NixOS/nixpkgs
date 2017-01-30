@@ -3105,6 +3105,8 @@ with pkgs;
 
   numlockx = callPackage ../tools/X11/numlockx { };
 
+  nuttcp = callPackage ../tools/networking/nuttcp { };
+
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
   nwdiag = pythonPackages.nwdiag;
@@ -4233,11 +4235,11 @@ with pkgs;
 
   openconnect = openconnect_gnutls;
 
-  openconnect_openssl = callPackage ../tools/networking/openconnect.nix {
+  openconnect_openssl = callPackage ../tools/networking/openconnect {
     gnutls = null;
   };
 
-  openconnect_gnutls = callPackage ../tools/networking/openconnect.nix {
+  openconnect_gnutls = callPackage ../tools/networking/openconnect {
     openssl = null;
   };
 
@@ -11149,6 +11151,8 @@ with pkgs;
   kbdlight = callPackage ../os-specific/linux/kbdlight { };
 
   kmscon = callPackage ../os-specific/linux/kmscon { };
+
+  kmscube = callPackage ../os-specific/linux/kmscube { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 

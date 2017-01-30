@@ -146,6 +146,8 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
+    dolmen =  callPackage ../development/ocaml-modules/dolmen { };
+
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };

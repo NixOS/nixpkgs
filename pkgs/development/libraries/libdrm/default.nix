@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ "--enable-freedreno" "--disable-valgrind" ]
+  configureFlags = [ "--disable-valgrind" ]
+    ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64) [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
