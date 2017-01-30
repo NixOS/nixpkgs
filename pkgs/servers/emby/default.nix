@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "emby-${version}";
-  version = "3.1.2";
+  version = "3.1.5";
 
   src = fetchurl {
     url = "https://github.com/MediaBrowser/Emby/releases/download/${version}/Emby.Mono.zip";
-    sha256 = "14v8bnidakcxcric8sqvwd5bzwa0lk0nyiwkx1by2x2ipj0r9rk3";
+    sha256 = "0s0m456rxdrj58zbaby6mdgc1ndc3zx2c07n94hn3hdlgralgwaa";
   };
 
   buildInputs = with pkgs; [
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   buildPhase = ''
-    substituteInPlace System.Data.SQLite.dll.config --replace libsqlite3.so ${sqlite.out}/lib/libsqlite3.so
-    cp System.Data.SQLite.dll.config SQLitePCLRaw.provider.sqlite3.dll.config
+    substituteInPlace SQLitePCLRaw.provider.sqlite3.dll.config --replace libsqlite3.so ${sqlite.out}/lib/libsqlite3.so
     substituteInPlace MediaBrowser.Server.Mono.exe.config --replace ProgramData-Server "/var/lib/emby/ProgramData-Server"
   '';
 
