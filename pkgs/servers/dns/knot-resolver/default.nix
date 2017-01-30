@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, utillinux, vimNox, which
+{ stdenv, fetchurl, pkgconfig, utillinux, hexdump, which
 , knot-dns, luajit, libuv, lmdb
 , cmocka, systemd, hiredis, libmemcached
 , gnutls, nettle
@@ -21,8 +21,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ":";
 
-  nativeBuildInputs = [ pkgconfig which makeWrapper ]
-    ++ [(if stdenv.isLinux then utillinux.bin/*hexdump*/ else vimNox/*xxd*/)];
+  nativeBuildInputs = [ pkgconfig which makeWrapper hexdump ];
 
   buildInputs = [ knot-dns luajit libuv gnutls ]
     # TODO: lmdb needs lmdb.pc; embedded for now
