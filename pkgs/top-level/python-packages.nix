@@ -12548,41 +12548,7 @@ in {
     propagatedBuildInputs = with self; [ requests2 ];
   };
 
-  hypothesis = buildPythonPackage rec {
-    # http://hypothesis.readthedocs.org/en/latest/packaging.html
-
-    # Hypothesis has optional dependencies on the following libraries
-    # pytz fake_factory django numpy pytest
-    # If you need these, you can just add them to your environment.
-
-    name = "hypothesis-${version}";
-    version = "3.5.2";
-
-    # Upstream prefers github tarballs
-    src = pkgs.fetchFromGitHub {
-      owner = "HypothesisWorks";
-      repo = "hypothesis";
-      rev = "${version}";
-      sha256 = "030rf4gn4b0hylr90wazilwa3bc038fcqng0wibcx67mqaq035n4";
-    };
-
-    buildInputs = with self; [ flake8 pytest flaky ];
-    propagatedBuildInputs = with self; ([ uncompyle6 ] ++ optionals isPy27 [ enum34  ]);
-
-    # Fails randomly in tests/cover/test_conjecture_engine.py::test_interleaving_engines.
-    doCheck = false;
-
-    # https://github.com/DRMacIver/hypothesis/issues/300
-    checkPhase = ''
-      ${python.interpreter} -m pytest tests/cover
-    '';
-
-    meta = {
-      description = "A Python library for property based testing";
-      homepage = https://github.com/DRMacIver/hypothesis;
-      license = licenses.mpl20;
-    };
-  };
+  hypothesis = callPackage ../development/python-modules/hypothesis.nix { };
 
   colored = buildPythonPackage rec {
     name = "colored-${version}";
