@@ -1,15 +1,15 @@
 ---
 title: User's Guide for Vim in Nixpkgs
-author: Peter Simons
+author: Marc Weber
 date: 2016-06-25
 ---
 # User's Guide to Vim Plugins/Addons/Bundles/Scripts in Nixpkgs
 
 You'll get a vim(-your-suffix) in PATH also loading the plugins you want.
-Loading can be deferred, see example
+Loading can be deferred; see examples.
 
 VAM (=vim-addon-manager) and Pathogen plugin managers are supported.
-Vundle,NeoBundle could be your turn.
+Vundle, NeoBundle could be your turn.
 
 ## dependencies by Vim plugins
 
