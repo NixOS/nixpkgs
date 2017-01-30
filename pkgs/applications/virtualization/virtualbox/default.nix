@@ -18,11 +18,14 @@ let
   python = python2;
   buildType = "release";
 
-  inherit (importJSON ./upstream-info.json) version extpackRev extpack main;
+  extpack = "3982657fd4853bcbc79b9162e618545a479b65aca08e9ced43a904aeeba3ffa5";
+  extpackRev = 112026;
+  main = "98073b1b2adee4e6553df73cb5bb6ea8ed7c3a41a475757716fd9400393bea40";
+  version = "5.1.10";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRev}.vbox-extpack";
+    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${toString extpackRev}.vbox-extpack";
     sha256 = extpack;
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use

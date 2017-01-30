@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnutls, jansson, liburcu, lmdb, libcap_ng, libidn
-, systemd, nettle, libedit }:
+, systemd, nettle, libedit, zlib, libiconv
+}:
 
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
@@ -15,11 +16,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls jansson liburcu lmdb libidn
+    gnutls jansson liburcu libidn
     nettle libedit
+    libiconv
     # without sphinx &al. for developer documentation
   ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd ];
+    # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
+    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd lmdb ]
+    ++ stdenv.lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
 

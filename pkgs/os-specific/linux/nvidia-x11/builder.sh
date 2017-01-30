@@ -19,7 +19,7 @@ buildPhase() {
         sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
-        make SYSSRC=$sysSrc SYSOUT=$sysOut module
+        make SYSSRC=$sysSrc SYSOUT=$sysOut module -j$NIX_BUILD_JOBS
 
         cd ..
     fi
@@ -30,6 +30,9 @@ installPhase() {
     # Install libGL and friends.
     mkdir -p "$out/etc/OpenCL/vendors"
     cp -p nvidia.icd $out/etc/OpenCL/vendors/
+
+    mkdir -p "$out/share/vulkan/icd.d"
+    cp -p nvidia_icd.json "$out/share/vulkan/icd.d/"
 
     mkdir -p "$out/lib"
     cp -prd *.so.* tls "$out/lib/"
@@ -68,7 +71,7 @@ installPhase() {
         ln -srnf "$libname" "$libname_short"
       fi
 
-      if [[ $libname_short =~ libEGL.so || $libname_short =~ libEGL_nvidia.so ]]; then
+      if [[ $libname_short =~ libEGL.so || $libname_short =~ libEGL_nvidia.so || $libname_short =~ libGLX.so || $libname_short =~ libGLX_nvidia.so ]]; then
           major=0
       else
           major=1

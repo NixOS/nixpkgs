@@ -64,10 +64,7 @@ in
 
     security.setuidPrograms = [ "e_freqset" ];
 
-    environment.etc = singleton
-      { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-        target = "X11/xkb";
-      };
+    services.xserver.exportConfiguration = true;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 
