@@ -1,12 +1,15 @@
 { stdenv, fetchurl, kernel, writeScript, coreutils, gnugrep, jq, curl
 }:
 
-let
-  data = stdenv.lib.importJSON ./update.json;
-in stdenv.mkDerivation rec {
-  name = "tp_smapi-${data.version}-${kernel.version}";
+stdenv.mkDerivation rec {
+  name = "tp_smapi-${version}-${kernel.version}";
 
-  src = fetchurl  { inherit (data) url sha256; };
+  version = "0.42";
+
+  src = fetchurl {
+    url = "https://github.com/evgeni/tp_smapi/archive/tp-smapi/${version}.tar.gz";
+    sha256 = "cd28bf6ee21b2c27b88d947cb0bfcb19648c7daa5d350115403dbcad05849381";
+  };
 
   hardeningDisable = [ "pic" ];
 
