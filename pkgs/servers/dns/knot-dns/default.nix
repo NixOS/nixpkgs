@@ -15,11 +15,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls jansson liburcu lmdb libidn
+    gnutls jansson liburcu libidn
     nettle libedit
     # without sphinx &al. for developer documentation
   ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd ];
+    # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
+    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd lmdb ];
 
   enableParallelBuilding = true;
 
