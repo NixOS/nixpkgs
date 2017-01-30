@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnutls, jansson, liburcu, lmdb, libcap_ng, libidn
-, systemd, nettle, libedit, zlib
+, systemd, nettle, libedit, zlib, libiconv
 }:
 
 # Note: ATM only the libraries have been tested in nixpkgs.
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnutls jansson liburcu libidn
     nettle libedit
+    libiconv
     # without sphinx &al. for developer documentation
   ]
     # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
