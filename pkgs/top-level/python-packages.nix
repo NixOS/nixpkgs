@@ -419,8 +419,24 @@ in {
     };
   };
 
-  acme = buildPythonPackage rec {
-    inherit (pkgs.certbot) src version;
+  acme = self.acme_0_9;
+
+  acme_0_9 = buildPythonPackage rec {
+    inherit (pkgs.certbot_0_9) src version;
+
+    name = "acme-${version}";
+
+    propagatedBuildInputs = with self; [
+      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
+      ndg-httpsclient
+    ];
+
+    buildInputs = with self; [ nose ];
+    postUnpack = "sourceRoot=\${sourceRoot}/acme";
+  };
+
+  acme_0_10 = buildPythonPackage rec {
+    inherit (pkgs.certbot_0_10) src version;
 
     name = "acme-${version}";
 
