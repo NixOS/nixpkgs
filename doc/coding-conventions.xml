@@ -623,7 +623,7 @@ evaluate correctly.</para>
     from bad to good:
     <itemizedlist>
       <listitem>
-        <para>Uses <literal>git://</literal> which won't be proxied.
+        <para>Bad: Uses <literal>git://</literal> which won't be proxied.
 <programlisting>
 src = fetchgit {
   url = "git://github.com/NixOS/nix.git";
@@ -634,7 +634,7 @@ src = fetchgit {
         </para>
       </listitem>
       <listitem>
-        <para>This is ok, but an archive fetch will still be faster.
+        <para>Better: This is ok, but an archive fetch will still be faster.
 <programlisting>
 src = fetchgit {
   url = "https://github.com/NixOS/nix.git";
@@ -645,7 +645,7 @@ src = fetchgit {
         </para>
       </listitem>
       <listitem>
-        <para>Fetches a snapshot archive and you get the rev you want.
+        <para>Best: Fetches a snapshot archive and you get the rev you want.
 <programlisting>
 src = fetchFromGitHub {
   owner = "NixOS";
