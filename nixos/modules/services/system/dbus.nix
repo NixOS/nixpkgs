@@ -20,8 +20,6 @@ let
     "<includedir>${d}/etc/dbus-1/session.d</includedir>"
   ]));
 
-  daemonArgs = "--address=systemd: --nofork --nopidfile --systemd-activation";
-
   configDir = pkgs.runCommand "dbus-conf"
     { preferLocalBuild = true;
       allowSubstitutes = false;
@@ -30,6 +28,9 @@ let
       mkdir -p $out
 
       cp ${pkgs.dbus.out}/share/dbus-1/{system,session}.conf $out
+
+      # avoid circular includes
+      sed -ri 's@(<include ignore_missing="yes">/etc/dbus-1/(system|session)\.conf</include>)@<!-- \1 -->@g' $out/{system,session}.conf
 
       # include by full path
       sed -ri "s@/etc/dbus-1/(system|session)-@$out/\1-@" $out/{system,session}.conf
@@ -95,6 +96,11 @@ in
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
+    environment.etc = singleton
+      { source = configDir;
+        target = "dbus-1";
+      };
+
     users.extraUsers.messagebus = {
       uid = config.ids.uids.messagebus;
       description = "D-Bus system message bus daemon user";
@@ -125,10 +131,6 @@ in
       # Don't restart dbus-daemon. Bad things tend to happen if we do.
       reloadIfChanged = true;
       restartTriggers = [ configDir ];
-      serviceConfig.ExecStart = [
-        "" # Default dbus.service has two entries, we need to override both.
-        "${lib.getBin pkgs.dbus}/bin/dbus-daemon --config-file=/run/current-system/dbus/system.conf ${daemonArgs}"
-      ];
     };
 
     systemd.user = {
@@ -136,18 +138,10 @@ in
         # Don't restart dbus-daemon. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [ configDir ];
-        serviceConfig.ExecStart = [
-          "" # Default dbus.service has two entries, we need to override both.
-          "${lib.getBin pkgs.dbus}/bin/dbus-daemon --config-file=/run/current-system/dbus/session.conf ${daemonArgs}"
-        ];
       };
       sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
     };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
-
-    system.extraSystemBuilderCmds = ''
-      ln -s ${configDir} $out/dbus
-    '';
   };
 }
