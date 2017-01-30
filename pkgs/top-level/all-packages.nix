@@ -17880,6 +17880,8 @@ with pkgs;
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
+  wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
+
   wraith = callPackage ../applications/networking/irc/wraith { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
