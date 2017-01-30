@@ -199,7 +199,10 @@ in
 
       environment.pathsToLink = [ "/share" ];
 
-      services.xserver.exportConfiguration = true;
+      environment.etc = singleton {
+        source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        target = "X11/xkb";
+      };
 
       environment.variables =
         {
