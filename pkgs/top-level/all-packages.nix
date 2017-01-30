@@ -6760,6 +6760,8 @@ with pkgs;
     ruby = ruby_2_2;
   };
 
+  bashdb = callPackage ../development/tools/misc/bashdb { };
+
   gdb = callPackage ../development/tools/misc/gdb {
     guile = null;
     hurd = gnu.hurdCross;
@@ -13428,6 +13430,8 @@ with pkgs;
   fte = callPackage ../applications/editors/fte { };
 
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
+
+  gcalcli = callPackage ../applications/misc/gcalcli { };
 
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
 
