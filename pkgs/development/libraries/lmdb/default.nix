@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   checkPhase = "make test";
 
   preInstall = ''
-    mkdir -p $out/{man/man1,bin,lib,include}
+    mkdir -p $out/{bin,lib,include}
   '';
 
   meta = with stdenv.lib; {
