@@ -896,7 +896,7 @@ in {
       sha256 = "1ybywzkd840v1qvb1p2bs08js260vq1jscjg8182hv7bmwacqy0k";
     };
 
-    buildInputs = with self; [ pytest_30 case ];
+    buildInputs = with self; [ pytest case ];
     propagatedBuildInputs = with self; [ vine ];
 
     meta = {
@@ -2670,7 +2670,7 @@ in {
       sha256 = "1anw68rkja1dbgvndxz5mq6f89hmxwaha0fjcdnsl5j1wj7imc1y";
     };
 
-    buildInputs = with self; [ pytest_30 case ];
+    buildInputs = with self; [ pytest case ];
 
     meta = {
       homepage = https://github.com/celery/billiard;
@@ -3586,7 +3586,7 @@ in {
       sha256 = "0kgmbs3fl9879n48p4m79nxy9by2yhvxq1jdvlnqzzvkdb2sdmg3";
     };
 
-    buildInputs = with self; [ pytest_30 case ];
+    buildInputs = with self; [ pytest case ];
     propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp eventlet ];
 
     meta = {
@@ -3832,7 +3832,7 @@ in {
       sha256 = "400b0bb63d9096b6bf2806efaf742a1cc8b6c88e0484f0afe7d7a7f0e9870609";
     };
 
-    checkInputs = with self; [ pytest ];
+    checkInputs = with self; [ pytest_29 ];
     propagatedBuildInputs = with self; [ click ] ++ optional (!isPy3k) futures;
 
     checkPhase = ''
@@ -4692,7 +4692,7 @@ in {
       sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest_29 ];
     propagatedBuildInputs = with self; [ future numpy ];
 
     doCheck = true;
@@ -4964,7 +4964,7 @@ in {
     };
   };
 
-  pytest = self.pytest_29;
+  pytest = self.pytest_30;
 
   pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};
 
@@ -4972,7 +4972,13 @@ in {
 
   pytest_29 = callPackage ../development/python-modules/pytest/2_9.nix {};
 
-  pytest_30 = callPackage ../development/python-modules/pytest {};
+  pytest_30 = callPackage ../development/python-modules/pytest{
+    hypothesis = self.hypothesis.override {
+      # hypothesis requires pytest that causes dependency cycle
+      doCheck = false;
+      pytest = null;
+    };
+  };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
@@ -4998,9 +5004,7 @@ in {
     };
   };
 
-  pytestdjango = callPackage ../development/python-modules/pytestdjango.nix {
-    pytest = self.pytest_30;
-  };
+  pytestdjango = callPackage ../development/python-modules/pytestdjango.nix { };
 
   pytest-fixture-config = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -5589,7 +5593,7 @@ in {
       sha256 = "117savw47c2givq9vxr5m02nyxmsk34l2ihxyy5axlaiqyxyf20s";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest_29 ];
     patchPhase = ''
       sed -i 's/==.*$//' requirements/test.txt
     '';
@@ -10344,9 +10348,7 @@ in {
     };
   };
 
-  django_guardian = callPackage ../development/python-modules/django_guardian.nix {
-    pytest = self.pytest_30;
-  };
+  django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
 
   django_tagging = buildPythonPackage rec {
     name = "django-tagging-0.4.5";
@@ -12586,41 +12588,7 @@ in {
     propagatedBuildInputs = with self; [ requests2 ];
   };
 
-  hypothesis = buildPythonPackage rec {
-    # http://hypothesis.readthedocs.org/en/latest/packaging.html
-
-    # Hypothesis has optional dependencies on the following libraries
-    # pytz fake_factory django numpy pytest
-    # If you need these, you can just add them to your environment.
-
-    name = "hypothesis-${version}";
-    version = "3.5.2";
-
-    # Upstream prefers github tarballs
-    src = pkgs.fetchFromGitHub {
-      owner = "HypothesisWorks";
-      repo = "hypothesis";
-      rev = "${version}";
-      sha256 = "030rf4gn4b0hylr90wazilwa3bc038fcqng0wibcx67mqaq035n4";
-    };
-
-    buildInputs = with self; [ flake8 pytest flaky ];
-    propagatedBuildInputs = with self; ([ uncompyle6 ] ++ optionals isPy27 [ enum34  ]);
-
-    # Fails randomly in tests/cover/test_conjecture_engine.py::test_interleaving_engines.
-    doCheck = false;
-
-    # https://github.com/DRMacIver/hypothesis/issues/300
-    checkPhase = ''
-      ${python.interpreter} -m pytest tests/cover
-    '';
-
-    meta = {
-      description = "A Python library for property based testing";
-      homepage = https://github.com/DRMacIver/hypothesis;
-      license = licenses.mpl20;
-    };
-  };
+  hypothesis = callPackage ../development/python-modules/hypothesis.nix { };
 
   colored = buildPythonPackage rec {
     name = "colored-${version}";
@@ -13557,7 +13525,7 @@ in {
       sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
     };
 
-    buildInputs = with self; [ pytest_30 case pytz ];
+    buildInputs = with self; [ pytest case pytz ];
 
     propagatedBuildInputs = with self; [ amqp ];
 
@@ -18460,7 +18428,7 @@ in {
       sha256 = "0v8aq0xzsa7clazszxl42904c3jpq69lg8a5hg754bqcqf72hfrn";
     };
     LC_ALL="en_US.UTF-8";
-    buildInputs = with self; [ pkgs.glibcLocales pytest ];
+    buildInputs = with self; [ pkgs.glibcLocales pytest_29 ];
 
     checkPhase = ''
       py.test
@@ -23424,7 +23392,7 @@ in {
       url = "mirror://pypi/s/${pname}/${name}.tar.gz";
       sha256 = "14220f8f761c48ba1e2526f087195077cf54fad7098b382ce220422f0ff59b12";
     };
-    buildInputs = with self; [ pytest virtualenv pytestrunner pytest-virtualenv ];
+    buildInputs = with self; [ pytest_29 virtualenv pytestrunner pytest-virtualenv ];
     propagatedBuildInputs = with self; [ twisted pathlib2 ];
     postPatch = ''
       sed -i '12,$d' tests/test_main.py
@@ -31650,7 +31618,7 @@ EOF
       url = "mirror://pypi/a/${pname}/${name}.tar.gz";
       sha256 = "1158ml8h3g0vlsgw2jmy579glbg7dn0mjij8xibdl509b8qv9p51";
     };
-    buildInputs = with self; [ unittest2 mock pytest trollius ];
+    buildInputs = with self; [ unittest2 mock pytest_29 trollius ];
     propagatedBuildInputs = with self; [ six twisted txaio ];
     checkPhase = ''
       py.test $out
@@ -31884,7 +31852,7 @@ EOF
       sha256 = "0h94x9mc9bspg23lb1f73h7smdzc39ps7z7sm0q38ds9jahmvfc7";
     };
 
-    buildInputs = with self; [ case pytest_30 ];
+    buildInputs = with self; [ case pytest ];
 
     meta = {
       homepage = https://github.com/celery/vine;
