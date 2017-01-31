@@ -13,6 +13,7 @@
 , preShellHook ? ""
 # Execute after shell hook
 , postShellHook ? ""
+, developmentPrefix ? ""
 , ... } @ attrs:
 
 let
@@ -45,11 +46,14 @@ in attrs // {
   shellHook = attrs.shellHook or ''
     ${preShellHook}
     if test -e setup.py; then
-      tmp_path=$(mktemp -d)
-      export PATH="$tmp_path/bin:$PATH"
-      export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
-      mkdir -p $tmp_path/${python.sitePackages}
-      ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path
+      developmentPrefix='${developmentPrefix}'
+      if test -z "$developmentPrefix"; then
+        developmentPrefix=$(mktemp -d)
+      fi
+      export PATH="$developmentPrefix/bin:$PATH"
+      export PYTHONPATH="$developmentPrefix/${python.sitePackages}:$PYTHONPATH"
+      mkdir -p "$developmentPrefix/${python.sitePackages}"
+      ${bootstrapped-pip}/bin/pip install -e . --prefix "$developmentPrefix" >&2
     fi
     ${postShellHook}
   '';
