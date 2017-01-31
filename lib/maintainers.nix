@@ -351,6 +351,7 @@
   olejorgenb = "Ole Jørgen Brønner <olejorgenb@yahoo.no>";
   orbekk = "KJ Ørbekk <kjetil.orbekk@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
+  orivej = "Orivej Desh <orivej@gmx.fr>";
   osener = "Ozan Sener <ozan@ozansener.com>";
   otwieracz = "Slawomir Gonet <slawek@otwiera.cz>";
   oxij = "Jan Malakhovski <oxij@oxij.org>";
