@@ -25,10 +25,10 @@ in {
   graylog_anonymous_usage_statistics = glPlugin rec {
     name = "graylog-anonymous-usage-statistics-${version}";
     pluginName = "graylog-plugin-anonymous-usage-statistics";
-    version = "2.1.2";
+    version = "2.2.0-rc.1";
     src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/usage-statistics-${version}.jar";
-      sha256 = "11kz8g7s7rljpad3hniqc1p69qjcjhaz5a786qqfq79hzm5560gs";
+      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/graylog-plugin-anonymous-usage-statistics-${version}.jar";
+      sha256 = "1qsxx6hrbx12bbpq4dqd7zhqhlmgv0i5q7ljjmdada4hv5fg6346";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-anonymous-usage-statistics";
@@ -38,10 +38,10 @@ in {
   graylog_auth_sso = glPlugin rec {
     name = "graylog-auth-sso-${version}";
     pluginName = "graylog-plugin-auth-sso";
-    version = "1.0.3";
+    version = "1.0.5";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1qraaf3pm2i7vhvrls9fspc6mxn9hf5n49298hza9rmhpc8izdzv";
+      sha256 = "14m8nilimdh6rp8bssks1hhqs0729q6wga2brbqi3dgmmy4gcwfn";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-auth-sso";
@@ -51,10 +51,10 @@ in {
   graylog_beats = glPlugin rec {
     name = "graylog-beats-${version}";
     pluginName = "graylog-plugin-beats";
-    version = "1.1.3";
+    version = "2.2.0-rc.1";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1qbcmfkz9fannbafw35qxl94x2mnmx46wmwlnrkwn60pkrf72mcb";
+      sha256 = "13v8f2sbp1rd9f9r191z6x83slpvzm6lvhkbzm8367xm08jansv3";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-beats";
@@ -64,10 +64,10 @@ in {
   graylog_collector = glPlugin rec {
     name = "graylog-collector-${version}";
     pluginName = "graylog-plugin-collector";
-    version = "1.1.2";
+    version = "2.2.0-rc.1";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0f9mhkyr5ma5y0y89klw8sllxrdmj321jsn52nxg1c82qp4gsxlj";
+      sha256 = "06f27w0bzpqd842w6ydlpdq8mplwsnyhw0v6nvj90fx54rpxfadv";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-collector";
@@ -116,10 +116,10 @@ in {
   graylog_threatintel = glPlugin rec {
     name = "graylog-threatintel-${version}";
     pluginName = "graylog-plugin-threatintel";
-    version = "0.8.0";
+    version = "0.9.0";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1ya69myvisiqb0mzdn1hrpm032fqvrjrjl5hlgfn8v0p6wz7j7iq";
+      sha256 = "1sqa4676rn142s7d8ipw7ww52ba49js4lp63jszl7ss5a3qf3v3v";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-threatintel";
