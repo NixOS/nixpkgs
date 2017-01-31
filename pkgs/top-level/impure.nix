@@ -29,7 +29,9 @@
       dirCheck = dir: dir != "" && pathExists (dir + "/.");
       overlays = dir:
         let content = readDir dir; in
-        map (n: import "${dir}/${n}") (sort lessThan (attrNames content));
+        map (n: import "${dir}/${n}")
+          (builtins.filter (n: builtins.match ".*\.nix" n != null)
+            (sort lessThan (attrNames content)));
     in
       if dirEnv != "" then
         if dirCheck dirEnv then overlays dirEnv
