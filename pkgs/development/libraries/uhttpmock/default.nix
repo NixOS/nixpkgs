@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Project for mocking web service APIs which use HTTP or HTTPS";
     homepage = https://gitlab.com/groups/uhttpmock/;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ DamienCassou ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }
