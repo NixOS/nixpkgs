@@ -112,6 +112,11 @@ let
 
     buildInputs = [ expat ];
 
+    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile \
+      --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
+    '';
+
     preBuild = ''
       makeFlagsArray=(
         LUA_LDIR="$out/share/lua/${lua.luaversion}"
@@ -121,7 +126,7 @@ let
 
     meta = {
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
