@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, nix, git }: let
+{ stdenv, fetchurl, pkgconfig, nix, git }:
+let
   version = "4.1.5";
 in stdenv.mkDerivation {
   name = "nix-exec-${version}";
@@ -10,6 +11,10 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [ pkgconfig nix git ];
+
+  patches = [
+    ./nix-0.12.patch
+  ];
 
   meta = {
     description = "Run programs defined in nix expressions";
