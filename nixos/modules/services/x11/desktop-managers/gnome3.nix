@@ -78,7 +78,7 @@ in {
       };
 
       debug = mkEnableOption "gnome-session debug messages";
-    };  
+    };
 
     environment.gnome3.packageSet = mkOption {
       default = null;
@@ -86,7 +86,7 @@ in {
       description = "Which GNOME 3 package set to use.";
       apply = p: if p == null then pkgs.gnome3 else p;
     };
-    
+
     environment.gnome3.excludePackages = mkOption {
       default = [];
       example = literalExample "[ pkgs.gnome3.totem ]";
@@ -124,6 +124,9 @@ in {
     hardware.bluetooth.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     services.udev.packages = [ pkgs.gnome3.gnome_settings_daemon ];
+
+    # If gnome3 is installed, build vim for gtk3 too.
+    nixpkgs.config.vim.gui = "gtk3";
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
