@@ -242,11 +242,11 @@ let
 
   luazlib = buildLuaPackage rec {
     name = "zlib-${version}";
-    version = "0.4";
+    version = "1.1";
 
     src = fetchzip {
       url = "https://github.com/brimworks/lua-zlib/archive/v${version}.tar.gz";
-      sha256 = "1pgxnjc0gvk25wsr69nsm60y5ad86z1nlq7mzj3ckygzkgi782dd";
+      sha256 = "1520lk4xpf094xn2zallqgqhs0zb4w61l49knv9y8pmhkdkxzzgy";
     };
 
     buildInputs = [ zlib ];
