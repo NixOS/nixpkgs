@@ -251,20 +251,22 @@ let
 
     buildInputs = [ zlib ];
 
+    preConfigure = "substituteInPlace Makefile --replace gcc cc --replace '-llua' ''";
+
     preBuild = ''
       makeFlagsArray=(
         ${platformString}
         LUAPATH="$out/share/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INCDIR="-I${lua}/include"
-        LIBDIR="-L$out/lib");
+        LIBDIR="-L${lua}/lib");
     '';
 
     preInstall = "mkdir -p $out/lib/lua/${lua.luaversion}";
 
     meta = with stdenv.lib; {
       homepage = https://github.com/brimworks/lua-zlib;
-      hydraPlatforms = platforms.linux;
+      hydraPlatforms = platforms.unix;
       license = licenses.mit;
       maintainers = [ maintainers.koral ];
     };
