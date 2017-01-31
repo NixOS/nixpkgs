@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    descritption = "A computer code to create and evaluate fast interpolation tables of pre-computed coefficients in perturbation theory for observables in hadron-induced processes";
-    license      = stdenv.lib.licenses.gpl3;
-    homepage     = http://fastnlo.hepforge.org;
-    platforms    = stdenv.lib.platforms.unix;
+    description = "A computer code to create and evaluate fast interpolation tables of pre-computed coefficients in perturbation theory for observables in hadron-induced processes";
+    license     = stdenv.lib.licenses.gpl3;
+    homepage    = http://fastnlo.hepforge.org;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };
 }

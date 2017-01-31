@@ -4964,6 +4964,30 @@ in {
     };
   };
 
+  pyhepmc = buildPythonPackage rec {
+    name = "pyhepmc-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyhepmc/${name}.tar.gz";
+      sha256 = "1rbi8gqgclfvaibv9kzhfis11gw101x8amc93qf9y08ny4jfyr1d";
+    };
+
+    disable = isPy3k;
+
+    buildInputs = with pkgs; [ swig hepmc ];
+    preBuild = ''
+      export export HEPMCPATH="${pkgs.hepmc}"
+    '';
+
+    meta = {
+      description = "A simple wrapper on the main classes of the HepMC event simulation representation, making it possible to create, read and manipulate HepMC events from Python code";
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ veprbl ];
+      platforms   = platforms.all;
+    };
+  };
+
   pytest = self.pytest_29;
 
   pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};

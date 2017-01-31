@@ -17303,6 +17303,8 @@ with pkgs;
 
   ### SCIENCE / PHYSICS
 
+  applgrid = callPackage ../development/libraries/physics/applgrid { };
+
   fastjet = callPackage ../development/libraries/physics/fastjet { };
 
   fastnlo = callPackage ../development/libraries/physics/fastnlo { };
