@@ -1,0 +1,33 @@
+diff --git a/src/fetchgit.cc b/src/fetchgit.cc
+index d6dec1e..1e5d287 100644
+--- a/src/fetchgit.cc
++++ b/src/fetchgit.cc
+@@ -78,7 +78,7 @@ extern "C" void fetchgit( nix::EvalState & state
+   auto submodules_iter = args[0]->attrs->find(submodules_sym);
+   auto do_submodules = submodules_iter == args[0]->attrs->end() ?
+     true :
+-    state.forceBool(*submodules_iter->value);
++    state.forceBool(*submodules_iter->value, *submodules_iter->pos);
+ 
+   constexpr char fetchgit_path[] = NIXEXEC_LIBEXEC_DIR "/fetchgit.sh";
+   const char * const argv[] = { fetchgit_path
+@@ -96,15 +96,15 @@ extern "C" void fetchgit( nix::EvalState & state
+     case -1:
+       throw SysError("forking to run fetchgit");
+     case 0:
+-      pipe.readSide.close();
+-      if (dup2(pipe.writeSide, STDOUT_FILENO) == -1)
++      pipe.readSide = -1;
++      if (dup2(pipe.writeSide.get(), STDOUT_FILENO) == -1)
+         err(214, "duping pipe to stdout");
+       /* const-correct, execv doesn't modify it c just has dumb casting rules */
+       execv(fetchgit_path, const_cast<char * const *>(argv));
+       err(212, "executing %s", fetchgit_path);
+   }
+-  pipe.writeSide.close();
+-  auto path = nix::drainFD(pipe.readSide);
++  pipe.writeSide = -1;
++  auto path = nix::drainFD(pipe.readSide.get());
+ 
+   int status;
+   errno = 0;
