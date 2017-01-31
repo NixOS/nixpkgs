@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/bit-team/backintime;
     description = "Simple backup tool for Linux";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
     longDescription = ''
       Back In Time is a simple backup tool (on top of rsync) for Linux
