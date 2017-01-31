@@ -1,0 +1,101 @@
+#!/bin/sh -eu
+
+
+PROG_NAME="$0"
+
+USAGE="$PROG_NAME [-h] PATTERN REPLACEMENT TARGET_BINARY_FILE
+
+Replace references as detected by the 'strings' command in a binary file.
+
+The replacement will be null terminated and overlaid on top of the
+original reference (in-place).  This means the replacement string can not
+be longer than the string replaced, which this script checks for.
+
+"
+
+
+main()
+(
+    while getopts h o
+    do
+        case $o in
+            h) echo "$USAGE"; exit 0;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    set +u
+    if [ -z "$1" -o -z "$2" -o -z "$3" ]
+    then echo "$USAGE"; exit 1
+    fi
+    set -u
+    target="$1"
+    pattern="$2"
+    replacement="$3"
+    work "$target" "$pattern" "$replacement"
+)
+
+
+work()
+(
+    target="$1"
+    pattern="$2"
+    replacement="$3"
+    replacement_file="$(make_replacement_file "$replacement")"
+    trap "rm $replacement_file" INT QUIT TSTP TERM EXIT
+    offsets="$(get_offsets "$target" "$pattern" "$replacement")"
+    for offset in $offsets
+    do replace "$replacement_file" "$offset" "$target"
+    done
+)
+
+
+get_offsets()
+(
+    target="$1"
+    pattern="$2"
+    replacement="$3"
+    strings -t d "$target" \
+        | grep -e "$pattern" \
+        | while read -r line
+            do
+                offset="$(echo "$line" | cut -d ' ' -f 1)"
+                orig="$(echo "$line" | cut -d ' ' -f 2)"
+                if [ "${#orig}" -lt "${#replacement}" ]
+                then
+                    msg="replacement too long"
+                    msg="${msg}\n    orig: ${orig}"
+                    msg="${msg}\n     new: ${replacement}"
+                    fail "$msg"
+                fi
+                echo "$offset"
+            done
+)
+
+
+make_replacement_file()
+(
+    replacement="$1"
+    tmpfile="$(mktemp)"
+    printf "$replacement\0" > "$tmpfile"
+    echo "$tmpfile"
+)
+
+
+replace()
+(
+    replacement_file="$1"
+    offset="$2"
+    target="$3"
+    dd if="$replacement_file" of="$target" obs=1 seek="$offset" conv=notrunc
+)
+
+
+fail()
+(
+    msg="$1"
+    echo "ERROR: $msg" > /dev/stderr
+    exit 1
+)
+
+
+main "$@"
