@@ -44,9 +44,6 @@ in
       "amd/amdrc".source = package + "/etc/amd/amdrc";
       "amd/amdapfxx.blb".source = package + "/etc/amd/amdapfxx.blb";
       "gbm/gbm.conf".source = package + "/etc/gbm/gbm.conf";
-      "OpenCL/vendors/amdocl64.icd".source = package + "/etc/OpenCL/vendors/amdocl64.icd";
-    } // optionalAttrs opengl.driSupport32Bit {
-      "OpenCL/vendors/amdocl32.icd".source = package32 + "/etc/OpenCL/vendors/amdocl32.icd";
     };
 
   };
