@@ -762,7 +762,7 @@ GEM
     teaspoon-jasmine (2.2.0)
       teaspoon (>= 1.0.0)
     temple (0.7.7)
-    test_after_commit (0.4.2)
+    test_after_commit (1.1.0)
       activerecord (>= 3.2)
     thin (1.7.0)
       daemons (~> 1.0, >= 1.0.9)

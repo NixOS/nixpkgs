@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnutls, jansson, liburcu, lmdb, libcap_ng, libidn
-, systemd, nettle, libedit, zlib, libiconv
+, systemd, nettle, libedit, zlib, libiconv, fetchpatch
 }:
 
 # Note: ATM only the libraries have been tested in nixpkgs.
@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
     sha256 = "0y9nhp9lfmxv4iy1xg7l4lfxv4168qhag26wwg0dbi0zjpkd790b";
   };
+
+  patches = stdenv.lib.optional stdenv.isDarwin
+      (fetchpatch {
+        name = "before-sierra.diff";
+        url = "https://gitlab.labs.nic.cz/labs/knot/merge_requests/664.diff";
+        sha256 = "0g4gm2m3pi0lfpkp53xayf6jq6yn3ifidh40maiy1a46dfadvw6w";
+      });
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -27,7 +34,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  CFLAGS = [ "-DNDEBUG" ];
+  CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   #doCheck = true; problems in combination with dynamic linking
 

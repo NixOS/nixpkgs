@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "slade-${version}";
-  version = "3.1.1.4";
+  version = "3.1.1.5";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
     rev = version;
-    sha256 = "0c2yjkpcwxkid1wczmc9f16x1p40my8jv61jc93ldgjzcprmrpn8";
+    sha256 = "0mdn59jm6ab4cdh99bgvadif3wdlqmk5mq635gg7krq35njgw6f6";
   };
 
   nativeBuildInputs = [ cmake pkgconfig zip ];

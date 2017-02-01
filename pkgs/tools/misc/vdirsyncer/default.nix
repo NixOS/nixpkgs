@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/pimutils/vdirsyncer;
     description = "Synchronize calendars and contacts";
-    maintainers = with maintainers; [ matthiasbeyer jgeerds DamienCassou ];
+    maintainers = with maintainers; [ matthiasbeyer jgeerds ];
     platforms = platforms.all;
     license = licenses.mit;
   };
