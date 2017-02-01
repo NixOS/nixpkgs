@@ -17,6 +17,8 @@ let
 
   fhsEnv = buildFHSUserEnv {
     name = "heroku-fhs-env";
+    # heroku requires psql to run `heroku pg:psql` command
+    targetPkgs = pkgs: [ pkgs.postgresql ];
   };
 
   heroku = stdenv.mkDerivation rec {
