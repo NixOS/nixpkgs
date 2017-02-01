@@ -18542,16 +18542,18 @@ in {
 
 
   pexpect = buildPythonPackage rec {
-    version = "3.3";
+    version = "4.2.1";
     name = "pexpect-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pexpect/${name}.tar.gz";
-      sha256 = "dfea618d43e83cfff21504f18f98019ba520f330e4142e5185ef7c73527de5ba";
+      sha256 = "3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92";
     };
 
-    # Wants to run python in a subprocess
+    # Wants to run pythonin a subprocess
     doCheck = false;
+
+    propagatedBuildInputs = with self; [ ptyprocess ];
 
     meta = {
       homepage = http://www.noah.org/wiki/Pexpect;
