@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1c5lv8qca21mndkx350wxv34qypqh6gb4rhzms4anr642clq3jg2";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = stdenv.lib.optionals (!pythonPackages.isPy3k) [
     pythonPackages.flup
     pythonPackages.ldap
     pythonPackages.sqlalchemy
