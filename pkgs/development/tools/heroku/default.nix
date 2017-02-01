@@ -17,6 +17,8 @@ let
 
   fhsEnv = buildFHSUserEnv {
     name = "heroku-fhs-env";
+    # heroku requires psql to run `heroku pg:psql` command
+    targetPkgs = pkgs: [ pkgs.postgresql ];
   };
 
   heroku = stdenv.mkDerivation rec {
@@ -69,6 +71,6 @@ in writeTextFile {
   executable = true;
   text = ''
     #!${bash}/bin/bash -e
-    ${fhsEnv}/bin/heroku-fhs-env ${heroku}/bin/heroku
+    ${fhsEnv}/bin/heroku-fhs-env ${heroku}/bin/heroku "$@"
   '';
 }
