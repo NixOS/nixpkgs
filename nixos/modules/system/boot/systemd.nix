@@ -301,7 +301,7 @@ let
     '';
 
   targetToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text =
         ''
           [Unit]
@@ -310,7 +310,7 @@ let
     };
 
   serviceToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Service]
@@ -330,7 +330,7 @@ let
     };
 
   socketToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Socket]
@@ -340,7 +340,7 @@ let
     };
 
   timerToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Timer]
@@ -349,7 +349,7 @@ let
     };
 
   pathToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Path]
@@ -358,7 +358,7 @@ let
     };
 
   mountToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Mount]
@@ -367,7 +367,7 @@ let
     };
 
   automountToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Automount]
@@ -376,7 +376,7 @@ let
     };
 
   sliceToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Slice]
