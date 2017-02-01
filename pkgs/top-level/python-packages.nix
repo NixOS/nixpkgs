@@ -15837,11 +15837,11 @@ in {
 
   nose-exclude = buildPythonPackage rec {
     name = "nose-exclude-${version}";
-    version = "0.4.1";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nose-exclude/${name}.tar.gz";
-      sha256 = "44466a9bcb56d2e568750f91504d1278c74eabb259a305b06e975b87b51635da";
+      sha256 = "f78fa8b41eeb815f0486414f710f1eea0949e346cfb11d59ba6295ed69e84304";
     };
 
     propagatedBuildInputs = with self; [ nose ];
