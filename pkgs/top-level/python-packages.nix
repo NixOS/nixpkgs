@@ -13298,11 +13298,13 @@ in {
   };
 
   jinja2 = buildPythonPackage rec {
-    name = "Jinja2-2.8";
+    pname = "Jinja2";
+    version = "2.9.5";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jinja2/${name}.tar.gz";
-      sha256 = "1x0v41lp5m1pjix3l46zx02b7lqp2hflgpnxwkywxynvi3zz47xw";
+      sha256 = "702a24d992f856fa8d5a7a36db6128198d0c21e1da34448ca236c42e92384825";
     };
 
     propagatedBuildInputs = with self; [ markupsafe ];
