@@ -25505,6 +25505,35 @@ in {
     };
   };
 
+  testpath = buildPythonPackage rec {
+    pname = "testpath";
+    version = "0.3";
+    name = "${pname}-${version}";
+
+    #format = "flit";
+    #src = pkgs.fetchFromGitHub {
+    #  owner = "jupyter";
+    #  repo = pname;
+    #  rev = "${version}";
+    #  sha256 = "1ghzmkrsrk9xrj42pjsq5gl7v3g2v0ji0xy0xzzxp5aizd3wrvl9";
+    #};
+    #doCheck = true;
+    #checkPhase = ''
+    #  ${python.interpreter} -m unittest discover
+    #'';
+    format = "wheel";
+    src = fetchpypi {
+      inherit pname version format;
+      sha256 = "f16b2cb3b03e1ada4fb0200b265a4446f92f3ba4b9d88ace34f51c54ab6d294e";
+    };
+
+    meta = {
+      description = "Test utilities for code working with files and commands";
+      license = with lib.licenses; [ mit ];
+      homepage = https://github.com/jupyter/testpath;
+    };
+  };
+
   testrepository = buildPythonPackage rec {
     name = "testrepository-${version}";
     version = "0.0.20";
