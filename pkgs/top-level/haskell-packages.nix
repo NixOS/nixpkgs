@@ -61,8 +61,8 @@ rec {
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
     };
-    ghcjsHEAD = packages.ghc801.callPackage ../development/compilers/ghcjs/head.nix {
-      bootPkgs = packages.ghc801;
+    ghcjsHEAD = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
+      bootPkgs = packages.ghc802;
     };
 
     jhc = callPackage ../development/compilers/jhc {

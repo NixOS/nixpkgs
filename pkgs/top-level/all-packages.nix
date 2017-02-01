@@ -749,6 +749,8 @@ with pkgs;
 
   consul-template = callPackage ../tools/system/consul-template { };
 
+  copyright-update = callPackage ../tools/text/copyright-update { };
+
   corebird = callPackage ../applications/networking/corebird { };
 
   corosync = callPackage ../servers/corosync { };
@@ -2167,6 +2169,8 @@ with pkgs;
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
   halibut = callPackage ../tools/typesetting/halibut { };
+
+  hardinfo = callPackage ../tools/system/hardinfo { };
 
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
 

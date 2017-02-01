@@ -183,7 +183,7 @@ rec {
 
      This adapter can be defined on the defaultStdenv definition.  You can
      use it by patching the all-packages.nix file or by using the override
-     feature of ~/.nixpkgs/config.nix .
+     feature of ~/.config/nixpkgs/config.nix .
   */
   validateLicenses = licensePred: stdenv: stdenv //
     { mkDerivation = args:

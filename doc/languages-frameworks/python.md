@@ -781,7 +781,7 @@ If you get the following error:
     could not create '/nix/store/6l1bvljpy8gazlsw2aw9skwwp4pmvyxw-python-2.7.8/etc':
     Permission denied
 
-This is a [known bug](https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix) in setuptools.
+This is a [known bug](https://github.com/pypa/setuptools/issues/130) in setuptools.
 Setuptools `install_data` does not respect `--prefix`. An example of such package using the feature is `pkgs/tools/X11/xpra/default.nix`.
 As workaround install it as an extra `preInstall` step:
 

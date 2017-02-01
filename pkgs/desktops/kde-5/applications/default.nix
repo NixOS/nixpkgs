@@ -56,6 +56,7 @@ let
     khelpcenter = callPackage ./khelpcenter.nix {};
     kio-extras = callPackage ./kio-extras.nix {};
     kmime = callPackage ./kmime.nix {};
+    kmix = callPackage ./kmix.nix {};
     kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
     kwalletmanager = callPackage ./kwalletmanager.nix {};

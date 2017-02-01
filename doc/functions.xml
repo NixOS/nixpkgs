@@ -119,7 +119,7 @@
       evaluation-per-function application incurs a performance penalty,
       which can become a problem if many overrides are used.
       It is only intended for ad-hoc customisation, such as in
-      <filename>~/.nixpkgs/config.nix</filename>.
+      <filename>~/.config/nixpkgs/config.nix</filename>.
     </para>
     </warning>
 
