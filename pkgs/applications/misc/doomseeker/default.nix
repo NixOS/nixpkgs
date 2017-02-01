@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patchPhase = ''
-    sed -e 's#/usr/share/applications#$out/share/applications#' -i src/core/CMakeLists.txt
+    substituteInPlace src/core/CMakeLists.txt --replace /usr/share/applications "$out"/share/applications
   '';
 
   meta = {
