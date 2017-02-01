@@ -37,9 +37,30 @@ let
 
   graphiteVersion = "0.9.15";
 
+  fetchwheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
+  # Fetch a wheel. By default we fetch an universal wheel.
+  # See https://www.python.org/dev/peps/pep-0427/#file-name-convention for details regarding the optional arguments.
+    let
+      url = "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
+    in pkgs.fetchurl {inherit url sha256;};
+
+  fetchtarball = {pname, version, sha256}:
+  # Fetch a tarball.
+    let
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz";
+    in pkgs.fetchurl {inherit url sha256;};
+
+  fetchpypi = {format ? "setuptools", ... } @attrs:
+    let
+      fetcher = (if format == "wheel" then fetchwheel
+        else if format == "setuptools" then fetchtarball
+        else throw "Unsupported kind ${kind}");
+    in fetcher (builtins.removeAttrs attrs ["format"]);
+
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit fetchwheel fetchtarball fetchpypi;
 
   # helpers
 
