@@ -69,6 +69,6 @@ in writeTextFile {
   executable = true;
   text = ''
     #!${bash}/bin/bash -e
-    ${fhsEnv}/bin/heroku-fhs-env ${heroku}/bin/heroku
+    ${fhsEnv}/bin/heroku-fhs-env ${heroku}/bin/heroku "$@"
   '';
 }
