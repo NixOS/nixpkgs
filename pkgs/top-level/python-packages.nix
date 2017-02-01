@@ -30898,18 +30898,16 @@ EOF
     };
   };
   pandocfilters = buildPythonPackage rec{
-    version = "1.3.0";
+    version = "1.4.1";
     pname = "pandocfilters";
     name = pname + "-${version}";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "jgm";
-      repo = pname;
-      rev = version;
-      sha256 = "0ky9k800ixwiwvra0na6d6qaqcyps83mycgd8qvkrn5r80hddkzz";
+    src = fetchpypi{
+      inherit pname version;
+      sha256 = "ec8bcd100d081db092c57f93462b1861bcfa1286ef126f34da5cb1d969538acd";
     };
-
-    propagatedBuildInputs = with self; [ ];
+    # No tests available
+    doCheck = false;
 
     meta = {
       description = "A python module for writing pandoc filters, with a collection of examples";
