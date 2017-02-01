@@ -13416,12 +13416,12 @@ in {
   };
 
   jupyter_core = buildPythonPackage rec {
-    version = "4.2.0";
+    version = "4.2.1";
     name = "jupyter_core-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_core/${name}.tar.gz";
-      sha256 = "44ec837a53bebf4e937112d3f9ccf31fee4f8db3e406dd0dd4f0378a354bed9c";
+      sha256 = "89c55399c8437f777197c2c82c1ff5639c7f71d4eb2f172a81afa120b68dc7b3";
     };
 
     buildInputs = with self; [ pytest mock ];
