@@ -743,6 +743,8 @@ with pkgs;
 
   consul-template = callPackage ../tools/system/consul-template { };
 
+  copyright-update = callPackage ../tools/text/copyright-update { };
+
   corebird = callPackage ../applications/networking/corebird { };
 
   corosync = callPackage ../servers/corosync { };
