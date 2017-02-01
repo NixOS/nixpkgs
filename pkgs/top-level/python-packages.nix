@@ -4103,7 +4103,7 @@ in {
   # Backported version of the ConfigParser library of Python 3.3
   configparser = if isPy3k then null else buildPythonPackage rec {
     name = "configparser-${version}";
-    version = "3.3.0r2";
+    version = "3.5.0";
 
     # running install_egg_info
     # error: [Errno 9] Bad file descriptor: '<stdout>'
@@ -4111,8 +4111,11 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/configparser/${name}.tar.gz";
-      sha256 = "6a2318590dfc4013fc5bf53c2bec14a8cb455a232295eb282a13f94786c4b0b2";
+      sha256 = "5308b47021bc2340965c371f0f058cc6971a04502638d4244225c49d80db273a";
     };
+
+    # No tests available
+    doCheck = false;
 
     meta = {
       maintainers = [ ];
