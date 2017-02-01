@@ -27055,11 +27055,11 @@ EOF
 
   xarray = buildPythonPackage rec {
     name = "xarray-${version}";
-    version = "0.8.2";
+    version = "0.9.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xarray/${name}.tar.gz";
-      sha256 = "4da06e38baea65c51347ba0770db416ebf003dbad5637215d2b25b191f2be1fb";
+      sha256 = "89772ed0e23f0e71c3fb8323746374999ecbe79c113e3fadc7ae6374e6dc0525";
     };
 
     buildInputs = with self; [ pytest ];
