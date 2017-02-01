@@ -2042,8 +2042,8 @@ extra-packages:
 
 package-maintainers:
   peti:
-    - cabal2nix
     - cabal-install
+    - cabal2nix
     - funcmp
     - git-annex
     - hackage-db
@@ -2062,6 +2062,8 @@ package-maintainers:
     - pandoc
     - stack
     - streamproc
+    - structured-haskell-mode
+    - titlecase
   gebner:
     - hledger-diff
   gridaphobe:
@@ -7111,7 +7113,6 @@ dont-distribute-packages:
   stripe:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   structs:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   structural-induction:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
-  structured-haskell-mode:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   structured-mongoDB:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   structures:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   stunts:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7358,7 +7359,6 @@ dont-distribute-packages:
   tip-haskell-frontend:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   tip-lib:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   Titim:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
-  titlecase:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   tkhs:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   tkyprof:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   tld:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
