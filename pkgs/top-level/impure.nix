@@ -39,7 +39,7 @@ in
         let content = readDir dir; in
         map (n: import (dir + ("/" + n)))
           (builtins.filter (n: builtins.match ".*\.nix" n != null)
-            (sort lessThan (attrNames content)));
+            (attrNames content));
     in
       if dirPath != "" then
         overlays dirPath
