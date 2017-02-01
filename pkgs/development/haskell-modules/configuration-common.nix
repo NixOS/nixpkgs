@@ -1097,13 +1097,13 @@ self: super: {
   http-api-data_0_3_5 = dontCheck super.http-api-data_0_3_5;
 
   # Fix build for latest versions of servant and servant-client.
-  servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
+  servant_0_10 = super.servant_0_10.overrideScope (self: super: {
     http-api-data = self.http-api-data_0_3_5;
   });
-  servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
+  servant-client_0_10 = super.servant-client_0_10.overrideScope (self: super: {
     http-api-data = self.http-api-data_0_3_5;
-    servant-server = self.servant-server_0_9_1_1;
-    servant = self.servant_0_9_1_1;
+    servant-server = self.servant-server_0_10;
+    servant = self.servant_0_10;
   });
 
   # build servant docs from the repository
