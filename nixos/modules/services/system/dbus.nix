@@ -27,14 +27,6 @@ let
     ''
       mkdir -p $out
 
-      cp ${pkgs.dbus.out}/share/dbus-1/{system,session}.conf $out
-
-      # avoid circular includes
-      sed -ri 's@(<include ignore_missing="yes">/etc/dbus-1/(system|session)\.conf</include>)@<!-- \1 -->@g' $out/{system,session}.conf
-
-      # include by full path
-      sed -ri "s@/etc/dbus-1/(system|session)-@$out/\1-@" $out/{system,session}.conf
-
       sed '${./dbus-system-local.conf.in}' \
         -e 's,@servicehelper@,${config.security.wrapperDir}/dbus-daemon-launch-helper,g' \
         -e 's,@extra@,${systemExtraxml},' \
