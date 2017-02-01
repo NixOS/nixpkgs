@@ -12966,12 +12966,12 @@ in {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.5.1";
+    version = "4.5.2";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipykernel/${name}.tar.gz";
-      sha256 = "520c855c6652651c6796a3dd8bc89d533023ac65c5ccf812908187d6f0e461da";
+      sha256 = "5a54f25f0e6c8ee74c362c23f9a95e10e74c6b7f5ef42059c861ff6f26d89462";
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
