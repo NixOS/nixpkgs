@@ -22112,11 +22112,11 @@ in {
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.11.1";
+    version = "2.13.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "5acf980358283faba0b897c73959cecf8b841205bb4b2ad3ef545f46eae1a133";
+      sha256 = "5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8";
     };
 
     nativeBuildInputs = [ self.pytest ];
