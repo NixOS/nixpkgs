@@ -17,13 +17,15 @@ in
   system ? builtins.currentSystem
 
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
-  # $HOME/.nixpkgs/config.nix.
+  # $HOME/.config/nixpkgs/config.nix.
   config ? let
       configFile = getEnv "NIXPKGS_CONFIG";
-      configFile2 = homeDir + "/.nixpkgs/config.nix";
+      configFile2 = homeDir + "/.config/nixpkgs/config.nix";
+      configFile3 = homeDir + "/.nixpkgs/config.nix"; # obsolete
     in
       if configFile != "" && pathExists configFile then import configFile
       else if homeDir != "" && pathExists configFile2 then import configFile2
+      else if homeDir != "" && pathExists configFile3 then import configFile3
       else {}
 
 , # Overlays are used to extend Nixpkgs collection with additional
@@ -31,7 +33,7 @@ in
   # fix-point made by Nixpkgs.
   overlays ? let
       dirPath = try (if pathExists <nixpkgs-overlays> then <nixpkgs-overlays> else "") "";
-      dirHome = homeDir + "/.nixpkgs/overlays";
+      dirHome = homeDir + "/.config/nixpkgs/overlays";
       dirCheck = dir: dir != "" && pathExists (dir + "/.");
       overlays = dir:
         let content = readDir dir; in
