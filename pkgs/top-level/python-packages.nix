@@ -15481,17 +15481,17 @@ in {
   };
 
   nbconvert = buildPythonPackage rec {
-    version = "4.2.0";
+    version = "5.1.1";
     name = "nbconvert-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nbconvert/${name}.tar.gz";
-      sha256 = "1ik3k1s8dnqcc6hcrzi1wwy6f5kxfz8rnyahvpy984kl49snv52m";
+      sha256 = "847731bc39829d0eb1e15a450ac98c71730e3598e53683d4d76a3f3b3fc5017d";
     };
 
     buildInputs = with self; [nose ipykernel ];
 
-    propagatedBuildInputs = with self; [ entrypoints mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
+    propagatedBuildInputs = with self; [ entrypoints bleach mistune jinja2 pygments traitlets testpath jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client];
 
     checkPhase = ''
       nosetests -v
