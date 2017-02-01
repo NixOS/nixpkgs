@@ -4410,11 +4410,11 @@ in {
 
   cytoolz = buildPythonPackage rec {
     name = "cytoolz-${version}";
-    version = "0.8.0";
+    version = "0.8.2";
 
     src = pkgs.fetchurl{
       url = "mirror://pypi/c/cytoolz/cytoolz-${version}.tar.gz";
-      sha256 = "2239890c8fe2da3eba82947c6a68cfa406e5a5045911c9ab3de8113462372629";
+      sha256 = "476a2ad176de5eaef80499b7b43d4f72ba6d23df33d349088dae315e9b31c552";
     };
 
     # Extension types
