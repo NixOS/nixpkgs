@@ -97,9 +97,9 @@ in rec {
                             (pkgs.lib.attrNames compiler);
           integerSimpleGhcs = pkgs.lib.genAttrs integerSimpleGhcNames
                                 (name: compiler."${name}".override { enableIntegerSimple = true; });
-      in integerSimpleGhcs // {
+      in pkgs.recurseIntoAttrs (integerSimpleGhcs // {
            ghcHEAD = integerSimpleGhcs.ghcHEAD.override { selfPkgs = packages.integer-simple.ghcHEAD; };
-         };
+         });
   };
 
   packages = {
