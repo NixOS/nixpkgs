@@ -1,6 +1,17 @@
 /* Impure default args for `pkgs/top-level/default.nix`. See that file
    for the meaning of each argument. */
 
+with builtins;
+
+let
+
+  homeDir = builtins.getEnv "HOME";
+
+  # Return ‘x’ if it evaluates, or ‘def’ if it throws an exception.
+  try = x: def: let res = tryEval x; in if res.success then res.value else def;
+
+in
+
 { # Fallback: Assume we are building packages for the current (host, in GNU
   # Autotools parlance) system.
   system ? builtins.currentSystem
@@ -8,10 +19,7 @@
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
   config ? let
-      inherit (builtins) getEnv pathExists;
-
       configFile = getEnv "NIXPKGS_CONFIG";
-      homeDir = getEnv "HOME";
       configFile2 = homeDir + "/.nixpkgs/config.nix";
     in
       if configFile != "" && pathExists configFile then import configFile
@@ -22,20 +30,17 @@
   # collections of packages.  These collection of packages are part of the
   # fix-point made by Nixpkgs.
   overlays ? let
-      inherit (builtins) getEnv pathExists readDir attrNames map sort
-        lessThan;
-      dirEnv = getEnv "NIXPKGS_OVERLAYS";
-      dirHome = (getEnv "HOME") + "/.nixpkgs/overlays";
+      dirPath = try (if pathExists <nixpkgs-overlays> then <nixpkgs-overlays> else "") "";
+      dirHome = homeDir + "/.nixpkgs/overlays";
       dirCheck = dir: dir != "" && pathExists (dir + "/.");
       overlays = dir:
         let content = readDir dir; in
-        map (n: import "${dir}/${n}")
+        map (n: import (dir + ("/" + n)))
           (builtins.filter (n: builtins.match ".*\.nix" n != null)
             (sort lessThan (attrNames content)));
     in
-      if dirEnv != "" then
-        if dirCheck dirEnv then overlays dirEnv
-        else throw "The environment variable NIXPKGS_OVERLAYS does not name a valid directory."
+      if dirPath != "" then
+        overlays dirPath
       else if dirCheck dirHome then overlays dirHome
       else []
 
