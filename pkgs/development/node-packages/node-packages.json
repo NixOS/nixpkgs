@@ -22,6 +22,7 @@
 , "gulp"
 , "hipache"
 , "htmlhint"
+, "ios-deploy"
 , "istanbul"
 , "jayschema"
 , "jshint"
