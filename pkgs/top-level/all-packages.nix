@@ -97,6 +97,8 @@ with pkgs;
 
   dockerTools = callPackage ../build-support/docker { };
 
+  docker_compose = pythonPackages.docker_compose;
+
   dotnetenv = callPackage ../build-support/dotnetenv {
     dotnetfx = dotnetfx40;
   };

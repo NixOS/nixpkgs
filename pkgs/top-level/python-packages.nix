@@ -6189,40 +6189,7 @@ in {
     };
   };
 
-  docker = buildPythonPackage rec {
-    name = "docker-py-${version}";
-    version = "1.10.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/docker-py/${name}.tar.gz";
-      sha256 = "05f49f6hnl7npmi7kigg0ibqk8s3fhzx1ivvz1kqvlv4ay3paajc";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [
-      six
-      requests2
-      websocket_client
-      ipaddress
-      backports_ssl_match_hostname
-      docker_pycreds
-    ];
-
-    # Flake8 version conflict
-    doCheck = false;
-
-    meta = {
-      description = "An API client for docker written in Python";
-      homepage = https://github.com/docker/docker-py;
-      license = licenses.asl20;
-      maintainers = with maintainers; [
-        jgeerds
-      ];
-    };
-  };
+  docker = callPackage ../development/python-modules/docker.nix {};
 
   dockerpty = buildPythonPackage rec {
     name = "dockerpty-0.4.1";
@@ -11073,43 +11040,7 @@ in {
     };
   };
 
-  docker_compose = buildPythonPackage rec {
-    version = "1.9.0";
-    name = "docker-compose-${version}";
-    namePrefix = "";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/docker-compose/${name}.tar.gz";
-      sha256 = "0zz2jqpxz69q34bp97pbwxda1ik3m8zbhh15mxvhfsn0g566dywq";
-    };
-
-    # lots of networking and other fails
-    doCheck = false;
-    buildInputs = with self; [ mock pytest nose ];
-    propagatedBuildInputs = with self; [
-      requests2 six pyyaml texttable docopt docker dockerpty websocket_client
-      enum34 jsonschema cached-property
-    ];
-
-    patchPhase = ''
-      sed -i "s/'requests >= 2.6.1, < 2.8'/'requests'/" setup.py
-    '';
-
-    postInstall = ''
-      mkdir -p $out/share/bash-completion/completions/
-      cp contrib/completion/bash/docker-compose $out/share/bash-completion/completions/docker-compose
-    '';
-
-    meta = {
-      homepage = "https://docs.docker.com/compose/";
-      description = "Multi-container orchestration for Docker";
-      license = licenses.asl20;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
-        jgeerds
-      ];
-    };
-  };
+  docker_compose = callPackage ../development/python-modules/docker_compose.nix {};
 
   fdroidserver = buildPythonPackage rec {
     version = "2016-05-31";
