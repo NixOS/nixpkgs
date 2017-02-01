@@ -15021,11 +15021,11 @@ in {
 
   multipledispatch = buildPythonPackage rec {
     name = "multipledispatch-${version}";
-    version = "0.4.8";
+    version = "0.4.9";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/multipledispatch/${name}.tar.gz";
-      sha256 = "07d41fb3ed25e8424536e48a8566f88a0f9926ca4b6174bff6aa16c98251b92e";
+      sha256 = "bda6abb8188d9abb429bd17ed15bc7433f77f1b05a78cfff761711ed81daa7a2";
     };
 
     meta = {
