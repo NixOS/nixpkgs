@@ -40,7 +40,10 @@ stdenv.mkDerivation rec {
     ./no-plugins.patch
   ];
 
-  outputs = [ "out" "lib" "info" ] ++ (optional (cross == null) "dev");
+  outputs = [ "out" ]
+    ++ optional (!stdenv.isDarwin) "lib" # problems in Darwin stdenv
+    ++ [ "info" ]
+    ++ optional (cross == null) "dev";
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];
