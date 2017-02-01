@@ -10848,6 +10848,8 @@ with pkgs;
 
   bluez5 = callPackage ../os-specific/linux/bluez/bluez5.nix { };
 
+  bluez4 = callPackage ../os-specific/linux/bluez { };
+
   # Needed for LibreOffice
   bluez5_28 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5_28.nix { });
 
