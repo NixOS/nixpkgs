@@ -12996,17 +12996,17 @@ in {
   };
 
   ipyparallel = buildPythonPackage rec {
-    version = "5.2.0";
+    version = "6.0.0";
     name = "ipyparallel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipyparallel/${name}.tar.gz";
-      sha256 = "d99e760f1a136b1c402755a4ab51a8d7cb87c892cccadf641948a5e886c8a455";
+      sha256 = "9bb5032e98a8c73ddb3da5fb8eecd93c676a5278b68799ab19257b348a0a27f6";
     };
 
     buildInputs = with self; [ nose ];
 
-    propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
+    propagatedBuildInputs = with self; [ dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
     ] ++ optionals (!isPy3k) [ futures ];
 
     # Requires access to cluster
