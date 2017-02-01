@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://pharo.org;
     license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = pharo-vm.meta.platforms;
   };
 }

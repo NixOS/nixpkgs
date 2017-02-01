@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   buildInputs = with pythonPackages; [
-    pytest
+    pytest_29
     pytest-rerunfailures
   ];
 

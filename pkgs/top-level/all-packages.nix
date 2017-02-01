@@ -702,6 +702,9 @@ with pkgs;
 
   capstone = callPackage ../development/libraries/capstone { };
 
+  cataract          = callPackage ../applications/misc/cataract { };
+  cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
+
   catch = callPackage ../development/libraries/catch { };
 
   catdoc = callPackage ../tools/text/catdoc { };
@@ -2274,15 +2277,15 @@ with pkgs;
   };
 
 
-  ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
-    inherit (haskellPackages) ihaskell ghcWithPackages;
+  # ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
+  #   inherit (haskellPackages) ihaskell ghcWithPackages;
 
-    ipython = python3.buildEnv.override {
-      extraLibs = with python3Packages; [ ipython ipykernel jupyter_client notebook ];
-    };
+  #   ipython = python3.buildEnv.override {
+  #     extraLibs = with python3Packages; [ ipython ipykernel jupyter_client notebook ];
+  #   };
 
-    packages = config.ihaskell.packages or (self: []);
-  };
+  #   packages = config.ihaskell.packages or (self: []);
+  # };
 
   imapproxy = callPackage ../tools/networking/imapproxy { };
 
@@ -3831,7 +3834,7 @@ with pkgs;
   slsnif = callPackage ../tools/misc/slsnif { };
 
   smartmontools = callPackage ../tools/system/smartmontools {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
+    inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
   };
 
   smbldaptools = callPackage ../tools/networking/smbldaptools {
@@ -4558,6 +4561,8 @@ with pkgs;
   xvkbd = callPackage ../tools/X11/xvkbd {};
 
   xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
+
+  yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
 
@@ -5919,7 +5924,6 @@ with pkgs;
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
 
   inherit (callPackage ../development/interpreters/ruby {})
-    ruby_1_9_3
     ruby_2_0_0
     ruby_2_1_10
     ruby_2_2_5
@@ -5928,7 +5932,6 @@ with pkgs;
 
   # Ruby aliases
   ruby = ruby_2_3;
-  ruby_1_9 = ruby_1_9_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
   ruby_2_2 = ruby_2_2_5;
@@ -9095,6 +9098,8 @@ with pkgs;
 
   pg_similarity = callPackage ../servers/sql/postgresql/pg_similarity {};
 
+  pgroonga = callPackage ../servers/sql/postgresql/pgroonga {};
+
   phonon = callPackage ../development/libraries/phonon {};
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
@@ -10366,7 +10371,10 @@ with pkgs;
   jetty = callPackage ../servers/http/jetty { };
 
   knot-dns = callPackage ../servers/dns/knot-dns { };
-  knot-resolver = callPackage ../servers/dns/knot-resolver { };
+  knot-resolver = callPackage ../servers/dns/knot-resolver {
+    # TODO: vimNox after it gets fixed on Darwin or something lighter
+    hexdump = if stdenv.isLinux then utillinux.bin else vim/*xxd*/;
+  };
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
@@ -12307,6 +12315,8 @@ with pkgs;
 
   hasklig = callPackage ../data/fonts/hasklig {};
 
+  siji = callPackage ../data/fonts/siji { };
+
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
 
   source-code-pro = callPackage ../data/fonts/source-code-pro {};
@@ -13322,6 +13332,7 @@ with pkgs;
     withGtk = false;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
   };
+  # The GTK UI is deprecated by upstream. You probably want the QT version.
   wireshark-gtk = wireshark-cli.override { withGtk = true; };
   wireshark-qt = wireshark-cli.override { withQt = true; };
   wireshark = wireshark-qt;
@@ -14609,6 +14620,8 @@ with pkgs;
   pidgin-mra = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-mra { };
 
   pidgin-skypeweb = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-skypeweb { };
+
+  pidgin-xmpp-receipts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-xmpp-receipts { };
 
   pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
@@ -17634,8 +17647,6 @@ with pkgs;
     nix-prefetch-zip
     nix-prefetch-scripts;
 
-  nix-update-source = callPackage ../tools/package-management/nix-update-source {};
-
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { };
@@ -17947,6 +17958,8 @@ with pkgs;
   with-shell = callPackage ../applications/misc/with-shell { };
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
+
+  wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
 

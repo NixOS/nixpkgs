@@ -113,6 +113,11 @@ let
 
     buildInputs = [ expat ];
 
+    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile \
+      --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
+    '';
+
     preBuild = ''
       makeFlagsArray=(
         LUA_LDIR="$out/share/lua/${lua.luaversion}"
@@ -122,7 +127,7 @@ let
 
     meta = {
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
@@ -288,14 +293,16 @@ let
 
   luazlib = buildLuaPackage rec {
     name = "zlib-${version}";
-    version = "0.4";
+    version = "1.1";
 
     src = fetchzip {
       url = "https://github.com/brimworks/lua-zlib/archive/v${version}.tar.gz";
-      sha256 = "1pgxnjc0gvk25wsr69nsm60y5ad86z1nlq7mzj3ckygzkgi782dd";
+      sha256 = "1520lk4xpf094xn2zallqgqhs0zb4w61l49knv9y8pmhkdkxzzgy";
     };
 
     buildInputs = [ zlib ];
+
+    preConfigure = "substituteInPlace Makefile --replace gcc cc --replace '-llua' ''";
 
     preBuild = ''
       makeFlagsArray=(
@@ -303,14 +310,14 @@ let
         LUAPATH="$out/share/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INCDIR="-I${lua}/include"
-        LIBDIR="-L$out/lib");
+        LIBDIR="-L${lua}/lib");
     '';
 
     preInstall = "mkdir -p $out/lib/lua/${lua.luaversion}";
 
     meta = with stdenv.lib; {
       homepage = https://github.com/brimworks/lua-zlib;
-      hydraPlatforms = platforms.linux;
+      hydraPlatforms = platforms.unix;
       license = licenses.mit;
       maintainers = [ maintainers.koral ];
     };

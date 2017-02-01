@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "theme-vertex";
-  version = "20161009";
+  version = "20170128";
 
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "vertex-theme";
-    rev = "c861918a7fccf6d0768d45d790a19a13bb23485e";
-    sha256 = "13abgl18m04sj44gqipxbagpan4jqral65w59rgnhb6ldxgnhg33";
+    rev = version;
+    sha256 = "0c9mhrs95ahz37djrv176vn41ywvj26ilwmnr1h9171giv6hid98";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
