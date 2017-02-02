@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, opam, topkg
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg
 , uchar, result, gg, uutf, otfm, js_of_ocaml,
   pdfBackend ? true, # depends on uutf and otfm
   htmlcBackend ? true # depends on js_of_ocaml
@@ -17,14 +17,14 @@ assert versionAtLeast ocaml.version "4.02.0";
 
 stdenv.mkDerivation rec {
 
-  name = "ocaml-${pname}-${version}";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
     sha256 = "1czd2fq85hy24w5pllarsq4pvbx9rda5zdikxfxdng8s9kff2h3f";
   };
 
-  buildInputs = [ ocaml findlib opam topkg ];
+  buildInputs = [ ocaml findlib ocamlbuild opam topkg ];
 
   propagatedBuildInputs = [ uchar result gg ]
                           ++ optionals pdfBackend [ uutf otfm ]
