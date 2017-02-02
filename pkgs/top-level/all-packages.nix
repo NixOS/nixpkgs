@@ -1321,11 +1321,17 @@ with pkgs;
   cksfv = callPackage ../tools/networking/cksfv { };
 
   clementine = callPackage ../applications/audio/clementine {
-    boost = boost155;
-    gst_plugins = [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-ffmpeg ];
+    # boost = boost155;
+    withQt4 = true;
+    withQt5 = false;
   };
 
   clementineFree = clementine.free;
+
+  clementine-qt5 = libsForQt5.callPackage ../applications/audio/clementine {
+    withQt4 = false;
+    withQt5 = true;
+  };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
