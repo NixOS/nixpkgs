@@ -42,11 +42,7 @@ let
 
   mkurls = ({name, kind, ext}:
     let
-      drvs = map builtins.parseDrvName
-        [
-          name
-          (toLower name)
-        ];
+      drvs = map builtins.parseDrvName [ name (toLower name) ];
     in map ({name, version}: "mirror://pypiio/${kind}/${_firstChar name}/${name}/${name}-${version}${ext}") drvs
   );
 
