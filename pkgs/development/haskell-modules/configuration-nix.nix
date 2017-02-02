@@ -161,6 +161,7 @@ self: super: builtins.intersectAttrs super {
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
   wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
+  download = dontCheck super.download;
   http-client = dontCheck super.http-client;
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
