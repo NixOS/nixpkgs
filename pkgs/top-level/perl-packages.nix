@@ -2696,10 +2696,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptOpenSSLRandom = buildPerlPackage rec {
-    name = "Crypt-OpenSSL-Random-0.10";
+    name = "Crypt-OpenSSL-Random-0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "12pirh1pj8lpvzcwj2if9i6dbr6a7s9g1zc7gzbd3v87d6mx0rdf";
+      sha256 = "0yjcabkibrkafywvdkmd1xpi6br48skyk3l15ni176wvlg38335v";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
