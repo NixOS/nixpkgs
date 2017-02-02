@@ -37,11 +37,24 @@ let
     ip link del "${i}" 2>/dev/null || true
   '';
 
-in
+  # warn that these attributes are deprecated (2017-2-2)
+  # Should be removed in the release after next
+  bondDeprecation = rec {
+    deprecated = [ "lacp_rate" "miimon" "mode" "xmit_hash_policy" ];
+    filterDeprecated = bond: (filterAttrs (attrName: attr:
+                         elem attrName deprecated && attr != null) bond);
+  };
 
-{
+  bondWarnings =
+    let oneBondWarnings = bondName: bond:
+          mapAttrsToList (bondText bondName) (bondDeprecation.filterDeprecated bond);
+        bondText = bondName: optName: _:
+          "${bondName}.${optName} is deprecated, use ${bondName}.driverOptions";
+    in {
+      warnings = flatten (mapAttrsToList oneBondWarnings cfg.bonds);
+    };
 
-  config = mkIf (!cfg.useNetworkd) {
+  normalConfig = {
 
     systemd.services =
       let
@@ -288,10 +301,11 @@ in
 
               echo "Creating new bond ${n}..."
               ip link add name "${n}" type bond \
-                ${optionalString (v.mode != null) "mode ${toString v.mode}"} \
-                ${optionalString (v.miimon != null) "miimon ${toString v.miimon}"} \
-                ${optionalString (v.xmit_hash_policy != null) "xmit_hash_policy ${toString v.xmit_hash_policy}"} \
-                ${optionalString (v.lacp_rate != null) "lacp_rate ${toString v.lacp_rate}"}
+              ${let opts = (mapAttrs (const toString)
+                             (bondDeprecation.filterDeprecated v))
+                           // v.driverOptions;
+                 in concatStringsSep "\n"
+                      (mapAttrsToList (set: val: "  ${set} ${val} \\") opts)}
 
               # !!! There must be a better way to wait for the interface
               while [ ! -d "/sys/class/net/${n}" ]; do sleep 0.1; done;
@@ -402,6 +416,14 @@ in
         KERNEL=="tun", TAG+="systemd"
       '';
 
+
   };
 
+in
+
+{
+  config = mkMerge [
+    bondWarnings
+    (mkIf (!cfg.useNetworkd) normalConfig)
+  ];
 }
