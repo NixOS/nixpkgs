@@ -105,6 +105,7 @@ let
       };
 
   commonConfiguration = import ./configuration-common.nix { inherit pkgs; };
+  nixConfiguration = import ./configuration-nix.nix { inherit pkgs; };
 
 in
 
@@ -112,4 +113,5 @@ in
     (extends overrides
       (extends packageSetConfig
         (extends compilerConfig
-          (extends commonConfiguration haskellPackages))))
+          (extends commonConfiguration
+            (extends nixConfiguration haskellPackages)))))
