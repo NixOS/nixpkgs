@@ -9550,7 +9550,17 @@ with pkgs;
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
-  suil = callPackage ../development/libraries/audio/suil { };
+  suil-qt4 = callPackage ../development/libraries/audio/suil {
+    withQt4 = true;
+    withQt5 = false;
+  };
+
+  suil-qt5 = callPackage ../development/libraries/audio/suil {
+    withQt4 = false;
+    withQt5 = true;
+  };
+
+  suil = suil-qt4;
 
   sutils = callPackage ../tools/misc/sutils { };
 
