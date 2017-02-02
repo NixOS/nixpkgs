@@ -2,15 +2,28 @@
 , buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
-, bootPkgs, hscolour, llvm_35
+, bootPkgs, hscolour
 , coreutils, fetchurl, fetchpatch, perl
 , docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, libxml2, libxslt
 
-, libiconv ? null, ncurses
+, libffi, libiconv ? null, ncurses
+
+, useLLVM ? !targetPlatform.isx86
+, # LLVM is conceptually a run-time-only depedendency, but for
+  # non-x86, we need LLVM to bootstrap later stages, so it becomes a
+  # build-time dependency too.
+  buildLlvmPackages, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
   enableIntegerSimple ? false, gmp ? null
+
+, # If enabled, use -fPIC when compiling static libs.
+  enableRelocatedStaticLibs ? targetPlatform != hostPlatform
+
+, # Whether to build dynamic libs for the standard library (on the target
+  # platform). Static libs are always built.
+  enableShared ? true
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -28,11 +41,31 @@ let
     sha256 = "1j45z4kcd3w1rzm4hapap2xc16bbh942qnzzdbdjcwqznsccznf0";
   };
 
-  buildMK = stdenv.lib.optionalString enableIntegerSimple ''
+  buildMK = ''
+    DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
+  '' + stdenv.lib.optionalString enableIntegerSimple ''
     INTEGER_LIBRARY = integer-simple
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
     BuildFlavour = perf-cross
+    Stage1Only = YES
+    HADDOCK_DOCS = NO
+  '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
+    GhcLibHcOpts += -fPIC
+    GhcRtsHcOpts += -fPIC
   '';
+
+  # Splicer will pull out correct variations
+  libDeps = platform: [ ncurses ]
+    ++ stdenv.lib.optional (!enableIntegerSimple) gmp
+    ++ stdenv.lib.optional (platform.libc == "libSystem") libiconv;
+
+  toolsForTarget =
+    if hostPlatform == buildPlatform then
+      [ targetPackages.stdenv.cc ] ++ stdenv.lib.optional useLLVM llvmPackages.llvm
+    else assert targetPlatform == hostPlatform; # build != host == target
+      [ stdenv.cc ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
+
+  targetCC = builtins.head toolsForTarget;
 
 in
 
@@ -45,16 +78,14 @@ stdenv.mkDerivation rec {
     sha256 = "1vsgmic8csczl62ciz51iv8nhrkm72lyhbz7p7id13y2w7fcx46g";
   };
 
+  enableParallelBuilding = true;
+
+  outputs = [ "out" "doc" ];
+
   patches = [
     docFixes
     ./relocation.patch
   ];
-
-  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ] ++ stdenv.lib.optionals targetPlatform.isArm [ llvm_35 ];
-
-  enableParallelBuilding = true;
-
-  outputs = [ "out" "doc" ];
 
   preConfigure = ''
     echo -n "${buildMK}" > mk/build.mk
@@ -65,15 +96,43 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
 
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ]
+    ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  # `--with` flags for libraries needed for RTS linker
   configureFlags = [
-    "--with-gcc=${stdenv.cc}/bin/cc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
     "--datadir=$doc/share/doc/ghc"
-  ] ++ stdenv.lib.optional (! enableIntegerSimple) [
+    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
-  ] ++ stdenv.lib.optional stdenv.isDarwin [
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.isDarwin) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
+  ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
+    "--enable-bootstrap-with-devel-snapshot"
+  ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
+    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+    "--disable-large-address-space"
   ];
+
+  # Hack to make sure we never to the relaxation `$PATH` and hooks support for
+  # compatability. This will be replaced with something clearer in a future
+  # masss-rebuild.
+  crossConfig = true;
+
+  nativeBuildInputs = [
+    ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour
+  ];
+
+  # For building runtime libs
+  depsBuildTarget = toolsForTarget;
+
+  buildInputs = libDeps hostPlatform;
+
+  propagatedBuildInputs = [ targetPackages.stdenv.cc ]
+    ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
+
+  depsTargetTarget = map stdenv.lib.getDev (libDeps targetPlatform);
+  depsTargetTargetPropagated = map (stdenv.lib.getOutput "out") (libDeps targetPlatform);
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
@@ -93,6 +152,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit bootPkgs targetPrefix;
+
+    inherit llvmPackages;
   };
 
   meta = {
@@ -101,4 +162,5 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;
   };
+
 }

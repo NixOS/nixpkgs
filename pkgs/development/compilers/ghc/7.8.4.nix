@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, ghc, perl, ncurses, libiconv
+{ stdenv, targetPackages
+
+, fetchurl, ghc, perl
+, libffi, libiconv ? null, ncurses
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
@@ -9,22 +12,7 @@
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 assert !enableIntegerSimple -> gmp != null;
 
-stdenv.mkDerivation (rec {
-  version = "7.8.4";
-  name = "ghc-${version}";
-
-  src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "1i4254akbb4ym437rf469gc0m40bxm31blp6s1z1g15jmnacs6f3";
-  };
-
-  patches = [ ./relocation.patch ];
-
-  buildInputs = [ ghc perl ncurses ]
-                ++ stdenv.lib.optional (!enableIntegerSimple) gmp;
-
-  enableParallelBuilding = true;
-
+let
   buildMK = ''
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses.dev}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses.out}/lib"
@@ -40,6 +28,27 @@ stdenv.mkDerivation (rec {
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp.dev}/include"
   '');
 
+  # Splicer will pull out correct variations
+  libDeps = [ ncurses ]
+    ++ stdenv.lib.optional (!enableIntegerSimple) gmp
+    ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "libSystem") libiconv;
+
+in
+
+stdenv.mkDerivation rec {
+  version = "7.8.4";
+  name = "ghc-${version}";
+
+  src = fetchurl {
+    url = "http://www.haskell.org/ghc/dist/${version}/${name}-src.tar.xz";
+    sha256 = "1i4254akbb4ym437rf469gc0m40bxm31blp6s1z1g15jmnacs6f3";
+  };
+
+  enableParallelBuilding = true;
+
+  patches = [ ./relocation.patch ]
+    ++ stdenv.lib.optional stdenv.isDarwin ./hpc-7.8.4.patch;
+
   preConfigure = ''
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -48,6 +57,18 @@ stdenv.mkDerivation (rec {
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
+
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ];
+
+  nativeBuildInputs = [ ghc perl ];
+  depsBuildTarget = [ targetPackages.stdenv.cc ];
+
+  buildInputs = libDeps;
+  propagatedBuildInputs = [ targetPackages.stdenv.cc ];
+
+  depsTargetTarget = map stdenv.lib.getDev libDeps;
+  depsTargetTargetPropagated = map (stdenv.lib.getOutput "out") libDeps;
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
@@ -62,7 +83,4 @@ stdenv.mkDerivation (rec {
     inherit (ghc.meta) license platforms;
   };
 
-} // stdenv.lib.optionalAttrs stdenv.isDarwin {
-  # https://ghc.haskell.org/trac/ghc/ticket/9762
-  patches = [ ./hpc-7.8.4.patch ];
-})
+}
