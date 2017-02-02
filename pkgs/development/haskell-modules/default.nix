@@ -1,4 +1,6 @@
 { pkgs, stdenv, ghc, all-cabal-hashes
+, buildPlatform, hostPlatform
+, buildPackages
 , compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})

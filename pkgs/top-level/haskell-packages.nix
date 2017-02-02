@@ -1,4 +1,6 @@
-{ pkgs, callPackage, stdenv, buildPlatform, targetPlatform }:
+{ pkgs, buildPackages, callPackage, stdenv
+, buildPlatform, targetPlatform
+}:
 
 let # These are attributes in compiler and packages that don't support integer-simple.
     integerSimpleExcludes = [
@@ -69,17 +71,13 @@ in rec {
       sphinx = pkgs.python27Packages.sphinx;
     };
     ghc821 = callPackage ../development/compilers/ghc/8.2.1.nix rec {
-      bootPkgs = packages.ghc802;
+      bootPkgs = if buildPlatform != targetPlatform then packages.ghc821 else packages.ghc802;
       inherit (bootPkgs) hscolour alex happy;
-      inherit buildPlatform targetPlatform;
       sphinx = pkgs.python3Packages.sphinx;
-      selfPkgs = packages.ghc821;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
-      bootPkgs = packages.ghc7103;
+      bootPkgs = if buildPlatform != targetPlatform then packages.ghcHEAD else packages.ghc7103;
       inherit (bootPkgs) alex happy;
-      inherit buildPlatform targetPlatform;
-      selfPkgs = packages.ghcHEAD;
     };
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
@@ -103,19 +101,17 @@ in rec {
 
     # The integer-simple attribute set contains all the GHC compilers
     # build with integer-simple instead of integer-gmp.
-    integer-simple =
-      let integerSimpleGhcNames =
-            pkgs.lib.filter (name: ! builtins.elem name integerSimpleExcludes)
-                            (pkgs.lib.attrNames compiler);
-          integerSimpleGhcs = pkgs.lib.genAttrs integerSimpleGhcNames
-                                (name: compiler."${name}".override { enableIntegerSimple = true; });
-      in pkgs.recurseIntoAttrs (integerSimpleGhcs // {
-           ghcHEAD = integerSimpleGhcs.ghcHEAD.override { selfPkgs = packages.integer-simple.ghcHEAD; };
-         });
-
+    integer-simple = let
+      integerSimpleGhcNames = pkgs.lib.filter
+        (name: ! builtins.elem name integerSimpleExcludes)
+        (pkgs.lib.attrNames compiler);
+    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
+      integerSimpleGhcNames
+      (name: compiler."${name}".override { enableIntegerSimple = true; }));
   };
 
-  packages = {
+  # Always get compilers from `buildPackages`
+  packages = let inherit (buildPackages.haskell) compiler; in {
 
     # Support for this compiler is broken, because it can't deal with directory-based package databases.
     # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
@@ -171,15 +167,6 @@ in rec {
       ghc = compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    # TODO Support for multiple variants here
-    ghcCross = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcHEAD.crossCompiler;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
-    };
-    ghcCross821 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc821.crossCompiler;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
-    };
     ghcjs = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjs;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
@@ -197,16 +184,16 @@ in rec {
 
     # The integer-simple attribute set contains package sets for all the GHC compilers
     # using integer-simple instead of integer-gmp.
-    integer-simple =
-      let integerSimpleGhcNames =
-            pkgs.lib.filter (name: ! builtins.elem name integerSimpleExcludes)
-                            (pkgs.lib.attrNames packages);
-      in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
-       ghc = compiler.integer-simple."${name}";
-       overrides = _self : _super : {
-         integer-simple = null;
-         integer-gmp = null;
-       };
+    integer-simple = let
+      integerSimpleGhcNames = pkgs.lib.filter
+        (name: ! builtins.elem name integerSimpleExcludes)
+        (pkgs.lib.attrNames packages);
+    in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
+      ghc = compiler.integer-simple."${name}";
+      overrides = _self : _super : {
+        integer-simple = null;
+        integer-gmp = null;
+      };
     });
 
   };
