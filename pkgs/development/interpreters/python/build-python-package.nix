@@ -12,7 +12,7 @@
 
 let
   setuptools-specific = import ./build-python-package-setuptools.nix { inherit lib python bootstrapped-pip; };
-  flit-specific = import ./build-python-package-flit.nix { inherit flit; };
+  flit-specific = import ./build-python-package-flit.nix { inherit python flit; };
   wheel-specific = import ./build-python-package-wheel.nix { };
   common = import ./build-python-package-common.nix { inherit python bootstrapped-pip; };
 in
