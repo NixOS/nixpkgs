@@ -621,6 +621,14 @@ self: super: {
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
 
+  # https://github.com/haskell/haddock/issues/571
+  haddock-api = appendPatch (doJailbreak super.haddock-api) (pkgs.fetchpatch {
+    url = "https://github.com/basvandijk/haddock/commit/f4c5e46ded05a4b8884f5ad6f3102f79ff3bb127.patch";
+    sha256 = "01dawvikzw6y43557sbp9q7z9vw2g3wnzvv5ny0f0ks6ccc0vj0m";
+    stripLen = 2;
+    addPrefixes = true;
+  });
+
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
 
