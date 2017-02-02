@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
   libmspack, openssl, pam, xercesc, icu, libdnet, procps,
   xlibsWrapper, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkgconfig, glib, gtk, gtkmm, iproute, dbus, systemd }:
+  pkgconfig, glib, gtk, gtkmm, iproute, dbus, systemd, fuse }:
 
 let
   majorVersion = "10.0";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ autoreconfHook makeWrapper libmspack openssl pam xercesc icu libdnet procps
-      pkgconfig glib gtk gtkmm xlibsWrapper libXinerama libXi libXrender libXrandr libXtst ];
+      pkgconfig glib gtk gtkmm xlibsWrapper libXinerama libXi libXrender libXrandr libXtst fuse ];
 
   postPatch = ''
      sed -i s,-Werror,,g configure.ac
