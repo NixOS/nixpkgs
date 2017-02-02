@@ -10,6 +10,8 @@ let
   packages = ( self:
 
 let
+
+  _firstChar = strings.substring 0 1;
   pythonAtLeast = versionAtLeast python.pythonVersion;
   pythonOlder = versionOlder python.pythonVersion;
   isPy26 = python.majorVersion == "2.6";
@@ -19,7 +21,7 @@ let
   isPy35 = python.majorVersion == "3.5";
   isPy36 = python.majorVersion == "3.6";
   isPyPy = python.executable == "pypy";
-  isPy3k = strings.substring 0 1 python.majorVersion == "3";
+  isPy3k = _firstChar python.majorVersion == "3";
 
   callPackage = pkgs.newScope self;
 
@@ -36,21 +38,30 @@ let
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
   graphiteVersion = "0.9.15";
+  
 
-  fetchPypiMirror = ({ kind, ext, sha256, ...} @ args:
+  mkurls = ({name, kind, ext}:
     let
-      _name = args.name or "${args.pname}-${args.version}";
-      _pdrv = builtins.parseDrvName _name;
+      drvs = map builtins.parseDrvName
+        [
+          name
+          (toLower name)
+        ];
+    in map ({name, version}: "mirror://pypiio/${kind}/${_firstChar name}/${name}/${name}-${version}${ext}") drvs
+  );
+
+  fetchPypiMirror = ({ kind, exts, sha256, ...} @ args:
+    let
+      name = args.name or "${args.pname}-${args.version}";
     in
       pkgs.fetchurl {
         inherit sha256;
-        url = "mirror://pypiio/${kind}/${builtins.substring 0 1 _name}/${_pdrv.name}/${_name}${ext}";
+        urls = concatMap (ext: mkurls { inherit name kind ext;}) exts;
    });
 
-  fetchSource = args: fetchPypiMirror (args // { kind = "source"; ext=".tar.gz"; });
-  fetchSourceZip = args: fetchPypiMirror (args // { kind = "source"; ext = ".zip";});
-  fetchWheel = args: fetchPypiMirror (args // rec { kind = if  "source" then "py3" else "py2"; ext = "-${kind}-none-any.whl";});
-  fetchUniversalWheel = args: fetchPypiMirror (args // rec { kind = "py2.py3"; ext = "-${kind}-none-any.whl";});
+  fetchSource = args: fetchPypiMirror (args // { kind = "source"; exts=[".tar.gz" ".zip"]; });
+  fetchWheel = args: fetchPypiMirror (args // rec { kind ="py${_firstChar python.majorVersion}"; exts = ["-${kind}-none-any.whl"];});
+  fetchUniversalWheel = args: fetchPypiMirror (args // rec { kind = "py2.py3"; exts = ["-${kind}-none-any.whl"];});
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
