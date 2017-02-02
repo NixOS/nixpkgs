@@ -97,6 +97,7 @@
 "github:shougo/vimproc.vim"
 "github:shougo/vimshell.vim"
 "github:sjl/gundo.vim"
+"github:slashmili/alchemist.vim"
 "github:takac/vim-hardtime"
 "github:terryma/vim-expand-region"
 "github:tex/vimpreviewpandoc"
