@@ -37,9 +37,9 @@ let
 
   graphiteVersion = "0.9.15";
 
-  fetchPypiMirror = ({ name ? null , pname ? null, version ? null, kind, ext, sha256}:
+  fetchPypiMirror = ({ kind, ext, sha256, ...} @ args:
     let
-      _name = if name == null then "${pname}-${version}" else name;
+      _name = args.name or "${args.pname}-${args.version}";
       _pdrv = builtins.parseDrvName _name;
     in
       pkgs.fetchurl {
