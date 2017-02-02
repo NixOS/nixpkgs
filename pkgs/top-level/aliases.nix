@@ -59,6 +59,7 @@ doNotDisplayTwice rec {
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
   keepassx2-http = keepassx-reboot; # added 2016-10-17
+  keepassx-reboot = keepassx-community; # added 2017-02-01
   keybase-go = keybase;  # added 2016-08-24
   letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
