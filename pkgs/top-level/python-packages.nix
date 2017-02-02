@@ -25431,7 +25431,7 @@ in {
 
     meta = {
       description = "Test utilities for code working with files and commands";
-      license = with lib.licenses; [ mit ];
+      license = licenses.mit;
       homepage = https://github.com/jupyter/testpath;
     };
   };
