@@ -10,6 +10,8 @@ let
   packages = ( self:
 
 let
+
+  _firstChar = strings.substring 0 1;
   pythonAtLeast = versionAtLeast python.pythonVersion;
   pythonOlder = versionOlder python.pythonVersion;
   isPy26 = python.majorVersion == "2.6";
@@ -19,7 +21,7 @@ let
   isPy35 = python.majorVersion == "3.5";
   isPy36 = python.majorVersion == "3.6";
   isPyPy = python.executable == "pypy";
-  isPy3k = strings.substring 0 1 python.majorVersion == "3";
+  isPy3k = _firstChar python.majorVersion == "3";
 
   callPackage = pkgs.newScope self;
 
@@ -36,7 +38,26 @@ let
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
   graphiteVersion = "0.9.15";
+  
 
+  mkurls = ({name, kind, ext}:
+    let
+      drvs = map builtins.parseDrvName [ name (toLower name) ];
+    in map ({name, version}: "mirror://pypiio/${kind}/${_firstChar name}/${name}/${name}-${version}${ext}") drvs
+  );
+
+  fetchPypiMirror = ({ kind, exts, sha256, ...} @ args:
+    let
+      name = args.name or "${args.pname}-${args.version}";
+    in
+      pkgs.fetchurl {
+        inherit sha256;
+        urls = concatMap (ext: mkurls { inherit name kind ext;}) exts;
+   });
+
+  fetchSource = args: fetchPypiMirror (args // { kind = "source"; exts=[".tar.gz" ".zip" ".tgz"]; });
+  fetchWheel = args: fetchPypiMirror (args // rec { kind ="py${_firstChar python.majorVersion}"; exts = ["-${kind}-none-any.whl"];});
+  fetchUniversalWheel = args: fetchPypiMirror (args // rec { kind = "py2.py3"; exts = ["-${kind}-none-any.whl"];});
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
@@ -53,14 +74,14 @@ in {
 
   acoustics = buildPythonPackage rec {
     pname = "acoustics";
+    name = "acoustics-${version}";
     version = "0.1.2";
-    name = pname + "-" + version;
 
     buildInputs = with self; [ cython pytest ];
     propagatedBuildInputs = with self; [ numpy scipy matplotlib pandas tabulate ];
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+    src = fetchSource {
+      inherit name;
       sha256 = "b75a47de700d01e704de95953a6e969922b2f510d7eefe59f7f8980ad44ad1b7";
     };
 
@@ -88,8 +109,8 @@ in {
 
     propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse ];
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/agate/${name}.tar.gz";
+    src = fetchSource {
+      inherit name;
       sha256 = "0h2w30a0zhylivz86d823a05hvg8w8p61lmm855z1wwkgml9l9d4";
     };
   };
@@ -755,8 +776,8 @@ in {
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/almir/${name}.zip";
+    src = fetchSourceZip {
+      inherit name;
       sha256 = "5dc0b8a5071f3ff46cd2d92608f567ba446e4c733c063b17d89703caeb9868fe";
     };
 
