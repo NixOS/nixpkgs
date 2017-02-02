@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, zlib, libusb1, cmake, qt5, enableGUI ? false }:
 
-let version = "1.4.1-34-g7ebee1e"; in
+let version = "1.4.1-37-gb6fe7f8"; in
 
 stdenv.mkDerivation {
   name = "heimdall-${version}";
