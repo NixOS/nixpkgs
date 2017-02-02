@@ -2,21 +2,21 @@
   makeWrapper, libXScrnSaver }:
 
 let
-  version = "1.8.1";
-  rev = "ee428b0eead68bf0fb99ab5fdc4439be227b6281";
+  version = "1.9.0";
+  rev = "38746938a4ab94f2f57d9e1309c51fd6fb37553d";
   channel = "stable";
 
-  sha256 = if stdenv.system == "i686-linux"    then "f48c2eb302de0742612f6c5e4ec4842fa474a85c1bcf421456526c9472d4641f"
-      else if stdenv.system == "x86_64-linux"  then "99bd463707f3a21bc949eec3e857c80aafef8f66e06a295148c1c23875244760"
-      else if stdenv.system == "x86_64-darwin" then "9202c85669853b07d1cbac9e6bcb01e7c08e13fd2a2b759dd53994e0fa51e7a1"
+  sha256 = if stdenv.system == "i686-linux"    then "05f1sk2lq2skp8fxq6q229kf89vi2sq3zz6lywq7nk81pwvp8jap"
+      else if stdenv.system == "x86_64-linux"  then "0wj17lwq8f88xvfa6wfbqm580kp0470ib2yxn15j9mv0iw7nzqry"
+      else if stdenv.system == "x86_64-darwin" then "1k067h099j6fv820nn6h4i8ax35yvd1h8f4h5216dm66cpikv7nd"
       else throw "Unsupported system: ${stdenv.system}";
 
   urlBase = "https://az764295.vo.msecnd.net/${channel}/${rev}/";
 
   urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-${channel}-code_${version}-1482159060_i386.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1486024310_i386.tar.gz"
       else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-${channel}-code_${version}-1482158209_amd64.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1486023356_amd64.tar.gz"
       else if stdenv.system == "x86_64-darwin" then
         urlBase + "VSCode-darwin-${channel}.zip"
       else throw "Unsupported system: ${stdenv.system}";
