@@ -55,7 +55,7 @@ let
         urls = concatMap (ext: mkurls { inherit name kind ext;}) exts;
    });
 
-  fetchSource = args: fetchPypiMirror (args // { kind = "source"; exts=[".tar.gz" ".zip"]; });
+  fetchSource = args: fetchPypiMirror (args // { kind = "source"; exts=[".tar.gz" ".zip" ".tgz"]; });
   fetchWheel = args: fetchPypiMirror (args // rec { kind ="py${_firstChar python.majorVersion}"; exts = ["-${kind}-none-any.whl"];});
   fetchUniversalWheel = args: fetchPypiMirror (args // rec { kind = "py2.py3"; exts = ["-${kind}-none-any.whl"];});
 in {
