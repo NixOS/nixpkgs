@@ -17254,11 +17254,7 @@ with pkgs;
 
   yacas = callPackage ../applications/science/math/yacas { };
 
-  speedcrunch = callPackage ../applications/science/math/speedcrunch {
-    qt = qt4;
-    cmake = cmakeCurses;
-  };
-
+  speedcrunch = qt5.callPackage ../applications/science/math/speedcrunch { };
 
   ### SCIENCE / MISC
 
