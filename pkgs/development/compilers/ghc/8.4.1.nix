@@ -1,6 +1,5 @@
 { stdenv, targetPackages
 , buildPlatform, hostPlatform, targetPlatform
-, selfPkgs, cross ? null
 
 # build-tools
 , bootPkgs, alex, happy
@@ -33,7 +32,7 @@ let
     BuildFlavour = perf-cross
   '';
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   inherit version rev;
   name = "${targetPrefix}ghc-${version}";
 
@@ -95,11 +94,6 @@ stdenv.mkDerivation (rec {
 
   passthru = {
     inherit bootPkgs targetPrefix;
-  } // stdenv.lib.optionalAttrs (targetPlatform != buildPlatform) {
-    crossCompiler = selfPkgs.ghc.override {
-      cross = targetPlatform;
-      bootPkgs = selfPkgs;
-    };
   };
 
   meta = {
@@ -109,24 +103,4 @@ stdenv.mkDerivation (rec {
     inherit (ghc.meta) license platforms;
   };
 
-} // stdenv.lib.optionalAttrs (cross != null) {
-  configureFlags = [
-    "CC=${stdenv.cc}/bin/${cross.config}-cc"
-    "LD=${stdenv.cc.bintools}/bin/${cross.config}-ld"
-    "AR=${stdenv.cc.bintools}/bin/${cross.config}-ar"
-    "NM=${stdenv.cc.bintools}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.cc.bintools}/bin/${cross.config}-ranlib"
-    "--target=${cross.config}"
-    "--enable-bootstrap-with-devel-snapshot"
-  ] ++
-    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-    stdenv.lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
-
-  configurePlatforms = [];
-
-  passthru = {
-    inherit bootPkgs cross;
-    cc = "${stdenv.cc}/bin/${cross.config}-cc";
-    ld = "${stdenv.cc}/bin/${cross.config}-ld";
-  };
-})
+}
