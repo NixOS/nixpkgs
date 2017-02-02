@@ -160,8 +160,8 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  nativeBuildInputs = optional (allPkgconfigDepends != []) pkgconfig ++
-                      buildTools ++ libraryToolDepends ++ executableToolDepends ++ [ removeReferencesTo ];
+  nativeBuildInputs = [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+                      buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
   otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
                      optionals (allPkgconfigDepends != []) allPkgconfigDepends ++
@@ -220,7 +220,6 @@ stdenv.mkDerivation ({
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
-    export PATH="${ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     packageConfDir="$TMPDIR/package.conf.d"
@@ -276,6 +275,8 @@ stdenv.mkDerivation ({
     runHook postCompileBuildDriver
   '';
 
+  # Cabal takes flags like `--configure-option=--host=...` instead
+  configurePlatforms = [];
   inherit configureFlags;
 
   configurePhase = ''
