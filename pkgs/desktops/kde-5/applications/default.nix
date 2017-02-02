@@ -64,6 +64,7 @@ let
     libkipi = callPackage ./libkipi.nix {};
     libkomparediff2 = callPackage ./libkomparediff2.nix {};
     marble = callPackage ./marble.nix {};
+    okteta = callPackage ./okteta.nix {};
     okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
     spectacle = callPackage ./spectacle.nix {};
