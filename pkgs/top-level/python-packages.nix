@@ -37,30 +37,29 @@ let
 
   graphiteVersion = "0.9.15";
 
-  fetchwheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
-  # Fetch a wheel. By default we fetch an universal wheel.
-  # See https://www.python.org/dev/peps/pep-0427/#file-name-convention for details regarding the optional arguments.
+  fetchPypi = {format ? "setuptools", ... } @attrs:
     let
-      url = "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
-    in pkgs.fetchurl {inherit url sha256;};
+      fetchWheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
+      # Fetch a wheel. By default we fetch an universal wheel.
+      # See https://www.python.org/dev/peps/pep-0427/#file-name-convention for details regarding the optional arguments.
+        let
+          url = "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
+        in pkgs.fetchurl {inherit url sha256;};
 
-  fetchtarball = {pname, version, sha256}:
-  # Fetch a tarball.
-    let
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz";
-    in pkgs.fetchurl {inherit url sha256;};
-
-  fetchpypi = {format ? "setuptools", ... } @attrs:
-    let
-      fetcher = (if format == "wheel" then fetchwheel
-        else if format == "setuptools" then fetchtarball
+      fetchSource = {pname, version, sha256}:
+      # Fetch a source tarball.
+        let
+          url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz";
+        in pkgs.fetchurl {inherit url sha256;};
+      fetcher = (if format == "wheel" then fetchWheel
+        else if format == "setuptools" then fetchSource
         else throw "Unsupported kind ${kind}");
     in fetcher (builtins.removeAttrs attrs ["format"]);
 
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
-  inherit fetchwheel fetchtarball fetchpypi;
+  inherit fetchPypi;
 
   # helpers
 
@@ -6631,7 +6630,7 @@ in {
     name = "${pname}-${version}";
     format = "wheel";
 
-    src = fetchpypi {
+    src = fetchPypi {
       inherit pname version format;
       sha256 = "0a0685962ee5ac303f470acbb659f0f97aef5b9deb6b85d059691c706ef6e45e";
     };
@@ -25424,7 +25423,7 @@ in {
     #  ${python.interpreter} -m unittest discover
     #'';
     format = "wheel";
-    src = fetchpypi {
+    src = fetchPypi {
       inherit pname version format;
       sha256 = "f16b2cb3b03e1ada4fb0200b265a4446f92f3ba4b9d88ace34f51c54ab6d294e";
     };
@@ -30804,7 +30803,7 @@ EOF
     pname = "pandocfilters";
     name = pname + "-${version}";
 
-    src = fetchpypi{
+    src = fetchPypi{
       inherit pname version;
       sha256 = "ec8bcd100d081db092c57f93462b1861bcfa1286ef126f34da5cb1d969538acd";
     };
