@@ -12627,9 +12627,7 @@ with pkgs;
 
   cava = callPackage ../applications/audio/cava { };
 
-  cb2bib = callPackage ../applications/office/cb2bib {
-    inherit (xorg) libX11;
-  };
+  cb2bib = qt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
 
