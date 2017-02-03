@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, zdoom
+{ stdenv, fetchFromGitHub, cmake, zdoom, makeWrapper
 , openal, fluidsynth, soundfont-fluid, mesa_noglu, SDL2
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
 stdenv.mkDerivation rec {
   name = "gzdoom-${version}";
-  version = "2.2.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "0xxgd8fa29pcdir1xah5cvx41bfy76p4dydpp13mf44p9pr29hrb";
+    sha256 = "1ys7wl4ygvm2lm49qjpql6c5i8gydmbg4f436bcpkywf5srr6xrd";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
     SDL2 mesa_noglu openal fluidsynth bzip2 zlib libjpeg libsndfile mpg123
     game-music-emu
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       install -Dm644 "$i" "$out/lib/gzdoom/$i"
     done
     mkdir $out/bin
-    ln -s $out/lib/gzdoom/gzdoom $out/bin/gzdoom
+    makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
   '';
 
   meta = with stdenv.lib; {
