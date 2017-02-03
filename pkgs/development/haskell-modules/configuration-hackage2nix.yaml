@@ -7140,7 +7140,6 @@ dont-distribute-packages:
   svgutils:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   svm-simple:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   svndump:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
-  swagger2:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   swagger:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   swapper:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   swearjure:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
