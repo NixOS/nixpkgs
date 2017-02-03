@@ -1,28 +1,27 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libtirpc
+{ fetchurl, stdenv, pkgconfig, libtirpc
 , useSystemd ? true, systemd }:
 
-let version = "0.2.3";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "rpcbind-${version}";
+  version = "0.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/rpcbind/${version}/${name}.tar.bz2";
-    sha256 = "0yyjzv4161rqxrgjcijkrawnk55rb96ha0pav48s03l2klx855wq";
+    sha256 = "0rjc867mdacag4yqvs827wqhkh27135rp9asj06ixhf71m9rljh7";
   };
 
   patches = [
     ./sunrpc.patch
-    ./0001-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/r/rpcbind/0.2.3-0.5/debian/patches/CVE-2015-7236.patch";
-      sha256 = "1wsv5j8f5djzxr11n4027x107cam1avmx9w34g6l5d9s61j763wq";
-    })
   ];
 
   buildInputs = [ libtirpc ]
              ++ stdenv.lib.optional useSystemd systemd;
 
-  configureFlags = stdenv.lib.optional (!useSystemd) "--with-systemdsystemunitdir=no";
+  configureFlags = [
+    "--with-systemdsystemunitdir=${if useSystemd then "$(out)/etc/systemd/system" else "no"}"
+    "--enable-warmstarts"
+    "--with-rpcuser=rpc"
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
 
