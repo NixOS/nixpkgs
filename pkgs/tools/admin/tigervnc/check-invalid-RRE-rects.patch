@@ -1,0 +1,31 @@
+Git-commit: 466de9c52e925ea784fe4ce455741b2638ee3e94
+Patch-Mainline: Upstream
+References: bnc#1019274
+Author: Pierre Ossman <ossman@cendio.se>
+Subject: [PATCH] Check invalid RRE rects
+Signed-off-by: Michal Srb <msrb@suse.com>
+
+
+diff --git a/common/rfb/rreDecode.h b/common/rfb/rreDecode.h
+index 56defbd..f9fdcfc 100644
+--- a/common/rfb/rreDecode.h
++++ b/common/rfb/rreDecode.h
+@@ -22,6 +22,7 @@
+ // BPP                - 8, 16 or 32
+
+ #include <rdr/InStream.h>
++#include <rfb/Exception.h>
+
+ namespace rfb {
+
+@@ -49,6 +50,10 @@ void RRE_DECODE (const Rect& r, rdr::InStream* is,
+     int y = is->readU16();
+     int w = is->readU16();
+     int h = is->readU16();
++
++    if (((x+w) > r.width()) || ((y+h) > r.height()))
++      throw Exception ("RRE decode error");
++
+     pb->fillRect(pf, Rect(r.tl.x+x, r.tl.y+y, r.tl.x+x+w, r.tl.y+y+h), &pix);
+   }
+ }

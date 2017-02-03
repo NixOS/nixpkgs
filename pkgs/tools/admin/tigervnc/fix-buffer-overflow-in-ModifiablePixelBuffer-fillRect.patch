@@ -1,0 +1,53 @@
+Git-commit: 18c020124ff1b2441f714da2017f63dba50720ba
+Patch-Mainline: Upstream
+References: bnc#1019274
+Author: Michal Srb <michalsrb@gmail.com>
+Subject: [PATCH] Fix buffer overflow in ModifiablePixelBuffer::fillRect.
+
+It can be triggered by RRE message with subrectangle out of framebuffer
+boundaries. It may prevent the same kind of issue caused by evil message
+from another encoding too.
+
+diff --git a/common/rfb/PixelBuffer.cxx b/common/rfb/PixelBuffer.cxx
+index 89addab..7f3df6c 100644
+--- a/common/rfb/PixelBuffer.cxx
++++ b/common/rfb/PixelBuffer.cxx
+@@ -101,15 +101,26 @@ void ModifiablePixelBuffer::fillRect(const Rect& r, const void* pix)
+   int stride;
+   U8 *buf;
+   int w, h, b;
++  Rect drect;
+
+-  w = r.width();
+-  h = r.height();
++  drect = r;
++  if (!drect.enclosed_by(getRect())) {
++    vlog.error("Destination rect %dx%d at %d,%d exceeds framebuffer %dx%d",
++               drect.width(), drect.height(), drect.tl.x, drect.tl.y, width_, height_);
++    drect = drect.intersect(getRect());
++  }
++
++  if (drect.is_empty())
++    return;
++
++  w = drect.width();
++  h = drect.height();
+   b = format.bpp/8;
+
+   if (h == 0)
+     return;
+
+-  buf = getBufferRW(r, &stride);
++  buf = getBufferRW(drect, &stride);
+
+   if (b == 1) {
+     while (h--) {
+@@ -136,7 +147,7 @@ void ModifiablePixelBuffer::fillRect(const Rect& r, const void* pix)
+     }
+   }
+
+-  commitBufferRW(r);
++  commitBufferRW(drect);
+ }
+
+ void ModifiablePixelBuffer::imageRect(const Rect& r,
