@@ -16812,6 +16812,8 @@ with pkgs;
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
+  ecopcr = callPackage ../applications/science/biology/ecopcr { };
+
   emboss = callPackage ../applications/science/biology/emboss { };
 
   htslib = callPackage ../development/libraries/science/biology/htslib { };
