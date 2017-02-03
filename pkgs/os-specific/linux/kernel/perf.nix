@@ -32,8 +32,11 @@ stdenv.mkDerivation {
   # bad `ld' and other stuff.
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=cpp" "-Wno-error=bool-compare" "-Wno-error=deprecated-declarations"
-    "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
-  ];
+  ]
+    # gcc before 6 doesn't know these options
+    ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc) [
+      "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
+    ];
 
   installFlags = "install install-man ASCIIDOC8=1";
 
