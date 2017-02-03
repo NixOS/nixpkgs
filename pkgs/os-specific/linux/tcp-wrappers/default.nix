@@ -1,23 +1,25 @@
 { fetchurl, stdenv }:
 
-stdenv.mkDerivation rec {
+let
+  vanillaVersion = "7.6.q";
+  patchLevel = "26";
+in stdenv.mkDerivation rec {
   name = "tcp-wrappers-${version}";
-  version = "7.6.q";
+  version = "${vanillaVersion}-${patchLevel}";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${vanillaVersion}.orig.tar.gz";
     sha256 = "0p9ilj4v96q32klavx0phw9va21fjp8vpk11nbh6v2ppxnnxfhwm";
   };
 
   debian = fetchurl {
-    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}-24.debian.tar.xz";
-    sha256 = "1kgax35rwaj5q8nf8fw60aczvxj99h2jjp7iv1f82y85yz9x0ak7";
+    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}.debian.tar.xz";
+    sha256 = "1dcdhi9lwzv7g19ggwxms2msq9fy14rl09rjqb10hwv0jix7z8j8";
   };
 
   prePatch = ''
     tar -xaf $debian
-    shopt -s extglob
-    patches="$(echo debian/patches/!(series)) $patches"
+    patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
   '';
 
   makeFlags = [ "REAL_DAEMON_DIR=$(out)/bin" "linux" ];
