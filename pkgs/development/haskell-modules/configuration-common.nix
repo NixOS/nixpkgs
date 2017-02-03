@@ -784,6 +784,7 @@ self: super: {
     # that's related to builds with shared libraries enabled. It would be great
     # if someone who knows a thing or two about Idris could look into this.
     preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+    doCheck = false;
   });
 
   # https://github.com/bos/math-functions/issues/25
