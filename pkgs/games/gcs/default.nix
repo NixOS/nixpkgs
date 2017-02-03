@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, runCommand
-, jdk, ant
-, jre, makeWrapper
+, jdk8, ant
+, jre8, makeWrapper
 , findutils
 }:
 
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     cp -r ${library} gcs_library
   '';
 
-  buildInputs = [ jdk jre ant makeWrapper ];
+  buildInputs = [ jdk8 jre8 ant makeWrapper ];
   buildPhase = ''
     cd apple_stubs
     ant
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
 
     find gcs/libraries toolkit/libraries apple_stubs/ \( -name '*.jar' -and -not -name '*-src.jar' \) -exec cp '{}' $out/share/java ';'
     
-    makeWrapper ${jre}/bin/java $out/bin/gcs \
+    makeWrapper ${jre8}/bin/java $out/bin/gcs \
       --set GCS_LIBRARY ${library} \
       --add-flags "-cp $out/share/java/gcs-${version}.jar com.trollworks.gcs.app.GCS"
   '';  
