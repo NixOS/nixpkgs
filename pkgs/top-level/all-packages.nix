@@ -17831,7 +17831,7 @@ with pkgs;
   vips = callPackage ../tools/graphics/vips { };
   nip2 = callPackage ../tools/graphics/nip2 { };
 
-  vokoscreen = callPackage ../applications/video/vokoscreen { };
+  vokoscreen = qt5.callPackage ../applications/video/vokoscreen { };
 
   wavegain = callPackage ../applications/audio/wavegain { };
 
