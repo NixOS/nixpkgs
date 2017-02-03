@@ -11245,6 +11245,8 @@ in
 
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
+    exfat-nofuse = callPackage ../os-specific/linux/exfat { };
+
     pktgen = callPackage ../os-specific/linux/pktgen { };
 
     odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
