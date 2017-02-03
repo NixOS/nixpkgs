@@ -17,7 +17,7 @@ let
   allConfFiles =
     cfg.confFiles //
     builtins.listToAttrs (map (x: { name = x;
-                                    value = builtins.readFile (pkgs.asterisk + "/etc/asterisk/" + x); })
+                                    value = builtins.readFile (cfg.package + "/etc/asterisk/" + x); })
                               defaultConfFiles);
 
   asteriskEtc = pkgs.stdenv.mkDerivation
@@ -38,7 +38,7 @@ let
     asteriskConf = ''
       [directories]
       astetcdir => /etc/asterisk
-      astmoddir => ${pkgs.asterisk}/lib/asterisk/modules
+      astmoddir => ${cfg.package}/lib/asterisk/modules
       astvarlibdir => /var/lib/asterisk
       astdbdir => /var/lib/asterisk
       astkeydir => /var/lib/asterisk
@@ -47,7 +47,7 @@ let
       astspooldir => /var/spool/asterisk
       astrundir => /var/run/asterisk
       astlogdir => /var/log/asterisk
-      astsbindir => ${pkgs.asterisk}/sbin
+      astsbindir => ${cfg.package}/sbin
     '';
     extraConf = cfg.extraConfig;
 
@@ -197,11 +197,17 @@ in
           Additional command line arguments to pass to Asterisk.
         '';
       };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.asterisk;
+        defaultText = "pkgs.asterisk";
+        description = "The Asterisk package to use.";
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.asterisk ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc.asterisk.source = asteriskEtc;
 
@@ -234,7 +240,7 @@ in
           # TODO: Make exceptions for /var directories that likely should be updated
           if [ ! -e "$d" ]; then
             mkdir -p "$d"
-            cp --recursive ${pkgs.asterisk}/"$d"/* "$d"/
+            cp --recursive ${cfg.package}/"$d"/* "$d"/
             chown --recursive ${asteriskUser}:${asteriskGroup} "$d"
             find "$d" -type d | xargs chmod 0755
           fi
@@ -247,8 +253,8 @@ in
             # FIXME: This doesn't account for arguments with spaces
             argString = concatStringsSep " " cfg.extraArguments;
           in
-          "${pkgs.asterisk}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
-        ExecReload = ''${pkgs.asterisk}/bin/asterisk -x "core reload"
+          "${cfg.package}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
+        ExecReload = ''${cfg.package}/bin/asterisk -x "core reload"
           '';
         Type = "forking";
         PIDFile = "/var/run/asterisk/asterisk.pid";

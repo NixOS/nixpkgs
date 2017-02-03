@@ -293,7 +293,7 @@ def interpret_tarball_with_md5(x):
                'md5': '48d647fbd8ef8889e5a7f422c1bfda94', 'brief': False}}
     """
 
-    match = {'key': re.match('^(.*)_TARBALL$', x['key']),
+    match = {'key': re.match('^(.*)_(TARBALL|JAR)$', x['key']),
              'value': re.match('(?P<md5>[0-9a-fA-F]{32})-(?P<tarball>.+)$',
                                x['value'])}
 

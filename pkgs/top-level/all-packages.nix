@@ -2696,6 +2696,8 @@ with pkgs;
 
   libx86emu = callPackage ../development/libraries/libx86emu { };
 
+  libzmf = callPackage ../development/libraries/libzmf {};
+
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
   libreswan = callPackage ../tools/networking/libreswan { };
@@ -10258,7 +10260,10 @@ with pkgs;
 
   apcupsd = callPackage ../servers/apcupsd { };
 
-  asterisk = callPackage ../servers/asterisk { };
+  asterisk = asterisk-stable;
+
+  inherit (callPackages ../servers/asterisk { })
+    asterisk-stable asterisk-lts;
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
@@ -14043,7 +14048,6 @@ with pkgs;
         freefont_ttf xorg.fontmiscmisc
       ];
     };
-    mdds = mdds_0_12_1;
     clucene_core = clucene_core_2;
     lcms = lcms2;
     harfbuzz = harfbuzz.override {

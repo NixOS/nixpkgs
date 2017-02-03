@@ -13,7 +13,18 @@
 , pywinrm
 }:
 
-buildPythonPackage rec {
+let
+  jinja = jinja2.override rec {
+    pname = "Jinja2";
+    version = "2.8.1";
+    name = "${pname}-${version}";
+    src = fetchurl {
+      url = "mirror://pypi/J/Jinja2/${name}.tar.gz";
+      sha256 = "35341f3a97b46327b3ef1eb624aadea87a535b8f50863036e085e7c426ac5891";
+    };
+  };
+
+in buildPythonPackage rec {
   pname = "ansible";
   version = "2.1.4.0";
   name = "${pname}-${version}";
@@ -34,7 +45,7 @@ buildPythonPackage rec {
   dontPatchShebangs = false;
   windowsSupport = true;
 
-  propagatedBuildInputs = [ pycrypto paramiko jinja2 pyyaml httplib2
+  propagatedBuildInputs = [ pycrypto paramiko jinja pyyaml httplib2
     boto six netaddr dns ] ++ lib.optional windowsSupport pywinrm;
 
   meta = {

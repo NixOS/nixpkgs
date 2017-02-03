@@ -1,4 +1,4 @@
-{ stdenv, ghc, pkgconfig, glibcLocales }:
+{ stdenv, ghc, pkgconfig, glibcLocales, cacert }:
 
 with stdenv.lib;
 

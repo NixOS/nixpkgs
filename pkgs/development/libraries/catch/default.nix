@@ -1,4 +1,4 @@
-{ stdenv, lib, cmake, fetchFromGitHub }:
+{ stdenv, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
 
@@ -13,25 +13,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake ];
-  dontUseCmakeConfigure = true;
+  cmakeFlags = [ "-DUSE_CPP14=ON" ];
 
-  buildPhase = ''
-    cmake . -BBuild -DCMAKE_BUILD_TYPE=Release -DUSE_CPP11=ON
-    cd Build
-    make
-    cd ..
-  '';
-
-  installPhase = ''
-    mkdir -p $out
-    mv include $out/.
-  '';
+  doCheck = true;
+  checkTarget = "test";
 
   meta = with stdenv.lib; {
     description = "A multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";
     homepage = "http://catch-lib.net";
     license = licenses.boost;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [ edwtjo knedlsepp ];
     platforms = with platforms; unix;
   };
 }
