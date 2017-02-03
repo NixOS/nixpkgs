@@ -80,7 +80,7 @@ rec {
     inherit (darwin) Security;
   };
 
-  qgit = callPackage ./qgit { };
+  qgit = qt5.callPackage ./qgit { };
 
   stgit = callPackage ./stgit {
   };

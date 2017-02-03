@@ -4,7 +4,7 @@ R packages
 ## Installation
 
 Define an environment for R that contains all the libraries that you'd like to
-use by adding the following snippet to your $HOME/.nixpkgs/config.nix file:
+use by adding the following snippet to your $HOME/.config/nixpkgs/config.nix file:
 
 ```nix
 {

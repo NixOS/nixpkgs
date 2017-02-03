@@ -30,13 +30,13 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
-  minor = "";
+  minor = "4";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${major}${if minor == "" then "" else "." + minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "068nxsfkp2ppcjh3fmcbapkiwnjpvkii73bfydpw4bf2yphdvsa8";
+    sha256 = "0a4psqsf71vc6hfgyv55jclsx8yb7lf4w840qlq6cq8j3hsjaavi";
   };
 
   buildInputs = [ pkgconfig glib boost ]
@@ -111,7 +111,7 @@ in stdenv.mkDerivation rec {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl fuuzetsu ehmry ];
+    maintainers = with maintainers; [ astsmtl fuuzetsu ehmry fpletz ];
     platforms   = platforms.unix;
 
     longDescription = ''

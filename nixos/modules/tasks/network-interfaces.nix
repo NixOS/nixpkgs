@@ -116,6 +116,28 @@ let
       };
     };
 
+  gatewayCoerce = address: { inherit address; };
+
+  gatewayOpts = { ... }: {
+
+    options = {
+
+      address = mkOption {
+        type = types.str;
+        description = "The default gateway address.";
+      };
+
+      interface = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "enp0s3";
+        description = "The default gateway interface.";
+      };
+
+    };
+
+  };
+
   interfaceOpts = { name, ... }: {
 
     options = {
@@ -327,19 +349,27 @@ in
 
     networking.defaultGateway = mkOption {
       default = null;
-      example = "131.211.84.1";
-      type = types.nullOr types.str;
+      example = {
+        address = "131.211.84.1";
+        device = "enp3s0";
+      };
+      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
-        The default gateway.  It can be left empty if it is auto-detected through DHCP.
+        The default gateway. It can be left empty if it is auto-detected through DHCP.
+        It can be specified as a string or an option set along with a network interface.
       '';
     };
 
     networking.defaultGateway6 = mkOption {
       default = null;
-      example = "2001:4d0:1e04:895::1";
-      type = types.nullOr types.str;
+      example = {
+        address = "2001:4d0:1e04:895::1";
+        device = "enp3s0";
+      };
+      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
-        The default ipv6 gateway.  It can be left empty if it is auto-detected through DHCP.
+        The default ipv6 gateway. It can be left empty if it is auto-detected through DHCP.
+        It can be specified as a string or an option set along with a network interface.
       '';
     };
 

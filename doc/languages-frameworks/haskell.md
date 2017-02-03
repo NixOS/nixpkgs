@@ -195,7 +195,7 @@ its normal core packages:
         mtl-2.2.1
 
 This function allows users to define their own development environment by means
-of an override. After adding the following snippet to `~/.nixpkgs/config.nix`,
+of an override. After adding the following snippet to `~/.config/nixpkgs/config.nix`,
 
     {
       packageOverrides = super: let self = super.pkgs; in
@@ -522,7 +522,7 @@ file with `cabal2nix`:
     $ cd ~/src/foo && cabal2nix . >default.nix
     $ cd ~/src/bar && cabal2nix . >default.nix
 
-Then edit your `~/.nixpkgs/config.nix` file to register those builds in the
+Then edit your `~/.config/nixpkgs/config.nix` file to register those builds in the
 default Haskell package set:
 
       {
@@ -554,7 +554,7 @@ Every Haskell package set takes a function called `overrides` that you can use
 to manipulate the package as much as you please. One useful application of this
 feature is to replace the default `mkDerivation` function with one that enables
 library profiling for all packages. To accomplish that, add configure the
-following snippet in your `~/.nixpkgs/config.nix` file:
+following snippet in your `~/.config/nixpkgs/config.nix` file:
 
     {
       packageOverrides = super: let self = super.pkgs; in
@@ -583,7 +583,7 @@ The first step is to generate Nix build instructions with `cabal2nix`:
 
     $ cabal2nix cabal://ghc-events-0.4.3.0 >~/.nixpkgs/ghc-events-0.4.3.0.nix
 
-Then add the override in `~/.nixpkgs/config.nix`:
+Then add the override in `~/.config/nixpkgs/config.nix`:
 
     {
       packageOverrides = super: let self = super.pkgs; in

@@ -1021,10 +1021,10 @@
       }) {};
     let-alist = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "let-alist";
-        version = "1.0.4";
+        version = "1.0.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/let-alist-1.0.4.el";
-          sha256 = "07312bvvyz86lf64vdkxg2l1wgfjl25ljdjwlf1bdzj01c4hm88x";
+          url = "https://elpa.gnu.org/packages/let-alist-1.0.5.el";
+          sha256 = "0r7b9jni50la1m79kklml11syg8d2fmdlr83pv005sv1wh02jszw";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1377,10 +1377,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20161224";
+        version = "20170124";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20161224.tar";
-          sha256 = "0b10bjypn0w5ja776f8sxl1qpvb61iyz1n3c74jx6fqwypv7dmgi";
+          url = "https://elpa.gnu.org/packages/org-20170124.tar";
+          sha256 = "0mcnjwvily0xv1xl11dj18lg38llvrxja2j9mwn6vql8n5y1srxi";
         };
         packageRequires = [];
         meta = {
@@ -1465,6 +1465,19 @@
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/poker.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    psgml = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+        pname = "psgml";
+        version = "1.3.4";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/psgml-1.3.4.tar";
+          sha256 = "1pgg9g040zsnvilvmwa73wyrvv9xh7gf6w1rkcx57qzg7yq4yaaj";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/psgml.html";
           license = lib.licenses.free;
         };
       }) {};

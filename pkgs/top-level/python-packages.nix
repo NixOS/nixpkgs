@@ -37,9 +37,29 @@ let
 
   graphiteVersion = "0.9.15";
 
+  fetchPypi = {format ? "setuptools", ... } @attrs:
+    let
+      fetchWheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
+      # Fetch a wheel. By default we fetch an universal wheel.
+      # See https://www.python.org/dev/peps/pep-0427/#file-name-convention for details regarding the optional arguments.
+        let
+          url = "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
+        in pkgs.fetchurl {inherit url sha256;};
+
+      fetchSource = {pname, version, sha256}:
+      # Fetch a source tarball.
+        let
+          url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz";
+        in pkgs.fetchurl {inherit url sha256;};
+      fetcher = (if format == "wheel" then fetchWheel
+        else if format == "setuptools" then fetchSource
+        else throw "Unsupported kind ${kind}");
+    in fetcher (builtins.removeAttrs attrs ["format"]);
+
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit fetchPypi;
 
   # helpers
 
@@ -4082,7 +4102,7 @@ in {
   # Backported version of the ConfigParser library of Python 3.3
   configparser = if isPy3k then null else buildPythonPackage rec {
     name = "configparser-${version}";
-    version = "3.3.0r2";
+    version = "3.5.0";
 
     # running install_egg_info
     # error: [Errno 9] Bad file descriptor: '<stdout>'
@@ -4090,8 +4110,11 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/configparser/${name}.tar.gz";
-      sha256 = "6a2318590dfc4013fc5bf53c2bec14a8cb455a232295eb282a13f94786c4b0b2";
+      sha256 = "5308b47021bc2340965c371f0f058cc6971a04502638d4244225c49d80db273a";
     };
+
+    # No tests available
+    doCheck = false;
 
     meta = {
       maintainers = [ ];
@@ -4386,11 +4409,11 @@ in {
 
   cytoolz = buildPythonPackage rec {
     name = "cytoolz-${version}";
-    version = "0.8.0";
+    version = "0.8.2";
 
     src = pkgs.fetchurl{
       url = "mirror://pypi/c/cytoolz/cytoolz-${version}.tar.gz";
-      sha256 = "2239890c8fe2da3eba82947c6a68cfa406e5a5045911c9ab3de8113462372629";
+      sha256 = "476a2ad176de5eaef80499b7b43d4f72ba6d23df33d349088dae315e9b31c552";
     };
 
     # Extension types
@@ -4399,8 +4422,9 @@ in {
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ toolz ];
 
+    # Disable failing test https://github.com/pytoolz/cytoolz/issues/97
     checkPhase = ''
-      nosetests -v $out/${python.sitePackages}
+      NOSE_EXCLUDE=test_curried_exceptions nosetests -v $out/${python.sitePackages}
     '';
 
     meta = {
@@ -6189,40 +6213,7 @@ in {
     };
   };
 
-  docker = buildPythonPackage rec {
-    name = "docker-py-${version}";
-    version = "1.10.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/docker-py/${name}.tar.gz";
-      sha256 = "05f49f6hnl7npmi7kigg0ibqk8s3fhzx1ivvz1kqvlv4ay3paajc";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [
-      six
-      requests2
-      websocket_client
-      ipaddress
-      backports_ssl_match_hostname
-      docker_pycreds
-    ];
-
-    # Flake8 version conflict
-    doCheck = false;
-
-    meta = {
-      description = "An API client for docker written in Python";
-      homepage = https://github.com/docker/docker-py;
-      license = licenses.asl20;
-      maintainers = with maintainers; [
-        jgeerds
-      ];
-    };
-  };
+  docker = callPackage ../development/python-modules/docker.nix {};
 
   dockerpty = buildPythonPackage rec {
     name = "dockerpty-0.4.1";
@@ -6635,13 +6626,14 @@ in {
   });
 
   entrypoints = buildPythonPackage rec {
-    name = "entrypoints";
-    version = "0.2.1";
+    pname = "entrypoints";
+    version = "0.2.2";
+    name = "${pname}-${version}";
     format = "wheel";
 
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/a5/2d/26548d66d58f7775cb332fcf3f864987c05f5e3f800b0b22b9919dacf653/entrypoints-0.2.1-py2.py3-none-any.whl";
-      sha256 = "112n36dllmls19j5k6bwcnsm6y2789lxzkjl1n9yir7gkm0dmzzw";
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "0a0685962ee5ac303f470acbb659f0f97aef5b9deb6b85d059691c706ef6e45e";
     };
 
     propagatedBuildInputs = with self; [ configparser ];
@@ -11073,43 +11065,7 @@ in {
     };
   };
 
-  docker_compose = buildPythonPackage rec {
-    version = "1.9.0";
-    name = "docker-compose-${version}";
-    namePrefix = "";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/docker-compose/${name}.tar.gz";
-      sha256 = "0zz2jqpxz69q34bp97pbwxda1ik3m8zbhh15mxvhfsn0g566dywq";
-    };
-
-    # lots of networking and other fails
-    doCheck = false;
-    buildInputs = with self; [ mock pytest nose ];
-    propagatedBuildInputs = with self; [
-      requests2 six pyyaml texttable docopt docker dockerpty websocket_client
-      enum34 jsonschema cached-property
-    ];
-
-    patchPhase = ''
-      sed -i "s/'requests >= 2.6.1, < 2.8'/'requests'/" setup.py
-    '';
-
-    postInstall = ''
-      mkdir -p $out/share/bash-completion/completions/
-      cp contrib/completion/bash/docker-compose $out/share/bash-completion/completions/docker-compose
-    '';
-
-    meta = {
-      homepage = "https://docs.docker.com/compose/";
-      description = "Multi-container orchestration for Docker";
-      license = licenses.asl20;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
-        jgeerds
-      ];
-    };
-  };
+  docker_compose = callPackage ../development/python-modules/docker_compose.nix {};
 
   fdroidserver = buildPythonPackage rec {
     version = "2016-05-31";
@@ -12909,12 +12865,12 @@ in {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.5.1";
+    version = "4.5.2";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipykernel/${name}.tar.gz";
-      sha256 = "520c855c6652651c6796a3dd8bc89d533023ac65c5ccf812908187d6f0e461da";
+      sha256 = "5a54f25f0e6c8ee74c362c23f9a95e10e74c6b7f5ef42059c861ff6f26d89462";
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
@@ -12939,17 +12895,17 @@ in {
   };
 
   ipyparallel = buildPythonPackage rec {
-    version = "5.2.0";
+    version = "6.0.0";
     name = "ipyparallel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipyparallel/${name}.tar.gz";
-      sha256 = "d99e760f1a136b1c402755a4ab51a8d7cb87c892cccadf641948a5e886c8a455";
+      sha256 = "9bb5032e98a8c73ddb3da5fb8eecd93c676a5278b68799ab19257b348a0a27f6";
     };
 
     buildInputs = with self; [ nose ];
 
-    propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
+    propagatedBuildInputs = with self; [ dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
     ] ++ optionals (!isPy3k) [ futures ];
 
     # Requires access to cluster
@@ -12965,12 +12921,12 @@ in {
   };
 
   ipython = buildPythonPackage rec {
-    version = "5.1.0";
+    version = "5.2.1";
     name = "ipython-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipython/${name}.tar.gz";
-      sha256 = "7ef4694e1345913182126b219aaa4a0047e191af414256da6772cf249571b961";
+      sha256 = "04dafc37c8876e10e797264302e4333dbcd2854ef6d16bb57cc12ce26515bfdb";
     };
 
     prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -13032,6 +12988,9 @@ in {
       url = "mirror://pypi/i/ipywidgets/${name}.tar.gz";
       sha256 = "baf6098f054dd5eacc2934b8ea3bef908b81ca8660d839f1f940255a72c660d2";
     };
+
+    # Tests are not distributed
+    doCheck = false;
 
     buildInputs = with self; [ nose pytest ];
     propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook widgetsnbextension ];
@@ -13241,11 +13200,13 @@ in {
   };
 
   jinja2 = buildPythonPackage rec {
-    name = "Jinja2-2.8";
+    pname = "Jinja2";
+    version = "2.9.5";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jinja2/${name}.tar.gz";
-      sha256 = "1x0v41lp5m1pjix3l46zx02b7lqp2hflgpnxwkywxynvi3zz47xw";
+      sha256 = "702a24d992f856fa8d5a7a36db6128198d0c21e1da34448ca236c42e92384825";
     };
 
     propagatedBuildInputs = with self; [ markupsafe ];
@@ -13357,12 +13318,12 @@ in {
   };
 
   jupyter_core = buildPythonPackage rec {
-    version = "4.2.0";
+    version = "4.2.1";
     name = "jupyter_core-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_core/${name}.tar.gz";
-      sha256 = "44ec837a53bebf4e937112d3f9ccf31fee4f8db3e406dd0dd4f0378a354bed9c";
+      sha256 = "89c55399c8437f777197c2c82c1ff5639c7f71d4eb2f172a81afa120b68dc7b3";
     };
 
     buildInputs = with self; [ pytest mock ];
@@ -14962,11 +14923,11 @@ in {
 
   multipledispatch = buildPythonPackage rec {
     name = "multipledispatch-${version}";
-    version = "0.4.8";
+    version = "0.4.9";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/multipledispatch/${name}.tar.gz";
-      sha256 = "07d41fb3ed25e8424536e48a8566f88a0f9926ca4b6174bff6aa16c98251b92e";
+      sha256 = "bda6abb8188d9abb429bd17ed15bc7433f77f1b05a78cfff761711ed81daa7a2";
     };
 
     meta = {
@@ -15422,17 +15383,17 @@ in {
   };
 
   nbconvert = buildPythonPackage rec {
-    version = "4.2.0";
+    version = "5.1.1";
     name = "nbconvert-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nbconvert/${name}.tar.gz";
-      sha256 = "1ik3k1s8dnqcc6hcrzi1wwy6f5kxfz8rnyahvpy984kl49snv52m";
+      sha256 = "847731bc39829d0eb1e15a450ac98c71730e3598e53683d4d76a3f3b3fc5017d";
     };
 
     buildInputs = with self; [nose ipykernel ];
 
-    propagatedBuildInputs = with self; [ entrypoints mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
+    propagatedBuildInputs = with self; [ entrypoints bleach mistune jinja2 pygments traitlets testpath jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client];
 
     checkPhase = ''
       nosetests -v
@@ -15450,16 +15411,19 @@ in {
   };
 
   nbformat = buildPythonPackage rec {
-    version = "4.0.1";
+    version = "4.2.0";
     name = "nbformat-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nbformat/${name}.tar.gz";
-      sha256 = "5261c957589b9dfcd387c338d59375162ba9ca82c69e378961a1f4e641285db5";
+      sha256 = "389a5b630a30539074f238a48fb9864592f63d611baccfa2ffaf14ffe239de06";
     };
+    LC_ALL="en_US.UTF-8";
+    buildInputs = with self; [ pytest pkgs.glibcLocales ];
+    propagatedBuildInputs = with self; [ipython_genutils traitlets testpath jsonschema jupyter_core];
 
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ipython_genutils traitlets jsonschema jupyter_core];
+    # Failing tests and permission issues
+    doCheck = false;
 
     meta = {
       description = "The Jupyter Notebook format";
@@ -15775,11 +15739,11 @@ in {
 
   nose-exclude = buildPythonPackage rec {
     name = "nose-exclude-${version}";
-    version = "0.4.1";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nose-exclude/${name}.tar.gz";
-      sha256 = "44466a9bcb56d2e568750f91504d1278c74eabb259a305b06e975b87b51635da";
+      sha256 = "f78fa8b41eeb815f0486414f710f1eea0949e346cfb11d59ba6295ed69e84304";
     };
 
     propagatedBuildInputs = with self; [ nose ];
@@ -15895,12 +15859,12 @@ in {
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.2.3";
+    version = "4.3.2";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "39a9603d3fe88b60de2903680c965cf643acf2c16fb2c6bac1d905e1042b5851";
+      sha256 = "fc77edf4ec295542172aa66a3e9d527e75038fcaadd3ed20afbf8596e5629aa9";
     };
 
     LC_ALL = "en_US.UTF-8";
@@ -16035,12 +15999,12 @@ in {
   numba = callPackage ../development/python-modules/numba { };
 
   numexpr = buildPythonPackage rec {
-    version = "2.6.1";
+    version = "2.6.2";
     name = "numexpr-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numexpr/${name}.tar.gz";
-      sha256 = "db2ee72f277b23c82d204189290ea4b792f9bd5b9d67744b045f8c2a8e929a06";
+      sha256 = "6ab8ff5c19e7f452966bf5a3220b845cf3244fe0b96544f7f9acedcc2db5c705";
     };
 
     propagatedBuildInputs = with self; [ numpy ];
@@ -17959,10 +17923,10 @@ in {
 
   bottleneck = buildPythonPackage rec {
     name = "Bottleneck-${version}";
-    version = "1.0.0";
+    version = "1.2.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/B/Bottleneck/Bottleneck-${version}.tar.gz";
-      sha256 = "15dl0ll5xmfzj2fsvajzwxsb9dbw5i9fx9i4r6n4i5nzzba7m6wd";
+      sha256 = "3bec84564a4adbe97c24e875749b949a19cfba4e4588be495cc441db7c6b05e8";
     };
 
     buildInputs = with self; [ nose ];
@@ -18480,16 +18444,18 @@ in {
 
 
   pexpect = buildPythonPackage rec {
-    version = "3.3";
+    version = "4.2.1";
     name = "pexpect-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pexpect/${name}.tar.gz";
-      sha256 = "dfea618d43e83cfff21504f18f98019ba520f330e4142e5185ef7c73527de5ba";
+      sha256 = "3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92";
     };
 
-    # Wants to run python in a subprocess
+    # Wants to run pythonin a subprocess
     doCheck = false;
+
+    propagatedBuildInputs = with self; [ ptyprocess ];
 
     meta = {
       homepage = http://www.noah.org/wiki/Pexpect;
@@ -22048,11 +22014,11 @@ in {
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.11.1";
+    version = "2.13.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "5acf980358283faba0b897c73959cecf8b841205bb4b2ad3ef545f46eae1a133";
+      sha256 = "5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8";
     };
 
     nativeBuildInputs = [ self.pytest ];
@@ -25203,12 +25169,12 @@ in {
   };
 
   tabulate = buildPythonPackage rec {
-    version = "0.7.5";
+    version = "0.7.7";
     name = "tabulate-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tabulate/${name}.tar.gz";
-      sha256 = "9071aacbd97a9a915096c1aaf0dc684ac2672904cd876db5904085d6dac9810e";
+      sha256 = "83a0b8e17c09f012090a50e1e97ae897300a72b35e0c86c0b53d3bd2ae86d8c6";
     };
 
     buildInputs = with self; [ nose ];
@@ -25438,6 +25404,35 @@ in {
       description = "A pyunit extension for dependency injection";
       homepage = https://pypi.python.org/pypi/testscenarios;
       license = licenses.asl20;
+    };
+  };
+
+  testpath = buildPythonPackage rec {
+    pname = "testpath";
+    version = "0.3";
+    name = "${pname}-${version}";
+
+    #format = "flit";
+    #src = pkgs.fetchFromGitHub {
+    #  owner = "jupyter";
+    #  repo = pname;
+    #  rev = "${version}";
+    #  sha256 = "1ghzmkrsrk9xrj42pjsq5gl7v3g2v0ji0xy0xzzxp5aizd3wrvl9";
+    #};
+    #doCheck = true;
+    #checkPhase = ''
+    #  ${python.interpreter} -m unittest discover
+    #'';
+    format = "wheel";
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "f16b2cb3b03e1ada4fb0200b265a4446f92f3ba4b9d88ace34f51c54ab6d294e";
+    };
+
+    meta = {
+      description = "Test utilities for code working with files and commands";
+      license = licenses.mit;
+      homepage = https://github.com/jupyter/testpath;
     };
   };
 
@@ -26962,11 +26957,11 @@ EOF
 
   xarray = buildPythonPackage rec {
     name = "xarray-${version}";
-    version = "0.8.2";
+    version = "0.9.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xarray/${name}.tar.gz";
-      sha256 = "4da06e38baea65c51347ba0770db416ebf003dbad5637215d2b25b191f2be1fb";
+      sha256 = "89772ed0e23f0e71c3fb8323746374999ecbe79c113e3fadc7ae6374e6dc0525";
     };
 
     buildInputs = with self; [ pytest ];
@@ -30805,18 +30800,16 @@ EOF
     };
   };
   pandocfilters = buildPythonPackage rec{
-    version = "1.3.0";
+    version = "1.4.1";
     pname = "pandocfilters";
     name = pname + "-${version}";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "jgm";
-      repo = pname;
-      rev = version;
-      sha256 = "0ky9k800ixwiwvra0na6d6qaqcyps83mycgd8qvkrn5r80hddkzz";
+    src = fetchPypi{
+      inherit pname version;
+      sha256 = "ec8bcd100d081db092c57f93462b1861bcfa1286ef126f34da5cb1d969538acd";
     };
-
-    propagatedBuildInputs = with self; [ ];
+    # No tests available
+    doCheck = false;
 
     meta = {
       description = "A python module for writing pandoc filters, with a collection of examples";
