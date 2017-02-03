@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pam ? null, glibcCross ? null }:
+{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, libxslt, libxml2
+, docbook_xml_dtd_412, docbook_xsl, gnome_doc_utils, flex, bison
+, pam ? null, glibcCross ? null }:
 
 let
 
@@ -15,14 +17,20 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "shadow-4.2.1";
+  name = "shadow-${version}";
+  version = "4.4";
 
-  src = fetchurl {
-    url = "http://pkg-shadow.alioth.debian.org/releases/${name}.tar.xz";
-    sha256 = "0h9x1zdbq0pqmygmc1x459jraiqw4gqz8849v268crk78z8r621v";
+  src = fetchFromGitHub {
+    owner = "shadow-maint";
+    repo = "shadow";
+    rev = "${version}";
+    sha256 = "005qk3n86chc8mlg86qhrns2kpl52n5f3las3m5s6266xij3qwka";
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
+  nativeBuildInputs = [autoreconfHook libxslt libxml2 
+    docbook_xml_dtd_412 docbook_xsl gnome_doc_utils flex bison
+    ];
 
   patches = [ ./keep-path.patch dots_in_usernames ];
 
@@ -33,7 +41,14 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export ac_cv_func_setpgrp_void=yes
     export shadow_cv_logdir=/var/log
+    (
+    head -n -1 "${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml" 
+    tail -n +3 "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml"
+    ) > xmlcatalog
+    configureFlags="$configureFlags --with-xml-catalog=$PWD/xmlcatalog ";
   '';
+
+  configureFlags = " --enable-man ";
 
   preBuild = assert glibc != null;
     ''
