@@ -281,6 +281,17 @@ rec {
     sourceRoot = ".";
   };
 
+  vim-highlightedyank = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-highlightedyank-2017-01-04";
+    src = fetchgit {
+      url = "git://github.com/machakann/vim-highlightedyank";
+      rev = "17327fd1072ac15a30f596a2fc0b6cef122e0640";
+      sha256 = "08rc1br8npvkxxh3jn9hmn4yh4nlxy04c8nwyrnpndhw05kca33a";
+    };
+    dependencies = [];
+
+  };
+
   alchemist-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "alchemist.vim-2017-01-02";
     src = fetchgit {

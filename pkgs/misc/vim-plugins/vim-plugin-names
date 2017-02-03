@@ -75,6 +75,7 @@
 "github:lokaltog/vim-easymotion"
 "github:luochen1990/rainbow"
 "github:lyokha/vim-xkbswitch"
+"github:machakann/vim-highlightedyank"
 "github:mhinz/vim-startify"
 "github:mkasa/lushtags"
 "github:mpickering/hlint-refactor-vim"
