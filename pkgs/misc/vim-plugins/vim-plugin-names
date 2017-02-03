@@ -74,6 +74,7 @@
 "github:lepture/vim-jinja"
 "github:lervag/vimtex"
 "github:lokaltog/vim-easymotion"
+"github:ludovicchabant/vim-lawrencium"
 "github:luochen1990/rainbow"
 "github:lyokha/vim-xkbswitch"
 "github:machakann/vim-highlightedyank"
