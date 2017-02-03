@@ -79,7 +79,7 @@ let
   checkBond = checkUnitConfig "Bond" [
     (assertOnlyFields [
       "Mode" "TransmitHashPolicy" "LACPTransmitRate" "MIIMonitorSec"
-      "UpDelaySec" "DownDelaySec"
+      "UpDelaySec" "DownDelaySec" "GratuitousARP"
     ])
     (assertValueOneOf "Mode" [
       "balance-rr" "active-backup" "balance-xor"
