@@ -384,6 +384,17 @@ rec {
 
   };
 
+  vim-lawrencium = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-lawrencium-2017-01-10";
+    src = fetchgit {
+      url = "git://github.com/ludovicchabant/vim-lawrencium";
+      rev = "88077183e1f5a9a1f741aeab7a1374cfed9e917f";
+      sha256 = "0z31v93wjycq4lqvbl1jzxi7i5i1vl919m4dyyzphybcqrjjpnab";
+    };
+    dependencies = [];
+
+  };
+
   ghcmod = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "ghcmod-2016-06-19";
     src = fetchgit {
