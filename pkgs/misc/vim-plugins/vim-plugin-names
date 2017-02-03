@@ -92,6 +92,7 @@
 "github:rust-lang/rust.vim"
 "github:sbdchd/neoformat"
 "github:sheerun/vim-polyglot"
+"github:shougo/neco-vim"
 "github:shougo/neocomplete.vim"
 "github:shougo/neosnippet-snippets"
 "github:shougo/neosnippet.vim"
