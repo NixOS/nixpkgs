@@ -17834,11 +17834,11 @@ in {
 
   requests-mock = buildPythonPackage rec {
     name = "requests-mock-${version}";
-    version = "0.6.0";
+    version = "1.3.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests-mock/${name}.tar.gz";
-      sha256 = "0gmd88c224y53b1ai8cfsrcxm9kw3gdqzysclmnaqspg7zjhxwd1";
+      sha256 = "0jr997dvk6zbmhvbpcv3rajrgag69mcsm1ai3w3rgk2jdh6rg1mx";
     };
 
     patchPhase = ''
