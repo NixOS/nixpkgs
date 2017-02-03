@@ -552,6 +552,17 @@ rec {
 
   };
 
+  vim-scala = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-scala-2016-08-02";
+    src = fetchgit {
+      url = "git://github.com/derekwyatt/vim-scala";
+      rev = "a6a350f7c632d0e640b57f9dcc7e123409a7bcd7";
+      sha256 = "108c5h02vcb3pnr3si8dhwq3mv2pj5d83mj1ljxdk9595xv8j2rp";
+    };
+    dependencies = [];
+
+  };
+
   vim-jade = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-jade-2016-10-31";
     src = fetchgit {

@@ -36,6 +36,7 @@
 "github:ctjhoa/spacevim"
 "github:ctrlpvim/ctrlp.vim"
 "github:derekelkins/agda-vim"
+"github:derekwyatt/vim-scala"
 "github:digitaltoad/vim-jade"
 "github:dracula/vim"
 "github:eagletmt/neco-ghc"
