@@ -27,6 +27,7 @@ in stdenv.mkDerivation {
   cmakeFlags = [
     "-DENABLE_FREETYPE=1"
     "-DENABLE_GETTEXT=1"
+    "-DENABLE_SYSTEM_JSONCPP=1"
     "-DGETTEXT_INCLUDE_DIR=${gettext}/include/gettext"
     "-DCURL_INCLUDE_DIR=${curl.dev}/include/curl"
     "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
