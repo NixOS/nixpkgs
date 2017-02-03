@@ -97,6 +97,8 @@ with pkgs;
 
   dockerTools = callPackage ../build-support/docker { };
 
+  docker_compose = pythonPackages.docker_compose;
+
   dotnetenv = callPackage ../build-support/dotnetenv {
     dotnetfx = dotnetfx40;
   };
@@ -13199,7 +13201,7 @@ with pkgs;
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
-  keepassx-reboot = callPackage ../applications/misc/keepassx/reboot.nix { };
+  keepassx-community = callPackage ../applications/misc/keepassx/community.nix { };
 
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
@@ -15658,10 +15660,12 @@ with pkgs;
     plugins = let inherit (lib) optional optionals; in with kodiPlugins;
       ([]
       ++ optional (config.kodi.enableAdvancedLauncher or false) advanced-launcher
-      ++ optional (config.kodi.enableGenesis or false) genesis
+      ++ optionals (config.kodi.enableControllers or false)
+        (with controllers;
+          [ default dreamcast gba genesis mouse n64 nes ps snes ])
+      ++ optional (config.kodi.enableExodus or false) exodus
       ++ optionals (config.kodi.enableHyperLauncher or false)
            (with hyper-launcher; [ plugin service pdfreader ])
-      ++ optionals (config.kodi.enableSALTS or false) [salts urlresolver t0mm0-common]
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
@@ -17339,11 +17343,7 @@ with pkgs;
 
   yacas = callPackage ../applications/science/math/yacas { };
 
-  speedcrunch = callPackage ../applications/science/math/speedcrunch {
-    qt = qt4;
-    cmake = cmakeCurses;
-  };
-
+  speedcrunch = qt5.callPackage ../applications/science/math/speedcrunch { };
 
   ### SCIENCE / MISC
 
@@ -17901,6 +17901,8 @@ with pkgs;
 
   vips = callPackage ../tools/graphics/vips { };
   nip2 = callPackage ../tools/graphics/nip2 { };
+
+  vokoscreen = callPackage ../applications/video/vokoscreen { };
 
   wavegain = callPackage ../applications/audio/wavegain { };
 

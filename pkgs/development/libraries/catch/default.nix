@@ -3,20 +3,20 @@
 stdenv.mkDerivation rec {
 
   name = "catch-${version}";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "philsquared";
     repo = "Catch";
-    rev = "v" + version;
-    sha256 = "1ag8siafg7fmb50qdqznryrg3lvv56f09nvqwqqn2rlk83zjnaw0";
+    rev = "v." + version;
+    sha256 = "0harki6irc4mqipjc24zyy0jimidr5ng3ss29bnpzbbwhrnkyrgm";
   };
 
   buildInputs = [ cmake ];
   dontUseCmakeConfigure = true;
 
   buildPhase = ''
-    cmake -Hprojects/CMake -BBuild -DCMAKE_BUILD_TYPE=Release -DUSE_CPP11=ON
+    cmake . -BBuild -DCMAKE_BUILD_TYPE=Release -DUSE_CPP11=ON
     cd Build
     make
     cd ..

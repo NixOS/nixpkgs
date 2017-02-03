@@ -281,6 +281,17 @@ rec {
     sourceRoot = ".";
   };
 
+  alchemist-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "alchemist.vim-2017-01-02";
+    src = fetchgit {
+      url = "git://github.com/slashmili/alchemist.vim";
+      rev = "c22d4883b7e2bfed78b70b557d816bf0491d7dd4";
+      sha256 = "0iv91mfj3lxc41xb8sxhl9mby5dllzyvw8508igrj5lvyrd1ikkf";
+    };
+    dependencies = [];
+
+  };
+
   commentary = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "commentary-2016-03-10";
     src = fetchgit {
@@ -2048,6 +2059,16 @@ rec {
     dependencies = [];
 
   };
+
+  vim-elixir = buildVimPluginFrom2Nix {
+      name = "vim-elixir-2017-02-01";
+      src = fetchgit {
+        url = "https://github.com/elixir-lang/vim-elixir";
+        rev = "9cbb3ee3865c594ed017f8118a80b355cd7e238f";
+        sha256 = "14mlnjpmgfal4vai2k8jjmhszwgyhnf3v75rssj05n47qnzlddk4";
+      };
+      dependencies = [];
+    };
 
   vim-gista = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-gista-2016-09-21";

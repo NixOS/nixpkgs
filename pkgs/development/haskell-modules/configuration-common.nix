@@ -162,6 +162,7 @@ self: super: {
   shakespeare-js = dontHaddock super.shakespeare-js;
   shakespeare-text = dontHaddock super.shakespeare-text;
   swagger = dontHaddock super.swagger;  # http://hydra.cryp.to/build/2035868/nixlog/1/raw
+  swagger2 = dontHaddock super.swagger2;
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
@@ -621,6 +622,14 @@ self: super: {
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
 
+  # https://github.com/haskell/haddock/issues/571
+  haddock-api = appendPatch (doJailbreak super.haddock-api) (pkgs.fetchpatch {
+    url = "https://github.com/basvandijk/haddock/commit/f4c5e46ded05a4b8884f5ad6f3102f79ff3bb127.patch";
+    sha256 = "01dawvikzw6y43557sbp9q7z9vw2g3wnzvv5ny0f0ks6ccc0vj0m";
+    stripLen = 2;
+    addPrefixes = true;
+  });
+
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
 
@@ -865,7 +874,17 @@ self: super: {
 
   # https://github.com/yesodweb/Shelly.hs/issues/106
   # https://github.com/yesodweb/Shelly.hs/issues/108
-  shelly = dontCheck super.shelly;
+  # https://github.com/yesodweb/Shelly.hs/issues/130
+  shelly =
+    let drv = appendPatch (dontCheck (doJailbreak super.shelly)) (pkgs.fetchpatch {
+                url = "https://github.com/k0001/Shelly.hs/commit/32a1e290961755e7b2379f59faa49b13d03dfef6.patch";
+                sha256 = "0ccq0qly8bxxv64dk97a44ng6hb01j6ajs0sp3f2nn0hf5j3xv69";
+              });
+    in overrideCabal drv (drv : {
+         # doJailbreak doesn't seem to work for build-depends inside an
+         # if-then-else block so we have to do it manually.
+         postPatch = "sed -i 's/base >=4\.6 \&\& <4\.9\.1/base -any/' shelly.cabal";
+       });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -1097,13 +1116,13 @@ self: super: {
   http-api-data_0_3_5 = dontCheck super.http-api-data_0_3_5;
 
   # Fix build for latest versions of servant and servant-client.
-  servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
+  servant_0_10 = super.servant_0_10.overrideScope (self: super: {
     http-api-data = self.http-api-data_0_3_5;
   });
-  servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
+  servant-client_0_10 = super.servant-client_0_10.overrideScope (self: super: {
     http-api-data = self.http-api-data_0_3_5;
-    servant-server = self.servant-server_0_9_1_1;
-    servant = self.servant_0_9_1_1;
+    servant-server = self.servant-server_0_10;
+    servant = self.servant_0_10;
   });
 
   # build servant docs from the repository

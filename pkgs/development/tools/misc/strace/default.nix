@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "strace-${version}";
-  version = "4.14";
+  version = "4.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/strace/${name}.tar.xz";
-    sha256 = "0bvicjkqk3c09zyxgkakymiqr3618sa2dfpd9f3fdp23n8853vav";
+    sha256 = "1a9wb2nzfqgwazd0yrlbk48awlfn898n1bdayvdxj7qlssac1kf0";
   };
 
   nativeBuildInputs = [ perl ];

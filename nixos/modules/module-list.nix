@@ -507,7 +507,8 @@
   ./services/security/frandom.nix
   ./services/security/haka.nix
   ./services/security/haveged.nix
-  ./services/security/hologram.nix
+  ./services/security/hologram-server.nix
+  ./services/security/hologram-agent.nix
   ./services/security/munge.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/physlock.nix

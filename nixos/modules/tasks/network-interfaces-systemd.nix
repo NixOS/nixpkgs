@@ -38,6 +38,12 @@ in
     } {
       assertion = cfg.vswitches == {};
       message = "networking.vswichtes are not supported by networkd.";
+    } {
+      assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
+      message = "networking.defaultGateway.interface is not supported by networkd.";
+    } {
+      assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
+      message = "networking.defaultGateway6.interface is not supported by networkd.";
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
