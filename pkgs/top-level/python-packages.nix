@@ -29771,23 +29771,6 @@ EOF
     '';
   };
 
-  neovim-remote = buildPythonPackage rec {
-    name = "neovim-remote-${version}";
-    version = "v1.4.0";
-    disabled = !isPy3k;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mhinz";
-      repo = "neovim-remote";
-      rev = version;
-      sha256 = "0msvfh27f56xj5ki59ikzavxz863nal5scm57n43618m49qzg8iz";
-    };
-
-    propagatedBuildInputs = [
-      self.neovim
-    ];
-  };
-
   ghp-import = buildPythonPackage rec {
     version = "0.4.1";
     name = "ghp-import-${version}";

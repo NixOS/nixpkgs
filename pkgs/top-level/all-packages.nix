@@ -15385,6 +15385,8 @@ with pkgs;
 
   neovim-pygui = pythonPackages.neovim_gui;
 
+  neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { pythonPackages = python3Packages; };
+
   vis = callPackage ../applications/editors/vis {
     inherit (lua52Packages) lpeg;
   };
