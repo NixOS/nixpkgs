@@ -1,6 +1,6 @@
 { stdenv, lib, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, substituteAll, xterm, makeWrapper, ruby
 , openssl, quartz-wm, fontconfig, xlsfonts, xfontsel
-, ttf_bitstream_vera, freefont_ttf, liberation_ttf_binary
+, ttf_bitstream_vera, freefont_ttf, liberation_ttf
 , shell ? "${bashInteractive}/bin/bash"
 }:
 
@@ -64,7 +64,7 @@ let
     xorg.fontbhlucidatypewriter75dpi
     ttf_bitstream_vera
     freefont_ttf
-    liberation_ttf_binary
+    liberation_ttf
     xorg.fontbh100dpi
     xorg.fontmiscmisc
     xorg.fontcursormisc
