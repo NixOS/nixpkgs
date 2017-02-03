@@ -220,6 +220,37 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   # SOURCE PACKAGES
 
+  Boogie = buildDotnetPackage rec {
+    baseName = "Boogie-unstable";
+    version = "2017-01-03";
+
+    src = fetchFromGitHub {
+      owner = "boogie-org";
+      repo = "boogie";
+      rev = "5e42f0dd2891b2b85a9198052e55592a2943b7ef";
+      sha256 = "1mjnf96hbn9abgzyvmrfxlhnm213290xb9wca7rnnl12i4fa4ahl";
+    };
+
+    buildInputs = [ dotnetPackages.NUnitRunners ];
+
+    xBuildFiles = [ "Source/Boogie.sln" ];
+
+    outputFiles = [ "Binaries/*" ];
+
+    postInstall = ''
+        mkdir -pv "$out/lib/dotnet/Boogie"
+        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/Boogie/z3.exe"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "An intermediate verification language";
+      homepage = "https://github.com/boogie-org/boogie";
+      license = licenses.mspl;
+      maintainers = [ maintainers.taktoa ];
+      platforms = with platforms; (linux ++ darwin);
+    };
+  };
+
   Deedle = buildDotnetPackage rec {
     baseName = "Deedle";
     version = "1.2.0";
