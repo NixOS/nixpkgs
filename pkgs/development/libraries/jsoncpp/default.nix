@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
 
   # Hack to be able to run the test, broken because we use
   # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preBuild = ''
+  preBuild = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH="`pwd`/src/lib_json:$DYLD_LIBRARY_PATH"
+  '' else ''
     export LD_LIBRARY_PATH="`pwd`/src/lib_json:$LD_LIBRARY_PATH"
   '';
 
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
     inherit version;
     homepage = https://github.com/open-source-parsers/jsoncpp;
     description = "A C++ library for interacting with JSON.";
-    maintainers = with maintainers; [ ttuegel page ];
+    maintainers = with maintainers; [ ttuegel cpages ];
     license = licenses.mit;
     platforms = platforms.all;
   };
