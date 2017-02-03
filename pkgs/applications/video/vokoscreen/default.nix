@@ -1,5 +1,5 @@
 { stdenv, fetchgit
-, pkgconfig, qt5, alsaLib, libv4l, xorg
+, pkgconfig, qtbase, qttools, qmakeHook, qtx11extras, alsaLib, libv4l, libXrandr
 , ffmpeg
 }:
 
@@ -12,13 +12,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    alsaLib.dev
-    libv4l.dev
+    alsaLib
+    libv4l
     pkgconfig
-    qt5.full
-    qt5.qmakeHook
-    qt5.qtx11extras
-    xorg.libXrandr.dev
+    qtbase
+    qttools
+    qmakeHook
+    qtx11extras
+    libXrandr
   ];
 
   patches = [

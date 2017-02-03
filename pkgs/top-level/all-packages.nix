@@ -12632,9 +12632,7 @@ with pkgs;
 
   cava = callPackage ../applications/audio/cava { };
 
-  cb2bib = callPackage ../applications/office/cb2bib {
-    inherit (xorg) libX11;
-  };
+  cb2bib = qt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
 
@@ -13147,7 +13145,7 @@ with pkgs;
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
-  keepassx-community = callPackage ../applications/misc/keepassx/community.nix { };
+  keepassx-community = qt5.callPackage ../applications/misc/keepassx/community.nix { };
 
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
@@ -14674,7 +14672,7 @@ with pkgs;
 
   qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
 
-  qjackctl = callPackage ../applications/audio/qjackctl { };
+  qjackctl = qt5.callPackage ../applications/audio/qjackctl { };
 
   qmidinet = callPackage ../applications/audio/qmidinet { };
 
@@ -16139,7 +16137,7 @@ with pkgs;
 
   minecraft-server = callPackage ../games/minecraft-server { };
 
-  multimc = callPackage ../games/multimc { };
+  multimc = qt5.callPackage ../games/multimc { };
 
   minetest = callPackage ../games/minetest {
     libpng = libpng12;
@@ -17837,7 +17835,7 @@ with pkgs;
   vips = callPackage ../tools/graphics/vips { };
   nip2 = callPackage ../tools/graphics/nip2 { };
 
-  vokoscreen = callPackage ../applications/video/vokoscreen { };
+  vokoscreen = qt5.callPackage ../applications/video/vokoscreen { };
 
   wavegain = callPackage ../applications/audio/wavegain { };
 
