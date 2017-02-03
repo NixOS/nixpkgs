@@ -14404,6 +14404,8 @@ with pkgs;
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
+  muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
+
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
   # Open Stack
