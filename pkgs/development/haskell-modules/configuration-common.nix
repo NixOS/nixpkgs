@@ -162,7 +162,7 @@ self: super: {
   shakespeare-js = dontHaddock super.shakespeare-js;
   shakespeare-text = dontHaddock super.shakespeare-text;
   swagger = dontHaddock super.swagger;  # http://hydra.cryp.to/build/2035868/nixlog/1/raw
-  swagger2 = dontHaddock super.swagger2;
+  swagger2 = dontHaddock (dontCheck super.swagger2);
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
