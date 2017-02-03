@@ -519,6 +519,7 @@
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
   yarr = "Dmitry V. <savraz@gmail.com>";
   yochai = "Yochai <yochai@titat.info>";
+  yorickvp = "Yorick van Pelt <yorickvanpelt@gmail.com>";
   yurrriq = "Eric Bailey <eric@ericb.me>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zagy = "Christian Zagrodnick <cz@flyingcircus.io>";
