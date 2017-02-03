@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchurl
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2, paxctl
 # libjulia dependencies
 , libunwind, llvm, readline, utf8proc, zlib
 # standard library dependencies
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     ./0001-use-system-utf8proc.patch
     ./0002-use-system-suitesparse.patch
     ./0003-no-ldconfig.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.needsPax ./0004-hardened-0.4.7.patch;
 
   postPatch = ''
     patchShebangs . contrib
@@ -79,7 +79,8 @@ stdenv.mkDerivation rec {
   ] ++
     stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices] ;
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ]
+    ++ stdenv.lib.optional stdenv.needsPax paxctl;
 
   makeFlags =
     let

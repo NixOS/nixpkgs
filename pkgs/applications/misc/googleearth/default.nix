@@ -9,8 +9,8 @@ let
     else abort "Unsupported architecture";
   sha256 =
     if arch == "amd64"
-    then "00ydkbpndjac0w04p6ldj07jbzgy48rcjpirhc5r8glbl8zdh52s"
-    else "081ivmxnx0wypbjgdpvyq2ayaaghhw5mrxlvc2w01d0zq5zi70lz";
+    then "0dwnppn5snl5bwkdrgj4cyylnhngi0g66fn2k41j3dvis83x24k6"
+    else "0gndbxrj3kgc2dhjqwjifr3cl85hgpm695z0wi01wvwzhrjqs0l2";
   fullPath = stdenv.lib.makeLibraryPath [
     glibc
     glib
