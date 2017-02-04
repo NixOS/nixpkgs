@@ -1,6 +1,16 @@
 { pkgs, callPackage, stdenv, buildPlatform, targetPlatform }:
 
-rec {
+let # These are the GHC versions that support building with integer-simple.
+    integerSimpleGhcNames = [
+      "ghc722"
+      "ghc742"
+      "ghc763"
+      "ghc783" "ghc784"
+      "ghc7102" "ghc7103"
+      "ghc801" "ghc802"
+      "ghcHEAD"
+    ];
+in rec {
 
   lib = import ../development/haskell-modules/lib.nix { inherit pkgs; };
 
@@ -74,6 +84,14 @@ rec {
       inherit (pkgs.haskellPackages) ghcWithPackages;
     });
 
+    # The integer-simple attribute set contains all the GHC compilers
+    # in integerSimpleGhcNames build with integer-simple instead of integer-gmp.
+    integer-simple =
+      let integerSimpleGhcs = pkgs.lib.genAttrs integerSimpleGhcNames
+                                (name: compiler."${name}".override { enableIntegerSimple = true; });
+      in integerSimpleGhcs // {
+           ghcHEAD = integerSimpleGhcs.ghcHEAD.override { selfPkgs = packages.integer-simple.ghcHEAD; };
+         };
   };
 
   packages = {
@@ -141,6 +159,16 @@ rec {
       ghc = compiler.ghcjsHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
+
+    # The integer-simple attribute set contains package sets for all the GHC compilers
+    # in integerSimpleGhcNames using integer-simple instead of integer-gmp.
+    integer-simple = pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
+       ghc = compiler.integer-simple."${name}";
+       overrides = _self : _super : {
+         integer-simple = null;
+         integer-gmp = null;
+       };
+    });
 
     # These attributes exist only for backwards-compatibility so that we don't break
     # stack's --nix support. These attributes will disappear in the foreseeable
