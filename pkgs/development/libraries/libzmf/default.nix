@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [boost icu libpng librevenge zlib cppunit];
   nativeBuildInputs = [doxygen pkgconfig];
+  configureFlags = " --disable-werror ";
 
   meta = {
     inherit version;
