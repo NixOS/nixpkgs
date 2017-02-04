@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha512 = "99cea54b553158c1e08cf19157ac2bb6822fd1fef0501d36f983e6b8d4f2143a2e6124d61297446944033d3fed9326fe0f12ca45db0b5815be71a0777e73ffb0";
   };
 
+  patches = [ ./gcc6.patch ];
+
   # New sed no longer tolerates this mistake.
   postPatch = ''
     for f in mozilla/{js/src,}/configure; do

@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
   meta = {
     inherit (s) version;
     description = ''Library for import of reflowable e-book formats'';

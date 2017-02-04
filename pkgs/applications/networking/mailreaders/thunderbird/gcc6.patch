@@ -1,0 +1,75 @@
+
+# HG changeset patch
+# User Mike Hommey <mh+mozilla@glandium.org>
+# Date 1457596445 -32400
+# Node ID 55212130f19da3079167a6b0a5a0ed6689c9a71d
+# Parent  27c94617d7064d566c24a42e11cd4c7ef725923d
+Bug 1245076 - Don't include mozalloc.h from the cstdlib wrapper. r=froydnj
+
+Our STL wrappers do various different things, one of which is including
+mozalloc.h for infallible operator new. mozalloc.h includes stdlib.h,
+which, in libstdc++ >= 6 is now itself a wrapper around cstdlib, which
+circles back to our STL wrapper.
+
+But of the things our STL wrappers do, including mozalloc.h is not one
+that is necessary for cstdlib. So skip including mozalloc.h in our
+cstdlib wrapper.
+
+Additionally, some C++ sources (in media/mtransport) are including
+headers in an extern "C" block, which end up including stdlib.h, which
+ends up including cstdlib because really, this is all C++, and our
+wrapper pre-includes <new> for mozalloc.h, which fails because templates
+don't work inside extern "C". So, don't pre-include <new> when we're not
+including mozalloc.h.
+
+
+diff --git a/mozilla/config/gcc-stl-wrapper.template.h b/mozilla/config/gcc-stl-wrapper.template.h
+--- a/mozilla/config/gcc-stl-wrapper.template.h
++++ b/mozilla/config/gcc-stl-wrapper.template.h
+@@ -12,33 +12,40 @@
+ // compiling ObjC.
+ #if defined(__EXCEPTIONS) && __EXCEPTIONS && !(__OBJC__ && __GNUC__ && XP_IOS)
+ #  error "STL code can only be used with -fno-exceptions"
+ #endif
+ 
+ // Silence "warning: #include_next is a GCC extension"
+ #pragma GCC system_header
+ 
++// Don't include mozalloc for cstdlib. See bug 1245076.
++#ifndef moz_dont_include_mozalloc_for_cstdlib
++#  define moz_dont_include_mozalloc_for_cstdlib
++#endif
++#ifndef moz_dont_include_mozalloc_for_${HEADER}
+ // mozalloc.h wants <new>; break the cycle by always explicitly
+ // including <new> here.  NB: this is a tad sneaky.  Sez the gcc docs:
+ //
+ //    `#include_next' does not distinguish between <file> and "file"
+ //    inclusion, nor does it check that the file you specify has the
+ //    same name as the current file. It simply looks for the file
+ //    named, starting with the directory in the search path after the
+ //    one where the current file was found.
+-#include_next <new>
++#  include_next <new>
+ 
+ // See if we're in code that can use mozalloc.  NB: this duplicates
+ // code in nscore.h because nscore.h pulls in prtypes.h, and chromium
+ // can't build with that being included before base/basictypes.h.
+-#if !defined(XPCOM_GLUE) && !defined(NS_NO_XPCOM) && !defined(MOZ_NO_MOZALLOC)
+-#  include "mozilla/mozalloc.h"
+-#else
+-#  error "STL code can only be used with infallible ::operator new()"
++#  if !defined(XPCOM_GLUE) && !defined(NS_NO_XPCOM) && !defined(MOZ_NO_MOZALLOC)
++#    include "mozilla/mozalloc.h"
++#  else
++#    error "STL code can only be used with infallible ::operator new()"
++#  endif
++
+ #endif
+ 
+ #if defined(DEBUG) && !defined(_GLIBCXX_DEBUG)
+ // Enable checked iterators and other goodies
+ //
+ // FIXME/bug 551254: gcc's debug STL implementation requires -frtti.
+ // Figure out how to resolve this with -fno-rtti.  Maybe build with
+ // -frtti in DEBUG builds?
+

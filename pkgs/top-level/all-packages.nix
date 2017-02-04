@@ -2787,7 +2787,9 @@ with pkgs;
 
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
-  memtest86plus = callPackage ../tools/misc/memtest86+ { };
+  memtest86plus = callPackage ../tools/misc/memtest86+ {
+    stdenv = overrideCC stdenv gcc5;
+  };
 
   meo = callPackage ../tools/security/meo {
     boost = boost155;
@@ -11563,9 +11565,7 @@ with pkgs;
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
-  miraclecast = callPackage ../os-specific/linux/miraclecast {
-    systemd = systemd.override { enableKDbus = true; };
-  };
+  miraclecast = callPackage ../os-specific/linux/miraclecast { };
 
   mkinitcpio-nfs-utils = callPackage ../os-specific/linux/mkinitcpio-nfs-utils { };
 
@@ -15742,9 +15742,7 @@ with pkgs;
     inherit (gnome2) libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
-  apvlv = callPackage ../applications/misc/apvlv {
-    gtk2 = gtk2-x11;
-  };
+  apvlv = callPackage ../applications/misc/apvlv { };
 
   xpdf = callPackage ../applications/misc/xpdf {
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";

@@ -80,12 +80,19 @@ stdenv.mkDerivation rec {
         gtk = gtk2.out;
         gdk_pixbuf = gdk_pixbuf.out;
       })
-    ++ [(fetchpatch {
+    ++ [
+      (fetchpatch {
         name = "fix-medium-font.patch";
         url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
           + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
         sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
-      })];
+      })
+      (fetchpatch {
+        name = "qt4-gcc6.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
+        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+      })
+    ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
@@ -145,8 +152,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
-    "-I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include"
+  NIX_CFLAGS_COMPILE =
+    optionalString stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
+    + optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
+      " -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include"
     + optionalString stdenv.isDarwin " -I${libcxx}/include/c++/v1";
 
   NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
