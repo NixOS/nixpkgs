@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, lablgtk, findlib, mesa, freeglut, camlp4 } :
+{stdenv, fetchurl, ocaml, lablgtk, findlib, mesa, freeglut, camlp5 } :
 
 let
   pname = "lablgl";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };
 
-  buildInputs = [ocaml findlib lablgtk freeglut camlp4];
+  buildInputs = [ ocaml findlib lablgtk freeglut camlp5 ];
   propagatedBuildInputs = [ mesa ];
 
   patches = [ ./Makefile.config.patch ./META.patch ];

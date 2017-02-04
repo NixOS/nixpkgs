@@ -5185,24 +5185,7 @@ in {
     };
   };
 
-  pytestpep257 = buildPythonPackage rec {
-     name = "pytest-pep257-${version}";
-     version = "0.0.1";
-
-     src = pkgs.fetchurl {
-       url = "mirror://pypi/p/pytest-pep257/${name}.tar.gz";
-       sha256 = "003vdkxpx37n0kjqpwgj3314hwk2jfz3nz58db7xh68bf8xy75lk";
-     };
-
-     buildInputs = with self; [ pytest ];
-     propagatedBuildInputs = with self ; [ pep257 ];
-
-     meta = {
-       homepage = https://github.com/anderslime/pytest-pep257;
-       description = "py.test plugin for PEP257";
-       license = licenses.mit;
-     };
-  };
+  pytest-pep257 = callPackage ../development/python-modules/pytest-pep257.nix { };
 
   pytest-raisesregexp = buildPythonPackage rec {
     name = "pytest-raisesregexp-${version}";
@@ -18617,28 +18600,7 @@ in {
     };
   };
 
-  pep257 = buildPythonPackage rec {
-    name = "pep257-${version}";
-    version = "0.3.2";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/GreenSteam/pep257/archive/${version}.tar.gz";
-      sha256 = "0v8aq0xzsa7clazszxl42904c3jpq69lg8a5hg754bqcqf72hfrn";
-    };
-    LC_ALL="en_US.UTF-8";
-    buildInputs = with self; [ pkgs.glibcLocales pytest_29 ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      homepage = https://github.com/GreenSteam/pep257/;
-      description = "Python docstring style checker";
-      longDescription = "Static analysis tool for checking compliance with Python PEP 257.";
-      lecense = licenses.mit;
-    };
-  };
+  pep257 = callPackage ../development/python-modules/pep257.nix { };
 
   percol = buildPythonPackage rec {
     name = "percol-${version}";
@@ -30085,6 +30047,23 @@ EOF
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
         --prefix PYTHONPATH : "${self.pygobject3}/lib/python2.7/site-packages:$PYTHONPATH"
     '';
+  };
+
+  neovim-remote = buildPythonPackage rec {
+    name = "neovim-remote-${version}";
+    version = "v1.4.0";
+    disabled = !isPy3k;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "mhinz";
+      repo = "neovim-remote";
+      rev = version;
+      sha256 = "0msvfh27f56xj5ki59ikzavxz863nal5scm57n43618m49qzg8iz";
+    };
+
+    propagatedBuildInputs = [
+      self.neovim
+    ];
   };
 
   ghp-import = buildPythonPackage rec {

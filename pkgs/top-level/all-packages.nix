@@ -5474,6 +5474,10 @@ with pkgs;
 
   squeak = callPackage ../development/compilers/squeak { };
 
+  squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
+    drivers = [ mysql_jdbc postgresql_jdbc ];
+  };
+
   stalin = callPackage ../development/compilers/stalin { };
 
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
@@ -12183,12 +12187,17 @@ with pkgs;
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
 
-  liberation_ttf_from_source = callPackage ../data/fonts/redhat-liberation-fonts { };
-  liberation_ttf_binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix { };
-  liberation_ttf = liberation_ttf_binary;
+  inherit (callPackages ../data/fonts/redhat-liberation-fonts { })
+    liberation_ttf_v1_from_source
+    liberation_ttf_v1_binary
+    liberation_ttf_v2_from_source
+    liberation_ttf_v2_binary;
+  liberation_ttf = liberation_ttf_v2_binary;
 
   liberationsansnarrow = callPackage ../data/fonts/liberationsansnarrow { };
   liberationsansnarrow_binary = callPackage ../data/fonts/liberationsansnarrow/binary.nix { };
+
+  liberastika = callPackage ../data/fonts/liberastika { };
 
   libertine = callPackage ../data/fonts/libertine { };
 
@@ -14083,7 +14092,7 @@ with pkgs;
     bison = bison2;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_02) llpp;
+  inherit (ocaml-ng.ocamlPackages_4_04) llpp;
 
   lmms = callPackage ../applications/audio/lmms { };
 
@@ -15460,6 +15469,8 @@ with pkgs;
     spice_gtk = spice_gtk;
   };
 
+  virt-top = callPackage ../applications/virtualization/virt-top { };
+
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     vte = gnome3.vte;
     dconf = gnome3.dconf;
@@ -16121,6 +16132,8 @@ with pkgs;
   gambatte = callPackage ../games/gambatte { };
 
   gav = callPackage ../games/gav { };
+
+  gcs = callPackage ../games/gcs { };
 
   gemrb = callPackage ../games/gemrb { };
 
