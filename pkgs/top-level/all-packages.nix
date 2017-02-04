@@ -914,6 +914,8 @@ in
 
   mathics = pythonPackages.mathics;
 
+  masscan = callPackage ../tools/security/masscan { };
+
   meson = callPackage ../development/tools/build-managers/meson { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
