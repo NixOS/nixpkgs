@@ -12140,6 +12140,8 @@ with pkgs;
   liberationsansnarrow = callPackage ../data/fonts/liberationsansnarrow { };
   liberationsansnarrow_binary = callPackage ../data/fonts/liberationsansnarrow/binary.nix { };
 
+  liberastika = callPackage ../data/fonts/liberastika { };
+
   libertine = callPackage ../data/fonts/libertine { };
 
   libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
