@@ -868,22 +868,22 @@ let
         sha1 = "fed9506063f36b10f066c8b59a144d7faebe1d82";
       };
     };
-    "ms-rest-1.15.2" = {
+    "ms-rest-1.15.4" = {
       name = "ms-rest";
       packageName = "ms-rest";
-      version = "1.15.2";
+      version = "1.15.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ms-rest/-/ms-rest-1.15.2.tgz";
-        sha1 = "882f7d22bd2360505f03b0cbfdd19a8f71e012ff";
+        url = "https://registry.npmjs.org/ms-rest/-/ms-rest-1.15.4.tgz";
+        sha1 = "7af7038fe843fd89d407fec346320db6b010ef8c";
       };
     };
-    "ms-rest-azure-1.15.2" = {
+    "ms-rest-azure-1.15.4" = {
       name = "ms-rest-azure";
       packageName = "ms-rest-azure";
-      version = "1.15.2";
+      version = "1.15.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ms-rest-azure/-/ms-rest-azure-1.15.2.tgz";
-        sha1 = "8375437c2199d8d4bc001d2308b5fc1c1fcf3d83";
+        url = "https://registry.npmjs.org/ms-rest-azure/-/ms-rest-azure-1.15.4.tgz";
+        sha1 = "ea89bce23c6ddd4593db1e86f6557cc6374e3492";
       };
     };
     "node-forge-0.6.23" = {
@@ -1433,24 +1433,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/async/-/async-0.2.7.tgz";
         sha1 = "44c5ee151aece6c4bf5364cfc7c28fe4e58f18df";
-      };
-    };
-    "uuid-2.0.1" = {
-      name = "uuid";
-      packageName = "uuid";
-      version = "2.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/uuid/-/uuid-2.0.1.tgz";
-        sha1 = "c2a30dedb3e535d72ccf82e343941a50ba8533ac";
-      };
-    };
-    "azure-arm-resource-1.4.4-preview" = {
-      name = "azure-arm-resource";
-      packageName = "azure-arm-resource";
-      version = "1.4.4-preview";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/azure-arm-resource/-/azure-arm-resource-1.4.4-preview.tgz";
-        sha1 = "557696d45a89d8320c1aa0916297024b71b73fe2";
       };
     };
     "debug-0.7.4" = {
@@ -2209,13 +2191,13 @@ let
         sha1 = "0fc73a9ed5f0d53c38193398523ef7e543777505";
       };
     };
-    "bcrypt-pbkdf-1.0.0" = {
+    "bcrypt-pbkdf-1.0.1" = {
       name = "bcrypt-pbkdf";
       packageName = "bcrypt-pbkdf";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.0.tgz";
-        sha1 = "3ca76b85241c7170bf7d9703e7b9aa74630040d4";
+        url = "https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.1.tgz";
+        sha1 = "63bc5dcb61331b92bc05fd528953c33462a06f8d";
       };
     };
     "mime-db-1.26.0" = {
@@ -9026,13 +9008,13 @@ let
         sha1 = "e01975e812781a163a6dadfdd80398dc64c889c3";
       };
     };
-    "espree-3.3.2" = {
+    "espree-3.4.0" = {
       name = "espree";
       packageName = "espree";
-      version = "3.3.2";
+      version = "3.4.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/espree/-/espree-3.3.2.tgz";
-        sha1 = "dbf3fadeb4ecb4d4778303e50103b3d36c88b89c";
+        url = "https://registry.npmjs.org/espree/-/espree-3.4.0.tgz";
+        sha1 = "41656fa5628e042878025ef467e78f125cb86e1d";
       };
     };
     "estraverse-4.2.0" = {
@@ -10043,13 +10025,13 @@ let
         sha1 = "4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61";
       };
     };
-    "node-pre-gyp-0.6.32" = {
+    "node-pre-gyp-0.6.33" = {
       name = "node-pre-gyp";
       packageName = "node-pre-gyp";
-      version = "0.6.32";
+      version = "0.6.33";
       src = fetchurl {
-        url = "https://registry.npmjs.org/node-pre-gyp/-/node-pre-gyp-0.6.32.tgz";
-        sha1 = "fc452b376e7319b3d255f5f34853ef6fd8fe1fd5";
+        url = "https://registry.npmjs.org/node-pre-gyp/-/node-pre-gyp-0.6.33.tgz";
+        sha1 = "640ac55198f6a925972e0c16c4ac26a034d5ecc9";
       };
     };
     "npmlog-4.0.2" = {
@@ -15606,8 +15588,8 @@ let
       version = "1.3.6";
       src = fetchgit {
         url = "https://github.com/gwicke/kad.git";
-        rev = "f35971036f43814043245da82b12d035b7bbfd16";
-        sha256 = "9529b2615547db37851d15b39155c608d6b8d0641366d14cce728824b6135a35";
+        rev = "936c91652d757ea6f9dd30e44698afb0daaa1d17";
+        sha256 = "69b2ef001b9f4161dad34f5305a5895cfa9f98f124689277293fd544d06f9251";
       };
     };
     "clarinet-0.11.0" = {
@@ -17573,6 +17555,42 @@ let
         sha1 = "316545bf22229225a2cecaa6824cd2f56a9709ed";
       };
     };
+    "enhanced-resolve-2.3.0" = {
+      name = "enhanced-resolve";
+      packageName = "enhanced-resolve";
+      version = "2.3.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-2.3.0.tgz";
+        sha1 = "a115c32504b6302e85a76269d7a57ccdd962e359";
+      };
+    };
+    "resolve-from-2.0.0" = {
+      name = "resolve-from";
+      packageName = "resolve-from";
+      version = "2.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/resolve-from/-/resolve-from-2.0.0.tgz";
+        sha1 = "9480ab20e94ffa1d9e80a804c7ea147611966b57";
+      };
+    };
+    "tapable-0.2.6" = {
+      name = "tapable";
+      packageName = "tapable";
+      version = "0.2.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/tapable/-/tapable-0.2.6.tgz";
+        sha1 = "206be8e188860b514425375e6f1ae89bfb01fd8d";
+      };
+    };
+    "memory-fs-0.3.0" = {
+      name = "memory-fs";
+      packageName = "memory-fs";
+      version = "0.3.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/memory-fs/-/memory-fs-0.3.0.tgz";
+        sha1 = "7bcc6b629e3a43e871d7e29aca6ae8a7f15cbb20";
+      };
+    };
     "async-2.1.2" = {
       name = "async";
       packageName = "async";
@@ -18266,15 +18284,6 @@ let
         sha1 = "a3a59ec97024985b46e958379646f96c4b616646";
       };
     };
-    "tapable-0.2.6" = {
-      name = "tapable";
-      packageName = "tapable";
-      version = "0.2.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/tapable/-/tapable-0.2.6.tgz";
-        sha1 = "206be8e188860b514425375e6f1ae89bfb01fd8d";
-      };
-    };
     "watchpack-1.2.0" = {
       name = "watchpack";
       packageName = "watchpack";
@@ -18660,12 +18669,10 @@ in
         ];
       })
       sources."moment-2.17.1"
-      sources."ms-rest-1.15.2"
-      (sources."ms-rest-azure-1.15.2" // {
+      sources."ms-rest-1.15.4"
+      (sources."ms-rest-azure-1.15.4" // {
         dependencies = [
           sources."async-0.2.7"
-          sources."uuid-2.0.1"
-          sources."azure-arm-resource-1.4.4-preview"
         ];
       })
       sources."node-forge-0.6.23"
@@ -18863,7 +18870,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."ctype-0.5.2"
@@ -20116,7 +20123,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."are-we-there-yet-1.1.2"
       sources."gauge-1.2.7"
       sources."delegates-1.0.0"
@@ -20530,16 +20537,17 @@ in
   elasticdump = nodeEnv.buildNodePackage {
     name = "elasticdump";
     packageName = "elasticdump";
-    version = "3.0.2";
+    version = "3.1.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/elasticdump/-/elasticdump-3.0.2.tgz";
-      sha1 = "0f010dbd6e26db0270abd88e3e5403062eb4f7a4";
+      url = "https://registry.npmjs.org/elasticdump/-/elasticdump-3.1.0.tgz";
+      sha1 = "4bec1f64f7931b84884306fb5b37a0d269d81e8d";
     };
     dependencies = [
       sources."JSONStream-1.3.0"
       sources."async-2.1.4"
       sources."aws4-1.5.0"
       sources."awscred-1.2.0"
+      sources."ini-1.3.4"
       sources."optimist-0.6.1"
       sources."request-2.79.0"
       sources."jsonparse-1.3.0"
@@ -20614,7 +20622,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
     ];
@@ -20748,7 +20756,7 @@ in
       sources."debug-2.6.0"
       sources."doctrine-1.5.0"
       sources."escope-3.6.0"
-      sources."espree-3.3.2"
+      sources."espree-3.4.0"
       sources."estraverse-4.2.0"
       sources."esutils-2.0.2"
       sources."file-entry-cache-2.0.0"
@@ -21170,7 +21178,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."glob-7.1.1"
@@ -22138,7 +22146,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."punycode-1.4.1"
       sources."block-stream-0.0.9"
       sources."fstream-1.0.10"
@@ -22714,7 +22722,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."glob-7.1.1"
@@ -22898,7 +22906,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."block-stream-0.0.9"
@@ -23192,7 +23200,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."punycode-1.4.1"
       sources."fs.realpath-1.0.0"
       sources."block-stream-0.0.9"
@@ -23220,10 +23228,10 @@ in
   node-pre-gyp = nodeEnv.buildNodePackage {
     name = "node-pre-gyp";
     packageName = "node-pre-gyp";
-    version = "0.6.32";
+    version = "0.6.33";
     src = fetchurl {
-      url = "https://registry.npmjs.org/node-pre-gyp/-/node-pre-gyp-0.6.32.tgz";
-      sha1 = "fc452b376e7319b3d255f5f34853ef6fd8fe1fd5";
+      url = "https://registry.npmjs.org/node-pre-gyp/-/node-pre-gyp-0.6.33.tgz";
+      sha1 = "640ac55198f6a925972e0c16c4ac26a034d5ecc9";
     };
     dependencies = [
       sources."mkdirp-0.5.1"
@@ -23343,7 +23351,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."glob-7.1.1"
@@ -23562,7 +23570,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."glob-7.1.1"
@@ -24014,7 +24022,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."punycode-1.4.1"
       sources."nodemailer-1.11.0"
       sources."poplib-0.1.7"
@@ -24494,7 +24502,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."stream-iterate-1.2.0"
@@ -24631,7 +24639,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."glob-7.1.1"
@@ -24709,10 +24717,10 @@ in
   npm-check-updates = nodeEnv.buildNodePackage {
     name = "npm-check-updates";
     packageName = "npm-check-updates";
-    version = "2.8.9";
+    version = "2.8.10";
     src = fetchurl {
-      url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-2.8.9.tgz";
-      sha1 = "c084b087a08ecf9292352e2cd591de903f8129c3";
+      url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-2.8.10.tgz";
+      sha1 = "20a65b4293a4594df74e98dbc5cfbddee39a756b";
     };
     dependencies = [
       sources."bluebird-3.4.7"
@@ -24965,7 +24973,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."block-stream-0.0.9"
@@ -25284,7 +25292,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."punycode-1.4.1"
       sources."bluebird-3.4.7"
       sources."bunyan-1.8.5"
@@ -26053,7 +26061,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."hoek-2.16.3"
       sources."boom-2.10.1"
       sources."cryptiles-2.0.5"
@@ -26286,7 +26294,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."events.node-0.4.9"
@@ -26486,7 +26494,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."punycode-1.4.1"
       sources."lru-cache-2.7.3"
       sources."sigmund-1.0.1"
@@ -26814,6 +26822,49 @@ in
     };
     production = true;
   };
+  tern = nodeEnv.buildNodePackage {
+    name = "tern";
+    packageName = "tern";
+    version = "0.20.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/tern/-/tern-0.20.0.tgz";
+      sha1 = "5058e1ae15a121a1f421500ced0c852c11e6fb34";
+    };
+    dependencies = [
+      sources."acorn-3.3.0"
+      sources."enhanced-resolve-2.3.0"
+      (sources."glob-3.2.11" // {
+        dependencies = [
+          sources."minimatch-0.3.0"
+        ];
+      })
+      sources."minimatch-0.2.14"
+      sources."resolve-from-2.0.0"
+      sources."tapable-0.2.6"
+      sources."memory-fs-0.3.0"
+      sources."graceful-fs-4.1.11"
+      sources."object-assign-4.1.1"
+      sources."errno-0.1.4"
+      sources."readable-stream-2.2.2"
+      sources."prr-0.0.0"
+      sources."buffer-shims-1.0.0"
+      sources."core-util-is-1.0.2"
+      sources."isarray-1.0.0"
+      sources."inherits-2.0.3"
+      sources."process-nextick-args-1.0.7"
+      sources."string_decoder-0.10.31"
+      sources."util-deprecate-1.0.2"
+      sources."lru-cache-2.7.3"
+      sources."sigmund-1.0.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "A JavaScript code analyzer for deep, cross-editor language support";
+      homepage = "https://github.com/ternjs/tern#readme";
+      license = "MIT";
+    };
+    production = true;
+  };
   titanium = nodeEnv.buildNodePackage {
     name = "titanium";
     packageName = "titanium";
@@ -26950,7 +27001,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."uglify-to-browserify-1.0.2"
       sources."yargs-3.10.0"
@@ -27524,7 +27575,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."punycode-1.4.1"
       sources."stream-iterate-1.2.0"
       sources."block-stream-0.0.9"
@@ -27762,7 +27813,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."hoek-2.16.3"
       sources."boom-2.10.1"
       sources."cryptiles-2.0.5"
@@ -28089,7 +28140,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."glob-7.1.1"
       sources."fs.realpath-1.0.0"
@@ -28351,7 +28402,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."jodid25519-1.0.2"
       sources."ecc-jsbn-0.1.1"
-      sources."bcrypt-pbkdf-1.0.0"
+      sources."bcrypt-pbkdf-1.0.1"
       sources."mime-db-1.26.0"
       sources."punycode-1.4.1"
       sources."is-utf8-0.2.1"
