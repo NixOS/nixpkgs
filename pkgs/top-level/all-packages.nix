@@ -11086,6 +11086,8 @@ with pkgs;
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
+  intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
+
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
   iotop = callPackage ../os-specific/linux/iotop { };
