@@ -18284,15 +18284,6 @@ let
         sha1 = "a3a59ec97024985b46e958379646f96c4b616646";
       };
     };
-    "tapable-0.2.6" = {
-      name = "tapable";
-      packageName = "tapable";
-      version = "0.2.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/tapable/-/tapable-0.2.6.tgz";
-        sha1 = "206be8e188860b514425375e6f1ae89bfb01fd8d";
-      };
-    };
     "watchpack-1.2.0" = {
       name = "watchpack";
       packageName = "watchpack";
