@@ -87,7 +87,7 @@ let
         # Creates a Haskell package from a source package by calling cabal2nix on the source.
         callCabal2nix = src: self.callPackage (haskellSrc2nix {
           inherit src;
-          name = src.name;
+          name = src.name or baseNameOf src;
         });
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
