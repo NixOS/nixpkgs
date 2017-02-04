@@ -46,6 +46,7 @@ following incompatible changes:</para>
       for what those parameters represent.
     </para>
   </listitem>
+
   <listitem>
     <para>
       <literal>ansible</literal> now defaults to ansible version 2 as version 1
@@ -54,6 +55,7 @@ following incompatible changes:</para>
       vulnerability</link> unpatched by upstream.
     </para>
   </listitem>
+
   <listitem>
     <para>
       <literal>gnome</literal> alias has been removed along with
@@ -116,7 +118,6 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
-
     <para><literal>overridePackages</literal> function no longer exists.
     It is replaced by <link
     xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
@@ -150,6 +151,15 @@ following incompatible changes:</para>
       <literal>networking.firewall.autoLoadConntrackHelpers</literal> and
       tune <literal>networking.firewall.connectionTrackingModules</literal>
       to suit your needs.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>local_recipient_maps</literal> is not set to empty value by
+      Postfix service. It's an insecure default as stated by Postfix
+      documentation. Those who want to retain this setting need to set it via
+      <literal>services.postfix.extraConfig</literal>.
     </para>
   </listitem>
 
