@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     "-Wno-error=cpp" "-Wno-error=bool-compare" "-Wno-error=deprecated-declarations"
   ]
     # gcc before 6 doesn't know these options
-    ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc) [
+    ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
     ];
 
