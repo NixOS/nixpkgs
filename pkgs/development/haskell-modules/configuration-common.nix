@@ -45,6 +45,9 @@ self: super: {
   # test phase requires networking
   mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.lib; });
 
+  # check requires mysql server
+  mysql-simple = dontCheck super.mysql-simple;
+
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
