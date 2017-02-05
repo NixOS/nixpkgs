@@ -12308,6 +12308,8 @@ with pkgs;
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
 
+  babelstone-han = callPackage ../data/fonts/babelstone-han { };
+
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
