@@ -8,7 +8,7 @@ assert (stdenv.system == "x86_64-linux") || (stdenv.system == "i686-linux");
 
 let
   bits =
-  if stdenv.system == "x86_64-linux" then "64"
+  if stdenv.is64bit then "64"
   else "32";
 
   libpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.glibc alsaLib ];
