@@ -161,6 +161,10 @@ composableDerivation {
       // edf "gtktest" "gtktest" { } #Do not try to compile and run a test GTK program
     */
 
+  preInstall = ''
+    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
+  '';
+
   postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
       "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
