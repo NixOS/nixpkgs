@@ -82,7 +82,8 @@ in
           configFile = {
   
             path = mkOption {
-              type = types.path;
+              type = types.nullOr types.path;
+              default = null;
               example = literalExample "/etc/wpa_supplicant.conf";
               description = ''
                 External <literal>wpa_supplicant.conf</literal> configuration file.
