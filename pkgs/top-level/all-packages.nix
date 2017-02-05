@@ -12212,6 +12212,8 @@ with pkgs;
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
+  firewalld = callPackage ../os-specific/linux/firewalld {};
+
   fnotifystat = callPackage ../os-specific/linux/fnotifystat { };
 
   forkstat = callPackage ../os-specific/linux/forkstat { };
