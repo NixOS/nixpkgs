@@ -4215,6 +4215,8 @@ with pkgs;
     inherit (gnome3) gexiv2;
   };
 
+  vim-vint = callPackage ../development/tools/vim-vint { };
+
   vit = callPackage ../applications/misc/vit { };
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
