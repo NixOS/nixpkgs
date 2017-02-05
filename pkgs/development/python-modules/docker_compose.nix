@@ -26,7 +26,9 @@ buildPythonApplication rec {
     stdenv.lib.optional (pythonOlder "3.2") functools32;
 
   patchPhase = ''
-    sed -i "s/'requests >= 2.6.1, < 2.8'/'requests'/" setup.py
+    # Remove upper bound on requires, see also
+    # https://github.com/docker/compose/issues/4431
+    sed -i "s/, < .*',$/',/" setup.py
   '';
 
   postInstall = ''
