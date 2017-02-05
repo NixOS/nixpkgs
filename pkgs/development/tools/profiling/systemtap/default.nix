@@ -1,11 +1,11 @@
 { fetchgit, pkgconfig, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake }:
+, elfutils, kernel, gnumake, python2, pythonPackages, binutils }:
 let
   ## fetchgit info
   url = git://sourceware.org/git/systemtap.git;
-  rev = "a10bdceb7c9a7dc52c759288dd2e555afcc5184a";
-  sha256 = "1kllzfnh4ksis0673rma5psglahl6rvy0xs5v05qkqn6kl7irmg1";
-  version = "2016-09-16";
+  rev = "276ed27a3cc64531542ab73bb36bb04784e79bbc";
+  sha256 = "11967dx3cjs96v3ncfljw0h7blsgg9wm8g9z2270q9a90988g2c2";
+  version = "2017-02-04";
 
   inherit (kernel) stdenv;
   inherit (stdenv) lib;
@@ -14,7 +14,13 @@ let
   stapBuild = stdenv.mkDerivation {
     name = "systemtap-${version}";
     src = fetchgit { inherit url rev sha256; };
-    buildInputs = [ elfutils pkgconfig gettext ];
+    buildInputs = [ elfutils pkgconfig gettext python2 pythonPackages.setuptools ];
+    # FIXME: Workaround for bug in kbuild, where quoted -I"/foo" flags would get mangled in out-of-tree kbuild dirs
+    postPatch = ''
+      substituteInPlace buildrun.cxx --replace \
+        'o << "EXTRA_CFLAGS += -I\"" << s.runtime_path << "\"" << endl;' \
+        'o << "EXTRA_CFLAGS += -I" << s.runtime_path << endl;'
+    '';
     enableParallelBuilding = true;
   };
 
@@ -48,5 +54,5 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   rm $out/bin/stap
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
     --add-flags "-r $kernelBuildDir" \
-    --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc elfutils gnumake ]}
+    --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc binutils elfutils gnumake ]}
 ''
