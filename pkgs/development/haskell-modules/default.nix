@@ -55,37 +55,50 @@ let
         inherit packages;
       };
 
-      haskellSrc2nix = { name, src, sha256 ? null }:
-        let
-          sha256Arg = if isNull sha256 then "" else ''--sha256="${sha256}"'';
-        in pkgs.stdenv.mkDerivation {
-          name = "cabal2nix-${name}";
-          buildInputs = [ pkgs.cabal2nix ];
-          phases = ["installPhase"];
-          LANG = "en_US.UTF-8";
-          LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux "${pkgs.glibcLocales}/lib/locale/locale-archive";
-          installPhase = ''
-            export HOME="$TMP"
-            mkdir -p "$out"
-            cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} ${sha256Arg} "${src}" > "$out/default.nix"
-          '';
-      };
-
-      hackage2nix = name: version: haskellSrc2nix {
-        name   = "${name}-${version}";
-        sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${all-cabal-hashes}/${name}/${version}/${name}.json")'';
-        src    = "${all-cabal-hashes}/${name}/${version}/${name}.cabal";
-      };
-
     in
       import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
 
         inherit mkDerivation callPackage;
 
-        callHackage = name: version: self.callPackage (hackage2nix name version);
+        # Creates a Haskell package from a source package by calling cabal2nix
+        # on the source.
+        haskellSrc2nix = { src, name ? "src", sha256 ? null }:
+          pkgs.stdenv.mkDerivation {
+            name = "cabal2nix-${name}";
+            buildInputs = [ pkgs.cabal2nix ];
+            phases = ["installPhase"];
+            LANG = "en_US.UTF-8";
+            LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux
+              "${pkgs.glibcLocales}/lib/locale/locale-archive";
+            installPhase = ''
+              export HOME="$TMP"
+              mkdir -p "$out"
+              cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} \
+                ${pkgs.lib.optionalString (!(isNull sha256))
+                    "--sha256=${sha256}"} \
+                "${src}" > "$out/default.nix"
+            '';
+            preferLocalBuild = true;
+        };
 
-        # Creates a Haskell package from a source package by calling cabal2nix on the source.
-        callCabal2nix = name: src: self.callPackage (haskellSrc2nix { inherit src name; });
+        # Creates a Haskell package from a name and version, as seen in Hackage.
+        # Note that this only works for the name and version combinations
+        # present in `all-cabal-hashes`.
+        hackage2nix = name: version: self.haskellSrc2nix {
+          name   = "${name}-${version}";
+          sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' \
+                       "${all-cabal-hashes}/${name}/${version}/${name}.json")'';
+          src    = "${all-cabal-hashes}/${name}/${version}/${name}.cabal";
+        };
+
+        # Call a Haskell package created from its Hackage definition. See
+        # `hackage2nix'.
+        callHackage = name: version:
+          self.callPackage (self.hackage2nix name version);
+
+        # Call a Haskell package created from its source. See `haskellSrc2nix'.
+        callCabal2nix = name: src:
+          self.callPackage (self.haskellSrc2nix { inherit src name; });
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
