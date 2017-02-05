@@ -5411,10 +5411,6 @@ with pkgs;
   sbcl = callPackage ../development/compilers/sbcl {};
   # For Maxima
   sbcl_1_3_12 = callPackage ../development/compilers/sbcl/1.3.12.nix { };
-  # For StumpWM
-  sbcl_1_2_5 = callPackage ../development/compilers/sbcl/1.2.5.nix {
-    clisp = clisp;
-  };
   # For ACL2
   sbcl_1_2_0 = callPackage ../development/compilers/sbcl/1.2.0.nix {
     clisp = clisp;
