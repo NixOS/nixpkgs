@@ -13360,14 +13360,18 @@ with pkgs;
   xfontsel = callPackage ../applications/misc/xfontsel { };
   inherit (xorg) xlsfonts;
 
-  freerdpStable = callPackage ../applications/networking/remote/freerdp {
+  freerdp = callPackage ../applications/networking/remote/freerdp {
+    inherit libpulseaudio;
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
+  };
+
+  freerdpUnstable = freerdp;
+
+  # This must go when weston v2 is released
+  freerdp_legacy = callPackage ../applications/networking/remote/freerdp/legacy.nix {
+    cmake = cmake_2_8;
     ffmpeg = ffmpeg_1;
   };
-  freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
-    ffmpeg = ffmpeg_2;
-    cmake = cmake_2_8;
-  };
-  freerdp = freerdpUnstable; # freerdpStable is marked broken, please switch back to it once fixed
 
   freicoin = callPackage ../applications/misc/freicoin {
     boost = boost155;
