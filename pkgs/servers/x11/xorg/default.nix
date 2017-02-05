@@ -812,11 +812,11 @@ let
   }) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (mkDerivation "libXi" {
-    name = "libXi-1.7.8";
+    name = "libXi-1.7.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.8.tar.bz2;
-      sha256 = "1fr7mi4nbcxsa88qin9g2ipmzh595ydxy9qnabzl270laf6zmwnq";
+      url = mirror://xorg/individual/lib/libXi-1.7.9.tar.bz2;
+      sha256 = "0idg1wc01hndvaa820fvfs7phvd1ymf0lldmq6386i7rhkzvirn2";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -856,11 +856,11 @@ let
   }) // {inherit printproto libX11 libXau libXext xextproto ;};
 
   libXpm = (mkDerivation "libXpm" {
-    name = "libXpm-3.5.11";
+    name = "libXpm-3.5.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXpm-3.5.11.tar.bz2;
-      sha256 = "07041q4k8m4nirzl7lrqn8by2zylx0xvh6n0za301qqs3njszgf5";
+      url = mirror://xorg/individual/lib/libXpm-3.5.12.tar.bz2;
+      sha256 = "1v5xaiw4zlhxspvx76y3hq4wpxv7mpj6parqnwdqvpj8vbinsspx";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
