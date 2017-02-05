@@ -1241,11 +1241,11 @@ let
   }) // {inherit libICE libSM libX11 libXext libXmu xproto libXt ;};
 
   utilmacros = (mkDerivation "utilmacros" {
-    name = "util-macros-1.19.0";
+    name = "util-macros-1.19.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/util-macros-1.19.0.tar.bz2;
-      sha256 = "1fnhpryf55l0yqajxn0cxan3kvsjzi67nlanz8clwqzf54cb2d98";
+      url = mirror://xorg/individual/util/util-macros-1.19.1.tar.bz2;
+      sha256 = "19h6wflpmh7xxqr6lk5z8pds6r9r0dn7ijbvaacymx2q0m05km0q";
     };
     buildInputs = [pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
