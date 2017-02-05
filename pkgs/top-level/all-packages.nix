@@ -2426,6 +2426,8 @@ with pkgs;
 
   kpcli = callPackage ../tools/security/kpcli { };
 
+  krename-qt5 = qt5.callPackage ../applications/misc/krename/kde5.nix { };
+
   kronometer = qt5.callPackage ../tools/misc/kronometer { };
 
   peruse = qt5.callPackage ../tools/misc/peruse { };
@@ -16628,7 +16630,7 @@ with pkgs;
 
           kvirc = callPackage ../applications/networking/irc/kvirc { };
 
-          krename = callPackage ../applications/misc/krename {
+          krename = callPackage ../applications/misc/krename/kde4.nix {
             taglib = taglib_1_9;
           };
 
