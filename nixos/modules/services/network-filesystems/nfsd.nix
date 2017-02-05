@@ -139,7 +139,6 @@ in
 
     systemd.services.nfs-mountd =
       { enable = true;
-        path = [ pkgs.nfs-utils ];
         restartTriggers = [ exports ];
 
         preStart =
@@ -155,8 +154,6 @@ in
                 | xargs -d '\n' mkdir -p
               ''
             }
-
-            exportfs -rav
           '';
       };
 
