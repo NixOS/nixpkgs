@@ -4448,6 +4448,8 @@ with pkgs;
 
   wrk = callPackage ../tools/networking/wrk { };
 
+  wuzz = callPackage ../tools/networking/wuzz { };
+
   wv = callPackage ../tools/misc/wv { };
 
   wv2 = callPackage ../tools/misc/wv2 { };
