@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 7.18
+  # LTS Haskell 7.19
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -55,7 +55,7 @@ default-package-overrides:
   - aeson-casing ==0.1.0.5
   - aeson-compat ==0.3.6
   - aeson-generic-compat ==0.0.1.0
-  - aeson-injector ==1.0.6.0
+  - aeson-injector ==1.0.7.0
   - aeson-pretty ==0.8.2
   - aeson-qq ==0.8.1
   - aeson-utils ==0.3.0.2
@@ -261,6 +261,7 @@ default-package-overrides:
   - c2hs ==0.28.1
   - Cabal ==1.24.2.0
   - cabal-dependency-licenses ==0.1.2.0
+  - cabal-doctest ==1
   - cabal-file-th ==0.2.4
   - cabal-helper ==0.7.3.0
   - cabal-rpm ==0.10.1
@@ -329,7 +330,7 @@ default-package-overrides:
   - clumpiness ==0.17.0.0
   - ClustalParser ==1.1.4
   - clustering ==0.2.1
-  - cmark ==0.5.4
+  - cmark ==0.5.5
   - cmark-highlight ==0.2.0.0
   - cmark-lucid ==0.1.0.0
   - cmdargs ==0.10.14
@@ -463,7 +464,7 @@ default-package-overrides:
   - distributed-closure ==0.3.3.0
   - distributed-static ==0.3.5.0
   - distribution-nixpkgs ==1.0.0.1
-  - distributive ==0.5.1
+  - distributive ==0.5.2
   - diversity ==0.8.0.1
   - djinn-ghc ==0.0.2.3
   - djinn-lib ==0.0.1.2
@@ -493,7 +494,7 @@ default-package-overrides:
   - easy-file ==0.2.1
   - Ebnf2ps ==1.0.15
   - ed25519 ==0.0.5.0
-  - ede ==0.2.8.6
+  - ede ==0.2.8.7
   - EdisonAPI ==1.3.1
   - EdisonCore ==1.3.1.1
   - edit-distance ==0.2.2.1
@@ -544,7 +545,7 @@ default-package-overrides:
   - farmhash ==0.1.0.5
   - fast-builder ==0.0.0.6
   - fast-digits ==0.2.1.0
-  - fast-logger ==2.4.8
+  - fast-logger ==2.4.10
   - fasta ==0.10.4.0
   - fay ==0.23.1.12
   - fay-base ==0.20.0.1
@@ -609,7 +610,7 @@ default-package-overrides:
   - generic-xmlpickler ==0.1.0.5
   - GenericPretty ==1.2.1
   - generics-eot ==0.2.1.1
-  - generics-sop ==0.2.3.0
+  - generics-sop ==0.2.4.0
   - generics-sop-lens ==0.1.2.1
   - geniplate-mirror ==0.7.4
   - genvalidity ==0.2.0.4
@@ -819,7 +820,7 @@ default-package-overrides:
   - HaskellNet-SSL ==0.3.3.0
   - haskintex ==0.6.0.1
   - haskoin-core ==0.4.0
-  - hasql ==0.19.15.2
+  - hasql ==0.19.16
   - hastache ==0.6.1
   - hasty-hamiltonian ==1.1.5
   - HaTeX ==3.17.1.0
@@ -847,7 +848,7 @@ default-package-overrides:
   - hid ==0.2.2
   - hidapi ==0.1.4
   - hierarchical-clustering ==0.4.6
-  - highlighting-kate ==0.6.3
+  - highlighting-kate ==0.6.4
   - hinotify ==0.3.9
   - hint ==0.6.0
   - hip ==1.2.0.0
@@ -1052,7 +1053,7 @@ default-package-overrides:
   - knob ==0.1.1
   - koofr-client ==1.0.0.3
   - kraken ==0.0.3
-  - lackey ==0.4.1
+  - lackey ==0.4.2
   - language-c ==0.5.0
   - language-c-quote ==0.11.7.1
   - language-dockerfile ==0.3.5.0
@@ -1177,7 +1178,7 @@ default-package-overrides:
   - monad-time ==0.2
   - monad-unlift ==0.2.0
   - monad-unlift-ref ==0.2.0
-  - monadcryptorandom ==0.7.0
+  - monadcryptorandom ==0.7.1
   - monadic-arrays ==0.2.2
   - monadLib ==3.7.3
   - monadloc ==0.7.1
@@ -1295,7 +1296,7 @@ default-package-overrides:
   - parsec ==3.1.11
   - parsers ==0.12.4
   - partial-handler ==1.0.2
-  - path ==0.5.11
+  - path ==0.5.12
   - path-extra ==0.0.3
   - path-io ==1.2.2
   - path-pieces ==0.2.1
@@ -1361,7 +1362,7 @@ default-package-overrides:
   - polyparse ==1.12
   - posix-realtime ==0.0.0.4
   - post-mess-age ==0.2.1.0
-  - postgresql-binary ==0.9.1.1
+  - postgresql-binary ==0.9.2
   - postgresql-libpq ==0.9.3.0
   - postgresql-query ==3.0.1
   - postgresql-schema ==0.1.10
@@ -1443,7 +1444,7 @@ default-package-overrides:
   - readable ==0.3.1
   - ReadArgs ==1.2.3
   - readline ==1.0.3.0
-  - rebase ==1.0.6
+  - rebase ==1.0.8
   - redis-io ==0.7.0
   - redis-resp ==0.4.0
   - reducers ==3.12.1
@@ -1467,7 +1468,7 @@ default-package-overrides:
   - regex-tdfa ==1.2.2
   - regex-tdfa-text ==1.0.0.3
   - reinterpret-cast ==0.1.0
-  - relational-query ==0.8.3.2
+  - relational-query ==0.8.3.4
   - relational-query-HDBC ==0.6.0.2
   - relational-record ==0.1.5.1
   - relational-schemas ==0.1.3.1
@@ -1476,6 +1477,7 @@ default-package-overrides:
   - repa-algorithms ==3.4.1.1
   - repa-io ==3.4.1.1
   - RepLib ==0.5.4
+  - rerebase ==1.0.3
   - reroute ==0.4.0.1
   - resolve-trivial-conflicts ==0.3.2.4
   - resource-pool ==0.2.3.2
@@ -1517,7 +1519,7 @@ default-package-overrides:
   - scotty ==0.11.0
   - scrape-changes ==0.1.0.4
   - scrypt ==0.5.0
-  - sdl2 ==2.1.3
+  - sdl2 ==2.1.3.1
   - secp256k1 ==0.4.6
   - securemem ==0.1.9
   - SegmentTree ==0.3
@@ -1545,7 +1547,7 @@ default-package-overrides:
   - servant-server ==0.8.1
   - servant-subscriber ==0.5.0.3
   - servant-swagger ==1.1.2
-  - servant-swagger-ui ==0.2.1.2.2.8
+  - servant-swagger-ui ==0.2.2.2.2.8
   - servant-yaml ==0.1.0.0
   - serversession ==1.0.1
   - serversession-backend-acid-state ==1.0.3
@@ -1777,7 +1779,7 @@ default-package-overrides:
   - tree-fun ==0.8.1.0
   - tree-view ==0.4
   - tries ==0.0.4
-  - trifecta ==1.6.1
+  - trifecta ==1.6.2.1
   - true-name ==0.1.0.2
   - ttrie ==0.1.2.1
   - tttool ==1.6.1.2
@@ -1796,9 +1798,10 @@ default-package-overrides:
   - type-level-numbers ==0.1.1.1
   - type-list ==0.5.0.0
   - type-spec ==0.2.0.0
+  - typed-process ==0.1.0.0
   - typelits-witnesses ==0.2.3.0
   - typography-geometry ==1.0.0.1
-  - tzdata ==0.1.20160614.0
+  - tzdata ==0.1.20161123.0
   - ua-parser ==0.7.3
   - uglymemo ==0.1.0.1
   - unbound ==0.5.1
@@ -1893,7 +1896,7 @@ default-package-overrides:
   - wai-transformers ==0.0.7
   - wai-websockets ==3.0.1.1
   - waitra ==0.0.4.0
-  - warp ==3.2.10
+  - warp ==3.2.11
   - warp-tls ==3.2.3
   - web-plugins ==0.2.9
   - web-routes ==0.27.11
@@ -1966,17 +1969,17 @@ default-package-overrides:
   - yarr ==1.4.0.2
   - yes-precure5-command ==5.5.3
   - yesod ==1.4.4
-  - yesod-auth ==1.4.15
+  - yesod-auth ==1.4.16
   - yesod-auth-account ==1.4.3
   - yesod-auth-basic ==0.1.0.2
   - yesod-auth-hashdb ==1.5.1.3
   - yesod-auth-oauth2 ==0.2.2
-  - yesod-bin ==1.4.18.7
-  - yesod-core ==1.4.30
+  - yesod-bin ==1.5.1
+  - yesod-core ==1.4.31
   - yesod-eventsource ==1.4.0.1
   - yesod-fay ==0.8.0
   - yesod-fb ==0.3.4
-  - yesod-form ==1.4.9
+  - yesod-form ==1.4.10
   - yesod-form-richtext ==0.1.0.0
   - yesod-gitrepo ==0.2.1.0
   - yesod-gitrev ==0.1.0.0
