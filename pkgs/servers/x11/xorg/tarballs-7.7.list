@@ -6,7 +6,7 @@ mirror://xorg/X11R7.7/src/everything/damageproto-1.2.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/dmxproto-2.3.1.tar.bz2
 mirror://xorg/individual/proto/dri2proto-2.8.tar.bz2
 mirror://xorg/individual/proto/dri3proto-1.0.tar.bz2
-mirror://xorg/individual/proto/presentproto-1.0.tar.bz2
+mirror://xorg/individual/proto/presentproto-1.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/encodings-1.0.4.tar.bz2
 mirror://xorg/X11R7.7/src/everything/fixesproto-5.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/font-adobe-100dpi-1.0.3.tar.bz2

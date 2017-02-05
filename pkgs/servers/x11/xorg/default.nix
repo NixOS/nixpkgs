@@ -1120,11 +1120,11 @@ let
   }) // {inherit libfontenc freetype xproto zlib ;};
 
   presentproto = (mkDerivation "presentproto" {
-    name = "presentproto-1.0";
+    name = "presentproto-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/presentproto-1.0.tar.bz2;
-      sha256 = "1kir51aqg9cwazs14ivcldcn3mzadqgykc9cg87rm40zf947sb41";
+      url = mirror://xorg/individual/proto/presentproto-1.1.tar.bz2;
+      sha256 = "1f96dlgfwhsd0834z8ydjzjnb0cwha5r6lxgia4say4zhsl276zn";
     };
     buildInputs = [pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
