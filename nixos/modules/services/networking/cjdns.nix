@@ -258,8 +258,7 @@ in
         Restart = "always";
         StartLimitInterval = 0;
         RestartSec = 1;
-        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
-        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_RAW";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW CAP_SETUID";
         ProtectSystem = true;
         MemoryDenyWriteExecute = true;
         ProtectHome = true;
