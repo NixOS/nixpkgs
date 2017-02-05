@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "08hb2gpzcj5p743wcagm0j2m4gh100xv12llpbjc13zi2icwv3xx";
   };
 
-  patches = optional stdenv.isAarch64 ./aarch64-fix-discarded-qualifier.patch;
-
   buildInputs = [ pciutils ];
 
   hardeningDisable = [ "stackprotector" ];
