@@ -52,6 +52,12 @@ in rec {
       description = "Units that want (i.e. depend on) this unit.";
     };
 
+    aliases = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = "Aliases of that unit.";
+    };
+
   };
 
   concreteUnitOptions = sharedOptions // {
