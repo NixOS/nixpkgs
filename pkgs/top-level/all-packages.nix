@@ -17537,6 +17537,8 @@ with pkgs;
 
   hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
 
+  illum = callPackage ../tools/system/illum { };
+
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
