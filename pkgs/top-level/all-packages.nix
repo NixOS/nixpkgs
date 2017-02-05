@@ -877,6 +877,8 @@ with pkgs;
 
   fzy = callPackage ../tools/misc/fzy { };
 
+  gbsplay = callPackage ../applications/audio/gbsplay { };
+
   gdrivefs = python27Packages.gdrivefs;
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
