@@ -43,10 +43,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/udev/rules.d
     # source has a filename typo
     cp scripts/10-procatpure-event-dev.rules $out/lib/udev/rules.d/10-procapture-event-dev.rules
-    cp scripts/ProCapture.conf $out/modprobe.conf
     cp -r src/res $out
-
-    substituteInPlace "$out"/modprobe.conf --replace /usr/local/share/ProCapture/src/res "$out"/res
 
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
