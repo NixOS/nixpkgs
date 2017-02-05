@@ -3844,6 +3844,8 @@ with pkgs;
 
   sonata = callPackage ../applications/audio/sonata { };
 
+  souper = callPackage ../development/compilers/souper { };
+
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
   spiped = callPackage ../tools/networking/spiped { };
