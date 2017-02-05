@@ -1285,11 +1285,11 @@ let
   }) // {inherit libX11 libXext libXft libXmu xproto libXrender ;};
 
   xauth = (mkDerivation "xauth" {
-    name = "xauth-1.0.9";
+    name = "xauth-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xauth-1.0.9.tar.bz2;
-      sha256 = "13y2invb0894b1in03jbglximbz6v31y2kr4yjjgica8xciibkjn";
+      url = mirror://xorg/individual/app/xauth-1.0.10.tar.bz2;
+      sha256 = "0kgwz9rmxjfdvi2syf8g0ms5rr5cgyqx4n0n1m960kyz7k745zjs";
     };
     buildInputs = [pkgconfig libX11 libXau libXext libXmu xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
