@@ -2430,6 +2430,8 @@ with pkgs;
 
   kronometer = qt5.callPackage ../tools/misc/kronometer { };
 
+  kdiff3-qt5 = qt5.callPackage ../tools/text/kdiff3/kde5.nix { };
+
   peruse = qt5.callPackage ../tools/misc/peruse { };
 
   kst = qt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
