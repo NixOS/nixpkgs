@@ -8295,6 +8295,8 @@ with pkgs;
 
   libidn = callPackage ../development/libraries/libidn { };
 
+  libidn2 = callPackage ../development/libraries/libidn2 { };
+
   idnkit = callPackage ../development/libraries/idnkit { };
 
   libiec61883 = callPackage ../development/libraries/libiec61883 { };
