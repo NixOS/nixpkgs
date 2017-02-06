@@ -60,6 +60,38 @@ rec {
   */
   foldl' = builtins.foldl' or foldl;
 
+  /* "Fold" a ternary function `op' between successive elements of `list' as if
+     it was a doubly-linked list with `lnul' and `rnul` base cases at either
+     end. In precise terms, `fold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
+     same as
+
+       let
+         f_-1  = lnul;
+         f_0   = op f_-1   x_0  f_1;
+         f_1   = op f_0    x_1  f_2;
+         f_2   = op f_1    x_2  f_3;
+         ...
+         f_n   = op f_n-1  x_n  f_n+1;
+         f_n+1 = rnul;
+       in
+         f_0
+
+     New in 17.03 --- Until that release is cut, feel free to modify this
+     function (and update its uses accordingly).
+  */
+  dfold = op: lnul: rnul: list:
+    let
+      len = length list;
+      go = pred: n:
+        if n == len
+        then rnul
+        else let
+          # Note the cycle -- call-by-need ensures finite fold.
+          cur  = op pred (elemAt list n) succ;
+          succ = go cur (n + 1);
+        in cur;
+    in go lnul 0;
+
   /* Map with index
 
      FIXME(zimbatm): why does this start to count at 1?

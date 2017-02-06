@@ -55,19 +55,21 @@ stageFuns: let
 
   # Adds the stdenv to the arguments, and sticks in it the previous stage for
   # debugging purposes.
-  folder = stageFun: finalSoFar: let
-    args = stageFun finalSoFar;
+  folder = nextStage: stageFun: prevStage: let
+    args = stageFun prevStage;
     args' = args // {
       stdenv = args.stdenv // {
         # For debugging
-        __bootPackages = finalSoFar;
+        __bootPackages = prevStage;
+        __hatPackages = nextStage;
       };
     };
   in
     if args.__raw or false
     then args'
     else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
-      buildPackages = if args.selfBuild or true then null else finalSoFar;
+      buildPackages = if args.selfBuild or true then null else prevStage;
+      __targetPackages = if args.selfBuild or true then null else nextStage;
     });
 
-in lib.lists.fold folder {} withAllowCustomOverrides
+in lib.lists.dfold folder {} {} withAllowCustomOverrides

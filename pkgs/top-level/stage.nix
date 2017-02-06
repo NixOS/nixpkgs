@@ -49,6 +49,13 @@
   # be defined internally as the produced package set as itself.
   buildPackages
 
+, # The package set used in the next stage. If null, `__targetPackages` will be
+  # defined internally as the produced package set as itself.
+  #
+  # THIS IS A HACK for compilers that don't think critically about cross-
+  # compilation. Please do *not* use unless you really know what you are doing.
+  __targetPackages
+
 , # The standard environment to use for building packages.
   stdenv
 
@@ -86,6 +93,8 @@ let
 
   stdenvBootstappingAndPlatforms = self: super: {
     buildPackages = (if buildPackages == null then self else buildPackages)
+      // { recurseForDerivations = false; };
+    __targetPackages = (if __targetPackages == null then self else __targetPackages)
       // { recurseForDerivations = false; };
     inherit stdenv
       buildPlatform hostPlatform targetPlatform;

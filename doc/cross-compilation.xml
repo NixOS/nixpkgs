@@ -124,6 +124,11 @@
       Because of this, a best-of-both-worlds solution is in the works with no splicing or explicit access of <varname>buildPackages</varname> needed.
       For now, feel free to use either method.
     </para>
+    <note><para>
+      There is also a "backlink" <varname>__targetPackages</varname>, yielding a package set which whose <varname>buildPackages<varname> is the current package set.
+      This is a hack, though, to accommodate compilers with lousy build systems.
+      Please do not use this unless you are absolutely sure you are packaging such a compiler and there is no other way.
+    </para></note>
   </section>
 
 </section>
