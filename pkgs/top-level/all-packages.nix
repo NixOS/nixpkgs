@@ -4428,7 +4428,7 @@ with pkgs;
   weighttp = callPackage ../tools/networking/weighttp { };
 
   wget = callPackage ../tools/networking/wget {
-    inherit (perlPackages) LWP;
+    inherit (perlPackages) IOSocketSSL LWP;
     libpsl = null;
   };
 

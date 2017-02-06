@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, gettext, libidn2, pkgconfig
-, perl, perlPackages, LWP, python3
-, libiconv, libpsl ? null, openssl ? null }:
+{ stdenv, fetchurl, gettext, pkgconfig, perl
+, libidn2, zlib, pcre, libuuid, libiconv
+, IOSocketSSL, LWP, python3
+, libpsl ? null
+, openssl ? null }:
 
 stdenv.mkDerivation rec {
   name = "wget-1.19";
@@ -26,9 +28,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ gettext pkgconfig perl ];
-  buildInputs = [ libidn2 libiconv libpsl ]
-    ++ stdenv.lib.optionals doCheck [ perlPackages.IOSocketSSL LWP python3 ]
+  buildInputs = [ libidn2 libiconv zlib pcre libuuid ]
+    ++ stdenv.lib.optionals doCheck [ IOSocketSSL LWP python3 ]
     ++ stdenv.lib.optional (openssl != null) openssl
+    ++ stdenv.lib.optional (libpsl != null) libpsl
     ++ stdenv.lib.optional stdenv.isDarwin perl;
 
   configureFlags =
