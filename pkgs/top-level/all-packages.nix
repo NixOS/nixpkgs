@@ -3320,6 +3320,8 @@ with pkgs;
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
+  pdf2htmlEX = callPackage ../tools/typesetting/pdf2htmlEX { };
+
   pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
