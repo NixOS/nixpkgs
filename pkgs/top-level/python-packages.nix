@@ -31908,6 +31908,8 @@ EOF
 
   incremental = callPackage ../development/python-modules/incremental { };
 
+  treq = callPackage ../development/python-modules/treq { };
+
 });
 
 in fix' (extends overrides packages)
