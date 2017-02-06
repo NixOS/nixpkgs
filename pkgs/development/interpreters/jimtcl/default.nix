@@ -10,9 +10,8 @@ stdenv.mkDerivation {
     sha256 = "00ldal1w9ysyfmx28xdcaz81vaazr1fqixxb2abk438yfpp1i9hq";
   };
 
-  buildInputs = [
-    sqlite readline asciidoc SDL SDL_gfx
-  ];
+  buildInputs = [ asciidoc ];
+  propagatedBuildInputs = [ readline SDL SDL_gfx sqlite ];
 
   NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
 

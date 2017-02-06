@@ -17562,6 +17562,8 @@ with pkgs;
   libjack2 = jack2Full.override { prefix = "lib"; };
   libjack2Unstable = callPackage ../misc/jackaudio/unstable.nix { };
 
+  libjaylink = callPackage ../development/tools/misc/libjaylink { };
+
   keynav = callPackage ../tools/X11/keynav { };
 
   kops = callPackage ../applications/networking/cluster/kops { };
