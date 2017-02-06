@@ -11171,8 +11171,6 @@ with pkgs;
     cross = assert targetPlatform != buildPlatform; targetPlatform;
   };
 
-  linuxHeaders_3_18 = callPackage ../os-specific/linux/kernel-headers/3.18.nix { };
-
   linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix { };
 
   # We can choose:
@@ -11224,17 +11222,6 @@ with pkgs;
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
     kernelPatches = with kernelPatches;
       [ bridge_stp_helper
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
-  linux_3_18 = callPackage ../os-specific/linux/kernel/linux-3.18.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11461,7 +11448,6 @@ with pkgs;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12);
-  linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
