@@ -17007,6 +17007,8 @@ with pkgs;
 
   aspino = callPackage ../applications/science/logic/aspino {};
 
+  boogie = dotnetPackages.Boogie;
+
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
     make = pkgs.gnumake3;
     inherit (ocamlPackages_3_12_1) ocaml findlib;

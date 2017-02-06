@@ -221,8 +221,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   # SOURCE PACKAGES
 
   Boogie = buildDotnetPackage rec {
-    baseName = "Boogie-unstable";
+    baseName = "Boogie";
     version = "2017-01-03";
+    name = "${baseName}-unstable-${version}";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
@@ -238,8 +239,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "Binaries/*" ];
 
     postInstall = ''
-        mkdir -pv "$out/lib/dotnet/Boogie"
-        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/Boogie/z3.exe"
+        mkdir -pv "$out/lib/dotnet/${baseName}"
+        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${baseName}/z3.exe"
     '';
 
     meta = with stdenv.lib; {
