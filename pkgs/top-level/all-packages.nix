@@ -12860,6 +12860,10 @@ with pkgs;
 
   doodle = callPackage ../applications/search/doodle { };
 
+  droopy = callPackage ../applications/networking/droopy {
+    inherit (python3Packages) wrapPython;
+  };
+
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
 
   dunst = callPackage ../applications/misc/dunst { };
