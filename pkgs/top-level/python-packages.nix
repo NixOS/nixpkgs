@@ -20657,7 +20657,7 @@ in {
       for test in $disabledTests; do
         file="''${test%%:*}"
         fun="''${test#*:}"
-        echo "$fun = unittest.expectedFailure($fun)" >> "tests/tests_$file.py"
+        echo "$fun = unittest.skip($fun)" >> "tests/tests_$file.py"
       done
     '';
 
