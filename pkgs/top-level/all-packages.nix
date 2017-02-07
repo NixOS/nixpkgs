@@ -13526,11 +13526,6 @@ with pkgs;
 
   gmu = callPackage ../applications/audio/gmu { };
 
-  gnash = callPackage ../applications/video/gnash {
-    inherit (gnome2) gtkglext;
-    xulrunner = firefox-unwrapped;
-  };
-
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer {
     inherit (gnome2) GConf;
   };
