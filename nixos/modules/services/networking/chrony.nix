@@ -30,6 +30,8 @@ let
     ${cfg.extraConfig}
   '';
 
+  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+
 in
 
 {
@@ -75,6 +77,13 @@ in
           Extra configuration directives that should be added to
           <literal>chrony.conf</literal>
         '';
+      };
+
+      extraFlags = mkOption {
+        default = [];
+        example = [ "-s" ];
+        type = types.listOf types.str;
+        description = "Extra flags passed to the chronyd command.";
       };
     };
 
@@ -123,7 +132,7 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${pkgs.chrony}/bin/chronyd -n -m -u chrony -f ${configFile}";
+          { ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
           };
       };
 
