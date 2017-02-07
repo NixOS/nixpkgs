@@ -6086,7 +6086,7 @@ in
 
   binutilsCross = assert crossSystem != null; lowPrio (forceNativeDrv (
     if crossSystem.libc == "libSystem" then darwin.cctools_cross
-    else binutils.override {
+    else binutils-raw.override {
       noSysDirs = true;
       cross = crossSystem;
     }));
