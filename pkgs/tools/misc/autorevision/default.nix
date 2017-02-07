@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=$(out)" ];
 
   postInstall = ''
-    sed -e "s|cmp|${diffutils}/bin/cmp|" \
-        -e "s|cat|${coreutils}/bin/cat|" \
-        -e "s|grep|${gnugrep}/bin/grep|" \
-        -e "s|\<sed\>|${gnused}/bin/sed|" \
-        -e "s|\<tee\>|${coreutils}/bin/tee|" \
+    sed -e "s|\<cmp\>|${diffutils}/bin/cmp|g" \
+        -e "s|\<cat\>|${coreutils}/bin/cat|g" \
+        -e "s|\<grep\>|${gnugrep}/bin/grep|g" \
+        -e "s|\<sed\>|${gnused}/bin/sed|g" \
+        -e "s|\<tee\>|${coreutils}/bin/tee|g" \
         -i "$out/bin/autorevision"
   '';
 
