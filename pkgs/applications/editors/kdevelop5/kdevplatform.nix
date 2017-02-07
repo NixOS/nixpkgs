@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "643d1145e1948af221f9ae148d0a10809f3d89af4b97ff0d6c4d571004f46bd4";
   };
 
+  patches = [ ./kdevplatform-projectconfigskeleton.patch ];
+
   nativeBuildInputs = [ cmake gettext pkgconfig extra-cmake-modules makeQtWrapper ];
 
   propagatedBuildInputs = [ ];
