@@ -1813,11 +1813,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videointel = (mkDerivation "xf86videointel" {
-    name = "xf86-video-intel-2016-09-08";
+    name = "xf86-video-intel-2017-02-05";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/15c5ff12459a034b552c787047d1af6d61047cd6.tar.gz;
-      sha256 = "0nggdll6i5qddv9r2imip4hf6aw1nmfxjqg3i6gcbwmqp2w3f003";
+      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/e4fe79cf0d9a05ee3f3a027148ef0aeb2b1b34e1.tar.gz;
+      sha256 = "1hzfz5m9iclxk55531nqmyn25a50ggibl1qb80l6742k25k211cr";
     };
     buildInputs = [pkgconfig dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ];
     meta.platforms = stdenv.lib.platforms.unix;
