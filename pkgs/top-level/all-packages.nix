@@ -8804,8 +8804,6 @@ with pkgs;
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
-  ming = callPackage ../development/libraries/ming { };
-
   minizip = callPackage ../development/libraries/minizip { };
 
   miro = callPackage ../applications/video/miro {
