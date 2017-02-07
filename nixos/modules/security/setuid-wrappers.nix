@@ -80,10 +80,12 @@ in
 
     system.activationScripts.setuid =
       let
+        setuidPackages = flatten (p: p.setuid or []) environment.systemPackages;
         setuidPrograms =
           (map (x: { program = x; })
             config.security.setuidPrograms)
-          ++ config.security.setuidOwners;
+          ++ config.security.setuidOwners
+          ++ setuidPackages;
 
         makeSetuidWrapper =
           { program
