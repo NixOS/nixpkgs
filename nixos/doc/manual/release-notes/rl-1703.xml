@@ -32,6 +32,15 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      Cross compilation has been rewritten. See the nixpkgs manual for
+      details. The most obvious breaking change is that derivations absent a
+      <literal>.nativeDrv</literal> or <literal>.crossDrv</literal> are now
+      cross by default, not native.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
       <literal>stdenv.overrides</literal> is now expected to take <literal>self</literal>
       and <literal>super</literal> arguments. See <literal>lib.trivial.extends</literal>
       for what those parameters represent.

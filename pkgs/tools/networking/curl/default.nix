@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     sha256 = "16rqhyzlpnivifin8n7l2fr9ihay9v2nw2drsniinb6bcykqaqfi";
   };
 
+  patches = [ ./issue-1174.patch ];
+
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig perl ];
 

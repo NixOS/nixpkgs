@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, docbook2x, docbook_xml_dtd_45
-, flex, bison, libmnl, libnftnl, gmp, readline, iptables }:
+, flex, bison, libmnl, libnftnl, gmp, readline }:
 
 stdenv.mkDerivation rec {
   name = "nftables-0.7";
@@ -12,13 +12,12 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "CONFIG_MAN=y"
     "DB2MAN=docbook2man"
-    "--with-xtables"
   ];
 
   XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
   nativeBuildInputs = [ pkgconfig docbook2x flex bison ];
-  buildInputs = [ libmnl libnftnl gmp readline iptables ];
+  buildInputs = [ libmnl libnftnl gmp readline ];
 
   meta = with stdenv.lib; {
     description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";

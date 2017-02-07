@@ -10,25 +10,11 @@ self: pkgs:
 
 with pkgs;
 
-let
-  defaultScope = pkgs // pkgs.xorg;
-in
-
 {
 
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
 
-
-  # We use `callPackage' to be able to omit function arguments that
-  # can be obtained from `pkgs' or `pkgs.xorg' (i.e. `defaultScope').
-  # Use `newScope' for sets of packages in `pkgs' (see e.g. `gnome'
-  # below).
-  callPackage = newScope {};
-
-  callPackages = lib.callPackagesWith defaultScope;
-
-  newScope = extra: lib.callPackageWith (defaultScope // extra);
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: nixpkgsFun {
@@ -39,15 +25,9 @@ in
   # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux" "i386";
 
-  callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
+  callPackage_i686 = pkgsi686Linux.callPackage;
 
-  forceNativeDrv = drv:
-    # Even when cross compiling, some packages come from the stdenv's
-    # bootstrapping package set. Those packages are only built for the native
-    # platform.
-    if crossSystem != null && drv ? crossDrv
-    then drv // { crossDrv = drv.nativeDrv; }
-    else drv;
+  forcedNativePackages = if hostPlatform == buildPlatform then pkgs else buildPackages;
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
@@ -523,6 +503,12 @@ in
   pass = callPackage ../tools/security/pass { };
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
+
+  kwm = callPackage ../os-specific/darwin/kwm { };
+
+  khd = callPackage ../os-specific/darwin/khd {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
@@ -2361,6 +2347,8 @@ in
     gcc = gcc49; # doesn't build with gcc5
   };
 
+  journalbeat = callPackage ../tools/system/journalbeat { };
+
   jp = callPackage ../development/tools/jp { };
 
   jp2a = callPackage ../applications/misc/jp2a { };
@@ -3266,7 +3254,7 @@ in
   pngout = callPackage ../tools/graphics/pngout { };
 
   hurdPartedCross =
-    if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
     then (makeOverridable
             ({ hurd }:
               (parted.override {
@@ -4771,44 +4759,48 @@ in
 
   gccApple = throw "gccApple is no longer supported";
 
-  gccCrossStageStatic = let
+  gccCrossStageStatic = assert targetPlatform != buildPlatform; let
     libcCross1 =
       if stdenv.cross.libc == "msvcrt" then windows.mingw_w64_headers
       else if stdenv.cross.libc == "libSystem" then darwin.xcode
       else null;
     in wrapGCCCross {
-      gcc = forceNativeDrv (gcc.cc.override {
-        cross = crossSystem;
+      gcc = forcedNativePackages.gcc.cc.override {
+        cross = targetPlatform;
         crossStageStatic = true;
         langCC = false;
         libcCross = libcCross1;
         enableShared = false;
-      });
+        # Why is this needed?
+        inherit (forcedNativePackages) binutilsCross;
+      };
       libc = libcCross1;
       binutils = binutilsCross;
-      cross = crossSystem;
+      cross = targetPlatform;
   };
 
   # Only needed for mingw builds
-  gccCrossMingw2 = wrapGCCCross {
+  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapGCCCross {
     gcc = gccCrossStageStatic.gcc;
     libc = windows.mingw_headers2;
     binutils = binutilsCross;
-    cross = assert crossSystem != null; crossSystem;
+    cross = targetPlatform;
   };
 
-  gccCrossStageFinal = wrapGCCCross {
-    gcc = forceNativeDrv (gcc.cc.override {
-      cross = crossSystem;
+  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapGCCCross {
+    gcc = forcedNativePackages.gcc.cc.override {
+      cross = targetPlatform;
       crossStageStatic = false;
 
       # XXX: We have troubles cross-compiling libstdc++ on MinGW (see
       # <http://hydra.nixos.org/build/4268232>), so don't even try.
-      langCC = crossSystem.config != "i686-pc-mingw32";
-    });
+      langCC = targetPlatform.config != "i686-pc-mingw32";
+      # Why is this needed?
+      inherit (forcedNativePackages) binutilsCross;
+    };
     libc = libcCross;
     binutils = binutilsCross;
-    cross = crossSystem;
+    cross = targetPlatform;
   };
 
   gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
@@ -4826,7 +4818,7 @@ in
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
   }));
 
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
@@ -4839,7 +4831,7 @@ in
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
     cloog = if !stdenv.isDarwin then cloog else null;
@@ -4856,7 +4848,7 @@ in
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_11 else null;
 
@@ -4873,7 +4865,7 @@ in
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
@@ -4888,7 +4880,7 @@ in
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
@@ -5021,7 +5013,7 @@ in
 
   # Haskell and GHC
 
-  haskell = callPackage ./haskell-packages.nix { inherit crossSystem; };
+  haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages = haskell.packages.ghc801.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
@@ -5499,12 +5491,12 @@ in
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
 
-    forceNativeDrv (callPackage ../build-support/gcc-cross-wrapper {
+    forcedNativePackages.callPackage ../build-support/gcc-cross-wrapper {
       nativeTools = false;
       nativeLibc = false;
       noLibc = (libc == null);
       inherit gcc binutils libc shell name cross;
-    });
+    };
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -6084,12 +6076,12 @@ in
     gold = false;
   });
 
-  binutilsCross = assert crossSystem != null; lowPrio (forceNativeDrv (
-    if crossSystem.libc == "libSystem" then darwin.cctools_cross
-    else binutils-raw.override {
+  binutilsCross = assert targetPlatform != buildPlatform; lowPrio (
+    if targetPlatform.libc == "libSystem" then darwin.cctools_cross
+    else forcedNativePackages.binutils-raw.override {
       noSysDirs = true;
-      cross = crossSystem;
-    }));
+      cross = targetPlatform;
+    });
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
   bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
@@ -6558,9 +6550,9 @@ in
      cross_renaming: we should make all programs use pkgconfig as
      nativeBuildInput after the renaming.
      */
-  pkgconfig = forceNativeDrv (callPackage ../development/tools/misc/pkgconfig {
+  pkgconfig = forcedNativePackages.callPackage ../development/tools/misc/pkgconfig {
     fetchurl = fetchurlBoot;
-  });
+  };
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
   postiats-utilities = callPackage ../development/tools/postiats-utilities {};
@@ -6734,7 +6726,7 @@ in
   gdbGuile = lowPrio (gdb.override { inherit guile; });
 
   gdbCross = lowPrio (callPackage ../development/tools/misc/gdb {
-    target = crossSystem;
+    target = if targetPlatform != buildPlatform then targetPlatform else null;
   });
 
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
@@ -7336,10 +7328,10 @@ in
     withGd = true;
   };
 
-  glibcCross = forceNativeDrv (glibc.override {
+  glibcCross = forcedNativePackages.glibc.override {
     gccCross = gccCrossStageStatic;
     linuxHeaders = linuxHeadersCross;
-  });
+  };
 
   # We can choose:
   libcCrossChooser = name: if name == "glibc" then glibcCross
@@ -7348,7 +7340,7 @@ in
     else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
-  libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
+  libcCross = assert targetPlatform != buildPlatform; libcCrossChooser targetPlatform.libc;
 
   # Only supported on Linux
   glibcLocales = if stdenv.isLinux then callPackage ../development/libraries/glibc/locales.nix { } else null;
@@ -8257,9 +8249,9 @@ in
   # glibc provides libiconv so systems with glibc don't need to build libiconv
   # separately, but we also provide libiconvReal, which will always be a
   # standalone libiconv, just in case you want it
-  libiconv = if crossSystem != null then
-    (if crossSystem.libc == "glibc" then libcCross
-      else if crossSystem.libc == "libSystem" then darwin.libiconv
+  libiconv = if stdenv ? cross then
+    (if stdenv.cross.libc == "glibc" then libcCross
+      else if stdenv.cross.libc == "libSystem" then darwin.libiconv
       else libiconvReal)
     else if stdenv.isGlibc then glibcIconv stdenv.cc.libc
     else if stdenv.isDarwin then darwin.libiconv
@@ -10910,8 +10902,8 @@ in
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
   in apple-source-releases // rec {
-    cctools_cross = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) {
-      cross = assert crossSystem != null; crossSystem;
+    cctools_cross = callPackage (forcedNativePackages.callPackage ../os-specific/darwin/cctools/port.nix {}).cross {
+      cross = assert targetPlatform != buildPlatform; targetPlatform;
       inherit maloader;
       xctoolchain = xcode.toolchain;
     };
@@ -10984,7 +10976,7 @@ in
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid =
-    if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
     then (utillinuxMinimal // {
       crossDrv = lib.overrideDerivation utillinuxMinimal.crossDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
@@ -11069,7 +11061,7 @@ in
 
   # GNU/Hurd core packages.
   gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
-    inherit platform crossSystem;
+    inherit platform;
   });
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
@@ -11148,13 +11140,13 @@ in
 
   linuxHeaders = linuxHeaders_4_4;
 
-  linuxHeaders24Cross = forceNativeDrv (callPackage ../os-specific/linux/kernel-headers/2.4.nix {
-    cross = assert crossSystem != null; crossSystem;
-  });
+  linuxHeaders24Cross = forcedNativePackages.callPackage ../os-specific/linux/kernel-headers/2.4.nix {
+    cross = assert targetPlatform != buildPlatform; targetPlatform;
+  };
 
-  linuxHeaders26Cross = forceNativeDrv (callPackage ../os-specific/linux/kernel-headers/4.4.nix {
-    cross = assert crossSystem != null; crossSystem;
-  });
+  linuxHeaders26Cross = forcedNativePackages.callPackage ../os-specific/linux/kernel-headers/4.4.nix {
+    cross = assert targetPlatform != buildPlatform; targetPlatform;
+  };
 
   linuxHeaders_3_18 = callPackage ../os-specific/linux/kernel-headers/3.18.nix { };
 
@@ -11165,8 +11157,8 @@ in
     else if ver == "2.6" then linuxHeaders26Cross
     else throw "Unknown linux kernel version";
 
-  linuxHeadersCross = assert crossSystem != null;
-    linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
+  linuxHeadersCross = assert targetPlatform != buildPlatform;
+    linuxHeadersCrossChooser targetPlatform.platform.kernelMajor;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
@@ -11243,7 +11235,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.4"
-        kernelPatches.p9_caching_4_4
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11260,6 +11251,7 @@ in
         # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
         # kernelPatches.cpu-cgroup-v2."4.7"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.p9_caching_4_9
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11272,6 +11264,7 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
+      kernelPatches.p9_caching_4_9
     ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
       kernelPatches.mips_fpureg_emu
       kernelPatches.mips_fpu_sigill
@@ -11672,6 +11665,8 @@ in
 
   powerdns = callPackage ../servers/dns/powerdns { };
 
+  pdns-recursor = callPackage ../servers/dns/pdns-recursor { };
+
   powertop = callPackage ../os-specific/linux/powertop { };
 
   prayer = callPackage ../servers/prayer { };
@@ -11828,7 +11823,7 @@ in
   uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {
     linuxHeaders = linuxHeadersCross;
     gccCross = gccCrossStageStatic;
-    cross = assert crossSystem != null; crossSystem;
+    cross = assert targetPlatform != buildPlatform; targetPlatform;
   });
 
   udev = systemd;

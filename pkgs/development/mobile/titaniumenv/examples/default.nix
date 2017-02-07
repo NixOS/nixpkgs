@@ -2,7 +2,7 @@
 , systems ? [ "x86_64-linux" "x86_64-darwin" ]
 , xcodeVersion ? "7.2"
 , xcodeBaseDir ? "/Applications/Xcode.app"
-, tiVersion ? "5.1.2.GA"
+, tiVersion ? "6.0.2.GA"
 , rename ? false
 , newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? "", iosVersion ? "9.2"
 , enableWirelessDistribution ? false, installURL ? null

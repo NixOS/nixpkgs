@@ -83,7 +83,24 @@ in let
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib system platform crossSystem config overlays;
+    # One would think that `localSystem` and `crossSystem` overlap horribly with
+    # the three `*Platforms` (`buildPlatform`, `hostPlatform,` and
+    # `targetPlatform`; see `stage.nix` or the manual). Actually, those
+    # identifiers I, @Ericson2314, purposefully not used here to draw a subtle
+    # but important distinction:
+    #
+    # While the granularity of having 3 platforms is necessary to properly
+    # *build* packages, it is overkill for specifying the user's *intent* when
+    # making a build plan or package set. A simple "build vs deploy" dichotomy
+    # is adequate: the "sliding window" principle described in the manual shows
+    # how to interpolate between the these two "end points" to get the 3
+    # platform triple for each bootstrapping stage.
+    #
+    # Also, less philosophically but quite practically, `crossSystem` should be
+    # null when one doesn't want to cross-compile, while the `*Platform`s are
+    # always non-null. `localSystem` is always non-null.
+    localSystem = { inherit system platform; };
+    inherit lib crossSystem config overlays;
   };
 
   pkgs = boot stages;

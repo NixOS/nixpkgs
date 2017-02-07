@@ -115,7 +115,19 @@ let
     , sandboxProfile ? ""
     , propagatedSandboxProfile ? ""
     , ... } @ attrs:
-    let
+    let # Rename argumemnts to avoid cycles
+      buildInputs__ = buildInputs;
+      nativeBuildInputs__ = nativeBuildInputs;
+      propagatedBuildInputs__ = propagatedBuildInputs;
+      propagatedNativeBuildInputs__ = propagatedNativeBuildInputs;
+    in let
+      getNativeDrv = drv: drv.nativeDrv or drv;
+      getCrossDrv = drv: drv.crossDrv or drv;
+      nativeBuildInputs = map getNativeDrv nativeBuildInputs__;
+      buildInputs = map getCrossDrv buildInputs__;
+      propagatedBuildInputs = map getCrossDrv propagatedBuildInputs__;
+      propagatedNativeBuildInputs = map getNativeDrv propagatedNativeBuildInputs__;
+    in let
       pos' =
         if pos != null then
           pos

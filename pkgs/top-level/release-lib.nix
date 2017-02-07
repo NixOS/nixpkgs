@@ -76,8 +76,9 @@ rec {
    * parameter for allPackages, defining the target platform for cross builds,
    * and triggering the build of the host derivation (cross built - crossDrv). */
   mapTestOnCross = crossSystem: mapAttrsRecursive
-    (path: systems: testOnCross crossSystem systems
-      (pkgs: addMetaAttrs { maintainers = crossMaintainers; } (getAttrFromPath path pkgs)));
+    (path: systems: testOnCross crossSystem systems (pkgs: addMetaAttrs
+      { maintainers = crossMaintainers; }
+      (getAttrFromPath path pkgs.splicedPackages)));
 
 
   /* Recursively map a (nested) set of derivations to an isomorphic

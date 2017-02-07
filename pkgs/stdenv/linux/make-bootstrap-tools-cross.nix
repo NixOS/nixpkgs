@@ -55,11 +55,12 @@ let
     if toolsArch == "armv6l" then raspberrypiCrossSystem else
     if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else null;
 
-  pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
+  pkgsUnspliced = pkgsFun ({inherit system;} // selectedCrossSystem);
+  pkgs = pkgsUnspliced.splicedPackages;
 
-  inherit (pkgs) stdenv nukeReferences cpio binutilsCross;
+  inherit (pkgsUnspliced.buildPackages) stdenv nukeReferences cpio binutilsCross;
 
-  glibc = pkgs.libcCross;
+  glibc = pkgs.libcCross.nativeDrv;
   bash = pkgs.bash.crossDrv;
   findutils = pkgs.findutils.crossDrv;
   diffutils = pkgs.diffutils.crossDrv;
@@ -71,7 +72,7 @@ let
   gnumake = pkgs.gnumake.crossDrv;
   patch = pkgs.patch.crossDrv;
   patchelf = pkgs.patchelf.crossDrv;
-  gcc = pkgs.gcc.cc.crossDrv;
+  gcc = pkgs.gcc.crossDrv.cc;
   gmpxx = pkgs.gmpxx.crossDrv;
   mpfr = pkgs.mpfr.crossDrv;
   zlib = pkgs.zlib.crossDrv;
@@ -86,17 +87,17 @@ in
 rec {
 
 
-  coreutilsMinimal = (pkgs.coreutils.override (args: {
+  coreutilsMinimal = pkgs.coreutils.override (args: {
     # We want coreutils without ACL/attr support.
     aclSupport = false;
     attrSupport = false;
     # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
     singleBinary = "symlinks";
-  })).crossDrv;
+  });
 
-  tarMinimal = (pkgs.gnutar.override { acl = null; }).crossDrv;
+  tarMinimal = pkgs.gnutar.override { acl = null; };
 
-  busyboxMinimal = (pkgs.busybox.override {
+  busyboxMinimal = pkgs.busybox.override {
     useMusl = true;
     enableStatic = true;
     enableMinimal = true;
@@ -109,13 +110,13 @@ rec {
       CONFIG_TAR y
       CONFIG_UNXZ y
     '';
-  }).crossDrv;
+  };
 
   build =
 
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools-cross";
-      crossConfig = stdenv.cross.config;
+      crossConfig = pkgsUnspliced.hostPlatform.config;
 
       buildInputs = [nukeReferences cpio binutilsCross];
 

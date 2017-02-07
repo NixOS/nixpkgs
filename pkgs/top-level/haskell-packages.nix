@@ -1,4 +1,4 @@
-{ pkgs, callPackage, stdenv, crossSystem }:
+{ pkgs, callPackage, stdenv, buildPlatform, targetPlatform }:
 
 rec {
 
@@ -55,7 +55,7 @@ rec {
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
       bootPkgs = packages.ghc7103;
       inherit (bootPkgs) alex happy;
-      inherit crossSystem;
+      inherit buildPlatform targetPlatform;
       selfPkgs = packages.ghcHEAD;
     };
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {

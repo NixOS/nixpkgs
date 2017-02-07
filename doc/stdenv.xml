@@ -194,33 +194,52 @@ genericBuild
     tools.</para></listitem>
   </varlistentry>
 
+</variablelist>
+
+<variablelist>
+  <title>Variables specifying dependencies</title>
+
+  <varlistentry>
+    <term><varname>nativeBuildInputs</varname></term>
+    <listitem><para>
+      A list of dependencies used by the new derivation at <emphasis>build</emphasis>-time.
+      I.e. these dependencies should not make it into the package's runtime-closure, though this is currently not checked.
+      For each dependency <replaceable>dir</replaceable>, the directory <filename><replaceable>dir</replaceable>/bin</filename>, if it exists, is added to the <envar>PATH</envar> environment variable.
+      Other environment variables are also set up via a pluggable mechanism.
+      For instance, if <varname>buildInputs</varname> contains Perl, then the <filename>lib/site_perl</filename> subdirectory of each input is added to the <envar>PERL5LIB</envar> environment variable.
+      See <xref linkend="ssec-setup-hooks"/> for details.
+    </para></listitem>
+  </varlistentry>
+
   <varlistentry>
     <term><varname>buildInputs</varname></term>
-    <listitem><para>A list of dependencies used by
-    <literal>stdenv</literal> to set up the environment for the build.
-    For each dependency <replaceable>dir</replaceable>, the directory
-    <filename><replaceable>dir</replaceable>/bin</filename>, if it
-    exists, is added to the <envar>PATH</envar> environment variable.
-    Other environment variables are also set up via a pluggable
-    mechanism.  For instance, if <varname>buildInputs</varname>
-    contains Perl, then the <filename>lib/site_perl</filename>
-    subdirectory of each input is added to the <envar>PERL5LIB</envar>
-    environment variable.  See <xref linkend="ssec-setup-hooks"/> for
-    details.</para></listitem>
+    <listitem><para>
+      A list of dependencies used by the new derivation at <emphasis>run</emphasis>-time.
+      Currently, the build-time environment is modified in the exact same way as with <varname>nativeBuildInputs</varname>.
+      This is problematic in that when cross-compiling, foreign executables can clobber native ones on the <envar>PATH</envar>.
+      Even more confusing is static-linking.
+      A statically-linked library should be listed here because ultimately that generated machine code will be used at run-time, even though a derivation containing the object files or static archives will only be used at build-time.
+      A less confusing solution to this would be nice.
+    </para></listitem>
   </varlistentry>
-  
+
+
+  <varlistentry>
+    <term><varname>propagatedNativeBuildInputs</varname></term>
+    <listitem><para>
+      Like <varname>nativeBuildInputs</varname>, but these dependencies are <emphasis>propagated</emphasis>:
+      that is, the dependencies listed here are added to the <varname>nativeBuildInputs</varname> of any package that uses <emphasis>this</emphasis> package as a dependency.
+      So if package Y has <literal>propagatedBuildInputs = [X]</literal>, and package Z has <literal>buildInputs = [Y]</literal>, then package X will appear in Z’s build environment automatically.
+    </para></listitem>
+  </varlistentry>
+
   <varlistentry>
     <term><varname>propagatedBuildInputs</varname></term>
-    <listitem><para>Like <varname>buildInputs</varname>, but these
-    dependencies are <emphasis>propagated</emphasis>: that is, the
-    dependencies listed here are added to the
-    <varname>buildInputs</varname> of any package that uses
-    <emphasis>this</emphasis> package as a dependency.  So if package
-    Y has <literal>propagatedBuildInputs = [X]</literal>, and package
-    Z has <literal>buildInputs = [Y]</literal>, then package X will
-    appear in Z’s build environment automatically.</para></listitem>
+    <listitem><para>
+      Like <varname>buildInputs</varname>, but propagated just like <varname>propagatedNativeBuildInputs</varname>.
+      This inherits <varname>buildInputs</varname>'s flaws of clobbering native executables when cross-compiling and being confusing for static linking.
+    </para></listitem>
   </varlistentry>
-  
 
 </variablelist>
 
@@ -322,7 +341,7 @@ executed and in what order:
       $preInstallPhases installPhase fixupPhase $preDistPhases
       distPhase $postPhases</literal>.
       </para>
-      
+
       <para>Usually, if you just want to add a few phases, it’s more
       convenient to set one of the variables below (such as
       <varname>preInstallPhases</varname>), as you then don’t specify
@@ -706,7 +725,7 @@ makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
 </variablelist>
 
 
-<para> 
+<para>
 You can set flags for <command>make</command> through the
 <varname>makeFlags</varname> variable.</para>
 
@@ -773,7 +792,7 @@ doCheck = true;</programlisting>
 
 </variablelist>
 
-  
+
 </section>
 
 
@@ -840,12 +859,12 @@ install phase.  The default <function>fixupPhase</function> does the
 following:
 
 <itemizedlist>
-      
+
   <listitem><para>It moves the <filename>man/</filename>,
   <filename>doc/</filename> and <filename>info/</filename>
   subdirectories of <envar>$out</envar> to
   <filename>share/</filename>.</para></listitem>
-      
+
   <listitem><para>It strips libraries and executables of debug
   information.</para></listitem>
 
@@ -1091,13 +1110,13 @@ functions.</para>
 
 <variablelist>
 
-  
+
   <varlistentry xml:id='fun-substitute'>
     <term><function>substitute</function>
     <replaceable>infile</replaceable>
     <replaceable>outfile</replaceable>
     <replaceable>subs</replaceable></term>
-    
+
     <listitem>
       <para>Performs string substitution on the contents of
       <replaceable>infile</replaceable>, writing the result to
@@ -1125,7 +1144,7 @@ functions.</para>
             <literal>@<replaceable>...</replaceable>@</literal> in the
             template as placeholders.</para></listitem>
           </varlistentry>
-          
+
           <varlistentry>
             <term><option>--subst-var-by</option>
             <replaceable>varName</replaceable>
@@ -1134,7 +1153,7 @@ functions.</para>
             <literal>@<replaceable>varName</replaceable>@</literal> by
             the string <replaceable>s</replaceable>.</para></listitem>
           </varlistentry>
-          
+
         </variablelist>
 
       </para>
@@ -1162,7 +1181,7 @@ substitute ./foo.in ./foo.out \
 
     </listitem>
   </varlistentry>
-  
+
 
   <varlistentry xml:id='fun-substituteInPlace'>
     <term><function>substituteInPlace</function>
@@ -1173,7 +1192,7 @@ substitute ./foo.in ./foo.out \
     <replaceable>file</replaceable>.</para></listitem>
   </varlistentry>
 
-  
+
   <varlistentry xml:id='fun-substituteAll'>
     <term><function>substituteAll</function>
     <replaceable>infile</replaceable>
@@ -1233,7 +1252,7 @@ echo @foo@
     <listitem><para>Strips the directory and hash part of a store
     path, outputting the name part to <literal>stdout</literal>.
     For example:
-    
+
 <programlisting>
 # prints coreutils-8.24
 stripHash "/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
@@ -1241,7 +1260,7 @@ stripHash "/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
 
     If you wish to store the result in another variable, then the
     following idiom may be useful:
-    
+
 <programlisting>
 name="/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
 someVar=$(stripHash $name)
@@ -1250,7 +1269,7 @@ someVar=$(stripHash $name)
     </para></listitem>
   </varlistentry>
 
-  
+
 </variablelist>
 
 </section>
@@ -1607,4 +1626,3 @@ Arch Wiki</link>.
 </section>
 
 </chapter>
-

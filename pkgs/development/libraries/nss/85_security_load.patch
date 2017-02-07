@@ -1,45 +1,45 @@
-diff -ru -x '*~' nss-3.27.1-orig/nss/cmd/shlibsign/shlibsign.c nss-3.27.1/nss/cmd/shlibsign/shlibsign.c
---- nss-3.27.1-orig/nss/cmd/shlibsign/shlibsign.c	2016-10-03 16:55:58.000000000 +0200
-+++ nss-3.27.1/nss/cmd/shlibsign/shlibsign.c	2016-11-15 16:28:07.308117900 +0100
-@@ -871,6 +871,8 @@
-     libname = PR_GetLibraryName(NULL, "softokn3");
-     assert(libname != NULL);
+diff -ru -x '*~' -x '*.orig' -x '*.rej' nss/cmd/shlibsign/shlibsign.c nss/cmd/shlibsign/shlibsign.c
+--- nss/cmd/shlibsign/shlibsign.c	2017-01-04 15:24:24.000000000 +0100
++++ nss/cmd/shlibsign/shlibsign.c	2017-01-24 14:43:31.030420852 +0100
+@@ -875,6 +875,8 @@
+         goto cleanup;
+     }
      lib = PR_LoadLibrary(libname);
 +    if (!lib)
 +        lib = PR_LoadLibrary(NIX_NSS_LIBDIR"libsoftokn3.so");
      assert(lib != NULL);
-     PR_FreeLibraryName(libname);
- 
-diff -ru -x '*~' nss-3.27.1-orig/nss/coreconf/config.mk nss-3.27.1/nss/coreconf/config.mk
---- nss-3.27.1-orig/nss/coreconf/config.mk	2016-10-03 16:55:58.000000000 +0200
-+++ nss-3.27.1/nss/coreconf/config.mk	2016-11-15 16:28:07.308117900 +0100
-@@ -217,3 +217,6 @@
- ifdef NSS_NO_PKCS11_BYPASS
- DEFINES += -DNO_PKCS11_BYPASS
- endif
+     if (!lib) {
+         PR_fprintf(PR_STDERR, "loading softokn3 failed");
+diff -ru -x '*~' -x '*.orig' -x '*.rej' nss/coreconf/config.mk nss/coreconf/config.mk
+--- nss/coreconf/config.mk	2017-01-04 15:24:24.000000000 +0100
++++ nss/coreconf/config.mk	2017-01-24 14:43:47.989432372 +0100
+@@ -208,3 +208,6 @@
+ # exported symbols, which causes problem when NSS is built as part of Mozilla.
+ # So we add a NSS_SSL_ENABLE_ZLIB variable to allow Mozilla to turn this off.
+ NSS_SSL_ENABLE_ZLIB = 1
 +
 +# Nix specific stuff.
 +DEFINES += -DNIX_NSS_LIBDIR=\"$(out)/lib/\"
-diff -ru -x '*~' nss-3.27.1-orig/nss/lib/pk11wrap/pk11load.c nss-3.27.1/nss/lib/pk11wrap/pk11load.c
---- nss-3.27.1-orig/nss/lib/pk11wrap/pk11load.c	2016-10-03 16:55:58.000000000 +0200
-+++ nss-3.27.1/nss/lib/pk11wrap/pk11load.c	2016-11-15 16:28:07.308117900 +0100
-@@ -429,6 +429,13 @@
- 	 * unload the library if anything goes wrong from here on out...
- 	 */
- 	library = PR_LoadLibrary(mod->dllName);
-+	if ((library == NULL) &&
-+	    !rindex(mod->dllName, PR_GetDirectorySeparator())) {
+diff -ru -x '*~' -x '*.orig' -x '*.rej' nss/lib/pk11wrap/pk11load.c nss/lib/pk11wrap/pk11load.c
+--- nss/lib/pk11wrap/pk11load.c	2017-01-04 15:24:24.000000000 +0100
++++ nss/lib/pk11wrap/pk11load.c	2017-01-24 14:45:06.883485652 +0100
+@@ -440,6 +440,13 @@
+          * unload the library if anything goes wrong from here on out...
+          */
+         library = PR_LoadLibrary(mod->dllName);
++        if ((library == NULL) &&
++            !rindex(mod->dllName, PR_GetDirectorySeparator())) {
 +            library = PORT_LoadLibraryFromOrigin(my_shlib_name,
-+                                      (PRFuncPtr) &softoken_LoadDSO,
-+                                      mod->dllName);
-+	}
++                (PRFuncPtr) &softoken_LoadDSO,
++                mod->dllName);
++        }
 +
- 	mod->library = (void *)library;
+         mod->library = (void *)library;
  
- 	if (library == NULL) {
-diff -ru -x '*~' nss-3.27.1-orig/nss/lib/util/secload.c nss-3.27.1/nss/lib/util/secload.c
---- nss-3.27.1-orig/nss/lib/util/secload.c	2016-10-03 16:55:58.000000000 +0200
-+++ nss-3.27.1/nss/lib/util/secload.c	2016-11-15 16:29:50.482259746 +0100
+         if (library == NULL) {
+diff -ru -x '*~' -x '*.orig' -x '*.rej' nss/lib/util/secload.c nss/lib/util/secload.c
+--- nss/lib/util/secload.c	2017-01-04 15:24:24.000000000 +0100
++++ nss/lib/util/secload.c	2017-01-24 14:43:31.030420852 +0100
 @@ -70,9 +70,14 @@
  
      /* Remove the trailing filename from referencePath and add the new one */

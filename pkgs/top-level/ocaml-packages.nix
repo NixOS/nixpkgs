@@ -20,6 +20,8 @@ let
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
+    apron = callPackage ../development/ocaml-modules/apron { };
+
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
     astring = callPackage ../development/ocaml-modules/astring { };
@@ -264,6 +266,8 @@ let
     mezzo = callPackage ../development/compilers/mezzo { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
+
+    mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
       lwt = ocaml_lwt;
