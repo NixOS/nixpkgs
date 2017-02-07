@@ -40,5 +40,8 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+    # Marked broken due to being unmaintained upstream and subject to known vulns
+    # See https://lwn.net/Vulnerabilities/712664/
+    broken = true;
   };
 }
