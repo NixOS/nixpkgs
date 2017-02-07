@@ -7,6 +7,13 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ xproto libX11 libXext libXrandr ];
   installFlags = "DESTDIR=\${out} PREFIX=";
+
+  passthru = {
+    setuid = [
+      { program = "slock"; }
+    ];
+  };
+
   meta = with stdenv.lib; {
     homepage = http://tools.suckless.org/slock;
     description = "Simple X display locker";
