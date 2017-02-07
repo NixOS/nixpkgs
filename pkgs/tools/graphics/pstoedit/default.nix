@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp libiconv ] 
+  buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp ] 
   ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices
+    libiconv ApplicationServices
   ]);
 
   meta = with stdenv.lib; {
