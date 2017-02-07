@@ -30,6 +30,12 @@ stdenv.mkDerivation {
     sed -e "s@/etc/@$out/etc/@g" -i Makefile
   '';
 
+  passthru = {
+    setuid = [
+      { program = "firejail"; }
+    ]
+  };
+
   meta = {
     inherit (s) version;
     description = ''Namespace-based sandboxing tool for Linux'';
