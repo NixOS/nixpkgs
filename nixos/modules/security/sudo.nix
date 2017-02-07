@@ -81,8 +81,6 @@ in
         ${cfg.extraConfig}
       '';
 
-    security.setuidPrograms = [ "sudo" "sudoedit" ];
-
     environment.systemPackages = [ sudo ];
 
     security.pam.services.sudo = { sshAgentAuth = true; };
