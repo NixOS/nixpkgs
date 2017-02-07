@@ -40,6 +40,8 @@ in stdenv.mkDerivation {
     cp -r "./"* "$out"
     mkdir "$out/bin"
     rm "$out/usr/bin/SpiderOakONE"
+    rmdir $out/usr/bin || true
+    mv $out/usr/share $out/
 
     patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"
@@ -48,6 +50,8 @@ in stdenv.mkDerivation {
     makeWrapper $out/opt/SpiderOakONE/lib/SpiderOakONE $out/bin/spideroak --set LD_LIBRARY_PATH $RPATH \
       --set QT_PLUGIN_PATH $out/opt/SpiderOakONE/lib/plugins/ \
       --set SpiderOak_EXEC_SCRIPT $out/bin/spideroak
+
+    sed -i 's/^Exec=.*/Exec=spideroak/' $out/share/applications/SpiderOakONE.desktop
   '';
 
   buildInputs = [ patchelf makeWrapper ];
