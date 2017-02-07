@@ -23,7 +23,6 @@ let
     driftfile ${stateDir}/chrony.drift
 
     keyfile ${keyFile}
-    generatecommandkey
 
     ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
 
