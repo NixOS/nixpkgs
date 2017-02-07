@@ -80,7 +80,8 @@ in
 
     system.activationScripts.setuid =
       let
-        setuidPackages = flatten (p: p.setuid or []) environment.systemPackages;
+        withSource = pkg: map (setuid: { source = "${pkg}/bin/${setuid.program}"; } // setuid) (pkg.setuid or []);
+        setuidPackages = concatMap withSource environment.systemPackages;
         setuidPrograms =
           (map (x: { program = x; })
             config.security.setuidPrograms)
