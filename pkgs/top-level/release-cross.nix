@@ -1,5 +1,8 @@
-{ # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ builtins.currentSystem ]
+/* This file defines some basic smoke tests for cross compilation.
+*/
+
+{ # The platforms *from* which we cross compile.
+  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -83,6 +86,25 @@ in
     guile = nativePlatforms;
   };
 
+  darwinToAarch64 = let
+    crossSystem = {
+      config = "aarch64-apple-darwin14";
+      arch = "arm64";
+      libc = "libSystem";
+    };
+  in mapTestOnCross crossSystem {
+    buildPackages.binutils = darwin;
+  };
+
+  darwinToArm = let
+    crossSystem = {
+      config = "arm-apple-darwin10";
+      arch = "armv7-a";
+      libc = "libSystem";
+    };
+  in mapTestOnCross crossSystem {
+    buildPackages.binutils = darwin;
+  };
 
   /* Test some cross builds to the Sheevaplug */
   crossSheevaplugLinux = let
