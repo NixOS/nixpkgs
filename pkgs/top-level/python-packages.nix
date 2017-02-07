@@ -672,6 +672,17 @@ in {
     };
   };
 
+  ansicolors = buildPythonPackage rec {
+    name    = "ansicolors-${version}";
+    version = "1.0.2";
+
+    src = self.fetchPypi {
+      pname = "ansicolors";
+      inherit version;
+      sha256 = "02lmh2fbqcwr98cq13l9ql0fvyad1dcb3ap3c5xq9qwjp45m6r3n";
+    };
+  };
+
   asgiref = buildPythonPackage rec {
     name = "asgiref-${version}";
     version = "1.0.0";
@@ -8148,6 +8159,17 @@ in {
     };
   };
 
+  lmdb = buildPythonPackage rec {
+    pname = "lmdb";
+    version = "0.92";
+    name = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "01nw6r08jkipx6v92kw49z34wmwikrpvc5j9xawdiyg1n2526wrx";
+    };
+  };
+
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.3";
 
@@ -8478,6 +8500,33 @@ in {
     };
   };
 
+  pants = buildPythonPackage rec {
+    pname   = "pantsbuild.pants";
+    version = "1.2.1";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "1bnzhhd2acwk7ckv56xzg2d9vxacl3k5bh13bsjxymnq3spm962w";
+    };
+
+    prePatch = ''
+      sed -E -i "s/'([[:alnum:].-]+)[=><][^']*'/'\\1'/g" setup.py
+    '';
+
+    # Unnecessary, and causes some really weird behavior around .class files, which
+    # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520. 
+    dontStrip = true;
+
+    propagatedBuildInputs = with self; [
+      ansicolors beautifulsoup4 cffi coverage docutils fasteners futures
+      isort lmdb markdown mock packaging pathspec pep8 pex psutil pyflakes
+      pygments pystache pytestcov pytest pywatchman requests2 scandir
+      setproctitle setuptools six thrift wheel twitter-common-dirutil
+      twitter-common-confluence twitter-common-collections
+    ];
+  };
+
   paperwork-backend = buildPythonPackage rec {
     name = "paperwork-backend-${version}";
     version = "1.0.6";
@@ -8510,6 +8559,17 @@ in {
       description = "Backend part of Paperwork (Python API, no UI)";
       homepage = "https://github.com/jflesch/paperwork-backend";
       license = licenses.gpl3Plus;
+    };
+  };
+
+  pathspec = buildPythonPackage rec {
+    pname   = "pathspec";
+    version = "0.3.4";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "0a37yrr2jhlg8aiynxivh2xqani7l9j725qxzrm7cm7m4rfcl1bn";
     };
   };
 
@@ -8649,6 +8709,20 @@ in {
       platforms = platforms.all;
       maintainers = with maintainers; [ berdario ];
     };
+  };
+
+  pex = buildPythonPackage rec {
+    name = "pex-${version}";
+    version = "1.2.2";
+
+    src = self.fetchPypi {
+      pname  = "pex";
+      sha256 = "1nwrf03cd6jw24lxyaalj59fdm2infr9glabznkpaq65mjzwshl3";
+      inherit version;
+    };
+
+    # A few more dependencies I don't want to handle right now...
+    doCheck = false;
   };
 
   pies = buildPythonPackage rec {
@@ -25947,6 +26021,80 @@ in {
       description = "Twitter API library";
       license     = licenses.mit;
       maintainers = with maintainers; [ thoughtpolice ];
+    };
+  };
+
+  twitter-common-collections = buildPythonPackage rec {
+    pname   = "twitter.common.collections";
+    version = "0.3.9";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "0wf8ks6y2kalx2inzayq0w4kh3kg25daik1ac7r6y79i03fslsc5";
+    };
+
+    propagatedBuildInputs = with self; [ twitter-common-lang ];
+  };
+
+  twitter-common-confluence = buildPythonPackage rec {
+    pname   = "twitter.common.confluence";
+    version = "0.3.9";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "1i2fjn23cmms81f1fhvvkg6hgzqpw07dlqg3ydz6cqv2glw7zq26";
+    };
+
+    propagatedBuildInputs = with self; [ twitter-common-log ];
+  };
+
+  twitter-common-dirutil = buildPythonPackage rec {
+    pname   = "twitter.common.dirutil";
+    version = "0.3.9";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "1wpjfmmxsdwnbx5dl13is4zkkpfcm94ksbzas9y2qhgswfa9jqha";
+    };
+
+    propagatedBuildInputs = with self; [ twitter-common-lang ];
+  };
+
+  twitter-common-lang = buildPythonPackage rec {
+    pname   = "twitter.common.lang";
+    version = "0.3.9";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "1l8fmnsrx7hgg3ivslg588rnl9n1gfjn2w6224fr8rs7zmkd5lan";
+    };
+  };
+
+  twitter-common-log = buildPythonPackage rec {
+    pname   = "twitter.common.log";
+    version = "0.3.9";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "1bdzbxx2bxwpf57xaxfz1nblzgfvhlidz8xqd7s84c62r3prh02v";
+    };
+
+    propagatedBuildInputs = with self; [ twitter-common-options twitter-common-dirutil ];
+  };
+
+  twitter-common-options = buildPythonPackage rec {
+    pname   = "twitter.common.options";
+    version = "0.3.9";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "0d1czag5mcxg0vcnlklspl2dvdab9kmznsycj04d3vggi158ljrd";
     };
   };
 
