@@ -16986,6 +16986,8 @@ with pkgs;
 
   ### SCIENCE/PROGRAMMING
 
+  dafny = dotnetPackages.Dafny;
+
   plm = callPackage ../applications/science/programming/plm { };
 
   ### SCIENCE/LOGIC
@@ -16999,6 +17001,8 @@ with pkgs;
   };
 
   aspino = callPackage ../applications/science/logic/aspino {};
+
+  boogie = dotnetPackages.Boogie;
 
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
     make = pkgs.gnumake3;
