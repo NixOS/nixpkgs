@@ -288,11 +288,11 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       rm -f $out/lib/dotnet/${baseName}/dafny{,-server}
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A programming language with built-in specification constructs";
       homepage = "http://research.microsoft.com/dafny";
       maintainers = with maintainers; [ layus ];
-      license = licenses.MIT;
+      license = licenses.mit;
       platforms = with platforms; (linux ++ darwin);
     };
   };
