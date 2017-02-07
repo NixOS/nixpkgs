@@ -24480,6 +24480,13 @@ in {
       imagesize
       requests2
     ];
+
+    # https://github.com/NixOS/nixpkgs/issues/22501
+    # Do not run `python sphinx-build arguments` but `sphinx-build arguments`.
+    postPatch = ''
+      substituteInPlace sphinx/make_mode.py --replace "sys.executable, " ""
+    '';
+
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
