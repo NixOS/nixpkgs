@@ -13805,6 +13805,10 @@ with pkgs;
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
+  google-play-music-desktop-player = callPackage ../applications/audio/google-play-music-desktop-player {
+    inherit (gnome2) GConf;
+  };
+
   google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
     libpng = libpng12;
   };
