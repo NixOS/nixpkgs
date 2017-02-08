@@ -18041,6 +18041,8 @@ with pkgs;
 
   tomb = callPackage ../os-specific/linux/tomb {};
 
+  tomboy = callPackage ../applications/misc/tomboy {};
+
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
   iterm2 = callPackage ../applications/misc/iterm2 {};
