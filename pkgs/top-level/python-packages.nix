@@ -26063,6 +26063,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ twitter-common-lang ];
+
+    meta = {
+      description = "Twitter's common collections";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   twitter-common-confluence = buildPythonPackage rec {
@@ -26076,6 +26083,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ twitter-common-log ];
+
+    meta = {
+      description = "Twitter's API to the confluence wiki";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   twitter-common-dirutil = buildPythonPackage rec {
@@ -26089,6 +26103,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ twitter-common-lang ];
+
+    meta = {
+      description = "Utilities for manipulating and finding files and directories";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   twitter-common-lang = buildPythonPackage rec {
@@ -26099,6 +26120,13 @@ in {
     src = self.fetchPypi {
       inherit pname version;
       sha256 = "1l8fmnsrx7hgg3ivslg588rnl9n1gfjn2w6224fr8rs7zmkd5lan";
+    };
+
+    meta = {
+      description = "Twitter's 2.x / 3.x compatibility swiss-army knife";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
     };
   };
 
@@ -26113,6 +26141,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ twitter-common-options twitter-common-dirutil ];
+
+    meta = {
+      description = "Twitter's common logging library";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   twitter-common-options = buildPythonPackage rec {
@@ -26123,6 +26158,13 @@ in {
     src = self.fetchPypi {
       inherit pname version;
       sha256 = "0d1czag5mcxg0vcnlklspl2dvdab9kmznsycj04d3vggi158ljrd";
+    };
+
+    meta = {
+      description = "Twitter's optparse wrapper";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
     };
   };
 
