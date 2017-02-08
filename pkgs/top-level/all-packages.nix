@@ -14214,6 +14214,8 @@ with pkgs;
 
   kmplayer = kde4.callPackage ../applications/video/kmplayer { };
 
+  kodestudio = callPackage ../applications/editors/kodestudio { };
+
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita {
