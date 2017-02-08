@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool, wxGTK30, libav, lua5_1, curl,
-  libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, mesa, glee }:
+{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, libav, lua5_1, curl
+, libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, mesa
+, glee }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "electricsheep";
-  version = "2.7b33-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "598d93d90573b69559463567540aac8bc8a5b3f3";
-  
+  version = "2.7b33-2017-02-04";
+
   src = fetchFromGitHub {
-    inherit rev;
     owner = "scottdraves";
-    repo = "${pname}";
-    sha256 = "1zcn6q0dl0ip85b8b4kisc5lqjb1cs0hpzlx4l5995l6mhq9kxis";
+    repo = pname;
+    rev = "12420cd40dfad8c32fb70b88f3d680d84f795c63";
+    sha256 = "1zqry25h6p0y0rg2h8xxda007hx1xdvsgzmjg13xkc8l4zsp5wah";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [
-    libtool wxGTK30 libav lua5_1 curl libpng xorg.libXrender pkgconfig
+    wxGTK30 libav lua5_1 curl libpng xorg.libXrender
     flam3 libgtop boost tinyxml freeglut mesa glee
   ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-   "CPPFLAGS=-I${glee}/include/GL"
+    "CPPFLAGS=-I${glee}/include/GL"
   ];
 
   preBuild = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
     homepage = http://electricsheep.org/;
-    maintainers = maintainers.nand0p;
+    maintainers = with maintainers; [ nand0p fpletz ];
     platforms = platforms.linux;
     license = licenses.gpl1;
   };
