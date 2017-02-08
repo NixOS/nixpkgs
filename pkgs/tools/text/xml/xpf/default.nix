@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, libxml2}:
+{stdenv, fetchurl, python2, libxml2}:
 
 assert libxml2.pythonSupport == true;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0ljx91w68rnh4871c0xlq2whlmhqz8dr39wcdczfjjpniqz1fmpz";
   };
   
-  buildInputs = [python libxml2];
+  buildInputs = [ python2 libxml2 ];
 
   meta = {
     description = "XML Pipes and Filters - command line tools for manipulating and querying XML data";
