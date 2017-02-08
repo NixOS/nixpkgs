@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "1.10.2";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
-    sha256 = "1abzaj9kczap1xmalgzid1k3gqcn1ghnn76cn2kclc1gbfwd4ccy";
+    sha256 = "07ing6z7n0ylz5vknk3d2lw54a6szd6m8hqc3px6lahmd832ga6f";
   };
 
   outputs = [ "out" "dev" ];
