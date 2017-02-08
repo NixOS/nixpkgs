@@ -12,9 +12,11 @@ let
 
 in
 
-{ # Fallback: Assume we are building packages for the current (host, in GNU
-  # Autotools parlance) system.
-  system ? builtins.currentSystem
+{ # We combine legacy `system` and `platform` into `localSystem`, if
+  # `localSystem` was not passed. Strictly speaking, this is pure desugar, but
+  # it is most convient to do so before the impure `localSystem.system` default,
+  # so we do it now.
+  localSystem ? builtins.intersectAttrs { system = null; platform = null; } args
 
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
@@ -49,4 +51,13 @@ in
 , ...
 } @ args:
 
-import ./. (args // { inherit system config overlays; })
+# If `localSystem` was explicitly passed, legacy `system` and `platform` should
+# not be passed.
+assert args ? localSystem -> !(args ? system || args ? platform);
+
+import ./. (builtins.removeAttrs args [ "system" "platform" ] // {
+  inherit config overlays;
+  # Fallback: Assume we are building packages on the current (build, in GNU
+  # Autotools parlance) system.
+  localSystem = { system = builtins.currentSystem; } // localSystem;
+})
