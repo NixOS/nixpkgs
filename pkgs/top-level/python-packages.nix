@@ -8744,6 +8744,13 @@ in {
 
     # A few more dependencies I don't want to handle right now...
     doCheck = false;
+
+    meta = {
+      description = "A library and tool for generating .pex (Python EXecutable) files";
+      homepage = "https://github.com/pantsbuild/pex";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   pies = buildPythonPackage rec {
