@@ -177,11 +177,15 @@ let
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
+      runHook preConfigure
+
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
       gn gen --args=${escapeShellArg gnFlags} out/Release
+
+      runHook postConfigure
     '';
 
     buildPhase = let
