@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonApplication, makeWrapper, zip, ffmpeg, pandoc
+{ stdenv, fetchurl, buildPythonApplication, makeWrapper, zip, ffmpeg, rtmpdump, pandoc
 , atomicparsley
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
@@ -7,6 +7,7 @@
 # included.
 , generateManPage ? false
 , ffmpegSupport ? true
+, rtmpSupport ? true
 }:
 
 with stdenv.lib;
@@ -14,19 +15,20 @@ with stdenv.lib;
 buildPythonApplication rec {
 
   name = "youtube-dl-${version}";
-  version = "2016.07.16";
+  version = "2017.02.04.1";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "017x2hqc2bacypjmn9ac9f91y9y6afydl0z7dich5l627494hvfg";
+    sha256 = "1aqca4mxgdjiv1qfnzqxx6lpwggfxsaahvvs235pyz0j3kywa4nj";
   };
 
   buildInputs = [ makeWrapper zip ] ++ optional generateManPage pandoc;
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
+  # rtmpdump is required to download files over RTMP
   # atomicparsley for embedding thumbnails
   postInstall = let
-    packagesthatwillbeusedbelow = [ atomicparsley ] ++ optional ffmpegSupport ffmpeg;
+    packagesthatwillbeusedbelow = [ atomicparsley ] ++ optional ffmpegSupport ffmpeg ++ optional rtmpSupport rtmpdump;
   in ''
     wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesthatwillbeusedbelow}"
   '';
