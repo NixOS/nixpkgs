@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, docbook_xsl, gtk_doc, icu
-, libxslt, pkgconfig, python }:
+, libxslt, pkgconfig, python2 }:
 
 let
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ icu libxslt ];
-  nativeBuildInputs = [ autoreconfHook docbook_xsl gtk_doc pkgconfig python ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl gtk_doc pkgconfig python2 ];
 
   postPatch = ''
     substituteInPlace src/psl.c --replace bits/stat.h sys/stat.h
