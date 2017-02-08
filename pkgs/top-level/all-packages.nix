@@ -885,6 +885,8 @@ with pkgs;
 
   fzy = callPackage ../tools/misc/fzy { };
 
+  gbsplay = callPackage ../applications/audio/gbsplay { };
+
   gdrivefs = python27Packages.gdrivefs;
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
@@ -2442,7 +2444,11 @@ with pkgs;
 
   kpcli = callPackage ../tools/security/kpcli { };
 
+  krename-qt5 = qt5.callPackage ../applications/misc/krename/kde5.nix { };
+
   kronometer = qt5.callPackage ../tools/misc/kronometer { };
+
+  kdiff3-qt5 = qt5.callPackage ../tools/text/kdiff3/kde5.nix { };
 
   peruse = qt5.callPackage ../tools/misc/peruse { };
 
@@ -4453,7 +4459,7 @@ with pkgs;
   weighttp = callPackage ../tools/networking/weighttp { };
 
   wget = callPackage ../tools/networking/wget {
-    inherit (perlPackages) LWP;
+    inherit (perlPackages) IOSocketSSL LWP;
     libpsl = null;
   };
 
@@ -4476,6 +4482,8 @@ with pkgs;
   wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
+
+  wuzz = callPackage ../tools/networking/wuzz { };
 
   wv = callPackage ../tools/misc/wv { };
 
@@ -5440,10 +5448,6 @@ with pkgs;
   sbcl = callPackage ../development/compilers/sbcl {};
   # For Maxima
   sbcl_1_3_12 = callPackage ../development/compilers/sbcl/1.3.12.nix { };
-  # For StumpWM
-  sbcl_1_2_5 = callPackage ../development/compilers/sbcl/1.2.5.nix {
-    clisp = clisp;
-  };
   # For ACL2
   sbcl_1_2_0 = callPackage ../development/compilers/sbcl/1.2.0.nix {
     clisp = clisp;
@@ -5452,7 +5456,7 @@ with pkgs;
   scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
   scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
-  scala_2_12 = callPackage ../development/compilers/scala { };
+  scala_2_12 = callPackage ../development/compilers/scala { jre = jre8; };
   scala = scala_2_12;
 
   scalafmt = callPackage ../development/tools/scalafmt { };
@@ -5960,6 +5964,7 @@ with pkgs;
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
+  spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.nix { };
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix { };
   spidermonkey = spidermonkey_31;
@@ -7785,8 +7790,6 @@ with pkgs;
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
-  jsoncpp_1_6_5 = callPackage ../development/libraries/jsoncpp/1.6.5 { };
-
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
   libjson = callPackage ../development/libraries/libjson { };
@@ -8331,6 +8334,8 @@ with pkgs;
 
   libidn = callPackage ../development/libraries/libidn { };
 
+  libidn2 = callPackage ../development/libraries/libidn2 { };
+
   idnkit = callPackage ../development/libraries/idnkit { };
 
   libiec61883 = callPackage ../development/libraries/libiec61883 { };
@@ -8835,8 +8840,6 @@ with pkgs;
   meterbridge = callPackage ../applications/audio/meterbridge { };
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
-
-  ming = callPackage ../development/libraries/ming { };
 
   minizip = callPackage ../development/libraries/minizip { };
 
@@ -10802,6 +10805,8 @@ with pkgs;
 
   shaarli = callPackage ../servers/web-apps/shaarli { };
 
+  shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
+
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
   unifi = callPackage ../servers/unifi { };
@@ -10847,7 +10852,7 @@ with pkgs;
     python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
-    fglrxCompat = config.xorg.fglrxCompat or false; # `config` because we have no `xorg.override`
+    abiCompat = config.xorg.abiCompat or null; # `config` because we have no `xorg.override`
   } // { inherit xlibsWrapper; } );
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
@@ -10915,6 +10920,8 @@ with pkgs;
   blktrace = callPackage ../os-specific/linux/blktrace { };
 
   bluez5 = callPackage ../os-specific/linux/bluez/bluez5.nix { };
+
+  bluez4 = callPackage ../os-specific/linux/bluez { };
 
   # Needed for LibreOffice
   bluez5_28 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5_28.nix { });
@@ -11136,6 +11143,8 @@ with pkgs;
   ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils { };
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
+
+  intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
 
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
@@ -13443,14 +13452,18 @@ with pkgs;
   xfontsel = callPackage ../applications/misc/xfontsel { };
   inherit (xorg) xlsfonts;
 
-  freerdpStable = callPackage ../applications/networking/remote/freerdp {
+  freerdp = callPackage ../applications/networking/remote/freerdp {
+    inherit libpulseaudio;
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
+  };
+
+  freerdpUnstable = freerdp;
+
+  # This must go when weston v2 is released
+  freerdp_legacy = callPackage ../applications/networking/remote/freerdp/legacy.nix {
+    cmake = cmake_2_8;
     ffmpeg = ffmpeg_1;
   };
-  freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
-    ffmpeg = ffmpeg_2;
-    cmake = cmake_2_8;
-  };
-  freerdp = freerdpUnstable; # freerdpStable is marked broken, please switch back to it once fixed
 
   freicoin = callPackage ../applications/misc/freicoin {
     boost = boost155;
@@ -13574,11 +13587,6 @@ with pkgs;
   };
 
   gmu = callPackage ../applications/audio/gmu { };
-
-  gnash = callPackage ../applications/video/gnash {
-    inherit (gnome2) gtkglext;
-    xulrunner = firefox-unwrapped;
-  };
 
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer {
     inherit (gnome2) GConf;
@@ -15157,8 +15165,6 @@ with pkgs;
 
   stumpwm = callPackage ../applications/window-managers/stumpwm {
     version = "latest";
-    sbcl = sbcl_1_2_5;
-    lispPackages = lispPackagesFor (wrapLisp sbcl_1_2_5);
   };
 
   stumpwm-git = stumpwm.override {
@@ -15593,7 +15599,7 @@ with pkgs;
   };
 
   weston = callPackage ../applications/window-managers/weston {
-    freerdp = freerdpUnstable;
+    freerdp = freerdp_legacy;
   };
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
@@ -16699,7 +16705,7 @@ with pkgs;
 
           kvirc = callPackage ../applications/networking/irc/kvirc { };
 
-          krename = callPackage ../applications/misc/krename {
+          krename = callPackage ../applications/misc/krename/kde4.nix {
             taglib = taglib_1_9;
           };
 
@@ -16900,6 +16906,8 @@ with pkgs;
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
+  ecopcr = callPackage ../applications/science/biology/ecopcr { };
+
   emboss = callPackage ../applications/science/biology/emboss { };
 
   htslib = callPackage ../development/libraries/science/biology/htslib { };
@@ -17052,6 +17060,8 @@ with pkgs;
 
   ### SCIENCE/PROGRAMMING
 
+  dafny = dotnetPackages.Dafny;
+
   plm = callPackage ../applications/science/programming/plm { };
 
   ### SCIENCE/LOGIC
@@ -17065,6 +17075,8 @@ with pkgs;
   };
 
   aspino = callPackage ../applications/science/logic/aspino {};
+
+  boogie = dotnetPackages.Boogie;
 
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
     make = pkgs.gnumake3;
@@ -17531,6 +17543,10 @@ with pkgs;
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
+  flam3 = callPackage ../tools/graphics/flam3 { };
+
+  glee = callPackage ../tools/graphics/glee { };
+
   fakenes = callPackage ../misc/emulators/fakenes { };
 
   faust = self.faust2;
@@ -17613,6 +17629,8 @@ with pkgs;
   hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
 
   hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
+
+  illum = callPackage ../tools/system/illum { };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };

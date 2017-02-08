@@ -138,9 +138,16 @@ let
       url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
       sha256 = "134azkxw84xp9g5qmzjsmcva629jm7plwcmjxkdzdg05vyd7kig1";
     };
+    preConfigure = "substituteInPlace config --replace 'CC= gcc' '';"
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace config \
+      --replace 'LIB_OPTION= -shared' '###' \
+      --replace '#LIB_OPTION= -bundle' 'LIB_OPTION= -bundle'
+      substituteInPlace Makefile --replace '10.3' '10.5'
+    '';
     meta = {
       homepage = "https://github.com/keplerproject/luafilesystem";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = stdenv.lib.platforms.unix;
       maintainers = with maintainers; [ flosse ];
     };
   };

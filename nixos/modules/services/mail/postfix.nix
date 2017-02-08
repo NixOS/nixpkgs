@@ -79,8 +79,6 @@ let
       relay_domains = ${concatStringsSep ", " cfg.relayDomains}
     ''
     + ''
-      local_recipient_maps =
-
       relayhost = ${if cfg.lookupMX || cfg.relayHost == "" then
           cfg.relayHost
         else

@@ -152,9 +152,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = "-std=gnu++98"
+  NIX_CFLAGS_COMPILE =
+    optionalString stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
     + optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
-      "-I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include"
+      " -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include"
     + optionalString stdenv.isDarwin " -I${libcxx}/include/c++/v1";
 
   NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)

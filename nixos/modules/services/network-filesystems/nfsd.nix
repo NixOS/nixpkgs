@@ -130,15 +130,21 @@ in
     systemd.services.nfs-server =
       { enable = true;
         wantedBy = [ "multi-user.target" ];
+
+        preStart =
+          ''
+            mkdir -p /var/lib/nfs/v4recovery
+          '';
       };
 
     systemd.services.nfs-mountd =
       { enable = true;
-        path = [ pkgs.nfs-utils ];
         restartTriggers = [ exports ];
 
         preStart =
           ''
+            mkdir -p /var/lib/nfs
+
             ${optionalString cfg.createMountPoints
               ''
                 # create export directories:
@@ -148,8 +154,6 @@ in
                 | xargs -d '\n' mkdir -p
               ''
             }
-
-            exportfs -rav
           '';
       };
 

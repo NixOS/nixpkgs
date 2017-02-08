@@ -3,8 +3,11 @@
 
 let
   version = "1.9.0";
-  rev = "38746938a4ab94f2f57d9e1309c51fd6fb37553d";
+  rev = "27240e71ef390bf2d66307e677c2a333cebf75af";
   channel = "stable";
+
+  # The revision can be obtained with the following command (see https://github.com/NixOS/nixpkgs/issues/22465):
+  # curl -w "%{url_effective}\n" -I -L -s -S https://vscode-update.azurewebsites.net/latest/linux-x64/stable -o /dev/null
 
   sha256 = if stdenv.system == "i686-linux"    then "05f1sk2lq2skp8fxq6q229kf89vi2sq3zz6lywq7nk81pwvp8jap"
       else if stdenv.system == "x86_64-linux"  then "0wj17lwq8f88xvfa6wfbqm580kp0470ib2yxn15j9mv0iw7nzqry"

@@ -111,6 +111,7 @@
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien@cassou.me>";
   danbst = "Danylo Hlynskyi <abcz2.uprola@gmail.com>";
+  dancek = "Hannu Hartikainen <hannu.hartikainen@gmail.com>";
   danielfullmer = "Daniel Fullmer <danielrf12@gmail.com>";
   dasuxullebt = "Christoph-Simon Senjak <christoph.senjak@googlemail.com>";
   davidak = "David Kleuker <post@davidak.de>";
@@ -296,6 +297,7 @@
   mdaiter = "Matthew S. Daiter <mdaiter8121@gmail.com>";
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
+  metabar = "Celine Mercier <softs@metabarcoding.org>";
   mguentner = "Maximilian Güntner <code@klandest.in>";
   mic92 = "Jörg Thalheim <joerg@higgsboson.tk>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";

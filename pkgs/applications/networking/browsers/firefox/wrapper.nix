@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, config
 
 ## various stuff that can be plugged in
-, gnash, flashplayer, hal-flash
+, flashplayer, hal-flash
 , MPlayerPlugin, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra_gtk2
 , supportsJDK, jrePlugin, icedtea_web
 , trezor-bridge, bluejeans, djview4, adobe-reader
@@ -23,16 +23,13 @@ browser:
 let
   cfg = stdenv.lib.attrByPath [ browserName ] {} config;
   enableAdobeFlash = cfg.enableAdobeFlash or false;
-  enableGnash = cfg.enableGnash or false;
   ffmpegSupport = browser.ffmpegSupport or false;
   jre = cfg.jre or false;
   icedtea = cfg.icedtea or false;
 
   plugins =
-     assert !(enableGnash && enableAdobeFlash);
      assert !(jre && icedtea);
      ([ ]
-      ++ lib.optional enableGnash gnash
       ++ lib.optional enableAdobeFlash flashplayer
       ++ lib.optional (cfg.enableDjvu or false) (djview4)
       ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)

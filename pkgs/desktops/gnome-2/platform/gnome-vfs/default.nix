@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, bzip2, openssl, samba, dbus_glib
+{ stdenv, fetchurl, pkgconfig, libxml2, bzip2, openssl, dbus_glib
 , glib, fam, cdparanoia, intltool, GConf, gnome_mime_data, avahi, acl }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs =
-    [ pkgconfig libxml2 bzip2 openssl samba dbus_glib fam cdparanoia
+    [ pkgconfig libxml2 bzip2 openssl dbus_glib fam cdparanoia
       intltool gnome_mime_data avahi acl
     ];
 
