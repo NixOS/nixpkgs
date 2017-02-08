@@ -816,6 +816,8 @@ with pkgs;
 
   discount = callPackage ../tools/text/discount { };
 
+  diskscan = callPackage ../tools/misc/diskscan { };
+
   disorderfs = callPackage ../tools/filesystems/disorderfs {
     asciidoc = asciidoc-full;
   };
