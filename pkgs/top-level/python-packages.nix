@@ -8536,7 +8536,7 @@ in {
     meta = {
       description = "A build system for software projects in a variety of languages";
       homepage = "http://www.pantsbuild.org/";
-      license = licenses.asl2;
+      license = licenses.asl20;
       maintainers = with maintainers; [ copumpkin ];
     };
   };
