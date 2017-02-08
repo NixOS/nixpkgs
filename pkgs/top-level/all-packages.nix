@@ -5182,6 +5182,7 @@ with pkgs;
 
   jdk = if stdenv.isDarwin then jdk7 else jdk8;
   jre = if stdenv.isDarwin then jre7 else jre8;
+  jre_headless = if stdenv.isDarwin then jre7 else jre8_headless;
 
   openshot-qt = callPackage ../applications/video/openshot-qt { };
 
