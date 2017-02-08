@@ -24,7 +24,7 @@ let
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRev}.vbox-extpack";
+    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${toString extpackRev}.vbox-extpack";
     sha256 = extpack;
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
