@@ -88,6 +88,11 @@ let
 
     nativeBuildInputs = [ gn which python2Packages.python perl pkgconfig ];
 
+    nativeBuildInputs = [
+      ninja which perl pkgconfig python
+      python2Packages.ply python2Packages.jinja2
+    ];
+
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
       utillinux alsaLib
@@ -95,7 +100,6 @@ let
       glib gtk2 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-      python2Packages.ply python2Packages.jinja2
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
@@ -182,7 +186,7 @@ let
 
     buildPhase = let
       buildCommand = target: ''
-        "${ninja}/bin/ninja" -C "${buildPath}"  \
+        ninja -C "${buildPath}"  \
           -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
           "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
