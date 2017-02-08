@@ -8522,7 +8522,7 @@ in {
     '';
 
     # Unnecessary, and causes some really weird behavior around .class files, which
-    # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520. 
+    # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520.
     dontStrip = true;
 
     propagatedBuildInputs = with self; [
@@ -8532,6 +8532,13 @@ in {
       setproctitle setuptools six thrift wheel twitter-common-dirutil
       twitter-common-confluence twitter-common-collections
     ];
+
+    meta = {
+      description = "A build system for software projects in a variety of languages";
+      homepage = "http://www.pantsbuild.org/";
+      license = licenses.asl2;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   paperwork-backend = buildPythonPackage rec {
