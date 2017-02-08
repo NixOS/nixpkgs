@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, emacs }:
+{ stdenv, fetchurl, python2, emacs }:
 
 stdenv.mkDerivation {
   name = "pydb-1.26";
@@ -8,11 +8,11 @@ stdenv.mkDerivation {
     sha256 = "1wlkz1hd5d4gkzhkjkzcm650c1lchj28hj36jx96mklglm41h4q1";
   };
 
-  buildInputs = [ python emacs /* emacs is optional */ ];
+  buildInputs = [ python2 emacs /* emacs is optional */ ];
 
   preConfigure = ''
     p="$(toPythonPath $out)"
-    configureFlags="$configureFlags --with-python=${python}/bin/python --with-site-packages=$p"
+    configureFlags="$configureFlags --with-python=${python.interpreter} --with-site-packages=$p"
   '';
 
   meta = { 
