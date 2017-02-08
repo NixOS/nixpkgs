@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/astroid" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:${gnome3.adwaita-icon-theme}/share"
   '';
 
   meta = {
