@@ -16769,6 +16769,8 @@ with pkgs;
     inherit (python3Packages) python pygobject3 pyxdg;
   };
 
+  redshift-plasma-applet = callPackage ../applications/misc/redshift-plasma-applet { };
+
   orion = callPackage ../misc/themes/orion {};
 
   albatross = callPackage ../misc/themes/albatross { };
