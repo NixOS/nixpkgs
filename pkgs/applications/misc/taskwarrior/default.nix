@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "GTD (getting things done) implementation";
+    description = "Highly flexible command-line tool to manage TODO lists";
     homepage = http://taskwarrior.org;
     license = licenses.mit;
     maintainers = with maintainers; [ marcweber jgeerds ];
