@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fontforge, pythonPackages, python}:
+{stdenv, fetchurl, fontforge, python2}:
 
 stdenv.mkDerivation rec {
   name = "liberation-fonts-2.00.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ymryvd2nw4jmw4w5y1i3ll2dn48rpkqzlsgv7994lk6qc9cdjvs";
   };
 
-  buildInputs = [ fontforge pythonPackages.fonttools python ];
+  buildInputs = [ fontforge python2.pkgs.fonttools ];
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
