@@ -108,7 +108,7 @@ in stdenv.mkDerivation {
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  inherit (chromium.browser) meta packageName;
+  inherit (chromium.browser) meta packageName version;
 
   passthru = {
     inherit (chromium) upstream-info browser;
