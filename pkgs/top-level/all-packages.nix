@@ -16148,7 +16148,7 @@ with pkgs;
   micropolis = callPackage ../games/micropolis { };
 
   minecraft = callPackage ../games/minecraft {
-    useAlsa = config.minecraft.alsa or false;
+    inherit (gnome2) GConf;
   };
 
   minecraft-server = callPackage ../games/minecraft-server { };
