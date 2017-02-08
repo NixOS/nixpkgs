@@ -2035,6 +2035,7 @@ extra-packages:
   - persistent-template == 2.1.*        # needed for git-annex
   - primitive == 0.5.1.*                # required to build alex with GHC 6.12.3
   - QuickCheck < 2                      # required by test-framework-quickcheck and its users
+  - servant-auth-server < 0.2.2.0       # https://github.com/plow-technologies/servant-auth/issues/25
   - seqid < 0.2                         # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - seqid-streams < 0.2                 # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - split < 0.2                         # newer versions don't work with GHC 6.12.3
@@ -5436,7 +5437,6 @@ dont-distribute-packages:
   log:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   logentries:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   logger:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
-  logging-effect:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   logging-facade-journald:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   logic-classes:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   Logic:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6785,14 +6785,10 @@ dont-distribute-packages:
   servant-auth-client:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-auth-docs:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-auth-hmac:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
-  servant-auth-server:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-auth-token-api:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-auth-token:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
-  servant-auth:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-csharp:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-db-postgresql:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
-  servant-docs:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
-  servant-elm:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-examples:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-github-webhook:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-haxl-client:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
