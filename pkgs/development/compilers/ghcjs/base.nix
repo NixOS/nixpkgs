@@ -39,6 +39,11 @@
 , coreutils
 , libiconv
 
+, ghcjsNodePkgs ? callPackage ../../../top-level/node-packages.nix {
+    generated = ./node-packages-generated.nix;
+    self = ghcjsNodePkgs;
+  }
+
 , version ? "0.2.0"
 , ghcjsSrc ? fetchFromGitHub {
     owner = "ghcjs";
@@ -160,12 +165,7 @@ in mkDerivation (rec {
         --with-gmp-includes ${gmp.dev}/include \
         --with-gmp-libraries ${gmp.out}/lib
   '';
-  passthru = let
-    ghcjsNodePkgs = callPackage ../../../top-level/node-packages.nix {
-      generated = ./node-packages-generated.nix;
-      self = ghcjsNodePkgs;
-    };
-  in {
+  passthru = {
     inherit bootPkgs;
     isCross = true;
     isGhcjs = true;
