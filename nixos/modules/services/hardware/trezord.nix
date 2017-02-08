@@ -35,7 +35,7 @@ in {
       description = "TREZOR Bridge";
       after = [ "systemd-udev-settle.service" "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.trezord ];
+      path = [];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.trezord}/bin/trezord -f";
@@ -43,15 +43,12 @@ in {
       };
     };
 
-    users.extraUsers = singleton {
-      name = "trezord";
+    users.users.trezord = {
       group = "trezord";
       description = "Trezor bridge daemon user";
     };
 
-    users.extraGroups = singleton {
-      name = "trezord";
-    };
+    users.groups.trezord = {};
   };
 }
 
