@@ -104,9 +104,9 @@ let
       ++ optional (versionAtLeast version "56.0.0.0") gtk3;
 
     patches = [
-      ./patches/glibc-2.24.patch
       ./patches/nix_plugin_paths_52.patch
-    ] ++ optional enableWideVine ./patches/widevine.patch;
+    ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
+      ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
