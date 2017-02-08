@@ -1,14 +1,19 @@
-{ stdenv, fetchFromGitHub, go }:
+{ stdenv, lib, fetchFromGitHub, go, pkgs }:
 
-stdenv.mkDerivation rec {
-  version = "0.14.17";
+let
+  removeExpr = ref: ''
+    sed -i "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
+  '';
+
+in stdenv.mkDerivation rec {
+  version = "0.14.23";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "0l220jnm8xwfc5jrznan15290al05bim5yyy4wngj9c55av6mlzq";
+    sha256 = "1himf8yhfpjsv5m068y2f6f696d7ip0jq7jmg69kn7035zlxicis";
   };
 
   buildInputs = [ go ];
@@ -25,15 +30,32 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/etc/systemd/{system,user}
+
     cp bin/* $out/bin
+  '' + lib.optionalString (stdenv.isLinux) ''
+    substitute etc/linux-systemd/system/syncthing-resume.service \
+               $out/etc/systemd/system/syncthing-resume.service \
+               --replace /usr/bin/pkill ${pkgs.procps}/bin/pkill
+
+    substitute etc/linux-systemd/system/syncthing@.service \
+               $out/etc/systemd/system/syncthing@.service \
+               --replace /usr/bin/syncthing $out/bin/syncthing
+
+    substitute etc/linux-systemd/user/syncthing.service \
+               $out/etc/systemd/user/syncthing.service \
+               --replace /usr/bin/syncthing $out/bin/syncthing
   '';
 
-  meta = {
+  preFixup = ''
+    find $out/bin -type f -exec ${removeExpr go} '{}' '+'
+  '';
+
+  meta = with stdenv.lib; {
     homepage = https://www.syncthing.net/;
     description = "Open Source Continuous File Synchronization";
-    license = stdenv.lib.licenses.mpl20;
-    maintainers = with stdenv.lib.maintainers; [ pshendry joko peterhoeg ];
-    platforms = with stdenv.lib.platforms; linux ++ freebsd ++ openbsd ++ netbsd;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ pshendry joko peterhoeg ];
+    platforms = platforms.unix;
   };
 }
